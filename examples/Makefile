@@ -2,7 +2,7 @@ NWCHEM = \
   nwchem_gemm nwchem_gemm_gemv nwchem_scal_axpy nwchem_dlarfx
 
 ABINIT = \
-  abinit_A
+  abinit_A abinit_B
 
 BLAS = \
   daxpy dgemm dgemv dger dscal
@@ -24,6 +24,9 @@ abinit.bc: $(ABINIT:=.bc)
 	$(IDL_BIN)/llvm-link $^ -o $@
 
 %.bc : %.F
+	$(FLANG) -Wno-override-module -c -emit-llvm $^ -o $@
+
+%.bc : %.F90
 	$(FLANG) -Wno-override-module -c -emit-llvm $^ -o $@
 
 %.inline.bc : %.fixed.bc
