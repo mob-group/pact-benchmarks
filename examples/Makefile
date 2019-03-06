@@ -1,3 +1,8 @@
+EXAMPLES = \
+  nwchem_gemm nwchem_gemm_gemv nwchem_scal_axpy
+
+all: $(EXAMPLES:=.bc)
+
 %.bc : %.F
 	$(FLANG) -c -emit-llvm $^ -o $@
 

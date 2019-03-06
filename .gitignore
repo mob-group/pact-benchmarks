@@ -154,3 +154,5 @@ tags
 
 *.bc
 *.ll
+
+env.sh
