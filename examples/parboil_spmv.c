@@ -16,7 +16,7 @@
 void *f_spmv_harness_(float *ov, float *a, float *iv, int *rowstr, int *colidx,
                       int *rows);
 
-int main(int argc, char **argv) {
+int spmv_benchmark(int argc, char **argv) {
   struct pb_TimerSet timers;
   struct pb_Parameters *parameters;
 
