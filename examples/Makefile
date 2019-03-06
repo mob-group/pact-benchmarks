@@ -11,3 +11,4 @@ all: $(EXAMPLES:=.good.bc)
 
 clean:
 	rm -f *.bc *.ll
+	rm -f replace-report*
