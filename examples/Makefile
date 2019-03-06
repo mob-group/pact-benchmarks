@@ -1,11 +1,15 @@
 NWCHEM = \
   nwchem_gemm nwchem_gemm_gemv nwchem_scal_axpy nwchem_dlarfx
 
+ABINIT = \
+  abinit_A
+
 BLAS = \
   daxpy dgemm dgemv dger dscal
 
 EXAMPLES = \
-  nwchem.inline.bc
+  nwchem.inline.bc \
+  abinit.fixed.bc
 
 all: $(EXAMPLES)
 
@@ -14,6 +18,9 @@ install: all
 	cp $(EXAMPLES) out
 
 nwchem.bc: $(BLAS:=.bc) $(NWCHEM:=.bc)
+	$(IDL_BIN)/llvm-link $^ -o $@
+
+abinit.bc: $(ABINIT:=.bc)
 	$(IDL_BIN)/llvm-link $^ -o $@
 
 %.bc : %.F
