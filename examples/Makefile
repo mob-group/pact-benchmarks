@@ -4,7 +4,14 @@ NWCHEM = \
 BLAS = \
   daxpy dgemm dgemv dger dscal
 
-all: nwchem.inline.bc
+EXAMPLES = \
+  nwchem.inline.bc
+
+all: $(EXAMPLES)
+
+install: all
+	mkdir -p out
+	cp $(EXAMPLES) out
 
 nwchem.bc: $(BLAS:=.bc) $(NWCHEM:=.bc)
 	$(IDL_BIN)/llvm-link $^ -o $@
@@ -23,3 +30,4 @@ nwchem.bc: $(BLAS:=.bc) $(NWCHEM:=.bc)
 clean:
 	rm -f *.bc *.ll
 	rm -f replace-report*
+	rm -rf out
