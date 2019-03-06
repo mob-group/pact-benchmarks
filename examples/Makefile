@@ -5,7 +5,7 @@ ABINIT = \
   abinit_A abinit_B
 
 WALES = \
-  commons porfuncs Pfold
+  commons porfuncs NGTmem NGT Pfold
 
 BLAS = \
   daxpy dgemm dgemv dger dscal
@@ -31,6 +31,9 @@ wales.bc: $(WALES:=.bc)
 	$(IDL_BIN)/llvm-link $^ -o $@
 
 %.bc : %.F
+	$(FLANG) -Wno-override-module -c -emit-llvm $^ -o $@
+
+%.bc : %.f
 	$(FLANG) -Wno-override-module -c -emit-llvm $^ -o $@
 
 %.bc : %.f90
