@@ -4,7 +4,7 @@ NWCHEM = \
 BLAS = \
   daxpy dgemm dgemv dger dscal
 
-all: nwchem.good.bc
+all: nwchem.inline.bc
 
 nwchem.bc: $(BLAS:=.bc) $(NWCHEM:=.bc)
 	$(IDL_BIN)/llvm-link $^ -o $@
@@ -12,8 +12,13 @@ nwchem.bc: $(BLAS:=.bc) $(NWCHEM:=.bc)
 %.bc : %.F
 	$(FLANG) -Wno-override-module -c -emit-llvm $^ -o $@
 
-%.good.bc : %.bc
-	$(IDL_BIN)/clang -O2 -fno-unroll-loops -fno-vectorize -fno-slp-vectorize -c -emit-llvm $^ -o $@
+%.inline.bc : %.fixed.bc
+	$(IDL_BIN)/opt -inline -inline-threshold=10000 $^ -o $@
+
+%.fixed.bc : %.bc
+	$(IDL_BIN)/clang -O2 \
+	  -fno-unroll-loops -fno-vectorize -fno-slp-vectorize \
+	  -c -emit-llvm $^ -o $@
 
 clean:
 	rm -f *.bc *.ll
