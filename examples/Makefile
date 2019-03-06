@@ -4,12 +4,16 @@ NWCHEM = \
 ABINIT = \
   abinit_A abinit_B
 
+WALES = \
+  commons porfuncs Pfold
+
 BLAS = \
   daxpy dgemm dgemv dger dscal
 
 EXAMPLES = \
   nwchem.inline.bc \
-  abinit.fixed.bc
+  abinit.fixed.bc \
+  wales.fixed.bc
 
 all: $(EXAMPLES)
 
@@ -23,10 +27,13 @@ nwchem.bc: $(BLAS:=.bc) $(NWCHEM:=.bc)
 abinit.bc: $(ABINIT:=.bc)
 	$(IDL_BIN)/llvm-link $^ -o $@
 
+wales.bc: $(WALES:=.bc)
+	$(IDL_BIN)/llvm-link $^ -o $@
+
 %.bc : %.F
 	$(FLANG) -Wno-override-module -c -emit-llvm $^ -o $@
 
-%.bc : %.F90
+%.bc : %.f90
 	$(FLANG) -Wno-override-module -c -emit-llvm $^ -o $@
 
 %.inline.bc : %.fixed.bc
@@ -40,4 +47,5 @@ abinit.bc: $(ABINIT:=.bc)
 clean:
 	rm -f *.bc *.ll
 	rm -f replace-report*
+	rm -f *.mod
 	rm -rf out
