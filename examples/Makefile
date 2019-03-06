@@ -8,7 +8,7 @@ WALES = \
   commons porfuncs NGTmem NGT Pfold
 
 PARBOIL = \
-  parboil_spmv
+  parboil_spmv parboil_gemm
 
 BLAS = \
   daxpy dgemm dgemv dger dscal
@@ -48,6 +48,9 @@ parboil.bc: $(PARBOIL:=.bc)
 
 %.bc : %.c
 	$(IDL_BIN)/clang -Xclang -disable-O0-optnone -c -emit-llvm $^ -o $@
+
+%.bc : %.cc
+	$(IDL_BIN)/clang++ -Xclang -disable-O0-optnone -c -emit-llvm $^ -o $@
 
 %.inline.bc : %.fixed.bc
 	$(IDL_BIN)/opt -inline -inline-threshold=10000 $^ -o $@
