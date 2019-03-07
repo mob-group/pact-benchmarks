@@ -16,6 +16,9 @@ GRAPH = \
 DARKNET = \
   darknet_core darknet_ol darknet_ll
 
+DSP = \
+  utdsp
+
 BLAS = \
   daxpy dgemm dgemv dger dscal
 
@@ -25,7 +28,8 @@ EXAMPLES = \
   wales.fixed.bc \
   parboil.fixed.bc \
   graph.fixed.bc \
-  darknet.fixed.bc
+  darknet.fixed.bc \
+  dsp.fixed.bc
 
 all: $(EXAMPLES)
 
@@ -49,6 +53,9 @@ graph.bc: $(GRAPH:=.bc)
 	$(IDL_BIN)/llvm-link $^ -o $@
 
 darknet.bc: $(DARKNET:=.bc)
+	$(IDL_BIN)/llvm-link $^ -o $@
+
+dsp.bc: $(DSP:=.bc)
 	$(IDL_BIN)/llvm-link $^ -o $@
 
 %.bc : %.F
