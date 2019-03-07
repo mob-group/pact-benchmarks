@@ -14,7 +14,7 @@ GRAPH = \
   bfs pagerank
 
 DARKNET = \
-  darknet_ol  
+  darknet_core darknet_ol darknet_ll
 
 BLAS = \
   daxpy dgemm dgemv dger dscal
