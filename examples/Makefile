@@ -17,7 +17,7 @@ DARKNET = \
   darknet_core darknet_ol darknet_ll
 
 DSP = \
-  utdsp
+  utdsp dspstone
 
 BLAS = \
   daxpy dgemm dgemv dger dscal
