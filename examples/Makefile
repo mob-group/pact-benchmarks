@@ -11,7 +11,7 @@ PARBOIL = \
   parboil_spmv parboil_gemm
 
 GRAPH = \
-  bfs
+  bfs pagerank
 
 BLAS = \
   daxpy dgemm dgemv dger dscal

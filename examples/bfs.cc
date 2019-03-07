@@ -363,7 +363,7 @@ Vector BFS(const CSRMatrix& M, int s) {
   return distances;
 }
 
-int main(int args, char** argv) {
+int bfs_main(int args, char** argv) {
   COOMatrix coo_mat = COOMatrix::read(std::cin);
 
   //    coo_mat.print();
@@ -396,4 +396,6 @@ int main(int args, char** argv) {
           std::cout<<i+1<<":\t"<<result.values[i]<<"\n";
       }
   */
+
+  return 0;
 }
