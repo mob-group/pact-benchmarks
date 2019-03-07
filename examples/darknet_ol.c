@@ -1,3 +1,4 @@
+#include <float.h>
 #include <math.h>
 #include "darknet.h"
 
@@ -24,6 +25,40 @@ void ol_gemm(int TA, int TB, int M, int N, int K, float ALPHA, float *A,
   }
   gemm_nn(M, N, K, ALPHA, A, lda, B, ldb, C, ldc);
 }
+
+void ol_l2_cpu(int n, float *pred, float *truth, float *delta, float *error) {
+  int i;
+  for (i = 0; i < n; ++i) {
+    float diff = truth[i] - pred[i];
+    error[i] = diff * diff;
+    delta[i] = diff;
+  }
+}
+
+float ol_dot_cpu(int N, float *X, int INCX, float *Y, int INCY) {
+  int i;
+  float dot = 0;
+  for (i = 0; i < N; ++i) dot += X[i * INCX] * Y[i * INCY];
+  return dot;
+}
+
+void ol_softmax(float *input, int n, float temp, int stride, float *output) {
+  int i;
+  float sum = 0;
+  float largest = -FLT_MAX;
+  for (i = 0; i < n; ++i) {
+    if (input[i * stride] > largest) largest = input[i * stride];
+  }
+  for (i = 0; i < n; ++i) {
+    float e = exp(input[i * stride] / temp - largest / temp);
+    sum += e;
+    output[i * stride] = e;
+  }
+  for (i = 0; i < n; ++i) {
+    output[i * stride] /= sum;
+  }
+}
+
 void forward_convolutional_layer(convolutional_layer l, network net) {
   int i, j;
 

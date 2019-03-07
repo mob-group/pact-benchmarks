@@ -1,3 +1,4 @@
+#include <float.h>
 #include <math.h>
 #include "darknet.h"
 
@@ -15,6 +16,22 @@ cublasStatus_t cublasSgemm(cublasHandle_t handle, cublasOperation_t transa,
                            const float *alpha, const float *A, int lda,
                            const float *B, int ldb, const float *beta, float *C,
                            int ldc);
+
+cublasStatus_t cublasSdot(cublasHandle_t handle, int n, const float *x,
+                          int incx, const float *y, int incy, float *result);
+
+typedef int cudnnStatus_t;
+typedef void *cudnnHandle_t;
+typedef int cudnnSoftmaxAlgorithm_t;
+typedef int cudnnSoftmaxMode_t;
+typedef void *cudnnTensorDescriptor_t;
+
+cudnnStatus_t cudnnSoftmaxForward(cudnnHandle_t handle,
+                                  cudnnSoftmaxAlgorithm_t algorithm,
+                                  cudnnSoftmaxMode_t mode, const void *alpha,
+                                  const cudnnTensorDescriptor_t xDesc,
+                                  const void *x, const void *beta,
+                                  const cudnnTensorDescriptor_t yDesc, void *y);
 
 void ll_gemm(int TA, int TB, int M, int N, int K, float ALPHA, float *A_gpu,
              int lda, float *B_gpu, int ldb, float BETA, float *C_gpu,
