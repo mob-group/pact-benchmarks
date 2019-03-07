@@ -10,6 +10,9 @@ WALES = \
 PARBOIL = \
   parboil_spmv parboil_gemm
 
+GRAPH = \
+  bfs
+
 BLAS = \
   daxpy dgemm dgemv dger dscal
 
@@ -17,7 +20,8 @@ EXAMPLES = \
   nwchem.inline.bc \
   abinit.fixed.bc \
   wales.fixed.bc \
-  parboil.fixed.bc
+  parboil.fixed.bc \
+  graph.fixed.bc
 
 all: $(EXAMPLES)
 
@@ -35,6 +39,9 @@ wales.bc: $(WALES:=.bc)
 	$(IDL_BIN)/llvm-link $^ -o $@
 
 parboil.bc: $(PARBOIL:=.bc)
+	$(IDL_BIN)/llvm-link $^ -o $@
+
+graph.bc: $(GRAPH:=.bc)
 	$(IDL_BIN)/llvm-link $^ -o $@
 
 %.bc : %.F
