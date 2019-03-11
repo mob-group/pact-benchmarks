@@ -34,6 +34,8 @@ The runnable benchmarks we have are:
   * Environment variables need to be set properly `export
     NWCHEM_TOP=.../locksteps/benchmarks/nwchem-6.8.1
     NWCHEM_TARGET=LINUX64 NWCHEM_MODULES=all USE_INTERNALBLAS=y USE_MPI=yes`
+  * Can build individual components by cding to them, rebuilding with make, then
+    running `make link` at the top level.
 * Running:
   * Built executable is `bin/nwchem` - it reads input from files included with
     the package.
