@@ -104,5 +104,22 @@ $RECYCLE.BIN/
 # debris  created in nwchem compilations
 include_stamp
 dependencies
+*.fh
+bin/
 # End of debris  created in nwchem compilations
 *.swp
+
+
+src/include/checksum.h
+src/include/context.h
+src/include/hdbm.h
+src/include/rtdb.cray.h
+src/include/rtdb.h
+src/peigs/peigs_stamp.LINUX64
+src/tools/build/
+src/tools/cc.CC.stamp
+src/tools/ga-5.6.5.MPI-TS.DIR.stamp
+src/tools/gfortran.FC.stamp
+src/tools/install/
+src/util/util_scalapack_info.F
+src/util/util_version.F
