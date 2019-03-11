@@ -123,3 +123,5 @@ src/tools/gfortran.FC.stamp
 src/tools/install/
 src/util/util_scalapack_info.F
 src/util/util_version.F
+
+util/util_nwchem_version.F
