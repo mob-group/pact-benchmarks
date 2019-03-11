@@ -140,7 +140,8 @@ ifdef OLD_GA
 else
 #case guard against case when tools have not been compiled yet
   ifeq ("$(wildcard ${GA_PATH}/bin/ga-config)","")
-    LIBPATH = -L$(SRCDIR)/tools/install/lib
+    TOOLSLIB =  $(shell grep libdir\ =  $(NWCHEM_TOP)/src/tools/build/Makefile |grep -v pkgl|cut -b 25-)
+    LIBPATH = -L$(SRCDIR)/tools/install/$(TOOLSLIB)
   else
     GA_LDFLAGS=  $(shell ${GA_PATH}/bin/ga-config --ldflags  )
 #extract GA libs location from last word in GA_LDLFLAGS
