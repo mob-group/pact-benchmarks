@@ -1,0 +1,39 @@
+!!****d* ABINIT/66nonlocal
+!! NAME
+!! 66nonlocal
+!!
+!! DESCRIPTION
+!! This directory contains level-3 routines used
+!! to apply the non-local operator. The main entry point to
+!! this library is the routine nonlocal.F90 , although ph1d3d.F90
+!! and strconv.F90 are also called by other routines.
+!!
+!! COPYRIGHT
+!! Copyright (C) 1998-2018 ABINIT group (TD)
+!! This file is distributed under the terms of the
+!! GNU General Public License, see ~abinit/COPYING
+!! or http://www.gnu.org/copyleft/gpl.txt .
+!! For the initials of contributors, see ~abinit/doc/developers/contributors.txt .
+!!
+!! CHILDREN
+!! interfaces_66_nonlocal.F90
+!! m_cgprj.F90
+!! m_contract.F90
+!! m_fock.F90
+!! m_gemm_nonlop.F90
+!! m_hamiltonian.F90
+!! m_metstr.F90
+!! m_mkffkg.F90
+!! m_mkffnl.F90
+!! m_nonlop.F90
+!! m_nonlop_pl.F90
+!! m_nonlop_test.F90
+!! m_nonlop_ylm.F90
+!! m_opernl.F90
+!! m_opernla_ylm.F90
+!! m_opernlb_ylm.F90
+!! m_opernlc_ylm.F90
+!! m_opernld_ylm.F90
+!! m_vkbr.F90
+!!
+!!***

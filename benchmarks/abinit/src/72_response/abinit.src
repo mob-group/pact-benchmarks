@@ -1,0 +1,44 @@
+# -*- Python -*-
+#
+#
+# This file is part of the ABINIT software package. For license information,
+# please see the COPYING file in the top-level directory of the ABINIT source
+# distribution.
+#
+
+#
+# Source files making up the 6response library
+#
+
+# Source file attributes
+ABI_SRC_NIL = 0     # No attribute
+ABI_SRC_BLT = 1     # The file is built by a script
+ABI_SRC_DEP = 2     # The file depends on other files
+
+# Source files
+sources = [
+ "m_dfpt_fef.F90",
+ "m_dfptnl_pert.F90",
+ "m_dfpt_cgwf.F90",
+ "m_dfpt_elt.F90",
+ "m_dfpt_mkrho.F90",
+ "m_dfpt_mkvxcstr.F90",
+ "m_dfpt_nstwf.F90",
+ "m_dfpt_rhotov.F90",
+ "m_dfpt_scfcv.F90",
+ "m_dfpt_vtorho.F90",
+ "m_dfpt_vtowfk.F90",
+ "m_d2frnl.F90",
+ "m_ddb.F90",
+ "m_ddb_hdr.F90",
+ "m_ddk.F90",
+ "m_dvdb.F90",
+ "m_efmas.F90",
+ "m_eig2d.F90",
+ "m_rf2.F90",
+ "m_paral_pert.F90",
+ "m_strain.F90",
+ "m_rf2_init.F90",
+]
+# IMPORTANT : please use the alphabetic order in the previous list. Do NOT add the new routine names at the end of the list.
+# This is important to avoid numerous conflicts at merge time. Thank you very much. Xavier.

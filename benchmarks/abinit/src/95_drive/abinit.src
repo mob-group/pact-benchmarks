@@ -1,0 +1,41 @@
+ # -*- Python -*-
+#
+# Copyright (C) 2005-2018 ABINIT Group (Yann Pouillon)
+#
+# This file is part of the ABINIT software package. For license information,
+# please see the COPYING file in the top-level directory of the ABINIT source
+# distribution.
+#
+
+#
+# Source files making up the 95_drive library
+#
+
+# Source file attributes
+ABI_SRC_NIL = 0     # No attribute
+ABI_SRC_BLT = 1     # The file is built by a script
+ABI_SRC_DEP = 2     # The file depends on other files
+
+# Source files
+sources = [
+ "m_argparse.F90",
+ "m_bethe_salpeter.F90",
+ "m_dfptnl_loop.F90",
+ "m_dfpt_looppert.F90",
+ "m_driver.F90",
+ "m_eph_driver.F90",
+ "m_gstate.F90",
+ "m_gstateimg.F90",
+ "m_gwls_sternheimer.F90",
+ "m_mover.F90",
+ "m_mover_effpot.F90",
+ "m_nonlinear.F90",
+ "m_precpred_1geo.F90",
+ "m_respfn_driver.F90",
+ "m_pead_nl_loop.F90",
+ "m_screening_driver.F90",
+ "m_sigma_driver.F90",
+ "m_wfk_analyze.F90",
+]
+# IMPORTANT : please use the alphabetic order in the previous list. Do NOT add the new routine names at the end of the list.
+# This is important to avoid numerous conflicts at merge time. Thank you very much. Xavier.
