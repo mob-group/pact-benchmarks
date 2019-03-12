@@ -332,3 +332,5 @@ tests/built-in/Input/testin_wannier90o_EBANDS.agr
 doc/input-web/*~
 src/98_main/tdep
 src/98_main/dummy_tests
+
+Test_suite
