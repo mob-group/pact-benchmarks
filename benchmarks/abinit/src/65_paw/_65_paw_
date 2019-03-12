@@ -1,0 +1,44 @@
+!!****d* ABINIT/13paw
+!! NAME
+!! 13paw
+!!
+!! DESCRIPTION
+!! This directory contains level-3 routines related to the
+!! Projector Augmented-Wave approach.
+!!
+!! COPYRIGHT
+!! Copyright (C) 1998-2018 ABINIT group (TD)
+!! This file is distributed under the terms of the
+!! GNU General Public License, see ~abinit/COPYING
+!! or http://www.gnu.org/copyleft/gpl.txt .
+!! For the initials of contributors, see ~abinit/doc/developers/contributors.txt .
+!!
+!! CHILDREN
+!! interfaces_65_paw.F90
+!! m_fourier_interpol.F90
+!! m_paw_atomorb.F90
+!! m_paw_correlations.F90
+!! m_paw_denpot.F90
+!! m_paw_dfpt.F90
+!! m_paw_dfptnl.F90
+!! m_paw_dmft.F90
+!! m_paw_efield.F90
+!! m_paw_hr.F90
+!! m_paw_init.F90
+!! m_paw_lmn.F90
+!! m_paw_mkaewf.F90
+!! m_paw_mkrho.F90
+!! m_paw_nhat.F90
+!! m_paw_nmr.F90
+!! m_paw_occupancies.F90
+!! m_paw_optics.F90
+!! m_paw_overlap.F90
+!! m_paw_pwaves_lmn.F90
+!! m_paw_slater.F90
+!! m_paw_sym.F90
+!! m_paw_tools.F90
+!! m_paw_uj.F90
+!! m_pawfgr.F90
+!! m_pawpwij.F90
+!!
+!!***

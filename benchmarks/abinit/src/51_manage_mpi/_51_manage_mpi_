@@ -1,0 +1,27 @@
+!!****d* ABINIT/51_manage_mpi
+!! NAME
+!! 51_manage_mpi
+!!
+!! DESCRIPTION
+!! This directory contains routines that are
+!! used to perform very basics tasks in the ABINIT package, including
+!! managing parallel behaviour, and needs to call MPI routines.
+!! Basic timing routines are also included in this directory.
+!! Some of these routines have two versions : one sequential, and
+!! one MPI-parallel.
+!!
+!! COPYRIGHT
+!! Copyright (C) 1998-2018 ABINIT group (TD)
+!! This file is distributed under the terms of the
+!! GNU General Public License, see ~abinit/COPYING
+!! or http://www.gnu.org/copyleft/gpl.txt .
+!! For the initials of contributors, see ~abinit/doc/developers/contributors.txt .
+!!
+!! CHILDREN
+!! interfaces_51_manage_mpi.F90
+!! m_io_redirect.F90
+!! m_mpinfo.F90
+!! m_wffile.F90
+!! m_xredistribute.F90
+!!
+!!***
