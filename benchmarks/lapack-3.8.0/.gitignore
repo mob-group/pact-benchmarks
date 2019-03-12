@@ -35,3 +35,5 @@ LAPACKE/example/xexample*
 # SED
 SRC/*-e
 LAPACKE/src/*-e
+
+build/
