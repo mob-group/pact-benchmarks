@@ -17,5 +17,7 @@ for f in ${files[@]}; do
     comm+="s/$sub/A$sub/Ig;"
   done
   sed -i "$comm" "$f"
+  ftrunc "$f" > "$f.tmp"
+  mv "$f.tmp" "$f"
   i=$((i+1))
 done
