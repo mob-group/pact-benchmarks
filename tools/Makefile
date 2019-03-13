@@ -1,4 +1,4 @@
-MKLFLAGS=-g -DMKL_ILP64 -m64 -I${MKLROOT}/include
+MKLFLAGS=-std=c99 -DMKL_ILP64 -m64 -I${MKLROOT}/include
 MKLLINK=-lgomp -lpthread -lm -ldl
 
 FC=gfortran
