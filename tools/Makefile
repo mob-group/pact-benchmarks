@@ -2,6 +2,7 @@ MKLFLAGS=-std=c99 -DMKL_ILP64 -m64 -I${MKLROOT}/include
 MKLLINK=-lgomp -lpthread -lm -ldl
 
 FC=gfortran
+SHIM_INSTALL ?= $(PACT_BENCH)/local/lib
 
 all: test ftest
 
@@ -19,6 +20,9 @@ libmklshim.a: mkl_shim.o
 
 %.o : %.f90
 	$(FC) $(MKLFLAGS) $^ -c -o $@
+
+install: libmklshim.a
+	cp $^ $(SHIM_INSTALL)
 
 clean:
 	rm -f *.a *.o test ftest
