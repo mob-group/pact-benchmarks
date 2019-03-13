@@ -17,7 +17,7 @@ CBLAS_TRANSPOSE fortran_to_c_trans(char *const trans) {
 void dgemm_shim_(char *const transA, char *const transB, INT *m, INT *n, INT *k,
                  REAL *alpha, REAL *a, INT *lda, REAL *b, INT *ldb, REAL *beta,
                  REAL *c, INT *ldc) {
-  CBLAS_LAYOUT layout = CblasRowMajor;
+  CBLAS_LAYOUT layout = CblasColMajor;
   cblas_dgemm(layout, fortran_to_c_trans(transA), fortran_to_c_trans(transB),
               *m, *n, *k, *alpha, a, *lda, b, *ldb, *beta, c, *ldc);
 }

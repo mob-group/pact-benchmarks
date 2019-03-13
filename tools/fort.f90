@@ -15,9 +15,9 @@ program hello
   B = (/ 1.0, 2.0, 3.0 /)
   C = (/ 0.0, 0.0 /)
 
-  LDA = K
-  LDB = N
-  LDC = N
+  LDA = M
+  LDB = K
+  LDC = M
 
   call dgemm_shim('N', 'N', M, N, K, ALPHA, A, LDA, B, LDB, BETA, C, LDC)
 
