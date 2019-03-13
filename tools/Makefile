@@ -22,6 +22,7 @@ libmklshim.a: mkl_shim.o
 	$(FC) $(MKLFLAGS) $^ -c -o $@
 
 install: libmklshim.a
+	mkdir -p $(SHIM_INSTALL)
 	cp $^ $(SHIM_INSTALL)
 
 clean:
