@@ -2,6 +2,9 @@
 
 subroutines=($(ag --nobreak --no-heading '^\s*subroutine' BLAS/SRC | \
   tr -s ' ' | cut -d' ' -f3 | cut -d '(' -f1 | sort -u))
+fns=($(ag --nobreak --no-heading '^.*FUNCTION' BLAS/SRC | tr -s ' ' | \
+  rev | cut -d' ' -f1 | rev | cut -d '(' -f1 | sort -u))
+subroutines+=("${fns[@]}")
 
 files=($(find -name '*.f'))
 
