@@ -53,7 +53,7 @@
 #%% test_chain = t03.in, t05.in, t06.in, t07.in, t08.in, t09.in, t11.in, t12.in, t14.in, t16.in
 #%% [files]
 #%% files_to_test = 
-#%%   t05.out, tolnlines = 0, tolabs = 0.000e+00, tolrel = 0.000e+00
+#%%   t05.out, tolnlines = 1000, tolabs = 0.000e+00, tolrel = 0.000e+00
 #%% psp_files = 14si.pspnc
 #%% [shell]
 #%% post_commands =  ww_cp t05o_WFK t09i_WFK

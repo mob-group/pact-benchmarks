@@ -73,7 +73,7 @@ nstep 20               # Maximal number of SCF cycles
 #%% executable = abinit
 #%% [files]
 #%% files_to_test = 
-#%%   t85.out, tolnlines = 35, tolabs = 2.0e+00, tolrel = 3.100e-03, fld_options = -easy
+#%%   t85.out, tolnlines = 1000, tolabs = 2.0e+00, tolrel = 3.100e-03, fld_options = -easy
 #%% psp_files = 22ti.pspnc, 28ni.pspnc
 #%% [paral_info]
 #%% max_nprocs = 8

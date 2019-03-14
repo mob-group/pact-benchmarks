@@ -87,8 +87,8 @@ jpawu2  0.5   eV
 #%% max_nprocs = 10
 #%% [NCPU_10]
 #%% files_to_test = 
-#%%   t83_MPI10.out, tolnlines = 0, tolabs = 0.0, tolrel = 0.0, fld_options = -medium;
-#%%   t83_MPI10o_DS2_atom_01_Gtau_offdiag_02.dat, tolnlines = 0, tolabs = 0.0, tolrel = 0.0, fld_options = -medium;
+#%%   t83_MPI10.out, tolnlines = 1000, tolabs = 0.0, tolrel = 0.0, fld_options = -medium;
+#%%   t83_MPI10o_DS2_atom_01_Gtau_offdiag_02.dat, tolnlines = 1000, tolabs = 0.0, tolrel = 0.0, fld_options = -medium;
 #%% [extra_info]
 #%% authors = B. Amadon
 #%% keywords = DMFT, CTQMC, FAILS_IFMPI

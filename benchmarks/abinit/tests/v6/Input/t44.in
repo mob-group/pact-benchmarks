@@ -47,7 +47,7 @@ prtwf 0
 #%% executable = abinit
 #%% [files]
 #%% files_to_test = 
-#%%   t44.out, tolnlines = 0, tolabs = 0.0, tolrel = 0.0, fld_options =  -medium
+#%%   t44.out, tolnlines = 1000, tolabs = 0.0, tolrel = 0.0, fld_options =  -medium
 #%% psp_files = in_ps.abinit.paw
 #%% [paral_info]
 #%% max_nprocs = 18

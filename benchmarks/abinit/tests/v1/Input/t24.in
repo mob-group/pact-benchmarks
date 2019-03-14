@@ -46,7 +46,7 @@ xred 3*0
 #%% input_prefix = t23o 
 #%% test_chain = t21.in, t22.in, t23.in, t24.in
 #%% [files]
-#%% files_to_test = t24.out, tolnlines = 0, tolabs = 0.000e+00, tolrel = 0.000e+00
+#%% files_to_test = t24.out, tolnlines = 1000, tolabs = 0.000e+00, tolrel = 0.000e+00
 #%% psp_files = 01h.bare
 #%% [paral_info]
 #%% max_nprocs = 2

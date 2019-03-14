@@ -49,7 +49,7 @@
 #%% test_chain = t51.in, t52.in
 #%% [files]
 #%% files_to_test = 
-#%%   t52.out, tolnlines = 3, tolabs = 1.000e-9, tolrel = 6.000e-04
+#%%   t52.out, tolnlines = 1000, tolabs = 1.000e-9, tolrel = 6.000e-04
 #%% psp_files = 13al.pspgth
 #%% [paral_info]
 #%% max_nprocs = 1

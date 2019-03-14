@@ -63,7 +63,7 @@ berryopt2  4       efield2   0.0001  0.0000  0.0000    getwfk2  1
 #%% executable = abinit
 #%% [files]
 #%% files_to_test = 
-#%%   tsv7_70.out, tolnlines = 7, tolabs = 2.0E-6, tolrel = 3.0E-3, fld_options = -medium
+#%%   tsv7_70.out, tolnlines = 1000, tolabs = 2.0E-6, tolrel = 3.0E-3, fld_options = -medium
 #%% psp_files = al_ps.abinit.paw, as_ps.paw
 #%% [paral_info]
 #%% max_nprocs = 1

@@ -62,7 +62,7 @@
 #%% test_chain = t38.in, t39.in, t40.in
 #%% [files]
 #%% files_to_test = 
-#%%   t38.out, tolnlines = 0, tolabs = 0.000e+00, tolrel = 0.000e+00, fld_options =  -medium
+#%%   t38.out, tolnlines = 1000, tolabs = 0.000e+00, tolrel = 0.000e+00, fld_options =  -medium
 #%% psp_files = 26fe.paw
 #%% [shell]
 #%% post_commands = 

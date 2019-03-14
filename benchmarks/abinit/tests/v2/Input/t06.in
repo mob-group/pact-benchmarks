@@ -115,7 +115,7 @@
 #%% executable = abinit
 #%% [files]
 #%% files_to_test = 
-#%%   t06.out, tolnlines = 2, tolabs = 1.100e-04, tolrel = 1.800e-04, fld_options = -medium
+#%%   t06.out, tolnlines = 1000, tolabs = 1.100e-04, tolrel = 1.800e-04, fld_options = -medium
 #%% psp_files = 14si.Hamann_mod 
 #%% [paral_info]
 #%% max_nprocs = 2

@@ -24,7 +24,7 @@
 #%% expected_failure = yes
 #%% [files]
 #%% files_to_test = 
-#%%  t64.out, tolnlines = 0, tolabs = 0.000e+00, tolrel = 0.000e+00
+#%%  t64.out, tolnlines = 1000, tolabs = 0.000e+00, tolrel = 0.000e+00
 #%% psp_files = 12mg.pspnc
 #%% [paral_info]
 #%% max_nprocs = 1

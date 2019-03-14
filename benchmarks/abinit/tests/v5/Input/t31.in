@@ -55,7 +55,7 @@ diemac 3.0
 #%% need_cpp_vars = 
 #%% [files]
 #%% files_to_test = 
-#%%   t31.out, tolnlines = 0, tolabs = 0.000e+00, tolrel = 0.000e+00, fld_options = -medium
+#%%   t31.out, tolnlines = 1000, tolabs = 0.000e+00, tolrel = 0.000e+00, fld_options = -medium
 #%% psp_files = si_ps.736.lda, o_ps.736.lda
 #%% [paral_info]
 #%% max_nprocs = 2

@@ -74,7 +74,7 @@ rfdir       1 1 1      # Do all directions (symmetry will be used)
 #%% test_chain = t37.in, t38.in, t39.in, t40.in
 #%% [files]
 #%% files_to_test = 
-#%%   t37.out, tolnlines = 4, tolabs = 1.1e-3, tolrel = 2.0e-4, fld_options = -medium
+#%%   t37.out, tolnlines = 1000, tolabs = 1.1e-3, tolrel = 2.0e-4, fld_options = -medium
 #%% psp_files = 6c.pspnc
 #%% [paral_info]
 #%% max_nprocs = 2

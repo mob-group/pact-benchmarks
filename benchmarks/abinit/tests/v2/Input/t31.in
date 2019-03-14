@@ -12,7 +12,7 @@ t30o_DS8_DDB
 #%% test_chain = t30.in, t31.in, t32.in
 #%% [files]
 #%% files_to_test = 
-#%%   t31.ddb.out, tolnlines = 21, tolabs = 5.6e-1, tolrel = 3.0e-10
+#%%   t31.ddb.out, tolnlines = 1000, tolabs = 5.6e-1, tolrel = 3.0e-10
 #%% [paral_info]
 #%% max_nprocs = 1
 #%% [extra_info]

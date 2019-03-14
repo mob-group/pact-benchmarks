@@ -60,7 +60,7 @@ diemac 3.0
 #%% executable = abinit
 #%% [files]
 #%% files_to_test = 
-#%%   t10.out, tolnlines = 0, tolabs = 0.0, tolrel = 0.0, fld_options = -medium
+#%%   t10.out, tolnlines = 1000, tolabs = 0.0, tolrel = 0.0, fld_options = -medium
 #%% psp_files = Si.GGA_X_PBE_SOL+GGA_C_PBE_SOL-paw.abinit, O.GGA_X_PBE_SOL+GGA_C_PBE_SOL-paw.abinit
 #%% [paral_info]
 #%% max_nprocs = 2

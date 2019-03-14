@@ -36,7 +36,7 @@ tsmear 5.0d-3
 #%% test_chain = t95.in, t96.in
 #%% [files]
 #%% files_to_test = 
-#%%   t95.out, tolnlines = 0, tolabs = 0.000e+00, tolrel = 0.000e+00
+#%%   t95.out, tolnlines = 1000, tolabs = 0.000e+00, tolrel = 0.000e+00
 #%% psp_files = 13al.psppos
 #%% [shell]
 #%% post_commands = ww_cp t95o_DEN t96i_DEN

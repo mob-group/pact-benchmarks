@@ -72,8 +72,8 @@
 #%% input_prefix = t04o
 #%% test_chain = t04.in, t07.in
 #%% [files]
-# MG: this file is not tested ###%% t07.out, tolnlines = 0, tolabs = 0.000e+00, tolrel = 0.000e+00
-#%% files_to_test = t07o_DOS, tolnlines = 0, tolabs = 0.000e+00, tolrel = 0.000e+00
+# MG: this file is not tested ###%% t07.out, tolnlines = 1000, tolabs = 0.000e+00, tolrel = 0.000e+00
+#%% files_to_test = t07o_DOS, tolnlines = 1000, tolabs = 0.000e+00, tolrel = 0.000e+00
 #%% psp_files = 13al.pspgth 
 #%% [paral_info]
 #%% max_nprocs = 2

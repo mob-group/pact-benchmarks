@@ -46,7 +46,7 @@
 #%% executable = abinit
 #%% [files]
 #%% files_to_test = 
-#%%   t11.out, tolnlines = 0, tolabs = 0.000e+00, tolrel = 0.000e+00
+#%%   t11.out, tolnlines = 1000, tolabs = 0.000e+00, tolrel = 0.000e+00
 #%% psp_files = HGH/14si.4.hgh
 #%% [paral_info]
 #%% max_nprocs = 1

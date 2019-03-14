@@ -128,7 +128,7 @@ rprim   5.0000000000e-01 -8.6602540378e-01  0.0000000000e+00
 #%% executable = abinit
 #%% [files]
 #%% files_to_test = 
-#%%   t64.out, tolnlines = 25, tolabs = 1.010e-03, tolrel = 6.000e-03, fld_options = -medium
+#%%   t64.out, tolnlines = 1000, tolabs = 1.010e-03, tolrel = 6.000e-03, fld_options = -medium
 #%% psp_files = 14si.pspnc, 08o_001023.pspfhi
 #%% [paral_info]
 #%% max_nprocs = 6

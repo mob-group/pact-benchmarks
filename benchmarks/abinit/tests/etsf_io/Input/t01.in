@@ -60,7 +60,7 @@ iomode  3
 #%% test_chain = t01.in, t03.in
 #%% [files]
 #%% files_to_test = 
-#%%   t01.out, tolnlines = 0, tolabs = 0.000e+00, tolrel = 0.000e+00
+#%%   t01.out, tolnlines = 1000, tolabs = 0.000e+00, tolrel = 0.000e+00
 #%% psp_files = 08o.pspgth, 01h.pspgth
 #%% [paral_info]
 #%% max_nprocs = 1

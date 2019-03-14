@@ -11,7 +11,7 @@ t60o_DEN   # DEN file
 #%% test_chain = t60.in, t61.in
 #%% [files]
 #%% files_to_test = 
-#%%   t61.stdout, tolnlines = 0, tolabs = 0.000e+00, tolrel = 0.000e+00
+#%%   t61.stdout, tolnlines = 1000, tolabs = 0.000e+00, tolrel = 0.000e+00
 #%% [shell]
 #%% Copy from Psps_dir to Workdir
 #%% pre_commands =  

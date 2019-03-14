@@ -29,7 +29,7 @@ xyzfile t10.in.xyz
 #%% executable = abinit
 #%% [files]
 #%% files_to_test = 
-#%%   t10.out, tolnlines = 0, tolabs = 0.0, tolrel = 0.0
+#%%   t10.out, tolnlines = 1000, tolabs = 0.0, tolrel = 0.0
 #%% extra_inputs = t10.in.xyz
 #%% psp_files = 14si.pspgth, 1h.pspnc
 #%% [paral_info]

@@ -55,7 +55,7 @@
 #%% test_chain = t71.in, t72.in
 #%% [files]
 #%% files_to_test = 
-#%%  t72.out, tolnlines = 0, tolabs = 0.000e+00, tolrel = 0.000e+00
+#%%  t72.out, tolnlines = 1000, tolabs = 0.000e+00, tolrel = 0.000e+00
 #%% psp_files = 42mo.pspnc
 #%% [paral_info]
 #%% max_nprocs = 3

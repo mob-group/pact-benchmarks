@@ -64,7 +64,7 @@ prteig 0
 #%% executable = abinit
 #%% [files]
 #%% files_to_test = 
-#%%   t31.out, tolnlines = 22, tolabs = 6.000e-2, tolrel = 0.15
+#%%   t31.out, tolnlines = 1000, tolabs = 6.000e-2, tolrel = 0.15
 #%% psp_files = 1h.atompaw.wvl
 #%% [paral_info]
 #%% max_nprocs = 1

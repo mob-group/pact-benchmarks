@@ -50,7 +50,7 @@
 #%% test_chain = t30.in, t31.in, t32.in
 #%% [files]
 #%% files_to_test = 
-#%%   t32.out, tolnlines = 4, tolabs = 1.1e-5, tolrel = 2.0e-8 
+#%%   t32.out, tolnlines = 1000, tolabs = 1.1e-5, tolrel = 2.0e-8 
 #%% [paral_info]
 #%% max_nprocs = 4
 #%% [extra_info]

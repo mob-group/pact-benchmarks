@@ -28,7 +28,7 @@ maxatd   14.0   # Important to include enough starting atoms,
 #%% test_chain = t30.in, t31.in
 #%% [files]
 #%% files_to_test = 
-#%%   t31.out, tolnlines = 0, tolabs = 0.000e+00, tolrel = 0.000e+00, fld_options = -medium
+#%%   t31.out, tolnlines = 1000, tolabs = 0.000e+00, tolrel = 0.000e+00, fld_options = -medium
 #%% psp_files = mg.fc
 #%% [paral_info]
 #%% max_nprocs = 1

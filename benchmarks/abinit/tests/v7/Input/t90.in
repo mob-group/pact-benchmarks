@@ -142,7 +142,7 @@ znucl 3
 ####  The comparison of the output file has been disabled: this test
 ####  fails on several slaves due to a different number of SCF cycles
 ####  Finding the magic numbers that make the test pass everywhere is a tricky business.
-####%% t90.out, tolnlines = 11, tolabs = 4.0e-3, tolrel = 1.1, fld_options =  -easy
+####%% t90.out, tolnlines = 1000, tolabs = 4.0e-3, tolrel = 1.1, fld_options =  -easy
 #%% psp_files = 03-Li.psp
 #%% [paral_info]
 #%% max_nprocs = 2

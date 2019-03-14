@@ -33,7 +33,7 @@
 #%% test_chain = t17.in, t19.in, t20.in, t21.in, t23.in
 #%% [files]
 #%% files_to_test = 
-#%%   t17.out, tolnlines = 0, tolabs = 0.000e+00, tolrel = 0.000e+00
+#%%   t17.out, tolnlines = 1000, tolabs = 0.000e+00, tolrel = 0.000e+00
 #%% psp_files = 14si.pspnc
 #%% [shell]
 #%% post_commands = 

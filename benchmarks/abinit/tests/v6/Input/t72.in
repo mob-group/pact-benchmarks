@@ -143,7 +143,7 @@ fermie_nest 0
 #%% test_chain = t72.in, t73.in, t74.in, t75.in, t76.in
 #%% [files]
 #%% files_to_test = 
-#%%   t72.out, tolnlines = 11, tolabs = 4.0e-3, tolrel = 1.1, fld_options =  -easy
+#%%   t72.out, tolnlines = 1000, tolabs = 4.0e-3, tolrel = 1.1, fld_options =  -easy
 #%% psp_files = 22ti.pspnc, 41nb.pspfhi
 #%% [paral_info]
 #%% max_nprocs = 2

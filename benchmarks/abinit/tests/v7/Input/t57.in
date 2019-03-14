@@ -69,7 +69,7 @@
 #%% post_commands = 
 #%% [files]
 #%% files_to_test = 
-#%%   t57.out, tolnlines = 7, tolabs = 1.1e-3, tolrel = 2.0e-4, fld_options = -medium
+#%%   t57.out, tolnlines = 1000, tolabs = 1.1e-3, tolrel = 2.0e-4, fld_options = -medium
 #%% psp_files = 6c.pspnc
 #%% [paral_info]
 #%% max_nprocs = 2

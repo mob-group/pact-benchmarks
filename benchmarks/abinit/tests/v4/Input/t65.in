@@ -57,7 +57,7 @@
 #%% executable = abinit
 #%% [files]
 #%% files_to_test = 
-#%%   t65.out, tolnlines = 2, tolabs = 1.010e-06, tolrel = 2.000e-04, fld_options =  -medium
+#%%   t65.out, tolnlines = 1000, tolabs = 1.010e-06, tolrel = 2.000e-04, fld_options =  -medium
 #%% psp_files = 13al.psphgh, 15p.5.hgh
 #%% [paral_info]
 #%% max_nprocs = 10

@@ -52,7 +52,7 @@ getxcart3     -2
 #%% executable = abinit
 #%% [files]
 #%% files_to_test = 
-#%%   t80.out, tolnlines = 0, tolabs = 1.289e-10, tolrel = 3.000e-10, fld_options =  -medium
+#%%   t80.out, tolnlines = 1000, tolabs = 1.289e-10, tolrel = 3.000e-10, fld_options =  -medium
 #%% psp_files = 01h.pspgth 
 #%% [paral_info]
 #%% max_nprocs = 1

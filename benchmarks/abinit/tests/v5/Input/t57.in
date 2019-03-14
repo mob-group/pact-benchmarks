@@ -43,7 +43,7 @@ prtwf 0   prtden 0
 #%% executable = abinit
 #%% [files]
 #%% files_to_test = 
-#%%   t57.out, tolnlines = 0, tolabs = 3.280e-11, tolrel = 9.540e-13
+#%%   t57.out, tolnlines = 1000, tolabs = 3.280e-11, tolrel = 9.540e-13
 #%% psp_files = dummy_atom
 #%% [paral_info]
 #%% max_nprocs = 1

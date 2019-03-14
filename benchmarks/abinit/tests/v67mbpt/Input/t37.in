@@ -80,7 +80,7 @@ freqremax4   31 eV
 #%% test_chain = t37.in, t38.in, t39.in
 #%% [files]
 #%% files_to_test = 
-#%%   t37.out, tolnlines = 20, tolabs = 2.0e-2, tolrel = 5.0e-1, fld_options = -ridiculous;
+#%%   t37.out, tolnlines = 1000, tolabs = 2.0e-2, tolrel = 5.0e-1, fld_options = -ridiculous;
 #%% psp_files = 03-Li.psp, 09-F.psp
 #%% [paral_info]
 #%% max_nprocs = 8

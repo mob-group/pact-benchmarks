@@ -74,17 +74,17 @@ prtden 0  prteig 0  prtwf 0
 #%% [setup]
 #%% executable = abinit
 #%% [files]
-#%% files_to_test = t05.out, tolnlines = 50, tolabs = 5.e-4, tolrel = 6.e-2
+#%% files_to_test = t05.out, tolnlines = 1000, tolabs = 5.e-4, tolrel = 6.e-2
 #%% psp_files = 28ni.paw, 8o.2.paw
 #%% [paral_info]
 #%% nprocs_to_test = 1,2,4
 #%% max_nprocs = 4
 #%% [NCPU_1]
-#%% files_to_test = t05_MPI1.out, tolnlines = 50, tolabs = 5.e-4, tolrel = 6.e-2
+#%% files_to_test = t05_MPI1.out, tolnlines = 1000, tolabs = 5.e-4, tolrel = 6.e-2
 #%% [NCPU_2]
-#%% files_to_test = t05_MPI2.out, tolnlines = 50, tolabs = 5.e-4, tolrel = 6.e-2
+#%% files_to_test = t05_MPI2.out, tolnlines = 1000, tolabs = 5.e-4, tolrel = 6.e-2
 #%% [NCPU_4]
-#%% files_to_test = t05_MPI4.out, tolnlines = 50, tolabs = 5.e-4, tolrel = 6.e-2
+#%% files_to_test = t05_MPI4.out, tolnlines = 1000, tolabs = 5.e-4, tolrel = 6.e-2
 #%% [extra_info]
 #%% authors = M. Torrent
 #%% keywords = PAW, LDAU

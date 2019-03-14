@@ -14,10 +14,10 @@ t09o
 #%%  t10_Kth,   tolnlines =50, tolabs = 1.2e-06, tolrel = 2.3e-01, fld_options = -easy;
 #%%  t10_abs,   tolnlines =50, tolabs = 4.0e+04, tolrel = 3.2e-05, fld_options = -ridiculous;
 #%%  t10_sigX,  tolnlines =10, tolabs = 2.1e-10, tolrel = 1.0e-07, fld_options = -easy;
-#%%  t10_emisX, tolnlines = 5, tolabs = 1.1e-07, tolrel = 1.9e-08, fld_options = -easy;
-#%%  t10_eps, tolnlines = 50, tolabs = 1.1e-07, tolrel = 1.9e-08, fld_options = -easy;
-#%%  t10_Lij, tolnlines = 50, tolabs = 1.1e-07, tolrel = 1.9e-08, fld_options = -ridiculous;
-#%%  t10_sig, tolnlines = 50, tolabs = 1.1e-07, tolrel = 1.9e-08, fld_options = -easy;
+#%%  t10_emisX, tolnlines = 1000, tolabs = 1.1e-07, tolrel = 1.9e-08, fld_options = -easy;
+#%%  t10_eps, tolnlines = 1000, tolabs = 1.1e-07, tolrel = 1.9e-08, fld_options = -easy;
+#%%  t10_Lij, tolnlines = 1000, tolabs = 1.1e-07, tolrel = 1.9e-08, fld_options = -ridiculous;
+#%%  t10_sig, tolnlines = 1000, tolabs = 1.1e-07, tolrel = 1.9e-08, fld_options = -easy;
 #%% extra_inputs = 
 #%% psp_files = 
 #%% [paral_info]

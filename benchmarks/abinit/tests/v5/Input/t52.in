@@ -26,7 +26,7 @@ t52.outden
 #%% test_chain = t51.in, t52.in, t53.in
 #%% [files]
 #%% files_to_test = 
-#%%   t52.stdout, tolnlines = 0, tolabs = 3.010e-14, tolrel = 4.000e-07
+#%%   t52.stdout, tolnlines = 1000, tolabs = 3.010e-14, tolrel = 4.000e-07
 #%% [paral_info]
 #%% max_nprocs = 1
 #%% [extra_info]

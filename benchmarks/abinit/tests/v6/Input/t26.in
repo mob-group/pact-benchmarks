@@ -50,7 +50,7 @@ ngkpt 4 4 4
 #%% executable = abinit
 #%% [files]
 #%% files_to_test = 
-#%%   t26.out, tolnlines = 0, tolabs = 0.0, tolrel = 0.0
+#%%   t26.out, tolnlines = 1000, tolabs = 0.0, tolrel = 0.0
 #%% psp_files = 1h.pspnc, 1h.pspnc
 #%% [paral_info]
 #%% max_nprocs = 20

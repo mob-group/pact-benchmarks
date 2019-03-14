@@ -12,7 +12,7 @@ t61o_DS5_DDB
 #%% test_chain = t61.in, t62.in, t63.in, t64.in, t65.in
 #%% [files]
 #%% files_to_test = 
-#%%   t62.stdout, tolnlines = 0, tolabs = 0.0, tolrel = 0.0
+#%%   t62.stdout, tolnlines = 1000, tolabs = 0.0, tolrel = 0.0
 #%% [paral_info]
 #%% max_nprocs = 1
 #%% [shell]

@@ -159,7 +159,7 @@ kptbounds4  0.0 0.0 0.0 #Gamma
 #%% need_cpp_vars = !HAVE_MPI_IO_DEFAULT, !HAVE_NETCDF_DEFAULT
 #%% [files]
 #%% files_to_test = 
-#%%   t77.out, tolnlines = 5, tolabs = 1.0E-15, tolrel = 1.0E-20, fld_options = 
+#%%   t77.out, tolnlines = 1000, tolabs = 1.0E-15, tolrel = 1.0E-20, fld_options = 
 #%% psp_files = Cu_LDA_abinit
 #%% [paral_info]
 #%% max_nprocs = 2

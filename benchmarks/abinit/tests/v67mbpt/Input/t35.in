@@ -70,10 +70,10 @@ bs_interp_rl_nb   1 # First-neighbour
 #%% test_chain = t31.in, t32.in, t33.in, t34.in, t35.in
 #%% [files]
 #%% files_to_test = 
-#%%  t35.out,               tolnlines = 20 , tolabs = 1.1e-2, tolrel = 4.0e-2, fld_options =  -ridiculous;
-#%%  t35o_DS1_EXC_MDF    ,  tolnlines = 800, tolabs = 1.1e-2, tolrel = 4.0e-2, fld_options =  -ridiculous;
-#%%  t35o_DS1_GW_NLF_MDF ,  tolnlines = 800, tolabs = 1.1e-2, tolrel = 4.0e-2, fld_options =  -ridiculous;
-#%%  t35o_DS1_RPA_NLF_MDF,  tolnlines = 800, tolabs = 1.1e-2, tolrel = 4.0e-2, fld_options =  -ridiculous;
+#%%  t35.out,               tolnlines = 1000 , tolabs = 1.1e-2, tolrel = 4.0e-2, fld_options =  -ridiculous;
+#%%  t35o_DS1_EXC_MDF    ,  tolnlines = 1000, tolabs = 1.1e-2, tolrel = 4.0e-2, fld_options =  -ridiculous;
+#%%  t35o_DS1_GW_NLF_MDF ,  tolnlines = 1000, tolabs = 1.1e-2, tolrel = 4.0e-2, fld_options =  -ridiculous;
+#%%  t35o_DS1_RPA_NLF_MDF,  tolnlines = 1000, tolabs = 1.1e-2, tolrel = 4.0e-2, fld_options =  -ridiculous;
 #%% psp_files = 14si.pspnc 
 #%% [paral_info]
 #%% max_nprocs = 1

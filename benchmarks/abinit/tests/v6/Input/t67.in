@@ -112,7 +112,7 @@ nbdbuf 0
 #%% executable = abinit
 #%% [files]
 #%% files_to_test = 
-#%%   t67.out, tolnlines = 0, tolabs = 0.0, tolrel = 0.0
+#%%   t67.out, tolnlines = 1000, tolabs = 0.0, tolrel = 0.0
 #%% psp_files = 02he.bare
 #%% [paral_info]
 #%% max_nprocs = 1

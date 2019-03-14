@@ -40,7 +40,7 @@ prtden 0
 #%% exclude_builders = ubu_intel_17.0_openmpi
 #%% [files]
 #%% files_to_test = 
-#%%   t06.out, tolnlines = 2, tolabs = 1.100e-07, tolrel = 5.000e-04
+#%%   t06.out, tolnlines = 1000, tolabs = 1.100e-07, tolrel = 5.000e-04
 #%% psp_files = HGH/1h.1.hgh, HGH/8o.6.hgh
 #%% [paral_info]
 #%% max_nprocs = 1

@@ -63,7 +63,7 @@ charge22  1
 #%% executable = abinit
 #%% [files]
 #%% files_to_test = 
-#%%   t42.out, tolnlines = 1, tolabs = 2.000e-10, tolrel = 2.000e-10
+#%%   t42.out, tolnlines = 1000, tolabs = 2.000e-10, tolrel = 2.000e-10
 #%% psp_files = 7n.pspnc, 7n.1s.psp_mod, 6c.pspnc, 1h.pspnc
 #%% [paral_info]
 #%% max_nprocs = 1

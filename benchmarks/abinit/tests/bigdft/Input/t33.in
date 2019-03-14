@@ -78,7 +78,7 @@ prteig 0
 #%% psp_files = 08o.pspgth
 #%% [paral_info]
 #%% max_nprocs = 1
-#%% files_to_test = t33.out, tolnlines = 0, tolabs = 1.000e-12, tolrel = 1.000e-12
+#%% files_to_test = t33.out, tolnlines = 1000, tolabs = 1.000e-12, tolrel = 1.000e-12
 #%% [extra_info]
 #%% authors = T. Rangel
 #%% keywords =  NC

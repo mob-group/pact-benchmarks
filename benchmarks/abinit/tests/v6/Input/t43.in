@@ -73,7 +73,7 @@ bfield 3*0.0
 #%% executable = abinit
 #%% [files]
 #%% files_to_test = 
-#%%   t43.out, tolnlines = 0, tolabs = 0.0, tolrel = 0.0, fld_options = -easy
+#%%   t43.out, tolnlines = 1000, tolabs = 0.0, tolrel = 0.0, fld_options = -easy
 #%% psp_files = al_ps.abinit.paw, as_ps.paw
 #%% [paral_info]
 #%% max_nprocs = 1

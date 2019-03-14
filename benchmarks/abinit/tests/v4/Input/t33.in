@@ -33,7 +33,7 @@ phimax   1.57079632679    #
 #%% test_chain = t32.in, t33.in, t34.in
 #%% [files]
 #%% files_to_test = 
-#%%   t33.out, tolnlines = 19, tolabs = 2.000e-03, tolrel = 2.000e-04, fld_options = -medium
+#%%   t33.out, tolnlines = 1000, tolabs = 2.000e-03, tolrel = 2.000e-04, fld_options = -medium
 #%% psp_files = o.fc, mg.fc
 #%% [paral_info]
 #%% max_nprocs = 1

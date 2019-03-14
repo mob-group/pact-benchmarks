@@ -79,7 +79,7 @@ iomode 3  # ETSF IO access
 #%% need_cpp_vars = HAVE_ETSF_IO
 #%% [files]
 #%% files_to_test = 
-#%%   t18.out, tolnlines = 0, tolabs = 1.320e-10, tolrel = 1.174e-13
+#%%   t18.out, tolnlines = 1000, tolabs = 1.320e-10, tolrel = 1.174e-13
 #%% psp_files = 06c.pspgth, 08o.pspgth
 #%% [paral_info]
 #%% max_nprocs = 1
