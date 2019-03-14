@@ -1,4 +1,4 @@
-*> \brief \b AB_CTFSM solves a matrix equation (one operand is a triangular matrix in RFP format).
+*> \brief \b CTFSM solves a matrix equation (one operand is a triangular matrix in RFP format).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CTFSM + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CTFSM.f">
+*> Download CTFSM + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctfsm.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CTFSM.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctfsm.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CTFSM.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctfsm.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CTFSM( TRANSR, SIDE, UPLO, TRANS, DIAG, M, N, ALPHA, A,
+*       SUBROUTINE CTFSM( TRANSR, SIDE, UPLO, TRANS, DIAG, M, N, ALPHA, A,
 *                         B, LDB )
 *
 *       .. Scalar Arguments ..
@@ -38,7 +38,7 @@
 *>
 *> Level 3 BLAS like routine for A in RFP Format.
 *>
-*> AB_CTFSM solves the matrix equation
+*> CTFSM solves the matrix equation
 *>
 *>    op( A )*X = alpha*B  or  X*op( A ) = alpha*B
 *>
@@ -295,8 +295,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_CTFSM( TRANSR, SIDE, UPLO, TRANS, DIAG, M, N, ALPHA,
-     $ A,
+      SUBROUTINE CTFSM( TRANSR, SIDE, UPLO, TRANS, DIAG, M, N, ALPHA, A,
      $                  B, LDB )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -326,11 +325,11 @@
       INTEGER            M1, M2, N1, N2, K, INFO, I, J
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_CGEMM, AB_CTRSM
+      EXTERNAL           XERBLA, CGEMM, CTRSM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MOD
@@ -340,20 +339,19 @@
 *     Test the input parameters.
 *
       INFO = 0
-      NORMALTRANSR = AB_LSAME( TRANSR, 'N' )
-      LSIDE = AB_LSAME( SIDE, 'L' )
-      LOWER = AB_LSAME( UPLO, 'L' )
-      NOTRANS = AB_LSAME( TRANS, 'N' )
-      IF( .NOT.NORMALTRANSR .AND. .NOT.AB_LSAME( TRANSR, 'C' ) ) THEN
+      NORMALTRANSR = LSAME( TRANSR, 'N' )
+      LSIDE = LSAME( SIDE, 'L' )
+      LOWER = LSAME( UPLO, 'L' )
+      NOTRANS = LSAME( TRANS, 'N' )
+      IF( .NOT.NORMALTRANSR .AND. .NOT.LSAME( TRANSR, 'C' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LSIDE .AND. .NOT.AB_LSAME( SIDE, 'R' ) ) THEN
+      ELSE IF( .NOT.LSIDE .AND. .NOT.LSAME( SIDE, 'R' ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.LOWER .AND. .NOT.AB_LSAME( UPLO, 'U' ) ) THEN
+      ELSE IF( .NOT.LOWER .AND. .NOT.LSAME( UPLO, 'U' ) ) THEN
          INFO = -3
-      ELSE IF( .NOT.NOTRANS .AND. .NOT.AB_LSAME( TRANS, 'C' ) ) THEN
+      ELSE IF( .NOT.NOTRANS .AND. .NOT.LSAME( TRANS, 'C' ) ) THEN
          INFO = -4
-      ELSE IF( .NOT.AB_LSAME( DIAG, 'N' ) .AND. .NOT.AB_LSAME( DIAG, 
-     $'U' ) )
+      ELSE IF( .NOT.LSAME( DIAG, 'N' ) .AND. .NOT.LSAME( DIAG, 'U' ) )
      $         THEN
          INFO = -5
       ELSE IF( M.LT.0 ) THEN
@@ -364,7 +362,7 @@
          INFO = -11
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CTFSM ', -INFO )
+         CALL XERBLA( 'CTFSM ', -INFO )
          RETURN
       END IF
 *
@@ -424,17 +422,14 @@
 *                    TRANS = 'N'
 *
                      IF( M.EQ.1 ) THEN
-                        CALL AB_CTRSM( 'L', 'L', 'N', DIAG, M1, N, ALPHA
-     $,
+                        CALL CTRSM( 'L', 'L', 'N', DIAG, M1, N, ALPHA,
      $                              A, M, B, LDB )
                      ELSE
-                        CALL AB_CTRSM( 'L', 'L', 'N', DIAG, M1, N, ALPHA
-     $,
+                        CALL CTRSM( 'L', 'L', 'N', DIAG, M1, N, ALPHA,
      $                              A( 0 ), M, B, LDB )
-                        CALL AB_CGEMM( 'N', 'N', M2, N, M1, -CONE, A( M1
-     $ ),
+                        CALL CGEMM( 'N', 'N', M2, N, M1, -CONE, A( M1 ),
      $                              M, B, LDB, ALPHA, B( M1, 0 ), LDB )
-                        CALL AB_CTRSM( 'L', 'U', 'C', DIAG, M2, N, CONE,
+                        CALL CTRSM( 'L', 'U', 'C', DIAG, M2, N, CONE,
      $                              A( M ), M, B( M1, 0 ), LDB )
                      END IF
 *
@@ -444,17 +439,14 @@
 *                    TRANS = 'C'
 *
                      IF( M.EQ.1 ) THEN
-                        CALL AB_CTRSM( 'L', 'L', 'C', DIAG, M1, N, ALPHA
-     $,
+                        CALL CTRSM( 'L', 'L', 'C', DIAG, M1, N, ALPHA,
      $                              A( 0 ), M, B, LDB )
                      ELSE
-                        CALL AB_CTRSM( 'L', 'U', 'N', DIAG, M2, N, ALPHA
-     $,
+                        CALL CTRSM( 'L', 'U', 'N', DIAG, M2, N, ALPHA,
      $                              A( M ), M, B( M1, 0 ), LDB )
-                        CALL AB_CGEMM( 'C', 'N', M1, N, M2, -CONE, A( M1
-     $ ),
+                        CALL CGEMM( 'C', 'N', M1, N, M2, -CONE, A( M1 ),
      $                              M, B( M1, 0 ), LDB, ALPHA, B, LDB )
-                        CALL AB_CTRSM( 'L', 'L', 'C', DIAG, M1, N, CONE,
+                        CALL CTRSM( 'L', 'L', 'C', DIAG, M1, N, CONE,
      $                              A( 0 ), M, B, LDB )
                      END IF
 *
@@ -469,12 +461,11 @@
 *                    SIDE  ='L', N is odd, TRANSR = 'N', UPLO = 'U', and
 *                    TRANS = 'N'
 *
-                     CALL AB_CTRSM( 'L', 'L', 'N', DIAG, M1, N, ALPHA,
+                     CALL CTRSM( 'L', 'L', 'N', DIAG, M1, N, ALPHA,
      $                           A( M2 ), M, B, LDB )
-                     CALL AB_CGEMM( 'C', 'N', M2, N, M1, -CONE, A( 0 ), 
-     $M,
+                     CALL CGEMM( 'C', 'N', M2, N, M1, -CONE, A( 0 ), M,
      $                           B, LDB, ALPHA, B( M1, 0 ), LDB )
-                     CALL AB_CTRSM( 'L', 'U', 'C', DIAG, M2, N, CONE,
+                     CALL CTRSM( 'L', 'U', 'C', DIAG, M2, N, CONE,
      $                           A( M1 ), M, B( M1, 0 ), LDB )
 *
                   ELSE
@@ -482,12 +473,11 @@
 *                    SIDE  ='L', N is odd, TRANSR = 'N', UPLO = 'U', and
 *                    TRANS = 'C'
 *
-                     CALL AB_CTRSM( 'L', 'U', 'N', DIAG, M2, N, ALPHA,
+                     CALL CTRSM( 'L', 'U', 'N', DIAG, M2, N, ALPHA,
      $                           A( M1 ), M, B( M1, 0 ), LDB )
-                     CALL AB_CGEMM( 'N', 'N', M1, N, M2, -CONE, A( 0 ), 
-     $M,
+                     CALL CGEMM( 'N', 'N', M1, N, M2, -CONE, A( 0 ), M,
      $                           B( M1, 0 ), LDB, ALPHA, B, LDB )
-                     CALL AB_CTRSM( 'L', 'L', 'C', DIAG, M1, N, CONE,
+                     CALL CTRSM( 'L', 'L', 'C', DIAG, M1, N, CONE,
      $                           A( M2 ), M, B, LDB )
 *
                   END IF
@@ -508,17 +498,15 @@
 *                    TRANS = 'N'
 *
                      IF( M.EQ.1 ) THEN
-                        CALL AB_CTRSM( 'L', 'U', 'C', DIAG, M1, N, ALPHA
-     $,
+                        CALL CTRSM( 'L', 'U', 'C', DIAG, M1, N, ALPHA,
      $                              A( 0 ), M1, B, LDB )
                      ELSE
-                        CALL AB_CTRSM( 'L', 'U', 'C', DIAG, M1, N, ALPHA
-     $,
+                        CALL CTRSM( 'L', 'U', 'C', DIAG, M1, N, ALPHA,
      $                              A( 0 ), M1, B, LDB )
-                        CALL AB_CGEMM( 'C', 'N', M2, N, M1, -CONE,
+                        CALL CGEMM( 'C', 'N', M2, N, M1, -CONE,
      $                              A( M1*M1 ), M1, B, LDB, ALPHA,
      $                              B( M1, 0 ), LDB )
-                        CALL AB_CTRSM( 'L', 'L', 'N', DIAG, M2, N, CONE,
+                        CALL CTRSM( 'L', 'L', 'N', DIAG, M2, N, CONE,
      $                              A( 1 ), M1, B( M1, 0 ), LDB )
                      END IF
 *
@@ -528,17 +516,15 @@
 *                    TRANS = 'C'
 *
                      IF( M.EQ.1 ) THEN
-                        CALL AB_CTRSM( 'L', 'U', 'N', DIAG, M1, N, ALPHA
-     $,
+                        CALL CTRSM( 'L', 'U', 'N', DIAG, M1, N, ALPHA,
      $                              A( 0 ), M1, B, LDB )
                      ELSE
-                        CALL AB_CTRSM( 'L', 'L', 'C', DIAG, M2, N, ALPHA
-     $,
+                        CALL CTRSM( 'L', 'L', 'C', DIAG, M2, N, ALPHA,
      $                              A( 1 ), M1, B( M1, 0 ), LDB )
-                        CALL AB_CGEMM( 'N', 'N', M1, N, M2, -CONE,
+                        CALL CGEMM( 'N', 'N', M1, N, M2, -CONE,
      $                              A( M1*M1 ), M1, B( M1, 0 ), LDB,
      $                              ALPHA, B, LDB )
-                        CALL AB_CTRSM( 'L', 'U', 'N', DIAG, M1, N, CONE,
+                        CALL CTRSM( 'L', 'U', 'N', DIAG, M1, N, CONE,
      $                              A( 0 ), M1, B, LDB )
                      END IF
 *
@@ -553,12 +539,11 @@
 *                    SIDE  ='L', N is odd, TRANSR = 'C', UPLO = 'U', and
 *                    TRANS = 'N'
 *
-                     CALL AB_CTRSM( 'L', 'U', 'C', DIAG, M1, N, ALPHA,
+                     CALL CTRSM( 'L', 'U', 'C', DIAG, M1, N, ALPHA,
      $                           A( M2*M2 ), M2, B, LDB )
-                     CALL AB_CGEMM( 'N', 'N', M2, N, M1, -CONE, A( 0 ), 
-     $M2,
+                     CALL CGEMM( 'N', 'N', M2, N, M1, -CONE, A( 0 ), M2,
      $                           B, LDB, ALPHA, B( M1, 0 ), LDB )
-                     CALL AB_CTRSM( 'L', 'L', 'N', DIAG, M2, N, CONE,
+                     CALL CTRSM( 'L', 'L', 'N', DIAG, M2, N, CONE,
      $                           A( M1*M2 ), M2, B( M1, 0 ), LDB )
 *
                   ELSE
@@ -566,12 +551,11 @@
 *                    SIDE  ='L', N is odd, TRANSR = 'C', UPLO = 'U', and
 *                    TRANS = 'C'
 *
-                     CALL AB_CTRSM( 'L', 'L', 'C', DIAG, M2, N, ALPHA,
+                     CALL CTRSM( 'L', 'L', 'C', DIAG, M2, N, ALPHA,
      $                           A( M1*M2 ), M2, B( M1, 0 ), LDB )
-                     CALL AB_CGEMM( 'C', 'N', M1, N, M2, -CONE, A( 0 ), 
-     $M2,
+                     CALL CGEMM( 'C', 'N', M1, N, M2, -CONE, A( 0 ), M2,
      $                           B( M1, 0 ), LDB, ALPHA, B, LDB )
-                     CALL AB_CTRSM( 'L', 'U', 'N', DIAG, M1, N, CONE,
+                     CALL CTRSM( 'L', 'U', 'N', DIAG, M1, N, CONE,
      $                           A( M2*M2 ), M2, B, LDB )
 *
                   END IF
@@ -597,11 +581,11 @@
 *                    SIDE  ='L', N is even, TRANSR = 'N', UPLO = 'L',
 *                    and TRANS = 'N'
 *
-                     CALL AB_CTRSM( 'L', 'L', 'N', DIAG, K, N, ALPHA,
+                     CALL CTRSM( 'L', 'L', 'N', DIAG, K, N, ALPHA,
      $                           A( 1 ), M+1, B, LDB )
-                     CALL AB_CGEMM( 'N', 'N', K, N, K, -CONE, A( K+1 ),
+                     CALL CGEMM( 'N', 'N', K, N, K, -CONE, A( K+1 ),
      $                           M+1, B, LDB, ALPHA, B( K, 0 ), LDB )
-                     CALL AB_CTRSM( 'L', 'U', 'C', DIAG, K, N, CONE,
+                     CALL CTRSM( 'L', 'U', 'C', DIAG, K, N, CONE,
      $                           A( 0 ), M+1, B( K, 0 ), LDB )
 *
                   ELSE
@@ -609,11 +593,11 @@
 *                    SIDE  ='L', N is even, TRANSR = 'N', UPLO = 'L',
 *                    and TRANS = 'C'
 *
-                     CALL AB_CTRSM( 'L', 'U', 'N', DIAG, K, N, ALPHA,
+                     CALL CTRSM( 'L', 'U', 'N', DIAG, K, N, ALPHA,
      $                           A( 0 ), M+1, B( K, 0 ), LDB )
-                     CALL AB_CGEMM( 'C', 'N', K, N, K, -CONE, A( K+1 ),
+                     CALL CGEMM( 'C', 'N', K, N, K, -CONE, A( K+1 ),
      $                           M+1, B( K, 0 ), LDB, ALPHA, B, LDB )
-                     CALL AB_CTRSM( 'L', 'L', 'C', DIAG, K, N, CONE,
+                     CALL CTRSM( 'L', 'L', 'C', DIAG, K, N, CONE,
      $                           A( 1 ), M+1, B, LDB )
 *
                   END IF
@@ -627,24 +611,22 @@
 *                    SIDE  ='L', N is even, TRANSR = 'N', UPLO = 'U',
 *                    and TRANS = 'N'
 *
-                     CALL AB_CTRSM( 'L', 'L', 'N', DIAG, K, N, ALPHA,
+                     CALL CTRSM( 'L', 'L', 'N', DIAG, K, N, ALPHA,
      $                           A( K+1 ), M+1, B, LDB )
-                     CALL AB_CGEMM( 'C', 'N', K, N, K, -CONE, A( 0 ), M+
-     $1,
+                     CALL CGEMM( 'C', 'N', K, N, K, -CONE, A( 0 ), M+1,
      $                           B, LDB, ALPHA, B( K, 0 ), LDB )
-                     CALL AB_CTRSM( 'L', 'U', 'C', DIAG, K, N, CONE,
+                     CALL CTRSM( 'L', 'U', 'C', DIAG, K, N, CONE,
      $                           A( K ), M+1, B( K, 0 ), LDB )
 *
                   ELSE
 *
 *                    SIDE  ='L', N is even, TRANSR = 'N', UPLO = 'U',
 *                    and TRANS = 'C'
-                     CALL AB_CTRSM( 'L', 'U', 'N', DIAG, K, N, ALPHA,
+                     CALL CTRSM( 'L', 'U', 'N', DIAG, K, N, ALPHA,
      $                           A( K ), M+1, B( K, 0 ), LDB )
-                     CALL AB_CGEMM( 'N', 'N', K, N, K, -CONE, A( 0 ), M+
-     $1,
+                     CALL CGEMM( 'N', 'N', K, N, K, -CONE, A( 0 ), M+1,
      $                           B( K, 0 ), LDB, ALPHA, B, LDB )
-                     CALL AB_CTRSM( 'L', 'L', 'C', DIAG, K, N, CONE,
+                     CALL CTRSM( 'L', 'L', 'C', DIAG, K, N, CONE,
      $                           A( K+1 ), M+1, B, LDB )
 *
                   END IF
@@ -664,12 +646,12 @@
 *                    SIDE  ='L', N is even, TRANSR = 'C', UPLO = 'L',
 *                    and TRANS = 'N'
 *
-                     CALL AB_CTRSM( 'L', 'U', 'C', DIAG, K, N, ALPHA,
+                     CALL CTRSM( 'L', 'U', 'C', DIAG, K, N, ALPHA,
      $                           A( K ), K, B, LDB )
-                     CALL AB_CGEMM( 'C', 'N', K, N, K, -CONE,
+                     CALL CGEMM( 'C', 'N', K, N, K, -CONE,
      $                           A( K*( K+1 ) ), K, B, LDB, ALPHA,
      $                           B( K, 0 ), LDB )
-                     CALL AB_CTRSM( 'L', 'L', 'N', DIAG, K, N, CONE,
+                     CALL CTRSM( 'L', 'L', 'N', DIAG, K, N, CONE,
      $                           A( 0 ), K, B( K, 0 ), LDB )
 *
                   ELSE
@@ -677,12 +659,12 @@
 *                    SIDE  ='L', N is even, TRANSR = 'C', UPLO = 'L',
 *                    and TRANS = 'C'
 *
-                     CALL AB_CTRSM( 'L', 'L', 'C', DIAG, K, N, ALPHA,
+                     CALL CTRSM( 'L', 'L', 'C', DIAG, K, N, ALPHA,
      $                           A( 0 ), K, B( K, 0 ), LDB )
-                     CALL AB_CGEMM( 'N', 'N', K, N, K, -CONE,
+                     CALL CGEMM( 'N', 'N', K, N, K, -CONE,
      $                           A( K*( K+1 ) ), K, B( K, 0 ), LDB,
      $                           ALPHA, B, LDB )
-                     CALL AB_CTRSM( 'L', 'U', 'N', DIAG, K, N, CONE,
+                     CALL CTRSM( 'L', 'U', 'N', DIAG, K, N, CONE,
      $                           A( K ), K, B, LDB )
 *
                   END IF
@@ -696,12 +678,11 @@
 *                    SIDE  ='L', N is even, TRANSR = 'C', UPLO = 'U',
 *                    and TRANS = 'N'
 *
-                     CALL AB_CTRSM( 'L', 'U', 'C', DIAG, K, N, ALPHA,
+                     CALL CTRSM( 'L', 'U', 'C', DIAG, K, N, ALPHA,
      $                           A( K*( K+1 ) ), K, B, LDB )
-                     CALL AB_CGEMM( 'N', 'N', K, N, K, -CONE, A( 0 ), K,
-     $ B,
+                     CALL CGEMM( 'N', 'N', K, N, K, -CONE, A( 0 ), K, B,
      $                           LDB, ALPHA, B( K, 0 ), LDB )
-                     CALL AB_CTRSM( 'L', 'L', 'N', DIAG, K, N, CONE,
+                     CALL CTRSM( 'L', 'L', 'N', DIAG, K, N, CONE,
      $                           A( K*K ), K, B( K, 0 ), LDB )
 *
                   ELSE
@@ -709,11 +690,11 @@
 *                    SIDE  ='L', N is even, TRANSR = 'C', UPLO = 'U',
 *                    and TRANS = 'C'
 *
-                     CALL AB_CTRSM( 'L', 'L', 'C', DIAG, K, N, ALPHA,
+                     CALL CTRSM( 'L', 'L', 'C', DIAG, K, N, ALPHA,
      $                           A( K*K ), K, B( K, 0 ), LDB )
-                     CALL AB_CGEMM( 'C', 'N', K, N, K, -CONE, A( 0 ), K,
+                     CALL CGEMM( 'C', 'N', K, N, K, -CONE, A( 0 ), K,
      $                           B( K, 0 ), LDB, ALPHA, B, LDB )
-                     CALL AB_CTRSM( 'L', 'U', 'N', DIAG, K, N, CONE,
+                     CALL CTRSM( 'L', 'U', 'N', DIAG, K, N, CONE,
      $                           A( K*( K+1 ) ), K, B, LDB )
 *
                   END IF
@@ -763,13 +744,12 @@
 *                    SIDE  ='R', N is odd, TRANSR = 'N', UPLO = 'L', and
 *                    TRANS = 'N'
 *
-                     CALL AB_CTRSM( 'R', 'U', 'C', DIAG, M, N2, ALPHA,
+                     CALL CTRSM( 'R', 'U', 'C', DIAG, M, N2, ALPHA,
      $                           A( N ), N, B( 0, N1 ), LDB )
-                     CALL AB_CGEMM( 'N', 'N', M, N1, N2, -CONE, B( 0, N1
-     $ ),
+                     CALL CGEMM( 'N', 'N', M, N1, N2, -CONE, B( 0, N1 ),
      $                           LDB, A( N1 ), N, ALPHA, B( 0, 0 ),
      $                           LDB )
-                     CALL AB_CTRSM( 'R', 'L', 'N', DIAG, M, N1, CONE,
+                     CALL CTRSM( 'R', 'L', 'N', DIAG, M, N1, CONE,
      $                           A( 0 ), N, B( 0, 0 ), LDB )
 *
                   ELSE
@@ -777,13 +757,12 @@
 *                    SIDE  ='R', N is odd, TRANSR = 'N', UPLO = 'L', and
 *                    TRANS = 'C'
 *
-                     CALL AB_CTRSM( 'R', 'L', 'C', DIAG, M, N1, ALPHA,
+                     CALL CTRSM( 'R', 'L', 'C', DIAG, M, N1, ALPHA,
      $                           A( 0 ), N, B( 0, 0 ), LDB )
-                     CALL AB_CGEMM( 'N', 'C', M, N2, N1, -CONE, B( 0, 0 
-     $),
+                     CALL CGEMM( 'N', 'C', M, N2, N1, -CONE, B( 0, 0 ),
      $                           LDB, A( N1 ), N, ALPHA, B( 0, N1 ),
      $                           LDB )
-                     CALL AB_CTRSM( 'R', 'U', 'N', DIAG, M, N2, CONE,
+                     CALL CTRSM( 'R', 'U', 'N', DIAG, M, N2, CONE,
      $                           A( N ), N, B( 0, N1 ), LDB )
 *
                   END IF
@@ -797,13 +776,12 @@
 *                    SIDE  ='R', N is odd, TRANSR = 'N', UPLO = 'U', and
 *                    TRANS = 'N'
 *
-                     CALL AB_CTRSM( 'R', 'L', 'C', DIAG, M, N1, ALPHA,
+                     CALL CTRSM( 'R', 'L', 'C', DIAG, M, N1, ALPHA,
      $                           A( N2 ), N, B( 0, 0 ), LDB )
-                     CALL AB_CGEMM( 'N', 'N', M, N2, N1, -CONE, B( 0, 0 
-     $),
+                     CALL CGEMM( 'N', 'N', M, N2, N1, -CONE, B( 0, 0 ),
      $                           LDB, A( 0 ), N, ALPHA, B( 0, N1 ),
      $                           LDB )
-                     CALL AB_CTRSM( 'R', 'U', 'N', DIAG, M, N2, CONE,
+                     CALL CTRSM( 'R', 'U', 'N', DIAG, M, N2, CONE,
      $                           A( N1 ), N, B( 0, N1 ), LDB )
 *
                   ELSE
@@ -811,12 +789,11 @@
 *                    SIDE  ='R', N is odd, TRANSR = 'N', UPLO = 'U', and
 *                    TRANS = 'C'
 *
-                     CALL AB_CTRSM( 'R', 'U', 'C', DIAG, M, N2, ALPHA,
+                     CALL CTRSM( 'R', 'U', 'C', DIAG, M, N2, ALPHA,
      $                           A( N1 ), N, B( 0, N1 ), LDB )
-                     CALL AB_CGEMM( 'N', 'C', M, N1, N2, -CONE, B( 0, N1
-     $ ),
+                     CALL CGEMM( 'N', 'C', M, N1, N2, -CONE, B( 0, N1 ),
      $                           LDB, A( 0 ), N, ALPHA, B( 0, 0 ), LDB )
-                     CALL AB_CTRSM( 'R', 'L', 'N', DIAG, M, N1, CONE,
+                     CALL CTRSM( 'R', 'L', 'N', DIAG, M, N1, CONE,
      $                           A( N2 ), N, B( 0, 0 ), LDB )
 *
                   END IF
@@ -836,13 +813,12 @@
 *                    SIDE  ='R', N is odd, TRANSR = 'C', UPLO = 'L', and
 *                    TRANS = 'N'
 *
-                     CALL AB_CTRSM( 'R', 'L', 'N', DIAG, M, N2, ALPHA,
+                     CALL CTRSM( 'R', 'L', 'N', DIAG, M, N2, ALPHA,
      $                           A( 1 ), N1, B( 0, N1 ), LDB )
-                     CALL AB_CGEMM( 'N', 'C', M, N1, N2, -CONE, B( 0, N1
-     $ ),
+                     CALL CGEMM( 'N', 'C', M, N1, N2, -CONE, B( 0, N1 ),
      $                           LDB, A( N1*N1 ), N1, ALPHA, B( 0, 0 ),
      $                           LDB )
-                     CALL AB_CTRSM( 'R', 'U', 'C', DIAG, M, N1, CONE,
+                     CALL CTRSM( 'R', 'U', 'C', DIAG, M, N1, CONE,
      $                           A( 0 ), N1, B( 0, 0 ), LDB )
 *
                   ELSE
@@ -850,13 +826,12 @@
 *                    SIDE  ='R', N is odd, TRANSR = 'C', UPLO = 'L', and
 *                    TRANS = 'C'
 *
-                     CALL AB_CTRSM( 'R', 'U', 'N', DIAG, M, N1, ALPHA,
+                     CALL CTRSM( 'R', 'U', 'N', DIAG, M, N1, ALPHA,
      $                           A( 0 ), N1, B( 0, 0 ), LDB )
-                     CALL AB_CGEMM( 'N', 'N', M, N2, N1, -CONE, B( 0, 0 
-     $),
+                     CALL CGEMM( 'N', 'N', M, N2, N1, -CONE, B( 0, 0 ),
      $                           LDB, A( N1*N1 ), N1, ALPHA, B( 0, N1 ),
      $                           LDB )
-                     CALL AB_CTRSM( 'R', 'L', 'C', DIAG, M, N2, CONE,
+                     CALL CTRSM( 'R', 'L', 'C', DIAG, M, N2, CONE,
      $                           A( 1 ), N1, B( 0, N1 ), LDB )
 *
                   END IF
@@ -870,13 +845,12 @@
 *                    SIDE  ='R', N is odd, TRANSR = 'C', UPLO = 'U', and
 *                    TRANS = 'N'
 *
-                     CALL AB_CTRSM( 'R', 'U', 'N', DIAG, M, N1, ALPHA,
+                     CALL CTRSM( 'R', 'U', 'N', DIAG, M, N1, ALPHA,
      $                           A( N2*N2 ), N2, B( 0, 0 ), LDB )
-                     CALL AB_CGEMM( 'N', 'C', M, N2, N1, -CONE, B( 0, 0 
-     $),
+                     CALL CGEMM( 'N', 'C', M, N2, N1, -CONE, B( 0, 0 ),
      $                           LDB, A( 0 ), N2, ALPHA, B( 0, N1 ),
      $                           LDB )
-                     CALL AB_CTRSM( 'R', 'L', 'C', DIAG, M, N2, CONE,
+                     CALL CTRSM( 'R', 'L', 'C', DIAG, M, N2, CONE,
      $                           A( N1*N2 ), N2, B( 0, N1 ), LDB )
 *
                   ELSE
@@ -884,13 +858,12 @@
 *                    SIDE  ='R', N is odd, TRANSR = 'C', UPLO = 'U', and
 *                    TRANS = 'C'
 *
-                     CALL AB_CTRSM( 'R', 'L', 'N', DIAG, M, N2, ALPHA,
+                     CALL CTRSM( 'R', 'L', 'N', DIAG, M, N2, ALPHA,
      $                           A( N1*N2 ), N2, B( 0, N1 ), LDB )
-                     CALL AB_CGEMM( 'N', 'N', M, N1, N2, -CONE, B( 0, N1
-     $ ),
+                     CALL CGEMM( 'N', 'N', M, N1, N2, -CONE, B( 0, N1 ),
      $                           LDB, A( 0 ), N2, ALPHA, B( 0, 0 ),
      $                           LDB )
-                     CALL AB_CTRSM( 'R', 'U', 'C', DIAG, M, N1, CONE,
+                     CALL CTRSM( 'R', 'U', 'C', DIAG, M, N1, CONE,
      $                           A( N2*N2 ), N2, B( 0, 0 ), LDB )
 *
                   END IF
@@ -916,12 +889,12 @@
 *                    SIDE  ='R', N is even, TRANSR = 'N', UPLO = 'L',
 *                    and TRANS = 'N'
 *
-                     CALL AB_CTRSM( 'R', 'U', 'C', DIAG, M, K, ALPHA,
+                     CALL CTRSM( 'R', 'U', 'C', DIAG, M, K, ALPHA,
      $                           A( 0 ), N+1, B( 0, K ), LDB )
-                     CALL AB_CGEMM( 'N', 'N', M, K, K, -CONE, B( 0, K ),
+                     CALL CGEMM( 'N', 'N', M, K, K, -CONE, B( 0, K ),
      $                           LDB, A( K+1 ), N+1, ALPHA, B( 0, 0 ),
      $                           LDB )
-                     CALL AB_CTRSM( 'R', 'L', 'N', DIAG, M, K, CONE,
+                     CALL CTRSM( 'R', 'L', 'N', DIAG, M, K, CONE,
      $                           A( 1 ), N+1, B( 0, 0 ), LDB )
 *
                   ELSE
@@ -929,12 +902,12 @@
 *                    SIDE  ='R', N is even, TRANSR = 'N', UPLO = 'L',
 *                    and TRANS = 'C'
 *
-                     CALL AB_CTRSM( 'R', 'L', 'C', DIAG, M, K, ALPHA,
+                     CALL CTRSM( 'R', 'L', 'C', DIAG, M, K, ALPHA,
      $                           A( 1 ), N+1, B( 0, 0 ), LDB )
-                     CALL AB_CGEMM( 'N', 'C', M, K, K, -CONE, B( 0, 0 ),
+                     CALL CGEMM( 'N', 'C', M, K, K, -CONE, B( 0, 0 ),
      $                           LDB, A( K+1 ), N+1, ALPHA, B( 0, K ),
      $                           LDB )
-                     CALL AB_CTRSM( 'R', 'U', 'N', DIAG, M, K, CONE,
+                     CALL CTRSM( 'R', 'U', 'N', DIAG, M, K, CONE,
      $                           A( 0 ), N+1, B( 0, K ), LDB )
 *
                   END IF
@@ -948,12 +921,12 @@
 *                    SIDE  ='R', N is even, TRANSR = 'N', UPLO = 'U',
 *                    and TRANS = 'N'
 *
-                     CALL AB_CTRSM( 'R', 'L', 'C', DIAG, M, K, ALPHA,
+                     CALL CTRSM( 'R', 'L', 'C', DIAG, M, K, ALPHA,
      $                           A( K+1 ), N+1, B( 0, 0 ), LDB )
-                     CALL AB_CGEMM( 'N', 'N', M, K, K, -CONE, B( 0, 0 ),
+                     CALL CGEMM( 'N', 'N', M, K, K, -CONE, B( 0, 0 ),
      $                           LDB, A( 0 ), N+1, ALPHA, B( 0, K ),
      $                           LDB )
-                     CALL AB_CTRSM( 'R', 'U', 'N', DIAG, M, K, CONE,
+                     CALL CTRSM( 'R', 'U', 'N', DIAG, M, K, CONE,
      $                           A( K ), N+1, B( 0, K ), LDB )
 *
                   ELSE
@@ -961,12 +934,12 @@
 *                    SIDE  ='R', N is even, TRANSR = 'N', UPLO = 'U',
 *                    and TRANS = 'C'
 *
-                     CALL AB_CTRSM( 'R', 'U', 'C', DIAG, M, K, ALPHA,
+                     CALL CTRSM( 'R', 'U', 'C', DIAG, M, K, ALPHA,
      $                           A( K ), N+1, B( 0, K ), LDB )
-                     CALL AB_CGEMM( 'N', 'C', M, K, K, -CONE, B( 0, K ),
+                     CALL CGEMM( 'N', 'C', M, K, K, -CONE, B( 0, K ),
      $                           LDB, A( 0 ), N+1, ALPHA, B( 0, 0 ),
      $                           LDB )
-                     CALL AB_CTRSM( 'R', 'L', 'N', DIAG, M, K, CONE,
+                     CALL CTRSM( 'R', 'L', 'N', DIAG, M, K, CONE,
      $                           A( K+1 ), N+1, B( 0, 0 ), LDB )
 *
                   END IF
@@ -986,12 +959,12 @@
 *                    SIDE  ='R', N is even, TRANSR = 'C', UPLO = 'L',
 *                    and TRANS = 'N'
 *
-                     CALL AB_CTRSM( 'R', 'L', 'N', DIAG, M, K, ALPHA,
+                     CALL CTRSM( 'R', 'L', 'N', DIAG, M, K, ALPHA,
      $                           A( 0 ), K, B( 0, K ), LDB )
-                     CALL AB_CGEMM( 'N', 'C', M, K, K, -CONE, B( 0, K ),
+                     CALL CGEMM( 'N', 'C', M, K, K, -CONE, B( 0, K ),
      $                           LDB, A( ( K+1 )*K ), K, ALPHA,
      $                           B( 0, 0 ), LDB )
-                     CALL AB_CTRSM( 'R', 'U', 'C', DIAG, M, K, CONE,
+                     CALL CTRSM( 'R', 'U', 'C', DIAG, M, K, CONE,
      $                           A( K ), K, B( 0, 0 ), LDB )
 *
                   ELSE
@@ -999,12 +972,12 @@
 *                    SIDE  ='R', N is even, TRANSR = 'C', UPLO = 'L',
 *                    and TRANS = 'C'
 *
-                     CALL AB_CTRSM( 'R', 'U', 'N', DIAG, M, K, ALPHA,
+                     CALL CTRSM( 'R', 'U', 'N', DIAG, M, K, ALPHA,
      $                           A( K ), K, B( 0, 0 ), LDB )
-                     CALL AB_CGEMM( 'N', 'N', M, K, K, -CONE, B( 0, 0 ),
+                     CALL CGEMM( 'N', 'N', M, K, K, -CONE, B( 0, 0 ),
      $                           LDB, A( ( K+1 )*K ), K, ALPHA,
      $                           B( 0, K ), LDB )
-                     CALL AB_CTRSM( 'R', 'L', 'C', DIAG, M, K, CONE,
+                     CALL CTRSM( 'R', 'L', 'C', DIAG, M, K, CONE,
      $                           A( 0 ), K, B( 0, K ), LDB )
 *
                   END IF
@@ -1018,11 +991,11 @@
 *                    SIDE  ='R', N is even, TRANSR = 'C', UPLO = 'U',
 *                    and TRANS = 'N'
 *
-                     CALL AB_CTRSM( 'R', 'U', 'N', DIAG, M, K, ALPHA,
+                     CALL CTRSM( 'R', 'U', 'N', DIAG, M, K, ALPHA,
      $                           A( ( K+1 )*K ), K, B( 0, 0 ), LDB )
-                     CALL AB_CGEMM( 'N', 'C', M, K, K, -CONE, B( 0, 0 ),
+                     CALL CGEMM( 'N', 'C', M, K, K, -CONE, B( 0, 0 ),
      $                           LDB, A( 0 ), K, ALPHA, B( 0, K ), LDB )
-                     CALL AB_CTRSM( 'R', 'L', 'C', DIAG, M, K, CONE,
+                     CALL CTRSM( 'R', 'L', 'C', DIAG, M, K, CONE,
      $                           A( K*K ), K, B( 0, K ), LDB )
 *
                   ELSE
@@ -1030,11 +1003,11 @@
 *                    SIDE  ='R', N is even, TRANSR = 'C', UPLO = 'U',
 *                    and TRANS = 'C'
 *
-                     CALL AB_CTRSM( 'R', 'L', 'N', DIAG, M, K, ALPHA,
+                     CALL CTRSM( 'R', 'L', 'N', DIAG, M, K, ALPHA,
      $                           A( K*K ), K, B( 0, K ), LDB )
-                     CALL AB_CGEMM( 'N', 'N', M, K, K, -CONE, B( 0, K ),
+                     CALL CGEMM( 'N', 'N', M, K, K, -CONE, B( 0, K ),
      $                           LDB, A( 0 ), K, ALPHA, B( 0, 0 ), LDB )
-                     CALL AB_CTRSM( 'R', 'U', 'C', DIAG, M, K, CONE,
+                     CALL CTRSM( 'R', 'U', 'C', DIAG, M, K, CONE,
      $                           A( ( K+1 )*K ), K, B( 0, 0 ), LDB )
 *
                   END IF
@@ -1048,6 +1021,6 @@
 *
       RETURN
 *
-*     End of AB_CTFSM
+*     End of CTFSM
 *
       END

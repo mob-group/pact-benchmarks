@@ -1,4 +1,4 @@
-*> \brief \b AB_DLABAD
+*> \brief \b DLABAD
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLABAD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLABAD.f">
+*> Download DLABAD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlabad.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLABAD.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlabad.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLABAD.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlabad.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLABAD( SMALL, LARGE )
+*       SUBROUTINE DLABAD( SMALL, LARGE )
 *
 *       .. Scalar Arguments ..
 *       DOUBLE PRECISION   LARGE, SMALL
@@ -30,13 +30,13 @@
 *>
 *> \verbatim
 *>
-*> AB_DLABAD takes as input the values computed by AB_DLAMCH for underflow and
+*> DLABAD takes as input the values computed by DLAMCH for underflow and
 *> overflow, and returns the square root of each of these values if the
 *> log of LARGE is sufficiently large.  This subroutine is intended to
 *> identify machines with a large exponent range, such as the Crays, and
 *> redefine the underflow and overflow limits to be the square roots of
-*> the values computed by AB_DLAMCH.  This subroutine is needed because
-*> AB_DLAMCH does not compensate for poor arithmetic in the upper half of
+*> the values computed by DLAMCH.  This subroutine is needed because
+*> DLAMCH does not compensate for poor arithmetic in the upper half of
 *> the exponent range, as is found on a Cray.
 *> \endverbatim
 *
@@ -46,7 +46,7 @@
 *> \param[in,out] SMALL
 *> \verbatim
 *>          SMALL is DOUBLE PRECISION
-*>          On entry, the underflow threshold as computed by AB_DLAMCH.
+*>          On entry, the underflow threshold as computed by DLAMCH.
 *>          On exit, if LOG10(LARGE) is sufficiently large, the square
 *>          root of SMALL, otherwise unchanged.
 *> \endverbatim
@@ -54,7 +54,7 @@
 *> \param[in,out] LARGE
 *> \verbatim
 *>          LARGE is DOUBLE PRECISION
-*>          On entry, the overflow threshold as computed by AB_DLAMCH.
+*>          On entry, the overflow threshold as computed by DLAMCH.
 *>          On exit, if LOG10(LARGE) is sufficiently large, the square
 *>          root of LARGE, otherwise unchanged.
 *> \endverbatim
@@ -72,7 +72,7 @@
 *> \ingroup OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_DLABAD( SMALL, LARGE )
+      SUBROUTINE DLABAD( SMALL, LARGE )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -100,6 +100,6 @@
 *
       RETURN
 *
-*     End of AB_DLABAD
+*     End of DLABAD
 *
       END

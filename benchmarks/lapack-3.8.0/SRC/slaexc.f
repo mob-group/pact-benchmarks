@@ -1,4 +1,4 @@
-*> \brief \b AB_SLAEXC swaps adjacent diagonal blocks of a real upper quasi-triangular matrix in Schur canonical form, by an orthogonal similarity transformation.
+*> \brief \b SLAEXC swaps adjacent diagonal blocks of a real upper quasi-triangular matrix in Schur canonical form, by an orthogonal similarity transformation.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLAEXC + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLAEXC.f">
+*> Download SLAEXC + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaexc.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLAEXC.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaexc.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLAEXC.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaexc.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLAEXC( WANTQ, N, T, LDT, Q, LDQ, J1, N1, N2, WORK,
+*       SUBROUTINE SLAEXC( WANTQ, N, T, LDT, Q, LDQ, J1, N1, N2, WORK,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SLAEXC swaps adjacent diagonal blocks T11 and T22 of order 1 or 2 in
+*> SLAEXC swaps adjacent diagonal blocks T11 and T22 of order 1 or 2 in
 *> an upper quasi-triangular matrix T by an orthogonal similarity
 *> transformation.
 *>
@@ -105,7 +105,7 @@
 *> \param[in] N2
 *> \verbatim
 *>          N2 is INTEGER
-*>          The order of the AB_SECOND block T22. N2 = 0, 1 or 2.
+*>          The order of the second block T22. N2 = 0, 1 or 2.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -135,7 +135,7 @@
 *> \ingroup realOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_SLAEXC( WANTQ, N, T, LDT, Q, LDQ, J1, N1, N2, WORK,
+      SUBROUTINE SLAEXC( WANTQ, N, T, LDT, Q, LDQ, J1, N1, N2, WORK,
      $                   INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -172,13 +172,12 @@
      $                   X( LDX, 2 )
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH, AB_SLANGE
-      EXTERNAL           AB_SLAMCH, AB_SLANGE
+      REAL               SLAMCH, SLANGE
+      EXTERNAL           SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SLACPY, AB_SLANV2, AB_AB_SLARFG, AB_AB_SLARF
-     $X, AB_SLARTG, AB_SLASY2,
-     $                   AB_SROT
+      EXTERNAL           SLACPY, SLANV2, SLARFG, SLARFX, SLARTG, SLASY2,
+     $                   SROT
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -207,15 +206,14 @@
 *
 *        Determine the transformation to perform the interchange.
 *
-         CALL AB_SLARTG( T( J1, J2 ), T22-T11, CS, SN, TEMP )
+         CALL SLARTG( T( J1, J2 ), T22-T11, CS, SN, TEMP )
 *
 *        Apply transformation to the matrix T.
 *
          IF( J3.LE.N )
-     $      CALL AB_SROT( N-J1-1, T( J1, J3 ), LDT, T( J2, J3 ), LDT, CS
-     $,
+     $      CALL SROT( N-J1-1, T( J1, J3 ), LDT, T( J2, J3 ), LDT, CS,
      $                 SN )
-         CALL AB_SROT( J1-1, T( 1, J1 ), 1, T( 1, J2 ), 1, CS, SN )
+         CALL SROT( J1-1, T( 1, J1 ), 1, T( 1, J2 ), 1, CS, SN )
 *
          T( J1, J1 ) = T22
          T( J2, J2 ) = T11
@@ -224,7 +222,7 @@
 *
 *           Accumulate transformation in the matrix Q.
 *
-            CALL AB_SROT( N, Q( 1, J1 ), 1, Q( 1, J2 ), 1, CS, SN )
+            CALL SROT( N, Q( 1, J1 ), 1, Q( 1, J2 ), 1, CS, SN )
          END IF
 *
       ELSE
@@ -235,19 +233,19 @@
 *        and compute its norm.
 *
          ND = N1 + N2
-         CALL AB_SLACPY( 'Full', ND, ND, T( J1, J1 ), LDT, D, LDD )
-         DNORM = AB_SLANGE( 'Max', ND, ND, D, LDD, WORK )
+         CALL SLACPY( 'Full', ND, ND, T( J1, J1 ), LDT, D, LDD )
+         DNORM = SLANGE( 'Max', ND, ND, D, LDD, WORK )
 *
 *        Compute machine-dependent threshold for test for accepting
 *        swap.
 *
-         EPS = AB_SLAMCH( 'P' )
-         SMLNUM = AB_SLAMCH( 'S' ) / EPS
+         EPS = SLAMCH( 'P' )
+         SMLNUM = SLAMCH( 'S' ) / EPS
          THRESH = MAX( TEN*EPS*DNORM, SMLNUM )
 *
 *        Solve T11*X - X*T22 = scale*T12 for X.
 *
-         CALL AB_SLASY2( .FALSE., .FALSE., -1, N1, N2, D, LDD,
+         CALL SLASY2( .FALSE., .FALSE., -1, N1, N2, D, LDD,
      $                D( N1+1, N1+1 ), LDD, D( 1, N1+1 ), LDD, SCALE, X,
      $                LDX, XNORM, IERR )
 *
@@ -265,14 +263,14 @@
          U( 1 ) = SCALE
          U( 2 ) = X( 1, 1 )
          U( 3 ) = X( 1, 2 )
-         CALL AB_AB_SLARFG( 3, U( 3 ), U, 1, TAU )
+         CALL SLARFG( 3, U( 3 ), U, 1, TAU )
          U( 3 ) = ONE
          T11 = T( J1, J1 )
 *
 *        Perform swap provisionally on diagonal block in D.
 *
-         CALL AB_AB_SLARFX( 'L', 3, 3, U, TAU, D, LDD, WORK )
-         CALL AB_AB_SLARFX( 'R', 3, 3, U, TAU, D, LDD, WORK )
+         CALL SLARFX( 'L', 3, 3, U, TAU, D, LDD, WORK )
+         CALL SLARFX( 'R', 3, 3, U, TAU, D, LDD, WORK )
 *
 *        Test whether to reject swap.
 *
@@ -281,9 +279,8 @@
 *
 *        Accept swap: apply transformation to the entire matrix T.
 *
-         CALL AB_AB_SLARFX( 'L', 3, N-J1+1, U, TAU, T( J1, J1 ), LDT, WO
-     $RK )
-         CALL AB_AB_SLARFX( 'R', J2, 3, U, TAU, T( 1, J1 ), LDT, WORK )
+         CALL SLARFX( 'L', 3, N-J1+1, U, TAU, T( J1, J1 ), LDT, WORK )
+         CALL SLARFX( 'R', J2, 3, U, TAU, T( 1, J1 ), LDT, WORK )
 *
          T( J3, J1 ) = ZERO
          T( J3, J2 ) = ZERO
@@ -293,8 +290,7 @@
 *
 *           Accumulate transformation in the matrix Q.
 *
-            CALL AB_AB_SLARFX( 'R', N, 3, U, TAU, Q( 1, J1 ), LDQ, WORK 
-     $)
+            CALL SLARFX( 'R', N, 3, U, TAU, Q( 1, J1 ), LDQ, WORK )
          END IF
          GO TO 40
 *
@@ -309,14 +305,14 @@
          U( 1 ) = -X( 1, 1 )
          U( 2 ) = -X( 2, 1 )
          U( 3 ) = SCALE
-         CALL AB_AB_SLARFG( 3, U( 1 ), U( 2 ), 1, TAU )
+         CALL SLARFG( 3, U( 1 ), U( 2 ), 1, TAU )
          U( 1 ) = ONE
          T33 = T( J3, J3 )
 *
 *        Perform swap provisionally on diagonal block in D.
 *
-         CALL AB_AB_SLARFX( 'L', 3, 3, U, TAU, D, LDD, WORK )
-         CALL AB_AB_SLARFX( 'R', 3, 3, U, TAU, D, LDD, WORK )
+         CALL SLARFX( 'L', 3, 3, U, TAU, D, LDD, WORK )
+         CALL SLARFX( 'R', 3, 3, U, TAU, D, LDD, WORK )
 *
 *        Test whether to reject swap.
 *
@@ -325,9 +321,8 @@
 *
 *        Accept swap: apply transformation to the entire matrix T.
 *
-         CALL AB_AB_SLARFX( 'R', J3, 3, U, TAU, T( 1, J1 ), LDT, WORK )
-         CALL AB_AB_SLARFX( 'L', 3, N-J1, U, TAU, T( J1, J2 ), LDT, WORK
-     $ )
+         CALL SLARFX( 'R', J3, 3, U, TAU, T( 1, J1 ), LDT, WORK )
+         CALL SLARFX( 'L', 3, N-J1, U, TAU, T( J1, J2 ), LDT, WORK )
 *
          T( J1, J1 ) = T33
          T( J2, J1 ) = ZERO
@@ -337,8 +332,7 @@
 *
 *           Accumulate transformation in the matrix Q.
 *
-            CALL AB_AB_SLARFX( 'R', N, 3, U, TAU, Q( 1, J1 ), LDQ, WORK 
-     $)
+            CALL SLARFX( 'R', N, 3, U, TAU, Q( 1, J1 ), LDQ, WORK )
          END IF
          GO TO 40
 *
@@ -355,22 +349,22 @@
          U1( 1 ) = -X( 1, 1 )
          U1( 2 ) = -X( 2, 1 )
          U1( 3 ) = SCALE
-         CALL AB_AB_SLARFG( 3, U1( 1 ), U1( 2 ), 1, TAU1 )
+         CALL SLARFG( 3, U1( 1 ), U1( 2 ), 1, TAU1 )
          U1( 1 ) = ONE
 *
          TEMP = -TAU1*( X( 1, 2 )+U1( 2 )*X( 2, 2 ) )
          U2( 1 ) = -TEMP*U1( 2 ) - X( 2, 2 )
          U2( 2 ) = -TEMP*U1( 3 )
          U2( 3 ) = SCALE
-         CALL AB_AB_SLARFG( 3, U2( 1 ), U2( 2 ), 1, TAU2 )
+         CALL SLARFG( 3, U2( 1 ), U2( 2 ), 1, TAU2 )
          U2( 1 ) = ONE
 *
 *        Perform swap provisionally on diagonal block in D.
 *
-         CALL AB_AB_SLARFX( 'L', 3, 4, U1, TAU1, D, LDD, WORK )
-         CALL AB_AB_SLARFX( 'R', 4, 3, U1, TAU1, D, LDD, WORK )
-         CALL AB_AB_SLARFX( 'L', 3, 4, U2, TAU2, D( 2, 1 ), LDD, WORK )
-         CALL AB_AB_SLARFX( 'R', 4, 3, U2, TAU2, D( 1, 2 ), LDD, WORK )
+         CALL SLARFX( 'L', 3, 4, U1, TAU1, D, LDD, WORK )
+         CALL SLARFX( 'R', 4, 3, U1, TAU1, D, LDD, WORK )
+         CALL SLARFX( 'L', 3, 4, U2, TAU2, D( 2, 1 ), LDD, WORK )
+         CALL SLARFX( 'R', 4, 3, U2, TAU2, D( 1, 2 ), LDD, WORK )
 *
 *        Test whether to reject swap.
 *
@@ -379,14 +373,10 @@
 *
 *        Accept swap: apply transformation to the entire matrix T.
 *
-         CALL AB_AB_SLARFX( 'L', 3, N-J1+1, U1, TAU1, T( J1, J1 ), LDT, 
-     $WORK )
-         CALL AB_AB_SLARFX( 'R', J4, 3, U1, TAU1, T( 1, J1 ), LDT, WORK 
-     $)
-         CALL AB_AB_SLARFX( 'L', 3, N-J1+1, U2, TAU2, T( J2, J1 ), LDT, 
-     $WORK )
-         CALL AB_AB_SLARFX( 'R', J4, 3, U2, TAU2, T( 1, J2 ), LDT, WORK 
-     $)
+         CALL SLARFX( 'L', 3, N-J1+1, U1, TAU1, T( J1, J1 ), LDT, WORK )
+         CALL SLARFX( 'R', J4, 3, U1, TAU1, T( 1, J1 ), LDT, WORK )
+         CALL SLARFX( 'L', 3, N-J1+1, U2, TAU2, T( J2, J1 ), LDT, WORK )
+         CALL SLARFX( 'R', J4, 3, U2, TAU2, T( 1, J2 ), LDT, WORK )
 *
          T( J3, J1 ) = ZERO
          T( J3, J2 ) = ZERO
@@ -397,10 +387,8 @@
 *
 *           Accumulate transformation in the matrix Q.
 *
-            CALL AB_AB_SLARFX( 'R', N, 3, U1, TAU1, Q( 1, J1 ), LDQ, WOR
-     $K )
-            CALL AB_AB_SLARFX( 'R', N, 3, U2, TAU2, Q( 1, J2 ), LDQ, WOR
-     $K )
+            CALL SLARFX( 'R', N, 3, U1, TAU1, Q( 1, J1 ), LDQ, WORK )
+            CALL SLARFX( 'R', N, 3, U2, TAU2, Q( 1, J2 ), LDQ, WORK )
          END IF
 *
    40    CONTINUE
@@ -409,14 +397,13 @@
 *
 *           Standardize new 2-by-2 block T11
 *
-            CALL AB_SLANV2( T( J1, J1 ), T( J1, J2 ), T( J2, J1 ),
+            CALL SLANV2( T( J1, J1 ), T( J1, J2 ), T( J2, J1 ),
      $                   T( J2, J2 ), WR1, WI1, WR2, WI2, CS, SN )
-            CALL AB_SROT( N-J1-1, T( J1, J1+2 ), LDT, T( J2, J1+2 ), LDT
-     $,
+            CALL SROT( N-J1-1, T( J1, J1+2 ), LDT, T( J2, J1+2 ), LDT,
      $                 CS, SN )
-            CALL AB_SROT( J1-1, T( 1, J1 ), 1, T( 1, J2 ), 1, CS, SN )
+            CALL SROT( J1-1, T( 1, J1 ), 1, T( 1, J2 ), 1, CS, SN )
             IF( WANTQ )
-     $         CALL AB_SROT( N, Q( 1, J1 ), 1, Q( 1, J2 ), 1, CS, SN )
+     $         CALL SROT( N, Q( 1, J1 ), 1, Q( 1, J2 ), 1, CS, SN )
          END IF
 *
          IF( N1.EQ.2 ) THEN
@@ -425,14 +412,14 @@
 *
             J3 = J1 + N2
             J4 = J3 + 1
-            CALL AB_SLANV2( T( J3, J3 ), T( J3, J4 ), T( J4, J3 ),
+            CALL SLANV2( T( J3, J3 ), T( J3, J4 ), T( J4, J3 ),
      $                   T( J4, J4 ), WR1, WI1, WR2, WI2, CS, SN )
             IF( J3+2.LE.N )
-     $         CALL AB_SROT( N-J3-1, T( J3, J3+2 ), LDT, T( J4, J3+2 ),
+     $         CALL SROT( N-J3-1, T( J3, J3+2 ), LDT, T( J4, J3+2 ),
      $                    LDT, CS, SN )
-            CALL AB_SROT( J3-1, T( 1, J3 ), 1, T( 1, J4 ), 1, CS, SN )
+            CALL SROT( J3-1, T( 1, J3 ), 1, T( 1, J4 ), 1, CS, SN )
             IF( WANTQ )
-     $         CALL AB_SROT( N, Q( 1, J3 ), 1, Q( 1, J4 ), 1, CS, SN )
+     $         CALL SROT( N, Q( 1, J3 ), 1, Q( 1, J4 ), 1, CS, SN )
          END IF
 *
       END IF
@@ -443,6 +430,6 @@
    50 INFO = 1
       RETURN
 *
-*     End of AB_SLAEXC
+*     End of SLAEXC
 *
       END

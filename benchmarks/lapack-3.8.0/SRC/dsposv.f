@@ -1,4 +1,4 @@
-*> \brief <b> AB_DAB_SPOSV computes the solution to system of linear equations A * X = B for PO matrices</b>
+*> \brief <b> DSPOSV computes the solution to system of linear equations A * X = B for PO matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DAB_SPOSV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DAB_SPOSV.f">
+*> Download DSPOSV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsposv.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DAB_SPOSV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsposv.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DAB_SPOSV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsposv.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DAB_SPOSV( UPLO, N, NRHS, A, LDA, B, LDB, X, LDX, WORK,
+*       SUBROUTINE DSPOSV( UPLO, N, NRHS, A, LDA, B, LDB, X, LDX, WORK,
 *                          SWORK, ITER, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,12 +37,12 @@
 *>
 *> \verbatim
 *>
-*> AB_DAB_SPOSV computes the solution to a real system of linear equations
+*> DSPOSV computes the solution to a real system of linear equations
 *>    A * X = B,
 *> where A is an N-by-N symmetric positive definite matrix and X and B
 *> are N-by-NRHS matrices.
 *>
-*> AB_DAB_SPOSV first attempts to factorize the matrix in SINGLE PRECISION
+*> DSPOSV first attempts to factorize the matrix in SINGLE PRECISION
 *> and use this factorization within an iterative refinement procedure
 *> to produce a solution with DOUBLE PRECISION normwise backward error
 *> quality (see below). If the approach fails the method switches to a
@@ -52,7 +52,7 @@
 *> the ratio SINGLE PRECISION performance over DOUBLE PRECISION
 *> performance is too small. A reasonable strategy should take the
 *> number of right-hand sides and the size of the matrix into account.
-*> This might be done with a call to AB_ILAENV in the future. Up to now, we
+*> This might be done with a call to ILAENV in the future. Up to now, we
 *> always try iterative refinement.
 *>
 *> The iterative refinement process is stopped if
@@ -65,7 +65,7 @@
 *>     o RNRM is the infinity-norm of the residual
 *>     o XNRM is the infinity-norm of the solution
 *>     o ANRM is the infinity-operator-norm of the matrix A
-*>     o EPS is the machine epsilon returned by AB_DLAMCH('Epsilon')
+*>     o EPS is the machine epsilon returned by DLAMCH('Epsilon')
 *> The value ITERMAX and BWDMAX are fixed to 30 and 1.0D+00
 *> respectively.
 *> \endverbatim
@@ -165,7 +165,7 @@
 *>                    implementation- or machine-specific reasons
 *>               -2 : narrowing the precision induced an overflow,
 *>                    the routine fell back to full precision
-*>               -3 : failure of AB_SPOTRF
+*>               -3 : failure of SPOTRF
 *>               -31: stop the iterative refinement after the 30th
 *>                    iterations
 *>          > 0: iterative refinement has been successfully used.
@@ -196,8 +196,7 @@
 *> \ingroup doublePOsolve
 *
 *  =====================================================================
-      SUBROUTINE AB_DAB_SPOSV( UPLO, N, NRHS, A, LDA, B, LDB, X, LDX, WO
-     $RK,
+      SUBROUTINE DSPOSV( UPLO, N, NRHS, A, LDA, B, LDB, X, LDX, WORK,
      $                   SWORK, ITER, INFO )
 *
 *  -- LAPACK driver routine (version 3.8.0) --
@@ -235,16 +234,14 @@
       DOUBLE PRECISION   ANRM, CTE, EPS, RNRM, XNRM
 *
 *     .. External Subroutines ..
-      EXTERNAL           AB_DAXPY, AB_DSYMM, AB_DLACPY, AB_DLAT2S, AB_AB
-     $_DLAG2S, AB_AB_SLAG2D,
-     $                   AB_SPOTRF, AB_SPOTRS, AB_DPOTRF, AB_DPOTRS, AB_
-     $XERBLA
+      EXTERNAL           DAXPY, DSYMM, DLACPY, DLAT2S, DLAG2S, SLAG2D,
+     $                   SPOTRF, SPOTRS, DPOTRF, DPOTRS, XERBLA
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_IDAMAX
-      DOUBLE PRECISION   AB_DLAMCH, AB_DLANSY
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_IDAMAX, AB_DLAMCH, AB_DLANSY, AB_LSAME
+      INTEGER            IDAMAX
+      DOUBLE PRECISION   DLAMCH, DLANSY
+      LOGICAL            LSAME
+      EXTERNAL           IDAMAX, DLAMCH, DLANSY, LSAME
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, SQRT
@@ -256,8 +253,7 @@
 *
 *     Test the input parameters.
 *
-      IF( .NOT.AB_LSAME( UPLO, 'U' ) .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) 
-     $THEN
+      IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -271,7 +267,7 @@
          INFO = -9
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DAB_SPOSV', -INFO )
+         CALL XERBLA( 'DSPOSV', -INFO )
          RETURN
       END IF
 *
@@ -290,8 +286,8 @@
 *
 *     Compute some constants.
 *
-      ANRM = AB_DLANSY( 'I', UPLO, N, A, LDA, WORK )
-      EPS = AB_DLAMCH( 'Epsilon' )
+      ANRM = DLANSY( 'I', UPLO, N, A, LDA, WORK )
+      EPS = DLAMCH( 'Epsilon' )
       CTE = ANRM*EPS*SQRT( DBLE( N ) )*BWDMAX
 *
 *     Set the indices PTSA, PTSX for referencing SA and SX in SWORK.
@@ -302,7 +298,7 @@
 *     Convert B from double precision to single precision and store the
 *     result in SX.
 *
-      CALL AB_AB_DLAG2S( N, NRHS, B, LDB, SWORK( PTSX ), N, INFO )
+      CALL DLAG2S( N, NRHS, B, LDB, SWORK( PTSX ), N, INFO )
 *
       IF( INFO.NE.0 ) THEN
          ITER = -2
@@ -312,7 +308,7 @@
 *     Convert A from double precision to single precision and store the
 *     result in SA.
 *
-      CALL AB_DLAT2S( UPLO, N, A, LDA, SWORK( PTSA ), N, INFO )
+      CALL DLAT2S( UPLO, N, A, LDA, SWORK( PTSA ), N, INFO )
 *
       IF( INFO.NE.0 ) THEN
          ITER = -2
@@ -321,7 +317,7 @@
 *
 *     Compute the Cholesky factorization of SA.
 *
-      CALL AB_SPOTRF( UPLO, N, SWORK( PTSA ), N, INFO )
+      CALL SPOTRF( UPLO, N, SWORK( PTSA ), N, INFO )
 *
       IF( INFO.NE.0 ) THEN
          ITER = -3
@@ -330,26 +326,26 @@
 *
 *     Solve the system SA*SX = SB.
 *
-      CALL AB_SPOTRS( UPLO, N, NRHS, SWORK( PTSA ), N, SWORK( PTSX ), N,
+      CALL SPOTRS( UPLO, N, NRHS, SWORK( PTSA ), N, SWORK( PTSX ), N,
      $             INFO )
 *
 *     Convert SX back to double precision
 *
-      CALL AB_AB_SLAG2D( N, NRHS, SWORK( PTSX ), N, X, LDX, INFO )
+      CALL SLAG2D( N, NRHS, SWORK( PTSX ), N, X, LDX, INFO )
 *
 *     Compute R = B - AX (R is WORK).
 *
-      CALL AB_DLACPY( 'All', N, NRHS, B, LDB, WORK, N )
+      CALL DLACPY( 'All', N, NRHS, B, LDB, WORK, N )
 *
-      CALL AB_DSYMM( 'Left', UPLO, N, NRHS, NEGONE, A, LDA, X, LDX, ONE,
+      CALL DSYMM( 'Left', UPLO, N, NRHS, NEGONE, A, LDA, X, LDX, ONE,
      $            WORK, N )
 *
 *     Check whether the NRHS normwise backward errors satisfy the
 *     stopping criterion. If yes, set ITER=0 and return.
 *
       DO I = 1, NRHS
-         XNRM = ABS( X( AB_IDAMAX( N, X( 1, I ), 1 ), I ) )
-         RNRM = ABS( WORK( AB_IDAMAX( N, WORK( 1, I ), 1 ), I ) )
+         XNRM = ABS( X( IDAMAX( N, X( 1, I ), 1 ), I ) )
+         RNRM = ABS( WORK( IDAMAX( N, WORK( 1, I ), 1 ), I ) )
          IF( RNRM.GT.XNRM*CTE )
      $      GO TO 10
       END DO
@@ -367,7 +363,7 @@
 *        Convert R (in WORK) from double precision to single precision
 *        and store the result in SX.
 *
-         CALL AB_AB_DLAG2S( N, NRHS, WORK, N, SWORK( PTSX ), N, INFO )
+         CALL DLAG2S( N, NRHS, WORK, N, SWORK( PTSX ), N, INFO )
 *
          IF( INFO.NE.0 ) THEN
             ITER = -2
@@ -376,32 +372,31 @@
 *
 *        Solve the system SA*SX = SR.
 *
-         CALL AB_SPOTRS( UPLO, N, NRHS, SWORK( PTSA ), N, SWORK( PTSX ),
-     $ N,
+         CALL SPOTRS( UPLO, N, NRHS, SWORK( PTSA ), N, SWORK( PTSX ), N,
      $                INFO )
 *
 *        Convert SX back to double precision and update the current
 *        iterate.
 *
-         CALL AB_AB_SLAG2D( N, NRHS, SWORK( PTSX ), N, WORK, N, INFO )
+         CALL SLAG2D( N, NRHS, SWORK( PTSX ), N, WORK, N, INFO )
 *
          DO I = 1, NRHS
-            CALL AB_DAXPY( N, ONE, WORK( 1, I ), 1, X( 1, I ), 1 )
+            CALL DAXPY( N, ONE, WORK( 1, I ), 1, X( 1, I ), 1 )
          END DO
 *
 *        Compute R = B - AX (R is WORK).
 *
-         CALL AB_DLACPY( 'All', N, NRHS, B, LDB, WORK, N )
+         CALL DLACPY( 'All', N, NRHS, B, LDB, WORK, N )
 *
-         CALL AB_DSYMM( 'L', UPLO, N, NRHS, NEGONE, A, LDA, X, LDX, ONE,
+         CALL DSYMM( 'L', UPLO, N, NRHS, NEGONE, A, LDA, X, LDX, ONE,
      $               WORK, N )
 *
 *        Check whether the NRHS normwise backward errors satisfy the
 *        stopping criterion. If yes, set ITER=IITER>0 and return.
 *
          DO I = 1, NRHS
-            XNRM = ABS( X( AB_IDAMAX( N, X( 1, I ), 1 ), I ) )
-            RNRM = ABS( WORK( AB_IDAMAX( N, WORK( 1, I ), 1 ), I ) )
+            XNRM = ABS( X( IDAMAX( N, X( 1, I ), 1 ), I ) )
+            RNRM = ABS( WORK( IDAMAX( N, WORK( 1, I ), 1 ), I ) )
             IF( RNRM.GT.XNRM*CTE )
      $         GO TO 20
          END DO
@@ -429,16 +424,16 @@
 *     Single-precision iterative refinement failed to converge to a
 *     satisfactory solution, so we resort to double precision.
 *
-      CALL AB_DPOTRF( UPLO, N, A, LDA, INFO )
+      CALL DPOTRF( UPLO, N, A, LDA, INFO )
 *
       IF( INFO.NE.0 )
      $   RETURN
 *
-      CALL AB_DLACPY( 'All', N, NRHS, B, LDB, X, LDX )
-      CALL AB_DPOTRS( UPLO, N, NRHS, A, LDA, X, LDX, INFO )
+      CALL DLACPY( 'All', N, NRHS, B, LDB, X, LDX )
+      CALL DPOTRS( UPLO, N, NRHS, A, LDA, X, LDX, INFO )
 *
       RETURN
 *
-*     End of AB_DAB_SPOSV.
+*     End of DSPOSV.
 *
       END

@@ -17,7 +17,7 @@
 *> \verbatim
 *>
 *> ZCHKAB is the test program for the COMPLEX*16 LAPACK
-*> ZAB_CGESV/ZAB_CPOSV routine
+*> ZCGESV/ZCPOSV routine
 *>
 *> The program must be driven by a short data file. The first 5 records
 *> specify problem dimensions and program options using list-directed
@@ -25,7 +25,7 @@
 *> number of matrix types to use in testing.  An annotated example of a
 *> data file can be obtained by deleting the first 3 characters from the
 *> following 9 lines:
-*> Data file for testing COMPLEX*16 LAPACK ZAB_CGESV
+*> Data file for testing COMPLEX*16 LAPACK ZCGESV
 *> 7                      Number of values of M
 *> 0 1 2 3 5 10 16        Values of M (row dimension)
 *> 1                      Number of values of NRHS
@@ -116,16 +116,14 @@
       COMPLEX            SWORK(NMAX*(NMAX+MAXRHS))
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH, AB_DSECND
-      LOGICAL            AB_LSAME, AB_AB_LSAMEN
-      REAL               AB_SLAMCH
-      EXTERNAL           AB_DLAMCH, AB_DSECND, AB_LSAME, AB_AB_LSAMEN, A
-     $B_SLAMCH
+      DOUBLE PRECISION   DLAMCH, DSECND
+      LOGICAL            LSAME, LSAMEN
+      REAL               SLAMCH
+      EXTERNAL           DLAMCH, DSECND, LSAME, LSAMEN, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALAREQ, AB_ZDRVAB, AB_ZDRVAC, AB_ZERRAB, AB_
-     $ZERRAC,
-     $                   AB_ILAVER
+      EXTERNAL           ALAREQ, ZDRVAB, ZDRVAC, ZERRAB, ZERRAC,
+     $                   ILAVER
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -141,7 +139,7 @@
 *     ..
 *     .. Executable Statements ..
 *
-      S1 = AB_DSECND( )
+      S1 = DSECND( )
       LDA = NMAX
       FATAL = .FALSE.
 *
@@ -151,7 +149,7 @@
 *
 *     Report values of parameters.
 *
-      CALL AB_ILAVER( VERS_MAJOR, VERS_MINOR, VERS_PATCH )
+      CALL ILAVER( VERS_MAJOR, VERS_MINOR, VERS_PATCH )
       WRITE( NOUT, FMT = 9994 ) VERS_MAJOR, VERS_MINOR, VERS_PATCH
 *
 *     Read the values of M
@@ -224,19 +222,19 @@
 *
 *     Calculate and print the machine dependent constants.
 *
-      SEPS = AB_SLAMCH( 'Underflow threshold' )
+      SEPS = SLAMCH( 'Underflow threshold' )
       WRITE( NOUT, FMT = 9991 )'(single precision) underflow', SEPS
-      SEPS = AB_SLAMCH( 'Overflow threshold' )
+      SEPS = SLAMCH( 'Overflow threshold' )
       WRITE( NOUT, FMT = 9991 )'(single precision) overflow ', SEPS
-      SEPS = AB_SLAMCH( 'Epsilon' )
+      SEPS = SLAMCH( 'Epsilon' )
       WRITE( NOUT, FMT = 9991 )'(single precision) precision', SEPS
       WRITE( NOUT, FMT = * )
 *
-      EPS = AB_DLAMCH( 'Underflow threshold' )
+      EPS = DLAMCH( 'Underflow threshold' )
       WRITE( NOUT, FMT = 9991 )'(double precision) underflow', EPS
-      EPS = AB_DLAMCH( 'Overflow threshold' )
+      EPS = DLAMCH( 'Overflow threshold' )
       WRITE( NOUT, FMT = 9991 )'(double precision) overflow ', EPS
-      EPS = AB_DLAMCH( 'Epsilon' )
+      EPS = DLAMCH( 'Epsilon' )
       WRITE( NOUT, FMT = 9991 )'(double precision) precision', EPS
       WRITE( NOUT, FMT = * )
 *
@@ -280,55 +278,55 @@
 *
 *     Check first character for correct precision.
 *
-      IF( .NOT.AB_LSAME( C1, 'Zomplex precision' ) ) THEN
+      IF( .NOT.LSAME( C1, 'Zomplex precision' ) ) THEN
             WRITE( NOUT, FMT = 9990 )PATH
 *
       ELSE IF( NMATS.LE.0 ) THEN
 *
 *        Check for a positive number of tests requested.
 *
-         WRITE( NOUT, FMT = 9990 )'ZAB_CGESV'
+         WRITE( NOUT, FMT = 9990 )'ZCGESV'
          GO TO 140
 *
-      ELSE IF( AB_AB_LSAMEN( 2, C2, 'GE' ) ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'GE' ) ) THEN
 *
 *        GE:  general matrices
 *
       NTYPES = 11
-      CALL AB_ALAREQ( 'ZGE', NMATS, DOTYPE, NTYPES, NIN, NOUT )
+      CALL ALAREQ( 'ZGE', NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
 *        Test the error exits
 *
          IF( TSTERR )
-     $     CALL AB_ZERRAB( NOUT )
+     $     CALL ZERRAB( NOUT )
 *
          IF( TSTDRV ) THEN
-            CALL AB_ZDRVAB( DOTYPE, NM, MVAL, NNS,
+            CALL ZDRVAB( DOTYPE, NM, MVAL, NNS,
      $                   NSVAL, THRESH, LDA, A( 1, 1 ),
      $                   A( 1, 2 ), B( 1, 1 ), B( 1, 2 ),
      $                   WORK, RWORK, SWORK, IWORK, NOUT )
          ELSE
-            WRITE( NOUT, FMT = 9989 )'ZAB_CGESV'
+            WRITE( NOUT, FMT = 9989 )'ZCGESV'
          END IF
 *
-      ELSE IF( AB_AB_LSAMEN( 2, C2, 'PO' ) ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'PO' ) ) THEN
 *
 *        PO:  positive definite matrices
 *
          NTYPES = 9
-         CALL AB_ALAREQ( 'DPO', NMATS, DOTYPE, NTYPES, NIN, NOUT )
+         CALL ALAREQ( 'DPO', NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTERR )
-     $      CALL AB_ZERRAC( NOUT )
+     $      CALL ZERRAC( NOUT )
 *
 *
          IF( TSTDRV ) THEN
-            CALL AB_ZDRVAC( DOTYPE, NM, MVAL, NNS, NSVAL,
+            CALL ZDRVAC( DOTYPE, NM, MVAL, NNS, NSVAL,
      $                   THRESH, LDA, A( 1, 1 ), A( 1, 2 ),
      $                   B( 1, 1 ), B( 1, 2 ),
      $                   WORK, RWORK, SWORK, NOUT )
          ELSE
-            WRITE( NOUT, FMT = 9989 )'ZAB_CPOSV'
+            WRITE( NOUT, FMT = 9989 )'ZCPOSV'
          END IF
 *
       ELSE
@@ -343,19 +341,18 @@
 *
   140 CONTINUE
       CLOSE ( NIN )
-      S2 = AB_DSECND( )
+      S2 = DSECND( )
       WRITE( NOUT, FMT = 9998 )
       WRITE( NOUT, FMT = 9997 )S2 - S1
 *
  9999 FORMAT( / ' Execution not attempted due to input errors' )
  9998 FORMAT( / ' End of tests' )
- 9997 FORMAT( ' Total time used = ', F12.2, ' AB_SECONDs', / )
+ 9997 FORMAT( ' Total time used = ', F12.2, ' seconds', / )
  9996 FORMAT( ' Invalid input value: ', A4, '=', I6, '; must be >=',
      $      I6 )
  9995 FORMAT( ' Invalid input value: ', A4, '=', I6, '; must be <=',
      $      I6 )
- 9994 FORMAT( ' Tests of the COMPLEX*16 LAPACK ZAB_CGESV/ZAB_CPOSV routi
-     $nes ',
+ 9994 FORMAT( ' Tests of the COMPLEX*16 LAPACK ZCGESV/ZCPOSV routines ',
      $      / ' LAPACK VERSION ', I1, '.', I1, '.', I1,
      $      / / ' The following parameter values will be used:' )
  9993 FORMAT( 4X, A4, ':  ', 10I6, / 11X, 10I6 )

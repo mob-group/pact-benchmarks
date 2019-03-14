@@ -1,4 +1,4 @@
-*> \brief \b AB_STZRQF
+*> \brief \b STZRQF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_STZRQF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_STZRQF.f">
+*> Download STZRQF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stzrqf.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_STZRQF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stzrqf.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_STZRQF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stzrqf.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_STZRQF( M, N, A, LDA, TAU, INFO )
+*       SUBROUTINE STZRQF( M, N, A, LDA, TAU, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, M, N
@@ -33,9 +33,9 @@
 *>
 *> \verbatim
 *>
-*> This routine is deprecated and has been replaced by routine AB_STZRZF.
+*> This routine is deprecated and has been replaced by routine STZRZF.
 *>
-*> AB_STZRQF reduces the M-by-N ( M<=N ) real upper trapezoidal matrix A
+*> STZRQF reduces the M-by-N ( M<=N ) real upper trapezoidal matrix A
 *> to upper triangular form by means of orthogonal transformations.
 *>
 *> The upper trapezoidal matrix A is factored as
@@ -108,7 +108,7 @@
 *>
 *> \verbatim
 *>
-*>  The factorization is obtained by HousehoAB_LDEr's method.  The kth
+*>  The factorization is obtained by Householder's method.  The kth
 *>  transformation matrix, Z( k ), which is used to introduce zeros into
 *>  the ( m - k + 1 )th row of A, is given in the form
 *>
@@ -136,7 +136,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_STZRQF( M, N, A, LDA, TAU, INFO )
+      SUBROUTINE STZRQF( M, N, A, LDA, TAU, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -163,8 +163,7 @@
       INTRINSIC          MAX, MIN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SAXPY, AB_SCOPY, AB_SGEMV, AB_SGER, AB_AB_SL
-     $ARFG, AB_XERBLA
+      EXTERNAL           SAXPY, SCOPY, SGEMV, SGER, SLARFG, XERBLA
 *     ..
 *     .. Executable Statements ..
 *
@@ -179,7 +178,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_STZRQF', -INFO )
+         CALL XERBLA( 'STZRQF', -INFO )
          RETURN
       END IF
 *
@@ -195,11 +194,10 @@
          M1 = MIN( M+1, N )
          DO 20 K = M, 1, -1
 *
-*           Use a HousehoAB_LDEr reflection to zero the kth row of A.
+*           Use a Householder reflection to zero the kth row of A.
 *           First set up the reflection.
 *
-            CALL AB_AB_SLARFG( N-M+1, A( K, K ), A( K, M1 ), LDA, TAU( K
-     $ ) )
+            CALL SLARFG( N-M+1, A( K, K ), A( K, M1 ), LDA, TAU( K ) )
 *
             IF( ( TAU( K ).NE.ZERO ) .AND. ( K.GT.1 ) ) THEN
 *
@@ -210,19 +208,18 @@
 *              the  kth column  of  A.  Also  let  B  denote  the  first
 *              ( k - 1 ) rows of the last ( n - m ) columns of A.
 *
-               CALL AB_SCOPY( K-1, A( 1, K ), 1, TAU, 1 )
+               CALL SCOPY( K-1, A( 1, K ), 1, TAU, 1 )
 *
 *              Form   w = a( k ) + B*z( k )  in TAU.
 *
-               CALL AB_SGEMV( 'No transpose', K-1, N-M, ONE, A( 1, M1 ),
+               CALL SGEMV( 'No transpose', K-1, N-M, ONE, A( 1, M1 ),
      $                     LDA, A( K, M1 ), LDA, ONE, TAU, 1 )
 *
 *              Now form  a( k ) := a( k ) - tau*w
 *              and       B      := B      - tau*w*z( k )**T.
 *
-               CALL AB_SAXPY( K-1, -TAU( K ), TAU, 1, A( 1, K ), 1 )
-               CALL AB_SGER( K-1, N-M, -TAU( K ), TAU, 1, A( K, M1 ), LD
-     $A,
+               CALL SAXPY( K-1, -TAU( K ), TAU, 1, A( 1, K ), 1 )
+               CALL SGER( K-1, N-M, -TAU( K ), TAU, 1, A( K, M1 ), LDA,
      $                    A( 1, M1 ), LDA )
             END IF
    20    CONTINUE
@@ -230,6 +227,6 @@
 *
       RETURN
 *
-*     End of AB_STZRQF
+*     End of STZRQF
 *
       END

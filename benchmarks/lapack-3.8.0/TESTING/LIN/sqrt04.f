@@ -1,4 +1,4 @@
-*> \brief \b AB_SQRT04
+*> \brief \b SQRT04
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SQRT04(M,N,NB,RESULT)
+*       SUBROUTINE SQRT04(M,N,NB,RESULT)
 *
 *       .. Scalar Arguments ..
 *       INTEGER M, N, NB, LDT
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SQRT04 tests AB_AB_SGEQRT and AB_AB_SGEMQRT.
+*> SQRT04 tests SGEQRT and SGEMQRT.
 *> \endverbatim
 *
 *  Arguments:
@@ -71,7 +71,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_SQRT04(M,N,NB,RESULT)
+      SUBROUTINE SQRT04(M,N,NB,RESULT)
       IMPLICIT NONE
 *
 *  -- LAPACK test routine (version 3.8.0) --
@@ -104,14 +104,13 @@
       INTEGER            ISEED( 4 )
 *     ..
 *     .. External Subroutine ..
-      EXTERNAL AB_SGEMM, AB_SLACPY, AB_SLARNV, AB_AB_SGEMQRT, AB_SLASET,
-     $ AB_AB_SGEQRT, AB_AB_SSYRK
+      EXTERNAL SGEMM, SLACPY, SLARNV, SGEMQRT, SLASET, SGEQRT, SSYRK
 *     ..
 *     .. External Functions ..
-      REAL AB_SLAMCH
-      REAL AB_SLANGE, AB_SLANSY
-      LOGICAL  AB_LSAME
-      EXTERNAL AB_SLAMCH, AB_SLANGE, AB_SLANSY, AB_LSAME
+      REAL SLAMCH
+      REAL SLANGE, SLANSY
+      LOGICAL  LSAME
+      EXTERNAL SLAMCH, SLANGE, SLANSY, LSAME
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC  MAX, MIN
@@ -119,7 +118,7 @@
 *     .. Data statements ..
       DATA ISEED / 1988, 1989, 1990, 1991 /
 *
-      EPS = AB_SLAMCH( 'Epsilon' )
+      EPS = SLAMCH( 'Epsilon' )
       K = MIN(M,N)
       L = MAX(M,N)
       LWORK = MAX(2,L)*MAX(2,L)*NB
@@ -134,30 +133,30 @@
 *
       LDT=NB
       DO J=1,N
-         CALL AB_SLARNV( 2, ISEED, M, A( 1, J ) )
+         CALL SLARNV( 2, ISEED, M, A( 1, J ) )
       END DO
-      CALL AB_SLACPY( 'Full', M, N, A, M, AF, M )
+      CALL SLACPY( 'Full', M, N, A, M, AF, M )
 *
 *     Factor the matrix A in the array AF.
 *
-      CALL AB_AB_SGEQRT( M, N, NB, AF, M, T, LDT, WORK, INFO )
+      CALL SGEQRT( M, N, NB, AF, M, T, LDT, WORK, INFO )
 *
 *     Generate the m-by-m matrix Q
 *
-      CALL AB_SLASET( 'Full', M, M, ZERO, ONE, Q, M )
-      CALL AB_AB_SGEMQRT( 'R', 'N', M, M, K, NB, AF, M, T, LDT, Q, M,
+      CALL SLASET( 'Full', M, M, ZERO, ONE, Q, M )
+      CALL SGEMQRT( 'R', 'N', M, M, K, NB, AF, M, T, LDT, Q, M,
      $              WORK, INFO )
 *
 *     Copy R
 *
-      CALL AB_SLASET( 'Full', M, N, ZERO, ZERO, R, M )
-      CALL AB_SLACPY( 'Upper', M, N, AF, M, R, M )
+      CALL SLASET( 'Full', M, N, ZERO, ZERO, R, M )
+      CALL SLACPY( 'Upper', M, N, AF, M, R, M )
 *
 *     Compute |R - Q'*A| / |A| and store in RESULT(1)
 *
-      CALL AB_SGEMM( 'T', 'N', M, N, M, -ONE, Q, M, A, M, ONE, R, M )
-      ANORM = AB_SLANGE( '1', M, N, A, M, RWORK )
-      RESID = AB_SLANGE( '1', M, N, R, M, RWORK )
+      CALL SGEMM( 'T', 'N', M, N, M, -ONE, Q, M, A, M, ONE, R, M )
+      ANORM = SLANGE( '1', M, N, A, M, RWORK )
+      RESID = SLANGE( '1', M, N, R, M, RWORK )
       IF( ANORM.GT.ZERO ) THEN
          RESULT( 1 ) = RESID / (EPS*MAX(1,M)*ANORM)
       ELSE
@@ -166,28 +165,28 @@
 *
 *     Compute |I - Q'*Q| and store in RESULT(2)
 *
-      CALL AB_SLASET( 'Full', M, M, ZERO, ONE, R, M )
-      CALL AB_AB_SSYRK( 'U', 'C', M, M, -ONE, Q, M, ONE, R, M )
-      RESID = AB_SLANSY( '1', 'Upper', M, R, M, RWORK )
+      CALL SLASET( 'Full', M, M, ZERO, ONE, R, M )
+      CALL SSYRK( 'U', 'C', M, M, -ONE, Q, M, ONE, R, M )
+      RESID = SLANSY( '1', 'Upper', M, R, M, RWORK )
       RESULT( 2 ) = RESID / (EPS*MAX(1,M))
 *
 *     Generate random m-by-n matrix C and a copy CF
 *
       DO J=1,N
-         CALL AB_SLARNV( 2, ISEED, M, C( 1, J ) )
+         CALL SLARNV( 2, ISEED, M, C( 1, J ) )
       END DO
-      CNORM = AB_SLANGE( '1', M, N, C, M, RWORK)
-      CALL AB_SLACPY( 'Full', M, N, C, M, CF, M )
+      CNORM = SLANGE( '1', M, N, C, M, RWORK)
+      CALL SLACPY( 'Full', M, N, C, M, CF, M )
 *
 *     Apply Q to C as Q*C
 *
-      CALL AB_AB_SGEMQRT( 'L', 'N', M, N, K, NB, AF, M, T, NB, CF, M,
+      CALL SGEMQRT( 'L', 'N', M, N, K, NB, AF, M, T, NB, CF, M,
      $             WORK, INFO)
 *
 *     Compute |Q*C - Q*C| / |C|
 *
-      CALL AB_SGEMM( 'N', 'N', M, N, M, -ONE, Q, M, C, M, ONE, CF, M )
-      RESID = AB_SLANGE( '1', M, N, CF, M, RWORK )
+      CALL SGEMM( 'N', 'N', M, N, M, -ONE, Q, M, C, M, ONE, CF, M )
+      RESID = SLANGE( '1', M, N, CF, M, RWORK )
       IF( CNORM.GT.ZERO ) THEN
          RESULT( 3 ) = RESID / (EPS*MAX(1,M)*CNORM)
       ELSE
@@ -196,17 +195,17 @@
 *
 *     Copy C into CF again
 *
-      CALL AB_SLACPY( 'Full', M, N, C, M, CF, M )
+      CALL SLACPY( 'Full', M, N, C, M, CF, M )
 *
 *     Apply Q to C as QT*C
 *
-      CALL AB_AB_SGEMQRT( 'L', 'T', M, N, K, NB, AF, M, T, NB, CF, M,
+      CALL SGEMQRT( 'L', 'T', M, N, K, NB, AF, M, T, NB, CF, M,
      $             WORK, INFO)
 *
 *     Compute |QT*C - QT*C| / |C|
 *
-      CALL AB_SGEMM( 'T', 'N', M, N, M, -ONE, Q, M, C, M, ONE, CF, M )
-      RESID = AB_SLANGE( '1', M, N, CF, M, RWORK )
+      CALL SGEMM( 'T', 'N', M, N, M, -ONE, Q, M, C, M, ONE, CF, M )
+      RESID = SLANGE( '1', M, N, CF, M, RWORK )
       IF( CNORM.GT.ZERO ) THEN
          RESULT( 4 ) = RESID / (EPS*MAX(1,M)*CNORM)
       ELSE
@@ -216,20 +215,20 @@
 *     Generate random n-by-m matrix D and a copy DF
 *
       DO J=1,M
-         CALL AB_SLARNV( 2, ISEED, N, D( 1, J ) )
+         CALL SLARNV( 2, ISEED, N, D( 1, J ) )
       END DO
-      DNORM = AB_SLANGE( '1', N, M, D, N, RWORK)
-      CALL AB_SLACPY( 'Full', N, M, D, N, DF, N )
+      DNORM = SLANGE( '1', N, M, D, N, RWORK)
+      CALL SLACPY( 'Full', N, M, D, N, DF, N )
 *
 *     Apply Q to D as D*Q
 *
-      CALL AB_AB_SGEMQRT( 'R', 'N', N, M, K, NB, AF, M, T, NB, DF, N,
+      CALL SGEMQRT( 'R', 'N', N, M, K, NB, AF, M, T, NB, DF, N,
      $             WORK, INFO)
 *
 *     Compute |D*Q - D*Q| / |D|
 *
-      CALL AB_SGEMM( 'N', 'N', N, M, M, -ONE, D, N, Q, M, ONE, DF, N )
-      RESID = AB_SLANGE( '1', N, M, DF, N, RWORK )
+      CALL SGEMM( 'N', 'N', N, M, M, -ONE, D, N, Q, M, ONE, DF, N )
+      RESID = SLANGE( '1', N, M, DF, N, RWORK )
       IF( CNORM.GT.ZERO ) THEN
          RESULT( 5 ) = RESID / (EPS*MAX(1,M)*DNORM)
       ELSE
@@ -238,17 +237,17 @@
 *
 *     Copy D into DF again
 *
-      CALL AB_SLACPY( 'Full', N, M, D, N, DF, N )
+      CALL SLACPY( 'Full', N, M, D, N, DF, N )
 *
 *     Apply Q to D as D*QT
 *
-      CALL AB_AB_SGEMQRT( 'R', 'T', N, M, K, NB, AF, M, T, NB, DF, N,
+      CALL SGEMQRT( 'R', 'T', N, M, K, NB, AF, M, T, NB, DF, N,
      $             WORK, INFO)
 *
 *     Compute |D*QT - D*QT| / |D|
 *
-      CALL AB_SGEMM( 'N', 'T', N, M, M, -ONE, D, N, Q, M, ONE, DF, N )
-      RESID = AB_SLANGE( '1', N, M, DF, N, RWORK )
+      CALL SGEMM( 'N', 'T', N, M, M, -ONE, D, N, Q, M, ONE, DF, N )
+      RESID = SLANGE( '1', N, M, DF, N, RWORK )
       IF( CNORM.GT.ZERO ) THEN
          RESULT( 6 ) = RESID / (EPS*MAX(1,M)*DNORM)
       ELSE

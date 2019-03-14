@@ -1,4 +1,4 @@
-*> \brief \b AB_CUNT01
+*> \brief \b CUNT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CUNT01( ROWCOL, M, N, U, LDU, WORK, LWORK, RWORK,
+*       SUBROUTINE CUNT01( ROWCOL, M, N, U, LDU, WORK, LWORK, RWORK,
 *                          RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CUNT01 checks that the matrix U is unitary by computing the ratio
+*> CUNT01 checks that the matrix U is unitary by computing the ratio
 *>
 *>    RESID = norm( I - U*U' ) / ( n * EPS ), if ROWCOL = 'R',
 *> or
@@ -123,7 +123,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_CUNT01( ROWCOL, M, N, U, LDU, WORK, LWORK, RWORK,
+      SUBROUTINE CUNT01( ROWCOL, M, N, U, LDU, WORK, LWORK, RWORK,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -154,13 +154,13 @@
       COMPLEX            TMP, ZDUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_CLANSY, AB_SLAMCH
-      COMPLEX            AB_CDOTC
-      EXTERNAL           AB_LSAME, AB_CLANSY, AB_SLAMCH, AB_CDOTC
+      LOGICAL            LSAME
+      REAL               CLANSY, SLAMCH
+      COMPLEX            CDOTC
+      EXTERNAL           LSAME, CLANSY, SLAMCH, CDOTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_AB_CHERK, AB_CLASET
+      EXTERNAL           CHERK, CLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CMPLX, MAX, MIN, REAL
@@ -180,8 +180,8 @@
       IF( M.LE.0 .OR. N.LE.0 )
      $   RETURN
 *
-      EPS = AB_SLAMCH( 'Precision' )
-      IF( M.LT.N .OR. ( M.EQ.N .AND. AB_LSAME( ROWCOL, 'R' ) ) ) THEN
+      EPS = SLAMCH( 'Precision' )
+      IF( M.LT.N .OR. ( M.EQ.N .AND. LSAME( ROWCOL, 'R' ) ) ) THEN
          TRANSU = 'N'
          K = N
       ELSE
@@ -199,15 +199,14 @@
 *
 *        Compute I - U*U' or I - U'*U.
 *
-         CALL AB_CLASET( 'Upper', MNMIN, MNMIN, CMPLX( ZERO ),
+         CALL CLASET( 'Upper', MNMIN, MNMIN, CMPLX( ZERO ),
      $                CMPLX( ONE ), WORK, LDWORK )
-         CALL AB_AB_CHERK( 'Upper', TRANSU, MNMIN, K, -ONE, U, LDU, ONE,
-     $ WORK,
+         CALL CHERK( 'Upper', TRANSU, MNMIN, K, -ONE, U, LDU, ONE, WORK,
      $               LDWORK )
 *
 *        Compute norm( I - U*U' ) / ( K * EPS ) .
 *
-         RESID = AB_CLANSY( '1', 'Upper', MNMIN, WORK, LDWORK, RWORK )
+         RESID = CLANSY( '1', 'Upper', MNMIN, WORK, LDWORK, RWORK )
          RESID = ( RESID / REAL( K ) ) / EPS
       ELSE IF( TRANSU.EQ.'C' ) THEN
 *
@@ -220,7 +219,7 @@
                ELSE
                   TMP = ONE
                END IF
-               TMP = TMP - AB_CDOTC( M, U( 1, I ), 1, U( 1, J ), 1 )
+               TMP = TMP - CDOTC( M, U( 1, I ), 1, U( 1, J ), 1 )
                RESID = MAX( RESID, CABS1( TMP ) )
    10       CONTINUE
    20    CONTINUE
@@ -236,7 +235,7 @@
                ELSE
                   TMP = ONE
                END IF
-               TMP = TMP - AB_CDOTC( N, U( J, 1 ), LDU, U( I, 1 ), LDU )
+               TMP = TMP - CDOTC( N, U( J, 1 ), LDU, U( I, 1 ), LDU )
                RESID = MAX( RESID, CABS1( TMP ) )
    30       CONTINUE
    40    CONTINUE
@@ -244,6 +243,6 @@
       END IF
       RETURN
 *
-*     End of AB_CUNT01
+*     End of CUNT01
 *
       END

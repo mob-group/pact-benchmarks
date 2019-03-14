@@ -1,4 +1,4 @@
-*> \brief \b AB_DDRVSY
+*> \brief \b DDRVSY
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DDRVSY( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
+*       SUBROUTINE DDRVSY( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
 *                          A, AFAC, AINV, B, X, XACT, WORK, RWORK, IWORK,
 *                          NOUT )
 *
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DDRVSY tests the driver routines AB_DSYSV and -SVX.
+*> DDRVSY tests the driver routines DSYSV and -SVX.
 *> \endverbatim
 *
 *  Arguments:
@@ -148,8 +148,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_DDRVSY( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX
-     $,
+      SUBROUTINE DDRVSY( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
      $                   A, AFAC, AINV, B, X, XACT, WORK, RWORK, IWORK,
      $                   NOUT )
 *
@@ -195,16 +194,13 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DGET06, AB_DLANSY
-      EXTERNAL           AB_DGET06, AB_DLANSY
+      DOUBLE PRECISION   DGET06, DLANSY
+      EXTERNAL           DGET06, DLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALADHD, AB_ALAERH, AB_ALASVM, AB_DERRVX, AB_
-     $DGET04, AB_DLACPY,
-     $                   AB_DLARHS, AB_DLASET, AB_DLATB4, AB_DLATMS, AB_
-     $DPOT02, AB_DPOT05,
-     $                   AB_DSYSV, AB_AB_DSYSVX, AB_DSYT01, AB_DSYTRF, A
-     $B_AB_DSYTRI2, AB_XLAENV
+      EXTERNAL           ALADHD, ALAERH, ALASVM, DERRVX, DGET04, DLACPY,
+     $                   DLARHS, DLASET, DLATB4, DLATMS, DPOT02, DPOT05,
+     $                   DSYSV, DSYSVX, DSYT01, DSYTRF, DSYTRI2, XLAENV
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -239,15 +235,15 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL AB_DERRVX( PATH, NOUT )
+     $   CALL DERRVX( PATH, NOUT )
       INFOT = 0
 *
 *     Set the block size and minimum block size for testing.
 *
       NB = 1
       NBMIN = 2
-      CALL AB_XLAENV( 1, NB )
-      CALL AB_XLAENV( 2, NBMIN )
+      CALL XLAENV( 1, NB )
+      CALL XLAENV( 2, NBMIN )
 *
 *     Do for each value of N in NVAL
 *
@@ -277,23 +273,21 @@
             DO 160 IUPLO = 1, 2
                UPLO = UPLOS( IUPLO )
 *
-*              Set up parameters with AB_DLATB4 and generate a test matrix
-*              with AB_DLATMS.
+*              Set up parameters with DLATB4 and generate a test matrix
+*              with DLATMS.
 *
-               CALL AB_DLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MO
-     $DE,
+               CALL DLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
      $                      CNDNUM, DIST )
 *
-               SRNAMT = 'AB_DLATMS'
-               CALL AB_DLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
+               SRNAMT = 'DLATMS'
+               CALL DLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
      $                      CNDNUM, ANORM, KL, KU, UPLO, A, LDA, WORK,
      $                      INFO )
 *
-*              Check error code from AB_DLATMS.
+*              Check error code from DLATMS.
 *
                IF( INFO.NE.0 ) THEN
-                  CALL AB_ALAERH( PATH, 'AB_DLATMS', INFO, 0, UPLO, N, N
-     $, -1,
+                  CALL ALAERH( PATH, 'DLATMS', INFO, 0, UPLO, N, N, -1,
      $                         -1, -1, IMAT, NFAIL, NERRS, NOUT )
                   GO TO 160
                END IF
@@ -372,7 +366,7 @@
                   FACT = FACTS( IFACT )
 *
 *                 Compute the condition number for comparison with
-*                 the value returned by AB_AB_DSYSVX.
+*                 the value returned by DSYSVX.
 *
                   IF( ZEROT ) THEN
                      IF( IFACT.EQ.1 )
@@ -383,23 +377,21 @@
 *
 *                    Compute the 1-norm of A.
 *
-                     ANORM = AB_DLANSY( '1', UPLO, N, A, LDA, RWORK )
+                     ANORM = DLANSY( '1', UPLO, N, A, LDA, RWORK )
 *
 *                    Factor the matrix A.
 *
-                     CALL AB_DLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
-                     CALL AB_DSYTRF( UPLO, N, AFAC, LDA, IWORK, WORK,
+                     CALL DLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
+                     CALL DSYTRF( UPLO, N, AFAC, LDA, IWORK, WORK,
      $                            LWORK, INFO )
 *
 *                    Compute inv(A) and take its norm.
 *
-                     CALL AB_DLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
+                     CALL DLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
                      LWORK = (N+NB+1)*(NB+3)
-                     CALL AB_AB_DSYTRI2( UPLO, N, AINV, LDA, IWORK, WORK
-     $,
+                     CALL DSYTRI2( UPLO, N, AINV, LDA, IWORK, WORK,
      $                            LWORK, INFO )
-                     AINVNM = AB_DLANSY( '1', UPLO, N, AINV, LDA, RWORK 
-     $)
+                     AINVNM = DLANSY( '1', UPLO, N, AINV, LDA, RWORK )
 *
 *                    Compute the 1-norm condition number of A.
 *
@@ -412,22 +404,22 @@
 *
 *                 Form an exact solution and set the right hand side.
 *
-                  SRNAMT = 'AB_DLARHS'
-                  CALL AB_DLARHS( PATH, XTYPE, UPLO, ' ', N, N, KL, KU,
+                  SRNAMT = 'DLARHS'
+                  CALL DLARHS( PATH, XTYPE, UPLO, ' ', N, N, KL, KU,
      $                         NRHS, A, LDA, XACT, LDA, B, LDA, ISEED,
      $                         INFO )
                   XTYPE = 'C'
 *
-*                 --- Test AB_DSYSV  ---
+*                 --- Test DSYSV  ---
 *
                   IF( IFACT.EQ.2 ) THEN
-                     CALL AB_DLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
-                     CALL AB_DLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
+                     CALL DLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
+                     CALL DLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
-*                    Factor the matrix and solve the system using AB_DSYSV.
+*                    Factor the matrix and solve the system using DSYSV.
 *
-                     SRNAMT = 'AB_DSYSV '
-                     CALL AB_DSYSV( UPLO, N, NRHS, AFAC, LDA, IWORK, X,
+                     SRNAMT = 'DSYSV '
+                     CALL DSYSV( UPLO, N, NRHS, AFAC, LDA, IWORK, X,
      $                           LDA, WORK, LWORK, INFO )
 *
 *                    Adjust the expected value of INFO to account for
@@ -447,11 +439,10 @@
                         END IF
                      END IF
 *
-*                    Check error code from AB_DSYSV .
+*                    Check error code from DSYSV .
 *
                      IF( INFO.NE.K ) THEN
-                        CALL AB_ALAERH( PATH, 'AB_DSYSV ', INFO, K, UPLO
-     $, N,
+                        CALL ALAERH( PATH, 'DSYSV ', INFO, K, UPLO, N,
      $                               N, -1, -1, NRHS, IMAT, NFAIL,
      $                               NERRS, NOUT )
                         GO TO 120
@@ -462,20 +453,18 @@
 *                    Reconstruct matrix from factors and compute
 *                    residual.
 *
-                     CALL AB_DSYT01( UPLO, N, A, LDA, AFAC, LDA, IWORK,
+                     CALL DSYT01( UPLO, N, A, LDA, AFAC, LDA, IWORK,
      $                            AINV, LDA, RWORK, RESULT( 1 ) )
 *
 *                    Compute residual of the computed solution.
 *
-                     CALL AB_DLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA 
-     $)
-                     CALL AB_DPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK
-     $,
+                     CALL DLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
+                     CALL DPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK,
      $                            LDA, RWORK, RESULT( 2 ) )
 *
 *                    Check solution from generated exact solution.
 *
-                     CALL AB_DGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                     CALL DGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                            RESULT( 3 ) )
                      NT = 3
 *
@@ -485,9 +474,8 @@
                      DO 110 K = 1, NT
                         IF( RESULT( K ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                        CALL AB_ALADHD( NOUT, PATH )
-                           WRITE( NOUT, FMT = 9999 )'AB_DSYSV ', UPLO, N
-     $,
+     $                        CALL ALADHD( NOUT, PATH )
+                           WRITE( NOUT, FMT = 9999 )'DSYSV ', UPLO, N,
      $                        IMAT, K, RESULT( K )
                            NFAIL = NFAIL + 1
                         END IF
@@ -496,18 +484,17 @@
   120                CONTINUE
                   END IF
 *
-*                 --- Test AB_AB_DSYSVX ---
+*                 --- Test DSYSVX ---
 *
                   IF( IFACT.EQ.2 )
-     $               CALL AB_DLASET( UPLO, N, N, ZERO, ZERO, AFAC, LDA )
-                  CALL AB_DLASET( 'Full', N, NRHS, ZERO, ZERO, X, LDA )
+     $               CALL DLASET( UPLO, N, N, ZERO, ZERO, AFAC, LDA )
+                  CALL DLASET( 'Full', N, NRHS, ZERO, ZERO, X, LDA )
 *
 *                 Solve the system and compute the condition number and
-*                 error bounds using AB_AB_DSYSVX.
+*                 error bounds using DSYSVX.
 *
-                  SRNAMT = 'AB_AB_DSYSVX'
-                  CALL AB_AB_DSYSVX( FACT, UPLO, N, NRHS, A, LDA, AFAC, 
-     $LDA,
+                  SRNAMT = 'DSYSVX'
+                  CALL DSYSVX( FACT, UPLO, N, NRHS, A, LDA, AFAC, LDA,
      $                         IWORK, B, LDA, X, LDA, RCOND, RWORK,
      $                         RWORK( NRHS+1 ), WORK, LWORK,
      $                         IWORK( N+1 ), INFO )
@@ -529,11 +516,10 @@
                      END IF
                   END IF
 *
-*                 Check the error code from AB_AB_DSYSVX.
+*                 Check the error code from DSYSVX.
 *
                   IF( INFO.NE.K ) THEN
-                     CALL AB_ALAERH( PATH, 'AB_AB_DSYSVX', INFO, K, FACT
-     $ // UPLO,
+                     CALL ALAERH( PATH, 'DSYSVX', INFO, K, FACT // UPLO,
      $                            N, N, -1, -1, NRHS, IMAT, NFAIL,
      $                            NERRS, NOUT )
                      GO TO 150
@@ -545,8 +531,7 @@
 *                       Reconstruct matrix from factors and compute
 *                       residual.
 *
-                        CALL AB_DSYT01( UPLO, N, A, LDA, AFAC, LDA, IWOR
-     $K,
+                        CALL DSYT01( UPLO, N, A, LDA, AFAC, LDA, IWORK,
      $                               AINV, LDA, RWORK( 2*NRHS+1 ),
      $                               RESULT( 1 ) )
                         K1 = 1
@@ -556,31 +541,28 @@
 *
 *                    Compute residual of the computed solution.
 *
-                     CALL AB_DLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA 
-     $)
-                     CALL AB_DPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK
-     $,
+                     CALL DLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
+                     CALL DPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK,
      $                            LDA, RWORK( 2*NRHS+1 ), RESULT( 2 ) )
 *
 *                    Check solution from generated exact solution.
 *
-                     CALL AB_DGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                     CALL DGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                            RESULT( 3 ) )
 *
 *                    Check the error bounds from iterative refinement.
 *
-                     CALL AB_DPOT05( UPLO, N, NRHS, A, LDA, B, LDA, X, L
-     $DA,
+                     CALL DPOT05( UPLO, N, NRHS, A, LDA, B, LDA, X, LDA,
      $                            XACT, LDA, RWORK, RWORK( NRHS+1 ),
      $                            RESULT( 4 ) )
                   ELSE
                      K1 = 6
                   END IF
 *
-*                 Compare RCOND from AB_AB_DSYSVX with the computed value
+*                 Compare RCOND from DSYSVX with the computed value
 *                 in RCONDC.
 *
-                  RESULT( 6 ) = AB_DGET06( RCOND, RCONDC )
+                  RESULT( 6 ) = DGET06( RCOND, RCONDC )
 *
 *                 Print information about the tests that did not pass
 *                 the threshold.
@@ -588,9 +570,8 @@
                   DO 140 K = K1, 6
                      IF( RESULT( K ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL AB_ALADHD( NOUT, PATH )
-                        WRITE( NOUT, FMT = 9998 )'AB_AB_DSYSVX', FACT, U
-     $PLO,
+     $                     CALL ALADHD( NOUT, PATH )
+                        WRITE( NOUT, FMT = 9998 )'DSYSVX', FACT, UPLO,
      $                     N, IMAT, K, RESULT( K )
                         NFAIL = NFAIL + 1
                      END IF
@@ -605,7 +586,7 @@
 *
 *     Print a summary of the results.
 *
-      CALL AB_ALASVM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL ALASVM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( 1X, A, ', UPLO=''', A1, ''', N =', I5, ', type ', I2,
      $      ', test ', I2, ', ratio =', G12.5 )
@@ -613,6 +594,6 @@
      $      ', type ', I2, ', test ', I2, ', ratio =', G12.5 )
       RETURN
 *
-*     End of AB_DDRVSY
+*     End of DDRVSY
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_CCHKTR
+*> \brief \b CCHKTR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CCHKTR( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSVAL,
+*       SUBROUTINE CCHKTR( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSVAL,
 *                          THRESH, TSTERR, NMAX, A, AINV, B, X, XACT,
 *                          WORK, RWORK, NOUT )
 *
@@ -31,7 +31,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CCHKTR tests AB_CTRTRI, -TRS, -RFS, and -CON, and AB_CLATRS
+*> CCHKTR tests CTRTRI, -TRS, -RFS, and -CON, and CLATRS
 *> \endverbatim
 *
 *  Arguments:
@@ -159,7 +159,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_CCHKTR( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSVAL,
+      SUBROUTINE CCHKTR( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSVAL,
      $                   THRESH, TSTERR, NMAX, A, AINV, B, X, XACT,
      $                   WORK, RWORK, NOUT )
 *
@@ -207,18 +207,15 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_CLANTR
-      EXTERNAL           AB_LSAME, AB_CLANTR
+      LOGICAL            LSAME
+      REAL               CLANTR
+      EXTERNAL           LSAME, CLANTR
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALAERH, AB_ALAHD, AB_ALASUM, AB_CCOPY, AB_CE
-     $RRTR, AB_CGET04,
-     $                   AB_CLACPY, AB_CLARHS, AB_CLATRS, AB_CLATTR, AB_
-     $CTRCON, AB_CTRRFS,
-     $                   AB_CTRT01, AB_CTRT02, AB_CTRT03, AB_CTRT05, AB_
-     $CTRT06, AB_CTRTRI,
-     $                   AB_CTRTRS, AB_XLAENV
+      EXTERNAL           ALAERH, ALAHD, ALASUM, CCOPY, CERRTR, CGET04,
+     $                   CLACPY, CLARHS, CLATRS, CLATTR, CTRCON, CTRRFS,
+     $                   CTRT01, CTRT02, CTRT03, CTRT05, CTRT06, CTRTRI,
+     $                   CTRTRS, XLAENV
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -252,7 +249,7 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL AB_CERRTR( PATH, NOUT )
+     $   CALL CERRTR( PATH, NOUT )
       INFOT = 0
 *
       DO 120 IN = 1, NN
@@ -276,16 +273,15 @@
 *
                UPLO = UPLOS( IUPLO )
 *
-*              Call AB_CLATTR to generate a triangular test matrix.
+*              Call CLATTR to generate a triangular test matrix.
 *
-               SRNAMT = 'AB_CLATTR'
-               CALL AB_CLATTR( IMAT, UPLO, 'No transpose', DIAG, ISEED, 
-     $N,
+               SRNAMT = 'CLATTR'
+               CALL CLATTR( IMAT, UPLO, 'No transpose', DIAG, ISEED, N,
      $                      A, LDA, X, WORK, RWORK, INFO )
 *
 *              Set IDIAG = 1 for non-unit matrices, 2 for unit.
 *
-               IF( AB_LSAME( DIAG, 'N' ) ) THEN
+               IF( LSAME( DIAG, 'N' ) ) THEN
                   IDIAG = 1
                ELSE
                   IDIAG = 2
@@ -296,28 +292,26 @@
 *                 Do for each blocksize in NBVAL
 *
                   NB = NBVAL( INB )
-                  CALL AB_XLAENV( 1, NB )
+                  CALL XLAENV( 1, NB )
 *
 *+    TEST 1
 *                 Form the inverse of A.
 *
-                  CALL AB_CLACPY( UPLO, N, N, A, LDA, AINV, LDA )
-                  SRNAMT = 'AB_CTRTRI'
-                  CALL AB_CTRTRI( UPLO, DIAG, N, AINV, LDA, INFO )
+                  CALL CLACPY( UPLO, N, N, A, LDA, AINV, LDA )
+                  SRNAMT = 'CTRTRI'
+                  CALL CTRTRI( UPLO, DIAG, N, AINV, LDA, INFO )
 *
-*                 Check error code from AB_CTRTRI.
+*                 Check error code from CTRTRI.
 *
                   IF( INFO.NE.0 )
-     $               CALL AB_ALAERH( PATH, 'AB_CTRTRI', INFO, 0, UPLO //
-     $ DIAG,
+     $               CALL ALAERH( PATH, 'CTRTRI', INFO, 0, UPLO // DIAG,
      $                            N, N, -1, -1, NB, IMAT, NFAIL, NERRS,
      $                            NOUT )
 *
 *                 Compute the infinity-norm condition number of A.
 *
-                  ANORM = AB_CLANTR( 'I', UPLO, DIAG, N, N, A, LDA, RWOR
-     $K )
-                  AINVNM = AB_CLANTR( 'I', UPLO, DIAG, N, N, AINV, LDA,
+                  ANORM = CLANTR( 'I', UPLO, DIAG, N, N, A, LDA, RWORK )
+                  AINVNM = CLANTR( 'I', UPLO, DIAG, N, N, AINV, LDA,
      $                     RWORK )
                   IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
                      RCONDI = ONE
@@ -329,14 +323,13 @@
 *                 its inverse.  Also compute the 1-norm condition number
 *                 of A.
 *
-                  CALL AB_CTRT01( UPLO, DIAG, N, A, LDA, AINV, LDA, RCON
-     $DO,
+                  CALL CTRT01( UPLO, DIAG, N, A, LDA, AINV, LDA, RCONDO,
      $                         RWORK, RESULT( 1 ) )
 *                 Print the test ratio if it is .GE. THRESH.
 *
                   IF( RESULT( 1 ).GE.THRESH ) THEN
                      IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                  CALL AB_ALAHD( NOUT, PATH )
+     $                  CALL ALAHD( NOUT, PATH )
                      WRITE( NOUT, FMT = 9999 )UPLO, DIAG, N, NB, IMAT,
      $                  1, RESULT( 1 )
                      NFAIL = NFAIL + 1
@@ -368,24 +361,21 @@
 *+    TEST 2
 *                       Solve and compute residual for op(A)*x = b.
 *
-                        SRNAMT = 'AB_CLARHS'
-                        CALL AB_CLARHS( PATH, XTYPE, UPLO, TRANS, N, N, 
-     $0,
+                        SRNAMT = 'CLARHS'
+                        CALL CLARHS( PATH, XTYPE, UPLO, TRANS, N, N, 0,
      $                               IDIAG, NRHS, A, LDA, XACT, LDA, B,
      $                               LDA, ISEED, INFO )
                         XTYPE = 'C'
-                        CALL AB_CLACPY( 'Full', N, NRHS, B, LDA, X, LDA 
-     $)
+                        CALL CLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
-                        SRNAMT = 'AB_CTRTRS'
-                        CALL AB_CTRTRS( UPLO, TRANS, DIAG, N, NRHS, A, L
-     $DA,
+                        SRNAMT = 'CTRTRS'
+                        CALL CTRTRS( UPLO, TRANS, DIAG, N, NRHS, A, LDA,
      $                               X, LDA, INFO )
 *
-*                       Check error code from AB_CTRTRS.
+*                       Check error code from CTRTRS.
 *
                         IF( INFO.NE.0 )
-     $                     CALL AB_ALAERH( PATH, 'AB_CTRTRS', INFO, 0,
+     $                     CALL ALAERH( PATH, 'CTRTRS', INFO, 0,
      $                                  UPLO // TRANS // DIAG, N, N, -1,
      $                                  -1, NRHS, IMAT, NFAIL, NERRS,
      $                                  NOUT )
@@ -395,42 +385,37 @@
                         IF( N.GT.0 )
      $                     DUMMY = A( 1 )
 *
-                        CALL AB_CTRT02( UPLO, TRANS, DIAG, N, NRHS, A, L
-     $DA,
+                        CALL CTRT02( UPLO, TRANS, DIAG, N, NRHS, A, LDA,
      $                               X, LDA, B, LDA, WORK, RWORK,
      $                               RESULT( 2 ) )
 *
 *+    TEST 3
 *                       Check solution from generated exact solution.
 *
-                        CALL AB_CGET04( N, NRHS, X, LDA, XACT, LDA, RCON
-     $DC,
+                        CALL CGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                               RESULT( 3 ) )
 *
 *+    TESTS 4, 5, and 6
 *                       Use iterative refinement to improve the solution
 *                       and compute error bounds.
 *
-                        SRNAMT = 'AB_CTRRFS'
-                        CALL AB_CTRRFS( UPLO, TRANS, DIAG, N, NRHS, A, L
-     $DA,
+                        SRNAMT = 'CTRRFS'
+                        CALL CTRRFS( UPLO, TRANS, DIAG, N, NRHS, A, LDA,
      $                               B, LDA, X, LDA, RWORK,
      $                               RWORK( NRHS+1 ), WORK,
      $                               RWORK( 2*NRHS+1 ), INFO )
 *
-*                       Check error code from AB_CTRRFS.
+*                       Check error code from CTRRFS.
 *
                         IF( INFO.NE.0 )
-     $                     CALL AB_ALAERH( PATH, 'AB_CTRRFS', INFO, 0,
+     $                     CALL ALAERH( PATH, 'CTRRFS', INFO, 0,
      $                                  UPLO // TRANS // DIAG, N, N, -1,
      $                                  -1, NRHS, IMAT, NFAIL, NERRS,
      $                                  NOUT )
 *
-                        CALL AB_CGET04( N, NRHS, X, LDA, XACT, LDA, RCON
-     $DC,
+                        CALL CGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                               RESULT( 4 ) )
-                        CALL AB_CTRT05( UPLO, TRANS, DIAG, N, NRHS, A, L
-     $DA,
+                        CALL CTRT05( UPLO, TRANS, DIAG, N, NRHS, A, LDA,
      $                               B, LDA, X, LDA, XACT, LDA, RWORK,
      $                               RWORK( NRHS+1 ), RESULT( 5 ) )
 *
@@ -440,7 +425,7 @@
                         DO 20 K = 2, 6
                            IF( RESULT( K ).GE.THRESH ) THEN
                               IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                           CALL AB_ALAHD( NOUT, PATH )
+     $                           CALL ALAHD( NOUT, PATH )
                               WRITE( NOUT, FMT = 9998 )UPLO, TRANS,
      $                           DIAG, N, NRHS, IMAT, K, RESULT( K )
                               NFAIL = NFAIL + 1
@@ -461,26 +446,25 @@
                         NORM = 'I'
                         RCONDC = RCONDI
                      END IF
-                     SRNAMT = 'AB_CTRCON'
-                     CALL AB_CTRCON( NORM, UPLO, DIAG, N, A, LDA, RCOND,
+                     SRNAMT = 'CTRCON'
+                     CALL CTRCON( NORM, UPLO, DIAG, N, A, LDA, RCOND,
      $                            WORK, RWORK, INFO )
 *
-*                       Check error code from AB_CTRCON.
+*                       Check error code from CTRCON.
 *
                      IF( INFO.NE.0 )
-     $                  CALL AB_ALAERH( PATH, 'AB_CTRCON', INFO, 0,
+     $                  CALL ALAERH( PATH, 'CTRCON', INFO, 0,
      $                               NORM // UPLO // DIAG, N, N, -1, -1,
      $                               -1, IMAT, NFAIL, NERRS, NOUT )
 *
-                     CALL AB_CTRT06( RCOND, RCONDC, UPLO, DIAG, N, A, LD
-     $A,
+                     CALL CTRT06( RCOND, RCONDC, UPLO, DIAG, N, A, LDA,
      $                            RWORK, RESULT( 7 ) )
 *
 *                    Print the test ratio if it is .GE. THRESH.
 *
                      IF( RESULT( 7 ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL AB_ALAHD( NOUT, PATH )
+     $                     CALL ALAHD( NOUT, PATH )
                         WRITE( NOUT, FMT = 9997 )NORM, UPLO, N, IMAT,
      $                     7, RESULT( 7 )
                         NFAIL = NFAIL + 1
@@ -491,7 +475,7 @@
    70       CONTINUE
    80    CONTINUE
 *
-*        Use pathological test matrices to test AB_CLATRS.
+*        Use pathological test matrices to test CLATRS.
 *
          DO 110 IMAT = NTYPE1 + 1, NTYPES
 *
@@ -511,48 +495,46 @@
 *
                   TRANS = TRANSS( ITRAN )
 *
-*                 Call AB_CLATTR to generate a triangular test matrix.
+*                 Call CLATTR to generate a triangular test matrix.
 *
-                  SRNAMT = 'AB_CLATTR'
-                  CALL AB_CLATTR( IMAT, UPLO, TRANS, DIAG, ISEED, N, A,
+                  SRNAMT = 'CLATTR'
+                  CALL CLATTR( IMAT, UPLO, TRANS, DIAG, ISEED, N, A,
      $                         LDA, X, WORK, RWORK, INFO )
 *
 *+    TEST 8
 *                 Solve the system op(A)*x = b.
 *
-                  SRNAMT = 'AB_CLATRS'
-                  CALL AB_CCOPY( N, X, 1, B, 1 )
-                  CALL AB_CLATRS( UPLO, TRANS, DIAG, 'N', N, A, LDA, B,
+                  SRNAMT = 'CLATRS'
+                  CALL CCOPY( N, X, 1, B, 1 )
+                  CALL CLATRS( UPLO, TRANS, DIAG, 'N', N, A, LDA, B,
      $                         SCALE, RWORK, INFO )
 *
-*                 Check error code from AB_CLATRS.
+*                 Check error code from CLATRS.
 *
                   IF( INFO.NE.0 )
-     $               CALL AB_ALAERH( PATH, 'AB_CLATRS', INFO, 0,
+     $               CALL ALAERH( PATH, 'CLATRS', INFO, 0,
      $                            UPLO // TRANS // DIAG // 'N', N, N,
      $                            -1, -1, -1, IMAT, NFAIL, NERRS, NOUT )
 *
-                  CALL AB_CTRT03( UPLO, TRANS, DIAG, N, 1, A, LDA, SCALE
-     $,
+                  CALL CTRT03( UPLO, TRANS, DIAG, N, 1, A, LDA, SCALE,
      $                         RWORK, ONE, B, LDA, X, LDA, WORK,
      $                         RESULT( 8 ) )
 *
 *+    TEST 9
 *                 Solve op(A)*X = b again with NORMIN = 'Y'.
 *
-                  CALL AB_CCOPY( N, X, 1, B( N+1 ), 1 )
-                  CALL AB_CLATRS( UPLO, TRANS, DIAG, 'Y', N, A, LDA,
+                  CALL CCOPY( N, X, 1, B( N+1 ), 1 )
+                  CALL CLATRS( UPLO, TRANS, DIAG, 'Y', N, A, LDA,
      $                         B( N+1 ), SCALE, RWORK, INFO )
 *
-*                 Check error code from AB_CLATRS.
+*                 Check error code from CLATRS.
 *
                   IF( INFO.NE.0 )
-     $               CALL AB_ALAERH( PATH, 'AB_CLATRS', INFO, 0,
+     $               CALL ALAERH( PATH, 'CLATRS', INFO, 0,
      $                            UPLO // TRANS // DIAG // 'Y', N, N,
      $                            -1, -1, -1, IMAT, NFAIL, NERRS, NOUT )
 *
-                  CALL AB_CTRT03( UPLO, TRANS, DIAG, N, 1, A, LDA, SCALE
-     $,
+                  CALL CTRT03( UPLO, TRANS, DIAG, N, 1, A, LDA, SCALE,
      $                         RWORK, ONE, B( N+1 ), LDA, X, LDA, WORK,
      $                         RESULT( 9 ) )
 *
@@ -561,15 +543,15 @@
 *
                   IF( RESULT( 8 ).GE.THRESH ) THEN
                      IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                  CALL AB_ALAHD( NOUT, PATH )
-                     WRITE( NOUT, FMT = 9996 )'AB_CLATRS', UPLO, TRANS,
+     $                  CALL ALAHD( NOUT, PATH )
+                     WRITE( NOUT, FMT = 9996 )'CLATRS', UPLO, TRANS,
      $                  DIAG, 'N', N, IMAT, 8, RESULT( 8 )
                      NFAIL = NFAIL + 1
                   END IF
                   IF( RESULT( 9 ).GE.THRESH ) THEN
                      IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                  CALL AB_ALAHD( NOUT, PATH )
-                     WRITE( NOUT, FMT = 9996 )'AB_CLATRS', UPLO, TRANS,
+     $                  CALL ALAHD( NOUT, PATH )
+                     WRITE( NOUT, FMT = 9996 )'CLATRS', UPLO, TRANS,
      $                  DIAG, 'Y', N, IMAT, 9, RESULT( 9 )
                      NFAIL = NFAIL + 1
                   END IF
@@ -581,7 +563,7 @@
 *
 *     Print a summary of the results.
 *
-      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( ' UPLO=''', A1, ''', DIAG=''', A1, ''', N=', I5, ', NB=',
      $      I4, ', type ', I2, ', test(', I2, ')= ', G12.5 )
@@ -595,6 +577,6 @@
      $      G12.5 )
       RETURN
 *
-*     End of AB_CCHKTR
+*     End of CCHKTR
 *
       END

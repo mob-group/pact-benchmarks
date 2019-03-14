@@ -1,4 +1,4 @@
-*> \brief \b AB_DTRT01
+*> \brief \b DTRT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DTRT01( UPLO, DIAG, N, A, LDA, AINV, LDAINV, RCOND,
+*       SUBROUTINE DTRT01( UPLO, DIAG, N, A, LDA, AINV, LDAINV, RCOND,
 *                          WORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DTRT01 computes the residual for a triangular matrix A times its
+*> DTRT01 computes the residual for a triangular matrix A times its
 *> inverse:
 *>    RESID = norm( A*AINV - I ) / ( N * norm(A) * norm(AINV) * EPS ),
 *> where EPS is the machine epsilon.
@@ -121,7 +121,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_DTRT01( UPLO, DIAG, N, A, LDA, AINV, LDAINV, RCOND,
+      SUBROUTINE DTRT01( UPLO, DIAG, N, A, LDA, AINV, LDAINV, RCOND,
      $                   WORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -149,12 +149,12 @@
       DOUBLE PRECISION   AINVNM, ANORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DLAMCH, AB_DLANTR
-      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_DLANTR
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH, DLANTR
+      EXTERNAL           LSAME, DLAMCH, DLANTR
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DTRMV
+      EXTERNAL           DTRMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE
@@ -171,9 +171,9 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0 or AINVNM = 0.
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
-      ANORM = AB_DLANTR( '1', UPLO, DIAG, N, N, A, LDA, WORK )
-      AINVNM = AB_DLANTR( '1', UPLO, DIAG, N, N, AINV, LDAINV, WORK )
+      EPS = DLAMCH( 'Epsilon' )
+      ANORM = DLANTR( '1', UPLO, DIAG, N, N, A, LDA, WORK )
+      AINVNM = DLANTR( '1', UPLO, DIAG, N, N, AINV, LDAINV, WORK )
       IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
          RCOND = ZERO
          RESID = ONE / EPS
@@ -183,7 +183,7 @@
 *
 *     Set the diagonal of AINV to 1 if AINV has unit diagonal.
 *
-      IF( AB_LSAME( DIAG, 'U' ) ) THEN
+      IF( LSAME( DIAG, 'U' ) ) THEN
          DO 10 J = 1, N
             AINV( J, J ) = ONE
    10    CONTINUE
@@ -191,15 +191,14 @@
 *
 *     Compute A * AINV, overwriting AINV.
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
          DO 20 J = 1, N
-            CALL AB_DTRMV( 'Upper', 'No transpose', DIAG, J, A, LDA,
+            CALL DTRMV( 'Upper', 'No transpose', DIAG, J, A, LDA,
      $                  AINV( 1, J ), 1 )
    20    CONTINUE
       ELSE
          DO 30 J = 1, N
-            CALL AB_DTRMV( 'Lower', 'No transpose', DIAG, N-J+1, A( J, J
-     $ ),
+            CALL DTRMV( 'Lower', 'No transpose', DIAG, N-J+1, A( J, J ),
      $                  LDA, AINV( J, J ), 1 )
    30    CONTINUE
       END IF
@@ -212,13 +211,12 @@
 *
 *     Compute norm(A*AINV - I) / (N * norm(A) * norm(AINV) * EPS)
 *
-      RESID = AB_DLANTR( '1', UPLO, 'Non-unit', N, N, AINV, LDAINV, WORK
-     $ )
+      RESID = DLANTR( '1', UPLO, 'Non-unit', N, N, AINV, LDAINV, WORK )
 *
       RESID = ( ( RESID*RCOND ) / DBLE( N ) ) / EPS
 *
       RETURN
 *
-*     End of AB_DTRT01
+*     End of DTRT01
 *
       END

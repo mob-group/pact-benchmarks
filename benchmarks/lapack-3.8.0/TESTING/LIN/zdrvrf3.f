@@ -1,4 +1,4 @@
-*> \brief \b AB_ZDRVRF3
+*> \brief \b ZDRVRF3
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,8 +8,8 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZDRVRF3( NOUT, NN, NVAL, THRESH, A, LDA, ARF, B1, B2,
-*      +                    D_WORK_AB_ZLANGE, Z_WORK_AB_AB_ZGEQRF, TAU )
+*       SUBROUTINE ZDRVRF3( NOUT, NN, NVAL, THRESH, A, LDA, ARF, B1, B2,
+*      +                    D_WORK_ZLANGE, Z_WORK_ZGEQRF, TAU )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDA, NN, NOUT
@@ -17,10 +17,10 @@
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            NVAL( NN )
-*       DOUBLE PRECISION   D_WORK_AB_ZLANGE( * )
+*       DOUBLE PRECISION   D_WORK_ZLANGE( * )
 *       COMPLEX*16         A( LDA, * ), ARF( * ), B1( LDA, * ),
 *      +                   B2( LDA, * )
-*       COMPLEX*16         Z_WORK_AB_AB_ZGEQRF( * ), TAU( * )
+*       COMPLEX*16         Z_WORK_ZGEQRF( * ), TAU( * )
 *       ..
 *
 *
@@ -29,8 +29,8 @@
 *>
 *> \verbatim
 *>
-*> AB_ZDRVRF3 tests the LAPACK RFP routines:
-*>     AB_ZTFSM
+*> ZDRVRF3 tests the LAPACK RFP routines:
+*>     ZTFSM
 *> \endverbatim
 *
 *  Arguments:
@@ -88,14 +88,14 @@
 *>          B2 is COMPLEX*16 array, dimension (LDA,NMAX)
 *> \endverbatim
 *>
-*> \param[out] D_WORK_AB_ZLANGE
+*> \param[out] D_WORK_ZLANGE
 *> \verbatim
-*>          D_WORK_AB_ZLANGE is DOUBLE PRECISION array, dimension (NMAX)
+*>          D_WORK_ZLANGE is DOUBLE PRECISION array, dimension (NMAX)
 *> \endverbatim
 *>
-*> \param[out] Z_WORK_AB_AB_ZGEQRF
+*> \param[out] Z_WORK_ZGEQRF
 *> \verbatim
-*>          Z_WORK_AB_AB_ZGEQRF is COMPLEX*16 array, dimension (NMAX)
+*>          Z_WORK_ZGEQRF is COMPLEX*16 array, dimension (NMAX)
 *> \endverbatim
 *>
 *> \param[out] TAU
@@ -116,9 +116,8 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZDRVRF3( NOUT, NN, NVAL, THRESH, A, LDA, ARF, B1, B2
-     $,
-     +                    D_WORK_AB_ZLANGE, Z_WORK_AB_AB_ZGEQRF, TAU )
+      SUBROUTINE ZDRVRF3( NOUT, NN, NVAL, THRESH, A, LDA, ARF, B1, B2,
+     +                    D_WORK_ZLANGE, Z_WORK_ZGEQRF, TAU )
 *
 *  -- LAPACK test routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -131,10 +130,10 @@
 *     ..
 *     .. Array Arguments ..
       INTEGER            NVAL( NN )
-      DOUBLE PRECISION   D_WORK_AB_ZLANGE( * )
+      DOUBLE PRECISION   D_WORK_ZLANGE( * )
       COMPLEX*16         A( LDA, * ), ARF( * ), B1( LDA, * ),
      +                   B2( LDA, * )
-      COMPLEX*16         Z_WORK_AB_AB_ZGEQRF( * ), TAU( * )
+      COMPLEX*16         Z_WORK_ZGEQRF( * ), TAU( * )
 *     ..
 *
 *  =====================================================================
@@ -160,13 +159,12 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE
-      COMPLEX*16         AB_ZLARND
-      EXTERNAL           AB_DLAMCH, AB_ZLARND, AB_ZLANGE
+      DOUBLE PRECISION   DLAMCH, ZLANGE
+      COMPLEX*16         ZLARND
+      EXTERNAL           DLAMCH, ZLARND, ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZTRTTF, AB_AB_ZGEQRF, AB_ZGEQLF, AB_ZTFSM, A
-     $B_ZTRSM
+      EXTERNAL           ZTRTTF, ZGEQRF, ZGEQLF, ZTFSM, ZTRSM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT
@@ -195,7 +193,7 @@
       DO 10 I = 1, 4
          ISEED( I ) = ISEEDY( I )
    10 CONTINUE
-      EPS = AB_DLAMCH( 'Precision' )
+      EPS = DLAMCH( 'Precision' )
 *
       DO 170 IIM = 1, NN
 *
@@ -232,7 +230,7 @@
                               ELSE IF ( IALPHA.EQ. 2) THEN
                                  ALPHA = ONE
                               ELSE
-                                 ALPHA = AB_ZLARND( 4, ISEED )
+                                 ALPHA = ZLARND( 4, ISEED )
                               END IF
 *
 *                             All the parameters are set:
@@ -268,7 +266,7 @@
 *
                               DO J = 1, NA
                                  DO I = 1, NA
-                                    A( I, J) = AB_ZLARND( 4, ISEED )
+                                    A( I, J) = ZLARND( 4, ISEED )
                                  END DO
                               END DO
 *
@@ -277,18 +275,18 @@
 *                                The case IUPLO.EQ.1 is when SIDE.EQ.'U'
 *                                -> QR factorization.
 *
-                                 SRNAMT = 'AB_AB_ZGEQRF'
-                                 CALL AB_AB_ZGEQRF( NA, NA, A, LDA, TAU,
-     +                                        Z_WORK_AB_AB_ZGEQRF, LDA,
+                                 SRNAMT = 'ZGEQRF'
+                                 CALL ZGEQRF( NA, NA, A, LDA, TAU,
+     +                                        Z_WORK_ZGEQRF, LDA,
      +                                        INFO )
                               ELSE
 *
 *                                The case IUPLO.EQ.2 is when SIDE.EQ.'L'
 *                                -> QL factorization.
 *
-                                 SRNAMT = 'AB_AB_ZGELQF'
-                                 CALL AB_AB_ZGELQF( NA, NA, A, LDA, TAU,
-     +                                        Z_WORK_AB_AB_ZGEQRF, LDA,
+                                 SRNAMT = 'ZGELQF'
+                                 CALL ZGELQF( NA, NA, A, LDA, TAU,
+     +                                        Z_WORK_ZGEQRF, LDA,
      +                                        INFO )
                               END IF
 *
@@ -298,15 +296,13 @@
 *                             value 1.0E+00.
 *
                               DO J = 1, NA
-                                 A( J, J) = A(J,J) * AB_ZLARND( 5, ISEED
-     $ )
+                                 A( J, J) = A(J,J) * ZLARND( 5, ISEED )
                               END DO
 *
 *                             Store a copy of A in RFP format (in ARF).
 *
-                              SRNAMT = 'AB_ZTRTTF'
-                              CALL AB_ZTRTTF( CFORM, UPLO, NA, A, LDA, A
-     $RF,
+                              SRNAMT = 'ZTRTTF'
+                              CALL ZTRTTF( CFORM, UPLO, NA, A, LDA, ARF,
      +                                     INFO )
 *
 *                             Generate B1 our M--by--N right-hand side
@@ -314,24 +310,23 @@
 *
                               DO J = 1, N
                                  DO I = 1, M
-                                    B1( I, J) = AB_ZLARND( 4, ISEED )
+                                    B1( I, J) = ZLARND( 4, ISEED )
                                     B2( I, J) = B1( I, J)
                                  END DO
                               END DO
 *
 *                             Solve op( A ) X = B or X op( A ) = B
-*                             with AB_ZTRSM
+*                             with ZTRSM
 *
-                              SRNAMT = 'AB_ZTRSM'
-                              CALL AB_ZTRSM( SIDE, UPLO, TRANS, DIAG, M,
-     $ N,
+                              SRNAMT = 'ZTRSM'
+                              CALL ZTRSM( SIDE, UPLO, TRANS, DIAG, M, N,
      +                               ALPHA, A, LDA, B1, LDA )
 *
 *                             Solve op( A ) X = B or X op( A ) = B
-*                             with AB_ZTFSM
+*                             with ZTFSM
 *
-                              SRNAMT = 'AB_ZTFSM'
-                              CALL AB_ZTFSM( CFORM, SIDE, UPLO, TRANS,
+                              SRNAMT = 'ZTFSM'
+                              CALL ZTFSM( CFORM, SIDE, UPLO, TRANS,
      +                                    DIAG, M, N, ALPHA, ARF, B2,
      +                                    LDA )
 *
@@ -343,8 +338,8 @@
                                  END DO
                               END DO
 *
-                              RESULT(1) = AB_ZLANGE( 'I', M, N, B1, LDA,
-     +                                            D_WORK_AB_ZLANGE )
+                              RESULT(1) = ZLANGE( 'I', M, N, B1, LDA,
+     +                                            D_WORK_ZLANGE )
 *
                               RESULT(1) = RESULT(1) / SQRT( EPS )
      +                                    / MAX ( MAX( M, N), 1 )
@@ -354,7 +349,7 @@
                                     WRITE( NOUT, * )
                                     WRITE( NOUT, FMT = 9999 )
                                  END IF
-                                 WRITE( NOUT, FMT = 9997 ) 'AB_ZTFSM',
+                                 WRITE( NOUT, FMT = 9997 ) 'ZTFSM',
      +                              CFORM, SIDE, UPLO, TRANS, DIAG, M,
      +                              N, RESULT(1)
                                  NFAIL = NFAIL + 1
@@ -372,12 +367,12 @@
 *     Print a summary of the results.
 *
       IF ( NFAIL.EQ.0 ) THEN
-         WRITE( NOUT, FMT = 9996 ) 'AB_ZTFSM', NRUN
+         WRITE( NOUT, FMT = 9996 ) 'ZTFSM', NRUN
       ELSE
-         WRITE( NOUT, FMT = 9995 ) 'AB_ZTFSM', NFAIL, NRUN
+         WRITE( NOUT, FMT = 9995 ) 'ZTFSM', NFAIL, NRUN
       END IF
 *
- 9999 FORMAT( 1X, ' *** Error(s) or Failure(s) while testing AB_ZTFSM
+ 9999 FORMAT( 1X, ' *** Error(s) or Failure(s) while testing ZTFSM
      +         ***')
  9997 FORMAT( 1X, '     Failure in ',A5,', CFORM=''',A1,''',',
      + ' SIDE=''',A1,''',',' UPLO=''',A1,''',',' TRANS=''',A1,''',',
@@ -389,6 +384,6 @@
 *
       RETURN
 *
-*     End of AB_ZDRVRF3
+*     End of ZDRVRF3
 *
       END

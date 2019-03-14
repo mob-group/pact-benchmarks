@@ -1,4 +1,4 @@
-*> \brief <b> AB_AB_ZGTSVX computes the solution to system of linear equations A * X = B for GT matrices </b>
+*> \brief <b> ZGTSVX computes the solution to system of linear equations A * X = B for GT matrices </b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_ZGTSVX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_ZGTSVX.f">
+*> Download ZGTSVX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgtsvx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_ZGTSVX.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgtsvx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_ZGTSVX.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgtsvx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_ZGTSVX( FACT, TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF,
+*       SUBROUTINE ZGTSVX( FACT, TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF,
 *                          DU2, IPIV, B, LDB, X, LDX, RCOND, FERR, BERR,
 *                          WORK, RWORK, INFO )
 *
@@ -41,7 +41,7 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_ZGTSVX uses the LU factorization to compute the solution to a complex
+*> ZGTSVX uses the LU factorization to compute the solution to a complex
 *> system of linear equations A * X = B, A**T * X = B, or A**H * X = B,
 *> where A is a tridiagonal matrix of order N and X and B are N-by-NRHS
 *> matrices.
@@ -137,7 +137,7 @@
 *>          DLF is COMPLEX*16 array, dimension (N-1)
 *>          If FACT = 'F', then DLF is an input argument and on entry
 *>          contains the (n-1) multipliers that define the matrix L from
-*>          the LU factorization of A as computed by AB_ZGTTRF.
+*>          the LU factorization of A as computed by ZGTTRF.
 *>
 *>          If FACT = 'N', then DLF is an output argument and on exit
 *>          contains the (n-1) multipliers that define the matrix L from
@@ -170,11 +170,11 @@
 *> \verbatim
 *>          DU2 is COMPLEX*16 array, dimension (N-2)
 *>          If FACT = 'F', then DU2 is an input argument and on entry
-*>          contains the (n-2) elements of the AB_SECOND superdiagonal of
+*>          contains the (n-2) elements of the second superdiagonal of
 *>          U.
 *>
 *>          If FACT = 'N', then DU2 is an output argument and on exit
-*>          contains the (n-2) elements of the AB_SECOND superdiagonal of
+*>          contains the (n-2) elements of the second superdiagonal of
 *>          U.
 *> \endverbatim
 *>
@@ -183,7 +183,7 @@
 *>          IPIV is INTEGER array, dimension (N)
 *>          If FACT = 'F', then IPIV is an input argument and on entry
 *>          contains the pivot indices from the LU factorization of A as
-*>          computed by AB_ZGTTRF.
+*>          computed by ZGTTRF.
 *>
 *>          If FACT = 'N', then IPIV is an output argument and on exit
 *>          contains the pivot indices from the LU factorization of A;
@@ -290,8 +290,7 @@
 *> \ingroup complex16GTsolve
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_ZGTSVX( FACT, TRANS, N, NRHS, DL, D, DU, DLF, DF,
-     $ DUF,
+      SUBROUTINE ZGTSVX( FACT, TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF,
      $                   DU2, IPIV, B, LDB, X, LDX, RCOND, FERR, BERR,
      $                   WORK, RWORK, INFO )
 *
@@ -325,14 +324,13 @@
       DOUBLE PRECISION   ANORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGT
-      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_ZLANGT
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH, ZLANGT
+      EXTERNAL           LSAME, DLAMCH, ZLANGT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZCOPY, AB_ZGTCON, AB_ZGTRFS, AB_Z
-     $GTTRF, AB_ZGTTRS,
-     $                   AB_ZLACPY
+      EXTERNAL           XERBLA, ZCOPY, ZGTCON, ZGTRFS, ZGTTRF, ZGTTRS,
+     $                   ZLACPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -340,13 +338,12 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-      NOFACT = AB_LSAME( FACT, 'N' )
-      NOTRAN = AB_LSAME( TRANS, 'N' )
-      IF( .NOT.NOFACT .AND. .NOT.AB_LSAME( FACT, 'F' ) ) THEN
+      NOFACT = LSAME( FACT, 'N' )
+      NOTRAN = LSAME( TRANS, 'N' )
+      IF( .NOT.NOFACT .AND. .NOT.LSAME( FACT, 'F' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) .AND. .N
-     $OT.
-     $         AB_LSAME( TRANS, 'C' ) ) THEN
+      ELSE IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) .AND. .NOT.
+     $         LSAME( TRANS, 'C' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -358,7 +355,7 @@
          INFO = -16
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_ZGTSVX', -INFO )
+         CALL XERBLA( 'ZGTSVX', -INFO )
          RETURN
       END IF
 *
@@ -366,12 +363,12 @@
 *
 *        Compute the LU factorization of A.
 *
-         CALL AB_ZCOPY( N, D, 1, DF, 1 )
+         CALL ZCOPY( N, D, 1, DF, 1 )
          IF( N.GT.1 ) THEN
-            CALL AB_ZCOPY( N-1, DL, 1, DLF, 1 )
-            CALL AB_ZCOPY( N-1, DU, 1, DUF, 1 )
+            CALL ZCOPY( N-1, DL, 1, DLF, 1 )
+            CALL ZCOPY( N-1, DU, 1, DUF, 1 )
          END IF
-         CALL AB_ZGTTRF( N, DLF, DF, DUF, DU2, IPIV, INFO )
+         CALL ZGTTRF( N, DLF, DF, DUF, DU2, IPIV, INFO )
 *
 *        Return if INFO is non-zero.
 *
@@ -388,34 +385,32 @@
       ELSE
          NORM = 'I'
       END IF
-      ANORM = AB_ZLANGT( NORM, N, DL, D, DU )
+      ANORM = ZLANGT( NORM, N, DL, D, DU )
 *
 *     Compute the reciprocal of the condition number of A.
 *
-      CALL AB_ZGTCON( NORM, N, DLF, DF, DUF, DU2, IPIV, ANORM, RCOND, WO
-     $RK,
+      CALL ZGTCON( NORM, N, DLF, DF, DUF, DU2, IPIV, ANORM, RCOND, WORK,
      $             INFO )
 *
 *     Compute the solution vectors X.
 *
-      CALL AB_ZLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
-      CALL AB_ZGTTRS( TRANS, N, NRHS, DLF, DF, DUF, DU2, IPIV, X, LDX,
+      CALL ZLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
+      CALL ZGTTRS( TRANS, N, NRHS, DLF, DF, DUF, DU2, IPIV, X, LDX,
      $             INFO )
 *
 *     Use iterative refinement to improve the computed solutions and
 *     compute error bounds and backward error estimates for them.
 *
-      CALL AB_ZGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF, DU2, IPIV
-     $,
+      CALL ZGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF, DU2, IPIV,
      $             B, LDB, X, LDX, FERR, BERR, WORK, RWORK, INFO )
 *
 *     Set INFO = N+1 if the matrix is singular to working precision.
 *
-      IF( RCOND.LT.AB_DLAMCH( 'Epsilon' ) )
+      IF( RCOND.LT.DLAMCH( 'Epsilon' ) )
      $   INFO = N + 1
 *
       RETURN
 *
-*     End of AB_AB_ZGTSVX
+*     End of ZGTSVX
 *
       END

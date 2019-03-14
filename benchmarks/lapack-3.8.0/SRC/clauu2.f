@@ -1,4 +1,4 @@
-*> \brief \b AB_CLAUU2 computes the product UUH or LHL, where U and L are upper or lower triangular matrices (unblocked algorithm).
+*> \brief \b CLAUU2 computes the product UUH or LHL, where U and L are upper or lower triangular matrices (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CLAUU2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLAUU2.f">
+*> Download CLAUU2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clauu2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLAUU2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clauu2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLAUU2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clauu2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CLAUU2( UPLO, N, A, LDA, INFO )
+*       SUBROUTINE CLAUU2( UPLO, N, A, LDA, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CLAUU2 computes the product U * U**H or L**H * L, where the triangular
+*> CLAUU2 computes the product U * U**H or L**H * L, where the triangular
 *> factor U or L is stored in the upper or lower triangular part of
 *> the array A.
 *>
@@ -100,7 +100,7 @@
 *> \ingroup complexOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_CLAUU2( UPLO, N, A, LDA, INFO )
+      SUBROUTINE CLAUU2( UPLO, N, A, LDA, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -127,12 +127,12 @@
       REAL               AII
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      COMPLEX            AB_CDOTC
-      EXTERNAL           AB_LSAME, AB_CDOTC
+      LOGICAL            LSAME
+      COMPLEX            CDOTC
+      EXTERNAL           LSAME, CDOTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CGEMV, AB_CLACGV, AB_CAB_SSCAL, AB_XERBLA
+      EXTERNAL           CGEMV, CLACGV, CSSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CMPLX, MAX, REAL
@@ -142,8 +142,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -151,7 +151,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CLAUU2', -INFO )
+         CALL XERBLA( 'CLAUU2', -INFO )
          RETURN
       END IF
 *
@@ -167,17 +167,15 @@
          DO 10 I = 1, N
             AII = A( I, I )
             IF( I.LT.N ) THEN
-               A( I, I ) = AII*AII + REAL( AB_CDOTC( N-I, A( I, I+1 ), L
-     $DA,
+               A( I, I ) = AII*AII + REAL( CDOTC( N-I, A( I, I+1 ), LDA,
      $                     A( I, I+1 ), LDA ) )
-               CALL AB_CLACGV( N-I, A( I, I+1 ), LDA )
-               CALL AB_CGEMV( 'No transpose', I-1, N-I, ONE, A( 1, I+1 )
-     $,
+               CALL CLACGV( N-I, A( I, I+1 ), LDA )
+               CALL CGEMV( 'No transpose', I-1, N-I, ONE, A( 1, I+1 ),
      $                     LDA, A( I, I+1 ), LDA, CMPLX( AII ),
      $                     A( 1, I ), 1 )
-               CALL AB_CLACGV( N-I, A( I, I+1 ), LDA )
+               CALL CLACGV( N-I, A( I, I+1 ), LDA )
             ELSE
-               CALL AB_CAB_SSCAL( I, AII, A( 1, I ), 1 )
+               CALL CSSCAL( I, AII, A( 1, I ), 1 )
             END IF
    10    CONTINUE
 *
@@ -188,22 +186,21 @@
          DO 20 I = 1, N
             AII = A( I, I )
             IF( I.LT.N ) THEN
-               A( I, I ) = AII*AII + REAL( AB_CDOTC( N-I, A( I+1, I ), 1
-     $,
+               A( I, I ) = AII*AII + REAL( CDOTC( N-I, A( I+1, I ), 1,
      $                     A( I+1, I ), 1 ) )
-               CALL AB_CLACGV( I-1, A( I, 1 ), LDA )
-               CALL AB_CGEMV( 'Conjugate transpose', N-I, I-1, ONE,
+               CALL CLACGV( I-1, A( I, 1 ), LDA )
+               CALL CGEMV( 'Conjugate transpose', N-I, I-1, ONE,
      $                     A( I+1, 1 ), LDA, A( I+1, I ), 1,
      $                     CMPLX( AII ), A( I, 1 ), LDA )
-               CALL AB_CLACGV( I-1, A( I, 1 ), LDA )
+               CALL CLACGV( I-1, A( I, 1 ), LDA )
             ELSE
-               CALL AB_CAB_SSCAL( I, AII, A( I, 1 ), LDA )
+               CALL CSSCAL( I, AII, A( I, 1 ), LDA )
             END IF
    20    CONTINUE
       END IF
 *
       RETURN
 *
-*     End of AB_CLAUU2
+*     End of CLAUU2
 *
       END

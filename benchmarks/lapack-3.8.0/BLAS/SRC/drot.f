@@ -1,4 +1,4 @@
-*> \brief \b AB_DROT
+*> \brief \b DROT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DROT(N,DX,INCX,DY,INCY,C,S)
+*       SUBROUTINE DROT(N,DX,INCX,DY,INCY,C,S)
 *
 *       .. Scalar Arguments ..
 *       DOUBLE PRECISION C,S
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*>    AB_DROT applies a plane rotation.
+*>    DROT applies a plane rotation.
 *> \endverbatim
 *
 *  Arguments:
@@ -90,7 +90,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_DROT(N,DX,INCX,DY,INCY,C,S)
+      SUBROUTINE DROT(N,DX,INCX,DY,INCY,C,S)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

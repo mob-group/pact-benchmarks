@@ -1,4 +1,4 @@
-*> \brief \b AB_SLARGE
+*> \brief \b SLARGE
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLARGE( N, A, LDA, ISEED, WORK, INFO )
+*       SUBROUTINE SLARGE( N, A, LDA, ISEED, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, N
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SLARGE pre- and post-multiplies a real general n by n matrix A
+*> SLARGE pre- and post-multiplies a real general n by n matrix A
 *> with a random orthogonal matrix: A = U*D*U'.
 *> \endverbatim
 *
@@ -85,7 +85,7 @@
 *> \ingroup real_matgen
 *
 *  =====================================================================
-      SUBROUTINE AB_SLARGE( N, A, LDA, ISEED, WORK, INFO )
+      SUBROUTINE SLARGE( N, A, LDA, ISEED, WORK, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -111,15 +111,14 @@
       REAL               TAU, WA, WB, WN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SGEMV, AB_SGER, AB_SLARNV, AB_SSCAL, AB_XERB
-     $LA
+      EXTERNAL           SGEMV, SGER, SLARNV, SSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SIGN
 *     ..
 *     .. External Functions ..
-      REAL               AB_SNRM2
-      EXTERNAL           AB_SNRM2
+      REAL               SNRM2
+      EXTERNAL           SNRM2
 *     ..
 *     .. Executable Statements ..
 *
@@ -132,7 +131,7 @@
          INFO = -3
       END IF
       IF( INFO.LT.0 ) THEN
-         CALL AB_XERBLA( 'AB_SLARGE', -INFO )
+         CALL XERBLA( 'SLARGE', -INFO )
          RETURN
       END IF
 *
@@ -142,37 +141,34 @@
 *
 *        generate random reflection
 *
-         CALL AB_SLARNV( 3, ISEED, N-I+1, WORK )
-         WN = AB_SNRM2( N-I+1, WORK, 1 )
+         CALL SLARNV( 3, ISEED, N-I+1, WORK )
+         WN = SNRM2( N-I+1, WORK, 1 )
          WA = SIGN( WN, WORK( 1 ) )
          IF( WN.EQ.ZERO ) THEN
             TAU = ZERO
          ELSE
             WB = WORK( 1 ) + WA
-            CALL AB_SSCAL( N-I, ONE / WB, WORK( 2 ), 1 )
+            CALL SSCAL( N-I, ONE / WB, WORK( 2 ), 1 )
             WORK( 1 ) = ONE
             TAU = WB / WA
          END IF
 *
 *        multiply A(i:n,1:n) by random reflection from the left
 *
-         CALL AB_SGEMV( 'Transpose', N-I+1, N, ONE, A( I, 1 ), LDA, WORK
-     $,
+         CALL SGEMV( 'Transpose', N-I+1, N, ONE, A( I, 1 ), LDA, WORK,
      $               1, ZERO, WORK( N+1 ), 1 )
-         CALL AB_SGER( N-I+1, N, -TAU, WORK, 1, WORK( N+1 ), 1, A( I, 1 
-     $),
+         CALL SGER( N-I+1, N, -TAU, WORK, 1, WORK( N+1 ), 1, A( I, 1 ),
      $              LDA )
 *
 *        multiply A(1:n,i:n) by random reflection from the right
 *
-         CALL AB_SGEMV( 'No transpose', N, N-I+1, ONE, A( 1, I ), LDA,
+         CALL SGEMV( 'No transpose', N, N-I+1, ONE, A( 1, I ), LDA,
      $               WORK, 1, ZERO, WORK( N+1 ), 1 )
-         CALL AB_SGER( N, N-I+1, -TAU, WORK( N+1 ), 1, WORK, 1, A( 1, I 
-     $),
+         CALL SGER( N, N-I+1, -TAU, WORK( N+1 ), 1, WORK, 1, A( 1, I ),
      $              LDA )
    10 CONTINUE
       RETURN
 *
-*     End of AB_SLARGE
+*     End of SLARGE
 *
       END

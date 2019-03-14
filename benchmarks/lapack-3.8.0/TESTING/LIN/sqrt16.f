@@ -1,4 +1,4 @@
-*> \brief \b AB_SQRT16
+*> \brief \b SQRT16
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SQRT16( TRANS, M, N, NRHS, A, LDA, X, LDX, B, LDB,
+*       SUBROUTINE SQRT16( TRANS, M, N, NRHS, A, LDA, X, LDX, B, LDB,
 *                          RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SQRT16 computes the residual for a solution of a system of linear
+*> SQRT16 computes the residual for a solution of a system of linear
 *> equations  A*x = b  or  A'*x = b:
 *>    RESID = norm(B - A*X) / ( max(m,n) * norm(A) * norm(X) * EPS ),
 *> where EPS is the machine epsilon.
@@ -130,7 +130,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_SQRT16( TRANS, M, N, NRHS, A, LDA, X, LDX, B, LDB,
+      SUBROUTINE SQRT16( TRANS, M, N, NRHS, A, LDA, X, LDX, B, LDB,
      $                   RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -159,12 +159,12 @@
       REAL               ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_SASUM, AB_SLAMCH, AB_SLANGE
-      EXTERNAL           AB_LSAME, AB_SASUM, AB_SLAMCH, AB_SLANGE
+      LOGICAL            LSAME
+      REAL               SASUM, SLAMCH, SLANGE
+      EXTERNAL           LSAME, SASUM, SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SGEMM
+      EXTERNAL           SGEMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -178,22 +178,21 @@
          RETURN
       END IF
 *
-      IF( AB_LSAME( TRANS, 'T' ) .OR. AB_LSAME( TRANS, 'C' ) ) THEN
-         ANORM = AB_SLANGE( 'I', M, N, A, LDA, RWORK )
+      IF( LSAME( TRANS, 'T' ) .OR. LSAME( TRANS, 'C' ) ) THEN
+         ANORM = SLANGE( 'I', M, N, A, LDA, RWORK )
          N1 = N
          N2 = M
       ELSE
-         ANORM = AB_SLANGE( '1', M, N, A, LDA, RWORK )
+         ANORM = SLANGE( '1', M, N, A, LDA, RWORK )
          N1 = M
          N2 = N
       END IF
 *
-      EPS = AB_SLAMCH( 'Epsilon' )
+      EPS = SLAMCH( 'Epsilon' )
 *
 *     Compute  B - A*X  (or  B - A'*X ) and store in B.
 *
-      CALL AB_SGEMM( TRANS, 'No transpose', N1, NRHS, N2, -ONE, A, LDA, 
-     $X,
+      CALL SGEMM( TRANS, 'No transpose', N1, NRHS, N2, -ONE, A, LDA, X,
      $            LDX, ONE, B, LDB )
 *
 *     Compute the maximum over the number of right hand sides of
@@ -201,8 +200,8 @@
 *
       RESID = ZERO
       DO 10 J = 1, NRHS
-         BNORM = AB_SASUM( N1, B( 1, J ), 1 )
-         XNORM = AB_SASUM( N2, X( 1, J ), 1 )
+         BNORM = SASUM( N1, B( 1, J ), 1 )
+         XNORM = SASUM( N2, X( 1, J ), 1 )
          IF( ANORM.EQ.ZERO .AND. BNORM.EQ.ZERO ) THEN
             RESID = ZERO
          ELSE IF( ANORM.LE.ZERO .OR. XNORM.LE.ZERO ) THEN
@@ -215,6 +214,6 @@
 *
       RETURN
 *
-*     End of AB_SQRT16
+*     End of SQRT16
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_DERRTZ
+*> \brief \b DERRTZ
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DERRTZ( PATH, NUNIT )
+*       SUBROUTINE DERRTZ( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DERRTZ tests the error exits for AB_STZRZF.
+*> DERRTZ tests the error exits for STZRZF.
 *> \endverbatim
 *
 *  Arguments:
@@ -52,7 +52,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_DERRTZ( PATH, NUNIT )
+      SUBROUTINE DERRTZ( PATH, NUNIT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -78,11 +78,11 @@
       DOUBLE PRECISION   A( NMAX, NMAX ), TAU( NMAX ), W( NMAX )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_AB_LSAMEN
-      EXTERNAL           AB_AB_LSAMEN
+      LOGICAL            LSAMEN
+      EXTERNAL           LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALAESM, AB_CHKXER, AB_DTZRZF
+      EXTERNAL           ALAESM, CHKXER, DTZRZF
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -106,36 +106,36 @@
       W( 2 ) = 0.0D+0
       OK = .TRUE.
 *
-      IF( AB_AB_LSAMEN( 2, C2, 'TZ' ) ) THEN
+      IF( LSAMEN( 2, C2, 'TZ' ) ) THEN
 *
 *        Test error exits for the trapezoidal routines.
 *
-*        AB_DTZRZF
+*        DTZRZF
 *
-         SRNAMT = 'AB_DTZRZF'
+         SRNAMT = 'DTZRZF'
          INFOT = 1
-         CALL AB_DTZRZF( -1, 0, A, 1, TAU, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_DTZRZF', INFOT, NOUT, LERR, OK )
+         CALL DTZRZF( -1, 0, A, 1, TAU, W, 1, INFO )
+         CALL CHKXER( 'DTZRZF', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_DTZRZF( 1, 0, A, 1, TAU, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_DTZRZF', INFOT, NOUT, LERR, OK )
+         CALL DTZRZF( 1, 0, A, 1, TAU, W, 1, INFO )
+         CALL CHKXER( 'DTZRZF', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_DTZRZF( 2, 2, A, 1, TAU, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_DTZRZF', INFOT, NOUT, LERR, OK )
+         CALL DTZRZF( 2, 2, A, 1, TAU, W, 1, INFO )
+         CALL CHKXER( 'DTZRZF', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_DTZRZF( 2, 2, A, 2, TAU, W, 0, INFO )
-         CALL AB_CHKXER( 'AB_DTZRZF', INFOT, NOUT, LERR, OK )
+         CALL DTZRZF( 2, 2, A, 2, TAU, W, 0, INFO )
+         CALL CHKXER( 'DTZRZF', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_DTZRZF( 2, 3, A, 2, TAU, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_DTZRZF', INFOT, NOUT, LERR, OK )
+         CALL DTZRZF( 2, 3, A, 2, TAU, W, 1, INFO )
+         CALL CHKXER( 'DTZRZF', INFOT, NOUT, LERR, OK )
       END IF
 *
 *     Print a summary line.
 *
-      CALL AB_ALAESM( PATH, OK, NOUT )
+      CALL ALAESM( PATH, OK, NOUT )
 *
       RETURN
 *
-*     End of AB_DERRTZ
+*     End of DERRTZ
 *
       END

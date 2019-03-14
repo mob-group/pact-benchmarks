@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_AB_DSYTRI_3X
+*> \brief \b DSYTRI_3X
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_AB_DSYTRI_3X + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_AB_DSYTRI_3X.f">
+*> Download DSYTRI_3X + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsytri_3x.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_AB_DSYTRI_3X.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsytri_3x.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_AB_DSYTRI_3X.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsytri_3x.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_AB_DSYTRI_3X( UPLO, N, A, LDA, E, IPIV, WORK, NB, INFO )
+*       SUBROUTINE DSYTRI_3X( UPLO, N, A, LDA, E, IPIV, WORK, NB, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,8 +34,8 @@
 *  =============
 *>
 *> \verbatim
-*> AB_AB_AB_DSYTRI_3X computes the inverse of a real symmetric indefinite
-*> matrix A using the factorization computed by AB_AB_DSYTRF_RK or AB_DSYTRF_BK:
+*> DSYTRI_3X computes the inverse of a real symmetric indefinite
+*> matrix A using the factorization computed by DSYTRF_RK or DSYTRF_BK:
 *>
 *>     A = P*U*D*(U**T)*(P**T) or A = P*L*D*(L**T)*(P**T),
 *>
@@ -69,7 +69,7 @@
 *> \verbatim
 *>          A is DOUBLE PRECISION array, dimension (LDA,N)
 *>          On entry, diagonal of the block diagonal matrix D and
-*>          factors U or L as computed by AB_AB_DSYTRF_RK and AB_DSYTRF_BK:
+*>          factors U or L as computed by DSYTRF_RK and DSYTRF_BK:
 *>            a) ONLY diagonal elements of the symmetric block diagonal
 *>               matrix D on the diagonal of A, i.e. D(k,k) = A(k,k);
 *>               (superdiagonal (or subdiagonal) elements of D
@@ -111,7 +111,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D
-*>          as determined by AB_AB_DSYTRF_RK or AB_DSYTRF_BK.
+*>          as determined by DSYTRF_RK or DSYTRF_BK.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -157,8 +157,7 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_AB_DSYTRI_3X( UPLO, N, A, LDA, E, IPIV, WORK, NB,
-     $ INFO )
+      SUBROUTINE DSYTRI_3X( UPLO, N, A, LDA, E, IPIV, WORK, NB, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -187,12 +186,11 @@
      $                   U11_I_J, U11_IP1_J
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DGEMM, AB_DSYSWAPR, AB_DTRTRI, AB_DTRMM, AB_
-     $XERBLA
+      EXTERNAL           DGEMM, DSYSWAPR, DTRTRI, DTRMM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MOD
@@ -202,8 +200,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -214,7 +212,7 @@
 *     Quick return if possible
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_AB_DSYTRI_3X', -INFO )
+         CALL XERBLA( 'DSYTRI_3X', -INFO )
          RETURN
       END IF
       IF( N.EQ.0 )
@@ -267,7 +265,7 @@
 *
 *        invA = P * inv(U**T) * inv(D) * inv(U) * P**T.
 *
-         CALL AB_DTRTRI( UPLO, 'U', N, A, LDA, INFO )
+         CALL DTRTRI( UPLO, 'U', N, A, LDA, INFO )
 *
 *        inv(D) and inv(D) * inv(U)
 *
@@ -380,7 +378,7 @@
 *
 *           U11**T * invD1 * U11 -> U11
 *
-            CALL AB_DTRMM( 'L', 'U', 'T', 'U', NNB, NNB,
+            CALL DTRMM( 'L', 'U', 'T', 'U', NNB, NNB,
      $                 ONE, A( CUT+1, CUT+1 ), LDA, WORK( U11+1, 1 ),
      $                 N+NB+1 )
 *
@@ -392,7 +390,7 @@
 *
 *           U01**T * invD * U01 -> A( CUT+I, CUT+J )
 *
-            CALL AB_DGEMM( 'T', 'N', NNB, NNB, CUT, ONE, A( 1, CUT+1 ),
+            CALL DGEMM( 'T', 'N', NNB, NNB, CUT, ONE, A( 1, CUT+1 ),
      $                  LDA, WORK, N+NB+1, ZERO, WORK(U11+1,1), N+NB+1 )
 
 *
@@ -406,7 +404,7 @@
 *
 *           U01 =  U00**T * invD0 * U01
 *
-            CALL AB_DTRMM( 'L', UPLO, 'T', 'U', CUT, NNB,
+            CALL DTRMM( 'L', UPLO, 'T', 'U', CUT, NNB,
      $                  ONE, A, LDA, WORK, N+NB+1 )
 
 *
@@ -436,10 +434,8 @@
          DO I = 1, N
              IP = ABS( IPIV( I ) )
              IF( IP.NE.I ) THEN
-                IF (I .LT. IP) CALL AB_DSYSWAPR( UPLO, N, A, LDA, I ,IP 
-     $)
-                IF (I .GT. IP) CALL AB_DSYSWAPR( UPLO, N, A, LDA, IP ,I 
-     $)
+                IF (I .LT. IP) CALL DSYSWAPR( UPLO, N, A, LDA, I ,IP )
+                IF (I .GT. IP) CALL DSYSWAPR( UPLO, N, A, LDA, IP ,I )
              END IF
          END DO
 *
@@ -449,7 +445,7 @@
 *
 *        inv A = P * inv(L**T) * inv(D) * inv(L) * P**T.
 *
-         CALL AB_DTRTRI( UPLO, 'U', N, A, LDA, INFO )
+         CALL DTRTRI( UPLO, 'U', N, A, LDA, INFO )
 *
 *        inv(D) and inv(D) * inv(L)
 *
@@ -561,7 +557,7 @@
 *
 *           L11**T * invD1 * L11 -> L11
 *
-            CALL AB_DTRMM( 'L', UPLO, 'T', 'U', NNB, NNB, ONE,
+            CALL DTRMM( 'L', UPLO, 'T', 'U', NNB, NNB, ONE,
      $                   A( CUT+1, CUT+1 ), LDA, WORK( U11+1, 1 ),
      $                   N+NB+1 )
 
@@ -576,7 +572,7 @@
 *
 *              L21**T * invD2*L21 -> A( CUT+I, CUT+J )
 *
-               CALL AB_DGEMM( 'T', 'N', NNB, NNB, N-NNB-CUT, ONE,
+               CALL DGEMM( 'T', 'N', NNB, NNB, N-NNB-CUT, ONE,
      $                     A( CUT+NNB+1, CUT+1 ), LDA, WORK, N+NB+1,
      $                     ZERO, WORK( U11+1, 1 ), N+NB+1 )
 
@@ -591,7 +587,7 @@
 *
 *              L01 =  L22**T * invD2 * L21
 *
-               CALL AB_DTRMM( 'L', UPLO, 'T', 'U', N-NNB-CUT, NNB, ONE,
+               CALL DTRMM( 'L', UPLO, 'T', 'U', N-NNB-CUT, NNB, ONE,
      $                     A( CUT+NNB+1, CUT+NNB+1 ), LDA, WORK,
      $                     N+NB+1 )
 *
@@ -634,10 +630,8 @@
          DO I = N, 1, -1
              IP = ABS( IPIV( I ) )
              IF( IP.NE.I ) THEN
-                IF (I .LT. IP) CALL AB_DSYSWAPR( UPLO, N, A, LDA, I ,IP 
-     $)
-                IF (I .GT. IP) CALL AB_DSYSWAPR( UPLO, N, A, LDA, IP ,I 
-     $)
+                IF (I .LT. IP) CALL DSYSWAPR( UPLO, N, A, LDA, I ,IP )
+                IF (I .GT. IP) CALL DSYSWAPR( UPLO, N, A, LDA, IP ,I )
              END IF
          END DO
 *
@@ -645,7 +639,7 @@
 *
       RETURN
 *
-*     End of AB_AB_AB_DSYTRI_3X
+*     End of DSYTRI_3X
 *
       END
 

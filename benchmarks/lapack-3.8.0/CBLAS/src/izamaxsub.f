@@ -1,15 +1,15 @@
-c     AB_AB_IZAMAXsub.f
+c     izamaxsub.f
 c
-c     The program is a fortran wrapper for AB_IZAMAX.
+c     The program is a fortran wrapper for izamax.
 c     Witten by Keita Teranishi.  2/11/1998
 c
-      subroutine AB_AB_IZAMAXsub(n,x,incx,iamax)
+      subroutine izamaxsub(n,x,incx,iamax)
 c
-      external AB_IZAMAX
-      integer  AB_IZAMAX,iamax
+      external izamax
+      integer  izamax,iamax
       integer n,incx
       double complex x(*)
 c
-      iamax=AB_IZAMAX(n,x,incx)
+      iamax=izamax(n,x,incx)
       return
       end

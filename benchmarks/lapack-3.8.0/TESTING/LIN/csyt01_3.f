@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_CSYT01_3
+*> \brief \b CSYT01_3
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_CSYT01_3( UPLO, N, A, LDA, AFAC, LDAFAC, E, IPIV, C,
+*       SUBROUTINE CSYT01_3( UPLO, N, A, LDA, AFAC, LDAFAC, E, IPIV, C,
 *                            LDC, RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -29,9 +29,9 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_CSYT01_3 reconstructs a symmetric indefinite matrix A from its
-*> block L*D*L' or U*D*U' factorization computed by AB_AB_CSYTRF_RK
-*> (or AB_CSYTRF_BK) and computes the residual
+*> CSYT01_3 reconstructs a symmetric indefinite matrix A from its
+*> block L*D*L' or U*D*U' factorization computed by CSYTRF_RK
+*> (or CSYTRF_BK) and computes the residual
 *>    norm( C - A ) / ( N * norm(A) * EPS ),
 *> where C is the reconstructed matrix and EPS is the machine epsilon.
 *> \endverbatim
@@ -70,7 +70,7 @@
 *> \verbatim
 *>          AFAC is COMPLEX array, dimension (LDAFAC,N)
 *>          Diagonal of the block diagonal matrix D and factors U or L
-*>          as computed by AB_AB_CSYTRF_RK and AB_CSYTRF_BK:
+*>          as computed by CSYTRF_RK and CSYTRF_BK:
 *>            a) ONLY diagonal elements of the symmetric block diagonal
 *>               matrix D on the diagonal of A, i.e. D(k,k) = A(k,k);
 *>               (superdiagonal (or subdiagonal) elements of D
@@ -99,7 +99,7 @@
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          The pivot indices from AB_AB_CSYTRF_RK (or AB_CSYTRF_BK).
+*>          The pivot indices from CSYTRF_RK (or CSYTRF_BK).
 *> \endverbatim
 *>
 *> \param[out] C
@@ -138,8 +138,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_CSYT01_3( UPLO, N, A, LDA, AFAC, LDAFAC, E, IPIV,
-     $ C,
+      SUBROUTINE CSYT01_3( UPLO, N, A, LDA, AFAC, LDAFAC, E, IPIV, C,
      $                     LDC, RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.1) --
@@ -173,13 +172,12 @@
       REAL               ANORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_SLAMCH, AB_CLANSY
-      EXTERNAL           AB_LSAME, AB_SLAMCH, AB_CLANSY
+      LOGICAL            LSAME
+      REAL               SLAMCH, CLANSY
+      EXTERNAL           LSAME, SLAMCH, CLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CLASET, AB_AB_CLAVSY_ROOK, AB_AB_AB_AB_CSYCO
-     $NVF_ROOK
+      EXTERNAL           CLASET, CLAVSY_ROOK, CSYCONVF_ROOK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          REAL
@@ -195,31 +193,30 @@
 *
 *     a) Revert to multiplyers of L
 *
-      CALL AB_AB_AB_AB_CSYCONVF_ROOK( UPLO, 'R', N, AFAC, LDAFAC, E, IPI
-     $V, INFO )
+      CALL CSYCONVF_ROOK( UPLO, 'R', N, AFAC, LDAFAC, E, IPIV, INFO )
 *
 *     1) Determine EPS and the norm of A.
 *
-      EPS = AB_SLAMCH( 'Epsilon' )
-      ANORM = AB_CLANSY( '1', UPLO, N, A, LDA, RWORK )
+      EPS = SLAMCH( 'Epsilon' )
+      ANORM = CLANSY( '1', UPLO, N, A, LDA, RWORK )
 *
 *     2) Initialize C to the identity matrix.
 *
-      CALL AB_CLASET( 'Full', N, N, CZERO, CONE, C, LDC )
+      CALL CLASET( 'Full', N, N, CZERO, CONE, C, LDC )
 *
-*     3) Call AB_AB_ZLAVSY_ROOK to form the product D * U' (or D * L' ).
+*     3) Call ZLAVSY_ROOK to form the product D * U' (or D * L' ).
 *
-      CALL AB_AB_CLAVSY_ROOK( UPLO, 'Transpose', 'Non-unit', N, N, AFAC,
+      CALL CLAVSY_ROOK( UPLO, 'Transpose', 'Non-unit', N, N, AFAC,
      $                  LDAFAC, IPIV, C, LDC, INFO )
 *
-*     4) Call AB_AB_ZLAVSY_ROOK again to multiply by U (or L ).
+*     4) Call ZLAVSY_ROOK again to multiply by U (or L ).
 *
-      CALL AB_AB_CLAVSY_ROOK( UPLO, 'No transpose', 'Unit', N, N, AFAC,
+      CALL CLAVSY_ROOK( UPLO, 'No transpose', 'Unit', N, N, AFAC,
      $                  LDAFAC, IPIV, C, LDC, INFO )
 *
 *     5) Compute the difference  C - A .
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
          DO J = 1, N
             DO I = 1, J
                C( I, J ) = C( I, J ) - A( I, J )
@@ -235,7 +232,7 @@
 *
 *     6) Compute norm( C - A ) / ( N * norm(A) * EPS )
 *
-      RESID = AB_CLANSY( '1', UPLO, N, C, LDC, RWORK )
+      RESID = CLANSY( '1', UPLO, N, C, LDC, RWORK )
 *
       IF( ANORM.LE.ZERO ) THEN
          IF( RESID.NE.ZERO )
@@ -247,11 +244,10 @@
 *
 *     b) Convert to factor of L (or U)
 *
-      CALL AB_AB_AB_AB_CSYCONVF_ROOK( UPLO, 'C', N, AFAC, LDAFAC, E, IPI
-     $V, INFO )
+      CALL CSYCONVF_ROOK( UPLO, 'C', N, AFAC, LDAFAC, E, IPIV, INFO )
 *
       RETURN
 *
-*     End of AB_AB_CSYT01_3
+*     End of CSYT01_3
 *
       END

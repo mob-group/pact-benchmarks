@@ -1,4 +1,4 @@
-*> \brief \b AB_DLARGE
+*> \brief \b DLARGE
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLARGE( N, A, LDA, ISEED, WORK, INFO )
+*       SUBROUTINE DLARGE( N, A, LDA, ISEED, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, N
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DLARGE pre- and post-multiplies a real general n by n matrix A
+*> DLARGE pre- and post-multiplies a real general n by n matrix A
 *> with a random orthogonal matrix: A = U*D*U'.
 *> \endverbatim
 *
@@ -85,7 +85,7 @@
 *> \ingroup double_matgen
 *
 *  =====================================================================
-      SUBROUTINE AB_DLARGE( N, A, LDA, ISEED, WORK, INFO )
+      SUBROUTINE DLARGE( N, A, LDA, ISEED, WORK, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -111,15 +111,14 @@
       DOUBLE PRECISION   TAU, WA, WB, WN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DGEMV, AB_DGER, AB_DLARNV, AB_DSCAL, AB_XERB
-     $LA
+      EXTERNAL           DGEMV, DGER, DLARNV, DSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SIGN
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DNRM2
-      EXTERNAL           AB_DNRM2
+      DOUBLE PRECISION   DNRM2
+      EXTERNAL           DNRM2
 *     ..
 *     .. Executable Statements ..
 *
@@ -132,7 +131,7 @@
          INFO = -3
       END IF
       IF( INFO.LT.0 ) THEN
-         CALL AB_XERBLA( 'AB_DLARGE', -INFO )
+         CALL XERBLA( 'DLARGE', -INFO )
          RETURN
       END IF
 *
@@ -142,37 +141,34 @@
 *
 *        generate random reflection
 *
-         CALL AB_DLARNV( 3, ISEED, N-I+1, WORK )
-         WN = AB_DNRM2( N-I+1, WORK, 1 )
+         CALL DLARNV( 3, ISEED, N-I+1, WORK )
+         WN = DNRM2( N-I+1, WORK, 1 )
          WA = SIGN( WN, WORK( 1 ) )
          IF( WN.EQ.ZERO ) THEN
             TAU = ZERO
          ELSE
             WB = WORK( 1 ) + WA
-            CALL AB_DSCAL( N-I, ONE / WB, WORK( 2 ), 1 )
+            CALL DSCAL( N-I, ONE / WB, WORK( 2 ), 1 )
             WORK( 1 ) = ONE
             TAU = WB / WA
          END IF
 *
 *        multiply A(i:n,1:n) by random reflection from the left
 *
-         CALL AB_DGEMV( 'Transpose', N-I+1, N, ONE, A( I, 1 ), LDA, WORK
-     $,
+         CALL DGEMV( 'Transpose', N-I+1, N, ONE, A( I, 1 ), LDA, WORK,
      $               1, ZERO, WORK( N+1 ), 1 )
-         CALL AB_DGER( N-I+1, N, -TAU, WORK, 1, WORK( N+1 ), 1, A( I, 1 
-     $),
+         CALL DGER( N-I+1, N, -TAU, WORK, 1, WORK( N+1 ), 1, A( I, 1 ),
      $              LDA )
 *
 *        multiply A(1:n,i:n) by random reflection from the right
 *
-         CALL AB_DGEMV( 'No transpose', N, N-I+1, ONE, A( 1, I ), LDA,
+         CALL DGEMV( 'No transpose', N, N-I+1, ONE, A( 1, I ), LDA,
      $               WORK, 1, ZERO, WORK( N+1 ), 1 )
-         CALL AB_DGER( N, N-I+1, -TAU, WORK( N+1 ), 1, WORK, 1, A( 1, I 
-     $),
+         CALL DGER( N, N-I+1, -TAU, WORK( N+1 ), 1, WORK, 1, A( 1, I ),
      $              LDA )
    10 CONTINUE
       RETURN
 *
-*     End of AB_DLARGE
+*     End of DLARGE
 *
       END

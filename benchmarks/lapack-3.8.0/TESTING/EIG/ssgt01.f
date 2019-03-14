@@ -1,4 +1,4 @@
-*> \brief \b AB_SSGT01
+*> \brief \b SSGT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SSGT01( ITYPE, UPLO, N, M, A, LDA, B, LDB, Z, LDZ, D,
+*       SUBROUTINE SSGT01( ITYPE, UPLO, N, M, A, LDA, B, LDB, Z, LDZ, D,
 *                          WORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SSGT01 checks a decomposition of the form
+*> SSGT01 checks a decomposition of the form
 *>
 *>    A Z   =  B Z D or
 *>    A B Z =  Z D or
@@ -143,8 +143,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_SSGT01( ITYPE, UPLO, N, M, A, LDA, B, LDB, Z, LDZ, D
-     $,
+      SUBROUTINE SSGT01( ITYPE, UPLO, N, M, A, LDA, B, LDB, Z, LDZ, D,
      $                   WORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -172,11 +171,11 @@
       REAL               ANORM, ULP
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH, AB_SLANGE, AB_SLANSY
-      EXTERNAL           AB_SLAMCH, AB_SLANGE, AB_SLANSY
+      REAL               SLAMCH, SLANGE, SLANSY
+      EXTERNAL           SLAMCH, SLANGE, SLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SSCAL, AB_SSYMM
+      EXTERNAL           SSCAL, SSYMM
 *     ..
 *     .. Executable Statements ..
 *
@@ -184,12 +183,12 @@
       IF( N.LE.0 )
      $   RETURN
 *
-      ULP = AB_SLAMCH( 'Epsilon' )
+      ULP = SLAMCH( 'Epsilon' )
 *
 *     Compute product of 1-norms of A and Z.
 *
-      ANORM = AB_SLANSY( '1', UPLO, N, A, LDA, WORK )*
-     $        AB_SLANGE( '1', N, M, Z, LDZ, WORK )
+      ANORM = SLANSY( '1', UPLO, N, A, LDA, WORK )*
+     $        SLANGE( '1', N, M, Z, LDZ, WORK )
       IF( ANORM.EQ.ZERO )
      $   ANORM = ONE
 *
@@ -197,55 +196,50 @@
 *
 *        Norm of AZ - BZD
 *
-         CALL AB_SSYMM( 'Left', UPLO, N, M, ONE, A, LDA, Z, LDZ, ZERO,
+         CALL SSYMM( 'Left', UPLO, N, M, ONE, A, LDA, Z, LDZ, ZERO,
      $               WORK, N )
          DO 10 I = 1, M
-            CALL AB_SSCAL( N, D( I ), Z( 1, I ), 1 )
+            CALL SSCAL( N, D( I ), Z( 1, I ), 1 )
    10    CONTINUE
-         CALL AB_SSYMM( 'Left', UPLO, N, M, ONE, B, LDB, Z, LDZ, -ONE,
+         CALL SSYMM( 'Left', UPLO, N, M, ONE, B, LDB, Z, LDZ, -ONE,
      $               WORK, N )
 *
-         RESULT( 1 ) = ( AB_SLANGE( '1', N, M, WORK, N, WORK ) / ANORM )
-     $ /
+         RESULT( 1 ) = ( SLANGE( '1', N, M, WORK, N, WORK ) / ANORM ) /
      $                 ( N*ULP )
 *
       ELSE IF( ITYPE.EQ.2 ) THEN
 *
 *        Norm of ABZ - ZD
 *
-         CALL AB_SSYMM( 'Left', UPLO, N, M, ONE, B, LDB, Z, LDZ, ZERO,
+         CALL SSYMM( 'Left', UPLO, N, M, ONE, B, LDB, Z, LDZ, ZERO,
      $               WORK, N )
          DO 20 I = 1, M
-            CALL AB_SSCAL( N, D( I ), Z( 1, I ), 1 )
+            CALL SSCAL( N, D( I ), Z( 1, I ), 1 )
    20    CONTINUE
-         CALL AB_SSYMM( 'Left', UPLO, N, M, ONE, A, LDA, WORK, N, -ONE, 
-     $Z,
+         CALL SSYMM( 'Left', UPLO, N, M, ONE, A, LDA, WORK, N, -ONE, Z,
      $               LDZ )
 *
-         RESULT( 1 ) = ( AB_SLANGE( '1', N, M, Z, LDZ, WORK ) / ANORM ) 
-     $/
+         RESULT( 1 ) = ( SLANGE( '1', N, M, Z, LDZ, WORK ) / ANORM ) /
      $                 ( N*ULP )
 *
       ELSE IF( ITYPE.EQ.3 ) THEN
 *
 *        Norm of BAZ - ZD
 *
-         CALL AB_SSYMM( 'Left', UPLO, N, M, ONE, A, LDA, Z, LDZ, ZERO,
+         CALL SSYMM( 'Left', UPLO, N, M, ONE, A, LDA, Z, LDZ, ZERO,
      $               WORK, N )
          DO 30 I = 1, M
-            CALL AB_SSCAL( N, D( I ), Z( 1, I ), 1 )
+            CALL SSCAL( N, D( I ), Z( 1, I ), 1 )
    30    CONTINUE
-         CALL AB_SSYMM( 'Left', UPLO, N, M, ONE, B, LDB, WORK, N, -ONE, 
-     $Z,
+         CALL SSYMM( 'Left', UPLO, N, M, ONE, B, LDB, WORK, N, -ONE, Z,
      $               LDZ )
 *
-         RESULT( 1 ) = ( AB_SLANGE( '1', N, M, Z, LDZ, WORK ) / ANORM ) 
-     $/
+         RESULT( 1 ) = ( SLANGE( '1', N, M, Z, LDZ, WORK ) / ANORM ) /
      $                 ( N*ULP )
       END IF
 *
       RETURN
 *
-*     End of AB_SSGT01
+*     End of SSGT01
 *
       END

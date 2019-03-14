@@ -1,4 +1,4 @@
-*> \brief \b AB_SGSVTS3
+*> \brief \b SGSVTS3
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SGSVTS3( M, P, N, A, AF, LDA, B, BF, LDB, U, LDU, V,
+*       SUBROUTINE SGSVTS3( M, P, N, A, AF, LDA, B, BF, LDB, U, LDU, V,
 *                           LDV, Q, LDQ, ALPHA, BETA, R, LDR, IWORK, WORK,
 *                           LWORK, RWORK, RESULT )
 *
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SGSVTS3 tests AB_AB_SGGSVD3, which computes the GSVD of an M-by-N matrix A
+*> SGSVTS3 tests SGGSVD3, which computes the GSVD of an M-by-N matrix A
 *> and a P-by-N matrix B:
 *>              U'*A*Q = D1*R and V'*B*Q = D2*R.
 *> \endverbatim
@@ -65,8 +65,8 @@
 *> \param[out] AF
 *> \verbatim
 *>          AF is REAL array, dimension (LDA,N)
-*>          Details of the GSVD of A and B, as returned by AB_AB_SGGSVD3,
-*>          see AB_AB_SGGSVD3 for further details.
+*>          Details of the GSVD of A and B, as returned by SGGSVD3,
+*>          see SGGSVD3 for further details.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -85,8 +85,8 @@
 *> \param[out] BF
 *> \verbatim
 *>          BF is REAL array, dimension (LDB,N)
-*>          Details of the GSVD of A and B, as returned by AB_AB_SGGSVD3,
-*>          see AB_AB_SGGSVD3 for further details.
+*>          Details of the GSVD of A and B, as returned by SGGSVD3,
+*>          see SGGSVD3 for further details.
 *> \endverbatim
 *>
 *> \param[in] LDB
@@ -143,7 +143,7 @@
 *>
 *>          The generalized singular value pairs of A and B, the
 *>          ``diagonal'' matrices D1 and D2 are constructed from
-*>          ALPHA and BETA, see subroutine AB_AB_SGGSVD3 for details.
+*>          ALPHA and BETA, see subroutine SGGSVD3 for details.
 *> \endverbatim
 *>
 *> \param[out] R
@@ -206,7 +206,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_SGSVTS3( M, P, N, A, AF, LDA, B, BF, LDB, U, LDU, V,
+      SUBROUTINE SGSVTS3( M, P, N, A, AF, LDA, B, BF, LDB, U, LDU, V,
      $                    LDV, Q, LDQ, ALPHA, BETA, R, LDR, IWORK, WORK,
      $                    LWORK, RWORK, RESULT )
 *
@@ -238,34 +238,32 @@
       REAL               ANORM, BNORM, RESID, TEMP, ULP, ULPINV, UNFL
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH, AB_SLANGE, AB_SLANSY
-      EXTERNAL           AB_SLAMCH, AB_SLANGE, AB_SLANSY
+      REAL               SLAMCH, SLANGE, SLANSY
+      EXTERNAL           SLAMCH, SLANGE, SLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SCOPY, AB_SGEMM, AB_AB_SGGSVD3, AB_SLACPY, A
-     $B_SLASET, AB_AB_SSYRK
+      EXTERNAL           SCOPY, SGEMM, SGGSVD3, SLACPY, SLASET, SSYRK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, REAL
 *     ..
 *     .. Executable Statements ..
 *
-      ULP = AB_SLAMCH( 'Precision' )
+      ULP = SLAMCH( 'Precision' )
       ULPINV = ONE / ULP
-      UNFL = AB_SLAMCH( 'Safe minimum' )
+      UNFL = SLAMCH( 'Safe minimum' )
 *
 *     Copy the matrix A to the array AF.
 *
-      CALL AB_SLACPY( 'Full', M, N, A, LDA, AF, LDA )
-      CALL AB_SLACPY( 'Full', P, N, B, LDB, BF, LDB )
+      CALL SLACPY( 'Full', M, N, A, LDA, AF, LDA )
+      CALL SLACPY( 'Full', P, N, B, LDB, BF, LDB )
 *
-      ANORM = MAX( AB_SLANGE( '1', M, N, A, LDA, RWORK ), UNFL )
-      BNORM = MAX( AB_SLANGE( '1', P, N, B, LDB, RWORK ), UNFL )
+      ANORM = MAX( SLANGE( '1', M, N, A, LDA, RWORK ), UNFL )
+      BNORM = MAX( SLANGE( '1', P, N, B, LDB, RWORK ), UNFL )
 *
 *     Factorize the matrices A and B in the arrays AF and BF.
 *
-      CALL AB_AB_SGGSVD3( 'U', 'V', 'Q', M, N, P, K, L, AF, LDA, BF, LDB
-     $,
+      CALL SGGSVD3( 'U', 'V', 'Q', M, N, P, K, L, AF, LDA, BF, LDB,
      $              ALPHA, BETA, U, LDU, V, LDV, Q, LDQ, WORK, LWORK,
      $              IWORK, INFO )
 *
@@ -287,11 +285,10 @@
 *
 *     Compute A:= U'*A*Q - D1*R
 *
-      CALL AB_SGEMM( 'No transpose', 'No transpose', M, N, N, ONE, A, LD
-     $A,
+      CALL SGEMM( 'No transpose', 'No transpose', M, N, N, ONE, A, LDA,
      $            Q, LDQ, ZERO, WORK, LDA )
 *
-      CALL AB_SGEMM( 'Transpose', 'No transpose', M, N, M, ONE, U, LDU,
+      CALL SGEMM( 'Transpose', 'No transpose', M, N, M, ONE, U, LDU,
      $            WORK, LDA, ZERO, A, LDA )
 *
       DO 60 I = 1, K
@@ -308,7 +305,7 @@
 *
 *     Compute norm( U'*A*Q - D1*R ) / ( MAX(1,M,N)*norm(A)*ULP ) .
 *
-      RESID = AB_SLANGE( '1', M, N, A, LDA, RWORK )
+      RESID = SLANGE( '1', M, N, A, LDA, RWORK )
 *
       IF( ANORM.GT.ZERO ) THEN
          RESULT( 1 ) = ( ( RESID / REAL( MAX( 1, M, N ) ) ) / ANORM ) /
@@ -319,11 +316,10 @@
 *
 *     Compute B := V'*B*Q - D2*R
 *
-      CALL AB_SGEMM( 'No transpose', 'No transpose', P, N, N, ONE, B, LD
-     $B,
+      CALL SGEMM( 'No transpose', 'No transpose', P, N, N, ONE, B, LDB,
      $            Q, LDQ, ZERO, WORK, LDB )
 *
-      CALL AB_SGEMM( 'Transpose', 'No transpose', P, N, P, ONE, V, LDV,
+      CALL SGEMM( 'Transpose', 'No transpose', P, N, P, ONE, V, LDV,
      $            WORK, LDB, ZERO, B, LDB )
 *
       DO 100 I = 1, L
@@ -334,7 +330,7 @@
 *
 *     Compute norm( V'*B*Q - D2*R ) / ( MAX(P,N)*norm(B)*ULP ) .
 *
-      RESID = AB_SLANGE( '1', P, N, B, LDB, RWORK )
+      RESID = SLANGE( '1', P, N, B, LDB, RWORK )
       IF( BNORM.GT.ZERO ) THEN
          RESULT( 2 ) = ( ( RESID / REAL( MAX( 1, P, N ) ) ) / BNORM ) /
      $                 ULP
@@ -344,43 +340,40 @@
 *
 *     Compute I - U'*U
 *
-      CALL AB_SLASET( 'Full', M, M, ZERO, ONE, WORK, LDQ )
-      CALL AB_AB_SSYRK( 'Upper', 'Transpose', M, M, -ONE, U, LDU, ONE, W
-     $ORK,
+      CALL SLASET( 'Full', M, M, ZERO, ONE, WORK, LDQ )
+      CALL SSYRK( 'Upper', 'Transpose', M, M, -ONE, U, LDU, ONE, WORK,
      $            LDU )
 *
 *     Compute norm( I - U'*U ) / ( M * ULP ) .
 *
-      RESID = AB_SLANSY( '1', 'Upper', M, WORK, LDU, RWORK )
+      RESID = SLANSY( '1', 'Upper', M, WORK, LDU, RWORK )
       RESULT( 3 ) = ( RESID / REAL( MAX( 1, M ) ) ) / ULP
 *
 *     Compute I - V'*V
 *
-      CALL AB_SLASET( 'Full', P, P, ZERO, ONE, WORK, LDV )
-      CALL AB_AB_SSYRK( 'Upper', 'Transpose', P, P, -ONE, V, LDV, ONE, W
-     $ORK,
+      CALL SLASET( 'Full', P, P, ZERO, ONE, WORK, LDV )
+      CALL SSYRK( 'Upper', 'Transpose', P, P, -ONE, V, LDV, ONE, WORK,
      $            LDV )
 *
 *     Compute norm( I - V'*V ) / ( P * ULP ) .
 *
-      RESID = AB_SLANSY( '1', 'Upper', P, WORK, LDV, RWORK )
+      RESID = SLANSY( '1', 'Upper', P, WORK, LDV, RWORK )
       RESULT( 4 ) = ( RESID / REAL( MAX( 1, P ) ) ) / ULP
 *
 *     Compute I - Q'*Q
 *
-      CALL AB_SLASET( 'Full', N, N, ZERO, ONE, WORK, LDQ )
-      CALL AB_AB_SSYRK( 'Upper', 'Transpose', N, N, -ONE, Q, LDQ, ONE, W
-     $ORK,
+      CALL SLASET( 'Full', N, N, ZERO, ONE, WORK, LDQ )
+      CALL SSYRK( 'Upper', 'Transpose', N, N, -ONE, Q, LDQ, ONE, WORK,
      $            LDQ )
 *
 *     Compute norm( I - Q'*Q ) / ( N * ULP ) .
 *
-      RESID = AB_SLANSY( '1', 'Upper', N, WORK, LDQ, RWORK )
+      RESID = SLANSY( '1', 'Upper', N, WORK, LDQ, RWORK )
       RESULT( 5 ) = ( RESID / REAL( MAX( 1, N ) ) ) / ULP
 *
 *     Check sorting
 *
-      CALL AB_SCOPY( N, ALPHA, 1, WORK, 1 )
+      CALL SCOPY( N, ALPHA, 1, WORK, 1 )
       DO 110 I = K + 1, MIN( K+L, M )
          J = IWORK( I )
          IF( I.NE.J ) THEN
@@ -398,6 +391,6 @@
 *
       RETURN
 *
-*     End of AB_SGSVTS3
+*     End of SGSVTS3
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_SGET33
+*> \brief \b SGET33
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SGET33( RMAX, LMAX, NINFO, KNT )
+*       SUBROUTINE SGET33( RMAX, LMAX, NINFO, KNT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            KNT, LMAX, NINFO
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SGET33 tests AB_SLANV2, a routine for putting 2 by 2 blocks into
+*> SGET33 tests SLANV2, a routine for putting 2 by 2 blocks into
 *> standard form.  In other words, it computes a two by two rotation
 *> [[C,S];[-S,C]] where in
 *>
@@ -74,7 +74,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_SGET33( RMAX, LMAX, NINFO, KNT )
+      SUBROUTINE SGET33( RMAX, LMAX, NINFO, KNT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -104,11 +104,11 @@
      $                   VAL( 4 ), VM( 3 )
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH
-      EXTERNAL           AB_SLAMCH
+      REAL               SLAMCH
+      EXTERNAL           SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SLABAD, AB_SLANV2
+      EXTERNAL           SLABAD, SLANV2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SIGN
@@ -117,10 +117,10 @@
 *
 *     Get machine parameters
 *
-      EPS = AB_SLAMCH( 'P' )
-      SMLNUM = AB_SLAMCH( 'S' ) / EPS
+      EPS = SLAMCH( 'P' )
+      SMLNUM = SLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL AB_SLABAD( SMLNUM, BIGNUM )
+      CALL SLABAD( SMLNUM, BIGNUM )
 *
 *     Set up test case parameters
 *
@@ -163,7 +163,7 @@
                               Q( 2, 1 ) = ZERO
                               Q( 2, 2 ) = ONE
 *
-                              CALL AB_SLANV2( T( 1, 1 ), T( 1, 2 ),
+                              CALL SLANV2( T( 1, 1 ), T( 1, 2 ),
      $                                     T( 2, 1 ), T( 2, 2 ), WR1,
      $                                     WI1, WR2, WI2, CS, SN )
                               DO 10 J1 = 1, 2
@@ -221,6 +221,6 @@
 *
       RETURN
 *
-*     End of AB_SGET33
+*     End of SGET33
 *
       END

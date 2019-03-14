@@ -1,4 +1,4 @@
-*> \brief \b AB_DLANST returns the value of the 1-norm, or the Frobenius norm, or the infinity norm, or the element of largest absolute value of a real symmetric tridiagonal matrix.
+*> \brief \b DLANST returns the value of the 1-norm, or the Frobenius norm, or the infinity norm, or the element of largest absolute value of a real symmetric tridiagonal matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLANST + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLANST.f">
+*> Download DLANST + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlanst.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLANST.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlanst.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLANST.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlanst.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       DOUBLE PRECISION FUNCTION AB_DLANST( NORM, N, D, E )
+*       DOUBLE PRECISION FUNCTION DLANST( NORM, N, D, E )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          NORM
@@ -34,15 +34,15 @@
 *>
 *> \verbatim
 *>
-*> AB_DLANST  returns the value of the one norm,  or the Frobenius norm, or
+*> DLANST  returns the value of the one norm,  or the Frobenius norm, or
 *> the  infinity norm,  or the  element of  largest absolute value  of a
 *> real symmetric tridiagonal matrix A.
 *> \endverbatim
 *>
-*> \return AB_DLANST
+*> \return DLANST
 *> \verbatim
 *>
-*>    AB_DLANST = ( max(abs(A(i,j))), NORM = 'M' or 'm'
+*>    DLANST = ( max(abs(A(i,j))), NORM = 'M' or 'm'
 *>             (
 *>             ( norm1(A),         NORM = '1', 'O' or 'o'
 *>             (
@@ -62,14 +62,14 @@
 *> \param[in] NORM
 *> \verbatim
 *>          NORM is CHARACTER*1
-*>          Specifies the value to be returned in AB_DLANST as described
+*>          Specifies the value to be returned in DLANST as described
 *>          above.
 *> \endverbatim
 *>
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The order of the matrix A.  N >= 0.  When N = 0, AB_DLANST is
+*>          The order of the matrix A.  N >= 0.  When N = 0, DLANST is
 *>          set to zero.
 *> \endverbatim
 *>
@@ -98,7 +98,7 @@
 *> \ingroup OTHERauxiliary
 *
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION AB_DLANST( NORM, N, D, E )
+      DOUBLE PRECISION FUNCTION DLANST( NORM, N, D, E )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -124,11 +124,11 @@
       DOUBLE PRECISION   ANORM, SCALE, SUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME, AB_DISNAN
-      EXTERNAL           AB_LSAME, AB_DISNAN
+      LOGICAL            LSAME, DISNAN
+      EXTERNAL           LSAME, DISNAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLASSQ
+      EXTERNAL           DLASSQ
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, SQRT
@@ -137,19 +137,19 @@
 *
       IF( N.LE.0 ) THEN
          ANORM = ZERO
-      ELSE IF( AB_LSAME( NORM, 'M' ) ) THEN
+      ELSE IF( LSAME( NORM, 'M' ) ) THEN
 *
 *        Find max(abs(A(i,j))).
 *
          ANORM = ABS( D( N ) )
          DO 10 I = 1, N - 1
             SUM = ABS( D( I ) )
-            IF( ANORM .LT. SUM .OR. AB_DISNAN( SUM ) ) ANORM = SUM
+            IF( ANORM .LT. SUM .OR. DISNAN( SUM ) ) ANORM = SUM
             SUM = ABS( E( I ) )
-            IF( ANORM .LT. SUM .OR. AB_DISNAN( SUM ) ) ANORM = SUM
+            IF( ANORM .LT. SUM .OR. DISNAN( SUM ) ) ANORM = SUM
    10    CONTINUE
-      ELSE IF( AB_LSAME( NORM, 'O' ) .OR. NORM.EQ.'1' .OR.
-     $         AB_LSAME( NORM, 'I' ) ) THEN
+      ELSE IF( LSAME( NORM, 'O' ) .OR. NORM.EQ.'1' .OR.
+     $         LSAME( NORM, 'I' ) ) THEN
 *
 *        Find norm1(A).
 *
@@ -158,30 +158,29 @@
          ELSE
             ANORM = ABS( D( 1 ) )+ABS( E( 1 ) )
             SUM = ABS( E( N-1 ) )+ABS( D( N ) )
-            IF( ANORM .LT. SUM .OR. AB_DISNAN( SUM ) ) ANORM = SUM
+            IF( ANORM .LT. SUM .OR. DISNAN( SUM ) ) ANORM = SUM
             DO 20 I = 2, N - 1
                SUM = ABS( D( I ) )+ABS( E( I ) )+ABS( E( I-1 ) )
-               IF( ANORM .LT. SUM .OR. AB_DISNAN( SUM ) ) ANORM = SUM
+               IF( ANORM .LT. SUM .OR. DISNAN( SUM ) ) ANORM = SUM
    20       CONTINUE
          END IF
-      ELSE IF( ( AB_LSAME( NORM, 'F' ) ) .OR. ( AB_LSAME( NORM, 'E' )
-     $ ) ) THEN
+      ELSE IF( ( LSAME( NORM, 'F' ) ) .OR. ( LSAME( NORM, 'E' ) ) ) THEN
 *
 *        Find normF(A).
 *
          SCALE = ZERO
          SUM = ONE
          IF( N.GT.1 ) THEN
-            CALL AB_DLASSQ( N-1, E, 1, SCALE, SUM )
+            CALL DLASSQ( N-1, E, 1, SCALE, SUM )
             SUM = 2*SUM
          END IF
-         CALL AB_DLASSQ( N, D, 1, SCALE, SUM )
+         CALL DLASSQ( N, D, 1, SCALE, SUM )
          ANORM = SCALE*SQRT( SUM )
       END IF
 *
-      AB_DLANST = ANORM
+      DLANST = ANORM
       RETURN
 *
-*     End of AB_DLANST
+*     End of DLANST
 *
       END

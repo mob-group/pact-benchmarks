@@ -1,6 +1,6 @@
-*> \brief \b AB_AB_SSYGV_2STAGE
+*> \brief \b SSYGV_2STAGE
 *
-*  @generated from AB_AB_DSYGV_2STAGE.f, fortran d -> s, Sun Nov  6 12:54:29 2016
+*  @generated from dsygv_2stage.f, fortran d -> s, Sun Nov  6 12:54:29 2016
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,19 +8,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_SSYGV_2STAGE + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_SSYGV_2STAGE.f">
+*> Download SSYGV_2STAGE + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssygv_2stage.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_SSYGV_2STAGE.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssygv_2stage.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_SSYGV_2STAGE.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssygv_2stage.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_SSYGV_2STAGE( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W,
+*       SUBROUTINE SSYGV_2STAGE( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W,
 *                                WORK, LWORK, INFO )
 *
 *       IMPLICIT NONE
@@ -39,7 +39,7 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_SSYGV_2STAGE computes all the eigenvalues, and optionally, the eigenvectors
+*> SSYGV_2STAGE computes all the eigenvalues, and optionally, the eigenvectors
 *> of a real generalized symmetric-definite eigenproblem, of the form
 *> A*x=(lambda)*B*x,  A*Bx=(lambda)*x,  or B*A*x=(lambda)*x.
 *> Here A and B are assumed to be symmetric and B is also
@@ -160,7 +160,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -168,8 +168,8 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
-*>          > 0:  AB_SPOTRF or AB_SSYEV returned an error code:
-*>             <= N:  if INFO = i, AB_SSYEV failed to converge;
+*>          > 0:  SPOTRF or SSYEV returned an error code:
+*>             <= N:  if INFO = i, SSYEV failed to converge;
 *>                    i off-diagonal elements of an intermediate
 *>                    tridiagonal form did not converge to zero;
 *>             > N:   if INFO = N + i, for 1 <= i <= N, then the leading
@@ -223,8 +223,7 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_SSYGV_2STAGE( ITYPE, JOBZ, UPLO, N, A, LDA, B, LD
-     $B, W,
+      SUBROUTINE SSYGV_2STAGE( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W,
      $                         WORK, LWORK, INFO )
 *
       IMPLICIT NONE
@@ -254,14 +253,13 @@
       INTEGER            NEIG, LWMIN, LHTRD, LWTRD, KD, IB
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_AB_ILAENV2STAGE
-      EXTERNAL           AB_LSAME, AB_AB_ILAENV2STAGE
+      LOGICAL            LSAME
+      INTEGER            ILAENV2STAGE
+      EXTERNAL           LSAME, ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SPOTRF, AB_SSYGST, AB_STRMM, AB_STRSM, AB_XE
-     $RBLA,
-     $                   AB_AB_SSYEV_2STAGE
+      EXTERNAL           SPOTRF, SSYGST, STRMM, STRSM, XERBLA,
+     $                   SSYEV_2STAGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -270,16 +268,16 @@
 *
 *     Test the input parameters.
 *
-      WANTZ = AB_LSAME( JOBZ, 'V' )
-      UPPER = AB_LSAME( UPLO, 'U' )
+      WANTZ = LSAME( JOBZ, 'V' )
+      UPPER = LSAME( UPLO, 'U' )
       LQUERY = ( LWORK.EQ.-1 )
 *
       INFO = 0
       IF( ITYPE.LT.1 .OR. ITYPE.GT.3 ) THEN
          INFO = -1
-      ELSE IF( .NOT.( AB_LSAME( JOBZ, 'N' ) ) ) THEN
+      ELSE IF( .NOT.( LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.( UPPER .OR. AB_LSAME( UPLO, 'L' ) ) ) THEN
+      ELSE IF( .NOT.( UPPER .OR. LSAME( UPLO, 'L' ) ) ) THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
@@ -290,14 +288,10 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         KD    = AB_AB_ILAENV2STAGE( 1, 'AB_AB_SSYTRD_2STAGE', JOBZ, N, 
-     $-1, -1, -1 )
-         IB    = AB_AB_ILAENV2STAGE( 2, 'AB_AB_SSYTRD_2STAGE', JOBZ, N, 
-     $KD, -1, -1 )
-         LHTRD = AB_AB_ILAENV2STAGE( 3, 'AB_AB_SSYTRD_2STAGE', JOBZ, N, 
-     $KD, IB, -1 )
-         LWTRD = AB_AB_ILAENV2STAGE( 4, 'AB_AB_SSYTRD_2STAGE', JOBZ, N, 
-     $KD, IB, -1 )
+         KD    = ILAENV2STAGE( 1, 'SSYTRD_2STAGE', JOBZ, N, -1, -1, -1 )
+         IB    = ILAENV2STAGE( 2, 'SSYTRD_2STAGE', JOBZ, N, KD, -1, -1 )
+         LHTRD = ILAENV2STAGE( 3, 'SSYTRD_2STAGE', JOBZ, N, KD, IB, -1 )
+         LWTRD = ILAENV2STAGE( 4, 'SSYTRD_2STAGE', JOBZ, N, KD, IB, -1 )
          LWMIN = 2*N + LHTRD + LWTRD
          WORK( 1 )  = LWMIN
 *
@@ -307,7 +301,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_SSYGV_2STAGE ', -INFO )
+         CALL XERBLA( 'SSYGV_2STAGE ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -320,7 +314,7 @@
 *
 *     Form a Cholesky factorization of B.
 *
-      CALL AB_SPOTRF( UPLO, N, B, LDB, INFO )
+      CALL SPOTRF( UPLO, N, B, LDB, INFO )
       IF( INFO.NE.0 ) THEN
          INFO = N + INFO
          RETURN
@@ -328,9 +322,8 @@
 *
 *     Transform problem to standard eigenvalue problem and solve.
 *
-      CALL AB_SSYGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
-      CALL AB_AB_SSYEV_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, IN
-     $FO )
+      CALL SSYGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
+      CALL SSYEV_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, INFO )
 *
       IF( WANTZ ) THEN
 *
@@ -350,8 +343,7 @@
                TRANS = 'T'
             END IF
 *
-            CALL AB_STRSM( 'Left', UPLO, TRANS, 'Non-unit', N, NEIG, ONE
-     $,
+            CALL STRSM( 'Left', UPLO, TRANS, 'Non-unit', N, NEIG, ONE,
      $                  B, LDB, A, LDA )
 *
          ELSE IF( ITYPE.EQ.3 ) THEN
@@ -365,8 +357,7 @@
                TRANS = 'N'
             END IF
 *
-            CALL AB_STRMM( 'Left', UPLO, TRANS, 'Non-unit', N, NEIG, ONE
-     $,
+            CALL STRMM( 'Left', UPLO, TRANS, 'Non-unit', N, NEIG, ONE,
      $                  B, LDB, A, LDA )
          END IF
       END IF
@@ -374,6 +365,6 @@
       WORK( 1 ) = LWMIN
       RETURN
 *
-*     End of AB_AB_SSYGV_2STAGE
+*     End of SSYGV_2STAGE
 *
       END

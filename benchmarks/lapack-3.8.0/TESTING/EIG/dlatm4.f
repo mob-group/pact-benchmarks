@@ -1,4 +1,4 @@
-*> \brief \b AB_DLATM4
+*> \brief \b DLATM4
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLATM4( ITYPE, N, NZ1, NZ2, ISIGN, AMAGN, RCOND,
+*       SUBROUTINE DLATM4( ITYPE, N, NZ1, NZ2, ISIGN, AMAGN, RCOND,
 *                          TRIANG, IDIST, ISEED, A, LDA )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DLATM4 generates basic square matrices, which may later be
+*> DLATM4 generates basic square matrices, which may later be
 *> multiplied by others in order to produce test matrices.  It is
 *> intended mainly to be used to test the generalized eigenvalue
 *> routines.
@@ -66,7 +66,7 @@
 *>          = 7:  1, a, a^2, ..., a^(k-1)=RCOND
 *>          = 8:  1, 1-d, 1-2*d, ..., 1-(k-1)*d=RCOND
 *>          = 9:  random numbers chosen from (RCOND,1)
-*>          = 10: random numbers with distribution IDIST (see AB_DLARND.)
+*>          = 10: random numbers with distribution IDIST (see DLARND.)
 *> \endverbatim
 *>
 *> \param[in] N
@@ -141,7 +141,7 @@
 *>          ISEED is INTEGER array, dimension (4)
 *>          On entry ISEED specifies the seed of the random number
 *>          generator.  The values of ISEED are changed on exit, and can
-*>          be used in the next call to AB_DLATM4 to continue the same
+*>          be used in the next call to DLATM4 to continue the same
 *>          random number sequence.
 *>          Note: ISEED(4) should be odd, for the random number generator
 *>          used at present.
@@ -172,7 +172,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_DLATM4( ITYPE, N, NZ1, NZ2, ISIGN, AMAGN, RCOND,
+      SUBROUTINE DLATM4( ITYPE, N, NZ1, NZ2, ISIGN, AMAGN, RCOND,
      $                   TRIANG, IDIST, ISEED, A, LDA )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -203,11 +203,11 @@
       DOUBLE PRECISION   ALPHA, CL, CR, SAFMIN, SL, SR, SV1, SV2, TEMP
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH, AB_DLARAN, AB_DLARND
-      EXTERNAL           AB_DLAMCH, AB_DLARAN, AB_DLARND
+      DOUBLE PRECISION   DLAMCH, DLARAN, DLARND
+      EXTERNAL           DLAMCH, DLARAN, DLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLASET
+      EXTERNAL           DLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, EXP, LOG, MAX, MIN, MOD, SQRT
@@ -216,7 +216,7 @@
 *
       IF( N.LE.0 )
      $   RETURN
-      CALL AB_DLASET( 'Full', N, N, ZERO, ZERO, A, LDA )
+      CALL DLASET( 'Full', N, N, ZERO, ZERO, A, LDA )
 *
 *     Insure a correct ISEED
 *
@@ -329,7 +329,7 @@
   180    CONTINUE
          ALPHA = LOG( RCOND )
          DO 190 JD = KBEG, KEND
-            A( JD, JD ) = EXP( ALPHA*AB_DLARAN( ISEED ) )
+            A( JD, JD ) = EXP( ALPHA*DLARAN( ISEED ) )
   190    CONTINUE
          GO TO 220
 *
@@ -337,7 +337,7 @@
 *
   200    CONTINUE
          DO 210 JD = KBEG, KEND
-            A( JD, JD ) = AB_DLARND( IDIST, ISEED )
+            A( JD, JD ) = DLARND( IDIST, ISEED )
   210    CONTINUE
 *
   220    CONTINUE
@@ -357,13 +357,13 @@
          IF( ISIGN.GT.0 ) THEN
             DO 250 JD = KBEG, KEND
                IF( DBLE( A( JD, JD ) ).NE.ZERO ) THEN
-                  IF( AB_DLARAN( ISEED ).GT.HALF )
+                  IF( DLARAN( ISEED ).GT.HALF )
      $               A( JD, JD ) = -A( JD, JD )
                END IF
   250       CONTINUE
             DO 260 JD = ISDB, ISDE
                IF( DBLE( A( JD+1, JD ) ).NE.ZERO ) THEN
-                  IF( AB_DLARAN( ISEED ).GT.HALF )
+                  IF( DLARAN( ISEED ).GT.HALF )
      $               A( JD+1, JD ) = -A( JD+1, JD )
                END IF
   260       CONTINUE
@@ -388,22 +388,22 @@
 *        random rotations to make 2x2 blocks.
 *
          IF( ISIGN.EQ.2 .AND. ITYPE.NE.2 .AND. ITYPE.NE.3 ) THEN
-            SAFMIN = AB_DLAMCH( 'S' )
+            SAFMIN = DLAMCH( 'S' )
             DO 290 JD = KBEG, KEND - 1, 2
-               IF( AB_DLARAN( ISEED ).GT.HALF ) THEN
+               IF( DLARAN( ISEED ).GT.HALF ) THEN
 *
 *                 Rotation on left.
 *
-                  CL = TWO*AB_DLARAN( ISEED ) - ONE
-                  SL = TWO*AB_DLARAN( ISEED ) - ONE
+                  CL = TWO*DLARAN( ISEED ) - ONE
+                  SL = TWO*DLARAN( ISEED ) - ONE
                   TEMP = ONE / MAX( SAFMIN, SQRT( CL**2+SL**2 ) )
                   CL = CL*TEMP
                   SL = SL*TEMP
 *
 *                 Rotation on right.
 *
-                  CR = TWO*AB_DLARAN( ISEED ) - ONE
-                  SR = TWO*AB_DLARAN( ISEED ) - ONE
+                  CR = TWO*DLARAN( ISEED ) - ONE
+                  SR = TWO*DLARAN( ISEED ) - ONE
                   TEMP = ONE / MAX( SAFMIN, SQRT( CR**2+SR**2 ) )
                   CR = CR*TEMP
                   SR = SR*TEMP
@@ -431,19 +431,19 @@
             IOFF = 2
             DO 300 JR = 1, N - 1
                IF( A( JR+1, JR ).EQ.ZERO )
-     $            A( JR, JR+1 ) = TRIANG*AB_DLARND( IDIST, ISEED )
+     $            A( JR, JR+1 ) = TRIANG*DLARND( IDIST, ISEED )
   300       CONTINUE
          END IF
 *
          DO 320 JC = 2, N
             DO 310 JR = 1, JC - IOFF
-               A( JR, JC ) = TRIANG*AB_DLARND( IDIST, ISEED )
+               A( JR, JC ) = TRIANG*DLARND( IDIST, ISEED )
   310       CONTINUE
   320    CONTINUE
       END IF
 *
       RETURN
 *
-*     End of AB_DLATM4
+*     End of DLATM4
 *
       END

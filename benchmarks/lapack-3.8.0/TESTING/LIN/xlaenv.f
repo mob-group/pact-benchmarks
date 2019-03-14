@@ -1,4 +1,4 @@
-*> \brief \b AB_XLAENV
+*> \brief \b XLAENV
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_XLAENV( ISPEC, NVALUE )
+*       SUBROUTINE XLAENV( ISPEC, NVALUE )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            ISPEC, NVALUE
@@ -20,8 +20,8 @@
 *>
 *> \verbatim
 *>
-*> AB_XLAENV sets certain machine- and problem-dependent quantities
-*> which will later be retrieved by AB_ILAENV.
+*> XLAENV sets certain machine- and problem-dependent quantities
+*> which will later be retrieved by ILAENV.
 *> \endverbatim
 *
 *  Arguments:
@@ -42,7 +42,7 @@
 *>               eigenvalue routines
 *>          = 5: the minimum column dimension for blocking to be used;
 *>               rectangular blocks must have dimension at least k by m,
-*>               where k is given by AB_ILAENV(2,...) and m by AB_ILAENV(5,...)
+*>               where k is given by ILAENV(2,...) and m by ILAENV(5,...)
 *>          = 6: the crossover point for the SVD (when reducing an m by n
 *>               matrix to bidiagonal form, if max(m,n)/min(m,n) exceeds
 *>               this value, a QR factorization is used first to reduce
@@ -76,7 +76,7 @@
 *> \ingroup aux_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_XLAENV( ISPEC, NVALUE )
+      SUBROUTINE XLAENV( ISPEC, NVALUE )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -106,6 +106,6 @@
 *
       RETURN
 *
-*     End of AB_XLAENV
+*     End of XLAENV
 *
       END

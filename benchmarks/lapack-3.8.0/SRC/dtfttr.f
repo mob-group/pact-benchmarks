@@ -1,4 +1,4 @@
-*> \brief \b AB_DTFTTR copies a triangular matrix from the rectangular full packed format (TF) to the standard full format (TR).
+*> \brief \b DTFTTR copies a triangular matrix from the rectangular full packed format (TF) to the standard full format (TR).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DTFTTR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DTFTTR.f">
+*> Download DTFTTR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dtfttr.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DTFTTR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dtfttr.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DTFTTR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtfttr.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DTFTTR( TRANSR, UPLO, N, ARF, A, LDA, INFO )
+*       SUBROUTINE DTFTTR( TRANSR, UPLO, N, ARF, A, LDA, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          TRANSR, UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DTFTTR copies a triangular matrix A from rectangular full packed
+*> DTFTTR copies a triangular matrix A from rectangular full packed
 *> format (TF) to standard full format (TR).
 *> \endverbatim
 *
@@ -194,7 +194,7 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE AB_DTFTTR( TRANSR, UPLO, N, ARF, A, LDA, INFO )
+      SUBROUTINE DTFTTR( TRANSR, UPLO, N, ARF, A, LDA, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -218,11 +218,11 @@
       INTEGER            I, J, L, IJ
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA
+      EXTERNAL           XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MOD
@@ -232,11 +232,11 @@
 *     Test the input parameters.
 *
       INFO = 0
-      NORMALTRANSR = AB_LSAME( TRANSR, 'N' )
-      LOWER = AB_LSAME( UPLO, 'L' )
-      IF( .NOT.NORMALTRANSR .AND. .NOT.AB_LSAME( TRANSR, 'T' ) ) THEN
+      NORMALTRANSR = LSAME( TRANSR, 'N' )
+      LOWER = LSAME( UPLO, 'L' )
+      IF( .NOT.NORMALTRANSR .AND. .NOT.LSAME( TRANSR, 'T' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LOWER .AND. .NOT.AB_LSAME( UPLO, 'U' ) ) THEN
+      ELSE IF( .NOT.LOWER .AND. .NOT.LSAME( UPLO, 'U' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -244,7 +244,7 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DTFTTR', -INFO )
+         CALL XERBLA( 'DTFTTR', -INFO )
          RETURN
       END IF
 *
@@ -490,6 +490,6 @@
 *
       RETURN
 *
-*     End of AB_DTFTTR
+*     End of DTFTTR
 *
       END

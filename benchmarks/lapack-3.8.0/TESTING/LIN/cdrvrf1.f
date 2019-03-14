@@ -1,4 +1,4 @@
-*> \brief \b AB_CDRVRF1
+*> \brief \b CDRVRF1
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CDRVRF1( NOUT, NN, NVAL, THRESH, A, LDA, ARF, WORK )
+*       SUBROUTINE CDRVRF1( NOUT, NN, NVAL, THRESH, A, LDA, ARF, WORK )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDA, NN, NOUT
@@ -26,8 +26,8 @@
 *>
 *> \verbatim
 *>
-*> AB_CDRVRF1 tests the LAPACK RFP routines:
-*>     AB_CLANHF.F
+*> CDRVRF1 tests the LAPACK RFP routines:
+*>     CLANHF.F
 *> \endverbatim
 *
 *  Arguments:
@@ -93,7 +93,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_CDRVRF1( NOUT, NN, NVAL, THRESH, A, LDA, ARF, WORK )
+      SUBROUTINE CDRVRF1( NOUT, NN, NVAL, THRESH, A, LDA, ARF, WORK )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -130,12 +130,12 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      COMPLEX            AB_CLARND
-      REAL               AB_SLAMCH, AB_CLANHE, AB_CLANHF
-      EXTERNAL           AB_SLAMCH, AB_CLARND, AB_CLANHE, AB_CLANHF
+      COMPLEX            CLARND
+      REAL               SLAMCH, CLANHE, CLANHF
+      EXTERNAL           SLAMCH, CLARND, CLANHE, CLANHF
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CTRTTF
+      EXTERNAL           CTRTTF
 *     ..
 *     .. Scalars in Common ..
       CHARACTER*32       SRNAMT
@@ -161,8 +161,8 @@
          ISEED( I ) = ISEEDY( I )
    10 CONTINUE
 *
-      EPS = AB_SLAMCH( 'Precision' )
-      SMALL = AB_SLAMCH( 'Safe minimum' )
+      EPS = SLAMCH( 'Precision' )
+      SMALL = SLAMCH( 'Safe minimum' )
       LARGE = ONE / SMALL
       SMALL = SMALL * LDA * LDA
       LARGE = LARGE / LDA / LDA
@@ -181,7 +181,7 @@
 *
             DO J = 1, N
                DO I = 1, N
-                  A( I, J) = AB_CLARND( 4, ISEED )
+                  A( I, J) = CLARND( 4, ISEED )
                END DO
             END DO
 *
@@ -213,10 +213,10 @@
 *
                   CFORM = FORMS( IFORM )
 *
-                  SRNAMT = 'AB_CTRTTF'
-                  CALL AB_CTRTTF( CFORM, UPLO, N, A, LDA, ARF, INFO )
+                  SRNAMT = 'CTRTTF'
+                  CALL CTRTTF( CFORM, UPLO, N, A, LDA, ARF, INFO )
 *
-*                 Check error code from AB_CTRTTF
+*                 Check error code from CTRTTF
 *
                   IF( INFO.NE.0 ) THEN
                      IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 ) THEN
@@ -233,9 +233,8 @@
 *                    Check all four norms: 'M', '1', 'I', 'F'
 *
                      NORM = NORMS( INORM )
-                     NORMARF = AB_CLANHF( NORM, CFORM, UPLO, N, ARF, WOR
-     $K )
-                     NORMA = AB_CLANHE( NORM, UPLO, N, A, LDA, WORK )
+                     NORMARF = CLANHF( NORM, CFORM, UPLO, N, ARF, WORK )
+                     NORMA = CLANHE( NORM, UPLO, N, A, LDA, WORK )
 *
                      RESULT(1) = ( NORMA - NORMARF ) / NORMA / EPS
                      NRUN = NRUN + 1
@@ -245,7 +244,7 @@
                            WRITE( NOUT, * )
                            WRITE( NOUT, FMT = 9999 )
                         END IF
-                        WRITE( NOUT, FMT = 9997 ) 'AB_CLANHF',
+                        WRITE( NOUT, FMT = 9997 ) 'CLANHF',
      +                      N, IIT, UPLO, CFORM, NORM, RESULT(1)
                         NFAIL = NFAIL + 1
                      END IF
@@ -258,15 +257,15 @@
 *     Print a summary of the results.
 *
       IF ( NFAIL.EQ.0 ) THEN
-         WRITE( NOUT, FMT = 9996 )'AB_CLANHF', NRUN
+         WRITE( NOUT, FMT = 9996 )'CLANHF', NRUN
       ELSE
-         WRITE( NOUT, FMT = 9995 ) 'AB_CLANHF', NFAIL, NRUN
+         WRITE( NOUT, FMT = 9995 ) 'CLANHF', NFAIL, NRUN
       END IF
       IF ( NERRS.NE.0 ) THEN
-         WRITE( NOUT, FMT = 9994 ) NERRS, 'AB_CLANHF'
+         WRITE( NOUT, FMT = 9994 ) NERRS, 'CLANHF'
       END IF
 *
- 9999 FORMAT( 1X, ' *** Error(s) or Failure(s) while testing AB_CLANHF
+ 9999 FORMAT( 1X, ' *** Error(s) or Failure(s) while testing CLANHF
      +         ***')
  9998 FORMAT( 1X, '     Error in ',A6,' with UPLO=''',A1,''', FORM=''',
      +        A1,''', N=',I5)
@@ -280,6 +279,6 @@
 *
       RETURN
 *
-*     End of AB_CDRVRF1
+*     End of CDRVRF1
 *
       END

@@ -1,4 +1,4 @@
-*> \brief <b> AB_AB_DSBEV_2STAGE computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
+*> \brief <b> DSBEV_2STAGE computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
 *
 *  @precisions fortran d -> s
 *
@@ -8,19 +8,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_DSBEV_2STAGE + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_DSBEV_2STAGE.f">
+*> Download DSBEV_2STAGE + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsbev_2stage.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_DSBEV_2STAGE.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsbev_2stage.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_DSBEV_2STAGE.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsbev_2stage.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_DSBEV_2STAGE( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ,
+*       SUBROUTINE DSBEV_2STAGE( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ,
 *                                WORK, LWORK, INFO )
 *
 *       IMPLICIT NONE
@@ -39,7 +39,7 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_DSBEV_2STAGE computes all the eigenvalues and, optionally, eigenvectors of
+*> DSBEV_2STAGE computes all the eigenvalues and, optionally, eigenvectors of
 *> a real symmetric band matrix A using the 2stage technique for
 *> the reduction to tridiagonal.
 *> \endverbatim
@@ -143,7 +143,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -201,8 +201,7 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_DSBEV_2STAGE( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, 
-     $LDZ,
+      SUBROUTINE DSBEV_2STAGE( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ,
      $                         WORK, LWORK, INFO )
 *
       IMPLICIT NONE
@@ -234,16 +233,14 @@
      $                   SMLNUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_AB_ILAENV2STAGE
-      DOUBLE PRECISION   AB_DLAMCH, AB_DLANSB
-      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_DLANSB, AB_AB_ILAENV2ST
-     $AGE
+      LOGICAL            LSAME
+      INTEGER            ILAENV2STAGE
+      DOUBLE PRECISION   DLAMCH, DLANSB
+      EXTERNAL           LSAME, DLAMCH, DLANSB, ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLASCL, AB_DSCAL, AB_DSTEQR, AB_DSTERF, AB_X
-     $ERBLA,
-     $                   AB_DSYTRD_SB2ST 
+      EXTERNAL           DLASCL, DSCAL, DSTEQR, DSTERF, XERBLA,
+     $                   DSYTRD_SB2ST 
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          SQRT
@@ -252,14 +249,14 @@
 *
 *     Test the input parameters.
 *
-      WANTZ = AB_LSAME( JOBZ, 'V' )
-      LOWER = AB_LSAME( UPLO, 'L' )
+      WANTZ = LSAME( JOBZ, 'V' )
+      LOWER = LSAME( UPLO, 'L' )
       LQUERY = ( LWORK.EQ.-1 )
 *
       INFO = 0
-      IF( .NOT.( AB_LSAME( JOBZ, 'N' ) ) ) THEN
+      IF( .NOT.( LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.( LOWER .OR. AB_LSAME( UPLO, 'U' ) ) ) THEN
+      ELSE IF( .NOT.( LOWER .OR. LSAME( UPLO, 'U' ) ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -276,11 +273,11 @@
             LWMIN = 1
             WORK( 1 ) = LWMIN
          ELSE
-            IB    = AB_AB_ILAENV2STAGE( 2, 'AB_DSYTRD_SB2ST', JOBZ,
+            IB    = ILAENV2STAGE( 2, 'DSYTRD_SB2ST', JOBZ,
      $                            N, KD, -1, -1 )
-            LHTRD = AB_AB_ILAENV2STAGE( 3, 'AB_DSYTRD_SB2ST', JOBZ,
+            LHTRD = ILAENV2STAGE( 3, 'DSYTRD_SB2ST', JOBZ,
      $                            N, KD, IB, -1 )
-            LWTRD = AB_AB_ILAENV2STAGE( 4, 'AB_DSYTRD_SB2ST', JOBZ,
+            LWTRD = ILAENV2STAGE( 4, 'DSYTRD_SB2ST', JOBZ,
      $                            N, KD, IB, -1 )
             LWMIN = N + LHTRD + LWTRD
             WORK( 1 )  = LWMIN
@@ -291,7 +288,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_DSBEV_2STAGE ', -INFO )
+         CALL XERBLA( 'DSBEV_2STAGE ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -315,8 +312,8 @@
 *
 *     Get machine constants.
 *
-      SAFMIN = AB_DLAMCH( 'Safe minimum' )
-      EPS    = AB_DLAMCH( 'Precision' )
+      SAFMIN = DLAMCH( 'Safe minimum' )
+      EPS    = DLAMCH( 'Precision' )
       SMLNUM = SAFMIN / EPS
       BIGNUM = ONE / SMLNUM
       RMIN   = SQRT( SMLNUM )
@@ -324,7 +321,7 @@
 *
 *     Scale matrix to allowable range, if necessary.
 *
-      ANRM = AB_DLANSB( 'M', UPLO, N, KD, AB, LDAB, WORK )
+      ANRM = DLANSB( 'M', UPLO, N, KD, AB, LDAB, WORK )
       ISCALE = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.RMIN ) THEN
          ISCALE = 1
@@ -335,32 +332,29 @@
       END IF
       IF( ISCALE.EQ.1 ) THEN
          IF( LOWER ) THEN
-            CALL AB_DLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INF
-     $O )
+            CALL DLASCL( 'B', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
          ELSE
-            CALL AB_DLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INF
-     $O )
+            CALL DLASCL( 'Q', KD, KD, ONE, SIGMA, N, N, AB, LDAB, INFO )
          END IF
       END IF
 *
-*     Call AB_DSYTRD_SB2ST to reduce symmetric band matrix to tridiagonal form.
+*     Call DSYTRD_SB2ST to reduce symmetric band matrix to tridiagonal form.
 *
       INDE    = 1
       INDHOUS = INDE + N
       INDWRK  = INDHOUS + LHTRD
       LLWORK  = LWORK - INDWRK + 1
 *
-      CALL AB_DSYTRD_SB2ST( "N", JOBZ, UPLO, N, KD, AB, LDAB, W,
+      CALL DSYTRD_SB2ST( "N", JOBZ, UPLO, N, KD, AB, LDAB, W,
      $                    WORK( INDE ), WORK( INDHOUS ), LHTRD, 
      $                    WORK( INDWRK ), LLWORK, IINFO )
 *
-*     For eigenvalues only, call AB_DSTERF.  For eigenvectors, call AB_SSTEQR.
+*     For eigenvalues only, call DSTERF.  For eigenvectors, call SSTEQR.
 *
       IF( .NOT.WANTZ ) THEN
-         CALL AB_DSTERF( N, W, WORK( INDE ), INFO )
+         CALL DSTERF( N, W, WORK( INDE ), INFO )
       ELSE
-         CALL AB_DSTEQR( JOBZ, N, W, WORK( INDE ), Z, LDZ, WORK( INDWRK 
-     $),
+         CALL DSTEQR( JOBZ, N, W, WORK( INDE ), Z, LDZ, WORK( INDWRK ),
      $                INFO )
       END IF
 *
@@ -372,7 +366,7 @@
          ELSE
             IMAX = INFO - 1
          END IF
-         CALL AB_DSCAL( IMAX, ONE / SIGMA, W, 1 )
+         CALL DSCAL( IMAX, ONE / SIGMA, W, 1 )
       END IF
 *
 *     Set WORK(1) to optimal workspace size.
@@ -381,6 +375,6 @@
 *
       RETURN
 *
-*     End of AB_AB_DSBEV_2STAGE
+*     End of DSBEV_2STAGE
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_SGERQS
+*> \brief \b SGERQS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_SGERQS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LWORK,
+*       SUBROUTINE SGERQS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LWORK,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -29,7 +29,7 @@
 *>     min || A*X - B ||
 *> using the RQ factorization
 *>     A = R*Q
-*> computed by AB_AB_SGERQF.
+*> computed by SGERQF.
 *> \endverbatim
 *
 *  Arguments:
@@ -57,7 +57,7 @@
 *> \verbatim
 *>          A is REAL array, dimension (LDA,N)
 *>          Details of the RQ factorization of the original matrix A as
-*>          returned by AB_AB_SGERQF.
+*>          returned by SGERQF.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -119,8 +119,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_SGERQS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LW
-     $ORK,
+      SUBROUTINE SGERQS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LWORK,
      $                   INFO )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -143,7 +142,7 @@
       PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SLASET, AB_SORMRQ, AB_STRSM, AB_XERBLA
+      EXTERNAL           SLASET, SORMRQ, STRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -163,13 +162,12 @@
          INFO = -5
       ELSE IF( LDB.LT.MAX( 1, N ) ) THEN
          INFO = -8
-      ELSE IF( LWORK.LT.1 .OR. LWORK.LT.NRHS .AND. M.GT.0 .AND. N.GT.
-     $0 )
+      ELSE IF( LWORK.LT.1 .OR. LWORK.LT.NRHS .AND. M.GT.0 .AND. N.GT.0 )
      $          THEN
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_SGERQS', -INFO )
+         CALL XERBLA( 'SGERQS', -INFO )
          RETURN
       END IF
 *
@@ -180,22 +178,20 @@
 *
 *     Solve R*X = B(n-m+1:n,:)
 *
-      CALL AB_STRSM( 'Left', 'Upper', 'No transpose', 'Non-unit', M, NRH
-     $S,
+      CALL STRSM( 'Left', 'Upper', 'No transpose', 'Non-unit', M, NRHS,
      $            ONE, A( 1, N-M+1 ), LDA, B( N-M+1, 1 ), LDB )
 *
 *     Set B(1:n-m,:) to zero
 *
-      CALL AB_SLASET( 'Full', N-M, NRHS, ZERO, ZERO, B, LDB )
+      CALL SLASET( 'Full', N-M, NRHS, ZERO, ZERO, B, LDB )
 *
 *     B := Q' * B
 *
-      CALL AB_SORMRQ( 'Left', 'Transpose', N, NRHS, M, A, LDA, TAU, B, L
-     $DB,
+      CALL SORMRQ( 'Left', 'Transpose', N, NRHS, M, A, LDA, TAU, B, LDB,
      $             WORK, LWORK, INFO )
 *
       RETURN
 *
-*     End of AB_AB_SGERQS
+*     End of SGERQS
 *
       END

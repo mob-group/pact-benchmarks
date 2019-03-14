@@ -1,4 +1,4 @@
-*> \brief \b AB_SERRGT
+*> \brief \b SERRGT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SERRGT( PATH, NUNIT )
+*       SUBROUTINE SERRGT( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SERRGT tests the error exits for the REAL tridiagonal
+*> SERRGT tests the error exits for the REAL tridiagonal
 *> routines.
 *> \endverbatim
 *
@@ -53,7 +53,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_SERRGT( PATH, NUNIT )
+      SUBROUTINE SERRGT( PATH, NUNIT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -83,13 +83,12 @@
      $                   R1( NMAX ), R2( NMAX ), W( NMAX ), X( NMAX )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_AB_LSAMEN
-      EXTERNAL           AB_AB_LSAMEN
+      LOGICAL            LSAMEN
+      EXTERNAL           LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALAESM, AB_CHKXER, AB_SGTCON, AB_SGTRFS, AB_
-     $SGTTRF, AB_SGTTRS,
-     $                   AB_SPTCON, AB_SPTRFS, AB_SPTTRF, AB_SPTTRS
+      EXTERNAL           ALAESM, CHKXER, SGTCON, SGTRFS, SGTTRF, SGTTRS,
+     $                   SPTCON, SPTRFS, SPTTRF, SPTTRS
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -116,140 +115,131 @@
       ANORM = 1.0
       OK = .TRUE.
 *
-      IF( AB_AB_LSAMEN( 2, C2, 'GT' ) ) THEN
+      IF( LSAMEN( 2, C2, 'GT' ) ) THEN
 *
 *        Test error exits for the general tridiagonal routines.
 *
-*        AB_SGTTRF
+*        SGTTRF
 *
-         SRNAMT = 'AB_SGTTRF'
+         SRNAMT = 'SGTTRF'
          INFOT = 1
-         CALL AB_SGTTRF( -1, C, D, E, F, IP, INFO )
-         CALL AB_CHKXER( 'AB_SGTTRF', INFOT, NOUT, LERR, OK )
+         CALL SGTTRF( -1, C, D, E, F, IP, INFO )
+         CALL CHKXER( 'SGTTRF', INFOT, NOUT, LERR, OK )
 *
-*        AB_SGTTRS
+*        SGTTRS
 *
-         SRNAMT = 'AB_SGTTRS'
+         SRNAMT = 'SGTTRS'
          INFOT = 1
-         CALL AB_SGTTRS( '/', 0, 0, C, D, E, F, IP, X, 1, INFO )
-         CALL AB_CHKXER( 'AB_SGTTRS', INFOT, NOUT, LERR, OK )
+         CALL SGTTRS( '/', 0, 0, C, D, E, F, IP, X, 1, INFO )
+         CALL CHKXER( 'SGTTRS', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_SGTTRS( 'N', -1, 0, C, D, E, F, IP, X, 1, INFO )
-         CALL AB_CHKXER( 'AB_SGTTRS', INFOT, NOUT, LERR, OK )
+         CALL SGTTRS( 'N', -1, 0, C, D, E, F, IP, X, 1, INFO )
+         CALL CHKXER( 'SGTTRS', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_SGTTRS( 'N', 0, -1, C, D, E, F, IP, X, 1, INFO )
-         CALL AB_CHKXER( 'AB_SGTTRS', INFOT, NOUT, LERR, OK )
+         CALL SGTTRS( 'N', 0, -1, C, D, E, F, IP, X, 1, INFO )
+         CALL CHKXER( 'SGTTRS', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_SGTTRS( 'N', 2, 1, C, D, E, F, IP, X, 1, INFO )
-         CALL AB_CHKXER( 'AB_SGTTRS', INFOT, NOUT, LERR, OK )
+         CALL SGTTRS( 'N', 2, 1, C, D, E, F, IP, X, 1, INFO )
+         CALL CHKXER( 'SGTTRS', INFOT, NOUT, LERR, OK )
 *
-*        AB_SGTRFS
+*        SGTRFS
 *
-         SRNAMT = 'AB_SGTRFS'
+         SRNAMT = 'SGTRFS'
          INFOT = 1
-         CALL AB_SGTRFS( '/', 0, 0, C, D, E, CF, DF, EF, F, IP, B, 1, X,
-     $ 1,
+         CALL SGTRFS( '/', 0, 0, C, D, E, CF, DF, EF, F, IP, B, 1, X, 1,
      $                R1, R2, W, IW, INFO )
-         CALL AB_CHKXER( 'AB_SGTRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SGTRFS', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_SGTRFS( 'N', -1, 0, C, D, E, CF, DF, EF, F, IP, B, 1, X
-     $,
+         CALL SGTRFS( 'N', -1, 0, C, D, E, CF, DF, EF, F, IP, B, 1, X,
      $                1, R1, R2, W, IW, INFO )
-         CALL AB_CHKXER( 'AB_SGTRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SGTRFS', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_SGTRFS( 'N', 0, -1, C, D, E, CF, DF, EF, F, IP, B, 1, X
-     $,
+         CALL SGTRFS( 'N', 0, -1, C, D, E, CF, DF, EF, F, IP, B, 1, X,
      $                1, R1, R2, W, IW, INFO )
-         CALL AB_CHKXER( 'AB_SGTRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SGTRFS', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL AB_SGTRFS( 'N', 2, 1, C, D, E, CF, DF, EF, F, IP, B, 1, X,
-     $ 2,
+         CALL SGTRFS( 'N', 2, 1, C, D, E, CF, DF, EF, F, IP, B, 1, X, 2,
      $                R1, R2, W, IW, INFO )
-         CALL AB_CHKXER( 'AB_SGTRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SGTRFS', INFOT, NOUT, LERR, OK )
          INFOT = 15
-         CALL AB_SGTRFS( 'N', 2, 1, C, D, E, CF, DF, EF, F, IP, B, 2, X,
-     $ 1,
+         CALL SGTRFS( 'N', 2, 1, C, D, E, CF, DF, EF, F, IP, B, 2, X, 1,
      $                R1, R2, W, IW, INFO )
-         CALL AB_CHKXER( 'AB_SGTRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SGTRFS', INFOT, NOUT, LERR, OK )
 *
-*        AB_SGTCON
+*        SGTCON
 *
-         SRNAMT = 'AB_SGTCON'
+         SRNAMT = 'SGTCON'
          INFOT = 1
-         CALL AB_SGTCON( '/', 0, C, D, E, F, IP, ANORM, RCOND, W, IW,
+         CALL SGTCON( '/', 0, C, D, E, F, IP, ANORM, RCOND, W, IW,
      $                INFO )
-         CALL AB_CHKXER( 'AB_SGTCON', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SGTCON', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_SGTCON( 'I', -1, C, D, E, F, IP, ANORM, RCOND, W, IW,
+         CALL SGTCON( 'I', -1, C, D, E, F, IP, ANORM, RCOND, W, IW,
      $                INFO )
-         CALL AB_CHKXER( 'AB_SGTCON', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SGTCON', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_SGTCON( 'I', 0, C, D, E, F, IP, -ANORM, RCOND, W, IW,
+         CALL SGTCON( 'I', 0, C, D, E, F, IP, -ANORM, RCOND, W, IW,
      $                INFO )
-         CALL AB_CHKXER( 'AB_SGTCON', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SGTCON', INFOT, NOUT, LERR, OK )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, C2, 'PT' ) ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'PT' ) ) THEN
 *
 *        Test error exits for the positive definite tridiagonal
 *        routines.
 *
-*        AB_SPTTRF
+*        SPTTRF
 *
-         SRNAMT = 'AB_SPTTRF'
+         SRNAMT = 'SPTTRF'
          INFOT = 1
-         CALL AB_SPTTRF( -1, D, E, INFO )
-         CALL AB_CHKXER( 'AB_SPTTRF', INFOT, NOUT, LERR, OK )
+         CALL SPTTRF( -1, D, E, INFO )
+         CALL CHKXER( 'SPTTRF', INFOT, NOUT, LERR, OK )
 *
-*        AB_SPTTRS
+*        SPTTRS
 *
-         SRNAMT = 'AB_SPTTRS'
+         SRNAMT = 'SPTTRS'
          INFOT = 1
-         CALL AB_SPTTRS( -1, 0, D, E, X, 1, INFO )
-         CALL AB_CHKXER( 'AB_SPTTRS', INFOT, NOUT, LERR, OK )
+         CALL SPTTRS( -1, 0, D, E, X, 1, INFO )
+         CALL CHKXER( 'SPTTRS', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_SPTTRS( 0, -1, D, E, X, 1, INFO )
-         CALL AB_CHKXER( 'AB_SPTTRS', INFOT, NOUT, LERR, OK )
+         CALL SPTTRS( 0, -1, D, E, X, 1, INFO )
+         CALL CHKXER( 'SPTTRS', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_SPTTRS( 2, 1, D, E, X, 1, INFO )
-         CALL AB_CHKXER( 'AB_SPTTRS', INFOT, NOUT, LERR, OK )
+         CALL SPTTRS( 2, 1, D, E, X, 1, INFO )
+         CALL CHKXER( 'SPTTRS', INFOT, NOUT, LERR, OK )
 *
-*        AB_SPTRFS
+*        SPTRFS
 *
-         SRNAMT = 'AB_SPTRFS'
+         SRNAMT = 'SPTRFS'
          INFOT = 1
-         CALL AB_SPTRFS( -1, 0, D, E, DF, EF, B, 1, X, 1, R1, R2, W, INF
-     $O )
-         CALL AB_CHKXER( 'AB_SPTRFS', INFOT, NOUT, LERR, OK )
+         CALL SPTRFS( -1, 0, D, E, DF, EF, B, 1, X, 1, R1, R2, W, INFO )
+         CALL CHKXER( 'SPTRFS', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_SPTRFS( 0, -1, D, E, DF, EF, B, 1, X, 1, R1, R2, W, INF
-     $O )
-         CALL AB_CHKXER( 'AB_SPTRFS', INFOT, NOUT, LERR, OK )
+         CALL SPTRFS( 0, -1, D, E, DF, EF, B, 1, X, 1, R1, R2, W, INFO )
+         CALL CHKXER( 'SPTRFS', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_SPTRFS( 2, 1, D, E, DF, EF, B, 1, X, 2, R1, R2, W, INFO
-     $ )
-         CALL AB_CHKXER( 'AB_SPTRFS', INFOT, NOUT, LERR, OK )
+         CALL SPTRFS( 2, 1, D, E, DF, EF, B, 1, X, 2, R1, R2, W, INFO )
+         CALL CHKXER( 'SPTRFS', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_SPTRFS( 2, 1, D, E, DF, EF, B, 2, X, 1, R1, R2, W, INFO
-     $ )
-         CALL AB_CHKXER( 'AB_SPTRFS', INFOT, NOUT, LERR, OK )
+         CALL SPTRFS( 2, 1, D, E, DF, EF, B, 2, X, 1, R1, R2, W, INFO )
+         CALL CHKXER( 'SPTRFS', INFOT, NOUT, LERR, OK )
 *
-*        AB_SPTCON
+*        SPTCON
 *
-         SRNAMT = 'AB_SPTCON'
+         SRNAMT = 'SPTCON'
          INFOT = 1
-         CALL AB_SPTCON( -1, D, E, ANORM, RCOND, W, INFO )
-         CALL AB_CHKXER( 'AB_SPTCON', INFOT, NOUT, LERR, OK )
+         CALL SPTCON( -1, D, E, ANORM, RCOND, W, INFO )
+         CALL CHKXER( 'SPTCON', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_SPTCON( 0, D, E, -ANORM, RCOND, W, INFO )
-         CALL AB_CHKXER( 'AB_SPTCON', INFOT, NOUT, LERR, OK )
+         CALL SPTCON( 0, D, E, -ANORM, RCOND, W, INFO )
+         CALL CHKXER( 'SPTCON', INFOT, NOUT, LERR, OK )
       END IF
 *
 *     Print a summary line.
 *
-      CALL AB_ALAESM( PATH, OK, NOUT )
+      CALL ALAESM( PATH, OK, NOUT )
 *
       RETURN
 *
-*     End of AB_SERRGT
+*     End of SERRGT
 *
       END

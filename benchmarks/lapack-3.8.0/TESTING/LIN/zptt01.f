@@ -1,4 +1,4 @@
-*> \brief \b AB_ZPTT01
+*> \brief \b ZPTT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZPTT01( N, D, E, DF, EF, WORK, RESID )
+*       SUBROUTINE ZPTT01( N, D, E, DF, EF, WORK, RESID )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            N
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZPTT01 reconstructs a tridiagonal matrix A from its L*D*L'
+*> ZPTT01 reconstructs a tridiagonal matrix A from its L*D*L'
 *> factorization and computes the residual
 *>    norm(L*D*L' - A) / ( n * norm(A) * EPS ),
 *> where EPS is the machine epsilon.
@@ -90,7 +90,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZPTT01( N, D, E, DF, EF, WORK, RESID )
+      SUBROUTINE ZPTT01( N, D, E, DF, EF, WORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -118,8 +118,8 @@
       COMPLEX*16         DE
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH
-      EXTERNAL           AB_DLAMCH
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCONJG, MAX
@@ -133,7 +133,7 @@
          RETURN
       END IF
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
+      EPS = DLAMCH( 'Epsilon' )
 *
 *     Construct the difference L*D*L' - A.
 *
@@ -171,6 +171,6 @@
 *
       RETURN
 *
-*     End of AB_ZPTT01
+*     End of ZPTT01
 *
       END

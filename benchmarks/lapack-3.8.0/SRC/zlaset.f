@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLASET initializes the off-diagonal elements and the diagonal elements of a matrix to given values.
+*> \brief \b ZLASET initializes the off-diagonal elements and the diagonal elements of a matrix to given values.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZLASET + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLASET.f">
+*> Download ZLASET + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlaset.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLASET.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlaset.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLASET.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlaset.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZLASET( UPLO, M, N, ALPHA, BETA, A, LDA )
+*       SUBROUTINE ZLASET( UPLO, M, N, ALPHA, BETA, A, LDA )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZLASET initializes a 2-D array A to BETA on the diagonal and
+*> ZLASET initializes a 2-D array A to BETA on the diagonal and
 *> ALPHA on the offdiagonals.
 *> \endverbatim
 *
@@ -104,7 +104,7 @@
 *> \ingroup complex16OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_ZLASET( UPLO, M, N, ALPHA, BETA, A, LDA )
+      SUBROUTINE ZLASET( UPLO, M, N, ALPHA, BETA, A, LDA )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -126,15 +126,15 @@
       INTEGER            I, J
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN
 *     ..
 *     .. Executable Statements ..
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
 *
 *        Set the diagonal to BETA and the strictly upper triangular
 *        part of the array to ALPHA.
@@ -148,7 +148,7 @@
             A( I, I ) = BETA
    30    CONTINUE
 *
-      ELSE IF( AB_LSAME( UPLO, 'L' ) ) THEN
+      ELSE IF( LSAME( UPLO, 'L' ) ) THEN
 *
 *        Set the diagonal to BETA and the strictly lower triangular
 *        part of the array to ALPHA.
@@ -179,6 +179,6 @@
 *
       RETURN
 *
-*     End of AB_ZLASET
+*     End of ZLASET
 *
       END

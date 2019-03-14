@@ -1,4 +1,4 @@
-*> \brief \b AB_SPTTRF
+*> \brief \b SPTTRF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SPTTRF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SPTTRF.f">
+*> Download SPTTRF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/spttrf.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SPTTRF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/spttrf.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SPTTRF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spttrf.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SPTTRF( N, D, E, INFO )
+*       SUBROUTINE SPTTRF( N, D, E, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, N
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SPTTRF computes the L*D*L**T factorization of a real symmetric
+*> SPTTRF computes the L*D*L**T factorization of a real symmetric
 *> positive definite tridiagonal matrix A.  The factorization may also
 *> be regarded as having the form A = U**T*D*U.
 *> \endverbatim
@@ -89,7 +89,7 @@
 *> \ingroup auxOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_SPTTRF( N, D, E, INFO )
+      SUBROUTINE SPTTRF( N, D, E, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -114,7 +114,7 @@
       REAL               EI
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA
+      EXTERNAL           XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MOD
@@ -126,7 +126,7 @@
       INFO = 0
       IF( N.LT.0 ) THEN
          INFO = -1
-         CALL AB_XERBLA( 'AB_SPTTRF', -INFO )
+         CALL XERBLA( 'SPTTRF', -INFO )
          RETURN
       END IF
 *
@@ -206,6 +206,6 @@
    30 CONTINUE
       RETURN
 *
-*     End of AB_SPTTRF
+*     End of SPTTRF
 *
       END

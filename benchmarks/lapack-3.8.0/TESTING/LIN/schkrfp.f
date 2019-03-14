@@ -97,26 +97,25 @@
       REAL               WORKARF( (NMAX*(NMAX+1))/2 )
       REAL               WORKAP( (NMAX*(NMAX+1))/2 )
       REAL               WORKARFINV( (NMAX*(NMAX+1))/2 )
-      REAL               S_WORK_AB_SLATMS( 3 * NMAX )
-      REAL               S_WORK_AB_SPOT01( NMAX )
-      REAL               S_TEMP_AB_SPOT02( NMAX, MAXRHS )
-      REAL               S_TEMP_AB_SPOT03( NMAX, NMAX )
-      REAL               S_WORK_AB_SLANSY( NMAX )
-      REAL               S_WORK_AB_SPOT02( NMAX )
-      REAL               S_WORK_AB_SPOT03( NMAX )
+      REAL               S_WORK_SLATMS( 3 * NMAX )
+      REAL               S_WORK_SPOT01( NMAX )
+      REAL               S_TEMP_SPOT02( NMAX, MAXRHS )
+      REAL               S_TEMP_SPOT03( NMAX, NMAX )
+      REAL               S_WORK_SLANSY( NMAX )
+      REAL               S_WORK_SPOT02( NMAX )
+      REAL               S_WORK_SPOT03( NMAX )
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH, AB_SECOND
-      EXTERNAL           AB_SLAMCH, AB_SECOND
+      REAL               SLAMCH, SECOND
+      EXTERNAL           SLAMCH, SECOND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ILAVER, AB_SDRVRFP, AB_SDRVRF1, AB_SDRVRF2, 
-     $AB_SDRVRF3,
-     +                   AB_SDRVRF4
+      EXTERNAL           ILAVER, SDRVRFP, SDRVRF1, SDRVRF2, SDRVRF3,
+     +                   SDRVRF4
 *     ..
 *     .. Executable Statements ..
 *
-      S1 = AB_SECOND( )
+      S1 = SECOND( )
       FATAL = .FALSE.
 *
 *     Read a dummy line.
@@ -125,7 +124,7 @@
 *
 *     Report LAPACK version tag (e.g. LAPACK-3.2.0)
 *
-      CALL AB_ILAVER( VERS_MAJOR, VERS_MINOR, VERS_PATCH )
+      CALL ILAVER( VERS_MAJOR, VERS_MINOR, VERS_PATCH )
       WRITE( NOUT, FMT = 9994 ) VERS_MAJOR, VERS_MINOR, VERS_PATCH
 *
 *     Read the values of N
@@ -219,62 +218,60 @@
 *
 *     Calculate and print the machine dependent constants.
 *
-      EPS = AB_SLAMCH( 'Underflow threshold' )
+      EPS = SLAMCH( 'Underflow threshold' )
       WRITE( NOUT, FMT = 9991 )'underflow', EPS
-      EPS = AB_SLAMCH( 'Overflow threshold' )
+      EPS = SLAMCH( 'Overflow threshold' )
       WRITE( NOUT, FMT = 9991 )'overflow ', EPS
-      EPS = AB_SLAMCH( 'Epsilon' )
+      EPS = SLAMCH( 'Epsilon' )
       WRITE( NOUT, FMT = 9991 )'precision', EPS
       WRITE( NOUT, FMT = * )
 *
 *     Test the error exit of:
 *
       IF( TSTERR )
-     $   CALL AB_SERRRFP( NOUT )
+     $   CALL SERRRFP( NOUT )
 *
-*     Test the routines: AB_SPFTRF, AB_SPFTRI, AB_SPFTRS (as in AB_SDRVPO).
-*     This also tests the routines: AB_STFSM, AB_STFTRI, AB_STFTTR, AB_STRTTF.
+*     Test the routines: spftrf, spftri, spftrs (as in SDRVPO).
+*     This also tests the routines: stfsm, stftri, stfttr, strttf.
 *
-      CALL AB_SDRVRFP( NOUT, NN, NVAL, NNS, NSVAL, NNT, NTVAL, THRESH,
+      CALL SDRVRFP( NOUT, NN, NVAL, NNS, NSVAL, NNT, NTVAL, THRESH,
      $              WORKA, WORKASAV, WORKAFAC, WORKAINV, WORKB,
      $              WORKBSAV, WORKXACT, WORKX, WORKARF, WORKARFINV,
-     $              S_WORK_AB_SLATMS, S_WORK_AB_SPOT01, S_TEMP_AB_SPOT02
-     $,
-     $              S_TEMP_AB_SPOT03, S_WORK_AB_SLANSY, S_WORK_AB_SPOT02
-     $,
-     $              S_WORK_AB_SPOT03 )
+     $              S_WORK_SLATMS, S_WORK_SPOT01, S_TEMP_SPOT02,
+     $              S_TEMP_SPOT03, S_WORK_SLANSY, S_WORK_SPOT02,
+     $              S_WORK_SPOT03 )
 *
-*     Test the routine: AB_SLANSF
+*     Test the routine: slansf
 *
-      CALL AB_SDRVRF1( NOUT, NN, NVAL, THRESH, WORKA, NMAX, WORKARF,
-     +              S_WORK_AB_SLANSY )
+      CALL SDRVRF1( NOUT, NN, NVAL, THRESH, WORKA, NMAX, WORKARF,
+     +              S_WORK_SLANSY )
 *
 *     Test the conversion routines:
-*       AB_STFTTP, AB_STPTTF, AB_STFTTR, AB_STRTTF, AB_STRTTP and AB_STPTTR.
+*       stfttp, stpttf, stfttr, strttf, strttp and stpttr.
 *
-      CALL AB_SDRVRF2( NOUT, NN, NVAL, WORKA, NMAX, WORKARF,
+      CALL SDRVRF2( NOUT, NN, NVAL, WORKA, NMAX, WORKARF,
      +              WORKAP, WORKASAV )
 *
-*     Test the routine: AB_STFSM
+*     Test the routine: stfsm
 *
-      CALL AB_SDRVRF3( NOUT, NN, NVAL, THRESH, WORKA, NMAX, WORKARF,
-     +              WORKAINV, WORKAFAC, S_WORK_AB_SLANSY,
-     +              S_WORK_AB_SPOT03, S_WORK_AB_SPOT01 )
+      CALL SDRVRF3( NOUT, NN, NVAL, THRESH, WORKA, NMAX, WORKARF,
+     +              WORKAINV, WORKAFAC, S_WORK_SLANSY,
+     +              S_WORK_SPOT03, S_WORK_SPOT01 )
 *
 *
-*     Test the routine: AB_SSFRK
+*     Test the routine: ssfrk
 *
-      CALL AB_SDRVRF4( NOUT, NN, NVAL, THRESH, WORKA, WORKAFAC, NMAX,
-     +              WORKARF, WORKAINV, NMAX, S_WORK_AB_SLANSY)
+      CALL SDRVRF4( NOUT, NN, NVAL, THRESH, WORKA, WORKAFAC, NMAX,
+     +              WORKARF, WORKAINV, NMAX, S_WORK_SLANSY)
 *
       CLOSE ( NIN )
-      S2 = AB_SECOND( )
+      S2 = SECOND( )
       WRITE( NOUT, FMT = 9998 )
       WRITE( NOUT, FMT = 9997 )S2 - S1
 *
  9999 FORMAT( / ' Execution not attempted due to input errors' )
  9998 FORMAT( / ' End of tests' )
- 9997 FORMAT( ' Total time used = ', F12.2, ' AB_SECONDs', / )
+ 9997 FORMAT( ' Total time used = ', F12.2, ' seconds', / )
  9996 FORMAT( ' !! Invalid input value: ', A4, '=', I6, '; must be >=',
      $      I6 )
  9995 FORMAT( ' !! Invalid input value: ', A4, '=', I6, '; must be <=',

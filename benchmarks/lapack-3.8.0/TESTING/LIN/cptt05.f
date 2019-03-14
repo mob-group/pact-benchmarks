@@ -1,4 +1,4 @@
-*> \brief \b AB_CPTT05
+*> \brief \b CPTT05
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CPTT05( N, NRHS, D, E, B, LDB, X, LDX, XACT, LDXACT,
+*       SUBROUTINE CPTT05( N, NRHS, D, E, B, LDB, X, LDX, XACT, LDXACT,
 *                          FERR, BERR, RESLTS )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CPTT05 tests the error bounds from iterative refinement for the
+*> CPTT05 tests the error bounds from iterative refinement for the
 *> computed solution to a system of equations A*X = B, where A is a
 *> Hermitian tridiagonal matrix of order n.
 *>
@@ -147,7 +147,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_CPTT05( N, NRHS, D, E, B, LDB, X, LDX, XACT, LDXACT,
+      SUBROUTINE CPTT05( N, NRHS, D, E, B, LDB, X, LDX, XACT, LDXACT,
      $                   FERR, BERR, RESLTS )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -176,9 +176,9 @@
       COMPLEX            ZDUM
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ICAMAX
-      REAL               AB_SLAMCH
-      EXTERNAL           AB_ICAMAX, AB_SLAMCH
+      INTEGER            ICAMAX
+      REAL               SLAMCH
+      EXTERNAL           ICAMAX, SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, MIN, REAL
@@ -199,8 +199,8 @@
          RETURN
       END IF
 *
-      EPS = AB_SLAMCH( 'Epsilon' )
-      UNFL = AB_SLAMCH( 'Safe minimum' )
+      EPS = SLAMCH( 'Epsilon' )
+      UNFL = SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
       NZ = 4
 *
@@ -210,7 +210,7 @@
 *
       ERRBND = ZERO
       DO 30 J = 1, NRHS
-         IMAX = AB_ICAMAX( N, X( 1, J ), 1 )
+         IMAX = ICAMAX( N, X( 1, J ), 1 )
          XNORM = MAX( CABS1( X( IMAX, J ) ), UNFL )
          DIFF = ZERO
          DO 10 I = 1, N
@@ -264,6 +264,6 @@
 *
       RETURN
 *
-*     End of AB_CPTT05
+*     End of CPTT05
 *
       END

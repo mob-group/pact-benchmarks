@@ -1,4 +1,4 @@
-*> \brief \b AB_DLAGS2 computes 2-by-2 orthogonal matrices U, V, and Q, and applies them to matrices A and B such that the rows of the transformed A and B are parallel.
+*> \brief \b DLAGS2 computes 2-by-2 orthogonal matrices U, V, and Q, and applies them to matrices A and B such that the rows of the transformed A and B are parallel.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLAGS2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLAGS2.f">
+*> Download DLAGS2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlags2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLAGS2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlags2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLAGS2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlags2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLAGS2( UPPER, A1, A2, A3, B1, B2, B3, CSU, SNU, CSV,
+*       SUBROUTINE DLAGS2( UPPER, A1, A2, A3, B1, B2, B3, CSU, SNU, CSV,
 *                          SNV, CSQ, SNQ )
 *
 *       .. Scalar Arguments ..
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DLAGS2 computes 2-by-2 orthogonal matrices U, V and Q, such
+*> DLAGS2 computes 2-by-2 orthogonal matrices U, V and Q, such
 *> that if ( UPPER ) then
 *>
 *>           U**T *A*Q = U**T *( A1 A2 )*Q = ( x  0  )
@@ -149,8 +149,7 @@
 *> \ingroup doubleOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_DLAGS2( UPPER, A1, A2, A3, B1, B2, B3, CSU, SNU, CSV
-     $,
+      SUBROUTINE DLAGS2( UPPER, A1, A2, A3, B1, B2, B3, CSU, SNU, CSV,
      $                   SNV, CSQ, SNQ )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -177,7 +176,7 @@
      $                   VB11, VB11R, VB12, VB21, VB22, VB22R
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLARTG, AB_DLASV2
+      EXTERNAL           DLARTG, DLASV2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS
@@ -200,7 +199,7 @@
 *         ( CSL -SNL )*( A B )*(  CSR  SNR ) = ( R 0 )
 *         ( SNL  CSL ) ( 0 D ) ( -SNR  CSR )   ( 0 T )
 *
-         CALL AB_DLASV2( A, B, D, S1, S2, SNR, CSR, SNL, CSL )
+         CALL DLASV2( A, B, D, S1, S2, SNR, CSR, SNL, CSL )
 *
          IF( ABS( CSL ).GE.ABS( SNL ) .OR. ABS( CSR ).GE.ABS( SNR ) )
      $        THEN
@@ -222,12 +221,12 @@
             IF( ( ABS( UA11R )+ABS( UA12 ) ).NE.ZERO ) THEN
                IF( AUA12 / ( ABS( UA11R )+ABS( UA12 ) ).LE.AVB12 /
      $             ( ABS( VB11R )+ABS( VB12 ) ) ) THEN
-                  CALL AB_DLARTG( -UA11R, UA12, CSQ, SNQ, R )
+                  CALL DLARTG( -UA11R, UA12, CSQ, SNQ, R )
                ELSE
-                  CALL AB_DLARTG( -VB11R, VB12, CSQ, SNQ, R )
+                  CALL DLARTG( -VB11R, VB12, CSQ, SNQ, R )
                END IF
             ELSE
-               CALL AB_DLARTG( -VB11R, VB12, CSQ, SNQ, R )
+               CALL DLARTG( -VB11R, VB12, CSQ, SNQ, R )
             END IF
 *
             CSU = CSL
@@ -254,12 +253,12 @@
             IF( ( ABS( UA21 )+ABS( UA22 ) ).NE.ZERO ) THEN
                IF( AUA22 / ( ABS( UA21 )+ABS( UA22 ) ).LE.AVB22 /
      $             ( ABS( VB21 )+ABS( VB22 ) ) ) THEN
-                  CALL AB_DLARTG( -UA21, UA22, CSQ, SNQ, R )
+                  CALL DLARTG( -UA21, UA22, CSQ, SNQ, R )
                ELSE
-                  CALL AB_DLARTG( -VB21, VB22, CSQ, SNQ, R )
+                  CALL DLARTG( -VB21, VB22, CSQ, SNQ, R )
                END IF
             ELSE
-               CALL AB_DLARTG( -VB21, VB22, CSQ, SNQ, R )
+               CALL DLARTG( -VB21, VB22, CSQ, SNQ, R )
             END IF
 *
             CSU = SNL
@@ -285,7 +284,7 @@
 *         ( CSL -SNL )*( A 0 )*(  CSR  SNR ) = ( R 0 )
 *         ( SNL  CSL ) ( C D ) ( -SNR  CSR )   ( 0 T )
 *
-         CALL AB_DLASV2( A, C, D, S1, S2, SNR, CSR, SNL, CSL )
+         CALL DLASV2( A, C, D, S1, S2, SNR, CSR, SNL, CSL )
 *
          IF( ABS( CSR ).GE.ABS( SNR ) .OR. ABS( CSL ).GE.ABS( SNL ) )
      $        THEN
@@ -307,12 +306,12 @@
             IF( ( ABS( UA21 )+ABS( UA22R ) ).NE.ZERO ) THEN
                IF( AUA21 / ( ABS( UA21 )+ABS( UA22R ) ).LE.AVB21 /
      $             ( ABS( VB21 )+ABS( VB22R ) ) ) THEN
-                  CALL AB_DLARTG( UA22R, UA21, CSQ, SNQ, R )
+                  CALL DLARTG( UA22R, UA21, CSQ, SNQ, R )
                ELSE
-                  CALL AB_DLARTG( VB22R, VB21, CSQ, SNQ, R )
+                  CALL DLARTG( VB22R, VB21, CSQ, SNQ, R )
                END IF
             ELSE
-               CALL AB_DLARTG( VB22R, VB21, CSQ, SNQ, R )
+               CALL DLARTG( VB22R, VB21, CSQ, SNQ, R )
             END IF
 *
             CSU = CSR
@@ -339,12 +338,12 @@
             IF( ( ABS( UA11 )+ABS( UA12 ) ).NE.ZERO ) THEN
                IF( AUA11 / ( ABS( UA11 )+ABS( UA12 ) ).LE.AVB11 /
      $             ( ABS( VB11 )+ABS( VB12 ) ) ) THEN
-                  CALL AB_DLARTG( UA12, UA11, CSQ, SNQ, R )
+                  CALL DLARTG( UA12, UA11, CSQ, SNQ, R )
                ELSE
-                  CALL AB_DLARTG( VB12, VB11, CSQ, SNQ, R )
+                  CALL DLARTG( VB12, VB11, CSQ, SNQ, R )
                END IF
             ELSE
-               CALL AB_DLARTG( VB12, VB11, CSQ, SNQ, R )
+               CALL DLARTG( VB12, VB11, CSQ, SNQ, R )
             END IF
 *
             CSU = SNR
@@ -358,6 +357,6 @@
 *
       RETURN
 *
-*     End of AB_DLAGS2
+*     End of DLAGS2
 *
       END

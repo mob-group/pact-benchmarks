@@ -1,4 +1,4 @@
-*> \brief \b AB_ZGESC2 solves a system of linear equations using the LU factorization with complete pivoting computed by AB_SGETC2.
+*> \brief \b ZGESC2 solves a system of linear equations using the LU factorization with complete pivoting computed by sgetc2.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZGESC2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZGESC2.f">
+*> Download ZGESC2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgesc2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZGESC2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgesc2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZGESC2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgesc2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZGESC2( N, A, LDA, RHS, IPIV, JPIV, SCALE )
+*       SUBROUTINE ZGESC2( N, A, LDA, RHS, IPIV, JPIV, SCALE )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDA, N
@@ -35,12 +35,12 @@
 *>
 *> \verbatim
 *>
-*> AB_ZGESC2 solves a system of linear equations
+*> ZGESC2 solves a system of linear equations
 *>
 *>           A * X = scale* RHS
 *>
 *> with a general N-by-N matrix A using the LU factorization with
-*> complete pivoting computed by AB_ZGETC2.
+*> complete pivoting computed by ZGETC2.
 *>
 *> \endverbatim
 *
@@ -57,7 +57,7 @@
 *> \verbatim
 *>          A is COMPLEX*16 array, dimension (LDA, N)
 *>          On entry, the  LU part of the factorization of the n-by-n
-*>          matrix A computed by AB_ZGETC2:  A = P * L * U * Q
+*>          matrix A computed by ZGETC2:  A = P * L * U * Q
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -113,7 +113,7 @@
 *>     Umea University, S-901 87 Umea, Sweden.
 *
 *  =====================================================================
-      SUBROUTINE AB_ZGESC2( N, A, LDA, RHS, IPIV, JPIV, SCALE )
+      SUBROUTINE ZGESC2( N, A, LDA, RHS, IPIV, JPIV, SCALE )
 *
 *  -- LAPACK auxiliary routine (version 3.8.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -141,12 +141,12 @@
       COMPLEX*16         TEMP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZLASWP, AB_ZSCAL, AB_DLABAD
+      EXTERNAL           ZLASWP, ZSCAL, DLABAD
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_IZAMAX
-      DOUBLE PRECISION   AB_DLAMCH
-      EXTERNAL           AB_IZAMAX, AB_DLAMCH
+      INTEGER            IZAMAX
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           IZAMAX, DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCMPLX
@@ -155,14 +155,14 @@
 *
 *     Set constant to control overflow
 *
-      EPS = AB_DLAMCH( 'P' )
-      SMLNUM = AB_DLAMCH( 'S' ) / EPS
+      EPS = DLAMCH( 'P' )
+      SMLNUM = DLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL AB_DLABAD( SMLNUM, BIGNUM )
+      CALL DLABAD( SMLNUM, BIGNUM )
 *
 *     Apply permutations IPIV to RHS
 *
-      CALL AB_ZLASWP( 1, RHS, LDA, 1, N-1, IPIV, 1 )
+      CALL ZLASWP( 1, RHS, LDA, 1, N-1, IPIV, 1 )
 *
 *     Solve for L part
 *
@@ -178,10 +178,10 @@
 *
 *     Check for scaling
 *
-      I = AB_IZAMAX( N, RHS, 1 )
+      I = IZAMAX( N, RHS, 1 )
       IF( TWO*SMLNUM*ABS( RHS( I ) ).GT.ABS( A( N, N ) ) ) THEN
          TEMP = DCMPLX( ONE / TWO, ZERO ) / ABS( RHS( I ) )
-         CALL AB_ZSCAL( N, TEMP, RHS( 1 ), 1 )
+         CALL ZSCAL( N, TEMP, RHS( 1 ), 1 )
          SCALE = SCALE*DBLE( TEMP )
       END IF
       DO 40 I = N, 1, -1
@@ -194,9 +194,9 @@
 *
 *     Apply permutations JPIV to the solution (RHS)
 *
-      CALL AB_ZLASWP( 1, RHS, LDA, 1, N-1, JPIV, -1 )
+      CALL ZLASWP( 1, RHS, LDA, 1, N-1, JPIV, -1 )
       RETURN
 *
-*     End of AB_ZGESC2
+*     End of ZGESC2
 *
       END

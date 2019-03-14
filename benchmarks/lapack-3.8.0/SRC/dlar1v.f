@@ -1,4 +1,4 @@
-*> \brief \b AB_DLAR1V computes the (scaled) r-th column of the inverse of the submatrix in rows b1 through bn of the tridiagonal matrix LDLT - λI.
+*> \brief \b DLAR1V computes the (scaled) r-th column of the inverse of the submatrix in rows b1 through bn of the tridiagonal matrix LDLT - λI.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLAR1V + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLAR1V.f">
+*> Download DLAR1V + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlar1v.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLAR1V.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlar1v.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLAR1V.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlar1v.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLAR1V( N, B1, BN, LAMBDA, D, L, LD, LLD,
+*       SUBROUTINE DLAR1V( N, B1, BN, LAMBDA, D, L, LD, LLD,
 *                  PIVMIN, GAPTOL, Z, WANTNC, NEGCNT, ZTZ, MINGMA,
 *                  R, ISUPPZ, NRMINV, RESID, RQCORR, WORK )
 *
@@ -41,7 +41,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DLAR1V computes the (scaled) r-th column of the inverse of
+*> DLAR1V computes the (scaled) r-th column of the inverse of
 *> the sumbmatrix in rows B1 through BN of the tridiagonal matrix
 *> L D L**T - sigma I. When sigma is close to an eigenvalue, the
 *> computed vector is an accurate eigenvector. Usually, r corresponds
@@ -226,7 +226,7 @@
 *> Christof Voemel, University of California, Berkeley, USA
 *
 *  =====================================================================
-      SUBROUTINE AB_DLAR1V( N, B1, BN, LAMBDA, D, L, LD, LLD,
+      SUBROUTINE DLAR1V( N, B1, BN, LAMBDA, D, L, LD, LLD,
      $           PIVMIN, GAPTOL, Z, WANTNC, NEGCNT, ZTZ, MINGMA,
      $           R, ISUPPZ, NRMINV, RESID, RQCORR, WORK )
 *
@@ -262,16 +262,16 @@
       DOUBLE PRECISION   DMINUS, DPLUS, EPS, S, TMP
 *     ..
 *     .. External Functions ..
-      LOGICAL AB_DISNAN
-      DOUBLE PRECISION   AB_DLAMCH
-      EXTERNAL           AB_DISNAN, AB_DLAMCH
+      LOGICAL DISNAN
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           DISNAN, DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = AB_DLAMCH( 'Precision' )
+      EPS = DLAMCH( 'Precision' )
 
 
       IF( R.EQ.0 ) THEN
@@ -309,7 +309,7 @@
          WORK( INDS+I ) = S*WORK( INDLPL+I )*L( I )
          S = WORK( INDS+I ) - LAMBDA
  50   CONTINUE
-      SAWNAN1 = AB_DISNAN( S )
+      SAWNAN1 = DISNAN( S )
       IF( SAWNAN1 ) GOTO 60
       DO 51 I = R1, R2 - 1
          DPLUS = D( I ) + S
@@ -317,7 +317,7 @@
          WORK( INDS+I ) = S*WORK( INDLPL+I )*L( I )
          S = WORK( INDS+I ) - LAMBDA
  51   CONTINUE
-      SAWNAN1 = AB_DISNAN( S )
+      SAWNAN1 = DISNAN( S )
 *
  60   CONTINUE
       IF( SAWNAN1 ) THEN
@@ -359,7 +359,7 @@
          WORK( INDP+I-1 ) = WORK( INDP+I )*TMP - LAMBDA
  80   CONTINUE
       TMP = WORK( INDP+R1-1 )
-      SAWNAN2 = AB_DISNAN( TMP )
+      SAWNAN2 = DISNAN( TMP )
 
       IF( SAWNAN2 ) THEN
 *        Runs a slower version of the above loop if a NaN is detected
@@ -481,6 +481,6 @@
 *
       RETURN
 *
-*     End of AB_DLAR1V
+*     End of DLAR1V
 *
       END

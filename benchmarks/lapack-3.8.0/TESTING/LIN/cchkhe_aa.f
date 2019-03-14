@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_CCHKHE_AA
+*> \brief \b CCHKHE_AA
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_CCHKHE_AA( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSVAL,
+*       SUBROUTINE CCHKHE_AA( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSVAL,
 *                             THRESH, TSTERR, NMAX, A, AFAC, AINV, B, X,
 *                             XACT, WORK, RWORK, IWORK, NOUT )
 *
@@ -31,7 +31,7 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_CCHKHE_AA tests AB_AB_CHETRF_AA, -TRS_AA.
+*> CCHKHE_AA tests CHETRF_AA, -TRS_AA.
 *> \endverbatim
 *
 *  Arguments:
@@ -168,8 +168,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_CCHKHE_AA( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSV
-     $AL,
+      SUBROUTINE CCHKHE_AA( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSVAL,
      $                      THRESH, TSTERR, NMAX, A, AFAC, AINV, B,
      $                      X, XACT, WORK, RWORK, IWORK, NOUT )
 *
@@ -220,11 +219,9 @@
       REAL         RESULT( NTESTS )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL     AB_ALAERH, AB_ALAHD, AB_ALASUM, AB_XLAENV, AB_CERRHE,
-     $ AB_AB_CHET01_AA,
-     $             AB_AB_CHETRF_AA, AB_AB_CHETRS_AA, AB_CLACPY, AB_CLAIP
-     $D, AB_CLARHS,
-     $             AB_CLATB4, AB_CLATMS, AB_CPOT02
+      EXTERNAL     ALAERH, ALAHD, ALASUM, XLAENV, CERRHE, CHET01_AA,
+     $             CHETRF_AA, CHETRS_AA, CLACPY, CLAIPD, CLARHS,
+     $             CLATB4, CLATMS, CPOT02
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC    MAX, MIN
@@ -266,13 +263,13 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL AB_CERRHE( PATH, NOUT )
+     $   CALL CERRHE( PATH, NOUT )
       INFOT = 0
 *
 *     Set the minimum block size for which the block routine should
-*     be used, which will be later returned by AB_ILAENV
+*     be used, which will be later returned by ILAENV
 *
-      CALL AB_XLAENV( 2, 2 )
+      CALL XLAENV( 2, 2 )
 *
 *     Do for each value of N in NVAL
 *
@@ -308,24 +305,23 @@
             DO 160 IUPLO = 1, 2
                UPLO = UPLOS( IUPLO )
 *
-*              Set up parameters with AB_CLATB4 for the matrix generator
+*              Set up parameters with CLATB4 for the matrix generator
 *              based on the type of matrix to be generated.
 *
-               CALL AB_CLATB4( MATPATH, IMAT, N, N, TYPE, KL, KU,
+               CALL CLATB4( MATPATH, IMAT, N, N, TYPE, KL, KU,
      $                      ANORM, MODE, CNDNUM, DIST )
 *
-*              Generate a matrix with AB_CLATMS.
+*              Generate a matrix with CLATMS.
 *
-               SRNAMT = 'AB_CLATMS'
-               CALL AB_CLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
+               SRNAMT = 'CLATMS'
+               CALL CLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
      $                      CNDNUM, ANORM, KL, KU, UPLO, A, LDA, WORK,
      $                      INFO )
 *
-*              Check error code from AB_CLATMS and handle error.
+*              Check error code from CLATMS and handle error.
 *
                IF( INFO.NE.0 ) THEN
-                  CALL AB_ALAERH( PATH, 'AB_CLATMS', INFO, 0, UPLO, N, N
-     $, -1,
+                  CALL ALAERH( PATH, 'CLATMS', INFO, 0, UPLO, N, N, -1,
      $                         -1, -1, IMAT, NFAIL, NERRS, NOUT )
 *
 *                 Skip all tests for this generated matrix
@@ -407,23 +403,23 @@
 *
 *              Set the imaginary part of the diagonals.
 *
-               CALL AB_CLAIPD( N, A, LDA+1, 0 )
+               CALL CLAIPD( N, A, LDA+1, 0 )
 *
 *              Do for each value of NB in NBVAL
 *
                DO 150 INB = 1, NNB
 *
 *                 Set the optimal blocksize, which will be later
-*                 returned by AB_ILAENV.
+*                 returned by ILAENV.
 *
                   NB = NBVAL( INB )
-                  CALL AB_XLAENV( 1, NB )
+                  CALL XLAENV( 1, NB )
 *
 *                 Copy the test matrix A into matrix AFAC which
 *                 will be factorized in place. This is needed to
 *                 preserve the test matrix A for subsequent tests.
 *
-                  CALL AB_CLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
+                  CALL CLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
 *
 *                 Compute the L*D*L**T or U*D*U**T factorization of the
 *                 matrix. IWORK stores details of the interchanges and
@@ -431,9 +427,8 @@
 *                 block factorization, LWORK is the length of AINV.
 *
                   LWORK = MAX( 1, ( NB+1 )*LDA )
-                  SRNAMT = 'AB_AB_CHETRF_AA'
-                  CALL AB_AB_CHETRF_AA( UPLO, N, AFAC, LDA, IWORK, AINV,
-     $ 
+                  SRNAMT = 'CHETRF_AA'
+                  CALL CHETRF_AA( UPLO, N, AFAC, LDA, IWORK, AINV, 
      $                            LWORK, INFO )
 *
 *                 Adjust the expected value of INFO to account for
@@ -456,11 +451,10 @@ c                  ELSE
                      K = 0
 c                  END IF
 *
-*                 Check error code from AB_CHETRF and handle error.
+*                 Check error code from CHETRF and handle error.
 *
                   IF( INFO.NE.K ) THEN
-                     CALL AB_ALAERH( PATH, 'AB_AB_CHETRF_AA', INFO, K, U
-     $PLO, 
+                     CALL ALAERH( PATH, 'CHETRF_AA', INFO, K, UPLO, 
      $                            N, N, -1, -1, NB, IMAT, NFAIL, NERRS, 
      $                            NOUT )
                   END IF
@@ -468,8 +462,7 @@ c                  END IF
 *+    TEST 1
 *                 Reconstruct matrix from factors and compute residual.
 *
-                  CALL AB_AB_CHET01_AA( UPLO, N, A, LDA, AFAC, LDA, IWOR
-     $K,
+                  CALL CHET01_AA( UPLO, N, A, LDA, AFAC, LDA, IWORK,
      $                            AINV, LDA, RWORK, RESULT( 1 ) )
                   NT = 1
 *
@@ -480,7 +473,7 @@ c                  END IF
                   DO 110 K = 1, NT
                      IF( RESULT( K ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL AB_ALAHD( NOUT, PATH )
+     $                     CALL ALAHD( NOUT, PATH )
                         WRITE( NOUT, FMT = 9999 )UPLO, N, NB, IMAT, K,
      $                     RESULT( K )
                         NFAIL = NFAIL + 1
@@ -505,35 +498,32 @@ c                  END IF
 *                    Choose a set of NRHS random solution vectors
 *                    stored in XACT and set up the right hand side B
 *
-                     SRNAMT = 'AB_CLARHS'
-                     CALL AB_CLARHS( MATPATH, XTYPE, UPLO, ' ', N, N,
+                     SRNAMT = 'CLARHS'
+                     CALL CLARHS( MATPATH, XTYPE, UPLO, ' ', N, N,
      $                            KL, KU, NRHS, A, LDA, XACT, LDA,
      $                            B, LDA, ISEED, INFO )
-                     CALL AB_CLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
+                     CALL CLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
-                     SRNAMT = 'AB_AB_CHETRS_AA'
+                     SRNAMT = 'CHETRS_AA'
                      LWORK = MAX( 1, 3*N-2 )
-                     CALL AB_AB_CHETRS_AA( UPLO, N, NRHS, AFAC, LDA, IWO
-     $RK,
+                     CALL CHETRS_AA( UPLO, N, NRHS, AFAC, LDA, IWORK,
      $                               X, LDA, WORK, LWORK, INFO )
 *
-*                    Check error code from AB_CHETRS and handle error.
+*                    Check error code from CHETRS and handle error.
 *
                      IF( INFO.NE.0 ) THEN
                         IF( IZERO.EQ.0 ) THEN
-                           CALL AB_ALAERH( PATH, 'AB_AB_CHETRS_AA', INFO
-     $, 0,
+                           CALL ALAERH( PATH, 'CHETRS_AA', INFO, 0,
      $                                   UPLO, N, N, -1, -1, NRHS, IMAT,
      $                                   NFAIL, NERRS, NOUT )
                         END IF
                      ELSE
-                        CALL AB_CLACPY( 'Full', N, NRHS, B, LDA, WORK, L
-     $DA
+                        CALL CLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA
      $                               )
 *
 *                       Compute the residual for the solution
 *
-                        CALL AB_CPOT02( UPLO, N, NRHS, A, LDA, X, LDA,
+                        CALL CPOT02( UPLO, N, NRHS, A, LDA, X, LDA,
      $                               WORK, LDA, RWORK, RESULT( 2 ) )
 *
 *                       Print information about the tests that did not pass
@@ -542,7 +532,7 @@ c                  END IF
                         DO 120 K = 2, 2
                            IF( RESULT( K ).GE.THRESH ) THEN
                               IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                           CALL AB_ALAHD( NOUT, PATH )
+     $                           CALL ALAHD( NOUT, PATH )
                               WRITE( NOUT, FMT = 9998 )UPLO, N, NRHS,
      $                           IMAT, K, RESULT( K )
                               NFAIL = NFAIL + 1
@@ -562,7 +552,7 @@ c                  END IF
 *
 *     Print a summary of the results.
 *
-      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( ' UPLO = ''', A1, ''', N =', I5, ', NB =', I4, ', type ',
      $      I2, ', test ', I2, ', ratio =', G12.5 )
@@ -572,6 +562,6 @@ c                  END IF
      $      I6 )
       RETURN
 *
-*     End of AB_AB_CCHKHE_AA
+*     End of CCHKHE_AA
 *
       END

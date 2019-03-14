@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_DSYTRS_ROOK
+*> \brief \b DSYTRS_ROOK
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_DSYTRS_ROOK + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_DSYTRS_ROOK.f">
+*> Download DSYTRS_ROOK + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsytrs_rook.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_DSYTRS_ROOK.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsytrs_rook.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_DSYTRS_ROOK.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsytrs_rook.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_DSYTRS_ROOK( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+*       SUBROUTINE DSYTRS_ROOK( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,9 +35,9 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_DSYTRS_ROOK solves a system of linear equations A*X = B with
+*> DSYTRS_ROOK solves a system of linear equations A*X = B with
 *> a real symmetric matrix A using the factorization A = U*D*U**T or
-*> A = L*D*L**T computed by AB_AB_DSYTRF_ROOK.
+*> A = L*D*L**T computed by DSYTRF_ROOK.
 *> \endverbatim
 *
 *  Arguments:
@@ -69,7 +69,7 @@
 *> \verbatim
 *>          A is DOUBLE PRECISION array, dimension (LDA,N)
 *>          The block diagonal matrix D and the multipliers used to
-*>          obtain the factor U or L as computed by AB_AB_DSYTRF_ROOK.
+*>          obtain the factor U or L as computed by DSYTRF_ROOK.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -82,7 +82,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D
-*>          as determined by AB_AB_DSYTRF_ROOK.
+*>          as determined by DSYTRF_ROOK.
 *> \endverbatim
 *>
 *> \param[in,out] B
@@ -133,7 +133,7 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_DSYTRS_ROOK( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
+      SUBROUTINE DSYTRS_ROOK( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
      $                        INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -162,12 +162,11 @@
       DOUBLE PRECISION   AK, AKM1, AKM1K, BK, BKM1, DENOM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DGEMV, AB_DGER, AB_DSCAL, AB_DSWAP, AB_XERBL
-     $A
+      EXTERNAL           DGEMV, DGER, DSCAL, DSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -175,8 +174,8 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -188,7 +187,7 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_DSYTRS_ROOK', -INFO )
+         CALL XERBLA( 'DSYTRS_ROOK', -INFO )
          RETURN
       END IF
 *
@@ -222,17 +221,17 @@
 *
             KP = IPIV( K )
             IF( KP.NE.K )
-     $         CALL AB_DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
 *
 *           Multiply by inv(U(K)), where U(K) is the transformation
 *           stored in column K of A.
 *
-            CALL AB_DGER( K-1, NRHS, -ONE, A( 1, K ), 1, B( K, 1 ), LDB,
+            CALL DGER( K-1, NRHS, -ONE, A( 1, K ), 1, B( K, 1 ), LDB,
      $                 B( 1, 1 ), LDB )
 *
 *           Multiply by the inverse of the diagonal block.
 *
-            CALL AB_DSCAL( NRHS, ONE / A( K, K ), B( K, 1 ), LDB )
+            CALL DSCAL( NRHS, ONE / A( K, K ), B( K, 1 ), LDB )
             K = K - 1
          ELSE
 *
@@ -242,20 +241,19 @@
 *
             KP = -IPIV( K )
             IF( KP.NE.K )
-     $         CALL AB_DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
 *
             KP = -IPIV( K-1 )
             IF( KP.NE.K-1 )
-     $         CALL AB_DSWAP( NRHS, B( K-1, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL DSWAP( NRHS, B( K-1, 1 ), LDB, B( KP, 1 ), LDB )
 *
 *           Multiply by inv(U(K)), where U(K) is the transformation
 *           stored in columns K-1 and K of A.
 *
             IF( K.GT.2 ) THEN
-               CALL AB_DGER( K-2, NRHS, -ONE, A( 1, K ), 1, B( K, 1 ),
+               CALL DGER( K-2, NRHS, -ONE, A( 1, K ), 1, B( K, 1 ),
      $                    LDB, B( 1, 1 ), LDB )
-               CALL AB_DGER( K-2, NRHS, -ONE, A( 1, K-1 ), 1, B( K-1, 1 
-     $),
+               CALL DGER( K-2, NRHS, -ONE, A( 1, K-1 ), 1, B( K-1, 1 ),
      $                    LDB, B( 1, 1 ), LDB )
             END IF
 *
@@ -298,14 +296,14 @@
 *           stored in column K of A.
 *
             IF( K.GT.1 )
-     $         CALL AB_DGEMV( 'Transpose', K-1, NRHS, -ONE, B,
+     $         CALL DGEMV( 'Transpose', K-1, NRHS, -ONE, B,
      $                     LDB, A( 1, K ), 1, ONE, B( K, 1 ), LDB )
 *
 *           Interchange rows K and IPIV(K).
 *
             KP = IPIV( K )
             IF( KP.NE.K )
-     $         CALL AB_DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
             K = K + 1
          ELSE
 *
@@ -315,9 +313,9 @@
 *           stored in columns K and K+1 of A.
 *
             IF( K.GT.1 ) THEN
-               CALL AB_DGEMV( 'Transpose', K-1, NRHS, -ONE, B,
+               CALL DGEMV( 'Transpose', K-1, NRHS, -ONE, B,
      $                     LDB, A( 1, K ), 1, ONE, B( K, 1 ), LDB )
-               CALL AB_DGEMV( 'Transpose', K-1, NRHS, -ONE, B,
+               CALL DGEMV( 'Transpose', K-1, NRHS, -ONE, B,
      $                     LDB, A( 1, K+1 ), 1, ONE, B( K+1, 1 ), LDB )
             END IF
 *
@@ -325,11 +323,11 @@
 *
             KP = -IPIV( K )
             IF( KP.NE.K )
-     $         CALL AB_DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
 *
             KP = -IPIV( K+1 )
             IF( KP.NE.K+1 )
-     $         CALL AB_DSWAP( NRHS, B( K+1, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL DSWAP( NRHS, B( K+1, 1 ), LDB, B( KP, 1 ), LDB )
 *
             K = K + 2
          END IF
@@ -362,18 +360,18 @@
 *
             KP = IPIV( K )
             IF( KP.NE.K )
-     $         CALL AB_DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
 *
 *           Multiply by inv(L(K)), where L(K) is the transformation
 *           stored in column K of A.
 *
             IF( K.LT.N )
-     $         CALL AB_DGER( N-K, NRHS, -ONE, A( K+1, K ), 1, B( K, 1 ),
+     $         CALL DGER( N-K, NRHS, -ONE, A( K+1, K ), 1, B( K, 1 ),
      $                    LDB, B( K+1, 1 ), LDB )
 *
 *           Multiply by the inverse of the diagonal block.
 *
-            CALL AB_DSCAL( NRHS, ONE / A( K, K ), B( K, 1 ), LDB )
+            CALL DSCAL( NRHS, ONE / A( K, K ), B( K, 1 ), LDB )
             K = K + 1
          ELSE
 *
@@ -383,20 +381,19 @@
 *
             KP = -IPIV( K )
             IF( KP.NE.K )
-     $         CALL AB_DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
 *
             KP = -IPIV( K+1 )
             IF( KP.NE.K+1 )
-     $         CALL AB_DSWAP( NRHS, B( K+1, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL DSWAP( NRHS, B( K+1, 1 ), LDB, B( KP, 1 ), LDB )
 *
 *           Multiply by inv(L(K)), where L(K) is the transformation
 *           stored in columns K and K+1 of A.
 *
             IF( K.LT.N-1 ) THEN
-               CALL AB_DGER( N-K-1, NRHS, -ONE, A( K+2, K ), 1, B( K, 1 
-     $),
+               CALL DGER( N-K-1, NRHS, -ONE, A( K+2, K ), 1, B( K, 1 ),
      $                    LDB, B( K+2, 1 ), LDB )
-               CALL AB_DGER( N-K-1, NRHS, -ONE, A( K+2, K+1 ), 1,
+               CALL DGER( N-K-1, NRHS, -ONE, A( K+2, K+1 ), 1,
      $                    B( K+1, 1 ), LDB, B( K+2, 1 ), LDB )
             END IF
 *
@@ -439,14 +436,14 @@
 *           stored in column K of A.
 *
             IF( K.LT.N )
-     $         CALL AB_DGEMV( 'Transpose', N-K, NRHS, -ONE, B( K+1, 1 ),
+     $         CALL DGEMV( 'Transpose', N-K, NRHS, -ONE, B( K+1, 1 ),
      $                     LDB, A( K+1, K ), 1, ONE, B( K, 1 ), LDB )
 *
 *           Interchange rows K and IPIV(K).
 *
             KP = IPIV( K )
             IF( KP.NE.K )
-     $         CALL AB_DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
             K = K - 1
          ELSE
 *
@@ -456,9 +453,9 @@
 *           stored in columns K-1 and K of A.
 *
             IF( K.LT.N ) THEN
-               CALL AB_DGEMV( 'Transpose', N-K, NRHS, -ONE, B( K+1, 1 ),
+               CALL DGEMV( 'Transpose', N-K, NRHS, -ONE, B( K+1, 1 ),
      $                     LDB, A( K+1, K ), 1, ONE, B( K, 1 ), LDB )
-               CALL AB_DGEMV( 'Transpose', N-K, NRHS, -ONE, B( K+1, 1 ),
+               CALL DGEMV( 'Transpose', N-K, NRHS, -ONE, B( K+1, 1 ),
      $                     LDB, A( K+1, K-1 ), 1, ONE, B( K-1, 1 ),
      $                     LDB )
             END IF
@@ -467,11 +464,11 @@
 *
             KP = -IPIV( K )
             IF( KP.NE.K )
-     $         CALL AB_DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
 *
             KP = -IPIV( K-1 )
             IF( KP.NE.K-1 )
-     $         CALL AB_DSWAP( NRHS, B( K-1, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL DSWAP( NRHS, B( K-1, 1 ), LDB, B( KP, 1 ), LDB )
 *
             K = K - 2
          END IF
@@ -482,6 +479,6 @@
 *
       RETURN
 *
-*     End of AB_AB_DSYTRS_ROOK
+*     End of DSYTRS_ROOK
 *
       END

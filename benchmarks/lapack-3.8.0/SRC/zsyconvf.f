@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_AB_ZSYCONVF
+*> \brief \b ZSYCONVF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_AB_ZSYCONVF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_AB_ZSYCONVF.f">
+*> Download ZSYCONVF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zsyconvf.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_AB_ZSYCONVF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zsyconvf.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_AB_ZSYCONVF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsyconvf.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_AB_ZSYCONVF( UPLO, WAY, N, A, LDA, E, IPIV, INFO )
+*       SUBROUTINE ZSYCONVF( UPLO, WAY, N, A, LDA, E, IPIV, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO, WAY
@@ -35,24 +35,24 @@
 *>
 *> \verbatim
 *> If parameter WAY = 'C':
-*> AB_AB_AB_ZSYCONVF converts the factorization output format used in
-*> AB_ZSYTRF provided on entry in parameter A into the factorization
-*> output format used in AB_AB_ZSYTRF_RK (or AB_ZSYTRF_BK) that is stored
+*> ZSYCONVF converts the factorization output format used in
+*> ZSYTRF provided on entry in parameter A into the factorization
+*> output format used in ZSYTRF_RK (or ZSYTRF_BK) that is stored
 *> on exit in parameters A and E. It also coverts in place details of
-*> the intechanges stored in IPIV from the format used in AB_ZSYTRF into
-*> the format used in AB_AB_ZSYTRF_RK (or AB_ZSYTRF_BK).
+*> the intechanges stored in IPIV from the format used in ZSYTRF into
+*> the format used in ZSYTRF_RK (or ZSYTRF_BK).
 *>
 *> If parameter WAY = 'R':
-*> AB_AB_AB_ZSYCONVF performs the conversion in reverse direction, i.e.
-*> converts the factorization output format used in AB_AB_ZSYTRF_RK
-*> (or AB_ZSYTRF_BK) provided on entry in parameters A and E into
-*> the factorization output format used in AB_ZSYTRF that is stored
+*> ZSYCONVF performs the conversion in reverse direction, i.e.
+*> converts the factorization output format used in ZSYTRF_RK
+*> (or ZSYTRF_BK) provided on entry in parameters A and E into
+*> the factorization output format used in ZSYTRF that is stored
 *> on exit in parameter A. It also coverts in place details of
-*> the intechanges stored in IPIV from the format used in AB_AB_ZSYTRF_RK
-*> (or AB_ZSYTRF_BK) into the format used in AB_ZSYTRF.
+*> the intechanges stored in IPIV from the format used in ZSYTRF_RK
+*> (or ZSYTRF_BK) into the format used in ZSYTRF.
 *>
-*> AB_AB_AB_ZSYCONVF can also convert in Hermitian matrix case, i.e. between
-*> formats used in AB_ZHETRF and AB_AB_ZHETRF_RK (or AB_ZHETRF_BK).
+*> ZSYCONVF can also convert in Hermitian matrix case, i.e. between
+*> formats used in ZHETRF and ZHETRF_RK (or ZHETRF_BK).
 *> \endverbatim
 *
 *  Arguments:
@@ -87,7 +87,7 @@
 *>          1) If WAY ='C':
 *>
 *>          On entry, contains factorization details in format used in
-*>          AB_ZSYTRF:
+*>          ZSYTRF:
 *>            a) all elements of the symmetric block diagonal
 *>               matrix D on the diagonal of A and on superdiagonal
 *>               (or subdiagonal) of A, and
@@ -97,7 +97,7 @@
 *>               in the superdiagonal part of A.
 *>
 *>          On exit, contains factorization details in format used in
-*>          AB_AB_ZSYTRF_RK or AB_ZSYTRF_BK:
+*>          ZSYTRF_RK or ZSYTRF_BK:
 *>            a) ONLY diagonal elements of the symmetric block diagonal
 *>               matrix D on the diagonal of A, i.e. D(k,k) = A(k,k);
 *>               (superdiagonal (or subdiagonal) elements of D
@@ -108,7 +108,7 @@
 *>          2) If WAY = 'R':
 *>
 *>          On entry, contains factorization details in format used in
-*>          AB_AB_ZSYTRF_RK or AB_ZSYTRF_BK:
+*>          ZSYTRF_RK or ZSYTRF_BK:
 *>            a) ONLY diagonal elements of the symmetric block diagonal
 *>               matrix D on the diagonal of A, i.e. D(k,k) = A(k,k);
 *>               (superdiagonal (or subdiagonal) elements of D
@@ -117,7 +117,7 @@
 *>               If UPLO = 'L': factor L in the subdiagonal part of A.
 *>
 *>          On exit, contains factorization details in format used in
-*>          AB_ZSYTRF:
+*>          ZSYTRF:
 *>            a) all elements of the symmetric block diagonal
 *>               matrix D on the diagonal of A and on superdiagonal
 *>               (or subdiagonal) of A, and
@@ -164,17 +164,17 @@
 *>
 *>          1) If WAY ='C':
 *>          On entry, details of the interchanges and the block
-*>          structure of D in the format used in AB_ZSYTRF.
+*>          structure of D in the format used in ZSYTRF.
 *>          On exit, details of the interchanges and the block
-*>          structure of D in the format used in AB_AB_ZSYTRF_RK
-*>          ( or AB_ZSYTRF_BK).
+*>          structure of D in the format used in ZSYTRF_RK
+*>          ( or ZSYTRF_BK).
 *>
 *>          1) If WAY ='R':
 *>          On entry, details of the interchanges and the block
-*>          structure of D in the format used in AB_AB_ZSYTRF_RK
-*>          ( or AB_ZSYTRF_BK).
+*>          structure of D in the format used in ZSYTRF_RK
+*>          ( or ZSYTRF_BK).
 *>          On exit, details of the interchanges and the block
-*>          structure of D in the format used in AB_ZSYTRF.
+*>          structure of D in the format used in ZSYTRF.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -207,8 +207,7 @@
 *>
 *> \endverbatim
 *  =====================================================================
-      SUBROUTINE AB_AB_AB_ZSYCONVF( UPLO, WAY, N, A, LDA, E, IPIV, INFO 
-     $)
+      SUBROUTINE ZSYCONVF( UPLO, WAY, N, A, LDA, E, IPIV, INFO )
 *
 *  -- LAPACK computational routine (version 3.8.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -231,11 +230,11 @@
       PARAMETER          ( ZERO = ( 0.0D+0, 0.0D+0 ) )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZSWAP, AB_XERBLA
+      EXTERNAL           ZSWAP, XERBLA
 *     .. Local Scalars ..
       LOGICAL            UPPER, CONVERT
       INTEGER            I, IP
@@ -243,11 +242,11 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      CONVERT = AB_LSAME( WAY, 'C' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      CONVERT = LSAME( WAY, 'C' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.CONVERT .AND. .NOT.AB_LSAME( WAY, 'R' ) ) THEN
+      ELSE IF( .NOT.CONVERT .AND. .NOT.LSAME( WAY, 'R' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -256,7 +255,7 @@
 
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_AB_ZSYCONVF', -INFO )
+         CALL XERBLA( 'ZSYCONVF', -INFO )
          RETURN
       END IF
 *
@@ -309,7 +308,7 @@
                   IP = IPIV( I )
                   IF( I.LT.N ) THEN
                      IF( IP.NE.I ) THEN
-                        CALL AB_ZSWAP( N-I, A( I, I+1 ), LDA,
+                        CALL ZSWAP( N-I, A( I, I+1 ), LDA,
      $                              A( IP, I+1 ), LDA )
                      END IF
                   END IF
@@ -323,7 +322,7 @@
                   IP = -IPIV( I )
                   IF( I.LT.N ) THEN
                      IF( IP.NE.(I-1) ) THEN
-                        CALL AB_ZSWAP( N-I, A( I-1, I+1 ), LDA,
+                        CALL ZSWAP( N-I, A( I-1, I+1 ), LDA,
      $                              A( IP, I+1 ), LDA )
                      END IF
                   END IF
@@ -362,7 +361,7 @@
                   IP = IPIV( I )
                   IF( I.LT.N ) THEN
                      IF( IP.NE.I ) THEN
-                        CALL AB_ZSWAP( N-I, A( IP, I+1 ), LDA,
+                        CALL ZSWAP( N-I, A( IP, I+1 ), LDA,
      $                              A( I, I+1 ), LDA )
                      END IF
                   END IF
@@ -377,7 +376,7 @@
                   IP = -IPIV( I )
                   IF( I.LT.N ) THEN
                      IF( IP.NE.(I-1) ) THEN
-                        CALL AB_ZSWAP( N-I, A( IP, I+1 ), LDA,
+                        CALL ZSWAP( N-I, A( IP, I+1 ), LDA,
      $                              A( I-1, I+1 ), LDA )
                      END IF
                   END IF
@@ -453,7 +452,7 @@
                   IP = IPIV( I )
                   IF ( I.GT.1 ) THEN
                      IF( IP.NE.I ) THEN
-                        CALL AB_ZSWAP( I-1, A( I, 1 ), LDA,
+                        CALL ZSWAP( I-1, A( I, 1 ), LDA,
      $                              A( IP, 1 ), LDA )
                      END IF
                   END IF
@@ -467,7 +466,7 @@
                   IP = -IPIV( I )
                   IF ( I.GT.1 ) THEN
                      IF( IP.NE.(I+1) ) THEN
-                        CALL AB_ZSWAP( I-1, A( I+1, 1 ), LDA,
+                        CALL ZSWAP( I-1, A( I+1, 1 ), LDA,
      $                              A( IP, 1 ), LDA )
                      END IF
                   END IF
@@ -506,7 +505,7 @@
                   IP = IPIV( I )
                   IF ( I.GT.1 ) THEN
                      IF( IP.NE.I ) THEN
-                        CALL AB_ZSWAP( I-1, A( IP, 1 ), LDA,
+                        CALL ZSWAP( I-1, A( IP, 1 ), LDA,
      $                              A( I, 1 ), LDA )
                      END IF
                   END IF
@@ -521,7 +520,7 @@
                   IP = -IPIV( I )
                   IF ( I.GT.1 ) THEN
                      IF( IP.NE.(I+1) ) THEN
-                        CALL AB_ZSWAP( I-1, A( IP, 1 ), LDA,
+                        CALL ZSWAP( I-1, A( IP, 1 ), LDA,
      $                              A( I+1, 1 ), LDA )
                      END IF
                   END IF
@@ -558,6 +557,6 @@
 
       RETURN
 *
-*     End of AB_AB_AB_ZSYCONVF
+*     End of ZSYCONVF
 *
       END

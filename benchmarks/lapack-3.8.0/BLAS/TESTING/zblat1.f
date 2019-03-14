@@ -54,7 +54,7 @@
       DOUBLE PRECISION SFAC
       INTEGER          IC
 *     .. External Subroutines ..
-      EXTERNAL         AB_CHECK1, AB_CHECK2, AB_HEADER
+      EXTERNAL         CHECK1, CHECK2, HEADER
 *     .. Common blocks ..
       COMMON           /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
 *     .. Data statements ..
@@ -63,7 +63,7 @@
       WRITE (NOUT,99999)
       DO 20 IC = 1, 10
          ICASE = IC
-         CALL AB_HEADER
+         CALL HEADER
 *
 *        Initialize PASS, INCX, INCY, and MODE for a new case.
 *        The value 9999 for INCX, INCY or MODE will appear in the
@@ -75,9 +75,9 @@
          INCY = 9999
          MODE = 9999
          IF (ICASE.LE.5) THEN
-            CALL AB_CHECK2(SFAC)
+            CALL CHECK2(SFAC)
          ELSE IF (ICASE.GE.6) THEN
-            CALL AB_CHECK1(SFAC)
+            CALL CHECK1(SFAC)
          END IF
 *        -- Print
          IF (PASS) WRITE (NOUT,99998)
@@ -87,7 +87,7 @@
 99999 FORMAT (' Complex BLAS Test Program Results',/1X)
 99998 FORMAT ('                                    ----- PASS -----')
       END
-      SUBROUTINE AB_HEADER
+      SUBROUTINE HEADER
 *     .. Parameters ..
       INTEGER          NOUT
       PARAMETER        (NOUT=6)
@@ -99,23 +99,23 @@
 *     .. Common blocks ..
       COMMON           /COMBLA/ICASE, N, INCX, INCY, MODE, PASS
 *     .. Data statements ..
-      DATA             L(1)/'AB_ZDOTC '/
-      DATA             L(2)/'AB_ZDOTU '/
-      DATA             L(3)/'AB_ZAXPY '/
-      DATA             L(4)/'AB_ZCOPY '/
-      DATA             L(5)/'AB_ZSWAP '/
-      DATA             L(6)/'AB_DZNRM2'/
-      DATA             L(7)/'AB_DZASUM'/
-      DATA             L(8)/'AB_ZSCAL '/
-      DATA             L(9)/'ZAB_DSCAL'/
-      DATA             L(10)/'AB_IZAMAX'/
+      DATA             L(1)/'ZDOTC '/
+      DATA             L(2)/'ZDOTU '/
+      DATA             L(3)/'ZAXPY '/
+      DATA             L(4)/'ZCOPY '/
+      DATA             L(5)/'ZSWAP '/
+      DATA             L(6)/'DZNRM2'/
+      DATA             L(7)/'DZASUM'/
+      DATA             L(8)/'ZSCAL '/
+      DATA             L(9)/'ZDSCAL'/
+      DATA             L(10)/'IZAMAX'/
 *     .. Executable Statements ..
       WRITE (NOUT,99999) ICASE, L(ICASE)
       RETURN
 *
 99999 FORMAT (/' Test of subprogram number',I3,12X,A6)
       END
-      SUBROUTINE AB_CHECK1(SFAC)
+      SUBROUTINE CHECK1(SFAC)
 *     .. Parameters ..
       INTEGER           NOUT
       PARAMETER         (NOUT=6)
@@ -134,12 +134,11 @@
       DOUBLE PRECISION  STRUE2(5), STRUE4(5)
       INTEGER           ITRUE3(5)
 *     .. External Functions ..
-      DOUBLE PRECISION  AB_DZASUM, AB_DZNRM2
-      INTEGER           AB_IZAMAX
-      EXTERNAL          AB_DZASUM, AB_DZNRM2, AB_IZAMAX
+      DOUBLE PRECISION  DZASUM, DZNRM2
+      INTEGER           IZAMAX
+      EXTERNAL          DZASUM, DZNRM2, IZAMAX
 *     .. External Subroutines ..
-      EXTERNAL          AB_ZSCAL, ZAB_DSCAL, AB_CTEST, AB_ITEST1, AB_AB_
-     $STEST1
+      EXTERNAL          ZSCAL, ZDSCAL, CTEST, ITEST1, STEST1
 *     .. Intrinsic Functions ..
       INTRINSIC         MAX
 *     .. Common blocks ..
@@ -249,32 +248,28 @@
                CX(I) = CV(I,NP1,INCX)
    20       CONTINUE
             IF (ICASE.EQ.6) THEN
-*              .. AB_DZNRM2 ..
-               CALL AB_AB_STEST1(AB_DZNRM2(N,CX,INCX),STRUE2(NP1),STRUE2
-     $(NP1),
+*              .. DZNRM2 ..
+               CALL STEST1(DZNRM2(N,CX,INCX),STRUE2(NP1),STRUE2(NP1),
      +                     SFAC)
             ELSE IF (ICASE.EQ.7) THEN
-*              .. AB_DZASUM ..
-               CALL AB_AB_STEST1(AB_DZASUM(N,CX,INCX),STRUE4(NP1),STRUE4
-     $(NP1),
+*              .. DZASUM ..
+               CALL STEST1(DZASUM(N,CX,INCX),STRUE4(NP1),STRUE4(NP1),
      +                     SFAC)
             ELSE IF (ICASE.EQ.8) THEN
-*              .. AB_ZSCAL ..
-               CALL AB_ZSCAL(N,CA,CX,INCX)
-               CALL AB_CTEST(LEN,CX,CTRUE5(1,NP1,INCX),CTRUE5(1,NP1,INCX
-     $),
+*              .. ZSCAL ..
+               CALL ZSCAL(N,CA,CX,INCX)
+               CALL CTEST(LEN,CX,CTRUE5(1,NP1,INCX),CTRUE5(1,NP1,INCX),
      +                    SFAC)
             ELSE IF (ICASE.EQ.9) THEN
-*              .. ZAB_DSCAL ..
-               CALL ZAB_DSCAL(N,SA,CX,INCX)
-               CALL AB_CTEST(LEN,CX,CTRUE6(1,NP1,INCX),CTRUE6(1,NP1,INCX
-     $),
+*              .. ZDSCAL ..
+               CALL ZDSCAL(N,SA,CX,INCX)
+               CALL CTEST(LEN,CX,CTRUE6(1,NP1,INCX),CTRUE6(1,NP1,INCX),
      +                    SFAC)
             ELSE IF (ICASE.EQ.10) THEN
-*              .. AB_IZAMAX ..
-               CALL AB_ITEST1(AB_IZAMAX(N,CX,INCX),ITRUE3(NP1))
+*              .. IZAMAX ..
+               CALL ITEST1(IZAMAX(N,CX,INCX),ITRUE3(NP1))
             ELSE
-               WRITE (NOUT,*) ' Shouldn''t be here in AB_CHECK1'
+               WRITE (NOUT,*) ' Shouldn''t be here in CHECK1'
                STOP
             END IF
 *
@@ -283,45 +278,45 @@
 *
       INCX = 1
       IF (ICASE.EQ.8) THEN
-*        AB_ZSCAL
+*        ZSCAL
 *        Add a test for alpha equal to zero.
          CA = (0.0D0,0.0D0)
          DO 80 I = 1, 5
             MWPCT(I) = (0.0D0,0.0D0)
             MWPCS(I) = (1.0D0,1.0D0)
    80    CONTINUE
-         CALL AB_ZSCAL(5,CA,CX,INCX)
-         CALL AB_CTEST(5,CX,MWPCT,MWPCS,SFAC)
+         CALL ZSCAL(5,CA,CX,INCX)
+         CALL CTEST(5,CX,MWPCT,MWPCS,SFAC)
       ELSE IF (ICASE.EQ.9) THEN
-*        ZAB_DSCAL
+*        ZDSCAL
 *        Add a test for alpha equal to zero.
          SA = 0.0D0
          DO 100 I = 1, 5
             MWPCT(I) = (0.0D0,0.0D0)
             MWPCS(I) = (1.0D0,1.0D0)
   100    CONTINUE
-         CALL ZAB_DSCAL(5,SA,CX,INCX)
-         CALL AB_CTEST(5,CX,MWPCT,MWPCS,SFAC)
+         CALL ZDSCAL(5,SA,CX,INCX)
+         CALL CTEST(5,CX,MWPCT,MWPCS,SFAC)
 *        Add a test for alpha equal to one.
          SA = 1.0D0
          DO 120 I = 1, 5
             MWPCT(I) = CX(I)
             MWPCS(I) = CX(I)
   120    CONTINUE
-         CALL ZAB_DSCAL(5,SA,CX,INCX)
-         CALL AB_CTEST(5,CX,MWPCT,MWPCS,SFAC)
+         CALL ZDSCAL(5,SA,CX,INCX)
+         CALL CTEST(5,CX,MWPCT,MWPCS,SFAC)
 *        Add a test for alpha equal to minus one.
          SA = -1.0D0
          DO 140 I = 1, 5
             MWPCT(I) = -CX(I)
             MWPCS(I) = -CX(I)
   140    CONTINUE
-         CALL ZAB_DSCAL(5,SA,CX,INCX)
-         CALL AB_CTEST(5,CX,MWPCT,MWPCS,SFAC)
+         CALL ZDSCAL(5,SA,CX,INCX)
+         CALL CTEST(5,CX,MWPCT,MWPCS,SFAC)
       END IF
       RETURN
       END
-      SUBROUTINE AB_CHECK2(SFAC)
+      SUBROUTINE CHECK2(SFAC)
 *     .. Parameters ..
       INTEGER           NOUT
       PARAMETER         (NOUT=6)
@@ -339,10 +334,10 @@
      +                  CT8(7,4,4), CX(7), CX1(7), CY(7), CY1(7)
       INTEGER           INCXS(4), INCYS(4), LENS(4,2), NS(4)
 *     .. External Functions ..
-      COMPLEX*16        AB_ZDOTC, AB_ZDOTU
-      EXTERNAL          AB_ZDOTC, AB_ZDOTU
+      COMPLEX*16        ZDOTC, ZDOTU
+      EXTERNAL          ZDOTC, ZDOTU
 *     .. External Subroutines ..
-      EXTERNAL          AB_ZAXPY, AB_ZCOPY, AB_ZSWAP, AB_CTEST
+      EXTERNAL          ZAXPY, ZCOPY, ZSWAP, CTEST
 *     .. Intrinsic Functions ..
       INTRINSIC         ABS, MIN
 *     .. Common blocks ..
@@ -536,28 +531,28 @@
                CY(I) = CY1(I)
    20       CONTINUE
             IF (ICASE.EQ.1) THEN
-*              .. AB_ZDOTC ..
-               CDOT(1) = AB_ZDOTC(N,CX,INCX,CY,INCY)
-               CALL AB_CTEST(1,CDOT,CT6(KN,KI),CSIZE1(KN),SFAC)
+*              .. ZDOTC ..
+               CDOT(1) = ZDOTC(N,CX,INCX,CY,INCY)
+               CALL CTEST(1,CDOT,CT6(KN,KI),CSIZE1(KN),SFAC)
             ELSE IF (ICASE.EQ.2) THEN
-*              .. AB_ZDOTU ..
-               CDOT(1) = AB_ZDOTU(N,CX,INCX,CY,INCY)
-               CALL AB_CTEST(1,CDOT,CT7(KN,KI),CSIZE1(KN),SFAC)
+*              .. ZDOTU ..
+               CDOT(1) = ZDOTU(N,CX,INCX,CY,INCY)
+               CALL CTEST(1,CDOT,CT7(KN,KI),CSIZE1(KN),SFAC)
             ELSE IF (ICASE.EQ.3) THEN
-*              .. AB_ZAXPY ..
-               CALL AB_ZAXPY(N,CA,CX,INCX,CY,INCY)
-               CALL AB_CTEST(LENY,CY,CT8(1,KN,KI),CSIZE2(1,KSIZE),SFAC)
+*              .. ZAXPY ..
+               CALL ZAXPY(N,CA,CX,INCX,CY,INCY)
+               CALL CTEST(LENY,CY,CT8(1,KN,KI),CSIZE2(1,KSIZE),SFAC)
             ELSE IF (ICASE.EQ.4) THEN
-*              .. AB_ZCOPY ..
-               CALL AB_ZCOPY(N,CX,INCX,CY,INCY)
-               CALL AB_CTEST(LENY,CY,CT10Y(1,KN,KI),CSIZE3,1.0D0)
+*              .. ZCOPY ..
+               CALL ZCOPY(N,CX,INCX,CY,INCY)
+               CALL CTEST(LENY,CY,CT10Y(1,KN,KI),CSIZE3,1.0D0)
             ELSE IF (ICASE.EQ.5) THEN
-*              .. AB_ZSWAP ..
-               CALL AB_ZSWAP(N,CX,INCX,CY,INCY)
-               CALL AB_CTEST(LENX,CX,CT10X(1,KN,KI),CSIZE3,1.0D0)
-               CALL AB_CTEST(LENY,CY,CT10Y(1,KN,KI),CSIZE3,1.0D0)
+*              .. ZSWAP ..
+               CALL ZSWAP(N,CX,INCX,CY,INCY)
+               CALL CTEST(LENX,CX,CT10X(1,KN,KI),CSIZE3,1.0D0)
+               CALL CTEST(LENY,CY,CT10Y(1,KN,KI),CSIZE3,1.0D0)
             ELSE
-               WRITE (NOUT,*) ' Shouldn''t be here in AB_CHECK2'
+               WRITE (NOUT,*) ' Shouldn''t be here in CHECK2'
                STOP
             END IF
 *
@@ -565,8 +560,8 @@
    60 CONTINUE
       RETURN
       END
-      SUBROUTINE AB_STEST(LEN,SCOMP,STRUE,SSIZE,SFAC)
-*     ********************************* AB_STEST **************************
+      SUBROUTINE STEST(LEN,SCOMP,STRUE,SSIZE,SFAC)
+*     ********************************* STEST **************************
 *
 *     THIS SUBR COMPARES ARRAYS  SCOMP() AND STRUE() OF LENGTH LEN TO
 *     SEE IF THE TERM BY TERM DIFFERENCES, MULTIPLIED BY SFAC, ARE
@@ -590,8 +585,8 @@
       DOUBLE PRECISION SD
       INTEGER          I
 *     .. External Functions ..
-      DOUBLE PRECISION AB_SDIFF
-      EXTERNAL         AB_SDIFF
+      DOUBLE PRECISION SDIFF
+      EXTERNAL         SDIFF
 *     .. Intrinsic Functions ..
       INTRINSIC        ABS
 *     .. Common blocks ..
@@ -606,7 +601,7 @@
 *                             HERE    SCOMP(I) IS NOT CLOSE TO STRUE(I).
 *
          IF ( .NOT. PASS) GO TO 20
-*                             PRINT FAIL MESSAGE AND AB_HEADER.
+*                             PRINT FAIL MESSAGE AND HEADER.
          PASS = .FALSE.
          WRITE (NOUT,99999)
          WRITE (NOUT,99998)
@@ -621,8 +616,8 @@
      +       '     SIZE(I)',/1X)
 99997 FORMAT (1X,I4,I3,3I5,I3,2D36.8,2D12.4)
       END
-      SUBROUTINE AB_AB_STEST1(SCOMP1,STRUE1,SSIZE,SFAC)
-*     ************************* AB_AB_STEST1 *****************************
+      SUBROUTINE STEST1(SCOMP1,STRUE1,SSIZE,SFAC)
+*     ************************* STEST1 *****************************
 *
 *     THIS IS AN INTERFACE SUBROUTINE TO ACCOMODATE THE FORTRAN
 *     REQUIREMENT THAT WHEN A DUMMY ARGUMENT IS AN ARRAY, THE
@@ -637,27 +632,27 @@
 *     .. Local Arrays ..
       DOUBLE PRECISION  SCOMP(1), STRUE(1)
 *     .. External Subroutines ..
-      EXTERNAL          AB_STEST
+      EXTERNAL          STEST
 *     .. Executable Statements ..
 *
       SCOMP(1) = SCOMP1
       STRUE(1) = STRUE1
-      CALL AB_STEST(1,SCOMP,STRUE,SSIZE,SFAC)
+      CALL STEST(1,SCOMP,STRUE,SSIZE,SFAC)
 *
       RETURN
       END
-      DOUBLE PRECISION FUNCTION AB_SDIFF(SA,SB)
-*     ********************************* AB_SDIFF **************************
+      DOUBLE PRECISION FUNCTION SDIFF(SA,SB)
+*     ********************************* SDIFF **************************
 *     COMPUTES DIFFERENCE OF TWO NUMBERS.  C. L. LAWSON, JPL 1974 FEB 15
 *
 *     .. Scalar Arguments ..
       DOUBLE PRECISION                SA, SB
 *     .. Executable Statements ..
-      AB_SDIFF = SA - SB
+      SDIFF = SA - SB
       RETURN
       END
-      SUBROUTINE AB_CTEST(LEN,CCOMP,CTRUE,CSIZE,SFAC)
-*     **************************** AB_CTEST *****************************
+      SUBROUTINE CTEST(LEN,CCOMP,CTRUE,CSIZE,SFAC)
+*     **************************** CTEST *****************************
 *
 *     C.L. LAWSON, JPL, 1978 DEC 6
 *
@@ -671,7 +666,7 @@
 *     .. Local Arrays ..
       DOUBLE PRECISION SCOMP(20), SSIZE(20), STRUE(20)
 *     .. External Subroutines ..
-      EXTERNAL         AB_STEST
+      EXTERNAL         STEST
 *     .. Intrinsic Functions ..
       INTRINSIC        DIMAG, DBLE
 *     .. Executable Statements ..
@@ -684,11 +679,11 @@
          SSIZE(2*I) = DIMAG(CSIZE(I))
    20 CONTINUE
 *
-      CALL AB_STEST(2*LEN,SCOMP,STRUE,SSIZE,SFAC)
+      CALL STEST(2*LEN,SCOMP,STRUE,SSIZE,SFAC)
       RETURN
       END
-      SUBROUTINE AB_ITEST1(ICOMP,ITRUE)
-*     ********************************* AB_ITEST1 *************************
+      SUBROUTINE ITEST1(ICOMP,ITRUE)
+*     ********************************* ITEST1 *************************
 *
 *     THIS SUBROUTINE COMPARES THE VARIABLES ICOMP AND ITRUE FOR
 *     EQUALITY.
@@ -712,7 +707,7 @@
 *                            HERE ICOMP IS NOT EQUAL TO ITRUE.
 *
       IF ( .NOT. PASS) GO TO 20
-*                             PRINT FAIL MESSAGE AND AB_HEADER.
+*                             PRINT FAIL MESSAGE AND HEADER.
       PASS = .FALSE.
       WRITE (NOUT,99999)
       WRITE (NOUT,99998)

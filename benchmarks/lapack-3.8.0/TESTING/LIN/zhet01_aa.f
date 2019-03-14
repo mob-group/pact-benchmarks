@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_ZHET01_AA
+*> \brief \b ZHET01_AA
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_ZHET01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV,
+*       SUBROUTINE ZHET01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV,
 *                             C, LDC, RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -28,7 +28,7 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_ZHET01_AA reconstructs a hermitian indefinite matrix A from its
+*> ZHET01_AA reconstructs a hermitian indefinite matrix A from its
 *> block L*D*L' or U*D*U' factorization and computes the residual
 *>    norm( C - A ) / ( N * norm(A) * EPS ),
 *> where C is the reconstructed matrix and EPS is the machine epsilon.
@@ -70,7 +70,7 @@
 *>          The factored form of the matrix A.  AFAC contains the block
 *>          diagonal matrix D and the multipliers used to obtain the
 *>          factor L or U from the block L*D*L' or U*D*U' factorization
-*>          as computed by AB_ZHETRF.
+*>          as computed by ZHETRF.
 *> \endverbatim
 *>
 *> \param[in] LDAFAC
@@ -82,7 +82,7 @@
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          The pivot indices from AB_ZHETRF.
+*>          The pivot indices from ZHETRF.
 *> \endverbatim
 *>
 *> \param[out] C
@@ -122,8 +122,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_ZHET01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C
-     $,
+      SUBROUTINE ZHET01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C,
      $                      LDC, RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -156,12 +155,12 @@
       DOUBLE PRECISION   ANORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANHE
-      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_ZLANHE
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH, ZLANHE
+      EXTERNAL           LSAME, DLAMCH, ZLANHE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZLASET, AB_ZLAVHE
+      EXTERNAL           ZLASET, ZLAVHE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE
@@ -177,53 +176,46 @@
 *
 *     Determine EPS and the norm of A.
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
-      ANORM = AB_ZLANHE( '1', UPLO, N, A, LDA, RWORK )
+      EPS = DLAMCH( 'Epsilon' )
+      ANORM = ZLANHE( '1', UPLO, N, A, LDA, RWORK )
 *
 *     Initialize C to the tridiagonal matrix T.
 *
-      CALL AB_ZLASET( 'Full', N, N, CZERO, CZERO, C, LDC )
-      CALL AB_ZLACPY( 'F', 1, N, AFAC( 1, 1 ), LDAFAC+1, C( 1, 1 ), LDC+
-     $1 )
+      CALL ZLASET( 'Full', N, N, CZERO, CZERO, C, LDC )
+      CALL ZLACPY( 'F', 1, N, AFAC( 1, 1 ), LDAFAC+1, C( 1, 1 ), LDC+1 )
       IF( N.GT.1 ) THEN
-         IF( AB_LSAME( UPLO, 'U' ) ) THEN
-            CALL AB_ZLACPY( 'F', 1, N-1, AFAC( 1, 2 ), LDAFAC+1, C( 1, 2
-     $ ),
+         IF( LSAME( UPLO, 'U' ) ) THEN
+            CALL ZLACPY( 'F', 1, N-1, AFAC( 1, 2 ), LDAFAC+1, C( 1, 2 ),
      $                   LDC+1 )
-            CALL AB_ZLACPY( 'F', 1, N-1, AFAC( 1, 2 ), LDAFAC+1, C( 2, 1
-     $ ),
+            CALL ZLACPY( 'F', 1, N-1, AFAC( 1, 2 ), LDAFAC+1, C( 2, 1 ),
      $                   LDC+1 )
-            CALL AB_ZLACGV( N-1, C( 2, 1 ), LDC+1 )
+            CALL ZLACGV( N-1, C( 2, 1 ), LDC+1 )
          ELSE
-            CALL AB_ZLACPY( 'F', 1, N-1, AFAC( 2, 1 ), LDAFAC+1, C( 1, 2
-     $ ),
+            CALL ZLACPY( 'F', 1, N-1, AFAC( 2, 1 ), LDAFAC+1, C( 1, 2 ),
      $                   LDC+1 )
-            CALL AB_ZLACPY( 'F', 1, N-1, AFAC( 2, 1 ), LDAFAC+1, C( 2, 1
-     $ ),
+            CALL ZLACPY( 'F', 1, N-1, AFAC( 2, 1 ), LDAFAC+1, C( 2, 1 ),
      $                   LDC+1 )
-            CALL AB_ZLACGV( N-1, C( 1, 2 ), LDC+1 )
+            CALL ZLACGV( N-1, C( 1, 2 ), LDC+1 )
          ENDIF
 *
-*        Call AB_ZTRMM to form the product U' * D (or L * D ).
+*        Call ZTRMM to form the product U' * D (or L * D ).
 *
-         IF( AB_LSAME( UPLO, 'U' ) ) THEN
-            CALL AB_ZTRMM( 'Left', UPLO, 'Conjugate transpose', 'Unit',
+         IF( LSAME( UPLO, 'U' ) ) THEN
+            CALL ZTRMM( 'Left', UPLO, 'Conjugate transpose', 'Unit',
      $                  N-1, N, CONE, AFAC( 1, 2 ), LDAFAC, C( 2, 1 ),
      $                  LDC )
          ELSE
-            CALL AB_ZTRMM( 'Left', UPLO, 'No transpose', 'Unit', N-1, N,
+            CALL ZTRMM( 'Left', UPLO, 'No transpose', 'Unit', N-1, N,
      $                  CONE, AFAC( 2, 1 ), LDAFAC, C( 2, 1 ), LDC )
          END IF
 *
-*        Call AB_ZTRMM again to multiply by U (or L ).
+*        Call ZTRMM again to multiply by U (or L ).
 *
-         IF( AB_LSAME( UPLO, 'U' ) ) THEN
-            CALL AB_ZTRMM( 'Right', UPLO, 'No transpose', 'Unit', N, N-1
-     $,
+         IF( LSAME( UPLO, 'U' ) ) THEN
+            CALL ZTRMM( 'Right', UPLO, 'No transpose', 'Unit', N, N-1,
      $                  CONE, AFAC( 1, 2 ), LDAFAC, C( 1, 2 ), LDC )
          ELSE
-            CALL AB_ZTRMM( 'Right', UPLO, 'Conjugate transpose', 'Unit',
-     $ N,
+            CALL ZTRMM( 'Right', UPLO, 'Conjugate transpose', 'Unit', N,
      $                  N-1, CONE, AFAC( 2, 1 ), LDAFAC, C( 1, 2 ),
      $                  LDC )
          END IF
@@ -233,19 +225,19 @@
          DO J = N, 1, -1
             I = IPIV( J )
             IF( I.NE.J )
-     $         CALL AB_ZSWAP( N, C( J, 1 ), LDC, C( I, 1 ), LDC )
+     $         CALL ZSWAP( N, C( J, 1 ), LDC, C( I, 1 ), LDC )
          END DO
          DO J = N, 1, -1
             I = IPIV( J )
             IF( I.NE.J )
-     $         CALL AB_ZSWAP( N, C( 1, J ), 1, C( 1, I ), 1 )
+     $         CALL ZSWAP( N, C( 1, J ), 1, C( 1, I ), 1 )
          END DO
       ENDIF
 *
 *
 *     Compute the difference  C - A .
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
          DO J = 1, N
             DO I = 1, J
                C( I, J ) = C( I, J ) - A( I, J )
@@ -261,7 +253,7 @@
 *
 *     Compute norm( C - A ) / ( N * norm(A) * EPS )
 *
-      RESID = AB_ZLANHE( '1', UPLO, N, C, LDC, RWORK )
+      RESID = ZLANHE( '1', UPLO, N, C, LDC, RWORK )
 *
       IF( ANORM.LE.ZERO ) THEN
          IF( RESID.NE.ZERO )
@@ -272,6 +264,6 @@
 *
       RETURN
 *
-*     End of AB_AB_ZHET01_AA
+*     End of ZHET01_AA
 *
       END

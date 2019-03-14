@@ -1,4 +1,4 @@
-*> \brief \b AB_SGET23
+*> \brief \b SGET23
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SGET23( COMP, BALANC, JTYPE, THRESH, ISEED, NOUNIT, N,
+*       SUBROUTINE SGET23( COMP, BALANC, JTYPE, THRESH, ISEED, NOUNIT, N,
 *                          A, LDA, H, WR, WI, WR1, WI1, VL, LDVL, VR,
 *                          LDVR, LRE, LDLRE, RCONDV, RCNDV1, RCDVIN,
 *                          RCONDE, RCNDE1, RCDEIN, SCALE, SCALE1, RESULT,
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*>    AB_SGET23  checks the nonsymmetric eigenvalue problem driver AB_AB_SGEEVX.
+*>    SGET23  checks the nonsymmetric eigenvalue problem driver SGEEVX.
 *>    If COMP = .FALSE., the first 8 of the following tests will be
 *>    performed on the input matrix A, and also test 9 if LWORK is
 *>    sufficiently large.
@@ -108,7 +108,7 @@
 *>   (10)     |RCONDV - RCDVIN| / cond(RCONDV)
 *>
 *>      RCONDV is the reciprocal right eigenvector condition number
-*>      computed by AB_AB_SGEEVX and RCDVIN (the precomputed true value)
+*>      computed by SGEEVX and RCDVIN (the precomputed true value)
 *>      is supplied as input. cond(RCONDV) is the condition number of
 *>      RCONDV, and takes errors in computing RCONDV into account, so
 *>      that the resulting quantity should be O(ULP). cond(RCONDV) is
@@ -117,7 +117,7 @@
 *>   (11)     |RCONDE - RCDEIN| / cond(RCONDE)
 *>
 *>      RCONDE is the reciprocal eigenvalue condition number
-*>      computed by AB_AB_SGEEVX and RCDEIN (the precomputed true value)
+*>      computed by SGEEVX and RCDEIN (the precomputed true value)
 *>      is supplied as input.  cond(RCONDE) is the condition number
 *>      of RCONDE, and takes errors in computing RCONDE into account,
 *>      so that the resulting quantity should be O(ULP). cond(RCONDE)
@@ -202,7 +202,7 @@
 *> \param[out] H
 *> \verbatim
 *>          H is REAL array, dimension (LDA,N)
-*>          Another copy of the test matrix A, modified by AB_AB_SGEEVX.
+*>          Another copy of the test matrix A, modified by SGEEVX.
 *> \endverbatim
 *>
 *> \param[out] WR
@@ -228,7 +228,7 @@
 *>          WI1 is REAL array, dimension (N)
 *>
 *>          Like WR, WI, these arrays contain the eigenvalues of A,
-*>          but those computed when AB_AB_SGEEVX only computes a partial
+*>          but those computed when SGEEVX only computes a partial
 *>          eigendecomposition, i.e. not the eigenvalues and left
 *>          and right eigenvectors.
 *> \endverbatim
@@ -355,7 +355,7 @@
 *>          INFO is INTEGER
 *>          If 0,  successful exit.
 *>          If <0, input parameter -INFO had an incorrect value.
-*>          If >0, AB_AB_SGEEVX returned an error code, the absolute
+*>          If >0, SGEEVX returned an error code, the absolute
 *>                 value of which is returned.
 *> \endverbatim
 *
@@ -372,8 +372,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_SGET23( COMP, BALANC, JTYPE, THRESH, ISEED, NOUNIT, 
-     $N,
+      SUBROUTINE SGET23( COMP, BALANC, JTYPE, THRESH, ISEED, NOUNIT, N,
      $                   A, LDA, H, WR, WI, WR1, WI1, VL, LDVL, VR,
      $                   LDVR, LRE, LDLRE, RCONDV, RCNDV1, RCDVIN,
      $                   RCONDE, RCNDE1, RCDEIN, SCALE, SCALE1, RESULT,
@@ -424,12 +423,12 @@
       REAL               DUM( 1 ), RES( 2 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_SLAMCH, AB_SLAPY2, AB_SNRM2
-      EXTERNAL           AB_LSAME, AB_SLAMCH, AB_SLAPY2, AB_SNRM2
+      LOGICAL            LSAME
+      REAL               SLAMCH, SLAPY2, SNRM2
+      EXTERNAL           LSAME, SLAMCH, SLAPY2, SNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_AB_SGEEVX, AB_SGET22, AB_SLACPY, AB_XERBLA
+      EXTERNAL           SGEEVX, SGET22, SLACPY, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL
@@ -441,9 +440,9 @@
 *
 *     Check for errors
 *
-      NOBAL = AB_LSAME( BALANC, 'N' )
-      BALOK = NOBAL .OR. AB_LSAME( BALANC, 'P' ) .OR.
-     $        AB_LSAME( BALANC, 'S' ) .OR. AB_LSAME( BALANC, 'B' )
+      NOBAL = LSAME( BALANC, 'N' )
+      BALOK = NOBAL .OR. LSAME( BALANC, 'P' ) .OR.
+     $        LSAME( BALANC, 'S' ) .OR. LSAME( BALANC, 'B' )
       INFO = 0
       IF( .NOT.BALOK ) THEN
          INFO = -2
@@ -461,13 +460,12 @@
          INFO = -18
       ELSE IF( LDLRE.LT.1 .OR. LDLRE.LT.N ) THEN
          INFO = -20
-      ELSE IF( LWORK.LT.3*N .OR. ( COMP .AND. LWORK.LT.6*N+N*N ) ) TH
-     $EN
+      ELSE IF( LWORK.LT.3*N .OR. ( COMP .AND. LWORK.LT.6*N+N*N ) ) THEN
          INFO = -31
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SGET23', -INFO )
+         CALL XERBLA( 'SGET23', -INFO )
          RETURN
       END IF
 *
@@ -482,8 +480,8 @@
 *
 *     More Important constants
 *
-      ULP = AB_SLAMCH( 'Precision' )
-      SMLNUM = AB_SLAMCH( 'S' )
+      ULP = SLAMCH( 'Precision' )
+      SMLNUM = SLAMCH( 'S' )
       ULPINV = ONE / ULP
 *
 *     Compute eigenvalues and eigenvectors, and test them
@@ -495,19 +493,17 @@
          SENSE = 'E'
          ISENSM = 1
       END IF
-      CALL AB_SLACPY( 'F', N, N, A, LDA, H, LDA )
-      CALL AB_AB_SGEEVX( BALANC, 'V', 'V', SENSE, N, H, LDA, WR, WI, VL,
-     $ LDVL,
+      CALL SLACPY( 'F', N, N, A, LDA, H, LDA )
+      CALL SGEEVX( BALANC, 'V', 'V', SENSE, N, H, LDA, WR, WI, VL, LDVL,
      $             VR, LDVR, ILO, IHI, SCALE, ABNRM, RCONDE, RCONDV,
      $             WORK, LWORK, IWORK, IINFO )
       IF( IINFO.NE.0 ) THEN
          RESULT( 1 ) = ULPINV
          IF( JTYPE.NE.22 ) THEN
-            WRITE( NOUNIT, FMT = 9998 )'AB_AB_SGEEVX1', IINFO, N, JTYPE,
+            WRITE( NOUNIT, FMT = 9998 )'SGEEVX1', IINFO, N, JTYPE,
      $         BALANC, ISEED
          ELSE
-            WRITE( NOUNIT, FMT = 9999 )'AB_AB_SGEEVX1', IINFO, N, ISEED(
-     $ 1 )
+            WRITE( NOUNIT, FMT = 9999 )'SGEEVX1', IINFO, N, ISEED( 1 )
          END IF
          INFO = ABS( IINFO )
          RETURN
@@ -515,13 +511,13 @@
 *
 *     Do Test (1)
 *
-      CALL AB_SGET22( 'N', 'N', 'N', N, A, LDA, VR, LDVR, WR, WI, WORK,
+      CALL SGET22( 'N', 'N', 'N', N, A, LDA, VR, LDVR, WR, WI, WORK,
      $             RES )
       RESULT( 1 ) = RES( 1 )
 *
 *     Do Test (2)
 *
-      CALL AB_SGET22( 'T', 'N', 'T', N, A, LDA, VL, LDVL, WR, WI, WORK,
+      CALL SGET22( 'T', 'N', 'T', N, A, LDA, VL, LDVL, WR, WI, WORK,
      $             RES )
       RESULT( 2 ) = RES( 1 )
 *
@@ -530,10 +526,10 @@
       DO 30 J = 1, N
          TNRM = ONE
          IF( WI( J ).EQ.ZERO ) THEN
-            TNRM = AB_SNRM2( N, VR( 1, J ), 1 )
+            TNRM = SNRM2( N, VR( 1, J ), 1 )
          ELSE IF( WI( J ).GT.ZERO ) THEN
-            TNRM = AB_SLAPY2( AB_SNRM2( N, VR( 1, J ), 1 ),
-     $             AB_SNRM2( N, VR( 1, J+1 ), 1 ) )
+            TNRM = SLAPY2( SNRM2( N, VR( 1, J ), 1 ),
+     $             SNRM2( N, VR( 1, J+1 ), 1 ) )
          END IF
          RESULT( 3 ) = MAX( RESULT( 3 ),
      $                 MIN( ULPINV, ABS( TNRM-ONE ) / ULP ) )
@@ -541,7 +537,7 @@
             VMX = ZERO
             VRMX = ZERO
             DO 20 JJ = 1, N
-               VTST = AB_SLAPY2( VR( JJ, J ), VR( JJ, J+1 ) )
+               VTST = SLAPY2( VR( JJ, J ), VR( JJ, J+1 ) )
                IF( VTST.GT.VMX )
      $            VMX = VTST
                IF( VR( JJ, J+1 ).EQ.ZERO .AND. ABS( VR( JJ, J ) ).GT.
@@ -557,10 +553,10 @@
       DO 50 J = 1, N
          TNRM = ONE
          IF( WI( J ).EQ.ZERO ) THEN
-            TNRM = AB_SNRM2( N, VL( 1, J ), 1 )
+            TNRM = SNRM2( N, VL( 1, J ), 1 )
          ELSE IF( WI( J ).GT.ZERO ) THEN
-            TNRM = AB_SLAPY2( AB_SNRM2( N, VL( 1, J ), 1 ),
-     $             AB_SNRM2( N, VL( 1, J+1 ), 1 ) )
+            TNRM = SLAPY2( SNRM2( N, VL( 1, J ), 1 ),
+     $             SNRM2( N, VL( 1, J+1 ), 1 ) )
          END IF
          RESULT( 4 ) = MAX( RESULT( 4 ),
      $                 MIN( ULPINV, ABS( TNRM-ONE ) / ULP ) )
@@ -568,7 +564,7 @@
             VMX = ZERO
             VRMX = ZERO
             DO 40 JJ = 1, N
-               VTST = AB_SLAPY2( VL( JJ, J ), VL( JJ, J+1 ) )
+               VTST = SLAPY2( VL( JJ, J ), VL( JJ, J+1 ) )
                IF( VTST.GT.VMX )
      $            VMX = VTST
                IF( VL( JJ, J+1 ).EQ.ZERO .AND. ABS( VL( JJ, J ) ).GT.
@@ -587,19 +583,17 @@
 *
 *        Compute eigenvalues only, and test them
 *
-         CALL AB_SLACPY( 'F', N, N, A, LDA, H, LDA )
-         CALL AB_AB_SGEEVX( BALANC, 'N', 'N', SENSE, N, H, LDA, WR1, WI1
-     $, DUM,
+         CALL SLACPY( 'F', N, N, A, LDA, H, LDA )
+         CALL SGEEVX( BALANC, 'N', 'N', SENSE, N, H, LDA, WR1, WI1, DUM,
      $                1, DUM, 1, ILO1, IHI1, SCALE1, ABNRM1, RCNDE1,
      $                RCNDV1, WORK, LWORK, IWORK, IINFO )
          IF( IINFO.NE.0 ) THEN
             RESULT( 1 ) = ULPINV
             IF( JTYPE.NE.22 ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'AB_AB_SGEEVX2', IINFO, N, JTY
-     $PE,
+               WRITE( NOUNIT, FMT = 9998 )'SGEEVX2', IINFO, N, JTYPE,
      $            BALANC, ISEED
             ELSE
-               WRITE( NOUNIT, FMT = 9999 )'AB_AB_SGEEVX2', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'SGEEVX2', IINFO, N,
      $            ISEED( 1 )
             END IF
             INFO = ABS( IINFO )
@@ -639,19 +633,17 @@
 *
 *        Compute eigenvalues and right eigenvectors, and test them
 *
-         CALL AB_SLACPY( 'F', N, N, A, LDA, H, LDA )
-         CALL AB_AB_SGEEVX( BALANC, 'N', 'V', SENSE, N, H, LDA, WR1, WI1
-     $, DUM,
+         CALL SLACPY( 'F', N, N, A, LDA, H, LDA )
+         CALL SGEEVX( BALANC, 'N', 'V', SENSE, N, H, LDA, WR1, WI1, DUM,
      $                1, LRE, LDLRE, ILO1, IHI1, SCALE1, ABNRM1, RCNDE1,
      $                RCNDV1, WORK, LWORK, IWORK, IINFO )
          IF( IINFO.NE.0 ) THEN
             RESULT( 1 ) = ULPINV
             IF( JTYPE.NE.22 ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'AB_AB_SGEEVX3', IINFO, N, JTY
-     $PE,
+               WRITE( NOUNIT, FMT = 9998 )'SGEEVX3', IINFO, N, JTYPE,
      $            BALANC, ISEED
             ELSE
-               WRITE( NOUNIT, FMT = 9999 )'AB_AB_SGEEVX3', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'SGEEVX3', IINFO, N,
      $            ISEED( 1 )
             END IF
             INFO = ABS( IINFO )
@@ -700,19 +692,17 @@
 *
 *        Compute eigenvalues and left eigenvectors, and test them
 *
-         CALL AB_SLACPY( 'F', N, N, A, LDA, H, LDA )
-         CALL AB_AB_SGEEVX( BALANC, 'V', 'N', SENSE, N, H, LDA, WR1, WI1
-     $, LRE,
+         CALL SLACPY( 'F', N, N, A, LDA, H, LDA )
+         CALL SGEEVX( BALANC, 'V', 'N', SENSE, N, H, LDA, WR1, WI1, LRE,
      $                LDLRE, DUM, 1, ILO1, IHI1, SCALE1, ABNRM1, RCNDE1,
      $                RCNDV1, WORK, LWORK, IWORK, IINFO )
          IF( IINFO.NE.0 ) THEN
             RESULT( 1 ) = ULPINV
             IF( JTYPE.NE.22 ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'AB_AB_SGEEVX4', IINFO, N, JTY
-     $PE,
+               WRITE( NOUNIT, FMT = 9998 )'SGEEVX4', IINFO, N, JTYPE,
      $            BALANC, ISEED
             ELSE
-               WRITE( NOUNIT, FMT = 9999 )'AB_AB_SGEEVX4', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'SGEEVX4', IINFO, N,
      $            ISEED( 1 )
             END IF
             INFO = ABS( IINFO )
@@ -766,15 +756,13 @@
 *     If COMP, compare condition numbers to precomputed ones
 *
       IF( COMP ) THEN
-         CALL AB_SLACPY( 'F', N, N, A, LDA, H, LDA )
-         CALL AB_AB_SGEEVX( 'N', 'V', 'V', 'B', N, H, LDA, WR, WI, VL, L
-     $DVL,
+         CALL SLACPY( 'F', N, N, A, LDA, H, LDA )
+         CALL SGEEVX( 'N', 'V', 'V', 'B', N, H, LDA, WR, WI, VL, LDVL,
      $                VR, LDVR, ILO, IHI, SCALE, ABNRM, RCONDE, RCONDV,
      $                WORK, LWORK, IWORK, IINFO )
          IF( IINFO.NE.0 ) THEN
             RESULT( 1 ) = ULPINV
-            WRITE( NOUNIT, FMT = 9999 )'AB_AB_SGEEVX5', IINFO, N, ISEED(
-     $ 1 )
+            WRITE( NOUNIT, FMT = 9999 )'SGEEVX5', IINFO, N, ISEED( 1 )
             INFO = ABS( IINFO )
             GO TO 250
          END IF
@@ -830,8 +818,7 @@
                VMAX = ONE / EPS
             ELSE IF( RCDVIN( I )-TOLIN.GT.RCONDV( I )+TOL ) THEN
                VMAX = ( RCDVIN( I )-TOLIN ) / ( RCONDV( I )+TOL )
-            ELSE IF( RCDVIN( I )+TOLIN.LT.EPS*( RCONDV( I )-TOL ) ) T
-     $HEN
+            ELSE IF( RCDVIN( I )+TOLIN.LT.EPS*( RCONDV( I )-TOL ) ) THEN
                VMAX = ONE / EPS
             ELSE IF( RCDVIN( I )+TOLIN.LT.RCONDV( I )-TOL ) THEN
                VMAX = ( RCONDV( I )-TOL ) / ( RCDVIN( I )+TOLIN )
@@ -862,8 +849,7 @@
                VMAX = ONE / EPS
             ELSE IF( RCDEIN( I )-TOLIN.GT.RCONDE( I )+TOL ) THEN
                VMAX = ( RCDEIN( I )-TOLIN ) / ( RCONDE( I )+TOL )
-            ELSE IF( RCDEIN( I )+TOLIN.LT.EPS*( RCONDE( I )-TOL ) ) T
-     $HEN
+            ELSE IF( RCDEIN( I )+TOLIN.LT.EPS*( RCONDE( I )-TOL ) ) THEN
                VMAX = ONE / EPS
             ELSE IF( RCDEIN( I )+TOLIN.LT.RCONDE( I )-TOL ) THEN
                VMAX = ( RCONDE( I )-TOL ) / ( RCDEIN( I )+TOLIN )
@@ -876,14 +862,14 @@
 *
       END IF
 *
- 9999 FORMAT( ' AB_SGET23: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
+ 9999 FORMAT( ' SGET23: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', INPUT EXAMPLE NUMBER = ', I4 )
- 9998 FORMAT( ' AB_SGET23: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
+ 9998 FORMAT( ' SGET23: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', JTYPE=', I6, ', BALANC = ', A, ', ISEED=(',
      $      3( I5, ',' ), I5, ')' )
 *
       RETURN
 *
-*     End of AB_SGET23
+*     End of SGET23
 *
       END

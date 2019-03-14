@@ -1,4 +1,4 @@
-*> \brief \b AB_DCKGLM
+*> \brief \b DCKGLM
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DCKGLM( NN, MVAL, PVAL, NVAL, NMATS, ISEED, THRESH,
+*       SUBROUTINE DCKGLM( NN, MVAL, PVAL, NVAL, NMATS, ISEED, THRESH,
 *                          NMAX, A, AF, B, BF, X, WORK, RWORK, NIN, NOUT,
 *                          INFO )
 *
@@ -28,7 +28,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DCKGLM tests AB_DGGGLM - subroutine for solving generalized linear
+*> DCKGLM tests DGGGLM - subroutine for solving generalized linear
 *>                       model problem.
 *> \endverbatim
 *
@@ -146,7 +146,7 @@
 *> \verbatim
 *>          INFO is INTEGER
 *>          = 0 :  successful exit
-*>          > 0 :  If AB_DLATMS returns an error code, the absolute value
+*>          > 0 :  If DLATMS returns an error code, the absolute value
 *>                 of it is returned.
 *> \endverbatim
 *
@@ -163,7 +163,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_DCKGLM( NN, MVAL, PVAL, NVAL, NMATS, ISEED, THRESH,
+      SUBROUTINE DCKGLM( NN, MVAL, PVAL, NVAL, NMATS, ISEED, THRESH,
      $                   NMAX, A, AF, B, BF, X, WORK, RWORK, NIN, NOUT,
      $                   INFO )
 *
@@ -200,12 +200,11 @@
       LOGICAL            DOTYPE( NTYPES )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLARND
-      EXTERNAL           AB_DLARND
+      DOUBLE PRECISION   DLARND
+      EXTERNAL           DLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_AB_ALAHDG, AB_ALAREQ, AB_ALASUM, AB_DGLMTS, 
-     $AB_DLATB9, AB_DLATMS
+      EXTERNAL           ALAHDG, ALAREQ, ALASUM, DGLMTS, DLATB9, DLATMS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS
@@ -219,7 +218,7 @@
       NRUN = 0
       NFAIL = 0
       FIRSTT = .TRUE.
-      CALL AB_ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
+      CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
       LDA = NMAX
       LDB = NMAX
       LWORK = NMAX*NMAX
@@ -256,16 +255,14 @@
             IF( .NOT.DOTYPE( IMAT ) )
      $         GO TO 30
 *
-*           Set up parameters with AB_DLATB9 and generate test
-*           matrices A and B with AB_DLATMS.
+*           Set up parameters with DLATB9 and generate test
+*           matrices A and B with DLATMS.
 *
-            CALL AB_DLATB9( PATH, IMAT, M, P, N, TYPE, KLA, KUA, KLB, KU
-     $B,
+            CALL DLATB9( PATH, IMAT, M, P, N, TYPE, KLA, KUA, KLB, KUB,
      $                   ANORM, BNORM, MODEA, MODEB, CNDNMA, CNDNMB,
      $                   DISTA, DISTB )
 *
-            CALL AB_DLATMS( N, M, DISTA, ISEED, TYPE, RWORK, MODEA, CNDN
-     $MA,
+            CALL DLATMS( N, M, DISTA, ISEED, TYPE, RWORK, MODEA, CNDNMA,
      $                   ANORM, KLA, KUA, 'No packing', A, LDA, WORK,
      $                   IINFO )
             IF( IINFO.NE.0 ) THEN
@@ -274,8 +271,7 @@
                GO TO 30
             END IF
 *
-            CALL AB_DLATMS( N, P, DISTB, ISEED, TYPE, RWORK, MODEB, CNDN
-     $MB,
+            CALL DLATMS( N, P, DISTB, ISEED, TYPE, RWORK, MODEB, CNDNMB,
      $                   BNORM, KLB, KUB, 'No packing', B, LDB, WORK,
      $                   IINFO )
             IF( IINFO.NE.0 ) THEN
@@ -287,10 +283,10 @@
 *           Generate random left hand side vector of GLM
 *
             DO 20 I = 1, N
-               X( I ) = AB_DLARND( 2, ISEED )
+               X( I ) = DLARND( 2, ISEED )
    20       CONTINUE
 *
-            CALL AB_DGLMTS( N, M, P, A, AF, LDA, B, BF, LDB, X,
+            CALL DGLMTS( N, M, P, A, AF, LDA, B, BF, LDB, X,
      $                   X( NMAX+1 ), X( 2*NMAX+1 ), X( 3*NMAX+1 ),
      $                   WORK, LWORK, RWORK, RESID )
 *
@@ -300,7 +296,7 @@
             IF( RESID.GE.THRESH ) THEN
                IF( NFAIL.EQ.0 .AND. FIRSTT ) THEN
                   FIRSTT = .FALSE.
-                  CALL AB_AB_ALAHDG( NOUT, PATH )
+                  CALL ALAHDG( NOUT, PATH )
                END IF
                WRITE( NOUT, FMT = 9998 )N, M, P, IMAT, 1, RESID
                NFAIL = NFAIL + 1
@@ -312,9 +308,9 @@
 *
 *     Print a summary of the results.
 *
-      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, 0 )
+      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, 0 )
 *
- 9999 FORMAT( ' AB_DLATMS in AB_DCKGLM INFO = ', I5 )
+ 9999 FORMAT( ' DLATMS in DCKGLM INFO = ', I5 )
  9998 FORMAT( ' N=', I4, ' M=', I4, ', P=', I4, ', type ', I2,
      $      ', test ', I2, ', ratio=', G13.6 )
  9997 FORMAT( ' *** Invalid input  for GLM:  M = ', I6, ', P = ', I6,
@@ -322,6 +318,6 @@
      $      '(this set of values will be skipped)' )
       RETURN
 *
-*     End of AB_DCKGLM
+*     End of DCKGLM
 *
       END

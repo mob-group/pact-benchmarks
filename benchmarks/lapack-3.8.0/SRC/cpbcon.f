@@ -1,4 +1,4 @@
-*> \brief \b AB_CPBCON
+*> \brief \b CPBCON
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CPBCON + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CPBCON.f">
+*> Download CPBCON + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpbcon.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CPBCON.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cpbcon.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CPBCON.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpbcon.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CPBCON( UPLO, N, KD, AB, LDAB, ANORM, RCOND, WORK,
+*       SUBROUTINE CPBCON( UPLO, N, KD, AB, LDAB, ANORM, RCOND, WORK,
 *                          RWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,10 +37,10 @@
 *>
 *> \verbatim
 *>
-*> AB_CPBCON estimates the reciprocal of the condition number (in the
+*> CPBCON estimates the reciprocal of the condition number (in the
 *> 1-norm) of a complex Hermitian positive definite band matrix using
 *> the Cholesky factorization A = U**H*U or A = L*L**H computed by
-*> AB_CPBTRF.
+*> CPBTRF.
 *>
 *> An estimate is obtained for norm(inv(A)), and the reciprocal of the
 *> condition number is computed as RCOND = 1 / (ANORM * norm(inv(A))).
@@ -130,7 +130,7 @@
 *> \ingroup complexOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_CPBCON( UPLO, N, KD, AB, LDAB, ANORM, RCOND, WORK,
+      SUBROUTINE CPBCON( UPLO, N, KD, AB, LDAB, ANORM, RCOND, WORK,
      $                   RWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -165,13 +165,13 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ICAMAX
-      REAL               AB_SLAMCH
-      EXTERNAL           AB_LSAME, AB_ICAMAX, AB_SLAMCH
+      LOGICAL            LSAME
+      INTEGER            ICAMAX
+      REAL               SLAMCH
+      EXTERNAL           LSAME, ICAMAX, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CLACN2, AB_CLATBS, AB_CAB_SRSCL, AB_XERBLA
+      EXTERNAL           CLACN2, CLATBS, CSRSCL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, REAL
@@ -187,8 +187,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -200,7 +200,7 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CPBCON', -INFO )
+         CALL XERBLA( 'CPBCON', -INFO )
          RETURN
       END IF
 *
@@ -214,41 +214,39 @@
          RETURN
       END IF
 *
-      SMLNUM = AB_SLAMCH( 'Safe minimum' )
+      SMLNUM = SLAMCH( 'Safe minimum' )
 *
 *     Estimate the 1-norm of the inverse.
 *
       KASE = 0
       NORMIN = 'N'
    10 CONTINUE
-      CALL AB_CLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
+      CALL CLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
       IF( KASE.NE.0 ) THEN
          IF( UPPER ) THEN
 *
 *           Multiply by inv(U**H).
 *
-            CALL AB_CLATBS( 'Upper', 'Conjugate transpose', 'Non-unit',
+            CALL CLATBS( 'Upper', 'Conjugate transpose', 'Non-unit',
      $                   NORMIN, N, KD, AB, LDAB, WORK, SCALEL, RWORK,
      $                   INFO )
             NORMIN = 'Y'
 *
 *           Multiply by inv(U).
 *
-            CALL AB_CLATBS( 'Upper', 'No transpose', 'Non-unit', NORMIN,
-     $ N,
+            CALL CLATBS( 'Upper', 'No transpose', 'Non-unit', NORMIN, N,
      $                   KD, AB, LDAB, WORK, SCALEU, RWORK, INFO )
          ELSE
 *
 *           Multiply by inv(L).
 *
-            CALL AB_CLATBS( 'Lower', 'No transpose', 'Non-unit', NORMIN,
-     $ N,
+            CALL CLATBS( 'Lower', 'No transpose', 'Non-unit', NORMIN, N,
      $                   KD, AB, LDAB, WORK, SCALEL, RWORK, INFO )
             NORMIN = 'Y'
 *
 *           Multiply by inv(L**H).
 *
-            CALL AB_CLATBS( 'Lower', 'Conjugate transpose', 'Non-unit',
+            CALL CLATBS( 'Lower', 'Conjugate transpose', 'Non-unit',
      $                   NORMIN, N, KD, AB, LDAB, WORK, SCALEU, RWORK,
      $                   INFO )
          END IF
@@ -257,10 +255,10 @@
 *
          SCALE = SCALEL*SCALEU
          IF( SCALE.NE.ONE ) THEN
-            IX = AB_ICAMAX( N, WORK, 1 )
+            IX = ICAMAX( N, WORK, 1 )
             IF( SCALE.LT.CABS1( WORK( IX ) )*SMLNUM .OR. SCALE.EQ.ZERO )
      $         GO TO 20
-            CALL AB_CAB_SRSCL( N, SCALE, WORK, 1 )
+            CALL CSRSCL( N, SCALE, WORK, 1 )
          END IF
          GO TO 10
       END IF
@@ -274,6 +272,6 @@
 *
       RETURN
 *
-*     End of AB_CPBCON
+*     End of CPBCON
 *
       END

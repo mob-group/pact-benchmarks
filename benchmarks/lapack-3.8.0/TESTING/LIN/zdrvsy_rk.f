@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_ZDRVSY_RK
+*> \brief \b ZDRVSY_RK
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_ZDRVSY_RK( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
+*       SUBROUTINE ZDRVSY_RK( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
 *                             NMAX, A, AFAC, E, AINV, B, X, XACT, WORK,
 *                             RWORK, IWORK, NOUT )
 *
@@ -31,7 +31,7 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_ZDRVSY_RK tests the driver routines AB_AB_ZSYSV_RK.
+*> ZDRVSY_RK tests the driver routines ZSYSV_RK.
 *> \endverbatim
 *
 *  Arguments:
@@ -154,8 +154,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_ZDRVSY_RK( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR
-     $,
+      SUBROUTINE ZDRVSY_RK( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
      $                      NMAX, A, AFAC, E, AINV, B, X, XACT, WORK,
      $                      RWORK, IWORK, NOUT )
 *
@@ -203,16 +202,13 @@
 
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_ZLANSY
-      EXTERNAL           AB_ZLANSY
+      DOUBLE PRECISION   ZLANSY
+      EXTERNAL           ZLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALADHD, AB_ALAERH, AB_ALASVM, AB_XLAENV, AB_
-     $ZERRVX, AB_ZGET04,
-     $                   AB_ZLACPY, AB_ZLARHS, AB_ZLATB4, AB_ZLATMS, AB_
-     $ZLATSY,
-     $                   AB_AB_ZSYSV_RK, AB_AB_ZSYT01_3, AB_ZSYT02, AB_A
-     $B_ZSYTRF_RK, AB_AB_ZSYTRI_3
+      EXTERNAL           ALADHD, ALAERH, ALASVM, XLAENV, ZERRVX, ZGET04,
+     $                   ZLACPY, ZLARHS, ZLATB4, ZLATMS, ZLATSY,
+     $                   ZSYSV_RK, ZSYT01_3, ZSYT02, ZSYTRF_RK, ZSYTRI_3
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -255,16 +251,16 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL AB_ZERRVX( PATH, NOUT )
+     $   CALL ZERRVX( PATH, NOUT )
       INFOT = 0
 *
 *     Set the block size and minimum block size for which the block
-*     routine should be used, which will be later returned by AB_ILAENV.
+*     routine should be used, which will be later returned by ILAENV.
 *
       NB = 1
       NBMIN = 2
-      CALL AB_XLAENV( 1, NB )
-      CALL AB_XLAENV( 2, NBMIN )
+      CALL XLAENV( 1, NB )
+      CALL XLAENV( 2, NBMIN )
 *
 *     Do for each value of N in NVAL
 *
@@ -298,25 +294,23 @@
 *
 *              Begin generate the test matrix A.
 *
-*              Set up parameters with AB_ZLATB4 for the matrix generator
+*              Set up parameters with ZLATB4 for the matrix generator
 *              based on the type of matrix to be generated.
 *
-                  CALL AB_ZLATB4( MATPATH, IMAT, N, N, TYPE, KL, KU, ANO
-     $RM,
+                  CALL ZLATB4( MATPATH, IMAT, N, N, TYPE, KL, KU, ANORM,
      $                         MODE, CNDNUM, DIST )
 *
-*              Generate a matrix with AB_ZLATMS.
+*              Generate a matrix with ZLATMS.
 *
-                  SRNAMT = 'AB_ZLATMS'
-                  CALL AB_ZLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
+                  SRNAMT = 'ZLATMS'
+                  CALL ZLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
      $                         CNDNUM, ANORM, KL, KU, UPLO, A, LDA,
      $                         WORK, INFO )
 *
-*              Check error code from AB_DLATMS and handle error.
+*              Check error code from DLATMS and handle error.
 *
                   IF( INFO.NE.0 ) THEN
-                     CALL AB_ALAERH( PATH, 'AB_ZLATMS', INFO, 0, UPLO, N
-     $, N,
+                     CALL ALAERH( PATH, 'ZLATMS', INFO, 0, UPLO, N, N,
      $                            -1, -1, -1, IMAT, NFAIL, NERRS, NOUT )
                      GO TO 160
                   END IF
@@ -393,7 +387,7 @@
 *                 IMAT = NTYPES:  Use a special block diagonal matrix to
 *                 test alternate code for the 2-by-2 blocks.
 *
-                  CALL AB_ZLATSY( UPLO, N, A, LDA, ISEED )
+                  CALL ZLATSY( UPLO, N, A, LDA, ISEED )
                END IF
 *
                DO 150 IFACT = 1, NFACT
@@ -403,7 +397,7 @@
                   FACT = FACTS( IFACT )
 *
 *                 Compute the condition number for comparison with
-*                 the value returned by AB_AB_ZSYSVX_ROOK.
+*                 the value returned by ZSYSVX_ROOK.
 *
                   IF( ZEROT ) THEN
                      IF( IFACT.EQ.1 )
@@ -414,28 +408,26 @@
 *
 *                    Compute the 1-norm of A.
 *
-                     ANORM = AB_ZLANSY( '1', UPLO, N, A, LDA, RWORK )
+                     ANORM = ZLANSY( '1', UPLO, N, A, LDA, RWORK )
 *
 *                    Factor the matrix A.
 *
 
-                     CALL AB_ZLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
-                     CALL AB_AB_ZSYTRF_RK( UPLO, N, AFAC, LDA, E, IWORK,
-     $ AINV,
+                     CALL ZLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
+                     CALL ZSYTRF_RK( UPLO, N, AFAC, LDA, E, IWORK, AINV,
      $                               LWORK, INFO )
 *
 *                    Compute inv(A) and take its norm.
 *
-                     CALL AB_ZLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
+                     CALL ZLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
                      LWORK = (N+NB+1)*(NB+3)
 *
 *                    We need to copute the invesrse to compute
 *                    RCONDC that is used later in TEST3.
 *
-                     CALL AB_AB_ZSYTRI_3( UPLO, N, AINV, LDA, E, IWORK,
+                     CALL ZSYTRI_3( UPLO, N, AINV, LDA, E, IWORK,
      $                              WORK, LWORK, INFO )
-                     AINVNM = AB_ZLANSY( '1', UPLO, N, AINV, LDA, RWORK 
-     $)
+                     AINVNM = ZLANSY( '1', UPLO, N, AINV, LDA, RWORK )
 *
 *                    Compute the 1-norm condition number of A.
 *
@@ -448,25 +440,23 @@
 *
 *                 Form an exact solution and set the right hand side.
 *
-                  SRNAMT = 'AB_ZLARHS'
-                  CALL AB_ZLARHS( MATPATH, XTYPE, UPLO, ' ', N, N, KL, K
-     $U,
+                  SRNAMT = 'ZLARHS'
+                  CALL ZLARHS( MATPATH, XTYPE, UPLO, ' ', N, N, KL, KU,
      $                         NRHS, A, LDA, XACT, LDA, B, LDA, ISEED,
      $                         INFO )
                   XTYPE = 'C'
 *
-*                 --- Test AB_AB_ZSYSV_RK  ---
+*                 --- Test ZSYSV_RK  ---
 *
                   IF( IFACT.EQ.2 ) THEN
-                     CALL AB_ZLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
-                     CALL AB_ZLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
+                     CALL ZLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
+                     CALL ZLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
 *                    Factor the matrix and solve the system using
-*                    AB_AB_ZSYSV_RK.
+*                    ZSYSV_RK.
 *
-                     SRNAMT = 'AB_AB_ZSYSV_RK'
-                     CALL AB_AB_ZSYSV_RK( UPLO, N, NRHS, AFAC, LDA, E, I
-     $WORK,
+                     SRNAMT = 'ZSYSV_RK'
+                     CALL ZSYSV_RK( UPLO, N, NRHS, AFAC, LDA, E, IWORK,
      $                              X, LDA, WORK, LWORK, INFO )
 *
 *                    Adjust the expected value of INFO to account for
@@ -486,11 +476,10 @@
                         END IF
                      END IF
 *
-*                    Check error code from AB_AB_ZSYSV_RK and handle error.
+*                    Check error code from ZSYSV_RK and handle error.
 *
                      IF( INFO.NE.K ) THEN
-                        CALL AB_ALAERH( PATH, 'AB_AB_ZSYSV_RK', INFO, K,
-     $ UPLO,
+                        CALL ALAERH( PATH, 'ZSYSV_RK', INFO, K, UPLO,
      $                               N, N, -1, -1, NRHS, IMAT, NFAIL,
      $                               NERRS, NOUT )
                         GO TO 120
@@ -501,22 +490,20 @@
 *+    TEST 1      Reconstruct matrix from factors and compute
 *                 residual.
 *
-                     CALL AB_AB_ZSYT01_3( UPLO, N, A, LDA, AFAC, LDA, E,
+                     CALL ZSYT01_3( UPLO, N, A, LDA, AFAC, LDA, E,
      $                              IWORK, AINV, LDA, RWORK,
      $                              RESULT( 1 ) )
 *
 *+    TEST 2      Compute residual of the computed solution.
 *
-                     CALL AB_ZLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA 
-     $)
-                     CALL AB_ZSYT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK
-     $,
+                     CALL ZLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
+                     CALL ZSYT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK,
      $                            LDA, RWORK, RESULT( 2 ) )
 *
 *+    TEST 3
 *                 Check solution from generated exact solution.
 *
-                     CALL AB_ZGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                     CALL ZGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                            RESULT( 3 ) )
                      NT = 3
 *
@@ -526,9 +513,8 @@
                      DO 110 K = 1, NT
                         IF( RESULT( K ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                        CALL AB_ALADHD( NOUT, PATH )
-                           WRITE( NOUT, FMT = 9999 )'AB_AB_ZSYSV_RK', UP
-     $LO,
+     $                        CALL ALADHD( NOUT, PATH )
+                           WRITE( NOUT, FMT = 9999 )'ZSYSV_RK', UPLO,
      $                            N, IMAT, K, RESULT( K )
                            NFAIL = NFAIL + 1
                         END IF
@@ -545,12 +531,12 @@
 *
 *     Print a summary of the results.
 *
-      CALL AB_ALASVM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL ALASVM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( 1X, A, ', UPLO=''', A1, ''', N =', I5, ', type ', I2,
      $      ', test ', I2, ', ratio =', G12.5 )
       RETURN
 *
-*     End of AB_AB_ZDRVSY_RK
+*     End of ZDRVSY_RK
 *
       END

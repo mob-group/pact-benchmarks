@@ -1,4 +1,4 @@
-*> \brief \b AB_STRT01
+*> \brief \b STRT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_STRT01( UPLO, DIAG, N, A, LDA, AINV, LDAINV, RCOND,
+*       SUBROUTINE STRT01( UPLO, DIAG, N, A, LDA, AINV, LDAINV, RCOND,
 *                          WORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> AB_STRT01 computes the residual for a triangular matrix A times its
+*> STRT01 computes the residual for a triangular matrix A times its
 *> inverse:
 *>    RESID = norm( A*AINV - I ) / ( N * norm(A) * norm(AINV) * EPS ),
 *> where EPS is the machine epsilon.
@@ -121,7 +121,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_STRT01( UPLO, DIAG, N, A, LDA, AINV, LDAINV, RCOND,
+      SUBROUTINE STRT01( UPLO, DIAG, N, A, LDA, AINV, LDAINV, RCOND,
      $                   WORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -149,12 +149,12 @@
       REAL               AINVNM, ANORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_SLAMCH, AB_SLANTR
-      EXTERNAL           AB_LSAME, AB_SLAMCH, AB_SLANTR
+      LOGICAL            LSAME
+      REAL               SLAMCH, SLANTR
+      EXTERNAL           LSAME, SLAMCH, SLANTR
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_STRMV
+      EXTERNAL           STRMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          REAL
@@ -171,9 +171,9 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0 or AINVNM = 0.
 *
-      EPS = AB_SLAMCH( 'Epsilon' )
-      ANORM = AB_SLANTR( '1', UPLO, DIAG, N, N, A, LDA, WORK )
-      AINVNM = AB_SLANTR( '1', UPLO, DIAG, N, N, AINV, LDAINV, WORK )
+      EPS = SLAMCH( 'Epsilon' )
+      ANORM = SLANTR( '1', UPLO, DIAG, N, N, A, LDA, WORK )
+      AINVNM = SLANTR( '1', UPLO, DIAG, N, N, AINV, LDAINV, WORK )
       IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
          RCOND = ZERO
          RESID = ONE / EPS
@@ -183,7 +183,7 @@
 *
 *     Set the diagonal of AINV to 1 if AINV has unit diagonal.
 *
-      IF( AB_LSAME( DIAG, 'U' ) ) THEN
+      IF( LSAME( DIAG, 'U' ) ) THEN
          DO 10 J = 1, N
             AINV( J, J ) = ONE
    10    CONTINUE
@@ -191,15 +191,14 @@
 *
 *     Compute A * AINV, overwriting AINV.
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
          DO 20 J = 1, N
-            CALL AB_STRMV( 'Upper', 'No transpose', DIAG, J, A, LDA,
+            CALL STRMV( 'Upper', 'No transpose', DIAG, J, A, LDA,
      $                  AINV( 1, J ), 1 )
    20    CONTINUE
       ELSE
          DO 30 J = 1, N
-            CALL AB_STRMV( 'Lower', 'No transpose', DIAG, N-J+1, A( J, J
-     $ ),
+            CALL STRMV( 'Lower', 'No transpose', DIAG, N-J+1, A( J, J ),
      $                  LDA, AINV( J, J ), 1 )
    30    CONTINUE
       END IF
@@ -212,13 +211,12 @@
 *
 *     Compute norm(A*AINV - I) / (N * norm(A) * norm(AINV) * EPS)
 *
-      RESID = AB_SLANTR( '1', UPLO, 'Non-unit', N, N, AINV, LDAINV, WORK
-     $ )
+      RESID = SLANTR( '1', UPLO, 'Non-unit', N, N, AINV, LDAINV, WORK )
 *
       RESID = ( ( RESID*RCOND ) / REAL( N ) ) / EPS
 *
       RETURN
 *
-*     End of AB_STRT01
+*     End of STRT01
 *
       END

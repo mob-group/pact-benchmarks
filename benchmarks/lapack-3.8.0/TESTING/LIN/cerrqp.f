@@ -1,4 +1,4 @@
-*> \brief \b AB_CERRQP
+*> \brief \b CERRQP
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CERRQP( PATH, NUNIT )
+*       SUBROUTINE CERRQP( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CERRQP tests the error exits for AB_CGEQP3.
+*> CERRQP tests the error exits for CGEQP3.
 *> \endverbatim
 *
 *  Arguments:
@@ -52,7 +52,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_CERRQP( PATH, NUNIT )
+      SUBROUTINE CERRQP( PATH, NUNIT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -81,11 +81,11 @@
      $                   W( 2*NMAX+3*NMAX )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_AB_LSAMEN
-      EXTERNAL           AB_AB_LSAMEN
+      LOGICAL            LSAMEN
+      EXTERNAL           LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALAESM, AB_CGEQP3, AB_CHKXER
+      EXTERNAL           ALAESM, CGEQP3, CHKXER
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -113,31 +113,31 @@
 *
 *     Test error exits for QR factorization with pivoting
 *
-      IF( AB_AB_LSAMEN( 2, C2, 'QP' ) ) THEN
+      IF( LSAMEN( 2, C2, 'QP' ) ) THEN
 *
-*        AB_CGEQP3
+*        CGEQP3
 *
-         SRNAMT = 'AB_CGEQP3'
+         SRNAMT = 'CGEQP3'
          INFOT = 1
-         CALL AB_CGEQP3( -1, 0, A, 1, IP, TAU, W, LW, RW, INFO )
-         CALL AB_CHKXER( 'AB_CGEQP3', INFOT, NOUT, LERR, OK )
+         CALL CGEQP3( -1, 0, A, 1, IP, TAU, W, LW, RW, INFO )
+         CALL CHKXER( 'CGEQP3', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_CGEQP3( 1, -1, A, 1, IP, TAU, W, LW, RW, INFO )
-         CALL AB_CHKXER( 'AB_CGEQP3', INFOT, NOUT, LERR, OK )
+         CALL CGEQP3( 1, -1, A, 1, IP, TAU, W, LW, RW, INFO )
+         CALL CHKXER( 'CGEQP3', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_CGEQP3( 2, 3, A, 1, IP, TAU, W, LW, RW, INFO )
-         CALL AB_CHKXER( 'AB_CGEQP3', INFOT, NOUT, LERR, OK )
+         CALL CGEQP3( 2, 3, A, 1, IP, TAU, W, LW, RW, INFO )
+         CALL CHKXER( 'CGEQP3', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_CGEQP3( 2, 2, A, 2, IP, TAU, W, LW-10, RW, INFO )
-         CALL AB_CHKXER( 'AB_CGEQP3', INFOT, NOUT, LERR, OK )
+         CALL CGEQP3( 2, 2, A, 2, IP, TAU, W, LW-10, RW, INFO )
+         CALL CHKXER( 'CGEQP3', INFOT, NOUT, LERR, OK )
       END IF
 *
 *     Print a summary line.
 *
-      CALL AB_ALAESM( PATH, OK, NOUT )
+      CALL ALAESM( PATH, OK, NOUT )
 *
       RETURN
 *
-*     End of AB_CERRQP
+*     End of CERRQP
 *
       END

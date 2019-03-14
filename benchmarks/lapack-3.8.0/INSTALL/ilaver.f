@@ -1,4 +1,4 @@
-*> \brief \b AB_ILAVER returns the LAPACK version.
+*> \brief \b ILAVER returns the LAPACK version.
 **
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*     SUBROUTINE AB_ILAVER( VERS_MAJOR, VERS_MINOR, VERS_PATCH )
+*     SUBROUTINE ILAVER( VERS_MAJOR, VERS_MINOR, VERS_PATCH )
 *
 *     INTEGER VERS_MAJOR, VERS_MINOR, VERS_PATCH
 *
@@ -46,7 +46,7 @@
 *> \ingroup auxOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_ILAVER( VERS_MAJOR, VERS_MINOR, VERS_PATCH )
+      SUBROUTINE ILAVER( VERS_MAJOR, VERS_MINOR, VERS_PATCH )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

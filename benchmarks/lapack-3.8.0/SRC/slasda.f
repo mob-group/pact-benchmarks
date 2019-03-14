@@ -1,4 +1,4 @@
-*> \brief \b AB_SLASDA computes the singular value decomposition (SVD) of a real upper bidiagonal matrix with diagonal d and off-diagonal e. Used by AB_SBDSDC.
+*> \brief \b SLASDA computes the singular value decomposition (SVD) of a real upper bidiagonal matrix with diagonal d and off-diagonal e. Used by sbdsdc.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLASDA + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLASDA.f">
+*> Download SLASDA + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasda.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLASDA.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasda.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLASDA.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasda.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLASDA( ICOMPQ, SMLSIZ, N, SQRE, D, E, U, LDU, VT, K,
+*       SUBROUTINE SLASDA( ICOMPQ, SMLSIZ, N, SQRE, D, E, U, LDU, VT, K,
 *                          DIFL, DIFR, Z, POLES, GIVPTR, GIVCOL, LDGCOL,
 *                          PERM, GIVNUM, C, S, WORK, IWORK, INFO )
 *
@@ -40,14 +40,14 @@
 *>
 *> \verbatim
 *>
-*> Using a divide and conquer approach, AB_SLASDA computes the singular
+*> Using a divide and conquer approach, SLASDA computes the singular
 *> value decomposition (SVD) of a real upper bidiagonal N-by-M matrix
 *> B with diagonal D and offdiagonal E, where M = N + SQRE. The
 *> algorithm computes the singular values in the SVD B = U * S * VT.
 *> The orthogonal matrices U and VT are optionally computed in
 *> compact form.
 *>
-*> A related subroutine, AB_SLASD0, computes the singular values and
+*> A related subroutine, SLASD0, computes the singular values and
 *> the singular vectors in explicit form.
 *> \endverbatim
 *
@@ -148,7 +148,7 @@
 *>         record distances between singular values on the I-th
 *>         level and singular values on the (I -1)-th level, and
 *>         DIFR(1:N, 2 * I ) contains the normalizing factors for
-*>         the right singular vector matrix. See AB_SLASD8 for details.
+*>         the right singular vector matrix. See SLASD8 for details.
 *> \endverbatim
 *>
 *> \param[out] Z
@@ -269,8 +269,7 @@
 *>     California at Berkeley, USA
 *>
 *  =====================================================================
-      SUBROUTINE AB_SLASDA( ICOMPQ, SMLSIZ, N, SQRE, D, E, U, LDU, VT, K
-     $,
+      SUBROUTINE SLASDA( ICOMPQ, SMLSIZ, N, SQRE, D, E, U, LDU, VT, K,
      $                   DIFL, DIFR, Z, POLES, GIVPTR, GIVCOL, LDGCOL,
      $                   PERM, GIVNUM, C, S, WORK, IWORK, INFO )
 *
@@ -305,8 +304,7 @@
       REAL               ALPHA, BETA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SCOPY, AB_SLASD6, AB_SLASDQ, AB_SLASDT, AB_S
-     $LASET, AB_XERBLA
+      EXTERNAL           SCOPY, SLASD6, SLASDQ, SLASDT, SLASET, XERBLA
 *     ..
 *     .. Executable Statements ..
 *
@@ -328,22 +326,20 @@
          INFO = -17
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SLASDA', -INFO )
+         CALL XERBLA( 'SLASDA', -INFO )
          RETURN
       END IF
 *
       M = N + SQRE
 *
-*     If the input matrix is too small, call AB_SLASDQ to find the SVD.
+*     If the input matrix is too small, call SLASDQ to find the SVD.
 *
       IF( N.LE.SMLSIZ ) THEN
          IF( ICOMPQ.EQ.0 ) THEN
-            CALL AB_SLASDQ( 'U', SQRE, N, 0, 0, 0, D, E, VT, LDU, U, LDU
-     $,
+            CALL SLASDQ( 'U', SQRE, N, 0, 0, 0, D, E, VT, LDU, U, LDU,
      $                   U, LDU, WORK, INFO )
          ELSE
-            CALL AB_SLASDQ( 'U', SQRE, N, M, N, 0, D, E, VT, LDU, U, LDU
-     $,
+            CALL SLASDQ( 'U', SQRE, N, M, N, 0, D, E, VT, LDU, U, LDU,
      $                   U, LDU, WORK, INFO )
          END IF
          RETURN
@@ -366,11 +362,11 @@
       NWORK1 = VL + M
       NWORK2 = NWORK1 + SMLSZP*SMLSZP
 *
-      CALL AB_SLASDT( N, NLVL, ND, IWORK( INODE ), IWORK( NDIML ),
+      CALL SLASDT( N, NLVL, ND, IWORK( INODE ), IWORK( NDIML ),
      $             IWORK( NDIMR ), SMLSIZ )
 *
 *     for the nodes on bottom level of the tree, solve
-*     their subproblems by AB_SLASDQ.
+*     their subproblems by SLASDQ.
 *
       NDB1 = ( ND+1 ) / 2
       DO 30 I = NDB1, ND
@@ -393,24 +389,23 @@
          VLI = VL + NLF - 1
          SQREI = 1
          IF( ICOMPQ.EQ.0 ) THEN
-            CALL AB_SLASET( 'A', NLP1, NLP1, ZERO, ONE, WORK( NWORK1 ),
+            CALL SLASET( 'A', NLP1, NLP1, ZERO, ONE, WORK( NWORK1 ),
      $                   SMLSZP )
-            CALL AB_SLASDQ( 'U', SQREI, NL, NLP1, NRU, NCC, D( NLF ),
+            CALL SLASDQ( 'U', SQREI, NL, NLP1, NRU, NCC, D( NLF ),
      $                   E( NLF ), WORK( NWORK1 ), SMLSZP,
      $                   WORK( NWORK2 ), NL, WORK( NWORK2 ), NL,
      $                   WORK( NWORK2 ), INFO )
             ITEMP = NWORK1 + NL*SMLSZP
-            CALL AB_SCOPY( NLP1, WORK( NWORK1 ), 1, WORK( VFI ), 1 )
-            CALL AB_SCOPY( NLP1, WORK( ITEMP ), 1, WORK( VLI ), 1 )
+            CALL SCOPY( NLP1, WORK( NWORK1 ), 1, WORK( VFI ), 1 )
+            CALL SCOPY( NLP1, WORK( ITEMP ), 1, WORK( VLI ), 1 )
          ELSE
-            CALL AB_SLASET( 'A', NL, NL, ZERO, ONE, U( NLF, 1 ), LDU )
-            CALL AB_SLASET( 'A', NLP1, NLP1, ZERO, ONE, VT( NLF, 1 ), LD
-     $U )
-            CALL AB_SLASDQ( 'U', SQREI, NL, NLP1, NL, NCC, D( NLF ),
+            CALL SLASET( 'A', NL, NL, ZERO, ONE, U( NLF, 1 ), LDU )
+            CALL SLASET( 'A', NLP1, NLP1, ZERO, ONE, VT( NLF, 1 ), LDU )
+            CALL SLASDQ( 'U', SQREI, NL, NLP1, NL, NCC, D( NLF ),
      $                   E( NLF ), VT( NLF, 1 ), LDU, U( NLF, 1 ), LDU,
      $                   U( NLF, 1 ), LDU, WORK( NWORK1 ), INFO )
-            CALL AB_SCOPY( NLP1, VT( NLF, 1 ), 1, WORK( VFI ), 1 )
-            CALL AB_SCOPY( NLP1, VT( NLF, NLP1 ), 1, WORK( VLI ), 1 )
+            CALL SCOPY( NLP1, VT( NLF, 1 ), 1, WORK( VFI ), 1 )
+            CALL SCOPY( NLP1, VT( NLF, NLP1 ), 1, WORK( VLI ), 1 )
          END IF
          IF( INFO.NE.0 ) THEN
             RETURN
@@ -428,24 +423,23 @@
          VLI = VLI + NLP1
          NRP1 = NR + SQREI
          IF( ICOMPQ.EQ.0 ) THEN
-            CALL AB_SLASET( 'A', NRP1, NRP1, ZERO, ONE, WORK( NWORK1 ),
+            CALL SLASET( 'A', NRP1, NRP1, ZERO, ONE, WORK( NWORK1 ),
      $                   SMLSZP )
-            CALL AB_SLASDQ( 'U', SQREI, NR, NRP1, NRU, NCC, D( NRF ),
+            CALL SLASDQ( 'U', SQREI, NR, NRP1, NRU, NCC, D( NRF ),
      $                   E( NRF ), WORK( NWORK1 ), SMLSZP,
      $                   WORK( NWORK2 ), NR, WORK( NWORK2 ), NR,
      $                   WORK( NWORK2 ), INFO )
             ITEMP = NWORK1 + ( NRP1-1 )*SMLSZP
-            CALL AB_SCOPY( NRP1, WORK( NWORK1 ), 1, WORK( VFI ), 1 )
-            CALL AB_SCOPY( NRP1, WORK( ITEMP ), 1, WORK( VLI ), 1 )
+            CALL SCOPY( NRP1, WORK( NWORK1 ), 1, WORK( VFI ), 1 )
+            CALL SCOPY( NRP1, WORK( ITEMP ), 1, WORK( VLI ), 1 )
          ELSE
-            CALL AB_SLASET( 'A', NR, NR, ZERO, ONE, U( NRF, 1 ), LDU )
-            CALL AB_SLASET( 'A', NRP1, NRP1, ZERO, ONE, VT( NRF, 1 ), LD
-     $U )
-            CALL AB_SLASDQ( 'U', SQREI, NR, NRP1, NR, NCC, D( NRF ),
+            CALL SLASET( 'A', NR, NR, ZERO, ONE, U( NRF, 1 ), LDU )
+            CALL SLASET( 'A', NRP1, NRP1, ZERO, ONE, VT( NRF, 1 ), LDU )
+            CALL SLASDQ( 'U', SQREI, NR, NRP1, NR, NCC, D( NRF ),
      $                   E( NRF ), VT( NRF, 1 ), LDU, U( NRF, 1 ), LDU,
      $                   U( NRF, 1 ), LDU, WORK( NWORK1 ), INFO )
-            CALL AB_SCOPY( NRP1, VT( NRF, 1 ), 1, WORK( VFI ), 1 )
-            CALL AB_SCOPY( NRP1, VT( NRF, NRP1 ), 1, WORK( VLI ), 1 )
+            CALL SCOPY( NRP1, VT( NRF, 1 ), 1, WORK( VFI ), 1 )
+            CALL SCOPY( NRP1, VT( NRF, NRP1 ), 1, WORK( VLI ), 1 )
          END IF
          IF( INFO.NE.0 ) THEN
             RETURN
@@ -489,7 +483,7 @@
             ALPHA = D( IC )
             BETA = E( IC )
             IF( ICOMPQ.EQ.0 ) THEN
-               CALL AB_SLASD6( ICOMPQ, NL, NR, SQREI, D( NLF ),
+               CALL SLASD6( ICOMPQ, NL, NR, SQREI, D( NLF ),
      $                      WORK( VFI ), WORK( VLI ), ALPHA, BETA,
      $                      IWORK( IDXQI ), PERM, GIVPTR( 1 ), GIVCOL,
      $                      LDGCOL, GIVNUM, LDU, POLES, DIFL, DIFR, Z,
@@ -497,7 +491,7 @@
      $                      IWORK( IWK ), INFO )
             ELSE
                J = J - 1
-               CALL AB_SLASD6( ICOMPQ, NL, NR, SQREI, D( NLF ),
+               CALL SLASD6( ICOMPQ, NL, NR, SQREI, D( NLF ),
      $                      WORK( VFI ), WORK( VLI ), ALPHA, BETA,
      $                      IWORK( IDXQI ), PERM( NLF, LVL ),
      $                      GIVPTR( J ), GIVCOL( NLF, LVL2 ), LDGCOL,
@@ -515,6 +509,6 @@
 *
       RETURN
 *
-*     End of AB_SLASDA
+*     End of SLASDA
 *
       END

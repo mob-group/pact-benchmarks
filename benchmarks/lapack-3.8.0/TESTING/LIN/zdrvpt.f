@@ -1,4 +1,4 @@
-*> \brief \b AB_ZDRVPT
+*> \brief \b ZDRVPT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZDRVPT( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, A, D,
+*       SUBROUTINE ZDRVPT( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, A, D,
 *                          E, B, X, XACT, WORK, RWORK, NOUT )
 *
 *       .. Scalar Arguments ..
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZDRVPT tests AB_ZPTSV and -SVX.
+*> ZDRVPT tests ZPTSV and -SVX.
 *> \endverbatim
 *
 *  Arguments:
@@ -137,8 +137,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZDRVPT( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, A, D
-     $,
+      SUBROUTINE ZDRVPT( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, A, D,
      $                   E, B, X, XACT, WORK, RWORK, NOUT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -183,19 +182,15 @@
       DOUBLE PRECISION   RESULT( NTESTS ), Z( 3 )
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_IDAMAX
-      DOUBLE PRECISION   AB_DGET06, AB_DZASUM, AB_ZLANHT
-      EXTERNAL           AB_IDAMAX, AB_DGET06, AB_DZASUM, AB_ZLANHT
+      INTEGER            IDAMAX
+      DOUBLE PRECISION   DGET06, DZASUM, ZLANHT
+      EXTERNAL           IDAMAX, DGET06, DZASUM, ZLANHT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALADHD, AB_ALAERH, AB_ALASVM, AB_DCOPY, AB_D
-     $LARNV, AB_DSCAL,
-     $                   AB_ZCOPY, ZAB_DSCAL, AB_ZERRVX, AB_ZGET04, AB_Z
-     $LACPY, AB_ZLAPTM,
-     $                   AB_ZLARNV, AB_ZLASET, AB_ZLATB4, AB_ZLATMS, AB_
-     $ZPTSV, AB_AB_ZPTSVX,
-     $                   AB_ZPTT01, AB_ZPTT02, AB_ZPTT05, AB_ZPTTRF, AB_
-     $ZPTTRS
+      EXTERNAL           ALADHD, ALAERH, ALASVM, DCOPY, DLARNV, DSCAL,
+     $                   ZCOPY, ZDSCAL, ZERRVX, ZGET04, ZLACPY, ZLAPTM,
+     $                   ZLARNV, ZLASET, ZLATB4, ZLATMS, ZPTSV, ZPTSVX,
+     $                   ZPTT01, ZPTT02, ZPTT05, ZPTTRF, ZPTTRS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DCMPLX, MAX
@@ -226,7 +221,7 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL AB_ZERRVX( PATH, NOUT )
+     $   CALL ZERRVX( PATH, NOUT )
       INFOT = 0
 *
       DO 120 IN = 1, NN
@@ -246,9 +241,9 @@
             IF( N.GT.0 .AND. .NOT.DOTYPE( IMAT ) )
      $         GO TO 110
 *
-*           Set up parameters with AB_ZLATB4.
+*           Set up parameters with ZLATB4.
 *
-            CALL AB_ZLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
+            CALL ZLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
      $                   COND, DIST )
 *
             ZEROT = IMAT.GE.8 .AND. IMAT.LE.10
@@ -257,16 +252,14 @@
 *              Type 1-6:  generate a symmetric tridiagonal matrix of
 *              known condition number in lower triangular band storage.
 *
-               SRNAMT = 'AB_ZLATMS'
-               CALL AB_ZLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE, CON
-     $D,
+               SRNAMT = 'ZLATMS'
+               CALL ZLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE, COND,
      $                      ANORM, KL, KU, 'B', A, 2, WORK, INFO )
 *
-*              Check the error code from AB_ZLATMS.
+*              Check the error code from ZLATMS.
 *
                IF( INFO.NE.0 ) THEN
-                  CALL AB_ALAERH( PATH, 'AB_ZLATMS', INFO, 0, ' ', N, N,
-     $ KL,
+                  CALL ALAERH( PATH, 'ZLATMS', INFO, 0, ' ', N, N, KL,
      $                         KU, -1, IMAT, NFAIL, NERRS, NOUT )
                   GO TO 110
                END IF
@@ -291,8 +284,8 @@
 *
 *                 Let D and E have values from [-1,1].
 *
-                  CALL AB_DLARNV( 2, ISEED, N, D )
-                  CALL AB_ZLARNV( 2, ISEED, N-1, E )
+                  CALL DLARNV( 2, ISEED, N, D )
+                  CALL ZLARNV( 2, ISEED, N-1, E )
 *
 *                 Make the tridiagonal matrix diagonally dominant.
 *
@@ -309,11 +302,11 @@
 *
 *                 Scale D and E so the maximum element is ANORM.
 *
-                  IX = AB_IDAMAX( N, D, 1 )
+                  IX = IDAMAX( N, D, 1 )
                   DMAX = D( IX )
-                  CALL AB_DSCAL( N, ANORM / DMAX, D, 1 )
+                  CALL DSCAL( N, ANORM / DMAX, D, 1 )
                   IF( N.GT.1 )
-     $               CALL ZAB_DSCAL( N-1, ANORM / DMAX, E, 1 )
+     $               CALL ZDSCAL( N-1, ANORM / DMAX, E, 1 )
 *
                ELSE IF( IZERO.GT.0 ) THEN
 *
@@ -371,14 +364,13 @@
 *
             IX = 1
             DO 40 J = 1, NRHS
-               CALL AB_ZLARNV( 2, ISEED, N, XACT( IX ) )
+               CALL ZLARNV( 2, ISEED, N, XACT( IX ) )
                IX = IX + LDA
    40       CONTINUE
 *
 *           Set the right hand side.
 *
-            CALL AB_ZLAPTM( 'Lower', N, NRHS, ONE, D, E, XACT, LDA, ZERO
-     $,
+            CALL ZLAPTM( 'Lower', N, NRHS, ONE, D, E, XACT, LDA, ZERO,
      $                   B, LDA )
 *
             DO 100 IFACT = 1, 2
@@ -389,7 +381,7 @@
                END IF
 *
 *              Compute the condition number for comparison with
-*              the value returned by AB_AB_ZPTSVX.
+*              the value returned by ZPTSVX.
 *
                IF( ZEROT ) THEN
                   IF( IFACT.EQ.1 )
@@ -400,17 +392,17 @@
 *
 *                 Compute the 1-norm of A.
 *
-                  ANORM = AB_ZLANHT( '1', N, D, E )
+                  ANORM = ZLANHT( '1', N, D, E )
 *
-                  CALL AB_DCOPY( N, D, 1, D( N+1 ), 1 )
+                  CALL DCOPY( N, D, 1, D( N+1 ), 1 )
                   IF( N.GT.1 )
-     $               CALL AB_ZCOPY( N-1, E, 1, E( N+1 ), 1 )
+     $               CALL ZCOPY( N-1, E, 1, E( N+1 ), 1 )
 *
 *                 Factor the matrix A.
 *
-                  CALL AB_ZPTTRF( N, D( N+1 ), E( N+1 ), INFO )
+                  CALL ZPTTRF( N, D( N+1 ), E( N+1 ), INFO )
 *
-*                 Use AB_ZPTTRS to solve for one column at a time of
+*                 Use ZPTTRS to solve for one column at a time of
 *                 inv(A), computing the maximum column sum as we go.
 *
                   AINVNM = ZERO
@@ -419,10 +411,9 @@
                         X( J ) = ZERO
    50                CONTINUE
                      X( I ) = ONE
-                     CALL AB_ZPTTRS( 'Lower', N, 1, D( N+1 ), E( N+1 ), 
-     $X,
+                     CALL ZPTTRS( 'Lower', N, 1, D( N+1 ), E( N+1 ), X,
      $                            LDA, INFO )
-                     AINVNM = MAX( AINVNM, AB_DZASUM( N, X, 1 ) )
+                     AINVNM = MAX( AINVNM, DZASUM( N, X, 1 ) )
    60             CONTINUE
 *
 *                 Compute the 1-norm condition number of A.
@@ -436,24 +427,23 @@
 *
                IF( IFACT.EQ.2 ) THEN
 *
-*                 --- Test AB_ZPTSV --
+*                 --- Test ZPTSV --
 *
-                  CALL AB_DCOPY( N, D, 1, D( N+1 ), 1 )
+                  CALL DCOPY( N, D, 1, D( N+1 ), 1 )
                   IF( N.GT.1 )
-     $               CALL AB_ZCOPY( N-1, E, 1, E( N+1 ), 1 )
-                  CALL AB_ZLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
+     $               CALL ZCOPY( N-1, E, 1, E( N+1 ), 1 )
+                  CALL ZLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
 *                 Factor A as L*D*L' and solve the system A*X = B.
 *
-                  SRNAMT = 'AB_ZPTSV '
-                  CALL AB_ZPTSV( N, NRHS, D( N+1 ), E( N+1 ), X, LDA,
+                  SRNAMT = 'ZPTSV '
+                  CALL ZPTSV( N, NRHS, D( N+1 ), E( N+1 ), X, LDA,
      $                        INFO )
 *
-*                 Check error code from AB_ZPTSV .
+*                 Check error code from ZPTSV .
 *
                   IF( INFO.NE.IZERO )
-     $               CALL AB_ALAERH( PATH, 'AB_ZPTSV ', INFO, IZERO, ' '
-     $, N,
+     $               CALL ALAERH( PATH, 'ZPTSV ', INFO, IZERO, ' ', N,
      $                            N, 1, 1, NRHS, IMAT, NFAIL, NERRS,
      $                            NOUT )
                   NT = 0
@@ -462,20 +452,18 @@
 *                    Check the factorization by computing the ratio
 *                       norm(L*D*L' - A) / (n * norm(A) * EPS )
 *
-                     CALL AB_ZPTT01( N, D, E, D( N+1 ), E( N+1 ), WORK,
+                     CALL ZPTT01( N, D, E, D( N+1 ), E( N+1 ), WORK,
      $                            RESULT( 1 ) )
 *
 *                    Compute the residual in the solution.
 *
-                     CALL AB_ZLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA 
-     $)
-                     CALL AB_ZPTT02( 'Lower', N, NRHS, D, E, X, LDA, WOR
-     $K,
+                     CALL ZLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
+                     CALL ZPTT02( 'Lower', N, NRHS, D, E, X, LDA, WORK,
      $                            LDA, RESULT( 2 ) )
 *
 *                    Check solution from generated exact solution.
 *
-                     CALL AB_ZGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                     CALL ZGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                            RESULT( 3 ) )
                      NT = 3
                   END IF
@@ -486,9 +474,8 @@
                   DO 70 K = 1, NT
                      IF( RESULT( K ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL AB_ALADHD( NOUT, PATH )
-                        WRITE( NOUT, FMT = 9999 )'AB_ZPTSV ', N, IMAT, K
-     $,
+     $                     CALL ALADHD( NOUT, PATH )
+                        WRITE( NOUT, FMT = 9999 )'ZPTSV ', N, IMAT, K,
      $                     RESULT( K )
                         NFAIL = NFAIL + 1
                      END IF
@@ -496,7 +483,7 @@
                   NRUN = NRUN + NT
                END IF
 *
-*              --- Test AB_AB_ZPTSVX ---
+*              --- Test ZPTSVX ---
 *
                IF( IFACT.GT.1 ) THEN
 *
@@ -510,23 +497,21 @@
      $               D( N+N ) = ZERO
                END IF
 *
-               CALL AB_ZLASET( 'Full', N, NRHS, DCMPLX( ZERO ),
+               CALL ZLASET( 'Full', N, NRHS, DCMPLX( ZERO ),
      $                      DCMPLX( ZERO ), X, LDA )
 *
 *              Solve the system and compute the condition number and
-*              error bounds using AB_AB_ZPTSVX.
+*              error bounds using ZPTSVX.
 *
-               SRNAMT = 'AB_AB_ZPTSVX'
-               CALL AB_AB_ZPTSVX( FACT, N, NRHS, D, E, D( N+1 ), E( N+1 
-     $), B,
+               SRNAMT = 'ZPTSVX'
+               CALL ZPTSVX( FACT, N, NRHS, D, E, D( N+1 ), E( N+1 ), B,
      $                      LDA, X, LDA, RCOND, RWORK, RWORK( NRHS+1 ),
      $                      WORK, RWORK( 2*NRHS+1 ), INFO )
 *
-*              Check the error code from AB_AB_ZPTSVX.
+*              Check the error code from ZPTSVX.
 *
                IF( INFO.NE.IZERO )
-     $            CALL AB_ALAERH( PATH, 'AB_AB_ZPTSVX', INFO, IZERO, FAC
-     $T, N, N,
+     $            CALL ALAERH( PATH, 'ZPTSVX', INFO, IZERO, FACT, N, N,
      $                         1, 1, NRHS, IMAT, NFAIL, NERRS, NOUT )
                IF( IZERO.EQ.0 ) THEN
                   IF( IFACT.EQ.2 ) THEN
@@ -535,7 +520,7 @@
 *                       norm(L*D*L' - A) / (n * norm(A) * EPS )
 *
                      K1 = 1
-                     CALL AB_ZPTT01( N, D, E, D( N+1 ), E( N+1 ), WORK,
+                     CALL ZPTT01( N, D, E, D( N+1 ), E( N+1 ), WORK,
      $                            RESULT( 1 ) )
                   ELSE
                      K1 = 2
@@ -543,19 +528,18 @@
 *
 *                 Compute the residual in the solution.
 *
-                  CALL AB_ZLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
-                  CALL AB_ZPTT02( 'Lower', N, NRHS, D, E, X, LDA, WORK,
+                  CALL ZLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
+                  CALL ZPTT02( 'Lower', N, NRHS, D, E, X, LDA, WORK,
      $                         LDA, RESULT( 2 ) )
 *
 *                 Check solution from generated exact solution.
 *
-                  CALL AB_ZGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                  CALL ZGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                         RESULT( 3 ) )
 *
 *                 Check error bounds from iterative refinement.
 *
-                  CALL AB_ZPTT05( N, NRHS, D, E, B, LDA, X, LDA, XACT, L
-     $DA,
+                  CALL ZPTT05( N, NRHS, D, E, B, LDA, X, LDA, XACT, LDA,
      $                         RWORK, RWORK( NRHS+1 ), RESULT( 4 ) )
                ELSE
                   K1 = 6
@@ -563,7 +547,7 @@
 *
 *              Check the reciprocal of the condition number.
 *
-               RESULT( 6 ) = AB_DGET06( RCOND, RCONDC )
+               RESULT( 6 ) = DGET06( RCOND, RCONDC )
 *
 *              Print information about the tests that did not pass
 *              the threshold.
@@ -571,9 +555,8 @@
                DO 90 K = K1, 6
                   IF( RESULT( K ).GE.THRESH ) THEN
                      IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                  CALL AB_ALADHD( NOUT, PATH )
-                     WRITE( NOUT, FMT = 9998 )'AB_AB_ZPTSVX', FACT, N, I
-     $MAT,
+     $                  CALL ALADHD( NOUT, PATH )
+                     WRITE( NOUT, FMT = 9998 )'ZPTSVX', FACT, N, IMAT,
      $                  K, RESULT( K )
                      NFAIL = NFAIL + 1
                   END IF
@@ -585,7 +568,7 @@
 *
 *     Print a summary of the results.
 *
-      CALL AB_ALASVM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL ALASVM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( 1X, A, ', N =', I5, ', type ', I2, ', test ', I2,
      $      ', ratio = ', G12.5 )
@@ -593,6 +576,6 @@
      $      ', test ', I2, ', ratio = ', G12.5 )
       RETURN
 *
-*     End of AB_ZDRVPT
+*     End of ZDRVPT
 *
       END

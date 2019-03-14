@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_DLARTGP generates a plane rotation so that the diagonal is nonnegative.
+*> \brief \b DLARTGP generates a plane rotation so that the diagonal is nonnegative.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_DLARTGP + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_DLARTGP.f">
+*> Download DLARTGP + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlartgp.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_DLARTGP.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlartgp.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_DLARTGP.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlartgp.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_DLARTGP( F, G, CS, SN, R )
+*       SUBROUTINE DLARTGP( F, G, CS, SN, R )
 *
 *       .. Scalar Arguments ..
 *       DOUBLE PRECISION   CS, F, G, R, SN
@@ -30,12 +30,12 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_DLARTGP generates a plane rotation so that
+*> DLARTGP generates a plane rotation so that
 *>
 *>    [  CS  SN  ]  .  [ F ]  =  [ R ]   where CS**2 + SN**2 = 1.
 *>    [ -SN  CS  ]     [ G ]     [ 0 ]
 *>
-*> This is a slower, more accurate version of the Level 1 BLAS routine AB_AB_DROTG,
+*> This is a slower, more accurate version of the Level 1 BLAS routine DROTG,
 *> with the following other differences:
 *>    F and G are unchanged on return.
 *>    If G=0, then CS=(+/-)1 and SN=0.
@@ -56,7 +56,7 @@
 *> \param[in] G
 *> \verbatim
 *>          G is DOUBLE PRECISION
-*>          The AB_SECOND component of vector to be rotated.
+*>          The second component of vector to be rotated.
 *> \endverbatim
 *>
 *> \param[out] CS
@@ -93,7 +93,7 @@
 *> \ingroup OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_DLARTGP( F, G, CS, SN, R )
+      SUBROUTINE DLARTGP( F, G, CS, SN, R )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -120,8 +120,8 @@
       DOUBLE PRECISION   EPS, F1, G1, SAFMIN, SAFMN2, SAFMX2, SCALE
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH
-      EXTERNAL           AB_DLAMCH
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, INT, LOG, MAX, SIGN, SQRT
@@ -135,10 +135,10 @@
 *     .. Executable Statements ..
 *
 *     IF( FIRST ) THEN
-         SAFMIN = AB_DLAMCH( 'S' )
-         EPS = AB_DLAMCH( 'E' )
-         SAFMN2 = AB_DLAMCH( 'B' )**INT( LOG( SAFMIN / EPS ) /
-     $            LOG( AB_DLAMCH( 'B' ) ) / TWO )
+         SAFMIN = DLAMCH( 'S' )
+         EPS = DLAMCH( 'E' )
+         SAFMN2 = DLAMCH( 'B' )**INT( LOG( SAFMIN / EPS ) /
+     $            LOG( DLAMCH( 'B' ) ) / TWO )
          SAFMX2 = ONE / SAFMN2
 *        FIRST = .FALSE.
 *     END IF
@@ -197,6 +197,6 @@
       END IF
       RETURN
 *
-*     End of AB_AB_DLARTGP
+*     End of DLARTGP
 *
       END

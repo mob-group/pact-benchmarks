@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_DGEQRT3 recursively computes a QR factorization of a general real or complex matrix using the compact WY representation of Q.
+*> \brief \b DGEQRT3 recursively computes a QR factorization of a general real or complex matrix using the compact WY representation of Q.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_DGEQRT3 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_DGEQRT3.f">
+*> Download DGEQRT3 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgeqrt3.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_DGEQRT3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgeqrt3.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_DGEQRT3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgeqrt3.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       RECURSIVE SUBROUTINE AB_AB_DGEQRT3( M, N, A, LDA, T, LDT, INFO )
+*       RECURSIVE SUBROUTINE DGEQRT3( M, N, A, LDA, T, LDT, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER   INFO, LDA, M, N, LDT
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_DGEQRT3 recursively computes a QR factorization of a real M-by-N
+*> DGEQRT3 recursively computes a QR factorization of a real M-by-N
 *> matrix A, using the compact WY representation of Q.
 *>
 *> Based on the algorithm of Elmroth and Gustavson,
@@ -130,7 +130,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      RECURSIVE SUBROUTINE AB_AB_DGEQRT3( M, N, A, LDA, T, LDT, INFO )
+      RECURSIVE SUBROUTINE DGEQRT3( M, N, A, LDA, T, LDT, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -154,7 +154,7 @@
       INTEGER   I, I1, J, J1, N1, N2, IINFO
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL  AB_AB_DLARFG, AB_DTRMM, AB_DGEMM, AB_XERBLA
+      EXTERNAL  DLARFG, DTRMM, DGEMM, XERBLA
 *     ..
 *     .. Executable Statements ..
 *
@@ -169,15 +169,15 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_DGEQRT3', -INFO )
+         CALL XERBLA( 'DGEQRT3', -INFO )
          RETURN
       END IF
 *
       IF( N.EQ.1 ) THEN
 *
-*        Compute HousehoAB_LDEr transform when N=1
+*        Compute Householder transform when N=1
 *
-         CALL AB_AB_DLARFG( M, A(1,1), A( MIN( 2, M ), 1 ), 1, T(1,1) )
+         CALL DLARFG( M, A(1,1), A( MIN( 2, M ), 1 ), 1, T(1,1) )
 *
       ELSE
 *
@@ -190,7 +190,7 @@
 *
 *        Compute A(1:M,1:N1) <- (Y1,R1,T1), where Q1 = I - Y1 T1 Y1^H
 *
-         CALL AB_AB_DGEQRT3( M, N1, A, LDA, T, LDT, IINFO )
+         CALL DGEQRT3( M, N1, A, LDA, T, LDT, IINFO )
 *
 *        Compute A(1:M,J1:N) = Q1^H A(1:M,J1:N) [workspace: T(1:N1,J1:N)]
 *
@@ -199,19 +199,19 @@
                T( I, J+N1 ) = A( I, J+N1 )
             END DO
          END DO
-         CALL AB_DTRMM( 'L', 'L', 'T', 'U', N1, N2, ONE,
+         CALL DTRMM( 'L', 'L', 'T', 'U', N1, N2, ONE,
      &               A, LDA, T( 1, J1 ), LDT )
 *
-         CALL AB_DGEMM( 'T', 'N', N1, N2, M-N1, ONE, A( J1, 1 ), LDA,
+         CALL DGEMM( 'T', 'N', N1, N2, M-N1, ONE, A( J1, 1 ), LDA,
      &               A( J1, J1 ), LDA, ONE, T( 1, J1 ), LDT)
 *
-         CALL AB_DTRMM( 'L', 'U', 'T', 'N', N1, N2, ONE,
+         CALL DTRMM( 'L', 'U', 'T', 'N', N1, N2, ONE,
      &               T, LDT, T( 1, J1 ), LDT )
 *
-         CALL AB_DGEMM( 'N', 'N', M-N1, N2, N1, -ONE, A( J1, 1 ), LDA,
+         CALL DGEMM( 'N', 'N', M-N1, N2, N1, -ONE, A( J1, 1 ), LDA,
      &               T( 1, J1 ), LDT, ONE, A( J1, J1 ), LDA )
 *
-         CALL AB_DTRMM( 'L', 'L', 'N', 'U', N1, N2, ONE,
+         CALL DTRMM( 'L', 'L', 'N', 'U', N1, N2, ONE,
      &               A, LDA, T( 1, J1 ), LDT )
 *
          DO J=1,N2
@@ -222,7 +222,7 @@
 *
 *        Compute A(J1:M,J1:N) <- (Y2,R2,T2) where Q2 = I - Y2 T2 Y2^H
 *
-         CALL AB_AB_DGEQRT3( M-N1, N2, A( J1, J1 ), LDA,
+         CALL DGEQRT3( M-N1, N2, A( J1, J1 ), LDA,
      &                T( J1, J1 ), LDT, IINFO )
 *
 *        Compute T3 = T(1:N1,J1:N) = -T1 Y1^H Y2 T2
@@ -233,16 +233,16 @@
             END DO
          END DO
 *
-         CALL AB_DTRMM( 'R', 'L', 'N', 'U', N1, N2, ONE,
+         CALL DTRMM( 'R', 'L', 'N', 'U', N1, N2, ONE,
      &               A( J1, J1 ), LDA, T( 1, J1 ), LDT )
 *
-         CALL AB_DGEMM( 'T', 'N', N1, N2, M-N, ONE, A( I1, 1 ), LDA,
+         CALL DGEMM( 'T', 'N', N1, N2, M-N, ONE, A( I1, 1 ), LDA,
      &               A( I1, J1 ), LDA, ONE, T( 1, J1 ), LDT )
 *
-         CALL AB_DTRMM( 'L', 'U', 'N', 'N', N1, N2, -ONE, T, LDT,
+         CALL DTRMM( 'L', 'U', 'N', 'N', N1, N2, -ONE, T, LDT,
      &               T( 1, J1 ), LDT )
 *
-         CALL AB_DTRMM( 'R', 'U', 'N', 'N', N1, N2, ONE,
+         CALL DTRMM( 'R', 'U', 'N', 'N', N1, N2, ONE,
      &               T( J1, J1 ), LDT, T( 1, J1 ), LDT )
 *
 *        Y = (Y1,Y2); R = [ R1  A(1:N1,J1:N) ];  T = [T1 T3]
@@ -252,6 +252,6 @@
 *
       RETURN
 *
-*     End of AB_AB_DGEQRT3
+*     End of DGEQRT3
 *
       END

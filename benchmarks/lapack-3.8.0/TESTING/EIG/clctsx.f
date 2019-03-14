@@ -1,4 +1,4 @@
-*> \brief \b AB_CLCTSX
+*> \brief \b CLCTSX
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       LOGICAL          FUNCTION AB_CLCTSX( ALPHA, BETA )
+*       LOGICAL          FUNCTION CLCTSX( ALPHA, BETA )
 *
 *       .. Scalar Arguments ..
 *       COMPLEX            ALPHA, BETA
@@ -21,7 +21,7 @@
 *> \verbatim
 *>
 *> This function is used to determine what eigenvalues will be
-*> selected.  If this is part of the test driver AB_CDRGSX, do not
+*> selected.  If this is part of the test driver CDRGSX, do not
 *> change the code UNLESS you are testing input examples and not
 *> using the built-in examples.
 *> \endverbatim
@@ -55,7 +55,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      LOGICAL          FUNCTION AB_CLCTSX( ALPHA, BETA )
+      LOGICAL          FUNCTION CLCTSX( ALPHA, BETA )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -89,9 +89,9 @@
       IF( FS ) THEN
          I = I + 1
          IF( I.LE.M ) THEN
-            AB_CLCTSX = .FALSE.
+            CLCTSX = .FALSE.
          ELSE
-            AB_CLCTSX = .TRUE.
+            CLCTSX = .TRUE.
          END IF
          IF( I.EQ.MPLUSN ) THEN
             FS = .FALSE.
@@ -100,9 +100,9 @@
       ELSE
          I = I + 1
          IF( I.LE.N ) THEN
-            AB_CLCTSX = .TRUE.
+            CLCTSX = .TRUE.
          ELSE
-            AB_CLCTSX = .FALSE.
+            CLCTSX = .FALSE.
          END IF
          IF( I.EQ.MPLUSN ) THEN
             FS = .TRUE.
@@ -111,13 +111,13 @@
       END IF
 *
 *      IF( BETA.EQ.CZERO ) THEN
-*         AB_CLCTSX = ( REAL( ALPHA ).GT.ZERO )
+*         CLCTSX = ( REAL( ALPHA ).GT.ZERO )
 *      ELSE
-*         AB_CLCTSX = ( REAL( ALPHA/BETA ).GT.ZERO )
+*         CLCTSX = ( REAL( ALPHA/BETA ).GT.ZERO )
 *      END IF
 *
       RETURN
 *
-*     End of AB_CLCTSX
+*     End of CLCTSX
 *
       END

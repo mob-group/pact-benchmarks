@@ -1,4 +1,4 @@
-*> \brief \b AB_SLAGSY
+*> \brief \b SLAGSY
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLAGSY( N, K, D, A, LDA, ISEED, WORK, INFO )
+*       SUBROUTINE SLAGSY( N, K, D, A, LDA, ISEED, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, K, LDA, N
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SLAGSY generates a real symmetric matrix A, by pre- and post-
+*> SLAGSY generates a real symmetric matrix A, by pre- and post-
 *> multiplying a real diagonal matrix D with a random orthogonal matrix:
 *> A = U*D*U'. The semi-bandwidth may then be reduced to k by additional
 *> orthogonal transformations.
@@ -99,7 +99,7 @@
 *> \ingroup real_matgen
 *
 *  =====================================================================
-      SUBROUTINE AB_SLAGSY( N, K, D, A, LDA, ISEED, WORK, INFO )
+      SUBROUTINE SLAGSY( N, K, D, A, LDA, ISEED, WORK, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -125,13 +125,12 @@
       REAL               ALPHA, TAU, WA, WB, WN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SAXPY, AB_SGEMV, AB_SGER, AB_SLARNV, AB_SSCA
-     $L, AB_SSYMV,
-     $                   AB_AB_SSYR2, AB_XERBLA
+      EXTERNAL           SAXPY, SGEMV, SGER, SLARNV, SSCAL, SSYMV,
+     $                   SSYR2, XERBLA
 *     ..
 *     .. External Functions ..
-      REAL               AB_SDOT, AB_SNRM2
-      EXTERNAL           AB_SDOT, AB_SNRM2
+      REAL               SDOT, SNRM2
+      EXTERNAL           SDOT, SNRM2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SIGN
@@ -149,7 +148,7 @@
          INFO = -5
       END IF
       IF( INFO.LT.0 ) THEN
-         CALL AB_XERBLA( 'AB_SLAGSY', -INFO )
+         CALL XERBLA( 'SLAGSY', -INFO )
          RETURN
       END IF
 *
@@ -170,14 +169,14 @@
 *
 *        generate random reflection
 *
-         CALL AB_SLARNV( 3, ISEED, N-I+1, WORK )
-         WN = AB_SNRM2( N-I+1, WORK, 1 )
+         CALL SLARNV( 3, ISEED, N-I+1, WORK )
+         WN = SNRM2( N-I+1, WORK, 1 )
          WA = SIGN( WN, WORK( 1 ) )
          IF( WN.EQ.ZERO ) THEN
             TAU = ZERO
          ELSE
             WB = WORK( 1 ) + WA
-            CALL AB_SSCAL( N-I, ONE / WB, WORK( 2 ), 1 )
+            CALL SSCAL( N-I, ONE / WB, WORK( 2 ), 1 )
             WORK( 1 ) = ONE
             TAU = WB / WA
          END IF
@@ -187,19 +186,17 @@
 *
 *        compute  y := tau * A * u
 *
-         CALL AB_SSYMV( 'Lower', N-I+1, TAU, A( I, I ), LDA, WORK, 1, ZE
-     $RO,
+         CALL SSYMV( 'Lower', N-I+1, TAU, A( I, I ), LDA, WORK, 1, ZERO,
      $               WORK( N+1 ), 1 )
 *
 *        compute  v := y - 1/2 * tau * ( y, u ) * u
 *
-         ALPHA = -HALF*TAU*AB_SDOT( N-I+1, WORK( N+1 ), 1, WORK, 1 )
-         CALL AB_SAXPY( N-I+1, ALPHA, WORK, 1, WORK( N+1 ), 1 )
+         ALPHA = -HALF*TAU*SDOT( N-I+1, WORK( N+1 ), 1, WORK, 1 )
+         CALL SAXPY( N-I+1, ALPHA, WORK, 1, WORK( N+1 ), 1 )
 *
 *        apply the transformation as a rank-2 update to A(i:n,i:n)
 *
-         CALL AB_AB_SSYR2( 'Lower', N-I+1, -ONE, WORK, 1, WORK( N+1 ), 1
-     $,
+         CALL SSYR2( 'Lower', N-I+1, -ONE, WORK, 1, WORK( N+1 ), 1,
      $               A( I, I ), LDA )
    40 CONTINUE
 *
@@ -209,41 +206,39 @@
 *
 *        generate reflection to annihilate A(k+i+1:n,i)
 *
-         WN = AB_SNRM2( N-K-I+1, A( K+I, I ), 1 )
+         WN = SNRM2( N-K-I+1, A( K+I, I ), 1 )
          WA = SIGN( WN, A( K+I, I ) )
          IF( WN.EQ.ZERO ) THEN
             TAU = ZERO
          ELSE
             WB = A( K+I, I ) + WA
-            CALL AB_SSCAL( N-K-I, ONE / WB, A( K+I+1, I ), 1 )
+            CALL SSCAL( N-K-I, ONE / WB, A( K+I+1, I ), 1 )
             A( K+I, I ) = ONE
             TAU = WB / WA
          END IF
 *
 *        apply reflection to A(k+i:n,i+1:k+i-1) from the left
 *
-         CALL AB_SGEMV( 'Transpose', N-K-I+1, K-1, ONE, A( K+I, I+1 ), L
-     $DA,
+         CALL SGEMV( 'Transpose', N-K-I+1, K-1, ONE, A( K+I, I+1 ), LDA,
      $               A( K+I, I ), 1, ZERO, WORK, 1 )
-         CALL AB_SGER( N-K-I+1, K-1, -TAU, A( K+I, I ), 1, WORK, 1,
+         CALL SGER( N-K-I+1, K-1, -TAU, A( K+I, I ), 1, WORK, 1,
      $              A( K+I, I+1 ), LDA )
 *
 *        apply reflection to A(k+i:n,k+i:n) from the left and the right
 *
 *        compute  y := tau * A * u
 *
-         CALL AB_SSYMV( 'Lower', N-K-I+1, TAU, A( K+I, K+I ), LDA,
+         CALL SSYMV( 'Lower', N-K-I+1, TAU, A( K+I, K+I ), LDA,
      $               A( K+I, I ), 1, ZERO, WORK, 1 )
 *
 *        compute  v := y - 1/2 * tau * ( y, u ) * u
 *
-         ALPHA = -HALF*TAU*AB_SDOT( N-K-I+1, WORK, 1, A( K+I, I ), 1 )
-         CALL AB_SAXPY( N-K-I+1, ALPHA, A( K+I, I ), 1, WORK, 1 )
+         ALPHA = -HALF*TAU*SDOT( N-K-I+1, WORK, 1, A( K+I, I ), 1 )
+         CALL SAXPY( N-K-I+1, ALPHA, A( K+I, I ), 1, WORK, 1 )
 *
 *        apply symmetric rank-2 update to A(k+i:n,k+i:n)
 *
-         CALL AB_AB_SSYR2( 'Lower', N-K-I+1, -ONE, A( K+I, I ), 1, WORK,
-     $ 1,
+         CALL SSYR2( 'Lower', N-K-I+1, -ONE, A( K+I, I ), 1, WORK, 1,
      $               A( K+I, K+I ), LDA )
 *
          A( K+I, I ) = -WA
@@ -261,6 +256,6 @@
    80 CONTINUE
       RETURN
 *
-*     End of AB_SLAGSY
+*     End of SLAGSY
 *
       END

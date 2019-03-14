@@ -1,4 +1,4 @@
-*> \brief \b AB_ZERRRFP
+*> \brief \b ZERRRFP
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZERRRFP( NUNIT )
+*       SUBROUTINE ZERRRFP( NUNIT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            NUNIT
@@ -20,12 +20,12 @@
 *>
 *> \verbatim
 *>
-*> AB_ZERRRFP tests the error exits for the COMPLEX*16 driver routines
+*> ZERRRFP tests the error exits for the COMPLEX*16 driver routines
 *> for solving linear systems of equations.
 *>
-*> AB_ZDRVRFP tests the COMPLEX*16 LAPACK RFP routines:
-*>     AB_ZTFSM, AB_ZTFTRI, AB_ZHFRK, AB_ZTFTTP, AB_ZTFTTR, AB_ZPFTRF, AB_ZPFTRS, AB_ZTPTTF,
-*>     AB_ZTPTTR, AB_ZTRTTF, and AB_ZTRTTP
+*> ZDRVRFP tests the COMPLEX*16 LAPACK RFP routines:
+*>     ZTFSM, ZTFTRI, ZHFRK, ZTFTTP, ZTFTTR, ZPFTRF, ZPFTRS, ZTPTTF,
+*>     ZTPTTR, ZTRTTF, and ZTRTTP
 *> \endverbatim
 *
 *  Arguments:
@@ -50,7 +50,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZERRRFP( NUNIT )
+      SUBROUTINE ZERRRFP( NUNIT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -73,11 +73,9 @@
       COMPLEX*16         A( 1, 1), B( 1, 1)
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CHKXER, AB_ZTFSM, AB_ZTFTRI, AB_ZHFRK, AB_ZT
-     $FTTP, AB_ZTFTTR,
-     +                   AB_ZPFTRI, AB_ZPFTRF, AB_ZPFTRS, AB_ZTPTTF, AB_
-     $ZTPTTR, AB_ZTRTTF,
-     +                   AB_ZTRTTP
+      EXTERNAL           CHKXER, ZTFSM, ZTFTRI, ZHFRK, ZTFTTP, ZTFTTR,
+     +                   ZPFTRI, ZPFTRF, ZPFTRS, ZTPTTF, ZTPTTR, ZTRTTF,
+     +                   ZTRTTP
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -101,176 +99,176 @@
       CALPHA    = DCMPLX( 1.0D0 , 1.0D0  )
       BETA      = 1.0D0
 *
-      SRNAMT = 'AB_ZPFTRF'
+      SRNAMT = 'ZPFTRF'
       INFOT = 1
-      CALL AB_ZPFTRF( '/', 'U', 0, A, INFO )
-      CALL AB_CHKXER( 'AB_ZPFTRF', INFOT, NOUT, LERR, OK )
+      CALL ZPFTRF( '/', 'U', 0, A, INFO )
+      CALL CHKXER( 'ZPFTRF', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_ZPFTRF( 'N', '/', 0, A, INFO )
-      CALL AB_CHKXER( 'AB_ZPFTRF', INFOT, NOUT, LERR, OK )
+      CALL ZPFTRF( 'N', '/', 0, A, INFO )
+      CALL CHKXER( 'ZPFTRF', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL AB_ZPFTRF( 'N', 'U', -1, A, INFO )
-      CALL AB_CHKXER( 'AB_ZPFTRF', INFOT, NOUT, LERR, OK )
+      CALL ZPFTRF( 'N', 'U', -1, A, INFO )
+      CALL CHKXER( 'ZPFTRF', INFOT, NOUT, LERR, OK )
 *
-      SRNAMT = 'AB_ZPFTRS'
+      SRNAMT = 'ZPFTRS'
       INFOT = 1
-      CALL AB_ZPFTRS( '/', 'U', 0, 0, A, B, 1, INFO )
-      CALL AB_CHKXER( 'AB_ZPFTRS', INFOT, NOUT, LERR, OK )
+      CALL ZPFTRS( '/', 'U', 0, 0, A, B, 1, INFO )
+      CALL CHKXER( 'ZPFTRS', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_ZPFTRS( 'N', '/', 0, 0, A, B, 1, INFO )
-      CALL AB_CHKXER( 'AB_ZPFTRS', INFOT, NOUT, LERR, OK )
+      CALL ZPFTRS( 'N', '/', 0, 0, A, B, 1, INFO )
+      CALL CHKXER( 'ZPFTRS', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL AB_ZPFTRS( 'N', 'U', -1, 0, A, B, 1, INFO )
-      CALL AB_CHKXER( 'AB_ZPFTRS', INFOT, NOUT, LERR, OK )
+      CALL ZPFTRS( 'N', 'U', -1, 0, A, B, 1, INFO )
+      CALL CHKXER( 'ZPFTRS', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL AB_ZPFTRS( 'N', 'U', 0, -1, A, B, 1, INFO )
-      CALL AB_CHKXER( 'AB_ZPFTRS', INFOT, NOUT, LERR, OK )
+      CALL ZPFTRS( 'N', 'U', 0, -1, A, B, 1, INFO )
+      CALL CHKXER( 'ZPFTRS', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL AB_ZPFTRS( 'N', 'U', 0, 0, A, B, 0, INFO )
-      CALL AB_CHKXER( 'AB_ZPFTRS', INFOT, NOUT, LERR, OK )
+      CALL ZPFTRS( 'N', 'U', 0, 0, A, B, 0, INFO )
+      CALL CHKXER( 'ZPFTRS', INFOT, NOUT, LERR, OK )
 *
-      SRNAMT = 'AB_ZPFTRI'
+      SRNAMT = 'ZPFTRI'
       INFOT = 1
-      CALL AB_ZPFTRI( '/', 'U', 0, A, INFO )
-      CALL AB_CHKXER( 'AB_ZPFTRI', INFOT, NOUT, LERR, OK )
+      CALL ZPFTRI( '/', 'U', 0, A, INFO )
+      CALL CHKXER( 'ZPFTRI', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_ZPFTRI( 'N', '/', 0, A, INFO )
-      CALL AB_CHKXER( 'AB_ZPFTRI', INFOT, NOUT, LERR, OK )
+      CALL ZPFTRI( 'N', '/', 0, A, INFO )
+      CALL CHKXER( 'ZPFTRI', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL AB_ZPFTRI( 'N', 'U', -1, A, INFO )
-      CALL AB_CHKXER( 'AB_ZPFTRI', INFOT, NOUT, LERR, OK )
+      CALL ZPFTRI( 'N', 'U', -1, A, INFO )
+      CALL CHKXER( 'ZPFTRI', INFOT, NOUT, LERR, OK )
 *
-      SRNAMT = 'AB_ZTFSM '
+      SRNAMT = 'ZTFSM '
       INFOT = 1
-      CALL AB_ZTFSM( '/', 'L', 'U', 'C', 'U', 0, 0, CALPHA, A, B, 1 )
-      CALL AB_CHKXER( 'AB_ZTFSM ', INFOT, NOUT, LERR, OK )
+      CALL ZTFSM( '/', 'L', 'U', 'C', 'U', 0, 0, CALPHA, A, B, 1 )
+      CALL CHKXER( 'ZTFSM ', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_ZTFSM( 'N', '/', 'U', 'C', 'U', 0, 0, CALPHA, A, B, 1 )
-      CALL AB_CHKXER( 'AB_ZTFSM ', INFOT, NOUT, LERR, OK )
+      CALL ZTFSM( 'N', '/', 'U', 'C', 'U', 0, 0, CALPHA, A, B, 1 )
+      CALL CHKXER( 'ZTFSM ', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL AB_ZTFSM( 'N', 'L', '/', 'C', 'U', 0, 0, CALPHA, A, B, 1 )
-      CALL AB_CHKXER( 'AB_ZTFSM ', INFOT, NOUT, LERR, OK )
+      CALL ZTFSM( 'N', 'L', '/', 'C', 'U', 0, 0, CALPHA, A, B, 1 )
+      CALL CHKXER( 'ZTFSM ', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL AB_ZTFSM( 'N', 'L', 'U', '/', 'U', 0, 0, CALPHA, A, B, 1 )
-      CALL AB_CHKXER( 'AB_ZTFSM ', INFOT, NOUT, LERR, OK )
+      CALL ZTFSM( 'N', 'L', 'U', '/', 'U', 0, 0, CALPHA, A, B, 1 )
+      CALL CHKXER( 'ZTFSM ', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL AB_ZTFSM( 'N', 'L', 'U', 'C', '/', 0, 0, CALPHA, A, B, 1 )
-      CALL AB_CHKXER( 'AB_ZTFSM ', INFOT, NOUT, LERR, OK )
+      CALL ZTFSM( 'N', 'L', 'U', 'C', '/', 0, 0, CALPHA, A, B, 1 )
+      CALL CHKXER( 'ZTFSM ', INFOT, NOUT, LERR, OK )
       INFOT = 6
-      CALL AB_ZTFSM( 'N', 'L', 'U', 'C', 'U', -1, 0, CALPHA, A, B, 1 )
-      CALL AB_CHKXER( 'AB_ZTFSM ', INFOT, NOUT, LERR, OK )
+      CALL ZTFSM( 'N', 'L', 'U', 'C', 'U', -1, 0, CALPHA, A, B, 1 )
+      CALL CHKXER( 'ZTFSM ', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL AB_ZTFSM( 'N', 'L', 'U', 'C', 'U', 0, -1, CALPHA, A, B, 1 )
-      CALL AB_CHKXER( 'AB_ZTFSM ', INFOT, NOUT, LERR, OK )
+      CALL ZTFSM( 'N', 'L', 'U', 'C', 'U', 0, -1, CALPHA, A, B, 1 )
+      CALL CHKXER( 'ZTFSM ', INFOT, NOUT, LERR, OK )
       INFOT = 11
-      CALL AB_ZTFSM( 'N', 'L', 'U', 'C', 'U', 0, 0, CALPHA, A, B, 0 )
-      CALL AB_CHKXER( 'AB_ZTFSM ', INFOT, NOUT, LERR, OK )
+      CALL ZTFSM( 'N', 'L', 'U', 'C', 'U', 0, 0, CALPHA, A, B, 0 )
+      CALL CHKXER( 'ZTFSM ', INFOT, NOUT, LERR, OK )
 *
-      SRNAMT = 'AB_ZTFTRI'
+      SRNAMT = 'ZTFTRI'
       INFOT = 1
-      CALL AB_ZTFTRI( '/', 'L', 'N', 0, A, INFO )
-      CALL AB_CHKXER( 'AB_ZTFTRI', INFOT, NOUT, LERR, OK )
+      CALL ZTFTRI( '/', 'L', 'N', 0, A, INFO )
+      CALL CHKXER( 'ZTFTRI', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_ZTFTRI( 'N', '/', 'N', 0, A, INFO )
-      CALL AB_CHKXER( 'AB_ZTFTRI', INFOT, NOUT, LERR, OK )
+      CALL ZTFTRI( 'N', '/', 'N', 0, A, INFO )
+      CALL CHKXER( 'ZTFTRI', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL AB_ZTFTRI( 'N', 'L', '/', 0, A, INFO )
-      CALL AB_CHKXER( 'AB_ZTFTRI', INFOT, NOUT, LERR, OK )
+      CALL ZTFTRI( 'N', 'L', '/', 0, A, INFO )
+      CALL CHKXER( 'ZTFTRI', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL AB_ZTFTRI( 'N', 'L', 'N', -1, A, INFO )
-      CALL AB_CHKXER( 'AB_ZTFTRI', INFOT, NOUT, LERR, OK )
+      CALL ZTFTRI( 'N', 'L', 'N', -1, A, INFO )
+      CALL CHKXER( 'ZTFTRI', INFOT, NOUT, LERR, OK )
 *
-      SRNAMT = 'AB_ZTFTTR'
+      SRNAMT = 'ZTFTTR'
       INFOT = 1
-      CALL AB_ZTFTTR( '/', 'U', 0, A, B, 1, INFO )
-      CALL AB_CHKXER( 'AB_ZTFTTR', INFOT, NOUT, LERR, OK )
+      CALL ZTFTTR( '/', 'U', 0, A, B, 1, INFO )
+      CALL CHKXER( 'ZTFTTR', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_ZTFTTR( 'N', '/', 0, A, B, 1, INFO )
-      CALL AB_CHKXER( 'AB_ZTFTTR', INFOT, NOUT, LERR, OK )
+      CALL ZTFTTR( 'N', '/', 0, A, B, 1, INFO )
+      CALL CHKXER( 'ZTFTTR', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL AB_ZTFTTR( 'N', 'U', -1, A, B, 1, INFO )
-      CALL AB_CHKXER( 'AB_ZTFTTR', INFOT, NOUT, LERR, OK )
+      CALL ZTFTTR( 'N', 'U', -1, A, B, 1, INFO )
+      CALL CHKXER( 'ZTFTTR', INFOT, NOUT, LERR, OK )
       INFOT = 6
-      CALL AB_ZTFTTR( 'N', 'U', 0, A, B, 0, INFO )
-      CALL AB_CHKXER( 'AB_ZTFTTR', INFOT, NOUT, LERR, OK )
+      CALL ZTFTTR( 'N', 'U', 0, A, B, 0, INFO )
+      CALL CHKXER( 'ZTFTTR', INFOT, NOUT, LERR, OK )
 *
-      SRNAMT = 'AB_ZTRTTF'
+      SRNAMT = 'ZTRTTF'
       INFOT = 1
-      CALL AB_ZTRTTF( '/', 'U', 0, A, 1, B, INFO )
-      CALL AB_CHKXER( 'AB_ZTRTTF', INFOT, NOUT, LERR, OK )
+      CALL ZTRTTF( '/', 'U', 0, A, 1, B, INFO )
+      CALL CHKXER( 'ZTRTTF', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_ZTRTTF( 'N', '/', 0, A, 1, B, INFO )
-      CALL AB_CHKXER( 'AB_ZTRTTF', INFOT, NOUT, LERR, OK )
+      CALL ZTRTTF( 'N', '/', 0, A, 1, B, INFO )
+      CALL CHKXER( 'ZTRTTF', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL AB_ZTRTTF( 'N', 'U', -1, A, 1, B, INFO )
-      CALL AB_CHKXER( 'AB_ZTRTTF', INFOT, NOUT, LERR, OK )
+      CALL ZTRTTF( 'N', 'U', -1, A, 1, B, INFO )
+      CALL CHKXER( 'ZTRTTF', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL AB_ZTRTTF( 'N', 'U', 0, A, 0, B, INFO )
-      CALL AB_CHKXER( 'AB_ZTRTTF', INFOT, NOUT, LERR, OK )
+      CALL ZTRTTF( 'N', 'U', 0, A, 0, B, INFO )
+      CALL CHKXER( 'ZTRTTF', INFOT, NOUT, LERR, OK )
 *
-      SRNAMT = 'AB_ZTFTTP'
+      SRNAMT = 'ZTFTTP'
       INFOT = 1
-      CALL AB_ZTFTTP( '/', 'U', 0, A, B, INFO )
-      CALL AB_CHKXER( 'AB_ZTFTTP', INFOT, NOUT, LERR, OK )
+      CALL ZTFTTP( '/', 'U', 0, A, B, INFO )
+      CALL CHKXER( 'ZTFTTP', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_ZTFTTP( 'N', '/', 0, A, B, INFO )
-      CALL AB_CHKXER( 'AB_ZTFTTP', INFOT, NOUT, LERR, OK )
+      CALL ZTFTTP( 'N', '/', 0, A, B, INFO )
+      CALL CHKXER( 'ZTFTTP', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL AB_ZTFTTP( 'N', 'U', -1, A, B, INFO )
-      CALL AB_CHKXER( 'AB_ZTFTTP', INFOT, NOUT, LERR, OK )
+      CALL ZTFTTP( 'N', 'U', -1, A, B, INFO )
+      CALL CHKXER( 'ZTFTTP', INFOT, NOUT, LERR, OK )
 *
-      SRNAMT = 'AB_ZTPTTF'
+      SRNAMT = 'ZTPTTF'
       INFOT = 1
-      CALL AB_ZTPTTF( '/', 'U', 0, A, B, INFO )
-      CALL AB_CHKXER( 'AB_ZTPTTF', INFOT, NOUT, LERR, OK )
+      CALL ZTPTTF( '/', 'U', 0, A, B, INFO )
+      CALL CHKXER( 'ZTPTTF', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_ZTPTTF( 'N', '/', 0, A, B, INFO )
-      CALL AB_CHKXER( 'AB_ZTPTTF', INFOT, NOUT, LERR, OK )
+      CALL ZTPTTF( 'N', '/', 0, A, B, INFO )
+      CALL CHKXER( 'ZTPTTF', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL AB_ZTPTTF( 'N', 'U', -1, A, B, INFO )
-      CALL AB_CHKXER( 'AB_ZTPTTF', INFOT, NOUT, LERR, OK )
+      CALL ZTPTTF( 'N', 'U', -1, A, B, INFO )
+      CALL CHKXER( 'ZTPTTF', INFOT, NOUT, LERR, OK )
 *
-      SRNAMT = 'AB_ZTRTTP'
+      SRNAMT = 'ZTRTTP'
       INFOT = 1
-      CALL AB_ZTRTTP( '/', 0, A, 1,  B, INFO )
-      CALL AB_CHKXER( 'AB_ZTRTTP', INFOT, NOUT, LERR, OK )
+      CALL ZTRTTP( '/', 0, A, 1,  B, INFO )
+      CALL CHKXER( 'ZTRTTP', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_ZTRTTP( 'U', -1, A, 1,  B, INFO )
-      CALL AB_CHKXER( 'AB_ZTRTTP', INFOT, NOUT, LERR, OK )
+      CALL ZTRTTP( 'U', -1, A, 1,  B, INFO )
+      CALL CHKXER( 'ZTRTTP', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL AB_ZTRTTP( 'U', 0, A, 0,  B, INFO )
-      CALL AB_CHKXER( 'AB_ZTRTTP', INFOT, NOUT, LERR, OK )
+      CALL ZTRTTP( 'U', 0, A, 0,  B, INFO )
+      CALL CHKXER( 'ZTRTTP', INFOT, NOUT, LERR, OK )
 *
-      SRNAMT = 'AB_ZTPTTR'
+      SRNAMT = 'ZTPTTR'
       INFOT = 1
-      CALL AB_ZTPTTR( '/', 0, A, B, 1,  INFO )
-      CALL AB_CHKXER( 'AB_ZTPTTR', INFOT, NOUT, LERR, OK )
+      CALL ZTPTTR( '/', 0, A, B, 1,  INFO )
+      CALL CHKXER( 'ZTPTTR', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_ZTPTTR( 'U', -1, A, B, 1,  INFO )
-      CALL AB_CHKXER( 'AB_ZTPTTR', INFOT, NOUT, LERR, OK )
+      CALL ZTPTTR( 'U', -1, A, B, 1,  INFO )
+      CALL CHKXER( 'ZTPTTR', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL AB_ZTPTTR( 'U', 0, A, B, 0, INFO )
-      CALL AB_CHKXER( 'AB_ZTPTTR', INFOT, NOUT, LERR, OK )
+      CALL ZTPTTR( 'U', 0, A, B, 0, INFO )
+      CALL CHKXER( 'ZTPTTR', INFOT, NOUT, LERR, OK )
 *
-      SRNAMT = 'AB_ZHFRK '
+      SRNAMT = 'ZHFRK '
       INFOT = 1
-      CALL AB_ZHFRK( '/', 'U', 'N', 0, 0, ALPHA, A, 1, BETA, B )
-      CALL AB_CHKXER( 'AB_ZHFRK ', INFOT, NOUT, LERR, OK )
+      CALL ZHFRK( '/', 'U', 'N', 0, 0, ALPHA, A, 1, BETA, B )
+      CALL CHKXER( 'ZHFRK ', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_ZHFRK( 'N', '/', 'N', 0, 0, ALPHA, A, 1, BETA, B )
-      CALL AB_CHKXER( 'AB_ZHFRK ', INFOT, NOUT, LERR, OK )
+      CALL ZHFRK( 'N', '/', 'N', 0, 0, ALPHA, A, 1, BETA, B )
+      CALL CHKXER( 'ZHFRK ', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL AB_ZHFRK( 'N', 'U', '/', 0, 0, ALPHA, A, 1, BETA, B )
-      CALL AB_CHKXER( 'AB_ZHFRK ', INFOT, NOUT, LERR, OK )
+      CALL ZHFRK( 'N', 'U', '/', 0, 0, ALPHA, A, 1, BETA, B )
+      CALL CHKXER( 'ZHFRK ', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL AB_ZHFRK( 'N', 'U', 'N', -1, 0, ALPHA, A, 1, BETA, B )
-      CALL AB_CHKXER( 'AB_ZHFRK ', INFOT, NOUT, LERR, OK )
+      CALL ZHFRK( 'N', 'U', 'N', -1, 0, ALPHA, A, 1, BETA, B )
+      CALL CHKXER( 'ZHFRK ', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL AB_ZHFRK( 'N', 'U', 'N', 0, -1, ALPHA, A, 1, BETA, B )
-      CALL AB_CHKXER( 'AB_ZHFRK ', INFOT, NOUT, LERR, OK )
+      CALL ZHFRK( 'N', 'U', 'N', 0, -1, ALPHA, A, 1, BETA, B )
+      CALL CHKXER( 'ZHFRK ', INFOT, NOUT, LERR, OK )
       INFOT = 8
-      CALL AB_ZHFRK( 'N', 'U', 'N', 0, 0, ALPHA, A, 0, BETA, B )
-      CALL AB_CHKXER( 'AB_ZHFRK ', INFOT, NOUT, LERR, OK )
+      CALL ZHFRK( 'N', 'U', 'N', 0, 0, ALPHA, A, 0, BETA, B )
+      CALL CHKXER( 'ZHFRK ', INFOT, NOUT, LERR, OK )
 *
 *     Print a summary line.
 *
@@ -286,6 +284,6 @@
      $        'exits ***' )
       RETURN
 *
-*     End of AB_ZERRRFP
+*     End of ZERRRFP
 *
       END

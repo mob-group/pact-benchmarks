@@ -1,4 +1,4 @@
-*> \brief \b AB_SLAED2 used by AB_SSTEDC. Merges eigenvalues and deflates secular equation. Used when the original matrix is tridiagonal.
+*> \brief \b SLAED2 used by sstedc. Merges eigenvalues and deflates secular equation. Used when the original matrix is tridiagonal.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLAED2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLAED2.f">
+*> Download SLAED2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaed2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLAED2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaed2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLAED2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaed2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLAED2( K, N, N1, D, Q, LDQ, INDXQ, RHO, Z, DLAMDA, W,
+*       SUBROUTINE SLAED2( K, N, N1, D, Q, LDQ, INDXQ, RHO, Z, DLAMDA, W,
 *                          Q2, INDX, INDXC, INDXP, COLTYP, INFO )
 *
 *       .. Scalar Arguments ..
@@ -38,7 +38,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SLAED2 merges the two sets of eigenvalues together into a single
+*> SLAED2 merges the two sets of eigenvalues together into a single
 *> sorted set.  Then it tries to deflate the size of the problem.
 *> There are two ways in which deflation can occur:  when two or more
 *> eigenvalues are close together or if there is a tiny entry in the
@@ -98,7 +98,7 @@
 *> \verbatim
 *>          INDXQ is INTEGER array, dimension (N)
 *>         The permutation which separately sorts the two sub-problems
-*>         in D into ascending order.  Note that elements in the AB_SECOND
+*>         in D into ascending order.  Note that elements in the second
 *>         half of this permutation must first have N1 added to their
 *>         values. Destroyed on exit.
 *> \endverbatim
@@ -110,7 +110,7 @@
 *>         cut which originally split the two submatrices which are now
 *>         being recombined.
 *>         On exit, RHO has been modified to the value required by
-*>         AB_SLAED3.
+*>         SLAED3.
 *> \endverbatim
 *>
 *> \param[in] Z
@@ -118,7 +118,7 @@
 *>          Z is REAL array, dimension (N)
 *>         On entry, Z contains the updating vector (the last
 *>         row of the first sub-eigenvector matrix and the first row of
-*>         the AB_SECOND sub-eigenvector matrix).
+*>         the second sub-eigenvector matrix).
 *>         On exit, the contents of Z have been destroyed by the updating
 *>         process.
 *> \endverbatim
@@ -127,21 +127,21 @@
 *> \verbatim
 *>          DLAMDA is REAL array, dimension (N)
 *>         A copy of the first K eigenvalues which will be used by
-*>         AB_SLAED3 to form the secular equation.
+*>         SLAED3 to form the secular equation.
 *> \endverbatim
 *>
 *> \param[out] W
 *> \verbatim
 *>          W is REAL array, dimension (N)
 *>         The first k values of the final deflation-altered z-vector
-*>         which will be passed to AB_SLAED3.
+*>         which will be passed to SLAED3.
 *> \endverbatim
 *>
 *> \param[out] Q2
 *> \verbatim
 *>          Q2 is REAL array, dimension (N1**2+(N-N1)**2)
 *>         A copy of the first K eigenvectors which will be used by
-*>         AB_SLAED3 in a matrix multiply (AB_SGEMM) to solve for the new
+*>         SLAED3 in a matrix multiply (SGEMM) to solve for the new
 *>         eigenvectors.
 *> \endverbatim
 *>
@@ -157,7 +157,7 @@
 *>          INDXC is INTEGER array, dimension (N)
 *>         The permutation used to arrange the columns of the deflated
 *>         Q matrix into three groups:  the first group contains non-zero
-*>         elements only at and above N1, the AB_SECOND contains
+*>         elements only at and above N1, the second contains
 *>         non-zero elements only below N1, and the third is dense.
 *> \endverbatim
 *>
@@ -209,8 +209,7 @@
 *>  Modified by Francoise Tisseur, University of Tennessee
 *>
 *  =====================================================================
-      SUBROUTINE AB_SLAED2( K, N, N1, D, Q, LDQ, INDXQ, RHO, Z, DLAMDA, 
-     $W,
+      SUBROUTINE SLAED2( K, N, N1, D, Q, LDQ, INDXQ, RHO, Z, DLAMDA, W,
      $                   Q2, INDX, INDXC, INDXP, COLTYP, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -245,13 +244,12 @@
       REAL               C, EPS, S, T, TAU, TOL
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ISAMAX
-      REAL               AB_SLAMCH, AB_SLAPY2
-      EXTERNAL           AB_ISAMAX, AB_SLAMCH, AB_SLAPY2
+      INTEGER            ISAMAX
+      REAL               SLAMCH, SLAPY2
+      EXTERNAL           ISAMAX, SLAMCH, SLAPY2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SCOPY, AB_SLACPY, AB_SLAMRG, AB_SROT, AB_SSC
-     $AL, AB_XERBLA
+      EXTERNAL           SCOPY, SLACPY, SLAMRG, SROT, SSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT
@@ -270,7 +268,7 @@
          INFO = -3
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SLAED2', -INFO )
+         CALL XERBLA( 'SLAED2', -INFO )
          RETURN
       END IF
 *
@@ -283,14 +281,14 @@
       N1P1 = N1 + 1
 *
       IF( RHO.LT.ZERO ) THEN
-         CALL AB_SSCAL( N2, MONE, Z( N1P1 ), 1 )
+         CALL SSCAL( N2, MONE, Z( N1P1 ), 1 )
       END IF
 *
 *     Normalize z so that norm(z) = 1.  Since z is the concatenation of
 *     two normalized vectors, norm2(z) = sqrt(2).
 *
       T = ONE / SQRT( TWO )
-      CALL AB_SSCAL( N, T, Z, 1 )
+      CALL SSCAL( N, T, Z, 1 )
 *
 *     RHO = ABS( norm(z)**2 * RHO )
 *
@@ -307,16 +305,16 @@
       DO 20 I = 1, N
          DLAMDA( I ) = D( INDXQ( I ) )
    20 CONTINUE
-      CALL AB_SLAMRG( N1, N2, DLAMDA, 1, 1, INDXC )
+      CALL SLAMRG( N1, N2, DLAMDA, 1, 1, INDXC )
       DO 30 I = 1, N
          INDX( I ) = INDXQ( INDXC( I ) )
    30 CONTINUE
 *
 *     Calculate the allowable deflation tolerance
 *
-      IMAX = AB_ISAMAX( N, Z, 1 )
-      JMAX = AB_ISAMAX( N, D, 1 )
-      EPS = AB_SLAMCH( 'Epsilon' )
+      IMAX = ISAMAX( N, Z, 1 )
+      JMAX = ISAMAX( N, D, 1 )
+      EPS = SLAMCH( 'Epsilon' )
       TOL = EIGHT*EPS*MAX( ABS( D( JMAX ) ), ABS( Z( IMAX ) ) )
 *
 *     If the rank-1 modifier is small enough, no more needs to be done
@@ -328,12 +326,12 @@
          IQ2 = 1
          DO 40 J = 1, N
             I = INDX( J )
-            CALL AB_SCOPY( N, Q( 1, I ), 1, Q2( IQ2 ), 1 )
+            CALL SCOPY( N, Q( 1, I ), 1, Q2( IQ2 ), 1 )
             DLAMDA( J ) = D( I )
             IQ2 = IQ2 + N
    40    CONTINUE
-         CALL AB_SLACPY( 'A', N, N, Q2, N, Q, LDQ )
-         CALL AB_SCOPY( N, DLAMDA, 1, D, 1 )
+         CALL SLACPY( 'A', N, N, Q2, N, Q, LDQ )
+         CALL SCOPY( N, DLAMDA, 1, D, 1 )
          GO TO 190
       END IF
 *
@@ -391,7 +389,7 @@
 *        Find sqrt(a**2+b**2) without overflow or
 *        destructive underflow.
 *
-         TAU = AB_SLAPY2( C, S )
+         TAU = SLAPY2( C, S )
          T = D( NJ ) - D( PJ )
          C = C / TAU
          S = -S / TAU
@@ -404,7 +402,7 @@
             IF( COLTYP( NJ ).NE.COLTYP( PJ ) )
      $         COLTYP( NJ ) = 2
             COLTYP( PJ ) = 4
-            CALL AB_SROT( N, Q( 1, PJ ), 1, Q( 1, NJ ), 1, C, S )
+            CALL SROT( N, Q( 1, PJ ), 1, Q( 1, NJ ), 1, C, S )
             T = D( PJ )*C**2 + D( NJ )*S**2
             D( NJ ) = D( PJ )*S**2 + D( NJ )*C**2
             D( PJ ) = T
@@ -485,7 +483,7 @@
       IQ2 = 1 + ( CTOT( 1 )+CTOT( 2 ) )*N1
       DO 140 J = 1, CTOT( 1 )
          JS = INDX( I )
-         CALL AB_SCOPY( N1, Q( 1, JS ), 1, Q2( IQ1 ), 1 )
+         CALL SCOPY( N1, Q( 1, JS ), 1, Q2( IQ1 ), 1 )
          Z( I ) = D( JS )
          I = I + 1
          IQ1 = IQ1 + N1
@@ -493,8 +491,8 @@
 *
       DO 150 J = 1, CTOT( 2 )
          JS = INDX( I )
-         CALL AB_SCOPY( N1, Q( 1, JS ), 1, Q2( IQ1 ), 1 )
-         CALL AB_SCOPY( N2, Q( N1+1, JS ), 1, Q2( IQ2 ), 1 )
+         CALL SCOPY( N1, Q( 1, JS ), 1, Q2( IQ1 ), 1 )
+         CALL SCOPY( N2, Q( N1+1, JS ), 1, Q2( IQ2 ), 1 )
          Z( I ) = D( JS )
          I = I + 1
          IQ1 = IQ1 + N1
@@ -503,7 +501,7 @@
 *
       DO 160 J = 1, CTOT( 3 )
          JS = INDX( I )
-         CALL AB_SCOPY( N2, Q( N1+1, JS ), 1, Q2( IQ2 ), 1 )
+         CALL SCOPY( N2, Q( N1+1, JS ), 1, Q2( IQ2 ), 1 )
          Z( I ) = D( JS )
          I = I + 1
          IQ2 = IQ2 + N2
@@ -512,7 +510,7 @@
       IQ1 = IQ2
       DO 170 J = 1, CTOT( 4 )
          JS = INDX( I )
-         CALL AB_SCOPY( N, Q( 1, JS ), 1, Q2( IQ2 ), 1 )
+         CALL SCOPY( N, Q( 1, JS ), 1, Q2( IQ2 ), 1 )
          IQ2 = IQ2 + N
          Z( I ) = D( JS )
          I = I + 1
@@ -522,12 +520,12 @@
 *     into the last N - K slots of D and Q respectively.
 *
       IF( K.LT.N ) THEN
-         CALL AB_SLACPY( 'A', N, CTOT( 4 ), Q2( IQ1 ), N,
+         CALL SLACPY( 'A', N, CTOT( 4 ), Q2( IQ1 ), N,
      $                Q( 1, K+1 ), LDQ )
-         CALL AB_SCOPY( N-K, Z( K+1 ), 1, D( K+1 ), 1 )
+         CALL SCOPY( N-K, Z( K+1 ), 1, D( K+1 ), 1 )
       END IF
 *
-*     Copy CTOT into COLTYP for referencing in AB_SLAED3.
+*     Copy CTOT into COLTYP for referencing in SLAED3.
 *
       DO 180 J = 1, 4
          COLTYP( J ) = CTOT( J )
@@ -536,6 +534,6 @@
   190 CONTINUE
       RETURN
 *
-*     End of AB_SLAED2
+*     End of SLAED2
 *
       END

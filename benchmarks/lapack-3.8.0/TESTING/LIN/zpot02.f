@@ -1,4 +1,4 @@
-*> \brief \b AB_ZPOT02
+*> \brief \b ZPOT02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZPOT02( UPLO, N, NRHS, A, LDA, X, LDX, B, LDB, RWORK,
+*       SUBROUTINE ZPOT02( UPLO, N, NRHS, A, LDA, X, LDX, B, LDB, RWORK,
 *                          RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZPOT02 computes the residual for the solution of a Hermitian system
+*> ZPOT02 computes the residual for the solution of a Hermitian system
 *> of linear equations  A*x = b:
 *>
 *>    RESID = norm(B - A*X) / ( norm(A) * norm(X) * EPS ),
@@ -124,8 +124,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZPOT02( UPLO, N, NRHS, A, LDA, X, LDX, B, LDB, RWORK
-     $,
+      SUBROUTINE ZPOT02( UPLO, N, NRHS, A, LDA, X, LDX, B, LDB, RWORK,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -156,11 +155,11 @@
       DOUBLE PRECISION   ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH, AB_DZASUM, AB_ZLANHE
-      EXTERNAL           AB_DLAMCH, AB_DZASUM, AB_ZLANHE
+      DOUBLE PRECISION   DLAMCH, DZASUM, ZLANHE
+      EXTERNAL           DLAMCH, DZASUM, ZLANHE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZHEMM
+      EXTERNAL           ZHEMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -176,8 +175,8 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
-      ANORM = AB_ZLANHE( '1', UPLO, N, A, LDA, RWORK )
+      EPS = DLAMCH( 'Epsilon' )
+      ANORM = ZLANHE( '1', UPLO, N, A, LDA, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -185,8 +184,7 @@
 *
 *     Compute  B - A*X
 *
-      CALL AB_ZHEMM( 'Left', UPLO, N, NRHS, -CONE, A, LDA, X, LDX, CONE,
-     $ B,
+      CALL ZHEMM( 'Left', UPLO, N, NRHS, -CONE, A, LDA, X, LDX, CONE, B,
      $            LDB )
 *
 *     Compute the maximum over the number of right hand sides of
@@ -194,8 +192,8 @@
 *
       RESID = ZERO
       DO 10 J = 1, NRHS
-         BNORM = AB_DZASUM( N, B( 1, J ), 1 )
-         XNORM = AB_DZASUM( N, X( 1, J ), 1 )
+         BNORM = DZASUM( N, B( 1, J ), 1 )
+         XNORM = DZASUM( N, X( 1, J ), 1 )
          IF( XNORM.LE.ZERO ) THEN
             RESID = ONE / EPS
          ELSE
@@ -205,6 +203,6 @@
 *
       RETURN
 *
-*     End of AB_ZPOT02
+*     End of ZPOT02
 *
       END

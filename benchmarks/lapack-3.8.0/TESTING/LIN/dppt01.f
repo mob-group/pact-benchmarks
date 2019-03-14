@@ -1,4 +1,4 @@
-*> \brief \b AB_DPPT01
+*> \brief \b DPPT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DPPT01( UPLO, N, A, AFAC, RWORK, RESID )
+*       SUBROUTINE DPPT01( UPLO, N, A, AFAC, RWORK, RESID )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DPPT01 reconstructs a symmetric positive definite packed matrix A
+*> DPPT01 reconstructs a symmetric positive definite packed matrix A
 *> from its L*L' or U'*U factorization and computes the residual
 *>    norm( L*L' - A ) / ( N * norm(A) * EPS ) or
 *>    norm( U'*U - A ) / ( N * norm(A) * EPS ),
@@ -91,7 +91,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_DPPT01( UPLO, N, A, AFAC, RWORK, RESID )
+      SUBROUTINE DPPT01( UPLO, N, A, AFAC, RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -118,12 +118,12 @@
       DOUBLE PRECISION   ANORM, EPS, T
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DDOT, AB_DLAMCH, AB_DLANSP
-      EXTERNAL           AB_LSAME, AB_DDOT, AB_DLAMCH, AB_DLANSP
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DDOT, DLAMCH, DLANSP
+      EXTERNAL           LSAME, DDOT, DLAMCH, DLANSP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DSCAL, AB_DSPR, AB_DTPMV
+      EXTERNAL           DSCAL, DSPR, DTPMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE
@@ -139,8 +139,8 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
-      ANORM = AB_DLANSP( '1', UPLO, N, A, RWORK )
+      EPS = DLAMCH( 'Epsilon' )
+      ANORM = DLANSP( '1', UPLO, N, A, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -148,20 +148,19 @@
 *
 *     Compute the product U'*U, overwriting U.
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
          KC = ( N*( N-1 ) ) / 2 + 1
          DO 10 K = N, 1, -1
 *
 *           Compute the (K,K) element of the result.
 *
-            T = AB_DDOT( K, AFAC( KC ), 1, AFAC( KC ), 1 )
+            T = DDOT( K, AFAC( KC ), 1, AFAC( KC ), 1 )
             AFAC( KC+K-1 ) = T
 *
 *           Compute the rest of column K.
 *
             IF( K.GT.1 ) THEN
-               CALL AB_DTPMV( 'Upper', 'Transpose', 'Non-unit', K-1, AFA
-     $C,
+               CALL DTPMV( 'Upper', 'Transpose', 'Non-unit', K-1, AFAC,
      $                     AFAC( KC ), 1 )
                KC = KC - ( K-1 )
             END IF
@@ -177,13 +176,13 @@
 *           columns K+1 through N.
 *
             IF( K.LT.N )
-     $         CALL AB_DSPR( 'Lower', N-K, ONE, AFAC( KC+1 ), 1,
+     $         CALL DSPR( 'Lower', N-K, ONE, AFAC( KC+1 ), 1,
      $                    AFAC( KC+N-K+1 ) )
 *
 *           Scale column K by the diagonal element.
 *
             T = AFAC( KC )
-            CALL AB_DSCAL( N-K+1, T, AFAC( KC ), 1 )
+            CALL DSCAL( N-K+1, T, AFAC( KC ), 1 )
 *
             KC = KC - ( N-K+2 )
    20    CONTINUE
@@ -198,12 +197,12 @@
 *
 *     Compute norm( L*U - A ) / ( N * norm(A) * EPS )
 *
-      RESID = AB_DLANSP( '1', UPLO, N, AFAC, RWORK )
+      RESID = DLANSP( '1', UPLO, N, AFAC, RWORK )
 *
       RESID = ( ( RESID / DBLE( N ) ) / ANORM ) / EPS
 *
       RETURN
 *
-*     End of AB_DPPT01
+*     End of DPPT01
 *
       END

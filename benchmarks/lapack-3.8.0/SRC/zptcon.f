@@ -1,4 +1,4 @@
-*> \brief \b AB_ZPTCON
+*> \brief \b ZPTCON
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZPTCON + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZPTCON.f">
+*> Download ZPTCON + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zptcon.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZPTCON.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zptcon.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZPTCON.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zptcon.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZPTCON( N, D, E, ANORM, RCOND, RWORK, INFO )
+*       SUBROUTINE ZPTCON( N, D, E, ANORM, RCOND, RWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, N
@@ -35,10 +35,10 @@
 *>
 *> \verbatim
 *>
-*> AB_ZPTCON computes the reciprocal of the condition number (in the
+*> ZPTCON computes the reciprocal of the condition number (in the
 *> 1-norm) of a complex Hermitian positive definite tridiagonal matrix
 *> using the factorization A = L*D*L**H or A = U**H*D*U computed by
-*> AB_ZPTTRF.
+*> ZPTTRF.
 *>
 *> Norm(inv(A)) is computed by a direct method, and the reciprocal of
 *> the condition number is computed as
@@ -58,14 +58,14 @@
 *> \verbatim
 *>          D is DOUBLE PRECISION array, dimension (N)
 *>          The n diagonal elements of the diagonal matrix D from the
-*>          factorization of A, as computed by AB_ZPTTRF.
+*>          factorization of A, as computed by ZPTTRF.
 *> \endverbatim
 *>
 *> \param[in] E
 *> \verbatim
 *>          E is COMPLEX*16 array, dimension (N-1)
 *>          The (n-1) off-diagonal elements of the unit bidiagonal factor
-*>          U or L from the factorization of A, as computed by AB_ZPTTRF.
+*>          U or L from the factorization of A, as computed by ZPTTRF.
 *> \endverbatim
 *>
 *> \param[in] ANORM
@@ -117,7 +117,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_ZPTCON( N, D, E, ANORM, RCOND, RWORK, INFO )
+      SUBROUTINE ZPTCON( N, D, E, ANORM, RCOND, RWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -144,11 +144,11 @@
       DOUBLE PRECISION   AINVNM
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_IDAMAX
-      EXTERNAL           AB_IDAMAX
+      INTEGER            IDAMAX
+      EXTERNAL           IDAMAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA
+      EXTERNAL           XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS
@@ -164,7 +164,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZPTCON', -INFO )
+         CALL XERBLA( 'ZPTCON', -INFO )
          RETURN
       END IF
 *
@@ -208,7 +208,7 @@
 *
 *     Compute AINVNM = max(x(i)), 1<=i<=n.
 *
-      IX = AB_IDAMAX( N, RWORK, 1 )
+      IX = IDAMAX( N, RWORK, 1 )
       AINVNM = ABS( RWORK( IX ) )
 *
 *     Compute the reciprocal condition number.
@@ -218,6 +218,6 @@
 *
       RETURN
 *
-*     End of AB_ZPTCON
+*     End of ZPTCON
 *
       END

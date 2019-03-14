@@ -1,4 +1,4 @@
-*> \brief \b AB_ZUNT01
+*> \brief \b ZUNT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZUNT01( ROWCOL, M, N, U, LDU, WORK, LWORK, RWORK,
+*       SUBROUTINE ZUNT01( ROWCOL, M, N, U, LDU, WORK, LWORK, RWORK,
 *                          RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZUNT01 checks that the matrix U is unitary by computing the ratio
+*> ZUNT01 checks that the matrix U is unitary by computing the ratio
 *>
 *>    RESID = norm( I - U*U' ) / ( n * EPS ), if ROWCOL = 'R',
 *> or
@@ -123,7 +123,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_ZUNT01( ROWCOL, M, N, U, LDU, WORK, LWORK, RWORK,
+      SUBROUTINE ZUNT01( ROWCOL, M, N, U, LDU, WORK, LWORK, RWORK,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -154,13 +154,13 @@
       COMPLEX*16         TMP, ZDUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANSY
-      COMPLEX*16         AB_ZDOTC
-      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_ZLANSY, AB_ZDOTC
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH, ZLANSY
+      COMPLEX*16         ZDOTC
+      EXTERNAL           LSAME, DLAMCH, ZLANSY, ZDOTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_AB_ZHERK, AB_ZLASET
+      EXTERNAL           ZHERK, ZLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCMPLX, DIMAG, MAX, MIN
@@ -180,8 +180,8 @@
       IF( M.LE.0 .OR. N.LE.0 )
      $   RETURN
 *
-      EPS = AB_DLAMCH( 'Precision' )
-      IF( M.LT.N .OR. ( M.EQ.N .AND. AB_LSAME( ROWCOL, 'R' ) ) ) THEN
+      EPS = DLAMCH( 'Precision' )
+      IF( M.LT.N .OR. ( M.EQ.N .AND. LSAME( ROWCOL, 'R' ) ) ) THEN
          TRANSU = 'N'
          K = N
       ELSE
@@ -199,15 +199,14 @@
 *
 *        Compute I - U*U' or I - U'*U.
 *
-         CALL AB_ZLASET( 'Upper', MNMIN, MNMIN, DCMPLX( ZERO ),
+         CALL ZLASET( 'Upper', MNMIN, MNMIN, DCMPLX( ZERO ),
      $                DCMPLX( ONE ), WORK, LDWORK )
-         CALL AB_AB_ZHERK( 'Upper', TRANSU, MNMIN, K, -ONE, U, LDU, ONE,
-     $ WORK,
+         CALL ZHERK( 'Upper', TRANSU, MNMIN, K, -ONE, U, LDU, ONE, WORK,
      $               LDWORK )
 *
 *        Compute norm( I - U*U' ) / ( K * EPS ) .
 *
-         RESID = AB_ZLANSY( '1', 'Upper', MNMIN, WORK, LDWORK, RWORK )
+         RESID = ZLANSY( '1', 'Upper', MNMIN, WORK, LDWORK, RWORK )
          RESID = ( RESID / DBLE( K ) ) / EPS
       ELSE IF( TRANSU.EQ.'C' ) THEN
 *
@@ -220,7 +219,7 @@
                ELSE
                   TMP = ONE
                END IF
-               TMP = TMP - AB_ZDOTC( M, U( 1, I ), 1, U( 1, J ), 1 )
+               TMP = TMP - ZDOTC( M, U( 1, I ), 1, U( 1, J ), 1 )
                RESID = MAX( RESID, CABS1( TMP ) )
    10       CONTINUE
    20    CONTINUE
@@ -236,7 +235,7 @@
                ELSE
                   TMP = ONE
                END IF
-               TMP = TMP - AB_ZDOTC( N, U( J, 1 ), LDU, U( I, 1 ), LDU )
+               TMP = TMP - ZDOTC( N, U( J, 1 ), LDU, U( I, 1 ), LDU )
                RESID = MAX( RESID, CABS1( TMP ) )
    30       CONTINUE
    40    CONTINUE
@@ -244,6 +243,6 @@
       END IF
       RETURN
 *
-*     End of AB_ZUNT01
+*     End of ZUNT01
 *
       END

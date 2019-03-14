@@ -1,4 +1,4 @@
-*> \brief \b AB_SBDT04
+*> \brief \b SBDT04
 *  =========== DOCUMENTATION ===========
 *
 * Online html documentation available at
@@ -7,7 +7,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SBDT04( UPLO, N, D, E, S, NS, U, LDU, VT, LDVT,
+*       SUBROUTINE SBDT04( UPLO, N, D, E, S, NS, U, LDU, VT, LDVT,
 *                          WORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SBDT04 reconstructs a bidiagonal matrix B from its (partial) SVD:
+*> SBDT04 reconstructs a bidiagonal matrix B from its (partial) SVD:
 *>    S = U' * B * V
 *> where U and V are orthogonal matrices and S is diagonal.
 *>
@@ -128,8 +128,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_SBDT04( UPLO, N, D, E, S, NS, U, LDU, VT, LDVT, WORK
-     $,
+      SUBROUTINE SBDT04( UPLO, N, D, E, S, NS, U, LDU, VT, LDVT, WORK,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -158,13 +157,13 @@
       REAL               BNORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ISAMAX
-      REAL               AB_SASUM, AB_SLAMCH
-      EXTERNAL           AB_LSAME, AB_ISAMAX, AB_SASUM, AB_SLAMCH
+      LOGICAL            LSAME
+      INTEGER            ISAMAX
+      REAL               SASUM, SLAMCH
+      EXTERNAL           LSAME, ISAMAX, SASUM, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SGEMM
+      EXTERNAL           SGEMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, REAL, MAX, MIN
@@ -177,13 +176,13 @@
       IF( N.LE.0 .OR. NS.LE.0 )
      $   RETURN
 *
-      EPS = AB_SLAMCH( 'Precision' )
+      EPS = SLAMCH( 'Precision' )
 *
 *     Compute S - U' * B * V.
 *
       BNORM = ZERO
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
 *
 *        B is upper bidiagonal.
 *
@@ -219,7 +218,7 @@
    60    CONTINUE
       END IF
 *
-      CALL AB_SGEMM( 'T', 'N', NS, NS, N, -ONE, U, LDU, WORK( 1 ),
+      CALL SGEMM( 'T', 'N', NS, NS, N, -ONE, U, LDU, WORK( 1 ),
      $            N, ZERO, WORK( 1+N*NS ), NS )
 *
 *     norm(S - U' * B * V)
@@ -227,7 +226,7 @@
       K = N*NS
       DO 70 I = 1, NS
          WORK( K+I ) =  WORK( K+I ) + S( I )
-         RESID = MAX( RESID, AB_SASUM( NS, WORK( K+1 ), 1 ) )
+         RESID = MAX( RESID, SASUM( NS, WORK( K+1 ), 1 ) )
          K = K + NS
    70 CONTINUE
 *
@@ -250,6 +249,6 @@
 *
       RETURN
 *
-*     End of AB_SBDT04
+*     End of SBDT04
 *
       END

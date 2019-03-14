@@ -1,4 +1,4 @@
-*> \brief \b AB_DCHKGL
+*> \brief \b DCHKGL
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DCHKGL( NIN, NOUT )
+*       SUBROUTINE DCHKGL( NIN, NOUT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            NIN, NOUT
@@ -20,7 +20,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DCHKGL tests AB_DGGBAL, a routine for balancing a matrix pair (A, B).
+*> DCHKGL tests DGGBAL, a routine for balancing a matrix pair (A, B).
 *> \endverbatim
 *
 *  Arguments:
@@ -51,7 +51,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_DCHKGL( NIN, NOUT )
+      SUBROUTINE DCHKGL( NIN, NOUT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -82,11 +82,11 @@
      $                   RSCALE( LDA ), RSCLIN( LDA ), WORK( LWORK )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE
-      EXTERNAL           AB_DLAMCH, AB_DLANGE
+      DOUBLE PRECISION   DLAMCH, DLANGE
+      EXTERNAL           DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DGGBAL
+      EXTERNAL           DGGBAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -100,7 +100,7 @@
       KNT = 0
       RMAX = ZERO
 *
-      EPS = AB_DLAMCH( 'Precision' )
+      EPS = DLAMCH( 'Precision' )
 *
    10 CONTINUE
 *
@@ -126,12 +126,12 @@
       READ( NIN, FMT = * )( LSCLIN( I ), I = 1, N )
       READ( NIN, FMT = * )( RSCLIN( I ), I = 1, N )
 *
-      ANORM = AB_DLANGE( 'M', N, N, A, LDA, WORK )
-      BNORM = AB_DLANGE( 'M', N, N, B, LDB, WORK )
+      ANORM = DLANGE( 'M', N, N, A, LDA, WORK )
+      BNORM = DLANGE( 'M', N, N, B, LDB, WORK )
 *
       KNT = KNT + 1
 *
-      CALL AB_DGGBAL( 'B', N, A, LDA, B, LDB, ILO, IHI, LSCALE, RSCALE,
+      CALL DGGBAL( 'B', N, A, LDA, B, LDB, ILO, IHI, LSCALE, RSCALE,
      $             WORK, INFO )
 *
       IF( INFO.NE.0 ) THEN
@@ -169,7 +169,7 @@
    90 CONTINUE
 *
       WRITE( NOUT, FMT = 9999 )
- 9999 FORMAT( 1X, '.. test output of AB_DGGBAL .. ' )
+ 9999 FORMAT( 1X, '.. test output of DGGBAL .. ' )
 *
       WRITE( NOUT, FMT = 9998 )RMAX
  9998 FORMAT( 1X, 'value of largest test error            = ', D12.3 )
@@ -186,6 +186,6 @@
 *
       RETURN
 *
-*     End of AB_DCHKGL
+*     End of DCHKGL
 *
       END

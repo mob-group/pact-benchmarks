@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLAQR1 sets a scalar multiple of the first column of the product of 2-by-2 or 3-by-3 matrix H and specified shifts.
+*> \brief \b ZLAQR1 sets a scalar multiple of the first column of the product of 2-by-2 or 3-by-3 matrix H and specified shifts.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZLAQR1 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLAQR1.f">
+*> Download ZLAQR1 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlaqr1.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLAQR1.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlaqr1.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLAQR1.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlaqr1.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZLAQR1( N, H, LDH, S1, S2, V )
+*       SUBROUTINE ZLAQR1( N, H, LDH, S1, S2, V )
 *
 *       .. Scalar Arguments ..
 *       COMPLEX*16         S1, S2
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*>      Given a 2-by-2 or 3-by-3 matrix H, AB_ZLAQR1 sets v to a
+*>      Given a 2-by-2 or 3-by-3 matrix H, ZLAQR1 sets v to a
 *>      scalar multiple of the first column of the product
 *>
 *>      (*)  K = (H - s1*I)*(H - s2*I)
@@ -105,7 +105,7 @@
 *>       University of Kansas, USA
 *>
 *  =====================================================================
-      SUBROUTINE AB_ZLAQR1( N, H, LDH, S1, S2, V )
+      SUBROUTINE ZLAQR1( N, H, LDH, S1, S2, V )
 *
 *  -- LAPACK auxiliary routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

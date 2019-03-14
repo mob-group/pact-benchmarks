@@ -1,4 +1,4 @@
-*> \brief \b AB_CLARRV computes the eigenvectors of the tridiagonal matrix T = L D LT given L, D and the eigenvalues of L D LT.
+*> \brief \b CLARRV computes the eigenvectors of the tridiagonal matrix T = L D LT given L, D and the eigenvalues of L D LT.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CLARRV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLARRV.f">
+*> Download CLARRV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clarrv.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLARRV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clarrv.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLARRV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clarrv.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CLARRV( N, VL, VU, D, L, PIVMIN,
+*       SUBROUTINE CLARRV( N, VL, VU, D, L, PIVMIN,
 *                          ISPLIT, M, DOL, DOU, MINRGP,
 *                          RTOL1, RTOL2, W, WERR, WGAP,
 *                          IBLOCK, INDEXW, GERS, Z, LDZ, ISUPPZ,
@@ -42,9 +42,9 @@
 *>
 *> \verbatim
 *>
-*> AB_CLARRV computes the eigenvectors of the tridiagonal matrix
+*> CLARRV computes the eigenvectors of the tridiagonal matrix
 *> T = L D L**T given L, D and APPROXIMATIONS to the eigenvalues of L D L**T.
-*> The input eigenvalues should have been computed by AB_SLARRE.
+*> The input eigenvalues should have been computed by SLARRE.
 *> \endverbatim
 *
 *  Arguments:
@@ -85,7 +85,7 @@
 *>          On entry, the (N-1) subdiagonal elements of the unit
 *>          bidiagonal matrix L are in elements 1 to N-1 of L
 *>          (if the matrix is not split.) At the end of each block
-*>          is stored the corresponding shift as given by AB_SLARRE.
+*>          is stored the corresponding shift as given by SLARRE.
 *>          On exit, L is overwritten.
 *> \endverbatim
 *>
@@ -100,7 +100,7 @@
 *>          ISPLIT is INTEGER array, dimension (N)
 *>          The splitting points, at which T breaks up into blocks.
 *>          The first block consists of rows/columns 1 to
-*>          ISPLIT( 1 ), the AB_SECOND of rows/columns ISPLIT( 1 )+1
+*>          ISPLIT( 1 ), the second of rows/columns ISPLIT( 1 )+1
 *>          through ISPLIT( 2 ), etc.
 *> \endverbatim
 *>
@@ -120,7 +120,7 @@
 *>          DOU is INTEGER
 *>          If the user wants to compute only selected eigenvectors from all
 *>          the eigenvalues supplied, he can specify an index range DOL:DOU.
-*>          Or ELSE the setting DOL=1, DOU=M should be applied.
+*>          Or else the setting DOL=1, DOU=M should be applied.
 *>          Note that DOL and DOU refer to the order in which the eigenvalues
 *>          are stored in W.
 *>          If the user wants to compute only selected eigenpairs, then
@@ -153,7 +153,7 @@
 *>          which eigenvectors are to be computed.  The eigenvalues
 *>          should be grouped by split-off block and ordered from
 *>          smallest to largest within the block ( The output array
-*>          W from AB_SLARRE is expected here ). Furthermore, they are with
+*>          W from SLARRE is expected here ). Furthermore, they are with
 *>          respect to the shift of the corresponding root representation
 *>          for their block. On exit, W holds the eigenvalues of the
 *>          UNshifted matrix.
@@ -178,7 +178,7 @@
 *>          The indices of the blocks (submatrices) associated with the
 *>          corresponding eigenvalues in W; IBLOCK(i)=1 if eigenvalue
 *>          W(i) belongs to the first block from the top, =2 if W(i)
-*>          belongs to the AB_SECOND block, etc.
+*>          belongs to the second block, etc.
 *> \endverbatim
 *>
 *> \param[in] INDEXW
@@ -186,7 +186,7 @@
 *>          INDEXW is INTEGER array, dimension (N)
 *>          The indices of the eigenvalues within each block (submatrix);
 *>          for example, INDEXW(i)= 10 and IBLOCK(i)=2 imply that the
-*>          i-th eigenvalue W(i) is the 10-th eigenvalue in the AB_SECOND block.
+*>          i-th eigenvalue W(i) is the 10-th eigenvalue in the second block.
 *> \endverbatim
 *>
 *> \param[in] GERS
@@ -239,20 +239,20 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit
 *>
-*>          > 0:  A problem occurred in AB_CLARRV.
+*>          > 0:  A problem occurred in CLARRV.
 *>          < 0:  One of the called subroutines signaled an internal problem.
 *>                Needs inspection of the corresponding parameter IINFO
 *>                for further information.
 *>
-*>          =-1:  Problem in AB_SLARRB when refining a child's eigenvalues.
-*>          =-2:  Problem in AB_SLARRF when computing the RRR of a child.
+*>          =-1:  Problem in SLARRB when refining a child's eigenvalues.
+*>          =-2:  Problem in SLARRF when computing the RRR of a child.
 *>                When a child is inside a tight cluster, it can be difficult
 *>                to find an RRR. A partial remedy from the user's point of
 *>                view is to make the parameter MINRGP smaller and recompile.
 *>                However, as the orthogonality of the computed vectors is
 *>                proportional to 1/MINRGP, the user should be aware that
 *>                he might be trading in precision when he decreases MINRGP.
-*>          =-3:  Problem in AB_SLARRB when refining a single eigenvalue
+*>          =-3:  Problem in SLARRB when refining a single eigenvalue
 *>                after the Rayleigh correction was rejected.
 *>          = 5:  The Rayleigh Quotient Iteration failed to converge to
 *>                full accuracy in MAXITR steps.
@@ -280,7 +280,7 @@
 *> Christof Voemel, University of California, Berkeley, USA
 *
 *  =====================================================================
-      SUBROUTINE AB_CLARRV( N, VL, VU, D, L, PIVMIN,
+      SUBROUTINE CLARRV( N, VL, VU, D, L, PIVMIN,
      $                   ISPLIT, M, DOL, DOU, MINRGP,
      $                   RTOL1, RTOL2, W, WERR, WGAP,
      $                   IBLOCK, INDEXW, GERS, Z, LDZ, ISUPPZ,
@@ -333,13 +333,12 @@
      $                   SIGMA, SPDIAM, SSIGMA, TAU, TMP, TOL, ZTZ
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH
-      EXTERNAL           AB_SLAMCH
+      REAL               SLAMCH
+      EXTERNAL           SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CLAR1V, AB_CLASET, AB_CAB_SSCAL, AB_SCOPY, A
-     $B_SLARRB,
-     $                   AB_SLARRF
+      EXTERNAL           CLAR1V, CLASET, CSSCAL, SCOPY, SLARRB,
+     $                   SLARRF
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC ABS, REAL, MAX, MIN
@@ -396,10 +395,10 @@
       ZUSEDW = ZUSEDU - ZUSEDL + 1
 
 
-      CALL AB_CLASET( 'Full', N, ZUSEDW, CZERO, CZERO,
+      CALL CLASET( 'Full', N, ZUSEDW, CZERO, CZERO,
      $                    Z(1,ZUSEDL), LDZ )
 
-      EPS = AB_SLAMCH( 'Precision' )
+      EPS = SLAMCH( 'Precision' )
       RQTOL = TWO * EPS
 *
 *     Set expert flags for standard code.
@@ -481,7 +480,7 @@
 *        The eigenvalue approximations will be refined when necessary as
 *        high relative accuracy is required for the computation of the
 *        corresponding eigenvectors.
-         CALL AB_SCOPY( IM, W( WBEGIN ), 1,
+         CALL SCOPY( IM, W( WBEGIN ), 1,
      $                   WORK( WBEGIN ), 1 )
 
 *        We store in W the eigenvalue approximations w.r.t. the original
@@ -567,7 +566,7 @@
                   SIGMA = REAL( Z( IEND, J+1 ) )
 
 *                 Set the corresponding entries in Z to zero
-                  CALL AB_CLASET( 'Full', IN, 2, CZERO, CZERO,
+                  CALL CLASET( 'Full', IN, 2, CZERO, CZERO,
      $                         Z( IBEGIN, J), LDZ )
                END IF
 
@@ -589,7 +588,7 @@
                   OFFSET = INDEXW( WBEGIN ) - 1
 *                 perform limited bisection (if necessary) to get approximate
 *                 eigenvalues to the precision needed.
-                  CALL AB_SLARRB( IN, D( IBEGIN ),
+                  CALL SLARRB( IN, D( IBEGIN ),
      $                         WORK(INDLLD+IBEGIN-1),
      $                         P, Q, RTOL1, RTOL2, OFFSET,
      $                         WORK(WBEGIN),WGAP(WBEGIN),WERR(WBEGIN),
@@ -603,7 +602,7 @@
 *                 of the unshifted matrix and must be used for computation
 *                 of WGAP, the entries of WORK might stem from RRRs with
 *                 different shifts. The gaps from WBEGIN-1+OLDFST to
-*                 WBEGIN-1+OLDLST are correctly computed in AB_SLARRB.
+*                 WBEGIN-1+OLDLST are correctly computed in SLARRB.
 *                 However, we only allow the gaps to become greater since
 *                 this is what should happen when we decrease WERR
                   IF( OLDFST.GT.1) THEN
@@ -699,7 +698,7 @@
                            P = INDEXW( WBEGIN-1+NEWLST )
                         ENDIF
                         OFFSET = INDEXW( WBEGIN ) - 1
-                        CALL AB_SLARRB( IN, D(IBEGIN),
+                        CALL SLARRB( IN, D(IBEGIN),
      $                       WORK( INDLLD+IBEGIN-1 ),P,P,
      $                       RQTOL, RQTOL, OFFSET,
      $                       WORK(WBEGIN),WGAP(WBEGIN),
@@ -724,15 +723,15 @@
 *                    Compute RRR of child cluster.
 *                    Note that the new RRR is stored in Z
 *
-*                    AB_SLARRF needs LWORK = 2*N
-                     CALL AB_SLARRF( IN, D( IBEGIN ), L( IBEGIN ),
+*                    SLARRF needs LWORK = 2*N
+                     CALL SLARRF( IN, D( IBEGIN ), L( IBEGIN ),
      $                         WORK(INDLD+IBEGIN-1),
      $                         NEWFST, NEWLST, WORK(WBEGIN),
      $                         WGAP(WBEGIN), WERR(WBEGIN),
      $                         SPDIAM, LGAP, RGAP, PIVMIN, TAU,
      $                         WORK( INDIN1 ), WORK( INDIN2 ),
      $                         WORK( INDWRK ), IINFO )
-*                    In the complex case, AB_SLARRF cannot write
+*                    In the complex case, SLARRF cannot write
 *                    the new RRR directly into Z and needs an intermediate
 *                    workspace
                      DO 56 K = 1, IN-1
@@ -744,7 +743,7 @@
                      Z( IEND, NEWFTT ) =
      $                  CMPLX( WORK( INDIN1+IN-1 ), ZERO )
                      IF( IINFO.EQ.0 ) THEN
-*                       a new RRR for the cluster was found by AB_SLARRF
+*                       a new RRR for the cluster was found by SLARRF
 *                       update shift and store it
                         SSIGMA = SIGMA + TAU
                         Z( IEND, NEWFTT+1 ) = CMPLX( SSIGMA, ZERO )
@@ -865,7 +864,7 @@
                         USEDBS = .TRUE.
                         ITMP1 = IWORK( IINDR+WINDEX )
                         OFFSET = INDEXW( WBEGIN ) - 1
-                        CALL AB_SLARRB( IN, D(IBEGIN),
+                        CALL SLARRB( IN, D(IBEGIN),
      $                       WORK(INDLLD+IBEGIN-1),INDEIG,INDEIG,
      $                       ZERO, TWO*EPS, OFFSET,
      $                       WORK(WBEGIN),WGAP(WBEGIN),
@@ -882,7 +881,7 @@
                         IWORK( IINDR+WINDEX ) = 0
                      ENDIF
 *                    Given LAMBDA, compute the eigenvector.
-                     CALL AB_CLAR1V( IN, 1, IN, LAMBDA, D( IBEGIN ),
+                     CALL CLAR1V( IN, 1, IN, LAMBDA, D( IBEGIN ),
      $                    L( IBEGIN ), WORK(INDLD+IBEGIN-1),
      $                    WORK(INDLLD+IBEGIN-1),
      $                    PIVMIN, GAPTOL, Z( IBEGIN, WINDEX ),
@@ -981,8 +980,8 @@
                            STP2II = .TRUE.
                         ENDIF
                         IF (STP2II) THEN
-*                          improve error angle by AB_SECOND step
-                           CALL AB_CLAR1V( IN, 1, IN, LAMBDA,
+*                          improve error angle by second step
+                           CALL CLAR1V( IN, 1, IN, LAMBDA,
      $                          D( IBEGIN ), L( IBEGIN ),
      $                          WORK(INDLD+IBEGIN-1),
      $                          WORK(INDLLD+IBEGIN-1),
@@ -1014,7 +1013,7 @@
                            Z( II, WINDEX ) = ZERO
  123                    CONTINUE
                      ENDIF
-                     CALL AB_CAB_SSCAL( ZTO-ZFROM+1, NRMINV,
+                     CALL CSSCAL( ZTO-ZFROM+1, NRMINV,
      $                       Z( ZFROM, WINDEX ), 1 )
  125                 CONTINUE
 *                    Update W
@@ -1056,6 +1055,6 @@
 
       RETURN
 *
-*     End of AB_CLARRV
+*     End of CLARRV
 *
       END

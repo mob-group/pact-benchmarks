@@ -1,4 +1,4 @@
-*> \brief \b AB_SCHKTB
+*> \brief \b SCHKTB
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SCHKTB( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
+*       SUBROUTINE SCHKTB( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
 *                          NMAX, AB, AINV, B, X, XACT, WORK, RWORK, IWORK,
 *                          NOUT )
 *
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SCHKTB tests AB_STBTRS, -RFS, and -CON, and AB_SLATBS.
+*> SCHKTB tests STBTRS, -RFS, and -CON, and SLATBS.
 *> \endverbatim
 *
 *  Arguments:
@@ -151,8 +151,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_SCHKTB( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR
-     $,
+      SUBROUTINE SCHKTB( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
      $                   NMAX, AB, AINV, B, X, XACT, WORK, RWORK, IWORK,
      $                   NOUT )
 *
@@ -200,18 +199,15 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_SLANTB, AB_SLANTR
-      EXTERNAL           AB_LSAME, AB_SLANTB, AB_SLANTR
+      LOGICAL            LSAME
+      REAL               SLANTB, SLANTR
+      EXTERNAL           LSAME, SLANTB, SLANTR
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALAERH, AB_ALAHD, AB_ALASUM, AB_SCOPY, AB_SE
-     $RRTR, AB_SGET04,
-     $                   AB_SLACPY, AB_SLARHS, AB_SLASET, AB_SLATBS, AB_
-     $SLATTB, AB_STBCON,
-     $                   AB_STBRFS, AB_STBSV, AB_STBT02, AB_STBT03, AB_S
-     $TBT05, AB_STBT06,
-     $                   AB_STBTRS
+      EXTERNAL           ALAERH, ALAHD, ALASUM, SCOPY, SERRTR, SGET04,
+     $                   SLACPY, SLARHS, SLASET, SLATBS, SLATTB, STBCON,
+     $                   STBRFS, STBSV, STBT02, STBT03, STBT05, STBT06,
+     $                   STBTRS
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -245,7 +241,7 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL AB_SERRTR( PATH, NOUT )
+     $   CALL SERRTR( PATH, NOUT )
       INFOT = 0
 *
       DO 140 IN = 1, NN
@@ -292,16 +288,15 @@
 *
                   UPLO = UPLOS( IUPLO )
 *
-*                 Call AB_SLATTB to generate a triangular test matrix.
+*                 Call SLATTB to generate a triangular test matrix.
 *
-                  SRNAMT = 'AB_SLATTB'
-                  CALL AB_SLATTB( IMAT, UPLO, 'No transpose', DIAG, ISEE
-     $D,
+                  SRNAMT = 'SLATTB'
+                  CALL SLATTB( IMAT, UPLO, 'No transpose', DIAG, ISEED,
      $                         N, KD, AB, LDAB, X, WORK, INFO )
 *
 *                 Set IDIAG = 1 for non-unit matrices, 2 for unit.
 *
-                  IF( AB_LSAME( DIAG, 'N' ) ) THEN
+                  IF( LSAME( DIAG, 'N' ) ) THEN
                      IDIAG = 1
                   ELSE
                      IDIAG = 2
@@ -310,17 +305,15 @@
 *                 Form the inverse of A so we can get a good estimate
 *                 of RCONDC = 1/(norm(A) * norm(inv(A))).
 *
-                  CALL AB_SLASET( 'Full', N, N, ZERO, ONE, AINV, LDA )
-                  IF( AB_LSAME( UPLO, 'U' ) ) THEN
+                  CALL SLASET( 'Full', N, N, ZERO, ONE, AINV, LDA )
+                  IF( LSAME( UPLO, 'U' ) ) THEN
                      DO 20 J = 1, N
-                        CALL AB_STBSV( UPLO, 'No transpose', DIAG, J, KD
-     $,
+                        CALL STBSV( UPLO, 'No transpose', DIAG, J, KD,
      $                              AB, LDAB, AINV( ( J-1 )*LDA+1 ), 1 )
    20                CONTINUE
                   ELSE
                      DO 30 J = 1, N
-                        CALL AB_STBSV( UPLO, 'No transpose', DIAG, N-J+1
-     $,
+                        CALL STBSV( UPLO, 'No transpose', DIAG, N-J+1,
      $                              KD, AB( ( J-1 )*LDAB+1 ), LDAB,
      $                              AINV( ( J-1 )*LDA+J ), 1 )
    30                CONTINUE
@@ -328,9 +321,9 @@
 *
 *                 Compute the 1-norm condition number of A.
 *
-                  ANORM = AB_SLANTB( '1', UPLO, DIAG, N, KD, AB, LDAB,
+                  ANORM = SLANTB( '1', UPLO, DIAG, N, KD, AB, LDAB,
      $                    RWORK )
-                  AINVNM = AB_SLANTR( '1', UPLO, DIAG, N, N, AINV, LDA,
+                  AINVNM = SLANTR( '1', UPLO, DIAG, N, N, AINV, LDA,
      $                     RWORK )
                   IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
                      RCONDO = ONE
@@ -340,9 +333,9 @@
 *
 *                 Compute the infinity-norm condition number of A.
 *
-                  ANORM = AB_SLANTB( 'I', UPLO, DIAG, N, KD, AB, LDAB,
+                  ANORM = SLANTB( 'I', UPLO, DIAG, N, KD, AB, LDAB,
      $                    RWORK )
-                  AINVNM = AB_SLANTR( 'I', UPLO, DIAG, N, N, AINV, LDA,
+                  AINVNM = SLANTR( 'I', UPLO, DIAG, N, N, AINV, LDA,
      $                     RWORK )
                   IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
                      RCONDI = ONE
@@ -370,64 +363,56 @@
 *+    TEST 1
 *                    Solve and compute residual for op(A)*x = b.
 *
-                        SRNAMT = 'AB_SLARHS'
-                        CALL AB_SLARHS( PATH, XTYPE, UPLO, TRANS, N, N, 
-     $KD,
+                        SRNAMT = 'SLARHS'
+                        CALL SLARHS( PATH, XTYPE, UPLO, TRANS, N, N, KD,
      $                               IDIAG, NRHS, AB, LDAB, XACT, LDA,
      $                               B, LDA, ISEED, INFO )
                         XTYPE = 'C'
-                        CALL AB_SLACPY( 'Full', N, NRHS, B, LDA, X, LDA 
-     $)
+                        CALL SLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
-                        SRNAMT = 'AB_STBTRS'
-                        CALL AB_STBTRS( UPLO, TRANS, DIAG, N, KD, NRHS, 
-     $AB,
+                        SRNAMT = 'STBTRS'
+                        CALL STBTRS( UPLO, TRANS, DIAG, N, KD, NRHS, AB,
      $                               LDAB, X, LDA, INFO )
 *
-*                    Check error code from AB_STBTRS.
+*                    Check error code from STBTRS.
 *
                         IF( INFO.NE.0 )
-     $                     CALL AB_ALAERH( PATH, 'AB_STBTRS', INFO, 0,
+     $                     CALL ALAERH( PATH, 'STBTRS', INFO, 0,
      $                                  UPLO // TRANS // DIAG, N, N, KD,
      $                                  KD, NRHS, IMAT, NFAIL, NERRS,
      $                                  NOUT )
 *
-                        CALL AB_STBT02( UPLO, TRANS, DIAG, N, KD, NRHS, 
-     $AB,
+                        CALL STBT02( UPLO, TRANS, DIAG, N, KD, NRHS, AB,
      $                               LDAB, X, LDA, B, LDA, WORK,
      $                               RESULT( 1 ) )
 *
 *+    TEST 2
 *                    Check solution from generated exact solution.
 *
-                        CALL AB_SGET04( N, NRHS, X, LDA, XACT, LDA, RCON
-     $DC,
+                        CALL SGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                               RESULT( 2 ) )
 *
 *+    TESTS 3, 4, and 5
 *                    Use iterative refinement to improve the solution
 *                    and compute error bounds.
 *
-                        SRNAMT = 'AB_STBRFS'
-                        CALL AB_STBRFS( UPLO, TRANS, DIAG, N, KD, NRHS, 
-     $AB,
+                        SRNAMT = 'STBRFS'
+                        CALL STBRFS( UPLO, TRANS, DIAG, N, KD, NRHS, AB,
      $                               LDAB, B, LDA, X, LDA, RWORK,
      $                               RWORK( NRHS+1 ), WORK, IWORK,
      $                               INFO )
 *
-*                    Check error code from AB_STBRFS.
+*                    Check error code from STBRFS.
 *
                         IF( INFO.NE.0 )
-     $                     CALL AB_ALAERH( PATH, 'AB_STBRFS', INFO, 0,
+     $                     CALL ALAERH( PATH, 'STBRFS', INFO, 0,
      $                                  UPLO // TRANS // DIAG, N, N, KD,
      $                                  KD, NRHS, IMAT, NFAIL, NERRS,
      $                                  NOUT )
 *
-                        CALL AB_SGET04( N, NRHS, X, LDA, XACT, LDA, RCON
-     $DC,
+                        CALL SGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                               RESULT( 3 ) )
-                        CALL AB_STBT05( UPLO, TRANS, DIAG, N, KD, NRHS, 
-     $AB,
+                        CALL STBT05( UPLO, TRANS, DIAG, N, KD, NRHS, AB,
      $                               LDAB, B, LDA, X, LDA, XACT, LDA,
      $                               RWORK, RWORK( NRHS+1 ),
      $                               RESULT( 4 ) )
@@ -438,7 +423,7 @@
                         DO 40 K = 1, 5
                            IF( RESULT( K ).GE.THRESH ) THEN
                               IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                           CALL AB_ALAHD( NOUT, PATH )
+     $                           CALL ALAHD( NOUT, PATH )
                               WRITE( NOUT, FMT = 9999 )UPLO, TRANS,
      $                           DIAG, N, KD, NRHS, IMAT, K, RESULT( K )
                               NFAIL = NFAIL + 1
@@ -459,19 +444,18 @@
                         NORM = 'I'
                         RCONDC = RCONDI
                      END IF
-                     SRNAMT = 'AB_STBCON'
-                     CALL AB_STBCON( NORM, UPLO, DIAG, N, KD, AB, LDAB,
+                     SRNAMT = 'STBCON'
+                     CALL STBCON( NORM, UPLO, DIAG, N, KD, AB, LDAB,
      $                            RCOND, WORK, IWORK, INFO )
 *
-*                    Check error code from AB_STBCON.
+*                    Check error code from STBCON.
 *
                      IF( INFO.NE.0 )
-     $                  CALL AB_ALAERH( PATH, 'AB_STBCON', INFO, 0,
+     $                  CALL ALAERH( PATH, 'STBCON', INFO, 0,
      $                               NORM // UPLO // DIAG, N, N, KD, KD,
      $                               -1, IMAT, NFAIL, NERRS, NOUT )
 *
-                     CALL AB_STBT06( RCOND, RCONDC, UPLO, DIAG, N, KD, A
-     $B,
+                     CALL STBT06( RCOND, RCONDC, UPLO, DIAG, N, KD, AB,
      $                            LDAB, RWORK, RESULT( 6 ) )
 *
 *                    Print information about the tests that did not pass
@@ -479,9 +463,8 @@
 *
                      IF( RESULT( 6 ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL AB_ALAHD( NOUT, PATH )
-                        WRITE( NOUT, FMT = 9998 ) 'AB_STBCON', NORM, UPL
-     $O,
+     $                     CALL ALAHD( NOUT, PATH )
+                        WRITE( NOUT, FMT = 9998 ) 'STBCON', NORM, UPLO,
      $                     DIAG, N, KD, IMAT, 6, RESULT( 6 )
                         NFAIL = NFAIL + 1
                      END IF
@@ -490,7 +473,7 @@
    80          CONTINUE
    90       CONTINUE
 *
-*           Use pathological test matrices to test AB_SLATBS.
+*           Use pathological test matrices to test SLATBS.
 *
             DO 120 IMAT = NTYPE1 + 1, NIMAT2
 *
@@ -510,51 +493,48 @@
 *
                      TRANS = TRANSS( ITRAN )
 *
-*                    Call AB_SLATTB to generate a triangular test matrix.
+*                    Call SLATTB to generate a triangular test matrix.
 *
-                     SRNAMT = 'AB_SLATTB'
-                     CALL AB_SLATTB( IMAT, UPLO, TRANS, DIAG, ISEED, N, 
-     $KD,
+                     SRNAMT = 'SLATTB'
+                     CALL SLATTB( IMAT, UPLO, TRANS, DIAG, ISEED, N, KD,
      $                            AB, LDAB, X, WORK, INFO )
 *
 *+    TEST 7
 *                    Solve the system op(A)*x = b
 *
-                     SRNAMT = 'AB_SLATBS'
-                     CALL AB_SCOPY( N, X, 1, B, 1 )
-                     CALL AB_SLATBS( UPLO, TRANS, DIAG, 'N', N, KD, AB,
+                     SRNAMT = 'SLATBS'
+                     CALL SCOPY( N, X, 1, B, 1 )
+                     CALL SLATBS( UPLO, TRANS, DIAG, 'N', N, KD, AB,
      $                            LDAB, B, SCALE, RWORK, INFO )
 *
-*                    Check error code from AB_SLATBS.
+*                    Check error code from SLATBS.
 *
                      IF( INFO.NE.0 )
-     $                  CALL AB_ALAERH( PATH, 'AB_SLATBS', INFO, 0,
+     $                  CALL ALAERH( PATH, 'SLATBS', INFO, 0,
      $                               UPLO // TRANS // DIAG // 'N', N, N,
      $                               KD, KD, -1, IMAT, NFAIL, NERRS,
      $                               NOUT )
 *
-                     CALL AB_STBT03( UPLO, TRANS, DIAG, N, KD, 1, AB, LD
-     $AB,
+                     CALL STBT03( UPLO, TRANS, DIAG, N, KD, 1, AB, LDAB,
      $                            SCALE, RWORK, ONE, B, LDA, X, LDA,
      $                            WORK, RESULT( 7 ) )
 *
 *+    TEST 8
 *                    Solve op(A)*x = b again with NORMIN = 'Y'.
 *
-                     CALL AB_SCOPY( N, X, 1, B, 1 )
-                     CALL AB_SLATBS( UPLO, TRANS, DIAG, 'Y', N, KD, AB,
+                     CALL SCOPY( N, X, 1, B, 1 )
+                     CALL SLATBS( UPLO, TRANS, DIAG, 'Y', N, KD, AB,
      $                            LDAB, B, SCALE, RWORK, INFO )
 *
-*                    Check error code from AB_SLATBS.
+*                    Check error code from SLATBS.
 *
                      IF( INFO.NE.0 )
-     $                  CALL AB_ALAERH( PATH, 'AB_SLATBS', INFO, 0,
+     $                  CALL ALAERH( PATH, 'SLATBS', INFO, 0,
      $                               UPLO // TRANS // DIAG // 'Y', N, N,
      $                               KD, KD, -1, IMAT, NFAIL, NERRS,
      $                               NOUT )
 *
-                     CALL AB_STBT03( UPLO, TRANS, DIAG, N, KD, 1, AB, LD
-     $AB,
+                     CALL STBT03( UPLO, TRANS, DIAG, N, KD, 1, AB, LDAB,
      $                            SCALE, RWORK, ONE, B, LDA, X, LDA,
      $                            WORK, RESULT( 8 ) )
 *
@@ -563,17 +543,15 @@
 *
                      IF( RESULT( 7 ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL AB_ALAHD( NOUT, PATH )
-                        WRITE( NOUT, FMT = 9997 )'AB_SLATBS', UPLO, TRAN
-     $S,
+     $                     CALL ALAHD( NOUT, PATH )
+                        WRITE( NOUT, FMT = 9997 )'SLATBS', UPLO, TRANS,
      $                     DIAG, 'N', N, KD, IMAT, 7, RESULT( 7 )
                         NFAIL = NFAIL + 1
                      END IF
                      IF( RESULT( 8 ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL AB_ALAHD( NOUT, PATH )
-                        WRITE( NOUT, FMT = 9997 )'AB_SLATBS', UPLO, TRAN
-     $S,
+     $                     CALL ALAHD( NOUT, PATH )
+                        WRITE( NOUT, FMT = 9997 )'SLATBS', UPLO, TRANS,
      $                     DIAG, 'Y', N, KD, IMAT, 8, RESULT( 8 )
                         NFAIL = NFAIL + 1
                      END IF
@@ -586,7 +564,7 @@
 *
 *     Print a summary of the results.
 *
-      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( ' UPLO=''', A1, ''', TRANS=''', A1, ''',
      $      DIAG=''', A1, ''', N=', I5, ', KD=', I5, ', NRHS=', I5,
@@ -599,6 +577,6 @@
      $      I1, ')=', G12.5 )
       RETURN
 *
-*     End of AB_SCHKTB
+*     End of SCHKTB
 *
       END

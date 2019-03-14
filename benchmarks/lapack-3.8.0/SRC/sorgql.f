@@ -1,4 +1,4 @@
-*> \brief \b AB_SORGQL
+*> \brief \b SORGQL
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SORGQL + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SORGQL.f">
+*> Download SORGQL + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sorgql.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SORGQL.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sorgql.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SORGQL.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorgql.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SORGQL( M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
+*       SUBROUTINE SORGQL( M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, K, LDA, LWORK, M, N
@@ -33,13 +33,13 @@
 *>
 *> \verbatim
 *>
-*> AB_SORGQL generates an M-by-N real matrix Q with orthonormal columns,
+*> SORGQL generates an M-by-N real matrix Q with orthonormal columns,
 *> which is defined as the last N columns of a product of K elementary
 *> reflectors of order M
 *>
 *>       Q  =  H(k) . . . H(2) H(1)
 *>
-*> as returned by AB_SGEQLF.
+*> as returned by SGEQLF.
 *> \endverbatim
 *
 *  Arguments:
@@ -69,7 +69,7 @@
 *>          A is REAL array, dimension (LDA,N)
 *>          On entry, the (n-k+i)-th column must contain the vector which
 *>          defines the elementary reflector H(i), for i = 1,2,...,k, as
-*>          returned by AB_SGEQLF in the last k columns of its array
+*>          returned by SGEQLF in the last k columns of its array
 *>          argument A.
 *>          On exit, the M-by-N matrix Q.
 *> \endverbatim
@@ -84,7 +84,7 @@
 *> \verbatim
 *>          TAU is REAL array, dimension (K)
 *>          TAU(i) must contain the scalar factor of the elementary
-*>          reflector H(i), as returned by AB_SGEQLF.
+*>          reflector H(i), as returned by SGEQLF.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -103,7 +103,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -126,7 +126,7 @@
 *> \ingroup realOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_SORGQL( M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
+      SUBROUTINE SORGQL( M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -152,15 +152,14 @@
      $                   NB, NBMIN, NX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_AB_SLARFB, AB_AB_SLARFT, AB_SORG2L, AB_XERBL
-     $A
+      EXTERNAL           SLARFB, SLARFT, SORG2L, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_ILAENV
+      INTEGER            ILAENV
+      EXTERNAL           ILAENV
 *     ..
 *     .. Executable Statements ..
 *
@@ -182,7 +181,7 @@
          IF( N.EQ.0 ) THEN
             LWKOPT = 1
          ELSE
-            NB = AB_ILAENV( 1, 'AB_SORGQL', ' ', M, N, K, -1 )
+            NB = ILAENV( 1, 'SORGQL', ' ', M, N, K, -1 )
             LWKOPT = N*NB
          END IF
          WORK( 1 ) = LWKOPT
@@ -193,7 +192,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SORGQL', -INFO )
+         CALL XERBLA( 'SORGQL', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -212,7 +211,7 @@
 *
 *        Determine when to cross over from blocked to unblocked code.
 *
-         NX = MAX( 0, AB_ILAENV( 3, 'AB_SORGQL', ' ', M, N, K, -1 ) )
+         NX = MAX( 0, ILAENV( 3, 'SORGQL', ' ', M, N, K, -1 ) )
          IF( NX.LT.K ) THEN
 *
 *           Determine if workspace is large enough for blocked code.
@@ -225,8 +224,7 @@
 *              determine the minimum value of NB.
 *
                NB = LWORK / LDWORK
-               NBMIN = MAX( 2, AB_ILAENV( 2, 'AB_SORGQL', ' ', M, N, K, 
-     $-1 ) )
+               NBMIN = MAX( 2, ILAENV( 2, 'SORGQL', ' ', M, N, K, -1 ) )
             END IF
          END IF
       END IF
@@ -251,7 +249,7 @@
 *
 *     Use unblocked code for the first or only block.
 *
-      CALL AB_SORG2L( M-KK, N-KK, K-KK, A, LDA, TAU, WORK, IINFO )
+      CALL SORG2L( M-KK, N-KK, K-KK, A, LDA, TAU, WORK, IINFO )
 *
       IF( KK.GT.0 ) THEN
 *
@@ -264,13 +262,12 @@
 *              Form the triangular factor of the block reflector
 *              H = H(i+ib-1) . . . H(i+1) H(i)
 *
-               CALL AB_AB_SLARFT( 'Backward', 'Columnwise', M-K+I+IB-1, 
-     $IB,
+               CALL SLARFT( 'Backward', 'Columnwise', M-K+I+IB-1, IB,
      $                      A( 1, N-K+I ), LDA, TAU( I ), WORK, LDWORK )
 *
 *              Apply H to A(1:m-k+i+ib-1,1:n-k+i-1) from the left
 *
-               CALL AB_AB_SLARFB( 'Left', 'No transpose', 'Backward',
+               CALL SLARFB( 'Left', 'No transpose', 'Backward',
      $                      'Columnwise', M-K+I+IB-1, N-K+I-1, IB,
      $                      A( 1, N-K+I ), LDA, WORK, LDWORK, A, LDA,
      $                      WORK( IB+1 ), LDWORK )
@@ -278,7 +275,7 @@
 *
 *           Apply H to rows 1:m-k+i+ib-1 of current block
 *
-            CALL AB_SORG2L( M-K+I+IB-1, IB, IB, A( 1, N-K+I ), LDA,
+            CALL SORG2L( M-K+I+IB-1, IB, IB, A( 1, N-K+I ), LDA,
      $                   TAU( I ), WORK, IINFO )
 *
 *           Set rows m-k+i+ib:m of current block to zero
@@ -294,6 +291,6 @@
       WORK( 1 ) = IWS
       RETURN
 *
-*     End of AB_SORGQL
+*     End of SORGQL
 *
       END

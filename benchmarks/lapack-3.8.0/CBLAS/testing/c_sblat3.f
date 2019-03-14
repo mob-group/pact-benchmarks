@@ -20,12 +20,12 @@
 *  0.0 1.0 0.7       VALUES OF ALPHA
 *  3                 NUMBER OF VALUES OF BETA
 *  0.0 1.0 1.3       VALUES OF BETA
-*  cblas_AB_SGEMM  T PUT F FOR NO TEST. SAME COLUMNS.
-*  cblas_AB_SSYMM  T PUT F FOR NO TEST. SAME COLUMNS.
-*  cblas_AB_STRMM  T PUT F FOR NO TEST. SAME COLUMNS.
-*  cblas_AB_STRSM  T PUT F FOR NO TEST. SAME COLUMNS.
-*  cblas_AB_AB_SSYRK  T PUT F FOR NO TEST. SAME COLUMNS.
-*  cblas_AB_AB_AB_SSYR2K T PUT F FOR NO TEST. SAME COLUMNS.
+*  cblas_sgemm  T PUT F FOR NO TEST. SAME COLUMNS.
+*  cblas_ssymm  T PUT F FOR NO TEST. SAME COLUMNS.
+*  cblas_strmm  T PUT F FOR NO TEST. SAME COLUMNS.
+*  cblas_strsm  T PUT F FOR NO TEST. SAME COLUMNS.
+*  cblas_ssyrk  T PUT F FOR NO TEST. SAME COLUMNS.
+*  cblas_ssyr2k T PUT F FOR NO TEST. SAME COLUMNS.
 *
 *  See:
 *
@@ -73,13 +73,12 @@
       LOGICAL            LTEST( NSUBS )
       CHARACTER*12       SNAMES( NSUBS )
 *     .. External Functions ..
-      REAL               AB_SDIFF
-      LOGICAL            AB_LSE
-      EXTERNAL           AB_SDIFF, AB_LSE
+      REAL               SDIFF
+      LOGICAL            LSE
+      EXTERNAL           SDIFF, LSE
 *     .. External Subroutines ..
-      EXTERNAL           AB_SCHK1, AB_SCHK2, AB_SCHK3, AB_SCHK4, AB_SCHK
-     $5, CS3CHKE,
-     $                   AB_SMMCH
+      EXTERNAL           SCHK1, SCHK2, SCHK3, SCHK4, SCHK5, CS3CHKE,
+     $                   SMMCH
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
 *     .. Scalars in Common ..
@@ -90,10 +89,9 @@
       COMMON             /INFOC/INFOT, NOUTC, OK
       COMMON             /SRNAMC/SRNAMT
 *     .. Data statements ..
-      DATA               SNAMES/'cblas_AB_SGEMM ', 'cblas_AB_SSYMM ',
-     $                   'cblas_AB_STRMM ', 'cblas_AB_STRSM ','cblas_AB_
-     $AB_SSYRK ',
-     $                   'cblas_AB_AB_AB_SSYR2K'/
+      DATA               SNAMES/'cblas_sgemm ', 'cblas_ssymm ',
+     $                   'cblas_strmm ', 'cblas_strsm ','cblas_ssyrk ',
+     $                   'cblas_ssyr2k'/
 *     .. Executable Statements ..
 *
       NOUTC = NOUT
@@ -201,7 +199,7 @@
 *
       EPS = ONE
    70 CONTINUE
-      IF( AB_SDIFF( ONE + EPS, ONE ).EQ.ZERO )
+      IF( SDIFF( ONE + EPS, ONE ).EQ.ZERO )
      $   GO TO 80
       EPS = HALF*EPS
       GO TO 70
@@ -209,7 +207,7 @@
       EPS = EPS + EPS
       WRITE( NOUT, FMT = 9998 )EPS
 *
-*     Check the reliability of AB_SMMCH using exact data.
+*     Check the reliability of SMMCH using exact data.
 *
       N = MIN( 32, NMAX )
       DO 100 J = 1, N
@@ -223,23 +221,23 @@
       DO 110 J = 1, N
          CC( J ) = J*( ( J + 1 )*J )/2 - ( ( J + 1 )*J*( J - 1 ) )/3
   110 CONTINUE
-*     CC holds the exact result. On exit from AB_SMMCH CT holds
-*     the result computed by AB_SMMCH.
+*     CC holds the exact result. On exit from SMMCH CT holds
+*     the result computed by SMMCH.
       TRANSA = 'N'
       TRANSB = 'N'
-      CALL AB_SMMCH( TRANSA, TRANSB, N, 1, N, ONE, AB, NMAX,
+      CALL SMMCH( TRANSA, TRANSB, N, 1, N, ONE, AB, NMAX,
      $            AB( 1, NMAX + 1 ), NMAX, ZERO, C, NMAX, CT, G, CC,
      $            NMAX, EPS, ERR, FATAL, NOUT, .TRUE. )
-      SAME = AB_LSE( CC, CT, N )
+      SAME = LSE( CC, CT, N )
       IF( .NOT.SAME.OR.ERR.NE.ZERO )THEN
          WRITE( NOUT, FMT = 9989 )TRANSA, TRANSB, SAME, ERR
          STOP
       END IF
       TRANSB = 'T'
-      CALL AB_SMMCH( TRANSA, TRANSB, N, 1, N, ONE, AB, NMAX,
+      CALL SMMCH( TRANSA, TRANSB, N, 1, N, ONE, AB, NMAX,
      $            AB( 1, NMAX + 1 ), NMAX, ZERO, C, NMAX, CT, G, CC,
      $            NMAX, EPS, ERR, FATAL, NOUT, .TRUE. )
-      SAME = AB_LSE( CC, CT, N )
+      SAME = LSE( CC, CT, N )
       IF( .NOT.SAME.OR.ERR.NE.ZERO )THEN
          WRITE( NOUT, FMT = 9989 )TRANSA, TRANSB, SAME, ERR
          STOP
@@ -254,19 +252,19 @@
   130 CONTINUE
       TRANSA = 'T'
       TRANSB = 'N'
-      CALL AB_SMMCH( TRANSA, TRANSB, N, 1, N, ONE, AB, NMAX,
+      CALL SMMCH( TRANSA, TRANSB, N, 1, N, ONE, AB, NMAX,
      $            AB( 1, NMAX + 1 ), NMAX, ZERO, C, NMAX, CT, G, CC,
      $            NMAX, EPS, ERR, FATAL, NOUT, .TRUE. )
-      SAME = AB_LSE( CC, CT, N )
+      SAME = LSE( CC, CT, N )
       IF( .NOT.SAME.OR.ERR.NE.ZERO )THEN
          WRITE( NOUT, FMT = 9989 )TRANSA, TRANSB, SAME, ERR
          STOP
       END IF
       TRANSB = 'T'
-      CALL AB_SMMCH( TRANSA, TRANSB, N, 1, N, ONE, AB, NMAX,
+      CALL SMMCH( TRANSA, TRANSB, N, 1, N, ONE, AB, NMAX,
      $            AB( 1, NMAX + 1 ), NMAX, ZERO, C, NMAX, CT, G, CC,
      $            NMAX, EPS, ERR, FATAL, NOUT, .TRUE. )
-      SAME = AB_LSE( CC, CT, N )
+      SAME = LSE( CC, CT, N )
       IF( .NOT.SAME.OR.ERR.NE.ZERO )THEN
          WRITE( NOUT, FMT = 9989 )TRANSA, TRANSB, SAME, ERR
          STOP
@@ -291,81 +289,71 @@
             OK = .TRUE.
             FATAL = .FALSE.
             GO TO ( 140, 150, 160, 160, 170, 180 )ISNUM
-*           Test AB_SGEMM, 01.
+*           Test SGEMM, 01.
   140       IF (CORDER) THEN
-            CALL AB_SCHK1( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRA
-     $CE,
+            CALL SCHK1( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET,
      $                  NMAX, AB, AA, AS, AB( 1, NMAX + 1 ), BB, BS, C,
      $                  CC, CS, CT, G, 0 )
             END IF
             IF (RORDER) THEN
-            CALL AB_SCHK1( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRA
-     $CE,
+            CALL SCHK1( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET,
      $                  NMAX, AB, AA, AS, AB( 1, NMAX + 1 ), BB, BS, C,
      $                  CC, CS, CT, G, 1 )
             END IF
             GO TO 190
-*           Test AB_SSYMM, 02.
+*           Test SSYMM, 02.
   150       IF (CORDER) THEN
-            CALL AB_SCHK2( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRA
-     $CE,
+            CALL SCHK2( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET,
      $                  NMAX, AB, AA, AS, AB( 1, NMAX + 1 ), BB, BS, C,
      $                  CC, CS, CT, G, 0 )
             END IF
             IF (RORDER) THEN
-            CALL AB_SCHK2( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRA
-     $CE,
+            CALL SCHK2( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET,
      $                  NMAX, AB, AA, AS, AB( 1, NMAX + 1 ), BB, BS, C,
      $                  CC, CS, CT, G, 1 )
             END IF
             GO TO 190
-*           Test AB_STRMM, 03, AB_STRSM, 04.
+*           Test STRMM, 03, STRSM, 04.
   160       IF (CORDER) THEN
-            CALL AB_SCHK3( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRA
-     $CE,
+            CALL SCHK3( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NALF, ALF, NMAX, AB,
      $                  AA, AS, AB( 1, NMAX + 1 ), BB, BS, CT, G, C,
      $                  0 )
             END IF
             IF (RORDER) THEN
-            CALL AB_SCHK3( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRA
-     $CE,
+            CALL SCHK3( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NALF, ALF, NMAX, AB,
      $                  AA, AS, AB( 1, NMAX + 1 ), BB, BS, CT, G, C,
      $                  1 )
             END IF
             GO TO 190
-*           Test AB_AB_SSYRK, 05.
+*           Test SSYRK, 05.
   170       IF (CORDER) THEN
-            CALL AB_SCHK4( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRA
-     $CE,
+            CALL SCHK4( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET,
      $                  NMAX, AB, AA, AS, AB( 1, NMAX + 1 ), BB, BS, C,
      $                  CC, CS, CT, G, 0 )
             END IF
             IF (RORDER) THEN
-            CALL AB_SCHK4( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRA
-     $CE,
+            CALL SCHK4( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET,
      $                  NMAX, AB, AA, AS, AB( 1, NMAX + 1 ), BB, BS, C,
      $                  CC, CS, CT, G, 1 )
             END IF
             GO TO 190
-*           Test AB_AB_AB_SSYR2K, 06.
+*           Test SSYR2K, 06.
   180       IF (CORDER) THEN
-            CALL AB_SCHK5( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRA
-     $CE,
+            CALL SCHK5( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET,
      $                  NMAX, AB, AA, AS, BB, BS, C, CC, CS, CT, G, W,
      $                  0 )
             END IF
             IF (RORDER) THEN
-            CALL AB_SCHK5( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRA
-     $CE,
+            CALL SCHK5( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET,
      $                  NMAX, AB, AA, AS, BB, BS, C, CC, CS, CT, G, W,
      $                  1 )
@@ -410,9 +398,8 @@
      $      /' ******* TESTS ABANDONED *******' )
  9990 FORMAT( ' SUBPROGRAM NAME ', A12,' NOT RECOGNIZED', /' ******* ',
      $      'TESTS ABANDONED *******' )
- 9989 FORMAT( ' ERROR IN AB_SMMCH -  IN-LINE DOT PRODUCTS ARE BEING EVAL
-     $U',
-     $      'ATED WRONGLY.', /' AB_SMMCH WAS CALLED WITH TRANSA = ', A1,
+ 9989 FORMAT( ' ERROR IN SMMCH -  IN-LINE DOT PRODUCTS ARE BEING EVALU',
+     $      'ATED WRONGLY.', /' SMMCH WAS CALLED WITH TRANSA = ', A1,
      $      ' AND TRANSB = ', A1, /' AND RETURNED SAME = ', L1, ' AND ',
      $      'ERR = ', F12.3, '.', /' THIS MAY BE DUE TO FAULTS IN THE ',
      $      'ARITHMETIC OR THE COMPILER.', /' ******* TESTS ABANDONED ',
@@ -426,12 +413,12 @@
 *     End of SBLAT3.
 *
       END
-      SUBROUTINE AB_SCHK1( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
+      SUBROUTINE SCHK1( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET, NMAX,
      $                  A, AA, AS, B, BB, BS, C, CC, CS, CT, G,
      $                  IORDER )
 *
-*  Tests AB_SGEMM.
+*  Tests SGEMM.
 *
 *  Auxiliary routine for test program for Level 3 Blas.
 *
@@ -467,10 +454,10 @@
 *     .. Local Arrays ..
       LOGICAL            ISAME( 13 )
 *     .. External Functions ..
-      LOGICAL            AB_LSE, AB_AB_LSERES
-      EXTERNAL           AB_LSE, AB_AB_LSERES
+      LOGICAL            LSE, LSERES
+      EXTERNAL           LSE, LSERES
 *     .. External Subroutines ..
-      EXTERNAL           CAB_SGEMM, AB_SMAKE, AB_SMMCH
+      EXTERNAL           CSGEMM, SMAKE, SMMCH
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
 *     .. Scalars in Common ..
@@ -527,8 +514,7 @@
 *
 *                 Generate the matrix A.
 *
-                  CALL AB_SMAKE( 'GE', ' ', ' ', MA, NA, A, NMAX, AA, LD
-     $A,
+                  CALL SMAKE( 'GE', ' ', ' ', MA, NA, A, NMAX, AA, LDA,
      $                        RESET, ZERO )
 *
                   DO 70 ICB = 1, 3
@@ -553,7 +539,7 @@
 *
 *                    Generate the matrix B.
 *
-                     CALL AB_SMAKE( 'GE', ' ', ' ', MB, NB, B, NMAX, BB,
+                     CALL SMAKE( 'GE', ' ', ' ', MB, NB, B, NMAX, BB,
      $                           LDB, RESET, ZERO )
 *
                      DO 60 IA = 1, NALF
@@ -564,7 +550,7 @@
 *
 *                          Generate the matrix C.
 *
-                           CALL AB_SMAKE( 'GE', ' ', ' ', M, N, C, NMAX,
+                           CALL SMAKE( 'GE', ' ', ' ', M, N, C, NMAX,
      $                                 CC, LDC, RESET, ZERO )
 *
                            NC = NC + 1
@@ -595,12 +581,12 @@
 *                          Call the subroutine.
 *
                            IF( TRACE )
-     $                        CALL AB_SPRCN1(NTRA, NC, SNAME, IORDER,
+     $                        CALL SPRCN1(NTRA, NC, SNAME, IORDER,
      $                        TRANSA, TRANSB, M, N, K, ALPHA, LDA,
      $                        LDB, BETA, LDC)
                            IF( REWI )
      $                        REWIND NTRA
-                           CALL CAB_SGEMM( IORDER, TRANSA, TRANSB, M, N,
+                           CALL CSGEMM( IORDER, TRANSA, TRANSB, M, N,
      $                                 K, ALPHA, AA, LDA, BB, LDB,
      $                                 BETA, CC, LDC )
 *
@@ -620,16 +606,15 @@
                            ISAME( 4 ) = NS.EQ.N
                            ISAME( 5 ) = KS.EQ.K
                            ISAME( 6 ) = ALS.EQ.ALPHA
-                           ISAME( 7 ) = AB_LSE( AS, AA, LAA )
+                           ISAME( 7 ) = LSE( AS, AA, LAA )
                            ISAME( 8 ) = LDAS.EQ.LDA
-                           ISAME( 9 ) = AB_LSE( BS, BB, LBB )
+                           ISAME( 9 ) = LSE( BS, BB, LBB )
                            ISAME( 10 ) = LDBS.EQ.LDB
                            ISAME( 11 ) = BLS.EQ.BETA
                            IF( NULL )THEN
-                              ISAME( 12 ) = AB_LSE( CS, CC, LCC )
+                              ISAME( 12 ) = LSE( CS, CC, LCC )
                            ELSE
-                              ISAME( 12 ) = AB_AB_LSERES( 'GE', ' ', M, 
-     $N, CS,
+                              ISAME( 12 ) = LSERES( 'GE', ' ', M, N, CS,
      $                                      CC, LDC )
                            END IF
                            ISAME( 13 ) = LDCS.EQ.LDC
@@ -652,7 +637,7 @@
 *
 *                             Check the result.
 *
-                              CALL AB_SMMCH( TRANSA, TRANSB, M, N, K,
+                              CALL SMMCH( TRANSA, TRANSB, M, N, K,
      $                                    ALPHA, A, NMAX, B, NMAX, BETA,
      $                                    C, NMAX, CT, G, CC, LDC, EPS,
      $                                    ERR, FATAL, NOUT, .TRUE. )
@@ -690,7 +675,7 @@
 *
   120 CONTINUE
       WRITE( NOUT, FMT = 9996 )SNAME
-      CALL AB_SPRCN1(NOUT, NC, SNAME, IORDER, TRANSA, TRANSB,
+      CALL SPRCN1(NOUT, NC, SNAME, IORDER, TRANSA, TRANSB,
      $           M, N, K, ALPHA, LDA, LDB, BETA, LDC)
 *
   130 CONTINUE
@@ -715,14 +700,13 @@
  9994 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of AB_SCHK1.
+*     End of SCHK1.
 *
       END
 *
 *
 *
-      SUBROUTINE AB_SPRCN1(NOUT, NC, SNAME, IORDER, TRANSA, TRANSB, M, N
-     $,
+      SUBROUTINE SPRCN1(NOUT, NC, SNAME, IORDER, TRANSA, TRANSB, M, N,
      $                 K, ALPHA, LDA, LDB, BETA, LDC)
       INTEGER          NOUT, NC, IORDER, M, N, K, LDA, LDB, LDC
       REAL             ALPHA, BETA
@@ -757,12 +741,12 @@
      $ F4.1, ', ', 'C,', I3, ').' )
       END
 *
-      SUBROUTINE AB_SCHK2( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
+      SUBROUTINE SCHK2( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET, NMAX,
      $                  A, AA, AS, B, BB, BS, C, CC, CS, CT, G,
      $                  IORDER )
 *
-*  Tests AB_SSYMM.
+*  Tests SSYMM.
 *
 *  Auxiliary routine for test program for Level 3 Blas.
 *
@@ -798,10 +782,10 @@
 *     .. Local Arrays ..
       LOGICAL            ISAME( 13 )
 *     .. External Functions ..
-      LOGICAL            AB_LSE, AB_AB_LSERES
-      EXTERNAL           AB_LSE, AB_AB_LSERES
+      LOGICAL            LSE, LSERES
+      EXTERNAL           LSE, LSERES
 *     .. External Subroutines ..
-      EXTERNAL           AB_SMAKE, AB_SMMCH, CAB_SSYMM
+      EXTERNAL           SMAKE, SMMCH, CSSYMM
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
 *     .. Scalars in Common ..
@@ -844,8 +828,7 @@
 *
 *           Generate the matrix B.
 *
-            CALL AB_SMAKE( 'GE', ' ', ' ', M, N, B, NMAX, BB, LDB, RESET
-     $,
+            CALL SMAKE( 'GE', ' ', ' ', M, N, B, NMAX, BB, LDB, RESET,
      $                  ZERO )
 *
             DO 80 ICS = 1, 2
@@ -871,8 +854,7 @@
 *
 *                 Generate the symmetric matrix A.
 *
-                  CALL AB_SMAKE( 'SY', UPLO, ' ', NA, NA, A, NMAX, AA, L
-     $DA,
+                  CALL SMAKE( 'SY', UPLO, ' ', NA, NA, A, NMAX, AA, LDA,
      $                        RESET, ZERO )
 *
                   DO 60 IA = 1, NALF
@@ -883,8 +865,7 @@
 *
 *                       Generate the matrix C.
 *
-                        CALL AB_SMAKE( 'GE', ' ', ' ', M, N, C, NMAX, CC
-     $,
+                        CALL SMAKE( 'GE', ' ', ' ', M, N, C, NMAX, CC,
      $                              LDC, RESET, ZERO )
 *
                         NC = NC + 1
@@ -914,12 +895,12 @@
 *                       Call the subroutine.
 *
                         IF( TRACE )
-     $                      CALL AB_SPRCN2(NTRA, NC, SNAME, IORDER,
+     $                      CALL SPRCN2(NTRA, NC, SNAME, IORDER,
      $                      SIDE, UPLO, M, N, ALPHA, LDA, LDB,
      $                      BETA, LDC)
                         IF( REWI )
      $                     REWIND NTRA
-                        CALL CAB_SSYMM( IORDER, SIDE, UPLO, M, N, ALPHA,
+                        CALL CSSYMM( IORDER, SIDE, UPLO, M, N, ALPHA,
      $                              AA, LDA, BB, LDB, BETA, CC, LDC )
 *
 *                       Check if error-exit was taken incorrectly.
@@ -937,16 +918,15 @@
                         ISAME( 3 ) = MS.EQ.M
                         ISAME( 4 ) = NS.EQ.N
                         ISAME( 5 ) = ALS.EQ.ALPHA
-                        ISAME( 6 ) = AB_LSE( AS, AA, LAA )
+                        ISAME( 6 ) = LSE( AS, AA, LAA )
                         ISAME( 7 ) = LDAS.EQ.LDA
-                        ISAME( 8 ) = AB_LSE( BS, BB, LBB )
+                        ISAME( 8 ) = LSE( BS, BB, LBB )
                         ISAME( 9 ) = LDBS.EQ.LDB
                         ISAME( 10 ) = BLS.EQ.BETA
                         IF( NULL )THEN
-                           ISAME( 11 ) = AB_LSE( CS, CC, LCC )
+                           ISAME( 11 ) = LSE( CS, CC, LCC )
                         ELSE
-                           ISAME( 11 ) = AB_AB_LSERES( 'GE', ' ', M, N, 
-     $CS,
+                           ISAME( 11 ) = LSERES( 'GE', ' ', M, N, CS,
      $                                   CC, LDC )
                         END IF
                         ISAME( 12 ) = LDCS.EQ.LDC
@@ -970,14 +950,12 @@
 *                          Check the result.
 *
                            IF( LEFT )THEN
-                              CALL AB_SMMCH( 'N', 'N', M, N, M, ALPHA, A
-     $,
+                              CALL SMMCH( 'N', 'N', M, N, M, ALPHA, A,
      $                                    NMAX, B, NMAX, BETA, C, NMAX,
      $                                    CT, G, CC, LDC, EPS, ERR,
      $                                    FATAL, NOUT, .TRUE. )
                            ELSE
-                              CALL AB_SMMCH( 'N', 'N', M, N, N, ALPHA, B
-     $,
+                              CALL SMMCH( 'N', 'N', M, N, N, ALPHA, B,
      $                                    NMAX, A, NMAX, BETA, C, NMAX,
      $                                    CT, G, CC, LDC, EPS, ERR,
      $                                    FATAL, NOUT, .TRUE. )
@@ -1014,8 +992,7 @@
 *
   110 CONTINUE
       WRITE( NOUT, FMT = 9996 )SNAME
-      CALL AB_SPRCN2(NOUT, NC, SNAME, IORDER, SIDE, UPLO, M, N, ALPHA, L
-     $DA,
+      CALL SPRCN2(NOUT, NC, SNAME, IORDER, SIDE, UPLO, M, N, ALPHA, LDA,
      $           LDB, BETA, LDC)
 *
   120 CONTINUE
@@ -1040,11 +1017,11 @@
  9994 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of AB_SCHK2.
+*     End of SCHK2.
 *
       END
 *
-      SUBROUTINE AB_SPRCN2(NOUT, NC, SNAME, IORDER, SIDE, UPLO, M, N,
+      SUBROUTINE SPRCN2(NOUT, NC, SNAME, IORDER, SIDE, UPLO, M, N,
      $                 ALPHA, LDA, LDB, BETA, LDC)
       INTEGER          NOUT, NC, IORDER, M, N, LDA, LDB, LDC
       REAL             ALPHA, BETA
@@ -1075,11 +1052,11 @@
      $ F4.1, ', ', 'C,', I3, ').' )
       END
 *
-      SUBROUTINE AB_SCHK3( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
+      SUBROUTINE SCHK3( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NALF, ALF, NMAX, A, AA, AS,
      $                  B, BB, BS, CT, G, C, IORDER )
 *
-*  Tests AB_STRMM and AB_STRSM.
+*  Tests STRMM and STRSM.
 *
 *  Auxiliary routine for test program for Level 3 Blas.
 *
@@ -1116,10 +1093,10 @@
 *     .. Local Arrays ..
       LOGICAL            ISAME( 13 )
 *     .. External Functions ..
-      LOGICAL            AB_LSE, AB_AB_LSERES
-      EXTERNAL           AB_LSE, AB_AB_LSERES
+      LOGICAL            LSE, LSERES
+      EXTERNAL           LSE, LSERES
 *     .. External Subroutines ..
-      EXTERNAL           AB_SMAKE, AB_SMMCH, CAB_STRMM, CAB_STRSM
+      EXTERNAL           SMAKE, SMMCH, CSTRMM, CSTRSM
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
 *     .. Scalars in Common ..
@@ -1135,7 +1112,7 @@
       NC = 0
       RESET = .TRUE.
       ERRMAX = ZERO
-*     Set up zero matrix for AB_SMMCH.
+*     Set up zero matrix for SMMCH.
       DO 20 J = 1, NMAX
          DO 10 I = 1, NMAX
             C( I, J ) = ZERO
@@ -1188,12 +1165,12 @@
 *
 *                          Generate the matrix A.
 *
-                           CALL AB_SMAKE( 'TR', UPLO, DIAG, NA, NA, A,
+                           CALL SMAKE( 'TR', UPLO, DIAG, NA, NA, A,
      $                                 NMAX, AA, LDA, RESET, ZERO )
 *
 *                          Generate the matrix B.
 *
-                           CALL AB_SMAKE( 'GE', ' ', ' ', M, N, B, NMAX,
+                           CALL SMAKE( 'GE', ' ', ' ', M, N, B, NMAX,
      $                                 BB, LDB, RESET, ZERO )
 *
                            NC = NC + 1
@@ -1221,26 +1198,22 @@
 *
                            IF( SNAME( 10: 11 ).EQ.'mm' )THEN
                               IF( TRACE )
-     $                           CALL AB_SPRCN3( NTRA, NC, SNAME, IORDER
-     $,
+     $                           CALL SPRCN3( NTRA, NC, SNAME, IORDER,
      $                           SIDE, UPLO, TRANSA, DIAG, M, N, ALPHA,
      $                           LDA, LDB)
                               IF( REWI )
      $                           REWIND NTRA
-                              CALL CAB_STRMM( IORDER, SIDE, UPLO, TRANSA
-     $,
+                              CALL CSTRMM( IORDER, SIDE, UPLO, TRANSA,
      $                                    DIAG, M, N, ALPHA, AA, LDA,
      $                                    BB, LDB )
                            ELSE IF( SNAME( 10: 11 ).EQ.'sm' )THEN
                               IF( TRACE )
-     $                           CALL AB_SPRCN3( NTRA, NC, SNAME, IORDER
-     $,
+     $                           CALL SPRCN3( NTRA, NC, SNAME, IORDER,
      $                           SIDE, UPLO, TRANSA, DIAG, M, N, ALPHA,
      $                           LDA, LDB)
                               IF( REWI )
      $                           REWIND NTRA
-                              CALL CAB_STRSM( IORDER, SIDE, UPLO, TRANSA
-     $,
+                              CALL CSTRSM( IORDER, SIDE, UPLO, TRANSA,
      $                                    DIAG, M, N, ALPHA, AA, LDA,
      $                                    BB, LDB )
                            END IF
@@ -1262,13 +1235,12 @@
                            ISAME( 5 ) = MS.EQ.M
                            ISAME( 6 ) = NS.EQ.N
                            ISAME( 7 ) = ALS.EQ.ALPHA
-                           ISAME( 8 ) = AB_LSE( AS, AA, LAA )
+                           ISAME( 8 ) = LSE( AS, AA, LAA )
                            ISAME( 9 ) = LDAS.EQ.LDA
                            IF( NULL )THEN
-                              ISAME( 10 ) = AB_LSE( BS, BB, LBB )
+                              ISAME( 10 ) = LSE( BS, BB, LBB )
                            ELSE
-                              ISAME( 10 ) = AB_AB_LSERES( 'GE', ' ', M, 
-     $N, BS,
+                              ISAME( 10 ) = LSERES( 'GE', ' ', M, N, BS,
      $                                      BB, LDB )
                            END IF
                            ISAME( 11 ) = LDBS.EQ.LDB
@@ -1293,13 +1265,13 @@
 *                                Check the result.
 *
                                  IF( LEFT )THEN
-                                    CALL AB_SMMCH( TRANSA, 'N', M, N, M,
+                                    CALL SMMCH( TRANSA, 'N', M, N, M,
      $                                          ALPHA, A, NMAX, B, NMAX,
      $                                          ZERO, C, NMAX, CT, G,
      $                                          BB, LDB, EPS, ERR,
      $                                          FATAL, NOUT, .TRUE. )
                                  ELSE
-                                    CALL AB_SMMCH( 'N', TRANSA, M, N, N,
+                                    CALL SMMCH( 'N', TRANSA, M, N, N,
      $                                          ALPHA, B, NMAX, A, NMAX,
      $                                          ZERO, C, NMAX, CT, G,
      $                                          BB, LDB, EPS, ERR,
@@ -1320,19 +1292,17 @@
    70                            CONTINUE
 *
                                  IF( LEFT )THEN
-                                    CALL AB_SMMCH( TRANSA, 'N', M, N, M,
+                                    CALL SMMCH( TRANSA, 'N', M, N, M,
      $                                          ONE, A, NMAX, C, NMAX,
      $                                          ZERO, B, NMAX, CT, G,
      $                                          BB, LDB, EPS, ERR,
-     $                                          FATAL, NOUT, .FALSE. 
-     $)
+     $                                          FATAL, NOUT, .FALSE. )
                                  ELSE
-                                    CALL AB_SMMCH( 'N', TRANSA, M, N, N,
+                                    CALL SMMCH( 'N', TRANSA, M, N, N,
      $                                          ONE, C, NMAX, A, NMAX,
      $                                          ZERO, B, NMAX, CT, G,
      $                                          BB, LDB, EPS, ERR,
-     $                                          FATAL, NOUT, .FALSE. 
-     $)
+     $                                          FATAL, NOUT, .FALSE. )
                                  END IF
                               END IF
                               ERRMAX = MAX( ERRMAX, ERR )
@@ -1370,8 +1340,7 @@
   150 CONTINUE
       WRITE( NOUT, FMT = 9996 )SNAME
       IF( TRACE )
-     $   CALL AB_SPRCN3( NTRA, NC, SNAME, IORDER, SIDE, UPLO, TRANSA, DI
-     $AG,
+     $   CALL SPRCN3( NTRA, NC, SNAME, IORDER, SIDE, UPLO, TRANSA, DIAG,
      $         M, N, ALPHA, LDA, LDB)
 *
   160 CONTINUE
@@ -1395,11 +1364,11 @@
  9994 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of AB_SCHK3.
+*     End of SCHK3.
 *
       END
 *
-      SUBROUTINE AB_SPRCN3(NOUT, NC, SNAME, IORDER, SIDE, UPLO, TRANSA,
+      SUBROUTINE SPRCN3(NOUT, NC, SNAME, IORDER, SIDE, UPLO, TRANSA,
      $                 DIAG, M, N, ALPHA, LDA, LDB)
       INTEGER          NOUT, NC, IORDER, M, N, LDA, LDB
       REAL             ALPHA
@@ -1442,12 +1411,12 @@
      $      F4.1, ', A,', I3, ', B,', I3, ').' )
       END
 *
-      SUBROUTINE AB_SCHK4( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
+      SUBROUTINE SCHK4( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET, NMAX,
      $                  A, AA, AS, B, BB, BS, C, CC, CS, CT, G,
      $                  IORDER )
 *
-*  Tests AB_AB_SSYRK.
+*  Tests SSYRK.
 *
 *  Auxiliary routine for test program for Level 3 Blas.
 *
@@ -1484,10 +1453,10 @@
 *     .. Local Arrays ..
       LOGICAL            ISAME( 13 )
 *     .. External Functions ..
-      LOGICAL            AB_LSE, AB_AB_LSERES
-      EXTERNAL           AB_LSE, AB_AB_LSERES
+      LOGICAL            LSE, LSERES
+      EXTERNAL           LSE, LSERES
 *     .. External Subroutines ..
-      EXTERNAL           AB_SMAKE, AB_SMMCH, CAB_AB_SSYRK
+      EXTERNAL           SMAKE, SMMCH, CSSYRK
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
 *     .. Scalars in Common ..
@@ -1540,7 +1509,7 @@
 *
 *              Generate the matrix A.
 *
-               CALL AB_SMAKE( 'GE', ' ', ' ', MA, NA, A, NMAX, AA, LDA,
+               CALL SMAKE( 'GE', ' ', ' ', MA, NA, A, NMAX, AA, LDA,
      $                     RESET, ZERO )
 *
                DO 70 ICU = 1, 2
@@ -1555,8 +1524,7 @@
 *
 *                       Generate the matrix C.
 *
-                        CALL AB_SMAKE( 'SY', UPLO, ' ', N, N, C, NMAX, C
-     $C,
+                        CALL SMAKE( 'SY', UPLO, ' ', N, N, C, NMAX, CC,
      $                              LDC, RESET, ZERO )
 *
                         NC = NC + 1
@@ -1581,13 +1549,11 @@
 *                       Call the subroutine.
 *
                         IF( TRACE )
-     $                     CALL AB_SPRCN4( NTRA, NC, SNAME, IORDER, UPLO
-     $,
+     $                     CALL SPRCN4( NTRA, NC, SNAME, IORDER, UPLO,
      $                     TRANS, N, K, ALPHA, LDA, BETA, LDC)
                         IF( REWI )
      $                     REWIND NTRA
-                        CALL CAB_AB_SSYRK( IORDER, UPLO, TRANS, N, K, AL
-     $PHA,
+                        CALL CSSYRK( IORDER, UPLO, TRANS, N, K, ALPHA,
      $                              AA, LDA, BETA, CC, LDC )
 *
 *                       Check if error-exit was taken incorrectly.
@@ -1605,14 +1571,13 @@
                         ISAME( 3 ) = NS.EQ.N
                         ISAME( 4 ) = KS.EQ.K
                         ISAME( 5 ) = ALS.EQ.ALPHA
-                        ISAME( 6 ) = AB_LSE( AS, AA, LAA )
+                        ISAME( 6 ) = LSE( AS, AA, LAA )
                         ISAME( 7 ) = LDAS.EQ.LDA
                         ISAME( 8 ) = BETS.EQ.BETA
                         IF( NULL )THEN
-                           ISAME( 9 ) = AB_LSE( CS, CC, LCC )
+                           ISAME( 9 ) = LSE( CS, CC, LCC )
                         ELSE
-                           ISAME( 9 ) = AB_AB_LSERES( 'SY', UPLO, N, N, 
-     $CS,
+                           ISAME( 9 ) = LSERES( 'SY', UPLO, N, N, CS,
      $                                  CC, LDC )
                         END IF
                         ISAME( 10 ) = LDCS.EQ.LDC
@@ -1645,16 +1610,14 @@
                                  LJ = N - J + 1
                               END IF
                               IF( TRAN )THEN
-                                 CALL AB_SMMCH( 'T', 'N', LJ, 1, K, ALPH
-     $A,
+                                 CALL SMMCH( 'T', 'N', LJ, 1, K, ALPHA,
      $                                       A( 1, JJ ), NMAX,
      $                                       A( 1, J ), NMAX, BETA,
      $                                       C( JJ, J ), NMAX, CT, G,
      $                                       CC( JC ), LDC, EPS, ERR,
      $                                       FATAL, NOUT, .TRUE. )
                               ELSE
-                                 CALL AB_SMMCH( 'N', 'T', LJ, 1, K, ALPH
-     $A,
+                                 CALL SMMCH( 'N', 'T', LJ, 1, K, ALPHA,
      $                                       A( JJ, 1 ), NMAX,
      $                                       A( J, 1 ), NMAX, BETA,
      $                                       C( JJ, J ), NMAX, CT, G,
@@ -1703,7 +1666,7 @@
 *
   120 CONTINUE
       WRITE( NOUT, FMT = 9996 )SNAME
-      CALL AB_SPRCN4( NOUT, NC, SNAME, IORDER, UPLO, TRANS, N, K, ALPHA,
+      CALL SPRCN4( NOUT, NC, SNAME, IORDER, UPLO, TRANS, N, K, ALPHA,
      $   LDA, BETA, LDC)
 *
   130 CONTINUE
@@ -1728,11 +1691,11 @@
  9993 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of AB_SCHK4.
+*     End of SCHK4.
 *
       END
 *
-      SUBROUTINE AB_SPRCN4(NOUT, NC, SNAME, IORDER, UPLO, TRANSA,
+      SUBROUTINE SPRCN4(NOUT, NC, SNAME, IORDER, UPLO, TRANSA,
      $                 N, K, ALPHA, LDA, BETA, LDC)
       INTEGER          NOUT, NC, IORDER, N, K, LDA, LDC
       REAL             ALPHA, BETA
@@ -1765,12 +1728,12 @@
      $      F4.1, ', A,', I3, ',', F4.1, ', C,', I3, ').' )
       END
 *
-      SUBROUTINE AB_SCHK5( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
+      SUBROUTINE SCHK5( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NALF, ALF, NBET, BET, NMAX,
      $                  AB, AA, AS, BB, BS, C, CC, CS, CT, G, W,
      $                  IORDER )
 *
-*  Tests AB_AB_AB_SSYR2K.
+*  Tests SSYR2K.
 *
 *  Auxiliary routine for test program for Level 3 Blas.
 *
@@ -1807,10 +1770,10 @@
 *     .. Local Arrays ..
       LOGICAL            ISAME( 13 )
 *     .. External Functions ..
-      LOGICAL            AB_LSE, AB_AB_LSERES
-      EXTERNAL           AB_LSE, AB_AB_LSERES
+      LOGICAL            LSE, LSERES
+      EXTERNAL           LSE, LSERES
 *     .. External Subroutines ..
-      EXTERNAL           AB_SMAKE, AB_SMMCH, CAB_AB_AB_SSYR2K
+      EXTERNAL           SMAKE, SMMCH, CSSYR2K
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
 *     .. Scalars in Common ..
@@ -1864,11 +1827,10 @@
 *              Generate the matrix A.
 *
                IF( TRAN )THEN
-                  CALL AB_SMAKE( 'GE', ' ', ' ', MA, NA, AB, 2*NMAX, AA,
+                  CALL SMAKE( 'GE', ' ', ' ', MA, NA, AB, 2*NMAX, AA,
      $                        LDA, RESET, ZERO )
                ELSE
-                  CALL AB_SMAKE( 'GE', ' ', ' ', MA, NA, AB, NMAX, AA, L
-     $DA,
+                  CALL SMAKE( 'GE', ' ', ' ', MA, NA, AB, NMAX, AA, LDA,
      $                        RESET, ZERO )
                END IF
 *
@@ -1877,11 +1839,10 @@
                LDB = LDA
                LBB = LAA
                IF( TRAN )THEN
-                  CALL AB_SMAKE( 'GE', ' ', ' ', MA, NA, AB( K + 1 ),
+                  CALL SMAKE( 'GE', ' ', ' ', MA, NA, AB( K + 1 ),
      $                        2*NMAX, BB, LDB, RESET, ZERO )
                ELSE
-                  CALL AB_SMAKE( 'GE', ' ', ' ', MA, NA, AB( K*NMAX + 1 
-     $),
+                  CALL SMAKE( 'GE', ' ', ' ', MA, NA, AB( K*NMAX + 1 ),
      $                        NMAX, BB, LDB, RESET, ZERO )
                END IF
 *
@@ -1897,8 +1858,7 @@
 *
 *                       Generate the matrix C.
 *
-                        CALL AB_SMAKE( 'SY', UPLO, ' ', N, N, C, NMAX, C
-     $C,
+                        CALL SMAKE( 'SY', UPLO, ' ', N, N, C, NMAX, CC,
      $                              LDC, RESET, ZERO )
 *
                         NC = NC + 1
@@ -1927,13 +1887,11 @@
 *                       Call the subroutine.
 *
                         IF( TRACE )
-     $                     CALL AB_SPRCN5( NTRA, NC, SNAME, IORDER, UPLO
-     $,
+     $                     CALL SPRCN5( NTRA, NC, SNAME, IORDER, UPLO,
      $                     TRANS, N, K, ALPHA, LDA, LDB, BETA, LDC)
                         IF( REWI )
      $                     REWIND NTRA
-                        CALL CAB_AB_AB_SSYR2K( IORDER, UPLO, TRANS, N, K
-     $, ALPHA,
+                        CALL CSSYR2K( IORDER, UPLO, TRANS, N, K, ALPHA,
      $                               AA, LDA, BB, LDB, BETA, CC, LDC )
 *
 *                       Check if error-exit was taken incorrectly.
@@ -1951,16 +1909,15 @@
                         ISAME( 3 ) = NS.EQ.N
                         ISAME( 4 ) = KS.EQ.K
                         ISAME( 5 ) = ALS.EQ.ALPHA
-                        ISAME( 6 ) = AB_LSE( AS, AA, LAA )
+                        ISAME( 6 ) = LSE( AS, AA, LAA )
                         ISAME( 7 ) = LDAS.EQ.LDA
-                        ISAME( 8 ) = AB_LSE( BS, BB, LBB )
+                        ISAME( 8 ) = LSE( BS, BB, LBB )
                         ISAME( 9 ) = LDBS.EQ.LDB
                         ISAME( 10 ) = BETS.EQ.BETA
                         IF( NULL )THEN
-                           ISAME( 11 ) = AB_LSE( CS, CC, LCC )
+                           ISAME( 11 ) = LSE( CS, CC, LCC )
                         ELSE
-                           ISAME( 11 ) = AB_AB_LSERES( 'SY', UPLO, N, N,
-     $ CS,
+                           ISAME( 11 ) = LSERES( 'SY', UPLO, N, N, CS,
      $                                   CC, LDC )
                         END IF
                         ISAME( 12 ) = LDCS.EQ.LDC
@@ -2000,7 +1957,7 @@
                                     W( K + I ) = AB( ( J - 1 )*2*NMAX +
      $                                           I )
    50                            CONTINUE
-                                 CALL AB_SMMCH( 'T', 'N', LJ, 1, 2*K,
+                                 CALL SMMCH( 'T', 'N', LJ, 1, 2*K,
      $                                       ALPHA, AB( JJAB ), 2*NMAX,
      $                                       W, 2*NMAX, BETA,
      $                                       C( JJ, J ), NMAX, CT, G,
@@ -2013,7 +1970,7 @@
                                     W( K + I ) = AB( ( I - 1 )*NMAX +
      $                                           J )
    60                            CONTINUE
-                                 CALL AB_SMMCH( 'N', 'N', LJ, 1, 2*K,
+                                 CALL SMMCH( 'N', 'N', LJ, 1, 2*K,
      $                                       ALPHA, AB( JJ ), NMAX, W,
      $                                       2*NMAX, BETA, C( JJ, J ),
      $                                       NMAX, CT, G, CC( JC ), LDC,
@@ -2064,7 +2021,7 @@
 *
   150 CONTINUE
       WRITE( NOUT, FMT = 9996 )SNAME
-      CALL AB_SPRCN5( NOUT, NC, SNAME, IORDER, UPLO, TRANS, N, K, ALPHA,
+      CALL SPRCN5( NOUT, NC, SNAME, IORDER, UPLO, TRANS, N, K, ALPHA,
      $   LDA, LDB, BETA, LDC)
 *
   160 CONTINUE
@@ -2090,11 +2047,11 @@
  9993 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of AB_SCHK5.
+*     End of SCHK5.
 *
       END
 *
-      SUBROUTINE AB_SPRCN5(NOUT, NC, SNAME, IORDER, UPLO, TRANSA,
+      SUBROUTINE SPRCN5(NOUT, NC, SNAME, IORDER, UPLO, TRANSA,
      $                 N, K, ALPHA, LDA, LDB, BETA, LDC)
       INTEGER          NOUT, NC, IORDER, N, K, LDA, LDB, LDC
       REAL             ALPHA, BETA
@@ -2127,8 +2084,7 @@
      $      F4.1, ', A,', I3, ', B', I3, ',', F4.1, ', C,', I3, ').' )
       END
 *
-      SUBROUTINE AB_SMAKE( TYPE, UPLO, DIAG, M, N, A, NMAX, AA, LDA, RES
-     $ET,
+      SUBROUTINE SMAKE( TYPE, UPLO, DIAG, M, N, A, NMAX, AA, LDA, RESET,
      $                  TRANSL )
 *
 *  Generates values for an M by N matrix A.
@@ -2162,8 +2118,8 @@
       INTEGER            I, IBEG, IEND, J
       LOGICAL            GEN, LOWER, SYM, TRI, UNIT, UPPER
 *     .. External Functions ..
-      REAL               AB_SBEG
-      EXTERNAL           AB_SBEG
+      REAL               SBEG
+      EXTERNAL           SBEG
 *     .. Executable Statements ..
       GEN = TYPE.EQ.'GE'
       SYM = TYPE.EQ.'SY'
@@ -2178,7 +2134,7 @@
          DO 10 I = 1, M
             IF( GEN.OR.( UPPER.AND.I.LE.J ).OR.( LOWER.AND.I.GE.J ) )
      $          THEN
-               A( I, J ) = AB_SBEG( RESET ) + TRANSL
+               A( I, J ) = SBEG( RESET ) + TRANSL
                IF( I.NE.J )THEN
 *                 Set some elements to zero
                   IF( N.GT.3.AND.J.EQ.N/2 )
@@ -2238,11 +2194,10 @@
       END IF
       RETURN
 *
-*     End of AB_SMAKE.
+*     End of SMAKE.
 *
       END
-      SUBROUTINE AB_SMMCH( TRANSA, TRANSB, M, N, KK, ALPHA, A, LDA, B, L
-     $DB,
+      SUBROUTINE SMMCH( TRANSA, TRANSB, M, N, KK, ALPHA, A, LDA, B, LDB,
      $                  BETA, C, LDC, CT, G, CC, LDCC, EPS, ERR, FATAL,
      $                  NOUT, MV )
 *
@@ -2361,10 +2316,10 @@
  9998 FORMAT( 1X, I7, 2G18.6 )
  9997 FORMAT( '      THESE ARE THE RESULTS FOR COLUMN ', I3 )
 *
-*     End of AB_SMMCH.
+*     End of SMMCH.
 *
       END
-      LOGICAL FUNCTION AB_LSE( RI, RJ, LR )
+      LOGICAL FUNCTION LSE( RI, RJ, LR )
 *
 *  Tests if two arrays are identical.
 *
@@ -2387,16 +2342,16 @@
          IF( RI( I ).NE.RJ( I ) )
      $      GO TO 20
    10 CONTINUE
-      AB_LSE = .TRUE.
+      LSE = .TRUE.
       GO TO 30
    20 CONTINUE
-      AB_LSE = .FALSE.
+      LSE = .FALSE.
    30 RETURN
 *
-*     End of AB_LSE.
+*     End of LSE.
 *
       END
-      LOGICAL FUNCTION AB_AB_LSERES( TYPE, UPLO, M, N, AA, AS, LDA )
+      LOGICAL FUNCTION LSERES( TYPE, UPLO, M, N, AA, AS, LDA )
 *
 *  Tests if selected elements in two arrays are equal.
 *
@@ -2449,16 +2404,16 @@
       END IF
 *
    60 CONTINUE
-      AB_AB_LSERES = .TRUE.
+      LSERES = .TRUE.
       GO TO 80
    70 CONTINUE
-      AB_AB_LSERES = .FALSE.
+      LSERES = .FALSE.
    80 RETURN
 *
-*     End of AB_AB_LSERES.
+*     End of LSERES.
 *
       END
-      REAL FUNCTION AB_SBEG( RESET )
+      REAL FUNCTION SBEG( RESET )
 *
 *  Generates random numbers uniformly distributed between -0.5 and 0.5.
 *
@@ -2498,13 +2453,13 @@
          IC = 0
          GO TO 10
       END IF
-      AB_SBEG = ( I - 500 )/1001.0
+      SBEG = ( I - 500 )/1001.0
       RETURN
 *
-*     End of AB_SBEG.
+*     End of SBEG.
 *
       END
-      REAL FUNCTION AB_SDIFF( X, Y )
+      REAL FUNCTION SDIFF( X, Y )
 *
 *  Auxiliary routine for test program for Level 3 Blas.
 *
@@ -2517,9 +2472,9 @@
 *     .. Scalar Arguments ..
       REAL               X, Y
 *     .. Executable Statements ..
-      AB_SDIFF = X - Y
+      SDIFF = X - Y
       RETURN
 *
-*     End of AB_SDIFF.
+*     End of SDIFF.
 *
       END

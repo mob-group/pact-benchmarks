@@ -1,4 +1,4 @@
-*> \brief \b AB_DDRVGEX
+*> \brief \b DDRVGEX
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DDRVGE( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
+*       SUBROUTINE DDRVGE( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
 *                          A, AFAC, ASAV, B, BSAV, X, XACT, S, WORK,
 *                          RWORK, IWORK, NOUT )
 *
@@ -31,10 +31,10 @@
 *>
 *> \verbatim
 *>
-*> AB_DDRVGE tests the driver routines AB_DGESV, -SVX, and -SVXX.
+*> DDRVGE tests the driver routines DGESV, -SVX, and -SVXX.
 *>
 *> Note that this file is used only when the XBLAS are available,
-*> otherwise AB_DDRVGE.f defines this subroutine.
+*> otherwise ddrvge.f defines this subroutine.
 *> \endverbatim
 *
 *  Arguments:
@@ -163,8 +163,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_DDRVGE( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX
-     $,
+      SUBROUTINE DDRVGE( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
      $                   A, AFAC, ASAV, B, BSAV, X, XACT, S, WORK,
      $                   RWORK, IWORK, NOUT )
 *
@@ -217,21 +216,16 @@
      $                   ERRBNDS_N( NRHS, 3 ), ERRBNDS_C( NRHS, 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DGET06, AB_DLAMCH, AB_DLANGE, AB_DLANTR, AB_
-     $DLA_GERPVGRW
-      EXTERNAL           AB_LSAME, AB_DGET06, AB_DLAMCH, AB_DLANGE, AB_D
-     $LANTR,
-     $                   AB_DLA_GERPVGRW
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DGET06, DLAMCH, DLANGE, DLANTR, DLA_GERPVGRW
+      EXTERNAL           LSAME, DGET06, DLAMCH, DLANGE, DLANTR,
+     $                   DLA_GERPVGRW
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALADHD, AB_ALAERH, AB_ALASVM, AB_DERRVX, AB_
-     $DGEEQU, AB_DGESV,
-     $                   AB_AB_DGESVX, AB_DGET01, AB_DGET02, AB_DGET04, 
-     $AB_DGET07, AB_DGETRF,
-     $                   AB_DGETRI, AB_DLACPY, AB_DLAQGE, AB_DLARHS, AB_
-     $DLASET, AB_DLATB4,
-     $                   AB_DLATMS, AB_XLAENV, AB_AB_AB_DGESVXX
+      EXTERNAL           ALADHD, ALAERH, ALASVM, DERRVX, DGEEQU, DGESV,
+     $                   DGESVX, DGET01, DGET02, DGET04, DGET07, DGETRF,
+     $                   DGETRI, DLACPY, DLAQGE, DLARHS, DLASET, DLATB4,
+     $                   DLATMS, XLAENV, DGESVXX
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -267,15 +261,15 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL AB_DERRVX( PATH, NOUT )
+     $   CALL DERRVX( PATH, NOUT )
       INFOT = 0
 *
 *     Set the block size and minimum block size for testing.
 *
       NB = 1
       NBMIN = 2
-      CALL AB_XLAENV( 1, NB )
-      CALL AB_XLAENV( 2, NBMIN )
+      CALL XLAENV( 1, NB )
+      CALL XLAENV( 2, NBMIN )
 *
 *     Do for each value of N in NVAL
 *
@@ -300,24 +294,22 @@
             IF( ZEROT .AND. N.LT.IMAT-4 )
      $         GO TO 80
 *
-*           Set up parameters with AB_DLATB4 and generate a test matrix
-*           with AB_DLATMS.
+*           Set up parameters with DLATB4 and generate a test matrix
+*           with DLATMS.
 *
-            CALL AB_DLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
+            CALL DLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
      $                   CNDNUM, DIST )
             RCONDC = ONE / CNDNUM
 *
-            SRNAMT = 'AB_DLATMS'
-            CALL AB_DLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE, CNDNUM
-     $,
+            SRNAMT = 'DLATMS'
+            CALL DLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE, CNDNUM,
      $                   ANORM, KL, KU, 'No packing', A, LDA, WORK,
      $                   INFO )
 *
-*           Check error code from AB_DLATMS.
+*           Check error code from DLATMS.
 *
             IF( INFO.NE.0 ) THEN
-               CALL AB_ALAERH( PATH, 'AB_DLATMS', INFO, 0, ' ', N, N, -1
-     $, -1,
+               CALL ALAERH( PATH, 'DLATMS', INFO, 0, ' ', N, N, -1, -1,
      $                      -1, IMAT, NFAIL, NERRS, NOUT )
                GO TO 80
             END IF
@@ -339,7 +331,7 @@
                      A( IOFF+I ) = ZERO
    20             CONTINUE
                ELSE
-                  CALL AB_DLASET( 'Full', N, N-IZERO+1, ZERO, ZERO,
+                  CALL DLASET( 'Full', N, N-IZERO+1, ZERO, ZERO,
      $                         A( IOFF+1 ), LDA )
                END IF
             ELSE
@@ -348,7 +340,7 @@
 *
 *           Save a copy of the matrix A in ASAV.
 *
-            CALL AB_DLACPY( 'Full', N, N, A, LDA, ASAV, LDA )
+            CALL DLACPY( 'Full', N, N, A, LDA, ASAV, LDA )
 *
             DO 70 IEQUED = 1, 4
                EQUED = EQUEDS( IEQUED )
@@ -360,9 +352,9 @@
 *
                DO 60 IFACT = 1, NFACT
                   FACT = FACTS( IFACT )
-                  PREFAC = AB_LSAME( FACT, 'F' )
-                  NOFACT = AB_LSAME( FACT, 'N' )
-                  EQUIL = AB_LSAME( FACT, 'E' )
+                  PREFAC = LSAME( FACT, 'F' )
+                  NOFACT = LSAME( FACT, 'N' )
+                  EQUIL = LSAME( FACT, 'E' )
 *
                   IF( ZEROT ) THEN
                      IF( PREFAC )
@@ -373,40 +365,39 @@
                   ELSE IF( .NOT.NOFACT ) THEN
 *
 *                    Compute the condition number for comparison with
-*                    the value returned by AB_AB_DGESVX (FACT = 'N' reuses
+*                    the value returned by DGESVX (FACT = 'N' reuses
 *                    the condition number from the previous iteration
 *                    with FACT = 'F').
 *
-                     CALL AB_DLACPY( 'Full', N, N, ASAV, LDA, AFAC, LDA 
-     $)
+                     CALL DLACPY( 'Full', N, N, ASAV, LDA, AFAC, LDA )
                      IF( EQUIL .OR. IEQUED.GT.1 ) THEN
 *
 *                       Compute row and column scale factors to
 *                       equilibrate the matrix A.
 *
-                        CALL AB_DGEEQU( N, N, AFAC, LDA, S, S( N+1 ),
+                        CALL DGEEQU( N, N, AFAC, LDA, S, S( N+1 ),
      $                               ROWCND, COLCND, AMAX, INFO )
                         IF( INFO.EQ.0 .AND. N.GT.0 ) THEN
-                           IF( AB_LSAME( EQUED, 'R' ) ) THEN
+                           IF( LSAME( EQUED, 'R' ) ) THEN
                               ROWCND = ZERO
                               COLCND = ONE
-                           ELSE IF( AB_LSAME( EQUED, 'C' ) ) THEN
+                           ELSE IF( LSAME( EQUED, 'C' ) ) THEN
                               ROWCND = ONE
                               COLCND = ZERO
-                           ELSE IF( AB_LSAME( EQUED, 'B' ) ) THEN
+                           ELSE IF( LSAME( EQUED, 'B' ) ) THEN
                               ROWCND = ZERO
                               COLCND = ZERO
                            END IF
 *
 *                          Equilibrate the matrix.
 *
-                           CALL AB_DLAQGE( N, N, AFAC, LDA, S, S( N+1 ),
+                           CALL DLAQGE( N, N, AFAC, LDA, S, S( N+1 ),
      $                                  ROWCND, COLCND, AMAX, EQUED )
                         END IF
                      END IF
 *
 *                    Save the condition number of the non-equilibrated
-*                    system for use in AB_DGET04.
+*                    system for use in DGET04.
 *
                      IF( EQUIL ) THEN
                         ROLDO = RCONDO
@@ -415,23 +406,22 @@
 *
 *                    Compute the 1-norm and infinity-norm of A.
 *
-                     ANORMO = AB_DLANGE( '1', N, N, AFAC, LDA, RWORK )
-                     ANORMI = AB_DLANGE( 'I', N, N, AFAC, LDA, RWORK )
+                     ANORMO = DLANGE( '1', N, N, AFAC, LDA, RWORK )
+                     ANORMI = DLANGE( 'I', N, N, AFAC, LDA, RWORK )
 *
 *                    Factor the matrix A.
 *
-                     CALL AB_DGETRF( N, N, AFAC, LDA, IWORK, INFO )
+                     CALL DGETRF( N, N, AFAC, LDA, IWORK, INFO )
 *
 *                    Form the inverse of A.
 *
-                     CALL AB_DLACPY( 'Full', N, N, AFAC, LDA, A, LDA )
+                     CALL DLACPY( 'Full', N, N, AFAC, LDA, A, LDA )
                      LWORK = NMAX*MAX( 3, NRHS )
-                     CALL AB_DGETRI( N, A, LDA, IWORK, WORK, LWORK, INFO
-     $ )
+                     CALL DGETRI( N, A, LDA, IWORK, WORK, LWORK, INFO )
 *
 *                    Compute the 1-norm condition number of A.
 *
-                     AINVNM = AB_DLANGE( '1', N, N, A, LDA, RWORK )
+                     AINVNM = DLANGE( '1', N, N, A, LDA, RWORK )
                      IF( ANORMO.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
                         RCONDO = ONE
                      ELSE
@@ -440,7 +430,7 @@
 *
 *                    Compute the infinity-norm condition number of A.
 *
-                     AINVNM = AB_DLANGE( 'I', N, N, A, LDA, RWORK )
+                     AINVNM = DLANGE( 'I', N, N, A, LDA, RWORK )
                      IF( ANORMI.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
                         RCONDI = ONE
                      ELSE
@@ -461,65 +451,57 @@
 *
 *                    Restore the matrix A.
 *
-                     CALL AB_DLACPY( 'Full', N, N, ASAV, LDA, A, LDA )
+                     CALL DLACPY( 'Full', N, N, ASAV, LDA, A, LDA )
 *
 *                    Form an exact solution and set the right hand side.
 *
-                     SRNAMT = 'AB_DLARHS'
-                     CALL AB_DLARHS( PATH, XTYPE, 'Full', TRANS, N, N, K
-     $L,
+                     SRNAMT = 'DLARHS'
+                     CALL DLARHS( PATH, XTYPE, 'Full', TRANS, N, N, KL,
      $                            KU, NRHS, A, LDA, XACT, LDA, B, LDA,
      $                            ISEED, INFO )
                      XTYPE = 'C'
-                     CALL AB_DLACPY( 'Full', N, NRHS, B, LDA, BSAV, LDA 
-     $)
+                     CALL DLACPY( 'Full', N, NRHS, B, LDA, BSAV, LDA )
 *
                      IF( NOFACT .AND. ITRAN.EQ.1 ) THEN
 *
-*                       --- Test AB_DGESV  ---
+*                       --- Test DGESV  ---
 *
 *                       Compute the LU factorization of the matrix and
 *                       solve the system.
 *
-                        CALL AB_DLACPY( 'Full', N, N, A, LDA, AFAC, LDA 
-     $)
-                        CALL AB_DLACPY( 'Full', N, NRHS, B, LDA, X, LDA 
-     $)
+                        CALL DLACPY( 'Full', N, N, A, LDA, AFAC, LDA )
+                        CALL DLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
-                        SRNAMT = 'AB_DGESV '
-                        CALL AB_DGESV( N, NRHS, AFAC, LDA, IWORK, X, LDA
-     $,
+                        SRNAMT = 'DGESV '
+                        CALL DGESV( N, NRHS, AFAC, LDA, IWORK, X, LDA,
      $                              INFO )
 *
-*                       Check error code from AB_DGESV .
+*                       Check error code from DGESV .
 *
                         IF( INFO.NE.IZERO )
-     $                     CALL AB_ALAERH( PATH, 'AB_DGESV ', INFO, IZER
-     $O,
+     $                     CALL ALAERH( PATH, 'DGESV ', INFO, IZERO,
      $                                  ' ', N, N, -1, -1, NRHS, IMAT,
      $                                  NFAIL, NERRS, NOUT )
 *
 *                       Reconstruct matrix from factors and compute
 *                       residual.
 *
-                        CALL AB_DGET01( N, N, A, LDA, AFAC, LDA, IWORK,
+                        CALL DGET01( N, N, A, LDA, AFAC, LDA, IWORK,
      $                               RWORK, RESULT( 1 ) )
                         NT = 1
                         IF( IZERO.EQ.0 ) THEN
 *
 *                          Compute residual of the computed solution.
 *
-                           CALL AB_DLACPY( 'Full', N, NRHS, B, LDA, WORK
-     $,
+                           CALL DLACPY( 'Full', N, NRHS, B, LDA, WORK,
      $                                  LDA )
-                           CALL AB_DGET02( 'No transpose', N, N, NRHS, A
-     $,
+                           CALL DGET02( 'No transpose', N, N, NRHS, A,
      $                                  LDA, X, LDA, WORK, LDA, RWORK,
      $                                  RESULT( 2 ) )
 *
 *                          Check solution from generated exact solution.
 *
-                           CALL AB_DGET04( N, NRHS, X, LDA, XACT, LDA,
+                           CALL DGET04( N, NRHS, X, LDA, XACT, LDA,
      $                                  RCONDC, RESULT( 3 ) )
                            NT = 3
                         END IF
@@ -530,8 +512,8 @@
                         DO 30 K = 1, NT
                            IF( RESULT( K ).GE.THRESH ) THEN
                               IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                           CALL AB_ALADHD( NOUT, PATH )
-                              WRITE( NOUT, FMT = 9999 )'AB_DGESV ', N,
+     $                           CALL ALADHD( NOUT, PATH )
+                              WRITE( NOUT, FMT = 9999 )'DGESV ', N,
      $                           IMAT, K, RESULT( K )
                               NFAIL = NFAIL + 1
                            END IF
@@ -539,76 +521,70 @@
                         NRUN = NRUN + NT
                      END IF
 *
-*                    --- Test AB_AB_DGESVX ---
+*                    --- Test DGESVX ---
 *
                      IF( .NOT.PREFAC )
-     $                  CALL AB_DLASET( 'Full', N, N, ZERO, ZERO, AFAC,
+     $                  CALL DLASET( 'Full', N, N, ZERO, ZERO, AFAC,
      $                               LDA )
-                     CALL AB_DLASET( 'Full', N, NRHS, ZERO, ZERO, X, LDA
-     $ )
+                     CALL DLASET( 'Full', N, NRHS, ZERO, ZERO, X, LDA )
                      IF( IEQUED.GT.1 .AND. N.GT.0 ) THEN
 *
 *                       Equilibrate the matrix if FACT = 'F' and
 *                       EQUED = 'R', 'C', or 'B'.
 *
-                        CALL AB_DLAQGE( N, N, A, LDA, S, S( N+1 ), ROWCN
-     $D,
+                        CALL DLAQGE( N, N, A, LDA, S, S( N+1 ), ROWCND,
      $                               COLCND, AMAX, EQUED )
                      END IF
 *
 *                    Solve the system and compute the condition number
-*                    and error bounds using AB_AB_DGESVX.
+*                    and error bounds using DGESVX.
 *
-                     SRNAMT = 'AB_AB_DGESVX'
-                     CALL AB_AB_DGESVX( FACT, TRANS, N, NRHS, A, LDA, AF
-     $AC,
+                     SRNAMT = 'DGESVX'
+                     CALL DGESVX( FACT, TRANS, N, NRHS, A, LDA, AFAC,
      $                            LDA, IWORK, EQUED, S, S( N+1 ), B,
      $                            LDA, X, LDA, RCOND, RWORK,
      $                            RWORK( NRHS+1 ), WORK, IWORK( N+1 ),
      $                            INFO )
 *
-*                    Check the error code from AB_AB_DGESVX.
+*                    Check the error code from DGESVX.
 *
                      IF( INFO.NE.IZERO )
-     $                  CALL AB_ALAERH( PATH, 'AB_AB_DGESVX', INFO, IZER
-     $O,
+     $                  CALL ALAERH( PATH, 'DGESVX', INFO, IZERO,
      $                               FACT // TRANS, N, N, -1, -1, NRHS,
      $                               IMAT, NFAIL, NERRS, NOUT )
 *
-*                    Compare WORK(1) from AB_AB_DGESVX with the computed
+*                    Compare WORK(1) from DGESVX with the computed
 *                    reciprocal pivot growth factor RPVGRW
 *
                      IF( INFO.NE.0 ) THEN
-                        RPVGRW = AB_DLANTR( 'M', 'U', 'N', INFO, INFO,
+                        RPVGRW = DLANTR( 'M', 'U', 'N', INFO, INFO,
      $                           AFAC, LDA, WORK )
                         IF( RPVGRW.EQ.ZERO ) THEN
                            RPVGRW = ONE
                         ELSE
-                           RPVGRW = AB_DLANGE( 'M', N, INFO, A, LDA,
+                           RPVGRW = DLANGE( 'M', N, INFO, A, LDA,
      $                              WORK ) / RPVGRW
                         END IF
                      ELSE
-                        RPVGRW = AB_DLANTR( 'M', 'U', 'N', N, N, AFAC, L
-     $DA,
+                        RPVGRW = DLANTR( 'M', 'U', 'N', N, N, AFAC, LDA,
      $                           WORK )
                         IF( RPVGRW.EQ.ZERO ) THEN
                            RPVGRW = ONE
                         ELSE
-                           RPVGRW = AB_DLANGE( 'M', N, N, A, LDA, WORK )
-     $ /
+                           RPVGRW = DLANGE( 'M', N, N, A, LDA, WORK ) /
      $                              RPVGRW
                         END IF
                      END IF
                      RESULT( 7 ) = ABS( RPVGRW-WORK( 1 ) ) /
      $                             MAX( WORK( 1 ), RPVGRW ) /
-     $                             AB_DLAMCH( 'E' )
+     $                             DLAMCH( 'E' )
 *
                      IF( .NOT.PREFAC ) THEN
 *
 *                       Reconstruct matrix from factors and compute
 *                       residual.
 *
-                        CALL AB_DGET01( N, N, A, LDA, AFAC, LDA, IWORK,
+                        CALL DGET01( N, N, A, LDA, AFAC, LDA, IWORK,
      $                               RWORK( 2*NRHS+1 ), RESULT( 1 ) )
                         K1 = 1
                      ELSE
@@ -620,18 +596,17 @@
 *
 *                       Compute residual of the computed solution.
 *
-                        CALL AB_DLACPY( 'Full', N, NRHS, BSAV, LDA, WORK
-     $,
+                        CALL DLACPY( 'Full', N, NRHS, BSAV, LDA, WORK,
      $                               LDA )
-                        CALL AB_DGET02( TRANS, N, N, NRHS, ASAV, LDA, X,
+                        CALL DGET02( TRANS, N, N, NRHS, ASAV, LDA, X,
      $                               LDA, WORK, LDA, RWORK( 2*NRHS+1 ),
      $                               RESULT( 2 ) )
 *
 *                       Check solution from generated exact solution.
 *
-                        IF( NOFACT .OR. ( PREFAC .AND. AB_LSAME( EQUED,
+                        IF( NOFACT .OR. ( PREFAC .AND. LSAME( EQUED,
      $                      'N' ) ) ) THEN
-                           CALL AB_DGET04( N, NRHS, X, LDA, XACT, LDA,
+                           CALL DGET04( N, NRHS, X, LDA, XACT, LDA,
      $                                  RCONDC, RESULT( 3 ) )
                         ELSE
                            IF( ITRAN.EQ.1 ) THEN
@@ -639,25 +614,24 @@
                            ELSE
                               ROLDC = ROLDI
                            END IF
-                           CALL AB_DGET04( N, NRHS, X, LDA, XACT, LDA,
+                           CALL DGET04( N, NRHS, X, LDA, XACT, LDA,
      $                                  ROLDC, RESULT( 3 ) )
                         END IF
 *
 *                       Check the error bounds from iterative
 *                       refinement.
 *
-                        CALL AB_DGET07( TRANS, N, NRHS, ASAV, LDA, B, LD
-     $A,
+                        CALL DGET07( TRANS, N, NRHS, ASAV, LDA, B, LDA,
      $                               X, LDA, XACT, LDA, RWORK, .TRUE.,
      $                               RWORK( NRHS+1 ), RESULT( 4 ) )
                      ELSE
                         TRFCON = .TRUE.
                      END IF
 *
-*                    Compare RCOND from AB_AB_DGESVX with the computed value
+*                    Compare RCOND from DGESVX with the computed value
 *                    in RCONDC.
 *
-                     RESULT( 6 ) = AB_DGET06( RCOND, RCONDC )
+                     RESULT( 6 ) = DGET06( RCOND, RCONDC )
 *
 *                    Print information about the tests that did not pass
 *                    the threshold.
@@ -666,15 +640,13 @@
                         DO 40 K = K1, NTESTS
                            IF( RESULT( K ).GE.THRESH ) THEN
                               IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                           CALL AB_ALADHD( NOUT, PATH )
+     $                           CALL ALADHD( NOUT, PATH )
                               IF( PREFAC ) THEN
-                                 WRITE( NOUT, FMT = 9997 )'AB_AB_DGESVX'
-     $,
+                                 WRITE( NOUT, FMT = 9997 )'DGESVX',
      $                              FACT, TRANS, N, EQUED, IMAT, K,
      $                              RESULT( K )
                               ELSE
-                                 WRITE( NOUT, FMT = 9998 )'AB_AB_DGESVX'
-     $,
+                                 WRITE( NOUT, FMT = 9998 )'DGESVX',
      $                              FACT, TRANS, N, IMAT, K, RESULT( K )
                               END IF
                               NFAIL = NFAIL + 1
@@ -685,14 +657,12 @@
                         IF( RESULT( 1 ).GE.THRESH .AND. .NOT.PREFAC )
      $                       THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                        CALL AB_ALADHD( NOUT, PATH )
+     $                        CALL ALADHD( NOUT, PATH )
                            IF( PREFAC ) THEN
-                              WRITE( NOUT, FMT = 9997 )'AB_AB_DGESVX', F
-     $ACT,
+                              WRITE( NOUT, FMT = 9997 )'DGESVX', FACT,
      $                           TRANS, N, EQUED, IMAT, 1, RESULT( 1 )
                            ELSE
-                              WRITE( NOUT, FMT = 9998 )'AB_AB_DGESVX', F
-     $ACT,
+                              WRITE( NOUT, FMT = 9998 )'DGESVX', FACT,
      $                           TRANS, N, IMAT, 1, RESULT( 1 )
                            END IF
                            NFAIL = NFAIL + 1
@@ -700,14 +670,12 @@
                         END IF
                         IF( RESULT( 6 ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                        CALL AB_ALADHD( NOUT, PATH )
+     $                        CALL ALADHD( NOUT, PATH )
                            IF( PREFAC ) THEN
-                              WRITE( NOUT, FMT = 9997 )'AB_AB_DGESVX', F
-     $ACT,
+                              WRITE( NOUT, FMT = 9997 )'DGESVX', FACT,
      $                           TRANS, N, EQUED, IMAT, 6, RESULT( 6 )
                            ELSE
-                              WRITE( NOUT, FMT = 9998 )'AB_AB_DGESVX', F
-     $ACT,
+                              WRITE( NOUT, FMT = 9998 )'DGESVX', FACT,
      $                           TRANS, N, IMAT, 6, RESULT( 6 )
                            END IF
                            NFAIL = NFAIL + 1
@@ -715,14 +683,12 @@
                         END IF
                         IF( RESULT( 7 ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                        CALL AB_ALADHD( NOUT, PATH )
+     $                        CALL ALADHD( NOUT, PATH )
                            IF( PREFAC ) THEN
-                              WRITE( NOUT, FMT = 9997 )'AB_AB_DGESVX', F
-     $ACT,
+                              WRITE( NOUT, FMT = 9997 )'DGESVX', FACT,
      $                           TRANS, N, EQUED, IMAT, 7, RESULT( 7 )
                            ELSE
-                              WRITE( NOUT, FMT = 9998 )'AB_AB_DGESVX', F
-     $ACT,
+                              WRITE( NOUT, FMT = 9998 )'DGESVX', FACT,
      $                           TRANS, N, IMAT, 7, RESULT( 7 )
                            END IF
                            NFAIL = NFAIL + 1
@@ -731,74 +697,69 @@
 *
                      END IF
 *
-*                    --- Test AB_AB_AB_DGESVXX ---
+*                    --- Test DGESVXX ---
 *
 *                    Restore the matrices A and B.
 *
-                     CALL AB_DLACPY( 'Full', N, N, ASAV, LDA, A, LDA )
-                     CALL AB_DLACPY( 'Full', N, NRHS, BSAV, LDA, B, LDA 
-     $)
+                     CALL DLACPY( 'Full', N, N, ASAV, LDA, A, LDA )
+                     CALL DLACPY( 'Full', N, NRHS, BSAV, LDA, B, LDA )
 
                      IF( .NOT.PREFAC )
-     $                  CALL AB_DLASET( 'Full', N, N, ZERO, ZERO, AFAC,
+     $                  CALL DLASET( 'Full', N, N, ZERO, ZERO, AFAC,
      $                               LDA )
-                     CALL AB_DLASET( 'Full', N, NRHS, ZERO, ZERO, X, LDA
-     $ )
+                     CALL DLASET( 'Full', N, NRHS, ZERO, ZERO, X, LDA )
                      IF( IEQUED.GT.1 .AND. N.GT.0 ) THEN
 *
 *                       Equilibrate the matrix if FACT = 'F' and
 *                       EQUED = 'R', 'C', or 'B'.
 *
-                        CALL AB_DLAQGE( N, N, A, LDA, S, S( N+1 ), ROWCN
-     $D,
+                        CALL DLAQGE( N, N, A, LDA, S, S( N+1 ), ROWCND,
      $                               COLCND, AMAX, EQUED )
                      END IF
 *
 *                    Solve the system and compute the condition number
-*                    and error bounds using AB_AB_AB_DGESVXX.
+*                    and error bounds using DGESVXX.
 *
-                     SRNAMT = 'AB_AB_AB_DGESVXX'
+                     SRNAMT = 'DGESVXX'
                      N_ERR_BNDS = 3
-                     CALL AB_AB_AB_DGESVXX( FACT, TRANS, N, NRHS, A, LDA
-     $, AFAC,
+                     CALL DGESVXX( FACT, TRANS, N, NRHS, A, LDA, AFAC,
      $                    LDA, IWORK, EQUED, S, S( N+1 ), B, LDA, X,
      $                    LDA, RCOND, RPVGRW_SVXX, BERR, N_ERR_BNDS,
      $                    ERRBNDS_N, ERRBNDS_C, 0, ZERO, WORK,
      $                    IWORK( N+1 ), INFO )
 *
-*                    Check the error code from AB_AB_AB_DGESVXX.
+*                    Check the error code from DGESVXX.
 *
                      IF( INFO.EQ.N+1 ) GOTO 50
                      IF( INFO.NE.IZERO ) THEN
-                        CALL AB_ALAERH( PATH, 'AB_AB_AB_DGESVXX', INFO, 
-     $IZERO,
+                        CALL ALAERH( PATH, 'DGESVXX', INFO, IZERO,
      $                               FACT // TRANS, N, N, -1, -1, NRHS,
      $                               IMAT, NFAIL, NERRS, NOUT )
                         GOTO 50
                      END IF
 *
-*                    Compare rpvgrw_svxx from AB_AB_AB_DGESVXX with the computed
+*                    Compare rpvgrw_svxx from DGESVXX with the computed
 *                    reciprocal pivot growth factor RPVGRW
 *
 
                      IF ( INFO .GT. 0 .AND. INFO .LT. N+1 ) THEN
-                        RPVGRW = AB_DLA_GERPVGRW
+                        RPVGRW = DLA_GERPVGRW
      $                               (N, INFO, A, LDA, AFAC, LDA)
                      ELSE
-                        RPVGRW = AB_DLA_GERPVGRW
+                        RPVGRW = DLA_GERPVGRW
      $                               (N, N, A, LDA, AFAC, LDA)
                      ENDIF
 
                      RESULT( 7 ) = ABS( RPVGRW-RPVGRW_SVXX ) /
      $                             MAX( RPVGRW_SVXX, RPVGRW ) /
-     $                             AB_DLAMCH( 'E' )
+     $                             DLAMCH( 'E' )
 *
                      IF( .NOT.PREFAC ) THEN
 *
 *                       Reconstruct matrix from factors and compute
 *                       residual.
 *
-                        CALL AB_DGET01( N, N, A, LDA, AFAC, LDA, IWORK,
+                        CALL DGET01( N, N, A, LDA, AFAC, LDA, IWORK,
      $                               RWORK( 2*NRHS+1 ), RESULT( 1 ) )
                         K1 = 1
                      ELSE
@@ -810,18 +771,17 @@
 *
 *                       Compute residual of the computed solution.
 *
-                        CALL AB_DLACPY( 'Full', N, NRHS, BSAV, LDA, WORK
-     $,
+                        CALL DLACPY( 'Full', N, NRHS, BSAV, LDA, WORK,
      $                               LDA )
-                        CALL AB_DGET02( TRANS, N, N, NRHS, ASAV, LDA, X,
+                        CALL DGET02( TRANS, N, N, NRHS, ASAV, LDA, X,
      $                               LDA, WORK, LDA, RWORK( 2*NRHS+1 ),
      $                               RESULT( 2 ) )
 *
 *                       Check solution from generated exact solution.
 *
-                        IF( NOFACT .OR. ( PREFAC .AND. AB_LSAME( EQUED,
+                        IF( NOFACT .OR. ( PREFAC .AND. LSAME( EQUED,
      $                      'N' ) ) ) THEN
-                           CALL AB_DGET04( N, NRHS, X, LDA, XACT, LDA,
+                           CALL DGET04( N, NRHS, X, LDA, XACT, LDA,
      $                                  RCONDC, RESULT( 3 ) )
                         ELSE
                            IF( ITRAN.EQ.1 ) THEN
@@ -829,17 +789,17 @@
                            ELSE
                               ROLDC = ROLDI
                            END IF
-                           CALL AB_DGET04( N, NRHS, X, LDA, XACT, LDA,
+                           CALL DGET04( N, NRHS, X, LDA, XACT, LDA,
      $                                  ROLDC, RESULT( 3 ) )
                         END IF
                      ELSE
                         TRFCON = .TRUE.
                      END IF
 *
-*                    Compare RCOND from AB_AB_AB_DGESVXX with the computed value
+*                    Compare RCOND from DGESVXX with the computed value
 *                    in RCONDC.
 *
-                     RESULT( 6 ) = AB_DGET06( RCOND, RCONDC )
+                     RESULT( 6 ) = DGET06( RCOND, RCONDC )
 *
 *                    Print information about the tests that did not pass
 *                    the threshold.
@@ -848,15 +808,13 @@
                         DO 45 K = K1, NTESTS
                            IF( RESULT( K ).GE.THRESH ) THEN
                               IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                           CALL AB_ALADHD( NOUT, PATH )
+     $                           CALL ALADHD( NOUT, PATH )
                               IF( PREFAC ) THEN
-                                 WRITE( NOUT, FMT = 9997 )'AB_AB_AB_DGES
-     $VXX',
+                                 WRITE( NOUT, FMT = 9997 )'DGESVXX',
      $                              FACT, TRANS, N, EQUED, IMAT, K,
      $                              RESULT( K )
                               ELSE
-                                 WRITE( NOUT, FMT = 9998 )'AB_AB_AB_DGES
-     $VXX',
+                                 WRITE( NOUT, FMT = 9998 )'DGESVXX',
      $                              FACT, TRANS, N, IMAT, K, RESULT( K )
                               END IF
                               NFAIL = NFAIL + 1
@@ -867,14 +825,12 @@
                         IF( RESULT( 1 ).GE.THRESH .AND. .NOT.PREFAC )
      $                       THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                        CALL AB_ALADHD( NOUT, PATH )
+     $                        CALL ALADHD( NOUT, PATH )
                            IF( PREFAC ) THEN
-                              WRITE( NOUT, FMT = 9997 )'AB_AB_AB_DGESVXX
-     $', FACT,
+                              WRITE( NOUT, FMT = 9997 )'DGESVXX', FACT,
      $                           TRANS, N, EQUED, IMAT, 1, RESULT( 1 )
                            ELSE
-                              WRITE( NOUT, FMT = 9998 )'AB_AB_AB_DGESVXX
-     $', FACT,
+                              WRITE( NOUT, FMT = 9998 )'DGESVXX', FACT,
      $                           TRANS, N, IMAT, 1, RESULT( 1 )
                            END IF
                            NFAIL = NFAIL + 1
@@ -882,14 +838,12 @@
                         END IF
                         IF( RESULT( 6 ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                        CALL AB_ALADHD( NOUT, PATH )
+     $                        CALL ALADHD( NOUT, PATH )
                            IF( PREFAC ) THEN
-                              WRITE( NOUT, FMT = 9997 )'AB_AB_AB_DGESVXX
-     $', FACT,
+                              WRITE( NOUT, FMT = 9997 )'DGESVXX', FACT,
      $                           TRANS, N, EQUED, IMAT, 6, RESULT( 6 )
                            ELSE
-                              WRITE( NOUT, FMT = 9998 )'AB_AB_AB_DGESVXX
-     $', FACT,
+                              WRITE( NOUT, FMT = 9998 )'DGESVXX', FACT,
      $                           TRANS, N, IMAT, 6, RESULT( 6 )
                            END IF
                            NFAIL = NFAIL + 1
@@ -897,14 +851,12 @@
                         END IF
                         IF( RESULT( 7 ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                        CALL AB_ALADHD( NOUT, PATH )
+     $                        CALL ALADHD( NOUT, PATH )
                            IF( PREFAC ) THEN
-                              WRITE( NOUT, FMT = 9997 )'AB_AB_AB_DGESVXX
-     $', FACT,
+                              WRITE( NOUT, FMT = 9997 )'DGESVXX', FACT,
      $                           TRANS, N, EQUED, IMAT, 7, RESULT( 7 )
                            ELSE
-                              WRITE( NOUT, FMT = 9998 )'AB_AB_AB_DGESVXX
-     $', FACT,
+                              WRITE( NOUT, FMT = 9998 )'DGESVXX', FACT,
      $                           TRANS, N, IMAT, 7, RESULT( 7 )
                            END IF
                            NFAIL = NFAIL + 1
@@ -921,12 +873,12 @@
 *
 *     Print a summary of the results.
 *
-      CALL AB_ALASVM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL ALASVM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
 
-*     Test Error Bounds from AB_AB_AB_DGESVXX
+*     Test Error Bounds from DGESVXX
 
-      CALL AB_DEBCHVXX( THRESH, PATH )
+      CALL DEBCHVXX( THRESH, PATH )
 
  9999 FORMAT( 1X, A, ', N =', I5, ', type ', I2, ', test(', I2, ') =',
      $      G12.5 )
@@ -937,6 +889,6 @@
      $      G12.5 )
       RETURN
 *
-*     End of AB_DDRVGE
+*     End of DDRVGE
 *
       END

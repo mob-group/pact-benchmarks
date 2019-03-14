@@ -1,4 +1,4 @@
-*> \brief \b AB_DPPT03
+*> \brief \b DPPT03
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DPPT03( UPLO, N, A, AINV, WORK, LDWORK, RWORK, RCOND,
+*       SUBROUTINE DPPT03( UPLO, N, A, AINV, WORK, LDWORK, RWORK, RCOND,
 *                          RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DPPT03 computes the residual for a symmetric packed matrix times its
+*> DPPT03 computes the residual for a symmetric packed matrix times its
 *> inverse:
 *>    norm( I - A*AINV ) / ( N * norm(A) * norm(AINV) * EPS ),
 *> where EPS is the machine epsilon.
@@ -107,8 +107,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_DPPT03( UPLO, N, A, AINV, WORK, LDWORK, RWORK, RCOND
-     $,
+      SUBROUTINE DPPT03( UPLO, N, A, AINV, WORK, LDWORK, RWORK, RCOND,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -137,15 +136,15 @@
       DOUBLE PRECISION   AINVNM, ANORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE, AB_DLANSP
-      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_DLANGE, AB_DLANSP
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH, DLANGE, DLANSP
+      EXTERNAL           LSAME, DLAMCH, DLANGE, DLANSP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DCOPY, AB_DSPMV
+      EXTERNAL           DCOPY, DSPMV
 *     ..
 *     .. Executable Statements ..
 *
@@ -159,9 +158,9 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0 or AINVNM = 0.
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
-      ANORM = AB_DLANSP( '1', UPLO, N, A, RWORK )
-      AINVNM = AB_DLANSP( '1', UPLO, N, AINV, RWORK )
+      EPS = DLAMCH( 'Epsilon' )
+      ANORM = DLANSP( '1', UPLO, N, A, RWORK )
+      AINVNM = DLANSP( '1', UPLO, N, AINV, RWORK )
       IF( ANORM.LE.ZERO .OR. AINVNM.EQ.ZERO ) THEN
          RCOND = ZERO
          RESID = ONE / EPS
@@ -174,26 +173,26 @@
 *     expand it to a full matrix, then multiply by A one column at a
 *     time, moving the result one column to the left.
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
 *
 *        Copy AINV
 *
          JJ = 1
          DO 10 J = 1, N - 1
-            CALL AB_DCOPY( J, AINV( JJ ), 1, WORK( 1, J+1 ), 1 )
-            CALL AB_DCOPY( J-1, AINV( JJ ), 1, WORK( J, 2 ), LDWORK )
+            CALL DCOPY( J, AINV( JJ ), 1, WORK( 1, J+1 ), 1 )
+            CALL DCOPY( J-1, AINV( JJ ), 1, WORK( J, 2 ), LDWORK )
             JJ = JJ + J
    10    CONTINUE
          JJ = ( ( N-1 )*N ) / 2 + 1
-         CALL AB_DCOPY( N-1, AINV( JJ ), 1, WORK( N, 2 ), LDWORK )
+         CALL DCOPY( N-1, AINV( JJ ), 1, WORK( N, 2 ), LDWORK )
 *
 *        Multiply by A
 *
          DO 20 J = 1, N - 1
-            CALL AB_DSPMV( 'Upper', N, -ONE, A, WORK( 1, J+1 ), 1, ZERO,
+            CALL DSPMV( 'Upper', N, -ONE, A, WORK( 1, J+1 ), 1, ZERO,
      $                  WORK( 1, J ), 1 )
    20    CONTINUE
-         CALL AB_DSPMV( 'Upper', N, -ONE, A, AINV( JJ ), 1, ZERO,
+         CALL DSPMV( 'Upper', N, -ONE, A, AINV( JJ ), 1, ZERO,
      $               WORK( 1, N ), 1 )
 *
 *     UPLO = 'L':
@@ -204,21 +203,21 @@
 *
 *        Copy AINV
 *
-         CALL AB_DCOPY( N-1, AINV( 2 ), 1, WORK( 1, 1 ), LDWORK )
+         CALL DCOPY( N-1, AINV( 2 ), 1, WORK( 1, 1 ), LDWORK )
          JJ = N + 1
          DO 30 J = 2, N
-            CALL AB_DCOPY( N-J+1, AINV( JJ ), 1, WORK( J, J-1 ), 1 )
-            CALL AB_DCOPY( N-J, AINV( JJ+1 ), 1, WORK( J, J ), LDWORK )
+            CALL DCOPY( N-J+1, AINV( JJ ), 1, WORK( J, J-1 ), 1 )
+            CALL DCOPY( N-J, AINV( JJ+1 ), 1, WORK( J, J ), LDWORK )
             JJ = JJ + N - J + 1
    30    CONTINUE
 *
 *        Multiply by A
 *
          DO 40 J = N, 2, -1
-            CALL AB_DSPMV( 'Lower', N, -ONE, A, WORK( 1, J-1 ), 1, ZERO,
+            CALL DSPMV( 'Lower', N, -ONE, A, WORK( 1, J-1 ), 1, ZERO,
      $                  WORK( 1, J ), 1 )
    40    CONTINUE
-         CALL AB_DSPMV( 'Lower', N, -ONE, A, AINV( 1 ), 1, ZERO,
+         CALL DSPMV( 'Lower', N, -ONE, A, AINV( 1 ), 1, ZERO,
      $               WORK( 1, 1 ), 1 )
 *
       END IF
@@ -231,12 +230,12 @@
 *
 *     Compute norm(I - A*AINV) / (N * norm(A) * norm(AINV) * EPS)
 *
-      RESID = AB_DLANGE( '1', N, N, WORK, LDWORK, RWORK )
+      RESID = DLANGE( '1', N, N, WORK, LDWORK, RWORK )
 *
       RESID = ( ( RESID*RCOND ) / EPS ) / DBLE( N )
 *
       RETURN
 *
-*     End of AB_DPPT03
+*     End of DPPT03
 *
       END

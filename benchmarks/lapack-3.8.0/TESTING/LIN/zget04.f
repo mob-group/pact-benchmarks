@@ -1,4 +1,4 @@
-*> \brief \b AB_ZGET04
+*> \brief \b ZGET04
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZGET04( N, NRHS, X, LDX, XACT, LDXACT, RCOND, RESID )
+*       SUBROUTINE ZGET04( N, NRHS, X, LDX, XACT, LDXACT, RCOND, RESID )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDX, LDXACT, N, NRHS
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZGET04 computes the difference between a computed solution and the
+*> ZGET04 computes the difference between a computed solution and the
 *> true solution to a system of linear equations.
 *>
 *> RESID =  ( norm(X-XACT) * RCOND ) / ( norm(XACT) * EPS ),
@@ -100,8 +100,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZGET04( N, NRHS, X, LDX, XACT, LDXACT, RCOND, RESID 
-     $)
+      SUBROUTINE ZGET04( N, NRHS, X, LDX, XACT, LDXACT, RCOND, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -128,9 +127,9 @@
       COMPLEX*16         ZDUM
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_IZAMAX
-      DOUBLE PRECISION   AB_DLAMCH
-      EXTERNAL           AB_IZAMAX, AB_DLAMCH
+      INTEGER            IZAMAX
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           IZAMAX, DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX
@@ -152,7 +151,7 @@
 *
 *     Exit with RESID = 1/EPS if RCOND is invalid.
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
+      EPS = DLAMCH( 'Epsilon' )
       IF( RCOND.LT.ZERO ) THEN
          RESID = 1.0D0 / EPS
          RETURN
@@ -164,7 +163,7 @@
 *
       RESID = ZERO
       DO 20 J = 1, NRHS
-         IX = AB_IZAMAX( N, XACT( 1, J ), 1 )
+         IX = IZAMAX( N, XACT( 1, J ), 1 )
          XNORM = CABS1( XACT( IX, J ) )
          DIFFNM = ZERO
          DO 10 I = 1, N
@@ -182,6 +181,6 @@
 *
       RETURN
 *
-*     End of AB_ZGET04
+*     End of ZGET04
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_CGEQPF
+*> \brief \b CGEQPF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CGEQPF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CGEQPF.f">
+*> Download CGEQPF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgeqpf.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CGEQPF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgeqpf.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CGEQPF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgeqpf.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CGEQPF( M, N, A, LDA, JPVT, TAU, WORK, RWORK, INFO )
+*       SUBROUTINE CGEQPF( M, N, A, LDA, JPVT, TAU, WORK, RWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, M, N
@@ -35,9 +35,9 @@
 *>
 *> \verbatim
 *>
-*> This routine is deprecated and has been replaced by routine AB_CGEQP3.
+*> This routine is deprecated and has been replaced by routine CGEQP3.
 *>
-*> AB_CGEQPF computes a QR factorization with column pivoting of a
+*> CGEQPF computes a QR factorization with column pivoting of a
 *> complex M-by-N matrix A: A*P = Q*R.
 *> \endverbatim
 *
@@ -146,7 +146,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_CGEQPF( M, N, A, LDA, JPVT, TAU, WORK, RWORK, INFO )
+      SUBROUTINE CGEQPF( M, N, A, LDA, JPVT, TAU, WORK, RWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -174,16 +174,15 @@
       COMPLEX            AII
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_AB_CGEQR2, AB_CLARF, AB_AB_CLARFG, AB_CSWAP,
-     $ AB_CUNM2R, AB_XERBLA
+      EXTERNAL           CGEQR2, CLARF, CLARFG, CSWAP, CUNM2R, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CMPLX, CONJG, MAX, MIN, SQRT
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ISAMAX
-      REAL               AB_SCNRM2, AB_SLAMCH
-      EXTERNAL           AB_ISAMAX, AB_SCNRM2, AB_SLAMCH
+      INTEGER            ISAMAX
+      REAL               SCNRM2, SLAMCH
+      EXTERNAL           ISAMAX, SCNRM2, SLAMCH
 *     ..
 *     .. Executable Statements ..
 *
@@ -198,12 +197,12 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CGEQPF', -INFO )
+         CALL XERBLA( 'CGEQPF', -INFO )
          RETURN
       END IF
 *
       MN = MIN( M, N )
-      TOL3Z = SQRT(AB_SLAMCH('Epsilon'))
+      TOL3Z = SQRT(SLAMCH('Epsilon'))
 *
 *     Move initial columns up front
 *
@@ -211,7 +210,7 @@
       DO 10 I = 1, N
          IF( JPVT( I ).NE.0 ) THEN
             IF( I.NE.ITEMP ) THEN
-               CALL AB_CSWAP( M, A( 1, I ), 1, A( 1, ITEMP ), 1 )
+               CALL CSWAP( M, A( 1, I ), 1, A( 1, ITEMP ), 1 )
                JPVT( I ) = JPVT( ITEMP )
                JPVT( ITEMP ) = I
             ELSE
@@ -228,10 +227,9 @@
 *
       IF( ITEMP.GT.0 ) THEN
          MA = MIN( ITEMP, M )
-         CALL AB_AB_CGEQR2( M, MA, A, LDA, TAU, WORK, INFO )
+         CALL CGEQR2( M, MA, A, LDA, TAU, WORK, INFO )
          IF( MA.LT.N ) THEN
-            CALL AB_CUNM2R( 'Left', 'Conjugate transpose', M, N-MA, MA, 
-     $A,
+            CALL CUNM2R( 'Left', 'Conjugate transpose', M, N-MA, MA, A,
      $                   LDA, TAU, A( 1, MA+1 ), LDA, WORK, INFO )
          END IF
       END IF
@@ -242,7 +240,7 @@
 *        work store the exact column norms.
 *
          DO 20 I = ITEMP + 1, N
-            RWORK( I ) = AB_SCNRM2( M-ITEMP, A( ITEMP+1, I ), 1 )
+            RWORK( I ) = SCNRM2( M-ITEMP, A( ITEMP+1, I ), 1 )
             RWORK( N+I ) = RWORK( I )
    20    CONTINUE
 *
@@ -252,10 +250,10 @@
 *
 *           Determine ith pivot column and swap if necessary
 *
-            PVT = ( I-1 ) + AB_ISAMAX( N-I+1, RWORK( I ), 1 )
+            PVT = ( I-1 ) + ISAMAX( N-I+1, RWORK( I ), 1 )
 *
             IF( PVT.NE.I ) THEN
-               CALL AB_CSWAP( M, A( 1, PVT ), 1, A( 1, I ), 1 )
+               CALL CSWAP( M, A( 1, PVT ), 1, A( 1, I ), 1 )
                ITEMP = JPVT( PVT )
                JPVT( PVT ) = JPVT( I )
                JPVT( I ) = ITEMP
@@ -266,7 +264,7 @@
 *           Generate elementary reflector H(i)
 *
             AII = A( I, I )
-            CALL AB_AB_CLARFG( M-I+1, AII, A( MIN( I+1, M ), I ), 1,
+            CALL CLARFG( M-I+1, AII, A( MIN( I+1, M ), I ), 1,
      $                   TAU( I ) )
             A( I, I ) = AII
 *
@@ -276,7 +274,7 @@
 *
                AII = A( I, I )
                A( I, I ) = CMPLX( ONE )
-               CALL AB_CLARF( 'Left', M-I+1, N-I, A( I, I ), 1,
+               CALL CLARF( 'Left', M-I+1, N-I, A( I, I ), 1,
      $                     CONJG( TAU( I ) ), A( I, I+1 ), LDA, WORK )
                A( I, I ) = AII
             END IF
@@ -294,7 +292,7 @@
                   TEMP2 = TEMP*( RWORK( J ) / RWORK( N+J ) )**2
                   IF( TEMP2 .LE. TOL3Z ) THEN
                      IF( M-I.GT.0 ) THEN
-                        RWORK( J ) = AB_SCNRM2( M-I, A( I+1, J ), 1 )
+                        RWORK( J ) = SCNRM2( M-I, A( I+1, J ), 1 )
                         RWORK( N+J ) = RWORK( J )
                      ELSE
                         RWORK( J ) = ZERO
@@ -310,6 +308,6 @@
       END IF
       RETURN
 *
-*     End of AB_CGEQPF
+*     End of CGEQPF
 *
       END

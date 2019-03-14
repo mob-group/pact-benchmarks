@@ -1,4 +1,4 @@
-*> \brief \b AB_CGET04
+*> \brief \b CGET04
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CGET04( N, NRHS, X, LDX, XACT, LDXACT, RCOND, RESID )
+*       SUBROUTINE CGET04( N, NRHS, X, LDX, XACT, LDXACT, RCOND, RESID )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDX, LDXACT, N, NRHS
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CGET04 computes the difference between a computed solution and the
+*> CGET04 computes the difference between a computed solution and the
 *> true solution to a system of linear equations.
 *>
 *> RESID =  ( norm(X-XACT) * RCOND ) / ( norm(XACT) * EPS ),
@@ -100,8 +100,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_CGET04( N, NRHS, X, LDX, XACT, LDXACT, RCOND, RESID 
-     $)
+      SUBROUTINE CGET04( N, NRHS, X, LDX, XACT, LDXACT, RCOND, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -128,9 +127,9 @@
       COMPLEX            ZDUM
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ICAMAX
-      REAL               AB_SLAMCH
-      EXTERNAL           AB_ICAMAX, AB_SLAMCH
+      INTEGER            ICAMAX
+      REAL               SLAMCH
+      EXTERNAL           ICAMAX, SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, REAL
@@ -152,7 +151,7 @@
 *
 *     Exit with RESID = 1/EPS if RCOND is invalid.
 *
-      EPS = AB_SLAMCH( 'Epsilon' )
+      EPS = SLAMCH( 'Epsilon' )
       IF( RCOND.LT.ZERO ) THEN
          RESID = 1.0 / EPS
          RETURN
@@ -164,7 +163,7 @@
 *
       RESID = ZERO
       DO 20 J = 1, NRHS
-         IX = AB_ICAMAX( N, XACT( 1, J ), 1 )
+         IX = ICAMAX( N, XACT( 1, J ), 1 )
          XNORM = CABS1( XACT( IX, J ) )
          DIFFNM = ZERO
          DO 10 I = 1, N
@@ -182,6 +181,6 @@
 *
       RETURN
 *
-*     End of AB_CGET04
+*     End of CGET04
 *
       END

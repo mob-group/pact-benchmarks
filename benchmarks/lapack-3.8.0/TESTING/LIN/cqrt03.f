@@ -1,4 +1,4 @@
-*> \brief \b AB_CQRT03
+*> \brief \b CQRT03
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CQRT03( M, N, K, AF, C, CC, Q, LDA, TAU, WORK, LWORK,
+*       SUBROUTINE CQRT03( M, N, K, AF, C, CC, Q, LDA, TAU, WORK, LWORK,
 *                          RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -26,11 +26,11 @@
 *>
 *> \verbatim
 *>
-*> AB_CQRT03 tests AB_CUNMQR, which computes Q*C, Q'*C, C*Q or C*Q'.
+*> CQRT03 tests CUNMQR, which computes Q*C, Q'*C, C*Q or C*Q'.
 *>
-*> AB_CQRT03 compares the results of a call to AB_CUNMQR with the results of
-*> forming Q explicitly by a call to AB_CUNGQR and then performing matrix
-*> multiplication by a call to AB_CGEMM.
+*> CQRT03 compares the results of a call to CUNMQR with the results of
+*> forming Q explicitly by a call to CUNGQR and then performing matrix
+*> multiplication by a call to CGEMM.
 *> \endverbatim
 *
 *  Arguments:
@@ -61,7 +61,7 @@
 *> \verbatim
 *>          AF is COMPLEX array, dimension (LDA,N)
 *>          Details of the QR factorization of an m-by-n matrix, as
-*>          returned by AB_AB_CGEQRF. See AB_AB_CGEQRF for further details.
+*>          returned by CGEQRF. See CGEQRF for further details.
 *> \endverbatim
 *>
 *> \param[out] C
@@ -133,8 +133,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_CQRT03( M, N, K, AF, C, CC, Q, LDA, TAU, WORK, LWORK
-     $,
+      SUBROUTINE CQRT03( M, N, K, AF, C, CC, Q, LDA, TAU, WORK, LWORK,
      $                   RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -165,13 +164,12 @@
       REAL               CNORM, EPS, RESID
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_CLANGE, AB_SLAMCH
-      EXTERNAL           AB_LSAME, AB_CLANGE, AB_SLAMCH
+      LOGICAL            LSAME
+      REAL               CLANGE, SLAMCH
+      EXTERNAL           LSAME, CLANGE, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CGEMM, AB_CLACPY, AB_CLARNV, AB_CLASET, AB_C
-     $UNGQR, AB_CUNMQR
+      EXTERNAL           CGEMM, CLACPY, CLARNV, CLASET, CUNGQR, CUNMQR
 *     ..
 *     .. Local Arrays ..
       INTEGER            ISEED( 4 )
@@ -190,17 +188,17 @@
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = AB_SLAMCH( 'Epsilon' )
+      EPS = SLAMCH( 'Epsilon' )
 *
 *     Copy the first k columns of the factorization to the array Q
 *
-      CALL AB_CLASET( 'Full', M, M, ROGUE, ROGUE, Q, LDA )
-      CALL AB_CLACPY( 'Lower', M-1, K, AF( 2, 1 ), LDA, Q( 2, 1 ), LDA )
+      CALL CLASET( 'Full', M, M, ROGUE, ROGUE, Q, LDA )
+      CALL CLACPY( 'Lower', M-1, K, AF( 2, 1 ), LDA, Q( 2, 1 ), LDA )
 *
 *     Generate the m-by-m matrix Q
 *
-      SRNAMT = 'AB_CUNGQR'
-      CALL AB_CUNGQR( M, M, K, Q, LDA, TAU, WORK, LWORK, INFO )
+      SRNAMT = 'CUNGQR'
+      CALL CUNGQR( M, M, K, Q, LDA, TAU, WORK, LWORK, INFO )
 *
       DO 30 ISIDE = 1, 2
          IF( ISIDE.EQ.1 ) THEN
@@ -216,9 +214,9 @@
 *        Generate MC by NC matrix C
 *
          DO 10 J = 1, NC
-            CALL AB_CLARNV( 2, ISEED, MC, C( 1, J ) )
+            CALL CLARNV( 2, ISEED, MC, C( 1, J ) )
    10    CONTINUE
-         CNORM = AB_CLANGE( '1', MC, NC, C, LDA, RWORK )
+         CNORM = CLANGE( '1', MC, NC, C, LDA, RWORK )
          IF( CNORM.EQ.ZERO )
      $      CNORM = ONE
 *
@@ -231,30 +229,29 @@
 *
 *           Copy C
 *
-            CALL AB_CLACPY( 'Full', MC, NC, C, LDA, CC, LDA )
+            CALL CLACPY( 'Full', MC, NC, C, LDA, CC, LDA )
 *
 *           Apply Q or Q' to C
 *
-            SRNAMT = 'AB_CUNMQR'
-            CALL AB_CUNMQR( SIDE, TRANS, MC, NC, K, AF, LDA, TAU, CC, LD
-     $A,
+            SRNAMT = 'CUNMQR'
+            CALL CUNMQR( SIDE, TRANS, MC, NC, K, AF, LDA, TAU, CC, LDA,
      $                   WORK, LWORK, INFO )
 *
 *           Form explicit product and subtract
 *
-            IF( AB_LSAME( SIDE, 'L' ) ) THEN
-               CALL AB_CGEMM( TRANS, 'No transpose', MC, NC, MC,
+            IF( LSAME( SIDE, 'L' ) ) THEN
+               CALL CGEMM( TRANS, 'No transpose', MC, NC, MC,
      $                     CMPLX( -ONE ), Q, LDA, C, LDA, CMPLX( ONE ),
      $                     CC, LDA )
             ELSE
-               CALL AB_CGEMM( 'No transpose', TRANS, MC, NC, NC,
+               CALL CGEMM( 'No transpose', TRANS, MC, NC, NC,
      $                     CMPLX( -ONE ), C, LDA, Q, LDA, CMPLX( ONE ),
      $                     CC, LDA )
             END IF
 *
 *           Compute error in the difference
 *
-            RESID = AB_CLANGE( '1', MC, NC, CC, LDA, RWORK )
+            RESID = CLANGE( '1', MC, NC, CC, LDA, RWORK )
             RESULT( ( ISIDE-1 )*2+ITRANS ) = RESID /
      $         ( REAL( MAX( 1, M ) )*CNORM*EPS )
 *
@@ -263,6 +260,6 @@
 *
       RETURN
 *
-*     End of AB_CQRT03
+*     End of CQRT03
 *
       END

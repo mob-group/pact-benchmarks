@@ -1,4 +1,4 @@
-*> \brief \b AB_DLA_GBRPVGRW computes the reciprocal pivot growth factor norm(A)/norm(U) for a general banded matrix.
+*> \brief \b DLA_GBRPVGRW computes the reciprocal pivot growth factor norm(A)/norm(U) for a general banded matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLA_GBRPVGRW + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLA_GBRPVGRW.f">
+*> Download DLA_GBRPVGRW + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dla_gbrpvgrw.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLA_GBRPVGRW.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dla_gbrpvgrw.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLA_GBRPVGRW.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dla_gbrpvgrw.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       DOUBLE PRECISION FUNCTION AB_DLA_GBRPVGRW( N, KL, KU, NCOLS, AB,
+*       DOUBLE PRECISION FUNCTION DLA_GBRPVGRW( N, KL, KU, NCOLS, AB,
 *                                               LDAB, AFB, LDAFB )
 *
 *       .. Scalar Arguments ..
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DLA_GBRPVGRW computes the reciprocal pivot growth factor
+*> DLA_GBRPVGRW computes the reciprocal pivot growth factor
 *> norm(A)/norm(U). The "max absolute element" norm is used. If this is
 *> much less than 1, the stability of the LU factorization of the
 *> (equilibrated) matrix A could be poor. This also means that the
@@ -89,7 +89,7 @@
 *> \verbatim
 *>          AFB is DOUBLE PRECISION array, dimension (LDAFB,N)
 *>     Details of the LU factorization of the band matrix A, as
-*>     computed by AB_DGBTRF.  U is stored as an upper triangular
+*>     computed by DGBTRF.  U is stored as an upper triangular
 *>     band matrix with KL+KU superdiagonals in rows 1 to KL+KU+1,
 *>     and the multipliers used during the factorization are stored
 *>     in rows KL+KU+2 to 2*KL+KU+1.
@@ -114,7 +114,7 @@
 *> \ingroup doubleGBcomputational
 *
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION AB_DLA_GBRPVGRW( N, KL, KU, NCOLS, AB,
+      DOUBLE PRECISION FUNCTION DLA_GBRPVGRW( N, KL, KU, NCOLS, AB,
      $                                        LDAB, AFB, LDAFB )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -156,5 +156,5 @@
             RPVGRW = MIN( AMAX / UMAX, RPVGRW )
          END IF
       END DO
-      AB_DLA_GBRPVGRW = RPVGRW
+      DLA_GBRPVGRW = RPVGRW
       END

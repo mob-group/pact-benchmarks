@@ -1,4 +1,4 @@
-*> \brief \b AB_SGEMM
+*> \brief \b SGEMM
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SGEMM(TRANSA,TRANSB,M,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+*       SUBROUTINE SGEMM(TRANSA,TRANSB,M,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
 *
 *       .. Scalar Arguments ..
 *       REAL ALPHA,BETA
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SGEMM  performs one of the matrix-matrix operations
+*> SGEMM  performs one of the matrix-matrix operations
 *>
 *>    C := alpha*op( A )*op( B ) + beta*C,
 *>
@@ -185,8 +185,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_SGEMM(TRANSA,TRANSB,M,N,K,ALPHA,A,LDA,B,LDB,BETA,C,L
-     $DC)
+      SUBROUTINE SGEMM(TRANSA,TRANSB,M,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
 *
 *  -- Reference BLAS level3 routine (version 3.7.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -205,11 +204,11 @@
 *  =====================================================================
 *
 *     .. External Functions ..
-      LOGICAL AB_LSAME
-      EXTERNAL AB_LSAME
+      LOGICAL LSAME
+      EXTERNAL LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL AB_XERBLA
+      EXTERNAL XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC MAX
@@ -228,8 +227,8 @@
 *     transposed and set  NROWA, NCOLA and  NROWB  as the number of rows
 *     and  columns of  A  and the  number of  rows  of  B  respectively.
 *
-      NOTA = AB_LSAME(TRANSA,'N')
-      NOTB = AB_LSAME(TRANSB,'N')
+      NOTA = LSAME(TRANSA,'N')
+      NOTB = LSAME(TRANSB,'N')
       IF (NOTA) THEN
           NROWA = M
           NCOLA = K
@@ -246,11 +245,11 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF ((.NOT.NOTA) .AND. (.NOT.AB_LSAME(TRANSA,'C')) .AND.
-     +    (.NOT.AB_LSAME(TRANSA,'T'))) THEN
+      IF ((.NOT.NOTA) .AND. (.NOT.LSAME(TRANSA,'C')) .AND.
+     +    (.NOT.LSAME(TRANSA,'T'))) THEN
           INFO = 1
-      ELSE IF ((.NOT.NOTB) .AND. (.NOT.AB_LSAME(TRANSB,'C')) .AND.
-     +         (.NOT.AB_LSAME(TRANSB,'T'))) THEN
+      ELSE IF ((.NOT.NOTB) .AND. (.NOT.LSAME(TRANSB,'C')) .AND.
+     +         (.NOT.LSAME(TRANSB,'T'))) THEN
           INFO = 2
       ELSE IF (M.LT.0) THEN
           INFO = 3
@@ -266,7 +265,7 @@
           INFO = 13
       END IF
       IF (INFO.NE.0) THEN
-          CALL AB_XERBLA('AB_SGEMM ',INFO)
+          CALL XERBLA('SGEMM ',INFO)
           RETURN
       END IF
 *
@@ -380,6 +379,6 @@
 *
       RETURN
 *
-*     End of AB_SGEMM .
+*     End of SGEMM .
 *
       END

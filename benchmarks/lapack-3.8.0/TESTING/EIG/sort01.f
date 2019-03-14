@@ -1,4 +1,4 @@
-*> \brief \b AB_SORT01
+*> \brief \b SORT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SORT01( ROWCOL, M, N, U, LDU, WORK, LWORK, RESID )
+*       SUBROUTINE SORT01( ROWCOL, M, N, U, LDU, WORK, LWORK, RESID )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          ROWCOL
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SORT01 checks that the matrix U is orthogonal by computing the ratio
+*> SORT01 checks that the matrix U is orthogonal by computing the ratio
 *>
 *>    RESID = norm( I - U*U' ) / ( n * EPS ), if ROWCOL = 'R',
 *> or
@@ -114,7 +114,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_SORT01( ROWCOL, M, N, U, LDU, WORK, LWORK, RESID )
+      SUBROUTINE SORT01( ROWCOL, M, N, U, LDU, WORK, LWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -142,12 +142,12 @@
       REAL               EPS, TMP
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_SDOT, AB_SLAMCH, AB_SLANSY
-      EXTERNAL           AB_LSAME, AB_SDOT, AB_SLAMCH, AB_SLANSY
+      LOGICAL            LSAME
+      REAL               SDOT, SLAMCH, SLANSY
+      EXTERNAL           LSAME, SDOT, SLAMCH, SLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SLASET, AB_AB_SSYRK
+      EXTERNAL           SLASET, SSYRK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, REAL
@@ -161,8 +161,8 @@
       IF( M.LE.0 .OR. N.LE.0 )
      $   RETURN
 *
-      EPS = AB_SLAMCH( 'Precision' )
-      IF( M.LT.N .OR. ( M.EQ.N .AND. AB_LSAME( ROWCOL, 'R' ) ) ) THEN
+      EPS = SLAMCH( 'Precision' )
+      IF( M.LT.N .OR. ( M.EQ.N .AND. LSAME( ROWCOL, 'R' ) ) ) THEN
          TRANSU = 'N'
          K = N
       ELSE
@@ -180,15 +180,13 @@
 *
 *        Compute I - U*U' or I - U'*U.
 *
-         CALL AB_SLASET( 'Upper', MNMIN, MNMIN, ZERO, ONE, WORK, LDWORK 
-     $)
-         CALL AB_AB_SSYRK( 'Upper', TRANSU, MNMIN, K, -ONE, U, LDU, ONE,
-     $ WORK,
+         CALL SLASET( 'Upper', MNMIN, MNMIN, ZERO, ONE, WORK, LDWORK )
+         CALL SSYRK( 'Upper', TRANSU, MNMIN, K, -ONE, U, LDU, ONE, WORK,
      $               LDWORK )
 *
 *        Compute norm( I - U*U' ) / ( K * EPS ) .
 *
-         RESID = AB_SLANSY( '1', 'Upper', MNMIN, WORK, LDWORK,
+         RESID = SLANSY( '1', 'Upper', MNMIN, WORK, LDWORK,
      $           WORK( LDWORK*MNMIN+1 ) )
          RESID = ( RESID / REAL( K ) ) / EPS
       ELSE IF( TRANSU.EQ.'T' ) THEN
@@ -202,7 +200,7 @@
                ELSE
                   TMP = ONE
                END IF
-               TMP = TMP - AB_SDOT( M, U( 1, I ), 1, U( 1, J ), 1 )
+               TMP = TMP - SDOT( M, U( 1, I ), 1, U( 1, J ), 1 )
                RESID = MAX( RESID, ABS( TMP ) )
    10       CONTINUE
    20    CONTINUE
@@ -218,7 +216,7 @@
                ELSE
                   TMP = ONE
                END IF
-               TMP = TMP - AB_SDOT( N, U( J, 1 ), LDU, U( I, 1 ), LDU )
+               TMP = TMP - SDOT( N, U( J, 1 ), LDU, U( I, 1 ), LDU )
                RESID = MAX( RESID, ABS( TMP ) )
    30       CONTINUE
    40    CONTINUE
@@ -226,6 +224,6 @@
       END IF
       RETURN
 *
-*     End of AB_SORT01
+*     End of SORT01
 *
       END

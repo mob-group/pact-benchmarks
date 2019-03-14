@@ -84,7 +84,7 @@
 *> \verbatim
 *>          AF is DOUBLE PRECISION array, dimension (LDAF,N)
 *>     The factors L and U from the factorization
-*>     A = P*L*U as computed by AB_DGETRF.
+*>     A = P*L*U as computed by DGETRF.
 *> \endverbatim
 *>
 *> \param[in] LDAF
@@ -97,7 +97,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>     The pivot indices from the factorization A = P*L*U
-*>     as computed by AB_DGETRF; row i of the matrix was interchanged
+*>     as computed by DGETRF; row i of the matrix was interchanged
 *>     with row IPIV(i).
 *> \endverbatim
 *>
@@ -178,11 +178,11 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLACN2, AB_DGETRS, AB_XERBLA
+      EXTERNAL           DLACN2, DGETRS, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -192,9 +192,9 @@
       DLA_GERCOND = 0.0D+0
 *
       INFO = 0
-      NOTRANS = AB_LSAME( TRANS, 'N' )
-      IF ( .NOT. NOTRANS .AND. .NOT. AB_LSAME(TRANS, 'T')
-     $     .AND. .NOT. AB_LSAME(TRANS, 'C') ) THEN
+      NOTRANS = LSAME( TRANS, 'N' )
+      IF ( .NOT. NOTRANS .AND. .NOT. LSAME(TRANS, 'T')
+     $     .AND. .NOT. LSAME(TRANS, 'C') ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -204,7 +204,7 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'DLA_GERCOND', -INFO )
+         CALL XERBLA( 'DLA_GERCOND', -INFO )
          RETURN
       END IF
       IF( N.EQ.0 ) THEN
@@ -259,7 +259,7 @@
 
       KASE = 0
    10 CONTINUE
-      CALL AB_DLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
+      CALL DLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
       IF( KASE.NE.0 ) THEN
          IF( KASE.EQ.2 ) THEN
 *
@@ -270,10 +270,10 @@
             END DO
 
             IF (NOTRANS) THEN
-               CALL AB_DGETRS( 'No transpose', N, 1, AF, LDAF, IPIV,
+               CALL DGETRS( 'No transpose', N, 1, AF, LDAF, IPIV,
      $            WORK, N, INFO )
             ELSE
-               CALL AB_DGETRS( 'Transpose', N, 1, AF, LDAF, IPIV,
+               CALL DGETRS( 'Transpose', N, 1, AF, LDAF, IPIV,
      $            WORK, N, INFO )
             END IF
 *
@@ -303,10 +303,10 @@
             END IF
 
             IF (NOTRANS) THEN
-               CALL AB_DGETRS( 'Transpose', N, 1, AF, LDAF, IPIV,
+               CALL DGETRS( 'Transpose', N, 1, AF, LDAF, IPIV,
      $            WORK, N, INFO )
             ELSE
-               CALL AB_DGETRS( 'No transpose', N, 1, AF, LDAF, IPIV,
+               CALL DGETRS( 'No transpose', N, 1, AF, LDAF, IPIV,
      $            WORK, N, INFO )
             END IF
 *

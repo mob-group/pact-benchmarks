@@ -1,4 +1,4 @@
-*> \brief \b AB_ZCHKPS
+*> \brief \b ZCHKPS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZCHKPS( DOTYPE, NN, NVAL, NNB, NBVAL, NRANK, RANKVAL,
+*       SUBROUTINE ZCHKPS( DOTYPE, NN, NVAL, NNB, NBVAL, NRANK, RANKVAL,
 *                          THRESH, TSTERR, NMAX, A, AFAC, PERM, PIV, WORK,
 *                          RWORK, NOUT )
 *
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZCHKPS tests AB_ZPSTRF.
+*> ZCHKPS tests ZPSTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -150,8 +150,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZCHKPS( DOTYPE, NN, NVAL, NNB, NBVAL, NRANK, RANKVAL
-     $,
+      SUBROUTINE ZCHKPS( DOTYPE, NN, NVAL, NNB, NBVAL, NRANK, RANKVAL,
      $                   THRESH, TSTERR, NMAX, A, AFAC, PERM, PIV, WORK,
      $                   RWORK, NOUT )
 *
@@ -193,9 +192,8 @@
       CHARACTER          UPLOS( 2 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALAERH, AB_ALAHD, AB_ALASUM, AB_XLAENV, AB_Z
-     $ERRPS, AB_ZLACPY,
-     $                   AB_ZLATB5, AB_ZLATMT, AB_ZPST01, AB_ZPSTRF
+      EXTERNAL           ALAERH, ALAHD, ALASUM, XLAENV, ZERRPS, ZLACPY,
+     $                   ZLATB5, ZLATMT, ZPST01, ZPSTRF
 *     ..
 *     .. Scalars in Common ..
       INTEGER            INFOT, NUNIT
@@ -229,7 +227,7 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL AB_ZERRPS( PATH, NOUT )
+     $   CALL ZERRPS( PATH, NOUT )
       INFOT = 0
 *
 *     Do for each value of N in NVAL
@@ -268,21 +266,21 @@
                DO 120 IUPLO = 1, 2
                   UPLO = UPLOS( IUPLO )
 *
-*              Set up parameters with AB_ZLATB5 and generate a test matrix
-*              with AB_ZLATMT.
+*              Set up parameters with ZLATB5 and generate a test matrix
+*              with ZLATMT.
 *
-                  CALL AB_ZLATB5( PATH, IMAT, N, TYPE, KL, KU, ANORM,
+                  CALL ZLATB5( PATH, IMAT, N, TYPE, KL, KU, ANORM,
      $                         MODE, CNDNUM, DIST )
 *
-                  SRNAMT = 'AB_ZLATMT'
-                  CALL AB_ZLATMT( N, N, DIST, ISEED, TYPE, RWORK, MODE,
+                  SRNAMT = 'ZLATMT'
+                  CALL ZLATMT( N, N, DIST, ISEED, TYPE, RWORK, MODE,
      $                         CNDNUM, ANORM, RANK, KL, KU, UPLO, A,
      $                         LDA, WORK, INFO )
 *
-*              Check error code from AB_ZLATMT.
+*              Check error code from ZLATMT.
 *
                   IF( INFO.NE.0 ) THEN
-                    CALL AB_ALAERH( PATH, 'AB_ZLATMT', INFO, 0, UPLO, N,
+                    CALL ALAERH( PATH, 'ZLATMT', INFO, 0, UPLO, N,
      $                           N, -1, -1, -1, IMAT, NFAIL, NERRS,
      $                           NOUT )
                      GO TO 120
@@ -292,26 +290,26 @@
 *
                   DO 110 INB = 1, NNB
                      NB = NBVAL( INB )
-                     CALL AB_XLAENV( 1, NB )
+                     CALL XLAENV( 1, NB )
 *
 *                 Compute the pivoted L*L' or U'*U factorization
 *                 of the matrix.
 *
-                     CALL AB_ZLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
-                     SRNAMT = 'AB_ZPSTRF'
+                     CALL ZLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
+                     SRNAMT = 'ZPSTRF'
 *
 *                 Use default tolerance
 *
                      TOL = -ONE
-                     CALL AB_ZPSTRF( UPLO, N, AFAC, LDA, PIV, COMPRANK,
+                     CALL ZPSTRF( UPLO, N, AFAC, LDA, PIV, COMPRANK,
      $                            TOL, RWORK, INFO )
 *
-*                 Check error code from AB_ZPSTRF.
+*                 Check error code from ZPSTRF.
 *
                      IF( (INFO.LT.IZERO)
      $                    .OR.(INFO.NE.IZERO.AND.RANK.EQ.N)
      $                    .OR.(INFO.LE.IZERO.AND.RANK.LT.N) ) THEN
-                        CALL AB_ALAERH( PATH, 'AB_ZPSTRF', INFO, IZERO,
+                        CALL ALAERH( PATH, 'ZPSTRF', INFO, IZERO,
      $                               UPLO, N, N, -1, -1, NB, IMAT,
      $                               NFAIL, NERRS, NOUT )
                         GO TO 110
@@ -326,8 +324,7 @@
 *
 *                 PERM holds permuted L*L^T or U^T*U
 *
-                     CALL AB_ZPST01( UPLO, N, A, LDA, AFAC, LDA, PERM, L
-     $DA,
+                     CALL ZPST01( UPLO, N, A, LDA, AFAC, LDA, PERM, LDA,
      $                            PIV, RWORK, RESULT, COMPRANK )
 *
 *                 Print information about the tests that did not pass
@@ -338,7 +335,7 @@
                      RANKDIFF = RANK - COMPRANK
                      IF( RESULT.GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL AB_ALAHD( NOUT, PATH )
+     $                     CALL ALAHD( NOUT, PATH )
                         WRITE( NOUT, FMT = 9999 )UPLO, N, RANK,
      $                     RANKDIFF, NB, IMAT, RESULT
                         NFAIL = NFAIL + 1
@@ -353,13 +350,13 @@
 *
 *     Print a summary of the results.
 *
-      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( ' UPLO = ''', A1, ''', N =', I5, ', RANK =', I3,
      $      ', Diff =', I5, ', NB =', I4, ', type ', I2, ', Ratio =',
      $      G12.5 )
       RETURN
 *
-*     End of AB_ZCHKPS
+*     End of ZCHKPS
 *
       END

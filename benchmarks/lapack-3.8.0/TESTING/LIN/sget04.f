@@ -1,4 +1,4 @@
-*> \brief \b AB_SGET04
+*> \brief \b SGET04
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SGET04( N, NRHS, X, LDX, XACT, LDXACT, RCOND, RESID )
+*       SUBROUTINE SGET04( N, NRHS, X, LDX, XACT, LDXACT, RCOND, RESID )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDX, LDXACT, N, NRHS
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SGET04 computes the difference between a computed solution and the
+*> SGET04 computes the difference between a computed solution and the
 *> true solution to a system of linear equations.
 *>
 *> RESID =  ( norm(X-XACT) * RCOND ) / ( norm(XACT) * EPS ),
@@ -100,8 +100,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_SGET04( N, NRHS, X, LDX, XACT, LDXACT, RCOND, RESID 
-     $)
+      SUBROUTINE SGET04( N, NRHS, X, LDX, XACT, LDXACT, RCOND, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -127,9 +126,9 @@
       REAL               DIFFNM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ISAMAX
-      REAL               AB_SLAMCH
-      EXTERNAL           AB_ISAMAX, AB_SLAMCH
+      INTEGER            ISAMAX
+      REAL               SLAMCH
+      EXTERNAL           ISAMAX, SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -145,7 +144,7 @@
 *
 *     Exit with RESID = 1/EPS if RCOND is invalid.
 *
-      EPS = AB_SLAMCH( 'Epsilon' )
+      EPS = SLAMCH( 'Epsilon' )
       IF( RCOND.LT.ZERO ) THEN
          RESID = 1.0 / EPS
          RETURN
@@ -157,7 +156,7 @@
 *
       RESID = ZERO
       DO 20 J = 1, NRHS
-         IX = AB_ISAMAX( N, XACT( 1, J ), 1 )
+         IX = ISAMAX( N, XACT( 1, J ), 1 )
          XNORM = ABS( XACT( IX, J ) )
          DIFFNM = ZERO
          DO 10 I = 1, N
@@ -175,6 +174,6 @@
 *
       RETURN
 *
-*     End of AB_SGET04
+*     End of SGET04
 *
       END

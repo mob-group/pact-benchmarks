@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_ZHETRD_2STAGE
+*> \brief \b ZHETRD_2STAGE
 *
 *  @precisions fortran z -> s d c
 *
@@ -8,19 +8,19 @@
 *            http://www.netlib.org/lapack/explore-html/ 
 *
 *> \htmlonly
-*> Download AB_AB_ZHETRD_2STAGE + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_ZHETRD_2STAGE.f"> 
+*> Download ZHETRD_2STAGE + dependencies 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhetrd_2stage.f"> 
 *> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_ZHETRD_2STAGE.f"> 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhetrd_2stage.f"> 
 *> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_ZHETRD_2STAGE.f"> 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhetrd_2stage.f"> 
 *> [TXT]</a>
 *> \endhtmlonly 
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_ZHETRD_2STAGE( VECT, UPLO, N, A, LDA, D, E, TAU, 
+*       SUBROUTINE ZHETRD_2STAGE( VECT, UPLO, N, A, LDA, D, E, TAU, 
 *                                 HOUS2, LHOUS2, WORK, LWORK, INFO )
 *
 *       IMPLICIT NONE
@@ -41,7 +41,7 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_ZHETRD_2STAGE reduces a complex Hermitian matrix A to real symmetric
+*> ZHETRD_2STAGE reduces a complex Hermitian matrix A to real symmetric
 *> tridiagonal form T by a unitary similarity transformation:
 *> Q1**H Q2**H* A * Q2 * Q1 = T.
 *> \endverbatim
@@ -52,10 +52,10 @@
 *> \param[in] VECT
 *> \verbatim
 *>          VECT is CHARACTER*1
-*>          = 'N':  No need for the HoushoAB_LDEr representation, 
-*>                  in particular for the AB_SECOND stage (Band to
+*>          = 'N':  No need for the Housholder representation, 
+*>                  in particular for the second stage (Band to
 *>                  tridiagonal) and thus LHOUS2 is of size max(1, 4*N);
-*>          = 'V':  the HousehoAB_LDEr representation is needed to 
+*>          = 'V':  the Householder representation is needed to 
 *>                  either generate Q1 Q2 or to apply Q1 Q2, 
 *>                  then LHOUS2 is to be queried and computed.
 *>                  (NOT AVAILABLE IN THIS RELEASE).
@@ -124,7 +124,7 @@
 *> \param[out] HOUS2
 *> \verbatim
 *>          HOUS2 is COMPLEX*16 array, dimension LHOUS2, that
-*>          store the HousehoAB_LDEr representation of the stage2
+*>          store the Householder representation of the stage2
 *>          band to tridiagonal.
 *> \endverbatim
 *>
@@ -136,7 +136,7 @@
 *>          then a query is assumed; the routine
 *>          only calculates the optimal size of the HOUS2 array, returns
 *>          this value as the first entry of the HOUS2 array, and no error
-*>          message related to LHOUS2 is issued by AB_XERBLA.
+*>          message related to LHOUS2 is issued by XERBLA.
 *>          LHOUS2 = MAX(1, dimension) where
 *>          dimension = 4*N if VECT='N'
 *>          not available now if VECT='H'
@@ -155,7 +155,7 @@
 *>          then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *>          LWORK = MAX(1, dimension) where
 *>          dimension   = max(stage1,stage2) + (KD+1)*N
 *>                      = N*KD + N*max(KD+1,FACTOPTNB) 
@@ -222,7 +222,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_AB_ZHETRD_2STAGE( VECT, UPLO, N, A, LDA, D, E, TAU, 
+      SUBROUTINE ZHETRD_2STAGE( VECT, UPLO, N, A, LDA, D, E, TAU, 
      $                          HOUS2, LHOUS2, WORK, LWORK, INFO )
 *
       IMPLICIT NONE
@@ -249,38 +249,34 @@
       INTEGER            KD, IB, LWMIN, LHMIN, LWRK, LDAB, WPOS, ABPOS
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_AB_ZHETRD_HE2HB, AB_ZHETRD_HB2ST
+      EXTERNAL           XERBLA, ZHETRD_HE2HB, ZHETRD_HB2ST
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_AB_ILAENV2STAGE
-      EXTERNAL           AB_LSAME, AB_AB_ILAENV2STAGE
+      LOGICAL            LSAME
+      INTEGER            ILAENV2STAGE
+      EXTERNAL           LSAME, ILAENV2STAGE
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters
 *
       INFO   = 0
-      WANTQ  = AB_LSAME( VECT, 'V' )
-      UPPER  = AB_LSAME( UPLO, 'U' )
+      WANTQ  = LSAME( VECT, 'V' )
+      UPPER  = LSAME( UPLO, 'U' )
       LQUERY = ( LWORK.EQ.-1 ) .OR. ( LHOUS2.EQ.-1 )
 *
 *     Determine the block size, the workspace size and the hous size.
 *
-      KD     = AB_AB_ILAENV2STAGE( 1, 'AB_AB_ZHETRD_2STAGE', VECT, N, -1
-     $, -1, -1 )
-      IB     = AB_AB_ILAENV2STAGE( 2, 'AB_AB_ZHETRD_2STAGE', VECT, N, KD
-     $, -1, -1 )
-      LHMIN  = AB_AB_ILAENV2STAGE( 3, 'AB_AB_ZHETRD_2STAGE', VECT, N, KD
-     $, IB, -1 )
-      LWMIN  = AB_AB_ILAENV2STAGE( 4, 'AB_AB_ZHETRD_2STAGE', VECT, N, KD
-     $, IB, -1 )
-*      WRITE(*,*),'AB_AB_ZHETRD_2STAGE N KD UPLO LHMIN LWMIN ',N, KD, UPLO,
+      KD     = ILAENV2STAGE( 1, 'ZHETRD_2STAGE', VECT, N, -1, -1, -1 )
+      IB     = ILAENV2STAGE( 2, 'ZHETRD_2STAGE', VECT, N, KD, -1, -1 )
+      LHMIN  = ILAENV2STAGE( 3, 'ZHETRD_2STAGE', VECT, N, KD, IB, -1 )
+      LWMIN  = ILAENV2STAGE( 4, 'ZHETRD_2STAGE', VECT, N, KD, IB, -1 )
+*      WRITE(*,*),'ZHETRD_2STAGE N KD UPLO LHMIN LWMIN ',N, KD, UPLO,
 *     $            LHMIN, LWMIN
 *
-      IF( .NOT.AB_LSAME( VECT, 'N' ) ) THEN
+      IF( .NOT.LSAME( VECT, 'N' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      ELSE IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -298,7 +294,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_ZHETRD_2STAGE', -INFO )
+         CALL XERBLA( 'ZHETRD_2STAGE', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -317,18 +313,17 @@
       LWRK  = LWORK-LDAB*N
       ABPOS = 1
       WPOS  = ABPOS + LDAB*N
-      CALL AB_AB_ZHETRD_HE2HB( UPLO, N, KD, A, LDA, WORK( ABPOS ), LDAB,
-     $ 
+      CALL ZHETRD_HE2HB( UPLO, N, KD, A, LDA, WORK( ABPOS ), LDAB, 
      $                   TAU, WORK( WPOS ), LWRK, INFO )
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_ZHETRD_HE2HB', -INFO )
+         CALL XERBLA( 'ZHETRD_HE2HB', -INFO )
          RETURN
       END IF
-      CALL AB_ZHETRD_HB2ST( 'Y', VECT, UPLO, N, KD, 
+      CALL ZHETRD_HB2ST( 'Y', VECT, UPLO, N, KD, 
      $                   WORK( ABPOS ), LDAB, D, E, 
      $                   HOUS2, LHOUS2, WORK( WPOS ), LWRK, INFO )
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZHETRD_HB2ST', -INFO )
+         CALL XERBLA( 'ZHETRD_HB2ST', -INFO )
          RETURN
       END IF
 *
@@ -337,6 +332,6 @@
       WORK( 1 )  = LWMIN
       RETURN
 *
-*     End of AB_AB_ZHETRD_2STAGE
+*     End of ZHETRD_2STAGE
 *
       END

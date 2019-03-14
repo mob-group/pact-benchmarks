@@ -1,4 +1,4 @@
-*> \brief \b AB_SGRQTS
+*> \brief \b SGRQTS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SGRQTS( M, P, N, A, AF, Q, R, LDA, TAUA, B, BF, Z, T,
+*       SUBROUTINE SGRQTS( M, P, N, A, AF, Q, R, LDA, TAUA, B, BF, Z, T,
 *                          BWK, LDB, TAUB, WORK, LWORK, RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -29,7 +29,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SGRQTS tests AB_SGGRQF, which computes the GRQ factorization of an
+*> SGRQTS tests SGGRQF, which computes the GRQ factorization of an
 *> M-by-N matrix A and a P-by-N matrix B: A = R*Q and B = Z*T*Q.
 *> \endverbatim
 *
@@ -64,7 +64,7 @@
 *> \verbatim
 *>          AF is REAL array, dimension (LDA,N)
 *>          Details of the GRQ factorization of A and B, as returned
-*>          by AB_SGGRQF, see AB_SGGRQF for further details.
+*>          by SGGRQF, see SGGRQF for further details.
 *> \endverbatim
 *>
 *> \param[out] Q
@@ -102,7 +102,7 @@
 *> \verbatim
 *>          BF is REAL array, dimension (LDB,N)
 *>          Details of the GQR factorization of A and B, as returned
-*>          by AB_SGGRQF, see AB_SGGRQF for further details.
+*>          by SGGRQF, see SGGRQF for further details.
 *> \endverbatim
 *>
 *> \param[out] Z
@@ -132,7 +132,7 @@
 *> \verbatim
 *>          TAUB is REAL array, dimension (min(P,N))
 *>          The scalar factors of the elementary reflectors, as returned
-*>          by AB_SGGRQF.
+*>          by SGGRQF.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -174,8 +174,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_SGRQTS( M, P, N, A, AF, Q, R, LDA, TAUA, B, BF, Z, T
-     $,
+      SUBROUTINE SGRQTS( M, P, N, A, AF, Q, R, LDA, TAUA, B, BF, Z, T,
      $                   BWK, LDB, TAUB, WORK, LWORK, RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -208,90 +207,82 @@
       REAL               ANORM, BNORM, ULP, UNFL, RESID
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH, AB_SLANGE, AB_SLANSY
-      EXTERNAL           AB_SLAMCH, AB_SLANGE, AB_SLANSY
+      REAL               SLAMCH, SLANGE, SLANSY
+      EXTERNAL           SLAMCH, SLANGE, SLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SGEMM, AB_SGGRQF, AB_SLACPY, AB_SLASET, AB_S
-     $ORGQR,
-     $                   AB_SORGRQ, AB_AB_SSYRK
+      EXTERNAL           SGEMM, SGGRQF, SLACPY, SLASET, SORGQR,
+     $                   SORGRQ, SSYRK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, REAL
 *     ..
 *     .. Executable Statements ..
 *
-      ULP = AB_SLAMCH( 'Precision' )
-      UNFL = AB_SLAMCH( 'Safe minimum' )
+      ULP = SLAMCH( 'Precision' )
+      UNFL = SLAMCH( 'Safe minimum' )
 *
 *     Copy the matrix A to the array AF.
 *
-      CALL AB_SLACPY( 'Full', M, N, A, LDA, AF, LDA )
-      CALL AB_SLACPY( 'Full', P, N, B, LDB, BF, LDB )
+      CALL SLACPY( 'Full', M, N, A, LDA, AF, LDA )
+      CALL SLACPY( 'Full', P, N, B, LDB, BF, LDB )
 *
-      ANORM = MAX( AB_SLANGE( '1', M, N, A, LDA, RWORK ), UNFL )
-      BNORM = MAX( AB_SLANGE( '1', P, N, B, LDB, RWORK ), UNFL )
+      ANORM = MAX( SLANGE( '1', M, N, A, LDA, RWORK ), UNFL )
+      BNORM = MAX( SLANGE( '1', P, N, B, LDB, RWORK ), UNFL )
 *
 *     Factorize the matrices A and B in the arrays AF and BF.
 *
-      CALL AB_SGGRQF( M, P, N, AF, LDA, TAUA, BF, LDB, TAUB, WORK,
+      CALL SGGRQF( M, P, N, AF, LDA, TAUA, BF, LDB, TAUB, WORK,
      $             LWORK, INFO )
 *
 *     Generate the N-by-N matrix Q
 *
-      CALL AB_SLASET( 'Full', N, N, ROGUE, ROGUE, Q, LDA )
+      CALL SLASET( 'Full', N, N, ROGUE, ROGUE, Q, LDA )
       IF( M.LE.N ) THEN
          IF( M.GT.0 .AND. M.LT.N )
-     $      CALL AB_SLACPY( 'Full', M, N-M, AF, LDA, Q( N-M+1, 1 ), LDA 
-     $)
+     $      CALL SLACPY( 'Full', M, N-M, AF, LDA, Q( N-M+1, 1 ), LDA )
          IF( M.GT.1 )
-     $      CALL AB_SLACPY( 'Lower', M-1, M-1, AF( 2, N-M+1 ), LDA,
+     $      CALL SLACPY( 'Lower', M-1, M-1, AF( 2, N-M+1 ), LDA,
      $                   Q( N-M+2, N-M+1 ), LDA )
       ELSE
          IF( N.GT.1 )
-     $      CALL AB_SLACPY( 'Lower', N-1, N-1, AF( M-N+2, 1 ), LDA,
+     $      CALL SLACPY( 'Lower', N-1, N-1, AF( M-N+2, 1 ), LDA,
      $                   Q( 2, 1 ), LDA )
       END IF
-      CALL AB_SORGRQ( N, N, MIN( M, N ), Q, LDA, TAUA, WORK, LWORK, INFO
-     $ )
+      CALL SORGRQ( N, N, MIN( M, N ), Q, LDA, TAUA, WORK, LWORK, INFO )
 *
 *     Generate the P-by-P matrix Z
 *
-      CALL AB_SLASET( 'Full', P, P, ROGUE, ROGUE, Z, LDB )
+      CALL SLASET( 'Full', P, P, ROGUE, ROGUE, Z, LDB )
       IF( P.GT.1 )
-     $   CALL AB_SLACPY( 'Lower', P-1, N, BF( 2,1 ), LDB, Z( 2,1 ), LDB 
-     $)
-      CALL AB_SORGQR( P, P, MIN( P,N ), Z, LDB, TAUB, WORK, LWORK, INFO 
-     $)
+     $   CALL SLACPY( 'Lower', P-1, N, BF( 2,1 ), LDB, Z( 2,1 ), LDB )
+      CALL SORGQR( P, P, MIN( P,N ), Z, LDB, TAUB, WORK, LWORK, INFO )
 *
 *     Copy R
 *
-      CALL AB_SLASET( 'Full', M, N, ZERO, ZERO, R, LDA )
+      CALL SLASET( 'Full', M, N, ZERO, ZERO, R, LDA )
       IF( M.LE.N )THEN
-         CALL AB_SLACPY( 'Upper', M, M, AF( 1, N-M+1 ), LDA, R( 1, N-M+1
-     $ ),
+         CALL SLACPY( 'Upper', M, M, AF( 1, N-M+1 ), LDA, R( 1, N-M+1 ),
      $                LDA )
       ELSE
-         CALL AB_SLACPY( 'Full', M-N, N, AF, LDA, R, LDA )
-         CALL AB_SLACPY( 'Upper', N, N, AF( M-N+1, 1 ), LDA, R( M-N+1, 1
-     $ ),
+         CALL SLACPY( 'Full', M-N, N, AF, LDA, R, LDA )
+         CALL SLACPY( 'Upper', N, N, AF( M-N+1, 1 ), LDA, R( M-N+1, 1 ),
      $                LDA )
       END IF
 *
 *     Copy T
 *
-      CALL AB_SLASET( 'Full', P, N, ZERO, ZERO, T, LDB )
-      CALL AB_SLACPY( 'Upper', P, N, BF, LDB, T, LDB )
+      CALL SLASET( 'Full', P, N, ZERO, ZERO, T, LDB )
+      CALL SLACPY( 'Upper', P, N, BF, LDB, T, LDB )
 *
 *     Compute R - A*Q'
 *
-      CALL AB_SGEMM( 'No transpose', 'Transpose', M, N, N, -ONE, A, LDA,
-     $ Q,
+      CALL SGEMM( 'No transpose', 'Transpose', M, N, N, -ONE, A, LDA, Q,
      $            LDA, ONE, R, LDA )
 *
 *     Compute norm( R - A*Q' ) / ( MAX(M,N)*norm(A)*ULP ) .
 *
-      RESID = AB_SLANGE( '1', M, N, R, LDA, RWORK )
+      RESID = SLANGE( '1', M, N, R, LDA, RWORK )
       IF( ANORM.GT.ZERO ) THEN
          RESULT( 1 ) = ( ( RESID / REAL(MAX(1,M,N) ) ) / ANORM ) / ULP
       ELSE
@@ -300,16 +291,14 @@
 *
 *     Compute T*Q - Z'*B
 *
-      CALL AB_SGEMM( 'Transpose', 'No transpose', P, N, P, ONE, Z, LDB, 
-     $B,
+      CALL SGEMM( 'Transpose', 'No transpose', P, N, P, ONE, Z, LDB, B,
      $            LDB, ZERO, BWK, LDB )
-      CALL AB_SGEMM( 'No transpose', 'No transpose', P, N, N, ONE, T, LD
-     $B,
+      CALL SGEMM( 'No transpose', 'No transpose', P, N, N, ONE, T, LDB,
      $            Q, LDA, -ONE, BWK, LDB )
 *
 *     Compute norm( T*Q - Z'*B ) / ( MAX(P,N)*norm(A)*ULP ) .
 *
-      RESID = AB_SLANGE( '1', P, N, BWK, LDB, RWORK )
+      RESID = SLANGE( '1', P, N, BWK, LDB, RWORK )
       IF( BNORM.GT.ZERO ) THEN
          RESULT( 2 ) = ( ( RESID / REAL( MAX( 1,P,M ) ) )/BNORM ) / ULP
       ELSE
@@ -318,30 +307,28 @@
 *
 *     Compute I - Q*Q'
 *
-      CALL AB_SLASET( 'Full', N, N, ZERO, ONE, R, LDA )
-      CALL AB_AB_SSYRK( 'Upper', 'No Transpose', N, N, -ONE, Q, LDA, ONE
-     $, R,
+      CALL SLASET( 'Full', N, N, ZERO, ONE, R, LDA )
+      CALL SSYRK( 'Upper', 'No Transpose', N, N, -ONE, Q, LDA, ONE, R,
      $            LDA )
 *
 *     Compute norm( I - Q'*Q ) / ( N * ULP ) .
 *
-      RESID = AB_SLANSY( '1', 'Upper', N, R, LDA, RWORK )
+      RESID = SLANSY( '1', 'Upper', N, R, LDA, RWORK )
       RESULT( 3 ) = ( RESID / REAL( MAX( 1,N ) ) ) / ULP
 *
 *     Compute I - Z'*Z
 *
-      CALL AB_SLASET( 'Full', P, P, ZERO, ONE, T, LDB )
-      CALL AB_AB_SSYRK( 'Upper', 'Transpose', P, P, -ONE, Z, LDB, ONE, T
-     $,
+      CALL SLASET( 'Full', P, P, ZERO, ONE, T, LDB )
+      CALL SSYRK( 'Upper', 'Transpose', P, P, -ONE, Z, LDB, ONE, T,
      $            LDB )
 *
 *     Compute norm( I - Z'*Z ) / ( P*ULP ) .
 *
-      RESID = AB_SLANSY( '1', 'Upper', P, T, LDB, RWORK )
+      RESID = SLANSY( '1', 'Upper', P, T, LDB, RWORK )
       RESULT( 4 ) = ( RESID / REAL( MAX( 1,P ) ) ) / ULP
 *
       RETURN
 *
-*     End of AB_SGRQTS
+*     End of SGRQTS
 *
       END

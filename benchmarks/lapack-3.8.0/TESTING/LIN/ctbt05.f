@@ -1,4 +1,4 @@
-*> \brief \b AB_CTBT05
+*> \brief \b CTBT05
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CTBT05( UPLO, TRANS, DIAG, N, KD, NRHS, AB, LDAB, B,
+*       SUBROUTINE CTBT05( UPLO, TRANS, DIAG, N, KD, NRHS, AB, LDAB, B,
 *                          LDB, X, LDX, XACT, LDXACT, FERR, BERR, RESLTS )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CTBT05 tests the error bounds from iterative refinement for the
+*> CTBT05 tests the error bounds from iterative refinement for the
 *> computed solution to a system of equations A*X = B, where A is a
 *> triangular band matrix.
 *>
@@ -186,7 +186,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_CTBT05( UPLO, TRANS, DIAG, N, KD, NRHS, AB, LDAB, B,
+      SUBROUTINE CTBT05( UPLO, TRANS, DIAG, N, KD, NRHS, AB, LDAB, B,
      $                   LDB, X, LDX, XACT, LDXACT, FERR, BERR, RESLTS )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -217,10 +217,10 @@
       COMPLEX            ZDUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ICAMAX
-      REAL               AB_SLAMCH
-      EXTERNAL           AB_LSAME, AB_ICAMAX, AB_SLAMCH
+      LOGICAL            LSAME
+      INTEGER            ICAMAX
+      REAL               SLAMCH
+      EXTERNAL           LSAME, ICAMAX, SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, MIN, REAL
@@ -241,12 +241,12 @@
          RETURN
       END IF
 *
-      EPS = AB_SLAMCH( 'Epsilon' )
-      UNFL = AB_SLAMCH( 'Safe minimum' )
+      EPS = SLAMCH( 'Epsilon' )
+      UNFL = SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      UPPER = AB_LSAME( UPLO, 'U' )
-      NOTRAN = AB_LSAME( TRANS, 'N' )
-      UNIT = AB_LSAME( DIAG, 'U' )
+      UPPER = LSAME( UPLO, 'U' )
+      NOTRAN = LSAME( TRANS, 'N' )
+      UNIT = LSAME( DIAG, 'U' )
       NZ = MIN( KD, N-1 ) + 1
 *
 *     Test 1:  Compute the maximum of
@@ -255,7 +255,7 @@
 *
       ERRBND = ZERO
       DO 30 J = 1, NRHS
-         IMAX = AB_ICAMAX( N, X( 1, J ), 1 )
+         IMAX = ICAMAX( N, X( 1, J ), 1 )
          XNORM = MAX( CABS1( X( IMAX, J ) ), UNFL )
          DIFF = ZERO
          DO 10 I = 1, N
@@ -338,6 +338,6 @@
 *
       RETURN
 *
-*     End of AB_CTBT05
+*     End of CTBT05
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_CTRT02
+*> \brief \b CTRT02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CTRT02( UPLO, TRANS, DIAG, N, NRHS, A, LDA, X, LDX, B,
+*       SUBROUTINE CTRT02( UPLO, TRANS, DIAG, N, NRHS, A, LDA, X, LDX, B,
 *                          LDB, WORK, RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -28,7 +28,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CTRT02 computes the residual for the computed solution to a
+*> CTRT02 computes the residual for the computed solution to a
 *> triangular system of linear equations  A*x = b,  A**T *x = b,
 *> or A**H *x = b.  Here A is a triangular matrix, A**T is the transpose
 *> of A, A**H is the conjugate transpose of A, and x and b are N by NRHS
@@ -154,8 +154,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_CTRT02( UPLO, TRANS, DIAG, N, NRHS, A, LDA, X, LDX, 
-     $B,
+      SUBROUTINE CTRT02( UPLO, TRANS, DIAG, N, NRHS, A, LDA, X, LDX, B,
      $                   LDB, WORK, RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -185,12 +184,12 @@
       REAL               ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_CLANTR, AB_SCASUM, AB_SLAMCH
-      EXTERNAL           AB_LSAME, AB_CLANTR, AB_SCASUM, AB_SLAMCH
+      LOGICAL            LSAME
+      REAL               CLANTR, SCASUM, SLAMCH
+      EXTERNAL           LSAME, CLANTR, SCASUM, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CAXPY, AB_CCOPY, AB_CTRMV
+      EXTERNAL           CAXPY, CCOPY, CTRMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CMPLX, MAX
@@ -206,15 +205,15 @@
 *
 *     Compute the 1-norm of A or A**H.
 *
-      IF( AB_LSAME( TRANS, 'N' ) ) THEN
-         ANORM = AB_CLANTR( '1', UPLO, DIAG, N, N, A, LDA, RWORK )
+      IF( LSAME( TRANS, 'N' ) ) THEN
+         ANORM = CLANTR( '1', UPLO, DIAG, N, N, A, LDA, RWORK )
       ELSE
-         ANORM = AB_CLANTR( 'I', UPLO, DIAG, N, N, A, LDA, RWORK )
+         ANORM = CLANTR( 'I', UPLO, DIAG, N, N, A, LDA, RWORK )
       END IF
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = AB_SLAMCH( 'Epsilon' )
+      EPS = SLAMCH( 'Epsilon' )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -225,11 +224,11 @@
 *
       RESID = ZERO
       DO 10 J = 1, NRHS
-         CALL AB_CCOPY( N, X( 1, J ), 1, WORK, 1 )
-         CALL AB_CTRMV( UPLO, TRANS, DIAG, N, A, LDA, WORK, 1 )
-         CALL AB_CAXPY( N, CMPLX( -ONE ), B( 1, J ), 1, WORK, 1 )
-         BNORM = AB_SCASUM( N, WORK, 1 )
-         XNORM = AB_SCASUM( N, X( 1, J ), 1 )
+         CALL CCOPY( N, X( 1, J ), 1, WORK, 1 )
+         CALL CTRMV( UPLO, TRANS, DIAG, N, A, LDA, WORK, 1 )
+         CALL CAXPY( N, CMPLX( -ONE ), B( 1, J ), 1, WORK, 1 )
+         BNORM = SCASUM( N, WORK, 1 )
+         XNORM = SCASUM( N, X( 1, J ), 1 )
          IF( XNORM.LE.ZERO ) THEN
             RESID = ONE / EPS
          ELSE
@@ -239,6 +238,6 @@
 *
       RETURN
 *
-*     End of AB_CTRT02
+*     End of CTRT02
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_DCHKSP
+*> \brief \b DCHKSP
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DCHKSP( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
+*       SUBROUTINE DCHKSP( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
 *                          NMAX, A, AFAC, AINV, B, X, XACT, WORK, RWORK,
 *                          IWORK, NOUT )
 *
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DCHKSP tests AB_DSPTRF, -TRI, -TRS, -RFS, and -CON
+*> DCHKSP tests DSPTRF, -TRI, -TRS, -RFS, and -CON
 *> \endverbatim
 *
 *  Arguments:
@@ -159,8 +159,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_DCHKSP( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR
-     $,
+      SUBROUTINE DCHKSP( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
      $                   NMAX, A, AFAC, AINV, B, X, XACT, WORK, RWORK,
      $                   IWORK, NOUT )
 *
@@ -206,18 +205,15 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DGET06, AB_DLANSP
-      EXTERNAL           AB_LSAME, AB_DGET06, AB_DLANSP
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DGET06, DLANSP
+      EXTERNAL           LSAME, DGET06, DLANSP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALAERH, AB_ALAHD, AB_ALASUM, AB_DCOPY, AB_DE
-     $RRSY, AB_DGET04,
-     $                   AB_DLACPY, AB_DLARHS, AB_DLATB4, AB_DLATMS, AB_
-     $DPPT02, AB_DPPT03,
-     $                   AB_DPPT05, AB_DSPCON, AB_AB_DSPRFS, AB_DSPT01, 
-     $AB_DSPTRF, AB_DSPTRI,
-     $                   AB_DSPTRS
+      EXTERNAL           ALAERH, ALAHD, ALASUM, DCOPY, DERRSY, DGET04,
+     $                   DLACPY, DLARHS, DLATB4, DLATMS, DPPT02, DPPT03,
+     $                   DPPT05, DSPCON, DSPRFS, DSPT01, DSPTRF, DSPTRI,
+     $                   DSPTRS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -251,7 +247,7 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL AB_DERRSY( PATH, NOUT )
+     $   CALL DERRSY( PATH, NOUT )
       INFOT = 0
 *
 *     Do for each value of N in NVAL
@@ -282,29 +278,27 @@
 *
             DO 150 IUPLO = 1, 2
                UPLO = UPLOS( IUPLO )
-               IF( AB_LSAME( UPLO, 'U' ) ) THEN
+               IF( LSAME( UPLO, 'U' ) ) THEN
                   PACKIT = 'C'
                ELSE
                   PACKIT = 'R'
                END IF
 *
-*              Set up parameters with AB_DLATB4 and generate a test matrix
-*              with AB_DLATMS.
+*              Set up parameters with DLATB4 and generate a test matrix
+*              with DLATMS.
 *
-               CALL AB_DLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MO
-     $DE,
+               CALL DLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
      $                      CNDNUM, DIST )
 *
-               SRNAMT = 'AB_DLATMS'
-               CALL AB_DLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
+               SRNAMT = 'DLATMS'
+               CALL DLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
      $                      CNDNUM, ANORM, KL, KU, PACKIT, A, LDA, WORK,
      $                      INFO )
 *
-*              Check error code from AB_DLATMS.
+*              Check error code from DLATMS.
 *
                IF( INFO.NE.0 ) THEN
-                  CALL AB_ALAERH( PATH, 'AB_DLATMS', INFO, 0, UPLO, N, N
-     $, -1,
+                  CALL ALAERH( PATH, 'DLATMS', INFO, 0, UPLO, N, N, -1,
      $                         -1, -1, IMAT, NFAIL, NERRS, NOUT )
                   GO TO 150
                END IF
@@ -379,9 +373,9 @@
 *              Compute the L*D*L' or U*D*U' factorization of the matrix.
 *
                NPP = N*( N+1 ) / 2
-               CALL AB_DCOPY( NPP, A, 1, AFAC, 1 )
-               SRNAMT = 'AB_DSPTRF'
-               CALL AB_DSPTRF( UPLO, N, AFAC, IWORK, INFO )
+               CALL DCOPY( NPP, A, 1, AFAC, 1 )
+               SRNAMT = 'DSPTRF'
+               CALL DSPTRF( UPLO, N, AFAC, IWORK, INFO )
 *
 *              Adjust the expected value of INFO to account for
 *              pivoting.
@@ -400,11 +394,10 @@
                   END IF
                END IF
 *
-*              Check error code from AB_DSPTRF.
+*              Check error code from DSPTRF.
 *
                IF( INFO.NE.K )
-     $            CALL AB_ALAERH( PATH, 'AB_DSPTRF', INFO, K, UPLO, N, N
-     $, -1,
+     $            CALL ALAERH( PATH, 'DSPTRF', INFO, K, UPLO, N, N, -1,
      $                         -1, -1, IMAT, NFAIL, NERRS, NOUT )
                IF( INFO.NE.0 ) THEN
                   TRFCON = .TRUE.
@@ -415,8 +408,7 @@
 *+    TEST 1
 *              Reconstruct matrix from factors and compute residual.
 *
-               CALL AB_DSPT01( UPLO, N, A, AFAC, IWORK, AINV, LDA, RWORK
-     $,
+               CALL DSPT01( UPLO, N, A, AFAC, IWORK, AINV, LDA, RWORK,
      $                      RESULT( 1 ) )
                NT = 1
 *
@@ -424,18 +416,17 @@
 *              Form the inverse and compute the residual.
 *
                IF( .NOT.TRFCON ) THEN
-                  CALL AB_DCOPY( NPP, AFAC, 1, AINV, 1 )
-                  SRNAMT = 'AB_DSPTRI'
-                  CALL AB_DSPTRI( UPLO, N, AINV, IWORK, WORK, INFO )
+                  CALL DCOPY( NPP, AFAC, 1, AINV, 1 )
+                  SRNAMT = 'DSPTRI'
+                  CALL DSPTRI( UPLO, N, AINV, IWORK, WORK, INFO )
 *
-*              Check error code from AB_DSPTRI.
+*              Check error code from DSPTRI.
 *
                   IF( INFO.NE.0 )
-     $               CALL AB_ALAERH( PATH, 'AB_DSPTRI', INFO, 0, UPLO, N
-     $, N,
+     $               CALL ALAERH( PATH, 'DSPTRI', INFO, 0, UPLO, N, N,
      $                            -1, -1, -1, IMAT, NFAIL, NERRS, NOUT )
 *
-                  CALL AB_DPPT03( UPLO, N, A, AINV, WORK, LDA, RWORK,
+                  CALL DPPT03( UPLO, N, A, AINV, WORK, LDA, RWORK,
      $                         RCONDC, RESULT( 2 ) )
                   NT = 2
                END IF
@@ -446,7 +437,7 @@
                DO 110 K = 1, NT
                   IF( RESULT( K ).GE.THRESH ) THEN
                      IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                  CALL AB_ALAHD( NOUT, PATH )
+     $                  CALL ALAHD( NOUT, PATH )
                      WRITE( NOUT, FMT = 9999 )UPLO, N, IMAT, K,
      $                  RESULT( K )
                      NFAIL = NFAIL + 1
@@ -467,55 +458,51 @@
 *+    TEST 3
 *              Solve and compute residual for  A * X = B.
 *
-                  SRNAMT = 'AB_DLARHS'
-                  CALL AB_DLARHS( PATH, XTYPE, UPLO, ' ', N, N, KL, KU,
+                  SRNAMT = 'DLARHS'
+                  CALL DLARHS( PATH, XTYPE, UPLO, ' ', N, N, KL, KU,
      $                         NRHS, A, LDA, XACT, LDA, B, LDA, ISEED,
      $                         INFO )
-                  CALL AB_DLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
+                  CALL DLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
-                  SRNAMT = 'AB_DSPTRS'
-                  CALL AB_DSPTRS( UPLO, N, NRHS, AFAC, IWORK, X, LDA,
+                  SRNAMT = 'DSPTRS'
+                  CALL DSPTRS( UPLO, N, NRHS, AFAC, IWORK, X, LDA,
      $                         INFO )
 *
-*              Check error code from AB_DSPTRS.
+*              Check error code from DSPTRS.
 *
                   IF( INFO.NE.0 )
-     $               CALL AB_ALAERH( PATH, 'AB_DSPTRS', INFO, 0, UPLO, N
-     $, N,
+     $               CALL ALAERH( PATH, 'DSPTRS', INFO, 0, UPLO, N, N,
      $                            -1, -1, NRHS, IMAT, NFAIL, NERRS,
      $                            NOUT )
 *
-                  CALL AB_DLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
-                  CALL AB_DPPT02( UPLO, N, NRHS, A, X, LDA, WORK, LDA,
+                  CALL DLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
+                  CALL DPPT02( UPLO, N, NRHS, A, X, LDA, WORK, LDA,
      $                         RWORK, RESULT( 3 ) )
 *
 *+    TEST 4
 *              Check solution from generated exact solution.
 *
-                  CALL AB_DGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                  CALL DGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                         RESULT( 4 ) )
 *
 *+    TESTS 5, 6, and 7
 *              Use iterative refinement to improve the solution.
 *
-                  SRNAMT = 'AB_AB_DSPRFS'
-                  CALL AB_AB_DSPRFS( UPLO, N, NRHS, A, AFAC, IWORK, B, L
-     $DA, X,
+                  SRNAMT = 'DSPRFS'
+                  CALL DSPRFS( UPLO, N, NRHS, A, AFAC, IWORK, B, LDA, X,
      $                         LDA, RWORK, RWORK( NRHS+1 ), WORK,
      $                         IWORK( N+1 ), INFO )
 *
-*              Check error code from AB_AB_DSPRFS.
+*              Check error code from DSPRFS.
 *
                   IF( INFO.NE.0 )
-     $               CALL AB_ALAERH( PATH, 'AB_AB_DSPRFS', INFO, 0, UPLO
-     $, N, N,
+     $               CALL ALAERH( PATH, 'DSPRFS', INFO, 0, UPLO, N, N,
      $                            -1, -1, NRHS, IMAT, NFAIL, NERRS,
      $                            NOUT )
 *
-                  CALL AB_DGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                  CALL DGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                         RESULT( 5 ) )
-                  CALL AB_DPPT05( UPLO, N, NRHS, A, B, LDA, X, LDA, XACT
-     $,
+                  CALL DPPT05( UPLO, N, NRHS, A, B, LDA, X, LDA, XACT,
      $                         LDA, RWORK, RWORK( NRHS+1 ),
      $                         RESULT( 6 ) )
 *
@@ -525,7 +512,7 @@
                   DO 120 K = 3, 7
                      IF( RESULT( K ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL AB_ALAHD( NOUT, PATH )
+     $                     CALL ALAHD( NOUT, PATH )
                         WRITE( NOUT, FMT = 9998 )UPLO, N, NRHS, IMAT,
      $                     K, RESULT( K )
                         NFAIL = NFAIL + 1
@@ -538,25 +525,24 @@
 *              Get an estimate of RCOND = 1/CNDNUM.
 *
   140          CONTINUE
-               ANORM = AB_DLANSP( '1', UPLO, N, A, RWORK )
-               SRNAMT = 'AB_DSPCON'
-               CALL AB_DSPCON( UPLO, N, AFAC, IWORK, ANORM, RCOND, WORK,
+               ANORM = DLANSP( '1', UPLO, N, A, RWORK )
+               SRNAMT = 'DSPCON'
+               CALL DSPCON( UPLO, N, AFAC, IWORK, ANORM, RCOND, WORK,
      $                      IWORK( N+1 ), INFO )
 *
-*              Check error code from AB_DSPCON.
+*              Check error code from DSPCON.
 *
                IF( INFO.NE.0 )
-     $            CALL AB_ALAERH( PATH, 'AB_DSPCON', INFO, 0, UPLO, N, N
-     $, -1,
+     $            CALL ALAERH( PATH, 'DSPCON', INFO, 0, UPLO, N, N, -1,
      $                         -1, -1, IMAT, NFAIL, NERRS, NOUT )
 *
-               RESULT( 8 ) = AB_DGET06( RCOND, RCONDC )
+               RESULT( 8 ) = DGET06( RCOND, RCONDC )
 *
 *              Print the test ratio if it is .GE. THRESH.
 *
                IF( RESULT( 8 ).GE.THRESH ) THEN
                   IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $               CALL AB_ALAHD( NOUT, PATH )
+     $               CALL ALAHD( NOUT, PATH )
                   WRITE( NOUT, FMT = 9999 )UPLO, N, IMAT, 8,
      $               RESULT( 8 )
                   NFAIL = NFAIL + 1
@@ -568,7 +554,7 @@
 *
 *     Print a summary of the results.
 *
-      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( ' UPLO = ''', A1, ''', N =', I5, ', type ', I2, ', test ',
      $      I2, ', ratio =', G12.5 )
@@ -576,6 +562,6 @@
      $      I2, ', test(', I2, ') =', G12.5 )
       RETURN
 *
-*     End of AB_DCHKSP
+*     End of DCHKSP
 *
       END

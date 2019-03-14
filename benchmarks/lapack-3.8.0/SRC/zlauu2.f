@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLAUU2 computes the product UUH or LHL, where U and L are upper or lower triangular matrices (unblocked algorithm).
+*> \brief \b ZLAUU2 computes the product UUH or LHL, where U and L are upper or lower triangular matrices (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZLAUU2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLAUU2.f">
+*> Download ZLAUU2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlauu2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLAUU2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlauu2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLAUU2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlauu2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZLAUU2( UPLO, N, A, LDA, INFO )
+*       SUBROUTINE ZLAUU2( UPLO, N, A, LDA, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZLAUU2 computes the product U * U**H or L**H * L, where the triangular
+*> ZLAUU2 computes the product U * U**H or L**H * L, where the triangular
 *> factor U or L is stored in the upper or lower triangular part of
 *> the array A.
 *>
@@ -100,7 +100,7 @@
 *> \ingroup complex16OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_ZLAUU2( UPLO, N, A, LDA, INFO )
+      SUBROUTINE ZLAUU2( UPLO, N, A, LDA, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -127,12 +127,12 @@
       DOUBLE PRECISION   AII
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      COMPLEX*16         AB_ZDOTC
-      EXTERNAL           AB_LSAME, AB_ZDOTC
+      LOGICAL            LSAME
+      COMPLEX*16         ZDOTC
+      EXTERNAL           LSAME, ZDOTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, ZAB_DSCAL, AB_ZGEMV, AB_ZLACGV
+      EXTERNAL           XERBLA, ZDSCAL, ZGEMV, ZLACGV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCMPLX, MAX
@@ -142,8 +142,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -151,7 +151,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZLAUU2', -INFO )
+         CALL XERBLA( 'ZLAUU2', -INFO )
          RETURN
       END IF
 *
@@ -167,17 +167,15 @@
          DO 10 I = 1, N
             AII = A( I, I )
             IF( I.LT.N ) THEN
-               A( I, I ) = AII*AII + DBLE( AB_ZDOTC( N-I, A( I, I+1 ), L
-     $DA,
+               A( I, I ) = AII*AII + DBLE( ZDOTC( N-I, A( I, I+1 ), LDA,
      $                     A( I, I+1 ), LDA ) )
-               CALL AB_ZLACGV( N-I, A( I, I+1 ), LDA )
-               CALL AB_ZGEMV( 'No transpose', I-1, N-I, ONE, A( 1, I+1 )
-     $,
+               CALL ZLACGV( N-I, A( I, I+1 ), LDA )
+               CALL ZGEMV( 'No transpose', I-1, N-I, ONE, A( 1, I+1 ),
      $                     LDA, A( I, I+1 ), LDA, DCMPLX( AII ),
      $                     A( 1, I ), 1 )
-               CALL AB_ZLACGV( N-I, A( I, I+1 ), LDA )
+               CALL ZLACGV( N-I, A( I, I+1 ), LDA )
             ELSE
-               CALL ZAB_DSCAL( I, AII, A( 1, I ), 1 )
+               CALL ZDSCAL( I, AII, A( 1, I ), 1 )
             END IF
    10    CONTINUE
 *
@@ -188,22 +186,21 @@
          DO 20 I = 1, N
             AII = A( I, I )
             IF( I.LT.N ) THEN
-               A( I, I ) = AII*AII + DBLE( AB_ZDOTC( N-I, A( I+1, I ), 1
-     $,
+               A( I, I ) = AII*AII + DBLE( ZDOTC( N-I, A( I+1, I ), 1,
      $                     A( I+1, I ), 1 ) )
-               CALL AB_ZLACGV( I-1, A( I, 1 ), LDA )
-               CALL AB_ZGEMV( 'Conjugate transpose', N-I, I-1, ONE,
+               CALL ZLACGV( I-1, A( I, 1 ), LDA )
+               CALL ZGEMV( 'Conjugate transpose', N-I, I-1, ONE,
      $                     A( I+1, 1 ), LDA, A( I+1, I ), 1,
      $                     DCMPLX( AII ), A( I, 1 ), LDA )
-               CALL AB_ZLACGV( I-1, A( I, 1 ), LDA )
+               CALL ZLACGV( I-1, A( I, 1 ), LDA )
             ELSE
-               CALL ZAB_DSCAL( I, AII, A( I, 1 ), LDA )
+               CALL ZDSCAL( I, AII, A( I, 1 ), LDA )
             END IF
    20    CONTINUE
       END IF
 *
       RETURN
 *
-*     End of AB_ZLAUU2
+*     End of ZLAUU2
 *
       END

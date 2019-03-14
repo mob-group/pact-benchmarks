@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_AB_ZGEQR2P computes the QR factorization of a general rectangular matrix with non-negative diagonal elements using an unblocked algorithm.
+*> \brief \b ZGEQR2P computes the QR factorization of a general rectangular matrix with non-negative diagonal elements using an unblocked algorithm.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_AB_ZGEQR2P + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_AB_ZGEQR2P.f">
+*> Download ZGEQR2P + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgeqr2p.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_AB_ZGEQR2P.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgeqr2p.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_AB_ZGEQR2P.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgeqr2p.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_AB_ZGEQR2P( M, N, A, LDA, TAU, WORK, INFO )
+*       SUBROUTINE ZGEQR2P( M, N, A, LDA, TAU, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, M, N
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_AB_ZGEQR2P computes a QR factorization of a complex m by n matrix A:
+*> ZGEQR2P computes a QR factorization of a complex m by n matrix A:
 *> A = Q * R. The diagonal entries of R are real and nonnegative.
 *> \endverbatim
 *
@@ -122,7 +122,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_AB_AB_ZGEQR2P( M, N, A, LDA, TAU, WORK, INFO )
+      SUBROUTINE ZGEQR2P( M, N, A, LDA, TAU, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -147,7 +147,7 @@
       COMPLEX*16         ALPHA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZLARF, AB_AB_AB_ZLARFGP
+      EXTERNAL           XERBLA, ZLARF, ZLARFGP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DCONJG, MAX, MIN
@@ -165,7 +165,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_AB_ZGEQR2P', -INFO )
+         CALL XERBLA( 'ZGEQR2P', -INFO )
          RETURN
       END IF
 *
@@ -175,8 +175,7 @@
 *
 *        Generate elementary reflector H(i) to annihilate A(i+1:m,i)
 *
-         CALL AB_AB_AB_ZLARFGP( M-I+1, A( I, I ), A( MIN( I+1, M ), I ),
-     $ 1,
+         CALL ZLARFGP( M-I+1, A( I, I ), A( MIN( I+1, M ), I ), 1,
      $                TAU( I ) )
          IF( I.LT.N ) THEN
 *
@@ -184,13 +183,13 @@
 *
             ALPHA = A( I, I )
             A( I, I ) = ONE
-            CALL AB_ZLARF( 'Left', M-I+1, N-I, A( I, I ), 1,
+            CALL ZLARF( 'Left', M-I+1, N-I, A( I, I ), 1,
      $                  DCONJG( TAU( I ) ), A( I, I+1 ), LDA, WORK )
             A( I, I ) = ALPHA
          END IF
    10 CONTINUE
       RETURN
 *
-*     End of AB_AB_AB_ZGEQR2P
+*     End of ZGEQR2P
 *
       END

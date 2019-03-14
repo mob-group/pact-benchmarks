@@ -1,4 +1,4 @@
-*> \brief \b AB_STGSJA
+*> \brief \b STGSJA
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_STGSJA + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_STGSJA.f">
+*> Download STGSJA + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stgsja.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_STGSJA.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stgsja.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_STGSJA.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stgsja.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_STGSJA( JOBU, JOBV, JOBQ, M, P, N, K, L, A, LDA, B,
+*       SUBROUTINE STGSJA( JOBU, JOBV, JOBQ, M, P, N, K, L, A, LDA, B,
 *                          LDB, TOLA, TOLB, ALPHA, BETA, U, LDU, V, LDV,
 *                          Q, LDQ, WORK, NCYCLE, INFO )
 *
@@ -40,11 +40,11 @@
 *>
 *> \verbatim
 *>
-*> AB_STGSJA computes the generalized singular value decomposition (GSVD)
+*> STGSJA computes the generalized singular value decomposition (GSVD)
 *> of two real upper triangular (or trapezoidal) matrices A and B.
 *>
 *> On entry, it is assumed that matrices A and B have the following
-*> forms, which may be obtained by the preprocessing subroutine AB_SGGSVP
+*> forms, which may be obtained by the preprocessing subroutine SGGSVP
 *> from a general M-by-N matrix A and P-by-N matrix B:
 *>
 *>              N-K-L  K    L
@@ -187,7 +187,7 @@
 *>
 *>          K and L specify the subblocks in the input matrices A and B:
 *>          A23 = A(K+1:MIN(K+L,M),N-L+1:N) and B13 = B(1:L,N-L+1:N)
-*>          of A and B, whose GSVD is going to be computed by AB_STGSJA.
+*>          of A and B, whose GSVD is going to be computed by STGSJA.
 *>          See Further Details.
 *> \endverbatim
 *>
@@ -263,7 +263,7 @@
 *> \verbatim
 *>          U is REAL array, dimension (LDU,M)
 *>          On entry, if JOBU = 'U', U must contain a matrix U1 (usually
-*>          the orthogonal matrix returned by AB_SGGSVP).
+*>          the orthogonal matrix returned by SGGSVP).
 *>          On exit,
 *>          if JOBU = 'I', U contains the orthogonal matrix U;
 *>          if JOBU = 'U', U contains the product U1*U.
@@ -281,7 +281,7 @@
 *> \verbatim
 *>          V is REAL array, dimension (LDV,P)
 *>          On entry, if JOBV = 'V', V must contain a matrix V1 (usually
-*>          the orthogonal matrix returned by AB_SGGSVP).
+*>          the orthogonal matrix returned by SGGSVP).
 *>          On exit,
 *>          if JOBV = 'I', V contains the orthogonal matrix V;
 *>          if JOBV = 'V', V contains the product V1*V.
@@ -299,7 +299,7 @@
 *> \verbatim
 *>          Q is REAL array, dimension (LDQ,N)
 *>          On entry, if JOBQ = 'Q', Q must contain a matrix Q1 (usually
-*>          the orthogonal matrix returned by AB_SGGSVP).
+*>          the orthogonal matrix returned by SGGSVP).
 *>          On exit,
 *>          if JOBQ = 'I', Q contains the orthogonal matrix Q;
 *>          if JOBQ = 'Q', Q contains the product Q1*Q.
@@ -359,7 +359,7 @@
 *>
 *> \verbatim
 *>
-*>  AB_STGSJA essentially uses a variant of Kogbetliantz algorithm to reduce
+*>  STGSJA essentially uses a variant of Kogbetliantz algorithm to reduce
 *>  min(L,M-K)-by-L triangular (or trapezoidal) matrix A23 and L-by-L
 *>  matrix B13 to the form:
 *>
@@ -374,7 +374,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_STGSJA( JOBU, JOBV, JOBQ, M, P, N, K, L, A, LDA, B,
+      SUBROUTINE STGSJA( JOBU, JOBV, JOBQ, M, P, N, K, L, A, LDA, B,
      $                   LDB, TOLA, TOLB, ALPHA, BETA, U, LDU, V, LDV,
      $                   Q, LDQ, WORK, NCYCLE, INFO )
 *
@@ -411,13 +411,12 @@
      $                   GAMMA, RWK, SNQ, SNU, SNV, SSMIN
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SCOPY, AB_SLAGS2, AB_SLAPLL, AB_SLARTG, AB_S
-     $LASET, AB_SROT,
-     $                   AB_SSCAL, AB_XERBLA
+      EXTERNAL           SCOPY, SLAGS2, SLAPLL, SLARTG, SLASET, SROT,
+     $                   SSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -426,23 +425,21 @@
 *
 *     Decode and test the input parameters
 *
-      INITU = AB_LSAME( JOBU, 'I' )
-      WANTU = INITU .OR. AB_LSAME( JOBU, 'U' )
+      INITU = LSAME( JOBU, 'I' )
+      WANTU = INITU .OR. LSAME( JOBU, 'U' )
 *
-      INITV = AB_LSAME( JOBV, 'I' )
-      WANTV = INITV .OR. AB_LSAME( JOBV, 'V' )
+      INITV = LSAME( JOBV, 'I' )
+      WANTV = INITV .OR. LSAME( JOBV, 'V' )
 *
-      INITQ = AB_LSAME( JOBQ, 'I' )
-      WANTQ = INITQ .OR. AB_LSAME( JOBQ, 'Q' )
+      INITQ = LSAME( JOBQ, 'I' )
+      WANTQ = INITQ .OR. LSAME( JOBQ, 'Q' )
 *
       INFO = 0
-      IF( .NOT.( INITU .OR. WANTU .OR. AB_LSAME( JOBU, 'N' ) ) ) THEN
+      IF( .NOT.( INITU .OR. WANTU .OR. LSAME( JOBU, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.( INITV .OR. WANTV .OR. AB_LSAME( JOBV, 'N' ) ) )
-     $ THEN
+      ELSE IF( .NOT.( INITV .OR. WANTV .OR. LSAME( JOBV, 'N' ) ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.( INITQ .OR. WANTQ .OR. AB_LSAME( JOBQ, 'N' ) ) )
-     $ THEN
+      ELSE IF( .NOT.( INITQ .OR. WANTQ .OR. LSAME( JOBQ, 'N' ) ) ) THEN
          INFO = -3
       ELSE IF( M.LT.0 ) THEN
          INFO = -4
@@ -462,18 +459,18 @@
          INFO = -22
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_STGSJA', -INFO )
+         CALL XERBLA( 'STGSJA', -INFO )
          RETURN
       END IF
 *
 *     Initialize U, V and Q, if necessary
 *
       IF( INITU )
-     $   CALL AB_SLASET( 'Full', M, M, ZERO, ONE, U, LDU )
+     $   CALL SLASET( 'Full', M, M, ZERO, ONE, U, LDU )
       IF( INITV )
-     $   CALL AB_SLASET( 'Full', P, P, ZERO, ONE, V, LDV )
+     $   CALL SLASET( 'Full', P, P, ZERO, ONE, V, LDV )
       IF( INITQ )
-     $   CALL AB_SLASET( 'Full', N, N, ZERO, ONE, Q, LDQ )
+     $   CALL SLASET( 'Full', N, N, ZERO, ONE, Q, LDQ )
 *
 *     Loop until convergence
 *
@@ -506,28 +503,27 @@
                   B2 = B( J, N-L+I )
                END IF
 *
-               CALL AB_SLAGS2( UPPER, A1, A2, A3, B1, B2, B3, CSU, SNU,
+               CALL SLAGS2( UPPER, A1, A2, A3, B1, B2, B3, CSU, SNU,
      $                      CSV, SNV, CSQ, SNQ )
 *
 *              Update (K+I)-th and (K+J)-th rows of matrix A: U**T *A
 *
                IF( K+J.LE.M )
-     $            CALL AB_SROT( L, A( K+J, N-L+1 ), LDA, A( K+I, N-L+1 )
-     $,
+     $            CALL SROT( L, A( K+J, N-L+1 ), LDA, A( K+I, N-L+1 ),
      $                       LDA, CSU, SNU )
 *
 *              Update I-th and J-th rows of matrix B: V**T *B
 *
-               CALL AB_SROT( L, B( J, N-L+1 ), LDB, B( I, N-L+1 ), LDB,
+               CALL SROT( L, B( J, N-L+1 ), LDB, B( I, N-L+1 ), LDB,
      $                    CSV, SNV )
 *
 *              Update (N-L+I)-th and (N-L+J)-th columns of matrices
 *              A and B: A*Q and B*Q
 *
-               CALL AB_SROT( MIN( K+L, M ), A( 1, N-L+J ), 1,
+               CALL SROT( MIN( K+L, M ), A( 1, N-L+J ), 1,
      $                    A( 1, N-L+I ), 1, CSQ, SNQ )
 *
-               CALL AB_SROT( L, B( 1, N-L+J ), 1, B( 1, N-L+I ), 1, CSQ,
+               CALL SROT( L, B( 1, N-L+J ), 1, B( 1, N-L+I ), 1, CSQ,
      $                    SNQ )
 *
                IF( UPPER ) THEN
@@ -543,16 +539,14 @@
 *              Update orthogonal matrices U, V, Q, if desired.
 *
                IF( WANTU .AND. K+J.LE.M )
-     $            CALL AB_SROT( M, U( 1, K+J ), 1, U( 1, K+I ), 1, CSU,
+     $            CALL SROT( M, U( 1, K+J ), 1, U( 1, K+I ), 1, CSU,
      $                       SNU )
 *
                IF( WANTV )
-     $            CALL AB_SROT( P, V( 1, J ), 1, V( 1, I ), 1, CSV, SNV 
-     $)
+     $            CALL SROT( P, V( 1, J ), 1, V( 1, I ), 1, CSV, SNV )
 *
                IF( WANTQ )
-     $            CALL AB_SROT( N, Q( 1, N-L+J ), 1, Q( 1, N-L+I ), 1, C
-     $SQ,
+     $            CALL SROT( N, Q( 1, N-L+J ), 1, Q( 1, N-L+I ), 1, CSQ,
      $                       SNQ )
 *
    10       CONTINUE
@@ -568,10 +562,9 @@
 *
             ERROR = ZERO
             DO 30 I = 1, MIN( L, M-K )
-               CALL AB_SCOPY( L-I+1, A( K+I, N-L+I ), LDA, WORK, 1 )
-               CALL AB_SCOPY( L-I+1, B( I, N-L+I ), LDB, WORK( L+1 ), 1 
-     $)
-               CALL AB_SLAPLL( L-I+1, WORK, 1, WORK( L+1 ), 1, SSMIN )
+               CALL SCOPY( L-I+1, A( K+I, N-L+I ), LDA, WORK, 1 )
+               CALL SCOPY( L-I+1, B( I, N-L+I ), LDB, WORK( L+1 ), 1 )
+               CALL SLAPLL( L-I+1, WORK, 1, WORK( L+1 ), 1, SSMIN )
                ERROR = MAX( ERROR, SSMIN )
    30       CONTINUE
 *
@@ -610,24 +603,21 @@
 *           change sign if necessary
 *
             IF( GAMMA.LT.ZERO ) THEN
-               CALL AB_SSCAL( L-I+1, -ONE, B( I, N-L+I ), LDB )
+               CALL SSCAL( L-I+1, -ONE, B( I, N-L+I ), LDB )
                IF( WANTV )
-     $            CALL AB_SSCAL( P, -ONE, V( 1, I ), 1 )
+     $            CALL SSCAL( P, -ONE, V( 1, I ), 1 )
             END IF
 *
-            CALL AB_SLARTG( ABS( GAMMA ), ONE, BETA( K+I ), ALPHA( K+I )
-     $,
+            CALL SLARTG( ABS( GAMMA ), ONE, BETA( K+I ), ALPHA( K+I ),
      $                   RWK )
 *
             IF( ALPHA( K+I ).GE.BETA( K+I ) ) THEN
-               CALL AB_SSCAL( L-I+1, ONE / ALPHA( K+I ), A( K+I, N-L+I )
-     $,
+               CALL SSCAL( L-I+1, ONE / ALPHA( K+I ), A( K+I, N-L+I ),
      $                     LDA )
             ELSE
-               CALL AB_SSCAL( L-I+1, ONE / BETA( K+I ), B( I, N-L+I ),
+               CALL SSCAL( L-I+1, ONE / BETA( K+I ), B( I, N-L+I ),
      $                     LDB )
-               CALL AB_SCOPY( L-I+1, B( I, N-L+I ), LDB, A( K+I, N-L+I )
-     $,
+               CALL SCOPY( L-I+1, B( I, N-L+I ), LDB, A( K+I, N-L+I ),
      $                     LDA )
             END IF
 *
@@ -635,7 +625,7 @@
 *
             ALPHA( K+I ) = ZERO
             BETA( K+I ) = ONE
-            CALL AB_SCOPY( L-I+1, B( I, N-L+I ), LDB, A( K+I, N-L+I ),
+            CALL SCOPY( L-I+1, B( I, N-L+I ), LDB, A( K+I, N-L+I ),
      $                  LDA )
 *
          END IF
@@ -660,6 +650,6 @@
       NCYCLE = KCYCLE
       RETURN
 *
-*     End of AB_STGSJA
+*     End of STGSJA
 *
       END

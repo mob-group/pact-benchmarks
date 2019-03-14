@@ -1,4 +1,4 @@
-*> \brief \b AB_CGET02
+*> \brief \b CGET02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CGET02( TRANS, M, N, NRHS, A, LDA, X, LDX, B, LDB,
+*       SUBROUTINE CGET02( TRANS, M, N, NRHS, A, LDA, X, LDX, B, LDB,
 *                          RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CGET02 computes the residual for a solution of a system of linear
+*> CGET02 computes the residual for a solution of a system of linear
 *> equations  A*x = b  or  A'*x = b:
 *>    RESID = norm(B - A*X) / ( norm(A) * norm(X) * EPS ),
 *> where EPS is the machine epsilon.
@@ -130,7 +130,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_CGET02( TRANS, M, N, NRHS, A, LDA, X, LDX, B, LDB,
+      SUBROUTINE CGET02( TRANS, M, N, NRHS, A, LDA, X, LDX, B, LDB,
      $                   RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.1) --
@@ -161,12 +161,12 @@
       REAL               ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_CLANGE, AB_SCASUM, AB_SLAMCH
-      EXTERNAL           AB_LSAME, AB_CLANGE, AB_SCASUM, AB_SLAMCH
+      LOGICAL            LSAME
+      REAL               CLANGE, SCASUM, SLAMCH
+      EXTERNAL           LSAME, CLANGE, SCASUM, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CGEMM
+      EXTERNAL           CGEMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -180,7 +180,7 @@
          RETURN
       END IF
 *
-      IF( AB_LSAME( TRANS, 'T' ) .OR. AB_LSAME( TRANS, 'C' ) ) THEN
+      IF( LSAME( TRANS, 'T' ) .OR. LSAME( TRANS, 'C' ) ) THEN
          N1 = N
          N2 = M
       ELSE
@@ -190,8 +190,8 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = AB_SLAMCH( 'Epsilon' )
-      ANORM = AB_CLANGE( '1', M, N, A, LDA, RWORK )
+      EPS = SLAMCH( 'Epsilon' )
+      ANORM = CLANGE( '1', M, N, A, LDA, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -199,8 +199,7 @@
 *
 *     Compute  B - A*X  (or  B - A'*X ) and store in B.
 *
-      CALL AB_CGEMM( TRANS, 'No transpose', N1, NRHS, N2, -CONE, A, LDA,
-     $ X,
+      CALL CGEMM( TRANS, 'No transpose', N1, NRHS, N2, -CONE, A, LDA, X,
      $            LDX, CONE, B, LDB )
 *
 *     Compute the maximum over the number of right hand sides of
@@ -208,8 +207,8 @@
 *
       RESID = ZERO
       DO 10 J = 1, NRHS
-         BNORM = AB_SCASUM( N1, B( 1, J ), 1 )
-         XNORM = AB_SCASUM( N2, X( 1, J ), 1 )
+         BNORM = SCASUM( N1, B( 1, J ), 1 )
+         XNORM = SCASUM( N2, X( 1, J ), 1 )
          IF( XNORM.LE.ZERO ) THEN
             RESID = ONE / EPS
          ELSE
@@ -219,6 +218,6 @@
 *
       RETURN
 *
-*     End of AB_CGET02
+*     End of CGET02
 *
       END

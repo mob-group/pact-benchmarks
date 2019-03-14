@@ -1,4 +1,4 @@
-*> \brief \b AB_SLAKF2
+*> \brief \b SLAKF2
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLAKF2( M, N, A, LDA, B, D, E, Z, LDZ )
+*       SUBROUTINE SLAKF2( M, N, A, LDA, B, D, E, Z, LDZ )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDA, LDZ, M, N
@@ -103,7 +103,7 @@
 *> \ingroup real_matgen
 *
 *  =====================================================================
-      SUBROUTINE AB_SLAKF2( M, N, A, LDA, B, D, E, Z, LDZ )
+      SUBROUTINE SLAKF2( M, N, A, LDA, B, D, E, Z, LDZ )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -128,7 +128,7 @@
       INTEGER            I, IK, J, JK, L, MN, MN2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SLASET
+      EXTERNAL           SLASET
 *     ..
 *     .. Executable Statements ..
 *
@@ -136,7 +136,7 @@
 *
       MN = M*N
       MN2 = 2*MN
-      CALL AB_SLASET( 'Full', MN2, MN2, ZERO, ZERO, Z, LDZ )
+      CALL SLASET( 'Full', MN2, MN2, ZERO, ZERO, Z, LDZ )
 *
       IK = 1
       DO 50 L = 1, N
@@ -186,6 +186,6 @@
 *
       RETURN
 *
-*     End of AB_SLAKF2
+*     End of SLAKF2
 *
       END

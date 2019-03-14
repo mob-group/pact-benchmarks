@@ -1,4 +1,4 @@
-*> \brief \b AB_SGEQP3
+*> \brief \b SGEQP3
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SGEQP3 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SGEQP3.f">
+*> Download SGEQP3 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgeqp3.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SGEQP3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgeqp3.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SGEQP3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgeqp3.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SGEQP3( M, N, A, LDA, JPVT, TAU, WORK, LWORK, INFO )
+*       SUBROUTINE SGEQP3( M, N, A, LDA, JPVT, TAU, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, LWORK, M, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SGEQP3 computes a QR factorization with column pivoting of a
+*> SGEQP3 computes a QR factorization with column pivoting of a
 *> matrix A:  A*P = Q*R  using Level 3 BLAS.
 *> \endverbatim
 *
@@ -102,7 +102,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -149,7 +149,7 @@
 *>    X. Sun, Computer Science Dept., Duke University, USA
 *>
 *  =====================================================================
-      SUBROUTINE AB_SGEQP3( M, N, A, LDA, JPVT, TAU, WORK, LWORK, INFO )
+      SUBROUTINE SGEQP3( M, N, A, LDA, JPVT, TAU, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -176,13 +176,12 @@
      $                   NBMIN, NFXD, NX, SM, SMINMN, SN, TOPBMN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_AB_SGEQRF, AB_SLAQP2, AB_SLAQPS, AB_SORMQR, 
-     $AB_SSWAP, AB_XERBLA
+      EXTERNAL           SGEQRF, SLAQP2, SLAQPS, SORMQR, SSWAP, XERBLA
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ILAENV
-      REAL               AB_SNRM2
-      EXTERNAL           AB_ILAENV, AB_SNRM2
+      INTEGER            ILAENV
+      REAL               SNRM2
+      EXTERNAL           ILAENV, SNRM2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          INT, MAX, MIN
@@ -206,7 +205,7 @@
             LWKOPT = 1
          ELSE
             IWS = 3*N + 1
-            NB = AB_ILAENV( INB, 'AB_AB_SGEQRF', ' ', M, N, -1, -1 )
+            NB = ILAENV( INB, 'SGEQRF', ' ', M, N, -1, -1 )
             LWKOPT = 2*N + ( N + 1 )*NB
          END IF
          WORK( 1 ) = LWKOPT
@@ -217,7 +216,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SGEQP3', -INFO )
+         CALL XERBLA( 'SGEQP3', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -229,7 +228,7 @@
       DO 10 J = 1, N
          IF( JPVT( J ).NE.0 ) THEN
             IF( J.NE.NFXD ) THEN
-               CALL AB_SSWAP( M, A( 1, J ), 1, A( 1, NFXD ), 1 )
+               CALL SSWAP( M, A( 1, J ), 1, A( 1, NFXD ), 1 )
                JPVT( J ) = JPVT( NFXD )
                JPVT( NFXD ) = J
             ELSE
@@ -250,14 +249,13 @@
 *
       IF( NFXD.GT.0 ) THEN
          NA = MIN( M, NFXD )
-*CC      CALL AB_AB_SGEQR2( M, NA, A, LDA, TAU, WORK, INFO )
-         CALL AB_AB_SGEQRF( M, NA, A, LDA, TAU, WORK, LWORK, INFO )
+*CC      CALL SGEQR2( M, NA, A, LDA, TAU, WORK, INFO )
+         CALL SGEQRF( M, NA, A, LDA, TAU, WORK, LWORK, INFO )
          IWS = MAX( IWS, INT( WORK( 1 ) ) )
          IF( NA.LT.N ) THEN
-*CC         CALL AB_SORM2R( 'Left', 'Transpose', M, N-NA, NA, A, LDA,
+*CC         CALL SORM2R( 'Left', 'Transpose', M, N-NA, NA, A, LDA,
 *CC  $                   TAU, A( 1, NA+1 ), LDA, WORK, INFO )
-            CALL AB_SORMQR( 'Left', 'Transpose', M, N-NA, NA, A, LDA, TA
-     $U,
+            CALL SORMQR( 'Left', 'Transpose', M, N-NA, NA, A, LDA, TAU,
      $                   A( 1, NA+1 ), LDA, WORK, LWORK, INFO )
             IWS = MAX( IWS, INT( WORK( 1 ) ) )
          END IF
@@ -274,7 +272,7 @@
 *
 *        Determine the block size.
 *
-         NB = AB_ILAENV( INB, 'AB_AB_SGEQRF', ' ', SM, SN, -1, -1 )
+         NB = ILAENV( INB, 'SGEQRF', ' ', SM, SN, -1, -1 )
          NBMIN = 2
          NX = 0
 *
@@ -282,8 +280,7 @@
 *
 *           Determine when to cross over from blocked to unblocked code.
 *
-            NX = MAX( 0, AB_ILAENV( IXOVER, 'AB_AB_SGEQRF', ' ', SM, SN,
-     $ -1,
+            NX = MAX( 0, ILAENV( IXOVER, 'SGEQRF', ' ', SM, SN, -1,
      $           -1 ) )
 *
 *
@@ -299,8 +296,7 @@
 *                 determine the minimum value of NB.
 *
                   NB = ( LWORK-2*SN ) / ( SN+1 )
-                  NBMIN = MAX( 2, AB_ILAENV( INBMIN, 'AB_AB_SGEQRF', ' '
-     $, SM, SN,
+                  NBMIN = MAX( 2, ILAENV( INBMIN, 'SGEQRF', ' ', SM, SN,
      $                    -1, -1 ) )
 *
 *
@@ -312,7 +308,7 @@
 *        store the exact column norms.
 *
          DO 20 J = NFXD + 1, N
-            WORK( J ) = AB_SNRM2( SM, A( NFXD+1, J ), 1 )
+            WORK( J ) = SNRM2( SM, A( NFXD+1, J ), 1 )
             WORK( N+J ) = WORK( J )
    20    CONTINUE
 *
@@ -333,7 +329,7 @@
 *
 *              Factorize JB columns among columns J:N.
 *
-               CALL AB_SLAQPS( M, N-J+1, J-1, JB, FJB, A( 1, J ), LDA,
+               CALL SLAQPS( M, N-J+1, J-1, JB, FJB, A( 1, J ), LDA,
      $                      JPVT( J ), TAU( J ), WORK( J ), WORK( N+J ),
      $                      WORK( 2*N+1 ), WORK( 2*N+JB+1 ), N-J+1 )
 *
@@ -348,7 +344,7 @@
 *
 *
          IF( J.LE.MINMN )
-     $      CALL AB_SLAQP2( M, N-J+1, J-1, A( 1, J ), LDA, JPVT( J ),
+     $      CALL SLAQP2( M, N-J+1, J-1, A( 1, J ), LDA, JPVT( J ),
      $                   TAU( J ), WORK( J ), WORK( N+J ),
      $                   WORK( 2*N+1 ) )
 *
@@ -357,6 +353,6 @@
       WORK( 1 ) = IWS
       RETURN
 *
-*     End of AB_SGEQP3
+*     End of SGEQP3
 *
       END

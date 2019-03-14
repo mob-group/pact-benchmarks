@@ -1,4 +1,4 @@
-*> \brief <b> AB_AB_SSYEVD computes the eigenvalues and, optionally, the left and/or right eigenvectors for SY matrices</b>
+*> \brief <b> SSYEVD computes the eigenvalues and, optionally, the left and/or right eigenvectors for SY matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_SSYEVD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_SSYEVD.f">
+*> Download SSYEVD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssyevd.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_SSYEVD.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssyevd.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_SSYEVD.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssyevd.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_SSYEVD( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, IWORK,
+*       SUBROUTINE SSYEVD( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, IWORK,
 *                          LIWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_SSYEVD computes all eigenvalues and, optionally, eigenvectors of a
+*> SSYEVD computes all eigenvalues and, optionally, eigenvectors of a
 *> real symmetric matrix A. If eigenvectors are desired, it uses a
 *> divide and conquer algorithm.
 *>
@@ -47,8 +47,8 @@
 *> Cray-2. It could conceivably fail on hexadecimal or decimal machines
 *> without guard digits, but we know of none.
 *>
-*> Because of large use of BLAS of level 3, AB_AB_SSYEVD needs N**2 more
-*> workspace than AB_AB_SSYEVX.
+*> Because of large use of BLAS of level 3, SSYEVD needs N**2 more
+*> workspace than SSYEVX.
 *> \endverbatim
 *
 *  Arguments:
@@ -121,7 +121,7 @@
 *>          only calculates the optimal sizes of the WORK and IWORK
 *>          arrays, returns these values as the first entries of the WORK
 *>          and IWORK arrays, and no error message related to LWORK or
-*>          LIWORK is issued by AB_XERBLA.
+*>          LIWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -142,7 +142,7 @@
 *>          routine only calculates the optimal sizes of the WORK and
 *>          IWORK arrays, returns these values as the first entries of
 *>          the WORK and IWORK arrays, and no error message related to
-*>          LWORK or LIWORK is issued by AB_XERBLA.
+*>          LWORK or LIWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -180,8 +180,7 @@
 *>  Modified description of INFO. Sven, 16 Feb 05. \n
 *>
 *  =====================================================================
-      SUBROUTINE AB_AB_SSYEVD( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, IW
-     $ORK,
+      SUBROUTINE SSYEVD( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, IWORK,
      $                   LIWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -213,15 +212,14 @@
      $                   SMLNUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      REAL               AB_SLAMCH, AB_SLANSY
-      EXTERNAL           AB_ILAENV, AB_LSAME, AB_SLAMCH, AB_SLANSY
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      REAL               SLAMCH, SLANSY
+      EXTERNAL           ILAENV, LSAME, SLAMCH, SLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SLACPY, AB_SLASCL, AB_SORMTR, AB_SSCAL, AB_S
-     $STEDC, AB_SSTERF,
-     $                   AB_SSYTRD, AB_XERBLA
+      EXTERNAL           SLACPY, SLASCL, SORMTR, SSCAL, SSTEDC, SSTERF,
+     $                   SSYTRD, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT
@@ -230,14 +228,14 @@
 *
 *     Test the input parameters.
 *
-      WANTZ = AB_LSAME( JOBZ, 'V' )
-      LOWER = AB_LSAME( UPLO, 'L' )
+      WANTZ = LSAME( JOBZ, 'V' )
+      LOWER = LSAME( UPLO, 'L' )
       LQUERY = ( LWORK.EQ.-1 .OR. LIWORK.EQ.-1 )
 *
       INFO = 0
-      IF( .NOT.( WANTZ .OR. AB_LSAME( JOBZ, 'N' ) ) ) THEN
+      IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.( LOWER .OR. AB_LSAME( UPLO, 'U' ) ) ) THEN
+      ELSE IF( .NOT.( LOWER .OR. LSAME( UPLO, 'U' ) ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -260,8 +258,7 @@
                LWMIN = 2*N + 1
             END IF
             LOPT = MAX( LWMIN, 2*N +
-     $                  AB_ILAENV( 1, 'AB_SSYTRD', UPLO, N, -1, -1, -1 )
-     $ )
+     $                  ILAENV( 1, 'SSYTRD', UPLO, N, -1, -1, -1 ) )
             LIOPT = LIWMIN
          END IF
          WORK( 1 ) = LOPT
@@ -275,7 +272,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_SSYEVD', -INFO )
+         CALL XERBLA( 'SSYEVD', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -295,8 +292,8 @@
 *
 *     Get machine constants.
 *
-      SAFMIN = AB_SLAMCH( 'Safe minimum' )
-      EPS = AB_SLAMCH( 'Precision' )
+      SAFMIN = SLAMCH( 'Safe minimum' )
+      EPS = SLAMCH( 'Precision' )
       SMLNUM = SAFMIN / EPS
       BIGNUM = ONE / SMLNUM
       RMIN = SQRT( SMLNUM )
@@ -304,7 +301,7 @@
 *
 *     Scale matrix to allowable range, if necessary.
 *
-      ANRM = AB_SLANSY( 'M', UPLO, N, A, LDA, WORK )
+      ANRM = SLANSY( 'M', UPLO, N, A, LDA, WORK )
       ISCALE = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.RMIN ) THEN
          ISCALE = 1
@@ -314,9 +311,9 @@
          SIGMA = RMAX / ANRM
       END IF
       IF( ISCALE.EQ.1 )
-     $   CALL AB_SLASCL( UPLO, 0, 0, ONE, SIGMA, N, N, A, LDA, INFO )
+     $   CALL SLASCL( UPLO, 0, 0, ONE, SIGMA, N, N, A, LDA, INFO )
 *
-*     Call AB_SSYTRD to reduce symmetric matrix to tridiagonal form.
+*     Call SSYTRD to reduce symmetric matrix to tridiagonal form.
 *
       INDE = 1
       INDTAU = INDE + N
@@ -325,34 +322,34 @@
       INDWK2 = INDWRK + N*N
       LLWRK2 = LWORK - INDWK2 + 1
 *
-      CALL AB_SSYTRD( UPLO, N, A, LDA, W, WORK( INDE ), WORK( INDTAU ),
+      CALL SSYTRD( UPLO, N, A, LDA, W, WORK( INDE ), WORK( INDTAU ),
      $             WORK( INDWRK ), LLWORK, IINFO )
 *
-*     For eigenvalues only, call AB_SSTERF.  For eigenvectors, first call
-*     AB_SSTEDC to generate the eigenvector matrix, WORK(INDWRK), of the
-*     tridiagonal matrix, then call AB_SORMTR to multiply it by the
-*     HousehoAB_LDEr transformations stored in A.
+*     For eigenvalues only, call SSTERF.  For eigenvectors, first call
+*     SSTEDC to generate the eigenvector matrix, WORK(INDWRK), of the
+*     tridiagonal matrix, then call SORMTR to multiply it by the
+*     Householder transformations stored in A.
 *
       IF( .NOT.WANTZ ) THEN
-         CALL AB_SSTERF( N, W, WORK( INDE ), INFO )
+         CALL SSTERF( N, W, WORK( INDE ), INFO )
       ELSE
-         CALL AB_SSTEDC( 'I', N, W, WORK( INDE ), WORK( INDWRK ), N,
+         CALL SSTEDC( 'I', N, W, WORK( INDE ), WORK( INDWRK ), N,
      $                WORK( INDWK2 ), LLWRK2, IWORK, LIWORK, INFO )
-         CALL AB_SORMTR( 'L', UPLO, 'N', N, N, A, LDA, WORK( INDTAU ),
+         CALL SORMTR( 'L', UPLO, 'N', N, N, A, LDA, WORK( INDTAU ),
      $                WORK( INDWRK ), N, WORK( INDWK2 ), LLWRK2, IINFO )
-         CALL AB_SLACPY( 'A', N, N, WORK( INDWRK ), N, A, LDA )
+         CALL SLACPY( 'A', N, N, WORK( INDWRK ), N, A, LDA )
       END IF
 *
 *     If matrix was scaled, then rescale eigenvalues appropriately.
 *
       IF( ISCALE.EQ.1 )
-     $   CALL AB_SSCAL( N, ONE / SIGMA, W, 1 )
+     $   CALL SSCAL( N, ONE / SIGMA, W, 1 )
 *
       WORK( 1 ) = LOPT
       IWORK( 1 ) = LIOPT
 *
       RETURN
 *
-*     End of AB_AB_SSYEVD
+*     End of SSYEVD
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLASSQ updates a sum of squares represented in scaled form.
+*> \brief \b ZLASSQ updates a sum of squares represented in scaled form.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZLASSQ + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLASSQ.f">
+*> Download ZLASSQ + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlassq.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLASSQ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlassq.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLASSQ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlassq.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZLASSQ( N, X, INCX, SCALE, SUMSQ )
+*       SUBROUTINE ZLASSQ( N, X, INCX, SCALE, SUMSQ )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCX, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZLASSQ returns the values scl and ssq such that
+*> ZLASSQ returns the values scl and ssq such that
 *>
 *>    ( scl**2 )*ssq = x( 1 )**2 +...+ x( n )**2 + ( scale**2 )*sumsq,
 *>
@@ -104,7 +104,7 @@
 *> \ingroup complex16OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_ZLASSQ( N, X, INCX, SCALE, SUMSQ )
+      SUBROUTINE ZLASSQ( N, X, INCX, SCALE, SUMSQ )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -130,8 +130,8 @@
       DOUBLE PRECISION   TEMP1
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_DISNAN
-      EXTERNAL           AB_DISNAN
+      LOGICAL            DISNAN
+      EXTERNAL           DISNAN
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG
@@ -141,7 +141,7 @@
       IF( N.GT.0 ) THEN
          DO 10 IX = 1, 1 + ( N-1 )*INCX, INCX
             TEMP1 = ABS( DBLE( X( IX ) ) )
-            IF( TEMP1.GT.ZERO.OR.AB_DISNAN( TEMP1 ) ) THEN
+            IF( TEMP1.GT.ZERO.OR.DISNAN( TEMP1 ) ) THEN
                IF( SCALE.LT.TEMP1 ) THEN
                   SUMSQ = 1 + SUMSQ*( SCALE / TEMP1 )**2
                   SCALE = TEMP1
@@ -150,7 +150,7 @@
                END IF
             END IF
             TEMP1 = ABS( DIMAG( X( IX ) ) )
-            IF( TEMP1.GT.ZERO.OR.AB_DISNAN( TEMP1 ) ) THEN
+            IF( TEMP1.GT.ZERO.OR.DISNAN( TEMP1 ) ) THEN
                IF( SCALE.LT.TEMP1 ) THEN
                   SUMSQ = 1 + SUMSQ*( SCALE / TEMP1 )**2
                   SCALE = TEMP1
@@ -163,6 +163,6 @@
 *
       RETURN
 *
-*     End of AB_ZLASSQ
+*     End of ZLASSQ
 *
       END

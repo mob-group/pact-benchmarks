@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_AB_CHERFSX
+*> \brief \b CHERFSX
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_AB_CHERFSX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_AB_CHERFSX.f">
+*> Download CHERFSX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cherfsx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_AB_CHERFSX.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cherfsx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_AB_CHERFSX.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cherfsx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_AB_CHERFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF, IPIV,
+*       SUBROUTINE CHERFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF, IPIV,
 *                           S, B, LDB, X, LDX, RCOND, BERR, N_ERR_BNDS,
 *                           ERR_BNDS_NORM, ERR_BNDS_COMP, NPARAMS, PARAMS,
 *                           WORK, RWORK, INFO )
@@ -43,7 +43,7 @@
 *>
 *> \verbatim
 *>
-*>    AB_AB_AB_CHERFSX improves the computed solution to a system of linear
+*>    CHERFSX improves the computed solution to a system of linear
 *>    equations when the coefficient matrix is Hermitian indefinite, and
 *>    provides error bounds and backward error estimates for the
 *>    solution.  In addition to normwise error bound, the code provides
@@ -123,7 +123,7 @@
 *>     The factored form of the matrix A.  AF contains the block
 *>     diagonal matrix D and the multipliers used to obtain the
 *>     factor U or L from the factorization A = U*D*U**T or A =
-*>     L*D*L**T as computed by AB_SSYTRF.
+*>     L*D*L**T as computed by SSYTRF.
 *> \endverbatim
 *>
 *> \param[in] LDAF
@@ -136,7 +136,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>     Details of the interchanges and the block structure of D
-*>     as determined by AB_SSYTRF.
+*>     as determined by SSYTRF.
 *> \endverbatim
 *>
 *> \param[in,out] S
@@ -170,7 +170,7 @@
 *> \param[in,out] X
 *> \verbatim
 *>          X is COMPLEX array, dimension (LDX,NRHS)
-*>     On entry, the solution matrix X, as computed by AB_SGETRS.
+*>     On entry, the solution matrix X, as computed by SGETRS.
 *>     On exit, the improved solution matrix X.
 *> \endverbatim
 *>
@@ -228,21 +228,21 @@
 *>     The first index in ERR_BNDS_NORM(i,:) corresponds to the ith
 *>     right-hand side.
 *>
-*>     The AB_SECOND index in ERR_BNDS_NORM(:,err) contains the following
+*>     The second index in ERR_BNDS_NORM(:,err) contains the following
 *>     three fields:
 *>     err = 1 "Trust/don't trust" boolean. Trust the answer if the
 *>              reciprocal condition number is less than the threshold
-*>              sqrt(n) * AB_SLAMCH('Epsilon').
+*>              sqrt(n) * slamch('Epsilon').
 *>
 *>     err = 2 "Guaranteed" error bound: The estimated forward error,
 *>              almost certainly within a factor of 10 of the true error
 *>              so long as the next entry is greater than the threshold
-*>              sqrt(n) * AB_SLAMCH('Epsilon'). This error bound should only
+*>              sqrt(n) * slamch('Epsilon'). This error bound should only
 *>              be trusted if the previous boolean is true.
 *>
 *>     err = 3  Reciprocal condition number: Estimated normwise
 *>              reciprocal condition number.  Compared with the threshold
-*>              sqrt(n) * AB_SLAMCH('Epsilon') to determine if the error
+*>              sqrt(n) * slamch('Epsilon') to determine if the error
 *>              estimate is "guaranteed". These reciprocal condition
 *>              numbers are 1 / (norm(Z^{-1},inf) * norm(Z,inf)) for some
 *>              appropriately scaled matrix Z.
@@ -276,21 +276,21 @@
 *>     The first index in ERR_BNDS_COMP(i,:) corresponds to the ith
 *>     right-hand side.
 *>
-*>     The AB_SECOND index in ERR_BNDS_COMP(:,err) contains the following
+*>     The second index in ERR_BNDS_COMP(:,err) contains the following
 *>     three fields:
 *>     err = 1 "Trust/don't trust" boolean. Trust the answer if the
 *>              reciprocal condition number is less than the threshold
-*>              sqrt(n) * AB_SLAMCH('Epsilon').
+*>              sqrt(n) * slamch('Epsilon').
 *>
 *>     err = 2 "Guaranteed" error bound: The estimated forward error,
 *>              almost certainly within a factor of 10 of the true error
 *>              so long as the next entry is greater than the threshold
-*>              sqrt(n) * AB_SLAMCH('Epsilon'). This error bound should only
+*>              sqrt(n) * slamch('Epsilon'). This error bound should only
 *>              be trusted if the previous boolean is true.
 *>
 *>     err = 3  Reciprocal condition number: Estimated componentwise
 *>              reciprocal condition number.  Compared with the threshold
-*>              sqrt(n) * AB_SLAMCH('Epsilon') to determine if the error
+*>              sqrt(n) * slamch('Epsilon') to determine if the error
 *>              estimate is "guaranteed". These reciprocal condition
 *>              numbers are 1 / (norm(Z^{-1},inf) * norm(Z,inf)) for some
 *>              appropriately scaled matrix Z.
@@ -342,7 +342,7 @@
 *>       PARAMS(LA_LINRX_CWISE_I = 3) : Flag determining if the code
 *>            will attempt to find a solution with small componentwise
 *>            relative error in the double-precision algorithm.  Positive
-*>            is true, 0.0 is FALSE.
+*>            is true, 0.0 is false.
 *>         Default: 1.0 (attempt componentwise convergence)
 *> \endverbatim
 *>
@@ -396,8 +396,7 @@
 *> \ingroup complexHEcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_AB_CHERFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDA
-     $F, IPIV,
+      SUBROUTINE CHERFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF, IPIV,
      $                    S, B, LDB, X, LDX, RCOND, BERR, N_ERR_BNDS,
      $                    ERR_BNDS_NORM, ERR_BNDS_COMP, NPARAMS, PARAMS,
      $                    WORK, RWORK, INFO )
@@ -456,19 +455,17 @@
       REAL               RTHRESH, UNSTABLE_THRESH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_CHECON, AB_CLA_HERFSX_EXTENDED
+      EXTERNAL           XERBLA, CHECON, CLA_HERFSX_EXTENDED
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT, TRANSFER
 *     ..
 *     .. External Functions ..
-      EXTERNAL           AB_LSAME, AB_ILAPREC
-      EXTERNAL           AB_SLAMCH, AB_CLANHE, AB_CLA_HERCOND_X, AB_CLA_
-     $HERCOND_C
-      REAL               AB_SLAMCH, AB_CLANHE, AB_CLA_HERCOND_X, AB_CLA_
-     $HERCOND_C
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAPREC
+      EXTERNAL           LSAME, ILAPREC
+      EXTERNAL           SLAMCH, CLANHE, CLA_HERCOND_X, CLA_HERCOND_C
+      REAL               SLAMCH, CLANHE, CLA_HERCOND_X, CLA_HERCOND_C
+      LOGICAL            LSAME
+      INTEGER            ILAPREC
 *     ..
 *     .. Executable Statements ..
 *
@@ -486,7 +483,7 @@
 *
 *     Set default parameters.
 *
-      ILLRCOND_THRESH = REAL( N ) * AB_SLAMCH( 'Epsilon' )
+      ILLRCOND_THRESH = REAL( N ) * SLAMCH( 'Epsilon' )
       ITHRESH = INT( ITHRESH_DEFAULT )
       RTHRESH = RTHRESH_DEFAULT
       UNSTABLE_THRESH = DZTHRESH_DEFAULT
@@ -518,14 +515,13 @@
          N_NORMS = 2
       END IF
 *
-      RCEQU = AB_LSAME( EQUED, 'Y' )
+      RCEQU = LSAME( EQUED, 'Y' )
 *
 *     Test input parameters.
 *
-      IF (.NOT.AB_LSAME( UPLO, 'U' ) .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) 
-     $THEN
+      IF (.NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
         INFO = -1
-      ELSE IF( .NOT.RCEQU .AND. .NOT.AB_LSAME( EQUED, 'N' ) ) THEN
+      ELSE IF( .NOT.RCEQU .AND. .NOT.LSAME( EQUED, 'N' ) ) THEN
         INFO = -2
       ELSE IF( N.LT.0 ) THEN
         INFO = -3
@@ -541,7 +537,7 @@
         INFO = -14
       END IF
       IF( INFO.NE.0 ) THEN
-        CALL AB_XERBLA( 'AB_AB_AB_CHERFSX', -INFO )
+        CALL XERBLA( 'CHERFSX', -INFO )
         RETURN
       END IF
 *
@@ -590,17 +586,17 @@
 *     number of A.
 *
       NORM = 'I'
-      ANORM = AB_CLANHE( NORM, UPLO, N, A, LDA, RWORK )
-      CALL AB_CHECON( UPLO, N, AF, LDAF, IPIV, ANORM, RCOND, WORK,
+      ANORM = CLANHE( NORM, UPLO, N, A, LDA, RWORK )
+      CALL CHECON( UPLO, N, AF, LDAF, IPIV, ANORM, RCOND, WORK,
      $     INFO )
 *
 *     Perform refinement on each right-hand side
 *
       IF ( REF_TYPE .NE. 0 ) THEN
 
-         PREC_TYPE = AB_ILAPREC( 'D' )
+         PREC_TYPE = ILAPREC( 'D' )
 
-         CALL AB_CLA_HERFSX_EXTENDED( PREC_TYPE, UPLO,  N,
+         CALL CLA_HERFSX_EXTENDED( PREC_TYPE, UPLO,  N,
      $        NRHS, A, LDA, AF, LDAF, IPIV, RCEQU, S, B,
      $        LDB, X, LDX, BERR, N_NORMS, ERR_BNDS_NORM, ERR_BNDS_COMP,
      $        WORK, RWORK, WORK(N+1),
@@ -609,18 +605,16 @@
      $        INFO )
       END IF
 
-      ERR_LBND = MAX( 10.0, SQRT( REAL( N ) ) ) * AB_SLAMCH( 'Epsilon' )
+      ERR_LBND = MAX( 10.0, SQRT( REAL( N ) ) ) * SLAMCH( 'Epsilon' )
       IF ( N_ERR_BNDS .GE. 1 .AND. N_NORMS .GE. 1 ) THEN
 *
 *     Compute scaled normwise condition number cond(A*C).
 *
          IF ( RCEQU ) THEN
-            RCOND_TMP = AB_CLA_HERCOND_C( UPLO, N, A, LDA, AF, LDAF, IPI
-     $V,
+            RCOND_TMP = CLA_HERCOND_C( UPLO, N, A, LDA, AF, LDAF, IPIV,
      $           S, .TRUE., INFO, WORK, RWORK )
          ELSE
-            RCOND_TMP = AB_CLA_HERCOND_C( UPLO, N, A, LDA, AF, LDAF, IPI
-     $V,
+            RCOND_TMP = CLA_HERCOND_C( UPLO, N, A, LDA, AF, LDAF, IPIV,
      $           S, .FALSE., INFO, WORK, RWORK )
          END IF
          DO J = 1, NRHS
@@ -637,8 +631,7 @@
                ERR_BNDS_NORM( J, LA_LINRX_ERR_I ) = 1.0
                ERR_BNDS_NORM( J, LA_LINRX_TRUST_I ) = 0.0
                IF ( INFO .LE. N ) INFO = N + J
-            ELSE IF ( ERR_BNDS_NORM( J, LA_LINRX_ERR_I ) .LT. ERR_LBN
-     $D )
+            ELSE IF ( ERR_BNDS_NORM( J, LA_LINRX_ERR_I ) .LT. ERR_LBND )
      $              THEN
                ERR_BNDS_NORM( J, LA_LINRX_ERR_I ) = ERR_LBND
                ERR_BNDS_NORM( J, LA_LINRX_TRUST_I ) = 1.0
@@ -662,11 +655,11 @@
 *     the inverse condition number is set to 0.0 when the estimated
 *     cwise error is at least CWISE_WRONG.
 *
-         CWISE_WRONG = SQRT( AB_SLAMCH( 'Epsilon' ) )
+         CWISE_WRONG = SQRT( SLAMCH( 'Epsilon' ) )
          DO J = 1, NRHS
             IF ( ERR_BNDS_COMP( J, LA_LINRX_ERR_I ) .LT. CWISE_WRONG )
      $     THEN
-               RCOND_TMP = AB_CLA_HERCOND_X( UPLO, N, A, LDA, AF, LDAF,
+               RCOND_TMP = CLA_HERCOND_X( UPLO, N, A, LDA, AF, LDAF,
      $         IPIV, X( 1, J ), INFO, WORK, RWORK )
             ELSE
                RCOND_TMP = 0.0
@@ -702,6 +695,6 @@
 *
       RETURN
 *
-*     End of AB_AB_AB_CHERFSX
+*     End of CHERFSX
 *
       END

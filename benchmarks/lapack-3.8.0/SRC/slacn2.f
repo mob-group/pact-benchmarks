@@ -1,4 +1,4 @@
-*> \brief \b AB_SLACN2 estimates the 1-norm of a square matrix, using reverse communication for evaluating matrix-vector products.
+*> \brief \b SLACN2 estimates the 1-norm of a square matrix, using reverse communication for evaluating matrix-vector products.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLACN2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLACN2.f">
+*> Download SLACN2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slacn2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLACN2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slacn2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLACN2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slacn2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLACN2( N, V, X, ISGN, EST, KASE, ISAVE )
+*       SUBROUTINE SLACN2( N, V, X, ISGN, EST, KASE, ISAVE )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            KASE, N
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SLACN2 estimates the 1-norm of a square, real matrix A.
+*> SLACN2 estimates the 1-norm of a square, real matrix A.
 *> Reverse communication is used for evaluating matrix-vector products.
 *> \endverbatim
 *
@@ -61,7 +61,7 @@
 *>         On an intermediate return, X should be overwritten by
 *>               A * X,   if KASE=1,
 *>               A**T * X,  if KASE=2,
-*>         and AB_SLACN2 must be re-called with all the other parameters
+*>         and SLACN2 must be re-called with all the other parameters
 *>         unchanged.
 *> \endverbatim
 *>
@@ -74,23 +74,23 @@
 *> \verbatim
 *>          EST is REAL
 *>         On entry with KASE = 1 or 2 and ISAVE(1) = 3, EST should be
-*>         unchanged from the previous call to AB_SLACN2.
+*>         unchanged from the previous call to SLACN2.
 *>         On exit, EST is an estimate (a lower bound) for norm(A).
 *> \endverbatim
 *>
 *> \param[in,out] KASE
 *> \verbatim
 *>          KASE is INTEGER
-*>         On the initial call to AB_SLACN2, KASE should be 0.
+*>         On the initial call to SLACN2, KASE should be 0.
 *>         On an intermediate return, KASE will be 1 or 2, indicating
 *>         whether X should be overwritten by A * X  or A**T * X.
-*>         On the final return from AB_SLACN2, KASE will again be 0.
+*>         On the final return from SLACN2, KASE will again be 0.
 *> \endverbatim
 *>
 *> \param[in,out] ISAVE
 *> \verbatim
 *>          ISAVE is INTEGER array, dimension (3)
-*>         ISAVE is used to save variables between calls to AB_SLACN2
+*>         ISAVE is used to save variables between calls to SLACN2
 *> \endverbatim
 *
 *  Authors:
@@ -112,10 +112,10 @@
 *>
 *>  Originally named SONEST, dated March 16, 1988.
 *>
-*>  This is a thread safe version of AB_SLACON, which uses the array ISAVE
+*>  This is a thread safe version of SLACON, which uses the array ISAVE
 *>  in place of a SAVE statement, as follows:
 *>
-*>     AB_SLACON     AB_SLACN2
+*>     SLACON     SLACN2
 *>      JUMP     ISAVE(1)
 *>      J        ISAVE(2)
 *>      ITER     ISAVE(3)
@@ -134,7 +134,7 @@
 *>  ACM Trans. Math. Soft., vol. 14, no. 4, pp. 381-396, December 1988.
 *>
 *  =====================================================================
-      SUBROUTINE AB_SLACN2( N, V, X, ISGN, EST, KASE, ISAVE )
+      SUBROUTINE SLACN2( N, V, X, ISGN, EST, KASE, ISAVE )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -163,12 +163,12 @@
       REAL               ALTSGN, ESTOLD, TEMP
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ISAMAX
-      REAL               AB_SASUM
-      EXTERNAL           AB_ISAMAX, AB_SASUM
+      INTEGER            ISAMAX
+      REAL               SASUM
+      EXTERNAL           ISAMAX, SASUM
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SCOPY
+      EXTERNAL           SCOPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, NINT, REAL, SIGN
@@ -196,7 +196,7 @@
 *        ... QUIT
          GO TO 150
       END IF
-      EST = AB_SASUM( N, X, 1 )
+      EST = SASUM( N, X, 1 )
 *
       DO 30 I = 1, N
          X( I ) = SIGN( ONE, X( I ) )
@@ -210,7 +210,7 @@
 *     FIRST ITERATION.  X HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*X.
 *
    40 CONTINUE
-      ISAVE( 2 ) = AB_ISAMAX( N, X, 1 )
+      ISAVE( 2 ) = ISAMAX( N, X, 1 )
       ISAVE( 3 ) = 2
 *
 *     MAIN LOOP - ITERATIONS 2,3,...,ITMAX.
@@ -228,9 +228,9 @@
 *     X HAS BEEN OVERWRITTEN BY A*X.
 *
    70 CONTINUE
-      CALL AB_SCOPY( N, X, 1, V, 1 )
+      CALL SCOPY( N, X, 1, V, 1 )
       ESTOLD = EST
-      EST = AB_SASUM( N, V, 1 )
+      EST = SASUM( N, V, 1 )
       DO 80 I = 1, N
          IF( NINT( SIGN( ONE, X( I ) ) ).NE.ISGN( I ) )
      $      GO TO 90
@@ -256,7 +256,7 @@
 *
   110 CONTINUE
       JLAST = ISAVE( 2 )
-      ISAVE( 2 ) = AB_ISAMAX( N, X, 1 )
+      ISAVE( 2 ) = ISAMAX( N, X, 1 )
       IF( ( X( JLAST ).NE.ABS( X( ISAVE( 2 ) ) ) ) .AND.
      $    ( ISAVE( 3 ).LT.ITMAX ) ) THEN
          ISAVE( 3 ) = ISAVE( 3 ) + 1
@@ -279,9 +279,9 @@
 *     X HAS BEEN OVERWRITTEN BY A*X.
 *
   140 CONTINUE
-      TEMP = TWO*( AB_SASUM( N, X, 1 ) / REAL( 3*N ) )
+      TEMP = TWO*( SASUM( N, X, 1 ) / REAL( 3*N ) )
       IF( TEMP.GT.EST ) THEN
-         CALL AB_SCOPY( N, X, 1, V, 1 )
+         CALL SCOPY( N, X, 1, V, 1 )
          EST = TEMP
       END IF
 *
@@ -289,6 +289,6 @@
       KASE = 0
       RETURN
 *
-*     End of AB_SLACN2
+*     End of SLACN2
 *
       END

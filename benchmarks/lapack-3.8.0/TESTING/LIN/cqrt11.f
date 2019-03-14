@@ -1,4 +1,4 @@
-*> \brief \b AB_CQRT11
+*> \brief \b CQRT11
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       REAL             FUNCTION AB_CQRT11( M, K, A, LDA, TAU, WORK, LWORK )
+*       REAL             FUNCTION CQRT11( M, K, A, LDA, TAU, WORK, LWORK )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            K, LDA, LWORK, M
@@ -23,7 +23,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CQRT11 computes the test ratio
+*> CQRT11 computes the test ratio
 *>
 *>       || Q'*Q - I || / (eps * m)
 *>
@@ -96,8 +96,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      REAL             FUNCTION AB_CQRT11( M, K, A, LDA, TAU, WORK, LWOR
-     $K )
+      REAL             FUNCTION CQRT11( M, K, A, LDA, TAU, WORK, LWORK )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -121,11 +120,11 @@
       INTEGER            INFO, J
 *     ..
 *     .. External Functions ..
-      REAL               AB_CLANGE, AB_SLAMCH
-      EXTERNAL           AB_CLANGE, AB_SLAMCH
+      REAL               CLANGE, SLAMCH
+      EXTERNAL           CLANGE, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CLASET, AB_CUNM2R, AB_XERBLA
+      EXTERNAL           CLASET, CUNM2R, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CMPLX, REAL
@@ -135,12 +134,12 @@
 *     ..
 *     .. Executable Statements ..
 *
-      AB_CQRT11 = ZERO
+      CQRT11 = ZERO
 *
 *     Test for sufficient workspace
 *
       IF( LWORK.LT.M*M+M ) THEN
-         CALL AB_XERBLA( 'AB_CQRT11', 7 )
+         CALL XERBLA( 'CQRT11', 7 )
          RETURN
       END IF
 *
@@ -149,30 +148,27 @@
       IF( M.LE.0 )
      $   RETURN
 *
-      CALL AB_CLASET( 'Full', M, M, CMPLX( ZERO ), CMPLX( ONE ), WORK, M
-     $ )
+      CALL CLASET( 'Full', M, M, CMPLX( ZERO ), CMPLX( ONE ), WORK, M )
 *
 *     Form Q
 *
-      CALL AB_CUNM2R( 'Left', 'No transpose', M, M, K, A, LDA, TAU, WORK
-     $,
+      CALL CUNM2R( 'Left', 'No transpose', M, M, K, A, LDA, TAU, WORK,
      $             M, WORK( M*M+1 ), INFO )
 *
 *     Form Q'*Q
 *
-      CALL AB_CUNM2R( 'Left', 'Conjugate transpose', M, M, K, A, LDA, TA
-     $U,
+      CALL CUNM2R( 'Left', 'Conjugate transpose', M, M, K, A, LDA, TAU,
      $             WORK, M, WORK( M*M+1 ), INFO )
 *
       DO 10 J = 1, M
          WORK( ( J-1 )*M+J ) = WORK( ( J-1 )*M+J ) - ONE
    10 CONTINUE
 *
-      AB_CQRT11 = AB_CLANGE( 'One-norm', M, M, WORK, M, RDUMMY ) /
-     $         ( REAL( M )*AB_SLAMCH( 'Epsilon' ) )
+      CQRT11 = CLANGE( 'One-norm', M, M, WORK, M, RDUMMY ) /
+     $         ( REAL( M )*SLAMCH( 'Epsilon' ) )
 *
       RETURN
 *
-*     End of AB_CQRT11
+*     End of CQRT11
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_DLA_PORPVGRW computes the reciprocal pivot growth factor norm(A)/norm(U) for a symmetric or Hermitian positive-definite matrix.
+*> \brief \b DLA_PORPVGRW computes the reciprocal pivot growth factor norm(A)/norm(U) for a symmetric or Hermitian positive-definite matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLA_PORPVGRW + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLA_PORPVGRW.f">
+*> Download DLA_PORPVGRW + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dla_porpvgrw.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLA_PORPVGRW.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dla_porpvgrw.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLA_PORPVGRW.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dla_porpvgrw.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       DOUBLE PRECISION FUNCTION AB_DLA_PORPVGRW( UPLO, NCOLS, A, LDA, AF,
+*       DOUBLE PRECISION FUNCTION DLA_PORPVGRW( UPLO, NCOLS, A, LDA, AF,
 *                                               LDAF, WORK )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *> \verbatim
 *>
 *>
-*> AB_DLA_PORPVGRW computes the reciprocal pivot growth factor
+*> DLA_PORPVGRW computes the reciprocal pivot growth factor
 *> norm(A)/norm(U). The "max absolute element" norm is used. If this is
 *> much less than 1, the stability of the LU factorization of the
 *> (equilibrated) matrix A could be poor. This also means that the
@@ -76,7 +76,7 @@
 *> \verbatim
 *>          AF is DOUBLE PRECISION array, dimension (LDAF,N)
 *>     The triangular factor U or L from the Cholesky factorization
-*>     A = U**T*U or A = L*L**T, as computed by AB_DPOTRF.
+*>     A = U**T*U or A = L*L**T, as computed by DPOTRF.
 *> \endverbatim
 *>
 *> \param[in] LDAF
@@ -103,8 +103,7 @@
 *> \ingroup doublePOcomputational
 *
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION AB_DLA_PORPVGRW( UPLO, NCOLS, A, LDA, AF
-     $,
+      DOUBLE PRECISION FUNCTION DLA_PORPVGRW( UPLO, NCOLS, A, LDA, AF,
      $                                        LDAF, WORK )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -131,14 +130,14 @@
       INTRINSIC          ABS, MAX, MIN
 *     ..
 *     .. External Functions ..
-      EXTERNAL           AB_LSAME
-      LOGICAL            AB_LSAME
+      EXTERNAL           LSAME
+      LOGICAL            LSAME
 *     ..
 *     .. Executable Statements ..
 *
-      UPPER = AB_LSAME( 'Upper', UPLO )
+      UPPER = LSAME( 'Upper', UPLO )
 *
-*     AB_DPOTRF will have factored only the NCOLSxNCOLS leading minor, so
+*     DPOTRF will have factored only the NCOLSxNCOLS leading minor, so
 *     we restrict the growth search to that minor and use only the first
 *     2*NCOLS workspace entries.
 *
@@ -168,7 +167,7 @@
 *     Now find the max magnitude entry of each column of the factor in
 *     AF.  No pivoting, so no permutations.
 *
-      IF ( AB_LSAME( 'Upper', UPLO ) ) THEN
+      IF ( LSAME( 'Upper', UPLO ) ) THEN
          DO J = 1, NCOLS
             DO I = 1, J
                WORK( J ) = MAX( ABS( AF( I, J ) ), WORK( J ) )
@@ -189,7 +188,7 @@
 *     as growth in itself, so simply ignore terms with zero
 *     denominators.
 *
-      IF ( AB_LSAME( 'Upper', UPLO ) ) THEN
+      IF ( LSAME( 'Upper', UPLO ) ) THEN
          DO I = 1, NCOLS
             UMAX = WORK( I )
             AMAX = WORK( NCOLS+I )
@@ -207,5 +206,5 @@
          END DO
       END IF
 
-      AB_DLA_PORPVGRW = RPVGRW
+      DLA_PORPVGRW = RPVGRW
       END

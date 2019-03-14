@@ -1,4 +1,4 @@
-*> \brief <b> AB_CSYSV computes the solution to system of linear equations A * X = B for SY matrices</b>
+*> \brief <b> CSYSV computes the solution to system of linear equations A * X = B for SY matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CSYSV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CSYSV.f">
+*> Download CSYSV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csysv.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CSYSV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/csysv.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CSYSV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csysv.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CSYSV( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
+*       SUBROUTINE CSYSV( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
 *                         LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CSYSV computes the solution to a complex system of linear equations
+*> CSYSV computes the solution to a complex system of linear equations
 *>    A * X = B,
 *> where A is an N-by-N symmetric matrix and X and B are N-by-NRHS
 *> matrices.
@@ -88,7 +88,7 @@
 *>          On exit, if INFO = 0, the block diagonal matrix D and the
 *>          multipliers used to obtain the factor U or L from the
 *>          factorization A = U*D*U**T or A = L*D*L**T as computed by
-*>          AB_CSYTRF.
+*>          CSYTRF.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -101,7 +101,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D, as
-*>          determined by AB_CSYTRF.  If IPIV(k) > 0, then rows and columns
+*>          determined by CSYTRF.  If IPIV(k) > 0, then rows and columns
 *>          k and IPIV(k) were interchanged, and D(k,k) is a 1-by-1
 *>          diagonal block.  If UPLO = 'U' and IPIV(k) = IPIV(k-1) < 0,
 *>          then rows and columns k-1 and -IPIV(k) were interchanged and
@@ -135,14 +135,14 @@
 *>          LWORK is INTEGER
 *>          The length of WORK.  LWORK >= 1, and for best performance
 *>          LWORK >= max(1,N*NB), where NB is the optimal blocksize for
-*>          AB_CSYTRF.
+*>          CSYTRF.
 *>          for LWORK < N, TRS will be done with Level BLAS 2
 *>          for LWORK >= N, TRS will be done with Level BLAS 3
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -168,7 +168,7 @@
 *> \ingroup complexSYsolve
 *
 *  =====================================================================
-      SUBROUTINE AB_CSYSV( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
+      SUBROUTINE CSYSV( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
      $                  LWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -192,11 +192,11 @@
       INTEGER            LWKOPT
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_CSYTRF, AB_CSYTRS, AB_AB_CSYTRS2
+      EXTERNAL           XERBLA, CSYTRF, CSYTRS, CSYTRS2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -207,8 +207,7 @@
 *
       INFO = 0
       LQUERY = ( LWORK.EQ.-1 )
-      IF( .NOT.AB_LSAME( UPLO, 'U' ) .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) 
-     $THEN
+      IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -226,14 +225,14 @@
          IF( N.EQ.0 ) THEN
             LWKOPT = 1
          ELSE
-            CALL AB_CSYTRF( UPLO, N, A, LDA, IPIV, WORK, -1, INFO )
+            CALL CSYTRF( UPLO, N, A, LDA, IPIV, WORK, -1, INFO )
             LWKOPT = WORK(1)
          END IF
          WORK( 1 ) = LWKOPT
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CSYSV ', -INFO )
+         CALL XERBLA( 'CSYSV ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -241,7 +240,7 @@
 *
 *     Compute the factorization A = U*D*U**T or A = L*D*L**T.
 *
-      CALL AB_CSYTRF( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
+      CALL CSYTRF( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
       IF( INFO.EQ.0 ) THEN
 *
 *        Solve the system A*X = B, overwriting B with X.
@@ -250,13 +249,13 @@
 *
 *        Solve with TRS ( Use Level BLAS 2)
 *
-            CALL AB_CSYTRS( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+            CALL CSYTRS( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
 *
          ELSE
 *
 *        Solve with TRS2 ( Use Level BLAS 3)
 *
-            CALL AB_AB_CSYTRS2( UPLO,N,NRHS,A,LDA,IPIV,B,LDB,WORK,INFO )
+            CALL CSYTRS2( UPLO,N,NRHS,A,LDA,IPIV,B,LDB,WORK,INFO )
 *
          END IF
 *
@@ -266,6 +265,6 @@
 *
       RETURN
 *
-*     End of AB_CSYSV
+*     End of CSYSV
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_CBDT01
+*> \brief \b CBDT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CBDT01( M, N, KD, A, LDA, Q, LDQ, D, E, PT, LDPT, WORK,
+*       SUBROUTINE CBDT01( M, N, KD, A, LDA, Q, LDQ, D, E, PT, LDPT, WORK,
 *                          RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CBDT01 reconstructs a general matrix A from its bidiagonal form
+*> CBDT01 reconstructs a general matrix A from its bidiagonal form
 *>    A = Q * B * P'
 *> where Q (m by min(m,n)) and P' (min(m,n) by n) are unitary
 *> matrices and B is bidiagonal.
@@ -143,8 +143,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_CBDT01( M, N, KD, A, LDA, Q, LDQ, D, E, PT, LDPT, WO
-     $RK,
+      SUBROUTINE CBDT01( M, N, KD, A, LDA, Q, LDQ, D, E, PT, LDPT, WORK,
      $                   RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -173,11 +172,11 @@
       REAL               ANORM, EPS
 *     ..
 *     .. External Functions ..
-      REAL               AB_CLANGE, AB_SCASUM, AB_SLAMCH
-      EXTERNAL           AB_CLANGE, AB_SCASUM, AB_SLAMCH
+      REAL               CLANGE, SCASUM, SLAMCH
+      EXTERNAL           CLANGE, SCASUM, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CCOPY, AB_CGEMV
+      EXTERNAL           CCOPY, CGEMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CMPLX, MAX, MIN, REAL
@@ -203,46 +202,43 @@
 *           B is upper bidiagonal and M >= N.
 *
             DO 20 J = 1, N
-               CALL AB_CCOPY( M, A( 1, J ), 1, WORK, 1 )
+               CALL CCOPY( M, A( 1, J ), 1, WORK, 1 )
                DO 10 I = 1, N - 1
                   WORK( M+I ) = D( I )*PT( I, J ) + E( I )*PT( I+1, J )
    10          CONTINUE
                WORK( M+N ) = D( N )*PT( N, J )
-               CALL AB_CGEMV( 'No transpose', M, N, -CMPLX( ONE ), Q, LD
-     $Q,
+               CALL CGEMV( 'No transpose', M, N, -CMPLX( ONE ), Q, LDQ,
      $                     WORK( M+1 ), 1, CMPLX( ONE ), WORK, 1 )
-               RESID = MAX( RESID, AB_SCASUM( M, WORK, 1 ) )
+               RESID = MAX( RESID, SCASUM( M, WORK, 1 ) )
    20       CONTINUE
          ELSE IF( KD.LT.0 ) THEN
 *
 *           B is upper bidiagonal and M < N.
 *
             DO 40 J = 1, N
-               CALL AB_CCOPY( M, A( 1, J ), 1, WORK, 1 )
+               CALL CCOPY( M, A( 1, J ), 1, WORK, 1 )
                DO 30 I = 1, M - 1
                   WORK( M+I ) = D( I )*PT( I, J ) + E( I )*PT( I+1, J )
    30          CONTINUE
                WORK( M+M ) = D( M )*PT( M, J )
-               CALL AB_CGEMV( 'No transpose', M, M, -CMPLX( ONE ), Q, LD
-     $Q,
+               CALL CGEMV( 'No transpose', M, M, -CMPLX( ONE ), Q, LDQ,
      $                     WORK( M+1 ), 1, CMPLX( ONE ), WORK, 1 )
-               RESID = MAX( RESID, AB_SCASUM( M, WORK, 1 ) )
+               RESID = MAX( RESID, SCASUM( M, WORK, 1 ) )
    40       CONTINUE
          ELSE
 *
 *           B is lower bidiagonal.
 *
             DO 60 J = 1, N
-               CALL AB_CCOPY( M, A( 1, J ), 1, WORK, 1 )
+               CALL CCOPY( M, A( 1, J ), 1, WORK, 1 )
                WORK( M+1 ) = D( 1 )*PT( 1, J )
                DO 50 I = 2, M
                   WORK( M+I ) = E( I-1 )*PT( I-1, J ) +
      $                          D( I )*PT( I, J )
    50          CONTINUE
-               CALL AB_CGEMV( 'No transpose', M, M, -CMPLX( ONE ), Q, LD
-     $Q,
+               CALL CGEMV( 'No transpose', M, M, -CMPLX( ONE ), Q, LDQ,
      $                     WORK( M+1 ), 1, CMPLX( ONE ), WORK, 1 )
-               RESID = MAX( RESID, AB_SCASUM( M, WORK, 1 ) )
+               RESID = MAX( RESID, SCASUM( M, WORK, 1 ) )
    60       CONTINUE
          END IF
       ELSE
@@ -251,33 +247,31 @@
 *
          IF( M.GE.N ) THEN
             DO 80 J = 1, N
-               CALL AB_CCOPY( M, A( 1, J ), 1, WORK, 1 )
+               CALL CCOPY( M, A( 1, J ), 1, WORK, 1 )
                DO 70 I = 1, N
                   WORK( M+I ) = D( I )*PT( I, J )
    70          CONTINUE
-               CALL AB_CGEMV( 'No transpose', M, N, -CMPLX( ONE ), Q, LD
-     $Q,
+               CALL CGEMV( 'No transpose', M, N, -CMPLX( ONE ), Q, LDQ,
      $                     WORK( M+1 ), 1, CMPLX( ONE ), WORK, 1 )
-               RESID = MAX( RESID, AB_SCASUM( M, WORK, 1 ) )
+               RESID = MAX( RESID, SCASUM( M, WORK, 1 ) )
    80       CONTINUE
          ELSE
             DO 100 J = 1, N
-               CALL AB_CCOPY( M, A( 1, J ), 1, WORK, 1 )
+               CALL CCOPY( M, A( 1, J ), 1, WORK, 1 )
                DO 90 I = 1, M
                   WORK( M+I ) = D( I )*PT( I, J )
    90          CONTINUE
-               CALL AB_CGEMV( 'No transpose', M, M, -CMPLX( ONE ), Q, LD
-     $Q,
+               CALL CGEMV( 'No transpose', M, M, -CMPLX( ONE ), Q, LDQ,
      $                     WORK( M+1 ), 1, CMPLX( ONE ), WORK, 1 )
-               RESID = MAX( RESID, AB_SCASUM( M, WORK, 1 ) )
+               RESID = MAX( RESID, SCASUM( M, WORK, 1 ) )
   100       CONTINUE
          END IF
       END IF
 *
 *     Compute norm(A - Q * B * P') / ( n * norm(A) * EPS )
 *
-      ANORM = AB_CLANGE( '1', M, N, A, LDA, RWORK )
-      EPS = AB_SLAMCH( 'Precision' )
+      ANORM = CLANGE( '1', M, N, A, LDA, RWORK )
+      EPS = SLAMCH( 'Precision' )
 *
       IF( ANORM.LE.ZERO ) THEN
          IF( RESID.NE.ZERO )
@@ -298,6 +292,6 @@
 *
       RETURN
 *
-*     End of AB_CBDT01
+*     End of CBDT01
 *
       END

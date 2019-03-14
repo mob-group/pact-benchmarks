@@ -1,4 +1,4 @@
-*> \brief \b AB_SGTRFS
+*> \brief \b SGTRFS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SGTRFS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SGTRFS.f">
+*> Download SGTRFS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgtrfs.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SGTRFS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgtrfs.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SGTRFS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgtrfs.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF, DU2,
+*       SUBROUTINE SGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF, DU2,
 *                          IPIV, B, LDB, X, LDX, FERR, BERR, WORK, IWORK,
 *                          INFO )
 *
@@ -39,7 +39,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SGTRFS improves the computed solution to a system of linear
+*> SGTRFS improves the computed solution to a system of linear
 *> equations when the coefficient matrix is tridiagonal, and provides
 *> error bounds and backward error estimates for the solution.
 *> \endverbatim
@@ -91,7 +91,7 @@
 *> \verbatim
 *>          DLF is REAL array, dimension (N-1)
 *>          The (n-1) multipliers that define the matrix L from the
-*>          LU factorization of A as computed by AB_SGTTRF.
+*>          LU factorization of A as computed by SGTTRF.
 *> \endverbatim
 *>
 *> \param[in] DF
@@ -110,7 +110,7 @@
 *> \param[in] DU2
 *> \verbatim
 *>          DU2 is REAL array, dimension (N-2)
-*>          The (n-2) elements of the AB_SECOND superdiagonal of U.
+*>          The (n-2) elements of the second superdiagonal of U.
 *> \endverbatim
 *>
 *> \param[in] IPIV
@@ -137,7 +137,7 @@
 *> \param[in,out] X
 *> \verbatim
 *>          X is REAL array, dimension (LDX,NRHS)
-*>          On entry, the solution matrix X, as computed by AB_SGTTRS.
+*>          On entry, the solution matrix X, as computed by SGTTRS.
 *>          On exit, the improved solution matrix X.
 *> \endverbatim
 *>
@@ -205,8 +205,7 @@
 *> \ingroup realGTcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_SGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF, DU2
-     $,
+      SUBROUTINE SGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF, DU2,
      $                   IPIV, B, LDB, X, LDX, FERR, BERR, WORK, IWORK,
      $                   INFO )
 *
@@ -248,25 +247,24 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SAXPY, AB_SCOPY, AB_SGTTRS, AB_SLACN2, AB_SL
-     $AGTM, AB_XERBLA
+      EXTERNAL           SAXPY, SCOPY, SGTTRS, SLACN2, SLAGTM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_SLAMCH
-      EXTERNAL           AB_LSAME, AB_SLAMCH
+      LOGICAL            LSAME
+      REAL               SLAMCH
+      EXTERNAL           LSAME, SLAMCH
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters.
 *
       INFO = 0
-      NOTRAN = AB_LSAME( TRANS, 'N' )
-      IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) .AND. .NOT.
-     $    AB_LSAME( TRANS, 'C' ) ) THEN
+      NOTRAN = LSAME( TRANS, 'N' )
+      IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) .AND. .NOT.
+     $    LSAME( TRANS, 'C' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -278,7 +276,7 @@
          INFO = -15
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SGTRFS', -INFO )
+         CALL XERBLA( 'SGTRFS', -INFO )
          RETURN
       END IF
 *
@@ -303,8 +301,8 @@
 *     NZ = maximum number of nonzero elements in each row of A, plus 1
 *
       NZ = 4
-      EPS = AB_SLAMCH( 'Epsilon' )
-      SAFMIN = AB_SLAMCH( 'Safe minimum' )
+      EPS = SLAMCH( 'Epsilon' )
+      SAFMIN = SLAMCH( 'Safe minimum' )
       SAFE1 = NZ*SAFMIN
       SAFE2 = SAFE1 / EPS
 *
@@ -321,9 +319,8 @@
 *        Compute residual R = B - op(A) * X,
 *        where op(A) = A, A**T, or A**H, depending on TRANS.
 *
-         CALL AB_SCOPY( N, B( 1, J ), 1, WORK( N+1 ), 1 )
-         CALL AB_SLAGTM( TRANS, N, 1, -ONE, DL, D, DU, X( 1, J ), LDX, O
-     $NE,
+         CALL SCOPY( N, B( 1, J ), 1, WORK( N+1 ), 1 )
+         CALL SLAGTM( TRANS, N, 1, -ONE, DL, D, DU, X( 1, J ), LDX, ONE,
      $                WORK( N+1 ), N )
 *
 *        Compute abs(op(A))*abs(x) + abs(b) for use in the backward
@@ -394,9 +391,9 @@
 *
 *           Update solution and try again.
 *
-            CALL AB_SGTTRS( TRANS, N, 1, DLF, DF, DUF, DU2, IPIV,
+            CALL SGTTRS( TRANS, N, 1, DLF, DF, DUF, DU2, IPIV,
      $                   WORK( N+1 ), N, INFO )
-            CALL AB_SAXPY( N, ONE, WORK( N+1 ), 1, X( 1, J ), 1 )
+            CALL SAXPY( N, ONE, WORK( N+1 ), 1, X( 1, J ), 1 )
             LSTRES = BERR( J )
             COUNT = COUNT + 1
             GO TO 20
@@ -420,7 +417,7 @@
 *        is incremented by SAFE1 if the i-th component of
 *        abs(op(A))*abs(X) + abs(B) is less than SAFE2.
 *
-*        Use AB_SLACN2 to estimate the infinity-norm of the matrix
+*        Use SLACN2 to estimate the infinity-norm of the matrix
 *           inv(op(A)) * diag(W),
 *        where W = abs(R) + NZ*EPS*( abs(op(A))*abs(X)+abs(B) )))
 *
@@ -434,15 +431,14 @@
 *
          KASE = 0
    70    CONTINUE
-         CALL AB_SLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK, FERR( J )
-     $,
+         CALL SLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK, FERR( J ),
      $                KASE, ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN
 *
 *              Multiply by diag(W)*inv(op(A)**T).
 *
-               CALL AB_SGTTRS( TRANST, N, 1, DLF, DF, DUF, DU2, IPIV,
+               CALL SGTTRS( TRANST, N, 1, DLF, DF, DUF, DU2, IPIV,
      $                      WORK( N+1 ), N, INFO )
                DO 80 I = 1, N
                   WORK( N+I ) = WORK( I )*WORK( N+I )
@@ -454,7 +450,7 @@
                DO 90 I = 1, N
                   WORK( N+I ) = WORK( I )*WORK( N+I )
    90          CONTINUE
-               CALL AB_SGTTRS( TRANSN, N, 1, DLF, DF, DUF, DU2, IPIV,
+               CALL SGTTRS( TRANSN, N, 1, DLF, DF, DUF, DU2, IPIV,
      $                      WORK( N+1 ), N, INFO )
             END IF
             GO TO 70
@@ -473,6 +469,6 @@
 *
       RETURN
 *
-*     End of AB_SGTRFS
+*     End of SGTRFS
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_ZPPT01
+*> \brief \b ZPPT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZPPT01( UPLO, N, A, AFAC, RWORK, RESID )
+*       SUBROUTINE ZPPT01( UPLO, N, A, AFAC, RWORK, RESID )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZPPT01 reconstructs a Hermitian positive definite packed matrix A
+*> ZPPT01 reconstructs a Hermitian positive definite packed matrix A
 *> from its L*L' or U'*U factorization and computes the residual
 *>    norm( L*L' - A ) / ( N * norm(A) * EPS ) or
 *>    norm( U'*U - A ) / ( N * norm(A) * EPS ),
@@ -93,7 +93,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZPPT01( UPLO, N, A, AFAC, RWORK, RESID )
+      SUBROUTINE ZPPT01( UPLO, N, A, AFAC, RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -122,13 +122,13 @@
       COMPLEX*16         TC
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANHP
-      COMPLEX*16         AB_ZDOTC
-      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_ZLANHP, AB_ZDOTC
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH, ZLANHP
+      COMPLEX*16         ZDOTC
+      EXTERNAL           LSAME, DLAMCH, ZLANHP, ZDOTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZHPR, AB_ZSCAL, AB_ZTPMV
+      EXTERNAL           ZHPR, ZSCAL, ZTPMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DIMAG
@@ -144,8 +144,8 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
-      ANORM = AB_ZLANHP( '1', UPLO, N, A, RWORK )
+      EPS = DLAMCH( 'Epsilon' )
+      ANORM = ZLANHP( '1', UPLO, N, A, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -155,7 +155,7 @@
 *     an error code if any are nonzero.
 *
       KC = 1
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
          DO 10 K = 1, N
             IF( DIMAG( AFAC( KC ) ).NE.ZERO ) THEN
                RESID = ONE / EPS
@@ -175,20 +175,19 @@
 *
 *     Compute the product U'*U, overwriting U.
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
          KC = ( N*( N-1 ) ) / 2 + 1
          DO 30 K = N, 1, -1
 *
 *           Compute the (K,K) element of the result.
 *
-            TR = AB_ZDOTC( K, AFAC( KC ), 1, AFAC( KC ), 1 )
+            TR = ZDOTC( K, AFAC( KC ), 1, AFAC( KC ), 1 )
             AFAC( KC+K-1 ) = TR
 *
 *           Compute the rest of column K.
 *
             IF( K.GT.1 ) THEN
-               CALL AB_ZTPMV( 'Upper', 'Conjugate', 'Non-unit', K-1, AFA
-     $C,
+               CALL ZTPMV( 'Upper', 'Conjugate', 'Non-unit', K-1, AFAC,
      $                     AFAC( KC ), 1 )
                KC = KC - ( K-1 )
             END IF
@@ -215,13 +214,13 @@
 *           columns K+1 through N.
 *
             IF( K.LT.N )
-     $         CALL AB_ZHPR( 'Lower', N-K, ONE, AFAC( KC+1 ), 1,
+     $         CALL ZHPR( 'Lower', N-K, ONE, AFAC( KC+1 ), 1,
      $                    AFAC( KC+N-K+1 ) )
 *
 *           Scale column K by the diagonal element.
 *
             TC = AFAC( KC )
-            CALL AB_ZSCAL( N-K+1, TC, AFAC( KC ), 1 )
+            CALL ZSCAL( N-K+1, TC, AFAC( KC ), 1 )
 *
             KC = KC - ( N-K+2 )
    60    CONTINUE
@@ -240,12 +239,12 @@
 *
 *     Compute norm( L*U - A ) / ( N * norm(A) * EPS )
 *
-      RESID = AB_ZLANHP( '1', UPLO, N, AFAC, RWORK )
+      RESID = ZLANHP( '1', UPLO, N, AFAC, RWORK )
 *
       RESID = ( ( RESID / DBLE( N ) ) / ANORM ) / EPS
 *
       RETURN
 *
-*     End of AB_ZPPT01
+*     End of ZPPT01
 *
       END

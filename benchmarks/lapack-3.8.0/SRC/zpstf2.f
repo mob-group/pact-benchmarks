@@ -1,4 +1,4 @@
-*> \brief \b AB_ZPSTF2 computes the Cholesky factorization with complete pivoting of a complex Hermitian positive semidefinite matrix.
+*> \brief \b ZPSTF2 computes the Cholesky factorization with complete pivoting of a complex Hermitian positive semidefinite matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZPSTF2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZPSTF2.f">
+*> Download ZPSTF2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zpstf2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZPSTF2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zpstf2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZPSTF2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpstf2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZPSTF2( UPLO, N, A, LDA, PIV, RANK, TOL, WORK, INFO )
+*       SUBROUTINE ZPSTF2( UPLO, N, A, LDA, PIV, RANK, TOL, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       DOUBLE PRECISION   TOL
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZPSTF2 computes the Cholesky factorization with complete
+*> ZPSTF2 computes the Cholesky factorization with complete
 *> pivoting of a complex Hermitian positive semidefinite matrix A.
 *>
 *> The factorization has the form
@@ -140,8 +140,7 @@
 *> \ingroup complex16OTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_ZPSTF2( UPLO, N, A, LDA, PIV, RANK, TOL, WORK, INFO 
-     $)
+      SUBROUTINE ZPSTF2( UPLO, N, A, LDA, PIV, RANK, TOL, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -174,13 +173,12 @@
       LOGICAL            UPPER
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH
-      LOGICAL            AB_LSAME, AB_DISNAN
-      EXTERNAL           AB_DLAMCH, AB_LSAME, AB_DISNAN
+      DOUBLE PRECISION   DLAMCH
+      LOGICAL            LSAME, DISNAN
+      EXTERNAL           DLAMCH, LSAME, DISNAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZAB_DSCAL, AB_ZGEMV, AB_ZLACGV, AB_ZSWAP, AB_XE
-     $RBLA
+      EXTERNAL           ZDSCAL, ZGEMV, ZLACGV, ZSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCONJG, MAX, SQRT
@@ -190,8 +188,8 @@
 *     Test the input parameters
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -199,7 +197,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZPSTF2', -INFO )
+         CALL XERBLA( 'ZPSTF2', -INFO )
          RETURN
       END IF
 *
@@ -221,7 +219,7 @@
   110 CONTINUE
       PVT = MAXLOC( WORK( 1:N ), 1 )
       AJJ = DBLE( A( PVT, PVT ) )
-      IF( AJJ.LE.ZERO.OR.AB_DISNAN( AJJ ) ) THEN
+      IF( AJJ.LE.ZERO.OR.DISNAN( AJJ ) ) THEN
          RANK = 0
          INFO = 1
          GO TO 200
@@ -230,7 +228,7 @@
 *     Compute stopping value if not supplied
 *
       IF( TOL.LT.ZERO ) THEN
-         DSTOP = N * AB_DLAMCH( 'Epsilon' ) * AJJ
+         DSTOP = N * DLAMCH( 'Epsilon' ) * AJJ
       ELSE
          DSTOP = TOL
       END IF
@@ -247,9 +245,9 @@
 *
          DO 150 J = 1, N
 *
-*        Find pivot, test for exit, ELSE swap rows and columns
+*        Find pivot, test for exit, else swap rows and columns
 *        Update dot products, compute possible pivots which are
-*        stored in the AB_SECOND half of WORK
+*        stored in the second half of WORK
 *
             DO 130 I = J, N
 *
@@ -266,7 +264,7 @@
                ITEMP = MAXLOC( WORK( (N+J):(2*N) ), 1 )
                PVT = ITEMP + J - 1
                AJJ = WORK( N+PVT )
-               IF( AJJ.LE.DSTOP.OR.AB_DISNAN( AJJ ) ) THEN
+               IF( AJJ.LE.DSTOP.OR.DISNAN( AJJ ) ) THEN
                   A( J, J ) = AJJ
                   GO TO 190
                END IF
@@ -277,9 +275,9 @@
 *              Pivot OK, so can now swap pivot rows and columns
 *
                A( PVT, PVT ) = A( J, J )
-               CALL AB_ZSWAP( J-1, A( 1, J ), 1, A( 1, PVT ), 1 )
+               CALL ZSWAP( J-1, A( 1, J ), 1, A( 1, PVT ), 1 )
                IF( PVT.LT.N )
-     $            CALL AB_ZSWAP( N-PVT, A( J, PVT+1 ), LDA,
+     $            CALL ZSWAP( N-PVT, A( J, PVT+1 ), LDA,
      $                        A( PVT, PVT+1 ), LDA )
                DO 140 I = J + 1, PVT - 1
                   ZTEMP = DCONJG( A( J, I ) )
@@ -304,12 +302,11 @@
 *           Compute elements J+1:N of row J
 *
             IF( J.LT.N ) THEN
-               CALL AB_ZLACGV( J-1, A( 1, J ), 1 )
-               CALL AB_ZGEMV( 'Trans', J-1, N-J, -CONE, A( 1, J+1 ), LDA
-     $,
+               CALL ZLACGV( J-1, A( 1, J ), 1 )
+               CALL ZGEMV( 'Trans', J-1, N-J, -CONE, A( 1, J+1 ), LDA,
      $                     A( 1, J ), 1, CONE, A( J, J+1 ), LDA )
-               CALL AB_ZLACGV( J-1, A( 1, J ), 1 )
-               CALL ZAB_DSCAL( N-J, ONE / AJJ, A( J, J+1 ), LDA )
+               CALL ZLACGV( J-1, A( 1, J ), 1 )
+               CALL ZDSCAL( N-J, ONE / AJJ, A( J, J+1 ), LDA )
             END IF
 *
   150    CONTINUE
@@ -320,9 +317,9 @@
 *
          DO 180 J = 1, N
 *
-*        Find pivot, test for exit, ELSE swap rows and columns
+*        Find pivot, test for exit, else swap rows and columns
 *        Update dot products, compute possible pivots which are
-*        stored in the AB_SECOND half of WORK
+*        stored in the second half of WORK
 *
             DO 160 I = J, N
 *
@@ -339,7 +336,7 @@
                ITEMP = MAXLOC( WORK( (N+J):(2*N) ), 1 )
                PVT = ITEMP + J - 1
                AJJ = WORK( N+PVT )
-               IF( AJJ.LE.DSTOP.OR.AB_DISNAN( AJJ ) ) THEN
+               IF( AJJ.LE.DSTOP.OR.DISNAN( AJJ ) ) THEN
                   A( J, J ) = AJJ
                   GO TO 190
                END IF
@@ -350,10 +347,9 @@
 *              Pivot OK, so can now swap pivot rows and columns
 *
                A( PVT, PVT ) = A( J, J )
-               CALL AB_ZSWAP( J-1, A( J, 1 ), LDA, A( PVT, 1 ), LDA )
+               CALL ZSWAP( J-1, A( J, 1 ), LDA, A( PVT, 1 ), LDA )
                IF( PVT.LT.N )
-     $            CALL AB_ZSWAP( N-PVT, A( PVT+1, J ), 1, A( PVT+1, PVT 
-     $),
+     $            CALL ZSWAP( N-PVT, A( PVT+1, J ), 1, A( PVT+1, PVT ),
      $                        1 )
                DO 170 I = J + 1, PVT - 1
                   ZTEMP = DCONJG( A( I, J ) )
@@ -378,11 +374,11 @@
 *           Compute elements J+1:N of column J
 *
             IF( J.LT.N ) THEN
-               CALL AB_ZLACGV( J-1, A( J, 1 ), LDA )
-               CALL AB_ZGEMV( 'No Trans', N-J, J-1, -CONE, A( J+1, 1 ),
+               CALL ZLACGV( J-1, A( J, 1 ), LDA )
+               CALL ZGEMV( 'No Trans', N-J, J-1, -CONE, A( J+1, 1 ),
      $                     LDA, A( J, 1 ), LDA, CONE, A( J+1, J ), 1 )
-               CALL AB_ZLACGV( J-1, A( J, 1 ), LDA )
-               CALL ZAB_DSCAL( N-J, ONE / AJJ, A( J+1, J ), 1 )
+               CALL ZLACGV( J-1, A( J, 1 ), LDA )
+               CALL ZDSCAL( N-J, ONE / AJJ, A( J+1, J ), 1 )
             END IF
 *
   180    CONTINUE
@@ -405,6 +401,6 @@
   200 CONTINUE
       RETURN
 *
-*     End of AB_ZPSTF2
+*     End of ZPSTF2
 *
       END

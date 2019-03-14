@@ -1,4 +1,4 @@
-*> \brief \b AB_CLAQGB scales a general band matrix, using row and column scaling factors computed by AB_SGBEQU.
+*> \brief \b CLAQGB scales a general band matrix, using row and column scaling factors computed by sgbequ.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CLAQGB + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLAQGB.f">
+*> Download CLAQGB + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/claqgb.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLAQGB.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/claqgb.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLAQGB.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claqgb.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CLAQGB( M, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND,
+*       SUBROUTINE CLAQGB( M, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND,
 *                          AMAX, EQUED )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CLAQGB equilibrates a general M by N band matrix A with KL
+*> CLAQGB equilibrates a general M by N band matrix A with KL
 *> subdiagonals and KU superdiagonals using the row and scaling factors
 *> in the vectors R and C.
 *> \endverbatim
@@ -157,8 +157,7 @@
 *> \ingroup complexGBauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_CLAQGB( M, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND
-     $,
+      SUBROUTINE CLAQGB( M, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND,
      $                   AMAX, EQUED )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -187,8 +186,8 @@
       REAL               CJ, LARGE, SMALL
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH
-      EXTERNAL           AB_SLAMCH
+      REAL               SLAMCH
+      EXTERNAL           SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -204,7 +203,7 @@
 *
 *     Initialize LARGE and SMALL.
 *
-      SMALL = AB_SLAMCH( 'Safe minimum' ) / AB_SLAMCH( 'Precision' )
+      SMALL = SLAMCH( 'Safe minimum' ) / SLAMCH( 'Precision' )
       LARGE = ONE / SMALL
 *
       IF( ROWCND.GE.THRESH .AND. AMAX.GE.SMALL .AND. AMAX.LE.LARGE )
@@ -254,6 +253,6 @@
 *
       RETURN
 *
-*     End of AB_CLAQGB
+*     End of CLAQGB
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_CLAUUM computes the product UUH or LHL, where U and L are upper or lower triangular matrices (blocked algorithm).
+*> \brief \b CLAUUM computes the product UUH or LHL, where U and L are upper or lower triangular matrices (blocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CLAUUM + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLAUUM.f">
+*> Download CLAUUM + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clauum.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLAUUM.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clauum.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLAUUM.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clauum.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CLAUUM( UPLO, N, A, LDA, INFO )
+*       SUBROUTINE CLAUUM( UPLO, N, A, LDA, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CLAUUM computes the product U * U**H or L**H * L, where the triangular
+*> CLAUUM computes the product U * U**H or L**H * L, where the triangular
 *> factor U or L is stored in the upper or lower triangular part of
 *> the array A.
 *>
@@ -100,7 +100,7 @@
 *> \ingroup complexOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_CLAUUM( UPLO, N, A, LDA, INFO )
+      SUBROUTINE CLAUUM( UPLO, N, A, LDA, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -128,13 +128,12 @@
       INTEGER            I, IB, NB
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_LSAME, AB_ILAENV
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CGEMM, AB_AB_CHERK, AB_CLAUU2, AB_CTRMM, AB_
-     $XERBLA
+      EXTERNAL           CGEMM, CHERK, CLAUU2, CTRMM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -144,8 +143,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -153,7 +152,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CLAUUM', -INFO )
+         CALL XERBLA( 'CLAUUM', -INFO )
          RETURN
       END IF
 *
@@ -164,13 +163,13 @@
 *
 *     Determine the block size for this environment.
 *
-      NB = AB_ILAENV( 1, 'AB_CLAUUM', UPLO, N, -1, -1, -1 )
+      NB = ILAENV( 1, 'CLAUUM', UPLO, N, -1, -1, -1 )
 *
       IF( NB.LE.1 .OR. NB.GE.N ) THEN
 *
 *        Use unblocked code
 *
-         CALL AB_CLAUU2( UPLO, N, A, LDA, INFO )
+         CALL CLAUU2( UPLO, N, A, LDA, INFO )
       ELSE
 *
 *        Use blocked code
@@ -181,17 +180,16 @@
 *
             DO 10 I = 1, N, NB
                IB = MIN( NB, N-I+1 )
-               CALL AB_CTRMM( 'Right', 'Upper', 'Conjugate transpose',
+               CALL CTRMM( 'Right', 'Upper', 'Conjugate transpose',
      $                     'Non-unit', I-1, IB, CONE, A( I, I ), LDA,
      $                     A( 1, I ), LDA )
-               CALL AB_CLAUU2( 'Upper', IB, A( I, I ), LDA, INFO )
+               CALL CLAUU2( 'Upper', IB, A( I, I ), LDA, INFO )
                IF( I+IB.LE.N ) THEN
-                  CALL AB_CGEMM( 'No transpose', 'Conjugate transpose',
+                  CALL CGEMM( 'No transpose', 'Conjugate transpose',
      $                        I-1, IB, N-I-IB+1, CONE, A( 1, I+IB ),
      $                        LDA, A( I, I+IB ), LDA, CONE, A( 1, I ),
      $                        LDA )
-                  CALL AB_AB_CHERK( 'Upper', 'No transpose', IB, N-I-IB+
-     $1,
+                  CALL CHERK( 'Upper', 'No transpose', IB, N-I-IB+1,
      $                        ONE, A( I, I+IB ), LDA, ONE, A( I, I ),
      $                        LDA )
                END IF
@@ -202,16 +200,15 @@
 *
             DO 20 I = 1, N, NB
                IB = MIN( NB, N-I+1 )
-               CALL AB_CTRMM( 'Left', 'Lower', 'Conjugate transpose',
+               CALL CTRMM( 'Left', 'Lower', 'Conjugate transpose',
      $                     'Non-unit', IB, I-1, CONE, A( I, I ), LDA,
      $                     A( I, 1 ), LDA )
-               CALL AB_CLAUU2( 'Lower', IB, A( I, I ), LDA, INFO )
+               CALL CLAUU2( 'Lower', IB, A( I, I ), LDA, INFO )
                IF( I+IB.LE.N ) THEN
-                  CALL AB_CGEMM( 'Conjugate transpose', 'No transpose', 
-     $IB,
+                  CALL CGEMM( 'Conjugate transpose', 'No transpose', IB,
      $                        I-1, N-I-IB+1, CONE, A( I+IB, I ), LDA,
      $                        A( I+IB, 1 ), LDA, CONE, A( I, 1 ), LDA )
-                  CALL AB_AB_CHERK( 'Lower', 'Conjugate transpose', IB,
+                  CALL CHERK( 'Lower', 'Conjugate transpose', IB,
      $                        N-I-IB+1, ONE, A( I+IB, I ), LDA, ONE,
      $                        A( I, I ), LDA )
                END IF
@@ -221,6 +218,6 @@
 *
       RETURN
 *
-*     End of AB_CLAUUM
+*     End of CLAUUM
 *
       END

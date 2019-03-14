@@ -1,4 +1,4 @@
-*> \brief \b AB_ZHPTRD
+*> \brief \b ZHPTRD
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZHPTRD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZHPTRD.f">
+*> Download ZHPTRD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhptrd.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZHPTRD.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhptrd.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZHPTRD.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhptrd.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZHPTRD( UPLO, N, AP, D, E, TAU, INFO )
+*       SUBROUTINE ZHPTRD( UPLO, N, AP, D, E, TAU, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZHPTRD reduces a complex Hermitian matrix A stored in packed form to
+*> ZHPTRD reduces a complex Hermitian matrix A stored in packed form to
 *> real symmetric tridiagonal form T by a unitary similarity
 *> transformation: Q**H * A * Q = T.
 *> \endverbatim
@@ -149,7 +149,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_ZHPTRD( UPLO, N, AP, D, E, TAU, INFO )
+      SUBROUTINE ZHPTRD( UPLO, N, AP, D, E, TAU, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -179,13 +179,12 @@
       COMPLEX*16         ALPHA, TAUI
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZAXPY, AB_ZHPMV, AB_AB_ZHPR2, AB_
-     $AB_ZLARFG
+      EXTERNAL           XERBLA, ZAXPY, ZHPMV, ZHPR2, ZLARFG
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      COMPLEX*16         AB_ZDOTC
-      EXTERNAL           AB_LSAME, AB_ZDOTC
+      LOGICAL            LSAME
+      COMPLEX*16         ZDOTC
+      EXTERNAL           LSAME, ZDOTC
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE
@@ -195,14 +194,14 @@
 *     Test the input parameters
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZHPTRD', -INFO )
+         CALL XERBLA( 'ZHPTRD', -INFO )
          RETURN
       END IF
 *
@@ -224,7 +223,7 @@
 *           to annihilate A(1:i-1,i+1)
 *
             ALPHA = AP( I1+I-1 )
-            CALL AB_AB_ZLARFG( I, ALPHA, AP( I1 ), 1, TAUI )
+            CALL ZLARFG( I, ALPHA, AP( I1 ), 1, TAUI )
             E( I ) = ALPHA
 *
             IF( TAUI.NE.ZERO ) THEN
@@ -235,19 +234,18 @@
 *
 *              Compute  y := tau * A * v  storing y in TAU(1:i)
 *
-               CALL AB_ZHPMV( UPLO, I, TAUI, AP, AP( I1 ), 1, ZERO, TAU,
+               CALL ZHPMV( UPLO, I, TAUI, AP, AP( I1 ), 1, ZERO, TAU,
      $                     1 )
 *
 *              Compute  w := y - 1/2 * tau * (y**H *v) * v
 *
-               ALPHA = -HALF*TAUI*AB_ZDOTC( I, TAU, 1, AP( I1 ), 1 )
-               CALL AB_ZAXPY( I, ALPHA, AP( I1 ), 1, TAU, 1 )
+               ALPHA = -HALF*TAUI*ZDOTC( I, TAU, 1, AP( I1 ), 1 )
+               CALL ZAXPY( I, ALPHA, AP( I1 ), 1, TAU, 1 )
 *
 *              Apply the transformation as a rank-2 update:
 *                 A := A - v * w**H - w * v**H
 *
-               CALL AB_AB_ZHPR2( UPLO, I, -ONE, AP( I1 ), 1, TAU, 1, AP 
-     $)
+               CALL ZHPR2( UPLO, I, -ONE, AP( I1 ), 1, TAU, 1, AP )
 *
             END IF
             AP( I1+I-1 ) = E( I )
@@ -270,7 +268,7 @@
 *           to annihilate A(i+2:n,i)
 *
             ALPHA = AP( II+1 )
-            CALL AB_AB_ZLARFG( N-I, ALPHA, AP( II+2 ), 1, TAUI )
+            CALL ZLARFG( N-I, ALPHA, AP( II+2 ), 1, TAUI )
             E( I ) = ALPHA
 *
             IF( TAUI.NE.ZERO ) THEN
@@ -281,22 +279,19 @@
 *
 *              Compute  y := tau * A * v  storing y in TAU(i:n-1)
 *
-               CALL AB_ZHPMV( UPLO, N-I, TAUI, AP( I1I1 ), AP( II+1 ), 1
-     $,
+               CALL ZHPMV( UPLO, N-I, TAUI, AP( I1I1 ), AP( II+1 ), 1,
      $                     ZERO, TAU( I ), 1 )
 *
 *              Compute  w := y - 1/2 * tau * (y**H *v) * v
 *
-               ALPHA = -HALF*TAUI*AB_ZDOTC( N-I, TAU( I ), 1, AP( II+1 )
-     $,
+               ALPHA = -HALF*TAUI*ZDOTC( N-I, TAU( I ), 1, AP( II+1 ),
      $                 1 )
-               CALL AB_ZAXPY( N-I, ALPHA, AP( II+1 ), 1, TAU( I ), 1 )
+               CALL ZAXPY( N-I, ALPHA, AP( II+1 ), 1, TAU( I ), 1 )
 *
 *              Apply the transformation as a rank-2 update:
 *                 A := A - v * w**H - w * v**H
 *
-               CALL AB_AB_ZHPR2( UPLO, N-I, -ONE, AP( II+1 ), 1, TAU( I 
-     $), 1,
+               CALL ZHPR2( UPLO, N-I, -ONE, AP( II+1 ), 1, TAU( I ), 1,
      $                     AP( I1I1 ) )
 *
             END IF
@@ -310,6 +305,6 @@
 *
       RETURN
 *
-*     End of AB_ZHPTRD
+*     End of ZHPTRD
 *
       END

@@ -6,7 +6,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DBDT05( M, N, A, LDA, S, NS, U, LDU,
+*       SUBROUTINE DBDT05( M, N, A, LDA, S, NS, U, LDU,
 *                          VT, LDVT, WORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DBDT05 reconstructs a bidiagonal matrix B from its (partial) SVD:
+*> DBDT05 reconstructs a bidiagonal matrix B from its (partial) SVD:
 *>    S = U' * B * V
 *> where U and V are orthogonal matrices and S is diagonal.
 *>
@@ -121,7 +121,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_DBDT05( M, N, A, LDA, S, NS, U, LDU,
+      SUBROUTINE DBDT05( M, N, A, LDA, S, NS, U, LDU,
      $                    VT, LDVT, WORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -149,14 +149,13 @@
       DOUBLE PRECISION   ANORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_IDAMAX
-      DOUBLE PRECISION   AB_DASUM, AB_DLAMCH, AB_DLANGE
-      EXTERNAL           AB_LSAME, AB_IDAMAX, AB_DASUM, AB_DLAMCH, AB_DL
-     $ANGE
+      LOGICAL            LSAME
+      INTEGER            IDAMAX
+      DOUBLE PRECISION   DASUM, DLAMCH, DLANGE
+      EXTERNAL           LSAME, IDAMAX, DASUM, DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DGEMM
+      EXTERNAL           DGEMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN
@@ -169,14 +168,14 @@
       IF( MIN( M, N ).LE.0 .OR. NS.LE.0 )
      $   RETURN
 *
-      EPS = AB_DLAMCH( 'Precision' )
-      ANORM = AB_DLANGE( 'M', M, N, A, LDA, WORK )
+      EPS = DLAMCH( 'Precision' )
+      ANORM = DLANGE( 'M', M, N, A, LDA, WORK )
 *
 *     Compute U' * A * V.
 *
-      CALL AB_DGEMM( 'N', 'T', M, NS, N, ONE, A, LDA, VT,
+      CALL DGEMM( 'N', 'T', M, NS, N, ONE, A, LDA, VT,
      $            LDVT, ZERO, WORK( 1+NS*NS ), M )
-      CALL AB_DGEMM( 'T', 'N', NS, NS, M, -ONE, U, LDU, WORK( 1+NS*NS ),
+      CALL DGEMM( 'T', 'N', NS, NS, M, -ONE, U, LDU, WORK( 1+NS*NS ),
      $            M, ZERO, WORK, NS )
 *
 *     norm(S - U' * B * V)
@@ -184,7 +183,7 @@
       J = 0
       DO 10 I = 1, NS
          WORK( J+I ) =  WORK( J+I ) + S( I )
-         RESID = MAX( RESID, AB_DASUM( NS, WORK( J+1 ), 1 ) )
+         RESID = MAX( RESID, DASUM( NS, WORK( J+1 ), 1 ) )
          J = J + NS
    10 CONTINUE
 *
@@ -207,6 +206,6 @@
 *
       RETURN
 *
-*     End of AB_DBDT05
+*     End of DBDT05
 *
       END

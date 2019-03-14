@@ -1,4 +1,4 @@
-*> \brief \b AB_DGTT02
+*> \brief \b DGTT02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DGTT02( TRANS, N, NRHS, DL, D, DU, X, LDX, B, LDB,
+*       SUBROUTINE DGTT02( TRANS, N, NRHS, DL, D, DU, X, LDX, B, LDB,
 *                          RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DGTT02 computes the residual for the solution to a tridiagonal
+*> DGTT02 computes the residual for the solution to a tridiagonal
 *> system of equations:
 *>    RESID = norm(B - op(A)*X) / (norm(A) * norm(X) * EPS),
 *> where EPS is the machine epsilon.
@@ -121,7 +121,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_DGTT02( TRANS, N, NRHS, DL, D, DU, X, LDX, B, LDB,
+      SUBROUTINE DGTT02( TRANS, N, NRHS, DL, D, DU, X, LDX, B, LDB,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -150,12 +150,12 @@
       DOUBLE PRECISION   ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DASUM, AB_DLAMCH, AB_DLANGT
-      EXTERNAL           AB_LSAME, AB_DASUM, AB_DLAMCH, AB_DLANGT
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DASUM, DLAMCH, DLANGT
+      EXTERNAL           LSAME, DASUM, DLAMCH, DLANGT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLAGTM
+      EXTERNAL           DLAGTM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -171,15 +171,15 @@
 *     Compute the maximum over the number of right hand sides of
 *        norm(B - op(A)*X) / ( norm(A) * norm(X) * EPS ).
 *
-      IF( AB_LSAME( TRANS, 'N' ) ) THEN
-         ANORM = AB_DLANGT( '1', N, DL, D, DU )
+      IF( LSAME( TRANS, 'N' ) ) THEN
+         ANORM = DLANGT( '1', N, DL, D, DU )
       ELSE
-         ANORM = AB_DLANGT( 'I', N, DL, D, DU )
+         ANORM = DLANGT( 'I', N, DL, D, DU )
       END IF
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
+      EPS = DLAMCH( 'Epsilon' )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -187,12 +187,12 @@
 *
 *     Compute B - op(A)*X.
 *
-      CALL AB_DLAGTM( TRANS, N, NRHS, -ONE, DL, D, DU, X, LDX, ONE, B,
+      CALL DLAGTM( TRANS, N, NRHS, -ONE, DL, D, DU, X, LDX, ONE, B,
      $             LDB )
 *
       DO 10 J = 1, NRHS
-         BNORM = AB_DASUM( N, B( 1, J ), 1 )
-         XNORM = AB_DASUM( N, X( 1, J ), 1 )
+         BNORM = DASUM( N, B( 1, J ), 1 )
+         XNORM = DASUM( N, X( 1, J ), 1 )
          IF( XNORM.LE.ZERO ) THEN
             RESID = ONE / EPS
          ELSE
@@ -202,6 +202,6 @@
 *
       RETURN
 *
-*     End of AB_DGTT02
+*     End of DGTT02
 *
       END

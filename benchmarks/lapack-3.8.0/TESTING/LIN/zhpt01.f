@@ -1,4 +1,4 @@
-*> \brief \b AB_ZHPT01
+*> \brief \b ZHPT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZHPT01( UPLO, N, A, AFAC, IPIV, C, LDC, RWORK, RESID )
+*       SUBROUTINE ZHPT01( UPLO, N, A, AFAC, IPIV, C, LDC, RWORK, RESID )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZHPT01 reconstructs a Hermitian indefinite packed matrix A from its
+*> ZHPT01 reconstructs a Hermitian indefinite packed matrix A from its
 *> block L*D*L' or U*D*U' factorization and computes the residual
 *>    norm( C - A ) / ( N * norm(A) * EPS ),
 *> where C is the reconstructed matrix, EPS is the machine epsilon,
@@ -66,13 +66,13 @@
 *>          The factored form of the matrix A, stored as a packed
 *>          triangular matrix.  AFAC contains the block diagonal matrix D
 *>          and the multipliers used to obtain the factor L or U from the
-*>          block L*D*L' or U*D*U' factorization as computed by AB_ZHPTRF.
+*>          block L*D*L' or U*D*U' factorization as computed by ZHPTRF.
 *> \endverbatim
 *>
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          The pivot indices from AB_ZHPTRF.
+*>          The pivot indices from ZHPTRF.
 *> \endverbatim
 *>
 *> \param[out] C
@@ -111,8 +111,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZHPT01( UPLO, N, A, AFAC, IPIV, C, LDC, RWORK, RESID
-     $ )
+      SUBROUTINE ZHPT01( UPLO, N, A, AFAC, IPIV, C, LDC, RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -144,12 +143,12 @@
       DOUBLE PRECISION   ANORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANHE, AB_ZLANHP
-      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_ZLANHE, AB_ZLANHP
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH, ZLANHE, ZLANHP
+      EXTERNAL           LSAME, DLAMCH, ZLANHE, ZLANHP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZLASET, AB_ZLAVHP
+      EXTERNAL           ZLASET, ZLAVHP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DIMAG
@@ -165,14 +164,14 @@
 *
 *     Determine EPS and the norm of A.
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
-      ANORM = AB_ZLANHP( '1', UPLO, N, A, RWORK )
+      EPS = DLAMCH( 'Epsilon' )
+      ANORM = ZLANHP( '1', UPLO, N, A, RWORK )
 *
 *     Check the imaginary parts of the diagonal elements and return with
 *     an error code if any are nonzero.
 *
       JC = 1
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
          DO 10 J = 1, N
             IF( DIMAG( AFAC( JC ) ).NE.ZERO ) THEN
                RESID = ONE / EPS
@@ -192,22 +191,21 @@
 *
 *     Initialize C to the identity matrix.
 *
-      CALL AB_ZLASET( 'Full', N, N, CZERO, CONE, C, LDC )
+      CALL ZLASET( 'Full', N, N, CZERO, CONE, C, LDC )
 *
-*     Call AB_ZLAVHP to form the product D * U' (or D * L' ).
+*     Call ZLAVHP to form the product D * U' (or D * L' ).
 *
-      CALL AB_ZLAVHP( UPLO, 'Conjugate', 'Non-unit', N, N, AFAC, IPIV, C
-     $,
+      CALL ZLAVHP( UPLO, 'Conjugate', 'Non-unit', N, N, AFAC, IPIV, C,
      $             LDC, INFO )
 *
-*     Call AB_ZLAVHP again to multiply by U ( or L ).
+*     Call ZLAVHP again to multiply by U ( or L ).
 *
-      CALL AB_ZLAVHP( UPLO, 'No transpose', 'Unit', N, N, AFAC, IPIV, C,
+      CALL ZLAVHP( UPLO, 'No transpose', 'Unit', N, N, AFAC, IPIV, C,
      $             LDC, INFO )
 *
 *     Compute the difference  C - A .
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
          JC = 0
          DO 40 J = 1, N
             DO 30 I = 1, J - 1
@@ -229,7 +227,7 @@
 *
 *     Compute norm( C - A ) / ( N * norm(A) * EPS )
 *
-      RESID = AB_ZLANHE( '1', UPLO, N, C, LDC, RWORK )
+      RESID = ZLANHE( '1', UPLO, N, C, LDC, RWORK )
 *
       IF( ANORM.LE.ZERO ) THEN
          IF( RESID.NE.ZERO )
@@ -240,6 +238,6 @@
 *
       RETURN
 *
-*     End of AB_ZHPT01
+*     End of ZHPT01
 *
       END

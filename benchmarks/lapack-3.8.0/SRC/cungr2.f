@@ -1,4 +1,4 @@
-*> \brief \b AB_CUNGR2 generates all or part of the unitary matrix Q from an RQ factorization determined by AB_CGERQF (unblocked algorithm).
+*> \brief \b CUNGR2 generates all or part of the unitary matrix Q from an RQ factorization determined by cgerqf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CUNGR2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CUNGR2.f">
+*> Download CUNGR2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cungr2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CUNGR2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cungr2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CUNGR2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cungr2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CUNGR2( M, N, K, A, LDA, TAU, WORK, INFO )
+*       SUBROUTINE CUNGR2( M, N, K, A, LDA, TAU, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, K, LDA, M, N
@@ -33,13 +33,13 @@
 *>
 *> \verbatim
 *>
-*> AB_CUNGR2 generates an m by n complex matrix Q with orthonormal rows,
+*> CUNGR2 generates an m by n complex matrix Q with orthonormal rows,
 *> which is defined as the last m rows of a product of k elementary
 *> reflectors of order n
 *>
 *>       Q  =  H(1)**H H(2)**H . . . H(k)**H
 *>
-*> as returned by AB_CGERQF.
+*> as returned by CGERQF.
 *> \endverbatim
 *
 *  Arguments:
@@ -69,7 +69,7 @@
 *>          A is COMPLEX array, dimension (LDA,N)
 *>          On entry, the (m-k+i)-th row must contain the vector which
 *>          defines the elementary reflector H(i), for i = 1,2,...,k, as
-*>          returned by AB_CGERQF in the last k rows of its array argument
+*>          returned by CGERQF in the last k rows of its array argument
 *>          A.
 *>          On exit, the m-by-n matrix Q.
 *> \endverbatim
@@ -84,7 +84,7 @@
 *> \verbatim
 *>          TAU is COMPLEX array, dimension (K)
 *>          TAU(i) must contain the scalar factor of the elementary
-*>          reflector H(i), as returned by AB_CGERQF.
+*>          reflector H(i), as returned by CGERQF.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -112,7 +112,7 @@
 *> \ingroup complexOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_CUNGR2( M, N, K, A, LDA, TAU, WORK, INFO )
+      SUBROUTINE CUNGR2( M, N, K, A, LDA, TAU, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -137,7 +137,7 @@
       INTEGER            I, II, J, L
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CLACGV, AB_CLARF, AB_CSCAL, AB_XERBLA
+      EXTERNAL           CLACGV, CLARF, CSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CONJG, MAX
@@ -157,7 +157,7 @@
          INFO = -5
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CUNGR2', -INFO )
+         CALL XERBLA( 'CUNGR2', -INFO )
          RETURN
       END IF
 *
@@ -184,12 +184,12 @@
 *
 *        Apply H(i)**H to A(1:m-k+i,1:n-k+i) from the right
 *
-         CALL AB_CLACGV( N-M+II-1, A( II, 1 ), LDA )
+         CALL CLACGV( N-M+II-1, A( II, 1 ), LDA )
          A( II, N-M+II ) = ONE
-         CALL AB_CLARF( 'Right', II-1, N-M+II, A( II, 1 ), LDA,
+         CALL CLARF( 'Right', II-1, N-M+II, A( II, 1 ), LDA,
      $               CONJG( TAU( I ) ), A, LDA, WORK )
-         CALL AB_CSCAL( N-M+II-1, -TAU( I ), A( II, 1 ), LDA )
-         CALL AB_CLACGV( N-M+II-1, A( II, 1 ), LDA )
+         CALL CSCAL( N-M+II-1, -TAU( I ), A( II, 1 ), LDA )
+         CALL CLACGV( N-M+II-1, A( II, 1 ), LDA )
          A( II, N-M+II ) = ONE - CONJG( TAU( I ) )
 *
 *        Set A(m-k+i,n-k+i+1:n) to zero
@@ -200,6 +200,6 @@
    40 CONTINUE
       RETURN
 *
-*     End of AB_CUNGR2
+*     End of CUNGR2
 *
       END

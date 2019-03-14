@@ -1,4 +1,4 @@
-*> \brief \b AB_SGET10
+*> \brief \b SGET10
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SGET10( M, N, A, LDA, B, LDB, WORK, RESULT )
+*       SUBROUTINE SGET10( M, N, A, LDA, B, LDB, WORK, RESULT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDA, LDB, M, N
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SGET10 compares two matrices A and B and computes the ratio
+*> SGET10 compares two matrices A and B and computes the ratio
 *> RESULT = norm( A - B ) / ( norm(A) * M * EPS )
 *> \endverbatim
 *
@@ -91,7 +91,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_SGET10( M, N, A, LDA, B, LDB, WORK, RESULT )
+      SUBROUTINE SGET10( M, N, A, LDA, B, LDB, WORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -117,11 +117,11 @@
       REAL               ANORM, EPS, UNFL, WNORM
 *     ..
 *     .. External Functions ..
-      REAL               AB_SASUM, AB_SLAMCH, AB_SLANGE
-      EXTERNAL           AB_SASUM, AB_SLAMCH, AB_SLANGE
+      REAL               SASUM, SLAMCH, SLANGE
+      EXTERNAL           SASUM, SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SAXPY, AB_SCOPY
+      EXTERNAL           SAXPY, SCOPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, REAL
@@ -135,17 +135,17 @@
          RETURN
       END IF
 *
-      UNFL = AB_SLAMCH( 'Safe minimum' )
-      EPS = AB_SLAMCH( 'Precision' )
+      UNFL = SLAMCH( 'Safe minimum' )
+      EPS = SLAMCH( 'Precision' )
 *
       WNORM = ZERO
       DO 10 J = 1, N
-         CALL AB_SCOPY( M, A( 1, J ), 1, WORK, 1 )
-         CALL AB_SAXPY( M, -ONE, B( 1, J ), 1, WORK, 1 )
-         WNORM = MAX( WNORM, AB_SASUM( N, WORK, 1 ) )
+         CALL SCOPY( M, A( 1, J ), 1, WORK, 1 )
+         CALL SAXPY( M, -ONE, B( 1, J ), 1, WORK, 1 )
+         WNORM = MAX( WNORM, SASUM( N, WORK, 1 ) )
    10 CONTINUE
 *
-      ANORM = MAX( AB_SLANGE( '1', M, N, A, LDA, WORK ), UNFL )
+      ANORM = MAX( SLANGE( '1', M, N, A, LDA, WORK ), UNFL )
 *
       IF( ANORM.GT.WNORM ) THEN
          RESULT = ( WNORM / ANORM ) / ( M*EPS )
@@ -159,6 +159,6 @@
 *
       RETURN
 *
-*     End of AB_SGET10
+*     End of SGET10
 *
       END

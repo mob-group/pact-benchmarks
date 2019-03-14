@@ -1,4 +1,4 @@
-*> \brief \b AB_ZAB_LSETS
+*> \brief \b ZLSETS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZAB_LSETS( M, P, N, A, AF, LDA, B, BF, LDB, C, CF, D, DF,
+*       SUBROUTINE ZLSETS( M, P, N, A, AF, LDA, B, BF, LDB, C, CF, D, DF,
 *                          X, WORK, LWORK, RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -22,8 +22,8 @@
 *>
 *> \verbatim
 *>
-*> AB_ZAB_LSETS tests AB_ZGGAB_LSE - a subroutine for solving linear equality
-*> constrained least square problem (AB_LSE).
+*> ZLSETS tests ZGGLSE - a subroutine for solving linear equality
+*> constrained least square problem (LSE).
 *> \endverbatim
 *
 *  Arguments:
@@ -86,7 +86,7 @@
 *> \param[in] C
 *> \verbatim
 *>          C is COMPLEX*16 array, dimension( M )
-*>          the vector C in the AB_LSE problem.
+*>          the vector C in the LSE problem.
 *> \endverbatim
 *>
 *> \param[out] CF
@@ -97,7 +97,7 @@
 *> \param[in] D
 *> \verbatim
 *>          D is COMPLEX*16 array, dimension( P )
-*>          the vector D in the AB_LSE problem.
+*>          the vector D in the LSE problem.
 *> \endverbatim
 *>
 *> \param[out] DF
@@ -108,7 +108,7 @@
 *> \param[out] X
 *> \verbatim
 *>          X is COMPLEX*16 array, dimension( N )
-*>          solution vector X in the AB_LSE problem.
+*>          solution vector X in the LSE problem.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -148,8 +148,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_ZAB_LSETS( M, P, N, A, AF, LDA, B, BF, LDB, C, CF, D
-     $, DF,
+      SUBROUTINE ZLSETS( M, P, N, A, AF, LDA, B, BF, LDB, C, CF, D, DF,
      $                   X, WORK, LWORK, RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -173,42 +172,39 @@
       INTEGER            INFO
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZCOPY, AB_ZGET02, AB_ZGGAB_LSE, AB_ZLACPY
+      EXTERNAL           ZCOPY, ZGET02, ZGGLSE, ZLACPY
 *     ..
 *     .. Executable Statements ..
 *
 *     Copy the matrices A and B to the arrays AF and BF,
 *     and the vectors C and D to the arrays CF and DF,
 *
-      CALL AB_ZLACPY( 'Full', M, N, A, LDA, AF, LDA )
-      CALL AB_ZLACPY( 'Full', P, N, B, LDB, BF, LDB )
-      CALL AB_ZCOPY( M, C, 1, CF, 1 )
-      CALL AB_ZCOPY( P, D, 1, DF, 1 )
+      CALL ZLACPY( 'Full', M, N, A, LDA, AF, LDA )
+      CALL ZLACPY( 'Full', P, N, B, LDB, BF, LDB )
+      CALL ZCOPY( M, C, 1, CF, 1 )
+      CALL ZCOPY( P, D, 1, DF, 1 )
 *
-*     Solve AB_LSE problem
+*     Solve LSE problem
 *
-      CALL AB_ZGGAB_LSE( M, N, P, AF, LDA, BF, LDB, CF, DF, X, WORK, LWO
-     $RK,
+      CALL ZGGLSE( M, N, P, AF, LDA, BF, LDB, CF, DF, X, WORK, LWORK,
      $             INFO )
 *
-*     Test the residual for the solution of AB_LSE
+*     Test the residual for the solution of LSE
 *
 *     Compute RESULT(1) = norm( A*x - c ) / norm(A)*norm(X)*EPS
 *
-      CALL AB_ZCOPY( M, C, 1, CF, 1 )
-      CALL AB_ZCOPY( P, D, 1, DF, 1 )
-      CALL AB_ZGET02( 'No transpose', M, N, 1, A, LDA, X, N, CF, M, RWOR
-     $K,
+      CALL ZCOPY( M, C, 1, CF, 1 )
+      CALL ZCOPY( P, D, 1, DF, 1 )
+      CALL ZGET02( 'No transpose', M, N, 1, A, LDA, X, N, CF, M, RWORK,
      $             RESULT( 1 ) )
 *
 *     Compute result(2) = norm( B*x - d ) / norm(B)*norm(X)*EPS
 *
-      CALL AB_ZGET02( 'No transpose', P, N, 1, B, LDB, X, N, DF, P, RWOR
-     $K,
+      CALL ZGET02( 'No transpose', P, N, 1, B, LDB, X, N, DF, P, RWORK,
      $             RESULT( 2 ) )
 *
       RETURN
 *
-*     End of AB_ZAB_LSETS
+*     End of ZLSETS
 *
       END

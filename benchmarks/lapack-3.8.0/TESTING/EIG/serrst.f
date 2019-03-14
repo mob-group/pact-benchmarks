@@ -1,4 +1,4 @@
-*> \brief \b AB_SERRST
+*> \brief \b SERRST
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SERRST( PATH, NUNIT )
+*       SUBROUTINE SERRST( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,14 +21,14 @@
 *>
 *> \verbatim
 *>
-*> AB_SERRST tests the error exits for AB_SSYTRD, AB_SORGTR, AB_SORMTR, AB_SSPTRD,
-*> AB_SOPGTR, AB_SOPMTR, AB_SSTEQR, AB_SSTERF, AB_SSTEBZ, AB_SSTEIN, AB_SPTEQR, AB_SSBTRD,
-*> AB_SSYEV, AB_AB_SSYEVX, AB_AB_SSYEVD, AB_SSBEV, AB_AB_SSBEVX, AB_AB_SSBEVD,
-*> AB_SSPEV, AB_AB_SSPEVX, AB_AB_SSPEVD, AB_SSTEV, AB_AB_SSTEVX, AB_AB_SSTEVD, and AB_SSTEDC.
-*> AB_AB_AB_SSYEVD_2STAGE, AB_AB_AB_SSYEVR_2STAGE, AB_AB_AB_SSYEVX_2STAGE,
-*> AB_AB_SSYEV_2STAGE, AB_AB_SSBEV_2STAGE, AB_AB_AB_SSBEVD_2STAGE,
-*> AB_AB_AB_SSBEVX_2STAGE, AB_AB_SSYTRD_2STAGE, AB_AB_SSYTRD_SY2SB,
-*> AB_SSYTRD_SB2ST
+*> SERRST tests the error exits for SSYTRD, SORGTR, SORMTR, SSPTRD,
+*> SOPGTR, SOPMTR, SSTEQR, SSTERF, SSTEBZ, SSTEIN, SPTEQR, SSBTRD,
+*> SSYEV, SSYEVX, SSYEVD, SSBEV, SSBEVX, SSBEVD,
+*> SSPEV, SSPEVX, SSPEVD, SSTEV, SSTEVX, SSTEVD, and SSTEDC.
+*> SSYEVD_2STAGE, SSYEVR_2STAGE, SSYEVX_2STAGE,
+*> SSYEV_2STAGE, SSBEV_2STAGE, SSBEVD_2STAGE,
+*> SSBEVX_2STAGE, SSYTRD_2STAGE, SSYTRD_SY2SB,
+*> SSYTRD_SB2ST
 *> \endverbatim
 *
 *  Arguments:
@@ -59,7 +59,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_SERRST( PATH, NUNIT )
+      SUBROUTINE SERRST( PATH, NUNIT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -90,27 +90,19 @@
      $                   Z( NMAX, NMAX )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_AB_LSAMEN
-      EXTERNAL           AB_AB_LSAMEN
+      LOGICAL            LSAMEN
+      EXTERNAL           LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CHKXER, AB_SOPGTR, AB_SOPMTR, AB_SORGTR, AB_
-     $SORMTR, AB_SPTEQR,
-     $                   AB_SSBEV, AB_AB_SSBEVD, AB_AB_SSBEVX, AB_SSBTRD
-     $, AB_SSPEV, AB_AB_SSPEVD,
-     $                   AB_AB_SSPEVX, AB_SSPTRD, AB_SSTEBZ, AB_SSTEDC, 
-     $AB_SSTEIN, AB_SSTEQR,
-     $                   AB_SSTERF, AB_SSTEV, AB_AB_SSTEVD, AB_AB_SSTEVR
-     $, AB_AB_SSTEVX, AB_SSYEV,
-     $                   AB_AB_SSYEVD, AB_AB_SSYEVR, AB_AB_SSYEVX, AB_SS
-     $YTRD,
-     $                   AB_AB_AB_SSYEVD_2STAGE, AB_AB_AB_SSYEVR_2STAGE,
-     $ AB_AB_AB_SSYEVX_2STAGE,
-     $                   AB_AB_SSYEV_2STAGE, AB_AB_SSBEV_2STAGE, AB_AB_A
-     $B_SSBEVD_2STAGE,
-     $                   AB_AB_AB_SSBEVX_2STAGE, AB_AB_SSYTRD_2STAGE, AB
-     $_AB_SSYTRD_SY2SB,
-     $                   AB_SSYTRD_SB2ST
+      EXTERNAL           CHKXER, SOPGTR, SOPMTR, SORGTR, SORMTR, SPTEQR,
+     $                   SSBEV, SSBEVD, SSBEVX, SSBTRD, SSPEV, SSPEVD,
+     $                   SSPEVX, SSPTRD, SSTEBZ, SSTEDC, SSTEIN, SSTEQR,
+     $                   SSTERF, SSTEV, SSTEVD, SSTEVR, SSTEVX, SSYEV,
+     $                   SSYEVD, SSYEVR, SSYEVX, SSYTRD,
+     $                   SSYEVD_2STAGE, SSYEVR_2STAGE, SSYEVX_2STAGE,
+     $                   SSYEV_2STAGE, SSBEV_2STAGE, SSBEVD_2STAGE,
+     $                   SSBEVX_2STAGE, SSYTRD_2STAGE, SSYTRD_SY2SB,
+     $                   SSYTRD_SB2ST
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -149,1445 +141,1262 @@
 *
 *     Test error exits for the ST path.
 *
-      IF( AB_AB_LSAMEN( 2, C2, 'ST' ) ) THEN
+      IF( LSAMEN( 2, C2, 'ST' ) ) THEN
 *
-*        AB_SSYTRD
+*        SSYTRD
 *
-         SRNAMT = 'AB_SSYTRD'
+         SRNAMT = 'SSYTRD'
          INFOT = 1
-         CALL AB_SSYTRD( '/', 0, A, 1, D, E, TAU, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_SSYTRD', INFOT, NOUT, LERR, OK )
+         CALL SSYTRD( '/', 0, A, 1, D, E, TAU, W, 1, INFO )
+         CALL CHKXER( 'SSYTRD', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_SSYTRD( 'U', -1, A, 1, D, E, TAU, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_SSYTRD', INFOT, NOUT, LERR, OK )
+         CALL SSYTRD( 'U', -1, A, 1, D, E, TAU, W, 1, INFO )
+         CALL CHKXER( 'SSYTRD', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_SSYTRD( 'U', 2, A, 1, D, E, TAU, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_SSYTRD', INFOT, NOUT, LERR, OK )
+         CALL SSYTRD( 'U', 2, A, 1, D, E, TAU, W, 1, INFO )
+         CALL CHKXER( 'SSYTRD', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_SSYTRD( 'U', 0, A, 1, D, E, TAU, W, 0, INFO )
-         CALL AB_CHKXER( 'AB_SSYTRD', INFOT, NOUT, LERR, OK )
+         CALL SSYTRD( 'U', 0, A, 1, D, E, TAU, W, 0, INFO )
+         CALL CHKXER( 'SSYTRD', INFOT, NOUT, LERR, OK )
          NT = NT + 4
 *
-*        AB_AB_SSYTRD_2STAGE
+*        SSYTRD_2STAGE
 *
-         SRNAMT = 'AB_AB_SSYTRD_2STAGE'
+         SRNAMT = 'SSYTRD_2STAGE'
          INFOT = 1
-         CALL AB_AB_SSYTRD_2STAGE( '/', 'U', 0, A, 1, D, E, TAU, 
+         CALL SSYTRD_2STAGE( '/', 'U', 0, A, 1, D, E, TAU, 
      $                                  C, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYTRD_2STAGE', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYTRD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 1
-         CALL AB_AB_SSYTRD_2STAGE( 'H', 'U', 0, A, 1, D, E, TAU, 
+         CALL SSYTRD_2STAGE( 'H', 'U', 0, A, 1, D, E, TAU, 
      $                                  C, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYTRD_2STAGE', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYTRD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_SSYTRD_2STAGE( 'N', '/', 0, A, 1, D, E, TAU, 
+         CALL SSYTRD_2STAGE( 'N', '/', 0, A, 1, D, E, TAU, 
      $                                  C, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYTRD_2STAGE', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYTRD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_SSYTRD_2STAGE( 'N', 'U', -1, A, 1, D, E, TAU, 
+         CALL SSYTRD_2STAGE( 'N', 'U', -1, A, 1, D, E, TAU, 
      $                                  C, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYTRD_2STAGE', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYTRD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_AB_SSYTRD_2STAGE( 'N', 'U', 2, A, 1, D, E, TAU, 
+         CALL SSYTRD_2STAGE( 'N', 'U', 2, A, 1, D, E, TAU, 
      $                                  C, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYTRD_2STAGE', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYTRD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_AB_SSYTRD_2STAGE( 'N', 'U', 0, A, 1, D, E, TAU, 
+         CALL SSYTRD_2STAGE( 'N', 'U', 0, A, 1, D, E, TAU, 
      $                                  C, 0, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYTRD_2STAGE', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYTRD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL AB_AB_SSYTRD_2STAGE( 'N', 'U', 0, A, 1, D, E, TAU, 
+         CALL SSYTRD_2STAGE( 'N', 'U', 0, A, 1, D, E, TAU, 
      $                                  C, 1, W, 0, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYTRD_2STAGE', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYTRD_2STAGE', INFOT, NOUT, LERR, OK )
          NT = NT + 7
 *
-*        AB_AB_SSYTRD_SY2SB
+*        SSYTRD_SY2SB
 *
-         SRNAMT = 'AB_AB_SSYTRD_SY2SB'
+         SRNAMT = 'SSYTRD_SY2SB'
          INFOT = 1
-         CALL AB_AB_SSYTRD_SY2SB( '/', 0, 0, A, 1, C, 1, TAU, W, 1, INFO
-     $ )
-         CALL AB_CHKXER( 'AB_AB_SSYTRD_SY2SB', INFOT, NOUT, LERR, OK )
+         CALL SSYTRD_SY2SB( '/', 0, 0, A, 1, C, 1, TAU, W, 1, INFO )
+         CALL CHKXER( 'SSYTRD_SY2SB', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_SSYTRD_SY2SB( 'U', -1, 0, A, 1, C, 1, TAU, W, 1, INF
-     $O )
-         CALL AB_CHKXER( 'AB_AB_SSYTRD_SY2SB', INFOT, NOUT, LERR, OK )
+         CALL SSYTRD_SY2SB( 'U', -1, 0, A, 1, C, 1, TAU, W, 1, INFO )
+         CALL CHKXER( 'SSYTRD_SY2SB', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_SSYTRD_SY2SB( 'U', 0, -1, A, 1, C, 1, TAU, W, 1, INF
-     $O )
-         CALL AB_CHKXER( 'AB_AB_SSYTRD_SY2SB', INFOT, NOUT, LERR, OK )
+         CALL SSYTRD_SY2SB( 'U', 0, -1, A, 1, C, 1, TAU, W, 1, INFO )
+         CALL CHKXER( 'SSYTRD_SY2SB', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_AB_SSYTRD_SY2SB( 'U', 2, 0, A, 1, C, 1, TAU, W, 1, INFO
-     $ )
-         CALL AB_CHKXER( 'AB_AB_SSYTRD_SY2SB', INFOT, NOUT, LERR, OK )
+         CALL SSYTRD_SY2SB( 'U', 2, 0, A, 1, C, 1, TAU, W, 1, INFO )
+         CALL CHKXER( 'SSYTRD_SY2SB', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_AB_SSYTRD_SY2SB( 'U', 0, 2, A, 1, C, 1, TAU, W, 1, INFO
-     $ )
-         CALL AB_CHKXER( 'AB_AB_SSYTRD_SY2SB', INFOT, NOUT, LERR, OK )
+         CALL SSYTRD_SY2SB( 'U', 0, 2, A, 1, C, 1, TAU, W, 1, INFO )
+         CALL CHKXER( 'SSYTRD_SY2SB', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_AB_SSYTRD_SY2SB( 'U', 0, 0, A, 1, C, 1, TAU, W, 0, INFO
-     $ )
-         CALL AB_CHKXER( 'AB_AB_SSYTRD_SY2SB', INFOT, NOUT, LERR, OK )
+         CALL SSYTRD_SY2SB( 'U', 0, 0, A, 1, C, 1, TAU, W, 0, INFO )
+         CALL CHKXER( 'SSYTRD_SY2SB', INFOT, NOUT, LERR, OK )
          NT = NT + 6
 *
-*        AB_SSYTRD_SB2ST
+*        SSYTRD_SB2ST
 *
-         SRNAMT = 'AB_SSYTRD_SB2ST'
+         SRNAMT = 'SSYTRD_SB2ST'
          INFOT = 1
-         CALL AB_SSYTRD_SB2ST( '/', 'N', 'U', 0, 0, A, 1, D, E, 
+         CALL SSYTRD_SB2ST( '/', 'N', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_SSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_SSYTRD_SB2ST( 'Y', '/', 'U', 0, 0, A, 1, D, E, 
+         CALL SSYTRD_SB2ST( 'Y', '/', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_SSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_SSYTRD_SB2ST( 'Y', 'H', 'U', 0, 0, A, 1, D, E, 
+         CALL SSYTRD_SB2ST( 'Y', 'H', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_SSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_SSYTRD_SB2ST( 'Y', 'N', '/', 0, 0, A, 1, D, E, 
+         CALL SSYTRD_SB2ST( 'Y', 'N', '/', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_SSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_SSYTRD_SB2ST( 'Y', 'N', 'U', -1, 0, A, 1, D, E, 
+         CALL SSYTRD_SB2ST( 'Y', 'N', 'U', -1, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_SSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_SSYTRD_SB2ST( 'Y', 'N', 'U', 0, -1, A, 1, D, E, 
+         CALL SSYTRD_SB2ST( 'Y', 'N', 'U', 0, -1, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_SSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_SSYTRD_SB2ST( 'Y', 'N', 'U', 0, 1, A, 1, D, E, 
+         CALL SSYTRD_SB2ST( 'Y', 'N', 'U', 0, 1, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_SSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL AB_SSYTRD_SB2ST( 'Y', 'N', 'U', 0, 0, A, 1, D, E, 
+         CALL SSYTRD_SB2ST( 'Y', 'N', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 0, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_SSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL AB_SSYTRD_SB2ST( 'Y', 'N', 'U', 0, 0, A, 1, D, E, 
+         CALL SSYTRD_SB2ST( 'Y', 'N', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 0, INFO )
-         CALL AB_CHKXER( 'AB_SSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
          NT = NT + 9
 *
-*        AB_SORGTR
+*        SORGTR
 *
-         SRNAMT = 'AB_SORGTR'
+         SRNAMT = 'SORGTR'
          INFOT = 1
-         CALL AB_SORGTR( '/', 0, A, 1, TAU, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_SORGTR', INFOT, NOUT, LERR, OK )
+         CALL SORGTR( '/', 0, A, 1, TAU, W, 1, INFO )
+         CALL CHKXER( 'SORGTR', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_SORGTR( 'U', -1, A, 1, TAU, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_SORGTR', INFOT, NOUT, LERR, OK )
+         CALL SORGTR( 'U', -1, A, 1, TAU, W, 1, INFO )
+         CALL CHKXER( 'SORGTR', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_SORGTR( 'U', 2, A, 1, TAU, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_SORGTR', INFOT, NOUT, LERR, OK )
+         CALL SORGTR( 'U', 2, A, 1, TAU, W, 1, INFO )
+         CALL CHKXER( 'SORGTR', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_SORGTR( 'U', 3, A, 3, TAU, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_SORGTR', INFOT, NOUT, LERR, OK )
+         CALL SORGTR( 'U', 3, A, 3, TAU, W, 1, INFO )
+         CALL CHKXER( 'SORGTR', INFOT, NOUT, LERR, OK )
          NT = NT + 4
 *
-*        AB_SORMTR
+*        SORMTR
 *
-         SRNAMT = 'AB_SORMTR'
+         SRNAMT = 'SORMTR'
          INFOT = 1
-         CALL AB_SORMTR( '/', 'U', 'N', 0, 0, A, 1, TAU, C, 1, W, 1, INF
-     $O )
-         CALL AB_CHKXER( 'AB_SORMTR', INFOT, NOUT, LERR, OK )
+         CALL SORMTR( '/', 'U', 'N', 0, 0, A, 1, TAU, C, 1, W, 1, INFO )
+         CALL CHKXER( 'SORMTR', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_SORMTR( 'L', '/', 'N', 0, 0, A, 1, TAU, C, 1, W, 1, INF
-     $O )
-         CALL AB_CHKXER( 'AB_SORMTR', INFOT, NOUT, LERR, OK )
+         CALL SORMTR( 'L', '/', 'N', 0, 0, A, 1, TAU, C, 1, W, 1, INFO )
+         CALL CHKXER( 'SORMTR', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_SORMTR( 'L', 'U', '/', 0, 0, A, 1, TAU, C, 1, W, 1, INF
-     $O )
-         CALL AB_CHKXER( 'AB_SORMTR', INFOT, NOUT, LERR, OK )
+         CALL SORMTR( 'L', 'U', '/', 0, 0, A, 1, TAU, C, 1, W, 1, INFO )
+         CALL CHKXER( 'SORMTR', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_SORMTR( 'L', 'U', 'N', -1, 0, A, 1, TAU, C, 1, W, 1,
+         CALL SORMTR( 'L', 'U', 'N', -1, 0, A, 1, TAU, C, 1, W, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_SORMTR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SORMTR', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_SORMTR( 'L', 'U', 'N', 0, -1, A, 1, TAU, C, 1, W, 1,
+         CALL SORMTR( 'L', 'U', 'N', 0, -1, A, 1, TAU, C, 1, W, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_SORMTR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SORMTR', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_SORMTR( 'L', 'U', 'N', 2, 0, A, 1, TAU, C, 2, W, 1, INF
-     $O )
-         CALL AB_CHKXER( 'AB_SORMTR', INFOT, NOUT, LERR, OK )
+         CALL SORMTR( 'L', 'U', 'N', 2, 0, A, 1, TAU, C, 2, W, 1, INFO )
+         CALL CHKXER( 'SORMTR', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_SORMTR( 'R', 'U', 'N', 0, 2, A, 1, TAU, C, 1, W, 1, INF
-     $O )
-         CALL AB_CHKXER( 'AB_SORMTR', INFOT, NOUT, LERR, OK )
+         CALL SORMTR( 'R', 'U', 'N', 0, 2, A, 1, TAU, C, 1, W, 1, INFO )
+         CALL CHKXER( 'SORMTR', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_SORMTR( 'L', 'U', 'N', 2, 0, A, 2, TAU, C, 1, W, 1, INF
-     $O )
-         CALL AB_CHKXER( 'AB_SORMTR', INFOT, NOUT, LERR, OK )
+         CALL SORMTR( 'L', 'U', 'N', 2, 0, A, 2, TAU, C, 1, W, 1, INFO )
+         CALL CHKXER( 'SORMTR', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL AB_SORMTR( 'L', 'U', 'N', 0, 2, A, 1, TAU, C, 1, W, 1, INF
-     $O )
-         CALL AB_CHKXER( 'AB_SORMTR', INFOT, NOUT, LERR, OK )
+         CALL SORMTR( 'L', 'U', 'N', 0, 2, A, 1, TAU, C, 1, W, 1, INFO )
+         CALL CHKXER( 'SORMTR', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL AB_SORMTR( 'R', 'U', 'N', 2, 0, A, 1, TAU, C, 2, W, 1, INF
-     $O )
-         CALL AB_CHKXER( 'AB_SORMTR', INFOT, NOUT, LERR, OK )
+         CALL SORMTR( 'R', 'U', 'N', 2, 0, A, 1, TAU, C, 2, W, 1, INFO )
+         CALL CHKXER( 'SORMTR', INFOT, NOUT, LERR, OK )
          NT = NT + 10
 *
-*        AB_SSPTRD
+*        SSPTRD
 *
-         SRNAMT = 'AB_SSPTRD'
+         SRNAMT = 'SSPTRD'
          INFOT = 1
-         CALL AB_SSPTRD( '/', 0, A, D, E, TAU, INFO )
-         CALL AB_CHKXER( 'AB_SSPTRD', INFOT, NOUT, LERR, OK )
+         CALL SSPTRD( '/', 0, A, D, E, TAU, INFO )
+         CALL CHKXER( 'SSPTRD', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_SSPTRD( 'U', -1, A, D, E, TAU, INFO )
-         CALL AB_CHKXER( 'AB_SSPTRD', INFOT, NOUT, LERR, OK )
+         CALL SSPTRD( 'U', -1, A, D, E, TAU, INFO )
+         CALL CHKXER( 'SSPTRD', INFOT, NOUT, LERR, OK )
          NT = NT + 2
 *
-*        AB_SOPGTR
+*        SOPGTR
 *
-         SRNAMT = 'AB_SOPGTR'
+         SRNAMT = 'SOPGTR'
          INFOT = 1
-         CALL AB_SOPGTR( '/', 0, A, TAU, Z, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_SOPGTR', INFOT, NOUT, LERR, OK )
+         CALL SOPGTR( '/', 0, A, TAU, Z, 1, W, INFO )
+         CALL CHKXER( 'SOPGTR', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_SOPGTR( 'U', -1, A, TAU, Z, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_SOPGTR', INFOT, NOUT, LERR, OK )
+         CALL SOPGTR( 'U', -1, A, TAU, Z, 1, W, INFO )
+         CALL CHKXER( 'SOPGTR', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_SOPGTR( 'U', 2, A, TAU, Z, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_SOPGTR', INFOT, NOUT, LERR, OK )
+         CALL SOPGTR( 'U', 2, A, TAU, Z, 1, W, INFO )
+         CALL CHKXER( 'SOPGTR', INFOT, NOUT, LERR, OK )
          NT = NT + 3
 *
-*        AB_SOPMTR
+*        SOPMTR
 *
-         SRNAMT = 'AB_SOPMTR'
+         SRNAMT = 'SOPMTR'
          INFOT = 1
-         CALL AB_SOPMTR( '/', 'U', 'N', 0, 0, A, TAU, C, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_SOPMTR', INFOT, NOUT, LERR, OK )
+         CALL SOPMTR( '/', 'U', 'N', 0, 0, A, TAU, C, 1, W, INFO )
+         CALL CHKXER( 'SOPMTR', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_SOPMTR( 'L', '/', 'N', 0, 0, A, TAU, C, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_SOPMTR', INFOT, NOUT, LERR, OK )
+         CALL SOPMTR( 'L', '/', 'N', 0, 0, A, TAU, C, 1, W, INFO )
+         CALL CHKXER( 'SOPMTR', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_SOPMTR( 'L', 'U', '/', 0, 0, A, TAU, C, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_SOPMTR', INFOT, NOUT, LERR, OK )
+         CALL SOPMTR( 'L', 'U', '/', 0, 0, A, TAU, C, 1, W, INFO )
+         CALL CHKXER( 'SOPMTR', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_SOPMTR( 'L', 'U', 'N', -1, 0, A, TAU, C, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_SOPMTR', INFOT, NOUT, LERR, OK )
+         CALL SOPMTR( 'L', 'U', 'N', -1, 0, A, TAU, C, 1, W, INFO )
+         CALL CHKXER( 'SOPMTR', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_SOPMTR( 'L', 'U', 'N', 0, -1, A, TAU, C, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_SOPMTR', INFOT, NOUT, LERR, OK )
+         CALL SOPMTR( 'L', 'U', 'N', 0, -1, A, TAU, C, 1, W, INFO )
+         CALL CHKXER( 'SOPMTR', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_SOPMTR( 'L', 'U', 'N', 2, 0, A, TAU, C, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_SOPMTR', INFOT, NOUT, LERR, OK )
+         CALL SOPMTR( 'L', 'U', 'N', 2, 0, A, TAU, C, 1, W, INFO )
+         CALL CHKXER( 'SOPMTR', INFOT, NOUT, LERR, OK )
          NT = NT + 6
 *
-*        AB_SPTEQR
+*        SPTEQR
 *
-         SRNAMT = 'AB_SPTEQR'
+         SRNAMT = 'SPTEQR'
          INFOT = 1
-         CALL AB_SPTEQR( '/', 0, D, E, Z, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_SPTEQR', INFOT, NOUT, LERR, OK )
+         CALL SPTEQR( '/', 0, D, E, Z, 1, W, INFO )
+         CALL CHKXER( 'SPTEQR', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_SPTEQR( 'N', -1, D, E, Z, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_SPTEQR', INFOT, NOUT, LERR, OK )
+         CALL SPTEQR( 'N', -1, D, E, Z, 1, W, INFO )
+         CALL CHKXER( 'SPTEQR', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_SPTEQR( 'V', 2, D, E, Z, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_SPTEQR', INFOT, NOUT, LERR, OK )
+         CALL SPTEQR( 'V', 2, D, E, Z, 1, W, INFO )
+         CALL CHKXER( 'SPTEQR', INFOT, NOUT, LERR, OK )
          NT = NT + 3
 *
-*        AB_SSTEBZ
+*        SSTEBZ
 *
-         SRNAMT = 'AB_SSTEBZ'
+         SRNAMT = 'SSTEBZ'
          INFOT = 1
-         CALL AB_SSTEBZ( '/', 'E', 0, 0.0, 1.0, 1, 0, 0.0, D, E, M, NSPL
-     $IT,
+         CALL SSTEBZ( '/', 'E', 0, 0.0, 1.0, 1, 0, 0.0, D, E, M, NSPLIT,
      $                X, I1, I2, W, IW, INFO )
-         CALL AB_CHKXER( 'AB_SSTEBZ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSTEBZ', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_SSTEBZ( 'A', '/', 0, 0.0, 0.0, 0, 0, 0.0, D, E, M, NSPL
-     $IT,
+         CALL SSTEBZ( 'A', '/', 0, 0.0, 0.0, 0, 0, 0.0, D, E, M, NSPLIT,
      $                X, I1, I2, W, IW, INFO )
-         CALL AB_CHKXER( 'AB_SSTEBZ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSTEBZ', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_SSTEBZ( 'A', 'E', -1, 0.0, 0.0, 0, 0, 0.0, D, E, M,
+         CALL SSTEBZ( 'A', 'E', -1, 0.0, 0.0, 0, 0, 0.0, D, E, M,
      $                NSPLIT, X, I1, I2, W, IW, INFO )
-         CALL AB_CHKXER( 'AB_SSTEBZ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSTEBZ', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_SSTEBZ( 'V', 'E', 0, 0.0, 0.0, 0, 0, 0.0, D, E, M, NSPL
-     $IT,
+         CALL SSTEBZ( 'V', 'E', 0, 0.0, 0.0, 0, 0, 0.0, D, E, M, NSPLIT,
      $                X, I1, I2, W, IW, INFO )
-         CALL AB_CHKXER( 'AB_SSTEBZ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSTEBZ', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_SSTEBZ( 'I', 'E', 0, 0.0, 0.0, 0, 0, 0.0, D, E, M, NSPL
-     $IT,
+         CALL SSTEBZ( 'I', 'E', 0, 0.0, 0.0, 0, 0, 0.0, D, E, M, NSPLIT,
      $                X, I1, I2, W, IW, INFO )
-         CALL AB_CHKXER( 'AB_SSTEBZ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSTEBZ', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_SSTEBZ( 'I', 'E', 1, 0.0, 0.0, 2, 1, 0.0, D, E, M, NSPL
-     $IT,
+         CALL SSTEBZ( 'I', 'E', 1, 0.0, 0.0, 2, 1, 0.0, D, E, M, NSPLIT,
      $                X, I1, I2, W, IW, INFO )
-         CALL AB_CHKXER( 'AB_SSTEBZ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSTEBZ', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_SSTEBZ( 'I', 'E', 1, 0.0, 0.0, 1, 0, 0.0, D, E, M, NSPL
-     $IT,
+         CALL SSTEBZ( 'I', 'E', 1, 0.0, 0.0, 1, 0, 0.0, D, E, M, NSPLIT,
      $                X, I1, I2, W, IW, INFO )
-         CALL AB_CHKXER( 'AB_SSTEBZ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSTEBZ', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_SSTEBZ( 'I', 'E', 1, 0.0, 0.0, 1, 2, 0.0, D, E, M, NSPL
-     $IT,
+         CALL SSTEBZ( 'I', 'E', 1, 0.0, 0.0, 1, 2, 0.0, D, E, M, NSPLIT,
      $                X, I1, I2, W, IW, INFO )
-         CALL AB_CHKXER( 'AB_SSTEBZ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSTEBZ', INFOT, NOUT, LERR, OK )
          NT = NT + 8
 *
-*        AB_SSTEIN
+*        SSTEIN
 *
-         SRNAMT = 'AB_SSTEIN'
+         SRNAMT = 'SSTEIN'
          INFOT = 1
-         CALL AB_SSTEIN( -1, D, E, 0, X, I1, I2, Z, 1, W, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_SSTEIN', INFOT, NOUT, LERR, OK )
+         CALL SSTEIN( -1, D, E, 0, X, I1, I2, Z, 1, W, IW, I3, INFO )
+         CALL CHKXER( 'SSTEIN', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_SSTEIN( 0, D, E, -1, X, I1, I2, Z, 1, W, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_SSTEIN', INFOT, NOUT, LERR, OK )
+         CALL SSTEIN( 0, D, E, -1, X, I1, I2, Z, 1, W, IW, I3, INFO )
+         CALL CHKXER( 'SSTEIN', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_SSTEIN( 0, D, E, 1, X, I1, I2, Z, 1, W, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_SSTEIN', INFOT, NOUT, LERR, OK )
+         CALL SSTEIN( 0, D, E, 1, X, I1, I2, Z, 1, W, IW, I3, INFO )
+         CALL CHKXER( 'SSTEIN', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_SSTEIN( 2, D, E, 0, X, I1, I2, Z, 1, W, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_SSTEIN', INFOT, NOUT, LERR, OK )
+         CALL SSTEIN( 2, D, E, 0, X, I1, I2, Z, 1, W, IW, I3, INFO )
+         CALL CHKXER( 'SSTEIN', INFOT, NOUT, LERR, OK )
          NT = NT + 4
 *
-*        AB_SSTEQR
+*        SSTEQR
 *
-         SRNAMT = 'AB_SSTEQR'
+         SRNAMT = 'SSTEQR'
          INFOT = 1
-         CALL AB_SSTEQR( '/', 0, D, E, Z, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_SSTEQR', INFOT, NOUT, LERR, OK )
+         CALL SSTEQR( '/', 0, D, E, Z, 1, W, INFO )
+         CALL CHKXER( 'SSTEQR', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_SSTEQR( 'N', -1, D, E, Z, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_SSTEQR', INFOT, NOUT, LERR, OK )
+         CALL SSTEQR( 'N', -1, D, E, Z, 1, W, INFO )
+         CALL CHKXER( 'SSTEQR', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_SSTEQR( 'V', 2, D, E, Z, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_SSTEQR', INFOT, NOUT, LERR, OK )
+         CALL SSTEQR( 'V', 2, D, E, Z, 1, W, INFO )
+         CALL CHKXER( 'SSTEQR', INFOT, NOUT, LERR, OK )
          NT = NT + 3
 *
-*        AB_SSTERF
+*        SSTERF
 *
-         SRNAMT = 'AB_SSTERF'
+         SRNAMT = 'SSTERF'
          INFOT = 1
-         CALL AB_SSTERF( -1, D, E, INFO )
-         CALL AB_CHKXER( 'AB_SSTERF', INFOT, NOUT, LERR, OK )
+         CALL SSTERF( -1, D, E, INFO )
+         CALL CHKXER( 'SSTERF', INFOT, NOUT, LERR, OK )
          NT = NT + 1
 *
-*        AB_SSTEDC
+*        SSTEDC
 *
-         SRNAMT = 'AB_SSTEDC'
+         SRNAMT = 'SSTEDC'
          INFOT = 1
-         CALL AB_SSTEDC( '/', 0, D, E, Z, 1, W, 1, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_SSTEDC', INFOT, NOUT, LERR, OK )
+         CALL SSTEDC( '/', 0, D, E, Z, 1, W, 1, IW, 1, INFO )
+         CALL CHKXER( 'SSTEDC', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_SSTEDC( 'N', -1, D, E, Z, 1, W, 1, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_SSTEDC', INFOT, NOUT, LERR, OK )
+         CALL SSTEDC( 'N', -1, D, E, Z, 1, W, 1, IW, 1, INFO )
+         CALL CHKXER( 'SSTEDC', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_SSTEDC( 'V', 2, D, E, Z, 1, W, 23, IW, 28, INFO )
-         CALL AB_CHKXER( 'AB_SSTEDC', INFOT, NOUT, LERR, OK )
+         CALL SSTEDC( 'V', 2, D, E, Z, 1, W, 23, IW, 28, INFO )
+         CALL CHKXER( 'SSTEDC', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_SSTEDC( 'N', 1, D, E, Z, 1, W, 0, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_SSTEDC', INFOT, NOUT, LERR, OK )
+         CALL SSTEDC( 'N', 1, D, E, Z, 1, W, 0, IW, 1, INFO )
+         CALL CHKXER( 'SSTEDC', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_SSTEDC( 'I', 2, D, E, Z, 2, W, 0, IW, 12, INFO )
-         CALL AB_CHKXER( 'AB_SSTEDC', INFOT, NOUT, LERR, OK )
+         CALL SSTEDC( 'I', 2, D, E, Z, 2, W, 0, IW, 12, INFO )
+         CALL CHKXER( 'SSTEDC', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_SSTEDC( 'V', 2, D, E, Z, 2, W, 0, IW, 28, INFO )
-         CALL AB_CHKXER( 'AB_SSTEDC', INFOT, NOUT, LERR, OK )
+         CALL SSTEDC( 'V', 2, D, E, Z, 2, W, 0, IW, 28, INFO )
+         CALL CHKXER( 'SSTEDC', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_SSTEDC( 'N', 1, D, E, Z, 1, W, 1, IW, 0, INFO )
-         CALL AB_CHKXER( 'AB_SSTEDC', INFOT, NOUT, LERR, OK )
+         CALL SSTEDC( 'N', 1, D, E, Z, 1, W, 1, IW, 0, INFO )
+         CALL CHKXER( 'SSTEDC', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_SSTEDC( 'I', 2, D, E, Z, 2, W, 19, IW, 0, INFO )
-         CALL AB_CHKXER( 'AB_SSTEDC', INFOT, NOUT, LERR, OK )
+         CALL SSTEDC( 'I', 2, D, E, Z, 2, W, 19, IW, 0, INFO )
+         CALL CHKXER( 'SSTEDC', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_SSTEDC( 'V', 2, D, E, Z, 2, W, 23, IW, 0, INFO )
-         CALL AB_CHKXER( 'AB_SSTEDC', INFOT, NOUT, LERR, OK )
+         CALL SSTEDC( 'V', 2, D, E, Z, 2, W, 23, IW, 0, INFO )
+         CALL CHKXER( 'SSTEDC', INFOT, NOUT, LERR, OK )
          NT = NT + 9
 *
-*        AB_AB_SSTEVD
+*        SSTEVD
 *
-         SRNAMT = 'AB_AB_SSTEVD'
+         SRNAMT = 'SSTEVD'
          INFOT = 1
-         CALL AB_AB_SSTEVD( '/', 0, D, E, Z, 1, W, 1, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSTEVD', INFOT, NOUT, LERR, OK )
+         CALL SSTEVD( '/', 0, D, E, Z, 1, W, 1, IW, 1, INFO )
+         CALL CHKXER( 'SSTEVD', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_SSTEVD( 'N', -1, D, E, Z, 1, W, 1, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSTEVD', INFOT, NOUT, LERR, OK )
+         CALL SSTEVD( 'N', -1, D, E, Z, 1, W, 1, IW, 1, INFO )
+         CALL CHKXER( 'SSTEVD', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_AB_SSTEVD( 'V', 2, D, E, Z, 1, W, 19, IW, 12, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSTEVD', INFOT, NOUT, LERR, OK )
+         CALL SSTEVD( 'V', 2, D, E, Z, 1, W, 19, IW, 12, INFO )
+         CALL CHKXER( 'SSTEVD', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_SSTEVD( 'N', 1, D, E, Z, 1, W, 0, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSTEVD', INFOT, NOUT, LERR, OK )
+         CALL SSTEVD( 'N', 1, D, E, Z, 1, W, 0, IW, 1, INFO )
+         CALL CHKXER( 'SSTEVD', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_SSTEVD( 'V', 2, D, E, Z, 2, W, 12, IW, 12, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSTEVD', INFOT, NOUT, LERR, OK )
+         CALL SSTEVD( 'V', 2, D, E, Z, 2, W, 12, IW, 12, INFO )
+         CALL CHKXER( 'SSTEVD', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_AB_SSTEVD( 'N', 0, D, E, Z, 1, W, 1, IW, 0, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSTEVD', INFOT, NOUT, LERR, OK )
+         CALL SSTEVD( 'N', 0, D, E, Z, 1, W, 1, IW, 0, INFO )
+         CALL CHKXER( 'SSTEVD', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_AB_SSTEVD( 'V', 2, D, E, Z, 2, W, 19, IW, 11, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSTEVD', INFOT, NOUT, LERR, OK )
+         CALL SSTEVD( 'V', 2, D, E, Z, 2, W, 19, IW, 11, INFO )
+         CALL CHKXER( 'SSTEVD', INFOT, NOUT, LERR, OK )
          NT = NT + 7
 *
-*        AB_SSTEV
+*        SSTEV
 *
-         SRNAMT = 'AB_SSTEV '
+         SRNAMT = 'SSTEV '
          INFOT = 1
-         CALL AB_SSTEV( '/', 0, D, E, Z, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_SSTEV ', INFOT, NOUT, LERR, OK )
+         CALL SSTEV( '/', 0, D, E, Z, 1, W, INFO )
+         CALL CHKXER( 'SSTEV ', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_SSTEV( 'N', -1, D, E, Z, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_SSTEV ', INFOT, NOUT, LERR, OK )
+         CALL SSTEV( 'N', -1, D, E, Z, 1, W, INFO )
+         CALL CHKXER( 'SSTEV ', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_SSTEV( 'V', 2, D, E, Z, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_SSTEV ', INFOT, NOUT, LERR, OK )
+         CALL SSTEV( 'V', 2, D, E, Z, 1, W, INFO )
+         CALL CHKXER( 'SSTEV ', INFOT, NOUT, LERR, OK )
          NT = NT + 3
 *
-*        AB_AB_SSTEVX
+*        SSTEVX
 *
-         SRNAMT = 'AB_AB_SSTEVX'
+         SRNAMT = 'SSTEVX'
          INFOT = 1
-         CALL AB_AB_SSTEVX( '/', 'A', 0, D, E, 0.0, 0.0, 0, 0, 0.0, M, X
-     $, Z,
+         CALL SSTEVX( '/', 'A', 0, D, E, 0.0, 0.0, 0, 0, 0.0, M, X, Z,
      $                1, W, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSTEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSTEVX', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_SSTEVX( 'N', '/', 0, D, E, 0.0, 1.0, 1, 0, 0.0, M, X
-     $, Z,
+         CALL SSTEVX( 'N', '/', 0, D, E, 0.0, 1.0, 1, 0, 0.0, M, X, Z,
      $                1, W, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSTEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSTEVX', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_SSTEVX( 'N', 'A', -1, D, E, 0.0, 0.0, 0, 0, 0.0, M, 
-     $X, Z,
+         CALL SSTEVX( 'N', 'A', -1, D, E, 0.0, 0.0, 0, 0, 0.0, M, X, Z,
      $                1, W, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSTEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSTEVX', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_AB_SSTEVX( 'N', 'V', 1, D, E, 0.0, 0.0, 0, 0, 0.0, M, X
-     $, Z,
+         CALL SSTEVX( 'N', 'V', 1, D, E, 0.0, 0.0, 0, 0, 0.0, M, X, Z,
      $                1, W, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSTEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSTEVX', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_SSTEVX( 'N', 'I', 1, D, E, 0.0, 0.0, 0, 0, 0.0, M, X
-     $, Z,
+         CALL SSTEVX( 'N', 'I', 1, D, E, 0.0, 0.0, 0, 0, 0.0, M, X, Z,
      $                1, W, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSTEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSTEVX', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_SSTEVX( 'N', 'I', 1, D, E, 0.0, 0.0, 2, 1, 0.0, M, X
-     $, Z,
+         CALL SSTEVX( 'N', 'I', 1, D, E, 0.0, 0.0, 2, 1, 0.0, M, X, Z,
      $                1, W, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSTEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSTEVX', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_AB_SSTEVX( 'N', 'I', 2, D, E, 0.0, 0.0, 2, 1, 0.0, M, X
-     $, Z,
+         CALL SSTEVX( 'N', 'I', 2, D, E, 0.0, 0.0, 2, 1, 0.0, M, X, Z,
      $                1, W, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSTEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSTEVX', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_AB_SSTEVX( 'N', 'I', 1, D, E, 0.0, 0.0, 1, 2, 0.0, M, X
-     $, Z,
+         CALL SSTEVX( 'N', 'I', 1, D, E, 0.0, 0.0, 1, 2, 0.0, M, X, Z,
      $                1, W, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSTEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSTEVX', INFOT, NOUT, LERR, OK )
          INFOT = 14
-         CALL AB_AB_SSTEVX( 'V', 'A', 2, D, E, 0.0, 0.0, 0, 0, 0.0, M, X
-     $, Z,
+         CALL SSTEVX( 'V', 'A', 2, D, E, 0.0, 0.0, 0, 0, 0.0, M, X, Z,
      $                1, W, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSTEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSTEVX', INFOT, NOUT, LERR, OK )
          NT = NT + 9
 *
-*        AB_AB_SSTEVR
+*        SSTEVR
 *
          N = 1
-         SRNAMT = 'AB_AB_SSTEVR'
+         SRNAMT = 'SSTEVR'
          INFOT = 1
-         CALL AB_AB_SSTEVR( '/', 'A', 0, D, E, 0.0, 0.0, 1, 1, 0.0, M, R
-     $, Z,
+         CALL SSTEVR( '/', 'A', 0, D, E, 0.0, 0.0, 1, 1, 0.0, M, R, Z,
      $                1, IW, X, 20*N, IW( 2*N+1 ), 10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSTEVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSTEVR', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_SSTEVR( 'V', '/', 0, D, E, 0.0, 0.0, 1, 1, 0.0, M, R
-     $, Z,
+         CALL SSTEVR( 'V', '/', 0, D, E, 0.0, 0.0, 1, 1, 0.0, M, R, Z,
      $                1, IW, X, 20*N, IW( 2*N+1 ), 10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSTEVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSTEVR', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_SSTEVR( 'V', 'A', -1, D, E, 0.0, 0.0, 1, 1, 0.0, M, 
-     $R, Z,
+         CALL SSTEVR( 'V', 'A', -1, D, E, 0.0, 0.0, 1, 1, 0.0, M, R, Z,
      $                1, IW, X, 20*N, IW( 2*N+1 ), 10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSTEVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSTEVR', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_AB_SSTEVR( 'V', 'V', 1, D, E, 0.0, 0.0, 1, 1, 0.0, M, R
-     $, Z,
+         CALL SSTEVR( 'V', 'V', 1, D, E, 0.0, 0.0, 1, 1, 0.0, M, R, Z,
      $                1, IW, X, 20*N, IW( 2*N+1 ), 10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSTEVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSTEVR', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_SSTEVR( 'V', 'I', 1, D, E, 0.0, 0.0, 0, 1, 0.0, M, W
-     $, Z,
+         CALL SSTEVR( 'V', 'I', 1, D, E, 0.0, 0.0, 0, 1, 0.0, M, W, Z,
      $                1, IW, X, 20*N, IW( 2*N+1 ), 10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSTEVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSTEVR', INFOT, NOUT, LERR, OK )
          INFOT = 9
          N = 2
-         CALL AB_AB_SSTEVR( 'V', 'I', 2, D, E, 0.0, 0.0, 2, 1, 0.0, M, W
-     $, Z,
+         CALL SSTEVR( 'V', 'I', 2, D, E, 0.0, 0.0, 2, 1, 0.0, M, W, Z,
      $                1, IW, X, 20*N, IW( 2*N+1 ), 10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSTEVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSTEVR', INFOT, NOUT, LERR, OK )
          INFOT = 14
          N = 1
-         CALL AB_AB_SSTEVR( 'V', 'I', 1, D, E, 0.0, 0.0, 1, 1, 0.0, M, W
-     $, Z,
+         CALL SSTEVR( 'V', 'I', 1, D, E, 0.0, 0.0, 1, 1, 0.0, M, W, Z,
      $                0, IW, X, 20*N, IW( 2*N+1 ), 10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSTEVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSTEVR', INFOT, NOUT, LERR, OK )
          INFOT = 17
-         CALL AB_AB_SSTEVR( 'V', 'I', 1, D, E, 0.0, 0.0, 1, 1, 0.0, M, W
-     $, Z,
+         CALL SSTEVR( 'V', 'I', 1, D, E, 0.0, 0.0, 1, 1, 0.0, M, W, Z,
      $                1, IW, X, 20*N-1, IW( 2*N+1 ), 10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSTEVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSTEVR', INFOT, NOUT, LERR, OK )
          INFOT = 19
-         CALL AB_AB_SSTEVR( 'V', 'I', 1, D, E, 0.0, 0.0, 1, 1, 0.0, M, W
-     $, Z,
+         CALL SSTEVR( 'V', 'I', 1, D, E, 0.0, 0.0, 1, 1, 0.0, M, W, Z,
      $                1, IW, X, 20*N, IW( 2*N+1 ), 10*N-1, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSTEVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSTEVR', INFOT, NOUT, LERR, OK )
          NT = NT + 9
 *
-*        AB_AB_SSYEVD
+*        SSYEVD
 *
-         SRNAMT = 'AB_AB_SSYEVD'
+         SRNAMT = 'SSYEVD'
          INFOT = 1
-         CALL AB_AB_SSYEVD( '/', 'U', 0, A, 1, X, W, 1, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYEVD', INFOT, NOUT, LERR, OK )
+         CALL SSYEVD( '/', 'U', 0, A, 1, X, W, 1, IW, 1, INFO )
+         CALL CHKXER( 'SSYEVD', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_SSYEVD( 'N', '/', 0, A, 1, X, W, 1, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYEVD', INFOT, NOUT, LERR, OK )
+         CALL SSYEVD( 'N', '/', 0, A, 1, X, W, 1, IW, 1, INFO )
+         CALL CHKXER( 'SSYEVD', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_SSYEVD( 'N', 'U', -1, A, 1, X, W, 1, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYEVD', INFOT, NOUT, LERR, OK )
+         CALL SSYEVD( 'N', 'U', -1, A, 1, X, W, 1, IW, 1, INFO )
+         CALL CHKXER( 'SSYEVD', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_AB_SSYEVD( 'N', 'U', 2, A, 1, X, W, 3, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYEVD', INFOT, NOUT, LERR, OK )
+         CALL SSYEVD( 'N', 'U', 2, A, 1, X, W, 3, IW, 1, INFO )
+         CALL CHKXER( 'SSYEVD', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_SSYEVD( 'N', 'U', 1, A, 1, X, W, 0, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYEVD', INFOT, NOUT, LERR, OK )
+         CALL SSYEVD( 'N', 'U', 1, A, 1, X, W, 0, IW, 1, INFO )
+         CALL CHKXER( 'SSYEVD', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_SSYEVD( 'N', 'U', 2, A, 2, X, W, 4, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYEVD', INFOT, NOUT, LERR, OK )
+         CALL SSYEVD( 'N', 'U', 2, A, 2, X, W, 4, IW, 1, INFO )
+         CALL CHKXER( 'SSYEVD', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_SSYEVD( 'V', 'U', 2, A, 2, X, W, 20, IW, 12, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYEVD', INFOT, NOUT, LERR, OK )
+         CALL SSYEVD( 'V', 'U', 2, A, 2, X, W, 20, IW, 12, INFO )
+         CALL CHKXER( 'SSYEVD', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_AB_SSYEVD( 'N', 'U', 1, A, 1, X, W, 1, IW, 0, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYEVD', INFOT, NOUT, LERR, OK )
+         CALL SSYEVD( 'N', 'U', 1, A, 1, X, W, 1, IW, 0, INFO )
+         CALL CHKXER( 'SSYEVD', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_AB_SSYEVD( 'N', 'U', 2, A, 2, X, W, 5, IW, 0, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYEVD', INFOT, NOUT, LERR, OK )
+         CALL SSYEVD( 'N', 'U', 2, A, 2, X, W, 5, IW, 0, INFO )
+         CALL CHKXER( 'SSYEVD', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_AB_SSYEVD( 'V', 'U', 2, A, 2, X, W, 27, IW, 11, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYEVD', INFOT, NOUT, LERR, OK )
+         CALL SSYEVD( 'V', 'U', 2, A, 2, X, W, 27, IW, 11, INFO )
+         CALL CHKXER( 'SSYEVD', INFOT, NOUT, LERR, OK )
          NT = NT + 10
 *
-*        AB_AB_AB_SSYEVD_2STAGE
+*        SSYEVD_2STAGE
 *
-         SRNAMT = 'AB_AB_AB_SSYEVD_2STAGE'
+         SRNAMT = 'SSYEVD_2STAGE'
          INFOT = 1
-         CALL AB_AB_AB_SSYEVD_2STAGE( '/', 'U', 0, A, 1, X, W, 1, IW, 1,
-     $ INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSYEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL SSYEVD_2STAGE( '/', 'U', 0, A, 1, X, W, 1, IW, 1, INFO )
+         CALL CHKXER( 'SSYEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 1
-         CALL AB_AB_AB_SSYEVD_2STAGE( 'V', 'U', 0, A, 1, X, W, 1, IW, 1,
-     $ INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSYEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL SSYEVD_2STAGE( 'V', 'U', 0, A, 1, X, W, 1, IW, 1, INFO )
+         CALL CHKXER( 'SSYEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_AB_SSYEVD_2STAGE( 'N', '/', 0, A, 1, X, W, 1, IW, 1,
-     $ INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSYEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL SSYEVD_2STAGE( 'N', '/', 0, A, 1, X, W, 1, IW, 1, INFO )
+         CALL CHKXER( 'SSYEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_AB_SSYEVD_2STAGE( 'N', 'U', -1, A, 1, X, W, 1, IW, 1
-     $, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSYEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL SSYEVD_2STAGE( 'N', 'U', -1, A, 1, X, W, 1, IW, 1, INFO )
+         CALL CHKXER( 'SSYEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_AB_AB_SSYEVD_2STAGE( 'N', 'U', 2, A, 1, X, W, 3, IW, 1,
-     $ INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSYEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL SSYEVD_2STAGE( 'N', 'U', 2, A, 1, X, W, 3, IW, 1, INFO )
+         CALL CHKXER( 'SSYEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_AB_SSYEVD_2STAGE( 'N', 'U', 1, A, 1, X, W, 0, IW, 1,
-     $ INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSYEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL SSYEVD_2STAGE( 'N', 'U', 1, A, 1, X, W, 0, IW, 1, INFO )
+         CALL CHKXER( 'SSYEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_AB_SSYEVD_2STAGE( 'N', 'U', 2, A, 2, X, W, 4, IW, 1,
-     $ INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSYEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL SSYEVD_2STAGE( 'N', 'U', 2, A, 2, X, W, 4, IW, 1, INFO )
+         CALL CHKXER( 'SSYEVD_2STAGE', INFOT, NOUT, LERR, OK )
 *         INFOT = 8
-*         CALL AB_AB_AB_SSYEVD_2STAGE( 'V', 'U', 2, A, 2, X, W, 20, IW, 12, INFO )
-*         CALL AB_CHKXER( 'AB_AB_AB_SSYEVD_2STAGE', INFOT, NOUT, LERR, OK )
+*         CALL SSYEVD_2STAGE( 'V', 'U', 2, A, 2, X, W, 20, IW, 12, INFO )
+*         CALL CHKXER( 'SSYEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_AB_AB_SSYEVD_2STAGE( 'N', 'U', 1, A, 1, X, W, 1, IW, 0,
-     $ INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSYEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL SSYEVD_2STAGE( 'N', 'U', 1, A, 1, X, W, 1, IW, 0, INFO )
+         CALL CHKXER( 'SSYEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_AB_AB_SSYEVD_2STAGE( 'N', 'U', 2, A, 2, X, W, 25, IW, 0
-     $, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSYEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL SSYEVD_2STAGE( 'N', 'U', 2, A, 2, X, W, 25, IW, 0, INFO )
+         CALL CHKXER( 'SSYEVD_2STAGE', INFOT, NOUT, LERR, OK )
 *         INFOT = 10
-*         CALL AB_AB_AB_SSYEVD_2STAGE( 'V', 'U', 2, A, 2, X, W, 27, IW, 11, INFO )
-*         CALL AB_CHKXER( 'AB_AB_AB_SSYEVD_2STAGE', INFOT, NOUT, LERR, OK )
+*         CALL SSYEVD_2STAGE( 'V', 'U', 2, A, 2, X, W, 27, IW, 11, INFO )
+*         CALL CHKXER( 'SSYEVD_2STAGE', INFOT, NOUT, LERR, OK )
          NT = NT + 9
 *
-*        AB_AB_SSYEVR
+*        SSYEVR
 *
-         SRNAMT = 'AB_AB_SSYEVR'
+         SRNAMT = 'SSYEVR'
          N = 1
          INFOT = 1
-         CALL AB_AB_SSYEVR( '/', 'A', 'U', 0, A, 1, 0.0, 0.0, 1, 1, 0.0,
-     $ M, R,
+         CALL SSYEVR( '/', 'A', 'U', 0, A, 1, 0.0, 0.0, 1, 1, 0.0, M, R,
      $                Z, 1, IW, Q, 26*N, IW( 2*N+1 ), 10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYEVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYEVR', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_SSYEVR( 'V', '/', 'U', 0, A, 1, 0.0, 0.0, 1, 1, 0.0,
-     $ M, R,
+         CALL SSYEVR( 'V', '/', 'U', 0, A, 1, 0.0, 0.0, 1, 1, 0.0, M, R,
      $                Z, 1, IW, Q, 26*N, IW( 2*N+1 ), 10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYEVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYEVR', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_SSYEVR( 'V', 'A', '/', -1, A, 1, 0.0, 0.0, 1, 1, 0.0
-     $, M,
+         CALL SSYEVR( 'V', 'A', '/', -1, A, 1, 0.0, 0.0, 1, 1, 0.0, M,
      $                R, Z, 1, IW, Q, 26*N, IW( 2*N+1 ), 10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYEVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYEVR', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_SSYEVR( 'V', 'A', 'U', -1, A, 1, 0.0, 0.0, 1, 1, 0.0
-     $, M,
+         CALL SSYEVR( 'V', 'A', 'U', -1, A, 1, 0.0, 0.0, 1, 1, 0.0, M,
      $                R, Z, 1, IW, Q, 26*N, IW( 2*N+1 ), 10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYEVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYEVR', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_AB_SSYEVR( 'V', 'A', 'U', 2, A, 1, 0.0, 0.0, 1, 1, 0.0,
-     $ M, R,
+         CALL SSYEVR( 'V', 'A', 'U', 2, A, 1, 0.0, 0.0, 1, 1, 0.0, M, R,
      $                Z, 1, IW, Q, 26*N, IW( 2*N+1 ), 10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYEVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYEVR', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_SSYEVR( 'V', 'V', 'U', 1, A, 1, 0.0E0, 0.0E0, 1, 1, 
-     $0.0,
+         CALL SSYEVR( 'V', 'V', 'U', 1, A, 1, 0.0E0, 0.0E0, 1, 1, 0.0,
      $                M, R, Z, 1, IW, Q, 26*N, IW( 2*N+1 ), 10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYEVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYEVR', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_AB_SSYEVR( 'V', 'I', 'U', 1, A, 1, 0.0E0, 0.0E0, 0, 1, 
-     $0.0,
+         CALL SSYEVR( 'V', 'I', 'U', 1, A, 1, 0.0E0, 0.0E0, 0, 1, 0.0,
      $                M, R, Z, 1, IW, Q, 26*N, IW( 2*N+1 ), 10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYEVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYEVR', INFOT, NOUT, LERR, OK )
          INFOT = 10
 *
-         CALL AB_AB_SSYEVR( 'V', 'I', 'U', 2, A, 2, 0.0E0, 0.0E0, 2, 1, 
-     $0.0,
+         CALL SSYEVR( 'V', 'I', 'U', 2, A, 2, 0.0E0, 0.0E0, 2, 1, 0.0,
      $                M, R, Z, 1, IW, Q, 26*N, IW( 2*N+1 ), 10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYEVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYEVR', INFOT, NOUT, LERR, OK )
          INFOT = 15
-         CALL AB_AB_SSYEVR( 'V', 'I', 'U', 1, A, 1, 0.0E0, 0.0E0, 1, 1, 
-     $0.0,
+         CALL SSYEVR( 'V', 'I', 'U', 1, A, 1, 0.0E0, 0.0E0, 1, 1, 0.0,
      $                M, R, Z, 0, IW, Q, 26*N, IW( 2*N+1 ), 10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYEVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYEVR', INFOT, NOUT, LERR, OK )
          INFOT = 18
-         CALL AB_AB_SSYEVR( 'V', 'I', 'U', 1, A, 1, 0.0E0, 0.0E0, 1, 1, 
-     $0.0,
+         CALL SSYEVR( 'V', 'I', 'U', 1, A, 1, 0.0E0, 0.0E0, 1, 1, 0.0,
      $                M, R, Z, 1, IW, Q, 26*N-1, IW( 2*N+1 ), 10*N,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYEVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYEVR', INFOT, NOUT, LERR, OK )
          INFOT = 20
-         CALL AB_AB_SSYEVR( 'V', 'I', 'U', 1, A, 1, 0.0E0, 0.0E0, 1, 1, 
-     $0.0,
+         CALL SSYEVR( 'V', 'I', 'U', 1, A, 1, 0.0E0, 0.0E0, 1, 1, 0.0,
      $                M, R, Z, 1, IW, Q, 26*N, IW( 2*N+1 ), 10*N-1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYEVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYEVR', INFOT, NOUT, LERR, OK )
          NT = NT + 11
 *
-*        AB_AB_AB_SSYEVR_2STAGE
+*        SSYEVR_2STAGE
 *
-         SRNAMT = 'AB_AB_AB_SSYEVR_2STAGE'
+         SRNAMT = 'SSYEVR_2STAGE'
          N = 1
          INFOT = 1
-         CALL AB_AB_AB_SSYEVR_2STAGE( '/', 'A', 'U', 0, A, 1,
+         CALL SSYEVR_2STAGE( '/', 'A', 'U', 0, A, 1,
      $                0.0E0, 0.0E0, 1, 1, 0.0E0,
      $                M, R, Z, 1, IW, Q, 26*N, IW( 2*N+1 ), 10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSYEVR_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSYEVR_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 1
-         CALL AB_AB_AB_SSYEVR_2STAGE( 'V', 'A', 'U', 0, A, 1,
+         CALL SSYEVR_2STAGE( 'V', 'A', 'U', 0, A, 1,
      $                0.0E0, 0.0E0, 1, 1, 0.0E0,
      $                M, R, Z, 1, IW, Q, 26*N, IW( 2*N+1 ), 10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSYEVR_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSYEVR_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_AB_SSYEVR_2STAGE( 'N', '/', 'U', 0, A, 1,
+         CALL SSYEVR_2STAGE( 'N', '/', 'U', 0, A, 1,
      $                0.0E0, 0.0E0, 1, 1, 0.0E0,
      $                M, R, Z, 1, IW, Q, 26*N, IW( 2*N+1 ), 10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSYEVR_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSYEVR_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_AB_SSYEVR_2STAGE( 'N', 'A', '/', -1, A, 1,
+         CALL SSYEVR_2STAGE( 'N', 'A', '/', -1, A, 1,
      $                0.0E0, 0.0E0, 1, 1, 0.0E0,
      $                M, R, Z, 1, IW, Q, 26*N, IW( 2*N+1 ), 10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSYEVR_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSYEVR_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_AB_SSYEVR_2STAGE( 'N', 'A', 'U', -1, A, 1,
+         CALL SSYEVR_2STAGE( 'N', 'A', 'U', -1, A, 1,
      $                0.0E0, 0.0E0, 1, 1, 0.0E0,
      $                M, R, Z, 1, IW, Q, 26*N, IW( 2*N+1 ), 10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSYEVR_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSYEVR_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_AB_AB_SSYEVR_2STAGE( 'N', 'A', 'U', 2, A, 1,
+         CALL SSYEVR_2STAGE( 'N', 'A', 'U', 2, A, 1,
      $                0.0E0, 0.0E0, 1, 1, 0.0E0,
      $                M, R, Z, 1, IW, Q, 26*N, IW( 2*N+1 ), 10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSYEVR_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSYEVR_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_AB_SSYEVR_2STAGE( 'N', 'V', 'U', 1, A, 1,
+         CALL SSYEVR_2STAGE( 'N', 'V', 'U', 1, A, 1,
      $                0.0E0, 0.0E0, 1, 1, 0.0E0,
      $                M, R, Z, 1, IW, Q, 26*N, IW( 2*N+1 ), 10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSYEVR_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSYEVR_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_AB_AB_SSYEVR_2STAGE( 'N', 'I', 'U', 1, A, 1,
+         CALL SSYEVR_2STAGE( 'N', 'I', 'U', 1, A, 1,
      $                0.0E0, 0.0E0, 0, 1, 0.0E0,
      $                M, R, Z, 1, IW, Q, 26*N, IW( 2*N+1 ), 10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSYEVR_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSYEVR_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_AB_AB_SSYEVR_2STAGE( 'N', 'I', 'U', 2, A, 2,
+         CALL SSYEVR_2STAGE( 'N', 'I', 'U', 2, A, 2,
      $                0.0E0, 0.0E0, 2, 1, 0.0E0,
      $                M, R, Z, 1, IW, Q, 26*N, IW( 2*N+1 ), 10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSYEVR_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSYEVR_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 15
-         CALL AB_AB_AB_SSYEVR_2STAGE( 'N', 'I', 'U', 1, A, 1,
+         CALL SSYEVR_2STAGE( 'N', 'I', 'U', 1, A, 1,
      $                0.0E0, 0.0E0, 1, 1, 0.0E0,
      $                M, R, Z, 0, IW, Q, 26*N, IW( 2*N+1 ), 10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSYEVR_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSYEVR_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 18
-         CALL AB_AB_AB_SSYEVR_2STAGE( 'N', 'I', 'U', 1, A, 1,
+         CALL SSYEVR_2STAGE( 'N', 'I', 'U', 1, A, 1,
      $                0.0E0, 0.0E0, 1, 1, 0.0E0,
      $                M, R, Z, 1, IW, Q, 0, IW( 2*N+1 ), 10*N,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSYEVR_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSYEVR_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 20
-         CALL AB_AB_AB_SSYEVR_2STAGE( 'N', 'I', 'U', 1, A, 1,
+         CALL SSYEVR_2STAGE( 'N', 'I', 'U', 1, A, 1,
      $                0.0E0, 0.0E0, 1, 1, 0.0E0,
      $                M, R, Z, 1, IW, Q, 26*N, IW( 2*N+1 ), 0,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSYEVR_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSYEVR_2STAGE', INFOT, NOUT, LERR, OK )
          NT = NT + 12
 *
-*        AB_SSYEV
+*        SSYEV
 *
-         SRNAMT = 'AB_SSYEV '
+         SRNAMT = 'SSYEV '
          INFOT = 1
-         CALL AB_SSYEV( '/', 'U', 0, A, 1, X, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_SSYEV ', INFOT, NOUT, LERR, OK )
+         CALL SSYEV( '/', 'U', 0, A, 1, X, W, 1, INFO )
+         CALL CHKXER( 'SSYEV ', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_SSYEV( 'N', '/', 0, A, 1, X, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_SSYEV ', INFOT, NOUT, LERR, OK )
+         CALL SSYEV( 'N', '/', 0, A, 1, X, W, 1, INFO )
+         CALL CHKXER( 'SSYEV ', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_SSYEV( 'N', 'U', -1, A, 1, X, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_SSYEV ', INFOT, NOUT, LERR, OK )
+         CALL SSYEV( 'N', 'U', -1, A, 1, X, W, 1, INFO )
+         CALL CHKXER( 'SSYEV ', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_SSYEV( 'N', 'U', 2, A, 1, X, W, 3, INFO )
-         CALL AB_CHKXER( 'AB_SSYEV ', INFOT, NOUT, LERR, OK )
+         CALL SSYEV( 'N', 'U', 2, A, 1, X, W, 3, INFO )
+         CALL CHKXER( 'SSYEV ', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_SSYEV( 'N', 'U', 1, A, 1, X, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_SSYEV ', INFOT, NOUT, LERR, OK )
+         CALL SSYEV( 'N', 'U', 1, A, 1, X, W, 1, INFO )
+         CALL CHKXER( 'SSYEV ', INFOT, NOUT, LERR, OK )
          NT = NT + 5
 *
-*        AB_AB_SSYEV_2STAGE
+*        SSYEV_2STAGE
 *
-         SRNAMT = 'AB_AB_SSYEV_2STAGE '
+         SRNAMT = 'SSYEV_2STAGE '
          INFOT = 1
-         CALL AB_AB_SSYEV_2STAGE( '/', 'U', 0, A, 1, X, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYEV_2STAGE ', INFOT, NOUT, LERR, OK )
+         CALL SSYEV_2STAGE( '/', 'U', 0, A, 1, X, W, 1, INFO )
+         CALL CHKXER( 'SSYEV_2STAGE ', INFOT, NOUT, LERR, OK )
          INFOT = 1
-         CALL AB_AB_SSYEV_2STAGE( 'V', 'U', 0, A, 1, X, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYEV_2STAGE ', INFOT, NOUT, LERR, OK )
+         CALL SSYEV_2STAGE( 'V', 'U', 0, A, 1, X, W, 1, INFO )
+         CALL CHKXER( 'SSYEV_2STAGE ', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_SSYEV_2STAGE( 'N', '/', 0, A, 1, X, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYEV_2STAGE ', INFOT, NOUT, LERR, OK )
+         CALL SSYEV_2STAGE( 'N', '/', 0, A, 1, X, W, 1, INFO )
+         CALL CHKXER( 'SSYEV_2STAGE ', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_SSYEV_2STAGE( 'N', 'U', -1, A, 1, X, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYEV_2STAGE ', INFOT, NOUT, LERR, OK )
+         CALL SSYEV_2STAGE( 'N', 'U', -1, A, 1, X, W, 1, INFO )
+         CALL CHKXER( 'SSYEV_2STAGE ', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_AB_SSYEV_2STAGE( 'N', 'U', 2, A, 1, X, W, 3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYEV_2STAGE ', INFOT, NOUT, LERR, OK )
+         CALL SSYEV_2STAGE( 'N', 'U', 2, A, 1, X, W, 3, INFO )
+         CALL CHKXER( 'SSYEV_2STAGE ', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_SSYEV_2STAGE( 'N', 'U', 1, A, 1, X, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYEV_2STAGE ', INFOT, NOUT, LERR, OK )
+         CALL SSYEV_2STAGE( 'N', 'U', 1, A, 1, X, W, 1, INFO )
+         CALL CHKXER( 'SSYEV_2STAGE ', INFOT, NOUT, LERR, OK )
          NT = NT + 6
 *
-*        AB_AB_SSYEVX
+*        SSYEVX
 *
-         SRNAMT = 'AB_AB_SSYEVX'
+         SRNAMT = 'SSYEVX'
          INFOT = 1
-         CALL AB_AB_SSYEVX( '/', 'A', 'U', 0, A, 1, 0.0, 0.0, 0, 0, 0.0,
-     $ M, X,
+         CALL SSYEVX( '/', 'A', 'U', 0, A, 1, 0.0, 0.0, 0, 0, 0.0, M, X,
      $                Z, 1, W, 1, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYEVX', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_SSYEVX( 'N', '/', 'U', 0, A, 1, 0.0, 1.0, 1, 0, 0.0,
-     $ M, X,
+         CALL SSYEVX( 'N', '/', 'U', 0, A, 1, 0.0, 1.0, 1, 0, 0.0, M, X,
      $                Z, 1, W, 1, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYEVX', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_SSYEVX( 'N', 'A', '/', 0, A, 1, 0.0, 0.0, 0, 0, 0.0,
-     $ M, X,
+         CALL SSYEVX( 'N', 'A', '/', 0, A, 1, 0.0, 0.0, 0, 0, 0.0, M, X,
      $                Z, 1, W, 1, IW, I3, INFO )
          INFOT = 4
-         CALL AB_AB_SSYEVX( 'N', 'A', 'U', -1, A, 1, 0.0, 0.0, 0, 0, 0.0
-     $, M,
+         CALL SSYEVX( 'N', 'A', 'U', -1, A, 1, 0.0, 0.0, 0, 0, 0.0, M,
      $                X, Z, 1, W, 1, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYEVX', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_AB_SSYEVX( 'N', 'A', 'U', 2, A, 1, 0.0, 0.0, 0, 0, 0.0,
-     $ M, X,
+         CALL SSYEVX( 'N', 'A', 'U', 2, A, 1, 0.0, 0.0, 0, 0, 0.0, M, X,
      $                Z, 1, W, 16, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYEVX', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_SSYEVX( 'N', 'V', 'U', 1, A, 1, 0.0, 0.0, 0, 0, 0.0,
-     $ M, X,
+         CALL SSYEVX( 'N', 'V', 'U', 1, A, 1, 0.0, 0.0, 0, 0, 0.0, M, X,
      $                Z, 1, W, 8, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYEVX', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_AB_SSYEVX( 'N', 'I', 'U', 1, A, 1, 0.0, 0.0, 0, 0, 0.0,
-     $ M, X,
+         CALL SSYEVX( 'N', 'I', 'U', 1, A, 1, 0.0, 0.0, 0, 0, 0.0, M, X,
      $                Z, 1, W, 8, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYEVX', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_AB_SSYEVX( 'N', 'I', 'U', 1, A, 1, 0.0, 0.0, 2, 1, 0.0,
-     $ M, X,
+         CALL SSYEVX( 'N', 'I', 'U', 1, A, 1, 0.0, 0.0, 2, 1, 0.0, M, X,
      $                Z, 1, W, 8, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYEVX', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_AB_SSYEVX( 'N', 'I', 'U', 2, A, 2, 0.0, 0.0, 2, 1, 0.0,
-     $ M, X,
+         CALL SSYEVX( 'N', 'I', 'U', 2, A, 2, 0.0, 0.0, 2, 1, 0.0, M, X,
      $                Z, 1, W, 16, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYEVX', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_AB_SSYEVX( 'N', 'I', 'U', 1, A, 1, 0.0, 0.0, 1, 2, 0.0,
-     $ M, X,
+         CALL SSYEVX( 'N', 'I', 'U', 1, A, 1, 0.0, 0.0, 1, 2, 0.0, M, X,
      $                Z, 1, W, 8, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYEVX', INFOT, NOUT, LERR, OK )
          INFOT = 15
-         CALL AB_AB_SSYEVX( 'V', 'A', 'U', 2, A, 2, 0.0, 0.0, 0, 0, 0.0,
-     $ M, X,
+         CALL SSYEVX( 'V', 'A', 'U', 2, A, 2, 0.0, 0.0, 0, 0, 0.0, M, X,
      $                Z, 1, W, 16, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYEVX', INFOT, NOUT, LERR, OK )
          INFOT = 17
-         CALL AB_AB_SSYEVX( 'V', 'A', 'U', 1, A, 1, 0.0, 0.0, 0, 0, 0.0,
-     $ M, X,
+         CALL SSYEVX( 'V', 'A', 'U', 1, A, 1, 0.0, 0.0, 0, 0, 0.0, M, X,
      $                Z, 1, W, 0, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSYEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYEVX', INFOT, NOUT, LERR, OK )
          NT = NT + 12
 *
-*        AB_AB_AB_SSYEVX_2STAGE
+*        SSYEVX_2STAGE
 *
-         SRNAMT = 'AB_AB_AB_SSYEVX_2STAGE'
+         SRNAMT = 'SSYEVX_2STAGE'
          INFOT = 1
-         CALL AB_AB_AB_SSYEVX_2STAGE( '/', 'A', 'U', 0, A, 1,
+         CALL SSYEVX_2STAGE( '/', 'A', 'U', 0, A, 1,
      $                 0.0E0, 0.0E0, 0, 0, 0.0E0,
      $                M, X, Z, 1, W, 1, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSYEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSYEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 1
-         CALL AB_AB_AB_SSYEVX_2STAGE( 'V', 'A', 'U', 0, A, 1,
+         CALL SSYEVX_2STAGE( 'V', 'A', 'U', 0, A, 1,
      $                 0.0E0, 0.0E0, 0, 0, 0.0E0,
      $                M, X, Z, 1, W, 1, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSYEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSYEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_AB_SSYEVX_2STAGE( 'N', '/', 'U', 0, A, 1,
+         CALL SSYEVX_2STAGE( 'N', '/', 'U', 0, A, 1,
      $                0.0E0, 1.0E0, 1, 0, 0.0E0,
      $                M, X, Z, 1, W, 1, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSYEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSYEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_AB_SSYEVX_2STAGE( 'N', 'A', '/', 0, A, 1,
+         CALL SSYEVX_2STAGE( 'N', 'A', '/', 0, A, 1,
      $                0.0E0, 0.0E0, 0, 0, 0.0E0,
      $                M, X, Z, 1, W, 1, IW, I3, INFO )
          INFOT = 4
-         CALL AB_AB_AB_SSYEVX_2STAGE( 'N', 'A', 'U', -1, A, 1,
+         CALL SSYEVX_2STAGE( 'N', 'A', 'U', -1, A, 1,
      $                0.0E0, 0.0E0, 0, 0, 0.0E0,
      $                M, X, Z, 1, W, 1, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSYEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSYEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_AB_AB_SSYEVX_2STAGE( 'N', 'A', 'U', 2, A, 1,
+         CALL SSYEVX_2STAGE( 'N', 'A', 'U', 2, A, 1,
      $                0.0E0, 0.0E0, 0, 0, 0.0E0,
      $                M, X, Z, 1, W, 16, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSYEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSYEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_AB_SSYEVX_2STAGE( 'N', 'V', 'U', 1, A, 1,
+         CALL SSYEVX_2STAGE( 'N', 'V', 'U', 1, A, 1,
      $                0.0E0, 0.0E0, 0, 0, 0.0E0,
      $                M, X, Z, 1, W, 8, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSYEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSYEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_AB_AB_SSYEVX_2STAGE( 'N', 'I', 'U', 1, A, 1,
+         CALL SSYEVX_2STAGE( 'N', 'I', 'U', 1, A, 1,
      $                0.0E0, 0.0E0, 0, 0, 0.0E0,
      $                M, X, Z, 1, W, 8, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSYEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSYEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_AB_AB_SSYEVX_2STAGE( 'N', 'I', 'U', 1, A, 1,
+         CALL SSYEVX_2STAGE( 'N', 'I', 'U', 1, A, 1,
      $                0.0E0, 0.0E0, 2, 1, 0.0E0,
      $                M, X, Z, 1, W, 8, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSYEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSYEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_AB_AB_SSYEVX_2STAGE( 'N', 'I', 'U', 2, A, 2,
+         CALL SSYEVX_2STAGE( 'N', 'I', 'U', 2, A, 2,
      $                0.0E0, 0.0E0, 2, 1, 0.0E0,
      $                M, X, Z, 1, W, 16, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSYEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSYEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_AB_AB_SSYEVX_2STAGE( 'N', 'I', 'U', 1, A, 1,
+         CALL SSYEVX_2STAGE( 'N', 'I', 'U', 1, A, 1,
      $                0.0E0, 0.0E0, 1, 2, 0.0E0,
      $                M, X, Z, 1, W, 8, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSYEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSYEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 15
-         CALL AB_AB_AB_SSYEVX_2STAGE( 'N', 'A', 'U', 2, A, 2,
+         CALL SSYEVX_2STAGE( 'N', 'A', 'U', 2, A, 2,
      $                0.0E0, 0.0E0, 0, 0, 0.0E0,
      $                M, X, Z, 0, W, 16, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSYEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSYEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 17
-         CALL AB_AB_AB_SSYEVX_2STAGE( 'N', 'A', 'U', 1, A, 1,
+         CALL SSYEVX_2STAGE( 'N', 'A', 'U', 1, A, 1,
      $                0.0E0, 0.0E0, 0, 0, 0.0E0,
      $                M, X, Z, 1, W, 0, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSYEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSYEVX_2STAGE', INFOT, NOUT, LERR, OK )
          NT = NT + 13
 *
-*        AB_AB_SSPEVD
+*        SSPEVD
 *
-         SRNAMT = 'AB_AB_SSPEVD'
+         SRNAMT = 'SSPEVD'
          INFOT = 1
-         CALL AB_AB_SSPEVD( '/', 'U', 0, A, X, Z, 1, W, 1, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSPEVD', INFOT, NOUT, LERR, OK )
+         CALL SSPEVD( '/', 'U', 0, A, X, Z, 1, W, 1, IW, 1, INFO )
+         CALL CHKXER( 'SSPEVD', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_SSPEVD( 'N', '/', 0, A, X, Z, 1, W, 1, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSPEVD', INFOT, NOUT, LERR, OK )
+         CALL SSPEVD( 'N', '/', 0, A, X, Z, 1, W, 1, IW, 1, INFO )
+         CALL CHKXER( 'SSPEVD', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_SSPEVD( 'N', 'U', -1, A, X, Z, 1, W, 1, IW, 1, INFO 
-     $)
-         CALL AB_CHKXER( 'AB_AB_SSPEVD', INFOT, NOUT, LERR, OK )
+         CALL SSPEVD( 'N', 'U', -1, A, X, Z, 1, W, 1, IW, 1, INFO )
+         CALL CHKXER( 'SSPEVD', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_AB_SSPEVD( 'V', 'U', 2, A, X, Z, 1, W, 23, IW, 12, INFO
-     $ )
-         CALL AB_CHKXER( 'AB_AB_SSPEVD', INFOT, NOUT, LERR, OK )
+         CALL SSPEVD( 'V', 'U', 2, A, X, Z, 1, W, 23, IW, 12, INFO )
+         CALL CHKXER( 'SSPEVD', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_AB_SSPEVD( 'N', 'U', 1, A, X, Z, 1, W, 0, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSPEVD', INFOT, NOUT, LERR, OK )
+         CALL SSPEVD( 'N', 'U', 1, A, X, Z, 1, W, 0, IW, 1, INFO )
+         CALL CHKXER( 'SSPEVD', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_AB_SSPEVD( 'N', 'U', 2, A, X, Z, 1, W, 3, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSPEVD', INFOT, NOUT, LERR, OK )
+         CALL SSPEVD( 'N', 'U', 2, A, X, Z, 1, W, 3, IW, 1, INFO )
+         CALL CHKXER( 'SSPEVD', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_AB_SSPEVD( 'V', 'U', 2, A, X, Z, 2, W, 16, IW, 12, INFO
-     $ )
-         CALL AB_CHKXER( 'AB_AB_SSPEVD', INFOT, NOUT, LERR, OK )
+         CALL SSPEVD( 'V', 'U', 2, A, X, Z, 2, W, 16, IW, 12, INFO )
+         CALL CHKXER( 'SSPEVD', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL AB_AB_SSPEVD( 'N', 'U', 1, A, X, Z, 1, W, 1, IW, 0, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSPEVD', INFOT, NOUT, LERR, OK )
+         CALL SSPEVD( 'N', 'U', 1, A, X, Z, 1, W, 1, IW, 0, INFO )
+         CALL CHKXER( 'SSPEVD', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL AB_AB_SSPEVD( 'N', 'U', 2, A, X, Z, 1, W, 4, IW, 0, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSPEVD', INFOT, NOUT, LERR, OK )
+         CALL SSPEVD( 'N', 'U', 2, A, X, Z, 1, W, 4, IW, 0, INFO )
+         CALL CHKXER( 'SSPEVD', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL AB_AB_SSPEVD( 'V', 'U', 2, A, X, Z, 2, W, 23, IW, 11, INFO
-     $ )
-         CALL AB_CHKXER( 'AB_AB_SSPEVD', INFOT, NOUT, LERR, OK )
+         CALL SSPEVD( 'V', 'U', 2, A, X, Z, 2, W, 23, IW, 11, INFO )
+         CALL CHKXER( 'SSPEVD', INFOT, NOUT, LERR, OK )
          NT = NT + 10
 *
-*        AB_SSPEV
+*        SSPEV
 *
-         SRNAMT = 'AB_SSPEV '
+         SRNAMT = 'SSPEV '
          INFOT = 1
-         CALL AB_SSPEV( '/', 'U', 0, A, W, Z, 1, X, INFO )
-         CALL AB_CHKXER( 'AB_SSPEV ', INFOT, NOUT, LERR, OK )
+         CALL SSPEV( '/', 'U', 0, A, W, Z, 1, X, INFO )
+         CALL CHKXER( 'SSPEV ', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_SSPEV( 'N', '/', 0, A, W, Z, 1, X, INFO )
-         CALL AB_CHKXER( 'AB_SSPEV ', INFOT, NOUT, LERR, OK )
+         CALL SSPEV( 'N', '/', 0, A, W, Z, 1, X, INFO )
+         CALL CHKXER( 'SSPEV ', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_SSPEV( 'N', 'U', -1, A, W, Z, 1, X, INFO )
-         CALL AB_CHKXER( 'AB_SSPEV ', INFOT, NOUT, LERR, OK )
+         CALL SSPEV( 'N', 'U', -1, A, W, Z, 1, X, INFO )
+         CALL CHKXER( 'SSPEV ', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_SSPEV( 'V', 'U', 2, A, W, Z, 1, X, INFO )
-         CALL AB_CHKXER( 'AB_SSPEV ', INFOT, NOUT, LERR, OK )
+         CALL SSPEV( 'V', 'U', 2, A, W, Z, 1, X, INFO )
+         CALL CHKXER( 'SSPEV ', INFOT, NOUT, LERR, OK )
          NT = NT + 4
 *
-*        AB_AB_SSPEVX
+*        SSPEVX
 *
-         SRNAMT = 'AB_AB_SSPEVX'
+         SRNAMT = 'SSPEVX'
          INFOT = 1
-         CALL AB_AB_SSPEVX( '/', 'A', 'U', 0, A, 0.0, 0.0, 0, 0, 0.0, M,
-     $ X, Z,
+         CALL SSPEVX( '/', 'A', 'U', 0, A, 0.0, 0.0, 0, 0, 0.0, M, X, Z,
      $                1, W, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSPEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSPEVX', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_SSPEVX( 'N', '/', 'U', 0, A, 0.0, 0.0, 0, 0, 0.0, M,
-     $ X, Z,
+         CALL SSPEVX( 'N', '/', 'U', 0, A, 0.0, 0.0, 0, 0, 0.0, M, X, Z,
      $                1, W, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSPEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSPEVX', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_SSPEVX( 'N', 'A', '/', 0, A, 0.0, 0.0, 0, 0, 0.0, M,
-     $ X, Z,
+         CALL SSPEVX( 'N', 'A', '/', 0, A, 0.0, 0.0, 0, 0, 0.0, M, X, Z,
      $                1, W, IW, I3, INFO )
          INFOT = 4
-         CALL AB_AB_SSPEVX( 'N', 'A', 'U', -1, A, 0.0, 0.0, 0, 0, 0.0, M
-     $, X,
+         CALL SSPEVX( 'N', 'A', 'U', -1, A, 0.0, 0.0, 0, 0, 0.0, M, X,
      $                Z, 1, W, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSPEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSPEVX', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_AB_SSPEVX( 'N', 'V', 'U', 1, A, 0.0, 0.0, 0, 0, 0.0, M,
-     $ X, Z,
+         CALL SSPEVX( 'N', 'V', 'U', 1, A, 0.0, 0.0, 0, 0, 0.0, M, X, Z,
      $                1, W, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSPEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSPEVX', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_SSPEVX( 'N', 'I', 'U', 1, A, 0.0, 0.0, 0, 0, 0.0, M,
-     $ X, Z,
+         CALL SSPEVX( 'N', 'I', 'U', 1, A, 0.0, 0.0, 0, 0, 0.0, M, X, Z,
      $                1, W, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSPEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSPEVX', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_SSPEVX( 'N', 'I', 'U', 1, A, 0.0, 0.0, 2, 1, 0.0, M,
-     $ X, Z,
+         CALL SSPEVX( 'N', 'I', 'U', 1, A, 0.0, 0.0, 2, 1, 0.0, M, X, Z,
      $                1, W, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSPEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSPEVX', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_AB_SSPEVX( 'N', 'I', 'U', 2, A, 0.0, 0.0, 2, 1, 0.0, M,
-     $ X, Z,
+         CALL SSPEVX( 'N', 'I', 'U', 2, A, 0.0, 0.0, 2, 1, 0.0, M, X, Z,
      $                1, W, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSPEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSPEVX', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_AB_SSPEVX( 'N', 'I', 'U', 1, A, 0.0, 0.0, 1, 2, 0.0, M,
-     $ X, Z,
+         CALL SSPEVX( 'N', 'I', 'U', 1, A, 0.0, 0.0, 1, 2, 0.0, M, X, Z,
      $                1, W, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSPEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSPEVX', INFOT, NOUT, LERR, OK )
          INFOT = 14
-         CALL AB_AB_SSPEVX( 'V', 'A', 'U', 2, A, 0.0, 0.0, 0, 0, 0.0, M,
-     $ X, Z,
+         CALL SSPEVX( 'V', 'A', 'U', 2, A, 0.0, 0.0, 0, 0, 0.0, M, X, Z,
      $                1, W, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSPEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSPEVX', INFOT, NOUT, LERR, OK )
          NT = NT + 10
 *
 *     Test error exits for the SB path.
 *
-      ELSE IF( AB_AB_LSAMEN( 2, C2, 'SB' ) ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'SB' ) ) THEN
 *
-*        AB_SSBTRD
+*        SSBTRD
 *
-         SRNAMT = 'AB_SSBTRD'
+         SRNAMT = 'SSBTRD'
          INFOT = 1
-         CALL AB_SSBTRD( '/', 'U', 0, 0, A, 1, D, E, Z, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_SSBTRD', INFOT, NOUT, LERR, OK )
+         CALL SSBTRD( '/', 'U', 0, 0, A, 1, D, E, Z, 1, W, INFO )
+         CALL CHKXER( 'SSBTRD', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_SSBTRD( 'N', '/', 0, 0, A, 1, D, E, Z, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_SSBTRD', INFOT, NOUT, LERR, OK )
+         CALL SSBTRD( 'N', '/', 0, 0, A, 1, D, E, Z, 1, W, INFO )
+         CALL CHKXER( 'SSBTRD', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_SSBTRD( 'N', 'U', -1, 0, A, 1, D, E, Z, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_SSBTRD', INFOT, NOUT, LERR, OK )
+         CALL SSBTRD( 'N', 'U', -1, 0, A, 1, D, E, Z, 1, W, INFO )
+         CALL CHKXER( 'SSBTRD', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_SSBTRD( 'N', 'U', 0, -1, A, 1, D, E, Z, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_SSBTRD', INFOT, NOUT, LERR, OK )
+         CALL SSBTRD( 'N', 'U', 0, -1, A, 1, D, E, Z, 1, W, INFO )
+         CALL CHKXER( 'SSBTRD', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_SSBTRD( 'N', 'U', 1, 1, A, 1, D, E, Z, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_SSBTRD', INFOT, NOUT, LERR, OK )
+         CALL SSBTRD( 'N', 'U', 1, 1, A, 1, D, E, Z, 1, W, INFO )
+         CALL CHKXER( 'SSBTRD', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_SSBTRD( 'V', 'U', 2, 0, A, 1, D, E, Z, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_SSBTRD', INFOT, NOUT, LERR, OK )
+         CALL SSBTRD( 'V', 'U', 2, 0, A, 1, D, E, Z, 1, W, INFO )
+         CALL CHKXER( 'SSBTRD', INFOT, NOUT, LERR, OK )
          NT = NT + 6
 *
-*        AB_SSYTRD_SB2ST
+*        SSYTRD_SB2ST
 *
-         SRNAMT = 'AB_SSYTRD_SB2ST'
+         SRNAMT = 'SSYTRD_SB2ST'
          INFOT = 1
-         CALL AB_SSYTRD_SB2ST( '/', 'N', 'U', 0, 0, A, 1, D, E, 
+         CALL SSYTRD_SB2ST( '/', 'N', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_SSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_SSYTRD_SB2ST( 'N', '/', 'U', 0, 0, A, 1, D, E, 
+         CALL SSYTRD_SB2ST( 'N', '/', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_SSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_SSYTRD_SB2ST( 'N', 'H', 'U', 0, 0, A, 1, D, E, 
+         CALL SSYTRD_SB2ST( 'N', 'H', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_SSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_SSYTRD_SB2ST( 'N', 'N', '/', 0, 0, A, 1, D, E, 
+         CALL SSYTRD_SB2ST( 'N', 'N', '/', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_SSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_SSYTRD_SB2ST( 'N', 'N', 'U', -1, 0, A, 1, D, E, 
+         CALL SSYTRD_SB2ST( 'N', 'N', 'U', -1, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_SSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_SSYTRD_SB2ST( 'N', 'N', 'U', 0, -1, A, 1, D, E, 
+         CALL SSYTRD_SB2ST( 'N', 'N', 'U', 0, -1, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_SSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_SSYTRD_SB2ST( 'N', 'N', 'U', 0, 1, A, 1, D, E, 
+         CALL SSYTRD_SB2ST( 'N', 'N', 'U', 0, 1, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_SSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL AB_SSYTRD_SB2ST( 'N', 'N', 'U', 0, 0, A, 1, D, E, 
+         CALL SSYTRD_SB2ST( 'N', 'N', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 0, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_SSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL AB_SSYTRD_SB2ST( 'N', 'N', 'U', 0, 0, A, 1, D, E, 
+         CALL SSYTRD_SB2ST( 'N', 'N', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 0, INFO )
-         CALL AB_CHKXER( 'AB_SSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSYTRD_SB2ST', INFOT, NOUT, LERR, OK )
          NT = NT + 9
 *
-*        AB_AB_SSBEVD
+*        SSBEVD
 *
-         SRNAMT = 'AB_AB_SSBEVD'
+         SRNAMT = 'SSBEVD'
          INFOT = 1
-         CALL AB_AB_SSBEVD( '/', 'U', 0, 0, A, 1, X, Z, 1, W, 1, IW, 1, 
-     $INFO )
-         CALL AB_CHKXER( 'AB_AB_SSBEVD', INFOT, NOUT, LERR, OK )
+         CALL SSBEVD( '/', 'U', 0, 0, A, 1, X, Z, 1, W, 1, IW, 1, INFO )
+         CALL CHKXER( 'SSBEVD', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_SSBEVD( 'N', '/', 0, 0, A, 1, X, Z, 1, W, 1, IW, 1, 
-     $INFO )
-         CALL AB_CHKXER( 'AB_AB_SSBEVD', INFOT, NOUT, LERR, OK )
+         CALL SSBEVD( 'N', '/', 0, 0, A, 1, X, Z, 1, W, 1, IW, 1, INFO )
+         CALL CHKXER( 'SSBEVD', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_SSBEVD( 'N', 'U', -1, 0, A, 1, X, Z, 1, W, 1, IW, 1,
+         CALL SSBEVD( 'N', 'U', -1, 0, A, 1, X, Z, 1, W, 1, IW, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_SSBEVD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSBEVD', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_SSBEVD( 'N', 'U', 0, -1, A, 1, X, Z, 1, W, 1, IW, 1,
+         CALL SSBEVD( 'N', 'U', 0, -1, A, 1, X, Z, 1, W, 1, IW, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_SSBEVD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSBEVD', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_AB_SSBEVD( 'N', 'U', 2, 1, A, 1, X, Z, 1, W, 4, IW, 1, 
-     $INFO )
-         CALL AB_CHKXER( 'AB_AB_SSBEVD', INFOT, NOUT, LERR, OK )
+         CALL SSBEVD( 'N', 'U', 2, 1, A, 1, X, Z, 1, W, 4, IW, 1, INFO )
+         CALL CHKXER( 'SSBEVD', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_AB_SSBEVD( 'V', 'U', 2, 1, A, 2, X, Z, 1, W, 25, IW, 12
-     $,
+         CALL SSBEVD( 'V', 'U', 2, 1, A, 2, X, Z, 1, W, 25, IW, 12,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_SSBEVD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSBEVD', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL AB_AB_SSBEVD( 'N', 'U', 1, 0, A, 1, X, Z, 1, W, 0, IW, 1, 
-     $INFO )
-         CALL AB_CHKXER( 'AB_AB_SSBEVD', INFOT, NOUT, LERR, OK )
+         CALL SSBEVD( 'N', 'U', 1, 0, A, 1, X, Z, 1, W, 0, IW, 1, INFO )
+         CALL CHKXER( 'SSBEVD', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL AB_AB_SSBEVD( 'N', 'U', 2, 0, A, 1, X, Z, 1, W, 3, IW, 1, 
-     $INFO )
-         CALL AB_CHKXER( 'AB_AB_SSBEVD', INFOT, NOUT, LERR, OK )
+         CALL SSBEVD( 'N', 'U', 2, 0, A, 1, X, Z, 1, W, 3, IW, 1, INFO )
+         CALL CHKXER( 'SSBEVD', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL AB_AB_SSBEVD( 'V', 'U', 2, 0, A, 1, X, Z, 2, W, 18, IW, 12
-     $,
+         CALL SSBEVD( 'V', 'U', 2, 0, A, 1, X, Z, 2, W, 18, IW, 12,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_SSBEVD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSBEVD', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL AB_AB_SSBEVD( 'N', 'U', 1, 0, A, 1, X, Z, 1, W, 1, IW, 0, 
-     $INFO )
-         CALL AB_CHKXER( 'AB_AB_SSBEVD', INFOT, NOUT, LERR, OK )
+         CALL SSBEVD( 'N', 'U', 1, 0, A, 1, X, Z, 1, W, 1, IW, 0, INFO )
+         CALL CHKXER( 'SSBEVD', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL AB_AB_SSBEVD( 'V', 'U', 2, 0, A, 1, X, Z, 2, W, 25, IW, 11
-     $,
+         CALL SSBEVD( 'V', 'U', 2, 0, A, 1, X, Z, 2, W, 25, IW, 11,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_SSBEVD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSBEVD', INFOT, NOUT, LERR, OK )
          NT = NT + 11
 *
-*        AB_AB_AB_SSBEVD_2STAGE
+*        SSBEVD_2STAGE
 *
-         SRNAMT = 'AB_AB_AB_SSBEVD_2STAGE'
+         SRNAMT = 'SSBEVD_2STAGE'
          INFOT = 1
-         CALL AB_AB_AB_SSBEVD_2STAGE( '/', 'U', 0, 0, A, 1, X, Z, 1, W,
+         CALL SSBEVD_2STAGE( '/', 'U', 0, 0, A, 1, X, Z, 1, W,
      $                                        1, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSBEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSBEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 1
-         CALL AB_AB_AB_SSBEVD_2STAGE( 'V', 'U', 0, 0, A, 1, X, Z, 1, W,
+         CALL SSBEVD_2STAGE( 'V', 'U', 0, 0, A, 1, X, Z, 1, W,
      $                                        1, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSBEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSBEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_AB_SSBEVD_2STAGE( 'N', '/', 0, 0, A, 1, X, Z, 1, W,
+         CALL SSBEVD_2STAGE( 'N', '/', 0, 0, A, 1, X, Z, 1, W,
      $                                        1, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSBEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSBEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_AB_SSBEVD_2STAGE( 'N', 'U', -1, 0, A, 1, X, Z, 1, W,
+         CALL SSBEVD_2STAGE( 'N', 'U', -1, 0, A, 1, X, Z, 1, W,
      $                                         1, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSBEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSBEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_AB_SSBEVD_2STAGE( 'N', 'U', 0, -1, A, 1, X, Z, 1, W,
+         CALL SSBEVD_2STAGE( 'N', 'U', 0, -1, A, 1, X, Z, 1, W,
      $                                         1, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSBEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSBEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_AB_AB_SSBEVD_2STAGE( 'N', 'U', 2, 1, A, 1, X, Z, 1, W,
+         CALL SSBEVD_2STAGE( 'N', 'U', 2, 1, A, 1, X, Z, 1, W,
      $                                        4, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSBEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSBEVD_2STAGE', INFOT, NOUT, LERR, OK )
 *         INFOT = 9
-*         CALL AB_AB_AB_SSBEVD_2STAGE( 'V', 'U', 2, 1, A, 2, X, Z, 1, W,
+*         CALL SSBEVD_2STAGE( 'V', 'U', 2, 1, A, 2, X, Z, 1, W,
 *     $                                      25, IW, 12, INFO )
-*         CALL AB_CHKXER( 'AB_AB_AB_SSBEVD_2STAGE', INFOT, NOUT, LERR, OK )
+*         CALL CHKXER( 'SSBEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL AB_AB_AB_SSBEVD_2STAGE( 'N', 'U', 1, 0, A, 1, X, Z, 1, W,
+         CALL SSBEVD_2STAGE( 'N', 'U', 1, 0, A, 1, X, Z, 1, W,
      $                                        0, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSBEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSBEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL AB_AB_AB_SSBEVD_2STAGE( 'N', 'U', 2, 0, A, 1, X, Z, 1, W,
+         CALL SSBEVD_2STAGE( 'N', 'U', 2, 0, A, 1, X, Z, 1, W,
      $                                        3, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSBEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSBEVD_2STAGE', INFOT, NOUT, LERR, OK )
 *         INFOT = 11
-*         CALL AB_AB_AB_SSBEVD_2STAGE( 'V', 'U', 2, 0, A, 1, X, Z, 2, W,
+*         CALL SSBEVD_2STAGE( 'V', 'U', 2, 0, A, 1, X, Z, 2, W,
 *     $                                      18, IW, 12, INFO )
-*         CALL AB_CHKXER( 'AB_AB_AB_SSBEVD_2STAGE', INFOT, NOUT, LERR, OK )
+*         CALL CHKXER( 'SSBEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL AB_AB_AB_SSBEVD_2STAGE( 'N', 'U', 1, 0, A, 1, X, Z, 1, W,
+         CALL SSBEVD_2STAGE( 'N', 'U', 1, 0, A, 1, X, Z, 1, W,
      $                                        1, IW, 0, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSBEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSBEVD_2STAGE', INFOT, NOUT, LERR, OK )
 *         INFOT = 13
-*         CALL AB_AB_AB_SSBEVD_2STAGE( 'V', 'U', 2, 0, A, 1, X, Z, 2, W,
+*         CALL SSBEVD_2STAGE( 'V', 'U', 2, 0, A, 1, X, Z, 2, W,
 *     $                                      25, IW, 11, INFO )
-*         CALL AB_CHKXER( 'AB_AB_AB_SSBEVD_2STAGE', INFOT, NOUT, LERR, OK )
+*         CALL CHKXER( 'SSBEVD_2STAGE', INFOT, NOUT, LERR, OK )
 *         NT = NT + 12
          NT = NT + 9
 *
-*        AB_SSBEV
+*        SSBEV
 *
-         SRNAMT = 'AB_SSBEV '
+         SRNAMT = 'SSBEV '
          INFOT = 1
-         CALL AB_SSBEV( '/', 'U', 0, 0, A, 1, X, Z, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_SSBEV ', INFOT, NOUT, LERR, OK )
+         CALL SSBEV( '/', 'U', 0, 0, A, 1, X, Z, 1, W, INFO )
+         CALL CHKXER( 'SSBEV ', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_SSBEV( 'N', '/', 0, 0, A, 1, X, Z, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_SSBEV ', INFOT, NOUT, LERR, OK )
+         CALL SSBEV( 'N', '/', 0, 0, A, 1, X, Z, 1, W, INFO )
+         CALL CHKXER( 'SSBEV ', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_SSBEV( 'N', 'U', -1, 0, A, 1, X, Z, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_SSBEV ', INFOT, NOUT, LERR, OK )
+         CALL SSBEV( 'N', 'U', -1, 0, A, 1, X, Z, 1, W, INFO )
+         CALL CHKXER( 'SSBEV ', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_SSBEV( 'N', 'U', 0, -1, A, 1, X, Z, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_SSBEV ', INFOT, NOUT, LERR, OK )
+         CALL SSBEV( 'N', 'U', 0, -1, A, 1, X, Z, 1, W, INFO )
+         CALL CHKXER( 'SSBEV ', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_SSBEV( 'N', 'U', 2, 1, A, 1, X, Z, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_SSBEV ', INFOT, NOUT, LERR, OK )
+         CALL SSBEV( 'N', 'U', 2, 1, A, 1, X, Z, 1, W, INFO )
+         CALL CHKXER( 'SSBEV ', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_SSBEV( 'V', 'U', 2, 0, A, 1, X, Z, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_SSBEV ', INFOT, NOUT, LERR, OK )
+         CALL SSBEV( 'V', 'U', 2, 0, A, 1, X, Z, 1, W, INFO )
+         CALL CHKXER( 'SSBEV ', INFOT, NOUT, LERR, OK )
          NT = NT + 6
 *
-*        AB_AB_SSBEV_2STAGE
+*        SSBEV_2STAGE
 *
-         SRNAMT = 'AB_AB_SSBEV_2STAGE '
+         SRNAMT = 'SSBEV_2STAGE '
          INFOT = 1
-         CALL AB_AB_SSBEV_2STAGE( '/', 'U', 0, 0, A, 1, X, Z, 1, W, 0, I
-     $NFO )
-         CALL AB_CHKXER( 'AB_AB_SSBEV_2STAGE ', INFOT, NOUT, LERR, OK )
+         CALL SSBEV_2STAGE( '/', 'U', 0, 0, A, 1, X, Z, 1, W, 0, INFO )
+         CALL CHKXER( 'SSBEV_2STAGE ', INFOT, NOUT, LERR, OK )
          INFOT = 1
-         CALL AB_AB_SSBEV_2STAGE( 'V', 'U', 0, 0, A, 1, X, Z, 1, W, 0, I
-     $NFO )
-         CALL AB_CHKXER( 'AB_AB_SSBEV_2STAGE ', INFOT, NOUT, LERR, OK )
+         CALL SSBEV_2STAGE( 'V', 'U', 0, 0, A, 1, X, Z, 1, W, 0, INFO )
+         CALL CHKXER( 'SSBEV_2STAGE ', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_SSBEV_2STAGE( 'N', '/', 0, 0, A, 1, X, Z, 1, W, 0, I
-     $NFO )
-         CALL AB_CHKXER( 'AB_AB_SSBEV_2STAGE ', INFOT, NOUT, LERR, OK )
+         CALL SSBEV_2STAGE( 'N', '/', 0, 0, A, 1, X, Z, 1, W, 0, INFO )
+         CALL CHKXER( 'SSBEV_2STAGE ', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_SSBEV_2STAGE( 'N', 'U', -1, 0, A, 1, X, Z, 1, W, 0, 
-     $INFO )
-         CALL AB_CHKXER( 'AB_AB_SSBEV_2STAGE ', INFOT, NOUT, LERR, OK )
+         CALL SSBEV_2STAGE( 'N', 'U', -1, 0, A, 1, X, Z, 1, W, 0, INFO )
+         CALL CHKXER( 'SSBEV_2STAGE ', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_SSBEV_2STAGE( 'N', 'U', 0, -1, A, 1, X, Z, 1, W, 0, 
-     $INFO )
-         CALL AB_CHKXER( 'AB_AB_SSBEV_2STAGE ', INFOT, NOUT, LERR, OK )
+         CALL SSBEV_2STAGE( 'N', 'U', 0, -1, A, 1, X, Z, 1, W, 0, INFO )
+         CALL CHKXER( 'SSBEV_2STAGE ', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_AB_SSBEV_2STAGE( 'N', 'U', 2, 1, A, 1, X, Z, 1, W, 0, I
-     $NFO )
-         CALL AB_CHKXER( 'AB_AB_SSBEV_2STAGE ', INFOT, NOUT, LERR, OK )
+         CALL SSBEV_2STAGE( 'N', 'U', 2, 1, A, 1, X, Z, 1, W, 0, INFO )
+         CALL CHKXER( 'SSBEV_2STAGE ', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_AB_SSBEV_2STAGE( 'N', 'U', 2, 0, A, 1, X, Z, 0, W, 0, I
-     $NFO )
-         CALL AB_CHKXER( 'AB_AB_SSBEV_2STAGE ', INFOT, NOUT, LERR, OK )
+         CALL SSBEV_2STAGE( 'N', 'U', 2, 0, A, 1, X, Z, 0, W, 0, INFO )
+         CALL CHKXER( 'SSBEV_2STAGE ', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL AB_AB_SSBEV_2STAGE( 'N', 'U', 0, 0, A, 1, X, Z, 1, W, 0, I
-     $NFO )
-         CALL AB_CHKXER( 'AB_AB_SSBEV_2STAGE ', INFOT, NOUT, LERR, OK )
+         CALL SSBEV_2STAGE( 'N', 'U', 0, 0, A, 1, X, Z, 1, W, 0, INFO )
+         CALL CHKXER( 'SSBEV_2STAGE ', INFOT, NOUT, LERR, OK )
          NT = NT + 8
 *
-*        AB_AB_SSBEVX
+*        SSBEVX
 *
-         SRNAMT = 'AB_AB_SSBEVX'
+         SRNAMT = 'SSBEVX'
          INFOT = 1
-         CALL AB_AB_SSBEVX( '/', 'A', 'U', 0, 0, A, 1, Q, 1, 0.0, 0.0, 0
-     $, 0,
+         CALL SSBEVX( '/', 'A', 'U', 0, 0, A, 1, Q, 1, 0.0, 0.0, 0, 0,
      $                0.0, M, X, Z, 1, W, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSBEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSBEVX', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_SSBEVX( 'N', '/', 'U', 0, 0, A, 1, Q, 1, 0.0, 0.0, 0
-     $, 0,
+         CALL SSBEVX( 'N', '/', 'U', 0, 0, A, 1, Q, 1, 0.0, 0.0, 0, 0,
      $                0.0, M, X, Z, 1, W, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSBEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSBEVX', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_SSBEVX( 'N', 'A', '/', 0, 0, A, 1, Q, 1, 0.0, 0.0, 0
-     $, 0,
+         CALL SSBEVX( 'N', 'A', '/', 0, 0, A, 1, Q, 1, 0.0, 0.0, 0, 0,
      $                0.0, M, X, Z, 1, W, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSBEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSBEVX', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_SSBEVX( 'N', 'A', 'U', -1, 0, A, 1, Q, 1, 0.0, 0.0, 
-     $0, 0,
+         CALL SSBEVX( 'N', 'A', 'U', -1, 0, A, 1, Q, 1, 0.0, 0.0, 0, 0,
      $                0.0, M, X, Z, 1, W, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSBEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSBEVX', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_AB_SSBEVX( 'N', 'A', 'U', 0, -1, A, 1, Q, 1, 0.0, 0.0, 
-     $0, 0,
+         CALL SSBEVX( 'N', 'A', 'U', 0, -1, A, 1, Q, 1, 0.0, 0.0, 0, 0,
      $                0.0, M, X, Z, 1, W, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSBEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSBEVX', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_AB_SSBEVX( 'N', 'A', 'U', 2, 1, A, 1, Q, 1, 0.0, 0.0, 0
-     $, 0,
+         CALL SSBEVX( 'N', 'A', 'U', 2, 1, A, 1, Q, 1, 0.0, 0.0, 0, 0,
      $                0.0, M, X, Z, 1, W, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSBEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSBEVX', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_AB_SSBEVX( 'V', 'A', 'U', 2, 0, A, 1, Q, 1, 0.0, 0.0, 0
-     $, 0,
+         CALL SSBEVX( 'V', 'A', 'U', 2, 0, A, 1, Q, 1, 0.0, 0.0, 0, 0,
      $                0.0, M, X, Z, 2, W, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSBEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSBEVX', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL AB_AB_SSBEVX( 'N', 'V', 'U', 1, 0, A, 1, Q, 1, 0.0, 0.0, 0
-     $, 0,
+         CALL SSBEVX( 'N', 'V', 'U', 1, 0, A, 1, Q, 1, 0.0, 0.0, 0, 0,
      $                0.0, M, X, Z, 1, W, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSBEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSBEVX', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL AB_AB_SSBEVX( 'N', 'I', 'U', 1, 0, A, 1, Q, 1, 0.0, 0.0, 0
-     $, 0,
+         CALL SSBEVX( 'N', 'I', 'U', 1, 0, A, 1, Q, 1, 0.0, 0.0, 0, 0,
      $                0.0, M, X, Z, 1, W, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSBEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSBEVX', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL AB_AB_SSBEVX( 'N', 'I', 'U', 1, 0, A, 1, Q, 1, 0.0, 0.0, 2
-     $, 1,
+         CALL SSBEVX( 'N', 'I', 'U', 1, 0, A, 1, Q, 1, 0.0, 0.0, 2, 1,
      $                0.0, M, X, Z, 1, W, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSBEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSBEVX', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL AB_AB_SSBEVX( 'N', 'I', 'U', 2, 0, A, 1, Q, 1, 0.0, 0.0, 2
-     $, 1,
+         CALL SSBEVX( 'N', 'I', 'U', 2, 0, A, 1, Q, 1, 0.0, 0.0, 2, 1,
      $                0.0, M, X, Z, 1, W, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSBEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSBEVX', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL AB_AB_SSBEVX( 'N', 'I', 'U', 1, 0, A, 1, Q, 1, 0.0, 0.0, 1
-     $, 2,
+         CALL SSBEVX( 'N', 'I', 'U', 1, 0, A, 1, Q, 1, 0.0, 0.0, 1, 2,
      $                0.0, M, X, Z, 1, W, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSBEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSBEVX', INFOT, NOUT, LERR, OK )
          INFOT = 18
-         CALL AB_AB_SSBEVX( 'V', 'A', 'U', 2, 0, A, 1, Q, 2, 0.0, 0.0, 0
-     $, 0,
+         CALL SSBEVX( 'V', 'A', 'U', 2, 0, A, 1, Q, 2, 0.0, 0.0, 0, 0,
      $                0.0, M, X, Z, 1, W, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_SSBEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'SSBEVX', INFOT, NOUT, LERR, OK )
          NT = NT + 13
 *
-*        AB_AB_AB_SSBEVX_2STAGE
+*        SSBEVX_2STAGE
 *
-         SRNAMT = 'AB_AB_AB_SSBEVX_2STAGE'
+         SRNAMT = 'SSBEVX_2STAGE'
          INFOT = 1
-         CALL AB_AB_AB_SSBEVX_2STAGE( '/', 'A', 'U', 0, 0, A, 1, Q, 1, 0
-     $.0E0,
+         CALL SSBEVX_2STAGE( '/', 'A', 'U', 0, 0, A, 1, Q, 1, 0.0E0,
      $          0.0E0, 0, 0, 0.0E0, M, X, Z, 1, W, 0, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSBEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSBEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 1
-         CALL AB_AB_AB_SSBEVX_2STAGE( 'V', 'A', 'U', 0, 0, A, 1, Q, 1, 0
-     $.0E0,
+         CALL SSBEVX_2STAGE( 'V', 'A', 'U', 0, 0, A, 1, Q, 1, 0.0E0,
      $          0.0E0, 0, 0, 0.0E0, M, X, Z, 1, W, 0, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSBEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSBEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_AB_SSBEVX_2STAGE( 'N', '/', 'U', 0, 0, A, 1, Q, 1, 0
-     $.0E0,
+         CALL SSBEVX_2STAGE( 'N', '/', 'U', 0, 0, A, 1, Q, 1, 0.0E0,
      $          0.0E0, 0, 0, 0.0E0, M, X, Z, 1, W, 0, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSBEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSBEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_AB_SSBEVX_2STAGE( 'N', 'A', '/', 0, 0, A, 1, Q, 1, 0
-     $.0E0,
+         CALL SSBEVX_2STAGE( 'N', 'A', '/', 0, 0, A, 1, Q, 1, 0.0E0,
      $          0.0E0, 0, 0, 0.0E0, M, X, Z, 1, W, 0, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSBEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSBEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_AB_SSBEVX_2STAGE( 'N', 'A', 'U', -1, 0, A, 1, Q, 1, 
-     $0.0E0,
+         CALL SSBEVX_2STAGE( 'N', 'A', 'U', -1, 0, A, 1, Q, 1, 0.0E0,
      $           0.0E0, 0, 0, 0.0E0, M, X, Z, 1, W, 0, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSBEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSBEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_AB_AB_SSBEVX_2STAGE( 'N', 'A', 'U', 0, -1, A, 1, Q, 1, 
-     $0.0E0,
+         CALL SSBEVX_2STAGE( 'N', 'A', 'U', 0, -1, A, 1, Q, 1, 0.0E0,
      $           0.0E0, 0, 0, 0.0E0, M, X, Z, 1, W, 0, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSBEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSBEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_AB_AB_SSBEVX_2STAGE( 'N', 'A', 'U', 2, 1, A, 1, Q, 1, 0
-     $.0E0,
+         CALL SSBEVX_2STAGE( 'N', 'A', 'U', 2, 1, A, 1, Q, 1, 0.0E0,
      $          0.0E0, 0, 0, 0.0E0, M, X, Z, 1, W, 0, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSBEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSBEVX_2STAGE', INFOT, NOUT, LERR, OK )
 *         INFOT = 9
-*         CALL AB_AB_AB_SSBEVX_2STAGE( 'V', 'A', 'U', 2, 0, A, 1, Q, 1, 0.0E0,
+*         CALL SSBEVX_2STAGE( 'V', 'A', 'U', 2, 0, A, 1, Q, 1, 0.0E0,
 *     $          0.0E0, 0, 0, 0.0E0, M, X, Z, 2, W, 0, IW, I3, INFO )
-*         CALL AB_CHKXER( 'AB_AB_AB_SSBEVX_2STAGE', INFOT, NOUT, LERR, OK )
+*         CALL CHKXER( 'SSBEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL AB_AB_AB_SSBEVX_2STAGE( 'N', 'V', 'U', 1, 0, A, 1, Q, 1, 0
-     $.0E0,
+         CALL SSBEVX_2STAGE( 'N', 'V', 'U', 1, 0, A, 1, Q, 1, 0.0E0,
      $          0.0E0, 0, 0, 0.0E0, M, X, Z, 1, W, 0, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSBEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSBEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL AB_AB_AB_SSBEVX_2STAGE( 'N', 'I', 'U', 1, 0, A, 1, Q, 1, 0
-     $.0E0,
+         CALL SSBEVX_2STAGE( 'N', 'I', 'U', 1, 0, A, 1, Q, 1, 0.0E0,
      $          0.0E0, 0, 0, 0.0E0, M, X, Z, 1, W, 0, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSBEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSBEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL AB_AB_AB_SSBEVX_2STAGE( 'N', 'I', 'U', 1, 0, A, 1, Q, 1, 0
-     $.0E0,
+         CALL SSBEVX_2STAGE( 'N', 'I', 'U', 1, 0, A, 1, Q, 1, 0.0E0,
      $          0.0E0, 2, 1, 0.0E0, M, X, Z, 1, W, 0, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSBEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSBEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL AB_AB_AB_SSBEVX_2STAGE( 'N', 'I', 'U', 2, 0, A, 1, Q, 1, 0
-     $.0E0,
+         CALL SSBEVX_2STAGE( 'N', 'I', 'U', 2, 0, A, 1, Q, 1, 0.0E0,
      $          0.0E0, 2, 1, 0.0E0, M, X, Z, 1, W, 0, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSBEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSBEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL AB_AB_AB_SSBEVX_2STAGE( 'N', 'I', 'U', 1, 0, A, 1, Q, 1, 0
-     $.0E0,
+         CALL SSBEVX_2STAGE( 'N', 'I', 'U', 1, 0, A, 1, Q, 1, 0.0E0,
      $          0.0E0, 1, 2, 0.0E0, M, X, Z, 1, W, 0, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSBEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSBEVX_2STAGE', INFOT, NOUT, LERR, OK )
 *         INFOT = 18
-*         CALL AB_AB_AB_SSBEVX_2STAGE( 'V', 'A', 'U', 2, 0, A, 1, Q, 2, 0.0E0,
+*         CALL SSBEVX_2STAGE( 'V', 'A', 'U', 2, 0, A, 1, Q, 2, 0.0E0,
 *     $          0.0E0, 0, 0, 0.0E0, M, X, Z, 1, W, 0, IW, I3, INFO )
-*         CALL AB_CHKXER( 'AB_AB_AB_SSBEVX_2STAGE', INFOT, NOUT, LERR, OK )
+*         CALL CHKXER( 'SSBEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 20
-         CALL AB_AB_AB_SSBEVX_2STAGE( 'N', 'A', 'U', 0, 0, A, 1, Q, 1, 0
-     $.0E0,
+         CALL SSBEVX_2STAGE( 'N', 'A', 'U', 0, 0, A, 1, Q, 1, 0.0E0,
      $           0.0E0, 0, 0, 0.0E0, M, X, Z, 1, W, 0, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_SSBEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'SSBEVX_2STAGE', INFOT, NOUT, LERR, OK )
 *         NT = NT + 15
          NT = NT + 13
       END IF
@@ -1607,6 +1416,6 @@
 *
       RETURN
 *
-*     End of AB_SERRST
+*     End of SERRST
 *
       END

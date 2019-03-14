@@ -1,4 +1,4 @@
-*> \brief \b AB_SGBT05
+*> \brief \b SGBT05
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SGBT05( TRANS, N, KL, KU, NRHS, AB, LDAB, B, LDB, X,
+*       SUBROUTINE SGBT05( TRANS, N, KL, KU, NRHS, AB, LDAB, B, LDB, X,
 *                          LDX, XACT, LDXACT, FERR, BERR, RESLTS )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SGBT05 tests the error bounds from iterative refinement for the
+*> SGBT05 tests the error bounds from iterative refinement for the
 *> computed solution to a system of equations op(A)*X = B, where A is a
 *> general band matrix of order n with kl subdiagonals and ku
 *> superdiagonals and op(A) = A or A**T, depending on TRANS.
@@ -173,7 +173,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_SGBT05( TRANS, N, KL, KU, NRHS, AB, LDAB, B, LDB, X,
+      SUBROUTINE SGBT05( TRANS, N, KL, KU, NRHS, AB, LDAB, B, LDB, X,
      $                   LDX, XACT, LDXACT, FERR, BERR, RESLTS )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -203,10 +203,10 @@
       REAL               AXBI, DIFF, EPS, ERRBND, OVFL, TMP, UNFL, XNORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ISAMAX
-      REAL               AB_SLAMCH
-      EXTERNAL           AB_LSAME, AB_ISAMAX, AB_SLAMCH
+      LOGICAL            LSAME
+      INTEGER            ISAMAX
+      REAL               SLAMCH
+      EXTERNAL           LSAME, ISAMAX, SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -221,10 +221,10 @@
          RETURN
       END IF
 *
-      EPS = AB_SLAMCH( 'Epsilon' )
-      UNFL = AB_SLAMCH( 'Safe minimum' )
+      EPS = SLAMCH( 'Epsilon' )
+      UNFL = SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      NOTRAN = AB_LSAME( TRANS, 'N' )
+      NOTRAN = LSAME( TRANS, 'N' )
       NZ = MIN( KL+KU+2, N+1 )
 *
 *     Test 1:  Compute the maximum of
@@ -233,7 +233,7 @@
 *
       ERRBND = ZERO
       DO 30 J = 1, NRHS
-         IMAX = AB_ISAMAX( N, X( 1, J ), 1 )
+         IMAX = ISAMAX( N, X( 1, J ), 1 )
          XNORM = MAX( ABS( X( IMAX, J ) ), UNFL )
          DIFF = ZERO
          DO 10 I = 1, N
@@ -289,6 +289,6 @@
 *
       RETURN
 *
-*     End of AB_SGBT05
+*     End of SGBT05
 *
       END

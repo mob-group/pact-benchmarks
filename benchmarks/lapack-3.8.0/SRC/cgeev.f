@@ -1,4 +1,4 @@
-*> \brief <b> AB_CGEEV computes the eigenvalues and, optionally, the left and/or right eigenvectors for GE matrices</b>
+*> \brief <b> CGEEV computes the eigenvalues and, optionally, the left and/or right eigenvectors for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CGEEV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CGEEV.f">
+*> Download CGEEV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgeev.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CGEEV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgeev.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CGEEV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgeev.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CGEEV( JOBVL, JOBVR, N, A, LDA, W, VL, LDVL, VR, LDVR,
+*       SUBROUTINE CGEEV( JOBVL, JOBVR, N, A, LDA, W, VL, LDVL, VR, LDVR,
 *                         WORK, LWORK, RWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CGEEV computes for an N-by-N complex nonsymmetric matrix A, the
+*> CGEEV computes for an N-by-N complex nonsymmetric matrix A, the
 *> eigenvalues and, optionally, the left and/or right eigenvectors.
 *>
 *> The right eigenvector v(j) of A satisfies
@@ -142,7 +142,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -171,13 +171,12 @@
 *
 *> \date June 2016
 *
-*  @generated from AB_ZGEEV.f, fortran z -> c, Tue Apr 19 01:47:44 2016
+*  @generated from zgeev.f, fortran z -> c, Tue Apr 19 01:47:44 2016
 *
 *> \ingroup complexGEeigen
 *
 *  =====================================================================
-      SUBROUTINE AB_CGEEV( JOBVL, JOBVR, N, A, LDA, W, VL, LDVL, VR, LDV
-     $R,
+      SUBROUTINE CGEEV( JOBVL, JOBVR, N, A, LDA, W, VL, LDVL, VR, LDVR,
      $                  WORK, LWORK, RWORK, INFO )
       implicit none
 *
@@ -207,7 +206,7 @@
       CHARACTER          SIDE
       INTEGER            HSWORK, I, IBAL, IERR, IHI, ILO, IRWORK, ITAU,
      $                   IWRK, K, LWORK_TREVC, MAXWRK, MINWRK, NOUT
-      REAL   ANRM, BIGNUM, AB_CSCALE, EPS, SCL, SMLNUM
+      REAL   ANRM, BIGNUM, CSCALE, EPS, SCL, SMLNUM
       COMPLEX         TMP
 *     ..
 *     .. Local Arrays ..
@@ -215,17 +214,14 @@
       REAL   DUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SLABAD, AB_XERBLA, AB_CAB_SSCAL, AB_CGEBAK, 
-     $AB_CGEBAL, AB_CGEHRD,
-     $                   AB_CHSEQR, AB_CLACPY, AB_CLASCL, AB_CSCAL, AB_A
-     $B_CTREVC3, AB_CUNGHR
+      EXTERNAL           SLABAD, XERBLA, CSSCAL, CGEBAK, CGEBAL, CGEHRD,
+     $                   CHSEQR, CLACPY, CLASCL, CSCAL, CTREVC3, CUNGHR
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ISAMAX, AB_ILAENV
-      REAL   AB_SLAMCH, AB_SCNRM2, AB_CLANGE
-      EXTERNAL           AB_LSAME, AB_ISAMAX, AB_ILAENV, AB_SLAMCH, AB_S
-     $CNRM2, AB_CLANGE
+      LOGICAL            LSAME
+      INTEGER            ISAMAX, ILAENV
+      REAL   SLAMCH, SCNRM2, CLANGE
+      EXTERNAL           LSAME, ISAMAX, ILAENV, SLAMCH, SCNRM2, CLANGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          REAL, CMPLX, CONJG, AIMAG, MAX, SQRT
@@ -236,12 +232,11 @@
 *
       INFO = 0
       LQUERY = ( LWORK.EQ.-1 )
-      WANTVL = AB_LSAME( JOBVL, 'V' )
-      WANTVR = AB_LSAME( JOBVR, 'V' )
-      IF( ( .NOT.WANTVL ) .AND. ( .NOT.AB_LSAME( JOBVL, 'N' ) ) ) THEN
+      WANTVL = LSAME( JOBVL, 'V' )
+      WANTVR = LSAME( JOBVR, 'V' )
+      IF( ( .NOT.WANTVL ) .AND. ( .NOT.LSAME( JOBVL, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( ( .NOT.WANTVR ) .AND. ( .NOT.AB_LSAME( JOBVR, 'N' ) ) 
-     $) THEN
+      ELSE IF( ( .NOT.WANTVR ) .AND. ( .NOT.LSAME( JOBVR, 'N' ) ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -259,8 +254,8 @@
 *       as well as the preferred amount for good performance.
 *       CWorkspace refers to complex workspace, and RWorkspace to real
 *       workspace. NB refers to the optimal block size for the
-*       immediately following subroutine, as returned by AB_ILAENV.
-*       HSWORK refers to the workspace preferred by AB_CHSEQR, as
+*       immediately following subroutine, as returned by ILAENV.
+*       HSWORK refers to the workspace preferred by CHSEQR, as
 *       calculated below. HSWORK is computed assuming ILO=1 and IHI=N,
 *       the worst case.)
 *
@@ -269,32 +264,30 @@
             MINWRK = 1
             MAXWRK = 1
          ELSE
-            MAXWRK = N + N*AB_ILAENV( 1, 'AB_CGEHRD', ' ', N, 1, N, 0 )
+            MAXWRK = N + N*ILAENV( 1, 'CGEHRD', ' ', N, 1, N, 0 )
             MINWRK = 2*N
             IF( WANTVL ) THEN
-               MAXWRK = MAX( MAXWRK, N + ( N - 1 )*AB_ILAENV( 1, 'AB_CUN
-     $GHR',
+               MAXWRK = MAX( MAXWRK, N + ( N - 1 )*ILAENV( 1, 'CUNGHR',
      $                       ' ', N, 1, N, -1 ) )
-               CALL AB_AB_CTREVC3( 'L', 'B', SELECT, N, A, LDA,
+               CALL CTREVC3( 'L', 'B', SELECT, N, A, LDA,
      $                       VL, LDVL, VR, LDVR,
      $                       N, NOUT, WORK, -1, RWORK, -1, IERR )
                LWORK_TREVC = INT( WORK(1) )
                MAXWRK = MAX( MAXWRK, N + LWORK_TREVC )
-               CALL AB_CHSEQR( 'S', 'V', N, 1, N, A, LDA, W, VL, LDVL,
+               CALL CHSEQR( 'S', 'V', N, 1, N, A, LDA, W, VL, LDVL,
      $                      WORK, -1, INFO )
             ELSE IF( WANTVR ) THEN
-               MAXWRK = MAX( MAXWRK, N + ( N - 1 )*AB_ILAENV( 1, 'AB_CUN
-     $GHR',
+               MAXWRK = MAX( MAXWRK, N + ( N - 1 )*ILAENV( 1, 'CUNGHR',
      $                       ' ', N, 1, N, -1 ) )
-               CALL AB_AB_CTREVC3( 'R', 'B', SELECT, N, A, LDA,
+               CALL CTREVC3( 'R', 'B', SELECT, N, A, LDA,
      $                       VL, LDVL, VR, LDVR,
      $                       N, NOUT, WORK, -1, RWORK, -1, IERR )
                LWORK_TREVC = INT( WORK(1) )
                MAXWRK = MAX( MAXWRK, N + LWORK_TREVC )
-               CALL AB_CHSEQR( 'S', 'V', N, 1, N, A, LDA, W, VR, LDVR,
+               CALL CHSEQR( 'S', 'V', N, 1, N, A, LDA, W, VR, LDVR,
      $                      WORK, -1, INFO )
             ELSE
-               CALL AB_CHSEQR( 'E', 'N', N, 1, N, A, LDA, W, VR, LDVR,
+               CALL CHSEQR( 'E', 'N', N, 1, N, A, LDA, W, VR, LDVR,
      $                      WORK, -1, INFO )
             END IF
             HSWORK = INT( WORK(1) )
@@ -308,7 +301,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CGEEV ', -INFO )
+         CALL XERBLA( 'CGEEV ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -321,34 +314,33 @@
 *
 *     Get machine constants
 *
-      EPS = AB_SLAMCH( 'P' )
-      SMLNUM = AB_SLAMCH( 'S' )
+      EPS = SLAMCH( 'P' )
+      SMLNUM = SLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
-      CALL AB_SLABAD( SMLNUM, BIGNUM )
+      CALL SLABAD( SMLNUM, BIGNUM )
       SMLNUM = SQRT( SMLNUM ) / EPS
       BIGNUM = ONE / SMLNUM
 *
 *     Scale A if max element outside range [SMLNUM,BIGNUM]
 *
-      ANRM = AB_CLANGE( 'M', N, N, A, LDA, DUM )
+      ANRM = CLANGE( 'M', N, N, A, LDA, DUM )
       SCALEA = .FALSE.
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
          SCALEA = .TRUE.
-         AB_CSCALE = SMLNUM
+         CSCALE = SMLNUM
       ELSE IF( ANRM.GT.BIGNUM ) THEN
          SCALEA = .TRUE.
-         AB_CSCALE = BIGNUM
+         CSCALE = BIGNUM
       END IF
       IF( SCALEA )
-     $   CALL AB_CLASCL( 'G', 0, 0, ANRM, AB_CSCALE, N, N, A, LDA, IERR 
-     $)
+     $   CALL CLASCL( 'G', 0, 0, ANRM, CSCALE, N, N, A, LDA, IERR )
 *
 *     Balance the matrix
 *     (CWorkspace: none)
 *     (RWorkspace: need N)
 *
       IBAL = 1
-      CALL AB_CGEBAL( 'B', N, A, LDA, ILO, IHI, RWORK( IBAL ), IERR )
+      CALL CGEBAL( 'B', N, A, LDA, ILO, IHI, RWORK( IBAL ), IERR )
 *
 *     Reduce to upper Hessenberg form
 *     (CWorkspace: need 2*N, prefer N+N*NB)
@@ -356,23 +348,22 @@
 *
       ITAU = 1
       IWRK = ITAU + N
-      CALL AB_CGEHRD( N, ILO, IHI, A, LDA, WORK( ITAU ), WORK( IWRK ),
+      CALL CGEHRD( N, ILO, IHI, A, LDA, WORK( ITAU ), WORK( IWRK ),
      $             LWORK-IWRK+1, IERR )
 *
       IF( WANTVL ) THEN
 *
 *        Want left eigenvectors
-*        Copy HousehoAB_LDEr vectors to VL
+*        Copy Householder vectors to VL
 *
          SIDE = 'L'
-         CALL AB_CLACPY( 'L', N, N, A, LDA, VL, LDVL )
+         CALL CLACPY( 'L', N, N, A, LDA, VL, LDVL )
 *
 *        Generate unitary matrix in VL
 *        (CWorkspace: need 2*N-1, prefer N+(N-1)*NB)
 *        (RWorkspace: none)
 *
-         CALL AB_CUNGHR( N, ILO, IHI, VL, LDVL, WORK( ITAU ), WORK( IWRK
-     $ ),
+         CALL CUNGHR( N, ILO, IHI, VL, LDVL, WORK( ITAU ), WORK( IWRK ),
      $                LWORK-IWRK+1, IERR )
 *
 *        Perform QR iteration, accumulating Schur vectors in VL
@@ -380,7 +371,7 @@
 *        (RWorkspace: none)
 *
          IWRK = ITAU
-         CALL AB_CHSEQR( 'S', 'V', N, ILO, IHI, A, LDA, W, VL, LDVL,
+         CALL CHSEQR( 'S', 'V', N, ILO, IHI, A, LDA, W, VL, LDVL,
      $                WORK( IWRK ), LWORK-IWRK+1, INFO )
 *
          IF( WANTVR ) THEN
@@ -389,23 +380,22 @@
 *           Copy Schur vectors to VR
 *
             SIDE = 'B'
-            CALL AB_CLACPY( 'F', N, N, VL, LDVL, VR, LDVR )
+            CALL CLACPY( 'F', N, N, VL, LDVL, VR, LDVR )
          END IF
 *
       ELSE IF( WANTVR ) THEN
 *
 *        Want right eigenvectors
-*        Copy HousehoAB_LDEr vectors to VR
+*        Copy Householder vectors to VR
 *
          SIDE = 'R'
-         CALL AB_CLACPY( 'L', N, N, A, LDA, VR, LDVR )
+         CALL CLACPY( 'L', N, N, A, LDA, VR, LDVR )
 *
 *        Generate unitary matrix in VR
 *        (CWorkspace: need 2*N-1, prefer N+(N-1)*NB)
 *        (RWorkspace: none)
 *
-         CALL AB_CUNGHR( N, ILO, IHI, VR, LDVR, WORK( ITAU ), WORK( IWRK
-     $ ),
+         CALL CUNGHR( N, ILO, IHI, VR, LDVR, WORK( ITAU ), WORK( IWRK ),
      $                LWORK-IWRK+1, IERR )
 *
 *        Perform QR iteration, accumulating Schur vectors in VR
@@ -413,7 +403,7 @@
 *        (RWorkspace: none)
 *
          IWRK = ITAU
-         CALL AB_CHSEQR( 'S', 'V', N, ILO, IHI, A, LDA, W, VR, LDVR,
+         CALL CHSEQR( 'S', 'V', N, ILO, IHI, A, LDA, W, VR, LDVR,
      $                WORK( IWRK ), LWORK-IWRK+1, INFO )
 *
       ELSE
@@ -423,11 +413,11 @@
 *        (RWorkspace: none)
 *
          IWRK = ITAU
-         CALL AB_CHSEQR( 'E', 'N', N, ILO, IHI, A, LDA, W, VR, LDVR,
+         CALL CHSEQR( 'E', 'N', N, ILO, IHI, A, LDA, W, VR, LDVR,
      $                WORK( IWRK ), LWORK-IWRK+1, INFO )
       END IF
 *
-*     If INFO .NE. 0 from AB_CHSEQR, then quit
+*     If INFO .NE. 0 from CHSEQR, then quit
 *
       IF( INFO.NE.0 )
      $   GO TO 50
@@ -439,8 +429,7 @@
 *        (RWorkspace: need 2*N)
 *
          IRWORK = IBAL + N
-         CALL AB_AB_CTREVC3( SIDE, 'B', SELECT, N, A, LDA, VL, LDVL, VR,
-     $ LDVR,
+         CALL CTREVC3( SIDE, 'B', SELECT, N, A, LDA, VL, LDVL, VR, LDVR,
      $                 N, NOUT, WORK( IWRK ), LWORK-IWRK+1,
      $                 RWORK( IRWORK ), N, IERR )
       END IF
@@ -451,22 +440,21 @@
 *        (CWorkspace: none)
 *        (RWorkspace: need N)
 *
-         CALL AB_CGEBAK( 'B', 'L', N, ILO, IHI, RWORK( IBAL ), N, VL, LD
-     $VL,
+         CALL CGEBAK( 'B', 'L', N, ILO, IHI, RWORK( IBAL ), N, VL, LDVL,
      $                IERR )
 *
 *        Normalize left eigenvectors and make largest component real
 *
          DO 20 I = 1, N
-            SCL = ONE / AB_SCNRM2( N, VL( 1, I ), 1 )
-            CALL AB_CAB_SSCAL( N, SCL, VL( 1, I ), 1 )
+            SCL = ONE / SCNRM2( N, VL( 1, I ), 1 )
+            CALL CSSCAL( N, SCL, VL( 1, I ), 1 )
             DO 10 K = 1, N
                RWORK( IRWORK+K-1 ) = REAL( VL( K, I ) )**2 +
      $                               AIMAG( VL( K, I ) )**2
    10       CONTINUE
-            K = AB_ISAMAX( N, RWORK( IRWORK ), 1 )
+            K = ISAMAX( N, RWORK( IRWORK ), 1 )
             TMP = CONJG( VL( K, I ) ) / SQRT( RWORK( IRWORK+K-1 ) )
-            CALL AB_CSCAL( N, TMP, VL( 1, I ), 1 )
+            CALL CSCAL( N, TMP, VL( 1, I ), 1 )
             VL( K, I ) = CMPLX( REAL( VL( K, I ) ), ZERO )
    20    CONTINUE
       END IF
@@ -477,22 +465,21 @@
 *        (CWorkspace: none)
 *        (RWorkspace: need N)
 *
-         CALL AB_CGEBAK( 'B', 'R', N, ILO, IHI, RWORK( IBAL ), N, VR, LD
-     $VR,
+         CALL CGEBAK( 'B', 'R', N, ILO, IHI, RWORK( IBAL ), N, VR, LDVR,
      $                IERR )
 *
 *        Normalize right eigenvectors and make largest component real
 *
          DO 40 I = 1, N
-            SCL = ONE / AB_SCNRM2( N, VR( 1, I ), 1 )
-            CALL AB_CAB_SSCAL( N, SCL, VR( 1, I ), 1 )
+            SCL = ONE / SCNRM2( N, VR( 1, I ), 1 )
+            CALL CSSCAL( N, SCL, VR( 1, I ), 1 )
             DO 30 K = 1, N
                RWORK( IRWORK+K-1 ) = REAL( VR( K, I ) )**2 +
      $                               AIMAG( VR( K, I ) )**2
    30       CONTINUE
-            K = AB_ISAMAX( N, RWORK( IRWORK ), 1 )
+            K = ISAMAX( N, RWORK( IRWORK ), 1 )
             TMP = CONJG( VR( K, I ) ) / SQRT( RWORK( IRWORK+K-1 ) )
-            CALL AB_CSCAL( N, TMP, VR( 1, I ), 1 )
+            CALL CSCAL( N, TMP, VR( 1, I ), 1 )
             VR( K, I ) = CMPLX( REAL( VR( K, I ) ), ZERO )
    40    CONTINUE
       END IF
@@ -501,18 +488,16 @@
 *
    50 CONTINUE
       IF( SCALEA ) THEN
-         CALL AB_CLASCL( 'G', 0, 0, AB_CSCALE, ANRM, N-INFO, 1, W( INFO+
-     $1 ),
+         CALL CLASCL( 'G', 0, 0, CSCALE, ANRM, N-INFO, 1, W( INFO+1 ),
      $                MAX( N-INFO, 1 ), IERR )
          IF( INFO.GT.0 ) THEN
-            CALL AB_CLASCL( 'G', 0, 0, AB_CSCALE, ANRM, ILO-1, 1, W, N, 
-     $IERR )
+            CALL CLASCL( 'G', 0, 0, CSCALE, ANRM, ILO-1, 1, W, N, IERR )
          END IF
       END IF
 *
       WORK( 1 ) = MAXWRK
       RETURN
 *
-*     End of AB_CGEEV
+*     End of CGEEV
 *
       END

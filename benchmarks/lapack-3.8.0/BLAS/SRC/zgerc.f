@@ -1,4 +1,4 @@
-*> \brief \b AB_ZGERC
+*> \brief \b ZGERC
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZGERC(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)
+*       SUBROUTINE ZGERC(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)
 *
 *       .. Scalar Arguments ..
 *       COMPLEX*16 ALPHA
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZGERC  performs the rank 1 operation
+*> ZGERC  performs the rank 1 operation
 *>
 *>    A := alpha*x*y**H + A,
 *>
@@ -128,7 +128,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_ZGERC(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)
+      SUBROUTINE ZGERC(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)
 *
 *  -- Reference BLAS level2 routine (version 3.7.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -154,7 +154,7 @@
       INTEGER I,INFO,IX,J,JY,KX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL AB_XERBLA
+      EXTERNAL XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC DCONJG,MAX
@@ -175,7 +175,7 @@
           INFO = 9
       END IF
       IF (INFO.NE.0) THEN
-          CALL AB_XERBLA('AB_ZGERC ',INFO)
+          CALL XERBLA('ZGERC ',INFO)
           RETURN
       END IF
 *
@@ -222,6 +222,6 @@
 *
       RETURN
 *
-*     End of AB_ZGERC .
+*     End of ZGERC .
 *
       END

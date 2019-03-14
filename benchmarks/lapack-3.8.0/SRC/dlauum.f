@@ -1,4 +1,4 @@
-*> \brief \b AB_DLAUUM computes the product UUH or LHL, where U and L are upper or lower triangular matrices (blocked algorithm).
+*> \brief \b DLAUUM computes the product UUH or LHL, where U and L are upper or lower triangular matrices (blocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLAUUM + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLAUUM.f">
+*> Download DLAUUM + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlauum.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLAUUM.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlauum.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLAUUM.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlauum.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLAUUM( UPLO, N, A, LDA, INFO )
+*       SUBROUTINE DLAUUM( UPLO, N, A, LDA, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DLAUUM computes the product U * U**T or L**T * L, where the triangular
+*> DLAUUM computes the product U * U**T or L**T * L, where the triangular
 *> factor U or L is stored in the upper or lower triangular part of
 *> the array A.
 *>
@@ -100,7 +100,7 @@
 *> \ingroup doubleOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_DLAUUM( UPLO, N, A, LDA, INFO )
+      SUBROUTINE DLAUUM( UPLO, N, A, LDA, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -126,13 +126,12 @@
       INTEGER            I, IB, NB
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_LSAME, AB_ILAENV
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DGEMM, AB_DLAUU2, AB_AB_DSYRK, AB_DTRMM, AB_
-     $XERBLA
+      EXTERNAL           DGEMM, DLAUU2, DSYRK, DTRMM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -142,8 +141,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -151,7 +150,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DLAUUM', -INFO )
+         CALL XERBLA( 'DLAUUM', -INFO )
          RETURN
       END IF
 *
@@ -162,13 +161,13 @@
 *
 *     Determine the block size for this environment.
 *
-      NB = AB_ILAENV( 1, 'AB_DLAUUM', UPLO, N, -1, -1, -1 )
+      NB = ILAENV( 1, 'DLAUUM', UPLO, N, -1, -1, -1 )
 *
       IF( NB.LE.1 .OR. NB.GE.N ) THEN
 *
 *        Use unblocked code
 *
-         CALL AB_DLAUU2( UPLO, N, A, LDA, INFO )
+         CALL DLAUU2( UPLO, N, A, LDA, INFO )
       ELSE
 *
 *        Use blocked code
@@ -179,16 +178,15 @@
 *
             DO 10 I = 1, N, NB
                IB = MIN( NB, N-I+1 )
-               CALL AB_DTRMM( 'Right', 'Upper', 'Transpose', 'Non-unit',
+               CALL DTRMM( 'Right', 'Upper', 'Transpose', 'Non-unit',
      $                     I-1, IB, ONE, A( I, I ), LDA, A( 1, I ),
      $                     LDA )
-               CALL AB_DLAUU2( 'Upper', IB, A( I, I ), LDA, INFO )
+               CALL DLAUU2( 'Upper', IB, A( I, I ), LDA, INFO )
                IF( I+IB.LE.N ) THEN
-                  CALL AB_DGEMM( 'No transpose', 'Transpose', I-1, IB,
+                  CALL DGEMM( 'No transpose', 'Transpose', I-1, IB,
      $                        N-I-IB+1, ONE, A( 1, I+IB ), LDA,
      $                        A( I, I+IB ), LDA, ONE, A( 1, I ), LDA )
-                  CALL AB_AB_DSYRK( 'Upper', 'No transpose', IB, N-I-IB+
-     $1,
+                  CALL DSYRK( 'Upper', 'No transpose', IB, N-I-IB+1,
      $                        ONE, A( I, I+IB ), LDA, ONE, A( I, I ),
      $                        LDA )
                END IF
@@ -199,16 +197,14 @@
 *
             DO 20 I = 1, N, NB
                IB = MIN( NB, N-I+1 )
-               CALL AB_DTRMM( 'Left', 'Lower', 'Transpose', 'Non-unit', 
-     $IB,
+               CALL DTRMM( 'Left', 'Lower', 'Transpose', 'Non-unit', IB,
      $                     I-1, ONE, A( I, I ), LDA, A( I, 1 ), LDA )
-               CALL AB_DLAUU2( 'Lower', IB, A( I, I ), LDA, INFO )
+               CALL DLAUU2( 'Lower', IB, A( I, I ), LDA, INFO )
                IF( I+IB.LE.N ) THEN
-                  CALL AB_DGEMM( 'Transpose', 'No transpose', IB, I-1,
+                  CALL DGEMM( 'Transpose', 'No transpose', IB, I-1,
      $                        N-I-IB+1, ONE, A( I+IB, I ), LDA,
      $                        A( I+IB, 1 ), LDA, ONE, A( I, 1 ), LDA )
-                  CALL AB_AB_DSYRK( 'Lower', 'Transpose', IB, N-I-IB+1, 
-     $ONE,
+                  CALL DSYRK( 'Lower', 'Transpose', IB, N-I-IB+1, ONE,
      $                        A( I+IB, I ), LDA, ONE, A( I, I ), LDA )
                END IF
    20       CONTINUE
@@ -217,6 +213,6 @@
 *
       RETURN
 *
-*     End of AB_DLAUUM
+*     End of DLAUUM
 *
       END

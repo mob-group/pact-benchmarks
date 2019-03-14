@@ -1,4 +1,4 @@
-*> \brief \b AB_SPOT01
+*> \brief \b SPOT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SPOT01( UPLO, N, A, LDA, AFAC, LDAFAC, RWORK, RESID )
+*       SUBROUTINE SPOT01( UPLO, N, A, LDA, AFAC, LDAFAC, RWORK, RESID )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SPOT01 reconstructs a symmetric positive definite matrix  A  from
+*> SPOT01 reconstructs a symmetric positive definite matrix  A  from
 *> its L*L' or U'*U factorization and computes the residual
 *>    norm( L*L' - A ) / ( N * norm(A) * EPS ) or
 *>    norm( U'*U - A ) / ( N * norm(A) * EPS ),
@@ -102,8 +102,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_SPOT01( UPLO, N, A, LDA, AFAC, LDAFAC, RWORK, RESID 
-     $)
+      SUBROUTINE SPOT01( UPLO, N, A, LDA, AFAC, LDAFAC, RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -130,12 +129,12 @@
       REAL               ANORM, EPS, T
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_SDOT, AB_SLAMCH, AB_SLANSY
-      EXTERNAL           AB_LSAME, AB_SDOT, AB_SLAMCH, AB_SLANSY
+      LOGICAL            LSAME
+      REAL               SDOT, SLAMCH, SLANSY
+      EXTERNAL           LSAME, SDOT, SLAMCH, SLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SSCAL, AB_SSYR, AB_STRMV
+      EXTERNAL           SSCAL, SSYR, STRMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          REAL
@@ -151,8 +150,8 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = AB_SLAMCH( 'Epsilon' )
-      ANORM = AB_SLANSY( '1', UPLO, N, A, LDA, RWORK )
+      EPS = SLAMCH( 'Epsilon' )
+      ANORM = SLANSY( '1', UPLO, N, A, LDA, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -160,17 +159,17 @@
 *
 *     Compute the product U'*U, overwriting U.
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
          DO 10 K = N, 1, -1
 *
 *           Compute the (K,K) element of the result.
 *
-            T = AB_SDOT( K, AFAC( 1, K ), 1, AFAC( 1, K ), 1 )
+            T = SDOT( K, AFAC( 1, K ), 1, AFAC( 1, K ), 1 )
             AFAC( K, K ) = T
 *
 *           Compute the rest of column K.
 *
-            CALL AB_STRMV( 'Upper', 'Transpose', 'Non-unit', K-1, AFAC,
+            CALL STRMV( 'Upper', 'Transpose', 'Non-unit', K-1, AFAC,
      $                  LDAFAC, AFAC( 1, K ), 1 )
 *
    10    CONTINUE
@@ -184,20 +183,20 @@
 *           columns K+1 through N.
 *
             IF( K+1.LE.N )
-     $         CALL AB_SSYR( 'Lower', N-K, ONE, AFAC( K+1, K ), 1,
+     $         CALL SSYR( 'Lower', N-K, ONE, AFAC( K+1, K ), 1,
      $                    AFAC( K+1, K+1 ), LDAFAC )
 *
 *           Scale column K by the diagonal element.
 *
             T = AFAC( K, K )
-            CALL AB_SSCAL( N-K+1, T, AFAC( K, K ), 1 )
+            CALL SSCAL( N-K+1, T, AFAC( K, K ), 1 )
 *
    20    CONTINUE
       END IF
 *
 *     Compute the difference  L*L' - A (or U'*U - A).
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
          DO 40 J = 1, N
             DO 30 I = 1, J
                AFAC( I, J ) = AFAC( I, J ) - A( I, J )
@@ -213,12 +212,12 @@
 *
 *     Compute norm( L*U - A ) / ( N * norm(A) * EPS )
 *
-      RESID = AB_SLANSY( '1', UPLO, N, AFAC, LDAFAC, RWORK )
+      RESID = SLANSY( '1', UPLO, N, AFAC, LDAFAC, RWORK )
 *
       RESID = ( ( RESID / REAL( N ) ) / ANORM ) / EPS
 *
       RETURN
 *
-*     End of AB_SPOT01
+*     End of SPOT01
 *
       END

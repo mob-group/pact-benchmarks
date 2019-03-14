@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_AB_DSYTRS_AA_2STAGE
+*> \brief \b DSYTRS_AA_2STAGE
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_AB_DSYTRS_AA_2STAGE + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_AB_DSYTRS_AA_2STAGE.f">
+*> Download DSYTRS_AA_2STAGE + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsytrs_aa_2stage.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_AB_DSYTRS_AA_2STAGE.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsytrs_aa_2stage.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_AB_DSYTRS_AA_2STAGE.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsytrs_aa_2stage.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*      SUBROUTINE AB_AB_AB_DSYTRS_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB, IPIV, 
+*      SUBROUTINE DSYTRS_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB, IPIV, 
 *                                   IPIV2, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,9 +35,9 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_AB_DSYTRS_AA_2STAGE solves a system of linear equations A*X = B with a real
+*> DSYTRS_AA_2STAGE solves a system of linear equations A*X = B with a real
 *> symmetric matrix A using the factorization A = U*T*U**T or
-*> A = L*T*L**T computed by AB_AB_AB_DSYTRF_AA_2STAGE.
+*> A = L*T*L**T computed by DSYTRF_AA_2STAGE.
 *> \endverbatim
 *
 *  Arguments:
@@ -68,7 +68,7 @@
 *> \param[in] A
 *> \verbatim
 *>          A is DOUBLE PRECISION array, dimension (LDA,N)
-*>          Details of factors computed by AB_AB_AB_DSYTRF_AA_2STAGE.
+*>          Details of factors computed by DSYTRF_AA_2STAGE.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -80,7 +80,7 @@
 *> \param[out] TB
 *> \verbatim
 *>          TB is DOUBLE PRECISION array, dimension (LTB)
-*>          Details of factors computed by AB_AB_AB_DSYTRF_AA_2STAGE.
+*>          Details of factors computed by DSYTRF_AA_2STAGE.
 *> \endverbatim
 *>
 *> \param[in] LTB
@@ -92,14 +92,14 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges as computed by
-*>          AB_AB_AB_DSYTRF_AA_2STAGE.
+*>          DSYTRF_AA_2STAGE.
 *> \endverbatim
 *>
 *> \param[in] IPIV2
 *> \verbatim
 *>          IPIV2 is INTEGER array, dimension (N)
 *>          Details of the interchanges as computed by
-*>          AB_AB_AB_DSYTRF_AA_2STAGE.
+*>          DSYTRF_AA_2STAGE.
 *> \endverbatim
 *>
 *> \param[in,out] B
@@ -135,8 +135,7 @@
 *> \ingroup doubleSYcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_AB_DSYTRS_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, L
-     $TB,
+      SUBROUTINE DSYTRS_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB,
      $                             IPIV, IPIV2, B, LDB, INFO )
 *
 *  -- LAPACK computational routine (version 3.8.0) --
@@ -165,11 +164,11 @@
       LOGICAL            UPPER
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DGBTRS, AB_DLASWP, AB_DTRSM, AB_XERBLA
+      EXTERNAL           DGBTRS, DLASWP, DTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -177,8 +176,8 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -192,7 +191,7 @@
          INFO = -11
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_AB_DSYTRS_AA_2STAGE', -INFO )
+         CALL XERBLA( 'DSYTRS_AA_2STAGE', -INFO )
          RETURN
       END IF
 *
@@ -214,31 +213,29 @@
 *
 *           Pivot, P**T * B
 *
-            CALL AB_DLASWP( NRHS, B, LDB, NB+1, N, IPIV, 1 )
+            CALL DLASWP( NRHS, B, LDB, NB+1, N, IPIV, 1 )
 *
 *           Compute (U**T \P**T * B) -> B    [ (U**T \P**T * B) ]
 *
-            CALL AB_DTRSM( 'L', 'U', 'T', 'U', N-NB, NRHS, ONE, A(1, NB+
-     $1),
+            CALL DTRSM( 'L', 'U', 'T', 'U', N-NB, NRHS, ONE, A(1, NB+1),
      $                 LDA, B(NB+1, 1), LDB)
 *
          END IF
 *
 *        Compute T \ B -> B   [ T \ (U**T \P**T * B) ]
 *
-         CALL AB_DGBTRS( 'N', N, NB, NB, NRHS, TB, LDTB, IPIV2, B, LDB,
+         CALL DGBTRS( 'N', N, NB, NB, NRHS, TB, LDTB, IPIV2, B, LDB,
      $               INFO)
          IF( N.GT.NB ) THEN
 *
 *           Compute (U \ B) -> B   [ U \ (T \ (U**T \P**T * B) ) ]
 *
-            CALL AB_DTRSM( 'L', 'U', 'N', 'U', N-NB, NRHS, ONE, A(1, NB+
-     $1),
+            CALL DTRSM( 'L', 'U', 'N', 'U', N-NB, NRHS, ONE, A(1, NB+1),
      $                  LDA, B(NB+1, 1), LDB)
 *
 *           Pivot, P * B  [ P * (U \ (T \ (U**T \P**T * B) )) ]
 *
-            CALL AB_DLASWP( NRHS, B, LDB, NB+1, N, IPIV, -1 )
+            CALL DLASWP( NRHS, B, LDB, NB+1, N, IPIV, -1 )
 *
          END IF
 *
@@ -250,37 +247,35 @@
 *
 *           Pivot, P**T * B
 *
-            CALL AB_DLASWP( NRHS, B, LDB, NB+1, N, IPIV, 1 )
+            CALL DLASWP( NRHS, B, LDB, NB+1, N, IPIV, 1 )
 *
 *           Compute (L \P**T * B) -> B    [ (L \P**T * B) ]
 *
-            CALL AB_DTRSM( 'L', 'L', 'N', 'U', N-NB, NRHS, ONE, A(NB+1, 
-     $1),
+            CALL DTRSM( 'L', 'L', 'N', 'U', N-NB, NRHS, ONE, A(NB+1, 1),
      $                 LDA, B(NB+1, 1), LDB)
 *
          END IF
 *
 *        Compute T \ B -> B   [ T \ (L \P**T * B) ]
 *
-         CALL AB_DGBTRS( 'N', N, NB, NB, NRHS, TB, LDTB, IPIV2, B, LDB,
+         CALL DGBTRS( 'N', N, NB, NB, NRHS, TB, LDTB, IPIV2, B, LDB,
      $               INFO)
          IF( N.GT.NB ) THEN
 *
 *           Compute (L**T \ B) -> B   [ L**T \ (T \ (L \P**T * B) ) ]
 *
-            CALL AB_DTRSM( 'L', 'L', 'T', 'U', N-NB, NRHS, ONE, A(NB+1, 
-     $1),
+            CALL DTRSM( 'L', 'L', 'T', 'U', N-NB, NRHS, ONE, A(NB+1, 1),
      $                  LDA, B(NB+1, 1), LDB)
 *
 *           Pivot, P * B  [ P * (L**T \ (T \ (L \P**T * B) )) ]
 *
-            CALL AB_DLASWP( NRHS, B, LDB, NB+1, N, IPIV, -1 )
+            CALL DLASWP( NRHS, B, LDB, NB+1, N, IPIV, -1 )
 *
          END IF
       END IF
 *
       RETURN
 *
-*     End of AB_AB_AB_DSYTRS_AA_2STAGE
+*     End of DSYTRS_AA_2STAGE
 *
       END

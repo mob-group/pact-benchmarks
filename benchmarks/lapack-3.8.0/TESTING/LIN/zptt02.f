@@ -1,4 +1,4 @@
-*> \brief \b AB_ZPTT02
+*> \brief \b ZPTT02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZPTT02( UPLO, N, NRHS, D, E, X, LDX, B, LDB, RESID )
+*       SUBROUTINE ZPTT02( UPLO, N, NRHS, D, E, X, LDX, B, LDB, RESID )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZPTT02 computes the residual for the solution to a symmetric
+*> ZPTT02 computes the residual for the solution to a symmetric
 *> tridiagonal system of equations:
 *>    RESID = norm(B - A*X) / (norm(A) * norm(X) * EPS),
 *> where EPS is the machine epsilon.
@@ -113,7 +113,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZPTT02( UPLO, N, NRHS, D, E, X, LDX, B, LDB, RESID )
+      SUBROUTINE ZPTT02( UPLO, N, NRHS, D, E, X, LDX, B, LDB, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -141,14 +141,14 @@
       DOUBLE PRECISION   ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH, AB_DZASUM, AB_ZLANHT
-      EXTERNAL           AB_DLAMCH, AB_DZASUM, AB_ZLANHT
+      DOUBLE PRECISION   DLAMCH, DZASUM, ZLANHT
+      EXTERNAL           DLAMCH, DZASUM, ZLANHT
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZLAPTM
+      EXTERNAL           ZLAPTM
 *     ..
 *     .. Executable Statements ..
 *
@@ -161,11 +161,11 @@
 *
 *     Compute the 1-norm of the tridiagonal matrix A.
 *
-      ANORM = AB_ZLANHT( '1', N, D, E )
+      ANORM = ZLANHT( '1', N, D, E )
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
+      EPS = DLAMCH( 'Epsilon' )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -173,15 +173,15 @@
 *
 *     Compute B - A*X.
 *
-      CALL AB_ZLAPTM( UPLO, N, NRHS, -ONE, D, E, X, LDX, ONE, B, LDB )
+      CALL ZLAPTM( UPLO, N, NRHS, -ONE, D, E, X, LDX, ONE, B, LDB )
 *
 *     Compute the maximum over the number of right hand sides of
 *        norm(B - A*X) / ( norm(A) * norm(X) * EPS ).
 *
       RESID = ZERO
       DO 10 J = 1, NRHS
-         BNORM = AB_DZASUM( N, B( 1, J ), 1 )
-         XNORM = AB_DZASUM( N, X( 1, J ), 1 )
+         BNORM = DZASUM( N, B( 1, J ), 1 )
+         XNORM = DZASUM( N, X( 1, J ), 1 )
          IF( XNORM.LE.ZERO ) THEN
             RESID = ONE / EPS
          ELSE
@@ -191,6 +191,6 @@
 *
       RETURN
 *
-*     End of AB_ZPTT02
+*     End of ZPTT02
 *
       END

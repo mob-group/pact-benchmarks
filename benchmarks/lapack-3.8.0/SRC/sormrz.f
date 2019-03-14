@@ -1,4 +1,4 @@
-*> \brief \b AB_SORMRZ
+*> \brief \b SORMRZ
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SORMRZ + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SORMRZ.f">
+*> Download SORMRZ + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sormrz.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SORMRZ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sormrz.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SORMRZ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sormrz.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SORMRZ( SIDE, TRANS, M, N, K, L, A, LDA, TAU, C, LDC,
+*       SUBROUTINE SORMRZ( SIDE, TRANS, M, N, K, L, A, LDA, TAU, C, LDC,
 *                          WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SORMRZ overwrites the general real M-by-N matrix C with
+*> SORMRZ overwrites the general real M-by-N matrix C with
 *>
 *>                 SIDE = 'L'     SIDE = 'R'
 *> TRANS = 'N':      Q * C          C * Q
@@ -46,7 +46,7 @@
 *>
 *>       Q = H(1) H(2) . . . H(k)
 *>
-*> as returned by AB_STZRZF. Q is of order M if SIDE = 'L' and of order N
+*> as returned by STZRZF. Q is of order M if SIDE = 'L' and of order N
 *> if SIDE = 'R'.
 *> \endverbatim
 *
@@ -92,7 +92,7 @@
 *> \verbatim
 *>          L is INTEGER
 *>          The number of columns of the matrix A containing
-*>          the meaningful part of the HousehoAB_LDEr reflectors.
+*>          the meaningful part of the Householder reflectors.
 *>          If SIDE = 'L', M >= L >= 0, if SIDE = 'R', N >= L >= 0.
 *> \endverbatim
 *>
@@ -103,7 +103,7 @@
 *>                               (LDA,N) if SIDE = 'R'
 *>          The i-th row must contain the vector which defines the
 *>          elementary reflector H(i), for i = 1,2,...,k, as returned by
-*>          AB_STZRZF in the last k rows of its array argument A.
+*>          STZRZF in the last k rows of its array argument A.
 *>          A is modified by the routine but restored on exit.
 *> \endverbatim
 *>
@@ -117,7 +117,7 @@
 *> \verbatim
 *>          TAU is REAL array, dimension (K)
 *>          TAU(i) must contain the scalar factor of the elementary
-*>          reflector H(i), as returned by AB_STZRZF.
+*>          reflector H(i), as returned by STZRZF.
 *> \endverbatim
 *>
 *> \param[in,out] C
@@ -150,7 +150,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -184,8 +184,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_SORMRZ( SIDE, TRANS, M, N, K, L, A, LDA, TAU, C, LDC
-     $,
+      SUBROUTINE SORMRZ( SIDE, TRANS, M, N, K, L, A, LDA, TAU, C, LDC,
      $                   WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -215,13 +214,12 @@
      $                   LDWORK, LWKOPT, MI, NB, NBMIN, NI, NQ, NW
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_LSAME, AB_ILAENV
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_AB_SLARZB, AB_AB_SLARZT, AB_SORMR3, AB_XERBL
-     $A
+      EXTERNAL           SLARZB, SLARZT, SORMR3, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -231,8 +229,8 @@
 *     Test the input arguments
 *
       INFO = 0
-      LEFT = AB_LSAME( SIDE, 'L' )
-      NOTRAN = AB_LSAME( TRANS, 'N' )
+      LEFT = LSAME( SIDE, 'L' )
+      NOTRAN = LSAME( TRANS, 'N' )
       LQUERY = ( LWORK.EQ.-1 )
 *
 *     NQ is the order of Q and NW is the minimum dimension of WORK
@@ -244,9 +242,9 @@
          NQ = N
          NW = MAX( 1, M )
       END IF
-      IF( .NOT.LEFT .AND. .NOT.AB_LSAME( SIDE, 'R' ) ) THEN
+      IF( .NOT.LEFT .AND. .NOT.LSAME( SIDE, 'R' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) ) THEN
+      ELSE IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) ) THEN
          INFO = -2
       ELSE IF( M.LT.0 ) THEN
          INFO = -3
@@ -272,8 +270,7 @@
          IF( M.EQ.0 .OR. N.EQ.0 ) THEN
             LWKOPT = 1
          ELSE
-            NB = MIN( NBMAX, AB_ILAENV( 1, 'AB_SORMRQ', SIDE // TRANS, M
-     $, N,
+            NB = MIN( NBMAX, ILAENV( 1, 'SORMRQ', SIDE // TRANS, M, N,
      $                               K, -1 ) )
             LWKOPT = NW*NB + TSIZE
          END IF
@@ -281,7 +278,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SORMRZ', -INFO )
+         CALL XERBLA( 'SORMRZ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -298,8 +295,7 @@
       IF( NB.GT.1 .AND. NB.LT.K ) THEN
          IF( LWORK.LT.NW*NB+TSIZE ) THEN
             NB = (LWORK-TSIZE) / LDWORK
-            NBMIN = MAX( 2, AB_ILAENV( 2, 'AB_SORMRQ', SIDE // TRANS, M,
-     $ N, K,
+            NBMIN = MAX( 2, ILAENV( 2, 'SORMRQ', SIDE // TRANS, M, N, K,
      $              -1 ) )
          END IF
       END IF
@@ -308,7 +304,7 @@
 *
 *        Use unblocked code
 *
-         CALL AB_SORMR3( SIDE, TRANS, M, N, K, L, A, LDA, TAU, C, LDC,
+         CALL SORMR3( SIDE, TRANS, M, N, K, L, A, LDA, TAU, C, LDC,
      $                WORK, IINFO )
       ELSE
 *
@@ -348,8 +344,7 @@
 *           Form the triangular factor of the block reflector
 *           H = H(i+ib-1) . . . H(i+1) H(i)
 *
-            CALL AB_AB_SLARZT( 'Backward', 'Rowwise', L, IB, A( I, JA ),
-     $ LDA,
+            CALL SLARZT( 'Backward', 'Rowwise', L, IB, A( I, JA ), LDA,
      $                   TAU( I ), WORK( IWT ), LDT )
 *
             IF( LEFT ) THEN
@@ -368,8 +363,7 @@
 *
 *           Apply H or H**T
 *
-            CALL AB_AB_SLARZB( SIDE, TRANST, 'Backward', 'Rowwise', MI, 
-     $NI,
+            CALL SLARZB( SIDE, TRANST, 'Backward', 'Rowwise', MI, NI,
      $                   IB, L, A( I, JA ), LDA, WORK( IWT ), LDT,
      $                   C( IC, JC ), LDC, WORK, LDWORK )
    10    CONTINUE
@@ -380,6 +374,6 @@
 *
       RETURN
 *
-*     End of AB_SORMRZ
+*     End of SORMRZ
 *
       END

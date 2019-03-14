@@ -1,4 +1,4 @@
-*> \brief \b AB_CLAVSP
+*> \brief \b CLAVSP
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CLAVSP( UPLO, TRANS, DIAG, N, NRHS, A, IPIV, B, LDB,
+*       SUBROUTINE CLAVSP( UPLO, TRANS, DIAG, N, NRHS, A, IPIV, B, LDB,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -26,11 +26,11 @@
 *>
 *> \verbatim
 *>
-*>    AB_CLAVSP  performs one of the matrix-vector operations
+*>    CLAVSP  performs one of the matrix-vector operations
 *>       x := A*x  or  x := A^T*x,
 *>    where x is an N element vector and  A is one of the factors
-*>    from the symmetric factorization computed by AB_CSPTRF.
-*>    AB_CSPTRF produces a factorization of the form
+*>    from the symmetric factorization computed by CSPTRF.
+*>    CSPTRF produces a factorization of the form
 *>         U * D * U^T     or     L * D * L^T,
 *>    where U (or L) is a product of permutation and unit upper (lower)
 *>    triangular matrices, U^T (or L^T) is the transpose of
@@ -39,9 +39,9 @@
 *>    and the upper or lower triangular parts of the diagonal blocks
 *>    are stored columnwise in packed format in the linear array A.
 *>
-*>    If TRANS = 'N' or 'n', AB_CLAVSP multiplies either by U or U * D
+*>    If TRANS = 'N' or 'n', CLAVSP multiplies either by U or U * D
 *>    (or L or L * D).
-*>    If TRANS = 'C' or 'c', AB_CLAVSP multiplies either by U^T or D * U^T
+*>    If TRANS = 'C' or 'c', CLAVSP multiplies either by U^T or D * U^T
 *>    (or L^T or D * L^T ).
 *> \endverbatim
 *
@@ -89,7 +89,7 @@
 *>
 *>  IPIV   - INTEGER array, dimension( N )
 *>           On entry, IPIV contains the vector of pivot indices as
-*>           determined by AB_CSPTRF.
+*>           determined by CSPTRF.
 *>           If IPIV( K ) = K, no interchange was done.
 *>           If IPIV( K ) <> K but IPIV( K ) > 0, then row K was inter-
 *>           changed with row IPIV( K ) and a 1 x 1 pivot block was used.
@@ -128,7 +128,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_CLAVSP( UPLO, TRANS, DIAG, N, NRHS, A, IPIV, B, LDB,
+      SUBROUTINE CLAVSP( UPLO, TRANS, DIAG, N, NRHS, A, IPIV, B, LDB,
      $                   INFO )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -157,12 +157,11 @@
       COMPLEX            D11, D12, D21, D22, T1, T2
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CGEMV, AB_CGERU, AB_CSCAL, AB_CSWAP, AB_XERB
-     $LA
+      EXTERNAL           CGEMV, CGERU, CSCAL, CSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -172,15 +171,12 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF( .NOT.AB_LSAME( UPLO, 'U' ) .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) 
-     $THEN
+      IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.AB_LSAME( TRANS, 'N' ) .AND. .NOT.AB_LSAME( TRANS
-     $, 'T' ) )
+      ELSE IF( .NOT.LSAME( TRANS, 'N' ) .AND. .NOT.LSAME( TRANS, 'T' ) )
      $          THEN
          INFO = -2
-      ELSE IF( .NOT.AB_LSAME( DIAG, 'U' ) .AND. .NOT.AB_LSAME( DIAG, 
-     $'N' ) )
+      ELSE IF( .NOT.LSAME( DIAG, 'U' ) .AND. .NOT.LSAME( DIAG, 'N' ) )
      $          THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
@@ -189,7 +185,7 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CLAVSP ', -INFO )
+         CALL XERBLA( 'CLAVSP ', -INFO )
          RETURN
       END IF
 *
@@ -198,18 +194,18 @@
       IF( N.EQ.0 )
      $   RETURN
 *
-      NOUNIT = AB_LSAME( DIAG, 'N' )
+      NOUNIT = LSAME( DIAG, 'N' )
 *------------------------------------------
 *
 *     Compute  B := A * B  (No transpose)
 *
 *------------------------------------------
-      IF( AB_LSAME( TRANS, 'N' ) ) THEN
+      IF( LSAME( TRANS, 'N' ) ) THEN
 *
 *        Compute  B := U*B
 *        where U = P(m)*inv(U(m))* ... *P(1)*inv(U(1))
 *
-         IF( AB_LSAME( UPLO, 'U' ) ) THEN
+         IF( LSAME( UPLO, 'U' ) ) THEN
 *
 *        Loop forward applying the transformations.
 *
@@ -226,7 +222,7 @@
 *              Multiply by the diagonal element if forming U * D.
 *
                IF( NOUNIT )
-     $            CALL AB_CSCAL( NRHS, A( KC+K-1 ), B( K, 1 ), LDB )
+     $            CALL CSCAL( NRHS, A( KC+K-1 ), B( K, 1 ), LDB )
 *
 *              Multiply by P(K) * inv(U(K))  if K > 1.
 *
@@ -234,15 +230,14 @@
 *
 *                 Apply the transformation.
 *
-                  CALL AB_CGERU( K-1, NRHS, ONE, A( KC ), 1, B( K, 1 ),
+                  CALL CGERU( K-1, NRHS, ONE, A( KC ), 1, B( K, 1 ),
      $                        LDB, B( 1, 1 ), LDB )
 *
 *                 Interchange if P(K) != I.
 *
                   KP = IPIV( K )
                   IF( KP.NE.K )
-     $               CALL AB_CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LD
-     $B )
+     $               CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
                END IF
                KC = KC + K
                K = K + 1
@@ -273,17 +268,16 @@
 *
 *                 Apply the transformations.
 *
-                  CALL AB_CGERU( K-1, NRHS, ONE, A( KC ), 1, B( K, 1 ),
+                  CALL CGERU( K-1, NRHS, ONE, A( KC ), 1, B( K, 1 ),
      $                        LDB, B( 1, 1 ), LDB )
-                  CALL AB_CGERU( K-1, NRHS, ONE, A( KCNEXT ), 1,
+                  CALL CGERU( K-1, NRHS, ONE, A( KCNEXT ), 1,
      $                        B( K+1, 1 ), LDB, B( 1, 1 ), LDB )
 *
 *                 Interchange if P(K) != I.
 *
                   KP = ABS( IPIV( K ) )
                   IF( KP.NE.K )
-     $               CALL AB_CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LD
-     $B )
+     $               CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
                END IF
                KC = KCNEXT + K + 1
                K = K + 2
@@ -315,7 +309,7 @@
 *              Multiply by the diagonal element if forming L * D.
 *
                IF( NOUNIT )
-     $            CALL AB_CSCAL( NRHS, A( KC ), B( K, 1 ), LDB )
+     $            CALL CSCAL( NRHS, A( KC ), B( K, 1 ), LDB )
 *
 *              Multiply by  P(K) * inv(L(K))  if K < N.
 *
@@ -324,16 +318,14 @@
 *
 *                 Apply the transformation.
 *
-                  CALL AB_CGERU( N-K, NRHS, ONE, A( KC+1 ), 1, B( K, 1 )
-     $,
+                  CALL CGERU( N-K, NRHS, ONE, A( KC+1 ), 1, B( K, 1 ),
      $                        LDB, B( K+1, 1 ), LDB )
 *
 *                 Interchange if a permutation was applied at the
 *                 K-th step of the factorization.
 *
                   IF( KP.NE.K )
-     $               CALL AB_CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LD
-     $B )
+     $               CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
                END IF
                K = K - 1
 *
@@ -364,10 +356,9 @@
 *
 *                 Apply the transformation.
 *
-                  CALL AB_CGERU( N-K, NRHS, ONE, A( KC+1 ), 1, B( K, 1 )
-     $,
+                  CALL CGERU( N-K, NRHS, ONE, A( KC+1 ), 1, B( K, 1 ),
      $                        LDB, B( K+1, 1 ), LDB )
-                  CALL AB_CGERU( N-K, NRHS, ONE, A( KCNEXT+2 ), 1,
+                  CALL CGERU( N-K, NRHS, ONE, A( KCNEXT+2 ), 1,
      $                        B( K-1, 1 ), LDB, B( K+1, 1 ), LDB )
 *
 *                 Interchange if a permutation was applied at the
@@ -375,8 +366,7 @@
 *
                   KP = ABS( IPIV( K ) )
                   IF( KP.NE.K )
-     $               CALL AB_CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LD
-     $B )
+     $               CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
                END IF
                KC = KCNEXT
                K = K - 2
@@ -395,7 +385,7 @@
 *        where U  = P(m)*inv(U(m))* ... *P(1)*inv(U(1))
 *        and   U^T = inv(U^T(1))*P(1)* ... *inv(U^T(m))*P(m)
 *
-         IF( AB_LSAME( UPLO, 'U' ) ) THEN
+         IF( LSAME( UPLO, 'U' ) ) THEN
 *
 *           Loop backward applying the transformations.
 *
@@ -414,18 +404,17 @@
 *
                   KP = IPIV( K )
                   IF( KP.NE.K )
-     $               CALL AB_CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LD
-     $B )
+     $               CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
 *
 *                 Apply the transformation:
 *                    y := y - B' * conjg(x)
 *                 where x is a column of A and y is a row of B.
 *
-                  CALL AB_CGEMV( 'Transpose', K-1, NRHS, ONE, B, LDB,
+                  CALL CGEMV( 'Transpose', K-1, NRHS, ONE, B, LDB,
      $                        A( KC ), 1, ONE, B( K, 1 ), LDB )
                END IF
                IF( NOUNIT )
-     $            CALL AB_CSCAL( NRHS, A( KC+K-1 ), B( K, 1 ), LDB )
+     $            CALL CSCAL( NRHS, A( KC+K-1 ), B( K, 1 ), LDB )
                K = K - 1
 *
 *           2 x 2 pivot block.
@@ -438,15 +427,15 @@
 *
                   KP = ABS( IPIV( K ) )
                   IF( KP.NE.K-1 )
-     $               CALL AB_CSWAP( NRHS, B( K-1, 1 ), LDB, B( KP, 1 ),
+     $               CALL CSWAP( NRHS, B( K-1, 1 ), LDB, B( KP, 1 ),
      $                           LDB )
 *
 *                 Apply the transformations.
 *
-                  CALL AB_CGEMV( 'Transpose', K-2, NRHS, ONE, B, LDB,
+                  CALL CGEMV( 'Transpose', K-2, NRHS, ONE, B, LDB,
      $                        A( KC ), 1, ONE, B( K, 1 ), LDB )
 *
-                  CALL AB_CGEMV( 'Transpose', K-2, NRHS, ONE, B, LDB,
+                  CALL CGEMV( 'Transpose', K-2, NRHS, ONE, B, LDB,
      $                        A( KCNEXT ), 1, ONE, B( K-1, 1 ), LDB )
                END IF
 *
@@ -493,17 +482,15 @@
 *
                   KP = IPIV( K )
                   IF( KP.NE.K )
-     $               CALL AB_CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LD
-     $B )
+     $               CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
 *
 *                 Apply the transformation
 *
-                  CALL AB_CGEMV( 'Transpose', N-K, NRHS, ONE, B( K+1, 1 
-     $),
+                  CALL CGEMV( 'Transpose', N-K, NRHS, ONE, B( K+1, 1 ),
      $                        LDB, A( KC+1 ), 1, ONE, B( K, 1 ), LDB )
                END IF
                IF( NOUNIT )
-     $            CALL AB_CSCAL( NRHS, A( KC ), B( K, 1 ), LDB )
+     $            CALL CSCAL( NRHS, A( KC ), B( K, 1 ), LDB )
                KC = KC + N - K + 1
                K = K + 1
 *
@@ -517,16 +504,16 @@
 *
                   KP = ABS( IPIV( K ) )
                   IF( KP.NE.K+1 )
-     $               CALL AB_CSWAP( NRHS, B( K+1, 1 ), LDB, B( KP, 1 ),
+     $               CALL CSWAP( NRHS, B( K+1, 1 ), LDB, B( KP, 1 ),
      $                           LDB )
 *
 *                 Apply the transformation
 *
-                  CALL AB_CGEMV( 'Transpose', N-K-1, NRHS, ONE,
+                  CALL CGEMV( 'Transpose', N-K-1, NRHS, ONE,
      $                        B( K+2, 1 ), LDB, A( KCNEXT+1 ), 1, ONE,
      $                        B( K+1, 1 ), LDB )
 *
-                  CALL AB_CGEMV( 'Transpose', N-K-1, NRHS, ONE,
+                  CALL CGEMV( 'Transpose', N-K-1, NRHS, ONE,
      $                        B( K+2, 1 ), LDB, A( KC+2 ), 1, ONE,
      $                        B( K, 1 ), LDB )
                END IF
@@ -555,6 +542,6 @@
       END IF
       RETURN
 *
-*     End of AB_CLAVSP
+*     End of CLAVSP
 *
       END

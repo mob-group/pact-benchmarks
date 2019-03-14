@@ -1,4 +1,4 @@
-*> \brief \b AB_CUNT03
+*> \brief \b CUNT03
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CUNT03( RC, MU, MV, N, K, U, LDU, V, LDV, WORK, LWORK,
+*       SUBROUTINE CUNT03( RC, MU, MV, N, K, U, LDU, V, LDV, WORK, LWORK,
 *                          RWORK, RESULT, INFO )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CUNT03 compares two unitary matrices U and V to see if their
+*> CUNT03 compares two unitary matrices U and V to see if their
 *> corresponding rows or columns span the same spaces.  The rows are
 *> checked if RC = 'R', and the columns are checked if RC = 'C'.
 *>
@@ -59,7 +59,7 @@
 *> \verbatim
 *>          MU is INTEGER
 *>          The number of rows of U if RC = 'R', and the number of
-*>          columns if RC = 'C'.  If MU = 0 AB_CUNT03 does nothing.
+*>          columns if RC = 'C'.  If MU = 0 CUNT03 does nothing.
 *>          MU must be at least zero.
 *> \endverbatim
 *>
@@ -67,7 +67,7 @@
 *> \verbatim
 *>          MV is INTEGER
 *>          The number of rows of V if RC = 'R', and the number of
-*>          columns if RC = 'C'.  If MV = 0 AB_CUNT03 does nothing.
+*>          columns if RC = 'C'.  If MV = 0 CUNT03 does nothing.
 *>          MV must be at least zero.
 *> \endverbatim
 *>
@@ -76,7 +76,7 @@
 *>          N is INTEGER
 *>          If RC = 'R', the number of columns in the matrices U and V,
 *>          and if RC = 'C', the number of rows in U and V.  If N = 0
-*>          AB_CUNT03 does nothing.  N must be at least zero.
+*>          CUNT03 does nothing.  N must be at least zero.
 *> \endverbatim
 *>
 *> \param[in] K
@@ -103,7 +103,7 @@
 *> \param[in] V
 *> \verbatim
 *>          V is COMPLEX array, dimension (LDV,N)
-*>          The AB_SECOND matrix to compare.  If RC = 'R', V is MV by N, and
+*>          The second matrix to compare.  If RC = 'R', V is MV by N, and
 *>          if RC = 'C', V is N by MV.
 *> \endverbatim
 *>
@@ -159,8 +159,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_CUNT03( RC, MU, MV, N, K, U, LDU, V, LDV, WORK, LWOR
-     $K,
+      SUBROUTINE CUNT03( RC, MU, MV, N, K, U, LDU, V, LDV, WORK, LWORK,
      $                   RWORK, RESULT, INFO )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -191,25 +190,25 @@
       COMPLEX            S, SU, SV
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ICAMAX
-      REAL               AB_SLAMCH
-      EXTERNAL           AB_LSAME, AB_ICAMAX, AB_SLAMCH
+      LOGICAL            LSAME
+      INTEGER            ICAMAX
+      REAL               SLAMCH
+      EXTERNAL           LSAME, ICAMAX, SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CMPLX, MAX, MIN, REAL
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CUNT01, AB_XERBLA
+      EXTERNAL           CUNT01, XERBLA
 *     ..
 *     .. Executable Statements ..
 *
 *     Check inputs
 *
       INFO = 0
-      IF( AB_LSAME( RC, 'R' ) ) THEN
+      IF( LSAME( RC, 'R' ) ) THEN
          IRC = 0
-      ELSE IF( AB_LSAME( RC, 'C' ) ) THEN
+      ELSE IF( LSAME( RC, 'C' ) ) THEN
          IRC = 1
       ELSE
          IRC = -1
@@ -232,7 +231,7 @@
          INFO = -9
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CUNT03', -INFO )
+         CALL XERBLA( 'CUNT03', -INFO )
          RETURN
       END IF
 *
@@ -244,7 +243,7 @@
 *
 *     Machine constants
 *
-      ULP = AB_SLAMCH( 'Precision' )
+      ULP = SLAMCH( 'Precision' )
 *
       IF( IRC.EQ.0 ) THEN
 *
@@ -252,7 +251,7 @@
 *
          RES1 = ZERO
          DO 20 I = 1, K
-            LMX = AB_ICAMAX( N, U( I, 1 ), LDU )
+            LMX = ICAMAX( N, U( I, 1 ), LDU )
             IF( V( I, LMX ).EQ.CMPLX( ZERO ) ) THEN
                SV = ONE
             ELSE
@@ -272,8 +271,7 @@
 *
 *        Compute orthogonality of rows of V.
 *
-         CALL AB_CUNT01( 'Rows', MV, N, V, LDV, WORK, LWORK, RWORK, RES2
-     $ )
+         CALL CUNT01( 'Rows', MV, N, V, LDV, WORK, LWORK, RWORK, RES2 )
 *
       ELSE
 *
@@ -281,7 +279,7 @@
 *
          RES1 = ZERO
          DO 40 I = 1, K
-            LMX = AB_ICAMAX( N, U( 1, I ), 1 )
+            LMX = ICAMAX( N, U( 1, I ), 1 )
             IF( V( LMX, I ).EQ.CMPLX( ZERO ) ) THEN
                SV = ONE
             ELSE
@@ -301,13 +299,13 @@
 *
 *        Compute orthogonality of columns of V.
 *
-         CALL AB_CUNT01( 'Columns', N, MV, V, LDV, WORK, LWORK, RWORK,
+         CALL CUNT01( 'Columns', N, MV, V, LDV, WORK, LWORK, RWORK,
      $                RES2 )
       END IF
 *
       RESULT = MIN( MAX( RES1, RES2 ), ONE / ULP )
       RETURN
 *
-*     End of AB_CUNT03
+*     End of CUNT03
 *
       END

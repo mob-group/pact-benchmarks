@@ -1,4 +1,4 @@
-*> \brief \b AB_DZASUM
+*> \brief \b DZASUM
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       DOUBLE PRECISION FUNCTION AB_DZASUM(N,ZX,INCX)
+*       DOUBLE PRECISION FUNCTION DZASUM(N,ZX,INCX)
 *
 *       .. Scalar Arguments ..
 *       INTEGER INCX,N
@@ -23,7 +23,7 @@
 *>
 *> \verbatim
 *>
-*>    AB_DZASUM takes the sum of the (|Re(.)| + |Im(.)|)'s of a complex vector and
+*>    DZASUM takes the sum of the (|Re(.)| + |Im(.)|)'s of a complex vector and
 *>    returns a single precision result.
 *> \endverbatim
 *
@@ -70,7 +70,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION AB_DZASUM(N,ZX,INCX)
+      DOUBLE PRECISION FUNCTION DZASUM(N,ZX,INCX)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -91,10 +91,10 @@
       INTEGER I,NINCX
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION AB_DCABS1
-      EXTERNAL AB_DCABS1
+      DOUBLE PRECISION DCABS1
+      EXTERNAL DCABS1
 *     ..
-      AB_DZASUM = 0.0d0
+      DZASUM = 0.0d0
       STEMP = 0.0d0
       IF (N.LE.0 .OR. INCX.LE.0) RETURN
       IF (INCX.EQ.1) THEN
@@ -102,7 +102,7 @@
 *        code for increment equal to 1
 *
          DO I = 1,N
-            STEMP = STEMP + AB_DCABS1(ZX(I))
+            STEMP = STEMP + DCABS1(ZX(I))
          END DO
       ELSE
 *
@@ -110,9 +110,9 @@
 *
          NINCX = N*INCX
          DO I = 1,NINCX,INCX
-            STEMP = STEMP + AB_DCABS1(ZX(I))
+            STEMP = STEMP + DCABS1(ZX(I))
          END DO
       END IF
-      AB_DZASUM = STEMP
+      DZASUM = STEMP
       RETURN
       END

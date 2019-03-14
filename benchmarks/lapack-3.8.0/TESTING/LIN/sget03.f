@@ -1,4 +1,4 @@
-*> \brief \b AB_SGET03
+*> \brief \b SGET03
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SGET03( N, A, LDA, AINV, LDAINV, WORK, LDWORK, RWORK,
+*       SUBROUTINE SGET03( N, A, LDA, AINV, LDAINV, WORK, LDWORK, RWORK,
 *                          RCOND, RESID )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SGET03 computes the residual for a general matrix times its inverse:
+*> SGET03 computes the residual for a general matrix times its inverse:
 *>    norm( I - AINV*A ) / ( N * norm(A) * norm(AINV) * EPS ),
 *> where EPS is the machine epsilon.
 *> \endverbatim
@@ -106,8 +106,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_SGET03( N, A, LDA, AINV, LDAINV, WORK, LDWORK, RWORK
-     $,
+      SUBROUTINE SGET03( N, A, LDA, AINV, LDAINV, WORK, LDWORK, RWORK,
      $                   RCOND, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -135,11 +134,11 @@
       REAL               AINVNM, ANORM, EPS
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH, AB_SLANGE
-      EXTERNAL           AB_SLAMCH, AB_SLANGE
+      REAL               SLAMCH, SLANGE
+      EXTERNAL           SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SGEMM
+      EXTERNAL           SGEMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          REAL
@@ -156,9 +155,9 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0 or AINVNM = 0.
 *
-      EPS = AB_SLAMCH( 'Epsilon' )
-      ANORM = AB_SLANGE( '1', N, N, A, LDA, RWORK )
-      AINVNM = AB_SLANGE( '1', N, N, AINV, LDAINV, RWORK )
+      EPS = SLAMCH( 'Epsilon' )
+      ANORM = SLANGE( '1', N, N, A, LDA, RWORK )
+      AINVNM = SLANGE( '1', N, N, AINV, LDAINV, RWORK )
       IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
          RCOND = ZERO
          RESID = ONE / EPS
@@ -168,7 +167,7 @@
 *
 *     Compute I - A * AINV
 *
-      CALL AB_SGEMM( 'No transpose', 'No transpose', N, N, N, -ONE,
+      CALL SGEMM( 'No transpose', 'No transpose', N, N, N, -ONE,
      $     AINV, LDAINV, A, LDA, ZERO, WORK, LDWORK )
       DO 10 I = 1, N
          WORK( I, I ) = ONE + WORK( I, I )
@@ -176,12 +175,12 @@
 *
 *     Compute norm(I - AINV*A) / (N * norm(A) * norm(AINV) * EPS)
 *
-      RESID = AB_SLANGE( '1', N, N, WORK, LDWORK, RWORK )
+      RESID = SLANGE( '1', N, N, WORK, LDWORK, RWORK )
 *
       RESID = ( ( RESID*RCOND ) / EPS ) / REAL( N )
 *
       RETURN
 *
-*     End of AB_SGET03
+*     End of SGET03
 *
       END

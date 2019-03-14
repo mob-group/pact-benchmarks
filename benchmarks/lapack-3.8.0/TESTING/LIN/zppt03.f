@@ -1,4 +1,4 @@
-*> \brief \b AB_ZPPT03
+*> \brief \b ZPPT03
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZPPT03( UPLO, N, A, AINV, WORK, LDWORK, RWORK, RCOND,
+*       SUBROUTINE ZPPT03( UPLO, N, A, AINV, WORK, LDWORK, RWORK, RCOND,
 *                          RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZPPT03 computes the residual for a Hermitian packed matrix times its
+*> ZPPT03 computes the residual for a Hermitian packed matrix times its
 *> inverse:
 *>    norm( I - A*AINV ) / ( N * norm(A) * norm(AINV) * EPS ),
 *> where EPS is the machine epsilon.
@@ -107,8 +107,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZPPT03( UPLO, N, A, AINV, WORK, LDWORK, RWORK, RCOND
-     $,
+      SUBROUTINE ZPPT03( UPLO, N, A, AINV, WORK, LDWORK, RWORK, RCOND,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -140,15 +139,15 @@
       DOUBLE PRECISION   AINVNM, ANORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE, AB_ZLANHP
-      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_ZLANGE, AB_ZLANHP
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH, ZLANGE, ZLANHP
+      EXTERNAL           LSAME, DLAMCH, ZLANGE, ZLANHP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCONJG
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZCOPY, AB_ZHPMV
+      EXTERNAL           ZCOPY, ZHPMV
 *     ..
 *     .. Executable Statements ..
 *
@@ -162,9 +161,9 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0 or AINVNM = 0.
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
-      ANORM = AB_ZLANHP( '1', UPLO, N, A, RWORK )
-      AINVNM = AB_ZLANHP( '1', UPLO, N, AINV, RWORK )
+      EPS = DLAMCH( 'Epsilon' )
+      ANORM = ZLANHP( '1', UPLO, N, A, RWORK )
+      AINVNM = ZLANHP( '1', UPLO, N, AINV, RWORK )
       IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
          RCOND = ZERO
          RESID = ONE / EPS
@@ -177,13 +176,13 @@
 *     expand it to a full matrix, then multiply by A one column at a
 *     time, moving the result one column to the left.
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
 *
 *        Copy AINV
 *
          JJ = 1
          DO 20 J = 1, N - 1
-            CALL AB_ZCOPY( J, AINV( JJ ), 1, WORK( 1, J+1 ), 1 )
+            CALL ZCOPY( J, AINV( JJ ), 1, WORK( 1, J+1 ), 1 )
             DO 10 I = 1, J - 1
                WORK( J, I+1 ) = DCONJG( AINV( JJ+I-1 ) )
    10       CONTINUE
@@ -197,11 +196,10 @@
 *        Multiply by A
 *
          DO 40 J = 1, N - 1
-            CALL AB_ZHPMV( 'Upper', N, -CONE, A, WORK( 1, J+1 ), 1, CZER
-     $O,
+            CALL ZHPMV( 'Upper', N, -CONE, A, WORK( 1, J+1 ), 1, CZERO,
      $                  WORK( 1, J ), 1 )
    40    CONTINUE
-         CALL AB_ZHPMV( 'Upper', N, -CONE, A, AINV( JJ ), 1, CZERO,
+         CALL ZHPMV( 'Upper', N, -CONE, A, AINV( JJ ), 1, CZERO,
      $               WORK( 1, N ), 1 )
 *
 *     UPLO = 'L':
@@ -217,7 +215,7 @@
    50    CONTINUE
          JJ = N + 1
          DO 70 J = 2, N
-            CALL AB_ZCOPY( N-J+1, AINV( JJ ), 1, WORK( J, J-1 ), 1 )
+            CALL ZCOPY( N-J+1, AINV( JJ ), 1, WORK( J, J-1 ), 1 )
             DO 60 I = 1, N - J
                WORK( J, J+I-1 ) = DCONJG( AINV( JJ+I ) )
    60       CONTINUE
@@ -227,11 +225,10 @@
 *        Multiply by A
 *
          DO 80 J = N, 2, -1
-            CALL AB_ZHPMV( 'Lower', N, -CONE, A, WORK( 1, J-1 ), 1, CZER
-     $O,
+            CALL ZHPMV( 'Lower', N, -CONE, A, WORK( 1, J-1 ), 1, CZERO,
      $                  WORK( 1, J ), 1 )
    80    CONTINUE
-         CALL AB_ZHPMV( 'Lower', N, -CONE, A, AINV( 1 ), 1, CZERO,
+         CALL ZHPMV( 'Lower', N, -CONE, A, AINV( 1 ), 1, CZERO,
      $               WORK( 1, 1 ), 1 )
 *
       END IF
@@ -244,12 +241,12 @@
 *
 *     Compute norm(I - A*AINV) / (N * norm(A) * norm(AINV) * EPS)
 *
-      RESID = AB_ZLANGE( '1', N, N, WORK, LDWORK, RWORK )
+      RESID = ZLANGE( '1', N, N, WORK, LDWORK, RWORK )
 *
       RESID = ( ( RESID*RCOND ) / EPS ) / DBLE( N )
 *
       RETURN
 *
-*     End of AB_ZPPT03
+*     End of ZPPT03
 *
       END

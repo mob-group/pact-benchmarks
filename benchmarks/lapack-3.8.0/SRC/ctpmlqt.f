@@ -1,7 +1,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CTPMLQT( SIDE, TRANS, M, N, K, L, MB, V, LDV, T, LDT,
+*       SUBROUTINE CTPMLQT( SIDE, TRANS, M, N, K, L, MB, V, LDV, T, LDT,
 *                           A, LDA, B, LDB, WORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -19,7 +19,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CTPMLQT applies a complex orthogonal matrix Q obtained from a
+*> CTPMLQT applies a complex orthogonal matrix Q obtained from a
 *> "triangular-pentagonal" complex block reflector H to a general
 *> complex matrix C, which consists of two blocks A and B.
 *> \endverbatim
@@ -72,7 +72,7 @@
 *>          MB is INTEGER
 *>          The block size used for the storage of T.  K >= MB >= 1.
 *>          This must be the same value of MB used to generate T
-*>          in AB_DTPLQT.
+*>          in DTPLQT.
 *> \endverbatim
 *>
 *> \param[in] V
@@ -80,7 +80,7 @@
 *>          V is COMPLEX array, dimension (LDA,K)
 *>          The i-th row must contain the vector which defines the
 *>          elementary reflector H(i), for i = 1,2,...,k, as returned by
-*>          AB_DTPLQT in B.  See Further Details.
+*>          DTPLQT in B.  See Further Details.
 *> \endverbatim
 *>
 *> \param[in] LDV
@@ -95,7 +95,7 @@
 *> \verbatim
 *>          T is COMPLEX array, dimension (LDT,K)
 *>          The upper triangular factors of the block reflectors
-*>          as returned by AB_DTPLQT, stored as a MB-by-K matrix.
+*>          as returned by DTPLQT, stored as a MB-by-K matrix.
 *> \endverbatim
 *>
 *> \param[in] LDT
@@ -196,8 +196,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_CTPMLQT( SIDE, TRANS, M, N, K, L, MB, V, LDV, T, LDT
-     $,
+      SUBROUTINE CTPMLQT( SIDE, TRANS, M, N, K, L, MB, V, LDV, T, LDT,
      $                    A, LDA, B, LDB, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
@@ -222,11 +221,11 @@
       INTEGER            I, IB, NB, LB, KF, LDAQ
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_CTPRFB
+      EXTERNAL           XERBLA, CTPRFB
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -236,10 +235,10 @@
 *     .. Test the input arguments ..
 *
       INFO   = 0
-      LEFT   = AB_LSAME( SIDE,  'L' )
-      RIGHT  = AB_LSAME( SIDE,  'R' )
-      TRAN   = AB_LSAME( TRANS, 'C' )
-      NOTRAN = AB_LSAME( TRANS, 'N' )
+      LEFT   = LSAME( SIDE,  'L' )
+      RIGHT  = LSAME( SIDE,  'R' )
+      TRAN   = LSAME( TRANS, 'C' )
+      NOTRAN = LSAME( TRANS, 'N' )
 *
       IF ( LEFT ) THEN
          LDAQ = MAX( 1, K )
@@ -271,7 +270,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CTPMLQT', -INFO )
+         CALL XERBLA( 'CTPMLQT', -INFO )
          RETURN
       END IF
 *
@@ -289,7 +288,7 @@
             ELSE
                LB = 0
             END IF
-            CALL AB_CTPRFB( 'L', 'C', 'F', 'R', NB, N, IB, LB,
+            CALL CTPRFB( 'L', 'C', 'F', 'R', NB, N, IB, LB,
      $                   V( I, 1 ), LDV, T( 1, I ), LDT,
      $                   A( I, 1 ), LDA, B, LDB, WORK, IB )
          END DO
@@ -304,7 +303,7 @@
             ELSE
                LB = NB-N+L-I+1
             END IF
-            CALL AB_CTPRFB( 'R', 'N', 'F', 'R', M, NB, IB, LB,
+            CALL CTPRFB( 'R', 'N', 'F', 'R', M, NB, IB, LB,
      $                   V( I, 1 ), LDV, T( 1, I ), LDT,
      $                   A( 1, I ), LDA, B, LDB, WORK, M )
          END DO
@@ -320,7 +319,7 @@
             ELSE
                LB = 0
             END IF
-            CALL AB_CTPRFB( 'L', 'N', 'F', 'R', NB, N, IB, LB,
+            CALL CTPRFB( 'L', 'N', 'F', 'R', NB, N, IB, LB,
      $                   V( I, 1 ), LDV, T( 1, I ), LDT,
      $                   A( I, 1 ), LDA, B, LDB, WORK, IB )
          END DO
@@ -336,7 +335,7 @@
             ELSE
                LB = NB-N+L-I+1
             END IF
-            CALL AB_CTPRFB( 'R', 'C', 'F', 'R', M, NB, IB, LB,
+            CALL CTPRFB( 'R', 'C', 'F', 'R', M, NB, IB, LB,
      $                   V( I, 1 ), LDV, T( 1, I ), LDT,
      $                   A( 1, I ), LDA, B, LDB, WORK, M )
          END DO
@@ -345,6 +344,6 @@
 *
       RETURN
 *
-*     End of AB_CTPMLQT
+*     End of CTPMLQT
 *
       END

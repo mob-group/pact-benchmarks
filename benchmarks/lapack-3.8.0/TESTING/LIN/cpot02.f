@@ -1,4 +1,4 @@
-*> \brief \b AB_CPOT02
+*> \brief \b CPOT02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CPOT02( UPLO, N, NRHS, A, LDA, X, LDX, B, LDB, RWORK,
+*       SUBROUTINE CPOT02( UPLO, N, NRHS, A, LDA, X, LDX, B, LDB, RWORK,
 *                          RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CPOT02 computes the residual for the solution of a Hermitian system
+*> CPOT02 computes the residual for the solution of a Hermitian system
 *> of linear equations  A*x = b:
 *>
 *>    RESID = norm(B - A*X) / ( norm(A) * norm(X) * EPS ),
@@ -124,8 +124,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_CPOT02( UPLO, N, NRHS, A, LDA, X, LDX, B, LDB, RWORK
-     $,
+      SUBROUTINE CPOT02( UPLO, N, NRHS, A, LDA, X, LDX, B, LDB, RWORK,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -156,11 +155,11 @@
       REAL               ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      REAL               AB_CLANHE, AB_SCASUM, AB_SLAMCH
-      EXTERNAL           AB_CLANHE, AB_SCASUM, AB_SLAMCH
+      REAL               CLANHE, SCASUM, SLAMCH
+      EXTERNAL           CLANHE, SCASUM, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CHEMM
+      EXTERNAL           CHEMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -176,8 +175,8 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = AB_SLAMCH( 'Epsilon' )
-      ANORM = AB_CLANHE( '1', UPLO, N, A, LDA, RWORK )
+      EPS = SLAMCH( 'Epsilon' )
+      ANORM = CLANHE( '1', UPLO, N, A, LDA, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -185,8 +184,7 @@
 *
 *     Compute  B - A*X
 *
-      CALL AB_CHEMM( 'Left', UPLO, N, NRHS, -CONE, A, LDA, X, LDX, CONE,
-     $ B,
+      CALL CHEMM( 'Left', UPLO, N, NRHS, -CONE, A, LDA, X, LDX, CONE, B,
      $            LDB )
 *
 *     Compute the maximum over the number of right hand sides of
@@ -194,8 +192,8 @@
 *
       RESID = ZERO
       DO 10 J = 1, NRHS
-         BNORM = AB_SCASUM( N, B( 1, J ), 1 )
-         XNORM = AB_SCASUM( N, X( 1, J ), 1 )
+         BNORM = SCASUM( N, B( 1, J ), 1 )
+         XNORM = SCASUM( N, X( 1, J ), 1 )
          IF( XNORM.LE.ZERO ) THEN
             RESID = ONE / EPS
          ELSE
@@ -205,6 +203,6 @@
 *
       RETURN
 *
-*     End of AB_CPOT02
+*     End of CPOT02
 *
       END

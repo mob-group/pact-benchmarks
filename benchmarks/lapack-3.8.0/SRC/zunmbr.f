@@ -1,4 +1,4 @@
-*> \brief \b AB_ZUNMBR
+*> \brief \b ZUNMBR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZUNMBR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZUNMBR.f">
+*> Download ZUNMBR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zunmbr.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZUNMBR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zunmbr.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZUNMBR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zunmbr.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZUNMBR( VECT, SIDE, TRANS, M, N, K, A, LDA, TAU, C,
+*       SUBROUTINE ZUNMBR( VECT, SIDE, TRANS, M, N, K, A, LDA, TAU, C,
 *                          LDC, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,19 +35,19 @@
 *>
 *> \verbatim
 *>
-*> If VECT = 'Q', AB_ZUNMBR overwrites the general complex M-by-N matrix C
+*> If VECT = 'Q', ZUNMBR overwrites the general complex M-by-N matrix C
 *> with
 *>                 SIDE = 'L'     SIDE = 'R'
 *> TRANS = 'N':      Q * C          C * Q
 *> TRANS = 'C':      Q**H * C       C * Q**H
 *>
-*> If VECT = 'P', AB_ZUNMBR overwrites the general complex M-by-N matrix C
+*> If VECT = 'P', ZUNMBR overwrites the general complex M-by-N matrix C
 *> with
 *>                 SIDE = 'L'     SIDE = 'R'
 *> TRANS = 'N':      P * C          C * P
 *> TRANS = 'C':      P**H * C       C * P**H
 *>
-*> Here Q and P**H are the unitary matrices determined by AB_ZGEBRD when
+*> Here Q and P**H are the unitary matrices determined by ZGEBRD when
 *> reducing a complex matrix A to bidiagonal form: A = Q * B * P**H. Q
 *> and P**H are defined as products of elementary reflectors H(i) and
 *> G(i) respectively.
@@ -104,9 +104,9 @@
 *> \verbatim
 *>          K is INTEGER
 *>          If VECT = 'Q', the number of columns in the original
-*>          matrix reduced by AB_ZGEBRD.
+*>          matrix reduced by ZGEBRD.
 *>          If VECT = 'P', the number of rows in the original
-*>          matrix reduced by AB_ZGEBRD.
+*>          matrix reduced by ZGEBRD.
 *>          K >= 0.
 *> \endverbatim
 *>
@@ -117,7 +117,7 @@
 *>                                (LDA,nq)        if VECT = 'P'
 *>          The vectors which define the elementary reflectors H(i) and
 *>          G(i), whose products determine the matrices Q and P, as
-*>          returned by AB_ZGEBRD.
+*>          returned by ZGEBRD.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -133,7 +133,7 @@
 *>          TAU is COMPLEX*16 array, dimension (min(nq,K))
 *>          TAU(i) must contain the scalar factor of the elementary
 *>          reflector H(i) or G(i) which determines Q or P, as returned
-*>          by AB_ZGEBRD in the array argument TAUQ or TAUP.
+*>          by ZGEBRD in the array argument TAUQ or TAUP.
 *> \endverbatim
 *>
 *> \param[in,out] C
@@ -170,7 +170,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -193,7 +193,7 @@
 *> \ingroup complex16OTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_ZUNMBR( VECT, SIDE, TRANS, M, N, K, A, LDA, TAU, C,
+      SUBROUTINE ZUNMBR( VECT, SIDE, TRANS, M, N, K, A, LDA, TAU, C,
      $                   LDC, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -217,12 +217,12 @@
       INTEGER            I1, I2, IINFO, LWKOPT, MI, NB, NI, NQ, NW
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_LSAME, AB_ILAENV
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZUNMLQ, AB_ZUNMQR
+      EXTERNAL           XERBLA, ZUNMLQ, ZUNMQR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -232,9 +232,9 @@
 *     Test the input arguments
 *
       INFO = 0
-      APPLYQ = AB_LSAME( VECT, 'Q' )
-      LEFT = AB_LSAME( SIDE, 'L' )
-      NOTRAN = AB_LSAME( TRANS, 'N' )
+      APPLYQ = LSAME( VECT, 'Q' )
+      LEFT = LSAME( SIDE, 'L' )
+      NOTRAN = LSAME( TRANS, 'N' )
       LQUERY = ( LWORK.EQ.-1 )
 *
 *     NQ is the order of Q or P and NW is the minimum dimension of WORK
@@ -249,11 +249,11 @@
       IF( M.EQ.0 .OR. N.EQ.0 ) THEN
          NW = 0
       END IF
-      IF( .NOT.APPLYQ .AND. .NOT.AB_LSAME( VECT, 'P' ) ) THEN
+      IF( .NOT.APPLYQ .AND. .NOT.LSAME( VECT, 'P' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LEFT .AND. .NOT.AB_LSAME( SIDE, 'R' ) ) THEN
+      ELSE IF( .NOT.LEFT .AND. .NOT.LSAME( SIDE, 'R' ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'C' ) ) THEN
+      ELSE IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'C' ) ) THEN
          INFO = -3
       ELSE IF( M.LT.0 ) THEN
          INFO = -4
@@ -275,22 +275,18 @@
          IF( NW.GT.0 ) THEN
             IF( APPLYQ ) THEN
                IF( LEFT ) THEN
-                  NB = AB_ILAENV( 1, 'AB_ZUNMQR', SIDE // TRANS, M-1, N,
-     $ M-1,
+                  NB = ILAENV( 1, 'ZUNMQR', SIDE // TRANS, M-1, N, M-1,
      $                 -1 )
                ELSE
-                  NB = AB_ILAENV( 1, 'AB_ZUNMQR', SIDE // TRANS, M, N-1,
-     $ N-1,
+                  NB = ILAENV( 1, 'ZUNMQR', SIDE // TRANS, M, N-1, N-1,
      $                 -1 )
                END IF
             ELSE
                IF( LEFT ) THEN
-                  NB = AB_ILAENV( 1, 'AB_ZUNMLQ', SIDE // TRANS, M-1, N,
-     $ M-1,
+                  NB = ILAENV( 1, 'ZUNMLQ', SIDE // TRANS, M-1, N, M-1,
      $                 -1 )
                ELSE
-                  NB = AB_ILAENV( 1, 'AB_ZUNMLQ', SIDE // TRANS, M, N-1,
-     $ N-1,
+                  NB = ILAENV( 1, 'ZUNMLQ', SIDE // TRANS, M, N-1, N-1,
      $                 -1 )
                END IF
             END IF
@@ -302,7 +298,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZUNMBR', -INFO )
+         CALL XERBLA( 'ZUNMBR', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -319,13 +315,13 @@
 *
          IF( NQ.GE.K ) THEN
 *
-*           Q was determined by a call to AB_ZGEBRD with nq >= k
+*           Q was determined by a call to ZGEBRD with nq >= k
 *
-            CALL AB_ZUNMQR( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,
+            CALL ZUNMQR( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,
      $                   WORK, LWORK, IINFO )
          ELSE IF( NQ.GT.1 ) THEN
 *
-*           Q was determined by a call to AB_ZGEBRD with nq < k
+*           Q was determined by a call to ZGEBRD with nq < k
 *
             IF( LEFT ) THEN
                MI = M - 1
@@ -338,8 +334,7 @@
                I1 = 1
                I2 = 2
             END IF
-            CALL AB_ZUNMQR( SIDE, TRANS, MI, NI, NQ-1, A( 2, 1 ), LDA, T
-     $AU,
+            CALL ZUNMQR( SIDE, TRANS, MI, NI, NQ-1, A( 2, 1 ), LDA, TAU,
      $                   C( I1, I2 ), LDC, WORK, LWORK, IINFO )
          END IF
       ELSE
@@ -353,13 +348,13 @@
          END IF
          IF( NQ.GT.K ) THEN
 *
-*           P was determined by a call to AB_ZGEBRD with nq > k
+*           P was determined by a call to ZGEBRD with nq > k
 *
-            CALL AB_ZUNMLQ( SIDE, TRANST, M, N, K, A, LDA, TAU, C, LDC,
+            CALL ZUNMLQ( SIDE, TRANST, M, N, K, A, LDA, TAU, C, LDC,
      $                   WORK, LWORK, IINFO )
          ELSE IF( NQ.GT.1 ) THEN
 *
-*           P was determined by a call to AB_ZGEBRD with nq <= k
+*           P was determined by a call to ZGEBRD with nq <= k
 *
             IF( LEFT ) THEN
                MI = M - 1
@@ -372,13 +367,13 @@
                I1 = 1
                I2 = 2
             END IF
-            CALL AB_ZUNMLQ( SIDE, TRANST, MI, NI, NQ-1, A( 1, 2 ), LDA,
+            CALL ZUNMLQ( SIDE, TRANST, MI, NI, NQ-1, A( 1, 2 ), LDA,
      $                   TAU, C( I1, I2 ), LDC, WORK, LWORK, IINFO )
          END IF
       END IF
       WORK( 1 ) = LWKOPT
       RETURN
 *
-*     End of AB_ZUNMBR
+*     End of ZUNMBR
 *
       END

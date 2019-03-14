@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_AB_CCHKSY_AA_2STAGE
+*> \brief \b CCHKSY_AA_2STAGE
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_AB_CCHKSY_AA_2STAGE( DOTYPE, NN, NVAL, NNB, NBVAL, 
+*       SUBROUTINE CCHKSY_AA_2STAGE( DOTYPE, NN, NVAL, NNB, NBVAL, 
 *                             NNS, NSVAL, THRESH, TSTERR, NMAX, A,
 *                             AFAC, AINV, B, X, XACT, WORK, RWORK,
 *                             IWORK, NOUT )
@@ -32,7 +32,7 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_AB_CCHKSY_AA_2STAGE tests AB_AB_AB_CSYTRF_AA_2STAGE, -TRS_AA_2STAGE.
+*> CCHKSY_AA_2STAGE tests CSYTRF_AA_2STAGE, -TRS_AA_2STAGE.
 *> \endverbatim
 *
 *  Arguments:
@@ -168,8 +168,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_AB_CCHKSY_AA_2STAGE( DOTYPE, NN, NVAL, NNB, NBVAL
-     $, NNS,
+      SUBROUTINE CCHKSY_AA_2STAGE( DOTYPE, NN, NVAL, NNB, NBVAL, NNS,
      $                      NSVAL, THRESH, TSTERR, NMAX, A, AFAC, AINV,
      $                      B, X, XACT, WORK, RWORK, IWORK, NOUT )
 *
@@ -218,12 +217,10 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALAERH, AB_ALAHD, AB_ALASUM, AB_CERRSY, AB_C
-     $LACPY, AB_CLARHS,
-     $                   AB_CLATB4, AB_CLATMS, AB_CSYT02, AB_CSYT01, 
-     $                   AB_AB_AB_CSYTRF_AA_2STAGE, AB_AB_AB_CSYTRS_AA_2
-     $STAGE,
-     $                   AB_XLAENV
+      EXTERNAL           ALAERH, ALAHD, ALASUM, CERRSY, CLACPY, CLARHS,
+     $                   CLATB4, CLATMS, CSYT02, CSYT01, 
+     $                   CSYTRF_AA_2STAGE, CSYTRS_AA_2STAGE,
+     $                   XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -264,13 +261,13 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL AB_CERRSY( PATH, NOUT )
+     $   CALL CERRSY( PATH, NOUT )
       INFOT = 0
 *
 *     Set the minimum block size for which the block routine should
-*     be used, which will be later returned by AB_ILAENV
+*     be used, which will be later returned by ILAENV
 *
-      CALL AB_XLAENV( 2, 2 )
+      CALL XLAENV( 2, 2 )
 *
 *     Do for each value of N in NVAL
 *
@@ -312,24 +309,23 @@
 *              Begin generate the test matrix A.
 *
 *
-*              Set up parameters with AB_CLATB4 for the matrix generator
+*              Set up parameters with CLATB4 for the matrix generator
 *              based on the type of matrix to be generated.
 *
-               CALL AB_CLATB4( MATPATH, IMAT, N, N, TYPE, KL, KU,
+               CALL CLATB4( MATPATH, IMAT, N, N, TYPE, KL, KU,
      $                      ANORM, MODE, CNDNUM, DIST )
 *
-*              Generate a matrix with AB_CLATMS.
+*              Generate a matrix with CLATMS.
 *
-               SRNAMT = 'AB_CLATMS'
-               CALL AB_CLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
+               SRNAMT = 'CLATMS'
+               CALL CLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
      $                      CNDNUM, ANORM, KL, KU, UPLO, A, LDA, WORK,
      $                      INFO )
 *
-*              Check error code from AB_CLATMS and handle error.
+*              Check error code from CLATMS and handle error.
 *
                IF( INFO.NE.0 ) THEN
-                  CALL AB_ALAERH( PATH, 'AB_CLATMS', INFO, 0, UPLO, N, N
-     $, -1,
+                  CALL ALAERH( PATH, 'CLATMS', INFO, 0, UPLO, N, N, -1,
      $                         -1, -1, IMAT, NFAIL, NERRS, NOUT )
 *
 *                    Skip all tests for this generated matrix
@@ -414,25 +410,25 @@
                DO 150 INB = 1, NNB
 *
 *                 Set the optimal blocksize, which will be later
-*                 returned by AB_ILAENV.
+*                 returned by ILAENV.
 *
                   NB = NBVAL( INB )
-                  CALL AB_XLAENV( 1, NB )
+                  CALL XLAENV( 1, NB )
 *
 *                 Copy the test matrix A into matrix AFAC which
 *                 will be factorized in place. This is needed to
 *                 preserve the test matrix A for subsequent tests.
 *
-                  CALL AB_CLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
+                  CALL CLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
 *
 *                 Compute the L*D*L**T or U*D*U**T factorization of the
 *                 matrix. IWORK stores details of the interchanges and
 *                 the block structure of D. AINV is a work array for
 *                 block factorization, LWORK is the length of AINV.
 *
-                  SRNAMT = 'AB_AB_AB_CSYTRF_AA_2STAGE'
+                  SRNAMT = 'CSYTRF_AA_2STAGE'
                   LWORK = MIN(N*NB, 3*NMAX*NMAX)
-                  CALL AB_AB_AB_CSYTRF_AA_2STAGE( UPLO, N, AFAC, LDA, 
+                  CALL CSYTRF_AA_2STAGE( UPLO, N, AFAC, LDA, 
      $                                   AINV, (3*NB+1)*N, 
      $                                   IWORK, IWORK( 1+N ),
      $                                   WORK, LWORK,
@@ -458,11 +454,10 @@
                      K = 0
                   END IF
 *
-*                 Check error code from AB_CSYTRF and handle error.
+*                 Check error code from CSYTRF and handle error.
 *
                   IF( INFO.NE.K ) THEN
-                     CALL AB_ALAERH( PATH, 'AB_AB_AB_CSYTRF_AA_2STAGE', 
-     $INFO, K,
+                     CALL ALAERH( PATH, 'CSYTRF_AA_2STAGE', INFO, K,
      $                            UPLO, N, N, -1, -1, NB, IMAT, NFAIL,
      $                            NERRS, NOUT )
                   END IF
@@ -470,8 +465,7 @@
 *+    TEST 1
 *                 Reconstruct matrix from factors and compute residual.
 *
-c                  CALL AB_AB_CSYT01_AA( UPLO, N, A, LDA, AFAC, LDA, IWO
-     $RK,
+c                  CALL CSYT01_AA( UPLO, N, A, LDA, AFAC, LDA, IWORK,
 c     $                            AINV, LDA, RWORK, RESULT( 1 ) )
 c                  NT = 1
                   NT = 0
@@ -483,7 +477,7 @@ c                  NT = 1
                   DO 110 K = 1, NT
                      IF( RESULT( K ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL AB_ALAHD( NOUT, PATH )
+     $                     CALL ALAHD( NOUT, PATH )
                         WRITE( NOUT, FMT = 9999 )UPLO, N, NB, IMAT, K,
      $                     RESULT( K )
                         NFAIL = NFAIL + 1
@@ -508,36 +502,33 @@ c                  NT = 1
 *                    Choose a set of NRHS random solution vectors
 *                    stored in XACT and set up the right hand side B
 *
-                     SRNAMT = 'AB_CLARHS'
-                     CALL AB_CLARHS( MATPATH, XTYPE, UPLO, ' ', N, N,
+                     SRNAMT = 'CLARHS'
+                     CALL CLARHS( MATPATH, XTYPE, UPLO, ' ', N, N,
      $                            KL, KU, NRHS, A, LDA, XACT, LDA,
      $                            B, LDA, ISEED, INFO )
-                     CALL AB_CLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
+                     CALL CLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
-                     SRNAMT = 'AB_AB_AB_CSYTRS_AA_2STAGE'
+                     SRNAMT = 'CSYTRS_AA_2STAGE'
                      LWORK = MAX( 1, 3*N-2 )
-                     CALL AB_AB_AB_CSYTRS_AA_2STAGE( UPLO, N, NRHS, AFAC
-     $, LDA,
+                     CALL CSYTRS_AA_2STAGE( UPLO, N, NRHS, AFAC, LDA,
      $                            AINV, (3*NB+1)*N, IWORK, IWORK( 1+N ),
      $                            X, LDA, INFO )
 *
-*                    Check error code from AB_CSYTRS and handle error.
+*                    Check error code from CSYTRS and handle error.
 *
                      IF( INFO.NE.0 ) THEN
                         IF( IZERO.EQ.0 ) THEN
-                           CALL AB_ALAERH( PATH, 'AB_AB_AB_CSYTRS_AA_2ST
-     $AGE',
+                           CALL ALAERH( PATH, 'CSYTRS_AA_2STAGE',
      $                                  INFO, 0, UPLO, N, N, -1, -1,
      $                                  NRHS, IMAT, NFAIL, NERRS, NOUT )
                         END IF
                      ELSE
-                        CALL AB_CLACPY( 'Full', N, NRHS, B, LDA, WORK, L
-     $DA
+                        CALL CLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA
      $                               )
 *
 *                       Compute the residual for the solution
 *
-                        CALL AB_CSYT02( UPLO, N, NRHS, A, LDA, X, LDA,
+                        CALL CSYT02( UPLO, N, NRHS, A, LDA, X, LDA,
      $                               WORK, LDA, RWORK, RESULT( 2 ) )
 *
 *
@@ -547,7 +538,7 @@ c                  NT = 1
                         DO 120 K = 2, 2
                            IF( RESULT( K ).GE.THRESH ) THEN
                               IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                           CALL AB_ALAHD( NOUT, PATH )
+     $                           CALL ALAHD( NOUT, PATH )
                               WRITE( NOUT, FMT = 9998 )UPLO, N, NRHS,
      $                           IMAT, K, RESULT( K )
                               NFAIL = NFAIL + 1
@@ -567,7 +558,7 @@ c                  NT = 1
 *
 *     Print a summary of the results.
 *
-      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( ' UPLO = ''', A1, ''', N =', I5, ', NB =', I4, ', type ',
      $      I2, ', test ', I2, ', ratio =', G12.5 )
@@ -577,6 +568,6 @@ c                  NT = 1
      $      I6 )
       RETURN
 *
-*     End of AB_AB_AB_CCHKSY_AA_2STAGE
+*     End of CCHKSY_AA_2STAGE
 *
       END

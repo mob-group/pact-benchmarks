@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_AB_SSYSVXX
+*> \brief \b SSYSVXX
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_AB_SSYSVXX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_AB_SSYSVXX.f">
+*> Download SSYSVXX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssysvxx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_AB_SSYSVXX.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssysvxx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_AB_SSYSVXX.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssysvxx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_AB_SSYSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV,
+*       SUBROUTINE SSYSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV,
 *                           EQUED, S, B, LDB, X, LDX, RCOND, RPVGRW, BERR,
 *                           N_ERR_BNDS, ERR_BNDS_NORM, ERR_BNDS_COMP,
 *                           NPARAMS, PARAMS, WORK, IWORK, INFO )
@@ -44,24 +44,24 @@
 *>
 *> \verbatim
 *>
-*>    AB_AB_AB_SSYSVXX uses the diagonal pivoting factorization to compute the
+*>    SSYSVXX uses the diagonal pivoting factorization to compute the
 *>    solution to a real system of linear equations A * X = B, where A
 *>    is an N-by-N symmetric matrix and X and B are N-by-NRHS matrices.
 *>
 *>    If requested, both normwise and maximum componentwise error bounds
-*>    are returned. AB_AB_AB_SSYSVXX will return a solution with a tiny
+*>    are returned. SSYSVXX will return a solution with a tiny
 *>    guaranteed error (O(eps) where eps is the working machine
 *>    precision) unless the matrix is very ill-conditioned, in which
 *>    case a warning is returned. Relevant condition numbers also are
 *>    calculated and returned.
 *>
-*>    AB_AB_AB_SSYSVXX accepts user-provided factorizations and equilibration
+*>    SSYSVXX accepts user-provided factorizations and equilibration
 *>    factors; see the definitions of the FACT and EQUED options.
 *>    Solving with refinement and using a factorization from a previous
-*>    AB_AB_AB_SSYSVXX call will also produce a solution with either O(eps)
+*>    SSYSVXX call will also produce a solution with either O(eps)
 *>    errors or warnings, but we cannot make that claim for general
 *>    user-provided factorizations and equilibration factors if they
-*>    differ from what AB_AB_AB_SSYSVXX would itself produce.
+*>    differ from what SSYSVXX would itself produce.
 *> \endverbatim
 *
 *> \par Description:
@@ -184,7 +184,7 @@
 *>     If FACT = 'F', then AF is an input argument and on entry
 *>     contains the block diagonal matrix D and the multipliers
 *>     used to obtain the factor U or L from the factorization A =
-*>     U*D*U**T or A = L*D*L**T as computed by AB_SSYTRF.
+*>     U*D*U**T or A = L*D*L**T as computed by SSYTRF.
 *>
 *>     If FACT = 'N', then AF is an output argument and on exit
 *>     returns the block diagonal matrix D and the multipliers
@@ -203,7 +203,7 @@
 *>          IPIV is INTEGER array, dimension (N)
 *>     If FACT = 'F', then IPIV is an input argument and on entry
 *>     contains details of the interchanges and the block
-*>     structure of D, as determined by AB_SSYTRF.  If IPIV(k) > 0,
+*>     structure of D, as determined by SSYTRF.  If IPIV(k) > 0,
 *>     then rows and columns k and IPIV(k) were interchanged and
 *>     D(k,k) is a 1-by-1 diagonal block.  If UPLO = 'U' and
 *>     IPIV(k) = IPIV(k-1) < 0, then rows and columns k-1 and
@@ -214,7 +214,7 @@
 *>
 *>     If FACT = 'N', then IPIV is an output argument and on exit
 *>     contains details of the interchanges and the block
-*>     structure of D, as determined by AB_SSYTRF.
+*>     structure of D, as determined by SSYTRF.
 *> \endverbatim
 *>
 *> \param[in,out] EQUED
@@ -335,21 +335,21 @@
 *>     The first index in ERR_BNDS_NORM(i,:) corresponds to the ith
 *>     right-hand side.
 *>
-*>     The AB_SECOND index in ERR_BNDS_NORM(:,err) contains the following
+*>     The second index in ERR_BNDS_NORM(:,err) contains the following
 *>     three fields:
 *>     err = 1 "Trust/don't trust" boolean. Trust the answer if the
 *>              reciprocal condition number is less than the threshold
-*>              sqrt(n) * AB_SLAMCH('Epsilon').
+*>              sqrt(n) * slamch('Epsilon').
 *>
 *>     err = 2 "Guaranteed" error bound: The estimated forward error,
 *>              almost certainly within a factor of 10 of the true error
 *>              so long as the next entry is greater than the threshold
-*>              sqrt(n) * AB_SLAMCH('Epsilon'). This error bound should only
+*>              sqrt(n) * slamch('Epsilon'). This error bound should only
 *>              be trusted if the previous boolean is true.
 *>
 *>     err = 3  Reciprocal condition number: Estimated normwise
 *>              reciprocal condition number.  Compared with the threshold
-*>              sqrt(n) * AB_SLAMCH('Epsilon') to determine if the error
+*>              sqrt(n) * slamch('Epsilon') to determine if the error
 *>              estimate is "guaranteed". These reciprocal condition
 *>              numbers are 1 / (norm(Z^{-1},inf) * norm(Z,inf)) for some
 *>              appropriately scaled matrix Z.
@@ -383,21 +383,21 @@
 *>     The first index in ERR_BNDS_COMP(i,:) corresponds to the ith
 *>     right-hand side.
 *>
-*>     The AB_SECOND index in ERR_BNDS_COMP(:,err) contains the following
+*>     The second index in ERR_BNDS_COMP(:,err) contains the following
 *>     three fields:
 *>     err = 1 "Trust/don't trust" boolean. Trust the answer if the
 *>              reciprocal condition number is less than the threshold
-*>              sqrt(n) * AB_SLAMCH('Epsilon').
+*>              sqrt(n) * slamch('Epsilon').
 *>
 *>     err = 2 "Guaranteed" error bound: The estimated forward error,
 *>              almost certainly within a factor of 10 of the true error
 *>              so long as the next entry is greater than the threshold
-*>              sqrt(n) * AB_SLAMCH('Epsilon'). This error bound should only
+*>              sqrt(n) * slamch('Epsilon'). This error bound should only
 *>              be trusted if the previous boolean is true.
 *>
 *>     err = 3  Reciprocal condition number: Estimated componentwise
 *>              reciprocal condition number.  Compared with the threshold
-*>              sqrt(n) * AB_SLAMCH('Epsilon') to determine if the error
+*>              sqrt(n) * slamch('Epsilon') to determine if the error
 *>              estimate is "guaranteed". These reciprocal condition
 *>              numbers are 1 / (norm(Z^{-1},inf) * norm(Z,inf)) for some
 *>              appropriately scaled matrix Z.
@@ -449,7 +449,7 @@
 *>       PARAMS(LA_LINRX_CWISE_I = 3) : Flag determining if the code
 *>            will attempt to find a solution with small componentwise
 *>            relative error in the double-precision algorithm.  Positive
-*>            is true, 0.0 is FALSE.
+*>            is true, 0.0 is false.
 *>         Default: 1.0 (attempt componentwise convergence)
 *> \endverbatim
 *>
@@ -503,8 +503,7 @@
 *> \ingroup realSYsolve
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_AB_SSYSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF
-     $, IPIV,
+      SUBROUTINE SSYSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV,
      $                    EQUED, S, B, LDB, X, LDX, RCOND, RPVGRW, BERR,
      $                    N_ERR_BNDS, ERR_BNDS_NORM, ERR_BNDS_COMP,
      $                    NPARAMS, PARAMS, WORK, IWORK, INFO )
@@ -549,14 +548,13 @@
       REAL               AMAX, BIGNUM, SMIN, SMAX, SCOND, SMLNUM
 *     ..
 *     .. External Functions ..
-      EXTERNAL           AB_LSAME, AB_SLAMCH, AB_SLA_SYRPVGRW
-      LOGICAL            AB_LSAME
-      REAL               AB_SLAMCH, AB_SLA_SYRPVGRW
+      EXTERNAL           LSAME, SLAMCH, SLA_SYRPVGRW
+      LOGICAL            LSAME
+      REAL               SLAMCH, SLA_SYRPVGRW
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SSYEQUB, AB_SSYTRF, AB_SSYTRS,
-     $                   AB_SLACPY, AB_SLAQSY, AB_XERBLA, AB_AB_SLASCL2,
-     $ AB_AB_AB_SSYRFSX
+      EXTERNAL           SSYEQUB, SSYTRF, SSYTRS,
+     $                   SLACPY, SLAQSY, XERBLA, SLASCL2, SSYRFSX
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -564,30 +562,30 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-      NOFACT = AB_LSAME( FACT, 'N' )
-      EQUIL = AB_LSAME( FACT, 'E' )
-      SMLNUM = AB_SLAMCH( 'Safe minimum' )
+      NOFACT = LSAME( FACT, 'N' )
+      EQUIL = LSAME( FACT, 'E' )
+      SMLNUM = SLAMCH( 'Safe minimum' )
       BIGNUM = ONE / SMLNUM
       IF( NOFACT .OR. EQUIL ) THEN
          EQUED = 'N'
          RCEQU = .FALSE.
       ELSE
-         RCEQU = AB_LSAME( EQUED, 'Y' )
+         RCEQU = LSAME( EQUED, 'Y' )
       ENDIF
 *
 *     Default is failure.  If an input parameter is wrong or
 *     factorization fails, make everything look horrible.  Only the
-*     pivot growth is set here, the rest is initialized in AB_AB_AB_SSYRFSX.
+*     pivot growth is set here, the rest is initialized in SSYRFSX.
 *
       RPVGRW = ZERO
 *
-*     Test the input parameters.  PARAMS is not tested until AB_AB_AB_SSYRFSX.
+*     Test the input parameters.  PARAMS is not tested until SSYRFSX.
 *
       IF( .NOT.NOFACT .AND. .NOT.EQUIL .AND. .NOT.
-     $     AB_LSAME( FACT, 'F' ) ) THEN
+     $     LSAME( FACT, 'F' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.AB_LSAME(UPLO, 'U') .AND.
-     $         .NOT.AB_LSAME(UPLO, 'L') ) THEN
+      ELSE IF( .NOT.LSAME(UPLO, 'U') .AND.
+     $         .NOT.LSAME(UPLO, 'L') ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -597,8 +595,8 @@
          INFO = -6
       ELSE IF( LDAF.LT.MAX( 1, N ) ) THEN
          INFO = -8
-      ELSE IF( AB_LSAME( FACT, 'F' ) .AND. .NOT.
-     $        ( RCEQU .OR. AB_LSAME( EQUED, 'N' ) ) ) THEN
+      ELSE IF( LSAME( FACT, 'F' ) .AND. .NOT.
+     $        ( RCEQU .OR. LSAME( EQUED, 'N' ) ) ) THEN
          INFO = -10
       ELSE
          IF ( RCEQU ) THEN
@@ -626,7 +624,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_AB_SSYSVXX', -INFO )
+         CALL XERBLA( 'SSYSVXX', -INFO )
          RETURN
       END IF
 *
@@ -634,28 +632,26 @@
 *
 *     Compute row and column scalings to equilibrate the matrix A.
 *
-         CALL AB_SSYEQUB( UPLO, N, A, LDA, S, SCOND, AMAX, WORK, INFEQU 
-     $)
+         CALL SSYEQUB( UPLO, N, A, LDA, S, SCOND, AMAX, WORK, INFEQU )
          IF( INFEQU.EQ.0 ) THEN
 *
 *     Equilibrate the matrix.
 *
-            CALL AB_SLAQSY( UPLO, N, A, LDA, S, SCOND, AMAX, EQUED )
-            RCEQU = AB_LSAME( EQUED, 'Y' )
+            CALL SLAQSY( UPLO, N, A, LDA, S, SCOND, AMAX, EQUED )
+            RCEQU = LSAME( EQUED, 'Y' )
          END IF
       END IF
 *
 *     Scale the right-hand side.
 *
-      IF( RCEQU ) CALL AB_AB_SLASCL2( N, NRHS, S, B, LDB )
+      IF( RCEQU ) CALL SLASCL2( N, NRHS, S, B, LDB )
 *
       IF( NOFACT .OR. EQUIL ) THEN
 *
 *        Compute the LDL^T or UDU^T factorization of A.
 *
-         CALL AB_SLACPY( UPLO, N, N, A, LDA, AF, LDAF )
-         CALL AB_SSYTRF( UPLO, N, AF, LDAF, IPIV, WORK, 5*MAX(1,N), INFO
-     $ )
+         CALL SLACPY( UPLO, N, N, A, LDA, AF, LDAF )
+         CALL SSYTRF( UPLO, N, AF, LDAF, IPIV, WORK, 5*MAX(1,N), INFO )
 *
 *        Return if INFO is non-zero.
 *
@@ -666,7 +662,7 @@
 *           leading rank-deficient INFO columns of A.
 *
             IF ( N.GT.0 )
-     $           RPVGRW = AB_SLA_SYRPVGRW(UPLO, N, INFO, A, LDA, AF,
+     $           RPVGRW = SLA_SYRPVGRW(UPLO, N, INFO, A, LDA, AF,
      $           LDAF, IPIV, WORK )
             RETURN
          END IF
@@ -675,30 +671,29 @@
 *     Compute the reciprocal pivot growth factor RPVGRW.
 *
       IF ( N.GT.0 )
-     $     RPVGRW = AB_SLA_SYRPVGRW( UPLO, N, INFO, A, LDA, AF, LDAF,
+     $     RPVGRW = SLA_SYRPVGRW( UPLO, N, INFO, A, LDA, AF, LDAF,
      $     IPIV, WORK )
 *
 *     Compute the solution matrix X.
 *
-      CALL AB_SLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
-      CALL AB_SSYTRS( UPLO, N, NRHS, AF, LDAF, IPIV, X, LDX, INFO )
+      CALL SLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
+      CALL SSYTRS( UPLO, N, NRHS, AF, LDAF, IPIV, X, LDX, INFO )
 *
 *     Use iterative refinement to improve the computed solution and
 *     compute error bounds and backward error estimates for it.
 *
-      CALL AB_AB_AB_SSYRFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF, IPI
-     $V,
+      CALL SSYRFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF, IPIV,
      $     S, B, LDB, X, LDX, RCOND, BERR, N_ERR_BNDS, ERR_BNDS_NORM,
      $     ERR_BNDS_COMP, NPARAMS, PARAMS, WORK, IWORK, INFO )
 *
 *     Scale solutions.
 *
       IF ( RCEQU ) THEN
-         CALL AB_AB_SLASCL2 ( N, NRHS, S, X, LDX )
+         CALL SLASCL2 ( N, NRHS, S, X, LDX )
       END IF
 *
       RETURN
 *
-*     End of AB_AB_AB_SSYSVXX
+*     End of SSYSVXX
 *
       END

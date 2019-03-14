@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLQT05
+*> \brief \b ZLQT05
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZLQT05(M,N,L,NB,RESULT)
+*       SUBROUTINE ZLQT05(M,N,L,NB,RESULT)
 *
 *       .. Scalar Arguments ..
 *       INTEGER LWORK, M, N, L, NB, LDT
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZQRT05 tests AB_ZTPLQT and AB_ZTPMLQT.
+*> ZQRT05 tests ZTPLQT and ZTPMLQT.
 *> \endverbatim
 *
 *  Arguments:
@@ -78,7 +78,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZLQT05(M,N,L,NB,RESULT)
+      SUBROUTINE ZLQT05(M,N,L,NB,RESULT)
       IMPLICIT NONE
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -112,15 +112,15 @@
       INTEGER            ISEED( 4 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION AB_DLAMCH
-      DOUBLE PRECISION AB_ZLANGE, AB_ZLANSY
-      LOGICAL  AB_LSAME
-      EXTERNAL AB_DLAMCH, AB_ZLANGE, AB_ZLANSY, AB_LSAME
+      DOUBLE PRECISION DLAMCH
+      DOUBLE PRECISION ZLANGE, ZLANSY
+      LOGICAL  LSAME
+      EXTERNAL DLAMCH, ZLANGE, ZLANSY, LSAME
 *     ..
 *     .. Data statements ..
       DATA ISEED / 1988, 1989, 1990, 1991 /
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
+      EPS = DLAMCH( 'Epsilon' )
       K = M
       N2 = M+N
       IF( N.GT.0 ) THEN
@@ -139,48 +139,47 @@
 *     Put random stuff into A
 *
       LDT=NB
-      CALL AB_ZLASET( 'Full', M, N2, CZERO, CZERO, A, M )
-      CALL AB_ZLASET( 'Full', NB, M, CZERO, CZERO, T, NB )
+      CALL ZLASET( 'Full', M, N2, CZERO, CZERO, A, M )
+      CALL ZLASET( 'Full', NB, M, CZERO, CZERO, T, NB )
       DO J=1,M
-         CALL AB_ZLARNV( 2, ISEED, M-J+1, A( J, J ) )
+         CALL ZLARNV( 2, ISEED, M-J+1, A( J, J ) )
       END DO
       IF( N.GT.0 ) THEN
          DO J=1,N-L
-            CALL AB_ZLARNV( 2, ISEED, M, A( 1, MIN(N+M,M+1) + J - 1 ) )
+            CALL ZLARNV( 2, ISEED, M, A( 1, MIN(N+M,M+1) + J - 1 ) )
          END DO
       END IF
       IF( L.GT.0 ) THEN
          DO J=1,L
-            CALL AB_ZLARNV( 2, ISEED, M-J+1, A( J, MIN(N+M,N+M-L+1)
+            CALL ZLARNV( 2, ISEED, M-J+1, A( J, MIN(N+M,N+M-L+1)
      $          + J - 1 ) )
          END DO
       END IF
 *
 *     Copy the matrix A to the array AF.
 *
-      CALL AB_ZLACPY( 'Full', M, N2, A, M, AF, M )
+      CALL ZLACPY( 'Full', M, N2, A, M, AF, M )
 *
 *     Factor the matrix A in the array AF.
 *
-      CALL AB_ZTPLQT( M,N,L,NB,AF,M,AF(1,NP1),M,T,LDT,WORK,INFO)
+      CALL ZTPLQT( M,N,L,NB,AF,M,AF(1,NP1),M,T,LDT,WORK,INFO)
 *
 *     Generate the (M+N)-by-(M+N) matrix Q by applying H to I
 *
-      CALL AB_ZLASET( 'Full', N2, N2, CZERO, ONE, Q, N2 )
-      CALL AB_AB_ZGEMLQT( 'L', 'N', N2, N2, K, NB, AF, M, T, LDT, Q, N2,
+      CALL ZLASET( 'Full', N2, N2, CZERO, ONE, Q, N2 )
+      CALL ZGEMLQT( 'L', 'N', N2, N2, K, NB, AF, M, T, LDT, Q, N2,
      $              WORK, INFO )
 *
 *     Copy L
 *
-      CALL AB_ZLASET( 'Full', N2, N2, CZERO, CZERO, R, N2 )
-      CALL AB_ZLACPY( 'Lower', M, N2, AF, M, R, N2 )
+      CALL ZLASET( 'Full', N2, N2, CZERO, CZERO, R, N2 )
+      CALL ZLACPY( 'Lower', M, N2, AF, M, R, N2 )
 *
 *     Compute |L - A*Q*C| / |A| and store in RESULT(1)
 *
-      CALL AB_ZGEMM( 'N', 'C', M, N2, N2, -ONE,  A, M, Q, N2, ONE, R, N2
-     $)
-      ANORM = AB_ZLANGE( '1', M, N2, A, M, RWORK )
-      RESID = AB_ZLANGE( '1', M, N2, R, N2, RWORK )
+      CALL ZGEMM( 'N', 'C', M, N2, N2, -ONE,  A, M, Q, N2, ONE, R, N2)
+      ANORM = ZLANGE( '1', M, N2, A, M, RWORK )
+      RESID = ZLANGE( '1', M, N2, R, N2, RWORK )
       IF( ANORM.GT.ZERO ) THEN
          RESULT( 1 ) = RESID / (EPS*ANORM*MAX(1,N2))
       ELSE
@@ -189,32 +188,30 @@
 *
 *     Compute |I - Q*Q'| and store in RESULT(2)
 *
-      CALL AB_ZLASET( 'Full', N2, N2, CZERO, ONE, R, N2 )
-      CALL AB_AB_ZHERK( 'U', 'N', N2, N2, DREAL(-ONE), Q, N2, DREAL(ONE)
-     $,
+      CALL ZLASET( 'Full', N2, N2, CZERO, ONE, R, N2 )
+      CALL ZHERK( 'U', 'N', N2, N2, DREAL(-ONE), Q, N2, DREAL(ONE),
      $               R, N2 )
-      RESID = AB_ZLANSY( '1', 'Upper', N2, R, N2, RWORK )
+      RESID = ZLANSY( '1', 'Upper', N2, R, N2, RWORK )
       RESULT( 2 ) = RESID / (EPS*MAX(1,N2))
 *
 *     Generate random m-by-n matrix C and a copy CF
 *
-      CALL AB_ZLASET( 'Full', N2, M, CZERO, ONE, C, N2 )
+      CALL ZLASET( 'Full', N2, M, CZERO, ONE, C, N2 )
       DO J=1,M
-         CALL AB_ZLARNV( 2, ISEED, N2, C( 1, J ) )
+         CALL ZLARNV( 2, ISEED, N2, C( 1, J ) )
       END DO
-      CNORM = AB_ZLANGE( '1', N2, M, C, N2, RWORK)
-      CALL AB_ZLACPY( 'Full', N2, M, C, N2, CF, N2 )
+      CNORM = ZLANGE( '1', N2, M, C, N2, RWORK)
+      CALL ZLACPY( 'Full', N2, M, C, N2, CF, N2 )
 *
 *     Apply Q to C as Q*C
 *
-      CALL AB_ZTPMLQT( 'L','N', N,M,K,L,NB,AF(1, NP1),M,T,LDT,CF,N2,
+      CALL ZTPMLQT( 'L','N', N,M,K,L,NB,AF(1, NP1),M,T,LDT,CF,N2,
      $               CF(NP1,1),N2,WORK,INFO)
 *
 *     Compute |Q*C - Q*C| / |C|
 *
-      CALL AB_ZGEMM( 'N', 'N', N2, M, N2, -ONE, Q, N2, C, N2, ONE, CF, N
-     $2 )
-      RESID = AB_ZLANGE( '1', N2, M, CF, N2, RWORK )
+      CALL ZGEMM( 'N', 'N', N2, M, N2, -ONE, Q, N2, C, N2, ONE, CF, N2 )
+      RESID = ZLANGE( '1', N2, M, CF, N2, RWORK )
       IF( CNORM.GT.ZERO ) THEN
          RESULT( 3 ) = RESID / (EPS*MAX(1,N2)*CNORM)
       ELSE
@@ -224,17 +221,17 @@
 *
 *     Copy C into CF again
 *
-      CALL AB_ZLACPY( 'Full', N2, M, C, N2, CF, N2 )
+      CALL ZLACPY( 'Full', N2, M, C, N2, CF, N2 )
 *
 *     Apply Q to C as QT*C
 *
-      CALL AB_ZTPMLQT( 'L','C',N,M,K,L,NB,AF(1,NP1),M,T,LDT,CF,N2,
+      CALL ZTPMLQT( 'L','C',N,M,K,L,NB,AF(1,NP1),M,T,LDT,CF,N2,
      $              CF(NP1,1),N2,WORK,INFO)
 *
 *     Compute |QT*C - QT*C| / |C|
 *
-      CALL AB_ZGEMM('C','N',N2,M,N2,-ONE,Q,N2,C,N2,ONE,CF,N2)
-      RESID = AB_ZLANGE( '1', N2, M, CF, N2, RWORK )
+      CALL ZGEMM('C','N',N2,M,N2,-ONE,Q,N2,C,N2,ONE,CF,N2)
+      RESID = ZLANGE( '1', N2, M, CF, N2, RWORK )
 
       IF( CNORM.GT.ZERO ) THEN
          RESULT( 4 ) = RESID / (EPS*MAX(1,N2)*CNORM)
@@ -245,20 +242,20 @@
 *     Generate random m-by-n matrix D and a copy DF
 *
       DO J=1,N2
-         CALL AB_ZLARNV( 2, ISEED, M, D( 1, J ) )
+         CALL ZLARNV( 2, ISEED, M, D( 1, J ) )
       END DO
-      DNORM = AB_ZLANGE( '1', M, N2, D, M, RWORK)
-      CALL AB_ZLACPY( 'Full', M, N2, D, M, DF, M )
+      DNORM = ZLANGE( '1', M, N2, D, M, RWORK)
+      CALL ZLACPY( 'Full', M, N2, D, M, DF, M )
 *
 *     Apply Q to D as D*Q
 *
-      CALL AB_ZTPMLQT('R','N',M,N,K,L,NB,AF(1,NP1),M,T,LDT,DF,M,
+      CALL ZTPMLQT('R','N',M,N,K,L,NB,AF(1,NP1),M,T,LDT,DF,M,
      $             DF(1,NP1),M,WORK,INFO)
 *
 *     Compute |D*Q - D*Q| / |D|
 *
-      CALL AB_ZGEMM('N','N',M,N2,N2,-ONE,D,M,Q,N2,ONE,DF,M)
-      RESID = AB_ZLANGE('1',M, N2,DF,M,RWORK )
+      CALL ZGEMM('N','N',M,N2,N2,-ONE,D,M,Q,N2,ONE,DF,M)
+      RESID = ZLANGE('1',M, N2,DF,M,RWORK )
       IF( CNORM.GT.ZERO ) THEN
          RESULT( 5 ) = RESID / (EPS*MAX(1,N2)*DNORM)
       ELSE
@@ -267,19 +264,18 @@
 *
 *     Copy D into DF again
 *
-      CALL AB_ZLACPY('Full',M,N2,D,M,DF,M )
+      CALL ZLACPY('Full',M,N2,D,M,DF,M )
 *
 *     Apply Q to D as D*QT
 *
-      CALL AB_ZTPMLQT('R','C',M,N,K,L,NB,AF(1,NP1),M,T,LDT,DF,M,
+      CALL ZTPMLQT('R','C',M,N,K,L,NB,AF(1,NP1),M,T,LDT,DF,M,
      $             DF(1,NP1),M,WORK,INFO)
 
 *
 *     Compute |D*QT - D*QT| / |D|
 *
-      CALL AB_ZGEMM( 'N', 'C', M, N2, N2, -ONE, D, M, Q, N2, ONE, DF, M 
-     $)
-      RESID = AB_ZLANGE( '1', M, N2, DF, M, RWORK )
+      CALL ZGEMM( 'N', 'C', M, N2, N2, -ONE, D, M, Q, N2, ONE, DF, M )
+      RESID = ZLANGE( '1', M, N2, DF, M, RWORK )
       IF( CNORM.GT.ZERO ) THEN
          RESULT( 6 ) = RESID / (EPS*MAX(1,N2)*DNORM)
       ELSE

@@ -1,4 +1,4 @@
-*> \brief \b AB_DSLECT
+*> \brief \b DSLECT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       LOGICAL          FUNCTION AB_DSLECT( ZR, ZI )
+*       LOGICAL          FUNCTION DSLECT( ZR, ZI )
 *
 *       .. Scalar Arguments ..
 *       DOUBLE PRECISION   ZI, ZR
@@ -20,15 +20,15 @@
 *>
 *> \verbatim
 *>
-*> AB_DSLECT returns .TRUE. if the eigenvalue ZR+sqrt(-1)*ZI is to be
+*> DSLECT returns .TRUE. if the eigenvalue ZR+sqrt(-1)*ZI is to be
 *> selected, and otherwise it returns .FALSE.
-*> It is used by AB_DCHK41 to test if AB_DGEES successfully sorts eigenvalues,
-*> and by AB_DCHK43 to test if AB_AB_DGEESX successfully sorts eigenvalues.
+*> It is used by DCHK41 to test if DGEES successfully sorts eigenvalues,
+*> and by DCHK43 to test if DGEESX successfully sorts eigenvalues.
 *>
 *> The common block /SSLCT/ controls how eigenvalues are selected.
-*> If SELOPT = 0, then AB_DSLECT return .TRUE. when ZR is less than zero,
+*> If SELOPT = 0, then DSLECT return .TRUE. when ZR is less than zero,
 *> and .FALSE. otherwise.
-*> If SELOPT is at least 1, AB_DSLECT returns SELVAL(SELOPT) and adds 1
+*> If SELOPT is at least 1, DSLECT returns SELVAL(SELOPT) and adds 1
 *> to SELOPT, cycling back to 1 at SELMAX.
 *> \endverbatim
 *
@@ -60,7 +60,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      LOGICAL          FUNCTION AB_DSLECT( ZR, ZI )
+      LOGICAL          FUNCTION DSLECT( ZR, ZI )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -92,26 +92,26 @@
       PARAMETER          ( ZERO = 0.0D0 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAPY2
-      EXTERNAL           AB_DLAPY2
+      DOUBLE PRECISION   DLAPY2
+      EXTERNAL           DLAPY2
 *     ..
 *     .. Executable Statements ..
 *
       IF( SELOPT.EQ.0 ) THEN
-         AB_DSLECT = ( ZR.LT.ZERO )
+         DSLECT = ( ZR.LT.ZERO )
       ELSE
-         RMIN = AB_DLAPY2( ZR-SELWR( 1 ), ZI-SELWI( 1 ) )
-         AB_DSLECT = SELVAL( 1 )
+         RMIN = DLAPY2( ZR-SELWR( 1 ), ZI-SELWI( 1 ) )
+         DSLECT = SELVAL( 1 )
          DO 10 I = 2, SELDIM
-            X = AB_DLAPY2( ZR-SELWR( I ), ZI-SELWI( I ) )
+            X = DLAPY2( ZR-SELWR( I ), ZI-SELWI( I ) )
             IF( X.LE.RMIN ) THEN
                RMIN = X
-               AB_DSLECT = SELVAL( I )
+               DSLECT = SELVAL( I )
             END IF
    10    CONTINUE
       END IF
       RETURN
 *
-*     End of AB_DSLECT
+*     End of DSLECT
 *
       END

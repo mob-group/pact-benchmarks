@@ -1,4 +1,4 @@
-*> \brief \b AB_ZERRPS
+*> \brief \b ZERRPS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZERRPS( PATH, NUNIT )
+*       SUBROUTINE ZERRPS( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            NUNIT
@@ -21,8 +21,8 @@
 *>
 *> \verbatim
 *>
-*> AB_ZERRPS tests the error exits for the COMPLEX routines
-*> for AB_ZPSTRF.
+*> ZERRPS tests the error exits for the COMPLEX routines
+*> for ZPSTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -53,7 +53,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZERRPS( PATH, NUNIT )
+      SUBROUTINE ZERRPS( PATH, NUNIT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -80,7 +80,7 @@
       INTEGER            PIV( NMAX )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALAESM, AB_CHKXER, AB_ZPSTF2, AB_ZPSTRF
+      EXTERNAL           ALAESM, CHKXER, ZPSTF2, ZPSTRF
 *     ..
 *     .. Scalars in Common ..
       INTEGER            INFOT, NOUT
@@ -117,39 +117,39 @@
 *        Test error exits of the routines that use the Cholesky
 *        decomposition of an Hermitian positive semidefinite matrix.
 *
-*        AB_ZPSTRF
+*        ZPSTRF
 *
-      SRNAMT = 'AB_ZPSTRF'
+      SRNAMT = 'ZPSTRF'
       INFOT = 1
-      CALL AB_ZPSTRF( '/', 0, A, 1, PIV, RANK, -1.D0, RWORK, INFO )
-      CALL AB_CHKXER( 'AB_ZPSTRF', INFOT, NOUT, LERR, OK )
+      CALL ZPSTRF( '/', 0, A, 1, PIV, RANK, -1.D0, RWORK, INFO )
+      CALL CHKXER( 'ZPSTRF', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_ZPSTRF( 'U', -1, A, 1, PIV, RANK, -1.D0, RWORK, INFO )
-      CALL AB_CHKXER( 'AB_ZPSTRF', INFOT, NOUT, LERR, OK )
+      CALL ZPSTRF( 'U', -1, A, 1, PIV, RANK, -1.D0, RWORK, INFO )
+      CALL CHKXER( 'ZPSTRF', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL AB_ZPSTRF( 'U', 2, A, 1, PIV, RANK, -1.D0, RWORK, INFO )
-      CALL AB_CHKXER( 'AB_ZPSTRF', INFOT, NOUT, LERR, OK )
+      CALL ZPSTRF( 'U', 2, A, 1, PIV, RANK, -1.D0, RWORK, INFO )
+      CALL CHKXER( 'ZPSTRF', INFOT, NOUT, LERR, OK )
 *
-*        AB_ZPSTF2
+*        ZPSTF2
 *
-      SRNAMT = 'AB_ZPSTF2'
+      SRNAMT = 'ZPSTF2'
       INFOT = 1
-      CALL AB_ZPSTF2( '/', 0, A, 1, PIV, RANK, -1.D0, RWORK, INFO )
-      CALL AB_CHKXER( 'AB_ZPSTF2', INFOT, NOUT, LERR, OK )
+      CALL ZPSTF2( '/', 0, A, 1, PIV, RANK, -1.D0, RWORK, INFO )
+      CALL CHKXER( 'ZPSTF2', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_ZPSTF2( 'U', -1, A, 1, PIV, RANK, -1.D0, RWORK, INFO )
-      CALL AB_CHKXER( 'AB_ZPSTF2', INFOT, NOUT, LERR, OK )
+      CALL ZPSTF2( 'U', -1, A, 1, PIV, RANK, -1.D0, RWORK, INFO )
+      CALL CHKXER( 'ZPSTF2', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL AB_ZPSTF2( 'U', 2, A, 1, PIV, RANK, -1.D0, RWORK, INFO )
-      CALL AB_CHKXER( 'AB_ZPSTF2', INFOT, NOUT, LERR, OK )
+      CALL ZPSTF2( 'U', 2, A, 1, PIV, RANK, -1.D0, RWORK, INFO )
+      CALL CHKXER( 'ZPSTF2', INFOT, NOUT, LERR, OK )
 *
 *
 *     Print a summary line.
 *
-      CALL AB_ALAESM( PATH, OK, NOUT )
+      CALL ALAESM( PATH, OK, NOUT )
 *
       RETURN
 *
-*     End of AB_ZERRPS
+*     End of ZERRPS
 *
       END

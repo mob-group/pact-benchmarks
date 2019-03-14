@@ -1,4 +1,4 @@
-*> \brief \b AB_ZHFRK performs a Hermitian rank-k operation for matrix in RFP format.
+*> \brief \b ZHFRK performs a Hermitian rank-k operation for matrix in RFP format.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZHFRK + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZHFRK.f">
+*> Download ZHFRK + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhfrk.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZHFRK.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhfrk.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZHFRK.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhfrk.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZHFRK( TRANSR, UPLO, TRANS, N, K, ALPHA, A, LDA, BETA,
+*       SUBROUTINE ZHFRK( TRANSR, UPLO, TRANS, N, K, ALPHA, A, LDA, BETA,
 *                         C )
 *
 *       .. Scalar Arguments ..
@@ -38,7 +38,7 @@
 *>
 *> Level 3 BLAS like routine for C in RFP Format.
 *>
-*> AB_ZHFRK performs one of the Hermitian rank--k operations
+*> ZHFRK performs one of the Hermitian rank--k operations
 *>
 *>    C := alpha*A*A**H + beta*C,
 *>
@@ -48,7 +48,7 @@
 *>
 *> where alpha and beta are real scalars, C is an n--by--n Hermitian
 *> matrix and A is an n--by--k matrix in the first case and a k--by--n
-*> matrix in the AB_SECOND case.
+*> matrix in the second case.
 *> \endverbatim
 *
 *  Arguments:
@@ -165,8 +165,7 @@
 *> \ingroup complex16OTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_ZHFRK( TRANSR, UPLO, TRANS, N, K, ALPHA, A, LDA, BET
-     $A,
+      SUBROUTINE ZHFRK( TRANSR, UPLO, TRANS, N, K, ALPHA, A, LDA, BETA,
      $                  C )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
@@ -197,11 +196,11 @@
       COMPLEX*16         CALPHA, CBETA
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZGEMM, AB_AB_ZHERK
+      EXTERNAL           XERBLA, ZGEMM, ZHERK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, DCMPLX
@@ -212,9 +211,9 @@
 *     Test the input parameters.
 *
       INFO = 0
-      NORMALTRANSR = AB_LSAME( TRANSR, 'N' )
-      LOWER = AB_LSAME( UPLO, 'L' )
-      NOTRANS = AB_LSAME( TRANS, 'N' )
+      NORMALTRANSR = LSAME( TRANSR, 'N' )
+      LOWER = LSAME( UPLO, 'L' )
+      NOTRANS = LSAME( TRANS, 'N' )
 *
       IF( NOTRANS ) THEN
          NROWA = N
@@ -222,11 +221,11 @@
          NROWA = K
       END IF
 *
-      IF( .NOT.NORMALTRANSR .AND. .NOT.AB_LSAME( TRANSR, 'C' ) ) THEN
+      IF( .NOT.NORMALTRANSR .AND. .NOT.LSAME( TRANSR, 'C' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LOWER .AND. .NOT.AB_LSAME( UPLO, 'U' ) ) THEN
+      ELSE IF( .NOT.LOWER .AND. .NOT.LSAME( UPLO, 'U' ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.NOTRANS .AND. .NOT.AB_LSAME( TRANS, 'C' ) ) THEN
+      ELSE IF( .NOT.NOTRANS .AND. .NOT.LSAME( TRANS, 'C' ) ) THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
@@ -236,14 +235,14 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZHFRK ', -INFO )
+         CALL XERBLA( 'ZHFRK ', -INFO )
          RETURN
       END IF
 *
 *     Quick return if possible.
 *
 *     The quick return case: ((ALPHA.EQ.0).AND.(BETA.NE.ZERO)) is not
-*     done (it is in AB_AB_ZHERK for example) and left in the general case.
+*     done (it is in ZHERK for example) and left in the general case.
 *
       IF( ( N.EQ.0 ) .OR. ( ( ( ALPHA.EQ.ZERO ) .OR. ( K.EQ.0 ) ) .AND.
      $    ( BETA.EQ.ONE ) ) )RETURN
@@ -292,28 +291,22 @@
 *
 *                 N is odd, TRANSR = 'N', UPLO = 'L', and TRANS = 'N'
 *
-                  CALL AB_AB_ZHERK( 'L', 'N', N1, K, ALPHA, A( 1, 1 ), L
-     $DA,
+                  CALL ZHERK( 'L', 'N', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( 1 ), N )
-                  CALL AB_AB_ZHERK( 'U', 'N', N2, K, ALPHA, A( N1+1, 1 )
-     $, LDA,
+                  CALL ZHERK( 'U', 'N', N2, K, ALPHA, A( N1+1, 1 ), LDA,
      $                        BETA, C( N+1 ), N )
-                  CALL AB_ZGEMM( 'N', 'C', N2, N1, K, CALPHA, A( N1+1, 1
-     $ ),
+                  CALL ZGEMM( 'N', 'C', N2, N1, K, CALPHA, A( N1+1, 1 ),
      $                        LDA, A( 1, 1 ), LDA, CBETA, C( N1+1 ), N )
 *
                ELSE
 *
 *                 N is odd, TRANSR = 'N', UPLO = 'L', and TRANS = 'C'
 *
-                  CALL AB_AB_ZHERK( 'L', 'C', N1, K, ALPHA, A( 1, 1 ), L
-     $DA,
+                  CALL ZHERK( 'L', 'C', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( 1 ), N )
-                  CALL AB_AB_ZHERK( 'U', 'C', N2, K, ALPHA, A( 1, N1+1 )
-     $, LDA,
+                  CALL ZHERK( 'U', 'C', N2, K, ALPHA, A( 1, N1+1 ), LDA,
      $                        BETA, C( N+1 ), N )
-                  CALL AB_ZGEMM( 'C', 'N', N2, N1, K, CALPHA, A( 1, N1+1
-     $ ),
+                  CALL ZGEMM( 'C', 'N', N2, N1, K, CALPHA, A( 1, N1+1 ),
      $                        LDA, A( 1, 1 ), LDA, CBETA, C( N1+1 ), N )
 *
                END IF
@@ -326,26 +319,22 @@
 *
 *                 N is odd, TRANSR = 'N', UPLO = 'U', and TRANS = 'N'
 *
-                  CALL AB_AB_ZHERK( 'L', 'N', N1, K, ALPHA, A( 1, 1 ), L
-     $DA,
+                  CALL ZHERK( 'L', 'N', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( N2+1 ), N )
-                  CALL AB_AB_ZHERK( 'U', 'N', N2, K, ALPHA, A( N2, 1 ), 
-     $LDA,
+                  CALL ZHERK( 'U', 'N', N2, K, ALPHA, A( N2, 1 ), LDA,
      $                        BETA, C( N1+1 ), N )
-                  CALL AB_ZGEMM( 'N', 'C', N1, N2, K, CALPHA, A( 1, 1 ),
+                  CALL ZGEMM( 'N', 'C', N1, N2, K, CALPHA, A( 1, 1 ),
      $                        LDA, A( N2, 1 ), LDA, CBETA, C( 1 ), N )
 *
                ELSE
 *
 *                 N is odd, TRANSR = 'N', UPLO = 'U', and TRANS = 'C'
 *
-                  CALL AB_AB_ZHERK( 'L', 'C', N1, K, ALPHA, A( 1, 1 ), L
-     $DA,
+                  CALL ZHERK( 'L', 'C', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( N2+1 ), N )
-                  CALL AB_AB_ZHERK( 'U', 'C', N2, K, ALPHA, A( 1, N2 ), 
-     $LDA,
+                  CALL ZHERK( 'U', 'C', N2, K, ALPHA, A( 1, N2 ), LDA,
      $                        BETA, C( N1+1 ), N )
-                  CALL AB_ZGEMM( 'C', 'N', N1, N2, K, CALPHA, A( 1, 1 ),
+                  CALL ZGEMM( 'C', 'N', N1, N2, K, CALPHA, A( 1, 1 ),
      $                        LDA, A( 1, N2 ), LDA, CBETA, C( 1 ), N )
 *
                END IF
@@ -364,13 +353,11 @@
 *
 *                 N is odd, TRANSR = 'C', UPLO = 'L', and TRANS = 'N'
 *
-                  CALL AB_AB_ZHERK( 'U', 'N', N1, K, ALPHA, A( 1, 1 ), L
-     $DA,
+                  CALL ZHERK( 'U', 'N', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( 1 ), N1 )
-                  CALL AB_AB_ZHERK( 'L', 'N', N2, K, ALPHA, A( N1+1, 1 )
-     $, LDA,
+                  CALL ZHERK( 'L', 'N', N2, K, ALPHA, A( N1+1, 1 ), LDA,
      $                        BETA, C( 2 ), N1 )
-                  CALL AB_ZGEMM( 'N', 'C', N1, N2, K, CALPHA, A( 1, 1 ),
+                  CALL ZGEMM( 'N', 'C', N1, N2, K, CALPHA, A( 1, 1 ),
      $                        LDA, A( N1+1, 1 ), LDA, CBETA,
      $                        C( N1*N1+1 ), N1 )
 *
@@ -378,13 +365,11 @@
 *
 *                 N is odd, TRANSR = 'C', UPLO = 'L', and TRANS = 'C'
 *
-                  CALL AB_AB_ZHERK( 'U', 'C', N1, K, ALPHA, A( 1, 1 ), L
-     $DA,
+                  CALL ZHERK( 'U', 'C', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( 1 ), N1 )
-                  CALL AB_AB_ZHERK( 'L', 'C', N2, K, ALPHA, A( 1, N1+1 )
-     $, LDA,
+                  CALL ZHERK( 'L', 'C', N2, K, ALPHA, A( 1, N1+1 ), LDA,
      $                        BETA, C( 2 ), N1 )
-                  CALL AB_ZGEMM( 'C', 'N', N1, N2, K, CALPHA, A( 1, 1 ),
+                  CALL ZGEMM( 'C', 'N', N1, N2, K, CALPHA, A( 1, 1 ),
      $                        LDA, A( 1, N1+1 ), LDA, CBETA,
      $                        C( N1*N1+1 ), N1 )
 *
@@ -398,28 +383,22 @@
 *
 *                 N is odd, TRANSR = 'C', UPLO = 'U', and TRANS = 'N'
 *
-                  CALL AB_AB_ZHERK( 'U', 'N', N1, K, ALPHA, A( 1, 1 ), L
-     $DA,
+                  CALL ZHERK( 'U', 'N', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( N2*N2+1 ), N2 )
-                  CALL AB_AB_ZHERK( 'L', 'N', N2, K, ALPHA, A( N1+1, 1 )
-     $, LDA,
+                  CALL ZHERK( 'L', 'N', N2, K, ALPHA, A( N1+1, 1 ), LDA,
      $                        BETA, C( N1*N2+1 ), N2 )
-                  CALL AB_ZGEMM( 'N', 'C', N2, N1, K, CALPHA, A( N1+1, 1
-     $ ),
+                  CALL ZGEMM( 'N', 'C', N2, N1, K, CALPHA, A( N1+1, 1 ),
      $                        LDA, A( 1, 1 ), LDA, CBETA, C( 1 ), N2 )
 *
                ELSE
 *
 *                 N is odd, TRANSR = 'C', UPLO = 'U', and TRANS = 'C'
 *
-                  CALL AB_AB_ZHERK( 'U', 'C', N1, K, ALPHA, A( 1, 1 ), L
-     $DA,
+                  CALL ZHERK( 'U', 'C', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( N2*N2+1 ), N2 )
-                  CALL AB_AB_ZHERK( 'L', 'C', N2, K, ALPHA, A( 1, N1+1 )
-     $, LDA,
+                  CALL ZHERK( 'L', 'C', N2, K, ALPHA, A( 1, N1+1 ), LDA,
      $                        BETA, C( N1*N2+1 ), N2 )
-                  CALL AB_ZGEMM( 'C', 'N', N2, N1, K, CALPHA, A( 1, N1+1
-     $ ),
+                  CALL ZGEMM( 'C', 'N', N2, N1, K, CALPHA, A( 1, N1+1 ),
      $                        LDA, A( 1, 1 ), LDA, CBETA, C( 1 ), N2 )
 *
                END IF
@@ -444,14 +423,11 @@
 *
 *                 N is even, TRANSR = 'N', UPLO = 'L', and TRANS = 'N'
 *
-                  CALL AB_AB_ZHERK( 'L', 'N', NK, K, ALPHA, A( 1, 1 ), L
-     $DA,
+                  CALL ZHERK( 'L', 'N', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( 2 ), N+1 )
-                  CALL AB_AB_ZHERK( 'U', 'N', NK, K, ALPHA, A( NK+1, 1 )
-     $, LDA,
+                  CALL ZHERK( 'U', 'N', NK, K, ALPHA, A( NK+1, 1 ), LDA,
      $                        BETA, C( 1 ), N+1 )
-                  CALL AB_ZGEMM( 'N', 'C', NK, NK, K, CALPHA, A( NK+1, 1
-     $ ),
+                  CALL ZGEMM( 'N', 'C', NK, NK, K, CALPHA, A( NK+1, 1 ),
      $                        LDA, A( 1, 1 ), LDA, CBETA, C( NK+2 ),
      $                        N+1 )
 *
@@ -459,14 +435,11 @@
 *
 *                 N is even, TRANSR = 'N', UPLO = 'L', and TRANS = 'C'
 *
-                  CALL AB_AB_ZHERK( 'L', 'C', NK, K, ALPHA, A( 1, 1 ), L
-     $DA,
+                  CALL ZHERK( 'L', 'C', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( 2 ), N+1 )
-                  CALL AB_AB_ZHERK( 'U', 'C', NK, K, ALPHA, A( 1, NK+1 )
-     $, LDA,
+                  CALL ZHERK( 'U', 'C', NK, K, ALPHA, A( 1, NK+1 ), LDA,
      $                        BETA, C( 1 ), N+1 )
-                  CALL AB_ZGEMM( 'C', 'N', NK, NK, K, CALPHA, A( 1, NK+1
-     $ ),
+                  CALL ZGEMM( 'C', 'N', NK, NK, K, CALPHA, A( 1, NK+1 ),
      $                        LDA, A( 1, 1 ), LDA, CBETA, C( NK+2 ),
      $                        N+1 )
 *
@@ -480,13 +453,11 @@
 *
 *                 N is even, TRANSR = 'N', UPLO = 'U', and TRANS = 'N'
 *
-                  CALL AB_AB_ZHERK( 'L', 'N', NK, K, ALPHA, A( 1, 1 ), L
-     $DA,
+                  CALL ZHERK( 'L', 'N', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( NK+2 ), N+1 )
-                  CALL AB_AB_ZHERK( 'U', 'N', NK, K, ALPHA, A( NK+1, 1 )
-     $, LDA,
+                  CALL ZHERK( 'U', 'N', NK, K, ALPHA, A( NK+1, 1 ), LDA,
      $                        BETA, C( NK+1 ), N+1 )
-                  CALL AB_ZGEMM( 'N', 'C', NK, NK, K, CALPHA, A( 1, 1 ),
+                  CALL ZGEMM( 'N', 'C', NK, NK, K, CALPHA, A( 1, 1 ),
      $                        LDA, A( NK+1, 1 ), LDA, CBETA, C( 1 ),
      $                        N+1 )
 *
@@ -494,13 +465,11 @@
 *
 *                 N is even, TRANSR = 'N', UPLO = 'U', and TRANS = 'C'
 *
-                  CALL AB_AB_ZHERK( 'L', 'C', NK, K, ALPHA, A( 1, 1 ), L
-     $DA,
+                  CALL ZHERK( 'L', 'C', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( NK+2 ), N+1 )
-                  CALL AB_AB_ZHERK( 'U', 'C', NK, K, ALPHA, A( 1, NK+1 )
-     $, LDA,
+                  CALL ZHERK( 'U', 'C', NK, K, ALPHA, A( 1, NK+1 ), LDA,
      $                        BETA, C( NK+1 ), N+1 )
-                  CALL AB_ZGEMM( 'C', 'N', NK, NK, K, CALPHA, A( 1, 1 ),
+                  CALL ZGEMM( 'C', 'N', NK, NK, K, CALPHA, A( 1, 1 ),
      $                        LDA, A( 1, NK+1 ), LDA, CBETA, C( 1 ),
      $                        N+1 )
 *
@@ -520,13 +489,11 @@
 *
 *                 N is even, TRANSR = 'C', UPLO = 'L', and TRANS = 'N'
 *
-                  CALL AB_AB_ZHERK( 'U', 'N', NK, K, ALPHA, A( 1, 1 ), L
-     $DA,
+                  CALL ZHERK( 'U', 'N', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( NK+1 ), NK )
-                  CALL AB_AB_ZHERK( 'L', 'N', NK, K, ALPHA, A( NK+1, 1 )
-     $, LDA,
+                  CALL ZHERK( 'L', 'N', NK, K, ALPHA, A( NK+1, 1 ), LDA,
      $                        BETA, C( 1 ), NK )
-                  CALL AB_ZGEMM( 'N', 'C', NK, NK, K, CALPHA, A( 1, 1 ),
+                  CALL ZGEMM( 'N', 'C', NK, NK, K, CALPHA, A( 1, 1 ),
      $                        LDA, A( NK+1, 1 ), LDA, CBETA,
      $                        C( ( ( NK+1 )*NK )+1 ), NK )
 *
@@ -534,13 +501,11 @@
 *
 *                 N is even, TRANSR = 'C', UPLO = 'L', and TRANS = 'C'
 *
-                  CALL AB_AB_ZHERK( 'U', 'C', NK, K, ALPHA, A( 1, 1 ), L
-     $DA,
+                  CALL ZHERK( 'U', 'C', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( NK+1 ), NK )
-                  CALL AB_AB_ZHERK( 'L', 'C', NK, K, ALPHA, A( 1, NK+1 )
-     $, LDA,
+                  CALL ZHERK( 'L', 'C', NK, K, ALPHA, A( 1, NK+1 ), LDA,
      $                        BETA, C( 1 ), NK )
-                  CALL AB_ZGEMM( 'C', 'N', NK, NK, K, CALPHA, A( 1, 1 ),
+                  CALL ZGEMM( 'C', 'N', NK, NK, K, CALPHA, A( 1, 1 ),
      $                        LDA, A( 1, NK+1 ), LDA, CBETA,
      $                        C( ( ( NK+1 )*NK )+1 ), NK )
 *
@@ -554,28 +519,22 @@
 *
 *                 N is even, TRANSR = 'C', UPLO = 'U', and TRANS = 'N'
 *
-                  CALL AB_AB_ZHERK( 'U', 'N', NK, K, ALPHA, A( 1, 1 ), L
-     $DA,
+                  CALL ZHERK( 'U', 'N', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( NK*( NK+1 )+1 ), NK )
-                  CALL AB_AB_ZHERK( 'L', 'N', NK, K, ALPHA, A( NK+1, 1 )
-     $, LDA,
+                  CALL ZHERK( 'L', 'N', NK, K, ALPHA, A( NK+1, 1 ), LDA,
      $                        BETA, C( NK*NK+1 ), NK )
-                  CALL AB_ZGEMM( 'N', 'C', NK, NK, K, CALPHA, A( NK+1, 1
-     $ ),
+                  CALL ZGEMM( 'N', 'C', NK, NK, K, CALPHA, A( NK+1, 1 ),
      $                        LDA, A( 1, 1 ), LDA, CBETA, C( 1 ), NK )
 *
                ELSE
 *
 *                 N is even, TRANSR = 'C', UPLO = 'U', and TRANS = 'C'
 *
-                  CALL AB_AB_ZHERK( 'U', 'C', NK, K, ALPHA, A( 1, 1 ), L
-     $DA,
+                  CALL ZHERK( 'U', 'C', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( NK*( NK+1 )+1 ), NK )
-                  CALL AB_AB_ZHERK( 'L', 'C', NK, K, ALPHA, A( 1, NK+1 )
-     $, LDA,
+                  CALL ZHERK( 'L', 'C', NK, K, ALPHA, A( 1, NK+1 ), LDA,
      $                        BETA, C( NK*NK+1 ), NK )
-                  CALL AB_ZGEMM( 'C', 'N', NK, NK, K, CALPHA, A( 1, NK+1
-     $ ),
+                  CALL ZGEMM( 'C', 'N', NK, NK, K, CALPHA, A( 1, NK+1 ),
      $                        LDA, A( 1, 1 ), LDA, CBETA, C( 1 ), NK )
 *
                END IF
@@ -588,6 +547,6 @@
 *
       RETURN
 *
-*     End of AB_ZHFRK
+*     End of ZHFRK
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLARTV applies a vector of plane rotations with real cosines and complex sines to the elements of a pair of vectors.
+*> \brief \b ZLARTV applies a vector of plane rotations with real cosines and complex sines to the elements of a pair of vectors.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZLARTV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLARTV.f">
+*> Download ZLARTV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlartv.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLARTV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlartv.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLARTV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlartv.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZLARTV( N, X, INCX, Y, INCY, C, S, INCC )
+*       SUBROUTINE ZLARTV( N, X, INCX, Y, INCY, C, S, INCC )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCC, INCX, INCY, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZLARTV applies a vector of complex plane rotations with real cosines
+*> ZLARTV applies a vector of complex plane rotations with real cosines
 *> to elements of the complex vectors x and y. For i = 1,2,...,n
 *>
 *>    ( x(i) ) := (        c(i)   s(i) ) ( x(i) )
@@ -105,7 +105,7 @@
 *> \ingroup complex16OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_ZLARTV( N, X, INCX, Y, INCY, C, S, INCC )
+      SUBROUTINE ZLARTV( N, X, INCX, Y, INCY, C, S, INCC )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -145,6 +145,6 @@
    10 CONTINUE
       RETURN
 *
-*     End of AB_ZLARTV
+*     End of ZLARTV
 *
       END

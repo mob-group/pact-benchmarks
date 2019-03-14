@@ -1,4 +1,4 @@
-*> \brief \b AB_DGET32
+*> \brief \b DGET32
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DGET32( RMAX, LMAX, NINFO, KNT )
+*       SUBROUTINE DGET32( RMAX, LMAX, NINFO, KNT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            KNT, LMAX, NINFO
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DGET32 tests AB_DLASY2, a routine for solving
+*> DGET32 tests DLASY2, a routine for solving
 *>
 *>         op(TL)*X + ISGN*X*op(TR) = SCALE*B
 *>
@@ -80,7 +80,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_DGET32( RMAX, LMAX, NINFO, KNT )
+      SUBROUTINE DGET32( RMAX, LMAX, NINFO, KNT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -113,11 +113,11 @@
      $                   X( 2, 2 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH
-      EXTERNAL           AB_DLAMCH
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLABAD, AB_DLASY2
+      EXTERNAL           DLABAD, DLASY2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT
@@ -131,10 +131,10 @@
 *
 *     Get machine parameters
 *
-      EPS = AB_DLAMCH( 'P' )
-      SMLNUM = AB_DLAMCH( 'S' ) / EPS
+      EPS = DLAMCH( 'P' )
+      SMLNUM = DLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL AB_DLABAD( SMLNUM, BIGNUM )
+      CALL DLABAD( SMLNUM, BIGNUM )
 *
 *     Set up test case parameters
 *
@@ -165,8 +165,7 @@
                         TR( 1, 1 ) = VAL( ITR )
                         B( 1, 1 ) = VAL( IB )
                         KNT = KNT + 1
-                        CALL AB_DLASY2( LTRANL, LTRANR, ISGN, N1, N2, TL
-     $,
+                        CALL DLASY2( LTRANL, LTRANR, ISGN, N1, N2, TL,
      $                               2, TR, 2, B, 2, SCALE, X, 2, XNORM,
      $                               INFO )
                         IF( INFO.NE.0 )
@@ -214,8 +213,7 @@
      $                                     VAL( ITLSCL )
                               TR( 1, 1 ) = VAL( ITR )
                               KNT = KNT + 1
-                              CALL AB_DLASY2( LTRANL, LTRANR, ISGN, N1, 
-     $N2,
+                              CALL DLASY2( LTRANL, LTRANR, ISGN, N1, N2,
      $                                     TL, 2, TR, 2, B, 2, SCALE, X,
      $                                     2, XNORM, INFO )
                               IF( INFO.NE.0 )
@@ -274,8 +272,7 @@
      $                                     VAL( ITRSCL )
                               TL( 1, 1 ) = VAL( ITL )
                               KNT = KNT + 1
-                              CALL AB_DLASY2( LTRANL, LTRANR, ISGN, N1, 
-     $N2,
+                              CALL DLASY2( LTRANL, LTRANR, ISGN, N1, N2,
      $                                     TL, 2, TR, 2, B, 2, SCALE, X,
      $                                     2, XNORM, INFO )
                               IF( INFO.NE.0 )
@@ -348,8 +345,7 @@
                                     TL( 2, 2 ) = ITVAL( 2, 2, ITL )*
      $                                           VAL( ITLSCL )
                                     KNT = KNT + 1
-                                    CALL AB_DLASY2( LTRANL, LTRANR, ISGN
-     $,
+                                    CALL DLASY2( LTRANL, LTRANR, ISGN,
      $                                           N1, N2, TL, 2, TR, 2,
      $                                           B, 2, SCALE, X, 2,
      $                                           XNORM, INFO )
@@ -430,6 +426,6 @@
 *
       RETURN
 *
-*     End of AB_DGET32
+*     End of DGET32
 *
       END

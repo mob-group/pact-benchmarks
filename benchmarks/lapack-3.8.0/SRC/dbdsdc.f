@@ -1,4 +1,4 @@
-*> \brief \b AB_DBDSDC
+*> \brief \b DBDSDC
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DBDSDC + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DBDSDC.f">
+*> Download DBDSDC + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dbdsdc.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DBDSDC.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dbdsdc.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DBDSDC.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dbdsdc.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DBDSDC( UPLO, COMPQ, N, D, E, U, LDU, VT, LDVT, Q, IQ,
+*       SUBROUTINE DBDSDC( UPLO, COMPQ, N, D, E, U, LDU, VT, LDVT, Q, IQ,
 *                          WORK, IWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,12 +37,12 @@
 *>
 *> \verbatim
 *>
-*> AB_DBDSDC computes the singular value decomposition (SVD) of a real
+*> DBDSDC computes the singular value decomposition (SVD) of a real
 *> N-by-N (upper or lower) bidiagonal matrix B:  B = U * S * VT,
 *> using a divide and conquer method, where S is a diagonal matrix
 *> with non-negative diagonal elements (the singular values of B), and
 *> U and VT are orthogonal matrices of left and right singular vectors,
-*> respectively. AB_DBDSDC can be used to compute all singular values,
+*> respectively. DBDSDC can be used to compute all singular values,
 *> and optionally, singular vectors or singular vectors in compact form.
 *>
 *> This code makes very mild assumptions about floating point
@@ -50,9 +50,9 @@
 *> add/subtract, or on those binary machines without guard digits
 *> which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or Cray-2.
 *> It could conceivably fail on hexadecimal or decimal machines
-*> without guard digits, but we know of none.  See AB_DLASD3 for details.
+*> without guard digits, but we know of none.  See DLASD3 for details.
 *>
-*> The code currently calls AB_DLASDQ if singular values only are desired.
+*> The code currently calls DLASDQ if singular values only are desired.
 *> However, it can be slightly modified to compute singular values
 *> using the divide and conquer method.
 *> \endverbatim
@@ -140,7 +140,7 @@
 *>             requiring O(N log N) space instead of 2*N**2.
 *>             In particular, Q contains all the DOUBLE PRECISION data in
 *>             LDQ >= N*(11 + 2*SMLSIZ + 8*INT(LOG_2(N/(SMLSIZ+1))))
-*>             words of memory, where SMLSIZ is returned by AB_ILAENV and
+*>             words of memory, where SMLSIZ is returned by ILAENV and
 *>             is equal to the maximum size of the subproblems at the
 *>             bottom of the computation tree (usually about 25).
 *>          For other values of COMPQ, Q is not referenced.
@@ -155,7 +155,7 @@
 *>             requiring O(N log N) space instead of 2*N**2.
 *>             In particular, IQ contains all INTEGER data in
 *>             LDIQ >= N*(3 + 3*INT(LOG_2(N/(SMLSIZ+1))))
-*>             words of memory, where SMLSIZ is returned by AB_ILAENV and
+*>             words of memory, where SMLSIZ is returned by ILAENV and
 *>             is equal to the maximum size of the subproblems at the
 *>             bottom of the computation tree (usually about 25).
 *>          For other values of COMPQ, IQ is not referenced.
@@ -202,8 +202,7 @@
 *>     California at Berkeley, USA
 *>
 *  =====================================================================
-      SUBROUTINE AB_DBDSDC( UPLO, COMPQ, N, D, E, U, LDU, VT, LDVT, Q, I
-     $Q,
+      SUBROUTINE DBDSDC( UPLO, COMPQ, N, D, E, U, LDU, VT, LDVT, Q, IQ,
      $                   WORK, IWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
@@ -238,15 +237,14 @@
       DOUBLE PRECISION   CS, EPS, ORGNRM, P, R, SN
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      DOUBLE PRECISION   AB_DLAMCH, AB_DLANST
-      EXTERNAL           AB_LSAME, AB_ILAENV, AB_DLAMCH, AB_DLANST
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      DOUBLE PRECISION   DLAMCH, DLANST
+      EXTERNAL           LSAME, ILAENV, DLAMCH, DLANST
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DCOPY, AB_DLARTG, AB_DLASCL, AB_DLASD0, AB_D
-     $LASDA, AB_DLASDQ,
-     $                   AB_DLASET, AB_DLASR, AB_DSWAP, AB_XERBLA
+      EXTERNAL           DCOPY, DLARTG, DLASCL, DLASD0, DLASDA, DLASDQ,
+     $                   DLASET, DLASR, DSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, INT, LOG, SIGN
@@ -258,15 +256,15 @@
       INFO = 0
 *
       IUPLO = 0
-      IF( AB_LSAME( UPLO, 'U' ) )
+      IF( LSAME( UPLO, 'U' ) )
      $   IUPLO = 1
-      IF( AB_LSAME( UPLO, 'L' ) )
+      IF( LSAME( UPLO, 'L' ) )
      $   IUPLO = 2
-      IF( AB_LSAME( COMPQ, 'N' ) ) THEN
+      IF( LSAME( COMPQ, 'N' ) ) THEN
          ICOMPQ = 0
-      ELSE IF( AB_LSAME( COMPQ, 'P' ) ) THEN
+      ELSE IF( LSAME( COMPQ, 'P' ) ) THEN
          ICOMPQ = 1
-      ELSE IF( AB_LSAME( COMPQ, 'I' ) ) THEN
+      ELSE IF( LSAME( COMPQ, 'I' ) ) THEN
          ICOMPQ = 2
       ELSE
          ICOMPQ = -1
@@ -285,7 +283,7 @@
          INFO = -9
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DBDSDC', -INFO )
+         CALL XERBLA( 'DBDSDC', -INFO )
          RETURN
       END IF
 *
@@ -293,7 +291,7 @@
 *
       IF( N.EQ.0 )
      $   RETURN
-      SMLSIZ = AB_ILAENV( 9, 'AB_DBDSDC', ' ', 0, 0, 0, 0 )
+      SMLSIZ = ILAENV( 9, 'DBDSDC', ' ', 0, 0, 0, 0 )
       IF( N.EQ.1 ) THEN
          IF( ICOMPQ.EQ.1 ) THEN
             Q( 1 ) = SIGN( ONE, D( 1 ) )
@@ -313,14 +311,14 @@
       WSTART = 1
       QSTART = 3
       IF( ICOMPQ.EQ.1 ) THEN
-         CALL AB_DCOPY( N, D, 1, Q( 1 ), 1 )
-         CALL AB_DCOPY( N-1, E, 1, Q( N+1 ), 1 )
+         CALL DCOPY( N, D, 1, Q( 1 ), 1 )
+         CALL DCOPY( N-1, E, 1, Q( N+1 ), 1 )
       END IF
       IF( IUPLO.EQ.2 ) THEN
          QSTART = 5
          IF( ICOMPQ .EQ. 2 ) WSTART = 2*N - 1
          DO 10 I = 1, N - 1
-            CALL AB_DLARTG( D( I ), E( I ), CS, SN, R )
+            CALL DLARTG( D( I ), E( I ), CS, SN, R )
             D( I ) = R
             E( I ) = SN*D( I+1 )
             D( I+1 ) = CS*D( I+1 )
@@ -334,13 +332,13 @@
    10    CONTINUE
       END IF
 *
-*     If ICOMPQ = 0, use AB_DLASDQ to compute the singular values.
+*     If ICOMPQ = 0, use DLASDQ to compute the singular values.
 *
       IF( ICOMPQ.EQ.0 ) THEN
 *        Ignore WSTART, instead using WORK( 1 ), since the two vectors
 *        for CS and -SN above are added only if ICOMPQ == 2,
 *        and adding them exceeds documented WORK size of 4*n.
-         CALL AB_DLASDQ( 'U', 0, N, 0, 0, 0, D, E, VT, LDVT, U, LDU, U,
+         CALL DLASDQ( 'U', 0, N, 0, 0, 0, D, E, VT, LDVT, U, LDU, U,
      $                LDU, WORK( 1 ), INFO )
          GO TO 40
       END IF
@@ -350,21 +348,18 @@
 *
       IF( N.LE.SMLSIZ ) THEN
          IF( ICOMPQ.EQ.2 ) THEN
-            CALL AB_DLASET( 'A', N, N, ZERO, ONE, U, LDU )
-            CALL AB_DLASET( 'A', N, N, ZERO, ONE, VT, LDVT )
-            CALL AB_DLASDQ( 'U', 0, N, N, N, 0, D, E, VT, LDVT, U, LDU, 
-     $U,
+            CALL DLASET( 'A', N, N, ZERO, ONE, U, LDU )
+            CALL DLASET( 'A', N, N, ZERO, ONE, VT, LDVT )
+            CALL DLASDQ( 'U', 0, N, N, N, 0, D, E, VT, LDVT, U, LDU, U,
      $                   LDU, WORK( WSTART ), INFO )
          ELSE IF( ICOMPQ.EQ.1 ) THEN
             IU = 1
             IVT = IU + N
-            CALL AB_DLASET( 'A', N, N, ZERO, ONE, Q( IU+( QSTART-1 )*N )
-     $,
+            CALL DLASET( 'A', N, N, ZERO, ONE, Q( IU+( QSTART-1 )*N ),
      $                   N )
-            CALL AB_DLASET( 'A', N, N, ZERO, ONE, Q( IVT+( QSTART-1 )*N 
-     $),
+            CALL DLASET( 'A', N, N, ZERO, ONE, Q( IVT+( QSTART-1 )*N ),
      $                   N )
-            CALL AB_DLASDQ( 'U', 0, N, N, N, 0, D, E,
+            CALL DLASDQ( 'U', 0, N, N, N, 0, D, E,
      $                   Q( IVT+( QSTART-1 )*N ), N,
      $                   Q( IU+( QSTART-1 )*N ), N,
      $                   Q( IU+( QSTART-1 )*N ), N, WORK( WSTART ),
@@ -374,19 +369,19 @@
       END IF
 *
       IF( ICOMPQ.EQ.2 ) THEN
-         CALL AB_DLASET( 'A', N, N, ZERO, ONE, U, LDU )
-         CALL AB_DLASET( 'A', N, N, ZERO, ONE, VT, LDVT )
+         CALL DLASET( 'A', N, N, ZERO, ONE, U, LDU )
+         CALL DLASET( 'A', N, N, ZERO, ONE, VT, LDVT )
       END IF
 *
 *     Scale.
 *
-      ORGNRM = AB_DLANST( 'M', N, D, E )
+      ORGNRM = DLANST( 'M', N, D, E )
       IF( ORGNRM.EQ.ZERO )
      $   RETURN
-      CALL AB_DLASCL( 'G', 0, 0, ORGNRM, ONE, N, 1, D, N, IERR )
-      CALL AB_DLASCL( 'G', 0, 0, ORGNRM, ONE, NM1, 1, E, NM1, IERR )
+      CALL DLASCL( 'G', 0, 0, ORGNRM, ONE, N, 1, D, N, IERR )
+      CALL DLASCL( 'G', 0, 0, ORGNRM, ONE, NM1, 1, E, NM1, IERR )
 *
-      EPS = (0.9D+0)*AB_DLAMCH( 'Epsilon' )
+      EPS = (0.9D+0)*DLAMCH( 'Epsilon' )
 *
       MLVL = INT( LOG( DBLE( N ) / DBLE( SMLSIZ+1 ) ) / LOG( TWO ) ) + 1
       SMLSZP = SMLSIZ + 1
@@ -450,11 +445,11 @@
                D( N ) = ABS( D( N ) )
             END IF
             IF( ICOMPQ.EQ.2 ) THEN
-               CALL AB_DLASD0( NSIZE, SQRE, D( START ), E( START ),
+               CALL DLASD0( NSIZE, SQRE, D( START ), E( START ),
      $                      U( START, START ), LDU, VT( START, START ),
      $                      LDVT, SMLSIZ, IWORK, WORK( WSTART ), INFO )
             ELSE
-               CALL AB_DLASDA( ICOMPQ, SMLSIZ, NSIZE, SQRE, D( START ),
+               CALL DLASDA( ICOMPQ, SMLSIZ, NSIZE, SQRE, D( START ),
      $                      E( START ), Q( START+( IU+QSTART-2 )*N ), N,
      $                      Q( START+( IVT+QSTART-2 )*N ),
      $                      IQ( START+K*N ), Q( START+( DIFL+QSTART-2 )*
@@ -477,7 +472,7 @@
 *
 *     Unscale
 *
-      CALL AB_DLASCL( 'G', 0, 0, ONE, ORGNRM, N, 1, D, N, IERR )
+      CALL DLASCL( 'G', 0, 0, ONE, ORGNRM, N, 1, D, N, IERR )
    40 CONTINUE
 *
 *     Use Selection Sort to minimize swaps of singular vectors
@@ -498,8 +493,8 @@
             IF( ICOMPQ.EQ.1 ) THEN
                IQ( I ) = KK
             ELSE IF( ICOMPQ.EQ.2 ) THEN
-               CALL AB_DSWAP( N, U( 1, I ), 1, U( 1, KK ), 1 )
-               CALL AB_DSWAP( N, VT( I, 1 ), LDVT, VT( KK, 1 ), LDVT )
+               CALL DSWAP( N, U( 1, I ), 1, U( 1, KK ), 1 )
+               CALL DSWAP( N, VT( I, 1 ), LDVT, VT( KK, 1 ), LDVT )
             END IF
          ELSE IF( ICOMPQ.EQ.1 ) THEN
             IQ( I ) = I
@@ -520,11 +515,10 @@
 *     which rotated B to be upper bidiagonal
 *
       IF( ( IUPLO.EQ.2 ) .AND. ( ICOMPQ.EQ.2 ) )
-     $   CALL AB_DLASR( 'L', 'V', 'B', N, N, WORK( 1 ), WORK( N ), U, LD
-     $U )
+     $   CALL DLASR( 'L', 'V', 'B', N, N, WORK( 1 ), WORK( N ), U, LDU )
 *
       RETURN
 *
-*     End of AB_DBDSDC
+*     End of DBDSDC
 *
       END

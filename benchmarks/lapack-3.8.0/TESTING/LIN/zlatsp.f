@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLATSP
+*> \brief \b ZLATSP
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZLATSP( UPLO, N, X, ISEED )
+*       SUBROUTINE ZLATSP( UPLO, N, X, ISEED )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZLATSP generates a special test matrix for the complex symmetric
+*> ZLATSP generates a special test matrix for the complex symmetric
 *> (indefinite) factorization for packed matrices.  The pivot blocks of
 *> the generated matrix will be in the following order:
 *>    2x2 pivot block, non diagonalizable
@@ -82,7 +82,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZLATSP( UPLO, N, X, ISEED )
+      SUBROUTINE ZLATSP( UPLO, N, X, ISEED )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -110,8 +110,8 @@
       COMPLEX*16         A, B, C, R
 *     ..
 *     .. External Functions ..
-      COMPLEX*16         AB_ZLARND
-      EXTERNAL           AB_ZLARND
+      COMPLEX*16         ZLARND
+      EXTERNAL           ZLARND
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, SQRT
@@ -138,21 +138,21 @@
 *
          JJ = N*( N+1 ) / 2
          DO 20 J = N, N5, -5
-            A = ALPHA3*AB_ZLARND( 5, ISEED )
-            B = AB_ZLARND( 5, ISEED ) / ALPHA
+            A = ALPHA3*ZLARND( 5, ISEED )
+            B = ZLARND( 5, ISEED ) / ALPHA
             C = A - 2.D0*B*EYE
             R = C / BETA
             X( JJ ) = A
             X( JJ-2 ) = B
             JJ = JJ - J
-            X( JJ ) = AB_ZLARND( 2, ISEED )
+            X( JJ ) = ZLARND( 2, ISEED )
             X( JJ-1 ) = R
             JJ = JJ - ( J-1 )
             X( JJ ) = C
             JJ = JJ - ( J-2 )
-            X( JJ ) = AB_ZLARND( 2, ISEED )
+            X( JJ ) = ZLARND( 2, ISEED )
             JJ = JJ - ( J-3 )
-            X( JJ ) = AB_ZLARND( 2, ISEED )
+            X( JJ ) = ZLARND( 2, ISEED )
             IF( ABS( X( JJ+( J-3 ) ) ).GT.ABS( X( JJ ) ) ) THEN
                X( JJ+( J-4 ) ) = 2.0D0*X( JJ+( J-3 ) )
             ELSE
@@ -165,14 +165,14 @@
 *
          J = N5 - 1
          IF( J.GT.2 ) THEN
-            A = ALPHA3*AB_ZLARND( 5, ISEED )
-            B = AB_ZLARND( 5, ISEED ) / ALPHA
+            A = ALPHA3*ZLARND( 5, ISEED )
+            B = ZLARND( 5, ISEED ) / ALPHA
             C = A - 2.D0*B*EYE
             R = C / BETA
             X( JJ ) = A
             X( JJ-2 ) = B
             JJ = JJ - J
-            X( JJ ) = AB_ZLARND( 2, ISEED )
+            X( JJ ) = ZLARND( 2, ISEED )
             X( JJ-1 ) = R
             JJ = JJ - ( J-1 )
             X( JJ ) = C
@@ -180,8 +180,8 @@
             J = J - 3
          END IF
          IF( J.GT.1 ) THEN
-            X( JJ ) = AB_ZLARND( 2, ISEED )
-            X( JJ-J ) = AB_ZLARND( 2, ISEED )
+            X( JJ ) = ZLARND( 2, ISEED )
+            X( JJ-J ) = ZLARND( 2, ISEED )
             IF( ABS( X( JJ ) ).GT.ABS( X( JJ-J ) ) ) THEN
                X( JJ-1 ) = 2.0D0*X( JJ )
             ELSE
@@ -190,7 +190,7 @@
             JJ = JJ - J - ( J-1 )
             J = J - 2
          ELSE IF( J.EQ.1 ) THEN
-            X( JJ ) = AB_ZLARND( 2, ISEED )
+            X( JJ ) = ZLARND( 2, ISEED )
             J = J - 1
          END IF
 *
@@ -202,21 +202,21 @@
 *
          JJ = 1
          DO 30 J = 1, N5, 5
-            A = ALPHA3*AB_ZLARND( 5, ISEED )
-            B = AB_ZLARND( 5, ISEED ) / ALPHA
+            A = ALPHA3*ZLARND( 5, ISEED )
+            B = ZLARND( 5, ISEED ) / ALPHA
             C = A - 2.D0*B*EYE
             R = C / BETA
             X( JJ ) = A
             X( JJ+2 ) = B
             JJ = JJ + ( N-J+1 )
-            X( JJ ) = AB_ZLARND( 2, ISEED )
+            X( JJ ) = ZLARND( 2, ISEED )
             X( JJ+1 ) = R
             JJ = JJ + ( N-J )
             X( JJ ) = C
             JJ = JJ + ( N-J-1 )
-            X( JJ ) = AB_ZLARND( 2, ISEED )
+            X( JJ ) = ZLARND( 2, ISEED )
             JJ = JJ + ( N-J-2 )
-            X( JJ ) = AB_ZLARND( 2, ISEED )
+            X( JJ ) = ZLARND( 2, ISEED )
             IF( ABS( X( JJ-( N-J-2 ) ) ).GT.ABS( X( JJ ) ) ) THEN
                X( JJ-( N-J-2 )+1 ) = 2.0D0*X( JJ-( N-J-2 ) )
             ELSE
@@ -229,14 +229,14 @@
 *
          J = N5 + 1
          IF( J.LT.N-1 ) THEN
-            A = ALPHA3*AB_ZLARND( 5, ISEED )
-            B = AB_ZLARND( 5, ISEED ) / ALPHA
+            A = ALPHA3*ZLARND( 5, ISEED )
+            B = ZLARND( 5, ISEED ) / ALPHA
             C = A - 2.D0*B*EYE
             R = C / BETA
             X( JJ ) = A
             X( JJ+2 ) = B
             JJ = JJ + ( N-J+1 )
-            X( JJ ) = AB_ZLARND( 2, ISEED )
+            X( JJ ) = ZLARND( 2, ISEED )
             X( JJ+1 ) = R
             JJ = JJ + ( N-J )
             X( JJ ) = C
@@ -244,8 +244,8 @@
             J = J + 3
          END IF
          IF( J.LT.N ) THEN
-            X( JJ ) = AB_ZLARND( 2, ISEED )
-            X( JJ+( N-J+1 ) ) = AB_ZLARND( 2, ISEED )
+            X( JJ ) = ZLARND( 2, ISEED )
+            X( JJ+( N-J+1 ) ) = ZLARND( 2, ISEED )
             IF( ABS( X( JJ ) ).GT.ABS( X( JJ+( N-J+1 ) ) ) ) THEN
                X( JJ+1 ) = 2.0D0*X( JJ )
             ELSE
@@ -254,7 +254,7 @@
             JJ = JJ + ( N-J+1 ) + ( N-J )
             J = J + 2
          ELSE IF( J.EQ.N ) THEN
-            X( JJ ) = AB_ZLARND( 2, ISEED )
+            X( JJ ) = ZLARND( 2, ISEED )
             JJ = JJ + ( N-J+1 )
             J = J + 1
          END IF
@@ -262,6 +262,6 @@
 *
       RETURN
 *
-*     End of AB_ZLATSP
+*     End of ZLATSP
 *
       END

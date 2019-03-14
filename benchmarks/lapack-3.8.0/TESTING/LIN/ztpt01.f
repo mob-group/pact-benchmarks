@@ -1,4 +1,4 @@
-*> \brief \b AB_ZTPT01
+*> \brief \b ZTPT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZTPT01( UPLO, DIAG, N, AP, AINVP, RCOND, RWORK, RESID )
+*       SUBROUTINE ZTPT01( UPLO, DIAG, N, AP, AINVP, RCOND, RWORK, RESID )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          DIAG, UPLO
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZTPT01 computes the residual for a triangular matrix A times its
+*> ZTPT01 computes the residual for a triangular matrix A times its
 *> inverse when A is stored in packed format:
 *>    RESID = norm(A*AINV - I) / ( N * norm(A) * norm(AINV) * EPS ),
 *> where EPS is the machine epsilon.
@@ -107,8 +107,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZTPT01( UPLO, DIAG, N, AP, AINVP, RCOND, RWORK, RESI
-     $D )
+      SUBROUTINE ZTPT01( UPLO, DIAG, N, AP, AINVP, RCOND, RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -137,12 +136,12 @@
       DOUBLE PRECISION   AINVNM, ANORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANTP
-      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_ZLANTP
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH, ZLANTP
+      EXTERNAL           LSAME, DLAMCH, ZLANTP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZTPMV
+      EXTERNAL           ZTPMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE
@@ -159,9 +158,9 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0 or AINVNM = 0.
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
-      ANORM = AB_ZLANTP( '1', UPLO, DIAG, N, AP, RWORK )
-      AINVNM = AB_ZLANTP( '1', UPLO, DIAG, N, AINVP, RWORK )
+      EPS = DLAMCH( 'Epsilon' )
+      ANORM = ZLANTP( '1', UPLO, DIAG, N, AP, RWORK )
+      AINVNM = ZLANTP( '1', UPLO, DIAG, N, AINVP, RWORK )
       IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
          RCOND = ZERO
          RESID = ONE / EPS
@@ -171,8 +170,8 @@
 *
 *     Compute A * AINV, overwriting AINV.
 *
-      UNITD = AB_LSAME( DIAG, 'U' )
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      UNITD = LSAME( DIAG, 'U' )
+      IF( LSAME( UPLO, 'U' ) ) THEN
          JC = 1
          DO 10 J = 1, N
             IF( UNITD )
@@ -180,7 +179,7 @@
 *
 *           Form the j-th column of A*AINV.
 *
-            CALL AB_ZTPMV( 'Upper', 'No transpose', DIAG, J, AP,
+            CALL ZTPMV( 'Upper', 'No transpose', DIAG, J, AP,
      $                  AINVP( JC ), 1 )
 *
 *           Subtract 1 from the diagonal to form A*AINV - I.
@@ -196,8 +195,7 @@
 *
 *           Form the j-th column of A*AINV.
 *
-            CALL AB_ZTPMV( 'Lower', 'No transpose', DIAG, N-J+1, AP( JC 
-     $),
+            CALL ZTPMV( 'Lower', 'No transpose', DIAG, N-J+1, AP( JC ),
      $                  AINVP( JC ), 1 )
 *
 *           Subtract 1 from the diagonal to form A*AINV - I.
@@ -209,12 +207,12 @@
 *
 *     Compute norm(A*AINV - I) / (N * norm(A) * norm(AINV) * EPS)
 *
-      RESID = AB_ZLANTP( '1', UPLO, 'Non-unit', N, AINVP, RWORK )
+      RESID = ZLANTP( '1', UPLO, 'Non-unit', N, AINVP, RWORK )
 *
       RESID = ( ( RESID*RCOND ) / DBLE( N ) ) / EPS
 *
       RETURN
 *
-*     End of AB_ZTPT01
+*     End of ZTPT01
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_ZSYT02
+*> \brief \b ZSYT02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZSYT02( UPLO, N, NRHS, A, LDA, X, LDX, B, LDB, RWORK,
+*       SUBROUTINE ZSYT02( UPLO, N, NRHS, A, LDA, X, LDX, B, LDB, RWORK,
 *                          RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZSYT02 computes the residual for a solution to a complex symmetric
+*> ZSYT02 computes the residual for a solution to a complex symmetric
 *> system of linear equations  A*x = b:
 *>
 *>    RESID = norm(B - A*X) / ( norm(A) * norm(X) * EPS ),
@@ -124,8 +124,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZSYT02( UPLO, N, NRHS, A, LDA, X, LDX, B, LDB, RWORK
-     $,
+      SUBROUTINE ZSYT02( UPLO, N, NRHS, A, LDA, X, LDX, B, LDB, RWORK,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -156,11 +155,11 @@
       DOUBLE PRECISION   ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH, AB_DZASUM, AB_ZLANSY
-      EXTERNAL           AB_DLAMCH, AB_DZASUM, AB_ZLANSY
+      DOUBLE PRECISION   DLAMCH, DZASUM, ZLANSY
+      EXTERNAL           DLAMCH, DZASUM, ZLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZSYMM
+      EXTERNAL           ZSYMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -176,8 +175,8 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
-      ANORM = AB_ZLANSY( '1', UPLO, N, A, LDA, RWORK )
+      EPS = DLAMCH( 'Epsilon' )
+      ANORM = ZLANSY( '1', UPLO, N, A, LDA, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -185,8 +184,7 @@
 *
 *     Compute  B - A*X  (or  B - A'*X ) and store in B .
 *
-      CALL AB_ZSYMM( 'Left', UPLO, N, NRHS, -CONE, A, LDA, X, LDX, CONE,
-     $ B,
+      CALL ZSYMM( 'Left', UPLO, N, NRHS, -CONE, A, LDA, X, LDX, CONE, B,
      $            LDB )
 *
 *     Compute the maximum over the number of right hand sides of
@@ -194,8 +192,8 @@
 *
       RESID = ZERO
       DO 10 J = 1, NRHS
-         BNORM = AB_DZASUM( N, B( 1, J ), 1 )
-         XNORM = AB_DZASUM( N, X( 1, J ), 1 )
+         BNORM = DZASUM( N, B( 1, J ), 1 )
+         XNORM = DZASUM( N, X( 1, J ), 1 )
          IF( XNORM.LE.ZERO ) THEN
             RESID = ONE / EPS
          ELSE
@@ -205,6 +203,6 @@
 *
       RETURN
 *
-*     End of AB_ZSYT02
+*     End of ZSYT02
 *
       END

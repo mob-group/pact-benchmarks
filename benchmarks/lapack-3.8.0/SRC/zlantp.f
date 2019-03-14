@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLANTP returns the value of the 1-norm, or the Frobenius norm, or the infinity norm, or the element of largest absolute value of a triangular matrix supplied in packed form.
+*> \brief \b ZLANTP returns the value of the 1-norm, or the Frobenius norm, or the infinity norm, or the element of largest absolute value of a triangular matrix supplied in packed form.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZLANTP + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLANTP.f">
+*> Download ZLANTP + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlantp.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLANTP.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlantp.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLANTP.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlantp.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       DOUBLE PRECISION FUNCTION AB_ZLANTP( NORM, UPLO, DIAG, N, AP, WORK )
+*       DOUBLE PRECISION FUNCTION ZLANTP( NORM, UPLO, DIAG, N, AP, WORK )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          DIAG, NORM, UPLO
@@ -35,15 +35,15 @@
 *>
 *> \verbatim
 *>
-*> AB_ZLANTP  returns the value of the one norm,  or the Frobenius norm, or
+*> ZLANTP  returns the value of the one norm,  or the Frobenius norm, or
 *> the  infinity norm,  or the  element of  largest absolute value  of a
 *> triangular matrix A, supplied in packed form.
 *> \endverbatim
 *>
-*> \return AB_ZLANTP
+*> \return ZLANTP
 *> \verbatim
 *>
-*>    AB_ZLANTP = ( max(abs(A(i,j))), NORM = 'M' or 'm'
+*>    ZLANTP = ( max(abs(A(i,j))), NORM = 'M' or 'm'
 *>             (
 *>             ( norm1(A),         NORM = '1', 'O' or 'o'
 *>             (
@@ -63,7 +63,7 @@
 *> \param[in] NORM
 *> \verbatim
 *>          NORM is CHARACTER*1
-*>          Specifies the value to be returned in AB_ZLANTP as described
+*>          Specifies the value to be returned in ZLANTP as described
 *>          above.
 *> \endverbatim
 *>
@@ -86,7 +86,7 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The order of the matrix A.  N >= 0.  When N = 0, AB_ZLANTP is
+*>          The order of the matrix A.  N >= 0.  When N = 0, ZLANTP is
 *>          set to zero.
 *> \endverbatim
 *>
@@ -123,8 +123,7 @@
 *> \ingroup complex16OTHERauxiliary
 *
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION AB_ZLANTP( NORM, UPLO, DIAG, N, AP, WORK
-     $ )
+      DOUBLE PRECISION FUNCTION ZLANTP( NORM, UPLO, DIAG, N, AP, WORK )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -152,11 +151,11 @@
       DOUBLE PRECISION   SCALE, SUM, VALUE
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME, AB_DISNAN
-      EXTERNAL           AB_LSAME, AB_DISNAN
+      LOGICAL            LSAME, DISNAN
+      EXTERNAL           LSAME, DISNAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZLASSQ
+      EXTERNAL           ZLASSQ
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, SQRT
@@ -165,19 +164,18 @@
 *
       IF( N.EQ.0 ) THEN
          VALUE = ZERO
-      ELSE IF( AB_LSAME( NORM, 'M' ) ) THEN
+      ELSE IF( LSAME( NORM, 'M' ) ) THEN
 *
 *        Find max(abs(A(i,j))).
 *
          K = 1
-         IF( AB_LSAME( DIAG, 'U' ) ) THEN
+         IF( LSAME( DIAG, 'U' ) ) THEN
             VALUE = ONE
-            IF( AB_LSAME( UPLO, 'U' ) ) THEN
+            IF( LSAME( UPLO, 'U' ) ) THEN
                DO 20 J = 1, N
                   DO 10 I = K, K + J - 2
                      SUM = ABS( AP( I ) )
-                     IF( VALUE .LT. SUM .OR. AB_DISNAN( SUM ) ) VALUE = 
-     $SUM
+                     IF( VALUE .LT. SUM .OR. DISNAN( SUM ) ) VALUE = SUM
    10             CONTINUE
                   K = K + J
    20          CONTINUE
@@ -185,20 +183,18 @@
                DO 40 J = 1, N
                   DO 30 I = K + 1, K + N - J
                      SUM = ABS( AP( I ) )
-                     IF( VALUE .LT. SUM .OR. AB_DISNAN( SUM ) ) VALUE = 
-     $SUM
+                     IF( VALUE .LT. SUM .OR. DISNAN( SUM ) ) VALUE = SUM
    30             CONTINUE
                   K = K + N - J + 1
    40          CONTINUE
             END IF
          ELSE
             VALUE = ZERO
-            IF( AB_LSAME( UPLO, 'U' ) ) THEN
+            IF( LSAME( UPLO, 'U' ) ) THEN
                DO 60 J = 1, N
                   DO 50 I = K, K + J - 1
                      SUM = ABS( AP( I ) )
-                     IF( VALUE .LT. SUM .OR. AB_DISNAN( SUM ) ) VALUE = 
-     $SUM
+                     IF( VALUE .LT. SUM .OR. DISNAN( SUM ) ) VALUE = SUM
    50             CONTINUE
                   K = K + J
    60          CONTINUE
@@ -206,21 +202,20 @@
                DO 80 J = 1, N
                   DO 70 I = K, K + N - J
                      SUM = ABS( AP( I ) )
-                     IF( VALUE .LT. SUM .OR. AB_DISNAN( SUM ) ) VALUE = 
-     $SUM
+                     IF( VALUE .LT. SUM .OR. DISNAN( SUM ) ) VALUE = SUM
    70             CONTINUE
                   K = K + N - J + 1
    80          CONTINUE
             END IF
          END IF
-      ELSE IF( ( AB_LSAME( NORM, 'O' ) ) .OR. ( NORM.EQ.'1' ) ) THEN
+      ELSE IF( ( LSAME( NORM, 'O' ) ) .OR. ( NORM.EQ.'1' ) ) THEN
 *
 *        Find norm1(A).
 *
          VALUE = ZERO
          K = 1
-         UDIAG = AB_LSAME( DIAG, 'U' )
-         IF( AB_LSAME( UPLO, 'U' ) ) THEN
+         UDIAG = LSAME( DIAG, 'U' )
+         IF( LSAME( UPLO, 'U' ) ) THEN
             DO 110 J = 1, N
                IF( UDIAG ) THEN
                   SUM = ONE
@@ -234,7 +229,7 @@
   100             CONTINUE
                END IF
                K = K + J
-               IF( VALUE .LT. SUM .OR. AB_DISNAN( SUM ) ) VALUE = SUM
+               IF( VALUE .LT. SUM .OR. DISNAN( SUM ) ) VALUE = SUM
   110       CONTINUE
          ELSE
             DO 140 J = 1, N
@@ -250,16 +245,16 @@
   130             CONTINUE
                END IF
                K = K + N - J + 1
-               IF( VALUE .LT. SUM .OR. AB_DISNAN( SUM ) ) VALUE = SUM
+               IF( VALUE .LT. SUM .OR. DISNAN( SUM ) ) VALUE = SUM
   140       CONTINUE
          END IF
-      ELSE IF( AB_LSAME( NORM, 'I' ) ) THEN
+      ELSE IF( LSAME( NORM, 'I' ) ) THEN
 *
 *        Find normI(A).
 *
          K = 1
-         IF( AB_LSAME( UPLO, 'U' ) ) THEN
-            IF( AB_LSAME( DIAG, 'U' ) ) THEN
+         IF( LSAME( UPLO, 'U' ) ) THEN
+            IF( LSAME( DIAG, 'U' ) ) THEN
                DO 150 I = 1, N
                   WORK( I ) = ONE
   150          CONTINUE
@@ -282,7 +277,7 @@
   200          CONTINUE
             END IF
          ELSE
-            IF( AB_LSAME( DIAG, 'U' ) ) THEN
+            IF( LSAME( DIAG, 'U' ) ) THEN
                DO 210 I = 1, N
                   WORK( I ) = ONE
   210          CONTINUE
@@ -308,20 +303,19 @@
          VALUE = ZERO
          DO 270 I = 1, N
             SUM = WORK( I )
-            IF( VALUE .LT. SUM .OR. AB_DISNAN( SUM ) ) VALUE = SUM
+            IF( VALUE .LT. SUM .OR. DISNAN( SUM ) ) VALUE = SUM
   270    CONTINUE
-      ELSE IF( ( AB_LSAME( NORM, 'F' ) ) .OR. ( AB_LSAME( NORM, 'E' )
-     $ ) ) THEN
+      ELSE IF( ( LSAME( NORM, 'F' ) ) .OR. ( LSAME( NORM, 'E' ) ) ) THEN
 *
 *        Find normF(A).
 *
-         IF( AB_LSAME( UPLO, 'U' ) ) THEN
-            IF( AB_LSAME( DIAG, 'U' ) ) THEN
+         IF( LSAME( UPLO, 'U' ) ) THEN
+            IF( LSAME( DIAG, 'U' ) ) THEN
                SCALE = ONE
                SUM = N
                K = 2
                DO 280 J = 2, N
-                  CALL AB_ZLASSQ( J-1, AP( K ), 1, SCALE, SUM )
+                  CALL ZLASSQ( J-1, AP( K ), 1, SCALE, SUM )
                   K = K + J
   280          CONTINUE
             ELSE
@@ -329,17 +323,17 @@
                SUM = ONE
                K = 1
                DO 290 J = 1, N
-                  CALL AB_ZLASSQ( J, AP( K ), 1, SCALE, SUM )
+                  CALL ZLASSQ( J, AP( K ), 1, SCALE, SUM )
                   K = K + J
   290          CONTINUE
             END IF
          ELSE
-            IF( AB_LSAME( DIAG, 'U' ) ) THEN
+            IF( LSAME( DIAG, 'U' ) ) THEN
                SCALE = ONE
                SUM = N
                K = 2
                DO 300 J = 1, N - 1
-                  CALL AB_ZLASSQ( N-J, AP( K ), 1, SCALE, SUM )
+                  CALL ZLASSQ( N-J, AP( K ), 1, SCALE, SUM )
                   K = K + N - J + 1
   300          CONTINUE
             ELSE
@@ -347,7 +341,7 @@
                SUM = ONE
                K = 1
                DO 310 J = 1, N
-                  CALL AB_ZLASSQ( N-J+1, AP( K ), 1, SCALE, SUM )
+                  CALL ZLASSQ( N-J+1, AP( K ), 1, SCALE, SUM )
                   K = K + N - J + 1
   310          CONTINUE
             END IF
@@ -355,9 +349,9 @@
          VALUE = SCALE*SQRT( SUM )
       END IF
 *
-      AB_ZLANTP = VALUE
+      ZLANTP = VALUE
       RETURN
 *
-*     End of AB_ZLANTP
+*     End of ZLANTP
 *
       END

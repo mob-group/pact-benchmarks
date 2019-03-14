@@ -1,4 +1,4 @@
-*> \brief \b AB_ZDOTU
+*> \brief \b ZDOTU
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       COMPLEX*16 FUNCTION AB_ZDOTU(N,ZX,INCX,ZY,INCY)
+*       COMPLEX*16 FUNCTION ZDOTU(N,ZX,INCX,ZY,INCY)
 *
 *       .. Scalar Arguments ..
 *       INTEGER INCX,INCY,N
@@ -23,8 +23,8 @@
 *>
 *> \verbatim
 *>
-*> AB_ZDOTU forms the dot product of two complex vectors
-*>      AB_ZDOTU = X^T * Y
+*> ZDOTU forms the dot product of two complex vectors
+*>      ZDOTU = X^T * Y
 *>
 *> \endverbatim
 *
@@ -81,7 +81,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      COMPLEX*16 FUNCTION AB_ZDOTU(N,ZX,INCX,ZY,INCY)
+      COMPLEX*16 FUNCTION ZDOTU(N,ZX,INCX,ZY,INCY)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -102,7 +102,7 @@
       INTEGER I,IX,IY
 *     ..
       ZTEMP = (0.0d0,0.0d0)
-      AB_ZDOTU = (0.0d0,0.0d0)
+      ZDOTU = (0.0d0,0.0d0)
       IF (N.LE.0) RETURN
       IF (INCX.EQ.1 .AND. INCY.EQ.1) THEN
 *
@@ -126,6 +126,6 @@
             IY = IY + INCY
          END DO
       END IF
-      AB_ZDOTU = ZTEMP
+      ZDOTU = ZTEMP
       RETURN
       END

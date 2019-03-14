@@ -1,4 +1,4 @@
-*> \brief \b AB_CGET22
+*> \brief \b CGET22
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,16 +8,16 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CGET22( TRANSA, TRANSE, TRANSW, N, A, LDA, E, AB_LDE, W,
+*       SUBROUTINE CGET22( TRANSA, TRANSE, TRANSW, N, A, LDA, E, LDE, W,
 *                          WORK, RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          TRANSA, TRANSE, TRANSW
-*       INTEGER            LDA, AB_LDE, N
+*       INTEGER            LDA, LDE, N
 *       ..
 *       .. Array Arguments ..
 *       REAL               RESULT( 2 ), RWORK( * )
-*       COMPLEX            A( LDA, * ), E( AB_LDE, * ), W( * ), WORK( * )
+*       COMPLEX            A( LDA, * ), E( LDE, * ), W( * ), WORK( * )
 *       ..
 *
 *
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CGET22 does an eigenvector check.
+*> CGET22 does an eigenvector check.
 *>
 *> The basic test is:
 *>
@@ -92,16 +92,16 @@
 *>
 *> \param[in] E
 *> \verbatim
-*>          E is COMPLEX array, dimension (AB_LDE,N)
+*>          E is COMPLEX array, dimension (LDE,N)
 *>          The matrix of eigenvectors. If TRANSE = 'N', the eigenvectors
 *>          are stored in the columns of E, if TRANSE = 'T' or 'C', the
 *>          eigenvectors are stored in the rows of E.
 *> \endverbatim
 *>
-*> \param[in] AB_LDE
+*> \param[in] LDE
 *> \verbatim
-*>          AB_LDE is INTEGER
-*>          The leading dimension of the array E.  AB_LDE >= max(1,N).
+*>          LDE is INTEGER
+*>          The leading dimension of the array E.  LDE >= max(1,N).
 *> \endverbatim
 *>
 *> \param[in] W
@@ -140,8 +140,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_CGET22( TRANSA, TRANSE, TRANSW, N, A, LDA, E, AB_LDE
-     $, W,
+      SUBROUTINE CGET22( TRANSA, TRANSE, TRANSW, N, A, LDA, E, LDE, W,
      $                   WORK, RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -151,11 +150,11 @@
 *
 *     .. Scalar Arguments ..
       CHARACTER          TRANSA, TRANSE, TRANSW
-      INTEGER            LDA, AB_LDE, N
+      INTEGER            LDA, LDE, N
 *     ..
 *     .. Array Arguments ..
       REAL               RESULT( 2 ), RWORK( * )
-      COMPLEX            A( LDA, * ), E( AB_LDE, * ), W( * ), WORK( * )
+      COMPLEX            A( LDA, * ), E( LDE, * ), W( * ), WORK( * )
 *     ..
 *
 *  =====================================================================
@@ -175,12 +174,12 @@
       COMPLEX            WTEMP
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_CLANGE, AB_SLAMCH
-      EXTERNAL           AB_LSAME, AB_CLANGE, AB_SLAMCH
+      LOGICAL            LSAME
+      REAL               CLANGE, SLAMCH
+      EXTERNAL           LSAME, CLANGE, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CGEMM, AB_CLASET
+      EXTERNAL           CGEMM, CLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CONJG, MAX, MIN, REAL
@@ -194,27 +193,27 @@
       IF( N.LE.0 )
      $   RETURN
 *
-      UNFL = AB_SLAMCH( 'Safe minimum' )
-      ULP = AB_SLAMCH( 'Precision' )
+      UNFL = SLAMCH( 'Safe minimum' )
+      ULP = SLAMCH( 'Precision' )
 *
       ITRNSE = 0
       ITRNSW = 0
       NORMA = 'O'
       NORME = 'O'
 *
-      IF( AB_LSAME( TRANSA, 'T' ) .OR. AB_LSAME( TRANSA, 'C' ) ) THEN
+      IF( LSAME( TRANSA, 'T' ) .OR. LSAME( TRANSA, 'C' ) ) THEN
          NORMA = 'I'
       END IF
 *
-      IF( AB_LSAME( TRANSE, 'T' ) ) THEN
+      IF( LSAME( TRANSE, 'T' ) ) THEN
          ITRNSE = 1
          NORME = 'I'
-      ELSE IF( AB_LSAME( TRANSE, 'C' ) ) THEN
+      ELSE IF( LSAME( TRANSE, 'C' ) ) THEN
          ITRNSE = 2
          NORME = 'I'
       END IF
 *
-      IF( AB_LSAME( TRANSW, 'C' ) ) THEN
+      IF( LSAME( TRANSW, 'C' ) ) THEN
          ITRNSW = 1
       END IF
 *
@@ -253,17 +252,17 @@
 *
 *     Norm of A:
 *
-      ANORM = MAX( AB_CLANGE( NORMA, N, N, A, LDA, RWORK ), UNFL )
+      ANORM = MAX( CLANGE( NORMA, N, N, A, LDA, RWORK ), UNFL )
 *
 *     Norm of E:
 *
-      ENORM = MAX( AB_CLANGE( NORME, N, N, E, AB_LDE, RWORK ), ULP )
+      ENORM = MAX( CLANGE( NORME, N, N, E, LDE, RWORK ), ULP )
 *
 *     Norm of error:
 *
 *     Error =  AE - EW
 *
-      CALL AB_CLASET( 'Full', N, N, CZERO, CZERO, WORK, N )
+      CALL CLASET( 'Full', N, N, CZERO, CZERO, WORK, N )
 *
       JOFF = 0
       DO 100 JCOL = 1, N
@@ -289,11 +288,10 @@
          JOFF = JOFF + N
   100 CONTINUE
 *
-      CALL AB_CGEMM( TRANSA, TRANSE, N, N, N, CONE, A, LDA, E, AB_LDE, -
-     $CONE,
+      CALL CGEMM( TRANSA, TRANSE, N, N, N, CONE, A, LDA, E, LDE, -CONE,
      $            WORK, N )
 *
-      ERRNRM = AB_CLANGE( 'One', N, N, WORK, N, RWORK ) / ENORM
+      ERRNRM = CLANGE( 'One', N, N, WORK, N, RWORK ) / ENORM
 *
 *     Compute RESULT(1) (avoiding under/overflow)
 *
@@ -314,6 +312,6 @@
 *
       RETURN
 *
-*     End of AB_CGET22
+*     End of CGET22
 *
       END

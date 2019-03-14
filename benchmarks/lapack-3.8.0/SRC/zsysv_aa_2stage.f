@@ -1,4 +1,4 @@
-*> \brief <b> AB_AB_AB_ZSYSV_AA_2STAGE computes the solution to system of linear equations A * X = B for SY matrices</b>
+*> \brief <b> ZSYSV_AA_2STAGE computes the solution to system of linear equations A * X = B for SY matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_AB_ZSYSV_AA_2STAGE + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_ZSYSV_AAsen_2stage.f">
+*> Download ZSYSV_AA_2STAGE + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zsysv_aasen_2stage.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_ZSYSV_AAsen_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zsysv_aasen_2stage.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_ZSYSV_AAsen_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsysv_aasen_2stage.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*      SUBROUTINE AB_AB_AB_ZSYSV_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB,
+*      SUBROUTINE ZSYSV_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB,
 *                                  IPIV, IPIV2, B, LDB, WORK, LWORK,
 *                                  INFO )
 *
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_AB_ZSYSV_AA_2STAGE computes the solution to a complex system of
+*> ZSYSV_AA_2STAGE computes the solution to a complex system of
 *> linear equations
 *>    A * X = B,
 *> where A is an N-by-N symmetric matrix and X and B are N-by-NRHS
@@ -111,7 +111,7 @@
 *>          If LTB = -1, then a workspace query is assumed; the
 *>          routine only calculates the optimal size of LTB, 
 *>          returns this value as the first entry of TB, and
-*>          no error message related to LTB is issued by AB_XERBLA.
+*>          no error message related to LTB is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IPIV
@@ -156,7 +156,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the
 *>          routine only calculates the optimal size of the WORK array,
 *>          returns this value as the first entry of the WORK array, and
-*>          no error message related to LWORK is issued by AB_XERBLA.
+*>          no error message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -180,8 +180,7 @@
 *> \ingroup complex16SYcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_AB_ZSYSV_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LT
-     $B,
+      SUBROUTINE ZSYSV_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB,
      $                            IPIV, IPIV2, B, LDB, WORK, LWORK,
      $                            INFO )
 *
@@ -208,12 +207,12 @@
       INTEGER            LWKOPT
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_AB_AB_ZSYTRF_AA_2STAGE,
-     $                   AB_AB_AB_ZSYTRS_AA_2STAGE
+      EXTERNAL           XERBLA, ZSYTRF_AA_2STAGE,
+     $                   ZSYTRS_AA_2STAGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -223,10 +222,10 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
+      UPPER = LSAME( UPLO, 'U' )
       WQUERY = ( LWORK.EQ.-1 )
       TQUERY = ( LTB.EQ.-1 )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -239,7 +238,7 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         CALL AB_AB_AB_ZSYTRF_AA_2STAGE( UPLO, N, A, LDA, TB, -1, IPIV,
+         CALL ZSYTRF_AA_2STAGE( UPLO, N, A, LDA, TB, -1, IPIV,
      $                          IPIV2, WORK, -1, INFO )
          LWKOPT = INT( WORK(1) )
          IF( LTB.LT.INT( TB(1) ) .AND. .NOT.TQUERY ) THEN
@@ -250,7 +249,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_AB_ZSYSV_AA_2STAGE', -INFO )
+         CALL XERBLA( 'ZSYSV_AA_2STAGE', -INFO )
          RETURN
       ELSE IF( WQUERY .OR. TQUERY ) THEN
          RETURN
@@ -259,21 +258,19 @@
 *
 *     Compute the factorization A = U*T*U**H or A = L*T*L**H.
 *
-      CALL AB_AB_AB_ZSYTRF_AA_2STAGE( UPLO, N, A, LDA, TB, LTB, IPIV, IP
-     $IV2,
+      CALL ZSYTRF_AA_2STAGE( UPLO, N, A, LDA, TB, LTB, IPIV, IPIV2,
      $                       WORK, LWORK, INFO )
       IF( INFO.EQ.0 ) THEN
 *
 *        Solve the system A*X = B, overwriting B with X.
 *
-         CALL AB_AB_AB_ZSYTRS_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB,
-     $ IPIV,
+         CALL ZSYTRS_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB, IPIV,
      $                          IPIV2, B, LDB, INFO )
 *
       END IF
 *
       WORK( 1 ) = LWKOPT
 *
-*     End of AB_AB_AB_ZSYSV_AA_2STAGE
+*     End of ZSYSV_AA_2STAGE
 *
       END

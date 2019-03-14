@@ -1,4 +1,4 @@
-*> \brief \b AB_DLARAN
+*> \brief \b DLARAN
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       DOUBLE PRECISION FUNCTION AB_DLARAN( ISEED )
+*       DOUBLE PRECISION FUNCTION DLARAN( ISEED )
 *
 *       .. Array Arguments ..
 *       INTEGER            ISEED( 4 )
@@ -20,7 +20,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DLARAN returns a random real number from a uniform (0,1)
+*> DLARAN returns a random real number from a uniform (0,1)
 *> distribution.
 *> \endverbatim
 *
@@ -65,7 +65,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION AB_DLARAN( ISEED )
+      DOUBLE PRECISION FUNCTION DLARAN( ISEED )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -127,20 +127,20 @@
       IF (RNDOUT.EQ.1.0D+0) THEN
 *        If a real number has n bits of precision, and the first
 *        n bits of the 48-bit integer above happen to be all 1 (which
-*        will occur about once every 2**n calls), then AB_DLARAN will
+*        will occur about once every 2**n calls), then DLARAN will
 *        be rounded to exactly 1.0.
-*        Since AB_DLARAN is not supposed to return exactly 0.0 or 1.0
-*        (and some callers of AB_DLARAN, such as AB_CLARND, depend on that),
+*        Since DLARAN is not supposed to return exactly 0.0 or 1.0
+*        (and some callers of DLARAN, such as CLARND, depend on that),
 *        the statistically correct thing to do in this situation is
 *        simply to iterate again.
-*        N.B. the case AB_DLARAN = 0.0 should not be possible.
+*        N.B. the case DLARAN = 0.0 should not be possible.
 *
          GOTO 10
       END IF
 *
-      AB_DLARAN = RNDOUT
+      DLARAN = RNDOUT
       RETURN
 *
-*     End of AB_DLARAN
+*     End of DLARAN
 *
       END

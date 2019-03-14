@@ -1,4 +1,4 @@
-*> \brief \b AB_DSTEDC
+*> \brief \b DSTEDC
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DSTEDC + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DSTEDC.f">
+*> Download DSTEDC + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dstedc.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DSTEDC.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dstedc.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DSTEDC.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dstedc.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DSTEDC( COMPZ, N, D, E, Z, LDZ, WORK, LWORK, IWORK,
+*       SUBROUTINE DSTEDC( COMPZ, N, D, E, Z, LDZ, WORK, LWORK, IWORK,
 *                          LIWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,10 +36,10 @@
 *>
 *> \verbatim
 *>
-*> AB_DSTEDC computes all eigenvalues and, optionally, eigenvectors of a
+*> DSTEDC computes all eigenvalues and, optionally, eigenvectors of a
 *> symmetric tridiagonal matrix using the divide and conquer method.
 *> The eigenvectors of a full or band real symmetric matrix can also be
-*> found if AB_DSYTRD or AB_DSPTRD or AB_DSBTRD has been used to reduce this
+*> found if DSYTRD or DSPTRD or DSBTRD has been used to reduce this
 *> matrix to tridiagonal form.
 *>
 *> This code makes very mild assumptions about floating point
@@ -47,7 +47,7 @@
 *> add/subtract, or on those binary machines without guard digits
 *> which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or Cray-2.
 *> It could conceivably fail on hexadecimal or decimal machines
-*> without guard digits, but we know of none.  See AB_DLAED3 for details.
+*> without guard digits, but we know of none.  See DLAED3 for details.
 *> \endverbatim
 *
 *  Arguments:
@@ -127,7 +127,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -152,7 +152,7 @@
 *>          If LIWORK = -1, then a workspace query is assumed; the
 *>          routine only calculates the optimal size of the IWORK array,
 *>          returns this value as the first entry of the IWORK array, and
-*>          no error message related to LIWORK is issued by AB_XERBLA.
+*>          no error message related to LIWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -185,7 +185,7 @@
 *>  Modified by Francoise Tisseur, University of Tennessee
 *>
 *  =====================================================================
-      SUBROUTINE AB_DSTEDC( COMPZ, N, D, E, Z, LDZ, WORK, LWORK, IWORK,
+      SUBROUTINE DSTEDC( COMPZ, N, D, E, Z, LDZ, WORK, LWORK, IWORK,
      $                   LIWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
@@ -215,15 +215,14 @@
       DOUBLE PRECISION   EPS, ORGNRM, P, TINY
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      DOUBLE PRECISION   AB_DLAMCH, AB_DLANST
-      EXTERNAL           AB_LSAME, AB_ILAENV, AB_DLAMCH, AB_DLANST
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      DOUBLE PRECISION   DLAMCH, DLANST
+      EXTERNAL           LSAME, ILAENV, DLAMCH, DLANST
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DGEMM, AB_DLACPY, AB_DLAED0, AB_DLASCL, AB_D
-     $LASET, AB_AB_DLASRT,
-     $                   AB_DSTEQR, AB_DSTERF, AB_DSWAP, AB_XERBLA
+      EXTERNAL           DGEMM, DLACPY, DLAED0, DLASCL, DLASET, DLASRT,
+     $                   DSTEQR, DSTERF, DSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, INT, LOG, MAX, MOD, SQRT
@@ -235,11 +234,11 @@
       INFO = 0
       LQUERY = ( LWORK.EQ.-1 .OR. LIWORK.EQ.-1 )
 *
-      IF( AB_LSAME( COMPZ, 'N' ) ) THEN
+      IF( LSAME( COMPZ, 'N' ) ) THEN
          ICOMPZ = 0
-      ELSE IF( AB_LSAME( COMPZ, 'V' ) ) THEN
+      ELSE IF( LSAME( COMPZ, 'V' ) ) THEN
          ICOMPZ = 1
-      ELSE IF( AB_LSAME( COMPZ, 'I' ) ) THEN
+      ELSE IF( LSAME( COMPZ, 'I' ) ) THEN
          ICOMPZ = 2
       ELSE
          ICOMPZ = -1
@@ -257,7 +256,7 @@
 *
 *        Compute the workspace requirements
 *
-         SMLSIZ = AB_ILAENV( 9, 'AB_DSTEDC', ' ', 0, 0, 0, 0 )
+         SMLSIZ = ILAENV( 9, 'DSTEDC', ' ', 0, 0, 0, 0 )
          IF( N.LE.1 .OR. ICOMPZ.EQ.0 ) THEN
             LIWMIN = 1
             LWMIN = 1
@@ -289,7 +288,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DSTEDC', -INFO )
+         CALL XERBLA( 'DSTEDC', -INFO )
          RETURN
       ELSE IF (LQUERY) THEN
          RETURN
@@ -309,15 +308,15 @@
 *     will use the Divide and Conquer routine to compute only the
 *     eigenvalues, which requires (3N + 3N**2) real workspace and
 *     (2 + 5N + 2N lg(N)) integer workspace.
-*     Since on many architectures AB_DSTERF is much faster than any other
+*     Since on many architectures DSTERF is much faster than any other
 *     algorithm for finding eigenvalues only, it is used here
 *     as the default. If the conditional clause is removed, then
 *     information on the size of workspace needs to be changed.
 *
-*     If COMPZ = 'N', use AB_DSTERF to compute the eigenvalues.
+*     If COMPZ = 'N', use DSTERF to compute the eigenvalues.
 *
       IF( ICOMPZ.EQ.0 ) THEN
-         CALL AB_DSTERF( N, D, E, INFO )
+         CALL DSTERF( N, D, E, INFO )
          GO TO 50
       END IF
 *
@@ -326,11 +325,11 @@
 *
       IF( N.LE.SMLSIZ ) THEN
 *
-         CALL AB_DSTEQR( COMPZ, N, D, E, Z, LDZ, WORK, INFO )
+         CALL DSTEQR( COMPZ, N, D, E, Z, LDZ, WORK, INFO )
 *
       ELSE
 *
-*        If COMPZ = 'V', the Z matrix must be stored ELSEwhere for later
+*        If COMPZ = 'V', the Z matrix must be stored elsewhere for later
 *        use.
 *
          IF( ICOMPZ.EQ.1 ) THEN
@@ -340,16 +339,16 @@
          END IF
 *
          IF( ICOMPZ.EQ.2 ) THEN
-            CALL AB_DLASET( 'Full', N, N, ZERO, ONE, Z, LDZ )
+            CALL DLASET( 'Full', N, N, ZERO, ONE, Z, LDZ )
          END IF
 *
 *        Scale.
 *
-         ORGNRM = AB_DLANST( 'M', N, D, E )
+         ORGNRM = DLANST( 'M', N, D, E )
          IF( ORGNRM.EQ.ZERO )
      $      GO TO 50
 *
-         EPS = AB_DLAMCH( 'Epsilon' )
+         EPS = DLAMCH( 'Epsilon' )
 *
          START = 1
 *
@@ -386,12 +385,10 @@
 *
 *              Scale.
 *
-               ORGNRM = AB_DLANST( 'M', M, D( START ), E( START ) )
-               CALL AB_DLASCL( 'G', 0, 0, ORGNRM, ONE, M, 1, D( START ),
-     $ M,
+               ORGNRM = DLANST( 'M', M, D( START ), E( START ) )
+               CALL DLASCL( 'G', 0, 0, ORGNRM, ONE, M, 1, D( START ), M,
      $                      INFO )
-               CALL AB_DLASCL( 'G', 0, 0, ORGNRM, ONE, M-1, 1, E( START 
-     $),
+               CALL DLASCL( 'G', 0, 0, ORGNRM, ONE, M-1, 1, E( START ),
      $                      M-1, INFO )
 *
                IF( ICOMPZ.EQ.1 ) THEN
@@ -399,7 +396,7 @@
                ELSE
                   STRTRW = START
                END IF
-               CALL AB_DLAED0( ICOMPZ, N, M, D( START ), E( START ),
+               CALL DLAED0( ICOMPZ, N, M, D( START ), E( START ),
      $                      Z( STRTRW, START ), LDZ, WORK( 1 ), N,
      $                      WORK( STOREZ ), IWORK, INFO )
                IF( INFO.NE.0 ) THEN
@@ -410,8 +407,7 @@
 *
 *              Scale back.
 *
-               CALL AB_DLASCL( 'G', 0, 0, ONE, ORGNRM, M, 1, D( START ),
-     $ M,
+               CALL DLASCL( 'G', 0, 0, ONE, ORGNRM, M, 1, D( START ), M,
      $                      INFO )
 *
             ELSE
@@ -421,19 +417,18 @@
 *                 the length of D, we must solve the sub-problem in a
 *                 workspace and then multiply back into Z.
 *
-                  CALL AB_DSTEQR( 'I', M, D( START ), E( START ), WORK, 
-     $M,
+                  CALL DSTEQR( 'I', M, D( START ), E( START ), WORK, M,
      $                         WORK( M*M+1 ), INFO )
-                  CALL AB_DLACPY( 'A', N, M, Z( 1, START ), LDZ,
+                  CALL DLACPY( 'A', N, M, Z( 1, START ), LDZ,
      $                         WORK( STOREZ ), N )
-                  CALL AB_DGEMM( 'N', 'N', N, M, M, ONE,
+                  CALL DGEMM( 'N', 'N', N, M, M, ONE,
      $                        WORK( STOREZ ), N, WORK, M, ZERO,
      $                        Z( 1, START ), LDZ )
                ELSE IF( ICOMPZ.EQ.2 ) THEN
-                  CALL AB_DSTEQR( 'I', M, D( START ), E( START ),
+                  CALL DSTEQR( 'I', M, D( START ), E( START ),
      $                         Z( START, START ), LDZ, WORK, INFO )
                ELSE
-                  CALL AB_DSTERF( M, D( START ), E( START ), INFO )
+                  CALL DSTERF( M, D( START ), E( START ), INFO )
                END IF
                IF( INFO.NE.0 ) THEN
                   INFO = START*( N+1 ) + FINISH
@@ -451,7 +446,7 @@
 *
 *          Use Quick Sort
 *
-           CALL AB_AB_DLASRT( 'I', N, D, INFO )
+           CALL DLASRT( 'I', N, D, INFO )
 *
          ELSE
 *
@@ -470,7 +465,7 @@
               IF( K.NE.I ) THEN
                  D( K ) = D( I )
                  D( I ) = P
-                 CALL AB_DSWAP( N, Z( 1, I ), 1, Z( 1, K ), 1 )
+                 CALL DSWAP( N, Z( 1, I ), 1, Z( 1, K ), 1 )
               END IF
    40      CONTINUE
          END IF
@@ -482,6 +477,6 @@
 *
       RETURN
 *
-*     End of AB_DSTEDC
+*     End of DSTEDC
 *
       END

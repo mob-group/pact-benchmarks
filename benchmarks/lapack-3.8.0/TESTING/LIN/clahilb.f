@@ -1,4 +1,4 @@
-*> \brief \b AB_CLAHILB
+*> \brief \b CLAHILB
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CLAHILB( N, NRHS, A, LDA, X, LDX, B, LDB, WORK,
+*       SUBROUTINE CLAHILB( N, NRHS, A, LDA, X, LDX, B, LDB, WORK,
 *            INFO, PATH)
 *
 *       .. Scalar Arguments ..
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CLAHILB generates an N by N scaled Hilbert matrix in A along with
+*> CLAHILB generates an N by N scaled Hilbert matrix in A along with
 *> NRHS right-hand sides in B and solutions in X such that A*X=B.
 *>
 *> The Hilbert matrix is scaled by M = LCM(1, 2, ..., 2*N-1) so that all
@@ -131,7 +131,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_CLAHILB( N, NRHS, A, LDA, X, LDX, B, LDB, WORK,
+      SUBROUTINE CLAHILB( N, NRHS, A, LDA, X, LDX, B, LDB, WORK,
      $     INFO, PATH)
 *
 *  -- LAPACK test routine (version 3.7.1) --
@@ -175,9 +175,9 @@
      $     (-.5,.5),(.5,.5),(.5,-.5)/
 *     ..
 *     .. External Functions
-      EXTERNAL AB_CLASET, AB_AB_LSAMEN
+      EXTERNAL CLASET, LSAMEN
       INTRINSIC REAL
-      LOGICAL AB_AB_LSAMEN
+      LOGICAL LSAMEN
 *     ..
 *     .. Executable Statements ..
       C2 = PATH( 2: 3 )
@@ -197,7 +197,7 @@
          INFO = -8
       END IF
       IF (INFO .LT. 0) THEN
-         CALL AB_XERBLA('AB_CLAHILB', -INFO)
+         CALL XERBLA('CLAHILB', -INFO)
          RETURN
       END IF
       IF (N .GT. NMAX_EXACT) THEN
@@ -221,8 +221,8 @@
 *
 *     Generate the scaled Hilbert matrix in A
 *     If we are testing SY routines, take
-*          D1_i = D2_i, ELSE, D1_i = D2_i*
-      IF ( AB_AB_LSAMEN( 2, C2, 'SY' ) ) THEN
+*          D1_i = D2_i, else, D1_i = D2_i*
+      IF ( LSAMEN( 2, C2, 'SY' ) ) THEN
          DO J = 1, N
             DO I = 1, N
                A(I, J) = D1(MOD(J,SIZE_D)+1) * (REAL(M) / (I + J - 1))
@@ -241,7 +241,7 @@
 *     Generate matrix B as simply the first NRHS columns of M * the
 *     identity.
       TMP = REAL(M)
-      CALL AB_CLASET('Full', N, NRHS, (0.0,0.0), TMP, B, LDB)
+      CALL CLASET('Full', N, NRHS, (0.0,0.0), TMP, B, LDB)
 *
 *     Generate the true solutions in X.  Because B = the first NRHS
 *     columns of M*I, the true solutions are just the first NRHS columns
@@ -253,8 +253,8 @@
       END DO
 
 *     If we are testing SY routines,
-*            take D1_i = D2_i, ELSE, D1_i = D2_i*
-      IF ( AB_AB_LSAMEN( 2, C2, 'SY' ) ) THEN
+*            take D1_i = D2_i, else, D1_i = D2_i*
+      IF ( LSAMEN( 2, C2, 'SY' ) ) THEN
          DO J = 1, NRHS
             DO I = 1, N
                X(I, J) =

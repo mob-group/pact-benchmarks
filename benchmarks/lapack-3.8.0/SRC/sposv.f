@@ -1,4 +1,4 @@
-*> \brief <b> AB_SPOSV computes the solution to system of linear equations A * X = B for PO matrices</b>
+*> \brief <b> SPOSV computes the solution to system of linear equations A * X = B for PO matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SPOSV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SPOSV.f">
+*> Download SPOSV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sposv.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SPOSV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sposv.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SPOSV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sposv.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SPOSV( UPLO, N, NRHS, A, LDA, B, LDB, INFO )
+*       SUBROUTINE SPOSV( UPLO, N, NRHS, A, LDA, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SPOSV computes the solution to a real system of linear equations
+*> SPOSV computes the solution to a real system of linear equations
 *>    A * X = B,
 *> where A is an N-by-N symmetric positive definite matrix and X and B
 *> are N-by-NRHS matrices.
@@ -128,7 +128,7 @@
 *> \ingroup realPOsolve
 *
 *  =====================================================================
-      SUBROUTINE AB_SPOSV( UPLO, N, NRHS, A, LDA, B, LDB, INFO )
+      SUBROUTINE SPOSV( UPLO, N, NRHS, A, LDA, B, LDB, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -146,11 +146,11 @@
 *  =====================================================================
 *
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SPOTRF, AB_SPOTRS, AB_XERBLA
+      EXTERNAL           SPOTRF, SPOTRS, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -160,8 +160,7 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF( .NOT.AB_LSAME( UPLO, 'U' ) .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) 
-     $THEN
+      IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -173,22 +172,22 @@
          INFO = -7
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SPOSV ', -INFO )
+         CALL XERBLA( 'SPOSV ', -INFO )
          RETURN
       END IF
 *
 *     Compute the Cholesky factorization A = U**T*U or A = L*L**T.
 *
-      CALL AB_SPOTRF( UPLO, N, A, LDA, INFO )
+      CALL SPOTRF( UPLO, N, A, LDA, INFO )
       IF( INFO.EQ.0 ) THEN
 *
 *        Solve the system A*X = B, overwriting B with X.
 *
-         CALL AB_SPOTRS( UPLO, N, NRHS, A, LDA, B, LDB, INFO )
+         CALL SPOTRS( UPLO, N, NRHS, A, LDA, B, LDB, INFO )
 *
       END IF
       RETURN
 *
-*     End of AB_SPOSV
+*     End of SPOSV
 *
       END

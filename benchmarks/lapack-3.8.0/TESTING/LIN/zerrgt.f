@@ -1,4 +1,4 @@
-*> \brief \b AB_ZERRGT
+*> \brief \b ZERRGT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZERRGT( PATH, NUNIT )
+*       SUBROUTINE ZERRGT( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZERRGT tests the error exits for the COMPLEX*16 tridiagonal
+*> ZERRGT tests the error exits for the COMPLEX*16 tridiagonal
 *> routines.
 *> \endverbatim
 *
@@ -53,7 +53,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZERRGT( PATH, NUNIT )
+      SUBROUTINE ZERRGT( PATH, NUNIT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -85,13 +85,12 @@
      $                   EF( NMAX ), W( NMAX ), X( NMAX )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_AB_LSAMEN
-      EXTERNAL           AB_AB_LSAMEN
+      LOGICAL            LSAMEN
+      EXTERNAL           LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALAESM, AB_CHKXER, AB_ZGTCON, AB_ZGTRFS, AB_
-     $ZGTTRF, AB_ZGTTRS,
-     $                   AB_ZPTCON, AB_ZPTRFS, AB_ZPTTRF, AB_ZPTTRS
+      EXTERNAL           ALAESM, CHKXER, ZGTCON, ZGTRFS, ZGTTRF, ZGTTRS,
+     $                   ZPTCON, ZPTRFS, ZPTTRF, ZPTTRS
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -116,149 +115,142 @@
       ANORM = 1.0D0
       OK = .TRUE.
 *
-      IF( AB_AB_LSAMEN( 2, C2, 'GT' ) ) THEN
+      IF( LSAMEN( 2, C2, 'GT' ) ) THEN
 *
 *        Test error exits for the general tridiagonal routines.
 *
-*        AB_ZGTTRF
+*        ZGTTRF
 *
-         SRNAMT = 'AB_ZGTTRF'
+         SRNAMT = 'ZGTTRF'
          INFOT = 1
-         CALL AB_ZGTTRF( -1, DL, E, DU, DU2, IP, INFO )
-         CALL AB_CHKXER( 'AB_ZGTTRF', INFOT, NOUT, LERR, OK )
+         CALL ZGTTRF( -1, DL, E, DU, DU2, IP, INFO )
+         CALL CHKXER( 'ZGTTRF', INFOT, NOUT, LERR, OK )
 *
-*        AB_ZGTTRS
+*        ZGTTRS
 *
-         SRNAMT = 'AB_ZGTTRS'
+         SRNAMT = 'ZGTTRS'
          INFOT = 1
-         CALL AB_ZGTTRS( '/', 0, 0, DL, E, DU, DU2, IP, X, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZGTTRS', INFOT, NOUT, LERR, OK )
+         CALL ZGTTRS( '/', 0, 0, DL, E, DU, DU2, IP, X, 1, INFO )
+         CALL CHKXER( 'ZGTTRS', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_ZGTTRS( 'N', -1, 0, DL, E, DU, DU2, IP, X, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZGTTRS', INFOT, NOUT, LERR, OK )
+         CALL ZGTTRS( 'N', -1, 0, DL, E, DU, DU2, IP, X, 1, INFO )
+         CALL CHKXER( 'ZGTTRS', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_ZGTTRS( 'N', 0, -1, DL, E, DU, DU2, IP, X, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZGTTRS', INFOT, NOUT, LERR, OK )
+         CALL ZGTTRS( 'N', 0, -1, DL, E, DU, DU2, IP, X, 1, INFO )
+         CALL CHKXER( 'ZGTTRS', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_ZGTTRS( 'N', 2, 1, DL, E, DU, DU2, IP, X, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZGTTRS', INFOT, NOUT, LERR, OK )
+         CALL ZGTTRS( 'N', 2, 1, DL, E, DU, DU2, IP, X, 1, INFO )
+         CALL CHKXER( 'ZGTTRS', INFOT, NOUT, LERR, OK )
 *
-*        AB_ZGTRFS
+*        ZGTRFS
 *
-         SRNAMT = 'AB_ZGTRFS'
+         SRNAMT = 'ZGTRFS'
          INFOT = 1
-         CALL AB_ZGTRFS( '/', 0, 0, DL, E, DU, DLF, EF, DUF, DU2, IP, B,
-     $ 1,
+         CALL ZGTRFS( '/', 0, 0, DL, E, DU, DLF, EF, DUF, DU2, IP, B, 1,
      $                X, 1, R1, R2, W, RW, INFO )
-         CALL AB_CHKXER( 'AB_ZGTRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZGTRFS', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_ZGTRFS( 'N', -1, 0, DL, E, DU, DLF, EF, DUF, DU2, IP, B
-     $,
+         CALL ZGTRFS( 'N', -1, 0, DL, E, DU, DLF, EF, DUF, DU2, IP, B,
      $                1, X, 1, R1, R2, W, RW, INFO )
-         CALL AB_CHKXER( 'AB_ZGTRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZGTRFS', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_ZGTRFS( 'N', 0, -1, DL, E, DU, DLF, EF, DUF, DU2, IP, B
-     $,
+         CALL ZGTRFS( 'N', 0, -1, DL, E, DU, DLF, EF, DUF, DU2, IP, B,
      $                1, X, 1, R1, R2, W, RW, INFO )
-         CALL AB_CHKXER( 'AB_ZGTRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZGTRFS', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL AB_ZGTRFS( 'N', 2, 1, DL, E, DU, DLF, EF, DUF, DU2, IP, B,
-     $ 1,
+         CALL ZGTRFS( 'N', 2, 1, DL, E, DU, DLF, EF, DUF, DU2, IP, B, 1,
      $                X, 2, R1, R2, W, RW, INFO )
-         CALL AB_CHKXER( 'AB_ZGTRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZGTRFS', INFOT, NOUT, LERR, OK )
          INFOT = 15
-         CALL AB_ZGTRFS( 'N', 2, 1, DL, E, DU, DLF, EF, DUF, DU2, IP, B,
-     $ 2,
+         CALL ZGTRFS( 'N', 2, 1, DL, E, DU, DLF, EF, DUF, DU2, IP, B, 2,
      $                X, 1, R1, R2, W, RW, INFO )
-         CALL AB_CHKXER( 'AB_ZGTRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZGTRFS', INFOT, NOUT, LERR, OK )
 *
-*        AB_ZGTCON
+*        ZGTCON
 *
-         SRNAMT = 'AB_ZGTCON'
+         SRNAMT = 'ZGTCON'
          INFOT = 1
-         CALL AB_ZGTCON( '/', 0, DL, E, DU, DU2, IP, ANORM, RCOND, W,
+         CALL ZGTCON( '/', 0, DL, E, DU, DU2, IP, ANORM, RCOND, W,
      $                INFO )
-         CALL AB_CHKXER( 'AB_ZGTCON', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZGTCON', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_ZGTCON( 'I', -1, DL, E, DU, DU2, IP, ANORM, RCOND, W,
+         CALL ZGTCON( 'I', -1, DL, E, DU, DU2, IP, ANORM, RCOND, W,
      $                INFO )
-         CALL AB_CHKXER( 'AB_ZGTCON', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZGTCON', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_ZGTCON( 'I', 0, DL, E, DU, DU2, IP, -ANORM, RCOND, W,
+         CALL ZGTCON( 'I', 0, DL, E, DU, DU2, IP, -ANORM, RCOND, W,
      $                INFO )
-         CALL AB_CHKXER( 'AB_ZGTCON', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZGTCON', INFOT, NOUT, LERR, OK )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, C2, 'PT' ) ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'PT' ) ) THEN
 *
 *        Test error exits for the positive definite tridiagonal
 *        routines.
 *
-*        AB_ZPTTRF
+*        ZPTTRF
 *
-         SRNAMT = 'AB_ZPTTRF'
+         SRNAMT = 'ZPTTRF'
          INFOT = 1
-         CALL AB_ZPTTRF( -1, D, E, INFO )
-         CALL AB_CHKXER( 'AB_ZPTTRF', INFOT, NOUT, LERR, OK )
+         CALL ZPTTRF( -1, D, E, INFO )
+         CALL CHKXER( 'ZPTTRF', INFOT, NOUT, LERR, OK )
 *
-*        AB_ZPTTRS
+*        ZPTTRS
 *
-         SRNAMT = 'AB_ZPTTRS'
+         SRNAMT = 'ZPTTRS'
          INFOT = 1
-         CALL AB_ZPTTRS( '/', 1, 0, D, E, X, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZPTTRS', INFOT, NOUT, LERR, OK )
+         CALL ZPTTRS( '/', 1, 0, D, E, X, 1, INFO )
+         CALL CHKXER( 'ZPTTRS', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_ZPTTRS( 'U', -1, 0, D, E, X, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZPTTRS', INFOT, NOUT, LERR, OK )
+         CALL ZPTTRS( 'U', -1, 0, D, E, X, 1, INFO )
+         CALL CHKXER( 'ZPTTRS', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_ZPTTRS( 'U', 0, -1, D, E, X, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZPTTRS', INFOT, NOUT, LERR, OK )
+         CALL ZPTTRS( 'U', 0, -1, D, E, X, 1, INFO )
+         CALL CHKXER( 'ZPTTRS', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_ZPTTRS( 'U', 2, 1, D, E, X, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZPTTRS', INFOT, NOUT, LERR, OK )
+         CALL ZPTTRS( 'U', 2, 1, D, E, X, 1, INFO )
+         CALL CHKXER( 'ZPTTRS', INFOT, NOUT, LERR, OK )
 *
-*        AB_ZPTRFS
+*        ZPTRFS
 *
-         SRNAMT = 'AB_ZPTRFS'
+         SRNAMT = 'ZPTRFS'
          INFOT = 1
-         CALL AB_ZPTRFS( '/', 1, 0, D, E, DF, EF, B, 1, X, 1, R1, R2, W,
+         CALL ZPTRFS( '/', 1, 0, D, E, DF, EF, B, 1, X, 1, R1, R2, W,
      $                RW, INFO )
-         CALL AB_CHKXER( 'AB_ZPTRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZPTRFS', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_ZPTRFS( 'U', -1, 0, D, E, DF, EF, B, 1, X, 1, R1, R2, W
-     $,
+         CALL ZPTRFS( 'U', -1, 0, D, E, DF, EF, B, 1, X, 1, R1, R2, W,
      $                RW, INFO )
-         CALL AB_CHKXER( 'AB_ZPTRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZPTRFS', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_ZPTRFS( 'U', 0, -1, D, E, DF, EF, B, 1, X, 1, R1, R2, W
-     $,
+         CALL ZPTRFS( 'U', 0, -1, D, E, DF, EF, B, 1, X, 1, R1, R2, W,
      $                RW, INFO )
-         CALL AB_CHKXER( 'AB_ZPTRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZPTRFS', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_ZPTRFS( 'U', 2, 1, D, E, DF, EF, B, 1, X, 2, R1, R2, W,
+         CALL ZPTRFS( 'U', 2, 1, D, E, DF, EF, B, 1, X, 2, R1, R2, W,
      $                RW, INFO )
-         CALL AB_CHKXER( 'AB_ZPTRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZPTRFS', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL AB_ZPTRFS( 'U', 2, 1, D, E, DF, EF, B, 2, X, 1, R1, R2, W,
+         CALL ZPTRFS( 'U', 2, 1, D, E, DF, EF, B, 2, X, 1, R1, R2, W,
      $                RW, INFO )
-         CALL AB_CHKXER( 'AB_ZPTRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZPTRFS', INFOT, NOUT, LERR, OK )
 *
-*        AB_ZPTCON
+*        ZPTCON
 *
-         SRNAMT = 'AB_ZPTCON'
+         SRNAMT = 'ZPTCON'
          INFOT = 1
-         CALL AB_ZPTCON( -1, D, E, ANORM, RCOND, RW, INFO )
-         CALL AB_CHKXER( 'AB_ZPTCON', INFOT, NOUT, LERR, OK )
+         CALL ZPTCON( -1, D, E, ANORM, RCOND, RW, INFO )
+         CALL CHKXER( 'ZPTCON', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_ZPTCON( 0, D, E, -ANORM, RCOND, RW, INFO )
-         CALL AB_CHKXER( 'AB_ZPTCON', INFOT, NOUT, LERR, OK )
+         CALL ZPTCON( 0, D, E, -ANORM, RCOND, RW, INFO )
+         CALL CHKXER( 'ZPTCON', INFOT, NOUT, LERR, OK )
       END IF
 *
 *     Print a summary line.
 *
-      CALL AB_ALAESM( PATH, OK, NOUT )
+      CALL ALAESM( PATH, OK, NOUT )
 *
       RETURN
 *
-*     End of AB_ZERRGT
+*     End of ZERRGT
 *
       END

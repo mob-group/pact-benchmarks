@@ -1,4 +1,4 @@
-*> \brief \b AB_DLAED9 used by AB_SSTEDC. Finds the roots of the secular equation and updates the eigenvectors. Used when the original matrix is dense.
+*> \brief \b DLAED9 used by sstedc. Finds the roots of the secular equation and updates the eigenvectors. Used when the original matrix is dense.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLAED9 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLAED9.f">
+*> Download DLAED9 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaed9.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLAED9.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaed9.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLAED9.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaed9.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLAED9( K, KSTART, KSTOP, N, D, Q, LDQ, RHO, DLAMDA, W,
+*       SUBROUTINE DLAED9( K, KSTART, KSTOP, N, D, Q, LDQ, RHO, DLAMDA, W,
 *                          S, LDS, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,9 +36,9 @@
 *>
 *> \verbatim
 *>
-*> AB_DLAED9 finds the roots of the secular equation, as defined by the
+*> DLAED9 finds the roots of the secular equation, as defined by the
 *> values in D, Z, and RHO, between KSTART and KSTOP.  It makes the
-*> appropriate calls to AB_DLAED4 and then stores the new matrix of
+*> appropriate calls to DLAED4 and then stores the new matrix of
 *> eigenvectors for use in calculating the next level of Z vectors.
 *> \endverbatim
 *
@@ -49,7 +49,7 @@
 *> \verbatim
 *>          K is INTEGER
 *>          The number of terms in the rational function to be solved by
-*>          AB_DLAED4.  K >= 0.
+*>          DLAED4.  K >= 0.
 *> \endverbatim
 *>
 *> \param[in] KSTART
@@ -153,8 +153,7 @@
 *> at Berkeley, USA
 *
 *  =====================================================================
-      SUBROUTINE AB_DLAED9( K, KSTART, KSTOP, N, D, Q, LDQ, RHO, DLAMDA,
-     $ W,
+      SUBROUTINE DLAED9( K, KSTART, KSTOP, N, D, Q, LDQ, RHO, DLAMDA, W,
      $                   S, LDS, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -178,11 +177,11 @@
       DOUBLE PRECISION   TEMP
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMC3, AB_DNRM2
-      EXTERNAL           AB_DLAMC3, AB_DNRM2
+      DOUBLE PRECISION   DLAMC3, DNRM2
+      EXTERNAL           DLAMC3, DNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DCOPY, AB_DLAED4, AB_XERBLA
+      EXTERNAL           DCOPY, DLAED4, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SIGN, SQRT
@@ -208,7 +207,7 @@
          INFO = -12
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DLAED9', -INFO )
+         CALL XERBLA( 'DLAED9', -INFO )
          RETURN
       END IF
 *
@@ -235,12 +234,11 @@
 *     this code.
 *
       DO 10 I = 1, N
-         DLAMDA( I ) = AB_DLAMC3( DLAMDA( I ), DLAMDA( I ) ) - DLAMDA( I
-     $ )
+         DLAMDA( I ) = DLAMC3( DLAMDA( I ), DLAMDA( I ) ) - DLAMDA( I )
    10 CONTINUE
 *
       DO 20 J = KSTART, KSTOP
-         CALL AB_DLAED4( K, J, DLAMDA, W, Q( 1, J ), RHO, D( J ), INFO )
+         CALL DLAED4( K, J, DLAMDA, W, Q( 1, J ), RHO, D( J ), INFO )
 *
 *        If the zero finder fails, the computation is terminated.
 *
@@ -259,11 +257,11 @@
 *
 *     Compute updated W.
 *
-      CALL AB_DCOPY( K, W, 1, S, 1 )
+      CALL DCOPY( K, W, 1, S, 1 )
 *
 *     Initialize W(I) = Q(I,I)
 *
-      CALL AB_DCOPY( K, Q, LDQ+1, W, 1 )
+      CALL DCOPY( K, Q, LDQ+1, W, 1 )
       DO 70 J = 1, K
          DO 50 I = 1, J - 1
             W( I ) = W( I )*( Q( I, J ) / ( DLAMDA( I )-DLAMDA( J ) ) )
@@ -282,7 +280,7 @@
          DO 90 I = 1, K
             Q( I, J ) = W( I ) / Q( I, J )
    90    CONTINUE
-         TEMP = AB_DNRM2( K, Q( 1, J ), 1 )
+         TEMP = DNRM2( K, Q( 1, J ), 1 )
          DO 100 I = 1, K
             S( I, J ) = Q( I, J ) / TEMP
   100    CONTINUE
@@ -291,6 +289,6 @@
   120 CONTINUE
       RETURN
 *
-*     End of AB_DLAED9
+*     End of DLAED9
 *
       END

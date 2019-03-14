@@ -1,4 +1,4 @@
-*> \brief \b AB_SSTERF
+*> \brief \b SSTERF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SSTERF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SSTERF.f">
+*> Download SSTERF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssterf.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SSTERF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssterf.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SSTERF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssterf.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SSTERF( N, D, E, INFO )
+*       SUBROUTINE SSTERF( N, D, E, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, N
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SSTERF computes all eigenvalues of a symmetric tridiagonal matrix
+*> SSTERF computes all eigenvalues of a symmetric tridiagonal matrix
 *> using the Pal-Walker-Kahan variant of the QL or QR algorithm.
 *> \endverbatim
 *
@@ -84,7 +84,7 @@
 *> \ingroup auxOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_SSTERF( N, D, E, INFO )
+      SUBROUTINE SSTERF( N, D, E, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -115,11 +115,11 @@
      $                   SIGMA, SSFMAX, SSFMIN
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH, AB_SLANST, AB_SLAPY2
-      EXTERNAL           AB_SLAMCH, AB_SLANST, AB_SLAPY2
+      REAL               SLAMCH, SLANST, SLAPY2
+      EXTERNAL           SLAMCH, SLANST, SLAPY2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SLAE2, AB_SLASCL, AB_AB_SLASRT, AB_XERBLA
+      EXTERNAL           SLAE2, SLASCL, SLASRT, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, SIGN, SQRT
@@ -134,7 +134,7 @@
 *
       IF( N.LT.0 ) THEN
          INFO = -1
-         CALL AB_XERBLA( 'AB_SSTERF', -INFO )
+         CALL XERBLA( 'SSTERF', -INFO )
          RETURN
       END IF
       IF( N.LE.1 )
@@ -142,9 +142,9 @@
 *
 *     Determine the unit roundoff for this environment.
 *
-      EPS = AB_SLAMCH( 'E' )
+      EPS = SLAMCH( 'E' )
       EPS2 = EPS**2
-      SAFMIN = AB_SLAMCH( 'S' )
+      SAFMIN = SLAMCH( 'S' )
       SAFMAX = ONE / SAFMIN
       SSFMAX = SQRT( SAFMAX ) / THREE
       SSFMIN = SQRT( SAFMIN ) / EPS2
@@ -186,23 +186,21 @@
 *
 *     Scale submatrix in rows and columns L to LEND
 *
-      ANORM = AB_SLANST( 'M', LEND-L+1, D( L ), E( L ) )
+      ANORM = SLANST( 'M', LEND-L+1, D( L ), E( L ) )
       ISCALE = 0
       IF( ANORM.EQ.ZERO )
      $   GO TO 10
       IF( ANORM.GT.SSFMAX ) THEN
          ISCALE = 1
-         CALL AB_SLASCL( 'G', 0, 0, ANORM, SSFMAX, LEND-L+1, 1, D( L ), 
-     $N,
+         CALL SLASCL( 'G', 0, 0, ANORM, SSFMAX, LEND-L+1, 1, D( L ), N,
      $                INFO )
-         CALL AB_SLASCL( 'G', 0, 0, ANORM, SSFMAX, LEND-L, 1, E( L ), N,
+         CALL SLASCL( 'G', 0, 0, ANORM, SSFMAX, LEND-L, 1, E( L ), N,
      $                INFO )
       ELSE IF( ANORM.LT.SSFMIN ) THEN
          ISCALE = 2
-         CALL AB_SLASCL( 'G', 0, 0, ANORM, SSFMIN, LEND-L+1, 1, D( L ), 
-     $N,
+         CALL SLASCL( 'G', 0, 0, ANORM, SSFMIN, LEND-L+1, 1, D( L ), N,
      $                INFO )
-         CALL AB_SLASCL( 'G', 0, 0, ANORM, SSFMIN, LEND-L, 1, E( L ), N,
+         CALL SLASCL( 'G', 0, 0, ANORM, SSFMIN, LEND-L, 1, E( L ), N,
      $                INFO )
       END IF
 *
@@ -239,12 +237,12 @@
          IF( M.EQ.L )
      $      GO TO 90
 *
-*        If remaining matrix is 2 by 2, use AB_SLAE2 to compute its
+*        If remaining matrix is 2 by 2, use SLAE2 to compute its
 *        eigenvalues.
 *
          IF( M.EQ.L+1 ) THEN
             RTE = SQRT( E( L ) )
-            CALL AB_SLAE2( D( L ), RTE, D( L+1 ), RT1, RT2 )
+            CALL SLAE2( D( L ), RTE, D( L+1 ), RT1, RT2 )
             D( L ) = RT1
             D( L+1 ) = RT2
             E( L ) = ZERO
@@ -262,7 +260,7 @@
 *
          RTE = SQRT( E( L ) )
          SIGMA = ( D( L+1 )-P ) / ( TWO*RTE )
-         R = AB_SLAPY2( SIGMA, ONE )
+         R = SLAPY2( SIGMA, ONE )
          SIGMA = P - ( RTE / ( SIGMA+SIGN( R, SIGMA ) ) )
 *
          C = ONE
@@ -325,12 +323,12 @@
          IF( M.EQ.L )
      $      GO TO 140
 *
-*        If remaining matrix is 2 by 2, use AB_SLAE2 to compute its
+*        If remaining matrix is 2 by 2, use SLAE2 to compute its
 *        eigenvalues.
 *
          IF( M.EQ.L-1 ) THEN
             RTE = SQRT( E( L-1 ) )
-            CALL AB_SLAE2( D( L ), RTE, D( L-1 ), RT1, RT2 )
+            CALL SLAE2( D( L ), RTE, D( L-1 ), RT1, RT2 )
             D( L ) = RT1
             D( L-1 ) = RT2
             E( L-1 ) = ZERO
@@ -348,7 +346,7 @@
 *
          RTE = SQRT( E( L-1 ) )
          SIGMA = ( D( L-1 )-P ) / ( TWO*RTE )
-         R = AB_SLAPY2( SIGMA, ONE )
+         R = SLAPY2( SIGMA, ONE )
          SIGMA = P - ( RTE / ( SIGMA+SIGN( R, SIGMA ) ) )
 *
          C = ONE
@@ -397,10 +395,10 @@
 *
   150 CONTINUE
       IF( ISCALE.EQ.1 )
-     $   CALL AB_SLASCL( 'G', 0, 0, SSFMAX, ANORM, LENDSV-LSV+1, 1,
+     $   CALL SLASCL( 'G', 0, 0, SSFMAX, ANORM, LENDSV-LSV+1, 1,
      $                D( LSV ), N, INFO )
       IF( ISCALE.EQ.2 )
-     $   CALL AB_SLASCL( 'G', 0, 0, SSFMIN, ANORM, LENDSV-LSV+1, 1,
+     $   CALL SLASCL( 'G', 0, 0, SSFMIN, ANORM, LENDSV-LSV+1, 1,
      $                D( LSV ), N, INFO )
 *
 *     Check for no convergence to an eigenvalue after a total
@@ -417,11 +415,11 @@
 *     Sort eigenvalues in increasing order.
 *
   170 CONTINUE
-      CALL AB_AB_SLASRT( 'I', N, D, INFO )
+      CALL SLASRT( 'I', N, D, INFO )
 *
   180 CONTINUE
       RETURN
 *
-*     End of AB_SSTERF
+*     End of SSTERF
 *
       END

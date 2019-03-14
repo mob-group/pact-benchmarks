@@ -1,4 +1,4 @@
-*> \brief \b AB_CSTT21
+*> \brief \b CSTT21
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CSTT21( N, KBAND, AD, AE, SD, SE, U, LDU, WORK, RWORK,
+*       SUBROUTINE CSTT21( N, KBAND, AD, AE, SD, SE, U, LDU, WORK, RWORK,
 *                          RESULT )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CSTT21  checks a decomposition of the form
+*> CSTT21  checks a decomposition of the form
 *>
 *>    A = U S UC>
 *> where * means conjugate transpose, A is real symmetric tridiagonal,
@@ -44,7 +44,7 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The size of the matrix.  If it is zero, AB_CSTT21 does nothing.
+*>          The size of the matrix.  If it is zero, CSTT21 does nothing.
 *>          It must be at least zero.
 *> \endverbatim
 *>
@@ -129,8 +129,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_CSTT21( N, KBAND, AD, AE, SD, SE, U, LDU, WORK, RWOR
-     $K,
+      SUBROUTINE CSTT21( N, KBAND, AD, AE, SD, SE, U, LDU, WORK, RWORK,
      $                   RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -161,11 +160,11 @@
       REAL               ANORM, TEMP1, TEMP2, ULP, UNFL, WNORM
 *     ..
 *     .. External Functions ..
-      REAL               AB_CLANGE, AB_CLANHE, AB_SLAMCH
-      EXTERNAL           AB_CLANGE, AB_CLANHE, AB_SLAMCH
+      REAL               CLANGE, CLANHE, SLAMCH
+      EXTERNAL           CLANGE, CLANHE, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CGEMM, AB_CHER, AB_AB_CHER2, AB_CLASET
+      EXTERNAL           CGEMM, CHER, CHER2, CLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CMPLX, MAX, MIN, REAL
@@ -179,14 +178,14 @@
       IF( N.LE.0 )
      $   RETURN
 *
-      UNFL = AB_SLAMCH( 'Safe minimum' )
-      ULP = AB_SLAMCH( 'Precision' )
+      UNFL = SLAMCH( 'Safe minimum' )
+      ULP = SLAMCH( 'Precision' )
 *
 *     Do Test 1
 *
 *     Copy A & Compute its 1-Norm:
 *
-      CALL AB_CLASET( 'Full', N, N, CZERO, CZERO, WORK, N )
+      CALL CLASET( 'Full', N, N, CZERO, CZERO, WORK, N )
 *
       ANORM = ZERO
       TEMP1 = ZERO
@@ -205,17 +204,17 @@
 *     Norm of A - USU*
 *
       DO 20 J = 1, N
-         CALL AB_CHER( 'L', N, -SD( J ), U( 1, J ), 1, WORK, N )
+         CALL CHER( 'L', N, -SD( J ), U( 1, J ), 1, WORK, N )
    20 CONTINUE
 *
       IF( N.GT.1 .AND. KBAND.EQ.1 ) THEN
          DO 30 J = 1, N - 1
-            CALL AB_AB_CHER2( 'L', N, -CMPLX( SE( J ) ), U( 1, J ), 1,
+            CALL CHER2( 'L', N, -CMPLX( SE( J ) ), U( 1, J ), 1,
      $                  U( 1, J+1 ), 1, WORK, N )
    30    CONTINUE
       END IF
 *
-      WNORM = AB_CLANHE( '1', 'L', N, WORK, N, RWORK )
+      WNORM = CLANHE( '1', 'L', N, WORK, N, RWORK )
 *
       IF( ANORM.GT.WNORM ) THEN
          RESULT( 1 ) = ( WNORM / ANORM ) / ( N*ULP )
@@ -231,19 +230,18 @@
 *
 *     Compute  UU* - I
 *
-      CALL AB_CGEMM( 'N', 'C', N, N, N, CONE, U, LDU, U, LDU, CZERO, WOR
-     $K,
+      CALL CGEMM( 'N', 'C', N, N, N, CONE, U, LDU, U, LDU, CZERO, WORK,
      $            N )
 *
       DO 40 J = 1, N
          WORK( ( N+1 )*( J-1 )+1 ) = WORK( ( N+1 )*( J-1 )+1 ) - CONE
    40 CONTINUE
 *
-      RESULT( 2 ) = MIN( REAL( N ), AB_CLANGE( '1', N, N, WORK, N,
+      RESULT( 2 ) = MIN( REAL( N ), CLANGE( '1', N, N, WORK, N,
      $              RWORK ) ) / ( N*ULP )
 *
       RETURN
 *
-*     End of AB_CSTT21
+*     End of CSTT21
 *
       END

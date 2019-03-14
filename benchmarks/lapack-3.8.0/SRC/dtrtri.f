@@ -1,4 +1,4 @@
-*> \brief \b AB_DTRTRI
+*> \brief \b DTRTRI
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DTRTRI + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DTRTRI.f">
+*> Download DTRTRI + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dtrtri.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DTRTRI.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dtrtri.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DTRTRI.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtrtri.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DTRTRI( UPLO, DIAG, N, A, LDA, INFO )
+*       SUBROUTINE DTRTRI( UPLO, DIAG, N, A, LDA, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          DIAG, UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DTRTRI computes the inverse of a real upper or lower triangular
+*> DTRTRI computes the inverse of a real upper or lower triangular
 *> matrix A.
 *>
 *> This is the Level 3 BLAS version of the algorithm.
@@ -107,7 +107,7 @@
 *> \ingroup doubleOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_DTRTRI( UPLO, DIAG, N, A, LDA, INFO )
+      SUBROUTINE DTRTRI( UPLO, DIAG, N, A, LDA, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -133,12 +133,12 @@
       INTEGER            J, JB, NB, NN
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_LSAME, AB_ILAENV
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DTRMM, AB_DTRSM, AB_DTRTI2, AB_XERBLA
+      EXTERNAL           DTRMM, DTRSM, DTRTI2, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -148,11 +148,11 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      NOUNIT = AB_LSAME( DIAG, 'N' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      NOUNIT = LSAME( DIAG, 'N' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.NOUNIT .AND. .NOT.AB_LSAME( DIAG, 'U' ) ) THEN
+      ELSE IF( .NOT.NOUNIT .AND. .NOT.LSAME( DIAG, 'U' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -160,7 +160,7 @@
          INFO = -5
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DTRTRI', -INFO )
+         CALL XERBLA( 'DTRTRI', -INFO )
          RETURN
       END IF
 *
@@ -181,12 +181,12 @@
 *
 *     Determine the block size for this environment.
 *
-      NB = AB_ILAENV( 1, 'AB_DTRTRI', UPLO // DIAG, N, -1, -1, -1 )
+      NB = ILAENV( 1, 'DTRTRI', UPLO // DIAG, N, -1, -1, -1 )
       IF( NB.LE.1 .OR. NB.GE.N ) THEN
 *
 *        Use unblocked code
 *
-         CALL AB_DTRTI2( UPLO, DIAG, N, A, LDA, INFO )
+         CALL DTRTI2( UPLO, DIAG, N, A, LDA, INFO )
       ELSE
 *
 *        Use blocked code
@@ -200,16 +200,14 @@
 *
 *              Compute rows 1:j-1 of current block column
 *
-               CALL AB_DTRMM( 'Left', 'Upper', 'No transpose', DIAG, J-1
-     $,
+               CALL DTRMM( 'Left', 'Upper', 'No transpose', DIAG, J-1,
      $                     JB, ONE, A, LDA, A( 1, J ), LDA )
-               CALL AB_DTRSM( 'Right', 'Upper', 'No transpose', DIAG, J-
-     $1,
+               CALL DTRSM( 'Right', 'Upper', 'No transpose', DIAG, J-1,
      $                     JB, -ONE, A( J, J ), LDA, A( 1, J ), LDA )
 *
 *              Compute inverse of current diagonal block
 *
-               CALL AB_DTRTI2( 'Upper', DIAG, JB, A( J, J ), LDA, INFO )
+               CALL DTRTI2( 'Upper', DIAG, JB, A( J, J ), LDA, INFO )
    20       CONTINUE
          ELSE
 *
@@ -222,23 +220,23 @@
 *
 *                 Compute rows j+jb:n of current block column
 *
-                  CALL AB_DTRMM( 'Left', 'Lower', 'No transpose', DIAG,
+                  CALL DTRMM( 'Left', 'Lower', 'No transpose', DIAG,
      $                        N-J-JB+1, JB, ONE, A( J+JB, J+JB ), LDA,
      $                        A( J+JB, J ), LDA )
-                  CALL AB_DTRSM( 'Right', 'Lower', 'No transpose', DIAG,
+                  CALL DTRSM( 'Right', 'Lower', 'No transpose', DIAG,
      $                        N-J-JB+1, JB, -ONE, A( J, J ), LDA,
      $                        A( J+JB, J ), LDA )
                END IF
 *
 *              Compute inverse of current diagonal block
 *
-               CALL AB_DTRTI2( 'Lower', DIAG, JB, A( J, J ), LDA, INFO )
+               CALL DTRTI2( 'Lower', DIAG, JB, A( J, J ), LDA, INFO )
    30       CONTINUE
          END IF
       END IF
 *
       RETURN
 *
-*     End of AB_DTRTRI
+*     End of DTRTRI
 *
       END

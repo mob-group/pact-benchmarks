@@ -1,4 +1,4 @@
-*> \brief \b AB_ZBDT05
+*> \brief \b ZBDT05
 *  =========== DOCUMENTATION ===========
 *
 * Online html documentation available at
@@ -7,7 +7,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZBDT05( M, N, A, LDA, S, NS, U, LDU,
+*       SUBROUTINE ZBDT05( M, N, A, LDA, S, NS, U, LDU,
 *                          VT, LDVT, WORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZBDT05 reconstructs a bidiagonal matrix B from its (partial) SVD:
+*> ZBDT05 reconstructs a bidiagonal matrix B from its (partial) SVD:
 *>    S = U' * B * V
 *> where U and V are orthogonal matrices and S is diagonal.
 *>
@@ -121,7 +121,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_ZBDT05( M, N, A, LDA, S, NS, U, LDU,
+      SUBROUTINE ZBDT05( M, N, A, LDA, S, NS, U, LDU,
      $                    VT, LDVT, WORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -155,15 +155,14 @@
       DOUBLE PRECISION   DUM( 1 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_IDAMAX
-      DOUBLE PRECISION   AB_DASUM, AB_DLAMCH, AB_ZLANGE
-      EXTERNAL           AB_LSAME, AB_IDAMAX, AB_DASUM, AB_DLAMCH, AB_ZL
-     $ANGE
-      DOUBLE PRECISION   AB_DZASUM
+      LOGICAL            LSAME
+      INTEGER            IDAMAX
+      DOUBLE PRECISION   DASUM, DLAMCH, ZLANGE
+      EXTERNAL           LSAME, IDAMAX, DASUM, DLAMCH, ZLANGE
+      DOUBLE PRECISION   DZASUM
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZGEMM
+      EXTERNAL           ZGEMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN
@@ -176,15 +175,14 @@
       IF( MIN( M, N ).LE.0 .OR. NS.LE.0 )
      $   RETURN
 *
-      EPS = AB_DLAMCH( 'Precision' )
-      ANORM = AB_ZLANGE( 'M', M, N, A, LDA, DUM )
+      EPS = DLAMCH( 'Precision' )
+      ANORM = ZLANGE( 'M', M, N, A, LDA, DUM )
 *
 *     Compute U' * A * V.
 *
-      CALL AB_ZGEMM( 'N', 'C', M, NS, N, CONE, A, LDA, VT,
+      CALL ZGEMM( 'N', 'C', M, NS, N, CONE, A, LDA, VT,
      $            LDVT, CZERO, WORK( 1+NS*NS ), M )
-      CALL AB_ZGEMM( 'C', 'N', NS, NS, M, -CONE, U, LDU, WORK( 1+NS*NS )
-     $,
+      CALL ZGEMM( 'C', 'N', NS, NS, M, -CONE, U, LDU, WORK( 1+NS*NS ),
      $            M, CZERO, WORK, NS )
 *
 *     norm(S - U' * B * V)
@@ -192,7 +190,7 @@
       J = 0
       DO 10 I = 1, NS
          WORK( J+I ) =  WORK( J+I ) + DCMPLX( S( I ), ZERO )
-         RESID = MAX( RESID, AB_DZASUM( NS, WORK( J+1 ), 1 ) )
+         RESID = MAX( RESID, DZASUM( NS, WORK( J+1 ), 1 ) )
          J = J + NS
    10 CONTINUE
 *
@@ -215,6 +213,6 @@
 *
       RETURN
 *
-*     End of AB_ZBDT05
+*     End of ZBDT05
 *
       END

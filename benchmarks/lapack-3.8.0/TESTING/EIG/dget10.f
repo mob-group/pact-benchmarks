@@ -1,4 +1,4 @@
-*> \brief \b AB_DGET10
+*> \brief \b DGET10
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DGET10( M, N, A, LDA, B, LDB, WORK, RESULT )
+*       SUBROUTINE DGET10( M, N, A, LDA, B, LDB, WORK, RESULT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDA, LDB, M, N
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DGET10 compares two matrices A and B and computes the ratio
+*> DGET10 compares two matrices A and B and computes the ratio
 *> RESULT = norm( A - B ) / ( norm(A) * M * EPS )
 *> \endverbatim
 *
@@ -91,7 +91,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_DGET10( M, N, A, LDA, B, LDB, WORK, RESULT )
+      SUBROUTINE DGET10( M, N, A, LDA, B, LDB, WORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -117,11 +117,11 @@
       DOUBLE PRECISION   ANORM, EPS, UNFL, WNORM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DASUM, AB_DLAMCH, AB_DLANGE
-      EXTERNAL           AB_DASUM, AB_DLAMCH, AB_DLANGE
+      DOUBLE PRECISION   DASUM, DLAMCH, DLANGE
+      EXTERNAL           DASUM, DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DAXPY, AB_DCOPY
+      EXTERNAL           DAXPY, DCOPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX, MIN
@@ -135,17 +135,17 @@
          RETURN
       END IF
 *
-      UNFL = AB_DLAMCH( 'Safe minimum' )
-      EPS = AB_DLAMCH( 'Precision' )
+      UNFL = DLAMCH( 'Safe minimum' )
+      EPS = DLAMCH( 'Precision' )
 *
       WNORM = ZERO
       DO 10 J = 1, N
-         CALL AB_DCOPY( M, A( 1, J ), 1, WORK, 1 )
-         CALL AB_DAXPY( M, -ONE, B( 1, J ), 1, WORK, 1 )
-         WNORM = MAX( WNORM, AB_DASUM( N, WORK, 1 ) )
+         CALL DCOPY( M, A( 1, J ), 1, WORK, 1 )
+         CALL DAXPY( M, -ONE, B( 1, J ), 1, WORK, 1 )
+         WNORM = MAX( WNORM, DASUM( N, WORK, 1 ) )
    10 CONTINUE
 *
-      ANORM = MAX( AB_DLANGE( '1', M, N, A, LDA, WORK ), UNFL )
+      ANORM = MAX( DLANGE( '1', M, N, A, LDA, WORK ), UNFL )
 *
       IF( ANORM.GT.WNORM ) THEN
          RESULT = ( WNORM / ANORM ) / ( M*EPS )
@@ -159,6 +159,6 @@
 *
       RETURN
 *
-*     End of AB_DGET10
+*     End of DGET10
 *
       END

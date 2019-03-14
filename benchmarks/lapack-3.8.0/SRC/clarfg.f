@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_CLARFG generates an elementary reflector (HousehoAB_LDEr matrix).
+*> \brief \b CLARFG generates an elementary reflector (Householder matrix).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_CLARFG + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_CLARFG.f">
+*> Download CLARFG + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clarfg.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_CLARFG.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clarfg.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_CLARFG.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clarfg.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_CLARFG( N, ALPHA, X, INCX, TAU )
+*       SUBROUTINE CLARFG( N, ALPHA, X, INCX, TAU )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCX, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_CLARFG generates a complex elementary reflector H of order n, such
+*> CLARFG generates a complex elementary reflector H of order n, such
 *> that
 *>
 *>       H**H * ( alpha ) = ( beta ),   H**H * H = I.
@@ -104,7 +104,7 @@
 *> \ingroup complexOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_CLARFG( N, ALPHA, X, INCX, TAU )
+      SUBROUTINE CLARFG( N, ALPHA, X, INCX, TAU )
 *
 *  -- LAPACK auxiliary routine (version 3.8.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -130,15 +130,15 @@
       REAL               ALPHI, ALPHR, BETA, RSAFMN, SAFMIN, XNORM
 *     ..
 *     .. External Functions ..
-      REAL               AB_SCNRM2, AB_SLAMCH, AB_SLAPY3
-      COMPLEX            AB_CLADIV
-      EXTERNAL           AB_SCNRM2, AB_SLAMCH, AB_SLAPY3, AB_CLADIV
+      REAL               SCNRM2, SLAMCH, SLAPY3
+      COMPLEX            CLADIV
+      EXTERNAL           SCNRM2, SLAMCH, SLAPY3, CLADIV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CMPLX, REAL, SIGN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CSCAL, AB_CAB_SSCAL
+      EXTERNAL           CSCAL, CSSCAL
 *     ..
 *     .. Executable Statements ..
 *
@@ -147,7 +147,7 @@
          RETURN
       END IF
 *
-      XNORM = AB_SCNRM2( N-1, X, INCX )
+      XNORM = SCNRM2( N-1, X, INCX )
       ALPHR = REAL( ALPHA )
       ALPHI = AIMAG( ALPHA )
 *
@@ -160,8 +160,8 @@
 *
 *        general case
 *
-         BETA = -SIGN( AB_SLAPY3( ALPHR, ALPHI, XNORM ), ALPHR )
-         SAFMIN = AB_SLAMCH( 'S' ) / AB_SLAMCH( 'E' )
+         BETA = -SIGN( SLAPY3( ALPHR, ALPHI, XNORM ), ALPHR )
+         SAFMIN = SLAMCH( 'S' ) / SLAMCH( 'E' )
          RSAFMN = ONE / SAFMIN
 *
          KNT = 0
@@ -171,7 +171,7 @@
 *
    10       CONTINUE
             KNT = KNT + 1
-            CALL AB_CAB_SSCAL( N-1, RSAFMN, X, INCX )
+            CALL CSSCAL( N-1, RSAFMN, X, INCX )
             BETA = BETA*RSAFMN
             ALPHI = ALPHI*RSAFMN
             ALPHR = ALPHR*RSAFMN
@@ -180,13 +180,13 @@
 *
 *           New BETA is at most 1, at least SAFMIN
 *
-            XNORM = AB_SCNRM2( N-1, X, INCX )
+            XNORM = SCNRM2( N-1, X, INCX )
             ALPHA = CMPLX( ALPHR, ALPHI )
-            BETA = -SIGN( AB_SLAPY3( ALPHR, ALPHI, XNORM ), ALPHR )
+            BETA = -SIGN( SLAPY3( ALPHR, ALPHI, XNORM ), ALPHR )
          END IF
          TAU = CMPLX( ( BETA-ALPHR ) / BETA, -ALPHI / BETA )
-         ALPHA = AB_CLADIV( CMPLX( ONE ), ALPHA-BETA )
-         CALL AB_CSCAL( N-1, ALPHA, X, INCX )
+         ALPHA = CLADIV( CMPLX( ONE ), ALPHA-BETA )
+         CALL CSCAL( N-1, ALPHA, X, INCX )
 *
 *        If ALPHA is subnormal, it may lose relative accuracy
 *
@@ -198,6 +198,6 @@
 *
       RETURN
 *
-*     End of AB_AB_CLARFG
+*     End of CLARFG
 *
       END

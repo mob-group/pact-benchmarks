@@ -1,4 +1,4 @@
-*> \brief \b AB_CPST01
+*> \brief \b CPST01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CPST01( UPLO, N, A, LDA, AFAC, LDAFAC, PERM, LDPERM,
+*       SUBROUTINE CPST01( UPLO, N, A, LDA, AFAC, LDAFAC, PERM, LDPERM,
 *                          PIV, RWORK, RESID, RANK )
 *
 *       .. Scalar Arguments ..
@@ -29,7 +29,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CPST01 reconstructs an Hermitian positive semidefinite matrix A
+*> CPST01 reconstructs an Hermitian positive semidefinite matrix A
 *> from its L or U factors and the permutation matrix P and computes
 *> the residual
 *>    norm( P*L*L'*P' - A ) / ( N * norm(A) * EPS ) or
@@ -133,7 +133,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_CPST01( UPLO, N, A, LDA, AFAC, LDAFAC, PERM, LDPERM,
+      SUBROUTINE CPST01( UPLO, N, A, LDA, AFAC, LDAFAC, PERM, LDPERM,
      $                   PIV, RWORK, RESID, RANK )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -167,13 +167,13 @@
       INTEGER            I, J, K
 *     ..
 *     .. External Functions ..
-      COMPLEX            AB_CDOTC
-      REAL               AB_CLANHE, AB_SLAMCH
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_CDOTC, AB_CLANHE, AB_SLAMCH, AB_LSAME
+      COMPLEX            CDOTC
+      REAL               CLANHE, SLAMCH
+      LOGICAL            LSAME
+      EXTERNAL           CDOTC, CLANHE, SLAMCH, LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CHER, AB_CSCAL, AB_CTRMV
+      EXTERNAL           CHER, CSCAL, CTRMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          AIMAG, CONJG, REAL
@@ -189,8 +189,8 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = AB_SLAMCH( 'Epsilon' )
-      ANORM = AB_CLANHE( '1', UPLO, N, A, LDA, RWORK )
+      EPS = SLAMCH( 'Epsilon' )
+      ANORM = CLANHE( '1', UPLO, N, A, LDA, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -208,7 +208,7 @@
 *
 *     Compute the product U'*U, overwriting U.
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
 *
          IF( RANK.LT.N ) THEN
             DO 120 J = RANK + 1, N
@@ -222,12 +222,12 @@
 *
 *           Compute the (K,K) element of the result.
 *
-            TR = AB_CDOTC( K, AFAC( 1, K ), 1, AFAC( 1, K ), 1 )
+            TR = CDOTC( K, AFAC( 1, K ), 1, AFAC( 1, K ), 1 )
             AFAC( K, K ) = TR
 *
 *           Compute the rest of column K.
 *
-            CALL AB_CTRMV( 'Upper', 'Conjugate', 'Non-unit', K-1, AFAC,
+            CALL CTRMV( 'Upper', 'Conjugate', 'Non-unit', K-1, AFAC,
      $                  LDAFAC, AFAC( 1, K ), 1 )
 *
   130    CONTINUE
@@ -249,20 +249,20 @@
 *           columns K+1 through N.
 *
             IF( K+1.LE.N )
-     $         CALL AB_CHER( 'Lower', N-K, ONE, AFAC( K+1, K ), 1,
+     $         CALL CHER( 'Lower', N-K, ONE, AFAC( K+1, K ), 1,
      $                    AFAC( K+1, K+1 ), LDAFAC )
 *
 *           Scale column K by the diagonal element.
 *
             TC = AFAC( K, K )
-            CALL AB_CSCAL( N-K+1, TC, AFAC( K, K ), 1 )
+            CALL CSCAL( N-K+1, TC, AFAC( K, K ), 1 )
   160    CONTINUE
 *
       END IF
 *
 *        Form P*L*L'*P' or P*U'*U*P'
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
 *
          DO 180 J = 1, N
             DO 170 I = 1, N
@@ -295,7 +295,7 @@
 *
 *     Compute the difference  P*L*L'*P' - A (or P*U'*U*P' - A).
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
          DO 220 J = 1, N
             DO 210 I = 1, J - 1
                PERM( I, J ) = PERM( I, J ) - A( I, J )
@@ -314,12 +314,12 @@
 *     Compute norm( P*L*L'P - A ) / ( N * norm(A) * EPS ), or
 *     ( P*U'*U*P' - A )/ ( N * norm(A) * EPS ).
 *
-      RESID = AB_CLANHE( '1', UPLO, N, PERM, LDAFAC, RWORK )
+      RESID = CLANHE( '1', UPLO, N, PERM, LDAFAC, RWORK )
 *
       RESID = ( ( RESID / REAL( N ) ) / ANORM ) / EPS
 *
       RETURN
 *
-*     End of AB_CPST01
+*     End of CPST01
 *
       END

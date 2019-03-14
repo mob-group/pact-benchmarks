@@ -1,4 +1,4 @@
-*> \brief \b AB_DLARRB provides limited bisection to locate eigenvalues for more accuracy.
+*> \brief \b DLARRB provides limited bisection to locate eigenvalues for more accuracy.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLARRB + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLARRB.f">
+*> Download DLARRB + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarrb.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLARRB.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarrb.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLARRB.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarrb.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLARRB( N, D, LLD, IFIRST, ILAST, RTOL1,
+*       SUBROUTINE DLARRB( N, D, LLD, IFIRST, ILAST, RTOL1,
 *                          RTOL2, OFFSET, W, WGAP, WERR, WORK, IWORK,
 *                          PIVMIN, SPDIAM, TWIST, INFO )
 *
@@ -38,7 +38,7 @@
 *>
 *> \verbatim
 *>
-*> Given the relatively robust representation(RRR) L D L^T, AB_DLARRB
+*> Given the relatively robust representation(RRR) L D L^T, DLARRB
 *> does "limited" bisection to refine the eigenvalues of L D L^T,
 *> W( IFIRST-OFFSET ) through W( ILAST-OFFSET ), to more accuracy. Initial
 *> guesses for these eigenvalues are input in W, the corresponding estimate
@@ -192,7 +192,7 @@
 *> Christof Voemel, University of California, Berkeley, USA
 *
 *  =====================================================================
-      SUBROUTINE AB_DLARRB( N, D, LLD, IFIRST, ILAST, RTOL1,
+      SUBROUTINE DLARRB( N, D, LLD, IFIRST, ILAST, RTOL1,
      $                   RTOL2, OFFSET, W, WGAP, WERR, WORK, IWORK,
      $                   PIVMIN, SPDIAM, TWIST, INFO )
 *
@@ -226,8 +226,8 @@
      $                   RGAP, RIGHT, TMP, WIDTH
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_DLANEG
-      EXTERNAL           AB_DLANEG
+      INTEGER            DLANEG
+      EXTERNAL           DLANEG
 *
 *     ..
 *     .. Intrinsic Functions ..
@@ -280,7 +280,7 @@
 *
          BACK = WERR( II )
  20      CONTINUE
-         NEGCNT = AB_DLANEG( N, D, LLD, LEFT, PIVMIN, R )
+         NEGCNT = DLANEG( N, D, LLD, LEFT, PIVMIN, R )
          IF( NEGCNT.GT.I-1 ) THEN
             LEFT = LEFT - BACK
             BACK = TWO*BACK
@@ -293,7 +293,7 @@
          BACK = WERR( II )
  50      CONTINUE
 
-         NEGCNT = AB_DLANEG( N, D, LLD, RIGHT, PIVMIN, R )
+         NEGCNT = DLANEG( N, D, LLD, RIGHT, PIVMIN, R )
           IF( NEGCNT.LT.I ) THEN
              RIGHT = RIGHT + BACK
              BACK = TWO*BACK
@@ -367,7 +367,7 @@
 *
 *        Perform one bisection step
 *
-         NEGCNT = AB_DLANEG( N, D, LLD, MID, PIVMIN, R )
+         NEGCNT = DLANEG( N, D, LLD, MID, PIVMIN, R )
          IF( NEGCNT.LE.I-1 ) THEN
             WORK( K-1 ) = MID
          ELSE
@@ -402,6 +402,6 @@
 
       RETURN
 *
-*     End of AB_DLARRB
+*     End of DLARRB
 *
       END

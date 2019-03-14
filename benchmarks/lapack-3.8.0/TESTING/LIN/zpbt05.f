@@ -1,4 +1,4 @@
-*> \brief \b AB_ZPBT05
+*> \brief \b ZPBT05
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZPBT05( UPLO, N, KD, NRHS, AB, LDAB, B, LDB, X, LDX,
+*       SUBROUTINE ZPBT05( UPLO, N, KD, NRHS, AB, LDAB, B, LDB, X, LDX,
 *                          XACT, LDXACT, FERR, BERR, RESLTS )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZPBT05 tests the error bounds from iterative refinement for the
+*> ZPBT05 tests the error bounds from iterative refinement for the
 *> computed solution to a system of equations A*X = B, where A is a
 *> Hermitian band matrix.
 *>
@@ -168,7 +168,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZPBT05( UPLO, N, KD, NRHS, AB, LDAB, B, LDB, X, LDX,
+      SUBROUTINE ZPBT05( UPLO, N, KD, NRHS, AB, LDAB, B, LDB, X, LDX,
      $                   XACT, LDXACT, FERR, BERR, RESLTS )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -199,10 +199,10 @@
       COMPLEX*16         ZDUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_IZAMAX
-      DOUBLE PRECISION   AB_DLAMCH
-      EXTERNAL           AB_LSAME, AB_IZAMAX, AB_DLAMCH
+      LOGICAL            LSAME
+      INTEGER            IZAMAX
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           LSAME, IZAMAX, DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX, MIN
@@ -223,10 +223,10 @@
          RETURN
       END IF
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
-      UNFL = AB_DLAMCH( 'Safe minimum' )
+      EPS = DLAMCH( 'Epsilon' )
+      UNFL = DLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      UPPER = AB_LSAME( UPLO, 'U' )
+      UPPER = LSAME( UPLO, 'U' )
       NZ = 2*MAX( KD, N-1 ) + 1
 *
 *     Test 1:  Compute the maximum of
@@ -235,7 +235,7 @@
 *
       ERRBND = ZERO
       DO 30 J = 1, NRHS
-         IMAX = AB_IZAMAX( N, X( 1, J ), 1 )
+         IMAX = IZAMAX( N, X( 1, J ), 1 )
          XNORM = MAX( CABS1( X( IMAX, J ) ), UNFL )
          DIFF = ZERO
          DO 10 I = 1, N
@@ -302,6 +302,6 @@
 *
       RETURN
 *
-*     End of AB_ZPBT05
+*     End of ZPBT05
 *
       END

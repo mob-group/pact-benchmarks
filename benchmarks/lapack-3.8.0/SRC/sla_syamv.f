@@ -1,4 +1,4 @@
-*> \brief \b AB_SLA_SYAMV computes a matrix-vector product using a symmetric indefinite matrix to calculate error bounds.
+*> \brief \b SLA_SYAMV computes a matrix-vector product using a symmetric indefinite matrix to calculate error bounds.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLA_SYAMV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLA_SYAMV.f">
+*> Download SLA_SYAMV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sla_syamv.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLA_SYAMV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sla_syamv.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLA_SYAMV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sla_syamv.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLA_SYAMV( UPLO, N, ALPHA, A, LDA, X, INCX, BETA, Y,
+*       SUBROUTINE SLA_SYAMV( UPLO, N, ALPHA, A, LDA, X, INCX, BETA, Y,
 *                             INCY )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SLA_SYAMV  performs the matrix-vector operation
+*> SLA_SYAMV  performs the matrix-vector operation
 *>
 *>         y := alpha*abs(A)*abs(x) + beta*abs(y),
 *>
@@ -174,7 +174,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_SLA_SYAMV( UPLO, N, ALPHA, A, LDA, X, INCX, BETA, Y,
+      SUBROUTINE SLA_SYAMV( UPLO, N, ALPHA, A, LDA, X, INCX, BETA, Y,
      $                      INCY )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
@@ -202,12 +202,12 @@
       INTEGER            I, INFO, IY, J, JX, KX, KY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_SLAMCH
-      REAL               AB_SLAMCH
+      EXTERNAL           XERBLA, SLAMCH
+      REAL               SLAMCH
 *     ..
 *     .. External Functions ..
-      EXTERNAL           AB_ILAUPLO
-      INTEGER            AB_ILAUPLO
+      EXTERNAL           ILAUPLO
+      INTEGER            ILAUPLO
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, ABS, SIGN
@@ -217,8 +217,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF     ( UPLO.NE.AB_ILAUPLO( 'U' ) .AND.
-     $         UPLO.NE.AB_ILAUPLO( 'L' ) ) THEN
+      IF     ( UPLO.NE.ILAUPLO( 'U' ) .AND.
+     $         UPLO.NE.ILAUPLO( 'L' ) ) THEN
          INFO = 1
       ELSE IF( N.LT.0 )THEN
          INFO = 2
@@ -230,7 +230,7 @@
          INFO = 10
       END IF
       IF( INFO.NE.0 )THEN
-         CALL AB_XERBLA( 'AB_SSYMV ', INFO )
+         CALL XERBLA( 'SSYMV ', INFO )
          RETURN
       END IF
 *
@@ -255,7 +255,7 @@
 *     Set SAFE1 essentially to be the underflow threshold times the
 *     number of additions in each row.
 *
-      SAFE1 = AB_SLAMCH( 'Safe minimum' )
+      SAFE1 = SLAMCH( 'Safe minimum' )
       SAFE1 = (N+1)*SAFE1
 *
 *     Form  y := alpha*abs(A)*abs(x) + beta*abs(y).
@@ -266,7 +266,7 @@
 *
       IY = KY
       IF ( INCX.EQ.1 ) THEN
-         IF ( UPLO .EQ. AB_ILAUPLO( 'U' ) ) THEN
+         IF ( UPLO .EQ. ILAUPLO( 'U' ) ) THEN
             DO I = 1, N
                IF ( BETA .EQ. ZERO ) THEN
                   SYMB_ZERO = .TRUE.
@@ -334,7 +334,7 @@
             END DO
          END IF
       ELSE
-         IF ( UPLO .EQ. AB_ILAUPLO( 'U' ) ) THEN
+         IF ( UPLO .EQ. ILAUPLO( 'U' ) ) THEN
             DO I = 1, N
                IF ( BETA .EQ. ZERO ) THEN
                   SYMB_ZERO = .TRUE.
@@ -412,6 +412,6 @@
 *
       RETURN
 *
-*     End of AB_SLA_SYAMV
+*     End of SLA_SYAMV
 *
       END

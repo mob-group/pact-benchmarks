@@ -1,4 +1,4 @@
-*> \brief \b AB_DCHKTZ
+*> \brief \b DCHKTZ
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DCHKTZ( DOTYPE, NM, MVAL, NN, NVAL, THRESH, TSTERR, A,
+*       SUBROUTINE DCHKTZ( DOTYPE, NM, MVAL, NN, NVAL, THRESH, TSTERR, A,
 *                          COPYA, S, TAU, WORK, NOUT )
 *
 *       .. Scalar Arguments ..
@@ -29,7 +29,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DCHKTZ tests AB_DTZRZF.
+*> DCHKTZ tests DTZRZF.
 *> \endverbatim
 *
 *  Arguments:
@@ -129,8 +129,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_DCHKTZ( DOTYPE, NM, MVAL, NN, NVAL, THRESH, TSTERR, 
-     $A,
+      SUBROUTINE DCHKTZ( DOTYPE, NM, MVAL, NN, NVAL, THRESH, TSTERR, A,
      $                   COPYA, S, TAU, WORK, NOUT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -171,13 +170,12 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH, AB_DQRT12, AB_DRZT01, AB_DRZT02
-      EXTERNAL           AB_DLAMCH, AB_DQRT12, AB_DRZT01, AB_DRZT02
+      DOUBLE PRECISION   DLAMCH, DQRT12, DRZT01, DRZT02
+      EXTERNAL           DLAMCH, DQRT12, DRZT01, DRZT02
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALAHD, AB_ALASUM, AB_DERRTZ, AB_AB_DGEQR2, A
-     $B_DLACPY, AB_DLAORD,
-     $                   AB_DLASET, AB_DLATMS, AB_DTZRZF
+      EXTERNAL           ALAHD, ALASUM, DERRTZ, DGEQR2, DLACPY, DLAORD,
+     $                   DLASET, DLATMS, DTZRZF
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -206,12 +204,12 @@
       DO 10 I = 1, 4
          ISEED( I ) = ISEEDY( I )
    10 CONTINUE
-      EPS = AB_DLAMCH( 'Epsilon' )
+      EPS = DLAMCH( 'Epsilon' )
 *
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL AB_DERRTZ( PATH, NOUT )
+     $   CALL DERRTZ( PATH, NOUT )
       INFOT = 0
 *
       DO 70 IM = 1, NM
@@ -241,55 +239,51 @@
 *
                   MODE = IMODE - 1
 *
-*                 Test AB_DTZRQF
+*                 Test DTZRQF
 *
 *                 Generate test matrix of size m by n using
 *                 singular value distribution indicated by `mode'.
 *
                   IF( MODE.EQ.0 ) THEN
-                     CALL AB_DLASET( 'Full', M, N, ZERO, ZERO, A, LDA )
+                     CALL DLASET( 'Full', M, N, ZERO, ZERO, A, LDA )
                      DO 30 I = 1, MNMIN
                         S( I ) = ZERO
    30                CONTINUE
                   ELSE
-                     CALL AB_DLATMS( M, N, 'Uniform', ISEED,
+                     CALL DLATMS( M, N, 'Uniform', ISEED,
      $                            'Nonsymmetric', S, IMODE,
      $                            ONE / EPS, ONE, M, N, 'No packing', A,
      $                            LDA, WORK, INFO )
-                     CALL AB_AB_DGEQR2( M, N, A, LDA, WORK, WORK( MNMIN+
-     $1 ),
+                     CALL DGEQR2( M, N, A, LDA, WORK, WORK( MNMIN+1 ),
      $                            INFO )
-                     CALL AB_DLASET( 'Lower', M-1, N, ZERO, ZERO, A( 2 )
-     $,
+                     CALL DLASET( 'Lower', M-1, N, ZERO, ZERO, A( 2 ),
      $                            LDA )
-                     CALL AB_DLAORD( 'Decreasing', MNMIN, S, 1 )
+                     CALL DLAORD( 'Decreasing', MNMIN, S, 1 )
                   END IF
 *
 *                 Save A and its singular values
 *
-                  CALL AB_DLACPY( 'All', M, N, A, LDA, COPYA, LDA )
+                  CALL DLACPY( 'All', M, N, A, LDA, COPYA, LDA )
 *
-*                 Call AB_DTZRZF to reduce the upper trapezoidal matrix to
+*                 Call DTZRZF to reduce the upper trapezoidal matrix to
 *                 upper triangular form.
 *
-                  SRNAMT = 'AB_DTZRZF'
-                  CALL AB_DTZRZF( M, N, A, LDA, TAU, WORK, LWORK, INFO )
+                  SRNAMT = 'DTZRZF'
+                  CALL DTZRZF( M, N, A, LDA, TAU, WORK, LWORK, INFO )
 *
 *                 Compute norm(svd(a) - svd(r))
 *
-                  RESULT( 1 ) = AB_DQRT12( M, M, A, LDA, S, WORK,
+                  RESULT( 1 ) = DQRT12( M, M, A, LDA, S, WORK,
      $                          LWORK )
 *
 *                 Compute norm( A - R*Q )
 *
-                  RESULT( 2 ) = AB_DRZT01( M, N, COPYA, A, LDA, TAU, WOR
-     $K,
+                  RESULT( 2 ) = DRZT01( M, N, COPYA, A, LDA, TAU, WORK,
      $                          LWORK )
 *
 *                 Compute norm(Q'*Q - I).
 *
-                  RESULT( 3 ) = AB_DRZT02( M, N, A, LDA, TAU, WORK, LWOR
-     $K )
+                  RESULT( 3 ) = DRZT02( M, N, A, LDA, TAU, WORK, LWORK )
 *
 *                 Print information about the tests that did not pass
 *                 the threshold.
@@ -297,7 +291,7 @@
                   DO 40 K = 1, NTESTS
                      IF( RESULT( K ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL AB_ALAHD( NOUT, PATH )
+     $                     CALL ALAHD( NOUT, PATH )
                         WRITE( NOUT, FMT = 9999 )M, N, IMODE, K,
      $                     RESULT( K )
                         NFAIL = NFAIL + 1
@@ -311,11 +305,11 @@
 *
 *     Print a summary of the results.
 *
-      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( ' M =', I5, ', N =', I5, ', type ', I2, ', test ', I2,
      $      ', ratio =', G12.5 )
 *
-*     End if AB_DCHKTZ
+*     End if DCHKTZ
 *
       END

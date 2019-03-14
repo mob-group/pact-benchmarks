@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_ZGEQRS
+*> \brief \b ZGEQRS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_ZGEQRS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LWORK,
+*       SUBROUTINE ZGEQRS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LWORK,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -29,7 +29,7 @@
 *>     min || A*X - B ||
 *> using the QR factorization
 *>     A = Q*R
-*> computed by AB_AB_ZGEQRF.
+*> computed by ZGEQRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -57,7 +57,7 @@
 *> \verbatim
 *>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          Details of the QR factorization of the original matrix A as
-*>          returned by AB_AB_ZGEQRF.
+*>          returned by ZGEQRF.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -118,8 +118,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_ZGEQRS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LW
-     $ORK,
+      SUBROUTINE ZGEQRS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LWORK,
      $                   INFO )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -142,7 +141,7 @@
       PARAMETER          ( ONE = ( 1.0D+0, 0.0D+0 ) )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZTRSM, AB_ZUNMQR
+      EXTERNAL           XERBLA, ZTRSM, ZUNMQR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -162,13 +161,12 @@
          INFO = -5
       ELSE IF( LDB.LT.MAX( 1, M ) ) THEN
          INFO = -8
-      ELSE IF( LWORK.LT.1 .OR. LWORK.LT.NRHS .AND. M.GT.0 .AND. N.GT.
-     $0 )
+      ELSE IF( LWORK.LT.1 .OR. LWORK.LT.NRHS .AND. M.GT.0 .AND. N.GT.0 )
      $          THEN
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_ZGEQRS', -INFO )
+         CALL XERBLA( 'ZGEQRS', -INFO )
          RETURN
       END IF
 *
@@ -179,17 +177,16 @@
 *
 *     B := Q' * B
 *
-      CALL AB_ZUNMQR( 'Left', 'Conjugate transpose', M, NRHS, N, A, LDA,
+      CALL ZUNMQR( 'Left', 'Conjugate transpose', M, NRHS, N, A, LDA,
      $             TAU, B, LDB, WORK, LWORK, INFO )
 *
 *     Solve R*X = B(1:n,:)
 *
-      CALL AB_ZTRSM( 'Left', 'Upper', 'No transpose', 'Non-unit', N, NRH
-     $S,
+      CALL ZTRSM( 'Left', 'Upper', 'No transpose', 'Non-unit', N, NRHS,
      $            ONE, A, LDA, B, LDB )
 *
       RETURN
 *
-*     End of AB_AB_ZGEQRS
+*     End of ZGEQRS
 *
       END

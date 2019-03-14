@@ -1,4 +1,4 @@
-*> \brief \b AB_ZQRT17
+*> \brief \b ZQRT17
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       DOUBLE PRECISION FUNCTION AB_ZQRT17( TRANS, IRESID, M, N, NRHS, A,
+*       DOUBLE PRECISION FUNCTION ZQRT17( TRANS, IRESID, M, N, NRHS, A,
 *                        LDA, X, LDX, B, LDB, C, WORK, LWORK )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZQRT17 computes the ratio
+*> ZQRT17 computes the ratio
 *>
 *>    || R'*op(A) ||/(||A||*alpha*max(M,N,NRHS)*eps)
 *>
@@ -147,7 +147,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION AB_ZQRT17( TRANS, IRESID, M, N, NRHS, A,
+      DOUBLE PRECISION FUNCTION ZQRT17( TRANS, IRESID, M, N, NRHS, A,
      $                 LDA, X, LDX, B, LDB, C, WORK, LWORK )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -178,67 +178,66 @@
       DOUBLE PRECISION   RWORK( 1 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE
-      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_ZLANGE
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH, ZLANGE
+      EXTERNAL           LSAME, DLAMCH, ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZGEMM, AB_ZLACPY, AB_ZLASCL
+      EXTERNAL           XERBLA, ZGEMM, ZLACPY, ZLASCL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCMPLX, MAX
 *     ..
 *     .. Executable Statements ..
 *
-      AB_ZQRT17 = ZERO
+      ZQRT17 = ZERO
 *
-      IF( AB_LSAME( TRANS, 'N' ) ) THEN
+      IF( LSAME( TRANS, 'N' ) ) THEN
          NROWS = M
          NCOLS = N
-      ELSE IF( AB_LSAME( TRANS, 'C' ) ) THEN
+      ELSE IF( LSAME( TRANS, 'C' ) ) THEN
          NROWS = N
          NCOLS = M
       ELSE
-         CALL AB_XERBLA( 'AB_ZQRT17', 1 )
+         CALL XERBLA( 'ZQRT17', 1 )
          RETURN
       END IF
 *
       IF( LWORK.LT.NCOLS*NRHS ) THEN
-         CALL AB_XERBLA( 'AB_ZQRT17', 13 )
+         CALL XERBLA( 'ZQRT17', 13 )
          RETURN
       END IF
 *
       IF( M.LE.0 .OR. N.LE.0 .OR. NRHS.LE.0 )
      $   RETURN
 *
-      NORMA = AB_ZLANGE( 'One-norm', M, N, A, LDA, RWORK )
-      SMLNUM = AB_DLAMCH( 'Safe minimum' ) / AB_DLAMCH( 'Precision' )
+      NORMA = ZLANGE( 'One-norm', M, N, A, LDA, RWORK )
+      SMLNUM = DLAMCH( 'Safe minimum' ) / DLAMCH( 'Precision' )
       BIGNUM = ONE / SMLNUM
       ISCL = 0
 *
 *     compute residual and scale it
 *
-      CALL AB_ZLACPY( 'All', NROWS, NRHS, B, LDB, C, LDB )
-      CALL AB_ZGEMM( TRANS, 'No transpose', NROWS, NRHS, NCOLS,
+      CALL ZLACPY( 'All', NROWS, NRHS, B, LDB, C, LDB )
+      CALL ZGEMM( TRANS, 'No transpose', NROWS, NRHS, NCOLS,
      $            DCMPLX( -ONE ), A, LDA, X, LDX, DCMPLX( ONE ), C,
      $            LDB )
-      NORMRS = AB_ZLANGE( 'Max', NROWS, NRHS, C, LDB, RWORK )
+      NORMRS = ZLANGE( 'Max', NROWS, NRHS, C, LDB, RWORK )
       IF( NORMRS.GT.SMLNUM ) THEN
          ISCL = 1
-         CALL AB_ZLASCL( 'General', 0, 0, NORMRS, ONE, NROWS, NRHS, C, L
-     $DB,
+         CALL ZLASCL( 'General', 0, 0, NORMRS, ONE, NROWS, NRHS, C, LDB,
      $                INFO )
       END IF
 *
 *     compute R'*A
 *
-      CALL AB_ZGEMM( 'Conjugate transpose', TRANS, NRHS, NCOLS, NROWS,
+      CALL ZGEMM( 'Conjugate transpose', TRANS, NRHS, NCOLS, NROWS,
      $            DCMPLX( ONE ), C, LDB, A, LDA, DCMPLX( ZERO ), WORK,
      $            NRHS )
 *
 *     compute and properly scale error
 *
-      ERR = AB_ZLANGE( 'One-norm', NRHS, NCOLS, WORK, NRHS, RWORK )
+      ERR = ZLANGE( 'One-norm', NRHS, NCOLS, WORK, NRHS, RWORK )
       IF( NORMA.NE.ZERO )
      $   ERR = ERR / NORMA
 *
@@ -246,7 +245,7 @@
      $   ERR = ERR*NORMRS
 *
       IF( IRESID.EQ.1 ) THEN
-         NORMB = AB_ZLANGE( 'One-norm', NROWS, NRHS, B, LDB, RWORK )
+         NORMB = ZLANGE( 'One-norm', NROWS, NRHS, B, LDB, RWORK )
          IF( NORMB.NE.ZERO )
      $      ERR = ERR / NORMB
       ELSE
@@ -254,10 +253,9 @@
      $      ERR = ERR / NORMRS
       END IF
 *
-      AB_ZQRT17 = ERR / ( AB_DLAMCH( 'Epsilon' )*DBLE( MAX( M, N, NRHS )
-     $ ) )
+      ZQRT17 = ERR / ( DLAMCH( 'Epsilon' )*DBLE( MAX( M, N, NRHS ) ) )
       RETURN
 *
-*     End of AB_ZQRT17
+*     End of ZQRT17
 *
       END

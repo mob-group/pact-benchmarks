@@ -1,4 +1,4 @@
-*> \brief \b AB_DLARRE given the tridiagonal matrix T, sets small off-diagonal elements to zero and for each unreduced block Ti, finds base representations and eigenvalues.
+*> \brief \b DLARRE given the tridiagonal matrix T, sets small off-diagonal elements to zero and for each unreduced block Ti, finds base representations and eigenvalues.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLARRE + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLARRE.f">
+*> Download DLARRE + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarre.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLARRE.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarre.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLARRE.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarre.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLARRE( RANGE, N, VL, VU, IL, IU, D, E, E2,
+*       SUBROUTINE DLARRE( RANGE, N, VL, VU, IL, IU, D, E, E2,
 *                           RTOL1, RTOL2, SPLTOL, NSPLIT, ISPLIT, M,
 *                           W, WERR, WGAP, IBLOCK, INDEXW, GERS, PIVMIN,
 *                           WORK, IWORK, INFO )
@@ -42,17 +42,17 @@
 *> \verbatim
 *>
 *> To find the desired eigenvalues of a given real symmetric
-*> tridiagonal matrix T, AB_DLARRE sets any "small" off-diagonal
+*> tridiagonal matrix T, DLARRE sets any "small" off-diagonal
 *> elements to zero, and for each unreduced block T_i, it finds
 *> (a) a suitable shift at one end of the block's spectrum,
 *> (b) the base representation, T_i - sigma_i I = L_i D_i L_i^T, and
 *> (c) eigenvalues of each L_i D_i L_i^T.
 *> The representations and eigenvalues found are then used by
-*> AB_DSTEMR to compute the eigenvectors of T.
+*> DSTEMR to compute the eigenvectors of T.
 *> The accuracy varies depending on whether bisection is used to
-*> find a few eigenvalues or the dqds algorithm (subroutine AB_DLASQ2) to
+*> find a few eigenvalues or the dqds algorithm (subroutine DLASQ2) to
 *> conpute all and then discard any unwanted one.
-*> As an added benefit, AB_DLARRE also outputs the n
+*> As an added benefit, DLARRE also outputs the n
 *> Gerschgorin intervals for the matrices L_i D_i L_i^T.
 *> \endverbatim
 *
@@ -81,7 +81,7 @@
 *>          If RANGE='V', the lower bound for the eigenvalues.
 *>          Eigenvalues less than or equal to VL, or greater than VU,
 *>          will not be returned.  VL < VU.
-*>          If RANGE='I' or ='A', AB_DLARRE computes bounds on the desired
+*>          If RANGE='I' or ='A', DLARRE computes bounds on the desired
 *>          part of the spectrum.
 *> \endverbatim
 *>
@@ -91,7 +91,7 @@
 *>          If RANGE='V', the upper bound for the eigenvalues.
 *>          Eigenvalues less than or equal to VL, or greater than VU,
 *>          will not be returned.  VL < VU.
-*>          If RANGE='I' or ='A', AB_DLARRE computes bounds on the desired
+*>          If RANGE='I' or ='A', DLARRE computes bounds on the desired
 *>          part of the spectrum.
 *> \endverbatim
 *>
@@ -170,7 +170,7 @@
 *>          ISPLIT is INTEGER array, dimension (N)
 *>          The splitting points, at which T breaks up into blocks.
 *>          The first block consists of rows/columns 1 to ISPLIT(1),
-*>          the AB_SECOND of rows/columns ISPLIT(1)+1 through ISPLIT(2),
+*>          the second of rows/columns ISPLIT(1)+1 through ISPLIT(2),
 *>          etc., and the NSPLIT-th consists of rows/columns
 *>          ISPLIT(NSPLIT-1)+1 through ISPLIT(NSPLIT)=N.
 *> \endverbatim
@@ -187,7 +187,7 @@
 *>          W is DOUBLE PRECISION array, dimension (N)
 *>          The first M elements contain the eigenvalues. The
 *>          eigenvalues of each of the blocks, L_i D_i L_i^T, are
-*>          sorted in ascending order ( AB_DLARRE may use the
+*>          sorted in ascending order ( DLARRE may use the
 *>          remaining N-M elements as workspace).
 *> \endverbatim
 *>
@@ -212,7 +212,7 @@
 *>          The indices of the blocks (submatrices) associated with the
 *>          corresponding eigenvalues in W; IBLOCK(i)=1 if eigenvalue
 *>          W(i) belongs to the first block from the top, =2 if W(i)
-*>          belongs to the AB_SECOND block, etc.
+*>          belongs to the second block, etc.
 *> \endverbatim
 *>
 *> \param[out] INDEXW
@@ -252,20 +252,20 @@
 *> \verbatim
 *>          INFO is INTEGER
 *>          = 0:  successful exit
-*>          > 0:  A problem occurred in AB_DLARRE.
+*>          > 0:  A problem occurred in DLARRE.
 *>          < 0:  One of the called subroutines signaled an internal problem.
 *>                Needs inspection of the corresponding parameter IINFO
 *>                for further information.
 *>
-*>          =-1:  Problem in AB_DLARRD.
+*>          =-1:  Problem in DLARRD.
 *>          = 2:  No base representation could be found in MAXTRY iterations.
 *>                Increasing MAXTRY and recompilation might be a remedy.
-*>          =-3:  Problem in AB_DLARRB when computing the refined root
-*>                representation for AB_DLASQ2.
-*>          =-4:  Problem in AB_DLARRB when preforming bisection on the
+*>          =-3:  Problem in DLARRB when computing the refined root
+*>                representation for DLASQ2.
+*>          =-4:  Problem in DLARRB when preforming bisection on the
 *>                desired part of the spectrum.
-*>          =-5:  Problem in AB_DLASQ2.
-*>          =-6:  Problem in AB_DLASQ2.
+*>          =-5:  Problem in DLASQ2.
+*>          =-6:  Problem in DLASQ2.
 *> \endverbatim
 *
 *  Authors:
@@ -300,7 +300,7 @@
 *>     Christof Voemel, University of California, Berkeley, USA \n
 *>
 *  =====================================================================
-      SUBROUTINE AB_DLARRE( RANGE, N, VL, VU, IL, IU, D, E, E2,
+      SUBROUTINE DLARRE( RANGE, N, VL, VU, IL, IU, D, E, E2,
      $                    RTOL1, RTOL2, SPLTOL, NSPLIT, ISPLIT, M,
      $                    W, WERR, WGAP, IBLOCK, INDEXW, GERS, PIVMIN,
      $                    WORK, IWORK, INFO )
@@ -353,15 +353,14 @@
       INTEGER            ISEED( 4 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION            AB_DLAMCH
-      EXTERNAL           AB_DLAMCH, AB_LSAME
+      LOGICAL            LSAME
+      DOUBLE PRECISION            DLAMCH
+      EXTERNAL           DLAMCH, LSAME
 
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DCOPY, AB_DLARNV, AB_DLARRA, AB_DLARRB, AB_D
-     $LARRC, AB_DLARRD,
-     $                   AB_DLASQ2, AB_DLARRK
+      EXTERNAL           DCOPY, DLARNV, DLARRA, DLARRB, DLARRC, DLARRD,
+     $                   DLASQ2, DLARRK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -380,19 +379,19 @@
 *
 *     Decode RANGE
 *
-      IF( AB_LSAME( RANGE, 'A' ) ) THEN
+      IF( LSAME( RANGE, 'A' ) ) THEN
          IRANGE = ALLRNG
-      ELSE IF( AB_LSAME( RANGE, 'V' ) ) THEN
+      ELSE IF( LSAME( RANGE, 'V' ) ) THEN
          IRANGE = VALRNG
-      ELSE IF( AB_LSAME( RANGE, 'I' ) ) THEN
+      ELSE IF( LSAME( RANGE, 'I' ) ) THEN
          IRANGE = INDRNG
       END IF
 
       M = 0
 
 *     Get machine constants
-      SAFMIN = AB_DLAMCH( 'S' )
-      EPS = AB_DLAMCH( 'P' )
+      SAFMIN = DLAMCH( 'S' )
+      EPS = DLAMCH( 'P' )
 
 *     Set parameters
       RTL = SQRT(EPS)
@@ -448,7 +447,7 @@
       SPDIAM = GU - GL
 
 *     Compute splitting points
-      CALL AB_DLARRA( N, D, E, E2, SPLTOL, SPDIAM,
+      CALL DLARRA( N, D, E, E2, SPLTOL, SPDIAM,
      $                    NSPLIT, ISPLIT, IINFO )
 
 *     Can force use of bisection instead of faster DQDS.
@@ -464,13 +463,13 @@
          VL = GL
          VU = GU
       ELSE
-*        We call AB_DLARRD to find crude approximations to the eigenvalues
+*        We call DLARRD to find crude approximations to the eigenvalues
 *        in the desired range. In case IRANGE = INDRNG, we also obtain the
 *        interval (VL,VU] that contains all the wanted eigenvalues.
 *        An interval [LEFT,RIGHT] has converged if
 *        RIGHT-LEFT.LT.RTOL*MAX(ABS(LEFT),ABS(RIGHT))
-*        AB_DLARRD needs a WORK of size 4*N, IWORK of size 3*N
-         CALL AB_DLARRD( RANGE, 'B', N, VL, VU, IL, IU, GERS,
+*        DLARRD needs a WORK of size 4*N, IWORK of size 3*N
+         CALL DLARRD( RANGE, 'B', N, VL, VU, IL, IU, GERS,
      $                    BSRTOL, D, E, E2, PIVMIN, NSPLIT, ISPLIT,
      $                    MM, W, WERR, VL, VU, IBLOCK, INDEXW,
      $                    WORK, IWORK, IINFO )
@@ -573,7 +572,7 @@
          IF(( (IRANGE.EQ.ALLRNG) .AND. (.NOT. FORCEB) ).OR.USEDQD) THEN
 *           Case of DQDS
 *           Find approximations to the extremal eigenvalues of the block
-            CALL AB_DLARRK( IN, 1, GL, GU, D(IBEGIN),
+            CALL DLARRK( IN, 1, GL, GU, D(IBEGIN),
      $               E2(IBEGIN), PIVMIN, RTL, TMP, TMP1, IINFO )
             IF( IINFO.NE.0 ) THEN
                INFO = -1
@@ -582,7 +581,7 @@
             ISLEFT = MAX(GL, TMP - TMP1
      $               - HNDRD * EPS* ABS(TMP - TMP1))
 
-            CALL AB_DLARRK( IN, IN, GL, GU, D(IBEGIN),
+            CALL DLARRK( IN, IN, GL, GU, D(IBEGIN),
      $               E2(IBEGIN), PIVMIN, RTL, TMP, TMP1, IINFO )
             IF( IINFO.NE.0 ) THEN
                INFO = -1
@@ -607,7 +606,7 @@
 *        should be on the left or the right end of the current block.
 *        The strategy is to shift to the end which is "more populated"
 *        Furthermore, decide whether to use DQDS for the computation of
-*        the eigenvalue approximations at the end of AB_DLARRE or bisection.
+*        the eigenvalue approximations at the end of DLARRE or bisection.
 *        dqds is chosen if all eigenvalues are desired or the number of
 *        eigenvalues to be computed is large compared to the blocksize.
          IF( ( IRANGE.EQ.ALLRNG ) .AND. (.NOT.FORCEB) ) THEN
@@ -623,7 +622,7 @@
             S1 = ISLEFT + FOURTH * SPDIAM
             S2 = ISRGHT - FOURTH * SPDIAM
          ELSE
-*           AB_DLARRD has computed IBLOCK and INDEXW for each eigenvalue
+*           DLARRD has computed IBLOCK and INDEXW for each eigenvalue
 *           approximation.
 *           choose sigma
             IF( USEDQD ) THEN
@@ -638,7 +637,7 @@
 
 *        Compute the negcount at the 1/4 and 3/4 points
          IF(MB.GT.1) THEN
-            CALL AB_DLARRC( 'T', IN, S1, S2, D(IBEGIN),
+            CALL DLARRC( 'T', IN, S1, S2, D(IBEGIN),
      $                    E(IBEGIN), PIVMIN, CNT, CNT1, CNT2, IINFO)
          ENDIF
 
@@ -764,8 +763,8 @@
 *        Store the shift.
          E( IEND ) = SIGMA
 *        Store D and L.
-         CALL AB_DCOPY( IN, WORK, 1, D( IBEGIN ), 1 )
-         CALL AB_DCOPY( IN-1, WORK( IN+1 ), 1, E( IBEGIN ), 1 )
+         CALL DCOPY( IN, WORK, 1, D( IBEGIN ), 1 )
+         CALL DCOPY( IN-1, WORK( IN+1 ), 1, E( IBEGIN ), 1 )
 
 
          IF(MB.GT.1 ) THEN
@@ -778,7 +777,7 @@
                ISEED( I ) = 1
  122        CONTINUE
 
-            CALL AB_DLARNV(2, ISEED, 2*IN-1, WORK(1))
+            CALL DLARNV(2, ISEED, 2*IN-1, WORK(1))
             DO 125 I = 1,IN-1
                D(IBEGIN+I-1) = D(IBEGIN+I-1)*(ONE+EPS*PERT*WORK(I))
                E(IBEGIN+I-1) = E(IBEGIN+I-1)*(ONE+EPS*PERT*WORK(IN+I))
@@ -788,28 +787,28 @@
          ENDIF
 *
 *        Don't update the Gerschgorin intervals because keeping track
-*        of the updates would be too much work in AB_DLARRV.
+*        of the updates would be too much work in DLARRV.
 *        We update W instead and use it to locate the proper Gerschgorin
 *        intervals.
 
 *        Compute the required eigenvalues of L D L' by bisection or dqds
          IF ( .NOT.USEDQD ) THEN
-*           If AB_DLARRD has been used, shift the eigenvalue approximations
+*           If DLARRD has been used, shift the eigenvalue approximations
 *           according to their representation. This is necessary for
-*           a uniform AB_DLARRV since dqds computes eigenvalues of the
-*           shifted representation. In AB_DLARRV, W will always hold the
+*           a uniform DLARRV since dqds computes eigenvalues of the
+*           shifted representation. In DLARRV, W will always hold the
 *           UNshifted eigenvalue approximation.
             DO 134 J=WBEGIN,WEND
                W(J) = W(J) - SIGMA
                WERR(J) = WERR(J) + ABS(W(J)) * EPS
  134        CONTINUE
-*           call AB_DLARRB to reduce eigenvalue error of the approximations
-*           from AB_DLARRD
+*           call DLARRB to reduce eigenvalue error of the approximations
+*           from DLARRD
             DO 135 I = IBEGIN, IEND-1
                WORK( I ) = D( I ) * E( I )**2
  135        CONTINUE
 *           use bisection to find EV from INDL to INDU
-            CALL AB_DLARRB(IN, D(IBEGIN), WORK(IBEGIN),
+            CALL DLARRB(IN, D(IBEGIN), WORK(IBEGIN),
      $                  INDL, INDU, RTOL1, RTOL2, INDL-1,
      $                  W(WBEGIN), WGAP(WBEGIN), WERR(WBEGIN),
      $                  WORK( 2*N+1 ), IWORK, PIVMIN, SPDIAM,
@@ -818,7 +817,7 @@
                INFO = -4
                RETURN
             END IF
-*           AB_DLARRB computes all gaps correctly except for the last one
+*           DLARRB computes all gaps correctly except for the last one
 *           Record distance to VU/GU
             WGAP( WEND ) = MAX( ZERO,
      $           ( VU-SIGMA ) - ( W( WEND ) + WERR( WEND ) ) )
@@ -835,7 +834,7 @@
 *           might be lost when the shift of the RRR is subtracted to obtain
 *           the eigenvalues of T. However, T is not guaranteed to define its
 *           eigenvalues to high relative accuracy anyway.
-*           Set RTOL to the order of the tolerance used in AB_DLASQ2
+*           Set RTOL to the order of the tolerance used in DLASQ2
 *           This is an ESTIMATED error, the worst case bound is 4*N*EPS
 *           which is usually too large and requires unnecessary work to be
 *           done by bisection when computing the eigenvectors
@@ -848,7 +847,7 @@
   140       CONTINUE
             WORK( 2*IN-1 ) = ABS( D( IEND ) )
             WORK( 2*IN ) = ZERO
-            CALL AB_DLASQ2( IN, WORK, IINFO )
+            CALL DLASQ2( IN, WORK, IINFO )
             IF( IINFO .NE. 0 ) THEN
 *              If IINFO = -5 then an index is part of a tight cluster
 *              and should be changed. The index is in IWORK(1) and the
@@ -881,7 +880,7 @@
             END IF
 
             DO 165 I = M - MB + 1, M
-*              the value of RTOL below should be the tolerance in AB_DLASQ2
+*              the value of RTOL below should be the tolerance in DLASQ2
                WERR( I ) = RTOL * ABS( W(I) )
  165        CONTINUE
             DO 166 I = M - MB + 1, M - 1
@@ -900,6 +899,6 @@
 
       RETURN
 *
-*     end of AB_DLARRE
+*     end of DLARRE
 *
       END

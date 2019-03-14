@@ -1,4 +1,4 @@
-*> \brief <b> AB_DGGEV computes the eigenvalues and, optionally, the left and/or right eigenvectors for GE matrices</b>
+*> \brief <b> DGGEV computes the eigenvalues and, optionally, the left and/or right eigenvectors for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DGGEV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGGEV.f">
+*> Download DGGEV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dggev.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGGEV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dggev.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGGEV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dggev.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DGGEV( JOBVL, JOBVR, N, A, LDA, B, LDB, ALPHAR, ALPHAI,
+*       SUBROUTINE DGGEV( JOBVL, JOBVR, N, A, LDA, B, LDB, ALPHAR, ALPHAI,
 *                         BETA, VL, LDVL, VR, LDVR, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DGGEV computes for a pair of N-by-N real nonsymmetric matrices (A,B)
+*> DGGEV computes for a pair of N-by-N real nonsymmetric matrices (A,B)
 *> the generalized eigenvalues, and optionally, the left and/or right
 *> generalized eigenvectors.
 *>
@@ -194,7 +194,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -206,8 +206,8 @@
 *>                The QZ iteration failed.  No eigenvectors have been
 *>                calculated, but ALPHAR(j), ALPHAI(j), and BETA(j)
 *>                should be correct for j=INFO+1,...,N.
-*>          > N:  =N+1: other than QZ iteration failed in AB_DHGEQZ.
-*>                =N+2: error return from AB_DTGEVC.
+*>          > N:  =N+1: other than QZ iteration failed in DHGEQZ.
+*>                =N+2: error return from DTGEVC.
 *> \endverbatim
 *
 *  Authors:
@@ -223,8 +223,7 @@
 *> \ingroup doubleGEeigen
 *
 *  =====================================================================
-      SUBROUTINE AB_DGGEV( JOBVL, JOBVR, N, A, LDA, B, LDB, ALPHAR, ALPH
-     $AI,
+      SUBROUTINE DGGEV( JOBVL, JOBVR, N, A, LDA, B, LDB, ALPHAR, ALPHAI,
      $                  BETA, VL, LDVL, VR, LDVR, WORK, LWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -261,17 +260,15 @@
       LOGICAL            LDUMMA( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_AB_DGEQRF, AB_DGGBAK, AB_DGGBAL, AB_DGGHRD, 
-     $AB_DHGEQZ, AB_DLABAD,
-     $                   AB_DLACPY,AB_DLASCL, AB_DLASET, AB_DORGQR, AB_D
-     $ORMQR, AB_DTGEVC,
-     $                   AB_XERBLA
+      EXTERNAL           DGEQRF, DGGBAK, DGGBAL, DGGHRD, DHGEQZ, DLABAD,
+     $                   DLACPY,DLASCL, DLASET, DORGQR, DORMQR, DTGEVC,
+     $                   XERBLA
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE
-      EXTERNAL           AB_LSAME, AB_ILAENV, AB_DLAMCH, AB_DLANGE
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      DOUBLE PRECISION   DLAMCH, DLANGE
+      EXTERNAL           LSAME, ILAENV, DLAMCH, DLANGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -280,10 +277,10 @@
 *
 *     Decode the input arguments
 *
-      IF( AB_LSAME( JOBVL, 'N' ) ) THEN
+      IF( LSAME( JOBVL, 'N' ) ) THEN
          IJOBVL = 1
          ILVL = .FALSE.
-      ELSE IF( AB_LSAME( JOBVL, 'V' ) ) THEN
+      ELSE IF( LSAME( JOBVL, 'V' ) ) THEN
          IJOBVL = 2
          ILVL = .TRUE.
       ELSE
@@ -291,10 +288,10 @@
          ILVL = .FALSE.
       END IF
 *
-      IF( AB_LSAME( JOBVR, 'N' ) ) THEN
+      IF( LSAME( JOBVR, 'N' ) ) THEN
          IJOBVR = 1
          ILVR = .FALSE.
-      ELSE IF( AB_LSAME( JOBVR, 'V' ) ) THEN
+      ELSE IF( LSAME( JOBVR, 'V' ) ) THEN
          IJOBVR = 2
          ILVR = .TRUE.
       ELSE
@@ -328,19 +325,18 @@
 *       minimal amount of workspace needed at that point in the code,
 *       as well as the preferred amount for good performance.
 *       NB refers to the optimal block size for the immediately
-*       following subroutine, as returned by AB_ILAENV. The workspace is
+*       following subroutine, as returned by ILAENV. The workspace is
 *       computed assuming ILO = 1 and IHI = N, the worst case.)
 *
       IF( INFO.EQ.0 ) THEN
          MINWRK = MAX( 1, 8*N )
          MAXWRK = MAX( 1, N*( 7 +
-     $                 AB_ILAENV( 1, 'AB_AB_DGEQRF', ' ', N, 1, N, 0 ) )
-     $ )
+     $                 ILAENV( 1, 'DGEQRF', ' ', N, 1, N, 0 ) ) )
          MAXWRK = MAX( MAXWRK, N*( 7 +
-     $                 AB_ILAENV( 1, 'AB_DORMQR', ' ', N, 1, N, 0 ) ) )
+     $                 ILAENV( 1, 'DORMQR', ' ', N, 1, N, 0 ) ) )
          IF( ILVL ) THEN
             MAXWRK = MAX( MAXWRK, N*( 7 +
-     $                 AB_ILAENV( 1, 'AB_DORGQR', ' ', N, 1, N, -1 ) ) )
+     $                 ILAENV( 1, 'DORGQR', ' ', N, 1, N, -1 ) ) )
          END IF
          WORK( 1 ) = MAXWRK
 *
@@ -349,7 +345,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DGGEV ', -INFO )
+         CALL XERBLA( 'DGGEV ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -362,16 +358,16 @@
 *
 *     Get machine constants
 *
-      EPS = AB_DLAMCH( 'P' )
-      SMLNUM = AB_DLAMCH( 'S' )
+      EPS = DLAMCH( 'P' )
+      SMLNUM = DLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
-      CALL AB_DLABAD( SMLNUM, BIGNUM )
+      CALL DLABAD( SMLNUM, BIGNUM )
       SMLNUM = SQRT( SMLNUM ) / EPS
       BIGNUM = ONE / SMLNUM
 *
 *     Scale A if max element outside range [SMLNUM,BIGNUM]
 *
-      ANRM = AB_DLANGE( 'M', N, N, A, LDA, WORK )
+      ANRM = DLANGE( 'M', N, N, A, LDA, WORK )
       ILASCL = .FALSE.
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
          ANRMTO = SMLNUM
@@ -381,11 +377,11 @@
          ILASCL = .TRUE.
       END IF
       IF( ILASCL )
-     $   CALL AB_DLASCL( 'G', 0, 0, ANRM, ANRMTO, N, N, A, LDA, IERR )
+     $   CALL DLASCL( 'G', 0, 0, ANRM, ANRMTO, N, N, A, LDA, IERR )
 *
 *     Scale B if max element outside range [SMLNUM,BIGNUM]
 *
-      BNRM = AB_DLANGE( 'M', N, N, B, LDB, WORK )
+      BNRM = DLANGE( 'M', N, N, B, LDB, WORK )
       ILBSCL = .FALSE.
       IF( BNRM.GT.ZERO .AND. BNRM.LT.SMLNUM ) THEN
          BNRMTO = SMLNUM
@@ -395,7 +391,7 @@
          ILBSCL = .TRUE.
       END IF
       IF( ILBSCL )
-     $   CALL AB_DLASCL( 'G', 0, 0, BNRM, BNRMTO, N, N, B, LDB, IERR )
+     $   CALL DLASCL( 'G', 0, 0, BNRM, BNRMTO, N, N, B, LDB, IERR )
 *
 *     Permute the matrices A, B to isolate eigenvalues if possible
 *     (Workspace: need 6*N)
@@ -403,7 +399,7 @@
       ILEFT = 1
       IRIGHT = N + 1
       IWRK = IRIGHT + N
-      CALL AB_DGGBAL( 'P', N, A, LDA, B, LDB, ILO, IHI, WORK( ILEFT ),
+      CALL DGGBAL( 'P', N, A, LDA, B, LDB, ILO, IHI, WORK( ILEFT ),
      $             WORK( IRIGHT ), WORK( IWRK ), IERR )
 *
 *     Reduce B to triangular form (QR decomposition of B)
@@ -417,13 +413,13 @@
       END IF
       ITAU = IWRK
       IWRK = ITAU + IROWS
-      CALL AB_AB_DGEQRF( IROWS, ICOLS, B( ILO, ILO ), LDB, WORK( ITAU ),
+      CALL DGEQRF( IROWS, ICOLS, B( ILO, ILO ), LDB, WORK( ITAU ),
      $             WORK( IWRK ), LWORK+1-IWRK, IERR )
 *
 *     Apply the orthogonal transformation to matrix A
 *     (Workspace: need N, prefer N*NB)
 *
-      CALL AB_DORMQR( 'L', 'T', IROWS, ICOLS, IROWS, B( ILO, ILO ), LDB,
+      CALL DORMQR( 'L', 'T', IROWS, ICOLS, IROWS, B( ILO, ILO ), LDB,
      $             WORK( ITAU ), A( ILO, ILO ), LDA, WORK( IWRK ),
      $             LWORK+1-IWRK, IERR )
 *
@@ -431,19 +427,19 @@
 *     (Workspace: need N, prefer N*NB)
 *
       IF( ILVL ) THEN
-         CALL AB_DLASET( 'Full', N, N, ZERO, ONE, VL, LDVL )
+         CALL DLASET( 'Full', N, N, ZERO, ONE, VL, LDVL )
          IF( IROWS.GT.1 ) THEN
-            CALL AB_DLACPY( 'L', IROWS-1, IROWS-1, B( ILO+1, ILO ), LDB,
+            CALL DLACPY( 'L', IROWS-1, IROWS-1, B( ILO+1, ILO ), LDB,
      $                   VL( ILO+1, ILO ), LDVL )
          END IF
-         CALL AB_DORGQR( IROWS, IROWS, IROWS, VL( ILO, ILO ), LDVL,
+         CALL DORGQR( IROWS, IROWS, IROWS, VL( ILO, ILO ), LDVL,
      $                WORK( ITAU ), WORK( IWRK ), LWORK+1-IWRK, IERR )
       END IF
 *
 *     Initialize VR
 *
       IF( ILVR )
-     $   CALL AB_DLASET( 'Full', N, N, ZERO, ONE, VR, LDVR )
+     $   CALL DLASET( 'Full', N, N, ZERO, ONE, VR, LDVR )
 *
 *     Reduce to generalized Hessenberg form
 *     (Workspace: none needed)
@@ -452,10 +448,10 @@
 *
 *        Eigenvectors requested -- work on whole matrix.
 *
-         CALL AB_DGGHRD( JOBVL, JOBVR, N, ILO, IHI, A, LDA, B, LDB, VL,
+         CALL DGGHRD( JOBVL, JOBVR, N, ILO, IHI, A, LDA, B, LDB, VL,
      $                LDVL, VR, LDVR, IERR )
       ELSE
-         CALL AB_DGGHRD( 'N', 'N', IROWS, 1, IROWS, A( ILO, ILO ), LDA,
+         CALL DGGHRD( 'N', 'N', IROWS, 1, IROWS, A( ILO, ILO ), LDA,
      $                B( ILO, ILO ), LDB, VL, LDVL, VR, LDVR, IERR )
       END IF
 *
@@ -469,7 +465,7 @@
       ELSE
          CHTEMP = 'E'
       END IF
-      CALL AB_DHGEQZ( CHTEMP, JOBVL, JOBVR, N, ILO, IHI, A, LDA, B, LDB,
+      CALL DHGEQZ( CHTEMP, JOBVL, JOBVR, N, ILO, IHI, A, LDA, B, LDB,
      $             ALPHAR, ALPHAI, BETA, VL, LDVL, VR, LDVR,
      $             WORK( IWRK ), LWORK+1-IWRK, IERR )
       IF( IERR.NE.0 ) THEN
@@ -496,8 +492,7 @@
          ELSE
             CHTEMP = 'R'
          END IF
-         CALL AB_DTGEVC( CHTEMP, 'B', LDUMMA, N, A, LDA, B, LDB, VL, LDV
-     $L,
+         CALL DTGEVC( CHTEMP, 'B', LDUMMA, N, A, LDA, B, LDB, VL, LDVL,
      $                VR, LDVR, N, IN, WORK( IWRK ), IERR )
          IF( IERR.NE.0 ) THEN
             INFO = N + 2
@@ -508,7 +503,7 @@
 *        (Workspace: none needed)
 *
          IF( ILVL ) THEN
-            CALL AB_DGGBAK( 'P', 'L', N, ILO, IHI, WORK( ILEFT ),
+            CALL DGGBAK( 'P', 'L', N, ILO, IHI, WORK( ILEFT ),
      $                   WORK( IRIGHT ), N, VL, LDVL, IERR )
             DO 50 JC = 1, N
                IF( ALPHAI( JC ).LT.ZERO )
@@ -540,7 +535,7 @@
    50       CONTINUE
          END IF
          IF( ILVR ) THEN
-            CALL AB_DGGBAK( 'P', 'R', N, ILO, IHI, WORK( ILEFT ),
+            CALL DGGBAK( 'P', 'R', N, ILO, IHI, WORK( ILEFT ),
      $                   WORK( IRIGHT ), N, VR, LDVR, IERR )
             DO 100 JC = 1, N
                IF( ALPHAI( JC ).LT.ZERO )
@@ -581,19 +576,17 @@
   110 CONTINUE
 *
       IF( ILASCL ) THEN
-         CALL AB_DLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAR, N, IERR 
-     $)
-         CALL AB_DLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAI, N, IERR 
-     $)
+         CALL DLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAR, N, IERR )
+         CALL DLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAI, N, IERR )
       END IF
 *
       IF( ILBSCL ) THEN
-         CALL AB_DLASCL( 'G', 0, 0, BNRMTO, BNRM, N, 1, BETA, N, IERR )
+         CALL DLASCL( 'G', 0, 0, BNRMTO, BNRM, N, 1, BETA, N, IERR )
       END IF
 *
       WORK( 1 ) = MAXWRK
       RETURN
 *
-*     End of AB_DGGEV
+*     End of DGGEV
 *
       END

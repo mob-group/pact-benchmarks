@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_AB_ZDRVHE_AA_2STAGE
+*> \brief \b ZDRVHE_AA_2STAGE
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_AB_ZDRVHE_AA_2STAGE(
+*       SUBROUTINE ZDRVHE_AA_2STAGE(
 *                             DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
 *                             A, AFAC, AINV, B, X, XACT, WORK, RWORK, IWORK,
 *                             NOUT )
@@ -32,7 +32,7 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_AB_ZDRVHE_AA_2STAGE tests the driver routine AB_AB_AB_ZHESV_AA_2STAGE.
+*> ZDRVHE_AA_2STAGE tests the driver routine ZHESV_AA_2STAGE.
 *> \endverbatim
 *
 *  Arguments:
@@ -150,7 +150,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_AB_ZDRVHE_AA_2STAGE(
+      SUBROUTINE ZDRVHE_AA_2STAGE(
      $                         DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
      $                         NMAX, A, AFAC, AINV, B, X, XACT, WORK,
      $                         RWORK, IWORK, NOUT )
@@ -198,17 +198,14 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DGET06, AB_ZLANHE
-      EXTERNAL           AB_DGET06, AB_ZLANHE
+      DOUBLE PRECISION   DGET06, ZLANHE
+      EXTERNAL           DGET06, ZLANHE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALADHD, AB_ALAERH, AB_ALASVM, AB_XLAENV, AB_
-     $ZERRVX,
-     $                   AB_ZGET04, AB_ZLACPY, AB_ZLARHS, AB_ZLATB4, AB_
-     $ZLATMS,
-     $                   AB_AB_AB_ZHESV_AA_2STAGE, AB_AB_ZHET01_AA, AB_Z
-     $POT02,
-     $                   AB_AB_AB_ZHETRF_AA_2STAGE
+      EXTERNAL           ALADHD, ALAERH, ALASVM, XLAENV, ZERRVX,
+     $                   ZGET04, ZLACPY, ZLARHS, ZLATB4, ZLATMS,
+     $                   ZHESV_AA_2STAGE, ZHET01_AA, ZPOT02,
+     $                   ZHETRF_AA_2STAGE
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -250,15 +247,15 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL AB_ZERRVX( PATH, NOUT )
+     $   CALL ZERRVX( PATH, NOUT )
       INFOT = 0
 *
 *     Set the block size and minimum block size for testing.
 *
       NB = 1
       NBMIN = 2
-      CALL AB_XLAENV( 1, NB )
-      CALL AB_XLAENV( 2, NBMIN )
+      CALL XLAENV( 1, NB )
+      CALL XLAENV( 2, NBMIN )
 *
 *     Do for each value of N in NVAL
 *
@@ -290,24 +287,23 @@
 *
 *              Begin generate the test matrix A.
 *
-*              Set up parameters with AB_ZLATB4 for the matrix generator
+*              Set up parameters with ZLATB4 for the matrix generator
 *              based on the type of matrix to be generated.
 *
-              CALL AB_ZLATB4( MATPATH, IMAT, N, N, TYPE, KL, KU, ANORM,
+              CALL ZLATB4( MATPATH, IMAT, N, N, TYPE, KL, KU, ANORM,
      $                         MODE, CNDNUM, DIST )
 *
-*              Generate a matrix with AB_ZLATMS.
+*              Generate a matrix with ZLATMS.
 *
-                  SRNAMT = 'AB_ZLATMS'
-                  CALL AB_ZLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
+                  SRNAMT = 'ZLATMS'
+                  CALL ZLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
      $                         CNDNUM, ANORM, KL, KU, UPLO, A, LDA,
      $                         WORK, INFO )
 *
-*                 Check error code from AB_ZLATMS and handle error.
+*                 Check error code from ZLATMS and handle error.
 *
                   IF( INFO.NE.0 ) THEN
-                     CALL AB_ALAERH( PATH, 'AB_ZLATMS', INFO, 0, UPLO, N
-     $, N,
+                     CALL ALAERH( PATH, 'ZLATMS', INFO, 0, UPLO, N, N,
      $                            -1, -1, -1, IMAT, NFAIL, NERRS, NOUT )
                      GO TO 160
                   END IF
@@ -392,25 +388,23 @@
 *
 *                 Form an exact solution and set the right hand side.
 *
-                  SRNAMT = 'AB_ZLARHS'
-                  CALL AB_ZLARHS( MATPATH, XTYPE, UPLO, ' ', N, N, KL, K
-     $U,
+                  SRNAMT = 'ZLARHS'
+                  CALL ZLARHS( MATPATH, XTYPE, UPLO, ' ', N, N, KL, KU,
      $                         NRHS, A, LDA, XACT, LDA, B, LDA, ISEED,
      $                         INFO )
                   XTYPE = 'C'
 *
-*                 --- Test AB_AB_AB_ZHESV_AA_2STAGE  ---
+*                 --- Test ZHESV_AA_2STAGE  ---
 *
                   IF( IFACT.EQ.2 ) THEN
-                     CALL AB_ZLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
-                     CALL AB_ZLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
+                     CALL ZLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
+                     CALL ZLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
-*                    Factor the matrix and solve the system using AB_AB_ZHESV_AA.
+*                    Factor the matrix and solve the system using ZHESV_AA.
 *
-                     SRNAMT = 'AB_AB_AB_ZHESV_AA_2STAGE '
+                     SRNAMT = 'ZHESV_AA_2STAGE '
                      LWORK = MIN(N*NB, 3*NMAX*NMAX)
-                     CALL AB_AB_AB_ZHESV_AA_2STAGE( UPLO, N, NRHS, AFAC,
-     $ LDA,
+                     CALL ZHESV_AA_2STAGE( UPLO, N, NRHS, AFAC, LDA,
      $                                 AINV, (3*NB+1)*N, 
      $                                 IWORK, IWORK( 1+N ),
      $                                 X, LDA, WORK, LWORK, INFO )
@@ -435,10 +429,10 @@
                         K = 0
                      END IF
 *
-*                    Check error code from AB_AB_ZHESV_AA .
+*                    Check error code from ZHESV_AA .
 *
                      IF( INFO.NE.K ) THEN
-                        CALL AB_ALAERH( PATH, 'AB_AB_ZHESV_AA', INFO, K,
+                        CALL ALAERH( PATH, 'ZHESV_AA', INFO, K,
      $                               UPLO, N, N, -1, -1, NRHS,
      $                               IMAT, NFAIL, NERRS, NOUT )
                         GO TO 120
@@ -448,17 +442,15 @@
 *
 *                    Compute residual of the computed solution.
 *
-                     CALL AB_ZLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA 
-     $)
-                     CALL AB_ZPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK
-     $,
+                     CALL ZLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
+                     CALL ZPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK,
      $                            LDA, RWORK, RESULT( 1 ) )
 *
 *                    Reconstruct matrix from factors and compute
 *                    residual.
 *
-*                    NEED TO CREATE AB_AB_ZHET01_AA_2STAGE
-*                     CALL AB_AB_ZHET01_AA( UPLO, N, A, LDA, AFAC, LDA,
+*                    NEED TO CREATE ZHET01_AA_2STAGE
+*                     CALL ZHET01_AA( UPLO, N, A, LDA, AFAC, LDA,
 *     $                                  IWORK, AINV, LDA, RWORK,
 *     $                                  RESULT( 2 ) )
 *                     NT = 2
@@ -470,9 +462,8 @@
                      DO 110 K = 1, NT
                         IF( RESULT( K ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                        CALL AB_ALADHD( NOUT, PATH )
-                           WRITE( NOUT, FMT = 9999 )'AB_AB_AB_ZHESV_AA_2
-     $STAGE',
+     $                        CALL ALADHD( NOUT, PATH )
+                           WRITE( NOUT, FMT = 9999 )'ZHESV_AA_2STAGE',
      $                         UPLO, N, IMAT, K, RESULT( K )
                            NFAIL = NFAIL + 1
                         END IF
@@ -489,12 +480,12 @@
 *
 *     Print a summary of the results.
 *
-      CALL AB_ALASVM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL ALASVM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( 1X, A, ', UPLO=''', A1, ''', N =', I5, ', type ', I2,
      $      ', test ', I2, ', ratio =', G12.5 )
       RETURN
 *
-*     End of AB_AB_AB_ZDRVHE_AA_2STAGE
+*     End of ZDRVHE_AA_2STAGE
 *
       END

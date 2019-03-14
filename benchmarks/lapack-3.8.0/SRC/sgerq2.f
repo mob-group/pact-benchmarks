@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_SGERQ2 computes the RQ factorization of a general rectangular matrix using an unblocked algorithm.
+*> \brief \b SGERQ2 computes the RQ factorization of a general rectangular matrix using an unblocked algorithm.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_SGERQ2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_SGERQ2.f">
+*> Download SGERQ2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgerq2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_SGERQ2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgerq2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_SGERQ2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgerq2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_SGERQ2( M, N, A, LDA, TAU, WORK, INFO )
+*       SUBROUTINE SGERQ2( M, N, A, LDA, TAU, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, M, N
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_SGERQ2 computes an RQ factorization of a real m by n matrix A:
+*> SGERQ2 computes an RQ factorization of a real m by n matrix A:
 *> A = R * Q.
 *> \endverbatim
 *
@@ -121,7 +121,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_AB_SGERQ2( M, N, A, LDA, TAU, WORK, INFO )
+      SUBROUTINE SGERQ2( M, N, A, LDA, TAU, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -146,7 +146,7 @@
       REAL               AII
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SLARF, AB_AB_SLARFG, AB_XERBLA
+      EXTERNAL           SLARF, SLARFG, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -164,7 +164,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_SGERQ2', -INFO )
+         CALL XERBLA( 'SGERQ2', -INFO )
          RETURN
       END IF
 *
@@ -175,20 +175,19 @@
 *        Generate elementary reflector H(i) to annihilate
 *        A(m-k+i,1:n-k+i-1)
 *
-         CALL AB_AB_SLARFG( N-K+I, A( M-K+I, N-K+I ), A( M-K+I, 1 ), LDA
-     $,
+         CALL SLARFG( N-K+I, A( M-K+I, N-K+I ), A( M-K+I, 1 ), LDA,
      $                TAU( I ) )
 *
 *        Apply H(i) to A(1:m-k+i-1,1:n-k+i) from the right
 *
          AII = A( M-K+I, N-K+I )
          A( M-K+I, N-K+I ) = ONE
-         CALL AB_SLARF( 'Right', M-K+I-1, N-K+I, A( M-K+I, 1 ), LDA,
+         CALL SLARF( 'Right', M-K+I-1, N-K+I, A( M-K+I, 1 ), LDA,
      $               TAU( I ), A, LDA, WORK )
          A( M-K+I, N-K+I ) = AII
    10 CONTINUE
       RETURN
 *
-*     End of AB_AB_SGERQ2
+*     End of SGERQ2
 *
       END

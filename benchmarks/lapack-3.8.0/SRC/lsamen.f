@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_LSAMEN
+*> \brief \b LSAMEN
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_LSAMEN + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_LSAMEN.f">
+*> Download LSAMEN + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/lsamen.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_LSAMEN.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/lsamen.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_LSAMEN.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/lsamen.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       LOGICAL          FUNCTION AB_AB_LSAMEN( N, CA, CB )
+*       LOGICAL          FUNCTION LSAMEN( N, CA, CB )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*( * )    CA, CB
@@ -31,10 +31,10 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_LSAMEN  tests if the first N letters of CA are the same as the
+*> LSAMEN  tests if the first N letters of CA are the same as the
 *> first N letters of CB, regardless of case.
-*> AB_AB_LSAMEN returns .TRUE. if CA and CB are equivalent except for case
-*> and .FALSE. otherwise.  AB_AB_LSAMEN also returns .FALSE. if LEN( CA )
+*> LSAMEN returns .TRUE. if CA and CB are equivalent except for case
+*> and .FALSE. otherwise.  LSAMEN also returns .FALSE. if LEN( CA )
 *> or LEN( CB ) is less than N.
 *> \endverbatim
 *
@@ -72,7 +72,7 @@
 *> \ingroup OTHERauxiliary
 *
 *  =====================================================================
-      LOGICAL          FUNCTION AB_AB_LSAMEN( N, CA, CB )
+      LOGICAL          FUNCTION LSAMEN( N, CA, CB )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -90,15 +90,15 @@
       INTEGER            I
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          LEN
 *     ..
 *     .. Executable Statements ..
 *
-      AB_AB_LSAMEN = .FALSE.
+      LSAMEN = .FALSE.
       IF( LEN( CA ).LT.N .OR. LEN( CB ).LT.N )
      $   GO TO 20
 *
@@ -106,17 +106,17 @@
 *
       DO 10 I = 1, N
 *
-*        Test if the characters are equal using AB_LSAME.
+*        Test if the characters are equal using LSAME.
 *
-         IF( .NOT.AB_LSAME( CA( I: I ), CB( I: I ) ) )
+         IF( .NOT.LSAME( CA( I: I ), CB( I: I ) ) )
      $      GO TO 20
 *
    10 CONTINUE
-      AB_AB_LSAMEN = .TRUE.
+      LSAMEN = .TRUE.
 *
    20 CONTINUE
       RETURN
 *
-*     End of AB_AB_LSAMEN
+*     End of LSAMEN
 *
       END

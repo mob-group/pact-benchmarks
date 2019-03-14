@@ -1,4 +1,4 @@
-*> \brief \b AB_SLALS0 applies back multiplying factors in solving the least squares problem using divide and conquer SVD approach. Used by AB_AB_SGELSD.
+*> \brief \b SLALS0 applies back multiplying factors in solving the least squares problem using divide and conquer SVD approach. Used by sgelsd.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLALS0 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLALS0.f">
+*> Download SLALS0 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slals0.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLALS0.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slals0.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLALS0.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slals0.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLALS0( ICOMPQ, NL, NR, SQRE, NRHS, B, LDB, BX, LDBX,
+*       SUBROUTINE SLALS0( ICOMPQ, NL, NR, SQRE, NRHS, B, LDB, BX, LDBX,
 *                          PERM, GIVPTR, GIVCOL, LDGCOL, GIVNUM, LDGNUM,
 *                          POLES, DIFL, DIFR, Z, K, C, S, WORK, INFO )
 *
@@ -40,7 +40,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SLALS0 applies back the multiplying factors of either the left or the
+*> SLALS0 applies back the multiplying factors of either the left or the
 *> right singular vector matrix of a diagonal matrix appended by a row
 *> to the right hand side matrix B in solving the least squares problem
 *> using the divide-and-conquer SVD approach.
@@ -264,8 +264,7 @@
 *>     Osni Marques, LBNL/NERSC, USA \n
 *
 *  =====================================================================
-      SUBROUTINE AB_SLALS0( ICOMPQ, NL, NR, SQRE, NRHS, B, LDB, BX, LDBX
-     $,
+      SUBROUTINE SLALS0( ICOMPQ, NL, NR, SQRE, NRHS, B, LDB, BX, LDBX,
      $                   PERM, GIVPTR, GIVCOL, LDGCOL, GIVNUM, LDGNUM,
      $                   POLES, DIFL, DIFR, Z, K, C, S, WORK, INFO )
 *
@@ -297,13 +296,12 @@
       REAL               DIFLJ, DIFRJ, DJ, DSIGJ, DSIGJP, TEMP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SCOPY, AB_SGEMV, AB_SLACPY, AB_SLASCL, AB_SR
-     $OT, AB_SSCAL,
-     $                   AB_XERBLA
+      EXTERNAL           SCOPY, SGEMV, SLACPY, SLASCL, SROT, SSCAL,
+     $                   XERBLA
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMC3, AB_SNRM2
-      EXTERNAL           AB_SLAMC3, AB_SNRM2
+      REAL               SLAMC3, SNRM2
+      EXTERNAL           SLAMC3, SNRM2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -339,7 +337,7 @@
          INFO = -20
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SLALS0', -INFO )
+         CALL XERBLA( 'SLALS0', -INFO )
          RETURN
       END IF
 *
@@ -353,26 +351,25 @@
 *        Step (1L): apply back the Givens rotations performed.
 *
          DO 10 I = 1, GIVPTR
-            CALL AB_SROT( NRHS, B( GIVCOL( I, 2 ), 1 ), LDB,
+            CALL SROT( NRHS, B( GIVCOL( I, 2 ), 1 ), LDB,
      $                 B( GIVCOL( I, 1 ), 1 ), LDB, GIVNUM( I, 2 ),
      $                 GIVNUM( I, 1 ) )
    10    CONTINUE
 *
 *        Step (2L): permute rows of B.
 *
-         CALL AB_SCOPY( NRHS, B( NLP1, 1 ), LDB, BX( 1, 1 ), LDBX )
+         CALL SCOPY( NRHS, B( NLP1, 1 ), LDB, BX( 1, 1 ), LDBX )
          DO 20 I = 2, N
-            CALL AB_SCOPY( NRHS, B( PERM( I ), 1 ), LDB, BX( I, 1 ), LDB
-     $X )
+            CALL SCOPY( NRHS, B( PERM( I ), 1 ), LDB, BX( I, 1 ), LDBX )
    20    CONTINUE
 *
 *        Step (3L): apply the inverse of the left singular vector
 *        matrix to BX.
 *
          IF( K.EQ.1 ) THEN
-            CALL AB_SCOPY( NRHS, BX, LDBX, B, LDB )
+            CALL SCOPY( NRHS, BX, LDBX, B, LDB )
             IF( Z( 1 ).LT.ZERO ) THEN
-               CALL AB_SSCAL( NRHS, NEGONE, B, LDB )
+               CALL SSCAL( NRHS, NEGONE, B, LDB )
             END IF
          ELSE
             DO 50 J = 1, K
@@ -396,7 +393,7 @@
                      WORK( I ) = ZERO
                   ELSE
                      WORK( I ) = POLES( I, 2 )*Z( I ) /
-     $                           ( AB_SLAMC3( POLES( I, 2 ), DSIGJ )-
+     $                           ( SLAMC3( POLES( I, 2 ), DSIGJ )-
      $                           DIFLJ ) / ( POLES( I, 2 )+DJ )
                   END IF
    30          CONTINUE
@@ -406,16 +403,15 @@
                      WORK( I ) = ZERO
                   ELSE
                      WORK( I ) = POLES( I, 2 )*Z( I ) /
-     $                           ( AB_SLAMC3( POLES( I, 2 ), DSIGJP )+
+     $                           ( SLAMC3( POLES( I, 2 ), DSIGJP )+
      $                           DIFRJ ) / ( POLES( I, 2 )+DJ )
                   END IF
    40          CONTINUE
                WORK( 1 ) = NEGONE
-               TEMP = AB_SNRM2( K, WORK, 1 )
-               CALL AB_SGEMV( 'T', K, NRHS, ONE, BX, LDBX, WORK, 1, ZERO
-     $,
+               TEMP = SNRM2( K, WORK, 1 )
+               CALL SGEMV( 'T', K, NRHS, ONE, BX, LDBX, WORK, 1, ZERO,
      $                     B( J, 1 ), LDB )
-               CALL AB_SLASCL( 'G', 0, 0, TEMP, ONE, 1, NRHS, B( J, 1 ),
+               CALL SLASCL( 'G', 0, 0, TEMP, ONE, 1, NRHS, B( J, 1 ),
      $                      LDB, INFO )
    50       CONTINUE
          END IF
@@ -423,7 +419,7 @@
 *        Move the deflated rows of BX to B also.
 *
          IF( K.LT.MAX( M, N ) )
-     $      CALL AB_SLACPY( 'A', N-K, NRHS, BX( K+1, 1 ), LDBX,
+     $      CALL SLACPY( 'A', N-K, NRHS, BX( K+1, 1 ), LDBX,
      $                   B( K+1, 1 ), LDB )
       ELSE
 *
@@ -433,7 +429,7 @@
 *        to B.
 *
          IF( K.EQ.1 ) THEN
-            CALL AB_SCOPY( NRHS, B, LDB, BX, LDBX )
+            CALL SCOPY( NRHS, B, LDB, BX, LDBX )
          ELSE
             DO 80 J = 1, K
                DSIGJ = POLES( J, 2 )
@@ -447,8 +443,7 @@
                   IF( Z( J ).EQ.ZERO ) THEN
                      WORK( I ) = ZERO
                   ELSE
-                     WORK( I ) = Z( J ) / ( AB_SLAMC3( DSIGJ, -POLES( I+
-     $1,
+                     WORK( I ) = Z( J ) / ( SLAMC3( DSIGJ, -POLES( I+1,
      $                           2 ) )-DIFR( I, 1 ) ) /
      $                           ( DSIGJ+POLES( I, 1 ) ) / DIFR( I, 2 )
                   END IF
@@ -457,12 +452,12 @@
                   IF( Z( J ).EQ.ZERO ) THEN
                      WORK( I ) = ZERO
                   ELSE
-                     WORK( I ) = Z( J ) / ( AB_SLAMC3( DSIGJ, -POLES( I,
+                     WORK( I ) = Z( J ) / ( SLAMC3( DSIGJ, -POLES( I,
      $                           2 ) )-DIFL( I ) ) /
      $                           ( DSIGJ+POLES( I, 1 ) ) / DIFR( I, 2 )
                   END IF
    70          CONTINUE
-               CALL AB_SGEMV( 'T', K, NRHS, ONE, B, LDB, WORK, 1, ZERO,
+               CALL SGEMV( 'T', K, NRHS, ONE, B, LDB, WORK, 1, ZERO,
      $                     BX( J, 1 ), LDBX )
    80       CONTINUE
          END IF
@@ -471,30 +466,27 @@
 *        related to the right null space of the subproblem.
 *
          IF( SQRE.EQ.1 ) THEN
-            CALL AB_SCOPY( NRHS, B( M, 1 ), LDB, BX( M, 1 ), LDBX )
-            CALL AB_SROT( NRHS, BX( 1, 1 ), LDBX, BX( M, 1 ), LDBX, C, S
-     $ )
+            CALL SCOPY( NRHS, B( M, 1 ), LDB, BX( M, 1 ), LDBX )
+            CALL SROT( NRHS, BX( 1, 1 ), LDBX, BX( M, 1 ), LDBX, C, S )
          END IF
          IF( K.LT.MAX( M, N ) )
-     $      CALL AB_SLACPY( 'A', N-K, NRHS, B( K+1, 1 ), LDB, BX( K+1, 1
-     $ ),
+     $      CALL SLACPY( 'A', N-K, NRHS, B( K+1, 1 ), LDB, BX( K+1, 1 ),
      $                   LDBX )
 *
 *        Step (3R): permute rows of B.
 *
-         CALL AB_SCOPY( NRHS, BX( 1, 1 ), LDBX, B( NLP1, 1 ), LDB )
+         CALL SCOPY( NRHS, BX( 1, 1 ), LDBX, B( NLP1, 1 ), LDB )
          IF( SQRE.EQ.1 ) THEN
-            CALL AB_SCOPY( NRHS, BX( M, 1 ), LDBX, B( M, 1 ), LDB )
+            CALL SCOPY( NRHS, BX( M, 1 ), LDBX, B( M, 1 ), LDB )
          END IF
          DO 90 I = 2, N
-            CALL AB_SCOPY( NRHS, BX( I, 1 ), LDBX, B( PERM( I ), 1 ), LD
-     $B )
+            CALL SCOPY( NRHS, BX( I, 1 ), LDBX, B( PERM( I ), 1 ), LDB )
    90    CONTINUE
 *
 *        Step (4R): apply back the Givens rotations performed.
 *
          DO 100 I = GIVPTR, 1, -1
-            CALL AB_SROT( NRHS, B( GIVCOL( I, 2 ), 1 ), LDB,
+            CALL SROT( NRHS, B( GIVCOL( I, 2 ), 1 ), LDB,
      $                 B( GIVCOL( I, 1 ), 1 ), LDB, GIVNUM( I, 2 ),
      $                 -GIVNUM( I, 1 ) )
   100    CONTINUE
@@ -502,6 +494,6 @@
 *
       RETURN
 *
-*     End of AB_SLALS0
+*     End of SLALS0
 *
       END

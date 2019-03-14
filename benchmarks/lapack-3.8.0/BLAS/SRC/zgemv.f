@@ -1,4 +1,4 @@
-*> \brief \b AB_ZGEMV
+*> \brief \b ZGEMV
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZGEMV(TRANS,M,N,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+*       SUBROUTINE ZGEMV(TRANS,M,N,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
 *
 *       .. Scalar Arguments ..
 *       COMPLEX*16 ALPHA,BETA
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZGEMV  performs one of the matrix-vector operations
+*> ZGEMV  performs one of the matrix-vector operations
 *>
 *>    y := alpha*A*x + beta*y,   or   y := alpha*A**T*x + beta*y,   or
 *>
@@ -156,7 +156,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_ZGEMV(TRANS,M,N,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+      SUBROUTINE ZGEMV(TRANS,M,N,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
 *
 *  -- Reference BLAS level2 routine (version 3.7.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -186,11 +186,11 @@
       LOGICAL NOCONJ
 *     ..
 *     .. External Functions ..
-      LOGICAL AB_LSAME
-      EXTERNAL AB_LSAME
+      LOGICAL LSAME
+      EXTERNAL LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL AB_XERBLA
+      EXTERNAL XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC DCONJG,MAX
@@ -199,8 +199,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF (.NOT.AB_LSAME(TRANS,'N') .AND. .NOT.AB_LSAME(TRANS,'T') .AND.
-     +    .NOT.AB_LSAME(TRANS,'C')) THEN
+      IF (.NOT.LSAME(TRANS,'N') .AND. .NOT.LSAME(TRANS,'T') .AND.
+     +    .NOT.LSAME(TRANS,'C')) THEN
           INFO = 1
       ELSE IF (M.LT.0) THEN
           INFO = 2
@@ -214,7 +214,7 @@
           INFO = 11
       END IF
       IF (INFO.NE.0) THEN
-          CALL AB_XERBLA('AB_ZGEMV ',INFO)
+          CALL XERBLA('ZGEMV ',INFO)
           RETURN
       END IF
 *
@@ -223,12 +223,12 @@
       IF ((M.EQ.0) .OR. (N.EQ.0) .OR.
      +    ((ALPHA.EQ.ZERO).AND. (BETA.EQ.ONE))) RETURN
 *
-      NOCONJ = AB_LSAME(TRANS,'T')
+      NOCONJ = LSAME(TRANS,'T')
 *
 *     Set  LENX  and  LENY, the lengths of the vectors x and y, and set
 *     up the start points in  X  and  Y.
 *
-      IF (AB_LSAME(TRANS,'N')) THEN
+      IF (LSAME(TRANS,'N')) THEN
           LENX = N
           LENY = M
       ELSE
@@ -278,7 +278,7 @@
           END IF
       END IF
       IF (ALPHA.EQ.ZERO) RETURN
-      IF (AB_LSAME(TRANS,'N')) THEN
+      IF (LSAME(TRANS,'N')) THEN
 *
 *        Form  y := alpha*A*x + y.
 *
@@ -345,6 +345,6 @@
 *
       RETURN
 *
-*     End of AB_ZGEMV .
+*     End of ZGEMV .
 *
       END

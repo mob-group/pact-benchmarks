@@ -1,4 +1,4 @@
-*> \brief \b AB_ZHEMV
+*> \brief \b ZHEMV
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZHEMV(UPLO,N,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+*       SUBROUTINE ZHEMV(UPLO,N,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
 *
 *       .. Scalar Arguments ..
 *       COMPLEX*16 ALPHA,BETA
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZHEMV  performs the matrix-vector  operation
+*> ZHEMV  performs the matrix-vector  operation
 *>
 *>    y := alpha*A*x + beta*y,
 *>
@@ -152,7 +152,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_ZHEMV(UPLO,N,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+      SUBROUTINE ZHEMV(UPLO,N,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
 *
 *  -- Reference BLAS level2 routine (version 3.7.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -181,11 +181,11 @@
       INTEGER I,INFO,IX,IY,J,JX,JY,KX,KY
 *     ..
 *     .. External Functions ..
-      LOGICAL AB_LSAME
-      EXTERNAL AB_LSAME
+      LOGICAL LSAME
+      EXTERNAL LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL AB_XERBLA
+      EXTERNAL XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC DBLE,DCONJG,MAX
@@ -194,7 +194,7 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF (.NOT.AB_LSAME(UPLO,'U') .AND. .NOT.AB_LSAME(UPLO,'L')) THEN
+      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
           INFO = 1
       ELSE IF (N.LT.0) THEN
           INFO = 2
@@ -206,7 +206,7 @@
           INFO = 10
       END IF
       IF (INFO.NE.0) THEN
-          CALL AB_XERBLA('AB_ZHEMV ',INFO)
+          CALL XERBLA('ZHEMV ',INFO)
           RETURN
       END IF
 *
@@ -260,7 +260,7 @@
           END IF
       END IF
       IF (ALPHA.EQ.ZERO) RETURN
-      IF (AB_LSAME(UPLO,'U')) THEN
+      IF (LSAME(UPLO,'U')) THEN
 *
 *        Form  y  when A is stored in upper triangle.
 *
@@ -332,6 +332,6 @@
 *
       RETURN
 *
-*     End of AB_ZHEMV .
+*     End of ZHEMV .
 *
       END

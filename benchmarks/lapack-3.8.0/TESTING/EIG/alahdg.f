@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_ALAHDG
+*> \brief \b ALAHDG
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_ALAHDG( IOUNIT, PATH )
+*       SUBROUTINE ALAHDG( IOUNIT, PATH )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3       PATH
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_ALAHDG prints AB_HEADER information for the different test paths.
+*> ALAHDG prints header information for the different test paths.
 *> \endverbatim
 *
 *  Arguments:
@@ -30,18 +30,18 @@
 *> \param[in] IOUNIT
 *> \verbatim
 *>          IOUNIT is INTEGER
-*>          The unit number to which the AB_HEADER information should be
+*>          The unit number to which the header information should be
 *>          printed.
 *> \endverbatim
 *>
 *> \param[in] PATH
 *> \verbatim
 *>          PATH is CHARACTER*3
-*>          The name of the path for which the AB_HEADER information is to
+*>          The name of the path for which the header information is to
 *>          be printed.  Current paths are
 *>             GQR:  GQR (general matrices)
 *>             GRQ:  GRQ (general matrices)
-*>             AB_LSE:  AB_LSE Problem
+*>             LSE:  LSE Problem
 *>             GLM:  GLM Problem
 *>             GSV:  Generalized Singular Value Decomposition
 *>             CSD:  CS Decomposition
@@ -60,7 +60,7 @@
 *> \ingroup aux_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_ALAHDG( IOUNIT, PATH )
+      SUBROUTINE ALAHDG( IOUNIT, PATH )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -79,8 +79,8 @@
       INTEGER           ITYPE
 *     ..
 *     .. External Functions ..
-      LOGICAL           AB_AB_LSAMEN
-      EXTERNAL          AB_AB_LSAMEN
+      LOGICAL           LSAMEN
+      EXTERNAL          LSAMEN
 *     ..
 *     .. Executable Statements ..
 *
@@ -90,22 +90,22 @@
 *
 *     First line describing matrices in this path
 *
-      IF( AB_AB_LSAMEN( 3, C2, 'GQR' ) ) THEN
+      IF( LSAMEN( 3, C2, 'GQR' ) ) THEN
          ITYPE = 1
          WRITE( IOUNIT, FMT = 9991 )PATH
-      ELSE IF( AB_AB_LSAMEN( 3, C2, 'GRQ' ) ) THEN
+      ELSE IF( LSAMEN( 3, C2, 'GRQ' ) ) THEN
          ITYPE = 2
          WRITE( IOUNIT, FMT = 9992 )PATH
-      ELSE IF( AB_AB_LSAMEN( 3, C2, 'AB_LSE' ) ) THEN
+      ELSE IF( LSAMEN( 3, C2, 'LSE' ) ) THEN
          ITYPE = 3
          WRITE( IOUNIT, FMT = 9993 )PATH
-      ELSE IF( AB_AB_LSAMEN( 3, C2, 'GLM' ) ) THEN
+      ELSE IF( LSAMEN( 3, C2, 'GLM' ) ) THEN
          ITYPE = 4
          WRITE( IOUNIT, FMT = 9994 )PATH
-      ELSE IF( AB_AB_LSAMEN( 3, C2, 'GSV' ) ) THEN
+      ELSE IF( LSAMEN( 3, C2, 'GSV' ) ) THEN
          ITYPE = 5
          WRITE( IOUNIT, FMT = 9995 )PATH
-      ELSE IF( AB_AB_LSAMEN( 3, C2, 'CSD' ) ) THEN
+      ELSE IF( LSAMEN( 3, C2, 'CSD' ) ) THEN
          ITYPE = 6
          WRITE( IOUNIT, FMT = 9996 )PATH
       END IF
@@ -187,7 +187,7 @@
          WRITE( IOUNIT, FMT = 9933 )4
       ELSE IF( ITYPE.EQ.3 ) THEN
 *
-*        AB_LSE Problem
+*        LSE Problem
 *
          WRITE( IOUNIT, FMT = 9937 )1
          WRITE( IOUNIT, FMT = 9938 )2
@@ -231,7 +231,7 @@
  9999 FORMAT( 1X, A )
  9991 FORMAT( / 1X, A3, ': GQR factorization of general matrices' )
  9992 FORMAT( / 1X, A3, ': GRQ factorization of general matrices' )
- 9993 FORMAT( / 1X, A3, ': AB_LSE Problem' )
+ 9993 FORMAT( / 1X, A3, ': LSE Problem' )
  9994 FORMAT( / 1X, A3, ': GLM Problem' )
  9995 FORMAT( / 1X, A3, ': Generalized Singular Value Decomposition' )
  9996 FORMAT( / 1X, A3, ': CS Decomposition' )
@@ -278,7 +278,7 @@
  9935 FORMAT( 3X, I2, ': norm( T * Q - Z'' * B )  / ( min( P,N ) * nor',
      $       'm(B)*EPS )' )
 *
-*     AB_LSE test ratio
+*     LSE test ratio
 *
  9937 FORMAT( 3X, I2, ': norm( A*x - c )  / ( norm(A)*norm(x) * EPS )' )
  9938 FORMAT( 3X, I2, ': norm( B*x - d )  / ( norm(B)*norm(x) * EPS )' )
@@ -325,6 +325,6 @@
  9926 FORMAT( 3X, I2, ': principal angle ordering ( 0 or ULP )' )
       RETURN
 *
-*     End of AB_AB_ALAHDG
+*     End of ALAHDG
 *
       END

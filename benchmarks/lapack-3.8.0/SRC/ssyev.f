@@ -1,4 +1,4 @@
-*> \brief <b> AB_SSYEV computes the eigenvalues and, optionally, the left and/or right eigenvectors for SY matrices</b>
+*> \brief <b> SSYEV computes the eigenvalues and, optionally, the left and/or right eigenvectors for SY matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SSYEV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SSYEV.f">
+*> Download SSYEV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssyev.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SSYEV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssyev.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SSYEV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssyev.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SSYEV( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, INFO )
+*       SUBROUTINE SSYEV( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          JOBZ, UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SSYEV computes all eigenvalues and, optionally, eigenvectors of a
+*> SSYEV computes all eigenvalues and, optionally, eigenvectors of a
 *> real symmetric matrix A.
 *> \endverbatim
 *
@@ -99,12 +99,12 @@
 *>          LWORK is INTEGER
 *>          The length of the array WORK.  LWORK >= max(1,3*N-1).
 *>          For optimal efficiency, LWORK >= (NB+2)*N,
-*>          where NB is the blocksize for AB_SSYTRD returned by AB_ILAENV.
+*>          where NB is the blocksize for SSYTRD returned by ILAENV.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -130,7 +130,7 @@
 *> \ingroup realSYeigen
 *
 *  =====================================================================
-      SUBROUTINE AB_SSYEV( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, INFO )
+      SUBROUTINE SSYEV( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -159,15 +159,14 @@
      $                   SMLNUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      REAL               AB_SLAMCH, AB_SLANSY
-      EXTERNAL           AB_ILAENV, AB_LSAME, AB_SLAMCH, AB_SLANSY
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      REAL               SLAMCH, SLANSY
+      EXTERNAL           ILAENV, LSAME, SLAMCH, SLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SLASCL, AB_SORGTR, AB_SSCAL, AB_SSTEQR, AB_S
-     $STERF, AB_SSYTRD,
-     $                   AB_XERBLA
+      EXTERNAL           SLASCL, SORGTR, SSCAL, SSTEQR, SSTERF, SSYTRD,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT
@@ -176,14 +175,14 @@
 *
 *     Test the input parameters.
 *
-      WANTZ = AB_LSAME( JOBZ, 'V' )
-      LOWER = AB_LSAME( UPLO, 'L' )
+      WANTZ = LSAME( JOBZ, 'V' )
+      LOWER = LSAME( UPLO, 'L' )
       LQUERY = ( LWORK.EQ.-1 )
 *
       INFO = 0
-      IF( .NOT.( WANTZ .OR. AB_LSAME( JOBZ, 'N' ) ) ) THEN
+      IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.( LOWER .OR. AB_LSAME( UPLO, 'U' ) ) ) THEN
+      ELSE IF( .NOT.( LOWER .OR. LSAME( UPLO, 'U' ) ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -192,7 +191,7 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         NB = AB_ILAENV( 1, 'AB_SSYTRD', UPLO, N, -1, -1, -1 )
+         NB = ILAENV( 1, 'SSYTRD', UPLO, N, -1, -1, -1 )
          LWKOPT = MAX( 1, ( NB+2 )*N )
          WORK( 1 ) = LWKOPT
 *
@@ -201,7 +200,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SSYEV ', -INFO )
+         CALL XERBLA( 'SSYEV ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -223,8 +222,8 @@
 *
 *     Get machine constants.
 *
-      SAFMIN = AB_SLAMCH( 'Safe minimum' )
-      EPS = AB_SLAMCH( 'Precision' )
+      SAFMIN = SLAMCH( 'Safe minimum' )
+      EPS = SLAMCH( 'Precision' )
       SMLNUM = SAFMIN / EPS
       BIGNUM = ONE / SMLNUM
       RMIN = SQRT( SMLNUM )
@@ -232,7 +231,7 @@
 *
 *     Scale matrix to allowable range, if necessary.
 *
-      ANRM = AB_SLANSY( 'M', UPLO, N, A, LDA, WORK )
+      ANRM = SLANSY( 'M', UPLO, N, A, LDA, WORK )
       ISCALE = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.RMIN ) THEN
          ISCALE = 1
@@ -242,28 +241,26 @@
          SIGMA = RMAX / ANRM
       END IF
       IF( ISCALE.EQ.1 )
-     $   CALL AB_SLASCL( UPLO, 0, 0, ONE, SIGMA, N, N, A, LDA, INFO )
+     $   CALL SLASCL( UPLO, 0, 0, ONE, SIGMA, N, N, A, LDA, INFO )
 *
-*     Call AB_SSYTRD to reduce symmetric matrix to tridiagonal form.
+*     Call SSYTRD to reduce symmetric matrix to tridiagonal form.
 *
       INDE = 1
       INDTAU = INDE + N
       INDWRK = INDTAU + N
       LLWORK = LWORK - INDWRK + 1
-      CALL AB_SSYTRD( UPLO, N, A, LDA, W, WORK( INDE ), WORK( INDTAU ),
+      CALL SSYTRD( UPLO, N, A, LDA, W, WORK( INDE ), WORK( INDTAU ),
      $             WORK( INDWRK ), LLWORK, IINFO )
 *
-*     For eigenvalues only, call AB_SSTERF.  For eigenvectors, first call
-*     AB_SORGTR to generate the orthogonal matrix, then call AB_SSTEQR.
+*     For eigenvalues only, call SSTERF.  For eigenvectors, first call
+*     SORGTR to generate the orthogonal matrix, then call SSTEQR.
 *
       IF( .NOT.WANTZ ) THEN
-         CALL AB_SSTERF( N, W, WORK( INDE ), INFO )
+         CALL SSTERF( N, W, WORK( INDE ), INFO )
       ELSE
-         CALL AB_SORGTR( UPLO, N, A, LDA, WORK( INDTAU ), WORK( INDWRK )
-     $,
+         CALL SORGTR( UPLO, N, A, LDA, WORK( INDTAU ), WORK( INDWRK ),
      $                LLWORK, IINFO )
-         CALL AB_SSTEQR( JOBZ, N, W, WORK( INDE ), A, LDA, WORK( INDTAU 
-     $),
+         CALL SSTEQR( JOBZ, N, W, WORK( INDE ), A, LDA, WORK( INDTAU ),
      $                INFO )
       END IF
 *
@@ -275,7 +272,7 @@
          ELSE
             IMAX = INFO - 1
          END IF
-         CALL AB_SSCAL( IMAX, ONE / SIGMA, W, 1 )
+         CALL SSCAL( IMAX, ONE / SIGMA, W, 1 )
       END IF
 *
 *     Set WORK(1) to optimal workspace size.
@@ -284,6 +281,6 @@
 *
       RETURN
 *
-*     End of AB_SSYEV
+*     End of SSYEV
 *
       END

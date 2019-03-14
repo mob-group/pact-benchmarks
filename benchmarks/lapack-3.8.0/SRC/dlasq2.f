@@ -1,4 +1,4 @@
-*> \brief \b AB_DLASQ2 computes all the eigenvalues of the symmetric positive definite tridiagonal matrix associated with the qd Array Z to high relative accuracy. Used by AB_SBDSQR and AB_SSTEGR.
+*> \brief \b DLASQ2 computes all the eigenvalues of the symmetric positive definite tridiagonal matrix associated with the qd Array Z to high relative accuracy. Used by sbdsqr and sstegr.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLASQ2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLASQ2.f">
+*> Download DLASQ2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasq2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLASQ2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlasq2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLASQ2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasq2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLASQ2( N, Z, INFO )
+*       SUBROUTINE DLASQ2( N, Z, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, N
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DLASQ2 computes all the eigenvalues of the symmetric positive
+*> DLASQ2 computes all the eigenvalues of the symmetric positive
 *> definite tridiagonal matrix associated with the qd array Z to high
 *> relative accuracy are computed to high relative accuracy, in the
 *> absence of denormalization, underflow and overflow.
@@ -44,10 +44,10 @@
 *> Z(1,3,5,,..). The tridiagonal is L*U or, if you prefer, the
 *> symmetric tridiagonal to which it is similar.
 *>
-*> Note : AB_DLASQ2 defines a logical variable, IEEE, which is true
+*> Note : DLASQ2 defines a logical variable, IEEE, which is true
 *> on machines which follow ieee-754 floating-point standard in their
-*> handling of infinities and NaNs, and FALSE otherwise. This variable
-*> is passed to AB_DLASQ3.
+*> handling of infinities and NaNs, and false otherwise. This variable
+*> is passed to DLASQ3.
 *> \endverbatim
 *
 *  Arguments:
@@ -110,7 +110,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_DLASQ2( N, Z, INFO )
+      SUBROUTINE DLASQ2( N, Z, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -139,18 +139,17 @@
      $                   K, KMIN, N0, N1, NBIG, NDIV, NFAIL, PP, SPLT,
      $                   TTYPE
       DOUBLE PRECISION   D, DEE, DEEMIN, DESIG, DMIN, DMIN1, DMIN2, DN,
-     $                   DN1, DN2, E, EMAX, EMIN, EPS, G, OAB_LDEMN, QMA
-     $X,
+     $                   DN1, DN2, E, EMAX, EMIN, EPS, G, OLDEMN, QMAX,
      $                   QMIN, S, SAFMIN, SIGMA, T, TAU, TEMP, TOL,
      $                   TOL2, TRACE, ZMAX, TEMPE, TEMPQ
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLASQ3, AB_AB_DLASRT, AB_XERBLA
+      EXTERNAL           DLASQ3, DLASRT, XERBLA
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ILAENV
-      DOUBLE PRECISION   AB_DLAMCH
-      EXTERNAL           AB_DLAMCH, AB_ILAENV
+      INTEGER            ILAENV
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           DLAMCH, ILAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN, SQRT
@@ -158,17 +157,17 @@
 *     .. Executable Statements ..
 *
 *     Test the input arguments.
-*     (in case AB_DLASQ2 is not called by AB_DLASQ1)
+*     (in case DLASQ2 is not called by DLASQ1)
 *
       INFO = 0
-      EPS = AB_DLAMCH( 'Precision' )
-      SAFMIN = AB_DLAMCH( 'Safe minimum' )
+      EPS = DLAMCH( 'Precision' )
+      SAFMIN = DLAMCH( 'Safe minimum' )
       TOL = EPS*HUNDRD
       TOL2 = TOL**2
 *
       IF( N.LT.0 ) THEN
          INFO = -1
-         CALL AB_XERBLA( 'AB_DLASQ2', 1 )
+         CALL XERBLA( 'DLASQ2', 1 )
          RETURN
       ELSE IF( N.EQ.0 ) THEN
          RETURN
@@ -178,7 +177,7 @@
 *
          IF( Z( 1 ).LT.ZERO ) THEN
             INFO = -201
-            CALL AB_XERBLA( 'AB_DLASQ2', 2 )
+            CALL XERBLA( 'DLASQ2', 2 )
          END IF
          RETURN
       ELSE IF( N.EQ.2 ) THEN
@@ -187,7 +186,7 @@
 *
          IF( Z( 2 ).LT.ZERO .OR. Z( 3 ).LT.ZERO ) THEN
             INFO = -2
-            CALL AB_XERBLA( 'AB_DLASQ2', 2 )
+            CALL XERBLA( 'DLASQ2', 2 )
             RETURN
          ELSE IF( Z( 3 ).GT.Z( 1 ) ) THEN
             D = Z( 3 )
@@ -224,11 +223,11 @@
       DO 10 K = 1, 2*( N-1 ), 2
          IF( Z( K ).LT.ZERO ) THEN
             INFO = -( 200+K )
-            CALL AB_XERBLA( 'AB_DLASQ2', 2 )
+            CALL XERBLA( 'DLASQ2', 2 )
             RETURN
          ELSE IF( Z( K+1 ).LT.ZERO ) THEN
             INFO = -( 200+K+1 )
-            CALL AB_XERBLA( 'AB_DLASQ2', 2 )
+            CALL XERBLA( 'DLASQ2', 2 )
             RETURN
          END IF
          D = D + Z( K )
@@ -239,7 +238,7 @@
    10 CONTINUE
       IF( Z( 2*N-1 ).LT.ZERO ) THEN
          INFO = -( 200+2*N-1 )
-         CALL AB_XERBLA( 'AB_DLASQ2', 2 )
+         CALL XERBLA( 'DLASQ2', 2 )
          RETURN
       END IF
       D = D + Z( 2*N-1 )
@@ -252,7 +251,7 @@
          DO 20 K = 2, N
             Z( K ) = Z( 2*K-1 )
    20    CONTINUE
-         CALL AB_AB_DLASRT( 'D', N, Z, IINFO )
+         CALL DLASRT( 'D', N, Z, IINFO )
          Z( 2*N-1 ) = D
          RETURN
       END IF
@@ -268,8 +267,8 @@
 *
 *     Check whether the machine is IEEE conformable.
 *
-      IEEE = AB_ILAENV( 10, 'AB_DLASQ2', 'N', 1, 2, 3, 4 ).EQ.1 .AND.
-     $       AB_ILAENV( 11, 'AB_DLASQ2', 'N', 1, 2, 3, 4 ).EQ.1
+      IEEE = ILAENV( 10, 'DLASQ2', 'N', 1, 2, 3, 4 ).EQ.1 .AND.
+     $       ILAENV( 11, 'DLASQ2', 'N', 1, 2, 3, 4 ).EQ.1
 *
 *     Rearrange data for locality: Z=(q1,qq1,e1,ee1,q2,qq2,e2,ee2,...).
 *
@@ -349,7 +348,7 @@
          PP = 1 - PP
    80 CONTINUE
 *
-*     Initialise variables to pass to AB_DLASQ3.
+*     Initialise variables to pass to DLASQ3.
 *
       TTYPE = 0
       DMIN1 = ZERO
@@ -450,7 +449,7 @@
 *        Now I0:N0 is unreduced.
 *        PP = 0 for ping, PP = 1 for pong.
 *        PP = 2 indicates that flipping was applied to the Z array and
-*               and that the tests for deflation upon entry in AB_DLASQ3
+*               and that the tests for deflation upon entry in DLASQ3
 *               should not be performed.
 *
          NBIG = 100*( N0-I0+1 )
@@ -460,8 +459,7 @@
 *
 *           While submatrix unfinished take a good dqds step.
 *
-            CALL AB_DLASQ3( I0, N0, Z, PP, DMIN, SIGMA, DESIG, QMAX, NFA
-     $IL,
+            CALL DLASQ3( I0, N0, Z, PP, DMIN, SIGMA, DESIG, QMAX, NFAIL,
      $                   ITER, NDIV, IEEE, TTYPE, DMIN1, DMIN2, DN, DN1,
      $                   DN2, G, TAU )
 *
@@ -475,7 +473,7 @@
                   SPLT = I0 - 1
                   QMAX = Z( 4*I0-3 )
                   EMIN = Z( 4*I0-1 )
-                  OAB_LDEMN = Z( 4*I0 )
+                  OLDEMN = Z( 4*I0 )
                   DO 130 I4 = 4*I0, 4*( N0-3 ), 4
                      IF( Z( I4 ).LE.TOL2*Z( I4-3 ) .OR.
      $                   Z( I4-1 ).LE.TOL2*SIGMA ) THEN
@@ -483,15 +481,15 @@
                         SPLT = I4 / 4
                         QMAX = ZERO
                         EMIN = Z( I4+3 )
-                        OAB_LDEMN = Z( I4+4 )
+                        OLDEMN = Z( I4+4 )
                      ELSE
                         QMAX = MAX( QMAX, Z( I4+1 ) )
                         EMIN = MIN( EMIN, Z( I4-1 ) )
-                        OAB_LDEMN = MIN( OAB_LDEMN, Z( I4 ) )
+                        OLDEMN = MIN( OLDEMN, Z( I4 ) )
                      END IF
   130             CONTINUE
                   Z( 4*N0-1 ) = EMIN
-                  Z( 4*N0 ) = OAB_LDEMN
+                  Z( 4*N0 ) = OLDEMN
                   I0 = SPLT + 1
                END IF
             END IF
@@ -563,7 +561,7 @@
 *
 *     Sort and compute sum of eigenvalues.
 *
-      CALL AB_AB_DLASRT( 'D', N, Z, IINFO )
+      CALL DLASRT( 'D', N, Z, IINFO )
 *
       E = ZERO
       DO 190 K = N, 1, -1
@@ -579,6 +577,6 @@
       Z( 2*N+5 ) = HUNDRD*NFAIL / DBLE( ITER )
       RETURN
 *
-*     End of AB_DLASQ2
+*     End of DLASQ2
 *
       END

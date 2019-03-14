@@ -1,4 +1,4 @@
-*> \brief \b AB_ZDRVRF4
+*> \brief \b ZDRVRF4
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,8 +8,8 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZDRVRF4( NOUT, NN, NVAL, THRESH, C1, C2, LDC, CRF, A,
-*      +                    LDA, D_WORK_AB_ZLANGE )
+*       SUBROUTINE ZDRVRF4( NOUT, NN, NVAL, THRESH, C1, C2, LDC, CRF, A,
+*      +                    LDA, D_WORK_ZLANGE )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDA, LDC, NN, NOUT
@@ -17,7 +17,7 @@
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            NVAL( NN )
-*       DOUBLE PRECISION   D_WORK_AB_ZLANGE( * )
+*       DOUBLE PRECISION   D_WORK_ZLANGE( * )
 *       COMPLEX*16         A( LDA, * ), C1( LDC, * ), C2( LDC, *),
 *      +                   CRF( * )
 *       ..
@@ -28,8 +28,8 @@
 *>
 *> \verbatim
 *>
-*> AB_ZDRVRF4 tests the LAPACK RFP routines:
-*>     AB_ZHFRK
+*> ZDRVRF4 tests the LAPACK RFP routines:
+*>     ZHFRK
 *> \endverbatim
 *
 *  Arguments:
@@ -93,9 +93,9 @@
 *>                The leading dimension of the array A.  LDA >= max(1,NMAX).
 *> \endverbatim
 *>
-*> \param[out] D_WORK_AB_ZLANGE
+*> \param[out] D_WORK_ZLANGE
 *> \verbatim
-*>          D_WORK_AB_ZLANGE is DOUBLE PRECISION array, dimension (NMAX)
+*>          D_WORK_ZLANGE is DOUBLE PRECISION array, dimension (NMAX)
 *> \endverbatim
 *
 *  Authors:
@@ -111,9 +111,8 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZDRVRF4( NOUT, NN, NVAL, THRESH, C1, C2, LDC, CRF, A
-     $,
-     +                    LDA, D_WORK_AB_ZLANGE )
+      SUBROUTINE ZDRVRF4( NOUT, NN, NVAL, THRESH, C1, C2, LDC, CRF, A,
+     +                    LDA, D_WORK_ZLANGE )
 *
 *  -- LAPACK test routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -126,7 +125,7 @@
 *     ..
 *     .. Array Arguments ..
       INTEGER            NVAL( NN )
-      DOUBLE PRECISION   D_WORK_AB_ZLANGE( * )
+      DOUBLE PRECISION   D_WORK_ZLANGE( * )
       COMPLEX*16         A( LDA, * ), C1( LDC, * ), C2( LDC, *),
      +                   CRF( * )
 *     ..
@@ -151,12 +150,12 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH, AB_DLARND, AB_ZLANGE
-      COMPLEX*16         AB_ZLARND
-      EXTERNAL           AB_DLAMCH, AB_DLARND, AB_ZLANGE, AB_ZLARND
+      DOUBLE PRECISION   DLAMCH, DLARND, ZLANGE
+      COMPLEX*16         ZLARND
+      EXTERNAL           DLAMCH, DLARND, ZLANGE, ZLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_AB_ZHERK, AB_ZHFRK, AB_ZTFTTR, AB_ZTRTTF
+      EXTERNAL           ZHERK, ZHFRK, ZTFTTR, ZTRTTF
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DABS, MAX
@@ -183,7 +182,7 @@
       DO 10 I = 1, 4
          ISEED( I ) = ISEEDY( I )
    10 CONTINUE
-      EPS = AB_DLAMCH( 'Precision' )
+      EPS = DLAMCH( 'Precision' )
 *
       DO 150 IIN = 1, NN
 *
@@ -217,8 +216,8 @@
                            ALPHA = ZERO
                            BETA = ONE
                         ELSE
-                           ALPHA = AB_DLARND( 2, ISEED )
-                           BETA = AB_DLARND( 2, ISEED )
+                           ALPHA = DLARND( 2, ISEED )
+                           BETA = DLARND( 2, ISEED )
                         END IF
 *
 *                       All the parameters are set:
@@ -234,12 +233,12 @@
 *
                            DO J = 1, K
                               DO I = 1, N
-                                 A( I, J) = AB_ZLARND( 4, ISEED )
+                                 A( I, J) = ZLARND( 4, ISEED )
                               END DO
                            END DO
 *
-                           NORMA = AB_ZLANGE( 'I', N, K, A, LDA,
-     +                                      D_WORK_AB_ZLANGE )
+                           NORMA = ZLANGE( 'I', N, K, A, LDA,
+     +                                      D_WORK_ZLANGE )
 *
                         ELSE
 *
@@ -247,12 +246,12 @@
 *
                            DO J = 1,N
                               DO I = 1, K
-                                 A( I, J) = AB_ZLARND( 4, ISEED )
+                                 A( I, J) = ZLARND( 4, ISEED )
                               END DO
                            END DO
 *
-                           NORMA = AB_ZLANGE( 'I', K, N, A, LDA,
-     +                                      D_WORK_AB_ZLANGE )
+                           NORMA = ZLANGE( 'I', K, N, A, LDA,
+     +                                      D_WORK_ZLANGE )
 *
                         END IF
 *
@@ -264,39 +263,37 @@
 *
                         DO J = 1, N
                            DO I = 1, N
-                              C1( I, J) = AB_ZLARND( 4, ISEED )
+                              C1( I, J) = ZLARND( 4, ISEED )
                               C2(I,J) = C1(I,J)
                            END DO
                         END DO
 *
-*                       (See comment later on for why we use AB_ZLANGE and
-*                       not AB_ZLANHE for C1.)
+*                       (See comment later on for why we use ZLANGE and
+*                       not ZLANHE for C1.)
 *
-                        NORMC = AB_ZLANGE( 'I', N, N, C1, LDC,
-     +                                      D_WORK_AB_ZLANGE )
+                        NORMC = ZLANGE( 'I', N, N, C1, LDC,
+     +                                      D_WORK_ZLANGE )
 *
-                        SRNAMT = 'AB_ZTRTTF'
-                        CALL AB_ZTRTTF( CFORM, UPLO, N, C1, LDC, CRF,
+                        SRNAMT = 'ZTRTTF'
+                        CALL ZTRTTF( CFORM, UPLO, N, C1, LDC, CRF,
      +                               INFO )
 *
-*                       call AB_AB_ZHERK the BLAS routine -> gives C1
+*                       call zherk the BLAS routine -> gives C1
 *
-                        SRNAMT = 'AB_AB_ZHERK '
-                        CALL AB_AB_ZHERK( UPLO, TRANS, N, K, ALPHA, A, L
-     $DA,
+                        SRNAMT = 'ZHERK '
+                        CALL ZHERK( UPLO, TRANS, N, K, ALPHA, A, LDA,
      +                              BETA, C1, LDC )
 *
-*                       call AB_ZHFRK the RFP routine -> gives CRF
+*                       call zhfrk the RFP routine -> gives CRF
 *
-                        SRNAMT = 'AB_ZHFRK '
-                        CALL AB_ZHFRK( CFORM, UPLO, TRANS, N, K, ALPHA, 
-     $A,
+                        SRNAMT = 'ZHFRK '
+                        CALL ZHFRK( CFORM, UPLO, TRANS, N, K, ALPHA, A,
      +                              LDA, BETA, CRF )
 *
 *                       convert CRF in full format -> gives C2
 *
-                        SRNAMT = 'AB_ZTFTTR'
-                        CALL AB_ZTFTTR( CFORM, UPLO, N, CRF, C2, LDC,
+                        SRNAMT = 'ZTFTTR'
+                        CALL ZTFTTR( CFORM, UPLO, N, CRF, C2, LDC,
      +                               INFO )
 *
 *                       compare C1 and C2
@@ -307,13 +304,13 @@
                            END DO
                         END DO
 *
-*                       Yes, C1 is Hermitian so we could call AB_ZLANHE,
+*                       Yes, C1 is Hermitian so we could call ZLANHE,
 *                       but we want to check the upper part that is
 *                       supposed to be unchanged and the diagonal that
-*                       is supposed to be real -> AB_ZLANGE
+*                       is supposed to be real -> ZLANGE
 *
-                        RESULT(1) = AB_ZLANGE( 'I', N, N, C1, LDC,
-     +                                      D_WORK_AB_ZLANGE )
+                        RESULT(1) = ZLANGE( 'I', N, N, C1, LDC,
+     +                                      D_WORK_ZLANGE )
                         RESULT(1) = RESULT(1)
      +                              / MAX( DABS( ALPHA ) * NORMA * NORMA
      +                                   + DABS( BETA ) * NORMC, ONE )
@@ -324,7 +321,7 @@
                               WRITE( NOUT, * )
                               WRITE( NOUT, FMT = 9999 )
                            END IF
-                           WRITE( NOUT, FMT = 9997 ) 'AB_ZHFRK',
+                           WRITE( NOUT, FMT = 9997 ) 'ZHFRK',
      +                        CFORM, UPLO, TRANS, N, K, RESULT(1)
                            NFAIL = NFAIL + 1
                         END IF
@@ -339,12 +336,12 @@
 *     Print a summary of the results.
 *
       IF ( NFAIL.EQ.0 ) THEN
-         WRITE( NOUT, FMT = 9996 ) 'AB_ZHFRK', NRUN
+         WRITE( NOUT, FMT = 9996 ) 'ZHFRK', NRUN
       ELSE
-         WRITE( NOUT, FMT = 9995 ) 'AB_ZHFRK', NFAIL, NRUN
+         WRITE( NOUT, FMT = 9995 ) 'ZHFRK', NFAIL, NRUN
       END IF
 *
- 9999 FORMAT( 1X, ' *** Error(s) or Failure(s) while testing AB_ZHFRK
+ 9999 FORMAT( 1X, ' *** Error(s) or Failure(s) while testing ZHFRK
      +         ***')
  9997 FORMAT( 1X, '     Failure in ',A5,', CFORM=''',A1,''',',
      + ' UPLO=''',A1,''',',' TRANS=''',A1,''',', ' N=',I3,', K =', I3,
@@ -356,6 +353,6 @@
 *
       RETURN
 *
-*     End of AB_ZDRVRF4
+*     End of ZDRVRF4
 *
       END

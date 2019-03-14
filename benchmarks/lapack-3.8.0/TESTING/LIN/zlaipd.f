@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLAIPD
+*> \brief \b ZLAIPD
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZLAIPD( N, A, INDA, VINDA )
+*       SUBROUTINE ZLAIPD( N, A, INDA, VINDA )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INDA, N, VINDA
@@ -23,7 +23,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZLAIPD sets the imaginary part of the diagonal elements of a complex
+*> ZLAIPD sets the imaginary part of the diagonal elements of a complex
 *> matrix A to a large value.  This is used to test LAPACK routines for
 *> complex Hermitian matrices, which are not supposed to access or use
 *> the imaginary parts of the diagonals.
@@ -81,7 +81,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZLAIPD( N, A, INDA, VINDA )
+      SUBROUTINE ZLAIPD( N, A, INDA, VINDA )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -102,15 +102,15 @@
       DOUBLE PRECISION   BIGNUM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH
-      EXTERNAL           AB_DLAMCH
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCMPLX
 *     ..
 *     .. Executable Statements ..
 *
-      BIGNUM = AB_DLAMCH( 'Epsilon' ) / AB_DLAMCH( 'Safe minimum' )
+      BIGNUM = DLAMCH( 'Epsilon' ) / DLAMCH( 'Safe minimum' )
       IA = 1
       IXA = INDA
       DO 10 I = 1, N

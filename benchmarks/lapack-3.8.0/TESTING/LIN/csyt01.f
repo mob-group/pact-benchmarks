@@ -1,4 +1,4 @@
-*> \brief \b AB_CSYT01
+*> \brief \b CSYT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CSYT01( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C, LDC,
+*       SUBROUTINE CSYT01( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C, LDC,
 *                          RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -28,7 +28,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CSYT01 reconstructs a complex symmetric indefinite matrix A from its
+*> CSYT01 reconstructs a complex symmetric indefinite matrix A from its
 *> block L*D*L' or U*D*U' factorization and computes the residual
 *>    norm( C - A ) / ( N * norm(A) * EPS ),
 *> where C is the reconstructed matrix, EPS is the machine epsilon,
@@ -71,7 +71,7 @@
 *>          The factored form of the matrix A.  AFAC contains the block
 *>          diagonal matrix D and the multipliers used to obtain the
 *>          factor L or U from the block L*D*L' or U*D*U' factorization
-*>          as computed by AB_CSYTRF.
+*>          as computed by CSYTRF.
 *> \endverbatim
 *>
 *> \param[in] LDAFAC
@@ -83,7 +83,7 @@
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          The pivot indices from AB_CSYTRF.
+*>          The pivot indices from CSYTRF.
 *> \endverbatim
 *>
 *> \param[out] C
@@ -122,7 +122,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_CSYT01( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C, LDC,
+      SUBROUTINE CSYT01( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C, LDC,
      $                   RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.5.0) --
@@ -155,12 +155,12 @@
       REAL               ANORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_CLANSY, AB_SLAMCH
-      EXTERNAL           AB_LSAME, AB_CLANSY, AB_SLAMCH
+      LOGICAL            LSAME
+      REAL               CLANSY, SLAMCH
+      EXTERNAL           LSAME, CLANSY, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CLASET, AB_CLAVSY
+      EXTERNAL           CLASET, CLAVSY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          REAL
@@ -176,26 +176,26 @@
 *
 *     Determine EPS and the norm of A.
 *
-      EPS = AB_SLAMCH( 'Epsilon' )
-      ANORM = AB_CLANSY( '1', UPLO, N, A, LDA, RWORK )
+      EPS = SLAMCH( 'Epsilon' )
+      ANORM = CLANSY( '1', UPLO, N, A, LDA, RWORK )
 *
 *     Initialize C to the identity matrix.
 *
-      CALL AB_CLASET( 'Full', N, N, CZERO, CONE, C, LDC )
+      CALL CLASET( 'Full', N, N, CZERO, CONE, C, LDC )
 *
-*     Call AB_CLAVSY to form the product D * U' (or D * L' ).
+*     Call CLAVSY to form the product D * U' (or D * L' ).
 *
-      CALL AB_CLAVSY( UPLO, 'Transpose', 'Non-unit', N, N, AFAC, LDAFAC,
+      CALL CLAVSY( UPLO, 'Transpose', 'Non-unit', N, N, AFAC, LDAFAC,
      $             IPIV, C, LDC, INFO )
 *
-*     Call AB_CLAVSY again to multiply by U (or L ).
+*     Call CLAVSY again to multiply by U (or L ).
 *
-      CALL AB_CLAVSY( UPLO, 'No transpose', 'Unit', N, N, AFAC, LDAFAC,
+      CALL CLAVSY( UPLO, 'No transpose', 'Unit', N, N, AFAC, LDAFAC,
      $             IPIV, C, LDC, INFO )
 *
 *     Compute the difference  C - A .
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
          DO 20 J = 1, N
             DO 10 I = 1, J
                C( I, J ) = C( I, J ) - A( I, J )
@@ -211,7 +211,7 @@
 *
 *     Compute norm( C - A ) / ( N * norm(A) * EPS )
 *
-      RESID = AB_CLANSY( '1', UPLO, N, C, LDC, RWORK )
+      RESID = CLANSY( '1', UPLO, N, C, LDC, RWORK )
 *
       IF( ANORM.LE.ZERO ) THEN
          IF( RESID.NE.ZERO )
@@ -222,6 +222,6 @@
 *
       RETURN
 *
-*     End of AB_CSYT01
+*     End of CSYT01
 *
       END

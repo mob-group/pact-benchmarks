@@ -1,4 +1,4 @@
-*> \brief \b AB_DPTT02
+*> \brief \b DPTT02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DPTT02( N, NRHS, D, E, X, LDX, B, LDB, RESID )
+*       SUBROUTINE DPTT02( N, NRHS, D, E, X, LDX, B, LDB, RESID )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDB, LDX, N, NRHS
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DPTT02 computes the residual for the solution to a symmetric
+*> DPTT02 computes the residual for the solution to a symmetric
 *> tridiagonal system of equations:
 *>    RESID = norm(B - A*X) / (norm(A) * norm(X) * EPS),
 *> where EPS is the machine epsilon.
@@ -102,7 +102,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_DPTT02( N, NRHS, D, E, X, LDX, B, LDB, RESID )
+      SUBROUTINE DPTT02( N, NRHS, D, E, X, LDX, B, LDB, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -128,14 +128,14 @@
       DOUBLE PRECISION   ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DASUM, AB_DLAMCH, AB_DLANST
-      EXTERNAL           AB_DASUM, AB_DLAMCH, AB_DLANST
+      DOUBLE PRECISION   DASUM, DLAMCH, DLANST
+      EXTERNAL           DASUM, DLAMCH, DLANST
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLAPTM
+      EXTERNAL           DLAPTM
 *     ..
 *     .. Executable Statements ..
 *
@@ -148,11 +148,11 @@
 *
 *     Compute the 1-norm of the tridiagonal matrix A.
 *
-      ANORM = AB_DLANST( '1', N, D, E )
+      ANORM = DLANST( '1', N, D, E )
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
+      EPS = DLAMCH( 'Epsilon' )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -160,15 +160,15 @@
 *
 *     Compute B - A*X.
 *
-      CALL AB_DLAPTM( N, NRHS, -ONE, D, E, X, LDX, ONE, B, LDB )
+      CALL DLAPTM( N, NRHS, -ONE, D, E, X, LDX, ONE, B, LDB )
 *
 *     Compute the maximum over the number of right hand sides of
 *        norm(B - A*X) / ( norm(A) * norm(X) * EPS ).
 *
       RESID = ZERO
       DO 10 J = 1, NRHS
-         BNORM = AB_DASUM( N, B( 1, J ), 1 )
-         XNORM = AB_DASUM( N, X( 1, J ), 1 )
+         BNORM = DASUM( N, B( 1, J ), 1 )
+         XNORM = DASUM( N, X( 1, J ), 1 )
          IF( XNORM.LE.ZERO ) THEN
             RESID = ONE / EPS
          ELSE
@@ -178,6 +178,6 @@
 *
       RETURN
 *
-*     End of AB_DPTT02
+*     End of DPTT02
 *
       END

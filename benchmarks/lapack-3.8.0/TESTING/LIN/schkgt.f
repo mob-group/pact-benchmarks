@@ -1,4 +1,4 @@
-*> \brief \b AB_SCHKGT
+*> \brief \b SCHKGT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SCHKGT( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
+*       SUBROUTINE SCHKGT( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
 *                          A, AF, B, X, XACT, WORK, RWORK, IWORK, NOUT )
 *
 *       .. Scalar Arguments ..
@@ -29,7 +29,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SCHKGT tests AB_SGTTRF, -TRS, -RFS, and -CON
+*> SCHKGT tests SGTTRF, -TRS, -RFS, and -CON
 *> \endverbatim
 *
 *  Arguments:
@@ -143,8 +143,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_SCHKGT( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR
-     $,
+      SUBROUTINE SCHKGT( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
      $                   A, AF, B, X, XACT, WORK, RWORK, IWORK, NOUT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -190,17 +189,14 @@
       REAL               RESULT( NTESTS ), Z( 3 )
 *     ..
 *     .. External Functions ..
-      REAL               AB_SASUM, AB_SGET06, AB_SLANGT
-      EXTERNAL           AB_SASUM, AB_SGET06, AB_SLANGT
+      REAL               SASUM, SGET06, SLANGT
+      EXTERNAL           SASUM, SGET06, SLANGT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALAERH, AB_ALAHD, AB_ALASUM, AB_SCOPY, AB_SE
-     $RRGE, AB_SGET04,
-     $                   AB_SGTCON, AB_SGTRFS, AB_SGTT01, AB_SGTT02, AB_
-     $SGTT05, AB_SGTTRF,
-     $                   AB_SGTTRS, AB_SLACPY, AB_SLAGTM, AB_SLARNV, AB_
-     $SLATB4, AB_SLATMS,
-     $                   AB_SSCAL
+      EXTERNAL           ALAERH, ALAHD, ALASUM, SCOPY, SERRGE, SGET04,
+     $                   SGTCON, SGTRFS, SGTT01, SGTT02, SGTT05, SGTTRF,
+     $                   SGTTRS, SLACPY, SLAGTM, SLARNV, SLATB4, SLATMS,
+     $                   SSCAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -232,7 +228,7 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL AB_SERRGE( PATH, NOUT )
+     $   CALL SERRGE( PATH, NOUT )
       INFOT = 0
 *
       DO 110 IN = 1, NN
@@ -253,9 +249,9 @@
             IF( .NOT.DOTYPE( IMAT ) )
      $         GO TO 100
 *
-*           Set up parameters with AB_SLATB4.
+*           Set up parameters with SLATB4.
 *
-            CALL AB_SLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
+            CALL SLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
      $                   COND, DIST )
 *
             ZEROT = IMAT.GE.8 .AND. IMAT.LE.10
@@ -264,27 +260,25 @@
 *              Types 1-6:  generate matrices of known condition number.
 *
                KOFF = MAX( 2-KU, 3-MAX( 1, N ) )
-               SRNAMT = 'AB_SLATMS'
-               CALL AB_SLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE, CON
-     $D,
+               SRNAMT = 'SLATMS'
+               CALL SLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE, COND,
      $                      ANORM, KL, KU, 'Z', AF( KOFF ), 3, WORK,
      $                      INFO )
 *
-*              Check the error code from AB_SLATMS.
+*              Check the error code from SLATMS.
 *
                IF( INFO.NE.0 ) THEN
-                  CALL AB_ALAERH( PATH, 'AB_SLATMS', INFO, 0, ' ', N, N,
-     $ KL,
+                  CALL ALAERH( PATH, 'SLATMS', INFO, 0, ' ', N, N, KL,
      $                         KU, -1, IMAT, NFAIL, NERRS, NOUT )
                   GO TO 100
                END IF
                IZERO = 0
 *
                IF( N.GT.1 ) THEN
-                  CALL AB_SCOPY( N-1, AF( 4 ), 3, A, 1 )
-                  CALL AB_SCOPY( N-1, AF( 3 ), 3, A( N+M+1 ), 1 )
+                  CALL SCOPY( N-1, AF( 4 ), 3, A, 1 )
+                  CALL SCOPY( N-1, AF( 3 ), 3, A( N+M+1 ), 1 )
                END IF
-               CALL AB_SCOPY( N, AF( 2 ), 3, A( M+1 ), 1 )
+               CALL SCOPY( N, AF( 2 ), 3, A( M+1 ), 1 )
             ELSE
 *
 *              Types 7-12:  generate tridiagonal matrices with
@@ -294,9 +288,9 @@
 *
 *                 Generate a matrix with elements from [-1,1].
 *
-                  CALL AB_SLARNV( 2, ISEED, N+2*M, A )
+                  CALL SLARNV( 2, ISEED, N+2*M, A )
                   IF( ANORM.NE.ONE )
-     $               CALL AB_SSCAL( N+2*M, ANORM, A, 1 )
+     $               CALL SSCAL( N+2*M, ANORM, A, 1 )
                ELSE IF( IZERO.GT.0 ) THEN
 *
 *                 Reuse the last matrix by copying back the zeroed out
@@ -350,21 +344,19 @@
 *           Factor A as L*U and compute the ratio
 *              norm(L*U - A) / (n * norm(A) * EPS )
 *
-            CALL AB_SCOPY( N+2*M, A, 1, AF, 1 )
-            SRNAMT = 'AB_SGTTRF'
-            CALL AB_SGTTRF( N, AF, AF( M+1 ), AF( N+M+1 ), AF( N+2*M+1 )
-     $,
+            CALL SCOPY( N+2*M, A, 1, AF, 1 )
+            SRNAMT = 'SGTTRF'
+            CALL SGTTRF( N, AF, AF( M+1 ), AF( N+M+1 ), AF( N+2*M+1 ),
      $                   IWORK, INFO )
 *
-*           Check error code from AB_SGTTRF.
+*           Check error code from SGTTRF.
 *
             IF( INFO.NE.IZERO )
-     $         CALL AB_ALAERH( PATH, 'AB_SGTTRF', INFO, IZERO, ' ', N, N
-     $, 1,
+     $         CALL ALAERH( PATH, 'SGTTRF', INFO, IZERO, ' ', N, N, 1,
      $                      1, -1, IMAT, NFAIL, NERRS, NOUT )
             TRFCON = INFO.NE.0
 *
-            CALL AB_SGTT01( N, A, A( M+1 ), A( N+M+1 ), AF, AF( M+1 ),
+            CALL SGTT01( N, A, A( M+1 ), A( N+M+1 ), AF, AF( M+1 ),
      $                   AF( N+M+1 ), AF( N+2*M+1 ), IWORK, WORK, LDA,
      $                   RWORK, RESULT( 1 ) )
 *
@@ -372,7 +364,7 @@
 *
             IF( RESULT( 1 ).GE.THRESH ) THEN
                IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $            CALL AB_ALAHD( NOUT, PATH )
+     $            CALL ALAHD( NOUT, PATH )
                WRITE( NOUT, FMT = 9999 )N, IMAT, 1, RESULT( 1 )
                NFAIL = NFAIL + 1
             END IF
@@ -385,11 +377,11 @@
                ELSE
                   NORM = 'I'
                END IF
-               ANORM = AB_SLANGT( NORM, N, A, A( M+1 ), A( N+M+1 ) )
+               ANORM = SLANGT( NORM, N, A, A( M+1 ), A( N+M+1 ) )
 *
                IF( .NOT.TRFCON ) THEN
 *
-*                 Use AB_SGTTRS to solve for one column at a time of inv(A)
+*                 Use SGTTRS to solve for one column at a time of inv(A)
 *                 or inv(A^T), computing the maximum column sum as we
 *                 go.
 *
@@ -399,10 +391,10 @@
                         X( J ) = ZERO
    30                CONTINUE
                      X( I ) = ONE
-                     CALL AB_SGTTRS( TRANS, N, 1, AF, AF( M+1 ),
+                     CALL SGTTRS( TRANS, N, 1, AF, AF( M+1 ),
      $                            AF( N+M+1 ), AF( N+2*M+1 ), IWORK, X,
      $                            LDA, INFO )
-                     AINVNM = MAX( AINVNM, AB_SASUM( N, X, 1 ) )
+                     AINVNM = MAX( AINVNM, SASUM( N, X, 1 ) )
    40             CONTINUE
 *
 *                 Compute RCONDC = 1 / (norm(A) * norm(inv(A))
@@ -425,25 +417,24 @@
 *              Estimate the reciprocal of the condition number of the
 *              matrix.
 *
-               SRNAMT = 'AB_SGTCON'
-               CALL AB_SGTCON( NORM, N, AF, AF( M+1 ), AF( N+M+1 ),
+               SRNAMT = 'SGTCON'
+               CALL SGTCON( NORM, N, AF, AF( M+1 ), AF( N+M+1 ),
      $                      AF( N+2*M+1 ), IWORK, ANORM, RCOND, WORK,
      $                      IWORK( N+1 ), INFO )
 *
-*              Check error code from AB_SGTCON.
+*              Check error code from SGTCON.
 *
                IF( INFO.NE.0 )
-     $            CALL AB_ALAERH( PATH, 'AB_SGTCON', INFO, 0, NORM, N, N
-     $, -1,
+     $            CALL ALAERH( PATH, 'SGTCON', INFO, 0, NORM, N, N, -1,
      $                         -1, -1, IMAT, NFAIL, NERRS, NOUT )
 *
-               RESULT( 7 ) = AB_SGET06( RCOND, RCONDC )
+               RESULT( 7 ) = SGET06( RCOND, RCONDC )
 *
 *              Print the test ratio if it is .GE. THRESH.
 *
                IF( RESULT( 7 ).GE.THRESH ) THEN
                   IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $               CALL AB_ALAHD( NOUT, PATH )
+     $               CALL ALAHD( NOUT, PATH )
                   WRITE( NOUT, FMT = 9997 )NORM, N, IMAT, 7,
      $               RESULT( 7 )
                   NFAIL = NFAIL + 1
@@ -463,7 +454,7 @@
 *
                IX = 1
                DO 60 J = 1, NRHS
-                  CALL AB_SLARNV( 2, ISEED, N, XACT( IX ) )
+                  CALL SLARNV( 2, ISEED, N, XACT( IX ) )
                   IX = IX + LDA
    60          CONTINUE
 *
@@ -477,60 +468,55 @@
 *
 *                 Set the right hand side.
 *
-                  CALL AB_SLAGTM( TRANS, N, NRHS, ONE, A, A( M+1 ),
+                  CALL SLAGTM( TRANS, N, NRHS, ONE, A, A( M+1 ),
      $                         A( N+M+1 ), XACT, LDA, ZERO, B, LDA )
 *
 *+    TEST 2
 *                 Solve op(A) * X = B and compute the residual.
 *
-                  CALL AB_SLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
-                  SRNAMT = 'AB_SGTTRS'
-                  CALL AB_SGTTRS( TRANS, N, NRHS, AF, AF( M+1 ),
+                  CALL SLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
+                  SRNAMT = 'SGTTRS'
+                  CALL SGTTRS( TRANS, N, NRHS, AF, AF( M+1 ),
      $                         AF( N+M+1 ), AF( N+2*M+1 ), IWORK, X,
      $                         LDA, INFO )
 *
-*                 Check error code from AB_SGTTRS.
+*                 Check error code from SGTTRS.
 *
                   IF( INFO.NE.0 )
-     $               CALL AB_ALAERH( PATH, 'AB_SGTTRS', INFO, 0, TRANS, 
-     $N, N,
+     $               CALL ALAERH( PATH, 'SGTTRS', INFO, 0, TRANS, N, N,
      $                            -1, -1, NRHS, IMAT, NFAIL, NERRS,
      $                            NOUT )
 *
-                  CALL AB_SLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
-                  CALL AB_SGTT02( TRANS, N, NRHS, A, A( M+1 ), A( N+M+1 
-     $),
+                  CALL SLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
+                  CALL SGTT02( TRANS, N, NRHS, A, A( M+1 ), A( N+M+1 ),
      $                         X, LDA, WORK, LDA, RESULT( 2 ) )
 *
 *+    TEST 3
 *                 Check solution from generated exact solution.
 *
-                  CALL AB_SGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                  CALL SGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                         RESULT( 3 ) )
 *
 *+    TESTS 4, 5, and 6
 *                 Use iterative refinement to improve the solution.
 *
-                  SRNAMT = 'AB_SGTRFS'
-                  CALL AB_SGTRFS( TRANS, N, NRHS, A, A( M+1 ), A( N+M+1 
-     $),
+                  SRNAMT = 'SGTRFS'
+                  CALL SGTRFS( TRANS, N, NRHS, A, A( M+1 ), A( N+M+1 ),
      $                         AF, AF( M+1 ), AF( N+M+1 ),
      $                         AF( N+2*M+1 ), IWORK, B, LDA, X, LDA,
      $                         RWORK, RWORK( NRHS+1 ), WORK,
      $                         IWORK( N+1 ), INFO )
 *
-*                 Check error code from AB_SGTRFS.
+*                 Check error code from SGTRFS.
 *
                   IF( INFO.NE.0 )
-     $               CALL AB_ALAERH( PATH, 'AB_SGTRFS', INFO, 0, TRANS, 
-     $N, N,
+     $               CALL ALAERH( PATH, 'SGTRFS', INFO, 0, TRANS, N, N,
      $                            -1, -1, NRHS, IMAT, NFAIL, NERRS,
      $                            NOUT )
 *
-                  CALL AB_SGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                  CALL SGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                         RESULT( 4 ) )
-                  CALL AB_SGTT05( TRANS, N, NRHS, A, A( M+1 ), A( N+M+1 
-     $),
+                  CALL SGTT05( TRANS, N, NRHS, A, A( M+1 ), A( N+M+1 ),
      $                         B, LDA, X, LDA, XACT, LDA, RWORK,
      $                         RWORK( NRHS+1 ), RESULT( 5 ) )
 *
@@ -540,7 +526,7 @@
                   DO 70 K = 2, 6
                      IF( RESULT( K ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL AB_ALAHD( NOUT, PATH )
+     $                     CALL ALAHD( NOUT, PATH )
                         WRITE( NOUT, FMT = 9998 )TRANS, N, NRHS, IMAT,
      $                     K, RESULT( K )
                         NFAIL = NFAIL + 1
@@ -555,7 +541,7 @@
 *
 *     Print a summary of the results.
 *
-      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( 12X, 'N =', I5, ',', 10X, ' type ', I2, ', test(', I2,
      $      ') = ', G12.5 )
@@ -565,6 +551,6 @@
      $      ', test(', I2, ') = ', G12.5 )
       RETURN
 *
-*     End of AB_SCHKGT
+*     End of SCHKGT
 *
       END

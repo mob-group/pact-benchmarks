@@ -1,4 +1,4 @@
-*> \brief \b AB_DCHKBL
+*> \brief \b DCHKBL
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DCHKBL( NIN, NOUT )
+*       SUBROUTINE DCHKBL( NIN, NOUT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            NIN, NOUT
@@ -20,7 +20,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DCHKBL tests AB_DGEBAL, a routine for balancing a general real
+*> DCHKBL tests DGEBAL, a routine for balancing a general real
 *> matrix and isolating some of its eigenvalues.
 *> \endverbatim
 *
@@ -52,7 +52,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_DCHKBL( NIN, NOUT )
+      SUBROUTINE DCHKBL( NIN, NOUT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -82,11 +82,11 @@
      $                   SCALE( LDA ), SCALIN( LDA )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE
-      EXTERNAL           AB_DLAMCH, AB_DLANGE
+      DOUBLE PRECISION   DLAMCH, DLANGE
+      EXTERNAL           DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DGEBAL
+      EXTERNAL           DGEBAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -100,8 +100,8 @@
       KNT = 0
       RMAX = ZERO
       VMAX = ZERO
-      SFMIN = AB_DLAMCH( 'S' )
-      MEPS = AB_DLAMCH( 'E' )
+      SFMIN = DLAMCH( 'S' )
+      MEPS = DLAMCH( 'E' )
 *
    10 CONTINUE
 *
@@ -118,10 +118,10 @@
    30 CONTINUE
       READ( NIN, FMT = * )( SCALIN( I ), I = 1, N )
 *
-      ANORM = AB_DLANGE( 'M', N, N, A, LDA, DUMMY )
+      ANORM = DLANGE( 'M', N, N, A, LDA, DUMMY )
       KNT = KNT + 1
 *
-      CALL AB_DGEBAL( 'B', N, A, LDA, ILO, IHI, SCALE, INFO )
+      CALL DGEBAL( 'B', N, A, LDA, ILO, IHI, SCALE, INFO )
 *
       IF( INFO.NE.0 ) THEN
          NINFO = NINFO + 1
@@ -158,7 +158,7 @@
    70 CONTINUE
 *
       WRITE( NOUT, FMT = 9999 )
- 9999 FORMAT( 1X, '.. test output of AB_DGEBAL .. ' )
+ 9999 FORMAT( 1X, '.. test output of DGEBAL .. ' )
 *
       WRITE( NOUT, FMT = 9998 )RMAX
  9998 FORMAT( 1X, 'value of largest test error            = ', D12.3 )
@@ -175,6 +175,6 @@
 *
       RETURN
 *
-*     End of AB_DCHKBL
+*     End of DCHKBL
 *
       END

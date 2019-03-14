@@ -1,4 +1,4 @@
-*> \brief \b AB_CERRPOX
+*> \brief \b CERRPOX
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CERRPO( PATH, NUNIT )
+*       SUBROUTINE CERRPO( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,11 +21,11 @@
 *>
 *> \verbatim
 *>
-*> AB_CERRPO tests the error exits for the COMPLEX routines
+*> CERRPO tests the error exits for the COMPLEX routines
 *> for Hermitian positive definite matrices.
 *>
 *> Note that this file is used only when the XBLAS are available,
-*> otherwise AB_CERRPO.f defines this subroutine.
+*> otherwise cerrpo.f defines this subroutine.
 *> \endverbatim
 *
 *  Arguments:
@@ -56,7 +56,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_CERRPO( PATH, NUNIT )
+      SUBROUTINE CERRPO( PATH, NUNIT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -88,18 +88,14 @@
      $                   W( 2*NMAX ), X( NMAX )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_AB_LSAMEN
-      EXTERNAL           AB_AB_LSAMEN
+      LOGICAL            LSAMEN
+      EXTERNAL           LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALAESM, AB_CHKXER, AB_CPBCON, AB_CPBEQU, AB_
-     $CPBRFS, AB_CPBTF2,
-     $                   AB_CPBTRF, AB_CPBTRS, AB_CPOCON, AB_CPOEQU, AB_
-     $CPORFS, AB_CPOTF2,
-     $                   AB_CPOTRF, AB_CPOTRI, AB_CPOTRS, AB_CPPCON, AB_
-     $CPPEQU, AB_CPPRFS,
-     $                   AB_CPPTRF, AB_CPPTRI, AB_CPPTRS, AB_AB_CPOEQUB,
-     $ AB_AB_CPORFSX
+      EXTERNAL           ALAESM, CHKXER, CPBCON, CPBEQU, CPBRFS, CPBTF2,
+     $                   CPBTRF, CPBTRS, CPOCON, CPOEQU, CPORFS, CPOTF2,
+     $                   CPOTRF, CPOTRI, CPOTRS, CPPCON, CPPEQU, CPPRFS,
+     $                   CPPTRF, CPPTRI, CPPTRS, CPOEQUB, CPORFSX
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -139,422 +135,403 @@
 *     Test error exits of the routines that use the Cholesky
 *     decomposition of a Hermitian positive definite matrix.
 *
-      IF( AB_AB_LSAMEN( 2, C2, 'PO' ) ) THEN
+      IF( LSAMEN( 2, C2, 'PO' ) ) THEN
 *
-*        AB_CPOTRF
+*        CPOTRF
 *
-         SRNAMT = 'AB_CPOTRF'
+         SRNAMT = 'CPOTRF'
          INFOT = 1
-         CALL AB_CPOTRF( '/', 0, A, 1, INFO )
-         CALL AB_CHKXER( 'AB_CPOTRF', INFOT, NOUT, LERR, OK )
+         CALL CPOTRF( '/', 0, A, 1, INFO )
+         CALL CHKXER( 'CPOTRF', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_CPOTRF( 'U', -1, A, 1, INFO )
-         CALL AB_CHKXER( 'AB_CPOTRF', INFOT, NOUT, LERR, OK )
+         CALL CPOTRF( 'U', -1, A, 1, INFO )
+         CALL CHKXER( 'CPOTRF', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_CPOTRF( 'U', 2, A, 1, INFO )
-         CALL AB_CHKXER( 'AB_CPOTRF', INFOT, NOUT, LERR, OK )
+         CALL CPOTRF( 'U', 2, A, 1, INFO )
+         CALL CHKXER( 'CPOTRF', INFOT, NOUT, LERR, OK )
 *
-*        AB_CPOTF2
+*        CPOTF2
 *
-         SRNAMT = 'AB_CPOTF2'
+         SRNAMT = 'CPOTF2'
          INFOT = 1
-         CALL AB_CPOTF2( '/', 0, A, 1, INFO )
-         CALL AB_CHKXER( 'AB_CPOTF2', INFOT, NOUT, LERR, OK )
+         CALL CPOTF2( '/', 0, A, 1, INFO )
+         CALL CHKXER( 'CPOTF2', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_CPOTF2( 'U', -1, A, 1, INFO )
-         CALL AB_CHKXER( 'AB_CPOTF2', INFOT, NOUT, LERR, OK )
+         CALL CPOTF2( 'U', -1, A, 1, INFO )
+         CALL CHKXER( 'CPOTF2', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_CPOTF2( 'U', 2, A, 1, INFO )
-         CALL AB_CHKXER( 'AB_CPOTF2', INFOT, NOUT, LERR, OK )
+         CALL CPOTF2( 'U', 2, A, 1, INFO )
+         CALL CHKXER( 'CPOTF2', INFOT, NOUT, LERR, OK )
 *
-*        AB_CPOTRI
+*        CPOTRI
 *
-         SRNAMT = 'AB_CPOTRI'
+         SRNAMT = 'CPOTRI'
          INFOT = 1
-         CALL AB_CPOTRI( '/', 0, A, 1, INFO )
-         CALL AB_CHKXER( 'AB_CPOTRI', INFOT, NOUT, LERR, OK )
+         CALL CPOTRI( '/', 0, A, 1, INFO )
+         CALL CHKXER( 'CPOTRI', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_CPOTRI( 'U', -1, A, 1, INFO )
-         CALL AB_CHKXER( 'AB_CPOTRI', INFOT, NOUT, LERR, OK )
+         CALL CPOTRI( 'U', -1, A, 1, INFO )
+         CALL CHKXER( 'CPOTRI', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_CPOTRI( 'U', 2, A, 1, INFO )
-         CALL AB_CHKXER( 'AB_CPOTRI', INFOT, NOUT, LERR, OK )
+         CALL CPOTRI( 'U', 2, A, 1, INFO )
+         CALL CHKXER( 'CPOTRI', INFOT, NOUT, LERR, OK )
 *
-*        AB_CPOTRS
+*        CPOTRS
 *
-         SRNAMT = 'AB_CPOTRS'
+         SRNAMT = 'CPOTRS'
          INFOT = 1
-         CALL AB_CPOTRS( '/', 0, 0, A, 1, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_CPOTRS', INFOT, NOUT, LERR, OK )
+         CALL CPOTRS( '/', 0, 0, A, 1, B, 1, INFO )
+         CALL CHKXER( 'CPOTRS', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_CPOTRS( 'U', -1, 0, A, 1, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_CPOTRS', INFOT, NOUT, LERR, OK )
+         CALL CPOTRS( 'U', -1, 0, A, 1, B, 1, INFO )
+         CALL CHKXER( 'CPOTRS', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_CPOTRS( 'U', 0, -1, A, 1, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_CPOTRS', INFOT, NOUT, LERR, OK )
+         CALL CPOTRS( 'U', 0, -1, A, 1, B, 1, INFO )
+         CALL CHKXER( 'CPOTRS', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_CPOTRS( 'U', 2, 1, A, 1, B, 2, INFO )
-         CALL AB_CHKXER( 'AB_CPOTRS', INFOT, NOUT, LERR, OK )
+         CALL CPOTRS( 'U', 2, 1, A, 1, B, 2, INFO )
+         CALL CHKXER( 'CPOTRS', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_CPOTRS( 'U', 2, 1, A, 2, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_CPOTRS', INFOT, NOUT, LERR, OK )
+         CALL CPOTRS( 'U', 2, 1, A, 2, B, 1, INFO )
+         CALL CHKXER( 'CPOTRS', INFOT, NOUT, LERR, OK )
 *
-*        AB_CPORFS
+*        CPORFS
 *
-         SRNAMT = 'AB_CPORFS'
+         SRNAMT = 'CPORFS'
          INFOT = 1
-         CALL AB_CPORFS( '/', 0, 0, A, 1, AF, 1, B, 1, X, 1, R1, R2, W, 
-     $R,
+         CALL CPORFS( '/', 0, 0, A, 1, AF, 1, B, 1, X, 1, R1, R2, W, R,
      $                INFO )
-         CALL AB_CHKXER( 'AB_CPORFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'CPORFS', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_CPORFS( 'U', -1, 0, A, 1, AF, 1, B, 1, X, 1, R1, R2, W,
-     $ R,
+         CALL CPORFS( 'U', -1, 0, A, 1, AF, 1, B, 1, X, 1, R1, R2, W, R,
      $                INFO )
-         CALL AB_CHKXER( 'AB_CPORFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'CPORFS', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_CPORFS( 'U', 0, -1, A, 1, AF, 1, B, 1, X, 1, R1, R2, W,
-     $ R,
+         CALL CPORFS( 'U', 0, -1, A, 1, AF, 1, B, 1, X, 1, R1, R2, W, R,
      $                INFO )
-         CALL AB_CHKXER( 'AB_CPORFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'CPORFS', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_CPORFS( 'U', 2, 1, A, 1, AF, 2, B, 2, X, 2, R1, R2, W, 
-     $R,
+         CALL CPORFS( 'U', 2, 1, A, 1, AF, 2, B, 2, X, 2, R1, R2, W, R,
      $                INFO )
-         CALL AB_CHKXER( 'AB_CPORFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'CPORFS', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_CPORFS( 'U', 2, 1, A, 2, AF, 1, B, 2, X, 2, R1, R2, W, 
-     $R,
+         CALL CPORFS( 'U', 2, 1, A, 2, AF, 1, B, 2, X, 2, R1, R2, W, R,
      $                INFO )
-         CALL AB_CHKXER( 'AB_CPORFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'CPORFS', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_CPORFS( 'U', 2, 1, A, 2, AF, 2, B, 1, X, 2, R1, R2, W, 
-     $R,
+         CALL CPORFS( 'U', 2, 1, A, 2, AF, 2, B, 1, X, 2, R1, R2, W, R,
      $                INFO )
-         CALL AB_CHKXER( 'AB_CPORFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'CPORFS', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL AB_CPORFS( 'U', 2, 1, A, 2, AF, 2, B, 2, X, 1, R1, R2, W, 
-     $R,
+         CALL CPORFS( 'U', 2, 1, A, 2, AF, 2, B, 2, X, 1, R1, R2, W, R,
      $                INFO )
-         CALL AB_CHKXER( 'AB_CPORFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'CPORFS', INFOT, NOUT, LERR, OK )
 *
-*        AB_AB_CPORFSX
+*        CPORFSX
 *
          N_ERR_BNDS = 3
          NPARAMS = 0
-         SRNAMT = 'AB_AB_CPORFSX'
+         SRNAMT = 'CPORFSX'
          INFOT = 1
-         CALL AB_AB_CPORFSX( '/', EQ, 0, 0, A, 1, AF, 1, S, B, 1, X, 1,
+         CALL CPORFSX( '/', EQ, 0, 0, A, 1, AF, 1, S, B, 1, X, 1,
      $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
      $        PARAMS, W, R, INFO )
-         CALL AB_CHKXER( 'AB_AB_CPORFSX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'CPORFSX', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_CPORFSX( 'U', '/', -1, 0, A, 1, AF, 1, S, B, 1, X, 1
-     $,
+         CALL CPORFSX( 'U', '/', -1, 0, A, 1, AF, 1, S, B, 1, X, 1,
      $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
      $        PARAMS, W, R, INFO )
-         CALL AB_CHKXER( 'AB_AB_CPORFSX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'CPORFSX', INFOT, NOUT, LERR, OK )
          EQ = 'N'
          INFOT = 3
-         CALL AB_AB_CPORFSX( 'U', EQ, -1, 0, A, 1, AF, 1, S, B, 1, X, 1,
+         CALL CPORFSX( 'U', EQ, -1, 0, A, 1, AF, 1, S, B, 1, X, 1,
      $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
      $        PARAMS, W, R, INFO )
-         CALL AB_CHKXER( 'AB_AB_CPORFSX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'CPORFSX', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_CPORFSX( 'U', EQ, 0, -1, A, 1, AF, 1, S, B, 1, X, 1,
+         CALL CPORFSX( 'U', EQ, 0, -1, A, 1, AF, 1, S, B, 1, X, 1,
      $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
      $        PARAMS, W, R, INFO )
-         CALL AB_CHKXER( 'AB_AB_CPORFSX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'CPORFSX', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_AB_CPORFSX( 'U', EQ, 2, 1, A, 1, AF, 2, S, B, 2, X, 2,
+         CALL CPORFSX( 'U', EQ, 2, 1, A, 1, AF, 2, S, B, 2, X, 2,
      $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
      $        PARAMS, W, R, INFO )
-         CALL AB_CHKXER( 'AB_AB_CPORFSX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'CPORFSX', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_CPORFSX( 'U', EQ, 2, 1, A, 2, AF, 1, S, B, 2, X, 2,
+         CALL CPORFSX( 'U', EQ, 2, 1, A, 2, AF, 1, S, B, 2, X, 2,
      $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
      $        PARAMS, W, R, INFO )
-         CALL AB_CHKXER( 'AB_AB_CPORFSX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'CPORFSX', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL AB_AB_CPORFSX( 'U', EQ, 2, 1, A, 2, AF, 2, S, B, 1, X, 2,
+         CALL CPORFSX( 'U', EQ, 2, 1, A, 2, AF, 2, S, B, 1, X, 2,
      $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
      $        PARAMS, W, R, INFO )
-         CALL AB_CHKXER( 'AB_AB_CPORFSX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'CPORFSX', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL AB_AB_CPORFSX( 'U', EQ, 2, 1, A, 2, AF, 2, S, B, 2, X, 1,
+         CALL CPORFSX( 'U', EQ, 2, 1, A, 2, AF, 2, S, B, 2, X, 1,
      $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
      $        PARAMS, W, R, INFO )
-         CALL AB_CHKXER( 'AB_AB_CPORFSX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'CPORFSX', INFOT, NOUT, LERR, OK )
 *
-*        AB_CPOCON
+*        CPOCON
 *
-         SRNAMT = 'AB_CPOCON'
+         SRNAMT = 'CPOCON'
          INFOT = 1
-         CALL AB_CPOCON( '/', 0, A, 1, ANRM, RCOND, W, R, INFO )
-         CALL AB_CHKXER( 'AB_CPOCON', INFOT, NOUT, LERR, OK )
+         CALL CPOCON( '/', 0, A, 1, ANRM, RCOND, W, R, INFO )
+         CALL CHKXER( 'CPOCON', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_CPOCON( 'U', -1, A, 1, ANRM, RCOND, W, R, INFO )
-         CALL AB_CHKXER( 'AB_CPOCON', INFOT, NOUT, LERR, OK )
+         CALL CPOCON( 'U', -1, A, 1, ANRM, RCOND, W, R, INFO )
+         CALL CHKXER( 'CPOCON', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_CPOCON( 'U', 2, A, 1, ANRM, RCOND, W, R, INFO )
-         CALL AB_CHKXER( 'AB_CPOCON', INFOT, NOUT, LERR, OK )
+         CALL CPOCON( 'U', 2, A, 1, ANRM, RCOND, W, R, INFO )
+         CALL CHKXER( 'CPOCON', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_CPOCON( 'U', 1, A, 1, -ANRM, RCOND, W, R, INFO )
-         CALL AB_CHKXER( 'AB_CPOCON', INFOT, NOUT, LERR, OK )
+         CALL CPOCON( 'U', 1, A, 1, -ANRM, RCOND, W, R, INFO )
+         CALL CHKXER( 'CPOCON', INFOT, NOUT, LERR, OK )
 *
-*        AB_CPOEQU
+*        CPOEQU
 *
-         SRNAMT = 'AB_CPOEQU'
+         SRNAMT = 'CPOEQU'
          INFOT = 1
-         CALL AB_CPOEQU( -1, A, 1, R1, RCOND, ANRM, INFO )
-         CALL AB_CHKXER( 'AB_CPOEQU', INFOT, NOUT, LERR, OK )
+         CALL CPOEQU( -1, A, 1, R1, RCOND, ANRM, INFO )
+         CALL CHKXER( 'CPOEQU', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_CPOEQU( 2, A, 1, R1, RCOND, ANRM, INFO )
-         CALL AB_CHKXER( 'AB_CPOEQU', INFOT, NOUT, LERR, OK )
+         CALL CPOEQU( 2, A, 1, R1, RCOND, ANRM, INFO )
+         CALL CHKXER( 'CPOEQU', INFOT, NOUT, LERR, OK )
 *
-*        AB_AB_CPOEQUB
+*        CPOEQUB
 *
-         SRNAMT = 'AB_AB_CPOEQUB'
+         SRNAMT = 'CPOEQUB'
          INFOT = 1
-         CALL AB_AB_CPOEQUB( -1, A, 1, R1, RCOND, ANRM, INFO )
-         CALL AB_CHKXER( 'AB_AB_CPOEQUB', INFOT, NOUT, LERR, OK )
+         CALL CPOEQUB( -1, A, 1, R1, RCOND, ANRM, INFO )
+         CALL CHKXER( 'CPOEQUB', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_CPOEQUB( 2, A, 1, R1, RCOND, ANRM, INFO )
-         CALL AB_CHKXER( 'AB_AB_CPOEQUB', INFOT, NOUT, LERR, OK )
+         CALL CPOEQUB( 2, A, 1, R1, RCOND, ANRM, INFO )
+         CALL CHKXER( 'CPOEQUB', INFOT, NOUT, LERR, OK )
 *
 *     Test error exits of the routines that use the Cholesky
 *     decomposition of a Hermitian positive definite packed matrix.
 *
-      ELSE IF( AB_AB_LSAMEN( 2, C2, 'PP' ) ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'PP' ) ) THEN
 *
-*        AB_CPPTRF
+*        CPPTRF
 *
-         SRNAMT = 'AB_CPPTRF'
+         SRNAMT = 'CPPTRF'
          INFOT = 1
-         CALL AB_CPPTRF( '/', 0, A, INFO )
-         CALL AB_CHKXER( 'AB_CPPTRF', INFOT, NOUT, LERR, OK )
+         CALL CPPTRF( '/', 0, A, INFO )
+         CALL CHKXER( 'CPPTRF', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_CPPTRF( 'U', -1, A, INFO )
-         CALL AB_CHKXER( 'AB_CPPTRF', INFOT, NOUT, LERR, OK )
+         CALL CPPTRF( 'U', -1, A, INFO )
+         CALL CHKXER( 'CPPTRF', INFOT, NOUT, LERR, OK )
 *
-*        AB_CPPTRI
+*        CPPTRI
 *
-         SRNAMT = 'AB_CPPTRI'
+         SRNAMT = 'CPPTRI'
          INFOT = 1
-         CALL AB_CPPTRI( '/', 0, A, INFO )
-         CALL AB_CHKXER( 'AB_CPPTRI', INFOT, NOUT, LERR, OK )
+         CALL CPPTRI( '/', 0, A, INFO )
+         CALL CHKXER( 'CPPTRI', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_CPPTRI( 'U', -1, A, INFO )
-         CALL AB_CHKXER( 'AB_CPPTRI', INFOT, NOUT, LERR, OK )
+         CALL CPPTRI( 'U', -1, A, INFO )
+         CALL CHKXER( 'CPPTRI', INFOT, NOUT, LERR, OK )
 *
-*        AB_CPPTRS
+*        CPPTRS
 *
-         SRNAMT = 'AB_CPPTRS'
+         SRNAMT = 'CPPTRS'
          INFOT = 1
-         CALL AB_CPPTRS( '/', 0, 0, A, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_CPPTRS', INFOT, NOUT, LERR, OK )
+         CALL CPPTRS( '/', 0, 0, A, B, 1, INFO )
+         CALL CHKXER( 'CPPTRS', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_CPPTRS( 'U', -1, 0, A, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_CPPTRS', INFOT, NOUT, LERR, OK )
+         CALL CPPTRS( 'U', -1, 0, A, B, 1, INFO )
+         CALL CHKXER( 'CPPTRS', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_CPPTRS( 'U', 0, -1, A, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_CPPTRS', INFOT, NOUT, LERR, OK )
+         CALL CPPTRS( 'U', 0, -1, A, B, 1, INFO )
+         CALL CHKXER( 'CPPTRS', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_CPPTRS( 'U', 2, 1, A, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_CPPTRS', INFOT, NOUT, LERR, OK )
+         CALL CPPTRS( 'U', 2, 1, A, B, 1, INFO )
+         CALL CHKXER( 'CPPTRS', INFOT, NOUT, LERR, OK )
 *
-*        AB_CPPRFS
+*        CPPRFS
 *
-         SRNAMT = 'AB_CPPRFS'
+         SRNAMT = 'CPPRFS'
          INFOT = 1
-         CALL AB_CPPRFS( '/', 0, 0, A, AF, B, 1, X, 1, R1, R2, W, R, INF
-     $O )
-         CALL AB_CHKXER( 'AB_CPPRFS', INFOT, NOUT, LERR, OK )
+         CALL CPPRFS( '/', 0, 0, A, AF, B, 1, X, 1, R1, R2, W, R, INFO )
+         CALL CHKXER( 'CPPRFS', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_CPPRFS( 'U', -1, 0, A, AF, B, 1, X, 1, R1, R2, W, R,
+         CALL CPPRFS( 'U', -1, 0, A, AF, B, 1, X, 1, R1, R2, W, R,
      $                INFO )
-         CALL AB_CHKXER( 'AB_CPPRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'CPPRFS', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_CPPRFS( 'U', 0, -1, A, AF, B, 1, X, 1, R1, R2, W, R,
+         CALL CPPRFS( 'U', 0, -1, A, AF, B, 1, X, 1, R1, R2, W, R,
      $                INFO )
-         CALL AB_CHKXER( 'AB_CPPRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'CPPRFS', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_CPPRFS( 'U', 2, 1, A, AF, B, 1, X, 2, R1, R2, W, R, INF
-     $O )
-         CALL AB_CHKXER( 'AB_CPPRFS', INFOT, NOUT, LERR, OK )
+         CALL CPPRFS( 'U', 2, 1, A, AF, B, 1, X, 2, R1, R2, W, R, INFO )
+         CALL CHKXER( 'CPPRFS', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_CPPRFS( 'U', 2, 1, A, AF, B, 2, X, 1, R1, R2, W, R, INF
-     $O )
-         CALL AB_CHKXER( 'AB_CPPRFS', INFOT, NOUT, LERR, OK )
+         CALL CPPRFS( 'U', 2, 1, A, AF, B, 2, X, 1, R1, R2, W, R, INFO )
+         CALL CHKXER( 'CPPRFS', INFOT, NOUT, LERR, OK )
 *
-*        AB_CPPCON
+*        CPPCON
 *
-         SRNAMT = 'AB_CPPCON'
+         SRNAMT = 'CPPCON'
          INFOT = 1
-         CALL AB_CPPCON( '/', 0, A, ANRM, RCOND, W, R, INFO )
-         CALL AB_CHKXER( 'AB_CPPCON', INFOT, NOUT, LERR, OK )
+         CALL CPPCON( '/', 0, A, ANRM, RCOND, W, R, INFO )
+         CALL CHKXER( 'CPPCON', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_CPPCON( 'U', -1, A, ANRM, RCOND, W, R, INFO )
-         CALL AB_CHKXER( 'AB_CPPCON', INFOT, NOUT, LERR, OK )
+         CALL CPPCON( 'U', -1, A, ANRM, RCOND, W, R, INFO )
+         CALL CHKXER( 'CPPCON', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_CPPCON( 'U', 1, A, -ANRM, RCOND, W, R, INFO )
-         CALL AB_CHKXER( 'AB_CPPCON', INFOT, NOUT, LERR, OK )
+         CALL CPPCON( 'U', 1, A, -ANRM, RCOND, W, R, INFO )
+         CALL CHKXER( 'CPPCON', INFOT, NOUT, LERR, OK )
 *
-*        AB_CPPEQU
+*        CPPEQU
 *
-         SRNAMT = 'AB_CPPEQU'
+         SRNAMT = 'CPPEQU'
          INFOT = 1
-         CALL AB_CPPEQU( '/', 0, A, R1, RCOND, ANRM, INFO )
-         CALL AB_CHKXER( 'AB_CPPEQU', INFOT, NOUT, LERR, OK )
+         CALL CPPEQU( '/', 0, A, R1, RCOND, ANRM, INFO )
+         CALL CHKXER( 'CPPEQU', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_CPPEQU( 'U', -1, A, R1, RCOND, ANRM, INFO )
-         CALL AB_CHKXER( 'AB_CPPEQU', INFOT, NOUT, LERR, OK )
+         CALL CPPEQU( 'U', -1, A, R1, RCOND, ANRM, INFO )
+         CALL CHKXER( 'CPPEQU', INFOT, NOUT, LERR, OK )
 *
 *     Test error exits of the routines that use the Cholesky
 *     decomposition of a Hermitian positive definite band matrix.
 *
-      ELSE IF( AB_AB_LSAMEN( 2, C2, 'PB' ) ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'PB' ) ) THEN
 *
-*        AB_CPBTRF
+*        CPBTRF
 *
-         SRNAMT = 'AB_CPBTRF'
+         SRNAMT = 'CPBTRF'
          INFOT = 1
-         CALL AB_CPBTRF( '/', 0, 0, A, 1, INFO )
-         CALL AB_CHKXER( 'AB_CPBTRF', INFOT, NOUT, LERR, OK )
+         CALL CPBTRF( '/', 0, 0, A, 1, INFO )
+         CALL CHKXER( 'CPBTRF', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_CPBTRF( 'U', -1, 0, A, 1, INFO )
-         CALL AB_CHKXER( 'AB_CPBTRF', INFOT, NOUT, LERR, OK )
+         CALL CPBTRF( 'U', -1, 0, A, 1, INFO )
+         CALL CHKXER( 'CPBTRF', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_CPBTRF( 'U', 1, -1, A, 1, INFO )
-         CALL AB_CHKXER( 'AB_CPBTRF', INFOT, NOUT, LERR, OK )
+         CALL CPBTRF( 'U', 1, -1, A, 1, INFO )
+         CALL CHKXER( 'CPBTRF', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_CPBTRF( 'U', 2, 1, A, 1, INFO )
-         CALL AB_CHKXER( 'AB_CPBTRF', INFOT, NOUT, LERR, OK )
+         CALL CPBTRF( 'U', 2, 1, A, 1, INFO )
+         CALL CHKXER( 'CPBTRF', INFOT, NOUT, LERR, OK )
 *
-*        AB_CPBTF2
+*        CPBTF2
 *
-         SRNAMT = 'AB_CPBTF2'
+         SRNAMT = 'CPBTF2'
          INFOT = 1
-         CALL AB_CPBTF2( '/', 0, 0, A, 1, INFO )
-         CALL AB_CHKXER( 'AB_CPBTF2', INFOT, NOUT, LERR, OK )
+         CALL CPBTF2( '/', 0, 0, A, 1, INFO )
+         CALL CHKXER( 'CPBTF2', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_CPBTF2( 'U', -1, 0, A, 1, INFO )
-         CALL AB_CHKXER( 'AB_CPBTF2', INFOT, NOUT, LERR, OK )
+         CALL CPBTF2( 'U', -1, 0, A, 1, INFO )
+         CALL CHKXER( 'CPBTF2', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_CPBTF2( 'U', 1, -1, A, 1, INFO )
-         CALL AB_CHKXER( 'AB_CPBTF2', INFOT, NOUT, LERR, OK )
+         CALL CPBTF2( 'U', 1, -1, A, 1, INFO )
+         CALL CHKXER( 'CPBTF2', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_CPBTF2( 'U', 2, 1, A, 1, INFO )
-         CALL AB_CHKXER( 'AB_CPBTF2', INFOT, NOUT, LERR, OK )
+         CALL CPBTF2( 'U', 2, 1, A, 1, INFO )
+         CALL CHKXER( 'CPBTF2', INFOT, NOUT, LERR, OK )
 *
-*        AB_CPBTRS
+*        CPBTRS
 *
-         SRNAMT = 'AB_CPBTRS'
+         SRNAMT = 'CPBTRS'
          INFOT = 1
-         CALL AB_CPBTRS( '/', 0, 0, 0, A, 1, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_CPBTRS', INFOT, NOUT, LERR, OK )
+         CALL CPBTRS( '/', 0, 0, 0, A, 1, B, 1, INFO )
+         CALL CHKXER( 'CPBTRS', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_CPBTRS( 'U', -1, 0, 0, A, 1, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_CPBTRS', INFOT, NOUT, LERR, OK )
+         CALL CPBTRS( 'U', -1, 0, 0, A, 1, B, 1, INFO )
+         CALL CHKXER( 'CPBTRS', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_CPBTRS( 'U', 1, -1, 0, A, 1, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_CPBTRS', INFOT, NOUT, LERR, OK )
+         CALL CPBTRS( 'U', 1, -1, 0, A, 1, B, 1, INFO )
+         CALL CHKXER( 'CPBTRS', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_CPBTRS( 'U', 0, 0, -1, A, 1, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_CPBTRS', INFOT, NOUT, LERR, OK )
+         CALL CPBTRS( 'U', 0, 0, -1, A, 1, B, 1, INFO )
+         CALL CHKXER( 'CPBTRS', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_CPBTRS( 'U', 2, 1, 1, A, 1, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_CPBTRS', INFOT, NOUT, LERR, OK )
+         CALL CPBTRS( 'U', 2, 1, 1, A, 1, B, 1, INFO )
+         CALL CHKXER( 'CPBTRS', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_CPBTRS( 'U', 2, 0, 1, A, 1, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_CPBTRS', INFOT, NOUT, LERR, OK )
+         CALL CPBTRS( 'U', 2, 0, 1, A, 1, B, 1, INFO )
+         CALL CHKXER( 'CPBTRS', INFOT, NOUT, LERR, OK )
 *
-*        AB_CPBRFS
+*        CPBRFS
 *
-         SRNAMT = 'AB_CPBRFS'
+         SRNAMT = 'CPBRFS'
          INFOT = 1
-         CALL AB_CPBRFS( '/', 0, 0, 0, A, 1, AF, 1, B, 1, X, 1, R1, R2, 
-     $W,
+         CALL CPBRFS( '/', 0, 0, 0, A, 1, AF, 1, B, 1, X, 1, R1, R2, W,
      $                R, INFO )
-         CALL AB_CHKXER( 'AB_CPBRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'CPBRFS', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_CPBRFS( 'U', -1, 0, 0, A, 1, AF, 1, B, 1, X, 1, R1, R2,
-     $ W,
+         CALL CPBRFS( 'U', -1, 0, 0, A, 1, AF, 1, B, 1, X, 1, R1, R2, W,
      $                R, INFO )
-         CALL AB_CHKXER( 'AB_CPBRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'CPBRFS', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_CPBRFS( 'U', 1, -1, 0, A, 1, AF, 1, B, 1, X, 1, R1, R2,
-     $ W,
+         CALL CPBRFS( 'U', 1, -1, 0, A, 1, AF, 1, B, 1, X, 1, R1, R2, W,
      $                R, INFO )
-         CALL AB_CHKXER( 'AB_CPBRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'CPBRFS', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_CPBRFS( 'U', 0, 0, -1, A, 1, AF, 1, B, 1, X, 1, R1, R2,
-     $ W,
+         CALL CPBRFS( 'U', 0, 0, -1, A, 1, AF, 1, B, 1, X, 1, R1, R2, W,
      $                R, INFO )
-         CALL AB_CHKXER( 'AB_CPBRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'CPBRFS', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_CPBRFS( 'U', 2, 1, 1, A, 1, AF, 2, B, 2, X, 2, R1, R2, 
-     $W,
+         CALL CPBRFS( 'U', 2, 1, 1, A, 1, AF, 2, B, 2, X, 2, R1, R2, W,
      $                R, INFO )
-         CALL AB_CHKXER( 'AB_CPBRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'CPBRFS', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_CPBRFS( 'U', 2, 1, 1, A, 2, AF, 1, B, 2, X, 2, R1, R2, 
-     $W,
+         CALL CPBRFS( 'U', 2, 1, 1, A, 2, AF, 1, B, 2, X, 2, R1, R2, W,
      $                R, INFO )
-         CALL AB_CHKXER( 'AB_CPBRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'CPBRFS', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_CPBRFS( 'U', 2, 0, 1, A, 1, AF, 1, B, 1, X, 2, R1, R2, 
-     $W,
+         CALL CPBRFS( 'U', 2, 0, 1, A, 1, AF, 1, B, 1, X, 2, R1, R2, W,
      $                R, INFO )
-         CALL AB_CHKXER( 'AB_CPBRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'CPBRFS', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL AB_CPBRFS( 'U', 2, 0, 1, A, 1, AF, 1, B, 2, X, 1, R1, R2, 
-     $W,
+         CALL CPBRFS( 'U', 2, 0, 1, A, 1, AF, 1, B, 2, X, 1, R1, R2, W,
      $                R, INFO )
-         CALL AB_CHKXER( 'AB_CPBRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'CPBRFS', INFOT, NOUT, LERR, OK )
 *
-*        AB_CPBCON
+*        CPBCON
 *
-         SRNAMT = 'AB_CPBCON'
+         SRNAMT = 'CPBCON'
          INFOT = 1
-         CALL AB_CPBCON( '/', 0, 0, A, 1, ANRM, RCOND, W, R, INFO )
-         CALL AB_CHKXER( 'AB_CPBCON', INFOT, NOUT, LERR, OK )
+         CALL CPBCON( '/', 0, 0, A, 1, ANRM, RCOND, W, R, INFO )
+         CALL CHKXER( 'CPBCON', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_CPBCON( 'U', -1, 0, A, 1, ANRM, RCOND, W, R, INFO )
-         CALL AB_CHKXER( 'AB_CPBCON', INFOT, NOUT, LERR, OK )
+         CALL CPBCON( 'U', -1, 0, A, 1, ANRM, RCOND, W, R, INFO )
+         CALL CHKXER( 'CPBCON', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_CPBCON( 'U', 1, -1, A, 1, ANRM, RCOND, W, R, INFO )
-         CALL AB_CHKXER( 'AB_CPBCON', INFOT, NOUT, LERR, OK )
+         CALL CPBCON( 'U', 1, -1, A, 1, ANRM, RCOND, W, R, INFO )
+         CALL CHKXER( 'CPBCON', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_CPBCON( 'U', 2, 1, A, 1, ANRM, RCOND, W, R, INFO )
-         CALL AB_CHKXER( 'AB_CPBCON', INFOT, NOUT, LERR, OK )
+         CALL CPBCON( 'U', 2, 1, A, 1, ANRM, RCOND, W, R, INFO )
+         CALL CHKXER( 'CPBCON', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_CPBCON( 'U', 1, 0, A, 1, -ANRM, RCOND, W, R, INFO )
-         CALL AB_CHKXER( 'AB_CPBCON', INFOT, NOUT, LERR, OK )
+         CALL CPBCON( 'U', 1, 0, A, 1, -ANRM, RCOND, W, R, INFO )
+         CALL CHKXER( 'CPBCON', INFOT, NOUT, LERR, OK )
 *
-*        AB_CPBEQU
+*        CPBEQU
 *
-         SRNAMT = 'AB_CPBEQU'
+         SRNAMT = 'CPBEQU'
          INFOT = 1
-         CALL AB_CPBEQU( '/', 0, 0, A, 1, R1, RCOND, ANRM, INFO )
-         CALL AB_CHKXER( 'AB_CPBEQU', INFOT, NOUT, LERR, OK )
+         CALL CPBEQU( '/', 0, 0, A, 1, R1, RCOND, ANRM, INFO )
+         CALL CHKXER( 'CPBEQU', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_CPBEQU( 'U', -1, 0, A, 1, R1, RCOND, ANRM, INFO )
-         CALL AB_CHKXER( 'AB_CPBEQU', INFOT, NOUT, LERR, OK )
+         CALL CPBEQU( 'U', -1, 0, A, 1, R1, RCOND, ANRM, INFO )
+         CALL CHKXER( 'CPBEQU', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_CPBEQU( 'U', 1, -1, A, 1, R1, RCOND, ANRM, INFO )
-         CALL AB_CHKXER( 'AB_CPBEQU', INFOT, NOUT, LERR, OK )
+         CALL CPBEQU( 'U', 1, -1, A, 1, R1, RCOND, ANRM, INFO )
+         CALL CHKXER( 'CPBEQU', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_CPBEQU( 'U', 2, 1, A, 1, R1, RCOND, ANRM, INFO )
-         CALL AB_CHKXER( 'AB_CPBEQU', INFOT, NOUT, LERR, OK )
+         CALL CPBEQU( 'U', 2, 1, A, 1, R1, RCOND, ANRM, INFO )
+         CALL CHKXER( 'CPBEQU', INFOT, NOUT, LERR, OK )
       END IF
 *
 *     Print a summary line.
 *
-      CALL AB_ALAESM( PATH, OK, NOUT )
+      CALL ALAESM( PATH, OK, NOUT )
 *
       RETURN
 *
-*     End of AB_CERRPO
+*     End of CERRPO
 *
       END

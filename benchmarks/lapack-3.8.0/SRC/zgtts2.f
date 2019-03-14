@@ -1,4 +1,4 @@
-*> \brief \b AB_ZGTTS2 solves a system of linear equations with a tridiagonal matrix using the LU factorization computed by AB_SGTTRF.
+*> \brief \b ZGTTS2 solves a system of linear equations with a tridiagonal matrix using the LU factorization computed by sgttrf.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZGTTS2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZGTTS2.f">
+*> Download ZGTTS2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgtts2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZGTTS2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgtts2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZGTTS2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgtts2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZGTTS2( ITRANS, N, NRHS, DL, D, DU, DU2, IPIV, B, LDB )
+*       SUBROUTINE ZGTTS2( ITRANS, N, NRHS, DL, D, DU, DU2, IPIV, B, LDB )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            ITRANS, LDB, N, NRHS
@@ -34,10 +34,10 @@
 *>
 *> \verbatim
 *>
-*> AB_ZGTTS2 solves one of the systems of equations
+*> ZGTTS2 solves one of the systems of equations
 *>    A * X = B,  A**T * X = B,  or  A**H * X = B,
 *> with a tridiagonal matrix A using the LU factorization computed
-*> by AB_ZGTTRF.
+*> by ZGTTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -88,7 +88,7 @@
 *> \param[in] DU2
 *> \verbatim
 *>          DU2 is COMPLEX*16 array, dimension (N-2)
-*>          The (n-2) elements of the AB_SECOND super-diagonal of U.
+*>          The (n-2) elements of the second super-diagonal of U.
 *> \endverbatim
 *>
 *> \param[in] IPIV
@@ -126,8 +126,7 @@
 *> \ingroup complex16GTcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_ZGTTS2( ITRANS, N, NRHS, DL, D, DU, DU2, IPIV, B, LD
-     $B )
+      SUBROUTINE ZGTTS2( ITRANS, N, NRHS, DL, D, DU, DU2, IPIV, B, LDB )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -345,6 +344,6 @@
          END IF
       END IF
 *
-*     End of AB_ZGTTS2
+*     End of ZGTTS2
 *
       END

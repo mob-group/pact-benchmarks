@@ -1,4 +1,4 @@
-*> \brief \b AB_CUNG2L generates all or part of the unitary matrix Q from a QL factorization determined by AB_CGEQLF (unblocked algorithm).
+*> \brief \b CUNG2L generates all or part of the unitary matrix Q from a QL factorization determined by cgeqlf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CUNG2L + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CUNG2L.f">
+*> Download CUNG2L + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cung2l.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CUNG2L.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cung2l.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CUNG2L.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cung2l.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CUNG2L( M, N, K, A, LDA, TAU, WORK, INFO )
+*       SUBROUTINE CUNG2L( M, N, K, A, LDA, TAU, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, K, LDA, M, N
@@ -33,13 +33,13 @@
 *>
 *> \verbatim
 *>
-*> AB_CUNG2L generates an m by n complex matrix Q with orthonormal columns,
+*> CUNG2L generates an m by n complex matrix Q with orthonormal columns,
 *> which is defined as the last n columns of a product of k elementary
 *> reflectors of order m
 *>
 *>       Q  =  H(k) . . . H(2) H(1)
 *>
-*> as returned by AB_CGEQLF.
+*> as returned by CGEQLF.
 *> \endverbatim
 *
 *  Arguments:
@@ -69,7 +69,7 @@
 *>          A is COMPLEX array, dimension (LDA,N)
 *>          On entry, the (n-k+i)-th column must contain the vector which
 *>          defines the elementary reflector H(i), for i = 1,2,...,k, as
-*>          returned by AB_CGEQLF in the last k columns of its array
+*>          returned by CGEQLF in the last k columns of its array
 *>          argument A.
 *>          On exit, the m-by-n matrix Q.
 *> \endverbatim
@@ -84,7 +84,7 @@
 *> \verbatim
 *>          TAU is COMPLEX array, dimension (K)
 *>          TAU(i) must contain the scalar factor of the elementary
-*>          reflector H(i), as returned by AB_CGEQLF.
+*>          reflector H(i), as returned by CGEQLF.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -112,7 +112,7 @@
 *> \ingroup complexOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_CUNG2L( M, N, K, A, LDA, TAU, WORK, INFO )
+      SUBROUTINE CUNG2L( M, N, K, A, LDA, TAU, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -137,7 +137,7 @@
       INTEGER            I, II, J, L
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CLARF, AB_CSCAL, AB_XERBLA
+      EXTERNAL           CLARF, CSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -157,7 +157,7 @@
          INFO = -5
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CUNG2L', -INFO )
+         CALL XERBLA( 'CUNG2L', -INFO )
          RETURN
       END IF
 *
@@ -181,10 +181,9 @@
 *        Apply H(i) to A(1:m-k+i,1:n-k+i) from the left
 *
          A( M-N+II, II ) = ONE
-         CALL AB_CLARF( 'Left', M-N+II, II-1, A( 1, II ), 1, TAU( I ), A
-     $,
+         CALL CLARF( 'Left', M-N+II, II-1, A( 1, II ), 1, TAU( I ), A,
      $               LDA, WORK )
-         CALL AB_CSCAL( M-N+II-1, -TAU( I ), A( 1, II ), 1 )
+         CALL CSCAL( M-N+II-1, -TAU( I ), A( 1, II ), 1 )
          A( M-N+II, II ) = ONE - TAU( I )
 *
 *        Set A(m-k+i+1:m,n-k+i) to zero
@@ -195,6 +194,6 @@
    40 CONTINUE
       RETURN
 *
-*     End of AB_CUNG2L
+*     End of CUNG2L
 *
       END

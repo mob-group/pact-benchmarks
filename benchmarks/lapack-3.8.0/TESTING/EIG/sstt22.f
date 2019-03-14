@@ -1,4 +1,4 @@
-*> \brief \b AB_SSTT22
+*> \brief \b SSTT22
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SSTT22( N, M, KBAND, AD, AE, SD, SE, U, LDU, WORK,
+*       SUBROUTINE SSTT22( N, M, KBAND, AD, AE, SD, SE, U, LDU, WORK,
 *                          LDWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SSTT22  checks a set of M eigenvalues and eigenvectors,
+*> SSTT22  checks a set of M eigenvalues and eigenvectors,
 *>
 *>     A U = U S
 *>
@@ -44,14 +44,14 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The size of the matrix.  If it is zero, AB_SSTT22 does nothing.
+*>          The size of the matrix.  If it is zero, SSTT22 does nothing.
 *>          It must be at least zero.
 *> \endverbatim
 *>
 *> \param[in] M
 *> \verbatim
 *>          M is INTEGER
-*>          The number of eigenpairs to check.  If it is zero, AB_SSTT22
+*>          The number of eigenpairs to check.  If it is zero, SSTT22
 *>          does nothing.  It must be at least zero.
 *> \endverbatim
 *>
@@ -136,7 +136,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_SSTT22( N, M, KBAND, AD, AE, SD, SE, U, LDU, WORK,
+      SUBROUTINE SSTT22( N, M, KBAND, AD, AE, SD, SE, U, LDU, WORK,
      $                   LDWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -163,11 +163,11 @@
       REAL               ANORM, AUKJ, ULP, UNFL, WNORM
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH, AB_SLANGE, AB_SLANSY
-      EXTERNAL           AB_SLAMCH, AB_SLANGE, AB_SLANSY
+      REAL               SLAMCH, SLANGE, SLANSY
+      EXTERNAL           SLAMCH, SLANGE, SLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SGEMM
+      EXTERNAL           SGEMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL
@@ -179,8 +179,8 @@
       IF( N.LE.0 .OR. M.LE.0 )
      $   RETURN
 *
-      UNFL = AB_SLAMCH( 'Safe minimum' )
-      ULP = AB_SLAMCH( 'Epsilon' )
+      UNFL = SLAMCH( 'Safe minimum' )
+      ULP = SLAMCH( 'Epsilon' )
 *
 *     Do Test 1
 *
@@ -221,7 +221,7 @@
          END IF
    40 CONTINUE
 *
-      WNORM = AB_SLANSY( '1', 'L', M, WORK, M, WORK( 1, M+1 ) )
+      WNORM = SLANSY( '1', 'L', M, WORK, M, WORK( 1, M+1 ) )
 *
       IF( ANORM.GT.WNORM ) THEN
          RESULT( 1 ) = ( WNORM / ANORM ) / ( M*ULP )
@@ -237,19 +237,18 @@
 *
 *     Compute  U'U - I
 *
-      CALL AB_SGEMM( 'T', 'N', M, M, N, ONE, U, LDU, U, LDU, ZERO, WORK,
+      CALL SGEMM( 'T', 'N', M, M, N, ONE, U, LDU, U, LDU, ZERO, WORK,
      $            M )
 *
       DO 50 J = 1, M
          WORK( J, J ) = WORK( J, J ) - ONE
    50 CONTINUE
 *
-      RESULT( 2 ) = MIN( REAL( M ), AB_SLANGE( '1', M, M, WORK, M, WORK(
-     $ 1,
+      RESULT( 2 ) = MIN( REAL( M ), SLANGE( '1', M, M, WORK, M, WORK( 1,
      $              M+1 ) ) ) / ( M*ULP )
 *
       RETURN
 *
-*     End of AB_SSTT22
+*     End of SSTT22
 *
       END

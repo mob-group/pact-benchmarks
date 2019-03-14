@@ -1,4 +1,4 @@
-*> \brief \b AB_DBDT04
+*> \brief \b DBDT04
 *  =========== DOCUMENTATION ===========
 *
 * Online html documentation available at
@@ -7,7 +7,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DBDT04( UPLO, N, D, E, S, NS, U, LDU, VT, LDVT,
+*       SUBROUTINE DBDT04( UPLO, N, D, E, S, NS, U, LDU, VT, LDVT,
 *                          WORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DBDT04 reconstructs a bidiagonal matrix B from its (partial) SVD:
+*> DBDT04 reconstructs a bidiagonal matrix B from its (partial) SVD:
 *>    S = U' * B * V
 *> where U and V are orthogonal matrices and S is diagonal.
 *>
@@ -128,8 +128,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_DBDT04( UPLO, N, D, E, S, NS, U, LDU, VT, LDVT, WORK
-     $,
+      SUBROUTINE DBDT04( UPLO, N, D, E, S, NS, U, LDU, VT, LDVT, WORK,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -158,13 +157,13 @@
       DOUBLE PRECISION   BNORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_IDAMAX
-      DOUBLE PRECISION   AB_DASUM, AB_DLAMCH
-      EXTERNAL           AB_LSAME, AB_IDAMAX, AB_DASUM, AB_DLAMCH
+      LOGICAL            LSAME
+      INTEGER            IDAMAX
+      DOUBLE PRECISION   DASUM, DLAMCH
+      EXTERNAL           LSAME, IDAMAX, DASUM, DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DGEMM
+      EXTERNAL           DGEMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN
@@ -177,13 +176,13 @@
       IF( N.LE.0 .OR. NS.LE.0 )
      $   RETURN
 *
-      EPS = AB_DLAMCH( 'Precision' )
+      EPS = DLAMCH( 'Precision' )
 *
 *     Compute S - U' * B * V.
 *
       BNORM = ZERO
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
 *
 *        B is upper bidiagonal.
 *
@@ -219,7 +218,7 @@
    60    CONTINUE
       END IF
 *
-      CALL AB_DGEMM( 'T', 'N', NS, NS, N, -ONE, U, LDU, WORK( 1 ),
+      CALL DGEMM( 'T', 'N', NS, NS, N, -ONE, U, LDU, WORK( 1 ),
      $            N, ZERO, WORK( 1+N*NS ), NS )
 *
 *     norm(S - U' * B * V)
@@ -227,7 +226,7 @@
       K = N*NS
       DO 70 I = 1, NS
          WORK( K+I ) =  WORK( K+I ) + S( I )
-         RESID = MAX( RESID, AB_DASUM( NS, WORK( K+1 ), 1 ) )
+         RESID = MAX( RESID, DASUM( NS, WORK( K+1 ), 1 ) )
          K = K + NS
    70 CONTINUE
 *
@@ -250,6 +249,6 @@
 *
       RETURN
 *
-*     End of AB_DBDT04
+*     End of DBDT04
 *
       END

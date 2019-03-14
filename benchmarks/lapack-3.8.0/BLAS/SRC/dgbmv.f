@@ -1,4 +1,4 @@
-*> \brief \b AB_DGBMV
+*> \brief \b DGBMV
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DGBMV(TRANS,M,N,KL,KU,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+*       SUBROUTINE DGBMV(TRANS,M,N,KL,KU,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
 *
 *       .. Scalar Arguments ..
 *       DOUBLE PRECISION ALPHA,BETA
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DGBMV  performs one of the matrix-vector operations
+*> DGBMV  performs one of the matrix-vector operations
 *>
 *>    y := alpha*A*x + beta*y,   or   y := alpha*A**T*x + beta*y,
 *>
@@ -183,8 +183,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_DGBMV(TRANS,M,N,KL,KU,ALPHA,A,LDA,X,INCX,BETA,Y,INCY
-     $)
+      SUBROUTINE DGBMV(TRANS,M,N,KL,KU,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
 *
 *  -- Reference BLAS level2 routine (version 3.7.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -211,11 +210,11 @@
       INTEGER I,INFO,IX,IY,J,JX,JY,K,KUP1,KX,KY,LENX,LENY
 *     ..
 *     .. External Functions ..
-      LOGICAL AB_LSAME
-      EXTERNAL AB_LSAME
+      LOGICAL LSAME
+      EXTERNAL LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL AB_XERBLA
+      EXTERNAL XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC MAX,MIN
@@ -224,8 +223,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF (.NOT.AB_LSAME(TRANS,'N') .AND. .NOT.AB_LSAME(TRANS,'T') .AND.
-     +    .NOT.AB_LSAME(TRANS,'C')) THEN
+      IF (.NOT.LSAME(TRANS,'N') .AND. .NOT.LSAME(TRANS,'T') .AND.
+     +    .NOT.LSAME(TRANS,'C')) THEN
           INFO = 1
       ELSE IF (M.LT.0) THEN
           INFO = 2
@@ -243,7 +242,7 @@
           INFO = 13
       END IF
       IF (INFO.NE.0) THEN
-          CALL AB_XERBLA('AB_DGBMV ',INFO)
+          CALL XERBLA('DGBMV ',INFO)
           RETURN
       END IF
 *
@@ -255,7 +254,7 @@
 *     Set  LENX  and  LENY, the lengths of the vectors x and y, and set
 *     up the start points in  X  and  Y.
 *
-      IF (AB_LSAME(TRANS,'N')) THEN
+      IF (LSAME(TRANS,'N')) THEN
           LENX = N
           LENY = M
       ELSE
@@ -306,7 +305,7 @@
       END IF
       IF (ALPHA.EQ.ZERO) RETURN
       KUP1 = KU + 1
-      IF (AB_LSAME(TRANS,'N')) THEN
+      IF (LSAME(TRANS,'N')) THEN
 *
 *        Form  y := alpha*A*x + y.
 *
@@ -366,6 +365,6 @@
 *
       RETURN
 *
-*     End of AB_DGBMV .
+*     End of DGBMV .
 *
       END

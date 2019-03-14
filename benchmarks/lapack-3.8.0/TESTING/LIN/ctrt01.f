@@ -1,4 +1,4 @@
-*> \brief \b AB_CTRT01
+*> \brief \b CTRT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CTRT01( UPLO, DIAG, N, A, LDA, AINV, LDAINV, RCOND,
+*       SUBROUTINE CTRT01( UPLO, DIAG, N, A, LDA, AINV, LDAINV, RCOND,
 *                          RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CTRT01 computes the residual for a triangular matrix A times its
+*> CTRT01 computes the residual for a triangular matrix A times its
 *> inverse:
 *>    RESID = norm( A*AINV - I ) / ( N * norm(A) * norm(AINV) * EPS ),
 *> where EPS is the machine epsilon.
@@ -122,7 +122,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_CTRT01( UPLO, DIAG, N, A, LDA, AINV, LDAINV, RCOND,
+      SUBROUTINE CTRT01( UPLO, DIAG, N, A, LDA, AINV, LDAINV, RCOND,
      $                   RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -151,12 +151,12 @@
       REAL               AINVNM, ANORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_CLANTR, AB_SLAMCH
-      EXTERNAL           AB_LSAME, AB_CLANTR, AB_SLAMCH
+      LOGICAL            LSAME
+      REAL               CLANTR, SLAMCH
+      EXTERNAL           LSAME, CLANTR, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CTRMV
+      EXTERNAL           CTRMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          REAL
@@ -173,9 +173,9 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0 or AINVNM = 0.
 *
-      EPS = AB_SLAMCH( 'Epsilon' )
-      ANORM = AB_CLANTR( '1', UPLO, DIAG, N, N, A, LDA, RWORK )
-      AINVNM = AB_CLANTR( '1', UPLO, DIAG, N, N, AINV, LDAINV, RWORK )
+      EPS = SLAMCH( 'Epsilon' )
+      ANORM = CLANTR( '1', UPLO, DIAG, N, N, A, LDA, RWORK )
+      AINVNM = CLANTR( '1', UPLO, DIAG, N, N, AINV, LDAINV, RWORK )
       IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
          RCOND = ZERO
          RESID = ONE / EPS
@@ -185,7 +185,7 @@
 *
 *     Set the diagonal of AINV to 1 if AINV has unit diagonal.
 *
-      IF( AB_LSAME( DIAG, 'U' ) ) THEN
+      IF( LSAME( DIAG, 'U' ) ) THEN
          DO 10 J = 1, N
             AINV( J, J ) = ONE
    10    CONTINUE
@@ -193,15 +193,14 @@
 *
 *     Compute A * AINV, overwriting AINV.
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
          DO 20 J = 1, N
-            CALL AB_CTRMV( 'Upper', 'No transpose', DIAG, J, A, LDA,
+            CALL CTRMV( 'Upper', 'No transpose', DIAG, J, A, LDA,
      $                  AINV( 1, J ), 1 )
    20    CONTINUE
       ELSE
          DO 30 J = 1, N
-            CALL AB_CTRMV( 'Lower', 'No transpose', DIAG, N-J+1, A( J, J
-     $ ),
+            CALL CTRMV( 'Lower', 'No transpose', DIAG, N-J+1, A( J, J ),
      $                  LDA, AINV( J, J ), 1 )
    30    CONTINUE
       END IF
@@ -214,13 +213,12 @@
 *
 *     Compute norm(A*AINV - I) / (N * norm(A) * norm(AINV) * EPS)
 *
-      RESID = AB_CLANTR( '1', UPLO, 'Non-unit', N, N, AINV, LDAINV, RWOR
-     $K )
+      RESID = CLANTR( '1', UPLO, 'Non-unit', N, N, AINV, LDAINV, RWORK )
 *
       RESID = ( ( RESID*RCOND ) / REAL( N ) ) / EPS
 *
       RETURN
 *
-*     End of AB_CTRT01
+*     End of CTRT01
 *
       END

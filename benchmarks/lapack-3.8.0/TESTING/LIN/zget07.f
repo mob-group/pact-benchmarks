@@ -1,4 +1,4 @@
-*> \brief \b AB_ZGET07
+*> \brief \b ZGET07
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZGET07( TRANS, N, NRHS, A, LDA, B, LDB, X, LDX, XACT,
+*       SUBROUTINE ZGET07( TRANS, N, NRHS, A, LDA, B, LDB, X, LDX, XACT,
 *                          LDXACT, FERR, CHKFERR, BERR, RESLTS )
 *
 *       .. Scalar Arguments ..
@@ -28,7 +28,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZGET07 tests the error bounds from iterative refinement for the
+*> ZGET07 tests the error bounds from iterative refinement for the
 *> computed solution to a system of equations op(A)*X = B, where A is a
 *> general n by n matrix and op(A) = A or A**T, depending on TRANS.
 *>
@@ -163,8 +163,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZGET07( TRANS, N, NRHS, A, LDA, B, LDB, X, LDX, XACT
-     $,
+      SUBROUTINE ZGET07( TRANS, N, NRHS, A, LDA, B, LDB, X, LDX, XACT,
      $                   LDXACT, FERR, CHKFERR, BERR, RESLTS )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -196,10 +195,10 @@
       COMPLEX*16         ZDUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_IZAMAX
-      DOUBLE PRECISION   AB_DLAMCH
-      EXTERNAL           AB_LSAME, AB_IZAMAX, AB_DLAMCH
+      LOGICAL            LSAME
+      INTEGER            IZAMAX
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           LSAME, IZAMAX, DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX, MIN
@@ -220,10 +219,10 @@
          RETURN
       END IF
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
-      UNFL = AB_DLAMCH( 'Safe minimum' )
+      EPS = DLAMCH( 'Epsilon' )
+      UNFL = DLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      NOTRAN = AB_LSAME( TRANS, 'N' )
+      NOTRAN = LSAME( TRANS, 'N' )
 *
 *     Test 1:  Compute the maximum of
 *        norm(X - XACT) / ( norm(X) * FERR )
@@ -232,7 +231,7 @@
       ERRBND = ZERO
       IF( CHKFERR ) THEN
          DO 30 J = 1, NRHS
-            IMAX = AB_IZAMAX( N, X( 1, J ), 1 )
+            IMAX = IZAMAX( N, X( 1, J ), 1 )
             XNORM = MAX( CABS1( X( IMAX, J ) ), UNFL )
             DIFF = ZERO
             DO 10 I = 1, N
@@ -290,6 +289,6 @@
 *
       RETURN
 *
-*     End of AB_ZGET07
+*     End of ZGET07
 *
       END

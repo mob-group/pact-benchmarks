@@ -1,4 +1,4 @@
-*> \brief <b> AB_AB_ZSYSV_AA computes the solution to system of linear equations A * X = B for SY matrices</b>
+*> \brief <b> ZSYSV_AA computes the solution to system of linear equations A * X = B for SY matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_ZSYSV_AA + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_ZSYSV_AA.f">
+*> Download ZSYSV_AA + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zsysv_aa.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_ZSYSV_AA.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zsysv_aa.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_ZSYSV_AA.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsysv_aa.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_ZSYSV_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
+*       SUBROUTINE ZSYSV_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
 *                            LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZSYSV computes the solution to a complex system of linear equations
+*> ZSYSV computes the solution to a complex system of linear equations
 *>    A * X = B,
 *> where A is an N-by-N symmetric matrix and X and B are N-by-NRHS
 *> matrices.
@@ -87,7 +87,7 @@
 *>          On exit, if INFO = 0, the tridiagonal matrix T and the
 *>          multipliers used to obtain the factor U or L from the
 *>          factorization A = U*T*U**T or A = L*T*L**T as computed by
-*>          AB_ZSYTRF.
+*>          ZSYTRF.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -128,12 +128,12 @@
 *>          LWORK is INTEGER
 *>          The length of WORK.  LWORK >= MAX(1,2*N,3*N-2), and for
 *>          the best performance, LWORK >= MAX(1,N*NB), where NB is
-*>          the optimal blocksize for AB_AB_ZSYTRF_AA.
+*>          the optimal blocksize for ZSYTRF_AA.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -159,8 +159,7 @@
 *> \ingroup complex16SYsolve
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_ZSYSV_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WO
-     $RK,
+      SUBROUTINE ZSYSV_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
      $                     LWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.8.0) --
@@ -184,12 +183,12 @@
       INTEGER            LWKOPT, LWKOPT_SYTRF, LWKOPT_SYTRS
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_ILAENV, AB_LSAME
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      EXTERNAL           ILAENV, LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_AB_ZSYTRF_AA, AB_AB_ZSYTRS_AA
+      EXTERNAL           XERBLA, ZSYTRF_AA, ZSYTRS_AA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -200,8 +199,7 @@
 *
       INFO = 0
       LQUERY = ( LWORK.EQ.-1 )
-      IF( .NOT.AB_LSAME( UPLO, 'U' ) .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) 
-     $THEN
+      IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -216,10 +214,9 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         CALL AB_AB_ZSYTRF_AA( UPLO, N, A, LDA, IPIV, WORK, -1, INFO )
+         CALL ZSYTRF_AA( UPLO, N, A, LDA, IPIV, WORK, -1, INFO )
          LWKOPT_SYTRF = INT( WORK(1) )
-         CALL AB_AB_ZSYTRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK
-     $,
+         CALL ZSYTRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
      $                   -1, INFO )
          LWKOPT_SYTRS = INT( WORK(1) )
          LWKOPT = MAX( LWKOPT_SYTRF, LWKOPT_SYTRS )
@@ -230,7 +227,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_ZSYSV_AA ', -INFO )
+         CALL XERBLA( 'ZSYSV_AA ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -238,13 +235,12 @@
 *
 *     Compute the factorization A = U*T*U**T or A = L*T*L**T.
 *
-      CALL AB_AB_ZSYTRF_AA( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
+      CALL ZSYTRF_AA( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
       IF( INFO.EQ.0 ) THEN
 *
 *        Solve the system A*X = B, overwriting B with X.
 *
-         CALL AB_AB_ZSYTRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK
-     $,
+         CALL ZSYTRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
      $                      LWORK, INFO )
 *
       END IF
@@ -253,6 +249,6 @@
 *
       RETURN
 *
-*     End of AB_AB_ZSYSV_AA
+*     End of ZSYSV_AA
 *
       END

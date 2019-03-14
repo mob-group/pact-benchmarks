@@ -1,4 +1,4 @@
-*> \brief \b AB_ZERRAC
+*> \brief \b ZERRAC
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZERRAC( NUNIT )
+*       SUBROUTINE ZERRAC( NUNIT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            NUNIT
@@ -20,7 +20,7 @@
 *>
 *> \verbatim
 *>
-*> ZERRPX tests the error exits for ZAB_CPOSV.
+*> ZERRPX tests the error exits for ZCPOSV.
 *> \endverbatim
 *
 *  Arguments:
@@ -45,7 +45,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZERRAC( NUNIT )
+      SUBROUTINE ZERRAC( NUNIT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -74,7 +74,7 @@
       COMPLEX            SWORK(NMAX*NMAX)
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CHKXER, ZAB_CPOSV
+      EXTERNAL           CHKXER, ZCPOSV
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -110,32 +110,32 @@
    20 CONTINUE
       OK = .TRUE.
 *
-      SRNAMT = 'ZAB_CPOSV'
+      SRNAMT = 'ZCPOSV'
       INFOT = 1
-      CALL ZAB_CPOSV('/',0,0,A,1,B,1,X,1,WORK,SWORK,RWORK,ITER,INFO)
-      CALL AB_CHKXER( 'ZAB_CPOSV', INFOT, NOUT, LERR, OK )
+      CALL ZCPOSV('/',0,0,A,1,B,1,X,1,WORK,SWORK,RWORK,ITER,INFO)
+      CALL CHKXER( 'ZCPOSV', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL ZAB_CPOSV('U',-1,0,A,1,B,1,X,1,WORK,SWORK,RWORK,ITER,INFO)
-      CALL AB_CHKXER( 'ZAB_CPOSV', INFOT, NOUT, LERR, OK )
+      CALL ZCPOSV('U',-1,0,A,1,B,1,X,1,WORK,SWORK,RWORK,ITER,INFO)
+      CALL CHKXER( 'ZCPOSV', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL ZAB_CPOSV('U',0,-1,A,1,B,1,X,1,WORK,SWORK,RWORK,ITER,INFO)
-      CALL AB_CHKXER( 'ZAB_CPOSV', INFOT, NOUT, LERR, OK )
+      CALL ZCPOSV('U',0,-1,A,1,B,1,X,1,WORK,SWORK,RWORK,ITER,INFO)
+      CALL CHKXER( 'ZCPOSV', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL ZAB_CPOSV('U',2,1,A,1,B,2,X,2,WORK,SWORK,RWORK,ITER,INFO)
-      CALL AB_CHKXER( 'ZAB_CPOSV', INFOT, NOUT, LERR, OK )
+      CALL ZCPOSV('U',2,1,A,1,B,2,X,2,WORK,SWORK,RWORK,ITER,INFO)
+      CALL CHKXER( 'ZCPOSV', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL ZAB_CPOSV('U',2,1,A,2,B,1,X,2,WORK,SWORK,RWORK,ITER,INFO)
-      CALL AB_CHKXER( 'ZAB_CPOSV', INFOT, NOUT, LERR, OK )
+      CALL ZCPOSV('U',2,1,A,2,B,1,X,2,WORK,SWORK,RWORK,ITER,INFO)
+      CALL CHKXER( 'ZCPOSV', INFOT, NOUT, LERR, OK )
       INFOT = 9
-      CALL ZAB_CPOSV('U',2,1,A,2,B,2,X,1,WORK,SWORK,RWORK,ITER,INFO)
-      CALL AB_CHKXER( 'ZAB_CPOSV', INFOT, NOUT, LERR, OK )
+      CALL ZCPOSV('U',2,1,A,2,B,2,X,1,WORK,SWORK,RWORK,ITER,INFO)
+      CALL CHKXER( 'ZCPOSV', INFOT, NOUT, LERR, OK )
 *
 *     Print a summary line.
 *
       IF( OK ) THEN
-         WRITE( NOUT, FMT = 9999 )'ZAB_CPOSV'
+         WRITE( NOUT, FMT = 9999 )'ZCPOSV'
       ELSE
-         WRITE( NOUT, FMT = 9998 )'ZAB_CPOSV'
+         WRITE( NOUT, FMT = 9998 )'ZCPOSV'
       END IF
 *
  9999 FORMAT( 1X, A6, ' drivers passed the tests of the error exits' )
@@ -144,6 +144,6 @@
 *
       RETURN
 *
-*     End of AB_ZERRAC
+*     End of ZERRAC
 *
       END

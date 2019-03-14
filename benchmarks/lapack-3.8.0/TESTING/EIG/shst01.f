@@ -1,4 +1,4 @@
-*> \brief \b AB_SHST01
+*> \brief \b SHST01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SHST01( N, ILO, IHI, A, LDA, H, LDH, Q, LDQ, WORK,
+*       SUBROUTINE SHST01( N, ILO, IHI, A, LDA, H, LDH, Q, LDQ, WORK,
 *                          LWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -25,14 +25,14 @@
 *>
 *> \verbatim
 *>
-*> AB_SHST01 tests the reduction of a general matrix A to upper Hessenberg
+*> SHST01 tests the reduction of a general matrix A to upper Hessenberg
 *> form:  A = Q*H*Q'.  Two test ratios are computed;
 *>
 *> RESULT(1) = norm( A - Q*H*Q' ) / ( norm(A) * N * EPS )
 *> RESULT(2) = norm( I - Q'*Q ) / ( N * EPS )
 *>
 *> The matrix Q is assumed to be given explicitly as it would be
-*> following AB_SGEHRD + AB_SORGHR.
+*> following SGEHRD + SORGHR.
 *>
 *> In this version, ILO and IHI are not used and are assumed to be 1 and
 *> N, respectively.
@@ -77,7 +77,7 @@
 *> \verbatim
 *>          H is REAL array, dimension (LDH,N)
 *>          The upper Hessenberg matrix H from the reduction A = Q*H*Q'
-*>          as computed by AB_SGEHRD.  H is assumed to be zero below the
+*>          as computed by SGEHRD.  H is assumed to be zero below the
 *>          first subdiagonal.
 *> \endverbatim
 *>
@@ -91,7 +91,7 @@
 *> \verbatim
 *>          Q is REAL array, dimension (LDQ,N)
 *>          The orthogonal matrix Q from the reduction A = Q*H*Q' as
-*>          computed by AB_SGEHRD + AB_SORGHR.
+*>          computed by SGEHRD + SORGHR.
 *> \endverbatim
 *>
 *> \param[in] LDQ
@@ -131,7 +131,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_SHST01( N, ILO, IHI, A, LDA, H, LDH, Q, LDQ, WORK,
+      SUBROUTINE SHST01( N, ILO, IHI, A, LDA, H, LDH, Q, LDQ, WORK,
      $                   LWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -158,11 +158,11 @@
       REAL               ANORM, EPS, OVFL, SMLNUM, UNFL, WNORM
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH, AB_SLANGE
-      EXTERNAL           AB_SLAMCH, AB_SLANGE
+      REAL               SLAMCH, SLANGE
+      EXTERNAL           SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SGEMM, AB_SLABAD, AB_SLACPY, AB_SORT01
+      EXTERNAL           SGEMM, SLABAD, SLACPY, SORT01
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -177,10 +177,10 @@
          RETURN
       END IF
 *
-      UNFL = AB_SLAMCH( 'Safe minimum' )
-      EPS = AB_SLAMCH( 'Precision' )
+      UNFL = SLAMCH( 'Safe minimum' )
+      EPS = SLAMCH( 'Precision' )
       OVFL = ONE / UNFL
-      CALL AB_SLABAD( UNFL, OVFL )
+      CALL SLABAD( UNFL, OVFL )
       SMLNUM = UNFL*N / EPS
 *
 *     Test 1:  Compute norm( A - Q*H*Q' ) / ( norm(A) * N * EPS )
@@ -188,23 +188,22 @@
 *     Copy A to WORK
 *
       LDWORK = MAX( 1, N )
-      CALL AB_SLACPY( ' ', N, N, A, LDA, WORK, LDWORK )
+      CALL SLACPY( ' ', N, N, A, LDA, WORK, LDWORK )
 *
 *     Compute Q*H
 *
-      CALL AB_SGEMM( 'No transpose', 'No transpose', N, N, N, ONE, Q, LD
-     $Q,
+      CALL SGEMM( 'No transpose', 'No transpose', N, N, N, ONE, Q, LDQ,
      $            H, LDH, ZERO, WORK( LDWORK*N+1 ), LDWORK )
 *
 *     Compute A - Q*H*Q'
 *
-      CALL AB_SGEMM( 'No transpose', 'Transpose', N, N, N, -ONE,
+      CALL SGEMM( 'No transpose', 'Transpose', N, N, N, -ONE,
      $            WORK( LDWORK*N+1 ), LDWORK, Q, LDQ, ONE, WORK,
      $            LDWORK )
 *
-      ANORM = MAX( AB_SLANGE( '1', N, N, A, LDA, WORK( LDWORK*N+1 ) ),
+      ANORM = MAX( SLANGE( '1', N, N, A, LDA, WORK( LDWORK*N+1 ) ),
      $        UNFL )
-      WNORM = AB_SLANGE( '1', N, N, WORK, LDWORK, WORK( LDWORK*N+1 ) )
+      WNORM = SLANGE( '1', N, N, WORK, LDWORK, WORK( LDWORK*N+1 ) )
 *
 *     Note that RESULT(1) cannot overflow and is bounded by 1/(N*EPS)
 *
@@ -212,11 +211,10 @@
 *
 *     Test 2:  Compute norm( I - Q'*Q ) / ( N * EPS )
 *
-      CALL AB_SORT01( 'Columns', N, N, Q, LDQ, WORK, LWORK, RESULT( 2 ) 
-     $)
+      CALL SORT01( 'Columns', N, N, Q, LDQ, WORK, LWORK, RESULT( 2 ) )
 *
       RETURN
 *
-*     End of AB_SHST01
+*     End of SHST01
 *
       END

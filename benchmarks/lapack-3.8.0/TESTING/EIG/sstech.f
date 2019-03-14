@@ -1,4 +1,4 @@
-*> \brief \b AB_SSTECH
+*> \brief \b SSTECH
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SSTECH( N, A, B, EIG, TOL, WORK, INFO )
+*       SUBROUTINE SSTECH( N, A, B, EIG, TOL, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, N
@@ -25,13 +25,13 @@
 *> \verbatim
 *>
 *>    Let T be the tridiagonal matrix with diagonal entries A(1) ,...,
-*>    A(N) and offdiagonal entries B(1) ,..., B(N-1)).  AB_SSTECH checks to
+*>    A(N) and offdiagonal entries B(1) ,..., B(N-1)).  SSTECH checks to
 *>    see if EIG(1) ,..., EIG(N) are indeed accurate eigenvalues of T.
 *>    It does this by expanding each EIG(I) into an interval
 *>    [SVD(I) - EPS, SVD(I) + EPS], merging overlapping intervals if
 *>    any, and using Sturm sequences to count and verify whether each
 *>    resulting interval has the correct number of eigenvalues (using
-*>    AB_SSTECT).  Here EPS = TOL*MACHEPS*MAXEIG, where MACHEPS is the
+*>    SSTECT).  Here EPS = TOL*MACHEPS*MAXEIG, where MACHEPS is the
 *>    machine precision and MAXEIG is the absolute value of the largest
 *>    eigenvalue. If each interval contains the correct number of
 *>    eigenvalues, INFO = 0 is returned, otherwise INFO is the index of
@@ -99,7 +99,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_SSTECH( N, A, B, EIG, TOL, WORK, INFO )
+      SUBROUTINE SSTECH( N, A, B, EIG, TOL, WORK, INFO )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -125,11 +125,11 @@
       REAL               EMIN, EPS, LOWER, MX, TUPPR, UNFLEP, UPPER
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH
-      EXTERNAL           AB_SLAMCH
+      REAL               SLAMCH
+      EXTERNAL           SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SSTECT
+      EXTERNAL           SSTECT
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -152,8 +152,8 @@
 *
 *     Get machine constants
 *
-      EPS = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
-      UNFLEP = AB_SLAMCH( 'Safe minimum' ) / EPS
+      EPS = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
+      UNFLEP = SLAMCH( 'Safe minimum' ) / EPS
       EPS = TOL*EPS
 *
 *     Compute maximum absolute eigenvalue, error tolerance
@@ -214,8 +214,8 @@
 *
 *     Count singular values in interval [ LOWER, UPPER ]
 *
-      CALL AB_SSTECT( N, A, B, LOWER, NUML )
-      CALL AB_SSTECT( N, A, B, UPPER, NUMU )
+      CALL SSTECT( N, A, B, LOWER, NUML )
+      CALL SSTECT( N, A, B, UPPER, NUMU )
       COUNT = NUMU - NUML
       IF( COUNT.NE.BPNT-TPNT+1 ) THEN
 *
@@ -231,6 +231,6 @@
    80 CONTINUE
       RETURN
 *
-*     End of AB_SSTECH
+*     End of SSTECH
 *
       END

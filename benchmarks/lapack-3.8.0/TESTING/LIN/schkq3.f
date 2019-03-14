@@ -1,4 +1,4 @@
-*> \brief \b AB_SCHKQ3
+*> \brief \b SCHKQ3
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SCHKQ3( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVAL,
+*       SUBROUTINE SCHKQ3( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVAL,
 *                          THRESH, A, COPYA, S, TAU, WORK, IWORK,
 *                          NOUT )
 *
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SCHKQ3 tests AB_SGEQP3.
+*> SCHKQ3 tests SGEQP3.
 *> \endverbatim
 *
 *  Arguments:
@@ -149,8 +149,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_SCHKQ3( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVA
-     $L,
+      SUBROUTINE SCHKQ3( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVAL,
      $                   THRESH, A, COPYA, S, TAU, WORK, IWORK,
      $                   NOUT )
 *
@@ -193,13 +192,12 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH, AB_SQPT01, AB_SQRT11, AB_SQRT12
-      EXTERNAL           AB_SLAMCH, AB_SQPT01, AB_SQRT11, AB_SQRT12
+      REAL               SLAMCH, SQPT01, SQRT11, SQRT12
+      EXTERNAL           SLAMCH, SQPT01, SQRT11, SQRT12
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALAHD, AB_ALASUM, AB_ICOPY, AB_SGEQP3, AB_SL
-     $ACPY, AB_SLAORD,
-     $                   AB_SLASET, AB_SLATMS, AB_XLAENV
+      EXTERNAL           ALAHD, ALASUM, ICOPY, SGEQP3, SLACPY, SLAORD,
+     $                   SLASET, SLATMS, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -228,7 +226,7 @@
       DO 10 I = 1, 4
          ISEED( I ) = ISEEDY( I )
    10 CONTINUE
-      EPS = AB_SLAMCH( 'Epsilon' )
+      EPS = SLAMCH( 'Epsilon' )
       INFOT = 0
 *
       DO 90 IM = 1, NM
@@ -257,7 +255,7 @@
 *                 3:  geometric distribution of singular values
 *                 4:  first n/2 columns fixed
 *                 5:  last n/2 columns fixed
-*                 6:  every AB_SECOND column fixed
+*                 6:  every second column fixed
 *
                MODE = IMODE
                IF( IMODE.GT.3 )
@@ -270,12 +268,12 @@
                   IWORK( I ) = 0
    20          CONTINUE
                IF( IMODE.EQ.1 ) THEN
-                  CALL AB_SLASET( 'Full', M, N, ZERO, ZERO, COPYA, LDA )
+                  CALL SLASET( 'Full', M, N, ZERO, ZERO, COPYA, LDA )
                   DO 30 I = 1, MNMIN
                      S( I ) = ZERO
    30             CONTINUE
                ELSE
-                  CALL AB_SLATMS( M, N, 'Uniform', ISEED, 'Nonsymm', S,
+                  CALL SLATMS( M, N, 'Uniform', ISEED, 'Nonsymm', S,
      $                         MODE, ONE / EPS, ONE, M, N, 'No packing',
      $                         COPYA, LDA, WORK, INFO )
                   IF( IMODE.GE.4 ) THEN
@@ -296,7 +294,7 @@
                         IWORK( I ) = 1
    40                CONTINUE
                   END IF
-                  CALL AB_SLAORD( 'Decreasing', MNMIN, S, 1 )
+                  CALL SLAORD( 'Decreasing', MNMIN, S, 1 )
                END IF
 *
                DO 60 INB = 1, NNB
@@ -304,15 +302,15 @@
 *                 Do for each pair of values (NB,NX) in NBVAL and NXVAL.
 *
                   NB = NBVAL( INB )
-                  CALL AB_XLAENV( 1, NB )
+                  CALL XLAENV( 1, NB )
                   NX = NXVAL( INB )
-                  CALL AB_XLAENV( 3, NX )
+                  CALL XLAENV( 3, NX )
 *
 *                 Get a working copy of COPYA into A and a copy of
 *                 vector IWORK.
 *
-                  CALL AB_SLACPY( 'All', M, N, COPYA, LDA, A, LDA )
-                  CALL AB_ICOPY( N, IWORK( 1 ), 1, IWORK( N+1 ), 1 )
+                  CALL SLACPY( 'All', M, N, COPYA, LDA, A, LDA )
+                  CALL ICOPY( N, IWORK( 1 ), 1, IWORK( N+1 ), 1 )
 *
 *                 Compute the QR factorization with pivoting of A
 *
@@ -320,24 +318,23 @@
 *
 *                 Compute the QP3 factorization of A
 *
-                  SRNAMT = 'AB_SGEQP3'
-                  CALL AB_SGEQP3( M, N, A, LDA, IWORK( N+1 ), TAU, WORK,
+                  SRNAMT = 'SGEQP3'
+                  CALL SGEQP3( M, N, A, LDA, IWORK( N+1 ), TAU, WORK,
      $                         LW, INFO )
 *
 *                 Compute norm(svd(a) - svd(r))
 *
-                  RESULT( 1 ) = AB_SQRT12( M, N, A, LDA, S, WORK,
+                  RESULT( 1 ) = SQRT12( M, N, A, LDA, S, WORK,
      $                          LWORK )
 *
 *                 Compute norm( A*P - Q*R )
 *
-                  RESULT( 2 ) = AB_SQPT01( M, N, MNMIN, COPYA, A, LDA, T
-     $AU,
+                  RESULT( 2 ) = SQPT01( M, N, MNMIN, COPYA, A, LDA, TAU,
      $                          IWORK( N+1 ), WORK, LWORK )
 *
 *                 Compute Q'*Q
 *
-                  RESULT( 3 ) = AB_SQRT11( M, MNMIN, A, LDA, TAU, WORK,
+                  RESULT( 3 ) = SQRT11( M, MNMIN, A, LDA, TAU, WORK,
      $                          LWORK )
 *
 *                 Print information about the tests that did not pass
@@ -346,8 +343,8 @@
                   DO 50 K = 1, NTESTS
                      IF( RESULT( K ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL AB_ALAHD( NOUT, PATH )
-                        WRITE( NOUT, FMT = 9999 )'AB_SGEQP3', M, N, NB,
+     $                     CALL ALAHD( NOUT, PATH )
+                        WRITE( NOUT, FMT = 9999 )'SGEQP3', M, N, NB,
      $                     IMODE, K, RESULT( K )
                         NFAIL = NFAIL + 1
                      END IF
@@ -361,11 +358,11 @@
 *
 *     Print a summary of the results.
 *
-      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( 1X, A, ' M =', I5, ', N =', I5, ', NB =', I4, ', type ',
      $      I2, ', test ', I2, ', ratio =', G12.5 )
 *
-*     End of AB_SCHKQ3
+*     End of SCHKQ3
 *
       END

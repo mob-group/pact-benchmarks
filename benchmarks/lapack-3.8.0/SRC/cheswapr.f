@@ -1,4 +1,4 @@
-*> \brief \b AB_CHESWAPR applies an elementary permutation on the rows and columns of a Hermitian matrix.
+*> \brief \b CHESWAPR applies an elementary permutation on the rows and columns of a Hermitian matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CHESWAPR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CHESWAPR.f">
+*> Download CHESWAPR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cheswapr.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CHESWAPR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cheswapr.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CHESWAPR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cheswapr.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CHESWAPR( UPLO, N, A, LDA, I1, I2)
+*       SUBROUTINE CHESWAPR( UPLO, N, A, LDA, I1, I2)
 *
 *       .. Scalar Arguments ..
 *       CHARACTER        UPLO
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CHESWAPR applies an elementary permutation on the rows and the columns of
+*> CHESWAPR applies an elementary permutation on the rows and the columns of
 *> a hermitian matrix.
 *> \endverbatim
 *
@@ -59,7 +59,7 @@
 *> \verbatim
 *>          A is COMPLEX array, dimension (LDA,N)
 *>          On entry, the NB diagonal matrix D and the multipliers
-*>          used to obtain the factor U or L as computed by AB_CSYTRF.
+*>          used to obtain the factor U or L as computed by CSYTRF.
 *>
 *>          On exit, if INFO = 0, the (symmetric) inverse of the original
 *>          matrix.  If UPLO = 'U', the upper triangular part of the
@@ -84,7 +84,7 @@
 *> \param[in] I2
 *> \verbatim
 *>          I2 is INTEGER
-*>          Index of the AB_SECOND row to swap
+*>          Index of the second row to swap
 *> \endverbatim
 *
 *  Authors:
@@ -100,7 +100,7 @@
 *> \ingroup complexHEauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_CHESWAPR( UPLO, N, A, LDA, I1, I2)
+      SUBROUTINE CHESWAPR( UPLO, N, A, LDA, I1, I2)
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -123,23 +123,23 @@
       COMPLEX            TMP
 *
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CSWAP
+      EXTERNAL           CSWAP
 *     ..
 *     .. Executable Statements ..
 *
-      UPPER = AB_LSAME( UPLO, 'U' )
+      UPPER = LSAME( UPLO, 'U' )
       IF (UPPER) THEN
 *
 *         UPPER
 *         first swap
 *          - swap column I1 and I2 from I1 to I1-1
-         CALL AB_CSWAP( I1-1, A(1,I1), 1, A(1,I2), 1 )
+         CALL CSWAP( I1-1, A(1,I1), 1, A(1,I2), 1 )
 *
-*          AB_SECOND swap :
+*          second swap :
 *          - swap A(I1,I1) and A(I2,I2)
 *          - swap row I1 from I1+1 to I2-1 with col I2 from I1+1 to I2-1
 *          - swap A(I2,I1) and A(I1,I2)
@@ -170,9 +170,9 @@
 *         LOWER
 *         first swap
 *          - swap row I1 and I2 from 1 to I1-1
-         CALL AB_CSWAP ( I1-1, A(I1,1), LDA, A(I2,1), LDA )
+         CALL CSWAP ( I1-1, A(I1,1), LDA, A(I2,1), LDA )
 *
-*         AB_SECOND swap :
+*         second swap :
 *          - swap A(I1,I1) and A(I2,I2)
 *          - swap col I1 from I1+1 to I2-1 with row I2 from I1+1 to I2-1
 *          - swap A(I2,I1) and A(I1,I2)
@@ -199,5 +199,5 @@
 *
       ENDIF
 
-      END SUBROUTINE AB_CHESWAPR
+      END SUBROUTINE CHESWAPR
 

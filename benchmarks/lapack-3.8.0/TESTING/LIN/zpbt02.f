@@ -1,4 +1,4 @@
-*> \brief \b AB_ZPBT02
+*> \brief \b ZPBT02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZPBT02( UPLO, N, KD, NRHS, A, LDA, X, LDX, B, LDB,
+*       SUBROUTINE ZPBT02( UPLO, N, KD, NRHS, A, LDA, X, LDX, B, LDB,
 *                          RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZPBT02 computes the residual for a solution of a Hermitian banded
+*> ZPBT02 computes the residual for a solution of a Hermitian banded
 *> system of equations  A*x = b:
 *>    RESID = norm( B - A*X ) / ( norm(A) * norm(X) * EPS)
 *> where EPS is the machine precision.
@@ -72,7 +72,7 @@
 *>          UPLO = 'L', the lower triangular part of A is stored.  The
 *>          columns of the appropriate triangle are stored in the columns
 *>          of A and the diagonals of the triangle are stored in the rows
-*>          of A.  See AB_ZPBTRF for further details.
+*>          of A.  See ZPBTRF for further details.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -133,7 +133,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZPBT02( UPLO, N, KD, NRHS, A, LDA, X, LDX, B, LDB,
+      SUBROUTINE ZPBT02( UPLO, N, KD, NRHS, A, LDA, X, LDX, B, LDB,
      $                   RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -164,11 +164,11 @@
       DOUBLE PRECISION   ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH, AB_DZASUM, AB_ZLANHB
-      EXTERNAL           AB_DLAMCH, AB_DZASUM, AB_ZLANHB
+      DOUBLE PRECISION   DLAMCH, DZASUM, ZLANHB
+      EXTERNAL           DLAMCH, DZASUM, ZLANHB
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZHBMV
+      EXTERNAL           ZHBMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -184,8 +184,8 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
-      ANORM = AB_ZLANHB( '1', UPLO, N, KD, A, LDA, RWORK )
+      EPS = DLAMCH( 'Epsilon' )
+      ANORM = ZLANHB( '1', UPLO, N, KD, A, LDA, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -194,7 +194,7 @@
 *     Compute  B - A*X
 *
       DO 10 J = 1, NRHS
-         CALL AB_ZHBMV( UPLO, N, KD, -CONE, A, LDA, X( 1, J ), 1, CONE,
+         CALL ZHBMV( UPLO, N, KD, -CONE, A, LDA, X( 1, J ), 1, CONE,
      $               B( 1, J ), 1 )
    10 CONTINUE
 *
@@ -203,8 +203,8 @@
 *
       RESID = ZERO
       DO 20 J = 1, NRHS
-         BNORM = AB_DZASUM( N, B( 1, J ), 1 )
-         XNORM = AB_DZASUM( N, X( 1, J ), 1 )
+         BNORM = DZASUM( N, B( 1, J ), 1 )
+         XNORM = DZASUM( N, X( 1, J ), 1 )
          IF( XNORM.LE.ZERO ) THEN
             RESID = ONE / EPS
          ELSE
@@ -214,6 +214,6 @@
 *
       RETURN
 *
-*     End of AB_ZPBT02
+*     End of ZPBT02
 *
       END

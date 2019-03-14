@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLAGHE
+*> \brief \b ZLAGHE
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZLAGHE( N, K, D, A, LDA, ISEED, WORK, INFO )
+*       SUBROUTINE ZLAGHE( N, K, D, A, LDA, ISEED, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, K, LDA, N
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZLAGHE generates a complex hermitian matrix A, by pre- and post-
+*> ZLAGHE generates a complex hermitian matrix A, by pre- and post-
 *> multiplying a real diagonal matrix D with a random unitary matrix:
 *> A = U*D*U'. The semi-bandwidth may then be reduced to k by additional
 *> unitary transformations.
@@ -100,7 +100,7 @@
 *> \ingroup complex16_matgen
 *
 *  =====================================================================
-      SUBROUTINE AB_ZLAGHE( N, K, D, A, LDA, ISEED, WORK, INFO )
+      SUBROUTINE ZLAGHE( N, K, D, A, LDA, ISEED, WORK, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -130,14 +130,13 @@
       COMPLEX*16         ALPHA, TAU, WA, WB
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZAXPY, AB_ZGEMV, AB_ZGERC, AB_ZHE
-     $MV, AB_AB_ZHER2,
-     $                   AB_ZLARNV, AB_ZSCAL
+      EXTERNAL           XERBLA, ZAXPY, ZGEMV, ZGERC, ZHEMV, ZHER2,
+     $                   ZLARNV, ZSCAL
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DZNRM2
-      COMPLEX*16         AB_ZDOTC
-      EXTERNAL           AB_DZNRM2, AB_ZDOTC
+      DOUBLE PRECISION   DZNRM2
+      COMPLEX*16         ZDOTC
+      EXTERNAL           DZNRM2, ZDOTC
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCONJG, MAX
@@ -155,7 +154,7 @@
          INFO = -5
       END IF
       IF( INFO.LT.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZLAGHE', -INFO )
+         CALL XERBLA( 'ZLAGHE', -INFO )
          RETURN
       END IF
 *
@@ -176,14 +175,14 @@
 *
 *        generate random reflection
 *
-         CALL AB_ZLARNV( 3, ISEED, N-I+1, WORK )
-         WN = AB_DZNRM2( N-I+1, WORK, 1 )
+         CALL ZLARNV( 3, ISEED, N-I+1, WORK )
+         WN = DZNRM2( N-I+1, WORK, 1 )
          WA = ( WN / ABS( WORK( 1 ) ) )*WORK( 1 )
          IF( WN.EQ.ZERO ) THEN
             TAU = ZERO
          ELSE
             WB = WORK( 1 ) + WA
-            CALL AB_ZSCAL( N-I, ONE / WB, WORK( 2 ), 1 )
+            CALL ZSCAL( N-I, ONE / WB, WORK( 2 ), 1 )
             WORK( 1 ) = ONE
             TAU = DBLE( WB / WA )
          END IF
@@ -193,19 +192,17 @@
 *
 *        compute  y := tau * A * u
 *
-         CALL AB_ZHEMV( 'Lower', N-I+1, TAU, A( I, I ), LDA, WORK, 1, ZE
-     $RO,
+         CALL ZHEMV( 'Lower', N-I+1, TAU, A( I, I ), LDA, WORK, 1, ZERO,
      $               WORK( N+1 ), 1 )
 *
 *        compute  v := y - 1/2 * tau * ( y, u ) * u
 *
-         ALPHA = -HALF*TAU*AB_ZDOTC( N-I+1, WORK( N+1 ), 1, WORK, 1 )
-         CALL AB_ZAXPY( N-I+1, ALPHA, WORK, 1, WORK( N+1 ), 1 )
+         ALPHA = -HALF*TAU*ZDOTC( N-I+1, WORK( N+1 ), 1, WORK, 1 )
+         CALL ZAXPY( N-I+1, ALPHA, WORK, 1, WORK( N+1 ), 1 )
 *
 *        apply the transformation as a rank-2 update to A(i:n,i:n)
 *
-         CALL AB_AB_ZHER2( 'Lower', N-I+1, -ONE, WORK, 1, WORK( N+1 ), 1
-     $,
+         CALL ZHER2( 'Lower', N-I+1, -ONE, WORK, 1, WORK( N+1 ), 1,
      $               A( I, I ), LDA )
    40 CONTINUE
 *
@@ -215,40 +212,39 @@
 *
 *        generate reflection to annihilate A(k+i+1:n,i)
 *
-         WN = AB_DZNRM2( N-K-I+1, A( K+I, I ), 1 )
+         WN = DZNRM2( N-K-I+1, A( K+I, I ), 1 )
          WA = ( WN / ABS( A( K+I, I ) ) )*A( K+I, I )
          IF( WN.EQ.ZERO ) THEN
             TAU = ZERO
          ELSE
             WB = A( K+I, I ) + WA
-            CALL AB_ZSCAL( N-K-I, ONE / WB, A( K+I+1, I ), 1 )
+            CALL ZSCAL( N-K-I, ONE / WB, A( K+I+1, I ), 1 )
             A( K+I, I ) = ONE
             TAU = DBLE( WB / WA )
          END IF
 *
 *        apply reflection to A(k+i:n,i+1:k+i-1) from the left
 *
-         CALL AB_ZGEMV( 'Conjugate transpose', N-K-I+1, K-1, ONE,
+         CALL ZGEMV( 'Conjugate transpose', N-K-I+1, K-1, ONE,
      $               A( K+I, I+1 ), LDA, A( K+I, I ), 1, ZERO, WORK, 1 )
-         CALL AB_ZGERC( N-K-I+1, K-1, -TAU, A( K+I, I ), 1, WORK, 1,
+         CALL ZGERC( N-K-I+1, K-1, -TAU, A( K+I, I ), 1, WORK, 1,
      $               A( K+I, I+1 ), LDA )
 *
 *        apply reflection to A(k+i:n,k+i:n) from the left and the right
 *
 *        compute  y := tau * A * u
 *
-         CALL AB_ZHEMV( 'Lower', N-K-I+1, TAU, A( K+I, K+I ), LDA,
+         CALL ZHEMV( 'Lower', N-K-I+1, TAU, A( K+I, K+I ), LDA,
      $               A( K+I, I ), 1, ZERO, WORK, 1 )
 *
 *        compute  v := y - 1/2 * tau * ( y, u ) * u
 *
-         ALPHA = -HALF*TAU*AB_ZDOTC( N-K-I+1, WORK, 1, A( K+I, I ), 1 )
-         CALL AB_ZAXPY( N-K-I+1, ALPHA, A( K+I, I ), 1, WORK, 1 )
+         ALPHA = -HALF*TAU*ZDOTC( N-K-I+1, WORK, 1, A( K+I, I ), 1 )
+         CALL ZAXPY( N-K-I+1, ALPHA, A( K+I, I ), 1, WORK, 1 )
 *
 *        apply hermitian rank-2 update to A(k+i:n,k+i:n)
 *
-         CALL AB_AB_ZHER2( 'Lower', N-K-I+1, -ONE, A( K+I, I ), 1, WORK,
-     $ 1,
+         CALL ZHER2( 'Lower', N-K-I+1, -ONE, A( K+I, I ), 1, WORK, 1,
      $               A( K+I, K+I ), LDA )
 *
          A( K+I, I ) = -WA
@@ -266,6 +262,6 @@
    80 CONTINUE
       RETURN
 *
-*     End of AB_ZLAGHE
+*     End of ZLAGHE
 *
       END

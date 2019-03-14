@@ -1,4 +1,4 @@
-*> \brief \b AB_ZSPT03
+*> \brief \b ZSPT03
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZSPT03( UPLO, N, A, AINV, WORK, LDW, RWORK, RCOND,
+*       SUBROUTINE ZSPT03( UPLO, N, A, AINV, WORK, LDW, RWORK, RCOND,
 *                          RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZSPT03 computes the residual for a complex symmetric packed matrix
+*> ZSPT03 computes the residual for a complex symmetric packed matrix
 *> times its inverse:
 *>    norm( I - A*AINV ) / ( N * norm(A) * norm(AINV) * EPS ),
 *> where EPS is the machine epsilon.
@@ -107,7 +107,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZSPT03( UPLO, N, A, AINV, WORK, LDW, RWORK, RCOND,
+      SUBROUTINE ZSPT03( UPLO, N, A, AINV, WORK, LDW, RWORK, RCOND,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -137,11 +137,10 @@
       COMPLEX*16         T
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE, AB_ZLANSP
-      COMPLEX*16         AB_ZDOTU
-      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_ZLANGE, AB_ZLANSP, AB_Z
-     $DOTU
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH, ZLANGE, ZLANSP
+      COMPLEX*16         ZDOTU
+      EXTERNAL           LSAME, DLAMCH, ZLANGE, ZLANSP, ZDOTU
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE
@@ -158,9 +157,9 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0 or AINVNM = 0.
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
-      ANORM = AB_ZLANSP( '1', UPLO, N, A, RWORK )
-      AINVNM = AB_ZLANSP( '1', UPLO, N, AINV, RWORK )
+      EPS = DLAMCH( 'Epsilon' )
+      ANORM = ZLANSP( '1', UPLO, N, A, RWORK )
+      AINVNM = ZLANSP( '1', UPLO, N, AINV, RWORK )
       IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
          RCOND = ZERO
          RESID = ONE / EPS
@@ -172,7 +171,7 @@
 *     Each element of - A * AINV is computed by taking the dot product
 *     of a row of A with a column of AINV.
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
          DO 70 I = 1, N
             ICOL = ( ( I-1 )*I ) / 2 + 1
 *
@@ -180,7 +179,7 @@
 *
             DO 30 J = 1, I
                JCOL = ( ( J-1 )*J ) / 2 + 1
-               T = AB_ZDOTU( J, A( ICOL ), 1, AINV( JCOL ), 1 )
+               T = ZDOTU( J, A( ICOL ), 1, AINV( JCOL ), 1 )
                JCOL = JCOL + 2*J - 1
                KCOL = ICOL - 1
                DO 10 K = J + 1, I
@@ -200,7 +199,7 @@
 *
             DO 60 J = I + 1, N
                JCOL = ( ( J-1 )*J ) / 2 + 1
-               T = AB_ZDOTU( I, A( ICOL ), 1, AINV( JCOL ), 1 )
+               T = ZDOTU( I, A( ICOL ), 1, AINV( JCOL ), 1 )
                JCOL = JCOL - 1
                KCOL = ICOL + 2*I - 1
                DO 40 K = I + 1, J
@@ -228,7 +227,7 @@
             ICOL = NALL - ( ( N-I+1 )*( N-I+2 ) ) / 2 + 1
             DO 100 J = 1, I
                JCOL = NALL - ( ( N-J )*( N-J+1 ) ) / 2 - ( N-I )
-               T = AB_ZDOTU( N-I+1, A( ICOL ), 1, AINV( JCOL ), 1 )
+               T = ZDOTU( N-I+1, A( ICOL ), 1, AINV( JCOL ), 1 )
                KCOL = I
                JCOL = J
                DO 80 K = 1, J - 1
@@ -249,7 +248,7 @@
             ICOL = NALL - ( ( N-I )*( N-I+1 ) ) / 2
             DO 130 J = I + 1, N
                JCOL = NALL - ( ( N-J+1 )*( N-J+2 ) ) / 2 + 1
-               T = AB_ZDOTU( N-J+1, A( ICOL-N+J ), 1, AINV( JCOL ), 1 )
+               T = ZDOTU( N-J+1, A( ICOL-N+J ), 1, AINV( JCOL ), 1 )
                KCOL = I
                JCOL = J
                DO 110 K = 1, I - 1
@@ -275,12 +274,12 @@
 *
 *     Compute norm(I - A*AINV) / (N * norm(A) * norm(AINV) * EPS)
 *
-      RESID = AB_ZLANGE( '1', N, N, WORK, LDW, RWORK )
+      RESID = ZLANGE( '1', N, N, WORK, LDW, RWORK )
 *
       RESID = ( ( RESID*RCOND ) / EPS ) / DBLE( N )
 *
       RETURN
 *
-*     End of AB_ZSPT03
+*     End of ZSPT03
 *
       END

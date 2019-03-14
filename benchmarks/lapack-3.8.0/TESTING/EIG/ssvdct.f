@@ -1,4 +1,4 @@
-*> \brief \b AB_SSVDCT
+*> \brief \b SSVDCT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SSVDCT( N, S, E, SHIFT, NUM )
+*       SUBROUTINE SSVDCT( N, S, E, SHIFT, NUM )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            N, NUM
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SSVDCT counts the number NUM of eigenvalues of a 2*N by 2*N
+*> SSVDCT counts the number NUM of eigenvalues of a 2*N by 2*N
 *> tridiagonal matrix T which are less than or equal to SHIFT.  T is
 *> formed by putting zeros on the diagonal and making the off-diagonals
 *> equal to S(1), E(1), S(2), E(2), ... , E(N-1), S(N).  If SHIFT is
@@ -85,7 +85,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_SSVDCT( N, S, E, SHIFT, NUM )
+      SUBROUTINE SSVDCT( N, S, E, SHIFT, NUM )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -114,8 +114,8 @@
      $                   TOM, U, UNFL
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH
-      EXTERNAL           AB_SLAMCH
+      REAL               SLAMCH
+      EXTERNAL           SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -124,7 +124,7 @@
 *
 *     Get machine constants
 *
-      UNFL = 2*AB_SLAMCH( 'Safe minimum' )
+      UNFL = 2*SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
 *
 *     Find largest entry
@@ -209,6 +209,6 @@
    20 CONTINUE
       RETURN
 *
-*     End of AB_SSVDCT
+*     End of SSVDCT
 *
       END

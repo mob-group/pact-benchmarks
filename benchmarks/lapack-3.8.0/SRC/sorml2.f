@@ -1,4 +1,4 @@
-*> \brief \b AB_SORML2 multiplies a general matrix by the orthogonal matrix from a LQ factorization determined by AB_AB_SGELQF (unblocked algorithm).
+*> \brief \b SORML2 multiplies a general matrix by the orthogonal matrix from a LQ factorization determined by sgelqf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SORML2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SORML2.f">
+*> Download SORML2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sorml2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SORML2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sorml2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SORML2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorml2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SORML2( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,
+*       SUBROUTINE SORML2( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,
 *                          WORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SORML2 overwrites the general real m by n matrix C with
+*> SORML2 overwrites the general real m by n matrix C with
 *>
 *>       Q * C  if SIDE = 'L' and TRANS = 'N', or
 *>
@@ -50,7 +50,7 @@
 *>
 *>       Q = H(k) . . . H(2) H(1)
 *>
-*> as returned by AB_AB_SGELQF. Q is of order m if SIDE = 'L' and of order n
+*> as returned by SGELQF. Q is of order m if SIDE = 'L' and of order n
 *> if SIDE = 'R'.
 *> \endverbatim
 *
@@ -99,7 +99,7 @@
 *>                               (LDA,N) if SIDE = 'R'
 *>          The i-th row must contain the vector which defines the
 *>          elementary reflector H(i), for i = 1,2,...,k, as returned by
-*>          AB_AB_SGELQF in the first k rows of its array argument A.
+*>          SGELQF in the first k rows of its array argument A.
 *>          A is modified by the routine but restored on exit.
 *> \endverbatim
 *>
@@ -113,7 +113,7 @@
 *> \verbatim
 *>          TAU is REAL array, dimension (K)
 *>          TAU(i) must contain the scalar factor of the elementary
-*>          reflector H(i), as returned by AB_AB_SGELQF.
+*>          reflector H(i), as returned by SGELQF.
 *> \endverbatim
 *>
 *> \param[in,out] C
@@ -156,7 +156,7 @@
 *> \ingroup realOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_SORML2( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,
+      SUBROUTINE SORML2( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,
      $                   WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -184,11 +184,11 @@
       REAL               AII
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SLARF, AB_XERBLA
+      EXTERNAL           SLARF, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -198,8 +198,8 @@
 *     Test the input arguments
 *
       INFO = 0
-      LEFT = AB_LSAME( SIDE, 'L' )
-      NOTRAN = AB_LSAME( TRANS, 'N' )
+      LEFT = LSAME( SIDE, 'L' )
+      NOTRAN = LSAME( TRANS, 'N' )
 *
 *     NQ is the order of Q
 *
@@ -208,9 +208,9 @@
       ELSE
          NQ = N
       END IF
-      IF( .NOT.LEFT .AND. .NOT.AB_LSAME( SIDE, 'R' ) ) THEN
+      IF( .NOT.LEFT .AND. .NOT.LSAME( SIDE, 'R' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) ) THEN
+      ELSE IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) ) THEN
          INFO = -2
       ELSE IF( M.LT.0 ) THEN
          INFO = -3
@@ -224,7 +224,7 @@
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SORML2', -INFO )
+         CALL XERBLA( 'SORML2', -INFO )
          RETURN
       END IF
 *
@@ -271,12 +271,12 @@
 *
          AII = A( I, I )
          A( I, I ) = ONE
-         CALL AB_SLARF( SIDE, MI, NI, A( I, I ), LDA, TAU( I ),
+         CALL SLARF( SIDE, MI, NI, A( I, I ), LDA, TAU( I ),
      $               C( IC, JC ), LDC, WORK )
          A( I, I ) = AII
    10 CONTINUE
       RETURN
 *
-*     End of AB_SORML2
+*     End of SORML2
 *
       END

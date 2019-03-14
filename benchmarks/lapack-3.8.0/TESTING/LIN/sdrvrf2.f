@@ -1,4 +1,4 @@
-*> \brief \b AB_SDRVRF2
+*> \brief \b SDRVRF2
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SDRVRF2( NOUT, NN, NVAL, A, LDA, ARF, AP, ASAV  )
+*       SUBROUTINE SDRVRF2( NOUT, NN, NVAL, A, LDA, ARF, AP, ASAV  )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDA, NN, NOUT
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SDRVRF2 tests the LAPACK RFP conversion routines.
+*> SDRVRF2 tests the LAPACK RFP conversion routines.
 *> \endverbatim
 *
 *  Arguments:
@@ -87,7 +87,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_SDRVRF2( NOUT, NN, NVAL, A, LDA, ARF, AP, ASAV  )
+      SUBROUTINE SDRVRF2( NOUT, NN, NVAL, A, LDA, ARF, AP, ASAV  )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -115,12 +115,11 @@
       INTEGER            ISEED( 4 ), ISEEDY( 4 )
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLARND
-      EXTERNAL           AB_SLARND
+      REAL               SLARND
+      EXTERNAL           SLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_STFTTR, AB_STFTTP, AB_STRTTF, AB_STRTTP, AB_
-     $STPTTR, AB_STPTTF
+      EXTERNAL           STFTTR, STFTTP, STRTTF, STRTTP, STPTTR, STPTTF
 *     ..
 *     .. Scalars in Common ..
       CHARACTER*32       SRNAMT
@@ -166,18 +165,18 @@
 *
                DO J = 1, N
                   DO I = 1, N
-                     A( I, J) = AB_SLARND( 2, ISEED )
+                     A( I, J) = SLARND( 2, ISEED )
                   END DO
                END DO
 *
-               SRNAMT = 'AB_DTRTTF'
-               CALL AB_STRTTF( CFORM, UPLO, N, A, LDA, ARF, INFO )
+               SRNAMT = 'DTRTTF'
+               CALL STRTTF( CFORM, UPLO, N, A, LDA, ARF, INFO )
 *
-               SRNAMT = 'AB_DTFTTP'
-               CALL AB_STFTTP( CFORM, UPLO, N, ARF, AP, INFO )
+               SRNAMT = 'DTFTTP'
+               CALL STFTTP( CFORM, UPLO, N, ARF, AP, INFO )
 *
-               SRNAMT = 'AB_DTPTTR'
-               CALL AB_STPTTR( UPLO, N, AP, ASAV, LDA, INFO )
+               SRNAMT = 'DTPTTR'
+               CALL STPTTR( UPLO, N, AP, ASAV, LDA, INFO )
 *
                OK1 = .TRUE.
                IF ( LOWER ) THEN
@@ -200,14 +199,14 @@
 *
                NRUN = NRUN + 1
 *
-               SRNAMT = 'AB_DTRTTP'
-               CALL AB_STRTTP( UPLO, N, A, LDA, AP, INFO )
+               SRNAMT = 'DTRTTP'
+               CALL STRTTP( UPLO, N, A, LDA, AP, INFO )
 *
-               SRNAMT = 'AB_DTPTTF'
-               CALL AB_STPTTF( CFORM, UPLO, N, AP, ARF, INFO )
+               SRNAMT = 'DTPTTF'
+               CALL STPTTF( CFORM, UPLO, N, AP, ARF, INFO )
 *
-               SRNAMT = 'AB_DTFTTR'
-               CALL AB_STFTTR( CFORM, UPLO, N, ARF, ASAV, LDA, INFO )
+               SRNAMT = 'DTFTTR'
+               CALL STFTTR( CFORM, UPLO, N, ARF, ASAV, LDA, INFO )
 *
                OK2 = .TRUE.
                IF ( LOWER ) THEN
@@ -260,6 +259,6 @@
 *
       RETURN
 *
-*     End of AB_SDRVRF2
+*     End of SDRVRF2
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLAROR
+*> \brief \b ZLAROR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZLAROR( SIDE, INIT, M, N, A, LDA, ISEED, X, INFO )
+*       SUBROUTINE ZLAROR( SIDE, INIT, M, N, A, LDA, ISEED, X, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          INIT, SIDE
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*>    AB_ZLAROR pre- or post-multiplies an M by N matrix A by a random
+*>    ZLAROR pre- or post-multiplies an M by N matrix A by a random
 *>    unitary matrix U, overwriting A. A may optionally be
 *>    initialized to the identity matrix before multiplying by U.
 *>    U is generated using the method of G.W. Stewart
@@ -58,7 +58,7 @@
 *>
 *>           INIT = 'I' may be used to generate square (i.e., unitary)
 *>           or rectangular orthogonal matrices (orthogonality being
-*>           in the sense of AB_ZDOTC):
+*>           in the sense of ZDOTC):
 *>
 *>           For square matrices, M=N, and SIDE many be either 'L' or
 *>           'R'; the rows will be orthogonal to each other, as will the
@@ -114,7 +114,7 @@
 *>           congruential sequence limited to small integers, and so
 *>           should produce machine independent random numbers. The
 *>           values of ISEED are changed on exit, and can be used in the
-*>           next call to AB_ZLAROR to continue the same random number
+*>           next call to ZLAROR to continue the same random number
 *>           sequence.
 *>           Modified.
 *> \endverbatim
@@ -134,7 +134,7 @@
 *>          INFO is INTEGER
 *>           An error flag.  It is set to:
 *>            0  if no error.
-*>            1  if AB_ZLARND returned a bad random number (installation
+*>            1  if ZLARND returned a bad random number (installation
 *>               problem)
 *>           -1  if SIDE is not L, R, C, or T.
 *>           -3  if M is negative.
@@ -156,7 +156,7 @@
 *> \ingroup complex16_matgen
 *
 *  =====================================================================
-      SUBROUTINE AB_ZLAROR( SIDE, INIT, M, N, A, LDA, ISEED, X, INFO )
+      SUBROUTINE ZLAROR( SIDE, INIT, M, N, A, LDA, ISEED, X, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -188,14 +188,13 @@
       COMPLEX*16         CSIGN, XNORMS
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DZNRM2
-      COMPLEX*16         AB_ZLARND
-      EXTERNAL           AB_LSAME, AB_DZNRM2, AB_ZLARND
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DZNRM2
+      COMPLEX*16         ZLARND
+      EXTERNAL           LSAME, DZNRM2, ZLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZGEMV, AB_ZGERC, AB_ZLACGV, AB_ZL
-     $ASET, AB_ZSCAL
+      EXTERNAL           XERBLA, ZGEMV, ZGERC, ZLACGV, ZLASET, ZSCAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DCMPLX, DCONJG
@@ -207,13 +206,13 @@
      $   RETURN
 *
       ITYPE = 0
-      IF( AB_LSAME( SIDE, 'L' ) ) THEN
+      IF( LSAME( SIDE, 'L' ) ) THEN
          ITYPE = 1
-      ELSE IF( AB_LSAME( SIDE, 'R' ) ) THEN
+      ELSE IF( LSAME( SIDE, 'R' ) ) THEN
          ITYPE = 2
-      ELSE IF( AB_LSAME( SIDE, 'C' ) ) THEN
+      ELSE IF( LSAME( SIDE, 'C' ) ) THEN
          ITYPE = 3
-      ELSE IF( AB_LSAME( SIDE, 'T' ) ) THEN
+      ELSE IF( LSAME( SIDE, 'T' ) ) THEN
          ITYPE = 4
       END IF
 *
@@ -229,7 +228,7 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZLAROR', -INFO )
+         CALL XERBLA( 'ZLAROR', -INFO )
          RETURN
       END IF
 *
@@ -241,13 +240,13 @@
 *
 *     Initialize A to the identity matrix if desired
 *
-      IF( AB_LSAME( INIT, 'I' ) )
-     $   CALL AB_ZLASET( 'Full', M, N, CZERO, CONE, A, LDA )
+      IF( LSAME( INIT, 'I' ) )
+     $   CALL ZLASET( 'Full', M, N, CZERO, CONE, A, LDA )
 *
 *     If no rotation possible, still multiply by
 *     a random complex number from the circle |x| = 1
 *
-*      2)      Compute Rotation by computing HousehoAB_LDEr
+*      2)      Compute Rotation by computing Householder
 *              Transformations H(2), H(3), ..., H(n).  Note that the
 *              order in which they are computed is irrelevant.
 *
@@ -261,12 +260,12 @@
 *        Generate independent normal( 0, 1 ) random numbers
 *
          DO 20 J = KBEG, NXFRM
-            X( J ) = AB_ZLARND( 3, ISEED )
+            X( J ) = ZLARND( 3, ISEED )
    20    CONTINUE
 *
-*        Generate a HousehoAB_LDEr transformation from the random vector X
+*        Generate a Householder transformation from the random vector X
 *
-         XNORM = AB_DZNRM2( IXFRM, X( KBEG ), 1 )
+         XNORM = DZNRM2( IXFRM, X( KBEG ), 1 )
          XABS = ABS( X( KBEG ) )
          IF( XABS.NE.CZERO ) THEN
             CSIGN = X( KBEG ) / XABS
@@ -278,22 +277,22 @@
          FACTOR = XNORM*( XNORM+XABS )
          IF( ABS( FACTOR ).LT.TOOSML ) THEN
             INFO = 1
-            CALL AB_XERBLA( 'AB_ZLAROR', -INFO )
+            CALL XERBLA( 'ZLAROR', -INFO )
             RETURN
          ELSE
             FACTOR = ONE / FACTOR
          END IF
          X( KBEG ) = X( KBEG ) + XNORMS
 *
-*        Apply HousehoAB_LDEr transformation to A
+*        Apply Householder transformation to A
 *
          IF( ITYPE.EQ.1 .OR. ITYPE.EQ.3 .OR. ITYPE.EQ.4 ) THEN
 *
 *           Apply H(k) on the left of A
 *
-            CALL AB_ZGEMV( 'C', IXFRM, N, CONE, A( KBEG, 1 ), LDA,
+            CALL ZGEMV( 'C', IXFRM, N, CONE, A( KBEG, 1 ), LDA,
      $                  X( KBEG ), 1, CZERO, X( 2*NXFRM+1 ), 1 )
-            CALL AB_ZGERC( IXFRM, N, -DCMPLX( FACTOR ), X( KBEG ), 1,
+            CALL ZGERC( IXFRM, N, -DCMPLX( FACTOR ), X( KBEG ), 1,
      $                  X( 2*NXFRM+1 ), 1, A( KBEG, 1 ), LDA )
 *
          END IF
@@ -303,19 +302,18 @@
 *           Apply H(k)* (or H(k)') on the right of A
 *
             IF( ITYPE.EQ.4 ) THEN
-               CALL AB_ZLACGV( IXFRM, X( KBEG ), 1 )
+               CALL ZLACGV( IXFRM, X( KBEG ), 1 )
             END IF
 *
-            CALL AB_ZGEMV( 'N', M, IXFRM, CONE, A( 1, KBEG ), LDA,
+            CALL ZGEMV( 'N', M, IXFRM, CONE, A( 1, KBEG ), LDA,
      $                  X( KBEG ), 1, CZERO, X( 2*NXFRM+1 ), 1 )
-            CALL AB_ZGERC( M, IXFRM, -DCMPLX( FACTOR ), X( 2*NXFRM+1 ), 
-     $1,
+            CALL ZGERC( M, IXFRM, -DCMPLX( FACTOR ), X( 2*NXFRM+1 ), 1,
      $                  X( KBEG ), 1, A( 1, KBEG ), LDA )
 *
          END IF
    30 CONTINUE
 *
-      X( 1 ) = AB_ZLARND( 3, ISEED )
+      X( 1 ) = ZLARND( 3, ISEED )
       XABS = ABS( X( 1 ) )
       IF( XABS.NE.ZERO ) THEN
          CSIGN = X( 1 ) / XABS
@@ -328,25 +326,24 @@
 *
       IF( ITYPE.EQ.1 .OR. ITYPE.EQ.3 .OR. ITYPE.EQ.4 ) THEN
          DO 40 IROW = 1, M
-            CALL AB_ZSCAL( N, DCONJG( X( NXFRM+IROW ) ), A( IROW, 1 ),
+            CALL ZSCAL( N, DCONJG( X( NXFRM+IROW ) ), A( IROW, 1 ),
      $                  LDA )
    40    CONTINUE
       END IF
 *
       IF( ITYPE.EQ.2 .OR. ITYPE.EQ.3 ) THEN
          DO 50 JCOL = 1, N
-            CALL AB_ZSCAL( M, X( NXFRM+JCOL ), A( 1, JCOL ), 1 )
+            CALL ZSCAL( M, X( NXFRM+JCOL ), A( 1, JCOL ), 1 )
    50    CONTINUE
       END IF
 *
       IF( ITYPE.EQ.4 ) THEN
          DO 60 JCOL = 1, N
-            CALL AB_ZSCAL( M, DCONJG( X( NXFRM+JCOL ) ), A( 1, JCOL ), 1
-     $ )
+            CALL ZSCAL( M, DCONJG( X( NXFRM+JCOL ) ), A( 1, JCOL ), 1 )
    60    CONTINUE
       END IF
       RETURN
 *
-*     End of AB_ZLAROR
+*     End of ZLAROR
 *
       END

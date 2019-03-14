@@ -1,4 +1,4 @@
-*> \brief \b AB_ZGETRF
+*> \brief \b ZGETRF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZGETRF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZGETRF.f">
+*> Download ZGETRF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgetrf.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZGETRF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgetrf.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZGETRF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgetrf.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZGETRF( M, N, A, LDA, IPIV, INFO )
+*       SUBROUTINE ZGETRF( M, N, A, LDA, IPIV, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, M, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZGETRF computes an LU factorization of a general M-by-N matrix A
+*> ZGETRF computes an LU factorization of a general M-by-N matrix A
 *> using partial pivoting with row interchanges.
 *>
 *> The factorization has the form
@@ -106,7 +106,7 @@
 *> \ingroup complex16GEcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_ZGETRF( M, N, A, LDA, IPIV, INFO )
+      SUBROUTINE ZGETRF( M, N, A, LDA, IPIV, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -131,12 +131,11 @@
       INTEGER            I, IINFO, J, JB, NB
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZGEMM, AB_ZGETRF2, AB_ZLASWP, AB_
-     $ZTRSM
+      EXTERNAL           XERBLA, ZGEMM, ZGETRF2, ZLASWP, ZTRSM
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_ILAENV
+      INTEGER            ILAENV
+      EXTERNAL           ILAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -154,7 +153,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZGETRF', -INFO )
+         CALL XERBLA( 'ZGETRF', -INFO )
          RETURN
       END IF
 *
@@ -165,12 +164,12 @@
 *
 *     Determine the block size for this environment.
 *
-      NB = AB_ILAENV( 1, 'AB_ZGETRF', ' ', M, N, -1, -1 )
+      NB = ILAENV( 1, 'ZGETRF', ' ', M, N, -1, -1 )
       IF( NB.LE.1 .OR. NB.GE.MIN( M, N ) ) THEN
 *
 *        Use unblocked code.
 *
-         CALL AB_ZGETRF2( M, N, A, LDA, IPIV, INFO )
+         CALL ZGETRF2( M, N, A, LDA, IPIV, INFO )
       ELSE
 *
 *        Use blocked code.
@@ -181,8 +180,7 @@
 *           Factor diagonal and subdiagonal blocks and test for exact
 *           singularity.
 *
-            CALL AB_ZGETRF2( M-J+1, JB, A( J, J ), LDA, IPIV( J ), IINFO
-     $ )
+            CALL ZGETRF2( M-J+1, JB, A( J, J ), LDA, IPIV( J ), IINFO )
 *
 *           Adjust INFO and the pivot indices.
 *
@@ -194,27 +192,25 @@
 *
 *           Apply interchanges to columns 1:J-1.
 *
-            CALL AB_ZLASWP( J-1, A, LDA, J, J+JB-1, IPIV, 1 )
+            CALL ZLASWP( J-1, A, LDA, J, J+JB-1, IPIV, 1 )
 *
             IF( J+JB.LE.N ) THEN
 *
 *              Apply interchanges to columns J+JB:N.
 *
-               CALL AB_ZLASWP( N-J-JB+1, A( 1, J+JB ), LDA, J, J+JB-1,
+               CALL ZLASWP( N-J-JB+1, A( 1, J+JB ), LDA, J, J+JB-1,
      $                      IPIV, 1 )
 *
 *              Compute block row of U.
 *
-               CALL AB_ZTRSM( 'Left', 'Lower', 'No transpose', 'Unit', J
-     $B,
+               CALL ZTRSM( 'Left', 'Lower', 'No transpose', 'Unit', JB,
      $                     N-J-JB+1, ONE, A( J, J ), LDA, A( J, J+JB ),
      $                     LDA )
                IF( J+JB.LE.M ) THEN
 *
 *                 Update trailing submatrix.
 *
-                  CALL AB_ZGEMM( 'No transpose', 'No transpose', M-J-JB+
-     $1,
+                  CALL ZGEMM( 'No transpose', 'No transpose', M-J-JB+1,
      $                        N-J-JB+1, JB, -ONE, A( J+JB, J ), LDA,
      $                        A( J, J+JB ), LDA, ONE, A( J+JB, J+JB ),
      $                        LDA )
@@ -224,6 +220,6 @@
       END IF
       RETURN
 *
-*     End of AB_ZGETRF
+*     End of ZGETRF
 *
       END

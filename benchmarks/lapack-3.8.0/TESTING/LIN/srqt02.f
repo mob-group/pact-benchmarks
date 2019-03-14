@@ -1,4 +1,4 @@
-*> \brief \b AB_SRQT02
+*> \brief \b SRQT02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SRQT02( M, N, K, A, AF, Q, R, LDA, TAU, WORK, LWORK,
+*       SUBROUTINE SRQT02( M, N, K, A, AF, Q, R, LDA, TAU, WORK, LWORK,
 *                          RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -26,11 +26,11 @@
 *>
 *> \verbatim
 *>
-*> AB_SRQT02 tests AB_SORGRQ, which generates an m-by-n matrix Q with
+*> SRQT02 tests SORGRQ, which generates an m-by-n matrix Q with
 *> orthonornmal rows that is defined as the product of k elementary
 *> reflectors.
 *>
-*> Given the RQ factorization of an m-by-n matrix A, AB_SRQT02 generates
+*> Given the RQ factorization of an m-by-n matrix A, SRQT02 generates
 *> the orthogonal matrix Q defined by the factorization of the last k
 *> rows of A; it compares R(m-k+1:m,n-m+1:n) with
 *> A(m-k+1:m,1:n)*Q(n-m+1:n,1:n)', and checks that the rows of Q are
@@ -63,14 +63,14 @@
 *> \param[in] A
 *> \verbatim
 *>          A is REAL array, dimension (LDA,N)
-*>          The m-by-n matrix A which was factorized by AB_SRQT01.
+*>          The m-by-n matrix A which was factorized by SRQT01.
 *> \endverbatim
 *>
 *> \param[in] AF
 *> \verbatim
 *>          AF is REAL array, dimension (LDA,N)
-*>          Details of the RQ factorization of A, as returned by AB_AB_SGERQF.
-*>          See AB_AB_SGERQF for further details.
+*>          Details of the RQ factorization of A, as returned by SGERQF.
+*>          See SGERQF for further details.
 *> \endverbatim
 *>
 *> \param[out] Q
@@ -133,7 +133,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_SRQT02( M, N, K, A, AF, Q, R, LDA, TAU, WORK, LWORK,
+      SUBROUTINE SRQT02( M, N, K, A, AF, Q, R, LDA, TAU, WORK, LWORK,
      $                   RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -163,12 +163,11 @@
       REAL               ANORM, EPS, RESID
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH, AB_SLANGE, AB_SLANSY
-      EXTERNAL           AB_SLAMCH, AB_SLANGE, AB_SLANSY
+      REAL               SLAMCH, SLANGE, SLANSY
+      EXTERNAL           SLAMCH, SLANGE, SLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SGEMM, AB_SLACPY, AB_SLASET, AB_SORGRQ, AB_A
-     $B_SSYRK
+      EXTERNAL           SGEMM, SLACPY, SLASET, SORGRQ, SSYRK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, REAL
@@ -189,39 +188,39 @@
          RETURN
       END IF
 *
-      EPS = AB_SLAMCH( 'Epsilon' )
+      EPS = SLAMCH( 'Epsilon' )
 *
 *     Copy the last k rows of the factorization to the array Q
 *
-      CALL AB_SLASET( 'Full', M, N, ROGUE, ROGUE, Q, LDA )
+      CALL SLASET( 'Full', M, N, ROGUE, ROGUE, Q, LDA )
       IF( K.LT.N )
-     $   CALL AB_SLACPY( 'Full', K, N-K, AF( M-K+1, 1 ), LDA,
+     $   CALL SLACPY( 'Full', K, N-K, AF( M-K+1, 1 ), LDA,
      $                Q( M-K+1, 1 ), LDA )
       IF( K.GT.1 )
-     $   CALL AB_SLACPY( 'Lower', K-1, K-1, AF( M-K+2, N-K+1 ), LDA,
+     $   CALL SLACPY( 'Lower', K-1, K-1, AF( M-K+2, N-K+1 ), LDA,
      $                Q( M-K+2, N-K+1 ), LDA )
 *
 *     Generate the last n rows of the matrix Q
 *
-      SRNAMT = 'AB_SORGRQ'
-      CALL AB_SORGRQ( M, N, K, Q, LDA, TAU( M-K+1 ), WORK, LWORK, INFO )
+      SRNAMT = 'SORGRQ'
+      CALL SORGRQ( M, N, K, Q, LDA, TAU( M-K+1 ), WORK, LWORK, INFO )
 *
 *     Copy R(m-k+1:m,n-m+1:n)
 *
-      CALL AB_SLASET( 'Full', K, M, ZERO, ZERO, R( M-K+1, N-M+1 ), LDA )
-      CALL AB_SLACPY( 'Upper', K, K, AF( M-K+1, N-K+1 ), LDA,
+      CALL SLASET( 'Full', K, M, ZERO, ZERO, R( M-K+1, N-M+1 ), LDA )
+      CALL SLACPY( 'Upper', K, K, AF( M-K+1, N-K+1 ), LDA,
      $             R( M-K+1, N-K+1 ), LDA )
 *
 *     Compute R(m-k+1:m,n-m+1:n) - A(m-k+1:m,1:n) * Q(n-m+1:n,1:n)'
 *
-      CALL AB_SGEMM( 'No transpose', 'Transpose', K, M, N, -ONE,
+      CALL SGEMM( 'No transpose', 'Transpose', K, M, N, -ONE,
      $            A( M-K+1, 1 ), LDA, Q, LDA, ONE, R( M-K+1, N-M+1 ),
      $            LDA )
 *
 *     Compute norm( R - A*Q' ) / ( N * norm(A) * EPS ) .
 *
-      ANORM = AB_SLANGE( '1', K, N, A( M-K+1, 1 ), LDA, RWORK )
-      RESID = AB_SLANGE( '1', K, M, R( M-K+1, N-M+1 ), LDA, RWORK )
+      ANORM = SLANGE( '1', K, N, A( M-K+1, 1 ), LDA, RWORK )
+      RESID = SLANGE( '1', K, M, R( M-K+1, N-M+1 ), LDA, RWORK )
       IF( ANORM.GT.ZERO ) THEN
          RESULT( 1 ) = ( ( RESID / REAL( MAX( 1, N ) ) ) / ANORM ) / EPS
       ELSE
@@ -230,19 +229,18 @@
 *
 *     Compute I - Q*Q'
 *
-      CALL AB_SLASET( 'Full', M, M, ZERO, ONE, R, LDA )
-      CALL AB_AB_SSYRK( 'Upper', 'No transpose', M, N, -ONE, Q, LDA, ONE
-     $, R,
+      CALL SLASET( 'Full', M, M, ZERO, ONE, R, LDA )
+      CALL SSYRK( 'Upper', 'No transpose', M, N, -ONE, Q, LDA, ONE, R,
      $            LDA )
 *
 *     Compute norm( I - Q*Q' ) / ( N * EPS ) .
 *
-      RESID = AB_SLANSY( '1', 'Upper', M, R, LDA, RWORK )
+      RESID = SLANSY( '1', 'Upper', M, R, LDA, RWORK )
 *
       RESULT( 2 ) = ( RESID / REAL( MAX( 1, N ) ) ) / EPS
 *
       RETURN
 *
-*     End of AB_SRQT02
+*     End of SRQT02
 *
       END

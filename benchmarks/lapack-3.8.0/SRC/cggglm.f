@@ -1,4 +1,4 @@
-*> \brief \b AB_CGGGLM
+*> \brief \b CGGGLM
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CGGGLM + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CGGGLM.f">
+*> Download CGGGLM + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cggglm.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CGGGLM.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cggglm.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CGGGLM.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cggglm.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CGGGLM( N, M, P, A, LDA, B, LDB, D, X, Y, WORK, LWORK,
+*       SUBROUTINE CGGGLM( N, M, P, A, LDA, B, LDB, D, X, Y, WORK, LWORK,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CGGGLM solves a general Gauss-Markov linear model (GLM) problem:
+*> CGGGLM solves a general Gauss-Markov linear model (GLM) problem:
 *>
 *>         minimize || y ||_2   subject to   d = A*x + B*y
 *>             x
@@ -145,12 +145,12 @@
 *>          The dimension of the array WORK. LWORK >= max(1,N+M+P).
 *>          For optimum performance, LWORK >= M+min(N,P)+max(N,P)*NB,
 *>          where NB is an upper bound for the optimal blocksizes for
-*>          AB_AB_CGEQRF, AB_CGERQF, AB_CUNMQR and AB_CUNMRQ.
+*>          CGEQRF, CGERQF, CUNMQR and CUNMRQ.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -182,8 +182,7 @@
 *> \ingroup complexOTHEReigen
 *
 *  =====================================================================
-      SUBROUTINE AB_CGGGLM( N, M, P, A, LDA, B, LDB, D, X, Y, WORK, LWOR
-     $K,
+      SUBROUTINE CGGGLM( N, M, P, A, LDA, B, LDB, D, X, Y, WORK, LWORK,
      $                   INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -212,13 +211,12 @@
      $                   NB4, NP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CCOPY, AB_CGEMV, AB_CGGQRF, AB_CTRTRS, AB_CU
-     $NMQR, AB_CUNMRQ,
-     $                   AB_XERBLA
+      EXTERNAL           CCOPY, CGEMV, CGGQRF, CTRTRS, CUNMQR, CUNMRQ,
+     $                   XERBLA
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_ILAENV
+      INTEGER            ILAENV
+      EXTERNAL           ILAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          INT, MAX, MIN
@@ -249,10 +247,10 @@
             LWKMIN = 1
             LWKOPT = 1
          ELSE
-            NB1 = AB_ILAENV( 1, 'AB_AB_CGEQRF', ' ', N, M, -1, -1 )
-            NB2 = AB_ILAENV( 1, 'AB_CGERQF', ' ', N, M, -1, -1 )
-            NB3 = AB_ILAENV( 1, 'AB_CUNMQR', ' ', N, M, P, -1 )
-            NB4 = AB_ILAENV( 1, 'AB_CUNMRQ', ' ', N, M, P, -1 )
+            NB1 = ILAENV( 1, 'CGEQRF', ' ', N, M, -1, -1 )
+            NB2 = ILAENV( 1, 'CGERQF', ' ', N, M, -1, -1 )
+            NB3 = ILAENV( 1, 'CUNMQR', ' ', N, M, P, -1 )
+            NB4 = ILAENV( 1, 'CUNMRQ', ' ', N, M, P, -1 )
             NB = MAX( NB1, NB2, NB3, NB4 )
             LWKMIN = M + N + P
             LWKOPT = M + NP + MAX( N, P )*NB
@@ -265,7 +263,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CGGGLM', -INFO )
+         CALL XERBLA( 'CGGGLM', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -285,22 +283,21 @@
 *     where R11 and T22 are upper triangular, and Q and Z are
 *     unitary.
 *
-      CALL AB_CGGQRF( N, M, P, A, LDA, WORK, B, LDB, WORK( M+1 ),
+      CALL CGGQRF( N, M, P, A, LDA, WORK, B, LDB, WORK( M+1 ),
      $             WORK( M+NP+1 ), LWORK-M-NP, INFO )
       LOPT = WORK( M+NP+1 )
 *
 *     Update left-hand-side vector d = Q**H*d = ( d1 ) M
 *                                               ( d2 ) N-M
 *
-      CALL AB_CUNMQR( 'Left', 'Conjugate transpose', N, 1, M, A, LDA, WO
-     $RK,
+      CALL CUNMQR( 'Left', 'Conjugate transpose', N, 1, M, A, LDA, WORK,
      $             D, MAX( 1, N ), WORK( M+NP+1 ), LWORK-M-NP, INFO )
       LOPT = MAX( LOPT, INT( WORK( M+NP+1 ) ) )
 *
 *     Solve T22*y2 = d2 for y2
 *
       IF( N.GT.M ) THEN
-         CALL AB_CTRTRS( 'Upper', 'No transpose', 'Non unit', N-M, 1,
+         CALL CTRTRS( 'Upper', 'No transpose', 'Non unit', N-M, 1,
      $                B( M+1, M+P-N+1 ), LDB, D( M+1 ), N-M, INFO )
 *
          IF( INFO.GT.0 ) THEN
@@ -308,7 +305,7 @@
             RETURN
          END IF
 *
-         CALL AB_CCOPY( N-M, D( M+1 ), 1, Y( M+P-N+1 ), 1 )
+         CALL CCOPY( N-M, D( M+1 ), 1, Y( M+P-N+1 ), 1 )
       END IF
 *
 *     Set y1 = 0
@@ -319,15 +316,13 @@
 *
 *     Update d1 = d1 - T12*y2
 *
-      CALL AB_CGEMV( 'No transpose', M, N-M, -CONE, B( 1, M+P-N+1 ), LDB
-     $,
+      CALL CGEMV( 'No transpose', M, N-M, -CONE, B( 1, M+P-N+1 ), LDB,
      $            Y( M+P-N+1 ), 1, CONE, D, 1 )
 *
 *     Solve triangular system: R11*x = d1
 *
       IF( M.GT.0 ) THEN
-         CALL AB_CTRTRS( 'Upper', 'No Transpose', 'Non unit', M, 1, A, L
-     $DA,
+         CALL CTRTRS( 'Upper', 'No Transpose', 'Non unit', M, 1, A, LDA,
      $                D, M, INFO )
 *
          IF( INFO.GT.0 ) THEN
@@ -337,18 +332,18 @@
 *
 *        Copy D to X
 *
-         CALL AB_CCOPY( M, D, 1, X, 1 )
+         CALL CCOPY( M, D, 1, X, 1 )
       END IF
 *
 *     Backward transformation y = Z**H *y
 *
-      CALL AB_CUNMRQ( 'Left', 'Conjugate transpose', P, 1, NP,
+      CALL CUNMRQ( 'Left', 'Conjugate transpose', P, 1, NP,
      $             B( MAX( 1, N-P+1 ), 1 ), LDB, WORK( M+1 ), Y,
      $             MAX( 1, P ), WORK( M+NP+1 ), LWORK-M-NP, INFO )
       WORK( 1 ) = M + NP + MAX( LOPT, INT( WORK( M+NP+1 ) ) )
 *
       RETURN
 *
-*     End of AB_CGGGLM
+*     End of CGGGLM
 *
       END

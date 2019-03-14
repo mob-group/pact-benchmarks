@@ -1,4 +1,4 @@
-*> \brief \b AB_ZCHKBK
+*> \brief \b ZCHKBK
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZCHKBK( NIN, NOUT )
+*       SUBROUTINE ZCHKBK( NIN, NOUT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            NIN, NOUT
@@ -20,9 +20,9 @@
 *>
 *> \verbatim
 *>
-*> AB_ZCHKBK tests AB_ZGEBAK, a routine for backward transformation of
+*> ZCHKBK tests ZGEBAK, a routine for backward transformation of
 *> the computed right or left eigenvectors if the original matrix
-*> was preprocessed by balance subroutine AB_ZGEBAL.
+*> was preprocessed by balance subroutine ZGEBAL.
 *> \endverbatim
 *
 *  Arguments:
@@ -53,7 +53,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_ZCHKBK( NIN, NOUT )
+      SUBROUTINE ZCHKBK( NIN, NOUT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -67,8 +67,8 @@
 * ======================================================================
 *
 *     .. Parameters ..
-      INTEGER            AB_LDE
-      PARAMETER          ( AB_LDE = 20 )
+      INTEGER            LDE
+      PARAMETER          ( LDE = 20 )
       DOUBLE PRECISION   ZERO
       PARAMETER          ( ZERO = 0.0D0 )
 *     ..
@@ -79,15 +79,15 @@
 *     ..
 *     .. Local Arrays ..
       INTEGER            LMAX( 2 )
-      DOUBLE PRECISION   SCALE( AB_LDE )
-      COMPLEX*16         E( AB_LDE, AB_LDE ), EIN( AB_LDE, AB_LDE )
+      DOUBLE PRECISION   SCALE( LDE )
+      COMPLEX*16         E( LDE, LDE ), EIN( LDE, LDE )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH
-      EXTERNAL           AB_DLAMCH
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZGEBAK
+      EXTERNAL           ZGEBAK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX
@@ -105,8 +105,8 @@
       NINFO = 0
       KNT = 0
       RMAX = ZERO
-      EPS = AB_DLAMCH( 'E' )
-      SAFMIN = AB_DLAMCH( 'S' )
+      EPS = DLAMCH( 'E' )
+      SAFMIN = DLAMCH( 'S' )
 *
    10 CONTINUE
 *
@@ -124,7 +124,7 @@
    30 CONTINUE
 *
       KNT = KNT + 1
-      CALL AB_ZGEBAK( 'B', 'R', N, ILO, IHI, SCALE, N, E, AB_LDE, INFO )
+      CALL ZGEBAK( 'B', 'R', N, ILO, IHI, SCALE, N, E, LDE, INFO )
 *
       IF( INFO.NE.0 ) THEN
          NINFO = NINFO + 1
@@ -151,7 +151,7 @@
    60 CONTINUE
 *
       WRITE( NOUT, FMT = 9999 )
- 9999 FORMAT( 1X, '.. test output of AB_ZGEBAK .. ' )
+ 9999 FORMAT( 1X, '.. test output of ZGEBAK .. ' )
 *
       WRITE( NOUT, FMT = 9998 )RMAX
  9998 FORMAT( 1X, 'value of largest test error             = ', D12.3 )
@@ -166,6 +166,6 @@
 *
       RETURN
 *
-*     End of AB_ZCHKBK
+*     End of ZCHKBK
 *
       END

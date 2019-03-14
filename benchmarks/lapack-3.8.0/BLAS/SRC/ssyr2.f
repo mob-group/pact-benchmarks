@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_SSYR2
+*> \brief \b SSYR2
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_SSYR2(UPLO,N,ALPHA,X,INCX,Y,INCY,A,LDA)
+*       SUBROUTINE SSYR2(UPLO,N,ALPHA,X,INCX,Y,INCY,A,LDA)
 *
 *       .. Scalar Arguments ..
 *       REAL ALPHA
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_SSYR2  performs the symmetric rank 2 operation
+*> SSYR2  performs the symmetric rank 2 operation
 *>
 *>    A := alpha*x*y**T + alpha*y*x**T + A,
 *>
@@ -145,7 +145,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_AB_SSYR2(UPLO,N,ALPHA,X,INCX,Y,INCY,A,LDA)
+      SUBROUTINE SSYR2(UPLO,N,ALPHA,X,INCX,Y,INCY,A,LDA)
 *
 *  -- Reference BLAS level2 routine (version 3.7.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -172,11 +172,11 @@
       INTEGER I,INFO,IX,IY,J,JX,JY,KX,KY
 *     ..
 *     .. External Functions ..
-      LOGICAL AB_LSAME
-      EXTERNAL AB_LSAME
+      LOGICAL LSAME
+      EXTERNAL LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL AB_XERBLA
+      EXTERNAL XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC MAX
@@ -185,7 +185,7 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF (.NOT.AB_LSAME(UPLO,'U') .AND. .NOT.AB_LSAME(UPLO,'L')) THEN
+      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
           INFO = 1
       ELSE IF (N.LT.0) THEN
           INFO = 2
@@ -197,7 +197,7 @@
           INFO = 9
       END IF
       IF (INFO.NE.0) THEN
-          CALL AB_XERBLA('AB_AB_SSYR2 ',INFO)
+          CALL XERBLA('SSYR2 ',INFO)
           RETURN
       END IF
 *
@@ -227,7 +227,7 @@
 *     accessed sequentially with one pass through the triangular part
 *     of A.
 *
-      IF (AB_LSAME(UPLO,'U')) THEN
+      IF (LSAME(UPLO,'U')) THEN
 *
 *        Form  A  when A is stored in the upper triangle.
 *
@@ -293,6 +293,6 @@
 *
       RETURN
 *
-*     End of AB_AB_SSYR2 .
+*     End of SSYR2 .
 *
       END

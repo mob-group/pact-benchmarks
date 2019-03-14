@@ -1,4 +1,4 @@
-*> \brief \b AB_DDRVRF3
+*> \brief \b DDRVRF3
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,8 +8,8 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DDRVRF3( NOUT, NN, NVAL, THRESH, A, LDA, ARF, B1, B2,
-*      +                    D_WORK_AB_DLANGE, D_WORK_AB_AB_DGEQRF, TAU )
+*       SUBROUTINE DDRVRF3( NOUT, NN, NVAL, THRESH, A, LDA, ARF, B1, B2,
+*      +                    D_WORK_DLANGE, D_WORK_DGEQRF, TAU )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDA, NN, NOUT
@@ -18,8 +18,8 @@
 *       .. Array Arguments ..
 *       INTEGER            NVAL( NN )
 *       DOUBLE PRECISION   A( LDA, * ), ARF( * ), B1( LDA, * ),
-*      +                   B2( LDA, * ), D_WORK_AB_AB_DGEQRF( * ),
-*      +                   D_WORK_AB_DLANGE( * ), TAU( * )
+*      +                   B2( LDA, * ), D_WORK_DGEQRF( * ),
+*      +                   D_WORK_DLANGE( * ), TAU( * )
 *       ..
 *
 *
@@ -28,8 +28,8 @@
 *>
 *> \verbatim
 *>
-*> AB_DDRVRF3 tests the LAPACK RFP routines:
-*>     AB_DTFSM
+*> DDRVRF3 tests the LAPACK RFP routines:
+*>     DTFSM
 *> \endverbatim
 *
 *  Arguments:
@@ -87,14 +87,14 @@
 *>          B2 is DOUBLE PRECISION array, dimension (LDA,NMAX)
 *> \endverbatim
 *>
-*> \param[out] D_WORK_AB_DLANGE
+*> \param[out] D_WORK_DLANGE
 *> \verbatim
-*>          D_WORK_AB_DLANGE is DOUBLE PRECISION array, dimension (NMAX)
+*>          D_WORK_DLANGE is DOUBLE PRECISION array, dimension (NMAX)
 *> \endverbatim
 *>
-*> \param[out] D_WORK_AB_AB_DGEQRF
+*> \param[out] D_WORK_DGEQRF
 *> \verbatim
-*>          D_WORK_AB_AB_DGEQRF is DOUBLE PRECISION array, dimension (NMAX)
+*>          D_WORK_DGEQRF is DOUBLE PRECISION array, dimension (NMAX)
 *> \endverbatim
 *>
 *> \param[out] TAU
@@ -115,9 +115,8 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_DDRVRF3( NOUT, NN, NVAL, THRESH, A, LDA, ARF, B1, B2
-     $,
-     +                    D_WORK_AB_DLANGE, D_WORK_AB_AB_DGEQRF, TAU )
+      SUBROUTINE DDRVRF3( NOUT, NN, NVAL, THRESH, A, LDA, ARF, B1, B2,
+     +                    D_WORK_DLANGE, D_WORK_DGEQRF, TAU )
 *
 *  -- LAPACK test routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -131,8 +130,8 @@
 *     .. Array Arguments ..
       INTEGER            NVAL( NN )
       DOUBLE PRECISION   A( LDA, * ), ARF( * ), B1( LDA, * ),
-     +                   B2( LDA, * ), D_WORK_AB_AB_DGEQRF( * ),
-     +                   D_WORK_AB_DLANGE( * ), TAU( * )
+     +                   B2( LDA, * ), D_WORK_DGEQRF( * ),
+     +                   D_WORK_DLANGE( * ), TAU( * )
 *     ..
 *
 *  =====================================================================
@@ -157,12 +156,11 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE, AB_DLARND
-      EXTERNAL           AB_DLAMCH, AB_DLANGE, AB_DLARND
+      DOUBLE PRECISION   DLAMCH, DLANGE, DLARND
+      EXTERNAL           DLAMCH, DLANGE, DLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DTRTTF, AB_AB_DGEQRF, AB_DGEQLF, AB_DTFSM, A
-     $B_DTRSM
+      EXTERNAL           DTRTTF, DGEQRF, DGEQLF, DTFSM, DTRSM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT
@@ -191,7 +189,7 @@
       DO 10 I = 1, 4
          ISEED( I ) = ISEEDY( I )
    10 CONTINUE
-      EPS = AB_DLAMCH( 'Precision' )
+      EPS = DLAMCH( 'Precision' )
 *
       DO 170 IIM = 1, NN
 *
@@ -228,7 +226,7 @@
                               ELSE IF ( IALPHA.EQ. 2) THEN
                                  ALPHA = ONE
                               ELSE
-                                 ALPHA = AB_DLARND( 2, ISEED )
+                                 ALPHA = DLARND( 2, ISEED )
                               END IF
 *
 *                             All the parameters are set:
@@ -264,7 +262,7 @@
 *
                               DO J = 1, NA
                                  DO I = 1, NA
-                                    A( I, J) = AB_DLARND( 2, ISEED )
+                                    A( I, J) = DLARND( 2, ISEED )
                                  END DO
                               END DO
 *
@@ -273,26 +271,25 @@
 *                                The case IUPLO.EQ.1 is when SIDE.EQ.'U'
 *                                -> QR factorization.
 *
-                                 SRNAMT = 'AB_AB_DGEQRF'
-                                 CALL AB_AB_DGEQRF( NA, NA, A, LDA, TAU,
-     +                                        D_WORK_AB_AB_DGEQRF, LDA,
+                                 SRNAMT = 'DGEQRF'
+                                 CALL DGEQRF( NA, NA, A, LDA, TAU,
+     +                                        D_WORK_DGEQRF, LDA,
      +                                        INFO )
                               ELSE
 *
 *                                The case IUPLO.EQ.2 is when SIDE.EQ.'L'
 *                                -> QL factorization.
 *
-                                 SRNAMT = 'AB_AB_DGELQF'
-                                 CALL AB_AB_DGELQF( NA, NA, A, LDA, TAU,
-     +                                        D_WORK_AB_AB_DGEQRF, LDA,
+                                 SRNAMT = 'DGELQF'
+                                 CALL DGELQF( NA, NA, A, LDA, TAU,
+     +                                        D_WORK_DGEQRF, LDA,
      +                                        INFO )
                               END IF
 *
 *                             Store a copy of A in RFP format (in ARF).
 *
-                              SRNAMT = 'AB_DTRTTF'
-                              CALL AB_DTRTTF( CFORM, UPLO, NA, A, LDA, A
-     $RF,
+                              SRNAMT = 'DTRTTF'
+                              CALL DTRTTF( CFORM, UPLO, NA, A, LDA, ARF,
      +                                     INFO )
 *
 *                             Generate B1 our M--by--N right-hand side
@@ -300,24 +297,23 @@
 *
                               DO J = 1, N
                                  DO I = 1, M
-                                    B1( I, J) = AB_DLARND( 2, ISEED )
+                                    B1( I, J) = DLARND( 2, ISEED )
                                     B2( I, J) = B1( I, J)
                                  END DO
                               END DO
 *
 *                             Solve op( A ) X = B or X op( A ) = B
-*                             with AB_DTRSM
+*                             with DTRSM
 *
-                              SRNAMT = 'AB_DTRSM'
-                              CALL AB_DTRSM( SIDE, UPLO, TRANS, DIAG, M,
-     $ N,
+                              SRNAMT = 'DTRSM'
+                              CALL DTRSM( SIDE, UPLO, TRANS, DIAG, M, N,
      +                               ALPHA, A, LDA, B1, LDA )
 *
 *                             Solve op( A ) X = B or X op( A ) = B
-*                             with AB_DTFSM
+*                             with DTFSM
 *
-                              SRNAMT = 'AB_DTFSM'
-                              CALL AB_DTFSM( CFORM, SIDE, UPLO, TRANS,
+                              SRNAMT = 'DTFSM'
+                              CALL DTFSM( CFORM, SIDE, UPLO, TRANS,
      +                                    DIAG, M, N, ALPHA, ARF, B2,
      +                                    LDA )
 *
@@ -329,8 +325,8 @@
                                  END DO
                               END DO
 *
-                              RESULT(1) = AB_DLANGE( 'I', M, N, B1, LDA,
-     +                                            D_WORK_AB_DLANGE )
+                              RESULT(1) = DLANGE( 'I', M, N, B1, LDA,
+     +                                            D_WORK_DLANGE )
 *
                               RESULT(1) = RESULT(1) / SQRT( EPS )
      +                                    / MAX ( MAX( M, N), 1 )
@@ -340,7 +336,7 @@
                                     WRITE( NOUT, * )
                                     WRITE( NOUT, FMT = 9999 )
                                  END IF
-                                 WRITE( NOUT, FMT = 9997 ) 'AB_DTFSM',
+                                 WRITE( NOUT, FMT = 9997 ) 'DTFSM',
      +                              CFORM, SIDE, UPLO, TRANS, DIAG, M,
      +                              N, RESULT(1)
                                  NFAIL = NFAIL + 1
@@ -358,12 +354,12 @@
 *     Print a summary of the results.
 *
       IF ( NFAIL.EQ.0 ) THEN
-         WRITE( NOUT, FMT = 9996 ) 'AB_DTFSM', NRUN
+         WRITE( NOUT, FMT = 9996 ) 'DTFSM', NRUN
       ELSE
-         WRITE( NOUT, FMT = 9995 ) 'AB_DTFSM', NFAIL, NRUN
+         WRITE( NOUT, FMT = 9995 ) 'DTFSM', NFAIL, NRUN
       END IF
 *
- 9999 FORMAT( 1X, ' *** Error(s) or Failure(s) while testing AB_DTFSM
+ 9999 FORMAT( 1X, ' *** Error(s) or Failure(s) while testing DTFSM
      +         ***')
  9997 FORMAT( 1X, '     Failure in ',A5,', CFORM=''',A1,''',',
      + ' SIDE=''',A1,''',',' UPLO=''',A1,''',',' TRANS=''',A1,''',',
@@ -375,6 +371,6 @@
 *
       RETURN
 *
-*     End of AB_DDRVRF3
+*     End of DDRVRF3
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_ZBDT03
+*> \brief \b ZBDT03
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZBDT03( UPLO, N, KD, D, E, U, LDU, S, VT, LDVT, WORK,
+*       SUBROUTINE ZBDT03( UPLO, N, KD, D, E, U, LDU, S, VT, LDVT, WORK,
 *                          RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZBDT03 reconstructs a bidiagonal matrix B from its SVD:
+*> ZBDT03 reconstructs a bidiagonal matrix B from its SVD:
 *>    S = U' * B * V
 *> where U and V are orthogonal matrices and S is diagonal.
 *>
@@ -132,8 +132,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_ZBDT03( UPLO, N, KD, D, E, U, LDU, S, VT, LDVT, WORK
-     $,
+      SUBROUTINE ZBDT03( UPLO, N, KD, D, E, U, LDU, S, VT, LDVT, WORK,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -162,13 +161,13 @@
       DOUBLE PRECISION   BNORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_IDAMAX
-      DOUBLE PRECISION   AB_DLAMCH, AB_DZASUM
-      EXTERNAL           AB_LSAME, AB_IDAMAX, AB_DLAMCH, AB_DZASUM
+      LOGICAL            LSAME
+      INTEGER            IDAMAX
+      DOUBLE PRECISION   DLAMCH, DZASUM
+      EXTERNAL           LSAME, IDAMAX, DLAMCH, DZASUM
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZGEMV
+      EXTERNAL           ZGEMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCMPLX, MAX, MIN
@@ -188,7 +187,7 @@
 *
 *        B is bidiagonal.
 *
-         IF( AB_LSAME( UPLO, 'U' ) ) THEN
+         IF( LSAME( UPLO, 'U' ) ) THEN
 *
 *           B is upper bidiagonal.
 *
@@ -196,8 +195,7 @@
                DO 10 I = 1, N
                   WORK( N+I ) = S( I )*VT( I, J )
    10          CONTINUE
-               CALL AB_ZGEMV( 'No transpose', N, N, -DCMPLX( ONE ), U, L
-     $DU,
+               CALL ZGEMV( 'No transpose', N, N, -DCMPLX( ONE ), U, LDU,
      $                     WORK( N+1 ), 1, DCMPLX( ZERO ), WORK, 1 )
                WORK( J ) = WORK( J ) + D( J )
                IF( J.GT.1 ) THEN
@@ -206,7 +204,7 @@
                ELSE
                   BNORM = MAX( BNORM, ABS( D( J ) ) )
                END IF
-               RESID = MAX( RESID, AB_DZASUM( N, WORK, 1 ) )
+               RESID = MAX( RESID, DZASUM( N, WORK, 1 ) )
    20       CONTINUE
          ELSE
 *
@@ -216,8 +214,7 @@
                DO 30 I = 1, N
                   WORK( N+I ) = S( I )*VT( I, J )
    30          CONTINUE
-               CALL AB_ZGEMV( 'No transpose', N, N, -DCMPLX( ONE ), U, L
-     $DU,
+               CALL ZGEMV( 'No transpose', N, N, -DCMPLX( ONE ), U, LDU,
      $                     WORK( N+1 ), 1, DCMPLX( ZERO ), WORK, 1 )
                WORK( J ) = WORK( J ) + D( J )
                IF( J.LT.N ) THEN
@@ -226,7 +223,7 @@
                ELSE
                   BNORM = MAX( BNORM, ABS( D( J ) ) )
                END IF
-               RESID = MAX( RESID, AB_DZASUM( N, WORK, 1 ) )
+               RESID = MAX( RESID, DZASUM( N, WORK, 1 ) )
    40       CONTINUE
          END IF
       ELSE
@@ -237,18 +234,18 @@
             DO 50 I = 1, N
                WORK( N+I ) = S( I )*VT( I, J )
    50       CONTINUE
-            CALL AB_ZGEMV( 'No transpose', N, N, -DCMPLX( ONE ), U, LDU,
+            CALL ZGEMV( 'No transpose', N, N, -DCMPLX( ONE ), U, LDU,
      $                  WORK( N+1 ), 1, DCMPLX( ZERO ), WORK, 1 )
             WORK( J ) = WORK( J ) + D( J )
-            RESID = MAX( RESID, AB_DZASUM( N, WORK, 1 ) )
+            RESID = MAX( RESID, DZASUM( N, WORK, 1 ) )
    60    CONTINUE
-         J = AB_IDAMAX( N, D, 1 )
+         J = IDAMAX( N, D, 1 )
          BNORM = ABS( D( J ) )
       END IF
 *
 *     Compute norm(B - U * S * V') / ( n * norm(B) * EPS )
 *
-      EPS = AB_DLAMCH( 'Precision' )
+      EPS = DLAMCH( 'Precision' )
 *
       IF( BNORM.LE.ZERO ) THEN
          IF( RESID.NE.ZERO )
@@ -269,6 +266,6 @@
 *
       RETURN
 *
-*     End of AB_ZBDT03
+*     End of ZBDT03
 *
       END

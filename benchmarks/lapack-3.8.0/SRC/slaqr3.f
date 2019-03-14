@@ -1,4 +1,4 @@
-*> \brief \b AB_SLAQR3 performs the orthogonal similarity transformation of a Hessenberg matrix to detect and deflate fully converged eigenvalues from a trailing principal submatrix (aggressive early deflation).
+*> \brief \b SLAQR3 performs the orthogonal similarity transformation of a Hessenberg matrix to detect and deflate fully converged eigenvalues from a trailing principal submatrix (aggressive early deflation).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLAQR3 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLAQR3.f">
+*> Download SLAQR3 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaqr3.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLAQR3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaqr3.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLAQR3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaqr3.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLAQR3( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH, ILOZ,
+*       SUBROUTINE SLAQR3( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH, ILOZ,
 *                          IHIZ, Z, LDZ, NS, ND, SR, SI, V, LDV, NH, T,
 *                          LDT, NV, WV, LDWV, WORK, LWORK )
 *
@@ -41,7 +41,7 @@
 *>
 *>    Aggressive early deflation:
 *>
-*>    AB_SLAQR3 accepts as input an upper Hessenberg matrix
+*>    SLAQR3 accepts as input an upper Hessenberg matrix
 *>    H and performs an orthogonal similarity transformation
 *>    designed to detect and deflate fully converged eigenvalues from
 *>    a trailing principal submatrix.  On output H has been over-
@@ -245,11 +245,11 @@
 *>          suffices, but greater efficiency may result from larger
 *>          values of LWORK.
 *>
-*>          If LWORK = -1, then a workspace query is assumed; AB_SLAQR3
+*>          If LWORK = -1, then a workspace query is assumed; SLAQR3
 *>          only estimates the optimal workspace size for the given
 *>          values of N, NW, KTOP and KBOT.  The estimate is returned
 *>          in WORK(1).  No error message related to LWORK is issued
-*>          by AB_XERBLA.  Neither H nor Z are accessed.
+*>          by XERBLA.  Neither H nor Z are accessed.
 *> \endverbatim
 *
 *  Authors:
@@ -271,8 +271,7 @@
 *>       University of Kansas, USA
 *>
 *  =====================================================================
-      SUBROUTINE AB_SLAQR3( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH, ILO
-     $Z,
+      SUBROUTINE SLAQR3( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH, ILOZ,
      $                   IHIZ, Z, LDZ, NS, ND, SR, SI, V, LDV, NH, T,
      $                   LDT, NV, WV, LDWV, WORK, LWORK )
 *
@@ -306,16 +305,14 @@
       LOGICAL            BULGE, SORTED
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_SLAMCH, AB_ILAENV
+      REAL               SLAMCH
+      INTEGER            ILAENV
+      EXTERNAL           SLAMCH, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SCOPY, AB_SGEHRD, AB_SGEMM, AB_SLABAD, AB_SL
-     $ACPY, AB_SLAHQR,
-     $                   AB_SLANV2, AB_SLAQR4, AB_SLARF, AB_AB_SLARFG, A
-     $B_SLASET, AB_SORMHR,
-     $                   AB_STREXC
+      EXTERNAL           SCOPY, SGEHRD, SGEMM, SLABAD, SLACPY, SLAHQR,
+     $                   SLANV2, SLAQR4, SLARF, SLARFG, SLASET, SORMHR,
+     $                   STREXC
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, INT, MAX, MIN, REAL, SQRT
@@ -329,22 +326,20 @@
          LWKOPT = 1
       ELSE
 *
-*        ==== Workspace query call to AB_SGEHRD ====
+*        ==== Workspace query call to SGEHRD ====
 *
-         CALL AB_SGEHRD( JW, 1, JW-1, T, LDT, WORK, WORK, -1, INFO )
+         CALL SGEHRD( JW, 1, JW-1, T, LDT, WORK, WORK, -1, INFO )
          LWK1 = INT( WORK( 1 ) )
 *
-*        ==== Workspace query call to AB_SORMHR ====
+*        ==== Workspace query call to SORMHR ====
 *
-         CALL AB_SORMHR( 'R', 'N', JW, JW, 1, JW-1, T, LDT, WORK, V, LDV
-     $,
+         CALL SORMHR( 'R', 'N', JW, JW, 1, JW-1, T, LDT, WORK, V, LDV,
      $                WORK, -1, INFO )
          LWK2 = INT( WORK( 1 ) )
 *
-*        ==== Workspace query call to AB_SLAQR4 ====
+*        ==== Workspace query call to SLAQR4 ====
 *
-         CALL AB_SLAQR4( .true., .true., JW, 1, JW, T, LDT, SR, SI, 1, J
-     $W,
+         CALL SLAQR4( .true., .true., JW, 1, JW, T, LDT, SR, SI, 1, JW,
      $                V, LDV, WORK, -1, INFQR )
          LWK3 = INT( WORK( 1 ) )
 *
@@ -373,10 +368,10 @@
 *
 *     ==== Machine constants ====
 *
-      SAFMIN = AB_SLAMCH( 'SAFE MINIMUM' )
+      SAFMIN = SLAMCH( 'SAFE MINIMUM' )
       SAFMAX = ONE / SAFMIN
-      CALL AB_SLABAD( SAFMIN, SAFMAX )
-      ULP = AB_SLAMCH( 'PRECISION' )
+      CALL SLABAD( SAFMIN, SAFMAX )
+      ULP = SLAMCH( 'PRECISION' )
       SMLNUM = SAFMIN*( REAL( N ) / ULP )
 *
 *     ==== Setup deflation window ====
@@ -414,21 +409,20 @@
 *     .    the deflation window that converged using INFQR
 *     .    here and there to keep track.) ====
 *
-      CALL AB_SLACPY( 'U', JW, JW, H( KWTOP, KWTOP ), LDH, T, LDT )
-      CALL AB_SCOPY( JW-1, H( KWTOP+1, KWTOP ), LDH+1, T( 2, 1 ), LDT+1 
-     $)
+      CALL SLACPY( 'U', JW, JW, H( KWTOP, KWTOP ), LDH, T, LDT )
+      CALL SCOPY( JW-1, H( KWTOP+1, KWTOP ), LDH+1, T( 2, 1 ), LDT+1 )
 *
-      CALL AB_SLASET( 'A', JW, JW, ZERO, ONE, V, LDV )
-      NMIN = AB_ILAENV( 12, 'AB_SLAQR3', 'SV', JW, 1, JW, LWORK )
+      CALL SLASET( 'A', JW, JW, ZERO, ONE, V, LDV )
+      NMIN = ILAENV( 12, 'SLAQR3', 'SV', JW, 1, JW, LWORK )
       IF( JW.GT.NMIN ) THEN
-         CALL AB_SLAQR4( .true., .true., JW, 1, JW, T, LDT, SR( KWTOP ),
+         CALL SLAQR4( .true., .true., JW, 1, JW, T, LDT, SR( KWTOP ),
      $                SI( KWTOP ), 1, JW, V, LDV, WORK, LWORK, INFQR )
       ELSE
-         CALL AB_SLAHQR( .true., .true., JW, 1, JW, T, LDT, SR( KWTOP ),
+         CALL SLAHQR( .true., .true., JW, 1, JW, T, LDT, SR( KWTOP ),
      $                SI( KWTOP ), 1, JW, V, LDV, INFQR )
       END IF
 *
-*     ==== AB_STREXC needs a clean margin near the diagonal ====
+*     ==== STREXC needs a clean margin near the diagonal ====
 *
       DO 10 J = 1, JW - 3
          T( J+2, J ) = ZERO
@@ -466,11 +460,10 @@
             ELSE
 *
 *              ==== Undeflatable.   Move it up out of the way.
-*              .    (AB_STREXC can not fail in this case.) ====
+*              .    (STREXC can not fail in this case.) ====
 *
                IFST = NS
-               CALL AB_STREXC( 'V', JW, T, LDT, V, LDV, IFST, ILST, WORK
-     $,
+               CALL STREXC( 'V', JW, T, LDT, V, LDV, IFST, ILST, WORK,
      $                      INFO )
                ILST = ILST + 1
             END IF
@@ -491,12 +484,11 @@
             ELSE
 *
 *              ==== Undeflatable. Move them up out of the way.
-*              .    Fortunately, AB_STREXC does the right thing with
+*              .    Fortunately, STREXC does the right thing with
 *              .    ILST in case of a rare exchange failure. ====
 *
                IFST = NS
-               CALL AB_STREXC( 'V', JW, T, LDT, V, LDV, IFST, ILST, WORK
-     $,
+               CALL STREXC( 'V', JW, T, LDT, V, LDV, IFST, ILST, WORK,
      $                      INFO )
                ILST = ILST + 2
             END IF
@@ -518,7 +510,7 @@
 *        .    graded matrices.  Bubble sort deals well with
 *        .    exchange failures. ====
 *
-         SORTED = .FALSE.
+         SORTED = .false.
          I = NS + 1
    30    CONTINUE
          IF( SORTED )
@@ -555,11 +547,10 @@
             IF( EVI.GE.EVK ) THEN
                I = K
             ELSE
-               SORTED = .FALSE.
+               SORTED = .false.
                IFST = I
                ILST = K
-               CALL AB_STREXC( 'V', JW, T, LDT, V, LDV, IFST, ILST, WORK
-     $,
+               CALL STREXC( 'V', JW, T, LDT, V, LDV, IFST, ILST, WORK,
      $                      INFO )
                IF( INFO.EQ.0 ) THEN
                   I = ILST
@@ -598,7 +589,7 @@
             CC = T( I, I-1 )
             BB = T( I-1, I )
             DD = T( I, I )
-            CALL AB_SLANV2( AA, BB, CC, DD, SR( KWTOP+I-2 ),
+            CALL SLANV2( AA, BB, CC, DD, SR( KWTOP+I-2 ),
      $                   SI( KWTOP+I-2 ), SR( KWTOP+I-1 ),
      $                   SI( KWTOP+I-1 ), CS, SN )
             I = I - 2
@@ -611,22 +602,21 @@
 *
 *           ==== Reflect spike back into lower triangle ====
 *
-            CALL AB_SCOPY( NS, V, LDV, WORK, 1 )
+            CALL SCOPY( NS, V, LDV, WORK, 1 )
             BETA = WORK( 1 )
-            CALL AB_AB_SLARFG( NS, BETA, WORK( 2 ), 1, TAU )
+            CALL SLARFG( NS, BETA, WORK( 2 ), 1, TAU )
             WORK( 1 ) = ONE
 *
-            CALL AB_SLASET( 'L', JW-2, JW-2, ZERO, ZERO, T( 3, 1 ), LDT 
-     $)
+            CALL SLASET( 'L', JW-2, JW-2, ZERO, ZERO, T( 3, 1 ), LDT )
 *
-            CALL AB_SLARF( 'L', NS, JW, WORK, 1, TAU, T, LDT,
+            CALL SLARF( 'L', NS, JW, WORK, 1, TAU, T, LDT,
      $                  WORK( JW+1 ) )
-            CALL AB_SLARF( 'R', NS, NS, WORK, 1, TAU, T, LDT,
+            CALL SLARF( 'R', NS, NS, WORK, 1, TAU, T, LDT,
      $                  WORK( JW+1 ) )
-            CALL AB_SLARF( 'R', JW, NS, WORK, 1, TAU, V, LDV,
+            CALL SLARF( 'R', JW, NS, WORK, 1, TAU, V, LDV,
      $                  WORK( JW+1 ) )
 *
-            CALL AB_SGEHRD( JW, 1, NS, T, LDT, WORK, WORK( JW+1 ),
+            CALL SGEHRD( JW, 1, NS, T, LDT, WORK, WORK( JW+1 ),
      $                   LWORK-JW, INFO )
          END IF
 *
@@ -634,16 +624,15 @@
 *
          IF( KWTOP.GT.1 )
      $      H( KWTOP, KWTOP-1 ) = S*V( 1, 1 )
-         CALL AB_SLACPY( 'U', JW, JW, T, LDT, H( KWTOP, KWTOP ), LDH )
-         CALL AB_SCOPY( JW-1, T( 2, 1 ), LDT+1, H( KWTOP+1, KWTOP ),
+         CALL SLACPY( 'U', JW, JW, T, LDT, H( KWTOP, KWTOP ), LDH )
+         CALL SCOPY( JW-1, T( 2, 1 ), LDT+1, H( KWTOP+1, KWTOP ),
      $               LDH+1 )
 *
 *        ==== Accumulate orthogonal matrix in order update
 *        .    H and Z, if requested.  ====
 *
          IF( NS.GT.1 .AND. S.NE.ZERO )
-     $      CALL AB_SORMHR( 'R', 'N', JW, NS, 1, NS, T, LDT, WORK, V, LD
-     $V,
+     $      CALL SORMHR( 'R', 'N', JW, NS, 1, NS, T, LDT, WORK, V, LDV,
      $                   WORK( JW+1 ), LWORK-JW, INFO )
 *
 *        ==== Update vertical slab in H ====
@@ -655,10 +644,9 @@
          END IF
          DO 70 KROW = LTOP, KWTOP - 1, NV
             KLN = MIN( NV, KWTOP-KROW )
-            CALL AB_SGEMM( 'N', 'N', KLN, JW, JW, ONE, H( KROW, KWTOP ),
+            CALL SGEMM( 'N', 'N', KLN, JW, JW, ONE, H( KROW, KWTOP ),
      $                  LDH, V, LDV, ZERO, WV, LDWV )
-            CALL AB_SLACPY( 'A', KLN, JW, WV, LDWV, H( KROW, KWTOP ), LD
-     $H )
+            CALL SLACPY( 'A', KLN, JW, WV, LDWV, H( KROW, KWTOP ), LDH )
    70    CONTINUE
 *
 *        ==== Update horizontal slab in H ====
@@ -666,9 +654,9 @@
          IF( WANTT ) THEN
             DO 80 KCOL = KBOT + 1, N, NH
                KLN = MIN( NH, N-KCOL+1 )
-               CALL AB_SGEMM( 'C', 'N', JW, KLN, JW, ONE, V, LDV,
+               CALL SGEMM( 'C', 'N', JW, KLN, JW, ONE, V, LDV,
      $                     H( KWTOP, KCOL ), LDH, ZERO, T, LDT )
-               CALL AB_SLACPY( 'A', JW, KLN, T, LDT, H( KWTOP, KCOL ),
+               CALL SLACPY( 'A', JW, KLN, T, LDT, H( KWTOP, KCOL ),
      $                      LDH )
    80       CONTINUE
          END IF
@@ -678,10 +666,9 @@
          IF( WANTZ ) THEN
             DO 90 KROW = ILOZ, IHIZ, NV
                KLN = MIN( NV, IHIZ-KROW+1 )
-               CALL AB_SGEMM( 'N', 'N', KLN, JW, JW, ONE, Z( KROW, KWTOP
-     $ ),
+               CALL SGEMM( 'N', 'N', KLN, JW, JW, ONE, Z( KROW, KWTOP ),
      $                     LDZ, V, LDV, ZERO, WV, LDWV )
-               CALL AB_SLACPY( 'A', KLN, JW, WV, LDWV, Z( KROW, KWTOP ),
+               CALL SLACPY( 'A', KLN, JW, WV, LDWV, Z( KROW, KWTOP ),
      $                      LDZ )
    90       CONTINUE
          END IF
@@ -703,6 +690,6 @@
 *
       WORK( 1 ) = REAL( LWKOPT )
 *
-*     ==== End of AB_SLAQR3 ====
+*     ==== End of SLAQR3 ====
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_ZLARFY
+*> \brief \b ZLARFY
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_ZLARFY( UPLO, N, V, INCV, TAU, C, LDC, WORK )
+*       SUBROUTINE ZLARFY( UPLO, N, V, INCV, TAU, C, LDC, WORK )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_ZLARFY applies an elementary reflector, or HousehoAB_LDEr matrix, H,
+*> ZLARFY applies an elementary reflector, or Householder matrix, H,
 *> to an n x n Hermitian matrix C, from both the left and the right.
 *>
 *> H is represented in the form
@@ -106,7 +106,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_ZLARFY( UPLO, N, V, INCV, TAU, C, LDC, WORK )
+      SUBROUTINE ZLARFY( UPLO, N, V, INCV, TAU, C, LDC, WORK )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -134,11 +134,11 @@
       COMPLEX*16         ALPHA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZAXPY, AB_ZHEMV, AB_AB_ZHER2
+      EXTERNAL           ZAXPY, ZHEMV, ZHER2
 *     ..
 *     .. External Functions ..
-      COMPLEX*16         AB_ZDOTC
-      EXTERNAL           AB_ZDOTC
+      COMPLEX*16         ZDOTC
+      EXTERNAL           ZDOTC
 *     ..
 *     .. Executable Statements ..
 *
@@ -147,17 +147,17 @@
 *
 *     Form  w:= C * v
 *
-      CALL AB_ZHEMV( UPLO, N, ONE, C, LDC, V, INCV, ZERO, WORK, 1 )
+      CALL ZHEMV( UPLO, N, ONE, C, LDC, V, INCV, ZERO, WORK, 1 )
 *
-      ALPHA = -HALF*TAU*AB_ZDOTC( N, WORK, 1, V, INCV )
-      CALL AB_ZAXPY( N, ALPHA, V, INCV, WORK, 1 )
+      ALPHA = -HALF*TAU*ZDOTC( N, WORK, 1, V, INCV )
+      CALL ZAXPY( N, ALPHA, V, INCV, WORK, 1 )
 *
 *     C := C - v * w' - w * v'
 *
-      CALL AB_AB_ZHER2( UPLO, N, -TAU, V, INCV, WORK, 1, C, LDC )
+      CALL ZHER2( UPLO, N, -TAU, V, INCV, WORK, 1, C, LDC )
 *
       RETURN
 *
-*     End of AB_AB_ZLARFY
+*     End of ZLARFY
 *
       END

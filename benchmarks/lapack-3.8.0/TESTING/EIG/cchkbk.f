@@ -1,4 +1,4 @@
-*> \brief \b AB_CCHKBK
+*> \brief \b CCHKBK
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CCHKBK( NIN, NOUT )
+*       SUBROUTINE CCHKBK( NIN, NOUT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            NIN, NOUT
@@ -20,9 +20,9 @@
 *>
 *> \verbatim
 *>
-*> AB_CCHKBK tests AB_CGEBAK, a routine for backward transformation of
+*> CCHKBK tests CGEBAK, a routine for backward transformation of
 *> the computed right or left eigenvectors if the original matrix
-*> was preprocessed by balance subroutine AB_CGEBAL.
+*> was preprocessed by balance subroutine CGEBAL.
 *> \endverbatim
 *
 *  Arguments:
@@ -53,7 +53,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_CCHKBK( NIN, NOUT )
+      SUBROUTINE CCHKBK( NIN, NOUT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -67,8 +67,8 @@
 * ======================================================================
 *
 *     .. Parameters ..
-      INTEGER            AB_LDE
-      PARAMETER          ( AB_LDE = 20 )
+      INTEGER            LDE
+      PARAMETER          ( LDE = 20 )
       REAL               ZERO
       PARAMETER          ( ZERO = 0.0E0 )
 *     ..
@@ -79,15 +79,15 @@
 *     ..
 *     .. Local Arrays ..
       INTEGER            LMAX( 2 )
-      REAL               SCALE( AB_LDE )
-      COMPLEX            E( AB_LDE, AB_LDE ), EIN( AB_LDE, AB_LDE )
+      REAL               SCALE( LDE )
+      COMPLEX            E( LDE, LDE ), EIN( LDE, LDE )
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH
-      EXTERNAL           AB_SLAMCH
+      REAL               SLAMCH
+      EXTERNAL           SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CGEBAK
+      EXTERNAL           CGEBAK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, REAL
@@ -105,8 +105,8 @@
       NINFO = 0
       KNT = 0
       RMAX = ZERO
-      EPS = AB_SLAMCH( 'E' )
-      SAFMIN = AB_SLAMCH( 'S' )
+      EPS = SLAMCH( 'E' )
+      SAFMIN = SLAMCH( 'S' )
 *
    10 CONTINUE
 *
@@ -124,7 +124,7 @@
    30 CONTINUE
 *
       KNT = KNT + 1
-      CALL AB_CGEBAK( 'B', 'R', N, ILO, IHI, SCALE, N, E, AB_LDE, INFO )
+      CALL CGEBAK( 'B', 'R', N, ILO, IHI, SCALE, N, E, LDE, INFO )
 *
       IF( INFO.NE.0 ) THEN
          NINFO = NINFO + 1
@@ -151,7 +151,7 @@
    60 CONTINUE
 *
       WRITE( NOUT, FMT = 9999 )
- 9999 FORMAT( 1X, '.. test output of AB_CGEBAK .. ' )
+ 9999 FORMAT( 1X, '.. test output of CGEBAK .. ' )
 *
       WRITE( NOUT, FMT = 9998 )RMAX
  9998 FORMAT( 1X, 'value of largest test error             = ', E12.3 )
@@ -166,6 +166,6 @@
 *
       RETURN
 *
-*     End of AB_CCHKBK
+*     End of CCHKBK
 *
       END

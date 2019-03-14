@@ -1,4 +1,4 @@
-*> \brief \b AB_DLAFTS
+*> \brief \b DLAFTS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLAFTS( TYPE, M, N, IMAT, NTESTS, RESULT, ISEED,
+*       SUBROUTINE DLAFTS( TYPE, M, N, IMAT, NTESTS, RESULT, ISEED,
 *                          THRESH, IOUNIT, IE )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*>    AB_DLAFTS tests the result vector against the threshold value to
+*>    DLAFTS tests the result vector against the threshold value to
 *>    see which tests for this matrix type failed to pass the threshold.
 *>    Output is to the file given by unit IOUNIT.
 *> \endverbatim
@@ -47,7 +47,7 @@
 *>
 *>  IMAT   - INTEGER
 *>           On entry, IMAT specifies the type of the test matrix.
-*>           A listing of the different types is printed by AB_DLAHD2
+*>           A listing of the different types is printed by DLAHD2
 *>           to the output file if a test fails to pass the threshold.
 *>           Not modified.
 *>
@@ -96,7 +96,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_DLAFTS( TYPE, M, N, IMAT, NTESTS, RESULT, ISEED,
+      SUBROUTINE DLAFTS( TYPE, M, N, IMAT, NTESTS, RESULT, ISEED,
      $                   THRESH, IOUNIT, IE )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -120,7 +120,7 @@
       INTEGER            K
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLAHD2
+      EXTERNAL           DLAHD2
 *     ..
 *     .. Executable Statements ..
 *
@@ -131,11 +131,11 @@
          DO 10 K = 1, NTESTS
             IF( RESULT( K ).GE.THRESH ) THEN
 *
-*           If this is the first test to fail, call AB_DLAHD2
-*           to print a AB_HEADER to the data file.
+*           If this is the first test to fail, call DLAHD2
+*           to print a header to the data file.
 *
                IF( IE.EQ.0 )
-     $            CALL AB_DLAHD2( IOUNIT, TYPE )
+     $            CALL DLAHD2( IOUNIT, TYPE )
                IE = IE + 1
                IF( RESULT( K ).LT.10000.0D0 ) THEN
                   WRITE( IOUNIT, FMT = 9999 )N, IMAT, ISEED, K,
@@ -159,11 +159,11 @@
          DO 20 K = 1, NTESTS
             IF( RESULT( K ).GE.THRESH ) THEN
 *
-*              If this is the first test to fail, call AB_DLAHD2
-*              to print a AB_HEADER to the data file.
+*              If this is the first test to fail, call DLAHD2
+*              to print a header to the data file.
 *
                IF( IE.EQ.0 )
-     $            CALL AB_DLAHD2( IOUNIT, TYPE )
+     $            CALL DLAHD2( IOUNIT, TYPE )
                IE = IE + 1
                IF( RESULT( K ).LT.10000.0D0 ) THEN
                   WRITE( IOUNIT, FMT = 9997 )M, N, IMAT, ISEED, K,
@@ -184,6 +184,6 @@
       END IF
       RETURN
 *
-*     End of AB_DLAFTS
+*     End of DLAFTS
 *
       END

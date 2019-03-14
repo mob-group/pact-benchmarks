@@ -1,4 +1,4 @@
-*> \brief \b AB_CSTT22
+*> \brief \b CSTT22
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CSTT22( N, M, KBAND, AD, AE, SD, SE, U, LDU, WORK,
+*       SUBROUTINE CSTT22( N, M, KBAND, AD, AE, SD, SE, U, LDU, WORK,
 *                          LDWORK, RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CSTT22  checks a set of M eigenvalues and eigenvectors,
+*> CSTT22  checks a set of M eigenvalues and eigenvectors,
 *>
 *>     A U = U S
 *>
@@ -45,14 +45,14 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The size of the matrix.  If it is zero, AB_CSTT22 does nothing.
+*>          The size of the matrix.  If it is zero, CSTT22 does nothing.
 *>          It must be at least zero.
 *> \endverbatim
 *>
 *> \param[in] M
 *> \verbatim
 *>          M is INTEGER
-*>          The number of eigenpairs to check.  If it is zero, AB_CSTT22
+*>          The number of eigenpairs to check.  If it is zero, CSTT22
 *>          does nothing.  It must be at least zero.
 *> \endverbatim
 *>
@@ -142,7 +142,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_CSTT22( N, M, KBAND, AD, AE, SD, SE, U, LDU, WORK,
+      SUBROUTINE CSTT22( N, M, KBAND, AD, AE, SD, SE, U, LDU, WORK,
      $                   LDWORK, RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -174,11 +174,11 @@
       COMPLEX            AUKJ
 *     ..
 *     .. External Functions ..
-      REAL               AB_CLANGE, AB_CLANSY, AB_SLAMCH
-      EXTERNAL           AB_CLANGE, AB_CLANSY, AB_SLAMCH
+      REAL               CLANGE, CLANSY, SLAMCH
+      EXTERNAL           CLANGE, CLANSY, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CGEMM
+      EXTERNAL           CGEMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL
@@ -190,8 +190,8 @@
       IF( N.LE.0 .OR. M.LE.0 )
      $   RETURN
 *
-      UNFL = AB_SLAMCH( 'Safe minimum' )
-      ULP = AB_SLAMCH( 'Epsilon' )
+      UNFL = SLAMCH( 'Safe minimum' )
+      ULP = SLAMCH( 'Epsilon' )
 *
 *     Do Test 1
 *
@@ -232,7 +232,7 @@
          END IF
    40 CONTINUE
 *
-      WNORM = AB_CLANSY( '1', 'L', M, WORK, M, RWORK )
+      WNORM = CLANSY( '1', 'L', M, WORK, M, RWORK )
 *
       IF( ANORM.GT.WNORM ) THEN
          RESULT( 1 ) = ( WNORM / ANORM ) / ( M*ULP )
@@ -248,19 +248,18 @@
 *
 *     Compute  U*U - I
 *
-      CALL AB_CGEMM( 'T', 'N', M, M, N, CONE, U, LDU, U, LDU, CZERO, WOR
-     $K,
+      CALL CGEMM( 'T', 'N', M, M, N, CONE, U, LDU, U, LDU, CZERO, WORK,
      $            M )
 *
       DO 50 J = 1, M
          WORK( J, J ) = WORK( J, J ) - ONE
    50 CONTINUE
 *
-      RESULT( 2 ) = MIN( REAL( M ), AB_CLANGE( '1', M, M, WORK, M,
+      RESULT( 2 ) = MIN( REAL( M ), CLANGE( '1', M, M, WORK, M,
      $              RWORK ) ) / ( M*ULP )
 *
       RETURN
 *
-*     End of AB_CSTT22
+*     End of CSTT22
 *
       END

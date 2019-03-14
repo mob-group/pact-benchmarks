@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_SSYTRI2
+*> \brief \b SSYTRI2
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_SSYTRI2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_SSYTRI2.f">
+*> Download SSYTRI2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssytri2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_SSYTRI2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssytri2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_SSYTRI2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssytri2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_SSYTRI2( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
+*       SUBROUTINE SSYTRI2( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,10 +35,10 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_SSYTRI2 computes the inverse of a REAL symmetric indefinite matrix
+*> SSYTRI2 computes the inverse of a REAL symmetric indefinite matrix
 *> A using the factorization A = U*D*U**T or A = L*D*L**T computed by
-*> AB_SSYTRF. AB_AB_SSYTRI2 sets the LEADING DIMENSION of the workspace
-*> before calling AB_AB_AB_SSYTRI2X that actually computes the inverse.
+*> SSYTRF. SSYTRI2 sets the LEADING DIMENSION of the workspace
+*> before calling SSYTRI2X that actually computes the inverse.
 *> \endverbatim
 *
 *  Arguments:
@@ -63,7 +63,7 @@
 *> \verbatim
 *>          A is REAL array, dimension (LDA,N)
 *>          On entry, the NB diagonal matrix D and the multipliers
-*>          used to obtain the factor U or L as computed by AB_SSYTRF.
+*>          used to obtain the factor U or L as computed by SSYTRF.
 *>
 *>          On exit, if INFO = 0, the (symmetric) inverse of the original
 *>          matrix.  If UPLO = 'U', the upper triangular part of the
@@ -83,7 +83,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the NB structure of D
-*>          as determined by AB_SSYTRF.
+*>          as determined by SSYTRF.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -100,7 +100,7 @@
 *>           calculates:
 *>              - the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array,
-*>              - and no error message related to LDWORK is issued by AB_XERBLA.
+*>              - and no error message related to LDWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -125,8 +125,7 @@
 *> \ingroup realSYcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_SSYTRI2( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO
-     $ )
+      SUBROUTINE SSYTRI2( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.8.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -149,29 +148,29 @@
       INTEGER            MINSIZE, NBMAX
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_LSAME, AB_ILAENV
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SSYTRI, AB_AB_AB_SSYTRI2X, AB_XERBLA
+      EXTERNAL           SSYTRI, SSYTRI2X, XERBLA
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
+      UPPER = LSAME( UPLO, 'U' )
       LQUERY = ( LWORK.EQ.-1 )
 *     Get blocksize
-      NBMAX = AB_ILAENV( 1, 'AB_SSYTRF', UPLO, N, -1, -1, -1 )
+      NBMAX = ILAENV( 1, 'SSYTRF', UPLO, N, -1, -1, -1 )
       IF ( NBMAX .GE. N ) THEN
          MINSIZE = N
       ELSE
          MINSIZE = (N+NBMAX+1)*(NBMAX+3)
       END IF
 *
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -185,7 +184,7 @@
 *
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_SSYTRI2', -INFO )
+         CALL XERBLA( 'SSYTRI2', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          WORK(1)=MINSIZE
@@ -195,13 +194,12 @@
      $   RETURN
 
       IF( NBMAX .GE. N ) THEN
-         CALL AB_SSYTRI( UPLO, N, A, LDA, IPIV, WORK, INFO )
+         CALL SSYTRI( UPLO, N, A, LDA, IPIV, WORK, INFO )
       ELSE
-         CALL AB_AB_AB_SSYTRI2X( UPLO, N, A, LDA, IPIV, WORK, NBMAX, INF
-     $O )
+         CALL SSYTRI2X( UPLO, N, A, LDA, IPIV, WORK, NBMAX, INFO )
       END IF
       RETURN
 *
-*     End of AB_AB_SSYTRI2
+*     End of SSYTRI2
 *
       END

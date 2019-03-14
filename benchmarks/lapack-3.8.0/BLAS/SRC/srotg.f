@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_SROTG
+*> \brief \b SROTG
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_SROTG(SA,SB,C,S)
+*       SUBROUTINE SROTG(SA,SB,C,S)
 *
 *       .. Scalar Arguments ..
 *       REAL C,S,SA,SB
@@ -20,7 +20,7 @@
 *>
 *> \verbatim
 *>
-*>    AB_AB_SROTG construct givens plane rotation.
+*>    SROTG construct givens plane rotation.
 *> \endverbatim
 *
 *  Arguments:
@@ -67,7 +67,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_AB_SROTG(SA,SB,C,S)
+      SUBROUTINE SROTG(SA,SB,C,S)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

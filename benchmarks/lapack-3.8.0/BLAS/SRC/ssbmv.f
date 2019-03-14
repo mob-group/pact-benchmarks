@@ -1,4 +1,4 @@
-*> \brief \b AB_SSBMV
+*> \brief \b SSBMV
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SSBMV(UPLO,N,K,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+*       SUBROUTINE SSBMV(UPLO,N,K,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
 *
 *       .. Scalar Arguments ..
 *       REAL ALPHA,BETA
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SSBMV  performs the matrix-vector  operation
+*> SSBMV  performs the matrix-vector  operation
 *>
 *>    y := alpha*A*x + beta*y,
 *>
@@ -182,7 +182,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_SSBMV(UPLO,N,K,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+      SUBROUTINE SSBMV(UPLO,N,K,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
 *
 *  -- Reference BLAS level2 routine (version 3.7.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -209,11 +209,11 @@
       INTEGER I,INFO,IX,IY,J,JX,JY,KPLUS1,KX,KY,L
 *     ..
 *     .. External Functions ..
-      LOGICAL AB_LSAME
-      EXTERNAL AB_LSAME
+      LOGICAL LSAME
+      EXTERNAL LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL AB_XERBLA
+      EXTERNAL XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC MAX,MIN
@@ -222,7 +222,7 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF (.NOT.AB_LSAME(UPLO,'U') .AND. .NOT.AB_LSAME(UPLO,'L')) THEN
+      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
           INFO = 1
       ELSE IF (N.LT.0) THEN
           INFO = 2
@@ -236,7 +236,7 @@
           INFO = 11
       END IF
       IF (INFO.NE.0) THEN
-          CALL AB_XERBLA('AB_SSBMV ',INFO)
+          CALL XERBLA('SSBMV ',INFO)
           RETURN
       END IF
 *
@@ -289,7 +289,7 @@
           END IF
       END IF
       IF (ALPHA.EQ.ZERO) RETURN
-      IF (AB_LSAME(UPLO,'U')) THEN
+      IF (LSAME(UPLO,'U')) THEN
 *
 *        Form  y  when upper triangle of A is stored.
 *
@@ -370,6 +370,6 @@
 *
       RETURN
 *
-*     End of AB_SSBMV .
+*     End of SSBMV .
 *
       END

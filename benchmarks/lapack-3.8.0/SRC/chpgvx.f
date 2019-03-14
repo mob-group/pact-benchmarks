@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_CHPGVX
+*> \brief \b CHPGVX
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_CHPGVX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_CHPGVX.f">
+*> Download CHPGVX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chpgvx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_CHPGVX.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chpgvx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_CHPGVX.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chpgvx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_CHPGVX( ITYPE, JOBZ, RANGE, UPLO, N, AP, BP, VL, VU,
+*       SUBROUTINE CHPGVX( ITYPE, JOBZ, RANGE, UPLO, N, AP, BP, VL, VU,
 *                          IL, IU, ABSTOL, M, W, Z, LDZ, WORK, RWORK,
 *                          IWORK, IFAIL, INFO )
 *
@@ -39,7 +39,7 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_CHPGVX computes selected eigenvalues and, optionally, eigenvectors
+*> CHPGVX computes selected eigenvalues and, optionally, eigenvectors
 *> of a complex generalized Hermitian-definite eigenproblem, of the form
 *> A*x=(lambda)*B*x,  A*Bx=(lambda)*x,  or B*A*x=(lambda)*x.  Here A and
 *> B are assumed to be Hermitian, stored in packed format, and B is also
@@ -169,10 +169,10 @@
 *>          by reducing AP to tridiagonal form.
 *>
 *>          Eigenvalues will be computed most accurately when ABSTOL is
-*>          set to twice the underflow threshold 2*AB_SLAMCH('S'), not zero.
+*>          set to twice the underflow threshold 2*SLAMCH('S'), not zero.
 *>          If this routine returns with INFO>0, indicating that some
 *>          eigenvectors did not converge, try setting ABSTOL to
-*>          2*AB_SLAMCH('S').
+*>          2*SLAMCH('S').
 *> \endverbatim
 *>
 *> \param[out] M
@@ -245,8 +245,8 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
-*>          > 0:  AB_CPPTRF or AB_AB_CHPEVX returned an error code:
-*>             <= N:  if INFO = i, AB_AB_CHPEVX failed to converge;
+*>          > 0:  CPPTRF or CHPEVX returned an error code:
+*>             <= N:  if INFO = i, CHPEVX failed to converge;
 *>                    i eigenvectors failed to converge.  Their indices
 *>                    are stored in array IFAIL.
 *>             > N:   if INFO = N + i, for 1 <= i <= n, then the leading
@@ -273,8 +273,7 @@
 *>     Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_CHPGVX( ITYPE, JOBZ, RANGE, UPLO, N, AP, BP, VL, 
-     $VU,
+      SUBROUTINE CHPGVX( ITYPE, JOBZ, RANGE, UPLO, N, AP, BP, VL, VU,
      $                   IL, IU, ABSTOL, M, W, Z, LDZ, WORK, RWORK,
      $                   IWORK, IFAIL, INFO )
 *
@@ -302,12 +301,11 @@
       INTEGER            J
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_AB_CHPEVX, AB_CHPGST, AB_CPPTRF, AB_CTPMV, A
-     $B_CTPSV, AB_XERBLA
+      EXTERNAL           CHPEVX, CHPGST, CPPTRF, CTPMV, CTPSV, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN
@@ -316,20 +314,20 @@
 *
 *     Test the input parameters.
 *
-      WANTZ = AB_LSAME( JOBZ, 'V' )
-      UPPER = AB_LSAME( UPLO, 'U' )
-      ALLEIG = AB_LSAME( RANGE, 'A' )
-      VALEIG = AB_LSAME( RANGE, 'V' )
-      INDEIG = AB_LSAME( RANGE, 'I' )
+      WANTZ = LSAME( JOBZ, 'V' )
+      UPPER = LSAME( UPLO, 'U' )
+      ALLEIG = LSAME( RANGE, 'A' )
+      VALEIG = LSAME( RANGE, 'V' )
+      INDEIG = LSAME( RANGE, 'I' )
 *
       INFO = 0
       IF( ITYPE.LT.1 .OR. ITYPE.GT.3 ) THEN
          INFO = -1
-      ELSE IF( .NOT.( WANTZ .OR. AB_LSAME( JOBZ, 'N' ) ) ) THEN
+      ELSE IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -2
       ELSE IF( .NOT.( ALLEIG .OR. VALEIG .OR. INDEIG ) ) THEN
          INFO = -3
-      ELSE IF( .NOT.( UPPER .OR. AB_LSAME( UPLO, 'L' ) ) ) THEN
+      ELSE IF( .NOT.( UPPER .OR. LSAME( UPLO, 'L' ) ) ) THEN
          INFO = -4
       ELSE IF( N.LT.0 ) THEN
          INFO = -5
@@ -353,7 +351,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_CHPGVX', -INFO )
+         CALL XERBLA( 'CHPGVX', -INFO )
          RETURN
       END IF
 *
@@ -364,7 +362,7 @@
 *
 *     Form a Cholesky factorization of B.
 *
-      CALL AB_CPPTRF( UPLO, N, BP, INFO )
+      CALL CPPTRF( UPLO, N, BP, INFO )
       IF( INFO.NE.0 ) THEN
          INFO = N + INFO
          RETURN
@@ -372,9 +370,8 @@
 *
 *     Transform problem to standard eigenvalue problem and solve.
 *
-      CALL AB_CHPGST( ITYPE, UPLO, N, AP, BP, INFO )
-      CALL AB_AB_CHPEVX( JOBZ, RANGE, UPLO, N, AP, VL, VU, IL, IU, ABSTO
-     $L, M,
+      CALL CHPGST( ITYPE, UPLO, N, AP, BP, INFO )
+      CALL CHPEVX( JOBZ, RANGE, UPLO, N, AP, VL, VU, IL, IU, ABSTOL, M,
      $             W, Z, LDZ, WORK, RWORK, IWORK, IFAIL, INFO )
 *
       IF( WANTZ ) THEN
@@ -395,7 +392,7 @@
             END IF
 *
             DO 10 J = 1, M
-               CALL AB_CTPSV( UPLO, TRANS, 'Non-unit', N, BP, Z( 1, J ),
+               CALL CTPSV( UPLO, TRANS, 'Non-unit', N, BP, Z( 1, J ),
      $                     1 )
    10       CONTINUE
 *
@@ -411,7 +408,7 @@
             END IF
 *
             DO 20 J = 1, M
-               CALL AB_CTPMV( UPLO, TRANS, 'Non-unit', N, BP, Z( 1, J ),
+               CALL CTPMV( UPLO, TRANS, 'Non-unit', N, BP, Z( 1, J ),
      $                     1 )
    20       CONTINUE
          END IF
@@ -419,6 +416,6 @@
 *
       RETURN
 *
-*     End of AB_AB_CHPGVX
+*     End of CHPGVX
 *
       END

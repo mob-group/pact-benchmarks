@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_CLAHEF_RK computes a partial factorization of a complex Hermitian indefinite matrix using bounded Bunch-Kaufman (rook) diagonal pivoting method.
+*> \brief \b CLAHEF_RK computes a partial factorization of a complex Hermitian indefinite matrix using bounded Bunch-Kaufman (rook) diagonal pivoting method.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_CLAHEF_RK + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_CLAHEF_RK.f">
+*> Download CLAHEF_RK + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clahef_rk.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_CLAHEF_RK.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clahef_rk.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_CLAHEF_RK.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clahef_rk.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_CLAHEF_RK( UPLO, N, NB, KB, A, LDA, E, IPIV, W, LDW,
+*       SUBROUTINE CLAHEF_RK( UPLO, N, NB, KB, A, LDA, E, IPIV, W, LDW,
 *                             INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *  =============
 *>
 *> \verbatim
-*> AB_AB_CLAHEF_RK computes a partial factorization of a complex Hermitian
+*> CLAHEF_RK computes a partial factorization of a complex Hermitian
 *> matrix A using the bounded Bunch-Kaufman (rook) diagonal
 *> pivoting method. The partial factorization has the form:
 *>
@@ -48,7 +48,7 @@
 *> where the order of D is at most NB. The actual order is returned in
 *> the argument KB, and is either NB or NB-1, or N if N <= NB.
 *>
-*> AB_AB_CLAHEF_RK is an auxiliary routine called by AB_AB_CHETRF_RK. It uses
+*> CLAHEF_RK is an auxiliary routine called by CHETRF_RK. It uses
 *> blocked code (calling Level 3 BLAS) to update the submatrix
 *> A11 (if UPLO = 'U') or A22 (if UPLO = 'L').
 *> \endverbatim
@@ -259,8 +259,7 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_CLAHEF_RK( UPLO, N, NB, KB, A, LDA, E, IPIV, W, L
-     $DW,
+      SUBROUTINE CLAHEF_RK( UPLO, N, NB, KB, A, LDA, E, IPIV, W, LDW,
      $                      INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -297,14 +296,13 @@
       COMPLEX            D11, D21, D22, Z
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ICAMAX
-      REAL               AB_SLAMCH
-      EXTERNAL           AB_LSAME, AB_ICAMAX, AB_SLAMCH
+      LOGICAL            LSAME
+      INTEGER            ICAMAX
+      REAL               SLAMCH
+      EXTERNAL           LSAME, ICAMAX, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CCOPY, AB_CAB_SSCAL, AB_CGEMM, AB_CGEMV, AB_
-     $CLACGV, AB_CSWAP
+      EXTERNAL           CCOPY, CSSCAL, CGEMM, CGEMV, CLACGV, CSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CONJG, AIMAG, MAX, MIN, REAL, SQRT
@@ -325,9 +323,9 @@
 *
 *     Compute machine safe minimum
 *
-      SFMIN = AB_SLAMCH( 'S' )
+      SFMIN = SLAMCH( 'S' )
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
 *
 *        Factorize the trailing columns of A using the upper triangle
 *        of A and working backwards, and compute the matrix W = U12*D
@@ -358,11 +356,10 @@
 *        Copy column K of A to column KW of W and update it
 *
          IF( K.GT.1 )
-     $      CALL AB_CCOPY( K-1, A( 1, K ), 1, W( 1, KW ), 1 )
+     $      CALL CCOPY( K-1, A( 1, K ), 1, W( 1, KW ), 1 )
          W( K, KW ) = REAL( A( K, K ) )
          IF( K.LT.N ) THEN
-            CALL AB_CGEMV( 'No transpose', K, N-K, -CONE, A( 1, K+1 ), L
-     $DA,
+            CALL CGEMV( 'No transpose', K, N-K, -CONE, A( 1, K+1 ), LDA,
      $                  W( K, KW+1 ), LDW, CONE, W( 1, KW ), 1 )
             W( K, KW ) = REAL( W( K, KW ) )
          END IF
@@ -377,7 +374,7 @@
 *        Determine both COLMAX and IMAX.
 *
          IF( K.GT.1 ) THEN
-            IMAX = AB_ICAMAX( K-1, W( 1, KW ), 1 )
+            IMAX = ICAMAX( K-1, W( 1, KW ), 1 )
             COLMAX = CABS1( W( IMAX, KW ) )
          ELSE
             COLMAX = ZERO
@@ -392,7 +389,7 @@
             KP = K
             A( K, K ) = REAL( W( K, KW ) )
             IF( K.GT.1 )
-     $         CALL AB_CCOPY( K-1, W( 1, KW ), 1, A( 1, K ), 1 )
+     $         CALL CCOPY( K-1, W( 1, KW ), 1, A( 1, K ), 1 )
 *
 *           Set E( K ) to zero
 *
@@ -428,17 +425,16 @@
 *                 Copy column IMAX to column KW-1 of W and update it
 *
                   IF( IMAX.GT.1 )
-     $               CALL AB_CCOPY( IMAX-1, A( 1, IMAX ), 1, W( 1, KW-1 
-     $),
+     $               CALL CCOPY( IMAX-1, A( 1, IMAX ), 1, W( 1, KW-1 ),
      $                           1 )
                   W( IMAX, KW-1 ) = REAL( A( IMAX, IMAX ) )
 *
-                  CALL AB_CCOPY( K-IMAX, A( IMAX, IMAX+1 ), LDA,
+                  CALL CCOPY( K-IMAX, A( IMAX, IMAX+1 ), LDA,
      $                        W( IMAX+1, KW-1 ), 1 )
-                  CALL AB_CLACGV( K-IMAX, W( IMAX+1, KW-1 ), 1 )
+                  CALL CLACGV( K-IMAX, W( IMAX+1, KW-1 ), 1 )
 *
                   IF( K.LT.N ) THEN
-                     CALL AB_CGEMV( 'No transpose', K, N-K, -CONE,
+                     CALL CGEMV( 'No transpose', K, N-K, -CONE,
      $                           A( 1, K+1 ), LDA, W( IMAX, KW+1 ), LDW,
      $                           CONE, W( 1, KW-1 ), 1 )
                      W( IMAX, KW-1 ) = REAL( W( IMAX, KW-1 ) )
@@ -449,7 +445,7 @@
 *                 Determine both ROWMAX and JMAX.
 *
                   IF( IMAX.NE.K ) THEN
-                     JMAX = IMAX + AB_ICAMAX( K-IMAX, W( IMAX+1, KW-1 ),
+                     JMAX = IMAX + ICAMAX( K-IMAX, W( IMAX+1, KW-1 ),
      $                                     1 )
                      ROWMAX = CABS1( W( JMAX, KW-1 ) )
                   ELSE
@@ -457,7 +453,7 @@
                   END IF
 *
                   IF( IMAX.GT.1 ) THEN
-                     ITEMP = AB_ICAMAX( IMAX-1, W( 1, KW-1 ), 1 )
+                     ITEMP = ICAMAX( IMAX-1, W( 1, KW-1 ), 1 )
                      STEMP = CABS1( W( ITEMP, KW-1 ) )
                      IF( STEMP.GT.ROWMAX ) THEN
                         ROWMAX = STEMP
@@ -480,7 +476,7 @@
 *
 *                    copy column KW-1 of W to column KW of W
 *
-                     CALL AB_CCOPY( K, W( 1, KW-1 ), 1, W( 1, KW ), 1 )
+                     CALL CCOPY( K, W( 1, KW-1 ), 1, W( 1, KW ), 1 )
 *
                      DONE = .TRUE.
 *
@@ -509,7 +505,7 @@
 *
 *                    Copy updated JMAXth (next IMAXth) column to Kth of W
 *
-                     CALL AB_CCOPY( K, W( 1, KW-1 ), 1, W( 1, KW ), 1 )
+                     CALL CCOPY( K, W( 1, KW-1 ), 1, W( 1, KW ), 1 )
 *
                   END IF
 *
@@ -543,11 +539,11 @@
 *              will be later overwritten.
 *
                A( P, P ) = REAL( A( K, K ) )
-               CALL AB_CCOPY( K-1-P, A( P+1, K ), 1, A( P, P+1 ),
+               CALL CCOPY( K-1-P, A( P+1, K ), 1, A( P, P+1 ),
      $                     LDA )
-               CALL AB_CLACGV( K-1-P, A( P, P+1 ), LDA )
+               CALL CLACGV( K-1-P, A( P, P+1 ), LDA )
                IF( P.GT.1 )
-     $            CALL AB_CCOPY( P-1, A( 1, K ), 1, A( 1, P ), 1 )
+     $            CALL CCOPY( P-1, A( 1, K ), 1, A( 1, P ), 1 )
 *
 *              Interchange rows K and P in the last K+1 to N columns of A
 *              (columns K and K-1 of A for 2-by-2 pivot will be
@@ -555,9 +551,9 @@
 *              in last KKW to NB columns of W.
 *
                IF( K.LT.N )
-     $            CALL AB_CSWAP( N-K, A( K, K+1 ), LDA, A( P, K+1 ),
+     $            CALL CSWAP( N-K, A( K, K+1 ), LDA, A( P, K+1 ),
      $                        LDA )
-               CALL AB_CSWAP( N-KK+1, W( K, KKW ), LDW, W( P, KKW ),
+               CALL CSWAP( N-KK+1, W( K, KKW ), LDW, W( P, KKW ),
      $                     LDW )
             END IF
 *
@@ -572,11 +568,11 @@
 *              will be later overwritten.
 *
                A( KP, KP ) = REAL( A( KK, KK ) )
-               CALL AB_CCOPY( KK-1-KP, A( KP+1, KK ), 1, A( KP, KP+1 ),
+               CALL CCOPY( KK-1-KP, A( KP+1, KK ), 1, A( KP, KP+1 ),
      $                     LDA )
-               CALL AB_CLACGV( KK-1-KP, A( KP, KP+1 ), LDA )
+               CALL CLACGV( KK-1-KP, A( KP, KP+1 ), LDA )
                IF( KP.GT.1 )
-     $            CALL AB_CCOPY( KP-1, A( 1, KK ), 1, A( 1, KP ), 1 )
+     $            CALL CCOPY( KP-1, A( 1, KK ), 1, A( 1, KP ), 1 )
 *
 *              Interchange rows KK and KP in last K+1 to N columns of A
 *              (columns K (or K and K-1 for 2-by-2 pivot) of A will be
@@ -584,9 +580,9 @@
 *              in last KKW to NB columns of W.
 *
                IF( K.LT.N )
-     $            CALL AB_CSWAP( N-K, A( KK, K+1 ), LDA, A( KP, K+1 ),
+     $            CALL CSWAP( N-K, A( KK, K+1 ), LDA, A( KP, K+1 ),
      $                        LDA )
-               CALL AB_CSWAP( N-KK+1, W( KK, KKW ), LDW, W( KP, KKW ),
+               CALL CSWAP( N-KK+1, W( KK, KKW ), LDW, W( KP, KKW ),
      $                     LDW )
             END IF
 *
@@ -608,7 +604,7 @@
 *              (NOTE: No need to use for Hermitian matrix
 *              A( K, K ) = REAL( W( K, K) ) to separately copy diagonal
 *              element D(k,k) from W (potentially saves only one load))
-               CALL AB_CCOPY( K, W( 1, KW ), 1, A( 1, K ), 1 )
+               CALL CCOPY( K, W( 1, KW ), 1, A( 1, K ), 1 )
                IF( K.GT.1 ) THEN
 *
 *                 (NOTE: No need to check if A(k,k) is NOT ZERO,
@@ -620,7 +616,7 @@
                   T = REAL( A( K, K ) )
                   IF( ABS( T ).GE.SFMIN ) THEN
                      R1 = ONE / T
-                     CALL AB_CAB_SSCAL( K-1, R1, A( 1, K ), 1 )
+                     CALL CSSCAL( K-1, R1, A( 1, K ), 1 )
                   ELSE
                      DO 14 II = 1, K-1
                         A( II, K ) = A( II, K ) / T
@@ -629,7 +625,7 @@
 *
 *                 (2) Conjugate column W(kw)
 *
-                  CALL AB_CLACGV( K-1, W( 1, KW ), 1 )
+                  CALL CLACGV( K-1, W( 1, KW ), 1 )
 *
 *                 Store the superdiagonal element of D in array E
 *
@@ -730,8 +726,8 @@
 *
 *              (2) Conjugate columns W(kw) and W(kw-1)
 *
-               CALL AB_CLACGV( K-1, W( 1, KW ), 1 )
-               CALL AB_CLACGV( K-2, W( 1, KW-1 ), 1 )
+               CALL CLACGV( K-1, W( 1, KW ), 1 )
+               CALL CLACGV( K-2, W( 1, KW-1 ), 1 )
 *
             END IF
 *
@@ -769,7 +765,7 @@
 *
             DO 40 JJ = J, J + JB - 1
                A( JJ, JJ ) = REAL( A( JJ, JJ ) )
-               CALL AB_CGEMV( 'No transpose', JJ-J+1, N-K, -CONE,
+               CALL CGEMV( 'No transpose', JJ-J+1, N-K, -CONE,
      $                     A( J, K+1 ), LDA, W( JJ, KW+1 ), LDW, CONE,
      $                     A( J, JJ ), 1 )
                A( JJ, JJ ) = REAL( A( JJ, JJ ) )
@@ -778,7 +774,7 @@
 *           Update the rectangular superdiagonal block
 *
             IF( J.GE.2 )
-     $         CALL AB_CGEMM( 'No transpose', 'Transpose', J-1, JB, N-K,
+     $         CALL CGEMM( 'No transpose', 'Transpose', J-1, JB, N-K,
      $                     -CONE, A( 1, K+1 ), LDA, W( J, KW+1 ), LDW,
      $                     CONE, A( 1, J ), LDA )
    50    CONTINUE
@@ -814,9 +810,9 @@
 *
          W( K, K ) = REAL( A( K, K ) )
          IF( K.LT.N )
-     $      CALL AB_CCOPY( N-K, A( K+1, K ), 1, W( K+1, K ), 1 )
+     $      CALL CCOPY( N-K, A( K+1, K ), 1, W( K+1, K ), 1 )
          IF( K.GT.1 ) THEN
-            CALL AB_CGEMV( 'No transpose', N-K+1, K-1, -CONE, A( K, 1 ),
+            CALL CGEMV( 'No transpose', N-K+1, K-1, -CONE, A( K, 1 ),
      $                  LDA, W( K, 1 ), LDW, CONE, W( K, K ), 1 )
             W( K, K ) = REAL( W( K, K ) )
          END IF
@@ -831,7 +827,7 @@
 *        Determine both COLMAX and IMAX.
 *
          IF( K.LT.N ) THEN
-            IMAX = K + AB_ICAMAX( N-K, W( K+1, K ), 1 )
+            IMAX = K + ICAMAX( N-K, W( K+1, K ), 1 )
             COLMAX = CABS1( W( IMAX, K ) )
          ELSE
             COLMAX = ZERO
@@ -846,7 +842,7 @@
             KP = K
             A( K, K ) = REAL( W( K, K ) )
             IF( K.LT.N )
-     $         CALL AB_CCOPY( N-K, W( K+1, K ), 1, A( K+1, K ), 1 )
+     $         CALL CCOPY( N-K, W( K+1, K ), 1, A( K+1, K ), 1 )
 *
 *           Set E( K ) to zero
 *
@@ -882,17 +878,16 @@
 *
 *                 Copy column IMAX to column k+1 of W and update it
 *
-                  CALL AB_CCOPY( IMAX-K, A( IMAX, K ), LDA, W( K, K+1 ),
-     $ 1)
-                  CALL AB_CLACGV( IMAX-K, W( K, K+1 ), 1 )
+                  CALL CCOPY( IMAX-K, A( IMAX, K ), LDA, W( K, K+1 ), 1)
+                  CALL CLACGV( IMAX-K, W( K, K+1 ), 1 )
                   W( IMAX, K+1 ) = REAL( A( IMAX, IMAX ) )
 *
                   IF( IMAX.LT.N )
-     $               CALL AB_CCOPY( N-IMAX, A( IMAX+1, IMAX ), 1,
+     $               CALL CCOPY( N-IMAX, A( IMAX+1, IMAX ), 1,
      $                           W( IMAX+1, K+1 ), 1 )
 *
                   IF( K.GT.1 ) THEN
-                     CALL AB_CGEMV( 'No transpose', N-K+1, K-1, -CONE,
+                     CALL CGEMV( 'No transpose', N-K+1, K-1, -CONE,
      $                            A( K, 1 ), LDA, W( IMAX, 1 ), LDW,
      $                            CONE, W( K, K+1 ), 1 )
                      W( IMAX, K+1 ) = REAL( W( IMAX, K+1 ) )
@@ -903,15 +898,14 @@
 *                 Determine both ROWMAX and JMAX.
 *
                   IF( IMAX.NE.K ) THEN
-                     JMAX = K - 1 + AB_ICAMAX( IMAX-K, W( K, K+1 ), 1 )
+                     JMAX = K - 1 + ICAMAX( IMAX-K, W( K, K+1 ), 1 )
                      ROWMAX = CABS1( W( JMAX, K+1 ) )
                   ELSE
                      ROWMAX = ZERO
                   END IF
 *
                   IF( IMAX.LT.N ) THEN
-                     ITEMP = IMAX + AB_ICAMAX( N-IMAX, W( IMAX+1, K+1 ),
-     $ 1)
+                     ITEMP = IMAX + ICAMAX( N-IMAX, W( IMAX+1, K+1 ), 1)
                      STEMP = CABS1( W( ITEMP, K+1 ) )
                      IF( STEMP.GT.ROWMAX ) THEN
                         ROWMAX = STEMP
@@ -934,8 +928,7 @@
 *
 *                    copy column K+1 of W to column K of W
 *
-                     CALL AB_CCOPY( N-K+1, W( K, K+1 ), 1, W( K, K ), 1 
-     $)
+                     CALL CCOPY( N-K+1, W( K, K+1 ), 1, W( K, K ), 1 )
 *
                      DONE = .TRUE.
 *
@@ -964,8 +957,7 @@
 *
 *                    Copy updated JMAXth (next IMAXth) column to Kth of W
 *
-                     CALL AB_CCOPY( N-K+1, W( K, K+1 ), 1, W( K, K ), 1 
-     $)
+                     CALL CCOPY( N-K+1, W( K, K+1 ), 1, W( K, K ), 1 )
 *
                   END IF
 *
@@ -995,10 +987,10 @@
 *              will be later overwritten.
 *
                A( P, P ) = REAL( A( K, K ) )
-               CALL AB_CCOPY( P-K-1, A( K+1, K ), 1, A( P, K+1 ), LDA )
-               CALL AB_CLACGV( P-K-1, A( P, K+1 ), LDA )
+               CALL CCOPY( P-K-1, A( K+1, K ), 1, A( P, K+1 ), LDA )
+               CALL CLACGV( P-K-1, A( P, K+1 ), LDA )
                IF( P.LT.N )
-     $            CALL AB_CCOPY( N-P, A( P+1, K ), 1, A( P+1, P ), 1 )
+     $            CALL CCOPY( N-P, A( P+1, K ), 1, A( P+1, P ), 1 )
 *
 *              Interchange rows K and P in first K-1 columns of A
 *              (columns K and K+1 of A for 2-by-2 pivot will be
@@ -1006,8 +998,8 @@
 *              in first KK columns of W.
 *
                IF( K.GT.1 )
-     $            CALL AB_CSWAP( K-1, A( K, 1 ), LDA, A( P, 1 ), LDA )
-               CALL AB_CSWAP( KK, W( K, 1 ), LDW, W( P, 1 ), LDW )
+     $            CALL CSWAP( K-1, A( K, 1 ), LDA, A( P, 1 ), LDA )
+               CALL CSWAP( KK, W( K, 1 ), LDW, W( P, 1 ), LDW )
             END IF
 *
 *           Interchange rows and columns KP and KK.
@@ -1021,12 +1013,11 @@
 *              will be later overwritten.
 *
                A( KP, KP ) = REAL( A( KK, KK ) )
-               CALL AB_CCOPY( KP-KK-1, A( KK+1, KK ), 1, A( KP, KK+1 ),
+               CALL CCOPY( KP-KK-1, A( KK+1, KK ), 1, A( KP, KK+1 ),
      $                     LDA )
-               CALL AB_CLACGV( KP-KK-1, A( KP, KK+1 ), LDA )
+               CALL CLACGV( KP-KK-1, A( KP, KK+1 ), LDA )
                IF( KP.LT.N )
-     $            CALL AB_CCOPY( N-KP, A( KP+1, KK ), 1, A( KP+1, KP ), 
-     $1 )
+     $            CALL CCOPY( N-KP, A( KP+1, KK ), 1, A( KP+1, KP ), 1 )
 *
 *              Interchange rows KK and KP in first K-1 columns of A
 *              (column K (or K and K+1 for 2-by-2 pivot) of A will be
@@ -1034,8 +1025,8 @@
 *              in first KK columns of W.
 *
                IF( K.GT.1 )
-     $            CALL AB_CSWAP( K-1, A( KK, 1 ), LDA, A( KP, 1 ), LDA )
-               CALL AB_CSWAP( KK, W( KK, 1 ), LDW, W( KP, 1 ), LDW )
+     $            CALL CSWAP( K-1, A( KK, 1 ), LDA, A( KP, 1 ), LDA )
+               CALL CSWAP( KK, W( KK, 1 ), LDW, W( KP, 1 ), LDW )
             END IF
 *
             IF( KSTEP.EQ.1 ) THEN
@@ -1056,7 +1047,7 @@
 *              (NOTE: No need to use for Hermitian matrix
 *              A( K, K ) = REAL( W( K, K) ) to separately copy diagonal
 *              element D(k,k) from W (potentially saves only one load))
-               CALL AB_CCOPY( N-K+1, W( K, K ), 1, A( K, K ), 1 )
+               CALL CCOPY( N-K+1, W( K, K ), 1, A( K, K ), 1 )
                IF( K.LT.N ) THEN
 *
 *                 (NOTE: No need to check if A(k,k) is NOT ZERO,
@@ -1068,7 +1059,7 @@
                   T = REAL( A( K, K ) )
                   IF( ABS( T ).GE.SFMIN ) THEN
                      R1 = ONE / T
-                     CALL AB_CAB_SSCAL( N-K, R1, A( K+1, K ), 1 )
+                     CALL CSSCAL( N-K, R1, A( K+1, K ), 1 )
                   ELSE
                      DO 74 II = K + 1, N
                         A( II, K ) = A( II, K ) / T
@@ -1077,7 +1068,7 @@
 *
 *                 (2) Conjugate column W(k)
 *
-                  CALL AB_CLACGV( N-K, W( K+1, K ), 1 )
+                  CALL CLACGV( N-K, W( K+1, K ), 1 )
 *
 *                 Store the subdiagonal element of D in array E
 *
@@ -1178,8 +1169,8 @@
 *
 *              (2) Conjugate columns W(k) and W(k+1)
 *
-               CALL AB_CLACGV( N-K, W( K+1, K ), 1 )
-               CALL AB_CLACGV( N-K-1, W( K+2, K+1 ), 1 )
+               CALL CLACGV( N-K, W( K+1, K ), 1 )
+               CALL CLACGV( N-K-1, W( K+2, K+1 ), 1 )
 *
             END IF
 *
@@ -1217,7 +1208,7 @@
 *
             DO 100 JJ = J, J + JB - 1
                A( JJ, JJ ) = REAL( A( JJ, JJ ) )
-               CALL AB_CGEMV( 'No transpose', J+JB-JJ, K-1, -CONE,
+               CALL CGEMV( 'No transpose', J+JB-JJ, K-1, -CONE,
      $                     A( JJ, 1 ), LDA, W( JJ, 1 ), LDW, CONE,
      $                     A( JJ, JJ ), 1 )
                A( JJ, JJ ) = REAL( A( JJ, JJ ) )
@@ -1226,7 +1217,7 @@
 *           Update the rectangular subdiagonal block
 *
             IF( J+JB.LE.N )
-     $         CALL AB_CGEMM( 'No transpose', 'Transpose', N-J-JB+1, JB,
+     $         CALL CGEMM( 'No transpose', 'Transpose', N-J-JB+1, JB,
      $                     K-1, -CONE, A( J+JB, 1 ), LDA, W( J, 1 ),
      $                     LDW, CONE, A( J+JB, J ), LDA )
   110    CONTINUE
@@ -1238,6 +1229,6 @@
       END IF
       RETURN
 *
-*     End of AB_AB_CLAHEF_RK
+*     End of CLAHEF_RK
 *
       END

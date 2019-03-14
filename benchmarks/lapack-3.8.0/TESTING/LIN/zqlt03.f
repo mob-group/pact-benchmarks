@@ -1,4 +1,4 @@
-*> \brief \b AB_ZQLT03
+*> \brief \b ZQLT03
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZQLT03( M, N, K, AF, C, CC, Q, LDA, TAU, WORK, LWORK,
+*       SUBROUTINE ZQLT03( M, N, K, AF, C, CC, Q, LDA, TAU, WORK, LWORK,
 *                          RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -26,11 +26,11 @@
 *>
 *> \verbatim
 *>
-*> AB_ZQLT03 tests AB_ZUNMQL, which computes Q*C, Q'*C, C*Q or C*Q'.
+*> ZQLT03 tests ZUNMQL, which computes Q*C, Q'*C, C*Q or C*Q'.
 *>
-*> AB_ZQLT03 compares the results of a call to AB_ZUNMQL with the results of
-*> forming Q explicitly by a call to AB_ZUNGQL and then performing matrix
-*> multiplication by a call to AB_ZGEMM.
+*> ZQLT03 compares the results of a call to ZUNMQL with the results of
+*> forming Q explicitly by a call to ZUNGQL and then performing matrix
+*> multiplication by a call to ZGEMM.
 *> \endverbatim
 *
 *  Arguments:
@@ -61,7 +61,7 @@
 *> \verbatim
 *>          AF is COMPLEX*16 array, dimension (LDA,N)
 *>          Details of the QL factorization of an m-by-n matrix, as
-*>          returned by AB_ZGEQLF. See AB_CGEQLF for further details.
+*>          returned by ZGEQLF. See CGEQLF for further details.
 *> \endverbatim
 *>
 *> \param[out] C
@@ -133,8 +133,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZQLT03( M, N, K, AF, C, CC, Q, LDA, TAU, WORK, LWORK
-     $,
+      SUBROUTINE ZQLT03( M, N, K, AF, C, CC, Q, LDA, TAU, WORK, LWORK,
      $                   RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -165,13 +164,12 @@
       DOUBLE PRECISION   CNORM, EPS, RESID
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE
-      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_ZLANGE
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH, ZLANGE
+      EXTERNAL           LSAME, DLAMCH, ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZGEMM, AB_ZLACPY, AB_ZLARNV, AB_ZLASET, AB_Z
-     $UNGQL, AB_ZUNMQL
+      EXTERNAL           ZGEMM, ZLACPY, ZLARNV, ZLASET, ZUNGQL, ZUNMQL
 *     ..
 *     .. Local Arrays ..
       INTEGER            ISEED( 4 )
@@ -190,7 +188,7 @@
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
+      EPS = DLAMCH( 'Epsilon' )
       MINMN = MIN( M, N )
 *
 *     Quick return if possible
@@ -205,18 +203,18 @@
 *
 *     Copy the last k columns of the factorization to the array Q
 *
-      CALL AB_ZLASET( 'Full', M, M, ROGUE, ROGUE, Q, LDA )
+      CALL ZLASET( 'Full', M, M, ROGUE, ROGUE, Q, LDA )
       IF( K.GT.0 .AND. M.GT.K )
-     $   CALL AB_ZLACPY( 'Full', M-K, K, AF( 1, N-K+1 ), LDA,
+     $   CALL ZLACPY( 'Full', M-K, K, AF( 1, N-K+1 ), LDA,
      $                Q( 1, M-K+1 ), LDA )
       IF( K.GT.1 )
-     $   CALL AB_ZLACPY( 'Upper', K-1, K-1, AF( M-K+1, N-K+2 ), LDA,
+     $   CALL ZLACPY( 'Upper', K-1, K-1, AF( M-K+1, N-K+2 ), LDA,
      $                Q( M-K+1, M-K+2 ), LDA )
 *
 *     Generate the m-by-m matrix Q
 *
-      SRNAMT = 'AB_ZUNGQL'
-      CALL AB_ZUNGQL( M, M, K, Q, LDA, TAU( MINMN-K+1 ), WORK, LWORK,
+      SRNAMT = 'ZUNGQL'
+      CALL ZUNGQL( M, M, K, Q, LDA, TAU( MINMN-K+1 ), WORK, LWORK,
      $             INFO )
 *
       DO 30 ISIDE = 1, 2
@@ -233,9 +231,9 @@
 *        Generate MC by NC matrix C
 *
          DO 10 J = 1, NC
-            CALL AB_ZLARNV( 2, ISEED, MC, C( 1, J ) )
+            CALL ZLARNV( 2, ISEED, MC, C( 1, J ) )
    10    CONTINUE
-         CNORM = AB_ZLANGE( '1', MC, NC, C, LDA, RWORK )
+         CNORM = ZLANGE( '1', MC, NC, C, LDA, RWORK )
          IF( CNORM.EQ.ZERO )
      $      CNORM = ONE
 *
@@ -248,32 +246,31 @@
 *
 *           Copy C
 *
-            CALL AB_ZLACPY( 'Full', MC, NC, C, LDA, CC, LDA )
+            CALL ZLACPY( 'Full', MC, NC, C, LDA, CC, LDA )
 *
 *           Apply Q or Q' to C
 *
-            SRNAMT = 'AB_ZUNMQL'
+            SRNAMT = 'ZUNMQL'
             IF( K.GT.0 )
-     $         CALL AB_ZUNMQL( SIDE, TRANS, MC, NC, K, AF( 1, N-K+1 ), L
-     $DA,
+     $         CALL ZUNMQL( SIDE, TRANS, MC, NC, K, AF( 1, N-K+1 ), LDA,
      $                      TAU( MINMN-K+1 ), CC, LDA, WORK, LWORK,
      $                      INFO )
 *
 *           Form explicit product and subtract
 *
-            IF( AB_LSAME( SIDE, 'L' ) ) THEN
-               CALL AB_ZGEMM( TRANS, 'No transpose', MC, NC, MC,
+            IF( LSAME( SIDE, 'L' ) ) THEN
+               CALL ZGEMM( TRANS, 'No transpose', MC, NC, MC,
      $                     DCMPLX( -ONE ), Q, LDA, C, LDA,
      $                     DCMPLX( ONE ), CC, LDA )
             ELSE
-               CALL AB_ZGEMM( 'No transpose', TRANS, MC, NC, NC,
+               CALL ZGEMM( 'No transpose', TRANS, MC, NC, NC,
      $                     DCMPLX( -ONE ), C, LDA, Q, LDA,
      $                     DCMPLX( ONE ), CC, LDA )
             END IF
 *
 *           Compute error in the difference
 *
-            RESID = AB_ZLANGE( '1', MC, NC, CC, LDA, RWORK )
+            RESID = ZLANGE( '1', MC, NC, CC, LDA, RWORK )
             RESULT( ( ISIDE-1 )*2+ITRANS ) = RESID /
      $         ( DBLE( MAX( 1, M ) )*CNORM*EPS )
 *
@@ -282,6 +279,6 @@
 *
       RETURN
 *
-*     End of AB_ZQLT03
+*     End of ZQLT03
 *
       END

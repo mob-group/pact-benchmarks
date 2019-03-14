@@ -1,4 +1,4 @@
-*> \brief \b AB_SLA_LIN_BERR computes a component-wise relative backward error.
+*> \brief \b SLA_LIN_BERR computes a component-wise relative backward error.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLA_LIN_BERR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLA_LIN_BERR.f">
+*> Download SLA_LIN_BERR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sla_lin_berr.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLA_LIN_BERR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sla_lin_berr.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLA_LIN_BERR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sla_lin_berr.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLA_LIN_BERR ( N, NZ, NRHS, RES, AYB, BERR )
+*       SUBROUTINE SLA_LIN_BERR ( N, NZ, NRHS, RES, AYB, BERR )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            N, NZ, NRHS
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*>    AB_SLA_LIN_BERR computes componentwise relative backward error from
+*>    SLA_LIN_BERR computes componentwise relative backward error from
 *>    the formula
 *>        max(i) ( abs(R(i)) / ( abs(op(A_s))*abs(Y) + abs(B_s) )(i) )
 *>    where abs(Z) is the componentwise absolute value of the matrix
@@ -54,7 +54,7 @@
 *> \param[in] NZ
 *> \verbatim
 *>          NZ is INTEGER
-*>     We add (NZ+1)*AB_SLAMCH( 'Safe minimum' ) to R(i) in the numerator to
+*>     We add (NZ+1)*SLAMCH( 'Safe minimum' ) to R(i) in the numerator to
 *>     guard against spuriously zero residuals. Default value is N.
 *> \endverbatim
 *>
@@ -77,7 +77,7 @@
 *>          AYB is REAL array, dimension (N, NRHS)
 *>     The denominator in the relative backward error formula above, i.e.,
 *>     the matrix abs(op(A_s))*abs(Y) + abs(B_s). The matrices A, Y, and B
-*>     are from iterative refinement (see AB_SLA_GERFSX_EXTENDED.f).
+*>     are from iterative refinement (see sla_gerfsx_extended.f).
 *> \endverbatim
 *>
 *> \param[out] BERR
@@ -99,7 +99,7 @@
 *> \ingroup realOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_SLA_LIN_BERR ( N, NZ, NRHS, RES, AYB, BERR )
+      SUBROUTINE SLA_LIN_BERR ( N, NZ, NRHS, RES, AYB, BERR )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -124,8 +124,8 @@
       INTRINSIC          ABS, MAX
 *     ..
 *     .. External Functions ..
-      EXTERNAL           AB_SLAMCH
-      REAL               AB_SLAMCH
+      EXTERNAL           SLAMCH
+      REAL               SLAMCH
       REAL               SAFE1
 *     ..
 *     .. Executable Statements ..
@@ -134,7 +134,7 @@
 *     residuals.  A similar safeguard is in the SLA_yyAMV routine used
 *     to compute AYB.
 *
-      SAFE1 = AB_SLAMCH( 'Safe minimum' )
+      SAFE1 = SLAMCH( 'Safe minimum' )
       SAFE1 = (NZ+1)*SAFE1
 
       DO J = 1, NRHS

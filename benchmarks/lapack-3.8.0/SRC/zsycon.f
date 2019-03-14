@@ -1,4 +1,4 @@
-*> \brief \b AB_ZSYCON
+*> \brief \b ZSYCON
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZSYCON + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZSYCON.f">
+*> Download ZSYCON + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zsycon.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZSYCON.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zsycon.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZSYCON.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsycon.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZSYCON( UPLO, N, A, LDA, IPIV, ANORM, RCOND, WORK,
+*       SUBROUTINE ZSYCON( UPLO, N, A, LDA, IPIV, ANORM, RCOND, WORK,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,9 +37,9 @@
 *>
 *> \verbatim
 *>
-*> AB_ZSYCON estimates the reciprocal of the condition number (in the
+*> ZSYCON estimates the reciprocal of the condition number (in the
 *> 1-norm) of a complex symmetric matrix A using the factorization
-*> A = U*D*U**T or A = L*D*L**T computed by AB_ZSYTRF.
+*> A = U*D*U**T or A = L*D*L**T computed by ZSYTRF.
 *>
 *> An estimate is obtained for norm(inv(A)), and the reciprocal of the
 *> condition number is computed as RCOND = 1 / (ANORM * norm(inv(A))).
@@ -67,7 +67,7 @@
 *> \verbatim
 *>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          The block diagonal matrix D and the multipliers used to
-*>          obtain the factor U or L as computed by AB_ZSYTRF.
+*>          obtain the factor U or L as computed by ZSYTRF.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -80,7 +80,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D
-*>          as determined by AB_ZSYTRF.
+*>          as determined by ZSYTRF.
 *> \endverbatim
 *>
 *> \param[in] ANORM
@@ -122,7 +122,7 @@
 *> \ingroup complex16SYcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_ZSYCON( UPLO, N, A, LDA, IPIV, ANORM, RCOND, WORK,
+      SUBROUTINE ZSYCON( UPLO, N, A, LDA, IPIV, ANORM, RCOND, WORK,
      $                   INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -155,11 +155,11 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZLACN2, AB_ZSYTRS
+      EXTERNAL           XERBLA, ZLACN2, ZSYTRS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -169,8 +169,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -180,7 +180,7 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZSYCON', -INFO )
+         CALL XERBLA( 'ZSYCON', -INFO )
          RETURN
       END IF
 *
@@ -218,12 +218,12 @@
 *
       KASE = 0
    30 CONTINUE
-      CALL AB_ZLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
+      CALL ZLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
       IF( KASE.NE.0 ) THEN
 *
 *        Multiply by inv(L*D*L**T) or inv(U*D*U**T).
 *
-         CALL AB_ZSYTRS( UPLO, N, 1, A, LDA, IPIV, WORK, N, INFO )
+         CALL ZSYTRS( UPLO, N, 1, A, LDA, IPIV, WORK, N, INFO )
          GO TO 30
       END IF
 *
@@ -234,6 +234,6 @@
 *
       RETURN
 *
-*     End of AB_ZSYCON
+*     End of ZSYCON
 *
       END

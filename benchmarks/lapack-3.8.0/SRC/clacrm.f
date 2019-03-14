@@ -1,4 +1,4 @@
-*> \brief \b AB_CLACRM multiplies a complex matrix by a square real matrix.
+*> \brief \b CLACRM multiplies a complex matrix by a square real matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CLACRM + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLACRM.f">
+*> Download CLACRM + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clacrm.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLACRM.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clacrm.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLACRM.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clacrm.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CLACRM( M, N, A, LDA, B, LDB, C, LDC, RWORK )
+*       SUBROUTINE CLACRM( M, N, A, LDA, B, LDB, C, LDC, RWORK )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDA, LDB, LDC, M, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CLACRM performs a very simple matrix-matrix multiplication:
+*> CLACRM performs a very simple matrix-matrix multiplication:
 *>          C := A * B,
 *> where A is M by N and complex; B is N by N and real;
 *> C is M by N and complex.
@@ -112,7 +112,7 @@
 *> \ingroup complexOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_CLACRM( M, N, A, LDA, B, LDB, C, LDC, RWORK )
+      SUBROUTINE CLACRM( M, N, A, LDA, B, LDB, C, LDC, RWORK )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -140,7 +140,7 @@
       INTRINSIC          AIMAG, CMPLX, REAL
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SGEMM
+      EXTERNAL           SGEMM
 *     ..
 *     .. Executable Statements ..
 *
@@ -156,7 +156,7 @@
    20 CONTINUE
 *
       L = M*N + 1
-      CALL AB_SGEMM( 'N', 'N', M, N, N, ONE, RWORK, M, B, LDB, ZERO,
+      CALL SGEMM( 'N', 'N', M, N, N, ONE, RWORK, M, B, LDB, ZERO,
      $            RWORK( L ), M )
       DO 40 J = 1, N
          DO 30 I = 1, M
@@ -169,7 +169,7 @@
             RWORK( ( J-1 )*M+I ) = AIMAG( A( I, J ) )
    50    CONTINUE
    60 CONTINUE
-      CALL AB_SGEMM( 'N', 'N', M, N, N, ONE, RWORK, M, B, LDB, ZERO,
+      CALL SGEMM( 'N', 'N', M, N, N, ONE, RWORK, M, B, LDB, ZERO,
      $            RWORK( L ), M )
       DO 80 J = 1, N
          DO 70 I = 1, M
@@ -180,6 +180,6 @@
 *
       RETURN
 *
-*     End of AB_CLACRM
+*     End of CLACRM
 *
       END

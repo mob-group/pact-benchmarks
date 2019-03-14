@@ -1,4 +1,4 @@
-*> \brief \b AB_DLAR2V applies a vector of plane rotations with real cosines and real sines from both sides to a sequence of 2-by-2 symmetric/Hermitian matrices.
+*> \brief \b DLAR2V applies a vector of plane rotations with real cosines and real sines from both sides to a sequence of 2-by-2 symmetric/Hermitian matrices.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLAR2V + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLAR2V.f">
+*> Download DLAR2V + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlar2v.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLAR2V.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlar2v.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLAR2V.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlar2v.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLAR2V( N, X, Y, Z, INCX, C, S, INCC )
+*       SUBROUTINE DLAR2V( N, X, Y, Z, INCX, C, S, INCC )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCC, INCX, N
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DLAR2V applies a vector of real plane rotations from both sides to
+*> DLAR2V applies a vector of real plane rotations from both sides to
 *> a sequence of 2-by-2 real symmetric matrices, defined by the elements
 *> of the vectors x, y and z. For i = 1,2,...,n
 *>
@@ -108,7 +108,7 @@
 *> \ingroup doubleOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_DLAR2V( N, X, Y, Z, INCX, C, S, INCC )
+      SUBROUTINE DLAR2V( N, X, Y, Z, INCX, C, S, INCC )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -151,7 +151,7 @@
          IC = IC + INCC
    10 CONTINUE
 *
-*     End of AB_DLAR2V
+*     End of DLAR2V
 *
       RETURN
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_ZDRVSG2STG
+*> \brief \b ZDRVSG2STG
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_ZDRVSG2STG( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+*       SUBROUTINE ZDRVSG2STG( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
 *                              NOUNIT, A, LDA, B, LDB, D, D2, Z, LDZ, AB,
 *                              BB, AP, BP, WORK, NWORK, RWORK, LRWORK,
 *                              IWORK, LIWORK, RESULT, INFO )
@@ -35,48 +35,48 @@
 *>
 *> \verbatim
 *>
-*>      AB_AB_ZDRVSG2STG checks the complex Hermitian generalized eigenproblem
+*>      ZDRVSG2STG checks the complex Hermitian generalized eigenproblem
 *>      drivers.
 *>
-*>              AB_ZHEGV computes all eigenvalues and, optionally,
+*>              ZHEGV computes all eigenvalues and, optionally,
 *>              eigenvectors of a complex Hermitian-definite generalized
 *>              eigenproblem.
 *>
-*>              AB_AB_ZHEGVD computes all eigenvalues and, optionally,
+*>              ZHEGVD computes all eigenvalues and, optionally,
 *>              eigenvectors of a complex Hermitian-definite generalized
 *>              eigenproblem using a divide and conquer algorithm.
 *>
-*>              AB_AB_ZHEGVX computes selected eigenvalues and, optionally,
+*>              ZHEGVX computes selected eigenvalues and, optionally,
 *>              eigenvectors of a complex Hermitian-definite generalized
 *>              eigenproblem.
 *>
-*>              AB_ZHPGV computes all eigenvalues and, optionally,
+*>              ZHPGV computes all eigenvalues and, optionally,
 *>              eigenvectors of a complex Hermitian-definite generalized
 *>              eigenproblem in packed storage.
 *>
-*>              AB_AB_ZHPGVD computes all eigenvalues and, optionally,
+*>              ZHPGVD computes all eigenvalues and, optionally,
 *>              eigenvectors of a complex Hermitian-definite generalized
 *>              eigenproblem in packed storage using a divide and
 *>              conquer algorithm.
 *>
-*>              AB_AB_ZHPGVX computes selected eigenvalues and, optionally,
+*>              ZHPGVX computes selected eigenvalues and, optionally,
 *>              eigenvectors of a complex Hermitian-definite generalized
 *>              eigenproblem in packed storage.
 *>
-*>              AB_ZHBGV computes all eigenvalues and, optionally,
+*>              ZHBGV computes all eigenvalues and, optionally,
 *>              eigenvectors of a complex Hermitian-definite banded
 *>              generalized eigenproblem.
 *>
-*>              AB_AB_ZHBGVD computes all eigenvalues and, optionally,
+*>              ZHBGVD computes all eigenvalues and, optionally,
 *>              eigenvectors of a complex Hermitian-definite banded
 *>              generalized eigenproblem using a divide and conquer
 *>              algorithm.
 *>
-*>              AB_AB_ZHBGVX computes selected eigenvalues and, optionally,
+*>              ZHBGVX computes selected eigenvalues and, optionally,
 *>              eigenvectors of a complex Hermitian-definite banded
 *>              generalized eigenproblem.
 *>
-*>      When AB_AB_ZDRVSG2STG is called, a number of matrix "sizes" ("n's") and a
+*>      When ZDRVSG2STG is called, a number of matrix "sizes" ("n's") and a
 *>      number of matrix "types" are specified.  For each size ("n")
 *>      and each type of matrix, one matrix A of the given type will be
 *>      generated; a random well-conditioned matrix B is also generated
@@ -84,39 +84,39 @@
 *>
 *>      For each pair (A,B), the following tests are performed:
 *>
-*>      (1) AB_ZHEGV with ITYPE = 1 and UPLO ='U':
+*>      (1) ZHEGV with ITYPE = 1 and UPLO ='U':
 *>
 *>              | A Z - B Z D | / ( |A| |Z| n ulp )
 *>              | D - D2 | / ( |D| ulp )   where D is computed by
-*>                                         AB_ZHEGV and  D2 is computed by
-*>                                         AB_AB_ZHEGV_2STAGE. This test is
-*>                                         only performed for AB_DSYGV
+*>                                         ZHEGV and  D2 is computed by
+*>                                         ZHEGV_2STAGE. This test is
+*>                                         only performed for DSYGV
 *>
-*>      (2) as (1) but calling AB_ZHPGV
-*>      (3) as (1) but calling AB_ZHBGV
+*>      (2) as (1) but calling ZHPGV
+*>      (3) as (1) but calling ZHBGV
 *>      (4) as (1) but with UPLO = 'L'
-*>      (5) as (4) but calling AB_ZHPGV
-*>      (6) as (4) but calling AB_ZHBGV
+*>      (5) as (4) but calling ZHPGV
+*>      (6) as (4) but calling ZHBGV
 *>
-*>      (7) AB_ZHEGV with ITYPE = 2 and UPLO ='U':
+*>      (7) ZHEGV with ITYPE = 2 and UPLO ='U':
 *>
 *>              | A B Z - Z D | / ( |A| |Z| n ulp )
 *>
-*>      (8) as (7) but calling AB_ZHPGV
+*>      (8) as (7) but calling ZHPGV
 *>      (9) as (7) but with UPLO = 'L'
-*>      (10) as (9) but calling AB_ZHPGV
+*>      (10) as (9) but calling ZHPGV
 *>
-*>      (11) AB_ZHEGV with ITYPE = 3 and UPLO ='U':
+*>      (11) ZHEGV with ITYPE = 3 and UPLO ='U':
 *>
 *>              | B A Z - Z D | / ( |A| |Z| n ulp )
 *>
-*>      (12) as (11) but calling AB_ZHPGV
+*>      (12) as (11) but calling ZHPGV
 *>      (13) as (11) but with UPLO = 'L'
-*>      (14) as (13) but calling AB_ZHPGV
+*>      (14) as (13) but calling ZHPGV
 *>
-*>      AB_AB_ZHEGVD, AB_AB_ZHPGVD and AB_AB_ZHBGVD performed the same 14 tests.
+*>      ZHEGVD, ZHPGVD and ZHBGVD performed the same 14 tests.
 *>
-*>      AB_AB_ZHEGVX, AB_AB_ZHPGVX and AB_AB_ZHBGVX performed the above 14 tests with
+*>      ZHEGVX, ZHPGVX and ZHBGVX performed the above 14 tests with
 *>      the parameter RANGE = 'A', 'N' and 'I', respectively.
 *>
 *>      The "sizes" are specified by an array NN(1:NSIZES); the value of
@@ -175,7 +175,7 @@
 *> \verbatim
 *>  NSIZES  INTEGER
 *>          The number of sizes of matrices to use.  If it is zero,
-*>          AB_AB_ZDRVSG2STG does nothing.  It must be at least zero.
+*>          ZDRVSG2STG does nothing.  It must be at least zero.
 *>          Not modified.
 *>
 *>  NN      INTEGER array, dimension (NSIZES)
@@ -185,7 +185,7 @@
 *>          Not modified.
 *>
 *>  NTYPES  INTEGER
-*>          The number of elements in DOTYPE.   If it is zero, AB_AB_ZDRVSG2STG
+*>          The number of elements in DOTYPE.   If it is zero, ZDRVSG2STG
 *>          does nothing.  It must be at least zero.  If it is MAXTYP+1
 *>          and NSIZES is 1, then an additional type, MAXTYP+1 is
 *>          defined, which is to use whatever matrix is in A.  This
@@ -211,7 +211,7 @@
 *>          congruential sequence limited to small integers, and so
 *>          should produce machine independent random numbers. The
 *>          values of ISEED are changed on exit, and can be used in the
-*>          next call to AB_AB_ZDRVSG2STG to continue the same random number
+*>          next call to ZDRVSG2STG to continue the same random number
 *>          sequence.
 *>          Modified.
 *>
@@ -242,7 +242,7 @@
 *>
 *>  B       COMPLEX*16 array, dimension (LDB , max(NN))
 *>          Used to hold the Hermitian positive definite matrix for
-*>          the generaiAB_LZEd problem.
+*>          the generailzed problem.
 *>          On exit, B contains the last matrix actually
 *>          used.
 *>          Modified.
@@ -326,8 +326,8 @@
 *>          -21: NWORK too small.
 *>          -23: LRWORK too small.
 *>          -25: LIWORK too small.
-*>          If  AB_ZLATMR, AB_CLATMS, AB_ZHEGV, AB_ZHPGV, AB_ZHBGV, AB_AB_CHEGVD, AB_AB_CHPGVD,
-*>              AB_AB_ZHPGVD, AB_AB_ZHEGVX, AB_AB_CHPGVX, AB_AB_ZHBGVX returns an error code,
+*>          If  ZLATMR, CLATMS, ZHEGV, ZHPGV, ZHBGV, CHEGVD, CHPGVD,
+*>              ZHPGVD, ZHEGVX, CHPGVX, ZHBGVX returns an error code,
 *>              the absolute value of it is returned.
 *>          Modified.
 *>
@@ -343,7 +343,7 @@
 *>       NMAX            Largest value in NN.
 *>       NMATS           The number of matrices generated so far.
 *>       NERRS           The number of tests which have exceeded THRESH
-*>                       so far (computed by AB_DLAFTS).
+*>                       so far (computed by DLAFTS).
 *>       COND, IMODE     Values to be passed to the matrix generators.
 *>       ANORM           Norm of A; passed to matrix generators.
 *>
@@ -371,8 +371,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_ZDRVSG2STG( NSIZES, NN, NTYPES, DOTYPE, ISEED, TH
-     $RESH,
+      SUBROUTINE ZDRVSG2STG( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
      $                       NOUNIT, A, LDA, B, LDB, D, D2, Z, LDZ, AB,
      $                       BB, AP, BP, WORK, NWORK, RWORK, LRWORK,
      $                       IWORK, LIWORK, RESULT, INFO )
@@ -425,18 +424,15 @@
      $                   KTYPE( MAXTYP )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DLAMCH, AB_DLARND
-      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_DLARND
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH, DLARND
+      EXTERNAL           LSAME, DLAMCH, DLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLABAD, AB_DLAFTS, AB_DLASUM, AB_XERBLA, AB_
-     $ZHBGV, AB_AB_ZHBGVD,
-     $                   AB_AB_ZHBGVX, AB_ZHEGV, AB_AB_ZHEGVD, AB_AB_ZHE
-     $GVX, AB_ZHPGV, AB_AB_ZHPGVD,
-     $                   AB_AB_ZHPGVX, AB_ZLACPY, AB_ZLASET, AB_ZLATMR, 
-     $AB_ZLATMS, AB_ZSGT01,
-     $                   AB_AB_ZHEGV_2STAGE
+      EXTERNAL           DLABAD, DLAFTS, DLASUM, XERBLA, ZHBGV, ZHBGVD,
+     $                   ZHBGVX, ZHEGV, ZHEGVD, ZHEGVX, ZHPGV, ZHPGVD,
+     $                   ZHPGVX, ZLACPY, ZLASET, ZLATMR, ZLATMS, ZSGT01,
+     $                   ZHEGV_2STAGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN, SQRT
@@ -484,7 +480,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_ZDRVSG2STG', -INFO )
+         CALL XERBLA( 'ZDRVSG2STG', -INFO )
          RETURN
       END IF
 *
@@ -495,10 +491,10 @@
 *
 *     More Important constants
 *
-      UNFL = AB_DLAMCH( 'Safe minimum' )
-      OVFL = AB_DLAMCH( 'Overflow' )
-      CALL AB_DLABAD( UNFL, OVFL )
-      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
+      UNFL = DLAMCH( 'Safe minimum' )
+      OVFL = DLAMCH( 'Overflow' )
+      CALL DLABAD( UNFL, OVFL )
+      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
       ULPINV = ONE / ULP
       RTUNFL = SQRT( UNFL )
       RTOVFL = SQRT( OVFL )
@@ -584,7 +580,7 @@
 *
                KA = 0
                KB = 0
-               CALL AB_ZLASET( 'Full', LDA, N, CZERO, CZERO, A, LDA )
+               CALL ZLASET( 'Full', LDA, N, CZERO, CZERO, A, LDA )
 *
             ELSE IF( ITYPE.EQ.2 ) THEN
 *
@@ -592,7 +588,7 @@
 *
                KA = 0
                KB = 0
-               CALL AB_ZLASET( 'Full', LDA, N, CZERO, CZERO, A, LDA )
+               CALL ZLASET( 'Full', LDA, N, CZERO, CZERO, A, LDA )
                DO 80 JCOL = 1, N
                   A( JCOL, JCOL ) = ANORM
    80          CONTINUE
@@ -603,8 +599,7 @@
 *
                KA = 0
                KB = 0
-               CALL AB_ZLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND
-     $,
+               CALL ZLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND,
      $                      ANORM, 0, 0, 'N', A, LDA, WORK, IINFO )
 *
             ELSE IF( ITYPE.EQ.5 ) THEN
@@ -613,8 +608,7 @@
 *
                KA = MAX( 0, N-1 )
                KB = KA
-               CALL AB_ZLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND
-     $,
+               CALL ZLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND,
      $                      ANORM, N, N, 'N', A, LDA, WORK, IINFO )
 *
             ELSE IF( ITYPE.EQ.7 ) THEN
@@ -623,8 +617,7 @@
 *
                KA = 0
                KB = 0
-               CALL AB_ZLATMR( N, N, 'S', ISEED, 'H', WORK, 6, ONE, CONE
-     $,
+               CALL ZLATMR( N, N, 'S', ISEED, 'H', WORK, 6, ONE, CONE,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, 0, 0,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -635,8 +628,7 @@
 *
                KA = MAX( 0, N-1 )
                KB = KA
-               CALL AB_ZLATMR( N, N, 'S', ISEED, 'H', WORK, 6, ONE, CONE
-     $,
+               CALL ZLATMR( N, N, 'S', ISEED, 'H', WORK, 6, ONE, CONE,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, N, N,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -661,8 +653,7 @@
                END IF
                KA = MAX( 0, MIN( N-1, KA9 ) )
                KB = MAX( 0, MIN( N-1, KB9 ) )
-               CALL AB_ZLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND
-     $,
+               CALL ZLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND,
      $                      ANORM, KA, KA, 'N', A, LDA, WORK, IINFO )
 *
             ELSE
@@ -684,8 +675,8 @@
                IL = 1
                IU = N
             ELSE
-               IL = 1 + INT( ( N-1 )*AB_DLARND( 1, ISEED2 ) )
-               IU = 1 + INT( ( N-1 )*AB_DLARND( 1, ISEED2 ) )
+               IL = 1 + INT( ( N-1 )*DLARND( 1, ISEED2 ) )
+               IU = 1 + INT( ( N-1 )*DLARND( 1, ISEED2 ) )
                IF( IL.GT.IU ) THEN
                   ITEMP = IL
                   IL = IU
@@ -693,8 +684,8 @@
                END IF
             END IF
 *
-*           3) Call AB_ZHEGV, AB_ZHPGV, AB_ZHBGV, AB_AB_CHEGVD, AB_AB_CHPGVD, AB_AB_CHBGVD,
-*              AB_AB_ZHEGVX, AB_AB_ZHPGVX and AB_AB_ZHBGVX, do tests.
+*           3) Call ZHEGV, ZHPGV, ZHBGV, CHEGVD, CHPGVD, CHBGVD,
+*              ZHEGVX, ZHPGVX and ZHBGVX, do tests.
 *
 *           loop over the three generalized problems
 *                 IBTYPE = 1: A*x = (lambda)*B*x
@@ -714,22 +705,21 @@
 *                 Generate random well-conditioned positive definite
 *                 matrix B, of bandwidth not greater than that of A.
 *
-                  CALL AB_ZLATMS( N, N, 'U', ISEED, 'P', RWORK, 5, TEN,
+                  CALL ZLATMS( N, N, 'U', ISEED, 'P', RWORK, 5, TEN,
      $                         ONE, KB, KB, UPLO, B, LDB, WORK( N+1 ),
      $                         IINFO )
 *
-*                 Test AB_ZHEGV
+*                 Test ZHEGV
 *
                   NTEST = NTEST + 1
 *
-                  CALL AB_ZLACPY( ' ', N, N, A, LDA, Z, LDZ )
-                  CALL AB_ZLACPY( UPLO, N, N, B, LDB, BB, LDB )
+                  CALL ZLACPY( ' ', N, N, A, LDA, Z, LDZ )
+                  CALL ZLACPY( UPLO, N, N, B, LDB, BB, LDB )
 *
-                  CALL AB_ZHEGV( IBTYPE, 'V', UPLO, N, Z, LDZ, BB, LDB, 
-     $D,
+                  CALL ZHEGV( IBTYPE, 'V', UPLO, N, Z, LDZ, BB, LDB, D,
      $                        WORK, NWORK, RWORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
-                     WRITE( NOUNIT, FMT = 9999 )'AB_ZHEGV(V,' // UPLO //
+                     WRITE( NOUNIT, FMT = 9999 )'ZHEGV(V,' // UPLO //
      $                  ')', IINFO, N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN
@@ -742,22 +732,22 @@
 *
 *                 Do Test
 *
-                  CALL AB_ZSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
+                  CALL ZSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
      $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
-*                 Test AB_AB_ZHEGV_2STAGE
+*                 Test ZHEGV_2STAGE
 *
                   NTEST = NTEST + 1
 *
-                  CALL AB_ZLACPY( ' ', N, N, A, LDA, Z, LDZ )
-                  CALL AB_ZLACPY( UPLO, N, N, B, LDB, BB, LDB )
+                  CALL ZLACPY( ' ', N, N, A, LDA, Z, LDZ )
+                  CALL ZLACPY( UPLO, N, N, B, LDB, BB, LDB )
 *
-                  CALL AB_AB_ZHEGV_2STAGE( IBTYPE, 'N', UPLO, N, Z, LDZ,
+                  CALL ZHEGV_2STAGE( IBTYPE, 'N', UPLO, N, Z, LDZ,
      $                               BB, LDB, D2, WORK, NWORK, RWORK, 
      $                               IINFO )
                   IF( IINFO.NE.0 ) THEN
                      WRITE( NOUNIT, FMT = 9999 )
-     $                  'AB_AB_ZHEGV_2STAGE(V,' // UPLO //
+     $                  'ZHEGV_2STAGE(V,' // UPLO //
      $                  ')', IINFO, N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN
@@ -770,8 +760,7 @@
 *
 *                 Do Test
 *
-C                  CALL AB_ZSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z
-     $,
+C                  CALL ZSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
 C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *           
 *                 Do Tests | D1 - D2 | / ( |D1| ulp )
@@ -789,20 +778,18 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
                   RESULT( NTEST ) = TEMP2 / 
      $                              MAX( UNFL, ULP*MAX( TEMP1, TEMP2 ) )
 *
-*                 Test AB_AB_ZHEGVD
+*                 Test ZHEGVD
 *
                   NTEST = NTEST + 1
 *
-                  CALL AB_ZLACPY( ' ', N, N, A, LDA, Z, LDZ )
-                  CALL AB_ZLACPY( UPLO, N, N, B, LDB, BB, LDB )
+                  CALL ZLACPY( ' ', N, N, A, LDA, Z, LDZ )
+                  CALL ZLACPY( UPLO, N, N, B, LDB, BB, LDB )
 *
-                  CALL AB_AB_ZHEGVD( IBTYPE, 'V', UPLO, N, Z, LDZ, BB, L
-     $DB, D,
+                  CALL ZHEGVD( IBTYPE, 'V', UPLO, N, Z, LDZ, BB, LDB, D,
      $                         WORK, NWORK, RWORK, LRWORK, IWORK,
      $                         LIWORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
-                     WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZHEGVD(V,' // UPL
-     $O //
+                     WRITE( NOUNIT, FMT = 9999 )'ZHEGVD(V,' // UPLO //
      $                  ')', IINFO, N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN
@@ -815,24 +802,22 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
 *                 Do Test
 *
-                  CALL AB_ZSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
+                  CALL ZSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
      $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
-*                 Test AB_AB_ZHEGVX
+*                 Test ZHEGVX
 *
                   NTEST = NTEST + 1
 *
-                  CALL AB_ZLACPY( ' ', N, N, A, LDA, AB, LDA )
-                  CALL AB_ZLACPY( UPLO, N, N, B, LDB, BB, LDB )
+                  CALL ZLACPY( ' ', N, N, A, LDA, AB, LDA )
+                  CALL ZLACPY( UPLO, N, N, B, LDB, BB, LDB )
 *
-                  CALL AB_AB_ZHEGVX( IBTYPE, 'V', 'A', UPLO, N, AB, LDA,
-     $ BB,
+                  CALL ZHEGVX( IBTYPE, 'V', 'A', UPLO, N, AB, LDA, BB,
      $                         LDB, VL, VU, IL, IU, ABSTOL, M, D, Z,
      $                         LDZ, WORK, NWORK, RWORK, IWORK( N+1 ),
      $                         IWORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
-                     WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZHEGVX(V,A' // UP
-     $LO //
+                     WRITE( NOUNIT, FMT = 9999 )'ZHEGVX(V,A' // UPLO //
      $                  ')', IINFO, N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN
@@ -845,13 +830,13 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
 *                 Do Test
 *
-                  CALL AB_ZSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
+                  CALL ZSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
      $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
                   NTEST = NTEST + 1
 *
-                  CALL AB_ZLACPY( ' ', N, N, A, LDA, AB, LDA )
-                  CALL AB_ZLACPY( UPLO, N, N, B, LDB, BB, LDB )
+                  CALL ZLACPY( ' ', N, N, A, LDA, AB, LDA )
+                  CALL ZLACPY( UPLO, N, N, B, LDB, BB, LDB )
 *
 *                 since we do not know the exact eigenvalues of this
 *                 eigenpair, we just set VL and VU as constants.
@@ -860,13 +845,12 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
                   VL = ZERO
                   VU = ANORM
-                  CALL AB_AB_ZHEGVX( IBTYPE, 'V', 'V', UPLO, N, AB, LDA,
-     $ BB,
+                  CALL ZHEGVX( IBTYPE, 'V', 'V', UPLO, N, AB, LDA, BB,
      $                         LDB, VL, VU, IL, IU, ABSTOL, M, D, Z,
      $                         LDZ, WORK, NWORK, RWORK, IWORK( N+1 ),
      $                         IWORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
-                     WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZHEGVX(V,V,' //
+                     WRITE( NOUNIT, FMT = 9999 )'ZHEGVX(V,V,' //
      $                  UPLO // ')', IINFO, N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN
@@ -879,21 +863,20 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
 *                 Do Test
 *
-                  CALL AB_ZSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB, Z,
+                  CALL ZSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB, Z,
      $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
                   NTEST = NTEST + 1
 *
-                  CALL AB_ZLACPY( ' ', N, N, A, LDA, AB, LDA )
-                  CALL AB_ZLACPY( UPLO, N, N, B, LDB, BB, LDB )
+                  CALL ZLACPY( ' ', N, N, A, LDA, AB, LDA )
+                  CALL ZLACPY( UPLO, N, N, B, LDB, BB, LDB )
 *
-                  CALL AB_AB_ZHEGVX( IBTYPE, 'V', 'I', UPLO, N, AB, LDA,
-     $ BB,
+                  CALL ZHEGVX( IBTYPE, 'V', 'I', UPLO, N, AB, LDA, BB,
      $                         LDB, VL, VU, IL, IU, ABSTOL, M, D, Z,
      $                         LDZ, WORK, NWORK, RWORK, IWORK( N+1 ),
      $                         IWORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
-                     WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZHEGVX(V,I,' //
+                     WRITE( NOUNIT, FMT = 9999 )'ZHEGVX(V,I,' //
      $                  UPLO // ')', IINFO, N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN
@@ -906,18 +889,18 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
 *                 Do Test
 *
-                  CALL AB_ZSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB, Z,
+                  CALL ZSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB, Z,
      $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
   100             CONTINUE
 *
-*                 Test AB_ZHPGV
+*                 Test ZHPGV
 *
                   NTEST = NTEST + 1
 *
 *                 Copy the matrices into packed storage.
 *
-                  IF( AB_LSAME( UPLO, 'U' ) ) THEN
+                  IF( LSAME( UPLO, 'U' ) ) THEN
                      IJ = 1
                      DO 120 J = 1, N
                         DO 110 I = 1, J
@@ -937,11 +920,10 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
   140                CONTINUE
                   END IF
 *
-                  CALL AB_ZHPGV( IBTYPE, 'V', UPLO, N, AP, BP, D, Z, LDZ
-     $,
+                  CALL ZHPGV( IBTYPE, 'V', UPLO, N, AP, BP, D, Z, LDZ,
      $                        WORK, RWORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
-                     WRITE( NOUNIT, FMT = 9999 )'AB_ZHPGV(V,' // UPLO //
+                     WRITE( NOUNIT, FMT = 9999 )'ZHPGV(V,' // UPLO //
      $                  ')', IINFO, N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN
@@ -954,16 +936,16 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
 *                 Do Test
 *
-                  CALL AB_ZSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
+                  CALL ZSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
      $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
-*                 Test AB_AB_ZHPGVD
+*                 Test ZHPGVD
 *
                   NTEST = NTEST + 1
 *
 *                 Copy the matrices into packed storage.
 *
-                  IF( AB_LSAME( UPLO, 'U' ) ) THEN
+                  IF( LSAME( UPLO, 'U' ) ) THEN
                      IJ = 1
                      DO 160 J = 1, N
                         DO 150 I = 1, J
@@ -983,13 +965,11 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
   180                CONTINUE
                   END IF
 *
-                  CALL AB_AB_ZHPGVD( IBTYPE, 'V', UPLO, N, AP, BP, D, Z,
-     $ LDZ,
+                  CALL ZHPGVD( IBTYPE, 'V', UPLO, N, AP, BP, D, Z, LDZ,
      $                         WORK, NWORK, RWORK, LRWORK, IWORK,
      $                         LIWORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
-                     WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZHPGVD(V,' // UPL
-     $O //
+                     WRITE( NOUNIT, FMT = 9999 )'ZHPGVD(V,' // UPLO //
      $                  ')', IINFO, N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN
@@ -1002,16 +982,16 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
 *                 Do Test
 *
-                  CALL AB_ZSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
+                  CALL ZSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
      $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
-*                 Test AB_AB_ZHPGVX
+*                 Test ZHPGVX
 *
                   NTEST = NTEST + 1
 *
 *                 Copy the matrices into packed storage.
 *
-                  IF( AB_LSAME( UPLO, 'U' ) ) THEN
+                  IF( LSAME( UPLO, 'U' ) ) THEN
                      IJ = 1
                      DO 200 J = 1, N
                         DO 190 I = 1, J
@@ -1031,13 +1011,11 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
   220                CONTINUE
                   END IF
 *
-                  CALL AB_AB_ZHPGVX( IBTYPE, 'V', 'A', UPLO, N, AP, BP, 
-     $VL,
+                  CALL ZHPGVX( IBTYPE, 'V', 'A', UPLO, N, AP, BP, VL,
      $                         VU, IL, IU, ABSTOL, M, D, Z, LDZ, WORK,
      $                         RWORK, IWORK( N+1 ), IWORK, INFO )
                   IF( IINFO.NE.0 ) THEN
-                     WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZHPGVX(V,A' // UP
-     $LO //
+                     WRITE( NOUNIT, FMT = 9999 )'ZHPGVX(V,A' // UPLO //
      $                  ')', IINFO, N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN
@@ -1050,14 +1028,14 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
 *                 Do Test
 *
-                  CALL AB_ZSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
+                  CALL ZSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
      $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
                   NTEST = NTEST + 1
 *
 *                 Copy the matrices into packed storage.
 *
-                  IF( AB_LSAME( UPLO, 'U' ) ) THEN
+                  IF( LSAME( UPLO, 'U' ) ) THEN
                      IJ = 1
                      DO 240 J = 1, N
                         DO 230 I = 1, J
@@ -1079,13 +1057,11 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
                   VL = ZERO
                   VU = ANORM
-                  CALL AB_AB_ZHPGVX( IBTYPE, 'V', 'V', UPLO, N, AP, BP, 
-     $VL,
+                  CALL ZHPGVX( IBTYPE, 'V', 'V', UPLO, N, AP, BP, VL,
      $                         VU, IL, IU, ABSTOL, M, D, Z, LDZ, WORK,
      $                         RWORK, IWORK( N+1 ), IWORK, INFO )
                   IF( IINFO.NE.0 ) THEN
-                     WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZHPGVX(V,V' // UP
-     $LO //
+                     WRITE( NOUNIT, FMT = 9999 )'ZHPGVX(V,V' // UPLO //
      $                  ')', IINFO, N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN
@@ -1098,14 +1074,14 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
 *                 Do Test
 *
-                  CALL AB_ZSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB, Z,
+                  CALL ZSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB, Z,
      $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
                   NTEST = NTEST + 1
 *
 *                 Copy the matrices into packed storage.
 *
-                  IF( AB_LSAME( UPLO, 'U' ) ) THEN
+                  IF( LSAME( UPLO, 'U' ) ) THEN
                      IJ = 1
                      DO 280 J = 1, N
                         DO 270 I = 1, J
@@ -1125,13 +1101,11 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
   300                CONTINUE
                   END IF
 *
-                  CALL AB_AB_ZHPGVX( IBTYPE, 'V', 'I', UPLO, N, AP, BP, 
-     $VL,
+                  CALL ZHPGVX( IBTYPE, 'V', 'I', UPLO, N, AP, BP, VL,
      $                         VU, IL, IU, ABSTOL, M, D, Z, LDZ, WORK,
      $                         RWORK, IWORK( N+1 ), IWORK, INFO )
                   IF( IINFO.NE.0 ) THEN
-                     WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZHPGVX(V,I' // UP
-     $LO //
+                     WRITE( NOUNIT, FMT = 9999 )'ZHPGVX(V,I' // UPLO //
      $                  ')', IINFO, N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN
@@ -1144,20 +1118,20 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
 *                 Do Test
 *
-                  CALL AB_ZSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB, Z,
+                  CALL ZSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB, Z,
      $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
   310             CONTINUE
 *
                   IF( IBTYPE.EQ.1 ) THEN
 *
-*                    TEST AB_ZHBGV
+*                    TEST ZHBGV
 *
                      NTEST = NTEST + 1
 *
 *                    Copy the matrices into band storage.
 *
-                     IF( AB_LSAME( UPLO, 'U' ) ) THEN
+                     IF( LSAME( UPLO, 'U' ) ) THEN
                         DO 340 J = 1, N
                            DO 320 I = MAX( 1, J-KA ), J
                               AB( KA+1+I-J, J ) = A( I, J )
@@ -1177,11 +1151,10 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
   370                   CONTINUE
                      END IF
 *
-                     CALL AB_ZHBGV( 'V', UPLO, N, KA, KB, AB, LDA, BB, L
-     $DB,
+                     CALL ZHBGV( 'V', UPLO, N, KA, KB, AB, LDA, BB, LDB,
      $                           D, Z, LDZ, WORK, RWORK, IINFO )
                      IF( IINFO.NE.0 ) THEN
-                        WRITE( NOUNIT, FMT = 9999 )'AB_ZHBGV(V,' //
+                        WRITE( NOUNIT, FMT = 9999 )'ZHBGV(V,' //
      $                     UPLO // ')', IINFO, N, JTYPE, IOLDSD
                         INFO = ABS( IINFO )
                         IF( IINFO.LT.0 ) THEN
@@ -1194,17 +1167,16 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
 *                    Do Test
 *
-                     CALL AB_ZSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB,
-     $ Z,
+                     CALL ZSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
      $                            LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
-*                    TEST AB_AB_ZHBGVD
+*                    TEST ZHBGVD
 *
                      NTEST = NTEST + 1
 *
 *                    Copy the matrices into band storage.
 *
-                     IF( AB_LSAME( UPLO, 'U' ) ) THEN
+                     IF( LSAME( UPLO, 'U' ) ) THEN
                         DO 400 J = 1, N
                            DO 380 I = MAX( 1, J-KA ), J
                               AB( KA+1+I-J, J ) = A( I, J )
@@ -1224,12 +1196,11 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
   430                   CONTINUE
                      END IF
 *
-                     CALL AB_AB_ZHBGVD( 'V', UPLO, N, KA, KB, AB, LDA, B
-     $B,
+                     CALL ZHBGVD( 'V', UPLO, N, KA, KB, AB, LDA, BB,
      $                            LDB, D, Z, LDZ, WORK, NWORK, RWORK,
      $                            LRWORK, IWORK, LIWORK, IINFO )
                      IF( IINFO.NE.0 ) THEN
-                        WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZHBGVD(V,' //
+                        WRITE( NOUNIT, FMT = 9999 )'ZHBGVD(V,' //
      $                     UPLO // ')', IINFO, N, JTYPE, IOLDSD
                         INFO = ABS( IINFO )
                         IF( IINFO.LT.0 ) THEN
@@ -1242,17 +1213,16 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
 *                    Do Test
 *
-                     CALL AB_ZSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB,
-     $ Z,
+                     CALL ZSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
      $                            LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
-*                    Test AB_AB_ZHBGVX
+*                    Test ZHBGVX
 *
                      NTEST = NTEST + 1
 *
 *                    Copy the matrices into band storage.
 *
-                     IF( AB_LSAME( UPLO, 'U' ) ) THEN
+                     IF( LSAME( UPLO, 'U' ) ) THEN
                         DO 460 J = 1, N
                            DO 440 I = MAX( 1, J-KA ), J
                               AB( KA+1+I-J, J ) = A( I, J )
@@ -1272,13 +1242,12 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
   490                   CONTINUE
                      END IF
 *
-                     CALL AB_AB_ZHBGVX( 'V', 'A', UPLO, N, KA, KB, AB, L
-     $DA,
+                     CALL ZHBGVX( 'V', 'A', UPLO, N, KA, KB, AB, LDA,
      $                            BB, LDB, BP, MAX( 1, N ), VL, VU, IL,
      $                            IU, ABSTOL, M, D, Z, LDZ, WORK, RWORK,
      $                            IWORK( N+1 ), IWORK, IINFO )
                      IF( IINFO.NE.0 ) THEN
-                        WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZHBGVX(V,A' //
+                        WRITE( NOUNIT, FMT = 9999 )'ZHBGVX(V,A' //
      $                     UPLO // ')', IINFO, N, JTYPE, IOLDSD
                         INFO = ABS( IINFO )
                         IF( IINFO.LT.0 ) THEN
@@ -1291,15 +1260,14 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
 *                    Do Test
 *
-                     CALL AB_ZSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB,
-     $ Z,
+                     CALL ZSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
      $                            LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
                      NTEST = NTEST + 1
 *
 *                    Copy the matrices into band storage.
 *
-                     IF( AB_LSAME( UPLO, 'U' ) ) THEN
+                     IF( LSAME( UPLO, 'U' ) ) THEN
                         DO 520 J = 1, N
                            DO 500 I = MAX( 1, J-KA ), J
                               AB( KA+1+I-J, J ) = A( I, J )
@@ -1321,13 +1289,12 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
                      VL = ZERO
                      VU = ANORM
-                     CALL AB_AB_ZHBGVX( 'V', 'V', UPLO, N, KA, KB, AB, L
-     $DA,
+                     CALL ZHBGVX( 'V', 'V', UPLO, N, KA, KB, AB, LDA,
      $                            BB, LDB, BP, MAX( 1, N ), VL, VU, IL,
      $                            IU, ABSTOL, M, D, Z, LDZ, WORK, RWORK,
      $                            IWORK( N+1 ), IWORK, IINFO )
                      IF( IINFO.NE.0 ) THEN
-                        WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZHBGVX(V,V' //
+                        WRITE( NOUNIT, FMT = 9999 )'ZHBGVX(V,V' //
      $                     UPLO // ')', IINFO, N, JTYPE, IOLDSD
                         INFO = ABS( IINFO )
                         IF( IINFO.LT.0 ) THEN
@@ -1340,15 +1307,14 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
 *                    Do Test
 *
-                     CALL AB_ZSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB,
-     $ Z,
+                     CALL ZSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB, Z,
      $                            LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
                      NTEST = NTEST + 1
 *
 *                    Copy the matrices into band storage.
 *
-                     IF( AB_LSAME( UPLO, 'U' ) ) THEN
+                     IF( LSAME( UPLO, 'U' ) ) THEN
                         DO 580 J = 1, N
                            DO 560 I = MAX( 1, J-KA ), J
                               AB( KA+1+I-J, J ) = A( I, J )
@@ -1368,13 +1334,12 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
   610                   CONTINUE
                      END IF
 *
-                     CALL AB_AB_ZHBGVX( 'V', 'I', UPLO, N, KA, KB, AB, L
-     $DA,
+                     CALL ZHBGVX( 'V', 'I', UPLO, N, KA, KB, AB, LDA,
      $                            BB, LDB, BP, MAX( 1, N ), VL, VU, IL,
      $                            IU, ABSTOL, M, D, Z, LDZ, WORK, RWORK,
      $                            IWORK( N+1 ), IWORK, IINFO )
                      IF( IINFO.NE.0 ) THEN
-                        WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZHBGVX(V,I' //
+                        WRITE( NOUNIT, FMT = 9999 )'ZHBGVX(V,I' //
      $                     UPLO // ')', IINFO, N, JTYPE, IOLDSD
                         INFO = ABS( IINFO )
                         IF( IINFO.LT.0 ) THEN
@@ -1387,8 +1352,7 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
 *                    Do Test
 *
-                     CALL AB_ZSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB,
-     $ Z,
+                     CALL ZSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB, Z,
      $                            LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
                   END IF
@@ -1399,21 +1363,20 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *           End of Loop -- Check for RESULT(j) > THRESH
 *
             NTESTT = NTESTT + NTEST
-            CALL AB_DLAFTS( 'ZSG', N, N, JTYPE, NTEST, RESULT, IOLDSD,
+            CALL DLAFTS( 'ZSG', N, N, JTYPE, NTEST, RESULT, IOLDSD,
      $                   THRESH, NOUNIT, NERRS )
   640    CONTINUE
   650 CONTINUE
 *
 *     Summary
 *
-      CALL AB_DLASUM( 'ZSG', NOUNIT, NERRS, NTESTT )
+      CALL DLASUM( 'ZSG', NOUNIT, NERRS, NTESTT )
 *
       RETURN
 *
- 9999 FORMAT( ' AB_AB_ZDRVSG2STG: ', A, ' returned INFO=', I6, '.', / 9X
-     $,
+ 9999 FORMAT( ' ZDRVSG2STG: ', A, ' returned INFO=', I6, '.', / 9X,
      $  'N=', I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
 *
-*     End of AB_AB_ZDRVSG2STG
+*     End of ZDRVSG2STG
 *
       END

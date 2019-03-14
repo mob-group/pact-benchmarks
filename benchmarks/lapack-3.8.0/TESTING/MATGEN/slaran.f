@@ -1,4 +1,4 @@
-*> \brief \b AB_SLARAN
+*> \brief \b SLARAN
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       REAL FUNCTION AB_SLARAN( ISEED )
+*       REAL FUNCTION SLARAN( ISEED )
 *
 *       .. Array Arguments ..
 *       INTEGER            ISEED( 4 )
@@ -20,7 +20,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SLARAN returns a random real number from a uniform (0,1)
+*> SLARAN returns a random real number from a uniform (0,1)
 *> distribution.
 *> \endverbatim
 *
@@ -65,7 +65,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      REAL FUNCTION AB_SLARAN( ISEED )
+      REAL FUNCTION SLARAN( ISEED )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -127,21 +127,21 @@
       IF (RNDOUT.EQ.1.0) THEN
 *        If a real number has n bits of precision, and the first
 *        n bits of the 48-bit integer above happen to be all 1 (which
-*        will occur about once every 2**n calls), then AB_SLARAN will
+*        will occur about once every 2**n calls), then SLARAN will
 *        be rounded to exactly 1.0. In IEEE single precision arithmetic,
 *        this will happen relatively often since n = 24.
-*        Since AB_SLARAN is not supposed to return exactly 0.0 or 1.0
-*        (and some callers of AB_SLARAN, such as AB_CLARND, depend on that),
+*        Since SLARAN is not supposed to return exactly 0.0 or 1.0
+*        (and some callers of SLARAN, such as CLARND, depend on that),
 *        the statistically correct thing to do in this situation is
 *        simply to iterate again.
-*        N.B. the case AB_SLARAN = 0.0 should not be possible.
+*        N.B. the case SLARAN = 0.0 should not be possible.
 *
          GOTO 10
       END IF
 *
-      AB_SLARAN = RNDOUT
+      SLARAN = RNDOUT
       RETURN
 *
-*     End of AB_SLARAN
+*     End of SLARAN
 *
       END

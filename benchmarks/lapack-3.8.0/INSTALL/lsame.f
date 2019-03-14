@@ -1,4 +1,4 @@
-*> \brief \b AB_LSAME
+*> \brief \b LSAME
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*      LOGICAL FUNCTION AB_LSAME( CA, CB )
+*      LOGICAL FUNCTION LSAME( CA, CB )
 *
 *     .. Scalar Arguments ..
 *      CHARACTER          CA, CB
@@ -20,7 +20,7 @@
 *>
 *> \verbatim
 *>
-*> AB_LSAME returns .TRUE. if CA is the same letter as CB regardless of
+*> LSAME returns .TRUE. if CA is the same letter as CB regardless of
 *> case.
 *> \endverbatim
 *
@@ -49,7 +49,7 @@
 *> \ingroup auxOTHERauxiliary
 *
 *  =====================================================================
-      LOGICAL FUNCTION AB_LSAME( CA, CB )
+      LOGICAL FUNCTION LSAME( CA, CB )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -72,8 +72,8 @@
 *
 *     Test if the characters are equal
 *
-      AB_LSAME = CA.EQ.CB
-      IF( AB_LSAME )
+      LSAME = CA.EQ.CB
+      IF( LSAME )
      $   RETURN
 *
 *     Now test for equivalence if both characters are alphabetic.
@@ -116,10 +116,10 @@
          IF( INTA.GE.225 .AND. INTA.LE.250 ) INTA = INTA - 32
          IF( INTB.GE.225 .AND. INTB.LE.250 ) INTB = INTB - 32
       END IF
-      AB_LSAME = INTA.EQ.INTB
+      LSAME = INTA.EQ.INTB
 *
 *     RETURN
 *
-*     End of AB_LSAME
+*     End of LSAME
 *
       END

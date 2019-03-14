@@ -1,4 +1,4 @@
-*> \brief \b AB_SLASUM
+*> \brief \b SLASUM
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLASUM( TYPE, IOUNIT, IE, NRUN )
+*       SUBROUTINE SLASUM( TYPE, IOUNIT, IE, NRUN )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        TYPE
@@ -21,7 +21,7 @@
 *\details \b Purpose:
 *\verbatim
 *
-* AB_SLASUM prints a summary of the results from one of the test routines.
+* SLASUM prints a summary of the results from one of the test routines.
 *
 * =====================================================================
 *
@@ -38,7 +38,7 @@
 * \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_SLASUM( TYPE, IOUNIT, IE, NRUN )
+      SUBROUTINE SLASUM( TYPE, IOUNIT, IE, NRUN )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -64,6 +64,6 @@
  9998 FORMAT( / 1X, A14, A3, A24, I5, A11 )
       RETURN
 *
-*    End of AB_SLASUM
+*    End of SLASUM
 *
       END

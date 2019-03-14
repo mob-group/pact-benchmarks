@@ -1,4 +1,4 @@
-*> \brief \b AB_SPPCON
+*> \brief \b SPPCON
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SPPCON + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SPPCON.f">
+*> Download SPPCON + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sppcon.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SPPCON.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sppcon.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SPPCON.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sppcon.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SPPCON( UPLO, N, AP, ANORM, RCOND, WORK, IWORK, INFO )
+*       SUBROUTINE SPPCON( UPLO, N, AP, ANORM, RCOND, WORK, IWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -36,10 +36,10 @@
 *>
 *> \verbatim
 *>
-*> AB_SPPCON estimates the reciprocal of the condition number (in the
+*> SPPCON estimates the reciprocal of the condition number (in the
 *> 1-norm) of a real symmetric positive definite packed matrix using
 *> the Cholesky factorization A = U**T*U or A = L*L**T computed by
-*> AB_SPPTRF.
+*> SPPTRF.
 *>
 *> An estimate is obtained for norm(inv(A)), and the reciprocal of the
 *> condition number is computed as RCOND = 1 / (ANORM * norm(inv(A))).
@@ -116,8 +116,7 @@
 *> \ingroup realOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_SPPCON( UPLO, N, AP, ANORM, RCOND, WORK, IWORK, INFO
-     $ )
+      SUBROUTINE SPPCON( UPLO, N, AP, ANORM, RCOND, WORK, IWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -150,13 +149,13 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ISAMAX
-      REAL               AB_SLAMCH
-      EXTERNAL           AB_LSAME, AB_ISAMAX, AB_SLAMCH
+      LOGICAL            LSAME
+      INTEGER            ISAMAX
+      REAL               SLAMCH
+      EXTERNAL           LSAME, ISAMAX, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SLACN2, AB_SLATPS, AB_SRSCL, AB_XERBLA
+      EXTERNAL           SLACN2, SLATPS, SRSCL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS
@@ -166,8 +165,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -175,7 +174,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SPPCON', -INFO )
+         CALL XERBLA( 'SPPCON', -INFO )
          RETURN
       END IF
 *
@@ -189,40 +188,38 @@
          RETURN
       END IF
 *
-      SMLNUM = AB_SLAMCH( 'Safe minimum' )
+      SMLNUM = SLAMCH( 'Safe minimum' )
 *
 *     Estimate the 1-norm of the inverse.
 *
       KASE = 0
       NORMIN = 'N'
    10 CONTINUE
-      CALL AB_SLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
+      CALL SLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
       IF( KASE.NE.0 ) THEN
          IF( UPPER ) THEN
 *
 *           Multiply by inv(U**T).
 *
-            CALL AB_SLATPS( 'Upper', 'Transpose', 'Non-unit', NORMIN, N,
+            CALL SLATPS( 'Upper', 'Transpose', 'Non-unit', NORMIN, N,
      $                   AP, WORK, SCALEL, WORK( 2*N+1 ), INFO )
             NORMIN = 'Y'
 *
 *           Multiply by inv(U).
 *
-            CALL AB_SLATPS( 'Upper', 'No transpose', 'Non-unit', NORMIN,
-     $ N,
+            CALL SLATPS( 'Upper', 'No transpose', 'Non-unit', NORMIN, N,
      $                   AP, WORK, SCALEU, WORK( 2*N+1 ), INFO )
          ELSE
 *
 *           Multiply by inv(L).
 *
-            CALL AB_SLATPS( 'Lower', 'No transpose', 'Non-unit', NORMIN,
-     $ N,
+            CALL SLATPS( 'Lower', 'No transpose', 'Non-unit', NORMIN, N,
      $                   AP, WORK, SCALEL, WORK( 2*N+1 ), INFO )
             NORMIN = 'Y'
 *
 *           Multiply by inv(L**T).
 *
-            CALL AB_SLATPS( 'Lower', 'Transpose', 'Non-unit', NORMIN, N,
+            CALL SLATPS( 'Lower', 'Transpose', 'Non-unit', NORMIN, N,
      $                   AP, WORK, SCALEU, WORK( 2*N+1 ), INFO )
          END IF
 *
@@ -230,10 +227,10 @@
 *
          SCALE = SCALEL*SCALEU
          IF( SCALE.NE.ONE ) THEN
-            IX = AB_ISAMAX( N, WORK, 1 )
+            IX = ISAMAX( N, WORK, 1 )
             IF( SCALE.LT.ABS( WORK( IX ) )*SMLNUM .OR. SCALE.EQ.ZERO )
      $         GO TO 20
-            CALL AB_SRSCL( N, SCALE, WORK, 1 )
+            CALL SRSCL( N, SCALE, WORK, 1 )
          END IF
          GO TO 10
       END IF
@@ -246,6 +243,6 @@
    20 CONTINUE
       RETURN
 *
-*     End of AB_SPPCON
+*     End of SPPCON
 *
       END

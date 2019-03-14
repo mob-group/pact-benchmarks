@@ -41,23 +41,23 @@
 *> (0.0,0.0) (1.0,0.0) (0.7,-0.9)       VALUES OF ALPHA
 *> 3                 NUMBER OF VALUES OF BETA
 *> (0.0,0.0) (1.0,0.0) (1.3,-1.1)       VALUES OF BETA
-*> AB_ZGEMV  T PUT F FOR NO TEST. SAME COLUMNS.
-*> AB_ZGBMV  T PUT F FOR NO TEST. SAME COLUMNS.
-*> AB_ZHEMV  T PUT F FOR NO TEST. SAME COLUMNS.
-*> AB_ZHBMV  T PUT F FOR NO TEST. SAME COLUMNS.
-*> AB_ZHPMV  T PUT F FOR NO TEST. SAME COLUMNS.
-*> AB_ZTRMV  T PUT F FOR NO TEST. SAME COLUMNS.
-*> AB_ZTBMV  T PUT F FOR NO TEST. SAME COLUMNS.
-*> AB_ZTPMV  T PUT F FOR NO TEST. SAME COLUMNS.
-*> AB_ZTRSV  T PUT F FOR NO TEST. SAME COLUMNS.
-*> AB_ZTBSV  T PUT F FOR NO TEST. SAME COLUMNS.
-*> AB_ZTPSV  T PUT F FOR NO TEST. SAME COLUMNS.
-*> AB_ZGERC  T PUT F FOR NO TEST. SAME COLUMNS.
-*> AB_ZGERU  T PUT F FOR NO TEST. SAME COLUMNS.
-*> AB_ZHER   T PUT F FOR NO TEST. SAME COLUMNS.
-*> AB_ZHPR   T PUT F FOR NO TEST. SAME COLUMNS.
-*> AB_AB_ZHER2  T PUT F FOR NO TEST. SAME COLUMNS.
-*> AB_AB_ZHPR2  T PUT F FOR NO TEST. SAME COLUMNS.
+*> ZGEMV  T PUT F FOR NO TEST. SAME COLUMNS.
+*> ZGBMV  T PUT F FOR NO TEST. SAME COLUMNS.
+*> ZHEMV  T PUT F FOR NO TEST. SAME COLUMNS.
+*> ZHBMV  T PUT F FOR NO TEST. SAME COLUMNS.
+*> ZHPMV  T PUT F FOR NO TEST. SAME COLUMNS.
+*> ZTRMV  T PUT F FOR NO TEST. SAME COLUMNS.
+*> ZTBMV  T PUT F FOR NO TEST. SAME COLUMNS.
+*> ZTPMV  T PUT F FOR NO TEST. SAME COLUMNS.
+*> ZTRSV  T PUT F FOR NO TEST. SAME COLUMNS.
+*> ZTBSV  T PUT F FOR NO TEST. SAME COLUMNS.
+*> ZTPSV  T PUT F FOR NO TEST. SAME COLUMNS.
+*> ZGERC  T PUT F FOR NO TEST. SAME COLUMNS.
+*> ZGERU  T PUT F FOR NO TEST. SAME COLUMNS.
+*> ZHER   T PUT F FOR NO TEST. SAME COLUMNS.
+*> ZHPR   T PUT F FOR NO TEST. SAME COLUMNS.
+*> ZHER2  T PUT F FOR NO TEST. SAME COLUMNS.
+*> ZHPR2  T PUT F FOR NO TEST. SAME COLUMNS.
 *>
 *> Further Details
 *> ===============
@@ -146,13 +146,12 @@
       LOGICAL            LTEST( NSUBS )
       CHARACTER*6        SNAMES( NSUBS )
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DDIFF
-      LOGICAL            AB_LZE
-      EXTERNAL           AB_DDIFF, AB_LZE
+      DOUBLE PRECISION   DDIFF
+      LOGICAL            LZE
+      EXTERNAL           DDIFF, LZE
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZCHK1, AB_ZCHK2, AB_ZCHK3, AB_ZCHK4, AB_ZCHK
-     $5, AB_ZCHK6,
-     $                   AB_ZCHKE, AB_ZMVCH
+      EXTERNAL           ZCHK1, ZCHK2, ZCHK3, ZCHK4, ZCHK5, ZCHK6,
+     $                   ZCHKE, ZMVCH
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
 *     .. Scalars in Common ..
@@ -163,15 +162,11 @@
       COMMON             /INFOC/INFOT, NOUTC, OK, LERR
       COMMON             /SRNAMC/SRNAMT
 *     .. Data statements ..
-      DATA               SNAMES/'AB_ZGEMV ', 'AB_ZGBMV ', 'AB_ZHEMV ', '
-     $AB_ZHBMV ',
-     $                   'AB_ZHPMV ', 'AB_ZTRMV ', 'AB_ZTBMV ', 'AB_ZTPM
-     $V ',
-     $                   'AB_ZTRSV ', 'AB_ZTBSV ', 'AB_ZTPSV ', 'AB_ZGER
-     $C ',
-     $                   'AB_ZGERU ', 'AB_ZHER  ', 'AB_ZHPR  ', 'AB_AB_Z
-     $HER2 ',
-     $                   'AB_AB_ZHPR2 '/
+      DATA               SNAMES/'ZGEMV ', 'ZGBMV ', 'ZHEMV ', 'ZHBMV ',
+     $                   'ZHPMV ', 'ZTRMV ', 'ZTBMV ', 'ZTPMV ',
+     $                   'ZTRSV ', 'ZTBSV ', 'ZTPSV ', 'ZGERC ',
+     $                   'ZGERU ', 'ZHER  ', 'ZHPR  ', 'ZHER2 ',
+     $                   'ZHPR2 '/
 *     .. Executable Statements ..
 *
 *     Read name and unit number for summary output file and open file.
@@ -295,7 +290,7 @@
       EPS = EPSILON(RZERO)
       WRITE( NOUT, FMT = 9998 )EPS
 *
-*     Check the reliability of AB_ZMVCH using exact data.
+*     Check the reliability of ZMVCH using exact data.
 *
       N = MIN( 32, NMAX )
       DO 120 J = 1, N
@@ -308,21 +303,20 @@
       DO 130 J = 1, N
          YY( J ) = J*( ( J + 1 )*J )/2 - ( ( J + 1 )*J*( J - 1 ) )/3
   130 CONTINUE
-*     YY holds the exact result. On exit from AB_ZMVCH YT holds
-*     the result computed by AB_ZMVCH.
+*     YY holds the exact result. On exit from ZMVCH YT holds
+*     the result computed by ZMVCH.
       TRANS = 'N'
-      CALL AB_ZMVCH( TRANS, N, N, ONE, A, NMAX, X, 1, ZERO, Y, 1, YT, G,
+      CALL ZMVCH( TRANS, N, N, ONE, A, NMAX, X, 1, ZERO, Y, 1, YT, G,
      $            YY, EPS, ERR, FATAL, NOUT, .TRUE. )
-      SAME = AB_LZE( YY, YT, N )
+      SAME = LZE( YY, YT, N )
       IF( .NOT.SAME.OR.ERR.NE.RZERO )THEN
          WRITE( NOUT, FMT = 9985 )TRANS, SAME, ERR
          STOP
       END IF
       TRANS = 'T'
-      CALL AB_ZMVCH( TRANS, N, N, ONE, A, NMAX, X, -1, ZERO, Y, -1, YT, 
-     $G,
+      CALL ZMVCH( TRANS, N, N, ONE, A, NMAX, X, -1, ZERO, Y, -1, YT, G,
      $            YY, EPS, ERR, FATAL, NOUT, .TRUE. )
-      SAME = AB_LZE( YY, YT, N )
+      SAME = LZE( YY, YT, N )
       IF( .NOT.SAME.OR.ERR.NE.RZERO )THEN
          WRITE( NOUT, FMT = 9985 )TRANS, SAME, ERR
          STOP
@@ -339,7 +333,7 @@
             SRNAMT = SNAMES( ISNUM )
 *           Test error exits.
             IF( TSTERR )THEN
-               CALL AB_ZCHKE( ISNUM, SNAMES( ISNUM ), NOUT )
+               CALL ZCHKE( ISNUM, SNAMES( ISNUM ), NOUT )
                WRITE( NOUT, FMT = * )
             END IF
 *           Test computations.
@@ -349,44 +343,38 @@
             GO TO ( 140, 140, 150, 150, 150, 160, 160,
      $              160, 160, 160, 160, 170, 170, 180,
      $              180, 190, 190 )ISNUM
-*           Test AB_ZGEMV, 01, and AB_ZGBMV, 02.
-  140       CALL AB_ZCHK1( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRA
-     $CE,
+*           Test ZGEMV, 01, and ZGBMV, 02.
+  140       CALL ZCHK1( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NKB, KB, NALF, ALF,
      $                  NBET, BET, NINC, INC, NMAX, INCMAX, A, AA, AS,
      $                  X, XX, XS, Y, YY, YS, YT, G )
             GO TO 200
-*           Test AB_ZHEMV, 03, AB_ZHBMV, 04, and AB_ZHPMV, 05.
-  150       CALL AB_ZCHK2( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRA
-     $CE,
+*           Test ZHEMV, 03, ZHBMV, 04, and ZHPMV, 05.
+  150       CALL ZCHK2( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NKB, KB, NALF, ALF,
      $                  NBET, BET, NINC, INC, NMAX, INCMAX, A, AA, AS,
      $                  X, XX, XS, Y, YY, YS, YT, G )
             GO TO 200
-*           Test AB_ZTRMV, 06, AB_ZTBMV, 07, AB_ZTPMV, 08,
-*           AB_ZTRSV, 09, AB_ZTBSV, 10, and AB_ZTPSV, 11.
-  160       CALL AB_ZCHK3( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRA
-     $CE,
+*           Test ZTRMV, 06, ZTBMV, 07, ZTPMV, 08,
+*           ZTRSV, 09, ZTBSV, 10, and ZTPSV, 11.
+  160       CALL ZCHK3( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NKB, KB, NINC, INC,
      $                  NMAX, INCMAX, A, AA, AS, Y, YY, YS, YT, G, Z )
             GO TO 200
-*           Test AB_ZGERC, 12, AB_ZGERU, 13.
-  170       CALL AB_ZCHK4( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRA
-     $CE,
+*           Test ZGERC, 12, ZGERU, 13.
+  170       CALL ZCHK4( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NALF, ALF, NINC, INC,
      $                  NMAX, INCMAX, A, AA, AS, X, XX, XS, Y, YY, YS,
      $                  YT, G, Z )
             GO TO 200
-*           Test AB_ZHER, 14, and AB_ZHPR, 15.
-  180       CALL AB_ZCHK5( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRA
-     $CE,
+*           Test ZHER, 14, and ZHPR, 15.
+  180       CALL ZCHK5( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NALF, ALF, NINC, INC,
      $                  NMAX, INCMAX, A, AA, AS, X, XX, XS, Y, YY, YS,
      $                  YT, G, Z )
             GO TO 200
-*           Test AB_AB_ZHER2, 16, and AB_AB_ZHPR2, 17.
-  190       CALL AB_ZCHK6( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRA
-     $CE,
+*           Test ZHER2, 16, and ZHPR2, 17.
+  190       CALL ZCHK6( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NALF, ALF, NINC, INC,
      $                  NMAX, INCMAX, A, AA, AS, X, XX, XS, Y, YY, YS,
      $                  YT, G, Z )
@@ -433,9 +421,8 @@
      $      /' ******* TESTS ABANDONED *******' )
  9986 FORMAT( ' SUBPROGRAM NAME ', A6, ' NOT RECOGNIZED', /' ******* T',
      $      'ESTS ABANDONED *******' )
- 9985 FORMAT( ' ERROR IN AB_ZMVCH -  IN-LINE DOT PRODUCTS ARE BEING EVAL
-     $U',
-     $      'ATED WRONGLY.', /' AB_ZMVCH WAS CALLED WITH TRANS = ', A1,
+ 9985 FORMAT( ' ERROR IN ZMVCH -  IN-LINE DOT PRODUCTS ARE BEING EVALU',
+     $      'ATED WRONGLY.', /' ZMVCH WAS CALLED WITH TRANS = ', A1,
      $      ' AND RETURNED SAME = ', L1, ' AND ERR = ', F12.3, '.', /
      $   ' THIS MAY BE DUE TO FAULTS IN THE ARITHMETIC OR THE COMPILER.'
      $      , /' ******* TESTS ABANDONED *******' )
@@ -448,12 +435,12 @@
 *     End of ZBLAT2.
 *
       END
-      SUBROUTINE AB_ZCHK1( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
+      SUBROUTINE ZCHK1( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NKB, KB, NALF, ALF, NBET,
      $                  BET, NINC, INC, NMAX, INCMAX, A, AA, AS, X, XX,
      $                  XS, Y, YY, YS, YT, G )
 *
-*  Tests AB_ZGEMV and AB_ZGBMV.
+*  Tests ZGEMV and ZGBMV.
 *
 *  Auxiliary routine for test program for Level 2 Blas.
 *
@@ -494,10 +481,10 @@
 *     .. Local Arrays ..
       LOGICAL            ISAME( 13 )
 *     .. External Functions ..
-      LOGICAL            AB_LZE, AB_AB_LZERES
-      EXTERNAL           AB_LZE, AB_AB_LZERES
+      LOGICAL            LZE, LZERES
+      EXTERNAL           LZE, LZERES
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZGBMV, AB_ZGEMV, AB_ZMAKE, AB_ZMVCH
+      EXTERNAL           ZGBMV, ZGEMV, ZMAKE, ZMVCH
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
 *     .. Scalars in Common ..
@@ -561,8 +548,7 @@
 *              Generate the matrix A.
 *
                TRANSL = ZERO
-               CALL AB_ZMAKE( SNAME( 2: 3 ), ' ', ' ', M, N, A, NMAX, AA
-     $,
+               CALL ZMAKE( SNAME( 2: 3 ), ' ', ' ', M, N, A, NMAX, AA,
      $                     LDA, KL, KU, RESET, TRANSL )
 *
                DO 90 IC = 1, 3
@@ -584,7 +570,7 @@
 *                    Generate the vector X.
 *
                      TRANSL = HALF
-                     CALL AB_ZMAKE( 'GE', ' ', ' ', 1, NL, X, 1, XX,
+                     CALL ZMAKE( 'GE', ' ', ' ', 1, NL, X, 1, XX,
      $                           ABS( INCX ), 0, NL - 1, RESET, TRANSL )
                      IF( NL.GT.1 )THEN
                         X( NL/2 ) = ZERO
@@ -604,8 +590,7 @@
 *                             Generate the vector Y.
 *
                               TRANSL = ZERO
-                              CALL AB_ZMAKE( 'GE', ' ', ' ', 1, ML, Y, 1
-     $,
+                              CALL ZMAKE( 'GE', ' ', ' ', 1, ML, Y, 1,
      $                                    YY, ABS( INCY ), 0, ML - 1,
      $                                    RESET, TRANSL )
 *
@@ -643,7 +628,7 @@
      $                              INCY
                                  IF( REWI )
      $                              REWIND NTRA
-                                 CALL AB_ZGEMV( TRANS, M, N, ALPHA, AA,
+                                 CALL ZGEMV( TRANS, M, N, ALPHA, AA,
      $                                       LDA, XX, INCX, BETA, YY,
      $                                       INCY )
                               ELSE IF( BANDED )THEN
@@ -653,8 +638,7 @@
      $                              INCX, BETA, INCY
                                  IF( REWI )
      $                              REWIND NTRA
-                                 CALL AB_ZGBMV( TRANS, M, N, KL, KU, ALP
-     $HA,
+                                 CALL ZGBMV( TRANS, M, N, KL, KU, ALPHA,
      $                                       AA, LDA, XX, INCX, BETA,
      $                                       YY, INCY )
                               END IF
@@ -674,16 +658,15 @@
                               ISAME( 3 ) = NS.EQ.N
                               IF( FULL )THEN
                                  ISAME( 4 ) = ALS.EQ.ALPHA
-                                 ISAME( 5 ) = AB_LZE( AS, AA, LAA )
+                                 ISAME( 5 ) = LZE( AS, AA, LAA )
                                  ISAME( 6 ) = LDAS.EQ.LDA
-                                 ISAME( 7 ) = AB_LZE( XS, XX, LX )
+                                 ISAME( 7 ) = LZE( XS, XX, LX )
                                  ISAME( 8 ) = INCXS.EQ.INCX
                                  ISAME( 9 ) = BLS.EQ.BETA
                                  IF( NULL )THEN
-                                    ISAME( 10 ) = AB_LZE( YS, YY, LY )
+                                    ISAME( 10 ) = LZE( YS, YY, LY )
                                  ELSE
-                                    ISAME( 10 ) = AB_AB_LZERES( 'GE', ' 
-     $', 1,
+                                    ISAME( 10 ) = LZERES( 'GE', ' ', 1,
      $                                            ML, YS, YY,
      $                                            ABS( INCY ) )
                                  END IF
@@ -692,16 +675,15 @@
                                  ISAME( 4 ) = KLS.EQ.KL
                                  ISAME( 5 ) = KUS.EQ.KU
                                  ISAME( 6 ) = ALS.EQ.ALPHA
-                                 ISAME( 7 ) = AB_LZE( AS, AA, LAA )
+                                 ISAME( 7 ) = LZE( AS, AA, LAA )
                                  ISAME( 8 ) = LDAS.EQ.LDA
-                                 ISAME( 9 ) = AB_LZE( XS, XX, LX )
+                                 ISAME( 9 ) = LZE( XS, XX, LX )
                                  ISAME( 10 ) = INCXS.EQ.INCX
                                  ISAME( 11 ) = BLS.EQ.BETA
                                  IF( NULL )THEN
-                                    ISAME( 12 ) = AB_LZE( YS, YY, LY )
+                                    ISAME( 12 ) = LZE( YS, YY, LY )
                                  ELSE
-                                    ISAME( 12 ) = AB_AB_LZERES( 'GE', ' 
-     $', 1,
+                                    ISAME( 12 ) = LZERES( 'GE', ' ', 1,
      $                                            ML, YS, YY,
      $                                            ABS( INCY ) )
                                  END IF
@@ -726,7 +708,7 @@
 *
 *                                Check the result.
 *
-                                 CALL AB_ZMVCH( TRANS, M, N, ALPHA, A,
+                                 CALL ZMVCH( TRANS, M, N, ALPHA, A,
      $                                       NMAX, X, INCX, BETA, Y,
      $                                       INCY, YT, G, YY, EPS, ERR,
      $                                       FATAL, NOUT, .TRUE. )
@@ -796,15 +778,15 @@
  9993 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of AB_ZCHK1.
+*     End of ZCHK1.
 *
       END
-      SUBROUTINE AB_ZCHK2( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
+      SUBROUTINE ZCHK2( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NKB, KB, NALF, ALF, NBET,
      $                  BET, NINC, INC, NMAX, INCMAX, A, AA, AS, X, XX,
      $                  XS, Y, YY, YS, YT, G )
 *
-*  Tests AB_ZHEMV, AB_ZHBMV and AB_ZHPMV.
+*  Tests ZHEMV, ZHBMV and ZHPMV.
 *
 *  Auxiliary routine for test program for Level 2 Blas.
 *
@@ -844,11 +826,10 @@
 *     .. Local Arrays ..
       LOGICAL            ISAME( 13 )
 *     .. External Functions ..
-      LOGICAL            AB_LZE, AB_AB_LZERES
-      EXTERNAL           AB_LZE, AB_AB_LZERES
+      LOGICAL            LZE, LZERES
+      EXTERNAL           LZE, LZERES
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZHBMV, AB_ZHEMV, AB_ZHPMV, AB_ZMAKE, AB_ZMVC
-     $H
+      EXTERNAL           ZHBMV, ZHEMV, ZHPMV, ZMAKE, ZMVCH
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
 *     .. Scalars in Common ..
@@ -913,8 +894,7 @@
 *              Generate the matrix A.
 *
                TRANSL = ZERO
-               CALL AB_ZMAKE( SNAME( 2: 3 ), UPLO, ' ', N, N, A, NMAX, A
-     $A,
+               CALL ZMAKE( SNAME( 2: 3 ), UPLO, ' ', N, N, A, NMAX, AA,
      $                     LDA, K, K, RESET, TRANSL )
 *
                DO 80 IX = 1, NINC
@@ -924,7 +904,7 @@
 *                 Generate the vector X.
 *
                   TRANSL = HALF
-                  CALL AB_ZMAKE( 'GE', ' ', ' ', 1, N, X, 1, XX,
+                  CALL ZMAKE( 'GE', ' ', ' ', 1, N, X, 1, XX,
      $                        ABS( INCX ), 0, N - 1, RESET, TRANSL )
                   IF( N.GT.1 )THEN
                      X( N/2 ) = ZERO
@@ -944,8 +924,7 @@
 *                          Generate the vector Y.
 *
                            TRANSL = ZERO
-                           CALL AB_ZMAKE( 'GE', ' ', ' ', 1, N, Y, 1, YY
-     $,
+                           CALL ZMAKE( 'GE', ' ', ' ', 1, N, Y, 1, YY,
      $                                 ABS( INCY ), 0, N - 1, RESET,
      $                                 TRANSL )
 *
@@ -980,8 +959,7 @@
      $                           UPLO, N, ALPHA, LDA, INCX, BETA, INCY
                               IF( REWI )
      $                           REWIND NTRA
-                              CALL AB_ZHEMV( UPLO, N, ALPHA, AA, LDA, XX
-     $,
+                              CALL ZHEMV( UPLO, N, ALPHA, AA, LDA, XX,
      $                                    INCX, BETA, YY, INCY )
                            ELSE IF( BANDED )THEN
                               IF( TRACE )
@@ -990,7 +968,7 @@
      $                           INCY
                               IF( REWI )
      $                           REWIND NTRA
-                              CALL AB_ZHBMV( UPLO, N, K, ALPHA, AA, LDA,
+                              CALL ZHBMV( UPLO, N, K, ALPHA, AA, LDA,
      $                                    XX, INCX, BETA, YY, INCY )
                            ELSE IF( PACKED )THEN
                               IF( TRACE )
@@ -998,8 +976,7 @@
      $                           UPLO, N, ALPHA, INCX, BETA, INCY
                               IF( REWI )
      $                           REWIND NTRA
-                              CALL AB_ZHPMV( UPLO, N, ALPHA, AA, XX, INC
-     $X,
+                              CALL ZHPMV( UPLO, N, ALPHA, AA, XX, INCX,
      $                                    BETA, YY, INCY )
                            END IF
 *
@@ -1017,46 +994,43 @@
                            ISAME( 2 ) = NS.EQ.N
                            IF( FULL )THEN
                               ISAME( 3 ) = ALS.EQ.ALPHA
-                              ISAME( 4 ) = AB_LZE( AS, AA, LAA )
+                              ISAME( 4 ) = LZE( AS, AA, LAA )
                               ISAME( 5 ) = LDAS.EQ.LDA
-                              ISAME( 6 ) = AB_LZE( XS, XX, LX )
+                              ISAME( 6 ) = LZE( XS, XX, LX )
                               ISAME( 7 ) = INCXS.EQ.INCX
                               ISAME( 8 ) = BLS.EQ.BETA
                               IF( NULL )THEN
-                                 ISAME( 9 ) = AB_LZE( YS, YY, LY )
+                                 ISAME( 9 ) = LZE( YS, YY, LY )
                               ELSE
-                                 ISAME( 9 ) = AB_AB_LZERES( 'GE', ' ', 1
-     $, N,
+                                 ISAME( 9 ) = LZERES( 'GE', ' ', 1, N,
      $                                        YS, YY, ABS( INCY ) )
                               END IF
                               ISAME( 10 ) = INCYS.EQ.INCY
                            ELSE IF( BANDED )THEN
                               ISAME( 3 ) = KS.EQ.K
                               ISAME( 4 ) = ALS.EQ.ALPHA
-                              ISAME( 5 ) = AB_LZE( AS, AA, LAA )
+                              ISAME( 5 ) = LZE( AS, AA, LAA )
                               ISAME( 6 ) = LDAS.EQ.LDA
-                              ISAME( 7 ) = AB_LZE( XS, XX, LX )
+                              ISAME( 7 ) = LZE( XS, XX, LX )
                               ISAME( 8 ) = INCXS.EQ.INCX
                               ISAME( 9 ) = BLS.EQ.BETA
                               IF( NULL )THEN
-                                 ISAME( 10 ) = AB_LZE( YS, YY, LY )
+                                 ISAME( 10 ) = LZE( YS, YY, LY )
                               ELSE
-                                 ISAME( 10 ) = AB_AB_LZERES( 'GE', ' ', 
-     $1, N,
+                                 ISAME( 10 ) = LZERES( 'GE', ' ', 1, N,
      $                                         YS, YY, ABS( INCY ) )
                               END IF
                               ISAME( 11 ) = INCYS.EQ.INCY
                            ELSE IF( PACKED )THEN
                               ISAME( 3 ) = ALS.EQ.ALPHA
-                              ISAME( 4 ) = AB_LZE( AS, AA, LAA )
-                              ISAME( 5 ) = AB_LZE( XS, XX, LX )
+                              ISAME( 4 ) = LZE( AS, AA, LAA )
+                              ISAME( 5 ) = LZE( XS, XX, LX )
                               ISAME( 6 ) = INCXS.EQ.INCX
                               ISAME( 7 ) = BLS.EQ.BETA
                               IF( NULL )THEN
-                                 ISAME( 8 ) = AB_LZE( YS, YY, LY )
+                                 ISAME( 8 ) = LZE( YS, YY, LY )
                               ELSE
-                                 ISAME( 8 ) = AB_AB_LZERES( 'GE', ' ', 1
-     $, N,
+                                 ISAME( 8 ) = LZERES( 'GE', ' ', 1, N,
      $                                        YS, YY, ABS( INCY ) )
                               END IF
                               ISAME( 9 ) = INCYS.EQ.INCY
@@ -1080,8 +1054,7 @@
 *
 *                             Check the result.
 *
-                              CALL AB_ZMVCH( 'N', N, N, ALPHA, A, NMAX, 
-     $X,
+                              CALL ZMVCH( 'N', N, N, ALPHA, A, NMAX, X,
      $                                    INCX, BETA, Y, INCY, YT, G,
      $                                    YY, EPS, ERR, FATAL, NOUT,
      $                                    .TRUE. )
@@ -1154,14 +1127,14 @@
  9992 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of AB_ZCHK2.
+*     End of ZCHK2.
 *
       END
-      SUBROUTINE AB_ZCHK3( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
+      SUBROUTINE ZCHK3( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NKB, KB, NINC, INC, NMAX,
      $                  INCMAX, A, AA, AS, X, XX, XS, XT, G, Z )
 *
-*  Tests AB_ZTRMV, AB_ZTBMV, AB_ZTPMV, AB_ZTRSV, AB_ZTBSV and AB_ZTPSV.
+*  Tests ZTRMV, ZTBMV, ZTPMV, ZTRSV, ZTBSV and ZTPSV.
 *
 *  Auxiliary routine for test program for Level 2 Blas.
 *
@@ -1199,12 +1172,11 @@
 *     .. Local Arrays ..
       LOGICAL            ISAME( 13 )
 *     .. External Functions ..
-      LOGICAL            AB_LZE, AB_AB_LZERES
-      EXTERNAL           AB_LZE, AB_AB_LZERES
+      LOGICAL            LZE, LZERES
+      EXTERNAL           LZE, LZERES
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZMAKE, AB_ZMVCH, AB_ZTBMV, AB_ZTBSV, AB_ZTPM
-     $V, AB_ZTPSV,
-     $                   AB_ZTRMV, AB_ZTRSV
+      EXTERNAL           ZMAKE, ZMVCH, ZTBMV, ZTBSV, ZTPMV, ZTPSV,
+     $                   ZTRMV, ZTRSV
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
 *     .. Scalars in Common ..
@@ -1230,7 +1202,7 @@
       NC = 0
       RESET = .TRUE.
       ERRMAX = RZERO
-*     Set up zero vector for AB_ZMVCH.
+*     Set up zero vector for ZMVCH.
       DO 10 I = 1, NMAX
          Z( I ) = ZERO
    10 CONTINUE
@@ -1279,7 +1251,7 @@
 *                    Generate the matrix A.
 *
                      TRANSL = ZERO
-                     CALL AB_ZMAKE( SNAME( 2: 3 ), UPLO, DIAG, N, N, A,
+                     CALL ZMAKE( SNAME( 2: 3 ), UPLO, DIAG, N, N, A,
      $                           NMAX, AA, LDA, K, K, RESET, TRANSL )
 *
                      DO 60 IX = 1, NINC
@@ -1289,7 +1261,7 @@
 *                       Generate the vector X.
 *
                         TRANSL = HALF
-                        CALL AB_ZMAKE( 'GE', ' ', ' ', 1, N, X, 1, XX,
+                        CALL ZMAKE( 'GE', ' ', ' ', 1, N, X, 1, XX,
      $                              ABS( INCX ), 0, N - 1, RESET,
      $                              TRANSL )
                         IF( N.GT.1 )THEN
@@ -1324,8 +1296,7 @@
      $                           UPLO, TRANS, DIAG, N, LDA, INCX
                               IF( REWI )
      $                           REWIND NTRA
-                              CALL AB_ZTRMV( UPLO, TRANS, DIAG, N, AA, L
-     $DA,
+                              CALL ZTRMV( UPLO, TRANS, DIAG, N, AA, LDA,
      $                                    XX, INCX )
                            ELSE IF( BANDED )THEN
                               IF( TRACE )
@@ -1333,8 +1304,7 @@
      $                           UPLO, TRANS, DIAG, N, K, LDA, INCX
                               IF( REWI )
      $                           REWIND NTRA
-                              CALL AB_ZTBMV( UPLO, TRANS, DIAG, N, K, AA
-     $,
+                              CALL ZTBMV( UPLO, TRANS, DIAG, N, K, AA,
      $                                    LDA, XX, INCX )
                            ELSE IF( PACKED )THEN
                               IF( TRACE )
@@ -1342,8 +1312,7 @@
      $                           UPLO, TRANS, DIAG, N, INCX
                               IF( REWI )
      $                           REWIND NTRA
-                              CALL AB_ZTPMV( UPLO, TRANS, DIAG, N, AA, X
-     $X,
+                              CALL ZTPMV( UPLO, TRANS, DIAG, N, AA, XX,
      $                                    INCX )
                            END IF
                         ELSE IF( SNAME( 4: 5 ).EQ.'SV' )THEN
@@ -1353,8 +1322,7 @@
      $                           UPLO, TRANS, DIAG, N, LDA, INCX
                               IF( REWI )
      $                           REWIND NTRA
-                              CALL AB_ZTRSV( UPLO, TRANS, DIAG, N, AA, L
-     $DA,
+                              CALL ZTRSV( UPLO, TRANS, DIAG, N, AA, LDA,
      $                                    XX, INCX )
                            ELSE IF( BANDED )THEN
                               IF( TRACE )
@@ -1362,8 +1330,7 @@
      $                           UPLO, TRANS, DIAG, N, K, LDA, INCX
                               IF( REWI )
      $                           REWIND NTRA
-                              CALL AB_ZTBSV( UPLO, TRANS, DIAG, N, K, AA
-     $,
+                              CALL ZTBSV( UPLO, TRANS, DIAG, N, K, AA,
      $                                    LDA, XX, INCX )
                            ELSE IF( PACKED )THEN
                               IF( TRACE )
@@ -1371,8 +1338,7 @@
      $                           UPLO, TRANS, DIAG, N, INCX
                               IF( REWI )
      $                           REWIND NTRA
-                              CALL AB_ZTPSV( UPLO, TRANS, DIAG, N, AA, X
-     $X,
+                              CALL ZTPSV( UPLO, TRANS, DIAG, N, AA, XX,
      $                                    INCX )
                            END IF
                         END IF
@@ -1392,35 +1358,32 @@
                         ISAME( 3 ) = DIAG.EQ.DIAGS
                         ISAME( 4 ) = NS.EQ.N
                         IF( FULL )THEN
-                           ISAME( 5 ) = AB_LZE( AS, AA, LAA )
+                           ISAME( 5 ) = LZE( AS, AA, LAA )
                            ISAME( 6 ) = LDAS.EQ.LDA
                            IF( NULL )THEN
-                              ISAME( 7 ) = AB_LZE( XS, XX, LX )
+                              ISAME( 7 ) = LZE( XS, XX, LX )
                            ELSE
-                              ISAME( 7 ) = AB_AB_LZERES( 'GE', ' ', 1, N
-     $, XS,
+                              ISAME( 7 ) = LZERES( 'GE', ' ', 1, N, XS,
      $                                     XX, ABS( INCX ) )
                            END IF
                            ISAME( 8 ) = INCXS.EQ.INCX
                         ELSE IF( BANDED )THEN
                            ISAME( 5 ) = KS.EQ.K
-                           ISAME( 6 ) = AB_LZE( AS, AA, LAA )
+                           ISAME( 6 ) = LZE( AS, AA, LAA )
                            ISAME( 7 ) = LDAS.EQ.LDA
                            IF( NULL )THEN
-                              ISAME( 8 ) = AB_LZE( XS, XX, LX )
+                              ISAME( 8 ) = LZE( XS, XX, LX )
                            ELSE
-                              ISAME( 8 ) = AB_AB_LZERES( 'GE', ' ', 1, N
-     $, XS,
+                              ISAME( 8 ) = LZERES( 'GE', ' ', 1, N, XS,
      $                                     XX, ABS( INCX ) )
                            END IF
                            ISAME( 9 ) = INCXS.EQ.INCX
                         ELSE IF( PACKED )THEN
-                           ISAME( 5 ) = AB_LZE( AS, AA, LAA )
+                           ISAME( 5 ) = LZE( AS, AA, LAA )
                            IF( NULL )THEN
-                              ISAME( 6 ) = AB_LZE( XS, XX, LX )
+                              ISAME( 6 ) = LZE( XS, XX, LX )
                            ELSE
-                              ISAME( 6 ) = AB_AB_LZERES( 'GE', ' ', 1, N
-     $, XS,
+                              ISAME( 6 ) = LZERES( 'GE', ' ', 1, N, XS,
      $                                     XX, ABS( INCX ) )
                            END IF
                            ISAME( 7 ) = INCXS.EQ.INCX
@@ -1445,8 +1408,7 @@
 *
 *                             Check the result.
 *
-                              CALL AB_ZMVCH( TRANS, N, N, ONE, A, NMAX, 
-     $X,
+                              CALL ZMVCH( TRANS, N, N, ONE, A, NMAX, X,
      $                                    INCX, ZERO, Z, INCX, XT, G,
      $                                    XX, EPS, ERR, FATAL, NOUT,
      $                                    .TRUE. )
@@ -1460,8 +1422,7 @@
                                  XX( 1 + ( I - 1 )*ABS( INCX ) )
      $                              = X( I )
    50                         CONTINUE
-                              CALL AB_ZMVCH( TRANS, N, N, ONE, A, NMAX, 
-     $Z,
+                              CALL ZMVCH( TRANS, N, N, ONE, A, NMAX, Z,
      $                                    INCX, ZERO, X, INCX, XT, G,
      $                                    XX, EPS, ERR, FATAL, NOUT,
      $                                    .FALSE. )
@@ -1528,15 +1489,15 @@
  9992 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of AB_ZCHK3.
+*     End of ZCHK3.
 *
       END
-      SUBROUTINE AB_ZCHK4( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
+      SUBROUTINE ZCHK4( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NALF, ALF, NINC, INC, NMAX,
      $                  INCMAX, A, AA, AS, X, XX, XS, Y, YY, YS, YT, G,
      $                  Z )
 *
-*  Tests AB_ZGERC and AB_ZGERU.
+*  Tests ZGERC and ZGERU.
 *
 *  Auxiliary routine for test program for Level 2 Blas.
 *
@@ -1575,10 +1536,10 @@
       COMPLEX*16         W( 1 )
       LOGICAL            ISAME( 13 )
 *     .. External Functions ..
-      LOGICAL            AB_LZE, AB_AB_LZERES
-      EXTERNAL           AB_LZE, AB_AB_LZERES
+      LOGICAL            LZE, LZERES
+      EXTERNAL           LZE, LZERES
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZGERC, AB_ZGERU, AB_ZMAKE, AB_ZMVCH
+      EXTERNAL           ZGERC, ZGERU, ZMAKE, ZMVCH
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DCONJG, MAX, MIN
 *     .. Scalars in Common ..
@@ -1622,8 +1583,7 @@
 *              Generate the vector X.
 *
                TRANSL = HALF
-               CALL AB_ZMAKE( 'GE', ' ', ' ', 1, M, X, 1, XX, ABS( INCX 
-     $),
+               CALL ZMAKE( 'GE', ' ', ' ', 1, M, X, 1, XX, ABS( INCX ),
      $                     0, M - 1, RESET, TRANSL )
                IF( M.GT.1 )THEN
                   X( M/2 ) = ZERO
@@ -1637,7 +1597,7 @@
 *                 Generate the vector Y.
 *
                   TRANSL = ZERO
-                  CALL AB_ZMAKE( 'GE', ' ', ' ', 1, N, Y, 1, YY,
+                  CALL ZMAKE( 'GE', ' ', ' ', 1, N, Y, 1, YY,
      $                        ABS( INCY ), 0, N - 1, RESET, TRANSL )
                   IF( N.GT.1 )THEN
                      Y( N/2 ) = ZERO
@@ -1650,8 +1610,7 @@
 *                    Generate the matrix A.
 *
                      TRANSL = ZERO
-                     CALL AB_ZMAKE( SNAME( 2: 3 ), ' ', ' ', M, N, A, NM
-     $AX,
+                     CALL ZMAKE( SNAME( 2: 3 ), ' ', ' ', M, N, A, NMAX,
      $                           AA, LDA, M - 1, N - 1, RESET, TRANSL )
 *
                      NC = NC + 1
@@ -1682,14 +1641,12 @@
                      IF( CONJ )THEN
                         IF( REWI )
      $                     REWIND NTRA
-                        CALL AB_ZGERC( M, N, ALPHA, XX, INCX, YY, INCY, 
-     $AA,
+                        CALL ZGERC( M, N, ALPHA, XX, INCX, YY, INCY, AA,
      $                              LDA )
                      ELSE
                         IF( REWI )
      $                     REWIND NTRA
-                        CALL AB_ZGERU( M, N, ALPHA, XX, INCX, YY, INCY, 
-     $AA,
+                        CALL ZGERU( M, N, ALPHA, XX, INCX, YY, INCY, AA,
      $                              LDA )
                      END IF
 *
@@ -1706,15 +1663,14 @@
                      ISAME( 1 ) = MS.EQ.M
                      ISAME( 2 ) = NS.EQ.N
                      ISAME( 3 ) = ALS.EQ.ALPHA
-                     ISAME( 4 ) = AB_LZE( XS, XX, LX )
+                     ISAME( 4 ) = LZE( XS, XX, LX )
                      ISAME( 5 ) = INCXS.EQ.INCX
-                     ISAME( 6 ) = AB_LZE( YS, YY, LY )
+                     ISAME( 6 ) = LZE( YS, YY, LY )
                      ISAME( 7 ) = INCYS.EQ.INCY
                      IF( NULL )THEN
-                        ISAME( 8 ) = AB_LZE( AS, AA, LAA )
+                        ISAME( 8 ) = LZE( AS, AA, LAA )
                      ELSE
-                        ISAME( 8 ) = AB_AB_LZERES( 'GE', ' ', M, N, AS, 
-     $AA,
+                        ISAME( 8 ) = LZERES( 'GE', ' ', M, N, AS, AA,
      $                               LDA )
                      END IF
                      ISAME( 9 ) = LDAS.EQ.LDA
@@ -1753,8 +1709,7 @@
                            END IF
                            IF( CONJ )
      $                        W( 1 ) = DCONJG( W( 1 ) )
-                           CALL AB_ZMVCH( 'N', M, 1, ALPHA, Z, NMAX, W, 
-     $1,
+                           CALL ZMVCH( 'N', M, 1, ALPHA, Z, NMAX, W, 1,
      $                                 ONE, A( 1, J ), 1, YT, G,
      $                                 AA( 1 + ( J - 1 )*LDA ), EPS,
      $                                 ERR, FATAL, NOUT, .TRUE. )
@@ -1812,15 +1767,15 @@
  9993 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of AB_ZCHK4.
+*     End of ZCHK4.
 *
       END
-      SUBROUTINE AB_ZCHK5( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
+      SUBROUTINE ZCHK5( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NALF, ALF, NINC, INC, NMAX,
      $                  INCMAX, A, AA, AS, X, XX, XS, Y, YY, YS, YT, G,
      $                  Z )
 *
-*  Tests AB_ZHER and AB_ZHPR.
+*  Tests ZHER and ZHPR.
 *
 *  Auxiliary routine for test program for Level 2 Blas.
 *
@@ -1860,10 +1815,10 @@
       COMPLEX*16         W( 1 )
       LOGICAL            ISAME( 13 )
 *     .. External Functions ..
-      LOGICAL            AB_LZE, AB_AB_LZERES
-      EXTERNAL           AB_LZE, AB_AB_LZERES
+      LOGICAL            LZE, LZERES
+      EXTERNAL           LZE, LZERES
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZHER, AB_ZHPR, AB_ZMAKE, AB_ZMVCH
+      EXTERNAL           ZHER, ZHPR, ZMAKE, ZMVCH
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCMPLX, DCONJG, MAX
 *     .. Scalars in Common ..
@@ -1913,8 +1868,7 @@
 *              Generate the vector X.
 *
                TRANSL = HALF
-               CALL AB_ZMAKE( 'GE', ' ', ' ', 1, N, X, 1, XX, ABS( INCX 
-     $),
+               CALL ZMAKE( 'GE', ' ', ' ', 1, N, X, 1, XX, ABS( INCX ),
      $                     0, N - 1, RESET, TRANSL )
                IF( N.GT.1 )THEN
                   X( N/2 ) = ZERO
@@ -1929,8 +1883,7 @@
 *                 Generate the matrix A.
 *
                   TRANSL = ZERO
-                  CALL AB_ZMAKE( SNAME( 2: 3 ), UPLO, ' ', N, N, A, NMAX
-     $,
+                  CALL ZMAKE( SNAME( 2: 3 ), UPLO, ' ', N, N, A, NMAX,
      $                        AA, LDA, N - 1, N - 1, RESET, TRANSL )
 *
                   NC = NC + 1
@@ -1957,14 +1910,14 @@
      $                  RALPHA, INCX, LDA
                      IF( REWI )
      $                  REWIND NTRA
-                     CALL AB_ZHER( UPLO, N, RALPHA, XX, INCX, AA, LDA )
+                     CALL ZHER( UPLO, N, RALPHA, XX, INCX, AA, LDA )
                   ELSE IF( PACKED )THEN
                      IF( TRACE )
      $                  WRITE( NTRA, FMT = 9994 )NC, SNAME, UPLO, N,
      $                  RALPHA, INCX
                      IF( REWI )
      $                  REWIND NTRA
-                     CALL AB_ZHPR( UPLO, N, RALPHA, XX, INCX, AA )
+                     CALL ZHPR( UPLO, N, RALPHA, XX, INCX, AA )
                   END IF
 *
 *                 Check if error-exit was taken incorrectly.
@@ -1980,13 +1933,12 @@
                   ISAME( 1 ) = UPLO.EQ.UPLOS
                   ISAME( 2 ) = NS.EQ.N
                   ISAME( 3 ) = RALS.EQ.RALPHA
-                  ISAME( 4 ) = AB_LZE( XS, XX, LX )
+                  ISAME( 4 ) = LZE( XS, XX, LX )
                   ISAME( 5 ) = INCXS.EQ.INCX
                   IF( NULL )THEN
-                     ISAME( 6 ) = AB_LZE( AS, AA, LAA )
+                     ISAME( 6 ) = LZE( AS, AA, LAA )
                   ELSE
-                     ISAME( 6 ) = AB_AB_LZERES( SNAME( 2: 3 ), UPLO, N, 
-     $N, AS,
+                     ISAME( 6 ) = LZERES( SNAME( 2: 3 ), UPLO, N, N, AS,
      $                            AA, LDA )
                   END IF
                   IF( .NOT.PACKED )THEN
@@ -2029,8 +1981,7 @@
                            JJ = J
                            LJ = N - J + 1
                         END IF
-                        CALL AB_ZMVCH( 'N', LJ, 1, ALPHA, Z( JJ ), LJ, W
-     $,
+                        CALL ZMVCH( 'N', LJ, 1, ALPHA, Z( JJ ), LJ, W,
      $                              1, ONE, A( JJ, J ), 1, YT, G,
      $                              AA( JA ), EPS, ERR, FATAL, NOUT,
      $                              .TRUE. )
@@ -2101,15 +2052,15 @@
  9992 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of AB_ZCHK5.
+*     End of ZCHK5.
 *
       END
-      SUBROUTINE AB_ZCHK6( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
+      SUBROUTINE ZCHK6( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NALF, ALF, NINC, INC, NMAX,
      $                  INCMAX, A, AA, AS, X, XX, XS, Y, YY, YS, YT, G,
      $                  Z )
 *
-*  Tests AB_AB_ZHER2 and AB_AB_ZHPR2.
+*  Tests ZHER2 and ZHPR2.
 *
 *  Auxiliary routine for test program for Level 2 Blas.
 *
@@ -2150,10 +2101,10 @@
       COMPLEX*16         W( 2 )
       LOGICAL            ISAME( 13 )
 *     .. External Functions ..
-      LOGICAL            AB_LZE, AB_AB_LZERES
-      EXTERNAL           AB_LZE, AB_AB_LZERES
+      LOGICAL            LZE, LZERES
+      EXTERNAL           LZE, LZERES
 *     .. External Subroutines ..
-      EXTERNAL           AB_AB_ZHER2, AB_AB_ZHPR2, AB_ZMAKE, AB_ZMVCH
+      EXTERNAL           ZHER2, ZHPR2, ZMAKE, ZMVCH
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DCONJG, MAX
 *     .. Scalars in Common ..
@@ -2203,8 +2154,7 @@
 *              Generate the vector X.
 *
                TRANSL = HALF
-               CALL AB_ZMAKE( 'GE', ' ', ' ', 1, N, X, 1, XX, ABS( INCX 
-     $),
+               CALL ZMAKE( 'GE', ' ', ' ', 1, N, X, 1, XX, ABS( INCX ),
      $                     0, N - 1, RESET, TRANSL )
                IF( N.GT.1 )THEN
                   X( N/2 ) = ZERO
@@ -2218,7 +2168,7 @@
 *                 Generate the vector Y.
 *
                   TRANSL = ZERO
-                  CALL AB_ZMAKE( 'GE', ' ', ' ', 1, N, Y, 1, YY,
+                  CALL ZMAKE( 'GE', ' ', ' ', 1, N, Y, 1, YY,
      $                        ABS( INCY ), 0, N - 1, RESET, TRANSL )
                   IF( N.GT.1 )THEN
                      Y( N/2 ) = ZERO
@@ -2232,7 +2182,7 @@
 *                    Generate the matrix A.
 *
                      TRANSL = ZERO
-                     CALL AB_ZMAKE( SNAME( 2: 3 ), UPLO, ' ', N, N, A,
+                     CALL ZMAKE( SNAME( 2: 3 ), UPLO, ' ', N, N, A,
      $                           NMAX, AA, LDA, N - 1, N - 1, RESET,
      $                           TRANSL )
 *
@@ -2264,8 +2214,7 @@
      $                     ALPHA, INCX, INCY, LDA
                         IF( REWI )
      $                     REWIND NTRA
-                        CALL AB_AB_ZHER2( UPLO, N, ALPHA, XX, INCX, YY, 
-     $INCY,
+                        CALL ZHER2( UPLO, N, ALPHA, XX, INCX, YY, INCY,
      $                              AA, LDA )
                      ELSE IF( PACKED )THEN
                         IF( TRACE )
@@ -2273,8 +2222,7 @@
      $                     ALPHA, INCX, INCY
                         IF( REWI )
      $                     REWIND NTRA
-                        CALL AB_AB_ZHPR2( UPLO, N, ALPHA, XX, INCX, YY, 
-     $INCY,
+                        CALL ZHPR2( UPLO, N, ALPHA, XX, INCX, YY, INCY,
      $                              AA )
                      END IF
 *
@@ -2291,15 +2239,14 @@
                      ISAME( 1 ) = UPLO.EQ.UPLOS
                      ISAME( 2 ) = NS.EQ.N
                      ISAME( 3 ) = ALS.EQ.ALPHA
-                     ISAME( 4 ) = AB_LZE( XS, XX, LX )
+                     ISAME( 4 ) = LZE( XS, XX, LX )
                      ISAME( 5 ) = INCXS.EQ.INCX
-                     ISAME( 6 ) = AB_LZE( YS, YY, LY )
+                     ISAME( 6 ) = LZE( YS, YY, LY )
                      ISAME( 7 ) = INCYS.EQ.INCY
                      IF( NULL )THEN
-                        ISAME( 8 ) = AB_LZE( AS, AA, LAA )
+                        ISAME( 8 ) = LZE( AS, AA, LAA )
                      ELSE
-                        ISAME( 8 ) = AB_AB_LZERES( SNAME( 2: 3 ), UPLO, 
-     $N, N,
+                        ISAME( 8 ) = LZERES( SNAME( 2: 3 ), UPLO, N, N,
      $                               AS, AA, LDA )
                      END IF
                      IF( .NOT.PACKED )THEN
@@ -2352,7 +2299,7 @@
                               JJ = J
                               LJ = N - J + 1
                            END IF
-                           CALL AB_ZMVCH( 'N', LJ, 2, ONE, Z( JJ, 1 ),
+                           CALL ZMVCH( 'N', LJ, 2, ONE, Z( JJ, 1 ),
      $                                 NMAX, W, 1, ONE, A( JJ, J ), 1,
      $                                 YT, G, AA( JA ), EPS, ERR, FATAL,
      $                                 NOUT, .TRUE. )
@@ -2428,13 +2375,13 @@
  9992 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of AB_ZCHK6.
+*     End of ZCHK6.
 *
       END
-      SUBROUTINE AB_ZCHKE( ISNUM, SRNAMT, NOUT )
+      SUBROUTINE ZCHKE( ISNUM, SRNAMT, NOUT )
 *
 *  Tests the error exits from the Level 2 Blas.
-*  Requires a special version of the error-handling routine AB_XERBLA.
+*  Requires a special version of the error-handling routine XERBLA.
 *  ALPHA, RALPHA, BETA, A, X and Y should not need to be defined.
 *
 *  Auxiliary routine for test program for Level 2 Blas.
@@ -2455,313 +2402,310 @@
 *     .. Local Arrays ..
       COMPLEX*16         A( 1, 1 ), X( 1 ), Y( 1 )
 *     .. External Subroutines ..
-      EXTERNAL           AB_CHKXER, AB_ZGBMV, AB_ZGEMV, AB_ZGERC, AB_ZGE
-     $RU, AB_ZHBMV,
-     $                   AB_ZHEMV, AB_ZHER, AB_AB_ZHER2, AB_ZHPMV, AB_ZH
-     $PR, AB_AB_ZHPR2, AB_ZTBMV,
-     $                   AB_ZTBSV, AB_ZTPMV, AB_ZTPSV, AB_ZTRMV, AB_ZTRS
-     $V
+      EXTERNAL           CHKXER, ZGBMV, ZGEMV, ZGERC, ZGERU, ZHBMV,
+     $                   ZHEMV, ZHER, ZHER2, ZHPMV, ZHPR, ZHPR2, ZTBMV,
+     $                   ZTBSV, ZTPMV, ZTPSV, ZTRMV, ZTRSV
 *     .. Common blocks ..
       COMMON             /INFOC/INFOT, NOUTC, OK, LERR
 *     .. Executable Statements ..
-*     OK is set to .FALSE. by the special version of AB_XERBLA or by AB_CHKXER
+*     OK is set to .FALSE. by the special version of XERBLA or by CHKXER
 *     if anything is wrong.
       OK = .TRUE.
-*     LERR is set to .TRUE. by the special version of AB_XERBLA each time
-*     it is called, and is then tested and re-set by AB_CHKXER.
+*     LERR is set to .TRUE. by the special version of XERBLA each time
+*     it is called, and is then tested and re-set by CHKXER.
       LERR = .FALSE.
       GO TO ( 10, 20, 30, 40, 50, 60, 70, 80,
      $        90, 100, 110, 120, 130, 140, 150, 160,
      $        170 )ISNUM
    10 INFOT = 1
-      CALL AB_ZGEMV( '/', 0, 0, ALPHA, A, 1, X, 1, BETA, Y, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZGEMV( '/', 0, 0, ALPHA, A, 1, X, 1, BETA, Y, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_ZGEMV( 'N', -1, 0, ALPHA, A, 1, X, 1, BETA, Y, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZGEMV( 'N', -1, 0, ALPHA, A, 1, X, 1, BETA, Y, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL AB_ZGEMV( 'N', 0, -1, ALPHA, A, 1, X, 1, BETA, Y, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZGEMV( 'N', 0, -1, ALPHA, A, 1, X, 1, BETA, Y, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 6
-      CALL AB_ZGEMV( 'N', 2, 0, ALPHA, A, 1, X, 1, BETA, Y, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZGEMV( 'N', 2, 0, ALPHA, A, 1, X, 1, BETA, Y, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 8
-      CALL AB_ZGEMV( 'N', 0, 0, ALPHA, A, 1, X, 0, BETA, Y, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZGEMV( 'N', 0, 0, ALPHA, A, 1, X, 0, BETA, Y, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 11
-      CALL AB_ZGEMV( 'N', 0, 0, ALPHA, A, 1, X, 1, BETA, Y, 0 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZGEMV( 'N', 0, 0, ALPHA, A, 1, X, 1, BETA, Y, 0 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       GO TO 180
    20 INFOT = 1
-      CALL AB_ZGBMV( '/', 0, 0, 0, 0, ALPHA, A, 1, X, 1, BETA, Y, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZGBMV( '/', 0, 0, 0, 0, ALPHA, A, 1, X, 1, BETA, Y, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_ZGBMV( 'N', -1, 0, 0, 0, ALPHA, A, 1, X, 1, BETA, Y, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZGBMV( 'N', -1, 0, 0, 0, ALPHA, A, 1, X, 1, BETA, Y, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL AB_ZGBMV( 'N', 0, -1, 0, 0, ALPHA, A, 1, X, 1, BETA, Y, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZGBMV( 'N', 0, -1, 0, 0, ALPHA, A, 1, X, 1, BETA, Y, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL AB_ZGBMV( 'N', 0, 0, -1, 0, ALPHA, A, 1, X, 1, BETA, Y, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZGBMV( 'N', 0, 0, -1, 0, ALPHA, A, 1, X, 1, BETA, Y, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL AB_ZGBMV( 'N', 2, 0, 0, -1, ALPHA, A, 1, X, 1, BETA, Y, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZGBMV( 'N', 2, 0, 0, -1, ALPHA, A, 1, X, 1, BETA, Y, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 8
-      CALL AB_ZGBMV( 'N', 0, 0, 1, 0, ALPHA, A, 1, X, 1, BETA, Y, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZGBMV( 'N', 0, 0, 1, 0, ALPHA, A, 1, X, 1, BETA, Y, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 10
-      CALL AB_ZGBMV( 'N', 0, 0, 0, 0, ALPHA, A, 1, X, 0, BETA, Y, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZGBMV( 'N', 0, 0, 0, 0, ALPHA, A, 1, X, 0, BETA, Y, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 13
-      CALL AB_ZGBMV( 'N', 0, 0, 0, 0, ALPHA, A, 1, X, 1, BETA, Y, 0 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZGBMV( 'N', 0, 0, 0, 0, ALPHA, A, 1, X, 1, BETA, Y, 0 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       GO TO 180
    30 INFOT = 1
-      CALL AB_ZHEMV( '/', 0, ALPHA, A, 1, X, 1, BETA, Y, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZHEMV( '/', 0, ALPHA, A, 1, X, 1, BETA, Y, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_ZHEMV( 'U', -1, ALPHA, A, 1, X, 1, BETA, Y, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZHEMV( 'U', -1, ALPHA, A, 1, X, 1, BETA, Y, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL AB_ZHEMV( 'U', 2, ALPHA, A, 1, X, 1, BETA, Y, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZHEMV( 'U', 2, ALPHA, A, 1, X, 1, BETA, Y, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL AB_ZHEMV( 'U', 0, ALPHA, A, 1, X, 0, BETA, Y, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZHEMV( 'U', 0, ALPHA, A, 1, X, 0, BETA, Y, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 10
-      CALL AB_ZHEMV( 'U', 0, ALPHA, A, 1, X, 1, BETA, Y, 0 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZHEMV( 'U', 0, ALPHA, A, 1, X, 1, BETA, Y, 0 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       GO TO 180
    40 INFOT = 1
-      CALL AB_ZHBMV( '/', 0, 0, ALPHA, A, 1, X, 1, BETA, Y, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZHBMV( '/', 0, 0, ALPHA, A, 1, X, 1, BETA, Y, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_ZHBMV( 'U', -1, 0, ALPHA, A, 1, X, 1, BETA, Y, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZHBMV( 'U', -1, 0, ALPHA, A, 1, X, 1, BETA, Y, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL AB_ZHBMV( 'U', 0, -1, ALPHA, A, 1, X, 1, BETA, Y, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZHBMV( 'U', 0, -1, ALPHA, A, 1, X, 1, BETA, Y, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 6
-      CALL AB_ZHBMV( 'U', 0, 1, ALPHA, A, 1, X, 1, BETA, Y, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZHBMV( 'U', 0, 1, ALPHA, A, 1, X, 1, BETA, Y, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 8
-      CALL AB_ZHBMV( 'U', 0, 0, ALPHA, A, 1, X, 0, BETA, Y, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZHBMV( 'U', 0, 0, ALPHA, A, 1, X, 0, BETA, Y, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 11
-      CALL AB_ZHBMV( 'U', 0, 0, ALPHA, A, 1, X, 1, BETA, Y, 0 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZHBMV( 'U', 0, 0, ALPHA, A, 1, X, 1, BETA, Y, 0 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       GO TO 180
    50 INFOT = 1
-      CALL AB_ZHPMV( '/', 0, ALPHA, A, X, 1, BETA, Y, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZHPMV( '/', 0, ALPHA, A, X, 1, BETA, Y, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_ZHPMV( 'U', -1, ALPHA, A, X, 1, BETA, Y, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZHPMV( 'U', -1, ALPHA, A, X, 1, BETA, Y, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 6
-      CALL AB_ZHPMV( 'U', 0, ALPHA, A, X, 0, BETA, Y, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZHPMV( 'U', 0, ALPHA, A, X, 0, BETA, Y, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 9
-      CALL AB_ZHPMV( 'U', 0, ALPHA, A, X, 1, BETA, Y, 0 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZHPMV( 'U', 0, ALPHA, A, X, 1, BETA, Y, 0 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       GO TO 180
    60 INFOT = 1
-      CALL AB_ZTRMV( '/', 'N', 'N', 0, A, 1, X, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZTRMV( '/', 'N', 'N', 0, A, 1, X, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_ZTRMV( 'U', '/', 'N', 0, A, 1, X, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZTRMV( 'U', '/', 'N', 0, A, 1, X, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL AB_ZTRMV( 'U', 'N', '/', 0, A, 1, X, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZTRMV( 'U', 'N', '/', 0, A, 1, X, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL AB_ZTRMV( 'U', 'N', 'N', -1, A, 1, X, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZTRMV( 'U', 'N', 'N', -1, A, 1, X, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 6
-      CALL AB_ZTRMV( 'U', 'N', 'N', 2, A, 1, X, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZTRMV( 'U', 'N', 'N', 2, A, 1, X, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 8
-      CALL AB_ZTRMV( 'U', 'N', 'N', 0, A, 1, X, 0 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZTRMV( 'U', 'N', 'N', 0, A, 1, X, 0 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       GO TO 180
    70 INFOT = 1
-      CALL AB_ZTBMV( '/', 'N', 'N', 0, 0, A, 1, X, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZTBMV( '/', 'N', 'N', 0, 0, A, 1, X, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_ZTBMV( 'U', '/', 'N', 0, 0, A, 1, X, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZTBMV( 'U', '/', 'N', 0, 0, A, 1, X, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL AB_ZTBMV( 'U', 'N', '/', 0, 0, A, 1, X, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZTBMV( 'U', 'N', '/', 0, 0, A, 1, X, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL AB_ZTBMV( 'U', 'N', 'N', -1, 0, A, 1, X, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZTBMV( 'U', 'N', 'N', -1, 0, A, 1, X, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL AB_ZTBMV( 'U', 'N', 'N', 0, -1, A, 1, X, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZTBMV( 'U', 'N', 'N', 0, -1, A, 1, X, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL AB_ZTBMV( 'U', 'N', 'N', 0, 1, A, 1, X, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZTBMV( 'U', 'N', 'N', 0, 1, A, 1, X, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 9
-      CALL AB_ZTBMV( 'U', 'N', 'N', 0, 0, A, 1, X, 0 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZTBMV( 'U', 'N', 'N', 0, 0, A, 1, X, 0 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       GO TO 180
    80 INFOT = 1
-      CALL AB_ZTPMV( '/', 'N', 'N', 0, A, X, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZTPMV( '/', 'N', 'N', 0, A, X, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_ZTPMV( 'U', '/', 'N', 0, A, X, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZTPMV( 'U', '/', 'N', 0, A, X, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL AB_ZTPMV( 'U', 'N', '/', 0, A, X, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZTPMV( 'U', 'N', '/', 0, A, X, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL AB_ZTPMV( 'U', 'N', 'N', -1, A, X, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZTPMV( 'U', 'N', 'N', -1, A, X, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL AB_ZTPMV( 'U', 'N', 'N', 0, A, X, 0 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZTPMV( 'U', 'N', 'N', 0, A, X, 0 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       GO TO 180
    90 INFOT = 1
-      CALL AB_ZTRSV( '/', 'N', 'N', 0, A, 1, X, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZTRSV( '/', 'N', 'N', 0, A, 1, X, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_ZTRSV( 'U', '/', 'N', 0, A, 1, X, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZTRSV( 'U', '/', 'N', 0, A, 1, X, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL AB_ZTRSV( 'U', 'N', '/', 0, A, 1, X, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZTRSV( 'U', 'N', '/', 0, A, 1, X, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL AB_ZTRSV( 'U', 'N', 'N', -1, A, 1, X, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZTRSV( 'U', 'N', 'N', -1, A, 1, X, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 6
-      CALL AB_ZTRSV( 'U', 'N', 'N', 2, A, 1, X, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZTRSV( 'U', 'N', 'N', 2, A, 1, X, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 8
-      CALL AB_ZTRSV( 'U', 'N', 'N', 0, A, 1, X, 0 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZTRSV( 'U', 'N', 'N', 0, A, 1, X, 0 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       GO TO 180
   100 INFOT = 1
-      CALL AB_ZTBSV( '/', 'N', 'N', 0, 0, A, 1, X, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZTBSV( '/', 'N', 'N', 0, 0, A, 1, X, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_ZTBSV( 'U', '/', 'N', 0, 0, A, 1, X, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZTBSV( 'U', '/', 'N', 0, 0, A, 1, X, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL AB_ZTBSV( 'U', 'N', '/', 0, 0, A, 1, X, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZTBSV( 'U', 'N', '/', 0, 0, A, 1, X, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL AB_ZTBSV( 'U', 'N', 'N', -1, 0, A, 1, X, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZTBSV( 'U', 'N', 'N', -1, 0, A, 1, X, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL AB_ZTBSV( 'U', 'N', 'N', 0, -1, A, 1, X, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZTBSV( 'U', 'N', 'N', 0, -1, A, 1, X, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL AB_ZTBSV( 'U', 'N', 'N', 0, 1, A, 1, X, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZTBSV( 'U', 'N', 'N', 0, 1, A, 1, X, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 9
-      CALL AB_ZTBSV( 'U', 'N', 'N', 0, 0, A, 1, X, 0 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZTBSV( 'U', 'N', 'N', 0, 0, A, 1, X, 0 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       GO TO 180
   110 INFOT = 1
-      CALL AB_ZTPSV( '/', 'N', 'N', 0, A, X, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZTPSV( '/', 'N', 'N', 0, A, X, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_ZTPSV( 'U', '/', 'N', 0, A, X, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZTPSV( 'U', '/', 'N', 0, A, X, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL AB_ZTPSV( 'U', 'N', '/', 0, A, X, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZTPSV( 'U', 'N', '/', 0, A, X, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL AB_ZTPSV( 'U', 'N', 'N', -1, A, X, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZTPSV( 'U', 'N', 'N', -1, A, X, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL AB_ZTPSV( 'U', 'N', 'N', 0, A, X, 0 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZTPSV( 'U', 'N', 'N', 0, A, X, 0 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       GO TO 180
   120 INFOT = 1
-      CALL AB_ZGERC( -1, 0, ALPHA, X, 1, Y, 1, A, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZGERC( -1, 0, ALPHA, X, 1, Y, 1, A, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_ZGERC( 0, -1, ALPHA, X, 1, Y, 1, A, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZGERC( 0, -1, ALPHA, X, 1, Y, 1, A, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL AB_ZGERC( 0, 0, ALPHA, X, 0, Y, 1, A, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZGERC( 0, 0, ALPHA, X, 0, Y, 1, A, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL AB_ZGERC( 0, 0, ALPHA, X, 1, Y, 0, A, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZGERC( 0, 0, ALPHA, X, 1, Y, 0, A, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 9
-      CALL AB_ZGERC( 2, 0, ALPHA, X, 1, Y, 1, A, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZGERC( 2, 0, ALPHA, X, 1, Y, 1, A, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       GO TO 180
   130 INFOT = 1
-      CALL AB_ZGERU( -1, 0, ALPHA, X, 1, Y, 1, A, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZGERU( -1, 0, ALPHA, X, 1, Y, 1, A, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_ZGERU( 0, -1, ALPHA, X, 1, Y, 1, A, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZGERU( 0, -1, ALPHA, X, 1, Y, 1, A, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL AB_ZGERU( 0, 0, ALPHA, X, 0, Y, 1, A, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZGERU( 0, 0, ALPHA, X, 0, Y, 1, A, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL AB_ZGERU( 0, 0, ALPHA, X, 1, Y, 0, A, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZGERU( 0, 0, ALPHA, X, 1, Y, 0, A, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 9
-      CALL AB_ZGERU( 2, 0, ALPHA, X, 1, Y, 1, A, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZGERU( 2, 0, ALPHA, X, 1, Y, 1, A, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       GO TO 180
   140 INFOT = 1
-      CALL AB_ZHER( '/', 0, RALPHA, X, 1, A, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZHER( '/', 0, RALPHA, X, 1, A, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_ZHER( 'U', -1, RALPHA, X, 1, A, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZHER( 'U', -1, RALPHA, X, 1, A, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL AB_ZHER( 'U', 0, RALPHA, X, 0, A, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZHER( 'U', 0, RALPHA, X, 0, A, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL AB_ZHER( 'U', 2, RALPHA, X, 1, A, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZHER( 'U', 2, RALPHA, X, 1, A, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       GO TO 180
   150 INFOT = 1
-      CALL AB_ZHPR( '/', 0, RALPHA, X, 1, A )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZHPR( '/', 0, RALPHA, X, 1, A )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_ZHPR( 'U', -1, RALPHA, X, 1, A )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZHPR( 'U', -1, RALPHA, X, 1, A )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL AB_ZHPR( 'U', 0, RALPHA, X, 0, A )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZHPR( 'U', 0, RALPHA, X, 0, A )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       GO TO 180
   160 INFOT = 1
-      CALL AB_AB_ZHER2( '/', 0, ALPHA, X, 1, Y, 1, A, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZHER2( '/', 0, ALPHA, X, 1, Y, 1, A, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_AB_ZHER2( 'U', -1, ALPHA, X, 1, Y, 1, A, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZHER2( 'U', -1, ALPHA, X, 1, Y, 1, A, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL AB_AB_ZHER2( 'U', 0, ALPHA, X, 0, Y, 1, A, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZHER2( 'U', 0, ALPHA, X, 0, Y, 1, A, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL AB_AB_ZHER2( 'U', 0, ALPHA, X, 1, Y, 0, A, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZHER2( 'U', 0, ALPHA, X, 1, Y, 0, A, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 9
-      CALL AB_AB_ZHER2( 'U', 2, ALPHA, X, 1, Y, 1, A, 1 )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZHER2( 'U', 2, ALPHA, X, 1, Y, 1, A, 1 )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       GO TO 180
   170 INFOT = 1
-      CALL AB_AB_ZHPR2( '/', 0, ALPHA, X, 1, Y, 1, A )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZHPR2( '/', 0, ALPHA, X, 1, Y, 1, A )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_AB_ZHPR2( 'U', -1, ALPHA, X, 1, Y, 1, A )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZHPR2( 'U', -1, ALPHA, X, 1, Y, 1, A )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL AB_AB_ZHPR2( 'U', 0, ALPHA, X, 0, Y, 1, A )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZHPR2( 'U', 0, ALPHA, X, 0, Y, 1, A )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL AB_AB_ZHPR2( 'U', 0, ALPHA, X, 1, Y, 0, A )
-      CALL AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      CALL ZHPR2( 'U', 0, ALPHA, X, 1, Y, 0, A )
+      CALL CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
 *
   180 IF( OK )THEN
          WRITE( NOUT, FMT = 9999 )SRNAMT
@@ -2774,10 +2718,10 @@
  9998 FORMAT( ' ******* ', A6, ' FAILED THE TESTS OF ERROR-EXITS *****',
      $      '**' )
 *
-*     End of AB_ZCHKE.
+*     End of ZCHKE.
 *
       END
-      SUBROUTINE AB_ZMAKE( TYPE, UPLO, DIAG, M, N, A, NMAX, AA, LDA, KL,
+      SUBROUTINE ZMAKE( TYPE, UPLO, DIAG, M, N, A, NMAX, AA, LDA, KL,
      $                  KU, RESET, TRANSL )
 *
 *  Generates values for an M by N matrix A within the bandwidth
@@ -2815,8 +2759,8 @@
       INTEGER            I, I1, I2, I3, IBEG, IEND, IOFF, J, JJ, KK
       LOGICAL            GEN, LOWER, SYM, TRI, UNIT, UPPER
 *     .. External Functions ..
-      COMPLEX*16         AB_ZBEG
-      EXTERNAL           AB_ZBEG
+      COMPLEX*16         ZBEG
+      EXTERNAL           ZBEG
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCMPLX, DCONJG, MAX, MIN
 *     .. Executable Statements ..
@@ -2835,7 +2779,7 @@
      $          THEN
                IF( ( I.LE.J.AND.J - I.LE.KU ).OR.
      $             ( I.GE.J.AND.I - J.LE.KL ) )THEN
-                  A( I, J ) = AB_ZBEG( RESET ) + TRANSL
+                  A( I, J ) = ZBEG( RESET ) + TRANSL
                ELSE
                   A( I, J ) = ZERO
                END IF
@@ -2967,11 +2911,10 @@
       END IF
       RETURN
 *
-*     End of AB_ZMAKE.
+*     End of ZMAKE.
 *
       END
-      SUBROUTINE AB_ZMVCH( TRANS, M, N, ALPHA, A, NMAX, X, INCX, BETA, Y
-     $,
+      SUBROUTINE ZMVCH( TRANS, M, N, ALPHA, A, NMAX, X, INCX, BETA, Y,
      $                  INCY, YT, G, YY, EPS, ERR, FATAL, NOUT, MV )
 *
 *  Checks the results of the computational tests.
@@ -3100,10 +3043,10 @@
      $      'SULT                    COMPUTED RESULT' )
  9998 FORMAT( 1X, I7, 2( '  (', G15.6, ',', G15.6, ')' ) )
 *
-*     End of AB_ZMVCH.
+*     End of ZMVCH.
 *
       END
-      LOGICAL FUNCTION AB_LZE( RI, RJ, LR )
+      LOGICAL FUNCTION LZE( RI, RJ, LR )
 *
 *  Tests if two arrays are identical.
 *
@@ -3124,16 +3067,16 @@
          IF( RI( I ).NE.RJ( I ) )
      $      GO TO 20
    10 CONTINUE
-      AB_LZE = .TRUE.
+      LZE = .TRUE.
       GO TO 30
    20 CONTINUE
-      AB_LZE = .FALSE.
+      LZE = .FALSE.
    30 RETURN
 *
-*     End of AB_LZE.
+*     End of LZE.
 *
       END
-      LOGICAL FUNCTION AB_AB_LZERES( TYPE, UPLO, M, N, AA, AS, LDA )
+      LOGICAL FUNCTION LZERES( TYPE, UPLO, M, N, AA, AS, LDA )
 *
 *  Tests if selected elements in two arrays are equal.
 *
@@ -3183,16 +3126,16 @@
    50    CONTINUE
       END IF
 *
-      AB_AB_LZERES = .TRUE.
+      LZERES = .TRUE.
       GO TO 80
    70 CONTINUE
-      AB_AB_LZERES = .FALSE.
+      LZERES = .FALSE.
    80 RETURN
 *
-*     End of AB_AB_LZERES.
+*     End of LZERES.
 *
       END
-      COMPLEX*16 FUNCTION AB_ZBEG( RESET )
+      COMPLEX*16 FUNCTION ZBEG( RESET )
 *
 *  Generates complex numbers as pairs of random numbers uniformly
 *  distributed between -0.5 and 0.5.
@@ -3238,13 +3181,13 @@
          IC = 0
          GO TO 10
       END IF
-      AB_ZBEG = DCMPLX( ( I - 500 )/1001.0D0, ( J - 500 )/1001.0D0 )
+      ZBEG = DCMPLX( ( I - 500 )/1001.0D0, ( J - 500 )/1001.0D0 )
       RETURN
 *
-*     End of AB_ZBEG.
+*     End of ZBEG.
 *
       END
-      DOUBLE PRECISION FUNCTION AB_DDIFF( X, Y )
+      DOUBLE PRECISION FUNCTION DDIFF( X, Y )
 *
 *  Auxiliary routine for test program for Level 2 Blas.
 *
@@ -3254,15 +3197,15 @@
 *     .. Scalar Arguments ..
       DOUBLE PRECISION   X, Y
 *     .. Executable Statements ..
-      AB_DDIFF = X - Y
+      DDIFF = X - Y
       RETURN
 *
-*     End of AB_DDIFF.
+*     End of DDIFF.
 *
       END
-      SUBROUTINE AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      SUBROUTINE CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
 *
-*  Tests whether AB_XERBLA has detected an error when it should.
+*  Tests whether XERBLA has detected an error when it should.
 *
 *  Auxiliary routine for test program for Level 2 Blas.
 *
@@ -3285,16 +3228,16 @@
  9999 FORMAT( ' ***** ILLEGAL VALUE OF PARAMETER NUMBER ', I2, ' NOT D',
      $      'ETECTED BY ', A6, ' *****' )
 *
-*     End of AB_CHKXER.
+*     End of CHKXER.
 *
       END
-      SUBROUTINE AB_XERBLA( SRNAME, INFO )
+      SUBROUTINE XERBLA( SRNAME, INFO )
 *
-*  This is a special version of AB_XERBLA to be used only as part of
+*  This is a special version of XERBLA to be used only as part of
 *  the test program for testing error exits from the Level 2 BLAS
 *  routines.
 *
-*  AB_XERBLA  is an error handler for the Level 2 BLAS routines.
+*  XERBLA  is an error handler for the Level 2 BLAS routines.
 *
 *  It is called by the Level 2 BLAS routines if an input parameter is
 *  invalid.
@@ -3331,16 +3274,14 @@
       END IF
       RETURN
 *
- 9999 FORMAT( ' ******* AB_XERBLA WAS CALLED WITH INFO = ', I6, ' INSTEA
-     $D',
+ 9999 FORMAT( ' ******* XERBLA WAS CALLED WITH INFO = ', I6, ' INSTEAD',
      $      ' OF ', I2, ' *******' )
- 9998 FORMAT( ' ******* AB_XERBLA WAS CALLED WITH SRNAME = ', A6, ' INST
-     $E',
+ 9998 FORMAT( ' ******* XERBLA WAS CALLED WITH SRNAME = ', A6, ' INSTE',
      $      'AD OF ', A6, ' *******' )
- 9997 FORMAT( ' ******* AB_XERBLA WAS CALLED WITH INFO = ', I6,
+ 9997 FORMAT( ' ******* XERBLA WAS CALLED WITH INFO = ', I6,
      $      ' *******' )
 *
-*     End of AB_XERBLA
+*     End of XERBLA
 *
       END
 

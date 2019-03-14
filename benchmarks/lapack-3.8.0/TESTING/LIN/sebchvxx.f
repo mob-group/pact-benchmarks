@@ -1,4 +1,4 @@
-*> \brief \b AB_SEBCHVXX
+*> \brief \b SEBCHVXX
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*      SUBROUTINE AB_SEBCHVXX( THRESH, PATH )
+*      SUBROUTINE SEBCHVXX( THRESH, PATH )
 *
 *     .. Scalar Arguments ..
 *      REAL               THRESH
@@ -21,8 +21,8 @@
 *>
 *> \verbatim
 *>
-*>  AB_SEBCHVXX will run S**SVXX on a series of Hilbert matrices and then
-*>  compare the error bounds returned by AB_AB_AB_SGESVXX to see if the returned
+*>  SEBCHVXX will run S**SVXX on a series of Hilbert matrices and then
+*>  compare the error bounds returned by SGESVXX to see if the returned
 *>  answer indeed falls within those bounds.
 *>
 *>  Eight test ratios will be computed.  The tests will pass if they are .LT.
@@ -41,7 +41,7 @@
 *>          ERRBND( *, nwise_i, bnd_i ) .LE. MAX(SQRT(N),10) * EPS.
 *>          If these conditions are met, the test ratio is set to be
 *>          ERRBND( *, nwise_i, bnd_i ) / MAX(SQRT(N), 10).  Otherwise it is 1/EPS.
-*>       B: For this case, AB_AB_AB_SGESVXX should just return 1.  If it is less than
+*>       B: For this case, SGESVXX should just return 1.  If it is less than
 *>          one, treat it the same as in 1A.  Otherwise it fails. (Set test
 *>          ratio to ERRBND( *, nwise_i, bnd_i ) * THRESH?)
 *>
@@ -58,7 +58,7 @@
 *>
 *>       4. Reciprocal condition number.
 *>       A: A condition number is computed with Xt and compared with the one
-*>          returned from AB_AB_AB_SGESVXX.  Let RCONDc be the RCOND returned by AB_AB_AB_SGESVXX
+*>          returned from SGESVXX.  Let RCONDc be the RCOND returned by SGESVXX
 *>          and RCONDt be the RCOND from the truth value.  Test ratio is set to
 *>          MAX(RCONDc/RCONDt, RCONDt/RCONDc).
 *>       B: Test ratio is set to 1 / (EPS * RCONDc).
@@ -94,7 +94,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_SEBCHVXX( THRESH, PATH )
+      SUBROUTINE SEBCHVXX( THRESH, PATH )
       IMPLICIT NONE
 *     .. Scalar Arguments ..
       REAL               THRESH
@@ -131,13 +131,12 @@
       INTEGER            IWORK(NMAX), IPIV(NMAX)
 
 *     .. External Functions ..
-      REAL               AB_SLAMCH
+      REAL               SLAMCH
 
 *     .. External Subroutines ..
-      EXTERNAL           AB_SLAHILB, AB_AB_AB_SGESVXX, AB_AB_AB_SSYSVXX,
-     $ AB_AB_AB_SPOSVXX, AB_AB_AB_SGBSVXX,
-     $                   AB_SLACPY, AB_AB_LSAMEN
-      LOGICAL            AB_AB_LSAMEN
+      EXTERNAL           SLAHILB, SGESVXX, SSYSVXX, SPOSVXX, SGBSVXX,
+     $                   SLACPY, LSAMEN
+      LOGICAL            LSAMEN
 
 *     .. Intrinsic Functions ..
       INTRINSIC          SQRT, MAX, ABS
@@ -154,7 +153,7 @@
       UPLO = 'U'
       TRANS = 'N'
       EQUED = 'N'
-      EPS = AB_SLAMCH('Epsilon')
+      EPS = SLAMCH('Epsilon')
       NFAIL = 0
       N_AUX_TESTS = 0
       LDA = NMAX
@@ -164,7 +163,7 @@
 
 *     Main loop to test the different Hilbert Matrices.
 
-      printed_guide = .FALSE.
+      printed_guide = .false.
 
       DO N = 1 , NMAX
          PARAMS(1) = -1
@@ -177,10 +176,10 @@
 
 *        Generate the Hilbert matrix, its inverse, and the
 *        right hand side, all scaled by the LCM(1,..,2N-1).
-         CALL AB_SLAHILB(N, N, A, LDA, INVHILB, LDA, B, LDA, WORK, INFO)
+         CALL SLAHILB(N, N, A, LDA, INVHILB, LDA, B, LDA, WORK, INFO)
 
 *        Copy A into ACOPY.
-         CALL AB_SLACPY('ALL', N, N, A, NMAX, ACOPY, NMAX)
+         CALL SLACPY('ALL', N, N, A, NMAX, ACOPY, NMAX)
 
 *        Store A in band format for GB tests
          DO J = 1, N
@@ -200,30 +199,27 @@
                ABCOPY( I, J ) = 0.0E+0
             END DO
          END DO
-         CALL AB_SLACPY('ALL', KL+KU+1, N, AB, LDAB, ABCOPY, LDAB)
+         CALL SLACPY('ALL', KL+KU+1, N, AB, LDAB, ABCOPY, LDAB)
 
 *        Call S**SVXX with default PARAMS and N_ERR_BND = 3.
-         IF ( AB_AB_LSAMEN( 2, C2, 'SY' ) ) THEN
-            CALL AB_AB_AB_SSYSVXX(FACT, UPLO, N, NRHS, ACOPY, LDA, AF, L
-     $DA,
+         IF ( LSAMEN( 2, C2, 'SY' ) ) THEN
+            CALL SSYSVXX(FACT, UPLO, N, NRHS, ACOPY, LDA, AF, LDA,
      $           IPIV, EQUED, S, B, LDA, X, LDA, ORCOND,
      $           RPVGRW, BERR, NERRBND, ERRBND_N, ERRBND_C, NPARAMS,
      $           PARAMS, WORK, IWORK, INFO)
-         ELSE IF ( AB_AB_LSAMEN( 2, C2, 'PO' ) ) THEN
-            CALL AB_AB_AB_SPOSVXX(FACT, UPLO, N, NRHS, ACOPY, LDA, AF, L
-     $DA,
+         ELSE IF ( LSAMEN( 2, C2, 'PO' ) ) THEN
+            CALL SPOSVXX(FACT, UPLO, N, NRHS, ACOPY, LDA, AF, LDA,
      $           EQUED, S, B, LDA, X, LDA, ORCOND,
      $           RPVGRW, BERR, NERRBND, ERRBND_N, ERRBND_C, NPARAMS,
      $           PARAMS, WORK, IWORK, INFO)
-         ELSE IF ( AB_AB_LSAMEN( 2, C2, 'GB' ) ) THEN
-            CALL AB_AB_AB_SGBSVXX(FACT, TRANS, N, KL, KU, NRHS, ABCOPY,
+         ELSE IF ( LSAMEN( 2, C2, 'GB' ) ) THEN
+            CALL SGBSVXX(FACT, TRANS, N, KL, KU, NRHS, ABCOPY,
      $           LDAB, AFB, LDAFB, IPIV, EQUED, R, C, B,
      $           LDA, X, LDA, ORCOND, RPVGRW, BERR, NERRBND,
      $           ERRBND_N, ERRBND_C, NPARAMS, PARAMS, WORK, IWORK,
      $           INFO)
          ELSE
-            CALL AB_AB_AB_SGESVXX(FACT, TRANS, N, NRHS, ACOPY, LDA, AF, 
-     $LDA,
+            CALL SGESVXX(FACT, TRANS, N, NRHS, ACOPY, LDA, AF, LDA,
      $           IPIV, EQUED, R, C, B, LDA, X, LDA, ORCOND,
      $           RPVGRW, BERR, NERRBND, ERRBND_N, ERRBND_C, NPARAMS,
      $           PARAMS, WORK, IWORK, INFO)
@@ -256,8 +252,7 @@
 *        Calculating the RCOND
          RNORM = 0
          RINORM = 0
-         IF ( AB_AB_LSAMEN( 2, C2, 'PO' ) .OR. AB_AB_LSAMEN( 2, C2, 'SY'
-     $ ) ) THEN
+         IF ( LSAMEN( 2, C2, 'PO' ) .OR. LSAMEN( 2, C2, 'SY' ) ) THEN
             DO I = 1, N
                SUMR = 0
                SUMRI = 0
@@ -268,8 +263,7 @@
                RNORM = MAX(RNORM,SUMR)
                RINORM = MAX(RINORM,SUMRI)
             END DO
-         ELSE IF ( AB_AB_LSAMEN( 2, C2, 'GE' ) .OR. AB_AB_LSAMEN( 2, 
-     $C2, 'GB' ) )
+         ELSE IF ( LSAMEN( 2, C2, 'GE' ) .OR. LSAMEN( 2, C2, 'GB' ) )
      $           THEN
             DO I = 1, N
                SUMR = 0
@@ -306,10 +300,8 @@
             RINORM = MAX(RINORM, SUMRI)
          END DO
 
-!        invhilb is the inverse *unscaled* Hilbert matrix, so scale its 
-     $norm
-!        by 1/A(1,1) to make the scaling match A (the scaled Hilbert mat
-     $rix)
+!        invhilb is the inverse *unscaled* Hilbert matrix, so scale its norm
+!        by 1/A(1,1) to make the scaling match A (the scaled Hilbert matrix)
          NCOND = A(1,1) / RINORM
 
          CONDTHRESH = M * EPS
@@ -326,13 +318,13 @@
                   CWISE_ERR = MAX(ABS(X(I,K) - INVHILB(I,K))
      $                 /ABS(INVHILB(I,K)), CWISE_ERR)
                ELSE IF (X(I, K) .NE. 0.0) THEN
-                  CWISE_ERR = AB_SLAMCH('OVERFLOW')
+                  CWISE_ERR = SLAMCH('OVERFLOW')
                END IF
             END DO
             IF (NORMT .NE. 0.0) THEN
                NWISE_ERR = NORMDIF / NORMT
             ELSE IF (NORMDIF .NE. 0.0) THEN
-               NWISE_ERR = AB_SLAMCH('OVERFLOW')
+               NWISE_ERR = SLAMCH('OVERFLOW')
             ELSE
                NWISE_ERR = 0.0
             ENDIF
@@ -354,10 +346,8 @@
                END DO
                RINORM = MAX(RINORM, SUMRI)
             END DO
-!        invhilb is the inverse *unscaled* Hilbert matrix, so scale its 
-     $norm
-!        by 1/A(1,1) to make the scaling match A (the scaled Hilbert mat
-     $rix)
+!        invhilb is the inverse *unscaled* Hilbert matrix, so scale its norm
+!        by 1/A(1,1) to make the scaling match A (the scaled Hilbert matrix)
             CCOND = A(1,1)/RINORM
 
 !        Forward error bound tests
@@ -460,20 +450,14 @@
 
 c$$$         WRITE(*,*)
 c$$$         WRITE(*,*) 'Normwise Error Bounds'
-c$$$         WRITE(*,*) 'Guaranteed error bound: ',ERRBND(NRHS,nwise_i,b
-     $nd_i)
-c$$$         WRITE(*,*) 'Reciprocal condition number: ',ERRBND(NRHS,nwis
-     $e_i,cond_i)
-c$$$         WRITE(*,*) 'Raw error estimate: ',ERRBND(NRHS,nwise_i,rawbn
-     $d_i)
+c$$$         WRITE(*,*) 'Guaranteed error bound: ',ERRBND(NRHS,nwise_i,bnd_i)
+c$$$         WRITE(*,*) 'Reciprocal condition number: ',ERRBND(NRHS,nwise_i,cond_i)
+c$$$         WRITE(*,*) 'Raw error estimate: ',ERRBND(NRHS,nwise_i,rawbnd_i)
 c$$$         WRITE(*,*)
 c$$$         WRITE(*,*) 'Componentwise Error Bounds'
-c$$$         WRITE(*,*) 'Guaranteed error bound: ',ERRBND(NRHS,cwise_i,b
-     $nd_i)
-c$$$         WRITE(*,*) 'Reciprocal condition number: ',ERRBND(NRHS,cwis
-     $e_i,cond_i)
-c$$$         WRITE(*,*) 'Raw error estimate: ',ERRBND(NRHS,cwise_i,rawbn
-     $d_i)
+c$$$         WRITE(*,*) 'Guaranteed error bound: ',ERRBND(NRHS,cwise_i,bnd_i)
+c$$$         WRITE(*,*) 'Reciprocal condition number: ',ERRBND(NRHS,cwise_i,cond_i)
+c$$$         WRITE(*,*) 'Raw error estimate: ',ERRBND(NRHS,cwise_i,rawbnd_i)
 c$$$         print *, 'Info: ', info
 c$$$         WRITE(*,*)
 *         WRITE(*,*) 'TSTRAT: ',TSTRAT

@@ -1,4 +1,4 @@
-*> \brief \b AB_CTBT06
+*> \brief \b CTBT06
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CTBT06( RCOND, RCONDC, UPLO, DIAG, N, KD, AB, LDAB,
+*       SUBROUTINE CTBT06( RCOND, RCONDC, UPLO, DIAG, N, KD, AB, LDAB,
 *                          RWORK, RAT )
 *
 *       .. Scalar Arguments ..
@@ -27,9 +27,9 @@
 *>
 *> \verbatim
 *>
-*> AB_CTBT06 computes a test ratio comparing RCOND (the reciprocal
+*> CTBT06 computes a test ratio comparing RCOND (the reciprocal
 *> condition number of a triangular matrix A) and RCONDC, the estimate
-*> computed by AB_CTBCON.  Information about the triangular matrix A is
+*> computed by CTBCON.  Information about the triangular matrix A is
 *> used if one estimate is zero and the other is non-zero to decide if
 *> underflow in the estimate is justified.
 *> \endverbatim
@@ -49,7 +49,7 @@
 *> \verbatim
 *>          RCONDC is REAL
 *>          The estimate of the reciprocal condition number computed by
-*>          AB_CTBCON.
+*>          CTBCON.
 *> \endverbatim
 *>
 *> \param[in] UPLO
@@ -123,7 +123,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_CTBT06( RCOND, RCONDC, UPLO, DIAG, N, KD, AB, LDAB,
+      SUBROUTINE CTBT06( RCOND, RCONDC, UPLO, DIAG, N, KD, AB, LDAB,
      $                   RWORK, RAT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -151,15 +151,15 @@
       REAL               ANORM, BIGNUM, EPS, RMAX, RMIN
 *     ..
 *     .. External Functions ..
-      REAL               AB_CLANTB, AB_SLAMCH
-      EXTERNAL           AB_CLANTB, AB_SLAMCH
+      REAL               CLANTB, SLAMCH
+      EXTERNAL           CLANTB, SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = AB_SLAMCH( 'Epsilon' )
+      EPS = SLAMCH( 'Epsilon' )
       RMAX = MAX( RCOND, RCONDC )
       RMIN = MIN( RCOND, RCONDC )
 *
@@ -191,14 +191,14 @@
 *        estimate multiplied by BIGNUM/TMAX, where TMAX is the maximum
 *        element in absolute value in A.
 *
-         BIGNUM = ONE / AB_SLAMCH( 'Safe minimum' )
-         ANORM = AB_CLANTB( 'M', UPLO, DIAG, N, KD, AB, LDAB, RWORK )
+         BIGNUM = ONE / SLAMCH( 'Safe minimum' )
+         ANORM = CLANTB( 'M', UPLO, DIAG, N, KD, AB, LDAB, RWORK )
 *
          RAT = RMAX*( MIN( BIGNUM / MAX( ONE, ANORM ), ONE / EPS ) )
       END IF
 *
       RETURN
 *
-*     End of AB_CTBT06
+*     End of CTBT06
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_CTPT01
+*> \brief \b CTPT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CTPT01( UPLO, DIAG, N, AP, AINVP, RCOND, RWORK, RESID )
+*       SUBROUTINE CTPT01( UPLO, DIAG, N, AP, AINVP, RCOND, RWORK, RESID )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          DIAG, UPLO
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CTPT01 computes the residual for a triangular matrix A times its
+*> CTPT01 computes the residual for a triangular matrix A times its
 *> inverse when A is stored in packed format:
 *>    RESID = norm(A*AINV - I) / ( N * norm(A) * norm(AINV) * EPS ),
 *> where EPS is the machine epsilon.
@@ -107,8 +107,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_CTPT01( UPLO, DIAG, N, AP, AINVP, RCOND, RWORK, RESI
-     $D )
+      SUBROUTINE CTPT01( UPLO, DIAG, N, AP, AINVP, RCOND, RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -137,12 +136,12 @@
       REAL               AINVNM, ANORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_CLANTP, AB_SLAMCH
-      EXTERNAL           AB_LSAME, AB_CLANTP, AB_SLAMCH
+      LOGICAL            LSAME
+      REAL               CLANTP, SLAMCH
+      EXTERNAL           LSAME, CLANTP, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CTPMV
+      EXTERNAL           CTPMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          REAL
@@ -159,9 +158,9 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0 or AINVNM = 0.
 *
-      EPS = AB_SLAMCH( 'Epsilon' )
-      ANORM = AB_CLANTP( '1', UPLO, DIAG, N, AP, RWORK )
-      AINVNM = AB_CLANTP( '1', UPLO, DIAG, N, AINVP, RWORK )
+      EPS = SLAMCH( 'Epsilon' )
+      ANORM = CLANTP( '1', UPLO, DIAG, N, AP, RWORK )
+      AINVNM = CLANTP( '1', UPLO, DIAG, N, AINVP, RWORK )
       IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
          RCOND = ZERO
          RESID = ONE / EPS
@@ -171,8 +170,8 @@
 *
 *     Compute A * AINV, overwriting AINV.
 *
-      UNITD = AB_LSAME( DIAG, 'U' )
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      UNITD = LSAME( DIAG, 'U' )
+      IF( LSAME( UPLO, 'U' ) ) THEN
          JC = 1
          DO 10 J = 1, N
             IF( UNITD )
@@ -180,7 +179,7 @@
 *
 *           Form the j-th column of A*AINV.
 *
-            CALL AB_CTPMV( 'Upper', 'No transpose', DIAG, J, AP,
+            CALL CTPMV( 'Upper', 'No transpose', DIAG, J, AP,
      $                  AINVP( JC ), 1 )
 *
 *           Subtract 1 from the diagonal to form A*AINV - I.
@@ -196,8 +195,7 @@
 *
 *           Form the j-th column of A*AINV.
 *
-            CALL AB_CTPMV( 'Lower', 'No transpose', DIAG, N-J+1, AP( JC 
-     $),
+            CALL CTPMV( 'Lower', 'No transpose', DIAG, N-J+1, AP( JC ),
      $                  AINVP( JC ), 1 )
 *
 *           Subtract 1 from the diagonal to form A*AINV - I.
@@ -209,12 +207,12 @@
 *
 *     Compute norm(A*AINV - I) / (N * norm(A) * norm(AINV) * EPS)
 *
-      RESID = AB_CLANTP( '1', UPLO, 'Non-unit', N, AINVP, RWORK )
+      RESID = CLANTP( '1', UPLO, 'Non-unit', N, AINVP, RWORK )
 *
       RESID = ( ( RESID*RCOND ) / REAL( N ) ) / EPS
 *
       RETURN
 *
-*     End of AB_CTPT01
+*     End of CTPT01
 *
       END

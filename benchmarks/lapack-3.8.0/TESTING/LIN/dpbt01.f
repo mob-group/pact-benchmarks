@@ -1,4 +1,4 @@
-*> \brief \b AB_DPBT01
+*> \brief \b DPBT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DPBT01( UPLO, N, KD, A, LDA, AFAC, LDAFAC, RWORK,
+*       SUBROUTINE DPBT01( UPLO, N, KD, A, LDA, AFAC, LDAFAC, RWORK,
 *                          RESID )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DPBT01 reconstructs a symmetric positive definite band matrix A from
+*> DPBT01 reconstructs a symmetric positive definite band matrix A from
 *> its L*L' or U'*U factorization and computes the residual
 *>    norm( L*L' - A ) / ( N * norm(A) * EPS ) or
 *>    norm( U'*U - A ) / ( N * norm(A) * EPS ),
@@ -67,7 +67,7 @@
 *>          UPLO = 'L', the lower triangular part of A is stored.  The
 *>          columns of the appropriate triangle are stored in the columns
 *>          of A and the diagonals of the triangle are stored in the rows
-*>          of A.  See AB_DPBTRF for further details.
+*>          of A.  See DPBTRF for further details.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -81,7 +81,7 @@
 *>          AFAC is DOUBLE PRECISION array, dimension (LDAFAC,N)
 *>          The factored form of the matrix A.  AFAC contains the factor
 *>          L or U from the L*L' or U'*U factorization in band storage
-*>          format, as computed by AB_DPBTRF.
+*>          format, as computed by DPBTRF.
 *> \endverbatim
 *>
 *> \param[in] LDAFAC
@@ -116,7 +116,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_DPBT01( UPLO, N, KD, A, LDA, AFAC, LDAFAC, RWORK,
+      SUBROUTINE DPBT01( UPLO, N, KD, A, LDA, AFAC, LDAFAC, RWORK,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -145,12 +145,12 @@
       DOUBLE PRECISION   ANORM, EPS, T
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DDOT, AB_DLAMCH, AB_DLANSB
-      EXTERNAL           AB_LSAME, AB_DDOT, AB_DLAMCH, AB_DLANSB
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DDOT, DLAMCH, DLANSB
+      EXTERNAL           LSAME, DDOT, DLAMCH, DLANSB
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DSCAL, AB_DSYR, AB_DTRMV
+      EXTERNAL           DSCAL, DSYR, DTRMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX, MIN
@@ -166,8 +166,8 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
-      ANORM = AB_DLANSB( '1', UPLO, N, KD, A, LDA, RWORK )
+      EPS = DLAMCH( 'Epsilon' )
+      ANORM = DLANSB( '1', UPLO, N, KD, A, LDA, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -175,20 +175,20 @@
 *
 *     Compute the product U'*U, overwriting U.
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
          DO 10 K = N, 1, -1
             KC = MAX( 1, KD+2-K )
             KLEN = KD + 1 - KC
 *
 *           Compute the (K,K) element of the result.
 *
-            T = AB_DDOT( KLEN+1, AFAC( KC, K ), 1, AFAC( KC, K ), 1 )
+            T = DDOT( KLEN+1, AFAC( KC, K ), 1, AFAC( KC, K ), 1 )
             AFAC( KD+1, K ) = T
 *
 *           Compute the rest of column K.
 *
             IF( KLEN.GT.0 )
-     $         CALL AB_DTRMV( 'Upper', 'Transpose', 'Non-unit', KLEN,
+     $         CALL DTRMV( 'Upper', 'Transpose', 'Non-unit', KLEN,
      $                     AFAC( KD+1, K-KLEN ), LDAFAC-1,
      $                     AFAC( KC, K ), 1 )
 *
@@ -204,20 +204,20 @@
 *           columns K+1 through N.
 *
             IF( KLEN.GT.0 )
-     $         CALL AB_DSYR( 'Lower', KLEN, ONE, AFAC( 2, K ), 1,
+     $         CALL DSYR( 'Lower', KLEN, ONE, AFAC( 2, K ), 1,
      $                    AFAC( 1, K+1 ), LDAFAC-1 )
 *
 *           Scale column K by the diagonal element.
 *
             T = AFAC( 1, K )
-            CALL AB_DSCAL( KLEN+1, T, AFAC( 1, K ), 1 )
+            CALL DSCAL( KLEN+1, T, AFAC( 1, K ), 1 )
 *
    20    CONTINUE
       END IF
 *
 *     Compute the difference  L*L' - A  or  U'*U - A.
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
          DO 40 J = 1, N
             MU = MAX( 1, KD+2-J )
             DO 30 I = MU, KD + 1
@@ -235,12 +235,12 @@
 *
 *     Compute norm( L*L' - A ) / ( N * norm(A) * EPS )
 *
-      RESID = AB_DLANSB( 'I', UPLO, N, KD, AFAC, LDAFAC, RWORK )
+      RESID = DLANSB( 'I', UPLO, N, KD, AFAC, LDAFAC, RWORK )
 *
       RESID = ( ( RESID / DBLE( N ) ) / ANORM ) / EPS
 *
       RETURN
 *
-*     End of AB_DPBT01
+*     End of DPBT01
 *
       END

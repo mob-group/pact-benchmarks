@@ -1,4 +1,4 @@
-*> \brief \b AB_DLAGV2 computes the Generalized Schur factorization of a real 2-by-2 matrix pencil (A,B) where B is upper triangular.
+*> \brief \b DLAGV2 computes the Generalized Schur factorization of a real 2-by-2 matrix pencil (A,B) where B is upper triangular.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLAGV2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLAGV2.f">
+*> Download DLAGV2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlagv2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLAGV2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlagv2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLAGV2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlagv2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLAGV2( A, LDA, B, LDB, ALPHAR, ALPHAI, BETA, CSL, SNL,
+*       SUBROUTINE DLAGV2( A, LDA, B, LDB, ALPHAR, ALPHAI, BETA, CSL, SNL,
 *                          CSR, SNR )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DLAGV2 computes the Generalized Schur factorization of a real 2-by-2
+*> DLAGV2 computes the Generalized Schur factorization of a real 2-by-2
 *> matrix pencil (A,B) where B is upper triangular. This routine
 *> computes orthogonal (rotation) matrices given by CSL, SNL and CSR,
 *> SNR such that
@@ -154,8 +154,7 @@
 *>     Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA
 *
 *  =====================================================================
-      SUBROUTINE AB_DLAGV2( A, LDA, B, LDB, ALPHAR, ALPHAI, BETA, CSL, S
-     $NL,
+      SUBROUTINE DLAGV2( A, LDA, B, LDB, ALPHAR, ALPHAI, BETA, CSL, SNL,
      $                   CSR, SNR )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -184,19 +183,19 @@
      $                   WR2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLAG2, AB_DLARTG, AB_DLASV2, AB_DROT
+      EXTERNAL           DLAG2, DLARTG, DLASV2, DROT
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH, AB_DLAPY2
-      EXTERNAL           AB_DLAMCH, AB_DLAPY2
+      DOUBLE PRECISION   DLAMCH, DLAPY2
+      EXTERNAL           DLAMCH, DLAPY2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
 *     ..
 *     .. Executable Statements ..
 *
-      SAFMIN = AB_DLAMCH( 'S' )
-      ULP = AB_DLAMCH( 'P' )
+      SAFMIN = DLAMCH( 'S' )
+      ULP = DLAMCH( 'P' )
 *
 *     Scale A
 *
@@ -231,21 +230,21 @@
 *     Check if B is singular
 *
       ELSE IF( ABS( B( 1, 1 ) ).LE.ULP ) THEN
-         CALL AB_DLARTG( A( 1, 1 ), A( 2, 1 ), CSL, SNL, R )
+         CALL DLARTG( A( 1, 1 ), A( 2, 1 ), CSL, SNL, R )
          CSR = ONE
          SNR = ZERO
-         CALL AB_DROT( 2, A( 1, 1 ), LDA, A( 2, 1 ), LDA, CSL, SNL )
-         CALL AB_DROT( 2, B( 1, 1 ), LDB, B( 2, 1 ), LDB, CSL, SNL )
+         CALL DROT( 2, A( 1, 1 ), LDA, A( 2, 1 ), LDA, CSL, SNL )
+         CALL DROT( 2, B( 1, 1 ), LDB, B( 2, 1 ), LDB, CSL, SNL )
          A( 2, 1 ) = ZERO
          B( 1, 1 ) = ZERO
          B( 2, 1 ) = ZERO
          WI = ZERO
 *
       ELSE IF( ABS( B( 2, 2 ) ).LE.ULP ) THEN
-         CALL AB_DLARTG( A( 2, 2 ), A( 2, 1 ), CSR, SNR, T )
+         CALL DLARTG( A( 2, 2 ), A( 2, 1 ), CSR, SNR, T )
          SNR = -SNR
-         CALL AB_DROT( 2, A( 1, 1 ), 1, A( 1, 2 ), 1, CSR, SNR )
-         CALL AB_DROT( 2, B( 1, 1 ), 1, B( 1, 2 ), 1, CSR, SNR )
+         CALL DROT( 2, A( 1, 1 ), 1, A( 1, 2 ), 1, CSR, SNR )
+         CALL DROT( 2, B( 1, 1 ), 1, B( 1, 2 ), 1, CSR, SNR )
          CSL = ONE
          SNL = ZERO
          A( 2, 1 ) = ZERO
@@ -257,8 +256,7 @@
 *
 *        B is nonsingular, first compute the eigenvalues of (A,B)
 *
-         CALL AB_DLAG2( A, LDA, B, LDB, SAFMIN, SCALE1, SCALE2, WR1, WR2
-     $,
+         CALL DLAG2( A, LDA, B, LDB, SAFMIN, SCALE1, SCALE2, WR1, WR2,
      $               WI )
 *
          IF( WI.EQ.ZERO ) THEN
@@ -269,28 +267,28 @@
             H2 = SCALE1*A( 1, 2 ) - WR1*B( 1, 2 )
             H3 = SCALE1*A( 2, 2 ) - WR1*B( 2, 2 )
 *
-            RR = AB_DLAPY2( H1, H2 )
-            QQ = AB_DLAPY2( SCALE1*A( 2, 1 ), H3 )
+            RR = DLAPY2( H1, H2 )
+            QQ = DLAPY2( SCALE1*A( 2, 1 ), H3 )
 *
             IF( RR.GT.QQ ) THEN
 *
 *              find right rotation matrix to zero 1,1 element of
 *              (sA - wB)
 *
-               CALL AB_DLARTG( H2, H1, CSR, SNR, T )
+               CALL DLARTG( H2, H1, CSR, SNR, T )
 *
             ELSE
 *
 *              find right rotation matrix to zero 2,1 element of
 *              (sA - wB)
 *
-               CALL AB_DLARTG( H3, SCALE1*A( 2, 1 ), CSR, SNR, T )
+               CALL DLARTG( H3, SCALE1*A( 2, 1 ), CSR, SNR, T )
 *
             END IF
 *
             SNR = -SNR
-            CALL AB_DROT( 2, A( 1, 1 ), 1, A( 1, 2 ), 1, CSR, SNR )
-            CALL AB_DROT( 2, B( 1, 1 ), 1, B( 1, 2 ), 1, CSR, SNR )
+            CALL DROT( 2, A( 1, 1 ), 1, A( 1, 2 ), 1, CSR, SNR )
+            CALL DROT( 2, B( 1, 1 ), 1, B( 1, 2 ), 1, CSR, SNR )
 *
 *           compute inf norms of A and B
 *
@@ -303,18 +301,18 @@
 *
 *              find left rotation matrix Q to zero out B(2,1)
 *
-               CALL AB_DLARTG( B( 1, 1 ), B( 2, 1 ), CSL, SNL, R )
+               CALL DLARTG( B( 1, 1 ), B( 2, 1 ), CSL, SNL, R )
 *
             ELSE
 *
 *              find left rotation matrix Q to zero out A(2,1)
 *
-               CALL AB_DLARTG( A( 1, 1 ), A( 2, 1 ), CSL, SNL, R )
+               CALL DLARTG( A( 1, 1 ), A( 2, 1 ), CSL, SNL, R )
 *
             END IF
 *
-            CALL AB_DROT( 2, A( 1, 1 ), LDA, A( 2, 1 ), LDA, CSL, SNL )
-            CALL AB_DROT( 2, B( 1, 1 ), LDB, B( 2, 1 ), LDB, CSL, SNL )
+            CALL DROT( 2, A( 1, 1 ), LDA, A( 2, 1 ), LDA, CSL, SNL )
+            CALL DROT( 2, B( 1, 1 ), LDB, B( 2, 1 ), LDB, CSL, SNL )
 *
             A( 2, 1 ) = ZERO
             B( 2, 1 ) = ZERO
@@ -324,16 +322,16 @@
 *           a pair of complex conjugate eigenvalues
 *           first compute the SVD of the matrix B
 *
-            CALL AB_DLASV2( B( 1, 1 ), B( 1, 2 ), B( 2, 2 ), R, T, SNR,
+            CALL DLASV2( B( 1, 1 ), B( 1, 2 ), B( 2, 2 ), R, T, SNR,
      $                   CSR, SNL, CSL )
 *
 *           Form (A,B) := Q(A,B)Z**T where Q is left rotation matrix and
-*           Z is right rotation matrix computed from AB_DLASV2
+*           Z is right rotation matrix computed from DLASV2
 *
-            CALL AB_DROT( 2, A( 1, 1 ), LDA, A( 2, 1 ), LDA, CSL, SNL )
-            CALL AB_DROT( 2, B( 1, 1 ), LDB, B( 2, 1 ), LDB, CSL, SNL )
-            CALL AB_DROT( 2, A( 1, 1 ), 1, A( 1, 2 ), 1, CSR, SNR )
-            CALL AB_DROT( 2, B( 1, 1 ), 1, B( 1, 2 ), 1, CSR, SNR )
+            CALL DROT( 2, A( 1, 1 ), LDA, A( 2, 1 ), LDA, CSL, SNL )
+            CALL DROT( 2, B( 1, 1 ), LDB, B( 2, 1 ), LDB, CSL, SNL )
+            CALL DROT( 2, A( 1, 1 ), 1, A( 1, 2 ), 1, CSR, SNR )
+            CALL DROT( 2, B( 1, 1 ), 1, B( 1, 2 ), 1, CSR, SNR )
 *
             B( 2, 1 ) = ZERO
             B( 1, 2 ) = ZERO
@@ -371,6 +369,6 @@
 *
       RETURN
 *
-*     End of AB_DLAGV2
+*     End of DLAGV2
 *
       END

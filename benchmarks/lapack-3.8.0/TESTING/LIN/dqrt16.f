@@ -1,4 +1,4 @@
-*> \brief \b AB_DQRT16
+*> \brief \b DQRT16
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DQRT16( TRANS, M, N, NRHS, A, LDA, X, LDX, B, LDB,
+*       SUBROUTINE DQRT16( TRANS, M, N, NRHS, A, LDA, X, LDX, B, LDB,
 *                          RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DQRT16 computes the residual for a solution of a system of linear
+*> DQRT16 computes the residual for a solution of a system of linear
 *> equations  A*x = b  or  A'*x = b:
 *>    RESID = norm(B - A*X) / ( max(m,n) * norm(A) * norm(X) * EPS ),
 *> where EPS is the machine epsilon.
@@ -130,7 +130,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_DQRT16( TRANS, M, N, NRHS, A, LDA, X, LDX, B, LDB,
+      SUBROUTINE DQRT16( TRANS, M, N, NRHS, A, LDA, X, LDX, B, LDB,
      $                   RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -159,12 +159,12 @@
       DOUBLE PRECISION   ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DASUM, AB_DLAMCH, AB_DLANGE
-      EXTERNAL           AB_LSAME, AB_DASUM, AB_DLAMCH, AB_DLANGE
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DASUM, DLAMCH, DLANGE
+      EXTERNAL           LSAME, DASUM, DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DGEMM
+      EXTERNAL           DGEMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -178,22 +178,21 @@
          RETURN
       END IF
 *
-      IF( AB_LSAME( TRANS, 'T' ) .OR. AB_LSAME( TRANS, 'C' ) ) THEN
-         ANORM = AB_DLANGE( 'I', M, N, A, LDA, RWORK )
+      IF( LSAME( TRANS, 'T' ) .OR. LSAME( TRANS, 'C' ) ) THEN
+         ANORM = DLANGE( 'I', M, N, A, LDA, RWORK )
          N1 = N
          N2 = M
       ELSE
-         ANORM = AB_DLANGE( '1', M, N, A, LDA, RWORK )
+         ANORM = DLANGE( '1', M, N, A, LDA, RWORK )
          N1 = M
          N2 = N
       END IF
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
+      EPS = DLAMCH( 'Epsilon' )
 *
 *     Compute  B - A*X  (or  B - A'*X ) and store in B.
 *
-      CALL AB_DGEMM( TRANS, 'No transpose', N1, NRHS, N2, -ONE, A, LDA, 
-     $X,
+      CALL DGEMM( TRANS, 'No transpose', N1, NRHS, N2, -ONE, A, LDA, X,
      $            LDX, ONE, B, LDB )
 *
 *     Compute the maximum over the number of right hand sides of
@@ -201,8 +200,8 @@
 *
       RESID = ZERO
       DO 10 J = 1, NRHS
-         BNORM = AB_DASUM( N1, B( 1, J ), 1 )
-         XNORM = AB_DASUM( N2, X( 1, J ), 1 )
+         BNORM = DASUM( N1, B( 1, J ), 1 )
+         XNORM = DASUM( N2, X( 1, J ), 1 )
          IF( ANORM.EQ.ZERO .AND. BNORM.EQ.ZERO ) THEN
             RESID = ZERO
          ELSE IF( ANORM.LE.ZERO .OR. XNORM.LE.ZERO ) THEN
@@ -215,6 +214,6 @@
 *
       RETURN
 *
-*     End of AB_DQRT16
+*     End of DQRT16
 *
       END

@@ -1,4 +1,4 @@
-*> \brief <b> AB_SGESV computes the solution to system of linear equations A * X = B for GE matrices</b> (simple driver)
+*> \brief <b> SGESV computes the solution to system of linear equations A * X = B for GE matrices</b> (simple driver)
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SGESV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SGESV.f">
+*> Download SGESV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgesv.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SGESV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgesv.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SGESV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgesv.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SGESV( N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+*       SUBROUTINE SGESV( N, NRHS, A, LDA, IPIV, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, LDB, N, NRHS
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SGESV computes the solution to a real system of linear equations
+*> SGESV computes the solution to a real system of linear equations
 *>    A * X = B,
 *> where A is an N-by-N matrix and X and B are N-by-NRHS matrices.
 *>
@@ -120,7 +120,7 @@
 *> \ingroup realGEsolve
 *
 *  =====================================================================
-      SUBROUTINE AB_SGESV( N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+      SUBROUTINE SGESV( N, NRHS, A, LDA, IPIV, B, LDB, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -138,7 +138,7 @@
 *  =====================================================================
 *
 *     .. External Subroutines ..
-      EXTERNAL           AB_SGETRF, AB_SGETRS, AB_XERBLA
+      EXTERNAL           SGETRF, SGETRS, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -158,22 +158,22 @@
          INFO = -7
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SGESV ', -INFO )
+         CALL XERBLA( 'SGESV ', -INFO )
          RETURN
       END IF
 *
 *     Compute the LU factorization of A.
 *
-      CALL AB_SGETRF( N, N, A, LDA, IPIV, INFO )
+      CALL SGETRF( N, N, A, LDA, IPIV, INFO )
       IF( INFO.EQ.0 ) THEN
 *
 *        Solve the system A*X = B, overwriting B with X.
 *
-         CALL AB_SGETRS( 'No transpose', N, NRHS, A, LDA, IPIV, B, LDB,
+         CALL SGETRS( 'No transpose', N, NRHS, A, LDA, IPIV, B, LDB,
      $                INFO )
       END IF
       RETURN
 *
-*     End of AB_SGESV
+*     End of SGESV
 *
       END

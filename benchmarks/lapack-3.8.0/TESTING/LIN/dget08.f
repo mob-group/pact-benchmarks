@@ -1,4 +1,4 @@
-*> \brief \b AB_DGET08
+*> \brief \b DGET08
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DGET08( TRANS, M, N, NRHS, A, LDA, X, LDX, B, LDB,
+*       SUBROUTINE DGET08( TRANS, M, N, NRHS, A, LDA, X, LDX, B, LDB,
 *                          RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DGET08 computes the residual for a solution of a system of linear
+*> DGET08 computes the residual for a solution of a system of linear
 *> equations  A*x = b  or  A'*x = b:
 *>    RESID = norm(B - A*X,inf) / ( norm(A,inf) * norm(X,inf) * EPS ),
 *> where EPS is the machine epsilon.
@@ -130,7 +130,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_DGET08( TRANS, M, N, NRHS, A, LDA, X, LDX, B, LDB,
+      SUBROUTINE DGET08( TRANS, M, N, NRHS, A, LDA, X, LDX, B, LDB,
      $                   RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -159,13 +159,13 @@
       DOUBLE PRECISION   ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_IDAMAX
-      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE
-      EXTERNAL           AB_LSAME, AB_IDAMAX, AB_DLAMCH, AB_DLANGE
+      LOGICAL            LSAME
+      INTEGER            IDAMAX
+      DOUBLE PRECISION   DLAMCH, DLANGE
+      EXTERNAL           LSAME, IDAMAX, DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DGEMM
+      EXTERNAL           DGEMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, ABS
@@ -179,7 +179,7 @@
          RETURN
       END IF
 *
-      IF( AB_LSAME( TRANS, 'T' ) .OR. AB_LSAME( TRANS, 'C' ) ) THEN
+      IF( LSAME( TRANS, 'T' ) .OR. LSAME( TRANS, 'C' ) ) THEN
          N1 = N
          N2 = M
       ELSE
@@ -189,8 +189,8 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
-      ANORM = AB_DLANGE( 'I', N1, N2, A, LDA, RWORK )
+      EPS = DLAMCH( 'Epsilon' )
+      ANORM = DLANGE( 'I', N1, N2, A, LDA, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -198,8 +198,7 @@
 *
 *     Compute  B - A*X  (or  B - A'*X ) and store in B.
 *
-      CALL AB_DGEMM( TRANS, 'No transpose', N1, NRHS, N2, -ONE, A, LDA, 
-     $X,
+      CALL DGEMM( TRANS, 'No transpose', N1, NRHS, N2, -ONE, A, LDA, X,
      $            LDX, ONE, B, LDB )
 *
 *     Compute the maximum over the number of right hand sides of
@@ -207,8 +206,8 @@
 *
       RESID = ZERO
       DO 10 J = 1, NRHS
-         BNORM = ABS(B(AB_IDAMAX( N1, B( 1, J ), 1 ),J))
-         XNORM = ABS(X(AB_IDAMAX( N2, X( 1, J ), 1 ),J))
+         BNORM = ABS(B(IDAMAX( N1, B( 1, J ), 1 ),J))
+         XNORM = ABS(X(IDAMAX( N2, X( 1, J ), 1 ),J))
          IF( XNORM.LE.ZERO ) THEN
             RESID = ONE / EPS
          ELSE
@@ -218,6 +217,6 @@
 *
       RETURN
 *
-*     End of AB_DGET02
+*     End of DGET02
 *
       END

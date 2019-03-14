@@ -1,4 +1,4 @@
-*> \brief \b AB_DCHKGK
+*> \brief \b DCHKGK
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DCHKGK( NIN, NOUT )
+*       SUBROUTINE DCHKGK( NIN, NOUT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            NIN, NOUT
@@ -20,7 +20,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DCHKGK tests AB_DGGBAK, a routine for backward balancing  of
+*> DCHKGK tests DGGBAK, a routine for backward balancing  of
 *> a matrix pair (A, B).
 *> \endverbatim
 *
@@ -52,7 +52,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_DCHKGK( NIN, NOUT )
+      SUBROUTINE DCHKGK( NIN, NOUT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -68,8 +68,8 @@
 *     .. Parameters ..
       INTEGER            LDA, LDB, LDVL, LDVR
       PARAMETER          ( LDA = 50, LDB = 50, LDVL = 50, LDVR = 50 )
-      INTEGER            AB_LDE, LDF, LDWORK
-      PARAMETER          ( AB_LDE = 50, LDF = 50, LDWORK = 50 )
+      INTEGER            LDE, LDF, LDWORK
+      PARAMETER          ( LDE = 50, LDF = 50, LDWORK = 50 )
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
 *     ..
@@ -80,18 +80,17 @@
 *     .. Local Arrays ..
       INTEGER            LMAX( 4 )
       DOUBLE PRECISION   A( LDA, LDA ), AF( LDA, LDA ), B( LDB, LDB ),
-     $                   BF( LDB, LDB ), E( AB_LDE, AB_LDE ), F( LDF, LD
-     $F ),
+     $                   BF( LDB, LDB ), E( LDE, LDE ), F( LDF, LDF ),
      $                   LSCALE( LDA ), RSCALE( LDA ), VL( LDVL, LDVL ),
      $                   VLF( LDVL, LDVL ), VR( LDVR, LDVR ),
      $                   VRF( LDVR, LDVR ), WORK( LDWORK, LDWORK )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE
-      EXTERNAL           AB_DLAMCH, AB_DLANGE
+      DOUBLE PRECISION   DLAMCH, DLANGE
+      EXTERNAL           DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DGEMM, AB_DGGBAK, AB_DGGBAL, AB_DLACPY
+      EXTERNAL           DGEMM, DGGBAK, DGGBAL, DLACPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -108,7 +107,7 @@
       KNT = 0
       RMAX = ZERO
 *
-      EPS = AB_DLAMCH( 'Precision' )
+      EPS = DLAMCH( 'Precision' )
 *
    10 CONTINUE
       READ( NIN, FMT = * )N, M
@@ -133,55 +132,49 @@
 *
       KNT = KNT + 1
 *
-      ANORM = AB_DLANGE( 'M', N, N, A, LDA, WORK )
-      BNORM = AB_DLANGE( 'M', N, N, B, LDB, WORK )
+      ANORM = DLANGE( 'M', N, N, A, LDA, WORK )
+      BNORM = DLANGE( 'M', N, N, B, LDB, WORK )
 *
-      CALL AB_DLACPY( 'FULL', N, N, A, LDA, AF, LDA )
-      CALL AB_DLACPY( 'FULL', N, N, B, LDB, BF, LDB )
+      CALL DLACPY( 'FULL', N, N, A, LDA, AF, LDA )
+      CALL DLACPY( 'FULL', N, N, B, LDB, BF, LDB )
 *
-      CALL AB_DGGBAL( 'B', N, A, LDA, B, LDB, ILO, IHI, LSCALE, RSCALE,
+      CALL DGGBAL( 'B', N, A, LDA, B, LDB, ILO, IHI, LSCALE, RSCALE,
      $             WORK, INFO )
       IF( INFO.NE.0 ) THEN
          NINFO = NINFO + 1
          LMAX( 1 ) = KNT
       END IF
 *
-      CALL AB_DLACPY( 'FULL', N, M, VL, LDVL, VLF, LDVL )
-      CALL AB_DLACPY( 'FULL', N, M, VR, LDVR, VRF, LDVR )
+      CALL DLACPY( 'FULL', N, M, VL, LDVL, VLF, LDVL )
+      CALL DLACPY( 'FULL', N, M, VR, LDVR, VRF, LDVR )
 *
-      CALL AB_DGGBAK( 'B', 'L', N, ILO, IHI, LSCALE, RSCALE, M, VL, LDVL
-     $,
+      CALL DGGBAK( 'B', 'L', N, ILO, IHI, LSCALE, RSCALE, M, VL, LDVL,
      $             INFO )
       IF( INFO.NE.0 ) THEN
          NINFO = NINFO + 1
          LMAX( 2 ) = KNT
       END IF
 *
-      CALL AB_DGGBAK( 'B', 'R', N, ILO, IHI, LSCALE, RSCALE, M, VR, LDVR
-     $,
+      CALL DGGBAK( 'B', 'R', N, ILO, IHI, LSCALE, RSCALE, M, VR, LDVR,
      $             INFO )
       IF( INFO.NE.0 ) THEN
          NINFO = NINFO + 1
          LMAX( 3 ) = KNT
       END IF
 *
-*     Test of AB_DGGBAK
+*     Test of DGGBAK
 *
-*     Check tiAB_LDE(VL)'*A*tiAB_LDE(VR) - VL'*tiAB_LDE(A)*VR
-*     where tiAB_LDE(A) denotes the transformed matrix.
+*     Check tilde(VL)'*A*tilde(VR) - VL'*tilde(A)*VR
+*     where tilde(A) denotes the transformed matrix.
 *
-      CALL AB_DGEMM( 'N', 'N', N, M, N, ONE, AF, LDA, VR, LDVR, ZERO, WO
-     $RK,
+      CALL DGEMM( 'N', 'N', N, M, N, ONE, AF, LDA, VR, LDVR, ZERO, WORK,
      $            LDWORK )
-      CALL AB_DGEMM( 'T', 'N', M, M, N, ONE, VL, LDVL, WORK, LDWORK, ZER
-     $O,
-     $            E, AB_LDE )
+      CALL DGEMM( 'T', 'N', M, M, N, ONE, VL, LDVL, WORK, LDWORK, ZERO,
+     $            E, LDE )
 *
-      CALL AB_DGEMM( 'N', 'N', N, M, N, ONE, A, LDA, VRF, LDVR, ZERO, WO
-     $RK,
+      CALL DGEMM( 'N', 'N', N, M, N, ONE, A, LDA, VRF, LDVR, ZERO, WORK,
      $            LDWORK )
-      CALL AB_DGEMM( 'T', 'N', M, M, N, ONE, VLF, LDVL, WORK, LDWORK, ZE
-     $RO,
+      CALL DGEMM( 'T', 'N', M, M, N, ONE, VLF, LDVL, WORK, LDWORK, ZERO,
      $            F, LDF )
 *
       VMAX = ZERO
@@ -196,20 +189,16 @@
          RMAX = VMAX
       END IF
 *
-*     Check tiAB_LDE(VL)'*B*tiAB_LDE(VR) - VL'*tiAB_LDE(B)*VR
+*     Check tilde(VL)'*B*tilde(VR) - VL'*tilde(B)*VR
 *
-      CALL AB_DGEMM( 'N', 'N', N, M, N, ONE, BF, LDB, VR, LDVR, ZERO, WO
-     $RK,
+      CALL DGEMM( 'N', 'N', N, M, N, ONE, BF, LDB, VR, LDVR, ZERO, WORK,
      $            LDWORK )
-      CALL AB_DGEMM( 'T', 'N', M, M, N, ONE, VL, LDVL, WORK, LDWORK, ZER
-     $O,
-     $            E, AB_LDE )
+      CALL DGEMM( 'T', 'N', M, M, N, ONE, VL, LDVL, WORK, LDWORK, ZERO,
+     $            E, LDE )
 *
-      CALL AB_DGEMM( 'N', 'N', N, M, N, ONE, B, LDB, VRF, LDVR, ZERO, WO
-     $RK,
+      CALL DGEMM( 'N', 'N', N, M, N, ONE, B, LDB, VRF, LDVR, ZERO, WORK,
      $            LDWORK )
-      CALL AB_DGEMM( 'T', 'N', M, M, N, ONE, VLF, LDVL, WORK, LDWORK, ZE
-     $RO,
+      CALL DGEMM( 'T', 'N', M, M, N, ONE, VLF, LDVL, WORK, LDWORK, ZERO,
      $            F, LDF )
 *
       VMAX = ZERO
@@ -229,16 +218,16 @@
   100 CONTINUE
 *
       WRITE( NOUT, FMT = 9999 )
- 9999 FORMAT( 1X, '.. test output of AB_DGGBAK .. ' )
+ 9999 FORMAT( 1X, '.. test output of DGGBAK .. ' )
 *
       WRITE( NOUT, FMT = 9998 )RMAX
  9998 FORMAT( ' value of largest test error                  =', D12.3 )
       WRITE( NOUT, FMT = 9997 )LMAX( 1 )
- 9997 FORMAT( ' example number where AB_DGGBAL info is not 0    =', I4 )
+ 9997 FORMAT( ' example number where DGGBAL info is not 0    =', I4 )
       WRITE( NOUT, FMT = 9996 )LMAX( 2 )
- 9996 FORMAT( ' example number where AB_DGGBAK(L) info is not 0 =', I4 )
+ 9996 FORMAT( ' example number where DGGBAK(L) info is not 0 =', I4 )
       WRITE( NOUT, FMT = 9995 )LMAX( 3 )
- 9995 FORMAT( ' example number where AB_DGGBAK(R) info is not 0 =', I4 )
+ 9995 FORMAT( ' example number where DGGBAK(R) info is not 0 =', I4 )
       WRITE( NOUT, FMT = 9994 )LMAX( 4 )
  9994 FORMAT( ' example number having largest error          =', I4 )
       WRITE( NOUT, FMT = 9993 )NINFO
@@ -248,6 +237,6 @@
 *
       RETURN
 *
-*     End of AB_DCHKGK
+*     End of DCHKGK
 *
       END

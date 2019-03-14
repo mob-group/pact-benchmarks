@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLATM1
+*> \brief \b ZLATM1
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZLATM1( MODE, COND, IRSIGN, IDIST, ISEED, D, N, INFO )
+*       SUBROUTINE ZLATM1( MODE, COND, IRSIGN, IDIST, ISEED, D, N, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            IDIST, INFO, IRSIGN, MODE, N
@@ -25,9 +25,9 @@
 *>
 *> \verbatim
 *>
-*>    AB_ZLATM1 computes the entries of D(1..N) as specified by
+*>    ZLATM1 computes the entries of D(1..N) as specified by
 *>    MODE, COND and IRSIGN. IDIST and ISEED determine the generation
-*>    of random numbers. AB_ZLATM1 is called by AB_ZLATMR to generate
+*>    of random numbers. ZLATM1 is called by ZLATMR to generate
 *>    random test matrices for LAPACK programs.
 *> \endverbatim
 *
@@ -92,7 +92,7 @@
 *>           linear congruential sequence limited to small
 *>           integers, and so should produce machine independent
 *>           random numbers. The values of ISEED are changed on
-*>           exit, and can be used in the next call to AB_ZLATM1
+*>           exit, and can be used in the next call to ZLATM1
 *>           to continue the same random number sequence.
 *>           Changed on exit.
 *> \endverbatim
@@ -135,8 +135,7 @@
 *> \ingroup complex16_matgen
 *
 *  =====================================================================
-      SUBROUTINE AB_ZLATM1( MODE, COND, IRSIGN, IDIST, ISEED, D, N, INFO
-     $ )
+      SUBROUTINE ZLATM1( MODE, COND, IRSIGN, IDIST, ISEED, D, N, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -164,12 +163,12 @@
       COMPLEX*16         CTEMP
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLARAN
-      COMPLEX*16         AB_ZLARND
-      EXTERNAL           AB_DLARAN, AB_ZLARND
+      DOUBLE PRECISION   DLARAN
+      COMPLEX*16         ZLARND
+      EXTERNAL           DLARAN, ZLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZLARNV
+      EXTERNAL           XERBLA, ZLARNV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, EXP, LOG
@@ -203,7 +202,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZLATM1', -INFO )
+         CALL XERBLA( 'ZLATM1', -INFO )
          RETURN
       END IF
 *
@@ -260,14 +259,14 @@
    90    CONTINUE
          ALPHA = LOG( ONE / COND )
          DO 100 I = 1, N
-            D( I ) = EXP( ALPHA*AB_DLARAN( ISEED ) )
+            D( I ) = EXP( ALPHA*DLARAN( ISEED ) )
   100    CONTINUE
          GO TO 120
 *
 *        Randomly distributed D values from IDIST
 *
   110    CONTINUE
-         CALL AB_ZLARNV( IDIST, ISEED, N, D )
+         CALL ZLARNV( IDIST, ISEED, N, D )
 *
   120    CONTINUE
 *
@@ -277,7 +276,7 @@
          IF( ( MODE.NE.-6 .AND. MODE.NE.0 .AND. MODE.NE.6 ) .AND.
      $       IRSIGN.EQ.1 ) THEN
             DO 130 I = 1, N
-               CTEMP = AB_ZLARND( 3, ISEED )
+               CTEMP = ZLARND( 3, ISEED )
                D( I ) = D( I )*( CTEMP / ABS( CTEMP ) )
   130       CONTINUE
          END IF
@@ -296,6 +295,6 @@
 *
       RETURN
 *
-*     End of AB_ZLATM1
+*     End of ZLATM1
 *
       END

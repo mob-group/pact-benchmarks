@@ -1,4 +1,4 @@
-*> \brief \b AB_DLANSY returns the value of the 1-norm, or the Frobenius norm, or the infinity norm, or the element of largest absolute value of a real symmetric matrix.
+*> \brief \b DLANSY returns the value of the 1-norm, or the Frobenius norm, or the infinity norm, or the element of largest absolute value of a real symmetric matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLANSY + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLANSY.f">
+*> Download DLANSY + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlansy.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLANSY.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlansy.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLANSY.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlansy.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       DOUBLE PRECISION FUNCTION AB_DLANSY( NORM, UPLO, N, A, LDA, WORK )
+*       DOUBLE PRECISION FUNCTION DLANSY( NORM, UPLO, N, A, LDA, WORK )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          NORM, UPLO
@@ -34,15 +34,15 @@
 *>
 *> \verbatim
 *>
-*> AB_DLANSY  returns the value of the one norm,  or the Frobenius norm, or
+*> DLANSY  returns the value of the one norm,  or the Frobenius norm, or
 *> the  infinity norm,  or the  element of  largest absolute value  of a
 *> real symmetric matrix A.
 *> \endverbatim
 *>
-*> \return AB_DLANSY
+*> \return DLANSY
 *> \verbatim
 *>
-*>    AB_DLANSY = ( max(abs(A(i,j))), NORM = 'M' or 'm'
+*>    DLANSY = ( max(abs(A(i,j))), NORM = 'M' or 'm'
 *>             (
 *>             ( norm1(A),         NORM = '1', 'O' or 'o'
 *>             (
@@ -62,7 +62,7 @@
 *> \param[in] NORM
 *> \verbatim
 *>          NORM is CHARACTER*1
-*>          Specifies the value to be returned in AB_DLANSY as described
+*>          Specifies the value to be returned in DLANSY as described
 *>          above.
 *> \endverbatim
 *>
@@ -78,7 +78,7 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The order of the matrix A.  N >= 0.  When N = 0, AB_DLANSY is
+*>          The order of the matrix A.  N >= 0.  When N = 0, DLANSY is
 *>          set to zero.
 *> \endverbatim
 *>
@@ -120,7 +120,7 @@
 *> \ingroup doubleSYauxiliary
 *
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION AB_DLANSY( NORM, UPLO, N, A, LDA, WORK )
+      DOUBLE PRECISION FUNCTION DLANSY( NORM, UPLO, N, A, LDA, WORK )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -146,11 +146,11 @@
       DOUBLE PRECISION   ABSA, SCALE, SUM, VALUE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLASSQ
+      EXTERNAL           DLASSQ
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME, AB_DISNAN
-      EXTERNAL           AB_LSAME, AB_DISNAN
+      LOGICAL            LSAME, DISNAN
+      EXTERNAL           LSAME, DISNAN
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, SQRT
@@ -159,34 +159,33 @@
 *
       IF( N.EQ.0 ) THEN
          VALUE = ZERO
-      ELSE IF( AB_LSAME( NORM, 'M' ) ) THEN
+      ELSE IF( LSAME( NORM, 'M' ) ) THEN
 *
 *        Find max(abs(A(i,j))).
 *
          VALUE = ZERO
-         IF( AB_LSAME( UPLO, 'U' ) ) THEN
+         IF( LSAME( UPLO, 'U' ) ) THEN
             DO 20 J = 1, N
                DO 10 I = 1, J
                   SUM = ABS( A( I, J ) )
-                  IF( VALUE .LT. SUM .OR. AB_DISNAN( SUM ) ) VALUE = SUM
+                  IF( VALUE .LT. SUM .OR. DISNAN( SUM ) ) VALUE = SUM
    10          CONTINUE
    20       CONTINUE
          ELSE
             DO 40 J = 1, N
                DO 30 I = J, N
                   SUM = ABS( A( I, J ) )
-                  IF( VALUE .LT. SUM .OR. AB_DISNAN( SUM ) ) VALUE = SUM
+                  IF( VALUE .LT. SUM .OR. DISNAN( SUM ) ) VALUE = SUM
    30          CONTINUE
    40       CONTINUE
          END IF
-      ELSE IF( ( AB_LSAME( NORM, 'I' ) ) .OR. ( AB_LSAME( NORM, 'O' )
-     $ ) .OR.
+      ELSE IF( ( LSAME( NORM, 'I' ) ) .OR. ( LSAME( NORM, 'O' ) ) .OR.
      $         ( NORM.EQ.'1' ) ) THEN
 *
 *        Find normI(A) ( = norm1(A), since A is symmetric).
 *
          VALUE = ZERO
-         IF( AB_LSAME( UPLO, 'U' ) ) THEN
+         IF( LSAME( UPLO, 'U' ) ) THEN
             DO 60 J = 1, N
                SUM = ZERO
                DO 50 I = 1, J - 1
@@ -198,7 +197,7 @@
    60       CONTINUE
             DO 70 I = 1, N
                SUM = WORK( I )
-               IF( VALUE .LT. SUM .OR. AB_DISNAN( SUM ) ) VALUE = SUM
+               IF( VALUE .LT. SUM .OR. DISNAN( SUM ) ) VALUE = SUM
    70       CONTINUE
          ELSE
             DO 80 I = 1, N
@@ -211,33 +210,32 @@
                   SUM = SUM + ABSA
                   WORK( I ) = WORK( I ) + ABSA
    90          CONTINUE
-               IF( VALUE .LT. SUM .OR. AB_DISNAN( SUM ) ) VALUE = SUM
+               IF( VALUE .LT. SUM .OR. DISNAN( SUM ) ) VALUE = SUM
   100       CONTINUE
          END IF
-      ELSE IF( ( AB_LSAME( NORM, 'F' ) ) .OR. ( AB_LSAME( NORM, 'E' )
-     $ ) ) THEN
+      ELSE IF( ( LSAME( NORM, 'F' ) ) .OR. ( LSAME( NORM, 'E' ) ) ) THEN
 *
 *        Find normF(A).
 *
          SCALE = ZERO
          SUM = ONE
-         IF( AB_LSAME( UPLO, 'U' ) ) THEN
+         IF( LSAME( UPLO, 'U' ) ) THEN
             DO 110 J = 2, N
-               CALL AB_DLASSQ( J-1, A( 1, J ), 1, SCALE, SUM )
+               CALL DLASSQ( J-1, A( 1, J ), 1, SCALE, SUM )
   110       CONTINUE
          ELSE
             DO 120 J = 1, N - 1
-               CALL AB_DLASSQ( N-J, A( J+1, J ), 1, SCALE, SUM )
+               CALL DLASSQ( N-J, A( J+1, J ), 1, SCALE, SUM )
   120       CONTINUE
          END IF
          SUM = 2*SUM
-         CALL AB_DLASSQ( N, A, LDA+1, SCALE, SUM )
+         CALL DLASSQ( N, A, LDA+1, SCALE, SUM )
          VALUE = SCALE*SQRT( SUM )
       END IF
 *
-      AB_DLANSY = VALUE
+      DLANSY = VALUE
       RETURN
 *
-*     End of AB_DLANSY
+*     End of DLANSY
 *
       END

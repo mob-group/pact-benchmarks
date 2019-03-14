@@ -1,4 +1,4 @@
-*> \brief \b AB_DLCTSX
+*> \brief \b DLCTSX
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       LOGICAL          FUNCTION AB_DLCTSX( AR, AI, BETA )
+*       LOGICAL          FUNCTION DLCTSX( AR, AI, BETA )
 *
 *       .. Scalar Arguments ..
 *       DOUBLE PRECISION   AI, AR, BETA
@@ -21,7 +21,7 @@
 *> \verbatim
 *>
 *> This function is used to determine what eigenvalues will be
-*> selected.  If this is part of the test driver AB_DDRGSX, do not
+*> selected.  If this is part of the test driver DDRGSX, do not
 *> change the code UNLESS you are testing input examples and not
 *> using the built-in examples.
 *> \endverbatim
@@ -63,7 +63,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      LOGICAL          FUNCTION AB_DLCTSX( AR, AI, BETA )
+      LOGICAL          FUNCTION DLCTSX( AR, AI, BETA )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -91,9 +91,9 @@
       IF( FS ) THEN
          I = I + 1
          IF( I.LE.M ) THEN
-            AB_DLCTSX = .FALSE.
+            DLCTSX = .FALSE.
          ELSE
-            AB_DLCTSX = .TRUE.
+            DLCTSX = .TRUE.
          END IF
          IF( I.EQ.MPLUSN ) THEN
             FS = .FALSE.
@@ -102,9 +102,9 @@
       ELSE
          I = I + 1
          IF( I.LE.N ) THEN
-            AB_DLCTSX = .TRUE.
+            DLCTSX = .TRUE.
          ELSE
-            AB_DLCTSX = .FALSE.
+            DLCTSX = .FALSE.
          END IF
          IF( I.EQ.MPLUSN ) THEN
             FS = .TRUE.
@@ -113,13 +113,13 @@
       END IF
 *
 *       IF( AR/BETA.GT.0.0 )THEN
-*          AB_DLCTSX = .TRUE.
+*          DLCTSX = .TRUE.
 *       ELSE
-*          AB_DLCTSX = .FALSE.
+*          DLCTSX = .FALSE.
 *       END IF
 *
       RETURN
 *
-*     End of AB_DLCTSX
+*     End of DLCTSX
 *
       END

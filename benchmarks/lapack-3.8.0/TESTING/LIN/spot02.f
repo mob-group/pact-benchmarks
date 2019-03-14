@@ -1,4 +1,4 @@
-*> \brief \b AB_SPOT02
+*> \brief \b SPOT02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SPOT02( UPLO, N, NRHS, A, LDA, X, LDX, B, LDB, RWORK,
+*       SUBROUTINE SPOT02( UPLO, N, NRHS, A, LDA, X, LDX, B, LDB, RWORK,
 *                          RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SPOT02 computes the residual for the solution of a symmetric system
+*> SPOT02 computes the residual for the solution of a symmetric system
 *> of linear equations  A*x = b:
 *>
 *>    RESID = norm(B - A*X) / ( norm(A) * norm(X) * EPS ),
@@ -124,8 +124,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_SPOT02( UPLO, N, NRHS, A, LDA, X, LDX, B, LDB, RWORK
-     $,
+      SUBROUTINE SPOT02( UPLO, N, NRHS, A, LDA, X, LDX, B, LDB, RWORK,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -154,11 +153,11 @@
       REAL               ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      REAL               AB_SASUM, AB_SLAMCH, AB_SLANSY
-      EXTERNAL           AB_SASUM, AB_SLAMCH, AB_SLANSY
+      REAL               SASUM, SLAMCH, SLANSY
+      EXTERNAL           SASUM, SLAMCH, SLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SSYMM
+      EXTERNAL           SSYMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -174,8 +173,8 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = AB_SLAMCH( 'Epsilon' )
-      ANORM = AB_SLANSY( '1', UPLO, N, A, LDA, RWORK )
+      EPS = SLAMCH( 'Epsilon' )
+      ANORM = SLANSY( '1', UPLO, N, A, LDA, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -183,8 +182,7 @@
 *
 *     Compute  B - A*X
 *
-      CALL AB_SSYMM( 'Left', UPLO, N, NRHS, -ONE, A, LDA, X, LDX, ONE, B
-     $,
+      CALL SSYMM( 'Left', UPLO, N, NRHS, -ONE, A, LDA, X, LDX, ONE, B,
      $            LDB )
 *
 *     Compute the maximum over the number of right hand sides of
@@ -192,8 +190,8 @@
 *
       RESID = ZERO
       DO 10 J = 1, NRHS
-         BNORM = AB_SASUM( N, B( 1, J ), 1 )
-         XNORM = AB_SASUM( N, X( 1, J ), 1 )
+         BNORM = SASUM( N, B( 1, J ), 1 )
+         XNORM = SASUM( N, X( 1, J ), 1 )
          IF( XNORM.LE.ZERO ) THEN
             RESID = ONE / EPS
          ELSE
@@ -203,6 +201,6 @@
 *
       RETURN
 *
-*     End of AB_SPOT02
+*     End of SPOT02
 *
       END

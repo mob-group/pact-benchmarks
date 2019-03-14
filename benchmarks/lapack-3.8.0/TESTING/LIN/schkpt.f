@@ -1,4 +1,4 @@
-*> \brief \b AB_SCHKPT
+*> \brief \b SCHKPT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SCHKPT( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
+*       SUBROUTINE SCHKPT( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
 *                          A, D, E, B, X, XACT, WORK, RWORK, NOUT )
 *
 *       .. Scalar Arguments ..
@@ -29,7 +29,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SCHKPT tests AB_SPTTRF, -TRS, -RFS, and -CON
+*> SCHKPT tests SPTTRF, -TRS, -RFS, and -CON
 *> \endverbatim
 *
 *  Arguments:
@@ -143,8 +143,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_SCHKPT( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR
-     $,
+      SUBROUTINE SCHKPT( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
      $                   A, D, E, B, X, XACT, WORK, RWORK, NOUT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -188,18 +187,15 @@
       REAL               RESULT( NTESTS ), Z( 3 )
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ISAMAX
-      REAL               AB_SASUM, AB_SGET06, AB_SLANST
-      EXTERNAL           AB_ISAMAX, AB_SASUM, AB_SGET06, AB_SLANST
+      INTEGER            ISAMAX
+      REAL               SASUM, SGET06, SLANST
+      EXTERNAL           ISAMAX, SASUM, SGET06, SLANST
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALAERH, AB_ALAHD, AB_ALASUM, AB_SCOPY, AB_SE
-     $RRGT, AB_SGET04,
-     $                   AB_SLACPY, AB_SLAPTM, AB_SLARNV, AB_SLATB4, AB_
-     $SLATMS, AB_SPTCON,
-     $                   AB_SPTRFS, AB_SPTT01, AB_SPTT02, AB_SPTT05, AB_
-     $SPTTRF, AB_SPTTRS,
-     $                   AB_SSCAL
+      EXTERNAL           ALAERH, ALAHD, ALASUM, SCOPY, SERRGT, SGET04,
+     $                   SLACPY, SLAPTM, SLARNV, SLATB4, SLATMS, SPTCON,
+     $                   SPTRFS, SPTT01, SPTT02, SPTT05, SPTTRF, SPTTRS,
+     $                   SSCAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -230,7 +226,7 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL AB_SERRGT( PATH, NOUT )
+     $   CALL SERRGT( PATH, NOUT )
       INFOT = 0
 *
       DO 110 IN = 1, NN
@@ -250,9 +246,9 @@
             IF( N.GT.0 .AND. .NOT.DOTYPE( IMAT ) )
      $         GO TO 100
 *
-*           Set up parameters with AB_SLATB4.
+*           Set up parameters with SLATB4.
 *
-            CALL AB_SLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
+            CALL SLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
      $                   COND, DIST )
 *
             ZEROT = IMAT.GE.8 .AND. IMAT.LE.10
@@ -261,16 +257,14 @@
 *              Type 1-6:  generate a symmetric tridiagonal matrix of
 *              known condition number in lower triangular band storage.
 *
-               SRNAMT = 'AB_SLATMS'
-               CALL AB_SLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE, CON
-     $D,
+               SRNAMT = 'SLATMS'
+               CALL SLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE, COND,
      $                      ANORM, KL, KU, 'B', A, 2, WORK, INFO )
 *
-*              Check the error code from AB_SLATMS.
+*              Check the error code from SLATMS.
 *
                IF( INFO.NE.0 ) THEN
-                  CALL AB_ALAERH( PATH, 'AB_SLATMS', INFO, 0, ' ', N, N,
-     $ KL,
+                  CALL ALAERH( PATH, 'SLATMS', INFO, 0, ' ', N, N, KL,
      $                         KU, -1, IMAT, NFAIL, NERRS, NOUT )
                   GO TO 100
                END IF
@@ -295,8 +289,8 @@
 *
 *                 Let D and E have values from [-1,1].
 *
-                  CALL AB_SLARNV( 2, ISEED, N, D )
-                  CALL AB_SLARNV( 2, ISEED, N-1, E )
+                  CALL SLARNV( 2, ISEED, N, D )
+                  CALL SLARNV( 2, ISEED, N-1, E )
 *
 *                 Make the tridiagonal matrix diagonally dominant.
 *
@@ -313,10 +307,10 @@
 *
 *                 Scale D and E so the maximum element is ANORM.
 *
-                  IX = AB_ISAMAX( N, D, 1 )
+                  IX = ISAMAX( N, D, 1 )
                   DMAX = D( IX )
-                  CALL AB_SSCAL( N, ANORM / DMAX, D, 1 )
-                  CALL AB_SSCAL( N-1, ANORM / DMAX, E, 1 )
+                  CALL SSCAL( N, ANORM / DMAX, D, 1 )
+                  CALL SSCAL( N-1, ANORM / DMAX, E, 1 )
 *
                ELSE IF( IZERO.GT.0 ) THEN
 *
@@ -370,21 +364,20 @@
                END IF
             END IF
 *
-            CALL AB_SCOPY( N, D, 1, D( N+1 ), 1 )
+            CALL SCOPY( N, D, 1, D( N+1 ), 1 )
             IF( N.GT.1 )
-     $         CALL AB_SCOPY( N-1, E, 1, E( N+1 ), 1 )
+     $         CALL SCOPY( N-1, E, 1, E( N+1 ), 1 )
 *
 *+    TEST 1
 *           Factor A as L*D*L' and compute the ratio
 *              norm(L*D*L' - A) / (n * norm(A) * EPS )
 *
-            CALL AB_SPTTRF( N, D( N+1 ), E( N+1 ), INFO )
+            CALL SPTTRF( N, D( N+1 ), E( N+1 ), INFO )
 *
-*           Check error code from AB_SPTTRF.
+*           Check error code from SPTTRF.
 *
             IF( INFO.NE.IZERO ) THEN
-               CALL AB_ALAERH( PATH, 'AB_SPTTRF', INFO, IZERO, ' ', N, N
-     $, -1,
+               CALL ALAERH( PATH, 'SPTTRF', INFO, IZERO, ' ', N, N, -1,
      $                      -1, -1, IMAT, NFAIL, NERRS, NOUT )
                GO TO 100
             END IF
@@ -394,14 +387,14 @@
                GO TO 90
             END IF
 *
-            CALL AB_SPTT01( N, D, E, D( N+1 ), E( N+1 ), WORK,
+            CALL SPTT01( N, D, E, D( N+1 ), E( N+1 ), WORK,
      $                   RESULT( 1 ) )
 *
 *           Print the test ratio if greater than or equal to THRESH.
 *
             IF( RESULT( 1 ).GE.THRESH ) THEN
                IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $            CALL AB_ALAHD( NOUT, PATH )
+     $            CALL ALAHD( NOUT, PATH )
                WRITE( NOUT, FMT = 9999 )N, IMAT, 1, RESULT( 1 )
                NFAIL = NFAIL + 1
             END IF
@@ -411,9 +404,9 @@
 *
 *           Compute norm(A).
 *
-            ANORM = AB_SLANST( '1', N, D, E )
+            ANORM = SLANST( '1', N, D, E )
 *
-*           Use AB_SPTTRS to solve for one column at a time of inv(A),
+*           Use SPTTRS to solve for one column at a time of inv(A),
 *           computing the maximum column sum as we go.
 *
             AINVNM = ZERO
@@ -422,8 +415,8 @@
                   X( J ) = ZERO
    40          CONTINUE
                X( I ) = ONE
-               CALL AB_SPTTRS( N, 1, D( N+1 ), E( N+1 ), X, LDA, INFO )
-               AINVNM = MAX( AINVNM, AB_SASUM( N, X, 1 ) )
+               CALL SPTTRS( N, 1, D( N+1 ), E( N+1 ), X, LDA, INFO )
+               AINVNM = MAX( AINVNM, SASUM( N, X, 1 ) )
    50       CONTINUE
             RCONDC = ONE / MAX( ONE, ANORM*AINVNM )
 *
@@ -434,57 +427,53 @@
 *
                IX = 1
                DO 60 J = 1, NRHS
-                  CALL AB_SLARNV( 2, ISEED, N, XACT( IX ) )
+                  CALL SLARNV( 2, ISEED, N, XACT( IX ) )
                   IX = IX + LDA
    60          CONTINUE
 *
 *           Set the right hand side.
 *
-               CALL AB_SLAPTM( N, NRHS, ONE, D, E, XACT, LDA, ZERO, B,
+               CALL SLAPTM( N, NRHS, ONE, D, E, XACT, LDA, ZERO, B,
      $                      LDA )
 *
 *+    TEST 2
 *           Solve A*x = b and compute the residual.
 *
-               CALL AB_SLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
-               CALL AB_SPTTRS( N, NRHS, D( N+1 ), E( N+1 ), X, LDA, INFO
-     $ )
+               CALL SLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
+               CALL SPTTRS( N, NRHS, D( N+1 ), E( N+1 ), X, LDA, INFO )
 *
-*           Check error code from AB_SPTTRS.
+*           Check error code from SPTTRS.
 *
                IF( INFO.NE.0 )
-     $            CALL AB_ALAERH( PATH, 'AB_SPTTRS', INFO, 0, ' ', N, N,
-     $ -1,
+     $            CALL ALAERH( PATH, 'SPTTRS', INFO, 0, ' ', N, N, -1,
      $                         -1, NRHS, IMAT, NFAIL, NERRS, NOUT )
 *
-               CALL AB_SLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
-               CALL AB_SPTT02( N, NRHS, D, E, X, LDA, WORK, LDA,
+               CALL SLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
+               CALL SPTT02( N, NRHS, D, E, X, LDA, WORK, LDA,
      $                      RESULT( 2 ) )
 *
 *+    TEST 3
 *           Check solution from generated exact solution.
 *
-               CALL AB_SGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+               CALL SGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                      RESULT( 3 ) )
 *
 *+    TESTS 4, 5, and 6
 *           Use iterative refinement to improve the solution.
 *
-               SRNAMT = 'AB_SPTRFS'
-               CALL AB_SPTRFS( N, NRHS, D, E, D( N+1 ), E( N+1 ), B, LDA
-     $,
+               SRNAMT = 'SPTRFS'
+               CALL SPTRFS( N, NRHS, D, E, D( N+1 ), E( N+1 ), B, LDA,
      $                      X, LDA, RWORK, RWORK( NRHS+1 ), WORK, INFO )
 *
-*           Check error code from AB_SPTRFS.
+*           Check error code from SPTRFS.
 *
                IF( INFO.NE.0 )
-     $            CALL AB_ALAERH( PATH, 'AB_SPTRFS', INFO, 0, ' ', N, N,
-     $ -1,
+     $            CALL ALAERH( PATH, 'SPTRFS', INFO, 0, ' ', N, N, -1,
      $                         -1, NRHS, IMAT, NFAIL, NERRS, NOUT )
 *
-               CALL AB_SGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+               CALL SGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                      RESULT( 4 ) )
-               CALL AB_SPTT05( N, NRHS, D, E, B, LDA, X, LDA, XACT, LDA,
+               CALL SPTT05( N, NRHS, D, E, B, LDA, X, LDA, XACT, LDA,
      $                      RWORK, RWORK( NRHS+1 ), RESULT( 5 ) )
 *
 *           Print information about the tests that did not pass the
@@ -493,7 +482,7 @@
                DO 70 K = 2, 6
                   IF( RESULT( K ).GE.THRESH ) THEN
                      IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                  CALL AB_ALAHD( NOUT, PATH )
+     $                  CALL ALAHD( NOUT, PATH )
                      WRITE( NOUT, FMT = 9998 )N, NRHS, IMAT, K,
      $                  RESULT( K )
                      NFAIL = NFAIL + 1
@@ -507,24 +496,23 @@
 *           matrix.
 *
    90       CONTINUE
-            SRNAMT = 'AB_SPTCON'
-            CALL AB_SPTCON( N, D( N+1 ), E( N+1 ), ANORM, RCOND, RWORK,
+            SRNAMT = 'SPTCON'
+            CALL SPTCON( N, D( N+1 ), E( N+1 ), ANORM, RCOND, RWORK,
      $                   INFO )
 *
-*           Check error code from AB_SPTCON.
+*           Check error code from SPTCON.
 *
             IF( INFO.NE.0 )
-     $         CALL AB_ALAERH( PATH, 'AB_SPTCON', INFO, 0, ' ', N, N, -1
-     $, -1,
+     $         CALL ALAERH( PATH, 'SPTCON', INFO, 0, ' ', N, N, -1, -1,
      $                      -1, IMAT, NFAIL, NERRS, NOUT )
 *
-            RESULT( 7 ) = AB_SGET06( RCOND, RCONDC )
+            RESULT( 7 ) = SGET06( RCOND, RCONDC )
 *
 *           Print the test ratio if greater than or equal to THRESH.
 *
             IF( RESULT( 7 ).GE.THRESH ) THEN
                IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $            CALL AB_ALAHD( NOUT, PATH )
+     $            CALL ALAHD( NOUT, PATH )
                WRITE( NOUT, FMT = 9999 )N, IMAT, 7, RESULT( 7 )
                NFAIL = NFAIL + 1
             END IF
@@ -534,7 +522,7 @@
 *
 *     Print a summary of the results.
 *
-      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( ' N =', I5, ', type ', I2, ', test ', I2, ', ratio = ',
      $      G12.5 )
@@ -542,6 +530,6 @@
      $      ') = ', G12.5 )
       RETURN
 *
-*     End of AB_SCHKPT
+*     End of SCHKPT
 *
       END

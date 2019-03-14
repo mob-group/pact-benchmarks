@@ -1,4 +1,4 @@
-*> \brief \b AB_CLAESY computes the eigenvalues and eigenvectors of a 2-by-2 complex symmetric matrix.
+*> \brief \b CLAESY computes the eigenvalues and eigenvectors of a 2-by-2 complex symmetric matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CLAESY + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLAESY.f">
+*> Download CLAESY + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/claesy.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLAESY.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/claesy.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLAESY.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claesy.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CLAESY( A, B, C, RT1, RT2, EVSCAL, CS1, SN1 )
+*       SUBROUTINE CLAESY( A, B, C, RT1, RT2, EVSCAL, CS1, SN1 )
 *
 *       .. Scalar Arguments ..
 *       COMPLEX            A, B, C, CS1, EVSCAL, RT1, RT2, SN1
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CLAESY computes the eigendecomposition of a 2-by-2 symmetric matrix
+*> CLAESY computes the eigendecomposition of a 2-by-2 symmetric matrix
 *>    ( ( A, B );( B, C ) )
 *> provided the norm of the matrix of eigenvectors is larger than
 *> some threshold value.
@@ -113,7 +113,7 @@
 *> \ingroup complexSYauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_CLAESY( A, B, C, RT1, RT2, EVSCAL, CS1, SN1 )
+      SUBROUTINE CLAESY( A, B, C, RT1, RT2, EVSCAL, CS1, SN1 )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -216,6 +216,6 @@
       END IF
       RETURN
 *
-*     End of AB_CLAESY
+*     End of CLAESY
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_ZTPTRI
+*> \brief \b ZTPTRI
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZTPTRI + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZTPTRI.f">
+*> Download ZTPTRI + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztptri.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZTPTRI.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztptri.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZTPTRI.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztptri.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZTPTRI( UPLO, DIAG, N, AP, INFO )
+*       SUBROUTINE ZTPTRI( UPLO, DIAG, N, AP, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          DIAG, UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZTPTRI computes the inverse of a complex upper or lower triangular
+*> ZTPTRI computes the inverse of a complex upper or lower triangular
 *> matrix A stored in packed format.
 *> \endverbatim
 *
@@ -115,7 +115,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_ZTPTRI( UPLO, DIAG, N, AP, INFO )
+      SUBROUTINE ZTPTRI( UPLO, DIAG, N, AP, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -143,28 +143,28 @@
       COMPLEX*16         AJJ
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZSCAL, AB_ZTPMV
+      EXTERNAL           XERBLA, ZSCAL, ZTPMV
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      NOUNIT = AB_LSAME( DIAG, 'N' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      NOUNIT = LSAME( DIAG, 'N' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.NOUNIT .AND. .NOT.AB_LSAME( DIAG, 'U' ) ) THEN
+      ELSE IF( .NOT.NOUNIT .AND. .NOT.LSAME( DIAG, 'U' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZTPTRI', -INFO )
+         CALL XERBLA( 'ZTPTRI', -INFO )
          RETURN
       END IF
 *
@@ -204,9 +204,9 @@
 *
 *           Compute elements 1:j-1 of j-th column.
 *
-            CALL AB_ZTPMV( 'Upper', 'No transpose', DIAG, J-1, AP,
+            CALL ZTPMV( 'Upper', 'No transpose', DIAG, J-1, AP,
      $                  AP( JC ), 1 )
-            CALL AB_ZSCAL( J-1, AJJ, AP( JC ), 1 )
+            CALL ZSCAL( J-1, AJJ, AP( JC ), 1 )
             JC = JC + J
    30    CONTINUE
 *
@@ -226,9 +226,9 @@
 *
 *              Compute elements j+1:n of j-th column.
 *
-               CALL AB_ZTPMV( 'Lower', 'No transpose', DIAG, N-J,
+               CALL ZTPMV( 'Lower', 'No transpose', DIAG, N-J,
      $                     AP( JCLAST ), AP( JC+1 ), 1 )
-               CALL AB_ZSCAL( N-J, AJJ, AP( JC+1 ), 1 )
+               CALL ZSCAL( N-J, AJJ, AP( JC+1 ), 1 )
             END IF
             JCLAST = JC
             JC = JC - N + J - 2
@@ -237,6 +237,6 @@
 *
       RETURN
 *
-*     End of AB_ZTPTRI
+*     End of ZTPTRI
 *
       END

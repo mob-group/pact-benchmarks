@@ -1,4 +1,4 @@
-*> \brief \b AB_IPARMQ
+*> \brief \b IPARMQ
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_IPARMQ + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_IPARMQ.f">
+*> Download IPARMQ + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/iparmq.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_IPARMQ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/iparmq.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_IPARMQ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/iparmq.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       INTEGER FUNCTION AB_IPARMQ( ISPEC, NAME, OPTS, N, ILO, IHI, LWORK )
+*       INTEGER FUNCTION IPARMQ( ISPEC, NAME, OPTS, N, ILO, IHI, LWORK )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            IHI, ILO, ISPEC, LWORK, N
@@ -33,7 +33,7 @@
 *>      This program sets problem and machine dependent parameters
 *>      useful for xHSEQR and related subroutines for eigenvalue
 *>      problems. It is called whenever
-*>      AB_IPARMQ is called with 12 <= ISPEC <= 16
+*>      IPARMQ is called with 12 <= ISPEC <= 16
 *> \endverbatim
 *
 *  Arguments:
@@ -42,7 +42,7 @@
 *> \param[in] ISPEC
 *> \verbatim
 *>          ISPEC is INTEGER
-*>              ISPEC specifies which tunable parameter AB_IPARMQ should
+*>              ISPEC specifies which tunable parameter IPARMQ should
 *>              return.
 *>
 *>              ISPEC=12: (INMIN)  Matrices of order nmin or less
@@ -64,17 +64,17 @@
 *>                        then the next QR sweep is skipped and early
 *>                        deflation is applied immediately to the
 *>                        remaining active diagonal block.  Setting
-*>                        AB_IPARMQ(ISPEC=14) = 0 causes TTQRE to skip a
+*>                        IPARMQ(ISPEC=14) = 0 causes TTQRE to skip a
 *>                        multi-shift QR sweep whenever early deflation
 *>                        finds a converged eigenvalue.  Setting
-*>                        AB_IPARMQ(ISPEC=14) greater than or equal to 100
+*>                        IPARMQ(ISPEC=14) greater than or equal to 100
 *>                        prevents TTQRE from skipping a multi-shift
 *>                        QR sweep.
 *>
 *>              ISPEC=15: (NSHFTS) The number of simultaneous shifts in
 *>                        a multi-shift QR iteration.
 *>
-*>              ISPEC=16: (IACC22) AB_IPARMQ is set to 0, 1 or 2 with the
+*>              ISPEC=16: (IACC22) IPARMQ is set to 0, 1 or 2 with the
 *>                        following meanings.
 *>                        0:  During the multi-shift QR/QZ sweep,
 *>                            blocked eigenvalue reordering, blocked
@@ -97,8 +97,8 @@
 *>                            is exploited during matrix-matrix
 *>                            multiplies.
 *>                        (If xTRMM is slower than xGEMM, then
-*>                        AB_IPARMQ(ISPEC=16)=1 may be more efficient than
-*>                        AB_IPARMQ(ISPEC=16)=2 despite the greater level of
+*>                        IPARMQ(ISPEC=16)=1 may be more efficient than
+*>                        IPARMQ(ISPEC=16)=2 despite the greater level of
 *>                        arithmetic work implied by the latter choice.)
 *> \endverbatim
 *>
@@ -158,7 +158,7 @@
 *>
 *>       Little is known about how best to choose these parameters.
 *>       It is possible to use different values of the parameters
-*>       for each of AB_CHSEQR, AB_DHSEQR, AB_SHSEQR and AB_ZHSEQR.
+*>       for each of CHSEQR, DHSEQR, SHSEQR and ZHSEQR.
 *>
 *>       It is probably best to choose different parameters for
 *>       different matrices and different parameters at different
@@ -173,23 +173,23 @@
 *>       only practical way to determine which choices are most
 *>       effective.
 *>
-*>       Following is a list of default values supplied by AB_IPARMQ.
+*>       Following is a list of default values supplied by IPARMQ.
 *>       These defaults may be adjusted in order to attain better
 *>       performance in any particular computational environment.
 *>
-*>       AB_IPARMQ(ISPEC=12) The xLAHQR vs xLAQR0 crossover point.
+*>       IPARMQ(ISPEC=12) The xLAHQR vs xLAQR0 crossover point.
 *>                        Default: 75. (Must be at least 11.)
 *>
-*>       AB_IPARMQ(ISPEC=13) Recommended deflation window size.
+*>       IPARMQ(ISPEC=13) Recommended deflation window size.
 *>                        This depends on ILO, IHI and NS, the
 *>                        number of simultaneous shifts returned
-*>                        by AB_IPARMQ(ISPEC=15).  The default for
+*>                        by IPARMQ(ISPEC=15).  The default for
 *>                        (IHI-ILO+1).LE.500 is NS.  The default
 *>                        for (IHI-ILO+1).GT.500 is 3*NS/2.
 *>
-*>       AB_IPARMQ(ISPEC=14) Nibble crossover point.  Default: 14.
+*>       IPARMQ(ISPEC=14) Nibble crossover point.  Default: 14.
 *>
-*>       AB_IPARMQ(ISPEC=15) Number of simultaneous shifts, NS.
+*>       IPARMQ(ISPEC=15) Number of simultaneous shifts, NS.
 *>                        a multi-shift QR iteration.
 *>
 *>                        If IHI-ILO+1 is ...
@@ -207,21 +207,20 @@
 *>
 *>                    (+)  By default matrices of this order are
 *>                         passed to the implicit double shift routine
-*>                         xLAHQR.  See AB_IPARMQ(ISPEC=12) above.   These
+*>                         xLAHQR.  See IPARMQ(ISPEC=12) above.   These
 *>                         values of NS are used only in case of a rare
 *>                         xLAHQR failure.
 *>
 *>                    (**) The asterisks (**) indicate an ad-hoc
 *>                         function increasing from 10 to 64.
 *>
-*>       AB_IPARMQ(ISPEC=16) Select structured matrix multiply.
+*>       IPARMQ(ISPEC=16) Select structured matrix multiply.
 *>                        (See ISPEC=16 above for details.)
 *>                        Default: 3.
 *> \endverbatim
 *>
 *  =====================================================================
-      INTEGER FUNCTION AB_IPARMQ( ISPEC, NAME, OPTS, N, ILO, IHI, LWORK 
-     $)
+      INTEGER FUNCTION IPARMQ( ISPEC, NAME, OPTS, N, ILO, IHI, LWORK )
 *
 *  -- LAPACK auxiliary routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -281,7 +280,7 @@
 *        .     to xLAHQR, the classic double shift algorithm.
 *        .     This must be at least 11. ====
 *
-         AB_IPARMQ = NMIN
+         IPARMQ = NMIN
 *
       ELSE IF( ISPEC.EQ.INIBL ) THEN
 *
@@ -289,22 +288,22 @@
 *        .    whenever aggressive early deflation finds
 *        .    at least (NIBBLE*(window size)/100) deflations. ====
 *
-         AB_IPARMQ = NIBBLE
+         IPARMQ = NIBBLE
 *
       ELSE IF( ISPEC.EQ.ISHFTS ) THEN
 *
 *        ==== NSHFTS: The number of simultaneous shifts =====
 *
-         AB_IPARMQ = NS
+         IPARMQ = NS
 *
       ELSE IF( ISPEC.EQ.INWIN ) THEN
 *
 *        ==== NW: deflation window size.  ====
 *
          IF( NH.LE.KNWSWP ) THEN
-            AB_IPARMQ = NS
+            IPARMQ = NS
          ELSE
-            AB_IPARMQ = 3*NS / 2
+            IPARMQ = 3*NS / 2
          END IF
 *
       ELSE IF( ISPEC.EQ.IACC22 ) THEN
@@ -319,7 +318,7 @@
 *
 *        Convert NAME to upper case if the first character is lower case.
 *
-         AB_IPARMQ = 0
+         IPARMQ = 0
          SUBNAM = NAME
          IC = ICHAR( SUBNAM( 1: 1 ) )
          IZ = ICHAR( 'Z' )
@@ -369,28 +368,28 @@
 *
          IF( SUBNAM( 2:6 ).EQ.'GGHRD' .OR.
      $       SUBNAM( 2:6 ).EQ.'GGHD3' ) THEN
-            AB_IPARMQ = 1
+            IPARMQ = 1
             IF( NH.GE.K22MIN )
-     $         AB_IPARMQ = 2
+     $         IPARMQ = 2
          ELSE IF ( SUBNAM( 4:6 ).EQ.'EXC' ) THEN
             IF( NH.GE.KACMIN )
-     $         AB_IPARMQ = 1
+     $         IPARMQ = 1
             IF( NH.GE.K22MIN )
-     $         AB_IPARMQ = 2
+     $         IPARMQ = 2
          ELSE IF ( SUBNAM( 2:6 ).EQ.'HSEQR' .OR.
      $             SUBNAM( 2:5 ).EQ.'LAQR' ) THEN
             IF( NS.GE.KACMIN )
-     $         AB_IPARMQ = 1
+     $         IPARMQ = 1
             IF( NS.GE.K22MIN )
-     $         AB_IPARMQ = 2
+     $         IPARMQ = 2
          END IF
 *
       ELSE
 *        ===== invalid value of ispec =====
-         AB_IPARMQ = -1
+         IPARMQ = -1
 *
       END IF
 *
-*     ==== End of AB_IPARMQ ====
+*     ==== End of IPARMQ ====
 *
       END

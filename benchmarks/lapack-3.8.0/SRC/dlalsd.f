@@ -1,4 +1,4 @@
-*> \brief \b AB_DLALSD uses the singular value decomposition of A to solve the least squares problem.
+*> \brief \b DLALSD uses the singular value decomposition of A to solve the least squares problem.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLALSD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLALSD.f">
+*> Download DLALSD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlalsd.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLALSD.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlalsd.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLALSD.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlalsd.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLALSD( UPLO, SMLSIZ, N, NRHS, D, E, B, LDB, RCOND,
+*       SUBROUTINE DLALSD( UPLO, SMLSIZ, N, NRHS, D, E, B, LDB, RCOND,
 *                          RANK, WORK, IWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DLALSD uses the singular value decomposition of A to solve the least
+*> DLALSD uses the singular value decomposition of A to solve the least
 *> squares problem of finding X to minimize the Euclidean norm of each
 *> column of A*X-B, where A is N-by-N upper bidiagonal, and X and B
 *> are N-by-NRHS. The solution X overwrites B.
@@ -176,7 +176,7 @@
 *>     Osni Marques, LBNL/NERSC, USA \n
 *
 *  =====================================================================
-      SUBROUTINE AB_DLALSD( UPLO, SMLSIZ, N, NRHS, D, E, B, LDB, RCOND,
+      SUBROUTINE DLALSD( UPLO, SMLSIZ, N, NRHS, D, E, B, LDB, RCOND,
      $                   RANK, WORK, IWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -208,15 +208,13 @@
       DOUBLE PRECISION   CS, EPS, ORGNRM, R, RCND, SN, TOL
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_IDAMAX
-      DOUBLE PRECISION   AB_DLAMCH, AB_DLANST
-      EXTERNAL           AB_IDAMAX, AB_DLAMCH, AB_DLANST
+      INTEGER            IDAMAX
+      DOUBLE PRECISION   DLAMCH, DLANST
+      EXTERNAL           IDAMAX, DLAMCH, DLANST
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DCOPY, AB_DGEMM, AB_DLACPY, AB_DLALSA, AB_DL
-     $ARTG, AB_DLASCL,
-     $                   AB_DLASDA, AB_DLASDQ, AB_DLASET, AB_AB_DLASRT, 
-     $AB_DROT, AB_XERBLA
+      EXTERNAL           DCOPY, DGEMM, DLACPY, DLALSA, DLARTG, DLASCL,
+     $                   DLASDA, DLASDQ, DLASET, DLASRT, DROT, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, INT, LOG, SIGN
@@ -235,11 +233,11 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DLALSD', -INFO )
+         CALL XERBLA( 'DLALSD', -INFO )
          RETURN
       END IF
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
+      EPS = DLAMCH( 'Epsilon' )
 *
 *     Set up the tolerance.
 *
@@ -257,11 +255,10 @@
          RETURN
       ELSE IF( N.EQ.1 ) THEN
          IF( D( 1 ).EQ.ZERO ) THEN
-            CALL AB_DLASET( 'A', 1, NRHS, ZERO, ZERO, B, LDB )
+            CALL DLASET( 'A', 1, NRHS, ZERO, ZERO, B, LDB )
          ELSE
             RANK = 1
-            CALL AB_DLASCL( 'G', 0, 0, D( 1 ), ONE, 1, NRHS, B, LDB, INF
-     $O )
+            CALL DLASCL( 'G', 0, 0, D( 1 ), ONE, 1, NRHS, B, LDB, INFO )
             D( 1 ) = ABS( D( 1 ) )
          END IF
          RETURN
@@ -271,12 +268,12 @@
 *
       IF( UPLO.EQ.'L' ) THEN
          DO 10 I = 1, N - 1
-            CALL AB_DLARTG( D( I ), E( I ), CS, SN, R )
+            CALL DLARTG( D( I ), E( I ), CS, SN, R )
             D( I ) = R
             E( I ) = SN*D( I+1 )
             D( I+1 ) = CS*D( I+1 )
             IF( NRHS.EQ.1 ) THEN
-               CALL AB_DROT( 1, B( I, 1 ), 1, B( I+1, 1 ), 1, CS, SN )
+               CALL DROT( 1, B( I, 1 ), 1, B( I+1, 1 ), 1, CS, SN )
             ELSE
                WORK( I*2-1 ) = CS
                WORK( I*2 ) = SN
@@ -287,8 +284,7 @@
                DO 20 J = 1, N - 1
                   CS = WORK( J*2-1 )
                   SN = WORK( J*2 )
-                  CALL AB_DROT( 1, B( J, I ), 1, B( J+1, I ), 1, CS, SN 
-     $)
+                  CALL DROT( 1, B( J, I ), 1, B( J+1, I ), 1, CS, SN )
    20          CONTINUE
    30       CONTINUE
          END IF
@@ -297,49 +293,45 @@
 *     Scale.
 *
       NM1 = N - 1
-      ORGNRM = AB_DLANST( 'M', N, D, E )
+      ORGNRM = DLANST( 'M', N, D, E )
       IF( ORGNRM.EQ.ZERO ) THEN
-         CALL AB_DLASET( 'A', N, NRHS, ZERO, ZERO, B, LDB )
+         CALL DLASET( 'A', N, NRHS, ZERO, ZERO, B, LDB )
          RETURN
       END IF
 *
-      CALL AB_DLASCL( 'G', 0, 0, ORGNRM, ONE, N, 1, D, N, INFO )
-      CALL AB_DLASCL( 'G', 0, 0, ORGNRM, ONE, NM1, 1, E, NM1, INFO )
+      CALL DLASCL( 'G', 0, 0, ORGNRM, ONE, N, 1, D, N, INFO )
+      CALL DLASCL( 'G', 0, 0, ORGNRM, ONE, NM1, 1, E, NM1, INFO )
 *
 *     If N is smaller than the minimum divide size SMLSIZ, then solve
 *     the problem with another solver.
 *
       IF( N.LE.SMLSIZ ) THEN
          NWORK = 1 + N*N
-         CALL AB_DLASET( 'A', N, N, ZERO, ONE, WORK, N )
-         CALL AB_DLASDQ( 'U', 0, N, N, 0, NRHS, D, E, WORK, N, WORK, N, 
-     $B,
+         CALL DLASET( 'A', N, N, ZERO, ONE, WORK, N )
+         CALL DLASDQ( 'U', 0, N, N, 0, NRHS, D, E, WORK, N, WORK, N, B,
      $                LDB, WORK( NWORK ), INFO )
          IF( INFO.NE.0 ) THEN
             RETURN
          END IF
-         TOL = RCND*ABS( D( AB_IDAMAX( N, D, 1 ) ) )
+         TOL = RCND*ABS( D( IDAMAX( N, D, 1 ) ) )
          DO 40 I = 1, N
             IF( D( I ).LE.TOL ) THEN
-               CALL AB_DLASET( 'A', 1, NRHS, ZERO, ZERO, B( I, 1 ), LDB 
-     $)
+               CALL DLASET( 'A', 1, NRHS, ZERO, ZERO, B( I, 1 ), LDB )
             ELSE
-               CALL AB_DLASCL( 'G', 0, 0, D( I ), ONE, 1, NRHS, B( I, 1 
-     $),
+               CALL DLASCL( 'G', 0, 0, D( I ), ONE, 1, NRHS, B( I, 1 ),
      $                      LDB, INFO )
                RANK = RANK + 1
             END IF
    40    CONTINUE
-         CALL AB_DGEMM( 'T', 'N', N, NRHS, N, ONE, WORK, N, B, LDB, ZERO
-     $,
+         CALL DGEMM( 'T', 'N', N, NRHS, N, ONE, WORK, N, B, LDB, ZERO,
      $               WORK( NWORK ), N )
-         CALL AB_DLACPY( 'A', N, NRHS, WORK( NWORK ), N, B, LDB )
+         CALL DLACPY( 'A', N, NRHS, WORK( NWORK ), N, B, LDB )
 *
 *        Unscale.
 *
-         CALL AB_DLASCL( 'G', 0, 0, ONE, ORGNRM, N, 1, D, N, INFO )
-         CALL AB_AB_DLASRT( 'D', N, D, INFO )
-         CALL AB_DLASCL( 'G', 0, 0, ORGNRM, ONE, N, NRHS, B, LDB, INFO )
+         CALL DLASCL( 'G', 0, 0, ONE, ORGNRM, N, 1, D, N, INFO )
+         CALL DLASRT( 'D', N, D, INFO )
+         CALL DLASCL( 'G', 0, 0, ORGNRM, ONE, N, NRHS, B, LDB, INFO )
 *
          RETURN
       END IF
@@ -412,7 +404,7 @@
                NSUB = NSUB + 1
                IWORK( NSUB ) = N
                IWORK( SIZEI+NSUB-1 ) = 1
-               CALL AB_DCOPY( NRHS, B( N, 1 ), LDB, WORK( BX+NM1 ), N )
+               CALL DCOPY( NRHS, B( N, 1 ), LDB, WORK( BX+NM1 ), N )
             END IF
             ST1 = ST - 1
             IF( NSIZE.EQ.1 ) THEN
@@ -420,26 +412,26 @@
 *              This is a 1-by-1 subproblem and is not solved
 *              explicitly.
 *
-               CALL AB_DCOPY( NRHS, B( ST, 1 ), LDB, WORK( BX+ST1 ), N )
+               CALL DCOPY( NRHS, B( ST, 1 ), LDB, WORK( BX+ST1 ), N )
             ELSE IF( NSIZE.LE.SMLSIZ ) THEN
 *
-*              This is a small subproblem and is solved by AB_DLASDQ.
+*              This is a small subproblem and is solved by DLASDQ.
 *
-               CALL AB_DLASET( 'A', NSIZE, NSIZE, ZERO, ONE,
+               CALL DLASET( 'A', NSIZE, NSIZE, ZERO, ONE,
      $                      WORK( VT+ST1 ), N )
-               CALL AB_DLASDQ( 'U', 0, NSIZE, NSIZE, 0, NRHS, D( ST ),
+               CALL DLASDQ( 'U', 0, NSIZE, NSIZE, 0, NRHS, D( ST ),
      $                      E( ST ), WORK( VT+ST1 ), N, WORK( NWORK ),
      $                      N, B( ST, 1 ), LDB, WORK( NWORK ), INFO )
                IF( INFO.NE.0 ) THEN
                   RETURN
                END IF
-               CALL AB_DLACPY( 'A', NSIZE, NRHS, B( ST, 1 ), LDB,
+               CALL DLACPY( 'A', NSIZE, NRHS, B( ST, 1 ), LDB,
      $                      WORK( BX+ST1 ), N )
             ELSE
 *
 *              A large problem. Solve it using divide and conquer.
 *
-               CALL AB_DLASDA( ICMPQ1, SMLSIZ, NSIZE, SQRE, D( ST ),
+               CALL DLASDA( ICMPQ1, SMLSIZ, NSIZE, SQRE, D( ST ),
      $                      E( ST ), WORK( U+ST1 ), N, WORK( VT+ST1 ),
      $                      IWORK( K+ST1 ), WORK( DIFL+ST1 ),
      $                      WORK( DIFR+ST1 ), WORK( Z+ST1 ),
@@ -452,7 +444,7 @@
                   RETURN
                END IF
                BXST = BX + ST1
-               CALL AB_DLALSA( ICMPQ2, SMLSIZ, NSIZE, NRHS, B( ST, 1 ),
+               CALL DLALSA( ICMPQ2, SMLSIZ, NSIZE, NRHS, B( ST, 1 ),
      $                      LDB, WORK( BXST ), N, WORK( U+ST1 ), N,
      $                      WORK( VT+ST1 ), IWORK( K+ST1 ),
      $                      WORK( DIFL+ST1 ), WORK( DIFR+ST1 ),
@@ -471,7 +463,7 @@
 *
 *     Apply the singular values and treat the tiny ones as zero.
 *
-      TOL = RCND*ABS( D( AB_IDAMAX( N, D, 1 ) ) )
+      TOL = RCND*ABS( D( IDAMAX( N, D, 1 ) ) )
 *
       DO 70 I = 1, N
 *
@@ -479,11 +471,10 @@
 *        subproblems were not solved explicitly.
 *
          IF( ABS( D( I ) ).LE.TOL ) THEN
-            CALL AB_DLASET( 'A', 1, NRHS, ZERO, ZERO, WORK( BX+I-1 ), N 
-     $)
+            CALL DLASET( 'A', 1, NRHS, ZERO, ZERO, WORK( BX+I-1 ), N )
          ELSE
             RANK = RANK + 1
-            CALL AB_DLASCL( 'G', 0, 0, D( I ), ONE, 1, NRHS,
+            CALL DLASCL( 'G', 0, 0, D( I ), ONE, 1, NRHS,
      $                   WORK( BX+I-1 ), N, INFO )
          END IF
          D( I ) = ABS( D( I ) )
@@ -498,14 +489,13 @@
          NSIZE = IWORK( SIZEI+I-1 )
          BXST = BX + ST1
          IF( NSIZE.EQ.1 ) THEN
-            CALL AB_DCOPY( NRHS, WORK( BXST ), N, B( ST, 1 ), LDB )
+            CALL DCOPY( NRHS, WORK( BXST ), N, B( ST, 1 ), LDB )
          ELSE IF( NSIZE.LE.SMLSIZ ) THEN
-            CALL AB_DGEMM( 'T', 'N', NSIZE, NRHS, NSIZE, ONE,
+            CALL DGEMM( 'T', 'N', NSIZE, NRHS, NSIZE, ONE,
      $                  WORK( VT+ST1 ), N, WORK( BXST ), N, ZERO,
      $                  B( ST, 1 ), LDB )
          ELSE
-            CALL AB_DLALSA( ICMPQ2, SMLSIZ, NSIZE, NRHS, WORK( BXST ), N
-     $,
+            CALL DLALSA( ICMPQ2, SMLSIZ, NSIZE, NRHS, WORK( BXST ), N,
      $                   B( ST, 1 ), LDB, WORK( U+ST1 ), N,
      $                   WORK( VT+ST1 ), IWORK( K+ST1 ),
      $                   WORK( DIFL+ST1 ), WORK( DIFR+ST1 ),
@@ -522,12 +512,12 @@
 *
 *     Unscale and sort the singular values.
 *
-      CALL AB_DLASCL( 'G', 0, 0, ONE, ORGNRM, N, 1, D, N, INFO )
-      CALL AB_AB_DLASRT( 'D', N, D, INFO )
-      CALL AB_DLASCL( 'G', 0, 0, ORGNRM, ONE, N, NRHS, B, LDB, INFO )
+      CALL DLASCL( 'G', 0, 0, ONE, ORGNRM, N, 1, D, N, INFO )
+      CALL DLASRT( 'D', N, D, INFO )
+      CALL DLASCL( 'G', 0, 0, ORGNRM, ONE, N, NRHS, B, LDB, INFO )
 *
       RETURN
 *
-*     End of AB_DLALSD
+*     End of DLALSD
 *
       END

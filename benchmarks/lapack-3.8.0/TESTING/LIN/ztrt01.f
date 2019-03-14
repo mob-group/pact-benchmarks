@@ -1,4 +1,4 @@
-*> \brief \b AB_ZTRT01
+*> \brief \b ZTRT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZTRT01( UPLO, DIAG, N, A, LDA, AINV, LDAINV, RCOND,
+*       SUBROUTINE ZTRT01( UPLO, DIAG, N, A, LDA, AINV, LDAINV, RCOND,
 *                          RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZTRT01 computes the residual for a triangular matrix A times its
+*> ZTRT01 computes the residual for a triangular matrix A times its
 *> inverse:
 *>    RESID = norm( A*AINV - I ) / ( N * norm(A) * norm(AINV) * EPS ),
 *> where EPS is the machine epsilon.
@@ -122,7 +122,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZTRT01( UPLO, DIAG, N, A, LDA, AINV, LDAINV, RCOND,
+      SUBROUTINE ZTRT01( UPLO, DIAG, N, A, LDA, AINV, LDAINV, RCOND,
      $                   RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -151,12 +151,12 @@
       DOUBLE PRECISION   AINVNM, ANORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANTR
-      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_ZLANTR
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH, ZLANTR
+      EXTERNAL           LSAME, DLAMCH, ZLANTR
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZTRMV
+      EXTERNAL           ZTRMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE
@@ -173,9 +173,9 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0 or AINVNM = 0.
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
-      ANORM = AB_ZLANTR( '1', UPLO, DIAG, N, N, A, LDA, RWORK )
-      AINVNM = AB_ZLANTR( '1', UPLO, DIAG, N, N, AINV, LDAINV, RWORK )
+      EPS = DLAMCH( 'Epsilon' )
+      ANORM = ZLANTR( '1', UPLO, DIAG, N, N, A, LDA, RWORK )
+      AINVNM = ZLANTR( '1', UPLO, DIAG, N, N, AINV, LDAINV, RWORK )
       IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
          RCOND = ZERO
          RESID = ONE / EPS
@@ -185,7 +185,7 @@
 *
 *     Set the diagonal of AINV to 1 if AINV has unit diagonal.
 *
-      IF( AB_LSAME( DIAG, 'U' ) ) THEN
+      IF( LSAME( DIAG, 'U' ) ) THEN
          DO 10 J = 1, N
             AINV( J, J ) = ONE
    10    CONTINUE
@@ -193,15 +193,14 @@
 *
 *     Compute A * AINV, overwriting AINV.
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
          DO 20 J = 1, N
-            CALL AB_ZTRMV( 'Upper', 'No transpose', DIAG, J, A, LDA,
+            CALL ZTRMV( 'Upper', 'No transpose', DIAG, J, A, LDA,
      $                  AINV( 1, J ), 1 )
    20    CONTINUE
       ELSE
          DO 30 J = 1, N
-            CALL AB_ZTRMV( 'Lower', 'No transpose', DIAG, N-J+1, A( J, J
-     $ ),
+            CALL ZTRMV( 'Lower', 'No transpose', DIAG, N-J+1, A( J, J ),
      $                  LDA, AINV( J, J ), 1 )
    30    CONTINUE
       END IF
@@ -214,13 +213,12 @@
 *
 *     Compute norm(A*AINV - I) / (N * norm(A) * norm(AINV) * EPS)
 *
-      RESID = AB_ZLANTR( '1', UPLO, 'Non-unit', N, N, AINV, LDAINV, RWOR
-     $K )
+      RESID = ZLANTR( '1', UPLO, 'Non-unit', N, N, AINV, LDAINV, RWORK )
 *
       RESID = ( ( RESID*RCOND ) / DBLE( N ) ) / EPS
 *
       RETURN
 *
-*     End of AB_ZTRT01
+*     End of ZTRT01
 *
       END

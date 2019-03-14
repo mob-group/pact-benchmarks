@@ -1,4 +1,4 @@
-*> \brief \b AB_LSAMETST
+*> \brief \b LSAMETST
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*      PROGRAM AB_LSAMETST
+*      PROGRAM LSAMETST
 *
 *  Authors:
 *  ========
@@ -22,7 +22,7 @@
 *
 *> \ingroup auxOTHERauxiliary
 *
-*  =====================================================================      PROGRAM AB_LSAMETST
+*  =====================================================================      PROGRAM LSAMETST
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *
@@ -36,8 +36,8 @@
       INTEGER            I1, I2
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ICHAR
@@ -55,35 +55,34 @@
          WRITE( *, * ) ' Non-ASCII character set, IOFF should be ',I2-I1
       END IF
 *
-*     Test AB_LSAME.
+*     Test LSAME.
 *
-      IF( .NOT. AB_LSAME( 'A', 'A' ) )
+      IF( .NOT. LSAME( 'A', 'A' ) )
      $   WRITE( *, 9999 )'A', 'A'
-      IF( .NOT. AB_LSAME( 'A', 'a' ) )
+      IF( .NOT. LSAME( 'A', 'a' ) )
      $   WRITE( *, 9999 )'A', 'a'
-      IF( .NOT. AB_LSAME( 'a', 'A' ) )
+      IF( .NOT. LSAME( 'a', 'A' ) )
      $   WRITE( *, 9999 )'a', 'A'
-      IF( .NOT. AB_LSAME( 'a', 'a' ) )
+      IF( .NOT. LSAME( 'a', 'a' ) )
      $   WRITE( *, 9999 )'a', 'a'
-      IF( AB_LSAME( 'A', 'B' ) )
+      IF( LSAME( 'A', 'B' ) )
      $   WRITE( *, 9998 )'A', 'B'
-      IF( AB_LSAME( 'A', 'b' ) )
+      IF( LSAME( 'A', 'b' ) )
      $   WRITE( *, 9998 )'A', 'b'
-      IF( AB_LSAME( 'a', 'B' ) )
+      IF( LSAME( 'a', 'B' ) )
      $   WRITE( *, 9998 )'a', 'B'
-      IF( AB_LSAME( 'a', 'b' ) )
+      IF( LSAME( 'a', 'b' ) )
      $   WRITE( *, 9998 )'a', 'b'
-      IF( AB_LSAME( 'O', '/' ) )
+      IF( LSAME( 'O', '/' ) )
      $   WRITE( *, 9998 )'O', '/'
-      IF( AB_LSAME( '/', 'O' ) )
+      IF( LSAME( '/', 'O' ) )
      $   WRITE( *, 9998 )'/', 'O'
-      IF( AB_LSAME( 'o', '/' ) )
+      IF( LSAME( 'o', '/' ) )
      $   WRITE( *, 9998 )'o', '/'
-      IF( AB_LSAME( '/', 'o' ) )
+      IF( LSAME( '/', 'o' ) )
      $   WRITE( *, 9998 )'/', 'o'
       WRITE( *, * )' Tests completed'
 *
- 9999 FORMAT( ' *** Error:  AB_LSAME( ', A1, ', ', A1, ') is .FALSE.'
-     $ )
- 9998 FORMAT( ' *** Error:  AB_LSAME( ', A1, ', ', A1, ') is .TRUE.' )
+ 9999 FORMAT( ' *** Error:  LSAME( ', A1, ', ', A1, ') is .FALSE.' )
+ 9998 FORMAT( ' *** Error:  LSAME( ', A1, ', ', A1, ') is .TRUE.' )
       END

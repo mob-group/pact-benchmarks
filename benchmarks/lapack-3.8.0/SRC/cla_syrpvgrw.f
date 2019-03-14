@@ -1,4 +1,4 @@
-*> \brief \b AB_CLA_SYRPVGRW computes the reciprocal pivot growth factor norm(A)/norm(U) for a symmetric indefinite matrix.
+*> \brief \b CLA_SYRPVGRW computes the reciprocal pivot growth factor norm(A)/norm(U) for a symmetric indefinite matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CLA_SYRPVGRW + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLA_SYRPVGRW.f">
+*> Download CLA_SYRPVGRW + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cla_syrpvgrw.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLA_SYRPVGRW.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cla_syrpvgrw.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLA_SYRPVGRW.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cla_syrpvgrw.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       REAL FUNCTION AB_CLA_SYRPVGRW( UPLO, N, INFO, A, LDA, AF, LDAF, IPIV,
+*       REAL FUNCTION CLA_SYRPVGRW( UPLO, N, INFO, A, LDA, AF, LDAF, IPIV,
 *                                   WORK )
 *
 *       .. Scalar Arguments ..
@@ -38,7 +38,7 @@
 *> \verbatim
 *>
 *>
-*> AB_CLA_SYRPVGRW computes the reciprocal pivot growth factor
+*> CLA_SYRPVGRW computes the reciprocal pivot growth factor
 *> norm(A)/norm(U). The "max absolute element" norm is used. If this is
 *> much less than 1, the stability of the LU factorization of the
 *> (equilibrated) matrix A could be poor. This also means that the
@@ -66,7 +66,7 @@
 *> \param[in] INFO
 *> \verbatim
 *>          INFO is INTEGER
-*>     The value of INFO returned from AB_CSYTRF, .i.e., the pivot in
+*>     The value of INFO returned from CSYTRF, .i.e., the pivot in
 *>     column INFO is exactly 0.
 *> \endverbatim
 *>
@@ -86,7 +86,7 @@
 *> \verbatim
 *>          AF is COMPLEX array, dimension (LDAF,N)
 *>     The block diagonal matrix D and the multipliers used to
-*>     obtain the factor U or L as computed by AB_CSYTRF.
+*>     obtain the factor U or L as computed by CSYTRF.
 *> \endverbatim
 *>
 *> \param[in] LDAF
@@ -99,7 +99,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>     Details of the interchanges and the block structure of D
-*>     as determined by AB_CSYTRF.
+*>     as determined by CSYTRF.
 *> \endverbatim
 *>
 *> \param[in] WORK
@@ -120,8 +120,7 @@
 *> \ingroup complexSYcomputational
 *
 *  =====================================================================
-      REAL FUNCTION AB_CLA_SYRPVGRW( UPLO, N, INFO, A, LDA, AF, LDAF, IP
-     $IV,
+      REAL FUNCTION CLA_SYRPVGRW( UPLO, N, INFO, A, LDA, AF, LDAF, IPIV,
      $                            WORK )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -151,8 +150,8 @@
       INTRINSIC          ABS, REAL, AIMAG, MAX, MIN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_LSAME
-      LOGICAL            AB_LSAME
+      EXTERNAL           LSAME
+      LOGICAL            LSAME
 *     ..
 *     .. Statement Functions ..
       REAL               CABS1
@@ -162,7 +161,7 @@
 *     ..
 *     .. Executable Statements ..
 *
-      UPPER = AB_LSAME( 'Upper', UPLO )
+      UPPER = LSAME( 'Upper', UPLO )
       IF ( INFO.EQ.0 ) THEN
          IF ( UPPER ) THEN
             NCOLS = 1
@@ -202,8 +201,8 @@
 *     permute the magnitudes of A above so they're in the same order as
 *     the factor.
 *
-*     The iteration orders and permutations were copied from AB_CSYTRS.
-*     Calls to AB_SSWAP would be severe overkill.
+*     The iteration orders and permutations were copied from csytrs.
+*     Calls to SSWAP would be severe overkill.
 *
       IF ( UPPER ) THEN
          K = N
@@ -328,5 +327,5 @@
          END DO
       END IF
 
-      AB_CLA_SYRPVGRW = RPVGRW
+      CLA_SYRPVGRW = RPVGRW
       END

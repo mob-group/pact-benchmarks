@@ -1,4 +1,4 @@
-*> \brief \b AB_ZGET36
+*> \brief \b ZGET36
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZGET36( RMAX, LMAX, NINFO, KNT, NIN )
+*       SUBROUTINE ZGET36( RMAX, LMAX, NINFO, KNT, NIN )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            KNT, LMAX, NIN, NINFO
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZGET36 tests AB_ZTREXC, a routine for reordering diagonal entries of a
+*> ZGET36 tests ZTREXC, a routine for reordering diagonal entries of a
 *> matrix in complex Schur form. Thus, ZLAEXC computes a unitary matrix
 *> Q such that
 *>
@@ -83,7 +83,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_ZGET36( RMAX, LMAX, NINFO, KNT, NIN )
+      SUBROUTINE ZGET36( RMAX, LMAX, NINFO, KNT, NIN )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -117,16 +117,15 @@
      $                   T2( LDT, LDT ), TMP( LDT, LDT ), WORK( LWORK )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH
-      EXTERNAL           AB_DLAMCH
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZCOPY, AB_ZHST01, AB_ZLACPY, AB_ZLASET, AB_Z
-     $TREXC
+      EXTERNAL           ZCOPY, ZHST01, ZLACPY, ZLASET, ZTREXC
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = AB_DLAMCH( 'P' )
+      EPS = DLAMCH( 'P' )
       RMAX = ZERO
       LMAX = 0
       KNT = 0
@@ -142,14 +141,14 @@
       DO 20 I = 1, N
          READ( NIN, FMT = * )( TMP( I, J ), J = 1, N )
    20 CONTINUE
-      CALL AB_ZLACPY( 'F', N, N, TMP, LDT, T1, LDT )
-      CALL AB_ZLACPY( 'F', N, N, TMP, LDT, T2, LDT )
+      CALL ZLACPY( 'F', N, N, TMP, LDT, T1, LDT )
+      CALL ZLACPY( 'F', N, N, TMP, LDT, T2, LDT )
       RES = ZERO
 *
 *     Test without accumulating Q
 *
-      CALL AB_ZLASET( 'Full', N, N, CZERO, CONE, Q, LDT )
-      CALL AB_ZTREXC( 'N', N, T1, LDT, Q, LDT, IFST, ILST, INFO1 )
+      CALL ZLASET( 'Full', N, N, CZERO, CONE, Q, LDT )
+      CALL ZTREXC( 'N', N, T1, LDT, Q, LDT, IFST, ILST, INFO1 )
       DO 40 I = 1, N
          DO 30 J = 1, N
             IF( I.EQ.J .AND. Q( I, J ).NE.CONE )
@@ -161,8 +160,8 @@
 *
 *     Test with accumulating Q
 *
-      CALL AB_ZLASET( 'Full', N, N, CZERO, CONE, Q, LDT )
-      CALL AB_ZTREXC( 'V', N, T2, LDT, Q, LDT, IFST, ILST, INFO2 )
+      CALL ZLASET( 'Full', N, N, CZERO, CONE, Q, LDT )
+      CALL ZTREXC( 'V', N, T2, LDT, Q, LDT, IFST, ILST, INFO2 )
 *
 *     Compare T1 with T2
 *
@@ -179,7 +178,7 @@
 *
 *     Test for successful reordering of T2
 *
-      CALL AB_ZCOPY( N, TMP, LDT+1, DIAG, 1 )
+      CALL ZCOPY( N, TMP, LDT+1, DIAG, 1 )
       IF( IFST.LT.ILST ) THEN
          DO 70 I = IFST + 1, ILST
             CTEMP = DIAG( I )
@@ -200,7 +199,7 @@
 *
 *     Test for small residual, and orthogonality of Q
 *
-      CALL AB_ZHST01( N, 1, N, TMP, LDT, T2, LDT, Q, LDT, WORK, LWORK,
+      CALL ZHST01( N, 1, N, TMP, LDT, T2, LDT, Q, LDT, WORK, LWORK,
      $             RWORK, RESULT )
       RES = RES + RESULT( 1 ) + RESULT( 2 )
 *
@@ -218,6 +217,6 @@
       END IF
       GO TO 10
 *
-*     End of AB_ZGET36
+*     End of ZGET36
 *
       END

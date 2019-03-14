@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLATTR
+*> \brief \b ZLATTR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZLATTR( IMAT, UPLO, TRANS, DIAG, ISEED, N, A, LDA, B,
+*       SUBROUTINE ZLATTR( IMAT, UPLO, TRANS, DIAG, ISEED, N, A, LDA, B,
 *                          WORK, RWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZLATTR generates a triangular test matrix in 2-dimensional storage.
+*> ZLATTR generates a triangular test matrix in 2-dimensional storage.
 *> IMAT and UPLO uniquely specify the properties of the test matrix,
 *> which is returned in the array A.
 *> \endverbatim
@@ -72,7 +72,7 @@
 *> \verbatim
 *>          ISEED is INTEGER array, dimension (4)
 *>          The seed vector for the random number generator (used in
-*>          AB_ZLATMS).  Modified on exit.
+*>          ZLATMS).  Modified on exit.
 *> \endverbatim
 *>
 *> \param[in] N
@@ -135,8 +135,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZLATTR( IMAT, UPLO, TRANS, DIAG, ISEED, N, A, LDA, B
-     $,
+      SUBROUTINE ZLATTR( IMAT, UPLO, TRANS, DIAG, ISEED, N, A, LDA, B,
      $                   WORK, RWORK, INFO )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -171,17 +170,15 @@
       COMPLEX*16         PLUS1, PLUS2, RA, RB, S, STAR1
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_IZAMAX
-      DOUBLE PRECISION   AB_DLAMCH, AB_DLARND
-      COMPLEX*16         AB_ZLARND
-      EXTERNAL           AB_LSAME, AB_IZAMAX, AB_DLAMCH, AB_DLARND, AB_Z
-     $LARND
+      LOGICAL            LSAME
+      INTEGER            IZAMAX
+      DOUBLE PRECISION   DLAMCH, DLARND
+      COMPLEX*16         ZLARND
+      EXTERNAL           LSAME, IZAMAX, DLAMCH, DLARND, ZLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLABAD, AB_DLARNV, AB_ZCOPY, ZAB_DSCAL, AB_Z
-     $LARNV, AB_ZLATB4,
-     $                   AB_ZLATMS, AB_ZROT, AB_AB_ZROTG, AB_ZSWAP
+      EXTERNAL           DLABAD, DLARNV, ZCOPY, ZDSCAL, ZLARNV, ZLATB4,
+     $                   ZLATMS, ZROT, ZROTG, ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCMPLX, DCONJG, MAX, SQRT
@@ -190,11 +187,11 @@
 *
       PATH( 1: 1 ) = 'Zomplex precision'
       PATH( 2: 3 ) = 'TR'
-      UNFL = AB_DLAMCH( 'Safe minimum' )
-      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
+      UNFL = DLAMCH( 'Safe minimum' )
+      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
       SMLNUM = UNFL
       BIGNUM = ( ONE-ULP ) / SMLNUM
-      CALL AB_DLABAD( SMLNUM, BIGNUM )
+      CALL DLABAD( SMLNUM, BIGNUM )
       IF( ( IMAT.GE.7 .AND. IMAT.LE.10 ) .OR. IMAT.EQ.18 ) THEN
          DIAG = 'U'
       ELSE
@@ -207,21 +204,21 @@
       IF( N.LE.0 )
      $   RETURN
 *
-*     Call AB_ZLATB4 to set parameters for AB_CLATMS.
+*     Call ZLATB4 to set parameters for CLATMS.
 *
-      UPPER = AB_LSAME( UPLO, 'U' )
+      UPPER = LSAME( UPLO, 'U' )
       IF( UPPER ) THEN
-         CALL AB_ZLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
+         CALL ZLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
      $                CNDNUM, DIST )
       ELSE
-         CALL AB_ZLATB4( PATH, -IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
+         CALL ZLATB4( PATH, -IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
      $                CNDNUM, DIST )
       END IF
 *
 *     IMAT <= 6:  Non-unit triangular matrix
 *
       IF( IMAT.LE.6 ) THEN
-         CALL AB_ZLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE, CNDNUM,
+         CALL ZLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE, CNDNUM,
      $                ANORM, KL, KU, 'No packing', A, LDA, WORK, INFO )
 *
 *     IMAT > 6:  Unit triangular matrix
@@ -327,9 +324,9 @@
 *
 *        where c = w / sqrt(w**2+4) and s = 2 / sqrt(w**2+4).
 *
-         STAR1 = 0.25D0*AB_ZLARND( 5, ISEED )
+         STAR1 = 0.25D0*ZLARND( 5, ISEED )
          SFAC = 0.5D0
-         PLUS1 = SFAC*AB_ZLARND( 5, ISEED )
+         PLUS1 = SFAC*ZLARND( 5, ISEED )
          DO 90 J = 1, N, 2
             PLUS2 = STAR1 / PLUS1
             WORK( J ) = PLUS1
@@ -338,11 +335,11 @@
                WORK( J+1 ) = PLUS2
                WORK( N+J+1 ) = ZERO
                PLUS1 = STAR1 / PLUS2
-               REXP = AB_DLARND( 2, ISEED )
+               REXP = DLARND( 2, ISEED )
                IF( REXP.LT.ZERO ) THEN
-                  STAR1 = -SFAC**( ONE-REXP )*AB_ZLARND( 5, ISEED )
+                  STAR1 = -SFAC**( ONE-REXP )*ZLARND( 5, ISEED )
                ELSE
-                  STAR1 = SFAC**( ONE+REXP )*AB_ZLARND( 5, ISEED )
+                  STAR1 = SFAC**( ONE+REXP )*ZLARND( 5, ISEED )
                END IF
             END IF
    90    CONTINUE
@@ -357,9 +354,9 @@
 *
          IF( UPPER ) THEN
             IF( N.GT.3 ) THEN
-               CALL AB_ZCOPY( N-3, WORK, 1, A( 2, 3 ), LDA+1 )
+               CALL ZCOPY( N-3, WORK, 1, A( 2, 3 ), LDA+1 )
                IF( N.GT.4 )
-     $            CALL AB_ZCOPY( N-4, WORK( N+1 ), 1, A( 2, 4 ), LDA+1 )
+     $            CALL ZCOPY( N-4, WORK( N+1 ), 1, A( 2, 4 ), LDA+1 )
             END IF
             DO 100 J = 2, N - 1
                A( 1, J ) = Y
@@ -368,9 +365,9 @@
             A( 1, N ) = Z
          ELSE
             IF( N.GT.3 ) THEN
-               CALL AB_ZCOPY( N-3, WORK, 1, A( 3, 2 ), LDA+1 )
+               CALL ZCOPY( N-3, WORK, 1, A( 3, 2 ), LDA+1 )
                IF( N.GT.4 )
-     $            CALL AB_ZCOPY( N-4, WORK( N+1 ), 1, A( 4, 2 ), LDA+1 )
+     $            CALL ZCOPY( N-4, WORK( N+1 ), 1, A( 4, 2 ), LDA+1 )
             END IF
             DO 110 J = 2, N - 1
                A( J, 1 ) = Y
@@ -385,19 +382,18 @@
             DO 120 J = 1, N - 1
                RA = A( J, J+1 )
                RB = 2.0D0
-               CALL AB_AB_ZROTG( RA, RB, C, S )
+               CALL ZROTG( RA, RB, C, S )
 *
 *              Multiply by [ c  s; -conjg(s)  c] on the left.
 *
                IF( N.GT.J+1 )
-     $            CALL AB_ZROT( N-J-1, A( J, J+2 ), LDA, A( J+1, J+2 ),
+     $            CALL ZROT( N-J-1, A( J, J+2 ), LDA, A( J+1, J+2 ),
      $                       LDA, C, S )
 *
 *              Multiply by [-c -s;  conjg(s) -c] on the right.
 *
                IF( J.GT.1 )
-     $            CALL AB_ZROT( J-1, A( 1, J+1 ), 1, A( 1, J ), 1, -C, -
-     $S )
+     $            CALL ZROT( J-1, A( 1, J+1 ), 1, A( 1, J ), 1, -C, -S )
 *
 *              Negate A(J,J+1).
 *
@@ -407,21 +403,19 @@
             DO 130 J = 1, N - 1
                RA = A( J+1, J )
                RB = 2.0D0
-               CALL AB_AB_ZROTG( RA, RB, C, S )
+               CALL ZROTG( RA, RB, C, S )
                S = DCONJG( S )
 *
 *              Multiply by [ c -s;  conjg(s) c] on the right.
 *
                IF( N.GT.J+1 )
-     $            CALL AB_ZROT( N-J-1, A( J+2, J+1 ), 1, A( J+2, J ), 1,
-     $ C,
+     $            CALL ZROT( N-J-1, A( J+2, J+1 ), 1, A( J+2, J ), 1, C,
      $                       -S )
 *
 *              Multiply by [-c  s; -conjg(s) -c] on the left.
 *
                IF( J.GT.1 )
-     $            CALL AB_ZROT( J-1, A( J, 1 ), LDA, A( J+1, 1 ), LDA, -
-     $C,
+     $            CALL ZROT( J-1, A( J, 1 ), LDA, A( J+1, 1 ), LDA, -C,
      $                       S )
 *
 *              Negate A(J+1,J).
@@ -442,24 +436,24 @@
 *
          IF( UPPER ) THEN
             DO 140 J = 1, N
-               CALL AB_ZLARNV( 4, ISEED, J-1, A( 1, J ) )
-               A( J, J ) = AB_ZLARND( 5, ISEED )*TWO
+               CALL ZLARNV( 4, ISEED, J-1, A( 1, J ) )
+               A( J, J ) = ZLARND( 5, ISEED )*TWO
   140       CONTINUE
          ELSE
             DO 150 J = 1, N
                IF( J.LT.N )
-     $            CALL AB_ZLARNV( 4, ISEED, N-J, A( J+1, J ) )
-               A( J, J ) = AB_ZLARND( 5, ISEED )*TWO
+     $            CALL ZLARNV( 4, ISEED, N-J, A( J+1, J ) )
+               A( J, J ) = ZLARND( 5, ISEED )*TWO
   150       CONTINUE
          END IF
 *
 *        Set the right hand side so that the largest value is BIGNUM.
 *
-         CALL AB_ZLARNV( 2, ISEED, N, B )
-         IY = AB_IZAMAX( N, B, 1 )
+         CALL ZLARNV( 2, ISEED, N, B )
+         IY = IZAMAX( N, B, 1 )
          BNORM = ABS( B( IY ) )
          BSCAL = BIGNUM / MAX( ONE, BNORM )
-         CALL ZAB_DSCAL( N, BSCAL, B, 1 )
+         CALL ZDSCAL( N, BSCAL, B, 1 )
 *
       ELSE IF( IMAT.EQ.12 ) THEN
 *
@@ -467,22 +461,22 @@
 *        cause immediate overflow when dividing by T(j,j).
 *        In type 12, the offdiagonal elements are small (CNORM(j) < 1).
 *
-         CALL AB_ZLARNV( 2, ISEED, N, B )
+         CALL ZLARNV( 2, ISEED, N, B )
          TSCAL = ONE / MAX( ONE, DBLE( N-1 ) )
          IF( UPPER ) THEN
             DO 160 J = 1, N
-               CALL AB_ZLARNV( 4, ISEED, J-1, A( 1, J ) )
-               CALL ZAB_DSCAL( J-1, TSCAL, A( 1, J ), 1 )
-               A( J, J ) = AB_ZLARND( 5, ISEED )
+               CALL ZLARNV( 4, ISEED, J-1, A( 1, J ) )
+               CALL ZDSCAL( J-1, TSCAL, A( 1, J ), 1 )
+               A( J, J ) = ZLARND( 5, ISEED )
   160       CONTINUE
             A( N, N ) = SMLNUM*A( N, N )
          ELSE
             DO 170 J = 1, N
                IF( J.LT.N ) THEN
-                  CALL AB_ZLARNV( 4, ISEED, N-J, A( J+1, J ) )
-                  CALL ZAB_DSCAL( N-J, TSCAL, A( J+1, J ), 1 )
+                  CALL ZLARNV( 4, ISEED, N-J, A( J+1, J ) )
+                  CALL ZDSCAL( N-J, TSCAL, A( J+1, J ), 1 )
                END IF
-               A( J, J ) = AB_ZLARND( 5, ISEED )
+               A( J, J ) = ZLARND( 5, ISEED )
   170       CONTINUE
             A( 1, 1 ) = SMLNUM*A( 1, 1 )
          END IF
@@ -493,18 +487,18 @@
 *        cause immediate overflow when dividing by T(j,j).
 *        In type 13, the offdiagonal elements are O(1) (CNORM(j) > 1).
 *
-         CALL AB_ZLARNV( 2, ISEED, N, B )
+         CALL ZLARNV( 2, ISEED, N, B )
          IF( UPPER ) THEN
             DO 180 J = 1, N
-               CALL AB_ZLARNV( 4, ISEED, J-1, A( 1, J ) )
-               A( J, J ) = AB_ZLARND( 5, ISEED )
+               CALL ZLARNV( 4, ISEED, J-1, A( 1, J ) )
+               A( J, J ) = ZLARND( 5, ISEED )
   180       CONTINUE
             A( N, N ) = SMLNUM*A( N, N )
          ELSE
             DO 190 J = 1, N
                IF( J.LT.N )
-     $            CALL AB_ZLARNV( 4, ISEED, N-J, A( J+1, J ) )
-               A( J, J ) = AB_ZLARND( 5, ISEED )
+     $            CALL ZLARNV( 4, ISEED, N-J, A( J+1, J ) )
+               A( J, J ) = ZLARND( 5, ISEED )
   190       CONTINUE
             A( 1, 1 ) = SMLNUM*A( 1, 1 )
          END IF
@@ -522,9 +516,9 @@
                   A( I, J ) = ZERO
   200          CONTINUE
                IF( JCOUNT.LE.2 ) THEN
-                  A( J, J ) = SMLNUM*AB_ZLARND( 5, ISEED )
+                  A( J, J ) = SMLNUM*ZLARND( 5, ISEED )
                ELSE
-                  A( J, J ) = AB_ZLARND( 5, ISEED )
+                  A( J, J ) = ZLARND( 5, ISEED )
                END IF
                JCOUNT = JCOUNT + 1
                IF( JCOUNT.GT.4 )
@@ -537,9 +531,9 @@
                   A( I, J ) = ZERO
   220          CONTINUE
                IF( JCOUNT.LE.2 ) THEN
-                  A( J, J ) = SMLNUM*AB_ZLARND( 5, ISEED )
+                  A( J, J ) = SMLNUM*ZLARND( 5, ISEED )
                ELSE
-                  A( J, J ) = AB_ZLARND( 5, ISEED )
+                  A( J, J ) = ZLARND( 5, ISEED )
                END IF
                JCOUNT = JCOUNT + 1
                IF( JCOUNT.GT.4 )
@@ -553,13 +547,13 @@
             B( 1 ) = ZERO
             DO 240 I = N, 2, -2
                B( I ) = ZERO
-               B( I-1 ) = SMLNUM*AB_ZLARND( 5, ISEED )
+               B( I-1 ) = SMLNUM*ZLARND( 5, ISEED )
   240       CONTINUE
          ELSE
             B( N ) = ZERO
             DO 250 I = 1, N - 1, 2
                B( I ) = ZERO
-               B( I+1 ) = SMLNUM*AB_ZLARND( 5, ISEED )
+               B( I+1 ) = SMLNUM*ZLARND( 5, ISEED )
   250       CONTINUE
          END IF
 *
@@ -571,7 +565,7 @@
 *
          TEXP = ONE / MAX( ONE, DBLE( N-1 ) )
          TSCAL = SMLNUM**TEXP
-         CALL AB_ZLARNV( 4, ISEED, N, B )
+         CALL ZLARNV( 4, ISEED, N, B )
          IF( UPPER ) THEN
             DO 270 J = 1, N
                DO 260 I = 1, J - 2
@@ -579,7 +573,7 @@
   260          CONTINUE
                IF( J.GT.1 )
      $            A( J-1, J ) = DCMPLX( -ONE, -ONE )
-               A( J, J ) = TSCAL*AB_ZLARND( 5, ISEED )
+               A( J, J ) = TSCAL*ZLARND( 5, ISEED )
   270       CONTINUE
             B( N ) = DCMPLX( ONE, ONE )
          ELSE
@@ -589,7 +583,7 @@
   280          CONTINUE
                IF( J.LT.N )
      $            A( J+1, J ) = DCMPLX( -ONE, -ONE )
-               A( J, J ) = TSCAL*AB_ZLARND( 5, ISEED )
+               A( J, J ) = TSCAL*ZLARND( 5, ISEED )
   290       CONTINUE
             B( 1 ) = DCMPLX( ONE, ONE )
          END IF
@@ -601,9 +595,9 @@
          IY = N / 2 + 1
          IF( UPPER ) THEN
             DO 300 J = 1, N
-               CALL AB_ZLARNV( 4, ISEED, J-1, A( 1, J ) )
+               CALL ZLARNV( 4, ISEED, J-1, A( 1, J ) )
                IF( J.NE.IY ) THEN
-                  A( J, J ) = AB_ZLARND( 5, ISEED )*TWO
+                  A( J, J ) = ZLARND( 5, ISEED )*TWO
                ELSE
                   A( J, J ) = ZERO
                END IF
@@ -611,16 +605,16 @@
          ELSE
             DO 310 J = 1, N
                IF( J.LT.N )
-     $            CALL AB_ZLARNV( 4, ISEED, N-J, A( J+1, J ) )
+     $            CALL ZLARNV( 4, ISEED, N-J, A( J+1, J ) )
                IF( J.NE.IY ) THEN
-                  A( J, J ) = AB_ZLARND( 5, ISEED )*TWO
+                  A( J, J ) = ZLARND( 5, ISEED )*TWO
                ELSE
                   A( J, J ) = ZERO
                END IF
   310       CONTINUE
          END IF
-         CALL AB_ZLARNV( 2, ISEED, N, B )
-         CALL ZAB_DSCAL( N, TWO, B, 1 )
+         CALL ZLARNV( 2, ISEED, N, B )
+         CALL ZDSCAL( N, TWO, B, 1 )
 *
       ELSE IF( IMAT.EQ.17 ) THEN
 *
@@ -669,66 +663,66 @@
 *
          IF( UPPER ) THEN
             DO 360 J = 1, N
-               CALL AB_ZLARNV( 4, ISEED, J-1, A( 1, J ) )
+               CALL ZLARNV( 4, ISEED, J-1, A( 1, J ) )
                A( J, J ) = ZERO
   360       CONTINUE
          ELSE
             DO 370 J = 1, N
                IF( J.LT.N )
-     $            CALL AB_ZLARNV( 4, ISEED, N-J, A( J+1, J ) )
+     $            CALL ZLARNV( 4, ISEED, N-J, A( J+1, J ) )
                A( J, J ) = ZERO
   370       CONTINUE
          END IF
 *
 *        Set the right hand side so that the largest value is BIGNUM.
 *
-         CALL AB_ZLARNV( 2, ISEED, N, B )
-         IY = AB_IZAMAX( N, B, 1 )
+         CALL ZLARNV( 2, ISEED, N, B )
+         IY = IZAMAX( N, B, 1 )
          BNORM = ABS( B( IY ) )
          BSCAL = BIGNUM / MAX( ONE, BNORM )
-         CALL ZAB_DSCAL( N, BSCAL, B, 1 )
+         CALL ZDSCAL( N, BSCAL, B, 1 )
 *
       ELSE IF( IMAT.EQ.19 ) THEN
 *
 *        Type 19:  Generate a triangular matrix with elements between
 *        BIGNUM/(n-1) and BIGNUM so that at least one of the column
 *        norms will exceed BIGNUM.
-*        1/3/91:  AB_ZLATRS no longer can handle this case
+*        1/3/91:  ZLATRS no longer can handle this case
 *
          TLEFT = BIGNUM / MAX( ONE, DBLE( N-1 ) )
          TSCAL = BIGNUM*( DBLE( N-1 ) / MAX( ONE, DBLE( N ) ) )
          IF( UPPER ) THEN
             DO 390 J = 1, N
-               CALL AB_ZLARNV( 5, ISEED, J, A( 1, J ) )
-               CALL AB_DLARNV( 1, ISEED, J, RWORK )
+               CALL ZLARNV( 5, ISEED, J, A( 1, J ) )
+               CALL DLARNV( 1, ISEED, J, RWORK )
                DO 380 I = 1, J
                   A( I, J ) = A( I, J )*( TLEFT+RWORK( I )*TSCAL )
   380          CONTINUE
   390       CONTINUE
          ELSE
             DO 410 J = 1, N
-               CALL AB_ZLARNV( 5, ISEED, N-J+1, A( J, J ) )
-               CALL AB_DLARNV( 1, ISEED, N-J+1, RWORK )
+               CALL ZLARNV( 5, ISEED, N-J+1, A( J, J ) )
+               CALL DLARNV( 1, ISEED, N-J+1, RWORK )
                DO 400 I = J, N
                   A( I, J ) = A( I, J )*( TLEFT+RWORK( I-J+1 )*TSCAL )
   400          CONTINUE
   410       CONTINUE
          END IF
-         CALL AB_ZLARNV( 2, ISEED, N, B )
-         CALL ZAB_DSCAL( N, TWO, B, 1 )
+         CALL ZLARNV( 2, ISEED, N, B )
+         CALL ZDSCAL( N, TWO, B, 1 )
       END IF
 *
 *     Flip the matrix if the transpose will be used.
 *
-      IF( .NOT.AB_LSAME( TRANS, 'N' ) ) THEN
+      IF( .NOT.LSAME( TRANS, 'N' ) ) THEN
          IF( UPPER ) THEN
             DO 420 J = 1, N / 2
-               CALL AB_ZSWAP( N-2*J+1, A( J, J ), LDA, A( J+1, N-J+1 ),
+               CALL ZSWAP( N-2*J+1, A( J, J ), LDA, A( J+1, N-J+1 ),
      $                     -1 )
   420       CONTINUE
          ELSE
             DO 430 J = 1, N / 2
-               CALL AB_ZSWAP( N-2*J+1, A( J, J ), 1, A( N-J+1, J+1 ),
+               CALL ZSWAP( N-2*J+1, A( J, J ), 1, A( N-J+1, J+1 ),
      $                     -LDA )
   430       CONTINUE
          END IF
@@ -736,6 +730,6 @@
 *
       RETURN
 *
-*     End of AB_ZLATTR
+*     End of ZLATTR
 *
       END

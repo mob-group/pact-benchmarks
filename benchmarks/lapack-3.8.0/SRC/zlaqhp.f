@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLAQHP scales a Hermitian matrix stored in packed form.
+*> \brief \b ZLAQHP scales a Hermitian matrix stored in packed form.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZLAQHP + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLAQHP.f">
+*> Download ZLAQHP + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlaqhp.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLAQHP.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlaqhp.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLAQHP.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlaqhp.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZLAQHP( UPLO, N, AP, S, SCOND, AMAX, EQUED )
+*       SUBROUTINE ZLAQHP( UPLO, N, AP, S, SCOND, AMAX, EQUED )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          EQUED, UPLO
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZLAQHP equilibrates a Hermitian matrix A using the scaling factors
+*> ZLAQHP equilibrates a Hermitian matrix A using the scaling factors
 *> in the vector S.
 *> \endverbatim
 *
@@ -124,7 +124,7 @@
 *> \ingroup complex16OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_ZLAQHP( UPLO, N, AP, S, SCOND, AMAX, EQUED )
+      SUBROUTINE ZLAQHP( UPLO, N, AP, S, SCOND, AMAX, EQUED )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -152,9 +152,9 @@
       DOUBLE PRECISION   CJ, LARGE, SMALL
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DLAMCH
-      EXTERNAL           AB_LSAME, AB_DLAMCH
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           LSAME, DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE
@@ -170,7 +170,7 @@
 *
 *     Initialize LARGE and SMALL.
 *
-      SMALL = AB_DLAMCH( 'Safe minimum' ) / AB_DLAMCH( 'Precision' )
+      SMALL = DLAMCH( 'Safe minimum' ) / DLAMCH( 'Precision' )
       LARGE = ONE / SMALL
 *
       IF( SCOND.GE.THRESH .AND. AMAX.GE.SMALL .AND. AMAX.LE.LARGE ) THEN
@@ -182,7 +182,7 @@
 *
 *        Replace A by diag(S) * A * diag(S).
 *
-         IF( AB_LSAME( UPLO, 'U' ) ) THEN
+         IF( LSAME( UPLO, 'U' ) ) THEN
 *
 *           Upper triangle of A is stored.
 *
@@ -214,6 +214,6 @@
 *
       RETURN
 *
-*     End of AB_ZLAQHP
+*     End of ZLAQHP
 *
       END

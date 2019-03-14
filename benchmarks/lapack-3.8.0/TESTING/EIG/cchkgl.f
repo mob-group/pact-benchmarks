@@ -1,4 +1,4 @@
-*> \brief \b AB_CCHKGL
+*> \brief \b CCHKGL
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CCHKGL( NIN, NOUT )
+*       SUBROUTINE CCHKGL( NIN, NOUT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            NIN, NOUT
@@ -20,7 +20,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CCHKGL tests AB_CGGBAL, a routine for balancing a matrix pair (A, B).
+*> CCHKGL tests CGGBAL, a routine for balancing a matrix pair (A, B).
 *> \endverbatim
 *
 *  Arguments:
@@ -51,7 +51,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_CCHKGL( NIN, NOUT )
+      SUBROUTINE CCHKGL( NIN, NOUT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -83,11 +83,11 @@
      $                   BIN( LDB, LDB )
 *     ..
 *     .. External Functions ..
-      REAL               AB_CLANGE, AB_SLAMCH
-      EXTERNAL           AB_CLANGE, AB_SLAMCH
+      REAL               CLANGE, SLAMCH
+      EXTERNAL           CLANGE, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CGGBAL
+      EXTERNAL           CGGBAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -101,7 +101,7 @@
       KNT = 0
       RMAX = ZERO
 *
-      EPS = AB_SLAMCH( 'Precision' )
+      EPS = SLAMCH( 'Precision' )
 *
    10 CONTINUE
 *
@@ -127,12 +127,12 @@
       READ( NIN, FMT = * )( LSCLIN( I ), I = 1, N )
       READ( NIN, FMT = * )( RSCLIN( I ), I = 1, N )
 *
-      ANORM = AB_CLANGE( 'M', N, N, A, LDA, WORK )
-      BNORM = AB_CLANGE( 'M', N, N, B, LDB, WORK )
+      ANORM = CLANGE( 'M', N, N, A, LDA, WORK )
+      BNORM = CLANGE( 'M', N, N, B, LDB, WORK )
 *
       KNT = KNT + 1
 *
-      CALL AB_CGGBAL( 'B', N, A, LDA, B, LDB, ILO, IHI, LSCALE, RSCALE,
+      CALL CGGBAL( 'B', N, A, LDA, B, LDB, ILO, IHI, LSCALE, RSCALE,
      $             WORK, INFO )
 *
       IF( INFO.NE.0 ) THEN
@@ -170,7 +170,7 @@
    90 CONTINUE
 *
       WRITE( NOUT, FMT = 9999 )
- 9999 FORMAT( ' .. test output of AB_CGGBAL .. ' )
+ 9999 FORMAT( ' .. test output of CGGBAL .. ' )
 *
       WRITE( NOUT, FMT = 9998 )RMAX
  9998 FORMAT( ' ratio of largest test error              = ', E12.3 )
@@ -187,6 +187,6 @@
 *
       RETURN
 *
-*     End of AB_CCHKGL
+*     End of CCHKGL
 *
       END

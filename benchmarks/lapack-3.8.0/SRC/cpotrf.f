@@ -1,4 +1,4 @@
-*> \brief \b AB_CPOTRF
+*> \brief \b CPOTRF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CPOTRF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CPOTRF.f">
+*> Download CPOTRF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpotrf.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CPOTRF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cpotrf.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CPOTRF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpotrf.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CPOTRF( UPLO, N, A, LDA, INFO )
+*       SUBROUTINE CPOTRF( UPLO, N, A, LDA, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CPOTRF computes the Cholesky factorization of a complex Hermitian
+*> CPOTRF computes the Cholesky factorization of a complex Hermitian
 *> positive definite matrix A.
 *>
 *> The factorization has the form
@@ -105,7 +105,7 @@
 *> \ingroup complexPOcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_CPOTRF( UPLO, N, A, LDA, INFO )
+      SUBROUTINE CPOTRF( UPLO, N, A, LDA, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -132,13 +132,12 @@
       INTEGER            J, JB, NB
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_LSAME, AB_ILAENV
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CGEMM, AB_AB_CHERK, AB_CPOTRF2, AB_CTRSM, AB
-     $_XERBLA
+      EXTERNAL           CGEMM, CHERK, CPOTRF2, CTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -148,8 +147,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -157,7 +156,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CPOTRF', -INFO )
+         CALL XERBLA( 'CPOTRF', -INFO )
          RETURN
       END IF
 *
@@ -168,12 +167,12 @@
 *
 *     Determine the block size for this environment.
 *
-      NB = AB_ILAENV( 1, 'AB_CPOTRF', UPLO, N, -1, -1, -1 )
+      NB = ILAENV( 1, 'CPOTRF', UPLO, N, -1, -1, -1 )
       IF( NB.LE.1 .OR. NB.GE.N ) THEN
 *
 *        Use unblocked code.
 *
-         CALL AB_CPOTRF2( UPLO, N, A, LDA, INFO )
+         CALL CPOTRF2( UPLO, N, A, LDA, INFO )
       ELSE
 *
 *        Use blocked code.
@@ -188,22 +187,20 @@
 *              for non-positive-definiteness.
 *
                JB = MIN( NB, N-J+1 )
-               CALL AB_AB_CHERK( 'Upper', 'Conjugate transpose', JB, J-1
-     $,
+               CALL CHERK( 'Upper', 'Conjugate transpose', JB, J-1,
      $                     -ONE, A( 1, J ), LDA, ONE, A( J, J ), LDA )
-               CALL AB_CPOTRF2( 'Upper', JB, A( J, J ), LDA, INFO )
+               CALL CPOTRF2( 'Upper', JB, A( J, J ), LDA, INFO )
                IF( INFO.NE.0 )
      $            GO TO 30
                IF( J+JB.LE.N ) THEN
 *
 *                 Compute the current block row.
 *
-                  CALL AB_CGEMM( 'Conjugate transpose', 'No transpose', 
-     $JB,
+                  CALL CGEMM( 'Conjugate transpose', 'No transpose', JB,
      $                        N-J-JB+1, J-1, -CONE, A( 1, J ), LDA,
      $                        A( 1, J+JB ), LDA, CONE, A( J, J+JB ),
      $                        LDA )
-                  CALL AB_CTRSM( 'Left', 'Upper', 'Conjugate transpose',
+                  CALL CTRSM( 'Left', 'Upper', 'Conjugate transpose',
      $                        'Non-unit', JB, N-J-JB+1, CONE, A( J, J ),
      $                        LDA, A( J, J+JB ), LDA )
                END IF
@@ -219,21 +216,20 @@
 *              for non-positive-definiteness.
 *
                JB = MIN( NB, N-J+1 )
-               CALL AB_AB_CHERK( 'Lower', 'No transpose', JB, J-1, -ONE,
+               CALL CHERK( 'Lower', 'No transpose', JB, J-1, -ONE,
      $                     A( J, 1 ), LDA, ONE, A( J, J ), LDA )
-               CALL AB_CPOTRF2( 'Lower', JB, A( J, J ), LDA, INFO )
+               CALL CPOTRF2( 'Lower', JB, A( J, J ), LDA, INFO )
                IF( INFO.NE.0 )
      $            GO TO 30
                IF( J+JB.LE.N ) THEN
 *
 *                 Compute the current block column.
 *
-                  CALL AB_CGEMM( 'No transpose', 'Conjugate transpose',
+                  CALL CGEMM( 'No transpose', 'Conjugate transpose',
      $                        N-J-JB+1, JB, J-1, -CONE, A( J+JB, 1 ),
      $                        LDA, A( J, 1 ), LDA, CONE, A( J+JB, J ),
      $                        LDA )
-                  CALL AB_CTRSM( 'Right', 'Lower', 'Conjugate transpose'
-     $,
+                  CALL CTRSM( 'Right', 'Lower', 'Conjugate transpose',
      $                        'Non-unit', N-J-JB+1, JB, CONE, A( J, J ),
      $                        LDA, A( J+JB, J ), LDA )
                END IF
@@ -248,6 +244,6 @@
    40 CONTINUE
       RETURN
 *
-*     End of AB_CPOTRF
+*     End of CPOTRF
 *
       END

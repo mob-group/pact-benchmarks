@@ -1,4 +1,4 @@
-*> \brief \b AB_ZHPT21
+*> \brief \b ZHPT21
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZHPT21( ITYPE, UPLO, N, KBAND, AP, D, E, U, LDU, VP,
+*       SUBROUTINE ZHPT21( ITYPE, UPLO, N, KBAND, AP, D, E, U, LDU, VP,
 *                          TAU, WORK, RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -27,16 +27,16 @@
 *>
 *> \verbatim
 *>
-*> AB_ZHPT21  generally checks a decomposition of the form
+*> ZHPT21  generally checks a decomposition of the form
 *>
 *>         A = U S UC>
 *> where * means conjugate transpose, A is hermitian, U is
 *> unitary, and S is diagonal (if KBAND=0) or (real) symmetric
 *> tridiagonal (if KBAND=1).  If ITYPE=1, then U is represented as
 *> a dense matrix, otherwise the U is expressed as a product of
-*> HousehoAB_LDEr transformations, whose vectors are stored in the
+*> Householder transformations, whose vectors are stored in the
 *> array "V" and whose scaling constants are in "TAU"; we shall
-*> use the letter "V" to refer to the product of HousehoAB_LDEr
+*> use the letter "V" to refer to the product of Householder
 *> transformations (which should be equal to U).
 *>
 *> Specifically, if ITYPE=1, then:
@@ -66,7 +66,7 @@
 *> AP.
 *>
 *> For ITYPE > 1, the transformation U is expressed as a product
-*> of HousehoAB_LDEr transformations:
+*> of Householder transformations:
 *>
 *>    If UPLO='U', then  V = H(n-1)...H(1),  where
 *>
@@ -93,11 +93,11 @@
 *>          1: U expressed as a dense unitary matrix:
 *>             RESULT(1) = | A - U S U* | / ( |A| n ulp )   *andC>             RESULT(2) = | I - UU* | / ( n ulp )
 *>
-*>          2: U expressed as a product V of HoushoAB_LDEr transformations:
+*>          2: U expressed as a product V of Housholder transformations:
 *>             RESULT(1) = | A - V S V* | / ( |A| n ulp )
 *>
 *>          3: U expressed both as a dense unitary matrix and
-*>             as a product of HoushoAB_LDEr transformations:
+*>             as a product of Housholder transformations:
 *>             RESULT(1) = | I - UV* | / ( n ulp )
 *> \endverbatim
 *>
@@ -113,7 +113,7 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The size of the matrix.  If it is zero, AB_ZHPT21 does nothing.
+*>          The size of the matrix.  If it is zero, ZHPT21 does nothing.
 *>          It must be at least zero.
 *> \endverbatim
 *>
@@ -168,7 +168,7 @@
 *> \verbatim
 *>          VP is DOUBLE PRECISION array, dimension (N*(N+1)/2)
 *>          If ITYPE=2 or 3, the columns of this array contain the
-*>          HousehoAB_LDEr vectors used to describe the unitary matrix
+*>          Householder vectors used to describe the unitary matrix
 *>          in the decomposition, as described in purpose.
 *>          *NOTE* If ITYPE=2 or 3, V is modified and restored.  The
 *>          subdiagonal (if UPLO='L') or the superdiagonal (if UPLO='U')
@@ -181,7 +181,7 @@
 *> \verbatim
 *>          TAU is COMPLEX*16 array, dimension (N)
 *>          If ITYPE >= 2, then TAU(j) is the scalar factor of
-*>          v(j) v(j)* in the HousehoAB_LDEr transformation H(j) of
+*>          v(j) v(j)* in the Householder transformation H(j) of
 *>          the product  U = H(1)...H(n-2)
 *>          If ITYPE < 2, then TAU is not referenced.
 *> \endverbatim
@@ -220,7 +220,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_ZHPT21( ITYPE, UPLO, N, KBAND, AP, D, E, U, LDU, VP,
+      SUBROUTINE ZHPT21( ITYPE, UPLO, N, KBAND, AP, D, E, U, LDU, VP,
      $                   TAU, WORK, RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -257,16 +257,14 @@
       COMPLEX*16         TEMP, VSAVE
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE, AB_ZLANHP
-      COMPLEX*16         AB_ZDOTC
-      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_ZLANGE, AB_ZLANHP, AB_Z
-     $DOTC
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH, ZLANGE, ZLANHP
+      COMPLEX*16         ZDOTC
+      EXTERNAL           LSAME, DLAMCH, ZLANGE, ZLANHP, ZDOTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZAXPY, AB_ZCOPY, AB_ZGEMM, AB_ZHPMV, AB_ZHPR
-     $, AB_AB_ZHPR2,
-     $                   AB_ZLACPY, AB_ZLASET, AB_ZUPMTR
+      EXTERNAL           ZAXPY, ZCOPY, ZGEMM, ZHPMV, ZHPR, ZHPR2,
+     $                   ZLACPY, ZLASET, ZUPMTR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCMPLX, MAX, MIN
@@ -283,7 +281,7 @@
 *
       LAP = ( N*( N+1 ) ) / 2
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
          LOWER = .FALSE.
          CUPLO = 'U'
       ELSE
@@ -291,8 +289,8 @@
          CUPLO = 'L'
       END IF
 *
-      UNFL = AB_DLAMCH( 'Safe minimum' )
-      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
+      UNFL = DLAMCH( 'Safe minimum' )
+      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
 *
 *     Some Error Checks
 *
@@ -308,7 +306,7 @@
       IF( ITYPE.EQ.3 ) THEN
          ANORM = ONE
       ELSE
-         ANORM = MAX( AB_ZLANHP( '1', CUPLO, N, AP, RWORK ), UNFL )
+         ANORM = MAX( ZLANHP( '1', CUPLO, N, AP, RWORK ), UNFL )
       END IF
 *
 *     Compute error matrix:
@@ -317,27 +315,26 @@
 *
 *        ITYPE=1: error = A - U S U*
 *
-         CALL AB_ZLASET( 'Full', N, N, CZERO, CZERO, WORK, N )
-         CALL AB_ZCOPY( LAP, AP, 1, WORK, 1 )
+         CALL ZLASET( 'Full', N, N, CZERO, CZERO, WORK, N )
+         CALL ZCOPY( LAP, AP, 1, WORK, 1 )
 *
          DO 10 J = 1, N
-            CALL AB_ZHPR( CUPLO, N, -D( J ), U( 1, J ), 1, WORK )
+            CALL ZHPR( CUPLO, N, -D( J ), U( 1, J ), 1, WORK )
    10    CONTINUE
 *
          IF( N.GT.1 .AND. KBAND.EQ.1 ) THEN
             DO 20 J = 1, N - 1
-               CALL AB_AB_ZHPR2( CUPLO, N, -DCMPLX( E( J ) ), U( 1, J ),
-     $ 1,
+               CALL ZHPR2( CUPLO, N, -DCMPLX( E( J ) ), U( 1, J ), 1,
      $                     U( 1, J-1 ), 1, WORK )
    20       CONTINUE
          END IF
-         WNORM = AB_ZLANHP( '1', CUPLO, N, WORK, RWORK )
+         WNORM = ZLANHP( '1', CUPLO, N, WORK, RWORK )
 *
       ELSE IF( ITYPE.EQ.2 ) THEN
 *
 *        ITYPE=2: error = V S V* - A
 *
-         CALL AB_ZLASET( 'Full', N, N, CZERO, CZERO, WORK, N )
+         CALL ZLASET( 'Full', N, N, CZERO, CZERO, WORK, N )
 *
          IF( LOWER ) THEN
             WORK( LAP ) = D( N )
@@ -354,15 +351,13 @@
                IF( TAU( J ).NE.CZERO ) THEN
                   VSAVE = VP( JP+J+1 )
                   VP( JP+J+1 ) = CONE
-                  CALL AB_ZHPMV( 'L', N-J, CONE, WORK( JP1+J+1 ),
+                  CALL ZHPMV( 'L', N-J, CONE, WORK( JP1+J+1 ),
      $                        VP( JP+J+1 ), 1, CZERO, WORK( LAP+1 ), 1 )
-                  TEMP = -HALF*TAU( J )*AB_ZDOTC( N-J, WORK( LAP+1 ), 1,
+                  TEMP = -HALF*TAU( J )*ZDOTC( N-J, WORK( LAP+1 ), 1,
      $                   VP( JP+J+1 ), 1 )
-                  CALL AB_ZAXPY( N-J, TEMP, VP( JP+J+1 ), 1, WORK( LAP+1
-     $ ),
+                  CALL ZAXPY( N-J, TEMP, VP( JP+J+1 ), 1, WORK( LAP+1 ),
      $                        1 )
-                  CALL AB_AB_ZHPR2( 'L', N-J, -TAU( J ), VP( JP+J+1 ), 1
-     $,
+                  CALL ZHPR2( 'L', N-J, -TAU( J ), VP( JP+J+1 ), 1,
      $                        WORK( LAP+1 ), 1, WORK( JP1+J+1 ) )
 *
                   VP( JP+J+1 ) = VSAVE
@@ -384,14 +379,13 @@
                IF( TAU( J ).NE.CZERO ) THEN
                   VSAVE = VP( JP1+J )
                   VP( JP1+J ) = CONE
-                  CALL AB_ZHPMV( 'U', J, CONE, WORK, VP( JP1+1 ), 1, CZE
-     $RO,
+                  CALL ZHPMV( 'U', J, CONE, WORK, VP( JP1+1 ), 1, CZERO,
      $                        WORK( LAP+1 ), 1 )
-                  TEMP = -HALF*TAU( J )*AB_ZDOTC( J, WORK( LAP+1 ), 1,
+                  TEMP = -HALF*TAU( J )*ZDOTC( J, WORK( LAP+1 ), 1,
      $                   VP( JP1+1 ), 1 )
-                  CALL AB_ZAXPY( J, TEMP, VP( JP1+1 ), 1, WORK( LAP+1 ),
+                  CALL ZAXPY( J, TEMP, VP( JP1+1 ), 1, WORK( LAP+1 ),
      $                        1 )
-                  CALL AB_AB_ZHPR2( 'U', J, -TAU( J ), VP( JP1+1 ), 1,
+                  CALL ZHPR2( 'U', J, -TAU( J ), VP( JP1+1 ), 1,
      $                        WORK( LAP+1 ), 1, WORK )
                   VP( JP1+J ) = VSAVE
                END IF
@@ -402,7 +396,7 @@
          DO 70 J = 1, LAP
             WORK( J ) = WORK( J ) - AP( J )
    70    CONTINUE
-         WNORM = AB_ZLANHP( '1', CUPLO, N, WORK, RWORK )
+         WNORM = ZLANHP( '1', CUPLO, N, WORK, RWORK )
 *
       ELSE IF( ITYPE.EQ.3 ) THEN
 *
@@ -410,8 +404,8 @@
 *
          IF( N.LT.2 )
      $      RETURN
-         CALL AB_ZLACPY( ' ', N, N, U, LDU, WORK, N )
-         CALL AB_ZUPMTR( 'R', CUPLO, 'C', N, N, VP, TAU, WORK, N,
+         CALL ZLACPY( ' ', N, N, U, LDU, WORK, N )
+         CALL ZUPMTR( 'R', CUPLO, 'C', N, N, VP, TAU, WORK, N,
      $                WORK( N**2+1 ), IINFO )
          IF( IINFO.NE.0 ) THEN
             RESULT( 1 ) = TEN / ULP
@@ -422,7 +416,7 @@
             WORK( ( N+1 )*( J-1 )+1 ) = WORK( ( N+1 )*( J-1 )+1 ) - CONE
    80    CONTINUE
 *
-         WNORM = AB_ZLANGE( '1', N, N, WORK, N, RWORK )
+         WNORM = ZLANGE( '1', N, N, WORK, N, RWORK )
       END IF
 *
       IF( ANORM.GT.WNORM ) THEN
@@ -440,19 +434,19 @@
 *     Compute  UU* - I
 *
       IF( ITYPE.EQ.1 ) THEN
-         CALL AB_ZGEMM( 'N', 'C', N, N, N, CONE, U, LDU, U, LDU, CZERO,
+         CALL ZGEMM( 'N', 'C', N, N, N, CONE, U, LDU, U, LDU, CZERO,
      $               WORK, N )
 *
          DO 90 J = 1, N
             WORK( ( N+1 )*( J-1 )+1 ) = WORK( ( N+1 )*( J-1 )+1 ) - CONE
    90    CONTINUE
 *
-         RESULT( 2 ) = MIN( AB_ZLANGE( '1', N, N, WORK, N, RWORK ),
+         RESULT( 2 ) = MIN( ZLANGE( '1', N, N, WORK, N, RWORK ),
      $                 DBLE( N ) ) / ( N*ULP )
       END IF
 *
       RETURN
 *
-*     End of AB_ZHPT21
+*     End of ZHPT21
 *
       END

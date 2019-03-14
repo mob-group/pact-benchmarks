@@ -1,4 +1,4 @@
-*> \brief \b AB_SORGRQ
+*> \brief \b SORGRQ
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SORGRQ + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SORGRQ.f">
+*> Download SORGRQ + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sorgrq.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SORGRQ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sorgrq.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SORGRQ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorgrq.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SORGRQ( M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
+*       SUBROUTINE SORGRQ( M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, K, LDA, LWORK, M, N
@@ -33,13 +33,13 @@
 *>
 *> \verbatim
 *>
-*> AB_SORGRQ generates an M-by-N real matrix Q with orthonormal rows,
+*> SORGRQ generates an M-by-N real matrix Q with orthonormal rows,
 *> which is defined as the last M rows of a product of K elementary
 *> reflectors of order N
 *>
 *>       Q  =  H(1) H(2) . . . H(k)
 *>
-*> as returned by AB_AB_SGERQF.
+*> as returned by SGERQF.
 *> \endverbatim
 *
 *  Arguments:
@@ -69,7 +69,7 @@
 *>          A is REAL array, dimension (LDA,N)
 *>          On entry, the (m-k+i)-th row must contain the vector which
 *>          defines the elementary reflector H(i), for i = 1,2,...,k, as
-*>          returned by AB_AB_SGERQF in the last k rows of its array argument
+*>          returned by SGERQF in the last k rows of its array argument
 *>          A.
 *>          On exit, the M-by-N matrix Q.
 *> \endverbatim
@@ -84,7 +84,7 @@
 *> \verbatim
 *>          TAU is REAL array, dimension (K)
 *>          TAU(i) must contain the scalar factor of the elementary
-*>          reflector H(i), as returned by AB_AB_SGERQF.
+*>          reflector H(i), as returned by SGERQF.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -103,7 +103,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -126,7 +126,7 @@
 *> \ingroup realOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_SORGRQ( M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
+      SUBROUTINE SORGRQ( M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -152,15 +152,14 @@
      $                   LWKOPT, NB, NBMIN, NX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_AB_SLARFB, AB_AB_SLARFT, AB_SORGR2, AB_XERBL
-     $A
+      EXTERNAL           SLARFB, SLARFT, SORGR2, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_ILAENV
+      INTEGER            ILAENV
+      EXTERNAL           ILAENV
 *     ..
 *     .. Executable Statements ..
 *
@@ -182,7 +181,7 @@
          IF( M.LE.0 ) THEN
             LWKOPT = 1
          ELSE
-            NB = AB_ILAENV( 1, 'AB_SORGRQ', ' ', M, N, K, -1 )
+            NB = ILAENV( 1, 'SORGRQ', ' ', M, N, K, -1 )
             LWKOPT = M*NB
          END IF
          WORK( 1 ) = LWKOPT
@@ -193,7 +192,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SORGRQ', -INFO )
+         CALL XERBLA( 'SORGRQ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -212,7 +211,7 @@
 *
 *        Determine when to cross over from blocked to unblocked code.
 *
-         NX = MAX( 0, AB_ILAENV( 3, 'AB_SORGRQ', ' ', M, N, K, -1 ) )
+         NX = MAX( 0, ILAENV( 3, 'SORGRQ', ' ', M, N, K, -1 ) )
          IF( NX.LT.K ) THEN
 *
 *           Determine if workspace is large enough for blocked code.
@@ -225,8 +224,7 @@
 *              determine the minimum value of NB.
 *
                NB = LWORK / LDWORK
-               NBMIN = MAX( 2, AB_ILAENV( 2, 'AB_SORGRQ', ' ', M, N, K, 
-     $-1 ) )
+               NBMIN = MAX( 2, ILAENV( 2, 'SORGRQ', ' ', M, N, K, -1 ) )
             END IF
          END IF
       END IF
@@ -251,7 +249,7 @@
 *
 *     Use unblocked code for the first or only block.
 *
-      CALL AB_SORGR2( M-KK, N-KK, K-KK, A, LDA, TAU, WORK, IINFO )
+      CALL SORGR2( M-KK, N-KK, K-KK, A, LDA, TAU, WORK, IINFO )
 *
       IF( KK.GT.0 ) THEN
 *
@@ -265,21 +263,19 @@
 *              Form the triangular factor of the block reflector
 *              H = H(i+ib-1) . . . H(i+1) H(i)
 *
-               CALL AB_AB_SLARFT( 'Backward', 'Rowwise', N-K+I+IB-1, IB,
+               CALL SLARFT( 'Backward', 'Rowwise', N-K+I+IB-1, IB,
      $                      A( II, 1 ), LDA, TAU( I ), WORK, LDWORK )
 *
 *              Apply H**T to A(1:m-k+i-1,1:n-k+i+ib-1) from the right
 *
-               CALL AB_AB_SLARFB( 'Right', 'Transpose', 'Backward', 'Row
-     $wise',
+               CALL SLARFB( 'Right', 'Transpose', 'Backward', 'Rowwise',
      $                      II-1, N-K+I+IB-1, IB, A( II, 1 ), LDA, WORK,
      $                      LDWORK, A, LDA, WORK( IB+1 ), LDWORK )
             END IF
 *
 *           Apply H**T to columns 1:n-k+i+ib-1 of current block
 *
-            CALL AB_SORGR2( IB, N-K+I+IB-1, IB, A( II, 1 ), LDA, TAU( I 
-     $),
+            CALL SORGR2( IB, N-K+I+IB-1, IB, A( II, 1 ), LDA, TAU( I ),
      $                   WORK, IINFO )
 *
 *           Set columns n-k+i+ib:n of current block to zero
@@ -295,6 +291,6 @@
       WORK( 1 ) = IWS
       RETURN
 *
-*     End of AB_SORGRQ
+*     End of SORGRQ
 *
       END

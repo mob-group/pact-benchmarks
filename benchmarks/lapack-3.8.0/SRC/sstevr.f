@@ -1,4 +1,4 @@
-*> \brief <b> AB_AB_SSTEVR computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
+*> \brief <b> SSTEVR computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_SSTEVR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_SSTEVR.f">
+*> Download SSTEVR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sstevr.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_SSTEVR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sstevr.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_SSTEVR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sstevr.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_SSTEVR( JOBZ, RANGE, N, D, E, VL, VU, IL, IU, ABSTOL,
+*       SUBROUTINE SSTEVR( JOBZ, RANGE, N, D, E, VL, VU, IL, IU, ABSTOL,
 *                          M, W, Z, LDZ, ISUPPZ, WORK, LWORK, IWORK,
 *                          LIWORK, INFO )
 *
@@ -38,13 +38,13 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_SSTEVR computes selected eigenvalues and, optionally, eigenvectors
+*> SSTEVR computes selected eigenvalues and, optionally, eigenvectors
 *> of a real symmetric tridiagonal matrix T.  Eigenvalues and
 *> eigenvectors can be selected by specifying either a range of values
 *> or a range of indices for the desired eigenvalues.
 *>
-*> Whenever possible, AB_AB_SSTEVR calls AB_SSTEMR to compute the
-*> eigenspectrum using Relatively Robust Representations.  AB_SSTEMR
+*> Whenever possible, SSTEVR calls SSTEMR to compute the
+*> eigenspectrum using Relatively Robust Representations.  SSTEMR
 *> computes eigenvalues by the dqds algorithm, while orthogonal
 *> eigenvectors are computed from various "good" L D L^T representations
 *> (also known as Relatively Robust Representations). Gram-Schmidt
@@ -69,12 +69,12 @@
 *> UC Berkeley, May 1997.
 *>
 *>
-*> Note 1 : AB_AB_SSTEVR calls AB_SSTEMR when the full spectrum is requested
+*> Note 1 : SSTEVR calls SSTEMR when the full spectrum is requested
 *> on machines which conform to the ieee-754 floating point standard.
-*> AB_AB_SSTEVR calls AB_SSTEBZ and AB_SSTEIN on non-ieee machines and
+*> SSTEVR calls SSTEBZ and SSTEIN on non-ieee machines and
 *> when partial spectrum requests are made.
 *>
-*> Normal execution of AB_SSTEMR may create NaNs and infinities and
+*> Normal execution of SSTEMR may create NaNs and infinities and
 *> hence may abort due to a floating point exception in environments
 *> which do not handle NaNs and infinities in the ieee standard default
 *> manner.
@@ -97,8 +97,8 @@
 *>          = 'V': all eigenvalues in the half-open interval (VL,VU]
 *>                 will be found.
 *>          = 'I': the IL-th through IU-th eigenvalues will be found.
-*>          For RANGE = 'V' or 'I' and IU - IL < N - 1, AB_SSTEBZ and
-*>          AB_SSTEIN are called
+*>          For RANGE = 'V' or 'I' and IU - IL < N - 1, SSTEBZ and
+*>          SSTEIN are called
 *> \endverbatim
 *>
 *> \param[in] N
@@ -179,7 +179,7 @@
 *>          Kahan, LAPACK Working Note #3.
 *>
 *>          If high relative accuracy is important, set ABSTOL to
-*>          AB_SLAMCH( 'Safe minimum' ).  Doing so will guarantee that
+*>          SLAMCH( 'Safe minimum' ).  Doing so will guarantee that
 *>          eigenvalues are computed to high relative accuracy when
 *>          possible in future releases.  The current code does not
 *>          make any guarantees about high relative accuracy, but
@@ -249,7 +249,7 @@
 *>          only calculates the optimal sizes of the WORK and IWORK
 *>          arrays, returns these values as the first entries of the WORK
 *>          and IWORK arrays, and no error message related to LWORK or
-*>          LIWORK is issued by AB_XERBLA.
+*>          LIWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -268,7 +268,7 @@
 *>          routine only calculates the optimal sizes of the WORK and
 *>          IWORK arrays, returns these values as the first entries of
 *>          the WORK and IWORK arrays, and no error message related to
-*>          LWORK or LIWORK is issued by AB_XERBLA.
+*>          LWORK or LIWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -302,8 +302,7 @@
 *>       California at Berkeley, USA \n
 *>
 *  =====================================================================
-      SUBROUTINE AB_AB_SSTEVR( JOBZ, RANGE, N, D, E, VL, VU, IL, IU, ABS
-     $TOL,
+      SUBROUTINE SSTEVR( JOBZ, RANGE, N, D, E, VL, VU, IL, IU, ABSTOL,
      $                   M, W, Z, LDZ, ISUPPZ, WORK, LWORK, IWORK,
      $                   LIWORK, INFO )
 *
@@ -338,15 +337,14 @@
      $                   TMP1, TNRM, VLL, VUU
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      REAL               AB_SLAMCH, AB_SLANST
-      EXTERNAL           AB_LSAME, AB_ILAENV, AB_SLAMCH, AB_SLANST
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      REAL               SLAMCH, SLANST
+      EXTERNAL           LSAME, ILAENV, SLAMCH, SLANST
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SCOPY, AB_SSCAL, AB_SSTEBZ, AB_SSTEMR, AB_SS
-     $TEIN, AB_SSTERF,
-     $                   AB_SSWAP, AB_XERBLA
+      EXTERNAL           SCOPY, SSCAL, SSTEBZ, SSTEMR, SSTEIN, SSTERF,
+     $                   SSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, SQRT
@@ -356,12 +354,12 @@
 *
 *     Test the input parameters.
 *
-      IEEEOK = AB_ILAENV( 10, 'AB_AB_SSTEVR', 'N', 1, 2, 3, 4 )
+      IEEEOK = ILAENV( 10, 'SSTEVR', 'N', 1, 2, 3, 4 )
 *
-      WANTZ = AB_LSAME( JOBZ, 'V' )
-      ALLEIG = AB_LSAME( RANGE, 'A' )
-      VALEIG = AB_LSAME( RANGE, 'V' )
-      INDEIG = AB_LSAME( RANGE, 'I' )
+      WANTZ = LSAME( JOBZ, 'V' )
+      ALLEIG = LSAME( RANGE, 'A' )
+      VALEIG = LSAME( RANGE, 'V' )
+      INDEIG = LSAME( RANGE, 'I' )
 *
       LQUERY = ( ( LWORK.EQ.-1 ) .OR. ( LIWORK.EQ.-1 ) )
       LWMIN = MAX( 1, 20*N )
@@ -369,7 +367,7 @@
 *
 *
       INFO = 0
-      IF( .NOT.( WANTZ .OR. AB_LSAME( JOBZ, 'N' ) ) ) THEN
+      IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
       ELSE IF( .NOT.( ALLEIG .OR. VALEIG .OR. INDEIG ) ) THEN
          INFO = -2
@@ -405,7 +403,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_SSTEVR', -INFO )
+         CALL XERBLA( 'SSTEVR', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -434,8 +432,8 @@
 *
 *     Get machine constants.
 *
-      SAFMIN = AB_SLAMCH( 'Safe minimum' )
-      EPS = AB_SLAMCH( 'Precision' )
+      SAFMIN = SLAMCH( 'Safe minimum' )
+      EPS = SLAMCH( 'Precision' )
       SMLNUM = SAFMIN / EPS
       BIGNUM = ONE / SMLNUM
       RMIN = SQRT( SMLNUM )
@@ -450,7 +448,7 @@
          VUU = VU
       END IF
 *
-      TNRM = AB_SLANST( 'M', N, D, E )
+      TNRM = SLANST( 'M', N, D, E )
       IF( TNRM.GT.ZERO .AND. TNRM.LT.RMIN ) THEN
          ISCALE = 1
          SIGMA = RMIN / TNRM
@@ -459,8 +457,8 @@
          SIGMA = RMAX / TNRM
       END IF
       IF( ISCALE.EQ.1 ) THEN
-         CALL AB_SSCAL( N, SIGMA, D, 1 )
-         CALL AB_SSCAL( N-1, SIGMA, E( 1 ), 1 )
+         CALL SSCAL( N, SIGMA, D, 1 )
+         CALL SSCAL( N-1, SIGMA, E( 1 ), 1 )
          IF( VALEIG ) THEN
             VLL = VL*SIGMA
             VUU = VU*SIGMA
@@ -468,25 +466,25 @@
       END IF
 
 *     Initialize indices into workspaces.  Note: These indices are used only
-*     if AB_SSTERF or AB_SSTEMR fail.
+*     if SSTERF or SSTEMR fail.
 
-*     IWORK(INDIBL:INDIBL+M-1) corresponds to IBLOCK in AB_SSTEBZ and
+*     IWORK(INDIBL:INDIBL+M-1) corresponds to IBLOCK in SSTEBZ and
 *     stores the block indices of each of the M<=N eigenvalues.
       INDIBL = 1
-*     IWORK(INDISP:INDISP+NSPLIT-1) corresponds to ISPLIT in AB_SSTEBZ and
+*     IWORK(INDISP:INDISP+NSPLIT-1) corresponds to ISPLIT in SSTEBZ and
 *     stores the starting and finishing indices of each block.
       INDISP = INDIBL + N
 *     IWORK(INDIFL:INDIFL+N-1) stores the indices of eigenvectors
 *     that corresponding to eigenvectors that fail to converge in
-*     AB_SSTEIN.  This information is discarded; if any fail, the driver
+*     SSTEIN.  This information is discarded; if any fail, the driver
 *     returns INFO > 0.
       INDIFL = INDISP + N
 *     INDIWO is the offset of the remaining integer workspace.
       INDIWO = INDISP + N
 *
 *     If all eigenvalues are desired, then
-*     call AB_SSTERF or AB_SSTEMR.  If this fails for some eigenvalue, then
-*     try AB_SSTEBZ.
+*     call SSTERF or SSTEMR.  If this fails for some eigenvalue, then
+*     try SSTEBZ.
 *
 *
       TEST = .FALSE.
@@ -496,18 +494,18 @@
          END IF
       END IF
       IF( ( ALLEIG .OR. TEST ) .AND. IEEEOK.EQ.1 ) THEN
-         CALL AB_SCOPY( N-1, E( 1 ), 1, WORK( 1 ), 1 )
+         CALL SCOPY( N-1, E( 1 ), 1, WORK( 1 ), 1 )
          IF( .NOT.WANTZ ) THEN
-            CALL AB_SCOPY( N, D, 1, W, 1 )
-            CALL AB_SSTERF( N, W, WORK, INFO )
+            CALL SCOPY( N, D, 1, W, 1 )
+            CALL SSTERF( N, W, WORK, INFO )
          ELSE
-            CALL AB_SCOPY( N, D, 1, WORK( N+1 ), 1 )
+            CALL SCOPY( N, D, 1, WORK( N+1 ), 1 )
             IF (ABSTOL .LE. TWO*N*EPS) THEN
                TRYRAC = .TRUE.
             ELSE
                TRYRAC = .FALSE.
             END IF
-            CALL AB_SSTEMR( JOBZ, 'A', N, WORK( N+1 ), WORK, VL, VU, IL,
+            CALL SSTEMR( JOBZ, 'A', N, WORK( N+1 ), WORK, VL, VU, IL,
      $                   IU, M, W, Z, LDZ, N, ISUPPZ, TRYRAC,
      $                   WORK( 2*N+1 ), LWORK-2*N, IWORK, LIWORK, INFO )
 *
@@ -519,7 +517,7 @@
          INFO = 0
       END IF
 *
-*     Otherwise, call AB_SSTEBZ and, if eigenvectors are desired, AB_SSTEIN.
+*     Otherwise, call SSTEBZ and, if eigenvectors are desired, SSTEIN.
 *
       IF( WANTZ ) THEN
          ORDER = 'B'
@@ -527,14 +525,12 @@
          ORDER = 'E'
       END IF
 
-      CALL AB_SSTEBZ( RANGE, ORDER, N, VLL, VUU, IL, IU, ABSTOL, D, E, M
-     $,
+      CALL SSTEBZ( RANGE, ORDER, N, VLL, VUU, IL, IU, ABSTOL, D, E, M,
      $             NSPLIT, W, IWORK( INDIBL ), IWORK( INDISP ), WORK,
      $             IWORK( INDIWO ), INFO )
 *
       IF( WANTZ ) THEN
-         CALL AB_SSTEIN( N, D, E, M, W, IWORK( INDIBL ), IWORK( INDISP )
-     $,
+         CALL SSTEIN( N, D, E, M, W, IWORK( INDIBL ), IWORK( INDISP ),
      $                Z, LDZ, WORK, IWORK( INDIWO ), IWORK( INDIFL ),
      $                INFO )
       END IF
@@ -548,7 +544,7 @@
          ELSE
             IMAX = INFO - 1
          END IF
-         CALL AB_SSCAL( IMAX, ONE / SIGMA, W, 1 )
+         CALL SSCAL( IMAX, ONE / SIGMA, W, 1 )
       END IF
 *
 *     If eigenvalues are not in order, then sort them, along with
@@ -568,7 +564,7 @@
             IF( I.NE.0 ) THEN
                W( I ) = W( J )
                W( J ) = TMP1
-               CALL AB_SSWAP( N, Z( 1, I ), 1, Z( 1, J ), 1 )
+               CALL SSWAP( N, Z( 1, I ), 1, Z( 1, J ), 1 )
             END IF
    30    CONTINUE
       END IF
@@ -581,6 +577,6 @@
       IWORK( 1 ) = LIWMIN
       RETURN
 *
-*     End of AB_AB_SSTEVR
+*     End of SSTEVR
 *
       END

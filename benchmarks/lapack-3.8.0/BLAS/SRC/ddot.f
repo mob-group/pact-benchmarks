@@ -1,4 +1,4 @@
-*> \brief \b AB_DDOT
+*> \brief \b DDOT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       DOUBLE PRECISION FUNCTION AB_DDOT(N,DX,INCX,DY,INCY)
+*       DOUBLE PRECISION FUNCTION DDOT(N,DX,INCX,DY,INCY)
 *
 *       .. Scalar Arguments ..
 *       INTEGER INCX,INCY,N
@@ -23,7 +23,7 @@
 *>
 *> \verbatim
 *>
-*>    AB_DDOT forms the dot product of two vectors.
+*>    DDOT forms the dot product of two vectors.
 *>    uses unrolled loops for increments equal to one.
 *> \endverbatim
 *
@@ -80,7 +80,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION AB_DDOT(N,DX,INCX,DY,INCY)
+      DOUBLE PRECISION FUNCTION DDOT(N,DX,INCX,DY,INCY)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -103,7 +103,7 @@
 *     .. Intrinsic Functions ..
       INTRINSIC MOD
 *     ..
-      AB_DDOT = 0.0d0
+      DDOT = 0.0d0
       DTEMP = 0.0d0
       IF (N.LE.0) RETURN
       IF (INCX.EQ.1 .AND. INCY.EQ.1) THEN
@@ -119,7 +119,7 @@
                DTEMP = DTEMP + DX(I)*DY(I)
             END DO
             IF (N.LT.5) THEN
-               AB_DDOT=DTEMP
+               DDOT=DTEMP
             RETURN
             END IF
          END IF
@@ -143,6 +143,6 @@
             IY = IY + INCY
          END DO
       END IF
-      AB_DDOT = DTEMP
+      DDOT = DTEMP
       RETURN
       END

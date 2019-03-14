@@ -1,4 +1,4 @@
-*> \brief \b AB_ZPOT01
+*> \brief \b ZPOT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZPOT01( UPLO, N, A, LDA, AFAC, LDAFAC, RWORK, RESID )
+*       SUBROUTINE ZPOT01( UPLO, N, A, LDA, AFAC, LDAFAC, RWORK, RESID )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZPOT01 reconstructs a Hermitian positive definite matrix  A  from
+*> ZPOT01 reconstructs a Hermitian positive definite matrix  A  from
 *> its L*L' or U'*U factorization and computes the residual
 *>    norm( L*L' - A ) / ( N * norm(A) * EPS ) or
 *>    norm( U'*U - A ) / ( N * norm(A) * EPS ),
@@ -104,8 +104,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZPOT01( UPLO, N, A, LDA, AFAC, LDAFAC, RWORK, RESID 
-     $)
+      SUBROUTINE ZPOT01( UPLO, N, A, LDA, AFAC, LDAFAC, RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -134,13 +133,13 @@
       COMPLEX*16         TC
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANHE
-      COMPLEX*16         AB_ZDOTC
-      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_ZLANHE, AB_ZDOTC
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH, ZLANHE
+      COMPLEX*16         ZDOTC
+      EXTERNAL           LSAME, DLAMCH, ZLANHE, ZDOTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZHER, AB_ZSCAL, AB_ZTRMV
+      EXTERNAL           ZHER, ZSCAL, ZTRMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DIMAG
@@ -156,8 +155,8 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
-      ANORM = AB_ZLANHE( '1', UPLO, N, A, LDA, RWORK )
+      EPS = DLAMCH( 'Epsilon' )
+      ANORM = ZLANHE( '1', UPLO, N, A, LDA, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -175,17 +174,17 @@
 *
 *     Compute the product U'*U, overwriting U.
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
          DO 20 K = N, 1, -1
 *
 *           Compute the (K,K) element of the result.
 *
-            TR = AB_ZDOTC( K, AFAC( 1, K ), 1, AFAC( 1, K ), 1 )
+            TR = ZDOTC( K, AFAC( 1, K ), 1, AFAC( 1, K ), 1 )
             AFAC( K, K ) = TR
 *
 *           Compute the rest of column K.
 *
-            CALL AB_ZTRMV( 'Upper', 'Conjugate', 'Non-unit', K-1, AFAC,
+            CALL ZTRMV( 'Upper', 'Conjugate', 'Non-unit', K-1, AFAC,
      $                  LDAFAC, AFAC( 1, K ), 1 )
 *
    20    CONTINUE
@@ -199,20 +198,20 @@
 *           columns K+1 through N.
 *
             IF( K+1.LE.N )
-     $         CALL AB_ZHER( 'Lower', N-K, ONE, AFAC( K+1, K ), 1,
+     $         CALL ZHER( 'Lower', N-K, ONE, AFAC( K+1, K ), 1,
      $                    AFAC( K+1, K+1 ), LDAFAC )
 *
 *           Scale column K by the diagonal element.
 *
             TC = AFAC( K, K )
-            CALL AB_ZSCAL( N-K+1, TC, AFAC( K, K ), 1 )
+            CALL ZSCAL( N-K+1, TC, AFAC( K, K ), 1 )
 *
    30    CONTINUE
       END IF
 *
 *     Compute the difference  L*L' - A (or U'*U - A).
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
          DO 50 J = 1, N
             DO 40 I = 1, J - 1
                AFAC( I, J ) = AFAC( I, J ) - A( I, J )
@@ -230,12 +229,12 @@
 *
 *     Compute norm( L*U - A ) / ( N * norm(A) * EPS )
 *
-      RESID = AB_ZLANHE( '1', UPLO, N, AFAC, LDAFAC, RWORK )
+      RESID = ZLANHE( '1', UPLO, N, AFAC, LDAFAC, RWORK )
 *
       RESID = ( ( RESID / DBLE( N ) ) / ANORM ) / EPS
 *
       RETURN
 *
-*     End of AB_ZPOT01
+*     End of ZPOT01
 *
       END

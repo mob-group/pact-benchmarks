@@ -1,4 +1,4 @@
-*> \brief \b AB_SBDT01
+*> \brief \b SBDT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SBDT01( M, N, KD, A, LDA, Q, LDQ, D, E, PT, LDPT, WORK,
+*       SUBROUTINE SBDT01( M, N, KD, A, LDA, Q, LDQ, D, E, PT, LDPT, WORK,
 *                          RESID )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SBDT01 reconstructs a general matrix A from its bidiagonal form
+*> SBDT01 reconstructs a general matrix A from its bidiagonal form
 *>    A = Q * B * P'
 *> where Q (m by min(m,n)) and P' (min(m,n) by n) are orthogonal
 *> matrices and B is bidiagonal.
@@ -137,8 +137,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_SBDT01( M, N, KD, A, LDA, Q, LDQ, D, E, PT, LDPT, WO
-     $RK,
+      SUBROUTINE SBDT01( M, N, KD, A, LDA, Q, LDQ, D, E, PT, LDPT, WORK,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -166,11 +165,11 @@
       REAL               ANORM, EPS
 *     ..
 *     .. External Functions ..
-      REAL               AB_SASUM, AB_SLAMCH, AB_SLANGE
-      EXTERNAL           AB_SASUM, AB_SLAMCH, AB_SLANGE
+      REAL               SASUM, SLAMCH, SLANGE
+      EXTERNAL           SASUM, SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SCOPY, AB_SGEMV
+      EXTERNAL           SCOPY, SGEMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, REAL
@@ -196,43 +195,43 @@
 *           B is upper bidiagonal and M >= N.
 *
             DO 20 J = 1, N
-               CALL AB_SCOPY( M, A( 1, J ), 1, WORK, 1 )
+               CALL SCOPY( M, A( 1, J ), 1, WORK, 1 )
                DO 10 I = 1, N - 1
                   WORK( M+I ) = D( I )*PT( I, J ) + E( I )*PT( I+1, J )
    10          CONTINUE
                WORK( M+N ) = D( N )*PT( N, J )
-               CALL AB_SGEMV( 'No transpose', M, N, -ONE, Q, LDQ,
+               CALL SGEMV( 'No transpose', M, N, -ONE, Q, LDQ,
      $                     WORK( M+1 ), 1, ONE, WORK, 1 )
-               RESID = MAX( RESID, AB_SASUM( M, WORK, 1 ) )
+               RESID = MAX( RESID, SASUM( M, WORK, 1 ) )
    20       CONTINUE
          ELSE IF( KD.LT.0 ) THEN
 *
 *           B is upper bidiagonal and M < N.
 *
             DO 40 J = 1, N
-               CALL AB_SCOPY( M, A( 1, J ), 1, WORK, 1 )
+               CALL SCOPY( M, A( 1, J ), 1, WORK, 1 )
                DO 30 I = 1, M - 1
                   WORK( M+I ) = D( I )*PT( I, J ) + E( I )*PT( I+1, J )
    30          CONTINUE
                WORK( M+M ) = D( M )*PT( M, J )
-               CALL AB_SGEMV( 'No transpose', M, M, -ONE, Q, LDQ,
+               CALL SGEMV( 'No transpose', M, M, -ONE, Q, LDQ,
      $                     WORK( M+1 ), 1, ONE, WORK, 1 )
-               RESID = MAX( RESID, AB_SASUM( M, WORK, 1 ) )
+               RESID = MAX( RESID, SASUM( M, WORK, 1 ) )
    40       CONTINUE
          ELSE
 *
 *           B is lower bidiagonal.
 *
             DO 60 J = 1, N
-               CALL AB_SCOPY( M, A( 1, J ), 1, WORK, 1 )
+               CALL SCOPY( M, A( 1, J ), 1, WORK, 1 )
                WORK( M+1 ) = D( 1 )*PT( 1, J )
                DO 50 I = 2, M
                   WORK( M+I ) = E( I-1 )*PT( I-1, J ) +
      $                          D( I )*PT( I, J )
    50          CONTINUE
-               CALL AB_SGEMV( 'No transpose', M, M, -ONE, Q, LDQ,
+               CALL SGEMV( 'No transpose', M, M, -ONE, Q, LDQ,
      $                     WORK( M+1 ), 1, ONE, WORK, 1 )
-               RESID = MAX( RESID, AB_SASUM( M, WORK, 1 ) )
+               RESID = MAX( RESID, SASUM( M, WORK, 1 ) )
    60       CONTINUE
          END IF
       ELSE
@@ -241,31 +240,31 @@
 *
          IF( M.GE.N ) THEN
             DO 80 J = 1, N
-               CALL AB_SCOPY( M, A( 1, J ), 1, WORK, 1 )
+               CALL SCOPY( M, A( 1, J ), 1, WORK, 1 )
                DO 70 I = 1, N
                   WORK( M+I ) = D( I )*PT( I, J )
    70          CONTINUE
-               CALL AB_SGEMV( 'No transpose', M, N, -ONE, Q, LDQ,
+               CALL SGEMV( 'No transpose', M, N, -ONE, Q, LDQ,
      $                     WORK( M+1 ), 1, ONE, WORK, 1 )
-               RESID = MAX( RESID, AB_SASUM( M, WORK, 1 ) )
+               RESID = MAX( RESID, SASUM( M, WORK, 1 ) )
    80       CONTINUE
          ELSE
             DO 100 J = 1, N
-               CALL AB_SCOPY( M, A( 1, J ), 1, WORK, 1 )
+               CALL SCOPY( M, A( 1, J ), 1, WORK, 1 )
                DO 90 I = 1, M
                   WORK( M+I ) = D( I )*PT( I, J )
    90          CONTINUE
-               CALL AB_SGEMV( 'No transpose', M, M, -ONE, Q, LDQ,
+               CALL SGEMV( 'No transpose', M, M, -ONE, Q, LDQ,
      $                     WORK( M+1 ), 1, ONE, WORK, 1 )
-               RESID = MAX( RESID, AB_SASUM( M, WORK, 1 ) )
+               RESID = MAX( RESID, SASUM( M, WORK, 1 ) )
   100       CONTINUE
          END IF
       END IF
 *
 *     Compute norm(A - Q * B * P') / ( n * norm(A) * EPS )
 *
-      ANORM = AB_SLANGE( '1', M, N, A, LDA, WORK )
-      EPS = AB_SLAMCH( 'Precision' )
+      ANORM = SLANGE( '1', M, N, A, LDA, WORK )
+      EPS = SLAMCH( 'Precision' )
 *
       IF( ANORM.LE.ZERO ) THEN
          IF( RESID.NE.ZERO )
@@ -286,6 +285,6 @@
 *
       RETURN
 *
-*     End of AB_SBDT01
+*     End of SBDT01
 *
       END

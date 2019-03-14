@@ -1,4 +1,4 @@
-*> \brief \b AB_ZGLMTS
+*> \brief \b ZGLMTS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZGLMTS( N, M, P, A, AF, LDA, B, BF, LDB, D, DF, X, U,
+*       SUBROUTINE ZGLMTS( N, M, P, A, AF, LDA, B, BF, LDB, D, DF, X, U,
 *                          WORK, LWORK, RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -23,7 +23,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZGLMTS tests AB_ZGGGLM - a subroutine for solving the generalized
+*> ZGLMTS tests ZGGGLM - a subroutine for solving the generalized
 *> linear model problem.
 *> \endverbatim
 *
@@ -143,8 +143,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_ZGLMTS( N, M, P, A, AF, LDA, B, BF, LDB, D, DF, X, U
-     $,
+      SUBROUTINE ZGLMTS( N, M, P, A, AF, LDA, B, BF, LDB, D, DF, X, U,
      $                   WORK, LWORK, RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -176,52 +175,50 @@
       DOUBLE PRECISION   ANORM, BNORM, DNORM, EPS, UNFL, XNORM, YNORM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH, AB_DZASUM, AB_ZLANGE
-      EXTERNAL           AB_DLAMCH, AB_DZASUM, AB_ZLANGE
+      DOUBLE PRECISION   DLAMCH, DZASUM, ZLANGE
+      EXTERNAL           DLAMCH, DZASUM, ZLANGE
 *     ..
 *     .. External Subroutines ..
 *
-      EXTERNAL           AB_ZCOPY, AB_ZGEMV, AB_ZGGGLM, AB_ZLACPY
+      EXTERNAL           ZCOPY, ZGEMV, ZGGGLM, ZLACPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
-      UNFL = AB_DLAMCH( 'Safe minimum' )
-      ANORM = MAX( AB_ZLANGE( '1', N, M, A, LDA, RWORK ), UNFL )
-      BNORM = MAX( AB_ZLANGE( '1', N, P, B, LDB, RWORK ), UNFL )
+      EPS = DLAMCH( 'Epsilon' )
+      UNFL = DLAMCH( 'Safe minimum' )
+      ANORM = MAX( ZLANGE( '1', N, M, A, LDA, RWORK ), UNFL )
+      BNORM = MAX( ZLANGE( '1', N, P, B, LDB, RWORK ), UNFL )
 *
 *     Copy the matrices A and B to the arrays AF and BF,
 *     and the vector D the array DF.
 *
-      CALL AB_ZLACPY( 'Full', N, M, A, LDA, AF, LDA )
-      CALL AB_ZLACPY( 'Full', N, P, B, LDB, BF, LDB )
-      CALL AB_ZCOPY( N, D, 1, DF, 1 )
+      CALL ZLACPY( 'Full', N, M, A, LDA, AF, LDA )
+      CALL ZLACPY( 'Full', N, P, B, LDB, BF, LDB )
+      CALL ZCOPY( N, D, 1, DF, 1 )
 *
 *     Solve GLM problem
 *
-      CALL AB_ZGGGLM( N, M, P, AF, LDA, BF, LDB, DF, X, U, WORK, LWORK,
+      CALL ZGGGLM( N, M, P, AF, LDA, BF, LDB, DF, X, U, WORK, LWORK,
      $             INFO )
 *
-*     Test the residual for the solution of AB_LSE
+*     Test the residual for the solution of LSE
 *
 *                       norm( d - A*x - B*u )
 *       RESULT = -----------------------------------------
 *                (norm(A)+norm(B))*(norm(x)+norm(u))*EPS
 *
-      CALL AB_ZCOPY( N, D, 1, DF, 1 )
-      CALL AB_ZGEMV( 'No transpose', N, M, -CONE, A, LDA, X, 1, CONE, DF
-     $,
+      CALL ZCOPY( N, D, 1, DF, 1 )
+      CALL ZGEMV( 'No transpose', N, M, -CONE, A, LDA, X, 1, CONE, DF,
      $            1 )
 *
-      CALL AB_ZGEMV( 'No transpose', N, P, -CONE, B, LDB, U, 1, CONE, DF
-     $,
+      CALL ZGEMV( 'No transpose', N, P, -CONE, B, LDB, U, 1, CONE, DF,
      $            1 )
 *
-      DNORM = AB_DZASUM( N, DF, 1 )
-      XNORM = AB_DZASUM( M, X, 1 ) + AB_DZASUM( P, U, 1 )
+      DNORM = DZASUM( N, DF, 1 )
+      XNORM = DZASUM( M, X, 1 ) + DZASUM( P, U, 1 )
       YNORM = ANORM + BNORM
 *
       IF( XNORM.LE.ZERO ) THEN
@@ -232,6 +229,6 @@
 *
       RETURN
 *
-*     End of AB_ZGLMTS
+*     End of ZGLMTS
 *
       END

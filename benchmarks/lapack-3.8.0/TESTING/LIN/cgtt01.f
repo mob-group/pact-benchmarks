@@ -1,4 +1,4 @@
-*> \brief \b AB_CGTT01
+*> \brief \b CGTT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CGTT01( N, DL, D, DU, DLF, DF, DUF, DU2, IPIV, WORK,
+*       SUBROUTINE CGTT01( N, DL, D, DU, DLF, DF, DUF, DU2, IPIV, WORK,
 *                          LDWORK, RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -28,7 +28,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CGTT01 reconstructs a tridiagonal matrix A from its LU factorization
+*> CGTT01 reconstructs a tridiagonal matrix A from its LU factorization
 *> and computes the residual
 *>    norm(L*U - A) / ( norm(A) * EPS ),
 *> where EPS is the machine epsilon.
@@ -84,7 +84,7 @@
 *> \param[in] DU2
 *> \verbatim
 *>          DU2 is COMPLEX array, dimension (N-2)
-*>          The (n-2) elements of the AB_SECOND super-diagonal of U.
+*>          The (n-2) elements of the second super-diagonal of U.
 *> \endverbatim
 *>
 *> \param[in] IPIV
@@ -131,7 +131,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_CGTT01( N, DL, D, DU, DLF, DF, DUF, DU2, IPIV, WORK,
+      SUBROUTINE CGTT01( N, DL, D, DU, DLF, DF, DUF, DU2, IPIV, WORK,
      $                   LDWORK, RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -162,14 +162,14 @@
       COMPLEX            LI
 *     ..
 *     .. External Functions ..
-      REAL               AB_CLANGT, AB_CLANHS, AB_SLAMCH
-      EXTERNAL           AB_CLANGT, AB_CLANHS, AB_SLAMCH
+      REAL               CLANGT, CLANHS, SLAMCH
+      EXTERNAL           CLANGT, CLANHS, SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CAXPY, AB_CSWAP
+      EXTERNAL           CAXPY, CSWAP
 *     ..
 *     .. Executable Statements ..
 *
@@ -180,7 +180,7 @@
          RETURN
       END IF
 *
-      EPS = AB_SLAMCH( 'Epsilon' )
+      EPS = SLAMCH( 'Epsilon' )
 *
 *     Copy the matrix U to WORK.
 *
@@ -211,14 +211,13 @@
       LASTJ = N
       DO 40 I = N - 1, 1, -1
          LI = DLF( I )
-         CALL AB_CAXPY( LASTJ-I+1, LI, WORK( I, I ), LDWORK,
+         CALL CAXPY( LASTJ-I+1, LI, WORK( I, I ), LDWORK,
      $               WORK( I+1, I ), LDWORK )
          IP = IPIV( I )
          IF( IP.EQ.I ) THEN
             LASTJ = MIN( I+2, N )
          ELSE
-            CALL AB_CSWAP( LASTJ-I+1, WORK( I, I ), LDWORK, WORK( I+1, I
-     $ ),
+            CALL CSWAP( LASTJ-I+1, WORK( I, I ), LDWORK, WORK( I+1, I ),
      $                  LDWORK )
          END IF
    40 CONTINUE
@@ -239,12 +238,12 @@
 *
 *     Compute the 1-norm of the tridiagonal matrix A.
 *
-      ANORM = AB_CLANGT( '1', N, DL, D, DU )
+      ANORM = CLANGT( '1', N, DL, D, DU )
 *
 *     Compute the 1-norm of WORK, which is only guaranteed to be
 *     upper Hessenberg.
 *
-      RESID = AB_CLANHS( '1', N, WORK, LDWORK, RWORK )
+      RESID = CLANHS( '1', N, WORK, LDWORK, RWORK )
 *
 *     Compute norm(L*U - A) / (norm(A) * EPS)
 *
@@ -257,6 +256,6 @@
 *
       RETURN
 *
-*     End of AB_CGTT01
+*     End of CGTT01
 *
       END

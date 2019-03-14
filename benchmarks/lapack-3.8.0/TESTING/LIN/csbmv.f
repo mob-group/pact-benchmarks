@@ -1,4 +1,4 @@
-*> \brief \b AB_CSBMV
+*> \brief \b CSBMV
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CSBMV( UPLO, N, K, ALPHA, A, LDA, X, INCX, BETA, Y,
+*       SUBROUTINE CSBMV( UPLO, N, K, ALPHA, A, LDA, X, INCX, BETA, Y,
 *                         INCY )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CSBMV  performs the matrix-vector  operation
+*> CSBMV  performs the matrix-vector  operation
 *>
 *>    y := alpha*A*x + beta*y,
 *>
@@ -149,7 +149,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_CSBMV( UPLO, N, K, ALPHA, A, LDA, X, INCX, BETA, Y,
+      SUBROUTINE CSBMV( UPLO, N, K, ALPHA, A, LDA, X, INCX, BETA, Y,
      $                  INCY )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -179,11 +179,11 @@
       COMPLEX            TEMP1, TEMP2
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA
+      EXTERNAL           XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -193,8 +193,7 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF( .NOT.AB_LSAME( UPLO, 'U' ) .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) 
-     $THEN
+      IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = 1
       ELSE IF( N.LT.0 ) THEN
          INFO = 2
@@ -208,7 +207,7 @@
          INFO = 11
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CSBMV ', INFO )
+         CALL XERBLA( 'CSBMV ', INFO )
          RETURN
       END IF
 *
@@ -263,7 +262,7 @@
       END IF
       IF( ALPHA.EQ.ZERO )
      $   RETURN
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
 *
 *        Form  y  when upper triangle of A is stored.
 *
@@ -344,6 +343,6 @@
 *
       RETURN
 *
-*     End of AB_CSBMV
+*     End of CSBMV
 *
       END

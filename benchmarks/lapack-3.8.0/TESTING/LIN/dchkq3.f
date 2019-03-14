@@ -1,4 +1,4 @@
-*> \brief \b AB_DCHKQ3
+*> \brief \b DCHKQ3
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DCHKQ3( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVAL,
+*       SUBROUTINE DCHKQ3( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVAL,
 *                          THRESH, A, COPYA, S, TAU, WORK, IWORK,
 *                          NOUT )
 *
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DCHKQ3 tests AB_DGEQP3.
+*> DCHKQ3 tests DGEQP3.
 *> \endverbatim
 *
 *  Arguments:
@@ -149,8 +149,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_DCHKQ3( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVA
-     $L,
+      SUBROUTINE DCHKQ3( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVAL,
      $                   THRESH, A, COPYA, S, TAU, WORK, IWORK,
      $                   NOUT )
 *
@@ -193,13 +192,12 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH, AB_DQPT01, AB_DQRT11, AB_DQRT12
-      EXTERNAL           AB_DLAMCH, AB_DQPT01, AB_DQRT11, AB_DQRT12
+      DOUBLE PRECISION   DLAMCH, DQPT01, DQRT11, DQRT12
+      EXTERNAL           DLAMCH, DQPT01, DQRT11, DQRT12
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALAHD, AB_ALASUM, AB_DGEQP3, AB_DLACPY, AB_D
-     $LAORD, AB_DLASET,
-     $                   AB_DLATMS, AB_ICOPY, AB_XLAENV
+      EXTERNAL           ALAHD, ALASUM, DGEQP3, DLACPY, DLAORD, DLASET,
+     $                   DLATMS, ICOPY, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -228,7 +226,7 @@
       DO 10 I = 1, 4
          ISEED( I ) = ISEEDY( I )
    10 CONTINUE
-      EPS = AB_DLAMCH( 'Epsilon' )
+      EPS = DLAMCH( 'Epsilon' )
       INFOT = 0
 *
       DO 90 IM = 1, NM
@@ -257,7 +255,7 @@
 *                 3:  geometric distribution of singular values
 *                 4:  first n/2 columns fixed
 *                 5:  last n/2 columns fixed
-*                 6:  every AB_SECOND column fixed
+*                 6:  every second column fixed
 *
                MODE = IMODE
                IF( IMODE.GT.3 )
@@ -270,12 +268,12 @@
                   IWORK( I ) = 0
    20          CONTINUE
                IF( IMODE.EQ.1 ) THEN
-                  CALL AB_DLASET( 'Full', M, N, ZERO, ZERO, COPYA, LDA )
+                  CALL DLASET( 'Full', M, N, ZERO, ZERO, COPYA, LDA )
                   DO 30 I = 1, MNMIN
                      S( I ) = ZERO
    30             CONTINUE
                ELSE
-                  CALL AB_DLATMS( M, N, 'Uniform', ISEED, 'Nonsymm', S,
+                  CALL DLATMS( M, N, 'Uniform', ISEED, 'Nonsymm', S,
      $                         MODE, ONE / EPS, ONE, M, N, 'No packing',
      $                         COPYA, LDA, WORK, INFO )
                   IF( IMODE.GE.4 ) THEN
@@ -296,7 +294,7 @@
                         IWORK( I ) = 1
    40                CONTINUE
                   END IF
-                  CALL AB_DLAORD( 'Decreasing', MNMIN, S, 1 )
+                  CALL DLAORD( 'Decreasing', MNMIN, S, 1 )
                END IF
 *
                DO 60 INB = 1, NNB
@@ -304,15 +302,15 @@
 *                 Do for each pair of values (NB,NX) in NBVAL and NXVAL.
 *
                   NB = NBVAL( INB )
-                  CALL AB_XLAENV( 1, NB )
+                  CALL XLAENV( 1, NB )
                   NX = NXVAL( INB )
-                  CALL AB_XLAENV( 3, NX )
+                  CALL XLAENV( 3, NX )
 *
 *                 Get a working copy of COPYA into A and a copy of
 *                 vector IWORK.
 *
-                  CALL AB_DLACPY( 'All', M, N, COPYA, LDA, A, LDA )
-                  CALL AB_ICOPY( N, IWORK( 1 ), 1, IWORK( N+1 ), 1 )
+                  CALL DLACPY( 'All', M, N, COPYA, LDA, A, LDA )
+                  CALL ICOPY( N, IWORK( 1 ), 1, IWORK( N+1 ), 1 )
 *
 *                 Compute the QR factorization with pivoting of A
 *
@@ -320,24 +318,23 @@
 *
 *                 Compute the QP3 factorization of A
 *
-                  SRNAMT = 'AB_DGEQP3'
-                  CALL AB_DGEQP3( M, N, A, LDA, IWORK( N+1 ), TAU, WORK,
+                  SRNAMT = 'DGEQP3'
+                  CALL DGEQP3( M, N, A, LDA, IWORK( N+1 ), TAU, WORK,
      $                         LW, INFO )
 *
 *                 Compute norm(svd(a) - svd(r))
 *
-                  RESULT( 1 ) = AB_DQRT12( M, N, A, LDA, S, WORK,
+                  RESULT( 1 ) = DQRT12( M, N, A, LDA, S, WORK,
      $                          LWORK )
 *
 *                 Compute norm( A*P - Q*R )
 *
-                  RESULT( 2 ) = AB_DQPT01( M, N, MNMIN, COPYA, A, LDA, T
-     $AU,
+                  RESULT( 2 ) = DQPT01( M, N, MNMIN, COPYA, A, LDA, TAU,
      $                          IWORK( N+1 ), WORK, LWORK )
 *
 *                 Compute Q'*Q
 *
-                  RESULT( 3 ) = AB_DQRT11( M, MNMIN, A, LDA, TAU, WORK,
+                  RESULT( 3 ) = DQRT11( M, MNMIN, A, LDA, TAU, WORK,
      $                          LWORK )
 *
 *                 Print information about the tests that did not pass
@@ -346,8 +343,8 @@
                   DO 50 K = 1, NTESTS
                      IF( RESULT( K ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL AB_ALAHD( NOUT, PATH )
-                        WRITE( NOUT, FMT = 9999 )'AB_DGEQP3', M, N, NB,
+     $                     CALL ALAHD( NOUT, PATH )
+                        WRITE( NOUT, FMT = 9999 )'DGEQP3', M, N, NB,
      $                     IMODE, K, RESULT( K )
                         NFAIL = NFAIL + 1
                      END IF
@@ -361,11 +358,11 @@
 *
 *     Print a summary of the results.
 *
-      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( 1X, A, ' M =', I5, ', N =', I5, ', NB =', I4, ', type ',
      $      I2, ', test ', I2, ', ratio =', G12.5 )
 *
-*     End of AB_DCHKQ3
+*     End of DCHKQ3
 *
       END

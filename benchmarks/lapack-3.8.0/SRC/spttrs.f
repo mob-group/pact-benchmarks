@@ -1,4 +1,4 @@
-*> \brief \b AB_SPTTRS
+*> \brief \b SPTTRS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SPTTRS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SPTTRS.f">
+*> Download SPTTRS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/spttrs.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SPTTRS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/spttrs.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SPTTRS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spttrs.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SPTTRS( N, NRHS, D, E, B, LDB, INFO )
+*       SUBROUTINE SPTTRS( N, NRHS, D, E, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDB, N, NRHS
@@ -33,9 +33,9 @@
 *>
 *> \verbatim
 *>
-*> AB_SPTTRS solves a tridiagonal system of the form
+*> SPTTRS solves a tridiagonal system of the form
 *>    A * X = B
-*> using the L*D*L**T factorization of A computed by AB_SPTTRF.  D is a
+*> using the L*D*L**T factorization of A computed by SPTTRF.  D is a
 *> diagonal matrix specified in the vector D, L is a unit bidiagonal
 *> matrix whose subdiagonal is specified in the vector E, and X and B
 *> are N by NRHS matrices.
@@ -107,7 +107,7 @@
 *> \ingroup realPTcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_SPTTRS( N, NRHS, D, E, B, LDB, INFO )
+      SUBROUTINE SPTTRS( N, NRHS, D, E, B, LDB, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -127,11 +127,11 @@
       INTEGER            J, JB, NB
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_ILAENV
+      INTEGER            ILAENV
+      EXTERNAL           ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SPTTS2, AB_XERBLA
+      EXTERNAL           SPTTS2, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -149,7 +149,7 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SPTTRS', -INFO )
+         CALL XERBLA( 'SPTTRS', -INFO )
          RETURN
       END IF
 *
@@ -163,21 +163,20 @@
       IF( NRHS.EQ.1 ) THEN
          NB = 1
       ELSE
-         NB = MAX( 1, AB_ILAENV( 1, 'AB_SPTTRS', ' ', N, NRHS, -1, -1 ) 
-     $)
+         NB = MAX( 1, ILAENV( 1, 'SPTTRS', ' ', N, NRHS, -1, -1 ) )
       END IF
 *
       IF( NB.GE.NRHS ) THEN
-         CALL AB_SPTTS2( N, NRHS, D, E, B, LDB )
+         CALL SPTTS2( N, NRHS, D, E, B, LDB )
       ELSE
          DO 10 J = 1, NRHS, NB
             JB = MIN( NRHS-J+1, NB )
-            CALL AB_SPTTS2( N, JB, D, E, B( 1, J ), LDB )
+            CALL SPTTS2( N, JB, D, E, B( 1, J ), LDB )
    10    CONTINUE
       END IF
 *
       RETURN
 *
-*     End of AB_SPTTRS
+*     End of SPTTRS
 *
       END

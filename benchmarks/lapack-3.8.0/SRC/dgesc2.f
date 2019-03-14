@@ -1,4 +1,4 @@
-*> \brief \b AB_DGESC2 solves a system of linear equations using the LU factorization with complete pivoting computed by AB_SGETC2.
+*> \brief \b DGESC2 solves a system of linear equations using the LU factorization with complete pivoting computed by sgetc2.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DGESC2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGESC2.f">
+*> Download DGESC2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgesc2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGESC2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgesc2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGESC2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgesc2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DGESC2( N, A, LDA, RHS, IPIV, JPIV, SCALE )
+*       SUBROUTINE DGESC2( N, A, LDA, RHS, IPIV, JPIV, SCALE )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDA, N
@@ -35,12 +35,12 @@
 *>
 *> \verbatim
 *>
-*> AB_DGESC2 solves a system of linear equations
+*> DGESC2 solves a system of linear equations
 *>
 *>           A * X = scale* RHS
 *>
 *> with a general N-by-N matrix A using the LU factorization with
-*> complete pivoting computed by AB_DGETC2.
+*> complete pivoting computed by DGETC2.
 *> \endverbatim
 *
 *  Arguments:
@@ -56,7 +56,7 @@
 *> \verbatim
 *>          A is DOUBLE PRECISION array, dimension (LDA,N)
 *>          On entry, the  LU part of the factorization of the n-by-n
-*>          matrix A computed by AB_DGETC2:  A = P * L * U * Q
+*>          matrix A computed by DGETC2:  A = P * L * U * Q
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -112,7 +112,7 @@
 *>     Umea University, S-901 87 Umea, Sweden.
 *
 *  =====================================================================
-      SUBROUTINE AB_DGESC2( N, A, LDA, RHS, IPIV, JPIV, SCALE )
+      SUBROUTINE DGESC2( N, A, LDA, RHS, IPIV, JPIV, SCALE )
 *
 *  -- LAPACK auxiliary routine (version 3.8.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -139,12 +139,12 @@
       DOUBLE PRECISION   BIGNUM, EPS, SMLNUM, TEMP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLASWP, AB_DSCAL, AB_DLABAD
+      EXTERNAL           DLASWP, DSCAL, DLABAD
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_IDAMAX
-      DOUBLE PRECISION   AB_DLAMCH
-      EXTERNAL           AB_IDAMAX, AB_DLAMCH
+      INTEGER            IDAMAX
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           IDAMAX, DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS
@@ -153,14 +153,14 @@
 *
 *      Set constant to control owerflow
 *
-      EPS = AB_DLAMCH( 'P' )
-      SMLNUM = AB_DLAMCH( 'S' ) / EPS
+      EPS = DLAMCH( 'P' )
+      SMLNUM = DLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL AB_DLABAD( SMLNUM, BIGNUM )
+      CALL DLABAD( SMLNUM, BIGNUM )
 *
 *     Apply permutations IPIV to RHS
 *
-      CALL AB_DLASWP( 1, RHS, LDA, 1, N-1, IPIV, 1 )
+      CALL DLASWP( 1, RHS, LDA, 1, N-1, IPIV, 1 )
 *
 *     Solve for L part
 *
@@ -176,10 +176,10 @@
 *
 *     Check for scaling
 *
-      I = AB_IDAMAX( N, RHS, 1 )
+      I = IDAMAX( N, RHS, 1 )
       IF( TWO*SMLNUM*ABS( RHS( I ) ).GT.ABS( A( N, N ) ) ) THEN
          TEMP = ( ONE / TWO ) / ABS( RHS( I ) )
-         CALL AB_DSCAL( N, TEMP, RHS( 1 ), 1 )
+         CALL DSCAL( N, TEMP, RHS( 1 ), 1 )
          SCALE = SCALE*TEMP
       END IF
 *
@@ -193,9 +193,9 @@
 *
 *     Apply permutations JPIV to the solution (RHS)
 *
-      CALL AB_DLASWP( 1, RHS, LDA, 1, N-1, JPIV, -1 )
+      CALL DLASWP( 1, RHS, LDA, 1, N-1, JPIV, -1 )
       RETURN
 *
-*     End of AB_DGESC2
+*     End of DGESC2
 *
       END

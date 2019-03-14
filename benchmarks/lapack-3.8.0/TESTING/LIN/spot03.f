@@ -1,4 +1,4 @@
-*> \brief \b AB_SPOT03
+*> \brief \b SPOT03
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SPOT03( UPLO, N, A, LDA, AINV, LDAINV, WORK, LDWORK,
+*       SUBROUTINE SPOT03( UPLO, N, A, LDA, AINV, LDAINV, WORK, LDWORK,
 *                          RWORK, RCOND, RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SPOT03 computes the residual for a symmetric matrix times its
+*> SPOT03 computes the residual for a symmetric matrix times its
 *> inverse:
 *>    norm( I - A*AINV ) / ( N * norm(A) * norm(AINV) * EPS ),
 *> where EPS is the machine epsilon.
@@ -122,7 +122,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_SPOT03( UPLO, N, A, LDA, AINV, LDAINV, WORK, LDWORK,
+      SUBROUTINE SPOT03( UPLO, N, A, LDA, AINV, LDAINV, WORK, LDWORK,
      $                   RWORK, RCOND, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -151,12 +151,12 @@
       REAL               AINVNM, ANORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_SLAMCH, AB_SLANGE, AB_SLANSY
-      EXTERNAL           AB_LSAME, AB_SLAMCH, AB_SLANGE, AB_SLANSY
+      LOGICAL            LSAME
+      REAL               SLAMCH, SLANGE, SLANSY
+      EXTERNAL           LSAME, SLAMCH, SLANGE, SLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SSYMM
+      EXTERNAL           SSYMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          REAL
@@ -173,9 +173,9 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0 or AINVNM = 0.
 *
-      EPS = AB_SLAMCH( 'Epsilon' )
-      ANORM = AB_SLANSY( '1', UPLO, N, A, LDA, RWORK )
-      AINVNM = AB_SLANSY( '1', UPLO, N, AINV, LDAINV, RWORK )
+      EPS = SLAMCH( 'Epsilon' )
+      ANORM = SLANSY( '1', UPLO, N, A, LDA, RWORK )
+      AINVNM = SLANSY( '1', UPLO, N, AINV, LDAINV, RWORK )
       IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
          RCOND = ZERO
          RESID = ONE / EPS
@@ -183,10 +183,10 @@
       END IF
       RCOND = ( ONE / ANORM ) / AINVNM
 *
-*     Expand AINV into a full matrix and call AB_SSYMM to multiply
+*     Expand AINV into a full matrix and call SSYMM to multiply
 *     AINV on the left by A.
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
          DO 20 J = 1, N
             DO 10 I = 1, J - 1
                AINV( J, I ) = AINV( I, J )
@@ -199,8 +199,7 @@
    30       CONTINUE
    40    CONTINUE
       END IF
-      CALL AB_SSYMM( 'Left', UPLO, N, N, -ONE, A, LDA, AINV, LDAINV, ZER
-     $O,
+      CALL SSYMM( 'Left', UPLO, N, N, -ONE, A, LDA, AINV, LDAINV, ZERO,
      $            WORK, LDWORK )
 *
 *     Add the identity matrix to WORK .
@@ -211,12 +210,12 @@
 *
 *     Compute norm(I - A*AINV) / (N * norm(A) * norm(AINV) * EPS)
 *
-      RESID = AB_SLANGE( '1', N, N, WORK, LDWORK, RWORK )
+      RESID = SLANGE( '1', N, N, WORK, LDWORK, RWORK )
 *
       RESID = ( ( RESID*RCOND ) / EPS ) / REAL( N )
 *
       RETURN
 *
-*     End of AB_SPOT03
+*     End of SPOT03
 *
       END

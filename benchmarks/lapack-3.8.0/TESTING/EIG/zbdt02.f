@@ -1,4 +1,4 @@
-*> \brief \b AB_ZBDT02
+*> \brief \b ZBDT02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZBDT02( M, N, B, LDB, C, LDC, U, LDU, WORK, RWORK,
+*       SUBROUTINE ZBDT02( M, N, B, LDB, C, LDC, U, LDU, WORK, RWORK,
 *                          RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZBDT02 tests the change of basis C = U' * B by computing the residual
+*> ZBDT02 tests the change of basis C = U' * B by computing the residual
 *>
 *>    RESID = norm( B - U * C ) / ( max(m,n) * norm(B) * EPS ),
 *>
@@ -116,7 +116,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_ZBDT02( M, N, B, LDB, C, LDC, U, LDU, WORK, RWORK,
+      SUBROUTINE ZBDT02( M, N, B, LDB, C, LDC, U, LDU, WORK, RWORK,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -145,11 +145,11 @@
       DOUBLE PRECISION   BNORM, EPS, REALMN
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH, AB_DZASUM, AB_ZLANGE
-      EXTERNAL           AB_DLAMCH, AB_DZASUM, AB_ZLANGE
+      DOUBLE PRECISION   DLAMCH, DZASUM, ZLANGE
+      EXTERNAL           DLAMCH, DZASUM, ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZCOPY, AB_ZGEMV
+      EXTERNAL           ZCOPY, ZGEMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCMPLX, MAX, MIN
@@ -162,20 +162,20 @@
       IF( M.LE.0 .OR. N.LE.0 )
      $   RETURN
       REALMN = DBLE( MAX( M, N ) )
-      EPS = AB_DLAMCH( 'Precision' )
+      EPS = DLAMCH( 'Precision' )
 *
 *     Compute norm( B - U * C )
 *
       DO 10 J = 1, N
-         CALL AB_ZCOPY( M, B( 1, J ), 1, WORK, 1 )
-         CALL AB_ZGEMV( 'No transpose', M, M, -DCMPLX( ONE ), U, LDU,
+         CALL ZCOPY( M, B( 1, J ), 1, WORK, 1 )
+         CALL ZGEMV( 'No transpose', M, M, -DCMPLX( ONE ), U, LDU,
      $               C( 1, J ), 1, DCMPLX( ONE ), WORK, 1 )
-         RESID = MAX( RESID, AB_DZASUM( M, WORK, 1 ) )
+         RESID = MAX( RESID, DZASUM( M, WORK, 1 ) )
    10 CONTINUE
 *
 *     Compute norm of B.
 *
-      BNORM = AB_ZLANGE( '1', M, N, B, LDB, RWORK )
+      BNORM = ZLANGE( '1', M, N, B, LDB, RWORK )
 *
       IF( BNORM.LE.ZERO ) THEN
          IF( RESID.NE.ZERO )
@@ -194,6 +194,6 @@
       END IF
       RETURN
 *
-*     End of AB_ZBDT02
+*     End of ZBDT02
 *
       END

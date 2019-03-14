@@ -1,4 +1,4 @@
-*> \brief \b AB_CHBT21
+*> \brief \b CHBT21
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CHBT21( UPLO, N, KA, KS, A, LDA, D, E, U, LDU, WORK,
+*       SUBROUTINE CHBT21( UPLO, N, KA, KS, A, LDA, D, E, U, LDU, WORK,
 *                          RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CHBT21  generally checks a decomposition of the form
+*> CHBT21  generally checks a decomposition of the form
 *>
 *>         A = U S UC>
 *> where * means conjugate transpose, A is hermitian banded, U is
@@ -53,7 +53,7 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The size of the matrix.  If it is zero, AB_CHBT21 does nothing.
+*>          The size of the matrix.  If it is zero, CHBT21 does nothing.
 *>          It must be at least zero.
 *> \endverbatim
 *>
@@ -106,7 +106,7 @@
 *> \verbatim
 *>          U is COMPLEX array, dimension (LDU, N)
 *>          The unitary matrix in the decomposition, expressed as a
-*>          dense matrix (i.e., not as a product of HousehoAB_LDEr
+*>          dense matrix (i.e., not as a product of Householder
 *>          transformations, Givens transformations, etc.)
 *> \endverbatim
 *>
@@ -147,7 +147,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_CHBT21( UPLO, N, KA, KS, A, LDA, D, E, U, LDU, WORK,
+      SUBROUTINE CHBT21( UPLO, N, KA, KS, A, LDA, D, E, U, LDU, WORK,
      $                   RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -180,13 +180,12 @@
       REAL               ANORM, ULP, UNFL, WNORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_CLANGE, AB_CLANHB, AB_CLANHP, AB_SLAMCH
-      EXTERNAL           AB_LSAME, AB_CLANGE, AB_CLANHB, AB_CLANHP, AB_S
-     $LAMCH
+      LOGICAL            LSAME
+      REAL               CLANGE, CLANHB, CLANHP, SLAMCH
+      EXTERNAL           LSAME, CLANGE, CLANHB, CLANHP, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CGEMM, AB_CHPR, AB_AB_CHPR2
+      EXTERNAL           CGEMM, CHPR, CHPR2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CMPLX, MAX, MIN, REAL
@@ -202,7 +201,7 @@
 *
       IKA = MAX( 0, MIN( N-1, KA ) )
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
          LOWER = .FALSE.
          CUPLO = 'U'
       ELSE
@@ -210,8 +209,8 @@
          CUPLO = 'L'
       END IF
 *
-      UNFL = AB_SLAMCH( 'Safe minimum' )
-      ULP = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
+      UNFL = SLAMCH( 'Safe minimum' )
+      ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
 *
 *     Some Error Checks
 *
@@ -219,8 +218,7 @@
 *
 *     Norm of A:
 *
-      ANORM = MAX( AB_CLANHB( '1', CUPLO, N, IKA, A, LDA, RWORK ), UNFL 
-     $)
+      ANORM = MAX( CLANHB( '1', CUPLO, N, IKA, A, LDA, RWORK ), UNFL )
 *
 *     Compute error matrix:    Error = A - U S U*
 *
@@ -250,16 +248,16 @@
    50 CONTINUE
 *
       DO 60 J = 1, N
-         CALL AB_CHPR( CUPLO, N, -D( J ), U( 1, J ), 1, WORK )
+         CALL CHPR( CUPLO, N, -D( J ), U( 1, J ), 1, WORK )
    60 CONTINUE
 *
       IF( N.GT.1 .AND. KS.EQ.1 ) THEN
          DO 70 J = 1, N - 1
-            CALL AB_AB_CHPR2( CUPLO, N, -CMPLX( E( J ) ), U( 1, J ), 1,
+            CALL CHPR2( CUPLO, N, -CMPLX( E( J ) ), U( 1, J ), 1,
      $                  U( 1, J+1 ), 1, WORK )
    70    CONTINUE
       END IF
-      WNORM = AB_CLANHP( '1', CUPLO, N, WORK, RWORK )
+      WNORM = CLANHP( '1', CUPLO, N, WORK, RWORK )
 *
       IF( ANORM.GT.WNORM ) THEN
          RESULT( 1 ) = ( WNORM / ANORM ) / ( N*ULP )
@@ -275,19 +273,18 @@
 *
 *     Compute  UU* - I
 *
-      CALL AB_CGEMM( 'N', 'C', N, N, N, CONE, U, LDU, U, LDU, CZERO, WOR
-     $K,
+      CALL CGEMM( 'N', 'C', N, N, N, CONE, U, LDU, U, LDU, CZERO, WORK,
      $            N )
 *
       DO 80 J = 1, N
          WORK( ( N+1 )*( J-1 )+1 ) = WORK( ( N+1 )*( J-1 )+1 ) - CONE
    80 CONTINUE
 *
-      RESULT( 2 ) = MIN( AB_CLANGE( '1', N, N, WORK, N, RWORK ),
+      RESULT( 2 ) = MIN( CLANGE( '1', N, N, WORK, N, RWORK ),
      $              REAL( N ) ) / ( N*ULP )
 *
       RETURN
 *
-*     End of AB_CHBT21
+*     End of CHBT21
 *
       END

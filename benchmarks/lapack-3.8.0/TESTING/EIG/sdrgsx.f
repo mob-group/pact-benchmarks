@@ -1,4 +1,4 @@
-*> \brief \b AB_SDRGSX
+*> \brief \b SDRGSX
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SDRGSX( NSIZE, NCMAX, THRESH, NIN, NOUT, A, LDA, B,
+*       SUBROUTINE SDRGSX( NSIZE, NCMAX, THRESH, NIN, NOUT, A, LDA, B,
 *                          AI, BI, Z, Q, ALPHAR, ALPHAI, BETA, C, LDC, S,
 *                          WORK, LWORK, IWORK, LIWORK, BWORK, INFO )
 *
@@ -32,10 +32,10 @@
 *>
 *> \verbatim
 *>
-*> AB_SDRGSX checks the nonsymmetric generalized eigenvalue (Schur form)
-*> problem expert driver AB_AB_SGGESX.
+*> SDRGSX checks the nonsymmetric generalized eigenvalue (Schur form)
+*> problem expert driver SGGESX.
 *>
-*> AB_AB_SGGESX factors A and B as Q S Z' and Q T Z', where ' means
+*> SGGESX factors A and B as Q S Z' and Q T Z', where ' means
 *> transpose, T is upper triangular, S is in generalized Schur form
 *> (block upper triangular, with 1x1 and 2x2 blocks on the diagonal,
 *> the 2x2 blocks corresponding to complex conjugate pairs of
@@ -53,11 +53,11 @@
 *> number for the right and left deflating subspaces corresponding to
 *> the selected eigenvalues.
 *>
-*> When AB_SDRGSX is called with NSIZE > 0, five (5) types of built-in
-*> matrix pairs are used to test the routine AB_AB_SGGESX.
+*> When SDRGSX is called with NSIZE > 0, five (5) types of built-in
+*> matrix pairs are used to test the routine SGGESX.
 *>
-*> When AB_SDRGSX is called with NSIZE = 0, it reads in test matrix data
-*> to test AB_AB_SGGESX.
+*> When SDRGSX is called with NSIZE = 0, it reads in test matrix data
+*> to test SGGESX.
 *>
 *> For each matrix pair, the following tests will be performed and
 *> compared with the threshold THRESH except for the tests (7) and (9):
@@ -97,7 +97,7 @@
 *>       and Difl equal zero, the estimate DIF should be less than
 *>       EPS*norm(A, B).
 *>
-*> (9)   If INFO = N+3 is returned by AB_AB_SGGESX, the reordering "failed"
+*> (9)   If INFO = N+3 is returned by SGGESX, the reordering "failed"
 *>       and we check that DIF = PL = PR = 0 and that the true value of
 *>       Difu and Difl is < EPS*norm(A, B). We count the events when
 *>       INFO=N+3.
@@ -115,7 +115,7 @@
 *> Note that for the built-in tests, a total of 10*NSIZE*(NSIZE-1)
 *> matrix pairs are generated and tested. NSIZE should be kept small.
 *>
-*> SVD (routine AB_AB_SGESVD) is used for computing the true value of DIF_u
+*> SVD (routine SGESVD) is used for computing the true value of DIF_u
 *> and DIF_l when testing the built-in test problems.
 *>
 *> Built-in Test Matrices
@@ -146,7 +146,7 @@
 *>          B22 = (b_ij) = ( 2(.5-sin(ij)) ) for i=m+1,...,k, j=i,...,k
 *>
 *> Type 3:  A11, A22 and B11, B22 are chosen as for Type 2, but each
-*>          AB_SECOND diagonal block in A_11 and each third diagonal block
+*>          second diagonal block in A_11 and each third diagonal block
 *>          in A_22 are made as 2 by 2 blocks.
 *>
 *> Type 4:  A11 = ( 20(.5 - sin(ij)) ) and B22 = ( 2(.5 - sin(i+j)) )
@@ -176,7 +176,7 @@
 *>                  |                       -d  1+b    |
 *>                  |                      -1+b  -d    |
 *>                  |                              1-d |
-*>          and matrix B are chosen as identity matrices (see AB_SLATM5).
+*>          and matrix B are chosen as identity matrices (see SLATM5).
 *>
 *> \endverbatim
 *
@@ -188,14 +188,14 @@
 *>          NSIZE is INTEGER
 *>          The maximum size of the matrices to use. NSIZE >= 0.
 *>          If NSIZE = 0, no built-in tests matrices are used, but
-*>          read-in test matrices are used to test AB_AB_SGGESX.
+*>          read-in test matrices are used to test SGGESX.
 *> \endverbatim
 *>
 *> \param[in] NCMAX
 *> \verbatim
 *>          NCMAX is INTEGER
 *>          Maximum allowable NMAX for generating Kroneker matrix
-*>          in call to AB_SLAKF2
+*>          in call to SLAKF2
 *> \endverbatim
 *>
 *> \param[in] THRESH
@@ -248,25 +248,25 @@
 *> \param[out] AI
 *> \verbatim
 *>          AI is REAL array, dimension (LDA, NSIZE)
-*>          Copy of A, modified by AB_AB_SGGESX.
+*>          Copy of A, modified by SGGESX.
 *> \endverbatim
 *>
 *> \param[out] BI
 *> \verbatim
 *>          BI is REAL array, dimension (LDA, NSIZE)
-*>          Copy of B, modified by AB_AB_SGGESX.
+*>          Copy of B, modified by SGGESX.
 *> \endverbatim
 *>
 *> \param[out] Z
 *> \verbatim
 *>          Z is REAL array, dimension (LDA, NSIZE)
-*>          Z holds the left Schur vectors computed by AB_AB_SGGESX.
+*>          Z holds the left Schur vectors computed by SGGESX.
 *> \endverbatim
 *>
 *> \param[out] Q
 *> \verbatim
 *>          Q is REAL array, dimension (LDA, NSIZE)
-*>          Q holds the right Schur vectors computed by AB_AB_SGGESX.
+*>          Q holds the right Schur vectors computed by SGGESX.
 *> \endverbatim
 *>
 *> \param[out] ALPHAR
@@ -289,7 +289,7 @@
 *> \param[out] C
 *> \verbatim
 *>          C is REAL array, dimension (LDC, LDC)
-*>          Store the matrix generated by subroutine AB_SLAKF2, this is the
+*>          Store the matrix generated by subroutine SLAKF2, this is the
 *>          matrix formed by Kronecker products used for estimating
 *>          DIF.
 *> \endverbatim
@@ -355,7 +355,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_SDRGSX( NSIZE, NCMAX, THRESH, NIN, NOUT, A, LDA, B,
+      SUBROUTINE SDRGSX( NSIZE, NCMAX, THRESH, NIN, NOUT, A, LDA, B,
      $                   AI, BI, Z, Q, ALPHAR, ALPHAI, BETA, C, LDC, S,
      $                   WORK, LWORK, IWORK, LIWORK, BWORK, INFO )
 *
@@ -397,16 +397,14 @@
       REAL               DIFEST( 2 ), PL( 2 ), RESULT( 10 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_SLCTSX
-      INTEGER            AB_ILAENV
-      REAL               AB_SLAMCH, AB_SLANGE
-      EXTERNAL           AB_SLCTSX, AB_ILAENV, AB_SLAMCH, AB_SLANGE
+      LOGICAL            SLCTSX
+      INTEGER            ILAENV
+      REAL               SLAMCH, SLANGE
+      EXTERNAL           SLCTSX, ILAENV, SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALASVM, AB_AB_SGESVD, AB_SGET51, AB_SGET53, 
-     $AB_AB_SGGESX, AB_SLABAD,
-     $                   AB_SLACPY, AB_SLAKF2, AB_SLASET, AB_SLATM5, AB_
-     $XERBLA
+      EXTERNAL           ALASVM, SGESVD, SGET51, SGET53, SGGESX, SLABAD,
+     $                   SLACPY, SLAKF2, SLASET, SLATM5, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -443,27 +441,25 @@
 *       minimal amount of workspace needed at that point in the code,
 *       as well as the preferred amount for good performance.
 *       NB refers to the optimal block size for the immediately
-*       following subroutine, as returned by AB_ILAENV.)
+*       following subroutine, as returned by ILAENV.)
 *
       MINWRK = 1
       IF( INFO.EQ.0 .AND. LWORK.GE.1 ) THEN
 c        MINWRK = MAX( 10*( NSIZE+1 ), 5*NSIZE*NSIZE / 2-2 )
          MINWRK = MAX( 10*( NSIZE+1 ), 5*NSIZE*NSIZE / 2 )
 *
-*        workspace for AB_AB_SGGESX
+*        workspace for sggesx
 *
          MAXWRK = 9*( NSIZE+1 ) + NSIZE*
-     $            AB_ILAENV( 1, 'AB_AB_SGEQRF', ' ', NSIZE, 1, NSIZE, 0 
-     $)
+     $            ILAENV( 1, 'SGEQRF', ' ', NSIZE, 1, NSIZE, 0 )
          MAXWRK = MAX( MAXWRK, 9*( NSIZE+1 )+NSIZE*
-     $            AB_ILAENV( 1, 'AB_SORGQR', ' ', NSIZE, 1, NSIZE, -1 ) 
-     $)
+     $            ILAENV( 1, 'SORGQR', ' ', NSIZE, 1, NSIZE, -1 ) )
 *
-*        workspace for AB_AB_SGESVD
+*        workspace for sgesvd
 *
          BDSPAC = 5*NSIZE*NSIZE / 2
          MAXWRK = MAX( MAXWRK, 3*NSIZE*NSIZE / 2+NSIZE*NSIZE*
-     $            AB_ILAENV( 1, 'AB_SGEBRD', ' ', NSIZE*NSIZE / 2,
+     $            ILAENV( 1, 'SGEBRD', ' ', NSIZE*NSIZE / 2,
      $            NSIZE*NSIZE / 2, -1, -1 ) )
          MAXWRK = MAX( MAXWRK, BDSPAC )
 *
@@ -476,17 +472,17 @@ c        MINWRK = MAX( 10*( NSIZE+1 ), 5*NSIZE*NSIZE / 2-2 )
      $   INFO = -19
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SDRGSX', -INFO )
+         CALL XERBLA( 'SDRGSX', -INFO )
          RETURN
       END IF
 *
 *     Important constants
 *
-      ULP = AB_SLAMCH( 'P' )
+      ULP = SLAMCH( 'P' )
       ULPINV = ONE / ULP
-      SMLNUM = AB_SLAMCH( 'S' ) / ULP
+      SMLNUM = SLAMCH( 'S' ) / ULP
       BIGNUM = ONE / SMLNUM
-      CALL AB_SLABAD( SMLNUM, BIGNUM )
+      CALL SLABAD( SMLNUM, BIGNUM )
       THRSH2 = TEN*THRESH
       NTESTT = 0
       NERRS = 0
@@ -498,7 +494,7 @@ c        MINWRK = MAX( 10*( NSIZE+1 ), 5*NSIZE*NSIZE / 2-2 )
      $   GO TO 70
 *
 *     Test the built-in matrix pairs.
-*     Loop over different functions (IFUNC) of AB_AB_SGGESX, types (PRTYPE)
+*     Loop over different functions (IFUNC) of SGGESX, types (PRTYPE)
 *     of test matrices, different size (M+N)
 *
       PRTYPE = 0
@@ -519,21 +515,19 @@ c        MINWRK = MAX( 10*( NSIZE+1 ), 5*NSIZE*NSIZE / 2-2 )
                   FS = .TRUE.
                   K = 0
 *
-                  CALL AB_SLASET( 'Full', MPLUSN, MPLUSN, ZERO, ZERO, AI
-     $,
+                  CALL SLASET( 'Full', MPLUSN, MPLUSN, ZERO, ZERO, AI,
      $                         LDA )
-                  CALL AB_SLASET( 'Full', MPLUSN, MPLUSN, ZERO, ZERO, BI
-     $,
+                  CALL SLASET( 'Full', MPLUSN, MPLUSN, ZERO, ZERO, BI,
      $                         LDA )
 *
-                  CALL AB_SLATM5( PRTYPE, M, N, AI, LDA, AI( M+1, M+1 ),
+                  CALL SLATM5( PRTYPE, M, N, AI, LDA, AI( M+1, M+1 ),
      $                         LDA, AI( 1, M+1 ), LDA, BI, LDA,
      $                         BI( M+1, M+1 ), LDA, BI( 1, M+1 ), LDA,
      $                         Q, LDA, Z, LDA, WEIGHT, QBA, QBB )
 *
 *                 Compute the Schur factorization and swapping the
 *                 m-by-m (1,1)-blocks with n-by-n (2,2)-blocks.
-*                 Swapping is accomplished via the function AB_SLCTSX
+*                 Swapping is accomplished via the function SLCTSX
 *                 which is supplied below.
 *
                   IF( IFUNC.EQ.0 ) THEN
@@ -546,21 +540,17 @@ c        MINWRK = MAX( 10*( NSIZE+1 ), 5*NSIZE*NSIZE / 2-2 )
                      SENSE = 'B'
                   END IF
 *
-                  CALL AB_SLACPY( 'Full', MPLUSN, MPLUSN, AI, LDA, A, LD
-     $A )
-                  CALL AB_SLACPY( 'Full', MPLUSN, MPLUSN, BI, LDA, B, LD
-     $A )
+                  CALL SLACPY( 'Full', MPLUSN, MPLUSN, AI, LDA, A, LDA )
+                  CALL SLACPY( 'Full', MPLUSN, MPLUSN, BI, LDA, B, LDA )
 *
-                  CALL AB_AB_SGGESX( 'V', 'V', 'S', AB_SLCTSX, SENSE, MP
-     $LUSN, AI,
+                  CALL SGGESX( 'V', 'V', 'S', SLCTSX, SENSE, MPLUSN, AI,
      $                         LDA, BI, LDA, MM, ALPHAR, ALPHAI, BETA,
      $                         Q, LDA, Z, LDA, PL, DIFEST, WORK, LWORK,
      $                         IWORK, LIWORK, BWORK, LINFO )
 *
                   IF( LINFO.NE.0 .AND. LINFO.NE.MPLUSN+2 ) THEN
                      RESULT( 1 ) = ULPINV
-                     WRITE( NOUT, FMT = 9999 )'AB_AB_SGGESX', LINFO, MPL
-     $USN,
+                     WRITE( NOUT, FMT = 9999 )'SGGESX', LINFO, MPLUSN,
      $                  PRTYPE
                      INFO = LINFO
                      GO TO 30
@@ -568,23 +558,22 @@ c        MINWRK = MAX( 10*( NSIZE+1 ), 5*NSIZE*NSIZE / 2-2 )
 *
 *                 Compute the norm(A, B)
 *
-                  CALL AB_SLACPY( 'Full', MPLUSN, MPLUSN, AI, LDA, WORK,
+                  CALL SLACPY( 'Full', MPLUSN, MPLUSN, AI, LDA, WORK,
      $                         MPLUSN )
-                  CALL AB_SLACPY( 'Full', MPLUSN, MPLUSN, BI, LDA,
+                  CALL SLACPY( 'Full', MPLUSN, MPLUSN, BI, LDA,
      $                         WORK( MPLUSN*MPLUSN+1 ), MPLUSN )
-                  ABNRM = AB_SLANGE( 'Fro', MPLUSN, 2*MPLUSN, WORK, MPLU
-     $SN,
+                  ABNRM = SLANGE( 'Fro', MPLUSN, 2*MPLUSN, WORK, MPLUSN,
      $                    WORK )
 *
 *                 Do tests (1) to (4)
 *
-                  CALL AB_SGET51( 1, MPLUSN, A, LDA, AI, LDA, Q, LDA, Z,
+                  CALL SGET51( 1, MPLUSN, A, LDA, AI, LDA, Q, LDA, Z,
      $                         LDA, WORK, RESULT( 1 ) )
-                  CALL AB_SGET51( 1, MPLUSN, B, LDA, BI, LDA, Q, LDA, Z,
+                  CALL SGET51( 1, MPLUSN, B, LDA, BI, LDA, Q, LDA, Z,
      $                         LDA, WORK, RESULT( 2 ) )
-                  CALL AB_SGET51( 3, MPLUSN, B, LDA, BI, LDA, Q, LDA, Q,
+                  CALL SGET51( 3, MPLUSN, B, LDA, BI, LDA, Q, LDA, Q,
      $                         LDA, WORK, RESULT( 3 ) )
-                  CALL AB_SGET51( 3, MPLUSN, B, LDA, BI, LDA, Z, LDA, Z,
+                  CALL SGET51( 3, MPLUSN, B, LDA, BI, LDA, Z, LDA, Z,
      $                         LDA, WORK, RESULT( 4 ) )
                   NTEST = 4
 *
@@ -636,8 +625,7 @@ c        MINWRK = MAX( 10*( NSIZE+1 ), 5*NSIZE*NSIZE / 2-2 )
                            END IF
                         END IF
                         IF( .NOT.ILABAD ) THEN
-                           CALL AB_SGET53( AI( I1, I1 ), LDA, BI( I1, I1
-     $ ),
+                           CALL SGET53( AI( I1, I1 ), LDA, BI( I1, I1 ),
      $                                  LDA, BETA( J ), ALPHAR( J ),
      $                                  ALPHAI( J ), TEMP2, IINFO )
                            IF( IINFO.GE.3 ) THEN
@@ -677,12 +665,11 @@ c        MINWRK = MAX( 10*( NSIZE+1 ), 5*NSIZE*NSIZE / 2-2 )
 *                    Note: for either following two causes, there are
 *                    almost same number of test cases fail the test.
 *
-                     CALL AB_SLAKF2( MM, MPLUSN-MM, AI, LDA,
+                     CALL SLAKF2( MM, MPLUSN-MM, AI, LDA,
      $                            AI( MM+1, MM+1 ), BI,
      $                            BI( MM+1, MM+1 ), C, LDC )
 *
-                     CALL AB_AB_SGESVD( 'N', 'N', MN2, MN2, C, LDC, S, W
-     $ORK,
+                     CALL SGESVD( 'N', 'N', MN2, MN2, C, LDC, S, WORK,
      $                            1, WORK( 2 ), 1, WORK( 3 ), LWORK-2,
      $                            INFO )
                      DIFTRU = S( MN2 )
@@ -722,7 +709,7 @@ c        MINWRK = MAX( 10*( NSIZE+1 ), 5*NSIZE*NSIZE / 2-2 )
                      IF( RESULT( J ).GE.THRESH ) THEN
 *
 *                       If this is the first test to fail,
-*                       print a AB_HEADER to the data file.
+*                       print a header to the data file.
 *
                         IF( NERRS.EQ.0 ) THEN
                            WRITE( NOUT, FMT = 9995 )'SGX'
@@ -780,40 +767,39 @@ c        MINWRK = MAX( 10*( NSIZE+1 ), 5*NSIZE*NSIZE / 2-2 )
       K = 0
       M = MPLUSN - N
 *
-      CALL AB_SLACPY( 'Full', MPLUSN, MPLUSN, AI, LDA, A, LDA )
-      CALL AB_SLACPY( 'Full', MPLUSN, MPLUSN, BI, LDA, B, LDA )
+      CALL SLACPY( 'Full', MPLUSN, MPLUSN, AI, LDA, A, LDA )
+      CALL SLACPY( 'Full', MPLUSN, MPLUSN, BI, LDA, B, LDA )
 *
 *     Compute the Schur factorization while swaping the
 *     m-by-m (1,1)-blocks with n-by-n (2,2)-blocks.
 *
-      CALL AB_AB_SGGESX( 'V', 'V', 'S', AB_SLCTSX, 'B', MPLUSN, AI, LDA,
-     $ BI, LDA,
+      CALL SGGESX( 'V', 'V', 'S', SLCTSX, 'B', MPLUSN, AI, LDA, BI, LDA,
      $             MM, ALPHAR, ALPHAI, BETA, Q, LDA, Z, LDA, PL, DIFEST,
      $             WORK, LWORK, IWORK, LIWORK, BWORK, LINFO )
 *
       IF( LINFO.NE.0 .AND. LINFO.NE.MPLUSN+2 ) THEN
          RESULT( 1 ) = ULPINV
-         WRITE( NOUT, FMT = 9998 )'AB_AB_SGGESX', LINFO, MPLUSN, NPTKNT
+         WRITE( NOUT, FMT = 9998 )'SGGESX', LINFO, MPLUSN, NPTKNT
          GO TO 130
       END IF
 *
 *     Compute the norm(A, B)
 *        (should this be norm of (A,B) or (AI,BI)?)
 *
-      CALL AB_SLACPY( 'Full', MPLUSN, MPLUSN, AI, LDA, WORK, MPLUSN )
-      CALL AB_SLACPY( 'Full', MPLUSN, MPLUSN, BI, LDA,
+      CALL SLACPY( 'Full', MPLUSN, MPLUSN, AI, LDA, WORK, MPLUSN )
+      CALL SLACPY( 'Full', MPLUSN, MPLUSN, BI, LDA,
      $             WORK( MPLUSN*MPLUSN+1 ), MPLUSN )
-      ABNRM = AB_SLANGE( 'Fro', MPLUSN, 2*MPLUSN, WORK, MPLUSN, WORK )
+      ABNRM = SLANGE( 'Fro', MPLUSN, 2*MPLUSN, WORK, MPLUSN, WORK )
 *
 *     Do tests (1) to (4)
 *
-      CALL AB_SGET51( 1, MPLUSN, A, LDA, AI, LDA, Q, LDA, Z, LDA, WORK,
+      CALL SGET51( 1, MPLUSN, A, LDA, AI, LDA, Q, LDA, Z, LDA, WORK,
      $             RESULT( 1 ) )
-      CALL AB_SGET51( 1, MPLUSN, B, LDA, BI, LDA, Q, LDA, Z, LDA, WORK,
+      CALL SGET51( 1, MPLUSN, B, LDA, BI, LDA, Q, LDA, Z, LDA, WORK,
      $             RESULT( 2 ) )
-      CALL AB_SGET51( 3, MPLUSN, B, LDA, BI, LDA, Q, LDA, Q, LDA, WORK,
+      CALL SGET51( 3, MPLUSN, B, LDA, BI, LDA, Q, LDA, Q, LDA, WORK,
      $             RESULT( 3 ) )
-      CALL AB_SGET51( 3, MPLUSN, B, LDA, BI, LDA, Z, LDA, Z, LDA, WORK,
+      CALL SGET51( 3, MPLUSN, B, LDA, BI, LDA, Z, LDA, Z, LDA, WORK,
      $             RESULT( 4 ) )
 *
 *     Do tests (5) and (6): check Schur form of A and compare
@@ -864,7 +850,7 @@ c        MINWRK = MAX( 10*( NSIZE+1 ), 5*NSIZE*NSIZE / 2-2 )
                END IF
             END IF
             IF( .NOT.ILABAD ) THEN
-               CALL AB_SGET53( AI( I1, I1 ), LDA, BI( I1, I1 ), LDA,
+               CALL SGET53( AI( I1, I1 ), LDA, BI( I1, I1 ), LDA,
      $                      BETA( J ), ALPHAR( J ), ALPHAI( J ), TEMP2,
      $                      IINFO )
                IF( IINFO.GE.3 ) THEN
@@ -940,7 +926,7 @@ c        MINWRK = MAX( 10*( NSIZE+1 ), 5*NSIZE*NSIZE / 2-2 )
          IF( RESULT( J ).GE.THRESH ) THEN
 *
 *           If this is the first test to fail,
-*           print a AB_HEADER to the data file.
+*           print a header to the data file.
 *
             IF( NERRS.EQ.0 ) THEN
                WRITE( NOUT, FMT = 9995 )'SGX'
@@ -973,23 +959,22 @@ c        MINWRK = MAX( 10*( NSIZE+1 ), 5*NSIZE*NSIZE / 2-2 )
 *
 *     Summary
 *
-      CALL AB_ALASVM( 'SGX', NOUT, NERRS, NTESTT, 0 )
+      CALL ALASVM( 'SGX', NOUT, NERRS, NTESTT, 0 )
 *
       WORK( 1 ) = MAXWRK
 *
       RETURN
 *
- 9999 FORMAT( ' AB_SDRGSX: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
+ 9999 FORMAT( ' SDRGSX: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', JTYPE=', I6, ')' )
 *
- 9998 FORMAT( ' AB_SDRGSX: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
+ 9998 FORMAT( ' SDRGSX: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', Input Example #', I2, ')' )
 *
- 9997 FORMAT( ' AB_SDRGSX: AB_SGET53 returned INFO=', I1, ' for eigenval
-     $ue ',
+ 9997 FORMAT( ' SDRGSX: SGET53 returned INFO=', I1, ' for eigenvalue ',
      $      I6, '.', / 9X, 'N=', I6, ', JTYPE=', I6, ')' )
 *
- 9996 FORMAT( ' AB_SDRGSX: S not in Schur form at eigenvalue ', I6, '.',
+ 9996 FORMAT( ' SDRGSX: S not in Schur form at eigenvalue ', I6, '.',
      $      / 9X, 'N=', I6, ', JTYPE=', I6, ')' )
 *
  9995 FORMAT( / 1X, A3, ' -- Real Expert Generalized Schur form',
@@ -1001,8 +986,7 @@ c        MINWRK = MAX( 10*( NSIZE+1 ), 5*NSIZE*NSIZE / 2-2 )
      $      '  1:  A is a block diagonal matrix of Jordan blocks ',
      $      'and B is the identity ', / '      matrix, ',
      $      / '  2:  A and B are upper triangular matrices, ',
-     $      / '  3:  A and B are as type 2, but each AB_SECOND diagonal 
-     $',
+     $      / '  3:  A and B are as type 2, but each second diagonal ',
      $      'block in A_11 and ', /
      $      '      each third diaongal block in A_22 are 2x2 blocks,',
      $      / '  4:  A and B are block diagonal matrices, ',
@@ -1037,6 +1021,6 @@ c        MINWRK = MAX( 10*( NSIZE+1 ), 5*NSIZE*NSIZE / 2-2 )
  9988 FORMAT( ' Input example #', I2, ', matrix order=', I4, ',',
      $      ' result ', I2, ' is', 1P, E10.3 )
 *
-*     End of AB_SDRGSX
+*     End of SDRGSX
 *
       END

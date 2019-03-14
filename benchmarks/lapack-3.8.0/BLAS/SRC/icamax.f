@@ -1,4 +1,4 @@
-*> \brief \b AB_ICAMAX
+*> \brief \b ICAMAX
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       INTEGER FUNCTION AB_ICAMAX(N,CX,INCX)
+*       INTEGER FUNCTION ICAMAX(N,CX,INCX)
 *
 *       .. Scalar Arguments ..
 *       INTEGER INCX,N
@@ -23,7 +23,7 @@
 *>
 *> \verbatim
 *>
-*>    AB_ICAMAX finds the index of the first element having maximum |Re(.)| + |Im(.)|
+*>    ICAMAX finds the index of the first element having maximum |Re(.)| + |Im(.)|
 *> \endverbatim
 *
 *  Arguments:
@@ -69,7 +69,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      INTEGER FUNCTION AB_ICAMAX(N,CX,INCX)
+      INTEGER FUNCTION ICAMAX(N,CX,INCX)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -90,22 +90,22 @@
       INTEGER I,IX
 *     ..
 *     .. External Functions ..
-      REAL AB_SCABS1
-      EXTERNAL AB_SCABS1
+      REAL SCABS1
+      EXTERNAL SCABS1
 *     ..
-      AB_ICAMAX = 0
+      ICAMAX = 0
       IF (N.LT.1 .OR. INCX.LE.0) RETURN
-      AB_ICAMAX = 1
+      ICAMAX = 1
       IF (N.EQ.1) RETURN
       IF (INCX.EQ.1) THEN
 *
 *        code for increment equal to 1
 *
-         SMAX = AB_SCABS1(CX(1))
+         SMAX = SCABS1(CX(1))
          DO I = 2,N
-            IF (AB_SCABS1(CX(I)).GT.SMAX) THEN
-               AB_ICAMAX = I
-               SMAX = AB_SCABS1(CX(I))
+            IF (SCABS1(CX(I)).GT.SMAX) THEN
+               ICAMAX = I
+               SMAX = SCABS1(CX(I))
             END IF
          END DO
       ELSE
@@ -113,12 +113,12 @@
 *        code for increment not equal to 1
 *
          IX = 1
-         SMAX = AB_SCABS1(CX(1))
+         SMAX = SCABS1(CX(1))
          IX = IX + INCX
          DO I = 2,N
-            IF (AB_SCABS1(CX(IX)).GT.SMAX) THEN
-               AB_ICAMAX = I
-               SMAX = AB_SCABS1(CX(IX))
+            IF (SCABS1(CX(IX)).GT.SMAX) THEN
+               ICAMAX = I
+               SMAX = SCABS1(CX(IX))
             END IF
             IX = IX + INCX
          END DO

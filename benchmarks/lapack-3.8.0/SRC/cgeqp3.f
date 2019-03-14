@@ -1,4 +1,4 @@
-*> \brief \b AB_CGEQP3
+*> \brief \b CGEQP3
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CGEQP3 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CGEQP3.f">
+*> Download CGEQP3 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgeqp3.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CGEQP3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgeqp3.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CGEQP3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgeqp3.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CGEQP3( M, N, A, LDA, JPVT, TAU, WORK, LWORK, RWORK,
+*       SUBROUTINE CGEQP3( M, N, A, LDA, JPVT, TAU, WORK, LWORK, RWORK,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CGEQP3 computes a QR factorization with column pivoting of a
+*> CGEQP3 computes a QR factorization with column pivoting of a
 *> matrix A:  A*P = Q*R  using Level 3 BLAS.
 *> \endverbatim
 *
@@ -104,7 +104,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -156,7 +156,7 @@
 *>    X. Sun, Computer Science Dept., Duke University, USA
 *>
 *  =====================================================================
-      SUBROUTINE AB_CGEQP3( M, N, A, LDA, JPVT, TAU, WORK, LWORK, RWORK,
+      SUBROUTINE CGEQP3( M, N, A, LDA, JPVT, TAU, WORK, LWORK, RWORK,
      $                   INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -185,13 +185,12 @@
      $                   NBMIN, NFXD, NX, SM, SMINMN, SN, TOPBMN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_AB_CGEQRF, AB_CLAQP2, AB_CLAQPS, AB_CSWAP, A
-     $B_CUNMQR, AB_XERBLA
+      EXTERNAL           CGEQRF, CLAQP2, CLAQPS, CSWAP, CUNMQR, XERBLA
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ILAENV
-      REAL               AB_SCNRM2
-      EXTERNAL           AB_ILAENV, AB_SCNRM2
+      INTEGER            ILAENV
+      REAL               SCNRM2
+      EXTERNAL           ILAENV, SCNRM2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          INT, MAX, MIN
@@ -218,7 +217,7 @@
             LWKOPT = 1
          ELSE
             IWS = N + 1
-            NB = AB_ILAENV( INB, 'AB_AB_CGEQRF', ' ', M, N, -1, -1 )
+            NB = ILAENV( INB, 'CGEQRF', ' ', M, N, -1, -1 )
             LWKOPT = ( N + 1 )*NB
          END IF
          WORK( 1 ) = CMPLX( LWKOPT )
@@ -229,7 +228,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CGEQP3', -INFO )
+         CALL XERBLA( 'CGEQP3', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -241,7 +240,7 @@
       DO 10 J = 1, N
          IF( JPVT( J ).NE.0 ) THEN
             IF( J.NE.NFXD ) THEN
-               CALL AB_CSWAP( M, A( 1, J ), 1, A( 1, NFXD ), 1 )
+               CALL CSWAP( M, A( 1, J ), 1, A( 1, NFXD ), 1 )
                JPVT( J ) = JPVT( NFXD )
                JPVT( NFXD ) = J
             ELSE
@@ -262,15 +261,14 @@
 *
       IF( NFXD.GT.0 ) THEN
          NA = MIN( M, NFXD )
-*CC      CALL AB_AB_CGEQR2( M, NA, A, LDA, TAU, WORK, INFO )
-         CALL AB_AB_CGEQRF( M, NA, A, LDA, TAU, WORK, LWORK, INFO )
+*CC      CALL CGEQR2( M, NA, A, LDA, TAU, WORK, INFO )
+         CALL CGEQRF( M, NA, A, LDA, TAU, WORK, LWORK, INFO )
          IWS = MAX( IWS, INT( WORK( 1 ) ) )
          IF( NA.LT.N ) THEN
-*CC         CALL AB_CUNM2R( 'Left', 'Conjugate Transpose', M, N-NA,
+*CC         CALL CUNM2R( 'Left', 'Conjugate Transpose', M, N-NA,
 *CC  $                   NA, A, LDA, TAU, A( 1, NA+1 ), LDA, WORK,
 *CC  $                   INFO )
-            CALL AB_CUNMQR( 'Left', 'Conjugate Transpose', M, N-NA, NA, 
-     $A,
+            CALL CUNMQR( 'Left', 'Conjugate Transpose', M, N-NA, NA, A,
      $                   LDA, TAU, A( 1, NA+1 ), LDA, WORK, LWORK,
      $                   INFO )
             IWS = MAX( IWS, INT( WORK( 1 ) ) )
@@ -288,7 +286,7 @@
 *
 *        Determine the block size.
 *
-         NB = AB_ILAENV( INB, 'AB_AB_CGEQRF', ' ', SM, SN, -1, -1 )
+         NB = ILAENV( INB, 'CGEQRF', ' ', SM, SN, -1, -1 )
          NBMIN = 2
          NX = 0
 *
@@ -296,8 +294,7 @@
 *
 *           Determine when to cross over from blocked to unblocked code.
 *
-            NX = MAX( 0, AB_ILAENV( IXOVER, 'AB_AB_CGEQRF', ' ', SM, SN,
-     $ -1,
+            NX = MAX( 0, ILAENV( IXOVER, 'CGEQRF', ' ', SM, SN, -1,
      $           -1 ) )
 *
 *
@@ -313,8 +310,7 @@
 *                 determine the minimum value of NB.
 *
                   NB = LWORK / ( SN+1 )
-                  NBMIN = MAX( 2, AB_ILAENV( INBMIN, 'AB_AB_CGEQRF', ' '
-     $, SM, SN,
+                  NBMIN = MAX( 2, ILAENV( INBMIN, 'CGEQRF', ' ', SM, SN,
      $                    -1, -1 ) )
 *
 *
@@ -326,7 +322,7 @@
 *        store the exact column norms.
 *
          DO 20 J = NFXD + 1, N
-            RWORK( J ) = AB_SCNRM2( SM, A( NFXD+1, J ), 1 )
+            RWORK( J ) = SCNRM2( SM, A( NFXD+1, J ), 1 )
             RWORK( N+J ) = RWORK( J )
    20    CONTINUE
 *
@@ -347,7 +343,7 @@
 *
 *              Factorize JB columns among columns J:N.
 *
-               CALL AB_CLAQPS( M, N-J+1, J-1, JB, FJB, A( 1, J ), LDA,
+               CALL CLAQPS( M, N-J+1, J-1, JB, FJB, A( 1, J ), LDA,
      $                      JPVT( J ), TAU( J ), RWORK( J ),
      $                      RWORK( N+J ), WORK( 1 ), WORK( JB+1 ),
      $                      N-J+1 )
@@ -363,7 +359,7 @@
 *
 *
          IF( J.LE.MINMN )
-     $      CALL AB_CLAQP2( M, N-J+1, J-1, A( 1, J ), LDA, JPVT( J ),
+     $      CALL CLAQP2( M, N-J+1, J-1, A( 1, J ), LDA, JPVT( J ),
      $                   TAU( J ), RWORK( J ), RWORK( N+J ), WORK( 1 ) )
 *
       END IF
@@ -371,6 +367,6 @@
       WORK( 1 ) = CMPLX( LWKOPT )
       RETURN
 *
-*     End of AB_CGEQP3
+*     End of CGEQP3
 *
       END

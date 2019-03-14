@@ -1,4 +1,4 @@
-*> \brief \b ZAB_DRSCL multiplies a vector by the reciprocal of a real scalar.
+*> \brief \b ZDRSCL multiplies a vector by the reciprocal of a real scalar.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZAB_DRSCL + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zAB_DRSCL.f">
+*> Download ZDRSCL + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zdrscl.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zAB_DRSCL.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zdrscl.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zAB_DRSCL.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zdrscl.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZAB_DRSCL( N, SA, SX, INCX )
+*       SUBROUTINE ZDRSCL( N, SA, SX, INCX )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCX, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> ZAB_DRSCL multiplies an n-element complex vector x by the real scalar
+*> ZDRSCL multiplies an n-element complex vector x by the real scalar
 *> 1/a.  This is done without overflow or underflow as long as
 *> the final result x/a does not overflow or underflow.
 *> \endverbatim
@@ -82,7 +82,7 @@
 *> \ingroup complex16OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE ZAB_DRSCL( N, SA, SX, INCX )
+      SUBROUTINE ZDRSCL( N, SA, SX, INCX )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -108,11 +108,11 @@
       DOUBLE PRECISION   BIGNUM, CDEN, CDEN1, CNUM, CNUM1, MUL, SMLNUM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH
-      EXTERNAL           AB_DLAMCH
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLABAD, ZAB_DSCAL
+      EXTERNAL           DLABAD, ZDSCAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS
@@ -126,9 +126,9 @@
 *
 *     Get machine parameters
 *
-      SMLNUM = AB_DLAMCH( 'S' )
+      SMLNUM = DLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
-      CALL AB_DLABAD( SMLNUM, BIGNUM )
+      CALL DLABAD( SMLNUM, BIGNUM )
 *
 *     Initialize the denominator to SA and the numerator to 1.
 *
@@ -162,13 +162,13 @@
 *
 *     Scale the vector X by MUL
 *
-      CALL ZAB_DSCAL( N, MUL, SX, INCX )
+      CALL ZDSCAL( N, MUL, SX, INCX )
 *
       IF( .NOT.DONE )
      $   GO TO 10
 *
       RETURN
 *
-*     End of ZAB_DRSCL
+*     End of ZDRSCL
 *
       END

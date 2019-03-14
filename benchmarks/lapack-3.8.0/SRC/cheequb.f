@@ -1,4 +1,4 @@
-*> \brief \b AB_CHEEQUB
+*> \brief \b CHEEQUB
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CHEEQUB + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CHEEQUB.f">
+*> Download CHEEQUB + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cheequb.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CHEEQUB.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cheequb.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CHEEQUB.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cheequb.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CHEEQUB( UPLO, N, A, LDA, S, SCOND, AMAX, WORK, INFO )
+*       SUBROUTINE CHEEQUB( UPLO, N, A, LDA, S, SCOND, AMAX, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, N
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CHEEQUB computes row and column scalings intended to equilibrate a
+*> CHEEQUB computes row and column scalings intended to equilibrate a
 *> Hermitian matrix A (with respect to the Euclidean norm) and reduce
 *> its condition number. The scale factors S are computed by the BIN
 *> algorithm (see references) so that the scaled matrix B with elements
@@ -130,8 +130,7 @@
 *>  Tech report version: http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.3.1679
 *>
 *  =====================================================================
-      SUBROUTINE AB_CHEEQUB( UPLO, N, A, LDA, S, SCOND, AMAX, WORK, INFO
-     $ )
+      SUBROUTINE CHEEQUB( UPLO, N, A, LDA, S, SCOND, AMAX, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.8.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -164,12 +163,12 @@
       COMPLEX            ZDUM
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME, AB_SLAMCH
+      REAL               SLAMCH
+      LOGICAL            LSAME
+      EXTERNAL           LSAME, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CLASSQ, AB_XERBLA
+      EXTERNAL           CLASSQ, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, INT, LOG, MAX, MIN, REAL, SQRT
@@ -185,8 +184,7 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF ( .NOT. ( AB_LSAME( UPLO, 'U' ) .OR. AB_LSAME( UPLO, 'L' ) ) ) 
-     $THEN
+      IF ( .NOT. ( LSAME( UPLO, 'U' ) .OR. LSAME( UPLO, 'L' ) ) ) THEN
          INFO = -1
       ELSE IF ( N .LT. 0 ) THEN
          INFO = -2
@@ -194,11 +192,11 @@
          INFO = -4
       END IF
       IF ( INFO .NE. 0 ) THEN
-         CALL AB_XERBLA( 'AB_CHEEQUB', -INFO )
+         CALL XERBLA( 'CHEEQUB', -INFO )
          RETURN
       END IF
 
-      UP = AB_LSAME( UPLO, 'U' )
+      UP = LSAME( UPLO, 'U' )
       AMAX = ZERO
 *
 *     Quick return if possible.
@@ -276,7 +274,7 @@
          DO I = N+1, 2*N
             WORK( I ) = S( I-N ) * WORK( I-N ) - AVG
          END DO
-         CALL AB_CLASSQ( N, WORK( N+1 ), 1, SCALE, SUMSQ )
+         CALL CLASSQ( N, WORK( N+1 ), 1, SCALE, SUMSQ )
          STD = SCALE * SQRT( SUMSQ / N )
 
          IF ( STD .LT. TOL * AVG ) GOTO 999
@@ -328,12 +326,12 @@
 
  999  CONTINUE
 
-      SMLNUM = AB_SLAMCH( 'SAFEMIN' )
+      SMLNUM = SLAMCH( 'SAFEMIN' )
       BIGNUM = ONE / SMLNUM
       SMIN = BIGNUM
       SMAX = ZERO
       T = ONE / SQRT( AVG )
-      BASE = AB_SLAMCH( 'B' )
+      BASE = SLAMCH( 'B' )
       U = ONE / LOG( BASE )
       DO I = 1, N
          S( I ) = BASE ** INT( U * LOG( S( I ) * T ) )

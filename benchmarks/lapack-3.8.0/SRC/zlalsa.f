@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLALSA computes the SVD of the coefficient matrix in compact form. Used by AB_AB_SGELSD.
+*> \brief \b ZLALSA computes the SVD of the coefficient matrix in compact form. Used by sgelsd.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZLALSA + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLALSA.f">
+*> Download ZLALSA + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlalsa.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLALSA.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlalsa.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLALSA.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlalsa.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZLALSA( ICOMPQ, SMLSIZ, N, NRHS, B, LDB, BX, LDBX, U,
+*       SUBROUTINE ZLALSA( ICOMPQ, SMLSIZ, N, NRHS, B, LDB, BX, LDBX, U,
 *                          LDU, VT, K, DIFL, DIFR, Z, POLES, GIVPTR,
 *                          GIVCOL, LDGCOL, PERM, GIVNUM, C, S, RWORK,
 *                          IWORK, INFO )
@@ -42,16 +42,16 @@
 *>
 *> \verbatim
 *>
-*> AB_ZLALSA is an itermediate step in solving the least squares problem
+*> ZLALSA is an itermediate step in solving the least squares problem
 *> by computing the SVD of the coefficient matrix in compact form (The
 *> singular vectors are computed as products of simple orthorgonal
 *> matrices.).
 *>
-*> If ICOMPQ = 0, AB_ZLALSA applies the inverse of the left singular vector
+*> If ICOMPQ = 0, ZLALSA applies the inverse of the left singular vector
 *> matrix of an upper bidiagonal matrix to the right hand side; and if
-*> ICOMPQ = 1, AB_ZLALSA applies the right singular vector matrix to the
+*> ICOMPQ = 1, ZLALSA applies the right singular vector matrix to the
 *> right hand side. The singular vector matrices were generated in
-*> compact form by AB_ZLALSA.
+*> compact form by ZLALSA.
 *> \endverbatim
 *
 *  Arguments:
@@ -262,8 +262,7 @@
 *>     Osni Marques, LBNL/NERSC, USA \n
 *
 *  =====================================================================
-      SUBROUTINE AB_ZLALSA( ICOMPQ, SMLSIZ, N, NRHS, B, LDB, BX, LDBX, U
-     $,
+      SUBROUTINE ZLALSA( ICOMPQ, SMLSIZ, N, NRHS, B, LDB, BX, LDBX, U,
      $                   LDU, VT, K, DIFL, DIFR, Z, POLES, GIVPTR,
      $                   GIVCOL, LDGCOL, PERM, GIVNUM, C, S, RWORK,
      $                   IWORK, INFO )
@@ -298,8 +297,7 @@
      $                   NDIMR, NL, NLF, NLP1, NLVL, NR, NRF, NRP1, SQRE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DGEMM, AB_DLASDT, AB_XERBLA, AB_ZCOPY, AB_ZL
-     $ALS0
+      EXTERNAL           DGEMM, DLASDT, XERBLA, ZCOPY, ZLALS0
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCMPLX, DIMAG
@@ -328,7 +326,7 @@
          INFO = -19
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZLALSA', -INFO )
+         CALL XERBLA( 'ZLALSA', -INFO )
          RETURN
       END IF
 *
@@ -338,7 +336,7 @@
       NDIML = INODE + N
       NDIMR = NDIML + N
 *
-      CALL AB_DLASDT( N, NLVL, ND, IWORK( INODE ), IWORK( NDIML ),
+      CALL DLASDT( N, NLVL, ND, IWORK( INODE ), IWORK( NDIML ),
      $             IWORK( NDIMR ), SMLSIZ )
 *
 *     The following code applies back the left singular vector factors.
@@ -349,7 +347,7 @@
       END IF
 *
 *     The nodes on the bottom level of the tree were solved
-*     by AB_DLASDQ. The corresponding left and right singular vector
+*     by DLASDQ. The corresponding left and right singular vector
 *     matrices are in explicit form. First apply back the left
 *     singular vector matrices.
 *
@@ -369,10 +367,10 @@
          NLF = IC - NL
          NRF = IC + 1
 *
-*        Since B and BX are complex, the following call to AB_DGEMM
+*        Since B and BX are complex, the following call to DGEMM
 *        is performed in two steps (real and imaginary parts).
 *
-*        CALL AB_DGEMM( 'T', 'N', NL, NRHS, NL, ONE, U( NLF, 1 ), LDU,
+*        CALL DGEMM( 'T', 'N', NL, NRHS, NL, ONE, U( NLF, 1 ), LDU,
 *     $               B( NLF, 1 ), LDB, ZERO, BX( NLF, 1 ), LDBX )
 *
          J = NL*NRHS*2
@@ -382,7 +380,7 @@
                RWORK( J ) = DBLE( B( JROW, JCOL ) )
    10       CONTINUE
    20    CONTINUE
-         CALL AB_DGEMM( 'T', 'N', NL, NRHS, NL, ONE, U( NLF, 1 ), LDU,
+         CALL DGEMM( 'T', 'N', NL, NRHS, NL, ONE, U( NLF, 1 ), LDU,
      $               RWORK( 1+NL*NRHS*2 ), NL, ZERO, RWORK( 1 ), NL )
          J = NL*NRHS*2
          DO 40 JCOL = 1, NRHS
@@ -391,7 +389,7 @@
                RWORK( J ) = DIMAG( B( JROW, JCOL ) )
    30       CONTINUE
    40    CONTINUE
-         CALL AB_DGEMM( 'T', 'N', NL, NRHS, NL, ONE, U( NLF, 1 ), LDU,
+         CALL DGEMM( 'T', 'N', NL, NRHS, NL, ONE, U( NLF, 1 ), LDU,
      $               RWORK( 1+NL*NRHS*2 ), NL, ZERO, RWORK( 1+NL*NRHS ),
      $               NL )
          JREAL = 0
@@ -405,10 +403,10 @@
    50       CONTINUE
    60    CONTINUE
 *
-*        Since B and BX are complex, the following call to AB_DGEMM
+*        Since B and BX are complex, the following call to DGEMM
 *        is performed in two steps (real and imaginary parts).
 *
-*        CALL AB_DGEMM( 'T', 'N', NR, NRHS, NR, ONE, U( NRF, 1 ), LDU,
+*        CALL DGEMM( 'T', 'N', NR, NRHS, NR, ONE, U( NRF, 1 ), LDU,
 *    $               B( NRF, 1 ), LDB, ZERO, BX( NRF, 1 ), LDBX )
 *
          J = NR*NRHS*2
@@ -418,7 +416,7 @@
                RWORK( J ) = DBLE( B( JROW, JCOL ) )
    70       CONTINUE
    80    CONTINUE
-         CALL AB_DGEMM( 'T', 'N', NR, NRHS, NR, ONE, U( NRF, 1 ), LDU,
+         CALL DGEMM( 'T', 'N', NR, NRHS, NR, ONE, U( NRF, 1 ), LDU,
      $               RWORK( 1+NR*NRHS*2 ), NR, ZERO, RWORK( 1 ), NR )
          J = NR*NRHS*2
          DO 100 JCOL = 1, NRHS
@@ -427,7 +425,7 @@
                RWORK( J ) = DIMAG( B( JROW, JCOL ) )
    90       CONTINUE
   100    CONTINUE
-         CALL AB_DGEMM( 'T', 'N', NR, NRHS, NR, ONE, U( NRF, 1 ), LDU,
+         CALL DGEMM( 'T', 'N', NR, NRHS, NR, ONE, U( NRF, 1 ), LDU,
      $               RWORK( 1+NR*NRHS*2 ), NR, ZERO, RWORK( 1+NR*NRHS ),
      $               NR )
          JREAL = 0
@@ -448,7 +446,7 @@
 *
       DO 140 I = 1, ND
          IC = IWORK( INODE+I-1 )
-         CALL AB_ZCOPY( NRHS, B( IC, 1 ), LDB, BX( IC, 1 ), LDBX )
+         CALL ZCOPY( NRHS, B( IC, 1 ), LDB, BX( IC, 1 ), LDBX )
   140 CONTINUE
 *
 *     Finally go through the left singular vector matrices of all
@@ -478,8 +476,7 @@
             NLF = IC - NL
             NRF = IC + 1
             J = J - 1
-            CALL AB_ZLALS0( ICOMPQ, NL, NR, SQRE, NRHS, BX( NLF, 1 ), LD
-     $BX,
+            CALL ZLALS0( ICOMPQ, NL, NR, SQRE, NRHS, BX( NLF, 1 ), LDBX,
      $                   B( NLF, 1 ), LDB, PERM( NLF, LVL ),
      $                   GIVPTR( J ), GIVCOL( NLF, LVL2 ), LDGCOL,
      $                   GIVNUM( NLF, LVL2 ), LDU, POLES( NLF, LVL2 ),
@@ -524,8 +521,7 @@
                SQRE = 1
             END IF
             J = J + 1
-            CALL AB_ZLALS0( ICOMPQ, NL, NR, SQRE, NRHS, B( NLF, 1 ), LDB
-     $,
+            CALL ZLALS0( ICOMPQ, NL, NR, SQRE, NRHS, B( NLF, 1 ), LDB,
      $                   BX( NLF, 1 ), LDBX, PERM( NLF, LVL ),
      $                   GIVPTR( J ), GIVCOL( NLF, LVL2 ), LDGCOL,
      $                   GIVNUM( NLF, LVL2 ), LDU, POLES( NLF, LVL2 ),
@@ -536,7 +532,7 @@
   190 CONTINUE
 *
 *     The nodes on the bottom level of the tree were solved
-*     by AB_DLASDQ. The corresponding right singular vector
+*     by DLASDQ. The corresponding right singular vector
 *     matrices are in explicit form. Apply them back.
 *
       NDB1 = ( ND+1 ) / 2
@@ -554,10 +550,10 @@
          NLF = IC - NL
          NRF = IC + 1
 *
-*        Since B and BX are complex, the following call to AB_DGEMM is
+*        Since B and BX are complex, the following call to DGEMM is
 *        performed in two steps (real and imaginary parts).
 *
-*        CALL AB_DGEMM( 'T', 'N', NLP1, NRHS, NLP1, ONE, VT( NLF, 1 ), LDU,
+*        CALL DGEMM( 'T', 'N', NLP1, NRHS, NLP1, ONE, VT( NLF, 1 ), LDU,
 *    $               B( NLF, 1 ), LDB, ZERO, BX( NLF, 1 ), LDBX )
 *
          J = NLP1*NRHS*2
@@ -567,8 +563,7 @@
                RWORK( J ) = DBLE( B( JROW, JCOL ) )
   200       CONTINUE
   210    CONTINUE
-         CALL AB_DGEMM( 'T', 'N', NLP1, NRHS, NLP1, ONE, VT( NLF, 1 ), L
-     $DU,
+         CALL DGEMM( 'T', 'N', NLP1, NRHS, NLP1, ONE, VT( NLF, 1 ), LDU,
      $               RWORK( 1+NLP1*NRHS*2 ), NLP1, ZERO, RWORK( 1 ),
      $               NLP1 )
          J = NLP1*NRHS*2
@@ -578,8 +573,7 @@
                RWORK( J ) = DIMAG( B( JROW, JCOL ) )
   220       CONTINUE
   230    CONTINUE
-         CALL AB_DGEMM( 'T', 'N', NLP1, NRHS, NLP1, ONE, VT( NLF, 1 ), L
-     $DU,
+         CALL DGEMM( 'T', 'N', NLP1, NRHS, NLP1, ONE, VT( NLF, 1 ), LDU,
      $               RWORK( 1+NLP1*NRHS*2 ), NLP1, ZERO,
      $               RWORK( 1+NLP1*NRHS ), NLP1 )
          JREAL = 0
@@ -593,10 +587,10 @@
   240       CONTINUE
   250    CONTINUE
 *
-*        Since B and BX are complex, the following call to AB_DGEMM is
+*        Since B and BX are complex, the following call to DGEMM is
 *        performed in two steps (real and imaginary parts).
 *
-*        CALL AB_DGEMM( 'T', 'N', NRP1, NRHS, NRP1, ONE, VT( NRF, 1 ), LDU,
+*        CALL DGEMM( 'T', 'N', NRP1, NRHS, NRP1, ONE, VT( NRF, 1 ), LDU,
 *    $               B( NRF, 1 ), LDB, ZERO, BX( NRF, 1 ), LDBX )
 *
          J = NRP1*NRHS*2
@@ -606,8 +600,7 @@
                RWORK( J ) = DBLE( B( JROW, JCOL ) )
   260       CONTINUE
   270    CONTINUE
-         CALL AB_DGEMM( 'T', 'N', NRP1, NRHS, NRP1, ONE, VT( NRF, 1 ), L
-     $DU,
+         CALL DGEMM( 'T', 'N', NRP1, NRHS, NRP1, ONE, VT( NRF, 1 ), LDU,
      $               RWORK( 1+NRP1*NRHS*2 ), NRP1, ZERO, RWORK( 1 ),
      $               NRP1 )
          J = NRP1*NRHS*2
@@ -617,8 +610,7 @@
                RWORK( J ) = DIMAG( B( JROW, JCOL ) )
   280       CONTINUE
   290    CONTINUE
-         CALL AB_DGEMM( 'T', 'N', NRP1, NRHS, NRP1, ONE, VT( NRF, 1 ), L
-     $DU,
+         CALL DGEMM( 'T', 'N', NRP1, NRHS, NRP1, ONE, VT( NRF, 1 ), LDU,
      $               RWORK( 1+NRP1*NRHS*2 ), NRP1, ZERO,
      $               RWORK( 1+NRP1*NRHS ), NRP1 )
          JREAL = 0
@@ -638,6 +630,6 @@
 *
       RETURN
 *
-*     End of AB_ZLALSA
+*     End of ZLALSA
 *
       END

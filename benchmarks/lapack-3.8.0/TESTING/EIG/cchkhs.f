@@ -1,4 +1,4 @@
-*> \brief \b AB_CCHKHS
+*> \brief \b CCHKHS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CCHKHS( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+*       SUBROUTINE CCHKHS( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
 *                          NOUNIT, A, LDA, H, T1, T2, U, LDU, Z, UZ, W1,
 *                          W3, EVECTL, EVECTR, EVECTY, EVECTX, UU, TAU,
 *                          WORK, NWORK, RWORK, IWORK, SELECT, RESULT,
@@ -36,35 +36,35 @@
 *>
 *> \verbatim
 *>
-*>    AB_CCHKHS  checks the nonsymmetric eigenvalue problem routines.
+*>    CCHKHS  checks the nonsymmetric eigenvalue problem routines.
 *>
-*>            AB_CGEHRD factors A as  U H U' , where ' means conjugate
+*>            CGEHRD factors A as  U H U' , where ' means conjugate
 *>            transpose, H is hessenberg, and U is unitary.
 *>
-*>            AB_CUNGHR generates the unitary matrix U.
+*>            CUNGHR generates the unitary matrix U.
 *>
-*>            AB_CUNMHR multiplies a matrix by the unitary matrix U.
+*>            CUNMHR multiplies a matrix by the unitary matrix U.
 *>
-*>            AB_CHSEQR factors H as  Z T Z' , where Z is unitary and T
+*>            CHSEQR factors H as  Z T Z' , where Z is unitary and T
 *>            is upper triangular.  It also computes the eigenvalues,
 *>            w(1), ..., w(n); we define a diagonal matrix W whose
 *>            (diagonal) entries are the eigenvalues.
 *>
-*>            AB_CTREVC computes the left eigenvector matrix L and the
+*>            CTREVC computes the left eigenvector matrix L and the
 *>            right eigenvector matrix R for the matrix T.  The
 *>            columns of L are the complex conjugates of the left
 *>            eigenvectors of T.  The columns of R are the right
 *>            eigenvectors of T.  L is lower triangular, and R is
 *>            upper triangular.
 *>
-*>            AB_CHSEIN computes the left eigenvector matrix Y and the
+*>            CHSEIN computes the left eigenvector matrix Y and the
 *>            right eigenvector matrix X for the matrix H.  The
 *>            columns of Y are the complex conjugates of the left
 *>            eigenvectors of H.  The columns of X are the right
 *>            eigenvectors of H.  Y is lower triangular, and X is
 *>            upper triangular.
 *>
-*>    When AB_CCHKHS is called, a number of matrix "sizes" ("n's") and a
+*>    When CCHKHS is called, a number of matrix "sizes" ("n's") and a
 *>    number of matrix "types" are specified.  For each size ("n")
 *>    and each type of matrix, one matrix will be generated and used
 *>    to test the nonsymmetric eigenroutines.  For each matrix, 14
@@ -173,7 +173,7 @@
 *> \verbatim
 *>  NSIZES - INTEGER
 *>           The number of sizes of matrices to use.  If it is zero,
-*>           AB_CCHKHS does nothing.  It must be at least zero.
+*>           CCHKHS does nothing.  It must be at least zero.
 *>           Not modified.
 *>
 *>  NN     - INTEGER array, dimension (NSIZES)
@@ -183,7 +183,7 @@
 *>           Not modified.
 *>
 *>  NTYPES - INTEGER
-*>           The number of elements in DOTYPE.   If it is zero, AB_CCHKHS
+*>           The number of elements in DOTYPE.   If it is zero, CCHKHS
 *>           does nothing.  It must be at least zero.  If it is MAXTYP+1
 *>           and NSIZES is 1, then an additional type, MAXTYP+1 is
 *>           defined, which is to use whatever matrix is in A.  This
@@ -209,7 +209,7 @@
 *>           congruential sequence limited to small integers, and so
 *>           should produce machine independent random numbers. The
 *>           values of ISEED are changed on exit, and can be used in the
-*>           next call to AB_CCHKHS to continue the same random number
+*>           next call to CCHKHS to continue the same random number
 *>           sequence.
 *>           Modified.
 *>
@@ -239,18 +239,18 @@
 *>           Not modified.
 *>
 *>  H      - COMPLEX array, dimension (LDA,max(NN))
-*>           The upper hessenberg matrix computed by AB_CGEHRD.  On exit,
+*>           The upper hessenberg matrix computed by CGEHRD.  On exit,
 *>           H contains the Hessenberg form of the matrix in A.
 *>           Modified.
 *>
 *>  T1     - COMPLEX array, dimension (LDA,max(NN))
-*>           The Schur (="quasi-triangular") matrix computed by AB_CHSEQR
+*>           The Schur (="quasi-triangular") matrix computed by CHSEQR
 *>           if Z is computed.  On exit, T1 contains the Schur form of
 *>           the matrix in A.
 *>           Modified.
 *>
 *>  T2     - COMPLEX array, dimension (LDA,max(NN))
-*>           The Schur matrix computed by AB_CHSEQR when Z is not computed.
+*>           The Schur matrix computed by CHSEQR when Z is not computed.
 *>           This should be identical to T1.
 *>           Modified.
 *>
@@ -260,11 +260,11 @@
 *>           Not modified.
 *>
 *>  U      - COMPLEX array, dimension (LDU,max(NN))
-*>           The unitary matrix computed by AB_CGEHRD.
+*>           The unitary matrix computed by CGEHRD.
 *>           Modified.
 *>
 *>  Z      - COMPLEX array, dimension (LDU,max(NN))
-*>           The unitary matrix computed by AB_CHSEQR.
+*>           The unitary matrix computed by CHSEQR.
 *>           Modified.
 *>
 *>  UZ     - COMPLEX array, dimension (LDU,max(NN))
@@ -282,7 +282,7 @@
 *>           decomposition (Z not computed, T only computed as much
 *>           as is necessary for determining eigenvalues).  On exit,
 *>           W3 contains the eigenvalues of the matrix in A, possibly
-*>           perturbed by AB_CHSEIN.
+*>           perturbed by CHSEIN.
 *>           Modified.
 *>
 *>  EVECTL - COMPLEX array, dimension (LDU,max(NN))
@@ -305,11 +305,11 @@
 *>           Modified.
 *>
 *>  UU     - COMPLEX array, dimension (LDU,max(NN))
-*>           Details of the unitary matrix computed by AB_CGEHRD.
+*>           Details of the unitary matrix computed by CGEHRD.
 *>           Modified.
 *>
 *>  TAU    - COMPLEX array, dimension (max(NN))
-*>           Further details of the unitary matrix computed by AB_CGEHRD.
+*>           Further details of the unitary matrix computed by CGEHRD.
 *>           Modified.
 *>
 *>  WORK   - COMPLEX array, dimension (NWORK)
@@ -346,9 +346,9 @@
 *>            -9: LDA < 1 or LDA < NMAX, where NMAX is max( NN(j) ).
 *>           -14: LDU < 1 or LDU < NMAX.
 *>           -26: NWORK too small.
-*>           If  AB_CLATMR, AB_CLATMS, or AB_CLATME returns an error code, the
+*>           If  CLATMR, CLATMS, or CLATME returns an error code, the
 *>               absolute value of it is returned.
-*>           If 1, then AB_CHSEQR could not find all the shifts.
+*>           If 1, then CHSEQR could not find all the shifts.
 *>           If 2, then the EISPACK code (for small blocks) failed.
 *>           If >2, then 30*N iterations were not enough to find an
 *>               eigenvalue or to decompose the problem.
@@ -373,7 +373,7 @@
 *>     NMAX            Largest value in NN.
 *>     NMATS           The number of matrices generated so far.
 *>     NERRS           The number of tests which have exceeded THRESH
-*>                     so far (computed by AB_SLAFTS).
+*>                     so far (computed by SLAFTS).
 *>     COND, CONDS,
 *>     IMODE           Values to be passed to the matrix generators.
 *>     ANORM           Norm of A; passed to matrix generators.
@@ -406,7 +406,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_CCHKHS( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+      SUBROUTINE CCHKHS( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
      $                   NOUNIT, A, LDA, H, T1, T2, U, LDU, Z, UZ, W1,
      $                   W3, EVECTL, EVECTR, EVECTY, EVECTX, UU, TAU,
      $                   WORK, NWORK, RWORK, IWORK, SELECT, RESULT,
@@ -460,17 +460,14 @@
       COMPLEX            CDUMMA( 4 )
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH
-      EXTERNAL           AB_SLAMCH
+      REAL               SLAMCH
+      EXTERNAL           SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CCOPY, AB_CGEHRD, AB_CGEMM, AB_CGET10, AB_CG
-     $ET22, AB_CHSEIN,
-     $                   AB_CHSEQR, AB_CHST01, AB_CLACPY, AB_CLASET, AB_
-     $CLATME, AB_CLATMR,
-     $                   AB_CLATMS, AB_CTREVC, AB_CUNGHR, AB_CUNMHR, AB_
-     $SLABAD, AB_SLAFTS,
-     $                   AB_SLASUM, AB_XERBLA
+      EXTERNAL           CCOPY, CGEHRD, CGEMM, CGET10, CGET22, CHSEIN,
+     $                   CHSEQR, CHST01, CLACPY, CLASET, CLATME, CLATMR,
+     $                   CLATMS, CTREVC, CUNGHR, CUNMHR, SLABAD, SLAFTS,
+     $                   SLASUM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL, SQRT
@@ -517,7 +514,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CCHKHS', -INFO )
+         CALL XERBLA( 'CCHKHS', -INFO )
          RETURN
       END IF
 *
@@ -528,10 +525,10 @@
 *
 *     More important constants
 *
-      UNFL = AB_SLAMCH( 'Safe minimum' )
-      OVFL = AB_SLAMCH( 'Overflow' )
-      CALL AB_SLABAD( UNFL, OVFL )
-      ULP = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
+      UNFL = SLAMCH( 'Safe minimum' )
+      OVFL = SLAMCH( 'Overflow' )
+      CALL SLABAD( UNFL, OVFL )
+      ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
       ULPINV = ONE / ULP
       RTUNFL = SQRT( UNFL )
       RTOVFL = SQRT( OVFL )
@@ -614,7 +611,7 @@
 *
    70       CONTINUE
 *
-            CALL AB_CLASET( 'Full', LDA, N, CZERO, CZERO, A, LDA )
+            CALL CLASET( 'Full', LDA, N, CZERO, CZERO, A, LDA )
             IINFO = 0
             COND = ULPINV
 *
@@ -647,7 +644,7 @@
 *
 *              Diagonal Matrix, [Eigen]values Specified
 *
-               CALL AB_CLATMR( N, N, 'D', ISEED, 'N', WORK, IMODE, COND,
+               CALL CLATMR( N, N, 'D', ISEED, 'N', WORK, IMODE, COND,
      $                      CONE, 'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, 0, 0,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -656,8 +653,7 @@
 *
 *              Hermitian, eigenvalues specified
 *
-               CALL AB_CLATMS( N, N, 'D', ISEED, 'H', RWORK, IMODE, COND
-     $,
+               CALL CLATMS( N, N, 'D', ISEED, 'H', RWORK, IMODE, COND,
      $                      ANORM, N, N, 'N', A, LDA, WORK, IINFO )
 *
             ELSE IF( ITYPE.EQ.6 ) THEN
@@ -672,7 +668,7 @@
                   CONDS = ZERO
                END IF
 *
-               CALL AB_CLATME( N, 'D', ISEED, WORK, IMODE, COND, CONE,
+               CALL CLATME( N, 'D', ISEED, WORK, IMODE, COND, CONE,
      $                      'T', 'T', 'T', RWORK, 4, CONDS, N, N, ANORM,
      $                      A, LDA, WORK( N+1 ), IINFO )
 *
@@ -680,8 +676,7 @@
 *
 *              Diagonal, random eigenvalues
 *
-               CALL AB_CLATMR( N, N, 'D', ISEED, 'N', WORK, 6, ONE, CONE
-     $,
+               CALL CLATMR( N, N, 'D', ISEED, 'N', WORK, 6, ONE, CONE,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, 0, 0,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -690,8 +685,7 @@
 *
 *              Hermitian, random eigenvalues
 *
-               CALL AB_CLATMR( N, N, 'D', ISEED, 'H', WORK, 6, ONE, CONE
-     $,
+               CALL CLATMR( N, N, 'D', ISEED, 'H', WORK, 6, ONE, CONE,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, N, N,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -700,8 +694,7 @@
 *
 *              General, random eigenvalues
 *
-               CALL AB_CLATMR( N, N, 'D', ISEED, 'N', WORK, 6, ONE, CONE
-     $,
+               CALL CLATMR( N, N, 'D', ISEED, 'N', WORK, 6, ONE, CONE,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, N, N,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -710,8 +703,7 @@
 *
 *              Triangular, random eigenvalues
 *
-               CALL AB_CLATMR( N, N, 'D', ISEED, 'N', WORK, 6, ONE, CONE
-     $,
+               CALL CLATMR( N, N, 'D', ISEED, 'N', WORK, 6, ONE, CONE,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, N, 0,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -730,20 +722,20 @@
 *
   100       CONTINUE
 *
-*           Call AB_CGEHRD to compute H and U, do tests.
+*           Call CGEHRD to compute H and U, do tests.
 *
-            CALL AB_CLACPY( ' ', N, N, A, LDA, H, LDA )
+            CALL CLACPY( ' ', N, N, A, LDA, H, LDA )
             NTEST = 1
 *
             ILO = 1
             IHI = N
 *
-            CALL AB_CGEHRD( N, ILO, IHI, H, LDA, WORK, WORK( N+1 ),
+            CALL CGEHRD( N, ILO, IHI, H, LDA, WORK, WORK( N+1 ),
      $                   NWORK-N, IINFO )
 *
             IF( IINFO.NE.0 ) THEN
                RESULT( 1 ) = ULPINV
-               WRITE( NOUNIT, FMT = 9999 )'AB_CGEHRD', IINFO, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'CGEHRD', IINFO, N, JTYPE,
      $            IOLDSD
                INFO = ABS( IINFO )
                GO TO 240
@@ -757,27 +749,26 @@
                   H( I, J ) = CZERO
   110          CONTINUE
   120       CONTINUE
-            CALL AB_CCOPY( N-1, WORK, 1, TAU, 1 )
-            CALL AB_CUNGHR( N, ILO, IHI, U, LDU, WORK, WORK( N+1 ),
+            CALL CCOPY( N-1, WORK, 1, TAU, 1 )
+            CALL CUNGHR( N, ILO, IHI, U, LDU, WORK, WORK( N+1 ),
      $                   NWORK-N, IINFO )
             NTEST = 2
 *
-            CALL AB_CHST01( N, ILO, IHI, A, LDA, H, LDA, U, LDU, WORK,
+            CALL CHST01( N, ILO, IHI, A, LDA, H, LDA, U, LDU, WORK,
      $                   NWORK, RWORK, RESULT( 1 ) )
 *
-*           Call AB_CHSEQR to compute T1, T2 and Z, do tests.
+*           Call CHSEQR to compute T1, T2 and Z, do tests.
 *
 *           Eigenvalues only (W3)
 *
-            CALL AB_CLACPY( ' ', N, N, H, LDA, T2, LDA )
+            CALL CLACPY( ' ', N, N, H, LDA, T2, LDA )
             NTEST = 3
             RESULT( 3 ) = ULPINV
 *
-            CALL AB_CHSEQR( 'E', 'N', N, ILO, IHI, T2, LDA, W3, UZ, LDU,
+            CALL CHSEQR( 'E', 'N', N, ILO, IHI, T2, LDA, W3, UZ, LDU,
      $                   WORK, NWORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'AB_CHSEQR(E)', IINFO, N, JTYP
-     $E,
+               WRITE( NOUNIT, FMT = 9999 )'CHSEQR(E)', IINFO, N, JTYPE,
      $            IOLDSD
                IF( IINFO.LE.N+2 ) THEN
                   INFO = ABS( IINFO )
@@ -787,13 +778,12 @@
 *
 *           Eigenvalues (W1) and Full Schur Form (T2)
 *
-            CALL AB_CLACPY( ' ', N, N, H, LDA, T2, LDA )
+            CALL CLACPY( ' ', N, N, H, LDA, T2, LDA )
 *
-            CALL AB_CHSEQR( 'S', 'N', N, ILO, IHI, T2, LDA, W1, UZ, LDU,
+            CALL CHSEQR( 'S', 'N', N, ILO, IHI, T2, LDA, W1, UZ, LDU,
      $                   WORK, NWORK, IINFO )
             IF( IINFO.NE.0 .AND. IINFO.LE.N+2 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'AB_CHSEQR(S)', IINFO, N, JTYP
-     $E,
+               WRITE( NOUNIT, FMT = 9999 )'CHSEQR(S)', IINFO, N, JTYPE,
      $            IOLDSD
                INFO = ABS( IINFO )
                GO TO 240
@@ -801,14 +791,13 @@
 *
 *           Eigenvalues (W1), Schur Form (T1), and Schur Vectors (UZ)
 *
-            CALL AB_CLACPY( ' ', N, N, H, LDA, T1, LDA )
-            CALL AB_CLACPY( ' ', N, N, U, LDU, UZ, LDU )
+            CALL CLACPY( ' ', N, N, H, LDA, T1, LDA )
+            CALL CLACPY( ' ', N, N, U, LDU, UZ, LDU )
 *
-            CALL AB_CHSEQR( 'S', 'V', N, ILO, IHI, T1, LDA, W1, UZ, LDU,
+            CALL CHSEQR( 'S', 'V', N, ILO, IHI, T1, LDA, W1, UZ, LDU,
      $                   WORK, NWORK, IINFO )
             IF( IINFO.NE.0 .AND. IINFO.LE.N+2 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'AB_CHSEQR(V)', IINFO, N, JTYP
-     $E,
+               WRITE( NOUNIT, FMT = 9999 )'CHSEQR(V)', IINFO, N, JTYPE,
      $            IOLDSD
                INFO = ABS( IINFO )
                GO TO 240
@@ -816,26 +805,25 @@
 *
 *           Compute Z = U' UZ
 *
-            CALL AB_CGEMM( 'C', 'N', N, N, N, CONE, U, LDU, UZ, LDU, CZE
-     $RO,
+            CALL CGEMM( 'C', 'N', N, N, N, CONE, U, LDU, UZ, LDU, CZERO,
      $                  Z, LDU )
             NTEST = 8
 *
 *           Do Tests 3: | H - Z T Z' | / ( |H| n ulp )
 *                and 4: | I - Z Z' | / ( n ulp )
 *
-            CALL AB_CHST01( N, ILO, IHI, H, LDA, T1, LDA, Z, LDU, WORK,
+            CALL CHST01( N, ILO, IHI, H, LDA, T1, LDA, Z, LDU, WORK,
      $                   NWORK, RWORK, RESULT( 3 ) )
 *
 *           Do Tests 5: | A - UZ T (UZ)' | / ( |A| n ulp )
 *                and 6: | I - UZ (UZ)' | / ( n ulp )
 *
-            CALL AB_CHST01( N, ILO, IHI, A, LDA, T1, LDA, UZ, LDU, WORK,
+            CALL CHST01( N, ILO, IHI, A, LDA, T1, LDA, UZ, LDU, WORK,
      $                   NWORK, RWORK, RESULT( 5 ) )
 *
 *           Do Test 7: | T2 - T1 | / ( |T| n ulp )
 *
-            CALL AB_CGET10( N, N, T2, LDA, T1, LDA, WORK, RWORK,
+            CALL CGET10( N, N, T2, LDA, T1, LDA, WORK, RWORK,
      $                   RESULT( 7 ) )
 *
 *           Do Test 8: | W3 - W1 | / ( max(|W1|,|W3|) ulp )
@@ -864,10 +852,10 @@
             DO 150 J = 1, N, 2
                SELECT( J ) = .TRUE.
   150       CONTINUE
-            CALL AB_CTREVC( 'Right', 'All', SELECT, N, T1, LDA, CDUMMA,
+            CALL CTREVC( 'Right', 'All', SELECT, N, T1, LDA, CDUMMA,
      $                   LDU, EVECTR, LDU, N, IN, WORK, RWORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'AB_CTREVC(R,A)', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'CTREVC(R,A)', IINFO, N,
      $            JTYPE, IOLDSD
                INFO = ABS( IINFO )
                GO TO 240
@@ -875,21 +863,21 @@
 *
 *           Test 9:  | TR - RW | / ( |T| |R| ulp )
 *
-            CALL AB_CGET22( 'N', 'N', 'N', N, T1, LDA, EVECTR, LDU, W1,
+            CALL CGET22( 'N', 'N', 'N', N, T1, LDA, EVECTR, LDU, W1,
      $                   WORK, RWORK, DUMMA( 1 ) )
             RESULT( 9 ) = DUMMA( 1 )
             IF( DUMMA( 2 ).GT.THRESH ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'Right', 'AB_CTREVC',
+               WRITE( NOUNIT, FMT = 9998 )'Right', 'CTREVC',
      $            DUMMA( 2 ), N, JTYPE, IOLDSD
             END IF
 *
 *           Compute selected right eigenvectors and confirm that
 *           they agree with previous right eigenvectors
 *
-            CALL AB_CTREVC( 'Right', 'Some', SELECT, N, T1, LDA, CDUMMA,
+            CALL CTREVC( 'Right', 'Some', SELECT, N, T1, LDA, CDUMMA,
      $                   LDU, EVECTL, LDU, N, IN, WORK, RWORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'AB_CTREVC(R,S)', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'CTREVC(R,S)', IINFO, N,
      $            JTYPE, IOLDSD
                INFO = ABS( IINFO )
                GO TO 240
@@ -910,19 +898,17 @@
   170       CONTINUE
   180       CONTINUE
             IF( .NOT.MATCH )
-     $         WRITE( NOUNIT, FMT = 9997 )'Right', 'AB_CTREVC', N, JTYPE
-     $,
+     $         WRITE( NOUNIT, FMT = 9997 )'Right', 'CTREVC', N, JTYPE,
      $         IOLDSD
 *
 *           Compute the Left eigenvector Matrix:
 *
             NTEST = 10
             RESULT( 10 ) = ULPINV
-            CALL AB_CTREVC( 'Left', 'All', SELECT, N, T1, LDA, EVECTL, L
-     $DU,
+            CALL CTREVC( 'Left', 'All', SELECT, N, T1, LDA, EVECTL, LDU,
      $                   CDUMMA, LDU, N, IN, WORK, RWORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'AB_CTREVC(L,A)', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'CTREVC(L,A)', IINFO, N,
      $            JTYPE, IOLDSD
                INFO = ABS( IINFO )
                GO TO 240
@@ -930,22 +916,21 @@
 *
 *           Test 10:  | LT - WL | / ( |T| |L| ulp )
 *
-            CALL AB_CGET22( 'C', 'N', 'C', N, T1, LDA, EVECTL, LDU, W1,
+            CALL CGET22( 'C', 'N', 'C', N, T1, LDA, EVECTL, LDU, W1,
      $                   WORK, RWORK, DUMMA( 3 ) )
             RESULT( 10 ) = DUMMA( 3 )
             IF( DUMMA( 4 ).GT.THRESH ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'Left', 'AB_CTREVC', DUMMA( 4 
-     $),
+               WRITE( NOUNIT, FMT = 9998 )'Left', 'CTREVC', DUMMA( 4 ),
      $            N, JTYPE, IOLDSD
             END IF
 *
 *           Compute selected left eigenvectors and confirm that
 *           they agree with previous left eigenvectors
 *
-            CALL AB_CTREVC( 'Left', 'Some', SELECT, N, T1, LDA, EVECTR,
+            CALL CTREVC( 'Left', 'Some', SELECT, N, T1, LDA, EVECTR,
      $                   LDU, CDUMMA, LDU, N, IN, WORK, RWORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'AB_CTREVC(L,S)', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'CTREVC(L,S)', IINFO, N,
      $            JTYPE, IOLDSD
                INFO = ABS( IINFO )
                GO TO 240
@@ -966,10 +951,10 @@
   200       CONTINUE
   210       CONTINUE
             IF( .NOT.MATCH )
-     $         WRITE( NOUNIT, FMT = 9997 )'Left', 'AB_CTREVC', N, JTYPE,
+     $         WRITE( NOUNIT, FMT = 9997 )'Left', 'CTREVC', N, JTYPE,
      $         IOLDSD
 *
-*           Call AB_CHSEIN for Right eigenvectors of H, do test 11
+*           Call CHSEIN for Right eigenvectors of H, do test 11
 *
             NTEST = 11
             RESULT( 11 ) = ULPINV
@@ -977,13 +962,11 @@
                SELECT( J ) = .TRUE.
   220       CONTINUE
 *
-            CALL AB_CHSEIN( 'Right', 'Qr', 'Ninitv', SELECT, N, H, LDA, 
-     $W3,
+            CALL CHSEIN( 'Right', 'Qr', 'Ninitv', SELECT, N, H, LDA, W3,
      $                   CDUMMA, LDU, EVECTX, LDU, N1, IN, WORK, RWORK,
      $                   IWORK, IWORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'AB_CHSEIN(R)', IINFO, N, JTYP
-     $E,
+               WRITE( NOUNIT, FMT = 9999 )'CHSEIN(R)', IINFO, N, JTYPE,
      $            IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 )
@@ -994,18 +977,17 @@
 *
 *                        (from inverse iteration)
 *
-               CALL AB_CGET22( 'N', 'N', 'N', N, H, LDA, EVECTX, LDU, W3
-     $,
+               CALL CGET22( 'N', 'N', 'N', N, H, LDA, EVECTX, LDU, W3,
      $                      WORK, RWORK, DUMMA( 1 ) )
                IF( DUMMA( 1 ).LT.ULPINV )
      $            RESULT( 11 ) = DUMMA( 1 )*ANINV
                IF( DUMMA( 2 ).GT.THRESH ) THEN
-                  WRITE( NOUNIT, FMT = 9998 )'Right', 'AB_CHSEIN',
+                  WRITE( NOUNIT, FMT = 9998 )'Right', 'CHSEIN',
      $               DUMMA( 2 ), N, JTYPE, IOLDSD
                END IF
             END IF
 *
-*           Call AB_CHSEIN for Left eigenvectors of H, do test 12
+*           Call CHSEIN for Left eigenvectors of H, do test 12
 *
             NTEST = 12
             RESULT( 12 ) = ULPINV
@@ -1013,13 +995,11 @@
                SELECT( J ) = .TRUE.
   230       CONTINUE
 *
-            CALL AB_CHSEIN( 'Left', 'Qr', 'Ninitv', SELECT, N, H, LDA, W
-     $3,
+            CALL CHSEIN( 'Left', 'Qr', 'Ninitv', SELECT, N, H, LDA, W3,
      $                   EVECTY, LDU, CDUMMA, LDU, N1, IN, WORK, RWORK,
      $                   IWORK, IWORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'AB_CHSEIN(L)', IINFO, N, JTYP
-     $E,
+               WRITE( NOUNIT, FMT = 9999 )'CHSEIN(L)', IINFO, N, JTYPE,
      $            IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 )
@@ -1030,27 +1010,25 @@
 *
 *                        (from inverse iteration)
 *
-               CALL AB_CGET22( 'C', 'N', 'C', N, H, LDA, EVECTY, LDU, W3
-     $,
+               CALL CGET22( 'C', 'N', 'C', N, H, LDA, EVECTY, LDU, W3,
      $                      WORK, RWORK, DUMMA( 3 ) )
                IF( DUMMA( 3 ).LT.ULPINV )
      $            RESULT( 12 ) = DUMMA( 3 )*ANINV
                IF( DUMMA( 4 ).GT.THRESH ) THEN
-                  WRITE( NOUNIT, FMT = 9998 )'Left', 'AB_CHSEIN',
+                  WRITE( NOUNIT, FMT = 9998 )'Left', 'CHSEIN',
      $               DUMMA( 4 ), N, JTYPE, IOLDSD
                END IF
             END IF
 *
-*           Call AB_CUNMHR for Right eigenvectors of A, do test 13
+*           Call CUNMHR for Right eigenvectors of A, do test 13
 *
             NTEST = 13
             RESULT( 13 ) = ULPINV
 *
-            CALL AB_CUNMHR( 'Left', 'No transpose', N, N, ILO, IHI, UU,
+            CALL CUNMHR( 'Left', 'No transpose', N, N, ILO, IHI, UU,
      $                   LDU, TAU, EVECTX, LDU, WORK, NWORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'AB_CUNMHR(L)', IINFO, N, JTYP
-     $E,
+               WRITE( NOUNIT, FMT = 9999 )'CUNMHR(L)', IINFO, N, JTYPE,
      $            IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 )
@@ -1061,23 +1039,21 @@
 *
 *                        (from inverse iteration)
 *
-               CALL AB_CGET22( 'N', 'N', 'N', N, A, LDA, EVECTX, LDU, W3
-     $,
+               CALL CGET22( 'N', 'N', 'N', N, A, LDA, EVECTX, LDU, W3,
      $                      WORK, RWORK, DUMMA( 1 ) )
                IF( DUMMA( 1 ).LT.ULPINV )
      $            RESULT( 13 ) = DUMMA( 1 )*ANINV
             END IF
 *
-*           Call AB_CUNMHR for Left eigenvectors of A, do test 14
+*           Call CUNMHR for Left eigenvectors of A, do test 14
 *
             NTEST = 14
             RESULT( 14 ) = ULPINV
 *
-            CALL AB_CUNMHR( 'Left', 'No transpose', N, N, ILO, IHI, UU,
+            CALL CUNMHR( 'Left', 'No transpose', N, N, ILO, IHI, UU,
      $                   LDU, TAU, EVECTY, LDU, WORK, NWORK, IINFO )
             IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'AB_CUNMHR(L)', IINFO, N, JTYP
-     $E,
+               WRITE( NOUNIT, FMT = 9999 )'CUNMHR(L)', IINFO, N, JTYPE,
      $            IOLDSD
                INFO = ABS( IINFO )
                IF( IINFO.LT.0 )
@@ -1088,8 +1064,7 @@
 *
 *                        (from inverse iteration)
 *
-               CALL AB_CGET22( 'C', 'N', 'C', N, A, LDA, EVECTY, LDU, W3
-     $,
+               CALL CGET22( 'C', 'N', 'C', N, A, LDA, EVECTY, LDU, W3,
      $                      WORK, RWORK, DUMMA( 3 ) )
                IF( DUMMA( 3 ).LT.ULPINV )
      $            RESULT( 14 ) = DUMMA( 3 )*ANINV
@@ -1100,7 +1075,7 @@
   240       CONTINUE
 *
             NTESTT = NTESTT + NTEST
-            CALL AB_SLAFTS( 'CHS', N, N, JTYPE, NTEST, RESULT, IOLDSD,
+            CALL SLAFTS( 'CHS', N, N, JTYPE, NTEST, RESULT, IOLDSD,
      $                   THRESH, NOUNIT, NERRS )
 *
   250    CONTINUE
@@ -1108,21 +1083,20 @@
 *
 *     Summary
 *
-      CALL AB_SLASUM( 'CHS', NOUNIT, NERRS, NTESTT )
+      CALL SLASUM( 'CHS', NOUNIT, NERRS, NTESTT )
 *
       RETURN
 *
- 9999 FORMAT( ' AB_CCHKHS: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
+ 9999 FORMAT( ' CCHKHS: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
- 9998 FORMAT( ' AB_CCHKHS: ', A, ' Eigenvectors from ', A, ' incorrectly
-     $ ',
+ 9998 FORMAT( ' CCHKHS: ', A, ' Eigenvectors from ', A, ' incorrectly ',
      $      'normalized.', / ' Bits of error=', 0P, G10.3, ',', 9X,
      $      'N=', I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5,
      $      ')' )
- 9997 FORMAT( ' AB_CCHKHS: Selected ', A, ' Eigenvectors from ', A,
+ 9997 FORMAT( ' CCHKHS: Selected ', A, ' Eigenvectors from ', A,
      $      ' do not match other eigenvectors ', 9X, 'N=', I6,
      $      ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
 *
-*     End of AB_CCHKHS
+*     End of CCHKHS
 *
       END

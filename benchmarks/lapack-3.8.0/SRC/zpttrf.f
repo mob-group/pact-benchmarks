@@ -1,4 +1,4 @@
-*> \brief \b AB_ZPTTRF
+*> \brief \b ZPTTRF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZPTTRF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZPTTRF.f">
+*> Download ZPTTRF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zpttrf.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZPTTRF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zpttrf.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZPTTRF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpttrf.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZPTTRF( N, D, E, INFO )
+*       SUBROUTINE ZPTTRF( N, D, E, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZPTTRF computes the L*D*L**H factorization of a complex Hermitian
+*> ZPTTRF computes the L*D*L**H factorization of a complex Hermitian
 *> positive definite tridiagonal matrix A.  The factorization may also
 *> be regarded as having the form A = U**H *D*U.
 *> \endverbatim
@@ -90,7 +90,7 @@
 *> \ingroup complex16PTcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_ZPTTRF( N, D, E, INFO )
+      SUBROUTINE ZPTTRF( N, D, E, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -116,7 +116,7 @@
       DOUBLE PRECISION   EII, EIR, F, G
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA
+      EXTERNAL           XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCMPLX, DIMAG, MOD
@@ -128,7 +128,7 @@
       INFO = 0
       IF( N.LT.0 ) THEN
          INFO = -1
-         CALL AB_XERBLA( 'AB_ZPTTRF', -INFO )
+         CALL XERBLA( 'ZPTTRF', -INFO )
          RETURN
       END IF
 *
@@ -223,6 +223,6 @@
    30 CONTINUE
       RETURN
 *
-*     End of AB_ZPTTRF
+*     End of ZPTTRF
 *
       END

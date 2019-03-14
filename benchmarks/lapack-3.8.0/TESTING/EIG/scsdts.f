@@ -1,4 +1,4 @@
-*> \brief \b AB_SCSDTS
+*> \brief \b SCSDTS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SCSDTS( M, P, Q, X, XF, LDX, U1, LDU1, U2, LDU2, V1T,
+*       SUBROUTINE SCSDTS( M, P, Q, X, XF, LDX, U1, LDU1, U2, LDU2, V1T,
 *                          LDV1T, V2T, LDV2T, THETA, IWORK, WORK, LWORK,
 *                          RWORK, RESULT )
 *
@@ -29,7 +29,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SCSDTS tests SORCSD, which, given an M-by-M partitioned orthogonal
+*> SCSDTS tests SORCSD, which, given an M-by-M partitioned orthogonal
 *> matrix X,
 *>              Q  M-Q
 *>       X = [ X11 X12 ] P   ,
@@ -48,7 +48,7 @@
 *>                             [  0  S  0 |  0  C  0 ]
 *>                             [  0  0  I |  0  0  0 ]
 *>
-*> and also AB_SORCSD2BY1, which, given
+*> and also SORCSD2BY1, which, given
 *>          Q
 *>       [ X11 ] P   ,
 *>       [ X21 ] M-P
@@ -225,8 +225,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_SCSDTS( M, P, Q, X, XF, LDX, U1, LDU1, U2, LDU2, V1T
-     $,
+      SUBROUTINE SCSDTS( M, P, Q, X, XF, LDX, U1, LDU1, U2, LDU2, V1T,
      $                   LDV1T, V2T, LDV2T, THETA, IWORK, WORK, LWORK,
      $                   RWORK, RESULT )
 *
@@ -249,9 +248,9 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      REAL               PIOVER2, REALONE, REAAB_LZERO
+      REAL               PIOVER2, REALONE, REALZERO
       PARAMETER          ( PIOVER2 = 1.57079632679489662E0,
-     $                     REALONE = 1.0E0, REAAB_LZERO = 0.0E0 )
+     $                     REALONE = 1.0E0, REALZERO = 0.0E0 )
       REAL               ZERO, ONE
       PARAMETER          ( ZERO = 0.0E0, ONE = 1.0E0 )
 *     ..
@@ -260,32 +259,29 @@
       REAL               EPS2, RESID, ULP, ULPINV
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH, AB_SLANGE, AB_SLANSY
-      EXTERNAL           AB_SLAMCH, AB_SLANGE, AB_SLANSY
+      REAL               SLAMCH, SLANGE, SLANSY
+      EXTERNAL           SLAMCH, SLANGE, SLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SGEMM, AB_SLACPY, AB_SLASET, SORCSD, AB_SORC
-     $SD2BY1,
-     $                   AB_AB_SSYRK
+      EXTERNAL           SGEMM, SLACPY, SLASET, SORCSD, SORCSD2BY1,
+     $                   SSYRK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          COS, MAX, MIN, REAL, SIN
 *     ..
 *     .. Executable Statements ..
 *
-      ULP = AB_SLAMCH( 'Precision' )
+      ULP = SLAMCH( 'Precision' )
       ULPINV = REALONE / ULP
 *
 *     The first half of the routine checks the 2-by-2 CSD
 *
-      CALL AB_SLASET( 'Full', M, M, ZERO, ONE, WORK, LDX )
-      CALL AB_AB_SSYRK( 'Upper', 'Conjugate transpose', M, M, -ONE, X, L
-     $DX,
+      CALL SLASET( 'Full', M, M, ZERO, ONE, WORK, LDX )
+      CALL SSYRK( 'Upper', 'Conjugate transpose', M, M, -ONE, X, LDX,
      $            ONE, WORK, LDX )
       IF (M.GT.0) THEN
          EPS2 = MAX( ULP,
-     $               AB_SLANGE( '1', M, M, WORK, LDX, RWORK ) / REAL( M 
-     $) )
+     $               SLANGE( '1', M, M, WORK, LDX, RWORK ) / REAL( M ) )
       ELSE
          EPS2 = ULP
       END IF
@@ -293,7 +289,7 @@
 *
 *     Copy the matrix X to the array XF.
 *
-      CALL AB_SLACPY( 'Full', M, M, X, LDX, XF, LDX )
+      CALL SLACPY( 'Full', M, M, X, LDX, XF, LDX )
 *
 *     Compute the CSD
 *
@@ -304,14 +300,12 @@
 *
 *     Compute XF := diag(U1,U2)'*X*diag(V1,V2) - [D11 D12; D21 D22]
 *
-      CALL AB_SLACPY( 'Full', M, M, X, LDX, XF, LDX )
+      CALL SLACPY( 'Full', M, M, X, LDX, XF, LDX )
 *
-      CALL AB_SGEMM( 'No transpose', 'Conjugate transpose', P, Q, Q, ONE
-     $,
+      CALL SGEMM( 'No transpose', 'Conjugate transpose', P, Q, Q, ONE,
      $            XF, LDX, V1T, LDV1T, ZERO, WORK, LDX )
 *
-      CALL AB_SGEMM( 'Conjugate transpose', 'No transpose', P, Q, P, ONE
-     $,
+      CALL SGEMM( 'Conjugate transpose', 'No transpose', P, Q, P, ONE,
      $            U1, LDU1, WORK, LDX, ZERO, XF, LDX )
 *
       DO I = 1, MIN(P,Q)-R
@@ -322,10 +316,10 @@
      $           XF(MIN(P,Q)-R+I,MIN(P,Q)-R+I) - COS(THETA(I))
       END DO
 *
-      CALL AB_SGEMM( 'No transpose', 'Conjugate transpose', P, M-Q, M-Q,
+      CALL SGEMM( 'No transpose', 'Conjugate transpose', P, M-Q, M-Q,
      $            ONE, XF(1,Q+1), LDX, V2T, LDV2T, ZERO, WORK, LDX )
 *
-      CALL AB_SGEMM( 'Conjugate transpose', 'No transpose', P, M-Q, P,
+      CALL SGEMM( 'Conjugate transpose', 'No transpose', P, M-Q, P,
      $            ONE, U1, LDU1, WORK, LDX, ZERO, XF(1,Q+1), LDX )
 *
       DO I = 1, MIN(P,M-Q)-R
@@ -337,11 +331,10 @@
      $      SIN(THETA(R-I+1))
       END DO
 *
-      CALL AB_SGEMM( 'No transpose', 'Conjugate transpose', M-P, Q, Q, O
-     $NE,
+      CALL SGEMM( 'No transpose', 'Conjugate transpose', M-P, Q, Q, ONE,
      $            XF(P+1,1), LDX, V1T, LDV1T, ZERO, WORK, LDX )
 *
-      CALL AB_SGEMM( 'Conjugate transpose', 'No transpose', M-P, Q, M-P,
+      CALL SGEMM( 'Conjugate transpose', 'No transpose', M-P, Q, M-P,
      $            ONE, U2, LDU2, WORK, LDX, ZERO, XF(P+1,1), LDX )
 *
       DO I = 1, MIN(M-P,Q)-R
@@ -353,12 +346,10 @@
      $             SIN(THETA(R-I+1))
       END DO
 *
-      CALL AB_SGEMM( 'No transpose', 'Conjugate transpose', M-P, M-Q, M-
-     $Q,
+      CALL SGEMM( 'No transpose', 'Conjugate transpose', M-P, M-Q, M-Q,
      $            ONE, XF(P+1,Q+1), LDX, V2T, LDV2T, ZERO, WORK, LDX )
 *
-      CALL AB_SGEMM( 'Conjugate transpose', 'No transpose', M-P, M-Q, M-
-     $P,
+      CALL SGEMM( 'Conjugate transpose', 'No transpose', M-P, M-Q, M-P,
      $            ONE, U2, LDU2, WORK, LDX, ZERO, XF(P+1,Q+1), LDX )
 *
       DO I = 1, MIN(M-P,M-Q)-R
@@ -372,77 +363,73 @@
 *
 *     Compute norm( U1'*X11*V1 - D11 ) / ( MAX(1,P,Q)*EPS2 ) .
 *
-      RESID = AB_SLANGE( '1', P, Q, XF, LDX, RWORK )
+      RESID = SLANGE( '1', P, Q, XF, LDX, RWORK )
       RESULT( 1 ) = ( RESID / REAL(MAX(1,P,Q)) ) / EPS2
 *
 *     Compute norm( U1'*X12*V2 - D12 ) / ( MAX(1,P,M-Q)*EPS2 ) .
 *
-      RESID = AB_SLANGE( '1', P, M-Q, XF(1,Q+1), LDX, RWORK )
+      RESID = SLANGE( '1', P, M-Q, XF(1,Q+1), LDX, RWORK )
       RESULT( 2 ) = ( RESID / REAL(MAX(1,P,M-Q)) ) / EPS2
 *
 *     Compute norm( U2'*X21*V1 - D21 ) / ( MAX(1,M-P,Q)*EPS2 ) .
 *
-      RESID = AB_SLANGE( '1', M-P, Q, XF(P+1,1), LDX, RWORK )
+      RESID = SLANGE( '1', M-P, Q, XF(P+1,1), LDX, RWORK )
       RESULT( 3 ) = ( RESID / REAL(MAX(1,M-P,Q)) ) / EPS2
 *
 *     Compute norm( U2'*X22*V2 - D22 ) / ( MAX(1,M-P,M-Q)*EPS2 ) .
 *
-      RESID = AB_SLANGE( '1', M-P, M-Q, XF(P+1,Q+1), LDX, RWORK )
+      RESID = SLANGE( '1', M-P, M-Q, XF(P+1,Q+1), LDX, RWORK )
       RESULT( 4 ) = ( RESID / REAL(MAX(1,M-P,M-Q)) ) / EPS2
 *
 *     Compute I - U1'*U1
 *
-      CALL AB_SLASET( 'Full', P, P, ZERO, ONE, WORK, LDU1 )
-      CALL AB_AB_SSYRK( 'Upper', 'Conjugate transpose', P, P, -ONE, U1, 
-     $LDU1,
+      CALL SLASET( 'Full', P, P, ZERO, ONE, WORK, LDU1 )
+      CALL SSYRK( 'Upper', 'Conjugate transpose', P, P, -ONE, U1, LDU1,
      $            ONE, WORK, LDU1 )
 *
 *     Compute norm( I - U'*U ) / ( MAX(1,P) * ULP ) .
 *
-      RESID = AB_SLANSY( '1', 'Upper', P, WORK, LDU1, RWORK )
+      RESID = SLANSY( '1', 'Upper', P, WORK, LDU1, RWORK )
       RESULT( 5 ) = ( RESID / REAL(MAX(1,P)) ) / ULP
 *
 *     Compute I - U2'*U2
 *
-      CALL AB_SLASET( 'Full', M-P, M-P, ZERO, ONE, WORK, LDU2 )
-      CALL AB_AB_SSYRK( 'Upper', 'Conjugate transpose', M-P, M-P, -ONE, 
-     $U2,
+      CALL SLASET( 'Full', M-P, M-P, ZERO, ONE, WORK, LDU2 )
+      CALL SSYRK( 'Upper', 'Conjugate transpose', M-P, M-P, -ONE, U2,
      $            LDU2, ONE, WORK, LDU2 )
 *
 *     Compute norm( I - U2'*U2 ) / ( MAX(1,M-P) * ULP ) .
 *
-      RESID = AB_SLANSY( '1', 'Upper', M-P, WORK, LDU2, RWORK )
+      RESID = SLANSY( '1', 'Upper', M-P, WORK, LDU2, RWORK )
       RESULT( 6 ) = ( RESID / REAL(MAX(1,M-P)) ) / ULP
 *
 *     Compute I - V1T*V1T'
 *
-      CALL AB_SLASET( 'Full', Q, Q, ZERO, ONE, WORK, LDV1T )
-      CALL AB_AB_SSYRK( 'Upper', 'No transpose', Q, Q, -ONE, V1T, LDV1T,
-     $ ONE,
+      CALL SLASET( 'Full', Q, Q, ZERO, ONE, WORK, LDV1T )
+      CALL SSYRK( 'Upper', 'No transpose', Q, Q, -ONE, V1T, LDV1T, ONE,
      $            WORK, LDV1T )
 *
 *     Compute norm( I - V1T*V1T' ) / ( MAX(1,Q) * ULP ) .
 *
-      RESID = AB_SLANSY( '1', 'Upper', Q, WORK, LDV1T, RWORK )
+      RESID = SLANSY( '1', 'Upper', Q, WORK, LDV1T, RWORK )
       RESULT( 7 ) = ( RESID / REAL(MAX(1,Q)) ) / ULP
 *
 *     Compute I - V2T*V2T'
 *
-      CALL AB_SLASET( 'Full', M-Q, M-Q, ZERO, ONE, WORK, LDV2T )
-      CALL AB_AB_SSYRK( 'Upper', 'No transpose', M-Q, M-Q, -ONE, V2T, LD
-     $V2T,
+      CALL SLASET( 'Full', M-Q, M-Q, ZERO, ONE, WORK, LDV2T )
+      CALL SSYRK( 'Upper', 'No transpose', M-Q, M-Q, -ONE, V2T, LDV2T,
      $            ONE, WORK, LDV2T )
 *
 *     Compute norm( I - V2T*V2T' ) / ( MAX(1,M-Q) * ULP ) .
 *
-      RESID = AB_SLANSY( '1', 'Upper', M-Q, WORK, LDV2T, RWORK )
+      RESID = SLANSY( '1', 'Upper', M-Q, WORK, LDV2T, RWORK )
       RESULT( 8 ) = ( RESID / REAL(MAX(1,M-Q)) ) / ULP
 *
 *     Check sorting
 *
-      RESULT( 9 ) = REAAB_LZERO
+      RESULT( 9 ) = REALZERO
       DO I = 1, R
-         IF( THETA(I).LT.REAAB_LZERO .OR. THETA(I).GT.PIOVER2 ) THEN
+         IF( THETA(I).LT.REALZERO .OR. THETA(I).GT.PIOVER2 ) THEN
             RESULT( 9 ) = ULPINV
          END IF
          IF( I.GT.1 ) THEN
@@ -452,16 +439,14 @@
          END IF
       END DO
 *
-*     The AB_SECOND half of the routine checks the 2-by-1 CSD
+*     The second half of the routine checks the 2-by-1 CSD
 *
-      CALL AB_SLASET( 'Full', Q, Q, ZERO, ONE, WORK, LDX )
-      CALL AB_AB_SSYRK( 'Upper', 'Conjugate transpose', Q, M, -ONE, X, L
-     $DX,
+      CALL SLASET( 'Full', Q, Q, ZERO, ONE, WORK, LDX )
+      CALL SSYRK( 'Upper', 'Conjugate transpose', Q, M, -ONE, X, LDX,
      $            ONE, WORK, LDX )
       IF (M.GT.0) THEN
          EPS2 = MAX( ULP,
-     $               AB_SLANGE( '1', Q, Q, WORK, LDX, RWORK ) / REAL( M 
-     $) )
+     $               SLANGE( '1', Q, Q, WORK, LDX, RWORK ) / REAL( M ) )
       ELSE
          EPS2 = ULP
       END IF
@@ -469,23 +454,20 @@
 *
 *     Copy the matrix [X11;X21] to the array XF.
 *
-      CALL AB_SLACPY( 'Full', M, Q, X, LDX, XF, LDX )
+      CALL SLACPY( 'Full', M, Q, X, LDX, XF, LDX )
 *
 *     Compute the CSD
 *
-      CALL AB_SORCSD2BY1( 'Y', 'Y', 'Y', M, P, Q, XF(1,1), LDX, XF(P+1,1
-     $),
+      CALL SORCSD2BY1( 'Y', 'Y', 'Y', M, P, Q, XF(1,1), LDX, XF(P+1,1),
      $                 LDX, THETA, U1, LDU1, U2, LDU2, V1T, LDV1T, WORK,
      $                 LWORK, IWORK, INFO )
 *
 *     Compute [X11;X21] := diag(U1,U2)'*[X11;X21]*V1 - [D11;D21]
 *
-      CALL AB_SGEMM( 'No transpose', 'Conjugate transpose', P, Q, Q, ONE
-     $,
+      CALL SGEMM( 'No transpose', 'Conjugate transpose', P, Q, Q, ONE,
      $            X, LDX, V1T, LDV1T, ZERO, WORK, LDX )
 *
-      CALL AB_SGEMM( 'Conjugate transpose', 'No transpose', P, Q, P, ONE
-     $,
+      CALL SGEMM( 'Conjugate transpose', 'No transpose', P, Q, P, ONE,
      $            U1, LDU1, WORK, LDX, ZERO, X, LDX )
 *
       DO I = 1, MIN(P,Q)-R
@@ -496,11 +478,10 @@
      $           X(MIN(P,Q)-R+I,MIN(P,Q)-R+I) - COS(THETA(I))
       END DO
 *
-      CALL AB_SGEMM( 'No transpose', 'Conjugate transpose', M-P, Q, Q, O
-     $NE,
+      CALL SGEMM( 'No transpose', 'Conjugate transpose', M-P, Q, Q, ONE,
      $            X(P+1,1), LDX, V1T, LDV1T, ZERO, WORK, LDX )
 *
-      CALL AB_SGEMM( 'Conjugate transpose', 'No transpose', M-P, Q, M-P,
+      CALL SGEMM( 'Conjugate transpose', 'No transpose', M-P, Q, M-P,
      $            ONE, U2, LDU2, WORK, LDX, ZERO, X(P+1,1), LDX )
 *
       DO I = 1, MIN(M-P,Q)-R
@@ -514,55 +495,52 @@
 *
 *     Compute norm( U1'*X11*V1 - D11 ) / ( MAX(1,P,Q)*EPS2 ) .
 *
-      RESID = AB_SLANGE( '1', P, Q, X, LDX, RWORK )
+      RESID = SLANGE( '1', P, Q, X, LDX, RWORK )
       RESULT( 10 ) = ( RESID / REAL(MAX(1,P,Q)) ) / EPS2
 *
 *     Compute norm( U2'*X21*V1 - D21 ) / ( MAX(1,M-P,Q)*EPS2 ) .
 *
-      RESID = AB_SLANGE( '1', M-P, Q, X(P+1,1), LDX, RWORK )
+      RESID = SLANGE( '1', M-P, Q, X(P+1,1), LDX, RWORK )
       RESULT( 11 ) = ( RESID / REAL(MAX(1,M-P,Q)) ) / EPS2
 *
 *     Compute I - U1'*U1
 *
-      CALL AB_SLASET( 'Full', P, P, ZERO, ONE, WORK, LDU1 )
-      CALL AB_AB_SSYRK( 'Upper', 'Conjugate transpose', P, P, -ONE, U1, 
-     $LDU1,
+      CALL SLASET( 'Full', P, P, ZERO, ONE, WORK, LDU1 )
+      CALL SSYRK( 'Upper', 'Conjugate transpose', P, P, -ONE, U1, LDU1,
      $            ONE, WORK, LDU1 )
 *
 *     Compute norm( I - U1'*U1 ) / ( MAX(1,P) * ULP ) .
 *
-      RESID = AB_SLANSY( '1', 'Upper', P, WORK, LDU1, RWORK )
+      RESID = SLANSY( '1', 'Upper', P, WORK, LDU1, RWORK )
       RESULT( 12 ) = ( RESID / REAL(MAX(1,P)) ) / ULP
 *
 *     Compute I - U2'*U2
 *
-      CALL AB_SLASET( 'Full', M-P, M-P, ZERO, ONE, WORK, LDU2 )
-      CALL AB_AB_SSYRK( 'Upper', 'Conjugate transpose', M-P, M-P, -ONE, 
-     $U2,
+      CALL SLASET( 'Full', M-P, M-P, ZERO, ONE, WORK, LDU2 )
+      CALL SSYRK( 'Upper', 'Conjugate transpose', M-P, M-P, -ONE, U2,
      $            LDU2, ONE, WORK, LDU2 )
 *
 *     Compute norm( I - U2'*U2 ) / ( MAX(1,M-P) * ULP ) .
 *
-      RESID = AB_SLANSY( '1', 'Upper', M-P, WORK, LDU2, RWORK )
+      RESID = SLANSY( '1', 'Upper', M-P, WORK, LDU2, RWORK )
       RESULT( 13 ) = ( RESID / REAL(MAX(1,M-P)) ) / ULP
 *
 *     Compute I - V1T*V1T'
 *
-      CALL AB_SLASET( 'Full', Q, Q, ZERO, ONE, WORK, LDV1T )
-      CALL AB_AB_SSYRK( 'Upper', 'No transpose', Q, Q, -ONE, V1T, LDV1T,
-     $ ONE,
+      CALL SLASET( 'Full', Q, Q, ZERO, ONE, WORK, LDV1T )
+      CALL SSYRK( 'Upper', 'No transpose', Q, Q, -ONE, V1T, LDV1T, ONE,
      $            WORK, LDV1T )
 *
 *     Compute norm( I - V1T*V1T' ) / ( MAX(1,Q) * ULP ) .
 *
-      RESID = AB_SLANSY( '1', 'Upper', Q, WORK, LDV1T, RWORK )
+      RESID = SLANSY( '1', 'Upper', Q, WORK, LDV1T, RWORK )
       RESULT( 14 ) = ( RESID / REAL(MAX(1,Q)) ) / ULP
 *
 *     Check sorting
 *
-      RESULT( 15 ) = REAAB_LZERO
+      RESULT( 15 ) = REALZERO
       DO I = 1, R
-         IF( THETA(I).LT.REAAB_LZERO .OR. THETA(I).GT.PIOVER2 ) THEN
+         IF( THETA(I).LT.REALZERO .OR. THETA(I).GT.PIOVER2 ) THEN
             RESULT( 15 ) = ULPINV
          END IF
          IF( I.GT.1 ) THEN
@@ -574,7 +552,7 @@
 *
       RETURN
 *
-*     End of AB_SCSDTS
+*     End of SCSDTS
 *
       END
 

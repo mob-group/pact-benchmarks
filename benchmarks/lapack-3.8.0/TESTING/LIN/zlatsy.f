@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLATSY
+*> \brief \b ZLATSY
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZLATSY( UPLO, N, X, LDX, ISEED )
+*       SUBROUTINE ZLATSY( UPLO, N, X, LDX, ISEED )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZLATSY generates a special test matrix for the complex symmetric
+*> ZLATSY generates a special test matrix for the complex symmetric
 *> (indefinite) factorization.  The pivot blocks of the generated matrix
 *> will be in the following order:
 *>    2x2 pivot block, non diagonalizable
@@ -87,7 +87,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZLATSY( UPLO, N, X, LDX, ISEED )
+      SUBROUTINE ZLATSY( UPLO, N, X, LDX, ISEED )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -115,8 +115,8 @@
       COMPLEX*16         A, B, C, R
 *     ..
 *     .. External Functions ..
-      COMPLEX*16         AB_ZLARND
-      EXTERNAL           AB_ZLARND
+      COMPLEX*16         ZLARND
+      EXTERNAL           ZLARND
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, SQRT
@@ -144,17 +144,17 @@
          N5 = N - 5*N5 + 1
 *
          DO 30 I = N, N5, -5
-            A = ALPHA3*AB_ZLARND( 5, ISEED )
-            B = AB_ZLARND( 5, ISEED ) / ALPHA
+            A = ALPHA3*ZLARND( 5, ISEED )
+            B = ZLARND( 5, ISEED ) / ALPHA
             C = A - 2.D0*B*EYE
             R = C / BETA
             X( I, I ) = A
             X( I-2, I ) = B
             X( I-2, I-1 ) = R
             X( I-2, I-2 ) = C
-            X( I-1, I-1 ) = AB_ZLARND( 2, ISEED )
-            X( I-3, I-3 ) = AB_ZLARND( 2, ISEED )
-            X( I-4, I-4 ) = AB_ZLARND( 2, ISEED )
+            X( I-1, I-1 ) = ZLARND( 2, ISEED )
+            X( I-3, I-3 ) = ZLARND( 2, ISEED )
+            X( I-4, I-4 ) = ZLARND( 2, ISEED )
             IF( ABS( X( I-3, I-3 ) ).GT.ABS( X( I-4, I-4 ) ) ) THEN
                X( I-4, I-3 ) = 2.0D0*X( I-3, I-3 )
             ELSE
@@ -166,20 +166,20 @@
 *
          I = N5 - 1
          IF( I.GT.2 ) THEN
-            A = ALPHA3*AB_ZLARND( 5, ISEED )
-            B = AB_ZLARND( 5, ISEED ) / ALPHA
+            A = ALPHA3*ZLARND( 5, ISEED )
+            B = ZLARND( 5, ISEED ) / ALPHA
             C = A - 2.D0*B*EYE
             R = C / BETA
             X( I, I ) = A
             X( I-2, I ) = B
             X( I-2, I-1 ) = R
             X( I-2, I-2 ) = C
-            X( I-1, I-1 ) = AB_ZLARND( 2, ISEED )
+            X( I-1, I-1 ) = ZLARND( 2, ISEED )
             I = I - 3
          END IF
          IF( I.GT.1 ) THEN
-            X( I, I ) = AB_ZLARND( 2, ISEED )
-            X( I-1, I-1 ) = AB_ZLARND( 2, ISEED )
+            X( I, I ) = ZLARND( 2, ISEED )
+            X( I-1, I-1 ) = ZLARND( 2, ISEED )
             IF( ABS( X( I, I ) ).GT.ABS( X( I-1, I-1 ) ) ) THEN
                X( I-1, I ) = 2.0D0*X( I, I )
             ELSE
@@ -187,7 +187,7 @@
             END IF
             I = I - 2
          ELSE IF( I.EQ.1 ) THEN
-            X( I, I ) = AB_ZLARND( 2, ISEED )
+            X( I, I ) = ZLARND( 2, ISEED )
             I = I - 1
          END IF
 *
@@ -206,17 +206,17 @@
          N5 = N5*5
 *
          DO 60 I = 1, N5, 5
-            A = ALPHA3*AB_ZLARND( 5, ISEED )
-            B = AB_ZLARND( 5, ISEED ) / ALPHA
+            A = ALPHA3*ZLARND( 5, ISEED )
+            B = ZLARND( 5, ISEED ) / ALPHA
             C = A - 2.D0*B*EYE
             R = C / BETA
             X( I, I ) = A
             X( I+2, I ) = B
             X( I+2, I+1 ) = R
             X( I+2, I+2 ) = C
-            X( I+1, I+1 ) = AB_ZLARND( 2, ISEED )
-            X( I+3, I+3 ) = AB_ZLARND( 2, ISEED )
-            X( I+4, I+4 ) = AB_ZLARND( 2, ISEED )
+            X( I+1, I+1 ) = ZLARND( 2, ISEED )
+            X( I+3, I+3 ) = ZLARND( 2, ISEED )
+            X( I+4, I+4 ) = ZLARND( 2, ISEED )
             IF( ABS( X( I+3, I+3 ) ).GT.ABS( X( I+4, I+4 ) ) ) THEN
                X( I+4, I+3 ) = 2.0D0*X( I+3, I+3 )
             ELSE
@@ -228,20 +228,20 @@
 *
          I = N5 + 1
          IF( I.LT.N-1 ) THEN
-            A = ALPHA3*AB_ZLARND( 5, ISEED )
-            B = AB_ZLARND( 5, ISEED ) / ALPHA
+            A = ALPHA3*ZLARND( 5, ISEED )
+            B = ZLARND( 5, ISEED ) / ALPHA
             C = A - 2.D0*B*EYE
             R = C / BETA
             X( I, I ) = A
             X( I+2, I ) = B
             X( I+2, I+1 ) = R
             X( I+2, I+2 ) = C
-            X( I+1, I+1 ) = AB_ZLARND( 2, ISEED )
+            X( I+1, I+1 ) = ZLARND( 2, ISEED )
             I = I + 3
          END IF
          IF( I.LT.N ) THEN
-            X( I, I ) = AB_ZLARND( 2, ISEED )
-            X( I+1, I+1 ) = AB_ZLARND( 2, ISEED )
+            X( I, I ) = ZLARND( 2, ISEED )
+            X( I+1, I+1 ) = ZLARND( 2, ISEED )
             IF( ABS( X( I, I ) ).GT.ABS( X( I+1, I+1 ) ) ) THEN
                X( I+1, I ) = 2.0D0*X( I, I )
             ELSE
@@ -249,13 +249,13 @@
             END IF
             I = I + 2
          ELSE IF( I.EQ.N ) THEN
-            X( I, I ) = AB_ZLARND( 2, ISEED )
+            X( I, I ) = ZLARND( 2, ISEED )
             I = I + 1
          END IF
       END IF
 *
       RETURN
 *
-*     End of AB_ZLATSY
+*     End of ZLATSY
 *
       END

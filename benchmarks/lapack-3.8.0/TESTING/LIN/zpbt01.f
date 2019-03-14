@@ -1,4 +1,4 @@
-*> \brief \b AB_ZPBT01
+*> \brief \b ZPBT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZPBT01( UPLO, N, KD, A, LDA, AFAC, LDAFAC, RWORK,
+*       SUBROUTINE ZPBT01( UPLO, N, KD, A, LDA, AFAC, LDAFAC, RWORK,
 *                          RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZPBT01 reconstructs a Hermitian positive definite band matrix A from
+*> ZPBT01 reconstructs a Hermitian positive definite band matrix A from
 *> its L*L' or U'*U factorization and computes the residual
 *>    norm( L*L' - A ) / ( N * norm(A) * EPS ) or
 *>    norm( U'*U - A ) / ( N * norm(A) * EPS ),
@@ -68,7 +68,7 @@
 *>          UPLO = 'L', the lower triangular part of A is stored.  The
 *>          columns of the appropriate triangle are stored in the columns
 *>          of A and the diagonals of the triangle are stored in the rows
-*>          of A.  See AB_ZPBTRF for further details.
+*>          of A.  See ZPBTRF for further details.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -82,7 +82,7 @@
 *>          AFAC is COMPLEX*16 array, dimension (LDAFAC,N)
 *>          The factored form of the matrix A.  AFAC contains the factor
 *>          L or U from the L*L' or U'*U factorization in band storage
-*>          format, as computed by AB_ZPBTRF.
+*>          format, as computed by ZPBTRF.
 *> \endverbatim
 *>
 *> \param[in] LDAFAC
@@ -117,7 +117,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZPBT01( UPLO, N, KD, A, LDA, AFAC, LDAFAC, RWORK,
+      SUBROUTINE ZPBT01( UPLO, N, KD, A, LDA, AFAC, LDAFAC, RWORK,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -147,13 +147,13 @@
       DOUBLE PRECISION   AKK, ANORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANHB
-      COMPLEX*16         AB_ZDOTC
-      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_ZLANHB, AB_ZDOTC
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH, ZLANHB
+      COMPLEX*16         ZDOTC
+      EXTERNAL           LSAME, DLAMCH, ZLANHB, ZDOTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZAB_DSCAL, AB_ZHER, AB_ZTRMV
+      EXTERNAL           ZDSCAL, ZHER, ZTRMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DIMAG, MAX, MIN
@@ -169,8 +169,8 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
-      ANORM = AB_ZLANHB( '1', UPLO, N, KD, A, LDA, RWORK )
+      EPS = DLAMCH( 'Epsilon' )
+      ANORM = ZLANHB( '1', UPLO, N, KD, A, LDA, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -179,7 +179,7 @@
 *     Check the imaginary parts of the diagonal elements and return with
 *     an error code if any are nonzero.
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
          DO 10 J = 1, N
             IF( DIMAG( AFAC( KD+1, J ) ).NE.ZERO ) THEN
                RESID = ONE / EPS
@@ -197,20 +197,20 @@
 *
 *     Compute the product U'*U, overwriting U.
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
          DO 30 K = N, 1, -1
             KC = MAX( 1, KD+2-K )
             KLEN = KD + 1 - KC
 *
 *           Compute the (K,K) element of the result.
 *
-            AKK = AB_ZDOTC( KLEN+1, AFAC( KC, K ), 1, AFAC( KC, K ), 1 )
+            AKK = ZDOTC( KLEN+1, AFAC( KC, K ), 1, AFAC( KC, K ), 1 )
             AFAC( KD+1, K ) = AKK
 *
 *           Compute the rest of column K.
 *
             IF( KLEN.GT.0 )
-     $         CALL AB_ZTRMV( 'Upper', 'Conjugate', 'Non-unit', KLEN,
+     $         CALL ZTRMV( 'Upper', 'Conjugate', 'Non-unit', KLEN,
      $                     AFAC( KD+1, K-KLEN ), LDAFAC-1,
      $                     AFAC( KC, K ), 1 )
 *
@@ -226,20 +226,20 @@
 *           columns K+1 through N.
 *
             IF( KLEN.GT.0 )
-     $         CALL AB_ZHER( 'Lower', KLEN, ONE, AFAC( 2, K ), 1,
+     $         CALL ZHER( 'Lower', KLEN, ONE, AFAC( 2, K ), 1,
      $                    AFAC( 1, K+1 ), LDAFAC-1 )
 *
 *           Scale column K by the diagonal element.
 *
             AKK = AFAC( 1, K )
-            CALL ZAB_DSCAL( KLEN+1, AKK, AFAC( 1, K ), 1 )
+            CALL ZDSCAL( KLEN+1, AKK, AFAC( 1, K ), 1 )
 *
    40    CONTINUE
       END IF
 *
 *     Compute the difference  L*L' - A  or  U'*U - A.
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
          DO 60 J = 1, N
             MU = MAX( 1, KD+2-J )
             DO 50 I = MU, KD + 1
@@ -257,12 +257,12 @@
 *
 *     Compute norm( L*L' - A ) / ( N * norm(A) * EPS )
 *
-      RESID = AB_ZLANHB( '1', UPLO, N, KD, AFAC, LDAFAC, RWORK )
+      RESID = ZLANHB( '1', UPLO, N, KD, AFAC, LDAFAC, RWORK )
 *
       RESID = ( ( RESID / DBLE( N ) ) / ANORM ) / EPS
 *
       RETURN
 *
-*     End of AB_ZPBT01
+*     End of ZPBT01
 *
       END

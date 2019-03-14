@@ -1,4 +1,4 @@
-*> \brief \b AB_SBDT02
+*> \brief \b SBDT02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SBDT02( M, N, B, LDB, C, LDC, U, LDU, WORK, RESID )
+*       SUBROUTINE SBDT02( M, N, B, LDB, C, LDC, U, LDU, WORK, RESID )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDB, LDC, LDU, M, N
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SBDT02 tests the change of basis C = U' * B by computing the residual
+*> SBDT02 tests the change of basis C = U' * B by computing the residual
 *>
 *>    RESID = norm( B - U * C ) / ( max(m,n) * norm(B) * EPS ),
 *>
@@ -109,7 +109,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_SBDT02( M, N, B, LDB, C, LDC, U, LDU, WORK, RESID )
+      SUBROUTINE SBDT02( M, N, B, LDB, C, LDC, U, LDU, WORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -136,11 +136,11 @@
       REAL               BNORM, EPS, REALMN
 *     ..
 *     .. External Functions ..
-      REAL               AB_SASUM, AB_SLAMCH, AB_SLANGE
-      EXTERNAL           AB_SASUM, AB_SLAMCH, AB_SLANGE
+      REAL               SASUM, SLAMCH, SLANGE
+      EXTERNAL           SASUM, SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SCOPY, AB_SGEMV
+      EXTERNAL           SCOPY, SGEMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, REAL
@@ -153,21 +153,20 @@
       IF( M.LE.0 .OR. N.LE.0 )
      $   RETURN
       REALMN = REAL( MAX( M, N ) )
-      EPS = AB_SLAMCH( 'Precision' )
+      EPS = SLAMCH( 'Precision' )
 *
 *     Compute norm( B - U * C )
 *
       DO 10 J = 1, N
-         CALL AB_SCOPY( M, B( 1, J ), 1, WORK, 1 )
-         CALL AB_SGEMV( 'No transpose', M, M, -ONE, U, LDU, C( 1, J ), 1
-     $,
+         CALL SCOPY( M, B( 1, J ), 1, WORK, 1 )
+         CALL SGEMV( 'No transpose', M, M, -ONE, U, LDU, C( 1, J ), 1,
      $               ONE, WORK, 1 )
-         RESID = MAX( RESID, AB_SASUM( M, WORK, 1 ) )
+         RESID = MAX( RESID, SASUM( M, WORK, 1 ) )
    10 CONTINUE
 *
 *     Compute norm of B.
 *
-      BNORM = AB_SLANGE( '1', M, N, B, LDB, WORK )
+      BNORM = SLANGE( '1', M, N, B, LDB, WORK )
 *
       IF( BNORM.LE.ZERO ) THEN
          IF( RESID.NE.ZERO )
@@ -186,6 +185,6 @@
       END IF
       RETURN
 *
-*     End of AB_SBDT02
+*     End of SBDT02
 *
       END

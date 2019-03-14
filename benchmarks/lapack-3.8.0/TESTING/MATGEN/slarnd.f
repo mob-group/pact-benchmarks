@@ -1,4 +1,4 @@
-*> \brief \b AB_SLARND
+*> \brief \b SLARND
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       REAL             FUNCTION AB_SLARND( IDIST, ISEED )
+*       REAL             FUNCTION SLARND( IDIST, ISEED )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            IDIST
@@ -23,7 +23,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SLARND returns a random real number from a uniform or normal
+*> SLARND returns a random real number from a uniform or normal
 *> distribution.
 *> \endverbatim
 *
@@ -65,13 +65,13 @@
 *>
 *> \verbatim
 *>
-*>  This routine calls the auxiliary routine AB_SLARAN to generate a random
+*>  This routine calls the auxiliary routine SLARAN to generate a random
 *>  real number from a uniform (0,1) distribution. The Box-Muller method
 *>  is used to transform numbers from a uniform to a normal distribution.
 *> \endverbatim
 *>
 *  =====================================================================
-      REAL             FUNCTION AB_SLARND( IDIST, ISEED )
+      REAL             FUNCTION SLARND( IDIST, ISEED )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -97,8 +97,8 @@
       REAL               T1, T2
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLARAN
-      EXTERNAL           AB_SLARAN
+      REAL               SLARAN
+      EXTERNAL           SLARAN
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          COS, LOG, SQRT
@@ -107,27 +107,27 @@
 *
 *     Generate a real random number from a uniform (0,1) distribution
 *
-      T1 = AB_SLARAN( ISEED )
+      T1 = SLARAN( ISEED )
 *
       IF( IDIST.EQ.1 ) THEN
 *
 *        uniform (0,1)
 *
-         AB_SLARND = T1
+         SLARND = T1
       ELSE IF( IDIST.EQ.2 ) THEN
 *
 *        uniform (-1,1)
 *
-         AB_SLARND = TWO*T1 - ONE
+         SLARND = TWO*T1 - ONE
       ELSE IF( IDIST.EQ.3 ) THEN
 *
 *        normal (0,1)
 *
-         T2 = AB_SLARAN( ISEED )
-         AB_SLARND = SQRT( -TWO*LOG( T1 ) )*COS( TWOPI*T2 )
+         T2 = SLARAN( ISEED )
+         SLARND = SQRT( -TWO*LOG( T1 ) )*COS( TWOPI*T2 )
       END IF
       RETURN
 *
-*     End of AB_SLARND
+*     End of SLARND
 *
       END

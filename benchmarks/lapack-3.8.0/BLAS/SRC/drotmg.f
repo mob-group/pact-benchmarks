@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_AB_DROTMG
+*> \brief \b DROTMG
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_AB_DROTMG(DD1,DD2,DX1,DY1,DPARAM)
+*       SUBROUTINE DROTMG(DD1,DD2,DX1,DY1,DPARAM)
 *
 *       .. Scalar Arguments ..
 *       DOUBLE PRECISION DD1,DD2,DX1,DY1
@@ -24,7 +24,7 @@
 *> \verbatim
 *>
 *>    CONSTRUCT THE MODIFIED GIVENS TRANSFORMATION MATRIX H WHICH ZEROS
-*>    THE AB_SECOND COMPONENT OF THE 2-VECTOR  (DSQRT(DD1)*DX1,DSQRT(DD2)*>    DY2)**T.
+*>    THE SECOND COMPONENT OF THE 2-VECTOR  (DSQRT(DD1)*DX1,DSQRT(DD2)*>    DY2)**T.
 *>    WITH DPARAM(1)=DFLAG, H HAS ONE OF THE FOLLOWING FORMS..
 *>
 *>    DFLAG=-1.D0     DFLAG=0.D0        DFLAG=1.D0     DFLAG=-2.D0
@@ -88,7 +88,7 @@
 *> \ingroup double_blas_level1
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_AB_DROTMG(DD1,DD2,DX1,DY1,DPARAM)
+      SUBROUTINE DROTMG(DD1,DD2,DX1,DY1,DPARAM)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

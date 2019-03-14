@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_CUNBDB5
+*> \brief \b CUNBDB5
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_CUNBDB5 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_CUNBDB5.f">
+*> Download CUNBDB5 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cunbdb5.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_CUNBDB5.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cunbdb5.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_CUNBDB5.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cunbdb5.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_CUNBDB5( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2,
+*       SUBROUTINE CUNBDB5( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2,
 *                           LDQ2, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *>\verbatim
 *>
-*> AB_AB_CUNBDB5 orthogonalizes the column vector
+*> CUNBDB5 orthogonalizes the column vector
 *>      X = [ X1 ]
 *>          [ X2 ]
 *> with respect to the columns of
@@ -153,8 +153,7 @@
 *> \ingroup complexOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_CUNBDB5( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ
-     $1, Q2,
+      SUBROUTINE CUNBDB5( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2,
      $                    LDQ2, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
@@ -180,11 +179,11 @@
       INTEGER            CHILDINFO, I, J
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_AB_CUNBDB6, AB_XERBLA
+      EXTERNAL           CUNBDB6, XERBLA
 *     ..
 *     .. External Functions ..
-      REAL               AB_SCNRM2
-      EXTERNAL           AB_SCNRM2
+      REAL               SCNRM2
+      EXTERNAL           SCNRM2
 *     ..
 *     .. Intrinsic Function ..
       INTRINSIC          MAX
@@ -213,20 +212,19 @@
       END IF
 *
       IF( INFO .NE. 0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_CUNBDB5', -INFO )
+         CALL XERBLA( 'CUNBDB5', -INFO )
          RETURN
       END IF
 *
 *     Project X onto the orthogonal complement of Q
 *
-      CALL AB_AB_CUNBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2,
-     $ LDQ2,
+      CALL CUNBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2, LDQ2,
      $              WORK, LWORK, CHILDINFO )
 *
 *     If the projection is nonzero, then return
 *
-      IF( AB_SCNRM2(M1,X1,INCX1) .NE. ZERO
-     $    .OR. AB_SCNRM2(M2,X2,INCX2) .NE. ZERO ) THEN
+      IF( SCNRM2(M1,X1,INCX1) .NE. ZERO
+     $    .OR. SCNRM2(M2,X2,INCX2) .NE. ZERO ) THEN
          RETURN
       END IF
 *
@@ -241,11 +239,10 @@
          DO J = 1, M2
             X2(J) = ZERO
          END DO
-         CALL AB_AB_CUNBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, 
-     $Q2,
+         CALL CUNBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2,
      $                 LDQ2, WORK, LWORK, CHILDINFO )
-         IF( AB_SCNRM2(M1,X1,INCX1) .NE. ZERO
-     $       .OR. AB_SCNRM2(M2,X2,INCX2) .NE. ZERO ) THEN
+         IF( SCNRM2(M1,X1,INCX1) .NE. ZERO
+     $       .OR. SCNRM2(M2,X2,INCX2) .NE. ZERO ) THEN
             RETURN
          END IF
       END DO
@@ -261,18 +258,17 @@
             X2(J) = ZERO
          END DO
          X2(I) = ONE
-         CALL AB_AB_CUNBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, 
-     $Q2,
+         CALL CUNBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2,
      $                 LDQ2, WORK, LWORK, CHILDINFO )
-         IF( AB_SCNRM2(M1,X1,INCX1) .NE. ZERO
-     $       .OR. AB_SCNRM2(M2,X2,INCX2) .NE. ZERO ) THEN
+         IF( SCNRM2(M1,X1,INCX1) .NE. ZERO
+     $       .OR. SCNRM2(M2,X2,INCX2) .NE. ZERO ) THEN
             RETURN
          END IF
       END DO
 *
       RETURN
 *
-*     End of AB_AB_CUNBDB5
+*     End of CUNBDB5
 *
       END
 

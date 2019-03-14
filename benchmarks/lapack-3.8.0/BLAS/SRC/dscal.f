@@ -1,4 +1,4 @@
-*> \brief \b AB_DSCAL
+*> \brief \b DSCAL
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DSCAL(N,DA,DX,INCX)
+*       SUBROUTINE DSCAL(N,DA,DX,INCX)
 *
 *       .. Scalar Arguments ..
 *       DOUBLE PRECISION DA
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*>    AB_DSCAL scales a vector by a constant.
+*>    DSCAL scales a vector by a constant.
 *>    uses unrolled loops for increment equal to 1.
 *> \endverbatim
 *
@@ -77,7 +77,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_DSCAL(N,DA,DX,INCX)
+      SUBROUTINE DSCAL(N,DA,DX,INCX)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

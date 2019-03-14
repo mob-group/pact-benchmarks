@@ -1,4 +1,4 @@
-*> \brief \b AB_SSTEIN
+*> \brief \b SSTEIN
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SSTEIN + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SSTEIN.f">
+*> Download SSTEIN + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sstein.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SSTEIN.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sstein.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SSTEIN.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sstein.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SSTEIN( N, D, E, M, W, IBLOCK, ISPLIT, Z, LDZ, WORK,
+*       SUBROUTINE SSTEIN( N, D, E, M, W, IBLOCK, ISPLIT, Z, LDZ, WORK,
 *                          IWORK, IFAIL, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SSTEIN computes the eigenvectors of a real symmetric tridiagonal
+*> SSTEIN computes the eigenvectors of a real symmetric tridiagonal
 *> matrix T corresponding to specified eigenvalues, using inverse
 *> iteration.
 *>
@@ -79,7 +79,7 @@
 *>          which eigenvectors are to be computed.  The eigenvalues
 *>          should be grouped by split-off block and ordered from
 *>          smallest to largest within the block.  ( The output array
-*>          W from AB_SSTEBZ with ORDER = 'B' is expected here. )
+*>          W from SSTEBZ with ORDER = 'B' is expected here. )
 *> \endverbatim
 *>
 *> \param[in] IBLOCK
@@ -88,8 +88,8 @@
 *>          The submatrix indices associated with the corresponding
 *>          eigenvalues in W; IBLOCK(i)=1 if eigenvalue W(i) belongs to
 *>          the first submatrix from the top, =2 if W(i) belongs to
-*>          the AB_SECOND submatrix, etc.  ( The output array IBLOCK
-*>          from AB_SSTEBZ is expected here. )
+*>          the second submatrix, etc.  ( The output array IBLOCK
+*>          from SSTEBZ is expected here. )
 *> \endverbatim
 *>
 *> \param[in] ISPLIT
@@ -97,9 +97,9 @@
 *>          ISPLIT is INTEGER array, dimension (N)
 *>          The splitting points, at which T breaks up into submatrices.
 *>          The first submatrix consists of rows/columns 1 to
-*>          ISPLIT( 1 ), the AB_SECOND of rows/columns ISPLIT( 1 )+1
+*>          ISPLIT( 1 ), the second of rows/columns ISPLIT( 1 )+1
 *>          through ISPLIT( 2 ), etc.
-*>          ( The output array ISPLIT from AB_SSTEBZ is expected here. )
+*>          ( The output array ISPLIT from SSTEBZ is expected here. )
 *> \endverbatim
 *>
 *> \param[out] Z
@@ -171,7 +171,7 @@
 *> \ingroup realOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_SSTEIN( N, D, E, M, W, IBLOCK, ISPLIT, Z, LDZ, WORK,
+      SUBROUTINE SSTEIN( N, D, E, M, W, IBLOCK, ISPLIT, Z, LDZ, WORK,
      $                   IWORK, IFAIL, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -208,14 +208,13 @@
       INTEGER            ISEED( 4 )
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ISAMAX
-      REAL               AB_SDOT, AB_SLAMCH, AB_SNRM2
-      EXTERNAL           AB_ISAMAX, AB_SDOT, AB_SLAMCH, AB_SNRM2
+      INTEGER            ISAMAX
+      REAL               SDOT, SLAMCH, SNRM2
+      EXTERNAL           ISAMAX, SDOT, SLAMCH, SNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SAXPY, AB_SCOPY, AB_SLAGTF, AB_SLAGTS, AB_SL
-     $ARNV, AB_SSCAL,
-     $                   AB_XERBLA
+      EXTERNAL           SAXPY, SCOPY, SLAGTF, SLAGTS, SLARNV, SSCAL,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -251,7 +250,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SSTEIN', -INFO )
+         CALL XERBLA( 'SSTEIN', -INFO )
          RETURN
       END IF
 *
@@ -266,9 +265,9 @@
 *
 *     Get machine constants.
 *
-      EPS = AB_SLAMCH( 'Precision' )
+      EPS = SLAMCH( 'Precision' )
 *
-*     Initialize seed for random number generator AB_SLARNV.
+*     Initialize seed for random number generator SLARNV.
 *
       DO 40 I = 1, 4
          ISEED( I ) = 1
@@ -347,19 +346,18 @@
 *
 *           Get random starting vector.
 *
-            CALL AB_SLARNV( 2, ISEED, BLKSIZ, WORK( INDRV1+1 ) )
+            CALL SLARNV( 2, ISEED, BLKSIZ, WORK( INDRV1+1 ) )
 *
 *           Copy the matrix T so it won't be destroyed in factorization.
 *
-            CALL AB_SCOPY( BLKSIZ, D( B1 ), 1, WORK( INDRV4+1 ), 1 )
-            CALL AB_SCOPY( BLKSIZ-1, E( B1 ), 1, WORK( INDRV2+2 ), 1 )
-            CALL AB_SCOPY( BLKSIZ-1, E( B1 ), 1, WORK( INDRV3+1 ), 1 )
+            CALL SCOPY( BLKSIZ, D( B1 ), 1, WORK( INDRV4+1 ), 1 )
+            CALL SCOPY( BLKSIZ-1, E( B1 ), 1, WORK( INDRV2+2 ), 1 )
+            CALL SCOPY( BLKSIZ-1, E( B1 ), 1, WORK( INDRV3+1 ), 1 )
 *
 *           Compute LU factors with partial pivoting  ( PT = LU )
 *
             TOL = ZERO
-            CALL AB_SLAGTF( BLKSIZ, WORK( INDRV4+1 ), XJ, WORK( INDRV2+2
-     $ ),
+            CALL SLAGTF( BLKSIZ, WORK( INDRV4+1 ), XJ, WORK( INDRV2+2 ),
      $                   WORK( INDRV3+1 ), TOL, WORK( INDRV5+1 ), IWORK,
      $                   IINFO )
 *
@@ -372,16 +370,15 @@
 *
 *           Normalize and scale the righthand side vector Pb.
 *
-            JMAX = AB_ISAMAX( BLKSIZ, WORK( INDRV1+1 ), 1 )
+            JMAX = ISAMAX( BLKSIZ, WORK( INDRV1+1 ), 1 )
             SCL = BLKSIZ*ONENRM*MAX( EPS,
      $            ABS( WORK( INDRV4+BLKSIZ ) ) ) /
      $            ABS( WORK( INDRV1+JMAX ) )
-            CALL AB_SSCAL( BLKSIZ, SCL, WORK( INDRV1+1 ), 1 )
+            CALL SSCAL( BLKSIZ, SCL, WORK( INDRV1+1 ), 1 )
 *
 *           Solve the system LU = Pb.
 *
-            CALL AB_SLAGTS( -1, BLKSIZ, WORK( INDRV4+1 ), WORK( INDRV2+2
-     $ ),
+            CALL SLAGTS( -1, BLKSIZ, WORK( INDRV4+1 ), WORK( INDRV2+2 ),
      $                   WORK( INDRV3+1 ), WORK( INDRV5+1 ), IWORK,
      $                   WORK( INDRV1+1 ), TOL, IINFO )
 *
@@ -394,10 +391,9 @@
      $         GPIND = J
             IF( GPIND.NE.J ) THEN
                DO 80 I = GPIND, J - 1
-                  CTR = -AB_SDOT( BLKSIZ, WORK( INDRV1+1 ), 1, Z( B1, I 
-     $),
+                  CTR = -SDOT( BLKSIZ, WORK( INDRV1+1 ), 1, Z( B1, I ),
      $                  1 )
-                  CALL AB_SAXPY( BLKSIZ, CTR, Z( B1, I ), 1,
+                  CALL SAXPY( BLKSIZ, CTR, Z( B1, I ), 1,
      $                        WORK( INDRV1+1 ), 1 )
    80          CONTINUE
             END IF
@@ -405,7 +401,7 @@
 *           Check the infinity norm of the iterate.
 *
    90       CONTINUE
-            JMAX = AB_ISAMAX( BLKSIZ, WORK( INDRV1+1 ), 1 )
+            JMAX = ISAMAX( BLKSIZ, WORK( INDRV1+1 ), 1 )
             NRM = ABS( WORK( INDRV1+JMAX ) )
 *
 *           Continue for additional iterations after norm reaches
@@ -429,11 +425,11 @@
 *           Accept iterate as jth eigenvector.
 *
   110       CONTINUE
-            SCL = ONE / AB_SNRM2( BLKSIZ, WORK( INDRV1+1 ), 1 )
-            JMAX = AB_ISAMAX( BLKSIZ, WORK( INDRV1+1 ), 1 )
+            SCL = ONE / SNRM2( BLKSIZ, WORK( INDRV1+1 ), 1 )
+            JMAX = ISAMAX( BLKSIZ, WORK( INDRV1+1 ), 1 )
             IF( WORK( INDRV1+JMAX ).LT.ZERO )
      $         SCL = -SCL
-            CALL AB_SSCAL( BLKSIZ, SCL, WORK( INDRV1+1 ), 1 )
+            CALL SSCAL( BLKSIZ, SCL, WORK( INDRV1+1 ), 1 )
   120       CONTINUE
             DO 130 I = 1, N
                Z( I, J ) = ZERO
@@ -452,6 +448,6 @@
 *
       RETURN
 *
-*     End of AB_SSTEIN
+*     End of SSTEIN
 *
       END

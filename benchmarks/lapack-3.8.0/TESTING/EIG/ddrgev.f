@@ -1,4 +1,4 @@
-*> \brief \b AB_DDRGEV
+*> \brief \b DDRGEV
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DDRGEV( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+*       SUBROUTINE DDRGEV( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
 *                          NOUNIT, A, LDA, B, S, T, Q, LDQ, Z, QE, LDQE,
 *                          ALPHAR, ALPHAI, BETA, ALPHR1, ALPHI1, BETA1,
 *                          WORK, LWORK, RESULT, INFO )
@@ -34,10 +34,10 @@
 *>
 *> \verbatim
 *>
-*> AB_DDRGEV checks the nonsymmetric generalized eigenvalue problem driver
-*> routine AB_DGGEV.
+*> DDRGEV checks the nonsymmetric generalized eigenvalue problem driver
+*> routine DGGEV.
 *>
-*> AB_DGGEV computes for a pair of n-by-n nonsymmetric matrices (A,B) the
+*> DGGEV computes for a pair of n-by-n nonsymmetric matrices (A,B) the
 *> generalized eigenvalues and, optionally, the left and right
 *> eigenvectors.
 *>
@@ -51,13 +51,13 @@
 *> (A - wB) * r = 0.  A left generalized eigenvector is a vector l such
 *> that l**H * (A - wB) = 0, where l**H is the conjugate-transpose of l.
 *>
-*> When AB_DDRGEV is called, a number of matrix "sizes" ("n's") and a
+*> When DDRGEV is called, a number of matrix "sizes" ("n's") and a
 *> number of matrix "types" are specified.  For each size ("n")
 *> and each type of matrix, a pair of matrices (A, B) will be generated
 *> and used for testing.  For each matrix pair, the following tests
 *> will be performed and compared with the threshold THRESH.
 *>
-*> Results from AB_DGGEV:
+*> Results from DGGEV:
 *>
 *> (1)  max over all left eigenvalue/-vector pairs (alpha/beta,l) of
 *>
@@ -186,7 +186,7 @@
 *> \verbatim
 *>          NSIZES is INTEGER
 *>          The number of sizes of matrices to use.  If it is zero,
-*>          AB_DDRGES does nothing.  NSIZES >= 0.
+*>          DDRGES does nothing.  NSIZES >= 0.
 *> \endverbatim
 *>
 *> \param[in] NN
@@ -199,7 +199,7 @@
 *> \param[in] NTYPES
 *> \verbatim
 *>          NTYPES is INTEGER
-*>          The number of elements in DOTYPE.   If it is zero, AB_DDRGES
+*>          The number of elements in DOTYPE.   If it is zero, DDRGES
 *>          does nothing.  It must be at least zero.  If it is MAXTYP+1
 *>          and NSIZES is 1, then an additional type, MAXTYP+1 is
 *>          defined, which is to use whatever matrix is in A.  This
@@ -229,7 +229,7 @@
 *>          congruential sequence limited to small integers, and so
 *>          should produce machine independent random numbers. The
 *>          values of ISEED are changed on exit, and can be used in the
-*>          next call to AB_DDRGES to continue the same random number
+*>          next call to DDRGES to continue the same random number
 *>          sequence.
 *> \endverbatim
 *>
@@ -280,7 +280,7 @@
 *> \verbatim
 *>          S is DOUBLE PRECISION array,
 *>                                 dimension (LDA, max(NN))
-*>          The Schur form matrix computed from A by AB_DGGES.  On exit, S
+*>          The Schur form matrix computed from A by DGGES.  On exit, S
 *>          contains the Schur form matrix corresponding to the matrix
 *>          in A.
 *> \endverbatim
@@ -289,14 +289,14 @@
 *> \verbatim
 *>          T is DOUBLE PRECISION array,
 *>                                 dimension (LDA, max(NN))
-*>          The upper triangular matrix computed from B by AB_DGGES.
+*>          The upper triangular matrix computed from B by DGGES.
 *> \endverbatim
 *>
 *> \param[out] Q
 *> \verbatim
 *>          Q is DOUBLE PRECISION array,
 *>                                 dimension (LDQ, max(NN))
-*>          The (left) eigenvectors matrix computed by AB_DGGEV.
+*>          The (left) eigenvectors matrix computed by DGGEV.
 *> \endverbatim
 *>
 *> \param[in] LDQ
@@ -309,7 +309,7 @@
 *> \param[out] Z
 *> \verbatim
 *>          Z is DOUBLE PRECISION array, dimension( LDQ, max(NN) )
-*>          The (right) orthogonal matrix computed by AB_DGGES.
+*>          The (right) orthogonal matrix computed by DGGES.
 *> \endverbatim
 *>
 *> \param[out] QE
@@ -338,7 +338,7 @@
 *> \verbatim
 *>          BETA is DOUBLE PRECISION array, dimension (max(NN))
 *>
-*>          The generalized eigenvalues of (A,B) computed by AB_DGGEV.
+*>          The generalized eigenvalues of (A,B) computed by DGGEV.
 *>          ( ALPHAR(k)+ALPHAI(k)*i ) / BETA(k) is the k-th
 *>          generalized eigenvalue of A and B.
 *> \endverbatim
@@ -358,7 +358,7 @@
 *>          BETA1 is DOUBLE PRECISION array, dimension (max(NN))
 *>
 *>          Like ALPHAR, ALPHAI, BETA, these arrays contain the
-*>          eigenvalues of A and B, but those computed when AB_DGGEV only
+*>          eigenvalues of A and B, but those computed when DGGEV only
 *>          computes a partial eigendecomposition, i.e. not the
 *>          eigenvalues and left and right eigenvectors.
 *> \endverbatim
@@ -403,7 +403,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_DDRGEV( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+      SUBROUTINE DDRGEV( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
      $                   NOUNIT, A, LDA, B, S, T, Q, LDQ, Z, QE, LDQE,
      $                   ALPHAR, ALPHAI, BETA, ALPHR1, ALPHI1, BETA1,
      $                   WORK, LWORK, RESULT, INFO )
@@ -453,14 +453,13 @@
       DOUBLE PRECISION   RMAGN( 0: 3 )
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ILAENV
-      DOUBLE PRECISION   AB_DLAMCH, AB_DLARND
-      EXTERNAL           AB_ILAENV, AB_DLAMCH, AB_DLARND
+      INTEGER            ILAENV
+      DOUBLE PRECISION   DLAMCH, DLARND
+      EXTERNAL           ILAENV, DLAMCH, DLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALASVM, AB_DGET52, AB_DGGEV, AB_DLABAD, AB_D
-     $LACPY, AB_AB_DLARFG,
-     $                   AB_DLASET, AB_DLATM4, AB_DORM2R, AB_XERBLA
+      EXTERNAL           ALASVM, DGET52, DGGEV, DLABAD, DLACPY, DLARFG,
+     $                   DLASET, DLATM4, DORM2R, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN, SIGN
@@ -522,13 +521,12 @@
 *       minimal amount of workspace needed at that point in the code,
 *       as well as the preferred amount for good performance.
 *       NB refers to the optimal block size for the immediately
-*       following subroutine, as returned by AB_ILAENV.
+*       following subroutine, as returned by ILAENV.
 *
       MINWRK = 1
       IF( INFO.EQ.0 .AND. LWORK.GE.1 ) THEN
          MINWRK = MAX( 1, 8*NMAX, NMAX*( NMAX+1 ) )
-         MAXWRK = 7*NMAX + NMAX*AB_ILAENV( 1, 'AB_AB_DGEQRF', ' ', NMAX,
-     $ 1, NMAX,
+         MAXWRK = 7*NMAX + NMAX*ILAENV( 1, 'DGEQRF', ' ', NMAX, 1, NMAX,
      $            0 )
          MAXWRK = MAX( MAXWRK, NMAX*( NMAX+1 ) )
          WORK( 1 ) = MAXWRK
@@ -538,7 +536,7 @@
      $   INFO = -25
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DDRGEV', -INFO )
+         CALL XERBLA( 'DDRGEV', -INFO )
          RETURN
       END IF
 *
@@ -547,11 +545,11 @@
       IF( NSIZES.EQ.0 .OR. NTYPES.EQ.0 )
      $   RETURN
 *
-      SAFMIN = AB_DLAMCH( 'Safe minimum' )
-      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
+      SAFMIN = DLAMCH( 'Safe minimum' )
+      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
       SAFMIN = SAFMIN / ULP
       SAFMAX = ONE / SAFMIN
-      CALL AB_DLABAD( SAFMIN, SAFMAX )
+      CALL DLABAD( SAFMIN, SAFMAX )
       ULPINV = ONE / ULP
 *
 *     The values RMAGN(2:3) depend on N, see below.
@@ -594,7 +592,7 @@
 *
 *           KZLASS: =1 means w/o rotation, =2 means w/ rotation,
 *                   =3 means random.
-*           KATYPE: the "type" to be passed to AB_DLATM4 for computing A.
+*           KATYPE: the "type" to be passed to DLATM4 for computing A.
 *           KAZERO: the pattern of zeros on the diagonal for A:
 *                   =1: ( xxx ), =2: (0, xxx ) =3: ( 0, 0, xxx, 0 ),
 *                   =4: ( 0, xxx, 0, 0 ), =5: ( 0, 0, 1, xxx, 0 ),
@@ -621,12 +619,11 @@
                IF( ABS( KATYPE( JTYPE ) ).EQ.3 ) THEN
                   IN = 2*( ( N-1 ) / 2 ) + 1
                   IF( IN.NE.N )
-     $               CALL AB_DLASET( 'Full', N, N, ZERO, ZERO, A, LDA )
+     $               CALL DLASET( 'Full', N, N, ZERO, ZERO, A, LDA )
                ELSE
                   IN = N
                END IF
-               CALL AB_DLATM4( KATYPE( JTYPE ), IN, KZ1( KAZERO( JTYPE )
-     $ ),
+               CALL DLATM4( KATYPE( JTYPE ), IN, KZ1( KAZERO( JTYPE ) ),
      $                      KZ2( KAZERO( JTYPE ) ), IASIGN( JTYPE ),
      $                      RMAGN( KAMAGN( JTYPE ) ), ULP,
      $                      RMAGN( KTRIAN( JTYPE )*KAMAGN( JTYPE ) ), 2,
@@ -640,12 +637,11 @@
                IF( ABS( KBTYPE( JTYPE ) ).EQ.3 ) THEN
                   IN = 2*( ( N-1 ) / 2 ) + 1
                   IF( IN.NE.N )
-     $               CALL AB_DLASET( 'Full', N, N, ZERO, ZERO, B, LDA )
+     $               CALL DLASET( 'Full', N, N, ZERO, ZERO, B, LDA )
                ELSE
                   IN = N
                END IF
-               CALL AB_DLATM4( KBTYPE( JTYPE ), IN, KZ1( KBZERO( JTYPE )
-     $ ),
+               CALL DLATM4( KBTYPE( JTYPE ), IN, KZ1( KBZERO( JTYPE ) ),
      $                      KZ2( KBZERO( JTYPE ) ), IBSIGN( JTYPE ),
      $                      RMAGN( KBMAGN( JTYPE ) ), ONE,
      $                      RMAGN( KTRIAN( JTYPE )*KBMAGN( JTYPE ) ), 2,
@@ -658,31 +654,29 @@
 *
 *                 Include rotations
 *
-*                 Generate Q, Z as HousehoAB_LDEr transformations times
+*                 Generate Q, Z as Householder transformations times
 *                 a diagonal matrix.
 *
                   DO 40 JC = 1, N - 1
                      DO 30 JR = JC, N
-                        Q( JR, JC ) = AB_DLARND( 3, ISEED )
-                        Z( JR, JC ) = AB_DLARND( 3, ISEED )
+                        Q( JR, JC ) = DLARND( 3, ISEED )
+                        Z( JR, JC ) = DLARND( 3, ISEED )
    30                CONTINUE
-                     CALL AB_AB_DLARFG( N+1-JC, Q( JC, JC ), Q( JC+1, JC
-     $ ), 1,
+                     CALL DLARFG( N+1-JC, Q( JC, JC ), Q( JC+1, JC ), 1,
      $                            WORK( JC ) )
                      WORK( 2*N+JC ) = SIGN( ONE, Q( JC, JC ) )
                      Q( JC, JC ) = ONE
-                     CALL AB_AB_DLARFG( N+1-JC, Z( JC, JC ), Z( JC+1, JC
-     $ ), 1,
+                     CALL DLARFG( N+1-JC, Z( JC, JC ), Z( JC+1, JC ), 1,
      $                            WORK( N+JC ) )
                      WORK( 3*N+JC ) = SIGN( ONE, Z( JC, JC ) )
                      Z( JC, JC ) = ONE
    40             CONTINUE
                   Q( N, N ) = ONE
                   WORK( N ) = ZERO
-                  WORK( 3*N ) = SIGN( ONE, AB_DLARND( 2, ISEED ) )
+                  WORK( 3*N ) = SIGN( ONE, DLARND( 2, ISEED ) )
                   Z( N, N ) = ONE
                   WORK( 2*N ) = ZERO
-                  WORK( 4*N ) = SIGN( ONE, AB_DLARND( 2, ISEED ) )
+                  WORK( 4*N ) = SIGN( ONE, DLARND( 2, ISEED ) )
 *
 *                 Apply the diagonal matrices
 *
@@ -694,21 +688,19 @@
      $                                B( JR, JC )
    50                CONTINUE
    60             CONTINUE
-                  CALL AB_DORM2R( 'L', 'N', N, N, N-1, Q, LDQ, WORK, A,
+                  CALL DORM2R( 'L', 'N', N, N, N-1, Q, LDQ, WORK, A,
      $                         LDA, WORK( 2*N+1 ), IERR )
                   IF( IERR.NE.0 )
      $               GO TO 90
-                  CALL AB_DORM2R( 'R', 'T', N, N, N-1, Z, LDQ, WORK( N+1
-     $ ),
+                  CALL DORM2R( 'R', 'T', N, N, N-1, Z, LDQ, WORK( N+1 ),
      $                         A, LDA, WORK( 2*N+1 ), IERR )
                   IF( IERR.NE.0 )
      $               GO TO 90
-                  CALL AB_DORM2R( 'L', 'N', N, N, N-1, Q, LDQ, WORK, B,
+                  CALL DORM2R( 'L', 'N', N, N, N-1, Q, LDQ, WORK, B,
      $                         LDA, WORK( 2*N+1 ), IERR )
                   IF( IERR.NE.0 )
      $               GO TO 90
-                  CALL AB_DORM2R( 'R', 'T', N, N, N-1, Z, LDQ, WORK( N+1
-     $ ),
+                  CALL DORM2R( 'R', 'T', N, N, N-1, Z, LDQ, WORK( N+1 ),
      $                         B, LDA, WORK( 2*N+1 ), IERR )
                   IF( IERR.NE.0 )
      $               GO TO 90
@@ -720,9 +712,9 @@
                DO 80 JC = 1, N
                   DO 70 JR = 1, N
                      A( JR, JC ) = RMAGN( KAMAGN( JTYPE ) )*
-     $                             AB_DLARND( 2, ISEED )
+     $                             DLARND( 2, ISEED )
                      B( JR, JC ) = RMAGN( KBMAGN( JTYPE ) )*
-     $                             AB_DLARND( 2, ISEED )
+     $                             DLARND( 2, ISEED )
    70             CONTINUE
    80          CONTINUE
             END IF
@@ -742,15 +734,15 @@
                RESULT( I ) = -ONE
   110       CONTINUE
 *
-*           Call AB_DGGEV to compute eigenvalues and eigenvectors.
+*           Call DGGEV to compute eigenvalues and eigenvectors.
 *
-            CALL AB_DLACPY( ' ', N, N, A, LDA, S, LDA )
-            CALL AB_DLACPY( ' ', N, N, B, LDA, T, LDA )
-            CALL AB_DGGEV( 'V', 'V', N, S, LDA, T, LDA, ALPHAR, ALPHAI,
+            CALL DLACPY( ' ', N, N, A, LDA, S, LDA )
+            CALL DLACPY( ' ', N, N, B, LDA, T, LDA )
+            CALL DGGEV( 'V', 'V', N, S, LDA, T, LDA, ALPHAR, ALPHAI,
      $                  BETA, Q, LDQ, Z, LDQ, WORK, LWORK, IERR )
             IF( IERR.NE.0 .AND. IERR.NE.N+1 ) THEN
                RESULT( 1 ) = ULPINV
-               WRITE( NOUNIT, FMT = 9999 )'AB_DGGEV1', IERR, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'DGGEV1', IERR, N, JTYPE,
      $            IOLDSD
                INFO = ABS( IERR )
                GO TO 190
@@ -758,32 +750,31 @@
 *
 *           Do the tests (1) and (2)
 *
-            CALL AB_DGET52( .TRUE., N, A, LDA, B, LDA, Q, LDQ, ALPHAR,
+            CALL DGET52( .TRUE., N, A, LDA, B, LDA, Q, LDQ, ALPHAR,
      $                   ALPHAI, BETA, WORK, RESULT( 1 ) )
             IF( RESULT( 2 ).GT.THRESH ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'Left', 'AB_DGGEV1',
+               WRITE( NOUNIT, FMT = 9998 )'Left', 'DGGEV1',
      $            RESULT( 2 ), N, JTYPE, IOLDSD
             END IF
 *
 *           Do the tests (3) and (4)
 *
-            CALL AB_DGET52( .FALSE., N, A, LDA, B, LDA, Z, LDQ, ALPHA
-     $R,
+            CALL DGET52( .FALSE., N, A, LDA, B, LDA, Z, LDQ, ALPHAR,
      $                   ALPHAI, BETA, WORK, RESULT( 3 ) )
             IF( RESULT( 4 ).GT.THRESH ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'Right', 'AB_DGGEV1',
+               WRITE( NOUNIT, FMT = 9998 )'Right', 'DGGEV1',
      $            RESULT( 4 ), N, JTYPE, IOLDSD
             END IF
 *
 *           Do the test (5)
 *
-            CALL AB_DLACPY( ' ', N, N, A, LDA, S, LDA )
-            CALL AB_DLACPY( ' ', N, N, B, LDA, T, LDA )
-            CALL AB_DGGEV( 'N', 'N', N, S, LDA, T, LDA, ALPHR1, ALPHI1,
+            CALL DLACPY( ' ', N, N, A, LDA, S, LDA )
+            CALL DLACPY( ' ', N, N, B, LDA, T, LDA )
+            CALL DGGEV( 'N', 'N', N, S, LDA, T, LDA, ALPHR1, ALPHI1,
      $                  BETA1, Q, LDQ, Z, LDQ, WORK, LWORK, IERR )
             IF( IERR.NE.0 .AND. IERR.NE.N+1 ) THEN
                RESULT( 1 ) = ULPINV
-               WRITE( NOUNIT, FMT = 9999 )'AB_DGGEV2', IERR, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'DGGEV2', IERR, N, JTYPE,
      $            IOLDSD
                INFO = ABS( IERR )
                GO TO 190
@@ -798,14 +789,13 @@
 *           Do the test (6): Compute eigenvalues and left eigenvectors,
 *           and test them
 *
-            CALL AB_DLACPY( ' ', N, N, A, LDA, S, LDA )
-            CALL AB_DLACPY( ' ', N, N, B, LDA, T, LDA )
-            CALL AB_DGGEV( 'V', 'N', N, S, LDA, T, LDA, ALPHR1, ALPHI1,
+            CALL DLACPY( ' ', N, N, A, LDA, S, LDA )
+            CALL DLACPY( ' ', N, N, B, LDA, T, LDA )
+            CALL DGGEV( 'V', 'N', N, S, LDA, T, LDA, ALPHR1, ALPHI1,
      $                  BETA1, QE, LDQE, Z, LDQ, WORK, LWORK, IERR )
             IF( IERR.NE.0 .AND. IERR.NE.N+1 ) THEN
                RESULT( 1 ) = ULPINV
-               WRITE( NOUNIT, FMT = 9999 )'AB_AB_DGGEV3', IERR, N, JTYPE
-     $,
+               WRITE( NOUNIT, FMT = 9999 )'DGGEV3', IERR, N, JTYPE,
      $            IOLDSD
                INFO = ABS( IERR )
                GO TO 190
@@ -827,13 +817,13 @@
 *           DO the test (7): Compute eigenvalues and right eigenvectors,
 *           and test them
 *
-            CALL AB_DLACPY( ' ', N, N, A, LDA, S, LDA )
-            CALL AB_DLACPY( ' ', N, N, B, LDA, T, LDA )
-            CALL AB_DGGEV( 'N', 'V', N, S, LDA, T, LDA, ALPHR1, ALPHI1,
+            CALL DLACPY( ' ', N, N, A, LDA, S, LDA )
+            CALL DLACPY( ' ', N, N, B, LDA, T, LDA )
+            CALL DGGEV( 'N', 'V', N, S, LDA, T, LDA, ALPHR1, ALPHI1,
      $                  BETA1, Q, LDQ, QE, LDQE, WORK, LWORK, IERR )
             IF( IERR.NE.0 .AND. IERR.NE.N+1 ) THEN
                RESULT( 1 ) = ULPINV
-               WRITE( NOUNIT, FMT = 9999 )'AB_DGGEV4', IERR, N, JTYPE,
+               WRITE( NOUNIT, FMT = 9999 )'DGGEV4', IERR, N, JTYPE,
      $            IOLDSD
                INFO = ABS( IERR )
                GO TO 190
@@ -864,7 +854,7 @@
                IF( RESULT( JR ).GE.THRESH ) THEN
 *
 *                 If this is the first test to fail,
-*                 print a AB_HEADER to the data file.
+*                 print a header to the data file.
 *
                   IF( NERRS.EQ.0 ) THEN
                      WRITE( NOUNIT, FMT = 9997 )'DGV'
@@ -896,17 +886,16 @@
 *
 *     Summary
 *
-      CALL AB_ALASVM( 'DGV', NOUNIT, NERRS, NTESTT, 0 )
+      CALL ALASVM( 'DGV', NOUNIT, NERRS, NTESTT, 0 )
 *
       WORK( 1 ) = MAXWRK
 *
       RETURN
 *
- 9999 FORMAT( ' AB_DDRGEV: ', A, ' returned INFO=', I6, '.', / 3X, 'N=',
+ 9999 FORMAT( ' DDRGEV: ', A, ' returned INFO=', I6, '.', / 3X, 'N=',
      $      I6, ', JTYPE=', I6, ', ISEED=(', 4( I4, ',' ), I5, ')' )
 *
- 9998 FORMAT( ' AB_DDRGEV: ', A, ' Eigenvectors from ', A, ' incorrectly
-     $ ',
+ 9998 FORMAT( ' DDRGEV: ', A, ' Eigenvectors from ', A, ' incorrectly ',
      $      'normalized.', / ' Bits of error=', 0P, G10.3, ',', 3X,
      $      'N=', I4, ', JTYPE=', I3, ', ISEED=(', 4( I4, ',' ), I5,
      $      ')' )
@@ -914,7 +903,7 @@
  9997 FORMAT( / 1X, A3, ' -- Real Generalized eigenvalue problem driver'
      $       )
 *
- 9996 FORMAT( ' Matrix types (see AB_DDRGEV for details): ' )
+ 9996 FORMAT( ' Matrix types (see DDRGEV for details): ' )
 *
  9995 FORMAT( ' Special Matrices:', 23X,
      $      '(J''=transposed Jordan block)',
@@ -946,6 +935,6 @@
  9991 FORMAT( ' Matrix order=', I5, ', type=', I2, ', seed=',
      $      4( I4, ',' ), ' result ', I2, ' is', 1P, D10.3 )
 *
-*     End of AB_DDRGEV
+*     End of DDRGEV
 *
       END

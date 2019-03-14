@@ -23,12 +23,11 @@ i=0
 function rename_one() {
   echo -en "\r$i/$nfiles"
   f="$1"
+  sed -i "$comm" "$f"
   ftrunc "$f" > "$f.tmp"
   mv "$f.tmp" "$f"
   i=$((i+1))
 }
-
-sed -i "$comm" "${files[@]}"
 
 for f in "${files[@]}"; do
   rename_one "$f"

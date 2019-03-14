@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_DORBDB6
+*> \brief \b DORBDB6
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_DORBDB6 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_DORBDB6.f">
+*> Download DORBDB6 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dorbdb6.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_DORBDB6.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dorbdb6.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_DORBDB6.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dorbdb6.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_DORBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2,
+*       SUBROUTINE DORBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2,
 *                           LDQ2, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *>\verbatim
 *>
-*> AB_AB_DORBDB6 orthogonalizes the column vector
+*> DORBDB6 orthogonalizes the column vector
 *>      X = [ X1 ]
 *>          [ X2 ]
 *> with respect to the columns of
@@ -151,8 +151,7 @@
 *> \ingroup doubleOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_DORBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ
-     $1, Q2,
+      SUBROUTINE DORBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2,
      $                    LDQ2, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
@@ -171,9 +170,9 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      DOUBLE PRECISION   ALPHASQ, REALONE, REAAB_LZERO
+      DOUBLE PRECISION   ALPHASQ, REALONE, REALZERO
       PARAMETER          ( ALPHASQ = 0.01D0, REALONE = 1.0D0,
-     $                     REAAB_LZERO = 0.0D0 )
+     $                     REALZERO = 0.0D0 )
       DOUBLE PRECISION   NEGONE, ONE, ZERO
       PARAMETER          ( NEGONE = -1.0D0, ONE = 1.0D0, ZERO = 0.0D0 )
 *     ..
@@ -182,7 +181,7 @@
       DOUBLE PRECISION   NORMSQ1, NORMSQ2, SCL1, SCL2, SSQ1, SSQ2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DGEMV, AB_DLASSQ, AB_XERBLA
+      EXTERNAL           DGEMV, DLASSQ, XERBLA
 *     ..
 *     .. Intrinsic Function ..
       INTRINSIC          MAX
@@ -211,19 +210,19 @@
       END IF
 *
       IF( INFO .NE. 0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_DORBDB6', -INFO )
+         CALL XERBLA( 'DORBDB6', -INFO )
          RETURN
       END IF
 *
 *     First, project X onto the orthogonal complement of Q's column
 *     space
 *
-      SCL1 = REAAB_LZERO
+      SCL1 = REALZERO
       SSQ1 = REALONE
-      CALL AB_DLASSQ( M1, X1, INCX1, SCL1, SSQ1 )
-      SCL2 = REAAB_LZERO
+      CALL DLASSQ( M1, X1, INCX1, SCL1, SSQ1 )
+      SCL2 = REALZERO
       SSQ2 = REALONE
-      CALL AB_DLASSQ( M2, X2, INCX2, SCL2, SSQ2 )
+      CALL DLASSQ( M2, X2, INCX2, SCL2, SSQ2 )
       NORMSQ1 = SCL1**2*SSQ1 + SCL2**2*SSQ2
 *
       IF( M1 .EQ. 0 ) THEN
@@ -231,25 +230,23 @@
             WORK(I) = ZERO
          END DO
       ELSE
-         CALL AB_DGEMV( 'C', M1, N, ONE, Q1, LDQ1, X1, INCX1, ZERO, WORK
-     $,
+         CALL DGEMV( 'C', M1, N, ONE, Q1, LDQ1, X1, INCX1, ZERO, WORK,
      $               1 )
       END IF
 *
-      CALL AB_DGEMV( 'C', M2, N, ONE, Q2, LDQ2, X2, INCX2, ONE, WORK, 1 
-     $)
+      CALL DGEMV( 'C', M2, N, ONE, Q2, LDQ2, X2, INCX2, ONE, WORK, 1 )
 *
-      CALL AB_DGEMV( 'N', M1, N, NEGONE, Q1, LDQ1, WORK, 1, ONE, X1,
+      CALL DGEMV( 'N', M1, N, NEGONE, Q1, LDQ1, WORK, 1, ONE, X1,
      $            INCX1 )
-      CALL AB_DGEMV( 'N', M2, N, NEGONE, Q2, LDQ2, WORK, 1, ONE, X2,
+      CALL DGEMV( 'N', M2, N, NEGONE, Q2, LDQ2, WORK, 1, ONE, X2,
      $            INCX2 )
 *
-      SCL1 = REAAB_LZERO
+      SCL1 = REALZERO
       SSQ1 = REALONE
-      CALL AB_DLASSQ( M1, X1, INCX1, SCL1, SSQ1 )
-      SCL2 = REAAB_LZERO
+      CALL DLASSQ( M1, X1, INCX1, SCL1, SSQ1 )
+      SCL2 = REALZERO
       SSQ2 = REALONE
-      CALL AB_DLASSQ( M2, X2, INCX2, SCL2, SSQ2 )
+      CALL DLASSQ( M2, X2, INCX2, SCL2, SSQ2 )
       NORMSQ2 = SCL1**2*SSQ1 + SCL2**2*SSQ2
 *
 *     If projection is sufficiently large in norm, then stop.
@@ -275,28 +272,26 @@
             WORK(I) = ZERO
          END DO
       ELSE
-         CALL AB_DGEMV( 'C', M1, N, ONE, Q1, LDQ1, X1, INCX1, ZERO, WORK
-     $,
+         CALL DGEMV( 'C', M1, N, ONE, Q1, LDQ1, X1, INCX1, ZERO, WORK,
      $               1 )
       END IF
 *
-      CALL AB_DGEMV( 'C', M2, N, ONE, Q2, LDQ2, X2, INCX2, ONE, WORK, 1 
-     $)
+      CALL DGEMV( 'C', M2, N, ONE, Q2, LDQ2, X2, INCX2, ONE, WORK, 1 )
 *
-      CALL AB_DGEMV( 'N', M1, N, NEGONE, Q1, LDQ1, WORK, 1, ONE, X1,
+      CALL DGEMV( 'N', M1, N, NEGONE, Q1, LDQ1, WORK, 1, ONE, X1,
      $            INCX1 )
-      CALL AB_DGEMV( 'N', M2, N, NEGONE, Q2, LDQ2, WORK, 1, ONE, X2,
+      CALL DGEMV( 'N', M2, N, NEGONE, Q2, LDQ2, WORK, 1, ONE, X2,
      $            INCX2 )
 *
-      SCL1 = REAAB_LZERO
+      SCL1 = REALZERO
       SSQ1 = REALONE
-      CALL AB_DLASSQ( M1, X1, INCX1, SCL1, SSQ1 )
-      SCL2 = REAAB_LZERO
+      CALL DLASSQ( M1, X1, INCX1, SCL1, SSQ1 )
+      SCL2 = REALZERO
       SSQ2 = REALONE
-      CALL AB_DLASSQ( M1, X1, INCX1, SCL1, SSQ1 )
+      CALL DLASSQ( M1, X1, INCX1, SCL1, SSQ1 )
       NORMSQ2 = SCL1**2*SSQ1 + SCL2**2*SSQ2
 *
-*     If AB_SECOND projection is sufficiently large in norm, then do
+*     If second projection is sufficiently large in norm, then do
 *     nothing more. Alternatively, if it shrunk significantly, then
 *     truncate it to zero.
 *
@@ -311,7 +306,7 @@
 *
       RETURN
 *
-*     End of AB_AB_DORBDB6
+*     End of DORBDB6
 *
       END
 

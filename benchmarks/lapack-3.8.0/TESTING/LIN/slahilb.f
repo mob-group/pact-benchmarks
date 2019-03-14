@@ -1,4 +1,4 @@
-*> \brief \b AB_SLAHILB
+*> \brief \b SLAHILB
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLAHILB( N, NRHS, A, LDA, X, LDX, B, LDB, WORK, INFO)
+*       SUBROUTINE SLAHILB( N, NRHS, A, LDA, X, LDX, B, LDB, WORK, INFO)
 *
 *       .. Scalar Arguments ..
 *       INTEGER N, NRHS, LDA, LDX, LDB, INFO
@@ -22,7 +22,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SLAHILB generates an N by N scaled Hilbert matrix in A along with
+*> SLAHILB generates an N by N scaled Hilbert matrix in A along with
 *> NRHS right-hand sides in B and solutions in X such that A*X=B.
 *>
 *> The Hilbert matrix is scaled by M = LCM(1, 2, ..., 2*N-1) so that all
@@ -122,8 +122,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_SLAHILB( N, NRHS, A, LDA, X, LDX, B, LDB, WORK, INFO
-     $)
+      SUBROUTINE SLAHILB( N, NRHS, A, LDA, X, LDX, B, LDB, WORK, INFO)
 *
 *  -- LAPACK test routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -151,7 +150,7 @@
       PARAMETER (NMAX_EXACT = 6, NMAX_APPROX = 11)
 *     ..
 *     .. External Functions
-      EXTERNAL AB_SLASET
+      EXTERNAL SLASET
       INTRINSIC REAL
 *     ..
 *     .. Executable Statements ..
@@ -171,7 +170,7 @@
          INFO = -8
       END IF
       IF (INFO .LT. 0) THEN
-         CALL AB_XERBLA('AB_SLAHILB', -INFO)
+         CALL XERBLA('SLAHILB', -INFO)
          RETURN
       END IF
       IF (N .GT. NMAX_EXACT) THEN
@@ -202,7 +201,7 @@
 *
 *     Generate matrix B as simply the first NRHS columns of M * the
 *     identity.
-      CALL AB_SLASET('Full', N, NRHS, 0.0, REAL(M), B, LDB)
+      CALL SLASET('Full', N, NRHS, 0.0, REAL(M), B, LDB)
 *
 *     Generate the true solutions in X.  Because B = the first NRHS
 *     columns of M*I, the true solutions are just the first NRHS columns

@@ -1,4 +1,4 @@
-*> \brief \b AB_CGET03
+*> \brief \b CGET03
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CGET03( N, A, LDA, AINV, LDAINV, WORK, LDWORK, RWORK,
+*       SUBROUTINE CGET03( N, A, LDA, AINV, LDAINV, WORK, LDWORK, RWORK,
 *                          RCOND, RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CGET03 computes the residual for a general matrix times its inverse:
+*> CGET03 computes the residual for a general matrix times its inverse:
 *>    norm( I - AINV*A ) / ( N * norm(A) * norm(AINV) * EPS ),
 *> where EPS is the machine epsilon.
 *> \endverbatim
@@ -107,8 +107,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_CGET03( N, A, LDA, AINV, LDAINV, WORK, LDWORK, RWORK
-     $,
+      SUBROUTINE CGET03( N, A, LDA, AINV, LDAINV, WORK, LDWORK, RWORK,
      $                   RCOND, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -140,11 +139,11 @@
       REAL               AINVNM, ANORM, EPS
 *     ..
 *     .. External Functions ..
-      REAL               AB_CLANGE, AB_SLAMCH
-      EXTERNAL           AB_CLANGE, AB_SLAMCH
+      REAL               CLANGE, SLAMCH
+      EXTERNAL           CLANGE, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CGEMM
+      EXTERNAL           CGEMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          REAL
@@ -161,9 +160,9 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0 or AINVNM = 0.
 *
-      EPS = AB_SLAMCH( 'Epsilon' )
-      ANORM = AB_CLANGE( '1', N, N, A, LDA, RWORK )
-      AINVNM = AB_CLANGE( '1', N, N, AINV, LDAINV, RWORK )
+      EPS = SLAMCH( 'Epsilon' )
+      ANORM = CLANGE( '1', N, N, A, LDA, RWORK )
+      AINVNM = CLANGE( '1', N, N, AINV, LDAINV, RWORK )
       IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
          RCOND = ZERO
          RESID = ONE / EPS
@@ -173,7 +172,7 @@
 *
 *     Compute I - A * AINV
 *
-      CALL AB_CGEMM( 'No transpose', 'No transpose', N, N, N, -CONE,
+      CALL CGEMM( 'No transpose', 'No transpose', N, N, N, -CONE,
      $            AINV, LDAINV, A, LDA, CZERO, WORK, LDWORK )
       DO 10 I = 1, N
          WORK( I, I ) = CONE + WORK( I, I )
@@ -181,12 +180,12 @@
 *
 *     Compute norm(I - AINV*A) / (N * norm(A) * norm(AINV) * EPS)
 *
-      RESID = AB_CLANGE( '1', N, N, WORK, LDWORK, RWORK )
+      RESID = CLANGE( '1', N, N, WORK, LDWORK, RWORK )
 *
       RESID = ( ( RESID*RCOND )/EPS ) / REAL( N )
 *
       RETURN
 *
-*     End of AB_CGET03
+*     End of CGET03
 *
       END

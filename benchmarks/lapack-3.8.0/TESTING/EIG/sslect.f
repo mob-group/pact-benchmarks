@@ -1,4 +1,4 @@
-*> \brief \b AB_SSLECT
+*> \brief \b SSLECT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       LOGICAL          FUNCTION AB_SSLECT( ZR, ZI )
+*       LOGICAL          FUNCTION SSLECT( ZR, ZI )
 *
 *       .. Scalar Arguments ..
 *       REAL               ZI, ZR
@@ -20,15 +20,15 @@
 *>
 *> \verbatim
 *>
-*> AB_SSLECT returns .TRUE. if the eigenvalue ZR+sqrt(-1)*ZI is to be
+*> SSLECT returns .TRUE. if the eigenvalue ZR+sqrt(-1)*ZI is to be
 *> selected, and otherwise it returns .FALSE.
-*> It is used by AB_SCHK41 to test if AB_SGEES successfully sorts eigenvalues,
-*> and by AB_SCHK43 to test if AB_AB_SGEESX successfully sorts eigenvalues.
+*> It is used by SCHK41 to test if SGEES successfully sorts eigenvalues,
+*> and by SCHK43 to test if SGEESX successfully sorts eigenvalues.
 *>
 *> The common block /SSLCT/ controls how eigenvalues are selected.
-*> If SELOPT = 0, then AB_SSLECT return .TRUE. when ZR is less than zero,
+*> If SELOPT = 0, then SSLECT return .TRUE. when ZR is less than zero,
 *> and .FALSE. otherwise.
-*> If SELOPT is at least 1, AB_SSLECT returns SELVAL(SELOPT) and adds 1
+*> If SELOPT is at least 1, SSLECT returns SELVAL(SELOPT) and adds 1
 *> to SELOPT, cycling back to 1 at SELMAX.
 *> \endverbatim
 *
@@ -60,7 +60,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      LOGICAL          FUNCTION AB_SSLECT( ZR, ZI )
+      LOGICAL          FUNCTION SSLECT( ZR, ZI )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -92,26 +92,26 @@
       PARAMETER          ( ZERO = 0.0E0 )
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAPY2
-      EXTERNAL           AB_SLAPY2
+      REAL               SLAPY2
+      EXTERNAL           SLAPY2
 *     ..
 *     .. Executable Statements ..
 *
       IF( SELOPT.EQ.0 ) THEN
-         AB_SSLECT = ( ZR.LT.ZERO )
+         SSLECT = ( ZR.LT.ZERO )
       ELSE
-         RMIN = AB_SLAPY2( ZR-SELWR( 1 ), ZI-SELWI( 1 ) )
-         AB_SSLECT = SELVAL( 1 )
+         RMIN = SLAPY2( ZR-SELWR( 1 ), ZI-SELWI( 1 ) )
+         SSLECT = SELVAL( 1 )
          DO 10 I = 2, SELDIM
-            X = AB_SLAPY2( ZR-SELWR( I ), ZI-SELWI( I ) )
+            X = SLAPY2( ZR-SELWR( I ), ZI-SELWI( I ) )
             IF( X.LE.RMIN ) THEN
                RMIN = X
-               AB_SSLECT = SELVAL( I )
+               SSLECT = SELVAL( I )
             END IF
    10    CONTINUE
       END IF
       RETURN
 *
-*     End of AB_SSLECT
+*     End of SSLECT
 *
       END

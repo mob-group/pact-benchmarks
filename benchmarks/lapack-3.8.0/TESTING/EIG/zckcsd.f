@@ -1,4 +1,4 @@
-*> \brief \b AB_ZCKCSD
+*> \brief \b ZCKCSD
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZCKCSD( NM, MVAL, PVAL, QVAL, NMATS, ISEED, THRESH,
+*       SUBROUTINE ZCKCSD( NM, MVAL, PVAL, QVAL, NMATS, ISEED, THRESH,
 *                          MMAX, X, XF, U1, U2, V1T, V2T, THETA, IWORK,
 *                          WORK, RWORK, NIN, NOUT, INFO )
 *
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZCKCSD tests ZUNCSD:
+*> ZCKCSD tests ZUNCSD:
 *>        the CSD for an M-by-M unitary matrix X partitioned as
 *>        [ X11 X12; X21 X22 ]. X11 is P-by-Q.
 *> \endverbatim
@@ -163,7 +163,7 @@
 *> \verbatim
 *>          INFO is INTEGER
 *>          = 0 :  successful exit
-*>          > 0 :  If AB_ZLAROR returns an error code, the absolute value
+*>          > 0 :  If ZLAROR returns an error code, the absolute value
 *>                 of it is returned.
 *> \endverbatim
 *
@@ -180,7 +180,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_ZCKCSD( NM, MVAL, PVAL, QVAL, NMATS, ISEED, THRESH,
+      SUBROUTINE ZCKCSD( NM, MVAL, PVAL, QVAL, NMATS, ISEED, THRESH,
      $                   MMAX, X, XF, U1, U2, V1T, V2T, THETA, IWORK,
      $                   WORK, RWORK, NIN, NOUT, INFO )
 *
@@ -208,11 +208,10 @@
       PARAMETER          ( NTESTS = 15 )
       INTEGER            NTYPES
       PARAMETER          ( NTYPES = 4 )
-      DOUBLE PRECISION   GAPDIGIT, ORTH, PIOVER2, REALONE, REAAB_LZERO, 
-     $TEN
+      DOUBLE PRECISION   GAPDIGIT, ORTH, PIOVER2, REALONE, REALZERO, TEN
       PARAMETER          ( GAPDIGIT = 18.0D0, ORTH = 1.0D-12,
      $                     PIOVER2 = 1.57079632679489662D0,
-     $                     REALONE = 1.0D0, REAAB_LZERO = 0.0D0,
+     $                     REALONE = 1.0D0, REALZERO = 0.0D0,
      $                     TEN = 10.0D0 )
       COMPLEX*16         ONE, ZERO
       PARAMETER          ( ONE = (1.0D0,0.0D0), ZERO = (0.0D0,0.0D0) )
@@ -228,16 +227,15 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_AB_ALAHDG, AB_ALAREQ, AB_ALASUM, AB_ZCSDTS, 
-     $AB_ZLACSG, AB_ZLAROR,
-     $                   AB_ZLASET
+      EXTERNAL           ALAHDG, ALAREQ, ALASUM, ZCSDTS, ZLACSG, ZLAROR,
+     $                   ZLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MIN
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLARAN, AB_DLARND
-      EXTERNAL           AB_DLARAN, AB_DLARND
+      DOUBLE PRECISION   DLARAN, DLARND
+      EXTERNAL           DLARAN, DLARND
 *     ..
 *     .. Executable Statements ..
 *
@@ -248,7 +246,7 @@
       NRUN = 0
       NFAIL = 0
       FIRSTT = .TRUE.
-      CALL AB_ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
+      CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
       LDX = MMAX
       LDU1 = MMAX
       LDU2 = MMAX
@@ -273,8 +271,7 @@
 *           Generate X
 *
             IF( IMAT.EQ.1 ) THEN
-               CALL AB_ZLAROR( 'L', 'I', M, M, X, LDX, ISEED, WORK, IINF
-     $O )
+               CALL ZLAROR( 'L', 'I', M, M, X, LDX, ISEED, WORK, IINFO )
                IF( M .NE. 0 .AND. IINFO .NE. 0 ) THEN
                   WRITE( NOUT, FMT = 9999 ) M, IINFO
                   INFO = ABS( IINFO )
@@ -283,19 +280,19 @@
             ELSE IF( IMAT.EQ.2 ) THEN
                R = MIN( P, M-P, Q, M-Q )
                DO I = 1, R
-                  THETA(I) = PIOVER2 * AB_DLARND( 1, ISEED )
+                  THETA(I) = PIOVER2 * DLARND( 1, ISEED )
                END DO
-               CALL AB_ZLACSG( M, P, Q, THETA, ISEED, X, LDX, WORK )
+               CALL ZLACSG( M, P, Q, THETA, ISEED, X, LDX, WORK )
                DO I = 1, M
                   DO J = 1, M
                      X(I+(J-1)*LDX) = X(I+(J-1)*LDX) +
-     $                                ORTH*AB_DLARND(2,ISEED)
+     $                                ORTH*DLARND(2,ISEED)
                   END DO
                END DO
             ELSE IF( IMAT.EQ.3 ) THEN
                R = MIN( P, M-P, Q, M-Q )
                DO I = 1, R+1
-                  THETA(I) = TEN**(-AB_DLARND(1,ISEED)*GAPDIGIT)
+                  THETA(I) = TEN**(-DLARND(1,ISEED)*GAPDIGIT)
                END DO
                DO I = 2, R+1
                   THETA(I) = THETA(I-1) + THETA(I)
@@ -303,23 +300,21 @@
                DO I = 1, R
                   THETA(I) = PIOVER2 * THETA(I) / THETA(R+1)
                END DO
-               CALL AB_ZLACSG( M, P, Q, THETA, ISEED, X, LDX, WORK )
+               CALL ZLACSG( M, P, Q, THETA, ISEED, X, LDX, WORK )
             ELSE
-               CALL AB_ZLASET( 'F', M, M, ZERO, ONE, X, LDX )
+               CALL ZLASET( 'F', M, M, ZERO, ONE, X, LDX )
                DO I = 1, M
-                  J = INT( AB_DLARAN( ISEED ) * M ) + 1
+                  J = INT( DLARAN( ISEED ) * M ) + 1
                   IF( J .NE. I ) THEN
-                     CALL ZAB_DROT( M, X(1+(I-1)*LDX), 1, X(1+(J-1)*LDX)
-     $,
-     $                 1, REAAB_LZERO, REALONE )
+                     CALL ZDROT( M, X(1+(I-1)*LDX), 1, X(1+(J-1)*LDX),
+     $                 1, REALZERO, REALONE )
                   END IF
                END DO
             END IF
 *
             NT = 15
 *
-            CALL AB_ZCSDTS( M, P, Q, X, XF, LDX, U1, LDU1, U2, LDU2, V1T
-     $,
+            CALL ZCSDTS( M, P, Q, X, XF, LDX, U1, LDU1, U2, LDU2, V1T,
      $                   LDV1T, V2T, LDV2T, THETA, IWORK, WORK, LWORK,
      $                   RWORK, RESULT )
 *
@@ -330,7 +325,7 @@
                IF( RESULT( I ).GE.THRESH ) THEN
                   IF( NFAIL.EQ.0 .AND. FIRSTT ) THEN
                      FIRSTT = .FALSE.
-                     CALL AB_AB_ALAHDG( NOUT, PATH )
+                     CALL ALAHDG( NOUT, PATH )
                   END IF
                   WRITE( NOUT, FMT = 9998 )M, P, Q, IMAT, I,
      $               RESULT( I )
@@ -343,20 +338,20 @@
 *
 *     Print a summary of the results.
 *
-      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, 0 )
+      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, 0 )
 *
- 9999 FORMAT( ' AB_ZLAROR in AB_ZCKCSD: M = ', I5, ', INFO = ', I15 )
+ 9999 FORMAT( ' ZLAROR in ZCKCSD: M = ', I5, ', INFO = ', I15 )
  9998 FORMAT( ' M=', I4, ' P=', I4, ', Q=', I4, ', type ', I2,
      $      ', test ', I2, ', ratio=', G13.6 )
       RETURN
 *
-*     End of AB_ZCKCSD
+*     End of ZCKCSD
 *
       END
 *
 *
 *
-      SUBROUTINE AB_ZLACSG( M, P, Q, THETA, ISEED, X, LDX, WORK )
+      SUBROUTINE ZLACSG( M, P, Q, THETA, ISEED, X, LDX, WORK )
       IMPLICIT NONE
 *
       INTEGER            LDX, M, P, Q
@@ -371,7 +366,7 @@
 *
       R = MIN( P, M-P, Q, M-Q )
 *
-      CALL AB_ZLASET( 'Full', M, M, ZERO, ZERO, X, LDX )
+      CALL ZLASET( 'Full', M, M, ZERO, ZERO, X, LDX )
 *
       DO I = 1, MIN(P,Q)-R
          X(I,I) = ONE
@@ -400,13 +395,12 @@
          X(P+(MIN(M-P,M-Q)-R)+I,Q+(MIN(M-P,M-Q)-R)+I) =
      $      DCMPLX( COS(THETA(I)), 0.0D0 )
       END DO
-      CALL AB_ZLAROR( 'Left', 'No init', P, M, X, LDX, ISEED, WORK, INFO
-     $ )
-      CALL AB_ZLAROR( 'Left', 'No init', M-P, M, X(P+1,1), LDX,
+      CALL ZLAROR( 'Left', 'No init', P, M, X, LDX, ISEED, WORK, INFO )
+      CALL ZLAROR( 'Left', 'No init', M-P, M, X(P+1,1), LDX,
      $             ISEED, WORK, INFO )
-      CALL AB_ZLAROR( 'Right', 'No init', M, Q, X, LDX, ISEED,
+      CALL ZLAROR( 'Right', 'No init', M, Q, X, LDX, ISEED,
      $             WORK, INFO )
-      CALL AB_ZLAROR( 'Right', 'No init', M, M-Q,
+      CALL ZLAROR( 'Right', 'No init', M, M-Q,
      $             X(1,Q+1), LDX, ISEED, WORK, INFO )
 *
       END

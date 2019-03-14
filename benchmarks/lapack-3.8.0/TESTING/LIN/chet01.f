@@ -1,4 +1,4 @@
-*> \brief \b AB_CHET01
+*> \brief \b CHET01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CHET01( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C, LDC,
+*       SUBROUTINE CHET01( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C, LDC,
 *                          RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -28,7 +28,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CHET01 reconstructs a Hermitian indefinite matrix A from its
+*> CHET01 reconstructs a Hermitian indefinite matrix A from its
 *> block L*D*L' or U*D*U' factorization and computes the residual
 *>    norm( C - A ) / ( N * norm(A) * EPS ),
 *> where C is the reconstructed matrix, EPS is the machine epsilon,
@@ -72,7 +72,7 @@
 *>          The factored form of the matrix A.  AFAC contains the block
 *>          diagonal matrix D and the multipliers used to obtain the
 *>          factor L or U from the block L*D*L' or U*D*U' factorization
-*>          as computed by AB_CHETRF.
+*>          as computed by CHETRF.
 *> \endverbatim
 *>
 *> \param[in] LDAFAC
@@ -84,7 +84,7 @@
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          The pivot indices from AB_CHETRF.
+*>          The pivot indices from CHETRF.
 *> \endverbatim
 *>
 *> \param[out] C
@@ -123,7 +123,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_CHET01( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C, LDC,
+      SUBROUTINE CHET01( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C, LDC,
      $                   RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.5.0) --
@@ -156,12 +156,12 @@
       REAL               ANORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_CLANHE, AB_SLAMCH
-      EXTERNAL           AB_LSAME, AB_CLANHE, AB_SLAMCH
+      LOGICAL            LSAME
+      REAL               CLANHE, SLAMCH
+      EXTERNAL           LSAME, CLANHE, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CLAVHE, AB_CLASET
+      EXTERNAL           CLAVHE, CLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          AIMAG, REAL
@@ -177,8 +177,8 @@
 *
 *     Determine EPS and the norm of A.
 *
-      EPS = AB_SLAMCH( 'Epsilon' )
-      ANORM = AB_CLANHE( '1', UPLO, N, A, LDA, RWORK )
+      EPS = SLAMCH( 'Epsilon' )
+      ANORM = CLANHE( '1', UPLO, N, A, LDA, RWORK )
 *
 *     Check the imaginary parts of the diagonal elements and return with
 *     an error code if any are nonzero.
@@ -192,21 +192,21 @@
 *
 *     Initialize C to the identity matrix.
 *
-      CALL AB_CLASET( 'Full', N, N, CZERO, CONE, C, LDC )
+      CALL CLASET( 'Full', N, N, CZERO, CONE, C, LDC )
 *
-*     Call AB_CLAVHE to form the product D * U' (or D * L' ).
+*     Call CLAVHE to form the product D * U' (or D * L' ).
 *
-      CALL AB_CLAVHE( UPLO, 'Conjugate', 'Non-unit', N, N, AFAC, LDAFAC,
+      CALL CLAVHE( UPLO, 'Conjugate', 'Non-unit', N, N, AFAC, LDAFAC,
      $             IPIV, C, LDC, INFO )
 *
-*     Call AB_CLAVHE again to multiply by U (or L ).
+*     Call CLAVHE again to multiply by U (or L ).
 *
-      CALL AB_CLAVHE( UPLO, 'No transpose', 'Unit', N, N, AFAC, LDAFAC,
+      CALL CLAVHE( UPLO, 'No transpose', 'Unit', N, N, AFAC, LDAFAC,
      $             IPIV, C, LDC, INFO )
 *
 *     Compute the difference  C - A .
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
          DO 30 J = 1, N
             DO 20 I = 1, J - 1
                C( I, J ) = C( I, J ) - A( I, J )
@@ -224,7 +224,7 @@
 *
 *     Compute norm( C - A ) / ( N * norm(A) * EPS )
 *
-      RESID = AB_CLANHE( '1', UPLO, N, C, LDC, RWORK )
+      RESID = CLANHE( '1', UPLO, N, C, LDC, RWORK )
 *
       IF( ANORM.LE.ZERO ) THEN
          IF( RESID.NE.ZERO )
@@ -235,6 +235,6 @@
 *
       RETURN
 *
-*     End of AB_CHET01
+*     End of CHET01
 *
       END

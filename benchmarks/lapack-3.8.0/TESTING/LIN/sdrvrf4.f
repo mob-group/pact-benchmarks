@@ -1,4 +1,4 @@
-*> \brief \b AB_SDRVRF4
+*> \brief \b SDRVRF4
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,8 +8,8 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SDRVRF4( NOUT, NN, NVAL, THRESH, C1, C2, LDC, CRF, A,
-*      +                    LDA, S_WORK_AB_SLANGE )
+*       SUBROUTINE SDRVRF4( NOUT, NN, NVAL, THRESH, C1, C2, LDC, CRF, A,
+*      +                    LDA, S_WORK_SLANGE )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDA, LDC, NN, NOUT
@@ -18,7 +18,7 @@
 *       .. Array Arguments ..
 *       INTEGER            NVAL( NN )
 *       REAL               A( LDA, * ), C1( LDC, * ), C2( LDC, *),
-*      +                   CRF( * ), S_WORK_AB_SLANGE( * )
+*      +                   CRF( * ), S_WORK_SLANGE( * )
 *       ..
 *
 *
@@ -27,8 +27,8 @@
 *>
 *> \verbatim
 *>
-*> AB_SDRVRF4 tests the LAPACK RFP routines:
-*>     AB_SSFRK
+*> SDRVRF4 tests the LAPACK RFP routines:
+*>     SSFRK
 *> \endverbatim
 *
 *  Arguments:
@@ -97,9 +97,9 @@
 *>                The leading dimension of the array A.  LDA >= max(1,NMAX).
 *> \endverbatim
 *>
-*> \param[out] S_WORK_AB_SLANGE
+*> \param[out] S_WORK_SLANGE
 *> \verbatim
-*>          S_WORK_AB_SLANGE is REAL array, dimension (NMAX)
+*>          S_WORK_SLANGE is REAL array, dimension (NMAX)
 *> \endverbatim
 *
 *  Authors:
@@ -115,9 +115,8 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_SDRVRF4( NOUT, NN, NVAL, THRESH, C1, C2, LDC, CRF, A
-     $,
-     +                    LDA, S_WORK_AB_SLANGE )
+      SUBROUTINE SDRVRF4( NOUT, NN, NVAL, THRESH, C1, C2, LDC, CRF, A,
+     +                    LDA, S_WORK_SLANGE )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -131,7 +130,7 @@
 *     .. Array Arguments ..
       INTEGER            NVAL( NN )
       REAL               A( LDA, * ), C1( LDC, * ), C2( LDC, *),
-     +                   CRF( * ), S_WORK_AB_SLANGE( * )
+     +                   CRF( * ), S_WORK_SLANGE( * )
 *     ..
 *
 *  =====================================================================
@@ -154,11 +153,11 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH, AB_SLARND, AB_SLANGE
-      EXTERNAL           AB_SLAMCH, AB_SLARND, AB_SLANGE
+      REAL               SLAMCH, SLARND, SLANGE
+      EXTERNAL           SLAMCH, SLARND, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_AB_SSYRK, AB_SSFRK, AB_STFTTR, AB_STRTTF
+      EXTERNAL           SSYRK, SSFRK, STFTTR, STRTTF
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -185,7 +184,7 @@
       DO 10 I = 1, 4
          ISEED( I ) = ISEEDY( I )
    10 CONTINUE
-      EPS = AB_SLAMCH( 'Precision' )
+      EPS = SLAMCH( 'Precision' )
 *
       DO 150 IIN = 1, NN
 *
@@ -219,8 +218,8 @@
                            ALPHA = ZERO
                            BETA = ONE
                         ELSE
-                           ALPHA = AB_SLARND( 2, ISEED )
-                           BETA = AB_SLARND( 2, ISEED )
+                           ALPHA = SLARND( 2, ISEED )
+                           BETA = SLARND( 2, ISEED )
                         END IF
 *
 *                       All the parameters are set:
@@ -236,12 +235,12 @@
 *
                            DO J = 1, K
                               DO I = 1, N
-                                 A( I, J) = AB_SLARND( 2, ISEED )
+                                 A( I, J) = SLARND( 2, ISEED )
                               END DO
                            END DO
 *
-                           NORMA = AB_SLANGE( 'I', N, K, A, LDA,
-     +                                      S_WORK_AB_SLANGE )
+                           NORMA = SLANGE( 'I', N, K, A, LDA,
+     +                                      S_WORK_SLANGE )
 *
 
                         ELSE
@@ -250,12 +249,12 @@
 *
                            DO J = 1,N
                               DO I = 1, K
-                                 A( I, J) = AB_SLARND( 2, ISEED )
+                                 A( I, J) = SLARND( 2, ISEED )
                               END DO
                            END DO
 *
-                           NORMA = AB_SLANGE( 'I', K, N, A, LDA,
-     +                                      S_WORK_AB_SLANGE )
+                           NORMA = SLANGE( 'I', K, N, A, LDA,
+     +                                      S_WORK_SLANGE )
 *
                         END IF
 *
@@ -266,39 +265,37 @@
 *
                         DO J = 1, N
                            DO I = 1, N
-                              C1( I, J) = AB_SLARND( 2, ISEED )
+                              C1( I, J) = SLARND( 2, ISEED )
                               C2(I,J) = C1(I,J)
                            END DO
                         END DO
 *
-*                       (See comment later on for why we use AB_SLANGE and
-*                       not AB_SLANSY for C1.)
+*                       (See comment later on for why we use SLANGE and
+*                       not SLANSY for C1.)
 *
-                        NORMC = AB_SLANGE( 'I', N, N, C1, LDC,
-     +                                      S_WORK_AB_SLANGE )
+                        NORMC = SLANGE( 'I', N, N, C1, LDC,
+     +                                      S_WORK_SLANGE )
 *
-                        SRNAMT = 'AB_STRTTF'
-                        CALL AB_STRTTF( CFORM, UPLO, N, C1, LDC, CRF,
+                        SRNAMT = 'STRTTF'
+                        CALL STRTTF( CFORM, UPLO, N, C1, LDC, CRF,
      +                               INFO )
 *
-*                       call AB_AB_SSYRK the BLAS routine -> gives C1
+*                       call ssyrk the BLAS routine -> gives C1
 *
-                        SRNAMT = 'AB_AB_SSYRK '
-                        CALL AB_AB_SSYRK( UPLO, TRANS, N, K, ALPHA, A, L
-     $DA,
+                        SRNAMT = 'SSYRK '
+                        CALL SSYRK( UPLO, TRANS, N, K, ALPHA, A, LDA,
      +                              BETA, C1, LDC )
 *
-*                       call AB_SSFRK the RFP routine -> gives CRF
+*                       call ssfrk the RFP routine -> gives CRF
 *
-                        SRNAMT = 'AB_SSFRK '
-                        CALL AB_SSFRK( CFORM, UPLO, TRANS, N, K, ALPHA, 
-     $A,
+                        SRNAMT = 'SSFRK '
+                        CALL SSFRK( CFORM, UPLO, TRANS, N, K, ALPHA, A,
      +                              LDA, BETA, CRF )
 *
 *                       convert CRF in full format -> gives C2
 *
-                        SRNAMT = 'AB_STFTTR'
-                        CALL AB_STFTTR( CFORM, UPLO, N, CRF, C2, LDC,
+                        SRNAMT = 'STFTTR'
+                        CALL STFTTR( CFORM, UPLO, N, CRF, C2, LDC,
      +                               INFO )
 *
 *                       compare C1 and C2
@@ -309,13 +306,13 @@
                            END DO
                         END DO
 *
-*                       Yes, C1 is symmetric so we could call AB_SLANSY,
+*                       Yes, C1 is symmetric so we could call SLANSY,
 *                       but we want to check the upper part that is
 *                       supposed to be unchanged and the diagonal that
-*                       is supposed to be real -> AB_SLANGE
+*                       is supposed to be real -> SLANGE
 *
-                        RESULT(1) = AB_SLANGE( 'I', N, N, C1, LDC,
-     +                                      S_WORK_AB_SLANGE )
+                        RESULT(1) = SLANGE( 'I', N, N, C1, LDC,
+     +                                      S_WORK_SLANGE )
                         RESULT(1) = RESULT(1)
      +                              / MAX( ABS( ALPHA ) * NORMA
      +                                   + ABS( BETA ) , ONE )
@@ -326,7 +323,7 @@
                               WRITE( NOUT, * )
                               WRITE( NOUT, FMT = 9999 )
                            END IF
-                           WRITE( NOUT, FMT = 9997 ) 'AB_SSFRK',
+                           WRITE( NOUT, FMT = 9997 ) 'SSFRK',
      +                        CFORM, UPLO, TRANS, N, K, RESULT(1)
                            NFAIL = NFAIL + 1
                         END IF
@@ -341,12 +338,12 @@
 *     Print a summary of the results.
 *
       IF ( NFAIL.EQ.0 ) THEN
-         WRITE( NOUT, FMT = 9996 ) 'AB_SSFRK', NRUN
+         WRITE( NOUT, FMT = 9996 ) 'SSFRK', NRUN
       ELSE
-         WRITE( NOUT, FMT = 9995 ) 'AB_SSFRK', NFAIL, NRUN
+         WRITE( NOUT, FMT = 9995 ) 'SSFRK', NFAIL, NRUN
       END IF
 *
- 9999 FORMAT( 1X, ' *** Error(s) or Failure(s) while testing AB_SSFRK
+ 9999 FORMAT( 1X, ' *** Error(s) or Failure(s) while testing SSFRK
      +         ***')
  9997 FORMAT( 1X, '     Failure in ',A5,', CFORM=''',A1,''',',
      + ' UPLO=''',A1,''',',' TRANS=''',A1,''',', ' N=',I3,', K =', I3,
@@ -358,6 +355,6 @@
 *
       RETURN
 *
-*     End of AB_SDRVRF4
+*     End of SDRVRF4
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLATM4
+*> \brief \b ZLATM4
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZLATM4( ITYPE, N, NZ1, NZ2, RSIGN, AMAGN, RCOND,
+*       SUBROUTINE ZLATM4( ITYPE, N, NZ1, NZ2, RSIGN, AMAGN, RCOND,
 *                          TRIANG, IDIST, ISEED, A, LDA )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZLATM4 generates basic square matrices, which may later be
+*> ZLATM4 generates basic square matrices, which may later be
 *> multiplied by others in order to produce test matrices.  It is
 *> intended mainly to be used to test the generalized eigenvalue
 *> routines.
@@ -67,7 +67,7 @@
 *>          = 7:  1, a, a^2, ..., a^(k-1)=RCOND
 *>          = 8:  1, 1-d, 1-2*d, ..., 1-(k-1)*d=RCOND
 *>          = 9:  random numbers chosen from (RCOND,1)
-*>          = 10: random numbers with distribution IDIST (see AB_ZLARND.)
+*>          = 10: random numbers with distribution IDIST (see ZLARND.)
 *> \endverbatim
 *>
 *> \param[in] N
@@ -137,7 +137,7 @@
 *>          ISEED is INTEGER array, dimension (4)
 *>          On entry ISEED specifies the seed of the random number
 *>          generator.  The values of ISEED are changed on exit, and can
-*>          be used in the next call to AB_ZLATM4 to continue the same
+*>          be used in the next call to ZLATM4 to continue the same
 *>          random number sequence.
 *>          Note: ISEED(4) should be odd, for the random number generator
 *>          used at present.
@@ -168,7 +168,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_ZLATM4( ITYPE, N, NZ1, NZ2, RSIGN, AMAGN, RCOND,
+      SUBROUTINE ZLATM4( ITYPE, N, NZ1, NZ2, RSIGN, AMAGN, RCOND,
      $                   TRIANG, IDIST, ISEED, A, LDA )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -201,12 +201,12 @@
       COMPLEX*16         CTEMP
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLARAN
-      COMPLEX*16         AB_ZLARND
-      EXTERNAL           AB_DLARAN, AB_ZLARND
+      DOUBLE PRECISION   DLARAN
+      COMPLEX*16         ZLARND
+      EXTERNAL           DLARAN, ZLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZLASET
+      EXTERNAL           ZLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCMPLX, EXP, LOG, MAX, MIN, MOD
@@ -215,7 +215,7 @@
 *
       IF( N.LE.0 )
      $   RETURN
-      CALL AB_ZLASET( 'Full', N, N, CZERO, CZERO, A, LDA )
+      CALL ZLASET( 'Full', N, N, CZERO, CZERO, A, LDA )
 *
 *     Insure a correct ISEED
 *
@@ -328,7 +328,7 @@
   180    CONTINUE
          ALPHA = LOG( RCOND )
          DO 190 JD = KBEG, KEND
-            A( JD, JD ) = EXP( ALPHA*AB_DLARAN( ISEED ) )
+            A( JD, JD ) = EXP( ALPHA*DLARAN( ISEED ) )
   190    CONTINUE
          GO TO 220
 *
@@ -336,7 +336,7 @@
 *
   200    CONTINUE
          DO 210 JD = KBEG, KEND
-            A( JD, JD ) = AB_ZLARND( IDIST, ISEED )
+            A( JD, JD ) = ZLARND( IDIST, ISEED )
   210    CONTINUE
 *
   220    CONTINUE
@@ -356,14 +356,14 @@
          IF( RSIGN ) THEN
             DO 250 JD = KBEG, KEND
                IF( DBLE( A( JD, JD ) ).NE.ZERO ) THEN
-                  CTEMP = AB_ZLARND( 3, ISEED )
+                  CTEMP = ZLARND( 3, ISEED )
                   CTEMP = CTEMP / ABS( CTEMP )
                   A( JD, JD ) = CTEMP*DBLE( A( JD, JD ) )
                END IF
   250       CONTINUE
             DO 260 JD = ISDB, ISDE
                IF( DBLE( A( JD+1, JD ) ).NE.ZERO ) THEN
-                  CTEMP = AB_ZLARND( 3, ISEED )
+                  CTEMP = ZLARND( 3, ISEED )
                   CTEMP = CTEMP / ABS( CTEMP )
                   A( JD+1, JD ) = CTEMP*DBLE( A( JD+1, JD ) )
                END IF
@@ -392,13 +392,13 @@
       IF( TRIANG.NE.ZERO ) THEN
          DO 300 JC = 2, N
             DO 290 JR = 1, JC - 1
-               A( JR, JC ) = TRIANG*AB_ZLARND( IDIST, ISEED )
+               A( JR, JC ) = TRIANG*ZLARND( IDIST, ISEED )
   290       CONTINUE
   300    CONTINUE
       END IF
 *
       RETURN
 *
-*     End of AB_ZLATM4
+*     End of ZLATM4
 *
       END

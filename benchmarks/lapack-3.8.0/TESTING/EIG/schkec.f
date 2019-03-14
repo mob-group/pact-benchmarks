@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_SCHKEC
+*> \brief \b SCHKEC
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_SCHKEC( THRESH, TSTERR, NIN, NOUT )
+*       SUBROUTINE SCHKEC( THRESH, TSTERR, NIN, NOUT )
 *
 *       .. Scalar Arguments ..
 *       LOGICAL            TSTERR
@@ -22,13 +22,13 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_SCHKEC tests eigen- condition estimation routines
-*>        AB_SLALN2, AB_SLASY2, AB_SLANV2, AB_SLAQTR, AB_SLAEXC,
-*>        AB_STRSYL, AB_STREXC, AB_STRSNA, AB_STRSEN
+*> SCHKEC tests eigen- condition estimation routines
+*>        SLALN2, SLASY2, SLANV2, SLAQTR, SLAEXC,
+*>        STRSYL, STREXC, STRSNA, STRSEN
 *>
 *> In all cases, the routine runs through a fixed set of numerical
 *> examples, subjects them to various tests, and compares the test
-*> results to a threshold THRESH. In addition, AB_STREXC, AB_STRSNA and AB_STRSEN
+*> results to a threshold THRESH. In addition, STREXC, STRSNA and STRSEN
 *> are tested by reading in precomputed examples from a file (on input
 *> unit NIN).  Output is written to output unit NOUT.
 *> \endverbatim
@@ -74,7 +74,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_SCHKEC( THRESH, TSTERR, NIN, NOUT )
+      SUBROUTINE SCHKEC( THRESH, TSTERR, NIN, NOUT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -106,22 +106,21 @@
       REAL               RTRSEN( 3 ), RTRSNA( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SERREC, AB_SGET31, AB_SGET32, AB_SGET33, AB_
-     $SGET34, AB_SGET35,
-     $                   AB_SGET36, AB_SGET37, AB_SGET38, AB_SGET39
+      EXTERNAL           SERREC, SGET31, SGET32, SGET33, SGET34, SGET35,
+     $                   SGET36, SGET37, SGET38, SGET39
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH
-      EXTERNAL           AB_SLAMCH
+      REAL               SLAMCH
+      EXTERNAL           SLAMCH
 *     ..
 *     .. Executable Statements ..
 *
       PATH( 1: 1 ) = 'Single precision'
       PATH( 2: 3 ) = 'EC'
-      EPS = AB_SLAMCH( 'P' )
-      SFMIN = AB_SLAMCH( 'S' )
+      EPS = SLAMCH( 'P' )
+      SFMIN = SLAMCH( 'S' )
 *
-*     Print AB_HEADER information
+*     Print header information
 *
       WRITE( NOUT, FMT = 9989 )
       WRITE( NOUT, FMT = 9988 )EPS, SFMIN
@@ -130,46 +129,46 @@
 *     Test error exits if TSTERR is .TRUE.
 *
       IF( TSTERR )
-     $   CALL AB_SERREC( PATH, NOUT )
+     $   CALL SERREC( PATH, NOUT )
 *
       OK = .TRUE.
-      CALL AB_SGET31( RLALN2, LLALN2, NLALN2, KLALN2 )
+      CALL SGET31( RLALN2, LLALN2, NLALN2, KLALN2 )
       IF( RLALN2.GT.THRESH .OR. NLALN2( 1 ).NE.0 ) THEN
          OK = .FALSE.
          WRITE( NOUT, FMT = 9999 )RLALN2, LLALN2, NLALN2, KLALN2
       END IF
 *
-      CALL AB_SGET32( RLASY2, LLASY2, NLASY2, KLASY2 )
+      CALL SGET32( RLASY2, LLASY2, NLASY2, KLASY2 )
       IF( RLASY2.GT.THRESH ) THEN
          OK = .FALSE.
          WRITE( NOUT, FMT = 9998 )RLASY2, LLASY2, NLASY2, KLASY2
       END IF
 *
-      CALL AB_SGET33( RLANV2, LLANV2, NLANV2, KLANV2 )
+      CALL SGET33( RLANV2, LLANV2, NLANV2, KLANV2 )
       IF( RLANV2.GT.THRESH .OR. NLANV2.NE.0 ) THEN
          OK = .FALSE.
          WRITE( NOUT, FMT = 9997 )RLANV2, LLANV2, NLANV2, KLANV2
       END IF
 *
-      CALL AB_SGET34( RLAEXC, LLAEXC, NLAEXC, KLAEXC )
+      CALL SGET34( RLAEXC, LLAEXC, NLAEXC, KLAEXC )
       IF( RLAEXC.GT.THRESH .OR. NLAEXC( 2 ).NE.0 ) THEN
          OK = .FALSE.
          WRITE( NOUT, FMT = 9996 )RLAEXC, LLAEXC, NLAEXC, KLAEXC
       END IF
 *
-      CALL AB_SGET35( RTRSYL, LTRSYL, NTRSYL, KTRSYL )
+      CALL SGET35( RTRSYL, LTRSYL, NTRSYL, KTRSYL )
       IF( RTRSYL.GT.THRESH ) THEN
          OK = .FALSE.
          WRITE( NOUT, FMT = 9995 )RTRSYL, LTRSYL, NTRSYL, KTRSYL
       END IF
 *
-      CALL AB_SGET36( RTREXC, LTREXC, NTREXC, KTREXC, NIN )
+      CALL SGET36( RTREXC, LTREXC, NTREXC, KTREXC, NIN )
       IF( RTREXC.GT.THRESH .OR. NTREXC( 3 ).GT.0 ) THEN
          OK = .FALSE.
          WRITE( NOUT, FMT = 9994 )RTREXC, LTREXC, NTREXC, KTREXC
       END IF
 *
-      CALL AB_SGET37( RTRSNA, LTRSNA, NTRSNA, KTRSNA, NIN )
+      CALL SGET37( RTRSNA, LTRSNA, NTRSNA, KTRSNA, NIN )
       IF( RTRSNA( 1 ).GT.THRESH .OR. RTRSNA( 2 ).GT.THRESH .OR.
      $    NTRSNA( 1 ).NE.0 .OR. NTRSNA( 2 ).NE.0 .OR. NTRSNA( 3 ).NE.0 )
      $     THEN
@@ -177,7 +176,7 @@
          WRITE( NOUT, FMT = 9993 )RTRSNA, LTRSNA, NTRSNA, KTRSNA
       END IF
 *
-      CALL AB_SGET38( RTRSEN, LTRSEN, NTRSEN, KTRSEN, NIN )
+      CALL SGET38( RTRSEN, LTRSEN, NTRSEN, KTRSEN, NIN )
       IF( RTRSEN( 1 ).GT.THRESH .OR. RTRSEN( 2 ).GT.THRESH .OR.
      $    NTRSEN( 1 ).NE.0 .OR. NTRSEN( 2 ).NE.0 .OR. NTRSEN( 3 ).NE.0 )
      $     THEN
@@ -185,7 +184,7 @@
          WRITE( NOUT, FMT = 9992 )RTRSEN, LTRSEN, NTRSEN, KTRSEN
       END IF
 *
-      CALL AB_SGET39( RLAQTR, LLAQTR, NLAQTR, KLAQTR )
+      CALL SGET39( RLAQTR, LLAQTR, NLAQTR, KLAQTR )
       IF( RLAQTR.GT.THRESH ) THEN
          OK = .FALSE.
          WRITE( NOUT, FMT = 9991 )RLAQTR, LLAQTR, NLAQTR, KLAQTR
@@ -197,42 +196,34 @@
      $   WRITE( NOUT, FMT = 9990 )PATH, NTESTS
 *
       RETURN
- 9999 FORMAT( ' Error in AB_SLALN2: RMAX =', E12.3, / ' LMAX = ', I8, ' 
-     $N',
+ 9999 FORMAT( ' Error in SLALN2: RMAX =', E12.3, / ' LMAX = ', I8, ' N',
      $      'INFO=', 2I8, ' KNT=', I8 )
- 9998 FORMAT( ' Error in AB_SLASY2: RMAX =', E12.3, / ' LMAX = ', I8, ' 
-     $N',
+ 9998 FORMAT( ' Error in SLASY2: RMAX =', E12.3, / ' LMAX = ', I8, ' N',
      $      'INFO=', I8, ' KNT=', I8 )
- 9997 FORMAT( ' Error in AB_SLANV2: RMAX =', E12.3, / ' LMAX = ', I8, ' 
-     $N',
+ 9997 FORMAT( ' Error in SLANV2: RMAX =', E12.3, / ' LMAX = ', I8, ' N',
      $      'INFO=', I8, ' KNT=', I8 )
- 9996 FORMAT( ' Error in AB_SLAEXC: RMAX =', E12.3, / ' LMAX = ', I8, ' 
-     $N',
+ 9996 FORMAT( ' Error in SLAEXC: RMAX =', E12.3, / ' LMAX = ', I8, ' N',
      $      'INFO=', 2I8, ' KNT=', I8 )
- 9995 FORMAT( ' Error in AB_STRSYL: RMAX =', E12.3, / ' LMAX = ', I8, ' 
-     $N',
+ 9995 FORMAT( ' Error in STRSYL: RMAX =', E12.3, / ' LMAX = ', I8, ' N',
      $      'INFO=', I8, ' KNT=', I8 )
- 9994 FORMAT( ' Error in AB_STREXC: RMAX =', E12.3, / ' LMAX = ', I8, ' 
-     $N',
+ 9994 FORMAT( ' Error in STREXC: RMAX =', E12.3, / ' LMAX = ', I8, ' N',
      $      'INFO=', 3I8, ' KNT=', I8 )
- 9993 FORMAT( ' Error in AB_STRSNA: RMAX =', 3E12.3, / ' LMAX = ', 3I8,
+ 9993 FORMAT( ' Error in STRSNA: RMAX =', 3E12.3, / ' LMAX = ', 3I8,
      $      ' NINFO=', 3I8, ' KNT=', I8 )
- 9992 FORMAT( ' Error in AB_STRSEN: RMAX =', 3E12.3, / ' LMAX = ', 3I8,
+ 9992 FORMAT( ' Error in STRSEN: RMAX =', 3E12.3, / ' LMAX = ', 3I8,
      $      ' NINFO=', 3I8, ' KNT=', I8 )
- 9991 FORMAT( ' Error in AB_SLAQTR: RMAX =', E12.3, / ' LMAX = ', I8, ' 
-     $N',
+ 9991 FORMAT( ' Error in SLAQTR: RMAX =', E12.3, / ' LMAX = ', I8, ' N',
      $      'INFO=', I8, ' KNT=', I8 )
  9990 FORMAT( / 1X, 'All tests for ', A3, ' routines passed the thresh',
      $      'old ( ', I6, ' tests run)' )
  9989 FORMAT( ' Tests of the Nonsymmetric eigenproblem condition estim',
-     $      'ation routines', / ' AB_SLALN2, AB_SLASY2, AB_SLANV2, AB_SL
-     $AEXC, STRS',
-     $      'YL, AB_STREXC, AB_STRSNA, AB_STRSEN, AB_SLAQTR', / )
+     $      'ation routines', / ' SLALN2, SLASY2, SLANV2, SLAEXC, STRS',
+     $      'YL, STREXC, STRSNA, STRSEN, SLAQTR', / )
  9988 FORMAT( ' Relative machine precision (EPS) = ', E16.6, / ' Safe ',
      $      'minimum (SFMIN)             = ', E16.6, / )
  9987 FORMAT( ' Routines pass computational tests if test ratio is les',
      $      's than', F8.2, / / )
 *
-*     End of AB_AB_SCHKEC
+*     End of SCHKEC
 *
       END

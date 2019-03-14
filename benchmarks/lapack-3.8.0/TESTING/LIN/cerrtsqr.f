@@ -1,4 +1,4 @@
-*> \brief \b AB_CERRTSQR
+*> \brief \b CERRTSQR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CERRTSQR( PATH, NUNIT )
+*       SUBROUTINE CERRTSQR( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CERRTSQR tests the error exits for the COMPLEX routines
+*> CERRTSQR tests the error exits for the COMPLEX routines
 *> that use the TSQR decomposition of a general matrix.
 *> \endverbatim
 *
@@ -53,7 +53,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_CERRTSQR( PATH, NUNIT )
+      SUBROUTINE CERRTSQR( PATH, NUNIT )
       IMPLICIT NONE
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -80,8 +80,8 @@
      $                   C( NMAX, NMAX ), TAU(NMAX)
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALAESM, AB_CHKXER, AB_CGEQR,
-     $                   AB_CGEMQR, AB_CGELQ, AB_CGEMLQ
+      EXTERNAL           ALAESM, CHKXER, CGEQR,
+     $                   CGEMQR, CGELQ, CGEMLQ
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -114,130 +114,130 @@
 *
 *     Error exits for TS factorization
 *
-*     AB_CGEQR
+*     CGEQR
 *
-      SRNAMT = 'AB_CGEQR'
+      SRNAMT = 'CGEQR'
       INFOT = 1
-      CALL AB_CGEQR( -1, 0, A, 1, TAU, 1, W, 1, INFO )
-      CALL AB_CHKXER( 'AB_CGEQR', INFOT, NOUT, LERR, OK )
+      CALL CGEQR( -1, 0, A, 1, TAU, 1, W, 1, INFO )
+      CALL CHKXER( 'CGEQR', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_CGEQR( 0, -1, A, 1, TAU, 1, W, 1, INFO )
-      CALL AB_CHKXER( 'AB_CGEQR', INFOT, NOUT, LERR, OK )
+      CALL CGEQR( 0, -1, A, 1, TAU, 1, W, 1, INFO )
+      CALL CHKXER( 'CGEQR', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL AB_CGEQR( 1, 1, A, 0, TAU, 1, W, 1, INFO )
-      CALL AB_CHKXER( 'AB_CGEQR', INFOT, NOUT, LERR, OK )
+      CALL CGEQR( 1, 1, A, 0, TAU, 1, W, 1, INFO )
+      CALL CHKXER( 'CGEQR', INFOT, NOUT, LERR, OK )
       INFOT = 6
-      CALL AB_CGEQR( 3, 2, A, 3, TAU, 1, W, 1, INFO )
-      CALL AB_CHKXER( 'AB_CGEQR', INFOT, NOUT, LERR, OK )
+      CALL CGEQR( 3, 2, A, 3, TAU, 1, W, 1, INFO )
+      CALL CHKXER( 'CGEQR', INFOT, NOUT, LERR, OK )
       INFOT = 8
-      CALL AB_CGEQR( 3, 2, A, 3, TAU, 8, W, 0, INFO )
-      CALL AB_CHKXER( 'AB_CGEQR', INFOT, NOUT, LERR, OK )
+      CALL CGEQR( 3, 2, A, 3, TAU, 8, W, 0, INFO )
+      CALL CHKXER( 'CGEQR', INFOT, NOUT, LERR, OK )
 *
-*     AB_CGEMQR
+*     CGEMQR
 *
       TAU(1)=1
       TAU(2)=1
-      SRNAMT = 'AB_CGEMQR'
+      SRNAMT = 'CGEMQR'
       NB=1
       INFOT = 1
-      CALL AB_CGEMQR( '/', 'N', 0, 0, 0, A, 1, TAU, 1, C, 1, W, 1,INFO)
-      CALL AB_CHKXER( 'AB_CGEMQR', INFOT, NOUT, LERR, OK )
+      CALL CGEMQR( '/', 'N', 0, 0, 0, A, 1, TAU, 1, C, 1, W, 1,INFO)
+      CALL CHKXER( 'CGEMQR', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_CGEMQR( 'L', '/', 0, 0, 0, A, 1, TAU, 1, C, 1, W, 1,INFO)
-      CALL AB_CHKXER( 'AB_CGEMQR', INFOT, NOUT, LERR, OK )
+      CALL CGEMQR( 'L', '/', 0, 0, 0, A, 1, TAU, 1, C, 1, W, 1,INFO)
+      CALL CHKXER( 'CGEMQR', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL AB_CGEMQR( 'L', 'N', -1, 0, 0, A, 1, TAU, 1, C, 1, W,1,INFO)
-      CALL AB_CHKXER( 'AB_CGEMQR', INFOT, NOUT, LERR, OK )
+      CALL CGEMQR( 'L', 'N', -1, 0, 0, A, 1, TAU, 1, C, 1, W,1,INFO)
+      CALL CHKXER( 'CGEMQR', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL AB_CGEMQR( 'L', 'N', 0, -1, 0, A, 1, TAU, 1, C, 1, W,1,INFO)
-      CALL AB_CHKXER( 'AB_CGEMQR', INFOT, NOUT, LERR, OK )
+      CALL CGEMQR( 'L', 'N', 0, -1, 0, A, 1, TAU, 1, C, 1, W,1,INFO)
+      CALL CHKXER( 'CGEMQR', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL AB_CGEMQR( 'L', 'N', 0, 0, -1, A, 1, TAU, 1, C, 1, W,1,INFO)
-      CALL AB_CHKXER( 'AB_CGEMQR', INFOT, NOUT, LERR, OK )
+      CALL CGEMQR( 'L', 'N', 0, 0, -1, A, 1, TAU, 1, C, 1, W,1,INFO)
+      CALL CHKXER( 'CGEMQR', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL AB_CGEMQR( 'R', 'N', 0, 0, -1, A, 1, TAU, 1, C, 1, W,1,INFO)
-      CALL AB_CHKXER( 'AB_CGEMQR', INFOT, NOUT, LERR, OK )
+      CALL CGEMQR( 'R', 'N', 0, 0, -1, A, 1, TAU, 1, C, 1, W,1,INFO)
+      CALL CHKXER( 'CGEMQR', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL AB_CGEMQR( 'L', 'N', 2, 1, 0, A, 0, TAU, 1, C, 1, W, 1,INFO)
-      CALL AB_CHKXER( 'AB_CGEMQR', INFOT, NOUT, LERR, OK )
+      CALL CGEMQR( 'L', 'N', 2, 1, 0, A, 0, TAU, 1, C, 1, W, 1,INFO)
+      CALL CHKXER( 'CGEMQR', INFOT, NOUT, LERR, OK )
       INFOT = 9
-      CALL AB_CGEMQR( 'R', 'N', 2, 2, 1, A, 2, TAU, 0, C, 1, W, 1,INFO)
-      CALL AB_CHKXER( 'AB_CGEMQR', INFOT, NOUT, LERR, OK )
+      CALL CGEMQR( 'R', 'N', 2, 2, 1, A, 2, TAU, 0, C, 1, W, 1,INFO)
+      CALL CHKXER( 'CGEMQR', INFOT, NOUT, LERR, OK )
       INFOT = 9
-      CALL AB_CGEMQR( 'L', 'N', 2, 2, 1, A, 2, TAU, 0, C, 1, W, 1,INFO)
-      CALL AB_CHKXER( 'AB_CGEMQR', INFOT, NOUT, LERR, OK )
+      CALL CGEMQR( 'L', 'N', 2, 2, 1, A, 2, TAU, 0, C, 1, W, 1,INFO)
+      CALL CHKXER( 'CGEMQR', INFOT, NOUT, LERR, OK )
       INFOT = 11
-      CALL AB_CGEMQR( 'L', 'N', 2, 1, 1, A, 2, TAU, 6, C, 0, W, 1,INFO)
-      CALL AB_CHKXER( 'AB_CGEMQR', INFOT, NOUT, LERR, OK )
+      CALL CGEMQR( 'L', 'N', 2, 1, 1, A, 2, TAU, 6, C, 0, W, 1,INFO)
+      CALL CHKXER( 'CGEMQR', INFOT, NOUT, LERR, OK )
       INFOT = 13
-      CALL AB_CGEMQR( 'L', 'N', 2, 2, 1, A, 2, TAU, 6, C, 2, W, 0,INFO)
-      CALL AB_CHKXER( 'AB_CGEMQR', INFOT, NOUT, LERR, OK )
+      CALL CGEMQR( 'L', 'N', 2, 2, 1, A, 2, TAU, 6, C, 2, W, 0,INFO)
+      CALL CHKXER( 'CGEMQR', INFOT, NOUT, LERR, OK )
 *
-*     AB_CGELQ
+*     CGELQ
 *
-      SRNAMT = 'AB_CGELQ'
+      SRNAMT = 'CGELQ'
       INFOT = 1
-      CALL AB_CGELQ( -1, 0, A, 1, TAU, 1, W, 1, INFO )
-      CALL AB_CHKXER( 'AB_CGELQ', INFOT, NOUT, LERR, OK )
+      CALL CGELQ( -1, 0, A, 1, TAU, 1, W, 1, INFO )
+      CALL CHKXER( 'CGELQ', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_CGELQ( 0, -1, A, 1, TAU, 1, W, 1, INFO )
-      CALL AB_CHKXER( 'AB_CGELQ', INFOT, NOUT, LERR, OK )
+      CALL CGELQ( 0, -1, A, 1, TAU, 1, W, 1, INFO )
+      CALL CHKXER( 'CGELQ', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL AB_CGELQ( 1, 1, A, 0, TAU, 1, W, 1, INFO )
-      CALL AB_CHKXER( 'AB_CGELQ', INFOT, NOUT, LERR, OK )
+      CALL CGELQ( 1, 1, A, 0, TAU, 1, W, 1, INFO )
+      CALL CHKXER( 'CGELQ', INFOT, NOUT, LERR, OK )
       INFOT = 6
-      CALL AB_CGELQ( 2, 3, A, 3, TAU, 1, W, 1, INFO )
-      CALL AB_CHKXER( 'AB_CGELQ', INFOT, NOUT, LERR, OK )
+      CALL CGELQ( 2, 3, A, 3, TAU, 1, W, 1, INFO )
+      CALL CHKXER( 'CGELQ', INFOT, NOUT, LERR, OK )
       INFOT = 8
-      CALL AB_CGELQ( 2, 3, A, 3, TAU, 8, W, 0, INFO )
-      CALL AB_CHKXER( 'AB_CGELQ', INFOT, NOUT, LERR, OK )
+      CALL CGELQ( 2, 3, A, 3, TAU, 8, W, 0, INFO )
+      CALL CHKXER( 'CGELQ', INFOT, NOUT, LERR, OK )
 *
-*     AB_CGEMLQ
+*     CGEMLQ
 *
       TAU(1)=1
       TAU(2)=1
-      SRNAMT = 'AB_CGEMLQ'
+      SRNAMT = 'CGEMLQ'
       NB=1
       INFOT = 1
-      CALL AB_CGEMLQ( '/', 'N', 0, 0, 0, A, 1, TAU, 1, C, 1, W, 1,INFO)
-      CALL AB_CHKXER( 'AB_CGEMLQ', INFOT, NOUT, LERR, OK )
+      CALL CGEMLQ( '/', 'N', 0, 0, 0, A, 1, TAU, 1, C, 1, W, 1,INFO)
+      CALL CHKXER( 'CGEMLQ', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_CGEMLQ( 'L', '/', 0, 0, 0, A, 1, TAU, 1, C, 1, W, 1,INFO)
-      CALL AB_CHKXER( 'AB_CGEMLQ', INFOT, NOUT, LERR, OK )
+      CALL CGEMLQ( 'L', '/', 0, 0, 0, A, 1, TAU, 1, C, 1, W, 1,INFO)
+      CALL CHKXER( 'CGEMLQ', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL AB_CGEMLQ( 'L', 'N', -1, 0, 0, A, 1, TAU, 1, C, 1, W,1,INFO)
-      CALL AB_CHKXER( 'AB_CGEMLQ', INFOT, NOUT, LERR, OK )
+      CALL CGEMLQ( 'L', 'N', -1, 0, 0, A, 1, TAU, 1, C, 1, W,1,INFO)
+      CALL CHKXER( 'CGEMLQ', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL AB_CGEMLQ( 'L', 'N', 0, -1, 0, A, 1, TAU, 1, C, 1, W,1,INFO)
-      CALL AB_CHKXER( 'AB_CGEMLQ', INFOT, NOUT, LERR, OK )
+      CALL CGEMLQ( 'L', 'N', 0, -1, 0, A, 1, TAU, 1, C, 1, W,1,INFO)
+      CALL CHKXER( 'CGEMLQ', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL AB_CGEMLQ( 'L', 'N', 0, 0, -1, A, 1, TAU, 1, C, 1, W,1,INFO)
-      CALL AB_CHKXER( 'AB_CGEMLQ', INFOT, NOUT, LERR, OK )
+      CALL CGEMLQ( 'L', 'N', 0, 0, -1, A, 1, TAU, 1, C, 1, W,1,INFO)
+      CALL CHKXER( 'CGEMLQ', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL AB_CGEMLQ( 'R', 'N', 0, 0, -1, A, 1, TAU, 1, C, 1, W,1,INFO)
-      CALL AB_CHKXER( 'AB_CGEMLQ', INFOT, NOUT, LERR, OK )
+      CALL CGEMLQ( 'R', 'N', 0, 0, -1, A, 1, TAU, 1, C, 1, W,1,INFO)
+      CALL CHKXER( 'CGEMLQ', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL AB_CGEMLQ( 'L', 'N', 1, 2, 0, A, 0, TAU, 1, C, 1, W, 1,INFO)
-      CALL AB_CHKXER( 'AB_CGEMLQ', INFOT, NOUT, LERR, OK )
+      CALL CGEMLQ( 'L', 'N', 1, 2, 0, A, 0, TAU, 1, C, 1, W, 1,INFO)
+      CALL CHKXER( 'CGEMLQ', INFOT, NOUT, LERR, OK )
       INFOT = 9
-      CALL AB_CGEMLQ( 'R', 'N', 2, 2, 1, A, 1, TAU, 0, C, 1, W, 1,INFO)
-      CALL AB_CHKXER( 'AB_CGEMLQ', INFOT, NOUT, LERR, OK )
+      CALL CGEMLQ( 'R', 'N', 2, 2, 1, A, 1, TAU, 0, C, 1, W, 1,INFO)
+      CALL CHKXER( 'CGEMLQ', INFOT, NOUT, LERR, OK )
       INFOT = 9
-      CALL AB_CGEMLQ( 'L', 'N', 2, 2, 1, A, 1, TAU, 0, C, 1, W, 1,INFO)
-      CALL AB_CHKXER( 'AB_CGEMLQ', INFOT, NOUT, LERR, OK )
+      CALL CGEMLQ( 'L', 'N', 2, 2, 1, A, 1, TAU, 0, C, 1, W, 1,INFO)
+      CALL CHKXER( 'CGEMLQ', INFOT, NOUT, LERR, OK )
       INFOT = 11
-      CALL AB_CGEMLQ( 'L', 'N', 1, 2, 1, A, 1, TAU, 6, C, 0, W, 1,INFO)
-      CALL AB_CHKXER( 'AB_CGEMLQ', INFOT, NOUT, LERR, OK )
+      CALL CGEMLQ( 'L', 'N', 1, 2, 1, A, 1, TAU, 6, C, 0, W, 1,INFO)
+      CALL CHKXER( 'CGEMLQ', INFOT, NOUT, LERR, OK )
       INFOT = 13
-      CALL AB_CGEMLQ( 'L', 'N', 2, 2, 1, A, 2, TAU, 6, C, 2, W, 0,INFO)
-      CALL AB_CHKXER( 'AB_CGEMLQ', INFOT, NOUT, LERR, OK )
+      CALL CGEMLQ( 'L', 'N', 2, 2, 1, A, 2, TAU, 6, C, 2, W, 0,INFO)
+      CALL CHKXER( 'CGEMLQ', INFOT, NOUT, LERR, OK )
 *
 *     Print a summary line.
 *
-      CALL AB_ALAESM( PATH, OK, NOUT )
+      CALL ALAESM( PATH, OK, NOUT )
 *
       RETURN
 *
-*     End of AB_CERRTSQR
+*     End of CERRTSQR
 *
       END

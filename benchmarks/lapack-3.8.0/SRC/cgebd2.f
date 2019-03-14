@@ -1,4 +1,4 @@
-*> \brief \b AB_CGEBD2 reduces a general matrix to bidiagonal form using an unblocked algorithm.
+*> \brief \b CGEBD2 reduces a general matrix to bidiagonal form using an unblocked algorithm.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CGEBD2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CGEBD2.f">
+*> Download CGEBD2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgebd2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CGEBD2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgebd2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CGEBD2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgebd2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CGEBD2( M, N, A, LDA, D, E, TAUQ, TAUP, WORK, INFO )
+*       SUBROUTINE CGEBD2( M, N, A, LDA, D, E, TAUQ, TAUP, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, M, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CGEBD2 reduces a complex general m by n matrix A to upper or lower
+*> CGEBD2 reduces a complex general m by n matrix A to upper or lower
 *> real bidiagonal form B by a unitary transformation: Q**H * A * P = B.
 *>
 *> If m >= n, B is upper bidiagonal; if m < n, B is lower bidiagonal.
@@ -188,7 +188,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_CGEBD2( M, N, A, LDA, D, E, TAUQ, TAUP, WORK, INFO )
+      SUBROUTINE CGEBD2( M, N, A, LDA, D, E, TAUQ, TAUP, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -215,7 +215,7 @@
       COMPLEX            ALPHA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CLACGV, AB_CLARF, AB_AB_CLARFG, AB_XERBLA
+      EXTERNAL           CLACGV, CLARF, CLARFG, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CONJG, MAX, MIN
@@ -233,7 +233,7 @@
          INFO = -4
       END IF
       IF( INFO.LT.0 ) THEN
-         CALL AB_XERBLA( 'AB_CGEBD2', -INFO )
+         CALL XERBLA( 'CGEBD2', -INFO )
          RETURN
       END IF
 *
@@ -246,7 +246,7 @@
 *           Generate elementary reflector H(i) to annihilate A(i+1:m,i)
 *
             ALPHA = A( I, I )
-            CALL AB_AB_CLARFG( M-I+1, ALPHA, A( MIN( I+1, M ), I ), 1,
+            CALL CLARFG( M-I+1, ALPHA, A( MIN( I+1, M ), I ), 1,
      $                   TAUQ( I ) )
             D( I ) = ALPHA
             A( I, I ) = ONE
@@ -254,7 +254,7 @@
 *           Apply H(i)**H to A(i:m,i+1:n) from the left
 *
             IF( I.LT.N )
-     $         CALL AB_CLARF( 'Left', M-I+1, N-I, A( I, I ), 1,
+     $         CALL CLARF( 'Left', M-I+1, N-I, A( I, I ), 1,
      $                     CONJG( TAUQ( I ) ), A( I, I+1 ), LDA, WORK )
             A( I, I ) = D( I )
 *
@@ -263,18 +263,18 @@
 *              Generate elementary reflector G(i) to annihilate
 *              A(i,i+2:n)
 *
-               CALL AB_CLACGV( N-I, A( I, I+1 ), LDA )
+               CALL CLACGV( N-I, A( I, I+1 ), LDA )
                ALPHA = A( I, I+1 )
-               CALL AB_AB_CLARFG( N-I, ALPHA, A( I, MIN( I+2, N ) ),
+               CALL CLARFG( N-I, ALPHA, A( I, MIN( I+2, N ) ),
      $                      LDA, TAUP( I ) )
                E( I ) = ALPHA
                A( I, I+1 ) = ONE
 *
 *              Apply G(i) to A(i+1:m,i+1:n) from the right
 *
-               CALL AB_CLARF( 'Right', M-I, N-I, A( I, I+1 ), LDA,
+               CALL CLARF( 'Right', M-I, N-I, A( I, I+1 ), LDA,
      $                     TAUP( I ), A( I+1, I+1 ), LDA, WORK )
-               CALL AB_CLACGV( N-I, A( I, I+1 ), LDA )
+               CALL CLACGV( N-I, A( I, I+1 ), LDA )
                A( I, I+1 ) = E( I )
             ELSE
                TAUP( I ) = ZERO
@@ -288,9 +288,9 @@
 *
 *           Generate elementary reflector G(i) to annihilate A(i,i+1:n)
 *
-            CALL AB_CLACGV( N-I+1, A( I, I ), LDA )
+            CALL CLACGV( N-I+1, A( I, I ), LDA )
             ALPHA = A( I, I )
-            CALL AB_AB_CLARFG( N-I+1, ALPHA, A( I, MIN( I+1, N ) ), LDA,
+            CALL CLARFG( N-I+1, ALPHA, A( I, MIN( I+1, N ) ), LDA,
      $                   TAUP( I ) )
             D( I ) = ALPHA
             A( I, I ) = ONE
@@ -298,9 +298,9 @@
 *           Apply G(i) to A(i+1:m,i:n) from the right
 *
             IF( I.LT.M )
-     $         CALL AB_CLARF( 'Right', M-I, N-I+1, A( I, I ), LDA,
+     $         CALL CLARF( 'Right', M-I, N-I+1, A( I, I ), LDA,
      $                     TAUP( I ), A( I+1, I ), LDA, WORK )
-            CALL AB_CLACGV( N-I+1, A( I, I ), LDA )
+            CALL CLACGV( N-I+1, A( I, I ), LDA )
             A( I, I ) = D( I )
 *
             IF( I.LT.M ) THEN
@@ -309,14 +309,14 @@
 *              A(i+2:m,i)
 *
                ALPHA = A( I+1, I )
-               CALL AB_AB_CLARFG( M-I, ALPHA, A( MIN( I+2, M ), I ), 1,
+               CALL CLARFG( M-I, ALPHA, A( MIN( I+2, M ), I ), 1,
      $                      TAUQ( I ) )
                E( I ) = ALPHA
                A( I+1, I ) = ONE
 *
 *              Apply H(i)**H to A(i+1:m,i+1:n) from the left
 *
-               CALL AB_CLARF( 'Left', M-I, N-I, A( I+1, I ), 1,
+               CALL CLARF( 'Left', M-I, N-I, A( I+1, I ), 1,
      $                     CONJG( TAUQ( I ) ), A( I+1, I+1 ), LDA,
      $                     WORK )
                A( I+1, I ) = E( I )
@@ -327,6 +327,6 @@
       END IF
       RETURN
 *
-*     End of AB_CGEBD2
+*     End of CGEBD2
 *
       END

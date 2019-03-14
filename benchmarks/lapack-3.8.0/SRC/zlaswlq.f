@@ -2,7 +2,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZLASWLQ( M, N, MB, NB, A, LDA, T, LDT, WORK,
+*       SUBROUTINE ZLASWLQ( M, N, MB, NB, A, LDA, T, LDT, WORK,
 *                            LWORK, INFO)
 *
 *       .. Scalar Arguments ..
@@ -18,7 +18,7 @@
 *>
 *> \verbatim
 *>
-*>          AB_ZLASWLQ computes a blocked Short-Wide LQ factorization of a
+*>          ZLASWLQ computes a blocked Short-Wide LQ factorization of a
 *>          M-by-N matrix A, where N >= M:
 *>          A = L * Q
 *> \endverbatim
@@ -96,7 +96,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *>
 *> \endverbatim
 *> \param[out] INFO
@@ -127,12 +127,12 @@
 *>   Q(3) zeros out the bottom MB-N rows of rows [1:M,2*NB-M+1:3*NB-2*M] of A
 *>   . . .
 *>
-*> Q(1) is computed by GELQT, which represents Q(1) by HousehoAB_LDEr vectors
+*> Q(1) is computed by GELQT, which represents Q(1) by Householder vectors
 *> stored under the diagonal of rows 1:MB of A, and by upper triangular
 *> block reflectors, stored in array T(1:LDT,1:N).
 *> For more information see Further Details in GELQT.
 *>
-*> Q(i) for i>1 is computed by TPLQT, which represents Q(i) by HousehoAB_LDEr vectors
+*> Q(i) for i>1 is computed by TPLQT, which represents Q(i) by Householder vectors
 *> stored in columns [(i-1)*(NB-M)+M+1:i*(NB-M)+M] of A, and by upper triangular
 *> block reflectors, stored in array T(1:LDT,(i-1)*M+1:i*M).
 *> The last Q(k) may use fewer rows.
@@ -147,7 +147,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_ZLASWLQ( M, N, MB, NB, A, LDA, T, LDT, WORK, LWORK,
+      SUBROUTINE ZLASWLQ( M, N, MB, NB, A, LDA, T, LDT, WORK, LWORK,
      $                  INFO)
 *
 *  -- LAPACK computational routine (version 3.7.1) --
@@ -170,10 +170,10 @@
       INTEGER    I, II, KK, CTR
 *     ..
 *     .. EXTERNAL FUNCTIONS ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     .. EXTERNAL SUBROUTINES ..
-      EXTERNAL           AB_AB_ZGELQT, AB_ZTPLQT, AB_XERBLA
+      EXTERNAL           ZGELQT, ZTPLQT, XERBLA
 *     .. INTRINSIC FUNCTIONS ..
       INTRINSIC          MAX, MIN, MOD
 *     ..
@@ -205,7 +205,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-        CALL AB_XERBLA( 'AB_ZLASWLQ', -INFO )
+        CALL XERBLA( 'ZLASWLQ', -INFO )
         RETURN
       ELSE IF (LQUERY) THEN
        RETURN
@@ -220,7 +220,7 @@
 *     The LQ Decomposition
 *
        IF((M.GE.N).OR.(NB.LE.M).OR.(NB.GE.N)) THEN
-        CALL AB_AB_ZGELQT( M, N, MB, A, LDA, T, LDT, WORK, INFO)
+        CALL ZGELQT( M, N, MB, A, LDA, T, LDT, WORK, INFO)
         RETURN
        END IF
 *
@@ -229,14 +229,14 @@
 *
 *      Compute the LQ factorization of the first block A(1:M,1:NB)
 *
-       CALL AB_AB_ZGELQT( M, NB, MB, A(1,1), LDA, T, LDT, WORK, INFO)
+       CALL ZGELQT( M, NB, MB, A(1,1), LDA, T, LDT, WORK, INFO)
        CTR = 1
 *
        DO I = NB+1, II-NB+M , (NB-M)
 *
 *      Compute the QR factorization of the current block A(1:M,I:I+NB-M)
 *
-         CALL AB_ZTPLQT( M, NB-M, 0, MB, A(1,1), LDA, A( 1, I ),
+         CALL ZTPLQT( M, NB-M, 0, MB, A(1,1), LDA, A( 1, I ),
      $                  LDA, T(1, CTR * M + 1),
      $                  LDT, WORK, INFO )
          CTR = CTR + 1
@@ -245,7 +245,7 @@
 *     Compute the QR factorization of the last block A(1:M,II:N)
 *
        IF (II.LE.N) THEN
-        CALL AB_ZTPLQT( M, KK, 0, MB, A(1,1), LDA, A( 1, II ),
+        CALL ZTPLQT( M, KK, 0, MB, A(1,1), LDA, A( 1, II ),
      $                  LDA, T(1, CTR * M + 1), LDT,
      $                  WORK, INFO )
        END IF
@@ -253,6 +253,6 @@
       WORK( 1 ) = M * MB
       RETURN
 *
-*     End of AB_ZLASWLQ
+*     End of ZLASWLQ
 *
       END

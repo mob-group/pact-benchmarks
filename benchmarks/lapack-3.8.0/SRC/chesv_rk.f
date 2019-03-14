@@ -1,4 +1,4 @@
-*> \brief <b> AB_AB_CHESV_RK computes the solution to system of linear equations A * X = B for SY matrices</b>
+*> \brief <b> CHESV_RK computes the solution to system of linear equations A * X = B for SY matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_CHESV_RK + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_CHESV_RK.f">
+*> Download CHESV_RK + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chesv_rk.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_CHESV_RK.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chesv_rk.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_CHESV_RK.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chesv_rk.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_CHESV_RK( UPLO, N, NRHS, A, LDA, E, IPIV, B, LDB,
+*       SUBROUTINE CHESV_RK( UPLO, N, NRHS, A, LDA, E, IPIV, B, LDB,
 *                            WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *  =============
 *>
 *> \verbatim
-*> AB_AB_CHESV_RK computes the solution to a complex system of linear
+*> CHESV_RK computes the solution to a complex system of linear
 *> equations A * X = B, where A is an N-by-N Hermitian matrix
 *> and X and B are N-by-NRHS matrices.
 *>
@@ -48,9 +48,9 @@
 *> matrix, P**T is the transpose of P, and D is Hermitian and block
 *> diagonal with 1-by-1 and 2-by-2 diagonal blocks.
 *>
-*> AB_AB_CHETRF_RK is called to compute the factorization of a complex
+*> CHETRF_RK is called to compute the factorization of a complex
 *> Hermitian matrix.  The factored form of A is then used to solve
-*> the system of equations A * X = B by calling BLAS3 routine AB_AB_CHETRS_3.
+*> the system of equations A * X = B by calling BLAS3 routine CHETRS_3.
 *> \endverbatim
 *
 *  Arguments:
@@ -94,7 +94,7 @@
 *>            referenced.
 *>
 *>          On exit, if INFO = 0, diagonal of the block diagonal
-*>          matrix D and factors U or L  as computed by AB_AB_CHETRF_RK:
+*>          matrix D and factors U or L  as computed by CHETRF_RK:
 *>            a) ONLY diagonal elements of the Hermitian block diagonal
 *>               matrix D on the diagonal of A, i.e. D(k,k) = A(k,k);
 *>               (superdiagonal (or subdiagonal) elements of D
@@ -102,7 +102,7 @@
 *>            b) If UPLO = 'U': factor U in the superdiagonal part of A.
 *>               If UPLO = 'L': factor L in the subdiagonal part of A.
 *>
-*>          For more info see the description of AB_AB_CHETRF_RK routine.
+*>          For more info see the description of CHETRF_RK routine.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -115,7 +115,7 @@
 *> \verbatim
 *>          E is COMPLEX array, dimension (N)
 *>          On exit, contains the output computed by the factorization
-*>          routine AB_AB_CHETRF_RK, i.e. the superdiagonal (or subdiagonal)
+*>          routine CHETRF_RK, i.e. the superdiagonal (or subdiagonal)
 *>          elements of the Hermitian block diagonal matrix D
 *>          with 1-by-1 or 2-by-2 diagonal blocks, where
 *>          If UPLO = 'U': E(i) = D(i-1,i), i=2:N, E(1) is set to 0;
@@ -125,16 +125,16 @@
 *>          1 <= k <= N, the element E(k) is set to 0 in both
 *>          UPLO = 'U' or UPLO = 'L' cases.
 *>
-*>          For more info see the description of AB_AB_CHETRF_RK routine.
+*>          For more info see the description of CHETRF_RK routine.
 *> \endverbatim
 *>
 *> \param[out] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D,
-*>          as determined by AB_AB_CHETRF_RK.
+*>          as determined by CHETRF_RK.
 *>
-*>          For more info see the description of AB_AB_CHETRF_RK routine.
+*>          For more info see the description of CHETRF_RK routine.
 *> \endverbatim
 *>
 *> \param[in,out] B
@@ -162,13 +162,13 @@
 *>          LWORK is INTEGER
 *>          The length of WORK.  LWORK >= 1. For best performance
 *>          of factorization stage LWORK >= max(1,N*NB), where NB is
-*>          the optimal blocksize for AB_AB_CHETRF_RK.
+*>          the optimal blocksize for CHETRF_RK.
 *>
 *>          If LWORK = -1, then a workspace query is assumed;
 *>          the routine only calculates the optimal size of the WORK
 *>          array for factorization stage, returns this value as
 *>          the first entry of the WORK array, and no error message
-*>          related to LWORK is issued by AB_XERBLA.
+*>          related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -225,8 +225,7 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_CHESV_RK( UPLO, N, NRHS, A, LDA, E, IPIV, B, LDB,
-     $ WORK,
+      SUBROUTINE CHESV_RK( UPLO, N, NRHS, A, LDA, E, IPIV, B, LDB, WORK,
      $                     LWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -250,11 +249,11 @@
       INTEGER            LWKOPT
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_AB_CHETRF_RK, AB_AB_CHETRS_3
+      EXTERNAL           XERBLA, CHETRF_RK, CHETRS_3
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -265,8 +264,7 @@
 *
       INFO = 0
       LQUERY = ( LWORK.EQ.-1 )
-      IF( .NOT.AB_LSAME( UPLO, 'U' ) .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) 
-     $THEN
+      IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -284,15 +282,14 @@
          IF( N.EQ.0 ) THEN
             LWKOPT = 1
          ELSE
-            CALL AB_AB_CHETRF_RK( UPLO, N, A, LDA, E, IPIV, WORK, -1, IN
-     $FO )
+            CALL CHETRF_RK( UPLO, N, A, LDA, E, IPIV, WORK, -1, INFO )
             LWKOPT = WORK(1)
          END IF
          WORK( 1 ) = LWKOPT
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_CHESV_RK ', -INFO )
+         CALL XERBLA( 'CHESV_RK ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -300,15 +297,13 @@
 *
 *     Compute the factorization A = U*D*U**T or A = L*D*L**T.
 *
-      CALL AB_AB_CHETRF_RK( UPLO, N, A, LDA, E, IPIV, WORK, LWORK, INFO 
-     $)
+      CALL CHETRF_RK( UPLO, N, A, LDA, E, IPIV, WORK, LWORK, INFO )
 *
       IF( INFO.EQ.0 ) THEN
 *
 *        Solve the system A*X = B with BLAS3 solver, overwriting B with X.
 *
-         CALL AB_AB_CHETRS_3( UPLO, N, NRHS, A, LDA, E, IPIV, B, LDB, IN
-     $FO )
+         CALL CHETRS_3( UPLO, N, NRHS, A, LDA, E, IPIV, B, LDB, INFO )
 *
       END IF
 *
@@ -316,6 +311,6 @@
 *
       RETURN
 *
-*     End of AB_AB_CHESV_RK
+*     End of CHESV_RK
 *
       END

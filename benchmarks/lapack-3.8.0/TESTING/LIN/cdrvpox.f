@@ -1,4 +1,4 @@
-*> \brief \b AB_CDRVPOX
+*> \brief \b CDRVPOX
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CDRVPO( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
+*       SUBROUTINE CDRVPO( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
 *                          A, AFAC, ASAV, B, BSAV, X, XACT, S, WORK,
 *                          RWORK, NOUT )
 *
@@ -31,10 +31,10 @@
 *>
 *> \verbatim
 *>
-*> AB_CDRVPO tests the driver routines AB_CPOSV, -SVX, and -SVXX.
+*> CDRVPO tests the driver routines CPOSV, -SVX, and -SVXX.
 *>
 *> Note that this file is used only when the XBLAS are available,
-*> otherwise AB_CDRVPO.f defines this subroutine.
+*> otherwise cdrvpo.f defines this subroutine.
 *> \endverbatim
 *
 *  Arguments:
@@ -158,8 +158,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_CDRVPO( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX
-     $,
+      SUBROUTINE CDRVPO( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
      $                   A, AFAC, ASAV, B, BSAV, X, XACT, S, WORK,
      $                   RWORK, NOUT )
 *
@@ -209,19 +208,15 @@
      $                   ERRBNDS_N( NRHS, 3 ), ERRBNDS_C( NRHS, 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_CLANHE, AB_SGET06
-      EXTERNAL           AB_LSAME, AB_CLANHE, AB_SGET06
+      LOGICAL            LSAME
+      REAL               CLANHE, SGET06
+      EXTERNAL           LSAME, CLANHE, SGET06
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALADHD, AB_ALAERH, AB_ALASVM, AB_CERRVX, AB_
-     $CGET04, AB_CLACPY,
-     $                   AB_CLAIPD, AB_CLAQHE, AB_CLARHS, AB_CLASET, AB_
-     $CLATB4, AB_CLATMS,
-     $                   AB_CPOEQU, AB_CPOSV, AB_AB_CPOSVX, AB_CPOT01, A
-     $B_CPOT02, AB_CPOT05,
-     $                   AB_CPOTRF, AB_CPOTRI, AB_XLAENV, AB_AB_AB_CPOSV
-     $XX
+      EXTERNAL           ALADHD, ALAERH, ALASVM, CERRVX, CGET04, CLACPY,
+     $                   CLAIPD, CLAQHE, CLARHS, CLASET, CLATB4, CLATMS,
+     $                   CPOEQU, CPOSV, CPOSVX, CPOT01, CPOT02, CPOT05,
+     $                   CPOTRF, CPOTRI, XLAENV, CPOSVXX
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -257,15 +252,15 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL AB_CERRVX( PATH, NOUT )
+     $   CALL CERRVX( PATH, NOUT )
       INFOT = 0
 *
 *     Set the block size and minimum block size for testing.
 *
       NB = 1
       NBMIN = 2
-      CALL AB_XLAENV( 1, NB )
-      CALL AB_XLAENV( 2, NBMIN )
+      CALL XLAENV( 1, NB )
+      CALL XLAENV( 2, NBMIN )
 *
 *     Do for each value of N in NVAL
 *
@@ -295,23 +290,21 @@
             DO 110 IUPLO = 1, 2
                UPLO = UPLOS( IUPLO )
 *
-*              Set up parameters with AB_CLATB4 and generate a test matrix
-*              with AB_CLATMS.
+*              Set up parameters with CLATB4 and generate a test matrix
+*              with CLATMS.
 *
-               CALL AB_CLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MO
-     $DE,
+               CALL CLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
      $                      CNDNUM, DIST )
 *
-               SRNAMT = 'AB_CLATMS'
-               CALL AB_CLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
+               SRNAMT = 'CLATMS'
+               CALL CLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
      $                      CNDNUM, ANORM, KL, KU, UPLO, A, LDA, WORK,
      $                      INFO )
 *
-*              Check error code from AB_CLATMS.
+*              Check error code from CLATMS.
 *
                IF( INFO.NE.0 ) THEN
-                  CALL AB_ALAERH( PATH, 'AB_CLATMS', INFO, 0, UPLO, N, N
-     $, -1,
+                  CALL ALAERH( PATH, 'CLATMS', INFO, 0, UPLO, N, N, -1,
      $                         -1, -1, IMAT, NFAIL, NERRS, NOUT )
                   GO TO 110
                END IF
@@ -357,11 +350,11 @@
 *
 *              Set the imaginary part of the diagonals.
 *
-               CALL AB_CLAIPD( N, A, LDA+1, 0 )
+               CALL CLAIPD( N, A, LDA+1, 0 )
 *
 *              Save a copy of the matrix A in ASAV.
 *
-               CALL AB_CLACPY( UPLO, N, N, A, LDA, ASAV, LDA )
+               CALL CLACPY( UPLO, N, N, A, LDA, ASAV, LDA )
 *
                DO 100 IEQUED = 1, 2
                   EQUED = EQUEDS( IEQUED )
@@ -373,30 +366,29 @@
 *
                   DO 90 IFACT = 1, NFACT
                      FACT = FACTS( IFACT )
-                     PREFAC = AB_LSAME( FACT, 'F' )
-                     NOFACT = AB_LSAME( FACT, 'N' )
-                     EQUIL = AB_LSAME( FACT, 'E' )
+                     PREFAC = LSAME( FACT, 'F' )
+                     NOFACT = LSAME( FACT, 'N' )
+                     EQUIL = LSAME( FACT, 'E' )
 *
                      IF( ZEROT ) THEN
                         IF( PREFAC )
      $                     GO TO 90
                         RCONDC = ZERO
 *
-                     ELSE IF( .NOT.AB_LSAME( FACT, 'N' ) ) THEN
+                     ELSE IF( .NOT.LSAME( FACT, 'N' ) ) THEN
 *
 *                       Compute the condition number for comparison with
-*                       the value returned by AB_AB_CPOSVX (FACT = 'N' reuses
+*                       the value returned by CPOSVX (FACT = 'N' reuses
 *                       the condition number from the previous iteration
 *                       with FACT = 'F').
 *
-                        CALL AB_CLACPY( UPLO, N, N, ASAV, LDA, AFAC, LDA
-     $ )
+                        CALL CLACPY( UPLO, N, N, ASAV, LDA, AFAC, LDA )
                         IF( EQUIL .OR. IEQUED.GT.1 ) THEN
 *
 *                          Compute row and column scale factors to
 *                          equilibrate the matrix A.
 *
-                           CALL AB_CPOEQU( N, AFAC, LDA, S, SCOND, AMAX,
+                           CALL CPOEQU( N, AFAC, LDA, S, SCOND, AMAX,
      $                                  INFO )
                            IF( INFO.EQ.0 .AND. N.GT.0 ) THEN
                               IF( IEQUED.GT.1 )
@@ -404,36 +396,33 @@
 *
 *                             Equilibrate the matrix.
 *
-                              CALL AB_CLAQHE( UPLO, N, AFAC, LDA, S, SCO
-     $ND,
+                              CALL CLAQHE( UPLO, N, AFAC, LDA, S, SCOND,
      $                                     AMAX, EQUED )
                            END IF
                         END IF
 *
 *                       Save the condition number of the
-*                       non-equilibrated system for use in AB_CGET04.
+*                       non-equilibrated system for use in CGET04.
 *
                         IF( EQUIL )
      $                     ROLDC = RCONDC
 *
 *                       Compute the 1-norm of A.
 *
-                        ANORM = AB_CLANHE( '1', UPLO, N, AFAC, LDA, RWOR
-     $K )
+                        ANORM = CLANHE( '1', UPLO, N, AFAC, LDA, RWORK )
 *
 *                       Factor the matrix A.
 *
-                        CALL AB_CPOTRF( UPLO, N, AFAC, LDA, INFO )
+                        CALL CPOTRF( UPLO, N, AFAC, LDA, INFO )
 *
 *                       Form the inverse of A.
 *
-                        CALL AB_CLACPY( UPLO, N, N, AFAC, LDA, A, LDA )
-                        CALL AB_CPOTRI( UPLO, N, A, LDA, INFO )
+                        CALL CLACPY( UPLO, N, N, AFAC, LDA, A, LDA )
+                        CALL CPOTRI( UPLO, N, A, LDA, INFO )
 *
 *                       Compute the 1-norm condition number of A.
 *
-                        AINVNM = AB_CLANHE( '1', UPLO, N, A, LDA, RWORK 
-     $)
+                        AINVNM = CLANHE( '1', UPLO, N, A, LDA, RWORK )
                         IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
                            RCONDC = ONE
                         ELSE
@@ -443,39 +432,35 @@
 *
 *                    Restore the matrix A.
 *
-                     CALL AB_CLACPY( UPLO, N, N, ASAV, LDA, A, LDA )
+                     CALL CLACPY( UPLO, N, N, ASAV, LDA, A, LDA )
 *
 *                    Form an exact solution and set the right hand side.
 *
-                     SRNAMT = 'AB_CLARHS'
-                     CALL AB_CLARHS( PATH, XTYPE, UPLO, ' ', N, N, KL, K
-     $U,
+                     SRNAMT = 'CLARHS'
+                     CALL CLARHS( PATH, XTYPE, UPLO, ' ', N, N, KL, KU,
      $                            NRHS, A, LDA, XACT, LDA, B, LDA,
      $                            ISEED, INFO )
                      XTYPE = 'C'
-                     CALL AB_CLACPY( 'Full', N, NRHS, B, LDA, BSAV, LDA 
-     $)
+                     CALL CLACPY( 'Full', N, NRHS, B, LDA, BSAV, LDA )
 *
                      IF( NOFACT ) THEN
 *
-*                       --- Test AB_CPOSV  ---
+*                       --- Test CPOSV  ---
 *
 *                       Compute the L*L' or U'*U factorization of the
 *                       matrix and solve the system.
 *
-                        CALL AB_CLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
-                        CALL AB_CLACPY( 'Full', N, NRHS, B, LDA, X, LDA 
-     $)
+                        CALL CLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
+                        CALL CLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
-                        SRNAMT = 'AB_CPOSV '
-                        CALL AB_CPOSV( UPLO, N, NRHS, AFAC, LDA, X, LDA,
+                        SRNAMT = 'CPOSV '
+                        CALL CPOSV( UPLO, N, NRHS, AFAC, LDA, X, LDA,
      $                              INFO )
 *
-*                       Check error code from AB_CPOSV .
+*                       Check error code from CPOSV .
 *
                         IF( INFO.NE.IZERO ) THEN
-                           CALL AB_ALAERH( PATH, 'AB_CPOSV ', INFO, IZER
-     $O,
+                           CALL ALAERH( PATH, 'CPOSV ', INFO, IZERO,
      $                                  UPLO, N, N, -1, -1, NRHS, IMAT,
      $                                  NFAIL, NERRS, NOUT )
                            GO TO 70
@@ -486,21 +471,19 @@
 *                       Reconstruct matrix from factors and compute
 *                       residual.
 *
-                        CALL AB_CPOT01( UPLO, N, A, LDA, AFAC, LDA, RWOR
-     $K,
+                        CALL CPOT01( UPLO, N, A, LDA, AFAC, LDA, RWORK,
      $                               RESULT( 1 ) )
 *
 *                       Compute residual of the computed solution.
 *
-                        CALL AB_CLACPY( 'Full', N, NRHS, B, LDA, WORK,
+                        CALL CLACPY( 'Full', N, NRHS, B, LDA, WORK,
      $                               LDA )
-                        CALL AB_CPOT02( UPLO, N, NRHS, A, LDA, X, LDA,
+                        CALL CPOT02( UPLO, N, NRHS, A, LDA, X, LDA,
      $                               WORK, LDA, RWORK, RESULT( 2 ) )
 *
 *                       Check solution from generated exact solution.
 *
-                        CALL AB_CGET04( N, NRHS, X, LDA, XACT, LDA, RCON
-     $DC,
+                        CALL CGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                               RESULT( 3 ) )
                         NT = 3
 *
@@ -510,9 +493,8 @@
                         DO 60 K = 1, NT
                            IF( RESULT( K ).GE.THRESH ) THEN
                               IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                           CALL AB_ALADHD( NOUT, PATH )
-                              WRITE( NOUT, FMT = 9999 )'AB_CPOSV ', UPLO
-     $,
+     $                           CALL ALADHD( NOUT, PATH )
+                              WRITE( NOUT, FMT = 9999 )'CPOSV ', UPLO,
      $                           N, IMAT, K, RESULT( K )
                               NFAIL = NFAIL + 1
                            END IF
@@ -521,37 +503,35 @@
    70                   CONTINUE
                      END IF
 *
-*                    --- Test AB_AB_CPOSVX ---
+*                    --- Test CPOSVX ---
 *
                      IF( .NOT.PREFAC )
-     $                  CALL AB_CLASET( UPLO, N, N, CMPLX( ZERO ),
+     $                  CALL CLASET( UPLO, N, N, CMPLX( ZERO ),
      $                               CMPLX( ZERO ), AFAC, LDA )
-                     CALL AB_CLASET( 'Full', N, NRHS, CMPLX( ZERO ),
+                     CALL CLASET( 'Full', N, NRHS, CMPLX( ZERO ),
      $                            CMPLX( ZERO ), X, LDA )
                      IF( IEQUED.GT.1 .AND. N.GT.0 ) THEN
 *
 *                       Equilibrate the matrix if FACT='F' and
 *                       EQUED='Y'.
 *
-                        CALL AB_CLAQHE( UPLO, N, A, LDA, S, SCOND, AMAX,
+                        CALL CLAQHE( UPLO, N, A, LDA, S, SCOND, AMAX,
      $                               EQUED )
                      END IF
 *
 *                    Solve the system and compute the condition number
-*                    and error bounds using AB_AB_CPOSVX.
+*                    and error bounds using CPOSVX.
 *
-                     SRNAMT = 'AB_AB_CPOSVX'
-                     CALL AB_AB_CPOSVX( FACT, UPLO, N, NRHS, A, LDA, AFA
-     $C,
+                     SRNAMT = 'CPOSVX'
+                     CALL CPOSVX( FACT, UPLO, N, NRHS, A, LDA, AFAC,
      $                            LDA, EQUED, S, B, LDA, X, LDA, RCOND,
      $                            RWORK, RWORK( NRHS+1 ), WORK,
      $                            RWORK( 2*NRHS+1 ), INFO )
 *
-*                    Check the error code from AB_AB_CPOSVX.
+*                    Check the error code from CPOSVX.
 *
                      IF( INFO.NE.IZERO ) THEN
-                        CALL AB_ALAERH( PATH, 'AB_AB_CPOSVX', INFO, IZER
-     $O,
+                        CALL ALAERH( PATH, 'CPOSVX', INFO, IZERO,
      $                               FACT // UPLO, N, N, -1, -1, NRHS,
      $                               IMAT, NFAIL, NERRS, NOUT )
                         GO TO 90
@@ -563,7 +543,7 @@
 *                          Reconstruct matrix from factors and compute
 *                          residual.
 *
-                           CALL AB_CPOT01( UPLO, N, A, LDA, AFAC, LDA,
+                           CALL CPOT01( UPLO, N, A, LDA, AFAC, LDA,
      $                                  RWORK( 2*NRHS+1 ), RESULT( 1 ) )
                            K1 = 1
                         ELSE
@@ -572,40 +552,37 @@
 *
 *                       Compute residual of the computed solution.
 *
-                        CALL AB_CLACPY( 'Full', N, NRHS, BSAV, LDA, WORK
-     $,
+                        CALL CLACPY( 'Full', N, NRHS, BSAV, LDA, WORK,
      $                               LDA )
-                        CALL AB_CPOT02( UPLO, N, NRHS, ASAV, LDA, X, LDA
-     $,
+                        CALL CPOT02( UPLO, N, NRHS, ASAV, LDA, X, LDA,
      $                               WORK, LDA, RWORK( 2*NRHS+1 ),
      $                               RESULT( 2 ) )
 *
 *                       Check solution from generated exact solution.
 *
-                        IF( NOFACT .OR. ( PREFAC .AND. AB_LSAME( EQUED,
+                        IF( NOFACT .OR. ( PREFAC .AND. LSAME( EQUED,
      $                      'N' ) ) ) THEN
-                           CALL AB_CGET04( N, NRHS, X, LDA, XACT, LDA,
+                           CALL CGET04( N, NRHS, X, LDA, XACT, LDA,
      $                                  RCONDC, RESULT( 3 ) )
                         ELSE
-                           CALL AB_CGET04( N, NRHS, X, LDA, XACT, LDA,
+                           CALL CGET04( N, NRHS, X, LDA, XACT, LDA,
      $                                  ROLDC, RESULT( 3 ) )
                         END IF
 *
 *                       Check the error bounds from iterative
 *                       refinement.
 *
-                        CALL AB_CPOT05( UPLO, N, NRHS, ASAV, LDA, B, LDA
-     $,
+                        CALL CPOT05( UPLO, N, NRHS, ASAV, LDA, B, LDA,
      $                               X, LDA, XACT, LDA, RWORK,
      $                               RWORK( NRHS+1 ), RESULT( 4 ) )
                      ELSE
                         K1 = 6
                      END IF
 *
-*                    Compare RCOND from AB_AB_CPOSVX with the computed value
+*                    Compare RCOND from CPOSVX with the computed value
 *                    in RCONDC.
 *
-                     RESULT( 6 ) = AB_SGET06( RCOND, RCONDC )
+                     RESULT( 6 ) = SGET06( RCOND, RCONDC )
 *
 *                    Print information about the tests that did not pass
 *                    the threshold.
@@ -613,14 +590,12 @@
                      DO 80 K = K1, 6
                         IF( RESULT( K ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                        CALL AB_ALADHD( NOUT, PATH )
+     $                        CALL ALADHD( NOUT, PATH )
                            IF( PREFAC ) THEN
-                              WRITE( NOUT, FMT = 9997 )'AB_AB_CPOSVX', F
-     $ACT,
+                              WRITE( NOUT, FMT = 9997 )'CPOSVX', FACT,
      $                           UPLO, N, EQUED, IMAT, K, RESULT( K )
                            ELSE
-                              WRITE( NOUT, FMT = 9998 )'AB_AB_CPOSVX', F
-     $ACT,
+                              WRITE( NOUT, FMT = 9998 )'CPOSVX', FACT,
      $                           UPLO, N, IMAT, K, RESULT( K )
                            END IF
                            NFAIL = NFAIL + 1
@@ -628,46 +603,43 @@
    80                CONTINUE
                      NRUN = NRUN + 7 - K1
 *
-*                    --- Test AB_AB_AB_CPOSVXX ---
+*                    --- Test CPOSVXX ---
 *
 *                    Restore the matrices A and B.
 *
-                     CALL AB_CLACPY( 'Full', N, N, ASAV, LDA, A, LDA )
-                     CALL AB_CLACPY( 'Full', N, NRHS, BSAV, LDA, B, LDA 
-     $)
+                     CALL CLACPY( 'Full', N, N, ASAV, LDA, A, LDA )
+                     CALL CLACPY( 'Full', N, NRHS, BSAV, LDA, B, LDA )
 
                      IF( .NOT.PREFAC )
-     $                  CALL AB_CLASET( UPLO, N, N, CMPLX( ZERO ),
+     $                  CALL CLASET( UPLO, N, N, CMPLX( ZERO ),
      $                               CMPLX( ZERO ), AFAC, LDA )
-                     CALL AB_CLASET( 'Full', N, NRHS, CMPLX( ZERO ),
+                     CALL CLASET( 'Full', N, NRHS, CMPLX( ZERO ),
      $                            CMPLX( ZERO ), X, LDA )
                      IF( IEQUED.GT.1 .AND. N.GT.0 ) THEN
 *
 *                       Equilibrate the matrix if FACT='F' and
 *                       EQUED='Y'.
 *
-                        CALL AB_CLAQHE( UPLO, N, A, LDA, S, SCOND, AMAX,
+                        CALL CLAQHE( UPLO, N, A, LDA, S, SCOND, AMAX,
      $                               EQUED )
                      END IF
 *
 *                    Solve the system and compute the condition number
-*                    and error bounds using AB_AB_AB_CPOSVXX.
+*                    and error bounds using CPOSVXX.
 *
-                     SRNAMT = 'AB_AB_AB_CPOSVXX'
+                     SRNAMT = 'CPOSVXX'
                      N_ERR_BNDS = 3
-                    CALL AB_AB_AB_CPOSVXX( FACT, UPLO, N, NRHS, A, LDA, 
-     $AFAC,
+                    CALL CPOSVXX( FACT, UPLO, N, NRHS, A, LDA, AFAC,
      $                    LDA, EQUED, S, B, LDA, X,
      $                    LDA, RCOND, RPVGRW_SVXX, BERR, N_ERR_BNDS,
      $                    ERRBNDS_N, ERRBNDS_C, 0, ZERO, WORK,
      $                    RWORK( 2*NRHS+1 ), INFO )
 *
-*                    Check the error code from AB_AB_AB_CPOSVXX.
+*                    Check the error code from CPOSVXX.
 *
                      IF( INFO.EQ.N+1 ) GOTO 90
                      IF( INFO.NE.IZERO ) THEN
-                        CALL AB_ALAERH( PATH, 'AB_AB_AB_CPOSVXX', INFO, 
-     $IZERO,
+                        CALL ALAERH( PATH, 'CPOSVXX', INFO, IZERO,
      $                               FACT // UPLO, N, N, -1, -1, NRHS,
      $                               IMAT, NFAIL, NERRS, NOUT )
                         GO TO 90
@@ -679,7 +651,7 @@
 *                          Reconstruct matrix from factors and compute
 *                          residual.
 *
-                           CALL AB_CPOT01( UPLO, N, A, LDA, AFAC, LDA,
+                           CALL CPOT01( UPLO, N, A, LDA, AFAC, LDA,
      $                                  RWORK( 2*NRHS+1 ), RESULT( 1 ) )
                            K1 = 1
                         ELSE
@@ -688,40 +660,37 @@
 *
 *                       Compute residual of the computed solution.
 *
-                        CALL AB_CLACPY( 'Full', N, NRHS, BSAV, LDA, WORK
-     $,
+                        CALL CLACPY( 'Full', N, NRHS, BSAV, LDA, WORK,
      $                               LDA )
-                        CALL AB_CPOT02( UPLO, N, NRHS, ASAV, LDA, X, LDA
-     $,
+                        CALL CPOT02( UPLO, N, NRHS, ASAV, LDA, X, LDA,
      $                               WORK, LDA, RWORK( 2*NRHS+1 ),
      $                               RESULT( 2 ) )
 *
 *                       Check solution from generated exact solution.
 *
-                        IF( NOFACT .OR. ( PREFAC .AND. AB_LSAME( EQUED,
+                        IF( NOFACT .OR. ( PREFAC .AND. LSAME( EQUED,
      $                      'N' ) ) ) THEN
-                           CALL AB_CGET04( N, NRHS, X, LDA, XACT, LDA,
+                           CALL CGET04( N, NRHS, X, LDA, XACT, LDA,
      $                                  RCONDC, RESULT( 3 ) )
                         ELSE
-                           CALL AB_CGET04( N, NRHS, X, LDA, XACT, LDA,
+                           CALL CGET04( N, NRHS, X, LDA, XACT, LDA,
      $                                  ROLDC, RESULT( 3 ) )
                         END IF
 *
 *                       Check the error bounds from iterative
 *                       refinement.
 *
-                        CALL AB_CPOT05( UPLO, N, NRHS, ASAV, LDA, B, LDA
-     $,
+                        CALL CPOT05( UPLO, N, NRHS, ASAV, LDA, B, LDA,
      $                               X, LDA, XACT, LDA, RWORK,
      $                               RWORK( NRHS+1 ), RESULT( 4 ) )
                      ELSE
                         K1 = 6
                      END IF
 *
-*                    Compare RCOND from AB_AB_AB_CPOSVXX with the computed value
+*                    Compare RCOND from CPOSVXX with the computed value
 *                    in RCONDC.
 *
-                     RESULT( 6 ) = AB_SGET06( RCOND, RCONDC )
+                     RESULT( 6 ) = SGET06( RCOND, RCONDC )
 *
 *                    Print information about the tests that did not pass
 *                    the threshold.
@@ -729,14 +698,12 @@
                      DO 85 K = K1, 6
                         IF( RESULT( K ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                        CALL AB_ALADHD( NOUT, PATH )
+     $                        CALL ALADHD( NOUT, PATH )
                            IF( PREFAC ) THEN
-                              WRITE( NOUT, FMT = 9997 )'AB_AB_AB_CPOSVXX
-     $', FACT,
+                              WRITE( NOUT, FMT = 9997 )'CPOSVXX', FACT,
      $                           UPLO, N, EQUED, IMAT, K, RESULT( K )
                            ELSE
-                              WRITE( NOUT, FMT = 9998 )'AB_AB_AB_CPOSVXX
-     $', FACT,
+                              WRITE( NOUT, FMT = 9998 )'CPOSVXX', FACT,
      $                           UPLO, N, IMAT, K, RESULT( K )
                            END IF
                            NFAIL = NFAIL + 1
@@ -751,12 +718,12 @@
 *
 *     Print a summary of the results.
 *
-      CALL AB_ALASVM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL ALASVM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
 
-*     Test Error Bounds for AB_AB_AB_CGESVXX
+*     Test Error Bounds for CGESVXX
 
-      CALL AB_CEBCHVXX(THRESH, PATH)
+      CALL CEBCHVXX(THRESH, PATH)
 
  9999 FORMAT( 1X, A, ', UPLO=''', A1, ''', N =', I5, ', type ', I1,
      $      ', test(', I1, ')=', G12.5 )
@@ -767,6 +734,6 @@
      $      G12.5 )
       RETURN
 *
-*     End of AB_CDRVPO
+*     End of CDRVPO
 *
       END

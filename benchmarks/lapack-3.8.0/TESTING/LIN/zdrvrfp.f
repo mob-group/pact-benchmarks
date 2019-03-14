@@ -1,4 +1,4 @@
-*> \brief \b AB_ZDRVRFP
+*> \brief \b ZDRVRFP
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,12 +8,12 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZDRVRFP( NOUT, NN, NVAL, NNS, NSVAL, NNT, NTVAL,
+*       SUBROUTINE ZDRVRFP( NOUT, NN, NVAL, NNS, NSVAL, NNT, NTVAL,
 *      +              THRESH, A, ASAV, AFAC, AINV, B,
 *      +              BSAV, XACT, X, ARF, ARFINV,
-*      +              Z_WORK_AB_ZLATMS, Z_WORK_AB_ZPOT02,
-*      +              Z_WORK_AB_ZPOT03, D_WORK_AB_ZLATMS, D_WORK_AB_ZLANHE,
-*      +              D_WORK_AB_ZPOT01, D_WORK_AB_ZPOT02, D_WORK_AB_ZPOT03 )
+*      +              Z_WORK_ZLATMS, Z_WORK_ZPOT02,
+*      +              Z_WORK_ZPOT03, D_WORK_ZLATMS, D_WORK_ZLANHE,
+*      +              D_WORK_ZPOT01, D_WORK_ZPOT02, D_WORK_ZPOT03 )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            NN, NNS, NNT, NOUT
@@ -31,14 +31,14 @@
 *       COMPLEX*16         ARFINV( * )
 *       COMPLEX*16         XACT( * )
 *       COMPLEX*16         X( * )
-*       COMPLEX*16         Z_WORK_AB_ZLATMS( * )
-*       COMPLEX*16         Z_WORK_AB_ZPOT02( * )
-*       COMPLEX*16         Z_WORK_AB_ZPOT03( * )
-*       DOUBLE PRECISION   D_WORK_AB_ZLATMS( * )
-*       DOUBLE PRECISION   D_WORK_AB_ZLANHE( * )
-*       DOUBLE PRECISION   D_WORK_AB_ZPOT01( * )
-*       DOUBLE PRECISION   D_WORK_AB_ZPOT02( * )
-*       DOUBLE PRECISION   D_WORK_AB_ZPOT03( * )
+*       COMPLEX*16         Z_WORK_ZLATMS( * )
+*       COMPLEX*16         Z_WORK_ZPOT02( * )
+*       COMPLEX*16         Z_WORK_ZPOT03( * )
+*       DOUBLE PRECISION   D_WORK_ZLATMS( * )
+*       DOUBLE PRECISION   D_WORK_ZLANHE( * )
+*       DOUBLE PRECISION   D_WORK_ZPOT01( * )
+*       DOUBLE PRECISION   D_WORK_ZPOT02( * )
+*       DOUBLE PRECISION   D_WORK_ZPOT03( * )
 *       ..
 *
 *
@@ -47,15 +47,15 @@
 *>
 *> \verbatim
 *>
-*> AB_ZDRVRFP tests the LAPACK RFP routines:
-*>     AB_ZPFTRF, AB_ZPFTRS, and AB_ZPFTRI.
+*> ZDRVRFP tests the LAPACK RFP routines:
+*>     ZPFTRF, ZPFTRS, and ZPFTRI.
 *>
-*> This testing routine follow the same tests as AB_ZDRVPO (test for the full
+*> This testing routine follow the same tests as ZDRVPO (test for the full
 *> format Symmetric Positive Definite solver).
 *>
 *> The tests are performed in Full Format, conversion back and forth from
-*> full format to RFP format are performed using the routines AB_ZTRTTF and
-*> AB_ZTFTTR.
+*> full format to RFP format are performed using the routines ZTRTTF and
+*> ZTFTTR.
 *>
 *> First, a specific matrix A of size N is created. There is nine types of
 *> different matrixes possible.
@@ -64,9 +64,9 @@
 *> *3. First row and column zero       8. Scaled near underflow
 *> *4. Last row and column zero        9. Scaled near overflow
 *> *5. Middle row and column zero
-*> (* - tests error exits from AB_ZPFTRF, no test ratios are computed)
+*> (* - tests error exits from ZPFTRF, no test ratios are computed)
 *> A solution XACT of size N-by-NRHS is created and the associated right
-*> hand side B as well. Then AB_ZPFTRF is called to compute L (or U), the
+*> hand side B as well. Then ZPFTRF is called to compute L (or U), the
 *> Cholesky factor of A. Then L (or U) is used to solve the linear system
 *> of equations AX = B. This gives X. Then L (or U) is used to compute the
 *> inverse of A, AINV. The following four tests are then performed:
@@ -184,44 +184,44 @@
 *>          ARFINV is COMPLEX*16 array, dimension ((NMAX*(NMAX+1))/2)
 *> \endverbatim
 *>
-*> \param[out] Z_WORK_AB_ZLATMS
+*> \param[out] Z_WORK_ZLATMS
 *> \verbatim
-*>          Z_WORK_AB_ZLATMS is COMPLEX*16 array, dimension ( 3*NMAX )
+*>          Z_WORK_ZLATMS is COMPLEX*16 array, dimension ( 3*NMAX )
 *> \endverbatim
 *>
-*> \param[out] Z_WORK_AB_ZPOT02
+*> \param[out] Z_WORK_ZPOT02
 *> \verbatim
-*>          Z_WORK_AB_ZPOT02 is COMPLEX*16 array, dimension ( NMAX*MAXRHS )
+*>          Z_WORK_ZPOT02 is COMPLEX*16 array, dimension ( NMAX*MAXRHS )
 *> \endverbatim
 *>
-*> \param[out] Z_WORK_AB_ZPOT03
+*> \param[out] Z_WORK_ZPOT03
 *> \verbatim
-*>          Z_WORK_AB_ZPOT03 is COMPLEX*16 array, dimension ( NMAX*NMAX )
+*>          Z_WORK_ZPOT03 is COMPLEX*16 array, dimension ( NMAX*NMAX )
 *> \endverbatim
 *>
-*> \param[out] D_WORK_AB_ZLATMS
+*> \param[out] D_WORK_ZLATMS
 *> \verbatim
-*>          D_WORK_AB_ZLATMS is DOUBLE PRECISION array, dimension ( NMAX )
+*>          D_WORK_ZLATMS is DOUBLE PRECISION array, dimension ( NMAX )
 *> \endverbatim
 *>
-*> \param[out] D_WORK_AB_ZLANHE
+*> \param[out] D_WORK_ZLANHE
 *> \verbatim
-*>          D_WORK_AB_ZLANHE is DOUBLE PRECISION array, dimension ( NMAX )
+*>          D_WORK_ZLANHE is DOUBLE PRECISION array, dimension ( NMAX )
 *> \endverbatim
 *>
-*> \param[out] D_WORK_AB_ZPOT01
+*> \param[out] D_WORK_ZPOT01
 *> \verbatim
-*>          D_WORK_AB_ZPOT01 is DOUBLE PRECISION array, dimension ( NMAX )
+*>          D_WORK_ZPOT01 is DOUBLE PRECISION array, dimension ( NMAX )
 *> \endverbatim
 *>
-*> \param[out] D_WORK_AB_ZPOT02
+*> \param[out] D_WORK_ZPOT02
 *> \verbatim
-*>          D_WORK_AB_ZPOT02 is DOUBLE PRECISION array, dimension ( NMAX )
+*>          D_WORK_ZPOT02 is DOUBLE PRECISION array, dimension ( NMAX )
 *> \endverbatim
 *>
-*> \param[out] D_WORK_AB_ZPOT03
+*> \param[out] D_WORK_ZPOT03
 *> \verbatim
-*>          D_WORK_AB_ZPOT03 is DOUBLE PRECISION array, dimension ( NMAX )
+*>          D_WORK_ZPOT03 is DOUBLE PRECISION array, dimension ( NMAX )
 *> \endverbatim
 *
 *  Authors:
@@ -237,14 +237,12 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZDRVRFP( NOUT, NN, NVAL, NNS, NSVAL, NNT, NTVAL,
+      SUBROUTINE ZDRVRFP( NOUT, NN, NVAL, NNS, NSVAL, NNT, NTVAL,
      +              THRESH, A, ASAV, AFAC, AINV, B,
      +              BSAV, XACT, X, ARF, ARFINV,
-     +              Z_WORK_AB_ZLATMS, Z_WORK_AB_ZPOT02,
-     +              Z_WORK_AB_ZPOT03, D_WORK_AB_ZLATMS, D_WORK_AB_ZLANHE
-     $,
-     +              D_WORK_AB_ZPOT01, D_WORK_AB_ZPOT02, D_WORK_AB_ZPOT03
-     $ )
+     +              Z_WORK_ZLATMS, Z_WORK_ZPOT02,
+     +              Z_WORK_ZPOT03, D_WORK_ZLATMS, D_WORK_ZLANHE,
+     +              D_WORK_ZPOT01, D_WORK_ZPOT02, D_WORK_ZPOT03 )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -267,14 +265,14 @@
       COMPLEX*16         ARFINV( * )
       COMPLEX*16         XACT( * )
       COMPLEX*16         X( * )
-      COMPLEX*16         Z_WORK_AB_ZLATMS( * )
-      COMPLEX*16         Z_WORK_AB_ZPOT02( * )
-      COMPLEX*16         Z_WORK_AB_ZPOT03( * )
-      DOUBLE PRECISION   D_WORK_AB_ZLATMS( * )
-      DOUBLE PRECISION   D_WORK_AB_ZLANHE( * )
-      DOUBLE PRECISION   D_WORK_AB_ZPOT01( * )
-      DOUBLE PRECISION   D_WORK_AB_ZPOT02( * )
-      DOUBLE PRECISION   D_WORK_AB_ZPOT03( * )
+      COMPLEX*16         Z_WORK_ZLATMS( * )
+      COMPLEX*16         Z_WORK_ZPOT02( * )
+      COMPLEX*16         Z_WORK_ZPOT03( * )
+      DOUBLE PRECISION   D_WORK_ZLATMS( * )
+      DOUBLE PRECISION   D_WORK_ZLANHE( * )
+      DOUBLE PRECISION   D_WORK_ZPOT01( * )
+      DOUBLE PRECISION   D_WORK_ZPOT02( * )
+      DOUBLE PRECISION   D_WORK_ZPOT03( * )
 *     ..
 *
 *  =====================================================================
@@ -300,17 +298,14 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_ZLANHE
-      EXTERNAL           AB_ZLANHE
+      DOUBLE PRECISION   ZLANHE
+      EXTERNAL           ZLANHE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALADHD, AB_ALAERH, AB_ALASVM, AB_ZGET04, AB_
-     $ZTFTTR, AB_ZLACPY,
-     +                   AB_ZLAIPD, AB_ZLARHS, AB_ZLATB4, AB_ZLATMS, AB_
-     $ZPFTRI, AB_ZPFTRF,
-     +                   AB_ZPFTRS, AB_ZPOT01, AB_ZPOT02, AB_ZPOT03, AB_
-     $ZPOTRI, AB_ZPOTRF,
-     +                   AB_ZTRTTF
+      EXTERNAL           ALADHD, ALAERH, ALASVM, ZGET04, ZTFTTR, ZLACPY,
+     +                   ZLAIPD, ZLARHS, ZLATB4, ZLATMS, ZPFTRI, ZPFTRF,
+     +                   ZPFTRS, ZPOT01, ZPOT02, ZPOT03, ZPOTRI, ZPOTRF,
+     +                   ZTRTTF
 *     ..
 *     .. Scalars in Common ..
       CHARACTER*32       SRNAMT
@@ -367,23 +362,22 @@
                   DO 100 IFORM = 1, 2
                      CFORM = FORMS( IFORM )
 *
-*                    Set up parameters with AB_ZLATB4 and generate a test
-*                    matrix with AB_ZLATMS.
+*                    Set up parameters with ZLATB4 and generate a test
+*                    matrix with ZLATMS.
 *
-                     CALL AB_ZLATB4( 'ZPO', IMAT, N, N, CTYPE, KL, KU,
+                     CALL ZLATB4( 'ZPO', IMAT, N, N, CTYPE, KL, KU,
      +                            ANORM, MODE, CNDNUM, DIST )
 *
-                     SRNAMT = 'AB_ZLATMS'
-                     CALL AB_ZLATMS( N, N, DIST, ISEED, CTYPE,
-     +                            D_WORK_AB_ZLATMS,
+                     SRNAMT = 'ZLATMS'
+                     CALL ZLATMS( N, N, DIST, ISEED, CTYPE,
+     +                            D_WORK_ZLATMS,
      +                            MODE, CNDNUM, ANORM, KL, KU, UPLO, A,
-     +                            LDA, Z_WORK_AB_ZLATMS, INFO )
+     +                            LDA, Z_WORK_ZLATMS, INFO )
 *
-*                    Check error code from AB_ZLATMS.
+*                    Check error code from ZLATMS.
 *
                      IF( INFO.NE.0 ) THEN
-                        CALL AB_ALAERH( 'ZPF', 'AB_ZLATMS', INFO, 0, UPL
-     $O, N,
+                        CALL ALAERH( 'ZPF', 'ZLATMS', INFO, 0, UPLO, N,
      +                               N, -1, -1, -1, IIT, NFAIL, NERRS,
      +                               NOUT )
                         GO TO 100
@@ -431,11 +425,11 @@
 *
 *                    Set the imaginary part of the diagonals.
 *
-                     CALL AB_ZLAIPD( N, A, LDA+1, 0 )
+                     CALL ZLAIPD( N, A, LDA+1, 0 )
 *
 *                    Save a copy of the matrix A in ASAV.
 *
-                     CALL AB_ZLACPY( UPLO, N, N, A, LDA, ASAV, LDA )
+                     CALL ZLACPY( UPLO, N, N, A, LDA, ASAV, LDA )
 *
 *                    Compute the condition number of A (RCONDC).
 *
@@ -445,64 +439,60 @@
 *
 *                       Compute the 1-norm of A.
 *
-                        ANORM = AB_ZLANHE( '1', UPLO, N, A, LDA,
-     +                         D_WORK_AB_ZLANHE )
+                        ANORM = ZLANHE( '1', UPLO, N, A, LDA,
+     +                         D_WORK_ZLANHE )
 *
 *                       Factor the matrix A.
 *
-                        CALL AB_ZPOTRF( UPLO, N, A, LDA, INFO )
+                        CALL ZPOTRF( UPLO, N, A, LDA, INFO )
 *
 *                       Form the inverse of A.
 *
-                        CALL AB_ZPOTRI( UPLO, N, A, LDA, INFO )
+                        CALL ZPOTRI( UPLO, N, A, LDA, INFO )
 
       					IF ( N .NE. 0 ) THEN
 *
 *                          Compute the 1-norm condition number of A.
 *
-                           AINVNM = AB_ZLANHE( '1', UPLO, N, A, LDA,
-     +                           D_WORK_AB_ZLANHE )
+                           AINVNM = ZLANHE( '1', UPLO, N, A, LDA,
+     +                           D_WORK_ZLANHE )
                            RCONDC = ( ONE / ANORM ) / AINVNM
 *
 *                          Restore the matrix A.
 *
-                           CALL AB_ZLACPY( UPLO, N, N, ASAV, LDA, A, LDA
-     $ )
+                           CALL ZLACPY( UPLO, N, N, ASAV, LDA, A, LDA )
                         END IF
 *
                      END IF
 *
 *                    Form an exact solution and set the right hand side.
 *
-                     SRNAMT = 'AB_ZLARHS'
-                     CALL AB_ZLARHS( 'ZPO', 'N', UPLO, ' ', N, N, KL, KU
-     $,
+                     SRNAMT = 'ZLARHS'
+                     CALL ZLARHS( 'ZPO', 'N', UPLO, ' ', N, N, KL, KU,
      +                            NRHS, A, LDA, XACT, LDA, B, LDA,
      +                            ISEED, INFO )
-                     CALL AB_ZLACPY( 'Full', N, NRHS, B, LDA, BSAV, LDA 
-     $)
+                     CALL ZLACPY( 'Full', N, NRHS, B, LDA, BSAV, LDA )
 *
 *                    Compute the L*L' or U'*U factorization of the
 *                    matrix and solve the system.
 *
-                     CALL AB_ZLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
-                     CALL AB_ZLACPY( 'Full', N, NRHS, B, LDB, X, LDB )
+                     CALL ZLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
+                     CALL ZLACPY( 'Full', N, NRHS, B, LDB, X, LDB )
 *
-                     SRNAMT = 'AB_ZTRTTF'
-                     CALL AB_ZTRTTF( CFORM, UPLO, N, AFAC, LDA, ARF, INF
-     $O )
-                     SRNAMT = 'AB_ZPFTRF'
-                     CALL AB_ZPFTRF( CFORM, UPLO, N, ARF, INFO )
+                     SRNAMT = 'ZTRTTF'
+                     CALL ZTRTTF( CFORM, UPLO, N, AFAC, LDA, ARF, INFO )
+                     SRNAMT = 'ZPFTRF'
+                     CALL ZPFTRF( CFORM, UPLO, N, ARF, INFO )
 *
-*                    Check error code from AB_ZPFTRF.
+*                    Check error code from ZPFTRF.
 *
                      IF( INFO.NE.IZERO ) THEN
 *
 *                       LANGOU: there is a small hick here: IZERO should
-*                       always be INFO however if INFO is ZERO, AB_ALAERH does not
+*                       always be INFO however if INFO is ZERO, ALAERH does not
 *                       complain.
 *
-                         CALL AB_ALAERH( 'ZPF', 'ZPFSV ', INFO, IZERO,
+                         CALL ALAERH( 'ZPF', 'ZPFSV ', INFO, IZERO,
      +                                UPLO, N, N, -1, -1, NRHS, IIT,
      +                                NFAIL, NERRS, NOUT )
                          GO TO 100
@@ -514,64 +504,60 @@
                         GO TO 100
                      END IF
 *
-                     SRNAMT = 'AB_ZPFTRS'
-                     CALL AB_ZPFTRS( CFORM, UPLO, N, NRHS, ARF, X, LDB,
+                     SRNAMT = 'ZPFTRS'
+                     CALL ZPFTRS( CFORM, UPLO, N, NRHS, ARF, X, LDB,
      +                            INFO )
 *
-                     SRNAMT = 'AB_ZTFTTR'
-                     CALL AB_ZTFTTR( CFORM, UPLO, N, ARF, AFAC, LDA, INF
-     $O )
+                     SRNAMT = 'ZTFTTR'
+                     CALL ZTFTTR( CFORM, UPLO, N, ARF, AFAC, LDA, INFO )
 *
 *                    Reconstruct matrix from factors and compute
 *                    residual.
 *
-                     CALL AB_ZLACPY( UPLO, N, N, AFAC, LDA, ASAV, LDA )
-                     CALL AB_ZPOT01( UPLO, N, A, LDA, AFAC, LDA,
-     +                             D_WORK_AB_ZPOT01, RESULT( 1 ) )
-                     CALL AB_ZLACPY( UPLO, N, N, ASAV, LDA, AFAC, LDA )
+                     CALL ZLACPY( UPLO, N, N, AFAC, LDA, ASAV, LDA )
+                     CALL ZPOT01( UPLO, N, A, LDA, AFAC, LDA,
+     +                             D_WORK_ZPOT01, RESULT( 1 ) )
+                     CALL ZLACPY( UPLO, N, N, ASAV, LDA, AFAC, LDA )
 *
 *                    Form the inverse and compute the residual.
 *
                     IF(MOD(N,2).EQ.0)THEN
-                       CALL AB_ZLACPY( 'A', N+1, N/2, ARF, N+1, ARFINV,
+                       CALL ZLACPY( 'A', N+1, N/2, ARF, N+1, ARFINV,
      +                               N+1 )
                     ELSE
-                       CALL AB_ZLACPY( 'A', N, (N+1)/2, ARF, N, ARFINV,
+                       CALL ZLACPY( 'A', N, (N+1)/2, ARF, N, ARFINV,
      +                               N )
                     END IF
 *
-                     SRNAMT = 'AB_ZPFTRI'
-                     CALL AB_ZPFTRI( CFORM, UPLO, N, ARFINV , INFO )
+                     SRNAMT = 'ZPFTRI'
+                     CALL ZPFTRI( CFORM, UPLO, N, ARFINV , INFO )
 *
-                     SRNAMT = 'AB_ZTFTTR'
-                     CALL AB_ZTFTTR( CFORM, UPLO, N, ARFINV, AINV, LDA,
+                     SRNAMT = 'ZTFTTR'
+                     CALL ZTFTTR( CFORM, UPLO, N, ARFINV, AINV, LDA,
      +                            INFO )
 *
-*                    Check error code from AB_ZPFTRI.
+*                    Check error code from ZPFTRI.
 *
                      IF( INFO.NE.0 )
-     +                  CALL AB_ALAERH( 'ZPO', 'AB_ZPFTRI', INFO, 0, UPL
-     $O, N,
+     +                  CALL ALAERH( 'ZPO', 'ZPFTRI', INFO, 0, UPLO, N,
      +                               N, -1, -1, -1, IMAT, NFAIL, NERRS,
      +                               NOUT )
 *
-                     CALL AB_ZPOT03( UPLO, N, A, LDA, AINV, LDA,
-     +                            Z_WORK_AB_ZPOT03, LDA, D_WORK_AB_ZPOT0
-     $3,
+                     CALL ZPOT03( UPLO, N, A, LDA, AINV, LDA,
+     +                            Z_WORK_ZPOT03, LDA, D_WORK_ZPOT03,
      +                            RCONDC, RESULT( 2 ) )
 *
 *                    Compute residual of the computed solution.
 *
-                     CALL AB_ZLACPY( 'Full', N, NRHS, B, LDA,
-     +                            Z_WORK_AB_ZPOT02, LDA )
-                     CALL AB_ZPOT02( UPLO, N, NRHS, A, LDA, X, LDA,
-     +                            Z_WORK_AB_ZPOT02, LDA, D_WORK_AB_ZPOT0
-     $2,
+                     CALL ZLACPY( 'Full', N, NRHS, B, LDA,
+     +                            Z_WORK_ZPOT02, LDA )
+                     CALL ZPOT02( UPLO, N, NRHS, A, LDA, X, LDA,
+     +                            Z_WORK_ZPOT02, LDA, D_WORK_ZPOT02,
      +                            RESULT( 3 ) )
 *
 *                    Check solution from generated exact solution.
 *
-                     CALL AB_ZGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                     CALL ZGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      +                         RESULT( 4 ) )
                      NT = 4
 *
@@ -581,7 +567,7 @@
                      DO 60 K = 1, NT
                         IF( RESULT( K ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     +                        CALL AB_ALADHD( NOUT, 'ZPF' )
+     +                        CALL ALADHD( NOUT, 'ZPF' )
                            WRITE( NOUT, FMT = 9999 )'ZPFSV ', UPLO,
      +                            N, IIT, K, RESULT( K )
                            NFAIL = NFAIL + 1
@@ -596,13 +582,13 @@
 *
 *     Print a summary of the results.
 *
-      CALL AB_ALASVM( 'ZPF', NOUT, NFAIL, NRUN, NERRS )
+      CALL ALASVM( 'ZPF', NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( 1X, A6, ', UPLO=''', A1, ''', N =', I5, ', type ', I1,
      +      ', test(', I1, ')=', G12.5 )
 *
       RETURN
 *
-*     End of AB_ZDRVRFP
+*     End of ZDRVRFP
 *
       END

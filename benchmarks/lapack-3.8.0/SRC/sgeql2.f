@@ -1,4 +1,4 @@
-*> \brief \b AB_SGEQL2 computes the QL factorization of a general rectangular matrix using an unblocked algorithm.
+*> \brief \b SGEQL2 computes the QL factorization of a general rectangular matrix using an unblocked algorithm.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SGEQL2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SGEQL2.f">
+*> Download SGEQL2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgeql2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SGEQL2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgeql2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SGEQL2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgeql2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SGEQL2( M, N, A, LDA, TAU, WORK, INFO )
+*       SUBROUTINE SGEQL2( M, N, A, LDA, TAU, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, M, N
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SGEQL2 computes a QL factorization of a real m by n matrix A:
+*> SGEQL2 computes a QL factorization of a real m by n matrix A:
 *> A = Q * L.
 *> \endverbatim
 *
@@ -121,7 +121,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_SGEQL2( M, N, A, LDA, TAU, WORK, INFO )
+      SUBROUTINE SGEQL2( M, N, A, LDA, TAU, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -146,7 +146,7 @@
       REAL               AII
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SLARF, AB_AB_SLARFG, AB_XERBLA
+      EXTERNAL           SLARF, SLARFG, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -164,7 +164,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SGEQL2', -INFO )
+         CALL XERBLA( 'SGEQL2', -INFO )
          RETURN
       END IF
 *
@@ -175,20 +175,19 @@
 *        Generate elementary reflector H(i) to annihilate
 *        A(1:m-k+i-1,n-k+i)
 *
-         CALL AB_AB_SLARFG( M-K+I, A( M-K+I, N-K+I ), A( 1, N-K+I ), 1,
+         CALL SLARFG( M-K+I, A( M-K+I, N-K+I ), A( 1, N-K+I ), 1,
      $                TAU( I ) )
 *
 *        Apply H(i) to A(1:m-k+i,1:n-k+i-1) from the left
 *
          AII = A( M-K+I, N-K+I )
          A( M-K+I, N-K+I ) = ONE
-         CALL AB_SLARF( 'Left', M-K+I, N-K+I-1, A( 1, N-K+I ), 1, TAU( I
-     $ ),
+         CALL SLARF( 'Left', M-K+I, N-K+I-1, A( 1, N-K+I ), 1, TAU( I ),
      $               A, LDA, WORK )
          A( M-K+I, N-K+I ) = AII
    10 CONTINUE
       RETURN
 *
-*     End of AB_SGEQL2
+*     End of SGEQL2
 *
       END

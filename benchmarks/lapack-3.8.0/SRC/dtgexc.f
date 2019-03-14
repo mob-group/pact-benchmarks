@@ -1,4 +1,4 @@
-*> \brief \b AB_DTGEXC
+*> \brief \b DTGEXC
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DTGEXC + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DTGEXC.f">
+*> Download DTGEXC + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dtgexc.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DTGEXC.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dtgexc.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DTGEXC.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtgexc.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DTGEXC( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
+*       SUBROUTINE DTGEXC( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
 *                          LDZ, IFST, ILST, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DTGEXC reorders the generalized real Schur decomposition of a real
+*> DTGEXC reorders the generalized real Schur decomposition of a real
 *> matrix pair (A,B) using an orthogonal equivalence transformation
 *>
 *>                (A, B) = Q * (A, B) * Z**T,
@@ -45,7 +45,7 @@
 *> to row ILST.
 *>
 *> (A, B) must be in generalized real Schur canonical form (as returned
-*> by AB_DGGES), i.e. A is block upper triangular with 1-by-1 and 2-by-2
+*> by DGGES), i.e. A is block upper triangular with 1-by-1 and 2-by-2
 *> diagonal blocks. B is upper triangular.
 *>
 *> Optionally, the matrices Q and Z of generalized Schur vectors are
@@ -150,7 +150,7 @@
 *>          Specify the reordering of the diagonal blocks of (A, B).
 *>          The block with row index IFST is moved to row ILST, by a
 *>          sequence of swapping between adjacent blocks.
-*>          On exit, if IFST pointed on entry to the AB_SECOND row of
+*>          On exit, if IFST pointed on entry to the second row of
 *>          a 2-by-2 block, it is changed to point to the first row;
 *>          ILST always points to the first row of the block in its
 *>          final position (which may differ from its input value by
@@ -172,7 +172,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -217,7 +217,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_DTGEXC( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
+      SUBROUTINE DTGEXC( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
      $                   LDZ, IFST, ILST, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -245,7 +245,7 @@
       INTEGER            HERE, LWMIN, NBF, NBL, NBNEXT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DTGEX2, AB_XERBLA
+      EXTERNAL           DTGEX2, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -262,11 +262,9 @@
          INFO = -5
       ELSE IF( LDB.LT.MAX( 1, N ) ) THEN
          INFO = -7
-      ELSE IF( LDQ.LT.1 .OR. WANTQ .AND. ( LDQ.LT.MAX( 1, N ) ) ) THE
-     $N
+      ELSE IF( LDQ.LT.1 .OR. WANTQ .AND. ( LDQ.LT.MAX( 1, N ) ) ) THEN
          INFO = -9
-      ELSE IF( LDZ.LT.1 .OR. WANTZ .AND. ( LDZ.LT.MAX( 1, N ) ) ) THE
-     $N
+      ELSE IF( LDZ.LT.1 .OR. WANTZ .AND. ( LDZ.LT.MAX( 1, N ) ) ) THEN
          INFO = -11
       ELSE IF( IFST.LT.1 .OR. IFST.GT.N ) THEN
          INFO = -12
@@ -288,7 +286,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DTGEXC', -INFO )
+         CALL XERBLA( 'DTGEXC', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -351,7 +349,7 @@
                IF( A( HERE+NBF+1, HERE+NBF ).NE.ZERO )
      $            NBNEXT = 2
             END IF
-            CALL AB_DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
+            CALL DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
      $                   LDZ, HERE, NBF, NBNEXT, WORK, LWORK, INFO )
             IF( INFO.NE.0 ) THEN
                ILST = HERE
@@ -376,7 +374,7 @@
                IF( A( HERE+3, HERE+2 ).NE.ZERO )
      $            NBNEXT = 2
             END IF
-            CALL AB_DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
+            CALL DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
      $                   LDZ, HERE+1, 1, NBNEXT, WORK, LWORK, INFO )
             IF( INFO.NE.0 ) THEN
                ILST = HERE
@@ -386,8 +384,7 @@
 *
 *              Swap two 1-by-1 blocks.
 *
-               CALL AB_DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, 
-     $Z,
+               CALL DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
      $                      LDZ, HERE, 1, 1, WORK, LWORK, INFO )
                IF( INFO.NE.0 ) THEN
                   ILST = HERE
@@ -405,8 +402,7 @@
 *
 *                 2-by-2 block did not split.
 *
-                  CALL AB_DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LD
-     $Q,
+                  CALL DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ,
      $                         Z, LDZ, HERE, 1, NBNEXT, WORK, LWORK,
      $                         INFO )
                   IF( INFO.NE.0 ) THEN
@@ -418,16 +414,14 @@
 *
 *                 2-by-2 block did split.
 *
-                  CALL AB_DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LD
-     $Q,
+                  CALL DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ,
      $                         Z, LDZ, HERE, 1, 1, WORK, LWORK, INFO )
                   IF( INFO.NE.0 ) THEN
                      ILST = HERE
                      RETURN
                   END IF
                   HERE = HERE + 1
-                  CALL AB_DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LD
-     $Q,
+                  CALL DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ,
      $                         Z, LDZ, HERE, 1, 1, WORK, LWORK, INFO )
                   IF( INFO.NE.0 ) THEN
                      ILST = HERE
@@ -456,7 +450,7 @@
                IF( A( HERE-1, HERE-2 ).NE.ZERO )
      $            NBNEXT = 2
             END IF
-            CALL AB_DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
+            CALL DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
      $                   LDZ, HERE-NBNEXT, NBNEXT, NBF, WORK, LWORK,
      $                   INFO )
             IF( INFO.NE.0 ) THEN
@@ -482,7 +476,7 @@
                IF( A( HERE-1, HERE-2 ).NE.ZERO )
      $            NBNEXT = 2
             END IF
-            CALL AB_DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
+            CALL DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
      $                   LDZ, HERE-NBNEXT, NBNEXT, 1, WORK, LWORK,
      $                   INFO )
             IF( INFO.NE.0 ) THEN
@@ -493,8 +487,7 @@
 *
 *              Swap two 1-by-1 blocks.
 *
-               CALL AB_DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, 
-     $Z,
+               CALL DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
      $                      LDZ, HERE, NBNEXT, 1, WORK, LWORK, INFO )
                IF( INFO.NE.0 ) THEN
                   ILST = HERE
@@ -511,8 +504,7 @@
 *
 *                 2-by-2 block did not split.
 *
-                  CALL AB_DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LD
-     $Q,
+                  CALL DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ,
      $                         Z, LDZ, HERE-1, 2, 1, WORK, LWORK, INFO )
                   IF( INFO.NE.0 ) THEN
                      ILST = HERE
@@ -523,16 +515,14 @@
 *
 *                 2-by-2 block did split.
 *
-                  CALL AB_DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LD
-     $Q,
+                  CALL DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ,
      $                         Z, LDZ, HERE, 1, 1, WORK, LWORK, INFO )
                   IF( INFO.NE.0 ) THEN
                      ILST = HERE
                      RETURN
                   END IF
                   HERE = HERE - 1
-                  CALL AB_DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LD
-     $Q,
+                  CALL DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ,
      $                         Z, LDZ, HERE, 1, 1, WORK, LWORK, INFO )
                   IF( INFO.NE.0 ) THEN
                      ILST = HERE
@@ -549,6 +539,6 @@
       WORK( 1 ) = LWMIN
       RETURN
 *
-*     End of AB_DTGEXC
+*     End of DTGEXC
 *
       END

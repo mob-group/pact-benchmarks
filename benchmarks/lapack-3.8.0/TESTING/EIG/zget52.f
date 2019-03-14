@@ -1,4 +1,4 @@
-*> \brief \b AB_ZGET52
+*> \brief \b ZGET52
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,17 +8,17 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZGET52( LEFT, N, A, LDA, B, LDB, E, AB_LDE, ALPHA, BETA,
+*       SUBROUTINE ZGET52( LEFT, N, A, LDA, B, LDB, E, LDE, ALPHA, BETA,
 *                          WORK, RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
 *       LOGICAL            LEFT
-*       INTEGER            LDA, LDB, AB_LDE, N
+*       INTEGER            LDA, LDB, LDE, N
 *       ..
 *       .. Array Arguments ..
 *       DOUBLE PRECISION   RESULT( 2 ), RWORK( * )
 *       COMPLEX*16         A( LDA, * ), ALPHA( * ), B( LDB, * ),
-*      $                   BETA( * ), E( AB_LDE, * ), WORK( * )
+*      $                   BETA( * ), E( LDE, * ), WORK( * )
 *       ..
 *
 *
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZGET52  does an eigenvector check for the generalized eigenvalue
+*> ZGET52  does an eigenvector check for the generalized eigenvalue
 *> problem.
 *>
 *> The basic test for right eigenvectors is:
@@ -43,7 +43,7 @@
 *>                         H   H  _      _
 *> For left eigenvectors, A , B , a, and b  are used.
 *>
-*> AB_ZGET52 also tests the normalization of E.  Each eigenvector is
+*> ZGET52 also tests the normalization of E.  Each eigenvector is
 *> supposed to be normalized so that the maximum "absolute value"
 *> of its elements is 1, where in this case, "absolute value"
 *> of a complex value x is  |Re(x)| + |Im(x)| ; let us call this
@@ -71,7 +71,7 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The size of the matrices.  If it is zero, AB_ZGET52 does
+*>          The size of the matrices.  If it is zero, ZGET52 does
 *>          nothing.  It must be at least zero.
 *> \endverbatim
 *>
@@ -103,13 +103,13 @@
 *>
 *> \param[in] E
 *> \verbatim
-*>          E is COMPLEX*16 array, dimension (AB_LDE, N)
+*>          E is COMPLEX*16 array, dimension (LDE, N)
 *>          The matrix of eigenvectors.  It must be O( 1 ).
 *> \endverbatim
 *>
-*> \param[in] AB_LDE
+*> \param[in] LDE
 *> \verbatim
-*>          AB_LDE is INTEGER
+*>          LDE is INTEGER
 *>          The leading dimension of E.  It must be at least 1 and at
 *>          least N.
 *> \endverbatim
@@ -159,8 +159,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_ZGET52( LEFT, N, A, LDA, B, LDB, E, AB_LDE, ALPHA, B
-     $ETA,
+      SUBROUTINE ZGET52( LEFT, N, A, LDA, B, LDB, E, LDE, ALPHA, BETA,
      $                   WORK, RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -170,12 +169,12 @@
 *
 *     .. Scalar Arguments ..
       LOGICAL            LEFT
-      INTEGER            LDA, LDB, AB_LDE, N
+      INTEGER            LDA, LDB, LDE, N
 *     ..
 *     .. Array Arguments ..
       DOUBLE PRECISION   RESULT( 2 ), RWORK( * )
       COMPLEX*16         A( LDA, * ), ALPHA( * ), B( LDB, * ),
-     $                   BETA( * ), E( AB_LDE, * ), WORK( * )
+     $                   BETA( * ), E( LDE, * ), WORK( * )
 *     ..
 *
 *  =====================================================================
@@ -196,11 +195,11 @@
       COMPLEX*16         ACOEFF, ALPHAI, BCOEFF, BETAI, X
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE
-      EXTERNAL           AB_DLAMCH, AB_ZLANGE
+      DOUBLE PRECISION   DLAMCH, ZLANGE
+      EXTERNAL           DLAMCH, ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZGEMV
+      EXTERNAL           ZGEMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCONJG, DIMAG, MAX
@@ -218,9 +217,9 @@
       IF( N.LE.0 )
      $   RETURN
 *
-      SAFMIN = AB_DLAMCH( 'Safe minimum' )
+      SAFMIN = DLAMCH( 'Safe minimum' )
       SAFMAX = ONE / SAFMIN
-      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
+      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
 *
       IF( LEFT ) THEN
          TRANS = 'C'
@@ -232,9 +231,9 @@
 *
 *     Norm of A, B, and E:
 *
-      ANORM = MAX( AB_ZLANGE( NORMAB, N, N, A, LDA, RWORK ), SAFMIN )
-      BNORM = MAX( AB_ZLANGE( NORMAB, N, N, B, LDB, RWORK ), SAFMIN )
-      ENORM = MAX( AB_ZLANGE( 'O', N, N, E, AB_LDE, RWORK ), ULP )
+      ANORM = MAX( ZLANGE( NORMAB, N, N, A, LDA, RWORK ), SAFMIN )
+      BNORM = MAX( ZLANGE( NORMAB, N, N, B, LDB, RWORK ), SAFMIN )
+      ENORM = MAX( ZLANGE( 'O', N, N, E, LDE, RWORK ), ULP )
       ALFMAX = SAFMAX / MAX( ONE, BNORM )
       BETMAX = SAFMAX / MAX( ONE, ANORM )
 *
@@ -259,13 +258,13 @@
             ACOEFF = DCONJG( ACOEFF )
             BCOEFF = DCONJG( BCOEFF )
          END IF
-         CALL AB_ZGEMV( TRANS, N, N, ACOEFF, A, LDA, E( 1, JVEC ), 1,
+         CALL ZGEMV( TRANS, N, N, ACOEFF, A, LDA, E( 1, JVEC ), 1,
      $               CZERO, WORK( N*( JVEC-1 )+1 ), 1 )
-         CALL AB_ZGEMV( TRANS, N, N, -BCOEFF, B, LDA, E( 1, JVEC ), 1,
+         CALL ZGEMV( TRANS, N, N, -BCOEFF, B, LDA, E( 1, JVEC ), 1,
      $               CONE, WORK( N*( JVEC-1 )+1 ), 1 )
    10 CONTINUE
 *
-      ERRNRM = AB_ZLANGE( 'One', N, N, WORK, N, RWORK ) / ENORM
+      ERRNRM = ZLANGE( 'One', N, N, WORK, N, RWORK ) / ENORM
 *
 *     Compute RESULT(1)
 *
@@ -288,6 +287,6 @@
 *
       RETURN
 *
-*     End of AB_ZGET52
+*     End of ZGET52
 *
       END

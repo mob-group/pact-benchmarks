@@ -1,4 +1,4 @@
-*> \brief \b AB_CCHKGE
+*> \brief \b CCHKGE
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CCHKGE( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NNS,
+*       SUBROUTINE CCHKGE( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NNS,
 *                          NSVAL, THRESH, TSTERR, NMAX, A, AFAC, AINV, B,
 *                          X, XACT, WORK, RWORK, IWORK, NOUT )
 *
@@ -32,7 +32,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CCHKGE tests AB_CGETRF, -TRI, -TRS, -RFS, and -CON.
+*> CCHKGE tests CGETRF, -TRI, -TRS, -RFS, and -CON.
 *> \endverbatim
 *
 *  Arguments:
@@ -182,7 +182,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_CCHKGE( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NNS,
+      SUBROUTINE CCHKGE( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NNS,
      $                   NSVAL, THRESH, TSTERR, NMAX, A, AFAC, AINV, B,
      $                   X, XACT, WORK, RWORK, IWORK, NOUT )
 *
@@ -233,17 +233,14 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      REAL               AB_CLANGE, AB_SGET06
-      EXTERNAL           AB_CLANGE, AB_SGET06
+      REAL               CLANGE, SGET06
+      EXTERNAL           CLANGE, SGET06
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALAERH, AB_ALAHD, AB_ALASUM, AB_CERRGE, AB_C
-     $GECON, AB_CGERFS,
-     $                   AB_CGET01, AB_CGET02, AB_CGET03, AB_CGET04, AB_
-     $CGET07, AB_CGETRF,
-     $                   AB_CGETRI, AB_CGETRS, AB_CLACPY, AB_CLARHS, AB_
-     $CLASET, AB_CLATB4,
-     $                   AB_CLATMS, AB_XLAENV
+      EXTERNAL           ALAERH, ALAHD, ALASUM, CERRGE, CGECON, CGERFS,
+     $                   CGET01, CGET02, CGET03, CGET04, CGET07, CGETRF,
+     $                   CGETRI, CGETRS, CLACPY, CLARHS, CLASET, CLATB4,
+     $                   CLATMS, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CMPLX, MAX, MIN
@@ -276,11 +273,11 @@
 *
 *     Test the error exits
 *
-      CALL AB_XLAENV( 1, 1 )
+      CALL XLAENV( 1, 1 )
       IF( TSTERR )
-     $   CALL AB_CERRGE( PATH, NOUT )
+     $   CALL CERRGE( PATH, NOUT )
       INFOT = 0
-      CALL AB_XLAENV( 2, 2 )
+      CALL XLAENV( 2, 2 )
 *
 *     Do for each value of M in MVAL
 *
@@ -310,23 +307,21 @@
                IF( ZEROT .AND. N.LT.IMAT-4 )
      $            GO TO 100
 *
-*              Set up parameters with AB_CLATB4 and generate a test matrix
-*              with AB_CLATMS.
+*              Set up parameters with CLATB4 and generate a test matrix
+*              with CLATMS.
 *
-               CALL AB_CLATB4( PATH, IMAT, M, N, TYPE, KL, KU, ANORM, MO
-     $DE,
+               CALL CLATB4( PATH, IMAT, M, N, TYPE, KL, KU, ANORM, MODE,
      $                      CNDNUM, DIST )
 *
-               SRNAMT = 'AB_CLATMS'
-               CALL AB_CLATMS( M, N, DIST, ISEED, TYPE, RWORK, MODE,
+               SRNAMT = 'CLATMS'
+               CALL CLATMS( M, N, DIST, ISEED, TYPE, RWORK, MODE,
      $                      CNDNUM, ANORM, KL, KU, 'No packing', A, LDA,
      $                      WORK, INFO )
 *
-*              Check error code from AB_CLATMS.
+*              Check error code from CLATMS.
 *
                IF( INFO.NE.0 ) THEN
-                  CALL AB_ALAERH( PATH, 'AB_CLATMS', INFO, 0, ' ', M, N,
-     $ -1,
+                  CALL ALAERH( PATH, 'CLATMS', INFO, 0, ' ', M, N, -1,
      $                         -1, -1, IMAT, NFAIL, NERRS, NOUT )
                   GO TO 100
                END IF
@@ -348,8 +343,7 @@
                         A( IOFF+I ) = ZERO
    20                CONTINUE
                   ELSE
-                     CALL AB_CLASET( 'Full', M, N-IZERO+1, CMPLX( ZERO )
-     $,
+                     CALL CLASET( 'Full', M, N-IZERO+1, CMPLX( ZERO ),
      $                            CMPLX( ZERO ), A( IOFF+1 ), LDA )
                   END IF
                ELSE
@@ -359,26 +353,25 @@
 *              These lines, if used in place of the calls in the DO 60
 *              loop, cause the code to bomb on a Sun SPARCstation.
 *
-*               ANORMO = AB_CLANGE( 'O', M, N, A, LDA, RWORK )
-*               ANORMI = AB_CLANGE( 'I', M, N, A, LDA, RWORK )
+*               ANORMO = CLANGE( 'O', M, N, A, LDA, RWORK )
+*               ANORMI = CLANGE( 'I', M, N, A, LDA, RWORK )
 *
 *              Do for each blocksize in NBVAL
 *
                DO 90 INB = 1, NNB
                   NB = NBVAL( INB )
-                  CALL AB_XLAENV( 1, NB )
+                  CALL XLAENV( 1, NB )
 *
 *                 Compute the LU factorization of the matrix.
 *
-                  CALL AB_CLACPY( 'Full', M, N, A, LDA, AFAC, LDA )
-                  SRNAMT = 'AB_CGETRF'
-                  CALL AB_CGETRF( M, N, AFAC, LDA, IWORK, INFO )
+                  CALL CLACPY( 'Full', M, N, A, LDA, AFAC, LDA )
+                  SRNAMT = 'CGETRF'
+                  CALL CGETRF( M, N, AFAC, LDA, IWORK, INFO )
 *
-*                 Check error code from AB_CGETRF.
+*                 Check error code from CGETRF.
 *
                   IF( INFO.NE.IZERO )
-     $               CALL AB_ALAERH( PATH, 'AB_CGETRF', INFO, IZERO, ' '
-     $, M,
+     $               CALL ALAERH( PATH, 'CGETRF', INFO, IZERO, ' ', M,
      $                            N, -1, -1, NB, IMAT, NFAIL, NERRS,
      $                            NOUT )
                   TRFCON = .FALSE.
@@ -386,8 +379,8 @@
 *+    TEST 1
 *                 Reconstruct matrix from factors and compute residual.
 *
-                  CALL AB_CLACPY( 'Full', M, N, AFAC, LDA, AINV, LDA )
-                  CALL AB_CGET01( M, N, A, LDA, AINV, LDA, IWORK, RWORK,
+                  CALL CLACPY( 'Full', M, N, AFAC, LDA, AINV, LDA )
+                  CALL CGET01( M, N, A, LDA, AINV, LDA, IWORK, RWORK,
      $                         RESULT( 1 ) )
                   NT = 1
 *
@@ -396,19 +389,17 @@
 *                 and compute the residual.
 *
                   IF( M.EQ.N .AND. INFO.EQ.0 ) THEN
-                     CALL AB_CLACPY( 'Full', N, N, AFAC, LDA, AINV, LDA 
-     $)
-                     SRNAMT = 'AB_CGETRI'
+                     CALL CLACPY( 'Full', N, N, AFAC, LDA, AINV, LDA )
+                     SRNAMT = 'CGETRI'
                      NRHS = NSVAL( 1 )
                      LWORK = NMAX*MAX( 3, NRHS )
-                     CALL AB_CGETRI( N, AINV, LDA, IWORK, WORK, LWORK,
+                     CALL CGETRI( N, AINV, LDA, IWORK, WORK, LWORK,
      $                            INFO )
 *
-*                    Check error code from AB_CGETRI.
+*                    Check error code from CGETRI.
 *
                      IF( INFO.NE.0 )
-     $                  CALL AB_ALAERH( PATH, 'AB_CGETRI', INFO, 0, ' ',
-     $ N, N,
+     $                  CALL ALAERH( PATH, 'CGETRI', INFO, 0, ' ', N, N,
      $                               -1, -1, NB, IMAT, NFAIL, NERRS,
      $                               NOUT )
 *
@@ -416,14 +407,14 @@
 *                    inverse.  Also compute the 1-norm condition number
 *                    of A.
 *
-                     CALL AB_CGET03( N, A, LDA, AINV, LDA, WORK, LDA,
+                     CALL CGET03( N, A, LDA, AINV, LDA, WORK, LDA,
      $                            RWORK, RCONDO, RESULT( 2 ) )
-                     ANORMO = AB_CLANGE( 'O', M, N, A, LDA, RWORK )
+                     ANORMO = CLANGE( 'O', M, N, A, LDA, RWORK )
 *
 *                    Compute the infinity-norm condition number of A.
 *
-                     ANORMI = AB_CLANGE( 'I', M, N, A, LDA, RWORK )
-                     AINVNM = AB_CLANGE( 'I', N, N, AINV, LDA, RWORK )
+                     ANORMI = CLANGE( 'I', M, N, A, LDA, RWORK )
+                     AINVNM = CLANGE( 'I', N, N, AINV, LDA, RWORK )
                      IF( ANORMI.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
                         RCONDI = ONE
                      ELSE
@@ -435,8 +426,8 @@
 *                    Do only the condition estimate if INFO > 0.
 *
                      TRFCON = .TRUE.
-                     ANORMO = AB_CLANGE( 'O', M, N, A, LDA, RWORK )
-                     ANORMI = AB_CLANGE( 'I', M, N, A, LDA, RWORK )
+                     ANORMO = CLANGE( 'O', M, N, A, LDA, RWORK )
+                     ANORMI = CLANGE( 'I', M, N, A, LDA, RWORK )
                      RCONDO = ZERO
                      RCONDI = ZERO
                   END IF
@@ -447,7 +438,7 @@
                   DO 30 K = 1, NT
                      IF( RESULT( K ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL AB_ALAHD( NOUT, PATH )
+     $                     CALL ALAHD( NOUT, PATH )
                         WRITE( NOUT, FMT = 9999 )M, N, NB, IMAT, K,
      $                     RESULT( K )
                         NFAIL = NFAIL + 1
@@ -479,65 +470,55 @@
 *+    TEST 3
 *                       Solve and compute residual for A * X = B.
 *
-                        SRNAMT = 'AB_CLARHS'
-                        CALL AB_CLARHS( PATH, XTYPE, ' ', TRANS, N, N, K
-     $L,
+                        SRNAMT = 'CLARHS'
+                        CALL CLARHS( PATH, XTYPE, ' ', TRANS, N, N, KL,
      $                               KU, NRHS, A, LDA, XACT, LDA, B,
      $                               LDA, ISEED, INFO )
                         XTYPE = 'C'
 *
-                        CALL AB_CLACPY( 'Full', N, NRHS, B, LDA, X, LDA 
-     $)
-                        SRNAMT = 'AB_CGETRS'
-                        CALL AB_CGETRS( TRANS, N, NRHS, AFAC, LDA, IWORK
-     $,
+                        CALL CLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
+                        SRNAMT = 'CGETRS'
+                        CALL CGETRS( TRANS, N, NRHS, AFAC, LDA, IWORK,
      $                               X, LDA, INFO )
 *
-*                       Check error code from AB_CGETRS.
+*                       Check error code from CGETRS.
 *
                         IF( INFO.NE.0 )
-     $                     CALL AB_ALAERH( PATH, 'AB_CGETRS', INFO, 0, T
-     $RANS,
+     $                     CALL ALAERH( PATH, 'CGETRS', INFO, 0, TRANS,
      $                                  N, N, -1, -1, NRHS, IMAT, NFAIL,
      $                                  NERRS, NOUT )
 *
-                        CALL AB_CLACPY( 'Full', N, NRHS, B, LDA, WORK,
+                        CALL CLACPY( 'Full', N, NRHS, B, LDA, WORK,
      $                               LDA )
-                        CALL AB_CGET02( TRANS, N, N, NRHS, A, LDA, X, LD
-     $A,
+                        CALL CGET02( TRANS, N, N, NRHS, A, LDA, X, LDA,
      $                               WORK, LDA, RWORK, RESULT( 3 ) )
 *
 *+    TEST 4
 *                       Check solution from generated exact solution.
 *
-                        CALL AB_CGET04( N, NRHS, X, LDA, XACT, LDA, RCON
-     $DC,
+                        CALL CGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                               RESULT( 4 ) )
 *
 *+    TESTS 5, 6, and 7
 *                       Use iterative refinement to improve the
 *                       solution.
 *
-                        SRNAMT = 'AB_CGERFS'
-                        CALL AB_CGERFS( TRANS, N, NRHS, A, LDA, AFAC, LD
-     $A,
+                        SRNAMT = 'CGERFS'
+                        CALL CGERFS( TRANS, N, NRHS, A, LDA, AFAC, LDA,
      $                               IWORK, B, LDA, X, LDA, RWORK,
      $                               RWORK( NRHS+1 ), WORK,
      $                               RWORK( 2*NRHS+1 ), INFO )
 *
-*                       Check error code from AB_CGERFS.
+*                       Check error code from CGERFS.
 *
                         IF( INFO.NE.0 )
-     $                     CALL AB_ALAERH( PATH, 'AB_CGERFS', INFO, 0, T
-     $RANS,
+     $                     CALL ALAERH( PATH, 'CGERFS', INFO, 0, TRANS,
      $                                  N, N, -1, -1, NRHS, IMAT, NFAIL,
      $                                  NERRS, NOUT )
 *
-                        CALL AB_CGET04( N, NRHS, X, LDA, XACT, LDA, RCON
-     $DC,
+                        CALL CGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                               RESULT( 5 ) )
-                        CALL AB_CGET07( TRANS, N, NRHS, A, LDA, B, LDA, 
-     $X,
+                        CALL CGET07( TRANS, N, NRHS, A, LDA, B, LDA, X,
      $                               LDA, XACT, LDA, RWORK, .TRUE.,
      $                               RWORK( NRHS+1 ), RESULT( 6 ) )
 *
@@ -547,7 +528,7 @@
                         DO 40 K = 3, 7
                            IF( RESULT( K ).GE.THRESH ) THEN
                               IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                           CALL AB_ALAHD( NOUT, PATH )
+     $                           CALL ALAHD( NOUT, PATH )
                               WRITE( NOUT, FMT = 9998 )TRANS, N, NRHS,
      $                           IMAT, K, RESULT( K )
                               NFAIL = NFAIL + 1
@@ -571,15 +552,14 @@
                         RCONDC = RCONDI
                         NORM = 'I'
                      END IF
-                     SRNAMT = 'AB_CGECON'
-                     CALL AB_CGECON( NORM, N, AFAC, LDA, ANORM, RCOND,
+                     SRNAMT = 'CGECON'
+                     CALL CGECON( NORM, N, AFAC, LDA, ANORM, RCOND,
      $                            WORK, RWORK, INFO )
 *
-*                       Check error code from AB_CGECON.
+*                       Check error code from CGECON.
 *
                      IF( INFO.NE.0 )
-     $                  CALL AB_ALAERH( PATH, 'AB_CGECON', INFO, 0, NORM
-     $, N,
+     $                  CALL ALAERH( PATH, 'CGECON', INFO, 0, NORM, N,
      $                               N, -1, -1, -1, IMAT, NFAIL, NERRS,
      $                               NOUT )
 *
@@ -587,14 +567,14 @@
 *
                      DUMMY = RCOND
 *
-                     RESULT( 8 ) = AB_SGET06( RCOND, RCONDC )
+                     RESULT( 8 ) = SGET06( RCOND, RCONDC )
 *
 *                    Print information about the tests that did not pass
 *                    the threshold.
 *
                      IF( RESULT( 8 ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL AB_ALAHD( NOUT, PATH )
+     $                     CALL ALAHD( NOUT, PATH )
                         WRITE( NOUT, FMT = 9997 )NORM, N, IMAT, 8,
      $                     RESULT( 8 )
                         NFAIL = NFAIL + 1
@@ -609,7 +589,7 @@
 *
 *     Print a summary of the results.
 *
-      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( ' M = ', I5, ', N =', I5, ', NB =', I4, ', type ', I2,
      $      ', test(', I2, ') =', G12.5 )
@@ -619,6 +599,6 @@
      $      ', test(', I2, ') =', G12.5 )
       RETURN
 *
-*     End of AB_CCHKGE
+*     End of CCHKGE
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_CQRT14
+*> \brief \b CQRT14
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       REAL             FUNCTION AB_CQRT14( TRANS, M, N, NRHS, A, LDA, X,
+*       REAL             FUNCTION CQRT14( TRANS, M, N, NRHS, A, LDA, X,
 *                        LDX, WORK, LWORK )
 *
 *       .. Scalar Arguments ..
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CQRT14 checks whether X is in the row space of A or A'.  It does so
+*> CQRT14 checks whether X is in the row space of A or A'.  It does so
 *> by scaling both X and A such that their norms are in the range
 *> [sqrt(eps), 1/sqrt(eps)], then computing a QR factorization of [A,X]
 *> (if TRANS = 'C') or an LQ factorization of [A',X]' (if TRANS = 'N'),
@@ -113,7 +113,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      REAL             FUNCTION AB_CQRT14( TRANS, M, N, NRHS, A, LDA, X,
+      REAL             FUNCTION CQRT14( TRANS, M, N, NRHS, A, LDA, X,
      $                 LDX, WORK, LWORK )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -144,50 +144,48 @@
       REAL               RWORK( 1 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_CLANGE, AB_SLAMCH
-      EXTERNAL           AB_LSAME, AB_CLANGE, AB_SLAMCH
+      LOGICAL            LSAME
+      REAL               CLANGE, SLAMCH
+      EXTERNAL           LSAME, CLANGE, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_AB_CGELQ2, AB_AB_CGEQR2, AB_CLACPY, AB_CLASC
-     $L, AB_XERBLA
+      EXTERNAL           CGELQ2, CGEQR2, CLACPY, CLASCL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CONJG, MAX, MIN, REAL
 *     ..
 *     .. Executable Statements ..
 *
-      AB_CQRT14 = ZERO
-      IF( AB_LSAME( TRANS, 'N' ) ) THEN
+      CQRT14 = ZERO
+      IF( LSAME( TRANS, 'N' ) ) THEN
          LDWORK = M + NRHS
          TPSD = .FALSE.
          IF( LWORK.LT.( M+NRHS )*( N+2 ) ) THEN
-            CALL AB_XERBLA( 'AB_CQRT14', 10 )
+            CALL XERBLA( 'CQRT14', 10 )
             RETURN
          ELSE IF( N.LE.0 .OR. NRHS.LE.0 ) THEN
             RETURN
          END IF
-      ELSE IF( AB_LSAME( TRANS, 'C' ) ) THEN
+      ELSE IF( LSAME( TRANS, 'C' ) ) THEN
          LDWORK = M
          TPSD = .TRUE.
          IF( LWORK.LT.( N+NRHS )*( M+2 ) ) THEN
-            CALL AB_XERBLA( 'AB_CQRT14', 10 )
+            CALL XERBLA( 'CQRT14', 10 )
             RETURN
          ELSE IF( M.LE.0 .OR. NRHS.LE.0 ) THEN
             RETURN
          END IF
       ELSE
-         CALL AB_XERBLA( 'AB_CQRT14', 1 )
+         CALL XERBLA( 'CQRT14', 1 )
          RETURN
       END IF
 *
 *     Copy and scale A
 *
-      CALL AB_CLACPY( 'All', M, N, A, LDA, WORK, LDWORK )
-      ANRM = AB_CLANGE( 'M', M, N, WORK, LDWORK, RWORK )
+      CALL CLACPY( 'All', M, N, A, LDA, WORK, LDWORK )
+      ANRM = CLANGE( 'M', M, N, WORK, LDWORK, RWORK )
       IF( ANRM.NE.ZERO )
-     $   CALL AB_CLASCL( 'G', 0, 0, ANRM, ONE, M, N, WORK, LDWORK, INFO 
-     $)
+     $   CALL CLASCL( 'G', 0, 0, ANRM, ONE, M, N, WORK, LDWORK, INFO )
 *
 *     Copy X or X' into the right place and scale it
 *
@@ -195,18 +193,18 @@
 *
 *        Copy X into columns n+1:n+nrhs of work
 *
-         CALL AB_CLACPY( 'All', M, NRHS, X, LDX, WORK( N*LDWORK+1 ),
+         CALL CLACPY( 'All', M, NRHS, X, LDX, WORK( N*LDWORK+1 ),
      $                LDWORK )
-         XNRM = AB_CLANGE( 'M', M, NRHS, WORK( N*LDWORK+1 ), LDWORK,
+         XNRM = CLANGE( 'M', M, NRHS, WORK( N*LDWORK+1 ), LDWORK,
      $          RWORK )
          IF( XNRM.NE.ZERO )
-     $      CALL AB_CLASCL( 'G', 0, 0, XNRM, ONE, M, NRHS,
+     $      CALL CLASCL( 'G', 0, 0, XNRM, ONE, M, NRHS,
      $                   WORK( N*LDWORK+1 ), LDWORK, INFO )
-         ANRM = AB_CLANGE( 'One-norm', M, N+NRHS, WORK, LDWORK, RWORK )
+         ANRM = CLANGE( 'One-norm', M, N+NRHS, WORK, LDWORK, RWORK )
 *
 *        Compute QR factorization of X
 *
-         CALL AB_AB_CGEQR2( M, N+NRHS, WORK, LDWORK,
+         CALL CGEQR2( M, N+NRHS, WORK, LDWORK,
      $                WORK( LDWORK*( N+NRHS )+1 ),
      $                WORK( LDWORK*( N+NRHS )+MIN( M, N+NRHS )+1 ),
      $                INFO )
@@ -231,14 +229,14 @@
    30       CONTINUE
    40    CONTINUE
 *
-         XNRM = AB_CLANGE( 'M', NRHS, N, WORK( M+1 ), LDWORK, RWORK )
+         XNRM = CLANGE( 'M', NRHS, N, WORK( M+1 ), LDWORK, RWORK )
          IF( XNRM.NE.ZERO )
-     $      CALL AB_CLASCL( 'G', 0, 0, XNRM, ONE, NRHS, N, WORK( M+1 ),
+     $      CALL CLASCL( 'G', 0, 0, XNRM, ONE, NRHS, N, WORK( M+1 ),
      $                   LDWORK, INFO )
 *
 *        Compute LQ factorization of work
 *
-         CALL AB_AB_CGELQ2( LDWORK, N, WORK, LDWORK, WORK( LDWORK*N+1 ),
+         CALL CGELQ2( LDWORK, N, WORK, LDWORK, WORK( LDWORK*N+1 ),
      $                WORK( LDWORK*( N+1 )+1 ), INFO )
 *
 *        Compute largest entry in lower triangle in
@@ -253,11 +251,10 @@
 *
       END IF
 *
-      AB_CQRT14 = ERR / ( REAL( MAX( M, N, NRHS ) )*AB_SLAMCH( 'Epsilon'
-     $ ) )
+      CQRT14 = ERR / ( REAL( MAX( M, N, NRHS ) )*SLAMCH( 'Epsilon' ) )
 *
       RETURN
 *
-*     End of AB_CQRT14
+*     End of CQRT14
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_CGESDD
+*> \brief \b CGESDD
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CGESDD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CGESDD.f">
+*> Download CGESDD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgesdd.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CGESDD.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgesdd.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CGESDD.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgesdd.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CGESDD( JOBZ, M, N, A, LDA, S, U, LDU, VT, LDVT,
+*       SUBROUTINE CGESDD( JOBZ, M, N, A, LDA, S, U, LDU, VT, LDVT,
 *                          WORK, LWORK, RWORK, IWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -38,7 +38,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CGESDD computes the singular value decomposition (SVD) of a complex
+*> CGESDD computes the singular value decomposition (SVD) of a complex
 *> M-by-N matrix A, optionally computing the left and/or right singular
 *> vectors, by using divide-and-conquer method. The SVD is written
 *>
@@ -186,8 +186,8 @@
 *>          RWORK is REAL array, dimension (MAX(1,LRWORK))
 *>          Let mx = max(M,N) and mn = min(M,N).
 *>          If JOBZ = 'N',    LRWORK >= 5*mn (LAPACK <= 3.6 needs 7*mn);
-*>          ELSE if mx >> mn, LRWORK >= 5*mn*mn + 5*mn;
-*>          ELSE              LRWORK >= max( 5*mn*mn + 5*mn,
+*>          else if mx >> mn, LRWORK >= 5*mn*mn + 5*mn;
+*>          else              LRWORK >= max( 5*mn*mn + 5*mn,
 *>                                           2*mx*mn + 2*mn*mn + mn ).
 *> \endverbatim
 *>
@@ -201,7 +201,7 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit.
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*>          > 0:  The updating process of AB_SBDSDC did not converge.
+*>          > 0:  The updating process of SBDSDC did not converge.
 *> \endverbatim
 *
 *  Authors:
@@ -223,7 +223,7 @@
 *>     California at Berkeley, USA
 *>
 *  =====================================================================
-      SUBROUTINE AB_CGESDD( JOBZ, M, N, A, LDA, S, U, LDU, VT, LDVT,
+      SUBROUTINE CGESDD( JOBZ, M, N, A, LDA, S, U, LDU, VT, LDVT,
      $                   WORK, LWORK, RWORK, IWORK, INFO )
       implicit none
 *
@@ -258,16 +258,16 @@
      $                   ISCL, ITAU, ITAUP, ITAUQ, IU, IVT, LDWKVT,
      $                   LDWRKL, LDWRKR, LDWRKU, MAXWRK, MINMN, MINWRK,
      $                   MNTHR1, MNTHR2, NRWORK, NWORK, WRKBL
-      INTEGER            LWORK_AB_CGEBRD_MN, LWORK_AB_CGEBRD_MM,
-     $                   LWORK_AB_CGEBRD_NN, LWORK_AB_AB_CGELQF_MN,
-     $                   LWORK_AB_AB_CGEQRF_MN,
-     $                   LWORK_AB_CUNGBR_P_MN, LWORK_AB_CUNGBR_P_NN,
-     $                   LWORK_AB_CUNGBR_Q_MN, LWORK_AB_CUNGBR_Q_MM,
-     $                   LWORK_AB_CUNGLQ_MN, LWORK_AB_CUNGLQ_NN,
-     $                   LWORK_AB_CUNGQR_MM, LWORK_AB_CUNGQR_MN,
-     $                   LWORK_AB_CUNMBR_PRC_MM, LWORK_AB_CUNMBR_QLN_MM,
-     $                   LWORK_AB_CUNMBR_PRC_MN, LWORK_AB_CUNMBR_QLN_MN,
-     $                   LWORK_AB_CUNMBR_PRC_NN, LWORK_AB_CUNMBR_QLN_NN
+      INTEGER            LWORK_CGEBRD_MN, LWORK_CGEBRD_MM,
+     $                   LWORK_CGEBRD_NN, LWORK_CGELQF_MN,
+     $                   LWORK_CGEQRF_MN,
+     $                   LWORK_CUNGBR_P_MN, LWORK_CUNGBR_P_NN,
+     $                   LWORK_CUNGBR_Q_MN, LWORK_CUNGBR_Q_MM,
+     $                   LWORK_CUNGLQ_MN, LWORK_CUNGLQ_NN,
+     $                   LWORK_CUNGQR_MM, LWORK_CUNGQR_MN,
+     $                   LWORK_CUNMBR_PRC_MM, LWORK_CUNMBR_QLN_MM,
+     $                   LWORK_CUNMBR_PRC_MN, LWORK_CUNMBR_QLN_MN,
+     $                   LWORK_CUNMBR_PRC_NN, LWORK_CUNMBR_QLN_NN
       REAL   ANRM, BIGNUM, EPS, SMLNUM
 *     ..
 *     .. Local Arrays ..
@@ -276,17 +276,14 @@
       COMPLEX            CDUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CGEBRD, AB_AB_CGELQF, AB_CGEMM, AB_AB_CGEQRF
-     $, AB_CLACP2, AB_CLACPY,
-     $                   AB_CLACRM, AB_CLARCM, AB_CLASCL, AB_CLASET, AB_
-     $CUNGBR, AB_CUNGLQ,
-     $                   AB_CUNGQR, AB_CUNMBR, AB_SBDSDC, AB_SLASCL, AB_
-     $XERBLA
+      EXTERNAL           CGEBRD, CGELQF, CGEMM, CGEQRF, CLACP2, CLACPY,
+     $                   CLACRM, CLARCM, CLASCL, CLASET, CUNGBR, CUNGLQ,
+     $                   CUNGQR, CUNMBR, SBDSDC, SLASCL, XERBLA
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_SLAMCH, AB_CLANGE
-      EXTERNAL           AB_LSAME, AB_SLAMCH, AB_CLANGE
+      LOGICAL            LSAME
+      REAL               SLAMCH, CLANGE
+      EXTERNAL           LSAME, SLAMCH, CLANGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          INT, MAX, MIN, SQRT
@@ -299,11 +296,11 @@
       MINMN  = MIN( M, N )
       MNTHR1 = INT( MINMN*17.0E0 / 9.0E0 )
       MNTHR2 = INT( MINMN*5.0E0 / 3.0E0 )
-      WNTQA  = AB_LSAME( JOBZ, 'A' )
-      WNTQS  = AB_LSAME( JOBZ, 'S' )
+      WNTQA  = LSAME( JOBZ, 'A' )
+      WNTQS  = LSAME( JOBZ, 'S' )
       WNTQAS = WNTQA .OR. WNTQS
-      WNTQO  = AB_LSAME( JOBZ, 'O' )
-      WNTQN  = AB_LSAME( JOBZ, 'N' )
+      WNTQO  = LSAME( JOBZ, 'O' )
+      WNTQN  = LSAME( JOBZ, 'N' )
       LQUERY = ( LWORK.EQ.-1 )
       MINWRK = 1
       MAXWRK = 1
@@ -331,7 +328,7 @@
 *       as well as the preferred amount for good performance.
 *       CWorkspace refers to complex workspace, and RWorkspace to
 *       real workspace. NB refers to the optimal block size for the
-*       immediately following subroutine, as returned by AB_ILAENV.)
+*       immediately following subroutine, as returned by ILAENV.)
 *
       IF( INFO.EQ.0 ) THEN
          MINWRK = 1
@@ -339,99 +336,98 @@
          IF( M.GE.N .AND. MINMN.GT.0 ) THEN
 *
 *           There is no complex work space needed for bidiagonal SVD
-*           The real work space needed for bidiagonal SVD (AB_SBDSDC) is
+*           The real work space needed for bidiagonal SVD (sbdsdc) is
 *           BDSPAC = 3*N*N + 4*N for singular values and vectors;
 *           BDSPAC = 4*N         for singular values only;
 *           not including e, RU, and RVT matrices.
 *
 *           Compute space preferred for each routine
-            CALL AB_CGEBRD( M, N, CDUM(1), M, DUM(1), DUM(1), CDUM(1),
+            CALL CGEBRD( M, N, CDUM(1), M, DUM(1), DUM(1), CDUM(1),
      $                   CDUM(1), CDUM(1), -1, IERR )
-            LWORK_AB_CGEBRD_MN = INT( CDUM(1) )
+            LWORK_CGEBRD_MN = INT( CDUM(1) )
 *
-            CALL AB_CGEBRD( N, N, CDUM(1), N, DUM(1), DUM(1), CDUM(1),
+            CALL CGEBRD( N, N, CDUM(1), N, DUM(1), DUM(1), CDUM(1),
      $                   CDUM(1), CDUM(1), -1, IERR )
-            LWORK_AB_CGEBRD_NN = INT( CDUM(1) )
+            LWORK_CGEBRD_NN = INT( CDUM(1) )
 *
-            CALL AB_AB_CGEQRF( M, N, CDUM(1), M, CDUM(1), CDUM(1), -1, I
-     $ERR )
-            LWORK_AB_AB_CGEQRF_MN = INT( CDUM(1) )
+            CALL CGEQRF( M, N, CDUM(1), M, CDUM(1), CDUM(1), -1, IERR )
+            LWORK_CGEQRF_MN = INT( CDUM(1) )
 *
-            CALL AB_CUNGBR( 'P', N, N, N, CDUM(1), N, CDUM(1), CDUM(1),
+            CALL CUNGBR( 'P', N, N, N, CDUM(1), N, CDUM(1), CDUM(1),
      $                   -1, IERR )
-            LWORK_AB_CUNGBR_P_NN = INT( CDUM(1) )
+            LWORK_CUNGBR_P_NN = INT( CDUM(1) )
 *
-            CALL AB_CUNGBR( 'Q', M, M, N, CDUM(1), M, CDUM(1), CDUM(1),
+            CALL CUNGBR( 'Q', M, M, N, CDUM(1), M, CDUM(1), CDUM(1),
      $                   -1, IERR )
-            LWORK_AB_CUNGBR_Q_MM = INT( CDUM(1) )
+            LWORK_CUNGBR_Q_MM = INT( CDUM(1) )
 *
-            CALL AB_CUNGBR( 'Q', M, N, N, CDUM(1), M, CDUM(1), CDUM(1),
+            CALL CUNGBR( 'Q', M, N, N, CDUM(1), M, CDUM(1), CDUM(1),
      $                   -1, IERR )
-            LWORK_AB_CUNGBR_Q_MN = INT( CDUM(1) )
+            LWORK_CUNGBR_Q_MN = INT( CDUM(1) )
 *
-            CALL AB_CUNGQR( M, M, N, CDUM(1), M, CDUM(1), CDUM(1),
+            CALL CUNGQR( M, M, N, CDUM(1), M, CDUM(1), CDUM(1),
      $                   -1, IERR )
-            LWORK_AB_CUNGQR_MM = INT( CDUM(1) )
+            LWORK_CUNGQR_MM = INT( CDUM(1) )
 *
-            CALL AB_CUNGQR( M, N, N, CDUM(1), M, CDUM(1), CDUM(1),
+            CALL CUNGQR( M, N, N, CDUM(1), M, CDUM(1), CDUM(1),
      $                   -1, IERR )
-            LWORK_AB_CUNGQR_MN = INT( CDUM(1) )
+            LWORK_CUNGQR_MN = INT( CDUM(1) )
 *
-            CALL AB_CUNMBR( 'P', 'R', 'C', N, N, N, CDUM(1), N, CDUM(1),
+            CALL CUNMBR( 'P', 'R', 'C', N, N, N, CDUM(1), N, CDUM(1),
      $                   CDUM(1), N, CDUM(1), -1, IERR )
-            LWORK_AB_CUNMBR_PRC_NN = INT( CDUM(1) )
+            LWORK_CUNMBR_PRC_NN = INT( CDUM(1) )
 *
-            CALL AB_CUNMBR( 'Q', 'L', 'N', M, M, N, CDUM(1), M, CDUM(1),
+            CALL CUNMBR( 'Q', 'L', 'N', M, M, N, CDUM(1), M, CDUM(1),
      $                   CDUM(1), M, CDUM(1), -1, IERR )
-            LWORK_AB_CUNMBR_QLN_MM = INT( CDUM(1) )
+            LWORK_CUNMBR_QLN_MM = INT( CDUM(1) )
 *
-            CALL AB_CUNMBR( 'Q', 'L', 'N', M, N, N, CDUM(1), M, CDUM(1),
+            CALL CUNMBR( 'Q', 'L', 'N', M, N, N, CDUM(1), M, CDUM(1),
      $                   CDUM(1), M, CDUM(1), -1, IERR )
-            LWORK_AB_CUNMBR_QLN_MN = INT( CDUM(1) )
+            LWORK_CUNMBR_QLN_MN = INT( CDUM(1) )
 *
-            CALL AB_CUNMBR( 'Q', 'L', 'N', N, N, N, CDUM(1), N, CDUM(1),
+            CALL CUNMBR( 'Q', 'L', 'N', N, N, N, CDUM(1), N, CDUM(1),
      $                   CDUM(1), N, CDUM(1), -1, IERR )
-            LWORK_AB_CUNMBR_QLN_NN = INT( CDUM(1) )
+            LWORK_CUNMBR_QLN_NN = INT( CDUM(1) )
 *
             IF( M.GE.MNTHR1 ) THEN
                IF( WNTQN ) THEN
 *
 *                 Path 1 (M >> N, JOBZ='N')
 *
-                  MAXWRK = N + LWORK_AB_AB_CGEQRF_MN
-                  MAXWRK = MAX( MAXWRK, 2*N + LWORK_AB_CGEBRD_NN )
+                  MAXWRK = N + LWORK_CGEQRF_MN
+                  MAXWRK = MAX( MAXWRK, 2*N + LWORK_CGEBRD_NN )
                   MINWRK = 3*N
                ELSE IF( WNTQO ) THEN
 *
 *                 Path 2 (M >> N, JOBZ='O')
 *
-                  WRKBL = N + LWORK_AB_AB_CGEQRF_MN
-                  WRKBL = MAX( WRKBL,   N + LWORK_AB_CUNGQR_MN )
-                  WRKBL = MAX( WRKBL, 2*N + LWORK_AB_CGEBRD_NN )
-                  WRKBL = MAX( WRKBL, 2*N + LWORK_AB_CUNMBR_QLN_NN )
-                  WRKBL = MAX( WRKBL, 2*N + LWORK_AB_CUNMBR_PRC_NN )
+                  WRKBL = N + LWORK_CGEQRF_MN
+                  WRKBL = MAX( WRKBL,   N + LWORK_CUNGQR_MN )
+                  WRKBL = MAX( WRKBL, 2*N + LWORK_CGEBRD_NN )
+                  WRKBL = MAX( WRKBL, 2*N + LWORK_CUNMBR_QLN_NN )
+                  WRKBL = MAX( WRKBL, 2*N + LWORK_CUNMBR_PRC_NN )
                   MAXWRK = M*N + N*N + WRKBL
                   MINWRK = 2*N*N + 3*N
                ELSE IF( WNTQS ) THEN
 *
 *                 Path 3 (M >> N, JOBZ='S')
 *
-                  WRKBL = N + LWORK_AB_AB_CGEQRF_MN
-                  WRKBL = MAX( WRKBL,   N + LWORK_AB_CUNGQR_MN )
-                  WRKBL = MAX( WRKBL, 2*N + LWORK_AB_CGEBRD_NN )
-                  WRKBL = MAX( WRKBL, 2*N + LWORK_AB_CUNMBR_QLN_NN )
-                  WRKBL = MAX( WRKBL, 2*N + LWORK_AB_CUNMBR_PRC_NN )
+                  WRKBL = N + LWORK_CGEQRF_MN
+                  WRKBL = MAX( WRKBL,   N + LWORK_CUNGQR_MN )
+                  WRKBL = MAX( WRKBL, 2*N + LWORK_CGEBRD_NN )
+                  WRKBL = MAX( WRKBL, 2*N + LWORK_CUNMBR_QLN_NN )
+                  WRKBL = MAX( WRKBL, 2*N + LWORK_CUNMBR_PRC_NN )
                   MAXWRK = N*N + WRKBL
                   MINWRK = N*N + 3*N
                ELSE IF( WNTQA ) THEN
 *
 *                 Path 4 (M >> N, JOBZ='A')
 *
-                  WRKBL = N + LWORK_AB_AB_CGEQRF_MN
-                  WRKBL = MAX( WRKBL,   N + LWORK_AB_CUNGQR_MM )
-                  WRKBL = MAX( WRKBL, 2*N + LWORK_AB_CGEBRD_NN )
-                  WRKBL = MAX( WRKBL, 2*N + LWORK_AB_CUNMBR_QLN_NN )
-                  WRKBL = MAX( WRKBL, 2*N + LWORK_AB_CUNMBR_PRC_NN )
+                  WRKBL = N + LWORK_CGEQRF_MN
+                  WRKBL = MAX( WRKBL,   N + LWORK_CUNGQR_MM )
+                  WRKBL = MAX( WRKBL, 2*N + LWORK_CGEBRD_NN )
+                  WRKBL = MAX( WRKBL, 2*N + LWORK_CUNMBR_QLN_NN )
+                  WRKBL = MAX( WRKBL, 2*N + LWORK_CUNMBR_PRC_NN )
                   MAXWRK = N*N + WRKBL
                   MINWRK = N*N + MAX( 3*N, N + M )
                END IF
@@ -439,141 +435,140 @@
 *
 *              Path 5 (M >> N, but not as much as MNTHR1)
 *
-               MAXWRK = 2*N + LWORK_AB_CGEBRD_MN
+               MAXWRK = 2*N + LWORK_CGEBRD_MN
                MINWRK = 2*N + M
                IF( WNTQO ) THEN
 *                 Path 5o (M >> N, JOBZ='O')
-                  MAXWRK = MAX( MAXWRK, 2*N + LWORK_AB_CUNGBR_P_NN )
-                  MAXWRK = MAX( MAXWRK, 2*N + LWORK_AB_CUNGBR_Q_MN )
+                  MAXWRK = MAX( MAXWRK, 2*N + LWORK_CUNGBR_P_NN )
+                  MAXWRK = MAX( MAXWRK, 2*N + LWORK_CUNGBR_Q_MN )
                   MAXWRK = MAXWRK + M*N
                   MINWRK = MINWRK + N*N
                ELSE IF( WNTQS ) THEN
 *                 Path 5s (M >> N, JOBZ='S')
-                  MAXWRK = MAX( MAXWRK, 2*N + LWORK_AB_CUNGBR_P_NN )
-                  MAXWRK = MAX( MAXWRK, 2*N + LWORK_AB_CUNGBR_Q_MN )
+                  MAXWRK = MAX( MAXWRK, 2*N + LWORK_CUNGBR_P_NN )
+                  MAXWRK = MAX( MAXWRK, 2*N + LWORK_CUNGBR_Q_MN )
                ELSE IF( WNTQA ) THEN
 *                 Path 5a (M >> N, JOBZ='A')
-                  MAXWRK = MAX( MAXWRK, 2*N + LWORK_AB_CUNGBR_P_NN )
-                  MAXWRK = MAX( MAXWRK, 2*N + LWORK_AB_CUNGBR_Q_MM )
+                  MAXWRK = MAX( MAXWRK, 2*N + LWORK_CUNGBR_P_NN )
+                  MAXWRK = MAX( MAXWRK, 2*N + LWORK_CUNGBR_Q_MM )
                END IF
             ELSE
 *
 *              Path 6 (M >= N, but not much larger)
 *
-               MAXWRK = 2*N + LWORK_AB_CGEBRD_MN
+               MAXWRK = 2*N + LWORK_CGEBRD_MN
                MINWRK = 2*N + M
                IF( WNTQO ) THEN
 *                 Path 6o (M >= N, JOBZ='O')
-                  MAXWRK = MAX( MAXWRK, 2*N + LWORK_AB_CUNMBR_PRC_NN )
-                  MAXWRK = MAX( MAXWRK, 2*N + LWORK_AB_CUNMBR_QLN_MN )
+                  MAXWRK = MAX( MAXWRK, 2*N + LWORK_CUNMBR_PRC_NN )
+                  MAXWRK = MAX( MAXWRK, 2*N + LWORK_CUNMBR_QLN_MN )
                   MAXWRK = MAXWRK + M*N
                   MINWRK = MINWRK + N*N
                ELSE IF( WNTQS ) THEN
 *                 Path 6s (M >= N, JOBZ='S')
-                  MAXWRK = MAX( MAXWRK, 2*N + LWORK_AB_CUNMBR_QLN_MN )
-                  MAXWRK = MAX( MAXWRK, 2*N + LWORK_AB_CUNMBR_PRC_NN )
+                  MAXWRK = MAX( MAXWRK, 2*N + LWORK_CUNMBR_QLN_MN )
+                  MAXWRK = MAX( MAXWRK, 2*N + LWORK_CUNMBR_PRC_NN )
                ELSE IF( WNTQA ) THEN
 *                 Path 6a (M >= N, JOBZ='A')
-                  MAXWRK = MAX( MAXWRK, 2*N + LWORK_AB_CUNMBR_QLN_MM )
-                  MAXWRK = MAX( MAXWRK, 2*N + LWORK_AB_CUNMBR_PRC_NN )
+                  MAXWRK = MAX( MAXWRK, 2*N + LWORK_CUNMBR_QLN_MM )
+                  MAXWRK = MAX( MAXWRK, 2*N + LWORK_CUNMBR_PRC_NN )
                END IF
             END IF
          ELSE IF( MINMN.GT.0 ) THEN
 *
 *           There is no complex work space needed for bidiagonal SVD
-*           The real work space needed for bidiagonal SVD (AB_SBDSDC) is
+*           The real work space needed for bidiagonal SVD (sbdsdc) is
 *           BDSPAC = 3*M*M + 4*M for singular values and vectors;
 *           BDSPAC = 4*M         for singular values only;
 *           not including e, RU, and RVT matrices.
 *
 *           Compute space preferred for each routine
-            CALL AB_CGEBRD( M, N, CDUM(1), M, DUM(1), DUM(1), CDUM(1),
+            CALL CGEBRD( M, N, CDUM(1), M, DUM(1), DUM(1), CDUM(1),
      $                   CDUM(1), CDUM(1), -1, IERR )
-            LWORK_AB_CGEBRD_MN = INT( CDUM(1) )
+            LWORK_CGEBRD_MN = INT( CDUM(1) )
 *
-            CALL AB_CGEBRD( M, M, CDUM(1), M, DUM(1), DUM(1), CDUM(1),
+            CALL CGEBRD( M, M, CDUM(1), M, DUM(1), DUM(1), CDUM(1),
      $                   CDUM(1), CDUM(1), -1, IERR )
-            LWORK_AB_CGEBRD_MM = INT( CDUM(1) )
+            LWORK_CGEBRD_MM = INT( CDUM(1) )
 *
-            CALL AB_AB_CGELQF( M, N, CDUM(1), M, CDUM(1), CDUM(1), -1, I
-     $ERR )
-            LWORK_AB_AB_CGELQF_MN = INT( CDUM(1) )
+            CALL CGELQF( M, N, CDUM(1), M, CDUM(1), CDUM(1), -1, IERR )
+            LWORK_CGELQF_MN = INT( CDUM(1) )
 *
-            CALL AB_CUNGBR( 'P', M, N, M, CDUM(1), M, CDUM(1), CDUM(1),
+            CALL CUNGBR( 'P', M, N, M, CDUM(1), M, CDUM(1), CDUM(1),
      $                   -1, IERR )
-            LWORK_AB_CUNGBR_P_MN = INT( CDUM(1) )
+            LWORK_CUNGBR_P_MN = INT( CDUM(1) )
 *
-            CALL AB_CUNGBR( 'P', N, N, M, CDUM(1), N, CDUM(1), CDUM(1),
+            CALL CUNGBR( 'P', N, N, M, CDUM(1), N, CDUM(1), CDUM(1),
      $                   -1, IERR )
-            LWORK_AB_CUNGBR_P_NN = INT( CDUM(1) )
+            LWORK_CUNGBR_P_NN = INT( CDUM(1) )
 *
-            CALL AB_CUNGBR( 'Q', M, M, N, CDUM(1), M, CDUM(1), CDUM(1),
+            CALL CUNGBR( 'Q', M, M, N, CDUM(1), M, CDUM(1), CDUM(1),
      $                   -1, IERR )
-            LWORK_AB_CUNGBR_Q_MM = INT( CDUM(1) )
+            LWORK_CUNGBR_Q_MM = INT( CDUM(1) )
 *
-            CALL AB_CUNGLQ( M, N, M, CDUM(1), M, CDUM(1), CDUM(1),
+            CALL CUNGLQ( M, N, M, CDUM(1), M, CDUM(1), CDUM(1),
      $                   -1, IERR )
-            LWORK_AB_CUNGLQ_MN = INT( CDUM(1) )
+            LWORK_CUNGLQ_MN = INT( CDUM(1) )
 *
-            CALL AB_CUNGLQ( N, N, M, CDUM(1), N, CDUM(1), CDUM(1),
+            CALL CUNGLQ( N, N, M, CDUM(1), N, CDUM(1), CDUM(1),
      $                   -1, IERR )
-            LWORK_AB_CUNGLQ_NN = INT( CDUM(1) )
+            LWORK_CUNGLQ_NN = INT( CDUM(1) )
 *
-            CALL AB_CUNMBR( 'P', 'R', 'C', M, M, M, CDUM(1), M, CDUM(1),
+            CALL CUNMBR( 'P', 'R', 'C', M, M, M, CDUM(1), M, CDUM(1),
      $                   CDUM(1), M, CDUM(1), -1, IERR )
-            LWORK_AB_CUNMBR_PRC_MM = INT( CDUM(1) )
+            LWORK_CUNMBR_PRC_MM = INT( CDUM(1) )
 *
-            CALL AB_CUNMBR( 'P', 'R', 'C', M, N, M, CDUM(1), M, CDUM(1),
+            CALL CUNMBR( 'P', 'R', 'C', M, N, M, CDUM(1), M, CDUM(1),
      $                   CDUM(1), M, CDUM(1), -1, IERR )
-            LWORK_AB_CUNMBR_PRC_MN = INT( CDUM(1) )
+            LWORK_CUNMBR_PRC_MN = INT( CDUM(1) )
 *
-            CALL AB_CUNMBR( 'P', 'R', 'C', N, N, M, CDUM(1), N, CDUM(1),
+            CALL CUNMBR( 'P', 'R', 'C', N, N, M, CDUM(1), N, CDUM(1),
      $                   CDUM(1), N, CDUM(1), -1, IERR )
-            LWORK_AB_CUNMBR_PRC_NN = INT( CDUM(1) )
+            LWORK_CUNMBR_PRC_NN = INT( CDUM(1) )
 *
-            CALL AB_CUNMBR( 'Q', 'L', 'N', M, M, M, CDUM(1), M, CDUM(1),
+            CALL CUNMBR( 'Q', 'L', 'N', M, M, M, CDUM(1), M, CDUM(1),
      $                   CDUM(1), M, CDUM(1), -1, IERR )
-            LWORK_AB_CUNMBR_QLN_MM = INT( CDUM(1) )
+            LWORK_CUNMBR_QLN_MM = INT( CDUM(1) )
 *
             IF( N.GE.MNTHR1 ) THEN
                IF( WNTQN ) THEN
 *
 *                 Path 1t (N >> M, JOBZ='N')
 *
-                  MAXWRK = M + LWORK_AB_AB_CGELQF_MN
-                  MAXWRK = MAX( MAXWRK, 2*M + LWORK_AB_CGEBRD_MM )
+                  MAXWRK = M + LWORK_CGELQF_MN
+                  MAXWRK = MAX( MAXWRK, 2*M + LWORK_CGEBRD_MM )
                   MINWRK = 3*M
                ELSE IF( WNTQO ) THEN
 *
 *                 Path 2t (N >> M, JOBZ='O')
 *
-                  WRKBL = M + LWORK_AB_AB_CGELQF_MN
-                  WRKBL = MAX( WRKBL,   M + LWORK_AB_CUNGLQ_MN )
-                  WRKBL = MAX( WRKBL, 2*M + LWORK_AB_CGEBRD_MM )
-                  WRKBL = MAX( WRKBL, 2*M + LWORK_AB_CUNMBR_QLN_MM )
-                  WRKBL = MAX( WRKBL, 2*M + LWORK_AB_CUNMBR_PRC_MM )
+                  WRKBL = M + LWORK_CGELQF_MN
+                  WRKBL = MAX( WRKBL,   M + LWORK_CUNGLQ_MN )
+                  WRKBL = MAX( WRKBL, 2*M + LWORK_CGEBRD_MM )
+                  WRKBL = MAX( WRKBL, 2*M + LWORK_CUNMBR_QLN_MM )
+                  WRKBL = MAX( WRKBL, 2*M + LWORK_CUNMBR_PRC_MM )
                   MAXWRK = M*N + M*M + WRKBL
                   MINWRK = 2*M*M + 3*M
                ELSE IF( WNTQS ) THEN
 *
 *                 Path 3t (N >> M, JOBZ='S')
 *
-                  WRKBL = M + LWORK_AB_AB_CGELQF_MN
-                  WRKBL = MAX( WRKBL,   M + LWORK_AB_CUNGLQ_MN )
-                  WRKBL = MAX( WRKBL, 2*M + LWORK_AB_CGEBRD_MM )
-                  WRKBL = MAX( WRKBL, 2*M + LWORK_AB_CUNMBR_QLN_MM )
-                  WRKBL = MAX( WRKBL, 2*M + LWORK_AB_CUNMBR_PRC_MM )
+                  WRKBL = M + LWORK_CGELQF_MN
+                  WRKBL = MAX( WRKBL,   M + LWORK_CUNGLQ_MN )
+                  WRKBL = MAX( WRKBL, 2*M + LWORK_CGEBRD_MM )
+                  WRKBL = MAX( WRKBL, 2*M + LWORK_CUNMBR_QLN_MM )
+                  WRKBL = MAX( WRKBL, 2*M + LWORK_CUNMBR_PRC_MM )
                   MAXWRK = M*M + WRKBL
                   MINWRK = M*M + 3*M
                ELSE IF( WNTQA ) THEN
 *
 *                 Path 4t (N >> M, JOBZ='A')
 *
-                  WRKBL = M + LWORK_AB_AB_CGELQF_MN
-                  WRKBL = MAX( WRKBL,   M + LWORK_AB_CUNGLQ_NN )
-                  WRKBL = MAX( WRKBL, 2*M + LWORK_AB_CGEBRD_MM )
-                  WRKBL = MAX( WRKBL, 2*M + LWORK_AB_CUNMBR_QLN_MM )
-                  WRKBL = MAX( WRKBL, 2*M + LWORK_AB_CUNMBR_PRC_MM )
+                  WRKBL = M + LWORK_CGELQF_MN
+                  WRKBL = MAX( WRKBL,   M + LWORK_CUNGLQ_NN )
+                  WRKBL = MAX( WRKBL, 2*M + LWORK_CGEBRD_MM )
+                  WRKBL = MAX( WRKBL, 2*M + LWORK_CUNMBR_QLN_MM )
+                  WRKBL = MAX( WRKBL, 2*M + LWORK_CUNMBR_PRC_MM )
                   MAXWRK = M*M + WRKBL
                   MINWRK = M*M + MAX( 3*M, M + N )
                END IF
@@ -581,43 +576,43 @@
 *
 *              Path 5t (N >> M, but not as much as MNTHR1)
 *
-               MAXWRK = 2*M + LWORK_AB_CGEBRD_MN
+               MAXWRK = 2*M + LWORK_CGEBRD_MN
                MINWRK = 2*M + N
                IF( WNTQO ) THEN
 *                 Path 5to (N >> M, JOBZ='O')
-                  MAXWRK = MAX( MAXWRK, 2*M + LWORK_AB_CUNGBR_Q_MM )
-                  MAXWRK = MAX( MAXWRK, 2*M + LWORK_AB_CUNGBR_P_MN )
+                  MAXWRK = MAX( MAXWRK, 2*M + LWORK_CUNGBR_Q_MM )
+                  MAXWRK = MAX( MAXWRK, 2*M + LWORK_CUNGBR_P_MN )
                   MAXWRK = MAXWRK + M*N
                   MINWRK = MINWRK + M*M
                ELSE IF( WNTQS ) THEN
 *                 Path 5ts (N >> M, JOBZ='S')
-                  MAXWRK = MAX( MAXWRK, 2*M + LWORK_AB_CUNGBR_Q_MM )
-                  MAXWRK = MAX( MAXWRK, 2*M + LWORK_AB_CUNGBR_P_MN )
+                  MAXWRK = MAX( MAXWRK, 2*M + LWORK_CUNGBR_Q_MM )
+                  MAXWRK = MAX( MAXWRK, 2*M + LWORK_CUNGBR_P_MN )
                ELSE IF( WNTQA ) THEN
 *                 Path 5ta (N >> M, JOBZ='A')
-                  MAXWRK = MAX( MAXWRK, 2*M + LWORK_AB_CUNGBR_Q_MM )
-                  MAXWRK = MAX( MAXWRK, 2*M + LWORK_AB_CUNGBR_P_NN )
+                  MAXWRK = MAX( MAXWRK, 2*M + LWORK_CUNGBR_Q_MM )
+                  MAXWRK = MAX( MAXWRK, 2*M + LWORK_CUNGBR_P_NN )
                END IF
             ELSE
 *
 *              Path 6t (N > M, but not much larger)
 *
-               MAXWRK = 2*M + LWORK_AB_CGEBRD_MN
+               MAXWRK = 2*M + LWORK_CGEBRD_MN
                MINWRK = 2*M + N
                IF( WNTQO ) THEN
 *                 Path 6to (N > M, JOBZ='O')
-                  MAXWRK = MAX( MAXWRK, 2*M + LWORK_AB_CUNMBR_QLN_MM )
-                  MAXWRK = MAX( MAXWRK, 2*M + LWORK_AB_CUNMBR_PRC_MN )
+                  MAXWRK = MAX( MAXWRK, 2*M + LWORK_CUNMBR_QLN_MM )
+                  MAXWRK = MAX( MAXWRK, 2*M + LWORK_CUNMBR_PRC_MN )
                   MAXWRK = MAXWRK + M*N
                   MINWRK = MINWRK + M*M
                ELSE IF( WNTQS ) THEN
 *                 Path 6ts (N > M, JOBZ='S')
-                  MAXWRK = MAX( MAXWRK, 2*M + LWORK_AB_CUNMBR_QLN_MM )
-                  MAXWRK = MAX( MAXWRK, 2*M + LWORK_AB_CUNMBR_PRC_MN )
+                  MAXWRK = MAX( MAXWRK, 2*M + LWORK_CUNMBR_QLN_MM )
+                  MAXWRK = MAX( MAXWRK, 2*M + LWORK_CUNMBR_PRC_MN )
                ELSE IF( WNTQA ) THEN
 *                 Path 6ta (N > M, JOBZ='A')
-                  MAXWRK = MAX( MAXWRK, 2*M + LWORK_AB_CUNMBR_QLN_MM )
-                  MAXWRK = MAX( MAXWRK, 2*M + LWORK_AB_CUNMBR_PRC_NN )
+                  MAXWRK = MAX( MAXWRK, 2*M + LWORK_CUNMBR_QLN_MM )
+                  MAXWRK = MAX( MAXWRK, 2*M + LWORK_CUNMBR_PRC_NN )
                END IF
             END IF
          END IF
@@ -631,7 +626,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CGESDD', -INFO )
+         CALL XERBLA( 'CGESDD', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -645,20 +640,20 @@
 *
 *     Get machine constants
 *
-      EPS = AB_SLAMCH( 'P' )
-      SMLNUM = SQRT( AB_SLAMCH( 'S' ) ) / EPS
+      EPS = SLAMCH( 'P' )
+      SMLNUM = SQRT( SLAMCH( 'S' ) ) / EPS
       BIGNUM = ONE / SMLNUM
 *
 *     Scale A if max element outside range [SMLNUM,BIGNUM]
 *
-      ANRM = AB_CLANGE( 'M', M, N, A, LDA, DUM )
+      ANRM = CLANGE( 'M', M, N, A, LDA, DUM )
       ISCL = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
          ISCL = 1
-         CALL AB_CLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, A, LDA, IERR )
+         CALL CLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, A, LDA, IERR )
       ELSE IF( ANRM.GT.BIGNUM ) THEN
          ISCL = 1
-         CALL AB_CLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, A, LDA, IERR )
+         CALL CLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, A, LDA, IERR )
       END IF
 *
       IF( M.GE.N ) THEN
@@ -682,13 +677,12 @@
 *              CWorkspace: prefer N [tau] + N*NB [work]
 *              RWorkspace: need   0
 *
-               CALL AB_AB_CGEQRF( M, N, A, LDA, WORK( ITAU ), WORK( NWOR
-     $K ),
+               CALL CGEQRF( M, N, A, LDA, WORK( ITAU ), WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
 *
 *              Zero out below R
 *
-               CALL AB_CLASET( 'L', N-1, N-1, CZERO, CZERO, A( 2, 1 ),
+               CALL CLASET( 'L', N-1, N-1, CZERO, CZERO, A( 2, 1 ),
      $                      LDA )
                IE = 1
                ITAUQ = 1
@@ -700,8 +694,7 @@
 *              CWorkspace: prefer 2*N [tauq, taup] + 2*N*NB [work]
 *              RWorkspace: need   N [e]
 *
-               CALL AB_CGEBRD( N, N, A, LDA, S, RWORK( IE ), WORK( ITAUQ
-     $ ),
+               CALL CGEBRD( N, N, A, LDA, S, RWORK( IE ), WORK( ITAUQ ),
      $                      WORK( ITAUP ), WORK( NWORK ), LWORK-NWORK+1,
      $                      IERR )
                NRWORK = IE + N
@@ -710,7 +703,7 @@
 *              CWorkspace: need   0
 *              RWorkspace: need   N [e] + BDSPAC
 *
-               CALL AB_SBDSDC( 'U', 'N', N, S, RWORK( IE ), DUM,1,DUM,1,
+               CALL SBDSDC( 'U', 'N', N, S, RWORK( IE ), DUM,1,DUM,1,
      $                      DUM, IDUM, RWORK( NRWORK ), IWORK, INFO )
 *
             ELSE IF( WNTQO ) THEN
@@ -741,15 +734,13 @@
 *              CWorkspace: prefer N*N [U] + N*N [R] + N [tau] + N*NB [work]
 *              RWorkspace: need   0
 *
-               CALL AB_AB_CGEQRF( M, N, A, LDA, WORK( ITAU ), WORK( NWOR
-     $K ),
+               CALL CGEQRF( M, N, A, LDA, WORK( ITAU ), WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
 *
 *              Copy R to WORK( IR ), zeroing out below it
 *
-               CALL AB_CLACPY( 'U', N, N, A, LDA, WORK( IR ), LDWRKR )
-               CALL AB_CLASET( 'L', N-1, N-1, CZERO, CZERO, WORK( IR+1 )
-     $,
+               CALL CLACPY( 'U', N, N, A, LDA, WORK( IR ), LDWRKR )
+               CALL CLASET( 'L', N-1, N-1, CZERO, CZERO, WORK( IR+1 ),
      $                      LDWRKR )
 *
 *              Generate Q in A
@@ -757,7 +748,7 @@
 *              CWorkspace: prefer N*N [U] + N*N [R] + N [tau] + N*NB [work]
 *              RWorkspace: need   0
 *
-               CALL AB_CUNGQR( M, N, N, A, LDA, WORK( ITAU ),
+               CALL CUNGQR( M, N, N, A, LDA, WORK( ITAU ),
      $                      WORK( NWORK ), LWORK-NWORK+1, IERR )
                IE = 1
                ITAUQ = ITAU
@@ -769,7 +760,7 @@
 *              CWorkspace: prefer N*N [U] + N*N [R] + 2*N [tauq, taup] + 2*N*NB [work]
 *              RWorkspace: need   N [e]
 *
-               CALL AB_CGEBRD( N, N, WORK( IR ), LDWRKR, S, RWORK( IE ),
+               CALL CGEBRD( N, N, WORK( IR ), LDWRKR, S, RWORK( IE ),
      $                      WORK( ITAUQ ), WORK( ITAUP ), WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
 *
@@ -782,8 +773,7 @@
                IRU = IE + N
                IRVT = IRU + N*N
                NRWORK = IRVT + N*N
-               CALL AB_SBDSDC( 'U', 'I', N, S, RWORK( IE ), RWORK( IRU )
-     $,
+               CALL SBDSDC( 'U', 'I', N, S, RWORK( IE ), RWORK( IRU ),
      $                      N, RWORK( IRVT ), N, DUM, IDUM,
      $                      RWORK( NRWORK ), IWORK, INFO )
 *
@@ -793,10 +783,9 @@
 *              CWorkspace: prefer N*N [U] + N*N [R] + 2*N [tauq, taup] + N*NB [work]
 *              RWorkspace: need   0
 *
-               CALL AB_CLACP2( 'F', N, N, RWORK( IRU ), N, WORK( IU ),
+               CALL CLACP2( 'F', N, N, RWORK( IRU ), N, WORK( IU ),
      $                      LDWRKU )
-               CALL AB_CUNMBR( 'Q', 'L', 'N', N, N, N, WORK( IR ), LDWRK
-     $R,
+               CALL CUNMBR( 'Q', 'L', 'N', N, N, N, WORK( IR ), LDWRKR,
      $                      WORK( ITAUQ ), WORK( IU ), LDWRKU,
      $                      WORK( NWORK ), LWORK-NWORK+1, IERR )
 *
@@ -806,9 +795,8 @@
 *              CWorkspace: prefer N*N [U] + N*N [R] + 2*N [tauq, taup] + N*NB [work]
 *              RWorkspace: need   0
 *
-               CALL AB_CLACP2( 'F', N, N, RWORK( IRVT ), N, VT, LDVT )
-               CALL AB_CUNMBR( 'P', 'R', 'C', N, N, N, WORK( IR ), LDWRK
-     $R,
+               CALL CLACP2( 'F', N, N, RWORK( IRVT ), N, VT, LDVT )
+               CALL CUNMBR( 'P', 'R', 'C', N, N, N, WORK( IR ), LDWRKR,
      $                      WORK( ITAUP ), VT, LDVT, WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
 *
@@ -820,10 +808,10 @@
 *
                DO 10 I = 1, M, LDWRKR
                   CHUNK = MIN( M-I+1, LDWRKR )
-                  CALL AB_CGEMM( 'N', 'N', CHUNK, N, N, CONE, A( I, 1 ),
+                  CALL CGEMM( 'N', 'N', CHUNK, N, N, CONE, A( I, 1 ),
      $                        LDA, WORK( IU ), LDWRKU, CZERO,
      $                        WORK( IR ), LDWRKR )
-                  CALL AB_CLACPY( 'F', CHUNK, N, WORK( IR ), LDWRKR,
+                  CALL CLACPY( 'F', CHUNK, N, WORK( IR ), LDWRKR,
      $                         A( I, 1 ), LDA )
    10          CONTINUE
 *
@@ -846,15 +834,13 @@
 *              CWorkspace: prefer N*N [R] + N [tau] + N*NB [work]
 *              RWorkspace: need   0
 *
-               CALL AB_AB_CGEQRF( M, N, A, LDA, WORK( ITAU ), WORK( NWOR
-     $K ),
+               CALL CGEQRF( M, N, A, LDA, WORK( ITAU ), WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
 *
 *              Copy R to WORK(IR), zeroing out below it
 *
-               CALL AB_CLACPY( 'U', N, N, A, LDA, WORK( IR ), LDWRKR )
-               CALL AB_CLASET( 'L', N-1, N-1, CZERO, CZERO, WORK( IR+1 )
-     $,
+               CALL CLACPY( 'U', N, N, A, LDA, WORK( IR ), LDWRKR )
+               CALL CLASET( 'L', N-1, N-1, CZERO, CZERO, WORK( IR+1 ),
      $                      LDWRKR )
 *
 *              Generate Q in A
@@ -862,7 +848,7 @@
 *              CWorkspace: prefer N*N [R] + N [tau] + N*NB [work]
 *              RWorkspace: need   0
 *
-               CALL AB_CUNGQR( M, N, N, A, LDA, WORK( ITAU ),
+               CALL CUNGQR( M, N, N, A, LDA, WORK( ITAU ),
      $                      WORK( NWORK ), LWORK-NWORK+1, IERR )
                IE = 1
                ITAUQ = ITAU
@@ -874,7 +860,7 @@
 *              CWorkspace: prefer N*N [R] + 2*N [tauq, taup] + 2*N*NB [work]
 *              RWorkspace: need   N [e]
 *
-               CALL AB_CGEBRD( N, N, WORK( IR ), LDWRKR, S, RWORK( IE ),
+               CALL CGEBRD( N, N, WORK( IR ), LDWRKR, S, RWORK( IE ),
      $                      WORK( ITAUQ ), WORK( ITAUP ), WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
 *
@@ -887,8 +873,7 @@
                IRU = IE + N
                IRVT = IRU + N*N
                NRWORK = IRVT + N*N
-               CALL AB_SBDSDC( 'U', 'I', N, S, RWORK( IE ), RWORK( IRU )
-     $,
+               CALL SBDSDC( 'U', 'I', N, S, RWORK( IE ), RWORK( IRU ),
      $                      N, RWORK( IRVT ), N, DUM, IDUM,
      $                      RWORK( NRWORK ), IWORK, INFO )
 *
@@ -898,9 +883,8 @@
 *              CWorkspace: prefer N*N [R] + 2*N [tauq, taup] + N*NB [work]
 *              RWorkspace: need   0
 *
-               CALL AB_CLACP2( 'F', N, N, RWORK( IRU ), N, U, LDU )
-               CALL AB_CUNMBR( 'Q', 'L', 'N', N, N, N, WORK( IR ), LDWRK
-     $R,
+               CALL CLACP2( 'F', N, N, RWORK( IRU ), N, U, LDU )
+               CALL CUNMBR( 'Q', 'L', 'N', N, N, N, WORK( IR ), LDWRKR,
      $                      WORK( ITAUQ ), U, LDU, WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
 *
@@ -910,9 +894,8 @@
 *              CWorkspace: prefer N*N [R] + 2*N [tauq, taup] + N*NB [work]
 *              RWorkspace: need   0
 *
-               CALL AB_CLACP2( 'F', N, N, RWORK( IRVT ), N, VT, LDVT )
-               CALL AB_CUNMBR( 'P', 'R', 'C', N, N, N, WORK( IR ), LDWRK
-     $R,
+               CALL CLACP2( 'F', N, N, RWORK( IRVT ), N, VT, LDVT )
+               CALL CUNMBR( 'P', 'R', 'C', N, N, N, WORK( IR ), LDWRKR,
      $                      WORK( ITAUP ), VT, LDVT, WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
 *
@@ -921,9 +904,8 @@
 *              CWorkspace: need   N*N [R]
 *              RWorkspace: need   0
 *
-               CALL AB_CLACPY( 'F', N, N, U, LDU, WORK( IR ), LDWRKR )
-               CALL AB_CGEMM( 'N', 'N', M, N, N, CONE, A, LDA, WORK( IR 
-     $),
+               CALL CLACPY( 'F', N, N, U, LDU, WORK( IR ), LDWRKR )
+               CALL CGEMM( 'N', 'N', M, N, N, CONE, A, LDA, WORK( IR ),
      $                     LDWRKR, CZERO, U, LDU )
 *
             ELSE IF( WNTQA ) THEN
@@ -945,22 +927,21 @@
 *              CWorkspace: prefer N*N [U] + N [tau] + N*NB [work]
 *              RWorkspace: need   0
 *
-               CALL AB_AB_CGEQRF( M, N, A, LDA, WORK( ITAU ), WORK( NWOR
-     $K ),
+               CALL CGEQRF( M, N, A, LDA, WORK( ITAU ), WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
-               CALL AB_CLACPY( 'L', M, N, A, LDA, U, LDU )
+               CALL CLACPY( 'L', M, N, A, LDA, U, LDU )
 *
 *              Generate Q in U
 *              CWorkspace: need   N*N [U] + N [tau] + M    [work]
 *              CWorkspace: prefer N*N [U] + N [tau] + M*NB [work]
 *              RWorkspace: need   0
 *
-               CALL AB_CUNGQR( M, M, N, U, LDU, WORK( ITAU ),
+               CALL CUNGQR( M, M, N, U, LDU, WORK( ITAU ),
      $                      WORK( NWORK ), LWORK-NWORK+1, IERR )
 *
 *              Produce R in A, zeroing out below it
 *
-               CALL AB_CLASET( 'L', N-1, N-1, CZERO, CZERO, A( 2, 1 ),
+               CALL CLASET( 'L', N-1, N-1, CZERO, CZERO, A( 2, 1 ),
      $                      LDA )
                IE = 1
                ITAUQ = ITAU
@@ -972,8 +953,7 @@
 *              CWorkspace: prefer N*N [U] + 2*N [tauq, taup] + 2*N*NB [work]
 *              RWorkspace: need   N [e]
 *
-               CALL AB_CGEBRD( N, N, A, LDA, S, RWORK( IE ), WORK( ITAUQ
-     $ ),
+               CALL CGEBRD( N, N, A, LDA, S, RWORK( IE ), WORK( ITAUQ ),
      $                      WORK( ITAUP ), WORK( NWORK ), LWORK-NWORK+1,
      $                      IERR )
                IRU = IE + N
@@ -986,8 +966,7 @@
 *              CWorkspace: need   0
 *              RWorkspace: need   N [e] + N*N [RU] + N*N [RVT] + BDSPAC
 *
-               CALL AB_SBDSDC( 'U', 'I', N, S, RWORK( IE ), RWORK( IRU )
-     $,
+               CALL SBDSDC( 'U', 'I', N, S, RWORK( IE ), RWORK( IRU ),
      $                      N, RWORK( IRVT ), N, DUM, IDUM,
      $                      RWORK( NRWORK ), IWORK, INFO )
 *
@@ -997,9 +976,9 @@
 *              CWorkspace: prefer N*N [U] + 2*N [tauq, taup] + N*NB [work]
 *              RWorkspace: need   0
 *
-               CALL AB_CLACP2( 'F', N, N, RWORK( IRU ), N, WORK( IU ),
+               CALL CLACP2( 'F', N, N, RWORK( IRU ), N, WORK( IU ),
      $                      LDWRKU )
-               CALL AB_CUNMBR( 'Q', 'L', 'N', N, N, N, A, LDA,
+               CALL CUNMBR( 'Q', 'L', 'N', N, N, N, A, LDA,
      $                      WORK( ITAUQ ), WORK( IU ), LDWRKU,
      $                      WORK( NWORK ), LWORK-NWORK+1, IERR )
 *
@@ -1009,8 +988,8 @@
 *              CWorkspace: prefer N*N [U] + 2*N [tauq, taup] + N*NB [work]
 *              RWorkspace: need   0
 *
-               CALL AB_CLACP2( 'F', N, N, RWORK( IRVT ), N, VT, LDVT )
-               CALL AB_CUNMBR( 'P', 'R', 'C', N, N, N, A, LDA,
+               CALL CLACP2( 'F', N, N, RWORK( IRVT ), N, VT, LDVT )
+               CALL CUNMBR( 'P', 'R', 'C', N, N, N, A, LDA,
      $                      WORK( ITAUP ), VT, LDVT, WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
 *
@@ -1019,13 +998,12 @@
 *              CWorkspace: need   N*N [U]
 *              RWorkspace: need   0
 *
-               CALL AB_CGEMM( 'N', 'N', M, N, N, CONE, U, LDU, WORK( IU 
-     $),
+               CALL CGEMM( 'N', 'N', M, N, N, CONE, U, LDU, WORK( IU ),
      $                     LDWRKU, CZERO, A, LDA )
 *
 *              Copy left singular vectors of A from A to U
 *
-               CALL AB_CLACPY( 'F', M, N, A, LDA, U, LDU )
+               CALL CLACPY( 'F', M, N, A, LDA, U, LDU )
 *
             END IF
 *
@@ -1035,7 +1013,7 @@
 *
 *           Path 5 (M >> N, but not as much as MNTHR1)
 *           Reduce to bidiagonal form without QR decomposition, use
-*           AB_CUNGBR and matrix multiplication to compute singular vectors
+*           CUNGBR and matrix multiplication to compute singular vectors
 *
             IE = 1
             NRWORK = IE + N
@@ -1048,7 +1026,7 @@
 *           CWorkspace: prefer 2*N [tauq, taup] + (M+N)*NB [work]
 *           RWorkspace: need   N [e]
 *
-            CALL AB_CGEBRD( M, N, A, LDA, S, RWORK( IE ), WORK( ITAUQ ),
+            CALL CGEBRD( M, N, A, LDA, S, RWORK( IE ), WORK( ITAUQ ),
      $                   WORK( ITAUP ), WORK( NWORK ), LWORK-NWORK+1,
      $                   IERR )
             IF( WNTQN ) THEN
@@ -1058,8 +1036,7 @@
 *              CWorkspace: need   0
 *              RWorkspace: need   N [e] + BDSPAC
 *
-               CALL AB_SBDSDC( 'U', 'N', N, S, RWORK( IE ), DUM, 1,DUM,1
-     $,
+               CALL SBDSDC( 'U', 'N', N, S, RWORK( IE ), DUM, 1,DUM,1,
      $                      DUM, IDUM, RWORK( NRWORK ), IWORK, INFO )
             ELSE IF( WNTQO ) THEN
                IU = NWORK
@@ -1073,8 +1050,8 @@
 *              CWorkspace: prefer 2*N [tauq, taup] + N*NB [work]
 *              RWorkspace: need   0
 *
-               CALL AB_CLACPY( 'U', N, N, A, LDA, VT, LDVT )
-               CALL AB_CUNGBR( 'P', N, N, N, VT, LDVT, WORK( ITAUP ),
+               CALL CLACPY( 'U', N, N, A, LDA, VT, LDVT )
+               CALL CUNGBR( 'P', N, N, N, VT, LDVT, WORK( ITAUP ),
      $                      WORK( NWORK ), LWORK-NWORK+1, IERR )
 *
 *              Generate Q in A
@@ -1082,7 +1059,7 @@
 *              CWorkspace: prefer 2*N [tauq, taup] + N*NB [work]
 *              RWorkspace: need   0
 *
-               CALL AB_CUNGBR( 'Q', M, N, N, A, LDA, WORK( ITAUQ ),
+               CALL CUNGBR( 'Q', M, N, N, A, LDA, WORK( ITAUQ ),
      $                      WORK( NWORK ), LWORK-NWORK+1, IERR )
 *
                IF( LWORK .GE. M*N + 3*N ) THEN
@@ -1104,8 +1081,7 @@
 *              CWorkspace: need   0
 *              RWorkspace: need   N [e] + N*N [RU] + N*N [RVT] + BDSPAC
 *
-               CALL AB_SBDSDC( 'U', 'I', N, S, RWORK( IE ), RWORK( IRU )
-     $,
+               CALL SBDSDC( 'U', 'I', N, S, RWORK( IE ), RWORK( IRU ),
      $                      N, RWORK( IRVT ), N, DUM, IDUM,
      $                      RWORK( NRWORK ), IWORK, INFO )
 *
@@ -1114,9 +1090,9 @@
 *              CWorkspace: need   2*N [tauq, taup] + N*N [U]
 *              RWorkspace: need   N [e] + N*N [RU] + N*N [RVT] + 2*N*N [rwork]
 *
-               CALL AB_CLARCM( N, N, RWORK( IRVT ), N, VT, LDVT,
+               CALL CLARCM( N, N, RWORK( IRVT ), N, VT, LDVT,
      $                      WORK( IU ), LDWRKU, RWORK( NRWORK ) )
-               CALL AB_CLACPY( 'F', N, N, WORK( IU ), LDWRKU, VT, LDVT )
+               CALL CLACPY( 'F', N, N, WORK( IU ), LDWRKU, VT, LDVT )
 *
 *              Multiply Q in A by real matrix RWORK(IRU), storing the
 *              result in WORK(IU), copying to A
@@ -1128,10 +1104,9 @@
                NRWORK = IRVT
                DO 20 I = 1, M, LDWRKU
                   CHUNK = MIN( M-I+1, LDWRKU )
-                  CALL AB_CLACRM( CHUNK, N, A( I, 1 ), LDA, RWORK( IRU )
-     $,
+                  CALL CLACRM( CHUNK, N, A( I, 1 ), LDA, RWORK( IRU ),
      $                         N, WORK( IU ), LDWRKU, RWORK( NRWORK ) )
-                  CALL AB_CLACPY( 'F', CHUNK, N, WORK( IU ), LDWRKU,
+                  CALL CLACPY( 'F', CHUNK, N, WORK( IU ), LDWRKU,
      $                         A( I, 1 ), LDA )
    20          CONTINUE
 *
@@ -1143,8 +1118,8 @@
 *              CWorkspace: prefer 2*N [tauq, taup] + N*NB [work]
 *              RWorkspace: need   0
 *
-               CALL AB_CLACPY( 'U', N, N, A, LDA, VT, LDVT )
-               CALL AB_CUNGBR( 'P', N, N, N, VT, LDVT, WORK( ITAUP ),
+               CALL CLACPY( 'U', N, N, A, LDA, VT, LDVT )
+               CALL CUNGBR( 'P', N, N, N, VT, LDVT, WORK( ITAUP ),
      $                      WORK( NWORK ), LWORK-NWORK+1, IERR )
 *
 *              Copy A to U, generate Q
@@ -1152,8 +1127,8 @@
 *              CWorkspace: prefer 2*N [tauq, taup] + N*NB [work]
 *              RWorkspace: need   0
 *
-               CALL AB_CLACPY( 'L', M, N, A, LDA, U, LDU )
-               CALL AB_CUNGBR( 'Q', M, N, N, U, LDU, WORK( ITAUQ ),
+               CALL CLACPY( 'L', M, N, A, LDA, U, LDU )
+               CALL CUNGBR( 'Q', M, N, N, U, LDU, WORK( ITAUQ ),
      $                      WORK( NWORK ), LWORK-NWORK+1, IERR )
 *
 *              Perform bidiagonal SVD, computing left singular vectors
@@ -1165,8 +1140,7 @@
                IRU = NRWORK
                IRVT = IRU + N*N
                NRWORK = IRVT + N*N
-               CALL AB_SBDSDC( 'U', 'I', N, S, RWORK( IE ), RWORK( IRU )
-     $,
+               CALL SBDSDC( 'U', 'I', N, S, RWORK( IE ), RWORK( IRU ),
      $                      N, RWORK( IRVT ), N, DUM, IDUM,
      $                      RWORK( NRWORK ), IWORK, INFO )
 *
@@ -1175,9 +1149,9 @@
 *              CWorkspace: need   0
 *              RWorkspace: need   N [e] + N*N [RU] + N*N [RVT] + 2*N*N [rwork]
 *
-               CALL AB_CLARCM( N, N, RWORK( IRVT ), N, VT, LDVT, A, LDA,
+               CALL CLARCM( N, N, RWORK( IRVT ), N, VT, LDVT, A, LDA,
      $                      RWORK( NRWORK ) )
-               CALL AB_CLACPY( 'F', N, N, A, LDA, VT, LDVT )
+               CALL CLACPY( 'F', N, N, A, LDA, VT, LDVT )
 *
 *              Multiply Q in U by real matrix RWORK(IRU), storing the
 *              result in A, copying to U
@@ -1185,9 +1159,9 @@
 *              RWorkspace: need   N [e] + N*N [RU] + 2*M*N [rwork] < N + 5*N*N since M < 2*N here
 *
                NRWORK = IRVT
-               CALL AB_CLACRM( M, N, U, LDU, RWORK( IRU ), N, A, LDA,
+               CALL CLACRM( M, N, U, LDU, RWORK( IRU ), N, A, LDA,
      $                      RWORK( NRWORK ) )
-               CALL AB_CLACPY( 'F', M, N, A, LDA, U, LDU )
+               CALL CLACPY( 'F', M, N, A, LDA, U, LDU )
             ELSE
 *
 *              Path 5a (M >> N, JOBZ='A')
@@ -1196,8 +1170,8 @@
 *              CWorkspace: prefer 2*N [tauq, taup] + N*NB [work]
 *              RWorkspace: need   0
 *
-               CALL AB_CLACPY( 'U', N, N, A, LDA, VT, LDVT )
-               CALL AB_CUNGBR( 'P', N, N, N, VT, LDVT, WORK( ITAUP ),
+               CALL CLACPY( 'U', N, N, A, LDA, VT, LDVT )
+               CALL CUNGBR( 'P', N, N, N, VT, LDVT, WORK( ITAUP ),
      $                      WORK( NWORK ), LWORK-NWORK+1, IERR )
 *
 *              Copy A to U, generate Q
@@ -1205,8 +1179,8 @@
 *              CWorkspace: prefer 2*N [tauq, taup] + M*NB [work]
 *              RWorkspace: need   0
 *
-               CALL AB_CLACPY( 'L', M, N, A, LDA, U, LDU )
-               CALL AB_CUNGBR( 'Q', M, M, N, U, LDU, WORK( ITAUQ ),
+               CALL CLACPY( 'L', M, N, A, LDA, U, LDU )
+               CALL CUNGBR( 'Q', M, M, N, U, LDU, WORK( ITAUQ ),
      $                      WORK( NWORK ), LWORK-NWORK+1, IERR )
 *
 *              Perform bidiagonal SVD, computing left singular vectors
@@ -1218,8 +1192,7 @@
                IRU = NRWORK
                IRVT = IRU + N*N
                NRWORK = IRVT + N*N
-               CALL AB_SBDSDC( 'U', 'I', N, S, RWORK( IE ), RWORK( IRU )
-     $,
+               CALL SBDSDC( 'U', 'I', N, S, RWORK( IE ), RWORK( IRU ),
      $                      N, RWORK( IRVT ), N, DUM, IDUM,
      $                      RWORK( NRWORK ), IWORK, INFO )
 *
@@ -1228,9 +1201,9 @@
 *              CWorkspace: need   0
 *              RWorkspace: need   N [e] + N*N [RU] + N*N [RVT] + 2*N*N [rwork]
 *
-               CALL AB_CLARCM( N, N, RWORK( IRVT ), N, VT, LDVT, A, LDA,
+               CALL CLARCM( N, N, RWORK( IRVT ), N, VT, LDVT, A, LDA,
      $                      RWORK( NRWORK ) )
-               CALL AB_CLACPY( 'F', N, N, A, LDA, VT, LDVT )
+               CALL CLACPY( 'F', N, N, A, LDA, VT, LDVT )
 *
 *              Multiply Q in U by real matrix RWORK(IRU), storing the
 *              result in A, copying to U
@@ -1238,9 +1211,9 @@
 *              RWorkspace: need   N [e] + N*N [RU] + 2*M*N [rwork] < N + 5*N*N since M < 2*N here
 *
                NRWORK = IRVT
-               CALL AB_CLACRM( M, N, U, LDU, RWORK( IRU ), N, A, LDA,
+               CALL CLACRM( M, N, U, LDU, RWORK( IRU ), N, A, LDA,
      $                      RWORK( NRWORK ) )
-               CALL AB_CLACPY( 'F', M, N, A, LDA, U, LDU )
+               CALL CLACPY( 'F', M, N, A, LDA, U, LDU )
             END IF
 *
          ELSE
@@ -1249,7 +1222,7 @@
 *
 *           Path 6 (M >= N, but not much larger)
 *           Reduce to bidiagonal form without QR decomposition
-*           Use AB_CUNMBR to compute singular vectors
+*           Use CUNMBR to compute singular vectors
 *
             IE = 1
             NRWORK = IE + N
@@ -1262,7 +1235,7 @@
 *           CWorkspace: prefer 2*N [tauq, taup] + (M+N)*NB [work]
 *           RWorkspace: need   N [e]
 *
-            CALL AB_CGEBRD( M, N, A, LDA, S, RWORK( IE ), WORK( ITAUQ ),
+            CALL CGEBRD( M, N, A, LDA, S, RWORK( IE ), WORK( ITAUQ ),
      $                   WORK( ITAUP ), WORK( NWORK ), LWORK-NWORK+1,
      $                   IERR )
             IF( WNTQN ) THEN
@@ -1272,7 +1245,7 @@
 *              CWorkspace: need   0
 *              RWorkspace: need   N [e] + BDSPAC
 *
-               CALL AB_SBDSDC( 'U', 'N', N, S, RWORK( IE ), DUM,1,DUM,1,
+               CALL SBDSDC( 'U', 'N', N, S, RWORK( IE ), DUM,1,DUM,1,
      $                      DUM, IDUM, RWORK( NRWORK ), IWORK, INFO )
             ELSE IF( WNTQO ) THEN
                IU = NWORK
@@ -1299,8 +1272,7 @@
 *              CWorkspace: need   0
 *              RWorkspace: need   N [e] + N*N [RU] + N*N [RVT] + BDSPAC
 *
-               CALL AB_SBDSDC( 'U', 'I', N, S, RWORK( IE ), RWORK( IRU )
-     $,
+               CALL SBDSDC( 'U', 'I', N, S, RWORK( IE ), RWORK( IRU ),
      $                      N, RWORK( IRVT ), N, DUM, IDUM,
      $                      RWORK( NRWORK ), IWORK, INFO )
 *
@@ -1310,8 +1282,8 @@
 *              CWorkspace: prefer 2*N [tauq, taup] + N*N [U] + N*NB [work]
 *              RWorkspace: need   N [e] + N*N [RU] + N*N [RVT]
 *
-               CALL AB_CLACP2( 'F', N, N, RWORK( IRVT ), N, VT, LDVT )
-               CALL AB_CUNMBR( 'P', 'R', 'C', N, N, N, A, LDA,
+               CALL CLACP2( 'F', N, N, RWORK( IRVT ), N, VT, LDVT )
+               CALL CUNMBR( 'P', 'R', 'C', N, N, N, A, LDA,
      $                      WORK( ITAUP ), VT, LDVT, WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
 *
@@ -1325,16 +1297,14 @@
 *                 CWorkspace: prefer 2*N [tauq, taup] + M*N [U] + N*NB [work]
 *                 RWorkspace: need   N [e] + N*N [RU]
 *
-                  CALL AB_CLASET( 'F', M, N, CZERO, CZERO, WORK( IU ),
+                  CALL CLASET( 'F', M, N, CZERO, CZERO, WORK( IU ),
      $                         LDWRKU )
-                  CALL AB_CLACP2( 'F', N, N, RWORK( IRU ), N, WORK( IU )
-     $,
+                  CALL CLACP2( 'F', N, N, RWORK( IRU ), N, WORK( IU ),
      $                         LDWRKU )
-                  CALL AB_CUNMBR( 'Q', 'L', 'N', M, N, N, A, LDA,
+                  CALL CUNMBR( 'Q', 'L', 'N', M, N, N, A, LDA,
      $                         WORK( ITAUQ ), WORK( IU ), LDWRKU,
      $                         WORK( NWORK ), LWORK-NWORK+1, IERR )
-                  CALL AB_CLACPY( 'F', M, N, WORK( IU ), LDWRKU, A, LDA 
-     $)
+                  CALL CLACPY( 'F', M, N, WORK( IU ), LDWRKU, A, LDA )
                ELSE
 *
 *                 Path 6o-slow
@@ -1343,7 +1313,7 @@
 *                 CWorkspace: prefer 2*N [tauq, taup] + N*N [U] + N*NB [work]
 *                 RWorkspace: need   0
 *
-                  CALL AB_CUNGBR( 'Q', M, N, N, A, LDA, WORK( ITAUQ ),
+                  CALL CUNGBR( 'Q', M, N, N, A, LDA, WORK( ITAUQ ),
      $                         WORK( NWORK ), LWORK-NWORK+1, IERR )
 *
 *                 Multiply Q in A by real matrix RWORK(IRU), storing the
@@ -1356,10 +1326,10 @@
                   NRWORK = IRVT
                   DO 30 I = 1, M, LDWRKU
                      CHUNK = MIN( M-I+1, LDWRKU )
-                     CALL AB_CLACRM( CHUNK, N, A( I, 1 ), LDA,
+                     CALL CLACRM( CHUNK, N, A( I, 1 ), LDA,
      $                            RWORK( IRU ), N, WORK( IU ), LDWRKU,
      $                            RWORK( NRWORK ) )
-                     CALL AB_CLACPY( 'F', CHUNK, N, WORK( IU ), LDWRKU,
+                     CALL CLACPY( 'F', CHUNK, N, WORK( IU ), LDWRKU,
      $                            A( I, 1 ), LDA )
    30             CONTINUE
                END IF
@@ -1376,8 +1346,7 @@
                IRU = NRWORK
                IRVT = IRU + N*N
                NRWORK = IRVT + N*N
-               CALL AB_SBDSDC( 'U', 'I', N, S, RWORK( IE ), RWORK( IRU )
-     $,
+               CALL SBDSDC( 'U', 'I', N, S, RWORK( IE ), RWORK( IRU ),
      $                      N, RWORK( IRVT ), N, DUM, IDUM,
      $                      RWORK( NRWORK ), IWORK, INFO )
 *
@@ -1387,9 +1356,9 @@
 *              CWorkspace: prefer 2*N [tauq, taup] + N*NB [work]
 *              RWorkspace: need   N [e] + N*N [RU] + N*N [RVT]
 *
-               CALL AB_CLASET( 'F', M, N, CZERO, CZERO, U, LDU )
-               CALL AB_CLACP2( 'F', N, N, RWORK( IRU ), N, U, LDU )
-               CALL AB_CUNMBR( 'Q', 'L', 'N', M, N, N, A, LDA,
+               CALL CLASET( 'F', M, N, CZERO, CZERO, U, LDU )
+               CALL CLACP2( 'F', N, N, RWORK( IRU ), N, U, LDU )
+               CALL CUNMBR( 'Q', 'L', 'N', M, N, N, A, LDA,
      $                      WORK( ITAUQ ), U, LDU, WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
 *
@@ -1399,8 +1368,8 @@
 *              CWorkspace: prefer 2*N [tauq, taup] + N*NB [work]
 *              RWorkspace: need   N [e] + N*N [RU] + N*N [RVT]
 *
-               CALL AB_CLACP2( 'F', N, N, RWORK( IRVT ), N, VT, LDVT )
-               CALL AB_CUNMBR( 'P', 'R', 'C', N, N, N, A, LDA,
+               CALL CLACP2( 'F', N, N, RWORK( IRVT ), N, VT, LDVT )
+               CALL CUNMBR( 'P', 'R', 'C', N, N, N, A, LDA,
      $                      WORK( ITAUP ), VT, LDVT, WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
             ELSE
@@ -1415,16 +1384,15 @@
                IRU = NRWORK
                IRVT = IRU + N*N
                NRWORK = IRVT + N*N
-               CALL AB_SBDSDC( 'U', 'I', N, S, RWORK( IE ), RWORK( IRU )
-     $,
+               CALL SBDSDC( 'U', 'I', N, S, RWORK( IE ), RWORK( IRU ),
      $                      N, RWORK( IRVT ), N, DUM, IDUM,
      $                      RWORK( NRWORK ), IWORK, INFO )
 *
 *              Set the right corner of U to identity matrix
 *
-               CALL AB_CLASET( 'F', M, M, CZERO, CZERO, U, LDU )
+               CALL CLASET( 'F', M, M, CZERO, CZERO, U, LDU )
                IF( M.GT.N ) THEN
-                  CALL AB_CLASET( 'F', M-N, M-N, CZERO, CONE,
+                  CALL CLASET( 'F', M-N, M-N, CZERO, CONE,
      $                         U( N+1, N+1 ), LDU )
                END IF
 *
@@ -1434,8 +1402,8 @@
 *              CWorkspace: prefer 2*N [tauq, taup] + M*NB [work]
 *              RWorkspace: need   N [e] + N*N [RU] + N*N [RVT]
 *
-               CALL AB_CLACP2( 'F', N, N, RWORK( IRU ), N, U, LDU )
-               CALL AB_CUNMBR( 'Q', 'L', 'N', M, M, N, A, LDA,
+               CALL CLACP2( 'F', N, N, RWORK( IRU ), N, U, LDU )
+               CALL CUNMBR( 'Q', 'L', 'N', M, M, N, A, LDA,
      $                      WORK( ITAUQ ), U, LDU, WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
 *
@@ -1445,8 +1413,8 @@
 *              CWorkspace: prefer 2*N [tauq, taup] + N*NB [work]
 *              RWorkspace: need   N [e] + N*N [RU] + N*N [RVT]
 *
-               CALL AB_CLACP2( 'F', N, N, RWORK( IRVT ), N, VT, LDVT )
-               CALL AB_CUNMBR( 'P', 'R', 'C', N, N, N, A, LDA,
+               CALL CLACP2( 'F', N, N, RWORK( IRVT ), N, VT, LDVT )
+               CALL CUNMBR( 'P', 'R', 'C', N, N, N, A, LDA,
      $                      WORK( ITAUP ), VT, LDVT, WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
             END IF
@@ -1474,13 +1442,12 @@
 *              CWorkspace: prefer M [tau] + M*NB [work]
 *              RWorkspace: need   0
 *
-               CALL AB_AB_CGELQF( M, N, A, LDA, WORK( ITAU ), WORK( NWOR
-     $K ),
+               CALL CGELQF( M, N, A, LDA, WORK( ITAU ), WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
 *
 *              Zero out above L
 *
-               CALL AB_CLASET( 'U', M-1, M-1, CZERO, CZERO, A( 1, 2 ),
+               CALL CLASET( 'U', M-1, M-1, CZERO, CZERO, A( 1, 2 ),
      $                      LDA )
                IE = 1
                ITAUQ = 1
@@ -1492,8 +1459,7 @@
 *              CWorkspace: prefer 2*M [tauq, taup] + 2*M*NB [work]
 *              RWorkspace: need   M [e]
 *
-               CALL AB_CGEBRD( M, M, A, LDA, S, RWORK( IE ), WORK( ITAUQ
-     $ ),
+               CALL CGEBRD( M, M, A, LDA, S, RWORK( IE ), WORK( ITAUQ ),
      $                      WORK( ITAUP ), WORK( NWORK ), LWORK-NWORK+1,
      $                      IERR )
                NRWORK = IE + M
@@ -1502,7 +1468,7 @@
 *              CWorkspace: need   0
 *              RWorkspace: need   M [e] + BDSPAC
 *
-               CALL AB_SBDSDC( 'U', 'N', M, S, RWORK( IE ), DUM,1,DUM,1,
+               CALL SBDSDC( 'U', 'N', M, S, RWORK( IE ), DUM,1,DUM,1,
      $                      DUM, IDUM, RWORK( NRWORK ), IWORK, INFO )
 *
             ELSE IF( WNTQO ) THEN
@@ -1538,14 +1504,13 @@
 *              CWorkspace: prefer M*M [VT] + M*M [L] + M [tau] + M*NB [work]
 *              RWorkspace: need   0
 *
-               CALL AB_AB_CGELQF( M, N, A, LDA, WORK( ITAU ), WORK( NWOR
-     $K ),
+               CALL CGELQF( M, N, A, LDA, WORK( ITAU ), WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
 *
 *              Copy L to WORK(IL), zeroing about above it
 *
-               CALL AB_CLACPY( 'L', M, M, A, LDA, WORK( IL ), LDWRKL )
-               CALL AB_CLASET( 'U', M-1, M-1, CZERO, CZERO,
+               CALL CLACPY( 'L', M, M, A, LDA, WORK( IL ), LDWRKL )
+               CALL CLASET( 'U', M-1, M-1, CZERO, CZERO,
      $                      WORK( IL+LDWRKL ), LDWRKL )
 *
 *              Generate Q in A
@@ -1553,7 +1518,7 @@
 *              CWorkspace: prefer M*M [VT] + M*M [L] + M [tau] + M*NB [work]
 *              RWorkspace: need   0
 *
-               CALL AB_CUNGLQ( M, N, M, A, LDA, WORK( ITAU ),
+               CALL CUNGLQ( M, N, M, A, LDA, WORK( ITAU ),
      $                      WORK( NWORK ), LWORK-NWORK+1, IERR )
                IE = 1
                ITAUQ = ITAU
@@ -1565,7 +1530,7 @@
 *              CWorkspace: prefer M*M [VT] + M*M [L] + 2*M [tauq, taup] + 2*M*NB [work]
 *              RWorkspace: need   M [e]
 *
-               CALL AB_CGEBRD( M, M, WORK( IL ), LDWRKL, S, RWORK( IE ),
+               CALL CGEBRD( M, M, WORK( IL ), LDWRKL, S, RWORK( IE ),
      $                      WORK( ITAUQ ), WORK( ITAUP ), WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
 *
@@ -1578,8 +1543,7 @@
                IRU = IE + M
                IRVT = IRU + M*M
                NRWORK = IRVT + M*M
-               CALL AB_SBDSDC( 'U', 'I', M, S, RWORK( IE ), RWORK( IRU )
-     $,
+               CALL SBDSDC( 'U', 'I', M, S, RWORK( IE ), RWORK( IRU ),
      $                      M, RWORK( IRVT ), M, DUM, IDUM,
      $                      RWORK( NRWORK ), IWORK, INFO )
 *
@@ -1589,9 +1553,8 @@
 *              CWorkspace: prefer M*M [VT] + M*M [L] + 2*M [tauq, taup] + M*NB [work]
 *              RWorkspace: need   0
 *
-               CALL AB_CLACP2( 'F', M, M, RWORK( IRU ), M, U, LDU )
-               CALL AB_CUNMBR( 'Q', 'L', 'N', M, M, M, WORK( IL ), LDWRK
-     $L,
+               CALL CLACP2( 'F', M, M, RWORK( IRU ), M, U, LDU )
+               CALL CUNMBR( 'Q', 'L', 'N', M, M, M, WORK( IL ), LDWRKL,
      $                      WORK( ITAUQ ), U, LDU, WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
 *
@@ -1601,10 +1564,9 @@
 *              CWorkspace: prefer M*M [VT] + M*M [L] + 2*M [tauq, taup] + M*NB [work]
 *              RWorkspace: need   0
 *
-               CALL AB_CLACP2( 'F', M, M, RWORK( IRVT ), M, WORK( IVT ),
+               CALL CLACP2( 'F', M, M, RWORK( IRVT ), M, WORK( IVT ),
      $                      LDWKVT )
-               CALL AB_CUNMBR( 'P', 'R', 'C', M, M, M, WORK( IL ), LDWRK
-     $L,
+               CALL CUNMBR( 'P', 'R', 'C', M, M, M, WORK( IL ), LDWRKL,
      $                      WORK( ITAUP ), WORK( IVT ), LDWKVT,
      $                      WORK( NWORK ), LWORK-NWORK+1, IERR )
 *
@@ -1616,11 +1578,10 @@
 *
                DO 40 I = 1, N, CHUNK
                   BLK = MIN( N-I+1, CHUNK )
-                  CALL AB_CGEMM( 'N', 'N', M, BLK, M, CONE, WORK( IVT ),
-     $ M,
+                  CALL CGEMM( 'N', 'N', M, BLK, M, CONE, WORK( IVT ), M,
      $                        A( 1, I ), LDA, CZERO, WORK( IL ),
      $                        LDWRKL )
-                  CALL AB_CLACPY( 'F', M, BLK, WORK( IL ), LDWRKL,
+                  CALL CLACPY( 'F', M, BLK, WORK( IL ), LDWRKL,
      $                         A( 1, I ), LDA )
    40          CONTINUE
 *
@@ -1643,14 +1604,13 @@
 *              CWorkspace: prefer M*M [L] + M [tau] + M*NB [work]
 *              RWorkspace: need   0
 *
-               CALL AB_AB_CGELQF( M, N, A, LDA, WORK( ITAU ), WORK( NWOR
-     $K ),
+               CALL CGELQF( M, N, A, LDA, WORK( ITAU ), WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
 *
 *              Copy L to WORK(IL), zeroing out above it
 *
-               CALL AB_CLACPY( 'L', M, M, A, LDA, WORK( IL ), LDWRKL )
-               CALL AB_CLASET( 'U', M-1, M-1, CZERO, CZERO,
+               CALL CLACPY( 'L', M, M, A, LDA, WORK( IL ), LDWRKL )
+               CALL CLASET( 'U', M-1, M-1, CZERO, CZERO,
      $                      WORK( IL+LDWRKL ), LDWRKL )
 *
 *              Generate Q in A
@@ -1658,7 +1618,7 @@
 *              CWorkspace: prefer M*M [L] + M [tau] + M*NB [work]
 *              RWorkspace: need   0
 *
-               CALL AB_CUNGLQ( M, N, M, A, LDA, WORK( ITAU ),
+               CALL CUNGLQ( M, N, M, A, LDA, WORK( ITAU ),
      $                      WORK( NWORK ), LWORK-NWORK+1, IERR )
                IE = 1
                ITAUQ = ITAU
@@ -1670,7 +1630,7 @@
 *              CWorkspace: prefer M*M [L] + 2*M [tauq, taup] + 2*M*NB [work]
 *              RWorkspace: need   M [e]
 *
-               CALL AB_CGEBRD( M, M, WORK( IL ), LDWRKL, S, RWORK( IE ),
+               CALL CGEBRD( M, M, WORK( IL ), LDWRKL, S, RWORK( IE ),
      $                      WORK( ITAUQ ), WORK( ITAUP ), WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
 *
@@ -1683,8 +1643,7 @@
                IRU = IE + M
                IRVT = IRU + M*M
                NRWORK = IRVT + M*M
-               CALL AB_SBDSDC( 'U', 'I', M, S, RWORK( IE ), RWORK( IRU )
-     $,
+               CALL SBDSDC( 'U', 'I', M, S, RWORK( IE ), RWORK( IRU ),
      $                      M, RWORK( IRVT ), M, DUM, IDUM,
      $                      RWORK( NRWORK ), IWORK, INFO )
 *
@@ -1694,9 +1653,8 @@
 *              CWorkspace: prefer M*M [L] + 2*M [tauq, taup] + M*NB [work]
 *              RWorkspace: need   0
 *
-               CALL AB_CLACP2( 'F', M, M, RWORK( IRU ), M, U, LDU )
-               CALL AB_CUNMBR( 'Q', 'L', 'N', M, M, M, WORK( IL ), LDWRK
-     $L,
+               CALL CLACP2( 'F', M, M, RWORK( IRU ), M, U, LDU )
+               CALL CUNMBR( 'Q', 'L', 'N', M, M, M, WORK( IL ), LDWRKL,
      $                      WORK( ITAUQ ), U, LDU, WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
 *
@@ -1706,9 +1664,8 @@
 *              CWorkspace: prefer M*M [L] + 2*M [tauq, taup] + M*NB [work]
 *              RWorkspace: need   0
 *
-               CALL AB_CLACP2( 'F', M, M, RWORK( IRVT ), M, VT, LDVT )
-               CALL AB_CUNMBR( 'P', 'R', 'C', M, M, M, WORK( IL ), LDWRK
-     $L,
+               CALL CLACP2( 'F', M, M, RWORK( IRVT ), M, VT, LDVT )
+               CALL CUNMBR( 'P', 'R', 'C', M, M, M, WORK( IL ), LDWRKL,
      $                      WORK( ITAUP ), VT, LDVT, WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
 *
@@ -1717,9 +1674,8 @@
 *              CWorkspace: need   M*M [L]
 *              RWorkspace: need   0
 *
-               CALL AB_CLACPY( 'F', M, M, VT, LDVT, WORK( IL ), LDWRKL )
-               CALL AB_CGEMM( 'N', 'N', M, N, M, CONE, WORK( IL ), LDWRK
-     $L,
+               CALL CLACPY( 'F', M, M, VT, LDVT, WORK( IL ), LDWRKL )
+               CALL CGEMM( 'N', 'N', M, N, M, CONE, WORK( IL ), LDWRKL,
      $                     A, LDA, CZERO, VT, LDVT )
 *
             ELSE IF( WNTQA ) THEN
@@ -1741,22 +1697,21 @@
 *              CWorkspace: prefer M*M [VT] + M [tau] + M*NB [work]
 *              RWorkspace: need   0
 *
-               CALL AB_AB_CGELQF( M, N, A, LDA, WORK( ITAU ), WORK( NWOR
-     $K ),
+               CALL CGELQF( M, N, A, LDA, WORK( ITAU ), WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
-               CALL AB_CLACPY( 'U', M, N, A, LDA, VT, LDVT )
+               CALL CLACPY( 'U', M, N, A, LDA, VT, LDVT )
 *
 *              Generate Q in VT
 *              CWorkspace: need   M*M [VT] + M [tau] + N    [work]
 *              CWorkspace: prefer M*M [VT] + M [tau] + N*NB [work]
 *              RWorkspace: need   0
 *
-               CALL AB_CUNGLQ( N, N, M, VT, LDVT, WORK( ITAU ),
+               CALL CUNGLQ( N, N, M, VT, LDVT, WORK( ITAU ),
      $                      WORK( NWORK ), LWORK-NWORK+1, IERR )
 *
 *              Produce L in A, zeroing out above it
 *
-               CALL AB_CLASET( 'U', M-1, M-1, CZERO, CZERO, A( 1, 2 ),
+               CALL CLASET( 'U', M-1, M-1, CZERO, CZERO, A( 1, 2 ),
      $                      LDA )
                IE = 1
                ITAUQ = ITAU
@@ -1768,8 +1723,7 @@
 *              CWorkspace: prefer M*M [VT] + 2*M [tauq, taup] + 2*M*NB [work]
 *              RWorkspace: need   M [e]
 *
-               CALL AB_CGEBRD( M, M, A, LDA, S, RWORK( IE ), WORK( ITAUQ
-     $ ),
+               CALL CGEBRD( M, M, A, LDA, S, RWORK( IE ), WORK( ITAUQ ),
      $                      WORK( ITAUP ), WORK( NWORK ), LWORK-NWORK+1,
      $                      IERR )
 *
@@ -1782,8 +1736,7 @@
                IRU = IE + M
                IRVT = IRU + M*M
                NRWORK = IRVT + M*M
-               CALL AB_SBDSDC( 'U', 'I', M, S, RWORK( IE ), RWORK( IRU )
-     $,
+               CALL SBDSDC( 'U', 'I', M, S, RWORK( IE ), RWORK( IRU ),
      $                      M, RWORK( IRVT ), M, DUM, IDUM,
      $                      RWORK( NRWORK ), IWORK, INFO )
 *
@@ -1793,8 +1746,8 @@
 *              CWorkspace: prefer M*M [VT] + 2*M [tauq, taup] + M*NB [work]
 *              RWorkspace: need   0
 *
-               CALL AB_CLACP2( 'F', M, M, RWORK( IRU ), M, U, LDU )
-               CALL AB_CUNMBR( 'Q', 'L', 'N', M, M, M, A, LDA,
+               CALL CLACP2( 'F', M, M, RWORK( IRU ), M, U, LDU )
+               CALL CUNMBR( 'Q', 'L', 'N', M, M, M, A, LDA,
      $                      WORK( ITAUQ ), U, LDU, WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
 *
@@ -1804,9 +1757,9 @@
 *              CWorkspace: prefer M*M [VT] + 2*M [tauq, taup] + M*NB [work]
 *              RWorkspace: need   0
 *
-               CALL AB_CLACP2( 'F', M, M, RWORK( IRVT ), M, WORK( IVT ),
+               CALL CLACP2( 'F', M, M, RWORK( IRVT ), M, WORK( IVT ),
      $                      LDWKVT )
-               CALL AB_CUNMBR( 'P', 'R', 'C', M, M, M, A, LDA,
+               CALL CUNMBR( 'P', 'R', 'C', M, M, M, A, LDA,
      $                      WORK( ITAUP ), WORK( IVT ), LDWKVT,
      $                      WORK( NWORK ), LWORK-NWORK+1, IERR )
 *
@@ -1815,13 +1768,12 @@
 *              CWorkspace: need   M*M [VT]
 *              RWorkspace: need   0
 *
-               CALL AB_CGEMM( 'N', 'N', M, N, M, CONE, WORK( IVT ), LDWK
-     $VT,
+               CALL CGEMM( 'N', 'N', M, N, M, CONE, WORK( IVT ), LDWKVT,
      $                     VT, LDVT, CZERO, A, LDA )
 *
 *              Copy right singular vectors of A from A to VT
 *
-               CALL AB_CLACPY( 'F', M, N, A, LDA, VT, LDVT )
+               CALL CLACPY( 'F', M, N, A, LDA, VT, LDVT )
 *
             END IF
 *
@@ -1831,7 +1783,7 @@
 *
 *           Path 5t (N >> M, but not as much as MNTHR1)
 *           Reduce to bidiagonal form without QR decomposition, use
-*           AB_CUNGBR and matrix multiplication to compute singular vectors
+*           CUNGBR and matrix multiplication to compute singular vectors
 *
             IE = 1
             NRWORK = IE + M
@@ -1844,7 +1796,7 @@
 *           CWorkspace: prefer 2*M [tauq, taup] + (M+N)*NB [work]
 *           RWorkspace: need   M [e]
 *
-            CALL AB_CGEBRD( M, N, A, LDA, S, RWORK( IE ), WORK( ITAUQ ),
+            CALL CGEBRD( M, N, A, LDA, S, RWORK( IE ), WORK( ITAUQ ),
      $                   WORK( ITAUP ), WORK( NWORK ), LWORK-NWORK+1,
      $                   IERR )
 *
@@ -1855,7 +1807,7 @@
 *              CWorkspace: need   0
 *              RWorkspace: need   M [e] + BDSPAC
 *
-               CALL AB_SBDSDC( 'L', 'N', M, S, RWORK( IE ), DUM,1,DUM,1,
+               CALL SBDSDC( 'L', 'N', M, S, RWORK( IE ), DUM,1,DUM,1,
      $                      DUM, IDUM, RWORK( NRWORK ), IWORK, INFO )
             ELSE IF( WNTQO ) THEN
                IRVT = NRWORK
@@ -1869,8 +1821,8 @@
 *              CWorkspace: prefer 2*M [tauq, taup] + M*NB [work]
 *              RWorkspace: need   0
 *
-               CALL AB_CLACPY( 'L', M, M, A, LDA, U, LDU )
-               CALL AB_CUNGBR( 'Q', M, M, N, U, LDU, WORK( ITAUQ ),
+               CALL CLACPY( 'L', M, M, A, LDA, U, LDU )
+               CALL CUNGBR( 'Q', M, M, N, U, LDU, WORK( ITAUQ ),
      $                      WORK( NWORK ), LWORK-NWORK+1, IERR )
 *
 *              Generate P**H in A
@@ -1878,7 +1830,7 @@
 *              CWorkspace: prefer 2*M [tauq, taup] + M*NB [work]
 *              RWorkspace: need   0
 *
-               CALL AB_CUNGBR( 'P', M, N, M, A, LDA, WORK( ITAUP ),
+               CALL CUNGBR( 'P', M, N, M, A, LDA, WORK( ITAUP ),
      $                      WORK( NWORK ), LWORK-NWORK+1, IERR )
 *
                LDWKVT = M
@@ -1902,8 +1854,7 @@
 *              CWorkspace: need   0
 *              RWorkspace: need   M [e] + M*M [RVT] + M*M [RU] + BDSPAC
 *
-               CALL AB_SBDSDC( 'L', 'I', M, S, RWORK( IE ), RWORK( IRU )
-     $,
+               CALL SBDSDC( 'L', 'I', M, S, RWORK( IE ), RWORK( IRU ),
      $                      M, RWORK( IRVT ), M, DUM, IDUM,
      $                      RWORK( NRWORK ), IWORK, INFO )
 *
@@ -1912,10 +1863,9 @@
 *              CWorkspace: need   2*M [tauq, taup] + M*M [VT]
 *              RWorkspace: need   M [e] + M*M [RVT] + M*M [RU] + 2*M*M [rwork]
 *
-               CALL AB_CLACRM( M, M, U, LDU, RWORK( IRU ), M, WORK( IVT 
-     $),
+               CALL CLACRM( M, M, U, LDU, RWORK( IRU ), M, WORK( IVT ),
      $                      LDWKVT, RWORK( NRWORK ) )
-               CALL AB_CLACPY( 'F', M, M, WORK( IVT ), LDWKVT, U, LDU )
+               CALL CLACPY( 'F', M, M, WORK( IVT ), LDWKVT, U, LDU )
 *
 *              Multiply RWORK(IRVT) by P**H in A, storing the
 *              result in WORK(IVT), copying to A
@@ -1927,10 +1877,9 @@
                NRWORK = IRU
                DO 50 I = 1, N, CHUNK
                   BLK = MIN( N-I+1, CHUNK )
-                  CALL AB_CLARCM( M, BLK, RWORK( IRVT ), M, A( 1, I ), L
-     $DA,
+                  CALL CLARCM( M, BLK, RWORK( IRVT ), M, A( 1, I ), LDA,
      $                         WORK( IVT ), LDWKVT, RWORK( NRWORK ) )
-                  CALL AB_CLACPY( 'F', M, BLK, WORK( IVT ), LDWKVT,
+                  CALL CLACPY( 'F', M, BLK, WORK( IVT ), LDWKVT,
      $                         A( 1, I ), LDA )
    50          CONTINUE
             ELSE IF( WNTQS ) THEN
@@ -1941,8 +1890,8 @@
 *              CWorkspace: prefer 2*M [tauq, taup] + M*NB [work]
 *              RWorkspace: need   0
 *
-               CALL AB_CLACPY( 'L', M, M, A, LDA, U, LDU )
-               CALL AB_CUNGBR( 'Q', M, M, N, U, LDU, WORK( ITAUQ ),
+               CALL CLACPY( 'L', M, M, A, LDA, U, LDU )
+               CALL CUNGBR( 'Q', M, M, N, U, LDU, WORK( ITAUQ ),
      $                      WORK( NWORK ), LWORK-NWORK+1, IERR )
 *
 *              Copy A to VT, generate P**H
@@ -1950,8 +1899,8 @@
 *              CWorkspace: prefer 2*M [tauq, taup] + M*NB [work]
 *              RWorkspace: need   0
 *
-               CALL AB_CLACPY( 'U', M, N, A, LDA, VT, LDVT )
-               CALL AB_CUNGBR( 'P', M, N, M, VT, LDVT, WORK( ITAUP ),
+               CALL CLACPY( 'U', M, N, A, LDA, VT, LDVT )
+               CALL CUNGBR( 'P', M, N, M, VT, LDVT, WORK( ITAUP ),
      $                      WORK( NWORK ), LWORK-NWORK+1, IERR )
 *
 *              Perform bidiagonal SVD, computing left singular vectors
@@ -1963,8 +1912,7 @@
                IRVT = NRWORK
                IRU = IRVT + M*M
                NRWORK = IRU + M*M
-               CALL AB_SBDSDC( 'L', 'I', M, S, RWORK( IE ), RWORK( IRU )
-     $,
+               CALL SBDSDC( 'L', 'I', M, S, RWORK( IE ), RWORK( IRU ),
      $                      M, RWORK( IRVT ), M, DUM, IDUM,
      $                      RWORK( NRWORK ), IWORK, INFO )
 *
@@ -1973,9 +1921,9 @@
 *              CWorkspace: need   0
 *              RWorkspace: need   M [e] + M*M [RVT] + M*M [RU] + 2*M*M [rwork]
 *
-               CALL AB_CLACRM( M, M, U, LDU, RWORK( IRU ), M, A, LDA,
+               CALL CLACRM( M, M, U, LDU, RWORK( IRU ), M, A, LDA,
      $                      RWORK( NRWORK ) )
-               CALL AB_CLACPY( 'F', M, M, A, LDA, U, LDU )
+               CALL CLACPY( 'F', M, M, A, LDA, U, LDU )
 *
 *              Multiply real matrix RWORK(IRVT) by P**H in VT,
 *              storing the result in A, copying to VT
@@ -1983,9 +1931,9 @@
 *              RWorkspace: need   M [e] + M*M [RVT] + 2*M*N [rwork] < M + 5*M*M since N < 2*M here
 *
                NRWORK = IRU
-               CALL AB_CLARCM( M, N, RWORK( IRVT ), M, VT, LDVT, A, LDA,
+               CALL CLARCM( M, N, RWORK( IRVT ), M, VT, LDVT, A, LDA,
      $                      RWORK( NRWORK ) )
-               CALL AB_CLACPY( 'F', M, N, A, LDA, VT, LDVT )
+               CALL CLACPY( 'F', M, N, A, LDA, VT, LDVT )
             ELSE
 *
 *              Path 5ta (N >> M, JOBZ='A')
@@ -1994,8 +1942,8 @@
 *              CWorkspace: prefer 2*M [tauq, taup] + M*NB [work]
 *              RWorkspace: need   0
 *
-               CALL AB_CLACPY( 'L', M, M, A, LDA, U, LDU )
-               CALL AB_CUNGBR( 'Q', M, M, N, U, LDU, WORK( ITAUQ ),
+               CALL CLACPY( 'L', M, M, A, LDA, U, LDU )
+               CALL CUNGBR( 'Q', M, M, N, U, LDU, WORK( ITAUQ ),
      $                      WORK( NWORK ), LWORK-NWORK+1, IERR )
 *
 *              Copy A to VT, generate P**H
@@ -2003,8 +1951,8 @@
 *              CWorkspace: prefer 2*M [tauq, taup] + N*NB [work]
 *              RWorkspace: need   0
 *
-               CALL AB_CLACPY( 'U', M, N, A, LDA, VT, LDVT )
-               CALL AB_CUNGBR( 'P', N, N, M, VT, LDVT, WORK( ITAUP ),
+               CALL CLACPY( 'U', M, N, A, LDA, VT, LDVT )
+               CALL CUNGBR( 'P', N, N, M, VT, LDVT, WORK( ITAUP ),
      $                      WORK( NWORK ), LWORK-NWORK+1, IERR )
 *
 *              Perform bidiagonal SVD, computing left singular vectors
@@ -2016,8 +1964,7 @@
                IRVT = NRWORK
                IRU = IRVT + M*M
                NRWORK = IRU + M*M
-               CALL AB_SBDSDC( 'L', 'I', M, S, RWORK( IE ), RWORK( IRU )
-     $,
+               CALL SBDSDC( 'L', 'I', M, S, RWORK( IE ), RWORK( IRU ),
      $                      M, RWORK( IRVT ), M, DUM, IDUM,
      $                      RWORK( NRWORK ), IWORK, INFO )
 *
@@ -2026,9 +1973,9 @@
 *              CWorkspace: need   0
 *              RWorkspace: need   M [e] + M*M [RVT] + M*M [RU] + 2*M*M [rwork]
 *
-               CALL AB_CLACRM( M, M, U, LDU, RWORK( IRU ), M, A, LDA,
+               CALL CLACRM( M, M, U, LDU, RWORK( IRU ), M, A, LDA,
      $                      RWORK( NRWORK ) )
-               CALL AB_CLACPY( 'F', M, M, A, LDA, U, LDU )
+               CALL CLACPY( 'F', M, M, A, LDA, U, LDU )
 *
 *              Multiply real matrix RWORK(IRVT) by P**H in VT,
 *              storing the result in A, copying to VT
@@ -2036,9 +1983,9 @@
 *              RWorkspace: need   M [e] + M*M [RVT] + 2*M*N [rwork] < M + 5*M*M since N < 2*M here
 *
                NRWORK = IRU
-               CALL AB_CLARCM( M, N, RWORK( IRVT ), M, VT, LDVT, A, LDA,
+               CALL CLARCM( M, N, RWORK( IRVT ), M, VT, LDVT, A, LDA,
      $                      RWORK( NRWORK ) )
-               CALL AB_CLACPY( 'F', M, N, A, LDA, VT, LDVT )
+               CALL CLACPY( 'F', M, N, A, LDA, VT, LDVT )
             END IF
 *
          ELSE
@@ -2047,7 +1994,7 @@
 *
 *           Path 6t (N > M, but not much larger)
 *           Reduce to bidiagonal form without LQ decomposition
-*           Use AB_CUNMBR to compute singular vectors
+*           Use CUNMBR to compute singular vectors
 *
             IE = 1
             NRWORK = IE + M
@@ -2060,7 +2007,7 @@
 *           CWorkspace: prefer 2*M [tauq, taup] + (M+N)*NB [work]
 *           RWorkspace: need   M [e]
 *
-            CALL AB_CGEBRD( M, N, A, LDA, S, RWORK( IE ), WORK( ITAUQ ),
+            CALL CGEBRD( M, N, A, LDA, S, RWORK( IE ), WORK( ITAUQ ),
      $                   WORK( ITAUP ), WORK( NWORK ), LWORK-NWORK+1,
      $                   IERR )
             IF( WNTQN ) THEN
@@ -2070,7 +2017,7 @@
 *              CWorkspace: need   0
 *              RWorkspace: need   M [e] + BDSPAC
 *
-               CALL AB_SBDSDC( 'L', 'N', M, S, RWORK( IE ), DUM,1,DUM,1,
+               CALL SBDSDC( 'L', 'N', M, S, RWORK( IE ), DUM,1,DUM,1,
      $                      DUM, IDUM, RWORK( NRWORK ), IWORK, INFO )
             ELSE IF( WNTQO ) THEN
 *              Path 6to (N > M, JOBZ='O')
@@ -2080,7 +2027,7 @@
 *
 *                 WORK( IVT ) is M by N
 *
-                  CALL AB_CLASET( 'F', M, N, CZERO, CZERO, WORK( IVT ),
+                  CALL CLASET( 'F', M, N, CZERO, CZERO, WORK( IVT ),
      $                         LDWKVT )
                   NWORK = IVT + LDWKVT*N
                ELSE
@@ -2100,8 +2047,7 @@
                IRVT = NRWORK
                IRU = IRVT + M*M
                NRWORK = IRU + M*M
-               CALL AB_SBDSDC( 'L', 'I', M, S, RWORK( IE ), RWORK( IRU )
-     $,
+               CALL SBDSDC( 'L', 'I', M, S, RWORK( IE ), RWORK( IRU ),
      $                      M, RWORK( IRVT ), M, DUM, IDUM,
      $                      RWORK( NRWORK ), IWORK, INFO )
 *
@@ -2111,8 +2057,8 @@
 *              CWorkspace: prefer 2*M [tauq, taup] + M*M [VT] + M*NB [work]
 *              RWorkspace: need   M [e] + M*M [RVT] + M*M [RU]
 *
-               CALL AB_CLACP2( 'F', M, M, RWORK( IRU ), M, U, LDU )
-               CALL AB_CUNMBR( 'Q', 'L', 'N', M, M, N, A, LDA,
+               CALL CLACP2( 'F', M, M, RWORK( IRU ), M, U, LDU )
+               CALL CUNMBR( 'Q', 'L', 'N', M, M, N, A, LDA,
      $                      WORK( ITAUQ ), U, LDU, WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
 *
@@ -2126,14 +2072,12 @@
 *                 CWorkspace: prefer 2*M [tauq, taup] + M*N [VT] + M*NB [work]
 *                 RWorkspace: need   M [e] + M*M [RVT]
 *
-                  CALL AB_CLACP2( 'F', M, M, RWORK( IRVT ), M, WORK( IVT
-     $ ),
+                  CALL CLACP2( 'F', M, M, RWORK( IRVT ), M, WORK( IVT ),
      $                         LDWKVT )
-                  CALL AB_CUNMBR( 'P', 'R', 'C', M, N, M, A, LDA,
+                  CALL CUNMBR( 'P', 'R', 'C', M, N, M, A, LDA,
      $                         WORK( ITAUP ), WORK( IVT ), LDWKVT,
      $                         WORK( NWORK ), LWORK-NWORK+1, IERR )
-                  CALL AB_CLACPY( 'F', M, N, WORK( IVT ), LDWKVT, A, LDA
-     $ )
+                  CALL CLACPY( 'F', M, N, WORK( IVT ), LDWKVT, A, LDA )
                ELSE
 *
 *                 Path 6to-slow
@@ -2142,7 +2086,7 @@
 *                 CWorkspace: prefer 2*M [tauq, taup] + M*M [VT] + M*NB [work]
 *                 RWorkspace: need   0
 *
-                  CALL AB_CUNGBR( 'P', M, N, M, A, LDA, WORK( ITAUP ),
+                  CALL CUNGBR( 'P', M, N, M, A, LDA, WORK( ITAUP ),
      $                         WORK( NWORK ), LWORK-NWORK+1, IERR )
 *
 *                 Multiply Q in A by real matrix RWORK(IRU), storing the
@@ -2155,11 +2099,10 @@
                   NRWORK = IRU
                   DO 60 I = 1, N, CHUNK
                      BLK = MIN( N-I+1, CHUNK )
-                     CALL AB_CLARCM( M, BLK, RWORK( IRVT ), M, A( 1, I )
-     $,
+                     CALL CLARCM( M, BLK, RWORK( IRVT ), M, A( 1, I ),
      $                            LDA, WORK( IVT ), LDWKVT,
      $                            RWORK( NRWORK ) )
-                     CALL AB_CLACPY( 'F', M, BLK, WORK( IVT ), LDWKVT,
+                     CALL CLACPY( 'F', M, BLK, WORK( IVT ), LDWKVT,
      $                            A( 1, I ), LDA )
    60             CONTINUE
                END IF
@@ -2175,8 +2118,7 @@
                IRVT = NRWORK
                IRU = IRVT + M*M
                NRWORK = IRU + M*M
-               CALL AB_SBDSDC( 'L', 'I', M, S, RWORK( IE ), RWORK( IRU )
-     $,
+               CALL SBDSDC( 'L', 'I', M, S, RWORK( IE ), RWORK( IRU ),
      $                      M, RWORK( IRVT ), M, DUM, IDUM,
      $                      RWORK( NRWORK ), IWORK, INFO )
 *
@@ -2186,8 +2128,8 @@
 *              CWorkspace: prefer 2*M [tauq, taup] + M*NB [work]
 *              RWorkspace: need   M [e] + M*M [RVT] + M*M [RU]
 *
-               CALL AB_CLACP2( 'F', M, M, RWORK( IRU ), M, U, LDU )
-               CALL AB_CUNMBR( 'Q', 'L', 'N', M, M, N, A, LDA,
+               CALL CLACP2( 'F', M, M, RWORK( IRU ), M, U, LDU )
+               CALL CUNMBR( 'Q', 'L', 'N', M, M, N, A, LDA,
      $                      WORK( ITAUQ ), U, LDU, WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
 *
@@ -2197,9 +2139,9 @@
 *              CWorkspace: prefer 2*M [tauq, taup] + M*NB [work]
 *              RWorkspace: need   M [e] + M*M [RVT]
 *
-               CALL AB_CLASET( 'F', M, N, CZERO, CZERO, VT, LDVT )
-               CALL AB_CLACP2( 'F', M, M, RWORK( IRVT ), M, VT, LDVT )
-               CALL AB_CUNMBR( 'P', 'R', 'C', M, N, M, A, LDA,
+               CALL CLASET( 'F', M, N, CZERO, CZERO, VT, LDVT )
+               CALL CLACP2( 'F', M, M, RWORK( IRVT ), M, VT, LDVT )
+               CALL CUNMBR( 'P', 'R', 'C', M, N, M, A, LDA,
      $                      WORK( ITAUP ), VT, LDVT, WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
             ELSE
@@ -2215,8 +2157,7 @@
                IRU = IRVT + M*M
                NRWORK = IRU + M*M
 *
-               CALL AB_SBDSDC( 'L', 'I', M, S, RWORK( IE ), RWORK( IRU )
-     $,
+               CALL SBDSDC( 'L', 'I', M, S, RWORK( IE ), RWORK( IRU ),
      $                      M, RWORK( IRVT ), M, DUM, IDUM,
      $                      RWORK( NRWORK ), IWORK, INFO )
 *
@@ -2226,14 +2167,14 @@
 *              CWorkspace: prefer 2*M [tauq, taup] + M*NB [work]
 *              RWorkspace: need   M [e] + M*M [RVT] + M*M [RU]
 *
-               CALL AB_CLACP2( 'F', M, M, RWORK( IRU ), M, U, LDU )
-               CALL AB_CUNMBR( 'Q', 'L', 'N', M, M, N, A, LDA,
+               CALL CLACP2( 'F', M, M, RWORK( IRU ), M, U, LDU )
+               CALL CUNMBR( 'Q', 'L', 'N', M, M, N, A, LDA,
      $                      WORK( ITAUQ ), U, LDU, WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
 *
 *              Set all of VT to identity matrix
 *
-               CALL AB_CLASET( 'F', N, N, CZERO, CONE, VT, LDVT )
+               CALL CLASET( 'F', N, N, CZERO, CONE, VT, LDVT )
 *
 *              Copy real matrix RWORK(IRVT) to complex matrix VT
 *              Overwrite VT by right singular vectors of A
@@ -2241,8 +2182,8 @@
 *              CWorkspace: prefer 2*M [tauq, taup] + N*NB [work]
 *              RWorkspace: need   M [e] + M*M [RVT]
 *
-               CALL AB_CLACP2( 'F', M, M, RWORK( IRVT ), M, VT, LDVT )
-               CALL AB_CUNMBR( 'P', 'R', 'C', N, N, M, A, LDA,
+               CALL CLACP2( 'F', M, M, RWORK( IRVT ), M, VT, LDVT )
+               CALL CUNMBR( 'P', 'R', 'C', N, N, M, A, LDA,
      $                      WORK( ITAUP ), VT, LDVT, WORK( NWORK ),
      $                      LWORK-NWORK+1, IERR )
             END IF
@@ -2255,16 +2196,16 @@
 *
       IF( ISCL.EQ.1 ) THEN
          IF( ANRM.GT.BIGNUM )
-     $      CALL AB_SLASCL( 'G', 0, 0, BIGNUM, ANRM, MINMN, 1, S, MINMN,
+     $      CALL SLASCL( 'G', 0, 0, BIGNUM, ANRM, MINMN, 1, S, MINMN,
      $                   IERR )
          IF( INFO.NE.0 .AND. ANRM.GT.BIGNUM )
-     $      CALL AB_SLASCL( 'G', 0, 0, BIGNUM, ANRM, MINMN-1, 1,
+     $      CALL SLASCL( 'G', 0, 0, BIGNUM, ANRM, MINMN-1, 1,
      $                   RWORK( IE ), MINMN, IERR )
          IF( ANRM.LT.SMLNUM )
-     $      CALL AB_SLASCL( 'G', 0, 0, SMLNUM, ANRM, MINMN, 1, S, MINMN,
+     $      CALL SLASCL( 'G', 0, 0, SMLNUM, ANRM, MINMN, 1, S, MINMN,
      $                   IERR )
          IF( INFO.NE.0 .AND. ANRM.LT.SMLNUM )
-     $      CALL AB_SLASCL( 'G', 0, 0, SMLNUM, ANRM, MINMN-1, 1,
+     $      CALL SLASCL( 'G', 0, 0, SMLNUM, ANRM, MINMN-1, 1,
      $                   RWORK( IE ), MINMN, IERR )
       END IF
 *
@@ -2274,6 +2215,6 @@
 *
       RETURN
 *
-*     End of AB_CGESDD
+*     End of CGESDD
 *
       END

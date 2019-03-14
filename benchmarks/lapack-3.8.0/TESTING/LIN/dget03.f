@@ -1,4 +1,4 @@
-*> \brief \b AB_DGET03
+*> \brief \b DGET03
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DGET03( N, A, LDA, AINV, LDAINV, WORK, LDWORK, RWORK,
+*       SUBROUTINE DGET03( N, A, LDA, AINV, LDAINV, WORK, LDWORK, RWORK,
 *                          RCOND, RESID )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DGET03 computes the residual for a general matrix times its inverse:
+*> DGET03 computes the residual for a general matrix times its inverse:
 *>    norm( I - AINV*A ) / ( N * norm(A) * norm(AINV) * EPS ),
 *> where EPS is the machine epsilon.
 *> \endverbatim
@@ -106,8 +106,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_DGET03( N, A, LDA, AINV, LDAINV, WORK, LDWORK, RWORK
-     $,
+      SUBROUTINE DGET03( N, A, LDA, AINV, LDAINV, WORK, LDWORK, RWORK,
      $                   RCOND, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -135,11 +134,11 @@
       DOUBLE PRECISION   AINVNM, ANORM, EPS
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE
-      EXTERNAL           AB_DLAMCH, AB_DLANGE
+      DOUBLE PRECISION   DLAMCH, DLANGE
+      EXTERNAL           DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DGEMM
+      EXTERNAL           DGEMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE
@@ -156,9 +155,9 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0 or AINVNM = 0.
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
-      ANORM = AB_DLANGE( '1', N, N, A, LDA, RWORK )
-      AINVNM = AB_DLANGE( '1', N, N, AINV, LDAINV, RWORK )
+      EPS = DLAMCH( 'Epsilon' )
+      ANORM = DLANGE( '1', N, N, A, LDA, RWORK )
+      AINVNM = DLANGE( '1', N, N, AINV, LDAINV, RWORK )
       IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
          RCOND = ZERO
          RESID = ONE / EPS
@@ -168,8 +167,7 @@
 *
 *     Compute I - A * AINV
 *
-      CALL AB_DGEMM( 'No transpose', 'No transpose', N, N, N, -ONE, AINV
-     $,
+      CALL DGEMM( 'No transpose', 'No transpose', N, N, N, -ONE, AINV,
      $            LDAINV, A, LDA, ZERO, WORK, LDWORK )
       DO 10 I = 1, N
          WORK( I, I ) = ONE + WORK( I, I )
@@ -177,12 +175,12 @@
 *
 *     Compute norm(I - AINV*A) / (N * norm(A) * norm(AINV) * EPS)
 *
-      RESID = AB_DLANGE( '1', N, N, WORK, LDWORK, RWORK )
+      RESID = DLANGE( '1', N, N, WORK, LDWORK, RWORK )
 *
       RESID = ( ( RESID*RCOND ) / EPS ) / DBLE( N )
 *
       RETURN
 *
-*     End of AB_DGET03
+*     End of DGET03
 *
       END

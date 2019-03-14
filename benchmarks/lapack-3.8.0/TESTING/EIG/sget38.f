@@ -1,4 +1,4 @@
-*> \brief \b AB_SGET38
+*> \brief \b SGET38
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SGET38( RMAX, LMAX, NINFO, KNT, NIN )
+*       SUBROUTINE SGET38( RMAX, LMAX, NINFO, KNT, NIN )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            KNT, NIN
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SGET38 tests AB_STRSEN, a routine for estimating condition numbers of a
+*> SGET38 tests STRSEN, a routine for estimating condition numbers of a
 *> cluster of eigenvalues and/or its associated right invariant subspace
 *>
 *> The test matrices are read from a file with logical unit number NIN.
@@ -37,8 +37,8 @@
 *> \verbatim
 *>          RMAX is REAL array, dimension (3)
 *>          Values of the largest test ratios.
-*>          RMAX(1) = largest residuals from AB_SHST01 or comparing
-*>                    different calls to AB_STRSEN
+*>          RMAX(1) = largest residuals from SHST01 or comparing
+*>                    different calls to STRSEN
 *>          RMAX(2) = largest error in reciprocal condition
 *>                    numbers taking their conditioning into account
 *>          RMAX(3) = largest error in reciprocal condition
@@ -51,17 +51,17 @@
 *>          LMAX is INTEGER array, dimension (3)
 *>          LMAX(i) is example number where largest test ratio
 *>          RMAX(i) is achieved. Also:
-*>          If AB_SGEHRD returns INFO nonzero on example i, LMAX(1)=i
-*>          If AB_SHSEQR returns INFO nonzero on example i, LMAX(2)=i
-*>          If AB_STRSEN returns INFO nonzero on example i, LMAX(3)=i
+*>          If SGEHRD returns INFO nonzero on example i, LMAX(1)=i
+*>          If SHSEQR returns INFO nonzero on example i, LMAX(2)=i
+*>          If STRSEN returns INFO nonzero on example i, LMAX(3)=i
 *> \endverbatim
 *>
 *> \param[out] NINFO
 *> \verbatim
 *>          NINFO is INTEGER array, dimension (3)
-*>          NINFO(1) = No. of times AB_SGEHRD returned INFO nonzero
-*>          NINFO(2) = No. of times AB_SHSEQR returned INFO nonzero
-*>          NINFO(3) = No. of times AB_STRSEN returned INFO nonzero
+*>          NINFO(1) = No. of times SGEHRD returned INFO nonzero
+*>          NINFO(2) = No. of times SHSEQR returned INFO nonzero
+*>          NINFO(3) = No. of times STRSEN returned INFO nonzero
 *> \endverbatim
 *>
 *> \param[out] KNT
@@ -89,7 +89,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_SGET38( RMAX, LMAX, NINFO, KNT, NIN )
+      SUBROUTINE SGET38( RMAX, LMAX, NINFO, KNT, NIN )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -133,23 +133,22 @@
      $                   WR( LDT ), WRTMP( LDT )
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH, AB_SLANGE
-      EXTERNAL           AB_SLAMCH, AB_SLANGE
+      REAL               SLAMCH, SLANGE
+      EXTERNAL           SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SCOPY, AB_SGEHRD, AB_SHSEQR, AB_SHST01, AB_S
-     $LABAD, AB_SLACPY,
-     $                   AB_SORGHR, AB_SSCAL, AB_STRSEN
+      EXTERNAL           SCOPY, SGEHRD, SHSEQR, SHST01, SLABAD, SLACPY,
+     $                   SORGHR, SSCAL, STRSEN
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, REAL, SQRT
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = AB_SLAMCH( 'P' )
-      SMLNUM = AB_SLAMCH( 'S' ) / EPS
+      EPS = SLAMCH( 'P' )
+      SMLNUM = SLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL AB_SLABAD( SMLNUM, BIGNUM )
+      CALL SLABAD( SMLNUM, BIGNUM )
 *
 *     EPSIN = 2**(-24) = precision to which input data computed
 *
@@ -183,25 +182,24 @@
    20 CONTINUE
       READ( NIN, FMT = * )SIN, SEPIN
 *
-      TNRM = AB_SLANGE( 'M', N, N, TMP, LDT, WORK )
+      TNRM = SLANGE( 'M', N, N, TMP, LDT, WORK )
       DO 160 ISCL = 1, 3
 *
 *        Scale input matrix
 *
          KNT = KNT + 1
-         CALL AB_SLACPY( 'F', N, N, TMP, LDT, T, LDT )
+         CALL SLACPY( 'F', N, N, TMP, LDT, T, LDT )
          VMUL = VAL( ISCL )
          DO 30 I = 1, N
-            CALL AB_SSCAL( N, VMUL, T( 1, I ), 1 )
+            CALL SSCAL( N, VMUL, T( 1, I ), 1 )
    30    CONTINUE
          IF( TNRM.EQ.ZERO )
      $      VMUL = ONE
-         CALL AB_SLACPY( 'F', N, N, T, LDT, TSAV, LDT )
+         CALL SLACPY( 'F', N, N, T, LDT, TSAV, LDT )
 *
 *        Compute Schur form
 *
-         CALL AB_SGEHRD( N, 1, N, T, LDT, WORK( 1 ), WORK( N+1 ), LWORK-
-     $N,
+         CALL SGEHRD( N, 1, N, T, LDT, WORK( 1 ), WORK( N+1 ), LWORK-N,
      $                INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 1 ) = KNT
@@ -211,15 +209,13 @@
 *
 *        Generate orthogonal matrix
 *
-         CALL AB_SLACPY( 'L', N, N, T, LDT, Q, LDT )
-         CALL AB_SORGHR( N, 1, N, Q, LDT, WORK( 1 ), WORK( N+1 ), LWORK-
-     $N,
+         CALL SLACPY( 'L', N, N, T, LDT, Q, LDT )
+         CALL SORGHR( N, 1, N, Q, LDT, WORK( 1 ), WORK( N+1 ), LWORK-N,
      $                INFO )
 *
 *        Compute Schur form
 *
-         CALL AB_SHSEQR( 'S', 'V', N, 1, N, T, LDT, WR, WI, Q, LDT, WORK
-     $,
+         CALL SHSEQR( 'S', 'V', N, 1, N, T, LDT, WR, WI, Q, LDT, WORK,
      $                LWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 2 ) = KNT
@@ -233,8 +229,8 @@
             IPNT( I ) = I
             SELECT( I ) = .FALSE.
    40    CONTINUE
-         CALL AB_SCOPY( N, WR, 1, WRTMP, 1 )
-         CALL AB_SCOPY( N, WI, 1, WITMP, 1 )
+         CALL SCOPY( N, WR, 1, WRTMP, 1 )
+         CALL SCOPY( N, WI, 1, WITMP, 1 )
          DO 60 I = 1, N - 1
             KMIN = I
             VRMIN = WRTMP( I )
@@ -260,10 +256,9 @@
 *
 *        Compute condition numbers
 *
-         CALL AB_SLACPY( 'F', N, N, Q, LDT, QSAV, LDT )
-         CALL AB_SLACPY( 'F', N, N, T, LDT, TSAV1, LDT )
-         CALL AB_STRSEN( 'B', 'V', SELECT, N, T, LDT, Q, LDT, WRTMP, WIT
-     $MP,
+         CALL SLACPY( 'F', N, N, Q, LDT, QSAV, LDT )
+         CALL SLACPY( 'F', N, N, T, LDT, TSAV1, LDT )
+         CALL STRSEN( 'B', 'V', SELECT, N, T, LDT, Q, LDT, WRTMP, WITMP,
      $                M, S, SEP, WORK, LWORK, IWORK, LIWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -275,8 +270,7 @@
 *
 *        Compute residuals
 *
-         CALL AB_SHST01( N, 1, N, TSAV, LDT, T, LDT, Q, LDT, WORK, LWORK
-     $,
+         CALL SHST01( N, 1, N, TSAV, LDT, T, LDT, Q, LDT, WORK, LWORK,
      $                RESULT )
          VMAX = MAX( RESULT( 1 ), RESULT( 2 ) )
          IF( VMAX.GT.RMAX( 1 ) ) THEN
@@ -400,12 +394,11 @@
 *        Update Q
 *
          VMAX = ZERO
-         CALL AB_SLACPY( 'F', N, N, TSAV1, LDT, TTMP, LDT )
-         CALL AB_SLACPY( 'F', N, N, QSAV, LDT, QTMP, LDT )
+         CALL SLACPY( 'F', N, N, TSAV1, LDT, TTMP, LDT )
+         CALL SLACPY( 'F', N, N, QSAV, LDT, QTMP, LDT )
          SEPTMP = -ONE
          STMP = -ONE
-         CALL AB_STRSEN( 'E', 'V', SELECT, N, TTMP, LDT, QTMP, LDT, WRTM
-     $P,
+         CALL STRSEN( 'E', 'V', SELECT, N, TTMP, LDT, QTMP, LDT, WRTMP,
      $                WITMP, M, STMP, SEPTMP, WORK, LWORK, IWORK,
      $                LIWORK, INFO )
          IF( INFO.NE.0 ) THEN
@@ -429,12 +422,11 @@
 *        Compute invariant subspace condition number only and compare
 *        Update Q
 *
-         CALL AB_SLACPY( 'F', N, N, TSAV1, LDT, TTMP, LDT )
-         CALL AB_SLACPY( 'F', N, N, QSAV, LDT, QTMP, LDT )
+         CALL SLACPY( 'F', N, N, TSAV1, LDT, TTMP, LDT )
+         CALL SLACPY( 'F', N, N, QSAV, LDT, QTMP, LDT )
          SEPTMP = -ONE
          STMP = -ONE
-         CALL AB_STRSEN( 'V', 'V', SELECT, N, TTMP, LDT, QTMP, LDT, WRTM
-     $P,
+         CALL STRSEN( 'V', 'V', SELECT, N, TTMP, LDT, QTMP, LDT, WRTMP,
      $                WITMP, M, STMP, SEPTMP, WORK, LWORK, IWORK,
      $                LIWORK, INFO )
          IF( INFO.NE.0 ) THEN
@@ -458,12 +450,11 @@
 *        Compute eigenvalue condition number only and compare
 *        Do not update Q
 *
-         CALL AB_SLACPY( 'F', N, N, TSAV1, LDT, TTMP, LDT )
-         CALL AB_SLACPY( 'F', N, N, QSAV, LDT, QTMP, LDT )
+         CALL SLACPY( 'F', N, N, TSAV1, LDT, TTMP, LDT )
+         CALL SLACPY( 'F', N, N, QSAV, LDT, QTMP, LDT )
          SEPTMP = -ONE
          STMP = -ONE
-         CALL AB_STRSEN( 'E', 'N', SELECT, N, TTMP, LDT, QTMP, LDT, WRTM
-     $P,
+         CALL STRSEN( 'E', 'N', SELECT, N, TTMP, LDT, QTMP, LDT, WRTMP,
      $                WITMP, M, STMP, SEPTMP, WORK, LWORK, IWORK,
      $                LIWORK, INFO )
          IF( INFO.NE.0 ) THEN
@@ -487,12 +478,11 @@
 *        Compute invariant subspace condition number only and compare
 *        Do not update Q
 *
-         CALL AB_SLACPY( 'F', N, N, TSAV1, LDT, TTMP, LDT )
-         CALL AB_SLACPY( 'F', N, N, QSAV, LDT, QTMP, LDT )
+         CALL SLACPY( 'F', N, N, TSAV1, LDT, TTMP, LDT )
+         CALL SLACPY( 'F', N, N, QSAV, LDT, QTMP, LDT )
          SEPTMP = -ONE
          STMP = -ONE
-         CALL AB_STRSEN( 'V', 'N', SELECT, N, TTMP, LDT, QTMP, LDT, WRTM
-     $P,
+         CALL STRSEN( 'V', 'N', SELECT, N, TTMP, LDT, QTMP, LDT, WRTMP,
      $                WITMP, M, STMP, SEPTMP, WORK, LWORK, IWORK,
      $                LIWORK, INFO )
          IF( INFO.NE.0 ) THEN
@@ -520,6 +510,6 @@
   160 CONTINUE
       GO TO 10
 *
-*     End of AB_SGET38
+*     End of SGET38
 *
       END

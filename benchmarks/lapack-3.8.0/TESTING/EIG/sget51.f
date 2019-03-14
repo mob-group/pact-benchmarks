@@ -1,4 +1,4 @@
-*> \brief \b AB_SGET51
+*> \brief \b SGET51
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SGET51( ITYPE, N, A, LDA, B, LDB, U, LDU, V, LDV, WORK,
+*       SUBROUTINE SGET51( ITYPE, N, A, LDA, B, LDB, U, LDU, V, LDV, WORK,
 *                          RESULT )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*>      AB_SGET51  generally checks a decomposition of the form
+*>      SGET51  generally checks a decomposition of the form
 *>
 *>              A = U B V'
 *>
@@ -60,7 +60,7 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The size of the matrix.  If it is zero, AB_SGET51 does nothing.
+*>          The size of the matrix.  If it is zero, SGET51 does nothing.
 *>          It must be at least zero.
 *> \endverbatim
 *>
@@ -146,8 +146,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_SGET51( ITYPE, N, A, LDA, B, LDB, U, LDU, V, LDV, WO
-     $RK,
+      SUBROUTINE SGET51( ITYPE, N, A, LDA, B, LDB, U, LDU, V, LDV, WORK,
      $                   RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -175,11 +174,11 @@
       REAL               ANORM, ULP, UNFL, WNORM
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH, AB_SLANGE
-      EXTERNAL           AB_SLAMCH, AB_SLANGE
+      REAL               SLAMCH, SLANGE
+      EXTERNAL           SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SGEMM, AB_SLACPY
+      EXTERNAL           SGEMM, SLACPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, REAL
@@ -192,8 +191,8 @@
 *
 *     Constants
 *
-      UNFL = AB_SLAMCH( 'Safe minimum' )
-      ULP = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
+      UNFL = SLAMCH( 'Safe minimum' )
+      ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
 *
 *     Some Error Checks
 *
@@ -206,25 +205,24 @@
 *
 *        Tests scaled by the norm(A)
 *
-         ANORM = MAX( AB_SLANGE( '1', N, N, A, LDA, WORK ), UNFL )
+         ANORM = MAX( SLANGE( '1', N, N, A, LDA, WORK ), UNFL )
 *
          IF( ITYPE.EQ.1 ) THEN
 *
 *           ITYPE=1: Compute W = A - UBV'
 *
-            CALL AB_SLACPY( ' ', N, N, A, LDA, WORK, N )
-            CALL AB_SGEMM( 'N', 'N', N, N, N, ONE, U, LDU, B, LDB, ZERO,
+            CALL SLACPY( ' ', N, N, A, LDA, WORK, N )
+            CALL SGEMM( 'N', 'N', N, N, N, ONE, U, LDU, B, LDB, ZERO,
      $                  WORK( N**2+1 ), N )
 *
-            CALL AB_SGEMM( 'N', 'C', N, N, N, -ONE, WORK( N**2+1 ), N, V
-     $,
+            CALL SGEMM( 'N', 'C', N, N, N, -ONE, WORK( N**2+1 ), N, V,
      $                  LDV, ONE, WORK, N )
 *
          ELSE
 *
 *           ITYPE=2: Compute W = A - B
 *
-            CALL AB_SLACPY( ' ', N, N, B, LDB, WORK, N )
+            CALL SLACPY( ' ', N, N, B, LDB, WORK, N )
 *
             DO 20 JCOL = 1, N
                DO 10 JROW = 1, N
@@ -236,7 +234,7 @@
 *
 *        Compute norm(W)/ ( ulp*norm(A) )
 *
-         WNORM = AB_SLANGE( '1', N, N, WORK, N, WORK( N**2+1 ) )
+         WNORM = SLANGE( '1', N, N, WORK, N, WORK( N**2+1 ) )
 *
          IF( ANORM.GT.WNORM ) THEN
             RESULT = ( WNORM / ANORM ) / ( N*ULP )
@@ -254,8 +252,7 @@
 *
 *        ITYPE=3: Compute  UU' - I
 *
-         CALL AB_SGEMM( 'N', 'C', N, N, N, ONE, U, LDU, U, LDU, ZERO, WO
-     $RK,
+         CALL SGEMM( 'N', 'C', N, N, N, ONE, U, LDU, U, LDU, ZERO, WORK,
      $               N )
 *
          DO 30 JDIAG = 1, N
@@ -263,12 +260,12 @@
      $         1 ) - ONE
    30    CONTINUE
 *
-         RESULT = MIN( AB_SLANGE( '1', N, N, WORK, N, WORK( N**2+1 ) ),
+         RESULT = MIN( SLANGE( '1', N, N, WORK, N, WORK( N**2+1 ) ),
      $            REAL( N ) ) / ( N*ULP )
       END IF
 *
       RETURN
 *
-*     End of AB_SGET51
+*     End of SGET51
 *
       END

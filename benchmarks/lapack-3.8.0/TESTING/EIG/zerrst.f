@@ -1,4 +1,4 @@
-*> \brief \b AB_ZERRST
+*> \brief \b ZERRST
 *
 *  @precisions fortran z -> c
 *
@@ -10,7 +10,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZERRST( PATH, NUNIT )
+*       SUBROUTINE ZERRST( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -23,13 +23,13 @@
 *>
 *> \verbatim
 *>
-*> AB_ZERRST tests the error exits for AB_ZHETRD, AB_ZUNGTR, AB_CUNMTR, AB_ZHPTRD,
-*> AB_ZUNGTR, AB_ZUPMTR, AB_ZSTEQR, AB_CSTEIN, AB_ZPTEQR, AB_ZHBTRD,
-*> AB_ZHEEV, AB_AB_CHEEVX, AB_AB_CHEEVD, AB_ZHBEV, AB_AB_CHBEVX, AB_AB_CHBEVD,
-*> AB_ZHPEV, AB_AB_CHPEVX, AB_AB_CHPEVD, and AB_ZSTEDC.
-*> AB_AB_AB_ZHEEVD_2STAGE, AB_AB_AB_ZHEEVR_2STAGE, AB_AB_AB_ZHEEVX_2STAGE,
-*> AB_AB_ZHEEV_2STAGE, AB_AB_ZHBEV_2STAGE, AB_AB_AB_ZHBEVD_2STAGE,
-*> AB_AB_AB_ZHBEVX_2STAGE, AB_AB_ZHETRD_2STAGE
+*> ZERRST tests the error exits for ZHETRD, ZUNGTR, CUNMTR, ZHPTRD,
+*> ZUNGTR, ZUPMTR, ZSTEQR, CSTEIN, ZPTEQR, ZHBTRD,
+*> ZHEEV, CHEEVX, CHEEVD, ZHBEV, CHBEVX, CHBEVD,
+*> ZHPEV, CHPEVX, CHPEVD, and ZSTEDC.
+*> ZHEEVD_2STAGE, ZHEEVR_2STAGE, ZHEEVX_2STAGE,
+*> ZHEEV_2STAGE, ZHBEV_2STAGE, ZHBEVD_2STAGE,
+*> ZHBEVX_2STAGE, ZHETRD_2STAGE
 *> \endverbatim
 *
 *  Arguments:
@@ -60,7 +60,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_ZERRST( PATH, NUNIT )
+      SUBROUTINE ZERRST( PATH, NUNIT )
 *
 *  -- LAPACK test routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -91,22 +91,17 @@
      $                   Z( NMAX, NMAX )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_AB_LSAMEN
-      EXTERNAL           AB_AB_LSAMEN
+      LOGICAL            LSAMEN
+      EXTERNAL           LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CHKXER, AB_ZHBEV, AB_AB_ZHBEVD, AB_AB_ZHBEVX
-     $, AB_ZHBTRD, AB_ZHEEV,
-     $                   AB_AB_ZHEEVD, AB_AB_ZHEEVR, AB_AB_ZHEEVX, AB_ZH
-     $ETRD, AB_ZHPEV, AB_AB_ZHPEVD,
-     $                   AB_AB_ZHPEVX, AB_ZHPTRD, AB_ZPTEQR, AB_ZSTEDC, 
-     $AB_ZSTEIN, AB_ZSTEQR,
-     $                   AB_ZUNGTR, AB_ZUNMTR, AB_ZUPGTR, AB_ZUPMTR,
-     $                   AB_AB_AB_ZHEEVD_2STAGE, AB_AB_AB_ZHEEVR_2STAGE,
-     $ AB_AB_AB_ZHEEVX_2STAGE,
-     $                   AB_AB_ZHEEV_2STAGE, AB_AB_ZHBEV_2STAGE, AB_AB_A
-     $B_ZHBEVD_2STAGE,
-     $                   AB_AB_AB_ZHBEVX_2STAGE, AB_AB_ZHETRD_2STAGE
+      EXTERNAL           CHKXER, ZHBEV, ZHBEVD, ZHBEVX, ZHBTRD, ZHEEV,
+     $                   ZHEEVD, ZHEEVR, ZHEEVX, ZHETRD, ZHPEV, ZHPEVD,
+     $                   ZHPEVX, ZHPTRD, ZPTEQR, ZSTEDC, ZSTEIN, ZSTEQR,
+     $                   ZUNGTR, ZUNMTR, ZUPGTR, ZUPMTR,
+     $                   ZHEEVD_2STAGE, ZHEEVR_2STAGE, ZHEEVX_2STAGE,
+     $                   ZHEEV_2STAGE, ZHBEV_2STAGE, ZHBEVD_2STAGE,
+     $                   ZHBEVX_2STAGE, ZHETRD_2STAGE
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -145,1334 +140,1189 @@
 *
 *     Test error exits for the ST path.
 *
-      IF( AB_AB_LSAMEN( 2, C2, 'ST' ) ) THEN
+      IF( LSAMEN( 2, C2, 'ST' ) ) THEN
 *
-*        AB_ZHETRD
+*        ZHETRD
 *
-         SRNAMT = 'AB_ZHETRD'
+         SRNAMT = 'ZHETRD'
          INFOT = 1
-         CALL AB_ZHETRD( '/', 0, A, 1, D, E, TAU, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZHETRD', INFOT, NOUT, LERR, OK )
+         CALL ZHETRD( '/', 0, A, 1, D, E, TAU, W, 1, INFO )
+         CALL CHKXER( 'ZHETRD', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_ZHETRD( 'U', -1, A, 1, D, E, TAU, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZHETRD', INFOT, NOUT, LERR, OK )
+         CALL ZHETRD( 'U', -1, A, 1, D, E, TAU, W, 1, INFO )
+         CALL CHKXER( 'ZHETRD', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_ZHETRD( 'U', 2, A, 1, D, E, TAU, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZHETRD', INFOT, NOUT, LERR, OK )
+         CALL ZHETRD( 'U', 2, A, 1, D, E, TAU, W, 1, INFO )
+         CALL CHKXER( 'ZHETRD', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_ZHETRD( 'U', 0, A, 1, D, E, TAU, W, 0, INFO )
-         CALL AB_CHKXER( 'AB_ZHETRD', INFOT, NOUT, LERR, OK )
+         CALL ZHETRD( 'U', 0, A, 1, D, E, TAU, W, 0, INFO )
+         CALL CHKXER( 'ZHETRD', INFOT, NOUT, LERR, OK )
          NT = NT + 4
 *
-*        AB_AB_ZHETRD_2STAGE
+*        ZHETRD_2STAGE
 *
-         SRNAMT = 'AB_AB_ZHETRD_2STAGE'
+         SRNAMT = 'ZHETRD_2STAGE'
          INFOT = 1
-         CALL AB_AB_ZHETRD_2STAGE( '/', 'U', 0, A, 1, D, E, TAU, 
+         CALL ZHETRD_2STAGE( '/', 'U', 0, A, 1, D, E, TAU, 
      $                                  C, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHETRD_2STAGE', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHETRD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 1
-         CALL AB_AB_ZHETRD_2STAGE( 'H', 'U', 0, A, 1, D, E, TAU, 
+         CALL ZHETRD_2STAGE( 'H', 'U', 0, A, 1, D, E, TAU, 
      $                                  C, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHETRD_2STAGE', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHETRD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_ZHETRD_2STAGE( 'N', '/', 0, A, 1, D, E, TAU, 
+         CALL ZHETRD_2STAGE( 'N', '/', 0, A, 1, D, E, TAU, 
      $                                  C, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHETRD_2STAGE', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHETRD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_ZHETRD_2STAGE( 'N', 'U', -1, A, 1, D, E, TAU, 
+         CALL ZHETRD_2STAGE( 'N', 'U', -1, A, 1, D, E, TAU, 
      $                                  C, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHETRD_2STAGE', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHETRD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_AB_ZHETRD_2STAGE( 'N', 'U', 2, A, 1, D, E, TAU, 
+         CALL ZHETRD_2STAGE( 'N', 'U', 2, A, 1, D, E, TAU, 
      $                                  C, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHETRD_2STAGE', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHETRD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_AB_ZHETRD_2STAGE( 'N', 'U', 0, A, 1, D, E, TAU, 
+         CALL ZHETRD_2STAGE( 'N', 'U', 0, A, 1, D, E, TAU, 
      $                                  C, 0, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHETRD_2STAGE', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHETRD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL AB_AB_ZHETRD_2STAGE( 'N', 'U', 0, A, 1, D, E, TAU, 
+         CALL ZHETRD_2STAGE( 'N', 'U', 0, A, 1, D, E, TAU, 
      $                                  C, 1, W, 0, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHETRD_2STAGE', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHETRD_2STAGE', INFOT, NOUT, LERR, OK )
          NT = NT + 7
 *
-*        AB_AB_ZHETRD_HE2HB
+*        ZHETRD_HE2HB
 *
-         SRNAMT = 'AB_AB_ZHETRD_HE2HB'
+         SRNAMT = 'ZHETRD_HE2HB'
          INFOT = 1
-         CALL AB_AB_ZHETRD_HE2HB( '/', 0, 0, A, 1, C, 1, TAU, W, 1, INFO
-     $ )
-         CALL AB_CHKXER( 'AB_AB_ZHETRD_HE2HB', INFOT, NOUT, LERR, OK )
+         CALL ZHETRD_HE2HB( '/', 0, 0, A, 1, C, 1, TAU, W, 1, INFO )
+         CALL CHKXER( 'ZHETRD_HE2HB', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_ZHETRD_HE2HB( 'U', -1, 0, A, 1, C, 1, TAU, W, 1, INF
-     $O )
-         CALL AB_CHKXER( 'AB_AB_ZHETRD_HE2HB', INFOT, NOUT, LERR, OK )
+         CALL ZHETRD_HE2HB( 'U', -1, 0, A, 1, C, 1, TAU, W, 1, INFO )
+         CALL CHKXER( 'ZHETRD_HE2HB', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_ZHETRD_HE2HB( 'U', 0, -1, A, 1, C, 1, TAU, W, 1, INF
-     $O )
-         CALL AB_CHKXER( 'AB_AB_ZHETRD_HE2HB', INFOT, NOUT, LERR, OK )
+         CALL ZHETRD_HE2HB( 'U', 0, -1, A, 1, C, 1, TAU, W, 1, INFO )
+         CALL CHKXER( 'ZHETRD_HE2HB', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_AB_ZHETRD_HE2HB( 'U', 2, 0, A, 1, C, 1, TAU, W, 1, INFO
-     $ )
-         CALL AB_CHKXER( 'AB_AB_ZHETRD_HE2HB', INFOT, NOUT, LERR, OK )
+         CALL ZHETRD_HE2HB( 'U', 2, 0, A, 1, C, 1, TAU, W, 1, INFO )
+         CALL CHKXER( 'ZHETRD_HE2HB', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_AB_ZHETRD_HE2HB( 'U', 0, 2, A, 1, C, 1, TAU, W, 1, INFO
-     $ )
-         CALL AB_CHKXER( 'AB_AB_ZHETRD_HE2HB', INFOT, NOUT, LERR, OK )
+         CALL ZHETRD_HE2HB( 'U', 0, 2, A, 1, C, 1, TAU, W, 1, INFO )
+         CALL CHKXER( 'ZHETRD_HE2HB', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_AB_ZHETRD_HE2HB( 'U', 0, 0, A, 1, C, 1, TAU, W, 0, INFO
-     $ )
-         CALL AB_CHKXER( 'AB_AB_ZHETRD_HE2HB', INFOT, NOUT, LERR, OK )
+         CALL ZHETRD_HE2HB( 'U', 0, 0, A, 1, C, 1, TAU, W, 0, INFO )
+         CALL CHKXER( 'ZHETRD_HE2HB', INFOT, NOUT, LERR, OK )
          NT = NT + 6
 *
-*        AB_ZHETRD_HB2ST
+*        ZHETRD_HB2ST
 *
-         SRNAMT = 'AB_ZHETRD_HB2ST'
+         SRNAMT = 'ZHETRD_HB2ST'
          INFOT = 1
-         CALL AB_ZHETRD_HB2ST( '/', 'N', 'U', 0, 0, A, 1, D, E, 
+         CALL ZHETRD_HB2ST( '/', 'N', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_ZHETRD_HB2ST( 'Y', '/', 'U', 0, 0, A, 1, D, E, 
+         CALL ZHETRD_HB2ST( 'Y', '/', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_ZHETRD_HB2ST( 'Y', 'H', 'U', 0, 0, A, 1, D, E, 
+         CALL ZHETRD_HB2ST( 'Y', 'H', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_ZHETRD_HB2ST( 'Y', 'N', '/', 0, 0, A, 1, D, E, 
+         CALL ZHETRD_HB2ST( 'Y', 'N', '/', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_ZHETRD_HB2ST( 'Y', 'N', 'U', -1, 0, A, 1, D, E, 
+         CALL ZHETRD_HB2ST( 'Y', 'N', 'U', -1, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_ZHETRD_HB2ST( 'Y', 'N', 'U', 0, -1, A, 1, D, E, 
+         CALL ZHETRD_HB2ST( 'Y', 'N', 'U', 0, -1, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_ZHETRD_HB2ST( 'Y', 'N', 'U', 0, 1, A, 1, D, E, 
+         CALL ZHETRD_HB2ST( 'Y', 'N', 'U', 0, 1, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL AB_ZHETRD_HB2ST( 'Y', 'N', 'U', 0, 0, A, 1, D, E, 
+         CALL ZHETRD_HB2ST( 'Y', 'N', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 0, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL AB_ZHETRD_HB2ST( 'Y', 'N', 'U', 0, 0, A, 1, D, E, 
+         CALL ZHETRD_HB2ST( 'Y', 'N', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 0, INFO )
-         CALL AB_CHKXER( 'AB_ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
          NT = NT + 9
 *
-*        AB_ZUNGTR
+*        ZUNGTR
 *
-         SRNAMT = 'AB_ZUNGTR'
+         SRNAMT = 'ZUNGTR'
          INFOT = 1
-         CALL AB_ZUNGTR( '/', 0, A, 1, TAU, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZUNGTR', INFOT, NOUT, LERR, OK )
+         CALL ZUNGTR( '/', 0, A, 1, TAU, W, 1, INFO )
+         CALL CHKXER( 'ZUNGTR', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_ZUNGTR( 'U', -1, A, 1, TAU, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZUNGTR', INFOT, NOUT, LERR, OK )
+         CALL ZUNGTR( 'U', -1, A, 1, TAU, W, 1, INFO )
+         CALL CHKXER( 'ZUNGTR', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_ZUNGTR( 'U', 2, A, 1, TAU, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZUNGTR', INFOT, NOUT, LERR, OK )
+         CALL ZUNGTR( 'U', 2, A, 1, TAU, W, 1, INFO )
+         CALL CHKXER( 'ZUNGTR', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_ZUNGTR( 'U', 3, A, 3, TAU, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZUNGTR', INFOT, NOUT, LERR, OK )
+         CALL ZUNGTR( 'U', 3, A, 3, TAU, W, 1, INFO )
+         CALL CHKXER( 'ZUNGTR', INFOT, NOUT, LERR, OK )
          NT = NT + 4
 *
-*        AB_ZUNMTR
+*        ZUNMTR
 *
-         SRNAMT = 'AB_ZUNMTR'
+         SRNAMT = 'ZUNMTR'
          INFOT = 1
-         CALL AB_ZUNMTR( '/', 'U', 'N', 0, 0, A, 1, TAU, C, 1, W, 1, INF
-     $O )
-         CALL AB_CHKXER( 'AB_ZUNMTR', INFOT, NOUT, LERR, OK )
+         CALL ZUNMTR( '/', 'U', 'N', 0, 0, A, 1, TAU, C, 1, W, 1, INFO )
+         CALL CHKXER( 'ZUNMTR', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_ZUNMTR( 'L', '/', 'N', 0, 0, A, 1, TAU, C, 1, W, 1, INF
-     $O )
-         CALL AB_CHKXER( 'AB_ZUNMTR', INFOT, NOUT, LERR, OK )
+         CALL ZUNMTR( 'L', '/', 'N', 0, 0, A, 1, TAU, C, 1, W, 1, INFO )
+         CALL CHKXER( 'ZUNMTR', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_ZUNMTR( 'L', 'U', '/', 0, 0, A, 1, TAU, C, 1, W, 1, INF
-     $O )
-         CALL AB_CHKXER( 'AB_ZUNMTR', INFOT, NOUT, LERR, OK )
+         CALL ZUNMTR( 'L', 'U', '/', 0, 0, A, 1, TAU, C, 1, W, 1, INFO )
+         CALL CHKXER( 'ZUNMTR', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_ZUNMTR( 'L', 'U', 'N', -1, 0, A, 1, TAU, C, 1, W, 1,
+         CALL ZUNMTR( 'L', 'U', 'N', -1, 0, A, 1, TAU, C, 1, W, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_ZUNMTR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZUNMTR', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_ZUNMTR( 'L', 'U', 'N', 0, -1, A, 1, TAU, C, 1, W, 1,
+         CALL ZUNMTR( 'L', 'U', 'N', 0, -1, A, 1, TAU, C, 1, W, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_ZUNMTR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZUNMTR', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_ZUNMTR( 'L', 'U', 'N', 2, 0, A, 1, TAU, C, 2, W, 1, INF
-     $O )
-         CALL AB_CHKXER( 'AB_ZUNMTR', INFOT, NOUT, LERR, OK )
+         CALL ZUNMTR( 'L', 'U', 'N', 2, 0, A, 1, TAU, C, 2, W, 1, INFO )
+         CALL CHKXER( 'ZUNMTR', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_ZUNMTR( 'R', 'U', 'N', 0, 2, A, 1, TAU, C, 1, W, 1, INF
-     $O )
-         CALL AB_CHKXER( 'AB_ZUNMTR', INFOT, NOUT, LERR, OK )
+         CALL ZUNMTR( 'R', 'U', 'N', 0, 2, A, 1, TAU, C, 1, W, 1, INFO )
+         CALL CHKXER( 'ZUNMTR', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_ZUNMTR( 'L', 'U', 'N', 2, 0, A, 2, TAU, C, 1, W, 1, INF
-     $O )
-         CALL AB_CHKXER( 'AB_ZUNMTR', INFOT, NOUT, LERR, OK )
+         CALL ZUNMTR( 'L', 'U', 'N', 2, 0, A, 2, TAU, C, 1, W, 1, INFO )
+         CALL CHKXER( 'ZUNMTR', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL AB_ZUNMTR( 'L', 'U', 'N', 0, 2, A, 1, TAU, C, 1, W, 1, INF
-     $O )
-         CALL AB_CHKXER( 'AB_ZUNMTR', INFOT, NOUT, LERR, OK )
+         CALL ZUNMTR( 'L', 'U', 'N', 0, 2, A, 1, TAU, C, 1, W, 1, INFO )
+         CALL CHKXER( 'ZUNMTR', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL AB_ZUNMTR( 'R', 'U', 'N', 2, 0, A, 1, TAU, C, 2, W, 1, INF
-     $O )
-         CALL AB_CHKXER( 'AB_ZUNMTR', INFOT, NOUT, LERR, OK )
+         CALL ZUNMTR( 'R', 'U', 'N', 2, 0, A, 1, TAU, C, 2, W, 1, INFO )
+         CALL CHKXER( 'ZUNMTR', INFOT, NOUT, LERR, OK )
          NT = NT + 10
 *
-*        AB_ZHPTRD
+*        ZHPTRD
 *
-         SRNAMT = 'AB_ZHPTRD'
+         SRNAMT = 'ZHPTRD'
          INFOT = 1
-         CALL AB_ZHPTRD( '/', 0, A, D, E, TAU, INFO )
-         CALL AB_CHKXER( 'AB_ZHPTRD', INFOT, NOUT, LERR, OK )
+         CALL ZHPTRD( '/', 0, A, D, E, TAU, INFO )
+         CALL CHKXER( 'ZHPTRD', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_ZHPTRD( 'U', -1, A, D, E, TAU, INFO )
-         CALL AB_CHKXER( 'AB_ZHPTRD', INFOT, NOUT, LERR, OK )
+         CALL ZHPTRD( 'U', -1, A, D, E, TAU, INFO )
+         CALL CHKXER( 'ZHPTRD', INFOT, NOUT, LERR, OK )
          NT = NT + 2
 *
-*        AB_ZUPGTR
+*        ZUPGTR
 *
-         SRNAMT = 'AB_ZUPGTR'
+         SRNAMT = 'ZUPGTR'
          INFOT = 1
-         CALL AB_ZUPGTR( '/', 0, A, TAU, Z, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_ZUPGTR', INFOT, NOUT, LERR, OK )
+         CALL ZUPGTR( '/', 0, A, TAU, Z, 1, W, INFO )
+         CALL CHKXER( 'ZUPGTR', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_ZUPGTR( 'U', -1, A, TAU, Z, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_ZUPGTR', INFOT, NOUT, LERR, OK )
+         CALL ZUPGTR( 'U', -1, A, TAU, Z, 1, W, INFO )
+         CALL CHKXER( 'ZUPGTR', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_ZUPGTR( 'U', 2, A, TAU, Z, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_ZUPGTR', INFOT, NOUT, LERR, OK )
+         CALL ZUPGTR( 'U', 2, A, TAU, Z, 1, W, INFO )
+         CALL CHKXER( 'ZUPGTR', INFOT, NOUT, LERR, OK )
          NT = NT + 3
 *
-*        AB_ZUPMTR
+*        ZUPMTR
 *
-         SRNAMT = 'AB_ZUPMTR'
+         SRNAMT = 'ZUPMTR'
          INFOT = 1
-         CALL AB_ZUPMTR( '/', 'U', 'N', 0, 0, A, TAU, C, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_ZUPMTR', INFOT, NOUT, LERR, OK )
+         CALL ZUPMTR( '/', 'U', 'N', 0, 0, A, TAU, C, 1, W, INFO )
+         CALL CHKXER( 'ZUPMTR', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_ZUPMTR( 'L', '/', 'N', 0, 0, A, TAU, C, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_ZUPMTR', INFOT, NOUT, LERR, OK )
+         CALL ZUPMTR( 'L', '/', 'N', 0, 0, A, TAU, C, 1, W, INFO )
+         CALL CHKXER( 'ZUPMTR', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_ZUPMTR( 'L', 'U', '/', 0, 0, A, TAU, C, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_ZUPMTR', INFOT, NOUT, LERR, OK )
+         CALL ZUPMTR( 'L', 'U', '/', 0, 0, A, TAU, C, 1, W, INFO )
+         CALL CHKXER( 'ZUPMTR', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_ZUPMTR( 'L', 'U', 'N', -1, 0, A, TAU, C, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_ZUPMTR', INFOT, NOUT, LERR, OK )
+         CALL ZUPMTR( 'L', 'U', 'N', -1, 0, A, TAU, C, 1, W, INFO )
+         CALL CHKXER( 'ZUPMTR', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_ZUPMTR( 'L', 'U', 'N', 0, -1, A, TAU, C, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_ZUPMTR', INFOT, NOUT, LERR, OK )
+         CALL ZUPMTR( 'L', 'U', 'N', 0, -1, A, TAU, C, 1, W, INFO )
+         CALL CHKXER( 'ZUPMTR', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_ZUPMTR( 'L', 'U', 'N', 2, 0, A, TAU, C, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_ZUPMTR', INFOT, NOUT, LERR, OK )
+         CALL ZUPMTR( 'L', 'U', 'N', 2, 0, A, TAU, C, 1, W, INFO )
+         CALL CHKXER( 'ZUPMTR', INFOT, NOUT, LERR, OK )
          NT = NT + 6
 *
-*        AB_ZPTEQR
+*        ZPTEQR
 *
-         SRNAMT = 'AB_ZPTEQR'
+         SRNAMT = 'ZPTEQR'
          INFOT = 1
-         CALL AB_ZPTEQR( '/', 0, D, E, Z, 1, RW, INFO )
-         CALL AB_CHKXER( 'AB_ZPTEQR', INFOT, NOUT, LERR, OK )
+         CALL ZPTEQR( '/', 0, D, E, Z, 1, RW, INFO )
+         CALL CHKXER( 'ZPTEQR', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_ZPTEQR( 'N', -1, D, E, Z, 1, RW, INFO )
-         CALL AB_CHKXER( 'AB_ZPTEQR', INFOT, NOUT, LERR, OK )
+         CALL ZPTEQR( 'N', -1, D, E, Z, 1, RW, INFO )
+         CALL CHKXER( 'ZPTEQR', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_ZPTEQR( 'V', 2, D, E, Z, 1, RW, INFO )
-         CALL AB_CHKXER( 'AB_ZPTEQR', INFOT, NOUT, LERR, OK )
+         CALL ZPTEQR( 'V', 2, D, E, Z, 1, RW, INFO )
+         CALL CHKXER( 'ZPTEQR', INFOT, NOUT, LERR, OK )
          NT = NT + 3
 *
-*        AB_ZSTEIN
+*        ZSTEIN
 *
-         SRNAMT = 'AB_ZSTEIN'
+         SRNAMT = 'ZSTEIN'
          INFOT = 1
-         CALL AB_ZSTEIN( -1, D, E, 0, X, I1, I2, Z, 1, RW, IW, I3, INFO 
-     $)
-         CALL AB_CHKXER( 'AB_ZSTEIN', INFOT, NOUT, LERR, OK )
+         CALL ZSTEIN( -1, D, E, 0, X, I1, I2, Z, 1, RW, IW, I3, INFO )
+         CALL CHKXER( 'ZSTEIN', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_ZSTEIN( 0, D, E, -1, X, I1, I2, Z, 1, RW, IW, I3, INFO 
-     $)
-         CALL AB_CHKXER( 'AB_ZSTEIN', INFOT, NOUT, LERR, OK )
+         CALL ZSTEIN( 0, D, E, -1, X, I1, I2, Z, 1, RW, IW, I3, INFO )
+         CALL CHKXER( 'ZSTEIN', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_ZSTEIN( 0, D, E, 1, X, I1, I2, Z, 1, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_ZSTEIN', INFOT, NOUT, LERR, OK )
+         CALL ZSTEIN( 0, D, E, 1, X, I1, I2, Z, 1, RW, IW, I3, INFO )
+         CALL CHKXER( 'ZSTEIN', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_ZSTEIN( 2, D, E, 0, X, I1, I2, Z, 1, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_ZSTEIN', INFOT, NOUT, LERR, OK )
+         CALL ZSTEIN( 2, D, E, 0, X, I1, I2, Z, 1, RW, IW, I3, INFO )
+         CALL CHKXER( 'ZSTEIN', INFOT, NOUT, LERR, OK )
          NT = NT + 4
 *
-*        AB_ZSTEQR
+*        ZSTEQR
 *
-         SRNAMT = 'AB_ZSTEQR'
+         SRNAMT = 'ZSTEQR'
          INFOT = 1
-         CALL AB_ZSTEQR( '/', 0, D, E, Z, 1, RW, INFO )
-         CALL AB_CHKXER( 'AB_ZSTEQR', INFOT, NOUT, LERR, OK )
+         CALL ZSTEQR( '/', 0, D, E, Z, 1, RW, INFO )
+         CALL CHKXER( 'ZSTEQR', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_ZSTEQR( 'N', -1, D, E, Z, 1, RW, INFO )
-         CALL AB_CHKXER( 'AB_ZSTEQR', INFOT, NOUT, LERR, OK )
+         CALL ZSTEQR( 'N', -1, D, E, Z, 1, RW, INFO )
+         CALL CHKXER( 'ZSTEQR', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_ZSTEQR( 'V', 2, D, E, Z, 1, RW, INFO )
-         CALL AB_CHKXER( 'AB_ZSTEQR', INFOT, NOUT, LERR, OK )
+         CALL ZSTEQR( 'V', 2, D, E, Z, 1, RW, INFO )
+         CALL CHKXER( 'ZSTEQR', INFOT, NOUT, LERR, OK )
          NT = NT + 3
 *
-*        AB_ZSTEDC
+*        ZSTEDC
 *
-         SRNAMT = 'AB_ZSTEDC'
+         SRNAMT = 'ZSTEDC'
          INFOT = 1
-         CALL AB_ZSTEDC( '/', 0, D, E, Z, 1, W, 1, RW, 1, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZSTEDC', INFOT, NOUT, LERR, OK )
+         CALL ZSTEDC( '/', 0, D, E, Z, 1, W, 1, RW, 1, IW, 1, INFO )
+         CALL CHKXER( 'ZSTEDC', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_ZSTEDC( 'N', -1, D, E, Z, 1, W, 1, RW, 1, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZSTEDC', INFOT, NOUT, LERR, OK )
+         CALL ZSTEDC( 'N', -1, D, E, Z, 1, W, 1, RW, 1, IW, 1, INFO )
+         CALL CHKXER( 'ZSTEDC', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_ZSTEDC( 'V', 2, D, E, Z, 1, W, 4, RW, 23, IW, 28, INFO 
-     $)
-         CALL AB_CHKXER( 'AB_ZSTEDC', INFOT, NOUT, LERR, OK )
+         CALL ZSTEDC( 'V', 2, D, E, Z, 1, W, 4, RW, 23, IW, 28, INFO )
+         CALL CHKXER( 'ZSTEDC', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_ZSTEDC( 'N', 2, D, E, Z, 1, W, 0, RW, 1, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZSTEDC', INFOT, NOUT, LERR, OK )
+         CALL ZSTEDC( 'N', 2, D, E, Z, 1, W, 0, RW, 1, IW, 1, INFO )
+         CALL CHKXER( 'ZSTEDC', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_ZSTEDC( 'V', 2, D, E, Z, 2, W, 0, RW, 23, IW, 28, INFO 
-     $)
-         CALL AB_CHKXER( 'AB_ZSTEDC', INFOT, NOUT, LERR, OK )
+         CALL ZSTEDC( 'V', 2, D, E, Z, 2, W, 0, RW, 23, IW, 28, INFO )
+         CALL CHKXER( 'ZSTEDC', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_ZSTEDC( 'N', 2, D, E, Z, 1, W, 1, RW, 0, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZSTEDC', INFOT, NOUT, LERR, OK )
+         CALL ZSTEDC( 'N', 2, D, E, Z, 1, W, 1, RW, 0, IW, 1, INFO )
+         CALL CHKXER( 'ZSTEDC', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_ZSTEDC( 'I', 2, D, E, Z, 2, W, 1, RW, 1, IW, 12, INFO )
-         CALL AB_CHKXER( 'AB_ZSTEDC', INFOT, NOUT, LERR, OK )
+         CALL ZSTEDC( 'I', 2, D, E, Z, 2, W, 1, RW, 1, IW, 12, INFO )
+         CALL CHKXER( 'ZSTEDC', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_ZSTEDC( 'V', 2, D, E, Z, 2, W, 4, RW, 1, IW, 28, INFO )
-         CALL AB_CHKXER( 'AB_ZSTEDC', INFOT, NOUT, LERR, OK )
+         CALL ZSTEDC( 'V', 2, D, E, Z, 2, W, 4, RW, 1, IW, 28, INFO )
+         CALL CHKXER( 'ZSTEDC', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL AB_ZSTEDC( 'N', 2, D, E, Z, 1, W, 1, RW, 1, IW, 0, INFO )
-         CALL AB_CHKXER( 'AB_ZSTEDC', INFOT, NOUT, LERR, OK )
+         CALL ZSTEDC( 'N', 2, D, E, Z, 1, W, 1, RW, 1, IW, 0, INFO )
+         CALL CHKXER( 'ZSTEDC', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL AB_ZSTEDC( 'I', 2, D, E, Z, 2, W, 1, RW, 23, IW, 0, INFO )
-         CALL AB_CHKXER( 'AB_ZSTEDC', INFOT, NOUT, LERR, OK )
+         CALL ZSTEDC( 'I', 2, D, E, Z, 2, W, 1, RW, 23, IW, 0, INFO )
+         CALL CHKXER( 'ZSTEDC', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL AB_ZSTEDC( 'V', 2, D, E, Z, 2, W, 4, RW, 23, IW, 0, INFO )
-         CALL AB_CHKXER( 'AB_ZSTEDC', INFOT, NOUT, LERR, OK )
+         CALL ZSTEDC( 'V', 2, D, E, Z, 2, W, 4, RW, 23, IW, 0, INFO )
+         CALL CHKXER( 'ZSTEDC', INFOT, NOUT, LERR, OK )
          NT = NT + 11
 *
-*        AB_AB_ZHEEVD
+*        ZHEEVD
 *
-         SRNAMT = 'AB_AB_ZHEEVD'
+         SRNAMT = 'ZHEEVD'
          INFOT = 1
-         CALL AB_AB_ZHEEVD( '/', 'U', 0, A, 1, X, W, 1, RW, 1, IW, 1, IN
-     $FO )
-         CALL AB_CHKXER( 'AB_AB_ZHEEVD', INFOT, NOUT, LERR, OK )
+         CALL ZHEEVD( '/', 'U', 0, A, 1, X, W, 1, RW, 1, IW, 1, INFO )
+         CALL CHKXER( 'ZHEEVD', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_ZHEEVD( 'N', '/', 0, A, 1, X, W, 1, RW, 1, IW, 1, IN
-     $FO )
-         CALL AB_CHKXER( 'AB_AB_ZHEEVD', INFOT, NOUT, LERR, OK )
+         CALL ZHEEVD( 'N', '/', 0, A, 1, X, W, 1, RW, 1, IW, 1, INFO )
+         CALL CHKXER( 'ZHEEVD', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_ZHEEVD( 'N', 'U', -1, A, 1, X, W, 1, RW, 1, IW, 1, I
-     $NFO )
-         CALL AB_CHKXER( 'AB_AB_ZHEEVD', INFOT, NOUT, LERR, OK )
+         CALL ZHEEVD( 'N', 'U', -1, A, 1, X, W, 1, RW, 1, IW, 1, INFO )
+         CALL CHKXER( 'ZHEEVD', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_AB_ZHEEVD( 'N', 'U', 2, A, 1, X, W, 3, RW, 2, IW, 1, IN
-     $FO )
-         CALL AB_CHKXER( 'AB_AB_ZHEEVD', INFOT, NOUT, LERR, OK )
+         CALL ZHEEVD( 'N', 'U', 2, A, 1, X, W, 3, RW, 2, IW, 1, INFO )
+         CALL CHKXER( 'ZHEEVD', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_ZHEEVD( 'N', 'U', 1, A, 1, X, W, 0, RW, 1, IW, 1, IN
-     $FO )
-         CALL AB_CHKXER( 'AB_AB_ZHEEVD', INFOT, NOUT, LERR, OK )
+         CALL ZHEEVD( 'N', 'U', 1, A, 1, X, W, 0, RW, 1, IW, 1, INFO )
+         CALL CHKXER( 'ZHEEVD', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_ZHEEVD( 'N', 'U', 2, A, 2, X, W, 2, RW, 2, IW, 1, IN
-     $FO )
-         CALL AB_CHKXER( 'AB_AB_ZHEEVD', INFOT, NOUT, LERR, OK )
+         CALL ZHEEVD( 'N', 'U', 2, A, 2, X, W, 2, RW, 2, IW, 1, INFO )
+         CALL CHKXER( 'ZHEEVD', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_ZHEEVD( 'V', 'U', 2, A, 2, X, W, 3, RW, 25, IW, 12, 
-     $INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHEEVD', INFOT, NOUT, LERR, OK )
+         CALL ZHEEVD( 'V', 'U', 2, A, 2, X, W, 3, RW, 25, IW, 12, INFO )
+         CALL CHKXER( 'ZHEEVD', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_AB_ZHEEVD( 'N', 'U', 1, A, 1, X, W, 1, RW, 0, IW, 1, IN
-     $FO )
-         CALL AB_CHKXER( 'AB_AB_ZHEEVD', INFOT, NOUT, LERR, OK )
+         CALL ZHEEVD( 'N', 'U', 1, A, 1, X, W, 1, RW, 0, IW, 1, INFO )
+         CALL CHKXER( 'ZHEEVD', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_AB_ZHEEVD( 'N', 'U', 2, A, 2, X, W, 3, RW, 1, IW, 1, IN
-     $FO )
-         CALL AB_CHKXER( 'AB_AB_ZHEEVD', INFOT, NOUT, LERR, OK )
+         CALL ZHEEVD( 'N', 'U', 2, A, 2, X, W, 3, RW, 1, IW, 1, INFO )
+         CALL CHKXER( 'ZHEEVD', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_AB_ZHEEVD( 'V', 'U', 2, A, 2, X, W, 8, RW, 18, IW, 12, 
-     $INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHEEVD', INFOT, NOUT, LERR, OK )
+         CALL ZHEEVD( 'V', 'U', 2, A, 2, X, W, 8, RW, 18, IW, 12, INFO )
+         CALL CHKXER( 'ZHEEVD', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL AB_AB_ZHEEVD( 'N', 'U', 1, A, 1, X, W, 1, RW, 1, IW, 0, IN
-     $FO )
-         CALL AB_CHKXER( 'AB_AB_ZHEEVD', INFOT, NOUT, LERR, OK )
+         CALL ZHEEVD( 'N', 'U', 1, A, 1, X, W, 1, RW, 1, IW, 0, INFO )
+         CALL CHKXER( 'ZHEEVD', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL AB_AB_ZHEEVD( 'V', 'U', 2, A, 2, X, W, 8, RW, 25, IW, 11, 
-     $INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHEEVD', INFOT, NOUT, LERR, OK )
+         CALL ZHEEVD( 'V', 'U', 2, A, 2, X, W, 8, RW, 25, IW, 11, INFO )
+         CALL CHKXER( 'ZHEEVD', INFOT, NOUT, LERR, OK )
          NT = NT + 12
 *
-*        AB_AB_AB_ZHEEVD_2STAGE
+*        ZHEEVD_2STAGE
 *
-         SRNAMT = 'AB_AB_AB_ZHEEVD_2STAGE'
+         SRNAMT = 'ZHEEVD_2STAGE'
          INFOT = 1
-         CALL AB_AB_AB_ZHEEVD_2STAGE( '/', 'U', 0, A, 1, X, W, 1,
+         CALL ZHEEVD_2STAGE( '/', 'U', 0, A, 1, X, W, 1,
      $                              RW, 1, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHEEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHEEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 1
-         CALL AB_AB_AB_ZHEEVD_2STAGE( 'V', 'U', 0, A, 1, X, W, 1,
+         CALL ZHEEVD_2STAGE( 'V', 'U', 0, A, 1, X, W, 1,
      $                              RW, 1, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHEEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHEEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_AB_ZHEEVD_2STAGE( 'N', '/', 0, A, 1, X, W, 1,
+         CALL ZHEEVD_2STAGE( 'N', '/', 0, A, 1, X, W, 1,
      $                              RW, 1, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHEEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHEEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_AB_ZHEEVD_2STAGE( 'N', 'U', -1, A, 1, X, W, 1,
+         CALL ZHEEVD_2STAGE( 'N', 'U', -1, A, 1, X, W, 1,
      $                               RW, 1, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHEEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHEEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_AB_AB_ZHEEVD_2STAGE( 'N', 'U', 2, A, 1, X, W, 3,
+         CALL ZHEEVD_2STAGE( 'N', 'U', 2, A, 1, X, W, 3,
      $                              RW, 2, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHEEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHEEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_AB_ZHEEVD_2STAGE( 'N', 'U', 1, A, 1, X, W, 0,
+         CALL ZHEEVD_2STAGE( 'N', 'U', 1, A, 1, X, W, 0,
      $                              RW, 1, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHEEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHEEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_AB_ZHEEVD_2STAGE( 'N', 'U', 2, A, 2, X, W, 2,
+         CALL ZHEEVD_2STAGE( 'N', 'U', 2, A, 2, X, W, 2,
      $                              RW, 2, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHEEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHEEVD_2STAGE', INFOT, NOUT, LERR, OK )
 *         INFOT = 8
-*         CALL AB_AB_AB_ZHEEVD_2STAGE( 'V', 'U', 2, A, 2, X, W, 3,
+*         CALL ZHEEVD_2STAGE( 'V', 'U', 2, A, 2, X, W, 3,
 *     $                            RW, 25, IW, 12, INFO )
-*         CALL AB_CHKXER( 'AB_AB_AB_ZHEEVD_2STAGE', INFOT, NOUT, LERR, OK )
+*         CALL CHKXER( 'ZHEEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_AB_AB_ZHEEVD_2STAGE( 'N', 'U', 1, A, 1, X, W, 1,
+         CALL ZHEEVD_2STAGE( 'N', 'U', 1, A, 1, X, W, 1,
      $                              RW, 0, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHEEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHEEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_AB_AB_ZHEEVD_2STAGE( 'N', 'U', 2, A, 2, X, W, 25,
+         CALL ZHEEVD_2STAGE( 'N', 'U', 2, A, 2, X, W, 25,
      $                              RW, 1, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHEEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHEEVD_2STAGE', INFOT, NOUT, LERR, OK )
 *         INFOT = 10
-*         CALL AB_AB_AB_ZHEEVD_2STAGE( 'V', 'U', 2, A, 2, X, W, 8,
+*         CALL ZHEEVD_2STAGE( 'V', 'U', 2, A, 2, X, W, 8,
 *     $                            RW, 18, IW, 12, INFO )
-*         CALL AB_CHKXER( 'AB_AB_AB_ZHEEVD_2STAGE', INFOT, NOUT, LERR, OK )
+*         CALL CHKXER( 'ZHEEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL AB_AB_AB_ZHEEVD_2STAGE( 'N', 'U', 1, A, 1, X, W, 1,
+         CALL ZHEEVD_2STAGE( 'N', 'U', 1, A, 1, X, W, 1,
      $                              RW, 1, IW, 0, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHEEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHEEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 12
-*         CALL AB_AB_AB_ZHEEVD_2STAGE( 'V', 'U', 2, A, 2, X, W, 8,
+*         CALL ZHEEVD_2STAGE( 'V', 'U', 2, A, 2, X, W, 8,
 *     $                            RW, 25, IW, 11, INFO )
-*         CALL AB_CHKXER( 'AB_AB_AB_ZHEEVD_2STAGE', INFOT, NOUT, LERR, OK )
+*         CALL CHKXER( 'ZHEEVD_2STAGE', INFOT, NOUT, LERR, OK )
          NT = NT + 10
 *
-*        AB_ZHEEV
+*        ZHEEV
 *
-         SRNAMT = 'AB_ZHEEV '
+         SRNAMT = 'ZHEEV '
          INFOT = 1
-         CALL AB_ZHEEV( '/', 'U', 0, A, 1, X, W, 1, RW, INFO )
-         CALL AB_CHKXER( 'AB_ZHEEV ', INFOT, NOUT, LERR, OK )
+         CALL ZHEEV( '/', 'U', 0, A, 1, X, W, 1, RW, INFO )
+         CALL CHKXER( 'ZHEEV ', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_ZHEEV( 'N', '/', 0, A, 1, X, W, 1, RW, INFO )
-         CALL AB_CHKXER( 'AB_ZHEEV ', INFOT, NOUT, LERR, OK )
+         CALL ZHEEV( 'N', '/', 0, A, 1, X, W, 1, RW, INFO )
+         CALL CHKXER( 'ZHEEV ', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_ZHEEV( 'N', 'U', -1, A, 1, X, W, 1, RW, INFO )
-         CALL AB_CHKXER( 'AB_ZHEEV ', INFOT, NOUT, LERR, OK )
+         CALL ZHEEV( 'N', 'U', -1, A, 1, X, W, 1, RW, INFO )
+         CALL CHKXER( 'ZHEEV ', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_ZHEEV( 'N', 'U', 2, A, 1, X, W, 3, RW, INFO )
-         CALL AB_CHKXER( 'AB_ZHEEV ', INFOT, NOUT, LERR, OK )
+         CALL ZHEEV( 'N', 'U', 2, A, 1, X, W, 3, RW, INFO )
+         CALL CHKXER( 'ZHEEV ', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_ZHEEV( 'N', 'U', 2, A, 2, X, W, 2, RW, INFO )
-         CALL AB_CHKXER( 'AB_ZHEEV ', INFOT, NOUT, LERR, OK )
+         CALL ZHEEV( 'N', 'U', 2, A, 2, X, W, 2, RW, INFO )
+         CALL CHKXER( 'ZHEEV ', INFOT, NOUT, LERR, OK )
          NT = NT + 5
 *
-*        AB_AB_ZHEEV_2STAGE
+*        ZHEEV_2STAGE
 *
-         SRNAMT = 'AB_AB_ZHEEV_2STAGE '
+         SRNAMT = 'ZHEEV_2STAGE '
          INFOT = 1
-         CALL AB_AB_ZHEEV_2STAGE( '/', 'U', 0, A, 1, X, W, 1, RW, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHEEV_2STAGE ', INFOT, NOUT, LERR, OK )
+         CALL ZHEEV_2STAGE( '/', 'U', 0, A, 1, X, W, 1, RW, INFO )
+         CALL CHKXER( 'ZHEEV_2STAGE ', INFOT, NOUT, LERR, OK )
          INFOT = 1
-         CALL AB_AB_ZHEEV_2STAGE( 'V', 'U', 0, A, 1, X, W, 1, RW, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHEEV_2STAGE ', INFOT, NOUT, LERR, OK )
+         CALL ZHEEV_2STAGE( 'V', 'U', 0, A, 1, X, W, 1, RW, INFO )
+         CALL CHKXER( 'ZHEEV_2STAGE ', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_ZHEEV_2STAGE( 'N', '/', 0, A, 1, X, W, 1, RW, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHEEV_2STAGE ', INFOT, NOUT, LERR, OK )
+         CALL ZHEEV_2STAGE( 'N', '/', 0, A, 1, X, W, 1, RW, INFO )
+         CALL CHKXER( 'ZHEEV_2STAGE ', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_ZHEEV_2STAGE( 'N', 'U', -1, A, 1, X, W, 1, RW, INFO 
-     $)
-         CALL AB_CHKXER( 'AB_AB_ZHEEV_2STAGE ', INFOT, NOUT, LERR, OK )
+         CALL ZHEEV_2STAGE( 'N', 'U', -1, A, 1, X, W, 1, RW, INFO )
+         CALL CHKXER( 'ZHEEV_2STAGE ', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_AB_ZHEEV_2STAGE( 'N', 'U', 2, A, 1, X, W, 3, RW, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHEEV_2STAGE ', INFOT, NOUT, LERR, OK )
+         CALL ZHEEV_2STAGE( 'N', 'U', 2, A, 1, X, W, 3, RW, INFO )
+         CALL CHKXER( 'ZHEEV_2STAGE ', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_ZHEEV_2STAGE( 'N', 'U', 2, A, 2, X, W, 2, RW, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHEEV_2STAGE ', INFOT, NOUT, LERR, OK )
+         CALL ZHEEV_2STAGE( 'N', 'U', 2, A, 2, X, W, 2, RW, INFO )
+         CALL CHKXER( 'ZHEEV_2STAGE ', INFOT, NOUT, LERR, OK )
          NT = NT + 6
 *
-*        AB_AB_ZHEEVX
+*        ZHEEVX
 *
-         SRNAMT = 'AB_AB_ZHEEVX'
+         SRNAMT = 'ZHEEVX'
          INFOT = 1
-         CALL AB_AB_ZHEEVX( '/', 'A', 'U', 0, A, 1, 0.0D0, 0.0D0, 0, 0, 
-     $0.0D0,
+         CALL ZHEEVX( '/', 'A', 'U', 0, A, 1, 0.0D0, 0.0D0, 0, 0, 0.0D0,
      $                M, X, Z, 1, W, 1, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHEEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHEEVX', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_ZHEEVX( 'V', '/', 'U', 0, A, 1, 0.0D0, 1.0D0, 1, 0, 
-     $0.0D0,
+         CALL ZHEEVX( 'V', '/', 'U', 0, A, 1, 0.0D0, 1.0D0, 1, 0, 0.0D0,
      $                M, X, Z, 1, W, 1, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHEEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHEEVX', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_ZHEEVX( 'V', 'A', '/', 0, A, 1, 0.0D0, 0.0D0, 0, 0, 
-     $0.0D0,
+         CALL ZHEEVX( 'V', 'A', '/', 0, A, 1, 0.0D0, 0.0D0, 0, 0, 0.0D0,
      $                M, X, Z, 1, W, 1, RW, IW, I3, INFO )
          INFOT = 4
-         CALL AB_AB_ZHEEVX( 'V', 'A', 'U', -1, A, 1, 0.0D0, 0.0D0, 0, 0,
+         CALL ZHEEVX( 'V', 'A', 'U', -1, A, 1, 0.0D0, 0.0D0, 0, 0,
      $                0.0D0, M, X, Z, 1, W, 1, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHEEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHEEVX', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_AB_ZHEEVX( 'V', 'A', 'U', 2, A, 1, 0.0D0, 0.0D0, 0, 0, 
-     $0.0D0,
+         CALL ZHEEVX( 'V', 'A', 'U', 2, A, 1, 0.0D0, 0.0D0, 0, 0, 0.0D0,
      $                M, X, Z, 2, W, 3, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHEEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHEEVX', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_ZHEEVX( 'V', 'V', 'U', 1, A, 1, 0.0D0, 0.0D0, 0, 0, 
-     $0.0D0,
+         CALL ZHEEVX( 'V', 'V', 'U', 1, A, 1, 0.0D0, 0.0D0, 0, 0, 0.0D0,
      $                M, X, Z, 1, W, 1, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHEEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHEEVX', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_AB_ZHEEVX( 'V', 'I', 'U', 1, A, 1, 0.0D0, 0.0D0, 0, 0, 
-     $0.0D0,
+         CALL ZHEEVX( 'V', 'I', 'U', 1, A, 1, 0.0D0, 0.0D0, 0, 0, 0.0D0,
      $                M, X, Z, 1, W, 1, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHEEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHEEVX', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_AB_ZHEEVX( 'V', 'I', 'U', 2, A, 2, 0.0D0, 0.0D0, 2, 1, 
-     $0.0D0,
+         CALL ZHEEVX( 'V', 'I', 'U', 2, A, 2, 0.0D0, 0.0D0, 2, 1, 0.0D0,
      $                M, X, Z, 2, W, 3, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHEEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHEEVX', INFOT, NOUT, LERR, OK )
          INFOT = 15
-         CALL AB_AB_ZHEEVX( 'V', 'A', 'U', 2, A, 2, 0.0D0, 0.0D0, 0, 0, 
-     $0.0D0,
+         CALL ZHEEVX( 'V', 'A', 'U', 2, A, 2, 0.0D0, 0.0D0, 0, 0, 0.0D0,
      $                M, X, Z, 1, W, 3, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHEEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHEEVX', INFOT, NOUT, LERR, OK )
          INFOT = 17
-         CALL AB_AB_ZHEEVX( 'V', 'A', 'U', 2, A, 2, 0.0D0, 0.0D0, 0, 0, 
-     $0.0D0,
+         CALL ZHEEVX( 'V', 'A', 'U', 2, A, 2, 0.0D0, 0.0D0, 0, 0, 0.0D0,
      $                M, X, Z, 2, W, 2, RW, IW, I1, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHEEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHEEVX', INFOT, NOUT, LERR, OK )
          NT = NT + 10
 *
-*        AB_AB_AB_ZHEEVX_2STAGE
+*        ZHEEVX_2STAGE
 *
-         SRNAMT = 'AB_AB_AB_ZHEEVX_2STAGE'
+         SRNAMT = 'ZHEEVX_2STAGE'
          INFOT = 1
-         CALL AB_AB_AB_ZHEEVX_2STAGE( '/', 'A', 'U', 0, A, 1,
+         CALL ZHEEVX_2STAGE( '/', 'A', 'U', 0, A, 1,
      $                0.0D0, 0.0D0, 0, 0, 0.0D0,
      $                M, X, Z, 1, W, 1, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHEEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHEEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 1
-         CALL AB_AB_AB_ZHEEVX_2STAGE( 'V', 'A', 'U', 0, A, 1,
+         CALL ZHEEVX_2STAGE( 'V', 'A', 'U', 0, A, 1,
      $                0.0D0, 0.0D0, 0, 0, 0.0D0,
      $                M, X, Z, 1, W, 1, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHEEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHEEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_AB_ZHEEVX_2STAGE( 'N', '/', 'U', 0, A, 1,
+         CALL ZHEEVX_2STAGE( 'N', '/', 'U', 0, A, 1,
      $                0.0D0, 1.0D0, 1, 0, 0.0D0,
      $                M, X, Z, 1, W, 1, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHEEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHEEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_AB_ZHEEVX_2STAGE( 'N', 'A', '/', 0, A, 1,
+         CALL ZHEEVX_2STAGE( 'N', 'A', '/', 0, A, 1,
      $                0.0D0, 0.0D0, 0, 0, 0.0D0,
      $                M, X, Z, 1, W, 1, RW, IW, I3, INFO )
          INFOT = 4
-         CALL AB_AB_AB_ZHEEVX_2STAGE( 'N', 'A', 'U', -1, A, 1,
+         CALL ZHEEVX_2STAGE( 'N', 'A', 'U', -1, A, 1,
      $                0.0D0, 0.0D0, 0, 0, 0.0D0,
      $                M, X, Z, 1, W, 1, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHEEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHEEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_AB_AB_ZHEEVX_2STAGE( 'N', 'A', 'U', 2, A, 1,
+         CALL ZHEEVX_2STAGE( 'N', 'A', 'U', 2, A, 1,
      $                0.0D0, 0.0D0, 0, 0, 0.0D0,
      $                M, X, Z, 2, W, 3, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHEEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHEEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_AB_ZHEEVX_2STAGE( 'N', 'V', 'U', 1, A, 1,
+         CALL ZHEEVX_2STAGE( 'N', 'V', 'U', 1, A, 1,
      $                0.0D0, 0.0D0, 0, 0, 0.0D0,
      $                M, X, Z, 1, W, 1, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHEEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHEEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_AB_AB_ZHEEVX_2STAGE( 'N', 'I', 'U', 1, A, 1,
+         CALL ZHEEVX_2STAGE( 'N', 'I', 'U', 1, A, 1,
      $                0.0D0, 0.0D0, 0, 0, 0.0D0,
      $                M, X, Z, 1, W, 1, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHEEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHEEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_AB_AB_ZHEEVX_2STAGE( 'N', 'I', 'U', 2, A, 2,
+         CALL ZHEEVX_2STAGE( 'N', 'I', 'U', 2, A, 2,
      $                0.0D0, 0.0D0, 2, 1, 0.0D0,
      $                M, X, Z, 2, W, 3, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHEEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHEEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 15
-         CALL AB_AB_AB_ZHEEVX_2STAGE( 'N', 'A', 'U', 2, A, 2,
+         CALL ZHEEVX_2STAGE( 'N', 'A', 'U', 2, A, 2,
      $                0.0D0, 0.0D0, 0, 0, 0.0D0,
      $                M, X, Z, 0, W, 3, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHEEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHEEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 17
-         CALL AB_AB_AB_ZHEEVX_2STAGE( 'N', 'A', 'U', 2, A, 2,
+         CALL ZHEEVX_2STAGE( 'N', 'A', 'U', 2, A, 2,
      $                0.0D0, 0.0D0, 0, 0, 0.0D0,
      $                M, X, Z, 2, W, 0, RW, IW, I1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHEEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHEEVX_2STAGE', INFOT, NOUT, LERR, OK )
          NT = NT + 11
 *
-*        AB_AB_ZHEEVR
+*        ZHEEVR
 *
-         SRNAMT = 'AB_AB_ZHEEVR'
+         SRNAMT = 'ZHEEVR'
          N = 1
          INFOT = 1
-         CALL AB_AB_ZHEEVR( '/', 'A', 'U', 0, A, 1, 0.0D0, 0.0D0, 1, 1, 
-     $0.0D0,
+         CALL ZHEEVR( '/', 'A', 'U', 0, A, 1, 0.0D0, 0.0D0, 1, 1, 0.0D0,
      $                M, R, Z, 1, IW, Q, 2*N, RW, 24*N, IW( 2*N+1 ),
      $                10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHEEVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHEEVR', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_ZHEEVR( 'V', '/', 'U', 0, A, 1, 0.0D0, 0.0D0, 1, 1, 
-     $0.0D0,
+         CALL ZHEEVR( 'V', '/', 'U', 0, A, 1, 0.0D0, 0.0D0, 1, 1, 0.0D0,
      $                M, R, Z, 1, IW, Q, 2*N, RW, 24*N, IW( 2*N+1 ),
      $                10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHEEVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHEEVR', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_ZHEEVR( 'V', 'A', '/', -1, A, 1, 0.0D0, 0.0D0, 1, 1,
+         CALL ZHEEVR( 'V', 'A', '/', -1, A, 1, 0.0D0, 0.0D0, 1, 1,
      $                0.0D0, M, R, Z, 1, IW, Q, 2*N, RW, 24*N,
      $                IW( 2*N+1 ), 10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHEEVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHEEVR', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_ZHEEVR( 'V', 'A', 'U', -1, A, 1, 0.0D0, 0.0D0, 1, 1,
+         CALL ZHEEVR( 'V', 'A', 'U', -1, A, 1, 0.0D0, 0.0D0, 1, 1,
      $                0.0D0, M, R, Z, 1, IW, Q, 2*N, RW, 24*N,
      $                IW( 2*N+1 ), 10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHEEVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHEEVR', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_AB_ZHEEVR( 'V', 'A', 'U', 2, A, 1, 0.0D0, 0.0D0, 1, 1, 
-     $0.0D0,
+         CALL ZHEEVR( 'V', 'A', 'U', 2, A, 1, 0.0D0, 0.0D0, 1, 1, 0.0D0,
      $                M, R, Z, 1, IW, Q, 2*N, RW, 24*N, IW( 2*N+1 ),
      $                10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHEEVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHEEVR', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_ZHEEVR( 'V', 'V', 'U', 1, A, 1, 0.0D0, 0.0D0, 1, 1, 
-     $0.0D0,
+         CALL ZHEEVR( 'V', 'V', 'U', 1, A, 1, 0.0D0, 0.0D0, 1, 1, 0.0D0,
      $                M, R, Z, 1, IW, Q, 2*N, RW, 24*N, IW( 2*N+1 ),
      $                10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHEEVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHEEVR', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_AB_ZHEEVR( 'V', 'I', 'U', 1, A, 1, 0.0D0, 0.0D0, 0, 1, 
-     $0.0D0,
+         CALL ZHEEVR( 'V', 'I', 'U', 1, A, 1, 0.0D0, 0.0D0, 0, 1, 0.0D0,
      $                M, R, Z, 1, IW, Q, 2*N, RW, 24*N, IW( 2*N+1 ),
      $                10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHEEVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHEEVR', INFOT, NOUT, LERR, OK )
          INFOT = 10
 *
-         CALL AB_AB_ZHEEVR( 'V', 'I', 'U', 2, A, 2, 0.0D0, 0.0D0, 2, 1, 
-     $0.0D0,
+         CALL ZHEEVR( 'V', 'I', 'U', 2, A, 2, 0.0D0, 0.0D0, 2, 1, 0.0D0,
      $                M, R, Z, 1, IW, Q, 2*N, RW, 24*N, IW( 2*N+1 ),
      $                10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHEEVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHEEVR', INFOT, NOUT, LERR, OK )
          INFOT = 15
-         CALL AB_AB_ZHEEVR( 'V', 'I', 'U', 1, A, 1, 0.0D0, 0.0D0, 1, 1, 
-     $0.0D0,
+         CALL ZHEEVR( 'V', 'I', 'U', 1, A, 1, 0.0D0, 0.0D0, 1, 1, 0.0D0,
      $                M, R, Z, 0, IW, Q, 2*N, RW, 24*N, IW( 2*N+1 ),
      $                10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHEEVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHEEVR', INFOT, NOUT, LERR, OK )
          INFOT = 18
-         CALL AB_AB_ZHEEVR( 'V', 'I', 'U', 1, A, 1, 0.0D0, 0.0D0, 1, 1, 
-     $0.0D0,
+         CALL ZHEEVR( 'V', 'I', 'U', 1, A, 1, 0.0D0, 0.0D0, 1, 1, 0.0D0,
      $                M, R, Z, 1, IW, Q, 2*N-1, RW, 24*N, IW( 2*N+1 ),
      $                10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHEEVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHEEVR', INFOT, NOUT, LERR, OK )
          INFOT = 20
-         CALL AB_AB_ZHEEVR( 'V', 'I', 'U', 1, A, 1, 0.0D0, 0.0D0, 1, 1, 
-     $0.0D0,
+         CALL ZHEEVR( 'V', 'I', 'U', 1, A, 1, 0.0D0, 0.0D0, 1, 1, 0.0D0,
      $                M, R, Z, 1, IW, Q, 2*N, RW, 24*N-1, IW( 2*N-1 ),
      $                10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHEEVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHEEVR', INFOT, NOUT, LERR, OK )
          INFOT = 22
-         CALL AB_AB_ZHEEVR( 'V', 'I', 'U', 1, A, 1, 0.0D0, 0.0D0, 1, 1, 
-     $0.0D0,
+         CALL ZHEEVR( 'V', 'I', 'U', 1, A, 1, 0.0D0, 0.0D0, 1, 1, 0.0D0,
      $                M, R, Z, 1, IW, Q, 2*N, RW, 24*N, IW, 10*N-1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHEEVR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHEEVR', INFOT, NOUT, LERR, OK )
          NT = NT + 12
 *
-*        AB_AB_AB_ZHEEVR_2STAGE
+*        ZHEEVR_2STAGE
 *
-         SRNAMT = 'AB_AB_AB_ZHEEVR_2STAGE'
+         SRNAMT = 'ZHEEVR_2STAGE'
          N = 1
          INFOT = 1
-         CALL AB_AB_AB_ZHEEVR_2STAGE( '/', 'A', 'U', 0, A, 1,
+         CALL ZHEEVR_2STAGE( '/', 'A', 'U', 0, A, 1,
      $                0.0D0, 0.0D0, 1, 1, 0.0D0,
      $                M, R, Z, 1, IW, Q, 2*N, RW, 24*N, IW( 2*N+1 ),
      $                10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHEEVR_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHEEVR_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 1
-         CALL AB_AB_AB_ZHEEVR_2STAGE( 'V', 'A', 'U', 0, A, 1,
+         CALL ZHEEVR_2STAGE( 'V', 'A', 'U', 0, A, 1,
      $                0.0D0, 0.0D0, 1, 1, 0.0D0,
      $                M, R, Z, 1, IW, Q, 2*N, RW, 24*N, IW( 2*N+1 ),
      $                10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHEEVR_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHEEVR_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_AB_ZHEEVR_2STAGE( 'N', '/', 'U', 0, A, 1,
+         CALL ZHEEVR_2STAGE( 'N', '/', 'U', 0, A, 1,
      $                0.0D0, 0.0D0, 1, 1, 0.0D0,
      $                M, R, Z, 1, IW, Q, 2*N, RW, 24*N, IW( 2*N+1 ),
      $                10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHEEVR_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHEEVR_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_AB_ZHEEVR_2STAGE( 'N', 'A', '/', -1, A, 1,
+         CALL ZHEEVR_2STAGE( 'N', 'A', '/', -1, A, 1,
      $                0.0D0, 0.0D0, 1, 1, 0.0D0,
      $                M, R, Z, 1, IW, Q, 2*N, RW, 24*N,
      $                IW( 2*N+1 ), 10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHEEVR_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHEEVR_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_AB_ZHEEVR_2STAGE( 'N', 'A', 'U', -1, A, 1,
+         CALL ZHEEVR_2STAGE( 'N', 'A', 'U', -1, A, 1,
      $                0.0D0, 0.0D0, 1, 1, 0.0D0,
      $                M, R, Z, 1, IW, Q, 2*N, RW, 24*N,
      $                IW( 2*N+1 ), 10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHEEVR_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHEEVR_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_AB_AB_ZHEEVR_2STAGE( 'N', 'A', 'U', 2, A, 1,
+         CALL ZHEEVR_2STAGE( 'N', 'A', 'U', 2, A, 1,
      $                0.0D0, 0.0D0, 1, 1, 0.0D0,
      $                M, R, Z, 1, IW, Q, 2*N, RW, 24*N, IW( 2*N+1 ),
      $                10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHEEVR_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHEEVR_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_AB_ZHEEVR_2STAGE( 'N', 'V', 'U', 1, A, 1,
+         CALL ZHEEVR_2STAGE( 'N', 'V', 'U', 1, A, 1,
      $                0.0D0, 0.0D0, 1, 1, 0.0D0,
      $                M, R, Z, 1, IW, Q, 2*N, RW, 24*N, IW( 2*N+1 ),
      $                10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHEEVR_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHEEVR_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_AB_AB_ZHEEVR_2STAGE( 'N', 'I', 'U', 1, A, 1,
+         CALL ZHEEVR_2STAGE( 'N', 'I', 'U', 1, A, 1,
      $                0.0D0, 0.0D0, 0, 1, 0.0D0,
      $                M, R, Z, 1, IW, Q, 2*N, RW, 24*N, IW( 2*N+1 ),
      $                10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHEEVR_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHEEVR_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_AB_AB_ZHEEVR_2STAGE( 'N', 'I', 'U', 2, A, 2,
+         CALL ZHEEVR_2STAGE( 'N', 'I', 'U', 2, A, 2,
      $                0.0D0, 0.0D0, 2, 1, 0.0D0,
      $                M, R, Z, 1, IW, Q, 2*N, RW, 24*N, IW( 2*N+1 ),
      $                10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHEEVR_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHEEVR_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 15
-         CALL AB_AB_AB_ZHEEVR_2STAGE( 'N', 'I', 'U', 1, A, 1,
+         CALL ZHEEVR_2STAGE( 'N', 'I', 'U', 1, A, 1,
      $                0.0D0, 0.0D0, 1, 1, 0.0D0,
      $                M, R, Z, 0, IW, Q, 2*N, RW, 24*N, IW( 2*N+1 ),
      $                10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHEEVR_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHEEVR_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 18
-         CALL AB_AB_AB_ZHEEVR_2STAGE( 'N', 'I', 'U', 1, A, 1,
+         CALL ZHEEVR_2STAGE( 'N', 'I', 'U', 1, A, 1,
      $                0.0D0, 0.0D0, 1, 1, 0.0D0,
      $                M, R, Z, 1, IW, Q, 2*N-1, RW, 24*N, IW( 2*N+1 ),
      $                10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHEEVR_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHEEVR_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 20
-         CALL AB_AB_AB_ZHEEVR_2STAGE( 'N', 'I', 'U', 1, A, 1,
+         CALL ZHEEVR_2STAGE( 'N', 'I', 'U', 1, A, 1,
      $                0.0D0, 0.0D0, 1, 1, 0.0D0,
      $                M, R, Z, 1, IW, Q, 26*N, RW, 24*N-1, IW( 2*N-1 ),
      $                10*N, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHEEVR_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHEEVR_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 22
-         CALL AB_AB_AB_ZHEEVR_2STAGE( 'N', 'I', 'U', 1, A, 1,
+         CALL ZHEEVR_2STAGE( 'N', 'I', 'U', 1, A, 1,
      $                0.0D0, 0.0D0, 1, 1, 0.0D0,
      $                M, R, Z, 1, IW, Q, 26*N, RW, 24*N, IW, 10*N-1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHEEVR_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHEEVR_2STAGE', INFOT, NOUT, LERR, OK )
          NT = NT + 13
 *
-*        AB_AB_ZHPEVD
+*        ZHPEVD
 *
-         SRNAMT = 'AB_AB_ZHPEVD'
+         SRNAMT = 'ZHPEVD'
          INFOT = 1
-         CALL AB_AB_ZHPEVD( '/', 'U', 0, A, X, Z, 1, W, 1, RW, 1, IW, 1,
+         CALL ZHPEVD( '/', 'U', 0, A, X, Z, 1, W, 1, RW, 1, IW, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHPEVD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHPEVD', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_ZHPEVD( 'N', '/', 0, A, X, Z, 1, W, 1, RW, 1, IW, 1,
+         CALL ZHPEVD( 'N', '/', 0, A, X, Z, 1, W, 1, RW, 1, IW, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHPEVD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHPEVD', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_ZHPEVD( 'N', 'U', -1, A, X, Z, 1, W, 1, RW, 1, IW, 1
-     $,
+         CALL ZHPEVD( 'N', 'U', -1, A, X, Z, 1, W, 1, RW, 1, IW, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHPEVD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHPEVD', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_AB_ZHPEVD( 'V', 'U', 2, A, X, Z, 1, W, 4, RW, 25, IW, 1
-     $2,
+         CALL ZHPEVD( 'V', 'U', 2, A, X, Z, 1, W, 4, RW, 25, IW, 12,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHPEVD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHPEVD', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_AB_ZHPEVD( 'N', 'U', 1, A, X, Z, 1, W, 0, RW, 1, IW, 1,
+         CALL ZHPEVD( 'N', 'U', 1, A, X, Z, 1, W, 0, RW, 1, IW, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHPEVD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHPEVD', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_AB_ZHPEVD( 'N', 'U', 2, A, X, Z, 2, W, 1, RW, 2, IW, 1,
+         CALL ZHPEVD( 'N', 'U', 2, A, X, Z, 2, W, 1, RW, 2, IW, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHPEVD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHPEVD', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_AB_ZHPEVD( 'V', 'U', 2, A, X, Z, 2, W, 2, RW, 25, IW, 1
-     $2,
+         CALL ZHPEVD( 'V', 'U', 2, A, X, Z, 2, W, 2, RW, 25, IW, 12,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHPEVD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHPEVD', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL AB_AB_ZHPEVD( 'N', 'U', 1, A, X, Z, 1, W, 1, RW, 0, IW, 1,
+         CALL ZHPEVD( 'N', 'U', 1, A, X, Z, 1, W, 1, RW, 0, IW, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHPEVD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHPEVD', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL AB_AB_ZHPEVD( 'N', 'U', 2, A, X, Z, 2, W, 2, RW, 1, IW, 1,
+         CALL ZHPEVD( 'N', 'U', 2, A, X, Z, 2, W, 2, RW, 1, IW, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHPEVD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHPEVD', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL AB_AB_ZHPEVD( 'V', 'U', 2, A, X, Z, 2, W, 4, RW, 18, IW, 1
-     $2,
+         CALL ZHPEVD( 'V', 'U', 2, A, X, Z, 2, W, 4, RW, 18, IW, 12,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHPEVD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHPEVD', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL AB_AB_ZHPEVD( 'N', 'U', 1, A, X, Z, 1, W, 1, RW, 1, IW, 0,
+         CALL ZHPEVD( 'N', 'U', 1, A, X, Z, 1, W, 1, RW, 1, IW, 0,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHPEVD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHPEVD', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL AB_AB_ZHPEVD( 'N', 'U', 2, A, X, Z, 2, W, 2, RW, 2, IW, 0,
+         CALL ZHPEVD( 'N', 'U', 2, A, X, Z, 2, W, 2, RW, 2, IW, 0,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHPEVD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHPEVD', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL AB_AB_ZHPEVD( 'V', 'U', 2, A, X, Z, 2, W, 4, RW, 25, IW, 2
-     $,
+         CALL ZHPEVD( 'V', 'U', 2, A, X, Z, 2, W, 4, RW, 25, IW, 2,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHPEVD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHPEVD', INFOT, NOUT, LERR, OK )
          NT = NT + 13
 *
-*        AB_ZHPEV
+*        ZHPEV
 *
-         SRNAMT = 'AB_ZHPEV '
+         SRNAMT = 'ZHPEV '
          INFOT = 1
-         CALL AB_ZHPEV( '/', 'U', 0, A, X, Z, 1, W, RW, INFO )
-         CALL AB_CHKXER( 'AB_ZHPEV ', INFOT, NOUT, LERR, OK )
+         CALL ZHPEV( '/', 'U', 0, A, X, Z, 1, W, RW, INFO )
+         CALL CHKXER( 'ZHPEV ', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_ZHPEV( 'N', '/', 0, A, X, Z, 1, W, RW, INFO )
-         CALL AB_CHKXER( 'AB_ZHPEV ', INFOT, NOUT, LERR, OK )
+         CALL ZHPEV( 'N', '/', 0, A, X, Z, 1, W, RW, INFO )
+         CALL CHKXER( 'ZHPEV ', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_ZHPEV( 'N', 'U', -1, A, X, Z, 1, W, RW, INFO )
-         CALL AB_CHKXER( 'AB_ZHPEV ', INFOT, NOUT, LERR, OK )
+         CALL ZHPEV( 'N', 'U', -1, A, X, Z, 1, W, RW, INFO )
+         CALL CHKXER( 'ZHPEV ', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_ZHPEV( 'V', 'U', 2, A, X, Z, 1, W, RW, INFO )
-         CALL AB_CHKXER( 'AB_ZHPEV ', INFOT, NOUT, LERR, OK )
+         CALL ZHPEV( 'V', 'U', 2, A, X, Z, 1, W, RW, INFO )
+         CALL CHKXER( 'ZHPEV ', INFOT, NOUT, LERR, OK )
          NT = NT + 4
 *
-*        AB_AB_ZHPEVX
+*        ZHPEVX
 *
-         SRNAMT = 'AB_AB_ZHPEVX'
+         SRNAMT = 'ZHPEVX'
          INFOT = 1
-         CALL AB_AB_ZHPEVX( '/', 'A', 'U', 0, A, 0.0D0, 0.0D0, 0, 0, 0.0
-     $D0, M,
+         CALL ZHPEVX( '/', 'A', 'U', 0, A, 0.0D0, 0.0D0, 0, 0, 0.0D0, M,
      $                X, Z, 1, W, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHPEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHPEVX', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_ZHPEVX( 'V', '/', 'U', 0, A, 0.0D0, 1.0D0, 1, 0, 0.0
-     $D0, M,
+         CALL ZHPEVX( 'V', '/', 'U', 0, A, 0.0D0, 1.0D0, 1, 0, 0.0D0, M,
      $                X, Z, 1, W, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHPEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHPEVX', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_ZHPEVX( 'V', 'A', '/', 0, A, 0.0D0, 0.0D0, 0, 0, 0.0
-     $D0, M,
+         CALL ZHPEVX( 'V', 'A', '/', 0, A, 0.0D0, 0.0D0, 0, 0, 0.0D0, M,
      $                X, Z, 1, W, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHPEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHPEVX', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_ZHPEVX( 'V', 'A', 'U', -1, A, 0.0D0, 0.0D0, 0, 0, 0.
-     $0D0,
+         CALL ZHPEVX( 'V', 'A', 'U', -1, A, 0.0D0, 0.0D0, 0, 0, 0.0D0,
      $                M, X, Z, 1, W, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHPEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHPEVX', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_AB_ZHPEVX( 'V', 'V', 'U', 1, A, 0.0D0, 0.0D0, 0, 0, 0.0
-     $D0, M,
+         CALL ZHPEVX( 'V', 'V', 'U', 1, A, 0.0D0, 0.0D0, 0, 0, 0.0D0, M,
      $                X, Z, 1, W, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHPEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHPEVX', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_ZHPEVX( 'V', 'I', 'U', 1, A, 0.0D0, 0.0D0, 0, 0, 0.0
-     $D0, M,
+         CALL ZHPEVX( 'V', 'I', 'U', 1, A, 0.0D0, 0.0D0, 0, 0, 0.0D0, M,
      $                X, Z, 1, W, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHPEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHPEVX', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_AB_ZHPEVX( 'V', 'I', 'U', 2, A, 0.0D0, 0.0D0, 2, 1, 0.0
-     $D0, M,
+         CALL ZHPEVX( 'V', 'I', 'U', 2, A, 0.0D0, 0.0D0, 2, 1, 0.0D0, M,
      $                X, Z, 2, W, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHPEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHPEVX', INFOT, NOUT, LERR, OK )
          INFOT = 14
-         CALL AB_AB_ZHPEVX( 'V', 'A', 'U', 2, A, 0.0D0, 0.0D0, 0, 0, 0.0
-     $D0, M,
+         CALL ZHPEVX( 'V', 'A', 'U', 2, A, 0.0D0, 0.0D0, 0, 0, 0.0D0, M,
      $                X, Z, 1, W, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHPEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHPEVX', INFOT, NOUT, LERR, OK )
          NT = NT + 8
 *
 *     Test error exits for the HB path.
 *
-      ELSE IF( AB_AB_LSAMEN( 2, C2, 'HB' ) ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'HB' ) ) THEN
 *
-*        AB_ZHBTRD
+*        ZHBTRD
 *
-         SRNAMT = 'AB_ZHBTRD'
+         SRNAMT = 'ZHBTRD'
          INFOT = 1
-         CALL AB_ZHBTRD( '/', 'U', 0, 0, A, 1, D, E, Z, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_ZHBTRD', INFOT, NOUT, LERR, OK )
+         CALL ZHBTRD( '/', 'U', 0, 0, A, 1, D, E, Z, 1, W, INFO )
+         CALL CHKXER( 'ZHBTRD', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_ZHBTRD( 'N', '/', 0, 0, A, 1, D, E, Z, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_ZHBTRD', INFOT, NOUT, LERR, OK )
+         CALL ZHBTRD( 'N', '/', 0, 0, A, 1, D, E, Z, 1, W, INFO )
+         CALL CHKXER( 'ZHBTRD', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_ZHBTRD( 'N', 'U', -1, 0, A, 1, D, E, Z, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_ZHBTRD', INFOT, NOUT, LERR, OK )
+         CALL ZHBTRD( 'N', 'U', -1, 0, A, 1, D, E, Z, 1, W, INFO )
+         CALL CHKXER( 'ZHBTRD', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_ZHBTRD( 'N', 'U', 0, -1, A, 1, D, E, Z, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_ZHBTRD', INFOT, NOUT, LERR, OK )
+         CALL ZHBTRD( 'N', 'U', 0, -1, A, 1, D, E, Z, 1, W, INFO )
+         CALL CHKXER( 'ZHBTRD', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_ZHBTRD( 'N', 'U', 1, 1, A, 1, D, E, Z, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_ZHBTRD', INFOT, NOUT, LERR, OK )
+         CALL ZHBTRD( 'N', 'U', 1, 1, A, 1, D, E, Z, 1, W, INFO )
+         CALL CHKXER( 'ZHBTRD', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_ZHBTRD( 'V', 'U', 2, 0, A, 1, D, E, Z, 1, W, INFO )
-         CALL AB_CHKXER( 'AB_ZHBTRD', INFOT, NOUT, LERR, OK )
+         CALL ZHBTRD( 'V', 'U', 2, 0, A, 1, D, E, Z, 1, W, INFO )
+         CALL CHKXER( 'ZHBTRD', INFOT, NOUT, LERR, OK )
          NT = NT + 6
 *
-*        AB_ZHETRD_HB2ST
+*        ZHETRD_HB2ST
 *
-         SRNAMT = 'AB_ZHETRD_HB2ST'
+         SRNAMT = 'ZHETRD_HB2ST'
          INFOT = 1
-         CALL AB_ZHETRD_HB2ST( '/', 'N', 'U', 0, 0, A, 1, D, E, 
+         CALL ZHETRD_HB2ST( '/', 'N', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_ZHETRD_HB2ST( 'N', '/', 'U', 0, 0, A, 1, D, E, 
+         CALL ZHETRD_HB2ST( 'N', '/', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_ZHETRD_HB2ST( 'N', 'H', 'U', 0, 0, A, 1, D, E, 
+         CALL ZHETRD_HB2ST( 'N', 'H', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_ZHETRD_HB2ST( 'N', 'N', '/', 0, 0, A, 1, D, E, 
+         CALL ZHETRD_HB2ST( 'N', 'N', '/', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_ZHETRD_HB2ST( 'N', 'N', 'U', -1, 0, A, 1, D, E, 
+         CALL ZHETRD_HB2ST( 'N', 'N', 'U', -1, 0, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_ZHETRD_HB2ST( 'N', 'N', 'U', 0, -1, A, 1, D, E, 
+         CALL ZHETRD_HB2ST( 'N', 'N', 'U', 0, -1, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_ZHETRD_HB2ST( 'N', 'N', 'U', 0, 1, A, 1, D, E, 
+         CALL ZHETRD_HB2ST( 'N', 'N', 'U', 0, 1, A, 1, D, E, 
      $                                    C, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL AB_ZHETRD_HB2ST( 'N', 'N', 'U', 0, 0, A, 1, D, E, 
+         CALL ZHETRD_HB2ST( 'N', 'N', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 0, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL AB_ZHETRD_HB2ST( 'N', 'N', 'U', 0, 0, A, 1, D, E, 
+         CALL ZHETRD_HB2ST( 'N', 'N', 'U', 0, 0, A, 1, D, E, 
      $                                    C, 1, W, 0, INFO )
-         CALL AB_CHKXER( 'AB_ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHETRD_HB2ST', INFOT, NOUT, LERR, OK )
          NT = NT + 9
 *
-*        AB_AB_ZHBEVD
+*        ZHBEVD
 *
-         SRNAMT = 'AB_AB_ZHBEVD'
+         SRNAMT = 'ZHBEVD'
          INFOT = 1
-         CALL AB_AB_ZHBEVD( '/', 'U', 0, 0, A, 1, X, Z, 1, W, 1, RW, 1, 
-     $IW, 1,
+         CALL ZHBEVD( '/', 'U', 0, 0, A, 1, X, Z, 1, W, 1, RW, 1, IW, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHBEVD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHBEVD', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_ZHBEVD( 'N', '/', 0, 0, A, 1, X, Z, 1, W, 1, RW, 1, 
-     $IW, 1,
+         CALL ZHBEVD( 'N', '/', 0, 0, A, 1, X, Z, 1, W, 1, RW, 1, IW, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHBEVD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHBEVD', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_ZHBEVD( 'N', 'U', -1, 0, A, 1, X, Z, 1, W, 1, RW, 1,
-     $ IW,
+         CALL ZHBEVD( 'N', 'U', -1, 0, A, 1, X, Z, 1, W, 1, RW, 1, IW,
      $                1, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHBEVD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHBEVD', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_ZHBEVD( 'N', 'U', 0, -1, A, 1, X, Z, 1, W, 1, RW, 1,
-     $ IW,
+         CALL ZHBEVD( 'N', 'U', 0, -1, A, 1, X, Z, 1, W, 1, RW, 1, IW,
      $                1, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHBEVD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHBEVD', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_AB_ZHBEVD( 'N', 'U', 2, 1, A, 1, X, Z, 1, W, 2, RW, 2, 
-     $IW, 1,
+         CALL ZHBEVD( 'N', 'U', 2, 1, A, 1, X, Z, 1, W, 2, RW, 2, IW, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHBEVD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHBEVD', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_AB_ZHBEVD( 'V', 'U', 2, 1, A, 2, X, Z, 1, W, 8, RW, 25,
-     $ IW,
+         CALL ZHBEVD( 'V', 'U', 2, 1, A, 2, X, Z, 1, W, 8, RW, 25, IW,
      $                12, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHBEVD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHBEVD', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL AB_AB_ZHBEVD( 'N', 'U', 1, 0, A, 1, X, Z, 1, W, 0, RW, 1, 
-     $IW, 1,
+         CALL ZHBEVD( 'N', 'U', 1, 0, A, 1, X, Z, 1, W, 0, RW, 1, IW, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHBEVD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHBEVD', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL AB_AB_ZHBEVD( 'N', 'U', 2, 1, A, 2, X, Z, 2, W, 1, RW, 2, 
-     $IW, 1,
+         CALL ZHBEVD( 'N', 'U', 2, 1, A, 2, X, Z, 2, W, 1, RW, 2, IW, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHBEVD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHBEVD', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL AB_AB_ZHBEVD( 'V', 'U', 2, 1, A, 2, X, Z, 2, W, 2, RW, 25,
-     $ IW,
+         CALL ZHBEVD( 'V', 'U', 2, 1, A, 2, X, Z, 2, W, 2, RW, 25, IW,
      $                12, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHBEVD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHBEVD', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL AB_AB_ZHBEVD( 'N', 'U', 1, 0, A, 1, X, Z, 1, W, 1, RW, 0, 
-     $IW, 1,
+         CALL ZHBEVD( 'N', 'U', 1, 0, A, 1, X, Z, 1, W, 1, RW, 0, IW, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHBEVD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHBEVD', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL AB_AB_ZHBEVD( 'N', 'U', 2, 1, A, 2, X, Z, 2, W, 2, RW, 1, 
-     $IW, 1,
+         CALL ZHBEVD( 'N', 'U', 2, 1, A, 2, X, Z, 2, W, 2, RW, 1, IW, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHBEVD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHBEVD', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL AB_AB_ZHBEVD( 'V', 'U', 2, 1, A, 2, X, Z, 2, W, 8, RW, 2, 
-     $IW,
+         CALL ZHBEVD( 'V', 'U', 2, 1, A, 2, X, Z, 2, W, 8, RW, 2, IW,
      $                12, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHBEVD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHBEVD', INFOT, NOUT, LERR, OK )
          INFOT = 15
-         CALL AB_AB_ZHBEVD( 'N', 'U', 1, 0, A, 1, X, Z, 1, W, 1, RW, 1, 
-     $IW, 0,
+         CALL ZHBEVD( 'N', 'U', 1, 0, A, 1, X, Z, 1, W, 1, RW, 1, IW, 0,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHBEVD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHBEVD', INFOT, NOUT, LERR, OK )
          INFOT = 15
-         CALL AB_AB_ZHBEVD( 'N', 'U', 2, 1, A, 2, X, Z, 2, W, 2, RW, 2, 
-     $IW, 0,
+         CALL ZHBEVD( 'N', 'U', 2, 1, A, 2, X, Z, 2, W, 2, RW, 2, IW, 0,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHBEVD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHBEVD', INFOT, NOUT, LERR, OK )
          INFOT = 15
-         CALL AB_AB_ZHBEVD( 'V', 'U', 2, 1, A, 2, X, Z, 2, W, 8, RW, 25,
-     $ IW,
+         CALL ZHBEVD( 'V', 'U', 2, 1, A, 2, X, Z, 2, W, 8, RW, 25, IW,
      $                2, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHBEVD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHBEVD', INFOT, NOUT, LERR, OK )
          NT = NT + 15
 *
-*        AB_AB_AB_ZHBEVD_2STAGE
+*        ZHBEVD_2STAGE
 *
-         SRNAMT = 'AB_AB_AB_ZHBEVD_2STAGE'
+         SRNAMT = 'ZHBEVD_2STAGE'
          INFOT = 1
-         CALL AB_AB_AB_ZHBEVD_2STAGE( '/', 'U', 0, 0, A, 1, X, Z, 1, 
+         CALL ZHBEVD_2STAGE( '/', 'U', 0, 0, A, 1, X, Z, 1, 
      $                           W, 1, RW, 1, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHBEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHBEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 1
-         CALL AB_AB_AB_ZHBEVD_2STAGE( 'V', 'U', 0, 0, A, 1, X, Z, 1, 
+         CALL ZHBEVD_2STAGE( 'V', 'U', 0, 0, A, 1, X, Z, 1, 
      $                           W, 1, RW, 1, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHBEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHBEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_AB_ZHBEVD_2STAGE( 'N', '/', 0, 0, A, 1, X, Z, 1,
+         CALL ZHBEVD_2STAGE( 'N', '/', 0, 0, A, 1, X, Z, 1,
      $                           W, 1, RW, 1, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHBEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHBEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_AB_ZHBEVD_2STAGE( 'N', 'U', -1, 0, A, 1, X, Z, 1,
+         CALL ZHBEVD_2STAGE( 'N', 'U', -1, 0, A, 1, X, Z, 1,
      $                            W, 1, RW, 1, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHBEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHBEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_AB_ZHBEVD_2STAGE( 'N', 'U', 0, -1, A, 1, X, Z, 1,
+         CALL ZHBEVD_2STAGE( 'N', 'U', 0, -1, A, 1, X, Z, 1,
      $                            W, 1, RW, 1, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHBEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHBEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_AB_AB_ZHBEVD_2STAGE( 'N', 'U', 2, 1, A, 1, X, Z, 1,
+         CALL ZHBEVD_2STAGE( 'N', 'U', 2, 1, A, 1, X, Z, 1,
      $                           W, 2, RW, 2, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHBEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHBEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_AB_AB_ZHBEVD_2STAGE( 'N', 'U', 2, 1, A, 2, X, Z, 0,
+         CALL ZHBEVD_2STAGE( 'N', 'U', 2, 1, A, 2, X, Z, 0,
      $                         W, 8, RW, 25, IW, 12, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHBEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHBEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL AB_AB_AB_ZHBEVD_2STAGE( 'N', 'U', 1, 0, A, 1, X, Z, 1,
+         CALL ZHBEVD_2STAGE( 'N', 'U', 1, 0, A, 1, X, Z, 1,
      $                           W, 0, RW, 1, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHBEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHBEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL AB_AB_AB_ZHBEVD_2STAGE( 'N', 'U', 2, 1, A, 2, X, Z, 2,
+         CALL ZHBEVD_2STAGE( 'N', 'U', 2, 1, A, 2, X, Z, 2,
      $                           W, 1, RW, 2, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHBEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHBEVD_2STAGE', INFOT, NOUT, LERR, OK )
 *         INFOT = 11
-*         CALL AB_AB_AB_ZHBEVD_2STAGE( 'V', 'U', 2, 1, A, 2, X, Z, 2,
+*         CALL ZHBEVD_2STAGE( 'V', 'U', 2, 1, A, 2, X, Z, 2,
 *     $                         W, 2, RW, 25, IW, 12, INFO )
-*         CALL AB_CHKXER( 'AB_AB_AB_ZHBEVD_2STAGE', INFOT, NOUT, LERR, OK )
+*         CALL CHKXER( 'ZHBEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL AB_AB_AB_ZHBEVD_2STAGE( 'N', 'U', 1, 0, A, 1, X, Z, 1,
+         CALL ZHBEVD_2STAGE( 'N', 'U', 1, 0, A, 1, X, Z, 1,
      $                           W, 1, RW, 0, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHBEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHBEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL AB_AB_AB_ZHBEVD_2STAGE( 'N', 'U', 2, 1, A, 2, X, Z, 2,
+         CALL ZHBEVD_2STAGE( 'N', 'U', 2, 1, A, 2, X, Z, 2,
      $                           W, 25, RW, 1, IW, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHBEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHBEVD_2STAGE', INFOT, NOUT, LERR, OK )
 *         INFOT = 13
-*         CALL AB_AB_AB_ZHBEVD_2STAGE( 'V', 'U', 2, 1, A, 2, X, Z, 2,
+*         CALL ZHBEVD_2STAGE( 'V', 'U', 2, 1, A, 2, X, Z, 2,
 *     $                          W, 25, RW, 2, IW, 12, INFO )
-*         CALL AB_CHKXER( 'AB_AB_AB_ZHBEVD_2STAGE', INFOT, NOUT, LERR, OK )
+*         CALL CHKXER( 'ZHBEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 15
-         CALL AB_AB_AB_ZHBEVD_2STAGE( 'N', 'U', 1, 0, A, 1, X, Z, 1,
+         CALL ZHBEVD_2STAGE( 'N', 'U', 1, 0, A, 1, X, Z, 1,
      $                           W, 1, RW, 1, IW, 0, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHBEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHBEVD_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 15
-         CALL AB_AB_AB_ZHBEVD_2STAGE( 'N', 'U', 2, 1, A, 2, X, Z, 2,
+         CALL ZHBEVD_2STAGE( 'N', 'U', 2, 1, A, 2, X, Z, 2,
      $                           W, 25, RW, 2, IW, 0, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHBEVD_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHBEVD_2STAGE', INFOT, NOUT, LERR, OK )
 *         INFOT = 15
-*         CALL AB_AB_AB_ZHBEVD_2STAGE( 'V', 'U', 2, 1, A, 2, X, Z, 2,
+*         CALL ZHBEVD_2STAGE( 'V', 'U', 2, 1, A, 2, X, Z, 2,
 *     $                          W, 25, RW, 25, IW, 2, INFO )
-*         CALL AB_CHKXER( 'AB_AB_AB_ZHBEVD_2STAGE', INFOT, NOUT, LERR, OK )
+*         CALL CHKXER( 'ZHBEVD_2STAGE', INFOT, NOUT, LERR, OK )
          NT = NT + 13
 *
-*        AB_ZHBEV
+*        ZHBEV
 *
-         SRNAMT = 'AB_ZHBEV '
+         SRNAMT = 'ZHBEV '
          INFOT = 1
-         CALL AB_ZHBEV( '/', 'U', 0, 0, A, 1, X, Z, 1, W, RW, INFO )
-         CALL AB_CHKXER( 'AB_ZHBEV ', INFOT, NOUT, LERR, OK )
+         CALL ZHBEV( '/', 'U', 0, 0, A, 1, X, Z, 1, W, RW, INFO )
+         CALL CHKXER( 'ZHBEV ', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_ZHBEV( 'N', '/', 0, 0, A, 1, X, Z, 1, W, RW, INFO )
-         CALL AB_CHKXER( 'AB_ZHBEV ', INFOT, NOUT, LERR, OK )
+         CALL ZHBEV( 'N', '/', 0, 0, A, 1, X, Z, 1, W, RW, INFO )
+         CALL CHKXER( 'ZHBEV ', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_ZHBEV( 'N', 'U', -1, 0, A, 1, X, Z, 1, W, RW, INFO )
-         CALL AB_CHKXER( 'AB_ZHBEV ', INFOT, NOUT, LERR, OK )
+         CALL ZHBEV( 'N', 'U', -1, 0, A, 1, X, Z, 1, W, RW, INFO )
+         CALL CHKXER( 'ZHBEV ', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_ZHBEV( 'N', 'U', 0, -1, A, 1, X, Z, 1, W, RW, INFO )
-         CALL AB_CHKXER( 'AB_ZHBEV ', INFOT, NOUT, LERR, OK )
+         CALL ZHBEV( 'N', 'U', 0, -1, A, 1, X, Z, 1, W, RW, INFO )
+         CALL CHKXER( 'ZHBEV ', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_ZHBEV( 'N', 'U', 2, 1, A, 1, X, Z, 1, W, RW, INFO )
-         CALL AB_CHKXER( 'AB_ZHBEV ', INFOT, NOUT, LERR, OK )
+         CALL ZHBEV( 'N', 'U', 2, 1, A, 1, X, Z, 1, W, RW, INFO )
+         CALL CHKXER( 'ZHBEV ', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_ZHBEV( 'V', 'U', 2, 0, A, 1, X, Z, 1, W, RW, INFO )
-         CALL AB_CHKXER( 'AB_ZHBEV ', INFOT, NOUT, LERR, OK )
+         CALL ZHBEV( 'V', 'U', 2, 0, A, 1, X, Z, 1, W, RW, INFO )
+         CALL CHKXER( 'ZHBEV ', INFOT, NOUT, LERR, OK )
          NT = NT + 6
 *
-*        AB_AB_ZHBEV_2STAGE
+*        ZHBEV_2STAGE
 *
-         SRNAMT = 'AB_AB_ZHBEV_2STAGE '
+         SRNAMT = 'ZHBEV_2STAGE '
          INFOT = 1
-         CALL AB_AB_ZHBEV_2STAGE( '/', 'U', 0, 0, A, 1, X,
+         CALL ZHBEV_2STAGE( '/', 'U', 0, 0, A, 1, X,
      $                        Z, 1, W, 0, RW, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHBEV_2STAGE ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHBEV_2STAGE ', INFOT, NOUT, LERR, OK )
          INFOT = 1
-         CALL AB_AB_ZHBEV_2STAGE( 'V', 'U', 0, 0, A, 1, X,
+         CALL ZHBEV_2STAGE( 'V', 'U', 0, 0, A, 1, X,
      $                        Z, 1, W, 0, RW, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHBEV_2STAGE ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHBEV_2STAGE ', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_ZHBEV_2STAGE( 'N', '/', 0, 0, A, 1, X,
+         CALL ZHBEV_2STAGE( 'N', '/', 0, 0, A, 1, X,
      $                        Z, 1, W, 0, RW, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHBEV_2STAGE ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHBEV_2STAGE ', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_ZHBEV_2STAGE( 'N', 'U', -1, 0, A, 1, X,
+         CALL ZHBEV_2STAGE( 'N', 'U', -1, 0, A, 1, X,
      $                         Z, 1, W, 0, RW, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHBEV_2STAGE ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHBEV_2STAGE ', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_ZHBEV_2STAGE( 'N', 'U', 0, -1, A, 1, X,
+         CALL ZHBEV_2STAGE( 'N', 'U', 0, -1, A, 1, X,
      $                         Z, 1, W, 0, RW, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHBEV_2STAGE ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHBEV_2STAGE ', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_AB_ZHBEV_2STAGE( 'N', 'U', 2, 1, A, 1, X,
+         CALL ZHBEV_2STAGE( 'N', 'U', 2, 1, A, 1, X,
      $                        Z, 1, W, 0, RW, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHBEV_2STAGE ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHBEV_2STAGE ', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_AB_ZHBEV_2STAGE( 'N', 'U', 2, 0, A, 1, X,
+         CALL ZHBEV_2STAGE( 'N', 'U', 2, 0, A, 1, X,
      $                        Z, 0, W, 0, RW, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHBEV_2STAGE ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHBEV_2STAGE ', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL AB_AB_ZHBEV_2STAGE( 'N', 'U', 2, 0, A, 1, X,
+         CALL ZHBEV_2STAGE( 'N', 'U', 2, 0, A, 1, X,
      $                        Z, 1, W, 0, RW, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHBEV_2STAGE ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHBEV_2STAGE ', INFOT, NOUT, LERR, OK )
          NT = NT + 8
 *
-*        AB_AB_ZHBEVX
+*        ZHBEVX
 *
-         SRNAMT = 'AB_AB_ZHBEVX'
+         SRNAMT = 'ZHBEVX'
          INFOT = 1
-         CALL AB_AB_ZHBEVX( '/', 'A', 'U', 0, 0, A, 1, Q, 1, 0.0D0, 0.0D
-     $0, 0,
+         CALL ZHBEVX( '/', 'A', 'U', 0, 0, A, 1, Q, 1, 0.0D0, 0.0D0, 0,
      $                0, 0.0D0, M, X, Z, 1, W, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHBEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHBEVX', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_ZHBEVX( 'V', '/', 'U', 0, 0, A, 1, Q, 1, 0.0D0, 1.0D
-     $0, 1,
+         CALL ZHBEVX( 'V', '/', 'U', 0, 0, A, 1, Q, 1, 0.0D0, 1.0D0, 1,
      $                0, 0.0D0, M, X, Z, 1, W, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHBEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHBEVX', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_ZHBEVX( 'V', 'A', '/', 0, 0, A, 1, Q, 1, 0.0D0, 0.0D
-     $0, 0,
+         CALL ZHBEVX( 'V', 'A', '/', 0, 0, A, 1, Q, 1, 0.0D0, 0.0D0, 0,
      $                0, 0.0D0, M, X, Z, 1, W, RW, IW, I3, INFO )
          INFOT = 4
-         CALL AB_AB_ZHBEVX( 'V', 'A', 'U', -1, 0, A, 1, Q, 1, 0.0D0, 0.0
-     $D0, 0,
+         CALL ZHBEVX( 'V', 'A', 'U', -1, 0, A, 1, Q, 1, 0.0D0, 0.0D0, 0,
      $                0, 0.0D0, M, X, Z, 1, W, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHBEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHBEVX', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_AB_ZHBEVX( 'V', 'A', 'U', 0, -1, A, 1, Q, 1, 0.0D0, 0.0
-     $D0, 0,
+         CALL ZHBEVX( 'V', 'A', 'U', 0, -1, A, 1, Q, 1, 0.0D0, 0.0D0, 0,
      $                0, 0.0D0, M, X, Z, 1, W, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHBEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHBEVX', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_AB_ZHBEVX( 'V', 'A', 'U', 2, 1, A, 1, Q, 2, 0.0D0, 0.0D
-     $0, 0,
+         CALL ZHBEVX( 'V', 'A', 'U', 2, 1, A, 1, Q, 2, 0.0D0, 0.0D0, 0,
      $                0, 0.0D0, M, X, Z, 2, W, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHBEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHBEVX', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_AB_ZHBEVX( 'V', 'A', 'U', 2, 0, A, 1, Q, 1, 0.0D0, 0.0D
-     $0, 0,
+         CALL ZHBEVX( 'V', 'A', 'U', 2, 0, A, 1, Q, 1, 0.0D0, 0.0D0, 0,
      $                0, 0.0D0, M, X, Z, 2, W, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHBEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHBEVX', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL AB_AB_ZHBEVX( 'V', 'V', 'U', 1, 0, A, 1, Q, 1, 0.0D0, 0.0D
-     $0, 0,
+         CALL ZHBEVX( 'V', 'V', 'U', 1, 0, A, 1, Q, 1, 0.0D0, 0.0D0, 0,
      $                0, 0.0D0, M, X, Z, 1, W, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHBEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHBEVX', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL AB_AB_ZHBEVX( 'V', 'I', 'U', 1, 0, A, 1, Q, 1, 0.0D0, 0.0D
-     $0, 0,
+         CALL ZHBEVX( 'V', 'I', 'U', 1, 0, A, 1, Q, 1, 0.0D0, 0.0D0, 0,
      $                0, 0.0D0, M, X, Z, 1, W, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHBEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHBEVX', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL AB_AB_ZHBEVX( 'V', 'I', 'U', 1, 0, A, 1, Q, 1, 0.0D0, 0.0D
-     $0, 1,
+         CALL ZHBEVX( 'V', 'I', 'U', 1, 0, A, 1, Q, 1, 0.0D0, 0.0D0, 1,
      $                2, 0.0D0, M, X, Z, 1, W, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHBEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHBEVX', INFOT, NOUT, LERR, OK )
          INFOT = 18
-         CALL AB_AB_ZHBEVX( 'V', 'A', 'U', 2, 0, A, 1, Q, 2, 0.0D0, 0.0D
-     $0, 0,
+         CALL ZHBEVX( 'V', 'A', 'U', 2, 0, A, 1, Q, 2, 0.0D0, 0.0D0, 0,
      $                0, 0.0D0, M, X, Z, 1, W, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZHBEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZHBEVX', INFOT, NOUT, LERR, OK )
          NT = NT + 11
 *
-*        AB_AB_AB_ZHBEVX_2STAGE
+*        ZHBEVX_2STAGE
 *
-         SRNAMT = 'AB_AB_AB_ZHBEVX_2STAGE'
+         SRNAMT = 'ZHBEVX_2STAGE'
          INFOT = 1
-         CALL AB_AB_AB_ZHBEVX_2STAGE( '/', 'A', 'U', 0, 0, A, 1, Q, 1,
+         CALL ZHBEVX_2STAGE( '/', 'A', 'U', 0, 0, A, 1, Q, 1,
      $                       0.0D0, 0.0D0, 0, 0, 0.0D0,
      $                       M, X, Z, 1, W, 0, RW, IW, I3, INFO )
          INFOT = 1
-         CALL AB_AB_AB_ZHBEVX_2STAGE( 'V', 'A', 'U', 0, 0, A, 1, Q, 1,
+         CALL ZHBEVX_2STAGE( 'V', 'A', 'U', 0, 0, A, 1, Q, 1,
      $                       0.0D0, 0.0D0, 0, 0, 0.0D0,
      $                       M, X, Z, 1, W, 0, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHBEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHBEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_AB_ZHBEVX_2STAGE( 'N', '/', 'U', 0, 0, A, 1, Q, 1,
+         CALL ZHBEVX_2STAGE( 'N', '/', 'U', 0, 0, A, 1, Q, 1,
      $                       0.0D0, 1.0D0, 1, 0, 0.0D0,
      $                       M, X, Z, 1, W, 0, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHBEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHBEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_AB_ZHBEVX_2STAGE( 'N', 'A', '/', 0, 0, A, 1, Q, 1,
+         CALL ZHBEVX_2STAGE( 'N', 'A', '/', 0, 0, A, 1, Q, 1,
      $                       0.0D0, 0.0D0, 0, 0, 0.0D0,
      $                       M, X, Z, 1, W, 0, RW, IW, I3, INFO )
          INFOT = 4
-         CALL AB_AB_AB_ZHBEVX_2STAGE( 'N', 'A', 'U', -1, 0, A, 1, Q, 1,
+         CALL ZHBEVX_2STAGE( 'N', 'A', 'U', -1, 0, A, 1, Q, 1,
      $                       0.0D0, 0.0D0, 0, 0, 0.0D0,
      $                       M, X, Z, 1, W, 0, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHBEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHBEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_AB_AB_ZHBEVX_2STAGE( 'N', 'A', 'U', 0, -1, A, 1, Q, 1,
+         CALL ZHBEVX_2STAGE( 'N', 'A', 'U', 0, -1, A, 1, Q, 1,
      $                       0.0D0, 0.0D0, 0, 0, 0.0D0,
      $                       M, X, Z, 1, W, 0, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHBEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHBEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_AB_AB_ZHBEVX_2STAGE( 'N', 'A', 'U', 2, 1, A, 1, Q, 2,
+         CALL ZHBEVX_2STAGE( 'N', 'A', 'U', 2, 1, A, 1, Q, 2,
      $                       0.0D0, 0.0D0, 0, 0, 0.0D0,
      $                       M, X, Z, 2, W, 0, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHBEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHBEVX_2STAGE', INFOT, NOUT, LERR, OK )
 *         INFOT = 9
-*         CALL AB_AB_AB_ZHBEVX_2STAGE( 'V', 'A', 'U', 2, 0, A, 1, Q, 1,
+*         CALL ZHBEVX_2STAGE( 'V', 'A', 'U', 2, 0, A, 1, Q, 1,
 *     $                       0.0D0, 0.0D0, 0, 0, 0.0D0,
 *     $                       M, X, Z, 2, W, 0, RW, IW, I3, INFO )
-*         CALL AB_CHKXER( 'AB_AB_AB_ZHBEVX_2STAGE', INFOT, NOUT, LERR, OK )
+*         CALL CHKXER( 'ZHBEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL AB_AB_AB_ZHBEVX_2STAGE( 'N', 'V', 'U', 1, 0, A, 1, Q, 1,
+         CALL ZHBEVX_2STAGE( 'N', 'V', 'U', 1, 0, A, 1, Q, 1,
      $                       0.0D0, 0.0D0, 0, 0, 0.0D0,
      $                       M, X, Z, 1, W, 0, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHBEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHBEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL AB_AB_AB_ZHBEVX_2STAGE( 'N', 'I', 'U', 1, 0, A, 1, Q, 1,
+         CALL ZHBEVX_2STAGE( 'N', 'I', 'U', 1, 0, A, 1, Q, 1,
      $                       0.0D0, 0.0D0, 0, 0, 0.0D0,
      $                       M, X, Z, 1, W, 0, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHBEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHBEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL AB_AB_AB_ZHBEVX_2STAGE( 'N', 'I', 'U', 1, 0, A, 1, Q, 1,
+         CALL ZHBEVX_2STAGE( 'N', 'I', 'U', 1, 0, A, 1, Q, 1,
      $                       0.0D0, 0.0D0, 1, 2, 0.0D0,
      $                       M, X, Z, 1, W, 0, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHBEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHBEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 18
-         CALL AB_AB_AB_ZHBEVX_2STAGE( 'N', 'A', 'U', 2, 0, A, 1, Q, 2,
+         CALL ZHBEVX_2STAGE( 'N', 'A', 'U', 2, 0, A, 1, Q, 2,
      $                       0.0D0, 0.0D0, 0, 0, 0.0D0,
      $                       M, X, Z, 0, W, 0, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHBEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHBEVX_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 20
-         CALL AB_AB_AB_ZHBEVX_2STAGE( 'N', 'A', 'U', 2, 0, A, 1, Q, 2,
+         CALL ZHBEVX_2STAGE( 'N', 'A', 'U', 2, 0, A, 1, Q, 2,
      $                       0.0D0, 0.0D0, 0, 0, 0.0D0,
      $                       M, X, Z, 1, W, 0, RW, IW, I3, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZHBEVX_2STAGE', INFOT, NOUT, LERR, OK
-     $ )
+         CALL CHKXER( 'ZHBEVX_2STAGE', INFOT, NOUT, LERR, OK )
          NT = NT + 12
       END IF
 *
@@ -1491,6 +1341,6 @@
 *
       RETURN
 *
-*     End of AB_ZERRST
+*     End of ZERRST
 *
       END

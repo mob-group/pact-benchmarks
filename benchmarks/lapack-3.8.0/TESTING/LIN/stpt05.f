@@ -1,4 +1,4 @@
-*> \brief \b AB_STPT05
+*> \brief \b STPT05
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_STPT05( UPLO, TRANS, DIAG, N, NRHS, AP, B, LDB, X, LDX,
+*       SUBROUTINE STPT05( UPLO, TRANS, DIAG, N, NRHS, AP, B, LDB, X, LDX,
 *                          XACT, LDXACT, FERR, BERR, RESLTS )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> AB_STPT05 tests the error bounds from iterative refinement for the
+*> STPT05 tests the error bounds from iterative refinement for the
 *> computed solution to a system of equations A*X = B, where A is a
 *> triangular matrix in packed storage format.
 *>
@@ -171,8 +171,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_STPT05( UPLO, TRANS, DIAG, N, NRHS, AP, B, LDB, X, L
-     $DX,
+      SUBROUTINE STPT05( UPLO, TRANS, DIAG, N, NRHS, AP, B, LDB, X, LDX,
      $                   XACT, LDXACT, FERR, BERR, RESLTS )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -201,10 +200,10 @@
       REAL               AXBI, DIFF, EPS, ERRBND, OVFL, TMP, UNFL, XNORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ISAMAX
-      REAL               AB_SLAMCH
-      EXTERNAL           AB_LSAME, AB_ISAMAX, AB_SLAMCH
+      LOGICAL            LSAME
+      INTEGER            ISAMAX
+      REAL               SLAMCH
+      EXTERNAL           LSAME, ISAMAX, SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -219,12 +218,12 @@
          RETURN
       END IF
 *
-      EPS = AB_SLAMCH( 'Epsilon' )
-      UNFL = AB_SLAMCH( 'Safe minimum' )
+      EPS = SLAMCH( 'Epsilon' )
+      UNFL = SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      UPPER = AB_LSAME( UPLO, 'U' )
-      NOTRAN = AB_LSAME( TRANS, 'N' )
-      UNIT = AB_LSAME( DIAG, 'U' )
+      UPPER = LSAME( UPLO, 'U' )
+      NOTRAN = LSAME( TRANS, 'N' )
+      UNIT = LSAME( DIAG, 'U' )
 *
 *     Test 1:  Compute the maximum of
 *        norm(X - XACT) / ( norm(X) * FERR )
@@ -232,7 +231,7 @@
 *
       ERRBND = ZERO
       DO 30 J = 1, NRHS
-         IMAX = AB_ISAMAX( N, X( 1, J ), 1 )
+         IMAX = ISAMAX( N, X( 1, J ), 1 )
          XNORM = MAX( ABS( X( IMAX, J ) ), UNFL )
          DIFF = ZERO
          DO 10 I = 1, N
@@ -320,6 +319,6 @@
 *
       RETURN
 *
-*     End of AB_STPT05
+*     End of STPT05
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_ZSGT01
+*> \brief \b ZSGT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZSGT01( ITYPE, UPLO, N, M, A, LDA, B, LDB, Z, LDZ, D,
+*       SUBROUTINE ZSGT01( ITYPE, UPLO, N, M, A, LDA, B, LDB, Z, LDZ, D,
 *                          WORK, RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -149,8 +149,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_ZSGT01( ITYPE, UPLO, N, M, A, LDA, B, LDB, Z, LDZ, D
-     $,
+      SUBROUTINE ZSGT01( ITYPE, UPLO, N, M, A, LDA, B, LDB, Z, LDZ, D,
      $                   WORK, RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -182,11 +181,11 @@
       DOUBLE PRECISION   ANORM, ULP
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE, AB_ZLANHE
-      EXTERNAL           AB_DLAMCH, AB_ZLANGE, AB_ZLANHE
+      DOUBLE PRECISION   DLAMCH, ZLANGE, ZLANHE
+      EXTERNAL           DLAMCH, ZLANGE, ZLANHE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZAB_DSCAL, AB_ZHEMM
+      EXTERNAL           ZDSCAL, ZHEMM
 *     ..
 *     .. Executable Statements ..
 *
@@ -194,12 +193,12 @@
       IF( N.LE.0 )
      $   RETURN
 *
-      ULP = AB_DLAMCH( 'Epsilon' )
+      ULP = DLAMCH( 'Epsilon' )
 *
 *     Compute product of 1-norms of A and Z.
 *
-      ANORM = AB_ZLANHE( '1', UPLO, N, A, LDA, RWORK )*
-     $        AB_ZLANGE( '1', N, M, Z, LDZ, RWORK )
+      ANORM = ZLANHE( '1', UPLO, N, A, LDA, RWORK )*
+     $        ZLANGE( '1', N, M, Z, LDZ, RWORK )
       IF( ANORM.EQ.ZERO )
      $   ANORM = ONE
 *
@@ -207,50 +206,45 @@
 *
 *        Norm of AZ - BZD
 *
-         CALL AB_ZHEMM( 'Left', UPLO, N, M, CONE, A, LDA, Z, LDZ, CZERO,
+         CALL ZHEMM( 'Left', UPLO, N, M, CONE, A, LDA, Z, LDZ, CZERO,
      $               WORK, N )
          DO 10 I = 1, M
-            CALL ZAB_DSCAL( N, D( I ), Z( 1, I ), 1 )
+            CALL ZDSCAL( N, D( I ), Z( 1, I ), 1 )
    10    CONTINUE
-         CALL AB_ZHEMM( 'Left', UPLO, N, M, CONE, B, LDB, Z, LDZ, -CONE,
+         CALL ZHEMM( 'Left', UPLO, N, M, CONE, B, LDB, Z, LDZ, -CONE,
      $               WORK, N )
 *
-         RESULT( 1 ) = ( AB_ZLANGE( '1', N, M, WORK, N, RWORK ) / ANORM 
-     $) /
+         RESULT( 1 ) = ( ZLANGE( '1', N, M, WORK, N, RWORK ) / ANORM ) /
      $                 ( N*ULP )
 *
       ELSE IF( ITYPE.EQ.2 ) THEN
 *
 *        Norm of ABZ - ZD
 *
-         CALL AB_ZHEMM( 'Left', UPLO, N, M, CONE, B, LDB, Z, LDZ, CZERO,
+         CALL ZHEMM( 'Left', UPLO, N, M, CONE, B, LDB, Z, LDZ, CZERO,
      $               WORK, N )
          DO 20 I = 1, M
-            CALL ZAB_DSCAL( N, D( I ), Z( 1, I ), 1 )
+            CALL ZDSCAL( N, D( I ), Z( 1, I ), 1 )
    20    CONTINUE
-         CALL AB_ZHEMM( 'Left', UPLO, N, M, CONE, A, LDA, WORK, N, -CONE
-     $,
+         CALL ZHEMM( 'Left', UPLO, N, M, CONE, A, LDA, WORK, N, -CONE,
      $               Z, LDZ )
 *
-         RESULT( 1 ) = ( AB_ZLANGE( '1', N, M, Z, LDZ, RWORK ) / ANORM )
-     $ /
+         RESULT( 1 ) = ( ZLANGE( '1', N, M, Z, LDZ, RWORK ) / ANORM ) /
      $                 ( N*ULP )
 *
       ELSE IF( ITYPE.EQ.3 ) THEN
 *
 *        Norm of BAZ - ZD
 *
-         CALL AB_ZHEMM( 'Left', UPLO, N, M, CONE, A, LDA, Z, LDZ, CZERO,
+         CALL ZHEMM( 'Left', UPLO, N, M, CONE, A, LDA, Z, LDZ, CZERO,
      $               WORK, N )
          DO 30 I = 1, M
-            CALL ZAB_DSCAL( N, D( I ), Z( 1, I ), 1 )
+            CALL ZDSCAL( N, D( I ), Z( 1, I ), 1 )
    30    CONTINUE
-         CALL AB_ZHEMM( 'Left', UPLO, N, M, CONE, B, LDB, WORK, N, -CONE
-     $,
+         CALL ZHEMM( 'Left', UPLO, N, M, CONE, B, LDB, WORK, N, -CONE,
      $               Z, LDZ )
 *
-         RESULT( 1 ) = ( AB_ZLANGE( '1', N, M, Z, LDZ, RWORK ) / ANORM )
-     $ /
+         RESULT( 1 ) = ( ZLANGE( '1', N, M, Z, LDZ, RWORK ) / ANORM ) /
      $                 ( N*ULP )
       END IF
 *

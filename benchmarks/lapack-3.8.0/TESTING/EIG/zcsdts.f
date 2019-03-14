@@ -1,4 +1,4 @@
-*> \brief \b AB_ZCSDTS
+*> \brief \b ZCSDTS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZCSDTS( M, P, Q, X, XF, LDX, U1, LDU1, U2, LDU2, V1T,
+*       SUBROUTINE ZCSDTS( M, P, Q, X, XF, LDX, U1, LDU1, U2, LDU2, V1T,
 *                          LDV1T, V2T, LDV2T, THETA, IWORK, WORK, LWORK,
 *                          RWORK, RESULT )
 *
@@ -29,7 +29,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZCSDTS tests ZUNCSD, which, given an M-by-M partitioned unitary
+*> ZCSDTS tests ZUNCSD, which, given an M-by-M partitioned unitary
 *> matrix X,
 *>              Q  M-Q
 *>       X = [ X11 X12 ] P   ,
@@ -48,7 +48,7 @@
 *>                             [  0  S  0 |  0  C  0 ]
 *>                             [  0  0  I |  0  0  0 ]
 *>
-*> and also AB_SORCSD2BY1, which, given
+*> and also SORCSD2BY1, which, given
 *>          Q
 *>       [ X11 ] P   ,
 *>       [ X21 ] M-P
@@ -225,8 +225,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_ZCSDTS( M, P, Q, X, XF, LDX, U1, LDU1, U2, LDU2, V1T
-     $,
+      SUBROUTINE ZCSDTS( M, P, Q, X, XF, LDX, U1, LDU1, U2, LDU2, V1T,
      $                   LDV1T, V2T, LDV2T, THETA, IWORK, WORK, LWORK,
      $                   RWORK, RESULT )
 *
@@ -249,9 +248,9 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      DOUBLE PRECISION   PIOVER2, REALONE, REAAB_LZERO
+      DOUBLE PRECISION   PIOVER2, REALONE, REALZERO
       PARAMETER          ( PIOVER2 = 1.57079632679489662D0,
-     $                     REALONE = 1.0D0, REAAB_LZERO = 0.0D0 )
+     $                     REALONE = 1.0D0, REALZERO = 0.0D0 )
       COMPLEX*16         ZERO, ONE
       PARAMETER          ( ZERO = (0.0D0,0.0D0), ONE = (1.0D0,0.0D0) )
 *     ..
@@ -260,31 +259,29 @@
       DOUBLE PRECISION   EPS2, RESID, ULP, ULPINV
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE, AB_ZLANHE
-      EXTERNAL           AB_DLAMCH, AB_ZLANGE, AB_ZLANHE
+      DOUBLE PRECISION   DLAMCH, ZLANGE, ZLANHE
+      EXTERNAL           DLAMCH, ZLANGE, ZLANHE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZGEMM, AB_AB_ZHERK, AB_ZLACPY, AB_ZLASET, ZU
-     $NCSD,
-     $                   AB_ZUNCSD2BY1
+      EXTERNAL           ZGEMM, ZHERK, ZLACPY, ZLASET, ZUNCSD,
+     $                   ZUNCSD2BY1
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          COS, DBLE, DCMPLX, MAX, MIN, REAL, SIN
 *     ..
 *     .. Executable Statements ..
 *
-      ULP = AB_DLAMCH( 'Precision' )
+      ULP = DLAMCH( 'Precision' )
       ULPINV = REALONE / ULP
 *
 *     The first half of the routine checks the 2-by-2 CSD
 *
-      CALL AB_ZLASET( 'Full', M, M, ZERO, ONE, WORK, LDX )
-      CALL AB_AB_ZHERK( 'Upper', 'Conjugate transpose', M, M, -REALONE,
+      CALL ZLASET( 'Full', M, M, ZERO, ONE, WORK, LDX )
+      CALL ZHERK( 'Upper', 'Conjugate transpose', M, M, -REALONE,
      $            X, LDX, REALONE, WORK, LDX )
       IF (M.GT.0) THEN
          EPS2 = MAX( ULP,
-     $               AB_ZLANGE( '1', M, M, WORK, LDX, RWORK ) / DBLE( M 
-     $) )
+     $               ZLANGE( '1', M, M, WORK, LDX, RWORK ) / DBLE( M ) )
       ELSE
          EPS2 = ULP
       END IF
@@ -292,7 +289,7 @@
 *
 *     Copy the matrix X to the array XF.
 *
-      CALL AB_ZLACPY( 'Full', M, M, X, LDX, XF, LDX )
+      CALL ZLACPY( 'Full', M, M, X, LDX, XF, LDX )
 *
 *     Compute the CSD
 *
@@ -303,14 +300,12 @@
 *
 *     Compute XF := diag(U1,U2)'*X*diag(V1,V2) - [D11 D12; D21 D22]
 *
-      CALL AB_ZLACPY( 'Full', M, M, X, LDX, XF, LDX )
+      CALL ZLACPY( 'Full', M, M, X, LDX, XF, LDX )
 *
-      CALL AB_ZGEMM( 'No transpose', 'Conjugate transpose', P, Q, Q, ONE
-     $,
+      CALL ZGEMM( 'No transpose', 'Conjugate transpose', P, Q, Q, ONE,
      $            XF, LDX, V1T, LDV1T, ZERO, WORK, LDX )
 *
-      CALL AB_ZGEMM( 'Conjugate transpose', 'No transpose', P, Q, P, ONE
-     $,
+      CALL ZGEMM( 'Conjugate transpose', 'No transpose', P, Q, P, ONE,
      $            U1, LDU1, WORK, LDX, ZERO, XF, LDX )
 *
       DO I = 1, MIN(P,Q)-R
@@ -322,10 +317,10 @@
      $              0.0D0 )
       END DO
 *
-      CALL AB_ZGEMM( 'No transpose', 'Conjugate transpose', P, M-Q, M-Q,
+      CALL ZGEMM( 'No transpose', 'Conjugate transpose', P, M-Q, M-Q,
      $            ONE, XF(1,Q+1), LDX, V2T, LDV2T, ZERO, WORK, LDX )
 *
-      CALL AB_ZGEMM( 'Conjugate transpose', 'No transpose', P, M-Q, P,
+      CALL ZGEMM( 'Conjugate transpose', 'No transpose', P, M-Q, P,
      $            ONE, U1, LDU1, WORK, LDX, ZERO, XF(1,Q+1), LDX )
 *
       DO I = 1, MIN(P,M-Q)-R
@@ -337,11 +332,10 @@
      $      DCMPLX( SIN(THETA(R-I+1)), 0.0D0 )
       END DO
 *
-      CALL AB_ZGEMM( 'No transpose', 'Conjugate transpose', M-P, Q, Q, O
-     $NE,
+      CALL ZGEMM( 'No transpose', 'Conjugate transpose', M-P, Q, Q, ONE,
      $            XF(P+1,1), LDX, V1T, LDV1T, ZERO, WORK, LDX )
 *
-      CALL AB_ZGEMM( 'Conjugate transpose', 'No transpose', M-P, Q, M-P,
+      CALL ZGEMM( 'Conjugate transpose', 'No transpose', M-P, Q, M-P,
      $            ONE, U2, LDU2, WORK, LDX, ZERO, XF(P+1,1), LDX )
 *
       DO I = 1, MIN(M-P,Q)-R
@@ -353,12 +347,10 @@
      $             DCMPLX( SIN(THETA(R-I+1)), 0.0D0 )
       END DO
 *
-      CALL AB_ZGEMM( 'No transpose', 'Conjugate transpose', M-P, M-Q, M-
-     $Q,
+      CALL ZGEMM( 'No transpose', 'Conjugate transpose', M-P, M-Q, M-Q,
      $            ONE, XF(P+1,Q+1), LDX, V2T, LDV2T, ZERO, WORK, LDX )
 *
-      CALL AB_ZGEMM( 'Conjugate transpose', 'No transpose', M-P, M-Q, M-
-     $P,
+      CALL ZGEMM( 'Conjugate transpose', 'No transpose', M-P, M-Q, M-P,
      $            ONE, U2, LDU2, WORK, LDX, ZERO, XF(P+1,Q+1), LDX )
 *
       DO I = 1, MIN(M-P,M-Q)-R
@@ -372,74 +364,73 @@
 *
 *     Compute norm( U1'*X11*V1 - D11 ) / ( MAX(1,P,Q)*EPS2 ) .
 *
-      RESID = AB_ZLANGE( '1', P, Q, XF, LDX, RWORK )
+      RESID = ZLANGE( '1', P, Q, XF, LDX, RWORK )
       RESULT( 1 ) = ( RESID / REAL(MAX(1,P,Q)) ) / EPS2
 *
 *     Compute norm( U1'*X12*V2 - D12 ) / ( MAX(1,P,M-Q)*EPS2 ) .
 *
-      RESID = AB_ZLANGE( '1', P, M-Q, XF(1,Q+1), LDX, RWORK )
+      RESID = ZLANGE( '1', P, M-Q, XF(1,Q+1), LDX, RWORK )
       RESULT( 2 ) = ( RESID / REAL(MAX(1,P,M-Q)) ) / EPS2
 *
 *     Compute norm( U2'*X21*V1 - D21 ) / ( MAX(1,M-P,Q)*EPS2 ) .
 *
-      RESID = AB_ZLANGE( '1', M-P, Q, XF(P+1,1), LDX, RWORK )
+      RESID = ZLANGE( '1', M-P, Q, XF(P+1,1), LDX, RWORK )
       RESULT( 3 ) = ( RESID / REAL(MAX(1,M-P,Q)) ) / EPS2
 *
 *     Compute norm( U2'*X22*V2 - D22 ) / ( MAX(1,M-P,M-Q)*EPS2 ) .
 *
-      RESID = AB_ZLANGE( '1', M-P, M-Q, XF(P+1,Q+1), LDX, RWORK )
+      RESID = ZLANGE( '1', M-P, M-Q, XF(P+1,Q+1), LDX, RWORK )
       RESULT( 4 ) = ( RESID / REAL(MAX(1,M-P,M-Q)) ) / EPS2
 *
 *     Compute I - U1'*U1
 *
-      CALL AB_ZLASET( 'Full', P, P, ZERO, ONE, WORK, LDU1 )
-      CALL AB_AB_ZHERK( 'Upper', 'Conjugate transpose', P, P, -REALONE,
+      CALL ZLASET( 'Full', P, P, ZERO, ONE, WORK, LDU1 )
+      CALL ZHERK( 'Upper', 'Conjugate transpose', P, P, -REALONE,
      $            U1, LDU1, REALONE, WORK, LDU1 )
 *
 *     Compute norm( I - U'*U ) / ( MAX(1,P) * ULP ) .
 *
-      RESID = AB_ZLANHE( '1', 'Upper', P, WORK, LDU1, RWORK )
+      RESID = ZLANHE( '1', 'Upper', P, WORK, LDU1, RWORK )
       RESULT( 5 ) = ( RESID / REAL(MAX(1,P)) ) / ULP
 *
 *     Compute I - U2'*U2
 *
-      CALL AB_ZLASET( 'Full', M-P, M-P, ZERO, ONE, WORK, LDU2 )
-      CALL AB_AB_ZHERK( 'Upper', 'Conjugate transpose', M-P, M-P, -REALO
-     $NE,
+      CALL ZLASET( 'Full', M-P, M-P, ZERO, ONE, WORK, LDU2 )
+      CALL ZHERK( 'Upper', 'Conjugate transpose', M-P, M-P, -REALONE,
      $            U2, LDU2, REALONE, WORK, LDU2 )
 *
 *     Compute norm( I - U2'*U2 ) / ( MAX(1,M-P) * ULP ) .
 *
-      RESID = AB_ZLANHE( '1', 'Upper', M-P, WORK, LDU2, RWORK )
+      RESID = ZLANHE( '1', 'Upper', M-P, WORK, LDU2, RWORK )
       RESULT( 6 ) = ( RESID / REAL(MAX(1,M-P)) ) / ULP
 *
 *     Compute I - V1T*V1T'
 *
-      CALL AB_ZLASET( 'Full', Q, Q, ZERO, ONE, WORK, LDV1T )
-      CALL AB_AB_ZHERK( 'Upper', 'No transpose', Q, Q, -REALONE,
+      CALL ZLASET( 'Full', Q, Q, ZERO, ONE, WORK, LDV1T )
+      CALL ZHERK( 'Upper', 'No transpose', Q, Q, -REALONE,
      $            V1T, LDV1T, REALONE, WORK, LDV1T )
 *
 *     Compute norm( I - V1T*V1T' ) / ( MAX(1,Q) * ULP ) .
 *
-      RESID = AB_ZLANHE( '1', 'Upper', Q, WORK, LDV1T, RWORK )
+      RESID = ZLANHE( '1', 'Upper', Q, WORK, LDV1T, RWORK )
       RESULT( 7 ) = ( RESID / REAL(MAX(1,Q)) ) / ULP
 *
 *     Compute I - V2T*V2T'
 *
-      CALL AB_ZLASET( 'Full', M-Q, M-Q, ZERO, ONE, WORK, LDV2T )
-      CALL AB_AB_ZHERK( 'Upper', 'No transpose', M-Q, M-Q, -REALONE,
+      CALL ZLASET( 'Full', M-Q, M-Q, ZERO, ONE, WORK, LDV2T )
+      CALL ZHERK( 'Upper', 'No transpose', M-Q, M-Q, -REALONE,
      $            V2T, LDV2T, REALONE, WORK, LDV2T )
 *
 *     Compute norm( I - V2T*V2T' ) / ( MAX(1,M-Q) * ULP ) .
 *
-      RESID = AB_ZLANHE( '1', 'Upper', M-Q, WORK, LDV2T, RWORK )
+      RESID = ZLANHE( '1', 'Upper', M-Q, WORK, LDV2T, RWORK )
       RESULT( 8 ) = ( RESID / REAL(MAX(1,M-Q)) ) / ULP
 *
 *     Check sorting
 *
-      RESULT( 9 ) = REAAB_LZERO
+      RESULT( 9 ) = REALZERO
       DO I = 1, R
-         IF( THETA(I).LT.REAAB_LZERO .OR. THETA(I).GT.PIOVER2 ) THEN
+         IF( THETA(I).LT.REALZERO .OR. THETA(I).GT.PIOVER2 ) THEN
             RESULT( 9 ) = ULPINV
          END IF
          IF( I.GT.1) THEN
@@ -449,15 +440,14 @@
          END IF
       END DO
 *
-*     The AB_SECOND half of the routine checks the 2-by-1 CSD
+*     The second half of the routine checks the 2-by-1 CSD
 *
-      CALL AB_ZLASET( 'Full', Q, Q, ZERO, ONE, WORK, LDX )
-      CALL AB_AB_ZHERK( 'Upper', 'Conjugate transpose', Q, M, -REALONE,
+      CALL ZLASET( 'Full', Q, Q, ZERO, ONE, WORK, LDX )
+      CALL ZHERK( 'Upper', 'Conjugate transpose', Q, M, -REALONE,
      $            X, LDX, REALONE, WORK, LDX )
       IF (M.GT.0) THEN
          EPS2 = MAX( ULP,
-     $               AB_ZLANGE( '1', Q, Q, WORK, LDX, RWORK ) / DBLE( M 
-     $) )
+     $               ZLANGE( '1', Q, Q, WORK, LDX, RWORK ) / DBLE( M ) )
       ELSE
          EPS2 = ULP
       END IF
@@ -465,23 +455,20 @@
 *
 *     Copy the matrix X to the array XF.
 *
-      CALL AB_ZLACPY( 'Full', M, M, X, LDX, XF, LDX )
+      CALL ZLACPY( 'Full', M, M, X, LDX, XF, LDX )
 *
 *     Compute the CSD
 *
-      CALL AB_ZUNCSD2BY1( 'Y', 'Y', 'Y', M, P, Q, XF(1,1), LDX, XF(P+1,1
-     $),
+      CALL ZUNCSD2BY1( 'Y', 'Y', 'Y', M, P, Q, XF(1,1), LDX, XF(P+1,1),
      $             LDX, THETA, U1, LDU1, U2, LDU2, V1T, LDV1T, WORK,
      $             LWORK, RWORK, 17*(R+2), IWORK, INFO )
 *
 *     Compute [X11;X21] := diag(U1,U2)'*[X11;X21]*V1 - [D11;D21]
 *
-      CALL AB_ZGEMM( 'No transpose', 'Conjugate transpose', P, Q, Q, ONE
-     $,
+      CALL ZGEMM( 'No transpose', 'Conjugate transpose', P, Q, Q, ONE,
      $            X, LDX, V1T, LDV1T, ZERO, WORK, LDX )
 *
-      CALL AB_ZGEMM( 'Conjugate transpose', 'No transpose', P, Q, P, ONE
-     $,
+      CALL ZGEMM( 'Conjugate transpose', 'No transpose', P, Q, P, ONE,
      $            U1, LDU1, WORK, LDX, ZERO, X, LDX )
 *
       DO I = 1, MIN(P,Q)-R
@@ -493,11 +480,10 @@
      $              0.0D0 )
       END DO
 *
-      CALL AB_ZGEMM( 'No transpose', 'Conjugate transpose', M-P, Q, Q, O
-     $NE,
+      CALL ZGEMM( 'No transpose', 'Conjugate transpose', M-P, Q, Q, ONE,
      $            X(P+1,1), LDX, V1T, LDV1T, ZERO, WORK, LDX )
 *
-      CALL AB_ZGEMM( 'Conjugate transpose', 'No transpose', M-P, Q, M-P,
+      CALL ZGEMM( 'Conjugate transpose', 'No transpose', M-P, Q, M-P,
      $            ONE, U2, LDU2, WORK, LDX, ZERO, X(P+1,1), LDX )
 *
       DO I = 1, MIN(M-P,Q)-R
@@ -511,53 +497,52 @@
 *
 *     Compute norm( U1'*X11*V1 - D11 ) / ( MAX(1,P,Q)*EPS2 ) .
 *
-      RESID = AB_ZLANGE( '1', P, Q, X, LDX, RWORK )
+      RESID = ZLANGE( '1', P, Q, X, LDX, RWORK )
       RESULT( 10 ) = ( RESID / REAL(MAX(1,P,Q)) ) / EPS2
 *
 *     Compute norm( U2'*X21*V1 - D21 ) / ( MAX(1,M-P,Q)*EPS2 ) .
 *
-      RESID = AB_ZLANGE( '1', M-P, Q, X(P+1,1), LDX, RWORK )
+      RESID = ZLANGE( '1', M-P, Q, X(P+1,1), LDX, RWORK )
       RESULT( 11 ) = ( RESID / REAL(MAX(1,M-P,Q)) ) / EPS2
 *
 *     Compute I - U1'*U1
 *
-      CALL AB_ZLASET( 'Full', P, P, ZERO, ONE, WORK, LDU1 )
-      CALL AB_AB_ZHERK( 'Upper', 'Conjugate transpose', P, P, -REALONE,
+      CALL ZLASET( 'Full', P, P, ZERO, ONE, WORK, LDU1 )
+      CALL ZHERK( 'Upper', 'Conjugate transpose', P, P, -REALONE,
      $            U1, LDU1, REALONE, WORK, LDU1 )
 *
 *     Compute norm( I - U'*U ) / ( MAX(1,P) * ULP ) .
 *
-      RESID = AB_ZLANHE( '1', 'Upper', P, WORK, LDU1, RWORK )
+      RESID = ZLANHE( '1', 'Upper', P, WORK, LDU1, RWORK )
       RESULT( 12 ) = ( RESID / REAL(MAX(1,P)) ) / ULP
 *
 *     Compute I - U2'*U2
 *
-      CALL AB_ZLASET( 'Full', M-P, M-P, ZERO, ONE, WORK, LDU2 )
-      CALL AB_AB_ZHERK( 'Upper', 'Conjugate transpose', M-P, M-P, -REALO
-     $NE,
+      CALL ZLASET( 'Full', M-P, M-P, ZERO, ONE, WORK, LDU2 )
+      CALL ZHERK( 'Upper', 'Conjugate transpose', M-P, M-P, -REALONE,
      $            U2, LDU2, REALONE, WORK, LDU2 )
 *
 *     Compute norm( I - U2'*U2 ) / ( MAX(1,M-P) * ULP ) .
 *
-      RESID = AB_ZLANHE( '1', 'Upper', M-P, WORK, LDU2, RWORK )
+      RESID = ZLANHE( '1', 'Upper', M-P, WORK, LDU2, RWORK )
       RESULT( 13 ) = ( RESID / REAL(MAX(1,M-P)) ) / ULP
 *
 *     Compute I - V1T*V1T'
 *
-      CALL AB_ZLASET( 'Full', Q, Q, ZERO, ONE, WORK, LDV1T )
-      CALL AB_AB_ZHERK( 'Upper', 'No transpose', Q, Q, -REALONE,
+      CALL ZLASET( 'Full', Q, Q, ZERO, ONE, WORK, LDV1T )
+      CALL ZHERK( 'Upper', 'No transpose', Q, Q, -REALONE,
      $            V1T, LDV1T, REALONE, WORK, LDV1T )
 *
 *     Compute norm( I - V1T*V1T' ) / ( MAX(1,Q) * ULP ) .
 *
-      RESID = AB_ZLANHE( '1', 'Upper', Q, WORK, LDV1T, RWORK )
+      RESID = ZLANHE( '1', 'Upper', Q, WORK, LDV1T, RWORK )
       RESULT( 14 ) = ( RESID / REAL(MAX(1,Q)) ) / ULP
 *
 *     Check sorting
 *
-      RESULT( 15 ) = REAAB_LZERO
+      RESULT( 15 ) = REALZERO
       DO I = 1, R
-         IF( THETA(I).LT.REAAB_LZERO .OR. THETA(I).GT.PIOVER2 ) THEN
+         IF( THETA(I).LT.REALZERO .OR. THETA(I).GT.PIOVER2 ) THEN
             RESULT( 15 ) = ULPINV
          END IF
          IF( I.GT.1) THEN
@@ -569,7 +554,7 @@
 *
       RETURN
 *
-*     End of AB_ZCSDTS
+*     End of ZCSDTS
 *
       END
 

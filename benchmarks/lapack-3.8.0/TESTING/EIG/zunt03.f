@@ -1,4 +1,4 @@
-*> \brief \b AB_ZUNT03
+*> \brief \b ZUNT03
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZUNT03( RC, MU, MV, N, K, U, LDU, V, LDV, WORK, LWORK,
+*       SUBROUTINE ZUNT03( RC, MU, MV, N, K, U, LDU, V, LDV, WORK, LWORK,
 *                          RWORK, RESULT, INFO )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZUNT03 compares two unitary matrices U and V to see if their
+*> ZUNT03 compares two unitary matrices U and V to see if their
 *> corresponding rows or columns span the same spaces.  The rows are
 *> checked if RC = 'R', and the columns are checked if RC = 'C'.
 *>
@@ -59,7 +59,7 @@
 *> \verbatim
 *>          MU is INTEGER
 *>          The number of rows of U if RC = 'R', and the number of
-*>          columns if RC = 'C'.  If MU = 0 AB_ZUNT03 does nothing.
+*>          columns if RC = 'C'.  If MU = 0 ZUNT03 does nothing.
 *>          MU must be at least zero.
 *> \endverbatim
 *>
@@ -67,7 +67,7 @@
 *> \verbatim
 *>          MV is INTEGER
 *>          The number of rows of V if RC = 'R', and the number of
-*>          columns if RC = 'C'.  If MV = 0 AB_ZUNT03 does nothing.
+*>          columns if RC = 'C'.  If MV = 0 ZUNT03 does nothing.
 *>          MV must be at least zero.
 *> \endverbatim
 *>
@@ -76,7 +76,7 @@
 *>          N is INTEGER
 *>          If RC = 'R', the number of columns in the matrices U and V,
 *>          and if RC = 'C', the number of rows in U and V.  If N = 0
-*>          AB_ZUNT03 does nothing.  N must be at least zero.
+*>          ZUNT03 does nothing.  N must be at least zero.
 *> \endverbatim
 *>
 *> \param[in] K
@@ -103,7 +103,7 @@
 *> \param[in] V
 *> \verbatim
 *>          V is COMPLEX*16 array, dimension (LDV,N)
-*>          The AB_SECOND matrix to compare.  If RC = 'R', V is MV by N, and
+*>          The second matrix to compare.  If RC = 'R', V is MV by N, and
 *>          if RC = 'C', V is N by MV.
 *> \endverbatim
 *>
@@ -159,8 +159,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_ZUNT03( RC, MU, MV, N, K, U, LDU, V, LDV, WORK, LWOR
-     $K,
+      SUBROUTINE ZUNT03( RC, MU, MV, N, K, U, LDU, V, LDV, WORK, LWORK,
      $                   RWORK, RESULT, INFO )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -191,25 +190,25 @@
       COMPLEX*16         S, SU, SV
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_IZAMAX
-      DOUBLE PRECISION   AB_DLAMCH
-      EXTERNAL           AB_LSAME, AB_IZAMAX, AB_DLAMCH
+      LOGICAL            LSAME
+      INTEGER            IZAMAX
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           LSAME, IZAMAX, DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCMPLX, MAX, MIN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZUNT01
+      EXTERNAL           XERBLA, ZUNT01
 *     ..
 *     .. Executable Statements ..
 *
 *     Check inputs
 *
       INFO = 0
-      IF( AB_LSAME( RC, 'R' ) ) THEN
+      IF( LSAME( RC, 'R' ) ) THEN
          IRC = 0
-      ELSE IF( AB_LSAME( RC, 'C' ) ) THEN
+      ELSE IF( LSAME( RC, 'C' ) ) THEN
          IRC = 1
       ELSE
          IRC = -1
@@ -232,7 +231,7 @@
          INFO = -9
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZUNT03', -INFO )
+         CALL XERBLA( 'ZUNT03', -INFO )
          RETURN
       END IF
 *
@@ -244,7 +243,7 @@
 *
 *     Machine constants
 *
-      ULP = AB_DLAMCH( 'Precision' )
+      ULP = DLAMCH( 'Precision' )
 *
       IF( IRC.EQ.0 ) THEN
 *
@@ -252,7 +251,7 @@
 *
          RES1 = ZERO
          DO 20 I = 1, K
-            LMX = AB_IZAMAX( N, U( I, 1 ), LDU )
+            LMX = IZAMAX( N, U( I, 1 ), LDU )
             IF( V( I, LMX ).EQ.DCMPLX( ZERO ) ) THEN
                SV = ONE
             ELSE
@@ -272,8 +271,7 @@
 *
 *        Compute orthogonality of rows of V.
 *
-         CALL AB_ZUNT01( 'Rows', MV, N, V, LDV, WORK, LWORK, RWORK, RES2
-     $ )
+         CALL ZUNT01( 'Rows', MV, N, V, LDV, WORK, LWORK, RWORK, RES2 )
 *
       ELSE
 *
@@ -281,7 +279,7 @@
 *
          RES1 = ZERO
          DO 40 I = 1, K
-            LMX = AB_IZAMAX( N, U( 1, I ), 1 )
+            LMX = IZAMAX( N, U( 1, I ), 1 )
             IF( V( LMX, I ).EQ.DCMPLX( ZERO ) ) THEN
                SV = ONE
             ELSE
@@ -301,13 +299,13 @@
 *
 *        Compute orthogonality of columns of V.
 *
-         CALL AB_ZUNT01( 'Columns', N, MV, V, LDV, WORK, LWORK, RWORK,
+         CALL ZUNT01( 'Columns', N, MV, V, LDV, WORK, LWORK, RWORK,
      $                RES2 )
       END IF
 *
       RESULT = MIN( MAX( RES1, RES2 ), ONE / ULP )
       RETURN
 *
-*     End of AB_ZUNT03
+*     End of ZUNT03
 *
       END

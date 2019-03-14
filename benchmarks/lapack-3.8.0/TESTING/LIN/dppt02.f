@@ -1,4 +1,4 @@
-*> \brief \b AB_DPPT02
+*> \brief \b DPPT02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DPPT02( UPLO, N, NRHS, A, X, LDX, B, LDB, RWORK,
+*       SUBROUTINE DPPT02( UPLO, N, NRHS, A, X, LDX, B, LDB, RWORK,
 *                          RESID )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DPPT02 computes the residual in the solution of a symmetric system
+*> DPPT02 computes the residual in the solution of a symmetric system
 *> of linear equations  A*x = b  when packed storage is used for the
 *> coefficient matrix.  The ratio computed is
 *>
@@ -119,7 +119,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_DPPT02( UPLO, N, NRHS, A, X, LDX, B, LDB, RWORK,
+      SUBROUTINE DPPT02( UPLO, N, NRHS, A, X, LDX, B, LDB, RWORK,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -147,11 +147,11 @@
       DOUBLE PRECISION   ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DASUM, AB_DLAMCH, AB_DLANSP
-      EXTERNAL           AB_DASUM, AB_DLAMCH, AB_DLANSP
+      DOUBLE PRECISION   DASUM, DLAMCH, DLANSP
+      EXTERNAL           DASUM, DLAMCH, DLANSP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DSPMV
+      EXTERNAL           DSPMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -167,8 +167,8 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
-      ANORM = AB_DLANSP( '1', UPLO, N, A, RWORK )
+      EPS = DLAMCH( 'Epsilon' )
+      ANORM = DLANSP( '1', UPLO, N, A, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -177,8 +177,7 @@
 *     Compute  B - A*X  for the matrix of right hand sides B.
 *
       DO 10 J = 1, NRHS
-         CALL AB_DSPMV( UPLO, N, -ONE, A, X( 1, J ), 1, ONE, B( 1, J ), 
-     $1 )
+         CALL DSPMV( UPLO, N, -ONE, A, X( 1, J ), 1, ONE, B( 1, J ), 1 )
    10 CONTINUE
 *
 *     Compute the maximum over the number of right hand sides of
@@ -186,8 +185,8 @@
 *
       RESID = ZERO
       DO 20 J = 1, NRHS
-         BNORM = AB_DASUM( N, B( 1, J ), 1 )
-         XNORM = AB_DASUM( N, X( 1, J ), 1 )
+         BNORM = DASUM( N, B( 1, J ), 1 )
+         XNORM = DASUM( N, X( 1, J ), 1 )
          IF( XNORM.LE.ZERO ) THEN
             RESID = ONE / EPS
          ELSE
@@ -197,6 +196,6 @@
 *
       RETURN
 *
-*     End of AB_DPPT02
+*     End of DPPT02
 *
       END

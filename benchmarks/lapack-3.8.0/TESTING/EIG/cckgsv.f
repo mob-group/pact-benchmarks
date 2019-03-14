@@ -1,4 +1,4 @@
-*> \brief \b AB_CCKGSV
+*> \brief \b CCKGSV
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CCKGSV( NM, MVAL, PVAL, NVAL, NMATS, ISEED, THRESH,
+*       SUBROUTINE CCKGSV( NM, MVAL, PVAL, NVAL, NMATS, ISEED, THRESH,
 *                          NMAX, A, AF, B, BF, U, V, Q, ALPHA, BETA, R,
 *                          IWORK, WORK, RWORK, NIN, NOUT, INFO )
 *
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CCKGSV tests AB_CGGSVD:
+*> CCKGSV tests CGGSVD:
 *>        the GSVD for M-by-N matrix A and P-by-N matrix B.
 *> \endverbatim
 *
@@ -177,7 +177,7 @@
 *> \verbatim
 *>          INFO is INTEGER
 *>          = 0 :  successful exit
-*>          > 0 :  If AB_CLATMS returns an error code, the absolute value
+*>          > 0 :  If CLATMS returns an error code, the absolute value
 *>                 of it is returned.
 *> \endverbatim
 *
@@ -194,7 +194,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_CCKGSV( NM, MVAL, PVAL, NVAL, NMATS, ISEED, THRESH,
+      SUBROUTINE CCKGSV( NM, MVAL, PVAL, NVAL, NMATS, ISEED, THRESH,
      $                   NMAX, A, AF, B, BF, U, V, Q, ALPHA, BETA, R,
      $                   IWORK, WORK, RWORK, NIN, NOUT, INFO )
 *
@@ -237,8 +237,7 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_AB_ALAHDG, AB_ALAREQ, AB_ALASUM, AB_CLATMS, 
-     $AB_SLATB9, AB_CGSVTS3
+      EXTERNAL           ALAHDG, ALAREQ, ALASUM, CLATMS, SLATB9, CGSVTS3
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS
@@ -252,7 +251,7 @@
       NRUN = 0
       NFAIL = 0
       FIRSTT = .TRUE.
-      CALL AB_ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
+      CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
       LDA = NMAX
       LDB = NMAX
       LDU = NMAX
@@ -275,18 +274,16 @@
             IF( .NOT.DOTYPE( IMAT ) )
      $         GO TO 20
 *
-*           Set up parameters with AB_SLATB9 and generate test
-*           matrices A and B with AB_CLATMS.
+*           Set up parameters with SLATB9 and generate test
+*           matrices A and B with CLATMS.
 *
-            CALL AB_SLATB9( PATH, IMAT, M, P, N, TYPE, KLA, KUA, KLB, KU
-     $B,
+            CALL SLATB9( PATH, IMAT, M, P, N, TYPE, KLA, KUA, KLB, KUB,
      $                   ANORM, BNORM, MODEA, MODEB, CNDNMA, CNDNMB,
      $                   DISTA, DISTB )
 *
 *           Generate M by N matrix A
 *
-            CALL AB_CLATMS( M, N, DISTA, ISEED, TYPE, RWORK, MODEA, CNDN
-     $MA,
+            CALL CLATMS( M, N, DISTA, ISEED, TYPE, RWORK, MODEA, CNDNMA,
      $                   ANORM, KLA, KUA, 'No packing', A, LDA, WORK,
      $                   IINFO )
             IF( IINFO.NE.0 ) THEN
@@ -297,8 +294,7 @@
 *
 *           Generate P by N matrix B
 *
-            CALL AB_CLATMS( P, N, DISTB, ISEED, TYPE, RWORK, MODEB, CNDN
-     $MB,
+            CALL CLATMS( P, N, DISTB, ISEED, TYPE, RWORK, MODEB, CNDNMB,
      $                   BNORM, KLB, KUB, 'No packing', B, LDB, WORK,
      $                   IINFO )
             IF( IINFO.NE.0 ) THEN
@@ -309,7 +305,7 @@
 *
             NT = 6
 *
-            CALL AB_CGSVTS3( M, P, N, A, AF, LDA, B, BF, LDB, U, LDU, V,
+            CALL CGSVTS3( M, P, N, A, AF, LDA, B, BF, LDB, U, LDU, V,
      $                    LDV, Q, LDQ, ALPHA, BETA, R, LDR, IWORK, WORK,
      $                    LWORK, RWORK, RESULT )
 *
@@ -320,7 +316,7 @@
                IF( RESULT( I ).GE.THRESH ) THEN
                   IF( NFAIL.EQ.0 .AND. FIRSTT ) THEN
                      FIRSTT = .FALSE.
-                     CALL AB_AB_ALAHDG( NOUT, PATH )
+                     CALL ALAHDG( NOUT, PATH )
                   END IF
                   WRITE( NOUT, FMT = 9998 )M, P, N, IMAT, I,
      $               RESULT( I )
@@ -334,13 +330,13 @@
 *
 *     Print a summary of the results.
 *
-      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, 0 )
+      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, 0 )
 *
- 9999 FORMAT( ' AB_CLATMS in AB_CCKGSV   INFO = ', I5 )
+ 9999 FORMAT( ' CLATMS in CCKGSV   INFO = ', I5 )
  9998 FORMAT( ' M=', I4, ' P=', I4, ', N=', I4, ', type ', I2,
      $      ', test ', I2, ', ratio=', G13.6 )
       RETURN
 *
-*     End of AB_CCKGSV
+*     End of CCKGSV
 *
       END

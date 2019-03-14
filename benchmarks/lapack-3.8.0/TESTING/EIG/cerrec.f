@@ -1,4 +1,4 @@
-*> \brief \b AB_CERREC
+*> \brief \b CERREC
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CERREC( PATH, NUNIT )
+*       SUBROUTINE CERREC( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,9 +21,9 @@
 *>
 *> \verbatim
 *>
-*> AB_CERREC tests the error exits for the routines for eigen- condition
+*> CERREC tests the error exits for the routines for eigen- condition
 *> estimation for REAL matrices:
-*>    AB_CTRSYL, AB_CTREXC, AB_CTRSNA and AB_CTRSEN.
+*>    CTRSYL, CTREXC, CTRSNA and CTRSEN.
 *> \endverbatim
 *
 *  Arguments:
@@ -54,7 +54,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_CERREC( PATH, NUNIT )
+      SUBROUTINE CERREC( PATH, NUNIT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -85,8 +85,7 @@
      $                   C( NMAX, NMAX ), WORK( LW ), X( NMAX )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CHKXER, AB_CTREXC, AB_CTRSEN, AB_CTRSNA, AB_
-     $CTRSYL
+      EXTERNAL           CHKXER, CTREXC, CTRSEN, CTRSNA, CTRSYL
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -116,159 +115,150 @@
          SEL( I ) = .TRUE.
    30 CONTINUE
 *
-*     Test AB_CTRSYL
+*     Test CTRSYL
 *
-      SRNAMT = 'AB_CTRSYL'
+      SRNAMT = 'CTRSYL'
       INFOT = 1
-      CALL AB_CTRSYL( 'X', 'N', 1, 0, 0, A, 1, B, 1, C, 1, SCALE, INFO )
-      CALL AB_CHKXER( 'AB_CTRSYL', INFOT, NOUT, LERR, OK )
+      CALL CTRSYL( 'X', 'N', 1, 0, 0, A, 1, B, 1, C, 1, SCALE, INFO )
+      CALL CHKXER( 'CTRSYL', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_CTRSYL( 'N', 'X', 1, 0, 0, A, 1, B, 1, C, 1, SCALE, INFO )
-      CALL AB_CHKXER( 'AB_CTRSYL', INFOT, NOUT, LERR, OK )
+      CALL CTRSYL( 'N', 'X', 1, 0, 0, A, 1, B, 1, C, 1, SCALE, INFO )
+      CALL CHKXER( 'CTRSYL', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL AB_CTRSYL( 'N', 'N', 0, 0, 0, A, 1, B, 1, C, 1, SCALE, INFO )
-      CALL AB_CHKXER( 'AB_CTRSYL', INFOT, NOUT, LERR, OK )
+      CALL CTRSYL( 'N', 'N', 0, 0, 0, A, 1, B, 1, C, 1, SCALE, INFO )
+      CALL CHKXER( 'CTRSYL', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL AB_CTRSYL( 'N', 'N', 1, -1, 0, A, 1, B, 1, C, 1, SCALE, INFO 
-     $)
-      CALL AB_CHKXER( 'AB_CTRSYL', INFOT, NOUT, LERR, OK )
+      CALL CTRSYL( 'N', 'N', 1, -1, 0, A, 1, B, 1, C, 1, SCALE, INFO )
+      CALL CHKXER( 'CTRSYL', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL AB_CTRSYL( 'N', 'N', 1, 0, -1, A, 1, B, 1, C, 1, SCALE, INFO 
-     $)
-      CALL AB_CHKXER( 'AB_CTRSYL', INFOT, NOUT, LERR, OK )
+      CALL CTRSYL( 'N', 'N', 1, 0, -1, A, 1, B, 1, C, 1, SCALE, INFO )
+      CALL CHKXER( 'CTRSYL', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL AB_CTRSYL( 'N', 'N', 1, 2, 0, A, 1, B, 1, C, 2, SCALE, INFO )
-      CALL AB_CHKXER( 'AB_CTRSYL', INFOT, NOUT, LERR, OK )
+      CALL CTRSYL( 'N', 'N', 1, 2, 0, A, 1, B, 1, C, 2, SCALE, INFO )
+      CALL CHKXER( 'CTRSYL', INFOT, NOUT, LERR, OK )
       INFOT = 9
-      CALL AB_CTRSYL( 'N', 'N', 1, 0, 2, A, 1, B, 1, C, 1, SCALE, INFO )
-      CALL AB_CHKXER( 'AB_CTRSYL', INFOT, NOUT, LERR, OK )
+      CALL CTRSYL( 'N', 'N', 1, 0, 2, A, 1, B, 1, C, 1, SCALE, INFO )
+      CALL CHKXER( 'CTRSYL', INFOT, NOUT, LERR, OK )
       INFOT = 11
-      CALL AB_CTRSYL( 'N', 'N', 1, 2, 0, A, 2, B, 1, C, 1, SCALE, INFO )
-      CALL AB_CHKXER( 'AB_CTRSYL', INFOT, NOUT, LERR, OK )
+      CALL CTRSYL( 'N', 'N', 1, 2, 0, A, 2, B, 1, C, 1, SCALE, INFO )
+      CALL CHKXER( 'CTRSYL', INFOT, NOUT, LERR, OK )
       NT = NT + 8
 *
-*     Test AB_CTREXC
+*     Test CTREXC
 *
-      SRNAMT = 'AB_CTREXC'
+      SRNAMT = 'CTREXC'
       IFST = 1
       ILST = 1
       INFOT = 1
-      CALL AB_CTREXC( 'X', 1, A, 1, B, 1, IFST, ILST, INFO )
-      CALL AB_CHKXER( 'AB_CTREXC', INFOT, NOUT, LERR, OK )
+      CALL CTREXC( 'X', 1, A, 1, B, 1, IFST, ILST, INFO )
+      CALL CHKXER( 'CTREXC', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_CTREXC( 'N', -1, A, 1, B, 1, IFST, ILST, INFO )
-      CALL AB_CHKXER( 'AB_CTREXC', INFOT, NOUT, LERR, OK )
+      CALL CTREXC( 'N', -1, A, 1, B, 1, IFST, ILST, INFO )
+      CALL CHKXER( 'CTREXC', INFOT, NOUT, LERR, OK )
       INFOT = 4
       ILST = 2
-      CALL AB_CTREXC( 'N', 2, A, 1, B, 1, IFST, ILST, INFO )
-      CALL AB_CHKXER( 'AB_CTREXC', INFOT, NOUT, LERR, OK )
+      CALL CTREXC( 'N', 2, A, 1, B, 1, IFST, ILST, INFO )
+      CALL CHKXER( 'CTREXC', INFOT, NOUT, LERR, OK )
       INFOT = 6
-      CALL AB_CTREXC( 'V', 2, A, 2, B, 1, IFST, ILST, INFO )
-      CALL AB_CHKXER( 'AB_CTREXC', INFOT, NOUT, LERR, OK )
+      CALL CTREXC( 'V', 2, A, 2, B, 1, IFST, ILST, INFO )
+      CALL CHKXER( 'CTREXC', INFOT, NOUT, LERR, OK )
       INFOT = 7
       IFST = 0
       ILST = 1
-      CALL AB_CTREXC( 'V', 1, A, 1, B, 1, IFST, ILST, INFO )
-      CALL AB_CHKXER( 'AB_CTREXC', INFOT, NOUT, LERR, OK )
+      CALL CTREXC( 'V', 1, A, 1, B, 1, IFST, ILST, INFO )
+      CALL CHKXER( 'CTREXC', INFOT, NOUT, LERR, OK )
       INFOT = 7
       IFST = 2
-      CALL AB_CTREXC( 'V', 1, A, 1, B, 1, IFST, ILST, INFO )
-      CALL AB_CHKXER( 'AB_CTREXC', INFOT, NOUT, LERR, OK )
+      CALL CTREXC( 'V', 1, A, 1, B, 1, IFST, ILST, INFO )
+      CALL CHKXER( 'CTREXC', INFOT, NOUT, LERR, OK )
       INFOT = 8
       IFST = 1
       ILST = 0
-      CALL AB_CTREXC( 'V', 1, A, 1, B, 1, IFST, ILST, INFO )
-      CALL AB_CHKXER( 'AB_CTREXC', INFOT, NOUT, LERR, OK )
+      CALL CTREXC( 'V', 1, A, 1, B, 1, IFST, ILST, INFO )
+      CALL CHKXER( 'CTREXC', INFOT, NOUT, LERR, OK )
       INFOT = 8
       ILST = 2
-      CALL AB_CTREXC( 'V', 1, A, 1, B, 1, IFST, ILST, INFO )
-      CALL AB_CHKXER( 'AB_CTREXC', INFOT, NOUT, LERR, OK )
+      CALL CTREXC( 'V', 1, A, 1, B, 1, IFST, ILST, INFO )
+      CALL CHKXER( 'CTREXC', INFOT, NOUT, LERR, OK )
       NT = NT + 8
 *
-*     Test AB_CTRSNA
+*     Test CTRSNA
 *
-      SRNAMT = 'AB_CTRSNA'
+      SRNAMT = 'CTRSNA'
       INFOT = 1
-      CALL AB_CTRSNA( 'X', 'A', SEL, 0, A, 1, B, 1, C, 1, S, SEP, 1, M,
+      CALL CTRSNA( 'X', 'A', SEL, 0, A, 1, B, 1, C, 1, S, SEP, 1, M,
      $             WORK, 1, RW, INFO )
-      CALL AB_CHKXER( 'AB_CTRSNA', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'CTRSNA', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_CTRSNA( 'B', 'X', SEL, 0, A, 1, B, 1, C, 1, S, SEP, 1, M,
+      CALL CTRSNA( 'B', 'X', SEL, 0, A, 1, B, 1, C, 1, S, SEP, 1, M,
      $             WORK, 1, RW, INFO )
-      CALL AB_CHKXER( 'AB_CTRSNA', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'CTRSNA', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL AB_CTRSNA( 'B', 'A', SEL, -1, A, 1, B, 1, C, 1, S, SEP, 1, M,
+      CALL CTRSNA( 'B', 'A', SEL, -1, A, 1, B, 1, C, 1, S, SEP, 1, M,
      $             WORK, 1, RW, INFO )
-      CALL AB_CHKXER( 'AB_CTRSNA', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'CTRSNA', INFOT, NOUT, LERR, OK )
       INFOT = 6
-      CALL AB_CTRSNA( 'V', 'A', SEL, 2, A, 1, B, 1, C, 1, S, SEP, 2, M,
+      CALL CTRSNA( 'V', 'A', SEL, 2, A, 1, B, 1, C, 1, S, SEP, 2, M,
      $             WORK, 2, RW, INFO )
-      CALL AB_CHKXER( 'AB_CTRSNA', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'CTRSNA', INFOT, NOUT, LERR, OK )
       INFOT = 8
-      CALL AB_CTRSNA( 'B', 'A', SEL, 2, A, 2, B, 1, C, 2, S, SEP, 2, M,
+      CALL CTRSNA( 'B', 'A', SEL, 2, A, 2, B, 1, C, 2, S, SEP, 2, M,
      $             WORK, 2, RW, INFO )
-      CALL AB_CHKXER( 'AB_CTRSNA', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'CTRSNA', INFOT, NOUT, LERR, OK )
       INFOT = 10
-      CALL AB_CTRSNA( 'B', 'A', SEL, 2, A, 2, B, 2, C, 1, S, SEP, 2, M,
+      CALL CTRSNA( 'B', 'A', SEL, 2, A, 2, B, 2, C, 1, S, SEP, 2, M,
      $             WORK, 2, RW, INFO )
-      CALL AB_CHKXER( 'AB_CTRSNA', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'CTRSNA', INFOT, NOUT, LERR, OK )
       INFOT = 13
-      CALL AB_CTRSNA( 'B', 'A', SEL, 1, A, 1, B, 1, C, 1, S, SEP, 0, M,
+      CALL CTRSNA( 'B', 'A', SEL, 1, A, 1, B, 1, C, 1, S, SEP, 0, M,
      $             WORK, 1, RW, INFO )
-      CALL AB_CHKXER( 'AB_CTRSNA', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'CTRSNA', INFOT, NOUT, LERR, OK )
       INFOT = 13
-      CALL AB_CTRSNA( 'B', 'S', SEL, 2, A, 2, B, 2, C, 2, S, SEP, 1, M,
+      CALL CTRSNA( 'B', 'S', SEL, 2, A, 2, B, 2, C, 2, S, SEP, 1, M,
      $             WORK, 1, RW, INFO )
-      CALL AB_CHKXER( 'AB_CTRSNA', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'CTRSNA', INFOT, NOUT, LERR, OK )
       INFOT = 16
-      CALL AB_CTRSNA( 'B', 'A', SEL, 2, A, 2, B, 2, C, 2, S, SEP, 2, M,
+      CALL CTRSNA( 'B', 'A', SEL, 2, A, 2, B, 2, C, 2, S, SEP, 2, M,
      $             WORK, 1, RW, INFO )
-      CALL AB_CHKXER( 'AB_CTRSNA', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'CTRSNA', INFOT, NOUT, LERR, OK )
       NT = NT + 9
 *
-*     Test AB_CTRSEN
+*     Test CTRSEN
 *
       SEL( 1 ) = .FALSE.
-      SRNAMT = 'AB_CTRSEN'
+      SRNAMT = 'CTRSEN'
       INFOT = 1
-      CALL AB_CTRSEN( 'X', 'N', SEL, 0, A, 1, B, 1, X, M, S( 1 ), SEP( 1
-     $ ),
+      CALL CTRSEN( 'X', 'N', SEL, 0, A, 1, B, 1, X, M, S( 1 ), SEP( 1 ),
      $             WORK, 1, INFO )
-      CALL AB_CHKXER( 'AB_CTRSEN', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'CTRSEN', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_CTRSEN( 'N', 'X', SEL, 0, A, 1, B, 1, X, M, S( 1 ), SEP( 1
-     $ ),
+      CALL CTRSEN( 'N', 'X', SEL, 0, A, 1, B, 1, X, M, S( 1 ), SEP( 1 ),
      $             WORK, 1, INFO )
-      CALL AB_CHKXER( 'AB_CTRSEN', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'CTRSEN', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL AB_CTRSEN( 'N', 'N', SEL, -1, A, 1, B, 1, X, M, S( 1 ),
+      CALL CTRSEN( 'N', 'N', SEL, -1, A, 1, B, 1, X, M, S( 1 ),
      $             SEP( 1 ), WORK, 1, INFO )
-      CALL AB_CHKXER( 'AB_CTRSEN', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'CTRSEN', INFOT, NOUT, LERR, OK )
       INFOT = 6
-      CALL AB_CTRSEN( 'N', 'N', SEL, 2, A, 1, B, 1, X, M, S( 1 ), SEP( 1
-     $ ),
+      CALL CTRSEN( 'N', 'N', SEL, 2, A, 1, B, 1, X, M, S( 1 ), SEP( 1 ),
      $             WORK, 2, INFO )
-      CALL AB_CHKXER( 'AB_CTRSEN', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'CTRSEN', INFOT, NOUT, LERR, OK )
       INFOT = 8
-      CALL AB_CTRSEN( 'N', 'V', SEL, 2, A, 2, B, 1, X, M, S( 1 ), SEP( 1
-     $ ),
+      CALL CTRSEN( 'N', 'V', SEL, 2, A, 2, B, 1, X, M, S( 1 ), SEP( 1 ),
      $             WORK, 1, INFO )
-      CALL AB_CHKXER( 'AB_CTRSEN', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'CTRSEN', INFOT, NOUT, LERR, OK )
       INFOT = 14
-      CALL AB_CTRSEN( 'N', 'V', SEL, 2, A, 2, B, 2, X, M, S( 1 ), SEP( 1
-     $ ),
+      CALL CTRSEN( 'N', 'V', SEL, 2, A, 2, B, 2, X, M, S( 1 ), SEP( 1 ),
      $             WORK, 0, INFO )
-      CALL AB_CHKXER( 'AB_CTRSEN', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'CTRSEN', INFOT, NOUT, LERR, OK )
       INFOT = 14
-      CALL AB_CTRSEN( 'E', 'V', SEL, 3, A, 3, B, 3, X, M, S( 1 ), SEP( 1
-     $ ),
+      CALL CTRSEN( 'E', 'V', SEL, 3, A, 3, B, 3, X, M, S( 1 ), SEP( 1 ),
      $             WORK, 1, INFO )
-      CALL AB_CHKXER( 'AB_CTRSEN', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'CTRSEN', INFOT, NOUT, LERR, OK )
       INFOT = 14
-      CALL AB_CTRSEN( 'V', 'V', SEL, 3, A, 3, B, 3, X, M, S( 1 ), SEP( 1
-     $ ),
+      CALL CTRSEN( 'V', 'V', SEL, 3, A, 3, B, 3, X, M, S( 1 ), SEP( 1 ),
      $             WORK, 3, INFO )
-      CALL AB_CHKXER( 'AB_CTRSEN', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'CTRSEN', INFOT, NOUT, LERR, OK )
       NT = NT + 8
 *
 *     Print a summary line.
@@ -285,6 +275,6 @@
      $      'exits ***' )
       RETURN
 *
-*     End of AB_CERREC
+*     End of CERREC
 *
       END

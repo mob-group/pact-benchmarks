@@ -1,4 +1,4 @@
-*> \brief \b AB_ZCHKRQ
+*> \brief \b ZCHKRQ
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZCHKRQ( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVAL,
+*       SUBROUTINE ZCHKRQ( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVAL,
 *                          NRHS, THRESH, TSTERR, NMAX, A, AF, AQ, AR, AC,
 *                          B, X, XACT, TAU, WORK, RWORK, IWORK, NOUT )
 *
@@ -32,7 +32,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZCHKRQ tests AB_ZGERQF, AB_ZUNGRQ and AB_CUNMRQ.
+*> ZCHKRQ tests ZGERQF, ZUNGRQ and CUNMRQ.
 *> \endverbatim
 *
 *  Arguments:
@@ -197,8 +197,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZCHKRQ( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVA
-     $L,
+      SUBROUTINE ZCHKRQ( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVAL,
      $                   NRHS, THRESH, TSTERR, NMAX, A, AF, AQ, AR, AC,
      $                   B, X, XACT, TAU, WORK, RWORK, IWORK, NOUT )
 *
@@ -244,11 +243,9 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALAERH, AB_ALAHD, AB_ALASUM, AB_XLAENV, AB_Z
-     $ERRRQ, AB_ZGERQS,
-     $                   AB_ZGET02, AB_ZLACPY, AB_ZLARHS, AB_ZLATB4, AB_
-     $ZLATMS, AB_ZRQT01,
-     $                   AB_ZRQT02, AB_ZRQT03
+      EXTERNAL           ALAERH, ALAHD, ALASUM, XLAENV, ZERRRQ, ZGERQS,
+     $                   ZGET02, ZLACPY, ZLARHS, ZLATB4, ZLATMS, ZRQT01,
+     $                   ZRQT02, ZRQT03
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -281,9 +278,9 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL AB_ZERRRQ( PATH, NOUT )
+     $   CALL ZERRRQ( PATH, NOUT )
       INFOT = 0
-      CALL AB_XLAENV( 2, 2 )
+      CALL XLAENV( 2, 2 )
 *
       LDA = NMAX
       LWORK = NMAX*MAX( NMAX, NRHS )
@@ -305,30 +302,28 @@
                IF( .NOT.DOTYPE( IMAT ) )
      $            GO TO 50
 *
-*              Set up parameters with AB_ZLATB4 and generate a test matrix
-*              with AB_ZLATMS.
+*              Set up parameters with ZLATB4 and generate a test matrix
+*              with ZLATMS.
 *
-               CALL AB_ZLATB4( PATH, IMAT, M, N, TYPE, KL, KU, ANORM, MO
-     $DE,
+               CALL ZLATB4( PATH, IMAT, M, N, TYPE, KL, KU, ANORM, MODE,
      $                      CNDNUM, DIST )
 *
-               SRNAMT = 'AB_ZLATMS'
-               CALL AB_ZLATMS( M, N, DIST, ISEED, TYPE, RWORK, MODE,
+               SRNAMT = 'ZLATMS'
+               CALL ZLATMS( M, N, DIST, ISEED, TYPE, RWORK, MODE,
      $                      CNDNUM, ANORM, KL, KU, 'No packing', A, LDA,
      $                      WORK, INFO )
 *
-*              Check error code from AB_ZLATMS.
+*              Check error code from ZLATMS.
 *
                IF( INFO.NE.0 ) THEN
-                  CALL AB_ALAERH( PATH, 'AB_ZLATMS', INFO, 0, ' ', M, N,
-     $ -1,
+                  CALL ALAERH( PATH, 'ZLATMS', INFO, 0, ' ', M, N, -1,
      $                         -1, -1, IMAT, NFAIL, NERRS, NOUT )
                   GO TO 50
                END IF
 *
 *              Set some values for K: the first value must be MINMN,
-*              corresponding to the call of AB_ZRQT01; other values are
-*              used in the calls of AB_ZRQT02, and must not exceed MINMN.
+*              corresponding to the call of ZRQT01; other values are
+*              used in the calls of ZRQT02, and must not exceed MINMN.
 *
                KVAL( 1 ) = MINMN
                KVAL( 2 ) = 0
@@ -353,39 +348,37 @@
 *
                   DO 30 INB = 1, NNB
                      NB = NBVAL( INB )
-                     CALL AB_XLAENV( 1, NB )
+                     CALL XLAENV( 1, NB )
                      NX = NXVAL( INB )
-                     CALL AB_XLAENV( 3, NX )
+                     CALL XLAENV( 3, NX )
                      DO I = 1, NTESTS
                         RESULT( I ) = ZERO
                      END DO
                      NT = 2
                      IF( IK.EQ.1 ) THEN
 *
-*                       Test AB_ZGERQF
+*                       Test ZGERQF
 *
-                        CALL AB_ZRQT01( M, N, A, AF, AQ, AR, LDA, TAU,
+                        CALL ZRQT01( M, N, A, AF, AQ, AR, LDA, TAU,
      $                               WORK, LWORK, RWORK, RESULT( 1 ) )
                      ELSE IF( M.LE.N ) THEN
 *
-*                       Test AB_ZUNGRQ, using factorization
-*                       returned by AB_ZRQT01
+*                       Test ZUNGRQ, using factorization
+*                       returned by ZRQT01
 *
-                        CALL AB_ZRQT02( M, N, K, A, AF, AQ, AR, LDA, TAU
-     $,
+                        CALL ZRQT02( M, N, K, A, AF, AQ, AR, LDA, TAU,
      $                               WORK, LWORK, RWORK, RESULT( 1 ) )
                      END IF
                      IF( M.GE.K ) THEN
 *
-*                       Test AB_ZUNMRQ, using factorization returned
-*                       by AB_ZRQT01
+*                       Test ZUNMRQ, using factorization returned
+*                       by ZRQT01
 *
-                        CALL AB_ZRQT03( M, N, K, AF, AC, AR, AQ, LDA, TA
-     $U,
+                        CALL ZRQT03( M, N, K, AF, AC, AR, AQ, LDA, TAU,
      $                               WORK, LWORK, RWORK, RESULT( 3 ) )
                         NT = NT + 4
 *
-*                       If M>=N and K=N, call AB_ZGERQS to solve a system
+*                       If M>=N and K=N, call ZGERQS to solve a system
 *                       with NRHS right hand sides and compute the
 *                       residual.
 *
@@ -394,28 +387,26 @@
 *                          Generate a solution and set the right
 *                          hand side.
 *
-                           SRNAMT = 'AB_ZLARHS'
-                           CALL AB_ZLARHS( PATH, 'New', 'Full',
+                           SRNAMT = 'ZLARHS'
+                           CALL ZLARHS( PATH, 'New', 'Full',
      $                                  'No transpose', M, N, 0, 0,
      $                                  NRHS, A, LDA, XACT, LDA, B, LDA,
      $                                  ISEED, INFO )
 *
-                           CALL AB_ZLACPY( 'Full', M, NRHS, B, LDA,
+                           CALL ZLACPY( 'Full', M, NRHS, B, LDA,
      $                                  X( N-M+1 ), LDA )
-                           SRNAMT = 'AB_ZGERQS'
-                           CALL AB_ZGERQS( M, N, NRHS, AF, LDA, TAU, X,
+                           SRNAMT = 'ZGERQS'
+                           CALL ZGERQS( M, N, NRHS, AF, LDA, TAU, X,
      $                                  LDA, WORK, LWORK, INFO )
 *
-*                          Check error code from AB_ZGERQS.
+*                          Check error code from ZGERQS.
 *
                            IF( INFO.NE.0 )
-     $                        CALL AB_ALAERH( PATH, 'AB_ZGERQS', INFO, 0
-     $, ' ',
+     $                        CALL ALAERH( PATH, 'ZGERQS', INFO, 0, ' ',
      $                                     M, N, NRHS, -1, NB, IMAT,
      $                                     NFAIL, NERRS, NOUT )
 *
-                           CALL AB_ZGET02( 'No transpose', M, N, NRHS, A
-     $,
+                           CALL ZGET02( 'No transpose', M, N, NRHS, A,
      $                                  LDA, X, LDA, B, LDA, RWORK,
      $                                  RESULT( 7 ) )
                            NT = NT + 1
@@ -428,7 +419,7 @@
                      DO 20 I = 1, NT
                         IF( RESULT( I ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                        CALL AB_ALAHD( NOUT, PATH )
+     $                        CALL ALAHD( NOUT, PATH )
                            WRITE( NOUT, FMT = 9999 )M, N, K, NB, NX,
      $                        IMAT, I, RESULT( I )
                            NFAIL = NFAIL + 1
@@ -443,12 +434,12 @@
 *
 *     Print a summary of the results.
 *
-      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( ' M=', I5, ', N=', I5, ', K=', I5, ', NB=', I4, ', NX=',
      $      I5, ', type ', I2, ', test(', I2, ')=', G12.5 )
       RETURN
 *
-*     End of AB_ZCHKRQ
+*     End of ZCHKRQ
 *
       END

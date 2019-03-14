@@ -1,4 +1,4 @@
-*> \brief \b AB_SLASQ4 computes an approximation to the smallest eigenvalue using values of d from the previous transform. Used by AB_SBDSQR.
+*> \brief \b SLASQ4 computes an approximation to the smallest eigenvalue using values of d from the previous transform. Used by sbdsqr.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLASQ4 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLASQ4.f">
+*> Download SLASQ4 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasq4.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLASQ4.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasq4.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLASQ4.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasq4.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLASQ4( I0, N0, Z, PP, N0IN, DMIN, DMIN1, DMIN2, DN,
+*       SUBROUTINE SLASQ4( I0, N0, Z, PP, N0IN, DMIN, DMIN1, DMIN2, DN,
 *                          DN1, DN2, TAU, TTYPE, G )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SLASQ4 computes an approximation TAU to the smallest eigenvalue
+*> SLASQ4 computes an approximation TAU to the smallest eigenvalue
 *> using values of d from the previous transform.
 *> \endverbatim
 *
@@ -124,7 +124,7 @@
 *> \verbatim
 *>          G is REAL
 *>        G is passed as an argument in order to save its value between
-*>        calls to AB_SLASQ4.
+*>        calls to SLASQ4.
 *> \endverbatim
 *
 *  Authors:
@@ -148,7 +148,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_SLASQ4( I0, N0, Z, PP, N0IN, DMIN, DMIN1, DMIN2, DN,
+      SUBROUTINE SLASQ4( I0, N0, Z, PP, N0IN, DMIN, DMIN1, DMIN2, DN,
      $                   DN1, DN2, TAU, TTYPE, G )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
@@ -419,6 +419,6 @@
       TAU = S
       RETURN
 *
-*     End of AB_SLASQ4
+*     End of SLASQ4
 *
       END

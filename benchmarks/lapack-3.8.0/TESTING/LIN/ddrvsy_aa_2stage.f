@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_AB_DDRVSY_AA_2STAGE
+*> \brief \b DDRVSY_AA_2STAGE
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_AB_DDRVSY_AA_2STAGE(
+*       SUBROUTINE DDRVSY_AA_2STAGE(
 *                             DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
 *                             A, AFAC, AINV, B, X, XACT, WORK, RWORK, IWORK,
 *                             NOUT )
@@ -32,7 +32,7 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_AB_DDRVSY_AA_2STAGE tests the driver routine AB_AB_AB_DSYSV_AA_2STAGE.
+*> DDRVSY_AA_2STAGE tests the driver routine DSYSV_AA_2STAGE.
 *> \endverbatim
 *
 *  Arguments:
@@ -150,7 +150,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_AB_DDRVSY_AA_2STAGE(
+      SUBROUTINE DDRVSY_AA_2STAGE(
      $                         DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
      $                         NMAX, A, AFAC, AINV, B, X, XACT, WORK,
      $                         RWORK, IWORK, NOUT )
@@ -198,17 +198,14 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLANSY, AB_SGET06
-      EXTERNAL           AB_DLANSY, AB_SGET06
+      DOUBLE PRECISION   DLANSY, SGET06
+      EXTERNAL           DLANSY, SGET06
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALADHD, AB_ALAERH, AB_ALASVM, AB_XLAENV, AB_
-     $DERRVX,
-     $                   AB_DGET04, AB_DLACPY, AB_DLARHS, AB_DLATB4, AB_
-     $DLATMS,
-     $                   AB_AB_AB_DSYSV_AA_2STAGE, AB_AB_CHET01_AA, AB_D
-     $POT02,
-     $                   AB_AB_AB_DSYTRF_AA_2STAGE
+      EXTERNAL           ALADHD, ALAERH, ALASVM, XLAENV, DERRVX,
+     $                   DGET04, DLACPY, DLARHS, DLATB4, DLATMS,
+     $                   DSYSV_AA_2STAGE, CHET01_AA, DPOT02,
+     $                   DSYTRF_AA_2STAGE
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -250,15 +247,15 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL AB_DERRVX( PATH, NOUT )
+     $   CALL DERRVX( PATH, NOUT )
       INFOT = 0
 *
 *     Set the block size and minimum block size for testing.
 *
       NB = 1
       NBMIN = 2
-      CALL AB_XLAENV( 1, NB )
-      CALL AB_XLAENV( 2, NBMIN )
+      CALL XLAENV( 1, NB )
+      CALL XLAENV( 2, NBMIN )
 *
 *     Do for each value of N in NVAL
 *
@@ -290,24 +287,23 @@
 *
 *              Begin generate the test matrix A.
 *
-*              Set up parameters with AB_DLATB4 for the matrix generator
+*              Set up parameters with DLATB4 for the matrix generator
 *              based on the type of matrix to be generated.
 *
-              CALL AB_DLATB4( MATPATH, IMAT, N, N, TYPE, KL, KU, ANORM,
+              CALL DLATB4( MATPATH, IMAT, N, N, TYPE, KL, KU, ANORM,
      $                         MODE, CNDNUM, DIST )
 *
-*              Generate a matrix with AB_DLATMS.
+*              Generate a matrix with DLATMS.
 *
-                  SRNAMT = 'AB_DLATMS'
-                  CALL AB_DLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
+                  SRNAMT = 'DLATMS'
+                  CALL DLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
      $                         CNDNUM, ANORM, KL, KU, UPLO, A, LDA,
      $                         WORK, INFO )
 *
-*                 Check error code from AB_DLATMS and handle error.
+*                 Check error code from DLATMS and handle error.
 *
                   IF( INFO.NE.0 ) THEN
-                     CALL AB_ALAERH( PATH, 'AB_DLATMS', INFO, 0, UPLO, N
-     $, N,
+                     CALL ALAERH( PATH, 'DLATMS', INFO, 0, UPLO, N, N,
      $                            -1, -1, -1, IMAT, NFAIL, NERRS, NOUT )
                      GO TO 160
                   END IF
@@ -392,25 +388,23 @@
 *
 *                 Form an exact solution and set the right hand side.
 *
-                  SRNAMT = 'AB_DLARHS'
-                  CALL AB_DLARHS( MATPATH, XTYPE, UPLO, ' ', N, N, KL, K
-     $U,
+                  SRNAMT = 'DLARHS'
+                  CALL DLARHS( MATPATH, XTYPE, UPLO, ' ', N, N, KL, KU,
      $                         NRHS, A, LDA, XACT, LDA, B, LDA, ISEED,
      $                         INFO )
                   XTYPE = 'C'
 *
-*                 --- Test AB_AB_AB_DSYSV_AA_2STAGE  ---
+*                 --- Test DSYSV_AA_2STAGE  ---
 *
                   IF( IFACT.EQ.2 ) THEN
-                     CALL AB_DLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
-                     CALL AB_DLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
+                     CALL DLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
+                     CALL DLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
-*                    Factor the matrix and solve the system using AB_AB_DSYSV_AA.
+*                    Factor the matrix and solve the system using DSYSV_AA.
 *
-                     SRNAMT = 'AB_AB_AB_DSYSV_AA_2STAGE '
+                     SRNAMT = 'DSYSV_AA_2STAGE '
                      LWORK = MIN(N*NB, 3*NMAX*NMAX)
-                     CALL AB_AB_AB_DSYSV_AA_2STAGE( UPLO, N, NRHS, AFAC,
-     $ LDA,
+                     CALL DSYSV_AA_2STAGE( UPLO, N, NRHS, AFAC, LDA,
      $                                 AINV, (3*NB+1)*N, 
      $                                 IWORK, IWORK( 1+N ),
      $                                 X, LDA, WORK, LWORK, INFO )
@@ -435,10 +429,10 @@
                         K = 0
                      END IF
 *
-*                    Check error code from AB_AB_DSYSV_AA .
+*                    Check error code from DSYSV_AA .
 *
                      IF( INFO.NE.K ) THEN
-                        CALL AB_ALAERH( PATH, 'AB_AB_DSYSV_AA', INFO, K,
+                        CALL ALAERH( PATH, 'DSYSV_AA', INFO, K,
      $                               UPLO, N, N, -1, -1, NRHS,
      $                               IMAT, NFAIL, NERRS, NOUT )
                         GO TO 120
@@ -448,16 +442,14 @@
 *
 *                    Compute residual of the computed solution.
 *
-                     CALL AB_DLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA 
-     $)
-                     CALL AB_DPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK
-     $,
+                     CALL DLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
+                     CALL DPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK,
      $                            LDA, RWORK, RESULT( 1 ) )
 *
 *                    Reconstruct matrix from factors and compute
 *                    residual.
 *
-c                     CALL AB_AB_CHET01_AA( UPLO, N, A, LDA, AFAC, LDA,
+c                     CALL CHET01_AA( UPLO, N, A, LDA, AFAC, LDA,
 c     $                                  IWORK, AINV, LDA, RWORK,
 c     $                                  RESULT( 2 ) )
 c                     NT = 2
@@ -469,8 +461,8 @@ c                     NT = 2
                      DO 110 K = 1, NT
                         IF( RESULT( K ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                        CALL AB_ALADHD( NOUT, PATH )
-                           WRITE( NOUT, FMT = 9999 )'AB_AB_DSYSV_AA ',
+     $                        CALL ALADHD( NOUT, PATH )
+                           WRITE( NOUT, FMT = 9999 )'DSYSV_AA ',
      $                         UPLO, N, IMAT, K, RESULT( K )
                            NFAIL = NFAIL + 1
                         END IF
@@ -487,12 +479,12 @@ c                     NT = 2
 *
 *     Print a summary of the results.
 *
-      CALL AB_ALASVM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL ALASVM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( 1X, A, ', UPLO=''', A1, ''', N =', I5, ', type ', I2,
      $      ', test ', I2, ', ratio =', G12.5 )
       RETURN
 *
-*     End of AB_AB_AB_DDRVSY_AA_2STAGE
+*     End of DDRVSY_AA_2STAGE
 *
       END

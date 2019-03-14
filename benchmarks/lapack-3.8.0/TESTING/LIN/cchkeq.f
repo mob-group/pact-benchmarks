@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_CCHKEQ
+*> \brief \b CCHKEQ
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_CCHKEQ( THRESH, NOUT )
+*       SUBROUTINE CCHKEQ( THRESH, NOUT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            NOUT
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_CCHKEQ tests AB_CGEEQU, AB_CGBEQU, AB_CPOEQU, AB_CPPEQU and AB_CPBEQU
+*> CCHKEQ tests CGEEQU, CGBEQU, CPOEQU, CPPEQU and CPBEQU
 *> \endverbatim
 *
 *  Arguments:
@@ -52,7 +52,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_CCHKEQ( THRESH, NOUT )
+      SUBROUTINE CCHKEQ( THRESH, NOUT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -91,12 +91,11 @@
       COMPLEX            A( NSZ, NSZ ), AB( NSZB, NSZ ), AP( NSZP )
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH
-      EXTERNAL           AB_SLAMCH
+      REAL               SLAMCH
+      EXTERNAL           SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CGBEQU, AB_CGEEQU, AB_CPBEQU, AB_CPOEQU, AB_
-     $CPPEQU
+      EXTERNAL           CGBEQU, CGEEQU, CPBEQU, CPOEQU, CPPEQU
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -106,7 +105,7 @@
       PATH( 1:1 ) = 'Complex precision'
       PATH( 2:3 ) = 'EQ'
 *
-      EPS = AB_SLAMCH( 'P' )
+      EPS = SLAMCH( 'P' )
       DO 10 I = 1, 5
          RESLTS( I ) = ZERO
    10 CONTINUE
@@ -115,7 +114,7 @@
          RPOW( I ) = ONE / POW( I )
    20 CONTINUE
 *
-*     Test AB_CGEEQU
+*     Test CGEEQU
 *
       DO 80 N = 0, NSZ
          DO 70 M = 0, NSZ
@@ -130,8 +129,7 @@
    30          CONTINUE
    40       CONTINUE
 *
-            CALL AB_CGEEQU( M, N, A, NSZ, R, C, RCOND, CCOND, NORM, INFO
-     $ )
+            CALL CGEEQU( M, N, A, NSZ, R, C, RCOND, CCOND, NORM, INFO )
 *
             IF( INFO.NE.0 ) THEN
                RESLTS( 1 ) = ONE
@@ -165,7 +163,7 @@
       DO 90 J = 1, NSZ
          A( MAX( NSZ-1, 1 ), J ) = CZERO
    90 CONTINUE
-      CALL AB_CGEEQU( NSZ, NSZ, A, NSZ, R, C, RCOND, CCOND, NORM, INFO )
+      CALL CGEEQU( NSZ, NSZ, A, NSZ, R, C, RCOND, CCOND, NORM, INFO )
       IF( INFO.NE.MAX( NSZ-1, 1 ) )
      $   RESLTS( 1 ) = ONE
 *
@@ -175,12 +173,12 @@
       DO 110 I = 1, NSZ
          A( I, MAX( NSZ-1, 1 ) ) = CZERO
   110 CONTINUE
-      CALL AB_CGEEQU( NSZ, NSZ, A, NSZ, R, C, RCOND, CCOND, NORM, INFO )
+      CALL CGEEQU( NSZ, NSZ, A, NSZ, R, C, RCOND, CCOND, NORM, INFO )
       IF( INFO.NE.NSZ+MAX( NSZ-1, 1 ) )
      $   RESLTS( 1 ) = ONE
       RESLTS( 1 ) = RESLTS( 1 ) / EPS
 *
-*     Test AB_CGBEQU
+*     Test CGBEQU
 *
       DO 250 N = 0, NSZ
          DO 240 M = 0, NSZ
@@ -202,7 +200,7 @@
   140                CONTINUE
   150             CONTINUE
 *
-                  CALL AB_CGBEQU( M, N, KL, KU, AB, NSZB, R, C, RCOND,
+                  CALL CGBEQU( M, N, KL, KU, AB, NSZB, R, C, RCOND,
      $                         CCOND, NORM, INFO )
 *
                   IF( INFO.NE.0 ) THEN
@@ -270,7 +268,7 @@
   250 CONTINUE
       RESLTS( 2 ) = RESLTS( 2 ) / EPS
 *
-*     Test AB_CPOEQU
+*     Test CPOEQU
 *
       DO 290 N = 0, NSZ
 *
@@ -284,7 +282,7 @@
   260       CONTINUE
   270    CONTINUE
 *
-         CALL AB_CPOEQU( N, A, NSZ, R, RCOND, NORM, INFO )
+         CALL CPOEQU( N, A, NSZ, R, RCOND, NORM, INFO )
 *
          IF( INFO.NE.0 ) THEN
             RESLTS( 3 ) = ONE
@@ -304,12 +302,12 @@
          END IF
   290 CONTINUE
       A( MAX( NSZ-1, 1 ), MAX( NSZ-1, 1 ) ) = -CONE
-      CALL AB_CPOEQU( NSZ, A, NSZ, R, RCOND, NORM, INFO )
+      CALL CPOEQU( NSZ, A, NSZ, R, RCOND, NORM, INFO )
       IF( INFO.NE.MAX( NSZ-1, 1 ) )
      $   RESLTS( 3 ) = ONE
       RESLTS( 3 ) = RESLTS( 3 ) / EPS
 *
-*     Test AB_CPPEQU
+*     Test CPPEQU
 *
       DO 360 N = 0, NSZ
 *
@@ -322,7 +320,7 @@
             AP( ( I*( I+1 ) ) / 2 ) = POW( 2*I+1 )
   310    CONTINUE
 *
-         CALL AB_CPPEQU( 'U', N, AP, R, RCOND, NORM, INFO )
+         CALL CPPEQU( 'U', N, AP, R, RCOND, NORM, INFO )
 *
          IF( INFO.NE.0 ) THEN
             RESLTS( 4 ) = ONE
@@ -352,7 +350,7 @@
             J = J + ( N-I+1 )
   340    CONTINUE
 *
-         CALL AB_CPPEQU( 'L', N, AP, R, RCOND, NORM, INFO )
+         CALL CPPEQU( 'L', N, AP, R, RCOND, NORM, INFO )
 *
          IF( INFO.NE.0 ) THEN
             RESLTS( 4 ) = ONE
@@ -374,12 +372,12 @@
   360 CONTINUE
       I = ( NSZ*( NSZ+1 ) ) / 2 - 2
       AP( I ) = -CONE
-      CALL AB_CPPEQU( 'L', NSZ, AP, R, RCOND, NORM, INFO )
+      CALL CPPEQU( 'L', NSZ, AP, R, RCOND, NORM, INFO )
       IF( INFO.NE.MAX( NSZ-1, 1 ) )
      $   RESLTS( 4 ) = ONE
       RESLTS( 4 ) = RESLTS( 4 ) / EPS
 *
-*     Test AB_CPBEQU
+*     Test CPBEQU
 *
       DO 460 N = 0, NSZ
          DO 450 KL = 0, MAX( N-1, 0 )
@@ -395,7 +393,7 @@
                AB( KL+1, J ) = POW( 2*J+1 )
   390       CONTINUE
 *
-            CALL AB_CPBEQU( 'U', N, KL, AB, NSZB, R, RCOND, NORM, INFO )
+            CALL CPBEQU( 'U', N, KL, AB, NSZB, R, RCOND, NORM, INFO )
 *
             IF( INFO.NE.0 ) THEN
                RESLTS( 5 ) = ONE
@@ -415,8 +413,7 @@
             END IF
             IF( N.NE.0 ) THEN
                AB( KL+1, MAX( N-1, 1 ) ) = -CONE
-               CALL AB_CPBEQU( 'U', N, KL, AB, NSZB, R, RCOND, NORM, INF
-     $O )
+               CALL CPBEQU( 'U', N, KL, AB, NSZB, R, RCOND, NORM, INFO )
                IF( INFO.NE.MAX( N-1, 1 ) )
      $            RESLTS( 5 ) = ONE
             END IF
@@ -432,7 +429,7 @@
                AB( 1, J ) = POW( 2*J+1 )
   430       CONTINUE
 *
-            CALL AB_CPBEQU( 'L', N, KL, AB, NSZB, R, RCOND, NORM, INFO )
+            CALL CPBEQU( 'L', N, KL, AB, NSZB, R, RCOND, NORM, INFO )
 *
             IF( INFO.NE.0 ) THEN
                RESLTS( 5 ) = ONE
@@ -452,8 +449,7 @@
             END IF
             IF( N.NE.0 ) THEN
                AB( 1, MAX( N-1, 1 ) ) = -CONE
-               CALL AB_CPBEQU( 'L', N, KL, AB, NSZB, R, RCOND, NORM, INF
-     $O )
+               CALL CPBEQU( 'L', N, KL, AB, NSZB, R, RCOND, NORM, INFO )
                IF( INFO.NE.MAX( N-1, 1 ) )
      $            RESLTS( 5 ) = ONE
             END IF
@@ -481,18 +477,18 @@
       END IF
  9999 FORMAT( 1X, 'All tests for ', A3,
      $      ' routines passed the threshold' )
- 9998 FORMAT( ' AB_CGEEQU failed test with value ', E10.3, ' exceeding',
+ 9998 FORMAT( ' CGEEQU failed test with value ', E10.3, ' exceeding',
      $      ' threshold ', E10.3 )
- 9997 FORMAT( ' AB_CGBEQU failed test with value ', E10.3, ' exceeding',
+ 9997 FORMAT( ' CGBEQU failed test with value ', E10.3, ' exceeding',
      $      ' threshold ', E10.3 )
- 9996 FORMAT( ' AB_CPOEQU failed test with value ', E10.3, ' exceeding',
+ 9996 FORMAT( ' CPOEQU failed test with value ', E10.3, ' exceeding',
      $      ' threshold ', E10.3 )
- 9995 FORMAT( ' AB_CPPEQU failed test with value ', E10.3, ' exceeding',
+ 9995 FORMAT( ' CPPEQU failed test with value ', E10.3, ' exceeding',
      $      ' threshold ', E10.3 )
- 9994 FORMAT( ' AB_CPBEQU failed test with value ', E10.3, ' exceeding',
+ 9994 FORMAT( ' CPBEQU failed test with value ', E10.3, ' exceeding',
      $      ' threshold ', E10.3 )
       RETURN
 *
-*     End of AB_AB_CCHKEQ
+*     End of CCHKEQ
 *
       END

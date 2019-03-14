@@ -1,4 +1,4 @@
-*> \brief \b AB_SERRPS
+*> \brief \b SERRPS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SERRPS( PATH, NUNIT )
+*       SUBROUTINE SERRPS( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            NUNIT
@@ -21,8 +21,8 @@
 *>
 *> \verbatim
 *>
-*> AB_SERRPS tests the error exits for the REAL routines
-*> for AB_SPSTRF..
+*> SERRPS tests the error exits for the REAL routines
+*> for SPSTRF..
 *> \endverbatim
 *
 *  Arguments:
@@ -53,7 +53,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_SERRPS( PATH, NUNIT )
+      SUBROUTINE SERRPS( PATH, NUNIT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -79,7 +79,7 @@
       INTEGER            PIV( NMAX )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALAESM, AB_CHKXER, AB_SPSTF2, AB_SPSTRF
+      EXTERNAL           ALAESM, CHKXER, SPSTF2, SPSTRF
 *     ..
 *     .. Scalars in Common ..
       INTEGER            INFOT, NOUT
@@ -116,39 +116,39 @@
 *        Test error exits of the routines that use the Cholesky
 *        decomposition of a symmetric positive semidefinite matrix.
 *
-*        AB_SPSTRF
+*        SPSTRF
 *
-      SRNAMT = 'AB_SPSTRF'
+      SRNAMT = 'SPSTRF'
       INFOT = 1
-      CALL AB_SPSTRF( '/', 0, A, 1, PIV, RANK, -1.0, WORK, INFO )
-      CALL AB_CHKXER( 'AB_SPSTRF', INFOT, NOUT, LERR, OK )
+      CALL SPSTRF( '/', 0, A, 1, PIV, RANK, -1.0, WORK, INFO )
+      CALL CHKXER( 'SPSTRF', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_SPSTRF( 'U', -1, A, 1, PIV, RANK, -1.0, WORK, INFO )
-      CALL AB_CHKXER( 'AB_SPSTRF', INFOT, NOUT, LERR, OK )
+      CALL SPSTRF( 'U', -1, A, 1, PIV, RANK, -1.0, WORK, INFO )
+      CALL CHKXER( 'SPSTRF', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL AB_SPSTRF( 'U', 2, A, 1, PIV, RANK, -1.0, WORK, INFO )
-      CALL AB_CHKXER( 'AB_SPSTRF', INFOT, NOUT, LERR, OK )
+      CALL SPSTRF( 'U', 2, A, 1, PIV, RANK, -1.0, WORK, INFO )
+      CALL CHKXER( 'SPSTRF', INFOT, NOUT, LERR, OK )
 *
-*        AB_SPSTF2
+*        SPSTF2
 *
-      SRNAMT = 'AB_SPSTF2'
+      SRNAMT = 'SPSTF2'
       INFOT = 1
-      CALL AB_SPSTF2( '/', 0, A, 1, PIV, RANK, -1.0, WORK, INFO )
-      CALL AB_CHKXER( 'AB_SPSTF2', INFOT, NOUT, LERR, OK )
+      CALL SPSTF2( '/', 0, A, 1, PIV, RANK, -1.0, WORK, INFO )
+      CALL CHKXER( 'SPSTF2', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_SPSTF2( 'U', -1, A, 1, PIV, RANK, -1.0, WORK, INFO )
-      CALL AB_CHKXER( 'AB_SPSTF2', INFOT, NOUT, LERR, OK )
+      CALL SPSTF2( 'U', -1, A, 1, PIV, RANK, -1.0, WORK, INFO )
+      CALL CHKXER( 'SPSTF2', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL AB_SPSTF2( 'U', 2, A, 1, PIV, RANK, -1.0, WORK, INFO )
-      CALL AB_CHKXER( 'AB_SPSTF2', INFOT, NOUT, LERR, OK )
+      CALL SPSTF2( 'U', 2, A, 1, PIV, RANK, -1.0, WORK, INFO )
+      CALL CHKXER( 'SPSTF2', INFOT, NOUT, LERR, OK )
 *
 *
 *     Print a summary line.
 *
-      CALL AB_ALAESM( PATH, OK, NOUT )
+      CALL ALAESM( PATH, OK, NOUT )
 *
       RETURN
 *
-*     End of AB_SERRPS
+*     End of SERRPS
 *
       END

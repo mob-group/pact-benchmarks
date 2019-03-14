@@ -1,4 +1,4 @@
-*> \brief \b AB_CCHKPT
+*> \brief \b CCHKPT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CCHKPT( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
+*       SUBROUTINE CCHKPT( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
 *                          A, D, E, B, X, XACT, WORK, RWORK, NOUT )
 *
 *       .. Scalar Arguments ..
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CCHKPT tests AB_CPTTRF, -TRS, -RFS, and -CON
+*> CCHKPT tests CPTTRF, -TRS, -RFS, and -CON
 *> \endverbatim
 *
 *  Arguments:
@@ -144,8 +144,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_CCHKPT( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR
-     $,
+      SUBROUTINE CCHKPT( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
      $                   A, D, E, B, X, XACT, WORK, RWORK, NOUT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -192,18 +191,15 @@
       COMPLEX            Z( 3 )
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ISAMAX
-      REAL               AB_CLANHT, AB_SCASUM, AB_SGET06
-      EXTERNAL           AB_ISAMAX, AB_CLANHT, AB_SCASUM, AB_SGET06
+      INTEGER            ISAMAX
+      REAL               CLANHT, SCASUM, SGET06
+      EXTERNAL           ISAMAX, CLANHT, SCASUM, SGET06
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALAERH, AB_ALAHD, AB_ALASUM, AB_CCOPY, AB_CE
-     $RRGT, AB_CGET04,
-     $                   AB_CLACPY, AB_CLAPTM, AB_CLARNV, AB_CLATB4, AB_
-     $CLATMS, AB_CPTCON,
-     $                   AB_CPTRFS, AB_CPTT01, AB_CPTT02, AB_CPTT05, AB_
-     $CPTTRF, AB_CPTTRS,
-     $                   AB_CAB_SSCAL, AB_SCOPY, AB_SLARNV, AB_SSCAL
+      EXTERNAL           ALAERH, ALAHD, ALASUM, CCOPY, CERRGT, CGET04,
+     $                   CLACPY, CLAPTM, CLARNV, CLATB4, CLATMS, CPTCON,
+     $                   CPTRFS, CPTT01, CPTT02, CPTT05, CPTTRF, CPTTRS,
+     $                   CSSCAL, SCOPY, SLARNV, SSCAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, REAL
@@ -234,7 +230,7 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL AB_CERRGT( PATH, NOUT )
+     $   CALL CERRGT( PATH, NOUT )
       INFOT = 0
 *
       DO 120 IN = 1, NN
@@ -254,9 +250,9 @@
             IF( N.GT.0 .AND. .NOT.DOTYPE( IMAT ) )
      $         GO TO 110
 *
-*           Set up parameters with AB_CLATB4.
+*           Set up parameters with CLATB4.
 *
-            CALL AB_CLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
+            CALL CLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
      $                   COND, DIST )
 *
             ZEROT = IMAT.GE.8 .AND. IMAT.LE.10
@@ -265,16 +261,14 @@
 *              Type 1-6:  generate a Hermitian tridiagonal matrix of
 *              known condition number in lower triangular band storage.
 *
-               SRNAMT = 'AB_CLATMS'
-               CALL AB_CLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE, CON
-     $D,
+               SRNAMT = 'CLATMS'
+               CALL CLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE, COND,
      $                      ANORM, KL, KU, 'B', A, 2, WORK, INFO )
 *
-*              Check the error code from AB_CLATMS.
+*              Check the error code from CLATMS.
 *
                IF( INFO.NE.0 ) THEN
-                  CALL AB_ALAERH( PATH, 'AB_CLATMS', INFO, 0, ' ', N, N,
-     $ KL,
+                  CALL ALAERH( PATH, 'CLATMS', INFO, 0, ' ', N, N, KL,
      $                         KU, -1, IMAT, NFAIL, NERRS, NOUT )
                   GO TO 110
                END IF
@@ -299,8 +293,8 @@
 *
 *                 Let E be complex, D real, with values from [-1,1].
 *
-                  CALL AB_SLARNV( 2, ISEED, N, D )
-                  CALL AB_CLARNV( 2, ISEED, N-1, E )
+                  CALL SLARNV( 2, ISEED, N, D )
+                  CALL CLARNV( 2, ISEED, N-1, E )
 *
 *                 Make the tridiagonal matrix diagonally dominant.
 *
@@ -317,10 +311,10 @@
 *
 *                 Scale D and E so the maximum element is ANORM.
 *
-                  IX = AB_ISAMAX( N, D, 1 )
+                  IX = ISAMAX( N, D, 1 )
                   DMAX = D( IX )
-                  CALL AB_SSCAL( N, ANORM / DMAX, D, 1 )
-                  CALL AB_CAB_SSCAL( N-1, ANORM / DMAX, E, 1 )
+                  CALL SSCAL( N, ANORM / DMAX, D, 1 )
+                  CALL CSSCAL( N-1, ANORM / DMAX, E, 1 )
 *
                ELSE IF( IZERO.GT.0 ) THEN
 *
@@ -374,21 +368,20 @@
                END IF
             END IF
 *
-            CALL AB_SCOPY( N, D, 1, D( N+1 ), 1 )
+            CALL SCOPY( N, D, 1, D( N+1 ), 1 )
             IF( N.GT.1 )
-     $         CALL AB_CCOPY( N-1, E, 1, E( N+1 ), 1 )
+     $         CALL CCOPY( N-1, E, 1, E( N+1 ), 1 )
 *
 *+    TEST 1
 *           Factor A as L*D*L' and compute the ratio
 *              norm(L*D*L' - A) / (n * norm(A) * EPS )
 *
-            CALL AB_CPTTRF( N, D( N+1 ), E( N+1 ), INFO )
+            CALL CPTTRF( N, D( N+1 ), E( N+1 ), INFO )
 *
-*           Check error code from AB_CPTTRF.
+*           Check error code from CPTTRF.
 *
             IF( INFO.NE.IZERO ) THEN
-               CALL AB_ALAERH( PATH, 'AB_CPTTRF', INFO, IZERO, ' ', N, N
-     $, -1,
+               CALL ALAERH( PATH, 'CPTTRF', INFO, IZERO, ' ', N, N, -1,
      $                      -1, -1, IMAT, NFAIL, NERRS, NOUT )
                GO TO 110
             END IF
@@ -398,14 +391,14 @@
                GO TO 100
             END IF
 *
-            CALL AB_CPTT01( N, D, E, D( N+1 ), E( N+1 ), WORK,
+            CALL CPTT01( N, D, E, D( N+1 ), E( N+1 ), WORK,
      $                   RESULT( 1 ) )
 *
 *           Print the test ratio if greater than or equal to THRESH.
 *
             IF( RESULT( 1 ).GE.THRESH ) THEN
                IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $            CALL AB_ALAHD( NOUT, PATH )
+     $            CALL ALAHD( NOUT, PATH )
                WRITE( NOUT, FMT = 9999 )N, IMAT, 1, RESULT( 1 )
                NFAIL = NFAIL + 1
             END IF
@@ -415,9 +408,9 @@
 *
 *           Compute norm(A).
 *
-            ANORM = AB_CLANHT( '1', N, D, E )
+            ANORM = CLANHT( '1', N, D, E )
 *
-*           Use AB_CPTTRS to solve for one column at a time of inv(A),
+*           Use CPTTRS to solve for one column at a time of inv(A),
 *           computing the maximum column sum as we go.
 *
             AINVNM = ZERO
@@ -426,10 +419,9 @@
                   X( J ) = ZERO
    40          CONTINUE
                X( I ) = ONE
-               CALL AB_CPTTRS( 'Lower', N, 1, D( N+1 ), E( N+1 ), X, LDA
-     $,
+               CALL CPTTRS( 'Lower', N, 1, D( N+1 ), E( N+1 ), X, LDA,
      $                      INFO )
-               AINVNM = MAX( AINVNM, AB_SCASUM( N, X, 1 ) )
+               AINVNM = MAX( AINVNM, SCASUM( N, X, 1 ) )
    50       CONTINUE
             RCONDC = ONE / MAX( ONE, ANORM*AINVNM )
 *
@@ -440,7 +432,7 @@
 *
                IX = 1
                DO 60 J = 1, NRHS
-                  CALL AB_CLARNV( 2, ISEED, N, XACT( IX ) )
+                  CALL CLARNV( 2, ISEED, N, XACT( IX ) )
                   IX = IX + LDA
    60          CONTINUE
 *
@@ -452,56 +444,51 @@
 *
 *              Set the right hand side.
 *
-                  CALL AB_CLAPTM( UPLO, N, NRHS, ONE, D, E, XACT, LDA,
+                  CALL CLAPTM( UPLO, N, NRHS, ONE, D, E, XACT, LDA,
      $                         ZERO, B, LDA )
 *
 *+    TEST 2
 *              Solve A*x = b and compute the residual.
 *
-                  CALL AB_CLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
-                  CALL AB_CPTTRS( UPLO, N, NRHS, D( N+1 ), E( N+1 ), X,
+                  CALL CLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
+                  CALL CPTTRS( UPLO, N, NRHS, D( N+1 ), E( N+1 ), X,
      $                         LDA, INFO )
 *
-*              Check error code from AB_CPTTRS.
+*              Check error code from CPTTRS.
 *
                   IF( INFO.NE.0 )
-     $               CALL AB_ALAERH( PATH, 'AB_CPTTRS', INFO, 0, UPLO, N
-     $, N,
+     $               CALL ALAERH( PATH, 'CPTTRS', INFO, 0, UPLO, N, N,
      $                            -1, -1, NRHS, IMAT, NFAIL, NERRS,
      $                            NOUT )
 *
-                  CALL AB_CLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
-                  CALL AB_CPTT02( UPLO, N, NRHS, D, E, X, LDA, WORK, LDA
-     $,
+                  CALL CLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
+                  CALL CPTT02( UPLO, N, NRHS, D, E, X, LDA, WORK, LDA,
      $                         RESULT( 2 ) )
 *
 *+    TEST 3
 *              Check solution from generated exact solution.
 *
-                  CALL AB_CGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                  CALL CGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                         RESULT( 3 ) )
 *
 *+    TESTS 4, 5, and 6
 *              Use iterative refinement to improve the solution.
 *
-                  SRNAMT = 'AB_CPTRFS'
-                  CALL AB_CPTRFS( UPLO, N, NRHS, D, E, D( N+1 ), E( N+1 
-     $),
+                  SRNAMT = 'CPTRFS'
+                  CALL CPTRFS( UPLO, N, NRHS, D, E, D( N+1 ), E( N+1 ),
      $                         B, LDA, X, LDA, RWORK, RWORK( NRHS+1 ),
      $                         WORK, RWORK( 2*NRHS+1 ), INFO )
 *
-*              Check error code from AB_CPTRFS.
+*              Check error code from CPTRFS.
 *
                   IF( INFO.NE.0 )
-     $               CALL AB_ALAERH( PATH, 'AB_CPTRFS', INFO, 0, UPLO, N
-     $, N,
+     $               CALL ALAERH( PATH, 'CPTRFS', INFO, 0, UPLO, N, N,
      $                            -1, -1, NRHS, IMAT, NFAIL, NERRS,
      $                            NOUT )
 *
-                  CALL AB_CGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                  CALL CGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                         RESULT( 4 ) )
-                  CALL AB_CPTT05( N, NRHS, D, E, B, LDA, X, LDA, XACT, L
-     $DA,
+                  CALL CPTT05( N, NRHS, D, E, B, LDA, X, LDA, XACT, LDA,
      $                         RWORK, RWORK( NRHS+1 ), RESULT( 5 ) )
 *
 *              Print information about the tests that did not pass the
@@ -510,7 +497,7 @@
                   DO 70 K = 2, 6
                      IF( RESULT( K ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL AB_ALAHD( NOUT, PATH )
+     $                     CALL ALAHD( NOUT, PATH )
                         WRITE( NOUT, FMT = 9998 )UPLO, N, NRHS, IMAT,
      $                     K, RESULT( K )
                         NFAIL = NFAIL + 1
@@ -526,24 +513,23 @@
 *           matrix.
 *
   100       CONTINUE
-            SRNAMT = 'AB_CPTCON'
-            CALL AB_CPTCON( N, D( N+1 ), E( N+1 ), ANORM, RCOND, RWORK,
+            SRNAMT = 'CPTCON'
+            CALL CPTCON( N, D( N+1 ), E( N+1 ), ANORM, RCOND, RWORK,
      $                   INFO )
 *
-*           Check error code from AB_CPTCON.
+*           Check error code from CPTCON.
 *
             IF( INFO.NE.0 )
-     $         CALL AB_ALAERH( PATH, 'AB_CPTCON', INFO, 0, ' ', N, N, -1
-     $, -1,
+     $         CALL ALAERH( PATH, 'CPTCON', INFO, 0, ' ', N, N, -1, -1,
      $                      -1, IMAT, NFAIL, NERRS, NOUT )
 *
-            RESULT( 7 ) = AB_SGET06( RCOND, RCONDC )
+            RESULT( 7 ) = SGET06( RCOND, RCONDC )
 *
 *           Print the test ratio if greater than or equal to THRESH.
 *
             IF( RESULT( 7 ).GE.THRESH ) THEN
                IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $            CALL AB_ALAHD( NOUT, PATH )
+     $            CALL ALAHD( NOUT, PATH )
                WRITE( NOUT, FMT = 9999 )N, IMAT, 7, RESULT( 7 )
                NFAIL = NFAIL + 1
             END IF
@@ -553,7 +539,7 @@
 *
 *     Print a summary of the results.
 *
-      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( ' N =', I5, ', type ', I2, ', test ', I2, ', ratio = ',
      $      G12.5 )
@@ -561,6 +547,6 @@
      $        ', type ', I2, ', test ', I2, ', ratio = ', G12.5 )
       RETURN
 *
-*     End of AB_CCHKPT
+*     End of CCHKPT
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_DORT03
+*> \brief \b DORT03
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DORT03( RC, MU, MV, N, K, U, LDU, V, LDV, WORK, LWORK,
+*       SUBROUTINE DORT03( RC, MU, MV, N, K, U, LDU, V, LDV, WORK, LWORK,
 *                          RESULT, INFO )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DORT03 compares two orthogonal matrices U and V to see if their
+*> DORT03 compares two orthogonal matrices U and V to see if their
 *> corresponding rows or columns span the same spaces.  The rows are
 *> checked if RC = 'R', and the columns are checked if RC = 'C'.
 *>
@@ -58,7 +58,7 @@
 *> \verbatim
 *>          MU is INTEGER
 *>          The number of rows of U if RC = 'R', and the number of
-*>          columns if RC = 'C'.  If MU = 0 AB_DORT03 does nothing.
+*>          columns if RC = 'C'.  If MU = 0 DORT03 does nothing.
 *>          MU must be at least zero.
 *> \endverbatim
 *>
@@ -66,7 +66,7 @@
 *> \verbatim
 *>          MV is INTEGER
 *>          The number of rows of V if RC = 'R', and the number of
-*>          columns if RC = 'C'.  If MV = 0 AB_DORT03 does nothing.
+*>          columns if RC = 'C'.  If MV = 0 DORT03 does nothing.
 *>          MV must be at least zero.
 *> \endverbatim
 *>
@@ -75,7 +75,7 @@
 *>          N is INTEGER
 *>          If RC = 'R', the number of columns in the matrices U and V,
 *>          and if RC = 'C', the number of rows in U and V.  If N = 0
-*>          AB_DORT03 does nothing.  N must be at least zero.
+*>          DORT03 does nothing.  N must be at least zero.
 *> \endverbatim
 *>
 *> \param[in] K
@@ -102,7 +102,7 @@
 *> \param[in] V
 *> \verbatim
 *>          V is DOUBLE PRECISION array, dimension (LDV,N)
-*>          The AB_SECOND matrix to compare.  If RC = 'R', V is MV by N, and
+*>          The second matrix to compare.  If RC = 'R', V is MV by N, and
 *>          if RC = 'C', V is N by MV.
 *> \endverbatim
 *>
@@ -153,8 +153,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_DORT03( RC, MU, MV, N, K, U, LDU, V, LDV, WORK, LWOR
-     $K,
+      SUBROUTINE DORT03( RC, MU, MV, N, K, U, LDU, V, LDV, WORK, LWORK,
      $                   RESULT, INFO )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -182,25 +181,25 @@
       DOUBLE PRECISION   RES1, RES2, S, ULP
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_IDAMAX
-      DOUBLE PRECISION   AB_DLAMCH
-      EXTERNAL           AB_LSAME, AB_IDAMAX, AB_DLAMCH
+      LOGICAL            LSAME
+      INTEGER            IDAMAX
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           LSAME, IDAMAX, DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN, SIGN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DORT01, AB_XERBLA
+      EXTERNAL           DORT01, XERBLA
 *     ..
 *     .. Executable Statements ..
 *
 *     Check inputs
 *
       INFO = 0
-      IF( AB_LSAME( RC, 'R' ) ) THEN
+      IF( LSAME( RC, 'R' ) ) THEN
          IRC = 0
-      ELSE IF( AB_LSAME( RC, 'C' ) ) THEN
+      ELSE IF( LSAME( RC, 'C' ) ) THEN
          IRC = 1
       ELSE
          IRC = -1
@@ -223,7 +222,7 @@
          INFO = -9
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DORT03', -INFO )
+         CALL XERBLA( 'DORT03', -INFO )
          RETURN
       END IF
 *
@@ -235,7 +234,7 @@
 *
 *     Machine constants
 *
-      ULP = AB_DLAMCH( 'Precision' )
+      ULP = DLAMCH( 'Precision' )
 *
       IF( IRC.EQ.0 ) THEN
 *
@@ -243,7 +242,7 @@
 *
          RES1 = ZERO
          DO 20 I = 1, K
-            LMX = AB_IDAMAX( N, U( I, 1 ), LDU )
+            LMX = IDAMAX( N, U( I, 1 ), LDU )
             S = SIGN( ONE, U( I, LMX ) )*SIGN( ONE, V( I, LMX ) )
             DO 10 J = 1, N
                RES1 = MAX( RES1, ABS( U( I, J )-S*V( I, J ) ) )
@@ -253,7 +252,7 @@
 *
 *        Compute orthogonality of rows of V.
 *
-         CALL AB_DORT01( 'Rows', MV, N, V, LDV, WORK, LWORK, RES2 )
+         CALL DORT01( 'Rows', MV, N, V, LDV, WORK, LWORK, RES2 )
 *
       ELSE
 *
@@ -261,7 +260,7 @@
 *
          RES1 = ZERO
          DO 40 I = 1, K
-            LMX = AB_IDAMAX( N, U( 1, I ), 1 )
+            LMX = IDAMAX( N, U( 1, I ), 1 )
             S = SIGN( ONE, U( LMX, I ) )*SIGN( ONE, V( LMX, I ) )
             DO 30 J = 1, N
                RES1 = MAX( RES1, ABS( U( J, I )-S*V( J, I ) ) )
@@ -271,12 +270,12 @@
 *
 *        Compute orthogonality of columns of V.
 *
-         CALL AB_DORT01( 'Columns', N, MV, V, LDV, WORK, LWORK, RES2 )
+         CALL DORT01( 'Columns', N, MV, V, LDV, WORK, LWORK, RES2 )
       END IF
 *
       RESULT = MIN( MAX( RES1, RES2 ), ONE / ULP )
       RETURN
 *
-*     End of AB_DORT03
+*     End of DORT03
 *
       END

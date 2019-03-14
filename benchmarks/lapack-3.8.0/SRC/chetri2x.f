@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_AB_CHETRI2X
+*> \brief \b CHETRI2X
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_AB_CHETRI2X + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_AB_CHETRI2X.f">
+*> Download CHETRI2X + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chetri2x.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_AB_CHETRI2X.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chetri2x.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_AB_CHETRI2X.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetri2x.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_AB_CHETRI2X( UPLO, N, A, LDA, IPIV, WORK, NB, INFO )
+*       SUBROUTINE CHETRI2X( UPLO, N, A, LDA, IPIV, WORK, NB, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,9 +35,9 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_AB_CHETRI2X computes the inverse of a complex Hermitian indefinite matrix
+*> CHETRI2X computes the inverse of a complex Hermitian indefinite matrix
 *> A using the factorization A = U*D*U**H or A = L*D*L**H computed by
-*> AB_CHETRF.
+*> CHETRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -62,7 +62,7 @@
 *> \verbatim
 *>          A is COMPLEX array, dimension (LDA,N)
 *>          On entry, the NNB diagonal matrix D and the multipliers
-*>          used to obtain the factor U or L as computed by AB_CHETRF.
+*>          used to obtain the factor U or L as computed by CHETRF.
 *>
 *>          On exit, if INFO = 0, the (symmetric) inverse of the original
 *>          matrix.  If UPLO = 'U', the upper triangular part of the
@@ -82,7 +82,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the NNB structure of D
-*>          as determined by AB_CHETRF.
+*>          as determined by CHETRF.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -118,8 +118,7 @@
 *> \ingroup complexHEcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_AB_CHETRI2X( UPLO, N, A, LDA, IPIV, WORK, NB, INF
-     $O )
+      SUBROUTINE CHETRI2X( UPLO, N, A, LDA, IPIV, WORK, NB, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -155,12 +154,12 @@
       COMPLEX   U11_I_J, U11_IP1_J
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_AB_CSYCONV, AB_XERBLA, AB_CTRTRI
-      EXTERNAL           AB_CGEMM, AB_CTRMM, AB_CHESWAPR
+      EXTERNAL           CSYCONV, XERBLA, CTRTRI
+      EXTERNAL           CGEMM, CTRMM, CHESWAPR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -170,8 +169,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -183,7 +182,7 @@
 *
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_AB_CHETRI2X', -INFO )
+         CALL XERBLA( 'CHETRI2X', -INFO )
          RETURN
       END IF
       IF( N.EQ.0 )
@@ -192,7 +191,7 @@
 *     Convert A
 *     Workspace got Non-diag elements of D
 *
-      CALL AB_AB_CSYCONV( UPLO, 'C', N, A, LDA, IPIV, WORK, IINFO )
+      CALL CSYCONV( UPLO, 'C', N, A, LDA, IPIV, WORK, IINFO )
 *
 *     Check that the diagonal matrix D is nonsingular.
 *
@@ -229,7 +228,7 @@
 *
 *        invA = P * inv(U**H)*inv(D)*inv(U)*P**H.
 *
-        CALL AB_CTRTRI( UPLO, 'U', N, A, LDA, INFO )
+        CALL CTRTRI( UPLO, 'U', N, A, LDA, INFO )
 *
 *       inv(D) and inv(D)*inv(U)
 *
@@ -342,7 +341,7 @@
 *
 *       U11**H*invD1*U11->U11
 *
-        CALL AB_CTRMM('L','U','C','U',NNB, NNB,
+        CALL CTRMM('L','U','C','U',NNB, NNB,
      $             CONE,A(CUT+1,CUT+1),LDA,WORK(U11+1,1),N+NB+1)
 *
          DO I=1,NNB
@@ -353,7 +352,7 @@
 *
 *          U01**H*invD*U01->A(CUT+I,CUT+J)
 *
-         CALL AB_CGEMM('C','N',NNB,NNB,CUT,CONE,A(1,CUT+1),LDA,
+         CALL CGEMM('C','N',NNB,NNB,CUT,CONE,A(1,CUT+1),LDA,
      $              WORK,N+NB+1, ZERO, WORK(U11+1,1), N+NB+1)
 *
 *        U11 =  U11**H*invD1*U11 + U01**H*invD*U01
@@ -366,7 +365,7 @@
 *
 *        U01 =  U00**H*invD0*U01
 *
-         CALL AB_CTRMM('L',UPLO,'C','U',CUT, NNB,
+         CALL CTRMM('L',UPLO,'C','U',CUT, NNB,
      $             CONE,A,LDA,WORK,N+NB+1)
 
 *
@@ -388,17 +387,15 @@
             DO WHILE ( I .LE. N )
                IF( IPIV(I) .GT. 0 ) THEN
                   IP=IPIV(I)
-                 IF (I .LT. IP) CALL AB_CHESWAPR( UPLO, N, A, LDA, I ,IP
-     $ )
-                 IF (I .GT. IP) CALL AB_CHESWAPR( UPLO, N, A, LDA, IP ,I
-     $ )
+                 IF (I .LT. IP) CALL CHESWAPR( UPLO, N, A, LDA, I ,IP )
+                 IF (I .GT. IP) CALL CHESWAPR( UPLO, N, A, LDA, IP ,I )
                ELSE
                  IP=-IPIV(I)
                  I=I+1
                  IF ( (I-1) .LT. IP)
-     $                  CALL AB_CHESWAPR( UPLO, N, A, LDA, I-1 ,IP )
+     $                  CALL CHESWAPR( UPLO, N, A, LDA, I-1 ,IP )
                  IF ( (I-1) .GT. IP)
-     $                  CALL AB_CHESWAPR( UPLO, N, A, LDA, IP ,I-1 )
+     $                  CALL CHESWAPR( UPLO, N, A, LDA, IP ,I-1 )
               ENDIF
                I=I+1
             END DO
@@ -408,7 +405,7 @@
 *
 *        invA = P * inv(U**H)*inv(D)*inv(U)*P**H.
 *
-         CALL AB_CTRTRI( UPLO, 'U', N, A, LDA, INFO )
+         CALL CTRTRI( UPLO, 'U', N, A, LDA, INFO )
 *
 *       inv(D) and inv(D)*inv(U)
 *
@@ -515,7 +512,7 @@
 *
 *       L11**H*invD1*L11->L11
 *
-        CALL AB_CTRMM('L',UPLO,'C','U',NNB, NNB,
+        CALL CTRMM('L',UPLO,'C','U',NNB, NNB,
      $             CONE,A(CUT+1,CUT+1),LDA,WORK(U11+1,1),N+NB+1)
 *
          DO I=1,NNB
@@ -528,7 +525,7 @@
 *
 *          L21**H*invD2*L21->A(CUT+I,CUT+J)
 *
-         CALL AB_CGEMM('C','N',NNB,NNB,N-NNB-CUT,CONE,A(CUT+NNB+1,CUT+1)
+         CALL CGEMM('C','N',NNB,NNB,N-NNB-CUT,CONE,A(CUT+NNB+1,CUT+1)
      $             ,LDA,WORK,N+NB+1, ZERO, WORK(U11+1,1), N+NB+1)
 
 *
@@ -542,7 +539,7 @@
 *
 *        L01 =  L22**H*invD2*L21
 *
-         CALL AB_CTRMM('L',UPLO,'C','U', N-NNB-CUT, NNB,
+         CALL CTRMM('L',UPLO,'C','U', N-NNB-CUT, NNB,
      $             CONE,A(CUT+NNB+1,CUT+NNB+1),LDA,WORK,N+NB+1)
 
 *      Update L21
@@ -573,16 +570,12 @@
             DO WHILE ( I .GE. 1 )
                IF( IPIV(I) .GT. 0 ) THEN
                   IP=IPIV(I)
-                 IF (I .LT. IP) CALL AB_CHESWAPR( UPLO, N, A, LDA, I ,IP
-     $  )
-                 IF (I .GT. IP) CALL AB_CHESWAPR( UPLO, N, A, LDA, IP ,I
-     $ )
+                 IF (I .LT. IP) CALL CHESWAPR( UPLO, N, A, LDA, I ,IP  )
+                 IF (I .GT. IP) CALL CHESWAPR( UPLO, N, A, LDA, IP ,I )
                ELSE
                  IP=-IPIV(I)
-                 IF ( I .LT. IP) CALL AB_CHESWAPR( UPLO, N, A, LDA, I ,I
-     $P )
-                 IF ( I .GT. IP) CALL AB_CHESWAPR( UPLO, N, A, LDA, IP ,
-     $I )
+                 IF ( I .LT. IP) CALL CHESWAPR( UPLO, N, A, LDA, I ,IP )
+                 IF ( I .GT. IP) CALL CHESWAPR( UPLO, N, A, LDA, IP ,I )
                  I=I-1
                ENDIF
                I=I-1
@@ -591,7 +584,7 @@
 *
       RETURN
 *
-*     End of AB_AB_AB_CHETRI2X
+*     End of CHETRI2X
 *
       END
 

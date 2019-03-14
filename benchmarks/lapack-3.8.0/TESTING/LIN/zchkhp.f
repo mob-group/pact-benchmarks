@@ -1,4 +1,4 @@
-*> \brief \b AB_ZCHKHP
+*> \brief \b ZCHKHP
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZCHKHP( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
+*       SUBROUTINE ZCHKHP( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
 *                          NMAX, A, AFAC, AINV, B, X, XACT, WORK, RWORK,
 *                          IWORK, NOUT )
 *
@@ -31,7 +31,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZCHKHP tests AB_ZHPTRF, -TRI, -TRS, -RFS, and -CON
+*> ZCHKHP tests ZHPTRF, -TRI, -TRS, -RFS, and -CON
 *> \endverbatim
 *
 *  Arguments:
@@ -160,8 +160,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZCHKHP( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR
-     $,
+      SUBROUTINE ZCHKHP( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
      $                   NMAX, A, AFAC, AINV, B, X, XACT, WORK, RWORK,
      $                   IWORK, NOUT )
 *
@@ -208,18 +207,15 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DGET06, AB_ZLANHP
-      EXTERNAL           AB_LSAME, AB_DGET06, AB_ZLANHP
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DGET06, ZLANHP
+      EXTERNAL           LSAME, DGET06, ZLANHP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALAERH, AB_ALAHD, AB_ALASUM, AB_ZCOPY, AB_ZE
-     $RRSY, AB_ZGET04,
-     $                   AB_ZHPCON, AB_AB_ZHPRFS, AB_ZHPT01, AB_ZHPTRF, 
-     $AB_ZHPTRI, AB_ZHPTRS,
-     $                   AB_ZLACPY, AB_ZLAIPD, AB_ZLARHS, AB_ZLATB4, AB_
-     $ZLATMS, AB_ZPPT02,
-     $                   AB_ZPPT03, AB_ZPPT05
+      EXTERNAL           ALAERH, ALAHD, ALASUM, ZCOPY, ZERRSY, ZGET04,
+     $                   ZHPCON, ZHPRFS, ZHPT01, ZHPTRF, ZHPTRI, ZHPTRS,
+     $                   ZLACPY, ZLAIPD, ZLARHS, ZLATB4, ZLATMS, ZPPT02,
+     $                   ZPPT03, ZPPT05
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -253,7 +249,7 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL AB_ZERRSY( PATH, NOUT )
+     $   CALL ZERRSY( PATH, NOUT )
       INFOT = 0
 *
 *     Do for each value of N in NVAL
@@ -284,29 +280,27 @@
 *
             DO 150 IUPLO = 1, 2
                UPLO = UPLOS( IUPLO )
-               IF( AB_LSAME( UPLO, 'U' ) ) THEN
+               IF( LSAME( UPLO, 'U' ) ) THEN
                   PACKIT = 'C'
                ELSE
                   PACKIT = 'R'
                END IF
 *
-*              Set up parameters with AB_ZLATB4 and generate a test matrix
-*              with AB_ZLATMS.
+*              Set up parameters with ZLATB4 and generate a test matrix
+*              with ZLATMS.
 *
-               CALL AB_ZLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MO
-     $DE,
+               CALL ZLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
      $                      CNDNUM, DIST )
 *
-               SRNAMT = 'AB_ZLATMS'
-               CALL AB_ZLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
+               SRNAMT = 'ZLATMS'
+               CALL ZLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
      $                      CNDNUM, ANORM, KL, KU, PACKIT, A, LDA, WORK,
      $                      INFO )
 *
-*              Check error code from AB_ZLATMS.
+*              Check error code from ZLATMS.
 *
                IF( INFO.NE.0 ) THEN
-                  CALL AB_ALAERH( PATH, 'AB_ZLATMS', INFO, 0, UPLO, N, N
-     $, -1,
+                  CALL ALAERH( PATH, 'ZLATMS', INFO, 0, UPLO, N, N, -1,
      $                         -1, -1, IMAT, NFAIL, NERRS, NOUT )
                   GO TO 150
                END IF
@@ -381,17 +375,17 @@
 *              Set the imaginary part of the diagonals.
 *
                IF( IUPLO.EQ.1 ) THEN
-                  CALL AB_ZLAIPD( N, A, 2, 1 )
+                  CALL ZLAIPD( N, A, 2, 1 )
                ELSE
-                  CALL AB_ZLAIPD( N, A, N, -1 )
+                  CALL ZLAIPD( N, A, N, -1 )
                END IF
 *
 *              Compute the L*D*L' or U*D*U' factorization of the matrix.
 *
                NPP = N*( N+1 ) / 2
-               CALL AB_ZCOPY( NPP, A, 1, AFAC, 1 )
-               SRNAMT = 'AB_ZHPTRF'
-               CALL AB_ZHPTRF( UPLO, N, AFAC, IWORK, INFO )
+               CALL ZCOPY( NPP, A, 1, AFAC, 1 )
+               SRNAMT = 'ZHPTRF'
+               CALL ZHPTRF( UPLO, N, AFAC, IWORK, INFO )
 *
 *              Adjust the expected value of INFO to account for
 *              pivoting.
@@ -410,11 +404,10 @@
                   END IF
                END IF
 *
-*              Check error code from AB_ZHPTRF.
+*              Check error code from ZHPTRF.
 *
                IF( INFO.NE.K )
-     $            CALL AB_ALAERH( PATH, 'AB_ZHPTRF', INFO, K, UPLO, N, N
-     $, -1,
+     $            CALL ALAERH( PATH, 'ZHPTRF', INFO, K, UPLO, N, N, -1,
      $                         -1, -1, IMAT, NFAIL, NERRS, NOUT )
                IF( INFO.NE.0 ) THEN
                   TRFCON = .TRUE.
@@ -425,8 +418,7 @@
 *+    TEST 1
 *              Reconstruct matrix from factors and compute residual.
 *
-               CALL AB_ZHPT01( UPLO, N, A, AFAC, IWORK, AINV, LDA, RWORK
-     $,
+               CALL ZHPT01( UPLO, N, A, AFAC, IWORK, AINV, LDA, RWORK,
      $                      RESULT( 1 ) )
                NT = 1
 *
@@ -434,18 +426,17 @@
 *              Form the inverse and compute the residual.
 *
                IF( .NOT.TRFCON ) THEN
-                  CALL AB_ZCOPY( NPP, AFAC, 1, AINV, 1 )
-                  SRNAMT = 'AB_ZHPTRI'
-                  CALL AB_ZHPTRI( UPLO, N, AINV, IWORK, WORK, INFO )
+                  CALL ZCOPY( NPP, AFAC, 1, AINV, 1 )
+                  SRNAMT = 'ZHPTRI'
+                  CALL ZHPTRI( UPLO, N, AINV, IWORK, WORK, INFO )
 *
-*              Check error code from AB_ZHPTRI.
+*              Check error code from ZHPTRI.
 *
                   IF( INFO.NE.0 )
-     $               CALL AB_ALAERH( PATH, 'AB_ZHPTRI', INFO, 0, UPLO, N
-     $, N,
+     $               CALL ALAERH( PATH, 'ZHPTRI', INFO, 0, UPLO, N, N,
      $                            -1, -1, -1, IMAT, NFAIL, NERRS, NOUT )
 *
-                  CALL AB_ZPPT03( UPLO, N, A, AINV, WORK, LDA, RWORK,
+                  CALL ZPPT03( UPLO, N, A, AINV, WORK, LDA, RWORK,
      $                         RCONDC, RESULT( 2 ) )
                   NT = 2
                END IF
@@ -456,7 +447,7 @@
                DO 110 K = 1, NT
                   IF( RESULT( K ).GE.THRESH ) THEN
                      IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                  CALL AB_ALAHD( NOUT, PATH )
+     $                  CALL ALAHD( NOUT, PATH )
                      WRITE( NOUT, FMT = 9999 )UPLO, N, IMAT, K,
      $                  RESULT( K )
                      NFAIL = NFAIL + 1
@@ -477,56 +468,52 @@
 *+    TEST 3
 *              Solve and compute residual for  A * X = B.
 *
-                  SRNAMT = 'AB_ZLARHS'
-                  CALL AB_ZLARHS( PATH, XTYPE, UPLO, ' ', N, N, KL, KU,
+                  SRNAMT = 'ZLARHS'
+                  CALL ZLARHS( PATH, XTYPE, UPLO, ' ', N, N, KL, KU,
      $                         NRHS, A, LDA, XACT, LDA, B, LDA, ISEED,
      $                         INFO )
                   XTYPE = 'C'
-                  CALL AB_ZLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
+                  CALL ZLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
-                  SRNAMT = 'AB_ZHPTRS'
-                  CALL AB_ZHPTRS( UPLO, N, NRHS, AFAC, IWORK, X, LDA,
+                  SRNAMT = 'ZHPTRS'
+                  CALL ZHPTRS( UPLO, N, NRHS, AFAC, IWORK, X, LDA,
      $                         INFO )
 *
-*              Check error code from AB_ZHPTRS.
+*              Check error code from ZHPTRS.
 *
                   IF( INFO.NE.0 )
-     $               CALL AB_ALAERH( PATH, 'AB_ZHPTRS', INFO, 0, UPLO, N
-     $, N,
+     $               CALL ALAERH( PATH, 'ZHPTRS', INFO, 0, UPLO, N, N,
      $                            -1, -1, NRHS, IMAT, NFAIL, NERRS,
      $                            NOUT )
 *
-                  CALL AB_ZLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
-                  CALL AB_ZPPT02( UPLO, N, NRHS, A, X, LDA, WORK, LDA,
+                  CALL ZLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
+                  CALL ZPPT02( UPLO, N, NRHS, A, X, LDA, WORK, LDA,
      $                         RWORK, RESULT( 3 ) )
 *
 *+    TEST 4
 *              Check solution from generated exact solution.
 *
-                  CALL AB_ZGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                  CALL ZGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                         RESULT( 4 ) )
 *
 *+    TESTS 5, 6, and 7
 *              Use iterative refinement to improve the solution.
 *
-                  SRNAMT = 'AB_AB_ZHPRFS'
-                  CALL AB_AB_ZHPRFS( UPLO, N, NRHS, A, AFAC, IWORK, B, L
-     $DA, X,
+                  SRNAMT = 'ZHPRFS'
+                  CALL ZHPRFS( UPLO, N, NRHS, A, AFAC, IWORK, B, LDA, X,
      $                         LDA, RWORK, RWORK( NRHS+1 ), WORK,
      $                         RWORK( 2*NRHS+1 ), INFO )
 *
-*              Check error code from AB_AB_ZHPRFS.
+*              Check error code from ZHPRFS.
 *
                   IF( INFO.NE.0 )
-     $               CALL AB_ALAERH( PATH, 'AB_AB_ZHPRFS', INFO, 0, UPLO
-     $, N, N,
+     $               CALL ALAERH( PATH, 'ZHPRFS', INFO, 0, UPLO, N, N,
      $                            -1, -1, NRHS, IMAT, NFAIL, NERRS,
      $                            NOUT )
 *
-                  CALL AB_ZGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                  CALL ZGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                         RESULT( 5 ) )
-                  CALL AB_ZPPT05( UPLO, N, NRHS, A, B, LDA, X, LDA, XACT
-     $,
+                  CALL ZPPT05( UPLO, N, NRHS, A, B, LDA, X, LDA, XACT,
      $                         LDA, RWORK, RWORK( NRHS+1 ),
      $                         RESULT( 6 ) )
 *
@@ -536,7 +523,7 @@
                   DO 120 K = 3, 7
                      IF( RESULT( K ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                     CALL AB_ALAHD( NOUT, PATH )
+     $                     CALL ALAHD( NOUT, PATH )
                         WRITE( NOUT, FMT = 9998 )UPLO, N, NRHS, IMAT,
      $                     K, RESULT( K )
                         NFAIL = NFAIL + 1
@@ -549,25 +536,24 @@
 *              Get an estimate of RCOND = 1/CNDNUM.
 *
   140          CONTINUE
-               ANORM = AB_ZLANHP( '1', UPLO, N, A, RWORK )
-               SRNAMT = 'AB_ZHPCON'
-               CALL AB_ZHPCON( UPLO, N, AFAC, IWORK, ANORM, RCOND, WORK,
+               ANORM = ZLANHP( '1', UPLO, N, A, RWORK )
+               SRNAMT = 'ZHPCON'
+               CALL ZHPCON( UPLO, N, AFAC, IWORK, ANORM, RCOND, WORK,
      $                      INFO )
 *
-*              Check error code from AB_ZHPCON.
+*              Check error code from ZHPCON.
 *
                IF( INFO.NE.0 )
-     $            CALL AB_ALAERH( PATH, 'AB_ZHPCON', INFO, 0, UPLO, N, N
-     $, -1,
+     $            CALL ALAERH( PATH, 'ZHPCON', INFO, 0, UPLO, N, N, -1,
      $                         -1, -1, IMAT, NFAIL, NERRS, NOUT )
 *
-               RESULT( 8 ) = AB_DGET06( RCOND, RCONDC )
+               RESULT( 8 ) = DGET06( RCOND, RCONDC )
 *
 *              Print the test ratio if it is .GE. THRESH.
 *
                IF( RESULT( 8 ).GE.THRESH ) THEN
                   IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $               CALL AB_ALAHD( NOUT, PATH )
+     $               CALL ALAHD( NOUT, PATH )
                   WRITE( NOUT, FMT = 9999 )UPLO, N, IMAT, 8,
      $               RESULT( 8 )
                   NFAIL = NFAIL + 1
@@ -579,7 +565,7 @@
 *
 *     Print a summary of the results.
 *
-      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( ' UPLO = ''', A1, ''', N =', I5, ', type ', I2, ', test ',
      $      I2, ', ratio =', G12.5 )
@@ -587,6 +573,6 @@
      $      I2, ', test(', I2, ') =', G12.5 )
       RETURN
 *
-*     End of AB_ZCHKHP
+*     End of ZCHKHP
 *
       END

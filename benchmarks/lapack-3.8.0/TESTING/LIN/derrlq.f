@@ -1,4 +1,4 @@
-*> \brief \b AB_DERRLQ
+*> \brief \b DERRLQ
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DERRLQ( PATH, NUNIT )
+*       SUBROUTINE DERRLQ( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DERRLQ tests the error exits for the DOUBLE PRECISION routines
+*> DERRLQ tests the error exits for the DOUBLE PRECISION routines
 *> that use the LQ decomposition of a general matrix.
 *> \endverbatim
 *
@@ -53,7 +53,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_DERRLQ( PATH, NUNIT )
+      SUBROUTINE DERRLQ( PATH, NUNIT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -79,9 +79,8 @@
      $                   W( NMAX ), X( NMAX )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALAESM, AB_CHKXER, AB_AB_DGELQ2, AB_AB_DGELQ
-     $F, AB_AB_DGELQS, AB_DORGL2,
-     $                   AB_DORGLQ, AB_DORML2, AB_DORMLQ
+      EXTERNAL           ALAESM, CHKXER, DGELQ2, DGELQF, DGELQS, DORGL2,
+     $                   DORGLQ, DORML2, DORMLQ
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -115,187 +114,187 @@
 *
 *     Error exits for LQ factorization
 *
-*     AB_AB_DGELQF
+*     DGELQF
 *
-      SRNAMT = 'AB_AB_DGELQF'
+      SRNAMT = 'DGELQF'
       INFOT = 1
-      CALL AB_AB_DGELQF( -1, 0, A, 1, B, W, 1, INFO )
-      CALL AB_CHKXER( 'AB_AB_DGELQF', INFOT, NOUT, LERR, OK )
+      CALL DGELQF( -1, 0, A, 1, B, W, 1, INFO )
+      CALL CHKXER( 'DGELQF', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_AB_DGELQF( 0, -1, A, 1, B, W, 1, INFO )
-      CALL AB_CHKXER( 'AB_AB_DGELQF', INFOT, NOUT, LERR, OK )
+      CALL DGELQF( 0, -1, A, 1, B, W, 1, INFO )
+      CALL CHKXER( 'DGELQF', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL AB_AB_DGELQF( 2, 1, A, 1, B, W, 2, INFO )
-      CALL AB_CHKXER( 'AB_AB_DGELQF', INFOT, NOUT, LERR, OK )
+      CALL DGELQF( 2, 1, A, 1, B, W, 2, INFO )
+      CALL CHKXER( 'DGELQF', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL AB_AB_DGELQF( 2, 1, A, 2, B, W, 1, INFO )
-      CALL AB_CHKXER( 'AB_AB_DGELQF', INFOT, NOUT, LERR, OK )
+      CALL DGELQF( 2, 1, A, 2, B, W, 1, INFO )
+      CALL CHKXER( 'DGELQF', INFOT, NOUT, LERR, OK )
 *
-*     AB_AB_DGELQ2
+*     DGELQ2
 *
-      SRNAMT = 'AB_AB_DGELQ2'
+      SRNAMT = 'DGELQ2'
       INFOT = 1
-      CALL AB_AB_DGELQ2( -1, 0, A, 1, B, W, INFO )
-      CALL AB_CHKXER( 'AB_AB_DGELQ2', INFOT, NOUT, LERR, OK )
+      CALL DGELQ2( -1, 0, A, 1, B, W, INFO )
+      CALL CHKXER( 'DGELQ2', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_AB_DGELQ2( 0, -1, A, 1, B, W, INFO )
-      CALL AB_CHKXER( 'AB_AB_DGELQ2', INFOT, NOUT, LERR, OK )
+      CALL DGELQ2( 0, -1, A, 1, B, W, INFO )
+      CALL CHKXER( 'DGELQ2', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL AB_AB_DGELQ2( 2, 1, A, 1, B, W, INFO )
-      CALL AB_CHKXER( 'AB_AB_DGELQ2', INFOT, NOUT, LERR, OK )
+      CALL DGELQ2( 2, 1, A, 1, B, W, INFO )
+      CALL CHKXER( 'DGELQ2', INFOT, NOUT, LERR, OK )
 *
-*     AB_AB_DGELQS
+*     DGELQS
 *
-      SRNAMT = 'AB_AB_DGELQS'
+      SRNAMT = 'DGELQS'
       INFOT = 1
-      CALL AB_AB_DGELQS( -1, 0, 0, A, 1, X, B, 1, W, 1, INFO )
-      CALL AB_CHKXER( 'AB_AB_DGELQS', INFOT, NOUT, LERR, OK )
+      CALL DGELQS( -1, 0, 0, A, 1, X, B, 1, W, 1, INFO )
+      CALL CHKXER( 'DGELQS', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_AB_DGELQS( 0, -1, 0, A, 1, X, B, 1, W, 1, INFO )
-      CALL AB_CHKXER( 'AB_AB_DGELQS', INFOT, NOUT, LERR, OK )
+      CALL DGELQS( 0, -1, 0, A, 1, X, B, 1, W, 1, INFO )
+      CALL CHKXER( 'DGELQS', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_AB_DGELQS( 2, 1, 0, A, 2, X, B, 1, W, 1, INFO )
-      CALL AB_CHKXER( 'AB_AB_DGELQS', INFOT, NOUT, LERR, OK )
+      CALL DGELQS( 2, 1, 0, A, 2, X, B, 1, W, 1, INFO )
+      CALL CHKXER( 'DGELQS', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL AB_AB_DGELQS( 0, 0, -1, A, 1, X, B, 1, W, 1, INFO )
-      CALL AB_CHKXER( 'AB_AB_DGELQS', INFOT, NOUT, LERR, OK )
+      CALL DGELQS( 0, 0, -1, A, 1, X, B, 1, W, 1, INFO )
+      CALL CHKXER( 'DGELQS', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL AB_AB_DGELQS( 2, 2, 0, A, 1, X, B, 2, W, 1, INFO )
-      CALL AB_CHKXER( 'AB_AB_DGELQS', INFOT, NOUT, LERR, OK )
+      CALL DGELQS( 2, 2, 0, A, 1, X, B, 2, W, 1, INFO )
+      CALL CHKXER( 'DGELQS', INFOT, NOUT, LERR, OK )
       INFOT = 8
-      CALL AB_AB_DGELQS( 1, 2, 0, A, 1, X, B, 1, W, 1, INFO )
-      CALL AB_CHKXER( 'AB_AB_DGELQS', INFOT, NOUT, LERR, OK )
+      CALL DGELQS( 1, 2, 0, A, 1, X, B, 1, W, 1, INFO )
+      CALL CHKXER( 'DGELQS', INFOT, NOUT, LERR, OK )
       INFOT = 10
-      CALL AB_AB_DGELQS( 1, 1, 2, A, 1, X, B, 1, W, 1, INFO )
-      CALL AB_CHKXER( 'AB_AB_DGELQS', INFOT, NOUT, LERR, OK )
+      CALL DGELQS( 1, 1, 2, A, 1, X, B, 1, W, 1, INFO )
+      CALL CHKXER( 'DGELQS', INFOT, NOUT, LERR, OK )
 *
-*     AB_DORGLQ
+*     DORGLQ
 *
-      SRNAMT = 'AB_DORGLQ'
+      SRNAMT = 'DORGLQ'
       INFOT = 1
-      CALL AB_DORGLQ( -1, 0, 0, A, 1, X, W, 1, INFO )
-      CALL AB_CHKXER( 'AB_DORGLQ', INFOT, NOUT, LERR, OK )
+      CALL DORGLQ( -1, 0, 0, A, 1, X, W, 1, INFO )
+      CALL CHKXER( 'DORGLQ', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_DORGLQ( 0, -1, 0, A, 1, X, W, 1, INFO )
-      CALL AB_CHKXER( 'AB_DORGLQ', INFOT, NOUT, LERR, OK )
+      CALL DORGLQ( 0, -1, 0, A, 1, X, W, 1, INFO )
+      CALL CHKXER( 'DORGLQ', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_DORGLQ( 2, 1, 0, A, 2, X, W, 2, INFO )
-      CALL AB_CHKXER( 'AB_DORGLQ', INFOT, NOUT, LERR, OK )
+      CALL DORGLQ( 2, 1, 0, A, 2, X, W, 2, INFO )
+      CALL CHKXER( 'DORGLQ', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL AB_DORGLQ( 0, 0, -1, A, 1, X, W, 1, INFO )
-      CALL AB_CHKXER( 'AB_DORGLQ', INFOT, NOUT, LERR, OK )
+      CALL DORGLQ( 0, 0, -1, A, 1, X, W, 1, INFO )
+      CALL CHKXER( 'DORGLQ', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL AB_DORGLQ( 1, 1, 2, A, 1, X, W, 1, INFO )
-      CALL AB_CHKXER( 'AB_DORGLQ', INFOT, NOUT, LERR, OK )
+      CALL DORGLQ( 1, 1, 2, A, 1, X, W, 1, INFO )
+      CALL CHKXER( 'DORGLQ', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL AB_DORGLQ( 2, 2, 0, A, 1, X, W, 2, INFO )
-      CALL AB_CHKXER( 'AB_DORGLQ', INFOT, NOUT, LERR, OK )
+      CALL DORGLQ( 2, 2, 0, A, 1, X, W, 2, INFO )
+      CALL CHKXER( 'DORGLQ', INFOT, NOUT, LERR, OK )
       INFOT = 8
-      CALL AB_DORGLQ( 2, 2, 0, A, 2, X, W, 1, INFO )
-      CALL AB_CHKXER( 'AB_DORGLQ', INFOT, NOUT, LERR, OK )
+      CALL DORGLQ( 2, 2, 0, A, 2, X, W, 1, INFO )
+      CALL CHKXER( 'DORGLQ', INFOT, NOUT, LERR, OK )
 *
-*     AB_DORGL2
+*     DORGL2
 *
-      SRNAMT = 'AB_DORGL2'
+      SRNAMT = 'DORGL2'
       INFOT = 1
-      CALL AB_DORGL2( -1, 0, 0, A, 1, X, W, INFO )
-      CALL AB_CHKXER( 'AB_DORGL2', INFOT, NOUT, LERR, OK )
+      CALL DORGL2( -1, 0, 0, A, 1, X, W, INFO )
+      CALL CHKXER( 'DORGL2', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_DORGL2( 0, -1, 0, A, 1, X, W, INFO )
-      CALL AB_CHKXER( 'AB_DORGL2', INFOT, NOUT, LERR, OK )
+      CALL DORGL2( 0, -1, 0, A, 1, X, W, INFO )
+      CALL CHKXER( 'DORGL2', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_DORGL2( 2, 1, 0, A, 2, X, W, INFO )
-      CALL AB_CHKXER( 'AB_DORGL2', INFOT, NOUT, LERR, OK )
+      CALL DORGL2( 2, 1, 0, A, 2, X, W, INFO )
+      CALL CHKXER( 'DORGL2', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL AB_DORGL2( 0, 0, -1, A, 1, X, W, INFO )
-      CALL AB_CHKXER( 'AB_DORGL2', INFOT, NOUT, LERR, OK )
+      CALL DORGL2( 0, 0, -1, A, 1, X, W, INFO )
+      CALL CHKXER( 'DORGL2', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL AB_DORGL2( 1, 1, 2, A, 1, X, W, INFO )
-      CALL AB_CHKXER( 'AB_DORGL2', INFOT, NOUT, LERR, OK )
+      CALL DORGL2( 1, 1, 2, A, 1, X, W, INFO )
+      CALL CHKXER( 'DORGL2', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL AB_DORGL2( 2, 2, 0, A, 1, X, W, INFO )
-      CALL AB_CHKXER( 'AB_DORGL2', INFOT, NOUT, LERR, OK )
+      CALL DORGL2( 2, 2, 0, A, 1, X, W, INFO )
+      CALL CHKXER( 'DORGL2', INFOT, NOUT, LERR, OK )
 *
-*     AB_DORMLQ
+*     DORMLQ
 *
-      SRNAMT = 'AB_DORMLQ'
+      SRNAMT = 'DORMLQ'
       INFOT = 1
-      CALL AB_DORMLQ( '/', 'N', 0, 0, 0, A, 1, X, AF, 1, W, 1, INFO )
-      CALL AB_CHKXER( 'AB_DORMLQ', INFOT, NOUT, LERR, OK )
+      CALL DORMLQ( '/', 'N', 0, 0, 0, A, 1, X, AF, 1, W, 1, INFO )
+      CALL CHKXER( 'DORMLQ', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_DORMLQ( 'L', '/', 0, 0, 0, A, 1, X, AF, 1, W, 1, INFO )
-      CALL AB_CHKXER( 'AB_DORMLQ', INFOT, NOUT, LERR, OK )
+      CALL DORMLQ( 'L', '/', 0, 0, 0, A, 1, X, AF, 1, W, 1, INFO )
+      CALL CHKXER( 'DORMLQ', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL AB_DORMLQ( 'L', 'N', -1, 0, 0, A, 1, X, AF, 1, W, 1, INFO )
-      CALL AB_CHKXER( 'AB_DORMLQ', INFOT, NOUT, LERR, OK )
+      CALL DORMLQ( 'L', 'N', -1, 0, 0, A, 1, X, AF, 1, W, 1, INFO )
+      CALL CHKXER( 'DORMLQ', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL AB_DORMLQ( 'L', 'N', 0, -1, 0, A, 1, X, AF, 1, W, 1, INFO )
-      CALL AB_CHKXER( 'AB_DORMLQ', INFOT, NOUT, LERR, OK )
+      CALL DORMLQ( 'L', 'N', 0, -1, 0, A, 1, X, AF, 1, W, 1, INFO )
+      CALL CHKXER( 'DORMLQ', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL AB_DORMLQ( 'L', 'N', 0, 0, -1, A, 1, X, AF, 1, W, 1, INFO )
-      CALL AB_CHKXER( 'AB_DORMLQ', INFOT, NOUT, LERR, OK )
+      CALL DORMLQ( 'L', 'N', 0, 0, -1, A, 1, X, AF, 1, W, 1, INFO )
+      CALL CHKXER( 'DORMLQ', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL AB_DORMLQ( 'L', 'N', 0, 1, 1, A, 1, X, AF, 1, W, 1, INFO )
-      CALL AB_CHKXER( 'AB_DORMLQ', INFOT, NOUT, LERR, OK )
+      CALL DORMLQ( 'L', 'N', 0, 1, 1, A, 1, X, AF, 1, W, 1, INFO )
+      CALL CHKXER( 'DORMLQ', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL AB_DORMLQ( 'R', 'N', 1, 0, 1, A, 1, X, AF, 1, W, 1, INFO )
-      CALL AB_CHKXER( 'AB_DORMLQ', INFOT, NOUT, LERR, OK )
+      CALL DORMLQ( 'R', 'N', 1, 0, 1, A, 1, X, AF, 1, W, 1, INFO )
+      CALL CHKXER( 'DORMLQ', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL AB_DORMLQ( 'L', 'N', 2, 0, 2, A, 1, X, AF, 2, W, 1, INFO )
-      CALL AB_CHKXER( 'AB_DORMLQ', INFOT, NOUT, LERR, OK )
+      CALL DORMLQ( 'L', 'N', 2, 0, 2, A, 1, X, AF, 2, W, 1, INFO )
+      CALL CHKXER( 'DORMLQ', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL AB_DORMLQ( 'R', 'N', 0, 2, 2, A, 1, X, AF, 1, W, 1, INFO )
-      CALL AB_CHKXER( 'AB_DORMLQ', INFOT, NOUT, LERR, OK )
+      CALL DORMLQ( 'R', 'N', 0, 2, 2, A, 1, X, AF, 1, W, 1, INFO )
+      CALL CHKXER( 'DORMLQ', INFOT, NOUT, LERR, OK )
       INFOT = 10
-      CALL AB_DORMLQ( 'L', 'N', 2, 1, 0, A, 2, X, AF, 1, W, 1, INFO )
-      CALL AB_CHKXER( 'AB_DORMLQ', INFOT, NOUT, LERR, OK )
+      CALL DORMLQ( 'L', 'N', 2, 1, 0, A, 2, X, AF, 1, W, 1, INFO )
+      CALL CHKXER( 'DORMLQ', INFOT, NOUT, LERR, OK )
       INFOT = 12
-      CALL AB_DORMLQ( 'L', 'N', 1, 2, 0, A, 1, X, AF, 1, W, 1, INFO )
-      CALL AB_CHKXER( 'AB_DORMLQ', INFOT, NOUT, LERR, OK )
+      CALL DORMLQ( 'L', 'N', 1, 2, 0, A, 1, X, AF, 1, W, 1, INFO )
+      CALL CHKXER( 'DORMLQ', INFOT, NOUT, LERR, OK )
       INFOT = 12
-      CALL AB_DORMLQ( 'R', 'N', 2, 1, 0, A, 1, X, AF, 2, W, 1, INFO )
-      CALL AB_CHKXER( 'AB_DORMLQ', INFOT, NOUT, LERR, OK )
+      CALL DORMLQ( 'R', 'N', 2, 1, 0, A, 1, X, AF, 2, W, 1, INFO )
+      CALL CHKXER( 'DORMLQ', INFOT, NOUT, LERR, OK )
 *
-*     AB_DORML2
+*     DORML2
 *
-      SRNAMT = 'AB_DORML2'
+      SRNAMT = 'DORML2'
       INFOT = 1
-      CALL AB_DORML2( '/', 'N', 0, 0, 0, A, 1, X, AF, 1, W, INFO )
-      CALL AB_CHKXER( 'AB_DORML2', INFOT, NOUT, LERR, OK )
+      CALL DORML2( '/', 'N', 0, 0, 0, A, 1, X, AF, 1, W, INFO )
+      CALL CHKXER( 'DORML2', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_DORML2( 'L', '/', 0, 0, 0, A, 1, X, AF, 1, W, INFO )
-      CALL AB_CHKXER( 'AB_DORML2', INFOT, NOUT, LERR, OK )
+      CALL DORML2( 'L', '/', 0, 0, 0, A, 1, X, AF, 1, W, INFO )
+      CALL CHKXER( 'DORML2', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL AB_DORML2( 'L', 'N', -1, 0, 0, A, 1, X, AF, 1, W, INFO )
-      CALL AB_CHKXER( 'AB_DORML2', INFOT, NOUT, LERR, OK )
+      CALL DORML2( 'L', 'N', -1, 0, 0, A, 1, X, AF, 1, W, INFO )
+      CALL CHKXER( 'DORML2', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL AB_DORML2( 'L', 'N', 0, -1, 0, A, 1, X, AF, 1, W, INFO )
-      CALL AB_CHKXER( 'AB_DORML2', INFOT, NOUT, LERR, OK )
+      CALL DORML2( 'L', 'N', 0, -1, 0, A, 1, X, AF, 1, W, INFO )
+      CALL CHKXER( 'DORML2', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL AB_DORML2( 'L', 'N', 0, 0, -1, A, 1, X, AF, 1, W, INFO )
-      CALL AB_CHKXER( 'AB_DORML2', INFOT, NOUT, LERR, OK )
+      CALL DORML2( 'L', 'N', 0, 0, -1, A, 1, X, AF, 1, W, INFO )
+      CALL CHKXER( 'DORML2', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL AB_DORML2( 'L', 'N', 0, 1, 1, A, 1, X, AF, 1, W, INFO )
-      CALL AB_CHKXER( 'AB_DORML2', INFOT, NOUT, LERR, OK )
+      CALL DORML2( 'L', 'N', 0, 1, 1, A, 1, X, AF, 1, W, INFO )
+      CALL CHKXER( 'DORML2', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL AB_DORML2( 'R', 'N', 1, 0, 1, A, 1, X, AF, 1, W, INFO )
-      CALL AB_CHKXER( 'AB_DORML2', INFOT, NOUT, LERR, OK )
+      CALL DORML2( 'R', 'N', 1, 0, 1, A, 1, X, AF, 1, W, INFO )
+      CALL CHKXER( 'DORML2', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL AB_DORML2( 'L', 'N', 2, 1, 2, A, 1, X, AF, 2, W, INFO )
-      CALL AB_CHKXER( 'AB_DORML2', INFOT, NOUT, LERR, OK )
+      CALL DORML2( 'L', 'N', 2, 1, 2, A, 1, X, AF, 2, W, INFO )
+      CALL CHKXER( 'DORML2', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL AB_DORML2( 'R', 'N', 1, 2, 2, A, 1, X, AF, 1, W, INFO )
-      CALL AB_CHKXER( 'AB_DORML2', INFOT, NOUT, LERR, OK )
+      CALL DORML2( 'R', 'N', 1, 2, 2, A, 1, X, AF, 1, W, INFO )
+      CALL CHKXER( 'DORML2', INFOT, NOUT, LERR, OK )
       INFOT = 10
-      CALL AB_DORML2( 'L', 'N', 2, 1, 0, A, 2, X, AF, 1, W, INFO )
-      CALL AB_CHKXER( 'AB_DORML2', INFOT, NOUT, LERR, OK )
+      CALL DORML2( 'L', 'N', 2, 1, 0, A, 2, X, AF, 1, W, INFO )
+      CALL CHKXER( 'DORML2', INFOT, NOUT, LERR, OK )
 *
 *     Print a summary line.
 *
-      CALL AB_ALAESM( PATH, OK, NOUT )
+      CALL ALAESM( PATH, OK, NOUT )
 *
       RETURN
 *
-*     End of AB_DERRLQ
+*     End of DERRLQ
 *
       END

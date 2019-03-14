@@ -1,4 +1,4 @@
-*> \brief \b AB_DORGBR
+*> \brief \b DORGBR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DORGBR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DORGBR.f">
+*> Download DORGBR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dorgbr.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DORGBR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dorgbr.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DORGBR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dorgbr.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DORGBR( VECT, M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
+*       SUBROUTINE DORGBR( VECT, M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          VECT
@@ -34,23 +34,23 @@
 *>
 *> \verbatim
 *>
-*> AB_DORGBR generates one of the real orthogonal matrices Q or P**T
-*> determined by AB_DGEBRD when reducing a real matrix A to bidiagonal
+*> DORGBR generates one of the real orthogonal matrices Q or P**T
+*> determined by DGEBRD when reducing a real matrix A to bidiagonal
 *> form: A = Q * B * P**T.  Q and P**T are defined as products of
 *> elementary reflectors H(i) or G(i) respectively.
 *>
 *> If VECT = 'Q', A is assumed to have been an M-by-K matrix, and Q
 *> is of order M:
-*> if m >= k, Q = H(1) H(2) . . . H(k) and AB_DORGBR returns the first n
+*> if m >= k, Q = H(1) H(2) . . . H(k) and DORGBR returns the first n
 *> columns of Q, where m >= n >= k;
-*> if m < k, Q = H(1) H(2) . . . H(m-1) and AB_DORGBR returns Q as an
+*> if m < k, Q = H(1) H(2) . . . H(m-1) and DORGBR returns Q as an
 *> M-by-M matrix.
 *>
 *> If VECT = 'P', A is assumed to have been a K-by-N matrix, and P**T
 *> is of order N:
-*> if k < n, P**T = G(k) . . . G(2) G(1) and AB_DORGBR returns the first m
+*> if k < n, P**T = G(k) . . . G(2) G(1) and DORGBR returns the first m
 *> rows of P**T, where n >= m >= k;
-*> if k >= n, P**T = G(n-1) . . . G(2) G(1) and AB_DORGBR returns P**T as
+*> if k >= n, P**T = G(n-1) . . . G(2) G(1) and DORGBR returns P**T as
 *> an N-by-N matrix.
 *> \endverbatim
 *
@@ -61,7 +61,7 @@
 *> \verbatim
 *>          VECT is CHARACTER*1
 *>          Specifies whether the matrix Q or the matrix P**T is
-*>          required, as defined in the transformation applied by AB_DGEBRD:
+*>          required, as defined in the transformation applied by DGEBRD:
 *>          = 'Q':  generate Q;
 *>          = 'P':  generate P**T.
 *> \endverbatim
@@ -86,9 +86,9 @@
 *> \verbatim
 *>          K is INTEGER
 *>          If VECT = 'Q', the number of columns in the original M-by-K
-*>          matrix reduced by AB_DGEBRD.
+*>          matrix reduced by DGEBRD.
 *>          If VECT = 'P', the number of rows in the original K-by-N
-*>          matrix reduced by AB_DGEBRD.
+*>          matrix reduced by DGEBRD.
 *>          K >= 0.
 *> \endverbatim
 *>
@@ -96,7 +96,7 @@
 *> \verbatim
 *>          A is DOUBLE PRECISION array, dimension (LDA,N)
 *>          On entry, the vectors which define the elementary reflectors,
-*>          as returned by AB_DGEBRD.
+*>          as returned by DGEBRD.
 *>          On exit, the M-by-N matrix Q or P**T.
 *> \endverbatim
 *>
@@ -113,7 +113,7 @@
 *>                                (min(N,K)) if VECT = 'P'
 *>          TAU(i) must contain the scalar factor of the elementary
 *>          reflector H(i) or G(i), which determines Q or P**T, as
-*>          returned by AB_DGEBRD in its array argument TAUQ or TAUP.
+*>          returned by DGEBRD in its array argument TAUQ or TAUP.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -132,7 +132,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -155,8 +155,7 @@
 *> \ingroup doubleGBcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_DORGBR( VECT, M, N, K, A, LDA, TAU, WORK, LWORK, INF
-     $O )
+      SUBROUTINE DORGBR( VECT, M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -182,11 +181,11 @@
       INTEGER            I, IINFO, J, LWKOPT, MN
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DORGLQ, AB_DORGQR, AB_XERBLA
+      EXTERNAL           DORGLQ, DORGQR, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -196,10 +195,10 @@
 *     Test the input arguments
 *
       INFO = 0
-      WANTQ = AB_LSAME( VECT, 'Q' )
+      WANTQ = LSAME( VECT, 'Q' )
       MN = MIN( M, N )
       LQUERY = ( LWORK.EQ.-1 )
-      IF( .NOT.WANTQ .AND. .NOT.AB_LSAME( VECT, 'P' ) ) THEN
+      IF( .NOT.WANTQ .AND. .NOT.LSAME( VECT, 'P' ) ) THEN
          INFO = -1
       ELSE IF( M.LT.0 ) THEN
          INFO = -2
@@ -219,21 +218,19 @@
          WORK( 1 ) = 1
          IF( WANTQ ) THEN
             IF( M.GE.K ) THEN
-               CALL AB_DORGQR( M, N, K, A, LDA, TAU, WORK, -1, IINFO )
+               CALL DORGQR( M, N, K, A, LDA, TAU, WORK, -1, IINFO )
             ELSE
                IF( M.GT.1 ) THEN
-                  CALL AB_DORGQR( M-1, M-1, M-1, A( 2, 2 ), LDA, TAU, WO
-     $RK,
+                  CALL DORGQR( M-1, M-1, M-1, A( 2, 2 ), LDA, TAU, WORK,
      $                         -1, IINFO )
                END IF
             END IF
          ELSE
             IF( K.LT.N ) THEN
-               CALL AB_DORGLQ( M, N, K, A, LDA, TAU, WORK, -1, IINFO )
+               CALL DORGLQ( M, N, K, A, LDA, TAU, WORK, -1, IINFO )
             ELSE
                IF( N.GT.1 ) THEN
-                  CALL AB_DORGLQ( N-1, N-1, N-1, A( 2, 2 ), LDA, TAU, WO
-     $RK,
+                  CALL DORGLQ( N-1, N-1, N-1, A( 2, 2 ), LDA, TAU, WORK,
      $                         -1, IINFO )
                END IF
             END IF
@@ -243,7 +240,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DORGBR', -INFO )
+         CALL XERBLA( 'DORGBR', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          WORK( 1 ) = LWKOPT
@@ -259,14 +256,14 @@
 *
       IF( WANTQ ) THEN
 *
-*        Form Q, determined by a call to AB_DGEBRD to reduce an m-by-k
+*        Form Q, determined by a call to DGEBRD to reduce an m-by-k
 *        matrix
 *
          IF( M.GE.K ) THEN
 *
 *           If m >= k, assume m >= n >= k
 *
-            CALL AB_DORGQR( M, N, K, A, LDA, TAU, WORK, LWORK, IINFO )
+            CALL DORGQR( M, N, K, A, LDA, TAU, WORK, LWORK, IINFO )
 *
          ELSE
 *
@@ -290,20 +287,20 @@
 *
 *              Form Q(2:m,2:m)
 *
-               CALL AB_DORGQR( M-1, M-1, M-1, A( 2, 2 ), LDA, TAU, WORK,
+               CALL DORGQR( M-1, M-1, M-1, A( 2, 2 ), LDA, TAU, WORK,
      $                      LWORK, IINFO )
             END IF
          END IF
       ELSE
 *
-*        Form P**T, determined by a call to AB_DGEBRD to reduce a k-by-n
+*        Form P**T, determined by a call to DGEBRD to reduce a k-by-n
 *        matrix
 *
          IF( K.LT.N ) THEN
 *
 *           If k < n, assume k <= m <= n
 *
-            CALL AB_DORGLQ( M, N, K, A, LDA, TAU, WORK, LWORK, IINFO )
+            CALL DORGLQ( M, N, K, A, LDA, TAU, WORK, LWORK, IINFO )
 *
          ELSE
 *
@@ -327,7 +324,7 @@
 *
 *              Form P**T(2:n,2:n)
 *
-               CALL AB_DORGLQ( N-1, N-1, N-1, A( 2, 2 ), LDA, TAU, WORK,
+               CALL DORGLQ( N-1, N-1, N-1, A( 2, 2 ), LDA, TAU, WORK,
      $                      LWORK, IINFO )
             END IF
          END IF
@@ -335,6 +332,6 @@
       WORK( 1 ) = LWKOPT
       RETURN
 *
-*     End of AB_DORGBR
+*     End of DORGBR
 *
       END

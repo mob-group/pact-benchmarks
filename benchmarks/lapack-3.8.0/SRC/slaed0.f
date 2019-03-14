@@ -1,4 +1,4 @@
-*> \brief \b AB_SLAED0 used by AB_SSTEDC. Computes all eigenvalues and corresponding eigenvectors of an unreduced symmetric tridiagonal matrix using the divide and conquer method.
+*> \brief \b SLAED0 used by sstedc. Computes all eigenvalues and corresponding eigenvectors of an unreduced symmetric tridiagonal matrix using the divide and conquer method.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLAED0 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLAED0.f">
+*> Download SLAED0 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaed0.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLAED0.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaed0.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLAED0.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaed0.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLAED0( ICOMPQ, QSIZ, N, D, E, Q, LDQ, QSTORE, LDQS,
+*       SUBROUTINE SLAED0( ICOMPQ, QSIZ, N, D, E, Q, LDQ, QSTORE, LDQS,
 *                          WORK, IWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SLAED0 computes all eigenvalues and corresponding eigenvectors of a
+*> SLAED0 computes all eigenvalues and corresponding eigenvectors of a
 *> symmetric tridiagonal matrix using the divide and conquer method.
 *> \endverbatim
 *
@@ -169,7 +169,7 @@
 *> at Berkeley, USA
 *
 *  =====================================================================
-      SUBROUTINE AB_SLAED0( ICOMPQ, QSIZ, N, D, E, Q, LDQ, QSTORE, LDQS,
+      SUBROUTINE SLAED0( ICOMPQ, QSIZ, N, D, E, Q, LDQ, QSTORE, LDQS,
      $                   WORK, IWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -200,13 +200,12 @@
       REAL               TEMP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SCOPY, AB_SGEMM, AB_SLACPY, AB_SLAED1, AB_SL
-     $AED7, AB_SSTEQR,
-     $                   AB_XERBLA
+      EXTERNAL           SCOPY, SGEMM, SLACPY, SLAED1, SLAED7, SSTEQR,
+     $                   XERBLA
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_ILAENV
+      INTEGER            ILAENV
+      EXTERNAL           ILAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, INT, LOG, MAX, REAL
@@ -229,7 +228,7 @@
          INFO = -9
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SLAED0', -INFO )
+         CALL XERBLA( 'SLAED0', -INFO )
          RETURN
       END IF
 *
@@ -238,7 +237,7 @@
       IF( N.EQ.0 )
      $   RETURN
 *
-      SMLSIZ = AB_ILAENV( 9, 'AB_SLAED0', ' ', 0, 0, 0, 0 )
+      SMLSIZ = ILAENV( 9, 'SLAED0', ' ', 0, 0, 0, 0 )
 *
 *     Determine the size and placement of the submatrices, and save in
 *     the leading elements of IWORK.
@@ -315,18 +314,18 @@
             MATSIZ = IWORK( I+1 ) - IWORK( I )
          END IF
          IF( ICOMPQ.EQ.2 ) THEN
-            CALL AB_SSTEQR( 'I', MATSIZ, D( SUBMAT ), E( SUBMAT ),
+            CALL SSTEQR( 'I', MATSIZ, D( SUBMAT ), E( SUBMAT ),
      $                   Q( SUBMAT, SUBMAT ), LDQ, WORK, INFO )
             IF( INFO.NE.0 )
      $         GO TO 130
          ELSE
-            CALL AB_SSTEQR( 'I', MATSIZ, D( SUBMAT ), E( SUBMAT ),
+            CALL SSTEQR( 'I', MATSIZ, D( SUBMAT ), E( SUBMAT ),
      $                   WORK( IQ-1+IWORK( IQPTR+CURR ) ), MATSIZ, WORK,
      $                   INFO )
             IF( INFO.NE.0 )
      $         GO TO 130
             IF( ICOMPQ.EQ.1 ) THEN
-               CALL AB_SGEMM( 'N', 'N', QSIZ, MATSIZ, MATSIZ, ONE,
+               CALL SGEMM( 'N', 'N', QSIZ, MATSIZ, MATSIZ, ONE,
      $                     Q( 1, SUBMAT ), LDQ, WORK( IQ-1+IWORK( IQPTR+
      $                     CURR ) ), MATSIZ, ZERO, QSTORE( 1, SUBMAT ),
      $                     LDQS )
@@ -365,20 +364,19 @@
 *
 *     Merge lower order eigensystems (of size MSD2 and MATSIZ - MSD2)
 *     into an eigensystem of size MATSIZ.
-*     AB_SLAED1 is used only for the full eigensystem of a tridiagonal
+*     SLAED1 is used only for the full eigensystem of a tridiagonal
 *     matrix.
-*     AB_SLAED7 handles the cases in which eigenvalues only or eigenvalues
+*     SLAED7 handles the cases in which eigenvalues only or eigenvalues
 *     and eigenvectors of a full symmetric matrix (which was reduced to
 *     tridiagonal form) are desired.
 *
             IF( ICOMPQ.EQ.2 ) THEN
-               CALL AB_SLAED1( MATSIZ, D( SUBMAT ), Q( SUBMAT, SUBMAT ),
+               CALL SLAED1( MATSIZ, D( SUBMAT ), Q( SUBMAT, SUBMAT ),
      $                      LDQ, IWORK( INDXQ+SUBMAT ),
      $                      E( SUBMAT+MSD2-1 ), MSD2, WORK,
      $                      IWORK( SUBPBS+1 ), INFO )
             ELSE
-               CALL AB_SLAED7( ICOMPQ, MATSIZ, QSIZ, TLVLS, CURLVL, CURP
-     $RB,
+               CALL SLAED7( ICOMPQ, MATSIZ, QSIZ, TLVLS, CURLVL, CURPRB,
      $                      D( SUBMAT ), QSTORE( 1, SUBMAT ), LDQS,
      $                      IWORK( INDXQ+SUBMAT ), E( SUBMAT+MSD2-1 ),
      $                      MSD2, WORK( IQ ), IWORK( IQPTR ),
@@ -405,23 +403,23 @@
          DO 100 I = 1, N
             J = IWORK( INDXQ+I )
             WORK( I ) = D( J )
-            CALL AB_SCOPY( QSIZ, QSTORE( 1, J ), 1, Q( 1, I ), 1 )
+            CALL SCOPY( QSIZ, QSTORE( 1, J ), 1, Q( 1, I ), 1 )
   100    CONTINUE
-         CALL AB_SCOPY( N, WORK, 1, D, 1 )
+         CALL SCOPY( N, WORK, 1, D, 1 )
       ELSE IF( ICOMPQ.EQ.2 ) THEN
          DO 110 I = 1, N
             J = IWORK( INDXQ+I )
             WORK( I ) = D( J )
-            CALL AB_SCOPY( N, Q( 1, J ), 1, WORK( N*I+1 ), 1 )
+            CALL SCOPY( N, Q( 1, J ), 1, WORK( N*I+1 ), 1 )
   110    CONTINUE
-         CALL AB_SCOPY( N, WORK, 1, D, 1 )
-         CALL AB_SLACPY( 'A', N, N, WORK( N+1 ), N, Q, LDQ )
+         CALL SCOPY( N, WORK, 1, D, 1 )
+         CALL SLACPY( 'A', N, N, WORK( N+1 ), N, Q, LDQ )
       ELSE
          DO 120 I = 1, N
             J = IWORK( INDXQ+I )
             WORK( I ) = D( J )
   120    CONTINUE
-         CALL AB_SCOPY( N, WORK, 1, D, 1 )
+         CALL SCOPY( N, WORK, 1, D, 1 )
       END IF
       GO TO 140
 *
@@ -431,6 +429,6 @@
   140 CONTINUE
       RETURN
 *
-*     End of AB_SLAED0
+*     End of SLAED0
 *
       END

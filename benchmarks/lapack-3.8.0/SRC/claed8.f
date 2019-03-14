@@ -1,4 +1,4 @@
-*> \brief \b AB_CLAED8 used by AB_SSTEDC. Merges eigenvalues and deflates secular equation. Used when the original matrix is dense.
+*> \brief \b CLAED8 used by sstedc. Merges eigenvalues and deflates secular equation. Used when the original matrix is dense.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CLAED8 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLAED8.f">
+*> Download CLAED8 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/claed8.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLAED8.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/claed8.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLAED8.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claed8.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CLAED8( K, N, QSIZ, Q, LDQ, D, RHO, CUTPNT, Z, DLAMDA,
+*       SUBROUTINE CLAED8( K, N, QSIZ, Q, LDQ, D, RHO, CUTPNT, Z, DLAMDA,
 *                          Q2, LDQ2, W, INDXP, INDX, INDXQ, PERM, GIVPTR,
 *                          GIVCOL, GIVNUM, INFO )
 *
@@ -40,7 +40,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CLAED8 merges the two sets of eigenvalues together into a single
+*> CLAED8 merges the two sets of eigenvalues together into a single
 *> sorted set.  Then it tries to deflate the size of the problem.
 *> There are two ways in which deflation can occur:  when two or more
 *> eigenvalues are close together or if there is a tiny element in the
@@ -103,7 +103,7 @@
 *>         Contains the off diagonal element associated with the rank-1
 *>         cut which originally split the two submatrices which are now
 *>         being recombined. RHO is modified during the computation to
-*>         the value required by AB_SLAED3.
+*>         the value required by SLAED3.
 *> \endverbatim
 *>
 *> \param[in] CUTPNT
@@ -118,7 +118,7 @@
 *>          Z is REAL array, dimension (N)
 *>         On input this vector contains the updating vector (the last
 *>         row of the first sub-eigenvector matrix and the first row of
-*>         the AB_SECOND sub-eigenvector matrix).  The contents of Z are
+*>         the second sub-eigenvector matrix).  The contents of Z are
 *>         destroyed during the updating process.
 *> \endverbatim
 *>
@@ -126,7 +126,7 @@
 *> \verbatim
 *>          DLAMDA is REAL array, dimension (N)
 *>         Contains a copy of the first K eigenvalues which will be used
-*>         by AB_SLAED3 to form the secular equation.
+*>         by SLAED3 to form the secular equation.
 *> \endverbatim
 *>
 *> \param[out] Q2
@@ -134,7 +134,7 @@
 *>          Q2 is COMPLEX array, dimension (LDQ2,N)
 *>         If ICOMPQ = 0, Q2 is not referenced.  Otherwise,
 *>         Contains a copy of the first K eigenvectors which will be used
-*>         by AB_SLAED7 in a matrix multiply (AB_SGEMM) to update the new
+*>         by SLAED7 in a matrix multiply (SGEMM) to update the new
 *>         eigenvectors.
 *> \endverbatim
 *>
@@ -148,7 +148,7 @@
 *> \verbatim
 *>          W is REAL array, dimension (N)
 *>         This will hold the first k values of the final
-*>         deflation-altered z-vector and will be passed to AB_SLAED3.
+*>         deflation-altered z-vector and will be passed to SLAED3.
 *> \endverbatim
 *>
 *> \param[out] INDXP
@@ -172,7 +172,7 @@
 *>          INDXQ is INTEGER array, dimension (N)
 *>         This contains the permutation which separately sorts the two
 *>         sub-problems in D into ascending order.  Note that elements in
-*>         the AB_SECOND half of this permutation must first have CUTPNT
+*>         the second half of this permutation must first have CUTPNT
 *>         added to their values in order to be accurate.
 *> \endverbatim
 *>
@@ -224,8 +224,7 @@
 *> \ingroup complexOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_CLAED8( K, N, QSIZ, Q, LDQ, D, RHO, CUTPNT, Z, DLAMD
-     $A,
+      SUBROUTINE CLAED8( K, N, QSIZ, Q, LDQ, D, RHO, CUTPNT, Z, DLAMDA,
      $                   Q2, LDQ2, W, INDXP, INDX, INDXQ, PERM, GIVPTR,
      $                   GIVCOL, GIVNUM, INFO )
 *
@@ -258,14 +257,13 @@
       REAL               C, EPS, S, T, TAU, TOL
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ISAMAX
-      REAL               AB_SLAMCH, AB_SLAPY2
-      EXTERNAL           AB_ISAMAX, AB_SLAMCH, AB_SLAPY2
+      INTEGER            ISAMAX
+      REAL               SLAMCH, SLAPY2
+      EXTERNAL           ISAMAX, SLAMCH, SLAPY2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CCOPY, AB_CLACPY, AB_CAB_SROT, AB_SCOPY, AB_
-     $SLAMRG, AB_SSCAL,
-     $                   AB_XERBLA
+      EXTERNAL           CCOPY, CLACPY, CSROT, SCOPY, SLAMRG, SSCAL,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT
@@ -288,7 +286,7 @@
          INFO = -12
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CLAED8', -INFO )
+         CALL XERBLA( 'CLAED8', -INFO )
          RETURN
       END IF
 *
@@ -309,7 +307,7 @@
       N1P1 = N1 + 1
 *
       IF( RHO.LT.ZERO ) THEN
-         CALL AB_SSCAL( N2, MONE, Z( N1P1 ), 1 )
+         CALL SSCAL( N2, MONE, Z( N1P1 ), 1 )
       END IF
 *
 *     Normalize z so that norm(z) = 1
@@ -318,7 +316,7 @@
       DO 10 J = 1, N
          INDX( J ) = J
    10 CONTINUE
-      CALL AB_SSCAL( N, T, Z, 1 )
+      CALL SSCAL( N, T, Z, 1 )
       RHO = ABS( TWO*RHO )
 *
 *     Sort the eigenvalues into increasing order
@@ -332,7 +330,7 @@
    30 CONTINUE
       I = 1
       J = CUTPNT + 1
-      CALL AB_SLAMRG( N1, N2, DLAMDA, 1, 1, INDX )
+      CALL SLAMRG( N1, N2, DLAMDA, 1, 1, INDX )
       DO 40 I = 1, N
          D( I ) = DLAMDA( INDX( I ) )
          Z( I ) = W( INDX( I ) )
@@ -340,9 +338,9 @@
 *
 *     Calculate the allowable deflation tolerance
 *
-      IMAX = AB_ISAMAX( N, Z, 1 )
-      JMAX = AB_ISAMAX( N, D, 1 )
-      EPS = AB_SLAMCH( 'Epsilon' )
+      IMAX = ISAMAX( N, Z, 1 )
+      JMAX = ISAMAX( N, D, 1 )
+      EPS = SLAMCH( 'Epsilon' )
       TOL = EIGHT*EPS*ABS( D( JMAX ) )
 *
 *     If the rank-1 modifier is small enough, no more needs to be done
@@ -353,10 +351,9 @@
          K = 0
          DO 50 J = 1, N
             PERM( J ) = INDXQ( INDX( J ) )
-            CALL AB_CCOPY( QSIZ, Q( 1, PERM( J ) ), 1, Q2( 1, J ), 1 )
+            CALL CCOPY( QSIZ, Q( 1, PERM( J ) ), 1, Q2( 1, J ), 1 )
    50    CONTINUE
-         CALL AB_CLACPY( 'A', QSIZ, N, Q2( 1, 1 ), LDQ2, Q( 1, 1 ), LDQ 
-     $)
+         CALL CLACPY( 'A', QSIZ, N, Q2( 1, 1 ), LDQ2, Q( 1, 1 ), LDQ )
          RETURN
       END IF
 *
@@ -402,7 +399,7 @@
 *        Find sqrt(a**2+b**2) without overflow or
 *        destructive underflow.
 *
-         TAU = AB_SLAPY2( C, S )
+         TAU = SLAPY2( C, S )
          T = D( J ) - D( JLAM )
          C = C / TAU
          S = -S / TAU
@@ -420,7 +417,7 @@
             GIVCOL( 2, GIVPTR ) = INDXQ( INDX( J ) )
             GIVNUM( 1, GIVPTR ) = C
             GIVNUM( 2, GIVPTR ) = S
-            CALL AB_CAB_SROT( QSIZ, Q( 1, INDXQ( INDX( JLAM ) ) ), 1,
+            CALL CSROT( QSIZ, Q( 1, INDXQ( INDX( JLAM ) ) ), 1,
      $                  Q( 1, INDXQ( INDX( J ) ) ), 1, C, S )
             T = D( JLAM )*C*C + D( J )*S*S
             D( J ) = D( JLAM )*S*S + D( J )*C*C
@@ -470,21 +467,20 @@
          JP = INDXP( J )
          DLAMDA( J ) = D( JP )
          PERM( J ) = INDXQ( INDX( JP ) )
-         CALL AB_CCOPY( QSIZ, Q( 1, PERM( J ) ), 1, Q2( 1, J ), 1 )
+         CALL CCOPY( QSIZ, Q( 1, PERM( J ) ), 1, Q2( 1, J ), 1 )
   110 CONTINUE
 *
 *     The deflated eigenvalues and their corresponding vectors go back
 *     into the last N - K slots of D and Q respectively.
 *
       IF( K.LT.N ) THEN
-         CALL AB_SCOPY( N-K, DLAMDA( K+1 ), 1, D( K+1 ), 1 )
-         CALL AB_CLACPY( 'A', QSIZ, N-K, Q2( 1, K+1 ), LDQ2, Q( 1, K+1 )
-     $,
+         CALL SCOPY( N-K, DLAMDA( K+1 ), 1, D( K+1 ), 1 )
+         CALL CLACPY( 'A', QSIZ, N-K, Q2( 1, K+1 ), LDQ2, Q( 1, K+1 ),
      $                LDQ )
       END IF
 *
       RETURN
 *
-*     End of AB_CLAED8
+*     End of CLAED8
 *
       END

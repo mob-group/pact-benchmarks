@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLAPLL measures the linear dependence of two vectors.
+*> \brief \b ZLAPLL measures the linear dependence of two vectors.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZLAPLL + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLAPLL.f">
+*> Download ZLAPLL + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlapll.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLAPLL.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlapll.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLAPLL.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlapll.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZLAPLL( N, X, INCX, Y, INCY, SSMIN )
+*       SUBROUTINE ZLAPLL( N, X, INCX, Y, INCY, SSMIN )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCX, INCY, N
@@ -98,7 +98,7 @@
 *> \ingroup complex16OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_ZLAPLL( N, X, INCX, Y, INCY, SSMIN )
+      SUBROUTINE ZLAPLL( N, X, INCX, Y, INCY, SSMIN )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -129,11 +129,11 @@
       INTRINSIC          ABS, DCONJG
 *     ..
 *     .. External Functions ..
-      COMPLEX*16         AB_ZDOTC
-      EXTERNAL           AB_ZDOTC
+      COMPLEX*16         ZDOTC
+      EXTERNAL           ZDOTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLAS2, AB_ZAXPY, AB_AB_ZLARFG
+      EXTERNAL           DLAS2, ZAXPY, ZLARFG
 *     ..
 *     .. Executable Statements ..
 *
@@ -146,24 +146,24 @@
 *
 *     Compute the QR factorization of the N-by-2 matrix ( X Y )
 *
-      CALL AB_AB_ZLARFG( N, X( 1 ), X( 1+INCX ), INCX, TAU )
+      CALL ZLARFG( N, X( 1 ), X( 1+INCX ), INCX, TAU )
       A11 = X( 1 )
       X( 1 ) = CONE
 *
-      C = -DCONJG( TAU )*AB_ZDOTC( N, X, INCX, Y, INCY )
-      CALL AB_ZAXPY( N, C, X, INCX, Y, INCY )
+      C = -DCONJG( TAU )*ZDOTC( N, X, INCX, Y, INCY )
+      CALL ZAXPY( N, C, X, INCX, Y, INCY )
 *
-      CALL AB_AB_ZLARFG( N-1, Y( 1+INCY ), Y( 1+2*INCY ), INCY, TAU )
+      CALL ZLARFG( N-1, Y( 1+INCY ), Y( 1+2*INCY ), INCY, TAU )
 *
       A12 = Y( 1 )
       A22 = Y( 1+INCY )
 *
 *     Compute the SVD of 2-by-2 Upper triangular matrix.
 *
-      CALL AB_DLAS2( ABS( A11 ), ABS( A12 ), ABS( A22 ), SSMIN, SSMAX )
+      CALL DLAS2( ABS( A11 ), ABS( A12 ), ABS( A22 ), SSMIN, SSMAX )
 *
       RETURN
 *
-*     End of AB_ZLAPLL
+*     End of ZLAPLL
 *
       END

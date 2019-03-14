@@ -1,4 +1,4 @@
-*> \brief \b AB_STPTTF copies a triangular matrix from the standard packed format (TP) to the rectangular full packed format (TF).
+*> \brief \b STPTTF copies a triangular matrix from the standard packed format (TP) to the rectangular full packed format (TF).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_STPTTF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_STPTTF.f">
+*> Download STPTTF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stpttf.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_STPTTF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stpttf.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_STPTTF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stpttf.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_STPTTF( TRANSR, UPLO, N, AP, ARF, INFO )
+*       SUBROUTINE STPTTF( TRANSR, UPLO, N, AP, ARF, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          TRANSR, UPLO
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> AB_STPTTF copies a triangular matrix A from standard packed format (TP)
+*> STPTTF copies a triangular matrix A from standard packed format (TP)
 *> to rectangular full packed format (TF).
 *> \endverbatim
 *
@@ -184,7 +184,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_STPTTF( TRANSR, UPLO, N, AP, ARF, INFO )
+      SUBROUTINE STPTTF( TRANSR, UPLO, N, AP, ARF, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -209,11 +209,11 @@
       INTEGER            IJP, JP, LDA, JS
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA
+      EXTERNAL           XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MOD
@@ -223,17 +223,17 @@
 *     Test the input parameters.
 *
       INFO = 0
-      NORMALTRANSR = AB_LSAME( TRANSR, 'N' )
-      LOWER = AB_LSAME( UPLO, 'L' )
-      IF( .NOT.NORMALTRANSR .AND. .NOT.AB_LSAME( TRANSR, 'T' ) ) THEN
+      NORMALTRANSR = LSAME( TRANSR, 'N' )
+      LOWER = LSAME( UPLO, 'L' )
+      IF( .NOT.NORMALTRANSR .AND. .NOT.LSAME( TRANSR, 'T' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LOWER .AND. .NOT.AB_LSAME( UPLO, 'U' ) ) THEN
+      ELSE IF( .NOT.LOWER .AND. .NOT.LSAME( UPLO, 'U' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_STPTTF', -INFO )
+         CALL XERBLA( 'STPTTF', -INFO )
          RETURN
       END IF
 *
@@ -497,6 +497,6 @@
 *
       RETURN
 *
-*     End of AB_STPTTF
+*     End of STPTTF
 *
       END

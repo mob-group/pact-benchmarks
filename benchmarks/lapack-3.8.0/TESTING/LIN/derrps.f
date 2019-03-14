@@ -1,4 +1,4 @@
-*> \brief \b AB_DERRPS
+*> \brief \b DERRPS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DERRPS( PATH, NUNIT )
+*       SUBROUTINE DERRPS( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            NUNIT
@@ -21,8 +21,8 @@
 *>
 *> \verbatim
 *>
-*> AB_DERRPS tests the error exits for the DOUBLE PRECISION routines
-*> for AB_DPSTRF.
+*> DERRPS tests the error exits for the DOUBLE PRECISION routines
+*> for DPSTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -53,7 +53,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_DERRPS( PATH, NUNIT )
+      SUBROUTINE DERRPS( PATH, NUNIT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -79,7 +79,7 @@
       INTEGER            PIV( NMAX )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALAESM, AB_CHKXER, AB_DPSTF2, AB_DPSTRF
+      EXTERNAL           ALAESM, CHKXER, DPSTF2, DPSTRF
 *     ..
 *     .. Scalars in Common ..
       INTEGER            INFOT, NOUT
@@ -116,39 +116,39 @@
 *        Test error exits of the routines that use the Cholesky
 *        decomposition of a symmetric positive semidefinite matrix.
 *
-*        AB_DPSTRF
+*        DPSTRF
 *
-      SRNAMT = 'AB_DPSTRF'
+      SRNAMT = 'DPSTRF'
       INFOT = 1
-      CALL AB_DPSTRF( '/', 0, A, 1, PIV, RANK, -1.D0, WORK, INFO )
-      CALL AB_CHKXER( 'AB_DPSTRF', INFOT, NOUT, LERR, OK )
+      CALL DPSTRF( '/', 0, A, 1, PIV, RANK, -1.D0, WORK, INFO )
+      CALL CHKXER( 'DPSTRF', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_DPSTRF( 'U', -1, A, 1, PIV, RANK, -1.D0, WORK, INFO )
-      CALL AB_CHKXER( 'AB_DPSTRF', INFOT, NOUT, LERR, OK )
+      CALL DPSTRF( 'U', -1, A, 1, PIV, RANK, -1.D0, WORK, INFO )
+      CALL CHKXER( 'DPSTRF', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL AB_DPSTRF( 'U', 2, A, 1, PIV, RANK, -1.D0, WORK, INFO )
-      CALL AB_CHKXER( 'AB_DPSTRF', INFOT, NOUT, LERR, OK )
+      CALL DPSTRF( 'U', 2, A, 1, PIV, RANK, -1.D0, WORK, INFO )
+      CALL CHKXER( 'DPSTRF', INFOT, NOUT, LERR, OK )
 *
-*        AB_DPSTF2
+*        DPSTF2
 *
-      SRNAMT = 'AB_DPSTF2'
+      SRNAMT = 'DPSTF2'
       INFOT = 1
-      CALL AB_DPSTF2( '/', 0, A, 1, PIV, RANK, -1.D0, WORK, INFO )
-      CALL AB_CHKXER( 'AB_DPSTF2', INFOT, NOUT, LERR, OK )
+      CALL DPSTF2( '/', 0, A, 1, PIV, RANK, -1.D0, WORK, INFO )
+      CALL CHKXER( 'DPSTF2', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_DPSTF2( 'U', -1, A, 1, PIV, RANK, -1.D0, WORK, INFO )
-      CALL AB_CHKXER( 'AB_DPSTF2', INFOT, NOUT, LERR, OK )
+      CALL DPSTF2( 'U', -1, A, 1, PIV, RANK, -1.D0, WORK, INFO )
+      CALL CHKXER( 'DPSTF2', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL AB_DPSTF2( 'U', 2, A, 1, PIV, RANK, -1.D0, WORK, INFO )
-      CALL AB_CHKXER( 'AB_DPSTF2', INFOT, NOUT, LERR, OK )
+      CALL DPSTF2( 'U', 2, A, 1, PIV, RANK, -1.D0, WORK, INFO )
+      CALL CHKXER( 'DPSTF2', INFOT, NOUT, LERR, OK )
 *
 *
 *     Print a summary line.
 *
-      CALL AB_ALAESM( PATH, OK, NOUT )
+      CALL ALAESM( PATH, OK, NOUT )
 *
       RETURN
 *
-*     End of AB_DERRPS
+*     End of DERRPS
 *
       END

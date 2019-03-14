@@ -1,4 +1,4 @@
-*> \brief \b AB_SGET22
+*> \brief \b SGET22
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,15 +8,15 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SGET22( TRANSA, TRANSE, TRANSW, N, A, LDA, E, AB_LDE, WR,
+*       SUBROUTINE SGET22( TRANSA, TRANSE, TRANSW, N, A, LDA, E, LDE, WR,
 *                          WI, WORK, RESULT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          TRANSA, TRANSE, TRANSW
-*       INTEGER            LDA, AB_LDE, N
+*       INTEGER            LDA, LDE, N
 *       ..
 *       .. Array Arguments ..
-*       REAL               A( LDA, * ), E( AB_LDE, * ), RESULT( 2 ), WI( * ),
+*       REAL               A( LDA, * ), E( LDE, * ), RESULT( 2 ), WI( * ),
 *      $                   WORK( * ), WR( * )
 *       ..
 *
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SGET22 does an eigenvector check.
+*> SGET22 does an eigenvector check.
 *>
 *> The basic test is:
 *>
@@ -110,16 +110,16 @@
 *>
 *> \param[in] E
 *> \verbatim
-*>          E is REAL array, dimension (AB_LDE,N)
+*>          E is REAL array, dimension (LDE,N)
 *>          The matrix of eigenvectors. If TRANSE = 'N', the eigenvectors
 *>          are stored in the columns of E, if TRANSE = 'T' or 'C', the
 *>          eigenvectors are stored in the rows of E.
 *> \endverbatim
 *>
-*> \param[in] AB_LDE
+*> \param[in] LDE
 *> \verbatim
-*>          AB_LDE is INTEGER
-*>          The leading dimension of the array E.  AB_LDE >= max(1,N).
+*>          LDE is INTEGER
+*>          The leading dimension of the array E.  LDE >= max(1,N).
 *> \endverbatim
 *>
 *> \param[in] WR
@@ -164,8 +164,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_SGET22( TRANSA, TRANSE, TRANSW, N, A, LDA, E, AB_LDE
-     $, WR,
+      SUBROUTINE SGET22( TRANSA, TRANSE, TRANSW, N, A, LDA, E, LDE, WR,
      $                   WI, WORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -175,11 +174,10 @@
 *
 *     .. Scalar Arguments ..
       CHARACTER          TRANSA, TRANSE, TRANSW
-      INTEGER            LDA, AB_LDE, N
+      INTEGER            LDA, LDE, N
 *     ..
 *     .. Array Arguments ..
-      REAL               A( LDA, * ), E( AB_LDE, * ), RESULT( 2 ), WI( *
-     $ ),
+      REAL               A( LDA, * ), E( LDE, * ), RESULT( 2 ), WI( * ),
      $                   WORK( * ), WR( * )
 *     ..
 *
@@ -200,12 +198,12 @@
       REAL               WMAT( 2, 2 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_SLAMCH, AB_SLANGE
-      EXTERNAL           AB_LSAME, AB_SLAMCH, AB_SLANGE
+      LOGICAL            LSAME
+      REAL               SLAMCH, SLANGE
+      EXTERNAL           LSAME, SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SAXPY, AB_SGEMM, AB_SLASET
+      EXTERNAL           SAXPY, SGEMM, SLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL
@@ -219,21 +217,21 @@
       IF( N.LE.0 )
      $   RETURN
 *
-      UNFL = AB_SLAMCH( 'Safe minimum' )
-      ULP = AB_SLAMCH( 'Precision' )
+      UNFL = SLAMCH( 'Safe minimum' )
+      ULP = SLAMCH( 'Precision' )
 *
       ITRNSE = 0
       INCE = 1
       NORMA = 'O'
       NORME = 'O'
 *
-      IF( AB_LSAME( TRANSA, 'T' ) .OR. AB_LSAME( TRANSA, 'C' ) ) THEN
+      IF( LSAME( TRANSA, 'T' ) .OR. LSAME( TRANSA, 'C' ) ) THEN
          NORMA = 'I'
       END IF
-      IF( AB_LSAME( TRANSE, 'T' ) .OR. AB_LSAME( TRANSE, 'C' ) ) THEN
+      IF( LSAME( TRANSE, 'T' ) .OR. LSAME( TRANSE, 'C' ) ) THEN
          NORME = 'I'
          ITRNSE = 1
-         INCE = AB_LDE
+         INCE = LDE
       END IF
 *
 *     Check normalization of E
@@ -311,17 +309,17 @@
 *
 *     Norm of A:
 *
-      ANORM = MAX( AB_SLANGE( NORMA, N, N, A, LDA, WORK ), UNFL )
+      ANORM = MAX( SLANGE( NORMA, N, N, A, LDA, WORK ), UNFL )
 *
 *     Norm of E:
 *
-      ENORM = MAX( AB_SLANGE( NORME, N, N, E, AB_LDE, WORK ), ULP )
+      ENORM = MAX( SLANGE( NORME, N, N, E, LDE, WORK ), ULP )
 *
 *     Norm of error:
 *
 *     Error =  AE - EW
 *
-      CALL AB_SLASET( 'Full', N, N, ZERO, ZERO, WORK, N )
+      CALL SLASET( 'Full', N, N, ZERO, ZERO, WORK, N )
 *
       IPAIR = 0
       IEROW = 1
@@ -342,28 +340,25 @@
             WMAT( 2, 1 ) = -WI( JCOL )
             WMAT( 1, 2 ) = WI( JCOL )
             WMAT( 2, 2 ) = WR( JCOL )
-            CALL AB_SGEMM( TRANSE, TRANSW, N, 2, 2, ONE, E( IEROW, IECOL
-     $ ),
-     $                  AB_LDE, WMAT, 2, ZERO, WORK( N*( JCOL-1 )+1 ), N
-     $ )
+            CALL SGEMM( TRANSE, TRANSW, N, 2, 2, ONE, E( IEROW, IECOL ),
+     $                  LDE, WMAT, 2, ZERO, WORK( N*( JCOL-1 )+1 ), N )
             IPAIR = 2
          ELSE IF( IPAIR.EQ.2 ) THEN
             IPAIR = 0
 *
          ELSE
 *
-            CALL AB_SAXPY( N, WR( JCOL ), E( IEROW, IECOL ), INCE,
+            CALL SAXPY( N, WR( JCOL ), E( IEROW, IECOL ), INCE,
      $                  WORK( N*( JCOL-1 )+1 ), 1 )
             IPAIR = 0
          END IF
 *
    80 CONTINUE
 *
-      CALL AB_SGEMM( TRANSA, TRANSE, N, N, N, ONE, A, LDA, E, AB_LDE, -O
-     $NE,
+      CALL SGEMM( TRANSA, TRANSE, N, N, N, ONE, A, LDA, E, LDE, -ONE,
      $            WORK, N )
 *
-      ERRNRM = AB_SLANGE( 'One', N, N, WORK, N, WORK( N*N+1 ) ) / ENORM
+      ERRNRM = SLANGE( 'One', N, N, WORK, N, WORK( N*N+1 ) ) / ENORM
 *
 *     Compute RESULT(1) (avoiding under/overflow)
 *
@@ -384,6 +379,6 @@
 *
       RETURN
 *
-*     End of AB_SGET22
+*     End of SGET22
 *
       END

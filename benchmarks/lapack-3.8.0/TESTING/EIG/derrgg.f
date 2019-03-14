@@ -1,4 +1,4 @@
-*> \brief \b AB_DERRGG
+*> \brief \b DERRGG
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DERRGG( PATH, NUNIT )
+*       SUBROUTINE DERRGG( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,10 +21,10 @@
 *>
 *> \verbatim
 *>
-*> AB_DERRGG tests the error exits for AB_DGGES, AB_AB_DGGESX, AB_DGGEV,  AB_AB_DGGEVX,
-*> AB_DGGGLM, AB_DGGHRD, AB_DGGAB_LSE, AB_DGGQRF, AB_DGGRQF, AB_AB_DGGSVD3,
-*> AB_AB_DGGSVP3, AB_DHGEQZ, DORCSD, AB_DTGEVC, AB_DTGEXC, AB_DTGSEN, AB_DTGSJA, AB_DTGSNA,
-*> AB_AB_DGGES3, AB_AB_DGGEV3, and AB_DTGSYL.
+*> DERRGG tests the error exits for DGGES, DGGESX, DGGEV,  DGGEVX,
+*> DGGGLM, DGGHRD, DGGLSE, DGGQRF, DGGRQF, DGGSVD3,
+*> DGGSVP3, DHGEQZ, DORCSD, DTGEVC, DTGEXC, DTGSEN, DTGSJA, DTGSNA,
+*> DGGES3, DGGEV3, and DTGSYL.
 *> \endverbatim
 *
 *  Arguments:
@@ -55,7 +55,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_DERRGG( PATH, NUNIT )
+      SUBROUTINE DERRGG( PATH, NUNIT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -91,18 +91,15 @@
      $                   W( LW ), Z( NMAX, NMAX )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_DLCTES, AB_DLCTSX, AB_AB_LSAMEN
-      EXTERNAL           AB_DLCTES, AB_DLCTSX, AB_AB_LSAMEN
+      LOGICAL            DLCTES, DLCTSX, LSAMEN
+      EXTERNAL           DLCTES, DLCTSX, LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CHKXER, AB_DGGES, AB_AB_DGGESX, AB_DGGEV, AB
-     $_AB_DGGEVX, AB_DGGGLM,
-     $                   AB_DGGHRD, AB_DGGAB_LSE, AB_DGGQRF, AB_DGGRQF,
-     $                   AB_DHGEQZ, DORCSD, AB_DTGEVC, AB_DTGEXC, AB_DTG
-     $SEN, AB_DTGSJA,
-     $                   AB_DTGSNA, AB_DTGSYL, AB_DGGHD3, AB_AB_DGGES3, 
-     $AB_AB_DGGEV3,
-     $                   AB_AB_DGGSVD3, AB_AB_DGGSVP3
+      EXTERNAL           CHKXER, DGGES, DGGESX, DGGEV, DGGEVX, DGGGLM,
+     $                   DGGHRD, DGGLSE, DGGQRF, DGGRQF,
+     $                   DHGEQZ, DORCSD, DTGEVC, DTGEXC, DTGSEN, DTGSJA,
+     $                   DTGSNA, DTGSYL, DGGHD3, DGGES3, DGGEV3,
+     $                   DGGSVD3, DGGSVP3
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -142,482 +139,405 @@
 *
 *     Test error exits for the GG path.
 *
-      IF( AB_AB_LSAMEN( 2, C2, 'GG' ) ) THEN
+      IF( LSAMEN( 2, C2, 'GG' ) ) THEN
 *
-*        AB_DGGHRD
+*        DGGHRD
 *
-         SRNAMT = 'AB_DGGHRD'
+         SRNAMT = 'DGGHRD'
          INFOT = 1
-         CALL AB_DGGHRD( '/', 'N', 0, 1, 0, A, 1, B, 1, Q, 1, Z, 1, INFO
-     $ )
-         CALL AB_CHKXER( 'AB_DGGHRD', INFOT, NOUT, LERR, OK )
+         CALL DGGHRD( '/', 'N', 0, 1, 0, A, 1, B, 1, Q, 1, Z, 1, INFO )
+         CALL CHKXER( 'DGGHRD', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_DGGHRD( 'N', '/', 0, 1, 0, A, 1, B, 1, Q, 1, Z, 1, INFO
-     $ )
-         CALL AB_CHKXER( 'AB_DGGHRD', INFOT, NOUT, LERR, OK )
+         CALL DGGHRD( 'N', '/', 0, 1, 0, A, 1, B, 1, Q, 1, Z, 1, INFO )
+         CALL CHKXER( 'DGGHRD', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_DGGHRD( 'N', 'N', -1, 0, 0, A, 1, B, 1, Q, 1, Z, 1, INF
-     $O )
-         CALL AB_CHKXER( 'AB_DGGHRD', INFOT, NOUT, LERR, OK )
+         CALL DGGHRD( 'N', 'N', -1, 0, 0, A, 1, B, 1, Q, 1, Z, 1, INFO )
+         CALL CHKXER( 'DGGHRD', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_DGGHRD( 'N', 'N', 0, 0, 0, A, 1, B, 1, Q, 1, Z, 1, INFO
-     $ )
-         CALL AB_CHKXER( 'AB_DGGHRD', INFOT, NOUT, LERR, OK )
+         CALL DGGHRD( 'N', 'N', 0, 0, 0, A, 1, B, 1, Q, 1, Z, 1, INFO )
+         CALL CHKXER( 'DGGHRD', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_DGGHRD( 'N', 'N', 0, 1, 1, A, 1, B, 1, Q, 1, Z, 1, INFO
-     $ )
-         CALL AB_CHKXER( 'AB_DGGHRD', INFOT, NOUT, LERR, OK )
+         CALL DGGHRD( 'N', 'N', 0, 1, 1, A, 1, B, 1, Q, 1, Z, 1, INFO )
+         CALL CHKXER( 'DGGHRD', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_DGGHRD( 'N', 'N', 2, 1, 1, A, 1, B, 2, Q, 1, Z, 1, INFO
-     $ )
-         CALL AB_CHKXER( 'AB_DGGHRD', INFOT, NOUT, LERR, OK )
+         CALL DGGHRD( 'N', 'N', 2, 1, 1, A, 1, B, 2, Q, 1, Z, 1, INFO )
+         CALL CHKXER( 'DGGHRD', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_DGGHRD( 'N', 'N', 2, 1, 1, A, 2, B, 1, Q, 1, Z, 1, INFO
-     $ )
-         CALL AB_CHKXER( 'AB_DGGHRD', INFOT, NOUT, LERR, OK )
+         CALL DGGHRD( 'N', 'N', 2, 1, 1, A, 2, B, 1, Q, 1, Z, 1, INFO )
+         CALL CHKXER( 'DGGHRD', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL AB_DGGHRD( 'V', 'N', 2, 1, 1, A, 2, B, 2, Q, 1, Z, 1, INFO
-     $ )
-         CALL AB_CHKXER( 'AB_DGGHRD', INFOT, NOUT, LERR, OK )
+         CALL DGGHRD( 'V', 'N', 2, 1, 1, A, 2, B, 2, Q, 1, Z, 1, INFO )
+         CALL CHKXER( 'DGGHRD', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL AB_DGGHRD( 'N', 'V', 2, 1, 1, A, 2, B, 2, Q, 1, Z, 1, INFO
-     $ )
-         CALL AB_CHKXER( 'AB_DGGHRD', INFOT, NOUT, LERR, OK )
+         CALL DGGHRD( 'N', 'V', 2, 1, 1, A, 2, B, 2, Q, 1, Z, 1, INFO )
+         CALL CHKXER( 'DGGHRD', INFOT, NOUT, LERR, OK )
          NT = NT + 9
 *
-*        AB_DGGHD3
+*        DGGHD3
 *
-         SRNAMT = 'AB_DGGHD3'
+         SRNAMT = 'DGGHD3'
          INFOT = 1
-         CALL AB_DGGHD3( '/', 'N', 0, 1, 0, A, 1, B, 1, Q, 1, Z, 1, W, L
-     $W,
+         CALL DGGHD3( '/', 'N', 0, 1, 0, A, 1, B, 1, Q, 1, Z, 1, W, LW,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DGGHD3', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGHD3', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_DGGHD3( 'N', '/', 0, 1, 0, A, 1, B, 1, Q, 1, Z, 1, W, L
-     $W,
+         CALL DGGHD3( 'N', '/', 0, 1, 0, A, 1, B, 1, Q, 1, Z, 1, W, LW,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DGGHD3', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGHD3', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_DGGHD3( 'N', 'N', -1, 0, 0, A, 1, B, 1, Q, 1, Z, 1, W, 
-     $LW,
+         CALL DGGHD3( 'N', 'N', -1, 0, 0, A, 1, B, 1, Q, 1, Z, 1, W, LW,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DGGHD3', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGHD3', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_DGGHD3( 'N', 'N', 0, 0, 0, A, 1, B, 1, Q, 1, Z, 1, W, L
-     $W,
+         CALL DGGHD3( 'N', 'N', 0, 0, 0, A, 1, B, 1, Q, 1, Z, 1, W, LW,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DGGHD3', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGHD3', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_DGGHD3( 'N', 'N', 0, 1, 1, A, 1, B, 1, Q, 1, Z, 1, W, L
-     $W,
+         CALL DGGHD3( 'N', 'N', 0, 1, 1, A, 1, B, 1, Q, 1, Z, 1, W, LW,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DGGHD3', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGHD3', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_DGGHD3( 'N', 'N', 2, 1, 1, A, 1, B, 2, Q, 1, Z, 1, W, L
-     $W,
+         CALL DGGHD3( 'N', 'N', 2, 1, 1, A, 1, B, 2, Q, 1, Z, 1, W, LW,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DGGHD3', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGHD3', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_DGGHD3( 'N', 'N', 2, 1, 1, A, 2, B, 1, Q, 1, Z, 1, W, L
-     $W,
+         CALL DGGHD3( 'N', 'N', 2, 1, 1, A, 2, B, 1, Q, 1, Z, 1, W, LW,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DGGHD3', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGHD3', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL AB_DGGHD3( 'V', 'N', 2, 1, 1, A, 2, B, 2, Q, 1, Z, 1, W, L
-     $W,
+         CALL DGGHD3( 'V', 'N', 2, 1, 1, A, 2, B, 2, Q, 1, Z, 1, W, LW,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DGGHD3', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGHD3', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL AB_DGGHD3( 'N', 'V', 2, 1, 1, A, 2, B, 2, Q, 1, Z, 1, W, L
-     $W,
+         CALL DGGHD3( 'N', 'V', 2, 1, 1, A, 2, B, 2, Q, 1, Z, 1, W, LW,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DGGHD3', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGHD3', INFOT, NOUT, LERR, OK )
          NT = NT + 9
 *
-*        AB_DHGEQZ
+*        DHGEQZ
 *
-         SRNAMT = 'AB_DHGEQZ'
+         SRNAMT = 'DHGEQZ'
          INFOT = 1
-         CALL AB_DHGEQZ( '/', 'N', 'N', 0, 1, 0, A, 1, B, 1, R1, R2, R3,
-     $ Q,
+         CALL DHGEQZ( '/', 'N', 'N', 0, 1, 0, A, 1, B, 1, R1, R2, R3, Q,
      $                1, Z, 1, W, LW, INFO )
-         CALL AB_CHKXER( 'AB_DHGEQZ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DHGEQZ', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_DHGEQZ( 'E', '/', 'N', 0, 1, 0, A, 1, B, 1, R1, R2, R3,
-     $ Q,
+         CALL DHGEQZ( 'E', '/', 'N', 0, 1, 0, A, 1, B, 1, R1, R2, R3, Q,
      $                1, Z, 1, W, LW, INFO )
-         CALL AB_CHKXER( 'AB_DHGEQZ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DHGEQZ', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_DHGEQZ( 'E', 'N', '/', 0, 1, 0, A, 1, B, 1, R1, R2, R3,
-     $ Q,
+         CALL DHGEQZ( 'E', 'N', '/', 0, 1, 0, A, 1, B, 1, R1, R2, R3, Q,
      $                1, Z, 1, W, LW, INFO )
-         CALL AB_CHKXER( 'AB_DHGEQZ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DHGEQZ', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_DHGEQZ( 'E', 'N', 'N', -1, 0, 0, A, 1, B, 1, R1, R2, R3
-     $,
+         CALL DHGEQZ( 'E', 'N', 'N', -1, 0, 0, A, 1, B, 1, R1, R2, R3,
      $                Q, 1, Z, 1, W, LW, INFO )
-         CALL AB_CHKXER( 'AB_DHGEQZ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DHGEQZ', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_DHGEQZ( 'E', 'N', 'N', 0, 0, 0, A, 1, B, 1, R1, R2, R3,
-     $ Q,
+         CALL DHGEQZ( 'E', 'N', 'N', 0, 0, 0, A, 1, B, 1, R1, R2, R3, Q,
      $                1, Z, 1, W, LW, INFO )
-         CALL AB_CHKXER( 'AB_DHGEQZ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DHGEQZ', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_DHGEQZ( 'E', 'N', 'N', 0, 1, 1, A, 1, B, 1, R1, R2, R3,
-     $ Q,
+         CALL DHGEQZ( 'E', 'N', 'N', 0, 1, 1, A, 1, B, 1, R1, R2, R3, Q,
      $                1, Z, 1, W, LW, INFO )
-         CALL AB_CHKXER( 'AB_DHGEQZ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DHGEQZ', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_DHGEQZ( 'E', 'N', 'N', 2, 1, 1, A, 1, B, 2, R1, R2, R3,
-     $ Q,
+         CALL DHGEQZ( 'E', 'N', 'N', 2, 1, 1, A, 1, B, 2, R1, R2, R3, Q,
      $                1, Z, 1, W, LW, INFO )
-         CALL AB_CHKXER( 'AB_DHGEQZ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DHGEQZ', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_DHGEQZ( 'E', 'N', 'N', 2, 1, 1, A, 2, B, 1, R1, R2, R3,
-     $ Q,
+         CALL DHGEQZ( 'E', 'N', 'N', 2, 1, 1, A, 2, B, 1, R1, R2, R3, Q,
      $                1, Z, 1, W, LW, INFO )
-         CALL AB_CHKXER( 'AB_DHGEQZ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DHGEQZ', INFOT, NOUT, LERR, OK )
          INFOT = 15
-         CALL AB_DHGEQZ( 'E', 'V', 'N', 2, 1, 1, A, 2, B, 2, R1, R2, R3,
-     $ Q,
+         CALL DHGEQZ( 'E', 'V', 'N', 2, 1, 1, A, 2, B, 2, R1, R2, R3, Q,
      $                1, Z, 1, W, LW, INFO )
-         CALL AB_CHKXER( 'AB_DHGEQZ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DHGEQZ', INFOT, NOUT, LERR, OK )
          INFOT = 17
-         CALL AB_DHGEQZ( 'E', 'N', 'V', 2, 1, 1, A, 2, B, 2, R1, R2, R3,
-     $ Q,
+         CALL DHGEQZ( 'E', 'N', 'V', 2, 1, 1, A, 2, B, 2, R1, R2, R3, Q,
      $                1, Z, 1, W, LW, INFO )
-         CALL AB_CHKXER( 'AB_DHGEQZ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DHGEQZ', INFOT, NOUT, LERR, OK )
          NT = NT + 10
 *
-*        AB_DTGEVC
+*        DTGEVC
 *
-         SRNAMT = 'AB_DTGEVC'
+         SRNAMT = 'DTGEVC'
          INFOT = 1
-         CALL AB_DTGEVC( '/', 'A', SEL, 0, A, 1, B, 1, Q, 1, Z, 1, 0, M,
-     $ W,
+         CALL DTGEVC( '/', 'A', SEL, 0, A, 1, B, 1, Q, 1, Z, 1, 0, M, W,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DTGEVC', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGEVC', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_DTGEVC( 'R', '/', SEL, 0, A, 1, B, 1, Q, 1, Z, 1, 0, M,
-     $ W,
+         CALL DTGEVC( 'R', '/', SEL, 0, A, 1, B, 1, Q, 1, Z, 1, 0, M, W,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DTGEVC', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGEVC', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_DTGEVC( 'R', 'A', SEL, -1, A, 1, B, 1, Q, 1, Z, 1, 0, M
-     $,
+         CALL DTGEVC( 'R', 'A', SEL, -1, A, 1, B, 1, Q, 1, Z, 1, 0, M,
      $                W, INFO )
-         CALL AB_CHKXER( 'AB_DTGEVC', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGEVC', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_DTGEVC( 'R', 'A', SEL, 2, A, 1, B, 2, Q, 1, Z, 2, 0, M,
-     $ W,
+         CALL DTGEVC( 'R', 'A', SEL, 2, A, 1, B, 2, Q, 1, Z, 2, 0, M, W,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DTGEVC', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGEVC', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_DTGEVC( 'R', 'A', SEL, 2, A, 2, B, 1, Q, 1, Z, 2, 0, M,
-     $ W,
+         CALL DTGEVC( 'R', 'A', SEL, 2, A, 2, B, 1, Q, 1, Z, 2, 0, M, W,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DTGEVC', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGEVC', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_DTGEVC( 'L', 'A', SEL, 2, A, 2, B, 2, Q, 1, Z, 1, 0, M,
-     $ W,
+         CALL DTGEVC( 'L', 'A', SEL, 2, A, 2, B, 2, Q, 1, Z, 1, 0, M, W,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DTGEVC', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGEVC', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL AB_DTGEVC( 'R', 'A', SEL, 2, A, 2, B, 2, Q, 1, Z, 1, 0, M,
-     $ W,
+         CALL DTGEVC( 'R', 'A', SEL, 2, A, 2, B, 2, Q, 1, Z, 1, 0, M, W,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DTGEVC', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGEVC', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL AB_DTGEVC( 'R', 'A', SEL, 2, A, 2, B, 2, Q, 1, Z, 2, 1, M,
-     $ W,
+         CALL DTGEVC( 'R', 'A', SEL, 2, A, 2, B, 2, Q, 1, Z, 2, 1, M, W,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DTGEVC', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGEVC', INFOT, NOUT, LERR, OK )
          NT = NT + 8
 *
 *     Test error exits for the GSV path.
 *
-      ELSE IF( AB_AB_LSAMEN( 3, PATH, 'GSV' ) ) THEN
+      ELSE IF( LSAMEN( 3, PATH, 'GSV' ) ) THEN
 *
-*        AB_AB_DGGSVD3
+*        DGGSVD3
 *
-         SRNAMT = 'AB_AB_DGGSVD3'
+         SRNAMT = 'DGGSVD3'
          INFOT = 1
-         CALL AB_AB_DGGSVD3( '/', 'N', 'N', 0, 0, 0, DUMMYK, DUMMYL, A, 
-     $1, B,
+         CALL DGGSVD3( '/', 'N', 'N', 0, 0, 0, DUMMYK, DUMMYL, A, 1, B,
      $               1, R1, R2, U, 1, V, 1, Q, 1, W, LWORK, IDUM, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGSVD3', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGSVD3', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_DGGSVD3( 'N', '/', 'N', 0, 0, 0, DUMMYK, DUMMYL, A, 
-     $1, B,
+         CALL DGGSVD3( 'N', '/', 'N', 0, 0, 0, DUMMYK, DUMMYL, A, 1, B,
      $               1, R1, R2, U, 1, V, 1, Q, 1, W, LWORK, IDUM, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGSVD3', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGSVD3', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_DGGSVD3( 'N', 'N', '/', 0, 0, 0, DUMMYK, DUMMYL, A, 
-     $1, B,
+         CALL DGGSVD3( 'N', 'N', '/', 0, 0, 0, DUMMYK, DUMMYL, A, 1, B,
      $               1, R1, R2, U, 1, V, 1, Q, 1, W, LWORK, IDUM, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGSVD3', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGSVD3', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_DGGSVD3( 'N', 'N', 'N', -1, 0, 0, DUMMYK, DUMMYL, A,
-     $ 1, B,
+         CALL DGGSVD3( 'N', 'N', 'N', -1, 0, 0, DUMMYK, DUMMYL, A, 1, B,
      $               1, R1, R2, U, 1, V, 1, Q, 1, W, LWORK, IDUM, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGSVD3', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGSVD3', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_AB_DGGSVD3( 'N', 'N', 'N', 0, -1, 0, DUMMYK, DUMMYL, A,
-     $ 1, B,
+         CALL DGGSVD3( 'N', 'N', 'N', 0, -1, 0, DUMMYK, DUMMYL, A, 1, B,
      $               1, R1, R2, U, 1, V, 1, Q, 1, W, LWORK, IDUM, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGSVD3', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGSVD3', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_AB_DGGSVD3( 'N', 'N', 'N', 0, 0, -1, DUMMYK, DUMMYL, A,
-     $ 1, B,
+         CALL DGGSVD3( 'N', 'N', 'N', 0, 0, -1, DUMMYK, DUMMYL, A, 1, B,
      $               1, R1, R2, U, 1, V, 1, Q, 1, W, LWORK, IDUM, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGSVD3', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGSVD3', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_AB_DGGSVD3( 'N', 'N', 'N', 2, 1, 1, DUMMYK, DUMMYL, A, 
-     $1, B,
+         CALL DGGSVD3( 'N', 'N', 'N', 2, 1, 1, DUMMYK, DUMMYL, A, 1, B,
      $               1, R1, R2, U, 1, V, 1, Q, 1, W, LWORK, IDUM, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGSVD3', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGSVD3', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL AB_AB_DGGSVD3( 'N', 'N', 'N', 1, 1, 2, DUMMYK, DUMMYL, A, 
-     $1, B,
+         CALL DGGSVD3( 'N', 'N', 'N', 1, 1, 2, DUMMYK, DUMMYL, A, 1, B,
      $               1, R1, R2, U, 1, V, 1, Q, 1, W, LWORK, IDUM, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGSVD3', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGSVD3', INFOT, NOUT, LERR, OK )
          INFOT = 16
-         CALL AB_AB_DGGSVD3( 'U', 'N', 'N', 2, 2, 2, DUMMYK, DUMMYL, A, 
-     $2, B,
+         CALL DGGSVD3( 'U', 'N', 'N', 2, 2, 2, DUMMYK, DUMMYL, A, 2, B,
      $               2, R1, R2, U, 1, V, 1, Q, 1, W, LWORK, IDUM, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGSVD3', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGSVD3', INFOT, NOUT, LERR, OK )
          INFOT = 18
-         CALL AB_AB_DGGSVD3( 'N', 'V', 'N', 1, 1, 2, DUMMYK, DUMMYL, A, 
-     $1, B,
+         CALL DGGSVD3( 'N', 'V', 'N', 1, 1, 2, DUMMYK, DUMMYL, A, 1, B,
      $               2, R1, R2, U, 1, V, 1, Q, 1, W, LWORK, IDUM, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGSVD3', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGSVD3', INFOT, NOUT, LERR, OK )
          INFOT = 20
-         CALL AB_AB_DGGSVD3( 'N', 'N', 'Q', 1, 2, 1, DUMMYK, DUMMYL, A, 
-     $1, B,
+         CALL DGGSVD3( 'N', 'N', 'Q', 1, 2, 1, DUMMYK, DUMMYL, A, 1, B,
      $               1, R1, R2, U, 1, V, 1, Q, 1, W, LWORK, IDUM, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGSVD3', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGSVD3', INFOT, NOUT, LERR, OK )
          NT = NT + 11
 *
-*        AB_AB_DGGSVP3
+*        DGGSVP3
 *
-         SRNAMT = 'AB_AB_DGGSVP3'
+         SRNAMT = 'DGGSVP3'
          INFOT = 1
-         CALL AB_AB_DGGSVP3( '/', 'N', 'N', 0, 0, 0, A, 1, B, 1, TOLA, T
-     $OLB,
+         CALL DGGSVP3( '/', 'N', 'N', 0, 0, 0, A, 1, B, 1, TOLA, TOLB,
      $                 DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, TAU, W,
      $                 LWORK, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGSVP3', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGSVP3', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_DGGSVP3( 'N', '/', 'N', 0, 0, 0, A, 1, B, 1, TOLA, T
-     $OLB,
+         CALL DGGSVP3( 'N', '/', 'N', 0, 0, 0, A, 1, B, 1, TOLA, TOLB,
      $                 DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, TAU, W,
      $                 LWORK, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGSVP3', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGSVP3', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_DGGSVP3( 'N', 'N', '/', 0, 0, 0, A, 1, B, 1, TOLA, T
-     $OLB,
+         CALL DGGSVP3( 'N', 'N', '/', 0, 0, 0, A, 1, B, 1, TOLA, TOLB,
      $                 DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, TAU, W,
      $                 LWORK, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGSVP3', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGSVP3', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_DGGSVP3( 'N', 'N', 'N', -1, 0, 0, A, 1, B, 1, TOLA, 
-     $TOLB,
+         CALL DGGSVP3( 'N', 'N', 'N', -1, 0, 0, A, 1, B, 1, TOLA, TOLB,
      $                 DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, TAU, W,
      $                 LWORK, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGSVP3', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGSVP3', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_AB_DGGSVP3( 'N', 'N', 'N', 0, -1, 0, A, 1, B, 1, TOLA, 
-     $TOLB,
+         CALL DGGSVP3( 'N', 'N', 'N', 0, -1, 0, A, 1, B, 1, TOLA, TOLB,
      $                 DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, TAU, W,
      $                 LWORK, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGSVP3', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGSVP3', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_AB_DGGSVP3( 'N', 'N', 'N', 0, 0, -1, A, 1, B, 1, TOLA, 
-     $TOLB,
+         CALL DGGSVP3( 'N', 'N', 'N', 0, 0, -1, A, 1, B, 1, TOLA, TOLB,
      $                 DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, TAU, W,
      $                 LWORK, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGSVP3', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGSVP3', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_DGGSVP3( 'N', 'N', 'N', 2, 1, 1, A, 1, B, 1, TOLA, T
-     $OLB,
+         CALL DGGSVP3( 'N', 'N', 'N', 2, 1, 1, A, 1, B, 1, TOLA, TOLB,
      $                 DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, TAU, W,
      $                 LWORK, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGSVP3', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGSVP3', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_AB_DGGSVP3( 'N', 'N', 'N', 1, 2, 1, A, 1, B, 1, TOLA, T
-     $OLB,
+         CALL DGGSVP3( 'N', 'N', 'N', 1, 2, 1, A, 1, B, 1, TOLA, TOLB,
      $                 DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, TAU, W,
      $                 LWORK, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGSVP3', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGSVP3', INFOT, NOUT, LERR, OK )
          INFOT = 16
-         CALL AB_AB_DGGSVP3( 'U', 'N', 'N', 2, 2, 2, A, 2, B, 2, TOLA, T
-     $OLB,
+         CALL DGGSVP3( 'U', 'N', 'N', 2, 2, 2, A, 2, B, 2, TOLA, TOLB,
      $                 DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, TAU, W,
      $                 LWORK, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGSVP3', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGSVP3', INFOT, NOUT, LERR, OK )
          INFOT = 18
-         CALL AB_AB_DGGSVP3( 'N', 'V', 'N', 1, 2, 1, A, 1, B, 2, TOLA, T
-     $OLB,
+         CALL DGGSVP3( 'N', 'V', 'N', 1, 2, 1, A, 1, B, 2, TOLA, TOLB,
      $                 DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, TAU, W,
      $                 LWORK, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGSVP3', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGSVP3', INFOT, NOUT, LERR, OK )
          INFOT = 20
-         CALL AB_AB_DGGSVP3( 'N', 'N', 'Q', 1, 1, 2, A, 1, B, 1, TOLA, T
-     $OLB,
+         CALL DGGSVP3( 'N', 'N', 'Q', 1, 1, 2, A, 1, B, 1, TOLA, TOLB,
      $                 DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, TAU, W,
      $                 LWORK, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGSVP3', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGSVP3', INFOT, NOUT, LERR, OK )
          NT = NT + 11
 *
-*        AB_DTGSJA
+*        DTGSJA
 *
-         SRNAMT = 'AB_DTGSJA'
+         SRNAMT = 'DTGSJA'
          INFOT = 1
-         CALL AB_DTGSJA( '/', 'N', 'N', 0, 0, 0, DUMMYK, DUMMYL, A, 1, B
-     $,
+         CALL DTGSJA( '/', 'N', 'N', 0, 0, 0, DUMMYK, DUMMYL, A, 1, B,
      $                1, TOLA, TOLB, R1, R2, U, 1, V, 1, Q, 1, W,
      $                NCYCLE, INFO )
-         CALL AB_CHKXER( 'AB_DTGSJA', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSJA', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_DTGSJA( 'N', '/', 'N', 0, 0, 0, DUMMYK, DUMMYL, A, 1, B
-     $,
+         CALL DTGSJA( 'N', '/', 'N', 0, 0, 0, DUMMYK, DUMMYL, A, 1, B,
      $                1, TOLA, TOLB, R1, R2, U, 1, V, 1, Q, 1, W,
      $                NCYCLE, INFO )
-         CALL AB_CHKXER( 'AB_DTGSJA', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSJA', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_DTGSJA( 'N', 'N', '/', 0, 0, 0, DUMMYK, DUMMYL, A, 1, B
-     $,
+         CALL DTGSJA( 'N', 'N', '/', 0, 0, 0, DUMMYK, DUMMYL, A, 1, B,
      $                1, TOLA, TOLB, R1, R2, U, 1, V, 1, Q, 1, W,
      $                NCYCLE, INFO )
-         CALL AB_CHKXER( 'AB_DTGSJA', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSJA', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_DTGSJA( 'N', 'N', 'N', -1, 0, 0, DUMMYK, DUMMYL, A, 1, 
-     $B,
+         CALL DTGSJA( 'N', 'N', 'N', -1, 0, 0, DUMMYK, DUMMYL, A, 1, B,
      $                1, TOLA, TOLB, R1, R2, U, 1, V, 1, Q, 1, W,
      $                NCYCLE, INFO )
-         CALL AB_CHKXER( 'AB_DTGSJA', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSJA', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_DTGSJA( 'N', 'N', 'N', 0, -1, 0, DUMMYK, DUMMYL, A, 1, 
-     $B,
+         CALL DTGSJA( 'N', 'N', 'N', 0, -1, 0, DUMMYK, DUMMYL, A, 1, B,
      $                1, TOLA, TOLB, R1, R2, U, 1, V, 1, Q, 1, W,
      $                NCYCLE, INFO )
-         CALL AB_CHKXER( 'AB_DTGSJA', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSJA', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_DTGSJA( 'N', 'N', 'N', 0, 0, -1, DUMMYK, DUMMYL, A, 1, 
-     $B,
+         CALL DTGSJA( 'N', 'N', 'N', 0, 0, -1, DUMMYK, DUMMYL, A, 1, B,
      $                1, TOLA, TOLB, R1, R2, U, 1, V, 1, Q, 1, W,
      $                NCYCLE, INFO )
-         CALL AB_CHKXER( 'AB_DTGSJA', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSJA', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_DTGSJA( 'N', 'N', 'N', 0, 0, 0, DUMMYK, DUMMYL, A, 0, B
-     $,
+         CALL DTGSJA( 'N', 'N', 'N', 0, 0, 0, DUMMYK, DUMMYL, A, 0, B,
      $                1, TOLA, TOLB, R1, R2, U, 1, V, 1, Q, 1, W,
      $                NCYCLE, INFO )
-         CALL AB_CHKXER( 'AB_DTGSJA', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSJA', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL AB_DTGSJA( 'N', 'N', 'N', 0, 0, 0, DUMMYK, DUMMYL, A, 1, B
-     $,
+         CALL DTGSJA( 'N', 'N', 'N', 0, 0, 0, DUMMYK, DUMMYL, A, 1, B,
      $                0, TOLA, TOLB, R1, R2, U, 1, V, 1, Q, 1, W,
      $                NCYCLE, INFO )
-         CALL AB_CHKXER( 'AB_DTGSJA', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSJA', INFOT, NOUT, LERR, OK )
          INFOT = 18
-         CALL AB_DTGSJA( 'U', 'N', 'N', 0, 0, 0, DUMMYK, DUMMYL, A, 1, B
-     $,
+         CALL DTGSJA( 'U', 'N', 'N', 0, 0, 0, DUMMYK, DUMMYL, A, 1, B,
      $                1, TOLA, TOLB, R1, R2, U, 0, V, 1, Q, 1, W,
      $                NCYCLE, INFO )
-         CALL AB_CHKXER( 'AB_DTGSJA', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSJA', INFOT, NOUT, LERR, OK )
          INFOT = 20
-         CALL AB_DTGSJA( 'N', 'V', 'N', 0, 0, 0, DUMMYK, DUMMYL, A, 1, B
-     $,
+         CALL DTGSJA( 'N', 'V', 'N', 0, 0, 0, DUMMYK, DUMMYL, A, 1, B,
      $                1, TOLA, TOLB, R1, R2, U, 1, V, 0, Q, 1, W,
      $                NCYCLE, INFO )
-         CALL AB_CHKXER( 'AB_DTGSJA', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSJA', INFOT, NOUT, LERR, OK )
          INFOT = 22
-         CALL AB_DTGSJA( 'N', 'N', 'Q', 0, 0, 0, DUMMYK, DUMMYL, A, 1, B
-     $,
+         CALL DTGSJA( 'N', 'N', 'Q', 0, 0, 0, DUMMYK, DUMMYL, A, 1, B,
      $                1, TOLA, TOLB, R1, R2, U, 1, V, 1, Q, 0, W,
      $                NCYCLE, INFO )
-         CALL AB_CHKXER( 'AB_DTGSJA', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSJA', INFOT, NOUT, LERR, OK )
          NT = NT + 11
 *
 *     Test error exits for the GLM path.
 *
-      ELSE IF( AB_AB_LSAMEN( 3, PATH, 'GLM' ) ) THEN
+      ELSE IF( LSAMEN( 3, PATH, 'GLM' ) ) THEN
 *
-*        AB_DGGGLM
+*        DGGGLM
 *
-         SRNAMT = 'AB_DGGGLM'
+         SRNAMT = 'DGGGLM'
          INFOT = 1
-         CALL AB_DGGGLM( -1, 0, 0, A, 1, B, 1, R1, R2, R3, W, LW, INFO )
-         CALL AB_CHKXER( 'AB_DGGGLM', INFOT, NOUT, LERR, OK )
+         CALL DGGGLM( -1, 0, 0, A, 1, B, 1, R1, R2, R3, W, LW, INFO )
+         CALL CHKXER( 'DGGGLM', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_DGGGLM( 0, -1, 0, A, 1, B, 1, R1, R2, R3, W, LW, INFO )
-         CALL AB_CHKXER( 'AB_DGGGLM', INFOT, NOUT, LERR, OK )
+         CALL DGGGLM( 0, -1, 0, A, 1, B, 1, R1, R2, R3, W, LW, INFO )
+         CALL CHKXER( 'DGGGLM', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_DGGGLM( 0, 1, 0, A, 1, B, 1, R1, R2, R3, W, LW, INFO )
-         CALL AB_CHKXER( 'AB_DGGGLM', INFOT, NOUT, LERR, OK )
+         CALL DGGGLM( 0, 1, 0, A, 1, B, 1, R1, R2, R3, W, LW, INFO )
+         CALL CHKXER( 'DGGGLM', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_DGGGLM( 0, 0, -1, A, 1, B, 1, R1, R2, R3, W, LW, INFO )
-         CALL AB_CHKXER( 'AB_DGGGLM', INFOT, NOUT, LERR, OK )
+         CALL DGGGLM( 0, 0, -1, A, 1, B, 1, R1, R2, R3, W, LW, INFO )
+         CALL CHKXER( 'DGGGLM', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_DGGGLM( 1, 0, 0, A, 1, B, 1, R1, R2, R3, W, LW, INFO )
-         CALL AB_CHKXER( 'AB_DGGGLM', INFOT, NOUT, LERR, OK )
+         CALL DGGGLM( 1, 0, 0, A, 1, B, 1, R1, R2, R3, W, LW, INFO )
+         CALL CHKXER( 'DGGGLM', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_DGGGLM( 0, 0, 0, A, 0, B, 1, R1, R2, R3, W, LW, INFO )
-         CALL AB_CHKXER( 'AB_DGGGLM', INFOT, NOUT, LERR, OK )
+         CALL DGGGLM( 0, 0, 0, A, 0, B, 1, R1, R2, R3, W, LW, INFO )
+         CALL CHKXER( 'DGGGLM', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_DGGGLM( 0, 0, 0, A, 1, B, 0, R1, R2, R3, W, LW, INFO )
-         CALL AB_CHKXER( 'AB_DGGGLM', INFOT, NOUT, LERR, OK )
+         CALL DGGGLM( 0, 0, 0, A, 1, B, 0, R1, R2, R3, W, LW, INFO )
+         CALL CHKXER( 'DGGGLM', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL AB_DGGGLM( 1, 1, 1, A, 1, B, 1, R1, R2, R3, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_DGGGLM', INFOT, NOUT, LERR, OK )
+         CALL DGGGLM( 1, 1, 1, A, 1, B, 1, R1, R2, R3, W, 1, INFO )
+         CALL CHKXER( 'DGGGLM', INFOT, NOUT, LERR, OK )
          NT = NT + 8
 *
-*     Test error exits for the AB_LSE path.
+*     Test error exits for the LSE path.
 *
-      ELSE IF( AB_AB_LSAMEN( 3, PATH, 'AB_LSE' ) ) THEN
+      ELSE IF( LSAMEN( 3, PATH, 'LSE' ) ) THEN
 *
-*        AB_DGGAB_LSE
+*        DGGLSE
 *
-         SRNAMT = 'AB_DGGAB_LSE'
+         SRNAMT = 'DGGLSE'
          INFOT = 1
-         CALL AB_DGGAB_LSE( -1, 0, 0, A, 1, B, 1, R1, R2, R3, W, LW, INF
-     $O )
-         CALL AB_CHKXER( 'AB_DGGAB_LSE', INFOT, NOUT, LERR, OK )
+         CALL DGGLSE( -1, 0, 0, A, 1, B, 1, R1, R2, R3, W, LW, INFO )
+         CALL CHKXER( 'DGGLSE', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_DGGAB_LSE( 0, -1, 0, A, 1, B, 1, R1, R2, R3, W, LW, INF
-     $O )
-         CALL AB_CHKXER( 'AB_DGGAB_LSE', INFOT, NOUT, LERR, OK )
+         CALL DGGLSE( 0, -1, 0, A, 1, B, 1, R1, R2, R3, W, LW, INFO )
+         CALL CHKXER( 'DGGLSE', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_DGGAB_LSE( 0, 0, -1, A, 1, B, 1, R1, R2, R3, W, LW, INF
-     $O )
-         CALL AB_CHKXER( 'AB_DGGAB_LSE', INFOT, NOUT, LERR, OK )
+         CALL DGGLSE( 0, 0, -1, A, 1, B, 1, R1, R2, R3, W, LW, INFO )
+         CALL CHKXER( 'DGGLSE', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_DGGAB_LSE( 0, 0, 1, A, 1, B, 1, R1, R2, R3, W, LW, INFO
-     $ )
-         CALL AB_CHKXER( 'AB_DGGAB_LSE', INFOT, NOUT, LERR, OK )
+         CALL DGGLSE( 0, 0, 1, A, 1, B, 1, R1, R2, R3, W, LW, INFO )
+         CALL CHKXER( 'DGGLSE', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_DGGAB_LSE( 0, 1, 0, A, 1, B, 1, R1, R2, R3, W, LW, INFO
-     $ )
-         CALL AB_CHKXER( 'AB_DGGAB_LSE', INFOT, NOUT, LERR, OK )
+         CALL DGGLSE( 0, 1, 0, A, 1, B, 1, R1, R2, R3, W, LW, INFO )
+         CALL CHKXER( 'DGGLSE', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_DGGAB_LSE( 0, 0, 0, A, 0, B, 1, R1, R2, R3, W, LW, INFO
-     $ )
-         CALL AB_CHKXER( 'AB_DGGAB_LSE', INFOT, NOUT, LERR, OK )
+         CALL DGGLSE( 0, 0, 0, A, 0, B, 1, R1, R2, R3, W, LW, INFO )
+         CALL CHKXER( 'DGGLSE', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_DGGAB_LSE( 0, 0, 0, A, 1, B, 0, R1, R2, R3, W, LW, INFO
-     $ )
-         CALL AB_CHKXER( 'AB_DGGAB_LSE', INFOT, NOUT, LERR, OK )
+         CALL DGGLSE( 0, 0, 0, A, 1, B, 0, R1, R2, R3, W, LW, INFO )
+         CALL CHKXER( 'DGGLSE', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL AB_DGGAB_LSE( 1, 1, 1, A, 1, B, 1, R1, R2, R3, W, 1, INFO 
-     $)
-         CALL AB_CHKXER( 'AB_DGGAB_LSE', INFOT, NOUT, LERR, OK )
+         CALL DGGLSE( 1, 1, 1, A, 1, B, 1, R1, R2, R3, W, 1, INFO )
+         CALL CHKXER( 'DGGLSE', INFOT, NOUT, LERR, OK )
          NT = NT + 8
 *
 *     Test error exits for the CSD path.
 *
-      ELSE IF( AB_AB_LSAMEN( 3, PATH, 'CSD' ) ) THEN
+      ELSE IF( LSAMEN( 3, PATH, 'CSD' ) ) THEN
 *
 *        DORCSD
 *
@@ -628,739 +548,632 @@
      $                 1, A, 1, A, 1, A,
      $                 A, 1, A, 1, A, 1, A,
      $                 1, W, LW, IW, INFO )
-         CALL AB_CHKXER( 'DORCSD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DORCSD', INFOT, NOUT, LERR, OK )
          INFOT = 8
          CALL DORCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
      $                 1, -1, 0, A, 1, A,
      $                 1, A, 1, A, 1, A,
      $                 A, 1, A, 1, A, 1, A,
      $                 1, W, LW, IW, INFO )
-         CALL AB_CHKXER( 'DORCSD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DORCSD', INFOT, NOUT, LERR, OK )
          INFOT = 9
          CALL DORCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
      $                 1, 1, -1, A, 1, A,
      $                 1, A, 1, A, 1, A,
      $                 A, 1, A, 1, A, 1, A,
      $                 1, W, LW, IW, INFO )
-         CALL AB_CHKXER( 'DORCSD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DORCSD', INFOT, NOUT, LERR, OK )
          INFOT = 11
          CALL DORCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
      $                 1, 1, 1, A, -1, A,
      $                 1, A, 1, A, 1, A,
      $                 A, 1, A, 1, A, 1, A,
      $                 1, W, LW, IW, INFO )
-         CALL AB_CHKXER( 'DORCSD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DORCSD', INFOT, NOUT, LERR, OK )
          INFOT = 20
          CALL DORCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
      $                 1, 1, 1, A, 1, A,
      $                 1, A, 1, A, 1, A,
      $                 A, -1, A, 1, A, 1, A,
      $                 1, W, LW, IW, INFO )
-         CALL AB_CHKXER( 'DORCSD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DORCSD', INFOT, NOUT, LERR, OK )
          INFOT = 22
          CALL DORCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
      $                 1, 1, 1, A, 1, A,
      $                 1, A, 1, A, 1, A,
      $                 A, 1, A, -1, A, 1, A,
      $                 1, W, LW, IW, INFO )
-         CALL AB_CHKXER( 'DORCSD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DORCSD', INFOT, NOUT, LERR, OK )
          INFOT = 24
          CALL DORCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
      $                 1, 1, 1, A, 1, A,
      $                 1, A, 1, A, 1, A,
      $                 A, 1, A, 1, A, -1, A,
      $                 1, W, LW, IW, INFO )
-         CALL AB_CHKXER( 'DORCSD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DORCSD', INFOT, NOUT, LERR, OK )
          INFOT = 26
          CALL DORCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
      $                 1, 1, 1, A, 1, A,
      $                 1, A, 1, A, 1, A,
      $                 A, 1, A, 1, A, 1, A,
      $                 -1, W, LW, IW, INFO )
-         CALL AB_CHKXER( 'DORCSD', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DORCSD', INFOT, NOUT, LERR, OK )
          NT = NT + 8
 *
 *     Test error exits for the GQR path.
 *
-      ELSE IF( AB_AB_LSAMEN( 3, PATH, 'GQR' ) ) THEN
+      ELSE IF( LSAMEN( 3, PATH, 'GQR' ) ) THEN
 *
-*        AB_DGGQRF
+*        DGGQRF
 *
-         SRNAMT = 'AB_DGGQRF'
+         SRNAMT = 'DGGQRF'
          INFOT = 1
-         CALL AB_DGGQRF( -1, 0, 0, A, 1, R1, B, 1, R2, W, LW, INFO )
-         CALL AB_CHKXER( 'AB_DGGQRF', INFOT, NOUT, LERR, OK )
+         CALL DGGQRF( -1, 0, 0, A, 1, R1, B, 1, R2, W, LW, INFO )
+         CALL CHKXER( 'DGGQRF', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_DGGQRF( 0, -1, 0, A, 1, R1, B, 1, R2, W, LW, INFO )
-         CALL AB_CHKXER( 'AB_DGGQRF', INFOT, NOUT, LERR, OK )
+         CALL DGGQRF( 0, -1, 0, A, 1, R1, B, 1, R2, W, LW, INFO )
+         CALL CHKXER( 'DGGQRF', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_DGGQRF( 0, 0, -1, A, 1, R1, B, 1, R2, W, LW, INFO )
-         CALL AB_CHKXER( 'AB_DGGQRF', INFOT, NOUT, LERR, OK )
+         CALL DGGQRF( 0, 0, -1, A, 1, R1, B, 1, R2, W, LW, INFO )
+         CALL CHKXER( 'DGGQRF', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_DGGQRF( 0, 0, 0, A, 0, R1, B, 1, R2, W, LW, INFO )
-         CALL AB_CHKXER( 'AB_DGGQRF', INFOT, NOUT, LERR, OK )
+         CALL DGGQRF( 0, 0, 0, A, 0, R1, B, 1, R2, W, LW, INFO )
+         CALL CHKXER( 'DGGQRF', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_DGGQRF( 0, 0, 0, A, 1, R1, B, 0, R2, W, LW, INFO )
-         CALL AB_CHKXER( 'AB_DGGQRF', INFOT, NOUT, LERR, OK )
+         CALL DGGQRF( 0, 0, 0, A, 1, R1, B, 0, R2, W, LW, INFO )
+         CALL CHKXER( 'DGGQRF', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL AB_DGGQRF( 1, 1, 2, A, 1, R1, B, 1, R2, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_DGGQRF', INFOT, NOUT, LERR, OK )
+         CALL DGGQRF( 1, 1, 2, A, 1, R1, B, 1, R2, W, 1, INFO )
+         CALL CHKXER( 'DGGQRF', INFOT, NOUT, LERR, OK )
          NT = NT + 6
 *
-*        AB_DGGRQF
+*        DGGRQF
 *
-         SRNAMT = 'AB_DGGRQF'
+         SRNAMT = 'DGGRQF'
          INFOT = 1
-         CALL AB_DGGRQF( -1, 0, 0, A, 1, R1, B, 1, R2, W, LW, INFO )
-         CALL AB_CHKXER( 'AB_DGGRQF', INFOT, NOUT, LERR, OK )
+         CALL DGGRQF( -1, 0, 0, A, 1, R1, B, 1, R2, W, LW, INFO )
+         CALL CHKXER( 'DGGRQF', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_DGGRQF( 0, -1, 0, A, 1, R1, B, 1, R2, W, LW, INFO )
-         CALL AB_CHKXER( 'AB_DGGRQF', INFOT, NOUT, LERR, OK )
+         CALL DGGRQF( 0, -1, 0, A, 1, R1, B, 1, R2, W, LW, INFO )
+         CALL CHKXER( 'DGGRQF', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_DGGRQF( 0, 0, -1, A, 1, R1, B, 1, R2, W, LW, INFO )
-         CALL AB_CHKXER( 'AB_DGGRQF', INFOT, NOUT, LERR, OK )
+         CALL DGGRQF( 0, 0, -1, A, 1, R1, B, 1, R2, W, LW, INFO )
+         CALL CHKXER( 'DGGRQF', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_DGGRQF( 0, 0, 0, A, 0, R1, B, 1, R2, W, LW, INFO )
-         CALL AB_CHKXER( 'AB_DGGRQF', INFOT, NOUT, LERR, OK )
+         CALL DGGRQF( 0, 0, 0, A, 0, R1, B, 1, R2, W, LW, INFO )
+         CALL CHKXER( 'DGGRQF', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_DGGRQF( 0, 0, 0, A, 1, R1, B, 0, R2, W, LW, INFO )
-         CALL AB_CHKXER( 'AB_DGGRQF', INFOT, NOUT, LERR, OK )
+         CALL DGGRQF( 0, 0, 0, A, 1, R1, B, 0, R2, W, LW, INFO )
+         CALL CHKXER( 'DGGRQF', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL AB_DGGRQF( 1, 1, 2, A, 1, R1, B, 1, R2, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_DGGRQF', INFOT, NOUT, LERR, OK )
+         CALL DGGRQF( 1, 1, 2, A, 1, R1, B, 1, R2, W, 1, INFO )
+         CALL CHKXER( 'DGGRQF', INFOT, NOUT, LERR, OK )
          NT = NT + 6
 *
 *     Test error exits for the DGS, DGV, DGX, and DXV paths.
 *
-      ELSE IF( AB_AB_LSAMEN( 3, PATH, 'DGS' ) .OR.
-     $         AB_AB_LSAMEN( 3, PATH, 'DGV' ) .OR.
-     $         AB_AB_LSAMEN( 3, PATH, 'DGX' ) .OR. AB_AB_LSAMEN( 3, PATH
-     $, 'DXV' ) )
+      ELSE IF( LSAMEN( 3, PATH, 'DGS' ) .OR.
+     $         LSAMEN( 3, PATH, 'DGV' ) .OR.
+     $         LSAMEN( 3, PATH, 'DGX' ) .OR. LSAMEN( 3, PATH, 'DXV' ) )
      $          THEN
 *
-*        AB_DGGES
+*        DGGES
 *
-         SRNAMT = 'AB_DGGES '
+         SRNAMT = 'DGGES '
          INFOT = 1
-         CALL AB_DGGES( '/', 'N', 'S', AB_DLCTES, 1, A, 1, B, 1, SDIM, R
-     $1, R2,
+         CALL DGGES( '/', 'N', 'S', DLCTES, 1, A, 1, B, 1, SDIM, R1, R2,
      $               R3, Q, 1, U, 1, W, 1, BW, INFO )
-         CALL AB_CHKXER( 'AB_DGGES ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGES ', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_DGGES( 'N', '/', 'S', AB_DLCTES, 1, A, 1, B, 1, SDIM, R
-     $1, R2,
+         CALL DGGES( 'N', '/', 'S', DLCTES, 1, A, 1, B, 1, SDIM, R1, R2,
      $               R3, Q, 1, U, 1, W, 1, BW, INFO )
-         CALL AB_CHKXER( 'AB_DGGES ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGES ', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_DGGES( 'N', 'V', '/', AB_DLCTES, 1, A, 1, B, 1, SDIM, R
-     $1, R2,
+         CALL DGGES( 'N', 'V', '/', DLCTES, 1, A, 1, B, 1, SDIM, R1, R2,
      $               R3, Q, 1, U, 1, W, 1, BW, INFO )
-         CALL AB_CHKXER( 'AB_DGGES ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGES ', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_DGGES( 'N', 'V', 'S', AB_DLCTES, -1, A, 1, B, 1, SDIM, 
-     $R1,
+         CALL DGGES( 'N', 'V', 'S', DLCTES, -1, A, 1, B, 1, SDIM, R1,
      $               R2, R3, Q, 1, U, 1, W, 1, BW, INFO )
-         CALL AB_CHKXER( 'AB_DGGES ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGES ', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_DGGES( 'N', 'V', 'S', AB_DLCTES, 1, A, 0, B, 1, SDIM, R
-     $1, R2,
+         CALL DGGES( 'N', 'V', 'S', DLCTES, 1, A, 0, B, 1, SDIM, R1, R2,
      $               R3, Q, 1, U, 1, W, 1, BW, INFO )
-         CALL AB_CHKXER( 'AB_DGGES ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGES ', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_DGGES( 'N', 'V', 'S', AB_DLCTES, 1, A, 1, B, 0, SDIM, R
-     $1, R2,
+         CALL DGGES( 'N', 'V', 'S', DLCTES, 1, A, 1, B, 0, SDIM, R1, R2,
      $               R3, Q, 1, U, 1, W, 1, BW, INFO )
-         CALL AB_CHKXER( 'AB_DGGES ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGES ', INFOT, NOUT, LERR, OK )
          INFOT = 15
-         CALL AB_DGGES( 'N', 'V', 'S', AB_DLCTES, 1, A, 1, B, 1, SDIM, R
-     $1, R2,
+         CALL DGGES( 'N', 'V', 'S', DLCTES, 1, A, 1, B, 1, SDIM, R1, R2,
      $               R3, Q, 0, U, 1, W, 1, BW, INFO )
-         CALL AB_CHKXER( 'AB_DGGES ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGES ', INFOT, NOUT, LERR, OK )
          INFOT = 15
-         CALL AB_DGGES( 'V', 'V', 'S', AB_DLCTES, 2, A, 2, B, 2, SDIM, R
-     $1, R2,
+         CALL DGGES( 'V', 'V', 'S', DLCTES, 2, A, 2, B, 2, SDIM, R1, R2,
      $               R3, Q, 1, U, 2, W, 1, BW, INFO )
-         CALL AB_CHKXER( 'AB_DGGES ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGES ', INFOT, NOUT, LERR, OK )
          INFOT = 17
-         CALL AB_DGGES( 'N', 'V', 'S', AB_DLCTES, 1, A, 1, B, 1, SDIM, R
-     $1, R2,
+         CALL DGGES( 'N', 'V', 'S', DLCTES, 1, A, 1, B, 1, SDIM, R1, R2,
      $               R3, Q, 1, U, 0, W, 1, BW, INFO )
-         CALL AB_CHKXER( 'AB_DGGES ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGES ', INFOT, NOUT, LERR, OK )
          INFOT = 17
-         CALL AB_DGGES( 'V', 'V', 'S', AB_DLCTES, 2, A, 2, B, 2, SDIM, R
-     $1, R2,
+         CALL DGGES( 'V', 'V', 'S', DLCTES, 2, A, 2, B, 2, SDIM, R1, R2,
      $               R3, Q, 2, U, 1, W, 1, BW, INFO )
-         CALL AB_CHKXER( 'AB_DGGES ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGES ', INFOT, NOUT, LERR, OK )
          INFOT = 19
-         CALL AB_DGGES( 'V', 'V', 'S', AB_DLCTES, 2, A, 2, B, 2, SDIM, R
-     $1, R2,
+         CALL DGGES( 'V', 'V', 'S', DLCTES, 2, A, 2, B, 2, SDIM, R1, R2,
      $               R3, Q, 2, U, 2, W, 1, BW, INFO )
-         CALL AB_CHKXER( 'AB_DGGES ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGES ', INFOT, NOUT, LERR, OK )
          NT = NT + 11
 *
-*        AB_AB_DGGES3
+*        DGGES3
 *
-         SRNAMT = 'AB_AB_DGGES3 '
+         SRNAMT = 'DGGES3 '
          INFOT = 1
-         CALL AB_AB_DGGES3( '/', 'N', 'S', AB_DLCTES, 1, A, 1, B, 1, SDI
-     $M, R1,
+         CALL DGGES3( '/', 'N', 'S', DLCTES, 1, A, 1, B, 1, SDIM, R1,
      $                R2, R3, Q, 1, U, 1, W, 1, BW, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGES3 ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGES3 ', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_DGGES3( 'N', '/', 'S', AB_DLCTES, 1, A, 1, B, 1, SDI
-     $M, R1,
+         CALL DGGES3( 'N', '/', 'S', DLCTES, 1, A, 1, B, 1, SDIM, R1,
      $                R2, R3, Q, 1, U, 1, W, 1, BW, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGES3 ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGES3 ', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_DGGES3( 'N', 'V', '/', AB_DLCTES, 1, A, 1, B, 1, SDI
-     $M, R1,
+         CALL DGGES3( 'N', 'V', '/', DLCTES, 1, A, 1, B, 1, SDIM, R1,
      $                R2, R3, Q, 1, U, 1, W, 1, BW, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGES3 ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGES3 ', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_AB_DGGES3( 'N', 'V', 'S', AB_DLCTES, -1, A, 1, B, 1, SD
-     $IM, R1,
+         CALL DGGES3( 'N', 'V', 'S', DLCTES, -1, A, 1, B, 1, SDIM, R1,
      $                R2, R3, Q, 1, U, 1, W, 1, BW, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGES3 ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGES3 ', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_AB_DGGES3( 'N', 'V', 'S', AB_DLCTES, 1, A, 0, B, 1, SDI
-     $M, R1,
+         CALL DGGES3( 'N', 'V', 'S', DLCTES, 1, A, 0, B, 1, SDIM, R1,
      $                R2, R3, Q, 1, U, 1, W, 1, BW, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGES3 ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGES3 ', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_AB_DGGES3( 'N', 'V', 'S', AB_DLCTES, 1, A, 1, B, 0, SDI
-     $M, R1,
+         CALL DGGES3( 'N', 'V', 'S', DLCTES, 1, A, 1, B, 0, SDIM, R1,
      $                R2, R3, Q, 1, U, 1, W, 1, BW, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGES3 ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGES3 ', INFOT, NOUT, LERR, OK )
          INFOT = 15
-         CALL AB_AB_DGGES3( 'N', 'V', 'S', AB_DLCTES, 1, A, 1, B, 1, SDI
-     $M, R1,
+         CALL DGGES3( 'N', 'V', 'S', DLCTES, 1, A, 1, B, 1, SDIM, R1,
      $                R2, R3, Q, 0, U, 1, W, 1, BW, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGES3 ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGES3 ', INFOT, NOUT, LERR, OK )
          INFOT = 15
-         CALL AB_AB_DGGES3( 'V', 'V', 'S', AB_DLCTES, 2, A, 2, B, 2, SDI
-     $M, R1,
+         CALL DGGES3( 'V', 'V', 'S', DLCTES, 2, A, 2, B, 2, SDIM, R1,
      $                R2, R3, Q, 1, U, 2, W, 1, BW, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGES3 ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGES3 ', INFOT, NOUT, LERR, OK )
          INFOT = 17
-         CALL AB_AB_DGGES3( 'N', 'V', 'S', AB_DLCTES, 1, A, 1, B, 1, SDI
-     $M, R1,
+         CALL DGGES3( 'N', 'V', 'S', DLCTES, 1, A, 1, B, 1, SDIM, R1,
      $                R2, R3, Q, 1, U, 0, W, 1, BW, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGES3 ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGES3 ', INFOT, NOUT, LERR, OK )
          INFOT = 17
-         CALL AB_AB_DGGES3( 'V', 'V', 'S', AB_DLCTES, 2, A, 2, B, 2, SDI
-     $M, R1,
+         CALL DGGES3( 'V', 'V', 'S', DLCTES, 2, A, 2, B, 2, SDIM, R1,
      $                R2, R3, Q, 2, U, 1, W, 1, BW, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGES3 ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGES3 ', INFOT, NOUT, LERR, OK )
          INFOT = 19
-         CALL AB_AB_DGGES3( 'V', 'V', 'S', AB_DLCTES, 2, A, 2, B, 2, SDI
-     $M, R1,
+         CALL DGGES3( 'V', 'V', 'S', DLCTES, 2, A, 2, B, 2, SDIM, R1,
      $                R2, R3, Q, 2, U, 2, W, 1, BW, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGES3 ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGES3 ', INFOT, NOUT, LERR, OK )
          NT = NT + 11
 *
-*        AB_AB_DGGESX
+*        DGGESX
 *
-         SRNAMT = 'AB_AB_DGGESX'
+         SRNAMT = 'DGGESX'
          INFOT = 1
-         CALL AB_AB_DGGESX( '/', 'N', 'S', AB_DLCTSX, 'N', 1, A, 1, B, 1
-     $, SDIM,
+         CALL DGGESX( '/', 'N', 'S', DLCTSX, 'N', 1, A, 1, B, 1, SDIM,
      $                R1, R2, R3, Q, 1, U, 1, RCE, RCV, W, 1, IW, 1, BW,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGESX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGESX', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_DGGESX( 'N', '/', 'S', AB_DLCTSX, 'N', 1, A, 1, B, 1
-     $, SDIM,
+         CALL DGGESX( 'N', '/', 'S', DLCTSX, 'N', 1, A, 1, B, 1, SDIM,
      $                R1, R2, R3, Q, 1, U, 1, RCE, RCV, W, 1, IW, 1, BW,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGESX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGESX', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_DGGESX( 'V', 'V', '/', AB_DLCTSX, 'N', 1, A, 1, B, 1
-     $, SDIM,
+         CALL DGGESX( 'V', 'V', '/', DLCTSX, 'N', 1, A, 1, B, 1, SDIM,
      $                R1, R2, R3, Q, 1, U, 1, RCE, RCV, W, 1, IW, 1, BW,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGESX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGESX', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_AB_DGGESX( 'V', 'V', 'S', AB_DLCTSX, '/', 1, A, 1, B, 1
-     $, SDIM,
+         CALL DGGESX( 'V', 'V', 'S', DLCTSX, '/', 1, A, 1, B, 1, SDIM,
      $                R1, R2, R3, Q, 1, U, 1, RCE, RCV, W, 1, IW, 1, BW,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGESX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGESX', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_AB_DGGESX( 'V', 'V', 'S', AB_DLCTSX, 'B', -1, A, 1, B, 
-     $1, SDIM,
+         CALL DGGESX( 'V', 'V', 'S', DLCTSX, 'B', -1, A, 1, B, 1, SDIM,
      $                R1, R2, R3, Q, 1, U, 1, RCE, RCV, W, 1, IW, 1, BW,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGESX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGESX', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_DGGESX( 'V', 'V', 'S', AB_DLCTSX, 'B', 1, A, 0, B, 1
-     $, SDIM,
+         CALL DGGESX( 'V', 'V', 'S', DLCTSX, 'B', 1, A, 0, B, 1, SDIM,
      $                R1, R2, R3, Q, 1, U, 1, RCE, RCV, W, 1, IW, 1, BW,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGESX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGESX', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_AB_DGGESX( 'V', 'V', 'S', AB_DLCTSX, 'B', 1, A, 1, B, 0
-     $, SDIM,
+         CALL DGGESX( 'V', 'V', 'S', DLCTSX, 'B', 1, A, 1, B, 0, SDIM,
      $                R1, R2, R3, Q, 1, U, 1, RCE, RCV, W, 1, IW, 1, BW,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGESX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGESX', INFOT, NOUT, LERR, OK )
          INFOT = 16
-         CALL AB_AB_DGGESX( 'V', 'V', 'S', AB_DLCTSX, 'B', 1, A, 1, B, 1
-     $, SDIM,
+         CALL DGGESX( 'V', 'V', 'S', DLCTSX, 'B', 1, A, 1, B, 1, SDIM,
      $                R1, R2, R3, Q, 0, U, 1, RCE, RCV, W, 1, IW, 1, BW,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGESX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGESX', INFOT, NOUT, LERR, OK )
          INFOT = 16
-         CALL AB_AB_DGGESX( 'V', 'V', 'S', AB_DLCTSX, 'B', 2, A, 2, B, 2
-     $, SDIM,
+         CALL DGGESX( 'V', 'V', 'S', DLCTSX, 'B', 2, A, 2, B, 2, SDIM,
      $                R1, R2, R3, Q, 1, U, 1, RCE, RCV, W, 1, IW, 1, BW,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGESX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGESX', INFOT, NOUT, LERR, OK )
          INFOT = 18
-         CALL AB_AB_DGGESX( 'V', 'V', 'S', AB_DLCTSX, 'B', 1, A, 1, B, 1
-     $, SDIM,
+         CALL DGGESX( 'V', 'V', 'S', DLCTSX, 'B', 1, A, 1, B, 1, SDIM,
      $                R1, R2, R3, Q, 1, U, 0, RCE, RCV, W, 1, IW, 1, BW,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGESX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGESX', INFOT, NOUT, LERR, OK )
          INFOT = 18
-         CALL AB_AB_DGGESX( 'V', 'V', 'S', AB_DLCTSX, 'B', 2, A, 2, B, 2
-     $, SDIM,
+         CALL DGGESX( 'V', 'V', 'S', DLCTSX, 'B', 2, A, 2, B, 2, SDIM,
      $                R1, R2, R3, Q, 2, U, 1, RCE, RCV, W, 1, IW, 1, BW,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGESX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGESX', INFOT, NOUT, LERR, OK )
          INFOT = 22
-         CALL AB_AB_DGGESX( 'V', 'V', 'S', AB_DLCTSX, 'B', 2, A, 2, B, 2
-     $, SDIM,
+         CALL DGGESX( 'V', 'V', 'S', DLCTSX, 'B', 2, A, 2, B, 2, SDIM,
      $                R1, R2, R3, Q, 2, U, 2, RCE, RCV, W, 1, IW, 1, BW,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGESX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGESX', INFOT, NOUT, LERR, OK )
          INFOT = 24
-         CALL AB_AB_DGGESX( 'V', 'V', 'S', AB_DLCTSX, 'V', 1, A, 1, B, 1
-     $, SDIM,
+         CALL DGGESX( 'V', 'V', 'S', DLCTSX, 'V', 1, A, 1, B, 1, SDIM,
      $                R1, R2, R3, Q, 1, U, 1, RCE, RCV, W, 32, IW, 0,
      $                BW, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGESX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGESX', INFOT, NOUT, LERR, OK )
          NT = NT + 13
 *
-*        AB_DGGEV
+*        DGGEV
 *
-         SRNAMT = 'AB_DGGEV '
+         SRNAMT = 'DGGEV '
          INFOT = 1
-         CALL AB_DGGEV( '/', 'N', 1, A, 1, B, 1, R1, R2, R3, Q, 1, U, 1,
-     $ W,
+         CALL DGGEV( '/', 'N', 1, A, 1, B, 1, R1, R2, R3, Q, 1, U, 1, W,
      $               1, INFO )
-         CALL AB_CHKXER( 'AB_DGGEV ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGEV ', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_DGGEV( 'N', '/', 1, A, 1, B, 1, R1, R2, R3, Q, 1, U, 1,
-     $ W,
+         CALL DGGEV( 'N', '/', 1, A, 1, B, 1, R1, R2, R3, Q, 1, U, 1, W,
      $               1, INFO )
-         CALL AB_CHKXER( 'AB_DGGEV ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGEV ', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_DGGEV( 'V', 'V', -1, A, 1, B, 1, R1, R2, R3, Q, 1, U, 1
-     $,
+         CALL DGGEV( 'V', 'V', -1, A, 1, B, 1, R1, R2, R3, Q, 1, U, 1,
      $               W, 1, INFO )
-         CALL AB_CHKXER( 'AB_DGGEV ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGEV ', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_DGGEV( 'V', 'V', 1, A, 0, B, 1, R1, R2, R3, Q, 1, U, 1,
-     $ W,
+         CALL DGGEV( 'V', 'V', 1, A, 0, B, 1, R1, R2, R3, Q, 1, U, 1, W,
      $               1, INFO )
-         CALL AB_CHKXER( 'AB_DGGEV ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGEV ', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_DGGEV( 'V', 'V', 1, A, 1, B, 0, R1, R2, R3, Q, 1, U, 1,
-     $ W,
+         CALL DGGEV( 'V', 'V', 1, A, 1, B, 0, R1, R2, R3, Q, 1, U, 1, W,
      $               1, INFO )
-         CALL AB_CHKXER( 'AB_DGGEV ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGEV ', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL AB_DGGEV( 'N', 'V', 1, A, 1, B, 1, R1, R2, R3, Q, 0, U, 1,
-     $ W,
+         CALL DGGEV( 'N', 'V', 1, A, 1, B, 1, R1, R2, R3, Q, 0, U, 1, W,
      $               1, INFO )
-         CALL AB_CHKXER( 'AB_DGGEV ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGEV ', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL AB_DGGEV( 'V', 'V', 2, A, 2, B, 2, R1, R2, R3, Q, 1, U, 2,
-     $ W,
+         CALL DGGEV( 'V', 'V', 2, A, 2, B, 2, R1, R2, R3, Q, 1, U, 2, W,
      $               1, INFO )
-         CALL AB_CHKXER( 'AB_DGGEV ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGEV ', INFOT, NOUT, LERR, OK )
          INFOT = 14
-         CALL AB_DGGEV( 'V', 'N', 2, A, 2, B, 2, R1, R2, R3, Q, 2, U, 0,
-     $ W,
+         CALL DGGEV( 'V', 'N', 2, A, 2, B, 2, R1, R2, R3, Q, 2, U, 0, W,
      $               1, INFO )
-         CALL AB_CHKXER( 'AB_DGGEV ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGEV ', INFOT, NOUT, LERR, OK )
          INFOT = 14
-         CALL AB_DGGEV( 'V', 'V', 2, A, 2, B, 2, R1, R2, R3, Q, 2, U, 1,
-     $ W,
+         CALL DGGEV( 'V', 'V', 2, A, 2, B, 2, R1, R2, R3, Q, 2, U, 1, W,
      $               1, INFO )
-         CALL AB_CHKXER( 'AB_DGGEV ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGEV ', INFOT, NOUT, LERR, OK )
          INFOT = 16
-         CALL AB_DGGEV( 'V', 'V', 1, A, 1, B, 1, R1, R2, R3, Q, 1, U, 1,
-     $ W,
+         CALL DGGEV( 'V', 'V', 1, A, 1, B, 1, R1, R2, R3, Q, 1, U, 1, W,
      $               1, INFO )
-         CALL AB_CHKXER( 'AB_DGGEV ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGEV ', INFOT, NOUT, LERR, OK )
          NT = NT + 10
 *
-*        AB_AB_DGGEV3
+*        DGGEV3
 *
-         SRNAMT = 'AB_AB_DGGEV3 '
+         SRNAMT = 'DGGEV3 '
          INFOT = 1
-         CALL AB_AB_DGGEV3( '/', 'N', 1, A, 1, B, 1, R1, R2, R3, Q, 1, U
-     $, 1,
+         CALL DGGEV3( '/', 'N', 1, A, 1, B, 1, R1, R2, R3, Q, 1, U, 1,
      $                W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGEV3 ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGEV3 ', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_DGGEV3( 'N', '/', 1, A, 1, B, 1, R1, R2, R3, Q, 1, U
-     $, 1,
+         CALL DGGEV3( 'N', '/', 1, A, 1, B, 1, R1, R2, R3, Q, 1, U, 1,
      $                W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGEV3 ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGEV3 ', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_DGGEV3( 'V', 'V', -1, A, 1, B, 1, R1, R2, R3, Q, 1, 
-     $U, 1,
+         CALL DGGEV3( 'V', 'V', -1, A, 1, B, 1, R1, R2, R3, Q, 1, U, 1,
      $                W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGEV3 ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGEV3 ', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_AB_DGGEV3( 'V', 'V', 1, A, 0, B, 1, R1, R2, R3, Q, 1, U
-     $, 1,
+         CALL DGGEV3( 'V', 'V', 1, A, 0, B, 1, R1, R2, R3, Q, 1, U, 1,
      $                W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGEV3 ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGEV3 ', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_AB_DGGEV3( 'V', 'V', 1, A, 1, B, 0, R1, R2, R3, Q, 1, U
-     $, 1,
+         CALL DGGEV3( 'V', 'V', 1, A, 1, B, 0, R1, R2, R3, Q, 1, U, 1,
      $                W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGEV3 ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGEV3 ', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL AB_AB_DGGEV3( 'N', 'V', 1, A, 1, B, 1, R1, R2, R3, Q, 0, U
-     $, 1,
+         CALL DGGEV3( 'N', 'V', 1, A, 1, B, 1, R1, R2, R3, Q, 0, U, 1,
      $                W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGEV3 ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGEV3 ', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL AB_AB_DGGEV3( 'V', 'V', 2, A, 2, B, 2, R1, R2, R3, Q, 1, U
-     $, 2,
+         CALL DGGEV3( 'V', 'V', 2, A, 2, B, 2, R1, R2, R3, Q, 1, U, 2,
      $                W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGEV3 ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGEV3 ', INFOT, NOUT, LERR, OK )
          INFOT = 14
-         CALL AB_AB_DGGEV3( 'V', 'N', 2, A, 2, B, 2, R1, R2, R3, Q, 2, U
-     $, 0,
+         CALL DGGEV3( 'V', 'N', 2, A, 2, B, 2, R1, R2, R3, Q, 2, U, 0,
      $                W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGEV3 ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGEV3 ', INFOT, NOUT, LERR, OK )
          INFOT = 14
-         CALL AB_AB_DGGEV3( 'V', 'V', 2, A, 2, B, 2, R1, R2, R3, Q, 2, U
-     $, 1,
+         CALL DGGEV3( 'V', 'V', 2, A, 2, B, 2, R1, R2, R3, Q, 2, U, 1,
      $                W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGEV3 ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGEV3 ', INFOT, NOUT, LERR, OK )
          INFOT = 16
-         CALL AB_AB_DGGEV3( 'V', 'V', 1, A, 1, B, 1, R1, R2, R3, Q, 1, U
-     $, 1,
+         CALL DGGEV3( 'V', 'V', 1, A, 1, B, 1, R1, R2, R3, Q, 1, U, 1,
      $                W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGEV3 ', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGEV3 ', INFOT, NOUT, LERR, OK )
          NT = NT + 10
 *
-*        AB_AB_DGGEVX
+*        DGGEVX
 *
-         SRNAMT = 'AB_AB_DGGEVX'
+         SRNAMT = 'DGGEVX'
          INFOT = 1
-         CALL AB_AB_DGGEVX( '/', 'N', 'N', 'N', 1, A, 1, B, 1, R1, R2, R
-     $3, Q,
+         CALL DGGEVX( '/', 'N', 'N', 'N', 1, A, 1, B, 1, R1, R2, R3, Q,
      $                1, U, 1, ILO, IHI, LS, RS, ANRM, BNRM, RCE, RCV,
      $                W, 1, IW, BW, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGEVX', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_DGGEVX( 'N', '/', 'N', 'N', 1, A, 1, B, 1, R1, R2, R
-     $3, Q,
+         CALL DGGEVX( 'N', '/', 'N', 'N', 1, A, 1, B, 1, R1, R2, R3, Q,
      $                1, U, 1, ILO, IHI, LS, RS, ANRM, BNRM, RCE, RCV,
      $                W, 1, IW, BW, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGEVX', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_DGGEVX( 'N', 'N', '/', 'N', 1, A, 1, B, 1, R1, R2, R
-     $3, Q,
+         CALL DGGEVX( 'N', 'N', '/', 'N', 1, A, 1, B, 1, R1, R2, R3, Q,
      $                1, U, 1, ILO, IHI, LS, RS, ANRM, BNRM, RCE, RCV,
      $                W, 1, IW, BW, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGEVX', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_DGGEVX( 'N', 'N', 'N', '/', 1, A, 1, B, 1, R1, R2, R
-     $3, Q,
+         CALL DGGEVX( 'N', 'N', 'N', '/', 1, A, 1, B, 1, R1, R2, R3, Q,
      $                1, U, 1, ILO, IHI, LS, RS, ANRM, BNRM, RCE, RCV,
      $                W, 1, IW, BW, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGEVX', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_AB_DGGEVX( 'N', 'N', 'N', 'N', -1, A, 1, B, 1, R1, R2, 
-     $R3, Q,
+         CALL DGGEVX( 'N', 'N', 'N', 'N', -1, A, 1, B, 1, R1, R2, R3, Q,
      $                1, U, 1, ILO, IHI, LS, RS, ANRM, BNRM, RCE, RCV,
      $                W, 1, IW, BW, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGEVX', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_AB_DGGEVX( 'N', 'N', 'N', 'N', 1, A, 0, B, 1, R1, R2, R
-     $3, Q,
+         CALL DGGEVX( 'N', 'N', 'N', 'N', 1, A, 0, B, 1, R1, R2, R3, Q,
      $                1, U, 1, ILO, IHI, LS, RS, ANRM, BNRM, RCE, RCV,
      $                W, 1, IW, BW, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGEVX', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_AB_DGGEVX( 'N', 'N', 'N', 'N', 1, A, 1, B, 0, R1, R2, R
-     $3, Q,
+         CALL DGGEVX( 'N', 'N', 'N', 'N', 1, A, 1, B, 0, R1, R2, R3, Q,
      $                1, U, 1, ILO, IHI, LS, RS, ANRM, BNRM, RCE, RCV,
      $                W, 1, IW, BW, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGEVX', INFOT, NOUT, LERR, OK )
          INFOT = 14
-         CALL AB_AB_DGGEVX( 'N', 'N', 'N', 'N', 1, A, 1, B, 1, R1, R2, R
-     $3, Q,
+         CALL DGGEVX( 'N', 'N', 'N', 'N', 1, A, 1, B, 1, R1, R2, R3, Q,
      $                0, U, 1, ILO, IHI, LS, RS, ANRM, BNRM, RCE, RCV,
      $                W, 1, IW, BW, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGEVX', INFOT, NOUT, LERR, OK )
          INFOT = 14
-         CALL AB_AB_DGGEVX( 'N', 'V', 'N', 'N', 2, A, 2, B, 2, R1, R2, R
-     $3, Q,
+         CALL DGGEVX( 'N', 'V', 'N', 'N', 2, A, 2, B, 2, R1, R2, R3, Q,
      $                1, U, 2, ILO, IHI, LS, RS, ANRM, BNRM, RCE, RCV,
      $                W, 1, IW, BW, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGEVX', INFOT, NOUT, LERR, OK )
          INFOT = 16
-         CALL AB_AB_DGGEVX( 'N', 'N', 'N', 'N', 1, A, 1, B, 1, R1, R2, R
-     $3, Q,
+         CALL DGGEVX( 'N', 'N', 'N', 'N', 1, A, 1, B, 1, R1, R2, R3, Q,
      $                1, U, 0, ILO, IHI, LS, RS, ANRM, BNRM, RCE, RCV,
      $                W, 1, IW, BW, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGEVX', INFOT, NOUT, LERR, OK )
          INFOT = 16
-         CALL AB_AB_DGGEVX( 'N', 'N', 'V', 'N', 2, A, 2, B, 2, R1, R2, R
-     $3, Q,
+         CALL DGGEVX( 'N', 'N', 'V', 'N', 2, A, 2, B, 2, R1, R2, R3, Q,
      $                2, U, 1, ILO, IHI, LS, RS, ANRM, BNRM, RCE, RCV,
      $                W, 1, IW, BW, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGEVX', INFOT, NOUT, LERR, OK )
          INFOT = 26
-         CALL AB_AB_DGGEVX( 'N', 'N', 'V', 'N', 2, A, 2, B, 2, R1, R2, R
-     $3, Q,
+         CALL DGGEVX( 'N', 'N', 'V', 'N', 2, A, 2, B, 2, R1, R2, R3, Q,
      $                2, U, 2, ILO, IHI, LS, RS, ANRM, BNRM, RCE, RCV,
      $                W, 1, IW, BW, INFO )
-         CALL AB_CHKXER( 'AB_AB_DGGEVX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DGGEVX', INFOT, NOUT, LERR, OK )
          NT = NT + 12
 *
-*        AB_DTGEXC
+*        DTGEXC
 *
-         SRNAMT = 'AB_DTGEXC'
+         SRNAMT = 'DTGEXC'
          INFOT = 3
-         CALL AB_DTGEXC( .TRUE., .TRUE., -1, A, 1, B, 1, Q, 1, Z, 1, IFS
-     $T,
+         CALL DTGEXC( .TRUE., .TRUE., -1, A, 1, B, 1, Q, 1, Z, 1, IFST,
      $                ILST, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_DTGEXC', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGEXC', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_DTGEXC( .TRUE., .TRUE., 1, A, 0, B, 1, Q, 1, Z, 1, IFST
-     $,
+         CALL DTGEXC( .TRUE., .TRUE., 1, A, 0, B, 1, Q, 1, Z, 1, IFST,
      $                ILST, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_DTGEXC', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGEXC', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_DTGEXC( .TRUE., .TRUE., 1, A, 1, B, 0, Q, 1, Z, 1, IFST
-     $,
+         CALL DTGEXC( .TRUE., .TRUE., 1, A, 1, B, 0, Q, 1, Z, 1, IFST,
      $                ILST, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_DTGEXC', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGEXC', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_DTGEXC( .FALSE., .TRUE., 1, A, 1, B, 1, Q, 0, Z, 1, 
-     $IFST,
+         CALL DTGEXC( .FALSE., .TRUE., 1, A, 1, B, 1, Q, 0, Z, 1, IFST,
      $                ILST, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_DTGEXC', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGEXC', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_DTGEXC( .TRUE., .TRUE., 1, A, 1, B, 1, Q, 0, Z, 1, IFST
-     $,
+         CALL DTGEXC( .TRUE., .TRUE., 1, A, 1, B, 1, Q, 0, Z, 1, IFST,
      $                ILST, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_DTGEXC', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGEXC', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL AB_DTGEXC( .TRUE., .FALSE., 1, A, 1, B, 1, Q, 1, Z, 0, 
-     $IFST,
+         CALL DTGEXC( .TRUE., .FALSE., 1, A, 1, B, 1, Q, 1, Z, 0, IFST,
      $                ILST, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_DTGEXC', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGEXC', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL AB_DTGEXC( .TRUE., .TRUE., 1, A, 1, B, 1, Q, 1, Z, 0, IFST
-     $,
+         CALL DTGEXC( .TRUE., .TRUE., 1, A, 1, B, 1, Q, 1, Z, 0, IFST,
      $                ILST, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_DTGEXC', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGEXC', INFOT, NOUT, LERR, OK )
          INFOT = 15
-         CALL AB_DTGEXC( .TRUE., .TRUE., 1, A, 1, B, 1, Q, 1, Z, 1, IFST
-     $,
+         CALL DTGEXC( .TRUE., .TRUE., 1, A, 1, B, 1, Q, 1, Z, 1, IFST,
      $                ILST, W, 0, INFO )
-         CALL AB_CHKXER( 'AB_DTGEXC', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGEXC', INFOT, NOUT, LERR, OK )
          NT = NT + 8
 *
-*        AB_DTGSEN
+*        DTGSEN
 *
-         SRNAMT = 'AB_DTGSEN'
+         SRNAMT = 'DTGSEN'
          INFOT = 1
-         CALL AB_DTGSEN( -1, .TRUE., .TRUE., SEL, 1, A, 1, B, 1, R1, R2,
+         CALL DTGSEN( -1, .TRUE., .TRUE., SEL, 1, A, 1, B, 1, R1, R2,
      $                R3, Q, 1, Z, 1, M, TOLA, TOLB, RCV, W, 1, IW, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DTGSEN', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSEN', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_DTGSEN( 1, .TRUE., .TRUE., SEL, -1, A, 1, B, 1, R1, R2,
+         CALL DTGSEN( 1, .TRUE., .TRUE., SEL, -1, A, 1, B, 1, R1, R2,
      $                R3, Q, 1, Z, 1, M, TOLA, TOLB, RCV, W, 1, IW, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DTGSEN', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSEN', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_DTGSEN( 1, .TRUE., .TRUE., SEL, 1, A, 0, B, 1, R1, R2, 
-     $R3,
+         CALL DTGSEN( 1, .TRUE., .TRUE., SEL, 1, A, 0, B, 1, R1, R2, R3,
      $                Q, 1, Z, 1, M, TOLA, TOLB, RCV, W, 1, IW, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DTGSEN', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSEN', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_DTGSEN( 1, .TRUE., .TRUE., SEL, 1, A, 1, B, 0, R1, R2, 
-     $R3,
+         CALL DTGSEN( 1, .TRUE., .TRUE., SEL, 1, A, 1, B, 0, R1, R2, R3,
      $                Q, 1, Z, 1, M, TOLA, TOLB, RCV, W, 1, IW, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DTGSEN', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSEN', INFOT, NOUT, LERR, OK )
          INFOT = 14
-         CALL AB_DTGSEN( 1, .TRUE., .TRUE., SEL, 1, A, 1, B, 1, R1, R2, 
-     $R3,
+         CALL DTGSEN( 1, .TRUE., .TRUE., SEL, 1, A, 1, B, 1, R1, R2, R3,
      $                Q, 0, Z, 1, M, TOLA, TOLB, RCV, W, 1, IW, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DTGSEN', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSEN', INFOT, NOUT, LERR, OK )
          INFOT = 16
-         CALL AB_DTGSEN( 1, .TRUE., .TRUE., SEL, 1, A, 1, B, 1, R1, R2, 
-     $R3,
+         CALL DTGSEN( 1, .TRUE., .TRUE., SEL, 1, A, 1, B, 1, R1, R2, R3,
      $                Q, 1, Z, 0, M, TOLA, TOLB, RCV, W, 1, IW, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DTGSEN', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSEN', INFOT, NOUT, LERR, OK )
          INFOT = 22
-         CALL AB_DTGSEN( 0, .TRUE., .TRUE., SEL, 1, A, 1, B, 1, R1, R2, 
-     $R3,
+         CALL DTGSEN( 0, .TRUE., .TRUE., SEL, 1, A, 1, B, 1, R1, R2, R3,
      $                Q, 1, Z, 1, M, TOLA, TOLB, RCV, W, 1, IW, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DTGSEN', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSEN', INFOT, NOUT, LERR, OK )
          INFOT = 22
-         CALL AB_DTGSEN( 1, .TRUE., .TRUE., SEL, 1, A, 1, B, 1, R1, R2, 
-     $R3,
+         CALL DTGSEN( 1, .TRUE., .TRUE., SEL, 1, A, 1, B, 1, R1, R2, R3,
      $                Q, 1, Z, 1, M, TOLA, TOLB, RCV, W, 1, IW, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DTGSEN', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSEN', INFOT, NOUT, LERR, OK )
          INFOT = 22
-         CALL AB_DTGSEN( 2, .TRUE., .TRUE., SEL, 1, A, 1, B, 1, R1, R2, 
-     $R3,
+         CALL DTGSEN( 2, .TRUE., .TRUE., SEL, 1, A, 1, B, 1, R1, R2, R3,
      $                Q, 1, Z, 1, M, TOLA, TOLB, RCV, W, 1, IW, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DTGSEN', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSEN', INFOT, NOUT, LERR, OK )
          INFOT = 24
-         CALL AB_DTGSEN( 0, .TRUE., .TRUE., SEL, 1, A, 1, B, 1, R1, R2, 
-     $R3,
+         CALL DTGSEN( 0, .TRUE., .TRUE., SEL, 1, A, 1, B, 1, R1, R2, R3,
      $                Q, 1, Z, 1, M, TOLA, TOLB, RCV, W, 20, IW, 0,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DTGSEN', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSEN', INFOT, NOUT, LERR, OK )
          INFOT = 24
-         CALL AB_DTGSEN( 1, .TRUE., .TRUE., SEL, 1, A, 1, B, 1, R1, R2, 
-     $R3,
+         CALL DTGSEN( 1, .TRUE., .TRUE., SEL, 1, A, 1, B, 1, R1, R2, R3,
      $                Q, 1, Z, 1, M, TOLA, TOLB, RCV, W, 20, IW, 0,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DTGSEN', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSEN', INFOT, NOUT, LERR, OK )
          INFOT = 24
-         CALL AB_DTGSEN( 2, .TRUE., .TRUE., SEL, 1, A, 1, B, 1, R1, R2, 
-     $R3,
+         CALL DTGSEN( 2, .TRUE., .TRUE., SEL, 1, A, 1, B, 1, R1, R2, R3,
      $                Q, 1, Z, 1, M, TOLA, TOLB, RCV, W, 20, IW, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DTGSEN', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSEN', INFOT, NOUT, LERR, OK )
          NT = NT + 12
 *
-*        AB_DTGSNA
+*        DTGSNA
 *
-         SRNAMT = 'AB_DTGSNA'
+         SRNAMT = 'DTGSNA'
          INFOT = 1
-         CALL AB_DTGSNA( '/', 'A', SEL, 1, A, 1, B, 1, Q, 1, U, 1, R1, R
-     $2,
+         CALL DTGSNA( '/', 'A', SEL, 1, A, 1, B, 1, Q, 1, U, 1, R1, R2,
      $                1, M, W, 1, IW, INFO )
-         CALL AB_CHKXER( 'AB_DTGSNA', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSNA', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_DTGSNA( 'B', '/', SEL, 1, A, 1, B, 1, Q, 1, U, 1, R1, R
-     $2,
+         CALL DTGSNA( 'B', '/', SEL, 1, A, 1, B, 1, Q, 1, U, 1, R1, R2,
      $                1, M, W, 1, IW, INFO )
-         CALL AB_CHKXER( 'AB_DTGSNA', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSNA', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_DTGSNA( 'B', 'A', SEL, -1, A, 1, B, 1, Q, 1, U, 1, R1, 
-     $R2,
+         CALL DTGSNA( 'B', 'A', SEL, -1, A, 1, B, 1, Q, 1, U, 1, R1, R2,
      $                1, M, W, 1, IW, INFO )
-         CALL AB_CHKXER( 'AB_DTGSNA', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSNA', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_DTGSNA( 'B', 'A', SEL, 1, A, 0, B, 1, Q, 1, U, 1, R1, R
-     $2,
+         CALL DTGSNA( 'B', 'A', SEL, 1, A, 0, B, 1, Q, 1, U, 1, R1, R2,
      $                1, M, W, 1, IW, INFO )
-         CALL AB_CHKXER( 'AB_DTGSNA', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSNA', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_DTGSNA( 'B', 'A', SEL, 1, A, 1, B, 0, Q, 1, U, 1, R1, R
-     $2,
+         CALL DTGSNA( 'B', 'A', SEL, 1, A, 1, B, 0, Q, 1, U, 1, R1, R2,
      $                1, M, W, 1, IW, INFO )
-         CALL AB_CHKXER( 'AB_DTGSNA', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSNA', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_DTGSNA( 'E', 'A', SEL, 1, A, 1, B, 1, Q, 0, U, 1, R1, R
-     $2,
+         CALL DTGSNA( 'E', 'A', SEL, 1, A, 1, B, 1, Q, 0, U, 1, R1, R2,
      $                1, M, W, 1, IW, INFO )
-         CALL AB_CHKXER( 'AB_DTGSNA', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSNA', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL AB_DTGSNA( 'E', 'A', SEL, 1, A, 1, B, 1, Q, 1, U, 0, R1, R
-     $2,
+         CALL DTGSNA( 'E', 'A', SEL, 1, A, 1, B, 1, Q, 1, U, 0, R1, R2,
      $                1, M, W, 1, IW, INFO )
-         CALL AB_CHKXER( 'AB_DTGSNA', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSNA', INFOT, NOUT, LERR, OK )
          INFOT = 15
-         CALL AB_DTGSNA( 'E', 'A', SEL, 1, A, 1, B, 1, Q, 1, U, 1, R1, R
-     $2,
+         CALL DTGSNA( 'E', 'A', SEL, 1, A, 1, B, 1, Q, 1, U, 1, R1, R2,
      $                0, M, W, 1, IW, INFO )
-         CALL AB_CHKXER( 'AB_DTGSNA', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSNA', INFOT, NOUT, LERR, OK )
          INFOT = 18
-         CALL AB_DTGSNA( 'E', 'A', SEL, 1, A, 1, B, 1, Q, 1, U, 1, R1, R
-     $2,
+         CALL DTGSNA( 'E', 'A', SEL, 1, A, 1, B, 1, Q, 1, U, 1, R1, R2,
      $                1, M, W, 0, IW, INFO )
-         CALL AB_CHKXER( 'AB_DTGSNA', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSNA', INFOT, NOUT, LERR, OK )
          NT = NT + 9
 *
-*        AB_DTGSYL
+*        DTGSYL
 *
-         SRNAMT = 'AB_DTGSYL'
+         SRNAMT = 'DTGSYL'
          INFOT = 1
-         CALL AB_DTGSYL( '/', 0, 1, 1, A, 1, B, 1, Q, 1, U, 1, V, 1, Z, 
-     $1,
+         CALL DTGSYL( '/', 0, 1, 1, A, 1, B, 1, Q, 1, U, 1, V, 1, Z, 1,
      $                SCALE, DIF, W, 1, IW, INFO )
-         CALL AB_CHKXER( 'AB_DTGSYL', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSYL', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_DTGSYL( 'N', -1, 1, 1, A, 1, B, 1, Q, 1, U, 1, V, 1, Z,
-     $ 1,
+         CALL DTGSYL( 'N', -1, 1, 1, A, 1, B, 1, Q, 1, U, 1, V, 1, Z, 1,
      $                SCALE, DIF, W, 1, IW, INFO )
-         CALL AB_CHKXER( 'AB_DTGSYL', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSYL', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_DTGSYL( 'N', 0, 0, 1, A, 1, B, 1, Q, 1, U, 1, V, 1, Z, 
-     $1,
+         CALL DTGSYL( 'N', 0, 0, 1, A, 1, B, 1, Q, 1, U, 1, V, 1, Z, 1,
      $                SCALE, DIF, W, 1, IW, INFO )
-         CALL AB_CHKXER( 'AB_DTGSYL', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSYL', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_DTGSYL( 'N', 0, 1, 0, A, 1, B, 1, Q, 1, U, 1, V, 1, Z, 
-     $1,
+         CALL DTGSYL( 'N', 0, 1, 0, A, 1, B, 1, Q, 1, U, 1, V, 1, Z, 1,
      $                SCALE, DIF, W, 1, IW, INFO )
-         CALL AB_CHKXER( 'AB_DTGSYL', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSYL', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_DTGSYL( 'N', 0, 1, 1, A, 0, B, 1, Q, 1, U, 1, V, 1, Z, 
-     $1,
+         CALL DTGSYL( 'N', 0, 1, 1, A, 0, B, 1, Q, 1, U, 1, V, 1, Z, 1,
      $                SCALE, DIF, W, 1, IW, INFO )
-         CALL AB_CHKXER( 'AB_DTGSYL', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSYL', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_DTGSYL( 'N', 0, 1, 1, A, 1, B, 0, Q, 1, U, 1, V, 1, Z, 
-     $1,
+         CALL DTGSYL( 'N', 0, 1, 1, A, 1, B, 0, Q, 1, U, 1, V, 1, Z, 1,
      $                SCALE, DIF, W, 1, IW, INFO )
-         CALL AB_CHKXER( 'AB_DTGSYL', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSYL', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_DTGSYL( 'N', 0, 1, 1, A, 1, B, 1, Q, 0, U, 1, V, 1, Z, 
-     $1,
+         CALL DTGSYL( 'N', 0, 1, 1, A, 1, B, 1, Q, 0, U, 1, V, 1, Z, 1,
      $                SCALE, DIF, W, 1, IW, INFO )
-         CALL AB_CHKXER( 'AB_DTGSYL', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSYL', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL AB_DTGSYL( 'N', 0, 1, 1, A, 1, B, 1, Q, 1, U, 0, V, 1, Z, 
-     $1,
+         CALL DTGSYL( 'N', 0, 1, 1, A, 1, B, 1, Q, 1, U, 0, V, 1, Z, 1,
      $                SCALE, DIF, W, 1, IW, INFO )
-         CALL AB_CHKXER( 'AB_DTGSYL', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSYL', INFOT, NOUT, LERR, OK )
          INFOT = 14
-         CALL AB_DTGSYL( 'N', 0, 1, 1, A, 1, B, 1, Q, 1, U, 1, V, 0, Z, 
-     $1,
+         CALL DTGSYL( 'N', 0, 1, 1, A, 1, B, 1, Q, 1, U, 1, V, 0, Z, 1,
      $                SCALE, DIF, W, 1, IW, INFO )
-         CALL AB_CHKXER( 'AB_DTGSYL', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSYL', INFOT, NOUT, LERR, OK )
          INFOT = 16
-         CALL AB_DTGSYL( 'N', 0, 1, 1, A, 1, B, 1, Q, 1, U, 1, V, 1, Z, 
-     $0,
+         CALL DTGSYL( 'N', 0, 1, 1, A, 1, B, 1, Q, 1, U, 1, V, 1, Z, 0,
      $                SCALE, DIF, W, 1, IW, INFO )
-         CALL AB_CHKXER( 'AB_DTGSYL', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSYL', INFOT, NOUT, LERR, OK )
          INFOT = 20
-         CALL AB_DTGSYL( 'N', 1, 1, 1, A, 1, B, 1, Q, 1, U, 1, V, 1, Z, 
-     $1,
+         CALL DTGSYL( 'N', 1, 1, 1, A, 1, B, 1, Q, 1, U, 1, V, 1, Z, 1,
      $                SCALE, DIF, W, 1, IW, INFO )
-         CALL AB_CHKXER( 'AB_DTGSYL', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSYL', INFOT, NOUT, LERR, OK )
          INFOT = 20
-         CALL AB_DTGSYL( 'N', 2, 1, 1, A, 1, B, 1, Q, 1, U, 1, V, 1, Z, 
-     $1,
+         CALL DTGSYL( 'N', 2, 1, 1, A, 1, B, 1, Q, 1, U, 1, V, 1, Z, 1,
      $                SCALE, DIF, W, 1, IW, INFO )
-         CALL AB_CHKXER( 'AB_DTGSYL', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DTGSYL', INFOT, NOUT, LERR, OK )
          NT = NT + 12
       END IF
 *
@@ -1379,6 +1192,6 @@
 *
       RETURN
 *
-*     End of AB_DERRGG
+*     End of DERRGG
 *
       END

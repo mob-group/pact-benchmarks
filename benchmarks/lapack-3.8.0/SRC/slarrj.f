@@ -1,4 +1,4 @@
-*> \brief \b AB_SLARRJ performs refinement of the initial estimates of the eigenvalues of the matrix T.
+*> \brief \b SLARRJ performs refinement of the initial estimates of the eigenvalues of the matrix T.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLARRJ + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLARRJ.f">
+*> Download SLARRJ + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slarrj.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLARRJ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slarrj.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLARRJ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slarrj.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLARRJ( N, D, E2, IFIRST, ILAST,
+*       SUBROUTINE SLARRJ( N, D, E2, IFIRST, ILAST,
 *                          RTOL, OFFSET, W, WERR, WORK, IWORK,
 *                          PIVMIN, SPDIAM, INFO )
 *
@@ -38,7 +38,7 @@
 *>
 *> \verbatim
 *>
-*> Given the initial eigenvalue approximations of T, AB_SLARRJ
+*> Given the initial eigenvalue approximations of T, SLARRJ
 *> does  bisection to refine the eigenvalues of T,
 *> W( IFIRST-OFFSET ) through W( ILAST-OFFSET ), to more accuracy. Initial
 *> guesses for these eigenvalues are input in W, the corresponding estimate
@@ -164,7 +164,7 @@
 *> Christof Voemel, University of California, Berkeley, USA
 *
 *  =====================================================================
-      SUBROUTINE AB_SLARRJ( N, D, E2, IFIRST, ILAST,
+      SUBROUTINE SLARRJ( N, D, E2, IFIRST, ILAST,
      $                   RTOL, OFFSET, W, WERR, WORK, IWORK,
      $                   PIVMIN, SPDIAM, INFO )
 *
@@ -374,6 +374,6 @@
 
       RETURN
 *
-*     End of AB_SLARRJ
+*     End of SLARRJ
 *
       END

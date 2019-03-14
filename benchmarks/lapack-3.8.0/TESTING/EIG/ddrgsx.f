@@ -1,4 +1,4 @@
-*> \brief \b AB_DDRGSX
+*> \brief \b DDRGSX
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DDRGSX( NSIZE, NCMAX, THRESH, NIN, NOUT, A, LDA, B, AI,
+*       SUBROUTINE DDRGSX( NSIZE, NCMAX, THRESH, NIN, NOUT, A, LDA, B, AI,
 *                          BI, Z, Q, ALPHAR, ALPHAI, BETA, C, LDC, S,
 *                          WORK, LWORK, IWORK, LIWORK, BWORK, INFO )
 *
@@ -32,10 +32,10 @@
 *>
 *> \verbatim
 *>
-*> AB_DDRGSX checks the nonsymmetric generalized eigenvalue (Schur form)
-*> problem expert driver AB_AB_DGGESX.
+*> DDRGSX checks the nonsymmetric generalized eigenvalue (Schur form)
+*> problem expert driver DGGESX.
 *>
-*> AB_AB_DGGESX factors A and B as Q S Z' and Q T Z', where ' means
+*> DGGESX factors A and B as Q S Z' and Q T Z', where ' means
 *> transpose, T is upper triangular, S is in generalized Schur form
 *> (block upper triangular, with 1x1 and 2x2 blocks on the diagonal,
 *> the 2x2 blocks corresponding to complex conjugate pairs of
@@ -53,11 +53,11 @@
 *> number for the right and left deflating subspaces corresponding to
 *> the selected eigenvalues.
 *>
-*> When AB_DDRGSX is called with NSIZE > 0, five (5) types of built-in
-*> matrix pairs are used to test the routine AB_AB_DGGESX.
+*> When DDRGSX is called with NSIZE > 0, five (5) types of built-in
+*> matrix pairs are used to test the routine DGGESX.
 *>
-*> When AB_DDRGSX is called with NSIZE = 0, it reads in test matrix data
-*> to test AB_AB_DGGESX.
+*> When DDRGSX is called with NSIZE = 0, it reads in test matrix data
+*> to test DGGESX.
 *>
 *> For each matrix pair, the following tests will be performed and
 *> compared with the threshold THRESH except for the tests (7) and (9):
@@ -97,7 +97,7 @@
 *>       and Difl equal zero, the estimate DIF should be less than
 *>       EPS*norm(A, B).
 *>
-*> (9)   If INFO = N+3 is returned by AB_AB_DGGESX, the reordering "failed"
+*> (9)   If INFO = N+3 is returned by DGGESX, the reordering "failed"
 *>       and we check that DIF = PL = PR = 0 and that the true value of
 *>       Difu and Difl is < EPS*norm(A, B). We count the events when
 *>       INFO=N+3.
@@ -115,7 +115,7 @@
 *> Note that for the built-in tests, a total of 10*NSIZE*(NSIZE-1)
 *> matrix pairs are generated and tested. NSIZE should be kept small.
 *>
-*> SVD (routine AB_AB_DGESVD) is used for computing the true value of DIF_u
+*> SVD (routine DGESVD) is used for computing the true value of DIF_u
 *> and DIF_l when testing the built-in test problems.
 *>
 *> Built-in Test Matrices
@@ -146,7 +146,7 @@
 *>          B22 = (b_ij) = ( 2(.5-sin(ij)) ) for i=m+1,...,k, j=i,...,k
 *>
 *> Type 3:  A11, A22 and B11, B22 are chosen as for Type 2, but each
-*>          AB_SECOND diagonal block in A_11 and each third diagonal block
+*>          second diagonal block in A_11 and each third diagonal block
 *>          in A_22 are made as 2 by 2 blocks.
 *>
 *> Type 4:  A11 = ( 20(.5 - sin(ij)) ) and B22 = ( 2(.5 - sin(i+j)) )
@@ -176,7 +176,7 @@
 *>                  |                       -d  1+b    |
 *>                  |                      -1+b  -d    |
 *>                  |                              1-d |
-*>          and matrix B are chosen as identity matrices (see AB_DLATM5).
+*>          and matrix B are chosen as identity matrices (see DLATM5).
 *>
 *> \endverbatim
 *
@@ -188,14 +188,14 @@
 *>          NSIZE is INTEGER
 *>          The maximum size of the matrices to use. NSIZE >= 0.
 *>          If NSIZE = 0, no built-in tests matrices are used, but
-*>          read-in test matrices are used to test AB_AB_DGGESX.
+*>          read-in test matrices are used to test DGGESX.
 *> \endverbatim
 *>
 *> \param[in] NCMAX
 *> \verbatim
 *>          NCMAX is INTEGER
 *>          Maximum allowable NMAX for generating Kroneker matrix
-*>          in call to AB_DLAKF2
+*>          in call to DLAKF2
 *> \endverbatim
 *>
 *> \param[in] THRESH
@@ -248,25 +248,25 @@
 *> \param[out] AI
 *> \verbatim
 *>          AI is DOUBLE PRECISION array, dimension (LDA, NSIZE)
-*>          Copy of A, modified by AB_AB_DGGESX.
+*>          Copy of A, modified by DGGESX.
 *> \endverbatim
 *>
 *> \param[out] BI
 *> \verbatim
 *>          BI is DOUBLE PRECISION array, dimension (LDA, NSIZE)
-*>          Copy of B, modified by AB_AB_DGGESX.
+*>          Copy of B, modified by DGGESX.
 *> \endverbatim
 *>
 *> \param[out] Z
 *> \verbatim
 *>          Z is DOUBLE PRECISION array, dimension (LDA, NSIZE)
-*>          Z holds the left Schur vectors computed by AB_AB_DGGESX.
+*>          Z holds the left Schur vectors computed by DGGESX.
 *> \endverbatim
 *>
 *> \param[out] Q
 *> \verbatim
 *>          Q is DOUBLE PRECISION array, dimension (LDA, NSIZE)
-*>          Q holds the right Schur vectors computed by AB_AB_DGGESX.
+*>          Q holds the right Schur vectors computed by DGGESX.
 *> \endverbatim
 *>
 *> \param[out] ALPHAR
@@ -289,7 +289,7 @@
 *> \param[out] C
 *> \verbatim
 *>          C is DOUBLE PRECISION array, dimension (LDC, LDC)
-*>          Store the matrix generated by subroutine AB_DLAKF2, this is the
+*>          Store the matrix generated by subroutine DLAKF2, this is the
 *>          matrix formed by Kronecker products used for estimating
 *>          DIF.
 *> \endverbatim
@@ -355,8 +355,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_DDRGSX( NSIZE, NCMAX, THRESH, NIN, NOUT, A, LDA, B, 
-     $AI,
+      SUBROUTINE DDRGSX( NSIZE, NCMAX, THRESH, NIN, NOUT, A, LDA, B, AI,
      $                   BI, Z, Q, ALPHAR, ALPHAI, BETA, C, LDC, S,
      $                   WORK, LWORK, IWORK, LIWORK, BWORK, INFO )
 *
@@ -398,16 +397,14 @@
       DOUBLE PRECISION   DIFEST( 2 ), PL( 2 ), RESULT( 10 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_DLCTSX
-      INTEGER            AB_ILAENV
-      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE
-      EXTERNAL           AB_DLCTSX, AB_ILAENV, AB_DLAMCH, AB_DLANGE
+      LOGICAL            DLCTSX
+      INTEGER            ILAENV
+      DOUBLE PRECISION   DLAMCH, DLANGE
+      EXTERNAL           DLCTSX, ILAENV, DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALASVM, AB_AB_DGESVD, AB_DGET51, AB_DGET53, 
-     $AB_AB_DGGESX, AB_DLABAD,
-     $                   AB_DLACPY, AB_DLAKF2, AB_DLASET, AB_DLATM5, AB_
-     $XERBLA
+      EXTERNAL           ALASVM, DGESVD, DGET51, DGET53, DGGESX, DLABAD,
+     $                   DLACPY, DLAKF2, DLASET, DLATM5, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -444,26 +441,24 @@
 *       minimal amount of workspace needed at that point in the code,
 *       as well as the preferred amount for good performance.
 *       NB refers to the optimal block size for the immediately
-*       following subroutine, as returned by AB_ILAENV.)
+*       following subroutine, as returned by ILAENV.)
 *
       MINWRK = 1
       IF( INFO.EQ.0 .AND. LWORK.GE.1 ) THEN
          MINWRK = MAX( 10*( NSIZE+1 ), 5*NSIZE*NSIZE / 2 )
 *
-*        workspace for AB_AB_SGGESX
+*        workspace for sggesx
 *
          MAXWRK = 9*( NSIZE+1 ) + NSIZE*
-     $            AB_ILAENV( 1, 'AB_AB_DGEQRF', ' ', NSIZE, 1, NSIZE, 0 
-     $)
+     $            ILAENV( 1, 'DGEQRF', ' ', NSIZE, 1, NSIZE, 0 )
          MAXWRK = MAX( MAXWRK, 9*( NSIZE+1 )+NSIZE*
-     $            AB_ILAENV( 1, 'AB_DORGQR', ' ', NSIZE, 1, NSIZE, -1 ) 
-     $)
+     $            ILAENV( 1, 'DORGQR', ' ', NSIZE, 1, NSIZE, -1 ) )
 *
-*        workspace for AB_AB_DGESVD
+*        workspace for dgesvd
 *
          BDSPAC = 5*NSIZE*NSIZE / 2
          MAXWRK = MAX( MAXWRK, 3*NSIZE*NSIZE / 2+NSIZE*NSIZE*
-     $            AB_ILAENV( 1, 'AB_DGEBRD', ' ', NSIZE*NSIZE / 2,
+     $            ILAENV( 1, 'DGEBRD', ' ', NSIZE*NSIZE / 2,
      $            NSIZE*NSIZE / 2, -1, -1 ) )
          MAXWRK = MAX( MAXWRK, BDSPAC )
 *
@@ -476,17 +471,17 @@
      $   INFO = -19
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DDRGSX', -INFO )
+         CALL XERBLA( 'DDRGSX', -INFO )
          RETURN
       END IF
 *
 *     Important constants
 *
-      ULP = AB_DLAMCH( 'P' )
+      ULP = DLAMCH( 'P' )
       ULPINV = ONE / ULP
-      SMLNUM = AB_DLAMCH( 'S' ) / ULP
+      SMLNUM = DLAMCH( 'S' ) / ULP
       BIGNUM = ONE / SMLNUM
-      CALL AB_DLABAD( SMLNUM, BIGNUM )
+      CALL DLABAD( SMLNUM, BIGNUM )
       THRSH2 = TEN*THRESH
       NTESTT = 0
       NERRS = 0
@@ -498,7 +493,7 @@
      $   GO TO 70
 *
 *     Test the built-in matrix pairs.
-*     Loop over different functions (IFUNC) of AB_AB_DGGESX, types (PRTYPE)
+*     Loop over different functions (IFUNC) of DGGESX, types (PRTYPE)
 *     of test matrices, different size (M+N)
 *
       PRTYPE = 0
@@ -519,21 +514,19 @@
                   FS = .TRUE.
                   K = 0
 *
-                  CALL AB_DLASET( 'Full', MPLUSN, MPLUSN, ZERO, ZERO, AI
-     $,
+                  CALL DLASET( 'Full', MPLUSN, MPLUSN, ZERO, ZERO, AI,
      $                         LDA )
-                  CALL AB_DLASET( 'Full', MPLUSN, MPLUSN, ZERO, ZERO, BI
-     $,
+                  CALL DLASET( 'Full', MPLUSN, MPLUSN, ZERO, ZERO, BI,
      $                         LDA )
 *
-                  CALL AB_DLATM5( PRTYPE, M, N, AI, LDA, AI( M+1, M+1 ),
+                  CALL DLATM5( PRTYPE, M, N, AI, LDA, AI( M+1, M+1 ),
      $                         LDA, AI( 1, M+1 ), LDA, BI, LDA,
      $                         BI( M+1, M+1 ), LDA, BI( 1, M+1 ), LDA,
      $                         Q, LDA, Z, LDA, WEIGHT, QBA, QBB )
 *
 *                 Compute the Schur factorization and swapping the
 *                 m-by-m (1,1)-blocks with n-by-n (2,2)-blocks.
-*                 Swapping is accomplished via the function AB_DLCTSX
+*                 Swapping is accomplished via the function DLCTSX
 *                 which is supplied below.
 *
                   IF( IFUNC.EQ.0 ) THEN
@@ -546,21 +539,17 @@
                      SENSE = 'B'
                   END IF
 *
-                  CALL AB_DLACPY( 'Full', MPLUSN, MPLUSN, AI, LDA, A, LD
-     $A )
-                  CALL AB_DLACPY( 'Full', MPLUSN, MPLUSN, BI, LDA, B, LD
-     $A )
+                  CALL DLACPY( 'Full', MPLUSN, MPLUSN, AI, LDA, A, LDA )
+                  CALL DLACPY( 'Full', MPLUSN, MPLUSN, BI, LDA, B, LDA )
 *
-                  CALL AB_AB_DGGESX( 'V', 'V', 'S', AB_DLCTSX, SENSE, MP
-     $LUSN, AI,
+                  CALL DGGESX( 'V', 'V', 'S', DLCTSX, SENSE, MPLUSN, AI,
      $                         LDA, BI, LDA, MM, ALPHAR, ALPHAI, BETA,
      $                         Q, LDA, Z, LDA, PL, DIFEST, WORK, LWORK,
      $                         IWORK, LIWORK, BWORK, LINFO )
 *
                   IF( LINFO.NE.0 .AND. LINFO.NE.MPLUSN+2 ) THEN
                      RESULT( 1 ) = ULPINV
-                     WRITE( NOUT, FMT = 9999 )'AB_AB_DGGESX', LINFO, MPL
-     $USN,
+                     WRITE( NOUT, FMT = 9999 )'DGGESX', LINFO, MPLUSN,
      $                  PRTYPE
                      INFO = LINFO
                      GO TO 30
@@ -568,23 +557,22 @@
 *
 *                 Compute the norm(A, B)
 *
-                  CALL AB_DLACPY( 'Full', MPLUSN, MPLUSN, AI, LDA, WORK,
+                  CALL DLACPY( 'Full', MPLUSN, MPLUSN, AI, LDA, WORK,
      $                         MPLUSN )
-                  CALL AB_DLACPY( 'Full', MPLUSN, MPLUSN, BI, LDA,
+                  CALL DLACPY( 'Full', MPLUSN, MPLUSN, BI, LDA,
      $                         WORK( MPLUSN*MPLUSN+1 ), MPLUSN )
-                  ABNRM = AB_DLANGE( 'Fro', MPLUSN, 2*MPLUSN, WORK, MPLU
-     $SN,
+                  ABNRM = DLANGE( 'Fro', MPLUSN, 2*MPLUSN, WORK, MPLUSN,
      $                    WORK )
 *
 *                 Do tests (1) to (4)
 *
-                  CALL AB_DGET51( 1, MPLUSN, A, LDA, AI, LDA, Q, LDA, Z,
+                  CALL DGET51( 1, MPLUSN, A, LDA, AI, LDA, Q, LDA, Z,
      $                         LDA, WORK, RESULT( 1 ) )
-                  CALL AB_DGET51( 1, MPLUSN, B, LDA, BI, LDA, Q, LDA, Z,
+                  CALL DGET51( 1, MPLUSN, B, LDA, BI, LDA, Q, LDA, Z,
      $                         LDA, WORK, RESULT( 2 ) )
-                  CALL AB_DGET51( 3, MPLUSN, B, LDA, BI, LDA, Q, LDA, Q,
+                  CALL DGET51( 3, MPLUSN, B, LDA, BI, LDA, Q, LDA, Q,
      $                         LDA, WORK, RESULT( 3 ) )
-                  CALL AB_DGET51( 3, MPLUSN, B, LDA, BI, LDA, Z, LDA, Z,
+                  CALL DGET51( 3, MPLUSN, B, LDA, BI, LDA, Z, LDA, Z,
      $                         LDA, WORK, RESULT( 4 ) )
                   NTEST = 4
 *
@@ -636,8 +624,7 @@
                            END IF
                         END IF
                         IF( .NOT.ILABAD ) THEN
-                           CALL AB_DGET53( AI( I1, I1 ), LDA, BI( I1, I1
-     $ ),
+                           CALL DGET53( AI( I1, I1 ), LDA, BI( I1, I1 ),
      $                                  LDA, BETA( J ), ALPHAR( J ),
      $                                  ALPHAI( J ), TEMP2, IINFO )
                            IF( IINFO.GE.3 ) THEN
@@ -677,12 +664,11 @@
 *                    Note: for either following two causes, there are
 *                    almost same number of test cases fail the test.
 *
-                     CALL AB_DLAKF2( MM, MPLUSN-MM, AI, LDA,
+                     CALL DLAKF2( MM, MPLUSN-MM, AI, LDA,
      $                            AI( MM+1, MM+1 ), BI,
      $                            BI( MM+1, MM+1 ), C, LDC )
 *
-                     CALL AB_AB_DGESVD( 'N', 'N', MN2, MN2, C, LDC, S, W
-     $ORK,
+                     CALL DGESVD( 'N', 'N', MN2, MN2, C, LDC, S, WORK,
      $                            1, WORK( 2 ), 1, WORK( 3 ), LWORK-2,
      $                            INFO )
                      DIFTRU = S( MN2 )
@@ -722,7 +708,7 @@
                      IF( RESULT( J ).GE.THRESH ) THEN
 *
 *                       If this is the first test to fail,
-*                       print a AB_HEADER to the data file.
+*                       print a header to the data file.
 *
                         IF( NERRS.EQ.0 ) THEN
                            WRITE( NOUT, FMT = 9995 )'DGX'
@@ -780,40 +766,39 @@
       K = 0
       M = MPLUSN - N
 *
-      CALL AB_DLACPY( 'Full', MPLUSN, MPLUSN, AI, LDA, A, LDA )
-      CALL AB_DLACPY( 'Full', MPLUSN, MPLUSN, BI, LDA, B, LDA )
+      CALL DLACPY( 'Full', MPLUSN, MPLUSN, AI, LDA, A, LDA )
+      CALL DLACPY( 'Full', MPLUSN, MPLUSN, BI, LDA, B, LDA )
 *
 *     Compute the Schur factorization while swaping the
 *     m-by-m (1,1)-blocks with n-by-n (2,2)-blocks.
 *
-      CALL AB_AB_DGGESX( 'V', 'V', 'S', AB_DLCTSX, 'B', MPLUSN, AI, LDA,
-     $ BI, LDA,
+      CALL DGGESX( 'V', 'V', 'S', DLCTSX, 'B', MPLUSN, AI, LDA, BI, LDA,
      $             MM, ALPHAR, ALPHAI, BETA, Q, LDA, Z, LDA, PL, DIFEST,
      $             WORK, LWORK, IWORK, LIWORK, BWORK, LINFO )
 *
       IF( LINFO.NE.0 .AND. LINFO.NE.MPLUSN+2 ) THEN
          RESULT( 1 ) = ULPINV
-         WRITE( NOUT, FMT = 9998 )'AB_AB_DGGESX', LINFO, MPLUSN, NPTKNT
+         WRITE( NOUT, FMT = 9998 )'DGGESX', LINFO, MPLUSN, NPTKNT
          GO TO 130
       END IF
 *
 *     Compute the norm(A, B)
 *        (should this be norm of (A,B) or (AI,BI)?)
 *
-      CALL AB_DLACPY( 'Full', MPLUSN, MPLUSN, AI, LDA, WORK, MPLUSN )
-      CALL AB_DLACPY( 'Full', MPLUSN, MPLUSN, BI, LDA,
+      CALL DLACPY( 'Full', MPLUSN, MPLUSN, AI, LDA, WORK, MPLUSN )
+      CALL DLACPY( 'Full', MPLUSN, MPLUSN, BI, LDA,
      $             WORK( MPLUSN*MPLUSN+1 ), MPLUSN )
-      ABNRM = AB_DLANGE( 'Fro', MPLUSN, 2*MPLUSN, WORK, MPLUSN, WORK )
+      ABNRM = DLANGE( 'Fro', MPLUSN, 2*MPLUSN, WORK, MPLUSN, WORK )
 *
 *     Do tests (1) to (4)
 *
-      CALL AB_DGET51( 1, MPLUSN, A, LDA, AI, LDA, Q, LDA, Z, LDA, WORK,
+      CALL DGET51( 1, MPLUSN, A, LDA, AI, LDA, Q, LDA, Z, LDA, WORK,
      $             RESULT( 1 ) )
-      CALL AB_DGET51( 1, MPLUSN, B, LDA, BI, LDA, Q, LDA, Z, LDA, WORK,
+      CALL DGET51( 1, MPLUSN, B, LDA, BI, LDA, Q, LDA, Z, LDA, WORK,
      $             RESULT( 2 ) )
-      CALL AB_DGET51( 3, MPLUSN, B, LDA, BI, LDA, Q, LDA, Q, LDA, WORK,
+      CALL DGET51( 3, MPLUSN, B, LDA, BI, LDA, Q, LDA, Q, LDA, WORK,
      $             RESULT( 3 ) )
-      CALL AB_DGET51( 3, MPLUSN, B, LDA, BI, LDA, Z, LDA, Z, LDA, WORK,
+      CALL DGET51( 3, MPLUSN, B, LDA, BI, LDA, Z, LDA, Z, LDA, WORK,
      $             RESULT( 4 ) )
 *
 *     Do tests (5) and (6): check Schur form of A and compare
@@ -864,7 +849,7 @@
                END IF
             END IF
             IF( .NOT.ILABAD ) THEN
-               CALL AB_DGET53( AI( I1, I1 ), LDA, BI( I1, I1 ), LDA,
+               CALL DGET53( AI( I1, I1 ), LDA, BI( I1, I1 ), LDA,
      $                      BETA( J ), ALPHAR( J ), ALPHAI( J ), TEMP2,
      $                      IINFO )
                IF( IINFO.GE.3 ) THEN
@@ -940,7 +925,7 @@
          IF( RESULT( J ).GE.THRESH ) THEN
 *
 *           If this is the first test to fail,
-*           print a AB_HEADER to the data file.
+*           print a header to the data file.
 *
             IF( NERRS.EQ.0 ) THEN
                WRITE( NOUT, FMT = 9995 )'DGX'
@@ -973,23 +958,22 @@
 *
 *     Summary
 *
-      CALL AB_ALASVM( 'DGX', NOUT, NERRS, NTESTT, 0 )
+      CALL ALASVM( 'DGX', NOUT, NERRS, NTESTT, 0 )
 *
       WORK( 1 ) = MAXWRK
 *
       RETURN
 *
- 9999 FORMAT( ' AB_DDRGSX: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
+ 9999 FORMAT( ' DDRGSX: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', JTYPE=', I6, ')' )
 *
- 9998 FORMAT( ' AB_DDRGSX: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
+ 9998 FORMAT( ' DDRGSX: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', Input Example #', I2, ')' )
 *
- 9997 FORMAT( ' AB_DDRGSX: AB_DGET53 returned INFO=', I1, ' for eigenval
-     $ue ',
+ 9997 FORMAT( ' DDRGSX: DGET53 returned INFO=', I1, ' for eigenvalue ',
      $      I6, '.', / 9X, 'N=', I6, ', JTYPE=', I6, ')' )
 *
- 9996 FORMAT( ' AB_DDRGSX: S not in Schur form at eigenvalue ', I6, '.',
+ 9996 FORMAT( ' DDRGSX: S not in Schur form at eigenvalue ', I6, '.',
      $      / 9X, 'N=', I6, ', JTYPE=', I6, ')' )
 *
  9995 FORMAT( / 1X, A3, ' -- Real Expert Generalized Schur form',
@@ -1001,8 +985,7 @@
      $      '  1:  A is a block diagonal matrix of Jordan blocks ',
      $      'and B is the identity ', / '      matrix, ',
      $      / '  2:  A and B are upper triangular matrices, ',
-     $      / '  3:  A and B are as type 2, but each AB_SECOND diagonal 
-     $',
+     $      / '  3:  A and B are as type 2, but each second diagonal ',
      $      'block in A_11 and ', /
      $      '      each third diaongal block in A_22 are 2x2 blocks,',
      $      / '  4:  A and B are block diagonal matrices, ',
@@ -1037,6 +1020,6 @@
  9988 FORMAT( ' Input example #', I2, ', matrix order=', I4, ',',
      $      ' result ', I2, ' is', 1P, D10.3 )
 *
-*     End of AB_DDRGSX
+*     End of DDRGSX
 *
       END

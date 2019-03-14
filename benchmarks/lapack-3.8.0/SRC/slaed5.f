@@ -1,4 +1,4 @@
-*> \brief \b AB_SLAED5 used by AB_SSTEDC. Solves the 2-by-2 secular equation.
+*> \brief \b SLAED5 used by sstedc. Solves the 2-by-2 secular equation.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLAED5 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLAED5.f">
+*> Download SLAED5 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaed5.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLAED5.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaed5.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLAED5.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaed5.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLAED5( I, D, Z, DELTA, RHO, DLAM )
+*       SUBROUTINE SLAED5( I, D, Z, DELTA, RHO, DLAM )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            I
@@ -106,7 +106,7 @@
 *>     at Berkeley, USA
 *>
 *  =====================================================================
-      SUBROUTINE AB_SLAED5( I, D, Z, DELTA, RHO, DLAM )
+      SUBROUTINE SLAED5( I, D, Z, DELTA, RHO, DLAM )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -184,6 +184,6 @@
       END IF
       RETURN
 *
-*     End OF AB_SLAED5
+*     End OF SLAED5
 *
       END

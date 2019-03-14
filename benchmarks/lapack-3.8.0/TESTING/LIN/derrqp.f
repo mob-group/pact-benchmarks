@@ -1,4 +1,4 @@
-*> \brief \b AB_DERRQP
+*> \brief \b DERRQP
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DERRQP( PATH, NUNIT )
+*       SUBROUTINE DERRQP( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DERRQP tests the error exits for AB_DGEQP3.
+*> DERRQP tests the error exits for DGEQP3.
 *> \endverbatim
 *
 *  Arguments:
@@ -52,7 +52,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_DERRQP( PATH, NUNIT )
+      SUBROUTINE DERRQP( PATH, NUNIT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -79,11 +79,11 @@
       DOUBLE PRECISION   A( NMAX, NMAX ), TAU( NMAX ), W( 3*NMAX+1 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_AB_LSAMEN
-      EXTERNAL           AB_AB_LSAMEN
+      LOGICAL            LSAMEN
+      EXTERNAL           LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALAESM, AB_CHKXER, AB_DGEQP3
+      EXTERNAL           ALAESM, CHKXER, DGEQP3
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -106,33 +106,33 @@
       A( 2, 1 ) = 4.0D+0
       OK = .TRUE.
 *
-      IF( AB_AB_LSAMEN( 2, C2, 'QP' ) ) THEN
+      IF( LSAMEN( 2, C2, 'QP' ) ) THEN
 *
 *        Test error exits for QR factorization with pivoting
 *
-*        AB_DGEQP3
+*        DGEQP3
 *
-         SRNAMT = 'AB_DGEQP3'
+         SRNAMT = 'DGEQP3'
          INFOT = 1
-         CALL AB_DGEQP3( -1, 0, A, 1, IP, TAU, W, LW, INFO )
-         CALL AB_CHKXER( 'AB_DGEQP3', INFOT, NOUT, LERR, OK )
+         CALL DGEQP3( -1, 0, A, 1, IP, TAU, W, LW, INFO )
+         CALL CHKXER( 'DGEQP3', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_DGEQP3( 1, -1, A, 1, IP, TAU, W, LW, INFO )
-         CALL AB_CHKXER( 'AB_DGEQP3', INFOT, NOUT, LERR, OK )
+         CALL DGEQP3( 1, -1, A, 1, IP, TAU, W, LW, INFO )
+         CALL CHKXER( 'DGEQP3', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_DGEQP3( 2, 3, A, 1, IP, TAU, W, LW, INFO )
-         CALL AB_CHKXER( 'AB_DGEQP3', INFOT, NOUT, LERR, OK )
+         CALL DGEQP3( 2, 3, A, 1, IP, TAU, W, LW, INFO )
+         CALL CHKXER( 'DGEQP3', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_DGEQP3( 2, 2, A, 2, IP, TAU, W, LW-10, INFO )
-         CALL AB_CHKXER( 'AB_DGEQP3', INFOT, NOUT, LERR, OK )
+         CALL DGEQP3( 2, 2, A, 2, IP, TAU, W, LW-10, INFO )
+         CALL CHKXER( 'DGEQP3', INFOT, NOUT, LERR, OK )
       END IF
 *
 *     Print a summary line.
 *
-      CALL AB_ALAESM( PATH, OK, NOUT )
+      CALL ALAESM( PATH, OK, NOUT )
 *
       RETURN
 *
-*     End of AB_DERRQP
+*     End of DERRQP
 *
       END

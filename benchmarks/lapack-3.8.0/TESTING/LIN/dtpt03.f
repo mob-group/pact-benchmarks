@@ -1,4 +1,4 @@
-*> \brief \b AB_DTPT03
+*> \brief \b DTPT03
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DTPT03( UPLO, TRANS, DIAG, N, NRHS, AP, SCALE, CNORM,
+*       SUBROUTINE DTPT03( UPLO, TRANS, DIAG, N, NRHS, AP, SCALE, CNORM,
 *                          TSCAL, X, LDX, B, LDB, WORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DTPT03 computes the residual for the solution to a scaled triangular
+*> DTPT03 computes the residual for the solution to a scaled triangular
 *> system of equations A*x = s*b  or  A'*x = s*b  when the triangular
 *> matrix A is stored in packed format.  Here A' is the transpose of A,
 *> s is a scalar, and x and b are N by NRHS matrices.  The test ratio is
@@ -158,8 +158,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_DTPT03( UPLO, TRANS, DIAG, N, NRHS, AP, SCALE, CNORM
-     $,
+      SUBROUTINE DTPT03( UPLO, TRANS, DIAG, N, NRHS, AP, SCALE, CNORM,
      $                   TSCAL, X, LDX, B, LDB, WORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -188,14 +187,13 @@
       DOUBLE PRECISION   BIGNUM, EPS, ERR, SMLNUM, TNORM, XNORM, XSCAL
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_IDAMAX
-      DOUBLE PRECISION   AB_DLAMCH
-      EXTERNAL           AB_LSAME, AB_IDAMAX, AB_DLAMCH
+      LOGICAL            LSAME
+      INTEGER            IDAMAX
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           LSAME, IDAMAX, DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DAXPY, AB_DCOPY, AB_DLABAD, AB_DSCAL, AB_DTP
-     $MV
+      EXTERNAL           DAXPY, DCOPY, DLABAD, DSCAL, DTPMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX
@@ -208,17 +206,17 @@
          RESID = ZERO
          RETURN
       END IF
-      EPS = AB_DLAMCH( 'Epsilon' )
-      SMLNUM = AB_DLAMCH( 'Safe minimum' )
+      EPS = DLAMCH( 'Epsilon' )
+      SMLNUM = DLAMCH( 'Safe minimum' )
       BIGNUM = ONE / SMLNUM
-      CALL AB_DLABAD( SMLNUM, BIGNUM )
+      CALL DLABAD( SMLNUM, BIGNUM )
 *
 *     Compute the norm of the triangular matrix A using the column
-*     norms already computed by AB_DLATPS.
+*     norms already computed by DLATPS.
 *
       TNORM = ZERO
-      IF( AB_LSAME( DIAG, 'N' ) ) THEN
-         IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( DIAG, 'N' ) ) THEN
+         IF( LSAME( UPLO, 'U' ) ) THEN
             JJ = 1
             DO 10 J = 1, N
                TNORM = MAX( TNORM, TSCAL*ABS( AP( JJ ) )+CNORM( J ) )
@@ -242,16 +240,16 @@
 *
       RESID = ZERO
       DO 40 J = 1, NRHS
-         CALL AB_DCOPY( N, X( 1, J ), 1, WORK, 1 )
-         IX = AB_IDAMAX( N, WORK, 1 )
+         CALL DCOPY( N, X( 1, J ), 1, WORK, 1 )
+         IX = IDAMAX( N, WORK, 1 )
          XNORM = MAX( ONE, ABS( X( IX, J ) ) )
          XSCAL = ( ONE / XNORM ) / DBLE( N )
-         CALL AB_DSCAL( N, XSCAL, WORK, 1 )
-         CALL AB_DTPMV( UPLO, TRANS, DIAG, N, AP, WORK, 1 )
-         CALL AB_DAXPY( N, -SCALE*XSCAL, B( 1, J ), 1, WORK, 1 )
-         IX = AB_IDAMAX( N, WORK, 1 )
+         CALL DSCAL( N, XSCAL, WORK, 1 )
+         CALL DTPMV( UPLO, TRANS, DIAG, N, AP, WORK, 1 )
+         CALL DAXPY( N, -SCALE*XSCAL, B( 1, J ), 1, WORK, 1 )
+         IX = IDAMAX( N, WORK, 1 )
          ERR = TSCAL*ABS( WORK( IX ) )
-         IX = AB_IDAMAX( N, X( 1, J ), 1 )
+         IX = IDAMAX( N, X( 1, J ), 1 )
          XNORM = ABS( X( IX, J ) )
          IF( ERR*SMLNUM.LE.XNORM ) THEN
             IF( XNORM.GT.ZERO )
@@ -272,6 +270,6 @@
 *
       RETURN
 *
-*     End of AB_DTPT03
+*     End of DTPT03
 *
       END

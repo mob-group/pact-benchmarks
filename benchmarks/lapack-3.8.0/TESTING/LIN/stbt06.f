@@ -1,4 +1,4 @@
-*> \brief \b AB_STBT06
+*> \brief \b STBT06
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_STBT06( RCOND, RCONDC, UPLO, DIAG, N, KD, AB, LDAB,
+*       SUBROUTINE STBT06( RCOND, RCONDC, UPLO, DIAG, N, KD, AB, LDAB,
 *                          WORK, RAT )
 *
 *       .. Scalar Arguments ..
@@ -26,9 +26,9 @@
 *>
 *> \verbatim
 *>
-*> AB_STBT06 computes a test ratio comparing RCOND (the reciprocal
+*> STBT06 computes a test ratio comparing RCOND (the reciprocal
 *> condition number of a triangular matrix A) and RCONDC, the estimate
-*> computed by AB_STBCON.  Information about the triangular matrix A is
+*> computed by STBCON.  Information about the triangular matrix A is
 *> used if one estimate is zero and the other is non-zero to decide if
 *> underflow in the estimate is justified.
 *> \endverbatim
@@ -48,7 +48,7 @@
 *> \verbatim
 *>          RCONDC is REAL
 *>          The estimate of the reciprocal condition number computed by
-*>          AB_STBCON.
+*>          STBCON.
 *> \endverbatim
 *>
 *> \param[in] UPLO
@@ -122,7 +122,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_STBT06( RCOND, RCONDC, UPLO, DIAG, N, KD, AB, LDAB,
+      SUBROUTINE STBT06( RCOND, RCONDC, UPLO, DIAG, N, KD, AB, LDAB,
      $                   WORK, RAT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -149,18 +149,18 @@
       REAL               ANORM, BIGNUM, EPS, RMAX, RMIN, SMLNUM
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH, AB_SLANTB
-      EXTERNAL           AB_SLAMCH, AB_SLANTB
+      REAL               SLAMCH, SLANTB
+      EXTERNAL           SLAMCH, SLANTB
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SLABAD
+      EXTERNAL           SLABAD
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = AB_SLAMCH( 'Epsilon' )
+      EPS = SLAMCH( 'Epsilon' )
       RMAX = MAX( RCOND, RCONDC )
       RMIN = MIN( RCOND, RCONDC )
 *
@@ -192,16 +192,16 @@
 *        estimate multiplied by BIGNUM/TMAX, where TMAX is the maximum
 *        element in absolute value in A.
 *
-         SMLNUM = AB_SLAMCH( 'Safe minimum' )
+         SMLNUM = SLAMCH( 'Safe minimum' )
          BIGNUM = ONE / SMLNUM
-         CALL AB_SLABAD( SMLNUM, BIGNUM )
-         ANORM = AB_SLANTB( 'M', UPLO, DIAG, N, KD, AB, LDAB, WORK )
+         CALL SLABAD( SMLNUM, BIGNUM )
+         ANORM = SLANTB( 'M', UPLO, DIAG, N, KD, AB, LDAB, WORK )
 *
          RAT = RMAX*( MIN( BIGNUM / MAX( ONE, ANORM ), ONE / EPS ) )
       END IF
 *
       RETURN
 *
-*     End of AB_STBT06
+*     End of STBT06
 *
       END

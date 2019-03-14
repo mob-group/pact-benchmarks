@@ -1,4 +1,4 @@
-*> \brief \b AB_SECOND Using INTERNAL function CPU_TIME.
+*> \brief \b SECOND Using INTERNAL function CPU_TIME.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*      REAL FUNCTION AB_SECOND( )
+*      REAL FUNCTION SECOND( )
 *
 *
 *> \par Purpose:
@@ -16,7 +16,7 @@
 *>
 *> \verbatim
 *>
-*>  AB_SECOND returns the user time for a process in AB_SECONDs.
+*>  SECOND returns the user time for a process in seconds.
 *>  This version gets the time from the INTERNAL function CPU_TIME.
 *> \endverbatim
 *
@@ -33,7 +33,7 @@
 *> \ingroup auxOTHERauxiliary
 *
 *  =====================================================================
-      REAL FUNCTION AB_SECOND( )
+      REAL FUNCTION SECOND( )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -53,9 +53,9 @@
 * .. Executable Statements .. *
 *
       CALL CPU_TIME( T )
-      AB_SECOND = T
+      SECOND = T
       RETURN
 *
-*     End of AB_SECOND
+*     End of SECOND
 *
       END

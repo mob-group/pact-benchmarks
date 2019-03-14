@@ -1,4 +1,4 @@
-*> \brief \b AB_ZHBT21
+*> \brief \b ZHBT21
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZHBT21( UPLO, N, KA, KS, A, LDA, D, E, U, LDU, WORK,
+*       SUBROUTINE ZHBT21( UPLO, N, KA, KS, A, LDA, D, E, U, LDU, WORK,
 *                          RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZHBT21  generally checks a decomposition of the form
+*> ZHBT21  generally checks a decomposition of the form
 *>
 *>         A = U S UC>
 *> where * means conjugate transpose, A is hermitian banded, U is
@@ -53,7 +53,7 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The size of the matrix.  If it is zero, AB_ZHBT21 does nothing.
+*>          The size of the matrix.  If it is zero, ZHBT21 does nothing.
 *>          It must be at least zero.
 *> \endverbatim
 *>
@@ -106,7 +106,7 @@
 *> \verbatim
 *>          U is COMPLEX*16 array, dimension (LDU, N)
 *>          The unitary matrix in the decomposition, expressed as a
-*>          dense matrix (i.e., not as a product of HousehoAB_LDEr
+*>          dense matrix (i.e., not as a product of Householder
 *>          transformations, Givens transformations, etc.)
 *> \endverbatim
 *>
@@ -147,7 +147,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_ZHBT21( UPLO, N, KA, KS, A, LDA, D, E, U, LDU, WORK,
+      SUBROUTINE ZHBT21( UPLO, N, KA, KS, A, LDA, D, E, U, LDU, WORK,
      $                   RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -180,13 +180,12 @@
       DOUBLE PRECISION   ANORM, ULP, UNFL, WNORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE, AB_ZLANHB, AB_ZLANHP
-      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_ZLANGE, AB_ZLANHB, AB_Z
-     $LANHP
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH, ZLANGE, ZLANHB, ZLANHP
+      EXTERNAL           LSAME, DLAMCH, ZLANGE, ZLANHB, ZLANHP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZGEMM, AB_ZHPR, AB_AB_ZHPR2
+      EXTERNAL           ZGEMM, ZHPR, ZHPR2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCMPLX, MAX, MIN
@@ -202,7 +201,7 @@
 *
       IKA = MAX( 0, MIN( N-1, KA ) )
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
          LOWER = .FALSE.
          CUPLO = 'U'
       ELSE
@@ -210,8 +209,8 @@
          CUPLO = 'L'
       END IF
 *
-      UNFL = AB_DLAMCH( 'Safe minimum' )
-      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
+      UNFL = DLAMCH( 'Safe minimum' )
+      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
 *
 *     Some Error Checks
 *
@@ -219,8 +218,7 @@
 *
 *     Norm of A:
 *
-      ANORM = MAX( AB_ZLANHB( '1', CUPLO, N, IKA, A, LDA, RWORK ), UNFL 
-     $)
+      ANORM = MAX( ZLANHB( '1', CUPLO, N, IKA, A, LDA, RWORK ), UNFL )
 *
 *     Compute error matrix:    Error = A - U S U*
 *
@@ -250,16 +248,16 @@
    50 CONTINUE
 *
       DO 60 J = 1, N
-         CALL AB_ZHPR( CUPLO, N, -D( J ), U( 1, J ), 1, WORK )
+         CALL ZHPR( CUPLO, N, -D( J ), U( 1, J ), 1, WORK )
    60 CONTINUE
 *
       IF( N.GT.1 .AND. KS.EQ.1 ) THEN
          DO 70 J = 1, N - 1
-            CALL AB_AB_ZHPR2( CUPLO, N, -DCMPLX( E( J ) ), U( 1, J ), 1,
+            CALL ZHPR2( CUPLO, N, -DCMPLX( E( J ) ), U( 1, J ), 1,
      $                  U( 1, J+1 ), 1, WORK )
    70    CONTINUE
       END IF
-      WNORM = AB_ZLANHP( '1', CUPLO, N, WORK, RWORK )
+      WNORM = ZLANHP( '1', CUPLO, N, WORK, RWORK )
 *
       IF( ANORM.GT.WNORM ) THEN
          RESULT( 1 ) = ( WNORM / ANORM ) / ( N*ULP )
@@ -275,19 +273,18 @@
 *
 *     Compute  UU* - I
 *
-      CALL AB_ZGEMM( 'N', 'C', N, N, N, CONE, U, LDU, U, LDU, CZERO, WOR
-     $K,
+      CALL ZGEMM( 'N', 'C', N, N, N, CONE, U, LDU, U, LDU, CZERO, WORK,
      $            N )
 *
       DO 80 J = 1, N
          WORK( ( N+1 )*( J-1 )+1 ) = WORK( ( N+1 )*( J-1 )+1 ) - CONE
    80 CONTINUE
 *
-      RESULT( 2 ) = MIN( AB_ZLANGE( '1', N, N, WORK, N, RWORK ),
+      RESULT( 2 ) = MIN( ZLANGE( '1', N, N, WORK, N, RWORK ),
      $              DBLE( N ) ) / ( N*ULP )
 *
       RETURN
 *
-*     End of AB_ZHBT21
+*     End of ZHBT21
 *
       END

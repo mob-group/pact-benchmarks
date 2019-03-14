@@ -1,4 +1,4 @@
-*> \brief \b AB_ALAREQ
+*> \brief \b ALAREQ
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
+*       SUBROUTINE ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -24,13 +24,13 @@
 *>
 *> \verbatim
 *>
-*> AB_ALAREQ handles input for the LAPACK test program.  It is called
+*> ALAREQ handles input for the LAPACK test program.  It is called
 *> to evaluate the input line which requested NMATS matrix types for
 *> PATH.  The flow of control is as follows:
 *>
 *> If NMATS = NTYPES then
 *>    DOTYPE(1:NTYPES) = .TRUE.
-*> ELSE
+*> else
 *>    Read the next input line for NMATS matrix types
 *>    Set DOTYPE(I) = .TRUE. for each valid type I
 *> endif
@@ -88,7 +88,7 @@
 *> \ingroup aux_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
+      SUBROUTINE ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -216,6 +216,6 @@
       WRITE( NOUT, FMT = * )
       STOP
 *
-*     End of AB_ALAREQ
+*     End of ALAREQ
 *
       END

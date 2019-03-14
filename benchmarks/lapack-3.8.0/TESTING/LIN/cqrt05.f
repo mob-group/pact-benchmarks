@@ -1,4 +1,4 @@
-*> \brief \b AB_CQRT05
+*> \brief \b CQRT05
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CQRT05(M,N,L,NB,RESULT)
+*       SUBROUTINE CQRT05(M,N,L,NB,RESULT)
 *
 *       .. Scalar Arguments ..
 *       INTEGER LWORK, M, N, L, NB, LDT
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CQRT05 tests AB_CTPQRT and AB_CTPMQRT.
+*> CQRT05 tests CTPQRT and CTPMQRT.
 *> \endverbatim
 *
 *  Arguments:
@@ -78,7 +78,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_CQRT05(M,N,L,NB,RESULT)
+      SUBROUTINE CQRT05(M,N,L,NB,RESULT)
       IMPLICIT NONE
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -113,15 +113,15 @@
       INTEGER            ISEED( 4 )
 *     ..
 *     .. External Functions ..
-      REAL AB_SLAMCH
-      REAL AB_CLANGE, AB_CLANSY
-      LOGICAL  AB_LSAME
-      EXTERNAL AB_SLAMCH, AB_CLANGE, AB_CLANSY, AB_LSAME
+      REAL SLAMCH
+      REAL CLANGE, CLANSY
+      LOGICAL  LSAME
+      EXTERNAL SLAMCH, CLANGE, CLANSY, LSAME
 *     ..
 *     .. Data statements ..
       DATA ISEED / 1988, 1989, 1990, 1991 /
 *
-      EPS = AB_SLAMCH( 'Epsilon' )
+      EPS = SLAMCH( 'Epsilon' )
       K = N
       M2 = M+N
       IF( M.GT.0 ) THEN
@@ -140,49 +140,46 @@
 *     Put random stuff into A
 *
       LDT=NB
-      CALL AB_CLASET( 'Full', M2, N, CZERO, CZERO, A, M2 )
-      CALL AB_CLASET( 'Full', NB, N, CZERO, CZERO, T, NB )
+      CALL CLASET( 'Full', M2, N, CZERO, CZERO, A, M2 )
+      CALL CLASET( 'Full', NB, N, CZERO, CZERO, T, NB )
       DO J=1,N
-         CALL AB_CLARNV( 2, ISEED, J, A( 1, J ) )
+         CALL CLARNV( 2, ISEED, J, A( 1, J ) )
       END DO
       IF( M.GT.0 ) THEN
          DO J=1,N
-            CALL AB_CLARNV( 2, ISEED, M-L, A( MIN(N+M,N+1), J ) )
+            CALL CLARNV( 2, ISEED, M-L, A( MIN(N+M,N+1), J ) )
          END DO
       END IF
       IF( L.GT.0 ) THEN
          DO J=1,N
-            CALL AB_CLARNV( 2, ISEED, MIN(J,L), A( MIN(N+M,N+M-L+1), J )
-     $ )
+            CALL CLARNV( 2, ISEED, MIN(J,L), A( MIN(N+M,N+M-L+1), J ) )
          END DO
       END IF
 *
 *     Copy the matrix A to the array AF.
 *
-      CALL AB_CLACPY( 'Full', M2, N, A, M2, AF, M2 )
+      CALL CLACPY( 'Full', M2, N, A, M2, AF, M2 )
 *
 *     Factor the matrix A in the array AF.
 *
-      CALL AB_CTPQRT( M,N,L,NB,AF,M2,AF(NP1,1),M2,T,LDT,WORK,INFO)
+      CALL CTPQRT( M,N,L,NB,AF,M2,AF(NP1,1),M2,T,LDT,WORK,INFO)
 *
 *     Generate the (M+N)-by-(M+N) matrix Q by applying H to I
 *
-      CALL AB_CLASET( 'Full', M2, M2, CZERO, ONE, Q, M2 )
-      CALL AB_AB_CGEMQRT( 'R', 'N', M2, M2, K, NB, AF, M2, T, LDT, Q, M2
-     $,
+      CALL CLASET( 'Full', M2, M2, CZERO, ONE, Q, M2 )
+      CALL CGEMQRT( 'R', 'N', M2, M2, K, NB, AF, M2, T, LDT, Q, M2,
      $              WORK, INFO )
 *
 *     Copy R
 *
-      CALL AB_CLASET( 'Full', M2, N, CZERO, CZERO, R, M2 )
-      CALL AB_CLACPY( 'Upper', M2, N, AF, M2, R, M2 )
+      CALL CLASET( 'Full', M2, N, CZERO, CZERO, R, M2 )
+      CALL CLACPY( 'Upper', M2, N, AF, M2, R, M2 )
 *
 *     Compute |R - Q'*A| / |A| and store in RESULT(1)
 *
-      CALL AB_CGEMM( 'C', 'N', M2, N, M2, -ONE, Q, M2, A, M2, ONE, R, M2
-     $ )
-      ANORM = AB_CLANGE( '1', M2, N, A, M2, RWORK )
-      RESID = AB_CLANGE( '1', M2, N, R, M2, RWORK )
+      CALL CGEMM( 'C', 'N', M2, N, M2, -ONE, Q, M2, A, M2, ONE, R, M2 )
+      ANORM = CLANGE( '1', M2, N, A, M2, RWORK )
+      RESID = CLANGE( '1', M2, N, R, M2, RWORK )
       IF( ANORM.GT.ZERO ) THEN
          RESULT( 1 ) = RESID / (EPS*ANORM*MAX(1,M2))
       ELSE
@@ -191,30 +188,29 @@
 *
 *     Compute |I - Q'*Q| and store in RESULT(2)
 *
-      CALL AB_CLASET( 'Full', M2, M2, CZERO, ONE, R, M2 )
-      CALL AB_AB_CHERK( 'U', 'C', M2, M2, REAL(-ONE), Q, M2, REAL(ONE),
+      CALL CLASET( 'Full', M2, M2, CZERO, ONE, R, M2 )
+      CALL CHERK( 'U', 'C', M2, M2, REAL(-ONE), Q, M2, REAL(ONE),
      $            R, M2 )
-      RESID = AB_CLANSY( '1', 'Upper', M2, R, M2, RWORK )
+      RESID = CLANSY( '1', 'Upper', M2, R, M2, RWORK )
       RESULT( 2 ) = RESID / (EPS*MAX(1,M2))
 *
 *     Generate random m-by-n matrix C and a copy CF
 *
       DO J=1,N
-         CALL AB_CLARNV( 2, ISEED, M2, C( 1, J ) )
+         CALL CLARNV( 2, ISEED, M2, C( 1, J ) )
       END DO
-      CNORM = AB_CLANGE( '1', M2, N, C, M2, RWORK)
-      CALL AB_CLACPY( 'Full', M2, N, C, M2, CF, M2 )
+      CNORM = CLANGE( '1', M2, N, C, M2, RWORK)
+      CALL CLACPY( 'Full', M2, N, C, M2, CF, M2 )
 *
 *     Apply Q to C as Q*C
 *
-      CALL AB_CTPMQRT( 'L','N', M,N,K,L,NB,AF(NP1,1),M2,T,LDT,CF,M2,
+      CALL CTPMQRT( 'L','N', M,N,K,L,NB,AF(NP1,1),M2,T,LDT,CF,M2,
      $               CF(NP1,1),M2,WORK,INFO)
 *
 *     Compute |Q*C - Q*C| / |C|
 *
-      CALL AB_CGEMM( 'N', 'N', M2, N, M2, -ONE, Q, M2, C, M2, ONE, CF, M
-     $2 )
-      RESID = AB_CLANGE( '1', M2, N, CF, M2, RWORK )
+      CALL CGEMM( 'N', 'N', M2, N, M2, -ONE, Q, M2, C, M2, ONE, CF, M2 )
+      RESID = CLANGE( '1', M2, N, CF, M2, RWORK )
       IF( CNORM.GT.ZERO ) THEN
          RESULT( 3 ) = RESID / (EPS*MAX(1,M2)*CNORM)
       ELSE
@@ -223,17 +219,17 @@
 *
 *     Copy C into CF again
 *
-      CALL AB_CLACPY( 'Full', M2, N, C, M2, CF, M2 )
+      CALL CLACPY( 'Full', M2, N, C, M2, CF, M2 )
 *
 *     Apply Q to C as QT*C
 *
-      CALL AB_CTPMQRT( 'L','C',M,N,K,L,NB,AF(NP1,1),M2,T,LDT,CF,M2,
+      CALL CTPMQRT( 'L','C',M,N,K,L,NB,AF(NP1,1),M2,T,LDT,CF,M2,
      $              CF(NP1,1),M2,WORK,INFO)
 *
 *     Compute |QT*C - QT*C| / |C|
 *
-      CALL AB_CGEMM('C','N',M2,N,M2,-ONE,Q,M2,C,M2,ONE,CF,M2)
-      RESID = AB_CLANGE( '1', M2, N, CF, M2, RWORK )
+      CALL CGEMM('C','N',M2,N,M2,-ONE,Q,M2,C,M2,ONE,CF,M2)
+      RESID = CLANGE( '1', M2, N, CF, M2, RWORK )
       IF( CNORM.GT.ZERO ) THEN
          RESULT( 4 ) = RESID / (EPS*MAX(1,M2)*CNORM)
       ELSE
@@ -243,20 +239,20 @@
 *     Generate random n-by-m matrix D and a copy DF
 *
       DO J=1,M2
-         CALL AB_CLARNV( 2, ISEED, N, D( 1, J ) )
+         CALL CLARNV( 2, ISEED, N, D( 1, J ) )
       END DO
-      DNORM = AB_CLANGE( '1', N, M2, D, N, RWORK)
-      CALL AB_CLACPY( 'Full', N, M2, D, N, DF, N )
+      DNORM = CLANGE( '1', N, M2, D, N, RWORK)
+      CALL CLACPY( 'Full', N, M2, D, N, DF, N )
 *
 *     Apply Q to D as D*Q
 *
-      CALL AB_CTPMQRT('R','N',N,M,N,L,NB,AF(NP1,1),M2,T,LDT,DF,N,
+      CALL CTPMQRT('R','N',N,M,N,L,NB,AF(NP1,1),M2,T,LDT,DF,N,
      $             DF(1,NP1),N,WORK,INFO)
 *
 *     Compute |D*Q - D*Q| / |D|
 *
-      CALL AB_CGEMM('N','N',N,M2,M2,-ONE,D,N,Q,M2,ONE,DF,N)
-      RESID = AB_CLANGE('1',N, M2,DF,N,RWORK )
+      CALL CGEMM('N','N',N,M2,M2,-ONE,D,N,Q,M2,ONE,DF,N)
+      RESID = CLANGE('1',N, M2,DF,N,RWORK )
       IF( CNORM.GT.ZERO ) THEN
          RESULT( 5 ) = RESID / (EPS*MAX(1,M2)*DNORM)
       ELSE
@@ -265,19 +261,18 @@
 *
 *     Copy D into DF again
 *
-      CALL AB_CLACPY('Full',N,M2,D,N,DF,N )
+      CALL CLACPY('Full',N,M2,D,N,DF,N )
 *
 *     Apply Q to D as D*QT
 *
-      CALL AB_CTPMQRT('R','C',N,M,N,L,NB,AF(NP1,1),M2,T,LDT,DF,N,
+      CALL CTPMQRT('R','C',N,M,N,L,NB,AF(NP1,1),M2,T,LDT,DF,N,
      $             DF(1,NP1),N,WORK,INFO)
 
 *
 *     Compute |D*QT - D*QT| / |D|
 *
-      CALL AB_CGEMM( 'N', 'C', N, M2, M2, -ONE, D, N, Q, M2, ONE, DF, N 
-     $)
-      RESID = AB_CLANGE( '1', N, M2, DF, N, RWORK )
+      CALL CGEMM( 'N', 'C', N, M2, M2, -ONE, D, N, Q, M2, ONE, DF, N )
+      RESID = CLANGE( '1', N, M2, DF, N, RWORK )
       IF( CNORM.GT.ZERO ) THEN
          RESULT( 6 ) = RESID / (EPS*MAX(1,M2)*DNORM)
       ELSE

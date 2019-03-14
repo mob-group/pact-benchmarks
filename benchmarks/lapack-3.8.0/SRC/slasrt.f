@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_SLASRT sorts numbers in increasing or decreasing order.
+*> \brief \b SLASRT sorts numbers in increasing or decreasing order.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_SLASRT + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_SLASRT.f">
+*> Download SLASRT + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasrt.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_SLASRT.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasrt.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_SLASRT.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasrt.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_SLASRT( ID, N, D, INFO )
+*       SUBROUTINE SLASRT( ID, N, D, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          ID
@@ -86,7 +86,7 @@
 *> \ingroup auxOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_SLASRT( ID, N, D, INFO )
+      SUBROUTINE SLASRT( ID, N, D, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -115,11 +115,11 @@
       INTEGER            STACK( 2, 32 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA
+      EXTERNAL           XERBLA
 *     ..
 *     .. Executable Statements ..
 *
@@ -127,9 +127,9 @@
 *
       INFO = 0
       DIR = -1
-      IF( AB_LSAME( ID, 'D' ) ) THEN
+      IF( LSAME( ID, 'D' ) ) THEN
          DIR = 0
-      ELSE IF( AB_LSAME( ID, 'I' ) ) THEN
+      ELSE IF( LSAME( ID, 'I' ) ) THEN
          DIR = 1
       END IF
       IF( DIR.EQ.-1 ) THEN
@@ -138,7 +138,7 @@
          INFO = -2
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_SLASRT', -INFO )
+         CALL XERBLA( 'SLASRT', -INFO )
          RETURN
       END IF
 *
@@ -298,6 +298,6 @@
      $   GO TO 10
       RETURN
 *
-*     End of AB_AB_SLASRT
+*     End of SLASRT
 *
       END

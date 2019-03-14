@@ -1,4 +1,4 @@
-*> \brief \b AB_CLARHS
+*> \brief \b CLARHS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CLARHS( PATH, XTYPE, UPLO, TRANS, M, N, KL, KU, NRHS,
+*       SUBROUTINE CLARHS( PATH, XTYPE, UPLO, TRANS, M, N, KL, KU, NRHS,
 *                          A, LDA, X, LDX, B, LDB, ISEED, INFO )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CLARHS chooses a set of NRHS random solution vectors and sets
+*> CLARHS chooses a set of NRHS random solution vectors and sets
 *> up the right hand sides for the linear system
 *>    op( A ) * X = B,
 *> where op( A ) may be A, A**T (transpose of A), or A**H (conjugate
@@ -183,7 +183,7 @@
 *> \verbatim
 *>          ISEED is INTEGER array, dimension (4)
 *>          The seed vector for the random number generator (used in
-*>          AB_CLATMS).  Modified on exit.
+*>          CLATMS).  Modified on exit.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -206,8 +206,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_CLARHS( PATH, XTYPE, UPLO, TRANS, M, N, KL, KU, NRHS
-     $,
+      SUBROUTINE CLARHS( PATH, XTYPE, UPLO, TRANS, M, N, KL, KU, NRHS,
      $                   A, LDA, X, LDX, B, LDB, ISEED, INFO )
 *
 *  -- LAPACK test routine (version 3.7.1) --
@@ -239,15 +238,13 @@
       INTEGER            J, MB, NX
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME, AB_AB_LSAMEN
-      EXTERNAL           AB_LSAME, AB_AB_LSAMEN
+      LOGICAL            LSAME, LSAMEN
+      EXTERNAL           LSAME, LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CGBMV, AB_CGEMM, AB_CHBMV, AB_CHEMM, AB_CHPM
-     $V, AB_CLACPY,
-     $                   AB_CLARNV, AB_CSBMV, AB_CSPMV, AB_CSYMM, AB_CTB
-     $MV, AB_CTPMV,
-     $                   AB_CTRMM, AB_XERBLA
+      EXTERNAL           CGBMV, CGEMM, CHBMV, CHEMM, CHPMV, CLACPY,
+     $                   CLARNV, CSBMV, CSPMV, CSYMM, CTBMV, CTPMV,
+     $                   CTRMM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -259,28 +256,24 @@
       INFO = 0
       C1 = PATH( 1: 1 )
       C2 = PATH( 2: 3 )
-      TRAN = AB_LSAME( TRANS, 'T' ) .OR. AB_LSAME( TRANS, 'C' )
+      TRAN = LSAME( TRANS, 'T' ) .OR. LSAME( TRANS, 'C' )
       NOTRAN = .NOT.TRAN
-      GEN = AB_LSAME( PATH( 2: 2 ), 'G' )
-      QRS = AB_LSAME( PATH( 2: 2 ), 'Q' ) .OR. AB_LSAME( PATH( 3: 3 ), '
-     $Q' )
-      SYM = AB_LSAME( PATH( 2: 2 ), 'P' ) .OR.
-     $      AB_LSAME( PATH( 2: 2 ), 'S' ) .OR. AB_LSAME( PATH( 2: 2 ), '
-     $H' )
-      TRI = AB_LSAME( PATH( 2: 2 ), 'T' )
-      BAND = AB_LSAME( PATH( 3: 3 ), 'B' )
-      IF( .NOT.AB_LSAME( C1, 'Complex precision' ) ) THEN
+      GEN = LSAME( PATH( 2: 2 ), 'G' )
+      QRS = LSAME( PATH( 2: 2 ), 'Q' ) .OR. LSAME( PATH( 3: 3 ), 'Q' )
+      SYM = LSAME( PATH( 2: 2 ), 'P' ) .OR.
+     $      LSAME( PATH( 2: 2 ), 'S' ) .OR. LSAME( PATH( 2: 2 ), 'H' )
+      TRI = LSAME( PATH( 2: 2 ), 'T' )
+      BAND = LSAME( PATH( 3: 3 ), 'B' )
+      IF( .NOT.LSAME( C1, 'Complex precision' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.( AB_LSAME( XTYPE, 'N' ) .OR. AB_LSAME( XTYPE, 'C
-     $' ) ) )
+      ELSE IF( .NOT.( LSAME( XTYPE, 'N' ) .OR. LSAME( XTYPE, 'C' ) ) )
      $          THEN
          INFO = -2
       ELSE IF( ( SYM .OR. TRI ) .AND. .NOT.
-     $         ( AB_LSAME( UPLO, 'U' ) .OR. AB_LSAME( UPLO, 'L' ) ) ) TH
-     $EN
+     $         ( LSAME( UPLO, 'U' ) .OR. LSAME( UPLO, 'L' ) ) ) THEN
          INFO = -3
       ELSE IF( ( GEN.OR.QRS ) .AND.
-     $   .NOT.( TRAN .OR. AB_LSAME( TRANS, 'N' ) ) ) THEN
+     $   .NOT.( TRAN .OR. LSAME( TRANS, 'N' ) ) ) THEN
          INFO = -4
       ELSE IF( M.LT.0 ) THEN
          INFO = -5
@@ -304,7 +297,7 @@
          INFO = -15
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CLARHS', -INFO )
+         CALL XERBLA( 'CLARHS', -INFO )
          RETURN
       END IF
 *
@@ -317,136 +310,124 @@
          NX = N
          MB = M
       END IF
-      IF( .NOT.AB_LSAME( XTYPE, 'C' ) ) THEN
+      IF( .NOT.LSAME( XTYPE, 'C' ) ) THEN
          DO 10 J = 1, NRHS
-            CALL AB_CLARNV( 2, ISEED, N, X( 1, J ) )
+            CALL CLARNV( 2, ISEED, N, X( 1, J ) )
    10    CONTINUE
       END IF
 *
 *     Multiply X by op( A ) using an appropriate
 *     matrix multiply routine.
 *
-      IF( AB_AB_LSAMEN( 2, C2, 'GE' ) .OR. AB_AB_LSAMEN( 2, C2, 'QR' ) .
-     $OR.
-     $    AB_AB_LSAMEN( 2, C2, 'LQ' ) .OR. AB_AB_LSAMEN( 2, C2, 'QL' ) .
-     $OR.
-     $    AB_AB_LSAMEN( 2, C2, 'RQ' ) ) THEN
+      IF( LSAMEN( 2, C2, 'GE' ) .OR. LSAMEN( 2, C2, 'QR' ) .OR.
+     $    LSAMEN( 2, C2, 'LQ' ) .OR. LSAMEN( 2, C2, 'QL' ) .OR.
+     $    LSAMEN( 2, C2, 'RQ' ) ) THEN
 *
 *        General matrix
 *
-         CALL AB_CGEMM( TRANS, 'N', MB, NRHS, NX, ONE, A, LDA, X, LDX,
+         CALL CGEMM( TRANS, 'N', MB, NRHS, NX, ONE, A, LDA, X, LDX,
      $               ZERO, B, LDB )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, C2, 'PO' ) .OR. AB_AB_LSAMEN( 2, C2, 
-     $'HE' ) ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'PO' ) .OR. LSAMEN( 2, C2, 'HE' ) ) THEN
 *
 *        Hermitian matrix, 2-D storage
 *
-         CALL AB_CHEMM( 'Left', UPLO, N, NRHS, ONE, A, LDA, X, LDX, ZERO
-     $,
+         CALL CHEMM( 'Left', UPLO, N, NRHS, ONE, A, LDA, X, LDX, ZERO,
      $               B, LDB )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, C2, 'SY' ) ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'SY' ) ) THEN
 *
 *        Symmetric matrix, 2-D storage
 *
-         CALL AB_CSYMM( 'Left', UPLO, N, NRHS, ONE, A, LDA, X, LDX, ZERO
-     $,
+         CALL CSYMM( 'Left', UPLO, N, NRHS, ONE, A, LDA, X, LDX, ZERO,
      $               B, LDB )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, C2, 'GB' ) ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'GB' ) ) THEN
 *
 *        General matrix, band storage
 *
          DO 20 J = 1, NRHS
-            CALL AB_CGBMV( TRANS, M, N, KL, KU, ONE, A, LDA, X( 1, J ), 
-     $1,
+            CALL CGBMV( TRANS, M, N, KL, KU, ONE, A, LDA, X( 1, J ), 1,
      $                  ZERO, B( 1, J ), 1 )
    20    CONTINUE
 *
-      ELSE IF( AB_AB_LSAMEN( 2, C2, 'PB' ) .OR. AB_AB_LSAMEN( 2, C2, 
-     $'HB' ) ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'PB' ) .OR. LSAMEN( 2, C2, 'HB' ) ) THEN
 *
 *        Hermitian matrix, band storage
 *
          DO 30 J = 1, NRHS
-            CALL AB_CHBMV( UPLO, N, KL, ONE, A, LDA, X( 1, J ), 1, ZERO,
+            CALL CHBMV( UPLO, N, KL, ONE, A, LDA, X( 1, J ), 1, ZERO,
      $                  B( 1, J ), 1 )
    30    CONTINUE
 *
-      ELSE IF( AB_AB_LSAMEN( 2, C2, 'SB' ) ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'SB' ) ) THEN
 *
 *        Symmetric matrix, band storage
 *
          DO 40 J = 1, NRHS
-            CALL AB_CSBMV( UPLO, N, KL, ONE, A, LDA, X( 1, J ), 1, ZERO,
+            CALL CSBMV( UPLO, N, KL, ONE, A, LDA, X( 1, J ), 1, ZERO,
      $                  B( 1, J ), 1 )
    40    CONTINUE
 *
-      ELSE IF( AB_AB_LSAMEN( 2, C2, 'PP' ) .OR. AB_AB_LSAMEN( 2, C2, 
-     $'HP' ) ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'PP' ) .OR. LSAMEN( 2, C2, 'HP' ) ) THEN
 *
 *        Hermitian matrix, packed storage
 *
          DO 50 J = 1, NRHS
-            CALL AB_CHPMV( UPLO, N, ONE, A, X( 1, J ), 1, ZERO, B( 1, J 
-     $),
+            CALL CHPMV( UPLO, N, ONE, A, X( 1, J ), 1, ZERO, B( 1, J ),
      $                  1 )
    50    CONTINUE
 *
-      ELSE IF( AB_AB_LSAMEN( 2, C2, 'SP' ) ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'SP' ) ) THEN
 *
 *        Symmetric matrix, packed storage
 *
          DO 60 J = 1, NRHS
-            CALL AB_CSPMV( UPLO, N, ONE, A, X( 1, J ), 1, ZERO, B( 1, J 
-     $),
+            CALL CSPMV( UPLO, N, ONE, A, X( 1, J ), 1, ZERO, B( 1, J ),
      $                  1 )
    60    CONTINUE
 *
-      ELSE IF( AB_AB_LSAMEN( 2, C2, 'TR' ) ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'TR' ) ) THEN
 *
 *        Triangular matrix.  Note that for triangular matrices,
 *           KU = 1 => non-unit triangular
 *           KU = 2 => unit triangular
 *
-         CALL AB_CLACPY( 'Full', N, NRHS, X, LDX, B, LDB )
+         CALL CLACPY( 'Full', N, NRHS, X, LDX, B, LDB )
          IF( KU.EQ.2 ) THEN
             DIAG = 'U'
          ELSE
             DIAG = 'N'
          END IF
-         CALL AB_CTRMM( 'Left', UPLO, TRANS, DIAG, N, NRHS, ONE, A, LDA,
-     $ B,
+         CALL CTRMM( 'Left', UPLO, TRANS, DIAG, N, NRHS, ONE, A, LDA, B,
      $               LDB )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, C2, 'TP' ) ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'TP' ) ) THEN
 *
 *        Triangular matrix, packed storage
 *
-         CALL AB_CLACPY( 'Full', N, NRHS, X, LDX, B, LDB )
+         CALL CLACPY( 'Full', N, NRHS, X, LDX, B, LDB )
          IF( KU.EQ.2 ) THEN
             DIAG = 'U'
          ELSE
             DIAG = 'N'
          END IF
          DO 70 J = 1, NRHS
-            CALL AB_CTPMV( UPLO, TRANS, DIAG, N, A, B( 1, J ), 1 )
+            CALL CTPMV( UPLO, TRANS, DIAG, N, A, B( 1, J ), 1 )
    70    CONTINUE
 *
-      ELSE IF( AB_AB_LSAMEN( 2, C2, 'TB' ) ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'TB' ) ) THEN
 *
 *        Triangular matrix, banded storage
 *
-         CALL AB_CLACPY( 'Full', N, NRHS, X, LDX, B, LDB )
+         CALL CLACPY( 'Full', N, NRHS, X, LDX, B, LDB )
          IF( KU.EQ.2 ) THEN
             DIAG = 'U'
          ELSE
             DIAG = 'N'
          END IF
          DO 80 J = 1, NRHS
-            CALL AB_CTBMV( UPLO, TRANS, DIAG, N, KL, A, LDA, B( 1, J ), 
-     $1 )
+            CALL CTBMV( UPLO, TRANS, DIAG, N, KL, A, LDA, B( 1, J ), 1 )
    80    CONTINUE
 *
       ELSE
@@ -454,11 +435,11 @@
 *        If none of the above, set INFO = -1 and return
 *
          INFO = -1
-         CALL AB_XERBLA( 'AB_CLARHS', -INFO )
+         CALL XERBLA( 'CLARHS', -INFO )
       END IF
 *
       RETURN
 *
-*     End of AB_CLARHS
+*     End of CLARHS
 *
       END

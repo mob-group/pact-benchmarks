@@ -1,4 +1,4 @@
-*> \brief \b AB_CGETC2 computes the LU factorization with complete pivoting of the general n-by-n matrix.
+*> \brief \b CGETC2 computes the LU factorization with complete pivoting of the general n-by-n matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CGETC2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CGETC2.f">
+*> Download CGETC2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgetc2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CGETC2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgetc2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CGETC2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgetc2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CGETC2( N, A, LDA, IPIV, JPIV, INFO )
+*       SUBROUTINE CGETC2( N, A, LDA, IPIV, JPIV, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CGETC2 computes an LU factorization, using complete pivoting, of the
+*> CGETC2 computes an LU factorization, using complete pivoting, of the
 *> n-by-n matrix A. The factorization has the form A = P * L * U * Q,
 *> where P and Q are permutation matrices, L is lower triangular with
 *> unit diagonal elements and U is upper triangular.
@@ -109,7 +109,7 @@
 *>     Umea University, S-901 87 Umea, Sweden.
 *
 *  =====================================================================
-      SUBROUTINE AB_CGETC2( N, A, LDA, IPIV, JPIV, INFO )
+      SUBROUTINE CGETC2( N, A, LDA, IPIV, JPIV, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -135,11 +135,11 @@
       REAL               BIGNUM, EPS, SMIN, SMLNUM, XMAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CGERU, AB_CSWAP, AB_SLABAD
+      EXTERNAL           CGERU, CSWAP, SLABAD
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH
-      EXTERNAL           AB_SLAMCH
+      REAL               SLAMCH
+      EXTERNAL           SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CMPLX, MAX
@@ -155,10 +155,10 @@
 *
 *     Set constants to control overflow
 *
-      EPS = AB_SLAMCH( 'P' )
-      SMLNUM = AB_SLAMCH( 'S' ) / EPS
+      EPS = SLAMCH( 'P' )
+      SMLNUM = SLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL AB_SLABAD( SMLNUM, BIGNUM )
+      CALL SLABAD( SMLNUM, BIGNUM )
 *
 *     Handle the case N=1 by itself
 *
@@ -195,13 +195,13 @@
 *        Swap rows
 *
          IF( IPV.NE.I )
-     $      CALL AB_CSWAP( N, A( IPV, 1 ), LDA, A( I, 1 ), LDA )
+     $      CALL CSWAP( N, A( IPV, 1 ), LDA, A( I, 1 ), LDA )
          IPIV( I ) = IPV
 *
 *        Swap columns
 *
          IF( JPV.NE.I )
-     $      CALL AB_CSWAP( N, A( 1, JPV ), 1, A( 1, I ), 1 )
+     $      CALL CSWAP( N, A( 1, JPV ), 1, A( 1, I ), 1 )
          JPIV( I ) = JPV
 *
 *        Check for singularity
@@ -213,7 +213,7 @@
          DO 30 J = I + 1, N
             A( J, I ) = A( J, I ) / A( I, I )
    30    CONTINUE
-         CALL AB_CGERU( N-I, N-I, -CMPLX( ONE ), A( I+1, I ), 1,
+         CALL CGERU( N-I, N-I, -CMPLX( ONE ), A( I+1, I ), 1,
      $               A( I, I+1 ), LDA, A( I+1, I+1 ), LDA )
    40 CONTINUE
 *
@@ -229,6 +229,6 @@
 *
       RETURN
 *
-*     End of AB_CGETC2
+*     End of CGETC2
 *
       END

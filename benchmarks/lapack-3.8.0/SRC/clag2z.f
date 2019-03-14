@@ -1,4 +1,4 @@
-*> \brief \b AB_CLAG2Z converts a complex single precision matrix to a complex double precision matrix.
+*> \brief \b CLAG2Z converts a complex single precision matrix to a complex double precision matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CLAG2Z + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLAG2Z.f">
+*> Download CLAG2Z + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clag2z.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLAG2Z.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clag2z.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLAG2Z.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clag2z.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CLAG2Z( M, N, SA, LDSA, A, LDA, INFO )
+*       SUBROUTINE CLAG2Z( M, N, SA, LDSA, A, LDA, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, LDSA, M, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CLAG2Z converts a COMPLEX matrix, SA, to a COMPLEX*16 matrix, A.
+*> CLAG2Z converts a COMPLEX matrix, SA, to a COMPLEX*16 matrix, A.
 *>
 *> Note that while it is possible to overflow while converting
 *> from double to single, it is not possible to overflow when
@@ -101,7 +101,7 @@
 *> \ingroup complex16OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_CLAG2Z( M, N, SA, LDSA, A, LDA, INFO )
+      SUBROUTINE CLAG2Z( M, N, SA, LDSA, A, LDA, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -131,6 +131,6 @@
    20 CONTINUE
       RETURN
 *
-*     End of AB_CLAG2Z
+*     End of CLAG2Z
 *
       END

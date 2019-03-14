@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_ZPOEQUB
+*> \brief \b ZPOEQUB
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_ZPOEQUB + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_ZPOEQUB.f">
+*> Download ZPOEQUB + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zpoequb.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_ZPOEQUB.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zpoequb.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_ZPOEQUB.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpoequb.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_ZPOEQUB( N, A, LDA, S, SCOND, AMAX, INFO )
+*       SUBROUTINE ZPOEQUB( N, A, LDA, S, SCOND, AMAX, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, N
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_ZPOEQUB computes row and column scalings intended to equilibrate a
+*> ZPOEQUB computes row and column scalings intended to equilibrate a
 *> Hermitian positive definite matrix A and reduce its condition number
 *> (with respect to the two-norm).  S contains the scale factors,
 *> S(i) = 1/sqrt(A(i,i)), chosen so that the scaled matrix B with
@@ -44,7 +44,7 @@
 *> smallest possible condition number over all possible diagonal
 *> scalings.
 *>
-*> This routine differs from AB_ZPOEQU by restricting the scaling factors
+*> This routine differs from ZPOEQU by restricting the scaling factors
 *> to a power of the radix.  Barring over- and underflow, scaling by
 *> these factors introduces no additional rounding errors.  However, the
 *> scaled diagonal entries are no longer approximately 1 but lie
@@ -117,7 +117,7 @@
 *> \ingroup complex16POcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_ZPOEQUB( N, A, LDA, S, SCOND, AMAX, INFO )
+      SUBROUTINE ZPOEQUB( N, A, LDA, S, SCOND, AMAX, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -144,11 +144,11 @@
       DOUBLE PRECISION   SMIN, BASE, TMP
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH
-      EXTERNAL           AB_DLAMCH
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA
+      EXTERNAL           XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, SQRT, LOG, INT, REAL, DIMAG
@@ -166,7 +166,7 @@
          INFO = -3
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_ZPOEQUB', -INFO )
+         CALL XERBLA( 'ZPOEQUB', -INFO )
          RETURN
       END IF
 *
@@ -178,7 +178,7 @@
          RETURN
       END IF
 
-      BASE = AB_DLAMCH( 'B' )
+      BASE = DLAMCH( 'B' )
       TMP = -0.5D+0 / LOG ( BASE )
 *
 *     Find the minimum and maximum diagonal elements.
@@ -218,6 +218,6 @@
 *
       RETURN
 *
-*     End of AB_AB_ZPOEQUB
+*     End of ZPOEQUB
 *
       END

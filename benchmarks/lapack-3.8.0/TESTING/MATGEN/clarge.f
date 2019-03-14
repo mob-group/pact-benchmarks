@@ -1,4 +1,4 @@
-*> \brief \b AB_CLARGE
+*> \brief \b CLARGE
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CLARGE( N, A, LDA, ISEED, WORK, INFO )
+*       SUBROUTINE CLARGE( N, A, LDA, ISEED, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, N
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CLARGE pre- and post-multiplies a complex general n by n matrix A
+*> CLARGE pre- and post-multiplies a complex general n by n matrix A
 *> with a random unitary matrix: A = U*D*U'.
 *> \endverbatim
 *
@@ -85,7 +85,7 @@
 *> \ingroup complex_matgen
 *
 *  =====================================================================
-      SUBROUTINE AB_CLARGE( N, A, LDA, ISEED, WORK, INFO )
+      SUBROUTINE CLARGE( N, A, LDA, ISEED, WORK, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -113,15 +113,14 @@
       COMPLEX            TAU, WA, WB
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CGEMV, AB_CGERC, AB_CLARNV, AB_CSCAL, AB_XER
-     $BLA
+      EXTERNAL           CGEMV, CGERC, CLARNV, CSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, REAL
 *     ..
 *     .. External Functions ..
-      REAL               AB_SCNRM2
-      EXTERNAL           AB_SCNRM2
+      REAL               SCNRM2
+      EXTERNAL           SCNRM2
 *     ..
 *     .. Executable Statements ..
 *
@@ -134,7 +133,7 @@
          INFO = -3
       END IF
       IF( INFO.LT.0 ) THEN
-         CALL AB_XERBLA( 'AB_CLARGE', -INFO )
+         CALL XERBLA( 'CLARGE', -INFO )
          RETURN
       END IF
 *
@@ -144,36 +143,34 @@
 *
 *        generate random reflection
 *
-         CALL AB_CLARNV( 3, ISEED, N-I+1, WORK )
-         WN = AB_SCNRM2( N-I+1, WORK, 1 )
+         CALL CLARNV( 3, ISEED, N-I+1, WORK )
+         WN = SCNRM2( N-I+1, WORK, 1 )
          WA = ( WN / ABS( WORK( 1 ) ) )*WORK( 1 )
          IF( WN.EQ.ZERO ) THEN
             TAU = ZERO
          ELSE
             WB = WORK( 1 ) + WA
-            CALL AB_CSCAL( N-I, ONE / WB, WORK( 2 ), 1 )
+            CALL CSCAL( N-I, ONE / WB, WORK( 2 ), 1 )
             WORK( 1 ) = ONE
             TAU = REAL( WB / WA )
          END IF
 *
 *        multiply A(i:n,1:n) by random reflection from the left
 *
-         CALL AB_CGEMV( 'Conjugate transpose', N-I+1, N, ONE, A( I, 1 ),
+         CALL CGEMV( 'Conjugate transpose', N-I+1, N, ONE, A( I, 1 ),
      $               LDA, WORK, 1, ZERO, WORK( N+1 ), 1 )
-         CALL AB_CGERC( N-I+1, N, -TAU, WORK, 1, WORK( N+1 ), 1, A( I, 1
-     $ ),
+         CALL CGERC( N-I+1, N, -TAU, WORK, 1, WORK( N+1 ), 1, A( I, 1 ),
      $               LDA )
 *
 *        multiply A(1:n,i:n) by random reflection from the right
 *
-         CALL AB_CGEMV( 'No transpose', N, N-I+1, ONE, A( 1, I ), LDA,
+         CALL CGEMV( 'No transpose', N, N-I+1, ONE, A( 1, I ), LDA,
      $               WORK, 1, ZERO, WORK( N+1 ), 1 )
-         CALL AB_CGERC( N, N-I+1, -TAU, WORK( N+1 ), 1, WORK, 1, A( 1, I
-     $ ),
+         CALL CGERC( N, N-I+1, -TAU, WORK( N+1 ), 1, WORK, 1, A( 1, I ),
      $               LDA )
    10 CONTINUE
       RETURN
 *
-*     End of AB_CLARGE
+*     End of CLARGE
 *
       END

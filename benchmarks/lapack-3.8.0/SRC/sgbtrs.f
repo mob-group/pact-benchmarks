@@ -1,4 +1,4 @@
-*> \brief \b AB_SGBTRS
+*> \brief \b SGBTRS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SGBTRS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SGBTRS.f">
+*> Download SGBTRS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgbtrs.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SGBTRS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgbtrs.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SGBTRS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgbtrs.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SGBTRS( TRANS, N, KL, KU, NRHS, AB, LDAB, IPIV, B, LDB,
+*       SUBROUTINE SGBTRS( TRANS, N, KL, KU, NRHS, AB, LDAB, IPIV, B, LDB,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,10 +36,10 @@
 *>
 *> \verbatim
 *>
-*> AB_SGBTRS solves a system of linear equations
+*> SGBTRS solves a system of linear equations
 *>    A * X = B  or  A**T * X = B
 *> with a general band matrix A using the LU factorization computed
-*> by AB_SGBTRF.
+*> by SGBTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -83,7 +83,7 @@
 *> \verbatim
 *>          AB is REAL array, dimension (LDAB,N)
 *>          Details of the LU factorization of the band matrix A, as
-*>          computed by AB_SGBTRF.  U is stored as an upper triangular band
+*>          computed by SGBTRF.  U is stored as an upper triangular band
 *>          matrix with KL+KU superdiagonals in rows 1 to KL+KU+1, and
 *>          the multipliers used during the factorization are stored in
 *>          rows KL+KU+2 to 2*KL+KU+1.
@@ -135,8 +135,7 @@
 *> \ingroup realGBcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_SGBTRS( TRANS, N, KL, KU, NRHS, AB, LDAB, IPIV, B, L
-     $DB,
+      SUBROUTINE SGBTRS( TRANS, N, KL, KU, NRHS, AB, LDAB, IPIV, B, LDB,
      $                   INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -164,12 +163,11 @@
       INTEGER            I, J, KD, L, LM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SGEMV, AB_SGER, AB_SSWAP, AB_STBSV, AB_XERBL
-     $A
+      EXTERNAL           SGEMV, SGER, SSWAP, STBSV, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -179,9 +177,9 @@
 *     Test the input parameters.
 *
       INFO = 0
-      NOTRAN = AB_LSAME( TRANS, 'N' )
-      IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) .AND. .NOT.
-     $    AB_LSAME( TRANS, 'C' ) ) THEN
+      NOTRAN = LSAME( TRANS, 'N' )
+      IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) .AND. .NOT.
+     $    LSAME( TRANS, 'C' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -197,7 +195,7 @@
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SGBTRS', -INFO )
+         CALL XERBLA( 'SGBTRS', -INFO )
          RETURN
       END IF
 *
@@ -225,9 +223,8 @@
                LM = MIN( KL, N-J )
                L = IPIV( J )
                IF( L.NE.J )
-     $            CALL AB_SSWAP( NRHS, B( L, 1 ), LDB, B( J, 1 ), LDB )
-               CALL AB_SGER( LM, NRHS, -ONE, AB( KD+1, J ), 1, B( J, 1 )
-     $,
+     $            CALL SSWAP( NRHS, B( L, 1 ), LDB, B( J, 1 ), LDB )
+               CALL SGER( LM, NRHS, -ONE, AB( KD+1, J ), 1, B( J, 1 ),
      $                    LDB, B( J+1, 1 ), LDB )
    10       CONTINUE
          END IF
@@ -236,8 +233,7 @@
 *
 *           Solve U*X = B, overwriting B with X.
 *
-            CALL AB_STBSV( 'Upper', 'No transpose', 'Non-unit', N, KL+KU
-     $,
+            CALL STBSV( 'Upper', 'No transpose', 'Non-unit', N, KL+KU,
      $                  AB, LDAB, B( 1, I ), 1 )
    20    CONTINUE
 *
@@ -249,8 +245,7 @@
 *
 *           Solve U**T*X = B, overwriting B with X.
 *
-            CALL AB_STBSV( 'Upper', 'Transpose', 'Non-unit', N, KL+KU, A
-     $B,
+            CALL STBSV( 'Upper', 'Transpose', 'Non-unit', N, KL+KU, AB,
      $                  LDAB, B( 1, I ), 1 )
    30    CONTINUE
 *
@@ -259,16 +254,16 @@
          IF( LNOTI ) THEN
             DO 40 J = N - 1, 1, -1
                LM = MIN( KL, N-J )
-               CALL AB_SGEMV( 'Transpose', LM, NRHS, -ONE, B( J+1, 1 ),
+               CALL SGEMV( 'Transpose', LM, NRHS, -ONE, B( J+1, 1 ),
      $                     LDB, AB( KD+1, J ), 1, ONE, B( J, 1 ), LDB )
                L = IPIV( J )
                IF( L.NE.J )
-     $            CALL AB_SSWAP( NRHS, B( L, 1 ), LDB, B( J, 1 ), LDB )
+     $            CALL SSWAP( NRHS, B( L, 1 ), LDB, B( J, 1 ), LDB )
    40       CONTINUE
          END IF
       END IF
       RETURN
 *
-*     End of AB_SGBTRS
+*     End of SGBTRS
 *
       END

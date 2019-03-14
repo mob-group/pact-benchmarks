@@ -1,4 +1,4 @@
-*> \brief \b AB_CSYT03
+*> \brief \b CSYT03
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CSYT03( UPLO, N, A, LDA, AINV, LDAINV, WORK, LDWORK,
+*       SUBROUTINE CSYT03( UPLO, N, A, LDA, AINV, LDAINV, WORK, LDWORK,
 *                          RWORK, RCOND, RESID )
 *
 *       .. Scalar Arguments ..
@@ -28,7 +28,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CSYT03 computes the residual for a complex symmetric matrix times
+*> CSYT03 computes the residual for a complex symmetric matrix times
 *> its inverse:
 *>    norm( I - A*AINV ) / ( N * norm(A) * norm(AINV) * EPS )
 *> where EPS is the machine epsilon.
@@ -123,7 +123,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_CSYT03( UPLO, N, A, LDA, AINV, LDAINV, WORK, LDWORK,
+      SUBROUTINE CSYT03( UPLO, N, A, LDA, AINV, LDAINV, WORK, LDWORK,
      $                   RWORK, RCOND, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -157,12 +157,12 @@
       REAL               AINVNM, ANORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_CLANGE, AB_CLANSY, AB_SLAMCH
-      EXTERNAL           AB_LSAME, AB_CLANGE, AB_CLANSY, AB_SLAMCH
+      LOGICAL            LSAME
+      REAL               CLANGE, CLANSY, SLAMCH
+      EXTERNAL           LSAME, CLANGE, CLANSY, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CSYMM
+      EXTERNAL           CSYMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          REAL
@@ -179,9 +179,9 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0 or AINVNM = 0.
 *
-      EPS = AB_SLAMCH( 'Epsilon' )
-      ANORM = AB_CLANSY( '1', UPLO, N, A, LDA, RWORK )
-      AINVNM = AB_CLANSY( '1', UPLO, N, AINV, LDAINV, RWORK )
+      EPS = SLAMCH( 'Epsilon' )
+      ANORM = CLANSY( '1', UPLO, N, A, LDA, RWORK )
+      AINVNM = CLANSY( '1', UPLO, N, AINV, LDAINV, RWORK )
       IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
          RCOND = ZERO
          RESID = ONE / EPS
@@ -189,10 +189,10 @@
       END IF
       RCOND = ( ONE/ANORM ) / AINVNM
 *
-*     Expand AINV into a full matrix and call AB_CSYMM to multiply
+*     Expand AINV into a full matrix and call CSYMM to multiply
 *     AINV on the left by A (store the result in WORK).
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
          DO 20 J = 1, N
             DO 10 I = 1, J - 1
                AINV( J, I ) = AINV( I, J )
@@ -205,7 +205,7 @@
    30       CONTINUE
    40    CONTINUE
       END IF
-      CALL AB_CSYMM( 'Left', UPLO, N, N, -CONE, A, LDA, AINV, LDAINV,
+      CALL CSYMM( 'Left', UPLO, N, N, -CONE, A, LDA, AINV, LDAINV,
      $            CZERO, WORK, LDWORK )
 *
 *     Add the identity matrix to WORK .
@@ -216,12 +216,12 @@
 *
 *     Compute norm(I - A*AINV) / (N * norm(A) * norm(AINV) * EPS)
 *
-      RESID = AB_CLANGE( '1', N, N, WORK, LDWORK, RWORK )
+      RESID = CLANGE( '1', N, N, WORK, LDWORK, RWORK )
 *
       RESID = ( ( RESID*RCOND )/EPS ) / REAL( N )
 *
       RETURN
 *
-*     End of AB_CSYT03
+*     End of CSYT03
 *
       END

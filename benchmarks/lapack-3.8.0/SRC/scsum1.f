@@ -1,4 +1,4 @@
-*> \brief \b AB_SCSUM1 forms the 1-norm of the complex vector using the true absolute value.
+*> \brief \b SCSUM1 forms the 1-norm of the complex vector using the true absolute value.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SCSUM1 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SCSUM1.f">
+*> Download SCSUM1 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/scsum1.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SCSUM1.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/scsum1.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SCSUM1.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/scsum1.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       REAL             FUNCTION AB_SCSUM1( N, CX, INCX )
+*       REAL             FUNCTION SCSUM1( N, CX, INCX )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCX, N
@@ -33,10 +33,10 @@
 *>
 *> \verbatim
 *>
-*> AB_SCSUM1 takes the sum of the absolute values of a complex
+*> SCSUM1 takes the sum of the absolute values of a complex
 *> vector and returns a single precision result.
 *>
-*> Based on AB_SCASUM from the Level 1 BLAS.
+*> Based on SCASUM from the Level 1 BLAS.
 *> The change is to use the 'genuine' absolute value.
 *> \endverbatim
 *
@@ -76,10 +76,10 @@
 *> \par Contributors:
 *  ==================
 *>
-*> Nick Higham for use with AB_CLACON.
+*> Nick Higham for use with CLACON.
 *
 *  =====================================================================
-      REAL             FUNCTION AB_SCSUM1( N, CX, INCX )
+      REAL             FUNCTION SCSUM1( N, CX, INCX )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -104,7 +104,7 @@
 *     ..
 *     .. Executable Statements ..
 *
-      AB_SCSUM1 = 0.0E0
+      SCSUM1 = 0.0E0
       STEMP = 0.0E0
       IF( N.LE.0 )
      $   RETURN
@@ -120,7 +120,7 @@
 *
          STEMP = STEMP + ABS( CX( I ) )
    10 CONTINUE
-      AB_SCSUM1 = STEMP
+      SCSUM1 = STEMP
       RETURN
 *
 *     CODE FOR INCREMENT EQUAL TO 1
@@ -132,9 +132,9 @@
 *
          STEMP = STEMP + ABS( CX( I ) )
    30 CONTINUE
-      AB_SCSUM1 = STEMP
+      SCSUM1 = STEMP
       RETURN
 *
-*     End of AB_SCSUM1
+*     End of SCSUM1
 *
       END

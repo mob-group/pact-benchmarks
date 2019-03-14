@@ -1,4 +1,4 @@
-*> \brief \b AB_CLATM5
+*> \brief \b CLATM5
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,18 +8,18 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CLATM5( PRTYPE, M, N, A, LDA, B, LDB, C, LDC, D, LDD,
-*                          E, AB_LDE, F, LDF, R, LDR, L, LDL, ALPHA, QBLCKA,
+*       SUBROUTINE CLATM5( PRTYPE, M, N, A, LDA, B, LDB, C, LDC, D, LDD,
+*                          E, LDE, F, LDF, R, LDR, L, LDL, ALPHA, QBLCKA,
 *                          QBLCKB )
 *
 *       .. Scalar Arguments ..
-*       INTEGER            LDA, LDB, LDC, LDD, AB_LDE, LDF, LDL, LDR, M, N,
+*       INTEGER            LDA, LDB, LDC, LDD, LDE, LDF, LDL, LDR, M, N,
 *      $                   PRTYPE, QBLCKA, QBLCKB
 *       REAL               ALPHA
 *       ..
 *       .. Array Arguments ..
 *       COMPLEX            A( LDA, * ), B( LDB, * ), C( LDC, * ),
-*      $                   D( LDD, * ), E( AB_LDE, * ), F( LDF, * ),
+*      $                   D( LDD, * ), E( LDE, * ), F( LDF, * ),
 *      $                   L( LDL, * ), R( LDR, * )
 *       ..
 *
@@ -29,7 +29,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CLATM5 generates matrices involved in the Generalized Sylvester
+*> CLATM5 generates matrices involved in the Generalized Sylvester
 *> equation:
 *>
 *>     A * R - L * B = C
@@ -116,13 +116,13 @@
 *>
 *> \param[out] E
 *> \verbatim
-*>          E is COMPLEX array, dimension (AB_LDE, N).
+*>          E is COMPLEX array, dimension (LDE, N).
 *>          On exit E N-by-N is initialized according to PRTYPE.
 *> \endverbatim
 *>
-*> \param[in] AB_LDE
+*> \param[in] LDE
 *> \verbatim
-*>          AB_LDE is INTEGER
+*>          LDE is INTEGER
 *>          The leading dimension of E.
 *> \endverbatim
 *>
@@ -205,17 +205,17 @@
 *>
 *>             A : if (i == j) then A(i, j) = 1.0
 *>                 if (j == i + 1) then A(i, j) = -1.0
-*>                 ELSE A(i, j) = 0.0,            i, j = 1...M
+*>                 else A(i, j) = 0.0,            i, j = 1...M
 *>
 *>             B : if (i == j) then B(i, j) = 1.0 - ALPHA
 *>                 if (j == i + 1) then B(i, j) = 1.0
-*>                 ELSE B(i, j) = 0.0,            i, j = 1...N
+*>                 else B(i, j) = 0.0,            i, j = 1...N
 *>
 *>             D : if (i == j) then D(i, j) = 1.0
-*>                 ELSE D(i, j) = 0.0,            i, j = 1...M
+*>                 else D(i, j) = 0.0,            i, j = 1...M
 *>
 *>             E : if (i == j) then E(i, j) = 1.0
-*>                 ELSE E(i, j) = 0.0,            i, j = 1...N
+*>                 else E(i, j) = 0.0,            i, j = 1...N
 *>
 *>             L =  R are chosen from [-10...10],
 *>                  which specifies the right hand sides (C, F).
@@ -223,7 +223,7 @@
 *>  PRTYPE = 2 or 3: Triangular and/or quasi- triangular.
 *>
 *>             A : if (i <= j) then A(i, j) = [-1...1]
-*>                 ELSE A(i, j) = 0.0,             i, j = 1...M
+*>                 else A(i, j) = 0.0,             i, j = 1...M
 *>
 *>                 if (PRTYPE = 3) then
 *>                    A(k + 1, k + 1) = A(k, k)
@@ -232,7 +232,7 @@
 *>                        k = 1, M - 1, QBLCKA
 *>
 *>             B : if (i <= j) then B(i, j) = [-1...1]
-*>                 ELSE B(i, j) = 0.0,            i, j = 1...N
+*>                 else B(i, j) = 0.0,            i, j = 1...N
 *>
 *>                 if (PRTYPE = 3) then
 *>                    B(k + 1, k + 1) = B(k, k)
@@ -241,11 +241,11 @@
 *>                        k = 1, N - 1, QBLCKB
 *>
 *>             D : if (i <= j) then D(i, j) = [-1...1].
-*>                 ELSE D(i, j) = 0.0,            i, j = 1...M
+*>                 else D(i, j) = 0.0,            i, j = 1...M
 *>
 *>
 *>             E : if (i <= j) then D(i, j) = [-1...1]
-*>                 ELSE E(i, j) = 0.0,            i, j = 1...N
+*>                 else E(i, j) = 0.0,            i, j = 1...N
 *>
 *>                 L, R are chosen from [-10...10],
 *>                 which specifies the right hand sides (C, F).
@@ -264,10 +264,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_CLATM5( PRTYPE, M, N, A, LDA, B, LDB, C, LDC, D, LDD
-     $,
-     $                   E, AB_LDE, F, LDF, R, LDR, L, LDL, ALPHA, QBLCK
-     $A,
+      SUBROUTINE CLATM5( PRTYPE, M, N, A, LDA, B, LDB, C, LDC, D, LDD,
+     $                   E, LDE, F, LDF, R, LDR, L, LDL, ALPHA, QBLCKA,
      $                   QBLCKB )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -276,14 +274,13 @@
 *     June 2016
 *
 *     .. Scalar Arguments ..
-      INTEGER            LDA, LDB, LDC, LDD, AB_LDE, LDF, LDL, LDR, M, N
-     $,
+      INTEGER            LDA, LDB, LDC, LDD, LDE, LDF, LDL, LDR, M, N,
      $                   PRTYPE, QBLCKA, QBLCKB
       REAL               ALPHA
 *     ..
 *     .. Array Arguments ..
       COMPLEX            A( LDA, * ), B( LDB, * ), C( LDC, * ),
-     $                   D( LDD, * ), E( AB_LDE, * ), F( LDF, * ),
+     $                   D( LDD, * ), E( LDE, * ), F( LDF, * ),
      $                   L( LDL, * ), R( LDR, * )
 *     ..
 *
@@ -305,7 +302,7 @@
       INTRINSIC          CMPLX, MOD, SIN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CGEMM
+      EXTERNAL           CGEMM
 *     ..
 *     .. Executable Statements ..
 *
@@ -497,15 +494,11 @@
 *
 *     Compute rhs (C, F)
 *
-      CALL AB_CGEMM( 'N', 'N', M, N, M, ONE, A, LDA, R, LDR, ZERO, C, LD
-     $C )
-      CALL AB_CGEMM( 'N', 'N', M, N, N, -ONE, L, LDL, B, LDB, ONE, C, LD
-     $C )
-      CALL AB_CGEMM( 'N', 'N', M, N, M, ONE, D, LDD, R, LDR, ZERO, F, LD
-     $F )
-      CALL AB_CGEMM( 'N', 'N', M, N, N, -ONE, L, LDL, E, AB_LDE, ONE, F,
-     $ LDF )
+      CALL CGEMM( 'N', 'N', M, N, M, ONE, A, LDA, R, LDR, ZERO, C, LDC )
+      CALL CGEMM( 'N', 'N', M, N, N, -ONE, L, LDL, B, LDB, ONE, C, LDC )
+      CALL CGEMM( 'N', 'N', M, N, M, ONE, D, LDD, R, LDR, ZERO, F, LDF )
+      CALL CGEMM( 'N', 'N', M, N, N, -ONE, L, LDL, E, LDE, ONE, F, LDF )
 *
-*     End of AB_CLATM5
+*     End of CLATM5
 *
       END

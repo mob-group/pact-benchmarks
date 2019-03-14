@@ -1,4 +1,4 @@
-*> \brief \b AB_CLARND
+*> \brief \b CLARND
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       COMPLEX FUNCTION AB_CLARND( IDIST, ISEED )
+*       COMPLEX FUNCTION CLARND( IDIST, ISEED )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            IDIST
@@ -23,7 +23,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CLARND returns a random complex number from a uniform or normal
+*> CLARND returns a random complex number from a uniform or normal
 *> distribution.
 *> \endverbatim
 *
@@ -67,13 +67,13 @@
 *>
 *> \verbatim
 *>
-*>  This routine calls the auxiliary routine AB_SLARAN to generate a random
+*>  This routine calls the auxiliary routine SLARAN to generate a random
 *>  real number from a uniform (0,1) distribution. The Box-Muller method
 *>  is used to transform numbers from a uniform to a normal distribution.
 *> \endverbatim
 *>
 *  =====================================================================
-      COMPLEX FUNCTION AB_CLARND( IDIST, ISEED )
+      COMPLEX FUNCTION CLARND( IDIST, ISEED )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -99,8 +99,8 @@
       REAL               T1, T2
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLARAN
-      EXTERNAL           AB_SLARAN
+      REAL               SLARAN
+      EXTERNAL           SLARAN
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CMPLX, EXP, LOG, SQRT
@@ -110,38 +110,37 @@
 *     Generate a pair of real random numbers from a uniform (0,1)
 *     distribution
 *
-      T1 = AB_SLARAN( ISEED )
-      T2 = AB_SLARAN( ISEED )
+      T1 = SLARAN( ISEED )
+      T2 = SLARAN( ISEED )
 *
       IF( IDIST.EQ.1 ) THEN
 *
 *        real and imaginary parts each uniform (0,1)
 *
-         AB_CLARND = CMPLX( T1, T2 )
+         CLARND = CMPLX( T1, T2 )
       ELSE IF( IDIST.EQ.2 ) THEN
 *
 *        real and imaginary parts each uniform (-1,1)
 *
-         AB_CLARND = CMPLX( TWO*T1-ONE, TWO*T2-ONE )
+         CLARND = CMPLX( TWO*T1-ONE, TWO*T2-ONE )
       ELSE IF( IDIST.EQ.3 ) THEN
 *
 *        real and imaginary parts each normal (0,1)
 *
-         AB_CLARND = SQRT( -TWO*LOG( T1 ) )*EXP( CMPLX( ZERO, TWOPI*T2 )
-     $ )
+         CLARND = SQRT( -TWO*LOG( T1 ) )*EXP( CMPLX( ZERO, TWOPI*T2 ) )
       ELSE IF( IDIST.EQ.4 ) THEN
 *
 *        uniform distribution on the unit disc abs(z) <= 1
 *
-         AB_CLARND = SQRT( T1 )*EXP( CMPLX( ZERO, TWOPI*T2 ) )
+         CLARND = SQRT( T1 )*EXP( CMPLX( ZERO, TWOPI*T2 ) )
       ELSE IF( IDIST.EQ.5 ) THEN
 *
 *        uniform distribution on the unit circle abs(z) = 1
 *
-         AB_CLARND = EXP( CMPLX( ZERO, TWOPI*T2 ) )
+         CLARND = EXP( CMPLX( ZERO, TWOPI*T2 ) )
       END IF
       RETURN
 *
-*     End of AB_CLARND
+*     End of CLARND
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_SLATTR
+*> \brief \b SLATTR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLATTR( IMAT, UPLO, TRANS, DIAG, ISEED, N, A, LDA, B,
+*       SUBROUTINE SLATTR( IMAT, UPLO, TRANS, DIAG, ISEED, N, A, LDA, B,
 *                          WORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SLATTR generates a triangular test matrix.
+*> SLATTR generates a triangular test matrix.
 *> IMAT and UPLO uniquely specify the properties of the test
 *> matrix, which is returned in the array A.
 *> \endverbatim
@@ -71,7 +71,7 @@
 *> \verbatim
 *>          ISEED is INTEGER array, dimension (4)
 *>          The seed vector for the random number generator (used in
-*>          AB_SLATMS).  Modified on exit.
+*>          SLATMS).  Modified on exit.
 *> \endverbatim
 *>
 *> \param[in] N
@@ -130,8 +130,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_SLATTR( IMAT, UPLO, TRANS, DIAG, ISEED, N, A, LDA, B
-     $,
+      SUBROUTINE SLATTR( IMAT, UPLO, TRANS, DIAG, ISEED, N, A, LDA, B,
      $                   WORK, INFO )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -164,15 +163,14 @@
      $                   TEXP, TLEFT, TSCAL, ULP, UNFL, X, Y, Z
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ISAMAX
-      REAL               AB_SLAMCH, AB_SLARND
-      EXTERNAL           AB_LSAME, AB_ISAMAX, AB_SLAMCH, AB_SLARND
+      LOGICAL            LSAME
+      INTEGER            ISAMAX
+      REAL               SLAMCH, SLARND
+      EXTERNAL           LSAME, ISAMAX, SLAMCH, SLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SCOPY, AB_SLABAD, AB_SLARNV, AB_SLATB4, AB_S
-     $LATMS, AB_SROT,
-     $                   AB_AB_SROTG, AB_SSCAL, AB_SSWAP
+      EXTERNAL           SCOPY, SLABAD, SLARNV, SLATB4, SLATMS, SROT,
+     $                   SROTG, SSCAL, SSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, REAL, SIGN, SQRT
@@ -181,11 +179,11 @@
 *
       PATH( 1: 1 ) = 'Single precision'
       PATH( 2: 3 ) = 'TR'
-      UNFL = AB_SLAMCH( 'Safe minimum' )
-      ULP = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
+      UNFL = SLAMCH( 'Safe minimum' )
+      ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
       SMLNUM = UNFL
       BIGNUM = ( ONE-ULP ) / SMLNUM
-      CALL AB_SLABAD( SMLNUM, BIGNUM )
+      CALL SLABAD( SMLNUM, BIGNUM )
       IF( ( IMAT.GE.7 .AND. IMAT.LE.10 ) .OR. IMAT.EQ.18 ) THEN
          DIAG = 'U'
       ELSE
@@ -198,22 +196,21 @@
       IF( N.LE.0 )
      $   RETURN
 *
-*     Call AB_SLATB4 to set parameters for AB_SLATMS.
+*     Call SLATB4 to set parameters for SLATMS.
 *
-      UPPER = AB_LSAME( UPLO, 'U' )
+      UPPER = LSAME( UPLO, 'U' )
       IF( UPPER ) THEN
-         CALL AB_SLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
+         CALL SLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
      $                CNDNUM, DIST )
       ELSE
-         CALL AB_SLATB4( PATH, -IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
+         CALL SLATB4( PATH, -IMAT, N, N, TYPE, KL, KU, ANORM, MODE,
      $                CNDNUM, DIST )
       END IF
 *
 *     IMAT <= 6:  Non-unit triangular matrix
 *
       IF( IMAT.LE.6 ) THEN
-         CALL AB_SLATMS( N, N, DIST, ISEED, TYPE, B, MODE, CNDNUM, ANORM
-     $,
+         CALL SLATMS( N, N, DIST, ISEED, TYPE, B, MODE, CNDNUM, ANORM,
      $                KL, KU, 'No packing', A, LDA, WORK, INFO )
 *
 *     IMAT > 6:  Unit triangular matrix
@@ -330,7 +327,7 @@
                WORK( J+1 ) = PLUS2
                WORK( N+J+1 ) = ZERO
                PLUS1 = STAR1 / PLUS2
-               REXP = AB_SLARND( 2, ISEED )
+               REXP = SLARND( 2, ISEED )
                STAR1 = STAR1*( SFAC**REXP )
                IF( REXP.LT.ZERO ) THEN
                   STAR1 = -SFAC**( ONE-REXP )
@@ -350,9 +347,9 @@
 *
          IF( UPPER ) THEN
             IF( N.GT.3 ) THEN
-               CALL AB_SCOPY( N-3, WORK, 1, A( 2, 3 ), LDA+1 )
+               CALL SCOPY( N-3, WORK, 1, A( 2, 3 ), LDA+1 )
                IF( N.GT.4 )
-     $            CALL AB_SCOPY( N-4, WORK( N+1 ), 1, A( 2, 4 ), LDA+1 )
+     $            CALL SCOPY( N-4, WORK( N+1 ), 1, A( 2, 4 ), LDA+1 )
             END IF
             DO 100 J = 2, N - 1
                A( 1, J ) = Y
@@ -361,9 +358,9 @@
             A( 1, N ) = Z
          ELSE
             IF( N.GT.3 ) THEN
-               CALL AB_SCOPY( N-3, WORK, 1, A( 3, 2 ), LDA+1 )
+               CALL SCOPY( N-3, WORK, 1, A( 3, 2 ), LDA+1 )
                IF( N.GT.4 )
-     $            CALL AB_SCOPY( N-4, WORK( N+1 ), 1, A( 4, 2 ), LDA+1 )
+     $            CALL SCOPY( N-4, WORK( N+1 ), 1, A( 4, 2 ), LDA+1 )
             END IF
             DO 110 J = 2, N - 1
                A( J, 1 ) = Y
@@ -378,19 +375,18 @@
             DO 120 J = 1, N - 1
                RA = A( J, J+1 )
                RB = 2.0
-               CALL AB_AB_SROTG( RA, RB, C, S )
+               CALL SROTG( RA, RB, C, S )
 *
 *              Multiply by [ c  s; -s  c] on the left.
 *
                IF( N.GT.J+1 )
-     $            CALL AB_SROT( N-J-1, A( J, J+2 ), LDA, A( J+1, J+2 ),
+     $            CALL SROT( N-J-1, A( J, J+2 ), LDA, A( J+1, J+2 ),
      $                       LDA, C, S )
 *
 *              Multiply by [-c -s;  s -c] on the right.
 *
                IF( J.GT.1 )
-     $            CALL AB_SROT( J-1, A( 1, J+1 ), 1, A( 1, J ), 1, -C, -
-     $S )
+     $            CALL SROT( J-1, A( 1, J+1 ), 1, A( 1, J ), 1, -C, -S )
 *
 *              Negate A(J,J+1).
 *
@@ -400,20 +396,18 @@
             DO 130 J = 1, N - 1
                RA = A( J+1, J )
                RB = 2.0
-               CALL AB_AB_SROTG( RA, RB, C, S )
+               CALL SROTG( RA, RB, C, S )
 *
 *              Multiply by [ c -s;  s  c] on the right.
 *
                IF( N.GT.J+1 )
-     $            CALL AB_SROT( N-J-1, A( J+2, J+1 ), 1, A( J+2, J ), 1,
-     $ C,
+     $            CALL SROT( N-J-1, A( J+2, J+1 ), 1, A( J+2, J ), 1, C,
      $                       -S )
 *
 *              Multiply by [-c  s; -s -c] on the left.
 *
                IF( J.GT.1 )
-     $            CALL AB_SROT( J-1, A( J, 1 ), LDA, A( J+1, 1 ), LDA, -
-     $C,
+     $            CALL SROT( J-1, A( J, 1 ), LDA, A( J+1, 1 ), LDA, -C,
      $                       S )
 *
 *              Negate A(J+1,J).
@@ -434,23 +428,23 @@
 *
          IF( UPPER ) THEN
             DO 140 J = 1, N
-               CALL AB_SLARNV( 2, ISEED, J, A( 1, J ) )
+               CALL SLARNV( 2, ISEED, J, A( 1, J ) )
                A( J, J ) = SIGN( TWO, A( J, J ) )
   140       CONTINUE
          ELSE
             DO 150 J = 1, N
-               CALL AB_SLARNV( 2, ISEED, N-J+1, A( J, J ) )
+               CALL SLARNV( 2, ISEED, N-J+1, A( J, J ) )
                A( J, J ) = SIGN( TWO, A( J, J ) )
   150       CONTINUE
          END IF
 *
 *        Set the right hand side so that the largest value is BIGNUM.
 *
-         CALL AB_SLARNV( 2, ISEED, N, B )
-         IY = AB_ISAMAX( N, B, 1 )
+         CALL SLARNV( 2, ISEED, N, B )
+         IY = ISAMAX( N, B, 1 )
          BNORM = ABS( B( IY ) )
          BSCAL = BIGNUM / MAX( ONE, BNORM )
-         CALL AB_SSCAL( N, BSCAL, B, 1 )
+         CALL SSCAL( N, BSCAL, B, 1 )
 *
       ELSE IF( IMAT.EQ.12 ) THEN
 *
@@ -458,20 +452,20 @@
 *        cause immediate overflow when dividing by T(j,j).
 *        In type 12, the offdiagonal elements are small (CNORM(j) < 1).
 *
-         CALL AB_SLARNV( 2, ISEED, N, B )
+         CALL SLARNV( 2, ISEED, N, B )
          TSCAL = ONE / MAX( ONE, REAL( N-1 ) )
          IF( UPPER ) THEN
             DO 160 J = 1, N
-               CALL AB_SLARNV( 2, ISEED, J, A( 1, J ) )
-               CALL AB_SSCAL( J-1, TSCAL, A( 1, J ), 1 )
+               CALL SLARNV( 2, ISEED, J, A( 1, J ) )
+               CALL SSCAL( J-1, TSCAL, A( 1, J ), 1 )
                A( J, J ) = SIGN( ONE, A( J, J ) )
   160       CONTINUE
             A( N, N ) = SMLNUM*A( N, N )
          ELSE
             DO 170 J = 1, N
-               CALL AB_SLARNV( 2, ISEED, N-J+1, A( J, J ) )
+               CALL SLARNV( 2, ISEED, N-J+1, A( J, J ) )
                IF( N.GT.J )
-     $            CALL AB_SSCAL( N-J, TSCAL, A( J+1, J ), 1 )
+     $            CALL SSCAL( N-J, TSCAL, A( J+1, J ), 1 )
                A( J, J ) = SIGN( ONE, A( J, J ) )
   170       CONTINUE
             A( 1, 1 ) = SMLNUM*A( 1, 1 )
@@ -483,16 +477,16 @@
 *        cause immediate overflow when dividing by T(j,j).
 *        In type 13, the offdiagonal elements are O(1) (CNORM(j) > 1).
 *
-         CALL AB_SLARNV( 2, ISEED, N, B )
+         CALL SLARNV( 2, ISEED, N, B )
          IF( UPPER ) THEN
             DO 180 J = 1, N
-               CALL AB_SLARNV( 2, ISEED, J, A( 1, J ) )
+               CALL SLARNV( 2, ISEED, J, A( 1, J ) )
                A( J, J ) = SIGN( ONE, A( J, J ) )
   180       CONTINUE
             A( N, N ) = SMLNUM*A( N, N )
          ELSE
             DO 190 J = 1, N
-               CALL AB_SLARNV( 2, ISEED, N-J+1, A( J, J ) )
+               CALL SLARNV( 2, ISEED, N-J+1, A( J, J ) )
                A( J, J ) = SIGN( ONE, A( J, J ) )
   190       CONTINUE
             A( 1, 1 ) = SMLNUM*A( 1, 1 )
@@ -560,7 +554,7 @@
 *
          TEXP = ONE / MAX( ONE, REAL( N-1 ) )
          TSCAL = SMLNUM**TEXP
-         CALL AB_SLARNV( 2, ISEED, N, B )
+         CALL SLARNV( 2, ISEED, N, B )
          IF( UPPER ) THEN
             DO 270 J = 1, N
                DO 260 I = 1, J - 2
@@ -590,7 +584,7 @@
          IY = N / 2 + 1
          IF( UPPER ) THEN
             DO 300 J = 1, N
-               CALL AB_SLARNV( 2, ISEED, J, A( 1, J ) )
+               CALL SLARNV( 2, ISEED, J, A( 1, J ) )
                IF( J.NE.IY ) THEN
                   A( J, J ) = SIGN( TWO, A( J, J ) )
                ELSE
@@ -599,7 +593,7 @@
   300       CONTINUE
          ELSE
             DO 310 J = 1, N
-               CALL AB_SLARNV( 2, ISEED, N-J+1, A( J, J ) )
+               CALL SLARNV( 2, ISEED, N-J+1, A( J, J ) )
                IF( J.NE.IY ) THEN
                   A( J, J ) = SIGN( TWO, A( J, J ) )
                ELSE
@@ -607,8 +601,8 @@
                END IF
   310       CONTINUE
          END IF
-         CALL AB_SLARNV( 2, ISEED, N, B )
-         CALL AB_SSCAL( N, TWO, B, 1 )
+         CALL SLARNV( 2, ISEED, N, B )
+         CALL SSCAL( N, TWO, B, 1 )
 *
       ELSE IF( IMAT.EQ.17 ) THEN
 *
@@ -657,64 +651,64 @@
 *
          IF( UPPER ) THEN
             DO 360 J = 1, N
-               CALL AB_SLARNV( 2, ISEED, J-1, A( 1, J ) )
+               CALL SLARNV( 2, ISEED, J-1, A( 1, J ) )
                A( J, J ) = ZERO
   360       CONTINUE
          ELSE
             DO 370 J = 1, N
                IF( J.LT.N )
-     $            CALL AB_SLARNV( 2, ISEED, N-J, A( J+1, J ) )
+     $            CALL SLARNV( 2, ISEED, N-J, A( J+1, J ) )
                A( J, J ) = ZERO
   370       CONTINUE
          END IF
 *
 *        Set the right hand side so that the largest value is BIGNUM.
 *
-         CALL AB_SLARNV( 2, ISEED, N, B )
-         IY = AB_ISAMAX( N, B, 1 )
+         CALL SLARNV( 2, ISEED, N, B )
+         IY = ISAMAX( N, B, 1 )
          BNORM = ABS( B( IY ) )
          BSCAL = BIGNUM / MAX( ONE, BNORM )
-         CALL AB_SSCAL( N, BSCAL, B, 1 )
+         CALL SSCAL( N, BSCAL, B, 1 )
 *
       ELSE IF( IMAT.EQ.19 ) THEN
 *
 *        Type 19:  Generate a triangular matrix with elements between
 *        BIGNUM/(n-1) and BIGNUM so that at least one of the column
 *        norms will exceed BIGNUM.
-*        1/3/91:  AB_SLATRS no longer can handle this case
+*        1/3/91:  SLATRS no longer can handle this case
 *
          TLEFT = BIGNUM / MAX( ONE, REAL( N-1 ) )
          TSCAL = BIGNUM*( REAL( N-1 ) / MAX( ONE, REAL( N ) ) )
          IF( UPPER ) THEN
             DO 390 J = 1, N
-               CALL AB_SLARNV( 2, ISEED, J, A( 1, J ) )
+               CALL SLARNV( 2, ISEED, J, A( 1, J ) )
                DO 380 I = 1, J
                   A( I, J ) = SIGN( TLEFT, A( I, J ) ) + TSCAL*A( I, J )
   380          CONTINUE
   390       CONTINUE
          ELSE
             DO 410 J = 1, N
-               CALL AB_SLARNV( 2, ISEED, N-J+1, A( J, J ) )
+               CALL SLARNV( 2, ISEED, N-J+1, A( J, J ) )
                DO 400 I = J, N
                   A( I, J ) = SIGN( TLEFT, A( I, J ) ) + TSCAL*A( I, J )
   400          CONTINUE
   410       CONTINUE
          END IF
-         CALL AB_SLARNV( 2, ISEED, N, B )
-         CALL AB_SSCAL( N, TWO, B, 1 )
+         CALL SLARNV( 2, ISEED, N, B )
+         CALL SSCAL( N, TWO, B, 1 )
       END IF
 *
 *     Flip the matrix if the transpose will be used.
 *
-      IF( .NOT.AB_LSAME( TRANS, 'N' ) ) THEN
+      IF( .NOT.LSAME( TRANS, 'N' ) ) THEN
          IF( UPPER ) THEN
             DO 420 J = 1, N / 2
-               CALL AB_SSWAP( N-2*J+1, A( J, J ), LDA, A( J+1, N-J+1 ),
+               CALL SSWAP( N-2*J+1, A( J, J ), LDA, A( J+1, N-J+1 ),
      $                     -1 )
   420       CONTINUE
          ELSE
             DO 430 J = 1, N / 2
-               CALL AB_SSWAP( N-2*J+1, A( J, J ), 1, A( N-J+1, J+1 ),
+               CALL SSWAP( N-2*J+1, A( J, J ), 1, A( N-J+1, J+1 ),
      $                     -LDA )
   430       CONTINUE
          END IF
@@ -722,6 +716,6 @@
 *
       RETURN
 *
-*     End of AB_SLATTR
+*     End of SLATTR
 *
       END

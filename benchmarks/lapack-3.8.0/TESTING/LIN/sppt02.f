@@ -1,4 +1,4 @@
-*> \brief \b AB_SPPT02
+*> \brief \b SPPT02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SPPT02( UPLO, N, NRHS, A, X, LDX, B, LDB, RWORK,
+*       SUBROUTINE SPPT02( UPLO, N, NRHS, A, X, LDX, B, LDB, RWORK,
 *                          RESID )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SPPT02 computes the residual in the solution of a symmetric system
+*> SPPT02 computes the residual in the solution of a symmetric system
 *> of linear equations  A*x = b  when packed storage is used for the
 *> coefficient matrix.  The ratio computed is
 *>
@@ -119,7 +119,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_SPPT02( UPLO, N, NRHS, A, X, LDX, B, LDB, RWORK,
+      SUBROUTINE SPPT02( UPLO, N, NRHS, A, X, LDX, B, LDB, RWORK,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -147,11 +147,11 @@
       REAL               ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      REAL               AB_SASUM, AB_SLAMCH, AB_SLANSP
-      EXTERNAL           AB_SASUM, AB_SLAMCH, AB_SLANSP
+      REAL               SASUM, SLAMCH, SLANSP
+      EXTERNAL           SASUM, SLAMCH, SLANSP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SSPMV
+      EXTERNAL           SSPMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -167,8 +167,8 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = AB_SLAMCH( 'Epsilon' )
-      ANORM = AB_SLANSP( '1', UPLO, N, A, RWORK )
+      EPS = SLAMCH( 'Epsilon' )
+      ANORM = SLANSP( '1', UPLO, N, A, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -177,8 +177,7 @@
 *     Compute  B - A*X  for the matrix of right hand sides B.
 *
       DO 10 J = 1, NRHS
-         CALL AB_SSPMV( UPLO, N, -ONE, A, X( 1, J ), 1, ONE, B( 1, J ), 
-     $1 )
+         CALL SSPMV( UPLO, N, -ONE, A, X( 1, J ), 1, ONE, B( 1, J ), 1 )
    10 CONTINUE
 *
 *     Compute the maximum over the number of right hand sides of
@@ -186,8 +185,8 @@
 *
       RESID = ZERO
       DO 20 J = 1, NRHS
-         BNORM = AB_SASUM( N, B( 1, J ), 1 )
-         XNORM = AB_SASUM( N, X( 1, J ), 1 )
+         BNORM = SASUM( N, B( 1, J ), 1 )
+         XNORM = SASUM( N, X( 1, J ), 1 )
          IF( XNORM.LE.ZERO ) THEN
             RESID = ONE / EPS
          ELSE
@@ -197,6 +196,6 @@
 *
       RETURN
 *
-*     End of AB_SPPT02
+*     End of SPPT02
 *
       END

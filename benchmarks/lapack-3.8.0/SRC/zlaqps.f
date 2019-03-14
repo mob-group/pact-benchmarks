@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLAQPS computes a step of QR factorization with column pivoting of a real m-by-n matrix A by using BLAS level 3.
+*> \brief \b ZLAQPS computes a step of QR factorization with column pivoting of a real m-by-n matrix A by using BLAS level 3.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZLAQPS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLAQPS.f">
+*> Download ZLAQPS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlaqps.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLAQPS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlaqps.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLAQPS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlaqps.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZLAQPS( M, N, OFFSET, NB, KB, A, LDA, JPVT, TAU, VN1,
+*       SUBROUTINE ZLAQPS( M, N, OFFSET, NB, KB, A, LDA, JPVT, TAU, VN1,
 *                          VN2, AUXV, F, LDF )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZLAQPS computes a step of QR factorization with column pivoting
+*> ZLAQPS computes a step of QR factorization with column pivoting
 *> of a complex M-by-N matrix A by using Blas-3.  It tries to factorize
 *> NB columns from A starting from the row OFFSET+1, and updates all
 *> of the matrix with Blas-3 xGEMM.
@@ -174,8 +174,7 @@
 *> \endhtmlonly
 *
 *  =====================================================================
-      SUBROUTINE AB_ZLAQPS( M, N, OFFSET, NB, KB, A, LDA, JPVT, TAU, VN1
-     $,
+      SUBROUTINE ZLAQPS( M, N, OFFSET, NB, KB, A, LDA, JPVT, TAU, VN1,
      $                   VN2, AUXV, F, LDF )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -207,22 +206,22 @@
       COMPLEX*16         AKK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZGEMM, AB_ZGEMV, AB_AB_ZLARFG, AB_ZSWAP
+      EXTERNAL           ZGEMM, ZGEMV, ZLARFG, ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCONJG, MAX, MIN, NINT, SQRT
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_IDAMAX
-      DOUBLE PRECISION   AB_DLAMCH, AB_DZNRM2
-      EXTERNAL           AB_IDAMAX, AB_DLAMCH, AB_DZNRM2
+      INTEGER            IDAMAX
+      DOUBLE PRECISION   DLAMCH, DZNRM2
+      EXTERNAL           IDAMAX, DLAMCH, DZNRM2
 *     ..
 *     .. Executable Statements ..
 *
       LASTRK = MIN( M, N+OFFSET )
       LSTICC = 0
       K = 0
-      TOL3Z = SQRT(AB_DLAMCH('Epsilon'))
+      TOL3Z = SQRT(DLAMCH('Epsilon'))
 *
 *     Beginning of while loop.
 *
@@ -233,10 +232,10 @@
 *
 *        Determine ith pivot column and swap if necessary
 *
-         PVT = ( K-1 ) + AB_IDAMAX( N-K+1, VN1( K ), 1 )
+         PVT = ( K-1 ) + IDAMAX( N-K+1, VN1( K ), 1 )
          IF( PVT.NE.K ) THEN
-            CALL AB_ZSWAP( M, A( 1, PVT ), 1, A( 1, K ), 1 )
-            CALL AB_ZSWAP( K-1, F( PVT, 1 ), LDF, F( K, 1 ), LDF )
+            CALL ZSWAP( M, A( 1, PVT ), 1, A( 1, K ), 1 )
+            CALL ZSWAP( K-1, F( PVT, 1 ), LDF, F( K, 1 ), LDF )
             ITEMP = JPVT( PVT )
             JPVT( PVT ) = JPVT( K )
             JPVT( K ) = ITEMP
@@ -244,15 +243,14 @@
             VN2( PVT ) = VN2( K )
          END IF
 *
-*        Apply previous HousehoAB_LDEr reflectors to column K:
+*        Apply previous Householder reflectors to column K:
 *        A(RK:M,K) := A(RK:M,K) - A(RK:M,1:K-1)*F(K,1:K-1)**H.
 *
          IF( K.GT.1 ) THEN
             DO 20 J = 1, K - 1
                F( K, J ) = DCONJG( F( K, J ) )
    20       CONTINUE
-            CALL AB_ZGEMV( 'No transpose', M-RK+1, K-1, -CONE, A( RK, 1 
-     $),
+            CALL ZGEMV( 'No transpose', M-RK+1, K-1, -CONE, A( RK, 1 ),
      $                  LDA, F( K, 1 ), LDF, CONE, A( RK, K ), 1 )
             DO 30 J = 1, K - 1
                F( K, J ) = DCONJG( F( K, J ) )
@@ -262,10 +260,9 @@
 *        Generate elementary reflector H(k).
 *
          IF( RK.LT.M ) THEN
-            CALL AB_AB_ZLARFG( M-RK+1, A( RK, K ), A( RK+1, K ), 1, TAU(
-     $ K ) )
+            CALL ZLARFG( M-RK+1, A( RK, K ), A( RK+1, K ), 1, TAU( K ) )
          ELSE
-            CALL AB_AB_ZLARFG( 1, A( RK, K ), A( RK, K ), 1, TAU( K ) )
+            CALL ZLARFG( 1, A( RK, K ), A( RK, K ), 1, TAU( K ) )
          END IF
 *
          AKK = A( RK, K )
@@ -276,7 +273,7 @@
 *        Compute  F(K+1:N,K) := tau(K)*A(RK:M,K+1:N)**H*A(RK:M,K).
 *
          IF( K.LT.N ) THEN
-            CALL AB_ZGEMV( 'Conjugate transpose', M-RK+1, N-K, TAU( K ),
+            CALL ZGEMV( 'Conjugate transpose', M-RK+1, N-K, TAU( K ),
      $                  A( RK, K+1 ), LDA, A( RK, K ), 1, CZERO,
      $                  F( K+1, K ), 1 )
          END IF
@@ -292,12 +289,11 @@
 *                    *A(RK:M,K).
 *
          IF( K.GT.1 ) THEN
-            CALL AB_ZGEMV( 'Conjugate transpose', M-RK+1, K-1, -TAU( K )
-     $,
+            CALL ZGEMV( 'Conjugate transpose', M-RK+1, K-1, -TAU( K ),
      $                  A( RK, 1 ), LDA, A( RK, K ), 1, CZERO,
      $                  AUXV( 1 ), 1 )
 *
-            CALL AB_ZGEMV( 'No transpose', N, K-1, CONE, F( 1, 1 ), LDF,
+            CALL ZGEMV( 'No transpose', N, K-1, CONE, F( 1, 1 ), LDF,
      $                  AUXV( 1 ), 1, CONE, F( 1, K ), 1 )
          END IF
 *
@@ -305,8 +301,7 @@
 *        A(RK,K+1:N) := A(RK,K+1:N) - A(RK,1:K)*F(K+1:N,1:K)**H.
 *
          IF( K.LT.N ) THEN
-            CALL AB_ZGEMM( 'No transpose', 'Conjugate transpose', 1, N-K
-     $,
+            CALL ZGEMM( 'No transpose', 'Conjugate transpose', 1, N-K,
      $                  K, -CONE, A( RK, 1 ), LDA, F( K+1, 1 ), LDF,
      $                  CONE, A( RK, K+1 ), LDA )
          END IF
@@ -347,8 +342,7 @@
 *                         A(OFFSET+KB+1:M,1:KB)*F(KB+1:N,1:KB)**H.
 *
       IF( KB.LT.MIN( N, M-OFFSET ) ) THEN
-         CALL AB_ZGEMM( 'No transpose', 'Conjugate transpose', M-RK, N-K
-     $B,
+         CALL ZGEMM( 'No transpose', 'Conjugate transpose', M-RK, N-KB,
      $               KB, -CONE, A( RK+1, 1 ), LDA, F( KB+1, 1 ), LDF,
      $               CONE, A( RK+1, KB+1 ), LDA )
       END IF
@@ -358,11 +352,11 @@
    60 CONTINUE
       IF( LSTICC.GT.0 ) THEN
          ITEMP = NINT( VN2( LSTICC ) )
-         VN1( LSTICC ) = AB_DZNRM2( M-RK, A( RK+1, LSTICC ), 1 )
+         VN1( LSTICC ) = DZNRM2( M-RK, A( RK+1, LSTICC ), 1 )
 *
 *        NOTE: The computation of VN1( LSTICC ) relies on the fact that
-*        AB_SNRM2 does not fail on vectors with norm below the value of
-*        SQRT(AB_DLAMCH('S'))
+*        SNRM2 does not fail on vectors with norm below the value of
+*        SQRT(DLAMCH('S'))
 *
          VN2( LSTICC ) = VN1( LSTICC )
          LSTICC = ITEMP
@@ -371,6 +365,6 @@
 *
       RETURN
 *
-*     End of AB_ZLAQPS
+*     End of ZLAQPS
 *
       END

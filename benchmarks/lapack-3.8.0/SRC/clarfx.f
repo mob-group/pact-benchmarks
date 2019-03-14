@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_CLARFX applies an elementary reflector to a general rectangular matrix, with loop unrolling when the reflector has order ≤ 10.
+*> \brief \b CLARFX applies an elementary reflector to a general rectangular matrix, with loop unrolling when the reflector has order ≤ 10.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_CLARFX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_CLARFX.f">
+*> Download CLARFX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clarfx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_CLARFX.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clarfx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_CLARFX.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clarfx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_CLARFX( SIDE, M, N, V, TAU, C, LDC, WORK )
+*       SUBROUTINE CLARFX( SIDE, M, N, V, TAU, C, LDC, WORK )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          SIDE
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_CLARFX applies a complex elementary reflector H to a complex m by n
+*> CLARFX applies a complex elementary reflector H to a complex m by n
 *> matrix C, from either the left or the right. H is represented in the
 *> form
 *>
@@ -117,7 +117,7 @@
 *> \ingroup complexOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_CLARFX( SIDE, M, N, V, TAU, C, LDC, WORK )
+      SUBROUTINE CLARFX( SIDE, M, N, V, TAU, C, LDC, WORK )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -146,11 +146,11 @@
      $                   V1, V10, V2, V3, V4, V5, V6, V7, V8, V9
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CLARF
+      EXTERNAL           CLARF
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CONJG
@@ -159,7 +159,7 @@
 *
       IF( TAU.EQ.ZERO )
      $   RETURN
-      IF( AB_LSAME( SIDE, 'L' ) ) THEN
+      IF( LSAME( SIDE, 'L' ) ) THEN
 *
 *        Form  H * C, where H has order m.
 *
@@ -168,11 +168,11 @@
 *
 *        Code for general M
 *
-         CALL AB_CLARF( SIDE, M, N, V, 1, TAU, C, LDC, WORK )
+         CALL CLARF( SIDE, M, N, V, 1, TAU, C, LDC, WORK )
          GO TO 410
    10    CONTINUE
 *
-*        Special code for 1 x 1 HousehoAB_LDEr
+*        Special code for 1 x 1 Householder
 *
          T1 = ONE - TAU*V( 1 )*CONJG( V( 1 ) )
          DO 20 J = 1, N
@@ -181,7 +181,7 @@
          GO TO 410
    30    CONTINUE
 *
-*        Special code for 2 x 2 HousehoAB_LDEr
+*        Special code for 2 x 2 Householder
 *
          V1 = CONJG( V( 1 ) )
          T1 = TAU*CONJG( V1 )
@@ -195,7 +195,7 @@
          GO TO 410
    50    CONTINUE
 *
-*        Special code for 3 x 3 HousehoAB_LDEr
+*        Special code for 3 x 3 Householder
 *
          V1 = CONJG( V( 1 ) )
          T1 = TAU*CONJG( V1 )
@@ -212,7 +212,7 @@
          GO TO 410
    70    CONTINUE
 *
-*        Special code for 4 x 4 HousehoAB_LDEr
+*        Special code for 4 x 4 Householder
 *
          V1 = CONJG( V( 1 ) )
          T1 = TAU*CONJG( V1 )
@@ -233,7 +233,7 @@
          GO TO 410
    90    CONTINUE
 *
-*        Special code for 5 x 5 HousehoAB_LDEr
+*        Special code for 5 x 5 Householder
 *
          V1 = CONJG( V( 1 ) )
          T1 = TAU*CONJG( V1 )
@@ -257,7 +257,7 @@
          GO TO 410
   110    CONTINUE
 *
-*        Special code for 6 x 6 HousehoAB_LDEr
+*        Special code for 6 x 6 Householder
 *
          V1 = CONJG( V( 1 ) )
          T1 = TAU*CONJG( V1 )
@@ -284,7 +284,7 @@
          GO TO 410
   130    CONTINUE
 *
-*        Special code for 7 x 7 HousehoAB_LDEr
+*        Special code for 7 x 7 Householder
 *
          V1 = CONJG( V( 1 ) )
          T1 = TAU*CONJG( V1 )
@@ -315,7 +315,7 @@
          GO TO 410
   150    CONTINUE
 *
-*        Special code for 8 x 8 HousehoAB_LDEr
+*        Special code for 8 x 8 Householder
 *
          V1 = CONJG( V( 1 ) )
          T1 = TAU*CONJG( V1 )
@@ -349,7 +349,7 @@
          GO TO 410
   170    CONTINUE
 *
-*        Special code for 9 x 9 HousehoAB_LDEr
+*        Special code for 9 x 9 Householder
 *
          V1 = CONJG( V( 1 ) )
          T1 = TAU*CONJG( V1 )
@@ -386,7 +386,7 @@
          GO TO 410
   190    CONTINUE
 *
-*        Special code for 10 x 10 HousehoAB_LDEr
+*        Special code for 10 x 10 Householder
 *
          V1 = CONJG( V( 1 ) )
          T1 = TAU*CONJG( V1 )
@@ -434,11 +434,11 @@
 *
 *        Code for general N
 *
-         CALL AB_CLARF( SIDE, M, N, V, 1, TAU, C, LDC, WORK )
+         CALL CLARF( SIDE, M, N, V, 1, TAU, C, LDC, WORK )
          GO TO 410
   210    CONTINUE
 *
-*        Special code for 1 x 1 HousehoAB_LDEr
+*        Special code for 1 x 1 Householder
 *
          T1 = ONE - TAU*V( 1 )*CONJG( V( 1 ) )
          DO 220 J = 1, M
@@ -447,7 +447,7 @@
          GO TO 410
   230    CONTINUE
 *
-*        Special code for 2 x 2 HousehoAB_LDEr
+*        Special code for 2 x 2 Householder
 *
          V1 = V( 1 )
          T1 = TAU*CONJG( V1 )
@@ -461,7 +461,7 @@
          GO TO 410
   250    CONTINUE
 *
-*        Special code for 3 x 3 HousehoAB_LDEr
+*        Special code for 3 x 3 Householder
 *
          V1 = V( 1 )
          T1 = TAU*CONJG( V1 )
@@ -478,7 +478,7 @@
          GO TO 410
   270    CONTINUE
 *
-*        Special code for 4 x 4 HousehoAB_LDEr
+*        Special code for 4 x 4 Householder
 *
          V1 = V( 1 )
          T1 = TAU*CONJG( V1 )
@@ -499,7 +499,7 @@
          GO TO 410
   290    CONTINUE
 *
-*        Special code for 5 x 5 HousehoAB_LDEr
+*        Special code for 5 x 5 Householder
 *
          V1 = V( 1 )
          T1 = TAU*CONJG( V1 )
@@ -523,7 +523,7 @@
          GO TO 410
   310    CONTINUE
 *
-*        Special code for 6 x 6 HousehoAB_LDEr
+*        Special code for 6 x 6 Householder
 *
          V1 = V( 1 )
          T1 = TAU*CONJG( V1 )
@@ -550,7 +550,7 @@
          GO TO 410
   330    CONTINUE
 *
-*        Special code for 7 x 7 HousehoAB_LDEr
+*        Special code for 7 x 7 Householder
 *
          V1 = V( 1 )
          T1 = TAU*CONJG( V1 )
@@ -581,7 +581,7 @@
          GO TO 410
   350    CONTINUE
 *
-*        Special code for 8 x 8 HousehoAB_LDEr
+*        Special code for 8 x 8 Householder
 *
          V1 = V( 1 )
          T1 = TAU*CONJG( V1 )
@@ -615,7 +615,7 @@
          GO TO 410
   370    CONTINUE
 *
-*        Special code for 9 x 9 HousehoAB_LDEr
+*        Special code for 9 x 9 Householder
 *
          V1 = V( 1 )
          T1 = TAU*CONJG( V1 )
@@ -652,7 +652,7 @@
          GO TO 410
   390    CONTINUE
 *
-*        Special code for 10 x 10 HousehoAB_LDEr
+*        Special code for 10 x 10 Householder
 *
          V1 = V( 1 )
          T1 = TAU*CONJG( V1 )
@@ -694,6 +694,6 @@
       END IF
   410 RETURN
 *
-*     End of AB_AB_CLARFX
+*     End of CLARFX
 *
       END

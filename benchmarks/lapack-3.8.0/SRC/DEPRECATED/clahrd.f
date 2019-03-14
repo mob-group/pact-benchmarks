@@ -1,4 +1,4 @@
-*> \brief \b AB_CLAHRD reduces the first nb columns of a general rectangular matrix A so that elements below the k-th subdiagonal are zero, and returns auxiliary matrices which are needed to apply the transformation to the unreduced part of A.
+*> \brief \b CLAHRD reduces the first nb columns of a general rectangular matrix A so that elements below the k-th subdiagonal are zero, and returns auxiliary matrices which are needed to apply the transformation to the unreduced part of A.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CLAHRD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLAHRD.f">
+*> Download CLAHRD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clahrd.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLAHRD.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clahrd.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLAHRD.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clahrd.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CLAHRD( N, K, NB, A, LDA, TAU, T, LDT, Y, LDY )
+*       SUBROUTINE CLAHRD( N, K, NB, A, LDA, TAU, T, LDT, Y, LDY )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            K, LDA, LDT, LDY, N, NB
@@ -34,9 +34,9 @@
 *>
 *> \verbatim
 *>
-*> This routine is deprecated and has been replaced by routine AB_CLAHR2.
+*> This routine is deprecated and has been replaced by routine CLAHR2.
 *>
-*> AB_CLAHRD reduces the first NB columns of a complex general n-by-(n-k+1)
+*> CLAHRD reduces the first NB columns of a complex general n-by-(n-k+1)
 *> matrix A so that elements below the k-th subdiagonal are zero. The
 *> reduction is performed by a unitary similarity transformation
 *> Q**H * A * Q. The routine returns the matrices V and T which determine
@@ -165,7 +165,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_CLAHRD( N, K, NB, A, LDA, TAU, T, LDT, Y, LDY )
+      SUBROUTINE CLAHRD( N, K, NB, A, LDA, TAU, T, LDT, Y, LDY )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -192,9 +192,8 @@
       COMPLEX            EI
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CAXPY, AB_CCOPY, AB_CGEMV, AB_CLACGV, AB_AB_
-     $CLARFG, AB_CSCAL,
-     $                   AB_CTRMV
+      EXTERNAL           CAXPY, CCOPY, CGEMV, CLACGV, CLARFG, CSCAL,
+     $                   CTRMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN
@@ -213,10 +212,10 @@
 *
 *           Compute i-th column of A - Y * V**H
 *
-            CALL AB_CLACGV( I-1, A( K+I-1, 1 ), LDA )
-            CALL AB_CGEMV( 'No transpose', N, I-1, -ONE, Y, LDY,
+            CALL CLACGV( I-1, A( K+I-1, 1 ), LDA )
+            CALL CGEMV( 'No transpose', N, I-1, -ONE, Y, LDY,
      $                  A( K+I-1, 1 ), LDA, ONE, A( 1, I ), 1 )
-            CALL AB_CLACGV( I-1, A( K+I-1, 1 ), LDA )
+            CALL CLACGV( I-1, A( K+I-1, 1 ), LDA )
 *
 *           Apply I - V * T**H * V**H to this column (call it b) from the
 *           left, using the last column of T as workspace
@@ -228,33 +227,31 @@
 *
 *           w := V1**H * b1
 *
-            CALL AB_CCOPY( I-1, A( K+1, I ), 1, T( 1, NB ), 1 )
-            CALL AB_CTRMV( 'Lower', 'Conjugate transpose', 'Unit', I-1,
+            CALL CCOPY( I-1, A( K+1, I ), 1, T( 1, NB ), 1 )
+            CALL CTRMV( 'Lower', 'Conjugate transpose', 'Unit', I-1,
      $                  A( K+1, 1 ), LDA, T( 1, NB ), 1 )
 *
 *           w := w + V2**H *b2
 *
-            CALL AB_CGEMV( 'Conjugate transpose', N-K-I+1, I-1, ONE,
+            CALL CGEMV( 'Conjugate transpose', N-K-I+1, I-1, ONE,
      $                  A( K+I, 1 ), LDA, A( K+I, I ), 1, ONE,
      $                  T( 1, NB ), 1 )
 *
 *           w := T**H *w
 *
-            CALL AB_CTRMV( 'Upper', 'Conjugate transpose', 'Non-unit', I
-     $-1,
+            CALL CTRMV( 'Upper', 'Conjugate transpose', 'Non-unit', I-1,
      $                  T, LDT, T( 1, NB ), 1 )
 *
 *           b2 := b2 - V2*w
 *
-            CALL AB_CGEMV( 'No transpose', N-K-I+1, I-1, -ONE, A( K+I, 1
-     $ ),
+            CALL CGEMV( 'No transpose', N-K-I+1, I-1, -ONE, A( K+I, 1 ),
      $                  LDA, T( 1, NB ), 1, ONE, A( K+I, I ), 1 )
 *
 *           b1 := b1 - V1*w
 *
-            CALL AB_CTRMV( 'Lower', 'No transpose', 'Unit', I-1,
+            CALL CTRMV( 'Lower', 'No transpose', 'Unit', I-1,
      $                  A( K+1, 1 ), LDA, T( 1, NB ), 1 )
-            CALL AB_CAXPY( I-1, -ONE, T( 1, NB ), 1, A( K+1, I ), 1 )
+            CALL CAXPY( I-1, -ONE, T( 1, NB ), 1, A( K+1, I ), 1 )
 *
             A( K+I-1, I-1 ) = EI
          END IF
@@ -263,28 +260,25 @@
 *        A(k+i+1:n,i)
 *
          EI = A( K+I, I )
-         CALL AB_AB_CLARFG( N-K-I+1, EI, A( MIN( K+I+1, N ), I ), 1,
+         CALL CLARFG( N-K-I+1, EI, A( MIN( K+I+1, N ), I ), 1,
      $                TAU( I ) )
          A( K+I, I ) = ONE
 *
 *        Compute  Y(1:n,i)
 *
-         CALL AB_CGEMV( 'No transpose', N, N-K-I+1, ONE, A( 1, I+1 ), LD
-     $A,
+         CALL CGEMV( 'No transpose', N, N-K-I+1, ONE, A( 1, I+1 ), LDA,
      $               A( K+I, I ), 1, ZERO, Y( 1, I ), 1 )
-         CALL AB_CGEMV( 'Conjugate transpose', N-K-I+1, I-1, ONE,
+         CALL CGEMV( 'Conjugate transpose', N-K-I+1, I-1, ONE,
      $               A( K+I, 1 ), LDA, A( K+I, I ), 1, ZERO, T( 1, I ),
      $               1 )
-         CALL AB_CGEMV( 'No transpose', N, I-1, -ONE, Y, LDY, T( 1, I ),
-     $ 1,
+         CALL CGEMV( 'No transpose', N, I-1, -ONE, Y, LDY, T( 1, I ), 1,
      $               ONE, Y( 1, I ), 1 )
-         CALL AB_CSCAL( N, TAU( I ), Y( 1, I ), 1 )
+         CALL CSCAL( N, TAU( I ), Y( 1, I ), 1 )
 *
 *        Compute T(1:i,i)
 *
-         CALL AB_CSCAL( I-1, -TAU( I ), T( 1, I ), 1 )
-         CALL AB_CTRMV( 'Upper', 'No transpose', 'Non-unit', I-1, T, LDT
-     $,
+         CALL CSCAL( I-1, -TAU( I ), T( 1, I ), 1 )
+         CALL CTRMV( 'Upper', 'No transpose', 'Non-unit', I-1, T, LDT,
      $               T( 1, I ), 1 )
          T( I, I ) = TAU( I )
 *
@@ -293,6 +287,6 @@
 *
       RETURN
 *
-*     End of AB_CLAHRD
+*     End of CLAHRD
 *
       END

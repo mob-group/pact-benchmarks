@@ -1,4 +1,4 @@
-*> \brief \b AB_SLATM6
+*> \brief \b SLATM6
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLATM6( TYPE, N, A, LDA, B, X, LDX, Y, LDY, ALPHA,
+*       SUBROUTINE SLATM6( TYPE, N, A, LDA, B, X, LDX, Y, LDY, ALPHA,
 *                          BETA, WX, WY, S, DIF )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SLATM6 generates test matrices for the generalized eigenvalue
+*> SLATM6 generates test matrices for the generalized eigenvalue
 *> problem, their corresponding right and left eigenvector matrices,
 *> and also reciprocal condition numbers for all eigenvalues and
 *> the reciprocal condition numbers of eigenvectors corresponding to
@@ -173,7 +173,7 @@
 *> \ingroup real_matgen
 *
 *  =====================================================================
-      SUBROUTINE AB_SLATM6( TYPE, N, A, LDA, B, X, LDX, Y, LDY, ALPHA,
+      SUBROUTINE SLATM6( TYPE, N, A, LDA, B, X, LDX, Y, LDY, ALPHA,
      $                   BETA, WX, WY, S, DIF )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -207,7 +207,7 @@
       INTRINSIC          REAL, SQRT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_AB_SGESVD, AB_SLACPY, AB_SLAKF2
+      EXTERNAL           SGESVD, SLACPY, SLAKF2
 *     ..
 *     .. Executable Statements ..
 *
@@ -230,7 +230,7 @@
 *
 *     Form X and Y
 *
-      CALL AB_SLACPY( 'F', N, N, B, LDA, Y, LDY )
+      CALL SLACPY( 'F', N, N, B, LDA, Y, LDY )
       Y( 3, 1 ) = -WY
       Y( 4, 1 ) = WY
       Y( 5, 1 ) = -WY
@@ -238,7 +238,7 @@
       Y( 4, 2 ) = WY
       Y( 5, 2 ) = -WY
 *
-      CALL AB_SLACPY( 'F', N, N, B, LDA, X, LDX )
+      CALL SLACPY( 'F', N, N, B, LDA, X, LDX )
       X( 1, 3 ) = -WX
       X( 1, 4 ) = -WX
       X( 1, 5 ) = WX
@@ -294,13 +294,13 @@
          S( 5 ) = ONE / SQRT( ( ONE+TWO*WX*WX ) /
      $            ( ONE+A( 5, 5 )*A( 5, 5 ) ) )
 *
-         CALL AB_SLAKF2( 1, 4, A, LDA, A( 2, 2 ), B, B( 2, 2 ), Z, 12 )
-         CALL AB_AB_SGESVD( 'N', 'N', 8, 8, Z, 12, WORK, WORK( 9 ), 1,
+         CALL SLAKF2( 1, 4, A, LDA, A( 2, 2 ), B, B( 2, 2 ), Z, 12 )
+         CALL SGESVD( 'N', 'N', 8, 8, Z, 12, WORK, WORK( 9 ), 1,
      $                WORK( 10 ), 1, WORK( 11 ), 40, INFO )
          DIF( 1 ) = WORK( 8 )
 *
-         CALL AB_SLAKF2( 4, 1, A, LDA, A( 5, 5 ), B, B( 5, 5 ), Z, 12 )
-         CALL AB_AB_SGESVD( 'N', 'N', 8, 8, Z, 12, WORK, WORK( 9 ), 1,
+         CALL SLAKF2( 4, 1, A, LDA, A( 5, 5 ), B, B( 5, 5 ), Z, 12 )
+         CALL SGESVD( 'N', 'N', 8, 8, Z, 12, WORK, WORK( 9 ), 1,
      $                WORK( 10 ), 1, WORK( 11 ), 40, INFO )
          DIF( 5 ) = WORK( 8 )
 *
@@ -314,15 +314,13 @@
      $            BETA ) ) )
          S( 5 ) = S( 4 )
 *
-         CALL AB_SLAKF2( 2, 3, A, LDA, A( 3, 3 ), B, B( 3, 3 ), Z, 12 )
-         CALL AB_AB_SGESVD( 'N', 'N', 12, 12, Z, 12, WORK, WORK( 13 ), 1
-     $,
+         CALL SLAKF2( 2, 3, A, LDA, A( 3, 3 ), B, B( 3, 3 ), Z, 12 )
+         CALL SGESVD( 'N', 'N', 12, 12, Z, 12, WORK, WORK( 13 ), 1,
      $                WORK( 14 ), 1, WORK( 15 ), 60, INFO )
          DIF( 1 ) = WORK( 12 )
 *
-         CALL AB_SLAKF2( 3, 2, A, LDA, A( 4, 4 ), B, B( 4, 4 ), Z, 12 )
-         CALL AB_AB_SGESVD( 'N', 'N', 12, 12, Z, 12, WORK, WORK( 13 ), 1
-     $,
+         CALL SLAKF2( 3, 2, A, LDA, A( 4, 4 ), B, B( 4, 4 ), Z, 12 )
+         CALL SGESVD( 'N', 'N', 12, 12, Z, 12, WORK, WORK( 13 ), 1,
      $                WORK( 14 ), 1, WORK( 15 ), 60, INFO )
          DIF( 5 ) = WORK( 12 )
 *
@@ -330,6 +328,6 @@
 *
       RETURN
 *
-*     End of AB_SLATM6
+*     End of SLATM6
 *
       END

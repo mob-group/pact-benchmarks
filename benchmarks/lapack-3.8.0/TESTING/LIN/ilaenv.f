@@ -1,4 +1,4 @@
-*> \brief \b AB_ILAENV
+*> \brief \b ILAENV
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       INTEGER FUNCTION AB_ILAENV( ISPEC, NAME, OPTS, N1, N2, N3,
+*       INTEGER FUNCTION ILAENV( ISPEC, NAME, OPTS, N1, N2, N3,
 *                        N4 )
 *
 *       .. Scalar Arguments ..
@@ -22,13 +22,13 @@
 *>
 *> \verbatim
 *>
-*> AB_ILAENV returns problem-dependent parameters for the local
+*> ILAENV returns problem-dependent parameters for the local
 *> environment.  See ISPEC for a description of the parameters.
 *>
 *> In this version, the problem-dependent parameters are contained in
 *> the integer array IPARMS in the common block CLAENV and the value
-*> with index ISPEC is copied to AB_ILAENV.  This version of AB_ILAENV is
-*> to be used in conjunction with AB_XLAENV in TESTING and TIMING.
+*> with index ISPEC is copied to ILAENV.  This version of ILAENV is
+*> to be used in conjunction with XLAENV in TESTING and TIMING.
 *> \endverbatim
 *
 *  Arguments:
@@ -38,7 +38,7 @@
 *> \verbatim
 *>          ISPEC is INTEGER
 *>          Specifies the parameter to be returned as the value of
-*>          AB_ILAENV.
+*>          ILAENV.
 *>          = 1: the optimal blocksize; if this value is 1, an unblocked
 *>               algorithm will give the best performance.
 *>          = 2: the minimum block size for which the block routine
@@ -50,7 +50,7 @@
 *>               eigenvalue routines
 *>          = 5: the minimum column dimension for blocking to be used;
 *>               rectangular blocks must have dimension at least k by m,
-*>               where k is given by AB_ILAENV(2,...) and m by AB_ILAENV(5,...)
+*>               where k is given by ILAENV(2,...) and m by ILAENV(5,...)
 *>          = 6: the crossover point for the SVD (when reducing an m by n
 *>               matrix to bidiagonal form, if max(m,n)/min(m,n) exceeds
 *>               this value, a QR factorization is used first to reduce
@@ -104,11 +104,11 @@
 *>          be required.
 *> \endverbatim
 *>
-*> \return AB_ILAENV
+*> \return ILAENV
 *> \verbatim
-*>          AB_ILAENV is INTEGER
+*>          ILAENV is INTEGER
 *>          >= 0: the value of the parameter specified by ISPEC
-*>          < 0:  if AB_ILAENV = -k, the k-th argument had an illegal value.
+*>          < 0:  if ILAENV = -k, the k-th argument had an illegal value.
 *> \endverbatim
 *
 *  Authors:
@@ -128,7 +128,7 @@
 *>
 *> \verbatim
 *>
-*>  The following conventions have been used when calling AB_ILAENV from the
+*>  The following conventions have been used when calling ILAENV from the
 *>  LAPACK routines:
 *>  1)  OPTS is a concatenation of all of the character options to
 *>      subroutine NAME, in the same order that they appear in the
@@ -136,19 +136,18 @@
 *>      the value of the parameter specified by ISPEC.
 *>  2)  The problem dimensions N1, N2, N3, N4 are specified in the order
 *>      that they appear in the argument list for NAME.  N1 is used
-*>      first, N2 AB_SECOND, and so on, and unused problem dimensions are
+*>      first, N2 second, and so on, and unused problem dimensions are
 *>      passed a value of -1.
-*>  3)  The parameter value returned by AB_ILAENV is checked for validity in
-*>      the calling subroutine.  For example, AB_ILAENV is used to retrieve
-*>      the optimal blocksize for AB_STRTRI as follows:
+*>  3)  The parameter value returned by ILAENV is checked for validity in
+*>      the calling subroutine.  For example, ILAENV is used to retrieve
+*>      the optimal blocksize for STRTRI as follows:
 *>
-*>      NB = AB_ILAENV( 1, 'AB_STRTRI', UPLO // DIAG, N, -1, -1, -1 )
+*>      NB = ILAENV( 1, 'STRTRI', UPLO // DIAG, N, -1, -1, -1 )
 *>      IF( NB.LE.1 ) NB = MAX( 1, N )
 *> \endverbatim
 *>
 *  =====================================================================
-      INTEGER          FUNCTION AB_ILAENV( ISPEC, NAME, OPTS, N1, N2, N3
-     $,
+      INTEGER          FUNCTION ILAENV( ISPEC, NAME, OPTS, N1, N2, N3,
      $                 N4 )
 *
 *  -- LAPACK test routine (version 3.8.0) --
@@ -167,8 +166,8 @@
       INTRINSIC          INT, MIN, REAL
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_IEEECK
-      EXTERNAL           AB_IEEECK
+      INTEGER            IEEECK
+      EXTERNAL           IEEECK
 *     ..
 *     .. Arrays in Common ..
       INTEGER            IPARMS( 100 )
@@ -187,65 +186,65 @@
 *
          IF ( NAME(2:6).EQ.'GEQR ' ) THEN
             IF (N3.EQ.2) THEN
-               AB_ILAENV = IPARMS ( 2 )
+               ILAENV = IPARMS ( 2 )
             ELSE
-               AB_ILAENV = IPARMS ( 1 )
+               ILAENV = IPARMS ( 1 )
             END IF
          ELSE IF ( NAME(2:6).EQ.'GELQ ' ) THEN
             IF (N3.EQ.2) THEN
-               AB_ILAENV = IPARMS ( 2 )
+               ILAENV = IPARMS ( 2 )
             ELSE
-               AB_ILAENV = IPARMS ( 1 )
+               ILAENV = IPARMS ( 1 )
             END IF
          ELSE
-            AB_ILAENV = IPARMS( ISPEC )
+            ILAENV = IPARMS( ISPEC )
          END IF
 *
       ELSE IF( ISPEC.EQ.6 ) THEN
 *
 *        Compute SVD crossover point.
 *
-         AB_ILAENV = INT( REAL( MIN( N1, N2 ) )*1.6E0 )
+         ILAENV = INT( REAL( MIN( N1, N2 ) )*1.6E0 )
 *
       ELSE IF( ISPEC.GE.7 .AND. ISPEC.LE.9 ) THEN
 *
 *        Return a value from the common block.
 *
-         AB_ILAENV = IPARMS( ISPEC )
+         ILAENV = IPARMS( ISPEC )
 *
       ELSE IF( ISPEC.EQ.10 ) THEN
 *
 *        IEEE NaN arithmetic can be trusted not to trap
 *
-C        AB_ILAENV = 0
-         AB_ILAENV = 1
-         IF( AB_ILAENV.EQ.1 ) THEN
-            AB_ILAENV = AB_IEEECK( 1, 0.0, 1.0 )
+C        ILAENV = 0
+         ILAENV = 1
+         IF( ILAENV.EQ.1 ) THEN
+            ILAENV = IEEECK( 1, 0.0, 1.0 )
          END IF
 *
       ELSE IF( ISPEC.EQ.11 ) THEN
 *
 *        Infinity arithmetic can be trusted not to trap
 *
-C        AB_ILAENV = 0
-         AB_ILAENV = 1
-         IF( AB_ILAENV.EQ.1 ) THEN
-            AB_ILAENV = AB_IEEECK( 0, 0.0, 1.0 )
+C        ILAENV = 0
+         ILAENV = 1
+         IF( ILAENV.EQ.1 ) THEN
+            ILAENV = IEEECK( 0, 0.0, 1.0 )
          END IF
 *
       ELSE
 *
 *        Invalid value for ISPEC
 *
-         AB_ILAENV = -1
+         ILAENV = -1
       END IF
 *
       RETURN
 *
-*     End of AB_ILAENV
+*     End of ILAENV
 *
       END
-      INTEGER FUNCTION AB_AB_ILAENV2STAGE( ISPEC, NAME, OPTS, N1, N2,
+      INTEGER FUNCTION ILAENV2STAGE( ISPEC, NAME, OPTS, N1, N2,
      $                               N3, N4 )
 *     .. Scalar Arguments ..
       CHARACTER*( * )    NAME, OPTS
@@ -276,10 +275,10 @@ C        AB_ILAENV = 0
 *     1 <= ISPEC <= 5: 2stage eigenvalues SVD routines. 
 *
          IF( ISPEC.EQ.1 ) THEN
-             AB_AB_ILAENV2STAGE = IPARMS( 1 )
+             ILAENV2STAGE = IPARMS( 1 )
          ELSE
              IISPEC = 16 + ISPEC
-             AB_AB_ILAENV2STAGE = IPARAM2STAGE( IISPEC, NAME, OPTS,
+             ILAENV2STAGE = IPARAM2STAGE( IISPEC, NAME, OPTS,
      $                                    N1, N2, N3, N4 ) 
          ENDIF
 *
@@ -287,7 +286,7 @@ C        AB_ILAENV = 0
 *
 *        Invalid value for ISPEC
 *
-         AB_AB_ILAENV2STAGE = -1
+         ILAENV2STAGE = -1
       END IF
 *
       RETURN

@@ -1,4 +1,4 @@
-*> \brief \b AB_CPBT02
+*> \brief \b CPBT02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CPBT02( UPLO, N, KD, NRHS, A, LDA, X, LDX, B, LDB,
+*       SUBROUTINE CPBT02( UPLO, N, KD, NRHS, A, LDA, X, LDX, B, LDB,
 *                          RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CPBT02 computes the residual for a solution of a Hermitian banded
+*> CPBT02 computes the residual for a solution of a Hermitian banded
 *> system of equations  A*x = b:
 *>    RESID = norm( B - A*X ) / ( norm(A) * norm(X) * EPS)
 *> where EPS is the machine precision.
@@ -72,7 +72,7 @@
 *>          UPLO = 'L', the lower triangular part of A is stored.  The
 *>          columns of the appropriate triangle are stored in the columns
 *>          of A and the diagonals of the triangle are stored in the rows
-*>          of A.  See AB_CPBTRF for further details.
+*>          of A.  See CPBTRF for further details.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -133,7 +133,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_CPBT02( UPLO, N, KD, NRHS, A, LDA, X, LDX, B, LDB,
+      SUBROUTINE CPBT02( UPLO, N, KD, NRHS, A, LDA, X, LDX, B, LDB,
      $                   RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -164,11 +164,11 @@
       REAL               ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      REAL               AB_CLANHB, AB_SCASUM, AB_SLAMCH
-      EXTERNAL           AB_CLANHB, AB_SCASUM, AB_SLAMCH
+      REAL               CLANHB, SCASUM, SLAMCH
+      EXTERNAL           CLANHB, SCASUM, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CHBMV
+      EXTERNAL           CHBMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -184,8 +184,8 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = AB_SLAMCH( 'Epsilon' )
-      ANORM = AB_CLANHB( '1', UPLO, N, KD, A, LDA, RWORK )
+      EPS = SLAMCH( 'Epsilon' )
+      ANORM = CLANHB( '1', UPLO, N, KD, A, LDA, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -194,7 +194,7 @@
 *     Compute  B - A*X
 *
       DO 10 J = 1, NRHS
-         CALL AB_CHBMV( UPLO, N, KD, -CONE, A, LDA, X( 1, J ), 1, CONE,
+         CALL CHBMV( UPLO, N, KD, -CONE, A, LDA, X( 1, J ), 1, CONE,
      $               B( 1, J ), 1 )
    10 CONTINUE
 *
@@ -203,8 +203,8 @@
 *
       RESID = ZERO
       DO 20 J = 1, NRHS
-         BNORM = AB_SCASUM( N, B( 1, J ), 1 )
-         XNORM = AB_SCASUM( N, X( 1, J ), 1 )
+         BNORM = SCASUM( N, B( 1, J ), 1 )
+         XNORM = SCASUM( N, X( 1, J ), 1 )
          IF( XNORM.LE.ZERO ) THEN
             RESID = ONE / EPS
          ELSE
@@ -214,6 +214,6 @@
 *
       RETURN
 *
-*     End of AB_CPBT02
+*     End of CPBT02
 *
       END

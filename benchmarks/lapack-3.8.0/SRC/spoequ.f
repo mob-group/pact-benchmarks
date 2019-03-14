@@ -1,4 +1,4 @@
-*> \brief \b AB_SPOEQU
+*> \brief \b SPOEQU
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SPOEQU + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SPOEQU.f">
+*> Download SPOEQU + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/spoequ.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SPOEQU.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/spoequ.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SPOEQU.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spoequ.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SPOEQU( N, A, LDA, S, SCOND, AMAX, INFO )
+*       SUBROUTINE SPOEQU( N, A, LDA, S, SCOND, AMAX, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SPOEQU computes row and column scalings intended to equilibrate a
+*> SPOEQU computes row and column scalings intended to equilibrate a
 *> symmetric positive definite matrix A and reduce its condition number
 *> (with respect to the two-norm).  S contains the scale factors,
 *> S(i) = 1/sqrt(A(i,i)), chosen so that the scaled matrix B with
@@ -110,7 +110,7 @@
 *> \ingroup realPOcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_SPOEQU( N, A, LDA, S, SCOND, AMAX, INFO )
+      SUBROUTINE SPOEQU( N, A, LDA, S, SCOND, AMAX, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -136,7 +136,7 @@
       REAL               SMIN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA
+      EXTERNAL           XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, SQRT
@@ -152,7 +152,7 @@
          INFO = -3
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SPOEQU', -INFO )
+         CALL XERBLA( 'SPOEQU', -INFO )
          RETURN
       END IF
 *
@@ -200,6 +200,6 @@
       END IF
       RETURN
 *
-*     End of AB_SPOEQU
+*     End of SPOEQU
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_ZQRT11
+*> \brief \b ZQRT11
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       DOUBLE PRECISION FUNCTION AB_ZQRT11( M, K, A, LDA, TAU, WORK, LWORK )
+*       DOUBLE PRECISION FUNCTION ZQRT11( M, K, A, LDA, TAU, WORK, LWORK )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            K, LDA, LWORK, M
@@ -23,7 +23,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZQRT11 computes the test ratio
+*> ZQRT11 computes the test ratio
 *>
 *>       || Q'*Q - I || / (eps * m)
 *>
@@ -96,8 +96,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION AB_ZQRT11( M, K, A, LDA, TAU, WORK, LWOR
-     $K )
+      DOUBLE PRECISION FUNCTION ZQRT11( M, K, A, LDA, TAU, WORK, LWORK )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -121,11 +120,11 @@
       INTEGER            INFO, J
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE
-      EXTERNAL           AB_DLAMCH, AB_ZLANGE
+      DOUBLE PRECISION   DLAMCH, ZLANGE
+      EXTERNAL           DLAMCH, ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZLASET, AB_ZUNM2R
+      EXTERNAL           XERBLA, ZLASET, ZUNM2R
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCMPLX
@@ -135,12 +134,12 @@
 *     ..
 *     .. Executable Statements ..
 *
-      AB_ZQRT11 = ZERO
+      ZQRT11 = ZERO
 *
 *     Test for sufficient workspace
 *
       IF( LWORK.LT.M*M+M ) THEN
-         CALL AB_XERBLA( 'AB_ZQRT11', 7 )
+         CALL XERBLA( 'ZQRT11', 7 )
          RETURN
       END IF
 *
@@ -149,30 +148,28 @@
       IF( M.LE.0 )
      $   RETURN
 *
-      CALL AB_ZLASET( 'Full', M, M, DCMPLX( ZERO ), DCMPLX( ONE ), WORK,
+      CALL ZLASET( 'Full', M, M, DCMPLX( ZERO ), DCMPLX( ONE ), WORK,
      $             M )
 *
 *     Form Q
 *
-      CALL AB_ZUNM2R( 'Left', 'No transpose', M, M, K, A, LDA, TAU, WORK
-     $,
+      CALL ZUNM2R( 'Left', 'No transpose', M, M, K, A, LDA, TAU, WORK,
      $             M, WORK( M*M+1 ), INFO )
 *
 *     Form Q'*Q
 *
-      CALL AB_ZUNM2R( 'Left', 'Conjugate transpose', M, M, K, A, LDA, TA
-     $U,
+      CALL ZUNM2R( 'Left', 'Conjugate transpose', M, M, K, A, LDA, TAU,
      $             WORK, M, WORK( M*M+1 ), INFO )
 *
       DO 10 J = 1, M
          WORK( ( J-1 )*M+J ) = WORK( ( J-1 )*M+J ) - ONE
    10 CONTINUE
 *
-      AB_ZQRT11 = AB_ZLANGE( 'One-norm', M, M, WORK, M, RDUMMY ) /
-     $         ( DBLE( M )*AB_DLAMCH( 'Epsilon' ) )
+      ZQRT11 = ZLANGE( 'One-norm', M, M, WORK, M, RDUMMY ) /
+     $         ( DBLE( M )*DLAMCH( 'Epsilon' ) )
 *
       RETURN
 *
-*     End of AB_ZQRT11
+*     End of ZQRT11
 *
       END

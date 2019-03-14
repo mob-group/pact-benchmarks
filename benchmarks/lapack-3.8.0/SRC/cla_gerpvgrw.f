@@ -1,4 +1,4 @@
-*> \brief \b AB_CLA_GERPVGRW multiplies a square real matrix by a complex matrix.
+*> \brief \b CLA_GERPVGRW multiplies a square real matrix by a complex matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CLA_GERPVGRW + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLA_GERPVGRW.f">
+*> Download CLA_GERPVGRW + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cla_gerpvgrw.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLA_GERPVGRW.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cla_gerpvgrw.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLA_GERPVGRW.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cla_gerpvgrw.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       REAL FUNCTION AB_CLA_GERPVGRW( N, NCOLS, A, LDA, AF, LDAF )
+*       REAL FUNCTION CLA_GERPVGRW( N, NCOLS, A, LDA, AF, LDAF )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            N, NCOLS, LDA, LDAF
@@ -34,7 +34,7 @@
 *> \verbatim
 *>
 *>
-*> AB_CLA_GERPVGRW computes the reciprocal pivot growth factor
+*> CLA_GERPVGRW computes the reciprocal pivot growth factor
 *> norm(A)/norm(U). The "max absolute element" norm is used. If this is
 *> much less than 1, the stability of the LU factorization of the
 *> (equilibrated) matrix A could be poor. This also means that the
@@ -74,7 +74,7 @@
 *> \verbatim
 *>          AF is COMPLEX array, dimension (LDAF,N)
 *>     The factors L and U from the factorization
-*>     A = P*L*U as computed by AB_CGETRF.
+*>     A = P*L*U as computed by CGETRF.
 *> \endverbatim
 *>
 *> \param[in] LDAF
@@ -96,7 +96,7 @@
 *> \ingroup complexGEcomputational
 *
 *  =====================================================================
-      REAL FUNCTION AB_CLA_GERPVGRW( N, NCOLS, A, LDA, AF, LDAF )
+      REAL FUNCTION CLA_GERPVGRW( N, NCOLS, A, LDA, AF, LDAF )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -143,5 +143,5 @@
             RPVGRW = MIN( AMAX / UMAX, RPVGRW )
          END IF
       END DO
-      AB_CLA_GERPVGRW = RPVGRW
+      CLA_GERPVGRW = RPVGRW
       END

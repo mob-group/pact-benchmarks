@@ -1,4 +1,4 @@
-*> \brief \b AB_ZTPT05
+*> \brief \b ZTPT05
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZTPT05( UPLO, TRANS, DIAG, N, NRHS, AP, B, LDB, X, LDX,
+*       SUBROUTINE ZTPT05( UPLO, TRANS, DIAG, N, NRHS, AP, B, LDB, X, LDX,
 *                          XACT, LDXACT, FERR, BERR, RESLTS )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZTPT05 tests the error bounds from iterative refinement for the
+*> ZTPT05 tests the error bounds from iterative refinement for the
 *> computed solution to a system of equations A*X = B, where A is a
 *> triangular matrix in packed storage format.
 *>
@@ -172,8 +172,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZTPT05( UPLO, TRANS, DIAG, N, NRHS, AP, B, LDB, X, L
-     $DX,
+      SUBROUTINE ZTPT05( UPLO, TRANS, DIAG, N, NRHS, AP, B, LDB, X, LDX,
      $                   XACT, LDXACT, FERR, BERR, RESLTS )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -204,10 +203,10 @@
       COMPLEX*16         ZDUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_IZAMAX
-      DOUBLE PRECISION   AB_DLAMCH
-      EXTERNAL           AB_LSAME, AB_IZAMAX, AB_DLAMCH
+      LOGICAL            LSAME
+      INTEGER            IZAMAX
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           LSAME, IZAMAX, DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX, MIN
@@ -228,12 +227,12 @@
          RETURN
       END IF
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
-      UNFL = AB_DLAMCH( 'Safe minimum' )
+      EPS = DLAMCH( 'Epsilon' )
+      UNFL = DLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      UPPER = AB_LSAME( UPLO, 'U' )
-      NOTRAN = AB_LSAME( TRANS, 'N' )
-      UNIT = AB_LSAME( DIAG, 'U' )
+      UPPER = LSAME( UPLO, 'U' )
+      NOTRAN = LSAME( TRANS, 'N' )
+      UNIT = LSAME( DIAG, 'U' )
 *
 *     Test 1:  Compute the maximum of
 *        norm(X - XACT) / ( norm(X) * FERR )
@@ -241,7 +240,7 @@
 *
       ERRBND = ZERO
       DO 30 J = 1, NRHS
-         IMAX = AB_IZAMAX( N, X( 1, J ), 1 )
+         IMAX = IZAMAX( N, X( 1, J ), 1 )
          XNORM = MAX( CABS1( X( IMAX, J ) ), UNFL )
          DIFF = ZERO
          DO 10 I = 1, N
@@ -330,6 +329,6 @@
 *
       RETURN
 *
-*     End of AB_ZTPT05
+*     End of ZTPT05
 *
       END

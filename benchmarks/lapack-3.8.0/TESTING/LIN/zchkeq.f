@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_ZCHKEQ
+*> \brief \b ZCHKEQ
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_ZCHKEQ( THRESH, NOUT )
+*       SUBROUTINE ZCHKEQ( THRESH, NOUT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            NOUT
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_ZCHKEQ tests AB_ZGEEQU, AB_ZGBEQU, AB_ZPOEQU, AB_ZPPEQU and AB_ZPBEQU
+*> ZCHKEQ tests ZGEEQU, ZGBEQU, ZPOEQU, ZPPEQU and ZPBEQU
 *> \endverbatim
 *
 *  Arguments:
@@ -52,7 +52,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_ZCHKEQ( THRESH, NOUT )
+      SUBROUTINE ZCHKEQ( THRESH, NOUT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -91,12 +91,11 @@
       COMPLEX*16         A( NSZ, NSZ ), AB( NSZB, NSZ ), AP( NSZP )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH
-      EXTERNAL           AB_DLAMCH
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZGBEQU, AB_ZGEEQU, AB_ZPBEQU, AB_ZPOEQU, AB_
-     $ZPPEQU
+      EXTERNAL           ZGBEQU, ZGEEQU, ZPBEQU, ZPOEQU, ZPPEQU
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -106,7 +105,7 @@
       PATH( 1: 1 ) = 'Zomplex precision'
       PATH( 2: 3 ) = 'EQ'
 *
-      EPS = AB_DLAMCH( 'P' )
+      EPS = DLAMCH( 'P' )
       DO 10 I = 1, 5
          RESLTS( I ) = ZERO
    10 CONTINUE
@@ -115,7 +114,7 @@
          RPOW( I ) = ONE / POW( I )
    20 CONTINUE
 *
-*     Test AB_ZGEEQU
+*     Test ZGEEQU
 *
       DO 80 N = 0, NSZ
          DO 70 M = 0, NSZ
@@ -130,8 +129,7 @@
    30          CONTINUE
    40       CONTINUE
 *
-            CALL AB_ZGEEQU( M, N, A, NSZ, R, C, RCOND, CCOND, NORM, INFO
-     $ )
+            CALL ZGEEQU( M, N, A, NSZ, R, C, RCOND, CCOND, NORM, INFO )
 *
             IF( INFO.NE.0 ) THEN
                RESLTS( 1 ) = ONE
@@ -165,7 +163,7 @@
       DO 90 J = 1, NSZ
          A( MAX( NSZ-1, 1 ), J ) = CZERO
    90 CONTINUE
-      CALL AB_ZGEEQU( NSZ, NSZ, A, NSZ, R, C, RCOND, CCOND, NORM, INFO )
+      CALL ZGEEQU( NSZ, NSZ, A, NSZ, R, C, RCOND, CCOND, NORM, INFO )
       IF( INFO.NE.MAX( NSZ-1, 1 ) )
      $   RESLTS( 1 ) = ONE
 *
@@ -175,12 +173,12 @@
       DO 110 I = 1, NSZ
          A( I, MAX( NSZ-1, 1 ) ) = CZERO
   110 CONTINUE
-      CALL AB_ZGEEQU( NSZ, NSZ, A, NSZ, R, C, RCOND, CCOND, NORM, INFO )
+      CALL ZGEEQU( NSZ, NSZ, A, NSZ, R, C, RCOND, CCOND, NORM, INFO )
       IF( INFO.NE.NSZ+MAX( NSZ-1, 1 ) )
      $   RESLTS( 1 ) = ONE
       RESLTS( 1 ) = RESLTS( 1 ) / EPS
 *
-*     Test AB_ZGBEQU
+*     Test ZGBEQU
 *
       DO 250 N = 0, NSZ
          DO 240 M = 0, NSZ
@@ -202,7 +200,7 @@
   140                CONTINUE
   150             CONTINUE
 *
-                  CALL AB_ZGBEQU( M, N, KL, KU, AB, NSZB, R, C, RCOND,
+                  CALL ZGBEQU( M, N, KL, KU, AB, NSZB, R, C, RCOND,
      $                         CCOND, NORM, INFO )
 *
                   IF( INFO.NE.0 ) THEN
@@ -270,7 +268,7 @@
   250 CONTINUE
       RESLTS( 2 ) = RESLTS( 2 ) / EPS
 *
-*     Test AB_ZPOEQU
+*     Test ZPOEQU
 *
       DO 290 N = 0, NSZ
 *
@@ -284,7 +282,7 @@
   260       CONTINUE
   270    CONTINUE
 *
-         CALL AB_ZPOEQU( N, A, NSZ, R, RCOND, NORM, INFO )
+         CALL ZPOEQU( N, A, NSZ, R, RCOND, NORM, INFO )
 *
          IF( INFO.NE.0 ) THEN
             RESLTS( 3 ) = ONE
@@ -304,12 +302,12 @@
          END IF
   290 CONTINUE
       A( MAX( NSZ-1, 1 ), MAX( NSZ-1, 1 ) ) = -CONE
-      CALL AB_ZPOEQU( NSZ, A, NSZ, R, RCOND, NORM, INFO )
+      CALL ZPOEQU( NSZ, A, NSZ, R, RCOND, NORM, INFO )
       IF( INFO.NE.MAX( NSZ-1, 1 ) )
      $   RESLTS( 3 ) = ONE
       RESLTS( 3 ) = RESLTS( 3 ) / EPS
 *
-*     Test AB_ZPPEQU
+*     Test ZPPEQU
 *
       DO 360 N = 0, NSZ
 *
@@ -322,7 +320,7 @@
             AP( ( I*( I+1 ) ) / 2 ) = POW( 2*I+1 )
   310    CONTINUE
 *
-         CALL AB_ZPPEQU( 'U', N, AP, R, RCOND, NORM, INFO )
+         CALL ZPPEQU( 'U', N, AP, R, RCOND, NORM, INFO )
 *
          IF( INFO.NE.0 ) THEN
             RESLTS( 4 ) = ONE
@@ -352,7 +350,7 @@
             J = J + ( N-I+1 )
   340    CONTINUE
 *
-         CALL AB_ZPPEQU( 'L', N, AP, R, RCOND, NORM, INFO )
+         CALL ZPPEQU( 'L', N, AP, R, RCOND, NORM, INFO )
 *
          IF( INFO.NE.0 ) THEN
             RESLTS( 4 ) = ONE
@@ -374,12 +372,12 @@
   360 CONTINUE
       I = ( NSZ*( NSZ+1 ) ) / 2 - 2
       AP( I ) = -CONE
-      CALL AB_ZPPEQU( 'L', NSZ, AP, R, RCOND, NORM, INFO )
+      CALL ZPPEQU( 'L', NSZ, AP, R, RCOND, NORM, INFO )
       IF( INFO.NE.MAX( NSZ-1, 1 ) )
      $   RESLTS( 4 ) = ONE
       RESLTS( 4 ) = RESLTS( 4 ) / EPS
 *
-*     Test AB_ZPBEQU
+*     Test ZPBEQU
 *
       DO 460 N = 0, NSZ
          DO 450 KL = 0, MAX( N-1, 0 )
@@ -395,7 +393,7 @@
                AB( KL+1, J ) = POW( 2*J+1 )
   390       CONTINUE
 *
-            CALL AB_ZPBEQU( 'U', N, KL, AB, NSZB, R, RCOND, NORM, INFO )
+            CALL ZPBEQU( 'U', N, KL, AB, NSZB, R, RCOND, NORM, INFO )
 *
             IF( INFO.NE.0 ) THEN
                RESLTS( 5 ) = ONE
@@ -415,8 +413,7 @@
             END IF
             IF( N.NE.0 ) THEN
                AB( KL+1, MAX( N-1, 1 ) ) = -CONE
-               CALL AB_ZPBEQU( 'U', N, KL, AB, NSZB, R, RCOND, NORM, INF
-     $O )
+               CALL ZPBEQU( 'U', N, KL, AB, NSZB, R, RCOND, NORM, INFO )
                IF( INFO.NE.MAX( N-1, 1 ) )
      $            RESLTS( 5 ) = ONE
             END IF
@@ -432,7 +429,7 @@
                AB( 1, J ) = POW( 2*J+1 )
   430       CONTINUE
 *
-            CALL AB_ZPBEQU( 'L', N, KL, AB, NSZB, R, RCOND, NORM, INFO )
+            CALL ZPBEQU( 'L', N, KL, AB, NSZB, R, RCOND, NORM, INFO )
 *
             IF( INFO.NE.0 ) THEN
                RESLTS( 5 ) = ONE
@@ -452,8 +449,7 @@
             END IF
             IF( N.NE.0 ) THEN
                AB( 1, MAX( N-1, 1 ) ) = -CONE
-               CALL AB_ZPBEQU( 'L', N, KL, AB, NSZB, R, RCOND, NORM, INF
-     $O )
+               CALL ZPBEQU( 'L', N, KL, AB, NSZB, R, RCOND, NORM, INFO )
                IF( INFO.NE.MAX( N-1, 1 ) )
      $            RESLTS( 5 ) = ONE
             END IF
@@ -481,18 +477,18 @@
       END IF
  9999 FORMAT( 1X, 'All tests for ', A3,
      $      ' routines passed the threshold' )
- 9998 FORMAT( ' AB_ZGEEQU failed test with value ', D10.3, ' exceeding',
+ 9998 FORMAT( ' ZGEEQU failed test with value ', D10.3, ' exceeding',
      $      ' threshold ', D10.3 )
- 9997 FORMAT( ' AB_ZGBEQU failed test with value ', D10.3, ' exceeding',
+ 9997 FORMAT( ' ZGBEQU failed test with value ', D10.3, ' exceeding',
      $      ' threshold ', D10.3 )
- 9996 FORMAT( ' AB_ZPOEQU failed test with value ', D10.3, ' exceeding',
+ 9996 FORMAT( ' ZPOEQU failed test with value ', D10.3, ' exceeding',
      $      ' threshold ', D10.3 )
- 9995 FORMAT( ' AB_ZPPEQU failed test with value ', D10.3, ' exceeding',
+ 9995 FORMAT( ' ZPPEQU failed test with value ', D10.3, ' exceeding',
      $      ' threshold ', D10.3 )
- 9994 FORMAT( ' AB_ZPBEQU failed test with value ', D10.3, ' exceeding',
+ 9994 FORMAT( ' ZPBEQU failed test with value ', D10.3, ' exceeding',
      $      ' threshold ', D10.3 )
       RETURN
 *
-*     End of AB_AB_ZCHKEQ
+*     End of ZCHKEQ
 *
       END

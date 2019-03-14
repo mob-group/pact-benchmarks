@@ -1,4 +1,4 @@
-*> \brief \b AB_CCHKTP
+*> \brief \b CCHKTP
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CCHKTP( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
+*       SUBROUTINE CCHKTP( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
 *                          NMAX, AP, AINVP, B, X, XACT, WORK, RWORK,
 *                          NOUT )
 *
@@ -31,7 +31,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CCHKTP tests AB_CTPTRI, -TRS, -RFS, and -CON, and AB_CLATPS
+*> CCHKTP tests CTPTRI, -TRS, -RFS, and -CON, and CLATPS
 *> \endverbatim
 *
 *  Arguments:
@@ -147,8 +147,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_CCHKTP( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR
-     $,
+      SUBROUTINE CCHKTP( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
      $                   NMAX, AP, AINVP, B, X, XACT, WORK, RWORK,
      $                   NOUT )
 *
@@ -196,18 +195,15 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_CLANTP
-      EXTERNAL           AB_LSAME, AB_CLANTP
+      LOGICAL            LSAME
+      REAL               CLANTP
+      EXTERNAL           LSAME, CLANTP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALAERH, AB_ALAHD, AB_ALASUM, AB_CCOPY, AB_CE
-     $RRTR, AB_CGET04,
-     $                   AB_CLACPY, AB_CLARHS, AB_CLATPS, AB_CLATTP, AB_
-     $CTPCON, AB_CTPRFS,
-     $                   AB_CTPT01, AB_CTPT02, AB_CTPT03, AB_CTPT05, AB_
-     $CTPT06, AB_CTPTRI,
-     $                   AB_CTPTRS
+      EXTERNAL           ALAERH, ALAHD, ALASUM, CCOPY, CERRTR, CGET04,
+     $                   CLACPY, CLARHS, CLATPS, CLATTP, CTPCON, CTPRFS,
+     $                   CTPT01, CTPT02, CTPT03, CTPT05, CTPT06, CTPTRI,
+     $                   CTPTRS
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -241,7 +237,7 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL AB_CERRTR( PATH, NOUT )
+     $   CALL CERRTR( PATH, NOUT )
       INFOT = 0
 *
       DO 110 IN = 1, NN
@@ -266,16 +262,15 @@
 *
                UPLO = UPLOS( IUPLO )
 *
-*              Call AB_CLATTP to generate a triangular test matrix.
+*              Call CLATTP to generate a triangular test matrix.
 *
-               SRNAMT = 'AB_CLATTP'
-               CALL AB_CLATTP( IMAT, UPLO, 'No transpose', DIAG, ISEED, 
-     $N,
+               SRNAMT = 'CLATTP'
+               CALL CLATTP( IMAT, UPLO, 'No transpose', DIAG, ISEED, N,
      $                      AP, X, WORK, RWORK, INFO )
 *
 *              Set IDIAG = 1 for non-unit matrices, 2 for unit.
 *
-               IF( AB_LSAME( DIAG, 'N' ) ) THEN
+               IF( LSAME( DIAG, 'N' ) ) THEN
                   IDIAG = 1
                ELSE
                   IDIAG = 2
@@ -285,21 +280,20 @@
 *              Form the inverse of A.
 *
                IF( N.GT.0 )
-     $            CALL AB_CCOPY( LAP, AP, 1, AINVP, 1 )
-               SRNAMT = 'AB_CTPTRI'
-               CALL AB_CTPTRI( UPLO, DIAG, N, AINVP, INFO )
+     $            CALL CCOPY( LAP, AP, 1, AINVP, 1 )
+               SRNAMT = 'CTPTRI'
+               CALL CTPTRI( UPLO, DIAG, N, AINVP, INFO )
 *
-*              Check error code from AB_CTPTRI.
+*              Check error code from CTPTRI.
 *
                IF( INFO.NE.0 )
-     $            CALL AB_ALAERH( PATH, 'AB_CTPTRI', INFO, 0, UPLO // DI
-     $AG, N,
+     $            CALL ALAERH( PATH, 'CTPTRI', INFO, 0, UPLO // DIAG, N,
      $                         N, -1, -1, -1, IMAT, NFAIL, NERRS, NOUT )
 *
 *              Compute the infinity-norm condition number of A.
 *
-               ANORM = AB_CLANTP( 'I', UPLO, DIAG, N, AP, RWORK )
-               AINVNM = AB_CLANTP( 'I', UPLO, DIAG, N, AINVP, RWORK )
+               ANORM = CLANTP( 'I', UPLO, DIAG, N, AP, RWORK )
+               AINVNM = CLANTP( 'I', UPLO, DIAG, N, AINVP, RWORK )
                IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
                   RCONDI = ONE
                ELSE
@@ -309,14 +303,14 @@
 *              Compute the residual for the triangular matrix times its
 *              inverse.  Also compute the 1-norm condition number of A.
 *
-               CALL AB_CTPT01( UPLO, DIAG, N, AP, AINVP, RCONDO, RWORK,
+               CALL CTPT01( UPLO, DIAG, N, AP, AINVP, RCONDO, RWORK,
      $                      RESULT( 1 ) )
 *
 *              Print the test ratio if it is .GE. THRESH.
 *
                IF( RESULT( 1 ).GE.THRESH ) THEN
                   IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $               CALL AB_ALAHD( NOUT, PATH )
+     $               CALL ALAHD( NOUT, PATH )
                   WRITE( NOUT, FMT = 9999 )UPLO, DIAG, N, IMAT, 1,
      $               RESULT( 1 )
                   NFAIL = NFAIL + 1
@@ -343,54 +337,54 @@
 *+    TEST 2
 *                 Solve and compute residual for op(A)*x = b.
 *
-                     SRNAMT = 'AB_CLARHS'
-                     CALL AB_CLARHS( PATH, XTYPE, UPLO, TRANS, N, N, 0,
+                     SRNAMT = 'CLARHS'
+                     CALL CLARHS( PATH, XTYPE, UPLO, TRANS, N, N, 0,
      $                            IDIAG, NRHS, AP, LAP, XACT, LDA, B,
      $                            LDA, ISEED, INFO )
                      XTYPE = 'C'
-                     CALL AB_CLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
+                     CALL CLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
-                     SRNAMT = 'AB_CTPTRS'
-                     CALL AB_CTPTRS( UPLO, TRANS, DIAG, N, NRHS, AP, X,
+                     SRNAMT = 'CTPTRS'
+                     CALL CTPTRS( UPLO, TRANS, DIAG, N, NRHS, AP, X,
      $                            LDA, INFO )
 *
-*                 Check error code from AB_CTPTRS.
+*                 Check error code from CTPTRS.
 *
                      IF( INFO.NE.0 )
-     $                  CALL AB_ALAERH( PATH, 'AB_CTPTRS', INFO, 0,
+     $                  CALL ALAERH( PATH, 'CTPTRS', INFO, 0,
      $                               UPLO // TRANS // DIAG, N, N, -1,
      $                               -1, -1, IMAT, NFAIL, NERRS, NOUT )
 *
-                     CALL AB_CTPT02( UPLO, TRANS, DIAG, N, NRHS, AP, X,
+                     CALL CTPT02( UPLO, TRANS, DIAG, N, NRHS, AP, X,
      $                            LDA, B, LDA, WORK, RWORK,
      $                            RESULT( 2 ) )
 *
 *+    TEST 3
 *                 Check solution from generated exact solution.
 *
-                     CALL AB_CGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                     CALL CGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                            RESULT( 3 ) )
 *
 *+    TESTS 4, 5, and 6
 *                 Use iterative refinement to improve the solution and
 *                 compute error bounds.
 *
-                     SRNAMT = 'AB_CTPRFS'
-                     CALL AB_CTPRFS( UPLO, TRANS, DIAG, N, NRHS, AP, B,
+                     SRNAMT = 'CTPRFS'
+                     CALL CTPRFS( UPLO, TRANS, DIAG, N, NRHS, AP, B,
      $                            LDA, X, LDA, RWORK, RWORK( NRHS+1 ),
      $                            WORK, RWORK( 2*NRHS+1 ), INFO )
 *
-*                 Check error code from AB_CTPRFS.
+*                 Check error code from CTPRFS.
 *
                      IF( INFO.NE.0 )
-     $                  CALL AB_ALAERH( PATH, 'AB_CTPRFS', INFO, 0,
+     $                  CALL ALAERH( PATH, 'CTPRFS', INFO, 0,
      $                               UPLO // TRANS // DIAG, N, N, -1,
      $                               -1, NRHS, IMAT, NFAIL, NERRS,
      $                               NOUT )
 *
-                     CALL AB_CGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                     CALL CGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                            RESULT( 4 ) )
-                     CALL AB_CTPT05( UPLO, TRANS, DIAG, N, NRHS, AP, B,
+                     CALL CTPT05( UPLO, TRANS, DIAG, N, NRHS, AP, B,
      $                            LDA, X, LDA, XACT, LDA, RWORK,
      $                            RWORK( NRHS+1 ), RESULT( 5 ) )
 *
@@ -400,7 +394,7 @@
                      DO 20 K = 2, 6
                         IF( RESULT( K ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                        CALL AB_ALAHD( NOUT, PATH )
+     $                        CALL ALAHD( NOUT, PATH )
                            WRITE( NOUT, FMT = 9998 )UPLO, TRANS, DIAG,
      $                        N, NRHS, IMAT, K, RESULT( K )
                            NFAIL = NFAIL + 1
@@ -421,27 +415,26 @@
                      NORM = 'I'
                      RCONDC = RCONDI
                   END IF
-                  SRNAMT = 'AB_CTPCON'
-                  CALL AB_CTPCON( NORM, UPLO, DIAG, N, AP, RCOND, WORK,
+                  SRNAMT = 'CTPCON'
+                  CALL CTPCON( NORM, UPLO, DIAG, N, AP, RCOND, WORK,
      $                         RWORK, INFO )
 *
-*                 Check error code from AB_CTPCON.
+*                 Check error code from CTPCON.
 *
                   IF( INFO.NE.0 )
-     $               CALL AB_ALAERH( PATH, 'AB_CTPCON', INFO, 0,
+     $               CALL ALAERH( PATH, 'CTPCON', INFO, 0,
      $                            NORM // UPLO // DIAG, N, N, -1, -1,
      $                            -1, IMAT, NFAIL, NERRS, NOUT )
 *
-                  CALL AB_CTPT06( RCOND, RCONDC, UPLO, DIAG, N, AP, RWOR
-     $K,
+                  CALL CTPT06( RCOND, RCONDC, UPLO, DIAG, N, AP, RWORK,
      $                         RESULT( 7 ) )
 *
 *                 Print the test ratio if it is .GE. THRESH.
 *
                   IF( RESULT( 7 ).GE.THRESH ) THEN
                      IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                  CALL AB_ALAHD( NOUT, PATH )
-                     WRITE( NOUT, FMT = 9997 ) 'AB_CTPCON', NORM, UPLO,
+     $                  CALL ALAHD( NOUT, PATH )
+                     WRITE( NOUT, FMT = 9997 ) 'CTPCON', NORM, UPLO,
      $                  DIAG, N, IMAT, 7, RESULT( 7 )
                      NFAIL = NFAIL + 1
                   END IF
@@ -450,7 +443,7 @@
    60       CONTINUE
    70    CONTINUE
 *
-*        Use pathological test matrices to test AB_CLATPS.
+*        Use pathological test matrices to test CLATPS.
 *
          DO 100 IMAT = NTYPE1 + 1, NTYPES
 *
@@ -470,49 +463,46 @@
 *
                   TRANS = TRANSS( ITRAN )
 *
-*                 Call AB_CLATTP to generate a triangular test matrix.
+*                 Call CLATTP to generate a triangular test matrix.
 *
-                  SRNAMT = 'AB_CLATTP'
-                  CALL AB_CLATTP( IMAT, UPLO, TRANS, DIAG, ISEED, N, AP,
-     $ X,
+                  SRNAMT = 'CLATTP'
+                  CALL CLATTP( IMAT, UPLO, TRANS, DIAG, ISEED, N, AP, X,
      $                         WORK, RWORK, INFO )
 *
 *+    TEST 8
 *                 Solve the system op(A)*x = b.
 *
-                  SRNAMT = 'AB_CLATPS'
-                  CALL AB_CCOPY( N, X, 1, B, 1 )
-                  CALL AB_CLATPS( UPLO, TRANS, DIAG, 'N', N, AP, B, SCAL
-     $E,
+                  SRNAMT = 'CLATPS'
+                  CALL CCOPY( N, X, 1, B, 1 )
+                  CALL CLATPS( UPLO, TRANS, DIAG, 'N', N, AP, B, SCALE,
      $                         RWORK, INFO )
 *
-*                 Check error code from AB_CLATPS.
+*                 Check error code from CLATPS.
 *
                   IF( INFO.NE.0 )
-     $               CALL AB_ALAERH( PATH, 'AB_CLATPS', INFO, 0,
+     $               CALL ALAERH( PATH, 'CLATPS', INFO, 0,
      $                            UPLO // TRANS // DIAG // 'N', N, N,
      $                            -1, -1, -1, IMAT, NFAIL, NERRS, NOUT )
 *
-                  CALL AB_CTPT03( UPLO, TRANS, DIAG, N, 1, AP, SCALE,
+                  CALL CTPT03( UPLO, TRANS, DIAG, N, 1, AP, SCALE,
      $                         RWORK, ONE, B, LDA, X, LDA, WORK,
      $                         RESULT( 8 ) )
 *
 *+    TEST 9
 *                 Solve op(A)*x = b again with NORMIN = 'Y'.
 *
-                  CALL AB_CCOPY( N, X, 1, B( N+1 ), 1 )
-                  CALL AB_CLATPS( UPLO, TRANS, DIAG, 'Y', N, AP, B( N+1 
-     $),
+                  CALL CCOPY( N, X, 1, B( N+1 ), 1 )
+                  CALL CLATPS( UPLO, TRANS, DIAG, 'Y', N, AP, B( N+1 ),
      $                         SCALE, RWORK, INFO )
 *
-*                 Check error code from AB_CLATPS.
+*                 Check error code from CLATPS.
 *
                   IF( INFO.NE.0 )
-     $               CALL AB_ALAERH( PATH, 'AB_CLATPS', INFO, 0,
+     $               CALL ALAERH( PATH, 'CLATPS', INFO, 0,
      $                            UPLO // TRANS // DIAG // 'Y', N, N,
      $                            -1, -1, -1, IMAT, NFAIL, NERRS, NOUT )
 *
-                  CALL AB_CTPT03( UPLO, TRANS, DIAG, N, 1, AP, SCALE,
+                  CALL CTPT03( UPLO, TRANS, DIAG, N, 1, AP, SCALE,
      $                         RWORK, ONE, B( N+1 ), LDA, X, LDA, WORK,
      $                         RESULT( 9 ) )
 *
@@ -521,15 +511,15 @@
 *
                   IF( RESULT( 8 ).GE.THRESH ) THEN
                      IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                  CALL AB_ALAHD( NOUT, PATH )
-                     WRITE( NOUT, FMT = 9996 )'AB_CLATPS', UPLO, TRANS,
+     $                  CALL ALAHD( NOUT, PATH )
+                     WRITE( NOUT, FMT = 9996 )'CLATPS', UPLO, TRANS,
      $                  DIAG, 'N', N, IMAT, 8, RESULT( 8 )
                      NFAIL = NFAIL + 1
                   END IF
                   IF( RESULT( 9 ).GE.THRESH ) THEN
                      IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                  CALL AB_ALAHD( NOUT, PATH )
-                     WRITE( NOUT, FMT = 9996 )'AB_CLATPS', UPLO, TRANS,
+     $                  CALL ALAHD( NOUT, PATH )
+                     WRITE( NOUT, FMT = 9996 )'CLATPS', UPLO, TRANS,
      $                  DIAG, 'Y', N, IMAT, 9, RESULT( 9 )
                      NFAIL = NFAIL + 1
                   END IF
@@ -541,7 +531,7 @@
 *
 *     Print a summary of the results.
 *
-      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( ' UPLO=''', A1, ''', DIAG=''', A1, ''', N=', I5,
      $      ', type ', I2, ', test(', I2, ')= ', G12.5 )
@@ -555,6 +545,6 @@
      $      G12.5 )
       RETURN
 *
-*     End of AB_CCHKTP
+*     End of CCHKTP
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_DGEHD2 reduces a general square matrix to upper Hessenberg form using an unblocked algorithm.
+*> \brief \b DGEHD2 reduces a general square matrix to upper Hessenberg form using an unblocked algorithm.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DGEHD2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGEHD2.f">
+*> Download DGEHD2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgehd2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGEHD2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgehd2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGEHD2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgehd2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DGEHD2( N, ILO, IHI, A, LDA, TAU, WORK, INFO )
+*       SUBROUTINE DGEHD2( N, ILO, IHI, A, LDA, TAU, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            IHI, ILO, INFO, LDA, N
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DGEHD2 reduces a real general matrix A to upper Hessenberg form H by
+*> DGEHD2 reduces a real general matrix A to upper Hessenberg form H by
 *> an orthogonal similarity transformation:  Q**T * A * Q = H .
 *> \endverbatim
 *
@@ -57,7 +57,7 @@
 *>
 *>          It is assumed that A is already upper triangular in rows
 *>          and columns 1:ILO-1 and IHI+1:N. ILO and IHI are normally
-*>          set by a previous call to AB_DGEBAL; otherwise they should be
+*>          set by a previous call to DGEBAL; otherwise they should be
 *>          set to 1 and N respectively. See Further Details.
 *>          1 <= ILO <= IHI <= max(1,N).
 *> \endverbatim
@@ -147,7 +147,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_DGEHD2( N, ILO, IHI, A, LDA, TAU, WORK, INFO )
+      SUBROUTINE DGEHD2( N, ILO, IHI, A, LDA, TAU, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -172,7 +172,7 @@
       DOUBLE PRECISION   AII
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLARF, AB_AB_DLARFG, AB_XERBLA
+      EXTERNAL           DLARF, DLARFG, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -192,7 +192,7 @@
          INFO = -5
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DGEHD2', -INFO )
+         CALL XERBLA( 'DGEHD2', -INFO )
          RETURN
       END IF
 *
@@ -200,20 +200,19 @@
 *
 *        Compute elementary reflector H(i) to annihilate A(i+2:ihi,i)
 *
-         CALL AB_AB_DLARFG( IHI-I, A( I+1, I ), A( MIN( I+2, N ), I ), 1
-     $,
+         CALL DLARFG( IHI-I, A( I+1, I ), A( MIN( I+2, N ), I ), 1,
      $                TAU( I ) )
          AII = A( I+1, I )
          A( I+1, I ) = ONE
 *
 *        Apply H(i) to A(1:ihi,i+1:ihi) from the right
 *
-         CALL AB_DLARF( 'Right', IHI, IHI-I, A( I+1, I ), 1, TAU( I ),
+         CALL DLARF( 'Right', IHI, IHI-I, A( I+1, I ), 1, TAU( I ),
      $               A( 1, I+1 ), LDA, WORK )
 *
 *        Apply H(i) to A(i+1:ihi,i+1:n) from the left
 *
-         CALL AB_DLARF( 'Left', IHI-I, N-I, A( I+1, I ), 1, TAU( I ),
+         CALL DLARF( 'Left', IHI-I, N-I, A( I+1, I ), 1, TAU( I ),
      $               A( I+1, I+1 ), LDA, WORK )
 *
          A( I+1, I ) = AII
@@ -221,6 +220,6 @@
 *
       RETURN
 *
-*     End of AB_DGEHD2
+*     End of DGEHD2
 *
       END

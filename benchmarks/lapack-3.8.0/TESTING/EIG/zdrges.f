@@ -1,4 +1,4 @@
-*> \brief \b AB_ZDRGES
+*> \brief \b ZDRGES
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZDRGES( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+*       SUBROUTINE ZDRGES( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
 *                          NOUNIT, A, LDA, B, S, T, Q, LDQ, Z, ALPHA,
 *                          BETA, WORK, LWORK, RWORK, RESULT, BWORK, INFO )
 *
@@ -31,10 +31,10 @@
 *>
 *> \verbatim
 *>
-*> AB_ZDRGES checks the nonsymmetric generalized eigenvalue (Schur form)
-*> problem driver AB_ZGGES.
+*> ZDRGES checks the nonsymmetric generalized eigenvalue (Schur form)
+*> problem driver ZGGES.
 *>
-*> AB_ZGGES factors A and B as Q*S*Z'  and Q*T*Z' , where ' means conjugate
+*> ZGGES factors A and B as Q*S*Z'  and Q*T*Z' , where ' means conjugate
 *> transpose, S and T are  upper triangular (i.e., in generalized Schur
 *> form), and Q and Z are unitary. It also computes the generalized
 *> eigenvalues (alpha(j),beta(j)), j=1,...,n.  Thus,
@@ -46,7 +46,7 @@
 *> cluster of eigenvalues appears in the leading diagonal block of the
 *> Schur forms.
 *>
-*> When AB_ZDRGES is called, a number of matrix "sizes" ("N's") and a
+*> When ZDRGES is called, a number of matrix "sizes" ("N's") and a
 *> number of matrix "TYPES" are specified.  For each size ("N")
 *> and each TYPE of matrix, a pair of matrices (A, B) will be generated
 *> and used for testing. For each matrix pair, the following 13 tests
@@ -191,7 +191,7 @@
 *> \verbatim
 *>          NSIZES is INTEGER
 *>          The number of sizes of matrices to use.  If it is zero,
-*>          AB_DDRGES does nothing.  NSIZES >= 0.
+*>          DDRGES does nothing.  NSIZES >= 0.
 *> \endverbatim
 *>
 *> \param[in] NN
@@ -204,7 +204,7 @@
 *> \param[in] NTYPES
 *> \verbatim
 *>          NTYPES is INTEGER
-*>          The number of elements in DOTYPE.   If it is zero, AB_DDRGES
+*>          The number of elements in DOTYPE.   If it is zero, DDRGES
 *>          does nothing.  It must be at least zero.  If it is MAXTYP+1
 *>          and NSIZES is 1, then an additional type, MAXTYP+1 is
 *>          defined, which is to use whatever matrix is in A on input.
@@ -234,7 +234,7 @@
 *>          congruential sequence limited to small integers, and so
 *>          should produce machine independent random numbers. The
 *>          values of ISEED are changed on exit, and can be used in the
-*>          next call to AB_DDRGES to continue the same random number
+*>          next call to DDRGES to continue the same random number
 *>          sequence.
 *> \endverbatim
 *>
@@ -282,7 +282,7 @@
 *> \param[out] S
 *> \verbatim
 *>          S is COMPLEX*16 array, dimension (LDA, max(NN))
-*>          The Schur form matrix computed from A by AB_ZGGES.  On exit, S
+*>          The Schur form matrix computed from A by ZGGES.  On exit, S
 *>          contains the Schur form matrix corresponding to the matrix
 *>          in A.
 *> \endverbatim
@@ -290,13 +290,13 @@
 *> \param[out] T
 *> \verbatim
 *>          T is COMPLEX*16 array, dimension (LDA, max(NN))
-*>          The upper triangular matrix computed from B by AB_ZGGES.
+*>          The upper triangular matrix computed from B by ZGGES.
 *> \endverbatim
 *>
 *> \param[out] Q
 *> \verbatim
 *>          Q is COMPLEX*16 array, dimension (LDQ, max(NN))
-*>          The (left) orthogonal matrix computed by AB_ZGGES.
+*>          The (left) orthogonal matrix computed by ZGGES.
 *> \endverbatim
 *>
 *> \param[in] LDQ
@@ -309,7 +309,7 @@
 *> \param[out] Z
 *> \verbatim
 *>          Z is COMPLEX*16 array, dimension( LDQ, max(NN) )
-*>          The (right) orthogonal matrix computed by AB_ZGGES.
+*>          The (right) orthogonal matrix computed by ZGGES.
 *> \endverbatim
 *>
 *> \param[out] ALPHA
@@ -321,7 +321,7 @@
 *> \verbatim
 *>          BETA is COMPLEX*16 array, dimension (max(NN))
 *>
-*>          The generalized eigenvalues of (A,B) computed by AB_ZGGES.
+*>          The generalized eigenvalues of (A,B) computed by ZGGES.
 *>          ALPHA(k) / BETA(k) is the k-th generalized eigenvalue of A
 *>          and B.
 *> \endverbatim
@@ -377,7 +377,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_ZDRGES( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+      SUBROUTINE ZDRGES( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
      $                   NOUNIT, A, LDA, B, S, T, Q, LDQ, Z, ALPHA,
      $                   BETA, WORK, LWORK, RWORK, RESULT, BWORK, INFO )
 *
@@ -430,17 +430,15 @@
       DOUBLE PRECISION   RMAGN( 0: 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_ZLCTES
-      INTEGER            AB_ILAENV
-      DOUBLE PRECISION   AB_DLAMCH
-      COMPLEX*16         AB_ZLARND
-      EXTERNAL           AB_ZLCTES, AB_ILAENV, AB_DLAMCH, AB_ZLARND
+      LOGICAL            ZLCTES
+      INTEGER            ILAENV
+      DOUBLE PRECISION   DLAMCH
+      COMPLEX*16         ZLARND
+      EXTERNAL           ZLCTES, ILAENV, DLAMCH, ZLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALASVM, AB_DLABAD, AB_XERBLA, AB_ZGET51, AB_
-     $ZGET54, AB_ZGGES,
-     $                   AB_ZLACPY, AB_AB_ZLARFG, AB_ZLASET, AB_ZLATM4, 
-     $AB_ZUNM2R
+      EXTERNAL           ALASVM, DLABAD, XERBLA, ZGET51, ZGET54, ZGGES,
+     $                   ZLACPY, ZLARFG, ZLASET, ZLATM4, ZUNM2R
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCONJG, DIMAG, MAX, MIN, SIGN
@@ -469,13 +467,11 @@
       DATA               KBMAGN / 8*1, 3, 2, 3, 2, 2, 3, 7*1, 3, 2, 3,
      $                   2, 1 /
       DATA               KTRIAN / 16*0, 10*1 /
-      DATA               LASIGN / 6*.FALSE., .TRUE., .FALSE., 2*.T
-     $RUE.,
+      DATA               LASIGN / 6*.FALSE., .TRUE., .FALSE., 2*.TRUE.,
      $                   2*.FALSE., 3*.TRUE., .FALSE., .TRUE.,
      $                   3*.FALSE., 5*.TRUE., .FALSE. /
       DATA               LBSIGN / 7*.FALSE., .TRUE., 2*.FALSE.,
-     $                   2*.TRUE., 2*.FALSE., .TRUE., .FALSE., .TR
-     $UE.,
+     $                   2*.TRUE., 2*.FALSE., .TRUE., .FALSE., .TRUE.,
      $                   9*.FALSE. /
 *     ..
 *     .. Executable Statements ..
@@ -511,15 +507,14 @@
 *       minimal amount of workspace needed at that point in the code,
 *       as well as the preferred amount for good performance.
 *       NB refers to the optimal block size for the immediately
-*       following subroutine, as returned by AB_ILAENV.
+*       following subroutine, as returned by ILAENV.
 *
       MINWRK = 1
       IF( INFO.EQ.0 .AND. LWORK.GE.1 ) THEN
          MINWRK = 3*NMAX*NMAX
-         NB = MAX( 1, AB_ILAENV( 1, 'AB_AB_ZGEQRF', ' ', NMAX, NMAX, -1,
-     $ -1 ),
-     $        AB_ILAENV( 1, 'AB_ZUNMQR', 'LC', NMAX, NMAX, NMAX, -1 ),
-     $        AB_ILAENV( 1, 'AB_ZUNGQR', ' ', NMAX, NMAX, NMAX, -1 ) )
+         NB = MAX( 1, ILAENV( 1, 'ZGEQRF', ' ', NMAX, NMAX, -1, -1 ),
+     $        ILAENV( 1, 'ZUNMQR', 'LC', NMAX, NMAX, NMAX, -1 ),
+     $        ILAENV( 1, 'ZUNGQR', ' ', NMAX, NMAX, NMAX, -1 ) )
          MAXWRK = MAX( NMAX+NMAX*NB, 3*NMAX*NMAX )
          WORK( 1 ) = MAXWRK
       END IF
@@ -528,7 +523,7 @@
      $   INFO = -19
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZDRGES', -INFO )
+         CALL XERBLA( 'ZDRGES', -INFO )
          RETURN
       END IF
 *
@@ -537,11 +532,11 @@
       IF( NSIZES.EQ.0 .OR. NTYPES.EQ.0 )
      $   RETURN
 *
-      ULP = AB_DLAMCH( 'Precision' )
-      SAFMIN = AB_DLAMCH( 'Safe minimum' )
+      ULP = DLAMCH( 'Precision' )
+      SAFMIN = DLAMCH( 'Safe minimum' )
       SAFMIN = SAFMIN / ULP
       SAFMAX = ONE / SAFMIN
-      CALL AB_DLABAD( SAFMIN, SAFMAX )
+      CALL DLABAD( SAFMIN, SAFMAX )
       ULPINV = ONE / ULP
 *
 *     The values RMAGN(2:3) depend on N, see below.
@@ -593,7 +588,7 @@
 *
 *           KZLASS: =1 means w/o rotation, =2 means w/ rotation,
 *                   =3 means random.
-*           KATYPE: the "type" to be passed to AB_ZLATM4 for computing A.
+*           KATYPE: the "type" to be passed to ZLATM4 for computing A.
 *           KAZERO: the pattern of zeros on the diagonal for A:
 *                   =1: ( xxx ), =2: (0, xxx ) =3: ( 0, 0, xxx, 0 ),
 *                   =4: ( 0, xxx, 0, 0 ), =5: ( 0, 0, 1, xxx, 0 ),
@@ -618,13 +613,11 @@
                IF( ABS( KATYPE( JTYPE ) ).EQ.3 ) THEN
                   IN = 2*( ( N-1 ) / 2 ) + 1
                   IF( IN.NE.N )
-     $               CALL AB_ZLASET( 'Full', N, N, CZERO, CZERO, A, LDA 
-     $)
+     $               CALL ZLASET( 'Full', N, N, CZERO, CZERO, A, LDA )
                ELSE
                   IN = N
                END IF
-               CALL AB_ZLATM4( KATYPE( JTYPE ), IN, KZ1( KAZERO( JTYPE )
-     $ ),
+               CALL ZLATM4( KATYPE( JTYPE ), IN, KZ1( KAZERO( JTYPE ) ),
      $                      KZ2( KAZERO( JTYPE ) ), LASIGN( JTYPE ),
      $                      RMAGN( KAMAGN( JTYPE ) ), ULP,
      $                      RMAGN( KTRIAN( JTYPE )*KAMAGN( JTYPE ) ), 2,
@@ -638,13 +631,11 @@
                IF( ABS( KBTYPE( JTYPE ) ).EQ.3 ) THEN
                   IN = 2*( ( N-1 ) / 2 ) + 1
                   IF( IN.NE.N )
-     $               CALL AB_ZLASET( 'Full', N, N, CZERO, CZERO, B, LDA 
-     $)
+     $               CALL ZLASET( 'Full', N, N, CZERO, CZERO, B, LDA )
                ELSE
                   IN = N
                END IF
-               CALL AB_ZLATM4( KBTYPE( JTYPE ), IN, KZ1( KBZERO( JTYPE )
-     $ ),
+               CALL ZLATM4( KBTYPE( JTYPE ), IN, KZ1( KBZERO( JTYPE ) ),
      $                      KZ2( KBZERO( JTYPE ) ), LBSIGN( JTYPE ),
      $                      RMAGN( KBMAGN( JTYPE ) ), ONE,
      $                      RMAGN( KTRIAN( JTYPE )*KBMAGN( JTYPE ) ), 2,
@@ -657,30 +648,28 @@
 *
 *                 Include rotations
 *
-*                 Generate Q, Z as HousehoAB_LDEr transformations times
+*                 Generate Q, Z as Householder transformations times
 *                 a diagonal matrix.
 *
                   DO 50 JC = 1, N - 1
                      DO 40 JR = JC, N
-                        Q( JR, JC ) = AB_ZLARND( 3, ISEED )
-                        Z( JR, JC ) = AB_ZLARND( 3, ISEED )
+                        Q( JR, JC ) = ZLARND( 3, ISEED )
+                        Z( JR, JC ) = ZLARND( 3, ISEED )
    40                CONTINUE
-                     CALL AB_AB_ZLARFG( N+1-JC, Q( JC, JC ), Q( JC+1, JC
-     $ ), 1,
+                     CALL ZLARFG( N+1-JC, Q( JC, JC ), Q( JC+1, JC ), 1,
      $                            WORK( JC ) )
                      WORK( 2*N+JC ) = SIGN( ONE, DBLE( Q( JC, JC ) ) )
                      Q( JC, JC ) = CONE
-                     CALL AB_AB_ZLARFG( N+1-JC, Z( JC, JC ), Z( JC+1, JC
-     $ ), 1,
+                     CALL ZLARFG( N+1-JC, Z( JC, JC ), Z( JC+1, JC ), 1,
      $                            WORK( N+JC ) )
                      WORK( 3*N+JC ) = SIGN( ONE, DBLE( Z( JC, JC ) ) )
                      Z( JC, JC ) = CONE
    50             CONTINUE
-                  CTEMP = AB_ZLARND( 3, ISEED )
+                  CTEMP = ZLARND( 3, ISEED )
                   Q( N, N ) = CONE
                   WORK( N ) = CZERO
                   WORK( 3*N ) = CTEMP / ABS( CTEMP )
-                  CTEMP = AB_ZLARND( 3, ISEED )
+                  CTEMP = ZLARND( 3, ISEED )
                   Z( N, N ) = CONE
                   WORK( 2*N ) = CZERO
                   WORK( 4*N ) = CTEMP / ABS( CTEMP )
@@ -697,21 +686,19 @@
      $                                B( JR, JC )
    60                CONTINUE
    70             CONTINUE
-                  CALL AB_ZUNM2R( 'L', 'N', N, N, N-1, Q, LDQ, WORK, A,
+                  CALL ZUNM2R( 'L', 'N', N, N, N-1, Q, LDQ, WORK, A,
      $                         LDA, WORK( 2*N+1 ), IINFO )
                   IF( IINFO.NE.0 )
      $               GO TO 100
-                  CALL AB_ZUNM2R( 'R', 'C', N, N, N-1, Z, LDQ, WORK( N+1
-     $ ),
+                  CALL ZUNM2R( 'R', 'C', N, N, N-1, Z, LDQ, WORK( N+1 ),
      $                         A, LDA, WORK( 2*N+1 ), IINFO )
                   IF( IINFO.NE.0 )
      $               GO TO 100
-                  CALL AB_ZUNM2R( 'L', 'N', N, N, N-1, Q, LDQ, WORK, B,
+                  CALL ZUNM2R( 'L', 'N', N, N, N-1, Q, LDQ, WORK, B,
      $                         LDA, WORK( 2*N+1 ), IINFO )
                   IF( IINFO.NE.0 )
      $               GO TO 100
-                  CALL AB_ZUNM2R( 'R', 'C', N, N, N-1, Z, LDQ, WORK( N+1
-     $ ),
+                  CALL ZUNM2R( 'R', 'C', N, N, N-1, Z, LDQ, WORK( N+1 ),
      $                         B, LDA, WORK( 2*N+1 ), IINFO )
                   IF( IINFO.NE.0 )
      $               GO TO 100
@@ -723,9 +710,9 @@
                DO 90 JC = 1, N
                   DO 80 JR = 1, N
                      A( JR, JC ) = RMAGN( KAMAGN( JTYPE ) )*
-     $                             AB_ZLARND( 4, ISEED )
+     $                             ZLARND( 4, ISEED )
                      B( JR, JC ) = RMAGN( KBMAGN( JTYPE ) )*
-     $                             AB_ZLARND( 4, ISEED )
+     $                             ZLARND( 4, ISEED )
    80             CONTINUE
    90          CONTINUE
             END IF
@@ -756,20 +743,18 @@
                   RSUB = 5
                END IF
 *
-*              Call AB_ZGGES to compute H, T, Q, Z, alpha, and beta.
+*              Call ZGGES to compute H, T, Q, Z, alpha, and beta.
 *
-               CALL AB_ZLACPY( 'Full', N, N, A, LDA, S, LDA )
-               CALL AB_ZLACPY( 'Full', N, N, B, LDA, T, LDA )
+               CALL ZLACPY( 'Full', N, N, A, LDA, S, LDA )
+               CALL ZLACPY( 'Full', N, N, B, LDA, T, LDA )
                NTEST = 1 + RSUB + ISORT
                RESULT( 1+RSUB+ISORT ) = ULPINV
-               CALL AB_ZGGES( 'V', 'V', SORT, AB_ZLCTES, N, S, LDA, T, L
-     $DA,
+               CALL ZGGES( 'V', 'V', SORT, ZLCTES, N, S, LDA, T, LDA,
      $                     SDIM, ALPHA, BETA, Q, LDQ, Z, LDQ, WORK,
      $                     LWORK, RWORK, BWORK, IINFO )
                IF( IINFO.NE.0 .AND. IINFO.NE.N+2 ) THEN
                   RESULT( 1+RSUB+ISORT ) = ULPINV
-                  WRITE( NOUNIT, FMT = 9999 )'AB_ZGGES', IINFO, N, JTYPE
-     $,
+                  WRITE( NOUNIT, FMT = 9999 )'ZGGES', IINFO, N, JTYPE,
      $               IOLDSD
                   INFO = ABS( IINFO )
                   GO TO 160
@@ -780,20 +765,18 @@
 *              Do tests 1--4 (or tests 7--9 when reordering )
 *
                IF( ISORT.EQ.0 ) THEN
-                  CALL AB_ZGET51( 1, N, A, LDA, S, LDA, Q, LDQ, Z, LDQ,
+                  CALL ZGET51( 1, N, A, LDA, S, LDA, Q, LDQ, Z, LDQ,
      $                         WORK, RWORK, RESULT( 1 ) )
-                  CALL AB_ZGET51( 1, N, B, LDA, T, LDA, Q, LDQ, Z, LDQ,
+                  CALL ZGET51( 1, N, B, LDA, T, LDA, Q, LDQ, Z, LDQ,
      $                         WORK, RWORK, RESULT( 2 ) )
                ELSE
-                  CALL AB_ZGET54( N, A, LDA, B, LDA, S, LDA, T, LDA, Q,
+                  CALL ZGET54( N, A, LDA, B, LDA, S, LDA, T, LDA, Q,
      $                         LDQ, Z, LDQ, WORK, RESULT( 2+RSUB ) )
                END IF
 *
-               CALL AB_ZGET51( 3, N, B, LDA, T, LDA, Q, LDQ, Q, LDQ, WOR
-     $K,
+               CALL ZGET51( 3, N, B, LDA, T, LDA, Q, LDQ, Q, LDQ, WORK,
      $                      RWORK, RESULT( 3+RSUB ) )
-               CALL AB_ZGET51( 3, N, B, LDA, T, LDA, Z, LDQ, Z, LDQ, WOR
-     $K,
+               CALL ZGET51( 3, N, B, LDA, T, LDA, Z, LDQ, Z, LDQ, WORK,
      $                      RWORK, RESULT( 4+RSUB ) )
 *
 *              Do test 5 and 6 (or Tests 10 and 11 when reordering):
@@ -838,7 +821,7 @@
                   RESULT( 12 ) = ZERO
                   KNTEIG = 0
                   DO 140 I = 1, N
-                     IF( AB_ZLCTES( ALPHA( I ), BETA( I ) ) )
+                     IF( ZLCTES( ALPHA( I ), BETA( I ) ) )
      $                  KNTEIG = KNTEIG + 1
   140             CONTINUE
                   IF( SDIM.NE.KNTEIG )
@@ -859,7 +842,7 @@
                IF( RESULT( JR ).GE.THRESH ) THEN
 *
 *                 If this is the first test to fail,
-*                 print a AB_HEADER to the data file.
+*                 print a header to the data file.
 *
                   IF( NERRS.EQ.0 ) THEN
                      WRITE( NOUNIT, FMT = 9997 )'ZGS'
@@ -892,23 +875,23 @@
 *
 *     Summary
 *
-      CALL AB_ALASVM( 'ZGS', NOUNIT, NERRS, NTESTT, 0 )
+      CALL ALASVM( 'ZGS', NOUNIT, NERRS, NTESTT, 0 )
 *
       WORK( 1 ) = MAXWRK
 *
       RETURN
 *
- 9999 FORMAT( ' AB_ZDRGES: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
+ 9999 FORMAT( ' ZDRGES: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', JTYPE=', I6, ', ISEED=(', 4( I4, ',' ), I5, ')' )
 *
- 9998 FORMAT( ' AB_ZDRGES: S not in Schur form at eigenvalue ', I6, '.',
+ 9998 FORMAT( ' ZDRGES: S not in Schur form at eigenvalue ', I6, '.',
      $      / 9X, 'N=', I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ),
      $      I5, ')' )
 *
  9997 FORMAT( / 1X, A3, ' -- Complex Generalized Schur from problem ',
      $      'driver' )
 *
- 9996 FORMAT( ' Matrix types (see AB_ZDRGES for details): ' )
+ 9996 FORMAT( ' Matrix types (see ZDRGES for details): ' )
 *
  9995 FORMAT( ' Special Matrices:', 23X,
      $      '(J''=transposed Jordan block)',
@@ -951,6 +934,6 @@
  9991 FORMAT( ' Matrix order=', I5, ', type=', I2, ', seed=',
      $      4( I4, ',' ), ' result ', I2, ' is', 1P, D10.3 )
 *
-*     End of AB_ZDRGES
+*     End of ZDRGES
 *
       END

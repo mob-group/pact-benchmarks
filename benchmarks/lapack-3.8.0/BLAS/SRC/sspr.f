@@ -1,4 +1,4 @@
-*> \brief \b AB_SSPR
+*> \brief \b SSPR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SSPR(UPLO,N,ALPHA,X,INCX,AP)
+*       SUBROUTINE SSPR(UPLO,N,ALPHA,X,INCX,AP)
 *
 *       .. Scalar Arguments ..
 *       REAL ALPHA
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SSPR    performs the symmetric rank 1 operation
+*> SSPR    performs the symmetric rank 1 operation
 *>
 *>    A := alpha*x*x**T + A,
 *>
@@ -125,7 +125,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_SSPR(UPLO,N,ALPHA,X,INCX,AP)
+      SUBROUTINE SSPR(UPLO,N,ALPHA,X,INCX,AP)
 *
 *  -- Reference BLAS level2 routine (version 3.7.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -152,17 +152,17 @@
       INTEGER I,INFO,IX,J,JX,K,KK,KX
 *     ..
 *     .. External Functions ..
-      LOGICAL AB_LSAME
-      EXTERNAL AB_LSAME
+      LOGICAL LSAME
+      EXTERNAL LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL AB_XERBLA
+      EXTERNAL XERBLA
 *     ..
 *
 *     Test the input parameters.
 *
       INFO = 0
-      IF (.NOT.AB_LSAME(UPLO,'U') .AND. .NOT.AB_LSAME(UPLO,'L')) THEN
+      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
           INFO = 1
       ELSE IF (N.LT.0) THEN
           INFO = 2
@@ -170,7 +170,7 @@
           INFO = 5
       END IF
       IF (INFO.NE.0) THEN
-          CALL AB_XERBLA('AB_SSPR  ',INFO)
+          CALL XERBLA('SSPR  ',INFO)
           RETURN
       END IF
 *
@@ -190,7 +190,7 @@
 *     are accessed sequentially with one pass through AP.
 *
       KK = 1
-      IF (AB_LSAME(UPLO,'U')) THEN
+      IF (LSAME(UPLO,'U')) THEN
 *
 *        Form  A  when upper triangle is stored in AP.
 *
@@ -256,6 +256,6 @@
 *
       RETURN
 *
-*     End of AB_SSPR  .
+*     End of SSPR  .
 *
       END

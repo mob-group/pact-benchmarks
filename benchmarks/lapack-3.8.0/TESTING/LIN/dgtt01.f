@@ -1,4 +1,4 @@
-*> \brief \b AB_DGTT01
+*> \brief \b DGTT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DGTT01( N, DL, D, DU, DLF, DF, DUF, DU2, IPIV, WORK,
+*       SUBROUTINE DGTT01( N, DL, D, DU, DLF, DF, DUF, DU2, IPIV, WORK,
 *                          LDWORK, RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -28,7 +28,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DGTT01 reconstructs a tridiagonal matrix A from its LU factorization
+*> DGTT01 reconstructs a tridiagonal matrix A from its LU factorization
 *> and computes the residual
 *>    norm(L*U - A) / ( norm(A) * EPS ),
 *> where EPS is the machine epsilon.
@@ -84,7 +84,7 @@
 *> \param[in] DU2
 *> \verbatim
 *>          DU2 is DOUBLE PRECISION array, dimension (N-2)
-*>          The (n-2) elements of the AB_SECOND super-diagonal of U.
+*>          The (n-2) elements of the second super-diagonal of U.
 *> \endverbatim
 *>
 *> \param[in] IPIV
@@ -131,7 +131,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_DGTT01( N, DL, D, DU, DLF, DF, DUF, DU2, IPIV, WORK,
+      SUBROUTINE DGTT01( N, DL, D, DU, DLF, DF, DUF, DU2, IPIV, WORK,
      $                   LDWORK, RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -161,14 +161,14 @@
       DOUBLE PRECISION   ANORM, EPS, LI
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGT, AB_DLANHS
-      EXTERNAL           AB_DLAMCH, AB_DLANGT, AB_DLANHS
+      DOUBLE PRECISION   DLAMCH, DLANGT, DLANHS
+      EXTERNAL           DLAMCH, DLANGT, DLANHS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DAXPY, AB_DSWAP
+      EXTERNAL           DAXPY, DSWAP
 *     ..
 *     .. Executable Statements ..
 *
@@ -179,7 +179,7 @@
          RETURN
       END IF
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
+      EPS = DLAMCH( 'Epsilon' )
 *
 *     Copy the matrix U to WORK.
 *
@@ -210,14 +210,13 @@
       LASTJ = N
       DO 40 I = N - 1, 1, -1
          LI = DLF( I )
-         CALL AB_DAXPY( LASTJ-I+1, LI, WORK( I, I ), LDWORK,
+         CALL DAXPY( LASTJ-I+1, LI, WORK( I, I ), LDWORK,
      $               WORK( I+1, I ), LDWORK )
          IP = IPIV( I )
          IF( IP.EQ.I ) THEN
             LASTJ = MIN( I+2, N )
          ELSE
-            CALL AB_DSWAP( LASTJ-I+1, WORK( I, I ), LDWORK, WORK( I+1, I
-     $ ),
+            CALL DSWAP( LASTJ-I+1, WORK( I, I ), LDWORK, WORK( I+1, I ),
      $                  LDWORK )
          END IF
    40 CONTINUE
@@ -238,12 +237,12 @@
 *
 *     Compute the 1-norm of the tridiagonal matrix A.
 *
-      ANORM = AB_DLANGT( '1', N, DL, D, DU )
+      ANORM = DLANGT( '1', N, DL, D, DU )
 *
 *     Compute the 1-norm of WORK, which is only guaranteed to be
 *     upper Hessenberg.
 *
-      RESID = AB_DLANHS( '1', N, WORK, LDWORK, RWORK )
+      RESID = DLANHS( '1', N, WORK, LDWORK, RWORK )
 *
 *     Compute norm(L*U - A) / (norm(A) * EPS)
 *
@@ -256,6 +255,6 @@
 *
       RETURN
 *
-*     End of AB_DGTT01
+*     End of DGTT01
 *
       END

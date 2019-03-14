@@ -1,4 +1,4 @@
-*> \brief \b AB_SDRVRF1
+*> \brief \b SDRVRF1
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SDRVRF1( NOUT, NN, NVAL, THRESH, A, LDA, ARF, WORK )
+*       SUBROUTINE SDRVRF1( NOUT, NN, NVAL, THRESH, A, LDA, ARF, WORK )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDA, NN, NOUT
@@ -25,8 +25,8 @@
 *>
 *> \verbatim
 *>
-*> AB_SDRVRF1 tests the LAPACK RFP routines:
-*>     AB_SLANSF
+*> SDRVRF1 tests the LAPACK RFP routines:
+*>     SLANSF
 *> \endverbatim
 *
 *  Arguments:
@@ -92,7 +92,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_SDRVRF1( NOUT, NN, NVAL, THRESH, A, LDA, ARF, WORK )
+      SUBROUTINE SDRVRF1( NOUT, NN, NVAL, THRESH, A, LDA, ARF, WORK )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -128,11 +128,11 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH, AB_SLANSY, AB_SLANSF, AB_SLARND
-      EXTERNAL           AB_SLAMCH, AB_SLANSY, AB_SLANSF, AB_SLARND
+      REAL               SLAMCH, SLANSY, SLANSF, SLARND
+      EXTERNAL           SLAMCH, SLANSY, SLANSF, SLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_STRTTF
+      EXTERNAL           STRTTF
 *     ..
 *     .. Scalars in Common ..
       CHARACTER*32       SRNAMT
@@ -158,8 +158,8 @@
          ISEED( I ) = ISEEDY( I )
    10 CONTINUE
 *
-      EPS = AB_SLAMCH( 'Precision' )
-      SMALL = AB_SLAMCH( 'Safe minimum' )
+      EPS = SLAMCH( 'Precision' )
+      SMALL = SLAMCH( 'Safe minimum' )
       LARGE = ONE / SMALL
       SMALL = SMALL * LDA * LDA
       LARGE = LARGE / LDA / LDA
@@ -181,7 +181,7 @@
 *
             DO J = 1, N
                DO I = 1, N
-                  A( I, J) = AB_SLARND( 2, ISEED )
+                  A( I, J) = SLARND( 2, ISEED )
                END DO
             END DO
 *
@@ -213,10 +213,10 @@
 *
                   CFORM = FORMS( IFORM )
 *
-                  SRNAMT = 'AB_STRTTF'
-                  CALL AB_STRTTF( CFORM, UPLO, N, A, LDA, ARF, INFO )
+                  SRNAMT = 'STRTTF'
+                  CALL STRTTF( CFORM, UPLO, N, A, LDA, ARF, INFO )
 *
-*                 Check error code from AB_STRTTF
+*                 Check error code from STRTTF
 *
                   IF( INFO.NE.0 ) THEN
                      IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 ) THEN
@@ -233,9 +233,8 @@
 *                    Check all four norms: 'M', '1', 'I', 'F'
 *
                      NORM = NORMS( INORM )
-                     NORMARF = AB_SLANSF( NORM, CFORM, UPLO, N, ARF, WOR
-     $K )
-                     NORMA = AB_SLANSY( NORM, UPLO, N, A, LDA, WORK )
+                     NORMARF = SLANSF( NORM, CFORM, UPLO, N, ARF, WORK )
+                     NORMA = SLANSY( NORM, UPLO, N, A, LDA, WORK )
 *
                      RESULT(1) = ( NORMA - NORMARF ) / NORMA / EPS
                      NRUN = NRUN + 1
@@ -245,7 +244,7 @@
                            WRITE( NOUT, * )
                            WRITE( NOUT, FMT = 9999 )
                         END IF
-                        WRITE( NOUT, FMT = 9997 ) 'AB_SLANSF',
+                        WRITE( NOUT, FMT = 9997 ) 'SLANSF',
      +                      N, IIT, UPLO, CFORM, NORM, RESULT(1)
                         NFAIL = NFAIL + 1
                      END IF
@@ -258,15 +257,15 @@
 *     Print a summary of the results.
 *
       IF ( NFAIL.EQ.0 ) THEN
-         WRITE( NOUT, FMT = 9996 ) 'AB_SLANSF', NRUN
+         WRITE( NOUT, FMT = 9996 ) 'SLANSF', NRUN
       ELSE
-         WRITE( NOUT, FMT = 9995 ) 'AB_SLANSF', NFAIL, NRUN
+         WRITE( NOUT, FMT = 9995 ) 'SLANSF', NFAIL, NRUN
       END IF
       IF ( NERRS.NE.0 ) THEN
-         WRITE( NOUT, FMT = 9994 ) NERRS, 'AB_SLANSF'
+         WRITE( NOUT, FMT = 9994 ) NERRS, 'SLANSF'
       END IF
 *
- 9999 FORMAT( 1X, ' *** Error(s) or Failure(s) while testing AB_SLANSF
+ 9999 FORMAT( 1X, ' *** Error(s) or Failure(s) while testing SLANSF
      +         ***')
  9998 FORMAT( 1X, '     Error in ',A6,' with UPLO=''',A1,''', FORM=''',
      +        A1,''', N=',I5)
@@ -280,6 +279,6 @@
 *
       RETURN
 *
-*     End of AB_SDRVRF1
+*     End of SDRVRF1
 *
       END

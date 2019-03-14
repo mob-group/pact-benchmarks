@@ -255,7 +255,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the work array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -277,7 +277,7 @@
 *>          If LRWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the RWORK array, returns
 *>          this value as the first entry of the work array, and no error
-*>          message related to LRWORK is issued by AB_XERBLA.
+*>          message related to LRWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -290,7 +290,7 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit.
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*>          > 0:  AB_CBBCSD did not converge. See the description of RWORK
+*>          > 0:  CBBCSD did not converge. See the description of RWORK
 *>                above for details.
 *> \endverbatim
 *
@@ -363,13 +363,12 @@
       LOGICAL            LRQUERY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_CBBCSD, AB_CLACPY, AB_CLAPMR, AB_
-     $CLAPMT,
-     $                   AB_CUNBDB, AB_CUNGLQ, AB_CUNGQR
+      EXTERNAL           XERBLA, CBBCSD, CLACPY, CLAPMR, CLAPMT,
+     $                   CUNBDB, CUNGLQ, CUNGQR
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. Intrinsic Functions
       INTRINSIC          INT, MAX, MIN
@@ -379,12 +378,12 @@
 *     Test input arguments
 *
       INFO = 0
-      WANTU1 = AB_LSAME( JOBU1, 'Y' )
-      WANTU2 = AB_LSAME( JOBU2, 'Y' )
-      WANTV1T = AB_LSAME( JOBV1T, 'Y' )
-      WANTV2T = AB_LSAME( JOBV2T, 'Y' )
-      COLMAJOR = .NOT. AB_LSAME( TRANS, 'T' )
-      DEFAULTSIGNS = .NOT. AB_LSAME( SIGNS, 'O' )
+      WANTU1 = LSAME( JOBU1, 'Y' )
+      WANTU2 = LSAME( JOBU2, 'Y' )
+      WANTV1T = LSAME( JOBV1T, 'Y' )
+      WANTV2T = LSAME( JOBV2T, 'Y' )
+      COLMAJOR = .NOT. LSAME( TRANS, 'T' )
+      DEFAULTSIGNS = .NOT. LSAME( SIGNS, 'O' )
       LQUERY = LWORK .EQ. -1
       LRQUERY = LRWORK .EQ. -1
       IF( M .LT. 0 ) THEN
@@ -472,7 +471,7 @@
          IB22D = IB21E + MAX( 1, Q - 1 )
          IB22E = IB22D + MAX( 1, Q )
          IBBCSD = IB22E + MAX( 1, Q - 1 )
-         CALL AB_CBBCSD( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS, M, P, Q,
+         CALL CBBCSD( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS, M, P, Q,
      $                THETA, THETA, U1, LDU1, U2, LDU2, V1T, LDV1T,
      $                V2T, LDV2T, THETA, THETA, THETA, THETA, THETA,
      $                THETA, THETA, THETA, RWORK, -1, CHILDINFO )
@@ -489,17 +488,17 @@
          ITAUQ1 = ITAUP2 + MAX( 1, M - P )
          ITAUQ2 = ITAUQ1 + MAX( 1, Q )
          IORGQR = ITAUQ2 + MAX( 1, M - Q )
-         CALL AB_CUNGQR( M-Q, M-Q, M-Q, U1, MAX(1,M-Q), U1, WORK, -1,
+         CALL CUNGQR( M-Q, M-Q, M-Q, U1, MAX(1,M-Q), U1, WORK, -1,
      $                CHILDINFO )
          LORGQRWORKOPT = INT( WORK(1) )
          LORGQRWORKMIN = MAX( 1, M - Q )
          IORGLQ = ITAUQ2 + MAX( 1, M - Q )
-         CALL AB_CUNGLQ( M-Q, M-Q, M-Q, U1, MAX(1,M-Q), U1, WORK, -1,
+         CALL CUNGLQ( M-Q, M-Q, M-Q, U1, MAX(1,M-Q), U1, WORK, -1,
      $                CHILDINFO )
          LORGLQWORKOPT = INT( WORK(1) )
          LORGLQWORKMIN = MAX( 1, M - Q )
          IORBDB = ITAUQ2 + MAX( 1, M - Q )
-         CALL AB_CUNBDB( TRANS, SIGNS, M, P, Q, X11, LDX11, X12, LDX12,
+         CALL CUNBDB( TRANS, SIGNS, M, P, Q, X11, LDX11, X12, LDX12,
      $                X21, LDX21, X22, LDX22, THETA, THETA, U1, U2,
      $                V1T, V2T, WORK, -1, CHILDINFO )
          LORBDBWORKOPT = INT( WORK(1) )
@@ -527,7 +526,7 @@
 *     Abort if any illegal arguments
 *
       IF( INFO .NE. 0 ) THEN
-         CALL AB_XERBLA( 'CUNCSD', -INFO )
+         CALL XERBLA( 'CUNCSD', -INFO )
          RETURN
       ELSE IF( LQUERY .OR. LRQUERY ) THEN
          RETURN
@@ -535,90 +534,84 @@
 *
 *     Transform to bidiagonal block form
 *
-      CALL AB_CUNBDB( TRANS, SIGNS, M, P, Q, X11, LDX11, X12, LDX12, X21
-     $,
+      CALL CUNBDB( TRANS, SIGNS, M, P, Q, X11, LDX11, X12, LDX12, X21,
      $             LDX21, X22, LDX22, THETA, RWORK(IPHI), WORK(ITAUP1),
      $             WORK(ITAUP2), WORK(ITAUQ1), WORK(ITAUQ2),
      $             WORK(IORBDB), LORBDBWORK, CHILDINFO )
 *
-*     Accumulate HousehoAB_LDEr reflectors
+*     Accumulate Householder reflectors
 *
       IF( COLMAJOR ) THEN
          IF( WANTU1 .AND. P .GT. 0 ) THEN
-            CALL AB_CLACPY( 'L', P, Q, X11, LDX11, U1, LDU1 )
-            CALL AB_CUNGQR( P, P, Q, U1, LDU1, WORK(ITAUP1), WORK(IORGQR
-     $),
+            CALL CLACPY( 'L', P, Q, X11, LDX11, U1, LDU1 )
+            CALL CUNGQR( P, P, Q, U1, LDU1, WORK(ITAUP1), WORK(IORGQR),
      $                   LORGQRWORK, INFO)
          END IF
          IF( WANTU2 .AND. M-P .GT. 0 ) THEN
-            CALL AB_CLACPY( 'L', M-P, Q, X21, LDX21, U2, LDU2 )
-            CALL AB_CUNGQR( M-P, M-P, Q, U2, LDU2, WORK(ITAUP2),
+            CALL CLACPY( 'L', M-P, Q, X21, LDX21, U2, LDU2 )
+            CALL CUNGQR( M-P, M-P, Q, U2, LDU2, WORK(ITAUP2),
      $                   WORK(IORGQR), LORGQRWORK, INFO )
          END IF
          IF( WANTV1T .AND. Q .GT. 0 ) THEN
-            CALL AB_CLACPY( 'U', Q-1, Q-1, X11(1,2), LDX11, V1T(2,2),
+            CALL CLACPY( 'U', Q-1, Q-1, X11(1,2), LDX11, V1T(2,2),
      $                   LDV1T )
             V1T(1, 1) = ONE
             DO J = 2, Q
                V1T(1,J) = ZERO
                V1T(J,1) = ZERO
             END DO
-            CALL AB_CUNGLQ( Q-1, Q-1, Q-1, V1T(2,2), LDV1T, WORK(ITAUQ1)
-     $,
+            CALL CUNGLQ( Q-1, Q-1, Q-1, V1T(2,2), LDV1T, WORK(ITAUQ1),
      $                   WORK(IORGLQ), LORGLQWORK, INFO )
          END IF
          IF( WANTV2T .AND. M-Q .GT. 0 ) THEN
-            CALL AB_CLACPY( 'U', P, M-Q, X12, LDX12, V2T, LDV2T )
+            CALL CLACPY( 'U', P, M-Q, X12, LDX12, V2T, LDV2T )
             IF( M-P .GT. Q ) THEN
-               CALL AB_CLACPY( 'U', M-P-Q, M-P-Q, X22(Q+1,P+1), LDX22,
+               CALL CLACPY( 'U', M-P-Q, M-P-Q, X22(Q+1,P+1), LDX22,
      $                      V2T(P+1,P+1), LDV2T )
             END IF
             IF( M .GT. Q ) THEN
-               CALL AB_CUNGLQ( M-Q, M-Q, M-Q, V2T, LDV2T, WORK(ITAUQ2),
+               CALL CUNGLQ( M-Q, M-Q, M-Q, V2T, LDV2T, WORK(ITAUQ2),
      $                      WORK(IORGLQ), LORGLQWORK, INFO )
             END IF
          END IF
       ELSE
          IF( WANTU1 .AND. P .GT. 0 ) THEN
-            CALL AB_CLACPY( 'U', Q, P, X11, LDX11, U1, LDU1 )
-            CALL AB_CUNGLQ( P, P, Q, U1, LDU1, WORK(ITAUP1), WORK(IORGLQ
-     $),
+            CALL CLACPY( 'U', Q, P, X11, LDX11, U1, LDU1 )
+            CALL CUNGLQ( P, P, Q, U1, LDU1, WORK(ITAUP1), WORK(IORGLQ),
      $                   LORGLQWORK, INFO)
          END IF
          IF( WANTU2 .AND. M-P .GT. 0 ) THEN
-            CALL AB_CLACPY( 'U', Q, M-P, X21, LDX21, U2, LDU2 )
-            CALL AB_CUNGLQ( M-P, M-P, Q, U2, LDU2, WORK(ITAUP2),
+            CALL CLACPY( 'U', Q, M-P, X21, LDX21, U2, LDU2 )
+            CALL CUNGLQ( M-P, M-P, Q, U2, LDU2, WORK(ITAUP2),
      $                   WORK(IORGLQ), LORGLQWORK, INFO )
          END IF
          IF( WANTV1T .AND. Q .GT. 0 ) THEN
-            CALL AB_CLACPY( 'L', Q-1, Q-1, X11(2,1), LDX11, V1T(2,2),
+            CALL CLACPY( 'L', Q-1, Q-1, X11(2,1), LDX11, V1T(2,2),
      $                   LDV1T )
             V1T(1, 1) = ONE
             DO J = 2, Q
                V1T(1,J) = ZERO
                V1T(J,1) = ZERO
             END DO
-            CALL AB_CUNGQR( Q-1, Q-1, Q-1, V1T(2,2), LDV1T, WORK(ITAUQ1)
-     $,
+            CALL CUNGQR( Q-1, Q-1, Q-1, V1T(2,2), LDV1T, WORK(ITAUQ1),
      $                   WORK(IORGQR), LORGQRWORK, INFO )
          END IF
          IF( WANTV2T .AND. M-Q .GT. 0 ) THEN
             P1 = MIN( P+1, M )
             Q1 = MIN( Q+1, M )
-            CALL AB_CLACPY( 'L', M-Q, P, X12, LDX12, V2T, LDV2T )
+            CALL CLACPY( 'L', M-Q, P, X12, LDX12, V2T, LDV2T )
             IF ( M .GT. P+Q ) THEN
-               CALL AB_CLACPY( 'L', M-P-Q, M-P-Q, X22(P1,Q1), LDX22,
+               CALL CLACPY( 'L', M-P-Q, M-P-Q, X22(P1,Q1), LDX22,
      $                      V2T(P+1,P+1), LDV2T )
             END IF
-            CALL AB_CUNGQR( M-Q, M-Q, M-Q, V2T, LDV2T, WORK(ITAUQ2),
+            CALL CUNGQR( M-Q, M-Q, M-Q, V2T, LDV2T, WORK(ITAUQ2),
      $                   WORK(IORGQR), LORGQRWORK, INFO )
          END IF
       END IF
 *
 *     Compute the CSD of the matrix in bidiagonal-block form
 *
-      CALL AB_CBBCSD( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS, M, P, Q, THET
-     $A,
+      CALL CBBCSD( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS, M, P, Q, THETA,
      $             RWORK(IPHI), U1, LDU1, U2, LDU2, V1T, LDV1T, V2T,
      $             LDV2T, RWORK(IB11D), RWORK(IB11E), RWORK(IB12D),
      $             RWORK(IB12E), RWORK(IB21D), RWORK(IB21E),
@@ -638,9 +631,9 @@
             IWORK(I) = I - Q
          END DO
          IF( COLMAJOR ) THEN
-            CALL AB_CLAPMT( .FALSE., M-P, M-P, U2, LDU2, IWORK )
+            CALL CLAPMT( .FALSE., M-P, M-P, U2, LDU2, IWORK )
          ELSE
-            CALL AB_CLAPMR( .FALSE., M-P, M-P, U2, LDU2, IWORK )
+            CALL CLAPMR( .FALSE., M-P, M-P, U2, LDU2, IWORK )
          END IF
       END IF
       IF( M .GT. 0 .AND. WANTV2T ) THEN
@@ -651,9 +644,9 @@
             IWORK(I) = I - P
          END DO
          IF( .NOT. COLMAJOR ) THEN
-            CALL AB_CLAPMT( .FALSE., M-Q, M-Q, V2T, LDV2T, IWORK )
+            CALL CLAPMT( .FALSE., M-Q, M-Q, V2T, LDV2T, IWORK )
          ELSE
-            CALL AB_CLAPMR( .FALSE., M-Q, M-Q, V2T, LDV2T, IWORK )
+            CALL CLAPMR( .FALSE., M-Q, M-Q, V2T, LDV2T, IWORK )
          END IF
       END IF
 *

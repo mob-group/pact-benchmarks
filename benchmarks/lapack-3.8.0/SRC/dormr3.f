@@ -1,4 +1,4 @@
-*> \brief \b AB_DORMR3 multiplies a general matrix by the orthogonal matrix from a RZ factorization determined by AB_STZRZF (unblocked algorithm).
+*> \brief \b DORMR3 multiplies a general matrix by the orthogonal matrix from a RZ factorization determined by stzrzf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DORMR3 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DORMR3.f">
+*> Download DORMR3 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dormr3.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DORMR3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dormr3.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DORMR3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dormr3.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DORMR3( SIDE, TRANS, M, N, K, L, A, LDA, TAU, C, LDC,
+*       SUBROUTINE DORMR3( SIDE, TRANS, M, N, K, L, A, LDA, TAU, C, LDC,
 *                          WORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DORMR3 overwrites the general real m by n matrix C with
+*> DORMR3 overwrites the general real m by n matrix C with
 *>
 *>       Q * C  if SIDE = 'L' and TRANS = 'N', or
 *>
@@ -50,7 +50,7 @@
 *>
 *>       Q = H(1) H(2) . . . H(k)
 *>
-*> as returned by AB_DTZRZF. Q is of order m if SIDE = 'L' and of order n
+*> as returned by DTZRZF. Q is of order m if SIDE = 'L' and of order n
 *> if SIDE = 'R'.
 *> \endverbatim
 *
@@ -96,7 +96,7 @@
 *> \verbatim
 *>          L is INTEGER
 *>          The number of columns of the matrix A containing
-*>          the meaningful part of the HousehoAB_LDEr reflectors.
+*>          the meaningful part of the Householder reflectors.
 *>          If SIDE = 'L', M >= L >= 0, if SIDE = 'R', N >= L >= 0.
 *> \endverbatim
 *>
@@ -107,7 +107,7 @@
 *>                               (LDA,N) if SIDE = 'R'
 *>          The i-th row must contain the vector which defines the
 *>          elementary reflector H(i), for i = 1,2,...,k, as returned by
-*>          AB_DTZRZF in the last k rows of its array argument A.
+*>          DTZRZF in the last k rows of its array argument A.
 *>          A is modified by the routine but restored on exit.
 *> \endverbatim
 *>
@@ -121,7 +121,7 @@
 *> \verbatim
 *>          TAU is DOUBLE PRECISION array, dimension (K)
 *>          TAU(i) must contain the scalar factor of the elementary
-*>          reflector H(i), as returned by AB_DTZRZF.
+*>          reflector H(i), as returned by DTZRZF.
 *> \endverbatim
 *>
 *> \param[in,out] C
@@ -175,8 +175,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_DORMR3( SIDE, TRANS, M, N, K, L, A, LDA, TAU, C, LDC
-     $,
+      SUBROUTINE DORMR3( SIDE, TRANS, M, N, K, L, A, LDA, TAU, C, LDC,
      $                   WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -199,11 +198,11 @@
       INTEGER            I, I1, I2, I3, IC, JA, JC, MI, NI, NQ
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLARZ, AB_XERBLA
+      EXTERNAL           DLARZ, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -213,8 +212,8 @@
 *     Test the input arguments
 *
       INFO = 0
-      LEFT = AB_LSAME( SIDE, 'L' )
-      NOTRAN = AB_LSAME( TRANS, 'N' )
+      LEFT = LSAME( SIDE, 'L' )
+      NOTRAN = LSAME( TRANS, 'N' )
 *
 *     NQ is the order of Q
 *
@@ -223,9 +222,9 @@
       ELSE
          NQ = N
       END IF
-      IF( .NOT.LEFT .AND. .NOT.AB_LSAME( SIDE, 'R' ) ) THEN
+      IF( .NOT.LEFT .AND. .NOT.LSAME( SIDE, 'R' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) ) THEN
+      ELSE IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) ) THEN
          INFO = -2
       ELSE IF( M.LT.0 ) THEN
          INFO = -3
@@ -242,7 +241,7 @@
          INFO = -11
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DORMR3', -INFO )
+         CALL XERBLA( 'DORMR3', -INFO )
          RETURN
       END IF
 *
@@ -288,13 +287,13 @@
 *
 *        Apply H(i) or H(i)**T
 *
-         CALL AB_DLARZ( SIDE, MI, NI, L, A( I, JA ), LDA, TAU( I ),
+         CALL DLARZ( SIDE, MI, NI, L, A( I, JA ), LDA, TAU( I ),
      $               C( IC, JC ), LDC, WORK )
 *
    10 CONTINUE
 *
       RETURN
 *
-*     End of AB_DORMR3
+*     End of DORMR3
 *
       END

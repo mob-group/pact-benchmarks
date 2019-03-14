@@ -1,4 +1,4 @@
-*> \brief \b AB_SDRVRF3
+*> \brief \b SDRVRF3
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,8 +8,8 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SDRVRF3( NOUT, NN, NVAL, THRESH, A, LDA, ARF, B1, B2,
-*      +                    S_WORK_AB_SLANGE, S_WORK_AB_AB_SGEQRF, TAU )
+*       SUBROUTINE SDRVRF3( NOUT, NN, NVAL, THRESH, A, LDA, ARF, B1, B2,
+*      +                    S_WORK_SLANGE, S_WORK_SGEQRF, TAU )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDA, NN, NOUT
@@ -18,8 +18,8 @@
 *       .. Array Arguments ..
 *       INTEGER            NVAL( NN )
 *       REAL               A( LDA, * ), ARF( * ), B1( LDA, * ),
-*      +                   B2( LDA, * ), S_WORK_AB_AB_SGEQRF( * ),
-*      +                   S_WORK_AB_SLANGE( * ), TAU( * )
+*      +                   B2( LDA, * ), S_WORK_SGEQRF( * ),
+*      +                   S_WORK_SLANGE( * ), TAU( * )
 *       ..
 *
 *
@@ -28,8 +28,8 @@
 *>
 *> \verbatim
 *>
-*> AB_SDRVRF3 tests the LAPACK RFP routines:
-*>     AB_STFSM
+*> SDRVRF3 tests the LAPACK RFP routines:
+*>     STFSM
 *> \endverbatim
 *
 *  Arguments:
@@ -87,14 +87,14 @@
 *>          B2 is REAL array, dimension (LDA,NMAX)
 *> \endverbatim
 *>
-*> \param[out] S_WORK_AB_SLANGE
+*> \param[out] S_WORK_SLANGE
 *> \verbatim
-*>          S_WORK_AB_SLANGE is REAL array, dimension (NMAX)
+*>          S_WORK_SLANGE is REAL array, dimension (NMAX)
 *> \endverbatim
 *>
-*> \param[out] S_WORK_AB_AB_SGEQRF
+*> \param[out] S_WORK_SGEQRF
 *> \verbatim
-*>          S_WORK_AB_AB_SGEQRF is REAL array, dimension (NMAX)
+*>          S_WORK_SGEQRF is REAL array, dimension (NMAX)
 *> \endverbatim
 *>
 *> \param[out] TAU
@@ -115,9 +115,8 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_SDRVRF3( NOUT, NN, NVAL, THRESH, A, LDA, ARF, B1, B2
-     $,
-     +                    S_WORK_AB_SLANGE, S_WORK_AB_AB_SGEQRF, TAU )
+      SUBROUTINE SDRVRF3( NOUT, NN, NVAL, THRESH, A, LDA, ARF, B1, B2,
+     +                    S_WORK_SLANGE, S_WORK_SGEQRF, TAU )
 *
 *  -- LAPACK test routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -131,8 +130,8 @@
 *     .. Array Arguments ..
       INTEGER            NVAL( NN )
       REAL               A( LDA, * ), ARF( * ), B1( LDA, * ),
-     +                   B2( LDA, * ), S_WORK_AB_AB_SGEQRF( * ),
-     +                   S_WORK_AB_SLANGE( * ), TAU( * )
+     +                   B2( LDA, * ), S_WORK_SGEQRF( * ),
+     +                   S_WORK_SLANGE( * ), TAU( * )
 *     ..
 *
 *  =====================================================================
@@ -157,12 +156,11 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH, AB_SLANGE, AB_SLARND
-      EXTERNAL           AB_SLAMCH, AB_SLANGE, AB_SLARND
+      REAL               SLAMCH, SLANGE, SLARND
+      EXTERNAL           SLAMCH, SLANGE, SLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_STRTTF, AB_AB_SGEQRF, AB_SGEQLF, AB_STFSM, A
-     $B_STRSM
+      EXTERNAL           STRTTF, SGEQRF, SGEQLF, STFSM, STRSM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT
@@ -191,7 +189,7 @@
       DO 10 I = 1, 4
          ISEED( I ) = ISEEDY( I )
    10 CONTINUE
-      EPS = AB_SLAMCH( 'Precision' )
+      EPS = SLAMCH( 'Precision' )
 *
       DO 170 IIM = 1, NN
 *
@@ -228,7 +226,7 @@
                               ELSE IF ( IALPHA.EQ. 2) THEN
                                  ALPHA = ONE
                               ELSE
-                                 ALPHA = AB_SLARND( 2, ISEED )
+                                 ALPHA = SLARND( 2, ISEED )
                               END IF
 *
 *                             All the parameters are set:
@@ -264,7 +262,7 @@
 *
                               DO J = 1, NA
                                  DO I = 1, NA
-                                    A( I, J) = AB_SLARND( 2, ISEED )
+                                    A( I, J) = SLARND( 2, ISEED )
                                  END DO
                               END DO
 *
@@ -273,26 +271,25 @@
 *                                The case IUPLO.EQ.1 is when SIDE.EQ.'U'
 *                                -> QR factorization.
 *
-                                 SRNAMT = 'AB_AB_SGEQRF'
-                                 CALL AB_AB_SGEQRF( NA, NA, A, LDA, TAU,
-     +                                        S_WORK_AB_AB_SGEQRF, LDA,
+                                 SRNAMT = 'SGEQRF'
+                                 CALL SGEQRF( NA, NA, A, LDA, TAU,
+     +                                        S_WORK_SGEQRF, LDA,
      +                                        INFO )
                               ELSE
 *
 *                                The case IUPLO.EQ.2 is when SIDE.EQ.'L'
 *                                -> QL factorization.
 *
-                                 SRNAMT = 'AB_AB_SGELQF'
-                                 CALL AB_AB_SGELQF( NA, NA, A, LDA, TAU,
-     +                                        S_WORK_AB_AB_SGEQRF, LDA,
+                                 SRNAMT = 'SGELQF'
+                                 CALL SGELQF( NA, NA, A, LDA, TAU,
+     +                                        S_WORK_SGEQRF, LDA,
      +                                        INFO )
                               END IF
 *
 *                             Store a copy of A in RFP format (in ARF).
 *
-                              SRNAMT = 'AB_STRTTF'
-                              CALL AB_STRTTF( CFORM, UPLO, NA, A, LDA, A
-     $RF,
+                              SRNAMT = 'STRTTF'
+                              CALL STRTTF( CFORM, UPLO, NA, A, LDA, ARF,
      +                                     INFO )
 *
 *                             Generate B1 our M--by--N right-hand side
@@ -300,24 +297,23 @@
 *
                               DO J = 1, N
                                  DO I = 1, M
-                                    B1( I, J) = AB_SLARND( 2, ISEED )
+                                    B1( I, J) = SLARND( 2, ISEED )
                                     B2( I, J) = B1( I, J)
                                  END DO
                               END DO
 *
 *                             Solve op( A ) X = B or X op( A ) = B
-*                             with AB_STRSM
+*                             with STRSM
 *
-                              SRNAMT = 'AB_STRSM'
-                              CALL AB_STRSM( SIDE, UPLO, TRANS, DIAG, M,
-     $ N,
+                              SRNAMT = 'STRSM'
+                              CALL STRSM( SIDE, UPLO, TRANS, DIAG, M, N,
      +                               ALPHA, A, LDA, B1, LDA )
 *
 *                             Solve op( A ) X = B or X op( A ) = B
-*                             with AB_STFSM
+*                             with STFSM
 *
-                              SRNAMT = 'AB_STFSM'
-                              CALL AB_STFSM( CFORM, SIDE, UPLO, TRANS,
+                              SRNAMT = 'STFSM'
+                              CALL STFSM( CFORM, SIDE, UPLO, TRANS,
      +                                    DIAG, M, N, ALPHA, ARF, B2,
      +                                    LDA )
 *
@@ -329,8 +325,8 @@
                                  END DO
                               END DO
 *
-                              RESULT(1) = AB_SLANGE( 'I', M, N, B1, LDA,
-     +                                            S_WORK_AB_SLANGE )
+                              RESULT(1) = SLANGE( 'I', M, N, B1, LDA,
+     +                                            S_WORK_SLANGE )
 *
                               RESULT(1) = RESULT(1) / SQRT( EPS )
      +                                    / MAX ( MAX( M, N), 1 )
@@ -340,7 +336,7 @@
                                     WRITE( NOUT, * )
                                     WRITE( NOUT, FMT = 9999 )
                                  END IF
-                                 WRITE( NOUT, FMT = 9997 ) 'AB_STFSM',
+                                 WRITE( NOUT, FMT = 9997 ) 'STFSM',
      +                              CFORM, SIDE, UPLO, TRANS, DIAG, M,
      +                              N, RESULT(1)
                                  NFAIL = NFAIL + 1
@@ -358,12 +354,12 @@
 *     Print a summary of the results.
 *
       IF ( NFAIL.EQ.0 ) THEN
-         WRITE( NOUT, FMT = 9996 ) 'AB_STFSM', NRUN
+         WRITE( NOUT, FMT = 9996 ) 'STFSM', NRUN
       ELSE
-         WRITE( NOUT, FMT = 9995 ) 'AB_STFSM', NFAIL, NRUN
+         WRITE( NOUT, FMT = 9995 ) 'STFSM', NFAIL, NRUN
       END IF
 *
- 9999 FORMAT( 1X, ' *** Error(s) or Failure(s) while testing AB_STFSM
+ 9999 FORMAT( 1X, ' *** Error(s) or Failure(s) while testing STFSM
      +         ***')
  9997 FORMAT( 1X, '     Failure in ',A5,', CFORM=''',A1,''',',
      + ' SIDE=''',A1,''',',' UPLO=''',A1,''',',' TRANS=''',A1,''',',
@@ -375,6 +371,6 @@
 *
       RETURN
 *
-*     End of AB_SDRVRF3
+*     End of SDRVRF3
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_SGESVJ
+*> \brief \b SGESVJ
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_SGESVJ + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_SGESVJ.f">
+*> Download SGESVJ + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgesvj.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_SGESVJ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgesvj.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_SGESVJ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgesvj.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_SGESVJ( JOBA, JOBU, JOBV, M, N, A, LDA, SVA, MV, V,
+*       SUBROUTINE SGESVJ( JOBA, JOBU, JOBV, M, N, A, LDA, SVA, MV, V,
 *                          LDV, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_SGESVJ computes the singular value decomposition (SVD) of a real
+*> SGESVJ computes the singular value decomposition (SVD) of a real
 *> M-by-N matrix A, where M >= N. The SVD of A is written as
 *>                                    [++]   [xx]   [x0]   [xx]
 *>              A = U * SIGMA * V^t,  [++] = [xx] * [ox] * [xx]
@@ -45,7 +45,7 @@
 *> matrix, and V is an N-by-N orthogonal matrix. The diagonal elements
 *> of SIGMA are the singular values of A. The columns of U and V are the
 *> left and the right singular vectors of A, respectively.
-*> AB_AB_SGESVJ can sometimes compute tiny singular values and their singular vectors much
+*> SGESVJ can sometimes compute tiny singular values and their singular vectors much
 *> more accurately than other SVD routines, see below under Further Details.
 *> \endverbatim
 *
@@ -70,7 +70,7 @@
 *>                 singular values are computed and returned in the leading
 *>                 columns of A. See more details in the description of A.
 *>                 The default numerical orthogonality threshold is set to
-*>                 approximately TOL=CTOL*EPS, CTOL=SQRT(M), EPS=AB_SLAMCH('E').
+*>                 approximately TOL=CTOL*EPS, CTOL=SQRT(M), EPS=SLAMCH('E').
 *>          = 'C': Analogous to JOBU='U', except that user can control the
 *>                 level of numerical orthogonality of the computed left
 *>                 singular vectors. TOL can be set to TOL = CTOL*EPS, where
@@ -103,7 +103,7 @@
 *> \param[in] M
 *> \verbatim
 *>          M is INTEGER
-*>          The number of rows of the input matrix A. 1/AB_SLAMCH('E') > M >= 0.
+*>          The number of rows of the input matrix A. 1/SLAMCH('E') > M >= 0.
 *> \endverbatim
 *>
 *> \param[in] N
@@ -123,7 +123,7 @@
 *>                 RANKA orthonormal columns of U are returned in the
 *>                 leading RANKA columns of the array A. Here RANKA <= N
 *>                 is the number of computed singular values of A that are
-*>                 above the underflow threshold AB_SLAMCH('S'). The singular
+*>                 above the underflow threshold SLAMCH('S'). The singular
 *>                 vectors corresponding to underflowed or zero singular
 *>                 values are not computed. The value of RANKA is returned
 *>                 in the array WORK as RANKA=NINT(WORK(2)). Also see the
@@ -132,7 +132,7 @@
 *>                 TOL=SQRT(M)*EPS (default); or TOL=CTOL*EPS (JOBU.EQ.'C'),
 *>                 see the description of JOBU.
 *>                 If INFO .GT. 0,
-*>                 the procedure AB_AB_SGESVJ did not converge in the given number
+*>                 the procedure SGESVJ did not converge in the given number
 *>                 of iterations (sweeps). In that case, the computed
 *>                 columns of U may not be orthogonal up to TOL. The output
 *>                 U (stored in A), SIGMA (given by the computed singular
@@ -150,7 +150,7 @@
 *>                 on exit, A contains the columns of U scaled with the
 *>                 corresponding singular values.
 *>                 If INFO .GT. 0 :
-*>                 the procedure AB_AB_SGESVJ did not converge in the given number
+*>                 the procedure SGESVJ did not converge in the given number
 *>                 of iterations (sweeps).
 *> \endverbatim
 *>
@@ -176,14 +176,14 @@
 *>                 singular values of A might underflow or overflow.
 *>
 *>          If INFO .GT. 0 :
-*>          the procedure AB_AB_SGESVJ did not converge in the given number of
+*>          the procedure SGESVJ did not converge in the given number of
 *>          iterations (sweeps) and SCALE*SVA(1:N) may not be accurate.
 *> \endverbatim
 *>
 *> \param[in] MV
 *> \verbatim
 *>          MV is INTEGER
-*>          If JOBV .EQ. 'A', then the product of Jacobi rotations in AB_AB_SGESVJ
+*>          If JOBV .EQ. 'A', then the product of Jacobi rotations in SGESVJ
 *>          is applied to the first MV rows of V. See the description of JOBV.
 *> \endverbatim
 *>
@@ -213,7 +213,7 @@
 *>          If JOBU .EQ. 'C' :
 *>          WORK(1) = CTOL, where CTOL defines the threshold for convergence.
 *>                    The process stops if all columns of A are mutually
-*>                    orthogonal up to CTOL*EPS, EPS=AB_SLAMCH('E').
+*>                    orthogonal up to CTOL*EPS, EPS=SLAMCH('E').
 *>                    It is required that CTOL >= ONE, i.e. it is not
 *>                    allowed to force the routine to obtain orthogonality
 *>                    below EPSILON.
@@ -228,7 +228,7 @@
 *>          WORK(4) = NINT(WORK(4)) is the number of sweeps of Jacobi
 *>                    rotations needed for numerical convergence.
 *>          WORK(5) = max_{i.NE.j} |COS(A(:,i),A(:,j))| in the last sweep.
-*>                    This is useful information in cases when AB_AB_SGESVJ did
+*>                    This is useful information in cases when SGESVJ did
 *>                    not converge, as it can be used to estimate whether
 *>                    the output is stil useful and for post festum analysis.
 *>          WORK(6) = the largest absolute value over all sines of the
@@ -247,7 +247,7 @@
 *>          INFO is INTEGER
 *>          = 0 : successful exit.
 *>          < 0 : if INFO = -i, then the i-th argument had an illegal value
-*>          > 0 : AB_AB_SGESVJ did not converge in the maximal allowed number (30)
+*>          > 0 : SGESVJ did not converge in the maximal allowed number (30)
 *>                of sweeps. The output may still be useful. See the
 *>                description of WORK.
 *> \endverbatim
@@ -320,8 +320,7 @@
 *> drmac@math.hr. Thank you.
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_SGESVJ( JOBA, JOBU, JOBV, M, N, A, LDA, SVA, MV, 
-     $V,
+      SUBROUTINE SGESVJ( JOBA, JOBU, JOBV, M, N, A, LDA, SVA, MV, V,
      $                   LDV, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
@@ -368,44 +367,41 @@
 *     .. External Functions ..
 *     ..
 *     from BLAS
-      REAL               AB_SDOT, AB_SNRM2
-      EXTERNAL           AB_SDOT, AB_SNRM2
-      INTEGER            AB_ISAMAX
-      EXTERNAL           AB_ISAMAX
+      REAL               SDOT, SNRM2
+      EXTERNAL           SDOT, SNRM2
+      INTEGER            ISAMAX
+      EXTERNAL           ISAMAX
 *     from LAPACK
-      REAL               AB_SLAMCH
-      EXTERNAL           AB_SLAMCH
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      REAL               SLAMCH
+      EXTERNAL           SLAMCH
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
 *     ..
 *     from BLAS
-      EXTERNAL           AB_SAXPY, AB_SCOPY, AB_AB_SROTM, AB_SSCAL, AB_S
-     $SWAP
+      EXTERNAL           SAXPY, SCOPY, SROTM, SSCAL, SSWAP
 *     from LAPACK
-      EXTERNAL           AB_SLASCL, AB_SLASET, AB_SLASSQ, AB_XERBLA
+      EXTERNAL           SLASCL, SLASET, SLASSQ, XERBLA
 *
-      EXTERNAL           AB_SGSVJ0, AB_SGSVJ1
+      EXTERNAL           SGSVJ0, SGSVJ1
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input arguments
 *
-      LSVEC = AB_LSAME( JOBU, 'U' )
-      UCTOL = AB_LSAME( JOBU, 'C' )
-      RSVEC = AB_LSAME( JOBV, 'V' )
-      APPLV = AB_LSAME( JOBV, 'A' )
-      UPPER = AB_LSAME( JOBA, 'U' )
-      LOWER = AB_LSAME( JOBA, 'L' )
+      LSVEC = LSAME( JOBU, 'U' )
+      UCTOL = LSAME( JOBU, 'C' )
+      RSVEC = LSAME( JOBV, 'V' )
+      APPLV = LSAME( JOBV, 'A' )
+      UPPER = LSAME( JOBA, 'U' )
+      LOWER = LSAME( JOBA, 'L' )
 *
-      IF( .NOT.( UPPER .OR. LOWER .OR. AB_LSAME( JOBA, 'G' ) ) ) THEN
+      IF( .NOT.( UPPER .OR. LOWER .OR. LSAME( JOBA, 'G' ) ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.( LSVEC .OR. UCTOL .OR. AB_LSAME( JOBU, 'N' ) ) )
-     $ THEN
+      ELSE IF( .NOT.( LSVEC .OR. UCTOL .OR. LSAME( JOBU, 'N' ) ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.( RSVEC .OR. APPLV .OR. AB_LSAME( JOBV, 'N' ) ) )
-     $ THEN
+      ELSE IF( .NOT.( RSVEC .OR. APPLV .OR. LSAME( JOBV, 'N' ) ) ) THEN
          INFO = -3
       ELSE IF( M.LT.0 ) THEN
          INFO = -4
@@ -428,7 +424,7 @@
 *
 *     #:(
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_SGESVJ', -INFO )
+         CALL XERBLA( 'SGESVJ', -INFO )
          RETURN
       END IF
 *
@@ -455,14 +451,14 @@
          END IF
       END IF
 *     ... and the machine dependent parameters are
-*[!]  (Make sure that AB_SLAMCH() works properly on the target machine.)
+*[!]  (Make sure that SLAMCH() works properly on the target machine.)
 *
-      EPSLN = AB_SLAMCH( 'Epsilon' )
+      EPSLN = SLAMCH( 'Epsilon' )
       ROOTEPS = SQRT( EPSLN )
-      SFMIN = AB_SLAMCH( 'SafeMinimum' )
+      SFMIN = SLAMCH( 'SafeMinimum' )
       ROOTSFMIN = SQRT( SFMIN )
       SMALL = SFMIN / EPSLN
-      BIG = AB_SLAMCH( 'Overflow' )
+      BIG = SLAMCH( 'Overflow' )
 *     BIG         = ONE    / SFMIN
       ROOTBIG = ONE / ROOTSFMIN
       LARGE = BIG / SQRT( FLOAT( M*N ) )
@@ -473,7 +469,7 @@
 *
       IF( FLOAT( M )*EPSLN.GE.ONE ) THEN
          INFO = -4
-         CALL AB_XERBLA( 'AB_AB_SGESVJ', -INFO )
+         CALL XERBLA( 'SGESVJ', -INFO )
          RETURN
       END IF
 *
@@ -481,7 +477,7 @@
 *
       IF( RSVEC ) THEN
          MVL = N
-         CALL AB_SLASET( 'A', MVL, N, ZERO, ONE, V, LDV )
+         CALL SLASET( 'A', MVL, N, ZERO, ONE, V, LDV )
       ELSE IF( APPLV ) THEN
          MVL = MV
       END IF
@@ -505,10 +501,10 @@
          DO 1874 p = 1, N
             AAPP = ZERO
             AAQQ = ONE
-            CALL AB_SLASSQ( M-p+1, A( p, p ), 1, AAPP, AAQQ )
+            CALL SLASSQ( M-p+1, A( p, p ), 1, AAPP, AAQQ )
             IF( AAPP.GT.BIG ) THEN
                INFO = -6
-               CALL AB_XERBLA( 'AB_AB_SGESVJ', -INFO )
+               CALL XERBLA( 'SGESVJ', -INFO )
                RETURN
             END IF
             AAQQ = SQRT( AAQQ )
@@ -530,10 +526,10 @@
          DO 2874 p = 1, N
             AAPP = ZERO
             AAQQ = ONE
-            CALL AB_SLASSQ( p, A( 1, p ), 1, AAPP, AAQQ )
+            CALL SLASSQ( p, A( 1, p ), 1, AAPP, AAQQ )
             IF( AAPP.GT.BIG ) THEN
                INFO = -6
-               CALL AB_XERBLA( 'AB_AB_SGESVJ', -INFO )
+               CALL XERBLA( 'SGESVJ', -INFO )
                RETURN
             END IF
             AAQQ = SQRT( AAQQ )
@@ -555,10 +551,10 @@
          DO 3874 p = 1, N
             AAPP = ZERO
             AAQQ = ONE
-            CALL AB_SLASSQ( M, A( 1, p ), 1, AAPP, AAQQ )
+            CALL SLASSQ( M, A( 1, p ), 1, AAPP, AAQQ )
             IF( AAPP.GT.BIG ) THEN
                INFO = -6
-               CALL AB_XERBLA( 'AB_AB_SGESVJ', -INFO )
+               CALL XERBLA( 'SGESVJ', -INFO )
                RETURN
             END IF
             AAQQ = SQRT( AAQQ )
@@ -593,7 +589,7 @@
 * #:) Quick return for zero matrix
 *
       IF( AAPP.EQ.ZERO ) THEN
-         IF( LSVEC )CALL AB_SLASET( 'G', M, N, ZERO, ONE, A, LDA )
+         IF( LSVEC )CALL SLASET( 'G', M, N, ZERO, ONE, A, LDA )
          WORK( 1 ) = ONE
          WORK( 2 ) = ZERO
          WORK( 3 ) = ZERO
@@ -606,7 +602,7 @@
 * #:) Quick return for one-column matrix
 *
       IF( N.EQ.1 ) THEN
-         IF( LSVEC )CALL AB_SLASCL( 'G', 0, 0, SVA( 1 ), SKL, M, 1,
+         IF( LSVEC )CALL SLASCL( 'G', 0, 0, SVA( 1 ), SKL, M, 1,
      $                           A( 1, 1 ), LDA, IERR )
          WORK( 1 ) = ONE / SKL
          IF( SVA( 1 ).GE.SFMIN ) THEN
@@ -650,11 +646,11 @@
 *     Scale, if necessary
 *
       IF( TEMP1.NE.ONE ) THEN
-         CALL AB_SLASCL( 'G', 0, 0, ONE, TEMP1, N, 1, SVA, N, IERR )
+         CALL SLASCL( 'G', 0, 0, ONE, TEMP1, N, 1, SVA, N, IERR )
       END IF
       SKL = TEMP1*SKL
       IF( SKL.NE.ONE ) THEN
-         CALL AB_SLASCL( JOBA, 0, 0, ONE, SKL, M, N, A, LDA, IERR )
+         CALL SLASCL( JOBA, 0, 0, ONE, SKL, M, N, A, LDA, IERR )
          SKL = ONE / SKL
       END IF
 *
@@ -675,8 +671,8 @@
 *
       SWBAND = 3
 *[TP] SWBAND is a tuning parameter [TP]. It is meaningful and effective
-*     if AB_AB_SGESVJ is used as a computational routine in the preconditioned
-*     Jacobi SVD algorithm AB_AB_SGESVJ. For sweeps i=1:SWBAND the procedure
+*     if SGESVJ is used as a computational routine in the preconditioned
+*     Jacobi SVD algorithm SGESVJ. For sweeps i=1:SWBAND the procedure
 *     works on pivots inside a band-like region around the diagonal.
 *     The boundaries are determined dynamically, based on the number of
 *     pivots above a threshold.
@@ -726,31 +722,31 @@
 *     [+ + x 0]   actually work on [x 0]              [x 0]
 *     [+ + x x]                    [x x].             [x x]
 *
-            CALL AB_SGSVJ0( JOBV, M-N34, N-N34, A( N34+1, N34+1 ), LDA,
+            CALL SGSVJ0( JOBV, M-N34, N-N34, A( N34+1, N34+1 ), LDA,
      $                   WORK( N34+1 ), SVA( N34+1 ), MVL,
      $                   V( N34*q+1, N34+1 ), LDV, EPSLN, SFMIN, TOL,
      $                   2, WORK( N+1 ), LWORK-N, IERR )
 *
-            CALL AB_SGSVJ0( JOBV, M-N2, N34-N2, A( N2+1, N2+1 ), LDA,
+            CALL SGSVJ0( JOBV, M-N2, N34-N2, A( N2+1, N2+1 ), LDA,
      $                   WORK( N2+1 ), SVA( N2+1 ), MVL,
      $                   V( N2*q+1, N2+1 ), LDV, EPSLN, SFMIN, TOL, 2,
      $                   WORK( N+1 ), LWORK-N, IERR )
 *
-            CALL AB_SGSVJ1( JOBV, M-N2, N-N2, N4, A( N2+1, N2+1 ), LDA,
+            CALL SGSVJ1( JOBV, M-N2, N-N2, N4, A( N2+1, N2+1 ), LDA,
      $                   WORK( N2+1 ), SVA( N2+1 ), MVL,
      $                   V( N2*q+1, N2+1 ), LDV, EPSLN, SFMIN, TOL, 1,
      $                   WORK( N+1 ), LWORK-N, IERR )
 *
-            CALL AB_SGSVJ0( JOBV, M-N4, N2-N4, A( N4+1, N4+1 ), LDA,
+            CALL SGSVJ0( JOBV, M-N4, N2-N4, A( N4+1, N4+1 ), LDA,
      $                   WORK( N4+1 ), SVA( N4+1 ), MVL,
      $                   V( N4*q+1, N4+1 ), LDV, EPSLN, SFMIN, TOL, 1,
      $                   WORK( N+1 ), LWORK-N, IERR )
 *
-            CALL AB_SGSVJ0( JOBV, M, N4, A, LDA, WORK, SVA, MVL, V, LDV,
+            CALL SGSVJ0( JOBV, M, N4, A, LDA, WORK, SVA, MVL, V, LDV,
      $                   EPSLN, SFMIN, TOL, 1, WORK( N+1 ), LWORK-N,
      $                   IERR )
 *
-            CALL AB_SGSVJ1( JOBV, M, N2, N4, A, LDA, WORK, SVA, MVL, V,
+            CALL SGSVJ1( JOBV, M, N2, N4, A, LDA, WORK, SVA, MVL, V,
      $                   LDV, EPSLN, SFMIN, TOL, 1, WORK( N+1 ),
      $                   LWORK-N, IERR )
 *
@@ -758,22 +754,20 @@
          ELSE IF( UPPER ) THEN
 *
 *
-            CALL AB_SGSVJ0( JOBV, N4, N4, A, LDA, WORK, SVA, MVL, V, LDV
-     $,
+            CALL SGSVJ0( JOBV, N4, N4, A, LDA, WORK, SVA, MVL, V, LDV,
      $                   EPSLN, SFMIN, TOL, 2, WORK( N+1 ), LWORK-N,
      $                   IERR )
 *
-            CALL AB_SGSVJ0( JOBV, N2, N4, A( 1, N4+1 ), LDA, WORK( N4+1 
-     $),
+            CALL SGSVJ0( JOBV, N2, N4, A( 1, N4+1 ), LDA, WORK( N4+1 ),
      $                   SVA( N4+1 ), MVL, V( N4*q+1, N4+1 ), LDV,
      $                   EPSLN, SFMIN, TOL, 1, WORK( N+1 ), LWORK-N,
      $                   IERR )
 *
-            CALL AB_SGSVJ1( JOBV, N2, N2, N4, A, LDA, WORK, SVA, MVL, V,
+            CALL SGSVJ1( JOBV, N2, N2, N4, A, LDA, WORK, SVA, MVL, V,
      $                   LDV, EPSLN, SFMIN, TOL, 1, WORK( N+1 ),
      $                   LWORK-N, IERR )
 *
-            CALL AB_SGSVJ0( JOBV, N2+N4, N4, A( 1, N2+1 ), LDA,
+            CALL SGSVJ0( JOBV, N2+N4, N4, A( 1, N2+1 ), LDA,
      $                   WORK( N2+1 ), SVA( N2+1 ), MVL,
      $                   V( N2*q+1, N2+1 ), LDV, EPSLN, SFMIN, TOL, 1,
      $                   WORK( N+1 ), LWORK-N, IERR )
@@ -812,10 +806,10 @@
 *
 *     .. de Rijk's pivoting
 *
-                  q = AB_ISAMAX( N-p+1, SVA( p ), 1 ) + p - 1
+                  q = ISAMAX( N-p+1, SVA( p ), 1 ) + p - 1
                   IF( p.NE.q ) THEN
-                     CALL AB_SSWAP( M, A( 1, p ), 1, A( 1, q ), 1 )
-                     IF( RSVEC )CALL AB_SSWAP( MVL, V( 1, p ), 1,
+                     CALL SSWAP( M, A( 1, p ), 1, A( 1, q ), 1 )
+                     IF( RSVEC )CALL SSWAP( MVL, V( 1, p ), 1,
      $                                      V( 1, q ), 1 )
                      TEMP1 = SVA( p )
                      SVA( p ) = SVA( q )
@@ -830,22 +824,22 @@
 *        Column norms are periodically updated by explicit
 *        norm computation.
 *        Caveat:
-*        Unfortunately, some BLAS implementations compute AB_SNRM2(M,A(1,p),1)
-*        as SQRT(AB_SDOT(M,A(1,p),1,A(1,p),1)), which may cause the result to
+*        Unfortunately, some BLAS implementations compute SNRM2(M,A(1,p),1)
+*        as SQRT(SDOT(M,A(1,p),1,A(1,p),1)), which may cause the result to
 *        overflow for ||A(:,p)||_2 > SQRT(overflow_threshold), and to
 *        underflow for ||A(:,p)||_2 < SQRT(underflow_threshold).
-*        Hence, AB_SNRM2 cannot be trusted, not even in the case when
+*        Hence, SNRM2 cannot be trusted, not even in the case when
 *        the true norm is far from the under(over)flow boundaries.
-*        If properly implemented AB_SNRM2 is available, the IF-THEN-ELSE
-*        below should read "AAPP = AB_SNRM2( M, A(1,p), 1 ) * WORK(p)".
+*        If properly implemented SNRM2 is available, the IF-THEN-ELSE
+*        below should read "AAPP = SNRM2( M, A(1,p), 1 ) * WORK(p)".
 *
                      IF( ( SVA( p ).LT.ROOTBIG ) .AND.
      $                   ( SVA( p ).GT.ROOTSFMIN ) ) THEN
-                        SVA( p ) = AB_SNRM2( M, A( 1, p ), 1 )*WORK( p )
+                        SVA( p ) = SNRM2( M, A( 1, p ), 1 )*WORK( p )
                      ELSE
                         TEMP1 = ZERO
                         AAPP = ONE
-                        CALL AB_SLASSQ( M, A( 1, p ), 1, TEMP1, AAPP )
+                        CALL SLASSQ( M, A( 1, p ), 1, TEMP1, AAPP )
                         SVA( p ) = TEMP1*SQRT( AAPP )*WORK( p )
                      END IF
                      AAPP = SVA( p )
@@ -867,33 +861,31 @@
                            IF( AAQQ.GE.ONE ) THEN
                               ROTOK = ( SMALL*AAPP ).LE.AAQQ
                               IF( AAPP.LT.( BIG / AAQQ ) ) THEN
-                                 AAPQ = ( AB_SDOT( M, A( 1, p ), 1, A( 1
-     $,
+                                 AAPQ = ( SDOT( M, A( 1, p ), 1, A( 1,
      $                                  q ), 1 )*WORK( p )*WORK( q ) /
      $                                  AAQQ ) / AAPP
                               ELSE
-                                 CALL AB_SCOPY( M, A( 1, p ), 1,
+                                 CALL SCOPY( M, A( 1, p ), 1,
      $                                       WORK( N+1 ), 1 )
-                                 CALL AB_SLASCL( 'G', 0, 0, AAPP,
+                                 CALL SLASCL( 'G', 0, 0, AAPP,
      $                                        WORK( p ), M, 1,
      $                                        WORK( N+1 ), LDA, IERR )
-                                 AAPQ = AB_SDOT( M, WORK( N+1 ), 1,
+                                 AAPQ = SDOT( M, WORK( N+1 ), 1,
      $                                  A( 1, q ), 1 )*WORK( q ) / AAQQ
                               END IF
                            ELSE
                               ROTOK = AAPP.LE.( AAQQ / SMALL )
                               IF( AAPP.GT.( SMALL / AAQQ ) ) THEN
-                                 AAPQ = ( AB_SDOT( M, A( 1, p ), 1, A( 1
-     $,
+                                 AAPQ = ( SDOT( M, A( 1, p ), 1, A( 1,
      $                                  q ), 1 )*WORK( p )*WORK( q ) /
      $                                  AAQQ ) / AAPP
                               ELSE
-                                 CALL AB_SCOPY( M, A( 1, q ), 1,
+                                 CALL SCOPY( M, A( 1, q ), 1,
      $                                       WORK( N+1 ), 1 )
-                                 CALL AB_SLASCL( 'G', 0, 0, AAQQ,
+                                 CALL SLASCL( 'G', 0, 0, AAQQ,
      $                                        WORK( q ), M, 1,
      $                                        WORK( N+1 ), LDA, IERR )
-                                 AAPQ = AB_SDOT( M, WORK( N+1 ), 1,
+                                 AAPQ = SDOT( M, WORK( N+1 ), 1,
      $                                  A( 1, p ), 1 )*WORK( p ) / AAPP
                               END IF
                            END IF
@@ -925,9 +917,9 @@
                                     FASTR( 3 ) = T*WORK( p ) / WORK( q )
                                     FASTR( 4 ) = -T*WORK( q ) /
      $                                           WORK( p )
-                                    CALL AB_AB_SROTM( M, A( 1, p ), 1,
+                                    CALL SROTM( M, A( 1, p ), 1,
      $                                          A( 1, q ), 1, FASTR )
-                                    IF( RSVEC )CALL AB_AB_SROTM( MVL,
+                                    IF( RSVEC )CALL SROTM( MVL,
      $                                              V( 1, p ), 1,
      $                                              V( 1, q ), 1,
      $                                              FASTR )
@@ -961,29 +953,26 @@
                                           FASTR( 4 ) = -T*AQOAP
                                           WORK( p ) = WORK( p )*CS
                                           WORK( q ) = WORK( q )*CS
-                                          CALL AB_AB_SROTM( M, A( 1, p )
-     $, 1,
+                                          CALL SROTM( M, A( 1, p ), 1,
      $                                                A( 1, q ), 1,
      $                                                FASTR )
-                                          IF( RSVEC )CALL AB_AB_SROTM( M
-     $VL,
+                                          IF( RSVEC )CALL SROTM( MVL,
      $                                        V( 1, p ), 1, V( 1, q ),
      $                                        1, FASTR )
                                        ELSE
-                                          CALL AB_SAXPY( M, -T*AQOAP,
+                                          CALL SAXPY( M, -T*AQOAP,
      $                                                A( 1, q ), 1,
      $                                                A( 1, p ), 1 )
-                                          CALL AB_SAXPY( M, CS*SN*APOAQ,
+                                          CALL SAXPY( M, CS*SN*APOAQ,
      $                                                A( 1, p ), 1,
      $                                                A( 1, q ), 1 )
                                           WORK( p ) = WORK( p )*CS
                                           WORK( q ) = WORK( q ) / CS
                                           IF( RSVEC ) THEN
-                                             CALL AB_SAXPY( MVL, -T*AQOA
-     $P,
+                                             CALL SAXPY( MVL, -T*AQOAP,
      $                                                   V( 1, q ), 1,
      $                                                   V( 1, p ), 1 )
-                                             CALL AB_SAXPY( MVL,
+                                             CALL SAXPY( MVL,
      $                                                   CS*SN*APOAQ,
      $                                                   V( 1, p ), 1,
      $                                                   V( 1, q ), 1 )
@@ -991,21 +980,19 @@
                                        END IF
                                     ELSE
                                        IF( WORK( q ).GE.ONE ) THEN
-                                          CALL AB_SAXPY( M, T*APOAQ,
+                                          CALL SAXPY( M, T*APOAQ,
      $                                                A( 1, p ), 1,
      $                                                A( 1, q ), 1 )
-                                          CALL AB_SAXPY( M, -CS*SN*AQOAP
-     $,
+                                          CALL SAXPY( M, -CS*SN*AQOAP,
      $                                                A( 1, q ), 1,
      $                                                A( 1, p ), 1 )
                                           WORK( p ) = WORK( p ) / CS
                                           WORK( q ) = WORK( q )*CS
                                           IF( RSVEC ) THEN
-                                             CALL AB_SAXPY( MVL, T*APOAQ
-     $,
+                                             CALL SAXPY( MVL, T*APOAQ,
      $                                                   V( 1, p ), 1,
      $                                                   V( 1, q ), 1 )
-                                             CALL AB_SAXPY( MVL,
+                                             CALL SAXPY( MVL,
      $                                                   -CS*SN*AQOAP,
      $                                                   V( 1, q ), 1,
      $                                                   V( 1, p ), 1 )
@@ -1013,40 +1000,39 @@
                                        ELSE
                                           IF( WORK( p ).GE.WORK( q ) )
      $                                        THEN
-                                             CALL AB_SAXPY( M, -T*AQOAP,
+                                             CALL SAXPY( M, -T*AQOAP,
      $                                                   A( 1, q ), 1,
      $                                                   A( 1, p ), 1 )
-                                             CALL AB_SAXPY( M, CS*SN*APO
-     $AQ,
+                                             CALL SAXPY( M, CS*SN*APOAQ,
      $                                                   A( 1, p ), 1,
      $                                                   A( 1, q ), 1 )
                                              WORK( p ) = WORK( p )*CS
                                              WORK( q ) = WORK( q ) / CS
                                              IF( RSVEC ) THEN
-                                                CALL AB_SAXPY( MVL,
+                                                CALL SAXPY( MVL,
      $                                               -T*AQOAP,
      $                                               V( 1, q ), 1,
      $                                               V( 1, p ), 1 )
-                                                CALL AB_SAXPY( MVL,
+                                                CALL SAXPY( MVL,
      $                                               CS*SN*APOAQ,
      $                                               V( 1, p ), 1,
      $                                               V( 1, q ), 1 )
                                              END IF
                                           ELSE
-                                             CALL AB_SAXPY( M, T*APOAQ,
+                                             CALL SAXPY( M, T*APOAQ,
      $                                                   A( 1, p ), 1,
      $                                                   A( 1, q ), 1 )
-                                             CALL AB_SAXPY( M,
+                                             CALL SAXPY( M,
      $                                                   -CS*SN*AQOAP,
      $                                                   A( 1, q ), 1,
      $                                                   A( 1, p ), 1 )
                                              WORK( p ) = WORK( p ) / CS
                                              WORK( q ) = WORK( q )*CS
                                              IF( RSVEC ) THEN
-                                                CALL AB_SAXPY( MVL,
+                                                CALL SAXPY( MVL,
      $                                               T*APOAQ, V( 1, p ),
      $                                               1, V( 1, q ), 1 )
-                                                CALL AB_SAXPY( MVL,
+                                                CALL SAXPY( MVL,
      $                                               -CS*SN*AQOAP,
      $                                               V( 1, q ), 1,
      $                                               V( 1, p ), 1 )
@@ -1058,21 +1044,17 @@
 *
                               ELSE
 *              .. have to use modified Gram-Schmidt like transformation
-                                 CALL AB_SCOPY( M, A( 1, p ), 1,
+                                 CALL SCOPY( M, A( 1, p ), 1,
      $                                       WORK( N+1 ), 1 )
-                                 CALL AB_SLASCL( 'G', 0, 0, AAPP, ONE, M
-     $,
+                                 CALL SLASCL( 'G', 0, 0, AAPP, ONE, M,
      $                                        1, WORK( N+1 ), LDA,
      $                                        IERR )
-                                 CALL AB_SLASCL( 'G', 0, 0, AAQQ, ONE, M
-     $,
+                                 CALL SLASCL( 'G', 0, 0, AAQQ, ONE, M,
      $                                        1, A( 1, q ), LDA, IERR )
                                  TEMP1 = -AAPQ*WORK( p ) / WORK( q )
-                                 CALL AB_SAXPY( M, TEMP1, WORK( N+1 ), 1
-     $,
+                                 CALL SAXPY( M, TEMP1, WORK( N+1 ), 1,
      $                                       A( 1, q ), 1 )
-                                 CALL AB_SLASCL( 'G', 0, 0, ONE, AAQQ, M
-     $,
+                                 CALL SLASCL( 'G', 0, 0, ONE, AAQQ, M,
      $                                        1, A( 1, q ), LDA, IERR )
                                  SVA( q ) = AAQQ*SQRT( MAX( ZERO,
      $                                      ONE-AAPQ*AAPQ ) )
@@ -1087,13 +1069,12 @@
      $                            THEN
                                  IF( ( AAQQ.LT.ROOTBIG ) .AND.
      $                               ( AAQQ.GT.ROOTSFMIN ) ) THEN
-                                    SVA( q ) = AB_SNRM2( M, A( 1, q ), 1
-     $ )*
+                                    SVA( q ) = SNRM2( M, A( 1, q ), 1 )*
      $                                         WORK( q )
                                  ELSE
                                     T = ZERO
                                     AAQQ = ONE
-                                    CALL AB_SLASSQ( M, A( 1, q ), 1, T,
+                                    CALL SLASSQ( M, A( 1, q ), 1, T,
      $                                           AAQQ )
                                     SVA( q ) = T*SQRT( AAQQ )*WORK( q )
                                  END IF
@@ -1101,12 +1082,12 @@
                               IF( ( AAPP / AAPP0 ).LE.ROOTEPS ) THEN
                                  IF( ( AAPP.LT.ROOTBIG ) .AND.
      $                               ( AAPP.GT.ROOTSFMIN ) ) THEN
-                                    AAPP = AB_SNRM2( M, A( 1, p ), 1 )*
+                                    AAPP = SNRM2( M, A( 1, p ), 1 )*
      $                                     WORK( p )
                                  ELSE
                                     T = ZERO
                                     AAPP = ONE
-                                    CALL AB_SLASSQ( M, A( 1, p ), 1, T,
+                                    CALL SLASSQ( M, A( 1, p ), 1, T,
      $                                           AAPP )
                                     AAPP = T*SQRT( AAPP )*WORK( p )
                                  END IF
@@ -1187,17 +1168,16 @@
                                  ROTOK = ( SMALL*AAQQ ).LE.AAPP
                               END IF
                               IF( AAPP.LT.( BIG / AAQQ ) ) THEN
-                                 AAPQ = ( AB_SDOT( M, A( 1, p ), 1, A( 1
-     $,
+                                 AAPQ = ( SDOT( M, A( 1, p ), 1, A( 1,
      $                                  q ), 1 )*WORK( p )*WORK( q ) /
      $                                  AAQQ ) / AAPP
                               ELSE
-                                 CALL AB_SCOPY( M, A( 1, p ), 1,
+                                 CALL SCOPY( M, A( 1, p ), 1,
      $                                       WORK( N+1 ), 1 )
-                                 CALL AB_SLASCL( 'G', 0, 0, AAPP,
+                                 CALL SLASCL( 'G', 0, 0, AAPP,
      $                                        WORK( p ), M, 1,
      $                                        WORK( N+1 ), LDA, IERR )
-                                 AAPQ = AB_SDOT( M, WORK( N+1 ), 1,
+                                 AAPQ = SDOT( M, WORK( N+1 ), 1,
      $                                  A( 1, q ), 1 )*WORK( q ) / AAQQ
                               END IF
                            ELSE
@@ -1207,17 +1187,16 @@
                                  ROTOK = AAQQ.LE.( AAPP / SMALL )
                               END IF
                               IF( AAPP.GT.( SMALL / AAQQ ) ) THEN
-                                 AAPQ = ( AB_SDOT( M, A( 1, p ), 1, A( 1
-     $,
+                                 AAPQ = ( SDOT( M, A( 1, p ), 1, A( 1,
      $                                  q ), 1 )*WORK( p )*WORK( q ) /
      $                                  AAQQ ) / AAPP
                               ELSE
-                                 CALL AB_SCOPY( M, A( 1, q ), 1,
+                                 CALL SCOPY( M, A( 1, q ), 1,
      $                                       WORK( N+1 ), 1 )
-                                 CALL AB_SLASCL( 'G', 0, 0, AAQQ,
+                                 CALL SLASCL( 'G', 0, 0, AAQQ,
      $                                        WORK( q ), M, 1,
      $                                        WORK( N+1 ), LDA, IERR )
-                                 AAPQ = AB_SDOT( M, WORK( N+1 ), 1,
+                                 AAPQ = SDOT( M, WORK( N+1 ), 1,
      $                                  A( 1, p ), 1 )*WORK( p ) / AAPP
                               END IF
                            END IF
@@ -1244,9 +1223,9 @@
                                     FASTR( 3 ) = T*WORK( p ) / WORK( q )
                                     FASTR( 4 ) = -T*WORK( q ) /
      $                                           WORK( p )
-                                    CALL AB_AB_SROTM( M, A( 1, p ), 1,
+                                    CALL SROTM( M, A( 1, p ), 1,
      $                                          A( 1, q ), 1, FASTR )
-                                    IF( RSVEC )CALL AB_AB_SROTM( MVL,
+                                    IF( RSVEC )CALL SROTM( MVL,
      $                                              V( 1, p ), 1,
      $                                              V( 1, q ), 1,
      $                                              FASTR )
@@ -1280,27 +1259,24 @@
                                           FASTR( 4 ) = -T*AQOAP
                                           WORK( p ) = WORK( p )*CS
                                           WORK( q ) = WORK( q )*CS
-                                          CALL AB_AB_SROTM( M, A( 1, p )
-     $, 1,
+                                          CALL SROTM( M, A( 1, p ), 1,
      $                                                A( 1, q ), 1,
      $                                                FASTR )
-                                          IF( RSVEC )CALL AB_AB_SROTM( M
-     $VL,
+                                          IF( RSVEC )CALL SROTM( MVL,
      $                                        V( 1, p ), 1, V( 1, q ),
      $                                        1, FASTR )
                                        ELSE
-                                          CALL AB_SAXPY( M, -T*AQOAP,
+                                          CALL SAXPY( M, -T*AQOAP,
      $                                                A( 1, q ), 1,
      $                                                A( 1, p ), 1 )
-                                          CALL AB_SAXPY( M, CS*SN*APOAQ,
+                                          CALL SAXPY( M, CS*SN*APOAQ,
      $                                                A( 1, p ), 1,
      $                                                A( 1, q ), 1 )
                                           IF( RSVEC ) THEN
-                                             CALL AB_SAXPY( MVL, -T*AQOA
-     $P,
+                                             CALL SAXPY( MVL, -T*AQOAP,
      $                                                   V( 1, q ), 1,
      $                                                   V( 1, p ), 1 )
-                                             CALL AB_SAXPY( MVL,
+                                             CALL SAXPY( MVL,
      $                                                   CS*SN*APOAQ,
      $                                                   V( 1, p ), 1,
      $                                                   V( 1, q ), 1 )
@@ -1310,19 +1286,17 @@
                                        END IF
                                     ELSE
                                        IF( WORK( q ).GE.ONE ) THEN
-                                          CALL AB_SAXPY( M, T*APOAQ,
+                                          CALL SAXPY( M, T*APOAQ,
      $                                                A( 1, p ), 1,
      $                                                A( 1, q ), 1 )
-                                          CALL AB_SAXPY( M, -CS*SN*AQOAP
-     $,
+                                          CALL SAXPY( M, -CS*SN*AQOAP,
      $                                                A( 1, q ), 1,
      $                                                A( 1, p ), 1 )
                                           IF( RSVEC ) THEN
-                                             CALL AB_SAXPY( MVL, T*APOAQ
-     $,
+                                             CALL SAXPY( MVL, T*APOAQ,
      $                                                   V( 1, p ), 1,
      $                                                   V( 1, q ), 1 )
-                                             CALL AB_SAXPY( MVL,
+                                             CALL SAXPY( MVL,
      $                                                   -CS*SN*AQOAP,
      $                                                   V( 1, q ), 1,
      $                                                   V( 1, p ), 1 )
@@ -1332,40 +1306,39 @@
                                        ELSE
                                           IF( WORK( p ).GE.WORK( q ) )
      $                                        THEN
-                                             CALL AB_SAXPY( M, -T*AQOAP,
+                                             CALL SAXPY( M, -T*AQOAP,
      $                                                   A( 1, q ), 1,
      $                                                   A( 1, p ), 1 )
-                                             CALL AB_SAXPY( M, CS*SN*APO
-     $AQ,
+                                             CALL SAXPY( M, CS*SN*APOAQ,
      $                                                   A( 1, p ), 1,
      $                                                   A( 1, q ), 1 )
                                              WORK( p ) = WORK( p )*CS
                                              WORK( q ) = WORK( q ) / CS
                                              IF( RSVEC ) THEN
-                                                CALL AB_SAXPY( MVL,
+                                                CALL SAXPY( MVL,
      $                                               -T*AQOAP,
      $                                               V( 1, q ), 1,
      $                                               V( 1, p ), 1 )
-                                                CALL AB_SAXPY( MVL,
+                                                CALL SAXPY( MVL,
      $                                               CS*SN*APOAQ,
      $                                               V( 1, p ), 1,
      $                                               V( 1, q ), 1 )
                                              END IF
                                           ELSE
-                                             CALL AB_SAXPY( M, T*APOAQ,
+                                             CALL SAXPY( M, T*APOAQ,
      $                                                   A( 1, p ), 1,
      $                                                   A( 1, q ), 1 )
-                                             CALL AB_SAXPY( M,
+                                             CALL SAXPY( M,
      $                                                   -CS*SN*AQOAP,
      $                                                   A( 1, q ), 1,
      $                                                   A( 1, p ), 1 )
                                              WORK( p ) = WORK( p ) / CS
                                              WORK( q ) = WORK( q )*CS
                                              IF( RSVEC ) THEN
-                                                CALL AB_SAXPY( MVL,
+                                                CALL SAXPY( MVL,
      $                                               T*APOAQ, V( 1, p ),
      $                                               1, V( 1, q ), 1 )
-                                                CALL AB_SAXPY( MVL,
+                                                CALL SAXPY( MVL,
      $                                               -CS*SN*AQOAP,
      $                                               V( 1, q ), 1,
      $                                               V( 1, p ), 1 )
@@ -1377,44 +1350,36 @@
 *
                               ELSE
                                  IF( AAPP.GT.AAQQ ) THEN
-                                    CALL AB_SCOPY( M, A( 1, p ), 1,
+                                    CALL SCOPY( M, A( 1, p ), 1,
      $                                          WORK( N+1 ), 1 )
-                                    CALL AB_SLASCL( 'G', 0, 0, AAPP, ONE
-     $,
+                                    CALL SLASCL( 'G', 0, 0, AAPP, ONE,
      $                                           M, 1, WORK( N+1 ), LDA,
      $                                           IERR )
-                                    CALL AB_SLASCL( 'G', 0, 0, AAQQ, ONE
-     $,
+                                    CALL SLASCL( 'G', 0, 0, AAQQ, ONE,
      $                                           M, 1, A( 1, q ), LDA,
      $                                           IERR )
                                     TEMP1 = -AAPQ*WORK( p ) / WORK( q )
-                                    CALL AB_SAXPY( M, TEMP1, WORK( N+1 )
-     $,
+                                    CALL SAXPY( M, TEMP1, WORK( N+1 ),
      $                                          1, A( 1, q ), 1 )
-                                    CALL AB_SLASCL( 'G', 0, 0, ONE, AAQQ
-     $,
+                                    CALL SLASCL( 'G', 0, 0, ONE, AAQQ,
      $                                           M, 1, A( 1, q ), LDA,
      $                                           IERR )
                                     SVA( q ) = AAQQ*SQRT( MAX( ZERO,
      $                                         ONE-AAPQ*AAPQ ) )
                                     MXSINJ = MAX( MXSINJ, SFMIN )
                                  ELSE
-                                    CALL AB_SCOPY( M, A( 1, q ), 1,
+                                    CALL SCOPY( M, A( 1, q ), 1,
      $                                          WORK( N+1 ), 1 )
-                                    CALL AB_SLASCL( 'G', 0, 0, AAQQ, ONE
-     $,
+                                    CALL SLASCL( 'G', 0, 0, AAQQ, ONE,
      $                                           M, 1, WORK( N+1 ), LDA,
      $                                           IERR )
-                                    CALL AB_SLASCL( 'G', 0, 0, AAPP, ONE
-     $,
+                                    CALL SLASCL( 'G', 0, 0, AAPP, ONE,
      $                                           M, 1, A( 1, p ), LDA,
      $                                           IERR )
                                     TEMP1 = -AAPQ*WORK( q ) / WORK( p )
-                                    CALL AB_SAXPY( M, TEMP1, WORK( N+1 )
-     $,
+                                    CALL SAXPY( M, TEMP1, WORK( N+1 ),
      $                                          1, A( 1, p ), 1 )
-                                    CALL AB_SLASCL( 'G', 0, 0, ONE, AAPP
-     $,
+                                    CALL SLASCL( 'G', 0, 0, ONE, AAPP,
      $                                           M, 1, A( 1, p ), LDA,
      $                                           IERR )
                                     SVA( p ) = AAPP*SQRT( MAX( ZERO,
@@ -1430,13 +1395,12 @@
      $                            THEN
                                  IF( ( AAQQ.LT.ROOTBIG ) .AND.
      $                               ( AAQQ.GT.ROOTSFMIN ) ) THEN
-                                    SVA( q ) = AB_SNRM2( M, A( 1, q ), 1
-     $ )*
+                                    SVA( q ) = SNRM2( M, A( 1, q ), 1 )*
      $                                         WORK( q )
                                  ELSE
                                     T = ZERO
                                     AAQQ = ONE
-                                    CALL AB_SLASSQ( M, A( 1, q ), 1, T,
+                                    CALL SLASSQ( M, A( 1, q ), 1, T,
      $                                           AAQQ )
                                     SVA( q ) = T*SQRT( AAQQ )*WORK( q )
                                  END IF
@@ -1444,12 +1408,12 @@
                               IF( ( AAPP / AAPP0 )**2.LE.ROOTEPS ) THEN
                                  IF( ( AAPP.LT.ROOTBIG ) .AND.
      $                               ( AAPP.GT.ROOTSFMIN ) ) THEN
-                                    AAPP = AB_SNRM2( M, A( 1, p ), 1 )*
+                                    AAPP = SNRM2( M, A( 1, p ), 1 )*
      $                                     WORK( p )
                                  ELSE
                                     T = ZERO
                                     AAPP = ONE
-                                    CALL AB_SLASSQ( M, A( 1, p ), 1, T,
+                                    CALL SLASSQ( M, A( 1, p ), 1, T,
      $                                           AAPP )
                                     AAPP = T*SQRT( AAPP )*WORK( p )
                                  END IF
@@ -1511,11 +1475,11 @@
 *     .. update SVA(N)
          IF( ( SVA( N ).LT.ROOTBIG ) .AND. ( SVA( N ).GT.ROOTSFMIN ) )
      $       THEN
-            SVA( N ) = AB_SNRM2( M, A( 1, N ), 1 )*WORK( N )
+            SVA( N ) = SNRM2( M, A( 1, N ), 1 )*WORK( N )
          ELSE
             T = ZERO
             AAPP = ONE
-            CALL AB_SLASSQ( M, A( 1, N ), 1, T, AAPP )
+            CALL SLASSQ( M, A( 1, N ), 1, T, AAPP )
             SVA( N ) = T*SQRT( AAPP )*WORK( N )
          END IF
 *
@@ -1552,7 +1516,7 @@
       N2 = 0
       N4 = 0
       DO 5991 p = 1, N - 1
-         q = AB_ISAMAX( N-p+1, SVA( p ), 1 ) + p - 1
+         q = ISAMAX( N-p+1, SVA( p ), 1 ) + p - 1
          IF( p.NE.q ) THEN
             TEMP1 = SVA( p )
             SVA( p ) = SVA( q )
@@ -1560,8 +1524,8 @@
             TEMP1 = WORK( p )
             WORK( p ) = WORK( q )
             WORK( q ) = TEMP1
-            CALL AB_SSWAP( M, A( 1, p ), 1, A( 1, q ), 1 )
-            IF( RSVEC )CALL AB_SSWAP( MVL, V( 1, p ), 1, V( 1, q ), 1 )
+            CALL SSWAP( M, A( 1, p ), 1, A( 1, q ), 1 )
+            IF( RSVEC )CALL SSWAP( MVL, V( 1, p ), 1, V( 1, q ), 1 )
          END IF
          IF( SVA( p ).NE.ZERO ) THEN
             N4 = N4 + 1
@@ -1577,7 +1541,7 @@
 *
       IF( LSVEC .OR. UCTOL ) THEN
          DO 1998 p = 1, N2
-            CALL AB_SSCAL( M, WORK( p ) / SVA( p ), A( 1, p ), 1 )
+            CALL SSCAL( M, WORK( p ) / SVA( p ), A( 1, p ), 1 )
  1998    CONTINUE
       END IF
 *
@@ -1586,12 +1550,12 @@
       IF( RSVEC ) THEN
          IF( APPLV ) THEN
             DO 2398 p = 1, N
-               CALL AB_SSCAL( MVL, WORK( p ), V( 1, p ), 1 )
+               CALL SSCAL( MVL, WORK( p ), V( 1, p ), 1 )
  2398       CONTINUE
          ELSE
             DO 2399 p = 1, N
-               TEMP1 = ONE / AB_SNRM2( MVL, V( 1, p ), 1 )
-               CALL AB_SSCAL( MVL, TEMP1, V( 1, p ), 1 )
+               TEMP1 = ONE / SNRM2( MVL, V( 1, p ), 1 )
+               CALL SSCAL( MVL, TEMP1, V( 1, p ), 1 )
  2399       CONTINUE
          END IF
       END IF
@@ -1632,6 +1596,6 @@
 *
       RETURN
 *     ..
-*     .. END OF AB_AB_SGESVJ
+*     .. END OF SGESVJ
 *     ..
       END

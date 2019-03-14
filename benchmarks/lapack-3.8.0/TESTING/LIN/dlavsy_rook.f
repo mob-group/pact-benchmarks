@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_DLAVSY_ROOK
+*> \brief \b DLAVSY_ROOK
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_DLAVSY_ROOK( UPLO, TRANS, DIAG, N, NRHS, A, LDA, IPIV, B,
+*       SUBROUTINE DLAVSY_ROOK( UPLO, TRANS, DIAG, N, NRHS, A, LDA, IPIV, B,
 *                               LDB, INFO )
 *
 *       .. Scalar Arguments ..
@@ -26,10 +26,10 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_DLAVSY_ROOK  performs one of the matrix-vector operations
+*> DLAVSY_ROOK  performs one of the matrix-vector operations
 *>    x := A*x  or  x := A'*x,
 *> where x is an N element vector and A is one of the factors
-*> from the block U*D*U' or L*D*L' factorization computed by AB_AB_DSYTRF_ROOK.
+*> from the block U*D*U' or L*D*L' factorization computed by DSYTRF_ROOK.
 *>
 *> If TRANS = 'N', multiplies by U  or U * D  (or L  or L * D)
 *> If TRANS = 'T', multiplies by U' or D * U' (or L' or D * L')
@@ -84,7 +84,7 @@
 *> \verbatim
 *>          A is DOUBLE PRECISION array, dimension (LDA,N)
 *>          The block diagonal matrix D and the multipliers used to
-*>          obtain the factor U or L as computed by AB_AB_DSYTRF_ROOK.
+*>          obtain the factor U or L as computed by DSYTRF_ROOK.
 *>          Stored as a 2-D triangular matrix.
 *> \endverbatim
 *>
@@ -98,7 +98,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D,
-*>          as determined by AB_AB_DSYTRF_ROOK.
+*>          as determined by DSYTRF_ROOK.
 *>
 *>          If UPLO = 'U':
 *>               If IPIV(k) > 0, then rows and columns k and IPIV(k)
@@ -154,8 +154,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_DLAVSY_ROOK( UPLO, TRANS, DIAG, N, NRHS, A, LDA, 
-     $IPIV,
+      SUBROUTINE DLAVSY_ROOK( UPLO, TRANS, DIAG, N, NRHS, A, LDA, IPIV,
      $                        B, LDB, INFO )
 *
 *  -- LAPACK test routine (version 3.5.0) --
@@ -184,12 +183,11 @@
       DOUBLE PRECISION   D11, D12, D21, D22, T1, T2
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DGEMV, AB_DGER, AB_DSCAL, AB_DSWAP, AB_XERBL
-     $A
+      EXTERNAL           DGEMV, DGER, DSCAL, DSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -199,15 +197,12 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF( .NOT.AB_LSAME( UPLO, 'U' ) .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) 
-     $THEN
+      IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.AB_LSAME( TRANS, 'N' ) .AND. .NOT.
-     $         AB_LSAME( TRANS, 'T' ) .AND. .NOT.AB_LSAME( TRANS, 'C' ) 
-     $) THEN
+      ELSE IF( .NOT.LSAME( TRANS, 'N' ) .AND. .NOT.
+     $         LSAME( TRANS, 'T' ) .AND. .NOT.LSAME( TRANS, 'C' ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.AB_LSAME( DIAG, 'U' ) .AND. .NOT.AB_LSAME( DIAG, 
-     $'N' ) )
+      ELSE IF( .NOT.LSAME( DIAG, 'U' ) .AND. .NOT.LSAME( DIAG, 'N' ) )
      $          THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
@@ -218,7 +213,7 @@
          INFO = -9
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_DLAVSY_ROOK ', -INFO )
+         CALL XERBLA( 'DLAVSY_ROOK ', -INFO )
          RETURN
       END IF
 *
@@ -227,18 +222,18 @@
       IF( N.EQ.0 )
      $   RETURN
 *
-      NOUNIT = AB_LSAME( DIAG, 'N' )
+      NOUNIT = LSAME( DIAG, 'N' )
 *------------------------------------------
 *
 *     Compute  B := A * B  (No transpose)
 *
 *------------------------------------------
-      IF( AB_LSAME( TRANS, 'N' ) ) THEN
+      IF( LSAME( TRANS, 'N' ) ) THEN
 *
 *        Compute  B := U*B
 *        where U = P(m)*inv(U(m))* ... *P(1)*inv(U(1))
 *
-         IF( AB_LSAME( UPLO, 'U' ) ) THEN
+         IF( LSAME( UPLO, 'U' ) ) THEN
 *
 *        Loop forward applying the transformations.
 *
@@ -253,7 +248,7 @@
 *              Multiply by the diagonal element if forming U * D.
 *
                IF( NOUNIT )
-     $            CALL AB_DSCAL( NRHS, A( K, K ), B( K, 1 ), LDB )
+     $            CALL DSCAL( NRHS, A( K, K ), B( K, 1 ), LDB )
 *
 *              Multiply by  P(K) * inv(U(K))  if K > 1.
 *
@@ -261,15 +256,14 @@
 *
 *                 Apply the transformation.
 *
-                  CALL AB_DGER( K-1, NRHS, ONE, A( 1, K ), 1, B( K, 1 ),
+                  CALL DGER( K-1, NRHS, ONE, A( 1, K ), 1, B( K, 1 ),
      $                       LDB, B( 1, 1 ), LDB )
 *
 *                 Interchange if P(K) .ne. I.
 *
                   KP = IPIV( K )
                   IF( KP.NE.K )
-     $               CALL AB_DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LD
-     $B )
+     $               CALL DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
                END IF
                K = K + 1
             ELSE
@@ -297,9 +291,9 @@
 *
 *                 Apply the transformations.
 *
-                  CALL AB_DGER( K-1, NRHS, ONE, A( 1, K ), 1, B( K, 1 ),
+                  CALL DGER( K-1, NRHS, ONE, A( 1, K ), 1, B( K, 1 ),
      $                       LDB, B( 1, 1 ), LDB )
-                  CALL AB_DGER( K-1, NRHS, ONE, A( 1, K+1 ), 1,
+                  CALL DGER( K-1, NRHS, ONE, A( 1, K+1 ), 1,
      $                       B( K+1, 1 ), LDB, B( 1, 1 ), LDB )
 *
 *                 Interchange if a permutation was applied at the
@@ -309,14 +303,13 @@
 *
                   KP = ABS( IPIV( K ) )
                   IF( KP.NE.K )
-     $               CALL AB_DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LD
-     $B )
+     $               CALL DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
 *
 *                 NOW swap the first of pair with Pth
 *
                   KP = ABS( IPIV( K+1 ) )
                   IF( KP.NE.K+1 )
-     $               CALL AB_DSWAP( NRHS, B( K+1, 1 ), LDB, B( KP, 1 ),
+     $               CALL DSWAP( NRHS, B( K+1, 1 ), LDB, B( KP, 1 ),
      $                           LDB )
                END IF
                K = K + 2
@@ -346,7 +339,7 @@
 *              Multiply by the diagonal element if forming L * D.
 *
                IF( NOUNIT )
-     $            CALL AB_DSCAL( NRHS, A( K, K ), B( K, 1 ), LDB )
+     $            CALL DSCAL( NRHS, A( K, K ), B( K, 1 ), LDB )
 *
 *              Multiply by  P(K) * inv(L(K))  if K < N.
 *
@@ -355,16 +348,14 @@
 *
 *                 Apply the transformation.
 *
-                  CALL AB_DGER( N-K, NRHS, ONE, A( K+1, K ), 1, B( K, 1 
-     $),
+                  CALL DGER( N-K, NRHS, ONE, A( K+1, K ), 1, B( K, 1 ),
      $                       LDB, B( K+1, 1 ), LDB )
 *
 *                 Interchange if a permutation was applied at the
 *                 K-th step of the factorization.
 *
                   IF( KP.NE.K )
-     $               CALL AB_DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LD
-     $B )
+     $               CALL DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
                END IF
                K = K - 1
 *
@@ -393,27 +384,25 @@
 *
 *                 Apply the transformation.
 *
-                  CALL AB_DGER( N-K, NRHS, ONE, A( K+1, K ), 1, B( K, 1 
-     $),
+                  CALL DGER( N-K, NRHS, ONE, A( K+1, K ), 1, B( K, 1 ),
      $                       LDB, B( K+1, 1 ), LDB )
-                  CALL AB_DGER( N-K, NRHS, ONE, A( K+1, K-1 ), 1,
+                  CALL DGER( N-K, NRHS, ONE, A( K+1, K-1 ), 1,
      $                       B( K-1, 1 ), LDB, B( K+1, 1 ), LDB )
 *
 *                 Interchange if a permutation was applied at the
 *                 K-th step of the factorization.
 *
-*                 Swap the AB_SECOND of pair with IMAXth
+*                 Swap the second of pair with IMAXth
 *
                   KP = ABS( IPIV( K ) )
                   IF( KP.NE.K )
-     $               CALL AB_DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LD
-     $B )
+     $               CALL DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
 *
 *                 NOW swap the first of pair with Pth
 *
                   KP = ABS( IPIV( K-1 ) )
                   IF( KP.NE.K-1 )
-     $               CALL AB_DSWAP( NRHS, B( K-1, 1 ), LDB, B( KP, 1 ),
+     $               CALL DSWAP( NRHS, B( K-1, 1 ), LDB, B( KP, 1 ),
      $                           LDB )
                END IF
                K = K - 2
@@ -432,7 +421,7 @@
 *        where U  = P(m)*inv(U(m))* ... *P(1)*inv(U(1))
 *        and   U' = inv(U'(1))*P(1)* ... *inv(U'(m))*P(m)
 *
-         IF( AB_LSAME( UPLO, 'U' ) ) THEN
+         IF( LSAME( UPLO, 'U' ) ) THEN
 *
 *           Loop backward applying the transformations.
 *
@@ -450,16 +439,15 @@
 *
                   KP = IPIV( K )
                   IF( KP.NE.K )
-     $               CALL AB_DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LD
-     $B )
+     $               CALL DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
 *
 *                 Apply the transformation
 *
-                  CALL AB_DGEMV( 'Transpose', K-1, NRHS, ONE, B, LDB,
+                  CALL DGEMV( 'Transpose', K-1, NRHS, ONE, B, LDB,
      $                        A( 1, K ), 1, ONE, B( K, 1 ), LDB )
                END IF
                IF( NOUNIT )
-     $            CALL AB_DSCAL( NRHS, A( K, K ), B( K, 1 ), LDB )
+     $            CALL DSCAL( NRHS, A( K, K ), B( K, 1 ), LDB )
                K = K - 1
 *
 *           2 x 2 pivot block.
@@ -467,25 +455,24 @@
             ELSE
                IF( K.GT.2 ) THEN
 *
-*                 Swap the AB_SECOND of pair with Pth
+*                 Swap the second of pair with Pth
 *
                   KP = ABS( IPIV( K ) )
                   IF( KP.NE.K )
-     $               CALL AB_DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LD
-     $B )
+     $               CALL DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
 *
 *                 Now swap the first of pair with IMAX(r)th
 *
                   KP = ABS( IPIV( K-1 ) )
                   IF( KP.NE.K-1 )
-     $               CALL AB_DSWAP( NRHS, B( K-1, 1 ), LDB, B( KP, 1 ),
+     $               CALL DSWAP( NRHS, B( K-1, 1 ), LDB, B( KP, 1 ),
      $                           LDB )
 *
 *                 Apply the transformations
 *
-                  CALL AB_DGEMV( 'Transpose', K-2, NRHS, ONE, B, LDB,
+                  CALL DGEMV( 'Transpose', K-2, NRHS, ONE, B, LDB,
      $                        A( 1, K ), 1, ONE, B( K, 1 ), LDB )
-                  CALL AB_DGEMV( 'Transpose', K-2, NRHS, ONE, B, LDB,
+                  CALL DGEMV( 'Transpose', K-2, NRHS, ONE, B, LDB,
      $                        A( 1, K-1 ), 1, ONE, B( K-1, 1 ), LDB )
                END IF
 *
@@ -530,17 +517,15 @@
 *
                   KP = IPIV( K )
                   IF( KP.NE.K )
-     $               CALL AB_DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LD
-     $B )
+     $               CALL DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
 *
 *                 Apply the transformation
 *
-                  CALL AB_DGEMV( 'Transpose', N-K, NRHS, ONE, B( K+1, 1 
-     $),
+                  CALL DGEMV( 'Transpose', N-K, NRHS, ONE, B( K+1, 1 ),
      $                        LDB, A( K+1, K ), 1, ONE, B( K, 1 ), LDB )
                END IF
                IF( NOUNIT )
-     $            CALL AB_DSCAL( NRHS, A( K, K ), B( K, 1 ), LDB )
+     $            CALL DSCAL( NRHS, A( K, K ), B( K, 1 ), LDB )
                K = K + 1
 *
 *           2 x 2 pivot block.
@@ -552,22 +537,21 @@
 *
                   KP = ABS( IPIV( K ) )
                   IF( KP.NE.K )
-     $               CALL AB_DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LD
-     $B )
+     $               CALL DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
 *
-*                 Now swap the AB_SECOND of pair with IMAX(r)th
+*                 Now swap the second of pair with IMAX(r)th
 *
                   KP = ABS( IPIV( K+1 ) )
                   IF( KP.NE.K+1 )
-     $               CALL AB_DSWAP( NRHS, B( K+1, 1 ), LDB, B( KP, 1 ),
+     $               CALL DSWAP( NRHS, B( K+1, 1 ), LDB, B( KP, 1 ),
      $                           LDB )
 *
 *                 Apply the transformation
 *
-                  CALL AB_DGEMV( 'Transpose', N-K-1, NRHS, ONE,
+                  CALL DGEMV( 'Transpose', N-K-1, NRHS, ONE,
      $                        B( K+2, 1 ), LDB, A( K+2, K+1 ), 1, ONE,
      $                        B( K+1, 1 ), LDB )
-                  CALL AB_DGEMV( 'Transpose', N-K-1, NRHS, ONE,
+                  CALL DGEMV( 'Transpose', N-K-1, NRHS, ONE,
      $                        B( K+2, 1 ), LDB, A( K+2, K ), 1, ONE,
      $                        B( K, 1 ), LDB )
                END IF
@@ -595,6 +579,6 @@
       END IF
       RETURN
 *
-*     End of AB_AB_DLAVSY_ROOK
+*     End of DLAVSY_ROOK
 *
       END

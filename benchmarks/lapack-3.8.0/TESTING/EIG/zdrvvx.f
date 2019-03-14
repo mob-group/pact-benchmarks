@@ -1,4 +1,4 @@
-*> \brief \b AB_ZDRVVX
+*> \brief \b ZDRVVX
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZDRVVX( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+*       SUBROUTINE ZDRVVX( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
 *                          NIUNIT, NOUNIT, A, LDA, H, W, W1, VL, LDVL, VR,
 *                          LDVR, LRE, LDLRE, RCONDV, RCNDV1, RCDVIN,
 *                          RCONDE, RCNDE1, RCDEIN, SCALE, SCALE1, RESULT,
@@ -37,15 +37,15 @@
 *>
 *> \verbatim
 *>
-*>    AB_ZDRVVX  checks the nonsymmetric eigenvalue problem expert driver
-*>    AB_AB_ZGEEVX.
+*>    ZDRVVX  checks the nonsymmetric eigenvalue problem expert driver
+*>    ZGEEVX.
 *>
-*>    AB_ZDRVVX uses both test matrices generated randomly depending on
+*>    ZDRVVX uses both test matrices generated randomly depending on
 *>    data supplied in the calling sequence, as well as on data
 *>    read from an input file and including precomputed condition
 *>    numbers to which it compares the ones it computes.
 *>
-*>    When AB_ZDRVVX is called, a number of matrix "sizes" ("n's") and a
+*>    When ZDRVVX is called, a number of matrix "sizes" ("n's") and a
 *>    number of matrix "types" are specified in the calling sequence.
 *>    For each size ("n") and each type of matrix, one matrix will be
 *>    generated and used to test the nonsymmetric eigenroutines.  For
@@ -188,7 +188,7 @@
 *>   (10)  |RCONDV - RCDVIN| / cond(RCONDV)
 *>
 *>      RCONDV is the reciprocal right eigenvector condition number
-*>      computed by AB_AB_ZGEEVX and RCDVIN (the precomputed true value)
+*>      computed by ZGEEVX and RCDVIN (the precomputed true value)
 *>      is supplied as input. cond(RCONDV) is the condition number of
 *>      RCONDV, and takes errors in computing RCONDV into account, so
 *>      that the resulting quantity should be O(ULP). cond(RCONDV) is
@@ -197,7 +197,7 @@
 *>   (11)  |RCONDE - RCDEIN| / cond(RCONDE)
 *>
 *>      RCONDE is the reciprocal eigenvalue condition number
-*>      computed by AB_AB_ZGEEVX and RCDEIN (the precomputed true value)
+*>      computed by ZGEEVX and RCDEIN (the precomputed true value)
 *>      is supplied as input.  cond(RCONDE) is the condition number
 *>      of RCONDE, and takes errors in computing RCONDE into account,
 *>      so that the resulting quantity should be O(ULP). cond(RCONDE)
@@ -258,7 +258,7 @@
 *>          congruential sequence limited to small integers, and so
 *>          should produce machine independent random numbers. The
 *>          values of ISEED are changed on exit, and can be used in the
-*>          next call to AB_ZDRVVX to continue the same random number
+*>          next call to ZDRVVX to continue the same random number
 *>          sequence.
 *> \endverbatim
 *>
@@ -306,7 +306,7 @@
 *> \param[out] H
 *> \verbatim
 *>          H is COMPLEX*16 array, dimension (LDA, max(NN,12))
-*>          Another copy of the test matrix A, modified by AB_AB_ZGEEVX.
+*>          Another copy of the test matrix A, modified by ZGEEVX.
 *> \endverbatim
 *>
 *> \param[out] W
@@ -319,7 +319,7 @@
 *> \verbatim
 *>          W1 is COMPLEX*16 array, dimension (max(NN,12))
 *>          Like W, this array contains the eigenvalues of A,
-*>          but those computed when AB_AB_ZGEEVX only computes a partial
+*>          but those computed when ZGEEVX only computes a partial
 *>          eigendecomposition, i.e. not the eigenvalues and left
 *>          and right eigenvectors.
 *> \endverbatim
@@ -447,7 +447,7 @@
 *>          INFO is INTEGER
 *>          If 0,  then successful exit.
 *>          If <0, then input parameter -INFO is incorrect.
-*>          If >0, AB_ZLATMR, AB_CLATMS, AB_CLATME or AB_ZGET23 returned an error
+*>          If >0, ZLATMR, CLATMS, CLATME or ZGET23 returned an error
 *>                 code, and INFO is its absolute value.
 *>
 *>-----------------------------------------------------------------------
@@ -490,7 +490,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_ZDRVVX( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+      SUBROUTINE ZDRVVX( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
      $                   NIUNIT, NOUNIT, A, LDA, H, W, W1, VL, LDVL, VR,
      $                   LDVR, LRE, LDLRE, RCONDV, RCNDV1, RCDVIN,
      $                   RCONDE, RCNDE1, RCDEIN, SCALE, SCALE1, RESULT,
@@ -547,13 +547,12 @@
      $                   KTYPE( MAXTYP )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH
-      EXTERNAL           AB_DLAMCH
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLABAD, AB_DLASUM, AB_XERBLA, AB_ZGET23, AB_
-     $ZLASET, AB_ZLATME,
-     $                   AB_ZLATMR, AB_ZLATMS
+      EXTERNAL           DLABAD, DLASUM, XERBLA, ZGET23, ZLASET, ZLATME,
+     $                   ZLATMR, ZLATMS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DCMPLX, MAX, MIN, SQRT
@@ -615,7 +614,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZDRVVX', -INFO )
+         CALL XERBLA( 'ZDRVVX', -INFO )
          RETURN
       END IF
 *
@@ -626,10 +625,10 @@
 *
 *     More Important constants
 *
-      UNFL = AB_DLAMCH( 'Safe minimum' )
+      UNFL = DLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      CALL AB_DLABAD( UNFL, OVFL )
-      ULP = AB_DLAMCH( 'Precision' )
+      CALL DLABAD( UNFL, OVFL )
+      ULP = DLAMCH( 'Precision' )
       ULPINV = ONE / ULP
       RTULP = SQRT( ULP )
       RTULPI = ONE / RTULP
@@ -696,7 +695,7 @@
 *
    60       CONTINUE
 *
-            CALL AB_ZLASET( 'Full', LDA, N, CZERO, CZERO, A, LDA )
+            CALL ZLASET( 'Full', LDA, N, CZERO, CZERO, A, LDA )
             IINFO = 0
             COND = ULPINV
 *
@@ -729,8 +728,7 @@
 *
 *              Diagonal Matrix, [Eigen]values Specified
 *
-               CALL AB_ZLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND
-     $,
+               CALL ZLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND,
      $                      ANORM, 0, 0, 'N', A, LDA, WORK( N+1 ),
      $                      IINFO )
 *
@@ -738,8 +736,7 @@
 *
 *              Symmetric, eigenvalues specified
 *
-               CALL AB_ZLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND
-     $,
+               CALL ZLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND,
      $                      ANORM, N, N, 'N', A, LDA, WORK( N+1 ),
      $                      IINFO )
 *
@@ -755,7 +752,7 @@
                   CONDS = ZERO
                END IF
 *
-               CALL AB_ZLATME( N, 'D', ISEED, WORK, IMODE, COND, CONE,
+               CALL ZLATME( N, 'D', ISEED, WORK, IMODE, COND, CONE,
      $                      'T', 'T', 'T', RWORK, 4, CONDS, N, N, ANORM,
      $                      A, LDA, WORK( 2*N+1 ), IINFO )
 *
@@ -763,8 +760,7 @@
 *
 *              Diagonal, random eigenvalues
 *
-               CALL AB_ZLATMR( N, N, 'D', ISEED, 'S', WORK, 6, ONE, CONE
-     $,
+               CALL ZLATMR( N, N, 'D', ISEED, 'S', WORK, 6, ONE, CONE,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, 0, 0,
      $                      ZERO, ANORM, 'NO', A, LDA, IDUMMA, IINFO )
@@ -773,8 +769,7 @@
 *
 *              Symmetric, random eigenvalues
 *
-               CALL AB_ZLATMR( N, N, 'D', ISEED, 'H', WORK, 6, ONE, CONE
-     $,
+               CALL ZLATMR( N, N, 'D', ISEED, 'H', WORK, 6, ONE, CONE,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, N, N,
      $                      ZERO, ANORM, 'NO', A, LDA, IDUMMA, IINFO )
@@ -783,19 +778,17 @@
 *
 *              General, random eigenvalues
 *
-               CALL AB_ZLATMR( N, N, 'D', ISEED, 'N', WORK, 6, ONE, CONE
-     $,
+               CALL ZLATMR( N, N, 'D', ISEED, 'N', WORK, 6, ONE, CONE,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, N, N,
      $                      ZERO, ANORM, 'NO', A, LDA, IDUMMA, IINFO )
                IF( N.GE.4 ) THEN
-                  CALL AB_ZLASET( 'Full', 2, N, CZERO, CZERO, A, LDA )
-                  CALL AB_ZLASET( 'Full', N-3, 1, CZERO, CZERO, A( 3, 1 
-     $),
+                  CALL ZLASET( 'Full', 2, N, CZERO, CZERO, A, LDA )
+                  CALL ZLASET( 'Full', N-3, 1, CZERO, CZERO, A( 3, 1 ),
      $                         LDA )
-                  CALL AB_ZLASET( 'Full', N-3, 2, CZERO, CZERO,
+                  CALL ZLASET( 'Full', N-3, 2, CZERO, CZERO,
      $                         A( 3, N-1 ), LDA )
-                  CALL AB_ZLASET( 'Full', 1, N, CZERO, CZERO, A( N, 1 ),
+                  CALL ZLASET( 'Full', 1, N, CZERO, CZERO, A( N, 1 ),
      $                         LDA )
                END IF
 *
@@ -803,8 +796,7 @@
 *
 *              Triangular, random eigenvalues
 *
-               CALL AB_ZLATMR( N, N, 'D', ISEED, 'N', WORK, 6, ONE, CONE
-     $,
+               CALL ZLATMR( N, N, 'D', ISEED, 'N', WORK, 6, ONE, CONE,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, N, 0,
      $                      ZERO, ANORM, 'NO', A, LDA, IDUMMA, IINFO )
@@ -842,7 +834,7 @@
 *
 *                 Perform tests
 *
-                  CALL AB_ZGET23( .FALSE., 0, BALANC, JTYPE, THRESH,
+                  CALL ZGET23( .FALSE., 0, BALANC, JTYPE, THRESH,
      $                         IOLDSD, NOUNIT, N, A, LDA, H, W, W1, VL,
      $                         LDVL, VR, LDVR, LRE, LDLRE, RCONDV,
      $                         RCNDV1, RCDVIN, RCONDE, RCNDE1, RCDEIN,
@@ -909,8 +901,7 @@
          READ( NIUNIT, FMT = * )WR, WI, RCDEIN( I ), RCDVIN( I )
          W1( I ) = DCMPLX( WR, WI )
   190 CONTINUE
-      CALL AB_ZGET23( .TRUE., ISRT, 'N', 22, THRESH, ISEED, NOUNIT, N, A
-     $,
+      CALL ZGET23( .TRUE., ISRT, 'N', 22, THRESH, ISEED, NOUNIT, N, A,
      $             LDA, H, W, W1, VL, LDVL, VR, LDVR, LRE, LDLRE,
      $             RCONDV, RCNDV1, RCDVIN, RCONDE, RCNDE1, RCDEIN,
      $             SCALE, SCALE1, RESULT, WORK, 6*N+2*N**2, RWORK,
@@ -951,11 +942,11 @@
 *
 *     Summary
 *
-      CALL AB_DLASUM( PATH, NOUNIT, NERRS, NTESTT )
+      CALL DLASUM( PATH, NOUNIT, NERRS, NTESTT )
 *
  9999 FORMAT( / 1X, A3, ' -- Complex Eigenvalue-Eigenvector ',
      $      'Decomposition Expert Driver',
-     $      / ' Matrix types (see AB_ZDRVVX for details): ' )
+     $      / ' Matrix types (see ZDRVVX for details): ' )
 *
  9998 FORMAT( / ' Special Matrices:', / '  1=Zero matrix.             ',
      $      '           ', '  5=Diagonal: geometr. spaced entries.',
@@ -983,14 +974,13 @@
      $      / ' 4 = | |VL(i)| - 1 | / ulp ',
      $      / ' 5 = 0 if W same no matter if VR or VL computed,',
      $      ' 1/ulp otherwise', /
-     $      ' 6 = 0 if VR same no matter what ELSE computed,',
+     $      ' 6 = 0 if VR same no matter what else computed,',
      $      '  1/ulp otherwise', /
-     $      ' 7 = 0 if VL same no matter what ELSE computed,',
+     $      ' 7 = 0 if VL same no matter what else computed,',
      $      '  1/ulp otherwise', /
-     $      ' 8 = 0 if RCONDV same no matter what ELSE computed,',
+     $      ' 8 = 0 if RCONDV same no matter what else computed,',
      $      '  1/ulp otherwise', /
-     $      ' 9 = 0 if SCALE, ILO, IHI, ABNRM same no matter what eAB_LS
-     $E',
+     $      ' 9 = 0 if SCALE, ILO, IHI, ABNRM same no matter what else',
      $      ' computed,  1/ulp otherwise',
      $      / ' 10 = | RCONDV - RCONDV(precomputed) | / cond(RCONDV),',
      $      / ' 11 = | RCONDE - RCONDE(precomputed) | / cond(RCONDE),' )
@@ -998,11 +988,11 @@
      $      4( I4, ',' ), ' type ', I2, ', test(', I2, ')=', G10.3 )
  9993 FORMAT( ' N=', I5, ', input example =', I3, ',  test(', I2, ')=',
      $      G10.3 )
- 9992 FORMAT( ' AB_ZDRVVX: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
+ 9992 FORMAT( ' ZDRVVX: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
 *
       RETURN
 *
-*     End of AB_ZDRVVX
+*     End of ZDRVVX
 *
       END

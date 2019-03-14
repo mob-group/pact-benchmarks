@@ -1,4 +1,4 @@
-*> \brief \b AB_CTRT06
+*> \brief \b CTRT06
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CTRT06( RCOND, RCONDC, UPLO, DIAG, N, A, LDA, RWORK,
+*       SUBROUTINE CTRT06( RCOND, RCONDC, UPLO, DIAG, N, A, LDA, RWORK,
 *                          RAT )
 *
 *       .. Scalar Arguments ..
@@ -27,9 +27,9 @@
 *>
 *> \verbatim
 *>
-*> AB_CTRT06 computes a test ratio comparing RCOND (the reciprocal
+*> CTRT06 computes a test ratio comparing RCOND (the reciprocal
 *> condition number of a triangular matrix A) and RCONDC, the estimate
-*> computed by AB_CTRCON.  Information about the triangular matrix A is
+*> computed by CTRCON.  Information about the triangular matrix A is
 *> used if one estimate is zero and the other is non-zero to decide if
 *> underflow in the estimate is justified.
 *> \endverbatim
@@ -49,7 +49,7 @@
 *> \verbatim
 *>          RCONDC is REAL
 *>          The estimate of the reciprocal condition number computed by
-*>          AB_CTRCON.
+*>          CTRCON.
 *> \endverbatim
 *>
 *> \param[in] UPLO
@@ -119,7 +119,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_CTRT06( RCOND, RCONDC, UPLO, DIAG, N, A, LDA, RWORK,
+      SUBROUTINE CTRT06( RCOND, RCONDC, UPLO, DIAG, N, A, LDA, RWORK,
      $                   RAT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -147,15 +147,15 @@
       REAL               ANORM, BIGNUM, EPS, RMAX, RMIN
 *     ..
 *     .. External Functions ..
-      REAL               AB_CLANTR, AB_SLAMCH
-      EXTERNAL           AB_CLANTR, AB_SLAMCH
+      REAL               CLANTR, SLAMCH
+      EXTERNAL           CLANTR, SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = AB_SLAMCH( 'Epsilon' )
+      EPS = SLAMCH( 'Epsilon' )
       RMAX = MAX( RCOND, RCONDC )
       RMIN = MIN( RCOND, RCONDC )
 *
@@ -187,14 +187,14 @@
 *        estimate multiplied by BIGNUM/TMAX, where TMAX is the maximum
 *        element in absolute value in A.
 *
-         BIGNUM = ONE / AB_SLAMCH( 'Safe minimum' )
-         ANORM = AB_CLANTR( 'M', UPLO, DIAG, N, N, A, LDA, RWORK )
+         BIGNUM = ONE / SLAMCH( 'Safe minimum' )
+         ANORM = CLANTR( 'M', UPLO, DIAG, N, N, A, LDA, RWORK )
 *
          RAT = RMAX*( MIN( BIGNUM / MAX( ONE, ANORM ), ONE / EPS ) )
       END IF
 *
       RETURN
 *
-*     End of AB_CTRT06
+*     End of CTRT06
 *
       END

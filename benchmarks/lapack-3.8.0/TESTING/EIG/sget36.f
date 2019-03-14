@@ -1,4 +1,4 @@
-*> \brief \b AB_SGET36
+*> \brief \b SGET36
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SGET36( RMAX, LMAX, NINFO, KNT, NIN )
+*       SUBROUTINE SGET36( RMAX, LMAX, NINFO, KNT, NIN )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            KNT, LMAX, NIN
@@ -24,8 +24,8 @@
 *>
 *> \verbatim
 *>
-*> AB_SGET36 tests AB_STREXC, a routine for moving blocks (either 1 by 1 or
-*> 2 by 2) on the diagonal of a matrix in real Schur form.  Thus, AB_SLAEXC
+*> SGET36 tests STREXC, a routine for moving blocks (either 1 by 1 or
+*> 2 by 2) on the diagonal of a matrix in real Schur form.  Thus, SLAEXC
 *> computes an orthogonal matrix Q such that
 *>
 *>    Q' * T1 * Q  = T2
@@ -86,7 +86,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_SGET36( RMAX, LMAX, NINFO, KNT, NIN )
+      SUBROUTINE SGET36( RMAX, LMAX, NINFO, KNT, NIN )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -119,18 +119,18 @@
      $                   T2( LDT, LDT ), TMP( LDT, LDT ), WORK( LWORK )
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH
-      EXTERNAL           AB_SLAMCH
+      REAL               SLAMCH
+      EXTERNAL           SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SHST01, AB_SLACPY, AB_SLASET, AB_STREXC
+      EXTERNAL           SHST01, SLACPY, SLASET, STREXC
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, SIGN
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = AB_SLAMCH( 'P' )
+      EPS = SLAMCH( 'P' )
       RMAX = ZERO
       LMAX = 0
       KNT = 0
@@ -148,8 +148,8 @@
       DO 20 I = 1, N
          READ( NIN, FMT = * )( TMP( I, J ), J = 1, N )
    20 CONTINUE
-      CALL AB_SLACPY( 'F', N, N, TMP, LDT, T1, LDT )
-      CALL AB_SLACPY( 'F', N, N, TMP, LDT, T2, LDT )
+      CALL SLACPY( 'F', N, N, TMP, LDT, T1, LDT )
+      CALL SLACPY( 'F', N, N, TMP, LDT, T2, LDT )
       IFSTSV = IFST
       ILSTSV = ILST
       IFST1 = IFST
@@ -160,9 +160,8 @@
 *
 *     Test without accumulating Q
 *
-      CALL AB_SLASET( 'Full', N, N, ZERO, ONE, Q, LDT )
-      CALL AB_STREXC( 'N', N, T1, LDT, Q, LDT, IFST1, ILST1, WORK, INFO1
-     $ )
+      CALL SLASET( 'Full', N, N, ZERO, ONE, Q, LDT )
+      CALL STREXC( 'N', N, T1, LDT, Q, LDT, IFST1, ILST1, WORK, INFO1 )
       DO 40 I = 1, N
          DO 30 J = 1, N
             IF( I.EQ.J .AND. Q( I, J ).NE.ONE )
@@ -174,9 +173,8 @@
 *
 *     Test with accumulating Q
 *
-      CALL AB_SLASET( 'Full', N, N, ZERO, ONE, Q, LDT )
-      CALL AB_STREXC( 'V', N, T2, LDT, Q, LDT, IFST2, ILST2, WORK, INFO2
-     $ )
+      CALL SLASET( 'Full', N, N, ZERO, ONE, Q, LDT )
+      CALL STREXC( 'V', N, T2, LDT, Q, LDT, IFST2, ILST2, WORK, INFO2 )
 *
 *     Compare T1 with T2
 *
@@ -206,7 +204,7 @@
 *
 *     Test for small residual, and orthogonality of Q
 *
-      CALL AB_SHST01( N, 1, N, TMP, LDT, T2, LDT, Q, LDT, WORK, LWORK,
+      CALL SHST01( N, 1, N, TMP, LDT, T2, LDT, Q, LDT, WORK, LWORK,
      $             RESULT )
       RES = RES + RESULT( 1 ) + RESULT( 2 )
 *
@@ -246,6 +244,6 @@
       END IF
       GO TO 10
 *
-*     End of AB_SGET36
+*     End of SGET36
 *
       END

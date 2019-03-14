@@ -1,4 +1,4 @@
-*> \brief \b AB_DERRAC
+*> \brief \b DERRAC
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DERRAC( NUNIT )
+*       SUBROUTINE DERRAC( NUNIT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            NUNIT
@@ -20,7 +20,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DERRAC tests the error exits for AB_DAB_SPOSV.
+*> DERRAC tests the error exits for DSPOSV.
 *> \endverbatim
 *
 *  Arguments:
@@ -45,7 +45,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_DERRAC( NUNIT )
+      SUBROUTINE DERRAC( NUNIT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -73,7 +73,7 @@
       REAL               SWORK(NMAX*NMAX)
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CHKXER, AB_DAB_SPOSV
+      EXTERNAL           CHKXER, DSPOSV
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -109,32 +109,32 @@
    20 CONTINUE
       OK = .TRUE.
 *
-      SRNAMT = 'AB_DAB_SPOSV'
+      SRNAMT = 'DSPOSV'
       INFOT = 1
-      CALL AB_DAB_SPOSV('/',0,0,A,1,B,1,X,1,WORK,SWORK,ITER,INFO)
-      CALL AB_CHKXER( 'AB_DAB_SPOSV', INFOT, NOUT, LERR, OK )
+      CALL DSPOSV('/',0,0,A,1,B,1,X,1,WORK,SWORK,ITER,INFO)
+      CALL CHKXER( 'DSPOSV', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_DAB_SPOSV('U',-1,0,A,1,B,1,X,1,WORK,SWORK,ITER,INFO)
-      CALL AB_CHKXER( 'AB_DAB_SPOSV', INFOT, NOUT, LERR, OK )
+      CALL DSPOSV('U',-1,0,A,1,B,1,X,1,WORK,SWORK,ITER,INFO)
+      CALL CHKXER( 'DSPOSV', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL AB_DAB_SPOSV('U',0,-1,A,1,B,1,X,1,WORK,SWORK,ITER,INFO)
-      CALL AB_CHKXER( 'AB_DAB_SPOSV', INFOT, NOUT, LERR, OK )
+      CALL DSPOSV('U',0,-1,A,1,B,1,X,1,WORK,SWORK,ITER,INFO)
+      CALL CHKXER( 'DSPOSV', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL AB_DAB_SPOSV('U',2,1,A,1,B,2,X,2,WORK,SWORK,ITER,INFO)
-      CALL AB_CHKXER( 'AB_DAB_SPOSV', INFOT, NOUT, LERR, OK )
+      CALL DSPOSV('U',2,1,A,1,B,2,X,2,WORK,SWORK,ITER,INFO)
+      CALL CHKXER( 'DSPOSV', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL AB_DAB_SPOSV('U',2,1,A,2,B,1,X,2,WORK,SWORK,ITER,INFO)
-      CALL AB_CHKXER( 'AB_DAB_SPOSV', INFOT, NOUT, LERR, OK )
+      CALL DSPOSV('U',2,1,A,2,B,1,X,2,WORK,SWORK,ITER,INFO)
+      CALL CHKXER( 'DSPOSV', INFOT, NOUT, LERR, OK )
       INFOT = 9
-      CALL AB_DAB_SPOSV('U',2,1,A,2,B,2,X,1,WORK,SWORK,ITER,INFO)
-      CALL AB_CHKXER( 'AB_DAB_SPOSV', INFOT, NOUT, LERR, OK )
+      CALL DSPOSV('U',2,1,A,2,B,2,X,1,WORK,SWORK,ITER,INFO)
+      CALL CHKXER( 'DSPOSV', INFOT, NOUT, LERR, OK )
 *
 *     Print a summary line.
 *
       IF( OK ) THEN
-         WRITE( NOUT, FMT = 9999 )'AB_DAB_SPOSV'
+         WRITE( NOUT, FMT = 9999 )'DSPOSV'
       ELSE
-         WRITE( NOUT, FMT = 9998 )'AB_DAB_SPOSV'
+         WRITE( NOUT, FMT = 9998 )'DSPOSV'
       END IF
 *
  9999 FORMAT( 1X, A6, ' drivers passed the tests of the error exits' )
@@ -143,6 +143,6 @@
 *
       RETURN
 *
-*     End of AB_DERRAC
+*     End of DERRAC
 *
       END

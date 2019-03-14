@@ -1,4 +1,4 @@
-*> \brief \b AB_DLATM1
+*> \brief \b DLATM1
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLATM1( MODE, COND, IRSIGN, IDIST, ISEED, D, N, INFO )
+*       SUBROUTINE DLATM1( MODE, COND, IRSIGN, IDIST, ISEED, D, N, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            IDIST, INFO, IRSIGN, MODE, N
@@ -25,9 +25,9 @@
 *>
 *> \verbatim
 *>
-*>    AB_DLATM1 computes the entries of D(1..N) as specified by
+*>    DLATM1 computes the entries of D(1..N) as specified by
 *>    MODE, COND and IRSIGN. IDIST and ISEED determine the generation
-*>    of random numbers. AB_DLATM1 is called by AB_DLATMR to generate
+*>    of random numbers. DLATM1 is called by DLATMR to generate
 *>    random test matrices for LAPACK programs.
 *> \endverbatim
 *
@@ -90,7 +90,7 @@
 *>           linear congruential sequence limited to small
 *>           integers, and so should produce machine independent
 *>           random numbers. The values of ISEED are changed on
-*>           exit, and can be used in the next call to AB_DLATM1
+*>           exit, and can be used in the next call to DLATM1
 *>           to continue the same random number sequence.
 *>           Changed on exit.
 *> \endverbatim
@@ -133,8 +133,7 @@
 *> \ingroup double_matgen
 *
 *  =====================================================================
-      SUBROUTINE AB_DLATM1( MODE, COND, IRSIGN, IDIST, ISEED, D, N, INFO
-     $ )
+      SUBROUTINE DLATM1( MODE, COND, IRSIGN, IDIST, ISEED, D, N, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -163,11 +162,11 @@
       DOUBLE PRECISION   ALPHA, TEMP
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLARAN
-      EXTERNAL           AB_DLARAN
+      DOUBLE PRECISION   DLARAN
+      EXTERNAL           DLARAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLARNV, AB_XERBLA
+      EXTERNAL           DLARNV, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, EXP, LOG
@@ -201,7 +200,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DLATM1', -INFO )
+         CALL XERBLA( 'DLATM1', -INFO )
          RETURN
       END IF
 *
@@ -258,14 +257,14 @@
    90    CONTINUE
          ALPHA = LOG( ONE / COND )
          DO 100 I = 1, N
-            D( I ) = EXP( ALPHA*AB_DLARAN( ISEED ) )
+            D( I ) = EXP( ALPHA*DLARAN( ISEED ) )
   100    CONTINUE
          GO TO 120
 *
 *        Randomly distributed D values from IDIST
 *
   110    CONTINUE
-         CALL AB_DLARNV( IDIST, ISEED, N, D )
+         CALL DLARNV( IDIST, ISEED, N, D )
 *
   120    CONTINUE
 *
@@ -275,7 +274,7 @@
          IF( ( MODE.NE.-6 .AND. MODE.NE.0 .AND. MODE.NE.6 ) .AND.
      $       IRSIGN.EQ.1 ) THEN
             DO 130 I = 1, N
-               TEMP = AB_DLARAN( ISEED )
+               TEMP = DLARAN( ISEED )
                IF( TEMP.GT.HALF )
      $            D( I ) = -D( I )
   130       CONTINUE
@@ -295,6 +294,6 @@
 *
       RETURN
 *
-*     End of AB_DLATM1
+*     End of DLATM1
 *
       END

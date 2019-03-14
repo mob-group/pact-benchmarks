@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_DSBGVX
+*> \brief \b DSBGVX
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_DSBGVX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_DSBGVX.f">
+*> Download DSBGVX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsbgvx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_DSBGVX.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsbgvx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_DSBGVX.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsbgvx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_DSBGVX( JOBZ, RANGE, UPLO, N, KA, KB, AB, LDAB, BB,
+*       SUBROUTINE DSBGVX( JOBZ, RANGE, UPLO, N, KA, KB, AB, LDAB, BB,
 *                          LDBB, Q, LDQ, VL, VU, IL, IU, ABSTOL, M, W, Z,
 *                          LDZ, WORK, IWORK, IFAIL, INFO )
 *
@@ -40,7 +40,7 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_DSBGVX computes selected eigenvalues, and optionally, eigenvectors
+*> DSBGVX computes selected eigenvalues, and optionally, eigenvectors
 *> of a real generalized symmetric-definite banded eigenproblem, of
 *> the form A*x=(lambda)*B*x.  Here A and B are assumed to be symmetric
 *> and banded, and B is also positive definite.  Eigenvalues and
@@ -124,7 +124,7 @@
 *>          if UPLO = 'L', BB(1+i-j,j)    = B(i,j) for j<=i<=min(n,j+kb).
 *>
 *>          On exit, the factor S from the split Cholesky factorization
-*>          B = S**T*S, as returned by AB_DPBSTF.
+*>          B = S**T*S, as returned by DPBSTF.
 *> \endverbatim
 *>
 *> \param[in] LDBB
@@ -203,10 +203,10 @@
 *>          by reducing A to tridiagonal form.
 *>
 *>          Eigenvalues will be computed most accurately when ABSTOL is
-*>          set to twice the underflow threshold 2*AB_DLAMCH('S'), not zero.
+*>          set to twice the underflow threshold 2*DLAMCH('S'), not zero.
 *>          If this routine returns with INFO>0, indicating that some
 *>          eigenvectors did not converge, try setting ABSTOL to
-*>          2*AB_DLAMCH('S').
+*>          2*DLAMCH('S').
 *> \endverbatim
 *>
 *> \param[out] M
@@ -265,7 +265,7 @@
 *>          < 0 : if INFO = -i, the i-th argument had an illegal value
 *>          <= N: if INFO = i, then i eigenvectors failed to converge.
 *>                  Their indices are stored in IFAIL.
-*>          > N : AB_DPBSTF returned an error code; i.e.,
+*>          > N : DPBSTF returned an error code; i.e.,
 *>                if INFO = N + i, for 1 <= i <= N, then the leading
 *>                minor of order i of B is not positive definite.
 *>                The factorization of B could not be completed and
@@ -290,8 +290,7 @@
 *>     Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_DSBGVX( JOBZ, RANGE, UPLO, N, KA, KB, AB, LDAB, B
-     $B,
+      SUBROUTINE DSBGVX( JOBZ, RANGE, UPLO, N, KA, KB, AB, LDAB, BB,
      $                   LDBB, Q, LDQ, VL, VU, IL, IU, ABSTOL, M, W, Z,
      $                   LDZ, WORK, IWORK, IFAIL, INFO )
 *
@@ -326,14 +325,12 @@
       DOUBLE PRECISION   TMP1
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DCOPY, AB_DGEMV, AB_DLACPY, AB_DPBSTF, AB_DS
-     $BGST, AB_DSBTRD,
-     $                   AB_DSTEBZ, AB_DSTEIN, AB_DSTEQR, AB_DSTERF, AB_
-     $DSWAP, AB_XERBLA
+      EXTERNAL           DCOPY, DGEMV, DLACPY, DPBSTF, DSBGST, DSBTRD,
+     $                   DSTEBZ, DSTEIN, DSTEQR, DSTERF, DSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN
@@ -342,18 +339,18 @@
 *
 *     Test the input parameters.
 *
-      WANTZ = AB_LSAME( JOBZ, 'V' )
-      UPPER = AB_LSAME( UPLO, 'U' )
-      ALLEIG = AB_LSAME( RANGE, 'A' )
-      VALEIG = AB_LSAME( RANGE, 'V' )
-      INDEIG = AB_LSAME( RANGE, 'I' )
+      WANTZ = LSAME( JOBZ, 'V' )
+      UPPER = LSAME( UPLO, 'U' )
+      ALLEIG = LSAME( RANGE, 'A' )
+      VALEIG = LSAME( RANGE, 'V' )
+      INDEIG = LSAME( RANGE, 'I' )
 *
       INFO = 0
-      IF( .NOT.( WANTZ .OR. AB_LSAME( JOBZ, 'N' ) ) ) THEN
+      IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
       ELSE IF( .NOT.( ALLEIG .OR. VALEIG .OR. INDEIG ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.( UPPER .OR. AB_LSAME( UPLO, 'L' ) ) ) THEN
+      ELSE IF( .NOT.( UPPER .OR. LSAME( UPLO, 'L' ) ) ) THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
@@ -386,7 +383,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_DSBGVX', -INFO )
+         CALL XERBLA( 'DSBGVX', -INFO )
          RETURN
       END IF
 *
@@ -398,7 +395,7 @@
 *
 *     Form a split Cholesky factorization of B.
 *
-      CALL AB_DPBSTF( UPLO, N, KB, BB, LDBB, INFO )
+      CALL DPBSTF( UPLO, N, KB, BB, LDBB, INFO )
       IF( INFO.NE.0 ) THEN
          INFO = N + INFO
          RETURN
@@ -406,7 +403,7 @@
 *
 *     Transform problem to standard eigenvalue problem.
 *
-      CALL AB_DSBGST( JOBZ, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, Q, LDQ,
+      CALL DSBGST( JOBZ, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, Q, LDQ,
      $             WORK, IINFO )
 *
 *     Reduce symmetric band matrix to tridiagonal form.
@@ -419,12 +416,12 @@
       ELSE
          VECT = 'N'
       END IF
-      CALL AB_DSBTRD( VECT, UPLO, N, KA, AB, LDAB, WORK( INDD ),
+      CALL DSBTRD( VECT, UPLO, N, KA, AB, LDAB, WORK( INDD ),
      $             WORK( INDE ), Q, LDQ, WORK( INDWRK ), IINFO )
 *
 *     If all eigenvalues are desired and ABSTOL is less than or equal
-*     to zero, then call AB_DSTERF or AB_SSTEQR.  If this fails for some
-*     eigenvalue, then try AB_DSTEBZ.
+*     to zero, then call DSTERF or SSTEQR.  If this fails for some
+*     eigenvalue, then try DSTEBZ.
 *
       TEST = .FALSE.
       IF( INDEIG ) THEN
@@ -433,14 +430,14 @@
          END IF
       END IF
       IF( ( ALLEIG .OR. TEST ) .AND. ( ABSTOL.LE.ZERO ) ) THEN
-         CALL AB_DCOPY( N, WORK( INDD ), 1, W, 1 )
+         CALL DCOPY( N, WORK( INDD ), 1, W, 1 )
          INDEE = INDWRK + 2*N
-         CALL AB_DCOPY( N-1, WORK( INDE ), 1, WORK( INDEE ), 1 )
+         CALL DCOPY( N-1, WORK( INDE ), 1, WORK( INDEE ), 1 )
          IF( .NOT.WANTZ ) THEN
-            CALL AB_DSTERF( N, W, WORK( INDEE ), INFO )
+            CALL DSTERF( N, W, WORK( INDEE ), INFO )
          ELSE
-            CALL AB_DLACPY( 'A', N, N, Q, LDQ, Z, LDZ )
-            CALL AB_DSTEQR( JOBZ, N, W, WORK( INDEE ), Z, LDZ,
+            CALL DLACPY( 'A', N, N, Q, LDQ, Z, LDZ )
+            CALL DSTEQR( JOBZ, N, W, WORK( INDEE ), Z, LDZ,
      $                   WORK( INDWRK ), INFO )
             IF( INFO.EQ.0 ) THEN
                DO 10 I = 1, N
@@ -455,8 +452,8 @@
          INFO = 0
       END IF
 *
-*     Otherwise, call AB_DSTEBZ and, if eigenvectors are desired,
-*     call AB_DSTEIN.
+*     Otherwise, call DSTEBZ and, if eigenvectors are desired,
+*     call DSTEIN.
 *
       IF( WANTZ ) THEN
          ORDER = 'B'
@@ -466,22 +463,22 @@
       INDIBL = 1
       INDISP = INDIBL + N
       INDIWO = INDISP + N
-      CALL AB_DSTEBZ( RANGE, ORDER, N, VL, VU, IL, IU, ABSTOL,
+      CALL DSTEBZ( RANGE, ORDER, N, VL, VU, IL, IU, ABSTOL,
      $             WORK( INDD ), WORK( INDE ), M, NSPLIT, W,
      $             IWORK( INDIBL ), IWORK( INDISP ), WORK( INDWRK ),
      $             IWORK( INDIWO ), INFO )
 *
       IF( WANTZ ) THEN
-         CALL AB_DSTEIN( N, WORK( INDD ), WORK( INDE ), M, W,
+         CALL DSTEIN( N, WORK( INDD ), WORK( INDE ), M, W,
      $                IWORK( INDIBL ), IWORK( INDISP ), Z, LDZ,
      $                WORK( INDWRK ), IWORK( INDIWO ), IFAIL, INFO )
 *
 *        Apply transformation matrix used in reduction to tridiagonal
-*        form to eigenvectors returned by AB_DSTEIN.
+*        form to eigenvectors returned by DSTEIN.
 *
          DO 20 J = 1, M
-            CALL AB_DCOPY( N, Z( 1, J ), 1, WORK( 1 ), 1 )
-            CALL AB_DGEMV( 'N', N, N, ONE, Q, LDQ, WORK, 1, ZERO,
+            CALL DCOPY( N, Z( 1, J ), 1, WORK( 1 ), 1 )
+            CALL DGEMV( 'N', N, N, ONE, Q, LDQ, WORK, 1, ZERO,
      $                  Z( 1, J ), 1 )
    20    CONTINUE
       END IF
@@ -508,7 +505,7 @@
                IWORK( INDIBL+I-1 ) = IWORK( INDIBL+J-1 )
                W( J ) = TMP1
                IWORK( INDIBL+J-1 ) = ITMP1
-               CALL AB_DSWAP( N, Z( 1, I ), 1, Z( 1, J ), 1 )
+               CALL DSWAP( N, Z( 1, I ), 1, Z( 1, J ), 1 )
                IF( INFO.NE.0 ) THEN
                   ITMP1 = IFAIL( I )
                   IFAIL( I ) = IFAIL( J )
@@ -520,6 +517,6 @@
 *
       RETURN
 *
-*     End of AB_AB_DSBGVX
+*     End of DSBGVX
 *
       END

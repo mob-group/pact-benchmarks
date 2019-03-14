@@ -1,4 +1,4 @@
-*> \brief \b AB_ZCHKBB
+*> \brief \b ZCHKBB
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZCHKBB( NSIZES, MVAL, NVAL, NWDTHS, KK, NTYPES, DOTYPE,
+*       SUBROUTINE ZCHKBB( NSIZES, MVAL, NVAL, NWDTHS, KK, NTYPES, DOTYPE,
 *                          NRHS, ISEED, THRESH, NOUNIT, A, LDA, AB, LDAB,
 *                          BD, BE, Q, LDQ, P, LDP, C, LDC, CC, WORK,
 *                          LWORK, RWORK, RESULT, INFO )
@@ -33,12 +33,12 @@
 *>
 *> \verbatim
 *>
-*> AB_ZCHKBB tests the reduction of a general complex rectangular band
+*> ZCHKBB tests the reduction of a general complex rectangular band
 *> matrix to real bidiagonal form.
 *>
-*> AB_ZGBBRD factors a general band matrix A as  Q B P* , where * means
+*> ZGBBRD factors a general band matrix A as  Q B P* , where * means
 *> conjugate transpose, B is upper bidiagonal, and Q and P are unitary;
-*> AB_ZGBBRD can also overwrite a given matrix C with Q* C .
+*> ZGBBRD can also overwrite a given matrix C with Q* C .
 *>
 *> For each pair of matrix dimensions (M,N) and each selected matrix
 *> type, an M by N matrix A and an M by NRHS matrix C are generated.
@@ -107,7 +107,7 @@
 *>          NSIZES is INTEGER
 *>          The number of values of M and N contained in the vectors
 *>          MVAL and NVAL.  The matrix sizes are used in pairs (M,N).
-*>          If NSIZES is zero, AB_ZCHKBB does nothing.  NSIZES must be at
+*>          If NSIZES is zero, ZCHKBB does nothing.  NSIZES must be at
 *>          least zero.
 *> \endverbatim
 *>
@@ -127,7 +127,7 @@
 *> \verbatim
 *>          NWDTHS is INTEGER
 *>          The number of bandwidths to use.  If it is zero,
-*>          AB_ZCHKBB does nothing.  It must be at least zero.
+*>          ZCHKBB does nothing.  It must be at least zero.
 *> \endverbatim
 *>
 *> \param[in] KK
@@ -140,7 +140,7 @@
 *> \param[in] NTYPES
 *> \verbatim
 *>          NTYPES is INTEGER
-*>          The number of elements in DOTYPE.   If it is zero, AB_ZCHKBB
+*>          The number of elements in DOTYPE.   If it is zero, ZCHKBB
 *>          does nothing.  It must be at least zero.  If it is MAXTYP+1
 *>          and NSIZES is 1, then an additional type, MAXTYP+1 is
 *>          defined, which is to use whatever matrix is in A.  This
@@ -178,7 +178,7 @@
 *>          congruential sequence limited to small integers, and so
 *>          should produce machine independent random numbers. The
 *>          values of ISEED are changed on exit, and can be used in the
-*>          next call to AB_ZCHKBB to continue the same random number
+*>          next call to ZCHKBB to continue the same random number
 *>          sequence.
 *> \endverbatim
 *>
@@ -231,20 +231,20 @@
 *> \verbatim
 *>          BD is DOUBLE PRECISION array, dimension (max(NN))
 *>          Used to hold the diagonal of the bidiagonal matrix computed
-*>          by AB_ZGBBRD.
+*>          by ZGBBRD.
 *> \endverbatim
 *>
 *> \param[out] BE
 *> \verbatim
 *>          BE is DOUBLE PRECISION array, dimension (max(NN))
 *>          Used to hold the off-diagonal of the bidiagonal matrix
-*>          computed by AB_ZGBBRD.
+*>          computed by ZGBBRD.
 *> \endverbatim
 *>
 *> \param[out] Q
 *> \verbatim
 *>          Q is COMPLEX*16 array, dimension (LDQ, max(NN))
-*>          Used to hold the unitary matrix Q computed by AB_ZGBBRD.
+*>          Used to hold the unitary matrix Q computed by ZGBBRD.
 *> \endverbatim
 *>
 *> \param[in] LDQ
@@ -257,7 +257,7 @@
 *> \param[out] P
 *> \verbatim
 *>          P is COMPLEX*16 array, dimension (LDP, max(NN))
-*>          Used to hold the unitary matrix P computed by AB_ZGBBRD.
+*>          Used to hold the unitary matrix P computed by ZGBBRD.
 *> \endverbatim
 *>
 *> \param[in] LDP
@@ -270,7 +270,7 @@
 *> \param[out] C
 *> \verbatim
 *>          C is COMPLEX*16 array, dimension (LDC, max(NN))
-*>          Used to hold the matrix C updated by AB_ZGBBRD.
+*>          Used to hold the matrix C updated by ZGBBRD.
 *> \endverbatim
 *>
 *> \param[in] LDC
@@ -356,8 +356,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_ZCHKBB( NSIZES, MVAL, NVAL, NWDTHS, KK, NTYPES, DOTY
-     $PE,
+      SUBROUTINE ZCHKBB( NSIZES, MVAL, NVAL, NWDTHS, KK, NTYPES, DOTYPE,
      $                   NRHS, ISEED, THRESH, NOUNIT, A, LDA, AB, LDAB,
      $                   BD, BE, Q, LDQ, P, LDP, C, LDC, CC, WORK,
      $                   LWORK, RWORK, RESULT, INFO )
@@ -406,14 +405,12 @@
      $                   KMODE( MAXTYP ), KTYPE( MAXTYP )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH
-      EXTERNAL           AB_DLAMCH
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLAHD2, AB_DLASUM, AB_XERBLA, AB_ZBDT01, AB_
-     $ZBDT02, AB_ZGBBRD,
-     $                   AB_ZLACPY, AB_ZLASET, AB_ZLATMR, AB_ZLATMS, AB_
-     $ZUNT01
+      EXTERNAL           DLAHD2, DLASUM, XERBLA, ZBDT01, ZBDT02, ZGBBRD,
+     $                   ZLACPY, ZLASET, ZLATMR, ZLATMS, ZUNT01
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN, SQRT
@@ -487,7 +484,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZCHKBB', -INFO )
+         CALL XERBLA( 'ZCHKBB', -INFO )
          RETURN
       END IF
 *
@@ -498,9 +495,9 @@
 *
 *     More Important constants
 *
-      UNFL = AB_DLAMCH( 'Safe minimum' )
+      UNFL = DLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
+      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
       ULPINV = ONE / ULP
       RTUNFL = SQRT( UNFL )
       RTOVFL = SQRT( OVFL )
@@ -578,8 +575,8 @@
 *
    70          CONTINUE
 *
-               CALL AB_ZLASET( 'Full', LDA, N, CZERO, CZERO, A, LDA )
-               CALL AB_ZLASET( 'Full', LDAB, N, CZERO, CZERO, AB, LDAB )
+               CALL ZLASET( 'Full', LDA, N, CZERO, CZERO, A, LDA )
+               CALL ZLASET( 'Full', LDAB, N, CZERO, CZERO, AB, LDAB )
                IINFO = 0
                COND = ULPINV
 *
@@ -602,7 +599,7 @@
 *
 *                 Diagonal Matrix, singular values specified
 *
-                  CALL AB_ZLATMS( M, N, 'S', ISEED, 'N', RWORK, IMODE,
+                  CALL ZLATMS( M, N, 'S', ISEED, 'N', RWORK, IMODE,
      $                         COND, ANORM, 0, 0, 'N', A, LDA, WORK,
      $                         IINFO )
 *
@@ -610,7 +607,7 @@
 *
 *                 Nonhermitian, singular values specified
 *
-                  CALL AB_ZLATMS( M, N, 'S', ISEED, 'N', RWORK, IMODE,
+                  CALL ZLATMS( M, N, 'S', ISEED, 'N', RWORK, IMODE,
      $                         COND, ANORM, KL, KU, 'N', A, LDA, WORK,
      $                         IINFO )
 *
@@ -618,7 +615,7 @@
 *
 *                 Nonhermitian, random entries
 *
-                  CALL AB_ZLATMR( M, N, 'S', ISEED, 'N', WORK, 6, ONE,
+                  CALL ZLATMR( M, N, 'S', ISEED, 'N', WORK, 6, ONE,
      $                         CONE, 'T', 'N', WORK( N+1 ), 1, ONE,
      $                         WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, KL,
      $                         KU, ZERO, ANORM, 'N', A, LDA, IDUMMA,
@@ -631,7 +628,7 @@
 *
 *              Generate Right-Hand Side
 *
-               CALL AB_ZLATMR( M, NRHS, 'S', ISEED, 'N', WORK, 6, ONE,
+               CALL ZLATMR( M, NRHS, 'S', ISEED, 'N', WORK, 6, ONE,
      $                      CONE, 'T', 'N', WORK( M+1 ), 1, ONE,
      $                      WORK( 2*M+1 ), 1, ONE, 'N', IDUMMA, M, NRHS,
      $                      ZERO, ONE, 'NO', C, LDC, IDUMMA, IINFO )
@@ -655,18 +652,16 @@
 *
 *              Copy C
 *
-               CALL AB_ZLACPY( 'Full', M, NRHS, C, LDC, CC, LDC )
+               CALL ZLACPY( 'Full', M, NRHS, C, LDC, CC, LDC )
 *
-*              Call AB_ZGBBRD to compute B, Q and P, and to update C.
+*              Call ZGBBRD to compute B, Q and P, and to update C.
 *
-               CALL AB_ZGBBRD( 'B', M, N, NRHS, KL, KU, AB, LDAB, BD, BE
-     $,
+               CALL ZGBBRD( 'B', M, N, NRHS, KL, KU, AB, LDAB, BD, BE,
      $                      Q, LDQ, P, LDP, CC, LDC, WORK, RWORK,
      $                      IINFO )
 *
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'AB_ZGBBRD', IINFO, N, JTYP
-     $E,
+                  WRITE( NOUNIT, FMT = 9999 )'ZGBBRD', IINFO, N, JTYPE,
      $               IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -682,14 +677,13 @@
 *                   3:  Check the orthogonality of P
 *                   4:  Check the computation of Q' * C
 *
-               CALL AB_ZBDT01( M, N, -1, A, LDA, Q, LDQ, BD, BE, P, LDP,
+               CALL ZBDT01( M, N, -1, A, LDA, Q, LDQ, BD, BE, P, LDP,
      $                      WORK, RWORK, RESULT( 1 ) )
-               CALL AB_ZUNT01( 'Columns', M, M, Q, LDQ, WORK, LWORK, RWO
-     $RK,
+               CALL ZUNT01( 'Columns', M, M, Q, LDQ, WORK, LWORK, RWORK,
      $                      RESULT( 2 ) )
-               CALL AB_ZUNT01( 'Rows', N, N, P, LDP, WORK, LWORK, RWORK,
+               CALL ZUNT01( 'Rows', N, N, P, LDP, WORK, LWORK, RWORK,
      $                      RESULT( 3 ) )
-               CALL AB_ZBDT02( M, NRHS, C, LDC, CC, LDC, Q, LDQ, WORK,
+               CALL ZBDT02( M, NRHS, C, LDC, CC, LDC, Q, LDQ, WORK,
      $                      RWORK, RESULT( 4 ) )
 *
 *              End of Loop -- Check for RESULT(j) > THRESH
@@ -703,7 +697,7 @@
                DO 130 JR = 1, NTEST
                   IF( RESULT( JR ).GE.THRESH ) THEN
                      IF( NERRS.EQ.0 )
-     $                  CALL AB_DLAHD2( NOUNIT, 'ZBB' )
+     $                  CALL DLAHD2( NOUNIT, 'ZBB' )
                      NERRS = NERRS + 1
                      WRITE( NOUNIT, FMT = 9998 )M, N, K, IOLDSD, JTYPE,
      $                  JR, RESULT( JR )
@@ -716,15 +710,15 @@
 *
 *     Summary
 *
-      CALL AB_DLASUM( 'ZBB', NOUNIT, NERRS, NTESTT )
+      CALL DLASUM( 'ZBB', NOUNIT, NERRS, NTESTT )
       RETURN
 *
- 9999 FORMAT( ' AB_ZCHKBB: ', A, ' returned INFO=', I5, '.', / 9X, 'M=',
+ 9999 FORMAT( ' ZCHKBB: ', A, ' returned INFO=', I5, '.', / 9X, 'M=',
      $      I5, ' N=', I5, ' K=', I5, ', JTYPE=', I5, ', ISEED=(',
      $      3( I5, ',' ), I5, ')' )
  9998 FORMAT( ' M =', I4, ' N=', I4, ', K=', I3, ', seed=',
      $      4( I4, ',' ), ' type ', I2, ', test(', I2, ')=', G10.3 )
 *
-*     End of AB_ZCHKBB
+*     End of ZCHKBB
 *
       END

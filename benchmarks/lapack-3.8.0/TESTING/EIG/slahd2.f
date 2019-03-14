@@ -1,4 +1,4 @@
-*> \brief \b AB_SLAHD2
+*> \brief \b SLAHD2
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLAHD2( IOUNIT, PATH )
+*       SUBROUTINE SLAHD2( IOUNIT, PATH )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SLAHD2 prints AB_HEADER information for the different test paths.
+*> SLAHD2 prints header information for the different test paths.
 *> \endverbatim
 *
 *  Arguments:
@@ -31,14 +31,14 @@
 *> \verbatim
 *>          IOUNIT is INTEGER.
 *>          On entry, IOUNIT specifies the unit number to which the
-*>          AB_HEADER information should be printed.
+*>          header information should be printed.
 *> \endverbatim
 *>
 *> \param[in] PATH
 *> \verbatim
 *>          PATH is CHARACTER*3.
 *>          On entry, PATH contains the name of the path for which the
-*>          AB_HEADER information is to be printed.  Current paths are
+*>          header information is to be printed.  Current paths are
 *>
 *>             SHS, CHS:  Non-symmetric eigenproblem.
 *>             SST, CST:  Symmetric eigenproblem.
@@ -63,7 +63,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_SLAHD2( IOUNIT, PATH )
+      SUBROUTINE SLAHD2( IOUNIT, PATH )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -83,21 +83,21 @@
       INTEGER            J
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME, AB_AB_LSAMEN
-      EXTERNAL           AB_LSAME, AB_AB_LSAMEN
+      LOGICAL            LSAME, LSAMEN
+      EXTERNAL           LSAME, LSAMEN
 *     ..
 *     .. Executable Statements ..
 *
       IF( IOUNIT.LE.0 )
      $   RETURN
-      SORD = AB_LSAME( PATH, 'S' ) .OR. AB_LSAME( PATH, 'D' )
-      CORZ = AB_LSAME( PATH, 'C' ) .OR. AB_LSAME( PATH, 'Z' )
+      SORD = LSAME( PATH, 'S' ) .OR. LSAME( PATH, 'D' )
+      CORZ = LSAME( PATH, 'C' ) .OR. LSAME( PATH, 'Z' )
       IF( .NOT.SORD .AND. .NOT.CORZ ) THEN
          WRITE( IOUNIT, FMT = 9999 )PATH
       END IF
       C2 = PATH( 2: 3 )
 *
-      IF( AB_AB_LSAMEN( 2, C2, 'HS' ) ) THEN
+      IF( LSAMEN( 2, C2, 'HS' ) ) THEN
          IF( SORD ) THEN
 *
 *           Real Non-symmetric Eigenvalue Problem:
@@ -137,7 +137,7 @@
      $         ( '*', J = 1, 6 )
          END IF
 *
-      ELSE IF( AB_AB_LSAMEN( 2, C2, 'ST' ) ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'ST' ) ) THEN
 *
          IF( SORD ) THEN
 *
@@ -172,7 +172,7 @@
             WRITE( IOUNIT, FMT = 9967 )
          END IF
 *
-      ELSE IF( AB_AB_LSAMEN( 2, C2, 'SG' ) ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'SG' ) ) THEN
 *
          IF( SORD ) THEN
 *
@@ -210,7 +210,7 @@
 *
          END IF
 *
-      ELSE IF( AB_AB_LSAMEN( 2, C2, 'BD' ) ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'BD' ) ) THEN
 *
          IF( SORD ) THEN
 *
@@ -242,7 +242,7 @@
             WRITE( IOUNIT, FMT = 9971 )
          END IF
 *
-      ELSE IF( AB_AB_LSAMEN( 2, C2, 'BB' ) ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'BB' ) ) THEN
 *
          IF( SORD ) THEN
 *
@@ -280,7 +280,7 @@
 *
       RETURN
 *
- 9999 FORMAT( 1X, A3, ':  no AB_HEADER available' )
+ 9999 FORMAT( 1X, A3, ':  no header available' )
  9998 FORMAT( / 1X, A3, ' -- Real Non-symmetric eigenvalue problem' )
  9997 FORMAT( / 1X, A3, ' -- Complex Non-symmetric eigenvalue problem' )
  9996 FORMAT( / 1X, A3, ' -- Real Symmetric eigenvalue problem' )
@@ -377,65 +377,65 @@
      $      / '( For each pair (A,B), where A is of the given type ',
      $      / ' and B is a random well-conditioned matrix. D is ',
      $      / ' diagonal, and Z is orthogonal. )',
-     $      / ' 1 = AB_SSYGV, with ITYPE=1 and UPLO=''U'':',
+     $      / ' 1 = SSYGV, with ITYPE=1 and UPLO=''U'':',
      $      '  | A Z - B Z D | / ( |A| |Z| n ulp )     ',
-     $      / ' 2 = AB_SSPGV, with ITYPE=1 and UPLO=''U'':',
+     $      / ' 2 = SSPGV, with ITYPE=1 and UPLO=''U'':',
      $      '  | A Z - B Z D | / ( |A| |Z| n ulp )     ',
-     $      / ' 3 = AB_SSBGV, with ITYPE=1 and UPLO=''U'':',
+     $      / ' 3 = SSBGV, with ITYPE=1 and UPLO=''U'':',
      $      '  | A Z - B Z D | / ( |A| |Z| n ulp )     ',
-     $      / ' 4 = AB_SSYGV, with ITYPE=1 and UPLO=''L'':',
+     $      / ' 4 = SSYGV, with ITYPE=1 and UPLO=''L'':',
      $      '  | A Z - B Z D | / ( |A| |Z| n ulp )     ',
-     $      / ' 5 = AB_SSPGV, with ITYPE=1 and UPLO=''L'':',
+     $      / ' 5 = SSPGV, with ITYPE=1 and UPLO=''L'':',
      $      '  | A Z - B Z D | / ( |A| |Z| n ulp )     ',
-     $      / ' 6 = AB_SSBGV, with ITYPE=1 and UPLO=''L'':',
+     $      / ' 6 = SSBGV, with ITYPE=1 and UPLO=''L'':',
      $      '  | A Z - B Z D | / ( |A| |Z| n ulp )     ' )
- 9976 FORMAT( ' 7 = AB_SSYGV, with ITYPE=2 and UPLO=''U'':',
+ 9976 FORMAT( ' 7 = SSYGV, with ITYPE=2 and UPLO=''U'':',
      $      '  | A B Z - Z D | / ( |A| |Z| n ulp )     ',
-     $      / ' 8 = AB_SSPGV, with ITYPE=2 and UPLO=''U'':',
+     $      / ' 8 = SSPGV, with ITYPE=2 and UPLO=''U'':',
      $      '  | A B Z - Z D | / ( |A| |Z| n ulp )     ',
-     $      / ' 9 = AB_SSPGV, with ITYPE=2 and UPLO=''L'':',
+     $      / ' 9 = SSPGV, with ITYPE=2 and UPLO=''L'':',
      $      '  | A B Z - Z D | / ( |A| |Z| n ulp )     ',
-     $      / '10 = AB_SSPGV, with ITYPE=2 and UPLO=''L'':',
+     $      / '10 = SSPGV, with ITYPE=2 and UPLO=''L'':',
      $      '  | A B Z - Z D | / ( |A| |Z| n ulp )     ',
-     $      / '11 = AB_SSYGV, with ITYPE=3 and UPLO=''U'':',
+     $      / '11 = SSYGV, with ITYPE=3 and UPLO=''U'':',
      $      '  | B A Z - Z D | / ( |A| |Z| n ulp )     ',
-     $      / '12 = AB_SSPGV, with ITYPE=3 and UPLO=''U'':',
+     $      / '12 = SSPGV, with ITYPE=3 and UPLO=''U'':',
      $      '  | B A Z - Z D | / ( |A| |Z| n ulp )     ',
-     $      / '13 = AB_SSYGV, with ITYPE=3 and UPLO=''L'':',
+     $      / '13 = SSYGV, with ITYPE=3 and UPLO=''L'':',
      $      '  | B A Z - Z D | / ( |A| |Z| n ulp )     ',
-     $      / '14 = AB_SSPGV, with ITYPE=3 and UPLO=''L'':',
+     $      / '14 = SSPGV, with ITYPE=3 and UPLO=''L'':',
      $      '  | B A Z - Z D | / ( |A| |Z| n ulp )     ' )
  9975 FORMAT( / ' Tests performed:   ',
      $      / '( For each pair (A,B), where A is of the given type ',
      $      / ' and B is a random well-conditioned matrix. D is ',
      $      / ' diagonal, and Z is unitary. )',
-     $      / ' 1 = AB_CHEGV, with ITYPE=1 and UPLO=''U'':',
+     $      / ' 1 = CHEGV, with ITYPE=1 and UPLO=''U'':',
      $      '  | A Z - B Z D | / ( |A| |Z| n ulp )     ',
-     $      / ' 2 = AB_CHPGV, with ITYPE=1 and UPLO=''U'':',
+     $      / ' 2 = CHPGV, with ITYPE=1 and UPLO=''U'':',
      $      '  | A Z - B Z D | / ( |A| |Z| n ulp )     ',
-     $      / ' 3 = AB_CHBGV, with ITYPE=1 and UPLO=''U'':',
+     $      / ' 3 = CHBGV, with ITYPE=1 and UPLO=''U'':',
      $      '  | A Z - B Z D | / ( |A| |Z| n ulp )     ',
-     $      / ' 4 = AB_CHEGV, with ITYPE=1 and UPLO=''L'':',
+     $      / ' 4 = CHEGV, with ITYPE=1 and UPLO=''L'':',
      $      '  | A Z - B Z D | / ( |A| |Z| n ulp )     ',
-     $      / ' 5 = AB_CHPGV, with ITYPE=1 and UPLO=''L'':',
+     $      / ' 5 = CHPGV, with ITYPE=1 and UPLO=''L'':',
      $      '  | A Z - B Z D | / ( |A| |Z| n ulp )     ',
-     $      / ' 6 = AB_CHBGV, with ITYPE=1 and UPLO=''L'':',
+     $      / ' 6 = CHBGV, with ITYPE=1 and UPLO=''L'':',
      $      '  | A Z - B Z D | / ( |A| |Z| n ulp )     ' )
- 9974 FORMAT( ' 7 = AB_CHEGV, with ITYPE=2 and UPLO=''U'':',
+ 9974 FORMAT( ' 7 = CHEGV, with ITYPE=2 and UPLO=''U'':',
      $      '  | A B Z - Z D | / ( |A| |Z| n ulp )     ',
-     $      / ' 8 = AB_CHPGV, with ITYPE=2 and UPLO=''U'':',
+     $      / ' 8 = CHPGV, with ITYPE=2 and UPLO=''U'':',
      $      '  | A B Z - Z D | / ( |A| |Z| n ulp )     ',
-     $      / ' 9 = AB_CHPGV, with ITYPE=2 and UPLO=''L'':',
+     $      / ' 9 = CHPGV, with ITYPE=2 and UPLO=''L'':',
      $      '  | A B Z - Z D | / ( |A| |Z| n ulp )     ',
-     $      / '10 = AB_CHPGV, with ITYPE=2 and UPLO=''L'':',
+     $      / '10 = CHPGV, with ITYPE=2 and UPLO=''L'':',
      $      '  | A B Z - Z D | / ( |A| |Z| n ulp )     ',
-     $      / '11 = AB_CHEGV, with ITYPE=3 and UPLO=''U'':',
+     $      / '11 = CHEGV, with ITYPE=3 and UPLO=''U'':',
      $      '  | B A Z - Z D | / ( |A| |Z| n ulp )     ',
-     $      / '12 = AB_CHPGV, with ITYPE=3 and UPLO=''U'':',
+     $      / '12 = CHPGV, with ITYPE=3 and UPLO=''U'':',
      $      '  | B A Z - Z D | / ( |A| |Z| n ulp )     ',
-     $      / '13 = AB_CHEGV, with ITYPE=3 and UPLO=''L'':',
+     $      / '13 = CHEGV, with ITYPE=3 and UPLO=''L'':',
      $      '  | B A Z - Z D | / ( |A| |Z| n ulp )     ',
-     $      / '14 = AB_CHPGV, with ITYPE=3 and UPLO=''L'':',
+     $      / '14 = CHPGV, with ITYPE=3 and UPLO=''L'':',
      $      '  | B A Z - Z D | / ( |A| |Z| n ulp )     ' )
 *
 *     Singular Value Decomposition
@@ -537,9 +537,9 @@
      $      / ' 2: norm( I - Q'' Q )   / ( m ulp )',
      $      / ' 3: norm( I - PT PT'' )   / ( n ulp )',
      $      / ' 4: norm( Y - Q'' C )   / ( norm(Y) max(m,nrhs) ulp )' )
- 9968 FORMAT( / ' Tests performed:  See AB_SDRVST.f' )
- 9967 FORMAT( / ' Tests performed:  See AB_CDRVST.f' )
+ 9968 FORMAT( / ' Tests performed:  See sdrvst.f' )
+ 9967 FORMAT( / ' Tests performed:  See cdrvst.f' )
 *
-*     End of AB_SLAHD2
+*     End of SLAHD2
 *
       END

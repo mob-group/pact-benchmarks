@@ -1,4 +1,4 @@
-*> \brief \b AB_DPPTRI
+*> \brief \b DPPTRI
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DPPTRI + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DPPTRI.f">
+*> Download DPPTRI + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dpptri.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DPPTRI.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dpptri.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DPPTRI.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpptri.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DPPTRI( UPLO, N, AP, INFO )
+*       SUBROUTINE DPPTRI( UPLO, N, AP, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,9 +34,9 @@
 *>
 *> \verbatim
 *>
-*> AB_DPPTRI computes the inverse of a real symmetric positive definite
+*> DPPTRI computes the inverse of a real symmetric positive definite
 *> matrix A using the Cholesky factorization A = U**T*U or A = L*L**T
-*> computed by AB_DPPTRF.
+*> computed by DPPTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -91,7 +91,7 @@
 *> \ingroup doubleOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_DPPTRI( UPLO, N, AP, INFO )
+      SUBROUTINE DPPTRI( UPLO, N, AP, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -118,27 +118,26 @@
       DOUBLE PRECISION   AJJ
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DDOT
-      EXTERNAL           AB_LSAME, AB_DDOT
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DDOT
+      EXTERNAL           LSAME, DDOT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DSCAL, AB_DSPR, AB_DTPMV, AB_DTPTRI, AB_XERB
-     $LA
+      EXTERNAL           DSCAL, DSPR, DTPMV, DTPTRI, XERBLA
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DPPTRI', -INFO )
+         CALL XERBLA( 'DPPTRI', -INFO )
          RETURN
       END IF
 *
@@ -149,7 +148,7 @@
 *
 *     Invert the triangular Cholesky factor U or L.
 *
-      CALL AB_DTPTRI( UPLO, 'Non-unit', N, AP, INFO )
+      CALL DTPTRI( UPLO, 'Non-unit', N, AP, INFO )
       IF( INFO.GT.0 )
      $   RETURN
 *
@@ -162,9 +161,9 @@
             JC = JJ + 1
             JJ = JJ + J
             IF( J.GT.1 )
-     $         CALL AB_DSPR( 'Upper', J-1, ONE, AP( JC ), 1, AP )
+     $         CALL DSPR( 'Upper', J-1, ONE, AP( JC ), 1, AP )
             AJJ = AP( JJ )
-            CALL AB_DSCAL( J, AJJ, AP( JC ), 1 )
+            CALL DSCAL( J, AJJ, AP( JC ), 1 )
    10    CONTINUE
 *
       ELSE
@@ -174,9 +173,9 @@
          JJ = 1
          DO 20 J = 1, N
             JJN = JJ + N - J + 1
-            AP( JJ ) = AB_DDOT( N-J+1, AP( JJ ), 1, AP( JJ ), 1 )
+            AP( JJ ) = DDOT( N-J+1, AP( JJ ), 1, AP( JJ ), 1 )
             IF( J.LT.N )
-     $         CALL AB_DTPMV( 'Lower', 'Transpose', 'Non-unit', N-J,
+     $         CALL DTPMV( 'Lower', 'Transpose', 'Non-unit', N-J,
      $                     AP( JJN ), AP( JJ+1 ), 1 )
             JJ = JJN
    20    CONTINUE
@@ -184,6 +183,6 @@
 *
       RETURN
 *
-*     End of AB_DPPTRI
+*     End of DPPTRI
 *
       END

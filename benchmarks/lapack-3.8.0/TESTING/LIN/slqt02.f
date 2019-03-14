@@ -1,4 +1,4 @@
-*> \brief \b AB_SLQT02
+*> \brief \b SLQT02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLQT02( M, N, K, A, AF, Q, L, LDA, TAU, WORK, LWORK,
+*       SUBROUTINE SLQT02( M, N, K, A, AF, Q, L, LDA, TAU, WORK, LWORK,
 *                          RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -26,11 +26,11 @@
 *>
 *> \verbatim
 *>
-*> AB_SLQT02 tests AB_SORGLQ, which generates an m-by-n matrix Q with
+*> SLQT02 tests SORGLQ, which generates an m-by-n matrix Q with
 *> orthonornmal rows that is defined as the product of k elementary
 *> reflectors.
 *>
-*> Given the LQ factorization of an m-by-n matrix A, AB_SLQT02 generates
+*> Given the LQ factorization of an m-by-n matrix A, SLQT02 generates
 *> the orthogonal matrix Q defined by the factorization of the first k
 *> rows of A; it compares L(1:k,1:m) with A(1:k,1:n)*Q(1:m,1:n)', and
 *> checks that the rows of Q are orthonormal.
@@ -62,14 +62,14 @@
 *> \param[in] A
 *> \verbatim
 *>          A is REAL array, dimension (LDA,N)
-*>          The m-by-n matrix A which was factorized by AB_SLQT01.
+*>          The m-by-n matrix A which was factorized by SLQT01.
 *> \endverbatim
 *>
 *> \param[in] AF
 *> \verbatim
 *>          AF is REAL array, dimension (LDA,N)
-*>          Details of the LQ factorization of A, as returned by AB_AB_SGELQF.
-*>          See AB_AB_SGELQF for further details.
+*>          Details of the LQ factorization of A, as returned by SGELQF.
+*>          See SGELQF for further details.
 *> \endverbatim
 *>
 *> \param[out] Q
@@ -132,7 +132,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_SLQT02( M, N, K, A, AF, Q, L, LDA, TAU, WORK, LWORK,
+      SUBROUTINE SLQT02( M, N, K, A, AF, Q, L, LDA, TAU, WORK, LWORK,
      $                   RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -162,12 +162,11 @@
       REAL               ANORM, EPS, RESID
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH, AB_SLANGE, AB_SLANSY
-      EXTERNAL           AB_SLAMCH, AB_SLANGE, AB_SLANSY
+      REAL               SLAMCH, SLANGE, SLANSY
+      EXTERNAL           SLAMCH, SLANGE, SLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SGEMM, AB_SLACPY, AB_SLASET, AB_SORGLQ, AB_A
-     $B_SSYRK
+      EXTERNAL           SGEMM, SLACPY, SLASET, SORGLQ, SSYRK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, REAL
@@ -180,33 +179,32 @@
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = AB_SLAMCH( 'Epsilon' )
+      EPS = SLAMCH( 'Epsilon' )
 *
 *     Copy the first k rows of the factorization to the array Q
 *
-      CALL AB_SLASET( 'Full', M, N, ROGUE, ROGUE, Q, LDA )
-      CALL AB_SLACPY( 'Upper', K, N-1, AF( 1, 2 ), LDA, Q( 1, 2 ), LDA )
+      CALL SLASET( 'Full', M, N, ROGUE, ROGUE, Q, LDA )
+      CALL SLACPY( 'Upper', K, N-1, AF( 1, 2 ), LDA, Q( 1, 2 ), LDA )
 *
 *     Generate the first n columns of the matrix Q
 *
-      SRNAMT = 'AB_SORGLQ'
-      CALL AB_SORGLQ( M, N, K, Q, LDA, TAU, WORK, LWORK, INFO )
+      SRNAMT = 'SORGLQ'
+      CALL SORGLQ( M, N, K, Q, LDA, TAU, WORK, LWORK, INFO )
 *
 *     Copy L(1:k,1:m)
 *
-      CALL AB_SLASET( 'Full', K, M, ZERO, ZERO, L, LDA )
-      CALL AB_SLACPY( 'Lower', K, M, AF, LDA, L, LDA )
+      CALL SLASET( 'Full', K, M, ZERO, ZERO, L, LDA )
+      CALL SLACPY( 'Lower', K, M, AF, LDA, L, LDA )
 *
 *     Compute L(1:k,1:m) - A(1:k,1:n) * Q(1:m,1:n)'
 *
-      CALL AB_SGEMM( 'No transpose', 'Transpose', K, M, N, -ONE, A, LDA,
-     $ Q,
+      CALL SGEMM( 'No transpose', 'Transpose', K, M, N, -ONE, A, LDA, Q,
      $            LDA, ONE, L, LDA )
 *
 *     Compute norm( L - A*Q' ) / ( N * norm(A) * EPS ) .
 *
-      ANORM = AB_SLANGE( '1', K, N, A, LDA, RWORK )
-      RESID = AB_SLANGE( '1', K, M, L, LDA, RWORK )
+      ANORM = SLANGE( '1', K, N, A, LDA, RWORK )
+      RESID = SLANGE( '1', K, M, L, LDA, RWORK )
       IF( ANORM.GT.ZERO ) THEN
          RESULT( 1 ) = ( ( RESID / REAL( MAX( 1, N ) ) ) / ANORM ) / EPS
       ELSE
@@ -215,19 +213,18 @@
 *
 *     Compute I - Q*Q'
 *
-      CALL AB_SLASET( 'Full', M, M, ZERO, ONE, L, LDA )
-      CALL AB_AB_SSYRK( 'Upper', 'No transpose', M, N, -ONE, Q, LDA, ONE
-     $, L,
+      CALL SLASET( 'Full', M, M, ZERO, ONE, L, LDA )
+      CALL SSYRK( 'Upper', 'No transpose', M, N, -ONE, Q, LDA, ONE, L,
      $            LDA )
 *
 *     Compute norm( I - Q*Q' ) / ( N * EPS ) .
 *
-      RESID = AB_SLANSY( '1', 'Upper', M, L, LDA, RWORK )
+      RESID = SLANSY( '1', 'Upper', M, L, LDA, RWORK )
 *
       RESULT( 2 ) = ( RESID / REAL( MAX( 1, N ) ) ) / EPS
 *
       RETURN
 *
-*     End of AB_SLQT02
+*     End of SLQT02
 *
       END

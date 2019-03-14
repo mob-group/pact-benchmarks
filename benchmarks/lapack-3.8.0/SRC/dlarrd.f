@@ -1,4 +1,4 @@
-*> \brief \b AB_DLARRD computes the eigenvalues of a symmetric tridiagonal matrix to suitable accuracy.
+*> \brief \b DLARRD computes the eigenvalues of a symmetric tridiagonal matrix to suitable accuracy.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLARRD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLARRD.f">
+*> Download DLARRD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarrd.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLARRD.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarrd.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLARRD.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarrd.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLARRD( RANGE, ORDER, N, VL, VU, IL, IU, GERS,
+*       SUBROUTINE DLARRD( RANGE, ORDER, N, VL, VU, IL, IU, GERS,
 *                           RELTOL, D, E, E2, PIVMIN, NSPLIT, ISPLIT,
 *                           M, W, WERR, WL, WU, IBLOCK, INDEXW,
 *                           WORK, IWORK, INFO )
@@ -41,9 +41,9 @@
 *>
 *> \verbatim
 *>
-*> AB_DLARRD computes the eigenvalues of a symmetric tridiagonal
+*> DLARRD computes the eigenvalues of a symmetric tridiagonal
 *> matrix T to suitable accuracy. This is an auxiliary code to be
-*> called from AB_DSTEMR.
+*> called from DSTEMR.
 *> The user may ask for all eigenvalues, all eigenvalues
 *> in the half-open interval (VL, VU], or the IL-th through IU-th
 *> eigenvalues.
@@ -178,7 +178,7 @@
 *>          ISPLIT is INTEGER array, dimension (N)
 *>          The splitting points, at which T breaks up into submatrices.
 *>          The first submatrix consists of rows/columns 1 to ISPLIT(1),
-*>          the AB_SECOND of rows/columns ISPLIT(1)+1 through ISPLIT(2),
+*>          the second of rows/columns ISPLIT(1)+1 through ISPLIT(2),
 *>          etc., and the NSPLIT-th consists of rows/columns
 *>          ISPLIT(NSPLIT-1)+1 through ISPLIT(NSPLIT)=N.
 *>          (Only the first NSPLIT elements will actually be used, but
@@ -197,7 +197,7 @@
 *> \verbatim
 *>          W is DOUBLE PRECISION array, dimension (N)
 *>          On exit, the first M elements of W will contain the
-*>          eigenvalue approximations. AB_DLARRD computes an interval
+*>          eigenvalue approximations. DLARRD computes an interval
 *>          I_j = (a_j, b_j] that includes eigenvalue j. The eigenvalue
 *>          approximation is given as the interval midpoint
 *>          W(j)= ( a_j + b_j)/2. The corresponding error is bounded by
@@ -223,7 +223,7 @@
 *>          If RANGE='V', then WL=VL and WU=VU.
 *>          If RANGE='A', then WL and WU are the global Gerschgorin bounds
 *>                        on the spectrum.
-*>          If RANGE='I', then WL and WU are computed by AB_DLAEBZ from the
+*>          If RANGE='I', then WL and WU are computed by DLAEBZ from the
 *>                        index range specified.
 *> \endverbatim
 *>
@@ -234,7 +234,7 @@
 *>          matrix T is considered to split into a block diagonal
 *>          matrix.  On exit, if INFO = 0, IBLOCK(i) specifies to which
 *>          block (from 1 to the number of blocks) the eigenvalue W(i)
-*>          belongs.  (AB_DLARRD may use the remaining N-M elements as
+*>          belongs.  (DLARRD may use the remaining N-M elements as
 *>          workspace.)
 *> \endverbatim
 *>
@@ -324,7 +324,7 @@
 *> \ingroup OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_DLARRD( RANGE, ORDER, N, VL, VU, IL, IU, GERS,
+      SUBROUTINE DLARRD( RANGE, ORDER, N, VL, VU, IL, IU, GERS,
      $                    RELTOL, D, E, E2, PIVMIN, NSPLIT, ISPLIT,
      $                    M, W, WERR, WL, WU, IBLOCK, INDEXW,
      $                    WORK, IWORK, INFO )
@@ -370,13 +370,13 @@
       INTEGER            IDUMMA( 1 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      DOUBLE PRECISION   AB_DLAMCH
-      EXTERNAL           AB_LSAME, AB_ILAENV, AB_DLAMCH
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           LSAME, ILAENV, DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLAEBZ
+      EXTERNAL           DLAEBZ
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, INT, LOG, MAX, MIN
@@ -393,11 +393,11 @@
 *
 *     Decode RANGE
 *
-      IF( AB_LSAME( RANGE, 'A' ) ) THEN
+      IF( LSAME( RANGE, 'A' ) ) THEN
          IRANGE = ALLRNG
-      ELSE IF( AB_LSAME( RANGE, 'V' ) ) THEN
+      ELSE IF( LSAME( RANGE, 'V' ) ) THEN
          IRANGE = VALRNG
-      ELSE IF( AB_LSAME( RANGE, 'I' ) ) THEN
+      ELSE IF( LSAME( RANGE, 'I' ) ) THEN
          IRANGE = INDRNG
       ELSE
          IRANGE = 0
@@ -407,8 +407,7 @@
 *
       IF( IRANGE.LE.0 ) THEN
          INFO = -1
-      ELSE IF( .NOT.(AB_LSAME(ORDER,'B').OR.AB_LSAME(ORDER,'E')) ) TH
-     $EN
+      ELSE IF( .NOT.(LSAME(ORDER,'B').OR.LSAME(ORDER,'E')) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -440,8 +439,8 @@
       IF( IRANGE.EQ.INDRNG .AND. IL.EQ.1 .AND. IU.EQ.N ) IRANGE = 1
 
 *     Get machine constants
-      EPS = AB_DLAMCH( 'P' )
-      UFLOW = AB_DLAMCH( 'U' )
+      EPS = DLAMCH( 'P' )
+      UFLOW = DLAMCH( 'U' )
 
 
 *     Special Case when N=1
@@ -462,7 +461,7 @@
 
 *     NB is the minimum vector length for vector bisection, or 0
 *     if only scalar is to be done.
-      NB = AB_ILAENV( 1, 'AB_DSTEBZ', ' ', N, -1, -1, -1 )
+      NB = ILAENV( 1, 'DSTEBZ', ' ', N, -1, -1, -1 )
       IF( NB.LE.1 ) NB = 0
 
 *     Find global spectral radius
@@ -478,7 +477,7 @@
       GU = GU + FUDGE*TNORM*EPS*N + FUDGE*TWO*PIVMIN
 *     [JAN/28/2009] remove the line below since SPDIAM variable not use
 *     SPDIAM = GU - GL
-*     Input arguments for AB_DLAEBZ:
+*     Input arguments for DLAEBZ:
 *     The relative tolerance.  An interval (a,b] lies within
 *     "relative tolerance" if  b-a < RELTOL*max(|a|,|b|),
       RTOLI = RELTOL
@@ -494,7 +493,7 @@
 
 *        RANGE='I': Compute an interval containing eigenvalues
 *        IL through IU. The initial interval [GL,GU] from the global
-*        Gerschgorin bounds GL and GU is refined by AB_DLAEBZ.
+*        Gerschgorin bounds GL and GU is refined by DLAEBZ.
          ITMAX = INT( ( LOG( TNORM+PIVMIN )-LOG( PIVMIN ) ) /
      $           LOG( TWO ) ) + 2
          WORK( N+1 ) = GL
@@ -510,7 +509,7 @@
          IWORK( 5 ) = IL - 1
          IWORK( 6 ) = IU
 *
-         CALL AB_DLAEBZ( 3, ITMAX, N, 2, 2, NB, ATOLI, RTOLI, PIVMIN,
+         CALL DLAEBZ( 3, ITMAX, N, 2, 2, NB, ATOLI, RTOLI, PIVMIN,
      $         D, E, E2, IWORK( 5 ), WORK( N+1 ), WORK( N+5 ), IOUT,
      $                IWORK, W, IBLOCK, IINFO )
          IF( IINFO .NE. 0 ) THEN
@@ -633,7 +632,7 @@
          ELSE
 *           General Case - block of size IN >= 2
 *           Compute local Gerschgorin interval and use it as the initial
-*           interval for AB_DLAEBZ
+*           interval for DLAEBZ
             GU = D( IBEGIN )
             GL = D( IBEGIN )
             TMP1 = ZERO
@@ -668,7 +667,7 @@
 *           Find negcount of initial interval boundaries GL and GU
             WORK( N+1 ) = GL
             WORK( N+IN+1 ) = GU
-            CALL AB_DLAEBZ( 1, 0, IN, IN, 1, NB, ATOLI, RTOLI, PIVMIN,
+            CALL DLAEBZ( 1, 0, IN, IN, 1, NB, ATOLI, RTOLI, PIVMIN,
      $                   D( IBEGIN ), E( IBEGIN ), E2( IBEGIN ),
      $                   IDUMMA, WORK( N+1 ), WORK( N+2*IN+1 ), IM,
      $                   IWORK, W( M+1 ), IBLOCK( M+1 ), IINFO )
@@ -684,8 +683,7 @@
 *           Compute Eigenvalues
             ITMAX = INT( ( LOG( GU-GL+PIVMIN )-LOG( PIVMIN ) ) /
      $              LOG( TWO ) ) + 2
-            CALL AB_DLAEBZ( 2, ITMAX, IN, IN, 1, NB, ATOLI, RTOLI, PIVMI
-     $N,
+            CALL DLAEBZ( 2, ITMAX, IN, IN, 1, NB, ATOLI, RTOLI, PIVMIN,
      $                   D( IBEGIN ), E( IBEGIN ), E2( IBEGIN ),
      $                   IDUMMA, WORK( N+1 ), WORK( N+2*IN+1 ), IOUT,
      $                   IWORK, W( M+1 ), IBLOCK( M+1 ), IINFO )
@@ -696,7 +694,7 @@
 *
 *           Copy eigenvalues into W and IBLOCK
 *           Use -JBLK for block number for unconverged eigenvalues.
-*           Loop over the number of output intervals from AB_DLAEBZ
+*           Loop over the number of output intervals from DLAEBZ
             DO 60 J = 1, IOUT
 *              eigenvalue approximation is middle point of interval
                TMP1 = HALF*( WORK( J+N )+WORK( J+IN+N ) )
@@ -833,7 +831,7 @@
 *        block.
 *     If ORDER='E', sort the eigenvalues from smallest to largest
 
-      IF( AB_LSAME(ORDER,'E') .AND. NSPLIT.GT.1 ) THEN
+      IF( LSAME(ORDER,'E') .AND. NSPLIT.GT.1 ) THEN
          DO 150 JE = 1, M - 1
             IE = 0
             TMP1 = W( JE )
@@ -866,6 +864,6 @@
      $   INFO = INFO + 2
       RETURN
 *
-*     End of AB_DLARRD
+*     End of DLARRD
 *
       END

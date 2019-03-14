@@ -1,4 +1,4 @@
-*> \brief \b AB_DCHKGB
+*> \brief \b DCHKGB
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DCHKGB( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NNS,
+*       SUBROUTINE DCHKGB( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NNS,
 *                          NSVAL, THRESH, TSTERR, A, LA, AFAC, LAFAC, B,
 *                          X, XACT, WORK, RWORK, IWORK, NOUT )
 *
@@ -31,7 +31,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DCHKGB tests AB_DGBTRF, -TRS, -RFS, and -CON
+*> DCHKGB tests DGBTRF, -TRS, -RFS, and -CON
 *> \endverbatim
 *
 *  Arguments:
@@ -187,7 +187,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_DCHKGB( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NNS,
+      SUBROUTINE DCHKGB( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NNS,
      $                   NSVAL, THRESH, TSTERR, A, LA, AFAC, LAFAC, B,
      $                   X, XACT, WORK, RWORK, IWORK, NOUT )
 *
@@ -237,17 +237,14 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DGET06, AB_DLANGB, AB_DLANGE
-      EXTERNAL           AB_DGET06, AB_DLANGB, AB_DLANGE
+      DOUBLE PRECISION   DGET06, DLANGB, DLANGE
+      EXTERNAL           DGET06, DLANGB, DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALAERH, AB_ALAHD, AB_ALASUM, AB_DCOPY, AB_DE
-     $RRGE, AB_DGBCON,
-     $                   AB_DGBRFS, AB_DGBT01, AB_DGBT02, AB_DGBT05, AB_
-     $DGBTRF, AB_DGBTRS,
-     $                   AB_DGET04, AB_DLACPY, AB_DLARHS, AB_DLASET, AB_
-     $DLATB4, AB_DLATMS,
-     $                   AB_XLAENV
+      EXTERNAL           ALAERH, ALAHD, ALASUM, DCOPY, DERRGE, DGBCON,
+     $                   DGBRFS, DGBT01, DGBT02, DGBT05, DGBTRF, DGBTRS,
+     $                   DGET04, DLACPY, DLARHS, DLASET, DLATB4, DLATMS,
+     $                   XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -281,9 +278,9 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL AB_DERRGE( PATH, NOUT )
+     $   CALL DERRGE( PATH, NOUT )
       INFOT = 0
-      CALL AB_XLAENV( 2, 2 )
+      CALL XLAENV( 2, 2 )
 *
 *     Initialize the first value for the lower and upper bandwidths.
 *
@@ -353,7 +350,7 @@
                   LDAFAC = 2*KL + KU + 1
                   IF( ( LDA*N ).GT.LA .OR. ( LDAFAC*N ).GT.LAFAC ) THEN
                      IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                  CALL AB_ALAHD( NOUT, PATH )
+     $                  CALL ALAHD( NOUT, PATH )
                      IF( N*( KL+KU+1 ).GT.LA ) THEN
                         WRITE( NOUT, FMT = 9999 )LA, M, N, KL, KU,
      $                     N*( KL+KU+1 )
@@ -383,26 +380,25 @@
 *
                      IF( .NOT.ZEROT .OR. .NOT.DOTYPE( 1 ) ) THEN
 *
-*                       Set up parameters with AB_DLATB4 and generate a
-*                       test matrix with AB_DLATMS.
+*                       Set up parameters with DLATB4 and generate a
+*                       test matrix with DLATMS.
 *
-                        CALL AB_DLATB4( PATH, IMAT, M, N, TYPE, KL, KU,
+                        CALL DLATB4( PATH, IMAT, M, N, TYPE, KL, KU,
      $                               ANORM, MODE, CNDNUM, DIST )
 *
                         KOFF = MAX( 1, KU+2-N )
                         DO 20 I = 1, KOFF - 1
                            A( I ) = ZERO
    20                   CONTINUE
-                        SRNAMT = 'AB_DLATMS'
-                        CALL AB_DLATMS( M, N, DIST, ISEED, TYPE, RWORK,
+                        SRNAMT = 'DLATMS'
+                        CALL DLATMS( M, N, DIST, ISEED, TYPE, RWORK,
      $                               MODE, CNDNUM, ANORM, KL, KU, 'Z',
      $                               A( KOFF ), LDA, WORK, INFO )
 *
-*                       Check the error code from AB_DLATMS.
+*                       Check the error code from DLATMS.
 *
                         IF( INFO.NE.0 ) THEN
-                           CALL AB_ALAERH( PATH, 'AB_DLATMS', INFO, 0, '
-     $ ', M,
+                           CALL ALAERH( PATH, 'DLATMS', INFO, 0, ' ', M,
      $                                  N, KL, KU, -1, IMAT, NFAIL,
      $                                  NERRS, NOUT )
                            GO TO 120
@@ -412,7 +408,7 @@
 *                       Use the same matrix for types 3 and 4 as for
 *                       type 2 by copying back the zeroed out column.
 *
-                        CALL AB_DCOPY( I2-I1+1, B, 1, A( IOFF+I1 ), 1 )
+                        CALL DCOPY( I2-I1+1, B, 1, A( IOFF+I1 ), 1 )
                      END IF
 *
 *                    For types 2, 3, and 4, zero one or more columns of
@@ -434,8 +430,7 @@
 *
                            I1 = MAX( 1, KU+2-IZERO )
                            I2 = MIN( KL+KU+1, KU+1+( M-IZERO ) )
-                           CALL AB_DCOPY( I2-I1+1, A( IOFF+I1 ), 1, B, 1
-     $ )
+                           CALL DCOPY( I2-I1+1, A( IOFF+I1 ), 1, B, 1 )
 *
                            DO 30 I = I1, I2
                               A( IOFF+I ) = ZERO
@@ -455,30 +450,28 @@
 *                    loop over INB, cause the code to bomb on a Sun
 *                    SPARCstation.
 *
-*                     ANORMO = AB_DLANGB( 'O', N, KL, KU, A, LDA, RWORK )
-*                     ANORMI = AB_DLANGB( 'I', N, KL, KU, A, LDA, RWORK )
+*                     ANORMO = DLANGB( 'O', N, KL, KU, A, LDA, RWORK )
+*                     ANORMI = DLANGB( 'I', N, KL, KU, A, LDA, RWORK )
 *
 *                    Do for each blocksize in NBVAL
 *
                      DO 110 INB = 1, NNB
                         NB = NBVAL( INB )
-                        CALL AB_XLAENV( 1, NB )
+                        CALL XLAENV( 1, NB )
 *
 *                       Compute the LU factorization of the band matrix.
 *
                         IF( M.GT.0 .AND. N.GT.0 )
-     $                     CALL AB_DLACPY( 'Full', KL+KU+1, N, A, LDA,
+     $                     CALL DLACPY( 'Full', KL+KU+1, N, A, LDA,
      $                                  AFAC( KL+1 ), LDAFAC )
-                        SRNAMT = 'AB_DGBTRF'
-                        CALL AB_DGBTRF( M, N, KL, KU, AFAC, LDAFAC, IWOR
-     $K,
+                        SRNAMT = 'DGBTRF'
+                        CALL DGBTRF( M, N, KL, KU, AFAC, LDAFAC, IWORK,
      $                               INFO )
 *
-*                       Check error code from AB_DGBTRF.
+*                       Check error code from DGBTRF.
 *
                         IF( INFO.NE.IZERO )
-     $                     CALL AB_ALAERH( PATH, 'AB_DGBTRF', INFO, IZER
-     $O,
+     $                     CALL ALAERH( PATH, 'DGBTRF', INFO, IZERO,
      $                                  ' ', M, N, KL, KU, NB, IMAT,
      $                                  NFAIL, NERRS, NOUT )
                         TRFCON = .FALSE.
@@ -487,8 +480,7 @@
 *                       Reconstruct matrix from factors and compute
 *                       residual.
 *
-                        CALL AB_DGBT01( M, N, KL, KU, A, LDA, AFAC, LDAF
-     $AC,
+                        CALL DGBT01( M, N, KL, KU, A, LDA, AFAC, LDAFAC,
      $                               IWORK, WORK, RESULT( 1 ) )
 *
 *                       Print information about the tests so far that
@@ -496,7 +488,7 @@
 *
                         IF( RESULT( 1 ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                        CALL AB_ALAHD( NOUT, PATH )
+     $                        CALL ALAHD( NOUT, PATH )
                            WRITE( NOUT, FMT = 9997 )M, N, KL, KU, NB,
      $                        IMAT, 1, RESULT( 1 )
                            NFAIL = NFAIL + 1
@@ -509,10 +501,8 @@
                         IF( INB.GT.1 .OR. M.NE.N )
      $                     GO TO 110
 *
-                        ANORMO = AB_DLANGB( 'O', N, KL, KU, A, LDA, RWOR
-     $K )
-                        ANORMI = AB_DLANGB( 'I', N, KL, KU, A, LDA, RWOR
-     $K )
+                        ANORMO = DLANGB( 'O', N, KL, KU, A, LDA, RWORK )
+                        ANORMI = DLANGB( 'I', N, KL, KU, A, LDA, RWORK )
 *
                         IF( INFO.EQ.0 ) THEN
 *
@@ -520,17 +510,16 @@
 *                          estimate of CNDNUM = norm(A) * norm(inv(A)).
 *
                            LDB = MAX( 1, N )
-                           CALL AB_DLASET( 'Full', N, N, ZERO, ONE, WORK
-     $,
+                           CALL DLASET( 'Full', N, N, ZERO, ONE, WORK,
      $                                  LDB )
-                           SRNAMT = 'AB_DGBTRS'
-                           CALL AB_DGBTRS( 'No transpose', N, KL, KU, N,
+                           SRNAMT = 'DGBTRS'
+                           CALL DGBTRS( 'No transpose', N, KL, KU, N,
      $                                  AFAC, LDAFAC, IWORK, WORK, LDB,
      $                                  INFO )
 *
 *                          Compute the 1-norm condition number of A.
 *
-                           AINVNM = AB_DLANGE( 'O', N, N, WORK, LDB,
+                           AINVNM = DLANGE( 'O', N, N, WORK, LDB,
      $                              RWORK )
                            IF( ANORMO.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
                               RCONDO = ONE
@@ -541,7 +530,7 @@
 *                          Compute the infinity-norm condition number of
 *                          A.
 *
-                           AINVNM = AB_DLANGE( 'I', N, N, WORK, LDB,
+                           AINVNM = DLANGE( 'I', N, N, WORK, LDB,
      $                              RWORK )
                            IF( ANORMI.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
                               RCONDI = ONE
@@ -579,34 +568,29 @@
 *+    TEST 2:
 *                             Solve and compute residual for A * X = B.
 *
-                              SRNAMT = 'AB_DLARHS'
-                              CALL AB_DLARHS( PATH, XTYPE, ' ', TRANS, N
-     $,
+                              SRNAMT = 'DLARHS'
+                              CALL DLARHS( PATH, XTYPE, ' ', TRANS, N,
      $                                     N, KL, KU, NRHS, A, LDA,
      $                                     XACT, LDB, B, LDB, ISEED,
      $                                     INFO )
                               XTYPE = 'C'
-                              CALL AB_DLACPY( 'Full', N, NRHS, B, LDB, X
-     $,
+                              CALL DLACPY( 'Full', N, NRHS, B, LDB, X,
      $                                     LDB )
 *
-                              SRNAMT = 'AB_DGBTRS'
-                              CALL AB_DGBTRS( TRANS, N, KL, KU, NRHS, AF
-     $AC,
+                              SRNAMT = 'DGBTRS'
+                              CALL DGBTRS( TRANS, N, KL, KU, NRHS, AFAC,
      $                                     LDAFAC, IWORK, X, LDB, INFO )
 *
-*                             Check error code from AB_DGBTRS.
+*                             Check error code from DGBTRS.
 *
                               IF( INFO.NE.0 )
-     $                           CALL AB_ALAERH( PATH, 'AB_DGBTRS', INFO
-     $, 0,
+     $                           CALL ALAERH( PATH, 'DGBTRS', INFO, 0,
      $                                        TRANS, N, N, KL, KU, -1,
      $                                        IMAT, NFAIL, NERRS, NOUT )
 *
-                              CALL AB_DLACPY( 'Full', N, NRHS, B, LDB,
+                              CALL DLACPY( 'Full', N, NRHS, B, LDB,
      $                                     WORK, LDB )
-                              CALL AB_DGBT02( TRANS, M, N, KL, KU, NRHS,
-     $ A,
+                              CALL DGBT02( TRANS, M, N, KL, KU, NRHS, A,
      $                                     LDA, X, LDB, WORK, LDB,
      $                                     RESULT( 2 ) )
 *
@@ -614,40 +598,37 @@
 *                             Check solution from generated exact
 *                             solution.
 *
-                              CALL AB_DGET04( N, NRHS, X, LDB, XACT, LDB
-     $,
+                              CALL DGET04( N, NRHS, X, LDB, XACT, LDB,
      $                                     RCONDC, RESULT( 3 ) )
 *
 *+    TESTS 4, 5, 6:
 *                             Use iterative refinement to improve the
 *                             solution.
 *
-                              SRNAMT = 'AB_DGBRFS'
-                              CALL AB_DGBRFS( TRANS, N, KL, KU, NRHS, A,
+                              SRNAMT = 'DGBRFS'
+                              CALL DGBRFS( TRANS, N, KL, KU, NRHS, A,
      $                                     LDA, AFAC, LDAFAC, IWORK, B,
      $                                     LDB, X, LDB, RWORK,
      $                                     RWORK( NRHS+1 ), WORK,
      $                                     IWORK( N+1 ), INFO )
 *
-*                             Check error code from AB_DGBRFS.
+*                             Check error code from DGBRFS.
 *
                               IF( INFO.NE.0 )
-     $                           CALL AB_ALAERH( PATH, 'AB_DGBRFS', INFO
-     $, 0,
+     $                           CALL ALAERH( PATH, 'DGBRFS', INFO, 0,
      $                                        TRANS, N, N, KL, KU, NRHS,
      $                                        IMAT, NFAIL, NERRS, NOUT )
 *
-                              CALL AB_DGET04( N, NRHS, X, LDB, XACT, LDB
-     $,
+                              CALL DGET04( N, NRHS, X, LDB, XACT, LDB,
      $                                     RCONDC, RESULT( 4 ) )
-                              CALL AB_DGBT05( TRANS, N, KL, KU, NRHS, A,
+                              CALL DGBT05( TRANS, N, KL, KU, NRHS, A,
      $                                     LDA, B, LDB, X, LDB, XACT,
      $                                     LDB, RWORK, RWORK( NRHS+1 ),
      $                                     RESULT( 5 ) )
                               DO 60 K = 2, 6
                                  IF( RESULT( K ).GE.THRESH ) THEN
                                     IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                                 CALL AB_ALAHD( NOUT, PATH )
+     $                                 CALL ALAHD( NOUT, PATH )
                                     WRITE( NOUT, FMT = 9996 )TRANS, N,
      $                                 KL, KU, NRHS, IMAT, K,
      $                                 RESULT( K )
@@ -672,28 +653,26 @@
                               RCONDC = RCONDI
                               NORM = 'I'
                            END IF
-                           SRNAMT = 'AB_DGBCON'
-                           CALL AB_DGBCON( NORM, N, KL, KU, AFAC, LDAFAC
-     $,
+                           SRNAMT = 'DGBCON'
+                           CALL DGBCON( NORM, N, KL, KU, AFAC, LDAFAC,
      $                                  IWORK, ANORM, RCOND, WORK,
      $                                  IWORK( N+1 ), INFO )
 *
-*                             Check error code from AB_DGBCON.
+*                             Check error code from DGBCON.
 *
                            IF( INFO.NE.0 )
-     $                        CALL AB_ALAERH( PATH, 'AB_DGBCON', INFO, 0
-     $,
+     $                        CALL ALAERH( PATH, 'DGBCON', INFO, 0,
      $                                     NORM, N, N, KL, KU, -1, IMAT,
      $                                     NFAIL, NERRS, NOUT )
 *
-                           RESULT( 7 ) = AB_DGET06( RCOND, RCONDC )
+                           RESULT( 7 ) = DGET06( RCOND, RCONDC )
 *
 *                          Print information about the tests that did
 *                          not pass the threshold.
 *
                            IF( RESULT( 7 ).GE.THRESH ) THEN
                               IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                           CALL AB_ALAHD( NOUT, PATH )
+     $                           CALL ALAHD( NOUT, PATH )
                               WRITE( NOUT, FMT = 9995 )NORM, N, KL, KU,
      $                           IMAT, 7, RESULT( 7 )
                               NFAIL = NFAIL + 1
@@ -710,13 +689,12 @@
 *
 *     Print a summary of the results.
 *
-      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
- 9999 FORMAT( ' *** In AB_DCHKGB, LA=', I5, ' is too small for M=', I5,
+ 9999 FORMAT( ' *** In DCHKGB, LA=', I5, ' is too small for M=', I5,
      $      ', N=', I5, ', KL=', I4, ', KU=', I4,
      $      / ' ==> Increase LA to at least ', I5 )
- 9998 FORMAT( ' *** In AB_DCHKGB, LAFAC=', I5, ' is too small for M=', I
-     $5,
+ 9998 FORMAT( ' *** In DCHKGB, LAFAC=', I5, ' is too small for M=', I5,
      $      ', N=', I5, ', KL=', I4, ', KU=', I4,
      $      / ' ==> Increase LAFAC to at least ', I5 )
  9997 FORMAT( ' M =', I5, ', N =', I5, ', KL=', I5, ', KU=', I5,
@@ -728,6 +706,6 @@
 *
       RETURN
 *
-*     End of AB_DCHKGB
+*     End of DCHKGB
 *
       END

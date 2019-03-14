@@ -1,4 +1,4 @@
-*> \brief \b AB_CGGRQF
+*> \brief \b CGGRQF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CGGRQF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CGGRQF.f">
+*> Download CGGRQF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cggrqf.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CGGRQF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cggrqf.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CGGRQF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cggrqf.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CGGRQF( M, P, N, A, LDA, TAUA, B, LDB, TAUB, WORK,
+*       SUBROUTINE CGGRQF( M, P, N, A, LDA, TAUA, B, LDB, TAUB, WORK,
 *                          LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CGGRQF computes a generalized RQ factorization of an M-by-N matrix A
+*> CGGRQF computes a generalized RQ factorization of an M-by-N matrix A
 *> and a P-by-N matrix B:
 *>
 *>             A = R*Q,        B = Z*T*Q,
@@ -149,12 +149,12 @@
 *>          where NB1 is the optimal blocksize for the RQ factorization
 *>          of an M-by-N matrix, NB2 is the optimal blocksize for the
 *>          QR factorization of a P-by-N matrix, and NB3 is the optimal
-*>          blocksize for a call of AB_CUNMRQ.
+*>          blocksize for a call of CUNMRQ.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -192,8 +192,8 @@
 *>  where taua is a complex scalar, and v is a complex vector with
 *>  v(n-k+i+1:n) = 0 and v(n-k+i) = 1; v(1:n-k+i-1) is stored on exit in
 *>  A(m-k+i,1:n-k+i-1), and taua in TAUA(i).
-*>  To form Q explicitly, use LAPACK subroutine AB_CUNGRQ.
-*>  To use Q to update another matrix, use LAPACK subroutine AB_CUNMRQ.
+*>  To form Q explicitly, use LAPACK subroutine CUNGRQ.
+*>  To use Q to update another matrix, use LAPACK subroutine CUNMRQ.
 *>
 *>  The matrix Z is represented as a product of elementary reflectors
 *>
@@ -206,12 +206,12 @@
 *>  where taub is a complex scalar, and v is a complex vector with
 *>  v(1:i-1) = 0 and v(i) = 1; v(i+1:p) is stored on exit in B(i+1:p,i),
 *>  and taub in TAUB(i).
-*>  To form Z explicitly, use LAPACK subroutine AB_CUNGQR.
-*>  To use Z to update another matrix, use LAPACK subroutine AB_CUNMQR.
+*>  To form Z explicitly, use LAPACK subroutine CUNGQR.
+*>  To use Z to update another matrix, use LAPACK subroutine CUNMQR.
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_CGGRQF( M, P, N, A, LDA, TAUA, B, LDB, TAUB, WORK,
+      SUBROUTINE CGGRQF( M, P, N, A, LDA, TAUA, B, LDB, TAUB, WORK,
      $                   LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -234,11 +234,11 @@
       INTEGER            LOPT, LWKOPT, NB, NB1, NB2, NB3
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_AB_CGEQRF, AB_CGERQF, AB_CUNMRQ, AB_XERBLA
+      EXTERNAL           CGEQRF, CGERQF, CUNMRQ, XERBLA
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_ILAENV
+      INTEGER            ILAENV
+      EXTERNAL           ILAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          INT, MAX, MIN
@@ -248,9 +248,9 @@
 *     Test the input parameters
 *
       INFO = 0
-      NB1 = AB_ILAENV( 1, 'AB_CGERQF', ' ', M, N, -1, -1 )
-      NB2 = AB_ILAENV( 1, 'AB_AB_CGEQRF', ' ', P, N, -1, -1 )
-      NB3 = AB_ILAENV( 1, 'AB_CUNMRQ', ' ', M, N, P, -1 )
+      NB1 = ILAENV( 1, 'CGERQF', ' ', M, N, -1, -1 )
+      NB2 = ILAENV( 1, 'CGEQRF', ' ', P, N, -1, -1 )
+      NB3 = ILAENV( 1, 'CUNMRQ', ' ', M, N, P, -1 )
       NB = MAX( NB1, NB2, NB3 )
       LWKOPT = MAX( N, M, P)*NB
       WORK( 1 ) = LWKOPT
@@ -269,7 +269,7 @@
          INFO = -11
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CGGRQF', -INFO )
+         CALL XERBLA( 'CGGRQF', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -277,23 +277,23 @@
 *
 *     RQ factorization of M-by-N matrix A: A = R*Q
 *
-      CALL AB_CGERQF( M, N, A, LDA, TAUA, WORK, LWORK, INFO )
+      CALL CGERQF( M, N, A, LDA, TAUA, WORK, LWORK, INFO )
       LOPT = WORK( 1 )
 *
 *     Update B := B*Q**H
 *
-      CALL AB_CUNMRQ( 'Right', 'Conjugate Transpose', P, N, MIN( M, N ),
+      CALL CUNMRQ( 'Right', 'Conjugate Transpose', P, N, MIN( M, N ),
      $             A( MAX( 1, M-N+1 ), 1 ), LDA, TAUA, B, LDB, WORK,
      $             LWORK, INFO )
       LOPT = MAX( LOPT, INT( WORK( 1 ) ) )
 *
 *     QR factorization of P-by-N matrix B: B = Z*T
 *
-      CALL AB_AB_CGEQRF( P, N, B, LDB, TAUB, WORK, LWORK, INFO )
+      CALL CGEQRF( P, N, B, LDB, TAUB, WORK, LWORK, INFO )
       WORK( 1 ) = MAX( LOPT, INT( WORK( 1 ) ) )
 *
       RETURN
 *
-*     End of AB_CGGRQF
+*     End of CGGRQF
 *
       END

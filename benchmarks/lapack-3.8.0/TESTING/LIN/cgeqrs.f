@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_CGEQRS
+*> \brief \b CGEQRS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_CGEQRS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LWORK,
+*       SUBROUTINE CGEQRS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LWORK,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -29,7 +29,7 @@
 *>     min || A*X - B ||
 *> using the QR factorization
 *>     A = Q*R
-*> computed by AB_AB_CGEQRF.
+*> computed by CGEQRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -57,7 +57,7 @@
 *> \verbatim
 *>          A is COMPLEX array, dimension (LDA,N)
 *>          Details of the QR factorization of the original matrix A as
-*>          returned by AB_AB_CGEQRF.
+*>          returned by CGEQRF.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -118,8 +118,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_CGEQRS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LW
-     $ORK,
+      SUBROUTINE CGEQRS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LWORK,
      $                   INFO )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -142,7 +141,7 @@
       PARAMETER          ( ONE = ( 1.0E+0, 0.0E+0 ) )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CTRSM, AB_CUNMQR, AB_XERBLA
+      EXTERNAL           CTRSM, CUNMQR, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -162,13 +161,12 @@
          INFO = -5
       ELSE IF( LDB.LT.MAX( 1, M ) ) THEN
          INFO = -8
-      ELSE IF( LWORK.LT.1 .OR. LWORK.LT.NRHS .AND. M.GT.0 .AND. N.GT.
-     $0 )
+      ELSE IF( LWORK.LT.1 .OR. LWORK.LT.NRHS .AND. M.GT.0 .AND. N.GT.0 )
      $          THEN
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_CGEQRS', -INFO )
+         CALL XERBLA( 'CGEQRS', -INFO )
          RETURN
       END IF
 *
@@ -179,17 +177,16 @@
 *
 *     B := Q' * B
 *
-      CALL AB_CUNMQR( 'Left', 'Conjugate transpose', M, NRHS, N, A, LDA,
+      CALL CUNMQR( 'Left', 'Conjugate transpose', M, NRHS, N, A, LDA,
      $             TAU, B, LDB, WORK, LWORK, INFO )
 *
 *     Solve R*X = B(1:n,:)
 *
-      CALL AB_CTRSM( 'Left', 'Upper', 'No transpose', 'Non-unit', N, NRH
-     $S,
+      CALL CTRSM( 'Left', 'Upper', 'No transpose', 'Non-unit', N, NRHS,
      $            ONE, A, LDA, B, LDB )
 *
       RETURN
 *
-*     End of AB_AB_CGEQRS
+*     End of CGEQRS
 *
       END

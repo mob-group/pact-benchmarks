@@ -1,4 +1,4 @@
-*> \brief \b AB_DPOTRI
+*> \brief \b DPOTRI
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DPOTRI + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DPOTRI.f">
+*> Download DPOTRI + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dpotri.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DPOTRI.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dpotri.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DPOTRI.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpotri.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DPOTRI( UPLO, N, A, LDA, INFO )
+*       SUBROUTINE DPOTRI( UPLO, N, A, LDA, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,9 +34,9 @@
 *>
 *> \verbatim
 *>
-*> AB_DPOTRI computes the inverse of a real symmetric positive definite
+*> DPOTRI computes the inverse of a real symmetric positive definite
 *> matrix A using the Cholesky factorization A = U**T*U or A = L*L**T
-*> computed by AB_DPOTRF.
+*> computed by DPOTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -60,7 +60,7 @@
 *>          A is DOUBLE PRECISION array, dimension (LDA,N)
 *>          On entry, the triangular factor U or L from the Cholesky
 *>          factorization A = U**T*U or A = L*L**T, as computed by
-*>          AB_DPOTRF.
+*>          DPOTRF.
 *>          On exit, the upper or lower triangle of the (symmetric)
 *>          inverse of A, overwriting the input factor U or L.
 *> \endverbatim
@@ -93,7 +93,7 @@
 *> \ingroup doublePOcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_DPOTRI( UPLO, N, A, LDA, INFO )
+      SUBROUTINE DPOTRI( UPLO, N, A, LDA, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -111,11 +111,11 @@
 *  =====================================================================
 *
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLAUUM, AB_DTRTRI, AB_XERBLA
+      EXTERNAL           DLAUUM, DTRTRI, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -125,8 +125,7 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF( .NOT.AB_LSAME( UPLO, 'U' ) .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) 
-     $THEN
+      IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -134,7 +133,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DPOTRI', -INFO )
+         CALL XERBLA( 'DPOTRI', -INFO )
          RETURN
       END IF
 *
@@ -145,16 +144,16 @@
 *
 *     Invert the triangular Cholesky factor U or L.
 *
-      CALL AB_DTRTRI( UPLO, 'Non-unit', N, A, LDA, INFO )
+      CALL DTRTRI( UPLO, 'Non-unit', N, A, LDA, INFO )
       IF( INFO.GT.0 )
      $   RETURN
 *
 *     Form inv(U) * inv(U)**T or inv(L)**T * inv(L).
 *
-      CALL AB_DLAUUM( UPLO, N, A, LDA, INFO )
+      CALL DLAUUM( UPLO, N, A, LDA, INFO )
 *
       RETURN
 *
-*     End of AB_DPOTRI
+*     End of DPOTRI
 *
       END

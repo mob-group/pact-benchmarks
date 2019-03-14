@@ -1,4 +1,4 @@
-*> \brief \b AB_ZHPMV
+*> \brief \b ZHPMV
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZHPMV(UPLO,N,ALPHA,AP,X,INCX,BETA,Y,INCY)
+*       SUBROUTINE ZHPMV(UPLO,N,ALPHA,AP,X,INCX,BETA,Y,INCY)
 *
 *       .. Scalar Arguments ..
 *       COMPLEX*16 ALPHA,BETA
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZHPMV  performs the matrix-vector operation
+*> ZHPMV  performs the matrix-vector operation
 *>
 *>    y := alpha*A*x + beta*y,
 *>
@@ -147,7 +147,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_ZHPMV(UPLO,N,ALPHA,AP,X,INCX,BETA,Y,INCY)
+      SUBROUTINE ZHPMV(UPLO,N,ALPHA,AP,X,INCX,BETA,Y,INCY)
 *
 *  -- Reference BLAS level2 routine (version 3.7.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -176,11 +176,11 @@
       INTEGER I,INFO,IX,IY,J,JX,JY,K,KK,KX,KY
 *     ..
 *     .. External Functions ..
-      LOGICAL AB_LSAME
-      EXTERNAL AB_LSAME
+      LOGICAL LSAME
+      EXTERNAL LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL AB_XERBLA
+      EXTERNAL XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC DBLE,DCONJG
@@ -189,7 +189,7 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF (.NOT.AB_LSAME(UPLO,'U') .AND. .NOT.AB_LSAME(UPLO,'L')) THEN
+      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
           INFO = 1
       ELSE IF (N.LT.0) THEN
           INFO = 2
@@ -199,7 +199,7 @@
           INFO = 9
       END IF
       IF (INFO.NE.0) THEN
-          CALL AB_XERBLA('AB_ZHPMV ',INFO)
+          CALL XERBLA('ZHPMV ',INFO)
           RETURN
       END IF
 *
@@ -253,7 +253,7 @@
       END IF
       IF (ALPHA.EQ.ZERO) RETURN
       KK = 1
-      IF (AB_LSAME(UPLO,'U')) THEN
+      IF (LSAME(UPLO,'U')) THEN
 *
 *        Form  y  when AP contains the upper triangle.
 *
@@ -333,6 +333,6 @@
 *
       RETURN
 *
-*     End of AB_ZHPMV .
+*     End of ZHPMV .
 *
       END

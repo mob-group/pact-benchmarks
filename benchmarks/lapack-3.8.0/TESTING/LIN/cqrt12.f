@@ -1,4 +1,4 @@
-*> \brief \b AB_CQRT12
+*> \brief \b CQRT12
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       REAL             FUNCTION AB_CQRT12( M, N, A, LDA, S, WORK, LWORK,
+*       REAL             FUNCTION CQRT12( M, N, A, LDA, S, WORK, LWORK,
 *                        RWORK )
 *
 *       .. Scalar Arguments ..
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CQRT12 computes the singular values `svlues' of the upper trapezoid
+*> CQRT12 computes the singular values `svlues' of the upper trapezoid
 *> of A(1:M,1:N) and returns the ratio
 *>
 *>      || s - svlues||/(||svlues||*eps*max(M,N))
@@ -94,7 +94,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      REAL             FUNCTION AB_CQRT12( M, N, A, LDA, S, WORK, LWORK,
+      REAL             FUNCTION CQRT12( M, N, A, LDA, S, WORK, LWORK,
      $                 RWORK )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -124,25 +124,24 @@
       REAL               DUMMY( 1 )
 *     ..
 *     .. External Functions ..
-      REAL               AB_CLANGE, AB_SASUM, AB_SLAMCH, AB_SNRM2
-      EXTERNAL           AB_CLANGE, AB_SASUM, AB_SLAMCH, AB_SNRM2
+      REAL               CLANGE, SASUM, SLAMCH, SNRM2
+      EXTERNAL           CLANGE, SASUM, SLAMCH, SNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CGEBD2, AB_CLASCL, AB_CLASET, AB_SAXPY, AB_S
-     $BDSQR, AB_SLABAD,
-     $                   AB_SLASCL, AB_XERBLA
+      EXTERNAL           CGEBD2, CLASCL, CLASET, SAXPY, SBDSQR, SLABAD,
+     $                   SLASCL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CMPLX, MAX, MIN, REAL
 *     ..
 *     .. Executable Statements ..
 *
-      AB_CQRT12 = ZERO
+      CQRT12 = ZERO
 *
 *     Test that enough workspace is supplied
 *
       IF( LWORK.LT.M*N+2*MIN( M, N )+MAX( M, N ) ) THEN
-         CALL AB_XERBLA( 'AB_CQRT12', 7 )
+         CALL XERBLA( 'CQRT12', 7 )
          RETURN
       END IF
 *
@@ -152,12 +151,11 @@
       IF( MN.LE.ZERO )
      $   RETURN
 *
-      NRMSVL = AB_SNRM2( MN, S, 1 )
+      NRMSVL = SNRM2( MN, S, 1 )
 *
 *     Copy upper triangle of A into work
 *
-      CALL AB_CLASET( 'Full', M, N, CMPLX( ZERO ), CMPLX( ZERO ), WORK, 
-     $M )
+      CALL CLASET( 'Full', M, N, CMPLX( ZERO ), CMPLX( ZERO ), WORK, M )
       DO 20 J = 1, N
          DO 10 I = 1, MIN( J, M )
             WORK( ( J-1 )*M+I ) = A( I, J )
@@ -166,25 +164,25 @@
 *
 *     Get machine parameters
 *
-      SMLNUM = AB_SLAMCH( 'S' ) / AB_SLAMCH( 'P' )
+      SMLNUM = SLAMCH( 'S' ) / SLAMCH( 'P' )
       BIGNUM = ONE / SMLNUM
-      CALL AB_SLABAD( SMLNUM, BIGNUM )
+      CALL SLABAD( SMLNUM, BIGNUM )
 *
 *     Scale work if max entry outside range [SMLNUM,BIGNUM]
 *
-      ANRM = AB_CLANGE( 'M', M, N, WORK, M, DUMMY )
+      ANRM = CLANGE( 'M', M, N, WORK, M, DUMMY )
       ISCL = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
 *
 *        Scale matrix norm up to SMLNUM
 *
-         CALL AB_CLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, WORK, M, INFO )
+         CALL CLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, WORK, M, INFO )
          ISCL = 1
       ELSE IF( ANRM.GT.BIGNUM ) THEN
 *
 *        Scale matrix norm down to BIGNUM
 *
-         CALL AB_CLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, WORK, M, INFO )
+         CALL CLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, WORK, M, INFO )
          ISCL = 1
       END IF
 *
@@ -192,23 +190,20 @@
 *
 *        Compute SVD of work
 *
-         CALL AB_CGEBD2( M, N, WORK, M, RWORK( 1 ), RWORK( MN+1 ),
+         CALL CGEBD2( M, N, WORK, M, RWORK( 1 ), RWORK( MN+1 ),
      $                WORK( M*N+1 ), WORK( M*N+MN+1 ),
      $                WORK( M*N+2*MN+1 ), INFO )
-         CALL AB_SBDSQR( 'Upper', MN, 0, 0, 0, RWORK( 1 ), RWORK( MN+1 )
-     $,
+         CALL SBDSQR( 'Upper', MN, 0, 0, 0, RWORK( 1 ), RWORK( MN+1 ),
      $                DUMMY, MN, DUMMY, 1, DUMMY, MN, RWORK( 2*MN+1 ),
      $                INFO )
 *
          IF( ISCL.EQ.1 ) THEN
             IF( ANRM.GT.BIGNUM ) THEN
-               CALL AB_SLASCL( 'G', 0, 0, BIGNUM, ANRM, MN, 1, RWORK( 1 
-     $),
+               CALL SLASCL( 'G', 0, 0, BIGNUM, ANRM, MN, 1, RWORK( 1 ),
      $                      MN, INFO )
             END IF
             IF( ANRM.LT.SMLNUM ) THEN
-               CALL AB_SLASCL( 'G', 0, 0, SMLNUM, ANRM, MN, 1, RWORK( 1 
-     $),
+               CALL SLASCL( 'G', 0, 0, SMLNUM, ANRM, MN, 1, RWORK( 1 ),
      $                      MN, INFO )
             END IF
          END IF
@@ -222,14 +217,14 @@
 *
 *     Compare s and singular values of work
 *
-      CALL AB_SAXPY( MN, -ONE, S, 1, RWORK( 1 ), 1 )
-      AB_CQRT12 = AB_SASUM( MN, RWORK( 1 ), 1 ) /
-     $         ( AB_SLAMCH( 'Epsilon' )*REAL( MAX( M, N ) ) )
+      CALL SAXPY( MN, -ONE, S, 1, RWORK( 1 ), 1 )
+      CQRT12 = SASUM( MN, RWORK( 1 ), 1 ) /
+     $         ( SLAMCH( 'Epsilon' )*REAL( MAX( M, N ) ) )
       IF( NRMSVL.NE.ZERO )
-     $   AB_CQRT12 = AB_CQRT12 / NRMSVL
+     $   CQRT12 = CQRT12 / NRMSVL
 *
       RETURN
 *
-*     End of AB_CQRT12
+*     End of CQRT12
 *
       END

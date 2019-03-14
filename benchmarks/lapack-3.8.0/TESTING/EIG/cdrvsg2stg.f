@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_CDRVSG2STG
+*> \brief \b CDRVSG2STG
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_CDRVSG2STG( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+*       SUBROUTINE CDRVSG2STG( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
 *                              NOUNIT, A, LDA, B, LDB, D, D2, Z, LDZ, AB,
 *                              BB, AP, BP, WORK, NWORK, RWORK, LRWORK,
 *                              IWORK, LIWORK, RESULT, INFO )
@@ -35,48 +35,48 @@
 *>
 *> \verbatim
 *>
-*>      AB_AB_CDRVSG2STG checks the complex Hermitian generalized eigenproblem
+*>      CDRVSG2STG checks the complex Hermitian generalized eigenproblem
 *>      drivers.
 *>
-*>              AB_CHEGV computes all eigenvalues and, optionally,
+*>              CHEGV computes all eigenvalues and, optionally,
 *>              eigenvectors of a complex Hermitian-definite generalized
 *>              eigenproblem.
 *>
-*>              AB_AB_CHEGVD computes all eigenvalues and, optionally,
+*>              CHEGVD computes all eigenvalues and, optionally,
 *>              eigenvectors of a complex Hermitian-definite generalized
 *>              eigenproblem using a divide and conquer algorithm.
 *>
-*>              AB_AB_CHEGVX computes selected eigenvalues and, optionally,
+*>              CHEGVX computes selected eigenvalues and, optionally,
 *>              eigenvectors of a complex Hermitian-definite generalized
 *>              eigenproblem.
 *>
-*>              AB_CHPGV computes all eigenvalues and, optionally,
+*>              CHPGV computes all eigenvalues and, optionally,
 *>              eigenvectors of a complex Hermitian-definite generalized
 *>              eigenproblem in packed storage.
 *>
-*>              AB_AB_CHPGVD computes all eigenvalues and, optionally,
+*>              CHPGVD computes all eigenvalues and, optionally,
 *>              eigenvectors of a complex Hermitian-definite generalized
 *>              eigenproblem in packed storage using a divide and
 *>              conquer algorithm.
 *>
-*>              AB_AB_CHPGVX computes selected eigenvalues and, optionally,
+*>              CHPGVX computes selected eigenvalues and, optionally,
 *>              eigenvectors of a complex Hermitian-definite generalized
 *>              eigenproblem in packed storage.
 *>
-*>              AB_CHBGV computes all eigenvalues and, optionally,
+*>              CHBGV computes all eigenvalues and, optionally,
 *>              eigenvectors of a complex Hermitian-definite banded
 *>              generalized eigenproblem.
 *>
-*>              AB_AB_CHBGVD computes all eigenvalues and, optionally,
+*>              CHBGVD computes all eigenvalues and, optionally,
 *>              eigenvectors of a complex Hermitian-definite banded
 *>              generalized eigenproblem using a divide and conquer
 *>              algorithm.
 *>
-*>              AB_AB_CHBGVX computes selected eigenvalues and, optionally,
+*>              CHBGVX computes selected eigenvalues and, optionally,
 *>              eigenvectors of a complex Hermitian-definite banded
 *>              generalized eigenproblem.
 *>
-*>      When AB_AB_CDRVSG2STG is called, a number of matrix "sizes" ("n's") and a
+*>      When CDRVSG2STG is called, a number of matrix "sizes" ("n's") and a
 *>      number of matrix "types" are specified.  For each size ("n")
 *>      and each type of matrix, one matrix A of the given type will be
 *>      generated; a random well-conditioned matrix B is also generated
@@ -84,39 +84,39 @@
 *>
 *>      For each pair (A,B), the following tests are performed:
 *>
-*>      (1) AB_CHEGV with ITYPE = 1 and UPLO ='U':
+*>      (1) CHEGV with ITYPE = 1 and UPLO ='U':
 *>
 *>              | A Z - B Z D | / ( |A| |Z| n ulp )
 *>              | D - D2 | / ( |D| ulp )   where D is computed by
-*>                                         AB_CHEGV and  D2 is computed by
-*>                                         AB_AB_CHEGV_2STAGE. This test is
-*>                                         only performed for AB_DSYGV
+*>                                         CHEGV and  D2 is computed by
+*>                                         CHEGV_2STAGE. This test is
+*>                                         only performed for DSYGV
 *>
-*>      (2) as (1) but calling AB_CHPGV
-*>      (3) as (1) but calling AB_CHBGV
+*>      (2) as (1) but calling CHPGV
+*>      (3) as (1) but calling CHBGV
 *>      (4) as (1) but with UPLO = 'L'
-*>      (5) as (4) but calling AB_CHPGV
-*>      (6) as (4) but calling AB_CHBGV
+*>      (5) as (4) but calling CHPGV
+*>      (6) as (4) but calling CHBGV
 *>
-*>      (7) AB_CHEGV with ITYPE = 2 and UPLO ='U':
+*>      (7) CHEGV with ITYPE = 2 and UPLO ='U':
 *>
 *>              | A B Z - Z D | / ( |A| |Z| n ulp )
 *>
-*>      (8) as (7) but calling AB_CHPGV
+*>      (8) as (7) but calling CHPGV
 *>      (9) as (7) but with UPLO = 'L'
-*>      (10) as (9) but calling AB_CHPGV
+*>      (10) as (9) but calling CHPGV
 *>
-*>      (11) AB_CHEGV with ITYPE = 3 and UPLO ='U':
+*>      (11) CHEGV with ITYPE = 3 and UPLO ='U':
 *>
 *>              | B A Z - Z D | / ( |A| |Z| n ulp )
 *>
-*>      (12) as (11) but calling AB_CHPGV
+*>      (12) as (11) but calling CHPGV
 *>      (13) as (11) but with UPLO = 'L'
-*>      (14) as (13) but calling AB_CHPGV
+*>      (14) as (13) but calling CHPGV
 *>
-*>      AB_AB_CHEGVD, AB_AB_CHPGVD and AB_AB_CHBGVD performed the same 14 tests.
+*>      CHEGVD, CHPGVD and CHBGVD performed the same 14 tests.
 *>
-*>      AB_AB_CHEGVX, AB_AB_CHPGVX and AB_AB_CHBGVX performed the above 14 tests with
+*>      CHEGVX, CHPGVX and CHBGVX performed the above 14 tests with
 *>      the parameter RANGE = 'A', 'N' and 'I', respectively.
 *>
 *>      The "sizes" are specified by an array NN(1:NSIZES); the value of
@@ -175,7 +175,7 @@
 *> \verbatim
 *>  NSIZES  INTEGER
 *>          The number of sizes of matrices to use.  If it is zero,
-*>          AB_AB_CDRVSG2STG does nothing.  It must be at least zero.
+*>          CDRVSG2STG does nothing.  It must be at least zero.
 *>          Not modified.
 *>
 *>  NN      INTEGER array, dimension (NSIZES)
@@ -185,7 +185,7 @@
 *>          Not modified.
 *>
 *>  NTYPES  INTEGER
-*>          The number of elements in DOTYPE.   If it is zero, AB_AB_CDRVSG2STG
+*>          The number of elements in DOTYPE.   If it is zero, CDRVSG2STG
 *>          does nothing.  It must be at least zero.  If it is MAXTYP+1
 *>          and NSIZES is 1, then an additional type, MAXTYP+1 is
 *>          defined, which is to use whatever matrix is in A.  This
@@ -211,7 +211,7 @@
 *>          congruential sequence limited to small integers, and so
 *>          should produce machine independent random numbers. The
 *>          values of ISEED are changed on exit, and can be used in the
-*>          next call to AB_AB_CDRVSG2STG to continue the same random number
+*>          next call to CDRVSG2STG to continue the same random number
 *>          sequence.
 *>          Modified.
 *>
@@ -242,7 +242,7 @@
 *>
 *>  B       COMPLEX array, dimension (LDB , max(NN))
 *>          Used to hold the Hermitian positive definite matrix for
-*>          the generaiAB_LZEd problem.
+*>          the generailzed problem.
 *>          On exit, B contains the last matrix actually
 *>          used.
 *>          Modified.
@@ -326,8 +326,8 @@
 *>          -21: NWORK too small.
 *>          -23: LRWORK too small.
 *>          -25: LIWORK too small.
-*>          If  AB_CLATMR, AB_CLATMS, AB_CHEGV, AB_CHPGV, AB_CHBGV, AB_AB_CHEGVD, AB_AB_CHPGVD,
-*>              AB_AB_CHPGVD, AB_AB_CHEGVX, AB_AB_CHPGVX, AB_AB_CHBGVX returns an error code,
+*>          If  CLATMR, CLATMS, CHEGV, CHPGV, CHBGV, CHEGVD, CHPGVD,
+*>              CHPGVD, CHEGVX, CHPGVX, CHBGVX returns an error code,
 *>              the absolute value of it is returned.
 *>          Modified.
 *>
@@ -343,7 +343,7 @@
 *>       NMAX            Largest value in NN.
 *>       NMATS           The number of matrices generated so far.
 *>       NERRS           The number of tests which have exceeded THRESH
-*>                       so far (computed by AB_SLAFTS).
+*>                       so far (computed by SLAFTS).
 *>       COND, IMODE     Values to be passed to the matrix generators.
 *>       ANORM           Norm of A; passed to matrix generators.
 *>
@@ -371,8 +371,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_CDRVSG2STG( NSIZES, NN, NTYPES, DOTYPE, ISEED, TH
-     $RESH,
+      SUBROUTINE CDRVSG2STG( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
      $                       NOUNIT, A, LDA, B, LDB, D, D2, Z, LDZ, AB,
      $                       BB, AP, BP, WORK, NWORK, RWORK, LRWORK,
      $                       IWORK, LIWORK, RESULT, INFO )
@@ -425,18 +424,15 @@
      $                   KTYPE( MAXTYP )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_SLAMCH, AB_SLARND
-      EXTERNAL           AB_LSAME, AB_SLAMCH, AB_SLARND
+      LOGICAL            LSAME
+      REAL               SLAMCH, SLARND
+      EXTERNAL           LSAME, SLAMCH, SLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SLABAD, AB_SLAFTS, AB_SLASUM, AB_XERBLA, AB_
-     $CHBGV, AB_AB_CHBGVD,
-     $                   AB_AB_CHBGVX, AB_CHEGV, AB_AB_CHEGVD, AB_AB_CHE
-     $GVX, AB_CHPGV, AB_AB_CHPGVD,
-     $                   AB_AB_CHPGVX, AB_CLACPY, AB_CLASET, AB_CLATMR, 
-     $AB_CLATMS, AB_CSGT01,
-     $                   AB_AB_CHEGV_2STAGE
+      EXTERNAL           SLABAD, SLAFTS, SLASUM, XERBLA, CHBGV, CHBGVD,
+     $                   CHBGVX, CHEGV, CHEGVD, CHEGVX, CHPGV, CHPGVD,
+     $                   CHPGVX, CLACPY, CLASET, CLATMR, CLATMS, CSGT01,
+     $                   CHEGV_2STAGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, REAL, MAX, MIN, SQRT
@@ -484,7 +480,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_CDRVSG2STG', -INFO )
+         CALL XERBLA( 'CDRVSG2STG', -INFO )
          RETURN
       END IF
 *
@@ -495,10 +491,10 @@
 *
 *     More Important constants
 *
-      UNFL = AB_SLAMCH( 'Safe minimum' )
-      OVFL = AB_SLAMCH( 'Overflow' )
-      CALL AB_SLABAD( UNFL, OVFL )
-      ULP = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
+      UNFL = SLAMCH( 'Safe minimum' )
+      OVFL = SLAMCH( 'Overflow' )
+      CALL SLABAD( UNFL, OVFL )
+      ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
       ULPINV = ONE / ULP
       RTUNFL = SQRT( UNFL )
       RTOVFL = SQRT( OVFL )
@@ -584,7 +580,7 @@
 *
                KA = 0
                KB = 0
-               CALL AB_CLASET( 'Full', LDA, N, CZERO, CZERO, A, LDA )
+               CALL CLASET( 'Full', LDA, N, CZERO, CZERO, A, LDA )
 *
             ELSE IF( ITYPE.EQ.2 ) THEN
 *
@@ -592,7 +588,7 @@
 *
                KA = 0
                KB = 0
-               CALL AB_CLASET( 'Full', LDA, N, CZERO, CZERO, A, LDA )
+               CALL CLASET( 'Full', LDA, N, CZERO, CZERO, A, LDA )
                DO 80 JCOL = 1, N
                   A( JCOL, JCOL ) = ANORM
    80          CONTINUE
@@ -603,8 +599,7 @@
 *
                KA = 0
                KB = 0
-               CALL AB_CLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND
-     $,
+               CALL CLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND,
      $                      ANORM, 0, 0, 'N', A, LDA, WORK, IINFO )
 *
             ELSE IF( ITYPE.EQ.5 ) THEN
@@ -613,8 +608,7 @@
 *
                KA = MAX( 0, N-1 )
                KB = KA
-               CALL AB_CLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND
-     $,
+               CALL CLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND,
      $                      ANORM, N, N, 'N', A, LDA, WORK, IINFO )
 *
             ELSE IF( ITYPE.EQ.7 ) THEN
@@ -623,8 +617,7 @@
 *
                KA = 0
                KB = 0
-               CALL AB_CLATMR( N, N, 'S', ISEED, 'H', WORK, 6, ONE, CONE
-     $,
+               CALL CLATMR( N, N, 'S', ISEED, 'H', WORK, 6, ONE, CONE,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, 0, 0,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -635,8 +628,7 @@
 *
                KA = MAX( 0, N-1 )
                KB = KA
-               CALL AB_CLATMR( N, N, 'S', ISEED, 'H', WORK, 6, ONE, CONE
-     $,
+               CALL CLATMR( N, N, 'S', ISEED, 'H', WORK, 6, ONE, CONE,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, N, N,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -661,8 +653,7 @@
                END IF
                KA = MAX( 0, MIN( N-1, KA9 ) )
                KB = MAX( 0, MIN( N-1, KB9 ) )
-               CALL AB_CLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND
-     $,
+               CALL CLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND,
      $                      ANORM, KA, KA, 'N', A, LDA, WORK, IINFO )
 *
             ELSE
@@ -684,8 +675,8 @@
                IL = 1
                IU = N
             ELSE
-               IL = 1 + INT( ( N-1 )*AB_SLARND( 1, ISEED2 ) )
-               IU = 1 + INT( ( N-1 )*AB_SLARND( 1, ISEED2 ) )
+               IL = 1 + INT( ( N-1 )*SLARND( 1, ISEED2 ) )
+               IU = 1 + INT( ( N-1 )*SLARND( 1, ISEED2 ) )
                IF( IL.GT.IU ) THEN
                   ITEMP = IL
                   IL = IU
@@ -693,8 +684,8 @@
                END IF
             END IF
 *
-*           3) Call AB_CHEGV, AB_CHPGV, AB_CHBGV, AB_AB_CHEGVD, AB_AB_CHPGVD, AB_AB_CHBGVD,
-*              AB_AB_CHEGVX, AB_AB_CHPGVX and AB_AB_CHBGVX, do tests.
+*           3) Call CHEGV, CHPGV, CHBGV, CHEGVD, CHPGVD, CHBGVD,
+*              CHEGVX, CHPGVX and CHBGVX, do tests.
 *
 *           loop over the three generalized problems
 *                 IBTYPE = 1: A*x = (lambda)*B*x
@@ -714,22 +705,21 @@
 *                 Generate random well-conditioned positive definite
 *                 matrix B, of bandwidth not greater than that of A.
 *
-                  CALL AB_CLATMS( N, N, 'U', ISEED, 'P', RWORK, 5, TEN,
+                  CALL CLATMS( N, N, 'U', ISEED, 'P', RWORK, 5, TEN,
      $                         ONE, KB, KB, UPLO, B, LDB, WORK( N+1 ),
      $                         IINFO )
 *
-*                 Test AB_CHEGV
+*                 Test CHEGV
 *
                   NTEST = NTEST + 1
 *
-                  CALL AB_CLACPY( ' ', N, N, A, LDA, Z, LDZ )
-                  CALL AB_CLACPY( UPLO, N, N, B, LDB, BB, LDB )
+                  CALL CLACPY( ' ', N, N, A, LDA, Z, LDZ )
+                  CALL CLACPY( UPLO, N, N, B, LDB, BB, LDB )
 *
-                  CALL AB_CHEGV( IBTYPE, 'V', UPLO, N, Z, LDZ, BB, LDB, 
-     $D,
+                  CALL CHEGV( IBTYPE, 'V', UPLO, N, Z, LDZ, BB, LDB, D,
      $                        WORK, NWORK, RWORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
-                     WRITE( NOUNIT, FMT = 9999 )'AB_CHEGV(V,' // UPLO //
+                     WRITE( NOUNIT, FMT = 9999 )'CHEGV(V,' // UPLO //
      $                  ')', IINFO, N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN
@@ -742,22 +732,22 @@
 *
 *                 Do Test
 *
-                  CALL AB_CSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
+                  CALL CSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
      $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
-*                 Test AB_AB_CHEGV_2STAGE
+*                 Test CHEGV_2STAGE
 *
                   NTEST = NTEST + 1
 *
-                  CALL AB_CLACPY( ' ', N, N, A, LDA, Z, LDZ )
-                  CALL AB_CLACPY( UPLO, N, N, B, LDB, BB, LDB )
+                  CALL CLACPY( ' ', N, N, A, LDA, Z, LDZ )
+                  CALL CLACPY( UPLO, N, N, B, LDB, BB, LDB )
 *
-                  CALL AB_AB_CHEGV_2STAGE( IBTYPE, 'N', UPLO, N, Z, LDZ,
+                  CALL CHEGV_2STAGE( IBTYPE, 'N', UPLO, N, Z, LDZ,
      $                               BB, LDB, D2, WORK, NWORK, RWORK, 
      $                               IINFO )
                   IF( IINFO.NE.0 ) THEN
                      WRITE( NOUNIT, FMT = 9999 )
-     $                  'AB_AB_CHEGV_2STAGE(V,' // UPLO //
+     $                  'CHEGV_2STAGE(V,' // UPLO //
      $                  ')', IINFO, N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN
@@ -770,8 +760,7 @@
 *
 *                 Do Test
 *
-C                  CALL AB_CSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z
-     $,
+C                  CALL CSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
 C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *           
 *                 Do Tests | D1 - D2 | / ( |D1| ulp )
@@ -789,20 +778,18 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
                   RESULT( NTEST ) = TEMP2 / 
      $                              MAX( UNFL, ULP*MAX( TEMP1, TEMP2 ) )
 *
-*                 Test AB_AB_CHEGVD
+*                 Test CHEGVD
 *
                   NTEST = NTEST + 1
 *
-                  CALL AB_CLACPY( ' ', N, N, A, LDA, Z, LDZ )
-                  CALL AB_CLACPY( UPLO, N, N, B, LDB, BB, LDB )
+                  CALL CLACPY( ' ', N, N, A, LDA, Z, LDZ )
+                  CALL CLACPY( UPLO, N, N, B, LDB, BB, LDB )
 *
-                  CALL AB_AB_CHEGVD( IBTYPE, 'V', UPLO, N, Z, LDZ, BB, L
-     $DB, D,
+                  CALL CHEGVD( IBTYPE, 'V', UPLO, N, Z, LDZ, BB, LDB, D,
      $                         WORK, NWORK, RWORK, LRWORK, IWORK,
      $                         LIWORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
-                     WRITE( NOUNIT, FMT = 9999 )'AB_AB_CHEGVD(V,' // UPL
-     $O //
+                     WRITE( NOUNIT, FMT = 9999 )'CHEGVD(V,' // UPLO //
      $                  ')', IINFO, N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN
@@ -815,24 +802,22 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
 *                 Do Test
 *
-                  CALL AB_CSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
+                  CALL CSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
      $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
-*                 Test AB_AB_CHEGVX
+*                 Test CHEGVX
 *
                   NTEST = NTEST + 1
 *
-                  CALL AB_CLACPY( ' ', N, N, A, LDA, AB, LDA )
-                  CALL AB_CLACPY( UPLO, N, N, B, LDB, BB, LDB )
+                  CALL CLACPY( ' ', N, N, A, LDA, AB, LDA )
+                  CALL CLACPY( UPLO, N, N, B, LDB, BB, LDB )
 *
-                  CALL AB_AB_CHEGVX( IBTYPE, 'V', 'A', UPLO, N, AB, LDA,
-     $ BB,
+                  CALL CHEGVX( IBTYPE, 'V', 'A', UPLO, N, AB, LDA, BB,
      $                         LDB, VL, VU, IL, IU, ABSTOL, M, D, Z,
      $                         LDZ, WORK, NWORK, RWORK, IWORK( N+1 ),
      $                         IWORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
-                     WRITE( NOUNIT, FMT = 9999 )'AB_AB_CHEGVX(V,A' // UP
-     $LO //
+                     WRITE( NOUNIT, FMT = 9999 )'CHEGVX(V,A' // UPLO //
      $                  ')', IINFO, N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN
@@ -845,13 +830,13 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
 *                 Do Test
 *
-                  CALL AB_CSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
+                  CALL CSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
      $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
                   NTEST = NTEST + 1
 *
-                  CALL AB_CLACPY( ' ', N, N, A, LDA, AB, LDA )
-                  CALL AB_CLACPY( UPLO, N, N, B, LDB, BB, LDB )
+                  CALL CLACPY( ' ', N, N, A, LDA, AB, LDA )
+                  CALL CLACPY( UPLO, N, N, B, LDB, BB, LDB )
 *
 *                 since we do not know the exact eigenvalues of this
 *                 eigenpair, we just set VL and VU as constants.
@@ -860,13 +845,12 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
                   VL = ZERO
                   VU = ANORM
-                  CALL AB_AB_CHEGVX( IBTYPE, 'V', 'V', UPLO, N, AB, LDA,
-     $ BB,
+                  CALL CHEGVX( IBTYPE, 'V', 'V', UPLO, N, AB, LDA, BB,
      $                         LDB, VL, VU, IL, IU, ABSTOL, M, D, Z,
      $                         LDZ, WORK, NWORK, RWORK, IWORK( N+1 ),
      $                         IWORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
-                     WRITE( NOUNIT, FMT = 9999 )'AB_AB_CHEGVX(V,V,' //
+                     WRITE( NOUNIT, FMT = 9999 )'CHEGVX(V,V,' //
      $                  UPLO // ')', IINFO, N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN
@@ -879,21 +863,20 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
 *                 Do Test
 *
-                  CALL AB_CSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB, Z,
+                  CALL CSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB, Z,
      $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
                   NTEST = NTEST + 1
 *
-                  CALL AB_CLACPY( ' ', N, N, A, LDA, AB, LDA )
-                  CALL AB_CLACPY( UPLO, N, N, B, LDB, BB, LDB )
+                  CALL CLACPY( ' ', N, N, A, LDA, AB, LDA )
+                  CALL CLACPY( UPLO, N, N, B, LDB, BB, LDB )
 *
-                  CALL AB_AB_CHEGVX( IBTYPE, 'V', 'I', UPLO, N, AB, LDA,
-     $ BB,
+                  CALL CHEGVX( IBTYPE, 'V', 'I', UPLO, N, AB, LDA, BB,
      $                         LDB, VL, VU, IL, IU, ABSTOL, M, D, Z,
      $                         LDZ, WORK, NWORK, RWORK, IWORK( N+1 ),
      $                         IWORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
-                     WRITE( NOUNIT, FMT = 9999 )'AB_AB_CHEGVX(V,I,' //
+                     WRITE( NOUNIT, FMT = 9999 )'CHEGVX(V,I,' //
      $                  UPLO // ')', IINFO, N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN
@@ -906,18 +889,18 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
 *                 Do Test
 *
-                  CALL AB_CSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB, Z,
+                  CALL CSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB, Z,
      $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
   100             CONTINUE
 *
-*                 Test AB_CHPGV
+*                 Test CHPGV
 *
                   NTEST = NTEST + 1
 *
 *                 Copy the matrices into packed storage.
 *
-                  IF( AB_LSAME( UPLO, 'U' ) ) THEN
+                  IF( LSAME( UPLO, 'U' ) ) THEN
                      IJ = 1
                      DO 120 J = 1, N
                         DO 110 I = 1, J
@@ -937,11 +920,10 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
   140                CONTINUE
                   END IF
 *
-                  CALL AB_CHPGV( IBTYPE, 'V', UPLO, N, AP, BP, D, Z, LDZ
-     $,
+                  CALL CHPGV( IBTYPE, 'V', UPLO, N, AP, BP, D, Z, LDZ,
      $                        WORK, RWORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
-                     WRITE( NOUNIT, FMT = 9999 )'AB_CHPGV(V,' // UPLO //
+                     WRITE( NOUNIT, FMT = 9999 )'CHPGV(V,' // UPLO //
      $                  ')', IINFO, N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN
@@ -954,16 +936,16 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
 *                 Do Test
 *
-                  CALL AB_CSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
+                  CALL CSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
      $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
-*                 Test AB_AB_CHPGVD
+*                 Test CHPGVD
 *
                   NTEST = NTEST + 1
 *
 *                 Copy the matrices into packed storage.
 *
-                  IF( AB_LSAME( UPLO, 'U' ) ) THEN
+                  IF( LSAME( UPLO, 'U' ) ) THEN
                      IJ = 1
                      DO 160 J = 1, N
                         DO 150 I = 1, J
@@ -983,13 +965,11 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
   180                CONTINUE
                   END IF
 *
-                  CALL AB_AB_CHPGVD( IBTYPE, 'V', UPLO, N, AP, BP, D, Z,
-     $ LDZ,
+                  CALL CHPGVD( IBTYPE, 'V', UPLO, N, AP, BP, D, Z, LDZ,
      $                         WORK, NWORK, RWORK, LRWORK, IWORK,
      $                         LIWORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
-                     WRITE( NOUNIT, FMT = 9999 )'AB_AB_CHPGVD(V,' // UPL
-     $O //
+                     WRITE( NOUNIT, FMT = 9999 )'CHPGVD(V,' // UPLO //
      $                  ')', IINFO, N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN
@@ -1002,16 +982,16 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
 *                 Do Test
 *
-                  CALL AB_CSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
+                  CALL CSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
      $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
-*                 Test AB_AB_CHPGVX
+*                 Test CHPGVX
 *
                   NTEST = NTEST + 1
 *
 *                 Copy the matrices into packed storage.
 *
-                  IF( AB_LSAME( UPLO, 'U' ) ) THEN
+                  IF( LSAME( UPLO, 'U' ) ) THEN
                      IJ = 1
                      DO 200 J = 1, N
                         DO 190 I = 1, J
@@ -1031,13 +1011,11 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
   220                CONTINUE
                   END IF
 *
-                  CALL AB_AB_CHPGVX( IBTYPE, 'V', 'A', UPLO, N, AP, BP, 
-     $VL,
+                  CALL CHPGVX( IBTYPE, 'V', 'A', UPLO, N, AP, BP, VL,
      $                         VU, IL, IU, ABSTOL, M, D, Z, LDZ, WORK,
      $                         RWORK, IWORK( N+1 ), IWORK, INFO )
                   IF( IINFO.NE.0 ) THEN
-                     WRITE( NOUNIT, FMT = 9999 )'AB_AB_CHPGVX(V,A' // UP
-     $LO //
+                     WRITE( NOUNIT, FMT = 9999 )'CHPGVX(V,A' // UPLO //
      $                  ')', IINFO, N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN
@@ -1050,14 +1028,14 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
 *                 Do Test
 *
-                  CALL AB_CSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
+                  CALL CSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
      $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
                   NTEST = NTEST + 1
 *
 *                 Copy the matrices into packed storage.
 *
-                  IF( AB_LSAME( UPLO, 'U' ) ) THEN
+                  IF( LSAME( UPLO, 'U' ) ) THEN
                      IJ = 1
                      DO 240 J = 1, N
                         DO 230 I = 1, J
@@ -1079,13 +1057,11 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
                   VL = ZERO
                   VU = ANORM
-                  CALL AB_AB_CHPGVX( IBTYPE, 'V', 'V', UPLO, N, AP, BP, 
-     $VL,
+                  CALL CHPGVX( IBTYPE, 'V', 'V', UPLO, N, AP, BP, VL,
      $                         VU, IL, IU, ABSTOL, M, D, Z, LDZ, WORK,
      $                         RWORK, IWORK( N+1 ), IWORK, INFO )
                   IF( IINFO.NE.0 ) THEN
-                     WRITE( NOUNIT, FMT = 9999 )'AB_AB_CHPGVX(V,V' // UP
-     $LO //
+                     WRITE( NOUNIT, FMT = 9999 )'CHPGVX(V,V' // UPLO //
      $                  ')', IINFO, N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN
@@ -1098,14 +1074,14 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
 *                 Do Test
 *
-                  CALL AB_CSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB, Z,
+                  CALL CSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB, Z,
      $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
                   NTEST = NTEST + 1
 *
 *                 Copy the matrices into packed storage.
 *
-                  IF( AB_LSAME( UPLO, 'U' ) ) THEN
+                  IF( LSAME( UPLO, 'U' ) ) THEN
                      IJ = 1
                      DO 280 J = 1, N
                         DO 270 I = 1, J
@@ -1125,13 +1101,11 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
   300                CONTINUE
                   END IF
 *
-                  CALL AB_AB_CHPGVX( IBTYPE, 'V', 'I', UPLO, N, AP, BP, 
-     $VL,
+                  CALL CHPGVX( IBTYPE, 'V', 'I', UPLO, N, AP, BP, VL,
      $                         VU, IL, IU, ABSTOL, M, D, Z, LDZ, WORK,
      $                         RWORK, IWORK( N+1 ), IWORK, INFO )
                   IF( IINFO.NE.0 ) THEN
-                     WRITE( NOUNIT, FMT = 9999 )'AB_AB_CHPGVX(V,I' // UP
-     $LO //
+                     WRITE( NOUNIT, FMT = 9999 )'CHPGVX(V,I' // UPLO //
      $                  ')', IINFO, N, JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      IF( IINFO.LT.0 ) THEN
@@ -1144,20 +1118,20 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
 *                 Do Test
 *
-                  CALL AB_CSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB, Z,
+                  CALL CSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB, Z,
      $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
   310             CONTINUE
 *
                   IF( IBTYPE.EQ.1 ) THEN
 *
-*                    TEST AB_CHBGV
+*                    TEST CHBGV
 *
                      NTEST = NTEST + 1
 *
 *                    Copy the matrices into band storage.
 *
-                     IF( AB_LSAME( UPLO, 'U' ) ) THEN
+                     IF( LSAME( UPLO, 'U' ) ) THEN
                         DO 340 J = 1, N
                            DO 320 I = MAX( 1, J-KA ), J
                               AB( KA+1+I-J, J ) = A( I, J )
@@ -1177,11 +1151,10 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
   370                   CONTINUE
                      END IF
 *
-                     CALL AB_CHBGV( 'V', UPLO, N, KA, KB, AB, LDA, BB, L
-     $DB,
+                     CALL CHBGV( 'V', UPLO, N, KA, KB, AB, LDA, BB, LDB,
      $                           D, Z, LDZ, WORK, RWORK, IINFO )
                      IF( IINFO.NE.0 ) THEN
-                        WRITE( NOUNIT, FMT = 9999 )'AB_CHBGV(V,' //
+                        WRITE( NOUNIT, FMT = 9999 )'CHBGV(V,' //
      $                     UPLO // ')', IINFO, N, JTYPE, IOLDSD
                         INFO = ABS( IINFO )
                         IF( IINFO.LT.0 ) THEN
@@ -1194,17 +1167,16 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
 *                    Do Test
 *
-                     CALL AB_CSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB,
-     $ Z,
+                     CALL CSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
      $                            LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
-*                    TEST AB_AB_CHBGVD
+*                    TEST CHBGVD
 *
                      NTEST = NTEST + 1
 *
 *                    Copy the matrices into band storage.
 *
-                     IF( AB_LSAME( UPLO, 'U' ) ) THEN
+                     IF( LSAME( UPLO, 'U' ) ) THEN
                         DO 400 J = 1, N
                            DO 380 I = MAX( 1, J-KA ), J
                               AB( KA+1+I-J, J ) = A( I, J )
@@ -1224,12 +1196,11 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
   430                   CONTINUE
                      END IF
 *
-                     CALL AB_AB_CHBGVD( 'V', UPLO, N, KA, KB, AB, LDA, B
-     $B,
+                     CALL CHBGVD( 'V', UPLO, N, KA, KB, AB, LDA, BB,
      $                            LDB, D, Z, LDZ, WORK, NWORK, RWORK,
      $                            LRWORK, IWORK, LIWORK, IINFO )
                      IF( IINFO.NE.0 ) THEN
-                        WRITE( NOUNIT, FMT = 9999 )'AB_AB_CHBGVD(V,' //
+                        WRITE( NOUNIT, FMT = 9999 )'CHBGVD(V,' //
      $                     UPLO // ')', IINFO, N, JTYPE, IOLDSD
                         INFO = ABS( IINFO )
                         IF( IINFO.LT.0 ) THEN
@@ -1242,17 +1213,16 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
 *                    Do Test
 *
-                     CALL AB_CSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB,
-     $ Z,
+                     CALL CSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
      $                            LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
-*                    Test AB_AB_CHBGVX
+*                    Test CHBGVX
 *
                      NTEST = NTEST + 1
 *
 *                    Copy the matrices into band storage.
 *
-                     IF( AB_LSAME( UPLO, 'U' ) ) THEN
+                     IF( LSAME( UPLO, 'U' ) ) THEN
                         DO 460 J = 1, N
                            DO 440 I = MAX( 1, J-KA ), J
                               AB( KA+1+I-J, J ) = A( I, J )
@@ -1272,13 +1242,12 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
   490                   CONTINUE
                      END IF
 *
-                     CALL AB_AB_CHBGVX( 'V', 'A', UPLO, N, KA, KB, AB, L
-     $DA,
+                     CALL CHBGVX( 'V', 'A', UPLO, N, KA, KB, AB, LDA,
      $                            BB, LDB, BP, MAX( 1, N ), VL, VU, IL,
      $                            IU, ABSTOL, M, D, Z, LDZ, WORK, RWORK,
      $                            IWORK( N+1 ), IWORK, IINFO )
                      IF( IINFO.NE.0 ) THEN
-                        WRITE( NOUNIT, FMT = 9999 )'AB_AB_CHBGVX(V,A' //
+                        WRITE( NOUNIT, FMT = 9999 )'CHBGVX(V,A' //
      $                     UPLO // ')', IINFO, N, JTYPE, IOLDSD
                         INFO = ABS( IINFO )
                         IF( IINFO.LT.0 ) THEN
@@ -1291,15 +1260,14 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
 *                    Do Test
 *
-                     CALL AB_CSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB,
-     $ Z,
+                     CALL CSGT01( IBTYPE, UPLO, N, N, A, LDA, B, LDB, Z,
      $                            LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
                      NTEST = NTEST + 1
 *
 *                    Copy the matrices into band storage.
 *
-                     IF( AB_LSAME( UPLO, 'U' ) ) THEN
+                     IF( LSAME( UPLO, 'U' ) ) THEN
                         DO 520 J = 1, N
                            DO 500 I = MAX( 1, J-KA ), J
                               AB( KA+1+I-J, J ) = A( I, J )
@@ -1321,13 +1289,12 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
                      VL = ZERO
                      VU = ANORM
-                     CALL AB_AB_CHBGVX( 'V', 'V', UPLO, N, KA, KB, AB, L
-     $DA,
+                     CALL CHBGVX( 'V', 'V', UPLO, N, KA, KB, AB, LDA,
      $                            BB, LDB, BP, MAX( 1, N ), VL, VU, IL,
      $                            IU, ABSTOL, M, D, Z, LDZ, WORK, RWORK,
      $                            IWORK( N+1 ), IWORK, IINFO )
                      IF( IINFO.NE.0 ) THEN
-                        WRITE( NOUNIT, FMT = 9999 )'AB_AB_CHBGVX(V,V' //
+                        WRITE( NOUNIT, FMT = 9999 )'CHBGVX(V,V' //
      $                     UPLO // ')', IINFO, N, JTYPE, IOLDSD
                         INFO = ABS( IINFO )
                         IF( IINFO.LT.0 ) THEN
@@ -1340,15 +1307,14 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
 *                    Do Test
 *
-                     CALL AB_CSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB,
-     $ Z,
+                     CALL CSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB, Z,
      $                            LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
                      NTEST = NTEST + 1
 *
 *                    Copy the matrices into band storage.
 *
-                     IF( AB_LSAME( UPLO, 'U' ) ) THEN
+                     IF( LSAME( UPLO, 'U' ) ) THEN
                         DO 580 J = 1, N
                            DO 560 I = MAX( 1, J-KA ), J
                               AB( KA+1+I-J, J ) = A( I, J )
@@ -1368,13 +1334,12 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
   610                   CONTINUE
                      END IF
 *
-                     CALL AB_AB_CHBGVX( 'V', 'I', UPLO, N, KA, KB, AB, L
-     $DA,
+                     CALL CHBGVX( 'V', 'I', UPLO, N, KA, KB, AB, LDA,
      $                            BB, LDB, BP, MAX( 1, N ), VL, VU, IL,
      $                            IU, ABSTOL, M, D, Z, LDZ, WORK, RWORK,
      $                            IWORK( N+1 ), IWORK, IINFO )
                      IF( IINFO.NE.0 ) THEN
-                        WRITE( NOUNIT, FMT = 9999 )'AB_AB_CHBGVX(V,I' //
+                        WRITE( NOUNIT, FMT = 9999 )'CHBGVX(V,I' //
      $                     UPLO // ')', IINFO, N, JTYPE, IOLDSD
                         INFO = ABS( IINFO )
                         IF( IINFO.LT.0 ) THEN
@@ -1387,8 +1352,7 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
 *                    Do Test
 *
-                     CALL AB_CSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB,
-     $ Z,
+                     CALL CSGT01( IBTYPE, UPLO, N, M, A, LDA, B, LDB, Z,
      $                            LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *
                   END IF
@@ -1399,21 +1363,20 @@ C     $                         LDZ, D, WORK, RWORK, RESULT( NTEST ) )
 *           End of Loop -- Check for RESULT(j) > THRESH
 *
             NTESTT = NTESTT + NTEST
-            CALL AB_SLAFTS( 'CSG', N, N, JTYPE, NTEST, RESULT, IOLDSD,
+            CALL SLAFTS( 'CSG', N, N, JTYPE, NTEST, RESULT, IOLDSD,
      $                   THRESH, NOUNIT, NERRS )
   640    CONTINUE
   650 CONTINUE
 *
 *     Summary
 *
-      CALL AB_SLASUM( 'CSG', NOUNIT, NERRS, NTESTT )
+      CALL SLASUM( 'CSG', NOUNIT, NERRS, NTESTT )
 *
       RETURN
 *
- 9999 FORMAT( ' AB_AB_CDRVSG2STG: ', A, ' returned INFO=', I6, '.', / 9X
-     $,
+ 9999 FORMAT( ' CDRVSG2STG: ', A, ' returned INFO=', I6, '.', / 9X,
      $  'N=', I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
 *
-*     End of AB_AB_CDRVSG2STG
+*     End of CDRVSG2STG
 *
       END

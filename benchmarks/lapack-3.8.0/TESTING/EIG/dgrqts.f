@@ -1,4 +1,4 @@
-*> \brief \b AB_DGRQTS
+*> \brief \b DGRQTS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DGRQTS( M, P, N, A, AF, Q, R, LDA, TAUA, B, BF, Z, T,
+*       SUBROUTINE DGRQTS( M, P, N, A, AF, Q, R, LDA, TAUA, B, BF, Z, T,
 *                          BWK, LDB, TAUB, WORK, LWORK, RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -28,7 +28,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DGRQTS tests AB_DGGRQF, which computes the GRQ factorization of an
+*> DGRQTS tests DGGRQF, which computes the GRQ factorization of an
 *> M-by-N matrix A and a P-by-N matrix B: A = R*Q and B = Z*T*Q.
 *> \endverbatim
 *
@@ -63,7 +63,7 @@
 *> \verbatim
 *>          AF is DOUBLE PRECISION array, dimension (LDA,N)
 *>          Details of the GRQ factorization of A and B, as returned
-*>          by AB_DGGRQF, see AB_SGGRQF for further details.
+*>          by DGGRQF, see SGGRQF for further details.
 *> \endverbatim
 *>
 *> \param[out] Q
@@ -101,7 +101,7 @@
 *> \verbatim
 *>          BF is DOUBLE PRECISION array, dimension (LDB,N)
 *>          Details of the GQR factorization of A and B, as returned
-*>          by AB_DGGRQF, see AB_SGGRQF for further details.
+*>          by DGGRQF, see SGGRQF for further details.
 *> \endverbatim
 *>
 *> \param[out] Z
@@ -131,7 +131,7 @@
 *> \verbatim
 *>          TAUB is DOUBLE PRECISION array, dimension (min(P,N))
 *>          The scalar factors of the elementary reflectors, as returned
-*>          by AB_DGGRQF.
+*>          by DGGRQF.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -173,8 +173,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_DGRQTS( M, P, N, A, AF, Q, R, LDA, TAUA, B, BF, Z, T
-     $,
+      SUBROUTINE DGRQTS( M, P, N, A, AF, Q, R, LDA, TAUA, B, BF, Z, T,
      $                   BWK, LDB, TAUB, WORK, LWORK, RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -206,91 +205,82 @@
       DOUBLE PRECISION   ANORM, BNORM, RESID, ULP, UNFL
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE, AB_DLANSY
-      EXTERNAL           AB_DLAMCH, AB_DLANGE, AB_DLANSY
+      DOUBLE PRECISION   DLAMCH, DLANGE, DLANSY
+      EXTERNAL           DLAMCH, DLANGE, DLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DGEMM, AB_DGGRQF, AB_DLACPY, AB_DLASET, AB_D
-     $ORGQR, AB_DORGRQ,
-     $                   AB_AB_DSYRK
+      EXTERNAL           DGEMM, DGGRQF, DLACPY, DLASET, DORGQR, DORGRQ,
+     $                   DSYRK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
-      ULP = AB_DLAMCH( 'Precision' )
-      UNFL = AB_DLAMCH( 'Safe minimum' )
+      ULP = DLAMCH( 'Precision' )
+      UNFL = DLAMCH( 'Safe minimum' )
 *
 *     Copy the matrix A to the array AF.
 *
-      CALL AB_DLACPY( 'Full', M, N, A, LDA, AF, LDA )
-      CALL AB_DLACPY( 'Full', P, N, B, LDB, BF, LDB )
+      CALL DLACPY( 'Full', M, N, A, LDA, AF, LDA )
+      CALL DLACPY( 'Full', P, N, B, LDB, BF, LDB )
 *
-      ANORM = MAX( AB_DLANGE( '1', M, N, A, LDA, RWORK ), UNFL )
-      BNORM = MAX( AB_DLANGE( '1', P, N, B, LDB, RWORK ), UNFL )
+      ANORM = MAX( DLANGE( '1', M, N, A, LDA, RWORK ), UNFL )
+      BNORM = MAX( DLANGE( '1', P, N, B, LDB, RWORK ), UNFL )
 *
 *     Factorize the matrices A and B in the arrays AF and BF.
 *
-      CALL AB_DGGRQF( M, P, N, AF, LDA, TAUA, BF, LDB, TAUB, WORK, LWORK
-     $,
+      CALL DGGRQF( M, P, N, AF, LDA, TAUA, BF, LDB, TAUB, WORK, LWORK,
      $             INFO )
 *
 *     Generate the N-by-N matrix Q
 *
-      CALL AB_DLASET( 'Full', N, N, ROGUE, ROGUE, Q, LDA )
+      CALL DLASET( 'Full', N, N, ROGUE, ROGUE, Q, LDA )
       IF( M.LE.N ) THEN
          IF( M.GT.0 .AND. M.LT.N )
-     $      CALL AB_DLACPY( 'Full', M, N-M, AF, LDA, Q( N-M+1, 1 ), LDA 
-     $)
+     $      CALL DLACPY( 'Full', M, N-M, AF, LDA, Q( N-M+1, 1 ), LDA )
          IF( M.GT.1 )
-     $      CALL AB_DLACPY( 'Lower', M-1, M-1, AF( 2, N-M+1 ), LDA,
+     $      CALL DLACPY( 'Lower', M-1, M-1, AF( 2, N-M+1 ), LDA,
      $                   Q( N-M+2, N-M+1 ), LDA )
       ELSE
          IF( N.GT.1 )
-     $      CALL AB_DLACPY( 'Lower', N-1, N-1, AF( M-N+2, 1 ), LDA,
+     $      CALL DLACPY( 'Lower', N-1, N-1, AF( M-N+2, 1 ), LDA,
      $                   Q( 2, 1 ), LDA )
       END IF
-      CALL AB_DORGRQ( N, N, MIN( M, N ), Q, LDA, TAUA, WORK, LWORK, INFO
-     $ )
+      CALL DORGRQ( N, N, MIN( M, N ), Q, LDA, TAUA, WORK, LWORK, INFO )
 *
 *     Generate the P-by-P matrix Z
 *
-      CALL AB_DLASET( 'Full', P, P, ROGUE, ROGUE, Z, LDB )
+      CALL DLASET( 'Full', P, P, ROGUE, ROGUE, Z, LDB )
       IF( P.GT.1 )
-     $   CALL AB_DLACPY( 'Lower', P-1, N, BF( 2, 1 ), LDB, Z( 2, 1 ), LD
-     $B )
-      CALL AB_DORGQR( P, P, MIN( P, N ), Z, LDB, TAUB, WORK, LWORK, INFO
-     $ )
+     $   CALL DLACPY( 'Lower', P-1, N, BF( 2, 1 ), LDB, Z( 2, 1 ), LDB )
+      CALL DORGQR( P, P, MIN( P, N ), Z, LDB, TAUB, WORK, LWORK, INFO )
 *
 *     Copy R
 *
-      CALL AB_DLASET( 'Full', M, N, ZERO, ZERO, R, LDA )
+      CALL DLASET( 'Full', M, N, ZERO, ZERO, R, LDA )
       IF( M.LE.N ) THEN
-         CALL AB_DLACPY( 'Upper', M, M, AF( 1, N-M+1 ), LDA, R( 1, N-M+1
-     $ ),
+         CALL DLACPY( 'Upper', M, M, AF( 1, N-M+1 ), LDA, R( 1, N-M+1 ),
      $                LDA )
       ELSE
-         CALL AB_DLACPY( 'Full', M-N, N, AF, LDA, R, LDA )
-         CALL AB_DLACPY( 'Upper', N, N, AF( M-N+1, 1 ), LDA, R( M-N+1, 1
-     $ ),
+         CALL DLACPY( 'Full', M-N, N, AF, LDA, R, LDA )
+         CALL DLACPY( 'Upper', N, N, AF( M-N+1, 1 ), LDA, R( M-N+1, 1 ),
      $                LDA )
       END IF
 *
 *     Copy T
 *
-      CALL AB_DLASET( 'Full', P, N, ZERO, ZERO, T, LDB )
-      CALL AB_DLACPY( 'Upper', P, N, BF, LDB, T, LDB )
+      CALL DLASET( 'Full', P, N, ZERO, ZERO, T, LDB )
+      CALL DLACPY( 'Upper', P, N, BF, LDB, T, LDB )
 *
 *     Compute R - A*Q'
 *
-      CALL AB_DGEMM( 'No transpose', 'Transpose', M, N, N, -ONE, A, LDA,
-     $ Q,
+      CALL DGEMM( 'No transpose', 'Transpose', M, N, N, -ONE, A, LDA, Q,
      $            LDA, ONE, R, LDA )
 *
 *     Compute norm( R - A*Q' ) / ( MAX(M,N)*norm(A)*ULP ) .
 *
-      RESID = AB_DLANGE( '1', M, N, R, LDA, RWORK )
+      RESID = DLANGE( '1', M, N, R, LDA, RWORK )
       IF( ANORM.GT.ZERO ) THEN
          RESULT( 1 ) = ( ( RESID / DBLE( MAX( 1, M, N ) ) ) / ANORM ) /
      $                 ULP
@@ -300,16 +290,14 @@
 *
 *     Compute T*Q - Z'*B
 *
-      CALL AB_DGEMM( 'Transpose', 'No transpose', P, N, P, ONE, Z, LDB, 
-     $B,
+      CALL DGEMM( 'Transpose', 'No transpose', P, N, P, ONE, Z, LDB, B,
      $            LDB, ZERO, BWK, LDB )
-      CALL AB_DGEMM( 'No transpose', 'No transpose', P, N, N, ONE, T, LD
-     $B,
+      CALL DGEMM( 'No transpose', 'No transpose', P, N, N, ONE, T, LDB,
      $            Q, LDA, -ONE, BWK, LDB )
 *
 *     Compute norm( T*Q - Z'*B ) / ( MAX(P,N)*norm(A)*ULP ) .
 *
-      RESID = AB_DLANGE( '1', P, N, BWK, LDB, RWORK )
+      RESID = DLANGE( '1', P, N, BWK, LDB, RWORK )
       IF( BNORM.GT.ZERO ) THEN
          RESULT( 2 ) = ( ( RESID / DBLE( MAX( 1, P, M ) ) ) / BNORM ) /
      $                 ULP
@@ -319,30 +307,28 @@
 *
 *     Compute I - Q*Q'
 *
-      CALL AB_DLASET( 'Full', N, N, ZERO, ONE, R, LDA )
-      CALL AB_AB_DSYRK( 'Upper', 'No Transpose', N, N, -ONE, Q, LDA, ONE
-     $, R,
+      CALL DLASET( 'Full', N, N, ZERO, ONE, R, LDA )
+      CALL DSYRK( 'Upper', 'No Transpose', N, N, -ONE, Q, LDA, ONE, R,
      $            LDA )
 *
 *     Compute norm( I - Q'*Q ) / ( N * ULP ) .
 *
-      RESID = AB_DLANSY( '1', 'Upper', N, R, LDA, RWORK )
+      RESID = DLANSY( '1', 'Upper', N, R, LDA, RWORK )
       RESULT( 3 ) = ( RESID / DBLE( MAX( 1, N ) ) ) / ULP
 *
 *     Compute I - Z'*Z
 *
-      CALL AB_DLASET( 'Full', P, P, ZERO, ONE, T, LDB )
-      CALL AB_AB_DSYRK( 'Upper', 'Transpose', P, P, -ONE, Z, LDB, ONE, T
-     $,
+      CALL DLASET( 'Full', P, P, ZERO, ONE, T, LDB )
+      CALL DSYRK( 'Upper', 'Transpose', P, P, -ONE, Z, LDB, ONE, T,
      $            LDB )
 *
 *     Compute norm( I - Z'*Z ) / ( P*ULP ) .
 *
-      RESID = AB_DLANSY( '1', 'Upper', P, T, LDB, RWORK )
+      RESID = DLANSY( '1', 'Upper', P, T, LDB, RWORK )
       RESULT( 4 ) = ( RESID / DBLE( MAX( 1, P ) ) ) / ULP
 *
       RETURN
 *
-*     End of AB_DGRQTS
+*     End of DGRQTS
 *
       END

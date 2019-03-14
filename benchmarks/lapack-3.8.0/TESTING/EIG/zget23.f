@@ -1,4 +1,4 @@
-*> \brief \b AB_ZGET23
+*> \brief \b ZGET23
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZGET23( COMP, ISRT, BALANC, JTYPE, THRESH, ISEED,
+*       SUBROUTINE ZGET23( COMP, ISRT, BALANC, JTYPE, THRESH, ISEED,
 *                          NOUNIT, N, A, LDA, H, W, W1, VL, LDVL, VR,
 *                          LDVR, LRE, LDLRE, RCONDV, RCNDV1, RCDVIN,
 *                          RCONDE, RCNDE1, RCDEIN, SCALE, SCALE1, RESULT,
@@ -38,7 +38,7 @@
 *>
 *> \verbatim
 *>
-*>    AB_ZGET23  checks the nonsymmetric eigenvalue problem driver AB_AB_CGEEVX.
+*>    ZGET23  checks the nonsymmetric eigenvalue problem driver CGEEVX.
 *>    If COMP = .FALSE., the first 8 of the following tests will be
 *>    performed on the input matrix A, and also test 9 if LWORK is
 *>    sufficiently large.
@@ -99,7 +99,7 @@
 *>   (10)     |RCONDV - RCDVIN| / cond(RCONDV)
 *>
 *>      RCONDV is the reciprocal right eigenvector condition number
-*>      computed by AB_AB_ZGEEVX and RCDVIN (the precomputed true value)
+*>      computed by ZGEEVX and RCDVIN (the precomputed true value)
 *>      is supplied as input. cond(RCONDV) is the condition number of
 *>      RCONDV, and takes errors in computing RCONDV into account, so
 *>      that the resulting quantity should be O(ULP). cond(RCONDV) is
@@ -108,7 +108,7 @@
 *>   (11)     |RCONDE - RCDEIN| / cond(RCONDE)
 *>
 *>      RCONDE is the reciprocal eigenvalue condition number
-*>      computed by AB_AB_ZGEEVX and RCDEIN (the precomputed true value)
+*>      computed by ZGEEVX and RCDEIN (the precomputed true value)
 *>      is supplied as input.  cond(RCONDE) is the condition number
 *>      of RCONDE, and takes errors in computing RCONDE into account,
 *>      so that the resulting quantity should be O(ULP). cond(RCONDE)
@@ -205,7 +205,7 @@
 *> \param[out] H
 *> \verbatim
 *>          H is COMPLEX*16 array, dimension (LDA,N)
-*>          Another copy of the test matrix A, modified by AB_AB_ZGEEVX.
+*>          Another copy of the test matrix A, modified by ZGEEVX.
 *> \endverbatim
 *>
 *> \param[out] W
@@ -218,7 +218,7 @@
 *> \verbatim
 *>          W1 is COMPLEX*16 array, dimension (N)
 *>          Like W, this array contains the eigenvalues of A,
-*>          but those computed when AB_AB_ZGEEVX only computes a partial
+*>          but those computed when ZGEEVX only computes a partial
 *>          eigendecomposition, i.e. not the eigenvalues and left
 *>          and right eigenvectors.
 *> \endverbatim
@@ -345,7 +345,7 @@
 *>          INFO is INTEGER
 *>          If 0,  successful exit.
 *>          If <0, input parameter -INFO had an incorrect value.
-*>          If >0, AB_AB_ZGEEVX returned an error code, the absolute
+*>          If >0, ZGEEVX returned an error code, the absolute
 *>                 value of which is returned.
 *> \endverbatim
 *
@@ -362,7 +362,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_ZGET23( COMP, ISRT, BALANC, JTYPE, THRESH, ISEED,
+      SUBROUTINE ZGET23( COMP, ISRT, BALANC, JTYPE, THRESH, ISEED,
      $                   NOUNIT, N, A, LDA, H, W, W1, VL, LDVL, VR,
      $                   LDVR, LRE, LDLRE, RCONDV, RCNDV1, RCDVIN,
      $                   RCONDE, RCNDE1, RCDEIN, SCALE, SCALE1, RESULT,
@@ -415,12 +415,12 @@
       COMPLEX*16         CDUM( 1 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DLAMCH, AB_DZNRM2
-      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_DZNRM2
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH, DZNRM2
+      EXTERNAL           LSAME, DLAMCH, DZNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_AB_ZGEEVX, AB_ZGET22, AB_ZLACPY
+      EXTERNAL           XERBLA, ZGEEVX, ZGET22, ZLACPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX, MIN
@@ -432,9 +432,9 @@
 *
 *     Check for errors
 *
-      NOBAL = AB_LSAME( BALANC, 'N' )
-      BALOK = NOBAL .OR. AB_LSAME( BALANC, 'P' ) .OR.
-     $        AB_LSAME( BALANC, 'S' ) .OR. AB_LSAME( BALANC, 'B' )
+      NOBAL = LSAME( BALANC, 'N' )
+      BALOK = NOBAL .OR. LSAME( BALANC, 'P' ) .OR.
+     $        LSAME( BALANC, 'S' ) .OR. LSAME( BALANC, 'B' )
       INFO = 0
       IF( ISRT.NE.0 .AND. ISRT.NE.1 ) THEN
          INFO = -2
@@ -454,13 +454,12 @@
          INFO = -17
       ELSE IF( LDLRE.LT.1 .OR. LDLRE.LT.N ) THEN
          INFO = -19
-      ELSE IF( LWORK.LT.2*N .OR. ( COMP .AND. LWORK.LT.2*N+N*N ) ) TH
-     $EN
+      ELSE IF( LWORK.LT.2*N .OR. ( COMP .AND. LWORK.LT.2*N+N*N ) ) THEN
          INFO = -30
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZGET23', -INFO )
+         CALL XERBLA( 'ZGET23', -INFO )
          RETURN
       END IF
 *
@@ -475,8 +474,8 @@
 *
 *     More Important constants
 *
-      ULP = AB_DLAMCH( 'Precision' )
-      SMLNUM = AB_DLAMCH( 'S' )
+      ULP = DLAMCH( 'Precision' )
+      SMLNUM = DLAMCH( 'S' )
       ULPINV = ONE / ULP
 *
 *     Compute eigenvalues and eigenvectors, and test them
@@ -488,19 +487,17 @@
          SENSE = 'E'
          ISENSM = 1
       END IF
-      CALL AB_ZLACPY( 'F', N, N, A, LDA, H, LDA )
-      CALL AB_AB_ZGEEVX( BALANC, 'V', 'V', SENSE, N, H, LDA, W, VL, LDVL
-     $, VR,
+      CALL ZLACPY( 'F', N, N, A, LDA, H, LDA )
+      CALL ZGEEVX( BALANC, 'V', 'V', SENSE, N, H, LDA, W, VL, LDVL, VR,
      $             LDVR, ILO, IHI, SCALE, ABNRM, RCONDE, RCONDV, WORK,
      $             LWORK, RWORK, IINFO )
       IF( IINFO.NE.0 ) THEN
          RESULT( 1 ) = ULPINV
          IF( JTYPE.NE.22 ) THEN
-            WRITE( NOUNIT, FMT = 9998 )'AB_AB_ZGEEVX1', IINFO, N, JTYPE,
+            WRITE( NOUNIT, FMT = 9998 )'ZGEEVX1', IINFO, N, JTYPE,
      $         BALANC, ISEED
          ELSE
-            WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZGEEVX1', IINFO, N, ISEED(
-     $ 1 )
+            WRITE( NOUNIT, FMT = 9999 )'ZGEEVX1', IINFO, N, ISEED( 1 )
          END IF
          INFO = ABS( IINFO )
          RETURN
@@ -508,22 +505,20 @@
 *
 *     Do Test (1)
 *
-      CALL AB_ZGET22( 'N', 'N', 'N', N, A, LDA, VR, LDVR, W, WORK, RWORK
-     $,
+      CALL ZGET22( 'N', 'N', 'N', N, A, LDA, VR, LDVR, W, WORK, RWORK,
      $             RES )
       RESULT( 1 ) = RES( 1 )
 *
 *     Do Test (2)
 *
-      CALL AB_ZGET22( 'C', 'N', 'C', N, A, LDA, VL, LDVL, W, WORK, RWORK
-     $,
+      CALL ZGET22( 'C', 'N', 'C', N, A, LDA, VL, LDVL, W, WORK, RWORK,
      $             RES )
       RESULT( 2 ) = RES( 1 )
 *
 *     Do Test (3)
 *
       DO 30 J = 1, N
-         TNRM = AB_DZNRM2( N, VR( 1, J ), 1 )
+         TNRM = DZNRM2( N, VR( 1, J ), 1 )
          RESULT( 3 ) = MAX( RESULT( 3 ),
      $                 MIN( ULPINV, ABS( TNRM-ONE ) / ULP ) )
          VMX = ZERO
@@ -543,7 +538,7 @@
 *     Do Test (4)
 *
       DO 50 J = 1, N
-         TNRM = AB_DZNRM2( N, VL( 1, J ), 1 )
+         TNRM = DZNRM2( N, VL( 1, J ), 1 )
          RESULT( 4 ) = MAX( RESULT( 4 ),
      $                 MIN( ULPINV, ABS( TNRM-ONE ) / ULP ) )
          VMX = ZERO
@@ -568,19 +563,17 @@
 *
 *        Compute eigenvalues only, and test them
 *
-         CALL AB_ZLACPY( 'F', N, N, A, LDA, H, LDA )
-         CALL AB_AB_ZGEEVX( BALANC, 'N', 'N', SENSE, N, H, LDA, W1, CDUM
-     $, 1,
+         CALL ZLACPY( 'F', N, N, A, LDA, H, LDA )
+         CALL ZGEEVX( BALANC, 'N', 'N', SENSE, N, H, LDA, W1, CDUM, 1,
      $                CDUM, 1, ILO1, IHI1, SCALE1, ABNRM1, RCNDE1,
      $                RCNDV1, WORK, LWORK, RWORK, IINFO )
          IF( IINFO.NE.0 ) THEN
             RESULT( 1 ) = ULPINV
             IF( JTYPE.NE.22 ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'AB_AB_ZGEEVX2', IINFO, N, JTY
-     $PE,
+               WRITE( NOUNIT, FMT = 9998 )'ZGEEVX2', IINFO, N, JTYPE,
      $            BALANC, ISEED
             ELSE
-               WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZGEEVX2', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'ZGEEVX2', IINFO, N,
      $            ISEED( 1 )
             END IF
             INFO = ABS( IINFO )
@@ -620,19 +613,17 @@
 *
 *        Compute eigenvalues and right eigenvectors, and test them
 *
-         CALL AB_ZLACPY( 'F', N, N, A, LDA, H, LDA )
-         CALL AB_AB_ZGEEVX( BALANC, 'N', 'V', SENSE, N, H, LDA, W1, CDUM
-     $, 1,
+         CALL ZLACPY( 'F', N, N, A, LDA, H, LDA )
+         CALL ZGEEVX( BALANC, 'N', 'V', SENSE, N, H, LDA, W1, CDUM, 1,
      $                LRE, LDLRE, ILO1, IHI1, SCALE1, ABNRM1, RCNDE1,
      $                RCNDV1, WORK, LWORK, RWORK, IINFO )
          IF( IINFO.NE.0 ) THEN
             RESULT( 1 ) = ULPINV
             IF( JTYPE.NE.22 ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'AB_AB_ZGEEVX3', IINFO, N, JTY
-     $PE,
+               WRITE( NOUNIT, FMT = 9998 )'ZGEEVX3', IINFO, N, JTYPE,
      $            BALANC, ISEED
             ELSE
-               WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZGEEVX3', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'ZGEEVX3', IINFO, N,
      $            ISEED( 1 )
             END IF
             INFO = ABS( IINFO )
@@ -681,18 +672,17 @@
 *
 *        Compute eigenvalues and left eigenvectors, and test them
 *
-         CALL AB_ZLACPY( 'F', N, N, A, LDA, H, LDA )
-         CALL AB_AB_ZGEEVX( BALANC, 'V', 'N', SENSE, N, H, LDA, W1, LRE,
+         CALL ZLACPY( 'F', N, N, A, LDA, H, LDA )
+         CALL ZGEEVX( BALANC, 'V', 'N', SENSE, N, H, LDA, W1, LRE,
      $                LDLRE, CDUM, 1, ILO1, IHI1, SCALE1, ABNRM1,
      $                RCNDE1, RCNDV1, WORK, LWORK, RWORK, IINFO )
          IF( IINFO.NE.0 ) THEN
             RESULT( 1 ) = ULPINV
             IF( JTYPE.NE.22 ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'AB_AB_ZGEEVX4', IINFO, N, JTY
-     $PE,
+               WRITE( NOUNIT, FMT = 9998 )'ZGEEVX4', IINFO, N, JTYPE,
      $            BALANC, ISEED
             ELSE
-               WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZGEEVX4', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'ZGEEVX4', IINFO, N,
      $            ISEED( 1 )
             END IF
             INFO = ABS( IINFO )
@@ -746,15 +736,13 @@
 *     If COMP, compare condition numbers to precomputed ones
 *
       IF( COMP ) THEN
-         CALL AB_ZLACPY( 'F', N, N, A, LDA, H, LDA )
-         CALL AB_AB_ZGEEVX( 'N', 'V', 'V', 'B', N, H, LDA, W, VL, LDVL, 
-     $VR,
+         CALL ZLACPY( 'F', N, N, A, LDA, H, LDA )
+         CALL ZGEEVX( 'N', 'V', 'V', 'B', N, H, LDA, W, VL, LDVL, VR,
      $                LDVR, ILO, IHI, SCALE, ABNRM, RCONDE, RCONDV,
      $                WORK, LWORK, RWORK, IINFO )
          IF( IINFO.NE.0 ) THEN
             RESULT( 1 ) = ULPINV
-            WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZGEEVX5', IINFO, N, ISEED(
-     $ 1 )
+            WRITE( NOUNIT, FMT = 9999 )'ZGEEVX5', IINFO, N, ISEED( 1 )
             INFO = ABS( IINFO )
             GO TO 250
          END IF
@@ -816,8 +804,7 @@
                VMAX = ONE / EPS
             ELSE IF( RCDVIN( I )-TOLIN.GT.RCONDV( I )+TOL ) THEN
                VMAX = ( RCDVIN( I )-TOLIN ) / ( RCONDV( I )+TOL )
-            ELSE IF( RCDVIN( I )+TOLIN.LT.EPS*( RCONDV( I )-TOL ) ) T
-     $HEN
+            ELSE IF( RCDVIN( I )+TOLIN.LT.EPS*( RCONDV( I )-TOL ) ) THEN
                VMAX = ONE / EPS
             ELSE IF( RCDVIN( I )+TOLIN.LT.RCONDV( I )-TOL ) THEN
                VMAX = ( RCONDV( I )-TOL ) / ( RCDVIN( I )+TOLIN )
@@ -848,8 +835,7 @@
                VMAX = ONE / EPS
             ELSE IF( RCDEIN( I )-TOLIN.GT.RCONDE( I )+TOL ) THEN
                VMAX = ( RCDEIN( I )-TOLIN ) / ( RCONDE( I )+TOL )
-            ELSE IF( RCDEIN( I )+TOLIN.LT.EPS*( RCONDE( I )-TOL ) ) T
-     $HEN
+            ELSE IF( RCDEIN( I )+TOLIN.LT.EPS*( RCONDE( I )-TOL ) ) THEN
                VMAX = ONE / EPS
             ELSE IF( RCDEIN( I )+TOLIN.LT.RCONDE( I )-TOL ) THEN
                VMAX = ( RCONDE( I )-TOL ) / ( RCDEIN( I )+TOLIN )
@@ -862,14 +848,14 @@
 *
       END IF
 *
- 9999 FORMAT( ' AB_ZGET23: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
+ 9999 FORMAT( ' ZGET23: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', INPUT EXAMPLE NUMBER = ', I4 )
- 9998 FORMAT( ' AB_ZGET23: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
+ 9998 FORMAT( ' ZGET23: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', JTYPE=', I6, ', BALANC = ', A, ', ISEED=(',
      $      3( I5, ',' ), I5, ')' )
 *
       RETURN
 *
-*     End of AB_ZGET23
+*     End of ZGET23
 *
       END

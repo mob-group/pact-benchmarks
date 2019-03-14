@@ -1,4 +1,4 @@
-*> \brief \b AB_SCKGQR
+*> \brief \b SCKGQR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SCKGQR( NM, MVAL, NP, PVAL, NN, NVAL, NMATS, ISEED,
+*       SUBROUTINE SCKGQR( NM, MVAL, NP, PVAL, NN, NVAL, NMATS, ISEED,
 *                          THRESH, NMAX, A, AF, AQ, AR, TAUA, B, BF, BZ,
 *                          BT, BWK, TAUB, WORK, RWORK, NIN, NOUT, INFO )
 *
@@ -29,9 +29,9 @@
 *>
 *> \verbatim
 *>
-*> AB_SCKGQR tests
-*> AB_SGGQRF: GQR factorization for N-by-M matrix A and N-by-P matrix B,
-*> AB_SGGRQF: GRQ factorization for M-by-N matrix A and P-by-N matrix B.
+*> SCKGQR tests
+*> SGGQRF: GQR factorization for N-by-M matrix A and N-by-P matrix B,
+*> SGGRQF: GRQ factorization for M-by-N matrix A and P-by-N matrix B.
 *> \endverbatim
 *
 *  Arguments:
@@ -189,7 +189,7 @@
 *> \verbatim
 *>          INFO is INTEGER
 *>          = 0 :  successful exit
-*>          > 0 :  If AB_SLATMS returns an error code, the absolute value
+*>          > 0 :  If SLATMS returns an error code, the absolute value
 *>                 of it is returned.
 *> \endverbatim
 *
@@ -206,7 +206,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_SCKGQR( NM, MVAL, NP, PVAL, NN, NVAL, NMATS, ISEED,
+      SUBROUTINE SCKGQR( NM, MVAL, NP, PVAL, NN, NVAL, NMATS, ISEED,
      $                   THRESH, NMAX, A, AF, AQ, AR, TAUA, B, BF, BZ,
      $                   BT, BWK, TAUB, WORK, RWORK, NIN, NOUT, INFO )
 *
@@ -248,9 +248,8 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_AB_ALAHDG, AB_ALAREQ, AB_ALASUM, AB_SGQRTS, 
-     $AB_SGRQTS, AB_SLATB9,
-     $                   AB_SLATMS
+      EXTERNAL           ALAHDG, ALAREQ, ALASUM, SGQRTS, SGRQTS, SLATB9,
+     $                   SLATMS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS
@@ -264,7 +263,7 @@
       NRUN = 0
       NFAIL = 0
       FIRSTT = .TRUE.
-      CALL AB_ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
+      CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
       LDA = NMAX
       LDB = NMAX
       LWORK = NMAX*NMAX
@@ -291,19 +290,18 @@
                   IF( .NOT.DOTYPE( IMAT ) )
      $               GO TO 30
 *
-*                 Test AB_SGGRQF
+*                 Test SGGRQF
 *
-*                 Set up parameters with AB_SLATB9 and generate test
-*                 matrices A and B with AB_SLATMS.
+*                 Set up parameters with SLATB9 and generate test
+*                 matrices A and B with SLATMS.
 *
-                  CALL AB_SLATB9( 'GRQ', IMAT, M, P, N, TYPE, KLA, KUA,
+                  CALL SLATB9( 'GRQ', IMAT, M, P, N, TYPE, KLA, KUA,
      $                         KLB, KUB, ANORM, BNORM, MODEA, MODEB,
      $                         CNDNMA, CNDNMB, DISTA, DISTB )
 *
 *                 Generate M by N matrix A
 *
-                  CALL AB_SLATMS( M, N, DISTA, ISEED, TYPE, RWORK, MODEA
-     $,
+                  CALL SLATMS( M, N, DISTA, ISEED, TYPE, RWORK, MODEA,
      $                         CNDNMA, ANORM, KLA, KUA, 'No packing', A,
      $                         LDA, WORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
@@ -314,8 +312,7 @@
 *
 *                 Generate P by N matrix B
 *
-                  CALL AB_SLATMS( P, N, DISTB, ISEED, TYPE, RWORK, MODEB
-     $,
+                  CALL SLATMS( P, N, DISTB, ISEED, TYPE, RWORK, MODEB,
      $                         CNDNMB, BNORM, KLB, KUB, 'No packing', B,
      $                         LDB, WORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
@@ -326,8 +323,7 @@
 *
                   NT = 4
 *
-                  CALL AB_SGRQTS( M, P, N, A, AF, AQ, AR, LDA, TAUA, B, 
-     $BF,
+                  CALL SGRQTS( M, P, N, A, AF, AQ, AR, LDA, TAUA, B, BF,
      $                         BZ, BT, BWK, LDB, TAUB, WORK, LWORK,
      $                         RWORK, RESULT )
 *
@@ -338,7 +334,7 @@
                      IF( RESULT( I ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. FIRSTT ) THEN
                            FIRSTT = .FALSE.
-                           CALL AB_AB_ALAHDG( NOUT, 'GRQ' )
+                           CALL ALAHDG( NOUT, 'GRQ' )
                         END IF
                         WRITE( NOUT, FMT = 9998 )M, P, N, IMAT, I,
      $                     RESULT( I )
@@ -347,19 +343,18 @@
    10             CONTINUE
                   NRUN = NRUN + NT
 *
-*                 Test AB_SGGQRF
+*                 Test SGGQRF
 *
-*                 Set up parameters with AB_SLATB9 and generate test
-*                 matrices A and B with AB_SLATMS.
+*                 Set up parameters with SLATB9 and generate test
+*                 matrices A and B with SLATMS.
 *
-                  CALL AB_SLATB9( 'GQR', IMAT, M, P, N, TYPE, KLA, KUA,
+                  CALL SLATB9( 'GQR', IMAT, M, P, N, TYPE, KLA, KUA,
      $                         KLB, KUB, ANORM, BNORM, MODEA, MODEB,
      $                         CNDNMA, CNDNMB, DISTA, DISTB )
 *
 *                 Generate N-by-M matrix  A
 *
-                  CALL AB_SLATMS( N, M, DISTA, ISEED, TYPE, RWORK, MODEA
-     $,
+                  CALL SLATMS( N, M, DISTA, ISEED, TYPE, RWORK, MODEA,
      $                         CNDNMA, ANORM, KLA, KUA, 'No packing', A,
      $                         LDA, WORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
@@ -370,8 +365,7 @@
 *
 *                 Generate N-by-P matrix  B
 *
-                  CALL AB_SLATMS( N, P, DISTB, ISEED, TYPE, RWORK, MODEA
-     $,
+                  CALL SLATMS( N, P, DISTB, ISEED, TYPE, RWORK, MODEA,
      $                         CNDNMA, BNORM, KLB, KUB, 'No packing', B,
      $                         LDB, WORK, IINFO )
                   IF( IINFO.NE.0 ) THEN
@@ -382,8 +376,7 @@
 *
                   NT = 4
 *
-                  CALL AB_SGQRTS( N, M, P, A, AF, AQ, AR, LDA, TAUA, B, 
-     $BF,
+                  CALL SGQRTS( N, M, P, A, AF, AQ, AR, LDA, TAUA, B, BF,
      $                         BZ, BT, BWK, LDB, TAUB, WORK, LWORK,
      $                         RWORK, RESULT )
 *
@@ -394,7 +387,7 @@
                      IF( RESULT( I ).GE.THRESH ) THEN
                         IF( NFAIL.EQ.0 .AND. FIRSTT ) THEN
                            FIRSTT = .FALSE.
-                           CALL AB_AB_ALAHDG( NOUT, PATH )
+                           CALL ALAHDG( NOUT, PATH )
                         END IF
                         WRITE( NOUT, FMT = 9997 )N, M, P, IMAT, I,
      $                     RESULT( I )
@@ -410,15 +403,15 @@
 *
 *     Print a summary of the results.
 *
-      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, 0 )
+      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, 0 )
 *
- 9999 FORMAT( ' AB_SLATMS in AB_SCKGQR:    INFO = ', I5 )
+ 9999 FORMAT( ' SLATMS in SCKGQR:    INFO = ', I5 )
  9998 FORMAT( ' M=', I4, ' P=', I4, ', N=', I4, ', type ', I2,
      $      ', test ', I2, ', ratio=', G13.6 )
  9997 FORMAT( ' N=', I4, ' M=', I4, ', P=', I4, ', type ', I2,
      $      ', test ', I2, ', ratio=', G13.6 )
       RETURN
 *
-*     End of AB_SCKGQR
+*     End of SCKGQR
 *
       END

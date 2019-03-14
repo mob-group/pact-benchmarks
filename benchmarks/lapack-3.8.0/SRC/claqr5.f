@@ -1,4 +1,4 @@
-*> \brief \b AB_CLAQR5 performs a single small-bulge multi-shift QR sweep.
+*> \brief \b CLAQR5 performs a single small-bulge multi-shift QR sweep.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CLAQR5 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLAQR5.f">
+*> Download CLAQR5 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/claqr5.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLAQR5.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/claqr5.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLAQR5.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claqr5.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CLAQR5( WANTT, WANTZ, KACC22, N, KTOP, KBOT, NSHFTS, S,
+*       SUBROUTINE CLAQR5( WANTT, WANTZ, KACC22, N, KTOP, KBOT, NSHFTS, S,
 *                          H, LDH, ILOZ, IHIZ, Z, LDZ, V, LDV, U, LDU, NV,
 *                          WV, LDWV, NH, WH, LDWH )
 *
@@ -38,7 +38,7 @@
 *>
 *> \verbatim
 *>
-*>    AB_CLAQR5 called by AB_CLAQR0 performs a
+*>    CLAQR5 called by CLAQR0 performs a
 *>    single small-bulge multi-shift QR sweep.
 *> \endverbatim
 *
@@ -49,14 +49,14 @@
 *> \verbatim
 *>          WANTT is LOGICAL
 *>             WANTT = .true. if the triangular Schur factor
-*>             is being computed.  WANTT is set to .FALSE. otherwise.
+*>             is being computed.  WANTT is set to .false. otherwise.
 *> \endverbatim
 *>
 *> \param[in] WANTZ
 *> \verbatim
 *>          WANTZ is LOGICAL
 *>             WANTZ = .true. if the unitary Schur factor is being
-*>             computed.  WANTZ is set to .FALSE. otherwise.
+*>             computed.  WANTZ is set to .false. otherwise.
 *> \endverbatim
 *>
 *> \param[in] KACC22
@@ -64,12 +64,12 @@
 *>          KACC22 is INTEGER with value 0, 1, or 2.
 *>             Specifies the computation mode of far-from-diagonal
 *>             orthogonal updates.
-*>        = 0: AB_CLAQR5 does not accumulate reflections and does not
+*>        = 0: CLAQR5 does not accumulate reflections and does not
 *>             use matrix-matrix multiply to update far-from-diagonal
 *>             matrix entries.
-*>        = 1: AB_CLAQR5 accumulates reflections and uses matrix-matrix
+*>        = 1: CLAQR5 accumulates reflections and uses matrix-matrix
 *>             multiply to update the far-from-diagonal matrix entries.
-*>        = 2: AB_CLAQR5 accumulates reflections, uses matrix-matrix
+*>        = 2: CLAQR5 accumulates reflections, uses matrix-matrix
 *>             multiply to update the far-from-diagonal matrix entries,
 *>             and takes advantage of 2-by-2 block structure during
 *>             matrix multiplies.
@@ -245,8 +245,7 @@
 *>       929--947, 2002.
 *>
 *  =====================================================================
-      SUBROUTINE AB_CLAQR5( WANTT, WANTZ, KACC22, N, KTOP, KBOT, NSHFTS,
-     $ S,
+      SUBROUTINE CLAQR5( WANTT, WANTZ, KACC22, N, KTOP, KBOT, NSHFTS, S,
      $                   H, LDH, ILOZ, IHIZ, Z, LDZ, V, LDV, U, LDU, NV,
      $                   WV, LDWV, NH, WH, LDWH )
 *
@@ -284,8 +283,8 @@
       LOGICAL            ACCUM, BLK22, BMP22
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH
-      EXTERNAL           AB_SLAMCH
+      REAL               SLAMCH
+      EXTERNAL           SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
 *
@@ -295,9 +294,8 @@
       COMPLEX            VT( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CGEMM, AB_CLACPY, AB_CLAQR1, AB_AB_CLARFG, A
-     $B_CLASET, AB_CTRMM,
-     $                   AB_SLABAD
+      EXTERNAL           CGEMM, CLACPY, CLAQR1, CLARFG, CLASET, CTRMM,
+     $                   SLABAD
 *     ..
 *     .. Statement Functions ..
       REAL               CABS1
@@ -325,10 +323,10 @@
 *
 *     ==== Machine constants for deflation ====
 *
-      SAFMIN = AB_SLAMCH( 'SAFE MINIMUM' )
+      SAFMIN = SLAMCH( 'SAFE MINIMUM' )
       SAFMAX = RONE / SAFMIN
-      CALL AB_SLABAD( SAFMIN, SAFMAX )
-      ULP = AB_SLAMCH( 'PRECISION' )
+      CALL SLABAD( SAFMIN, SAFMAX )
+      ULP = SLAMCH( 'PRECISION' )
       SMLNUM = SAFMIN*( REAL( N ) / ULP )
 *
 *     ==== Use accumulated reflections to update far-from-diagonal
@@ -358,7 +356,7 @@
       DO 210 INCOL = 3*( 1-NBMPS ) + KTOP - 1, KBOT - 2, 3*NBMPS - 2
          NDCOL = INCOL + KDU
          IF( ACCUM )
-     $      CALL AB_CLASET( 'ALL', KDU, KDU, ZERO, ONE, U, LDU )
+     $      CALL CLASET( 'ALL', KDU, KDU, ZERO, ONE, U, LDU )
 *
 *        ==== Near-the-diagonal bulge chase.  The following loop
 *        .    performs the near-the-diagonal part of a small bulge
@@ -393,15 +391,15 @@
             DO 10 M = MTOP, MBOT
                K = KRCOL + 3*( M-1 )
                IF( K.EQ.KTOP-1 ) THEN
-                  CALL AB_CLAQR1( 3, H( KTOP, KTOP ), LDH, S( 2*M-1 ),
+                  CALL CLAQR1( 3, H( KTOP, KTOP ), LDH, S( 2*M-1 ),
      $                         S( 2*M ), V( 1, M ) )
                   ALPHA = V( 1, M )
-                  CALL AB_AB_CLARFG( 3, ALPHA, V( 2, M ), 1, V( 1, M ) )
+                  CALL CLARFG( 3, ALPHA, V( 2, M ), 1, V( 1, M ) )
                ELSE
                   BETA = H( K+1, K )
                   V( 2, M ) = H( K+2, K )
                   V( 3, M ) = H( K+3, K )
-                  CALL AB_AB_CLARFG( 3, BETA, V( 2, M ), 1, V( 1, M ) )
+                  CALL CLARFG( 3, BETA, V( 2, M ), 1, V( 1, M ) )
 *
 *                 ==== A Bulge may collapse because of vigilant
 *                 .    deflation or destructive underflow.  In the
@@ -424,10 +422,10 @@
 *                    .    reflector is too large, then abandon it.
 *                    .    Otherwise, use the new one. ====
 *
-                     CALL AB_CLAQR1( 3, H( K+1, K+1 ), LDH, S( 2*M-1 ),
+                     CALL CLAQR1( 3, H( K+1, K+1 ), LDH, S( 2*M-1 ),
      $                            S( 2*M ), VT )
                      ALPHA = VT( 1 )
-                     CALL AB_AB_CLARFG( 3, ALPHA, VT( 2 ), 1, VT( 1 ) )
+                     CALL CLARFG( 3, ALPHA, VT( 2 ), 1, VT( 1 ) )
                      REFSUM = CONJG( VT( 1 ) )*
      $                        ( H( K+1, K )+CONJG( VT( 2 ) )*
      $                        H( K+2, K ) )
@@ -467,16 +465,14 @@
             K = KRCOL + 3*( M22-1 )
             IF( BMP22 ) THEN
                IF( K.EQ.KTOP-1 ) THEN
-                  CALL AB_CLAQR1( 2, H( K+1, K+1 ), LDH, S( 2*M22-1 ),
+                  CALL CLAQR1( 2, H( K+1, K+1 ), LDH, S( 2*M22-1 ),
      $                         S( 2*M22 ), V( 1, M22 ) )
                   BETA = V( 1, M22 )
-                  CALL AB_AB_CLARFG( 2, BETA, V( 2, M22 ), 1, V( 1, M22 
-     $) )
+                  CALL CLARFG( 2, BETA, V( 2, M22 ), 1, V( 1, M22 ) )
                ELSE
                   BETA = H( K+1, K )
                   V( 2, M22 ) = H( K+2, K )
-                  CALL AB_AB_CLARFG( 2, BETA, V( 2, M22 ), 1, V( 1, M22 
-     $) )
+                  CALL CLARFG( 2, BETA, V( 2, M22 ), 1, V( 1, M22 ) )
                   H( K+1, K ) = BETA
                   H( K+2, K ) = ZERO
                END IF
@@ -710,11 +706,10 @@
 *
                DO 150 JCOL = MIN( NDCOL, KBOT ) + 1, JBOT, NH
                   JLEN = MIN( NH, JBOT-JCOL+1 )
-                  CALL AB_CGEMM( 'C', 'N', NU, JLEN, NU, ONE, U( K1, K1 
-     $),
+                  CALL CGEMM( 'C', 'N', NU, JLEN, NU, ONE, U( K1, K1 ),
      $                        LDU, H( INCOL+K1, JCOL ), LDH, ZERO, WH,
      $                        LDWH )
-                  CALL AB_CLACPY( 'ALL', NU, JLEN, WH, LDWH,
+                  CALL CLACPY( 'ALL', NU, JLEN, WH, LDWH,
      $                         H( INCOL+K1, JCOL ), LDH )
   150          CONTINUE
 *
@@ -722,10 +717,10 @@
 *
                DO 160 JROW = JTOP, MAX( KTOP, INCOL ) - 1, NV
                   JLEN = MIN( NV, MAX( KTOP, INCOL )-JROW )
-                  CALL AB_CGEMM( 'N', 'N', JLEN, NU, NU, ONE,
+                  CALL CGEMM( 'N', 'N', JLEN, NU, NU, ONE,
      $                        H( JROW, INCOL+K1 ), LDH, U( K1, K1 ),
      $                        LDU, ZERO, WV, LDWV )
-                  CALL AB_CLACPY( 'ALL', JLEN, NU, WV, LDWV,
+                  CALL CLACPY( 'ALL', JLEN, NU, WV, LDWV,
      $                         H( JROW, INCOL+K1 ), LDH )
   160          CONTINUE
 *
@@ -734,10 +729,10 @@
                IF( WANTZ ) THEN
                   DO 170 JROW = ILOZ, IHIZ, NV
                      JLEN = MIN( NV, IHIZ-JROW+1 )
-                     CALL AB_CGEMM( 'N', 'N', JLEN, NU, NU, ONE,
+                     CALL CGEMM( 'N', 'N', JLEN, NU, NU, ONE,
      $                           Z( JROW, INCOL+K1 ), LDZ, U( K1, K1 ),
      $                           LDU, ZERO, WV, LDWV )
-                     CALL AB_CLACPY( 'ALL', JLEN, NU, WV, LDWV,
+                     CALL CLACPY( 'ALL', JLEN, NU, WV, LDWV,
      $                            Z( JROW, INCOL+K1 ), LDZ )
   170             CONTINUE
                END IF
@@ -767,44 +762,41 @@
 *                 ==== Copy bottom of H to top+KZS of scratch ====
 *                  (The first KZS rows get multiplied by zero.) ====
 *
-                  CALL AB_CLACPY( 'ALL', KNZ, JLEN, H( INCOL+1+J2, JCOL 
-     $),
+                  CALL CLACPY( 'ALL', KNZ, JLEN, H( INCOL+1+J2, JCOL ),
      $                         LDH, WH( KZS+1, 1 ), LDWH )
 *
 *                 ==== Multiply by U21**H ====
 *
-                  CALL AB_CLASET( 'ALL', KZS, JLEN, ZERO, ZERO, WH, LDWH
-     $ )
-                  CALL AB_CTRMM( 'L', 'U', 'C', 'N', KNZ, JLEN, ONE,
+                  CALL CLASET( 'ALL', KZS, JLEN, ZERO, ZERO, WH, LDWH )
+                  CALL CTRMM( 'L', 'U', 'C', 'N', KNZ, JLEN, ONE,
      $                        U( J2+1, 1+KZS ), LDU, WH( KZS+1, 1 ),
      $                        LDWH )
 *
 *                 ==== Multiply top of H by U11**H ====
 *
-                  CALL AB_CGEMM( 'C', 'N', I2, JLEN, J2, ONE, U, LDU,
+                  CALL CGEMM( 'C', 'N', I2, JLEN, J2, ONE, U, LDU,
      $                        H( INCOL+1, JCOL ), LDH, ONE, WH, LDWH )
 *
 *                 ==== Copy top of H to bottom of WH ====
 *
-                  CALL AB_CLACPY( 'ALL', J2, JLEN, H( INCOL+1, JCOL ), L
-     $DH,
+                  CALL CLACPY( 'ALL', J2, JLEN, H( INCOL+1, JCOL ), LDH,
      $                         WH( I2+1, 1 ), LDWH )
 *
 *                 ==== Multiply by U21**H ====
 *
-                  CALL AB_CTRMM( 'L', 'L', 'C', 'N', J2, JLEN, ONE,
+                  CALL CTRMM( 'L', 'L', 'C', 'N', J2, JLEN, ONE,
      $                        U( 1, I2+1 ), LDU, WH( I2+1, 1 ), LDWH )
 *
 *                 ==== Multiply by U22 ====
 *
-                  CALL AB_CGEMM( 'C', 'N', I4-I2, JLEN, J4-J2, ONE,
+                  CALL CGEMM( 'C', 'N', I4-I2, JLEN, J4-J2, ONE,
      $                        U( J2+1, I2+1 ), LDU,
      $                        H( INCOL+1+J2, JCOL ), LDH, ONE,
      $                        WH( I2+1, 1 ), LDWH )
 *
 *                 ==== Copy it back ====
 *
-                  CALL AB_CLACPY( 'ALL', KDU, JLEN, WH, LDWH,
+                  CALL CLACPY( 'ALL', KDU, JLEN, WH, LDWH,
      $                         H( INCOL+1, JCOL ), LDH )
   180          CONTINUE
 *
@@ -816,45 +808,42 @@
 *                 ==== Copy right of H to scratch (the first KZS
 *                 .    columns get multiplied by zero) ====
 *
-                  CALL AB_CLACPY( 'ALL', JLEN, KNZ, H( JROW, INCOL+1+J2 
-     $),
+                  CALL CLACPY( 'ALL', JLEN, KNZ, H( JROW, INCOL+1+J2 ),
      $                         LDH, WV( 1, 1+KZS ), LDWV )
 *
 *                 ==== Multiply by U21 ====
 *
-                  CALL AB_CLASET( 'ALL', JLEN, KZS, ZERO, ZERO, WV, LDWV
-     $ )
-                  CALL AB_CTRMM( 'R', 'U', 'N', 'N', JLEN, KNZ, ONE,
+                  CALL CLASET( 'ALL', JLEN, KZS, ZERO, ZERO, WV, LDWV )
+                  CALL CTRMM( 'R', 'U', 'N', 'N', JLEN, KNZ, ONE,
      $                        U( J2+1, 1+KZS ), LDU, WV( 1, 1+KZS ),
      $                        LDWV )
 *
 *                 ==== Multiply by U11 ====
 *
-                  CALL AB_CGEMM( 'N', 'N', JLEN, I2, J2, ONE,
+                  CALL CGEMM( 'N', 'N', JLEN, I2, J2, ONE,
      $                        H( JROW, INCOL+1 ), LDH, U, LDU, ONE, WV,
      $                        LDWV )
 *
 *                 ==== Copy left of H to right of scratch ====
 *
-                  CALL AB_CLACPY( 'ALL', JLEN, J2, H( JROW, INCOL+1 ), L
-     $DH,
+                  CALL CLACPY( 'ALL', JLEN, J2, H( JROW, INCOL+1 ), LDH,
      $                         WV( 1, 1+I2 ), LDWV )
 *
 *                 ==== Multiply by U21 ====
 *
-                  CALL AB_CTRMM( 'R', 'L', 'N', 'N', JLEN, I4-I2, ONE,
+                  CALL CTRMM( 'R', 'L', 'N', 'N', JLEN, I4-I2, ONE,
      $                        U( 1, I2+1 ), LDU, WV( 1, 1+I2 ), LDWV )
 *
 *                 ==== Multiply by U22 ====
 *
-                  CALL AB_CGEMM( 'N', 'N', JLEN, I4-I2, J4-J2, ONE,
+                  CALL CGEMM( 'N', 'N', JLEN, I4-I2, J4-J2, ONE,
      $                        H( JROW, INCOL+1+J2 ), LDH,
      $                        U( J2+1, I2+1 ), LDU, ONE, WV( 1, 1+I2 ),
      $                        LDWV )
 *
 *                 ==== Copy it back ====
 *
-                  CALL AB_CLACPY( 'ALL', JLEN, KDU, WV, LDWV,
+                  CALL CLACPY( 'ALL', JLEN, KDU, WV, LDWV,
      $                         H( JROW, INCOL+1 ), LDH )
   190          CONTINUE
 *
@@ -867,47 +856,45 @@
 *                    ==== Copy right of Z to left of scratch (first
 *                    .     KZS columns get multiplied by zero) ====
 *
-                     CALL AB_CLACPY( 'ALL', JLEN, KNZ,
+                     CALL CLACPY( 'ALL', JLEN, KNZ,
      $                            Z( JROW, INCOL+1+J2 ), LDZ,
      $                            WV( 1, 1+KZS ), LDWV )
 *
 *                    ==== Multiply by U12 ====
 *
-                     CALL AB_CLASET( 'ALL', JLEN, KZS, ZERO, ZERO, WV,
+                     CALL CLASET( 'ALL', JLEN, KZS, ZERO, ZERO, WV,
      $                            LDWV )
-                     CALL AB_CTRMM( 'R', 'U', 'N', 'N', JLEN, KNZ, ONE,
+                     CALL CTRMM( 'R', 'U', 'N', 'N', JLEN, KNZ, ONE,
      $                           U( J2+1, 1+KZS ), LDU, WV( 1, 1+KZS ),
      $                           LDWV )
 *
 *                    ==== Multiply by U11 ====
 *
-                     CALL AB_CGEMM( 'N', 'N', JLEN, I2, J2, ONE,
+                     CALL CGEMM( 'N', 'N', JLEN, I2, J2, ONE,
      $                           Z( JROW, INCOL+1 ), LDZ, U, LDU, ONE,
      $                           WV, LDWV )
 *
 *                    ==== Copy left of Z to right of scratch ====
 *
-                     CALL AB_CLACPY( 'ALL', JLEN, J2, Z( JROW, INCOL+1 )
-     $,
+                     CALL CLACPY( 'ALL', JLEN, J2, Z( JROW, INCOL+1 ),
      $                            LDZ, WV( 1, 1+I2 ), LDWV )
 *
 *                    ==== Multiply by U21 ====
 *
-                     CALL AB_CTRMM( 'R', 'L', 'N', 'N', JLEN, I4-I2, ONE
-     $,
+                     CALL CTRMM( 'R', 'L', 'N', 'N', JLEN, I4-I2, ONE,
      $                           U( 1, I2+1 ), LDU, WV( 1, 1+I2 ),
      $                           LDWV )
 *
 *                    ==== Multiply by U22 ====
 *
-                     CALL AB_CGEMM( 'N', 'N', JLEN, I4-I2, J4-J2, ONE,
+                     CALL CGEMM( 'N', 'N', JLEN, I4-I2, J4-J2, ONE,
      $                           Z( JROW, INCOL+1+J2 ), LDZ,
      $                           U( J2+1, I2+1 ), LDU, ONE,
      $                           WV( 1, 1+I2 ), LDWV )
 *
 *                    ==== Copy the result back to Z ====
 *
-                     CALL AB_CLACPY( 'ALL', JLEN, KDU, WV, LDWV,
+                     CALL CLACPY( 'ALL', JLEN, KDU, WV, LDWV,
      $                            Z( JROW, INCOL+1 ), LDZ )
   200             CONTINUE
                END IF
@@ -915,6 +902,6 @@
          END IF
   210 CONTINUE
 *
-*     ==== End of AB_CLAQR5 ====
+*     ==== End of CLAQR5 ====
 *
       END

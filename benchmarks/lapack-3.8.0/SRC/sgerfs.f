@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_SGERFS
+*> \brief \b SGERFS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_SGERFS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_SGERFS.f">
+*> Download SGERFS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgerfs.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_SGERFS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgerfs.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_SGERFS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgerfs.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_SGERFS( TRANS, N, NRHS, A, LDA, AF, LDAF, IPIV, B, LDB,
+*       SUBROUTINE SGERFS( TRANS, N, NRHS, A, LDA, AF, LDAF, IPIV, B, LDB,
 *                          X, LDX, FERR, BERR, WORK, IWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_SGERFS improves the computed solution to a system of linear
+*> SGERFS improves the computed solution to a system of linear
 *> equations and provides error bounds and backward error estimates for
 *> the solution.
 *> \endverbatim
@@ -83,7 +83,7 @@
 *> \verbatim
 *>          AF is REAL array, dimension (LDAF,N)
 *>          The factors L and U from the factorization A = P*L*U
-*>          as computed by AB_SGETRF.
+*>          as computed by SGETRF.
 *> \endverbatim
 *>
 *> \param[in] LDAF
@@ -95,7 +95,7 @@
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          The pivot indices from AB_SGETRF; for 1<=i<=N, row i of the
+*>          The pivot indices from SGETRF; for 1<=i<=N, row i of the
 *>          matrix was interchanged with row IPIV(i).
 *> \endverbatim
 *>
@@ -114,7 +114,7 @@
 *> \param[in,out] X
 *> \verbatim
 *>          X is REAL array, dimension (LDX,NRHS)
-*>          On entry, the solution matrix X, as computed by AB_SGETRS.
+*>          On entry, the solution matrix X, as computed by SGETRS.
 *>          On exit, the improved solution matrix X.
 *> \endverbatim
 *>
@@ -182,8 +182,7 @@
 *> \ingroup realGEcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_SGERFS( TRANS, N, NRHS, A, LDA, AF, LDAF, IPIV, B
-     $, LDB,
+      SUBROUTINE SGERFS( TRANS, N, NRHS, A, LDA, AF, LDAF, IPIV, B, LDB,
      $                   X, LDX, FERR, BERR, WORK, IWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -225,25 +224,24 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SAXPY, AB_SCOPY, AB_SGEMV, AB_SGETRS, AB_SLA
-     $CN2, AB_XERBLA
+      EXTERNAL           SAXPY, SCOPY, SGEMV, SGETRS, SLACN2, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_SLAMCH
-      EXTERNAL           AB_LSAME, AB_SLAMCH
+      LOGICAL            LSAME
+      REAL               SLAMCH
+      EXTERNAL           LSAME, SLAMCH
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters.
 *
       INFO = 0
-      NOTRAN = AB_LSAME( TRANS, 'N' )
-      IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) .AND. .NOT.
-     $    AB_LSAME( TRANS, 'C' ) ) THEN
+      NOTRAN = LSAME( TRANS, 'N' )
+      IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) .AND. .NOT.
+     $    LSAME( TRANS, 'C' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -259,7 +257,7 @@
          INFO = -12
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_SGERFS', -INFO )
+         CALL XERBLA( 'SGERFS', -INFO )
          RETURN
       END IF
 *
@@ -282,8 +280,8 @@
 *     NZ = maximum number of nonzero elements in each row of A, plus 1
 *
       NZ = N + 1
-      EPS = AB_SLAMCH( 'Epsilon' )
-      SAFMIN = AB_SLAMCH( 'Safe minimum' )
+      EPS = SLAMCH( 'Epsilon' )
+      SAFMIN = SLAMCH( 'Safe minimum' )
       SAFE1 = NZ*SAFMIN
       SAFE2 = SAFE1 / EPS
 *
@@ -300,8 +298,8 @@
 *        Compute residual R = B - op(A) * X,
 *        where op(A) = A, A**T, or A**H, depending on TRANS.
 *
-         CALL AB_SCOPY( N, B( 1, J ), 1, WORK( N+1 ), 1 )
-         CALL AB_SGEMV( TRANS, N, N, -ONE, A, LDA, X( 1, J ), 1, ONE,
+         CALL SCOPY( N, B( 1, J ), 1, WORK( N+1 ), 1 )
+         CALL SGEMV( TRANS, N, N, -ONE, A, LDA, X( 1, J ), 1, ONE,
      $               WORK( N+1 ), 1 )
 *
 *        Compute componentwise relative backward error from formula
@@ -357,9 +355,9 @@
 *
 *           Update solution and try again.
 *
-            CALL AB_SGETRS( TRANS, N, 1, AF, LDAF, IPIV, WORK( N+1 ), N,
+            CALL SGETRS( TRANS, N, 1, AF, LDAF, IPIV, WORK( N+1 ), N,
      $                   INFO )
-            CALL AB_SAXPY( N, ONE, WORK( N+1 ), 1, X( 1, J ), 1 )
+            CALL SAXPY( N, ONE, WORK( N+1 ), 1, X( 1, J ), 1 )
             LSTRES = BERR( J )
             COUNT = COUNT + 1
             GO TO 20
@@ -383,7 +381,7 @@
 *        is incremented by SAFE1 if the i-th component of
 *        abs(op(A))*abs(X) + abs(B) is less than SAFE2.
 *
-*        Use AB_SLACN2 to estimate the infinity-norm of the matrix
+*        Use SLACN2 to estimate the infinity-norm of the matrix
 *           inv(op(A)) * diag(W),
 *        where W = abs(R) + NZ*EPS*( abs(op(A))*abs(X)+abs(B) )))
 *
@@ -397,16 +395,14 @@
 *
          KASE = 0
   100    CONTINUE
-         CALL AB_SLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK, FERR( J )
-     $,
+         CALL SLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK, FERR( J ),
      $                KASE, ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN
 *
 *              Multiply by diag(W)*inv(op(A)**T).
 *
-               CALL AB_SGETRS( TRANST, N, 1, AF, LDAF, IPIV, WORK( N+1 )
-     $,
+               CALL SGETRS( TRANST, N, 1, AF, LDAF, IPIV, WORK( N+1 ),
      $                      N, INFO )
                DO 110 I = 1, N
                   WORK( N+I ) = WORK( I )*WORK( N+I )
@@ -418,8 +414,7 @@
                DO 120 I = 1, N
                   WORK( N+I ) = WORK( I )*WORK( N+I )
   120          CONTINUE
-               CALL AB_SGETRS( TRANS, N, 1, AF, LDAF, IPIV, WORK( N+1 ),
-     $ N,
+               CALL SGETRS( TRANS, N, 1, AF, LDAF, IPIV, WORK( N+1 ), N,
      $                      INFO )
             END IF
             GO TO 100
@@ -438,6 +433,6 @@
 *
       RETURN
 *
-*     End of AB_AB_SGERFS
+*     End of SGERFS
 *
       END

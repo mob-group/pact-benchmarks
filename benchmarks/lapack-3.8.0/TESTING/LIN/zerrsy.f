@@ -1,4 +1,4 @@
-*> \brief \b AB_ZERRSY
+*> \brief \b ZERRSY
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZERRSY( PATH, NUNIT )
+*       SUBROUTINE ZERRSY( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZERRSY tests the error exits for the COMPLEX*16 routines
+*> ZERRSY tests the error exits for the COMPLEX*16 routines
 *> for symmetric indefinite matrices.
 *> \endverbatim
 *
@@ -53,7 +53,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZERRSY( PATH, NUNIT )
+      SUBROUTINE ZERRSY( PATH, NUNIT )
 *
 *  -- LAPACK test routine (version 3.8.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -83,21 +83,16 @@
      $                   E( NMAX ), W( 2*NMAX ), X( NMAX )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_AB_LSAMEN
-      EXTERNAL           AB_AB_LSAMEN
+      LOGICAL            LSAMEN
+      EXTERNAL           LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALAESM, AB_CHKXER, AB_ZSPCON, AB_AB_ZSPRFS, 
-     $AB_ZSPTRF, AB_ZSPTRI,
-     $                   AB_ZSPTRS, AB_ZSYCON, AB_AB_ZSYCON_3, AB_AB_ZSY
-     $CON_ROOK, AB_AB_ZSYRFS,
-     $                   AB_ZSYTF2, AB_AB_ZSYTF2_RK, AB_AB_ZSYTF2_ROOK, 
-     $AB_ZSYTRF,
-     $                   AB_AB_ZSYTRF_RK, AB_AB_ZSYTRF_ROOK, AB_ZSYTRI, 
-     $AB_AB_ZSYTRI_3,
-     $                   AB_AB_AB_ZSYTRI_3X, AB_AB_ZSYTRI_ROOK, AB_AB_ZS
-     $YTRI2, AB_AB_AB_ZSYTRI2X,
-     $                   AB_ZSYTRS, AB_AB_ZSYTRS_3, AB_AB_ZSYTRS_ROOK
+      EXTERNAL           ALAESM, CHKXER, ZSPCON, ZSPRFS, ZSPTRF, ZSPTRI,
+     $                   ZSPTRS, ZSYCON, ZSYCON_3, ZSYCON_ROOK, ZSYRFS,
+     $                   ZSYTF2, ZSYTF2_RK, ZSYTF2_ROOK, ZSYTRF,
+     $                   ZSYTRF_RK, ZSYTRF_ROOK, ZSYTRI, ZSYTRI_3,
+     $                   ZSYTRI_3X, ZSYTRI_ROOK, ZSYTRI2, ZSYTRI2X,
+     $                   ZSYTRS, ZSYTRS_3, ZSYTRS_ROOK
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -137,248 +132,237 @@
       ANRM = 1.0D0
       OK = .TRUE.
 *
-      IF( AB_AB_LSAMEN( 2, C2, 'SY' ) ) THEN
+      IF( LSAMEN( 2, C2, 'SY' ) ) THEN
 *
 *        Test error exits of the routines that use factorization
 *        of a symmetric indefinite matrix with patrial
 *        (Bunch-Kaufman) diagonal pivoting method.
 *
-*        AB_ZSYTRF
+*        ZSYTRF
 *
-         SRNAMT = 'AB_ZSYTRF'
+         SRNAMT = 'ZSYTRF'
          INFOT = 1
-         CALL AB_ZSYTRF( '/', 0, A, 1, IP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZSYTRF', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRF( '/', 0, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'ZSYTRF', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_ZSYTRF( 'U', -1, A, 1, IP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZSYTRF', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRF( 'U', -1, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'ZSYTRF', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_ZSYTRF( 'U', 2, A, 1, IP, W, 4, INFO )
-         CALL AB_CHKXER( 'AB_ZSYTRF', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRF( 'U', 2, A, 1, IP, W, 4, INFO )
+         CALL CHKXER( 'ZSYTRF', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_ZSYTRF( 'U', 0, A, 1, IP, W, 0, INFO )
-         CALL AB_CHKXER( 'AB_ZSYTRF', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRF( 'U', 0, A, 1, IP, W, 0, INFO )
+         CALL CHKXER( 'ZSYTRF', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_ZSYTRF( 'U', 0, A, 1, IP, W, -2, INFO )
-         CALL AB_CHKXER( 'AB_ZSYTRF', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRF( 'U', 0, A, 1, IP, W, -2, INFO )
+         CALL CHKXER( 'ZSYTRF', INFOT, NOUT, LERR, OK )
 *
-*        AB_ZSYTF2
+*        ZSYTF2
 *
-         SRNAMT = 'AB_ZSYTF2'
+         SRNAMT = 'ZSYTF2'
          INFOT = 1
-         CALL AB_ZSYTF2( '/', 0, A, 1, IP, INFO )
-         CALL AB_CHKXER( 'AB_ZSYTF2', INFOT, NOUT, LERR, OK )
+         CALL ZSYTF2( '/', 0, A, 1, IP, INFO )
+         CALL CHKXER( 'ZSYTF2', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_ZSYTF2( 'U', -1, A, 1, IP, INFO )
-         CALL AB_CHKXER( 'AB_ZSYTF2', INFOT, NOUT, LERR, OK )
+         CALL ZSYTF2( 'U', -1, A, 1, IP, INFO )
+         CALL CHKXER( 'ZSYTF2', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_ZSYTF2( 'U', 2, A, 1, IP, INFO )
-         CALL AB_CHKXER( 'AB_ZSYTF2', INFOT, NOUT, LERR, OK )
+         CALL ZSYTF2( 'U', 2, A, 1, IP, INFO )
+         CALL CHKXER( 'ZSYTF2', INFOT, NOUT, LERR, OK )
 *
-*        AB_ZSYTRI
+*        ZSYTRI
 *
-         SRNAMT = 'AB_ZSYTRI'
+         SRNAMT = 'ZSYTRI'
          INFOT = 1
-         CALL AB_ZSYTRI( '/', 0, A, 1, IP, W, INFO )
-         CALL AB_CHKXER( 'AB_ZSYTRI', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRI( '/', 0, A, 1, IP, W, INFO )
+         CALL CHKXER( 'ZSYTRI', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_ZSYTRI( 'U', -1, A, 1, IP, W, INFO )
-         CALL AB_CHKXER( 'AB_ZSYTRI', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRI( 'U', -1, A, 1, IP, W, INFO )
+         CALL CHKXER( 'ZSYTRI', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_ZSYTRI( 'U', 2, A, 1, IP, W, INFO )
-         CALL AB_CHKXER( 'AB_ZSYTRI', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRI( 'U', 2, A, 1, IP, W, INFO )
+         CALL CHKXER( 'ZSYTRI', INFOT, NOUT, LERR, OK )
 *
-*        AB_AB_ZSYTRI2
+*        ZSYTRI2
 *
-         SRNAMT = 'AB_AB_ZSYTRI2'
+         SRNAMT = 'ZSYTRI2'
          INFOT = 1
-         CALL AB_AB_ZSYTRI2( '/', 0, A, 1, IP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRI2', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRI2( '/', 0, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'ZSYTRI2', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_ZSYTRI2( 'U', -1, A, 1, IP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRI2', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRI2( 'U', -1, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'ZSYTRI2', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_ZSYTRI2( 'U', 2, A, 1, IP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRI2', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRI2( 'U', 2, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'ZSYTRI2', INFOT, NOUT, LERR, OK )
 *
-*        AB_AB_AB_ZSYTRI2X
+*        ZSYTRI2X
 *
-         SRNAMT = 'AB_AB_AB_ZSYTRI2X'
+         SRNAMT = 'ZSYTRI2X'
          INFOT = 1
-         CALL AB_AB_AB_ZSYTRI2X( '/', 0, A, 1, IP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZSYTRI2X', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRI2X( '/', 0, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'ZSYTRI2X', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_AB_ZSYTRI2X( 'U', -1, A, 1, IP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZSYTRI2X', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRI2X( 'U', -1, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'ZSYTRI2X', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_AB_ZSYTRI2X( 'U', 2, A, 1, IP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZSYTRI2X', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRI2X( 'U', 2, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'ZSYTRI2X', INFOT, NOUT, LERR, OK )
 *
-*        AB_ZSYTRS
+*        ZSYTRS
 *
-         SRNAMT = 'AB_ZSYTRS'
+         SRNAMT = 'ZSYTRS'
          INFOT = 1
-         CALL AB_ZSYTRS( '/', 0, 0, A, 1, IP, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZSYTRS', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRS( '/', 0, 0, A, 1, IP, B, 1, INFO )
+         CALL CHKXER( 'ZSYTRS', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_ZSYTRS( 'U', -1, 0, A, 1, IP, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZSYTRS', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRS( 'U', -1, 0, A, 1, IP, B, 1, INFO )
+         CALL CHKXER( 'ZSYTRS', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_ZSYTRS( 'U', 0, -1, A, 1, IP, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZSYTRS', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRS( 'U', 0, -1, A, 1, IP, B, 1, INFO )
+         CALL CHKXER( 'ZSYTRS', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_ZSYTRS( 'U', 2, 1, A, 1, IP, B, 2, INFO )
-         CALL AB_CHKXER( 'AB_ZSYTRS', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRS( 'U', 2, 1, A, 1, IP, B, 2, INFO )
+         CALL CHKXER( 'ZSYTRS', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_ZSYTRS( 'U', 2, 1, A, 2, IP, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZSYTRS', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRS( 'U', 2, 1, A, 2, IP, B, 1, INFO )
+         CALL CHKXER( 'ZSYTRS', INFOT, NOUT, LERR, OK )
 *
-*        AB_AB_ZSYRFS
+*        ZSYRFS
 *
-         SRNAMT = 'AB_AB_ZSYRFS'
+         SRNAMT = 'ZSYRFS'
          INFOT = 1
-         CALL AB_AB_ZSYRFS( '/', 0, 0, A, 1, AF, 1, IP, B, 1, X, 1, R1, 
-     $R2, W,
+         CALL ZSYRFS( '/', 0, 0, A, 1, AF, 1, IP, B, 1, X, 1, R1, R2, W,
      $                R, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZSYRFS', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_ZSYRFS( 'U', -1, 0, A, 1, AF, 1, IP, B, 1, X, 1, R1,
-     $ R2,
+         CALL ZSYRFS( 'U', -1, 0, A, 1, AF, 1, IP, B, 1, X, 1, R1, R2,
      $                W, R, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZSYRFS', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_ZSYRFS( 'U', 0, -1, A, 1, AF, 1, IP, B, 1, X, 1, R1,
-     $ R2,
+         CALL ZSYRFS( 'U', 0, -1, A, 1, AF, 1, IP, B, 1, X, 1, R1, R2,
      $                W, R, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZSYRFS', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_AB_ZSYRFS( 'U', 2, 1, A, 1, AF, 2, IP, B, 2, X, 2, R1, 
-     $R2, W,
+         CALL ZSYRFS( 'U', 2, 1, A, 1, AF, 2, IP, B, 2, X, 2, R1, R2, W,
      $                R, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZSYRFS', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_AB_ZSYRFS( 'U', 2, 1, A, 2, AF, 1, IP, B, 2, X, 2, R1, 
-     $R2, W,
+         CALL ZSYRFS( 'U', 2, 1, A, 2, AF, 1, IP, B, 2, X, 2, R1, R2, W,
      $                R, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZSYRFS', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_AB_ZSYRFS( 'U', 2, 1, A, 2, AF, 2, IP, B, 1, X, 2, R1, 
-     $R2, W,
+         CALL ZSYRFS( 'U', 2, 1, A, 2, AF, 2, IP, B, 1, X, 2, R1, R2, W,
      $                R, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZSYRFS', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL AB_AB_ZSYRFS( 'U', 2, 1, A, 2, AF, 2, IP, B, 2, X, 1, R1, 
-     $R2, W,
+         CALL ZSYRFS( 'U', 2, 1, A, 2, AF, 2, IP, B, 2, X, 1, R1, R2, W,
      $                R, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZSYRFS', INFOT, NOUT, LERR, OK )
 *
-*        AB_ZSYCON
+*        ZSYCON
 *
-         SRNAMT = 'AB_ZSYCON'
+         SRNAMT = 'ZSYCON'
          INFOT = 1
-         CALL AB_ZSYCON( '/', 0, A, 1, IP, ANRM, RCOND, W, INFO )
-         CALL AB_CHKXER( 'AB_ZSYCON', INFOT, NOUT, LERR, OK )
+         CALL ZSYCON( '/', 0, A, 1, IP, ANRM, RCOND, W, INFO )
+         CALL CHKXER( 'ZSYCON', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_ZSYCON( 'U', -1, A, 1, IP, ANRM, RCOND, W, INFO )
-         CALL AB_CHKXER( 'AB_ZSYCON', INFOT, NOUT, LERR, OK )
+         CALL ZSYCON( 'U', -1, A, 1, IP, ANRM, RCOND, W, INFO )
+         CALL CHKXER( 'ZSYCON', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_ZSYCON( 'U', 2, A, 1, IP, ANRM, RCOND, W, INFO )
-         CALL AB_CHKXER( 'AB_ZSYCON', INFOT, NOUT, LERR, OK )
+         CALL ZSYCON( 'U', 2, A, 1, IP, ANRM, RCOND, W, INFO )
+         CALL CHKXER( 'ZSYCON', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_ZSYCON( 'U', 1, A, 1, IP, -ANRM, RCOND, W, INFO )
-         CALL AB_CHKXER( 'AB_ZSYCON', INFOT, NOUT, LERR, OK )
+         CALL ZSYCON( 'U', 1, A, 1, IP, -ANRM, RCOND, W, INFO )
+         CALL CHKXER( 'ZSYCON', INFOT, NOUT, LERR, OK )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, C2, 'SR' ) ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'SR' ) ) THEN
 *
 *        Test error exits of the routines that use factorization
 *        of a symmetric indefinite matrix with rook
 *        (bounded Bunch-Kaufman) diagonal pivoting method.
 *
-*        AB_AB_ZSYTRF_ROOK
+*        ZSYTRF_ROOK
 *
-         SRNAMT = 'AB_AB_ZSYTRF_ROOK'
+         SRNAMT = 'ZSYTRF_ROOK'
          INFOT = 1
-         CALL AB_AB_ZSYTRF_ROOK( '/', 0, A, 1, IP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRF_ROOK', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRF_ROOK( '/', 0, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'ZSYTRF_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_ZSYTRF_ROOK( 'U', -1, A, 1, IP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRF_ROOK', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRF_ROOK( 'U', -1, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'ZSYTRF_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_ZSYTRF_ROOK( 'U', 2, A, 1, IP, W, 4, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRF_ROOK', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRF_ROOK( 'U', 2, A, 1, IP, W, 4, INFO )
+         CALL CHKXER( 'ZSYTRF_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_AB_ZSYTRF_ROOK( 'U', 0, A, 1, IP, W, 0, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRF_ROOK', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRF_ROOK( 'U', 0, A, 1, IP, W, 0, INFO )
+         CALL CHKXER( 'ZSYTRF_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_AB_ZSYTRF_ROOK( 'U', 0, A, 1, IP, W, -2, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRF_ROOK', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRF_ROOK( 'U', 0, A, 1, IP, W, -2, INFO )
+         CALL CHKXER( 'ZSYTRF_ROOK', INFOT, NOUT, LERR, OK )
 *
-*        AB_AB_ZSYTF2_ROOK
+*        ZSYTF2_ROOK
 *
-         SRNAMT = 'AB_AB_ZSYTF2_ROOK'
+         SRNAMT = 'ZSYTF2_ROOK'
          INFOT = 1
-         CALL AB_AB_ZSYTF2_ROOK( '/', 0, A, 1, IP, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTF2_ROOK', INFOT, NOUT, LERR, OK )
+         CALL ZSYTF2_ROOK( '/', 0, A, 1, IP, INFO )
+         CALL CHKXER( 'ZSYTF2_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_ZSYTF2_ROOK( 'U', -1, A, 1, IP, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTF2_ROOK', INFOT, NOUT, LERR, OK )
+         CALL ZSYTF2_ROOK( 'U', -1, A, 1, IP, INFO )
+         CALL CHKXER( 'ZSYTF2_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_ZSYTF2_ROOK( 'U', 2, A, 1, IP, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTF2_ROOK', INFOT, NOUT, LERR, OK )
+         CALL ZSYTF2_ROOK( 'U', 2, A, 1, IP, INFO )
+         CALL CHKXER( 'ZSYTF2_ROOK', INFOT, NOUT, LERR, OK )
 *
-*        AB_AB_ZSYTRI_ROOK
+*        ZSYTRI_ROOK
 *
-         SRNAMT = 'AB_AB_ZSYTRI_ROOK'
+         SRNAMT = 'ZSYTRI_ROOK'
          INFOT = 1
-         CALL AB_AB_ZSYTRI_ROOK( '/', 0, A, 1, IP, W, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRI_ROOK', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRI_ROOK( '/', 0, A, 1, IP, W, INFO )
+         CALL CHKXER( 'ZSYTRI_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_ZSYTRI_ROOK( 'U', -1, A, 1, IP, W, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRI_ROOK', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRI_ROOK( 'U', -1, A, 1, IP, W, INFO )
+         CALL CHKXER( 'ZSYTRI_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_ZSYTRI_ROOK( 'U', 2, A, 1, IP, W, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRI_ROOK', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRI_ROOK( 'U', 2, A, 1, IP, W, INFO )
+         CALL CHKXER( 'ZSYTRI_ROOK', INFOT, NOUT, LERR, OK )
 *
-*        AB_AB_ZSYTRS_ROOK
+*        ZSYTRS_ROOK
 *
-         SRNAMT = 'AB_AB_ZSYTRS_ROOK'
+         SRNAMT = 'ZSYTRS_ROOK'
          INFOT = 1
-         CALL AB_AB_ZSYTRS_ROOK( '/', 0, 0, A, 1, IP, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRS_ROOK', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRS_ROOK( '/', 0, 0, A, 1, IP, B, 1, INFO )
+         CALL CHKXER( 'ZSYTRS_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_ZSYTRS_ROOK( 'U', -1, 0, A, 1, IP, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRS_ROOK', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRS_ROOK( 'U', -1, 0, A, 1, IP, B, 1, INFO )
+         CALL CHKXER( 'ZSYTRS_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_ZSYTRS_ROOK( 'U', 0, -1, A, 1, IP, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRS_ROOK', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRS_ROOK( 'U', 0, -1, A, 1, IP, B, 1, INFO )
+         CALL CHKXER( 'ZSYTRS_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_AB_ZSYTRS_ROOK( 'U', 2, 1, A, 1, IP, B, 2, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRS_ROOK', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRS_ROOK( 'U', 2, 1, A, 1, IP, B, 2, INFO )
+         CALL CHKXER( 'ZSYTRS_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_ZSYTRS_ROOK( 'U', 2, 1, A, 2, IP, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRS_ROOK', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRS_ROOK( 'U', 2, 1, A, 2, IP, B, 1, INFO )
+         CALL CHKXER( 'ZSYTRS_ROOK', INFOT, NOUT, LERR, OK )
 *
-*        AB_AB_ZSYCON_ROOK
+*        ZSYCON_ROOK
 *
-         SRNAMT = 'AB_AB_ZSYCON_ROOK'
+         SRNAMT = 'ZSYCON_ROOK'
          INFOT = 1
-         CALL AB_AB_ZSYCON_ROOK( '/', 0, A, 1, IP, ANRM, RCOND, W, INFO 
-     $)
-         CALL AB_CHKXER( 'AB_AB_ZSYCON_ROOK', INFOT, NOUT, LERR, OK )
+         CALL ZSYCON_ROOK( '/', 0, A, 1, IP, ANRM, RCOND, W, INFO )
+         CALL CHKXER( 'ZSYCON_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_ZSYCON_ROOK( 'U', -1, A, 1, IP, ANRM, RCOND, W, INFO
-     $ )
-         CALL AB_CHKXER( 'AB_AB_ZSYCON_ROOK', INFOT, NOUT, LERR, OK )
+         CALL ZSYCON_ROOK( 'U', -1, A, 1, IP, ANRM, RCOND, W, INFO )
+         CALL CHKXER( 'ZSYCON_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_ZSYCON_ROOK( 'U', 2, A, 1, IP, ANRM, RCOND, W, INFO 
-     $)
-         CALL AB_CHKXER( 'AB_AB_ZSYCON_ROOK', INFOT, NOUT, LERR, OK )
+         CALL ZSYCON_ROOK( 'U', 2, A, 1, IP, ANRM, RCOND, W, INFO )
+         CALL CHKXER( 'ZSYCON_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_AB_ZSYCON_ROOK( 'U', 1, A, 1, IP, -ANRM, RCOND, W, INFO
-     $ )
-         CALL AB_CHKXER( 'AB_AB_ZSYCON_ROOK', INFOT, NOUT, LERR, OK )
+         CALL ZSYCON_ROOK( 'U', 1, A, 1, IP, -ANRM, RCOND, W, INFO )
+         CALL CHKXER( 'ZSYCON_ROOK', INFOT, NOUT, LERR, OK )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, C2, 'SK' ) ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'SK' ) ) THEN
 *
 *        Test error exits of the routines that use factorization
 *        of a symmetric indefinite matrix with rook
@@ -388,317 +372,292 @@
 *        L (or U) is stored in A, diagonal of D is stored on the
 *        diagonal of A, subdiagonal of D is stored in a separate array E.
 *
-*        AB_AB_ZSYTRF_RK
+*        ZSYTRF_RK
 *
-         SRNAMT = 'AB_AB_ZSYTRF_RK'
+         SRNAMT = 'ZSYTRF_RK'
          INFOT = 1
-         CALL AB_AB_ZSYTRF_RK( '/', 0, A, 1, E, IP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRF_RK', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRF_RK( '/', 0, A, 1, E, IP, W, 1, INFO )
+         CALL CHKXER( 'ZSYTRF_RK', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_ZSYTRF_RK( 'U', -1, A, 1, E, IP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRF_RK', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRF_RK( 'U', -1, A, 1, E, IP, W, 1, INFO )
+         CALL CHKXER( 'ZSYTRF_RK', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_ZSYTRF_RK( 'U', 2, A, 1, E, IP, W, 4, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRF_RK', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRF_RK( 'U', 2, A, 1, E, IP, W, 4, INFO )
+         CALL CHKXER( 'ZSYTRF_RK', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_ZSYTRF_RK( 'U', 0, A, 1, E, IP, W, 0, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRF_RK', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRF_RK( 'U', 0, A, 1, E, IP, W, 0, INFO )
+         CALL CHKXER( 'ZSYTRF_RK', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_ZSYTRF_RK( 'U', 0, A, 1, E, IP, W, -2, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRF_RK', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRF_RK( 'U', 0, A, 1, E, IP, W, -2, INFO )
+         CALL CHKXER( 'ZSYTRF_RK', INFOT, NOUT, LERR, OK )
 *
-*        AB_AB_ZSYTF2_RK
+*        ZSYTF2_RK
 *
-         SRNAMT = 'AB_AB_ZSYTF2_RK'
+         SRNAMT = 'ZSYTF2_RK'
          INFOT = 1
-         CALL AB_AB_ZSYTF2_RK( '/', 0, A, 1, E, IP, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTF2_RK', INFOT, NOUT, LERR, OK )
+         CALL ZSYTF2_RK( '/', 0, A, 1, E, IP, INFO )
+         CALL CHKXER( 'ZSYTF2_RK', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_ZSYTF2_RK( 'U', -1, A, 1, E, IP, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTF2_RK', INFOT, NOUT, LERR, OK )
+         CALL ZSYTF2_RK( 'U', -1, A, 1, E, IP, INFO )
+         CALL CHKXER( 'ZSYTF2_RK', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_ZSYTF2_RK( 'U', 2, A, 1, E, IP, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTF2_RK', INFOT, NOUT, LERR, OK )
+         CALL ZSYTF2_RK( 'U', 2, A, 1, E, IP, INFO )
+         CALL CHKXER( 'ZSYTF2_RK', INFOT, NOUT, LERR, OK )
 *
-*        AB_AB_ZSYTRI_3
+*        ZSYTRI_3
 *
-         SRNAMT = 'AB_AB_ZSYTRI_3'
+         SRNAMT = 'ZSYTRI_3'
          INFOT = 1
-         CALL AB_AB_ZSYTRI_3( '/', 0, A, 1, E, IP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRI_3', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRI_3( '/', 0, A, 1, E, IP, W, 1, INFO )
+         CALL CHKXER( 'ZSYTRI_3', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_ZSYTRI_3( 'U', -1, A, 1, E, IP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRI_3', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRI_3( 'U', -1, A, 1, E, IP, W, 1, INFO )
+         CALL CHKXER( 'ZSYTRI_3', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_ZSYTRI_3( 'U', 2, A, 1, E, IP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRI_3', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRI_3( 'U', 2, A, 1, E, IP, W, 1, INFO )
+         CALL CHKXER( 'ZSYTRI_3', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_ZSYTRI_3( 'U', 0, A, 1, E, IP, W, 0, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRI_3', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRI_3( 'U', 0, A, 1, E, IP, W, 0, INFO )
+         CALL CHKXER( 'ZSYTRI_3', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_ZSYTRI_3( 'U', 0, A, 1, E, IP, W, -2, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRI_3', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRI_3( 'U', 0, A, 1, E, IP, W, -2, INFO )
+         CALL CHKXER( 'ZSYTRI_3', INFOT, NOUT, LERR, OK )
 *
-*        AB_AB_AB_ZSYTRI_3X
+*        ZSYTRI_3X
 *
-         SRNAMT = 'AB_AB_AB_ZSYTRI_3X'
+         SRNAMT = 'ZSYTRI_3X'
          INFOT = 1
-         CALL AB_AB_AB_ZSYTRI_3X( '/', 0, A, 1, E, IP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZSYTRI_3X', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRI_3X( '/', 0, A, 1, E, IP, W, 1, INFO )
+         CALL CHKXER( 'ZSYTRI_3X', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_AB_ZSYTRI_3X( 'U', -1, A, 1, E, IP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZSYTRI_3X', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRI_3X( 'U', -1, A, 1, E, IP, W, 1, INFO )
+         CALL CHKXER( 'ZSYTRI_3X', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_AB_ZSYTRI_3X( 'U', 2, A, 1, E, IP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZSYTRI_3X', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRI_3X( 'U', 2, A, 1, E, IP, W, 1, INFO )
+         CALL CHKXER( 'ZSYTRI_3X', INFOT, NOUT, LERR, OK )
 *
-*        AB_AB_ZSYTRS_3
+*        ZSYTRS_3
 *
-         SRNAMT = 'AB_AB_ZSYTRS_3'
+         SRNAMT = 'ZSYTRS_3'
          INFOT = 1
-         CALL AB_AB_ZSYTRS_3( '/', 0, 0, A, 1, E, IP, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRS_3', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRS_3( '/', 0, 0, A, 1, E, IP, B, 1, INFO )
+         CALL CHKXER( 'ZSYTRS_3', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_ZSYTRS_3( 'U', -1, 0, A, 1, E, IP, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRS_3', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRS_3( 'U', -1, 0, A, 1, E, IP, B, 1, INFO )
+         CALL CHKXER( 'ZSYTRS_3', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_ZSYTRS_3( 'U', 0, -1, A, 1, E, IP, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRS_3', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRS_3( 'U', 0, -1, A, 1, E, IP, B, 1, INFO )
+         CALL CHKXER( 'ZSYTRS_3', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_AB_ZSYTRS_3( 'U', 2, 1, A, 1, E, IP, B, 2, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRS_3', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRS_3( 'U', 2, 1, A, 1, E, IP, B, 2, INFO )
+         CALL CHKXER( 'ZSYTRS_3', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_AB_ZSYTRS_3( 'U', 2, 1, A, 2, E, IP, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRS_3', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRS_3( 'U', 2, 1, A, 2, E, IP, B, 1, INFO )
+         CALL CHKXER( 'ZSYTRS_3', INFOT, NOUT, LERR, OK )
 *
-*        AB_AB_ZSYCON_3
+*        ZSYCON_3
 *
-         SRNAMT = 'AB_AB_ZSYCON_3'
+         SRNAMT = 'ZSYCON_3'
          INFOT = 1
-         CALL AB_AB_ZSYCON_3( '/', 0, A, 1,  E, IP, ANRM, RCOND, W, INFO
-     $ )
-         CALL AB_CHKXER( 'AB_AB_ZSYCON_3', INFOT, NOUT, LERR, OK )
+         CALL ZSYCON_3( '/', 0, A, 1,  E, IP, ANRM, RCOND, W, INFO )
+         CALL CHKXER( 'ZSYCON_3', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_ZSYCON_3( 'U', -1, A, 1, E, IP, ANRM, RCOND, W, INFO
-     $ )
-         CALL AB_CHKXER( 'AB_AB_ZSYCON_3', INFOT, NOUT, LERR, OK )
+         CALL ZSYCON_3( 'U', -1, A, 1, E, IP, ANRM, RCOND, W, INFO )
+         CALL CHKXER( 'ZSYCON_3', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_ZSYCON_3( 'U', 2, A, 1, E, IP, ANRM, RCOND, W, INFO 
-     $)
-         CALL AB_CHKXER( 'AB_AB_ZSYCON_3', INFOT, NOUT, LERR, OK )
+         CALL ZSYCON_3( 'U', 2, A, 1, E, IP, ANRM, RCOND, W, INFO )
+         CALL CHKXER( 'ZSYCON_3', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_AB_ZSYCON_3( 'U', 1, A, 1, E, IP, -1.0D0, RCOND, W, INF
-     $O)
-         CALL AB_CHKXER( 'AB_AB_ZSYCON_3', INFOT, NOUT, LERR, OK )
+         CALL ZSYCON_3( 'U', 1, A, 1, E, IP, -1.0D0, RCOND, W, INFO)
+         CALL CHKXER( 'ZSYCON_3', INFOT, NOUT, LERR, OK )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, C2, 'SP' ) ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'SP' ) ) THEN
 *
 *        Test error exits of the routines that use factorization
 *        of a symmetric indefinite packed matrix with patrial
 *        (Bunch-Kaufman) pivoting.
 *
-*        AB_ZSPTRF
+*        ZSPTRF
 *
-         SRNAMT = 'AB_ZSPTRF'
+         SRNAMT = 'ZSPTRF'
          INFOT = 1
-         CALL AB_ZSPTRF( '/', 0, A, IP, INFO )
-         CALL AB_CHKXER( 'AB_ZSPTRF', INFOT, NOUT, LERR, OK )
+         CALL ZSPTRF( '/', 0, A, IP, INFO )
+         CALL CHKXER( 'ZSPTRF', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_ZSPTRF( 'U', -1, A, IP, INFO )
-         CALL AB_CHKXER( 'AB_ZSPTRF', INFOT, NOUT, LERR, OK )
+         CALL ZSPTRF( 'U', -1, A, IP, INFO )
+         CALL CHKXER( 'ZSPTRF', INFOT, NOUT, LERR, OK )
 *
-*        AB_ZSPTRI
+*        ZSPTRI
 *
-         SRNAMT = 'AB_ZSPTRI'
+         SRNAMT = 'ZSPTRI'
          INFOT = 1
-         CALL AB_ZSPTRI( '/', 0, A, IP, W, INFO )
-         CALL AB_CHKXER( 'AB_ZSPTRI', INFOT, NOUT, LERR, OK )
+         CALL ZSPTRI( '/', 0, A, IP, W, INFO )
+         CALL CHKXER( 'ZSPTRI', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_ZSPTRI( 'U', -1, A, IP, W, INFO )
-         CALL AB_CHKXER( 'AB_ZSPTRI', INFOT, NOUT, LERR, OK )
+         CALL ZSPTRI( 'U', -1, A, IP, W, INFO )
+         CALL CHKXER( 'ZSPTRI', INFOT, NOUT, LERR, OK )
 *
-*        AB_ZSPTRS
+*        ZSPTRS
 *
-         SRNAMT = 'AB_ZSPTRS'
+         SRNAMT = 'ZSPTRS'
          INFOT = 1
-         CALL AB_ZSPTRS( '/', 0, 0, A, IP, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZSPTRS', INFOT, NOUT, LERR, OK )
+         CALL ZSPTRS( '/', 0, 0, A, IP, B, 1, INFO )
+         CALL CHKXER( 'ZSPTRS', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_ZSPTRS( 'U', -1, 0, A, IP, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZSPTRS', INFOT, NOUT, LERR, OK )
+         CALL ZSPTRS( 'U', -1, 0, A, IP, B, 1, INFO )
+         CALL CHKXER( 'ZSPTRS', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_ZSPTRS( 'U', 0, -1, A, IP, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZSPTRS', INFOT, NOUT, LERR, OK )
+         CALL ZSPTRS( 'U', 0, -1, A, IP, B, 1, INFO )
+         CALL CHKXER( 'ZSPTRS', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_ZSPTRS( 'U', 2, 1, A, IP, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_ZSPTRS', INFOT, NOUT, LERR, OK )
+         CALL ZSPTRS( 'U', 2, 1, A, IP, B, 1, INFO )
+         CALL CHKXER( 'ZSPTRS', INFOT, NOUT, LERR, OK )
 *
-*        AB_AB_ZSPRFS
+*        ZSPRFS
 *
-         SRNAMT = 'AB_AB_ZSPRFS'
+         SRNAMT = 'ZSPRFS'
          INFOT = 1
-         CALL AB_AB_ZSPRFS( '/', 0, 0, A, AF, IP, B, 1, X, 1, R1, R2, W,
-     $ R,
+         CALL ZSPRFS( '/', 0, 0, A, AF, IP, B, 1, X, 1, R1, R2, W, R,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSPRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZSPRFS', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_ZSPRFS( 'U', -1, 0, A, AF, IP, B, 1, X, 1, R1, R2, W
-     $, R,
+         CALL ZSPRFS( 'U', -1, 0, A, AF, IP, B, 1, X, 1, R1, R2, W, R,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSPRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZSPRFS', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_ZSPRFS( 'U', 0, -1, A, AF, IP, B, 1, X, 1, R1, R2, W
-     $, R,
+         CALL ZSPRFS( 'U', 0, -1, A, AF, IP, B, 1, X, 1, R1, R2, W, R,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSPRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZSPRFS', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_ZSPRFS( 'U', 2, 1, A, AF, IP, B, 1, X, 2, R1, R2, W,
-     $ R,
+         CALL ZSPRFS( 'U', 2, 1, A, AF, IP, B, 1, X, 2, R1, R2, W, R,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSPRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZSPRFS', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_AB_ZSPRFS( 'U', 2, 1, A, AF, IP, B, 2, X, 1, R1, R2, W,
-     $ R,
+         CALL ZSPRFS( 'U', 2, 1, A, AF, IP, B, 2, X, 1, R1, R2, W, R,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSPRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'ZSPRFS', INFOT, NOUT, LERR, OK )
 *
-*        AB_ZSPCON
+*        ZSPCON
 *
-         SRNAMT = 'AB_ZSPCON'
+         SRNAMT = 'ZSPCON'
          INFOT = 1
-         CALL AB_ZSPCON( '/', 0, A, IP, ANRM, RCOND, W, INFO )
-         CALL AB_CHKXER( 'AB_ZSPCON', INFOT, NOUT, LERR, OK )
+         CALL ZSPCON( '/', 0, A, IP, ANRM, RCOND, W, INFO )
+         CALL CHKXER( 'ZSPCON', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_ZSPCON( 'U', -1, A, IP, ANRM, RCOND, W, INFO )
-         CALL AB_CHKXER( 'AB_ZSPCON', INFOT, NOUT, LERR, OK )
+         CALL ZSPCON( 'U', -1, A, IP, ANRM, RCOND, W, INFO )
+         CALL CHKXER( 'ZSPCON', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_ZSPCON( 'U', 1, A, IP, -ANRM, RCOND, W, INFO )
-         CALL AB_CHKXER( 'AB_ZSPCON', INFOT, NOUT, LERR, OK )
+         CALL ZSPCON( 'U', 1, A, IP, -ANRM, RCOND, W, INFO )
+         CALL CHKXER( 'ZSPCON', INFOT, NOUT, LERR, OK )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, C2, 'SA' ) ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'SA' ) ) THEN
 *
 *        Test error exits of the routines that use factorization
 *        of a symmetric indefinite matrix with Aasen's algorithm.
 *
-*        AB_AB_ZSYTRF_AA
+*        ZSYTRF_AA
 *
-         SRNAMT = 'AB_AB_ZSYTRF_AA'
+         SRNAMT = 'ZSYTRF_AA'
          INFOT = 1
-         CALL AB_AB_ZSYTRF_AA( '/', 0, A, 1, IP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRF_AA', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRF_AA( '/', 0, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'ZSYTRF_AA', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_ZSYTRF_AA( 'U', -1, A, 1, IP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRF_AA', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRF_AA( 'U', -1, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'ZSYTRF_AA', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_ZSYTRF_AA( 'U', 2, A, 1, IP, W, 4, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRF_AA', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRF_AA( 'U', 2, A, 1, IP, W, 4, INFO )
+         CALL CHKXER( 'ZSYTRF_AA', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_AB_ZSYTRF_AA( 'U', 0, A, 1, IP, W, 0, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRF_AA', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRF_AA( 'U', 0, A, 1, IP, W, 0, INFO )
+         CALL CHKXER( 'ZSYTRF_AA', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_AB_ZSYTRF_AA( 'U', 0, A, 1, IP, W, -2, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRF_AA', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRF_AA( 'U', 0, A, 1, IP, W, -2, INFO )
+         CALL CHKXER( 'ZSYTRF_AA', INFOT, NOUT, LERR, OK )
 *
-*        AB_AB_ZSYTRS_AA
+*        ZSYTRS_AA
 *
-         SRNAMT = 'AB_AB_ZSYTRS_AA'
+         SRNAMT = 'ZSYTRS_AA'
          INFOT = 1
-         CALL AB_AB_ZSYTRS_AA( '/', 0, 0, A, 1, IP, B, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRS_AA', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRS_AA( '/', 0, 0, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'ZSYTRS_AA', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_ZSYTRS_AA( 'U', -1, 0, A, 1, IP, B, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRS_AA', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRS_AA( 'U', -1, 0, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'ZSYTRS_AA', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_ZSYTRS_AA( 'U', 0, -1, A, 1, IP, B, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRS_AA', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRS_AA( 'U', 0, -1, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'ZSYTRS_AA', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_AB_ZSYTRS_AA( 'U', 2, 1, A, 1, IP, B, 2, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRS_AA', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRS_AA( 'U', 2, 1, A, 1, IP, B, 2, W, 1, INFO )
+         CALL CHKXER( 'ZSYTRS_AA', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_ZSYTRS_AA( 'U', 2, 1, A, 2, IP, B, 1, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRS_AA', INFOT, NOUT, LERR, OK )
+         CALL ZSYTRS_AA( 'U', 2, 1, A, 2, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'ZSYTRS_AA', INFOT, NOUT, LERR, OK )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, C2, 'S2' ) ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'S2' ) ) THEN
 *
 *        Test error exits of the routines that use factorization
 *        of a symmetric indefinite matrix with Aasen's algorithm.
 *
-*        AB_AB_AB_ZSYTRF_AA_2STAGE
+*        ZSYTRF_AA_2STAGE
 *
-         SRNAMT = 'AB_AB_AB_ZSYTRF_AA_2STAGE'
+         SRNAMT = 'ZSYTRF_AA_2STAGE'
          INFOT = 1
-         CALL AB_AB_AB_ZSYTRF_AA_2STAGE( '/', 0, A, 1, A, 1, IP, IP, W, 
-     $1,
+         CALL ZSYTRF_AA_2STAGE( '/', 0, A, 1, A, 1, IP, IP, W, 1,
      $                          INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZSYTRF_AA_2STAGE', INFOT, NOUT, LERR,
-     $ OK )
+         CALL CHKXER( 'ZSYTRF_AA_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_AB_ZSYTRF_AA_2STAGE( 'U', -1, A, 1, A, 1, IP, IP, W,
-     $ 1,
+         CALL ZSYTRF_AA_2STAGE( 'U', -1, A, 1, A, 1, IP, IP, W, 1,
      $                           INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZSYTRF_AA_2STAGE', INFOT, NOUT, LERR,
-     $ OK )
+         CALL CHKXER( 'ZSYTRF_AA_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_AB_ZSYTRF_AA_2STAGE( 'U', 2, A, 1, A, 2, IP, IP, W, 
-     $1,
+         CALL ZSYTRF_AA_2STAGE( 'U', 2, A, 1, A, 2, IP, IP, W, 1,
      $                           INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZSYTRF_AA_2STAGE', INFOT, NOUT, LERR,
-     $ OK )
+         CALL CHKXER( 'ZSYTRF_AA_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_AB_AB_ZSYTRF_AA_2STAGE( 'U', 2, A, 2, A, 1, IP, IP, W, 
-     $1,
+         CALL ZSYTRF_AA_2STAGE( 'U', 2, A, 2, A, 1, IP, IP, W, 1,
      $                           INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZSYTRF_AA_2STAGE', INFOT, NOUT, LERR,
-     $ OK )
+         CALL CHKXER( 'ZSYTRF_AA_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_AB_AB_ZSYTRF_AA_2STAGE( 'U', 2, A, 2, A, 8, IP, IP, W, 
-     $0,
+         CALL ZSYTRF_AA_2STAGE( 'U', 2, A, 2, A, 8, IP, IP, W, 0,
      $                           INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZSYTRF_AA_2STAGE', INFOT, NOUT, LERR,
-     $ OK )
+         CALL CHKXER( 'ZSYTRF_AA_2STAGE', INFOT, NOUT, LERR, OK )
 *
-*        AB_AB_AB_CHETRS_AA_2STAGE
+*        CHETRS_AA_2STAGE
 *
-         SRNAMT = 'AB_AB_AB_ZSYTRS_AA_2STAGE'
+         SRNAMT = 'ZSYTRS_AA_2STAGE'
          INFOT = 1
-         CALL AB_AB_AB_ZSYTRS_AA_2STAGE( '/', 0, 0, A, 1, A, 1, IP, IP,
+         CALL ZSYTRS_AA_2STAGE( '/', 0, 0, A, 1, A, 1, IP, IP,
      $                          B, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZSYTRS_AA_2STAGE', INFOT, NOUT, LERR,
-     $ OK )
+         CALL CHKXER( 'ZSYTRS_AA_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_AB_ZSYTRS_AA_2STAGE( 'U', -1, 0, A, 1, A, 1, IP, IP,
+         CALL ZSYTRS_AA_2STAGE( 'U', -1, 0, A, 1, A, 1, IP, IP,
      $                          B, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZSYTRS_AA_2STAGE', INFOT, NOUT, LERR,
-     $ OK )
+         CALL CHKXER( 'ZSYTRS_AA_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_AB_ZSYTRS_AA_2STAGE( 'U', 0, -1, A, 1, A, 1, IP, IP,
+         CALL ZSYTRS_AA_2STAGE( 'U', 0, -1, A, 1, A, 1, IP, IP,
      $                          B, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZSYTRS_AA_2STAGE', INFOT, NOUT, LERR,
-     $ OK )
+         CALL CHKXER( 'ZSYTRS_AA_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_AB_AB_ZSYTRS_AA_2STAGE( 'U', 2, 1, A, 1, A, 1, IP, IP,
+         CALL ZSYTRS_AA_2STAGE( 'U', 2, 1, A, 1, A, 1, IP, IP,
      $                          B, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZSYTRS_AA_2STAGE', INFOT, NOUT, LERR,
-     $ OK )
+         CALL CHKXER( 'ZSYTRS_AA_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_AB_AB_ZSYTRS_AA_2STAGE( 'U', 2, 1, A, 2, A, 1, IP, IP,
+         CALL ZSYTRS_AA_2STAGE( 'U', 2, 1, A, 2, A, 1, IP, IP,
      $                          B, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_ZSYTRS_AA_2STAGE', INFOT, NOUT, LERR,
-     $ OK )
+         CALL CHKXER( 'ZSYTRS_AA_2STAGE', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL AB_AB_AB_ZSYTRS_AA_2STAGE( 'U', 2, 1, A, 2, A, 8, IP, IP,
+         CALL ZSYTRS_AA_2STAGE( 'U', 2, 1, A, 2, A, 8, IP, IP,
      $                          B, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_ZSYTRS_AA_STAGE', INFOT, NOUT, LERR, OK 
-     $)
+         CALL CHKXER( 'ZSYTRS_AA_STAGE', INFOT, NOUT, LERR, OK )
 *
       END IF
 *
 *     Print a summary line.
 *
-      CALL AB_ALAESM( PATH, OK, NOUT )
+      CALL ALAESM( PATH, OK, NOUT )
 *
       RETURN
 *
-*     End of AB_ZERRSY
+*     End of ZERRSY
 *
       END

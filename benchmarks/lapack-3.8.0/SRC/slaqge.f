@@ -1,4 +1,4 @@
-*> \brief \b AB_SLAQGE scales a general rectangular matrix, using row and column scaling factors computed by AB_SGEEQU.
+*> \brief \b SLAQGE scales a general rectangular matrix, using row and column scaling factors computed by sgeequ.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLAQGE + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLAQGE.f">
+*> Download SLAQGE + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaqge.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLAQGE.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaqge.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLAQGE.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaqge.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLAQGE( M, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
+*       SUBROUTINE SLAQGE( M, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
 *                          EQUED )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SLAQGE equilibrates a general M by N matrix A using the row and
+*> SLAQGE equilibrates a general M by N matrix A using the row and
 *> column scaling factors in the vectors R and C.
 *> \endverbatim
 *
@@ -139,7 +139,7 @@
 *> \ingroup realGEauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_SLAQGE( M, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
+      SUBROUTINE SLAQGE( M, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
      $                   EQUED )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -167,8 +167,8 @@
       REAL               CJ, LARGE, SMALL
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH
-      EXTERNAL           AB_SLAMCH
+      REAL               SLAMCH
+      EXTERNAL           SLAMCH
 *     ..
 *     .. Executable Statements ..
 *
@@ -181,7 +181,7 @@
 *
 *     Initialize LARGE and SMALL.
 *
-      SMALL = AB_SLAMCH( 'Safe minimum' ) / AB_SLAMCH( 'Precision' )
+      SMALL = SLAMCH( 'Safe minimum' ) / SLAMCH( 'Precision' )
       LARGE = ONE / SMALL
 *
       IF( ROWCND.GE.THRESH .AND. AMAX.GE.SMALL .AND. AMAX.LE.LARGE )
@@ -231,6 +231,6 @@
 *
       RETURN
 *
-*     End of AB_SLAQGE
+*     End of SLAQGE
 *
       END

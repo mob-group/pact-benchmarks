@@ -1,4 +1,4 @@
-*> \brief \b AB_ILADIAG
+*> \brief \b ILADIAG
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ILADIAG + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ILADIAG.f">
+*> Download ILADIAG + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/iladiag.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ILADIAG.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/iladiag.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ILADIAG.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/iladiag.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       INTEGER FUNCTION AB_ILADIAG( DIAG )
+*       INTEGER FUNCTION ILADIAG( DIAG )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          DIAG
@@ -34,8 +34,8 @@
 *> matrix has unit diagonal or not to the relevant BLAST-specified
 *> integer constant.
 *>
-*> AB_ILADIAG returns an INTEGER.  If AB_ILADIAG < 0, then the input is not a
-*> character indicating a unit or non-unit diagonal.  Otherwise AB_ILADIAG
+*> ILADIAG returns an INTEGER.  If ILADIAG < 0, then the input is not a
+*> character indicating a unit or non-unit diagonal.  Otherwise ILADIAG
 *> returns the constant value corresponding to DIAG.
 *> \endverbatim
 *
@@ -56,7 +56,7 @@
 *> \ingroup auxOTHERcomputational
 *
 *  =====================================================================
-      INTEGER FUNCTION AB_ILADIAG( DIAG )
+      INTEGER FUNCTION ILADIAG( DIAG )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -74,19 +74,19 @@
       PARAMETER ( BLAS_NON_UNIT_DIAG = 131, BLAS_UNIT_DIAG = 132 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. Executable Statements ..
-      IF( AB_LSAME( DIAG, 'N' ) ) THEN
-         AB_ILADIAG = BLAS_NON_UNIT_DIAG
-      ELSE IF( AB_LSAME( DIAG, 'U' ) ) THEN
-         AB_ILADIAG = BLAS_UNIT_DIAG
+      IF( LSAME( DIAG, 'N' ) ) THEN
+         ILADIAG = BLAS_NON_UNIT_DIAG
+      ELSE IF( LSAME( DIAG, 'U' ) ) THEN
+         ILADIAG = BLAS_UNIT_DIAG
       ELSE
-         AB_ILADIAG = -1
+         ILADIAG = -1
       END IF
       RETURN
 *
-*     End of AB_ILADIAG
+*     End of ILADIAG
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_SLAED7 used by AB_SSTEDC. Computes the updated eigensystem of a diagonal matrix after modification by a rank-one symmetric matrix. Used when the original matrix is dense.
+*> \brief \b SLAED7 used by sstedc. Computes the updated eigensystem of a diagonal matrix after modification by a rank-one symmetric matrix. Used when the original matrix is dense.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLAED7 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLAED7.f">
+*> Download SLAED7 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaed7.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLAED7.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaed7.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLAED7.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaed7.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLAED7( ICOMPQ, N, QSIZ, TLVLS, CURLVL, CURPBM, D, Q,
+*       SUBROUTINE SLAED7( ICOMPQ, N, QSIZ, TLVLS, CURLVL, CURPBM, D, Q,
 *                          LDQ, INDXQ, RHO, CUTPNT, QSTORE, QPTR, PRMPTR,
 *                          PERM, GIVPTR, GIVCOL, GIVNUM, WORK, IWORK,
 *                          INFO )
@@ -41,18 +41,18 @@
 *>
 *> \verbatim
 *>
-*> AB_SLAED7 computes the updated eigensystem of a diagonal
+*> SLAED7 computes the updated eigensystem of a diagonal
 *> matrix after modification by a rank-one symmetric matrix. This
 *> routine is used only for the eigenproblem which requires all
 *> eigenvalues and optionally eigenvectors of a dense symmetric matrix
-*> that has been reduced to tridiagonal form.  AB_SLAED1 handles
+*> that has been reduced to tridiagonal form.  SLAED1 handles
 *> the case in which all eigenvalues and eigenvectors of a symmetric
 *> tridiagonal matrix are desired.
 *>
 *>   T = Q(in) ( D(in) + RHO * Z*Z**T ) Q**T(in) = Q(out) * D(out) * Q**T(out)
 *>
 *>    where Z = Q**Tu, u is a vector of length N with ones in the
-*>    CUTPNT and CUTPNT + 1 th elements and zeros ELSEwhere.
+*>    CUTPNT and CUTPNT + 1 th elements and zeros elsewhere.
 *>
 *>    The eigenvectors of the original matrix are stored in Q, and the
 *>    eigenvalues are in D.  The algorithm consists of three stages:
@@ -61,11 +61,11 @@
 *>       when there are multiple eigenvalues or if there is a zero in
 *>       the Z vector.  For each such occurrence the dimension of the
 *>       secular equation problem is reduced by one.  This stage is
-*>       performed by the routine AB_SLAED8.
+*>       performed by the routine SLAED8.
 *>
-*>       The AB_SECOND stage consists of calculating the updated
+*>       The second stage consists of calculating the updated
 *>       eigenvalues. This is done by finding the roots of the secular
-*>       equation via the routine AB_SLAED4 (as called by AB_SLAED9).
+*>       equation via the routine SLAED4 (as called by SLAED9).
 *>       This routine also calculates the eigenvectors of the current
 *>       problem.
 *>
@@ -255,8 +255,7 @@
 *> at Berkeley, USA
 *
 *  =====================================================================
-      SUBROUTINE AB_SLAED7( ICOMPQ, N, QSIZ, TLVLS, CURLVL, CURPBM, D, Q
-     $,
+      SUBROUTINE SLAED7( ICOMPQ, N, QSIZ, TLVLS, CURLVL, CURPBM, D, Q,
      $                   LDQ, INDXQ, RHO, CUTPNT, QSTORE, QPTR, PRMPTR,
      $                   PERM, GIVPTR, GIVCOL, GIVNUM, WORK, IWORK,
      $                   INFO )
@@ -289,8 +288,7 @@
      $                   IQ2, IS, IW, IZ, K, LDQ2, N1, N2, PTR
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SGEMM, AB_SLAED8, AB_SLAED9, AB_SLAEDA, AB_S
-     $LAMRG, AB_XERBLA
+      EXTERNAL           SGEMM, SLAED8, SLAED9, SLAEDA, SLAMRG, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -313,7 +311,7 @@
          INFO = -12
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SLAED7', -INFO )
+         CALL XERBLA( 'SLAED7', -INFO )
          RETURN
       END IF
 *
@@ -324,7 +322,7 @@
 *
 *     The following values are for bookkeeping purposes only.  They are
 *     integer pointers which indicate the portion of the workspace
-*     used by a particular array in AB_SLAED8 and AB_SLAED9.
+*     used by a particular array in SLAED8 and SLAED9.
 *
       IF( ICOMPQ.EQ.1 ) THEN
          LDQ2 = QSIZ
@@ -351,7 +349,7 @@
          PTR = PTR + 2**( TLVLS-I )
    10 CONTINUE
       CURR = PTR + CURPBM
-      CALL AB_SLAEDA( N, TLVLS, CURLVL, CURPBM, PRMPTR, PERM, GIVPTR,
+      CALL SLAEDA( N, TLVLS, CURLVL, CURPBM, PRMPTR, PERM, GIVPTR,
      $             GIVCOL, GIVNUM, QSTORE, QPTR, WORK( IZ ),
      $             WORK( IZ+N ), INFO )
 *
@@ -367,7 +365,7 @@
 *
 *     Sort and Deflate eigenvalues.
 *
-      CALL AB_SLAED8( ICOMPQ, K, N, QSIZ, D, Q, LDQ, INDXQ, RHO, CUTPNT,
+      CALL SLAED8( ICOMPQ, K, N, QSIZ, D, Q, LDQ, INDXQ, RHO, CUTPNT,
      $             WORK( IZ ), WORK( IDLMDA ), WORK( IQ2 ), LDQ2,
      $             WORK( IW ), PERM( PRMPTR( CURR ) ), GIVPTR( CURR+1 ),
      $             GIVCOL( 1, GIVPTR( CURR ) ),
@@ -379,13 +377,12 @@
 *     Solve Secular Equation.
 *
       IF( K.NE.0 ) THEN
-         CALL AB_SLAED9( K, 1, K, N, D, WORK( IS ), K, RHO, WORK( IDLMDA
-     $ ),
+         CALL SLAED9( K, 1, K, N, D, WORK( IS ), K, RHO, WORK( IDLMDA ),
      $                WORK( IW ), QSTORE( QPTR( CURR ) ), K, INFO )
          IF( INFO.NE.0 )
      $      GO TO 30
          IF( ICOMPQ.EQ.1 ) THEN
-            CALL AB_SGEMM( 'N', 'N', QSIZ, K, K, ONE, WORK( IQ2 ), LDQ2,
+            CALL SGEMM( 'N', 'N', QSIZ, K, K, ONE, WORK( IQ2 ), LDQ2,
      $                  QSTORE( QPTR( CURR ) ), K, ZERO, Q, LDQ )
          END IF
          QPTR( CURR+1 ) = QPTR( CURR ) + K**2
@@ -394,7 +391,7 @@
 *
          N1 = K
          N2 = N - K
-         CALL AB_SLAMRG( N1, N2, D, 1, -1, INDXQ )
+         CALL SLAMRG( N1, N2, D, 1, -1, INDXQ )
       ELSE
          QPTR( CURR+1 ) = QPTR( CURR )
          DO 20 I = 1, N
@@ -405,6 +402,6 @@
    30 CONTINUE
       RETURN
 *
-*     End of AB_SLAED7
+*     End of SLAED7
 *
       END

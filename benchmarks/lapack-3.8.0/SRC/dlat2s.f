@@ -1,4 +1,4 @@
-*> \brief \b AB_DLAT2S converts a double-precision triangular matrix to a single-precision triangular matrix.
+*> \brief \b DLAT2S converts a double-precision triangular matrix to a single-precision triangular matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLAT2S + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLAT2S.f">
+*> Download DLAT2S + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlat2s.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLAT2S.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlat2s.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLAT2S.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlat2s.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLAT2S( UPLO, N, A, LDA, SA, LDSA, INFO )
+*       SUBROUTINE DLAT2S( UPLO, N, A, LDA, SA, LDSA, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,11 +35,11 @@
 *>
 *> \verbatim
 *>
-*> AB_DLAT2S converts a DOUBLE PRECISION triangular matrix, SA, to a SINGLE
+*> DLAT2S converts a DOUBLE PRECISION triangular matrix, SA, to a SINGLE
 *> PRECISION triangular matrix, A.
 *>
 *> RMAX is the overflow for the SINGLE PRECISION arithmetic
-*> AB_DLAS2S checks that all the entries of A are between -RMAX and
+*> DLAS2S checks that all the entries of A are between -RMAX and
 *> RMAX. If not the conversion is aborted and a flag is raised.
 *>
 *> This is an auxiliary routine so there is no argument checking.
@@ -109,7 +109,7 @@
 *> \ingroup doubleOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_DLAT2S( UPLO, N, A, LDA, SA, LDSA, INFO )
+      SUBROUTINE DLAT2S( UPLO, N, A, LDA, SA, LDSA, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -133,14 +133,14 @@
       LOGICAL            UPPER
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_SLAMCH, AB_LSAME
+      REAL               SLAMCH
+      LOGICAL            LSAME
+      EXTERNAL           SLAMCH, LSAME
 *     ..
 *     .. Executable Statements ..
 *
-      RMAX = AB_SLAMCH( 'O' )
-      UPPER = AB_LSAME( UPLO, 'U' )
+      RMAX = SLAMCH( 'O' )
+      UPPER = LSAME( UPLO, 'U' )
       IF( UPPER ) THEN
          DO 20 J = 1, N
             DO 10 I = 1, J
@@ -168,6 +168,6 @@
 *
       RETURN
 *
-*     End of AB_DLAT2S
+*     End of DLAT2S
 *
       END

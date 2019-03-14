@@ -1,4 +1,4 @@
-*> \brief \b AB_DTBT02
+*> \brief \b DTBT02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DTBT02( UPLO, TRANS, DIAG, N, KD, NRHS, AB, LDAB, X,
+*       SUBROUTINE DTBT02( UPLO, TRANS, DIAG, N, KD, NRHS, AB, LDAB, X,
 *                          LDX, B, LDB, WORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DTBT02 computes the residual for the computed solution to a
+*> DTBT02 computes the residual for the computed solution to a
 *> triangular system of linear equations  A*x = b  or  A' *x = b when
 *> A is a triangular band matrix.  Here A' is the transpose of A and
 *> x and b are N by NRHS matrices.  The test ratio is the maximum over
@@ -151,7 +151,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_DTBT02( UPLO, TRANS, DIAG, N, KD, NRHS, AB, LDAB, X,
+      SUBROUTINE DTBT02( UPLO, TRANS, DIAG, N, KD, NRHS, AB, LDAB, X,
      $                   LDX, B, LDB, WORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -180,12 +180,12 @@
       DOUBLE PRECISION   ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DASUM, AB_DLAMCH, AB_DLANTB
-      EXTERNAL           AB_LSAME, AB_DASUM, AB_DLAMCH, AB_DLANTB
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DASUM, DLAMCH, DLANTB
+      EXTERNAL           LSAME, DASUM, DLAMCH, DLANTB
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DAXPY, AB_DCOPY, AB_DTBMV
+      EXTERNAL           DAXPY, DCOPY, DTBMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -201,15 +201,15 @@
 *
 *     Compute the 1-norm of A or A'.
 *
-      IF( AB_LSAME( TRANS, 'N' ) ) THEN
-         ANORM = AB_DLANTB( '1', UPLO, DIAG, N, KD, AB, LDAB, WORK )
+      IF( LSAME( TRANS, 'N' ) ) THEN
+         ANORM = DLANTB( '1', UPLO, DIAG, N, KD, AB, LDAB, WORK )
       ELSE
-         ANORM = AB_DLANTB( 'I', UPLO, DIAG, N, KD, AB, LDAB, WORK )
+         ANORM = DLANTB( 'I', UPLO, DIAG, N, KD, AB, LDAB, WORK )
       END IF
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
+      EPS = DLAMCH( 'Epsilon' )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -220,11 +220,11 @@
 *
       RESID = ZERO
       DO 10 J = 1, NRHS
-         CALL AB_DCOPY( N, X( 1, J ), 1, WORK, 1 )
-         CALL AB_DTBMV( UPLO, TRANS, DIAG, N, KD, AB, LDAB, WORK, 1 )
-         CALL AB_DAXPY( N, -ONE, B( 1, J ), 1, WORK, 1 )
-         BNORM = AB_DASUM( N, WORK, 1 )
-         XNORM = AB_DASUM( N, X( 1, J ), 1 )
+         CALL DCOPY( N, X( 1, J ), 1, WORK, 1 )
+         CALL DTBMV( UPLO, TRANS, DIAG, N, KD, AB, LDAB, WORK, 1 )
+         CALL DAXPY( N, -ONE, B( 1, J ), 1, WORK, 1 )
+         BNORM = DASUM( N, WORK, 1 )
+         XNORM = DASUM( N, X( 1, J ), 1 )
          IF( XNORM.LE.ZERO ) THEN
             RESID = ONE / EPS
          ELSE
@@ -234,6 +234,6 @@
 *
       RETURN
 *
-*     End of AB_DTBT02
+*     End of DTBT02
 *
       END

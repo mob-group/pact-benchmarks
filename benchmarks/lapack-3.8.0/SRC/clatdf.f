@@ -1,4 +1,4 @@
-*> \brief \b AB_CLATDF uses the LU factorization of the n-by-n matrix computed by AB_SGETC2 and computes a contribution to the reciprocal Dif-estimate.
+*> \brief \b CLATDF uses the LU factorization of the n-by-n matrix computed by sgetc2 and computes a contribution to the reciprocal Dif-estimate.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,24 +6,24 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CLATDF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLATDF.f">
+*> Download CLATDF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clatdf.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLATDF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clatdf.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLATDF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clatdf.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CLATDF( IJOB, N, Z, LDZ, RHS, RDSUM, RAB_DSCAL, IPIV,
+*       SUBROUTINE CLATDF( IJOB, N, Z, LDZ, RHS, RDSUM, RDSCAL, IPIV,
 *                          JPIV )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            IJOB, LDZ, N
-*       REAL               RAB_DSCAL, RDSUM
+*       REAL               RDSCAL, RDSUM
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            IPIV( * ), JPIV( * )
@@ -36,13 +36,13 @@
 *>
 *> \verbatim
 *>
-*> AB_CLATDF computes the contribution to the reciprocal Dif-estimate
+*> CLATDF computes the contribution to the reciprocal Dif-estimate
 *> by solving for x in Z * x = b, where b is chosen such that the norm
 *> of x is as large as possible. It is assumed that LU decomposition
-*> of Z has been computed by AB_CGETC2. On entry RHS = f holds the
+*> of Z has been computed by CGETC2. On entry RHS = f holds the
 *> contribution from earlier solved sub-systems, and on return RHS = x.
 *>
-*> The factorization of Z returned by AB_CGETC2 has the form
+*> The factorization of Z returned by CGETC2 has the form
 *> Z = P * L * U * Q, where P and Q are permutation matrices. L is lower
 *> triangular with unit diagonal elements and U is upper triangular.
 *> \endverbatim
@@ -54,7 +54,7 @@
 *> \verbatim
 *>          IJOB is INTEGER
 *>          IJOB = 2: First compute an approximative null-vector e
-*>              of Z using AB_CGECON, e is normalized and solve for
+*>              of Z using CGECON, e is normalized and solve for
 *>              Zx = +-e - f with the sign giving the greater value of
 *>              2-norm(x).  About 5 times as expensive as Default.
 *>          IJOB .ne. 2: Local look ahead strategy where
@@ -72,7 +72,7 @@
 *> \verbatim
 *>          Z is COMPLEX array, dimension (LDZ, N)
 *>          On entry, the LU part of the factorization of the n-by-n
-*>          matrix Z computed by AB_CGETC2:  Z = P * L * U * Q
+*>          matrix Z computed by CGETC2:  Z = P * L * U * Q
 *> \endverbatim
 *>
 *> \param[in] LDZ
@@ -93,23 +93,23 @@
 *> \verbatim
 *>          RDSUM is REAL
 *>          On entry, the sum of squares of computed contributions to
-*>          the Dif-estimate under computation by AB_CTGSYL, where the
-*>          scaling factor RAB_DSCAL (see below) has been factored out.
+*>          the Dif-estimate under computation by CTGSYL, where the
+*>          scaling factor RDSCAL (see below) has been factored out.
 *>          On exit, the corresponding sum of squares updated with the
 *>          contributions from the current sub-system.
 *>          If TRANS = 'T' RDSUM is not touched.
-*>          NOTE: RDSUM only makes sense when AB_CTGSY2 is called by AB_CTGSYL.
+*>          NOTE: RDSUM only makes sense when CTGSY2 is called by CTGSYL.
 *> \endverbatim
 *>
-*> \param[in,out] RAB_DSCAL
+*> \param[in,out] RDSCAL
 *> \verbatim
-*>          RAB_DSCAL is REAL
+*>          RDSCAL is REAL
 *>          On entry, scaling factor used to prevent overflow in RDSUM.
-*>          On exit, RAB_DSCAL is updated w.r.t. the current contributions
+*>          On exit, RDSCAL is updated w.r.t. the current contributions
 *>          in RDSUM.
-*>          If TRANS = 'T', RAB_DSCAL is not touched.
-*>          NOTE: RAB_DSCAL only makes sense when AB_CTGSY2 is called by
-*>          AB_CTGSYL.
+*>          If TRANS = 'T', RDSCAL is not touched.
+*>          NOTE: RDSCAL only makes sense when CTGSY2 is called by
+*>          CTGSYL.
 *> \endverbatim
 *>
 *> \param[in] IPIV
@@ -166,8 +166,7 @@
 *>         1995.
 *
 *  =====================================================================
-      SUBROUTINE AB_CLATDF( IJOB, N, Z, LDZ, RHS, RDSUM, RAB_DSCAL, IPIV
-     $,
+      SUBROUTINE CLATDF( IJOB, N, Z, LDZ, RHS, RDSUM, RDSCAL, IPIV,
      $                   JPIV )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -177,7 +176,7 @@
 *
 *     .. Scalar Arguments ..
       INTEGER            IJOB, LDZ, N
-      REAL               RAB_DSCAL, RDSUM
+      REAL               RDSCAL, RDSUM
 *     ..
 *     .. Array Arguments ..
       INTEGER            IPIV( * ), JPIV( * )
@@ -204,14 +203,13 @@
       COMPLEX            WORK( 4*MAXDIM ), XM( MAXDIM ), XP( MAXDIM )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CAXPY, AB_CCOPY, AB_CGECON, AB_CGESC2, AB_CL
-     $ASSQ, AB_CLASWP,
-     $                   AB_CSCAL
+      EXTERNAL           CAXPY, CCOPY, CGECON, CGESC2, CLASSQ, CLASWP,
+     $                   CSCAL
 *     ..
 *     .. External Functions ..
-      REAL               AB_SCASUM
-      COMPLEX            AB_CDOTC
-      EXTERNAL           AB_SCASUM, AB_CDOTC
+      REAL               SCASUM
+      COMPLEX            CDOTC
+      EXTERNAL           SCASUM, CDOTC
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, REAL, SQRT
@@ -222,7 +220,7 @@
 *
 *        Apply permutations IPIV to RHS
 *
-         CALL AB_CLASWP( 1, RHS, LDZ, 1, N-1, IPIV, 1 )
+         CALL CLASWP( 1, RHS, LDZ, 1, N-1, IPIV, 1 )
 *
 *        Solve for L-part choosing RHS either to +1 or -1.
 *
@@ -235,10 +233,9 @@
 *           Lockahead for L- part RHS(1:N-1) = +-1
 *           SPLUS and SMIN computed more efficiently than in BSOLVE[1].
 *
-            SPLUS = SPLUS + REAL( AB_CDOTC( N-J, Z( J+1, J ), 1, Z( J+1,
+            SPLUS = SPLUS + REAL( CDOTC( N-J, Z( J+1, J ), 1, Z( J+1,
      $              J ), 1 ) )
-            SMINU = REAL( AB_CDOTC( N-J, Z( J+1, J ), 1, RHS( J+1 ), 1 )
-     $ )
+            SMINU = REAL( CDOTC( N-J, Z( J+1, J ), 1, RHS( J+1 ), 1 ) )
             SPLUS = SPLUS*REAL( RHS( J ) )
             IF( SPLUS.GT.SMINU ) THEN
                RHS( J ) = BP
@@ -259,7 +256,7 @@
 *           Compute the remaining r.h.s.
 *
             TEMP = -RHS( J )
-            CALL AB_CAXPY( N-J, TEMP, Z( J+1, J ), 1, RHS( J+1 ), 1 )
+            CALL CAXPY( N-J, TEMP, Z( J+1, J ), 1, RHS( J+1 ), 1 )
    10    CONTINUE
 *
 *        Solve for U- part, lockahead for RHS(N) = +-1. This is not done
@@ -267,7 +264,7 @@
 *        any ill-conditioning of the original matrix is transfered to U
 *        and not to L. U(N, N) is an approximation to sigma_min(LU).
 *
-         CALL AB_CCOPY( N-1, RHS, 1, WORK, 1 )
+         CALL CCOPY( N-1, RHS, 1, WORK, 1 )
          WORK( N ) = RHS( N ) + CONE
          RHS( N ) = RHS( N ) - CONE
          SPLUS = ZERO
@@ -284,15 +281,15 @@
             SMINU = SMINU + ABS( RHS( I ) )
    30    CONTINUE
          IF( SPLUS.GT.SMINU )
-     $      CALL AB_CCOPY( N, WORK, 1, RHS, 1 )
+     $      CALL CCOPY( N, WORK, 1, RHS, 1 )
 *
 *        Apply the permutations JPIV to the computed solution (RHS)
 *
-         CALL AB_CLASWP( 1, RHS, LDZ, 1, N-1, JPIV, -1 )
+         CALL CLASWP( 1, RHS, LDZ, 1, N-1, JPIV, -1 )
 *
 *        Compute the sum of squares
 *
-         CALL AB_CLASSQ( N, RHS, 1, RAB_DSCAL, RDSUM )
+         CALL CLASSQ( N, RHS, 1, RDSCAL, RDSUM )
          RETURN
       END IF
 *
@@ -300,27 +297,27 @@
 *
 *     Compute approximate nullvector XM of Z
 *
-      CALL AB_CGECON( 'I', N, Z, LDZ, ONE, RTEMP, WORK, RWORK, INFO )
-      CALL AB_CCOPY( N, WORK( N+1 ), 1, XM, 1 )
+      CALL CGECON( 'I', N, Z, LDZ, ONE, RTEMP, WORK, RWORK, INFO )
+      CALL CCOPY( N, WORK( N+1 ), 1, XM, 1 )
 *
 *     Compute RHS
 *
-      CALL AB_CLASWP( 1, XM, LDZ, 1, N-1, IPIV, -1 )
-      TEMP = CONE / SQRT( AB_CDOTC( N, XM, 1, XM, 1 ) )
-      CALL AB_CSCAL( N, TEMP, XM, 1 )
-      CALL AB_CCOPY( N, XM, 1, XP, 1 )
-      CALL AB_CAXPY( N, CONE, RHS, 1, XP, 1 )
-      CALL AB_CAXPY( N, -CONE, XM, 1, RHS, 1 )
-      CALL AB_CGESC2( N, Z, LDZ, RHS, IPIV, JPIV, SCALE )
-      CALL AB_CGESC2( N, Z, LDZ, XP, IPIV, JPIV, SCALE )
-      IF( AB_SCASUM( N, XP, 1 ).GT.AB_SCASUM( N, RHS, 1 ) )
-     $   CALL AB_CCOPY( N, XP, 1, RHS, 1 )
+      CALL CLASWP( 1, XM, LDZ, 1, N-1, IPIV, -1 )
+      TEMP = CONE / SQRT( CDOTC( N, XM, 1, XM, 1 ) )
+      CALL CSCAL( N, TEMP, XM, 1 )
+      CALL CCOPY( N, XM, 1, XP, 1 )
+      CALL CAXPY( N, CONE, RHS, 1, XP, 1 )
+      CALL CAXPY( N, -CONE, XM, 1, RHS, 1 )
+      CALL CGESC2( N, Z, LDZ, RHS, IPIV, JPIV, SCALE )
+      CALL CGESC2( N, Z, LDZ, XP, IPIV, JPIV, SCALE )
+      IF( SCASUM( N, XP, 1 ).GT.SCASUM( N, RHS, 1 ) )
+     $   CALL CCOPY( N, XP, 1, RHS, 1 )
 *
 *     Compute the sum of squares
 *
-      CALL AB_CLASSQ( N, RHS, 1, RAB_DSCAL, RDSUM )
+      CALL CLASSQ( N, RHS, 1, RDSCAL, RDSUM )
       RETURN
 *
-*     End of AB_CLATDF
+*     End of CLATDF
 *
       END

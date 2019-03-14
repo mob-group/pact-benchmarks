@@ -1,4 +1,4 @@
-*> \brief <b> AB_DGELS solves overdetermined or underdetermined systems for GE matrices</b>
+*> \brief <b> DGELS solves overdetermined or underdetermined systems for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DGELS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGELS.f">
+*> Download DGELS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgels.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGELS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgels.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGELS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgels.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DGELS( TRANS, M, N, NRHS, A, LDA, B, LDB, WORK, LWORK,
+*       SUBROUTINE DGELS( TRANS, M, N, NRHS, A, LDA, B, LDB, WORK, LWORK,
 *                         INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DGELS solves overdetermined or underdetermined real linear systems
+*> DGELS solves overdetermined or underdetermined real linear systems
 *> involving an M-by-N matrix A, or its transpose, using a QR or LQ
 *> factorization of A.  It is assumed that A has full rank.
 *>
@@ -96,9 +96,9 @@
 *>          On entry, the M-by-N matrix A.
 *>          On exit,
 *>            if M >= N, A is overwritten by details of its QR
-*>                       factorization as returned by AB_AB_DGEQRF;
+*>                       factorization as returned by DGEQRF;
 *>            if M <  N, A is overwritten by details of its LQ
-*>                       factorization as returned by AB_AB_DGELQF.
+*>                       factorization as returned by DGELQF.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -153,7 +153,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -180,8 +180,7 @@
 *> \ingroup doubleGEsolve
 *
 *  =====================================================================
-      SUBROUTINE AB_DGELS( TRANS, M, N, NRHS, A, LDA, B, LDB, WORK, LWOR
-     $K,
+      SUBROUTINE DGELS( TRANS, M, N, NRHS, A, LDA, B, LDB, WORK, LWORK,
      $                  INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -212,16 +211,14 @@
       DOUBLE PRECISION   RWORK( 1 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE
-      EXTERNAL           AB_LSAME, AB_ILAENV, AB_DLABAD, AB_DLAMCH, AB_D
-     $LANGE
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      DOUBLE PRECISION   DLAMCH, DLANGE
+      EXTERNAL           LSAME, ILAENV, DLABAD, DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_AB_DGELQF, AB_AB_DGEQRF, AB_DLASCL, AB_DLASE
-     $T, AB_DORMLQ, AB_DORMQR,
-     $                   AB_DTRTRS, AB_XERBLA
+      EXTERNAL           DGELQF, DGEQRF, DLASCL, DLASET, DORMLQ, DORMQR,
+     $                   DTRTRS, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX, MIN
@@ -233,8 +230,7 @@
       INFO = 0
       MN = MIN( M, N )
       LQUERY = ( LWORK.EQ.-1 )
-      IF( .NOT.( AB_LSAME( TRANS, 'N' ) .OR. AB_LSAME( TRANS, 'T' ) ) ) 
-     $THEN
+      IF( .NOT.( LSAME( TRANS, 'N' ) .OR. LSAME( TRANS, 'T' ) ) ) THEN
          INFO = -1
       ELSE IF( M.LT.0 ) THEN
          INFO = -2
@@ -246,8 +242,7 @@
          INFO = -6
       ELSE IF( LDB.LT.MAX( 1, M, N ) ) THEN
          INFO = -8
-      ELSE IF( LWORK.LT.MAX( 1, MN+MAX( MN, NRHS ) ) .AND. .NOT.LQUER
-     $Y )
+      ELSE IF( LWORK.LT.MAX( 1, MN+MAX( MN, NRHS ) ) .AND. .NOT.LQUERY )
      $          THEN
          INFO = -10
       END IF
@@ -257,29 +252,25 @@
       IF( INFO.EQ.0 .OR. INFO.EQ.-10 ) THEN
 *
          TPSD = .TRUE.
-         IF( AB_LSAME( TRANS, 'N' ) )
+         IF( LSAME( TRANS, 'N' ) )
      $      TPSD = .FALSE.
 *
          IF( M.GE.N ) THEN
-            NB = AB_ILAENV( 1, 'AB_AB_DGEQRF', ' ', M, N, -1, -1 )
+            NB = ILAENV( 1, 'DGEQRF', ' ', M, N, -1, -1 )
             IF( TPSD ) THEN
-               NB = MAX( NB, AB_ILAENV( 1, 'AB_DORMQR', 'LN', M, NRHS, N
-     $,
+               NB = MAX( NB, ILAENV( 1, 'DORMQR', 'LN', M, NRHS, N,
      $              -1 ) )
             ELSE
-               NB = MAX( NB, AB_ILAENV( 1, 'AB_DORMQR', 'LT', M, NRHS, N
-     $,
+               NB = MAX( NB, ILAENV( 1, 'DORMQR', 'LT', M, NRHS, N,
      $              -1 ) )
             END IF
          ELSE
-            NB = AB_ILAENV( 1, 'AB_AB_DGELQF', ' ', M, N, -1, -1 )
+            NB = ILAENV( 1, 'DGELQF', ' ', M, N, -1, -1 )
             IF( TPSD ) THEN
-               NB = MAX( NB, AB_ILAENV( 1, 'AB_DORMLQ', 'LT', N, NRHS, M
-     $,
+               NB = MAX( NB, ILAENV( 1, 'DORMLQ', 'LT', N, NRHS, M,
      $              -1 ) )
             ELSE
-               NB = MAX( NB, AB_ILAENV( 1, 'AB_DORMLQ', 'LN', N, NRHS, M
-     $,
+               NB = MAX( NB, ILAENV( 1, 'DORMLQ', 'LN', N, NRHS, M,
      $              -1 ) )
             END IF
          END IF
@@ -290,7 +281,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DGELS ', -INFO )
+         CALL XERBLA( 'DGELS ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -299,57 +290,57 @@
 *     Quick return if possible
 *
       IF( MIN( M, N, NRHS ).EQ.0 ) THEN
-         CALL AB_DLASET( 'Full', MAX( M, N ), NRHS, ZERO, ZERO, B, LDB )
+         CALL DLASET( 'Full', MAX( M, N ), NRHS, ZERO, ZERO, B, LDB )
          RETURN
       END IF
 *
 *     Get machine parameters
 *
-      SMLNUM = AB_DLAMCH( 'S' ) / AB_DLAMCH( 'P' )
+      SMLNUM = DLAMCH( 'S' ) / DLAMCH( 'P' )
       BIGNUM = ONE / SMLNUM
-      CALL AB_DLABAD( SMLNUM, BIGNUM )
+      CALL DLABAD( SMLNUM, BIGNUM )
 *
 *     Scale A, B if max element outside range [SMLNUM,BIGNUM]
 *
-      ANRM = AB_DLANGE( 'M', M, N, A, LDA, RWORK )
+      ANRM = DLANGE( 'M', M, N, A, LDA, RWORK )
       IASCL = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
 *
 *        Scale matrix norm up to SMLNUM
 *
-         CALL AB_DLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, A, LDA, INFO )
+         CALL DLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, A, LDA, INFO )
          IASCL = 1
       ELSE IF( ANRM.GT.BIGNUM ) THEN
 *
 *        Scale matrix norm down to BIGNUM
 *
-         CALL AB_DLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, A, LDA, INFO )
+         CALL DLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, A, LDA, INFO )
          IASCL = 2
       ELSE IF( ANRM.EQ.ZERO ) THEN
 *
 *        Matrix all zero. Return zero solution.
 *
-         CALL AB_DLASET( 'F', MAX( M, N ), NRHS, ZERO, ZERO, B, LDB )
+         CALL DLASET( 'F', MAX( M, N ), NRHS, ZERO, ZERO, B, LDB )
          GO TO 50
       END IF
 *
       BROW = M
       IF( TPSD )
      $   BROW = N
-      BNRM = AB_DLANGE( 'M', BROW, NRHS, B, LDB, RWORK )
+      BNRM = DLANGE( 'M', BROW, NRHS, B, LDB, RWORK )
       IBSCL = 0
       IF( BNRM.GT.ZERO .AND. BNRM.LT.SMLNUM ) THEN
 *
 *        Scale matrix norm up to SMLNUM
 *
-         CALL AB_DLASCL( 'G', 0, 0, BNRM, SMLNUM, BROW, NRHS, B, LDB,
+         CALL DLASCL( 'G', 0, 0, BNRM, SMLNUM, BROW, NRHS, B, LDB,
      $                INFO )
          IBSCL = 1
       ELSE IF( BNRM.GT.BIGNUM ) THEN
 *
 *        Scale matrix norm down to BIGNUM
 *
-         CALL AB_DLASCL( 'G', 0, 0, BNRM, BIGNUM, BROW, NRHS, B, LDB,
+         CALL DLASCL( 'G', 0, 0, BNRM, BIGNUM, BROW, NRHS, B, LDB,
      $                INFO )
          IBSCL = 2
       END IF
@@ -358,8 +349,7 @@
 *
 *        compute QR factorization of A
 *
-         CALL AB_AB_DGEQRF( M, N, A, LDA, WORK( 1 ), WORK( MN+1 ), LWORK
-     $-MN,
+         CALL DGEQRF( M, N, A, LDA, WORK( 1 ), WORK( MN+1 ), LWORK-MN,
      $                INFO )
 *
 *        workspace at least N, optimally N*NB
@@ -370,7 +360,7 @@
 *
 *           B(1:M,1:NRHS) := Q**T * B(1:M,1:NRHS)
 *
-            CALL AB_DORMQR( 'Left', 'Transpose', M, NRHS, N, A, LDA,
+            CALL DORMQR( 'Left', 'Transpose', M, NRHS, N, A, LDA,
      $                   WORK( 1 ), B, LDB, WORK( MN+1 ), LWORK-MN,
      $                   INFO )
 *
@@ -378,8 +368,7 @@
 *
 *           B(1:N,1:NRHS) := inv(R) * B(1:N,1:NRHS)
 *
-            CALL AB_DTRTRS( 'Upper', 'No transpose', 'Non-unit', N, NRHS
-     $,
+            CALL DTRTRS( 'Upper', 'No transpose', 'Non-unit', N, NRHS,
      $                   A, LDA, B, LDB, INFO )
 *
             IF( INFO.GT.0 ) THEN
@@ -394,7 +383,7 @@
 *
 *           B(1:N,1:NRHS) := inv(R**T) * B(1:N,1:NRHS)
 *
-            CALL AB_DTRTRS( 'Upper', 'Transpose', 'Non-unit', N, NRHS,
+            CALL DTRTRS( 'Upper', 'Transpose', 'Non-unit', N, NRHS,
      $                   A, LDA, B, LDB, INFO )
 *
             IF( INFO.GT.0 ) THEN
@@ -411,7 +400,7 @@
 *
 *           B(1:M,1:NRHS) := Q(1:N,:) * B(1:N,1:NRHS)
 *
-            CALL AB_DORMQR( 'Left', 'No transpose', M, NRHS, N, A, LDA,
+            CALL DORMQR( 'Left', 'No transpose', M, NRHS, N, A, LDA,
      $                   WORK( 1 ), B, LDB, WORK( MN+1 ), LWORK-MN,
      $                   INFO )
 *
@@ -425,8 +414,7 @@
 *
 *        Compute LQ factorization of A
 *
-         CALL AB_AB_DGELQF( M, N, A, LDA, WORK( 1 ), WORK( MN+1 ), LWORK
-     $-MN,
+         CALL DGELQF( M, N, A, LDA, WORK( 1 ), WORK( MN+1 ), LWORK-MN,
      $                INFO )
 *
 *        workspace at least M, optimally M*NB.
@@ -437,8 +425,7 @@
 *
 *           B(1:M,1:NRHS) := inv(L) * B(1:M,1:NRHS)
 *
-            CALL AB_DTRTRS( 'Lower', 'No transpose', 'Non-unit', M, NRHS
-     $,
+            CALL DTRTRS( 'Lower', 'No transpose', 'Non-unit', M, NRHS,
      $                   A, LDA, B, LDB, INFO )
 *
             IF( INFO.GT.0 ) THEN
@@ -455,7 +442,7 @@
 *
 *           B(1:N,1:NRHS) := Q(1:N,:)**T * B(1:M,1:NRHS)
 *
-            CALL AB_DORMLQ( 'Left', 'Transpose', N, NRHS, M, A, LDA,
+            CALL DORMLQ( 'Left', 'Transpose', N, NRHS, M, A, LDA,
      $                   WORK( 1 ), B, LDB, WORK( MN+1 ), LWORK-MN,
      $                   INFO )
 *
@@ -469,7 +456,7 @@
 *
 *           B(1:N,1:NRHS) := Q * B(1:N,1:NRHS)
 *
-            CALL AB_DORMLQ( 'Left', 'No transpose', N, NRHS, M, A, LDA,
+            CALL DORMLQ( 'Left', 'No transpose', N, NRHS, M, A, LDA,
      $                   WORK( 1 ), B, LDB, WORK( MN+1 ), LWORK-MN,
      $                   INFO )
 *
@@ -477,7 +464,7 @@
 *
 *           B(1:M,1:NRHS) := inv(L**T) * B(1:M,1:NRHS)
 *
-            CALL AB_DTRTRS( 'Lower', 'Transpose', 'Non-unit', M, NRHS,
+            CALL DTRTRS( 'Lower', 'Transpose', 'Non-unit', M, NRHS,
      $                   A, LDA, B, LDB, INFO )
 *
             IF( INFO.GT.0 ) THEN
@@ -493,17 +480,17 @@
 *     Undo scaling
 *
       IF( IASCL.EQ.1 ) THEN
-         CALL AB_DLASCL( 'G', 0, 0, ANRM, SMLNUM, SCLLEN, NRHS, B, LDB,
+         CALL DLASCL( 'G', 0, 0, ANRM, SMLNUM, SCLLEN, NRHS, B, LDB,
      $                INFO )
       ELSE IF( IASCL.EQ.2 ) THEN
-         CALL AB_DLASCL( 'G', 0, 0, ANRM, BIGNUM, SCLLEN, NRHS, B, LDB,
+         CALL DLASCL( 'G', 0, 0, ANRM, BIGNUM, SCLLEN, NRHS, B, LDB,
      $                INFO )
       END IF
       IF( IBSCL.EQ.1 ) THEN
-         CALL AB_DLASCL( 'G', 0, 0, SMLNUM, BNRM, SCLLEN, NRHS, B, LDB,
+         CALL DLASCL( 'G', 0, 0, SMLNUM, BNRM, SCLLEN, NRHS, B, LDB,
      $                INFO )
       ELSE IF( IBSCL.EQ.2 ) THEN
-         CALL AB_DLASCL( 'G', 0, 0, BIGNUM, BNRM, SCLLEN, NRHS, B, LDB,
+         CALL DLASCL( 'G', 0, 0, BIGNUM, BNRM, SCLLEN, NRHS, B, LDB,
      $                INFO )
       END IF
 *
@@ -512,6 +499,6 @@
 *
       RETURN
 *
-*     End of AB_DGELS
+*     End of DGELS
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_DLATMR
+*> \brief \b DLATMR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLATMR( M, N, DIST, ISEED, SYM, D, MODE, COND, DMAX,
+*       SUBROUTINE DLATMR( M, N, DIST, ISEED, SYM, D, MODE, COND, DMAX,
 *                          RSIGN, GRADE, DL, MODEL, CONDL, DR, MODER,
 *                          CONDR, PIVTNG, IPIVOT, KL, KU, SPARSE, ANORM,
 *                          PACK, A, LDA, IWORK, INFO )
@@ -29,10 +29,10 @@
 *>
 *> \verbatim
 *>
-*>    AB_DLATMR generates random matrices of various types for testing
+*>    DLATMR generates random matrices of various types for testing
 *>    LAPACK programs.
 *>
-*>    AB_DLATMR operates by applying the following sequence of
+*>    DLATMR operates by applying the following sequence of
 *>    operations:
 *>
 *>      Generate a matrix A with random entries of distribution DIST
@@ -72,10 +72,10 @@
 *>         store the upper triangle in banded format (if symmetric)
 *>         store the entire matrix in banded format
 *>
-*>    Note: If two calls to AB_DLATMR differ only in the PACK parameter,
+*>    Note: If two calls to DLATMR differ only in the PACK parameter,
 *>          they will generate mathematically equivalent matrices.
 *>
-*>          If two calls to AB_DLATMR both have full bandwidth (KL = M-1
+*>          If two calls to DLATMR both have full bandwidth (KL = M-1
 *>          and KU = N-1), and differ only in the PIVTNG and PACK
 *>          parameters, then the matrices generated will differ only
 *>          in the order of the rows and/or columns, and otherwise
@@ -118,7 +118,7 @@
 *>           uses a linear congruential sequence limited to small
 *>           integers, and so should produce machine independent
 *>           random numbers. The values of ISEED are changed on
-*>           exit, and can be used in the next call to AB_DLATMR
+*>           exit, and can be used in the next call to DLATMR
 *>           to continue the same random number sequence.
 *>           Changed on exit.
 *> \endverbatim
@@ -276,7 +276,7 @@
 *>           'B' or 'F' => both or full pivoting, i.e., on both sides.
 *>                         In this case, M must equal N
 *>
-*>           If two calls to AB_DLATMR both have full bandwidth (KL = M-1
+*>           If two calls to DLATMR both have full bandwidth (KL = M-1
 *>           and KU = N-1), and differ only in the PIVTNG and PACK
 *>           parameters, then the matrices generated will differ only
 *>           in the order of the rows and/or columns, and otherwise
@@ -289,7 +289,7 @@
 *>          IPIVOT is INTEGER array, dimension (N or M)
 *>           This array specifies the permutation used.  After the
 *>           basic matrix is generated, the rows, columns, or both
-*>           are permuted.   If, say, row pivoting is selected, AB_DLATMR
+*>           are permuted.   If, say, row pivoting is selected, DLATMR
 *>           starts with the *last* row and interchanges the M-th and
 *>           IPIVOT(M)-th rows, then moves to the next-to-last row,
 *>           interchanging the (M-1)-th and the IPIVOT(M-1)-th rows,
@@ -374,7 +374,7 @@
 *>           PB, SB or TB     - use 'B' or 'Q'
 *>           PP, SP or TP     - use 'C' or 'R'
 *>
-*>           If two calls to AB_DLATMR differ only in the PACK parameter,
+*>           If two calls to DLATMR differ only in the PACK parameter,
 *>           they will generate mathematically equivalent matrices.
 *>           Not modified.
 *> \endverbatim
@@ -445,10 +445,10 @@
 *>                  SYM='N', and either KU not equal to 0 or N not equal
 *>                  to M
 *>           -26 => LDA too small
-*>             1 => Error return from AB_DLATM1 (computing D)
+*>             1 => Error return from DLATM1 (computing D)
 *>             2 => Cannot scale diagonal to DMAX (max. entry is 0)
-*>             3 => Error return from AB_DLATM1 (computing DL)
-*>             4 => Error return from AB_DLATM1 (computing DR)
+*>             3 => Error return from DLATM1 (computing DL)
+*>             4 => Error return from DLATM1 (computing DR)
 *>             5 => ANORM is positive, but matrix constructed prior to
 *>                  attempting to scale it to have norm ANORM, is zero
 *> \endverbatim
@@ -466,7 +466,7 @@
 *> \ingroup double_matgen
 *
 *  =====================================================================
-      SUBROUTINE AB_DLATMR( M, N, DIST, ISEED, SYM, D, MODE, COND, DMAX,
+      SUBROUTINE DLATMR( M, N, DIST, ISEED, SYM, D, MODE, COND, DMAX,
      $                   RSIGN, GRADE, DL, MODEL, CONDL, DR, MODER,
      $                   CONDR, PIVTNG, IPIVOT, KL, KU, SPARSE, ANORM,
      $                   PACK, A, LDA, IWORK, INFO )
@@ -505,16 +505,14 @@
       DOUBLE PRECISION   TEMPA( 1 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DLANGB, AB_DLANGE, AB_DLANSB, AB_DLANSP, AB_
-     $DLANSY, AB_DLATM2,
-     $                   AB_DLATM3
-      EXTERNAL           AB_LSAME, AB_DLANGB, AB_DLANGE, AB_DLANSB, AB_D
-     $LANSP, AB_DLANSY,
-     $                   AB_DLATM2, AB_DLATM3
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLANGB, DLANGE, DLANSB, DLANSP, DLANSY, DLATM2,
+     $                   DLATM3
+      EXTERNAL           LSAME, DLANGB, DLANGE, DLANSB, DLANSP, DLANSY,
+     $                   DLATM2, DLATM3
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLATM1, AB_DSCAL, AB_XERBLA
+      EXTERNAL           DLATM1, DSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, MOD
@@ -533,11 +531,11 @@
 *
 *     Decode DIST
 *
-      IF( AB_LSAME( DIST, 'U' ) ) THEN
+      IF( LSAME( DIST, 'U' ) ) THEN
          IDIST = 1
-      ELSE IF( AB_LSAME( DIST, 'S' ) ) THEN
+      ELSE IF( LSAME( DIST, 'S' ) ) THEN
          IDIST = 2
-      ELSE IF( AB_LSAME( DIST, 'N' ) ) THEN
+      ELSE IF( LSAME( DIST, 'N' ) ) THEN
          IDIST = 3
       ELSE
          IDIST = -1
@@ -545,11 +543,11 @@
 *
 *     Decode SYM
 *
-      IF( AB_LSAME( SYM, 'S' ) ) THEN
+      IF( LSAME( SYM, 'S' ) ) THEN
          ISYM = 0
-      ELSE IF( AB_LSAME( SYM, 'N' ) ) THEN
+      ELSE IF( LSAME( SYM, 'N' ) ) THEN
          ISYM = 1
-      ELSE IF( AB_LSAME( SYM, 'H' ) ) THEN
+      ELSE IF( LSAME( SYM, 'H' ) ) THEN
          ISYM = 0
       ELSE
          ISYM = -1
@@ -557,9 +555,9 @@
 *
 *     Decode RSIGN
 *
-      IF( AB_LSAME( RSIGN, 'F' ) ) THEN
+      IF( LSAME( RSIGN, 'F' ) ) THEN
          IRSIGN = 0
-      ELSE IF( AB_LSAME( RSIGN, 'T' ) ) THEN
+      ELSE IF( LSAME( RSIGN, 'T' ) ) THEN
          IRSIGN = 1
       ELSE
          IRSIGN = -1
@@ -567,20 +565,20 @@
 *
 *     Decode PIVTNG
 *
-      IF( AB_LSAME( PIVTNG, 'N' ) ) THEN
+      IF( LSAME( PIVTNG, 'N' ) ) THEN
          IPVTNG = 0
-      ELSE IF( AB_LSAME( PIVTNG, ' ' ) ) THEN
+      ELSE IF( LSAME( PIVTNG, ' ' ) ) THEN
          IPVTNG = 0
-      ELSE IF( AB_LSAME( PIVTNG, 'L' ) ) THEN
+      ELSE IF( LSAME( PIVTNG, 'L' ) ) THEN
          IPVTNG = 1
          NPVTS = M
-      ELSE IF( AB_LSAME( PIVTNG, 'R' ) ) THEN
+      ELSE IF( LSAME( PIVTNG, 'R' ) ) THEN
          IPVTNG = 2
          NPVTS = N
-      ELSE IF( AB_LSAME( PIVTNG, 'B' ) ) THEN
+      ELSE IF( LSAME( PIVTNG, 'B' ) ) THEN
          IPVTNG = 3
          NPVTS = MIN( N, M )
-      ELSE IF( AB_LSAME( PIVTNG, 'F' ) ) THEN
+      ELSE IF( LSAME( PIVTNG, 'F' ) ) THEN
          IPVTNG = 3
          NPVTS = MIN( N, M )
       ELSE
@@ -589,18 +587,17 @@
 *
 *     Decode GRADE
 *
-      IF( AB_LSAME( GRADE, 'N' ) ) THEN
+      IF( LSAME( GRADE, 'N' ) ) THEN
          IGRADE = 0
-      ELSE IF( AB_LSAME( GRADE, 'L' ) ) THEN
+      ELSE IF( LSAME( GRADE, 'L' ) ) THEN
          IGRADE = 1
-      ELSE IF( AB_LSAME( GRADE, 'R' ) ) THEN
+      ELSE IF( LSAME( GRADE, 'R' ) ) THEN
          IGRADE = 2
-      ELSE IF( AB_LSAME( GRADE, 'B' ) ) THEN
+      ELSE IF( LSAME( GRADE, 'B' ) ) THEN
          IGRADE = 3
-      ELSE IF( AB_LSAME( GRADE, 'E' ) ) THEN
+      ELSE IF( LSAME( GRADE, 'E' ) ) THEN
          IGRADE = 4
-      ELSE IF( AB_LSAME( GRADE, 'H' ) .OR. AB_LSAME( GRADE, 'S' ) ) T
-     $HEN
+      ELSE IF( LSAME( GRADE, 'H' ) .OR. LSAME( GRADE, 'S' ) ) THEN
          IGRADE = 5
       ELSE
          IGRADE = -1
@@ -608,21 +605,21 @@
 *
 *     Decode PACK
 *
-      IF( AB_LSAME( PACK, 'N' ) ) THEN
+      IF( LSAME( PACK, 'N' ) ) THEN
          IPACK = 0
-      ELSE IF( AB_LSAME( PACK, 'U' ) ) THEN
+      ELSE IF( LSAME( PACK, 'U' ) ) THEN
          IPACK = 1
-      ELSE IF( AB_LSAME( PACK, 'L' ) ) THEN
+      ELSE IF( LSAME( PACK, 'L' ) ) THEN
          IPACK = 2
-      ELSE IF( AB_LSAME( PACK, 'C' ) ) THEN
+      ELSE IF( LSAME( PACK, 'C' ) ) THEN
          IPACK = 3
-      ELSE IF( AB_LSAME( PACK, 'R' ) ) THEN
+      ELSE IF( LSAME( PACK, 'R' ) ) THEN
          IPACK = 4
-      ELSE IF( AB_LSAME( PACK, 'B' ) ) THEN
+      ELSE IF( LSAME( PACK, 'B' ) ) THEN
          IPACK = 5
-      ELSE IF( AB_LSAME( PACK, 'Q' ) ) THEN
+      ELSE IF( LSAME( PACK, 'Q' ) ) THEN
          IPACK = 6
-      ELSE IF( AB_LSAME( PACK, 'Z' ) ) THEN
+      ELSE IF( LSAME( PACK, 'Z' ) ) THEN
          IPACK = 7
       ELSE
          IPACK = -1
@@ -722,7 +719,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DLATMR', -INFO )
+         CALL XERBLA( 'DLATMR', -INFO )
          RETURN
       END IF
 *
@@ -744,7 +741,7 @@
 *
 *             Compute D according to COND and MODE
 *
-      CALL AB_DLATM1( MODE, COND, IRSIGN, IDIST, ISEED, D, MNMIN, INFO )
+      CALL DLATM1( MODE, COND, IRSIGN, IDIST, ISEED, D, MNMIN, INFO )
       IF( INFO.NE.0 ) THEN
          INFO = 1
          RETURN
@@ -776,7 +773,7 @@
 *
       IF( IGRADE.EQ.1 .OR. IGRADE.EQ.3 .OR. IGRADE.EQ.4 .OR. IGRADE.EQ.
      $    5 ) THEN
-         CALL AB_DLATM1( MODEL, CONDL, 0, IDIST, ISEED, DL, M, INFO )
+         CALL DLATM1( MODEL, CONDL, 0, IDIST, ISEED, DL, M, INFO )
          IF( INFO.NE.0 ) THEN
             INFO = 3
             RETURN
@@ -786,7 +783,7 @@
 *     Compute DR if grading set
 *
       IF( IGRADE.EQ.2 .OR. IGRADE.EQ.3 ) THEN
-         CALL AB_DLATM1( MODER, CONDR, 0, IDIST, ISEED, DR, N, INFO )
+         CALL DLATM1( MODER, CONDR, 0, IDIST, ISEED, DR, N, INFO )
          IF( INFO.NE.0 ) THEN
             INFO = 4
             RETURN
@@ -823,14 +820,14 @@
 *
       IF( FULBND ) THEN
 *
-*        Use AB_DLATM3 so matrices generated with differing PIVOTing only
+*        Use DLATM3 so matrices generated with differing PIVOTing only
 *        differ only in the order of their rows and/or columns.
 *
          IF( IPACK.EQ.0 ) THEN
             IF( ISYM.EQ.0 ) THEN
                DO 100 J = 1, N
                   DO 90 I = 1, J
-                     TEMP = AB_DLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
+                     TEMP = DLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
      $                      IDIST, ISEED, D, IGRADE, DL, DR, IPVTNG,
      $                      IWORK, SPARSE )
                      A( ISUB, JSUB ) = TEMP
@@ -840,7 +837,7 @@
             ELSE IF( ISYM.EQ.1 ) THEN
                DO 120 J = 1, N
                   DO 110 I = 1, M
-                     TEMP = AB_DLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
+                     TEMP = DLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
      $                      IDIST, ISEED, D, IGRADE, DL, DR, IPVTNG,
      $                      IWORK, SPARSE )
                      A( ISUB, JSUB ) = TEMP
@@ -852,8 +849,7 @@
 *
             DO 140 J = 1, N
                DO 130 I = 1, J
-                  TEMP = AB_DLATM3( M, N, I, J, ISUB, JSUB, KL, KU, IDIS
-     $T,
+                  TEMP = DLATM3( M, N, I, J, ISUB, JSUB, KL, KU, IDIST,
      $                   ISEED, D, IGRADE, DL, DR, IPVTNG, IWORK,
      $                   SPARSE )
                   MNSUB = MIN( ISUB, JSUB )
@@ -868,8 +864,7 @@
 *
             DO 160 J = 1, N
                DO 150 I = 1, J
-                  TEMP = AB_DLATM3( M, N, I, J, ISUB, JSUB, KL, KU, IDIS
-     $T,
+                  TEMP = DLATM3( M, N, I, J, ISUB, JSUB, KL, KU, IDIST,
      $                   ISEED, D, IGRADE, DL, DR, IPVTNG, IWORK,
      $                   SPARSE )
                   MNSUB = MIN( ISUB, JSUB )
@@ -884,8 +879,7 @@
 *
             DO 180 J = 1, N
                DO 170 I = 1, J
-                  TEMP = AB_DLATM3( M, N, I, J, ISUB, JSUB, KL, KU, IDIS
-     $T,
+                  TEMP = DLATM3( M, N, I, J, ISUB, JSUB, KL, KU, IDIST,
      $                   ISEED, D, IGRADE, DL, DR, IPVTNG, IWORK,
      $                   SPARSE )
 *
@@ -909,8 +903,7 @@
 *
             DO 200 J = 1, N
                DO 190 I = 1, J
-                  TEMP = AB_DLATM3( M, N, I, J, ISUB, JSUB, KL, KU, IDIS
-     $T,
+                  TEMP = DLATM3( M, N, I, J, ISUB, JSUB, KL, KU, IDIST,
      $                   ISEED, D, IGRADE, DL, DR, IPVTNG, IWORK,
      $                   SPARSE )
 *
@@ -941,7 +934,7 @@
                   IF( I.LT.1 ) THEN
                      A( J-I+1, I+N ) = ZERO
                   ELSE
-                     TEMP = AB_DLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
+                     TEMP = DLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
      $                      IDIST, ISEED, D, IGRADE, DL, DR, IPVTNG,
      $                      IWORK, SPARSE )
                      MNSUB = MIN( ISUB, JSUB )
@@ -955,8 +948,7 @@
 *
             DO 240 J = 1, N
                DO 230 I = J - KUU, J
-                  TEMP = AB_DLATM3( M, N, I, J, ISUB, JSUB, KL, KU, IDIS
-     $T,
+                  TEMP = DLATM3( M, N, I, J, ISUB, JSUB, KL, KU, IDIST,
      $                   ISEED, D, IGRADE, DL, DR, IPVTNG, IWORK,
      $                   SPARSE )
                   MNSUB = MIN( ISUB, JSUB )
@@ -970,7 +962,7 @@
             IF( ISYM.EQ.0 ) THEN
                DO 260 J = 1, N
                   DO 250 I = J - KUU, J
-                     TEMP = AB_DLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
+                     TEMP = DLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
      $                      IDIST, ISEED, D, IGRADE, DL, DR, IPVTNG,
      $                      IWORK, SPARSE )
                      MNSUB = MIN( ISUB, JSUB )
@@ -985,7 +977,7 @@
             ELSE IF( ISYM.EQ.1 ) THEN
                DO 280 J = 1, N
                   DO 270 I = J - KUU, J + KLL
-                     TEMP = AB_DLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
+                     TEMP = DLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
      $                      IDIST, ISEED, D, IGRADE, DL, DR, IPVTNG,
      $                      IWORK, SPARSE )
                      A( ISUB-JSUB+KUU+1, JSUB ) = TEMP
@@ -997,13 +989,13 @@
 *
       ELSE
 *
-*        Use AB_DLATM2
+*        Use DLATM2
 *
          IF( IPACK.EQ.0 ) THEN
             IF( ISYM.EQ.0 ) THEN
                DO 300 J = 1, N
                   DO 290 I = 1, J
-                     A( I, J ) = AB_DLATM2( M, N, I, J, KL, KU, IDIST,
+                     A( I, J ) = DLATM2( M, N, I, J, KL, KU, IDIST,
      $                           ISEED, D, IGRADE, DL, DR, IPVTNG,
      $                           IWORK, SPARSE )
                      A( J, I ) = A( I, J )
@@ -1012,7 +1004,7 @@
             ELSE IF( ISYM.EQ.1 ) THEN
                DO 320 J = 1, N
                   DO 310 I = 1, M
-                     A( I, J ) = AB_DLATM2( M, N, I, J, KL, KU, IDIST,
+                     A( I, J ) = DLATM2( M, N, I, J, KL, KU, IDIST,
      $                           ISEED, D, IGRADE, DL, DR, IPVTNG,
      $                           IWORK, SPARSE )
   310             CONTINUE
@@ -1023,8 +1015,7 @@
 *
             DO 340 J = 1, N
                DO 330 I = 1, J
-                  A( I, J ) = AB_DLATM2( M, N, I, J, KL, KU, IDIST, ISEE
-     $D,
+                  A( I, J ) = DLATM2( M, N, I, J, KL, KU, IDIST, ISEED,
      $                        D, IGRADE, DL, DR, IPVTNG, IWORK, SPARSE )
                   IF( I.NE.J )
      $               A( J, I ) = ZERO
@@ -1035,8 +1026,7 @@
 *
             DO 360 J = 1, N
                DO 350 I = 1, J
-                  A( J, I ) = AB_DLATM2( M, N, I, J, KL, KU, IDIST, ISEE
-     $D,
+                  A( J, I ) = DLATM2( M, N, I, J, KL, KU, IDIST, ISEED,
      $                        D, IGRADE, DL, DR, IPVTNG, IWORK, SPARSE )
                   IF( I.NE.J )
      $               A( I, J ) = ZERO
@@ -1054,8 +1044,7 @@
                      ISUB = 1
                      JSUB = JSUB + 1
                   END IF
-                  A( ISUB, JSUB ) = AB_DLATM2( M, N, I, J, KL, KU, IDIST
-     $,
+                  A( ISUB, JSUB ) = DLATM2( M, N, I, J, KL, KU, IDIST,
      $                              ISEED, D, IGRADE, DL, DR, IPVTNG,
      $                              IWORK, SPARSE )
   370          CONTINUE
@@ -1081,7 +1070,7 @@
                      JSUB = ( K-1 ) / LDA + 1
                      ISUB = K - LDA*( JSUB-1 )
 *
-                     A( ISUB, JSUB ) = AB_DLATM2( M, N, I, J, KL, KU,
+                     A( ISUB, JSUB ) = DLATM2( M, N, I, J, KL, KU,
      $                                 IDIST, ISEED, D, IGRADE, DL, DR,
      $                                 IPVTNG, IWORK, SPARSE )
   390             CONTINUE
@@ -1096,7 +1085,7 @@
                         ISUB = 1
                         JSUB = JSUB + 1
                      END IF
-                     A( ISUB, JSUB ) = AB_DLATM2( M, N, I, J, KL, KU,
+                     A( ISUB, JSUB ) = DLATM2( M, N, I, J, KL, KU,
      $                                 IDIST, ISEED, D, IGRADE, DL, DR,
      $                                 IPVTNG, IWORK, SPARSE )
   410             CONTINUE
@@ -1110,8 +1099,7 @@
                   IF( I.LT.1 ) THEN
                      A( J-I+1, I+N ) = ZERO
                   ELSE
-                     A( J-I+1, I ) = AB_DLATM2( M, N, I, J, KL, KU, IDIS
-     $T,
+                     A( J-I+1, I ) = DLATM2( M, N, I, J, KL, KU, IDIST,
      $                               ISEED, D, IGRADE, DL, DR, IPVTNG,
      $                               IWORK, SPARSE )
                   END IF
@@ -1122,8 +1110,7 @@
 *
             DO 460 J = 1, N
                DO 450 I = J - KUU, J
-                  A( I-J+KUU+1, J ) = AB_DLATM2( M, N, I, J, KL, KU, IDI
-     $ST,
+                  A( I-J+KUU+1, J ) = DLATM2( M, N, I, J, KL, KU, IDIST,
      $                                ISEED, D, IGRADE, DL, DR, IPVTNG,
      $                                IWORK, SPARSE )
   450          CONTINUE
@@ -1134,7 +1121,7 @@
             IF( ISYM.EQ.0 ) THEN
                DO 480 J = 1, N
                   DO 470 I = J - KUU, J
-                     A( I-J+KUU+1, J ) = AB_DLATM2( M, N, I, J, KL, KU,
+                     A( I-J+KUU+1, J ) = DLATM2( M, N, I, J, KL, KU,
      $                                   IDIST, ISEED, D, IGRADE, DL,
      $                                   DR, IPVTNG, IWORK, SPARSE )
                      IF( I.LT.1 )
@@ -1146,7 +1133,7 @@
             ELSE IF( ISYM.EQ.1 ) THEN
                DO 500 J = 1, N
                   DO 490 I = J - KUU, J + KLL
-                     A( I-J+KUU+1, J ) = AB_DLATM2( M, N, I, J, KL, KU,
+                     A( I-J+KUU+1, J ) = DLATM2( M, N, I, J, KL, KU,
      $                                   IDIST, ISEED, D, IGRADE, DL,
      $                                   DR, IPVTNG, IWORK, SPARSE )
   490             CONTINUE
@@ -1160,21 +1147,21 @@
 *     5)      Scaling the norm
 *
       IF( IPACK.EQ.0 ) THEN
-         ONORM = AB_DLANGE( 'M', M, N, A, LDA, TEMPA )
+         ONORM = DLANGE( 'M', M, N, A, LDA, TEMPA )
       ELSE IF( IPACK.EQ.1 ) THEN
-         ONORM = AB_DLANSY( 'M', 'U', N, A, LDA, TEMPA )
+         ONORM = DLANSY( 'M', 'U', N, A, LDA, TEMPA )
       ELSE IF( IPACK.EQ.2 ) THEN
-         ONORM = AB_DLANSY( 'M', 'L', N, A, LDA, TEMPA )
+         ONORM = DLANSY( 'M', 'L', N, A, LDA, TEMPA )
       ELSE IF( IPACK.EQ.3 ) THEN
-         ONORM = AB_DLANSP( 'M', 'U', N, A, TEMPA )
+         ONORM = DLANSP( 'M', 'U', N, A, TEMPA )
       ELSE IF( IPACK.EQ.4 ) THEN
-         ONORM = AB_DLANSP( 'M', 'L', N, A, TEMPA )
+         ONORM = DLANSP( 'M', 'L', N, A, TEMPA )
       ELSE IF( IPACK.EQ.5 ) THEN
-         ONORM = AB_DLANSB( 'M', 'L', N, KLL, A, LDA, TEMPA )
+         ONORM = DLANSB( 'M', 'L', N, KLL, A, LDA, TEMPA )
       ELSE IF( IPACK.EQ.6 ) THEN
-         ONORM = AB_DLANSB( 'M', 'U', N, KUU, A, LDA, TEMPA )
+         ONORM = DLANSB( 'M', 'U', N, KUU, A, LDA, TEMPA )
       ELSE IF( IPACK.EQ.7 ) THEN
-         ONORM = AB_DLANGB( 'M', N, KLL, KUU, A, LDA, TEMPA )
+         ONORM = DLANGB( 'M', N, KLL, KUU, A, LDA, TEMPA )
       END IF
 *
       IF( ANORM.GE.ZERO ) THEN
@@ -1193,20 +1180,20 @@
 *
             IF( IPACK.LE.2 ) THEN
                DO 510 J = 1, N
-                  CALL AB_DSCAL( M, ONE / ONORM, A( 1, J ), 1 )
-                  CALL AB_DSCAL( M, ANORM, A( 1, J ), 1 )
+                  CALL DSCAL( M, ONE / ONORM, A( 1, J ), 1 )
+                  CALL DSCAL( M, ANORM, A( 1, J ), 1 )
   510          CONTINUE
 *
             ELSE IF( IPACK.EQ.3 .OR. IPACK.EQ.4 ) THEN
 *
-               CALL AB_DSCAL( N*( N+1 ) / 2, ONE / ONORM, A, 1 )
-               CALL AB_DSCAL( N*( N+1 ) / 2, ANORM, A, 1 )
+               CALL DSCAL( N*( N+1 ) / 2, ONE / ONORM, A, 1 )
+               CALL DSCAL( N*( N+1 ) / 2, ANORM, A, 1 )
 *
             ELSE IF( IPACK.GE.5 ) THEN
 *
                DO 520 J = 1, N
-                  CALL AB_DSCAL( KLL+KUU+1, ONE / ONORM, A( 1, J ), 1 )
-                  CALL AB_DSCAL( KLL+KUU+1, ANORM, A( 1, J ), 1 )
+                  CALL DSCAL( KLL+KUU+1, ONE / ONORM, A( 1, J ), 1 )
+                  CALL DSCAL( KLL+KUU+1, ANORM, A( 1, J ), 1 )
   520          CONTINUE
 *
             END IF
@@ -1217,18 +1204,17 @@
 *
             IF( IPACK.LE.2 ) THEN
                DO 530 J = 1, N
-                  CALL AB_DSCAL( M, ANORM / ONORM, A( 1, J ), 1 )
+                  CALL DSCAL( M, ANORM / ONORM, A( 1, J ), 1 )
   530          CONTINUE
 *
             ELSE IF( IPACK.EQ.3 .OR. IPACK.EQ.4 ) THEN
 *
-               CALL AB_DSCAL( N*( N+1 ) / 2, ANORM / ONORM, A, 1 )
+               CALL DSCAL( N*( N+1 ) / 2, ANORM / ONORM, A, 1 )
 *
             ELSE IF( IPACK.GE.5 ) THEN
 *
                DO 540 J = 1, N
-                  CALL AB_DSCAL( KLL+KUU+1, ANORM / ONORM, A( 1, J ), 1 
-     $)
+                  CALL DSCAL( KLL+KUU+1, ANORM / ONORM, A( 1, J ), 1 )
   540          CONTINUE
             END IF
 *
@@ -1236,6 +1222,6 @@
 *
       END IF
 *
-*     End of AB_DLATMR
+*     End of DLATMR
 *
       END

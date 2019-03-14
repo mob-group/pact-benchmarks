@@ -1,4 +1,4 @@
-*> \brief \b AB_SLAQP2 computes a QR factorization with column pivoting of the matrix block.
+*> \brief \b SLAQP2 computes a QR factorization with column pivoting of the matrix block.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLAQP2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLAQP2.f">
+*> Download SLAQP2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaqp2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLAQP2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaqp2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLAQP2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaqp2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLAQP2( M, N, OFFSET, A, LDA, JPVT, TAU, VN1, VN2,
+*       SUBROUTINE SLAQP2( M, N, OFFSET, A, LDA, JPVT, TAU, VN1, VN2,
 *                          WORK )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SLAQP2 computes a QR factorization with column pivoting of
+*> SLAQP2 computes a QR factorization with column pivoting of
 *> the block A(OFFSET+1:M,1:N).
 *> The block A(1:OFFSET,1:N) is accordingly pivoted, but not factorized.
 *> \endverbatim
@@ -146,7 +146,7 @@
 *> \endhtmlonly
 *
 *  =====================================================================
-      SUBROUTINE AB_SLAQP2( M, N, OFFSET, A, LDA, JPVT, TAU, VN1, VN2,
+      SUBROUTINE SLAQP2( M, N, OFFSET, A, LDA, JPVT, TAU, VN1, VN2,
      $                   WORK )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -174,20 +174,20 @@
       REAL               AII, TEMP, TEMP2, TOL3Z
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SLARF, AB_AB_SLARFG, AB_SSWAP
+      EXTERNAL           SLARF, SLARFG, SSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ISAMAX
-      REAL               AB_SLAMCH, AB_SNRM2
-      EXTERNAL           AB_ISAMAX, AB_SLAMCH, AB_SNRM2
+      INTEGER            ISAMAX
+      REAL               SLAMCH, SNRM2
+      EXTERNAL           ISAMAX, SLAMCH, SNRM2
 *     ..
 *     .. Executable Statements ..
 *
       MN = MIN( M-OFFSET, N )
-      TOL3Z = SQRT(AB_SLAMCH('Epsilon'))
+      TOL3Z = SQRT(SLAMCH('Epsilon'))
 *
 *     Compute factorization.
 *
@@ -197,10 +197,10 @@
 *
 *        Determine ith pivot column and swap if necessary.
 *
-         PVT = ( I-1 ) + AB_ISAMAX( N-I+1, VN1( I ), 1 )
+         PVT = ( I-1 ) + ISAMAX( N-I+1, VN1( I ), 1 )
 *
          IF( PVT.NE.I ) THEN
-            CALL AB_SSWAP( M, A( 1, PVT ), 1, A( 1, I ), 1 )
+            CALL SSWAP( M, A( 1, PVT ), 1, A( 1, I ), 1 )
             ITEMP = JPVT( PVT )
             JPVT( PVT ) = JPVT( I )
             JPVT( I ) = ITEMP
@@ -211,11 +211,10 @@
 *        Generate elementary reflector H(i).
 *
          IF( OFFPI.LT.M ) THEN
-            CALL AB_AB_SLARFG( M-OFFPI+1, A( OFFPI, I ), A( OFFPI+1, I )
-     $, 1,
+            CALL SLARFG( M-OFFPI+1, A( OFFPI, I ), A( OFFPI+1, I ), 1,
      $                   TAU( I ) )
          ELSE
-            CALL AB_AB_SLARFG( 1, A( M, I ), A( M, I ), 1, TAU( I ) )
+            CALL SLARFG( 1, A( M, I ), A( M, I ), 1, TAU( I ) )
          END IF
 *
          IF( I.LT.N ) THEN
@@ -224,7 +223,7 @@
 *
             AII = A( OFFPI, I )
             A( OFFPI, I ) = ONE
-            CALL AB_SLARF( 'Left', M-OFFPI+1, N-I, A( OFFPI, I ), 1,
+            CALL SLARF( 'Left', M-OFFPI+1, N-I, A( OFFPI, I ), 1,
      $                  TAU( I ), A( OFFPI, I+1 ), LDA, WORK( 1 ) )
             A( OFFPI, I ) = AII
          END IF
@@ -242,7 +241,7 @@
                TEMP2 = TEMP*( VN1( J ) / VN2( J ) )**2
                IF( TEMP2 .LE. TOL3Z ) THEN
                   IF( OFFPI.LT.M ) THEN
-                     VN1( J ) = AB_SNRM2( M-OFFPI, A( OFFPI+1, J ), 1 )
+                     VN1( J ) = SNRM2( M-OFFPI, A( OFFPI+1, J ), 1 )
                      VN2( J ) = VN1( J )
                   ELSE
                      VN1( J ) = ZERO
@@ -258,6 +257,6 @@
 *
       RETURN
 *
-*     End of AB_SLAQP2
+*     End of SLAQP2
 *
       END

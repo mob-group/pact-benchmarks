@@ -2,7 +2,7 @@
 *  Definition:
 *  ===========
 *
-*      SUBROUTINE AB_DGEMLQ( SIDE, TRANS, M, N, K, A, LDA, T,
+*      SUBROUTINE DGEMLQ( SIDE, TRANS, M, N, K, A, LDA, T,
 *     $                   TSIZE, C, LDC, WORK, LWORK, INFO )
 *
 *
@@ -19,14 +19,14 @@
 *>
 *> \verbatim
 *>
-*>     AB_DGEMLQ overwrites the general real M-by-N matrix C with
+*>     DGEMLQ overwrites the general real M-by-N matrix C with
 *>
 *>                    SIDE = 'L'     SIDE = 'R'
 *>    TRANS = 'N':      Q * C          C * Q
 *>    TRANS = 'T':      Q**T * C       C * Q**T
 *>    where Q is a real orthogonal matrix defined as the product
 *>    of blocked elementary reflectors computed by short wide LQ
-*>    factorization (AB_DGELQ)
+*>    factorization (DGELQ)
 *>
 *> \endverbatim
 *
@@ -74,7 +74,7 @@
 *>          A is DOUBLE PRECISION array, dimension
 *>                               (LDA,M) if SIDE = 'L',
 *>                               (LDA,N) if SIDE = 'R'
-*>          Part of the data structure to represent Q as returned by AB_DGELQ.
+*>          Part of the data structure to represent Q as returned by DGELQ.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -86,7 +86,7 @@
 *> \param[in] T
 *> \verbatim
 *>          T is DOUBLE PRECISION array, dimension (MAX(5,TSIZE)).
-*>          Part of the data structure to represent Q as returned by AB_DGELQ.
+*>          Part of the data structure to represent Q as returned by DGELQ.
 *> \endverbatim
 *>
 *> \param[in] TSIZE
@@ -120,7 +120,7 @@
 *>          If LWORK = -1, then a workspace query is assumed. The routine
 *>          only calculates the size of the WORK array, returns this
 *>          value as WORK(1), and no error message related to WORK 
-*>          is issued by AB_XERBLA.
+*>          is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -153,19 +153,19 @@
 *>          T(2): row block size (MB)
 *>          T(3): column block size (NB)
 *>          T(6:TSIZE): data structure needed for Q, computed by
-*>                           AB_DLASWLQ or AB_AB_DGELQT
+*>                           DLASWLQ or DGELQT
 *>
 *>  Depending on the matrix dimensions M and N, and row and column
-*>  block sizes MB and NB returned by AB_ILAENV, AB_DGELQ will use either
-*>  AB_DLASWLQ (if the matrix is wide-and-short) or AB_AB_DGELQT to compute
+*>  block sizes MB and NB returned by ILAENV, DGELQ will use either
+*>  DLASWLQ (if the matrix is wide-and-short) or DGELQT to compute
 *>  the LQ factorization.
-*>  This version of AB_DGEMLQ will use either AB_DLAMSWLQ or AB_AB_DGEMLQT to 
+*>  This version of DGEMLQ will use either DLAMSWLQ or DGEMLQT to 
 *>  multiply matrix Q by another matrix.
-*>  Further Details in AB_DLAMSWLQ or AB_AB_DGEMLQT.
+*>  Further Details in DLAMSWLQ or DGEMLQT.
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_DGEMLQ( SIDE, TRANS, M, N, K, A, LDA, T, TSIZE,
+      SUBROUTINE DGEMLQ( SIDE, TRANS, M, N, K, A, LDA, T, TSIZE,
      $                   C, LDC, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -189,11 +189,11 @@
       INTEGER            MB, NB, LW, NBLCKS, MN
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLAMSWLQ, AB_AB_DGEMLQT, AB_XERBLA
+      EXTERNAL           DLAMSWLQ, DGEMLQT, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          INT, MAX, MIN, MOD
@@ -203,10 +203,10 @@
 *     Test the input arguments
 *
       LQUERY  = LWORK.EQ.-1
-      NOTRAN  = AB_LSAME( TRANS, 'N' )
-      TRAN    = AB_LSAME( TRANS, 'T' )
-      LEFT    = AB_LSAME( SIDE, 'L' )
-      RIGHT   = AB_LSAME( SIDE, 'R' )
+      NOTRAN  = LSAME( TRANS, 'N' )
+      TRAN    = LSAME( TRANS, 'T' )
+      LEFT    = LSAME( SIDE, 'L' )
+      RIGHT   = LSAME( SIDE, 'R' )
 *
       MB = INT( T( 2 ) )
       NB = INT( T( 3 ) )
@@ -254,7 +254,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-        CALL AB_XERBLA( 'AB_DGEMLQ', -INFO )
+        CALL XERBLA( 'DGEMLQ', -INFO )
         RETURN
       ELSE IF( LQUERY ) THEN
         RETURN
@@ -268,10 +268,10 @@
 *
       IF( ( LEFT .AND. M.LE.K ) .OR. ( RIGHT .AND. N.LE.K )
      $     .OR. ( NB.LE.K ) .OR. ( NB.GE.MAX( M, N, K ) ) ) THEN
-        CALL AB_AB_DGEMLQT( SIDE, TRANS, M, N, K, MB, A, LDA,
+        CALL DGEMLQT( SIDE, TRANS, M, N, K, MB, A, LDA,
      $                T( 6 ), MB, C, LDC, WORK, INFO )
       ELSE
-        CALL AB_DLAMSWLQ( SIDE, TRANS, M, N, K, MB, NB, A, LDA, T( 6 ),
+        CALL DLAMSWLQ( SIDE, TRANS, M, N, K, MB, NB, A, LDA, T( 6 ),
      $                 MB, C, LDC, WORK, LWORK, INFO )
       END IF
 *
@@ -279,6 +279,6 @@
 *
       RETURN
 *
-*     End of AB_DGEMLQ
+*     End of DGEMLQ
 *
       END

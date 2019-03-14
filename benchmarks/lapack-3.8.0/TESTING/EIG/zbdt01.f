@@ -1,4 +1,4 @@
-*> \brief \b AB_ZBDT01
+*> \brief \b ZBDT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZBDT01( M, N, KD, A, LDA, Q, LDQ, D, E, PT, LDPT, WORK,
+*       SUBROUTINE ZBDT01( M, N, KD, A, LDA, Q, LDQ, D, E, PT, LDPT, WORK,
 *                          RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZBDT01 reconstructs a general matrix A from its bidiagonal form
+*> ZBDT01 reconstructs a general matrix A from its bidiagonal form
 *>    A = Q * B * P'
 *> where Q (m by min(m,n)) and P' (min(m,n) by n) are unitary
 *> matrices and B is bidiagonal.
@@ -143,8 +143,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_ZBDT01( M, N, KD, A, LDA, Q, LDQ, D, E, PT, LDPT, WO
-     $RK,
+      SUBROUTINE ZBDT01( M, N, KD, A, LDA, Q, LDQ, D, E, PT, LDPT, WORK,
      $                   RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -173,11 +172,11 @@
       DOUBLE PRECISION   ANORM, EPS
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH, AB_DZASUM, AB_ZLANGE
-      EXTERNAL           AB_DLAMCH, AB_DZASUM, AB_ZLANGE
+      DOUBLE PRECISION   DLAMCH, DZASUM, ZLANGE
+      EXTERNAL           DLAMCH, DZASUM, ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZCOPY, AB_ZGEMV
+      EXTERNAL           ZCOPY, ZGEMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCMPLX, MAX, MIN
@@ -203,46 +202,43 @@
 *           B is upper bidiagonal and M >= N.
 *
             DO 20 J = 1, N
-               CALL AB_ZCOPY( M, A( 1, J ), 1, WORK, 1 )
+               CALL ZCOPY( M, A( 1, J ), 1, WORK, 1 )
                DO 10 I = 1, N - 1
                   WORK( M+I ) = D( I )*PT( I, J ) + E( I )*PT( I+1, J )
    10          CONTINUE
                WORK( M+N ) = D( N )*PT( N, J )
-               CALL AB_ZGEMV( 'No transpose', M, N, -DCMPLX( ONE ), Q, L
-     $DQ,
+               CALL ZGEMV( 'No transpose', M, N, -DCMPLX( ONE ), Q, LDQ,
      $                     WORK( M+1 ), 1, DCMPLX( ONE ), WORK, 1 )
-               RESID = MAX( RESID, AB_DZASUM( M, WORK, 1 ) )
+               RESID = MAX( RESID, DZASUM( M, WORK, 1 ) )
    20       CONTINUE
          ELSE IF( KD.LT.0 ) THEN
 *
 *           B is upper bidiagonal and M < N.
 *
             DO 40 J = 1, N
-               CALL AB_ZCOPY( M, A( 1, J ), 1, WORK, 1 )
+               CALL ZCOPY( M, A( 1, J ), 1, WORK, 1 )
                DO 30 I = 1, M - 1
                   WORK( M+I ) = D( I )*PT( I, J ) + E( I )*PT( I+1, J )
    30          CONTINUE
                WORK( M+M ) = D( M )*PT( M, J )
-               CALL AB_ZGEMV( 'No transpose', M, M, -DCMPLX( ONE ), Q, L
-     $DQ,
+               CALL ZGEMV( 'No transpose', M, M, -DCMPLX( ONE ), Q, LDQ,
      $                     WORK( M+1 ), 1, DCMPLX( ONE ), WORK, 1 )
-               RESID = MAX( RESID, AB_DZASUM( M, WORK, 1 ) )
+               RESID = MAX( RESID, DZASUM( M, WORK, 1 ) )
    40       CONTINUE
          ELSE
 *
 *           B is lower bidiagonal.
 *
             DO 60 J = 1, N
-               CALL AB_ZCOPY( M, A( 1, J ), 1, WORK, 1 )
+               CALL ZCOPY( M, A( 1, J ), 1, WORK, 1 )
                WORK( M+1 ) = D( 1 )*PT( 1, J )
                DO 50 I = 2, M
                   WORK( M+I ) = E( I-1 )*PT( I-1, J ) +
      $                          D( I )*PT( I, J )
    50          CONTINUE
-               CALL AB_ZGEMV( 'No transpose', M, M, -DCMPLX( ONE ), Q, L
-     $DQ,
+               CALL ZGEMV( 'No transpose', M, M, -DCMPLX( ONE ), Q, LDQ,
      $                     WORK( M+1 ), 1, DCMPLX( ONE ), WORK, 1 )
-               RESID = MAX( RESID, AB_DZASUM( M, WORK, 1 ) )
+               RESID = MAX( RESID, DZASUM( M, WORK, 1 ) )
    60       CONTINUE
          END IF
       ELSE
@@ -251,33 +247,31 @@
 *
          IF( M.GE.N ) THEN
             DO 80 J = 1, N
-               CALL AB_ZCOPY( M, A( 1, J ), 1, WORK, 1 )
+               CALL ZCOPY( M, A( 1, J ), 1, WORK, 1 )
                DO 70 I = 1, N
                   WORK( M+I ) = D( I )*PT( I, J )
    70          CONTINUE
-               CALL AB_ZGEMV( 'No transpose', M, N, -DCMPLX( ONE ), Q, L
-     $DQ,
+               CALL ZGEMV( 'No transpose', M, N, -DCMPLX( ONE ), Q, LDQ,
      $                     WORK( M+1 ), 1, DCMPLX( ONE ), WORK, 1 )
-               RESID = MAX( RESID, AB_DZASUM( M, WORK, 1 ) )
+               RESID = MAX( RESID, DZASUM( M, WORK, 1 ) )
    80       CONTINUE
          ELSE
             DO 100 J = 1, N
-               CALL AB_ZCOPY( M, A( 1, J ), 1, WORK, 1 )
+               CALL ZCOPY( M, A( 1, J ), 1, WORK, 1 )
                DO 90 I = 1, M
                   WORK( M+I ) = D( I )*PT( I, J )
    90          CONTINUE
-               CALL AB_ZGEMV( 'No transpose', M, M, -DCMPLX( ONE ), Q, L
-     $DQ,
+               CALL ZGEMV( 'No transpose', M, M, -DCMPLX( ONE ), Q, LDQ,
      $                     WORK( M+1 ), 1, DCMPLX( ONE ), WORK, 1 )
-               RESID = MAX( RESID, AB_DZASUM( M, WORK, 1 ) )
+               RESID = MAX( RESID, DZASUM( M, WORK, 1 ) )
   100       CONTINUE
          END IF
       END IF
 *
 *     Compute norm(A - Q * B * P') / ( n * norm(A) * EPS )
 *
-      ANORM = AB_ZLANGE( '1', M, N, A, LDA, RWORK )
-      EPS = AB_DLAMCH( 'Precision' )
+      ANORM = ZLANGE( '1', M, N, A, LDA, RWORK )
+      EPS = DLAMCH( 'Precision' )
 *
       IF( ANORM.LE.ZERO ) THEN
          IF( RESID.NE.ZERO )
@@ -298,6 +292,6 @@
 *
       RETURN
 *
-*     End of AB_ZBDT01
+*     End of ZBDT01
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_AB_DERRLQTP
+*> \brief \b DERRLQTP
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_AB_SERRLQTP( PATH, NUNIT )
+*       SUBROUTINE SERRLQTP( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_AB_SERRLQTP tests the error exits for the REAL routines
+*> SERRLQTP tests the error exits for the REAL routines
 *> that use the LQT decomposition of a triangular-pentagonal matrix.
 *> \endverbatim
 *
@@ -53,7 +53,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_AB_SERRLQTP( PATH, NUNIT )
+      SUBROUTINE SERRLQTP( PATH, NUNIT )
       IMPLICIT NONE
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -80,8 +80,8 @@
      $                   B( NMAX, NMAX ), C( NMAX, NMAX )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALAESM, AB_CHKXER, AB_AB_STPLQT2, AB_STPLQT,
-     $                   AB_STPMLQT
+      EXTERNAL           ALAESM, CHKXER, STPLQT2, STPLQT,
+     $                   STPMLQT
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -114,112 +114,112 @@
 *
 *     Error exits for TPLQT factorization
 *
-*     AB_STPLQT
+*     STPLQT
 *
-      SRNAMT = 'AB_STPLQT'
+      SRNAMT = 'STPLQT'
       INFOT = 1
-      CALL AB_STPLQT( -1, 1, 0, 1, A, 1, B, 1, T, 1, W, INFO )
-      CALL AB_CHKXER( 'AB_STPLQT', INFOT, NOUT, LERR, OK )
+      CALL STPLQT( -1, 1, 0, 1, A, 1, B, 1, T, 1, W, INFO )
+      CALL CHKXER( 'STPLQT', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_STPLQT( 1, -1, 0, 1, A, 1, B, 1, T, 1, W, INFO )
-      CALL AB_CHKXER( 'AB_STPLQT', INFOT, NOUT, LERR, OK )
+      CALL STPLQT( 1, -1, 0, 1, A, 1, B, 1, T, 1, W, INFO )
+      CALL CHKXER( 'STPLQT', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL AB_STPLQT( 0, 1, -1, 1, A, 1, B, 1, T, 1, W, INFO )
-      CALL AB_CHKXER( 'AB_STPLQT', INFOT, NOUT, LERR, OK )
+      CALL STPLQT( 0, 1, -1, 1, A, 1, B, 1, T, 1, W, INFO )
+      CALL CHKXER( 'STPLQT', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL AB_STPLQT( 0, 1, 1, 1, A, 1, B, 1, T, 1, W, INFO )
-      CALL AB_CHKXER( 'AB_STPLQT', INFOT, NOUT, LERR, OK )
+      CALL STPLQT( 0, 1, 1, 1, A, 1, B, 1, T, 1, W, INFO )
+      CALL CHKXER( 'STPLQT', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL AB_STPLQT( 0, 1, 0, 0, A, 1, B, 1, T, 1, W, INFO )
-      CALL AB_CHKXER( 'AB_STPLQT', INFOT, NOUT, LERR, OK )
+      CALL STPLQT( 0, 1, 0, 0, A, 1, B, 1, T, 1, W, INFO )
+      CALL CHKXER( 'STPLQT', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL AB_STPLQT( 1, 1, 0, 2, A, 1, B, 1, T, 1, W, INFO )
-      CALL AB_CHKXER( 'AB_STPLQT', INFOT, NOUT, LERR, OK )
+      CALL STPLQT( 1, 1, 0, 2, A, 1, B, 1, T, 1, W, INFO )
+      CALL CHKXER( 'STPLQT', INFOT, NOUT, LERR, OK )
       INFOT = 6
-      CALL AB_STPLQT( 2, 1, 0, 2, A, 1, B, 1, T, 1, W, INFO )
-      CALL AB_CHKXER( 'AB_STPLQT', INFOT, NOUT, LERR, OK )
+      CALL STPLQT( 2, 1, 0, 2, A, 1, B, 1, T, 1, W, INFO )
+      CALL CHKXER( 'STPLQT', INFOT, NOUT, LERR, OK )
       INFOT = 8
-      CALL AB_STPLQT( 2, 1, 0, 1, A, 2, B, 1, T, 1, W, INFO )
-      CALL AB_CHKXER( 'AB_STPLQT', INFOT, NOUT, LERR, OK )
+      CALL STPLQT( 2, 1, 0, 1, A, 2, B, 1, T, 1, W, INFO )
+      CALL CHKXER( 'STPLQT', INFOT, NOUT, LERR, OK )
       INFOT = 10
-      CALL AB_STPLQT( 2, 2, 1, 2, A, 2, B, 2, T, 1, W, INFO )
-      CALL AB_CHKXER( 'AB_STPLQT', INFOT, NOUT, LERR, OK )
+      CALL STPLQT( 2, 2, 1, 2, A, 2, B, 2, T, 1, W, INFO )
+      CALL CHKXER( 'STPLQT', INFOT, NOUT, LERR, OK )
 *
-*     AB_AB_STPLQT2
+*     STPLQT2
 *
-      SRNAMT = 'AB_AB_STPLQT2'
+      SRNAMT = 'STPLQT2'
       INFOT = 1
-      CALL AB_AB_STPLQT2( -1, 0, 0, A, 1, B, 1, T, 1, INFO )
-      CALL AB_CHKXER( 'AB_AB_STPLQT2', INFOT, NOUT, LERR, OK )
+      CALL STPLQT2( -1, 0, 0, A, 1, B, 1, T, 1, INFO )
+      CALL CHKXER( 'STPLQT2', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_AB_STPLQT2( 0, -1, 0, A, 1, B, 1, T, 1, INFO )
-      CALL AB_CHKXER( 'AB_AB_STPLQT2', INFOT, NOUT, LERR, OK )
+      CALL STPLQT2( 0, -1, 0, A, 1, B, 1, T, 1, INFO )
+      CALL CHKXER( 'STPLQT2', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL AB_AB_STPLQT2( 0, 0, -1, A, 1, B, 1, T, 1, INFO )
-      CALL AB_CHKXER( 'AB_AB_STPLQT2', INFOT, NOUT, LERR, OK )
+      CALL STPLQT2( 0, 0, -1, A, 1, B, 1, T, 1, INFO )
+      CALL CHKXER( 'STPLQT2', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL AB_AB_STPLQT2( 2, 2, 0, A, 1, B, 2, T, 2, INFO )
-      CALL AB_CHKXER( 'AB_AB_STPLQT2', INFOT, NOUT, LERR, OK )
+      CALL STPLQT2( 2, 2, 0, A, 1, B, 2, T, 2, INFO )
+      CALL CHKXER( 'STPLQT2', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL AB_AB_STPLQT2( 2, 2, 0, A, 2, B, 1, T, 2, INFO )
-      CALL AB_CHKXER( 'AB_AB_STPLQT2', INFOT, NOUT, LERR, OK )
+      CALL STPLQT2( 2, 2, 0, A, 2, B, 1, T, 2, INFO )
+      CALL CHKXER( 'STPLQT2', INFOT, NOUT, LERR, OK )
       INFOT = 9
-      CALL AB_AB_STPLQT2( 2, 2, 0, A, 2, B, 2, T, 1, INFO )
-      CALL AB_CHKXER( 'AB_AB_STPLQT2', INFOT, NOUT, LERR, OK )
+      CALL STPLQT2( 2, 2, 0, A, 2, B, 2, T, 1, INFO )
+      CALL CHKXER( 'STPLQT2', INFOT, NOUT, LERR, OK )
 *
-*     AB_STPMLQT
+*     STPMLQT
 *
-      SRNAMT = 'AB_STPMLQT'
+      SRNAMT = 'STPMLQT'
       INFOT = 1
-      CALL AB_STPMLQT( '/', 'N', 0, 0, 0, 0, 1, A, 1, T, 1, B, 1, C, 1,
+      CALL STPMLQT( '/', 'N', 0, 0, 0, 0, 1, A, 1, T, 1, B, 1, C, 1,
      $              W, INFO )
-      CALL AB_CHKXER( 'AB_STPMLQT', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'STPMLQT', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_STPMLQT( 'L', '/', 0, 0, 0, 0, 1, A, 1, T, 1, B, 1, C, 1,
+      CALL STPMLQT( 'L', '/', 0, 0, 0, 0, 1, A, 1, T, 1, B, 1, C, 1,
      $              W, INFO )
-      CALL AB_CHKXER( 'AB_STPMLQT', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'STPMLQT', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL AB_STPMLQT( 'L', 'N', -1, 0, 0, 0, 1, A, 1, T, 1, B, 1, C, 1,
+      CALL STPMLQT( 'L', 'N', -1, 0, 0, 0, 1, A, 1, T, 1, B, 1, C, 1,
      $              W, INFO )
-      CALL AB_CHKXER( 'AB_STPMLQT', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'STPMLQT', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL AB_STPMLQT( 'L', 'N', 0, -1, 0, 0, 1, A, 1, T, 1, B, 1, C, 1,
+      CALL STPMLQT( 'L', 'N', 0, -1, 0, 0, 1, A, 1, T, 1, B, 1, C, 1,
      $              W, INFO )
-      CALL AB_CHKXER( 'AB_STPMLQT', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'STPMLQT', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL AB_STPMLQT( 'L', 'N', 0, 0, -1, 0, 1, A, 1, T, 1, B, 1, C, 1,
+      CALL STPMLQT( 'L', 'N', 0, 0, -1, 0, 1, A, 1, T, 1, B, 1, C, 1,
      $              W, INFO )
       INFOT = 6
-      CALL AB_STPMLQT( 'L', 'N', 0, 0, 0, -1, 1, A, 1, T, 1, B, 1, C, 1,
+      CALL STPMLQT( 'L', 'N', 0, 0, 0, -1, 1, A, 1, T, 1, B, 1, C, 1,
      $              W, INFO )
-      CALL AB_CHKXER( 'AB_STPMLQT', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'STPMLQT', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL AB_STPMLQT( 'L', 'N', 0, 0, 0, 0, 0, A, 1, T, 1, B, 1, C, 1,
+      CALL STPMLQT( 'L', 'N', 0, 0, 0, 0, 0, A, 1, T, 1, B, 1, C, 1,
      $              W, INFO )
-      CALL AB_CHKXER( 'AB_STPMLQT', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'STPMLQT', INFOT, NOUT, LERR, OK )
       INFOT = 9
-      CALL AB_STPMLQT( 'R', 'N', 2, 2, 2, 1, 1, A, 1, T, 1, B, 1, C, 1,
+      CALL STPMLQT( 'R', 'N', 2, 2, 2, 1, 1, A, 1, T, 1, B, 1, C, 1,
      $              W, INFO )
-      CALL AB_CHKXER( 'AB_STPMLQT', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'STPMLQT', INFOT, NOUT, LERR, OK )
       INFOT = 11
-      CALL AB_STPMLQT( 'R', 'N', 1, 1, 1, 1, 1, A, 1, T, 0, B, 1, C, 1,
+      CALL STPMLQT( 'R', 'N', 1, 1, 1, 1, 1, A, 1, T, 0, B, 1, C, 1,
      $              W, INFO )
-      CALL AB_CHKXER( 'AB_STPMLQT', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'STPMLQT', INFOT, NOUT, LERR, OK )
       INFOT = 13
-      CALL AB_STPMLQT( 'L', 'N', 1, 1, 1, 1, 1, A, 1, T, 1, B, 0, C, 1,
+      CALL STPMLQT( 'L', 'N', 1, 1, 1, 1, 1, A, 1, T, 1, B, 0, C, 1,
      $              W, INFO )
-      CALL AB_CHKXER( 'AB_STPMLQT', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'STPMLQT', INFOT, NOUT, LERR, OK )
       INFOT = 15
-      CALL AB_STPMLQT( 'L', 'N', 1, 1, 1, 1, 1, A, 1, T, 1, B, 1, C, 0,
+      CALL STPMLQT( 'L', 'N', 1, 1, 1, 1, 1, A, 1, T, 1, B, 1, C, 0,
      $              W, INFO )
-      CALL AB_CHKXER( 'AB_STPMLQT', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'STPMLQT', INFOT, NOUT, LERR, OK )
 *
 *     Print a summary line.
 *
-      CALL AB_ALAESM( PATH, OK, NOUT )
+      CALL ALAESM( PATH, OK, NOUT )
 *
       RETURN
 *
-*     End of AB_AB_SERRLQT
+*     End of SERRLQT
 *
       END

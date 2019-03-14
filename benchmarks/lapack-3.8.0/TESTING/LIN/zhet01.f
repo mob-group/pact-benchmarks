@@ -1,4 +1,4 @@
-*> \brief \b AB_ZHET01
+*> \brief \b ZHET01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZHET01( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C, LDC,
+*       SUBROUTINE ZHET01( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C, LDC,
 *                          RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -28,7 +28,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZHET01 reconstructs a Hermitian indefinite matrix A from its
+*> ZHET01 reconstructs a Hermitian indefinite matrix A from its
 *> block L*D*L' or U*D*U' factorization and computes the residual
 *>    norm( C - A ) / ( N * norm(A) * EPS ),
 *> where C is the reconstructed matrix, EPS is the machine epsilon,
@@ -72,7 +72,7 @@
 *>          The factored form of the matrix A.  AFAC contains the block
 *>          diagonal matrix D and the multipliers used to obtain the
 *>          factor L or U from the block L*D*L' or U*D*U' factorization
-*>          as computed by AB_ZHETRF.
+*>          as computed by ZHETRF.
 *> \endverbatim
 *>
 *> \param[in] LDAFAC
@@ -84,7 +84,7 @@
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          The pivot indices from AB_ZHETRF.
+*>          The pivot indices from ZHETRF.
 *> \endverbatim
 *>
 *> \param[out] C
@@ -123,7 +123,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZHET01( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C, LDC,
+      SUBROUTINE ZHET01( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C, LDC,
      $                   RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.5.0) --
@@ -156,12 +156,12 @@
       DOUBLE PRECISION   ANORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANHE
-      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_ZLANHE
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH, ZLANHE
+      EXTERNAL           LSAME, DLAMCH, ZLANHE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZLASET, AB_ZLAVHE
+      EXTERNAL           ZLASET, ZLAVHE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DIMAG
@@ -177,8 +177,8 @@
 *
 *     Determine EPS and the norm of A.
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
-      ANORM = AB_ZLANHE( '1', UPLO, N, A, LDA, RWORK )
+      EPS = DLAMCH( 'Epsilon' )
+      ANORM = ZLANHE( '1', UPLO, N, A, LDA, RWORK )
 *
 *     Check the imaginary parts of the diagonal elements and return with
 *     an error code if any are nonzero.
@@ -192,21 +192,21 @@
 *
 *     Initialize C to the identity matrix.
 *
-      CALL AB_ZLASET( 'Full', N, N, CZERO, CONE, C, LDC )
+      CALL ZLASET( 'Full', N, N, CZERO, CONE, C, LDC )
 *
-*     Call AB_ZLAVHE to form the product D * U' (or D * L' ).
+*     Call ZLAVHE to form the product D * U' (or D * L' ).
 *
-      CALL AB_ZLAVHE( UPLO, 'Conjugate', 'Non-unit', N, N, AFAC, LDAFAC,
+      CALL ZLAVHE( UPLO, 'Conjugate', 'Non-unit', N, N, AFAC, LDAFAC,
      $             IPIV, C, LDC, INFO )
 *
-*     Call AB_ZLAVHE again to multiply by U (or L ).
+*     Call ZLAVHE again to multiply by U (or L ).
 *
-      CALL AB_ZLAVHE( UPLO, 'No transpose', 'Unit', N, N, AFAC, LDAFAC,
+      CALL ZLAVHE( UPLO, 'No transpose', 'Unit', N, N, AFAC, LDAFAC,
      $             IPIV, C, LDC, INFO )
 *
 *     Compute the difference  C - A .
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
          DO 30 J = 1, N
             DO 20 I = 1, J - 1
                C( I, J ) = C( I, J ) - A( I, J )
@@ -224,7 +224,7 @@
 *
 *     Compute norm( C - A ) / ( N * norm(A) * EPS )
 *
-      RESID = AB_ZLANHE( '1', UPLO, N, C, LDC, RWORK )
+      RESID = ZLANHE( '1', UPLO, N, C, LDC, RWORK )
 *
       IF( ANORM.LE.ZERO ) THEN
          IF( RESID.NE.ZERO )
@@ -235,6 +235,6 @@
 *
       RETURN
 *
-*     End of AB_ZHET01
+*     End of ZHET01
 *
       END

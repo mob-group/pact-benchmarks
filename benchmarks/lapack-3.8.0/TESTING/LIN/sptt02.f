@@ -1,4 +1,4 @@
-*> \brief \b AB_SPTT02
+*> \brief \b SPTT02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SPTT02( N, NRHS, D, E, X, LDX, B, LDB, RESID )
+*       SUBROUTINE SPTT02( N, NRHS, D, E, X, LDX, B, LDB, RESID )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDB, LDX, N, NRHS
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SPTT02 computes the residual for the solution to a symmetric
+*> SPTT02 computes the residual for the solution to a symmetric
 *> tridiagonal system of equations:
 *>    RESID = norm(B - A*X) / (norm(A) * norm(X) * EPS),
 *> where EPS is the machine epsilon.
@@ -102,7 +102,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_SPTT02( N, NRHS, D, E, X, LDX, B, LDB, RESID )
+      SUBROUTINE SPTT02( N, NRHS, D, E, X, LDX, B, LDB, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -128,14 +128,14 @@
       REAL               ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      REAL               AB_SASUM, AB_SLAMCH, AB_SLANST
-      EXTERNAL           AB_SASUM, AB_SLAMCH, AB_SLANST
+      REAL               SASUM, SLAMCH, SLANST
+      EXTERNAL           SASUM, SLAMCH, SLANST
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SLAPTM
+      EXTERNAL           SLAPTM
 *     ..
 *     .. Executable Statements ..
 *
@@ -148,11 +148,11 @@
 *
 *     Compute the 1-norm of the tridiagonal matrix A.
 *
-      ANORM = AB_SLANST( '1', N, D, E )
+      ANORM = SLANST( '1', N, D, E )
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = AB_SLAMCH( 'Epsilon' )
+      EPS = SLAMCH( 'Epsilon' )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -160,15 +160,15 @@
 *
 *     Compute B - A*X.
 *
-      CALL AB_SLAPTM( N, NRHS, -ONE, D, E, X, LDX, ONE, B, LDB )
+      CALL SLAPTM( N, NRHS, -ONE, D, E, X, LDX, ONE, B, LDB )
 *
 *     Compute the maximum over the number of right hand sides of
 *        norm(B - A*X) / ( norm(A) * norm(X) * EPS ).
 *
       RESID = ZERO
       DO 10 J = 1, NRHS
-         BNORM = AB_SASUM( N, B( 1, J ), 1 )
-         XNORM = AB_SASUM( N, X( 1, J ), 1 )
+         BNORM = SASUM( N, B( 1, J ), 1 )
+         XNORM = SASUM( N, X( 1, J ), 1 )
          IF( XNORM.LE.ZERO ) THEN
             RESID = ONE / EPS
          ELSE
@@ -178,6 +178,6 @@
 *
       RETURN
 *
-*     End of AB_SPTT02
+*     End of SPTT02
 *
       END

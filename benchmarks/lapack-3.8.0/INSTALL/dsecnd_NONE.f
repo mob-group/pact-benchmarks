@@ -1,4 +1,4 @@
-*> \brief \b AB_DSECND returns nothing
+*> \brief \b DSECND returns nothing
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*      DOUBLE PRECISION FUNCTION AB_DSECND( )
+*      DOUBLE PRECISION FUNCTION DSECND( )
 *
 *
 *> \par Purpose:
@@ -16,7 +16,7 @@
 *>
 *> \verbatim
 *>
-*>  AB_DSECND returns nothing instead of returning the user time for a process in AB_SECONDs.
+*>  DSECND returns nothing instead of returning the user time for a process in seconds.
 *>  If you are using that routine, it means that neither EXTERNAL ETIME,
 *>  EXTERNAL ETIME_, INTERNAL ETIME, INTERNAL CPU_TIME is available  on
 *>  your machine.
@@ -35,7 +35,7 @@
 *> \ingroup auxOTHERauxiliary
 *
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION AB_DSECND( )
+      DOUBLE PRECISION FUNCTION DSECND( )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -44,9 +44,9 @@
 *
 * =====================================================================
 *
-      AB_DSECND = 0.0D+0
+      DSECND = 0.0D+0
       RETURN
 *
-*     End of AB_DSECND
+*     End of DSECND
 *
       END

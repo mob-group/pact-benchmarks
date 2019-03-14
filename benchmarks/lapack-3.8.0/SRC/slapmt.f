@@ -1,4 +1,4 @@
-*> \brief \b AB_SLAPMT performs a forward or backward permutation of the columns of a matrix.
+*> \brief \b SLAPMT performs a forward or backward permutation of the columns of a matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLAPMT + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLAPMT.f">
+*> Download SLAPMT + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slapmt.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLAPMT.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slapmt.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLAPMT.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slapmt.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLAPMT( FORWRD, M, N, X, LDX, K )
+*       SUBROUTINE SLAPMT( FORWRD, M, N, X, LDX, K )
 *
 *       .. Scalar Arguments ..
 *       LOGICAL            FORWRD
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SLAPMT rearranges the columns of the M by N matrix X as specified
+*> SLAPMT rearranges the columns of the M by N matrix X as specified
 *> by the permutation K(1),K(2),...,K(N) of the integers 1,...,N.
 *> If FORWRD = .TRUE.,  forward permutation:
 *>
@@ -102,7 +102,7 @@
 *> \ingroup realOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_SLAPMT( FORWRD, M, N, X, LDX, K )
+      SUBROUTINE SLAPMT( FORWRD, M, N, X, LDX, K )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -198,6 +198,6 @@
 *
       RETURN
 *
-*     End of AB_SLAPMT
+*     End of SLAPMT
 *
       END

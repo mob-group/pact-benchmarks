@@ -1,4 +1,4 @@
-*> \brief \b AB_SGTTRF
+*> \brief \b SGTTRF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SGTTRF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SGTTRF.f">
+*> Download SGTTRF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgttrf.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SGTTRF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgttrf.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SGTTRF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgttrf.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SGTTRF( N, DL, D, DU, DU2, IPIV, INFO )
+*       SUBROUTINE SGTTRF( N, DL, D, DU, DU2, IPIV, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SGTTRF computes an LU factorization of a real tridiagonal matrix A
+*> SGTTRF computes an LU factorization of a real tridiagonal matrix A
 *> using elimination with partial pivoting and row interchanges.
 *>
 *> The factorization has the form
@@ -86,7 +86,7 @@
 *> \verbatim
 *>          DU2 is REAL array, dimension (N-2)
 *>          On exit, DU2 is overwritten by the (n-2) elements of the
-*>          AB_SECOND super-diagonal of U.
+*>          second super-diagonal of U.
 *> \endverbatim
 *>
 *> \param[out] IPIV
@@ -122,7 +122,7 @@
 *> \ingroup realGTcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_SGTTRF( N, DL, D, DU, DU2, IPIV, INFO )
+      SUBROUTINE SGTTRF( N, DL, D, DU, DU2, IPIV, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -151,14 +151,14 @@
       INTRINSIC          ABS
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA
+      EXTERNAL           XERBLA
 *     ..
 *     .. Executable Statements ..
 *
       INFO = 0
       IF( N.LT.0 ) THEN
          INFO = -1
-         CALL AB_XERBLA( 'AB_SGTTRF', -INFO )
+         CALL XERBLA( 'SGTTRF', -INFO )
          RETURN
       END IF
 *
@@ -232,6 +232,6 @@
 *
       RETURN
 *
-*     End of AB_SGTTRF
+*     End of SGTTRF
 *
       END

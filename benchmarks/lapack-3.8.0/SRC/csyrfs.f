@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_CSYRFS
+*> \brief \b CSYRFS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_CSYRFS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_CSYRFS.f">
+*> Download CSYRFS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csyrfs.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_CSYRFS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/csyrfs.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_CSYRFS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csyrfs.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_CSYRFS( UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV, B, LDB,
+*       SUBROUTINE CSYRFS( UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV, B, LDB,
 *                          X, LDX, FERR, BERR, WORK, RWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -38,7 +38,7 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_CSYRFS improves the computed solution to a system of linear
+*> CSYRFS improves the computed solution to a system of linear
 *> equations when the coefficient matrix is symmetric indefinite, and
 *> provides error bounds and backward error estimates for the solution.
 *> \endverbatim
@@ -90,7 +90,7 @@
 *>          The factored form of the matrix A.  AF contains the block
 *>          diagonal matrix D and the multipliers used to obtain the
 *>          factor U or L from the factorization A = U*D*U**T or
-*>          A = L*D*L**T as computed by AB_CSYTRF.
+*>          A = L*D*L**T as computed by CSYTRF.
 *> \endverbatim
 *>
 *> \param[in] LDAF
@@ -103,7 +103,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D
-*>          as determined by AB_CSYTRF.
+*>          as determined by CSYTRF.
 *> \endverbatim
 *>
 *> \param[in] B
@@ -121,7 +121,7 @@
 *> \param[in,out] X
 *> \verbatim
 *>          X is COMPLEX array, dimension (LDX,NRHS)
-*>          On entry, the solution matrix X, as computed by AB_CSYTRS.
+*>          On entry, the solution matrix X, as computed by CSYTRS.
 *>          On exit, the improved solution matrix X.
 *> \endverbatim
 *>
@@ -189,8 +189,7 @@
 *> \ingroup complexSYcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_CSYRFS( UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV, B,
-     $ LDB,
+      SUBROUTINE CSYRFS( UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV, B, LDB,
      $                   X, LDX, FERR, BERR, WORK, RWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -233,16 +232,15 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CAXPY, AB_CCOPY, AB_CLACN2, AB_CSYMV, AB_CSY
-     $TRS, AB_XERBLA
+      EXTERNAL           CAXPY, CCOPY, CLACN2, CSYMV, CSYTRS, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, REAL
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_SLAMCH
-      EXTERNAL           AB_LSAME, AB_SLAMCH
+      LOGICAL            LSAME
+      REAL               SLAMCH
+      EXTERNAL           LSAME, SLAMCH
 *     ..
 *     .. Statement Functions ..
       REAL               CABS1
@@ -255,8 +253,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -272,7 +270,7 @@
          INFO = -12
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_CSYRFS', -INFO )
+         CALL XERBLA( 'CSYRFS', -INFO )
          RETURN
       END IF
 *
@@ -289,8 +287,8 @@
 *     NZ = maximum number of nonzero elements in each row of A, plus 1
 *
       NZ = N + 1
-      EPS = AB_SLAMCH( 'Epsilon' )
-      SAFMIN = AB_SLAMCH( 'Safe minimum' )
+      EPS = SLAMCH( 'Epsilon' )
+      SAFMIN = SLAMCH( 'Safe minimum' )
       SAFE1 = NZ*SAFMIN
       SAFE2 = SAFE1 / EPS
 *
@@ -306,9 +304,8 @@
 *
 *        Compute residual R = B - A * X
 *
-         CALL AB_CCOPY( N, B( 1, J ), 1, WORK, 1 )
-         CALL AB_CSYMV( UPLO, N, -ONE, A, LDA, X( 1, J ), 1, ONE, WORK, 
-     $1 )
+         CALL CCOPY( N, B( 1, J ), 1, WORK, 1 )
+         CALL CSYMV( UPLO, N, -ONE, A, LDA, X( 1, J ), 1, ONE, WORK, 1 )
 *
 *        Compute componentwise relative backward error from formula
 *
@@ -369,8 +366,8 @@
 *
 *           Update solution and try again.
 *
-            CALL AB_CSYTRS( UPLO, N, 1, AF, LDAF, IPIV, WORK, N, INFO )
-            CALL AB_CAXPY( N, ONE, WORK, 1, X( 1, J ), 1 )
+            CALL CSYTRS( UPLO, N, 1, AF, LDAF, IPIV, WORK, N, INFO )
+            CALL CAXPY( N, ONE, WORK, 1, X( 1, J ), 1 )
             LSTRES = BERR( J )
             COUNT = COUNT + 1
             GO TO 20
@@ -394,7 +391,7 @@
 *        is incremented by SAFE1 if the i-th component of
 *        abs(A)*abs(X) + abs(B) is less than SAFE2.
 *
-*        Use AB_CLACN2 to estimate the infinity-norm of the matrix
+*        Use CLACN2 to estimate the infinity-norm of the matrix
 *           inv(A) * diag(W),
 *        where W = abs(R) + NZ*EPS*( abs(A)*abs(X)+abs(B) )))
 *
@@ -409,14 +406,13 @@
 *
          KASE = 0
   100    CONTINUE
-         CALL AB_CLACN2( N, WORK( N+1 ), WORK, FERR( J ), KASE, ISAVE )
+         CALL CLACN2( N, WORK( N+1 ), WORK, FERR( J ), KASE, ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN
 *
 *              Multiply by diag(W)*inv(A**T).
 *
-               CALL AB_CSYTRS( UPLO, N, 1, AF, LDAF, IPIV, WORK, N, INFO
-     $ )
+               CALL CSYTRS( UPLO, N, 1, AF, LDAF, IPIV, WORK, N, INFO )
                DO 110 I = 1, N
                   WORK( I ) = RWORK( I )*WORK( I )
   110          CONTINUE
@@ -427,8 +423,7 @@
                DO 120 I = 1, N
                   WORK( I ) = RWORK( I )*WORK( I )
   120          CONTINUE
-               CALL AB_CSYTRS( UPLO, N, 1, AF, LDAF, IPIV, WORK, N, INFO
-     $ )
+               CALL CSYTRS( UPLO, N, 1, AF, LDAF, IPIV, WORK, N, INFO )
             END IF
             GO TO 100
          END IF
@@ -446,6 +441,6 @@
 *
       RETURN
 *
-*     End of AB_AB_CSYRFS
+*     End of CSYRFS
 *
       END

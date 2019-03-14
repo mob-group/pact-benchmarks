@@ -1,4 +1,4 @@
-*> \brief \b AB_DQRT15
+*> \brief \b DQRT15
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DQRT15( SCALE, RKSEL, M, N, NRHS, A, LDA, B, LDB, S,
+*       SUBROUTINE DQRT15( SCALE, RKSEL, M, N, NRHS, A, LDA, B, LDB, S,
 *                          RANK, NORMA, NORMB, ISEED, WORK, LWORK )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DQRT15 generates a matrix with full or deficient rank and of various
+*> DQRT15 generates a matrix with full or deficient rank and of various
 *> norms.
 *> \endverbatim
 *
@@ -145,7 +145,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_DQRT15( SCALE, RKSEL, M, N, NRHS, A, LDA, B, LDB, S,
+      SUBROUTINE DQRT15( SCALE, RKSEL, M, N, NRHS, A, LDA, B, LDB, S,
      $                   RANK, NORMA, NORMB, ISEED, WORK, LWORK )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -177,15 +177,12 @@
       DOUBLE PRECISION   DUMMY( 1 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DASUM, AB_DLAMCH, AB_DLANGE, AB_DLARND, AB_D
-     $NRM2
-      EXTERNAL           AB_DASUM, AB_DLAMCH, AB_DLANGE, AB_DLARND, AB_D
-     $NRM2
+      DOUBLE PRECISION   DASUM, DLAMCH, DLANGE, DLARND, DNRM2
+      EXTERNAL           DASUM, DLAMCH, DLANGE, DLARND, DNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DGEMM, AB_DLAORD, AB_DLARF, AB_DLARNV, AB_DL
-     $AROR, AB_DLASCL,
-     $                   AB_DLASET, AB_DSCAL, AB_XERBLA
+      EXTERNAL           DGEMM, DLAORD, DLARF, DLARNV, DLAROR, DLASCL,
+     $                   DLASET, DSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -194,13 +191,13 @@
 *
       MN = MIN( M, N )
       IF( LWORK.LT.MAX( M+MN, MN*NRHS, 2*N+M ) ) THEN
-         CALL AB_XERBLA( 'AB_DQRT15', 16 )
+         CALL XERBLA( 'DQRT15', 16 )
          RETURN
       END IF
 *
-      SMLNUM = AB_DLAMCH( 'Safe minimum' )
+      SMLNUM = DLAMCH( 'Safe minimum' )
       BIGNUM = ONE / SMLNUM
-      EPS = AB_DLAMCH( 'Epsilon' )
+      EPS = DLAMCH( 'Epsilon' )
       SMLNUM = ( SMLNUM / EPS ) / EPS
       BIGNUM = ONE / SMLNUM
 *
@@ -214,7 +211,7 @@
             S( J ) = ZERO
    10    CONTINUE
       ELSE
-         CALL AB_XERBLA( 'AB_DQRT15', 2 )
+         CALL XERBLA( 'DQRT15', 2 )
       END IF
 *
       IF( RANK.GT.0 ) THEN
@@ -224,30 +221,29 @@
          S( 1 ) = ONE
          DO 30 J = 2, RANK
    20       CONTINUE
-            TEMP = AB_DLARND( 1, ISEED )
+            TEMP = DLARND( 1, ISEED )
             IF( TEMP.GT.SVMIN ) THEN
                S( J ) = ABS( TEMP )
             ELSE
                GO TO 20
             END IF
    30    CONTINUE
-         CALL AB_DLAORD( 'Decreasing', RANK, S, 1 )
+         CALL DLAORD( 'Decreasing', RANK, S, 1 )
 *
 *        Generate 'rank' columns of a random orthogonal matrix in A
 *
-         CALL AB_DLARNV( 2, ISEED, M, WORK )
-         CALL AB_DSCAL( M, ONE / AB_DNRM2( M, WORK, 1 ), WORK, 1 )
-         CALL AB_DLASET( 'Full', M, RANK, ZERO, ONE, A, LDA )
-         CALL AB_DLARF( 'Left', M, RANK, WORK, 1, TWO, A, LDA,
+         CALL DLARNV( 2, ISEED, M, WORK )
+         CALL DSCAL( M, ONE / DNRM2( M, WORK, 1 ), WORK, 1 )
+         CALL DLASET( 'Full', M, RANK, ZERO, ONE, A, LDA )
+         CALL DLARF( 'Left', M, RANK, WORK, 1, TWO, A, LDA,
      $               WORK( M+1 ) )
 *
 *        workspace used: m+mn
 *
 *        Generate consistent rhs in the range space of A
 *
-         CALL AB_DLARNV( 2, ISEED, RANK*NRHS, WORK )
-         CALL AB_DGEMM( 'No transpose', 'No transpose', M, NRHS, RANK, O
-     $NE,
+         CALL DLARNV( 2, ISEED, RANK*NRHS, WORK )
+         CALL DGEMM( 'No transpose', 'No transpose', M, NRHS, RANK, ONE,
      $               A, LDA, WORK, RANK, ZERO, B, LDB )
 *
 *        work space used: <= mn *nrhs
@@ -255,14 +251,12 @@
 *        generate (unscaled) matrix A
 *
          DO 40 J = 1, RANK
-            CALL AB_DSCAL( M, S( J ), A( 1, J ), 1 )
+            CALL DSCAL( M, S( J ), A( 1, J ), 1 )
    40    CONTINUE
          IF( RANK.LT.N )
-     $      CALL AB_DLASET( 'Full', M, N-RANK, ZERO, ZERO, A( 1, RANK+1 
-     $),
+     $      CALL DLASET( 'Full', M, N-RANK, ZERO, ZERO, A( 1, RANK+1 ),
      $                   LDA )
-         CALL AB_DLAROR( 'Right', 'No initialization', M, N, A, LDA, ISE
-     $ED,
+         CALL DLAROR( 'Right', 'No initialization', M, N, A, LDA, ISEED,
      $                WORK, INFO )
 *
       ELSE
@@ -274,50 +268,48 @@
          DO 50 J = 1, MN
             S( J ) = ZERO
    50    CONTINUE
-         CALL AB_DLASET( 'Full', M, N, ZERO, ZERO, A, LDA )
-         CALL AB_DLASET( 'Full', M, NRHS, ZERO, ZERO, B, LDB )
+         CALL DLASET( 'Full', M, N, ZERO, ZERO, A, LDA )
+         CALL DLASET( 'Full', M, NRHS, ZERO, ZERO, B, LDB )
 *
       END IF
 *
 *     Scale the matrix
 *
       IF( SCALE.NE.1 ) THEN
-         NORMA = AB_DLANGE( 'Max', M, N, A, LDA, DUMMY )
+         NORMA = DLANGE( 'Max', M, N, A, LDA, DUMMY )
          IF( NORMA.NE.ZERO ) THEN
             IF( SCALE.EQ.2 ) THEN
 *
 *              matrix scaled up
 *
-               CALL AB_DLASCL( 'General', 0, 0, NORMA, BIGNUM, M, N, A,
+               CALL DLASCL( 'General', 0, 0, NORMA, BIGNUM, M, N, A,
      $                      LDA, INFO )
-               CALL AB_DLASCL( 'General', 0, 0, NORMA, BIGNUM, MN, 1, S,
+               CALL DLASCL( 'General', 0, 0, NORMA, BIGNUM, MN, 1, S,
      $                      MN, INFO )
-               CALL AB_DLASCL( 'General', 0, 0, NORMA, BIGNUM, M, NRHS, 
-     $B,
+               CALL DLASCL( 'General', 0, 0, NORMA, BIGNUM, M, NRHS, B,
      $                      LDB, INFO )
             ELSE IF( SCALE.EQ.3 ) THEN
 *
 *              matrix scaled down
 *
-               CALL AB_DLASCL( 'General', 0, 0, NORMA, SMLNUM, M, N, A,
+               CALL DLASCL( 'General', 0, 0, NORMA, SMLNUM, M, N, A,
      $                      LDA, INFO )
-               CALL AB_DLASCL( 'General', 0, 0, NORMA, SMLNUM, MN, 1, S,
+               CALL DLASCL( 'General', 0, 0, NORMA, SMLNUM, MN, 1, S,
      $                      MN, INFO )
-               CALL AB_DLASCL( 'General', 0, 0, NORMA, SMLNUM, M, NRHS, 
-     $B,
+               CALL DLASCL( 'General', 0, 0, NORMA, SMLNUM, M, NRHS, B,
      $                      LDB, INFO )
             ELSE
-               CALL AB_XERBLA( 'AB_DQRT15', 1 )
+               CALL XERBLA( 'DQRT15', 1 )
                RETURN
             END IF
          END IF
       END IF
 *
-      NORMA = AB_DASUM( MN, S, 1 )
-      NORMB = AB_DLANGE( 'One-norm', M, NRHS, B, LDB, DUMMY )
+      NORMA = DASUM( MN, S, 1 )
+      NORMB = DLANGE( 'One-norm', M, NRHS, B, LDB, DUMMY )
 *
       RETURN
 *
-*     End of AB_DQRT15
+*     End of DQRT15
 *
       END

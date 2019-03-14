@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLATMT
+*> \brief \b ZLATMT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZLATMT( M, N, DIST, ISEED, SYM, D, MODE, COND, DMAX,
+*       SUBROUTINE ZLATMT( M, N, DIST, ISEED, SYM, D, MODE, COND, DMAX,
 *                          RANK, KL, KU, PACK, A, LDA, WORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -28,11 +28,11 @@
 *>
 *> \verbatim
 *>
-*>    AB_ZLATMT generates random matrices with specified singular values
+*>    ZLATMT generates random matrices with specified singular values
 *>    (or hermitian with specified eigenvalues)
 *>    for testing LAPACK programs.
 *>
-*>    AB_ZLATMT operates by applying the following sequence of
+*>    ZLATMT operates by applying the following sequence of
 *>    operations:
 *>
 *>      Set the diagonal to D, where D may be input or
@@ -47,7 +47,7 @@
 *>              and the right by random unitary matrices, then:
 *>
 *>          Reduce the bandwidth according to KL and KU, using
-*>              HousehoAB_LDEr transformations.
+*>              Householder transformations.
 *>
 *>      Method B:
 *>          Convert the bandwidth-0 (i.e., diagonal) matrix to a
@@ -121,7 +121,7 @@
 *>           uses a linear congruential sequence limited to small
 *>           integers, and so should produce machine independent
 *>           random numbers. The values of ISEED are changed on
-*>           exit, and can be used in the next call to AB_ZLATMT
+*>           exit, and can be used in the next call to ZLATMT
 *>           to continue the same random number sequence.
 *>           Changed on exit.
 *> \endverbatim
@@ -259,7 +259,7 @@
 *>           PB, SB, HB, or TB     - use 'B' or 'Q'
 *>           PP, SP, HB, or TP     - use 'C' or 'R'
 *>
-*>           If two calls to AB_ZLATMT differ only in the PACK parameter,
+*>           If two calls to ZLATMT differ only in the PACK parameter,
 *>           they will generate mathematically equivalent matrices.
 *>           Not modified.
 *> \endverbatim
@@ -319,9 +319,9 @@
 *>                  N.
 *>           -14 => LDA is less than M, or PACK='Z' and LDA is less than
 *>                  MIN(KU,N-1) + MIN(KL,M-1) + 1.
-*>            1  => Error return from AB_DLATM7
+*>            1  => Error return from DLATM7
 *>            2  => Cannot scale to DMAX (max. sing. value is 0)
-*>            3  => Error return from AB_ZLAGGE, AB_ZLAGHE or AB_ZLAGSY
+*>            3  => Error return from ZLAGGE, ZLAGHE or ZLAGSY
 *> \endverbatim
 *
 *  Authors:
@@ -337,7 +337,7 @@
 *> \ingroup complex16_matgen
 *
 *  =====================================================================
-      SUBROUTINE AB_ZLATMT( M, N, DIST, ISEED, SYM, D, MODE, COND, DMAX,
+      SUBROUTINE ZLATMT( M, N, DIST, ISEED, SYM, D, MODE, COND, DMAX,
      $                   RANK, KL, KU, PACK, A, LDA, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -379,15 +379,14 @@
       LOGICAL            CSYM, GIVENS, ILEXTR, ILTEMP, TOPDWN
 *     ..
 *     .. External Functions ..
-      COMPLEX*16         AB_ZLARND
-      DOUBLE PRECISION   AB_DLARND
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_ZLARND, AB_DLARND, AB_LSAME
+      COMPLEX*16         ZLARND
+      DOUBLE PRECISION   DLARND
+      LOGICAL            LSAME
+      EXTERNAL           ZLARND, DLARND, LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLATM7, AB_DSCAL, AB_XERBLA, AB_ZLAGGE, AB_Z
-     $LAGHE,
-     $                   AB_ZLAGSY, AB_ZLAROT, AB_ZLARTG, AB_ZLASET
+      EXTERNAL           DLATM7, DSCAL, XERBLA, ZLAGGE, ZLAGHE,
+     $                   ZLAGSY, ZLAROT, ZLARTG, ZLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, COS, DBLE, DCMPLX, DCONJG, MAX, MIN, MOD,
@@ -407,11 +406,11 @@
 *
 *     Decode DIST
 *
-      IF( AB_LSAME( DIST, 'U' ) ) THEN
+      IF( LSAME( DIST, 'U' ) ) THEN
          IDIST = 1
-      ELSE IF( AB_LSAME( DIST, 'S' ) ) THEN
+      ELSE IF( LSAME( DIST, 'S' ) ) THEN
          IDIST = 2
-      ELSE IF( AB_LSAME( DIST, 'N' ) ) THEN
+      ELSE IF( LSAME( DIST, 'N' ) ) THEN
          IDIST = 3
       ELSE
          IDIST = -1
@@ -419,19 +418,19 @@
 *
 *     Decode SYM
 *
-      IF( AB_LSAME( SYM, 'N' ) ) THEN
+      IF( LSAME( SYM, 'N' ) ) THEN
          ISYM = 1
          IRSIGN = 0
          CSYM = .FALSE.
-      ELSE IF( AB_LSAME( SYM, 'P' ) ) THEN
+      ELSE IF( LSAME( SYM, 'P' ) ) THEN
          ISYM = 2
          IRSIGN = 0
          CSYM = .FALSE.
-      ELSE IF( AB_LSAME( SYM, 'S' ) ) THEN
+      ELSE IF( LSAME( SYM, 'S' ) ) THEN
          ISYM = 2
          IRSIGN = 0
          CSYM = .TRUE.
-      ELSE IF( AB_LSAME( SYM, 'H' ) ) THEN
+      ELSE IF( LSAME( SYM, 'H' ) ) THEN
          ISYM = 2
          IRSIGN = 1
          CSYM = .FALSE.
@@ -442,27 +441,27 @@
 *     Decode PACK
 *
       ISYMPK = 0
-      IF( AB_LSAME( PACK, 'N' ) ) THEN
+      IF( LSAME( PACK, 'N' ) ) THEN
          IPACK = 0
-      ELSE IF( AB_LSAME( PACK, 'U' ) ) THEN
+      ELSE IF( LSAME( PACK, 'U' ) ) THEN
          IPACK = 1
          ISYMPK = 1
-      ELSE IF( AB_LSAME( PACK, 'L' ) ) THEN
+      ELSE IF( LSAME( PACK, 'L' ) ) THEN
          IPACK = 2
          ISYMPK = 1
-      ELSE IF( AB_LSAME( PACK, 'C' ) ) THEN
+      ELSE IF( LSAME( PACK, 'C' ) ) THEN
          IPACK = 3
          ISYMPK = 2
-      ELSE IF( AB_LSAME( PACK, 'R' ) ) THEN
+      ELSE IF( LSAME( PACK, 'R' ) ) THEN
          IPACK = 4
          ISYMPK = 3
-      ELSE IF( AB_LSAME( PACK, 'B' ) ) THEN
+      ELSE IF( LSAME( PACK, 'B' ) ) THEN
          IPACK = 5
          ISYMPK = 3
-      ELSE IF( AB_LSAME( PACK, 'Q' ) ) THEN
+      ELSE IF( LSAME( PACK, 'Q' ) ) THEN
          IPACK = 6
          ISYMPK = 2
-      ELSE IF( AB_LSAME( PACK, 'Z' ) ) THEN
+      ELSE IF( LSAME( PACK, 'Z' ) ) THEN
          IPACK = 7
       ELSE
          IPACK = -1
@@ -512,8 +511,7 @@
          INFO = -5
       ELSE IF( ABS( MODE ).GT.6 ) THEN
          INFO = -7
-      ELSE IF( ( MODE.NE.0 .AND. ABS( MODE ).NE.6 ) .AND. COND.LT.ONE
-     $ )
+      ELSE IF( ( MODE.NE.0 .AND. ABS( MODE ).NE.6 ) .AND. COND.LT.ONE )
      $         THEN
          INFO = -8
       ELSE IF( KL.LT.0 ) THEN
@@ -530,7 +528,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZLATMT', -INFO )
+         CALL XERBLA( 'ZLATMT', -INFO )
          RETURN
       END IF
 *
@@ -547,7 +545,7 @@
 *
 *             Compute D according to COND and MODE
 *
-      CALL AB_DLATM7( MODE, COND, IRSIGN, IDIST, ISEED, D, MNMIN, RANK,
+      CALL DLATM7( MODE, COND, IRSIGN, IDIST, ISEED, D, MNMIN, RANK,
      $             IINFO )
       IF( IINFO.NE.0 ) THEN
          INFO = 1
@@ -579,11 +577,11 @@
             RETURN
          END IF
 *
-         CALL AB_DSCAL( RANK, ALPHA, D, 1 )
+         CALL DSCAL( RANK, ALPHA, D, 1 )
 *
       END IF
 *
-      CALL AB_ZLASET( 'Full', LDA, N, CZERO, CZERO, A, LDA )
+      CALL ZLASET( 'Full', LDA, N, CZERO, CZERO, A, LDA )
 *
 *     3)      Generate Banded Matrix using Givens rotations.
 *             Also the special case of UUB=LLB=0
@@ -628,7 +626,7 @@
       ELSE IF( GIVENS ) THEN
 *
 *        Check whether to use Givens rotations,
-*        HousehoAB_LDEr transformations, or nothing.
+*        Householder transformations, or nothing.
 *
          IF( ISYM.EQ.1 ) THEN
 *
@@ -655,14 +653,13 @@
 *
                   DO 150 JR = 1, MIN( M+JKU, N ) + JKL - 1
                      EXTRA = CZERO
-                     ANGLE = TWOPI*AB_DLARND( 1, ISEED )
-                     C = COS( ANGLE )*AB_ZLARND( 5, ISEED )
-                     S = SIN( ANGLE )*AB_ZLARND( 5, ISEED )
+                     ANGLE = TWOPI*DLARND( 1, ISEED )
+                     C = COS( ANGLE )*ZLARND( 5, ISEED )
+                     S = SIN( ANGLE )*ZLARND( 5, ISEED )
                      ICOL = MAX( 1, JR-JKL )
                      IF( JR.LT.M ) THEN
                         IL = MIN( N, JR+JKU ) + 1 - ICOL
-                        CALL AB_ZLAROT( .TRUE., JR.GT.JKL, .FALSE., I
-     $L, C,
+                        CALL ZLAROT( .TRUE., JR.GT.JKL, .FALSE., IL, C,
      $                               S, A( JR-ISKEW*ICOL+IOFFST, ICOL ),
      $                               ILDA, EXTRA, DUMMY )
                      END IF
@@ -673,10 +670,9 @@
                      IC = ICOL
                      DO 140 JCH = JR - JKL, 1, -JKL - JKU
                         IF( IR.LT.M ) THEN
-                           CALL AB_ZLARTG( A( IR+1-ISKEW*( IC+1 )+IOFFST
-     $,
+                           CALL ZLARTG( A( IR+1-ISKEW*( IC+1 )+IOFFST,
      $                                  IC+1 ), EXTRA, REALC, S, DUMMY )
-                           DUMMY = AB_DLARND( 5, ISEED )
+                           DUMMY = DLARND( 5, ISEED )
                            C = DCONJG( REALC*DUMMY )
                            S = DCONJG( -S*DUMMY )
                         END IF
@@ -684,23 +680,20 @@
                         IL = IR + 2 - IROW
                         ZTEMP = CZERO
                         ILTEMP = JCH.GT.JKU
-                        CALL AB_ZLAROT( .FALSE., ILTEMP, .TRUE., IL, 
-     $C, S,
+                        CALL ZLAROT( .FALSE., ILTEMP, .TRUE., IL, C, S,
      $                               A( IROW-ISKEW*IC+IOFFST, IC ),
      $                               ILDA, ZTEMP, EXTRA )
                         IF( ILTEMP ) THEN
-                           CALL AB_ZLARTG( A( IROW+1-ISKEW*( IC+1 )+IOFF
-     $ST,
+                           CALL ZLARTG( A( IROW+1-ISKEW*( IC+1 )+IOFFST,
      $                                  IC+1 ), ZTEMP, REALC, S, DUMMY )
-                           DUMMY = AB_ZLARND( 5, ISEED )
+                           DUMMY = ZLARND( 5, ISEED )
                            C = DCONJG( REALC*DUMMY )
                            S = DCONJG( -S*DUMMY )
 *
                            ICOL = MAX( 1, JCH-JKU-JKL )
                            IL = IC + 2 - ICOL
                            EXTRA = CZERO
-                           CALL AB_ZLAROT( .TRUE., JCH.GT.JKU+JKL, .TRUE
-     $.,
+                           CALL ZLAROT( .TRUE., JCH.GT.JKU+JKL, .TRUE.,
      $                                  IL, C, S, A( IROW-ISKEW*ICOL+
      $                                  IOFFST, ICOL ), ILDA, EXTRA,
      $                                  ZTEMP )
@@ -718,14 +711,13 @@
 *
                   DO 180 JC = 1, MIN( N+JKL, M ) + JKU - 1
                      EXTRA = CZERO
-                     ANGLE = TWOPI*AB_DLARND( 1, ISEED )
-                     C = COS( ANGLE )*AB_ZLARND( 5, ISEED )
-                     S = SIN( ANGLE )*AB_ZLARND( 5, ISEED )
+                     ANGLE = TWOPI*DLARND( 1, ISEED )
+                     C = COS( ANGLE )*ZLARND( 5, ISEED )
+                     S = SIN( ANGLE )*ZLARND( 5, ISEED )
                      IROW = MAX( 1, JC-JKU )
                      IF( JC.LT.N ) THEN
                         IL = MIN( M, JC+JKL ) + 1 - IROW
-                        CALL AB_ZLAROT( .FALSE., JC.GT.JKU, .FALSE
-     $., IL, C,
+                        CALL ZLAROT( .FALSE., JC.GT.JKU, .FALSE., IL, C,
      $                               S, A( IROW-ISKEW*JC+IOFFST, JC ),
      $                               ILDA, EXTRA, DUMMY )
                      END IF
@@ -736,10 +728,9 @@
                      IR = IROW
                      DO 170 JCH = JC - JKU, 1, -JKL - JKU
                         IF( IC.LT.N ) THEN
-                           CALL AB_ZLARTG( A( IR+1-ISKEW*( IC+1 )+IOFFST
-     $,
+                           CALL ZLARTG( A( IR+1-ISKEW*( IC+1 )+IOFFST,
      $                                  IC+1 ), EXTRA, REALC, S, DUMMY )
-                           DUMMY = AB_ZLARND( 5, ISEED )
+                           DUMMY = ZLARND( 5, ISEED )
                            C = DCONJG( REALC*DUMMY )
                            S = DCONJG( -S*DUMMY )
                         END IF
@@ -747,23 +738,20 @@
                         IL = IC + 2 - ICOL
                         ZTEMP = CZERO
                         ILTEMP = JCH.GT.JKL
-                        CALL AB_ZLAROT( .TRUE., ILTEMP, .TRUE., IL, C, S
-     $,
+                        CALL ZLAROT( .TRUE., ILTEMP, .TRUE., IL, C, S,
      $                               A( IR-ISKEW*ICOL+IOFFST, ICOL ),
      $                               ILDA, ZTEMP, EXTRA )
                         IF( ILTEMP ) THEN
-                           CALL AB_ZLARTG( A( IR+1-ISKEW*( ICOL+1 )+IOFF
-     $ST,
+                           CALL ZLARTG( A( IR+1-ISKEW*( ICOL+1 )+IOFFST,
      $                                  ICOL+1 ), ZTEMP, REALC, S,
      $                                  DUMMY )
-                           DUMMY = AB_ZLARND( 5, ISEED )
+                           DUMMY = ZLARND( 5, ISEED )
                            C = DCONJG( REALC*DUMMY )
                            S = DCONJG( -S*DUMMY )
                            IROW = MAX( 1, JCH-JKL-JKU )
                            IL = IR + 2 - IROW
                            EXTRA = CZERO
-                           CALL AB_ZLAROT( .FALSE., JCH.GT.JKL+JKU, .
-     $TRUE.,
+                           CALL ZLAROT( .FALSE., JCH.GT.JKL+JKU, .TRUE.,
      $                                  IL, C, S, A( IROW-ISKEW*ICOL+
      $                                  IOFFST, ICOL ), ILDA, EXTRA,
      $                                  ZTEMP )
@@ -789,14 +777,13 @@
                   IENDCH = MIN( M, N+JKL ) - 1
                   DO 210 JC = MIN( M+JKU, N ) - 1, 1 - JKL, -1
                      EXTRA = CZERO
-                     ANGLE = TWOPI*AB_DLARND( 1, ISEED )
-                     C = COS( ANGLE )*AB_ZLARND( 5, ISEED )
-                     S = SIN( ANGLE )*AB_ZLARND( 5, ISEED )
+                     ANGLE = TWOPI*DLARND( 1, ISEED )
+                     C = COS( ANGLE )*ZLARND( 5, ISEED )
+                     S = SIN( ANGLE )*ZLARND( 5, ISEED )
                      IROW = MAX( 1, JC-JKU+1 )
                      IF( JC.GT.0 ) THEN
                         IL = MIN( M, JC+JKL+1 ) + 1 - IROW
-                        CALL AB_ZLAROT( .FALSE., .FALSE., JC+JKL.L
-     $T.M, IL,
+                        CALL ZLAROT( .FALSE., .FALSE., JC+JKL.LT.M, IL,
      $                               C, S, A( IROW-ISKEW*JC+IOFFST,
      $                               JC ), ILDA, DUMMY, EXTRA )
                      END IF
@@ -807,9 +794,9 @@
                      DO 200 JCH = JC + JKL, IENDCH, JKL + JKU
                         ILEXTR = IC.GT.0
                         IF( ILEXTR ) THEN
-                           CALL AB_ZLARTG( A( JCH-ISKEW*IC+IOFFST, IC ),
+                           CALL ZLARTG( A( JCH-ISKEW*IC+IOFFST, IC ),
      $                                  EXTRA, REALC, S, DUMMY )
-                           DUMMY = AB_ZLARND( 5, ISEED )
+                           DUMMY = ZLARND( 5, ISEED )
                            C = REALC*DUMMY
                            S = S*DUMMY
                         END IF
@@ -817,19 +804,18 @@
                         ICOL = MIN( N-1, JCH+JKU )
                         ILTEMP = JCH + JKU.LT.N
                         ZTEMP = CZERO
-                        CALL AB_ZLAROT( .TRUE., ILEXTR, ILTEMP, ICOL+2-I
-     $C,
+                        CALL ZLAROT( .TRUE., ILEXTR, ILTEMP, ICOL+2-IC,
      $                               C, S, A( JCH-ISKEW*IC+IOFFST, IC ),
      $                               ILDA, EXTRA, ZTEMP )
                         IF( ILTEMP ) THEN
-                           CALL AB_ZLARTG( A( JCH-ISKEW*ICOL+IOFFST,
+                           CALL ZLARTG( A( JCH-ISKEW*ICOL+IOFFST,
      $                                  ICOL ), ZTEMP, REALC, S, DUMMY )
-                           DUMMY = AB_ZLARND( 5, ISEED )
+                           DUMMY = ZLARND( 5, ISEED )
                            C = REALC*DUMMY
                            S = S*DUMMY
                            IL = MIN( IENDCH, JCH+JKL+JKU ) + 2 - JCH
                            EXTRA = CZERO
-                           CALL AB_ZLAROT( .FALSE., .TRUE.,
+                           CALL ZLAROT( .FALSE., .TRUE.,
      $                                  JCH+JKL+JKU.LE.IENDCH, IL, C, S,
      $                                  A( JCH-ISKEW*ICOL+IOFFST,
      $                                  ICOL ), ILDA, ZTEMP, EXTRA )
@@ -850,14 +836,13 @@
                   IENDCH = MIN( N, M+JKU ) - 1
                   DO 240 JR = MIN( N+JKL, M ) - 1, 1 - JKU, -1
                      EXTRA = CZERO
-                     ANGLE = TWOPI*AB_DLARND( 1, ISEED )
-                     C = COS( ANGLE )*AB_ZLARND( 5, ISEED )
-                     S = SIN( ANGLE )*AB_ZLARND( 5, ISEED )
+                     ANGLE = TWOPI*DLARND( 1, ISEED )
+                     C = COS( ANGLE )*ZLARND( 5, ISEED )
+                     S = SIN( ANGLE )*ZLARND( 5, ISEED )
                      ICOL = MAX( 1, JR-JKL+1 )
                      IF( JR.GT.0 ) THEN
                         IL = MIN( N, JR+JKU+1 ) + 1 - ICOL
-                        CALL AB_ZLAROT( .TRUE., .FALSE., JR+JKU.LT.N,
-     $ IL,
+                        CALL ZLAROT( .TRUE., .FALSE., JR+JKU.LT.N, IL,
      $                               C, S, A( JR-ISKEW*ICOL+IOFFST,
      $                               ICOL ), ILDA, DUMMY, EXTRA )
                      END IF
@@ -868,10 +853,9 @@
                      DO 230 JCH = JR + JKU, IENDCH, JKL + JKU
                         ILEXTR = IR.GT.0
                         IF( ILEXTR ) THEN
-                           CALL AB_ZLARTG( A( IR-ISKEW*JCH+IOFFST, JCH )
-     $,
+                           CALL ZLARTG( A( IR-ISKEW*JCH+IOFFST, JCH ),
      $                                  EXTRA, REALC, S, DUMMY )
-                           DUMMY = AB_ZLARND( 5, ISEED )
+                           DUMMY = ZLARND( 5, ISEED )
                            C = REALC*DUMMY
                            S = S*DUMMY
                         END IF
@@ -879,20 +863,18 @@
                         IROW = MIN( M-1, JCH+JKL )
                         ILTEMP = JCH + JKL.LT.M
                         ZTEMP = CZERO
-                        CALL AB_ZLAROT( .FALSE., ILEXTR, ILTEMP, IROW
-     $+2-IR,
+                        CALL ZLAROT( .FALSE., ILEXTR, ILTEMP, IROW+2-IR,
      $                               C, S, A( IR-ISKEW*JCH+IOFFST,
      $                               JCH ), ILDA, EXTRA, ZTEMP )
                         IF( ILTEMP ) THEN
-                           CALL AB_ZLARTG( A( IROW-ISKEW*JCH+IOFFST, JCH
-     $ ),
+                           CALL ZLARTG( A( IROW-ISKEW*JCH+IOFFST, JCH ),
      $                                  ZTEMP, REALC, S, DUMMY )
-                           DUMMY = AB_ZLARND( 5, ISEED )
+                           DUMMY = ZLARND( 5, ISEED )
                            C = REALC*DUMMY
                            S = S*DUMMY
                            IL = MIN( IENDCH, JCH+JKL+JKU ) + 2 - JCH
                            EXTRA = CZERO
-                           CALL AB_ZLAROT( .TRUE., .TRUE.,
+                           CALL ZLAROT( .TRUE., .TRUE.,
      $                                  JCH+JKL+JKU.LE.IENDCH, IL, C, S,
      $                                  A( IROW-ISKEW*JCH+IOFFST, JCH ),
      $                                  ILDA, ZTEMP, EXTRA )
@@ -933,9 +915,9 @@
                      IL = MIN( JC+1, K+2 )
                      EXTRA = CZERO
                      ZTEMP = A( JC-ISKEW*( JC+1 )+IOFFG, JC+1 )
-                     ANGLE = TWOPI*AB_DLARND( 1, ISEED )
-                     C = COS( ANGLE )*AB_ZLARND( 5, ISEED )
-                     S = SIN( ANGLE )*AB_ZLARND( 5, ISEED )
+                     ANGLE = TWOPI*DLARND( 1, ISEED )
+                     C = COS( ANGLE )*ZLARND( 5, ISEED )
+                     S = SIN( ANGLE )*ZLARND( 5, ISEED )
                      IF( CSYM ) THEN
                         CT = C
                         ST = S
@@ -944,11 +926,10 @@
                         CT = DCONJG( C )
                         ST = DCONJG( S )
                      END IF
-                     CALL AB_ZLAROT( .FALSE., JC.GT.K, .TRUE., IL, C,
-     $ S,
+                     CALL ZLAROT( .FALSE., JC.GT.K, .TRUE., IL, C, S,
      $                            A( IROW-ISKEW*JC+IOFFG, JC ), ILDA,
      $                            EXTRA, ZTEMP )
-                     CALL AB_ZLAROT( .TRUE., .TRUE., .FALSE.,
+                     CALL ZLAROT( .TRUE., .TRUE., .FALSE.,
      $                            MIN( K, N-JC )+1, CT, ST,
      $                            A( ( 1-ISKEW )*JC+IOFFG, JC ), ILDA,
      $                            ZTEMP, DUMMY )
@@ -957,9 +938,9 @@
 *
                      ICOL = JC
                      DO 270 JCH = JC - K, 1, -K
-                        CALL AB_ZLARTG( A( JCH+1-ISKEW*( ICOL+1 )+IOFFG,
+                        CALL ZLARTG( A( JCH+1-ISKEW*( ICOL+1 )+IOFFG,
      $                               ICOL+1 ), EXTRA, REALC, S, DUMMY )
-                        DUMMY = AB_ZLARND( 5, ISEED )
+                        DUMMY = ZLARND( 5, ISEED )
                         C = DCONJG( REALC*DUMMY )
                         S = DCONJG( -S*DUMMY )
                         ZTEMP = A( JCH-ISKEW*( JCH+1 )+IOFFG, JCH+1 )
@@ -971,15 +952,13 @@
                            CT = DCONJG( C )
                            ST = DCONJG( S )
                         END IF
-                        CALL AB_ZLAROT( .TRUE., .TRUE., .TRUE., K+2, C, 
-     $S,
+                        CALL ZLAROT( .TRUE., .TRUE., .TRUE., K+2, C, S,
      $                               A( ( 1-ISKEW )*JCH+IOFFG, JCH ),
      $                               ILDA, ZTEMP, EXTRA )
                         IROW = MAX( 1, JCH-K )
                         IL = MIN( JCH+1, K+2 )
                         EXTRA = CZERO
-                        CALL AB_ZLAROT( .FALSE., JCH.GT.K, .TRUE., IL
-     $, CT,
+                        CALL ZLAROT( .FALSE., JCH.GT.K, .TRUE., IL, CT,
      $                               ST, A( IROW-ISKEW*JCH+IOFFG, JCH ),
      $                               ILDA, EXTRA, ZTEMP )
                         ICOL = JCH
@@ -1038,9 +1017,9 @@
                      IL = MIN( N+1-JC, K+2 )
                      EXTRA = CZERO
                      ZTEMP = A( 1+( 1-ISKEW )*JC+IOFFG, JC )
-                     ANGLE = TWOPI*AB_DLARND( 1, ISEED )
-                     C = COS( ANGLE )*AB_ZLARND( 5, ISEED )
-                     S = SIN( ANGLE )*AB_ZLARND( 5, ISEED )
+                     ANGLE = TWOPI*DLARND( 1, ISEED )
+                     C = COS( ANGLE )*ZLARND( 5, ISEED )
+                     S = SIN( ANGLE )*ZLARND( 5, ISEED )
                      IF( CSYM ) THEN
                         CT = C
                         ST = S
@@ -1049,13 +1028,11 @@
                         CT = DCONJG( C )
                         ST = DCONJG( S )
                      END IF
-                     CALL AB_ZLAROT( .FALSE., .TRUE., N-JC.GT.K, IL, 
-     $C, S,
+                     CALL ZLAROT( .FALSE., .TRUE., N-JC.GT.K, IL, C, S,
      $                            A( ( 1-ISKEW )*JC+IOFFG, JC ), ILDA,
      $                            ZTEMP, EXTRA )
                      ICOL = MAX( 1, JC-K+1 )
-                     CALL AB_ZLAROT( .TRUE., .FALSE., .TRUE., JC+2-IC
-     $OL,
+                     CALL ZLAROT( .TRUE., .FALSE., .TRUE., JC+2-ICOL,
      $                            CT, ST, A( JC-ISKEW*ICOL+IOFFG,
      $                            ICOL ), ILDA, DUMMY, ZTEMP )
 *
@@ -1063,9 +1040,9 @@
 *
                      ICOL = JC
                      DO 360 JCH = JC + K, N - 1, K
-                        CALL AB_ZLARTG( A( JCH-ISKEW*ICOL+IOFFG, ICOL ),
+                        CALL ZLARTG( A( JCH-ISKEW*ICOL+IOFFG, ICOL ),
      $                               EXTRA, REALC, S, DUMMY )
-                        DUMMY = AB_ZLARND( 5, ISEED )
+                        DUMMY = ZLARND( 5, ISEED )
                         C = REALC*DUMMY
                         S = S*DUMMY
                         ZTEMP = A( 1+( 1-ISKEW )*JCH+IOFFG, JCH )
@@ -1077,14 +1054,12 @@
                            CT = DCONJG( C )
                            ST = DCONJG( S )
                         END IF
-                        CALL AB_ZLAROT( .TRUE., .TRUE., .TRUE., K+2, C, 
-     $S,
+                        CALL ZLAROT( .TRUE., .TRUE., .TRUE., K+2, C, S,
      $                               A( JCH-ISKEW*ICOL+IOFFG, ICOL ),
      $                               ILDA, EXTRA, ZTEMP )
                         IL = MIN( N+1-JCH, K+2 )
                         EXTRA = CZERO
-                        CALL AB_ZLAROT( .FALSE., .TRUE., N-JCH.GT.K, 
-     $IL,
+                        CALL ZLAROT( .FALSE., .TRUE., N-JCH.GT.K, IL,
      $                               CT, ST, A( ( 1-ISKEW )*JCH+IOFFG,
      $                               JCH ), ILDA, ZTEMP, EXTRA )
                         ICOL = JCH
@@ -1139,7 +1114,7 @@
 *
 *        4)      Generate Banded Matrix by first
 *                Rotating by random Unitary matrices,
-*                then reducing the bandwidth using HousehoAB_LDEr
+*                then reducing the bandwidth using Householder
 *                transformations.
 *
 *                Note: we should get here only if LDA .ge. N
@@ -1148,7 +1123,7 @@
 *
 *           Non-symmetric -- A = U D V
 *
-            CALL AB_ZLAGGE( MR, NC, LLB, UUB, D, A, LDA, ISEED, WORK,
+            CALL ZLAGGE( MR, NC, LLB, UUB, D, A, LDA, ISEED, WORK,
      $                   IINFO )
          ELSE
 *
@@ -1156,9 +1131,9 @@
 *           Hermitian -- A = U D U*
 *
             IF( CSYM ) THEN
-               CALL AB_ZLAGSY( M, LLB, D, A, LDA, ISEED, WORK, IINFO )
+               CALL ZLAGSY( M, LLB, D, A, LDA, ISEED, WORK, IINFO )
             ELSE
-               CALL AB_ZLAGHE( M, LLB, D, A, LDA, ISEED, WORK, IINFO )
+               CALL ZLAGHE( M, LLB, D, A, LDA, ISEED, WORK, IINFO )
             END IF
          END IF
 *
@@ -1285,6 +1260,6 @@
 *
       RETURN
 *
-*     End of AB_ZLATMT
+*     End of ZLATMT
 *
       END

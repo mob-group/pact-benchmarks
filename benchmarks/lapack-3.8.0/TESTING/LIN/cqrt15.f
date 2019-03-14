@@ -1,4 +1,4 @@
-*> \brief \b AB_CQRT15
+*> \brief \b CQRT15
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CQRT15( SCALE, RKSEL, M, N, NRHS, A, LDA, B, LDB, S,
+*       SUBROUTINE CQRT15( SCALE, RKSEL, M, N, NRHS, A, LDA, B, LDB, S,
 *                          RANK, NORMA, NORMB, ISEED, WORK, LWORK )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CQRT15 generates a matrix with full or deficient rank and of various
+*> CQRT15 generates a matrix with full or deficient rank and of various
 *> norms.
 *> \endverbatim
 *
@@ -146,7 +146,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_CQRT15( SCALE, RKSEL, M, N, NRHS, A, LDA, B, LDB, S,
+      SUBROUTINE CQRT15( SCALE, RKSEL, M, N, NRHS, A, LDA, B, LDB, S,
      $                   RANK, NORMA, NORMB, ISEED, WORK, LWORK )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -182,16 +182,12 @@
       REAL               DUMMY( 1 )
 *     ..
 *     .. External Functions ..
-      REAL               AB_CLANGE, AB_SASUM, AB_SCNRM2, AB_SLAMCH, AB_S
-     $LARND
-      EXTERNAL           AB_CLANGE, AB_SASUM, AB_SCNRM2, AB_SLAMCH, AB_S
-     $LARND
+      REAL               CLANGE, SASUM, SCNRM2, SLAMCH, SLARND
+      EXTERNAL           CLANGE, SASUM, SCNRM2, SLAMCH, SLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CGEMM, AB_CLARF, AB_CLARNV, AB_CLAROR, AB_CL
-     $ASCL, AB_CLASET,
-     $                   AB_CAB_SSCAL, AB_SLABAD, AB_SLAORD, AB_SLASCL, 
-     $AB_XERBLA
+      EXTERNAL           CGEMM, CLARF, CLARNV, CLAROR, CLASCL, CLASET,
+     $                   CSSCAL, SLABAD, SLAORD, SLASCL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CMPLX, MAX, MIN
@@ -200,14 +196,14 @@
 *
       MN = MIN( M, N )
       IF( LWORK.LT.MAX( M+MN, MN*NRHS, 2*N+M ) ) THEN
-         CALL AB_XERBLA( 'AB_CQRT15', 16 )
+         CALL XERBLA( 'CQRT15', 16 )
          RETURN
       END IF
 *
-      SMLNUM = AB_SLAMCH( 'Safe minimum' )
+      SMLNUM = SLAMCH( 'Safe minimum' )
       BIGNUM = ONE / SMLNUM
-      CALL AB_SLABAD( SMLNUM, BIGNUM )
-      EPS = AB_SLAMCH( 'Epsilon' )
+      CALL SLABAD( SMLNUM, BIGNUM )
+      EPS = SLAMCH( 'Epsilon' )
       SMLNUM = ( SMLNUM / EPS ) / EPS
       BIGNUM = ONE / SMLNUM
 *
@@ -221,7 +217,7 @@
             S( J ) = ZERO
    10    CONTINUE
       ELSE
-         CALL AB_XERBLA( 'AB_CQRT15', 2 )
+         CALL XERBLA( 'CQRT15', 2 )
       END IF
 *
       IF( RANK.GT.0 ) THEN
@@ -231,29 +227,29 @@
          S( 1 ) = ONE
          DO 30 J = 2, RANK
    20       CONTINUE
-            TEMP = AB_SLARND( 1, ISEED )
+            TEMP = SLARND( 1, ISEED )
             IF( TEMP.GT.SVMIN ) THEN
                S( J ) = ABS( TEMP )
             ELSE
                GO TO 20
             END IF
    30    CONTINUE
-         CALL AB_SLAORD( 'Decreasing', RANK, S, 1 )
+         CALL SLAORD( 'Decreasing', RANK, S, 1 )
 *
 *        Generate 'rank' columns of a random orthogonal matrix in A
 *
-         CALL AB_CLARNV( 2, ISEED, M, WORK )
-         CALL AB_CAB_SSCAL( M, ONE / AB_SCNRM2( M, WORK, 1 ), WORK, 1 )
-         CALL AB_CLASET( 'Full', M, RANK, CZERO, CONE, A, LDA )
-         CALL AB_CLARF( 'Left', M, RANK, WORK, 1, CMPLX( TWO ), A, LDA,
+         CALL CLARNV( 2, ISEED, M, WORK )
+         CALL CSSCAL( M, ONE / SCNRM2( M, WORK, 1 ), WORK, 1 )
+         CALL CLASET( 'Full', M, RANK, CZERO, CONE, A, LDA )
+         CALL CLARF( 'Left', M, RANK, WORK, 1, CMPLX( TWO ), A, LDA,
      $               WORK( M+1 ) )
 *
 *        workspace used: m+mn
 *
 *        Generate consistent rhs in the range space of A
 *
-         CALL AB_CLARNV( 2, ISEED, RANK*NRHS, WORK )
-         CALL AB_CGEMM( 'No transpose', 'No transpose', M, NRHS, RANK,
+         CALL CLARNV( 2, ISEED, RANK*NRHS, WORK )
+         CALL CGEMM( 'No transpose', 'No transpose', M, NRHS, RANK,
      $               CONE, A, LDA, WORK, RANK, CZERO, B, LDB )
 *
 *        work space used: <= mn *nrhs
@@ -261,13 +257,12 @@
 *        generate (unscaled) matrix A
 *
          DO 40 J = 1, RANK
-            CALL AB_CAB_SSCAL( M, S( J ), A( 1, J ), 1 )
+            CALL CSSCAL( M, S( J ), A( 1, J ), 1 )
    40    CONTINUE
          IF( RANK.LT.N )
-     $      CALL AB_CLASET( 'Full', M, N-RANK, CZERO, CZERO,
+     $      CALL CLASET( 'Full', M, N-RANK, CZERO, CZERO,
      $                   A( 1, RANK+1 ), LDA )
-         CALL AB_CLAROR( 'Right', 'No initialization', M, N, A, LDA, ISE
-     $ED,
+         CALL CLAROR( 'Right', 'No initialization', M, N, A, LDA, ISEED,
      $                WORK, INFO )
 *
       ELSE
@@ -279,50 +274,48 @@
          DO 50 J = 1, MN
             S( J ) = ZERO
    50    CONTINUE
-         CALL AB_CLASET( 'Full', M, N, CZERO, CZERO, A, LDA )
-         CALL AB_CLASET( 'Full', M, NRHS, CZERO, CZERO, B, LDB )
+         CALL CLASET( 'Full', M, N, CZERO, CZERO, A, LDA )
+         CALL CLASET( 'Full', M, NRHS, CZERO, CZERO, B, LDB )
 *
       END IF
 *
 *     Scale the matrix
 *
       IF( SCALE.NE.1 ) THEN
-         NORMA = AB_CLANGE( 'Max', M, N, A, LDA, DUMMY )
+         NORMA = CLANGE( 'Max', M, N, A, LDA, DUMMY )
          IF( NORMA.NE.ZERO ) THEN
             IF( SCALE.EQ.2 ) THEN
 *
 *              matrix scaled up
 *
-               CALL AB_CLASCL( 'General', 0, 0, NORMA, BIGNUM, M, N, A,
+               CALL CLASCL( 'General', 0, 0, NORMA, BIGNUM, M, N, A,
      $                      LDA, INFO )
-               CALL AB_SLASCL( 'General', 0, 0, NORMA, BIGNUM, MN, 1, S,
+               CALL SLASCL( 'General', 0, 0, NORMA, BIGNUM, MN, 1, S,
      $                      MN, INFO )
-               CALL AB_CLASCL( 'General', 0, 0, NORMA, BIGNUM, M, NRHS, 
-     $B,
+               CALL CLASCL( 'General', 0, 0, NORMA, BIGNUM, M, NRHS, B,
      $                      LDB, INFO )
             ELSE IF( SCALE.EQ.3 ) THEN
 *
 *              matrix scaled down
 *
-               CALL AB_CLASCL( 'General', 0, 0, NORMA, SMLNUM, M, N, A,
+               CALL CLASCL( 'General', 0, 0, NORMA, SMLNUM, M, N, A,
      $                      LDA, INFO )
-               CALL AB_SLASCL( 'General', 0, 0, NORMA, SMLNUM, MN, 1, S,
+               CALL SLASCL( 'General', 0, 0, NORMA, SMLNUM, MN, 1, S,
      $                      MN, INFO )
-               CALL AB_CLASCL( 'General', 0, 0, NORMA, SMLNUM, M, NRHS, 
-     $B,
+               CALL CLASCL( 'General', 0, 0, NORMA, SMLNUM, M, NRHS, B,
      $                      LDB, INFO )
             ELSE
-               CALL AB_XERBLA( 'AB_CQRT15', 1 )
+               CALL XERBLA( 'CQRT15', 1 )
                RETURN
             END IF
          END IF
       END IF
 *
-      NORMA = AB_SASUM( MN, S, 1 )
-      NORMB = AB_CLANGE( 'One-norm', M, NRHS, B, LDB, DUMMY )
+      NORMA = SASUM( MN, S, 1 )
+      NORMB = CLANGE( 'One-norm', M, NRHS, B, LDB, DUMMY )
 *
       RETURN
 *
-*     End of AB_CQRT15
+*     End of CQRT15
 *
       END

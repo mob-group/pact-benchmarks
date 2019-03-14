@@ -1,4 +1,4 @@
-*> \brief \b AB_CHKXER
+*> \brief \b CHKXER
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+*       SUBROUTINE CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
 *
 *       .. Scalar Arguments ..
 *       LOGICAL            LERR, OK
@@ -39,7 +39,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
+      SUBROUTINE CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -66,6 +66,6 @@
  9999 FORMAT( ' *** Illegal value of parameter number ', I2,
      $      ' not detected by ', A6, ' ***' )
 *
-*     End of AB_CHKXER.
+*     End of CHKXER.
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_ALASVM
+*> \brief \b ALASVM
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ALASVM( TYPE, NOUT, NFAIL, NRUN, NERRS )
+*       SUBROUTINE ALASVM( TYPE, NOUT, NFAIL, NRUN, NERRS )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        TYPE
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ALASVM prints a summary of results from one of the -DRV- routines.
+*> ALASVM prints a summary of results from one of the -DRV- routines.
 *> \endverbatim
 *
 *  Arguments:
@@ -71,7 +71,7 @@
 *> \ingroup aux_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_ALASVM( TYPE, NOUT, NFAIL, NRUN, NERRS )
+      SUBROUTINE ALASVM( TYPE, NOUT, NFAIL, NRUN, NERRS )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -103,6 +103,6 @@
  9997 FORMAT( 14X, I6, ' error messages recorded' )
       RETURN
 *
-*     End of AB_ALASVM
+*     End of ALASVM
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_CLATME
+*> \brief \b CLATME
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CLATME( N, DIST, ISEED, D, MODE, COND, DMAX,
+*       SUBROUTINE CLATME( N, DIST, ISEED, D, MODE, COND, DMAX,
 *         RSIGN,
 *                          UPPER, SIM, DS, MODES, CONDS, KL, KU, ANORM,
 *         A,
@@ -32,10 +32,10 @@
 *>
 *> \verbatim
 *>
-*>    AB_CLATME generates random non-symmetric square matrices with
+*>    CLATME generates random non-symmetric square matrices with
 *>    specified eigenvalues for testing LAPACK programs.
 *>
-*>    AB_CLATME operates by applying the following sequence of
+*>    CLATME operates by applying the following sequence of
 *>    operations:
 *>
 *>    1. Set the diagonal to D, where D may be input or
@@ -50,7 +50,7 @@
 *>         CONDS, and on the right by X inverse.
 *>
 *>    4. If KL < N-1, the lower bandwidth is reduced to KL using
-*>         HousehoAB_LDEr transformations.  If KU < N-1, the upper
+*>         Householder transformations.  If KU < N-1, the upper
 *>         bandwidth is reduced to KU.
 *>
 *>    5. If ANORM is not negative, the matrix is scaled to have
@@ -91,7 +91,7 @@
 *>           uses a linear congruential sequence limited to small
 *>           integers, and so should produce machine independent
 *>           random numbers. The values of ISEED are changed on
-*>           exit, and can be used in the next call to AB_CLATME
+*>           exit, and can be used in the next call to CLATME
 *>           to continue the same random number sequence.
 *>           Changed on exit.
 *> \endverbatim
@@ -275,11 +275,11 @@
 *>           -16 => KU is less than 1, or KL and KU are both less than
 *>                  N-1.
 *>           -19 => LDA is less than M.
-*>            1  => Error return from AB_CLATM1 (computing D)
+*>            1  => Error return from CLATM1 (computing D)
 *>            2  => Cannot scale to DMAX (max. eigenvalue is 0)
-*>            3  => Error return from AB_SLATM1 (computing DS)
-*>            4  => Error return from AB_CLARGE
-*>            5  => Zero singular value from AB_SLATM1.
+*>            3  => Error return from SLATM1 (computing DS)
+*>            4  => Error return from CLARGE
+*>            5  => Zero singular value from SLATM1.
 *> \endverbatim
 *
 *  Authors:
@@ -295,7 +295,7 @@
 *> \ingroup complex_matgen
 *
 *  =====================================================================
-      SUBROUTINE AB_CLATME( N, DIST, ISEED, D, MODE, COND, DMAX,
+      SUBROUTINE CLATME( N, DIST, ISEED, D, MODE, COND, DMAX,
      $  RSIGN,
      $                   UPPER, SIM, DS, MODES, CONDS, KL, KU, ANORM,
      $  A,
@@ -341,17 +341,15 @@
       REAL               TEMPA( 1 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_CLANGE
-      COMPLEX            AB_CLARND
-      EXTERNAL           AB_LSAME, AB_CLANGE, AB_CLARND
+      LOGICAL            LSAME
+      REAL               CLANGE
+      COMPLEX            CLARND
+      EXTERNAL           LSAME, CLANGE, CLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CCOPY, AB_CGEMV, AB_CGERC, AB_CLACGV, AB_AB_
-     $CLARFG, AB_CLARGE,
-     $                   AB_CLARNV, AB_CLATM1, AB_CLASET, AB_CSCAL, AB_C
-     $AB_SSCAL, AB_SLATM1,
-     $                   AB_XERBLA
+      EXTERNAL           CCOPY, CGEMV, CGERC, CLACGV, CLARFG, CLARGE,
+     $                   CLARNV, CLATM1, CLASET, CSCAL, CSSCAL, SLATM1,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CONJG, MAX, MOD
@@ -370,13 +368,13 @@
 *
 *     Decode DIST
 *
-      IF( AB_LSAME( DIST, 'U' ) ) THEN
+      IF( LSAME( DIST, 'U' ) ) THEN
          IDIST = 1
-      ELSE IF( AB_LSAME( DIST, 'S' ) ) THEN
+      ELSE IF( LSAME( DIST, 'S' ) ) THEN
          IDIST = 2
-      ELSE IF( AB_LSAME( DIST, 'N' ) ) THEN
+      ELSE IF( LSAME( DIST, 'N' ) ) THEN
          IDIST = 3
-      ELSE IF( AB_LSAME( DIST, 'D' ) ) THEN
+      ELSE IF( LSAME( DIST, 'D' ) ) THEN
          IDIST = 4
       ELSE
          IDIST = -1
@@ -384,9 +382,9 @@
 *
 *     Decode RSIGN
 *
-      IF( AB_LSAME( RSIGN, 'T' ) ) THEN
+      IF( LSAME( RSIGN, 'T' ) ) THEN
          IRSIGN = 1
-      ELSE IF( AB_LSAME( RSIGN, 'F' ) ) THEN
+      ELSE IF( LSAME( RSIGN, 'F' ) ) THEN
          IRSIGN = 0
       ELSE
          IRSIGN = -1
@@ -394,9 +392,9 @@
 *
 *     Decode UPPER
 *
-      IF( AB_LSAME( UPPER, 'T' ) ) THEN
+      IF( LSAME( UPPER, 'T' ) ) THEN
          IUPPER = 1
-      ELSE IF( AB_LSAME( UPPER, 'F' ) ) THEN
+      ELSE IF( LSAME( UPPER, 'F' ) ) THEN
          IUPPER = 0
       ELSE
          IUPPER = -1
@@ -404,9 +402,9 @@
 *
 *     Decode SIM
 *
-      IF( AB_LSAME( SIM, 'T' ) ) THEN
+      IF( LSAME( SIM, 'T' ) ) THEN
          ISIM = 1
-      ELSE IF( AB_LSAME( SIM, 'F' ) ) THEN
+      ELSE IF( LSAME( SIM, 'F' ) ) THEN
          ISIM = 0
       ELSE
          ISIM = -1
@@ -430,8 +428,7 @@
          INFO = -2
       ELSE IF( ABS( MODE ).GT.6 ) THEN
          INFO = -5
-      ELSE IF( ( MODE.NE.0 .AND. ABS( MODE ).NE.6 ) .AND. COND.LT.ONE
-     $ )
+      ELSE IF( ( MODE.NE.0 .AND. ABS( MODE ).NE.6 ) .AND. COND.LT.ONE )
      $          THEN
          INFO = -6
       ELSE IF( IRSIGN.EQ.-1 ) THEN
@@ -455,7 +452,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CLATME', -INFO )
+         CALL XERBLA( 'CLATME', -INFO )
          RETURN
       END IF
 *
@@ -472,7 +469,7 @@
 *
 *             Compute D according to COND and MODE
 *
-      CALL AB_CLATM1( MODE, COND, IRSIGN, IDIST, ISEED, D, N, IINFO )
+      CALL CLATM1( MODE, COND, IRSIGN, IDIST, ISEED, D, N, IINFO )
       IF( IINFO.NE.0 ) THEN
          INFO = 1
          RETURN
@@ -493,18 +490,18 @@
             RETURN
          END IF
 *
-         CALL AB_CSCAL( N, ALPHA, D, 1 )
+         CALL CSCAL( N, ALPHA, D, 1 )
 *
       END IF
 *
-      CALL AB_CLASET( 'Full', N, N, CZERO, CZERO, A, LDA )
-      CALL AB_CCOPY( N, D, 1, A, LDA+1 )
+      CALL CLASET( 'Full', N, N, CZERO, CZERO, A, LDA )
+      CALL CCOPY( N, D, 1, A, LDA+1 )
 *
 *     3)      If UPPER='T', set upper triangle of A to random numbers.
 *
       IF( IUPPER.NE.0 ) THEN
          DO 40 JC = 2, N
-            CALL AB_CLARNV( IDIST, ISEED, JC-1, A( 1, JC ) )
+            CALL CLARNV( IDIST, ISEED, JC-1, A( 1, JC ) )
    40    CONTINUE
       END IF
 *
@@ -520,7 +517,7 @@
 *        Compute S (singular values of the eigenvector matrix)
 *        according to CONDS and MODES
 *
-         CALL AB_SLATM1( MODES, CONDS, 0, 0, ISEED, DS, N, IINFO )
+         CALL SLATM1( MODES, CONDS, 0, 0, ISEED, DS, N, IINFO )
          IF( IINFO.NE.0 ) THEN
             INFO = 3
             RETURN
@@ -528,7 +525,7 @@
 *
 *        Multiply by V and V'
 *
-         CALL AB_CLARGE( N, A, LDA, ISEED, WORK, IINFO )
+         CALL CLARGE( N, A, LDA, ISEED, WORK, IINFO )
          IF( IINFO.NE.0 ) THEN
             INFO = 4
             RETURN
@@ -537,9 +534,9 @@
 *        Multiply by S and (1/S)
 *
          DO 50 J = 1, N
-            CALL AB_CAB_SSCAL( N, DS( J ), A( J, 1 ), LDA )
+            CALL CSSCAL( N, DS( J ), A( J, 1 ), LDA )
             IF( DS( J ).NE.ZERO ) THEN
-               CALL AB_CAB_SSCAL( N, ONE / DS( J ), A( 1, J ), 1 )
+               CALL CSSCAL( N, ONE / DS( J ), A( 1, J ), 1 )
             ELSE
                INFO = 5
                RETURN
@@ -548,7 +545,7 @@
 *
 *        Multiply by U and U'
 *
-         CALL AB_CLARGE( N, A, LDA, ISEED, WORK, IINFO )
+         CALL CLARGE( N, A, LDA, ISEED, WORK, IINFO )
          IF( IINFO.NE.0 ) THEN
             INFO = 4
             RETURN
@@ -566,31 +563,29 @@
             IROWS = N + 1 - JCR
             ICOLS = N + KL - JCR
 *
-            CALL AB_CCOPY( IROWS, A( JCR, IC ), 1, WORK, 1 )
+            CALL CCOPY( IROWS, A( JCR, IC ), 1, WORK, 1 )
             XNORMS = WORK( 1 )
-            CALL AB_AB_CLARFG( IROWS, XNORMS, WORK( 2 ), 1, TAU )
+            CALL CLARFG( IROWS, XNORMS, WORK( 2 ), 1, TAU )
             TAU = CONJG( TAU )
             WORK( 1 ) = CONE
-            ALPHA = AB_CLARND( 5, ISEED )
+            ALPHA = CLARND( 5, ISEED )
 *
-            CALL AB_CGEMV( 'C', IROWS, ICOLS, CONE, A( JCR, IC+1 ), LDA,
+            CALL CGEMV( 'C', IROWS, ICOLS, CONE, A( JCR, IC+1 ), LDA,
      $                  WORK, 1, CZERO, WORK( IROWS+1 ), 1 )
-            CALL AB_CGERC( IROWS, ICOLS, -TAU, WORK, 1, WORK( IROWS+1 ),
-     $ 1,
+            CALL CGERC( IROWS, ICOLS, -TAU, WORK, 1, WORK( IROWS+1 ), 1,
      $                  A( JCR, IC+1 ), LDA )
 *
-            CALL AB_CGEMV( 'N', N, IROWS, CONE, A( 1, JCR ), LDA, WORK, 
-     $1,
+            CALL CGEMV( 'N', N, IROWS, CONE, A( 1, JCR ), LDA, WORK, 1,
      $                  CZERO, WORK( IROWS+1 ), 1 )
-            CALL AB_CGERC( N, IROWS, -CONJG( TAU ), WORK( IROWS+1 ), 1,
+            CALL CGERC( N, IROWS, -CONJG( TAU ), WORK( IROWS+1 ), 1,
      $                  WORK, 1, A( 1, JCR ), LDA )
 *
             A( JCR, IC ) = XNORMS
-            CALL AB_CLASET( 'Full', IROWS-1, 1, CZERO, CZERO,
+            CALL CLASET( 'Full', IROWS-1, 1, CZERO, CZERO,
      $                   A( JCR+1, IC ), LDA )
 *
-            CALL AB_CSCAL( ICOLS+1, ALPHA, A( JCR, IC ), LDA )
-            CALL AB_CSCAL( N, CONJG( ALPHA ), A( 1, JCR ), 1 )
+            CALL CSCAL( ICOLS+1, ALPHA, A( JCR, IC ), LDA )
+            CALL CSCAL( N, CONJG( ALPHA ), A( 1, JCR ), 1 )
    60    CONTINUE
       ELSE IF( KU.LT.N-1 ) THEN
 *
@@ -601,49 +596,47 @@
             IROWS = N + KU - JCR
             ICOLS = N + 1 - JCR
 *
-            CALL AB_CCOPY( ICOLS, A( IR, JCR ), LDA, WORK, 1 )
+            CALL CCOPY( ICOLS, A( IR, JCR ), LDA, WORK, 1 )
             XNORMS = WORK( 1 )
-            CALL AB_AB_CLARFG( ICOLS, XNORMS, WORK( 2 ), 1, TAU )
+            CALL CLARFG( ICOLS, XNORMS, WORK( 2 ), 1, TAU )
             TAU = CONJG( TAU )
             WORK( 1 ) = CONE
-            CALL AB_CLACGV( ICOLS-1, WORK( 2 ), 1 )
-            ALPHA = AB_CLARND( 5, ISEED )
+            CALL CLACGV( ICOLS-1, WORK( 2 ), 1 )
+            ALPHA = CLARND( 5, ISEED )
 *
-            CALL AB_CGEMV( 'N', IROWS, ICOLS, CONE, A( IR+1, JCR ), LDA,
+            CALL CGEMV( 'N', IROWS, ICOLS, CONE, A( IR+1, JCR ), LDA,
      $                  WORK, 1, CZERO, WORK( ICOLS+1 ), 1 )
-            CALL AB_CGERC( IROWS, ICOLS, -TAU, WORK( ICOLS+1 ), 1, WORK,
-     $ 1,
+            CALL CGERC( IROWS, ICOLS, -TAU, WORK( ICOLS+1 ), 1, WORK, 1,
      $                  A( IR+1, JCR ), LDA )
 *
-            CALL AB_CGEMV( 'C', ICOLS, N, CONE, A( JCR, 1 ), LDA, WORK, 
-     $1,
+            CALL CGEMV( 'C', ICOLS, N, CONE, A( JCR, 1 ), LDA, WORK, 1,
      $                  CZERO, WORK( ICOLS+1 ), 1 )
-            CALL AB_CGERC( ICOLS, N, -CONJG( TAU ), WORK, 1,
+            CALL CGERC( ICOLS, N, -CONJG( TAU ), WORK, 1,
      $                  WORK( ICOLS+1 ), 1, A( JCR, 1 ), LDA )
 *
             A( IR, JCR ) = XNORMS
-            CALL AB_CLASET( 'Full', 1, ICOLS-1, CZERO, CZERO,
+            CALL CLASET( 'Full', 1, ICOLS-1, CZERO, CZERO,
      $                   A( IR, JCR+1 ), LDA )
 *
-            CALL AB_CSCAL( IROWS+1, ALPHA, A( IR, JCR ), 1 )
-            CALL AB_CSCAL( N, CONJG( ALPHA ), A( JCR, 1 ), LDA )
+            CALL CSCAL( IROWS+1, ALPHA, A( IR, JCR ), 1 )
+            CALL CSCAL( N, CONJG( ALPHA ), A( JCR, 1 ), LDA )
    70    CONTINUE
       END IF
 *
 *     Scale the matrix to have norm ANORM
 *
       IF( ANORM.GE.ZERO ) THEN
-         TEMP = AB_CLANGE( 'M', N, N, A, LDA, TEMPA )
+         TEMP = CLANGE( 'M', N, N, A, LDA, TEMPA )
          IF( TEMP.GT.ZERO ) THEN
             RALPHA = ANORM / TEMP
             DO 80 J = 1, N
-               CALL AB_CAB_SSCAL( N, RALPHA, A( 1, J ), 1 )
+               CALL CSSCAL( N, RALPHA, A( 1, J ), 1 )
    80       CONTINUE
          END IF
       END IF
 *
       RETURN
 *
-*     End of AB_CLATME
+*     End of CLATME
 *
       END

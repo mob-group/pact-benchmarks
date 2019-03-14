@@ -1,4 +1,4 @@
-*> \brief \b AB_SGETRF2
+*> \brief \b SGETRF2
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       RECURSIVE SUBROUTINE AB_SGETRF2( M, N, A, LDA, IPIV, INFO )
+*       RECURSIVE SUBROUTINE SGETRF2( M, N, A, LDA, IPIV, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, M, N
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SGETRF2 computes an LU factorization of a general M-by-N matrix A
+*> SGETRF2 computes an LU factorization of a general M-by-N matrix A
 *> using partial pivoting with row interchanges.
 *>
 *> The factorization has the form
@@ -111,7 +111,7 @@
 *> \ingroup realGEcomputational
 *
 *  =====================================================================
-      RECURSIVE SUBROUTINE AB_SGETRF2( M, N, A, LDA, IPIV, INFO )
+      RECURSIVE SUBROUTINE SGETRF2( M, N, A, LDA, IPIV, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -137,13 +137,12 @@
       INTEGER            I, IINFO, n1, n2
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH
-      INTEGER            AB_ISAMAX
-      EXTERNAL           AB_SLAMCH, AB_ISAMAX
+      REAL               SLAMCH
+      INTEGER            ISAMAX
+      EXTERNAL           SLAMCH, ISAMAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SGEMM, AB_SSCAL, AB_SLASWP, AB_STRSM, AB_XER
-     $BLA
+      EXTERNAL           SGEMM, SSCAL, SLASWP, STRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -161,7 +160,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SGETRF2', -INFO )
+         CALL XERBLA( 'SGETRF2', -INFO )
          RETURN
       END IF
 *
@@ -186,11 +185,11 @@
 *
 *        Compute machine safe minimum
 *
-         SFMIN = AB_SLAMCH('S')
+         SFMIN = SLAMCH('S')
 *
 *        Find pivot and test for singularity
 *
-         I = AB_ISAMAX( M, A( 1, 1 ), 1 )
+         I = ISAMAX( M, A( 1, 1 ), 1 )
          IPIV( 1 ) = I
          IF( A( I, 1 ).NE.ZERO ) THEN
 *
@@ -205,7 +204,7 @@
 *           Compute elements 2:M of the column
 *
             IF( ABS(A( 1, 1 )) .GE. SFMIN ) THEN
-               CALL AB_SSCAL( M-1, ONE / A( 1, 1 ), A( 2, 1 ), 1 )
+               CALL SSCAL( M-1, ONE / A( 1, 1 ), A( 2, 1 ), 1 )
             ELSE
                DO 10 I = 1, M-1
                   A( 1+I, 1 ) = A( 1+I, 1 ) / A( 1, 1 )
@@ -227,7 +226,7 @@
 *        Factor [ --- ]
 *               [ A21 ]
 *
-         CALL AB_SGETRF2( m, n1, A, lda, ipiv, iinfo )
+         CALL SGETRF2( m, n1, A, lda, ipiv, iinfo )
 
          IF ( info.EQ.0 .AND. iinfo.GT.0 )
      $      info = iinfo
@@ -236,21 +235,21 @@
 *        Apply interchanges to [ --- ]
 *                              [ A22 ]
 *
-         CALL AB_SLASWP( N2, A( 1, N1+1 ), LDA, 1, N1, IPIV, 1 )
+         CALL SLASWP( N2, A( 1, N1+1 ), LDA, 1, N1, IPIV, 1 )
 *
 *        Solve A12
 *
-         CALL AB_STRSM( 'L', 'L', 'N', 'U', N1, N2, ONE, A, LDA,
+         CALL STRSM( 'L', 'L', 'N', 'U', N1, N2, ONE, A, LDA,
      $               A( 1, N1+1 ), LDA )
 *
 *        Update A22
 *
-         CALL AB_SGEMM( 'N', 'N', M-N1, N2, N1, -ONE, A( N1+1, 1 ), LDA,
+         CALL SGEMM( 'N', 'N', M-N1, N2, N1, -ONE, A( N1+1, 1 ), LDA,
      $               A( 1, N1+1 ), LDA, ONE, A( N1+1, N1+1 ), LDA )
 *
 *        Factor A22
 *
-         CALL AB_SGETRF2( M-N1, N2, A( N1+1, N1+1 ), LDA, IPIV( N1+1 ),
+         CALL SGETRF2( M-N1, N2, A( N1+1, N1+1 ), LDA, IPIV( N1+1 ),
      $                 IINFO )
 *
 *        Adjust INFO and the pivot indices
@@ -263,11 +262,11 @@
 *
 *        Apply interchanges to A21
 *
-         CALL AB_SLASWP( N1, A( 1, 1 ), LDA, N1+1, MIN( M, N), IPIV, 1 )
+         CALL SLASWP( N1, A( 1, 1 ), LDA, N1+1, MIN( M, N), IPIV, 1 )
 *
       END IF
       RETURN
 *
-*     End of AB_SGETRF2
+*     End of SGETRF2
 *
       END

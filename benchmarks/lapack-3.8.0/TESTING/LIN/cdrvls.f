@@ -1,4 +1,4 @@
-*> \brief \b AB_CDRVLS
+*> \brief \b CDRVLS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CDRVLS( DOTYPE, NM, MVAL, NN, NVAL, NNS, NSVAL, NNB,
+*       SUBROUTINE CDRVLS( DOTYPE, NM, MVAL, NN, NVAL, NNS, NSVAL, NNB,
 *                          NBVAL, NXVAL, THRESH, TSTERR, A, COPYA, B,
 *                          COPYB, C, S, COPYS, NOUT )
 *
@@ -31,8 +31,8 @@
 *>
 *> \verbatim
 *>
-*> AB_CDRVLS tests the least squares driver routines AB_CGELS, AB_CGETSLS, AB_AB_CGELSS, AB_AB_CGELSY
-*> and AB_AB_CGELSD.
+*> CDRVLS tests the least squares driver routines CGELS, CGETSLS, CGELSS, CGELSY
+*> and CGELSD.
 *> \endverbatim
 *
 *  Arguments:
@@ -188,7 +188,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_CDRVLS( DOTYPE, NM, MVAL, NN, NVAL, NNS, NSVAL, NNB,
+      SUBROUTINE CDRVLS( DOTYPE, NM, MVAL, NN, NVAL, NNS, NSVAL, NNB,
      $                   NBVAL, NXVAL, THRESH, TSTERR, A, COPYA, B,
      $                   COPYB, C, S, COPYS, NOUT )
 *
@@ -231,11 +231,9 @@
      $                   LWLSY, LWORK, M, MNMIN, N, NB, NCOLS, NERRS,
      $                   NFAIL, NRHS, NROWS, NRUN, RANK, MB,
      $                   MMAX, NMAX, NSMAX, LIWORK, LRWORK,
-     $                   LWORK_AB_CGELS, LWORK_AB_CGETSLS, LWORK_AB_AB_C
-     $GELSS,
-     $                   LWORK_AB_AB_CGELSY, LWORK_AB_AB_CGELSD,
-     $                   LRWORK_AB_AB_CGELSY, LRWORK_AB_AB_CGELSS, LRWOR
-     $K_AB_AB_CGELSD
+     $                   LWORK_CGELS, LWORK_CGETSLS, LWORK_CGELSS,
+     $                   LWORK_CGELSY, LWORK_CGELSD,
+     $                   LRWORK_CGELSY, LRWORK_CGELSS, LRWORK_CGELSD
       REAL               EPS, NORMA, NORMB, RCOND
 *     ..
 *     .. Local Arrays ..
@@ -249,19 +247,14 @@
       INTEGER, ALLOCATABLE :: IWORK (:)
 *     ..
 *     .. External Functions ..
-      REAL               AB_CQRT12, AB_CQRT14, AB_CQRT17, AB_SASUM, AB_S
-     $LAMCH
-      EXTERNAL           AB_CQRT12, AB_CQRT14, AB_CQRT17, AB_SASUM, AB_S
-     $LAMCH
+      REAL               CQRT12, CQRT14, CQRT17, SASUM, SLAMCH
+      EXTERNAL           CQRT12, CQRT14, CQRT17, SASUM, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALAERH, AB_ALAHD, AB_ALASVM, AB_CERRLS, AB_C
-     $GELS, AB_AB_CGELSD,
-     $                   AB_AB_CGELSS, AB_AB_CGELSY, AB_CGEMM, AB_CGETSL
-     $S, AB_CLACPY,
-     $                   AB_CLARNV, AB_CQRT13, AB_CQRT15, AB_CQRT16, AB_
-     $CAB_SSCAL,
-     $                   AB_SAXPY, AB_XLAENV
+      EXTERNAL           ALAERH, ALAHD, ALASVM, CERRLS, CGELS, CGELSD,
+     $                   CGELSS, CGELSY, CGEMM, CGETSLS, CLACPY,
+     $                   CLARNV, CQRT13, CQRT15, CQRT16, CSSCAL,
+     $                   SAXPY, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, INT, REAL, SQRT
@@ -290,7 +283,7 @@
       DO 10 I = 1, 4
          ISEED( I ) = ISEEDY( I )
    10 CONTINUE
-      EPS = AB_SLAMCH( 'Epsilon' )
+      EPS = SLAMCH( 'Epsilon' )
 *
 *     Threshold for rank estimation
 *
@@ -298,14 +291,14 @@
 *
 *     Test the error exits
 *
-      CALL AB_XLAENV( 9, SMLSIZ )
+      CALL XLAENV( 9, SMLSIZ )
       IF( TSTERR )
-     $   CALL AB_CERRLS( PATH, NOUT )
+     $   CALL CERRLS( PATH, NOUT )
 *
-*     Print the AB_HEADER if NM = 0 or NN = 0 and THRESH = 0.
+*     Print the header if NM = 0 or NN = 0 and THRESH = 0.
 *
       IF( ( NM.EQ.0 .OR. NN.EQ.0 ) .AND. THRESH.EQ.ZERO )
-     $   CALL AB_ALAHD( NOUT, PATH )
+     $   CALL ALAHD( NOUT, PATH )
       INFOT = 0
 *
 *     Compute maximal workspace needed for all routines
@@ -334,7 +327,7 @@
       MNMIN = MAX( MIN( M, N ), 1 )
 *
 *     Compute workspace needed for routines
-*     AB_CQRT14, AB_CQRT17 (two side cases), AB_CQRT15 and AB_CQRT12
+*     CQRT14, CQRT17 (two side cases), CQRT15 and CQRT12
 *
       LWORK = MAX( 1, ( M+N )*NRHS,
      $      ( N+NRHS )*( M+2 ), ( M+NRHS )*( N+2 ),
@@ -367,48 +360,42 @@
                                  TRANS = 'C'
                               END IF
 *
-*                             Compute workspace needed for AB_CGELS
-                              CALL AB_CGELS( TRANS, M, N, NRHS, A, LDA,
+*                             Compute workspace needed for CGELS
+                              CALL CGELS( TRANS, M, N, NRHS, A, LDA,
      $                                    B, LDB, WQ, -1, INFO )
-                              LWORK_AB_CGELS = INT( WQ )
-*                             Compute workspace needed for AB_CGETSLS
-                              CALL AB_CGETSLS( TRANS, M, N, NRHS, A, LDA
-     $,
+                              LWORK_CGELS = INT( WQ )
+*                             Compute workspace needed for CGETSLS
+                              CALL CGETSLS( TRANS, M, N, NRHS, A, LDA,
      $                                      B, LDB, WQ, -1, INFO )
-                              LWORK_AB_CGETSLS = INT( WQ )
+                              LWORK_CGETSLS = INT( WQ )
                            ENDDO
                         END IF
-*                       Compute workspace needed for AB_AB_CGELSY
-                        CALL AB_AB_CGELSY( M, N, NRHS, A, LDA, B, LDB,
+*                       Compute workspace needed for CGELSY
+                        CALL CGELSY( M, N, NRHS, A, LDA, B, LDB,
      $                               IWQ, RCOND, CRANK, WQ, -1, RWORK,
      $                               INFO )
-                        LWORK_AB_AB_CGELSY = INT( WQ )
-                        LRWORK_AB_AB_CGELSY = 2*N
-*                       Compute workspace needed for AB_AB_CGELSS
-                        CALL AB_AB_CGELSS( M, N, NRHS, A, LDA, B, LDB, S
-     $,
+                        LWORK_CGELSY = INT( WQ )
+                        LRWORK_CGELSY = 2*N
+*                       Compute workspace needed for CGELSS
+                        CALL CGELSS( M, N, NRHS, A, LDA, B, LDB, S,
      $                               RCOND, CRANK, WQ, -1, RWORK, INFO )
-                        LWORK_AB_AB_CGELSS = INT( WQ )
-                        LRWORK_AB_AB_CGELSS = 5*MNMIN
-*                       Compute workspace needed for AB_AB_CGELSD
-                        CALL AB_AB_CGELSD( M, N, NRHS, A, LDA, B, LDB, S
-     $,
+                        LWORK_CGELSS = INT( WQ )
+                        LRWORK_CGELSS = 5*MNMIN
+*                       Compute workspace needed for CGELSD
+                        CALL CGELSD( M, N, NRHS, A, LDA, B, LDB, S,
      $                               RCOND, CRANK, WQ, -1, RWQ, IWQ,
      $                               INFO )
-                        LWORK_AB_AB_CGELSD = INT( WQ )
-                        LRWORK_AB_AB_CGELSD = INT( RWQ )
-*                       Compute LIWORK workspace needed for AB_AB_CGELSY and AB_AB_CGELSD
+                        LWORK_CGELSD = INT( WQ )
+                        LRWORK_CGELSD = INT( RWQ )
+*                       Compute LIWORK workspace needed for CGELSY and CGELSD
                         LIWORK = MAX( LIWORK, N, IWQ )
-*                       Compute LRWORK workspace needed for AB_AB_CGELSY, AB_AB_CGELSS and AB_AB_CGELSD
-                        LRWORK = MAX( LRWORK, LRWORK_AB_AB_CGELSY,
-     $                                LRWORK_AB_AB_CGELSS, LRWORK_AB_AB_
-     $CGELSD )
+*                       Compute LRWORK workspace needed for CGELSY, CGELSS and CGELSD
+                        LRWORK = MAX( LRWORK, LRWORK_CGELSY,
+     $                                LRWORK_CGELSS, LRWORK_CGELSD )
 *                       Compute LWORK workspace needed for all functions
-                        LWORK = MAX( LWORK, LWORK_AB_CGELS, LWORK_AB_CGE
-     $TSLS,
-     $                               LWORK_AB_AB_CGELSY, LWORK_AB_AB_CGE
-     $LSS,
-     $                               LWORK_AB_AB_CGELSD )
+                        LWORK = MAX( LWORK, LWORK_CGELS, LWORK_CGETSLS,
+     $                               LWORK_CGELSY, LWORK_CGELSS,
+     $                               LWORK_CGELSD )
                      END IF
                   ENDDO
                ENDDO
@@ -443,16 +430,16 @@
 *
                      IF( IRANK.EQ.1 ) THEN
 *
-*                       Test AB_CGELS
+*                       Test CGELS
 *
 *                       Generate a matrix of scaling type ISCALE
 *
-                        CALL AB_CQRT13( ISCALE, M, N, COPYA, LDA, NORMA,
+                        CALL CQRT13( ISCALE, M, N, COPYA, LDA, NORMA,
      $                               ISEED )
                         DO 40 INB = 1, NNB
                            NB = NBVAL( INB )
-                           CALL AB_XLAENV( 1, NB )
-                           CALL AB_XLAENV( 3, NXVAL( INB ) )
+                           CALL XLAENV( 1, NB )
+                           CALL XLAENV( 3, NXVAL( INB ) )
 *
                            DO 30 ITRAN = 1, 2
                               IF( ITRAN.EQ.1 ) THEN
@@ -469,37 +456,32 @@
 *                             Set up a consistent rhs
 *
                               IF( NCOLS.GT.0 ) THEN
-                                 CALL AB_CLARNV( 2, ISEED, NCOLS*NRHS,
+                                 CALL CLARNV( 2, ISEED, NCOLS*NRHS,
      $                                        WORK )
-                                 CALL AB_CAB_SSCAL( NCOLS*NRHS,
+                                 CALL CSSCAL( NCOLS*NRHS,
      $                                        ONE / REAL( NCOLS ), WORK,
      $                                        1 )
                               END IF
-                              CALL AB_CGEMM( TRANS, 'No transpose', NROW
-     $S,
+                              CALL CGEMM( TRANS, 'No transpose', NROWS,
      $                                    NRHS, NCOLS, CONE, COPYA, LDA,
      $                                    WORK, LDWORK, CZERO, B, LDB )
-                              CALL AB_CLACPY( 'Full', NROWS, NRHS, B, LD
-     $B,
+                              CALL CLACPY( 'Full', NROWS, NRHS, B, LDB,
      $                                     COPYB, LDB )
 *
 *                             Solve LS or overdetermined system
 *
                               IF( M.GT.0 .AND. N.GT.0 ) THEN
-                                 CALL AB_CLACPY( 'Full', M, N, COPYA, LD
-     $A,
+                                 CALL CLACPY( 'Full', M, N, COPYA, LDA,
      $                                        A, LDA )
-                                 CALL AB_CLACPY( 'Full', NROWS, NRHS,
+                                 CALL CLACPY( 'Full', NROWS, NRHS,
      $                                        COPYB, LDB, B, LDB )
                               END IF
-                              SRNAMT = 'AB_CGELS '
-                              CALL AB_CGELS( TRANS, M, N, NRHS, A, LDA, 
-     $B,
+                              SRNAMT = 'CGELS '
+                              CALL CGELS( TRANS, M, N, NRHS, A, LDA, B,
      $                                    LDB, WORK, LWORK, INFO )
 *
                               IF( INFO.NE.0 )
-     $                           CALL AB_ALAERH( PATH, 'AB_CGELS ', INFO
-     $, 0,
+     $                           CALL ALAERH( PATH, 'CGELS ', INFO, 0,
      $                                        TRANS, M, N, NRHS, -1, NB,
      $                                        ITYPE, NFAIL, NERRS,
      $                                        NOUT )
@@ -508,9 +490,9 @@
 *
                               LDWORK = MAX( 1, NROWS )
                               IF( NROWS.GT.0 .AND. NRHS.GT.0 )
-     $                           CALL AB_CLACPY( 'Full', NROWS, NRHS,
+     $                           CALL CLACPY( 'Full', NROWS, NRHS,
      $                                        COPYB, LDB, C, LDB )
-                              CALL AB_CQRT16( TRANS, M, N, NRHS, COPYA,
+                              CALL CQRT16( TRANS, M, N, NRHS, COPYA,
      $                                     LDA, B, LDB, C, LDB, RWORK,
      $                                     RESULT( 1 ) )
 *
@@ -519,8 +501,7 @@
 *
 *                                Solving LS system
 *
-                                 RESULT( 2 ) = AB_CQRT17( TRANS, 1, M, N
-     $,
+                                 RESULT( 2 ) = CQRT17( TRANS, 1, M, N,
      $                                         NRHS, COPYA, LDA, B, LDB,
      $                                         COPYB, LDB, C, WORK,
      $                                         LWORK )
@@ -528,7 +509,7 @@
 *
 *                                Solving overdetermined system
 *
-                                 RESULT( 2 ) = AB_CQRT14( TRANS, M, N,
+                                 RESULT( 2 ) = CQRT14( TRANS, M, N,
      $                                         NRHS, COPYA, LDA, B, LDB,
      $                                         WORK, LWORK )
                               END IF
@@ -539,7 +520,7 @@
                               DO 20 K = 1, 2
                                  IF( RESULT( K ).GE.THRESH ) THEN
                                     IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                                 CALL AB_ALAHD( NOUT, PATH )
+     $                                 CALL ALAHD( NOUT, PATH )
                                     WRITE( NOUT, FMT = 9999 )TRANS, M,
      $                                 N, NRHS, NB, ITYPE, K,
      $                                 RESULT( K )
@@ -551,18 +532,18 @@
    40                   CONTINUE
 *
 *
-*                       Test AB_CGETSLS
+*                       Test CGETSLS
 *
 *                       Generate a matrix of scaling type ISCALE
 *
-                        CALL AB_CQRT13( ISCALE, M, N, COPYA, LDA, NORMA,
+                        CALL CQRT13( ISCALE, M, N, COPYA, LDA, NORMA,
      $                               ISEED )
                         DO 65 INB = 1, NNB
                              MB = NBVAL( INB )
-                             CALL AB_XLAENV( 1, MB )
+                             CALL XLAENV( 1, MB )
                              DO 62 IMB = 1, NNB
                               NB = NBVAL( IMB )
-                              CALL AB_XLAENV( 2, NB )
+                              CALL XLAENV( 2, NB )
 *
                            DO 60 ITRAN = 1, 2
                               IF( ITRAN.EQ.1 ) THEN
@@ -579,35 +560,31 @@
 *                             Set up a consistent rhs
 *
                               IF( NCOLS.GT.0 ) THEN
-                                 CALL AB_CLARNV( 2, ISEED, NCOLS*NRHS,
+                                 CALL CLARNV( 2, ISEED, NCOLS*NRHS,
      $                                        WORK )
-                                 CALL AB_CSCAL( NCOLS*NRHS,
+                                 CALL CSCAL( NCOLS*NRHS,
      $                                       ONE / REAL( NCOLS ), WORK,
      $                                       1 )
                               END IF
-                              CALL AB_CGEMM( TRANS, 'No transpose', NROW
-     $S,
+                              CALL CGEMM( TRANS, 'No transpose', NROWS,
      $                                    NRHS, NCOLS, CONE, COPYA, LDA,
      $                                    WORK, LDWORK, CZERO, B, LDB )
-                              CALL AB_CLACPY( 'Full', NROWS, NRHS, B, LD
-     $B,
+                              CALL CLACPY( 'Full', NROWS, NRHS, B, LDB,
      $                                     COPYB, LDB )
 *
 *                             Solve LS or overdetermined system
 *
                               IF( M.GT.0 .AND. N.GT.0 ) THEN
-                                 CALL AB_CLACPY( 'Full', M, N, COPYA, LD
-     $A,
+                                 CALL CLACPY( 'Full', M, N, COPYA, LDA,
      $                                        A, LDA )
-                                 CALL AB_CLACPY( 'Full', NROWS, NRHS,
+                                 CALL CLACPY( 'Full', NROWS, NRHS,
      $                                        COPYB, LDB, B, LDB )
                               END IF
-                              SRNAMT = 'AB_CGETSLS '
-                              CALL AB_CGETSLS( TRANS, M, N, NRHS, A,
+                              SRNAMT = 'CGETSLS '
+                              CALL CGETSLS( TRANS, M, N, NRHS, A,
      $                                 LDA, B, LDB, WORK, LWORK, INFO )
                               IF( INFO.NE.0 )
-     $                           CALL AB_ALAERH( PATH, 'AB_CGETSLS ', IN
-     $FO, 0,
+     $                           CALL ALAERH( PATH, 'CGETSLS ', INFO, 0,
      $                                        TRANS, M, N, NRHS, -1, NB,
      $                                        ITYPE, NFAIL, NERRS,
      $                                        NOUT )
@@ -616,9 +593,9 @@
 *
                               LDWORK = MAX( 1, NROWS )
                               IF( NROWS.GT.0 .AND. NRHS.GT.0 )
-     $                           CALL AB_CLACPY( 'Full', NROWS, NRHS,
+     $                           CALL CLACPY( 'Full', NROWS, NRHS,
      $                                        COPYB, LDB, C, LDB )
-                              CALL AB_CQRT16( TRANS, M, N, NRHS, COPYA,
+                              CALL CQRT16( TRANS, M, N, NRHS, COPYA,
      $                                     LDA, B, LDB, C, LDB, WORK,
      $                                     RESULT( 15 ) )
 *
@@ -627,8 +604,7 @@
 *
 *                                Solving LS system
 *
-                                 RESULT( 16 ) = AB_CQRT17( TRANS, 1, M, 
-     $N,
+                                 RESULT( 16 ) = CQRT17( TRANS, 1, M, N,
      $                                         NRHS, COPYA, LDA, B, LDB,
      $                                         COPYB, LDB, C, WORK,
      $                                         LWORK )
@@ -636,7 +612,7 @@
 *
 *                                Solving overdetermined system
 *
-                                 RESULT( 16 ) = AB_CQRT14( TRANS, M, N,
+                                 RESULT( 16 ) = CQRT14( TRANS, M, N,
      $                                         NRHS, COPYA, LDA, B, LDB,
      $                                         WORK, LWORK )
                               END IF
@@ -647,7 +623,7 @@
                               DO 50 K = 15, 16
                                  IF( RESULT( K ).GE.THRESH ) THEN
                                     IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                                 CALL AB_ALAHD( NOUT, PATH )
+     $                                 CALL ALAHD( NOUT, PATH )
                                     WRITE( NOUT, FMT = 9997 )TRANS, M,
      $                                 N, NRHS, MB, NB, ITYPE, K,
      $                                 RESULT( K )
@@ -663,8 +639,7 @@
 *                    Generate a matrix of scaling type ISCALE and rank
 *                    type IRANK.
 *
-                     CALL AB_CQRT15( ISCALE, IRANK, M, N, NRHS, COPYA, L
-     $DA,
+                     CALL CQRT15( ISCALE, IRANK, M, N, NRHS, COPYA, LDA,
      $                            COPYB, LDB, COPYS, RANK, NORMA, NORMB,
      $                            ISEED, WORK, LWORK )
 *
@@ -676,19 +651,18 @@
 *
                      DO 90 INB = 1, NNB
                         NB = NBVAL( INB )
-                        CALL AB_XLAENV( 1, NB )
-                        CALL AB_XLAENV( 3, NXVAL( INB ) )
+                        CALL XLAENV( 1, NB )
+                        CALL XLAENV( 3, NXVAL( INB ) )
 *
-*                       Test AB_AB_CGELSY
+*                       Test CGELSY
 *
-*                       AB_AB_CGELSY:  Compute the minimum-norm solution
+*                       CGELSY:  Compute the minimum-norm solution
 *                       X to min( norm( A * X - B ) )
 *                       using the rank-revealing orthogonal
 *                       factorization.
 *
-                        CALL AB_CLACPY( 'Full', M, N, COPYA, LDA, A, LDA
-     $ )
-                        CALL AB_CLACPY( 'Full', M, NRHS, COPYB, LDB, B,
+                        CALL CLACPY( 'Full', M, N, COPYA, LDA, A, LDA )
+                        CALL CLACPY( 'Full', M, NRHS, COPYB, LDB, B,
      $                               LDB )
 *
 *                       Initialize vector IWORK.
@@ -697,14 +671,12 @@
                            IWORK( J ) = 0
    70                   CONTINUE
 *
-                        SRNAMT = 'AB_AB_CGELSY'
-                        CALL AB_AB_CGELSY( M, N, NRHS, A, LDA, B, LDB, I
-     $WORK,
+                        SRNAMT = 'CGELSY'
+                        CALL CGELSY( M, N, NRHS, A, LDA, B, LDB, IWORK,
      $                               RCOND, CRANK, WORK, LWLSY, RWORK,
      $                               INFO )
                         IF( INFO.NE.0 )
-     $                     CALL AB_ALAERH( PATH, 'AB_AB_CGELSY', INFO, 0
-     $, ' ', M,
+     $                     CALL ALAERH( PATH, 'CGELSY', INFO, 0, ' ', M,
      $                                  N, NRHS, -1, NB, ITYPE, NFAIL,
      $                                  NERRS, NOUT )
 *
@@ -713,17 +685,15 @@
 *                       Test 3:  Compute relative error in svd
 *                                workspace: M*N + 4*MIN(M,N) + MAX(M,N)
 *
-                        RESULT( 3 ) = AB_CQRT12( CRANK, CRANK, A, LDA,
+                        RESULT( 3 ) = CQRT12( CRANK, CRANK, A, LDA,
      $                                COPYS, WORK, LWORK, RWORK )
 *
 *                       Test 4:  Compute error in solution
 *                                workspace:  M*NRHS + M
 *
-                        CALL AB_CLACPY( 'Full', M, NRHS, COPYB, LDB, WOR
-     $K,
+                        CALL CLACPY( 'Full', M, NRHS, COPYB, LDB, WORK,
      $                               LDWORK )
-                        CALL AB_CQRT16( 'No transpose', M, N, NRHS, COPY
-     $A,
+                        CALL CQRT16( 'No transpose', M, N, NRHS, COPYA,
      $                               LDA, B, LDB, WORK, LDWORK, RWORK,
      $                               RESULT( 4 ) )
 *
@@ -732,8 +702,7 @@
 *
                         RESULT( 5 ) = ZERO
                         IF( M.GT.CRANK )
-     $                     RESULT( 5 ) = AB_CQRT17( 'No transpose', 1, M
-     $,
+     $                     RESULT( 5 ) = CQRT17( 'No transpose', 1, M,
      $                                   N, NRHS, COPYA, LDA, B, LDB,
      $                                   COPYB, LDB, C, WORK, LWORK )
 *
@@ -743,30 +712,26 @@
                         RESULT( 6 ) = ZERO
 *
                         IF( N.GT.CRANK )
-     $                     RESULT( 6 ) = AB_CQRT14( 'No transpose', M, N
-     $,
+     $                     RESULT( 6 ) = CQRT14( 'No transpose', M, N,
      $                                   NRHS, COPYA, LDA, B, LDB,
      $                                   WORK, LWORK )
 *
-*                       Test AB_AB_CGELSS
+*                       Test CGELSS
 *
-*                       AB_AB_CGELSS:  Compute the minimum-norm solution
+*                       CGELSS:  Compute the minimum-norm solution
 *                       X to min( norm( A * X - B ) )
 *                       using the SVD.
 *
-                        CALL AB_CLACPY( 'Full', M, N, COPYA, LDA, A, LDA
-     $ )
-                        CALL AB_CLACPY( 'Full', M, NRHS, COPYB, LDB, B,
+                        CALL CLACPY( 'Full', M, N, COPYA, LDA, A, LDA )
+                        CALL CLACPY( 'Full', M, NRHS, COPYB, LDB, B,
      $                               LDB )
-                        SRNAMT = 'AB_AB_CGELSS'
-                        CALL AB_AB_CGELSS( M, N, NRHS, A, LDA, B, LDB, S
-     $,
+                        SRNAMT = 'CGELSS'
+                        CALL CGELSS( M, N, NRHS, A, LDA, B, LDB, S,
      $                               RCOND, CRANK, WORK, LWORK, RWORK,
      $                               INFO )
 *
                         IF( INFO.NE.0 )
-     $                     CALL AB_ALAERH( PATH, 'AB_AB_CGELSS', INFO, 0
-     $, ' ', M,
+     $                     CALL ALAERH( PATH, 'CGELSS', INFO, 0, ' ', M,
      $                                  N, NRHS, -1, NB, ITYPE, NFAIL,
      $                                  NERRS, NOUT )
 *
@@ -776,9 +741,9 @@
 *                       Test 7:  Compute relative error in svd
 *
                         IF( RANK.GT.0 ) THEN
-                           CALL AB_SAXPY( MNMIN, -ONE, COPYS, 1, S, 1 )
-                           RESULT( 7 ) = AB_SASUM( MNMIN, S, 1 ) /
-     $                                    AB_SASUM( MNMIN, COPYS, 1 ) /
+                           CALL SAXPY( MNMIN, -ONE, COPYS, 1, S, 1 )
+                           RESULT( 7 ) = SASUM( MNMIN, S, 1 ) /
+     $                                    SASUM( MNMIN, COPYS, 1 ) /
      $                                    ( EPS*REAL( MNMIN ) )
                         ELSE
                            RESULT( 7 ) = ZERO
@@ -786,11 +751,9 @@
 *
 *                       Test 8:  Compute error in solution
 *
-                        CALL AB_CLACPY( 'Full', M, NRHS, COPYB, LDB, WOR
-     $K,
+                        CALL CLACPY( 'Full', M, NRHS, COPYB, LDB, WORK,
      $                               LDWORK )
-                        CALL AB_CQRT16( 'No transpose', M, N, NRHS, COPY
-     $A,
+                        CALL CQRT16( 'No transpose', M, N, NRHS, COPYA,
      $                               LDA, B, LDB, WORK, LDWORK, RWORK,
      $                               RESULT( 8 ) )
 *
@@ -798,8 +761,7 @@
 *
                         RESULT( 9 ) = ZERO
                         IF( M.GT.CRANK )
-     $                     RESULT( 9 ) = AB_CQRT17( 'No transpose', 1, M
-     $,
+     $                     RESULT( 9 ) = CQRT17( 'No transpose', 1, M,
      $                                    N, NRHS, COPYA, LDA, B, LDB,
      $                                    COPYB, LDB, C, WORK, LWORK )
 *
@@ -807,41 +769,37 @@
 *
                         RESULT( 10 ) = ZERO
                         IF( N.GT.CRANK )
-     $                     RESULT( 10 ) = AB_CQRT14( 'No transpose', M, 
-     $N,
+     $                     RESULT( 10 ) = CQRT14( 'No transpose', M, N,
      $                                    NRHS, COPYA, LDA, B, LDB,
      $                                    WORK, LWORK )
 *
-*                       Test AB_AB_CGELSD
+*                       Test CGELSD
 *
-*                       AB_AB_CGELSD:  Compute the minimum-norm solution X
+*                       CGELSD:  Compute the minimum-norm solution X
 *                       to min( norm( A * X - B ) ) using a
 *                       divide and conquer SVD.
 *
-                        CALL AB_XLAENV( 9, 25 )
+                        CALL XLAENV( 9, 25 )
 *
-                        CALL AB_CLACPY( 'Full', M, N, COPYA, LDA, A, LDA
-     $ )
-                        CALL AB_CLACPY( 'Full', M, NRHS, COPYB, LDB, B,
+                        CALL CLACPY( 'Full', M, N, COPYA, LDA, A, LDA )
+                        CALL CLACPY( 'Full', M, NRHS, COPYB, LDB, B,
      $                               LDB )
 *
-                        SRNAMT = 'AB_AB_CGELSD'
-                        CALL AB_AB_CGELSD( M, N, NRHS, A, LDA, B, LDB, S
-     $,
+                        SRNAMT = 'CGELSD'
+                        CALL CGELSD( M, N, NRHS, A, LDA, B, LDB, S,
      $                               RCOND, CRANK, WORK, LWORK, RWORK,
      $                               IWORK, INFO )
                         IF( INFO.NE.0 )
-     $                     CALL AB_ALAERH( PATH, 'AB_AB_CGELSD', INFO, 0
-     $, ' ', M,
+     $                     CALL ALAERH( PATH, 'CGELSD', INFO, 0, ' ', M,
      $                                  N, NRHS, -1, NB, ITYPE, NFAIL,
      $                                  NERRS, NOUT )
 *
 *                       Test 11:  Compute relative error in svd
 *
                         IF( RANK.GT.0 ) THEN
-                           CALL AB_SAXPY( MNMIN, -ONE, COPYS, 1, S, 1 )
-                           RESULT( 11 ) = AB_SASUM( MNMIN, S, 1 ) /
-     $                                    AB_SASUM( MNMIN, COPYS, 1 ) /
+                           CALL SAXPY( MNMIN, -ONE, COPYS, 1, S, 1 )
+                           RESULT( 11 ) = SASUM( MNMIN, S, 1 ) /
+     $                                    SASUM( MNMIN, COPYS, 1 ) /
      $                                    ( EPS*REAL( MNMIN ) )
                         ELSE
                            RESULT( 11 ) = ZERO
@@ -849,11 +807,9 @@
 *
 *                       Test 12:  Compute error in solution
 *
-                        CALL AB_CLACPY( 'Full', M, NRHS, COPYB, LDB, WOR
-     $K,
+                        CALL CLACPY( 'Full', M, NRHS, COPYB, LDB, WORK,
      $                               LDWORK )
-                        CALL AB_CQRT16( 'No transpose', M, N, NRHS, COPY
-     $A,
+                        CALL CQRT16( 'No transpose', M, N, NRHS, COPYA,
      $                               LDA, B, LDB, WORK, LDWORK, RWORK,
      $                               RESULT( 12 ) )
 *
@@ -861,8 +817,7 @@
 *
                         RESULT( 13 ) = ZERO
                         IF( M.GT.CRANK )
-     $                     RESULT( 13 ) = AB_CQRT17( 'No transpose', 1, 
-     $M,
+     $                     RESULT( 13 ) = CQRT17( 'No transpose', 1, M,
      $                                    N, NRHS, COPYA, LDA, B, LDB,
      $                                    COPYB, LDB, C, WORK, LWORK )
 *
@@ -870,8 +825,7 @@
 *
                         RESULT( 14 ) = ZERO
                         IF( N.GT.CRANK )
-     $                     RESULT( 14 ) = AB_CQRT14( 'No transpose', M, 
-     $N,
+     $                     RESULT( 14 ) = CQRT14( 'No transpose', M, N,
      $                                    NRHS, COPYA, LDA, B, LDB,
      $                                    WORK, LWORK )
 *
@@ -881,7 +835,7 @@
                         DO 80 K = 3, 14
                            IF( RESULT( K ).GE.THRESH ) THEN
                               IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                           CALL AB_ALAHD( NOUT, PATH )
+     $                           CALL ALAHD( NOUT, PATH )
                               WRITE( NOUT, FMT = 9998 )M, N, NRHS, NB,
      $                           ITYPE, K, RESULT( K )
                               NFAIL = NFAIL + 1
@@ -898,7 +852,7 @@
 *
 *     Print a summary of the results.
 *
-      CALL AB_ALASVM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL ALASVM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( ' TRANS=''', A1, ''', M=', I5, ', N=', I5, ', NRHS=', I4,
      $      ', NB=', I4, ', type', I2, ', test(', I2, ')=', G12.5 )
@@ -913,6 +867,6 @@
       DEALLOCATE( IWORK )
       RETURN
 *
-*     End of AB_CDRVLS
+*     End of CDRVLS
 *
       END

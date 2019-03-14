@@ -1,4 +1,4 @@
-*> \brief \b AB_DLAMCHTST
+*> \brief \b DLAMCHTST
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*      PROGRAM AB_DLAMCHTST
+*      PROGRAM DLAMCHTST
 *
 *  Authors:
 *  ========
@@ -22,7 +22,7 @@
 *
 *> \ingroup auxOTHERauxiliary
 *
-*  =====================================================================      PROGRAM AB_DLAMCHTST
+*  =====================================================================      PROGRAM DLAMCHTST
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -36,21 +36,21 @@
      $                   SFMIN, T
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH
-      EXTERNAL           AB_DLAMCH
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           DLAMCH
 *     ..
 *     .. Executable Statements ..
 *
-      EPS   = AB_DLAMCH( 'Epsilon' )
-      SFMIN = AB_DLAMCH( 'Safe minimum' )
-      BASE  = AB_DLAMCH( 'Base' )
-      PREC  = AB_DLAMCH( 'Precision' )
-      T     = AB_DLAMCH( 'Number of digits in mantissa' )
-      RND   = AB_DLAMCH( 'Rounding mode' )
-      EMIN  = AB_DLAMCH( 'Minimum exponent' )
-      RMIN  = AB_DLAMCH( 'Underflow threshold' )
-      EMAX  = AB_DLAMCH( 'Largest exponent' )
-      RMAX  = AB_DLAMCH( 'Overflow threshold' )
+      EPS   = DLAMCH( 'Epsilon' )
+      SFMIN = DLAMCH( 'Safe minimum' )
+      BASE  = DLAMCH( 'Base' )
+      PREC  = DLAMCH( 'Precision' )
+      T     = DLAMCH( 'Number of digits in mantissa' )
+      RND   = DLAMCH( 'Rounding mode' )
+      EMIN  = DLAMCH( 'Minimum exponent' )
+      RMIN  = DLAMCH( 'Underflow threshold' )
+      EMAX  = DLAMCH( 'Largest exponent' )
+      RMAX  = DLAMCH( 'Overflow threshold' )
 *
       WRITE( 6, * )' Epsilon                      = ', EPS
       WRITE( 6, * )' Safe minimum                 = ', SFMIN

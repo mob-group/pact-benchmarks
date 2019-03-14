@@ -1,4 +1,4 @@
-*> \brief \b AB_ZSCAL
+*> \brief \b ZSCAL
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZSCAL(N,ZA,ZX,INCX)
+*       SUBROUTINE ZSCAL(N,ZA,ZX,INCX)
 *
 *       .. Scalar Arguments ..
 *       COMPLEX*16 ZA
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*>    AB_ZSCAL scales a vector by a constant.
+*>    ZSCAL scales a vector by a constant.
 *> \endverbatim
 *
 *  Arguments:
@@ -76,7 +76,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_ZSCAL(N,ZA,ZX,INCX)
+      SUBROUTINE ZSCAL(N,ZA,ZX,INCX)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

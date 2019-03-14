@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_DSYGVX
+*> \brief \b DSYGVX
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_DSYGVX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_DSYGVX.f">
+*> Download DSYGVX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsygvx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_DSYGVX.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsygvx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_DSYGVX.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsygvx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_DSYGVX( ITYPE, JOBZ, RANGE, UPLO, N, A, LDA, B, LDB,
+*       SUBROUTINE DSYGVX( ITYPE, JOBZ, RANGE, UPLO, N, A, LDA, B, LDB,
 *                          VL, VU, IL, IU, ABSTOL, M, W, Z, LDZ, WORK,
 *                          LWORK, IWORK, IFAIL, INFO )
 *
@@ -39,7 +39,7 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_DSYGVX computes selected eigenvalues, and optionally, eigenvectors
+*> DSYGVX computes selected eigenvalues, and optionally, eigenvectors
 *> of a real generalized symmetric-definite eigenproblem, of the form
 *> A*x=(lambda)*B*x,  A*Bx=(lambda)*x,  or B*A*x=(lambda)*x.  Here A
 *> and B are assumed to be symmetric and B is also positive definite.
@@ -180,10 +180,10 @@
 *>          generalized problem is transformed.
 *>
 *>          Eigenvalues will be computed most accurately when ABSTOL is
-*>          set to twice the underflow threshold 2*AB_DLAMCH('S'), not zero.
+*>          set to twice the underflow threshold 2*DLAMCH('S'), not zero.
 *>          If this routine returns with INFO>0, indicating that some
 *>          eigenvectors did not converge, try setting ABSTOL to
-*>          2*AB_DLAMCH('S').
+*>          2*DLAMCH('S').
 *> \endverbatim
 *>
 *> \param[out] M
@@ -238,12 +238,12 @@
 *>          LWORK is INTEGER
 *>          The length of the array WORK.  LWORK >= max(1,8*N).
 *>          For optimal efficiency, LWORK >= (NB+3)*N,
-*>          where NB is the blocksize for AB_DSYTRD returned by AB_ILAENV.
+*>          where NB is the blocksize for DSYTRD returned by ILAENV.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -265,8 +265,8 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
-*>          > 0:  AB_DPOTRF or AB_AB_DSYEVX returned an error code:
-*>             <= N:  if INFO = i, AB_AB_DSYEVX failed to converge;
+*>          > 0:  DPOTRF or DSYEVX returned an error code:
+*>             <= N:  if INFO = i, DSYEVX failed to converge;
 *>                    i eigenvectors failed to converge.  Their indices
 *>                    are stored in array IFAIL.
 *>             > N:   if INFO = N + i, for 1 <= i <= N, then the leading
@@ -293,8 +293,7 @@
 *>     Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_DSYGVX( ITYPE, JOBZ, RANGE, UPLO, N, A, LDA, B, L
-     $DB,
+      SUBROUTINE DSYGVX( ITYPE, JOBZ, RANGE, UPLO, N, A, LDA, B, LDB,
      $                   VL, VU, IL, IU, ABSTOL, M, W, Z, LDZ, WORK,
      $                   LWORK, IWORK, IFAIL, INFO )
 *
@@ -326,13 +325,12 @@
       INTEGER            LWKMIN, LWKOPT, NB
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_LSAME, AB_ILAENV
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DPOTRF, AB_AB_DSYEVX, AB_DSYGST, AB_DTRMM, A
-     $B_DTRSM, AB_XERBLA
+      EXTERNAL           DPOTRF, DSYEVX, DSYGST, DTRMM, DTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -341,21 +339,21 @@
 *
 *     Test the input parameters.
 *
-      UPPER = AB_LSAME( UPLO, 'U' )
-      WANTZ = AB_LSAME( JOBZ, 'V' )
-      ALLEIG = AB_LSAME( RANGE, 'A' )
-      VALEIG = AB_LSAME( RANGE, 'V' )
-      INDEIG = AB_LSAME( RANGE, 'I' )
+      UPPER = LSAME( UPLO, 'U' )
+      WANTZ = LSAME( JOBZ, 'V' )
+      ALLEIG = LSAME( RANGE, 'A' )
+      VALEIG = LSAME( RANGE, 'V' )
+      INDEIG = LSAME( RANGE, 'I' )
       LQUERY = ( LWORK.EQ.-1 )
 *
       INFO = 0
       IF( ITYPE.LT.1 .OR. ITYPE.GT.3 ) THEN
          INFO = -1
-      ELSE IF( .NOT.( WANTZ .OR. AB_LSAME( JOBZ, 'N' ) ) ) THEN
+      ELSE IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -2
       ELSE IF( .NOT.( ALLEIG .OR. VALEIG .OR. INDEIG ) ) THEN
          INFO = -3
-      ELSE IF( .NOT.( UPPER .OR. AB_LSAME( UPLO, 'L' ) ) ) THEN
+      ELSE IF( .NOT.( UPPER .OR. LSAME( UPLO, 'L' ) ) ) THEN
          INFO = -4
       ELSE IF( N.LT.0 ) THEN
          INFO = -5
@@ -383,7 +381,7 @@
 *
       IF( INFO.EQ.0 ) THEN
          LWKMIN = MAX( 1, 8*N )
-         NB = AB_ILAENV( 1, 'AB_DSYTRD', UPLO, N, -1, -1, -1 )
+         NB = ILAENV( 1, 'DSYTRD', UPLO, N, -1, -1, -1 )
          LWKOPT = MAX( LWKMIN, ( NB + 3 )*N )
          WORK( 1 ) = LWKOPT
 *
@@ -393,7 +391,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_DSYGVX', -INFO )
+         CALL XERBLA( 'DSYGVX', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -408,7 +406,7 @@
 *
 *     Form a Cholesky factorization of B.
 *
-      CALL AB_DPOTRF( UPLO, N, B, LDB, INFO )
+      CALL DPOTRF( UPLO, N, B, LDB, INFO )
       IF( INFO.NE.0 ) THEN
          INFO = N + INFO
          RETURN
@@ -416,9 +414,8 @@
 *
 *     Transform problem to standard eigenvalue problem and solve.
 *
-      CALL AB_DSYGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
-      CALL AB_AB_DSYEVX( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL, IU, A
-     $BSTOL,
+      CALL DSYGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
+      CALL DSYEVX( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL, IU, ABSTOL,
      $             M, W, Z, LDZ, WORK, LWORK, IWORK, IFAIL, INFO )
 *
       IF( WANTZ ) THEN
@@ -438,8 +435,7 @@
                TRANS = 'T'
             END IF
 *
-            CALL AB_DTRSM( 'Left', UPLO, TRANS, 'Non-unit', N, M, ONE, B
-     $,
+            CALL DTRSM( 'Left', UPLO, TRANS, 'Non-unit', N, M, ONE, B,
      $                  LDB, Z, LDZ )
 *
          ELSE IF( ITYPE.EQ.3 ) THEN
@@ -453,8 +449,7 @@
                TRANS = 'N'
             END IF
 *
-            CALL AB_DTRMM( 'Left', UPLO, TRANS, 'Non-unit', N, M, ONE, B
-     $,
+            CALL DTRMM( 'Left', UPLO, TRANS, 'Non-unit', N, M, ONE, B,
      $                  LDB, Z, LDZ )
          END IF
       END IF
@@ -465,6 +460,6 @@
 *
       RETURN
 *
-*     End of AB_AB_DSYGVX
+*     End of DSYGVX
 *
       END

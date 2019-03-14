@@ -1,4 +1,4 @@
-*> \brief \b AB_CERRPS
+*> \brief \b CERRPS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CERRPS( PATH, NUNIT )
+*       SUBROUTINE CERRPS( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            NUNIT
@@ -21,8 +21,8 @@
 *>
 *> \verbatim
 *>
-*> AB_CERRPS tests the error exits for the COMPLEX routines
-*> for AB_CPSTRF..
+*> CERRPS tests the error exits for the COMPLEX routines
+*> for CPSTRF..
 *> \endverbatim
 *
 *  Arguments:
@@ -53,7 +53,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_CERRPS( PATH, NUNIT )
+      SUBROUTINE CERRPS( PATH, NUNIT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -80,7 +80,7 @@
       INTEGER            PIV( NMAX )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALAESM, AB_CHKXER, AB_CPSTF2, AB_CPSTRF
+      EXTERNAL           ALAESM, CHKXER, CPSTF2, CPSTRF
 *     ..
 *     .. Scalars in Common ..
       INTEGER            INFOT, NOUT
@@ -117,39 +117,39 @@
 *        Test error exits of the routines that use the Cholesky
 *        decomposition of an Hermitian positive semidefinite matrix.
 *
-*        AB_CPSTRF
+*        CPSTRF
 *
-      SRNAMT = 'AB_CPSTRF'
+      SRNAMT = 'CPSTRF'
       INFOT = 1
-      CALL AB_CPSTRF( '/', 0, A, 1, PIV, RANK, -1.0, RWORK, INFO )
-      CALL AB_CHKXER( 'AB_CPSTRF', INFOT, NOUT, LERR, OK )
+      CALL CPSTRF( '/', 0, A, 1, PIV, RANK, -1.0, RWORK, INFO )
+      CALL CHKXER( 'CPSTRF', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_CPSTRF( 'U', -1, A, 1, PIV, RANK, -1.0, RWORK, INFO )
-      CALL AB_CHKXER( 'AB_CPSTRF', INFOT, NOUT, LERR, OK )
+      CALL CPSTRF( 'U', -1, A, 1, PIV, RANK, -1.0, RWORK, INFO )
+      CALL CHKXER( 'CPSTRF', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL AB_CPSTRF( 'U', 2, A, 1, PIV, RANK, -1.0, RWORK, INFO )
-      CALL AB_CHKXER( 'AB_CPSTRF', INFOT, NOUT, LERR, OK )
+      CALL CPSTRF( 'U', 2, A, 1, PIV, RANK, -1.0, RWORK, INFO )
+      CALL CHKXER( 'CPSTRF', INFOT, NOUT, LERR, OK )
 *
-*        AB_CPSTF2
+*        CPSTF2
 *
-      SRNAMT = 'AB_CPSTF2'
+      SRNAMT = 'CPSTF2'
       INFOT = 1
-      CALL AB_CPSTF2( '/', 0, A, 1, PIV, RANK, -1.0, RWORK, INFO )
-      CALL AB_CHKXER( 'AB_CPSTF2', INFOT, NOUT, LERR, OK )
+      CALL CPSTF2( '/', 0, A, 1, PIV, RANK, -1.0, RWORK, INFO )
+      CALL CHKXER( 'CPSTF2', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_CPSTF2( 'U', -1, A, 1, PIV, RANK, -1.0, RWORK, INFO )
-      CALL AB_CHKXER( 'AB_CPSTF2', INFOT, NOUT, LERR, OK )
+      CALL CPSTF2( 'U', -1, A, 1, PIV, RANK, -1.0, RWORK, INFO )
+      CALL CHKXER( 'CPSTF2', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL AB_CPSTF2( 'U', 2, A, 1, PIV, RANK, -1.0, RWORK, INFO )
-      CALL AB_CHKXER( 'AB_CPSTF2', INFOT, NOUT, LERR, OK )
+      CALL CPSTF2( 'U', 2, A, 1, PIV, RANK, -1.0, RWORK, INFO )
+      CALL CHKXER( 'CPSTF2', INFOT, NOUT, LERR, OK )
 *
 *
 *     Print a summary line.
 *
-      CALL AB_ALAESM( PATH, OK, NOUT )
+      CALL ALAESM( PATH, OK, NOUT )
 *
       RETURN
 *
-*     End of AB_CERRPS
+*     End of CERRPS
 *
       END

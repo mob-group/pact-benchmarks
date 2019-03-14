@@ -1,4 +1,4 @@
-*> \brief \b AB_CLAGGE
+*> \brief \b CLAGGE
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CLAGGE( M, N, KL, KU, D, A, LDA, ISEED, WORK, INFO )
+*       SUBROUTINE CLAGGE( M, N, KL, KU, D, A, LDA, ISEED, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, KL, KU, LDA, M, N
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CLAGGE generates a complex general m by n matrix A, by pre- and post-
+*> CLAGGE generates a complex general m by n matrix A, by pre- and post-
 *> multiplying a real diagonal matrix D with random unitary matrices:
 *> A = U*D*V. The lower and upper bandwidths may then be reduced to
 *> kl and ku by additional unitary transformations.
@@ -112,7 +112,7 @@
 *> \ingroup complex_matgen
 *
 *  =====================================================================
-      SUBROUTINE AB_CLAGGE( M, N, KL, KU, D, A, LDA, ISEED, WORK, INFO )
+      SUBROUTINE CLAGGE( M, N, KL, KU, D, A, LDA, ISEED, WORK, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -141,15 +141,14 @@
       COMPLEX            TAU, WA, WB
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CGEMV, AB_CGERC, AB_CLACGV, AB_CLARNV, AB_CS
-     $CAL, AB_XERBLA
+      EXTERNAL           CGEMV, CGERC, CLACGV, CLARNV, CSCAL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL
 *     ..
 *     .. External Functions ..
-      REAL               AB_SCNRM2
-      EXTERNAL           AB_SCNRM2
+      REAL               SCNRM2
+      EXTERNAL           SCNRM2
 *     ..
 *     .. Executable Statements ..
 *
@@ -168,7 +167,7 @@
          INFO = -7
       END IF
       IF( INFO.LT.0 ) THEN
-         CALL AB_XERBLA( 'AB_CLAGGE', -INFO )
+         CALL XERBLA( 'CLAGGE', -INFO )
          RETURN
       END IF
 *
@@ -194,46 +193,46 @@
 *
 *           generate random reflection
 *
-            CALL AB_CLARNV( 3, ISEED, M-I+1, WORK )
-            WN = AB_SCNRM2( M-I+1, WORK, 1 )
+            CALL CLARNV( 3, ISEED, M-I+1, WORK )
+            WN = SCNRM2( M-I+1, WORK, 1 )
             WA = ( WN / ABS( WORK( 1 ) ) )*WORK( 1 )
             IF( WN.EQ.ZERO ) THEN
                TAU = ZERO
             ELSE
                WB = WORK( 1 ) + WA
-               CALL AB_CSCAL( M-I, ONE / WB, WORK( 2 ), 1 )
+               CALL CSCAL( M-I, ONE / WB, WORK( 2 ), 1 )
                WORK( 1 ) = ONE
                TAU = REAL( WB / WA )
             END IF
 *
 *           multiply A(i:m,i:n) by random reflection from the left
 *
-            CALL AB_CGEMV( 'Conjugate transpose', M-I+1, N-I+1, ONE,
+            CALL CGEMV( 'Conjugate transpose', M-I+1, N-I+1, ONE,
      $                  A( I, I ), LDA, WORK, 1, ZERO, WORK( M+1 ), 1 )
-            CALL AB_CGERC( M-I+1, N-I+1, -TAU, WORK, 1, WORK( M+1 ), 1,
+            CALL CGERC( M-I+1, N-I+1, -TAU, WORK, 1, WORK( M+1 ), 1,
      $                  A( I, I ), LDA )
          END IF
          IF( I.LT.N ) THEN
 *
 *           generate random reflection
 *
-            CALL AB_CLARNV( 3, ISEED, N-I+1, WORK )
-            WN = AB_SCNRM2( N-I+1, WORK, 1 )
+            CALL CLARNV( 3, ISEED, N-I+1, WORK )
+            WN = SCNRM2( N-I+1, WORK, 1 )
             WA = ( WN / ABS( WORK( 1 ) ) )*WORK( 1 )
             IF( WN.EQ.ZERO ) THEN
                TAU = ZERO
             ELSE
                WB = WORK( 1 ) + WA
-               CALL AB_CSCAL( N-I, ONE / WB, WORK( 2 ), 1 )
+               CALL CSCAL( N-I, ONE / WB, WORK( 2 ), 1 )
                WORK( 1 ) = ONE
                TAU = REAL( WB / WA )
             END IF
 *
 *           multiply A(i:m,i:n) by random reflection from the right
 *
-            CALL AB_CGEMV( 'No transpose', M-I+1, N-I+1, ONE, A( I, I ),
+            CALL CGEMV( 'No transpose', M-I+1, N-I+1, ONE, A( I, I ),
      $                  LDA, WORK, 1, ZERO, WORK( N+1 ), 1 )
-            CALL AB_CGERC( M-I+1, N-I+1, -TAU, WORK( N+1 ), 1, WORK, 1,
+            CALL CGERC( M-I+1, N-I+1, -TAU, WORK( N+1 ), 1, WORK, 1,
      $                  A( I, I ), LDA )
          END IF
    40 CONTINUE
@@ -250,24 +249,23 @@
 *
 *              generate reflection to annihilate A(kl+i+1:m,i)
 *
-               WN = AB_SCNRM2( M-KL-I+1, A( KL+I, I ), 1 )
+               WN = SCNRM2( M-KL-I+1, A( KL+I, I ), 1 )
                WA = ( WN / ABS( A( KL+I, I ) ) )*A( KL+I, I )
                IF( WN.EQ.ZERO ) THEN
                   TAU = ZERO
                ELSE
                   WB = A( KL+I, I ) + WA
-                  CALL AB_CSCAL( M-KL-I, ONE / WB, A( KL+I+1, I ), 1 )
+                  CALL CSCAL( M-KL-I, ONE / WB, A( KL+I+1, I ), 1 )
                   A( KL+I, I ) = ONE
                   TAU = REAL( WB / WA )
                END IF
 *
 *              apply reflection to A(kl+i:m,i+1:n) from the left
 *
-               CALL AB_CGEMV( 'Conjugate transpose', M-KL-I+1, N-I, ONE,
+               CALL CGEMV( 'Conjugate transpose', M-KL-I+1, N-I, ONE,
      $                     A( KL+I, I+1 ), LDA, A( KL+I, I ), 1, ZERO,
      $                     WORK, 1 )
-               CALL AB_CGERC( M-KL-I+1, N-I, -TAU, A( KL+I, I ), 1, WORK
-     $,
+               CALL CGERC( M-KL-I+1, N-I, -TAU, A( KL+I, I ), 1, WORK,
      $                     1, A( KL+I, I+1 ), LDA )
                A( KL+I, I ) = -WA
             END IF
@@ -276,25 +274,24 @@
 *
 *              generate reflection to annihilate A(i,ku+i+1:n)
 *
-               WN = AB_SCNRM2( N-KU-I+1, A( I, KU+I ), LDA )
+               WN = SCNRM2( N-KU-I+1, A( I, KU+I ), LDA )
                WA = ( WN / ABS( A( I, KU+I ) ) )*A( I, KU+I )
                IF( WN.EQ.ZERO ) THEN
                   TAU = ZERO
                ELSE
                   WB = A( I, KU+I ) + WA
-                  CALL AB_CSCAL( N-KU-I, ONE / WB, A( I, KU+I+1 ), LDA )
+                  CALL CSCAL( N-KU-I, ONE / WB, A( I, KU+I+1 ), LDA )
                   A( I, KU+I ) = ONE
                   TAU = REAL( WB / WA )
                END IF
 *
 *              apply reflection to A(i+1:m,ku+i:n) from the right
 *
-               CALL AB_CLACGV( N-KU-I+1, A( I, KU+I ), LDA )
-               CALL AB_CGEMV( 'No transpose', M-I, N-KU-I+1, ONE,
+               CALL CLACGV( N-KU-I+1, A( I, KU+I ), LDA )
+               CALL CGEMV( 'No transpose', M-I, N-KU-I+1, ONE,
      $                     A( I+1, KU+I ), LDA, A( I, KU+I ), LDA, ZERO,
      $                     WORK, 1 )
-               CALL AB_CGERC( M-I, N-KU-I+1, -TAU, WORK, 1, A( I, KU+I )
-     $,
+               CALL CGERC( M-I, N-KU-I+1, -TAU, WORK, 1, A( I, KU+I ),
      $                     LDA, A( I+1, KU+I ), LDA )
                A( I, KU+I ) = -WA
             END IF
@@ -307,25 +304,24 @@
 *
 *              generate reflection to annihilate A(i,ku+i+1:n)
 *
-               WN = AB_SCNRM2( N-KU-I+1, A( I, KU+I ), LDA )
+               WN = SCNRM2( N-KU-I+1, A( I, KU+I ), LDA )
                WA = ( WN / ABS( A( I, KU+I ) ) )*A( I, KU+I )
                IF( WN.EQ.ZERO ) THEN
                   TAU = ZERO
                ELSE
                   WB = A( I, KU+I ) + WA
-                  CALL AB_CSCAL( N-KU-I, ONE / WB, A( I, KU+I+1 ), LDA )
+                  CALL CSCAL( N-KU-I, ONE / WB, A( I, KU+I+1 ), LDA )
                   A( I, KU+I ) = ONE
                   TAU = REAL( WB / WA )
                END IF
 *
 *              apply reflection to A(i+1:m,ku+i:n) from the right
 *
-               CALL AB_CLACGV( N-KU-I+1, A( I, KU+I ), LDA )
-               CALL AB_CGEMV( 'No transpose', M-I, N-KU-I+1, ONE,
+               CALL CLACGV( N-KU-I+1, A( I, KU+I ), LDA )
+               CALL CGEMV( 'No transpose', M-I, N-KU-I+1, ONE,
      $                     A( I+1, KU+I ), LDA, A( I, KU+I ), LDA, ZERO,
      $                     WORK, 1 )
-               CALL AB_CGERC( M-I, N-KU-I+1, -TAU, WORK, 1, A( I, KU+I )
-     $,
+               CALL CGERC( M-I, N-KU-I+1, -TAU, WORK, 1, A( I, KU+I ),
      $                     LDA, A( I+1, KU+I ), LDA )
                A( I, KU+I ) = -WA
             END IF
@@ -334,24 +330,23 @@
 *
 *              generate reflection to annihilate A(kl+i+1:m,i)
 *
-               WN = AB_SCNRM2( M-KL-I+1, A( KL+I, I ), 1 )
+               WN = SCNRM2( M-KL-I+1, A( KL+I, I ), 1 )
                WA = ( WN / ABS( A( KL+I, I ) ) )*A( KL+I, I )
                IF( WN.EQ.ZERO ) THEN
                   TAU = ZERO
                ELSE
                   WB = A( KL+I, I ) + WA
-                  CALL AB_CSCAL( M-KL-I, ONE / WB, A( KL+I+1, I ), 1 )
+                  CALL CSCAL( M-KL-I, ONE / WB, A( KL+I+1, I ), 1 )
                   A( KL+I, I ) = ONE
                   TAU = REAL( WB / WA )
                END IF
 *
 *              apply reflection to A(kl+i:m,i+1:n) from the left
 *
-               CALL AB_CGEMV( 'Conjugate transpose', M-KL-I+1, N-I, ONE,
+               CALL CGEMV( 'Conjugate transpose', M-KL-I+1, N-I, ONE,
      $                     A( KL+I, I+1 ), LDA, A( KL+I, I ), 1, ZERO,
      $                     WORK, 1 )
-               CALL AB_CGERC( M-KL-I+1, N-I, -TAU, A( KL+I, I ), 1, WORK
-     $,
+               CALL CGERC( M-KL-I+1, N-I, -TAU, A( KL+I, I ), 1, WORK,
      $                     1, A( KL+I, I+1 ), LDA )
                A( KL+I, I ) = -WA
             END IF
@@ -371,6 +366,6 @@
    70 CONTINUE
       RETURN
 *
-*     End of AB_CLAGGE
+*     End of CLAGGE
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_SCHKQR
+*> \brief \b SCHKQR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SCHKQR( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVAL,
+*       SUBROUTINE SCHKQR( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVAL,
 *                          NRHS, THRESH, TSTERR, NMAX, A, AF, AQ, AR, AC,
 *                          B, X, XACT, TAU, WORK, RWORK, IWORK, NOUT )
 *
@@ -32,7 +32,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SCHKQR tests AB_AB_SGEQRF, AB_SORGQR and AB_SORMQR.
+*> SCHKQR tests SGEQRF, SORGQR and SORMQR.
 *> \endverbatim
 *
 *  Arguments:
@@ -197,8 +197,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_SCHKQR( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVA
-     $L,
+      SUBROUTINE SCHKQR( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVAL,
      $                   NRHS, THRESH, TSTERR, NMAX, A, AF, AQ, AR, AC,
      $                   B, X, XACT, TAU, WORK, RWORK, IWORK, NOUT )
 *
@@ -248,11 +247,9 @@
       EXTERNAL           SGENND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALAERH, AB_ALAHD, AB_ALASUM, AB_SERRQR, AB_A
-     $B_SGEQRS, AB_SGET02,
-     $                   AB_SLACPY, AB_SLARHS, AB_SLATB4, AB_SLATMS, AB_
-     $SQRT01,
-     $                   AB_AB_SQRT01P, AB_SQRT02, AB_SQRT03, AB_XLAENV
+      EXTERNAL           ALAERH, ALAHD, ALASUM, SERRQR, SGEQRS, SGET02,
+     $                   SLACPY, SLARHS, SLATB4, SLATMS, SQRT01,
+     $                   SQRT01P, SQRT02, SQRT03, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -285,9 +282,9 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL AB_SERRQR( PATH, NOUT )
+     $   CALL SERRQR( PATH, NOUT )
       INFOT = 0
-      CALL AB_XLAENV( 2, 2 )
+      CALL XLAENV( 2, 2 )
 *
       LDA = NMAX
       LWORK = NMAX*MAX( NMAX, NRHS )
@@ -309,30 +306,28 @@
                IF( .NOT.DOTYPE( IMAT ) )
      $            GO TO 50
 *
-*              Set up parameters with AB_SLATB4 and generate a test matrix
-*              with AB_SLATMS.
+*              Set up parameters with SLATB4 and generate a test matrix
+*              with SLATMS.
 *
-               CALL AB_SLATB4( PATH, IMAT, M, N, TYPE, KL, KU, ANORM, MO
-     $DE,
+               CALL SLATB4( PATH, IMAT, M, N, TYPE, KL, KU, ANORM, MODE,
      $                      CNDNUM, DIST )
 *
-               SRNAMT = 'AB_SLATMS'
-               CALL AB_SLATMS( M, N, DIST, ISEED, TYPE, RWORK, MODE,
+               SRNAMT = 'SLATMS'
+               CALL SLATMS( M, N, DIST, ISEED, TYPE, RWORK, MODE,
      $                      CNDNUM, ANORM, KL, KU, 'No packing', A, LDA,
      $                      WORK, INFO )
 *
-*              Check error code from AB_SLATMS.
+*              Check error code from SLATMS.
 *
                IF( INFO.NE.0 ) THEN
-                  CALL AB_ALAERH( PATH, 'AB_SLATMS', INFO, 0, ' ', M, N,
-     $ -1,
+                  CALL ALAERH( PATH, 'SLATMS', INFO, 0, ' ', M, N, -1,
      $                         -1, -1, IMAT, NFAIL, NERRS, NOUT )
                   GO TO 50
                END IF
 *
 *              Set some values for K: the first value must be MINMN,
-*              corresponding to the call of AB_SQRT01; other values are
-*              used in the calls of AB_SQRT02, and must not exceed MINMN.
+*              corresponding to the call of SQRT01; other values are
+*              used in the calls of SQRT02, and must not exceed MINMN.
 *
                KVAL( 1 ) = MINMN
                KVAL( 2 ) = 0
@@ -357,24 +352,23 @@
 *
                   DO 30 INB = 1, NNB
                      NB = NBVAL( INB )
-                     CALL AB_XLAENV( 1, NB )
+                     CALL XLAENV( 1, NB )
                      NX = NXVAL( INB )
-                     CALL AB_XLAENV( 3, NX )
+                     CALL XLAENV( 3, NX )
                      DO I = 1, NTESTS
                         RESULT( I ) = ZERO
                      END DO
                      NT = 2
                      IF( IK.EQ.1 ) THEN
 *
-*                       Test AB_AB_SGEQRF
+*                       Test SGEQRF
 *
-                        CALL AB_SQRT01( M, N, A, AF, AQ, AR, LDA, TAU,
+                        CALL SQRT01( M, N, A, AF, AQ, AR, LDA, TAU,
      $                               WORK, LWORK, RWORK, RESULT( 1 ) )
 *
-*                       Test AB_AB_AB_SGEQRFP
+*                       Test SGEQRFP
 *
-                        CALL AB_AB_SQRT01P( M, N, A, AF, AQ, AR, LDA, TA
-     $U,
+                        CALL SQRT01P( M, N, A, AF, AQ, AR, LDA, TAU,
      $                               WORK, LWORK, RWORK, RESULT( 8 ) )
 
                          IF( .NOT. SGENND( M, N, AF, LDA ) )
@@ -382,24 +376,22 @@
                          NT = NT + 1
                      ELSE IF( M.GE.N ) THEN
 *
-*                       Test AB_SORGQR, using factorization
-*                       returned by AB_SQRT01
+*                       Test SORGQR, using factorization
+*                       returned by SQRT01
 *
-                        CALL AB_SQRT02( M, N, K, A, AF, AQ, AR, LDA, TAU
-     $,
+                        CALL SQRT02( M, N, K, A, AF, AQ, AR, LDA, TAU,
      $                               WORK, LWORK, RWORK, RESULT( 1 ) )
                      END IF
                      IF( M.GE.K ) THEN
 *
-*                       Test AB_SORMQR, using factorization returned
-*                       by AB_SQRT01
+*                       Test SORMQR, using factorization returned
+*                       by SQRT01
 *
-                        CALL AB_SQRT03( M, N, K, AF, AC, AR, AQ, LDA, TA
-     $U,
+                        CALL SQRT03( M, N, K, AF, AC, AR, AQ, LDA, TAU,
      $                               WORK, LWORK, RWORK, RESULT( 3 ) )
                         NT = NT + 4
 *
-*                       If M>=N and K=N, call AB_AB_SGEQRS to solve a system
+*                       If M>=N and K=N, call SGEQRS to solve a system
 *                       with NRHS right hand sides and compute the
 *                       residual.
 *
@@ -408,29 +400,26 @@
 *                          Generate a solution and set the right
 *                          hand side.
 *
-                           SRNAMT = 'AB_SLARHS'
-                           CALL AB_SLARHS( PATH, 'New', 'Full',
+                           SRNAMT = 'SLARHS'
+                           CALL SLARHS( PATH, 'New', 'Full',
      $                                  'No transpose', M, N, 0, 0,
      $                                  NRHS, A, LDA, XACT, LDA, B, LDA,
      $                                  ISEED, INFO )
 *
-                           CALL AB_SLACPY( 'Full', M, NRHS, B, LDA, X,
+                           CALL SLACPY( 'Full', M, NRHS, B, LDA, X,
      $                                  LDA )
-                           SRNAMT = 'AB_AB_SGEQRS'
-                           CALL AB_AB_SGEQRS( M, N, NRHS, AF, LDA, TAU, 
-     $X,
+                           SRNAMT = 'SGEQRS'
+                           CALL SGEQRS( M, N, NRHS, AF, LDA, TAU, X,
      $                                  LDA, WORK, LWORK, INFO )
 *
-*                          Check error code from AB_AB_SGEQRS.
+*                          Check error code from SGEQRS.
 *
                            IF( INFO.NE.0 )
-     $                        CALL AB_ALAERH( PATH, 'AB_AB_SGEQRS', INFO
-     $, 0, ' ',
+     $                        CALL ALAERH( PATH, 'SGEQRS', INFO, 0, ' ',
      $                                     M, N, NRHS, -1, NB, IMAT,
      $                                     NFAIL, NERRS, NOUT )
 *
-                           CALL AB_SGET02( 'No transpose', M, N, NRHS, A
-     $,
+                           CALL SGET02( 'No transpose', M, N, NRHS, A,
      $                                  LDA, X, LDA, B, LDA, RWORK,
      $                                  RESULT( 7 ) )
                            NT = NT + 1
@@ -443,7 +432,7 @@
                      DO 20 I = 1, NTESTS
                         IF( RESULT( I ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                        CALL AB_ALAHD( NOUT, PATH )
+     $                        CALL ALAHD( NOUT, PATH )
                            WRITE( NOUT, FMT = 9999 )M, N, K, NB, NX,
      $                        IMAT, I, RESULT( I )
                            NFAIL = NFAIL + 1
@@ -458,12 +447,12 @@
 *
 *     Print a summary of the results.
 *
-      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( ' M=', I5, ', N=', I5, ', K=', I5, ', NB=', I4, ', NX=',
      $      I5, ', type ', I2, ', test(', I2, ')=', G12.5 )
       RETURN
 *
-*     End of AB_SCHKQR
+*     End of SCHKQR
 *
       END

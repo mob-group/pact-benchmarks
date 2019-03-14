@@ -1,4 +1,4 @@
-*> \brief \b AB_DQRT11
+*> \brief \b DQRT11
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       DOUBLE PRECISION FUNCTION AB_DQRT11( M, K, A, LDA, TAU, WORK, LWORK )
+*       DOUBLE PRECISION FUNCTION DQRT11( M, K, A, LDA, TAU, WORK, LWORK )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            K, LDA, LWORK, M
@@ -23,7 +23,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DQRT11 computes the test ratio
+*> DQRT11 computes the test ratio
 *>
 *>       || Q'*Q - I || / (eps * m)
 *>
@@ -96,8 +96,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION AB_DQRT11( M, K, A, LDA, TAU, WORK, LWOR
-     $K )
+      DOUBLE PRECISION FUNCTION DQRT11( M, K, A, LDA, TAU, WORK, LWORK )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -121,11 +120,11 @@
       INTEGER            INFO, J
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE
-      EXTERNAL           AB_DLAMCH, AB_DLANGE
+      DOUBLE PRECISION   DLAMCH, DLANGE
+      EXTERNAL           DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLASET, AB_DORM2R, AB_XERBLA
+      EXTERNAL           DLASET, DORM2R, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE
@@ -135,12 +134,12 @@
 *     ..
 *     .. Executable Statements ..
 *
-      AB_DQRT11 = ZERO
+      DQRT11 = ZERO
 *
 *     Test for sufficient workspace
 *
       IF( LWORK.LT.M*M+M ) THEN
-         CALL AB_XERBLA( 'AB_DQRT11', 7 )
+         CALL XERBLA( 'DQRT11', 7 )
          RETURN
       END IF
 *
@@ -149,29 +148,27 @@
       IF( M.LE.0 )
      $   RETURN
 *
-      CALL AB_DLASET( 'Full', M, M, ZERO, ONE, WORK, M )
+      CALL DLASET( 'Full', M, M, ZERO, ONE, WORK, M )
 *
 *     Form Q
 *
-      CALL AB_DORM2R( 'Left', 'No transpose', M, M, K, A, LDA, TAU, WORK
-     $,
+      CALL DORM2R( 'Left', 'No transpose', M, M, K, A, LDA, TAU, WORK,
      $             M, WORK( M*M+1 ), INFO )
 *
 *     Form Q'*Q
 *
-      CALL AB_DORM2R( 'Left', 'Transpose', M, M, K, A, LDA, TAU, WORK, M
-     $,
+      CALL DORM2R( 'Left', 'Transpose', M, M, K, A, LDA, TAU, WORK, M,
      $             WORK( M*M+1 ), INFO )
 *
       DO 10 J = 1, M
          WORK( ( J-1 )*M+J ) = WORK( ( J-1 )*M+J ) - ONE
    10 CONTINUE
 *
-      AB_DQRT11 = AB_DLANGE( 'One-norm', M, M, WORK, M, RDUMMY ) /
-     $         ( DBLE( M )*AB_DLAMCH( 'Epsilon' ) )
+      DQRT11 = DLANGE( 'One-norm', M, M, WORK, M, RDUMMY ) /
+     $         ( DBLE( M )*DLAMCH( 'Epsilon' ) )
 *
       RETURN
 *
-*     End of AB_DQRT11
+*     End of DQRT11
 *
       END

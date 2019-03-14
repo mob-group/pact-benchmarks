@@ -1,4 +1,4 @@
-*> \brief \b AB_ZCHKGK
+*> \brief \b ZCHKGK
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZCHKGK( NIN, NOUT )
+*       SUBROUTINE ZCHKGK( NIN, NOUT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            NIN, NOUT
@@ -20,7 +20,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZCHKGK tests AB_ZGGBAK, a routine for backward balancing  of
+*> ZCHKGK tests ZGGBAK, a routine for backward balancing  of
 *> a matrix pair (A, B).
 *> \endverbatim
 *
@@ -52,7 +52,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_ZCHKGK( NIN, NOUT )
+      SUBROUTINE ZCHKGK( NIN, NOUT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -68,8 +68,8 @@
 *     .. Parameters ..
       INTEGER            LDA, LDB, LDVL, LDVR
       PARAMETER          ( LDA = 50, LDB = 50, LDVL = 50, LDVR = 50 )
-      INTEGER            AB_LDE, LDF, LDWORK, LRWORK
-      PARAMETER          ( AB_LDE = 50, LDF = 50, LDWORK = 50,
+      INTEGER            LDE, LDF, LDWORK, LRWORK
+      PARAMETER          ( LDE = 50, LDF = 50, LDWORK = 50,
      $                   LRWORK = 6*50 )
       DOUBLE PRECISION   ZERO
       PARAMETER          ( ZERO = 0.0D+0 )
@@ -86,18 +86,17 @@
       INTEGER            LMAX( 4 )
       DOUBLE PRECISION   LSCALE( LDA ), RSCALE( LDA ), RWORK( LRWORK )
       COMPLEX*16         A( LDA, LDA ), AF( LDA, LDA ), B( LDB, LDB ),
-     $                   BF( LDB, LDB ), E( AB_LDE, AB_LDE ), F( LDF, LD
-     $F ),
+     $                   BF( LDB, LDB ), E( LDE, LDE ), F( LDF, LDF ),
      $                   VL( LDVL, LDVL ), VLF( LDVL, LDVL ),
      $                   VR( LDVR, LDVR ), VRF( LDVR, LDVR ),
      $                   WORK( LDWORK, LDWORK )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE
-      EXTERNAL           AB_DLAMCH, AB_ZLANGE
+      DOUBLE PRECISION   DLAMCH, ZLANGE
+      EXTERNAL           DLAMCH, ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZGEMM, AB_ZGGBAK, AB_ZGGBAL, AB_ZLACPY
+      EXTERNAL           ZGEMM, ZGGBAK, ZGGBAL, ZLACPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX
@@ -118,7 +117,7 @@
       KNT = 0
       RMAX = ZERO
 *
-      EPS = AB_DLAMCH( 'Precision' )
+      EPS = DLAMCH( 'Precision' )
 *
    10 CONTINUE
       READ( NIN, FMT = * )N, M
@@ -143,51 +142,49 @@
 *
       KNT = KNT + 1
 *
-      ANORM = AB_ZLANGE( 'M', N, N, A, LDA, RWORK )
-      BNORM = AB_ZLANGE( 'M', N, N, B, LDB, RWORK )
+      ANORM = ZLANGE( 'M', N, N, A, LDA, RWORK )
+      BNORM = ZLANGE( 'M', N, N, B, LDB, RWORK )
 *
-      CALL AB_ZLACPY( 'FULL', N, N, A, LDA, AF, LDA )
-      CALL AB_ZLACPY( 'FULL', N, N, B, LDB, BF, LDB )
+      CALL ZLACPY( 'FULL', N, N, A, LDA, AF, LDA )
+      CALL ZLACPY( 'FULL', N, N, B, LDB, BF, LDB )
 *
-      CALL AB_ZGGBAL( 'B', N, A, LDA, B, LDB, ILO, IHI, LSCALE, RSCALE,
+      CALL ZGGBAL( 'B', N, A, LDA, B, LDB, ILO, IHI, LSCALE, RSCALE,
      $             RWORK, INFO )
       IF( INFO.NE.0 ) THEN
          NINFO = NINFO + 1
          LMAX( 1 ) = KNT
       END IF
 *
-      CALL AB_ZLACPY( 'FULL', N, M, VL, LDVL, VLF, LDVL )
-      CALL AB_ZLACPY( 'FULL', N, M, VR, LDVR, VRF, LDVR )
+      CALL ZLACPY( 'FULL', N, M, VL, LDVL, VLF, LDVL )
+      CALL ZLACPY( 'FULL', N, M, VR, LDVR, VRF, LDVR )
 *
-      CALL AB_ZGGBAK( 'B', 'L', N, ILO, IHI, LSCALE, RSCALE, M, VL, LDVL
-     $,
+      CALL ZGGBAK( 'B', 'L', N, ILO, IHI, LSCALE, RSCALE, M, VL, LDVL,
      $             INFO )
       IF( INFO.NE.0 ) THEN
          NINFO = NINFO + 1
          LMAX( 2 ) = KNT
       END IF
 *
-      CALL AB_ZGGBAK( 'B', 'R', N, ILO, IHI, LSCALE, RSCALE, M, VR, LDVR
-     $,
+      CALL ZGGBAK( 'B', 'R', N, ILO, IHI, LSCALE, RSCALE, M, VR, LDVR,
      $             INFO )
       IF( INFO.NE.0 ) THEN
          NINFO = NINFO + 1
          LMAX( 3 ) = KNT
       END IF
 *
-*     Test of AB_ZGGBAK
+*     Test of ZGGBAK
 *
-*     Check tiAB_LDE(VL)'*A*tiAB_LDE(VR) - VL'*tiAB_LDE(A)*VR
-*     where tiAB_LDE(A) denotes the transformed matrix.
+*     Check tilde(VL)'*A*tilde(VR) - VL'*tilde(A)*VR
+*     where tilde(A) denotes the transformed matrix.
 *
-      CALL AB_ZGEMM( 'N', 'N', N, M, N, CONE, AF, LDA, VR, LDVR, CZERO,
+      CALL ZGEMM( 'N', 'N', N, M, N, CONE, AF, LDA, VR, LDVR, CZERO,
      $            WORK, LDWORK )
-      CALL AB_ZGEMM( 'C', 'N', M, M, N, CONE, VL, LDVL, WORK, LDWORK,
-     $            CZERO, E, AB_LDE )
+      CALL ZGEMM( 'C', 'N', M, M, N, CONE, VL, LDVL, WORK, LDWORK,
+     $            CZERO, E, LDE )
 *
-      CALL AB_ZGEMM( 'N', 'N', N, M, N, CONE, A, LDA, VRF, LDVR, CZERO,
+      CALL ZGEMM( 'N', 'N', N, M, N, CONE, A, LDA, VRF, LDVR, CZERO,
      $            WORK, LDWORK )
-      CALL AB_ZGEMM( 'C', 'N', M, M, N, CONE, VLF, LDVL, WORK, LDWORK,
+      CALL ZGEMM( 'C', 'N', M, M, N, CONE, VLF, LDVL, WORK, LDWORK,
      $            CZERO, F, LDF )
 *
       VMAX = ZERO
@@ -202,16 +199,16 @@
          RMAX = VMAX
       END IF
 *
-*     Check tiAB_LDE(VL)'*B*tiAB_LDE(VR) - VL'*tiAB_LDE(B)*VR
+*     Check tilde(VL)'*B*tilde(VR) - VL'*tilde(B)*VR
 *
-      CALL AB_ZGEMM( 'N', 'N', N, M, N, CONE, BF, LDB, VR, LDVR, CZERO,
+      CALL ZGEMM( 'N', 'N', N, M, N, CONE, BF, LDB, VR, LDVR, CZERO,
      $            WORK, LDWORK )
-      CALL AB_ZGEMM( 'C', 'N', M, M, N, CONE, VL, LDVL, WORK, LDWORK,
-     $            CZERO, E, AB_LDE )
+      CALL ZGEMM( 'C', 'N', M, M, N, CONE, VL, LDVL, WORK, LDWORK,
+     $            CZERO, E, LDE )
 *
-      CALL AB_ZGEMM( 'n', 'n', N, M, N, CONE, B, LDB, VRF, LDVR, CZERO,
+      CALL ZGEMM( 'n', 'n', N, M, N, CONE, B, LDB, VRF, LDVR, CZERO,
      $            WORK, LDWORK )
-      CALL AB_ZGEMM( 'C', 'N', M, M, N, CONE, VLF, LDVL, WORK, LDWORK,
+      CALL ZGEMM( 'C', 'N', M, M, N, CONE, VLF, LDVL, WORK, LDWORK,
      $            CZERO, F, LDF )
 *
       VMAX = ZERO
@@ -231,16 +228,16 @@
   100 CONTINUE
 *
       WRITE( NOUT, FMT = 9999 )
- 9999 FORMAT( 1X, '.. test output of AB_ZGGBAK .. ' )
+ 9999 FORMAT( 1X, '.. test output of ZGGBAK .. ' )
 *
       WRITE( NOUT, FMT = 9998 )RMAX
  9998 FORMAT( ' value of largest test error                  =', D12.3 )
       WRITE( NOUT, FMT = 9997 )LMAX( 1 )
- 9997 FORMAT( ' example number where AB_ZGGBAL info is not 0    =', I4 )
+ 9997 FORMAT( ' example number where ZGGBAL info is not 0    =', I4 )
       WRITE( NOUT, FMT = 9996 )LMAX( 2 )
- 9996 FORMAT( ' example number where AB_ZGGBAK(L) info is not 0 =', I4 )
+ 9996 FORMAT( ' example number where ZGGBAK(L) info is not 0 =', I4 )
       WRITE( NOUT, FMT = 9995 )LMAX( 3 )
- 9995 FORMAT( ' example number where AB_ZGGBAK(R) info is not 0 =', I4 )
+ 9995 FORMAT( ' example number where ZGGBAK(R) info is not 0 =', I4 )
       WRITE( NOUT, FMT = 9994 )LMAX( 4 )
  9994 FORMAT( ' example number having largest error          =', I4 )
       WRITE( NOUT, FMT = 9992 )NINFO
@@ -250,6 +247,6 @@
 *
       RETURN
 *
-*     End of AB_ZCHKGK
+*     End of ZCHKGK
 *
       END

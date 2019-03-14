@@ -1,4 +1,4 @@
-*> \brief \b AB_CLARTG generates a plane rotation with real cosine and complex sine.
+*> \brief \b CLARTG generates a plane rotation with real cosine and complex sine.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CLARTG + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLARTG.f">
+*> Download CLARTG + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clartg.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLARTG.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clartg.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLARTG.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clartg.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CLARTG( F, G, CS, SN, R )
+*       SUBROUTINE CLARTG( F, G, CS, SN, R )
 *
 *       .. Scalar Arguments ..
 *       REAL               CS
@@ -31,13 +31,13 @@
 *>
 *> \verbatim
 *>
-*> AB_CLARTG generates a plane rotation so that
+*> CLARTG generates a plane rotation so that
 *>
 *>    [  CS  SN  ]     [ F ]     [ R ]
 *>    [  __      ]  .  [   ]  =  [   ]   where CS**2 + |SN|**2 = 1.
 *>    [ -SN  CS  ]     [ G ]     [ 0 ]
 *>
-*> This is a faster version of the BLAS1 routine AB_AB_CROTG, except for
+*> This is a faster version of the BLAS1 routine CROTG, except for
 *> the following differences:
 *>    F and G are unchanged on return.
 *>    If G=0, then CS=1 and SN=0.
@@ -56,7 +56,7 @@
 *> \param[in] G
 *> \verbatim
 *>          G is COMPLEX
-*>          The AB_SECOND component of vector to be rotated.
+*>          The second component of vector to be rotated.
 *> \endverbatim
 *>
 *> \param[out] CS
@@ -101,7 +101,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_CLARTG( F, G, CS, SN, R )
+      SUBROUTINE CLARTG( F, G, CS, SN, R )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -129,9 +129,9 @@
       COMPLEX            FF, FS, GS
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH, AB_SLAPY2
-      LOGICAL            AB_SISNAN
-      EXTERNAL           AB_SLAMCH, AB_SLAPY2, AB_SISNAN
+      REAL               SLAMCH, SLAPY2
+      LOGICAL            SISNAN
+      EXTERNAL           SLAMCH, SLAPY2, SISNAN
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CMPLX, CONJG, INT, LOG, MAX, REAL,
@@ -146,10 +146,10 @@
 *     ..
 *     .. Executable Statements ..
 *
-      SAFMIN = AB_SLAMCH( 'S' )
-      EPS = AB_SLAMCH( 'E' )
-      SAFMN2 = AB_SLAMCH( 'B' )**INT( LOG( SAFMIN / EPS ) /
-     $         LOG( AB_SLAMCH( 'B' ) ) / TWO )
+      SAFMIN = SLAMCH( 'S' )
+      EPS = SLAMCH( 'E' )
+      SAFMN2 = SLAMCH( 'B' )**INT( LOG( SAFMIN / EPS ) /
+     $         LOG( SLAMCH( 'B' ) ) / TWO )
       SAFMX2 = ONE / SAFMN2
       SCALE = MAX( ABS1( F ), ABS1( G ) )
       FS = F
@@ -164,7 +164,7 @@
          IF( SCALE.GE.SAFMX2 )
      $      GO TO 10
       ELSE IF( SCALE.LE.SAFMN2 ) THEN
-         IF( G.EQ.CZERO.OR.AB_SISNAN( ABS( G ) ) ) THEN
+         IF( G.EQ.CZERO.OR.SISNAN( ABS( G ) ) ) THEN
             CS = ONE
             SN = CZERO
             R = F
@@ -186,13 +186,13 @@
 *
          IF( F.EQ.CZERO ) THEN
             CS = ZERO
-            R = AB_SLAPY2( REAL( G ), AIMAG( G ) )
+            R = SLAPY2( REAL( G ), AIMAG( G ) )
 *           Do complex/real division explicitly with two real divisions
-            D = AB_SLAPY2( REAL( GS ), AIMAG( GS ) )
+            D = SLAPY2( REAL( GS ), AIMAG( GS ) )
             SN = CMPLX( REAL( GS ) / D, -AIMAG( GS ) / D )
             RETURN
          END IF
-         F2S = AB_SLAPY2( REAL( FS ), AIMAG( FS ) )
+         F2S = SLAPY2( REAL( FS ), AIMAG( FS ) )
 *        G2 and G2S are accurate
 *        G2 is at least SAFMIN, and G2S is at least SAFMN2
          G2S = SQRT( G2 )
@@ -207,12 +207,12 @@
 *        Make sure abs(FF) = 1
 *        Do complex/real division explicitly with 2 real divisions
          IF( ABS1( F ).GT.ONE ) THEN
-            D = AB_SLAPY2( REAL( F ), AIMAG( F ) )
+            D = SLAPY2( REAL( F ), AIMAG( F ) )
             FF = CMPLX( REAL( F ) / D, AIMAG( F ) / D )
          ELSE
             DR = SAFMX2*REAL( F )
             DI = SAFMX2*AIMAG( F )
-            D = AB_SLAPY2( DR, DI )
+            D = SLAPY2( DR, DI )
             FF = CMPLX( DR / D, DI / D )
          END IF
          SN = FF*CMPLX( REAL( GS ) / G2S, -AIMAG( GS ) / G2S )
@@ -245,6 +245,6 @@
       END IF
       RETURN
 *
-*     End of AB_CLARTG
+*     End of CLARTG
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_STBT03
+*> \brief \b STBT03
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_STBT03( UPLO, TRANS, DIAG, N, KD, NRHS, AB, LDAB,
+*       SUBROUTINE STBT03( UPLO, TRANS, DIAG, N, KD, NRHS, AB, LDAB,
 *                          SCALE, CNORM, TSCAL, X, LDX, B, LDB, WORK,
 *                          RESID )
 *
@@ -28,7 +28,7 @@
 *>
 *> \verbatim
 *>
-*> AB_STBT03 computes the residual for the solution to a scaled triangular
+*> STBT03 computes the residual for the solution to a scaled triangular
 *> system of equations  A*x = s*b  or  A'*x = s*b  when A is a
 *> triangular band matrix. Here A' is the transpose of A, s is a scalar,
 *> and x and b are N by NRHS matrices.  The test ratio is the maximum
@@ -171,7 +171,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_STBT03( UPLO, TRANS, DIAG, N, KD, NRHS, AB, LDAB,
+      SUBROUTINE STBT03( UPLO, TRANS, DIAG, N, KD, NRHS, AB, LDAB,
      $                   SCALE, CNORM, TSCAL, X, LDX, B, LDB, WORK,
      $                   RESID )
 *
@@ -201,14 +201,13 @@
       REAL               BIGNUM, EPS, ERR, SMLNUM, TNORM, XNORM, XSCAL
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ISAMAX
-      REAL               AB_SLAMCH
-      EXTERNAL           AB_LSAME, AB_ISAMAX, AB_SLAMCH
+      LOGICAL            LSAME
+      INTEGER            ISAMAX
+      REAL               SLAMCH
+      EXTERNAL           LSAME, ISAMAX, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SAXPY, AB_SCOPY, AB_SLABAD, AB_SSCAL, AB_STB
-     $MV
+      EXTERNAL           SAXPY, SCOPY, SLABAD, SSCAL, STBMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, REAL
@@ -221,17 +220,17 @@
          RESID = ZERO
          RETURN
       END IF
-      EPS = AB_SLAMCH( 'Epsilon' )
-      SMLNUM = AB_SLAMCH( 'Safe minimum' )
+      EPS = SLAMCH( 'Epsilon' )
+      SMLNUM = SLAMCH( 'Safe minimum' )
       BIGNUM = ONE / SMLNUM
-      CALL AB_SLABAD( SMLNUM, BIGNUM )
+      CALL SLABAD( SMLNUM, BIGNUM )
 *
 *     Compute the norm of the triangular matrix A using the column
-*     norms already computed by AB_SLATBS.
+*     norms already computed by SLATBS.
 *
       TNORM = ZERO
-      IF( AB_LSAME( DIAG, 'N' ) ) THEN
-         IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( DIAG, 'N' ) ) THEN
+         IF( LSAME( UPLO, 'U' ) ) THEN
             DO 10 J = 1, N
                TNORM = MAX( TNORM, TSCAL*ABS( AB( KD+1, J ) )+
      $                 CNORM( J ) )
@@ -252,16 +251,16 @@
 *
       RESID = ZERO
       DO 40 J = 1, NRHS
-         CALL AB_SCOPY( N, X( 1, J ), 1, WORK, 1 )
-         IX = AB_ISAMAX( N, WORK, 1 )
+         CALL SCOPY( N, X( 1, J ), 1, WORK, 1 )
+         IX = ISAMAX( N, WORK, 1 )
          XNORM = MAX( ONE, ABS( X( IX, J ) ) )
          XSCAL = ( ONE / XNORM ) / REAL( KD+1 )
-         CALL AB_SSCAL( N, XSCAL, WORK, 1 )
-         CALL AB_STBMV( UPLO, TRANS, DIAG, N, KD, AB, LDAB, WORK, 1 )
-         CALL AB_SAXPY( N, -SCALE*XSCAL, B( 1, J ), 1, WORK, 1 )
-         IX = AB_ISAMAX( N, WORK, 1 )
+         CALL SSCAL( N, XSCAL, WORK, 1 )
+         CALL STBMV( UPLO, TRANS, DIAG, N, KD, AB, LDAB, WORK, 1 )
+         CALL SAXPY( N, -SCALE*XSCAL, B( 1, J ), 1, WORK, 1 )
+         IX = ISAMAX( N, WORK, 1 )
          ERR = TSCAL*ABS( WORK( IX ) )
-         IX = AB_ISAMAX( N, X( 1, J ), 1 )
+         IX = ISAMAX( N, X( 1, J ), 1 )
          XNORM = ABS( X( IX, J ) )
          IF( ERR*SMLNUM.LE.XNORM ) THEN
             IF( XNORM.GT.ZERO )
@@ -282,6 +281,6 @@
 *
       RETURN
 *
-*     End of AB_STBT03
+*     End of STBT03
 *
       END

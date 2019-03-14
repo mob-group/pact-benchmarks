@@ -1,4 +1,4 @@
-*> \brief \b AB_ZSLECT
+*> \brief \b ZSLECT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       LOGICAL          FUNCTION AB_ZSLECT( Z )
+*       LOGICAL          FUNCTION ZSLECT( Z )
 *
 *       .. Scalar Arguments ..
 *       COMPLEX*16         Z
@@ -20,15 +20,15 @@
 *>
 *> \verbatim
 *>
-*> AB_ZSLECT returns .TRUE. if the eigenvalue Z is to be selected,
+*> ZSLECT returns .TRUE. if the eigenvalue Z is to be selected,
 *> otherwise it returns .FALSE.
-*> It is used by AB_ZCHK41 to test if AB_ZGEES successfully sorts eigenvalues,
-*> and by AB_ZCHK43 to test if AB_AB_ZGEESX successfully sorts eigenvalues.
+*> It is used by ZCHK41 to test if ZGEES successfully sorts eigenvalues,
+*> and by ZCHK43 to test if ZGEESX successfully sorts eigenvalues.
 *>
 *> The common block /SSLCT/ controls how eigenvalues are selected.
-*> If SELOPT = 0, then AB_ZSLECT return .TRUE. when real(Z) is less than
+*> If SELOPT = 0, then ZSLECT return .TRUE. when real(Z) is less than
 *> zero, and .FALSE. otherwise.
-*> If SELOPT is at least 1, AB_ZSLECT returns SELVAL(SELOPT) and adds 1
+*> If SELOPT is at least 1, ZSLECT returns SELVAL(SELOPT) and adds 1
 *> to SELOPT, cycling back to 1 at SELMAX.
 *> \endverbatim
 *
@@ -54,7 +54,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      LOGICAL          FUNCTION AB_ZSLECT( Z )
+      LOGICAL          FUNCTION ZSLECT( Z )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -91,20 +91,20 @@
 *     .. Executable Statements ..
 *
       IF( SELOPT.EQ.0 ) THEN
-         AB_ZSLECT = ( DBLE( Z ).LT.ZERO )
+         ZSLECT = ( DBLE( Z ).LT.ZERO )
       ELSE
          RMIN = ABS( Z-DCMPLX( SELWR( 1 ), SELWI( 1 ) ) )
-         AB_ZSLECT = SELVAL( 1 )
+         ZSLECT = SELVAL( 1 )
          DO 10 I = 2, SELDIM
             X = ABS( Z-DCMPLX( SELWR( I ), SELWI( I ) ) )
             IF( X.LE.RMIN ) THEN
                RMIN = X
-               AB_ZSLECT = SELVAL( I )
+               ZSLECT = SELVAL( I )
             END IF
    10    CONTINUE
       END IF
       RETURN
 *
-*     End of AB_ZSLECT
+*     End of ZSLECT
 *
       END

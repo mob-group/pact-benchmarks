@@ -1,4 +1,4 @@
-*> \brief \b AB_DERRBD
+*> \brief \b DERRBD
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DERRBD( PATH, NUNIT )
+*       SUBROUTINE DERRBD( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,8 +21,8 @@
 *>
 *> \verbatim
 *>
-*> AB_DERRBD tests the error exits for AB_DGEBD2, AB_DGEBRD, AB_DORGBR, AB_DORMBR,
-*> AB_DBDSQR, AB_DBDSDC and AB_DBDSVDX.
+*> DERRBD tests the error exits for DGEBD2, DGEBRD, DORGBR, DORMBR,
+*> DBDSQR, DBDSDC and DBDSVDX.
 *> \endverbatim
 *
 *  Arguments:
@@ -53,7 +53,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_DERRBD( PATH, NUNIT )
+      SUBROUTINE DERRBD( PATH, NUNIT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -85,13 +85,12 @@
      $                   V( NMAX, NMAX ), W( LW )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_AB_LSAMEN
-      EXTERNAL           AB_AB_LSAMEN
+      LOGICAL            LSAMEN
+      EXTERNAL           LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CHKXER, AB_DBDSDC, AB_DBDSQR, AB_DBDSVDX, AB
-     $_DGEBD2,
-     $                   AB_DGEBRD, AB_DORGBR, AB_DORMBR
+      EXTERNAL           CHKXER, DBDSDC, DBDSQR, DBDSVDX, DGEBD2,
+     $                   DGEBRD, DORGBR, DORMBR
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -123,244 +122,240 @@
 *
 *     Test error exits of the SVD routines.
 *
-      IF( AB_AB_LSAMEN( 2, C2, 'BD' ) ) THEN
+      IF( LSAMEN( 2, C2, 'BD' ) ) THEN
 *
-*        AB_DGEBRD
+*        DGEBRD
 *
-         SRNAMT = 'AB_DGEBRD'
+         SRNAMT = 'DGEBRD'
          INFOT = 1
-         CALL AB_DGEBRD( -1, 0, A, 1, D, E, TQ, TP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_DGEBRD', INFOT, NOUT, LERR, OK )
+         CALL DGEBRD( -1, 0, A, 1, D, E, TQ, TP, W, 1, INFO )
+         CALL CHKXER( 'DGEBRD', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_DGEBRD( 0, -1, A, 1, D, E, TQ, TP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_DGEBRD', INFOT, NOUT, LERR, OK )
+         CALL DGEBRD( 0, -1, A, 1, D, E, TQ, TP, W, 1, INFO )
+         CALL CHKXER( 'DGEBRD', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_DGEBRD( 2, 1, A, 1, D, E, TQ, TP, W, 2, INFO )
-         CALL AB_CHKXER( 'AB_DGEBRD', INFOT, NOUT, LERR, OK )
+         CALL DGEBRD( 2, 1, A, 1, D, E, TQ, TP, W, 2, INFO )
+         CALL CHKXER( 'DGEBRD', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_DGEBRD( 2, 1, A, 2, D, E, TQ, TP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_DGEBRD', INFOT, NOUT, LERR, OK )
+         CALL DGEBRD( 2, 1, A, 2, D, E, TQ, TP, W, 1, INFO )
+         CALL CHKXER( 'DGEBRD', INFOT, NOUT, LERR, OK )
          NT = NT + 4
 *
-*        AB_DGEBD2
+*        DGEBD2
 *
-         SRNAMT = 'AB_DGEBD2'
+         SRNAMT = 'DGEBD2'
          INFOT = 1
-         CALL AB_DGEBD2( -1, 0, A, 1, D, E, TQ, TP, W, INFO )
-         CALL AB_CHKXER( 'AB_DGEBD2', INFOT, NOUT, LERR, OK )
+         CALL DGEBD2( -1, 0, A, 1, D, E, TQ, TP, W, INFO )
+         CALL CHKXER( 'DGEBD2', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_DGEBD2( 0, -1, A, 1, D, E, TQ, TP, W, INFO )
-         CALL AB_CHKXER( 'AB_DGEBD2', INFOT, NOUT, LERR, OK )
+         CALL DGEBD2( 0, -1, A, 1, D, E, TQ, TP, W, INFO )
+         CALL CHKXER( 'DGEBD2', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_DGEBD2( 2, 1, A, 1, D, E, TQ, TP, W, INFO )
-         CALL AB_CHKXER( 'AB_DGEBD2', INFOT, NOUT, LERR, OK )
+         CALL DGEBD2( 2, 1, A, 1, D, E, TQ, TP, W, INFO )
+         CALL CHKXER( 'DGEBD2', INFOT, NOUT, LERR, OK )
          NT = NT + 3
 *
-*        AB_DORGBR
+*        DORGBR
 *
-         SRNAMT = 'AB_DORGBR'
+         SRNAMT = 'DORGBR'
          INFOT = 1
-         CALL AB_DORGBR( '/', 0, 0, 0, A, 1, TQ, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_DORGBR', INFOT, NOUT, LERR, OK )
+         CALL DORGBR( '/', 0, 0, 0, A, 1, TQ, W, 1, INFO )
+         CALL CHKXER( 'DORGBR', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_DORGBR( 'Q', -1, 0, 0, A, 1, TQ, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_DORGBR', INFOT, NOUT, LERR, OK )
+         CALL DORGBR( 'Q', -1, 0, 0, A, 1, TQ, W, 1, INFO )
+         CALL CHKXER( 'DORGBR', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_DORGBR( 'Q', 0, -1, 0, A, 1, TQ, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_DORGBR', INFOT, NOUT, LERR, OK )
+         CALL DORGBR( 'Q', 0, -1, 0, A, 1, TQ, W, 1, INFO )
+         CALL CHKXER( 'DORGBR', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_DORGBR( 'Q', 0, 1, 0, A, 1, TQ, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_DORGBR', INFOT, NOUT, LERR, OK )
+         CALL DORGBR( 'Q', 0, 1, 0, A, 1, TQ, W, 1, INFO )
+         CALL CHKXER( 'DORGBR', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_DORGBR( 'Q', 1, 0, 1, A, 1, TQ, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_DORGBR', INFOT, NOUT, LERR, OK )
+         CALL DORGBR( 'Q', 1, 0, 1, A, 1, TQ, W, 1, INFO )
+         CALL CHKXER( 'DORGBR', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_DORGBR( 'P', 1, 0, 0, A, 1, TQ, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_DORGBR', INFOT, NOUT, LERR, OK )
+         CALL DORGBR( 'P', 1, 0, 0, A, 1, TQ, W, 1, INFO )
+         CALL CHKXER( 'DORGBR', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_DORGBR( 'P', 0, 1, 1, A, 1, TQ, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_DORGBR', INFOT, NOUT, LERR, OK )
+         CALL DORGBR( 'P', 0, 1, 1, A, 1, TQ, W, 1, INFO )
+         CALL CHKXER( 'DORGBR', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_DORGBR( 'Q', 0, 0, -1, A, 1, TQ, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_DORGBR', INFOT, NOUT, LERR, OK )
+         CALL DORGBR( 'Q', 0, 0, -1, A, 1, TQ, W, 1, INFO )
+         CALL CHKXER( 'DORGBR', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_DORGBR( 'Q', 2, 1, 1, A, 1, TQ, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_DORGBR', INFOT, NOUT, LERR, OK )
+         CALL DORGBR( 'Q', 2, 1, 1, A, 1, TQ, W, 1, INFO )
+         CALL CHKXER( 'DORGBR', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_DORGBR( 'Q', 2, 2, 1, A, 2, TQ, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_DORGBR', INFOT, NOUT, LERR, OK )
+         CALL DORGBR( 'Q', 2, 2, 1, A, 2, TQ, W, 1, INFO )
+         CALL CHKXER( 'DORGBR', INFOT, NOUT, LERR, OK )
          NT = NT + 10
 *
-*        AB_DORMBR
+*        DORMBR
 *
-         SRNAMT = 'AB_DORMBR'
+         SRNAMT = 'DORMBR'
          INFOT = 1
-         CALL AB_DORMBR( '/', 'L', 'T', 0, 0, 0, A, 1, TQ, U, 1, W, 1,
+         CALL DORMBR( '/', 'L', 'T', 0, 0, 0, A, 1, TQ, U, 1, W, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DORMBR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DORMBR', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_DORMBR( 'Q', '/', 'T', 0, 0, 0, A, 1, TQ, U, 1, W, 1,
+         CALL DORMBR( 'Q', '/', 'T', 0, 0, 0, A, 1, TQ, U, 1, W, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DORMBR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DORMBR', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_DORMBR( 'Q', 'L', '/', 0, 0, 0, A, 1, TQ, U, 1, W, 1,
+         CALL DORMBR( 'Q', 'L', '/', 0, 0, 0, A, 1, TQ, U, 1, W, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DORMBR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DORMBR', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_DORMBR( 'Q', 'L', 'T', -1, 0, 0, A, 1, TQ, U, 1, W, 1,
+         CALL DORMBR( 'Q', 'L', 'T', -1, 0, 0, A, 1, TQ, U, 1, W, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DORMBR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DORMBR', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_DORMBR( 'Q', 'L', 'T', 0, -1, 0, A, 1, TQ, U, 1, W, 1,
+         CALL DORMBR( 'Q', 'L', 'T', 0, -1, 0, A, 1, TQ, U, 1, W, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DORMBR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DORMBR', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_DORMBR( 'Q', 'L', 'T', 0, 0, -1, A, 1, TQ, U, 1, W, 1,
+         CALL DORMBR( 'Q', 'L', 'T', 0, 0, -1, A, 1, TQ, U, 1, W, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DORMBR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DORMBR', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_DORMBR( 'Q', 'L', 'T', 2, 0, 0, A, 1, TQ, U, 2, W, 1,
+         CALL DORMBR( 'Q', 'L', 'T', 2, 0, 0, A, 1, TQ, U, 2, W, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DORMBR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DORMBR', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_DORMBR( 'Q', 'R', 'T', 0, 2, 0, A, 1, TQ, U, 1, W, 1,
+         CALL DORMBR( 'Q', 'R', 'T', 0, 2, 0, A, 1, TQ, U, 1, W, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DORMBR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DORMBR', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_DORMBR( 'P', 'L', 'T', 2, 0, 2, A, 1, TQ, U, 2, W, 1,
+         CALL DORMBR( 'P', 'L', 'T', 2, 0, 2, A, 1, TQ, U, 2, W, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DORMBR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DORMBR', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_DORMBR( 'P', 'R', 'T', 0, 2, 2, A, 1, TQ, U, 1, W, 1,
+         CALL DORMBR( 'P', 'R', 'T', 0, 2, 2, A, 1, TQ, U, 1, W, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DORMBR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DORMBR', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL AB_DORMBR( 'Q', 'R', 'T', 2, 0, 0, A, 1, TQ, U, 1, W, 1,
+         CALL DORMBR( 'Q', 'R', 'T', 2, 0, 0, A, 1, TQ, U, 1, W, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DORMBR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DORMBR', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL AB_DORMBR( 'Q', 'L', 'T', 0, 2, 0, A, 1, TQ, U, 1, W, 1,
+         CALL DORMBR( 'Q', 'L', 'T', 0, 2, 0, A, 1, TQ, U, 1, W, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DORMBR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DORMBR', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL AB_DORMBR( 'Q', 'R', 'T', 2, 0, 0, A, 1, TQ, U, 2, W, 1,
+         CALL DORMBR( 'Q', 'R', 'T', 2, 0, 0, A, 1, TQ, U, 2, W, 1,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DORMBR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DORMBR', INFOT, NOUT, LERR, OK )
          NT = NT + 13
 *
-*        AB_DBDSQR
+*        DBDSQR
 *
-         SRNAMT = 'AB_DBDSQR'
+         SRNAMT = 'DBDSQR'
          INFOT = 1
-         CALL AB_DBDSQR( '/', 0, 0, 0, 0, D, E, V, 1, U, 1, A, 1, W, INF
-     $O )
-         CALL AB_CHKXER( 'AB_DBDSQR', INFOT, NOUT, LERR, OK )
+         CALL DBDSQR( '/', 0, 0, 0, 0, D, E, V, 1, U, 1, A, 1, W, INFO )
+         CALL CHKXER( 'DBDSQR', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_DBDSQR( 'U', -1, 0, 0, 0, D, E, V, 1, U, 1, A, 1, W,
+         CALL DBDSQR( 'U', -1, 0, 0, 0, D, E, V, 1, U, 1, A, 1, W,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DBDSQR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DBDSQR', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_DBDSQR( 'U', 0, -1, 0, 0, D, E, V, 1, U, 1, A, 1, W,
+         CALL DBDSQR( 'U', 0, -1, 0, 0, D, E, V, 1, U, 1, A, 1, W,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DBDSQR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DBDSQR', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_DBDSQR( 'U', 0, 0, -1, 0, D, E, V, 1, U, 1, A, 1, W,
+         CALL DBDSQR( 'U', 0, 0, -1, 0, D, E, V, 1, U, 1, A, 1, W,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DBDSQR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DBDSQR', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_DBDSQR( 'U', 0, 0, 0, -1, D, E, V, 1, U, 1, A, 1, W,
+         CALL DBDSQR( 'U', 0, 0, 0, -1, D, E, V, 1, U, 1, A, 1, W,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DBDSQR', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DBDSQR', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_DBDSQR( 'U', 2, 1, 0, 0, D, E, V, 1, U, 1, A, 1, W, INF
-     $O )
-         CALL AB_CHKXER( 'AB_DBDSQR', INFOT, NOUT, LERR, OK )
+         CALL DBDSQR( 'U', 2, 1, 0, 0, D, E, V, 1, U, 1, A, 1, W, INFO )
+         CALL CHKXER( 'DBDSQR', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL AB_DBDSQR( 'U', 0, 0, 2, 0, D, E, V, 1, U, 1, A, 1, W, INF
-     $O )
-         CALL AB_CHKXER( 'AB_DBDSQR', INFOT, NOUT, LERR, OK )
+         CALL DBDSQR( 'U', 0, 0, 2, 0, D, E, V, 1, U, 1, A, 1, W, INFO )
+         CALL CHKXER( 'DBDSQR', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL AB_DBDSQR( 'U', 2, 0, 0, 1, D, E, V, 1, U, 1, A, 1, W, INF
-     $O )
-         CALL AB_CHKXER( 'AB_DBDSQR', INFOT, NOUT, LERR, OK )
+         CALL DBDSQR( 'U', 2, 0, 0, 1, D, E, V, 1, U, 1, A, 1, W, INFO )
+         CALL CHKXER( 'DBDSQR', INFOT, NOUT, LERR, OK )
          NT = NT + 8
 *
-*        AB_DBDSDC
+*        DBDSDC
 *
-         SRNAMT = 'AB_DBDSDC'
+         SRNAMT = 'DBDSDC'
          INFOT = 1
-         CALL AB_DBDSDC( '/', 'N', 0, D, E, U, 1, V, 1, Q, IQ, W, IW,
+         CALL DBDSDC( '/', 'N', 0, D, E, U, 1, V, 1, Q, IQ, W, IW,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DBDSDC', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DBDSDC', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_DBDSDC( 'U', '/', 0, D, E, U, 1, V, 1, Q, IQ, W, IW,
+         CALL DBDSDC( 'U', '/', 0, D, E, U, 1, V, 1, Q, IQ, W, IW,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DBDSDC', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DBDSDC', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_DBDSDC( 'U', 'N', -1, D, E, U, 1, V, 1, Q, IQ, W, IW,
+         CALL DBDSDC( 'U', 'N', -1, D, E, U, 1, V, 1, Q, IQ, W, IW,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DBDSDC', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DBDSDC', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_DBDSDC( 'U', 'I', 2, D, E, U, 1, V, 1, Q, IQ, W, IW,
+         CALL DBDSDC( 'U', 'I', 2, D, E, U, 1, V, 1, Q, IQ, W, IW,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DBDSDC', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DBDSDC', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_DBDSDC( 'U', 'I', 2, D, E, U, 2, V, 1, Q, IQ, W, IW,
+         CALL DBDSDC( 'U', 'I', 2, D, E, U, 2, V, 1, Q, IQ, W, IW,
      $                INFO )
-         CALL AB_CHKXER( 'AB_DBDSDC', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DBDSDC', INFOT, NOUT, LERR, OK )
          NT = NT + 5
 *
-*        AB_DBDSVDX
+*        DBDSVDX
 *
-         SRNAMT = 'AB_DBDSVDX'
+         SRNAMT = 'DBDSVDX'
          INFOT = 1
-         CALL AB_DBDSVDX( 'X', 'N', 'A', 1, D, E, ZERO, ONE, 0, 0,
+         CALL DBDSVDX( 'X', 'N', 'A', 1, D, E, ZERO, ONE, 0, 0,
      $                    NS, S, Q, 1, W, IW, INFO)
-         CALL AB_CHKXER( 'AB_DBDSVDX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DBDSVDX', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_DBDSVDX( 'U', 'X', 'A', 1, D, E, ZERO, ONE, 0, 0,
+         CALL DBDSVDX( 'U', 'X', 'A', 1, D, E, ZERO, ONE, 0, 0,
      $                    NS, S, Q, 1, W, IW, INFO)
-         CALL AB_CHKXER( 'AB_DBDSVDX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DBDSVDX', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_DBDSVDX( 'U', 'V', 'X', 1, D, E, ZERO, ONE, 0, 0,
+         CALL DBDSVDX( 'U', 'V', 'X', 1, D, E, ZERO, ONE, 0, 0,
      $                    NS, S, Q, 1, W, IW, INFO)
-         CALL AB_CHKXER( 'AB_DBDSVDX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DBDSVDX', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_DBDSVDX( 'U', 'V', 'A', -1, D, E, ZERO, ONE, 0, 0,
+         CALL DBDSVDX( 'U', 'V', 'A', -1, D, E, ZERO, ONE, 0, 0,
      $                    NS, S, Q, 1, W, IW, INFO)
-         CALL AB_CHKXER( 'AB_DBDSVDX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DBDSVDX', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_DBDSVDX( 'U', 'V', 'V', 2, D, E, -ONE, ZERO, 0, 0,
+         CALL DBDSVDX( 'U', 'V', 'V', 2, D, E, -ONE, ZERO, 0, 0,
      $                    NS, S, Q, 1, W, IW, INFO)
-         CALL AB_CHKXER( 'AB_DBDSVDX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DBDSVDX', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_DBDSVDX( 'U', 'V', 'V', 2, D, E, ONE, ZERO, 0, 0,
+         CALL DBDSVDX( 'U', 'V', 'V', 2, D, E, ONE, ZERO, 0, 0,
      $                    NS, S, Q, 1, W, IW, INFO)
-         CALL AB_CHKXER( 'AB_DBDSVDX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DBDSVDX', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_DBDSVDX( 'L', 'V', 'I', 2, D, E, ZERO, ZERO, 0, 2,
+         CALL DBDSVDX( 'L', 'V', 'I', 2, D, E, ZERO, ZERO, 0, 2,
      $                    NS, S, Q, 1, W, IW, INFO)
-         CALL AB_CHKXER( 'AB_DBDSVDX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DBDSVDX', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_DBDSVDX( 'L', 'V', 'I', 4, D, E, ZERO, ZERO, 5, 2,
+         CALL DBDSVDX( 'L', 'V', 'I', 4, D, E, ZERO, ZERO, 5, 2,
      $                    NS, S, Q, 1, W, IW, INFO)
-         CALL AB_CHKXER( 'AB_DBDSVDX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DBDSVDX', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_DBDSVDX( 'L', 'V', 'I', 4, D, E, ZERO, ZERO, 3, 2,
+         CALL DBDSVDX( 'L', 'V', 'I', 4, D, E, ZERO, ZERO, 3, 2,
      $                    NS, S, Q, 1, W, IW, INFO)
-         CALL AB_CHKXER( 'AB_DBDSVDX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DBDSVDX', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_DBDSVDX( 'L', 'V', 'I', 4, D, E, ZERO, ZERO, 3, 5,
+         CALL DBDSVDX( 'L', 'V', 'I', 4, D, E, ZERO, ZERO, 3, 5,
      $                    NS, S, Q, 1, W, IW, INFO)
-         CALL AB_CHKXER( 'AB_DBDSVDX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DBDSVDX', INFOT, NOUT, LERR, OK )
          INFOT = 14
-         CALL AB_DBDSVDX( 'L', 'V', 'A', 4, D, E, ZERO, ZERO, 0, 0,
+         CALL DBDSVDX( 'L', 'V', 'A', 4, D, E, ZERO, ZERO, 0, 0,
      $                    NS, S, Q, 0, W, IW, INFO)
-         CALL AB_CHKXER( 'AB_DBDSVDX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DBDSVDX', INFOT, NOUT, LERR, OK )
          INFOT = 14
-         CALL AB_DBDSVDX( 'L', 'V', 'A', 4, D, E, ZERO, ZERO, 0, 0,
+         CALL DBDSVDX( 'L', 'V', 'A', 4, D, E, ZERO, ZERO, 0, 0,
      $                    NS, S, Q, 2, W, IW, INFO)
-         CALL AB_CHKXER( 'AB_DBDSVDX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DBDSVDX', INFOT, NOUT, LERR, OK )
          NT = NT + 12
       END IF
 *
@@ -379,6 +374,6 @@
 *
       RETURN
 *
-*     End of AB_DERRBD
+*     End of DERRBD
 *
       END

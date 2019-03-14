@@ -1,4 +1,4 @@
-*> \brief \b AB_ZQRT16
+*> \brief \b ZQRT16
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZQRT16( TRANS, M, N, NRHS, A, LDA, X, LDX, B, LDB,
+*       SUBROUTINE ZQRT16( TRANS, M, N, NRHS, A, LDA, X, LDX, B, LDB,
 *                          RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZQRT16 computes the residual for a solution of a system of linear
+*> ZQRT16 computes the residual for a solution of a system of linear
 *> equations  A*x = b  or  A'*x = b:
 *>    RESID = norm(B - A*X) / ( max(m,n) * norm(A) * norm(X) * EPS ),
 *> where EPS is the machine epsilon.
@@ -130,7 +130,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZQRT16( TRANS, M, N, NRHS, A, LDA, X, LDX, B, LDB,
+      SUBROUTINE ZQRT16( TRANS, M, N, NRHS, A, LDA, X, LDX, B, LDB,
      $                   RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -161,12 +161,12 @@
       DOUBLE PRECISION   ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DLAMCH, AB_DZASUM, AB_ZLANGE
-      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_DZASUM, AB_ZLANGE
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH, DZASUM, ZLANGE
+      EXTERNAL           LSAME, DLAMCH, DZASUM, ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZGEMM
+      EXTERNAL           ZGEMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -180,22 +180,21 @@
          RETURN
       END IF
 *
-      IF( AB_LSAME( TRANS, 'T' ) .OR. AB_LSAME( TRANS, 'C' ) ) THEN
-         ANORM = AB_ZLANGE( 'I', M, N, A, LDA, RWORK )
+      IF( LSAME( TRANS, 'T' ) .OR. LSAME( TRANS, 'C' ) ) THEN
+         ANORM = ZLANGE( 'I', M, N, A, LDA, RWORK )
          N1 = N
          N2 = M
       ELSE
-         ANORM = AB_ZLANGE( '1', M, N, A, LDA, RWORK )
+         ANORM = ZLANGE( '1', M, N, A, LDA, RWORK )
          N1 = M
          N2 = N
       END IF
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
+      EPS = DLAMCH( 'Epsilon' )
 *
 *     Compute  B - A*X  (or  B - A'*X ) and store in B.
 *
-      CALL AB_ZGEMM( TRANS, 'No transpose', N1, NRHS, N2, -CONE, A, LDA,
-     $ X,
+      CALL ZGEMM( TRANS, 'No transpose', N1, NRHS, N2, -CONE, A, LDA, X,
      $            LDX, CONE, B, LDB )
 *
 *     Compute the maximum over the number of right hand sides of
@@ -203,8 +202,8 @@
 *
       RESID = ZERO
       DO 10 J = 1, NRHS
-         BNORM = AB_DZASUM( N1, B( 1, J ), 1 )
-         XNORM = AB_DZASUM( N2, X( 1, J ), 1 )
+         BNORM = DZASUM( N1, B( 1, J ), 1 )
+         XNORM = DZASUM( N2, X( 1, J ), 1 )
          IF( ANORM.EQ.ZERO .AND. BNORM.EQ.ZERO ) THEN
             RESID = ZERO
          ELSE IF( ANORM.LE.ZERO .OR. XNORM.LE.ZERO ) THEN
@@ -217,6 +216,6 @@
 *
       RETURN
 *
-*     End of AB_ZQRT16
+*     End of ZQRT16
 *
       END

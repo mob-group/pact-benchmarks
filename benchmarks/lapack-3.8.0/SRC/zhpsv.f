@@ -1,4 +1,4 @@
-*> \brief <b> AB_ZHPSV computes the solution to system of linear equations A * X = B for OTHER matrices</b>
+*> \brief <b> ZHPSV computes the solution to system of linear equations A * X = B for OTHER matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZHPSV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZHPSV.f">
+*> Download ZHPSV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhpsv.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZHPSV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhpsv.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZHPSV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhpsv.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZHPSV( UPLO, N, NRHS, AP, IPIV, B, LDB, INFO )
+*       SUBROUTINE ZHPSV( UPLO, N, NRHS, AP, IPIV, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZHPSV computes the solution to a complex system of linear equations
+*> ZHPSV computes the solution to a complex system of linear equations
 *>    A * X = B,
 *> where A is an N-by-N Hermitian matrix stored in packed format and X
 *> and B are N-by-NRHS matrices.
@@ -85,7 +85,7 @@
 *>
 *>          On exit, the block diagonal matrix D and the multipliers used
 *>          to obtain the factor U or L from the factorization
-*>          A = U*D*U**H or A = L*D*L**H as computed by AB_ZHPTRF, stored as
+*>          A = U*D*U**H or A = L*D*L**H as computed by ZHPTRF, stored as
 *>          a packed triangular matrix in the same storage format as A.
 *> \endverbatim
 *>
@@ -93,7 +93,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D, as
-*>          determined by AB_ZHPTRF.  If IPIV(k) > 0, then rows and columns
+*>          determined by ZHPTRF.  If IPIV(k) > 0, then rows and columns
 *>          k and IPIV(k) were interchanged, and D(k,k) is a 1-by-1
 *>          diagonal block.  If UPLO = 'U' and IPIV(k) = IPIV(k-1) < 0,
 *>          then rows and columns k-1 and -IPIV(k) were interchanged and
@@ -160,7 +160,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_ZHPSV( UPLO, N, NRHS, AP, IPIV, B, LDB, INFO )
+      SUBROUTINE ZHPSV( UPLO, N, NRHS, AP, IPIV, B, LDB, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -179,11 +179,11 @@
 *  =====================================================================
 *
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZHPTRF, AB_ZHPTRS
+      EXTERNAL           XERBLA, ZHPTRF, ZHPTRS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -193,8 +193,7 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF( .NOT.AB_LSAME( UPLO, 'U' ) .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) 
-     $THEN
+      IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -204,22 +203,22 @@
          INFO = -7
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZHPSV ', -INFO )
+         CALL XERBLA( 'ZHPSV ', -INFO )
          RETURN
       END IF
 *
 *     Compute the factorization A = U*D*U**H or A = L*D*L**H.
 *
-      CALL AB_ZHPTRF( UPLO, N, AP, IPIV, INFO )
+      CALL ZHPTRF( UPLO, N, AP, IPIV, INFO )
       IF( INFO.EQ.0 ) THEN
 *
 *        Solve the system A*X = B, overwriting B with X.
 *
-         CALL AB_ZHPTRS( UPLO, N, NRHS, AP, IPIV, B, LDB, INFO )
+         CALL ZHPTRS( UPLO, N, NRHS, AP, IPIV, B, LDB, INFO )
 *
       END IF
       RETURN
 *
-*     End of AB_ZHPSV
+*     End of ZHPSV
 *
       END

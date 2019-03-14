@@ -1,4 +1,4 @@
-*> \brief \b AB_STGSYL
+*> \brief \b STGSYL
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,32 +6,32 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_STGSYL + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_STGSYL.f">
+*> Download STGSYL + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stgsyl.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_STGSYL.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stgsyl.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_STGSYL.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stgsyl.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_STGSYL( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC, D,
-*                          LDD, E, AB_LDE, F, LDF, SCALE, DIF, WORK, LWORK,
+*       SUBROUTINE STGSYL( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC, D,
+*                          LDD, E, LDE, F, LDF, SCALE, DIF, WORK, LWORK,
 *                          IWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          TRANS
-*       INTEGER            IJOB, INFO, LDA, LDB, LDC, LDD, AB_LDE, LDF,
+*       INTEGER            IJOB, INFO, LDA, LDB, LDC, LDD, LDE, LDF,
 *      $                   LWORK, M, N
 *       REAL               DIF, SCALE
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            IWORK( * )
 *       REAL               A( LDA, * ), B( LDB, * ), C( LDC, * ),
-*      $                   D( LDD, * ), E( AB_LDE, * ), F( LDF, * ),
+*      $                   D( LDD, * ), E( LDE, * ), F( LDF, * ),
 *      $                   WORK( * )
 *       ..
 *
@@ -41,7 +41,7 @@
 *>
 *> \verbatim
 *>
-*> AB_STGSYL solves the generalized Sylvester equation:
+*> STGSYL solves the generalized Sylvester equation:
 *>
 *>             A * R - L * B = scale * C                 (1)
 *>             D * R - L * E = scale * F
@@ -64,7 +64,7 @@
 *> Here Ik is the identity matrix of size k and X**T is the transpose of
 *> X. kron(X, Y) is the Kronecker product between the matrices X and Y.
 *>
-*> If TRANS = 'T', AB_STGSYL solves the transposed system Z**T*y = scale*b,
+*> If TRANS = 'T', STGSYL solves the transposed system Z**T*y = scale*b,
 *> which is equivalent to solve for R and L in
 *>
 *>             A**T * R + D**T * L = scale * C           (3)
@@ -72,9 +72,9 @@
 *>
 *> This case (TRANS = 'T') is used to compute an one-norm-based estimate
 *> of Dif[(A,D), (B,E)], the separation between the matrix pairs (A,D)
-*> and (B,E), using AB_SLACON.
+*> and (B,E), using SLACON.
 *>
-*> If IJOB >= 1, AB_STGSYL computes a Frobenius norm-based estimate
+*> If IJOB >= 1, STGSYL computes a Frobenius norm-based estimate
 *> of Dif[(A,D),(B,E)]. That is, the reciprocal of a lower bound on the
 *> reciprocal of the smallest singular value of Z. See [1-2] for more
 *> information.
@@ -102,7 +102,7 @@
 *>           =3: Only an estimate of Dif[(A,D), (B,E)] is computed.
 *>               (look ahead strategy IJOB  = 1 is used).
 *>           =4: Only an estimate of Dif[(A,D), (B,E)] is computed.
-*>               ( AB_SGECON on sub-systems is used ).
+*>               ( SGECON on sub-systems is used ).
 *>          Not referenced if TRANS = 'T'.
 *> \endverbatim
 *>
@@ -175,20 +175,20 @@
 *>
 *> \param[in] E
 *> \verbatim
-*>          E is REAL array, dimension (AB_LDE, N)
+*>          E is REAL array, dimension (LDE, N)
 *>          The upper triangular matrix E.
 *> \endverbatim
 *>
-*> \param[in] AB_LDE
+*> \param[in] LDE
 *> \verbatim
-*>          AB_LDE is INTEGER
-*>          The leading dimension of the array E. AB_LDE >= max(1, N).
+*>          LDE is INTEGER
+*>          The leading dimension of the array E. LDE >= max(1, N).
 *> \endverbatim
 *>
 *> \param[in,out] F
 *> \verbatim
 *>          F is REAL array, dimension (LDF, N)
-*>          On entry, F contains the right-hand-side of the AB_SECOND matrix
+*>          On entry, F contains the right-hand-side of the second matrix
 *>          equation in (1) or (3).
 *>          On exit, if IJOB = 0, 1 or 2, F has been overwritten by
 *>          the solution L. If IJOB = 3 or 4 and TRANS = 'N', F holds L,
@@ -237,7 +237,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -295,10 +295,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_STGSYL( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC, D
-     $,
-     $                   LDD, E, AB_LDE, F, LDF, SCALE, DIF, WORK, LWORK
-     $,
+      SUBROUTINE STGSYL( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC, D,
+     $                   LDD, E, LDE, F, LDF, SCALE, DIF, WORK, LWORK,
      $                   IWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -308,19 +306,19 @@
 *
 *     .. Scalar Arguments ..
       CHARACTER          TRANS
-      INTEGER            IJOB, INFO, LDA, LDB, LDC, LDD, AB_LDE, LDF,
+      INTEGER            IJOB, INFO, LDA, LDB, LDC, LDD, LDE, LDF,
      $                   LWORK, M, N
       REAL               DIF, SCALE
 *     ..
 *     .. Array Arguments ..
       INTEGER            IWORK( * )
       REAL               A( LDA, * ), B( LDB, * ), C( LDC, * ),
-     $                   D( LDD, * ), E( AB_LDE, * ), F( LDF, * ),
+     $                   D( LDD, * ), E( LDE, * ), F( LDF, * ),
      $                   WORK( * )
 *     ..
 *
 *  =====================================================================
-*  Replaced various illegal calls to AB_SCOPY by calls to AB_SLASET.
+*  Replaced various illegal calls to SCOPY by calls to SLASET.
 *  Sven Hammarling, 1/5/02.
 *
 *     .. Parameters ..
@@ -331,16 +329,15 @@
       LOGICAL            LQUERY, NOTRAN
       INTEGER            I, IE, IFUNC, IROUND, IS, ISOLVE, J, JE, JS, K,
      $                   LINFO, LWMIN, MB, NB, P, PPQQ, PQ, Q
-      REAL               AB_DSCALE, DSUM, SCALE2, SCALOC
+      REAL               DSCALE, DSUM, SCALE2, SCALOC
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_LSAME, AB_ILAENV
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SGEMM, AB_SLACPY, AB_SLASET, AB_SSCAL, AB_ST
-     $GSY2, AB_XERBLA
+      EXTERNAL           SGEMM, SLACPY, SLASET, SSCAL, STGSY2, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, REAL, SQRT
@@ -350,10 +347,10 @@
 *     Decode and test input parameters
 *
       INFO = 0
-      NOTRAN = AB_LSAME( TRANS, 'N' )
+      NOTRAN = LSAME( TRANS, 'N' )
       LQUERY = ( LWORK.EQ.-1 )
 *
-      IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) ) THEN
+      IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) ) THEN
          INFO = -1
       ELSE IF( NOTRAN ) THEN
          IF( ( IJOB.LT.0 ) .OR. ( IJOB.GT.4 ) ) THEN
@@ -373,7 +370,7 @@
             INFO = -10
          ELSE IF( LDD.LT.MAX( 1, M ) ) THEN
             INFO = -12
-         ELSE IF( AB_LDE.LT.MAX( 1, N ) ) THEN
+         ELSE IF( LDE.LT.MAX( 1, N ) ) THEN
             INFO = -14
          ELSE IF( LDF.LT.MAX( 1, M ) ) THEN
             INFO = -16
@@ -398,7 +395,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_STGSYL', -INFO )
+         CALL XERBLA( 'STGSYL', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -418,16 +415,16 @@
 *
 *     Determine optimal block sizes MB and NB
 *
-      MB = AB_ILAENV( 2, 'AB_STGSYL', TRANS, M, N, -1, -1 )
-      NB = AB_ILAENV( 5, 'AB_STGSYL', TRANS, M, N, -1, -1 )
+      MB = ILAENV( 2, 'STGSYL', TRANS, M, N, -1, -1 )
+      NB = ILAENV( 5, 'STGSYL', TRANS, M, N, -1, -1 )
 *
       ISOLVE = 1
       IFUNC = 0
       IF( NOTRAN ) THEN
          IF( IJOB.GE.3 ) THEN
             IFUNC = IJOB - 2
-            CALL AB_SLASET( 'F', M, N, ZERO, ZERO, C, LDC )
-            CALL AB_SLASET( 'F', M, N, ZERO, ZERO, F, LDF )
+            CALL SLASET( 'F', M, N, ZERO, ZERO, C, LDC )
+            CALL SLASET( 'F', M, N, ZERO, ZERO, F, LDF )
          ELSE IF( IJOB.GE.1 .AND. NOTRAN ) THEN
             ISOLVE = 2
          END IF
@@ -440,19 +437,17 @@
 *
 *           Use unblocked Level 2 solver
 *
-            AB_DSCALE = ZERO
+            DSCALE = ZERO
             DSUM = ONE
             PQ = 0
-            CALL AB_STGSY2( TRANS, IFUNC, M, N, A, LDA, B, LDB, C, LDC, 
-     $D,
-     $                   LDD, E, AB_LDE, F, LDF, SCALE, DSUM, AB_DSCALE,
+            CALL STGSY2( TRANS, IFUNC, M, N, A, LDA, B, LDB, C, LDC, D,
+     $                   LDD, E, LDE, F, LDF, SCALE, DSUM, DSCALE,
      $                   IWORK, PQ, INFO )
-            IF( AB_DSCALE.NE.ZERO ) THEN
+            IF( DSCALE.NE.ZERO ) THEN
                IF( IJOB.EQ.1 .OR. IJOB.EQ.3 ) THEN
-                  DIF = SQRT( REAL( 2*M*N ) ) / ( AB_DSCALE*SQRT( DSUM )
-     $ )
+                  DIF = SQRT( REAL( 2*M*N ) ) / ( DSCALE*SQRT( DSUM ) )
                ELSE
-                  DIF = SQRT( REAL( PQ ) ) / ( AB_DSCALE*SQRT( DSUM ) )
+                  DIF = SQRT( REAL( PQ ) ) / ( DSCALE*SQRT( DSUM ) )
                END IF
             END IF
 *
@@ -461,13 +456,13 @@
                   IFUNC = IJOB
                END IF
                SCALE2 = SCALE
-               CALL AB_SLACPY( 'F', M, N, C, LDC, WORK, M )
-               CALL AB_SLACPY( 'F', M, N, F, LDF, WORK( M*N+1 ), M )
-               CALL AB_SLASET( 'F', M, N, ZERO, ZERO, C, LDC )
-               CALL AB_SLASET( 'F', M, N, ZERO, ZERO, F, LDF )
+               CALL SLACPY( 'F', M, N, C, LDC, WORK, M )
+               CALL SLACPY( 'F', M, N, F, LDF, WORK( M*N+1 ), M )
+               CALL SLASET( 'F', M, N, ZERO, ZERO, C, LDC )
+               CALL SLASET( 'F', M, N, ZERO, ZERO, F, LDF )
             ELSE IF( ISOLVE.EQ.2 .AND. IROUND.EQ.2 ) THEN
-               CALL AB_SLACPY( 'F', M, N, WORK, M, C, LDC )
-               CALL AB_SLACPY( 'F', M, N, WORK( M*N+1 ), M, F, LDF )
+               CALL SLACPY( 'F', M, N, WORK, M, C, LDC )
+               CALL SLACPY( 'F', M, N, WORK( M*N+1 ), M, F, LDF )
                SCALE = SCALE2
             END IF
    30    CONTINUE
@@ -526,7 +521,7 @@
 *               D(I, I) * R(I, J) - L(I, J) * E(J, J) = F(I, J)
 *           for I = P, P - 1,..., 1; J = 1, 2,..., Q
 *
-            AB_DSCALE = ZERO
+            DSCALE = ZERO
             DSUM = ONE
             PQ = 0
             SCALE = ONE
@@ -539,12 +534,10 @@
                   IE = IWORK( I+1 ) - 1
                   MB = IE - IS + 1
                   PPQQ = 0
-                  CALL AB_STGSY2( TRANS, IFUNC, MB, NB, A( IS, IS ), LDA
-     $,
+                  CALL STGSY2( TRANS, IFUNC, MB, NB, A( IS, IS ), LDA,
      $                         B( JS, JS ), LDB, C( IS, JS ), LDC,
-     $                         D( IS, IS ), LDD, E( JS, JS ), AB_LDE,
-     $                         F( IS, JS ), LDF, SCALOC, DSUM, AB_DSCALE
-     $,
+     $                         D( IS, IS ), LDD, E( JS, JS ), LDE,
+     $                         F( IS, JS ), LDF, SCALOC, DSUM, DSCALE,
      $                         IWORK( Q+2 ), PPQQ, LINFO )
                   IF( LINFO.GT.0 )
      $               INFO = LINFO
@@ -552,20 +545,20 @@
                   PQ = PQ + PPQQ
                   IF( SCALOC.NE.ONE ) THEN
                      DO 80 K = 1, JS - 1
-                        CALL AB_SSCAL( M, SCALOC, C( 1, K ), 1 )
-                        CALL AB_SSCAL( M, SCALOC, F( 1, K ), 1 )
+                        CALL SSCAL( M, SCALOC, C( 1, K ), 1 )
+                        CALL SSCAL( M, SCALOC, F( 1, K ), 1 )
    80                CONTINUE
                      DO 90 K = JS, JE
-                        CALL AB_SSCAL( IS-1, SCALOC, C( 1, K ), 1 )
-                        CALL AB_SSCAL( IS-1, SCALOC, F( 1, K ), 1 )
+                        CALL SSCAL( IS-1, SCALOC, C( 1, K ), 1 )
+                        CALL SSCAL( IS-1, SCALOC, F( 1, K ), 1 )
    90                CONTINUE
                      DO 100 K = JS, JE
-                        CALL AB_SSCAL( M-IE, SCALOC, C( IE+1, K ), 1 )
-                        CALL AB_SSCAL( M-IE, SCALOC, F( IE+1, K ), 1 )
+                        CALL SSCAL( M-IE, SCALOC, C( IE+1, K ), 1 )
+                        CALL SSCAL( M-IE, SCALOC, F( IE+1, K ), 1 )
   100                CONTINUE
                      DO 110 K = JE + 1, N
-                        CALL AB_SSCAL( M, SCALOC, C( 1, K ), 1 )
-                        CALL AB_SSCAL( M, SCALOC, F( 1, K ), 1 )
+                        CALL SSCAL( M, SCALOC, C( 1, K ), 1 )
+                        CALL SSCAL( M, SCALOC, F( 1, K ), 1 )
   110                CONTINUE
                      SCALE = SCALE*SCALOC
                   END IF
@@ -574,30 +567,28 @@
 *                 equation.
 *
                   IF( I.GT.1 ) THEN
-                     CALL AB_SGEMM( 'N', 'N', IS-1, NB, MB, -ONE,
+                     CALL SGEMM( 'N', 'N', IS-1, NB, MB, -ONE,
      $                           A( 1, IS ), LDA, C( IS, JS ), LDC, ONE,
      $                           C( 1, JS ), LDC )
-                     CALL AB_SGEMM( 'N', 'N', IS-1, NB, MB, -ONE,
+                     CALL SGEMM( 'N', 'N', IS-1, NB, MB, -ONE,
      $                           D( 1, IS ), LDD, C( IS, JS ), LDC, ONE,
      $                           F( 1, JS ), LDF )
                   END IF
                   IF( J.LT.Q ) THEN
-                     CALL AB_SGEMM( 'N', 'N', MB, N-JE, NB, ONE,
+                     CALL SGEMM( 'N', 'N', MB, N-JE, NB, ONE,
      $                           F( IS, JS ), LDF, B( JS, JE+1 ), LDB,
      $                           ONE, C( IS, JE+1 ), LDC )
-                     CALL AB_SGEMM( 'N', 'N', MB, N-JE, NB, ONE,
-     $                           F( IS, JS ), LDF, E( JS, JE+1 ), AB_LDE
-     $,
+                     CALL SGEMM( 'N', 'N', MB, N-JE, NB, ONE,
+     $                           F( IS, JS ), LDF, E( JS, JE+1 ), LDE,
      $                           ONE, F( IS, JE+1 ), LDF )
                   END IF
   120          CONTINUE
   130       CONTINUE
-            IF( AB_DSCALE.NE.ZERO ) THEN
+            IF( DSCALE.NE.ZERO ) THEN
                IF( IJOB.EQ.1 .OR. IJOB.EQ.3 ) THEN
-                  DIF = SQRT( REAL( 2*M*N ) ) / ( AB_DSCALE*SQRT( DSUM )
-     $ )
+                  DIF = SQRT( REAL( 2*M*N ) ) / ( DSCALE*SQRT( DSUM ) )
                ELSE
-                  DIF = SQRT( REAL( PQ ) ) / ( AB_DSCALE*SQRT( DSUM ) )
+                  DIF = SQRT( REAL( PQ ) ) / ( DSCALE*SQRT( DSUM ) )
                END IF
             END IF
             IF( ISOLVE.EQ.2 .AND. IROUND.EQ.1 ) THEN
@@ -605,13 +596,13 @@
                   IFUNC = IJOB
                END IF
                SCALE2 = SCALE
-               CALL AB_SLACPY( 'F', M, N, C, LDC, WORK, M )
-               CALL AB_SLACPY( 'F', M, N, F, LDF, WORK( M*N+1 ), M )
-               CALL AB_SLASET( 'F', M, N, ZERO, ZERO, C, LDC )
-               CALL AB_SLASET( 'F', M, N, ZERO, ZERO, F, LDF )
+               CALL SLACPY( 'F', M, N, C, LDC, WORK, M )
+               CALL SLACPY( 'F', M, N, F, LDF, WORK( M*N+1 ), M )
+               CALL SLASET( 'F', M, N, ZERO, ZERO, C, LDC )
+               CALL SLASET( 'F', M, N, ZERO, ZERO, F, LDF )
             ELSE IF( ISOLVE.EQ.2 .AND. IROUND.EQ.2 ) THEN
-               CALL AB_SLACPY( 'F', M, N, WORK, M, C, LDC )
-               CALL AB_SLACPY( 'F', M, N, WORK( M*N+1 ), M, F, LDF )
+               CALL SLACPY( 'F', M, N, WORK, M, C, LDC )
+               CALL SLACPY( 'F', M, N, WORK( M*N+1 ), M, F, LDF )
                SCALE = SCALE2
             END IF
   150    CONTINUE
@@ -632,29 +623,29 @@
                JS = IWORK( J )
                JE = IWORK( J+1 ) - 1
                NB = JE - JS + 1
-               CALL AB_STGSY2( TRANS, IFUNC, MB, NB, A( IS, IS ), LDA,
+               CALL STGSY2( TRANS, IFUNC, MB, NB, A( IS, IS ), LDA,
      $                      B( JS, JS ), LDB, C( IS, JS ), LDC,
-     $                      D( IS, IS ), LDD, E( JS, JS ), AB_LDE,
-     $                      F( IS, JS ), LDF, SCALOC, DSUM, AB_DSCALE,
+     $                      D( IS, IS ), LDD, E( JS, JS ), LDE,
+     $                      F( IS, JS ), LDF, SCALOC, DSUM, DSCALE,
      $                      IWORK( Q+2 ), PPQQ, LINFO )
                IF( LINFO.GT.0 )
      $            INFO = LINFO
                IF( SCALOC.NE.ONE ) THEN
                   DO 160 K = 1, JS - 1
-                     CALL AB_SSCAL( M, SCALOC, C( 1, K ), 1 )
-                     CALL AB_SSCAL( M, SCALOC, F( 1, K ), 1 )
+                     CALL SSCAL( M, SCALOC, C( 1, K ), 1 )
+                     CALL SSCAL( M, SCALOC, F( 1, K ), 1 )
   160             CONTINUE
                   DO 170 K = JS, JE
-                     CALL AB_SSCAL( IS-1, SCALOC, C( 1, K ), 1 )
-                     CALL AB_SSCAL( IS-1, SCALOC, F( 1, K ), 1 )
+                     CALL SSCAL( IS-1, SCALOC, C( 1, K ), 1 )
+                     CALL SSCAL( IS-1, SCALOC, F( 1, K ), 1 )
   170             CONTINUE
                   DO 180 K = JS, JE
-                     CALL AB_SSCAL( M-IE, SCALOC, C( IE+1, K ), 1 )
-                     CALL AB_SSCAL( M-IE, SCALOC, F( IE+1, K ), 1 )
+                     CALL SSCAL( M-IE, SCALOC, C( IE+1, K ), 1 )
+                     CALL SSCAL( M-IE, SCALOC, F( IE+1, K ), 1 )
   180             CONTINUE
                   DO 190 K = JE + 1, N
-                     CALL AB_SSCAL( M, SCALOC, C( 1, K ), 1 )
-                     CALL AB_SSCAL( M, SCALOC, F( 1, K ), 1 )
+                     CALL SSCAL( M, SCALOC, C( 1, K ), 1 )
+                     CALL SSCAL( M, SCALOC, F( 1, K ), 1 )
   190             CONTINUE
                   SCALE = SCALE*SCALOC
                END IF
@@ -662,20 +653,18 @@
 *              Substitute R(I, J) and L(I, J) into remaining equation.
 *
                IF( J.GT.P+2 ) THEN
-                  CALL AB_SGEMM( 'N', 'T', MB, JS-1, NB, ONE, C( IS, JS 
-     $),
+                  CALL SGEMM( 'N', 'T', MB, JS-1, NB, ONE, C( IS, JS ),
      $                        LDC, B( 1, JS ), LDB, ONE, F( IS, 1 ),
      $                        LDF )
-                  CALL AB_SGEMM( 'N', 'T', MB, JS-1, NB, ONE, F( IS, JS 
-     $),
-     $                        LDF, E( 1, JS ), AB_LDE, ONE, F( IS, 1 ),
+                  CALL SGEMM( 'N', 'T', MB, JS-1, NB, ONE, F( IS, JS ),
+     $                        LDF, E( 1, JS ), LDE, ONE, F( IS, 1 ),
      $                        LDF )
                END IF
                IF( I.LT.P ) THEN
-                  CALL AB_SGEMM( 'T', 'N', M-IE, NB, MB, -ONE,
+                  CALL SGEMM( 'T', 'N', M-IE, NB, MB, -ONE,
      $                        A( IS, IE+1 ), LDA, C( IS, JS ), LDC, ONE,
      $                        C( IE+1, JS ), LDC )
-                  CALL AB_SGEMM( 'T', 'N', M-IE, NB, MB, -ONE,
+                  CALL SGEMM( 'T', 'N', M-IE, NB, MB, -ONE,
      $                        D( IS, IE+1 ), LDD, F( IS, JS ), LDF, ONE,
      $                        C( IE+1, JS ), LDC )
                END IF
@@ -688,6 +677,6 @@
 *
       RETURN
 *
-*     End of AB_STGSYL
+*     End of STGSYL
 *
       END

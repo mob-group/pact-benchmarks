@@ -1,4 +1,4 @@
-*> \brief \b AB_SERREC
+*> \brief \b SERREC
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SERREC( PATH, NUNIT )
+*       SUBROUTINE SERREC( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,9 +21,9 @@
 *>
 *> \verbatim
 *>
-*> AB_SERREC tests the error exits for the routines for eigen- condition
+*> SERREC tests the error exits for the routines for eigen- condition
 *> estimation for REAL matrices:
-*>    AB_STRSYL, AB_STREXC, AB_STRSNA and AB_STRSEN.
+*>    STRSYL, STREXC, STRSNA and STRSEN.
 *> \endverbatim
 *
 *  Arguments:
@@ -54,7 +54,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_SERREC( PATH, NUNIT )
+      SUBROUTINE SERREC( PATH, NUNIT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -85,8 +85,7 @@
      $                   WI( NMAX ), WORK( NMAX ), WR( NMAX )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CHKXER, AB_STREXC, AB_STRSEN, AB_STRSNA, AB_
-     $STRSYL
+      EXTERNAL           CHKXER, STREXC, STRSEN, STRSNA, STRSYL
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -116,160 +115,158 @@
          SEL( I ) = .TRUE.
    30 CONTINUE
 *
-*     Test AB_STRSYL
+*     Test STRSYL
 *
-      SRNAMT = 'AB_STRSYL'
+      SRNAMT = 'STRSYL'
       INFOT = 1
-      CALL AB_STRSYL( 'X', 'N', 1, 0, 0, A, 1, B, 1, C, 1, SCALE, INFO )
-      CALL AB_CHKXER( 'AB_STRSYL', INFOT, NOUT, LERR, OK )
+      CALL STRSYL( 'X', 'N', 1, 0, 0, A, 1, B, 1, C, 1, SCALE, INFO )
+      CALL CHKXER( 'STRSYL', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_STRSYL( 'N', 'X', 1, 0, 0, A, 1, B, 1, C, 1, SCALE, INFO )
-      CALL AB_CHKXER( 'AB_STRSYL', INFOT, NOUT, LERR, OK )
+      CALL STRSYL( 'N', 'X', 1, 0, 0, A, 1, B, 1, C, 1, SCALE, INFO )
+      CALL CHKXER( 'STRSYL', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL AB_STRSYL( 'N', 'N', 0, 0, 0, A, 1, B, 1, C, 1, SCALE, INFO )
-      CALL AB_CHKXER( 'AB_STRSYL', INFOT, NOUT, LERR, OK )
+      CALL STRSYL( 'N', 'N', 0, 0, 0, A, 1, B, 1, C, 1, SCALE, INFO )
+      CALL CHKXER( 'STRSYL', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL AB_STRSYL( 'N', 'N', 1, -1, 0, A, 1, B, 1, C, 1, SCALE, INFO 
-     $)
-      CALL AB_CHKXER( 'AB_STRSYL', INFOT, NOUT, LERR, OK )
+      CALL STRSYL( 'N', 'N', 1, -1, 0, A, 1, B, 1, C, 1, SCALE, INFO )
+      CALL CHKXER( 'STRSYL', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL AB_STRSYL( 'N', 'N', 1, 0, -1, A, 1, B, 1, C, 1, SCALE, INFO 
-     $)
-      CALL AB_CHKXER( 'AB_STRSYL', INFOT, NOUT, LERR, OK )
+      CALL STRSYL( 'N', 'N', 1, 0, -1, A, 1, B, 1, C, 1, SCALE, INFO )
+      CALL CHKXER( 'STRSYL', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL AB_STRSYL( 'N', 'N', 1, 2, 0, A, 1, B, 1, C, 2, SCALE, INFO )
-      CALL AB_CHKXER( 'AB_STRSYL', INFOT, NOUT, LERR, OK )
+      CALL STRSYL( 'N', 'N', 1, 2, 0, A, 1, B, 1, C, 2, SCALE, INFO )
+      CALL CHKXER( 'STRSYL', INFOT, NOUT, LERR, OK )
       INFOT = 9
-      CALL AB_STRSYL( 'N', 'N', 1, 0, 2, A, 1, B, 1, C, 1, SCALE, INFO )
-      CALL AB_CHKXER( 'AB_STRSYL', INFOT, NOUT, LERR, OK )
+      CALL STRSYL( 'N', 'N', 1, 0, 2, A, 1, B, 1, C, 1, SCALE, INFO )
+      CALL CHKXER( 'STRSYL', INFOT, NOUT, LERR, OK )
       INFOT = 11
-      CALL AB_STRSYL( 'N', 'N', 1, 2, 0, A, 2, B, 1, C, 1, SCALE, INFO )
-      CALL AB_CHKXER( 'AB_STRSYL', INFOT, NOUT, LERR, OK )
+      CALL STRSYL( 'N', 'N', 1, 2, 0, A, 2, B, 1, C, 1, SCALE, INFO )
+      CALL CHKXER( 'STRSYL', INFOT, NOUT, LERR, OK )
       NT = NT + 8
 *
-*     Test AB_STREXC
+*     Test STREXC
 *
-      SRNAMT = 'AB_STREXC'
+      SRNAMT = 'STREXC'
       IFST = 1
       ILST = 1
       INFOT = 1
-      CALL AB_STREXC( 'X', 1, A, 1, B, 1, IFST, ILST, WORK, INFO )
-      CALL AB_CHKXER( 'AB_STREXC', INFOT, NOUT, LERR, OK )
+      CALL STREXC( 'X', 1, A, 1, B, 1, IFST, ILST, WORK, INFO )
+      CALL CHKXER( 'STREXC', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_STREXC( 'N', -1, A, 1, B, 1, IFST, ILST, WORK, INFO )
-      CALL AB_CHKXER( 'AB_STREXC', INFOT, NOUT, LERR, OK )
+      CALL STREXC( 'N', -1, A, 1, B, 1, IFST, ILST, WORK, INFO )
+      CALL CHKXER( 'STREXC', INFOT, NOUT, LERR, OK )
       INFOT = 4
       ILST = 2
-      CALL AB_STREXC( 'N', 2, A, 1, B, 1, IFST, ILST, WORK, INFO )
-      CALL AB_CHKXER( 'AB_STREXC', INFOT, NOUT, LERR, OK )
+      CALL STREXC( 'N', 2, A, 1, B, 1, IFST, ILST, WORK, INFO )
+      CALL CHKXER( 'STREXC', INFOT, NOUT, LERR, OK )
       INFOT = 6
-      CALL AB_STREXC( 'V', 2, A, 2, B, 1, IFST, ILST, WORK, INFO )
-      CALL AB_CHKXER( 'AB_STREXC', INFOT, NOUT, LERR, OK )
+      CALL STREXC( 'V', 2, A, 2, B, 1, IFST, ILST, WORK, INFO )
+      CALL CHKXER( 'STREXC', INFOT, NOUT, LERR, OK )
       INFOT = 7
       IFST = 0
       ILST = 1
-      CALL AB_STREXC( 'V', 1, A, 1, B, 1, IFST, ILST, WORK, INFO )
-      CALL AB_CHKXER( 'AB_STREXC', INFOT, NOUT, LERR, OK )
+      CALL STREXC( 'V', 1, A, 1, B, 1, IFST, ILST, WORK, INFO )
+      CALL CHKXER( 'STREXC', INFOT, NOUT, LERR, OK )
       INFOT = 7
       IFST = 2
-      CALL AB_STREXC( 'V', 1, A, 1, B, 1, IFST, ILST, WORK, INFO )
-      CALL AB_CHKXER( 'AB_STREXC', INFOT, NOUT, LERR, OK )
+      CALL STREXC( 'V', 1, A, 1, B, 1, IFST, ILST, WORK, INFO )
+      CALL CHKXER( 'STREXC', INFOT, NOUT, LERR, OK )
       INFOT = 8
       IFST = 1
       ILST = 0
-      CALL AB_STREXC( 'V', 1, A, 1, B, 1, IFST, ILST, WORK, INFO )
-      CALL AB_CHKXER( 'AB_STREXC', INFOT, NOUT, LERR, OK )
+      CALL STREXC( 'V', 1, A, 1, B, 1, IFST, ILST, WORK, INFO )
+      CALL CHKXER( 'STREXC', INFOT, NOUT, LERR, OK )
       INFOT = 8
       ILST = 2
-      CALL AB_STREXC( 'V', 1, A, 1, B, 1, IFST, ILST, WORK, INFO )
-      CALL AB_CHKXER( 'AB_STREXC', INFOT, NOUT, LERR, OK )
+      CALL STREXC( 'V', 1, A, 1, B, 1, IFST, ILST, WORK, INFO )
+      CALL CHKXER( 'STREXC', INFOT, NOUT, LERR, OK )
       NT = NT + 8
 *
-*     Test AB_STRSNA
+*     Test STRSNA
 *
-      SRNAMT = 'AB_STRSNA'
+      SRNAMT = 'STRSNA'
       INFOT = 1
-      CALL AB_STRSNA( 'X', 'A', SEL, 0, A, 1, B, 1, C, 1, S, SEP, 1, M,
+      CALL STRSNA( 'X', 'A', SEL, 0, A, 1, B, 1, C, 1, S, SEP, 1, M,
      $             WORK, 1, IWORK, INFO )
-      CALL AB_CHKXER( 'AB_STRSNA', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'STRSNA', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_STRSNA( 'B', 'X', SEL, 0, A, 1, B, 1, C, 1, S, SEP, 1, M,
+      CALL STRSNA( 'B', 'X', SEL, 0, A, 1, B, 1, C, 1, S, SEP, 1, M,
      $             WORK, 1, IWORK, INFO )
-      CALL AB_CHKXER( 'AB_STRSNA', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'STRSNA', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL AB_STRSNA( 'B', 'A', SEL, -1, A, 1, B, 1, C, 1, S, SEP, 1, M,
+      CALL STRSNA( 'B', 'A', SEL, -1, A, 1, B, 1, C, 1, S, SEP, 1, M,
      $             WORK, 1, IWORK, INFO )
-      CALL AB_CHKXER( 'AB_STRSNA', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'STRSNA', INFOT, NOUT, LERR, OK )
       INFOT = 6
-      CALL AB_STRSNA( 'V', 'A', SEL, 2, A, 1, B, 1, C, 1, S, SEP, 2, M,
+      CALL STRSNA( 'V', 'A', SEL, 2, A, 1, B, 1, C, 1, S, SEP, 2, M,
      $             WORK, 2, IWORK, INFO )
-      CALL AB_CHKXER( 'AB_STRSNA', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'STRSNA', INFOT, NOUT, LERR, OK )
       INFOT = 8
-      CALL AB_STRSNA( 'B', 'A', SEL, 2, A, 2, B, 1, C, 2, S, SEP, 2, M,
+      CALL STRSNA( 'B', 'A', SEL, 2, A, 2, B, 1, C, 2, S, SEP, 2, M,
      $             WORK, 2, IWORK, INFO )
-      CALL AB_CHKXER( 'AB_STRSNA', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'STRSNA', INFOT, NOUT, LERR, OK )
       INFOT = 10
-      CALL AB_STRSNA( 'B', 'A', SEL, 2, A, 2, B, 2, C, 1, S, SEP, 2, M,
+      CALL STRSNA( 'B', 'A', SEL, 2, A, 2, B, 2, C, 1, S, SEP, 2, M,
      $             WORK, 2, IWORK, INFO )
-      CALL AB_CHKXER( 'AB_STRSNA', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'STRSNA', INFOT, NOUT, LERR, OK )
       INFOT = 13
-      CALL AB_STRSNA( 'B', 'A', SEL, 1, A, 1, B, 1, C, 1, S, SEP, 0, M,
+      CALL STRSNA( 'B', 'A', SEL, 1, A, 1, B, 1, C, 1, S, SEP, 0, M,
      $             WORK, 1, IWORK, INFO )
-      CALL AB_CHKXER( 'AB_STRSNA', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'STRSNA', INFOT, NOUT, LERR, OK )
       INFOT = 13
-      CALL AB_STRSNA( 'B', 'S', SEL, 2, A, 2, B, 2, C, 2, S, SEP, 1, M,
+      CALL STRSNA( 'B', 'S', SEL, 2, A, 2, B, 2, C, 2, S, SEP, 1, M,
      $             WORK, 2, IWORK, INFO )
-      CALL AB_CHKXER( 'AB_STRSNA', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'STRSNA', INFOT, NOUT, LERR, OK )
       INFOT = 16
-      CALL AB_STRSNA( 'B', 'A', SEL, 2, A, 2, B, 2, C, 2, S, SEP, 2, M,
+      CALL STRSNA( 'B', 'A', SEL, 2, A, 2, B, 2, C, 2, S, SEP, 2, M,
      $             WORK, 1, IWORK, INFO )
-      CALL AB_CHKXER( 'AB_STRSNA', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'STRSNA', INFOT, NOUT, LERR, OK )
       NT = NT + 9
 *
-*     Test AB_STRSEN
+*     Test STRSEN
 *
       SEL( 1 ) = .FALSE.
-      SRNAMT = 'AB_STRSEN'
+      SRNAMT = 'STRSEN'
       INFOT = 1
-      CALL AB_STRSEN( 'X', 'N', SEL, 0, A, 1, B, 1, WR, WI, M, S( 1 ),
+      CALL STRSEN( 'X', 'N', SEL, 0, A, 1, B, 1, WR, WI, M, S( 1 ),
      $             SEP( 1 ), WORK, 1, IWORK, 1, INFO )
-      CALL AB_CHKXER( 'AB_STRSEN', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'STRSEN', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL AB_STRSEN( 'N', 'X', SEL, 0, A, 1, B, 1, WR, WI, M, S( 1 ),
+      CALL STRSEN( 'N', 'X', SEL, 0, A, 1, B, 1, WR, WI, M, S( 1 ),
      $             SEP( 1 ), WORK, 1, IWORK, 1, INFO )
-      CALL AB_CHKXER( 'AB_STRSEN', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'STRSEN', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL AB_STRSEN( 'N', 'N', SEL, -1, A, 1, B, 1, WR, WI, M, S( 1 ),
+      CALL STRSEN( 'N', 'N', SEL, -1, A, 1, B, 1, WR, WI, M, S( 1 ),
      $             SEP( 1 ), WORK, 1, IWORK, 1, INFO )
-      CALL AB_CHKXER( 'AB_STRSEN', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'STRSEN', INFOT, NOUT, LERR, OK )
       INFOT = 6
-      CALL AB_STRSEN( 'N', 'N', SEL, 2, A, 1, B, 1, WR, WI, M, S( 1 ),
+      CALL STRSEN( 'N', 'N', SEL, 2, A, 1, B, 1, WR, WI, M, S( 1 ),
      $             SEP( 1 ), WORK, 2, IWORK, 1, INFO )
-      CALL AB_CHKXER( 'AB_STRSEN', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'STRSEN', INFOT, NOUT, LERR, OK )
       INFOT = 8
-      CALL AB_STRSEN( 'N', 'V', SEL, 2, A, 2, B, 1, WR, WI, M, S( 1 ),
+      CALL STRSEN( 'N', 'V', SEL, 2, A, 2, B, 1, WR, WI, M, S( 1 ),
      $             SEP( 1 ), WORK, 1, IWORK, 1, INFO )
-      CALL AB_CHKXER( 'AB_STRSEN', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'STRSEN', INFOT, NOUT, LERR, OK )
       INFOT = 15
-      CALL AB_STRSEN( 'N', 'V', SEL, 2, A, 2, B, 2, WR, WI, M, S( 1 ),
+      CALL STRSEN( 'N', 'V', SEL, 2, A, 2, B, 2, WR, WI, M, S( 1 ),
      $             SEP( 1 ), WORK, 0, IWORK, 1, INFO )
-      CALL AB_CHKXER( 'AB_STRSEN', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'STRSEN', INFOT, NOUT, LERR, OK )
       INFOT = 15
-      CALL AB_STRSEN( 'E', 'V', SEL, 3, A, 3, B, 3, WR, WI, M, S( 1 ),
+      CALL STRSEN( 'E', 'V', SEL, 3, A, 3, B, 3, WR, WI, M, S( 1 ),
      $             SEP( 1 ), WORK, 1, IWORK, 1, INFO )
-      CALL AB_CHKXER( 'AB_STRSEN', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'STRSEN', INFOT, NOUT, LERR, OK )
       INFOT = 15
-      CALL AB_STRSEN( 'V', 'V', SEL, 3, A, 3, B, 3, WR, WI, M, S( 1 ),
+      CALL STRSEN( 'V', 'V', SEL, 3, A, 3, B, 3, WR, WI, M, S( 1 ),
      $             SEP( 1 ), WORK, 3, IWORK, 2, INFO )
-      CALL AB_CHKXER( 'AB_STRSEN', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'STRSEN', INFOT, NOUT, LERR, OK )
       INFOT = 17
-      CALL AB_STRSEN( 'E', 'V', SEL, 2, A, 2, B, 2, WR, WI, M, S( 1 ),
+      CALL STRSEN( 'E', 'V', SEL, 2, A, 2, B, 2, WR, WI, M, S( 1 ),
      $             SEP( 1 ), WORK, 1, IWORK, 0, INFO )
-      CALL AB_CHKXER( 'AB_STRSEN', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'STRSEN', INFOT, NOUT, LERR, OK )
       INFOT = 17
-      CALL AB_STRSEN( 'V', 'V', SEL, 3, A, 3, B, 3, WR, WI, M, S( 1 ),
+      CALL STRSEN( 'V', 'V', SEL, 3, A, 3, B, 3, WR, WI, M, S( 1 ),
      $             SEP( 1 ), WORK, 4, IWORK, 1, INFO )
-      CALL AB_CHKXER( 'AB_STRSEN', INFOT, NOUT, LERR, OK )
+      CALL CHKXER( 'STRSEN', INFOT, NOUT, LERR, OK )
       NT = NT + 10
 *
 *     Print a summary line.
@@ -286,6 +283,6 @@
  9998 FORMAT( ' *** ', A3, ' routines failed the tests of the error ex',
      $      'its ***' )
 *
-*     End of AB_SERREC
+*     End of SERREC
 *
       END

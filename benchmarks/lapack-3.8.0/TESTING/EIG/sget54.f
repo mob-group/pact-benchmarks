@@ -1,4 +1,4 @@
-*> \brief \b AB_SGET54
+*> \brief \b SGET54
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SGET54( N, A, LDA, B, LDB, S, LDS, T, LDT, U, LDU, V,
+*       SUBROUTINE SGET54( N, A, LDA, B, LDB, S, LDS, T, LDT, U, LDU, V,
 *                          LDV, WORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SGET54 checks a generalized decomposition of the form
+*> SGET54 checks a generalized decomposition of the form
 *>
 *>          A = U*S*V'  and B = U*T* V'
 *>
@@ -44,7 +44,7 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The size of the matrix.  If it is zero, AB_SGET54 does nothing.
+*>          The size of the matrix.  If it is zero, SGET54 does nothing.
 *>          It must be at least zero.
 *> \endverbatim
 *>
@@ -153,8 +153,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_SGET54( N, A, LDA, B, LDB, S, LDS, T, LDT, U, LDU, V
-     $,
+      SUBROUTINE SGET54( N, A, LDA, B, LDB, S, LDS, T, LDT, U, LDU, V,
      $                   LDV, WORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -185,11 +184,11 @@
       REAL               DUM( 1 )
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH, AB_SLANGE
-      EXTERNAL           AB_SLAMCH, AB_SLANGE
+      REAL               SLAMCH, SLANGE
+      EXTERNAL           SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SGEMM, AB_SLACPY
+      EXTERNAL           SGEMM, SLACPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, REAL
@@ -202,37 +201,36 @@
 *
 *     Constants
 *
-      UNFL = AB_SLAMCH( 'Safe minimum' )
-      ULP = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
+      UNFL = SLAMCH( 'Safe minimum' )
+      ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
 *
 *     compute the norm of (A,B)
 *
-      CALL AB_SLACPY( 'Full', N, N, A, LDA, WORK, N )
-      CALL AB_SLACPY( 'Full', N, N, B, LDB, WORK( N*N+1 ), N )
-      ABNORM = MAX( AB_SLANGE( '1', N, 2*N, WORK, N, DUM ), UNFL )
+      CALL SLACPY( 'Full', N, N, A, LDA, WORK, N )
+      CALL SLACPY( 'Full', N, N, B, LDB, WORK( N*N+1 ), N )
+      ABNORM = MAX( SLANGE( '1', N, 2*N, WORK, N, DUM ), UNFL )
 *
 *     Compute W1 = A - U*S*V', and put in the array WORK(1:N*N)
 *
-      CALL AB_SLACPY( ' ', N, N, A, LDA, WORK, N )
-      CALL AB_SGEMM( 'N', 'N', N, N, N, ONE, U, LDU, S, LDS, ZERO,
+      CALL SLACPY( ' ', N, N, A, LDA, WORK, N )
+      CALL SGEMM( 'N', 'N', N, N, N, ONE, U, LDU, S, LDS, ZERO,
      $            WORK( N*N+1 ), N )
 *
-      CALL AB_SGEMM( 'N', 'C', N, N, N, -ONE, WORK( N*N+1 ), N, V, LDV,
+      CALL SGEMM( 'N', 'C', N, N, N, -ONE, WORK( N*N+1 ), N, V, LDV,
      $            ONE, WORK, N )
 *
 *     Compute W2 = B - U*T*V', and put in the workarray W(N*N+1:2*N*N)
 *
-      CALL AB_SLACPY( ' ', N, N, B, LDB, WORK( N*N+1 ), N )
-      CALL AB_SGEMM( 'N', 'N', N, N, N, ONE, U, LDU, T, LDT, ZERO,
+      CALL SLACPY( ' ', N, N, B, LDB, WORK( N*N+1 ), N )
+      CALL SGEMM( 'N', 'N', N, N, N, ONE, U, LDU, T, LDT, ZERO,
      $            WORK( 2*N*N+1 ), N )
 *
-      CALL AB_SGEMM( 'N', 'C', N, N, N, -ONE, WORK( 2*N*N+1 ), N, V, LDV
-     $,
+      CALL SGEMM( 'N', 'C', N, N, N, -ONE, WORK( 2*N*N+1 ), N, V, LDV,
      $            ONE, WORK( N*N+1 ), N )
 *
 *     Compute norm(W)/ ( ulp*norm((A,B)) )
 *
-      WNORM = AB_SLANGE( '1', N, 2*N, WORK, N, DUM )
+      WNORM = SLANGE( '1', N, 2*N, WORK, N, DUM )
 *
       IF( ABNORM.GT.WNORM ) THEN
          RESULT = ( WNORM / ABNORM ) / ( 2*N*ULP )
@@ -246,6 +244,6 @@
 *
       RETURN
 *
-*     End of AB_SGET54
+*     End of SGET54
 *
       END

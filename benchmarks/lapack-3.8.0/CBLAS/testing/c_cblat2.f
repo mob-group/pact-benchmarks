@@ -24,23 +24,23 @@
 *  (0.0,0.0) (1.0,0.0) (0.7,-0.9)       VALUES OF ALPHA
 *  3                 NUMBER OF VALUES OF BETA
 *  (0.0,0.0) (1.0,0.0) (1.3,-1.1)       VALUES OF BETA
-*  cblas_AB_CGEMV  T PUT F FOR NO TEST. SAME COLUMNS.
-*  cblas_AB_CGBMV  T PUT F FOR NO TEST. SAME COLUMNS.
-*  cblas_AB_CHEMV  T PUT F FOR NO TEST. SAME COLUMNS.
-*  cblas_AB_CHBMV  T PUT F FOR NO TEST. SAME COLUMNS.
-*  cblas_AB_CHPMV  T PUT F FOR NO TEST. SAME COLUMNS.
-*  cblas_AB_CTRMV  T PUT F FOR NO TEST. SAME COLUMNS.
-*  cblas_AB_CTBMV  T PUT F FOR NO TEST. SAME COLUMNS.
-*  cblas_AB_CTPMV  T PUT F FOR NO TEST. SAME COLUMNS.
-*  cblas_AB_CTRSV  T PUT F FOR NO TEST. SAME COLUMNS.
-*  cblas_AB_CTBSV  T PUT F FOR NO TEST. SAME COLUMNS.
-*  cblas_AB_CTPSV  T PUT F FOR NO TEST. SAME COLUMNS.
-*  cblas_AB_CGERC  T PUT F FOR NO TEST. SAME COLUMNS.
-*  cblas_AB_CGERU  T PUT F FOR NO TEST. SAME COLUMNS.
-*  cblas_AB_CHER   T PUT F FOR NO TEST. SAME COLUMNS.
-*  cblas_AB_CHPR   T PUT F FOR NO TEST. SAME COLUMNS.
-*  cblas_AB_AB_CHER2  T PUT F FOR NO TEST. SAME COLUMNS.
-*  cblas_AB_AB_CHPR2  T PUT F FOR NO TEST. SAME COLUMNS.
+*  cblas_cgemv  T PUT F FOR NO TEST. SAME COLUMNS.
+*  cblas_cgbmv  T PUT F FOR NO TEST. SAME COLUMNS.
+*  cblas_chemv  T PUT F FOR NO TEST. SAME COLUMNS.
+*  cblas_chbmv  T PUT F FOR NO TEST. SAME COLUMNS.
+*  cblas_chpmv  T PUT F FOR NO TEST. SAME COLUMNS.
+*  cblas_ctrmv  T PUT F FOR NO TEST. SAME COLUMNS.
+*  cblas_ctbmv  T PUT F FOR NO TEST. SAME COLUMNS.
+*  cblas_ctpmv  T PUT F FOR NO TEST. SAME COLUMNS.
+*  cblas_ctrsv  T PUT F FOR NO TEST. SAME COLUMNS.
+*  cblas_ctbsv  T PUT F FOR NO TEST. SAME COLUMNS.
+*  cblas_ctpsv  T PUT F FOR NO TEST. SAME COLUMNS.
+*  cblas_cgerc  T PUT F FOR NO TEST. SAME COLUMNS.
+*  cblas_cgeru  T PUT F FOR NO TEST. SAME COLUMNS.
+*  cblas_cher   T PUT F FOR NO TEST. SAME COLUMNS.
+*  cblas_chpr   T PUT F FOR NO TEST. SAME COLUMNS.
+*  cblas_cher2  T PUT F FOR NO TEST. SAME COLUMNS.
+*  cblas_chpr2  T PUT F FOR NO TEST. SAME COLUMNS.
 *
 *     See:
 *
@@ -98,13 +98,12 @@
       LOGICAL            LTEST( NSUBS )
       CHARACTER*12       SNAMES( NSUBS )
 *     .. External Functions ..
-      REAL               AB_SDIFF
-      LOGICAL            AB_LCE
-      EXTERNAL           AB_SDIFF, AB_LCE
+      REAL               SDIFF
+      LOGICAL            LCE
+      EXTERNAL           SDIFF, LCE
 *     .. External Subroutines ..
-      EXTERNAL           AB_CCHK1, AB_CCHK2, AB_CCHK3, AB_CCHK4, AB_CCHK
-     $5, AB_CCHK6,
-     $                   CC2CHKE, AB_CMVCH
+      EXTERNAL           CCHK1, CCHK2, CCHK3, CCHK4, CCHK5, CCHK6,
+     $                   CC2CHKE, CMVCH
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
 *     .. Scalars in Common ..
@@ -115,17 +114,12 @@
       COMMON             /INFOC/INFOT, NOUTC, OK
       COMMON             /SRNAMC/SRNAMT
 *     .. Data statements ..
-      DATA               SNAMES/'cblas_AB_CGEMV ', 'cblas_AB_CGBMV ',
-     $                   'cblas_AB_CHEMV ','cblas_AB_CHBMV ','cblas_AB_C
-     $HPMV ',
-     $                   'cblas_AB_CTRMV ','cblas_AB_CTBMV ','cblas_AB_C
-     $TPMV ',
-     $                   'cblas_AB_CTRSV ','cblas_AB_CTBSV ','cblas_AB_C
-     $TPSV ',
-     $                   'cblas_AB_CGERC ','cblas_AB_CGERU ','cblas_AB_C
-     $HER  ',
-     $                   'cblas_AB_CHPR  ','cblas_AB_AB_CHER2 ','cblas_A
-     $B_AB_CHPR2 '/
+      DATA               SNAMES/'cblas_cgemv ', 'cblas_cgbmv ',
+     $                   'cblas_chemv ','cblas_chbmv ','cblas_chpmv ',
+     $                   'cblas_ctrmv ','cblas_ctbmv ','cblas_ctpmv ',
+     $                   'cblas_ctrsv ','cblas_ctbsv ','cblas_ctpsv ',
+     $                   'cblas_cgerc ','cblas_cgeru ','cblas_cher  ',
+     $                   'cblas_chpr  ','cblas_cher2 ','cblas_chpr2 '/
 *     .. Executable Statements ..
 *
       NOUTC = NOUT
@@ -260,7 +254,7 @@
 *
       EPS = RONE
    90 CONTINUE
-      IF( AB_SDIFF( RONE + EPS, RONE ).EQ.RZERO )
+      IF( SDIFF( RONE + EPS, RONE ).EQ.RZERO )
      $   GO TO 100
       EPS = RHALF*EPS
       GO TO 90
@@ -268,7 +262,7 @@
       EPS = EPS + EPS
       WRITE( NOUT, FMT = 9998 )EPS
 *
-*     Check the reliability of AB_CMVCH using exact data.
+*     Check the reliability of CMVCH using exact data.
 *
       N = MIN( 32, NMAX )
       DO 120 J = 1, N
@@ -281,21 +275,20 @@
       DO 130 J = 1, N
          YY( J ) = J*( ( J + 1 )*J )/2 - ( ( J + 1 )*J*( J - 1 ) )/3
   130 CONTINUE
-*     YY holds the exact result. On exit from AB_CMVCH YT holds
-*     the result computed by AB_CMVCH.
+*     YY holds the exact result. On exit from CMVCH YT holds
+*     the result computed by CMVCH.
       TRANS = 'N'
-      CALL AB_CMVCH( TRANS, N, N, ONE, A, NMAX, X, 1, ZERO, Y, 1, YT, G,
+      CALL CMVCH( TRANS, N, N, ONE, A, NMAX, X, 1, ZERO, Y, 1, YT, G,
      $            YY, EPS, ERR, FATAL, NOUT, .TRUE. )
-      SAME = AB_LCE( YY, YT, N )
+      SAME = LCE( YY, YT, N )
       IF( .NOT.SAME.OR.ERR.NE.RZERO )THEN
          WRITE( NOUT, FMT = 9985 )TRANS, SAME, ERR
          STOP
       END IF
       TRANS = 'T'
-      CALL AB_CMVCH( TRANS, N, N, ONE, A, NMAX, X, -1, ZERO, Y, -1, YT, 
-     $G,
+      CALL CMVCH( TRANS, N, N, ONE, A, NMAX, X, -1, ZERO, Y, -1, YT, G,
      $            YY, EPS, ERR, FATAL, NOUT, .TRUE. )
-      SAME = AB_LCE( YY, YT, N )
+      SAME = LCE( YY, YT, N )
       IF( .NOT.SAME.OR.ERR.NE.RZERO )THEN
          WRITE( NOUT, FMT = 9985 )TRANS, SAME, ERR
          STOP
@@ -322,98 +315,86 @@
             GO TO ( 140, 140, 150, 150, 150, 160, 160,
      $              160, 160, 160, 160, 170, 170, 180,
      $              180, 190, 190 )ISNUM
-*           Test AB_CGEMV, 01, and AB_CGBMV, 02.
+*           Test CGEMV, 01, and CGBMV, 02.
   140       IF (CORDER) THEN
-            CALL AB_CCHK1( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRA
-     $CE,
+            CALL CCHK1( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NKB, KB, NALF, ALF,
      $                  NBET, BET, NINC, INC, NMAX, INCMAX, A, AA, AS,
      $                  X, XX, XS, Y, YY, YS, YT, G, 0 )
             END IF
             IF (RORDER) THEN
-            CALL AB_CCHK1( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRA
-     $CE,
+            CALL CCHK1( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NKB, KB, NALF, ALF,
      $                  NBET, BET, NINC, INC, NMAX, INCMAX, A, AA, AS,
      $                  X, XX, XS, Y, YY, YS, YT, G, 1 )
             END IF
             GO TO 200
-*           Test AB_CHEMV, 03, AB_CHBMV, 04, and AB_CHPMV, 05.
+*           Test CHEMV, 03, CHBMV, 04, and CHPMV, 05.
   150      IF (CORDER) THEN
-           CALL AB_CCHK2( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRAC
-     $E,
+           CALL CCHK2( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NKB, KB, NALF, ALF,
      $                  NBET, BET, NINC, INC, NMAX, INCMAX, A, AA, AS,
      $                  X, XX, XS, Y, YY, YS, YT, G, 0 )
            END IF
            IF (RORDER) THEN
-           CALL AB_CCHK2( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRAC
-     $E,
+           CALL CCHK2( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NKB, KB, NALF, ALF,
      $                  NBET, BET, NINC, INC, NMAX, INCMAX, A, AA, AS,
      $                  X, XX, XS, Y, YY, YS, YT, G, 1 )
            END IF
             GO TO 200
-*           Test AB_CTRMV, 06, AB_CTBMV, 07, AB_CTPMV, 08,
-*           AB_CTRSV, 09, AB_CTBSV, 10, and AB_CTPSV, 11.
+*           Test CTRMV, 06, CTBMV, 07, CTPMV, 08,
+*           CTRSV, 09, CTBSV, 10, and CTPSV, 11.
   160      IF (CORDER) THEN
-           CALL AB_CCHK3( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRAC
-     $E,
+           CALL CCHK3( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NKB, KB, NINC, INC,
      $                  NMAX, INCMAX, A, AA, AS, Y, YY, YS, YT, G, Z,
      $			0 )
            END IF
            IF (RORDER) THEN
-           CALL AB_CCHK3( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRAC
-     $E,
+           CALL CCHK3( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NKB, KB, NINC, INC,
      $                  NMAX, INCMAX, A, AA, AS, Y, YY, YS, YT, G, Z,
      $			1 )
            END IF
             GO TO 200
-*           Test AB_CGERC, 12, AB_CGERU, 13.
+*           Test CGERC, 12, CGERU, 13.
   170      IF (CORDER) THEN
-           CALL AB_CCHK4( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRAC
-     $E,
+           CALL CCHK4( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NALF, ALF, NINC, INC,
      $                  NMAX, INCMAX, A, AA, AS, X, XX, XS, Y, YY, YS,
      $                  YT, G, Z, 0 )
            END IF
            IF (RORDER) THEN
-           CALL AB_CCHK4( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRAC
-     $E,
+           CALL CCHK4( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NALF, ALF, NINC, INC,
      $                  NMAX, INCMAX, A, AA, AS, X, XX, XS, Y, YY, YS,
      $                  YT, G, Z, 1 )
            END IF
             GO TO 200
-*           Test AB_CHER, 14, and AB_CHPR, 15.
+*           Test CHER, 14, and CHPR, 15.
   180      IF (CORDER) THEN
-           CALL AB_CCHK5( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRAC
-     $E,
+           CALL CCHK5( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NALF, ALF, NINC, INC,
      $                  NMAX, INCMAX, A, AA, AS, X, XX, XS, Y, YY, YS,
      $                  YT, G, Z, 0 )
            END IF
            IF (RORDER) THEN
-           CALL AB_CCHK5( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRAC
-     $E,
+           CALL CCHK5( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NALF, ALF, NINC, INC,
      $                  NMAX, INCMAX, A, AA, AS, X, XX, XS, Y, YY, YS,
      $                  YT, G, Z, 1 )
            END IF
             GO TO 200
-*           Test AB_AB_CHER2, 16, and AB_AB_CHPR2, 17.
+*           Test CHER2, 16, and CHPR2, 17.
   190      IF (CORDER) THEN
-           CALL AB_CCHK6( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRAC
-     $E,
+           CALL CCHK6( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NALF, ALF, NINC, INC,
      $                  NMAX, INCMAX, A, AA, AS, X, XX, XS, Y, YY, YS,
      $                  YT, G, Z, 0 )
            END IF
            IF (RORDER) THEN
-           CALL AB_CCHK6( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRAC
-     $E,
+           CALL CCHK6( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NALF, ALF, NINC, INC,
      $                  NMAX, INCMAX, A, AA, AS, X, XX, XS, Y, YY, YS,
      $                  YT, G, Z, 1 )
@@ -464,9 +445,8 @@
      $      /' ******* TESTS ABANDONED *******' )
  9986 FORMAT(' SUBPROGRAM NAME ',A12, ' NOT RECOGNIZED', /' ******* T',
      $      'ESTS ABANDONED *******' )
- 9985 FORMAT(' ERROR IN AB_CMVCH -  IN-LINE DOT PRODUCTS ARE BEING EVALU
-     $',
-     $      'ATED WRONGLY.', /' AB_CMVCH WAS CALLED WITH TRANS = ', A1,
+ 9985 FORMAT(' ERROR IN CMVCH -  IN-LINE DOT PRODUCTS ARE BEING EVALU',
+     $      'ATED WRONGLY.', /' CMVCH WAS CALLED WITH TRANS = ', A1,
      $      ' AND RETURNED SAME = ', L1, ' AND ERR = ', F12.3, '.', /
      $  ' THIS MAY BE DUE TO FAULTS IN THE ARITHMETIC OR THE COMPILER.'
      $      , /' ******* TESTS ABANDONED *******' )
@@ -479,12 +459,12 @@
 *     End of CBLAT2.
 *
       END
-      SUBROUTINE AB_CCHK1( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
+      SUBROUTINE CCHK1( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NKB, KB, NALF, ALF, NBET,
      $                  BET, NINC, INC, NMAX, INCMAX, A, AA, AS, X, XX,
      $                  XS, Y, YY, YS, YT, G, IORDER )
 *
-*  Tests AB_CGEMV and AB_CGBMV.
+*  Tests CGEMV and CGBMV.
 *
 *  Auxiliary routine for test program for Level 2 Blas.
 *
@@ -525,10 +505,10 @@
 *     .. Local Arrays ..
       LOGICAL            ISAME( 13 )
 *     .. External Functions ..
-      LOGICAL            AB_LCE, AB_AB_LCERES
-      EXTERNAL           AB_LCE, AB_AB_LCERES
+      LOGICAL            LCE, LCERES
+      EXTERNAL           LCE, LCERES
 *     .. External Subroutines ..
-      EXTERNAL           CAB_CGBMV, CAB_CGEMV, AB_CMAKE, AB_CMVCH
+      EXTERNAL           CCGBMV, CCGEMV, CMAKE, CMVCH
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
 *     .. Scalars in Common ..
@@ -592,8 +572,7 @@
 *              Generate the matrix A.
 *
                TRANSL = ZERO
-               CALL AB_CMAKE( SNAME( 8: 9 ), ' ', ' ', M, N, A, NMAX, AA
-     $,
+               CALL CMAKE( SNAME( 8: 9 ), ' ', ' ', M, N, A, NMAX, AA,
      $                     LDA, KL, KU, RESET, TRANSL )
 *
                DO 90 IC = 1, 3
@@ -622,7 +601,7 @@
 *                    Generate the vector X.
 *
                      TRANSL = HALF
-                     CALL AB_CMAKE( 'ge', ' ', ' ', 1, NL, X, 1, XX,
+                     CALL CMAKE( 'ge', ' ', ' ', 1, NL, X, 1, XX,
      $                          ABS( INCX ), 0, NL - 1, RESET, TRANSL )
                      IF( NL.GT.1 )THEN
                         X( NL/2 ) = ZERO
@@ -642,8 +621,7 @@
 *                             Generate the vector Y.
 *
                               TRANSL = ZERO
-                              CALL AB_CMAKE( 'ge', ' ', ' ', 1, ML, Y, 1
-     $,
+                              CALL CMAKE( 'ge', ' ', ' ', 1, ML, Y, 1,
      $                                    YY, ABS( INCY ), 0, ML - 1,
      $                                    RESET, TRANSL )
 *
@@ -681,7 +659,7 @@
      $                              INCY
                                  IF( REWI )
      $                              REWIND NTRA
-                                 CALL CAB_CGEMV( IORDER, TRANS, M, N,
+                                 CALL CCGEMV( IORDER, TRANS, M, N,
      $                                      ALPHA, AA, LDA, XX, INCX,
      $                                      BETA, YY, INCY )
                               ELSE IF( BANDED )THEN
@@ -691,8 +669,7 @@
      $                              INCX, BETA, INCY
                                  IF( REWI )
      $                              REWIND NTRA
-                                 CALL CAB_CGBMV( IORDER, TRANS, M, N, KL
-     $,
+                                 CALL CCGBMV( IORDER, TRANS, M, N, KL,
      $                                       KU, ALPHA, AA, LDA, XX,
      $                                       INCX, BETA, YY, INCY )
                               END IF
@@ -713,16 +690,15 @@
                               ISAME( 3 ) = NS.EQ.N
                               IF( FULL )THEN
                                  ISAME( 4 ) = ALS.EQ.ALPHA
-                                 ISAME( 5 ) = AB_LCE( AS, AA, LAA )
+                                 ISAME( 5 ) = LCE( AS, AA, LAA )
                                  ISAME( 6 ) = LDAS.EQ.LDA
-                                 ISAME( 7 ) = AB_LCE( XS, XX, LX )
+                                 ISAME( 7 ) = LCE( XS, XX, LX )
                                  ISAME( 8 ) = INCXS.EQ.INCX
                                  ISAME( 9 ) = BLS.EQ.BETA
                                  IF( NULL )THEN
-                                    ISAME( 10 ) = AB_LCE( YS, YY, LY )
+                                    ISAME( 10 ) = LCE( YS, YY, LY )
                                  ELSE
-                                    ISAME( 10 ) = AB_AB_LCERES( 'ge', ' 
-     $', 1,
+                                    ISAME( 10 ) = LCERES( 'ge', ' ', 1,
      $                                            ML, YS, YY,
      $                                            ABS( INCY ) )
                                  END IF
@@ -731,16 +707,15 @@
                                  ISAME( 4 ) = KLS.EQ.KL
                                  ISAME( 5 ) = KUS.EQ.KU
                                  ISAME( 6 ) = ALS.EQ.ALPHA
-                                 ISAME( 7 ) = AB_LCE( AS, AA, LAA )
+                                 ISAME( 7 ) = LCE( AS, AA, LAA )
                                  ISAME( 8 ) = LDAS.EQ.LDA
-                                 ISAME( 9 ) = AB_LCE( XS, XX, LX )
+                                 ISAME( 9 ) = LCE( XS, XX, LX )
                                  ISAME( 10 ) = INCXS.EQ.INCX
                                  ISAME( 11 ) = BLS.EQ.BETA
                                  IF( NULL )THEN
-                                    ISAME( 12 ) = AB_LCE( YS, YY, LY )
+                                    ISAME( 12 ) = LCE( YS, YY, LY )
                                  ELSE
-                                    ISAME( 12 ) = AB_AB_LCERES( 'ge', ' 
-     $', 1,
+                                    ISAME( 12 ) = LCERES( 'ge', ' ', 1,
      $                                            ML, YS, YY,
      $                                            ABS( INCY ) )
                                  END IF
@@ -765,7 +740,7 @@
 *
 *                                Check the result.
 *
-                                 CALL AB_CMVCH( TRANS, M, N, ALPHA, A,
+                                 CALL CMVCH( TRANS, M, N, ALPHA, A,
      $                                       NMAX, X, INCX, BETA, Y,
      $                                       INCY, YT, G, YY, EPS, ERR,
      $                                       FATAL, NOUT, .TRUE. )
@@ -836,15 +811,15 @@
  9993 FORMAT(' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of AB_CCHK1.
+*     End of CCHK1.
 *
       END
-      SUBROUTINE AB_CCHK2( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
+      SUBROUTINE CCHK2( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NKB, KB, NALF, ALF, NBET,
      $                  BET, NINC, INC, NMAX, INCMAX, A, AA, AS, X, XX,
      $                  XS, Y, YY, YS, YT, G, IORDER )
 *
-*  Tests AB_CHEMV, AB_CHBMV and AB_CHPMV.
+*  Tests CHEMV, CHBMV and CHPMV.
 *
 *  Auxiliary routine for test program for Level 2 Blas.
 *
@@ -884,11 +859,10 @@
 *     .. Local Arrays ..
       LOGICAL            ISAME( 13 )
 *     .. External Functions ..
-      LOGICAL            AB_LCE, AB_AB_LCERES
-      EXTERNAL           AB_LCE, AB_AB_LCERES
+      LOGICAL            LCE, LCERES
+      EXTERNAL           LCE, LCERES
 *     .. External Subroutines ..
-      EXTERNAL           CAB_CHBMV, CAB_CHEMV, CAB_CHPMV, AB_CMAKE, AB_C
-     $MVCH
+      EXTERNAL           CCHBMV, CCHEMV, CCHPMV, CMAKE, CMVCH
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
 *     .. Scalars in Common ..
@@ -958,8 +932,7 @@
 *              Generate the matrix A.
 *
                TRANSL = ZERO
-               CALL AB_CMAKE( SNAME( 8: 9 ), UPLO, ' ', N, N, A, NMAX, A
-     $A,
+               CALL CMAKE( SNAME( 8: 9 ), UPLO, ' ', N, N, A, NMAX, AA,
      $                     LDA, K, K, RESET, TRANSL )
 *
                DO 80 IX = 1, NINC
@@ -969,7 +942,7 @@
 *                 Generate the vector X.
 *
                   TRANSL = HALF
-                  CALL AB_CMAKE( 'ge', ' ', ' ', 1, N, X, 1, XX,
+                  CALL CMAKE( 'ge', ' ', ' ', 1, N, X, 1, XX,
      $                        ABS( INCX ), 0, N - 1, RESET, TRANSL )
                   IF( N.GT.1 )THEN
                      X( N/2 ) = ZERO
@@ -989,8 +962,7 @@
 *                          Generate the vector Y.
 *
                            TRANSL = ZERO
-                           CALL AB_CMAKE( 'ge', ' ', ' ', 1, N, Y, 1, YY
-     $,
+                           CALL CMAKE( 'ge', ' ', ' ', 1, N, Y, 1, YY,
      $                                 ABS( INCY ), 0, N - 1, RESET,
      $                                 TRANSL )
 *
@@ -1025,8 +997,7 @@
      $                           CUPLO, N, ALPHA, LDA, INCX, BETA, INCY
                               IF( REWI )
      $                           REWIND NTRA
-                              CALL CAB_CHEMV( IORDER, UPLO, N, ALPHA, AA
-     $,
+                              CALL CCHEMV( IORDER, UPLO, N, ALPHA, AA,
      $                                    LDA, XX, INCX, BETA, YY,
      $                                    INCY )
                            ELSE IF( BANDED )THEN
@@ -1036,7 +1007,7 @@
      $                           INCY
                               IF( REWI )
      $                           REWIND NTRA
-                              CALL CAB_CHBMV( IORDER, UPLO, N, K, ALPHA,
+                              CALL CCHBMV( IORDER, UPLO, N, K, ALPHA,
      $                                    AA, LDA, XX, INCX, BETA,
      $                                    YY, INCY )
                            ELSE IF( PACKED )THEN
@@ -1045,8 +1016,7 @@
      $                           CUPLO, N, ALPHA, INCX, BETA, INCY
                               IF( REWI )
      $                           REWIND NTRA
-                              CALL CAB_CHPMV( IORDER, UPLO, N, ALPHA, AA
-     $,
+                              CALL CCHPMV( IORDER, UPLO, N, ALPHA, AA,
      $                                    XX, INCX, BETA, YY, INCY )
                            END IF
 *
@@ -1064,46 +1034,43 @@
                            ISAME( 2 ) = NS.EQ.N
                            IF( FULL )THEN
                               ISAME( 3 ) = ALS.EQ.ALPHA
-                              ISAME( 4 ) = AB_LCE( AS, AA, LAA )
+                              ISAME( 4 ) = LCE( AS, AA, LAA )
                               ISAME( 5 ) = LDAS.EQ.LDA
-                              ISAME( 6 ) = AB_LCE( XS, XX, LX )
+                              ISAME( 6 ) = LCE( XS, XX, LX )
                               ISAME( 7 ) = INCXS.EQ.INCX
                               ISAME( 8 ) = BLS.EQ.BETA
                               IF( NULL )THEN
-                                 ISAME( 9 ) = AB_LCE( YS, YY, LY )
+                                 ISAME( 9 ) = LCE( YS, YY, LY )
                               ELSE
-                                 ISAME( 9 ) = AB_AB_LCERES( 'ge', ' ', 1
-     $, N,
+                                 ISAME( 9 ) = LCERES( 'ge', ' ', 1, N,
      $                                        YS, YY, ABS( INCY ) )
                               END IF
                               ISAME( 10 ) = INCYS.EQ.INCY
                            ELSE IF( BANDED )THEN
                               ISAME( 3 ) = KS.EQ.K
                               ISAME( 4 ) = ALS.EQ.ALPHA
-                              ISAME( 5 ) = AB_LCE( AS, AA, LAA )
+                              ISAME( 5 ) = LCE( AS, AA, LAA )
                               ISAME( 6 ) = LDAS.EQ.LDA
-                              ISAME( 7 ) = AB_LCE( XS, XX, LX )
+                              ISAME( 7 ) = LCE( XS, XX, LX )
                               ISAME( 8 ) = INCXS.EQ.INCX
                               ISAME( 9 ) = BLS.EQ.BETA
                               IF( NULL )THEN
-                                 ISAME( 10 ) = AB_LCE( YS, YY, LY )
+                                 ISAME( 10 ) = LCE( YS, YY, LY )
                               ELSE
-                                 ISAME( 10 ) = AB_AB_LCERES( 'ge', ' ', 
-     $1, N,
+                                 ISAME( 10 ) = LCERES( 'ge', ' ', 1, N,
      $                                         YS, YY, ABS( INCY ) )
                               END IF
                               ISAME( 11 ) = INCYS.EQ.INCY
                            ELSE IF( PACKED )THEN
                               ISAME( 3 ) = ALS.EQ.ALPHA
-                              ISAME( 4 ) = AB_LCE( AS, AA, LAA )
-                              ISAME( 5 ) = AB_LCE( XS, XX, LX )
+                              ISAME( 4 ) = LCE( AS, AA, LAA )
+                              ISAME( 5 ) = LCE( XS, XX, LX )
                               ISAME( 6 ) = INCXS.EQ.INCX
                               ISAME( 7 ) = BLS.EQ.BETA
                               IF( NULL )THEN
-                                 ISAME( 8 ) = AB_LCE( YS, YY, LY )
+                                 ISAME( 8 ) = LCE( YS, YY, LY )
                               ELSE
-                                 ISAME( 8 ) = AB_AB_LCERES( 'ge', ' ', 1
-     $, N,
+                                 ISAME( 8 ) = LCERES( 'ge', ' ', 1, N,
      $                                        YS, YY, ABS( INCY ) )
                               END IF
                               ISAME( 9 ) = INCYS.EQ.INCY
@@ -1127,8 +1094,7 @@
 *
 *                             Check the result.
 *
-                              CALL AB_CMVCH( 'N', N, N, ALPHA, A, NMAX, 
-     $X,
+                              CALL CMVCH( 'N', N, N, ALPHA, A, NMAX, X,
      $                                    INCX, BETA, Y, INCY, YT, G,
      $                                    YY, EPS, ERR, FATAL, NOUT,
      $                                    .TRUE. )
@@ -1201,14 +1167,14 @@
  9992 FORMAT(' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of AB_CCHK2.
+*     End of CCHK2.
 *
       END
-      SUBROUTINE AB_CCHK3( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
+      SUBROUTINE CCHK3( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NKB, KB, NINC, INC, NMAX,
      $                 INCMAX, A, AA, AS, X, XX, XS, XT, G, Z, IORDER )
 *
-*  Tests AB_CTRMV, AB_CTBMV, AB_CTPMV, AB_CTRSV, AB_CTBSV and AB_CTPSV.
+*  Tests CTRMV, CTBMV, CTPMV, CTRSV, CTBSV and CTPSV.
 *
 *  Auxiliary routine for test program for Level 2 Blas.
 *
@@ -1247,12 +1213,11 @@
 *     .. Local Arrays ..
       LOGICAL            ISAME( 13 )
 *     .. External Functions ..
-      LOGICAL            AB_LCE, AB_AB_LCERES
-      EXTERNAL           AB_LCE, AB_AB_LCERES
+      LOGICAL            LCE, LCERES
+      EXTERNAL           LCE, LCERES
 *     .. External Subroutines ..
-      EXTERNAL           AB_CMAKE, AB_CMVCH, CAB_CTBMV, CAB_CTBSV, CAB_C
-     $TPMV,
-     $                   CAB_CTPSV, CAB_CTRMV, CAB_CTRSV
+      EXTERNAL           CMAKE, CMVCH, CCTBMV, CCTBSV, CCTPMV,
+     $                   CCTPSV, CCTRMV, CCTRSV
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
 *     .. Scalars in Common ..
@@ -1278,7 +1243,7 @@
       NC = 0
       RESET = .TRUE.
       ERRMAX = RZERO
-*     Set up zero vector for AB_CMVCH.
+*     Set up zero vector for CMVCH.
       DO 10 I = 1, NMAX
          Z( I ) = ZERO
    10 CONTINUE
@@ -1344,7 +1309,7 @@
 *                    Generate the matrix A.
 *
                      TRANSL = ZERO
-                     CALL AB_CMAKE( SNAME( 8: 9 ), UPLO, DIAG, N, N, A,
+                     CALL CMAKE( SNAME( 8: 9 ), UPLO, DIAG, N, N, A,
      $                           NMAX, AA, LDA, K, K, RESET, TRANSL )
 *
                      DO 60 IX = 1, NINC
@@ -1354,7 +1319,7 @@
 *                       Generate the vector X.
 *
                         TRANSL = HALF
-                        CALL AB_CMAKE( 'ge', ' ', ' ', 1, N, X, 1, XX,
+                        CALL CMAKE( 'ge', ' ', ' ', 1, N, X, 1, XX,
      $                              ABS( INCX ), 0, N - 1, RESET,
      $                              TRANSL )
                         IF( N.GT.1 )THEN
@@ -1389,7 +1354,7 @@
      $                           CUPLO, CTRANS, CDIAG, N, LDA, INCX
                               IF( REWI )
      $                           REWIND NTRA
-                              CALL CAB_CTRMV( IORDER, UPLO, TRANS, DIAG,
+                              CALL CCTRMV( IORDER, UPLO, TRANS, DIAG,
      $                                    N, AA, LDA, XX, INCX )
                            ELSE IF( BANDED )THEN
                               IF( TRACE )
@@ -1397,7 +1362,7 @@
      $                           CUPLO, CTRANS, CDIAG, N, K, LDA, INCX
                               IF( REWI )
      $                           REWIND NTRA
-                              CALL CAB_CTBMV( IORDER, UPLO, TRANS, DIAG,
+                              CALL CCTBMV( IORDER, UPLO, TRANS, DIAG,
      $                                    N, K, AA, LDA, XX, INCX )
                            ELSE IF( PACKED )THEN
                               IF( TRACE )
@@ -1405,7 +1370,7 @@
      $                           CUPLO, CTRANS, CDIAG, N, INCX
                               IF( REWI )
      $                           REWIND NTRA
-                              CALL CAB_CTPMV( IORDER, UPLO, TRANS, DIAG,
+                              CALL CCTPMV( IORDER, UPLO, TRANS, DIAG,
      $                                    N, AA, XX, INCX )
                            END IF
                         ELSE IF( SNAME( 10: 11 ).EQ.'sv' )THEN
@@ -1415,7 +1380,7 @@
      $                           CUPLO, CTRANS, CDIAG, N, LDA, INCX
                               IF( REWI )
      $                           REWIND NTRA
-                              CALL CAB_CTRSV( IORDER, UPLO, TRANS, DIAG,
+                              CALL CCTRSV( IORDER, UPLO, TRANS, DIAG,
      $                                    N, AA, LDA, XX, INCX )
                            ELSE IF( BANDED )THEN
                               IF( TRACE )
@@ -1423,7 +1388,7 @@
      $                           CUPLO, CTRANS, CDIAG, N, K, LDA, INCX
                               IF( REWI )
      $                           REWIND NTRA
-                              CALL CAB_CTBSV( IORDER, UPLO, TRANS, DIAG,
+                              CALL CCTBSV( IORDER, UPLO, TRANS, DIAG,
      $                                    N, K, AA, LDA, XX, INCX )
                            ELSE IF( PACKED )THEN
                               IF( TRACE )
@@ -1431,7 +1396,7 @@
      $                           CUPLO, CTRANS, CDIAG, N, INCX
                               IF( REWI )
      $                           REWIND NTRA
-                              CALL CAB_CTPSV( IORDER, UPLO, TRANS, DIAG,
+                              CALL CCTPSV( IORDER, UPLO, TRANS, DIAG,
      $                                    N, AA, XX, INCX )
                            END IF
                         END IF
@@ -1451,35 +1416,32 @@
                         ISAME( 3 ) = DIAG.EQ.DIAGS
                         ISAME( 4 ) = NS.EQ.N
                         IF( FULL )THEN
-                           ISAME( 5 ) = AB_LCE( AS, AA, LAA )
+                           ISAME( 5 ) = LCE( AS, AA, LAA )
                            ISAME( 6 ) = LDAS.EQ.LDA
                            IF( NULL )THEN
-                              ISAME( 7 ) = AB_LCE( XS, XX, LX )
+                              ISAME( 7 ) = LCE( XS, XX, LX )
                            ELSE
-                              ISAME( 7 ) = AB_AB_LCERES( 'ge', ' ', 1, N
-     $, XS,
+                              ISAME( 7 ) = LCERES( 'ge', ' ', 1, N, XS,
      $                                     XX, ABS( INCX ) )
                            END IF
                            ISAME( 8 ) = INCXS.EQ.INCX
                         ELSE IF( BANDED )THEN
                            ISAME( 5 ) = KS.EQ.K
-                           ISAME( 6 ) = AB_LCE( AS, AA, LAA )
+                           ISAME( 6 ) = LCE( AS, AA, LAA )
                            ISAME( 7 ) = LDAS.EQ.LDA
                            IF( NULL )THEN
-                              ISAME( 8 ) = AB_LCE( XS, XX, LX )
+                              ISAME( 8 ) = LCE( XS, XX, LX )
                            ELSE
-                              ISAME( 8 ) = AB_AB_LCERES( 'ge', ' ', 1, N
-     $, XS,
+                              ISAME( 8 ) = LCERES( 'ge', ' ', 1, N, XS,
      $                                     XX, ABS( INCX ) )
                            END IF
                            ISAME( 9 ) = INCXS.EQ.INCX
                         ELSE IF( PACKED )THEN
-                           ISAME( 5 ) = AB_LCE( AS, AA, LAA )
+                           ISAME( 5 ) = LCE( AS, AA, LAA )
                            IF( NULL )THEN
-                              ISAME( 6 ) = AB_LCE( XS, XX, LX )
+                              ISAME( 6 ) = LCE( XS, XX, LX )
                            ELSE
-                              ISAME( 6 ) = AB_AB_LCERES( 'ge', ' ', 1, N
-     $, XS,
+                              ISAME( 6 ) = LCERES( 'ge', ' ', 1, N, XS,
      $                                     XX, ABS( INCX ) )
                            END IF
                            ISAME( 7 ) = INCXS.EQ.INCX
@@ -1504,8 +1466,7 @@
 *
 *                             Check the result.
 *
-                              CALL AB_CMVCH( TRANS, N, N, ONE, A, NMAX, 
-     $X,
+                              CALL CMVCH( TRANS, N, N, ONE, A, NMAX, X,
      $                                    INCX, ZERO, Z, INCX, XT, G,
      $                                    XX, EPS, ERR, FATAL, NOUT,
      $                                    .TRUE. )
@@ -1519,8 +1480,7 @@
                                  XX( 1 + ( I - 1 )*ABS( INCX ) )
      $                              = X( I )
    50                         CONTINUE
-                              CALL AB_CMVCH( TRANS, N, N, ONE, A, NMAX, 
-     $Z,
+                              CALL CMVCH( TRANS, N, N, ONE, A, NMAX, Z,
      $                                    INCX, ZERO, X, INCX, XT, G,
      $                                    XX, EPS, ERR, FATAL, NOUT,
      $                                    .FALSE. )
@@ -1588,15 +1548,15 @@
  9992 FORMAT(' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of AB_CCHK3.
+*     End of CCHK3.
 *
       END
-      SUBROUTINE AB_CCHK4( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
+      SUBROUTINE CCHK4( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NALF, ALF, NINC, INC, NMAX,
      $                  INCMAX, A, AA, AS, X, XX, XS, Y, YY, YS, YT, G,
      $                  Z, IORDER )
 *
-*  Tests AB_CGERC and AB_CGERU.
+*  Tests CGERC and CGERU.
 *
 *  Auxiliary routine for test program for Level 2 Blas.
 *
@@ -1635,10 +1595,10 @@
       COMPLEX            W( 1 )
       LOGICAL            ISAME( 13 )
 *     .. External Functions ..
-      LOGICAL            AB_LCE, AB_AB_LCERES
-      EXTERNAL           AB_LCE, AB_AB_LCERES
+      LOGICAL            LCE, LCERES
+      EXTERNAL           LCE, LCERES
 *     .. External Subroutines ..
-      EXTERNAL           CAB_CGERC, CAB_CGERU, AB_CMAKE, AB_CMVCH
+      EXTERNAL           CCGERC, CCGERU, CMAKE, CMVCH
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CONJG, MAX, MIN
 *     .. Scalars in Common ..
@@ -1682,8 +1642,7 @@
 *              Generate the vector X.
 *
                TRANSL = HALF
-               CALL AB_CMAKE( 'ge', ' ', ' ', 1, M, X, 1, XX, ABS( INCX 
-     $),
+               CALL CMAKE( 'ge', ' ', ' ', 1, M, X, 1, XX, ABS( INCX ),
      $                     0, M - 1, RESET, TRANSL )
                IF( M.GT.1 )THEN
                   X( M/2 ) = ZERO
@@ -1697,7 +1656,7 @@
 *                 Generate the vector Y.
 *
                   TRANSL = ZERO
-                  CALL AB_CMAKE( 'ge', ' ', ' ', 1, N, Y, 1, YY,
+                  CALL CMAKE( 'ge', ' ', ' ', 1, N, Y, 1, YY,
      $                        ABS( INCY ), 0, N - 1, RESET, TRANSL )
                   IF( N.GT.1 )THEN
                      Y( N/2 ) = ZERO
@@ -1710,8 +1669,7 @@
 *                    Generate the matrix A.
 *
                      TRANSL = ZERO
-                     CALL AB_CMAKE(SNAME( 8: 9 ), ' ', ' ', M, N, A, NMA
-     $X,
+                     CALL CMAKE(SNAME( 8: 9 ), ' ', ' ', M, N, A, NMAX,
      $                           AA, LDA, M - 1, N - 1, RESET, TRANSL )
 *
                      NC = NC + 1
@@ -1742,12 +1700,12 @@
                      IF( CONJ )THEN
                         IF( REWI )
      $                     REWIND NTRA
-                        CALL CAB_CGERC( IORDER, M, N, ALPHA, XX, INCX,
+                        CALL CCGERC( IORDER, M, N, ALPHA, XX, INCX,
      $                              YY, INCY, AA, LDA )
                      ELSE
                         IF( REWI )
      $                     REWIND NTRA
-                        CALL CAB_CGERU( IORDER, M, N, ALPHA, XX, INCX,
+                        CALL CCGERU( IORDER, M, N, ALPHA, XX, INCX,
      $                              YY, INCY, AA, LDA )
                      END IF
 *
@@ -1764,15 +1722,14 @@
                      ISAME( 1 ) = MS.EQ.M
                      ISAME( 2 ) = NS.EQ.N
                      ISAME( 3 ) = ALS.EQ.ALPHA
-                     ISAME( 4 ) = AB_LCE( XS, XX, LX )
+                     ISAME( 4 ) = LCE( XS, XX, LX )
                      ISAME( 5 ) = INCXS.EQ.INCX
-                     ISAME( 6 ) = AB_LCE( YS, YY, LY )
+                     ISAME( 6 ) = LCE( YS, YY, LY )
                      ISAME( 7 ) = INCYS.EQ.INCY
                      IF( NULL )THEN
-                        ISAME( 8 ) = AB_LCE( AS, AA, LAA )
+                        ISAME( 8 ) = LCE( AS, AA, LAA )
                      ELSE
-                        ISAME( 8 ) = AB_AB_LCERES( 'ge', ' ', M, N, AS, 
-     $AA,
+                        ISAME( 8 ) = LCERES( 'ge', ' ', M, N, AS, AA,
      $                               LDA )
                      END IF
                      ISAME( 9 ) = LDAS.EQ.LDA
@@ -1811,8 +1768,7 @@
                            END IF
                            IF( CONJ )
      $                        W( 1 ) = CONJG( W( 1 ) )
-                           CALL AB_CMVCH( 'N', M, 1, ALPHA, Z, NMAX, W, 
-     $1,
+                           CALL CMVCH( 'N', M, 1, ALPHA, Z, NMAX, W, 1,
      $                                 ONE, A( 1, J ), 1, YT, G,
      $                                 AA( 1 + ( J - 1 )*LDA ), EPS,
      $                                 ERR, FATAL, NOUT, .TRUE. )
@@ -1869,15 +1825,15 @@
  9993 FORMAT(' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of AB_CCHK4.
+*     End of CCHK4.
 *
       END
-      SUBROUTINE AB_CCHK5( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
+      SUBROUTINE CCHK5( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NALF, ALF, NINC, INC, NMAX,
      $                  INCMAX, A, AA, AS, X, XX, XS, Y, YY, YS, YT, G,
      $                  Z, IORDER )
 *
-*  Tests AB_CHER and AB_CHPR.
+*  Tests CHER and CHPR.
 *
 *  Auxiliary routine for test program for Level 2 Blas.
 *
@@ -1918,10 +1874,10 @@
       COMPLEX            W( 1 )
       LOGICAL            ISAME( 13 )
 *     .. External Functions ..
-      LOGICAL            AB_LCE, AB_AB_LCERES
-      EXTERNAL           AB_LCE, AB_AB_LCERES
+      LOGICAL            LCE, LCERES
+      EXTERNAL           LCE, LCERES
 *     .. External Subroutines ..
-      EXTERNAL           CAB_CHER, CAB_CHPR, AB_CMAKE, AB_CMVCH
+      EXTERNAL           CCHER, CCHPR, CMAKE, CMVCH
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CMPLX, CONJG, MAX, REAL
 *     .. Scalars in Common ..
@@ -1976,8 +1932,7 @@
 *              Generate the vector X.
 *
                TRANSL = HALF
-               CALL AB_CMAKE( 'ge', ' ', ' ', 1, N, X, 1, XX, ABS( INCX 
-     $),
+               CALL CMAKE( 'ge', ' ', ' ', 1, N, X, 1, XX, ABS( INCX ),
      $                     0, N - 1, RESET, TRANSL )
                IF( N.GT.1 )THEN
                   X( N/2 ) = ZERO
@@ -1992,8 +1947,7 @@
 *                 Generate the matrix A.
 *
                   TRANSL = ZERO
-                  CALL AB_CMAKE( SNAME( 8: 9 ), UPLO, ' ', N, N, A, NMAX
-     $,
+                  CALL CMAKE( SNAME( 8: 9 ), UPLO, ' ', N, N, A, NMAX,
      $                        AA, LDA, N - 1, N - 1, RESET, TRANSL )
 *
                   NC = NC + 1
@@ -2020,7 +1974,7 @@
      $                  RALPHA, INCX, LDA
                      IF( REWI )
      $                  REWIND NTRA
-                     CALL CAB_CHER( IORDER, UPLO, N, RALPHA, XX,
+                     CALL CCHER( IORDER, UPLO, N, RALPHA, XX,
      $                            INCX, AA, LDA )
                   ELSE IF( PACKED )THEN
                      IF( TRACE )
@@ -2028,7 +1982,7 @@
      $                  RALPHA, INCX
                      IF( REWI )
      $                  REWIND NTRA
-                     CALL CAB_CHPR( IORDER, UPLO, N, RALPHA,
+                     CALL CCHPR( IORDER, UPLO, N, RALPHA,
      $                            XX, INCX, AA )
                   END IF
 *
@@ -2045,13 +1999,12 @@
                   ISAME( 1 ) = UPLO.EQ.UPLOS
                   ISAME( 2 ) = NS.EQ.N
                   ISAME( 3 ) = RALS.EQ.RALPHA
-                  ISAME( 4 ) = AB_LCE( XS, XX, LX )
+                  ISAME( 4 ) = LCE( XS, XX, LX )
                   ISAME( 5 ) = INCXS.EQ.INCX
                   IF( NULL )THEN
-                     ISAME( 6 ) = AB_LCE( AS, AA, LAA )
+                     ISAME( 6 ) = LCE( AS, AA, LAA )
                   ELSE
-                    ISAME( 6 ) = AB_AB_LCERES( SNAME( 8: 9 ), UPLO, N, N
-     $, AS,
+                    ISAME( 6 ) = LCERES( SNAME( 8: 9 ), UPLO, N, N, AS,
      $                            AA, LDA )
                   END IF
                   IF( .NOT.PACKED )THEN
@@ -2094,8 +2047,7 @@
                            JJ = J
                            LJ = N - J + 1
                         END IF
-                        CALL AB_CMVCH( 'N', LJ, 1, ALPHA, Z( JJ ), LJ, W
-     $,
+                        CALL CMVCH( 'N', LJ, 1, ALPHA, Z( JJ ), LJ, W,
      $                              1, ONE, A( JJ, J ), 1, YT, G,
      $                              AA( JA ), EPS, ERR, FATAL, NOUT,
      $                              .TRUE. )
@@ -2166,15 +2118,15 @@
  9992 FORMAT(' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of AB_CCHK5.
+*     End of CCHK5.
 *
       END
-      SUBROUTINE AB_CCHK6( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
+      SUBROUTINE CCHK6( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
      $                  FATAL, NIDIM, IDIM, NALF, ALF, NINC, INC, NMAX,
      $                  INCMAX, A, AA, AS, X, XX, XS, Y, YY, YS, YT, G,
      $                  Z, IORDER )
 *
-*  Tests AB_AB_CHER2 and AB_AB_CHPR2.
+*  Tests CHER2 and CHPR2.
 *
 *  Auxiliary routine for test program for Level 2 Blas.
 *
@@ -2216,10 +2168,10 @@
       COMPLEX            W( 2 )
       LOGICAL            ISAME( 13 )
 *     .. External Functions ..
-      LOGICAL            AB_LCE, AB_AB_LCERES
-      EXTERNAL           AB_LCE, AB_AB_LCERES
+      LOGICAL            LCE, LCERES
+      EXTERNAL           LCE, LCERES
 *     .. External Subroutines ..
-      EXTERNAL           CAB_AB_CHER2, CAB_AB_CHPR2, AB_CMAKE, AB_CMVCH
+      EXTERNAL           CCHER2, CCHPR2, CMAKE, CMVCH
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CONJG, MAX
 *     .. Scalars in Common ..
@@ -2274,8 +2226,7 @@
 *              Generate the vector X.
 *
                TRANSL = HALF
-               CALL AB_CMAKE( 'ge', ' ', ' ', 1, N, X, 1, XX, ABS( INCX 
-     $),
+               CALL CMAKE( 'ge', ' ', ' ', 1, N, X, 1, XX, ABS( INCX ),
      $                     0, N - 1, RESET, TRANSL )
                IF( N.GT.1 )THEN
                   X( N/2 ) = ZERO
@@ -2289,7 +2240,7 @@
 *                 Generate the vector Y.
 *
                   TRANSL = ZERO
-                  CALL AB_CMAKE( 'ge', ' ', ' ', 1, N, Y, 1, YY,
+                  CALL CMAKE( 'ge', ' ', ' ', 1, N, Y, 1, YY,
      $                        ABS( INCY ), 0, N - 1, RESET, TRANSL )
                   IF( N.GT.1 )THEN
                      Y( N/2 ) = ZERO
@@ -2303,7 +2254,7 @@
 *                    Generate the matrix A.
 *
                      TRANSL = ZERO
-                     CALL AB_CMAKE( SNAME( 8: 9 ), UPLO, ' ', N, N, A,
+                     CALL CMAKE( SNAME( 8: 9 ), UPLO, ' ', N, N, A,
      $                           NMAX, AA, LDA, N - 1, N - 1, RESET,
      $                           TRANSL )
 *
@@ -2335,8 +2286,7 @@
      $                     ALPHA, INCX, INCY, LDA
                         IF( REWI )
      $                     REWIND NTRA
-                        CALL CAB_AB_CHER2( IORDER, UPLO, N, ALPHA, XX, I
-     $NCX,
+                        CALL CCHER2( IORDER, UPLO, N, ALPHA, XX, INCX,
      $                              YY, INCY, AA, LDA )
                      ELSE IF( PACKED )THEN
                         IF( TRACE )
@@ -2344,8 +2294,7 @@
      $                     ALPHA, INCX, INCY
                         IF( REWI )
      $                     REWIND NTRA
-                        CALL CAB_AB_CHPR2( IORDER, UPLO, N, ALPHA, XX, I
-     $NCX,
+                        CALL CCHPR2( IORDER, UPLO, N, ALPHA, XX, INCX,
      $                              YY, INCY, AA )
                      END IF
 *
@@ -2362,15 +2311,14 @@
                      ISAME( 1 ) = UPLO.EQ.UPLOS
                      ISAME( 2 ) = NS.EQ.N
                      ISAME( 3 ) = ALS.EQ.ALPHA
-                     ISAME( 4 ) = AB_LCE( XS, XX, LX )
+                     ISAME( 4 ) = LCE( XS, XX, LX )
                      ISAME( 5 ) = INCXS.EQ.INCX
-                     ISAME( 6 ) = AB_LCE( YS, YY, LY )
+                     ISAME( 6 ) = LCE( YS, YY, LY )
                      ISAME( 7 ) = INCYS.EQ.INCY
                      IF( NULL )THEN
-                        ISAME( 8 ) = AB_LCE( AS, AA, LAA )
+                        ISAME( 8 ) = LCE( AS, AA, LAA )
                      ELSE
-                        ISAME( 8 ) = AB_AB_LCERES( SNAME( 8: 9 ), UPLO, 
-     $N, N,
+                        ISAME( 8 ) = LCERES( SNAME( 8: 9 ), UPLO, N, N,
      $                               AS, AA, LDA )
                      END IF
                      IF( .NOT.PACKED )THEN
@@ -2423,7 +2371,7 @@
                               JJ = J
                               LJ = N - J + 1
                            END IF
-                           CALL AB_CMVCH( 'N', LJ, 2, ONE, Z( JJ, 1 ),
+                           CALL CMVCH( 'N', LJ, 2, ONE, Z( JJ, 1 ),
      $                                 NMAX, W, 1, ONE, A( JJ, J ), 1,
      $                                YT, G, AA( JA ), EPS, ERR, FATAL,
      $                                 NOUT, .TRUE. )
@@ -2497,11 +2445,10 @@
  9992 FORMAT(' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of AB_CCHK6.
+*     End of CCHK6.
 *
       END
-      SUBROUTINE AB_CMVCH( TRANS, M, N, ALPHA, A, NMAX, X, INCX, BETA, Y
-     $,
+      SUBROUTINE CMVCH( TRANS, M, N, ALPHA, A, NMAX, X, INCX, BETA, Y,
      $                  INCY, YT, G, YY, EPS, ERR, FATAL, NOUT, MV )
 *
 *  Checks the results of the computational tests.
@@ -2630,10 +2577,10 @@
      $     'SULT                    COMPUTED RESULT' )
  9998 FORMAT( 1X, I7, 2( '  (', G15.6, ',', G15.6, ')' ) )
 *
-*     End of AB_CMVCH.
+*     End of CMVCH.
 *
       END
-      LOGICAL FUNCTION AB_LCE( RI, RJ, LR )
+      LOGICAL FUNCTION LCE( RI, RJ, LR )
 *
 *  Tests if two arrays are identical.
 *
@@ -2654,16 +2601,16 @@
          IF( RI( I ).NE.RJ( I ) )
      $      GO TO 20
    10 CONTINUE
-      AB_LCE = .TRUE.
+      LCE = .TRUE.
       GO TO 30
    20 CONTINUE
-      AB_LCE = .FALSE.
+      LCE = .FALSE.
    30 RETURN
 *
-*     End of AB_LCE.
+*     End of LCE.
 *
       END
-      LOGICAL FUNCTION AB_AB_LCERES( TYPE, UPLO, M, N, AA, AS, LDA )
+      LOGICAL FUNCTION LCERES( TYPE, UPLO, M, N, AA, AS, LDA )
 *
 *  Tests if selected elements in two arrays are equal.
 *
@@ -2714,16 +2661,16 @@
       END IF
 *
    60 CONTINUE
-      AB_AB_LCERES = .TRUE.
+      LCERES = .TRUE.
       GO TO 80
    70 CONTINUE
-      AB_AB_LCERES = .FALSE.
+      LCERES = .FALSE.
    80 RETURN
 *
-*     End of AB_AB_LCERES.
+*     End of LCERES.
 *
       END
-      COMPLEX FUNCTION AB_CBEG( RESET )
+      COMPLEX FUNCTION CBEG( RESET )
 *
 *  Generates complex numbers as pairs of random numbers uniformly
 *  distributed between -0.5 and 0.5.
@@ -2769,13 +2716,13 @@
          IC = 0
          GO TO 10
       END IF
-      AB_CBEG = CMPLX( ( I - 500 )/1001.0, ( J - 500 )/1001.0 )
+      CBEG = CMPLX( ( I - 500 )/1001.0, ( J - 500 )/1001.0 )
       RETURN
 *
-*     End of AB_CBEG.
+*     End of CBEG.
 *
       END
-      REAL FUNCTION AB_SDIFF( X, Y )
+      REAL FUNCTION SDIFF( X, Y )
 *
 *  Auxiliary routine for test program for Level 2 Blas.
 *
@@ -2785,13 +2732,13 @@
 *     .. Scalar Arguments ..
       REAL               X, Y
 *     .. Executable Statements ..
-      AB_SDIFF = X - Y
+      SDIFF = X - Y
       RETURN
 *
-*     End of AB_SDIFF.
+*     End of SDIFF.
 *
       END
-      SUBROUTINE AB_CMAKE( TYPE, UPLO, DIAG, M, N, A, NMAX, AA, LDA, KL,
+      SUBROUTINE CMAKE( TYPE, UPLO, DIAG, M, N, A, NMAX, AA, LDA, KL,
      $                  KU, RESET, TRANSL )
 *
 *  Generates values for an M by N matrix A within the bandwidth
@@ -2828,8 +2775,8 @@
       INTEGER            I, I1, I2, I3, IBEG, IEND, IOFF, J, JJ, KK
       LOGICAL            GEN, LOWER, SYM, TRI, UNIT, UPPER
 *     .. External Functions ..
-      COMPLEX            AB_CBEG
-      EXTERNAL           AB_CBEG
+      COMPLEX            CBEG
+      EXTERNAL           CBEG
 *     .. Intrinsic Functions ..
       INTRINSIC          CMPLX, CONJG, MAX, MIN, REAL
 *     .. Executable Statements ..
@@ -2848,7 +2795,7 @@
      $          THEN
                IF( ( I.LE.J.AND.J - I.LE.KU ).OR.
      $             ( I.GE.J.AND.I - J.LE.KL ) )THEN
-                  A( I, J ) = AB_CBEG( RESET ) + TRANSL
+                  A( I, J ) = CBEG( RESET ) + TRANSL
                ELSE
                   A( I, J ) = ZERO
                END IF
@@ -2980,6 +2927,6 @@
       END IF
       RETURN
 *
-*     End of AB_CMAKE.
+*     End of CMAKE.
 *
       END

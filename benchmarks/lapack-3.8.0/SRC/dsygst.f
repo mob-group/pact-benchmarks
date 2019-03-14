@@ -1,4 +1,4 @@
-*> \brief \b AB_DSYGST
+*> \brief \b DSYGST
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DSYGST + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DSYGST.f">
+*> Download DSYGST + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsygst.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DSYGST.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsygst.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DSYGST.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsygst.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DSYGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
+*       SUBROUTINE DSYGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DSYGST reduces a real symmetric-definite generalized eigenproblem
+*> DSYGST reduces a real symmetric-definite generalized eigenproblem
 *> to standard form.
 *>
 *> If ITYPE = 1, the problem is A*x = lambda*B*x,
@@ -43,7 +43,7 @@
 *> If ITYPE = 2 or 3, the problem is A*B*x = lambda*x or
 *> B*A*x = lambda*x, and A is overwritten by U*A*U**T or L**T*A*L.
 *>
-*> B must have been previously factorized as U**T*U or L*L**T by AB_DPOTRF.
+*> B must have been previously factorized as U**T*U or L*L**T by DPOTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -96,7 +96,7 @@
 *> \verbatim
 *>          B is DOUBLE PRECISION array, dimension (LDB,N)
 *>          The triangular factor from the Cholesky factorization of B,
-*>          as returned by AB_DPOTRF.
+*>          as returned by DPOTRF.
 *> \endverbatim
 *>
 *> \param[in] LDB
@@ -125,7 +125,7 @@
 *> \ingroup doubleSYcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_DSYGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
+      SUBROUTINE DSYGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -151,26 +151,25 @@
       INTEGER            K, KB, NB
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DSYGS2, AB_DSYMM, AB_AB_AB_DSYR2K, AB_DTRMM,
-     $ AB_DTRSM, AB_XERBLA
+      EXTERNAL           DSYGS2, DSYMM, DSYR2K, DTRMM, DTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_LSAME, AB_ILAENV
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
+      UPPER = LSAME( UPLO, 'U' )
       IF( ITYPE.LT.1 .OR. ITYPE.GT.3 ) THEN
          INFO = -1
-      ELSE IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      ELSE IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -180,7 +179,7 @@
          INFO = -7
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DSYGST', -INFO )
+         CALL XERBLA( 'DSYGST', -INFO )
          RETURN
       END IF
 *
@@ -191,13 +190,13 @@
 *
 *     Determine the block size for this environment.
 *
-      NB = AB_ILAENV( 1, 'AB_DSYGST', UPLO, N, -1, -1, -1 )
+      NB = ILAENV( 1, 'DSYGST', UPLO, N, -1, -1, -1 )
 *
       IF( NB.LE.1 .OR. NB.GE.N ) THEN
 *
 *        Use unblocked code
 *
-         CALL AB_DSYGS2( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
+         CALL DSYGS2( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
       ELSE
 *
 *        Use blocked code
@@ -212,24 +211,22 @@
 *
 *                 Update the upper triangle of A(k:n,k:n)
 *
-                  CALL AB_DSYGS2( ITYPE, UPLO, KB, A( K, K ), LDA,
+                  CALL DSYGS2( ITYPE, UPLO, KB, A( K, K ), LDA,
      $                         B( K, K ), LDB, INFO )
                   IF( K+KB.LE.N ) THEN
-                     CALL AB_DTRSM( 'Left', UPLO, 'Transpose', 'Non-unit
-     $',
+                     CALL DTRSM( 'Left', UPLO, 'Transpose', 'Non-unit',
      $                           KB, N-K-KB+1, ONE, B( K, K ), LDB,
      $                           A( K, K+KB ), LDA )
-                     CALL AB_DSYMM( 'Left', UPLO, KB, N-K-KB+1, -HALF,
+                     CALL DSYMM( 'Left', UPLO, KB, N-K-KB+1, -HALF,
      $                           A( K, K ), LDA, B( K, K+KB ), LDB, ONE,
      $                           A( K, K+KB ), LDA )
-                     CALL AB_AB_AB_DSYR2K( UPLO, 'Transpose', N-K-KB+1, 
-     $KB, -ONE,
+                     CALL DSYR2K( UPLO, 'Transpose', N-K-KB+1, KB, -ONE,
      $                            A( K, K+KB ), LDA, B( K, K+KB ), LDB,
      $                            ONE, A( K+KB, K+KB ), LDA )
-                     CALL AB_DSYMM( 'Left', UPLO, KB, N-K-KB+1, -HALF,
+                     CALL DSYMM( 'Left', UPLO, KB, N-K-KB+1, -HALF,
      $                           A( K, K ), LDA, B( K, K+KB ), LDB, ONE,
      $                           A( K, K+KB ), LDA )
-                     CALL AB_DTRSM( 'Right', UPLO, 'No transpose',
+                     CALL DTRSM( 'Right', UPLO, 'No transpose',
      $                           'Non-unit', KB, N-K-KB+1, ONE,
      $                           B( K+KB, K+KB ), LDB, A( K, K+KB ),
      $                           LDA )
@@ -244,24 +241,22 @@
 *
 *                 Update the lower triangle of A(k:n,k:n)
 *
-                  CALL AB_DSYGS2( ITYPE, UPLO, KB, A( K, K ), LDA,
+                  CALL DSYGS2( ITYPE, UPLO, KB, A( K, K ), LDA,
      $                         B( K, K ), LDB, INFO )
                   IF( K+KB.LE.N ) THEN
-                     CALL AB_DTRSM( 'Right', UPLO, 'Transpose', 'Non-uni
-     $t',
+                     CALL DTRSM( 'Right', UPLO, 'Transpose', 'Non-unit',
      $                           N-K-KB+1, KB, ONE, B( K, K ), LDB,
      $                           A( K+KB, K ), LDA )
-                     CALL AB_DSYMM( 'Right', UPLO, N-K-KB+1, KB, -HALF,
+                     CALL DSYMM( 'Right', UPLO, N-K-KB+1, KB, -HALF,
      $                           A( K, K ), LDA, B( K+KB, K ), LDB, ONE,
      $                           A( K+KB, K ), LDA )
-                     CALL AB_AB_AB_DSYR2K( UPLO, 'No transpose', N-K-KB+
-     $1, KB,
+                     CALL DSYR2K( UPLO, 'No transpose', N-K-KB+1, KB,
      $                            -ONE, A( K+KB, K ), LDA, B( K+KB, K ),
      $                            LDB, ONE, A( K+KB, K+KB ), LDA )
-                     CALL AB_DSYMM( 'Right', UPLO, N-K-KB+1, KB, -HALF,
+                     CALL DSYMM( 'Right', UPLO, N-K-KB+1, KB, -HALF,
      $                           A( K, K ), LDA, B( K+KB, K ), LDB, ONE,
      $                           A( K+KB, K ), LDA )
-                     CALL AB_DTRSM( 'Left', UPLO, 'No transpose',
+                     CALL DTRSM( 'Left', UPLO, 'No transpose',
      $                           'Non-unit', N-K-KB+1, KB, ONE,
      $                           B( K+KB, K+KB ), LDB, A( K+KB, K ),
      $                           LDA )
@@ -278,23 +273,19 @@
 *
 *                 Update the upper triangle of A(1:k+kb-1,1:k+kb-1)
 *
-                  CALL AB_DTRMM( 'Left', UPLO, 'No transpose', 'Non-unit
-     $',
+                  CALL DTRMM( 'Left', UPLO, 'No transpose', 'Non-unit',
      $                        K-1, KB, ONE, B, LDB, A( 1, K ), LDA )
-                  CALL AB_DSYMM( 'Right', UPLO, K-1, KB, HALF, A( K, K )
-     $,
+                  CALL DSYMM( 'Right', UPLO, K-1, KB, HALF, A( K, K ),
      $                        LDA, B( 1, K ), LDB, ONE, A( 1, K ), LDA )
-                  CALL AB_AB_AB_DSYR2K( UPLO, 'No transpose', K-1, KB, O
-     $NE,
+                  CALL DSYR2K( UPLO, 'No transpose', K-1, KB, ONE,
      $                         A( 1, K ), LDA, B( 1, K ), LDB, ONE, A,
      $                         LDA )
-                  CALL AB_DSYMM( 'Right', UPLO, K-1, KB, HALF, A( K, K )
-     $,
+                  CALL DSYMM( 'Right', UPLO, K-1, KB, HALF, A( K, K ),
      $                        LDA, B( 1, K ), LDB, ONE, A( 1, K ), LDA )
-                  CALL AB_DTRMM( 'Right', UPLO, 'Transpose', 'Non-unit',
+                  CALL DTRMM( 'Right', UPLO, 'Transpose', 'Non-unit',
      $                        K-1, KB, ONE, B( K, K ), LDB, A( 1, K ),
      $                        LDA )
-                  CALL AB_DSYGS2( ITYPE, UPLO, KB, A( K, K ), LDA,
+                  CALL DSYGS2( ITYPE, UPLO, KB, A( K, K ), LDA,
      $                         B( K, K ), LDB, INFO )
    30          CONTINUE
             ELSE
@@ -306,20 +297,18 @@
 *
 *                 Update the lower triangle of A(1:k+kb-1,1:k+kb-1)
 *
-                  CALL AB_DTRMM( 'Right', UPLO, 'No transpose', 'Non-uni
-     $t',
+                  CALL DTRMM( 'Right', UPLO, 'No transpose', 'Non-unit',
      $                        KB, K-1, ONE, B, LDB, A( K, 1 ), LDA )
-                  CALL AB_DSYMM( 'Left', UPLO, KB, K-1, HALF, A( K, K ),
+                  CALL DSYMM( 'Left', UPLO, KB, K-1, HALF, A( K, K ),
      $                        LDA, B( K, 1 ), LDB, ONE, A( K, 1 ), LDA )
-                  CALL AB_AB_AB_DSYR2K( UPLO, 'Transpose', K-1, KB, ONE,
+                  CALL DSYR2K( UPLO, 'Transpose', K-1, KB, ONE,
      $                         A( K, 1 ), LDA, B( K, 1 ), LDB, ONE, A,
      $                         LDA )
-                  CALL AB_DSYMM( 'Left', UPLO, KB, K-1, HALF, A( K, K ),
+                  CALL DSYMM( 'Left', UPLO, KB, K-1, HALF, A( K, K ),
      $                        LDA, B( K, 1 ), LDB, ONE, A( K, 1 ), LDA )
-                  CALL AB_DTRMM( 'Left', UPLO, 'Transpose', 'Non-unit', 
-     $KB,
+                  CALL DTRMM( 'Left', UPLO, 'Transpose', 'Non-unit', KB,
      $                        K-1, ONE, B( K, K ), LDB, A( K, 1 ), LDA )
-                  CALL AB_DSYGS2( ITYPE, UPLO, KB, A( K, K ), LDA,
+                  CALL DSYGS2( ITYPE, UPLO, KB, A( K, K ), LDA,
      $                         B( K, K ), LDB, INFO )
    40          CONTINUE
             END IF
@@ -327,6 +316,6 @@
       END IF
       RETURN
 *
-*     End of AB_DSYGST
+*     End of DSYGST
 *
       END

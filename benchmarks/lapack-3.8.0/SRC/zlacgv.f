@@ -1,4 +1,4 @@
-*> \brief \b AB_ZLACGV conjugates a complex vector.
+*> \brief \b ZLACGV conjugates a complex vector.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZLACGV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLACGV.f">
+*> Download ZLACGV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlacgv.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLACGV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlacgv.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLACGV.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlacgv.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZLACGV( N, X, INCX )
+*       SUBROUTINE ZLACGV( N, X, INCX )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCX, N
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZLACGV conjugates a complex vector of length N.
+*> ZLACGV conjugates a complex vector of length N.
 *> \endverbatim
 *
 *  Arguments:
@@ -72,7 +72,7 @@
 *> \ingroup complex16OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_ZLACGV( N, X, INCX )
+      SUBROUTINE ZLACGV( N, X, INCX )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -111,6 +111,6 @@
       END IF
       RETURN
 *
-*     End of AB_ZLACGV
+*     End of ZLACGV
 *
       END

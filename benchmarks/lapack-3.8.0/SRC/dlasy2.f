@@ -1,4 +1,4 @@
-*> \brief \b AB_DLASY2 solves the Sylvester matrix equation where the matrices are of order 1 or 2.
+*> \brief \b DLASY2 solves the Sylvester matrix equation where the matrices are of order 1 or 2.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLASY2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLASY2.f">
+*> Download DLASY2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasy2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLASY2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlasy2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLASY2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasy2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLASY2( LTRANL, LTRANR, ISGN, N1, N2, TL, LDTL, TR,
+*       SUBROUTINE DLASY2( LTRANL, LTRANR, ISGN, N1, N2, TL, LDTL, TR,
 *                          LDTR, B, LDB, SCALE, X, LDX, XNORM, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DLASY2 solves for the N1 by N2 matrix X, 1 <= N1,N2 <= 2, in
+*> DLASY2 solves for the N1 by N2 matrix X, 1 <= N1,N2 <= 2, in
 *>
 *>        op(TL)*X + ISGN*X*op(TR) = SCALE*B,
 *>
@@ -171,7 +171,7 @@
 *> \ingroup doubleSYauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_DLASY2( LTRANL, LTRANR, ISGN, N1, N2, TL, LDTL, TR,
+      SUBROUTINE DLASY2( LTRANL, LTRANR, ISGN, N1, N2, TL, LDTL, TR,
      $                   LDTR, B, LDB, SCALE, X, LDX, XNORM, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -210,12 +210,12 @@
       DOUBLE PRECISION   BTMP( 4 ), T16( 4, 4 ), TMP( 4 ), X2( 2 )
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_IDAMAX
-      DOUBLE PRECISION   AB_DLAMCH
-      EXTERNAL           AB_IDAMAX, AB_DLAMCH
+      INTEGER            IDAMAX
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           IDAMAX, DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DCOPY, AB_DSWAP
+      EXTERNAL           DCOPY, DSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -223,10 +223,8 @@
 *     .. Data statements ..
       DATA               LOCU12 / 3, 4, 1, 2 / , LOCL21 / 2, 1, 4, 3 / ,
      $                   LOCU22 / 4, 3, 2, 1 /
-      DATA               XSWPIV / .FALSE., .FALSE., .TRUE., .TRUE.
-     $ /
-      DATA               BSWPIV / .FALSE., .TRUE., .FALSE., .TRUE.
-     $ /
+      DATA               XSWPIV / .FALSE., .FALSE., .TRUE., .TRUE. /
+      DATA               BSWPIV / .FALSE., .TRUE., .FALSE., .TRUE. /
 *     ..
 *     .. Executable Statements ..
 *
@@ -241,8 +239,8 @@
 *
 *     Set constants to control overflow
 *
-      EPS = AB_DLAMCH( 'P' )
-      SMLNUM = AB_DLAMCH( 'S' ) / EPS
+      EPS = DLAMCH( 'P' )
+      SMLNUM = DLAMCH( 'S' ) / EPS
       SGN = ISGN
 *
       K = N1 + N1 + N2 - 2
@@ -314,7 +312,7 @@
 *     Solve 2 by 2 system using complete pivoting.
 *     Set pivots less than SMIN to SMIN.
 *
-      IPIV = AB_IDAMAX( 4, TMP, 1 )
+      IPIV = IDAMAX( 4, TMP, 1 )
       U11 = TMP( IPIV )
       IF( ABS( U11 ).LE.SMIN ) THEN
          INFO = 1
@@ -374,7 +372,7 @@
      $       ABS( TL( 2, 1 ) ), ABS( TL( 2, 2 ) ) )
       SMIN = MAX( EPS*SMIN, SMLNUM )
       BTMP( 1 ) = ZERO
-      CALL AB_DCOPY( 16, BTMP, 0, T16, 1 )
+      CALL DCOPY( 16, BTMP, 0, T16, 1 )
       T16( 1, 1 ) = TL( 1, 1 ) + SGN*TR( 1, 1 )
       T16( 2, 2 ) = TL( 2, 2 ) + SGN*TR( 1, 1 )
       T16( 3, 3 ) = TL( 1, 1 ) + SGN*TR( 2, 2 )
@@ -420,13 +418,13 @@
    60       CONTINUE
    70    CONTINUE
          IF( IPSV.NE.I ) THEN
-            CALL AB_DSWAP( 4, T16( IPSV, 1 ), 4, T16( I, 1 ), 4 )
+            CALL DSWAP( 4, T16( IPSV, 1 ), 4, T16( I, 1 ), 4 )
             TEMP = BTMP( I )
             BTMP( I ) = BTMP( IPSV )
             BTMP( IPSV ) = TEMP
          END IF
          IF( JPSV.NE.I )
-     $      CALL AB_DSWAP( 4, T16( 1, JPSV ), 1, T16( 1, I ), 1 )
+     $      CALL DSWAP( 4, T16( 1, JPSV ), 1, T16( 1, I ), 1 )
          JPIV( I ) = JPSV
          IF( ABS( T16( I, I ) ).LT.SMIN ) THEN
             INFO = 1
@@ -479,6 +477,6 @@
      $        ABS( TMP( 2 ) )+ABS( TMP( 4 ) ) )
       RETURN
 *
-*     End of AB_DLASY2
+*     End of DLASY2
 *
       END

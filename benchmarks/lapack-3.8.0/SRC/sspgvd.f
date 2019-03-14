@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_SSPGVD
+*> \brief \b SSPGVD
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_SSPGVD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_SSPGVD.f">
+*> Download SSPGVD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sspgvd.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_SSPGVD.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sspgvd.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_SSPGVD.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sspgvd.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_SSPGVD( ITYPE, JOBZ, UPLO, N, AP, BP, W, Z, LDZ, WORK,
+*       SUBROUTINE SSPGVD( ITYPE, JOBZ, UPLO, N, AP, BP, W, Z, LDZ, WORK,
 *                          LWORK, IWORK, LIWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_SSPGVD computes all the eigenvalues, and optionally, the eigenvectors
+*> SSPGVD computes all the eigenvalues, and optionally, the eigenvectors
 *> of a real generalized symmetric-definite eigenproblem, of the form
 *> A*x=(lambda)*B*x,  A*Bx=(lambda)*x,  or B*A*x=(lambda)*x.  Here A and
 *> B are assumed to be symmetric, stored in packed format, and B is also
@@ -151,7 +151,7 @@
 *>          only calculates the required sizes of the WORK and IWORK
 *>          arrays, returns these values as the first entries of the WORK
 *>          and IWORK arrays, and no error message related to LWORK or
-*>          LIWORK is issued by AB_XERBLA.
+*>          LIWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -171,7 +171,7 @@
 *>          routine only calculates the required sizes of the WORK and
 *>          IWORK arrays, returns these values as the first entries of
 *>          the WORK and IWORK arrays, and no error message related to
-*>          LWORK or LIWORK is issued by AB_XERBLA.
+*>          LWORK or LIWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -179,8 +179,8 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
-*>          > 0:  AB_SPPTRF or AB_AB_SSPEVD returned an error code:
-*>             <= N:  if INFO = i, AB_AB_SSPEVD failed to converge;
+*>          > 0:  SPPTRF or SSPEVD returned an error code:
+*>             <= N:  if INFO = i, SSPEVD failed to converge;
 *>                    i off-diagonal elements of an intermediate
 *>                    tridiagonal form did not converge to zero;
 *>             > N:   if INFO = N + i, for 1 <= i <= N, then the leading
@@ -207,8 +207,7 @@
 *>     Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_SSPGVD( ITYPE, JOBZ, UPLO, N, AP, BP, W, Z, LDZ, 
-     $WORK,
+      SUBROUTINE SSPGVD( ITYPE, JOBZ, UPLO, N, AP, BP, W, Z, LDZ, WORK,
      $                   LWORK, IWORK, LIWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -234,12 +233,11 @@
       INTEGER            J, LIWMIN, LWMIN, NEIG
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SPPTRF, AB_AB_SSPEVD, AB_SSPGST, AB_STPMV, A
-     $B_STPSV, AB_XERBLA
+      EXTERNAL           SPPTRF, SSPEVD, SSPGST, STPMV, STPSV, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, REAL
@@ -248,16 +246,16 @@
 *
 *     Test the input parameters.
 *
-      WANTZ = AB_LSAME( JOBZ, 'V' )
-      UPPER = AB_LSAME( UPLO, 'U' )
+      WANTZ = LSAME( JOBZ, 'V' )
+      UPPER = LSAME( UPLO, 'U' )
       LQUERY = ( LWORK.EQ.-1 .OR. LIWORK.EQ.-1 )
 *
       INFO = 0
       IF( ITYPE.LT.1 .OR. ITYPE.GT.3 ) THEN
          INFO = -1
-      ELSE IF( .NOT.( WANTZ .OR. AB_LSAME( JOBZ, 'N' ) ) ) THEN
+      ELSE IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.( UPPER .OR. AB_LSAME( UPLO, 'L' ) ) ) THEN
+      ELSE IF( .NOT.( UPPER .OR. LSAME( UPLO, 'L' ) ) ) THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
@@ -288,7 +286,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_SSPGVD', -INFO )
+         CALL XERBLA( 'SSPGVD', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -301,7 +299,7 @@
 *
 *     Form a Cholesky factorization of BP.
 *
-      CALL AB_SPPTRF( UPLO, N, BP, INFO )
+      CALL SPPTRF( UPLO, N, BP, INFO )
       IF( INFO.NE.0 ) THEN
          INFO = N + INFO
          RETURN
@@ -309,9 +307,8 @@
 *
 *     Transform problem to standard eigenvalue problem and solve.
 *
-      CALL AB_SSPGST( ITYPE, UPLO, N, AP, BP, INFO )
-      CALL AB_AB_SSPEVD( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, LWORK, IWOR
-     $K,
+      CALL SSPGST( ITYPE, UPLO, N, AP, BP, INFO )
+      CALL SSPEVD( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, LWORK, IWORK,
      $             LIWORK, INFO )
       LWMIN = MAX( REAL( LWMIN ), REAL( WORK( 1 ) ) )
       LIWMIN = MAX( REAL( LIWMIN ), REAL( IWORK( 1 ) ) )
@@ -335,7 +332,7 @@
             END IF
 *
             DO 10 J = 1, NEIG
-               CALL AB_STPSV( UPLO, TRANS, 'Non-unit', N, BP, Z( 1, J ),
+               CALL STPSV( UPLO, TRANS, 'Non-unit', N, BP, Z( 1, J ),
      $                     1 )
    10       CONTINUE
 *
@@ -351,7 +348,7 @@
             END IF
 *
             DO 20 J = 1, NEIG
-               CALL AB_STPMV( UPLO, TRANS, 'Non-unit', N, BP, Z( 1, J ),
+               CALL STPMV( UPLO, TRANS, 'Non-unit', N, BP, Z( 1, J ),
      $                     1 )
    20       CONTINUE
          END IF
@@ -362,6 +359,6 @@
 *
       RETURN
 *
-*     End of AB_AB_SSPGVD
+*     End of SSPGVD
 *
       END

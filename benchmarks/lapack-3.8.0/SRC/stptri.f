@@ -1,4 +1,4 @@
-*> \brief \b AB_STPTRI
+*> \brief \b STPTRI
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_STPTRI + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_STPTRI.f">
+*> Download STPTRI + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stptri.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_STPTRI.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stptri.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_STPTRI.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stptri.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_STPTRI( UPLO, DIAG, N, AP, INFO )
+*       SUBROUTINE STPTRI( UPLO, DIAG, N, AP, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          DIAG, UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_STPTRI computes the inverse of a real upper or lower triangular
+*> STPTRI computes the inverse of a real upper or lower triangular
 *> matrix A stored in packed format.
 *> \endverbatim
 *
@@ -115,7 +115,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_STPTRI( UPLO, DIAG, N, AP, INFO )
+      SUBROUTINE STPTRI( UPLO, DIAG, N, AP, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -142,28 +142,28 @@
       REAL               AJJ
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SSCAL, AB_STPMV, AB_XERBLA
+      EXTERNAL           SSCAL, STPMV, XERBLA
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      NOUNIT = AB_LSAME( DIAG, 'N' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      NOUNIT = LSAME( DIAG, 'N' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.NOUNIT .AND. .NOT.AB_LSAME( DIAG, 'U' ) ) THEN
+      ELSE IF( .NOT.NOUNIT .AND. .NOT.LSAME( DIAG, 'U' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_STPTRI', -INFO )
+         CALL XERBLA( 'STPTRI', -INFO )
          RETURN
       END IF
 *
@@ -203,9 +203,9 @@
 *
 *           Compute elements 1:j-1 of j-th column.
 *
-            CALL AB_STPMV( 'Upper', 'No transpose', DIAG, J-1, AP,
+            CALL STPMV( 'Upper', 'No transpose', DIAG, J-1, AP,
      $                  AP( JC ), 1 )
-            CALL AB_SSCAL( J-1, AJJ, AP( JC ), 1 )
+            CALL SSCAL( J-1, AJJ, AP( JC ), 1 )
             JC = JC + J
    30    CONTINUE
 *
@@ -225,9 +225,9 @@
 *
 *              Compute elements j+1:n of j-th column.
 *
-               CALL AB_STPMV( 'Lower', 'No transpose', DIAG, N-J,
+               CALL STPMV( 'Lower', 'No transpose', DIAG, N-J,
      $                     AP( JCLAST ), AP( JC+1 ), 1 )
-               CALL AB_SSCAL( N-J, AJJ, AP( JC+1 ), 1 )
+               CALL SSCAL( N-J, AJJ, AP( JC+1 ), 1 )
             END IF
             JCLAST = JC
             JC = JC - N + J - 2
@@ -236,6 +236,6 @@
 *
       RETURN
 *
-*     End of AB_STPTRI
+*     End of STPTRI
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_ZQRT12
+*> \brief \b ZQRT12
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       DOUBLE PRECISION FUNCTION AB_ZQRT12( M, N, A, LDA, S, WORK, LWORK,
+*       DOUBLE PRECISION FUNCTION ZQRT12( M, N, A, LDA, S, WORK, LWORK,
 *                        RWORK )
 *
 *       .. Scalar Arguments ..
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZQRT12 computes the singular values `svlues' of the upper trapezoid
+*> ZQRT12 computes the singular values `svlues' of the upper trapezoid
 *> of A(1:M,1:N) and returns the ratio
 *>
 *>      || s - svlues||/(||svlues||*eps*max(M,N))
@@ -94,7 +94,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION AB_ZQRT12( M, N, A, LDA, S, WORK, LWORK,
+      DOUBLE PRECISION FUNCTION ZQRT12( M, N, A, LDA, S, WORK, LWORK,
      $                 RWORK )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -124,25 +124,24 @@
       DOUBLE PRECISION   DUMMY( 1 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DASUM, AB_DLAMCH, AB_DNRM2, AB_ZLANGE
-      EXTERNAL           AB_DASUM, AB_DLAMCH, AB_DNRM2, AB_ZLANGE
+      DOUBLE PRECISION   DASUM, DLAMCH, DNRM2, ZLANGE
+      EXTERNAL           DASUM, DLAMCH, DNRM2, ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DAXPY, AB_DBDSQR, AB_DLABAD, AB_DLASCL, AB_X
-     $ERBLA, AB_ZGEBD2,
-     $                   AB_ZLASCL, AB_ZLASET
+      EXTERNAL           DAXPY, DBDSQR, DLABAD, DLASCL, XERBLA, ZGEBD2,
+     $                   ZLASCL, ZLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCMPLX, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
-      AB_ZQRT12 = ZERO
+      ZQRT12 = ZERO
 *
 *     Test that enough workspace is supplied
 *
       IF( LWORK.LT.M*N+2*MIN( M, N )+MAX( M, N ) ) THEN
-         CALL AB_XERBLA( 'AB_ZQRT12', 7 )
+         CALL XERBLA( 'ZQRT12', 7 )
          RETURN
       END IF
 *
@@ -152,12 +151,11 @@
       IF( MN.LE.ZERO )
      $   RETURN
 *
-      NRMSVL = AB_DNRM2( MN, S, 1 )
+      NRMSVL = DNRM2( MN, S, 1 )
 *
 *     Copy upper triangle of A into work
 *
-      CALL AB_ZLASET( 'Full', M, N, DCMPLX( ZERO ), DCMPLX( ZERO ), WORK
-     $,
+      CALL ZLASET( 'Full', M, N, DCMPLX( ZERO ), DCMPLX( ZERO ), WORK,
      $             M )
       DO 20 J = 1, N
          DO 10 I = 1, MIN( J, M )
@@ -167,25 +165,25 @@
 *
 *     Get machine parameters
 *
-      SMLNUM = AB_DLAMCH( 'S' ) / AB_DLAMCH( 'P' )
+      SMLNUM = DLAMCH( 'S' ) / DLAMCH( 'P' )
       BIGNUM = ONE / SMLNUM
-      CALL AB_DLABAD( SMLNUM, BIGNUM )
+      CALL DLABAD( SMLNUM, BIGNUM )
 *
 *     Scale work if max entry outside range [SMLNUM,BIGNUM]
 *
-      ANRM = AB_ZLANGE( 'M', M, N, WORK, M, DUMMY )
+      ANRM = ZLANGE( 'M', M, N, WORK, M, DUMMY )
       ISCL = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
 *
 *        Scale matrix norm up to SMLNUM
 *
-         CALL AB_ZLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, WORK, M, INFO )
+         CALL ZLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, WORK, M, INFO )
          ISCL = 1
       ELSE IF( ANRM.GT.BIGNUM ) THEN
 *
 *        Scale matrix norm down to BIGNUM
 *
-         CALL AB_ZLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, WORK, M, INFO )
+         CALL ZLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, WORK, M, INFO )
          ISCL = 1
       END IF
 *
@@ -193,23 +191,20 @@
 *
 *        Compute SVD of work
 *
-         CALL AB_ZGEBD2( M, N, WORK, M, RWORK( 1 ), RWORK( MN+1 ),
+         CALL ZGEBD2( M, N, WORK, M, RWORK( 1 ), RWORK( MN+1 ),
      $                WORK( M*N+1 ), WORK( M*N+MN+1 ),
      $                WORK( M*N+2*MN+1 ), INFO )
-         CALL AB_DBDSQR( 'Upper', MN, 0, 0, 0, RWORK( 1 ), RWORK( MN+1 )
-     $,
+         CALL DBDSQR( 'Upper', MN, 0, 0, 0, RWORK( 1 ), RWORK( MN+1 ),
      $                DUMMY, MN, DUMMY, 1, DUMMY, MN, RWORK( 2*MN+1 ),
      $                INFO )
 *
          IF( ISCL.EQ.1 ) THEN
             IF( ANRM.GT.BIGNUM ) THEN
-               CALL AB_DLASCL( 'G', 0, 0, BIGNUM, ANRM, MN, 1, RWORK( 1 
-     $),
+               CALL DLASCL( 'G', 0, 0, BIGNUM, ANRM, MN, 1, RWORK( 1 ),
      $                      MN, INFO )
             END IF
             IF( ANRM.LT.SMLNUM ) THEN
-               CALL AB_DLASCL( 'G', 0, 0, SMLNUM, ANRM, MN, 1, RWORK( 1 
-     $),
+               CALL DLASCL( 'G', 0, 0, SMLNUM, ANRM, MN, 1, RWORK( 1 ),
      $                      MN, INFO )
             END IF
          END IF
@@ -223,14 +218,14 @@
 *
 *     Compare s and singular values of work
 *
-      CALL AB_DAXPY( MN, -ONE, S, 1, RWORK( 1 ), 1 )
-      AB_ZQRT12 = AB_DASUM( MN, RWORK( 1 ), 1 ) /
-     $         ( AB_DLAMCH( 'Epsilon' )*DBLE( MAX( M, N ) ) )
+      CALL DAXPY( MN, -ONE, S, 1, RWORK( 1 ), 1 )
+      ZQRT12 = DASUM( MN, RWORK( 1 ), 1 ) /
+     $         ( DLAMCH( 'Epsilon' )*DBLE( MAX( M, N ) ) )
       IF( NRMSVL.NE.ZERO )
-     $   AB_ZQRT12 = AB_ZQRT12 / NRMSVL
+     $   ZQRT12 = ZQRT12 / NRMSVL
 *
       RETURN
 *
-*     End of AB_ZQRT12
+*     End of ZQRT12
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_CHET01_AA
+*> \brief \b CHET01_AA
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_CHET01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV,
+*       SUBROUTINE CHET01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV,
 *                             C, LDC, RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -28,7 +28,7 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_CHET01_AA reconstructs a hermitian indefinite matrix A from its
+*> CHET01_AA reconstructs a hermitian indefinite matrix A from its
 *> block L*D*L' or U*D*U' factorization and computes the residual
 *>    norm( C - A ) / ( N * norm(A) * EPS ),
 *> where C is the reconstructed matrix and EPS is the machine epsilon.
@@ -70,7 +70,7 @@
 *>          The factored form of the matrix A.  AFAC contains the block
 *>          diagonal matrix D and the multipliers used to obtain the
 *>          factor L or U from the block L*D*L' or U*D*U' factorization
-*>          as computed by AB_CHETRF.
+*>          as computed by CHETRF.
 *> \endverbatim
 *>
 *> \param[in] LDAFAC
@@ -82,7 +82,7 @@
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          The pivot indices from AB_CHETRF.
+*>          The pivot indices from CHETRF.
 *> \endverbatim
 *>
 *> \param[out] C
@@ -122,8 +122,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_CHET01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C
-     $,
+      SUBROUTINE CHET01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C,
      $                      LDC, RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -156,12 +155,12 @@
       REAL               ANORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_SLAMCH, AB_CLANHE
-      EXTERNAL           AB_LSAME, AB_SLAMCH, AB_CLANHE
+      LOGICAL            LSAME
+      REAL               SLAMCH, CLANHE
+      EXTERNAL           LSAME, SLAMCH, CLANHE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CLASET, AB_CLAVHE
+      EXTERNAL           CLASET, CLAVHE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE
@@ -177,53 +176,46 @@
 *
 *     Determine EPS and the norm of A.
 *
-      EPS = AB_SLAMCH( 'Epsilon' )
-      ANORM = AB_CLANHE( '1', UPLO, N, A, LDA, RWORK )
+      EPS = SLAMCH( 'Epsilon' )
+      ANORM = CLANHE( '1', UPLO, N, A, LDA, RWORK )
 *
 *     Initialize C to the tridiagonal matrix T.
 *
-      CALL AB_CLASET( 'Full', N, N, CZERO, CZERO, C, LDC )
-      CALL AB_CLACPY( 'F', 1, N, AFAC( 1, 1 ), LDAFAC+1, C( 1, 1 ), LDC+
-     $1 )
+      CALL CLASET( 'Full', N, N, CZERO, CZERO, C, LDC )
+      CALL CLACPY( 'F', 1, N, AFAC( 1, 1 ), LDAFAC+1, C( 1, 1 ), LDC+1 )
       IF( N.GT.1 ) THEN
-         IF( AB_LSAME( UPLO, 'U' ) ) THEN
-            CALL AB_CLACPY( 'F', 1, N-1, AFAC( 1, 2 ), LDAFAC+1, C( 1, 2
-     $ ),
+         IF( LSAME( UPLO, 'U' ) ) THEN
+            CALL CLACPY( 'F', 1, N-1, AFAC( 1, 2 ), LDAFAC+1, C( 1, 2 ),
      $                   LDC+1 )
-            CALL AB_CLACPY( 'F', 1, N-1, AFAC( 1, 2 ), LDAFAC+1, C( 2, 1
-     $ ),
+            CALL CLACPY( 'F', 1, N-1, AFAC( 1, 2 ), LDAFAC+1, C( 2, 1 ),
      $                   LDC+1 )
-            CALL AB_CLACGV( N-1, C( 2, 1 ), LDC+1 )
+            CALL CLACGV( N-1, C( 2, 1 ), LDC+1 )
          ELSE
-            CALL AB_CLACPY( 'F', 1, N-1, AFAC( 2, 1 ), LDAFAC+1, C( 1, 2
-     $ ),
+            CALL CLACPY( 'F', 1, N-1, AFAC( 2, 1 ), LDAFAC+1, C( 1, 2 ),
      $                   LDC+1 )
-            CALL AB_CLACPY( 'F', 1, N-1, AFAC( 2, 1 ), LDAFAC+1, C( 2, 1
-     $ ),
+            CALL CLACPY( 'F', 1, N-1, AFAC( 2, 1 ), LDAFAC+1, C( 2, 1 ),
      $                   LDC+1 )
-            CALL AB_CLACGV( N-1, C( 1, 2 ), LDC+1 )
+            CALL CLACGV( N-1, C( 1, 2 ), LDC+1 )
          ENDIF
 *
-*        Call AB_CTRMM to form the product U' * D (or L * D ).
+*        Call CTRMM to form the product U' * D (or L * D ).
 *
-         IF( AB_LSAME( UPLO, 'U' ) ) THEN
-            CALL AB_CTRMM( 'Left', UPLO, 'Conjugate transpose', 'Unit',
+         IF( LSAME( UPLO, 'U' ) ) THEN
+            CALL CTRMM( 'Left', UPLO, 'Conjugate transpose', 'Unit',
      $                  N-1, N, CONE, AFAC( 1, 2 ), LDAFAC, C( 2, 1 ),
      $                  LDC )
          ELSE
-            CALL AB_CTRMM( 'Left', UPLO, 'No transpose', 'Unit', N-1, N,
+            CALL CTRMM( 'Left', UPLO, 'No transpose', 'Unit', N-1, N,
      $                  CONE, AFAC( 2, 1 ), LDAFAC, C( 2, 1 ), LDC )
          END IF
 *
-*        Call AB_CTRMM again to multiply by U (or L ).
+*        Call CTRMM again to multiply by U (or L ).
 *
-         IF( AB_LSAME( UPLO, 'U' ) ) THEN
-            CALL AB_CTRMM( 'Right', UPLO, 'No transpose', 'Unit', N, N-1
-     $,
+         IF( LSAME( UPLO, 'U' ) ) THEN
+            CALL CTRMM( 'Right', UPLO, 'No transpose', 'Unit', N, N-1,
      $                  CONE, AFAC( 1, 2 ), LDAFAC, C( 1, 2 ), LDC )
          ELSE
-            CALL AB_CTRMM( 'Right', UPLO, 'Conjugate transpose', 'Unit',
-     $ N,
+            CALL CTRMM( 'Right', UPLO, 'Conjugate transpose', 'Unit', N,
      $                  N-1, CONE, AFAC( 2, 1 ), LDAFAC, C( 1, 2 ),
      $                  LDC )
          END IF
@@ -234,18 +226,18 @@
       DO J = N, 1, -1
          I = IPIV( J )
          IF( I.NE.J )
-     $      CALL AB_CSWAP( N, C( J, 1 ), LDC, C( I, 1 ), LDC )
+     $      CALL CSWAP( N, C( J, 1 ), LDC, C( I, 1 ), LDC )
       END DO
       DO J = N, 1, -1
          I = IPIV( J )
          IF( I.NE.J )
-     $      CALL AB_CSWAP( N, C( 1, J ), 1, C( 1, I ), 1 )
+     $      CALL CSWAP( N, C( 1, J ), 1, C( 1, I ), 1 )
       END DO
 *
 *
 *     Compute the difference  C - A .
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
          DO J = 1, N
             DO I = 1, J
                C( I, J ) = C( I, J ) - A( I, J )
@@ -261,7 +253,7 @@
 *
 *     Compute norm( C - A ) / ( N * norm(A) * EPS )
 *
-      RESID = AB_CLANHE( '1', UPLO, N, C, LDC, RWORK )
+      RESID = CLANHE( '1', UPLO, N, C, LDC, RWORK )
 *
       IF( ANORM.LE.ZERO ) THEN
          IF( RESID.NE.ZERO )
@@ -272,6 +264,6 @@
 *
       RETURN
 *
-*     End of AB_AB_CHET01_AA
+*     End of CHET01_AA
 *
       END

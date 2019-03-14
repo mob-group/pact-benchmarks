@@ -1,4 +1,4 @@
-*> \brief \b AB_DGEQLF
+*> \brief \b DGEQLF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DGEQLF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGEQLF.f">
+*> Download DGEQLF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgeqlf.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGEQLF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgeqlf.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGEQLF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgeqlf.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DGEQLF( M, N, A, LDA, TAU, WORK, LWORK, INFO )
+*       SUBROUTINE DGEQLF( M, N, A, LDA, TAU, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, LWORK, M, N
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DGEQLF computes a QL factorization of a real M-by-N matrix A:
+*> DGEQLF computes a QL factorization of a real M-by-N matrix A:
 *> A = Q * L.
 *> \endverbatim
 *
@@ -95,7 +95,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -136,7 +136,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_DGEQLF( M, N, A, LDA, TAU, WORK, LWORK, INFO )
+      SUBROUTINE DGEQLF( M, N, A, LDA, TAU, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -158,15 +158,14 @@
      $                   MU, NB, NBMIN, NU, NX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DGEQL2, AB_AB_DLARFB, AB_AB_DLARFT, AB_XERBL
-     $A
+      EXTERNAL           DGEQL2, DLARFB, DLARFT, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_ILAENV
+      INTEGER            ILAENV
+      EXTERNAL           ILAENV
 *     ..
 *     .. Executable Statements ..
 *
@@ -187,7 +186,7 @@
          IF( K.EQ.0 ) THEN
             LWKOPT = 1
          ELSE
-            NB = AB_ILAENV( 1, 'AB_DGEQLF', ' ', M, N, -1, -1 )
+            NB = ILAENV( 1, 'DGEQLF', ' ', M, N, -1, -1 )
             LWKOPT = N*NB
          END IF
          WORK( 1 ) = LWKOPT
@@ -198,7 +197,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DGEQLF', -INFO )
+         CALL XERBLA( 'DGEQLF', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -217,7 +216,7 @@
 *
 *        Determine when to cross over from blocked to unblocked code.
 *
-         NX = MAX( 0, AB_ILAENV( 3, 'AB_DGEQLF', ' ', M, N, -1, -1 ) )
+         NX = MAX( 0, ILAENV( 3, 'DGEQLF', ' ', M, N, -1, -1 ) )
          IF( NX.LT.K ) THEN
 *
 *           Determine if workspace is large enough for blocked code.
@@ -230,7 +229,7 @@
 *              determine the minimum value of NB.
 *
                NB = LWORK / LDWORK
-               NBMIN = MAX( 2, AB_ILAENV( 2, 'AB_DGEQLF', ' ', M, N, -1,
+               NBMIN = MAX( 2, ILAENV( 2, 'DGEQLF', ' ', M, N, -1,
      $                 -1 ) )
             END IF
          END IF
@@ -250,21 +249,19 @@
 *           Compute the QL factorization of the current block
 *           A(1:m-k+i+ib-1,n-k+i:n-k+i+ib-1)
 *
-            CALL AB_DGEQL2( M-K+I+IB-1, IB, A( 1, N-K+I ), LDA, TAU( I )
-     $,
+            CALL DGEQL2( M-K+I+IB-1, IB, A( 1, N-K+I ), LDA, TAU( I ),
      $                   WORK, IINFO )
             IF( N-K+I.GT.1 ) THEN
 *
 *              Form the triangular factor of the block reflector
 *              H = H(i+ib-1) . . . H(i+1) H(i)
 *
-               CALL AB_AB_DLARFT( 'Backward', 'Columnwise', M-K+I+IB-1, 
-     $IB,
+               CALL DLARFT( 'Backward', 'Columnwise', M-K+I+IB-1, IB,
      $                      A( 1, N-K+I ), LDA, TAU( I ), WORK, LDWORK )
 *
 *              Apply H**T to A(1:m-k+i+ib-1,1:n-k+i-1) from the left
 *
-               CALL AB_AB_DLARFB( 'Left', 'Transpose', 'Backward',
+               CALL DLARFB( 'Left', 'Transpose', 'Backward',
      $                      'Columnwise', M-K+I+IB-1, N-K+I-1, IB,
      $                      A( 1, N-K+I ), LDA, WORK, LDWORK, A, LDA,
      $                      WORK( IB+1 ), LDWORK )
@@ -280,11 +277,11 @@
 *     Use unblocked code to factor the last or only block
 *
       IF( MU.GT.0 .AND. NU.GT.0 )
-     $   CALL AB_DGEQL2( MU, NU, A, LDA, TAU, WORK, IINFO )
+     $   CALL DGEQL2( MU, NU, A, LDA, TAU, WORK, IINFO )
 *
       WORK( 1 ) = IWS
       RETURN
 *
-*     End of AB_DGEQLF
+*     End of DGEQLF
 *
       END

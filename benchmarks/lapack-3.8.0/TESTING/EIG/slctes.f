@@ -1,4 +1,4 @@
-*> \brief \b AB_SLCTES
+*> \brief \b SLCTES
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       LOGICAL          FUNCTION AB_SLCTES( ZR, ZI, D )
+*       LOGICAL          FUNCTION SLCTES( ZR, ZI, D )
 *
 *       .. Scalar Arguments ..
 *       REAL               D, ZI, ZR
@@ -20,13 +20,13 @@
 *>
 *> \verbatim
 *>
-*> AB_SLCTES returns .TRUE. if the eigenvalue (ZR/D) + sqrt(-1)*(ZI/D)
+*> SLCTES returns .TRUE. if the eigenvalue (ZR/D) + sqrt(-1)*(ZI/D)
 *> is to be selected (specifically, in this subroutine, if the real
 *> part of the eigenvalue is negative), and otherwise it returns
 *> .FALSE..
 *>
-*> It is used by the test routine AB_SDRGES to test whether the driver
-*> routine AB_SGGES successfully sorts eigenvalues.
+*> It is used by the test routine SDRGES to test whether the driver
+*> routine SGGES successfully sorts eigenvalues.
 *> \endverbatim
 *
 *  Arguments:
@@ -66,7 +66,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      LOGICAL          FUNCTION AB_SLCTES( ZR, ZI, D )
+      LOGICAL          FUNCTION SLCTES( ZR, ZI, D )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -89,13 +89,13 @@
 *     .. Executable Statements ..
 *
       IF( D.EQ.ZERO ) THEN
-         AB_SLCTES = ( ZR.LT.ZERO )
+         SLCTES = ( ZR.LT.ZERO )
       ELSE
-         AB_SLCTES = ( SIGN( ONE, ZR ).NE.SIGN( ONE, D ) )
+         SLCTES = ( SIGN( ONE, ZR ).NE.SIGN( ONE, D ) )
       END IF
 *
       RETURN
 *
-*     End of AB_SLCTES
+*     End of SLCTES
 *
       END

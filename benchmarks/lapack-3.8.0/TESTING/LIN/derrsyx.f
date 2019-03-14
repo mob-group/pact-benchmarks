@@ -1,4 +1,4 @@
-*> \brief \b AB_DERRSYX
+*> \brief \b DERRSYX
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DERRSY( PATH, NUNIT )
+*       SUBROUTINE DERRSY( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,11 +21,11 @@
 *>
 *> \verbatim
 *>
-*> AB_DERRSY tests the error exits for the DOUBLE PRECISION routines
+*> DERRSY tests the error exits for the DOUBLE PRECISION routines
 *> for symmetric indefinite matrices.
 *>
 *> Note that this file is used only when the XBLAS are available,
-*> otherwise AB_DERRSY.f defines this subroutine.
+*> otherwise derrsy.f defines this subroutine.
 *> \endverbatim
 *
 *  Arguments:
@@ -56,7 +56,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_DERRSY( PATH, NUNIT )
+      SUBROUTINE DERRSY( PATH, NUNIT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -88,22 +88,16 @@
      $                   ERR_BNDS_C( NMAX, 3 ), PARAMS( 1 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_AB_LSAMEN
-      EXTERNAL           AB_AB_LSAMEN
+      LOGICAL            LSAMEN
+      EXTERNAL           LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALAESM, AB_CHKXER, AB_DSPCON, AB_AB_DSPRFS, 
-     $AB_DSPTRF, AB_DSPTRI,
-     $                   AB_DSPTRS, AB_DSYCON, AB_AB_DSYCON_3, AB_AB_DSY
-     $CON_ROOK, AB_AB_DSYRFS,
-     $                   AB_DSYTF2, AB_AB_DSYTF2_RK, AB_AB_DSYTF2_ROOK, 
-     $AB_DSYTRF,
-     $                   AB_AB_DSYTRF_RK, AB_AB_DSYTRF_ROOK, AB_DSYTRI, 
-     $AB_AB_DSYTRI_3,
-     $                   AB_AB_AB_DSYTRI_3X, AB_AB_DSYTRI_ROOK, AB_AB_DS
-     $YTRI2, AB_AB_AB_DSYTRI2X,
-     $                   AB_DSYTRS, AB_AB_DSYTRS_3, AB_AB_DSYTRS_ROOK, A
-     $B_AB_AB_DSYRFSX
+      EXTERNAL           ALAESM, CHKXER, DSPCON, DSPRFS, DSPTRF, DSPTRI,
+     $                   DSPTRS, DSYCON, DSYCON_3, DSYCON_ROOK, DSYRFS,
+     $                   DSYTF2, DSYTF2_RK, DSYTF2_ROOK, DSYTRF,
+     $                   DSYTRF_RK, DSYTRF_ROOK, DSYTRI, DSYTRI_3,
+     $                   DSYTRI_3X, DSYTRI_ROOK, DSYTRI2, DSYTRI2X,
+     $                   DSYTRS, DSYTRS_3, DSYTRS_ROOK, DSYRFSX
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -144,303 +138,284 @@
       RCOND = 1.0D0
       OK = .TRUE.
 *
-      IF( AB_AB_LSAMEN( 2, C2, 'SY' ) ) THEN
+      IF( LSAMEN( 2, C2, 'SY' ) ) THEN
 *
 *        Test error exits of the routines that use factorization
 *        of a symmetric indefinite matrix with patrial
 *        (Bunch-Kaufman) pivoting.
 *
-*        AB_DSYTRF
+*        DSYTRF
 *
-         SRNAMT = 'AB_DSYTRF'
+         SRNAMT = 'DSYTRF'
          INFOT = 1
-         CALL AB_DSYTRF( '/', 0, A, 1, IP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_DSYTRF', INFOT, NOUT, LERR, OK )
+         CALL DSYTRF( '/', 0, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'DSYTRF', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_DSYTRF( 'U', -1, A, 1, IP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_DSYTRF', INFOT, NOUT, LERR, OK )
+         CALL DSYTRF( 'U', -1, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'DSYTRF', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_DSYTRF( 'U', 2, A, 1, IP, W, 4, INFO )
-         CALL AB_CHKXER( 'AB_DSYTRF', INFOT, NOUT, LERR, OK )
+         CALL DSYTRF( 'U', 2, A, 1, IP, W, 4, INFO )
+         CALL CHKXER( 'DSYTRF', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_DSYTRF( 'U', 0, A, 1, IP, W, 0, INFO )
-         CALL AB_CHKXER( 'AB_DSYTRF', INFOT, NOUT, LERR, OK )
+         CALL DSYTRF( 'U', 0, A, 1, IP, W, 0, INFO )
+         CALL CHKXER( 'DSYTRF', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_DSYTRF( 'U', 0, A, 1, IP, W, -2, INFO )
-         CALL AB_CHKXER( 'AB_DSYTRF', INFOT, NOUT, LERR, OK )
+         CALL DSYTRF( 'U', 0, A, 1, IP, W, -2, INFO )
+         CALL CHKXER( 'DSYTRF', INFOT, NOUT, LERR, OK )
 *
-*        AB_DSYTF2
+*        DSYTF2
 *
-         SRNAMT = 'AB_DSYTF2'
+         SRNAMT = 'DSYTF2'
          INFOT = 1
-         CALL AB_DSYTF2( '/', 0, A, 1, IP, INFO )
-         CALL AB_CHKXER( 'AB_DSYTF2', INFOT, NOUT, LERR, OK )
+         CALL DSYTF2( '/', 0, A, 1, IP, INFO )
+         CALL CHKXER( 'DSYTF2', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_DSYTF2( 'U', -1, A, 1, IP, INFO )
-         CALL AB_CHKXER( 'AB_DSYTF2', INFOT, NOUT, LERR, OK )
+         CALL DSYTF2( 'U', -1, A, 1, IP, INFO )
+         CALL CHKXER( 'DSYTF2', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_DSYTF2( 'U', 2, A, 1, IP, INFO )
-         CALL AB_CHKXER( 'AB_DSYTF2', INFOT, NOUT, LERR, OK )
+         CALL DSYTF2( 'U', 2, A, 1, IP, INFO )
+         CALL CHKXER( 'DSYTF2', INFOT, NOUT, LERR, OK )
 *
-*        AB_DSYTRI
+*        DSYTRI
 *
-         SRNAMT = 'AB_DSYTRI'
+         SRNAMT = 'DSYTRI'
          INFOT = 1
-         CALL AB_DSYTRI( '/', 0, A, 1, IP, W, INFO )
-         CALL AB_CHKXER( 'AB_DSYTRI', INFOT, NOUT, LERR, OK )
+         CALL DSYTRI( '/', 0, A, 1, IP, W, INFO )
+         CALL CHKXER( 'DSYTRI', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_DSYTRI( 'U', -1, A, 1, IP, W, INFO )
-         CALL AB_CHKXER( 'AB_DSYTRI', INFOT, NOUT, LERR, OK )
+         CALL DSYTRI( 'U', -1, A, 1, IP, W, INFO )
+         CALL CHKXER( 'DSYTRI', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_DSYTRI( 'U', 2, A, 1, IP, W, INFO )
-         CALL AB_CHKXER( 'AB_DSYTRI', INFOT, NOUT, LERR, OK )
+         CALL DSYTRI( 'U', 2, A, 1, IP, W, INFO )
+         CALL CHKXER( 'DSYTRI', INFOT, NOUT, LERR, OK )
 *
-*        AB_AB_DSYTRI2
+*        DSYTRI2
 *
-         SRNAMT = 'AB_AB_DSYTRI2'
+         SRNAMT = 'DSYTRI2'
          INFOT = 1
-         CALL AB_AB_DSYTRI2( '/', 0, A, 1, IP, W, IW, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYTRI2', INFOT, NOUT, LERR, OK )
+         CALL DSYTRI2( '/', 0, A, 1, IP, W, IW, INFO )
+         CALL CHKXER( 'DSYTRI2', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_DSYTRI2( 'U', -1, A, 1, IP, W, IW, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYTRI2', INFOT, NOUT, LERR, OK )
+         CALL DSYTRI2( 'U', -1, A, 1, IP, W, IW, INFO )
+         CALL CHKXER( 'DSYTRI2', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_DSYTRI2( 'U', 2, A, 1, IP, W, IW, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYTRI2', INFOT, NOUT, LERR, OK )
+         CALL DSYTRI2( 'U', 2, A, 1, IP, W, IW, INFO )
+         CALL CHKXER( 'DSYTRI2', INFOT, NOUT, LERR, OK )
 *
-*        AB_AB_AB_DSYTRI2X
+*        DSYTRI2X
 *
-         SRNAMT = 'AB_AB_AB_DSYTRI2X'
+         SRNAMT = 'DSYTRI2X'
          INFOT = 1
-         CALL AB_AB_AB_DSYTRI2X( '/', 0, A, 1, IP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_DSYTRI2X', INFOT, NOUT, LERR, OK )
+         CALL DSYTRI2X( '/', 0, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'DSYTRI2X', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_AB_DSYTRI2X( 'U', -1, A, 1, IP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_DSYTRI2X', INFOT, NOUT, LERR, OK )
+         CALL DSYTRI2X( 'U', -1, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'DSYTRI2X', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_AB_DSYTRI2X( 'U', 2, A, 1, IP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_DSYTRI2X', INFOT, NOUT, LERR, OK )
+         CALL DSYTRI2X( 'U', 2, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'DSYTRI2X', INFOT, NOUT, LERR, OK )
 *
-*        AB_DSYTRS
+*        DSYTRS
 *
-         SRNAMT = 'AB_DSYTRS'
+         SRNAMT = 'DSYTRS'
          INFOT = 1
-         CALL AB_DSYTRS( '/', 0, 0, A, 1, IP, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_DSYTRS', INFOT, NOUT, LERR, OK )
+         CALL DSYTRS( '/', 0, 0, A, 1, IP, B, 1, INFO )
+         CALL CHKXER( 'DSYTRS', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_DSYTRS( 'U', -1, 0, A, 1, IP, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_DSYTRS', INFOT, NOUT, LERR, OK )
+         CALL DSYTRS( 'U', -1, 0, A, 1, IP, B, 1, INFO )
+         CALL CHKXER( 'DSYTRS', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_DSYTRS( 'U', 0, -1, A, 1, IP, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_DSYTRS', INFOT, NOUT, LERR, OK )
+         CALL DSYTRS( 'U', 0, -1, A, 1, IP, B, 1, INFO )
+         CALL CHKXER( 'DSYTRS', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_DSYTRS( 'U', 2, 1, A, 1, IP, B, 2, INFO )
-         CALL AB_CHKXER( 'AB_DSYTRS', INFOT, NOUT, LERR, OK )
+         CALL DSYTRS( 'U', 2, 1, A, 1, IP, B, 2, INFO )
+         CALL CHKXER( 'DSYTRS', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_DSYTRS( 'U', 2, 1, A, 2, IP, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_DSYTRS', INFOT, NOUT, LERR, OK )
+         CALL DSYTRS( 'U', 2, 1, A, 2, IP, B, 1, INFO )
+         CALL CHKXER( 'DSYTRS', INFOT, NOUT, LERR, OK )
 *
-*        AB_AB_DSYRFS
+*        DSYRFS
 *
-         SRNAMT = 'AB_AB_DSYRFS'
+         SRNAMT = 'DSYRFS'
          INFOT = 1
-         CALL AB_AB_DSYRFS( '/', 0, 0, A, 1, AF, 1, IP, B, 1, X, 1, R1, 
-     $R2, W,
+         CALL DSYRFS( '/', 0, 0, A, 1, AF, 1, IP, B, 1, X, 1, R1, R2, W,
      $                IW, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DSYRFS', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_DSYRFS( 'U', -1, 0, A, 1, AF, 1, IP, B, 1, X, 1, R1,
-     $ R2,
+         CALL DSYRFS( 'U', -1, 0, A, 1, AF, 1, IP, B, 1, X, 1, R1, R2,
      $                W, IW, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DSYRFS', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_DSYRFS( 'U', 0, -1, A, 1, AF, 1, IP, B, 1, X, 1, R1,
-     $ R2,
+         CALL DSYRFS( 'U', 0, -1, A, 1, AF, 1, IP, B, 1, X, 1, R1, R2,
      $                W, IW, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DSYRFS', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_AB_DSYRFS( 'U', 2, 1, A, 1, AF, 2, IP, B, 2, X, 2, R1, 
-     $R2, W,
+         CALL DSYRFS( 'U', 2, 1, A, 1, AF, 2, IP, B, 2, X, 2, R1, R2, W,
      $                IW, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DSYRFS', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_AB_DSYRFS( 'U', 2, 1, A, 2, AF, 1, IP, B, 2, X, 2, R1, 
-     $R2, W,
+         CALL DSYRFS( 'U', 2, 1, A, 2, AF, 1, IP, B, 2, X, 2, R1, R2, W,
      $                IW, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DSYRFS', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_AB_DSYRFS( 'U', 2, 1, A, 2, AF, 2, IP, B, 1, X, 2, R1, 
-     $R2, W,
+         CALL DSYRFS( 'U', 2, 1, A, 2, AF, 2, IP, B, 1, X, 2, R1, R2, W,
      $                IW, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DSYRFS', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL AB_AB_DSYRFS( 'U', 2, 1, A, 2, AF, 2, IP, B, 2, X, 1, R1, 
-     $R2, W,
+         CALL DSYRFS( 'U', 2, 1, A, 2, AF, 2, IP, B, 2, X, 1, R1, R2, W,
      $                IW, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DSYRFS', INFOT, NOUT, LERR, OK )
 *
-*        AB_AB_AB_DSYRFSX
+*        DSYRFSX
 *
          N_ERR_BNDS = 3
          NPARAMS = 0
-         SRNAMT = 'AB_AB_AB_DSYRFSX'
+         SRNAMT = 'DSYRFSX'
          INFOT = 1
-         CALL AB_AB_AB_DSYRFSX( '/', EQ, 0, 0, A, 1, AF, 1, IP, S, B, 1,
-     $ X, 1,
+         CALL DSYRFSX( '/', EQ, 0, 0, A, 1, AF, 1, IP, S, B, 1, X, 1,
      $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
      $        PARAMS, W, IW, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_DSYRFSX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DSYRFSX', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_AB_DSYRFSX( 'U', EQ, -1, 0, A, 1, AF, 1, IP, S, B, 1
-     $, X, 1,
+         CALL DSYRFSX( 'U', EQ, -1, 0, A, 1, AF, 1, IP, S, B, 1, X, 1,
      $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
      $        PARAMS, W, IW, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_DSYRFSX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DSYRFSX', INFOT, NOUT, LERR, OK )
          EQ = 'N'
          INFOT = 3
-         CALL AB_AB_AB_DSYRFSX( 'U', EQ, -1, 0, A, 1, AF, 1, IP, S, B, 1
-     $, X, 1,
+         CALL DSYRFSX( 'U', EQ, -1, 0, A, 1, AF, 1, IP, S, B, 1, X, 1,
      $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
      $        PARAMS, W, IW, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_DSYRFSX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DSYRFSX', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_AB_DSYRFSX( 'U', EQ, 0, -1, A, 1, AF, 1, IP, S, B, 1
-     $, X, 1,
+         CALL DSYRFSX( 'U', EQ, 0, -1, A, 1, AF, 1, IP, S, B, 1, X, 1,
      $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
      $        PARAMS, W, IW, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_DSYRFSX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DSYRFSX', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_AB_AB_DSYRFSX( 'U', EQ, 2, 1, A, 1, AF, 2, IP, S, B, 2,
-     $ X, 2,
+         CALL DSYRFSX( 'U', EQ, 2, 1, A, 1, AF, 2, IP, S, B, 2, X, 2,
      $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
      $        PARAMS, W, IW, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_DSYRFSX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DSYRFSX', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_AB_DSYRFSX( 'U', EQ, 2, 1, A, 2, AF, 1, IP, S, B, 2,
-     $ X, 2,
+         CALL DSYRFSX( 'U', EQ, 2, 1, A, 2, AF, 1, IP, S, B, 2, X, 2,
      $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
      $        PARAMS, W, IW, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_DSYRFSX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DSYRFSX', INFOT, NOUT, LERR, OK )
          INFOT = 12
-         CALL AB_AB_AB_DSYRFSX( 'U', EQ, 2, 1, A, 2, AF, 2, IP, S, B, 1,
-     $ X, 2,
+         CALL DSYRFSX( 'U', EQ, 2, 1, A, 2, AF, 2, IP, S, B, 1, X, 2,
      $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
      $        PARAMS, W, IW, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_DSYRFSX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DSYRFSX', INFOT, NOUT, LERR, OK )
          INFOT = 14
-         CALL AB_AB_AB_DSYRFSX( 'U', EQ, 2, 1, A, 2, AF, 2, IP, S, B, 2,
-     $ X, 1,
+         CALL DSYRFSX( 'U', EQ, 2, 1, A, 2, AF, 2, IP, S, B, 2, X, 1,
      $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
      $        PARAMS, W, IW, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_DSYRFSX', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DSYRFSX', INFOT, NOUT, LERR, OK )
 *
-*        AB_DSYCON
+*        DSYCON
 *
-         SRNAMT = 'AB_DSYCON'
+         SRNAMT = 'DSYCON'
          INFOT = 1
-         CALL AB_DSYCON( '/', 0, A, 1, IP, ANRM, RCOND, W, IW, INFO )
-         CALL AB_CHKXER( 'AB_DSYCON', INFOT, NOUT, LERR, OK )
+         CALL DSYCON( '/', 0, A, 1, IP, ANRM, RCOND, W, IW, INFO )
+         CALL CHKXER( 'DSYCON', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_DSYCON( 'U', -1, A, 1, IP, ANRM, RCOND, W, IW, INFO )
-         CALL AB_CHKXER( 'AB_DSYCON', INFOT, NOUT, LERR, OK )
+         CALL DSYCON( 'U', -1, A, 1, IP, ANRM, RCOND, W, IW, INFO )
+         CALL CHKXER( 'DSYCON', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_DSYCON( 'U', 2, A, 1, IP, ANRM, RCOND, W, IW, INFO )
-         CALL AB_CHKXER( 'AB_DSYCON', INFOT, NOUT, LERR, OK )
+         CALL DSYCON( 'U', 2, A, 1, IP, ANRM, RCOND, W, IW, INFO )
+         CALL CHKXER( 'DSYCON', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_DSYCON( 'U', 1, A, 1, IP, -1.0D0, RCOND, W, IW, INFO )
-         CALL AB_CHKXER( 'AB_DSYCON', INFOT, NOUT, LERR, OK )
+         CALL DSYCON( 'U', 1, A, 1, IP, -1.0D0, RCOND, W, IW, INFO )
+         CALL CHKXER( 'DSYCON', INFOT, NOUT, LERR, OK )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, C2, 'SR' ) ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'SR' ) ) THEN
 *
 *        Test error exits of the routines that use factorization
 *        of a symmetric indefinite matrix with rook
 *        (bounded Bunch-Kaufman) pivoting.
 *
-*        AB_AB_DSYTRF_ROOK
+*        DSYTRF_ROOK
 *
-         SRNAMT = 'AB_AB_DSYTRF_ROOK'
+         SRNAMT = 'DSYTRF_ROOK'
          INFOT = 1
-         CALL AB_AB_DSYTRF_ROOK( '/', 0, A, 1, IP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYTRF_ROOK', INFOT, NOUT, LERR, OK )
+         CALL DSYTRF_ROOK( '/', 0, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'DSYTRF_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_DSYTRF_ROOK( 'U', -1, A, 1, IP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYTRF_ROOK', INFOT, NOUT, LERR, OK )
+         CALL DSYTRF_ROOK( 'U', -1, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'DSYTRF_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_DSYTRF_ROOK( 'U', 2, A, 1, IP, W, 4, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYTRF_ROOK', INFOT, NOUT, LERR, OK )
+         CALL DSYTRF_ROOK( 'U', 2, A, 1, IP, W, 4, INFO )
+         CALL CHKXER( 'DSYTRF_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_AB_DSYTRF_ROOK( 'U', 0, A, 1, IP, W, 0, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYTRF_ROOK', INFOT, NOUT, LERR, OK )
+         CALL DSYTRF_ROOK( 'U', 0, A, 1, IP, W, 0, INFO )
+         CALL CHKXER( 'DSYTRF_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_AB_DSYTRF_ROOK( 'U', 0, A, 1, IP, W, -2, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYTRF_ROOK', INFOT, NOUT, LERR, OK )
+         CALL DSYTRF_ROOK( 'U', 0, A, 1, IP, W, -2, INFO )
+         CALL CHKXER( 'DSYTRF_ROOK', INFOT, NOUT, LERR, OK )
 *
-*        AB_AB_DSYTF2_ROOK
+*        DSYTF2_ROOK
 *
-         SRNAMT = 'AB_AB_DSYTF2_ROOK'
+         SRNAMT = 'DSYTF2_ROOK'
          INFOT = 1
-         CALL AB_AB_DSYTF2_ROOK( '/', 0, A, 1, IP, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYTF2_ROOK', INFOT, NOUT, LERR, OK )
+         CALL DSYTF2_ROOK( '/', 0, A, 1, IP, INFO )
+         CALL CHKXER( 'DSYTF2_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_DSYTF2_ROOK( 'U', -1, A, 1, IP, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYTF2_ROOK', INFOT, NOUT, LERR, OK )
+         CALL DSYTF2_ROOK( 'U', -1, A, 1, IP, INFO )
+         CALL CHKXER( 'DSYTF2_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_DSYTF2_ROOK( 'U', 2, A, 1, IP, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYTF2_ROOK', INFOT, NOUT, LERR, OK )
+         CALL DSYTF2_ROOK( 'U', 2, A, 1, IP, INFO )
+         CALL CHKXER( 'DSYTF2_ROOK', INFOT, NOUT, LERR, OK )
 *
-*        AB_AB_DSYTRI_ROOK
+*        DSYTRI_ROOK
 *
-         SRNAMT = 'AB_AB_DSYTRI_ROOK'
+         SRNAMT = 'DSYTRI_ROOK'
          INFOT = 1
-         CALL AB_AB_DSYTRI_ROOK( '/', 0, A, 1, IP, W, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYTRI_ROOK', INFOT, NOUT, LERR, OK )
+         CALL DSYTRI_ROOK( '/', 0, A, 1, IP, W, INFO )
+         CALL CHKXER( 'DSYTRI_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_DSYTRI_ROOK( 'U', -1, A, 1, IP, W, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYTRI_ROOK', INFOT, NOUT, LERR, OK )
+         CALL DSYTRI_ROOK( 'U', -1, A, 1, IP, W, INFO )
+         CALL CHKXER( 'DSYTRI_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_DSYTRI_ROOK( 'U', 2, A, 1, IP, W, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYTRI_ROOK', INFOT, NOUT, LERR, OK )
+         CALL DSYTRI_ROOK( 'U', 2, A, 1, IP, W, INFO )
+         CALL CHKXER( 'DSYTRI_ROOK', INFOT, NOUT, LERR, OK )
 *
-*        AB_AB_DSYTRS_ROOK
+*        DSYTRS_ROOK
 *
-         SRNAMT = 'AB_AB_DSYTRS_ROOK'
+         SRNAMT = 'DSYTRS_ROOK'
          INFOT = 1
-         CALL AB_AB_DSYTRS_ROOK( '/', 0, 0, A, 1, IP, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYTRS_ROOK', INFOT, NOUT, LERR, OK )
+         CALL DSYTRS_ROOK( '/', 0, 0, A, 1, IP, B, 1, INFO )
+         CALL CHKXER( 'DSYTRS_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_DSYTRS_ROOK( 'U', -1, 0, A, 1, IP, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYTRS_ROOK', INFOT, NOUT, LERR, OK )
+         CALL DSYTRS_ROOK( 'U', -1, 0, A, 1, IP, B, 1, INFO )
+         CALL CHKXER( 'DSYTRS_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_DSYTRS_ROOK( 'U', 0, -1, A, 1, IP, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYTRS_ROOK', INFOT, NOUT, LERR, OK )
+         CALL DSYTRS_ROOK( 'U', 0, -1, A, 1, IP, B, 1, INFO )
+         CALL CHKXER( 'DSYTRS_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_AB_DSYTRS_ROOK( 'U', 2, 1, A, 1, IP, B, 2, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYTRS_ROOK', INFOT, NOUT, LERR, OK )
+         CALL DSYTRS_ROOK( 'U', 2, 1, A, 1, IP, B, 2, INFO )
+         CALL CHKXER( 'DSYTRS_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_DSYTRS_ROOK( 'U', 2, 1, A, 2, IP, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYTRS_ROOK', INFOT, NOUT, LERR, OK )
+         CALL DSYTRS_ROOK( 'U', 2, 1, A, 2, IP, B, 1, INFO )
+         CALL CHKXER( 'DSYTRS_ROOK', INFOT, NOUT, LERR, OK )
 *
-*        AB_AB_DSYCON_ROOK
+*        DSYCON_ROOK
 *
-         SRNAMT = 'AB_AB_DSYCON_ROOK'
+         SRNAMT = 'DSYCON_ROOK'
          INFOT = 1
-         CALL AB_AB_DSYCON_ROOK( '/', 0, A, 1, IP, ANRM, RCOND, W, IW, I
-     $NFO )
-         CALL AB_CHKXER( 'AB_AB_DSYCON_ROOK', INFOT, NOUT, LERR, OK )
+         CALL DSYCON_ROOK( '/', 0, A, 1, IP, ANRM, RCOND, W, IW, INFO )
+         CALL CHKXER( 'DSYCON_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_DSYCON_ROOK( 'U', -1, A, 1, IP, ANRM, RCOND, W, IW, 
-     $INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYCON_ROOK', INFOT, NOUT, LERR, OK )
+         CALL DSYCON_ROOK( 'U', -1, A, 1, IP, ANRM, RCOND, W, IW, INFO )
+         CALL CHKXER( 'DSYCON_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_DSYCON_ROOK( 'U', 2, A, 1, IP, ANRM, RCOND, W, IW, I
-     $NFO )
-         CALL AB_CHKXER( 'AB_AB_DSYCON_ROOK', INFOT, NOUT, LERR, OK )
+         CALL DSYCON_ROOK( 'U', 2, A, 1, IP, ANRM, RCOND, W, IW, INFO )
+         CALL CHKXER( 'DSYCON_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL AB_AB_DSYCON_ROOK( 'U', 1, A, 1, IP, -1.0D0, RCOND, W, IW,
-     $ INFO)
-         CALL AB_CHKXER( 'AB_AB_DSYCON_ROOK', INFOT, NOUT, LERR, OK )
+         CALL DSYCON_ROOK( 'U', 1, A, 1, IP, -1.0D0, RCOND, W, IW, INFO)
+         CALL CHKXER( 'DSYCON_ROOK', INFOT, NOUT, LERR, OK )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, C2, 'SK' ) ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'SK' ) ) THEN
 *
 *        Test error exits of the routines that use factorization
 *        of a symmetric indefinite matrix with rook
@@ -450,200 +425,195 @@
 *        L (or U) is stored in A, diagonal of D is stored on the
 *        diagonal of A, subdiagonal of D is stored in a separate array E.
 *
-*        AB_AB_DSYTRF_RK
+*        DSYTRF_RK
 *
-         SRNAMT = 'AB_AB_DSYTRF_RK'
+         SRNAMT = 'DSYTRF_RK'
          INFOT = 1
-         CALL AB_AB_DSYTRF_RK( '/', 0, A, 1, E, IP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYTRF_RK', INFOT, NOUT, LERR, OK )
+         CALL DSYTRF_RK( '/', 0, A, 1, E, IP, W, 1, INFO )
+         CALL CHKXER( 'DSYTRF_RK', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_DSYTRF_RK( 'U', -1, A, 1, E, IP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYTRF_RK', INFOT, NOUT, LERR, OK )
+         CALL DSYTRF_RK( 'U', -1, A, 1, E, IP, W, 1, INFO )
+         CALL CHKXER( 'DSYTRF_RK', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_DSYTRF_RK( 'U', 2, A, 1, E, IP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYTRF_RK', INFOT, NOUT, LERR, OK )
+         CALL DSYTRF_RK( 'U', 2, A, 1, E, IP, W, 1, INFO )
+         CALL CHKXER( 'DSYTRF_RK', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_DSYTRF_RK( 'U', 0, A, 1, E, IP, W, 0, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYTRF_RK', INFOT, NOUT, LERR, OK )
+         CALL DSYTRF_RK( 'U', 0, A, 1, E, IP, W, 0, INFO )
+         CALL CHKXER( 'DSYTRF_RK', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_DSYTRF_RK( 'U', 0, A, 1, E, IP, W, -2, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYTRF_RK', INFOT, NOUT, LERR, OK )
+         CALL DSYTRF_RK( 'U', 0, A, 1, E, IP, W, -2, INFO )
+         CALL CHKXER( 'DSYTRF_RK', INFOT, NOUT, LERR, OK )
 *
-*        AB_AB_DSYTF2_RK
+*        DSYTF2_RK
 *
-         SRNAMT = 'AB_AB_DSYTF2_RK'
+         SRNAMT = 'DSYTF2_RK'
          INFOT = 1
-         CALL AB_AB_DSYTF2_RK( '/', 0, A, 1, E, IP, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYTF2_RK', INFOT, NOUT, LERR, OK )
+         CALL DSYTF2_RK( '/', 0, A, 1, E, IP, INFO )
+         CALL CHKXER( 'DSYTF2_RK', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_DSYTF2_RK( 'U', -1, A, 1, E, IP, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYTF2_RK', INFOT, NOUT, LERR, OK )
+         CALL DSYTF2_RK( 'U', -1, A, 1, E, IP, INFO )
+         CALL CHKXER( 'DSYTF2_RK', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_DSYTF2_RK( 'U', 2, A, 1, E, IP, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYTF2_RK', INFOT, NOUT, LERR, OK )
+         CALL DSYTF2_RK( 'U', 2, A, 1, E, IP, INFO )
+         CALL CHKXER( 'DSYTF2_RK', INFOT, NOUT, LERR, OK )
 *
-*        AB_AB_DSYTRI_3
+*        DSYTRI_3
 *
-         SRNAMT = 'AB_AB_DSYTRI_3'
+         SRNAMT = 'DSYTRI_3'
          INFOT = 1
-         CALL AB_AB_DSYTRI_3( '/', 0, A, 1, E, IP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYTRI_3', INFOT, NOUT, LERR, OK )
+         CALL DSYTRI_3( '/', 0, A, 1, E, IP, W, 1, INFO )
+         CALL CHKXER( 'DSYTRI_3', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_DSYTRI_3( 'U', -1, A, 1, E, IP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYTRI_3', INFOT, NOUT, LERR, OK )
+         CALL DSYTRI_3( 'U', -1, A, 1, E, IP, W, 1, INFO )
+         CALL CHKXER( 'DSYTRI_3', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_DSYTRI_3( 'U', 2, A, 1, E, IP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYTRI_3', INFOT, NOUT, LERR, OK )
+         CALL DSYTRI_3( 'U', 2, A, 1, E, IP, W, 1, INFO )
+         CALL CHKXER( 'DSYTRI_3', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_DSYTRI_3( 'U', 0, A, 1, E, IP, W, 0, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYTRI_3', INFOT, NOUT, LERR, OK )
+         CALL DSYTRI_3( 'U', 0, A, 1, E, IP, W, 0, INFO )
+         CALL CHKXER( 'DSYTRI_3', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_DSYTRI_3( 'U', 0, A, 1, E, IP, W, -2, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYTRI_3', INFOT, NOUT, LERR, OK )
+         CALL DSYTRI_3( 'U', 0, A, 1, E, IP, W, -2, INFO )
+         CALL CHKXER( 'DSYTRI_3', INFOT, NOUT, LERR, OK )
 *
-*        AB_AB_AB_DSYTRI_3X
+*        DSYTRI_3X
 *
-         SRNAMT = 'AB_AB_AB_DSYTRI_3X'
+         SRNAMT = 'DSYTRI_3X'
          INFOT = 1
-         CALL AB_AB_AB_DSYTRI_3X( '/', 0, A, 1, E, IP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_DSYTRI_3X', INFOT, NOUT, LERR, OK )
+         CALL DSYTRI_3X( '/', 0, A, 1, E, IP, W, 1, INFO )
+         CALL CHKXER( 'DSYTRI_3X', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_AB_DSYTRI_3X( 'U', -1, A, 1, E, IP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_DSYTRI_3X', INFOT, NOUT, LERR, OK )
+         CALL DSYTRI_3X( 'U', -1, A, 1, E, IP, W, 1, INFO )
+         CALL CHKXER( 'DSYTRI_3X', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_AB_DSYTRI_3X( 'U', 2, A, 1, E, IP, W, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_AB_DSYTRI_3X', INFOT, NOUT, LERR, OK )
+         CALL DSYTRI_3X( 'U', 2, A, 1, E, IP, W, 1, INFO )
+         CALL CHKXER( 'DSYTRI_3X', INFOT, NOUT, LERR, OK )
 *
-*        AB_AB_DSYTRS_3
+*        DSYTRS_3
 *
-         SRNAMT = 'AB_AB_DSYTRS_3'
+         SRNAMT = 'DSYTRS_3'
          INFOT = 1
-         CALL AB_AB_DSYTRS_3( '/', 0, 0, A, 1, E, IP, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYTRS_3', INFOT, NOUT, LERR, OK )
+         CALL DSYTRS_3( '/', 0, 0, A, 1, E, IP, B, 1, INFO )
+         CALL CHKXER( 'DSYTRS_3', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_DSYTRS_3( 'U', -1, 0, A, 1, E, IP, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYTRS_3', INFOT, NOUT, LERR, OK )
+         CALL DSYTRS_3( 'U', -1, 0, A, 1, E, IP, B, 1, INFO )
+         CALL CHKXER( 'DSYTRS_3', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_DSYTRS_3( 'U', 0, -1, A, 1, E, IP, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYTRS_3', INFOT, NOUT, LERR, OK )
+         CALL DSYTRS_3( 'U', 0, -1, A, 1, E, IP, B, 1, INFO )
+         CALL CHKXER( 'DSYTRS_3', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_AB_DSYTRS_3( 'U', 2, 1, A, 1, E, IP, B, 2, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYTRS_3', INFOT, NOUT, LERR, OK )
+         CALL DSYTRS_3( 'U', 2, 1, A, 1, E, IP, B, 2, INFO )
+         CALL CHKXER( 'DSYTRS_3', INFOT, NOUT, LERR, OK )
          INFOT = 9
-         CALL AB_AB_DSYTRS_3( 'U', 2, 1, A, 2, E, IP, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYTRS_3', INFOT, NOUT, LERR, OK )
+         CALL DSYTRS_3( 'U', 2, 1, A, 2, E, IP, B, 1, INFO )
+         CALL CHKXER( 'DSYTRS_3', INFOT, NOUT, LERR, OK )
 *
-*        AB_AB_DSYCON_3
+*        DSYCON_3
 *
-         SRNAMT = 'AB_AB_DSYCON_3'
+         SRNAMT = 'DSYCON_3'
          INFOT = 1
-         CALL AB_AB_DSYCON_3( '/', 0, A, 1,  E, IP, ANRM, RCOND, W, IW,
+         CALL DSYCON_3( '/', 0, A, 1,  E, IP, ANRM, RCOND, W, IW,
      $                   INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYCON_3', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DSYCON_3', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_DSYCON_3( 'U', -1, A, 1, E, IP, ANRM, RCOND, W, IW,
+         CALL DSYCON_3( 'U', -1, A, 1, E, IP, ANRM, RCOND, W, IW,
      $                   INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYCON_3', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DSYCON_3', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL AB_AB_DSYCON_3( 'U', 2, A, 1, E, IP, ANRM, RCOND, W, IW,
+         CALL DSYCON_3( 'U', 2, A, 1, E, IP, ANRM, RCOND, W, IW,
      $                   INFO )
-         CALL AB_CHKXER( 'AB_AB_DSYCON_3', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DSYCON_3', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_AB_DSYCON_3( 'U', 1, A, 1, E, IP, -1.0D0, RCOND, W, IW,
+         CALL DSYCON_3( 'U', 1, A, 1, E, IP, -1.0D0, RCOND, W, IW,
      $                   INFO)
-         CALL AB_CHKXER( 'AB_AB_DSYCON_3', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DSYCON_3', INFOT, NOUT, LERR, OK )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, C2, 'SP' ) ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'SP' ) ) THEN
 *
 *        Test error exits of the routines that use factorization
 *        of a symmetric indefinite packed matrix with patrial
 *        (Bunch-Kaufman) pivoting.
 *
-*        AB_DSPTRF
+*        DSPTRF
 *
-         SRNAMT = 'AB_DSPTRF'
+         SRNAMT = 'DSPTRF'
          INFOT = 1
-         CALL AB_DSPTRF( '/', 0, A, IP, INFO )
-         CALL AB_CHKXER( 'AB_DSPTRF', INFOT, NOUT, LERR, OK )
+         CALL DSPTRF( '/', 0, A, IP, INFO )
+         CALL CHKXER( 'DSPTRF', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_DSPTRF( 'U', -1, A, IP, INFO )
-         CALL AB_CHKXER( 'AB_DSPTRF', INFOT, NOUT, LERR, OK )
+         CALL DSPTRF( 'U', -1, A, IP, INFO )
+         CALL CHKXER( 'DSPTRF', INFOT, NOUT, LERR, OK )
 *
-*        AB_DSPTRI
+*        DSPTRI
 *
-         SRNAMT = 'AB_DSPTRI'
+         SRNAMT = 'DSPTRI'
          INFOT = 1
-         CALL AB_DSPTRI( '/', 0, A, IP, W, INFO )
-         CALL AB_CHKXER( 'AB_DSPTRI', INFOT, NOUT, LERR, OK )
+         CALL DSPTRI( '/', 0, A, IP, W, INFO )
+         CALL CHKXER( 'DSPTRI', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_DSPTRI( 'U', -1, A, IP, W, INFO )
-         CALL AB_CHKXER( 'AB_DSPTRI', INFOT, NOUT, LERR, OK )
+         CALL DSPTRI( 'U', -1, A, IP, W, INFO )
+         CALL CHKXER( 'DSPTRI', INFOT, NOUT, LERR, OK )
 *
-*        AB_DSPTRS
+*        DSPTRS
 *
-         SRNAMT = 'AB_DSPTRS'
+         SRNAMT = 'DSPTRS'
          INFOT = 1
-         CALL AB_DSPTRS( '/', 0, 0, A, IP, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_DSPTRS', INFOT, NOUT, LERR, OK )
+         CALL DSPTRS( '/', 0, 0, A, IP, B, 1, INFO )
+         CALL CHKXER( 'DSPTRS', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_DSPTRS( 'U', -1, 0, A, IP, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_DSPTRS', INFOT, NOUT, LERR, OK )
+         CALL DSPTRS( 'U', -1, 0, A, IP, B, 1, INFO )
+         CALL CHKXER( 'DSPTRS', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_DSPTRS( 'U', 0, -1, A, IP, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_DSPTRS', INFOT, NOUT, LERR, OK )
+         CALL DSPTRS( 'U', 0, -1, A, IP, B, 1, INFO )
+         CALL CHKXER( 'DSPTRS', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL AB_DSPTRS( 'U', 2, 1, A, IP, B, 1, INFO )
-         CALL AB_CHKXER( 'AB_DSPTRS', INFOT, NOUT, LERR, OK )
+         CALL DSPTRS( 'U', 2, 1, A, IP, B, 1, INFO )
+         CALL CHKXER( 'DSPTRS', INFOT, NOUT, LERR, OK )
 *
-*        AB_AB_DSPRFS
+*        DSPRFS
 *
-         SRNAMT = 'AB_AB_DSPRFS'
+         SRNAMT = 'DSPRFS'
          INFOT = 1
-         CALL AB_AB_DSPRFS( '/', 0, 0, A, AF, IP, B, 1, X, 1, R1, R2, W,
-     $ IW,
+         CALL DSPRFS( '/', 0, 0, A, AF, IP, B, 1, X, 1, R1, R2, W, IW,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_DSPRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DSPRFS', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_AB_DSPRFS( 'U', -1, 0, A, AF, IP, B, 1, X, 1, R1, R2, W
-     $, IW,
+         CALL DSPRFS( 'U', -1, 0, A, AF, IP, B, 1, X, 1, R1, R2, W, IW,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_DSPRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DSPRFS', INFOT, NOUT, LERR, OK )
          INFOT = 3
-         CALL AB_AB_DSPRFS( 'U', 0, -1, A, AF, IP, B, 1, X, 1, R1, R2, W
-     $, IW,
+         CALL DSPRFS( 'U', 0, -1, A, AF, IP, B, 1, X, 1, R1, R2, W, IW,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_DSPRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DSPRFS', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL AB_AB_DSPRFS( 'U', 2, 1, A, AF, IP, B, 1, X, 2, R1, R2, W,
-     $ IW,
+         CALL DSPRFS( 'U', 2, 1, A, AF, IP, B, 1, X, 2, R1, R2, W, IW,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_DSPRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DSPRFS', INFOT, NOUT, LERR, OK )
          INFOT = 10
-         CALL AB_AB_DSPRFS( 'U', 2, 1, A, AF, IP, B, 2, X, 1, R1, R2, W,
-     $ IW,
+         CALL DSPRFS( 'U', 2, 1, A, AF, IP, B, 2, X, 1, R1, R2, W, IW,
      $                INFO )
-         CALL AB_CHKXER( 'AB_AB_DSPRFS', INFOT, NOUT, LERR, OK )
+         CALL CHKXER( 'DSPRFS', INFOT, NOUT, LERR, OK )
 *
-*        AB_DSPCON
+*        DSPCON
 *
-         SRNAMT = 'AB_DSPCON'
+         SRNAMT = 'DSPCON'
          INFOT = 1
-         CALL AB_DSPCON( '/', 0, A, IP, ANRM, RCOND, W, IW, INFO )
-         CALL AB_CHKXER( 'AB_DSPCON', INFOT, NOUT, LERR, OK )
+         CALL DSPCON( '/', 0, A, IP, ANRM, RCOND, W, IW, INFO )
+         CALL CHKXER( 'DSPCON', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL AB_DSPCON( 'U', -1, A, IP, ANRM, RCOND, W, IW, INFO )
-         CALL AB_CHKXER( 'AB_DSPCON', INFOT, NOUT, LERR, OK )
+         CALL DSPCON( 'U', -1, A, IP, ANRM, RCOND, W, IW, INFO )
+         CALL CHKXER( 'DSPCON', INFOT, NOUT, LERR, OK )
          INFOT = 5
-         CALL AB_DSPCON( 'U', 1, A, IP, -1.0D0, RCOND, W, IW, INFO )
-         CALL AB_CHKXER( 'AB_DSPCON', INFOT, NOUT, LERR, OK )
+         CALL DSPCON( 'U', 1, A, IP, -1.0D0, RCOND, W, IW, INFO )
+         CALL CHKXER( 'DSPCON', INFOT, NOUT, LERR, OK )
       END IF
 *
 *     Print a summary line.
 *
-      CALL AB_ALAESM( PATH, OK, NOUT )
+      CALL ALAESM( PATH, OK, NOUT )
 *
       RETURN
 *
-*     End of AB_DERRSY
+*     End of DERRSY
 *
       END

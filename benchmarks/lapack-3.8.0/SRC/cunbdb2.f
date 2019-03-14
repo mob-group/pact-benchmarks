@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_CUNBDB2
+*> \brief \b CUNBDB2
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_CUNBDB2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_CUNBDB2.f">
+*> Download CUNBDB2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cunbdb2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_CUNBDB2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cunbdb2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_CUNBDB2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cunbdb2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_CUNBDB2( M, P, Q, X11, LDX11, X21, LDX21, THETA, PHI,
+*       SUBROUTINE CUNBDB2( M, P, Q, X11, LDX11, X21, LDX21, THETA, PHI,
 *                           TAUP1, TAUP2, TAUQ1, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *>\verbatim
 *>
-*> AB_AB_CUNBDB2 simultaneously bidiagonalizes the blocks of a tall and skinny
+*> CUNBDB2 simultaneously bidiagonalizes the blocks of a tall and skinny
 *> matrix X with orthonomal columns:
 *>
 *>                            [ B11 ]
@@ -46,12 +46,12 @@
 *>                            [  0  ]
 *>
 *> X11 is P-by-Q, and X21 is (M-P)-by-Q. P must be no larger than M-P,
-*> Q, or M-Q. Routines AB_AB_CUNBDB1, AB_AB_CUNBDB3, and AB_AB_CUNBDB4 handle cases in
+*> Q, or M-Q. Routines CUNBDB1, CUNBDB3, and CUNBDB4 handle cases in
 *> which P is not the minimum dimension.
 *>
 *> The unitary matrices P1, P2, and Q1 are P-by-P, (M-P)-by-(M-P),
 *> and (M-Q)-by-(M-Q), respectively. They are represented implicitly by
-*> HousehoAB_LDEr vectors.
+*> Householder vectors.
 *>
 *> B11 and B12 are P-by-P bidiagonal matrices represented implicitly by
 *> angles THETA, PHI.
@@ -154,7 +154,7 @@
 *>           If LWORK = -1, then a workspace query is assumed; the routine
 *>           only calculates the optimal size of the WORK array, returns
 *>           this value as the first entry of the WORK array, and no error
-*>           message related to LWORK is issued by AB_XERBLA.
+*>           message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -188,8 +188,8 @@
 *>  with a sine or cosine of a PHI. See [1] or CUNCSD for details.
 *>
 *>  P1, P2, and Q1 are represented as products of elementary reflectors.
-*>  See AB_CUNCSD2BY1 for details on generating P1, P2, and Q1 using AB_CUNGQR
-*>  and AB_CUNGLQ.
+*>  See CUNCSD2BY1 for details on generating P1, P2, and Q1 using CUNGQR
+*>  and CUNGLQ.
 *> \endverbatim
 *
 *> \par References:
@@ -199,8 +199,7 @@
 *>      Algorithms, 50(1):33-65, 2009.
 *>
 *  =====================================================================
-      SUBROUTINE AB_AB_CUNBDB2( M, P, Q, X11, LDX11, X21, LDX21, THETA, 
-     $PHI,
+      SUBROUTINE CUNBDB2( M, P, Q, X11, LDX11, X21, LDX21, THETA, PHI,
      $                    TAUP1, TAUP2, TAUQ1, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.8.0) --
@@ -231,13 +230,12 @@
       LOGICAL            LQUERY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CLARF, AB_AB_AB_CLARFGP, AB_AB_CUNBDB5, AB_C
-     $AB_SROT, AB_CSCAL, AB_CLACGV,
-     $                   AB_XERBLA
+      EXTERNAL           CLARF, CLARFGP, CUNBDB5, CSROT, CSCAL, CLACGV,
+     $                   XERBLA
 *     ..
 *     .. External Functions ..
-      REAL               AB_SCNRM2
-      EXTERNAL           AB_SCNRM2
+      REAL               SCNRM2
+      EXTERNAL           SCNRM2
 *     ..
 *     .. Intrinsic Function ..
       INTRINSIC          ATAN2, COS, MAX, SIN, SQRT
@@ -276,7 +274,7 @@
          END IF
       END IF
       IF( INFO .NE. 0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_CUNBDB2', -INFO )
+         CALL XERBLA( 'CUNBDB2', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -287,44 +285,38 @@
       DO I = 1, P
 *
          IF( I .GT. 1 ) THEN
-            CALL AB_CAB_SROT( Q-I+1, X11(I,I), LDX11, X21(I-1,I), LDX21,
-     $ C,
+            CALL CSROT( Q-I+1, X11(I,I), LDX11, X21(I-1,I), LDX21, C,
      $                  S )
          END IF
-         CALL AB_CLACGV( Q-I+1, X11(I,I), LDX11 )
-         CALL AB_AB_AB_CLARFGP( Q-I+1, X11(I,I), X11(I,I+1), LDX11, TAUQ
-     $1(I) )
+         CALL CLACGV( Q-I+1, X11(I,I), LDX11 )
+         CALL CLARFGP( Q-I+1, X11(I,I), X11(I,I+1), LDX11, TAUQ1(I) )
          C = REAL( X11(I,I) )
          X11(I,I) = ONE
-         CALL AB_CLARF( 'R', P-I, Q-I+1, X11(I,I), LDX11, TAUQ1(I),
+         CALL CLARF( 'R', P-I, Q-I+1, X11(I,I), LDX11, TAUQ1(I),
      $               X11(I+1,I), LDX11, WORK(ILARF) )
-         CALL AB_CLARF( 'R', M-P-I+1, Q-I+1, X11(I,I), LDX11, TAUQ1(I),
+         CALL CLARF( 'R', M-P-I+1, Q-I+1, X11(I,I), LDX11, TAUQ1(I),
      $               X21(I,I), LDX21, WORK(ILARF) )
-         CALL AB_CLACGV( Q-I+1, X11(I,I), LDX11 )
-         S = SQRT( AB_SCNRM2( P-I, X11(I+1,I), 1 )**2
-     $           + AB_SCNRM2( M-P-I+1, X21(I,I), 1 )**2 )
+         CALL CLACGV( Q-I+1, X11(I,I), LDX11 )
+         S = SQRT( SCNRM2( P-I, X11(I+1,I), 1 )**2
+     $           + SCNRM2( M-P-I+1, X21(I,I), 1 )**2 )
          THETA(I) = ATAN2( S, C )
 *
-         CALL AB_AB_CUNBDB5( P-I, M-P-I+1, Q-I, X11(I+1,I), 1, X21(I,I),
-     $ 1,
+         CALL CUNBDB5( P-I, M-P-I+1, Q-I, X11(I+1,I), 1, X21(I,I), 1,
      $                 X11(I+1,I+1), LDX11, X21(I,I+1), LDX21,
      $                 WORK(IORBDB5), LORBDB5, CHILDINFO )
-         CALL AB_CSCAL( P-I, NEGONE, X11(I+1,I), 1 )
-         CALL AB_AB_AB_CLARFGP( M-P-I+1, X21(I,I), X21(I+1,I), 1, TAUP2(
-     $I) )
+         CALL CSCAL( P-I, NEGONE, X11(I+1,I), 1 )
+         CALL CLARFGP( M-P-I+1, X21(I,I), X21(I+1,I), 1, TAUP2(I) )
          IF( I .LT. P ) THEN
-            CALL AB_AB_AB_CLARFGP( P-I, X11(I+1,I), X11(I+2,I), 1, TAUP1
-     $(I) )
+            CALL CLARFGP( P-I, X11(I+1,I), X11(I+2,I), 1, TAUP1(I) )
             PHI(I) = ATAN2( REAL( X11(I+1,I) ), REAL( X21(I,I) ) )
             C = COS( PHI(I) )
             S = SIN( PHI(I) )
             X11(I+1,I) = ONE
-            CALL AB_CLARF( 'L', P-I, Q-I, X11(I+1,I), 1, CONJG(TAUP1(I))
-     $,
+            CALL CLARF( 'L', P-I, Q-I, X11(I+1,I), 1, CONJG(TAUP1(I)),
      $                  X11(I+1,I+1), LDX11, WORK(ILARF) )
          END IF
          X21(I,I) = ONE
-         CALL AB_CLARF( 'L', M-P-I+1, Q-I, X21(I,I), 1, CONJG(TAUP2(I)),
+         CALL CLARF( 'L', M-P-I+1, Q-I, X21(I,I), 1, CONJG(TAUP2(I)),
      $               X21(I,I+1), LDX21, WORK(ILARF) )
 *
       END DO
@@ -332,16 +324,15 @@
 *     Reduce the bottom-right portion of X21 to the identity matrix
 *
       DO I = P + 1, Q
-         CALL AB_AB_AB_CLARFGP( M-P-I+1, X21(I,I), X21(I+1,I), 1, TAUP2(
-     $I) )
+         CALL CLARFGP( M-P-I+1, X21(I,I), X21(I+1,I), 1, TAUP2(I) )
          X21(I,I) = ONE
-         CALL AB_CLARF( 'L', M-P-I+1, Q-I, X21(I,I), 1, CONJG(TAUP2(I)),
+         CALL CLARF( 'L', M-P-I+1, Q-I, X21(I,I), 1, CONJG(TAUP2(I)),
      $               X21(I,I+1), LDX21, WORK(ILARF) )
       END DO
 *
       RETURN
 *
-*     End of AB_AB_CUNBDB2
+*     End of CUNBDB2
 *
       END
 

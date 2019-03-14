@@ -1,4 +1,4 @@
-*> \brief \b  AB_AB_CHETRS_ROOK computes the solution to a system of linear equations A * X = B for HE matrices using factorization obtained with one of the bounded diagonal pivoting methods (max 2 interchanges)
+*> \brief \b  CHETRS_ROOK computes the solution to a system of linear equations A * X = B for HE matrices using factorization obtained with one of the bounded diagonal pivoting methods (max 2 interchanges)
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_CHETRS_ROOK + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_CHETRS_ROOK.f">
+*> Download CHETRS_ROOK + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chetrs_rook.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_CHETRS_ROOK.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chetrs_rook.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_CHETRS_ROOK.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetrs_rook.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_CHETRS_ROOK( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+*       SUBROUTINE CHETRS_ROOK( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,9 +35,9 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_CHETRS_ROOK solves a system of linear equations A*X = B with a complex
+*> CHETRS_ROOK solves a system of linear equations A*X = B with a complex
 *> Hermitian matrix A using the factorization A = U*D*U**H or
-*> A = L*D*L**H computed by AB_AB_CHETRF_ROOK.
+*> A = L*D*L**H computed by CHETRF_ROOK.
 *> \endverbatim
 *
 *  Arguments:
@@ -69,7 +69,7 @@
 *> \verbatim
 *>          A is COMPLEX array, dimension (LDA,N)
 *>          The block diagonal matrix D and the multipliers used to
-*>          obtain the factor U or L as computed by AB_AB_CHETRF_ROOK.
+*>          obtain the factor U or L as computed by CHETRF_ROOK.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -82,7 +82,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D
-*>          as determined by AB_AB_CHETRF_ROOK.
+*>          as determined by CHETRF_ROOK.
 *> \endverbatim
 *>
 *> \param[in,out] B
@@ -133,7 +133,7 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_CHETRS_ROOK( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
+      SUBROUTINE CHETRS_ROOK( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
      $                        INFO )
 *
 *  -- LAPACK computational routine (version 3.5.0) --
@@ -163,12 +163,11 @@
       COMPLEX            AK, AKM1, AKM1K, BK, BKM1, DENOM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CGEMV, AB_CGERU, AB_CLACGV, AB_CAB_SSCAL, AB
-     $_CSWAP, AB_XERBLA
+      EXTERNAL           CGEMV, CGERU, CLACGV, CSSCAL, CSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CONJG, MAX, REAL
@@ -176,8 +175,8 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -189,7 +188,7 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_CHETRS_ROOK', -INFO )
+         CALL XERBLA( 'CHETRS_ROOK', -INFO )
          RETURN
       END IF
 *
@@ -223,19 +222,18 @@
 *
             KP = IPIV( K )
             IF( KP.NE.K )
-     $         CALL AB_CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
 *
 *           Multiply by inv(U(K)), where U(K) is the transformation
 *           stored in column K of A.
 *
-            CALL AB_CGERU( K-1, NRHS, -ONE, A( 1, K ), 1, B( K, 1 ), LDB
-     $,
+            CALL CGERU( K-1, NRHS, -ONE, A( 1, K ), 1, B( K, 1 ), LDB,
      $                  B( 1, 1 ), LDB )
 *
 *           Multiply by the inverse of the diagonal block.
 *
             S = REAL( ONE ) / REAL( A( K, K ) )
-            CALL AB_CAB_SSCAL( NRHS, S, B( K, 1 ), LDB )
+            CALL CSSCAL( NRHS, S, B( K, 1 ), LDB )
             K = K - 1
          ELSE
 *
@@ -245,19 +243,18 @@
 *
             KP = -IPIV( K )
             IF( KP.NE.K )
-     $         CALL AB_CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
 *
             KP = -IPIV( K-1)
             IF( KP.NE.K-1 )
-     $         CALL AB_CSWAP( NRHS, B( K-1, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL CSWAP( NRHS, B( K-1, 1 ), LDB, B( KP, 1 ), LDB )
 *
 *           Multiply by inv(U(K)), where U(K) is the transformation
 *           stored in columns K-1 and K of A.
 *
-            CALL AB_CGERU( K-2, NRHS, -ONE, A( 1, K ), 1, B( K, 1 ), LDB
-     $,
+            CALL CGERU( K-2, NRHS, -ONE, A( 1, K ), 1, B( K, 1 ), LDB,
      $                  B( 1, 1 ), LDB )
-            CALL AB_CGERU( K-2, NRHS, -ONE, A( 1, K-1 ), 1, B( K-1, 1 ),
+            CALL CGERU( K-2, NRHS, -ONE, A( 1, K-1 ), 1, B( K-1, 1 ),
      $                  LDB, B( 1, 1 ), LDB )
 *
 *           Multiply by the inverse of the diagonal block.
@@ -299,17 +296,17 @@
 *           stored in column K of A.
 *
             IF( K.GT.1 ) THEN
-               CALL AB_CLACGV( NRHS, B( K, 1 ), LDB )
-               CALL AB_CGEMV( 'Conjugate transpose', K-1, NRHS, -ONE, B,
+               CALL CLACGV( NRHS, B( K, 1 ), LDB )
+               CALL CGEMV( 'Conjugate transpose', K-1, NRHS, -ONE, B,
      $                     LDB, A( 1, K ), 1, ONE, B( K, 1 ), LDB )
-               CALL AB_CLACGV( NRHS, B( K, 1 ), LDB )
+               CALL CLACGV( NRHS, B( K, 1 ), LDB )
             END IF
 *
 *           Interchange rows K and IPIV(K).
 *
             KP = IPIV( K )
             IF( KP.NE.K )
-     $         CALL AB_CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
             K = K + 1
          ELSE
 *
@@ -319,26 +316,26 @@
 *           stored in columns K and K+1 of A.
 *
             IF( K.GT.1 ) THEN
-               CALL AB_CLACGV( NRHS, B( K, 1 ), LDB )
-               CALL AB_CGEMV( 'Conjugate transpose', K-1, NRHS, -ONE, B,
+               CALL CLACGV( NRHS, B( K, 1 ), LDB )
+               CALL CGEMV( 'Conjugate transpose', K-1, NRHS, -ONE, B,
      $                     LDB, A( 1, K ), 1, ONE, B( K, 1 ), LDB )
-               CALL AB_CLACGV( NRHS, B( K, 1 ), LDB )
+               CALL CLACGV( NRHS, B( K, 1 ), LDB )
 *
-               CALL AB_CLACGV( NRHS, B( K+1, 1 ), LDB )
-               CALL AB_CGEMV( 'Conjugate transpose', K-1, NRHS, -ONE, B,
+               CALL CLACGV( NRHS, B( K+1, 1 ), LDB )
+               CALL CGEMV( 'Conjugate transpose', K-1, NRHS, -ONE, B,
      $                     LDB, A( 1, K+1 ), 1, ONE, B( K+1, 1 ), LDB )
-               CALL AB_CLACGV( NRHS, B( K+1, 1 ), LDB )
+               CALL CLACGV( NRHS, B( K+1, 1 ), LDB )
             END IF
 *
 *           Interchange rows K and -IPIV(K), then K+1 and -IPIV(K+1)
 *
             KP = -IPIV( K )
             IF( KP.NE.K )
-     $         CALL AB_CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
 *
             KP = -IPIV( K+1 )
             IF( KP.NE.K+1 )
-     $         CALL AB_CSWAP( NRHS, B( K+1, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL CSWAP( NRHS, B( K+1, 1 ), LDB, B( KP, 1 ), LDB )
 *
             K = K + 2
          END IF
@@ -371,20 +368,19 @@
 *
             KP = IPIV( K )
             IF( KP.NE.K )
-     $         CALL AB_CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
 *
 *           Multiply by inv(L(K)), where L(K) is the transformation
 *           stored in column K of A.
 *
             IF( K.LT.N )
-     $         CALL AB_CGERU( N-K, NRHS, -ONE, A( K+1, K ), 1, B( K, 1 )
-     $,
+     $         CALL CGERU( N-K, NRHS, -ONE, A( K+1, K ), 1, B( K, 1 ),
      $                     LDB, B( K+1, 1 ), LDB )
 *
 *           Multiply by the inverse of the diagonal block.
 *
             S = REAL( ONE ) / REAL( A( K, K ) )
-            CALL AB_CAB_SSCAL( NRHS, S, B( K, 1 ), LDB )
+            CALL CSSCAL( NRHS, S, B( K, 1 ), LDB )
             K = K + 1
          ELSE
 *
@@ -394,20 +390,19 @@
 *
             KP = -IPIV( K )
             IF( KP.NE.K )
-     $         CALL AB_CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
 *
             KP = -IPIV( K+1 )
             IF( KP.NE.K+1 )
-     $         CALL AB_CSWAP( NRHS, B( K+1, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL CSWAP( NRHS, B( K+1, 1 ), LDB, B( KP, 1 ), LDB )
 *
 *           Multiply by inv(L(K)), where L(K) is the transformation
 *           stored in columns K and K+1 of A.
 *
             IF( K.LT.N-1 ) THEN
-               CALL AB_CGERU( N-K-1, NRHS, -ONE, A( K+2, K ), 1, B( K, 1
-     $ ),
+               CALL CGERU( N-K-1, NRHS, -ONE, A( K+2, K ), 1, B( K, 1 ),
      $                     LDB, B( K+2, 1 ), LDB )
-               CALL AB_CGERU( N-K-1, NRHS, -ONE, A( K+2, K+1 ), 1,
+               CALL CGERU( N-K-1, NRHS, -ONE, A( K+2, K+1 ), 1,
      $                     B( K+1, 1 ), LDB, B( K+2, 1 ), LDB )
             END IF
 *
@@ -450,18 +445,18 @@
 *           stored in column K of A.
 *
             IF( K.LT.N ) THEN
-               CALL AB_CLACGV( NRHS, B( K, 1 ), LDB )
-               CALL AB_CGEMV( 'Conjugate transpose', N-K, NRHS, -ONE,
+               CALL CLACGV( NRHS, B( K, 1 ), LDB )
+               CALL CGEMV( 'Conjugate transpose', N-K, NRHS, -ONE,
      $                     B( K+1, 1 ), LDB, A( K+1, K ), 1, ONE,
      $                     B( K, 1 ), LDB )
-               CALL AB_CLACGV( NRHS, B( K, 1 ), LDB )
+               CALL CLACGV( NRHS, B( K, 1 ), LDB )
             END IF
 *
 *           Interchange rows K and IPIV(K).
 *
             KP = IPIV( K )
             IF( KP.NE.K )
-     $         CALL AB_CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
             K = K - 1
          ELSE
 *
@@ -471,28 +466,28 @@
 *           stored in columns K-1 and K of A.
 *
             IF( K.LT.N ) THEN
-               CALL AB_CLACGV( NRHS, B( K, 1 ), LDB )
-               CALL AB_CGEMV( 'Conjugate transpose', N-K, NRHS, -ONE,
+               CALL CLACGV( NRHS, B( K, 1 ), LDB )
+               CALL CGEMV( 'Conjugate transpose', N-K, NRHS, -ONE,
      $                     B( K+1, 1 ), LDB, A( K+1, K ), 1, ONE,
      $                     B( K, 1 ), LDB )
-               CALL AB_CLACGV( NRHS, B( K, 1 ), LDB )
+               CALL CLACGV( NRHS, B( K, 1 ), LDB )
 *
-               CALL AB_CLACGV( NRHS, B( K-1, 1 ), LDB )
-               CALL AB_CGEMV( 'Conjugate transpose', N-K, NRHS, -ONE,
+               CALL CLACGV( NRHS, B( K-1, 1 ), LDB )
+               CALL CGEMV( 'Conjugate transpose', N-K, NRHS, -ONE,
      $                     B( K+1, 1 ), LDB, A( K+1, K-1 ), 1, ONE,
      $                     B( K-1, 1 ), LDB )
-               CALL AB_CLACGV( NRHS, B( K-1, 1 ), LDB )
+               CALL CLACGV( NRHS, B( K-1, 1 ), LDB )
             END IF
 *
 *           Interchange rows K and -IPIV(K), then K-1 and -IPIV(K-1)
 *
             KP = -IPIV( K )
             IF( KP.NE.K )
-     $         CALL AB_CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
 *
             KP = -IPIV( K-1 )
             IF( KP.NE.K-1 )
-     $         CALL AB_CSWAP( NRHS, B( K-1, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL CSWAP( NRHS, B( K-1, 1 ), LDB, B( KP, 1 ), LDB )
 *
             K = K - 2
          END IF
@@ -503,6 +498,6 @@
 *
       RETURN
 *
-*     End of AB_AB_CHETRS_ROOK
+*     End of CHETRS_ROOK
 *
       END

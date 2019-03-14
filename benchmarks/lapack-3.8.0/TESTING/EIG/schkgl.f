@@ -1,4 +1,4 @@
-*> \brief \b AB_SCHKGL
+*> \brief \b SCHKGL
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SCHKGL( NIN, NOUT )
+*       SUBROUTINE SCHKGL( NIN, NOUT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            NIN, NOUT
@@ -20,7 +20,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SCHKGL tests AB_SGGBAL, a routine for balancing a matrix pair (A, B).
+*> SCHKGL tests SGGBAL, a routine for balancing a matrix pair (A, B).
 *> \endverbatim
 *
 *  Arguments:
@@ -51,7 +51,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_SCHKGL( NIN, NOUT )
+      SUBROUTINE SCHKGL( NIN, NOUT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -82,11 +82,11 @@
      $                   RSCALE( LDA ), RSCLIN( LDA ), WORK( LWORK )
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH, AB_SLANGE
-      EXTERNAL           AB_SLAMCH, AB_SLANGE
+      REAL               SLAMCH, SLANGE
+      EXTERNAL           SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SGGBAL
+      EXTERNAL           SGGBAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -100,7 +100,7 @@
       KNT = 0
       RMAX = ZERO
 *
-      EPS = AB_SLAMCH( 'Precision' )
+      EPS = SLAMCH( 'Precision' )
 *
    10 CONTINUE
 *
@@ -126,12 +126,12 @@
       READ( NIN, FMT = * )( LSCLIN( I ), I = 1, N )
       READ( NIN, FMT = * )( RSCLIN( I ), I = 1, N )
 *
-      ANORM = AB_SLANGE( 'M', N, N, A, LDA, WORK )
-      BNORM = AB_SLANGE( 'M', N, N, B, LDB, WORK )
+      ANORM = SLANGE( 'M', N, N, A, LDA, WORK )
+      BNORM = SLANGE( 'M', N, N, B, LDB, WORK )
 *
       KNT = KNT + 1
 *
-      CALL AB_SGGBAL( 'B', N, A, LDA, B, LDB, ILO, IHI, LSCALE, RSCALE,
+      CALL SGGBAL( 'B', N, A, LDA, B, LDB, ILO, IHI, LSCALE, RSCALE,
      $             WORK, INFO )
 *
       IF( INFO.NE.0 ) THEN
@@ -169,7 +169,7 @@
    90 CONTINUE
 *
       WRITE( NOUT, FMT = 9999 )
- 9999 FORMAT( 1X, '.. test output of AB_SGGBAL .. ' )
+ 9999 FORMAT( 1X, '.. test output of SGGBAL .. ' )
 *
       WRITE( NOUT, FMT = 9998 )RMAX
  9998 FORMAT( 1X, 'value of largest test error            = ', E12.3 )
@@ -186,6 +186,6 @@
 *
       RETURN
 *
-*     End of AB_SCHKGL
+*     End of SCHKGL
 *
       END

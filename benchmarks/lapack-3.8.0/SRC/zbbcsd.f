@@ -1,4 +1,4 @@
-*> \brief \b AB_ZBBCSD
+*> \brief \b ZBBCSD
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZBBCSD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZBBCSD.f">
+*> Download ZBBCSD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zbbcsd.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZBBCSD.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zbbcsd.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZBBCSD.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zbbcsd.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZBBCSD( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS, M, P, Q,
+*       SUBROUTINE ZBBCSD( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS, M, P, Q,
 *                          THETA, PHI, U1, LDU1, U2, LDU2, V1T, LDV1T,
 *                          V2T, LDV2T, B11D, B11E, B12D, B12E, B21D, B21E,
 *                          B22D, B22E, RWORK, LRWORK, INFO )
@@ -41,7 +41,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZBBCSD computes the CS decomposition of a unitary matrix in
+*> ZBBCSD computes the CS decomposition of a unitary matrix in
 *> bidiagonal-block form,
 *>
 *>
@@ -206,8 +206,8 @@
 *> \param[out] B11D
 *> \verbatim
 *>          B11D is DOUBLE PRECISION array, dimension (Q)
-*>          When AB_ZBBCSD converges, B11D contains the cosines of THETA(1),
-*>          ..., THETA(Q). If AB_ZBBCSD fails to converge, then B11D
+*>          When ZBBCSD converges, B11D contains the cosines of THETA(1),
+*>          ..., THETA(Q). If ZBBCSD fails to converge, then B11D
 *>          contains the diagonal of the partially reduced top-left
 *>          block.
 *> \endverbatim
@@ -215,7 +215,7 @@
 *> \param[out] B11E
 *> \verbatim
 *>          B11E is DOUBLE PRECISION array, dimension (Q-1)
-*>          When AB_ZBBCSD converges, B11E contains zeros. If AB_ZBBCSD fails
+*>          When ZBBCSD converges, B11E contains zeros. If ZBBCSD fails
 *>          to converge, then B11E contains the superdiagonal of the
 *>          partially reduced top-left block.
 *> \endverbatim
@@ -223,8 +223,8 @@
 *> \param[out] B12D
 *> \verbatim
 *>          B12D is DOUBLE PRECISION array, dimension (Q)
-*>          When AB_ZBBCSD converges, B12D contains the negative sines of
-*>          THETA(1), ..., THETA(Q). If AB_ZBBCSD fails to converge, then
+*>          When ZBBCSD converges, B12D contains the negative sines of
+*>          THETA(1), ..., THETA(Q). If ZBBCSD fails to converge, then
 *>          B12D contains the diagonal of the partially reduced top-right
 *>          block.
 *> \endverbatim
@@ -232,7 +232,7 @@
 *> \param[out] B12E
 *> \verbatim
 *>          B12E is DOUBLE PRECISION array, dimension (Q-1)
-*>          When AB_ZBBCSD converges, B12E contains zeros. If AB_ZBBCSD fails
+*>          When ZBBCSD converges, B12E contains zeros. If ZBBCSD fails
 *>          to converge, then B12E contains the subdiagonal of the
 *>          partially reduced top-right block.
 *> \endverbatim
@@ -240,8 +240,8 @@
 *> \param[out] B21D
 *> \verbatim
 *>          B21D is DOUBLE PRECISION array, dimension (Q)
-*>          When AB_ZBBCSD converges, B21D contains the negative sines of
-*>          THETA(1), ..., THETA(Q). If AB_ZBBCSD fails to converge, then
+*>          When ZBBCSD converges, B21D contains the negative sines of
+*>          THETA(1), ..., THETA(Q). If ZBBCSD fails to converge, then
 *>          B21D contains the diagonal of the partially reduced bottom-left
 *>          block.
 *> \endverbatim
@@ -249,7 +249,7 @@
 *> \param[out] B21E
 *> \verbatim
 *>          B21E is DOUBLE PRECISION array, dimension (Q-1)
-*>          When AB_ZBBCSD converges, B21E contains zeros. If AB_ZBBCSD fails
+*>          When ZBBCSD converges, B21E contains zeros. If ZBBCSD fails
 *>          to converge, then B21E contains the subdiagonal of the
 *>          partially reduced bottom-left block.
 *> \endverbatim
@@ -257,8 +257,8 @@
 *> \param[out] B22D
 *> \verbatim
 *>          B22D is DOUBLE PRECISION array, dimension (Q)
-*>          When AB_ZBBCSD converges, B22D contains the negative sines of
-*>          THETA(1), ..., THETA(Q). If AB_ZBBCSD fails to converge, then
+*>          When ZBBCSD converges, B22D contains the negative sines of
+*>          THETA(1), ..., THETA(Q). If ZBBCSD fails to converge, then
 *>          B22D contains the diagonal of the partially reduced bottom-right
 *>          block.
 *> \endverbatim
@@ -266,7 +266,7 @@
 *> \param[out] B22E
 *> \verbatim
 *>          B22E is DOUBLE PRECISION array, dimension (Q-1)
-*>          When AB_ZBBCSD converges, B22E contains zeros. If AB_ZBBCSD fails
+*>          When ZBBCSD converges, B22E contains zeros. If ZBBCSD fails
 *>          to converge, then B22E contains the subdiagonal of the
 *>          partially reduced bottom-right block.
 *> \endverbatim
@@ -285,7 +285,7 @@
 *>          If LRWORK = -1, then a workspace query is assumed; the
 *>          routine only calculates the optimal size of the RWORK array,
 *>          returns this value as the first entry of the work array, and
-*>          no error message related to LRWORK is issued by AB_XERBLA.
+*>          no error message related to LRWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -293,7 +293,7 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit.
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*>          > 0:  if AB_ZBBCSD did not converge, INFO specifies the number
+*>          > 0:  if ZBBCSD did not converge, INFO specifies the number
 *>                of nonzero entries in PHI, and B11D, B11E, etc.,
 *>                contain the partially reduced matrix.
 *> \endverbatim
@@ -327,8 +327,7 @@
 *> \ingroup complex16OTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_ZBBCSD( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS, M, P, Q
-     $,
+      SUBROUTINE ZBBCSD( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS, M, P, Q,
      $                   THETA, PHI, U1, LDU1, U2, LDU2, V1T, LDV1T,
      $                   V2T, LDV2T, B11D, B11E, B12D, B12E, B21D, B21E,
      $                   B22D, B22E, RWORK, LRWORK, INFO )
@@ -374,14 +373,13 @@
      $                   TEMP, THETAMAX, THETAMIN, THRESH, TOL, TOLMUL,
      $                   UNFL, X1, X2, Y1, Y2
 *
-      EXTERNAL           AB_AB_DLARTGP, AB_AB_DLARTGS, AB_DLAS2, AB_XERB
-     $LA, AB_ZLASR, AB_ZSCAL,
-     $                   AB_ZSWAP
+      EXTERNAL           DLARTGP, DLARTGS, DLAS2, XERBLA, ZLASR, ZSCAL,
+     $                   ZSWAP
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME, AB_DLAMCH
+      DOUBLE PRECISION   DLAMCH
+      LOGICAL            LSAME
+      EXTERNAL           LSAME, DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, ATAN2, COS, MAX, MIN, SIN, SQRT
@@ -392,11 +390,11 @@
 *
       INFO = 0
       LQUERY = LRWORK .EQ. -1
-      WANTU1 = AB_LSAME( JOBU1, 'Y' )
-      WANTU2 = AB_LSAME( JOBU2, 'Y' )
-      WANTV1T = AB_LSAME( JOBV1T, 'Y' )
-      WANTV2T = AB_LSAME( JOBV2T, 'Y' )
-      COLMAJOR = .NOT. AB_LSAME( TRANS, 'T' )
+      WANTU1 = LSAME( JOBU1, 'Y' )
+      WANTU2 = LSAME( JOBU2, 'Y' )
+      WANTV1T = LSAME( JOBV1T, 'Y' )
+      WANTV2T = LSAME( JOBV2T, 'Y' )
+      COLMAJOR = .NOT. LSAME( TRANS, 'T' )
 *
       IF( M .LT. 0 ) THEN
          INFO = -6
@@ -444,7 +442,7 @@
       END IF
 *
       IF( INFO .NE. 0 ) THEN
-         CALL AB_XERBLA( 'AB_ZBBCSD', -INFO )
+         CALL XERBLA( 'ZBBCSD', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -452,8 +450,8 @@
 *
 *     Get machine constants
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
-      UNFL = AB_DLAMCH( 'Safe minimum' )
+      EPS = DLAMCH( 'Epsilon' )
+      UNFL = DLAMCH( 'Safe minimum' )
       TOLMUL = MAX( TEN, MIN( HUNDRED, EPS**MEIGHTH ) )
       TOL = TOLMUL*EPS
       THRESH = MAX( TOL, MAXITR*Q*Q*UNFL )
@@ -562,11 +560,9 @@
 *
 *           Compute shifts for B11 and B21 and use the lesser
 *
-            CALL AB_DLAS2( B11D(IMAX-1), B11E(IMAX-1), B11D(IMAX), SIGMA
-     $11,
+            CALL DLAS2( B11D(IMAX-1), B11E(IMAX-1), B11D(IMAX), SIGMA11,
      $                  DUMMY )
-            CALL AB_DLAS2( B21D(IMAX-1), B21E(IMAX-1), B21D(IMAX), SIGMA
-     $21,
+            CALL DLAS2( B21D(IMAX-1), B21E(IMAX-1), B21D(IMAX), SIGMA21,
      $                  DUMMY )
 *
             IF( SIGMA11 .LE. SIGMA21 ) THEN
@@ -589,10 +585,10 @@
 *        Rotate to produce bulges in B11 and B21
 *
          IF( MU .LE. NU ) THEN
-            CALL AB_AB_DLARTGS( B11D(IMIN), B11E(IMIN), MU,
+            CALL DLARTGS( B11D(IMIN), B11E(IMIN), MU,
      $                    RWORK(IV1TCS+IMIN-1), RWORK(IV1TSN+IMIN-1) )
          ELSE
-            CALL AB_AB_DLARTGS( B21D(IMIN), B21E(IMIN), NU,
+            CALL DLARTGS( B21D(IMIN), B21E(IMIN), NU,
      $                    RWORK(IV1TCS+IMIN-1), RWORK(IV1TSN+IMIN-1) )
          END IF
 *
@@ -619,25 +615,23 @@
 *        Chase the bulges in B11(IMIN+1,IMIN) and B21(IMIN+1,IMIN)
 *
          IF( B11D(IMIN)**2+B11BULGE**2 .GT. THRESH**2 ) THEN
-            CALL AB_AB_DLARTGP( B11BULGE, B11D(IMIN), RWORK(IU1SN+IMIN-1
-     $),
+            CALL DLARTGP( B11BULGE, B11D(IMIN), RWORK(IU1SN+IMIN-1),
      $                    RWORK(IU1CS+IMIN-1), R )
          ELSE IF( MU .LE. NU ) THEN
-            CALL AB_AB_DLARTGS( B11E( IMIN ), B11D( IMIN + 1 ), MU,
+            CALL DLARTGS( B11E( IMIN ), B11D( IMIN + 1 ), MU,
      $                    RWORK(IU1CS+IMIN-1), RWORK(IU1SN+IMIN-1) )
          ELSE
-            CALL AB_AB_DLARTGS( B12D( IMIN ), B12E( IMIN ), NU,
+            CALL DLARTGS( B12D( IMIN ), B12E( IMIN ), NU,
      $                    RWORK(IU1CS+IMIN-1), RWORK(IU1SN+IMIN-1) )
          END IF
          IF( B21D(IMIN)**2+B21BULGE**2 .GT. THRESH**2 ) THEN
-            CALL AB_AB_DLARTGP( B21BULGE, B21D(IMIN), RWORK(IU2SN+IMIN-1
-     $),
+            CALL DLARTGP( B21BULGE, B21D(IMIN), RWORK(IU2SN+IMIN-1),
      $                    RWORK(IU2CS+IMIN-1), R )
          ELSE IF( NU .LT. MU ) THEN
-            CALL AB_AB_DLARTGS( B21E( IMIN ), B21D( IMIN + 1 ), NU,
+            CALL DLARTGS( B21E( IMIN ), B21D( IMIN + 1 ), NU,
      $                    RWORK(IU2CS+IMIN-1), RWORK(IU2SN+IMIN-1) )
          ELSE
-            CALL AB_AB_DLARTGS( B22D(IMIN), B22E(IMIN), MU,
+            CALL DLARTGS( B22D(IMIN), B22E(IMIN), MU,
      $                    RWORK(IU2CS+IMIN-1), RWORK(IU2SN+IMIN-1) )
          END IF
          RWORK(IU2CS+IMIN-1) = -RWORK(IU2CS+IMIN-1)
@@ -704,43 +698,37 @@
 *           chasing by applying the original shift again.
 *
             IF( .NOT. RESTART11 .AND. .NOT. RESTART21 ) THEN
-               CALL AB_AB_DLARTGP( X2, X1, RWORK(IV1TSN+I-1),
+               CALL DLARTGP( X2, X1, RWORK(IV1TSN+I-1),
      $                       RWORK(IV1TCS+I-1), R )
             ELSE IF( .NOT. RESTART11 .AND. RESTART21 ) THEN
-               CALL AB_AB_DLARTGP( B11BULGE, B11E(I-1), RWORK(IV1TSN+I-1
-     $),
+               CALL DLARTGP( B11BULGE, B11E(I-1), RWORK(IV1TSN+I-1),
      $                       RWORK(IV1TCS+I-1), R )
             ELSE IF( RESTART11 .AND. .NOT. RESTART21 ) THEN
-               CALL AB_AB_DLARTGP( B21BULGE, B21E(I-1), RWORK(IV1TSN+I-1
-     $),
+               CALL DLARTGP( B21BULGE, B21E(I-1), RWORK(IV1TSN+I-1),
      $                       RWORK(IV1TCS+I-1), R )
             ELSE IF( MU .LE. NU ) THEN
-               CALL AB_AB_DLARTGS( B11D(I), B11E(I), MU, RWORK(IV1TCS+I-
-     $1),
+               CALL DLARTGS( B11D(I), B11E(I), MU, RWORK(IV1TCS+I-1),
      $                       RWORK(IV1TSN+I-1) )
             ELSE
-               CALL AB_AB_DLARTGS( B21D(I), B21E(I), NU, RWORK(IV1TCS+I-
-     $1),
+               CALL DLARTGS( B21D(I), B21E(I), NU, RWORK(IV1TCS+I-1),
      $                       RWORK(IV1TSN+I-1) )
             END IF
             RWORK(IV1TCS+I-1) = -RWORK(IV1TCS+I-1)
             RWORK(IV1TSN+I-1) = -RWORK(IV1TSN+I-1)
             IF( .NOT. RESTART12 .AND. .NOT. RESTART22 ) THEN
-               CALL AB_AB_DLARTGP( Y2, Y1, RWORK(IV2TSN+I-1-1),
+               CALL DLARTGP( Y2, Y1, RWORK(IV2TSN+I-1-1),
      $                       RWORK(IV2TCS+I-1-1), R )
             ELSE IF( .NOT. RESTART12 .AND. RESTART22 ) THEN
-               CALL AB_AB_DLARTGP( B12BULGE, B12D(I-1), RWORK(IV2TSN+I-1
-     $-1),
+               CALL DLARTGP( B12BULGE, B12D(I-1), RWORK(IV2TSN+I-1-1),
      $                       RWORK(IV2TCS+I-1-1), R )
             ELSE IF( RESTART12 .AND. .NOT. RESTART22 ) THEN
-               CALL AB_AB_DLARTGP( B22BULGE, B22D(I-1), RWORK(IV2TSN+I-1
-     $-1),
+               CALL DLARTGP( B22BULGE, B22D(I-1), RWORK(IV2TSN+I-1-1),
      $                       RWORK(IV2TCS+I-1-1), R )
             ELSE IF( NU .LT. MU ) THEN
-               CALL AB_AB_DLARTGS( B12E(I-1), B12D(I), NU,
+               CALL DLARTGS( B12E(I-1), B12D(I), NU,
      $                       RWORK(IV2TCS+I-1-1), RWORK(IV2TSN+I-1-1) )
             ELSE
-               CALL AB_AB_DLARTGS( B22E(I-1), B22D(I), MU,
+               CALL DLARTGS( B22E(I-1), B22D(I), MU,
      $                       RWORK(IV2TCS+I-1-1), RWORK(IV2TSN+I-1-1) )
             END IF
 *
@@ -793,43 +781,35 @@
 *           chasing by applying the original shift again.
 *
             IF( .NOT. RESTART11 .AND. .NOT. RESTART12 ) THEN
-               CALL AB_AB_DLARTGP( X2, X1, RWORK(IU1SN+I-1), RWORK(IU1CS
-     $+I-1),
+               CALL DLARTGP( X2, X1, RWORK(IU1SN+I-1), RWORK(IU1CS+I-1),
      $                       R )
             ELSE IF( .NOT. RESTART11 .AND. RESTART12 ) THEN
-               CALL AB_AB_DLARTGP( B11BULGE, B11D(I), RWORK(IU1SN+I-1),
+               CALL DLARTGP( B11BULGE, B11D(I), RWORK(IU1SN+I-1),
      $                       RWORK(IU1CS+I-1), R )
             ELSE IF( RESTART11 .AND. .NOT. RESTART12 ) THEN
-               CALL AB_AB_DLARTGP( B12BULGE, B12E(I-1), RWORK(IU1SN+I-1)
-     $,
+               CALL DLARTGP( B12BULGE, B12E(I-1), RWORK(IU1SN+I-1),
      $                       RWORK(IU1CS+I-1), R )
             ELSE IF( MU .LE. NU ) THEN
-               CALL AB_AB_DLARTGS( B11E(I), B11D(I+1), MU, RWORK(IU1CS+I
-     $-1),
+               CALL DLARTGS( B11E(I), B11D(I+1), MU, RWORK(IU1CS+I-1),
      $                       RWORK(IU1SN+I-1) )
             ELSE
-               CALL AB_AB_DLARTGS( B12D(I), B12E(I), NU, RWORK(IU1CS+I-1
-     $),
+               CALL DLARTGS( B12D(I), B12E(I), NU, RWORK(IU1CS+I-1),
      $                       RWORK(IU1SN+I-1) )
             END IF
             IF( .NOT. RESTART21 .AND. .NOT. RESTART22 ) THEN
-               CALL AB_AB_DLARTGP( Y2, Y1, RWORK(IU2SN+I-1), RWORK(IU2CS
-     $+I-1),
+               CALL DLARTGP( Y2, Y1, RWORK(IU2SN+I-1), RWORK(IU2CS+I-1),
      $                       R )
             ELSE IF( .NOT. RESTART21 .AND. RESTART22 ) THEN
-               CALL AB_AB_DLARTGP( B21BULGE, B21D(I), RWORK(IU2SN+I-1),
+               CALL DLARTGP( B21BULGE, B21D(I), RWORK(IU2SN+I-1),
      $                       RWORK(IU2CS+I-1), R )
             ELSE IF( RESTART21 .AND. .NOT. RESTART22 ) THEN
-               CALL AB_AB_DLARTGP( B22BULGE, B22E(I-1), RWORK(IU2SN+I-1)
-     $,
+               CALL DLARTGP( B22BULGE, B22E(I-1), RWORK(IU2SN+I-1),
      $                       RWORK(IU2CS+I-1), R )
             ELSE IF( NU .LT. MU ) THEN
-               CALL AB_AB_DLARTGS( B21E(I), B21E(I+1), NU, RWORK(IU2CS+I
-     $-1),
+               CALL DLARTGS( B21E(I), B21E(I+1), NU, RWORK(IU2CS+I-1),
      $                       RWORK(IU2SN+I-1) )
             ELSE
-               CALL AB_AB_DLARTGS( B22D(I), B22E(I), MU, RWORK(IU2CS+I-1
-     $),
+               CALL DLARTGS( B22D(I), B22E(I), MU, RWORK(IU2CS+I-1),
      $                       RWORK(IU2SN+I-1) )
             END IF
             RWORK(IU2CS+I-1) = -RWORK(IU2CS+I-1)
@@ -882,22 +862,22 @@
          RESTART22 = B22D(IMAX-1)**2 + B22BULGE**2 .LE. THRESH**2
 *
          IF( .NOT. RESTART12 .AND. .NOT. RESTART22 ) THEN
-            CALL AB_AB_DLARTGP( Y2, Y1, RWORK(IV2TSN+IMAX-1-1),
+            CALL DLARTGP( Y2, Y1, RWORK(IV2TSN+IMAX-1-1),
      $                    RWORK(IV2TCS+IMAX-1-1), R )
          ELSE IF( .NOT. RESTART12 .AND. RESTART22 ) THEN
-            CALL AB_AB_DLARTGP( B12BULGE, B12D(IMAX-1),
+            CALL DLARTGP( B12BULGE, B12D(IMAX-1),
      $                    RWORK(IV2TSN+IMAX-1-1),
      $                    RWORK(IV2TCS+IMAX-1-1), R )
          ELSE IF( RESTART12 .AND. .NOT. RESTART22 ) THEN
-            CALL AB_AB_DLARTGP( B22BULGE, B22D(IMAX-1),
+            CALL DLARTGP( B22BULGE, B22D(IMAX-1),
      $                    RWORK(IV2TSN+IMAX-1-1),
      $                    RWORK(IV2TCS+IMAX-1-1), R )
          ELSE IF( NU .LT. MU ) THEN
-            CALL AB_AB_DLARTGS( B12E(IMAX-1), B12D(IMAX), NU,
+            CALL DLARTGS( B12E(IMAX-1), B12D(IMAX), NU,
      $                    RWORK(IV2TCS+IMAX-1-1),
      $                    RWORK(IV2TSN+IMAX-1-1) )
          ELSE
-            CALL AB_AB_DLARTGS( B22E(IMAX-1), B22D(IMAX), MU,
+            CALL DLARTGS( B22E(IMAX-1), B22D(IMAX), MU,
      $                    RWORK(IV2TCS+IMAX-1-1),
      $                    RWORK(IV2TSN+IMAX-1-1) )
          END IF
@@ -917,44 +897,44 @@
 *
          IF( WANTU1 ) THEN
             IF( COLMAJOR ) THEN
-               CALL AB_ZLASR( 'R', 'V', 'F', P, IMAX-IMIN+1,
+               CALL ZLASR( 'R', 'V', 'F', P, IMAX-IMIN+1,
      $                     RWORK(IU1CS+IMIN-1), RWORK(IU1SN+IMIN-1),
      $                     U1(1,IMIN), LDU1 )
             ELSE
-               CALL AB_ZLASR( 'L', 'V', 'F', IMAX-IMIN+1, P,
+               CALL ZLASR( 'L', 'V', 'F', IMAX-IMIN+1, P,
      $                     RWORK(IU1CS+IMIN-1), RWORK(IU1SN+IMIN-1),
      $                     U1(IMIN,1), LDU1 )
             END IF
          END IF
          IF( WANTU2 ) THEN
             IF( COLMAJOR ) THEN
-               CALL AB_ZLASR( 'R', 'V', 'F', M-P, IMAX-IMIN+1,
+               CALL ZLASR( 'R', 'V', 'F', M-P, IMAX-IMIN+1,
      $                     RWORK(IU2CS+IMIN-1), RWORK(IU2SN+IMIN-1),
      $                     U2(1,IMIN), LDU2 )
             ELSE
-               CALL AB_ZLASR( 'L', 'V', 'F', IMAX-IMIN+1, M-P,
+               CALL ZLASR( 'L', 'V', 'F', IMAX-IMIN+1, M-P,
      $                     RWORK(IU2CS+IMIN-1), RWORK(IU2SN+IMIN-1),
      $                     U2(IMIN,1), LDU2 )
             END IF
          END IF
          IF( WANTV1T ) THEN
             IF( COLMAJOR ) THEN
-               CALL AB_ZLASR( 'L', 'V', 'F', IMAX-IMIN+1, Q,
+               CALL ZLASR( 'L', 'V', 'F', IMAX-IMIN+1, Q,
      $                     RWORK(IV1TCS+IMIN-1), RWORK(IV1TSN+IMIN-1),
      $                     V1T(IMIN,1), LDV1T )
             ELSE
-               CALL AB_ZLASR( 'R', 'V', 'F', Q, IMAX-IMIN+1,
+               CALL ZLASR( 'R', 'V', 'F', Q, IMAX-IMIN+1,
      $                     RWORK(IV1TCS+IMIN-1), RWORK(IV1TSN+IMIN-1),
      $                     V1T(1,IMIN), LDV1T )
             END IF
          END IF
          IF( WANTV2T ) THEN
             IF( COLMAJOR ) THEN
-               CALL AB_ZLASR( 'L', 'V', 'F', IMAX-IMIN+1, M-Q,
+               CALL ZLASR( 'L', 'V', 'F', IMAX-IMIN+1, M-Q,
      $                     RWORK(IV2TCS+IMIN-1), RWORK(IV2TSN+IMIN-1),
      $                     V2T(IMIN,1), LDV2T )
             ELSE
-               CALL AB_ZLASR( 'R', 'V', 'F', M-Q, IMAX-IMIN+1,
+               CALL ZLASR( 'R', 'V', 'F', M-Q, IMAX-IMIN+1,
      $                     RWORK(IV2TCS+IMIN-1), RWORK(IV2TSN+IMIN-1),
      $                     V2T(1,IMIN), LDV2T )
             END IF
@@ -967,9 +947,9 @@
             B21D(IMAX) = -B21D(IMAX)
             IF( WANTV1T ) THEN
                IF( COLMAJOR ) THEN
-                  CALL AB_ZSCAL( Q, NEGONECOMPLEX, V1T(IMAX,1), LDV1T )
+                  CALL ZSCAL( Q, NEGONECOMPLEX, V1T(IMAX,1), LDV1T )
                ELSE
-                  CALL AB_ZSCAL( Q, NEGONECOMPLEX, V1T(1,IMAX), 1 )
+                  CALL ZSCAL( Q, NEGONECOMPLEX, V1T(1,IMAX), 1 )
                END IF
             END IF
          END IF
@@ -990,9 +970,9 @@
             B12D(IMAX) = -B12D(IMAX)
             IF( WANTU1 ) THEN
                IF( COLMAJOR ) THEN
-                  CALL AB_ZSCAL( P, NEGONECOMPLEX, U1(1,IMAX), 1 )
+                  CALL ZSCAL( P, NEGONECOMPLEX, U1(1,IMAX), 1 )
                ELSE
-                  CALL AB_ZSCAL( P, NEGONECOMPLEX, U1(IMAX,1), LDU1 )
+                  CALL ZSCAL( P, NEGONECOMPLEX, U1(IMAX,1), LDU1 )
                END IF
             END IF
          END IF
@@ -1000,9 +980,9 @@
             B22D(IMAX) = -B22D(IMAX)
             IF( WANTU2 ) THEN
                IF( COLMAJOR ) THEN
-                  CALL AB_ZSCAL( M-P, NEGONECOMPLEX, U2(1,IMAX), 1 )
+                  CALL ZSCAL( M-P, NEGONECOMPLEX, U2(1,IMAX), 1 )
                ELSE
-                  CALL AB_ZSCAL( M-P, NEGONECOMPLEX, U2(IMAX,1), LDU2 )
+                  CALL ZSCAL( M-P, NEGONECOMPLEX, U2(IMAX,1), LDU2 )
                END IF
             END IF
          END IF
@@ -1012,10 +992,9 @@
          IF( B12D(IMAX)+B22D(IMAX) .LT. 0 ) THEN
             IF( WANTV2T ) THEN
                IF( COLMAJOR ) THEN
-                  CALL AB_ZSCAL( M-Q, NEGONECOMPLEX, V2T(IMAX,1), LDV2T 
-     $)
+                  CALL ZSCAL( M-Q, NEGONECOMPLEX, V2T(IMAX,1), LDV2T )
                ELSE
-                  CALL AB_ZSCAL( M-Q, NEGONECOMPLEX, V2T(1,IMAX), 1 )
+                  CALL ZSCAL( M-Q, NEGONECOMPLEX, V2T(1,IMAX), 1 )
                END IF
             END IF
          END IF
@@ -1076,24 +1055,23 @@
             THETA(I) = THETAMIN
             IF( COLMAJOR ) THEN
                IF( WANTU1 )
-     $            CALL AB_ZSWAP( P, U1(1,I), 1, U1(1,MINI), 1 )
+     $            CALL ZSWAP( P, U1(1,I), 1, U1(1,MINI), 1 )
                IF( WANTU2 )
-     $            CALL AB_ZSWAP( M-P, U2(1,I), 1, U2(1,MINI), 1 )
+     $            CALL ZSWAP( M-P, U2(1,I), 1, U2(1,MINI), 1 )
                IF( WANTV1T )
-     $            CALL AB_ZSWAP( Q, V1T(I,1), LDV1T, V1T(MINI,1), LDV1T 
-     $)
+     $            CALL ZSWAP( Q, V1T(I,1), LDV1T, V1T(MINI,1), LDV1T )
                IF( WANTV2T )
-     $            CALL AB_ZSWAP( M-Q, V2T(I,1), LDV2T, V2T(MINI,1),
+     $            CALL ZSWAP( M-Q, V2T(I,1), LDV2T, V2T(MINI,1),
      $               LDV2T )
             ELSE
                IF( WANTU1 )
-     $            CALL AB_ZSWAP( P, U1(I,1), LDU1, U1(MINI,1), LDU1 )
+     $            CALL ZSWAP( P, U1(I,1), LDU1, U1(MINI,1), LDU1 )
                IF( WANTU2 )
-     $            CALL AB_ZSWAP( M-P, U2(I,1), LDU2, U2(MINI,1), LDU2 )
+     $            CALL ZSWAP( M-P, U2(I,1), LDU2, U2(MINI,1), LDU2 )
                IF( WANTV1T )
-     $            CALL AB_ZSWAP( Q, V1T(1,I), 1, V1T(1,MINI), 1 )
+     $            CALL ZSWAP( Q, V1T(1,I), 1, V1T(1,MINI), 1 )
                IF( WANTV2T )
-     $            CALL AB_ZSWAP( M-Q, V2T(1,I), 1, V2T(1,MINI), 1 )
+     $            CALL ZSWAP( M-Q, V2T(1,I), 1, V2T(1,MINI), 1 )
             END IF
          END IF
 *
@@ -1101,7 +1079,7 @@
 *
       RETURN
 *
-*     End of AB_ZBBCSD
+*     End of ZBBCSD
 *
       END
 

@@ -1,4 +1,4 @@
-*> \brief \b AB_SGTCON
+*> \brief \b SGTCON
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SGTCON + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SGTCON.f">
+*> Download SGTCON + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgtcon.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SGTCON.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgtcon.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SGTCON.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgtcon.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SGTCON( NORM, N, DL, D, DU, DU2, IPIV, ANORM, RCOND,
+*       SUBROUTINE SGTCON( NORM, N, DL, D, DU, DU2, IPIV, ANORM, RCOND,
 *                          WORK, IWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,9 +37,9 @@
 *>
 *> \verbatim
 *>
-*> AB_SGTCON estimates the reciprocal of the condition number of a real
+*> SGTCON estimates the reciprocal of the condition number of a real
 *> tridiagonal matrix A using the LU factorization as computed by
-*> AB_SGTTRF.
+*> SGTTRF.
 *>
 *> An estimate is obtained for norm(inv(A)), and the reciprocal of the
 *> condition number is computed as RCOND = 1 / (ANORM * norm(inv(A))).
@@ -67,7 +67,7 @@
 *> \verbatim
 *>          DL is REAL array, dimension (N-1)
 *>          The (n-1) multipliers that define the matrix L from the
-*>          LU factorization of A as computed by AB_SGTTRF.
+*>          LU factorization of A as computed by SGTTRF.
 *> \endverbatim
 *>
 *> \param[in] D
@@ -86,7 +86,7 @@
 *> \param[in] DU2
 *> \verbatim
 *>          DU2 is REAL array, dimension (N-2)
-*>          The (n-2) elements of the AB_SECOND superdiagonal of U.
+*>          The (n-2) elements of the second superdiagonal of U.
 *> \endverbatim
 *>
 *> \param[in] IPIV
@@ -143,7 +143,7 @@
 *> \ingroup realGTcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_SGTCON( NORM, N, DL, D, DU, DU2, IPIV, ANORM, RCOND,
+      SUBROUTINE SGTCON( NORM, N, DL, D, DU, DU2, IPIV, ANORM, RCOND,
      $                   WORK, IWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -176,19 +176,19 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SGTTRS, AB_SLACN2, AB_XERBLA
+      EXTERNAL           SGTTRS, SLACN2, XERBLA
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input arguments.
 *
       INFO = 0
-      ONENRM = NORM.EQ.'1' .OR. AB_LSAME( NORM, 'O' )
-      IF( .NOT.ONENRM .AND. .NOT.AB_LSAME( NORM, 'I' ) ) THEN
+      ONENRM = NORM.EQ.'1' .OR. LSAME( NORM, 'O' )
+      IF( .NOT.ONENRM .AND. .NOT.LSAME( NORM, 'I' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -196,7 +196,7 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SGTCON', -INFO )
+         CALL XERBLA( 'SGTCON', -INFO )
          RETURN
       END IF
 *
@@ -225,20 +225,19 @@
       END IF
       KASE = 0
    20 CONTINUE
-      CALL AB_SLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
+      CALL SLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
       IF( KASE.NE.0 ) THEN
          IF( KASE.EQ.KASE1 ) THEN
 *
 *           Multiply by inv(U)*inv(L).
 *
-            CALL AB_SGTTRS( 'No transpose', N, 1, DL, D, DU, DU2, IPIV,
+            CALL SGTTRS( 'No transpose', N, 1, DL, D, DU, DU2, IPIV,
      $                   WORK, N, INFO )
          ELSE
 *
 *           Multiply by inv(L**T)*inv(U**T).
 *
-            CALL AB_SGTTRS( 'Transpose', N, 1, DL, D, DU, DU2, IPIV, WOR
-     $K,
+            CALL SGTTRS( 'Transpose', N, 1, DL, D, DU, DU2, IPIV, WORK,
      $                   N, INFO )
          END IF
          GO TO 20
@@ -251,6 +250,6 @@
 *
       RETURN
 *
-*     End of AB_SGTCON
+*     End of SGTCON
 *
       END

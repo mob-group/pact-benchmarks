@@ -1,4 +1,4 @@
-*> \brief \b AB_SSWAP
+*> \brief \b SSWAP
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SSWAP(N,SX,INCX,SY,INCY)
+*       SUBROUTINE SSWAP(N,SX,INCX,SY,INCY)
 *
 *       .. Scalar Arguments ..
 *       INTEGER INCX,INCY,N
@@ -23,7 +23,7 @@
 *>
 *> \verbatim
 *>
-*>    AB_SSWAP interchanges two vectors.
+*>    SSWAP interchanges two vectors.
 *>    uses unrolled loops for increments equal to 1.
 *> \endverbatim
 *
@@ -80,7 +80,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_SSWAP(N,SX,INCX,SY,INCY)
+      SUBROUTINE SSWAP(N,SX,INCX,SY,INCY)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

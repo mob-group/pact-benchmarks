@@ -1,4 +1,4 @@
-*> \brief \b AB_DDRVES
+*> \brief \b DDRVES
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DDRVES( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+*       SUBROUTINE DDRVES( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
 *                          NOUNIT, A, LDA, H, HT, WR, WI, WRT, WIT, VS,
 *                          LDVS, RESULT, WORK, NWORK, IWORK, BWORK, INFO )
 *
@@ -30,10 +30,10 @@
 *>
 *> \verbatim
 *>
-*>    AB_DDRVES checks the nonsymmetric eigenvalue (Schur form) problem
-*>    driver AB_DGEES.
+*>    DDRVES checks the nonsymmetric eigenvalue (Schur form) problem
+*>    driver DGEES.
 *>
-*>    When AB_DDRVES is called, a number of matrix "sizes" ("n's") and a
+*>    When DDRVES is called, a number of matrix "sizes" ("n's") and a
 *>    number of matrix "types" are specified.  For each size ("n")
 *>    and each type of matrix, one matrix will be generated and used
 *>    to test the nonsymmetric eigenroutines.  For each matrix, 13
@@ -170,7 +170,7 @@
 *> \verbatim
 *>          NSIZES is INTEGER
 *>          The number of sizes of matrices to use.  If it is zero,
-*>          AB_DDRVES does nothing.  It must be at least zero.
+*>          DDRVES does nothing.  It must be at least zero.
 *> \endverbatim
 *>
 *> \param[in] NN
@@ -184,7 +184,7 @@
 *> \param[in] NTYPES
 *> \verbatim
 *>          NTYPES is INTEGER
-*>          The number of elements in DOTYPE.   If it is zero, AB_DDRVES
+*>          The number of elements in DOTYPE.   If it is zero, DDRVES
 *>          does nothing.  It must be at least zero.  If it is MAXTYP+1
 *>          and NSIZES is 1, then an additional type, MAXTYP+1 is
 *>          defined, which is to use whatever matrix is in A.  This
@@ -214,7 +214,7 @@
 *>          congruential sequence limited to small integers, and so
 *>          should produce machine independent random numbers. The
 *>          values of ISEED are changed on exit, and can be used in the
-*>          next call to AB_DDRVES to continue the same random number
+*>          next call to DDRVES to continue the same random number
 *>          sequence.
 *> \endverbatim
 *>
@@ -253,13 +253,13 @@
 *> \param[out] H
 *> \verbatim
 *>          H is DOUBLE PRECISION array, dimension (LDA, max(NN))
-*>          Another copy of the test matrix A, modified by AB_DGEES.
+*>          Another copy of the test matrix A, modified by DGEES.
 *> \endverbatim
 *>
 *> \param[out] HT
 *> \verbatim
 *>          HT is DOUBLE PRECISION array, dimension (LDA, max(NN))
-*>          Yet another copy of the test matrix A, modified by AB_DGEES.
+*>          Yet another copy of the test matrix A, modified by DGEES.
 *> \endverbatim
 *>
 *> \param[out] WR
@@ -285,7 +285,7 @@
 *>          WIT is DOUBLE PRECISION array, dimension (max(NN))
 *>
 *>          Like WR, WI, these arrays contain the eigenvalues of A,
-*>          but those computed when AB_DGEES only computes a partial
+*>          but those computed when DGEES only computes a partial
 *>          eigendecomposition, i.e. not Schur vectors
 *> \endverbatim
 *>
@@ -341,7 +341,7 @@
 *>           -9: LDA < 1 or LDA < NMAX, where NMAX is max( NN(j) ).
 *>          -17: LDVS < 1 or LDVS < NMAX, where NMAX is max( NN(j) ).
 *>          -20: NWORK too small.
-*>          If  AB_DLATMR, AB_SLATMS, AB_SLATME or AB_DGEES returns an error code,
+*>          If  DLATMR, SLATMS, SLATME or DGEES returns an error code,
 *>              the absolute value of it is returned.
 *>
 *>-----------------------------------------------------------------------
@@ -384,7 +384,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_DDRVES( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+      SUBROUTINE DDRVES( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
      $                   NOUNIT, A, LDA, H, HT, WR, WI, WRT, WIT, VS,
      $                   LDVS, RESULT, WORK, NWORK, IWORK, BWORK, INFO )
 *
@@ -442,14 +442,13 @@
       COMMON             / SSLCT / SELOPT, SELDIM, SELVAL, SELWR, SELWI
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_DSLECT
-      DOUBLE PRECISION   AB_DLAMCH
-      EXTERNAL           AB_DSLECT, AB_DLAMCH
+      LOGICAL            DSLECT
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           DSLECT, DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DGEES, AB_DHST01, AB_DLABAD, AB_DLACPY, AB_D
-     $LASET, AB_DLASUM,
-     $                   AB_DLATME, AB_DLATMR, AB_DLATMS, AB_XERBLA
+      EXTERNAL           DGEES, DHST01, DLABAD, DLACPY, DLASET, DLASUM,
+     $                   DLATME, DLATMR, DLATMS, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SIGN, SQRT
@@ -505,7 +504,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DDRVES', -INFO )
+         CALL XERBLA( 'DDRVES', -INFO )
          RETURN
       END IF
 *
@@ -516,10 +515,10 @@
 *
 *     More Important constants
 *
-      UNFL = AB_DLAMCH( 'Safe minimum' )
+      UNFL = DLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      CALL AB_DLABAD( UNFL, OVFL )
-      ULP = AB_DLAMCH( 'Precision' )
+      CALL DLABAD( UNFL, OVFL )
+      ULP = DLAMCH( 'Precision' )
       ULPINV = ONE / ULP
       RTULP = SQRT( ULP )
       RTULPI = ONE / RTULP
@@ -584,7 +583,7 @@
 *
    60       CONTINUE
 *
-            CALL AB_DLASET( 'Full', LDA, N, ZERO, ZERO, A, LDA )
+            CALL DLASET( 'Full', LDA, N, ZERO, ZERO, A, LDA )
             IINFO = 0
             COND = ULPINV
 *
@@ -617,7 +616,7 @@
 *
 *              Diagonal Matrix, [Eigen]values Specified
 *
-               CALL AB_DLATMS( N, N, 'S', ISEED, 'S', WORK, IMODE, COND,
+               CALL DLATMS( N, N, 'S', ISEED, 'S', WORK, IMODE, COND,
      $                      ANORM, 0, 0, 'N', A, LDA, WORK( N+1 ),
      $                      IINFO )
 *
@@ -625,7 +624,7 @@
 *
 *              Symmetric, eigenvalues specified
 *
-               CALL AB_DLATMS( N, N, 'S', ISEED, 'S', WORK, IMODE, COND,
+               CALL DLATMS( N, N, 'S', ISEED, 'S', WORK, IMODE, COND,
      $                      ANORM, N, N, 'N', A, LDA, WORK( N+1 ),
      $                      IINFO )
 *
@@ -642,7 +641,7 @@
                END IF
 *
                ADUMMA( 1 ) = ' '
-               CALL AB_DLATME( N, 'S', ISEED, WORK, IMODE, COND, ONE,
+               CALL DLATME( N, 'S', ISEED, WORK, IMODE, COND, ONE,
      $                      ADUMMA, 'T', 'T', 'T', WORK( N+1 ), 4,
      $                      CONDS, N, N, ANORM, A, LDA, WORK( 2*N+1 ),
      $                      IINFO )
@@ -651,7 +650,7 @@
 *
 *              Diagonal, random eigenvalues
 *
-               CALL AB_DLATMR( N, N, 'S', ISEED, 'S', WORK, 6, ONE, ONE,
+               CALL DLATMR( N, N, 'S', ISEED, 'S', WORK, 6, ONE, ONE,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, 0, 0,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -660,7 +659,7 @@
 *
 *              Symmetric, random eigenvalues
 *
-               CALL AB_DLATMR( N, N, 'S', ISEED, 'S', WORK, 6, ONE, ONE,
+               CALL DLATMR( N, N, 'S', ISEED, 'S', WORK, 6, ONE, ONE,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, N, N,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -669,18 +668,17 @@
 *
 *              General, random eigenvalues
 *
-               CALL AB_DLATMR( N, N, 'S', ISEED, 'N', WORK, 6, ONE, ONE,
+               CALL DLATMR( N, N, 'S', ISEED, 'N', WORK, 6, ONE, ONE,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, N, N,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
                IF( N.GE.4 ) THEN
-                  CALL AB_DLASET( 'Full', 2, N, ZERO, ZERO, A, LDA )
-                  CALL AB_DLASET( 'Full', N-3, 1, ZERO, ZERO, A( 3, 1 ),
+                  CALL DLASET( 'Full', 2, N, ZERO, ZERO, A, LDA )
+                  CALL DLASET( 'Full', N-3, 1, ZERO, ZERO, A( 3, 1 ),
      $                         LDA )
-                  CALL AB_DLASET( 'Full', N-3, 2, ZERO, ZERO, A( 3, N-1 
-     $),
+                  CALL DLASET( 'Full', N-3, 2, ZERO, ZERO, A( 3, N-1 ),
      $                         LDA )
-                  CALL AB_DLASET( 'Full', 1, N, ZERO, ZERO, A( N, 1 ),
+                  CALL DLASET( 'Full', 1, N, ZERO, ZERO, A( N, 1 ),
      $                         LDA )
                END IF
 *
@@ -688,7 +686,7 @@
 *
 *              Triangular, random eigenvalues
 *
-               CALL AB_DLATMR( N, N, 'S', ISEED, 'N', WORK, 6, ONE, ONE,
+               CALL DLATMR( N, N, 'S', ISEED, 'N', WORK, 6, ONE, ONE,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, N, 0,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -736,13 +734,12 @@
 *
 *                 Compute Schur form and Schur vectors, and test them
 *
-                  CALL AB_DLACPY( 'F', N, N, A, LDA, H, LDA )
-                  CALL AB_DGEES( 'V', SORT, AB_DSLECT, N, H, LDA, SDIM, 
-     $WR,
+                  CALL DLACPY( 'F', N, N, A, LDA, H, LDA )
+                  CALL DGEES( 'V', SORT, DSLECT, N, H, LDA, SDIM, WR,
      $                        WI, VS, LDVS, WORK, NNWORK, BWORK, IINFO )
                   IF( IINFO.NE.0 .AND. IINFO.NE.N+2 ) THEN
                      RESULT( 1+RSUB ) = ULPINV
-                     WRITE( NOUNIT, FMT = 9992 )'AB_DGEES1', IINFO, N,
+                     WRITE( NOUNIT, FMT = 9992 )'DGEES1', IINFO, N,
      $                  JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      GO TO 220
@@ -774,8 +771,7 @@
 *                 Do Tests (2) and (3) or Tests (8) and (9)
 *
                   LWORK = MAX( 1, 2*N*N )
-                  CALL AB_DHST01( N, 1, N, A, LDA, H, LDA, VS, LDVS, WOR
-     $K,
+                  CALL DHST01( N, 1, N, A, LDA, H, LDA, VS, LDVS, WORK,
      $                         LWORK, RES )
                   RESULT( 2+RSUB ) = RES( 1 )
                   RESULT( 3+RSUB ) = RES( 2 )
@@ -812,14 +808,13 @@
 *
 *                 Do Test (5) or Test (11)
 *
-                  CALL AB_DLACPY( 'F', N, N, A, LDA, HT, LDA )
-                  CALL AB_DGEES( 'N', SORT, AB_DSLECT, N, HT, LDA, SDIM,
-     $ WRT,
+                  CALL DLACPY( 'F', N, N, A, LDA, HT, LDA )
+                  CALL DGEES( 'N', SORT, DSLECT, N, HT, LDA, SDIM, WRT,
      $                        WIT, VS, LDVS, WORK, NNWORK, BWORK,
      $                        IINFO )
                   IF( IINFO.NE.0 .AND. IINFO.NE.N+2 ) THEN
                      RESULT( 5+RSUB ) = ULPINV
-                     WRITE( NOUNIT, FMT = 9992 )'AB_DGEES2', IINFO, N,
+                     WRITE( NOUNIT, FMT = 9992 )'DGEES2', IINFO, N,
      $                  JTYPE, IOLDSD
                      INFO = ABS( IINFO )
                      GO TO 220
@@ -847,15 +842,15 @@
                      RESULT( 13 ) = ZERO
                      KNTEIG = 0
                      DO 200 I = 1, N
-                        IF( AB_DSLECT( WR( I ), WI( I ) ) .OR.
-     $                      AB_DSLECT( WR( I ), -WI( I ) ) )
+                        IF( DSLECT( WR( I ), WI( I ) ) .OR.
+     $                      DSLECT( WR( I ), -WI( I ) ) )
      $                      KNTEIG = KNTEIG + 1
                         IF( I.LT.N ) THEN
-                           IF( ( AB_DSLECT( WR( I+1 ),
-     $                         WI( I+1 ) ) .OR. AB_DSLECT( WR( I+1 ),
+                           IF( ( DSLECT( WR( I+1 ),
+     $                         WI( I+1 ) ) .OR. DSLECT( WR( I+1 ),
      $                         -WI( I+1 ) ) ) .AND.
-     $                         ( .NOT.( AB_DSLECT( WR( I ),
-     $                         WI( I ) ) .OR. AB_DSLECT( WR( I ),
+     $                         ( .NOT.( DSLECT( WR( I ),
+     $                         WI( I ) ) .OR. DSLECT( WR( I ),
      $                         -WI( I ) ) ) ) .AND. IINFO.NE.N+2 )
      $                         RESULT( 13 ) = ULPINV
                         END IF
@@ -908,10 +903,10 @@
 *
 *     Summary
 *
-      CALL AB_DLASUM( PATH, NOUNIT, NERRS, NTESTT )
+      CALL DLASUM( PATH, NOUNIT, NERRS, NTESTT )
 *
  9999 FORMAT( / 1X, A3, ' -- Real Schur Form Decomposition Driver',
-     $      / ' Matrix types (see AB_DDRVES for details): ' )
+     $      / ' Matrix types (see DDRVES for details): ' )
 *
  9998 FORMAT( / ' Special Matrices:', / '  1=Zero matrix.             ',
      $      '           ', '  5=Diagonal: geometr. spaced entries.',
@@ -956,11 +951,11 @@
      $      ' 13 = 0 if sorting successful, 1/ulp otherwise', / )
  9993 FORMAT( ' N=', I5, ', IWK=', I2, ', seed=', 4( I4, ',' ),
      $      ' type ', I2, ', test(', I2, ')=', G10.3 )
- 9992 FORMAT( ' AB_DDRVES: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
+ 9992 FORMAT( ' DDRVES: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
 *
       RETURN
 *
-*     End of AB_DDRVES
+*     End of DDRVES
 *
       END

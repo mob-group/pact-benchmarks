@@ -1,4 +1,4 @@
-*> \brief \b AB_SCHKBB
+*> \brief \b SCHKBB
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SCHKBB( NSIZES, MVAL, NVAL, NWDTHS, KK, NTYPES, DOTYPE,
+*       SUBROUTINE SCHKBB( NSIZES, MVAL, NVAL, NWDTHS, KK, NTYPES, DOTYPE,
 *                          NRHS, ISEED, THRESH, NOUNIT, A, LDA, AB, LDAB,
 *                          BD, BE, Q, LDQ, P, LDP, C, LDC, CC, WORK,
 *                          LWORK, RESULT, INFO )
@@ -32,12 +32,12 @@
 *>
 *> \verbatim
 *>
-*> AB_SCHKBB tests the reduction of a general real rectangular band
+*> SCHKBB tests the reduction of a general real rectangular band
 *> matrix to bidiagonal form.
 *>
-*> AB_SGBBRD factors a general band matrix A as  Q B P* , where * means
+*> SGBBRD factors a general band matrix A as  Q B P* , where * means
 *> transpose, B is upper bidiagonal, and Q and P are orthogonal;
-*> AB_SGBBRD can also overwrite a given matrix C with Q* C .
+*> SGBBRD can also overwrite a given matrix C with Q* C .
 *>
 *> For each pair of matrix dimensions (M,N) and each selected matrix
 *> type, an M by N matrix A and an M by NRHS matrix C are generated.
@@ -106,7 +106,7 @@
 *>          NSIZES is INTEGER
 *>          The number of values of M and N contained in the vectors
 *>          MVAL and NVAL.  The matrix sizes are used in pairs (M,N).
-*>          If NSIZES is zero, AB_SCHKBB does nothing.  NSIZES must be at
+*>          If NSIZES is zero, SCHKBB does nothing.  NSIZES must be at
 *>          least zero.
 *> \endverbatim
 *>
@@ -126,7 +126,7 @@
 *> \verbatim
 *>          NWDTHS is INTEGER
 *>          The number of bandwidths to use.  If it is zero,
-*>          AB_SCHKBB does nothing.  It must be at least zero.
+*>          SCHKBB does nothing.  It must be at least zero.
 *> \endverbatim
 *>
 *> \param[in] KK
@@ -139,7 +139,7 @@
 *> \param[in] NTYPES
 *> \verbatim
 *>          NTYPES is INTEGER
-*>          The number of elements in DOTYPE.   If it is zero, AB_SCHKBB
+*>          The number of elements in DOTYPE.   If it is zero, SCHKBB
 *>          does nothing.  It must be at least zero.  If it is MAXTYP+1
 *>          and NSIZES is 1, then an additional type, MAXTYP+1 is
 *>          defined, which is to use whatever matrix is in A.  This
@@ -177,7 +177,7 @@
 *>          congruential sequence limited to small integers, and so
 *>          should produce machine independent random numbers. The
 *>          values of ISEED are changed on exit, and can be used in the
-*>          next call to AB_SCHKBB to continue the same random number
+*>          next call to SCHKBB to continue the same random number
 *>          sequence.
 *> \endverbatim
 *>
@@ -230,20 +230,20 @@
 *> \verbatim
 *>          BD is REAL array, dimension (max(NN))
 *>          Used to hold the diagonal of the bidiagonal matrix computed
-*>          by AB_SGBBRD.
+*>          by SGBBRD.
 *> \endverbatim
 *>
 *> \param[out] BE
 *> \verbatim
 *>          BE is REAL array, dimension (max(NN))
 *>          Used to hold the off-diagonal of the bidiagonal matrix
-*>          computed by AB_SGBBRD.
+*>          computed by SGBBRD.
 *> \endverbatim
 *>
 *> \param[out] Q
 *> \verbatim
 *>          Q is REAL array, dimension (LDQ, max(NN))
-*>          Used to hold the orthogonal matrix Q computed by AB_SGBBRD.
+*>          Used to hold the orthogonal matrix Q computed by SGBBRD.
 *> \endverbatim
 *>
 *> \param[in] LDQ
@@ -256,7 +256,7 @@
 *> \param[out] P
 *> \verbatim
 *>          P is REAL array, dimension (LDP, max(NN))
-*>          Used to hold the orthogonal matrix P computed by AB_SGBBRD.
+*>          Used to hold the orthogonal matrix P computed by SGBBRD.
 *> \endverbatim
 *>
 *> \param[in] LDP
@@ -269,7 +269,7 @@
 *> \param[out] C
 *> \verbatim
 *>          C is REAL array, dimension (LDC, max(NN))
-*>          Used to hold the matrix C updated by AB_SGBBRD.
+*>          Used to hold the matrix C updated by SGBBRD.
 *> \endverbatim
 *>
 *> \param[in] LDC
@@ -350,8 +350,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_SCHKBB( NSIZES, MVAL, NVAL, NWDTHS, KK, NTYPES, DOTY
-     $PE,
+      SUBROUTINE SCHKBB( NSIZES, MVAL, NVAL, NWDTHS, KK, NTYPES, DOTYPE,
      $                   NRHS, ISEED, THRESH, NOUNIT, A, LDA, AB, LDAB,
      $                   BD, BE, Q, LDQ, P, LDP, C, LDC, CC, WORK,
      $                   LWORK, RESULT, INFO )
@@ -396,14 +395,12 @@
      $                   KMODE( MAXTYP ), KTYPE( MAXTYP )
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH
-      EXTERNAL           AB_SLAMCH
+      REAL               SLAMCH
+      EXTERNAL           SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SBDT01, AB_SBDT02, AB_SGBBRD, AB_SLACPY, AB_
-     $SLAHD2, AB_SLASET,
-     $                   AB_SLASUM, AB_SLATMR, AB_SLATMS, AB_SORT01, AB_
-     $XERBLA
+      EXTERNAL           SBDT01, SBDT02, SGBBRD, SLACPY, SLAHD2, SLASET,
+     $                   SLASUM, SLATMR, SLATMS, SORT01, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL, SQRT
@@ -477,7 +474,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SCHKBB', -INFO )
+         CALL XERBLA( 'SCHKBB', -INFO )
          RETURN
       END IF
 *
@@ -488,9 +485,9 @@
 *
 *     More Important constants
 *
-      UNFL = AB_SLAMCH( 'Safe minimum' )
+      UNFL = SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      ULP = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
+      ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
       ULPINV = ONE / ULP
       RTUNFL = SQRT( UNFL )
       RTOVFL = SQRT( OVFL )
@@ -568,8 +565,8 @@
 *
    70          CONTINUE
 *
-               CALL AB_SLASET( 'Full', LDA, N, ZERO, ZERO, A, LDA )
-               CALL AB_SLASET( 'Full', LDAB, N, ZERO, ZERO, AB, LDAB )
+               CALL SLASET( 'Full', LDA, N, ZERO, ZERO, A, LDA )
+               CALL SLASET( 'Full', LDAB, N, ZERO, ZERO, AB, LDAB )
                IINFO = 0
                COND = ULPINV
 *
@@ -592,8 +589,7 @@
 *
 *                 Diagonal Matrix, singular values specified
 *
-                  CALL AB_SLATMS( M, N, 'S', ISEED, 'N', WORK, IMODE, CO
-     $ND,
+                  CALL SLATMS( M, N, 'S', ISEED, 'N', WORK, IMODE, COND,
      $                         ANORM, 0, 0, 'N', A, LDA, WORK( M+1 ),
      $                         IINFO )
 *
@@ -601,8 +597,7 @@
 *
 *                 Nonhermitian, singular values specified
 *
-                  CALL AB_SLATMS( M, N, 'S', ISEED, 'N', WORK, IMODE, CO
-     $ND,
+                  CALL SLATMS( M, N, 'S', ISEED, 'N', WORK, IMODE, COND,
      $                         ANORM, KL, KU, 'N', A, LDA, WORK( M+1 ),
      $                         IINFO )
 *
@@ -610,8 +605,7 @@
 *
 *                 Nonhermitian, random entries
 *
-                  CALL AB_SLATMR( M, N, 'S', ISEED, 'N', WORK, 6, ONE, O
-     $NE,
+                  CALL SLATMR( M, N, 'S', ISEED, 'N', WORK, 6, ONE, ONE,
      $                         'T', 'N', WORK( N+1 ), 1, ONE,
      $                         WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, KL,
      $                         KU, ZERO, ANORM, 'N', A, LDA, IDUMMA,
@@ -624,8 +618,7 @@
 *
 *              Generate Right-Hand Side
 *
-               CALL AB_SLATMR( M, NRHS, 'S', ISEED, 'N', WORK, 6, ONE, O
-     $NE,
+               CALL SLATMR( M, NRHS, 'S', ISEED, 'N', WORK, 6, ONE, ONE,
      $                      'T', 'N', WORK( M+1 ), 1, ONE,
      $                      WORK( 2*M+1 ), 1, ONE, 'N', IDUMMA, M, NRHS,
      $                      ZERO, ONE, 'NO', C, LDC, IDUMMA, IINFO )
@@ -649,17 +642,15 @@
 *
 *              Copy C
 *
-               CALL AB_SLACPY( 'Full', M, NRHS, C, LDC, CC, LDC )
+               CALL SLACPY( 'Full', M, NRHS, C, LDC, CC, LDC )
 *
-*              Call AB_SGBBRD to compute B, Q and P, and to update C.
+*              Call SGBBRD to compute B, Q and P, and to update C.
 *
-               CALL AB_SGBBRD( 'B', M, N, NRHS, KL, KU, AB, LDAB, BD, BE
-     $,
+               CALL SGBBRD( 'B', M, N, NRHS, KL, KU, AB, LDAB, BD, BE,
      $                      Q, LDQ, P, LDP, CC, LDC, WORK, IINFO )
 *
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'AB_SGBBRD', IINFO, N, JTYP
-     $E,
+                  WRITE( NOUNIT, FMT = 9999 )'SGBBRD', IINFO, N, JTYPE,
      $               IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -675,13 +666,13 @@
 *                   3:  Check the orthogonality of P
 *                   4:  Check the computation of Q' * C
 *
-               CALL AB_SBDT01( M, N, -1, A, LDA, Q, LDQ, BD, BE, P, LDP,
+               CALL SBDT01( M, N, -1, A, LDA, Q, LDQ, BD, BE, P, LDP,
      $                      WORK, RESULT( 1 ) )
-               CALL AB_SORT01( 'Columns', M, M, Q, LDQ, WORK, LWORK,
+               CALL SORT01( 'Columns', M, M, Q, LDQ, WORK, LWORK,
      $                      RESULT( 2 ) )
-               CALL AB_SORT01( 'Rows', N, N, P, LDP, WORK, LWORK,
+               CALL SORT01( 'Rows', N, N, P, LDP, WORK, LWORK,
      $                      RESULT( 3 ) )
-               CALL AB_SBDT02( M, NRHS, C, LDC, CC, LDC, Q, LDQ, WORK,
+               CALL SBDT02( M, NRHS, C, LDC, CC, LDC, Q, LDQ, WORK,
      $                      RESULT( 4 ) )
 *
 *              End of Loop -- Check for RESULT(j) > THRESH
@@ -695,7 +686,7 @@
                DO 130 JR = 1, NTEST
                   IF( RESULT( JR ).GE.THRESH ) THEN
                      IF( NERRS.EQ.0 )
-     $                  CALL AB_SLAHD2( NOUNIT, 'SBB' )
+     $                  CALL SLAHD2( NOUNIT, 'SBB' )
                      NERRS = NERRS + 1
                      WRITE( NOUNIT, FMT = 9998 )M, N, K, IOLDSD, JTYPE,
      $                  JR, RESULT( JR )
@@ -708,15 +699,15 @@
 *
 *     Summary
 *
-      CALL AB_SLASUM( 'SBB', NOUNIT, NERRS, NTESTT )
+      CALL SLASUM( 'SBB', NOUNIT, NERRS, NTESTT )
       RETURN
 *
- 9999 FORMAT( ' AB_SCHKBB: ', A, ' returned INFO=', I5, '.', / 9X, 'M=',
+ 9999 FORMAT( ' SCHKBB: ', A, ' returned INFO=', I5, '.', / 9X, 'M=',
      $      I5, ' N=', I5, ' K=', I5, ', JTYPE=', I5, ', ISEED=(',
      $      3( I5, ',' ), I5, ')' )
  9998 FORMAT( ' M =', I4, ' N=', I4, ', K=', I3, ', seed=',
      $      4( I4, ',' ), ' type ', I2, ', test(', I2, ')=', G10.3 )
 *
-*     End of AB_SCHKBB
+*     End of SCHKBB
 *
       END

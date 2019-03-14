@@ -1,4 +1,4 @@
-*> \brief \b AB_DDRVBD
+*> \brief \b DDRVBD
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DDRVBD( NSIZES, MM, NN, NTYPES, DOTYPE, ISEED, THRESH,
+*       SUBROUTINE DDRVBD( NSIZES, MM, NN, NTYPES, DOTYPE, ISEED, THRESH,
 *                          A, LDA, U, LDU, VT, LDVT, ASAV, USAV, VTSAV, S,
 *                          SSAV, E, WORK, LWORK, IWORK, NOUT, INFO )
 *
@@ -31,10 +31,10 @@
 *>
 *> \verbatim
 *>
-*> AB_DDRVBD checks the singular value decomposition (SVD) drivers
-*> AB_AB_DGESVD, AB_DGESDD, AB_AB_DGESVJ, and AB_DGEJSV.
+*> DDRVBD checks the singular value decomposition (SVD) drivers
+*> DGESVD, DGESDD, DGESVJ, and DGEJSV.
 *>
-*> Both AB_AB_DGESVD and AB_DGESDD factor A = U diag(S) VT, where U and VT are
+*> Both DGESVD and DGESDD factor A = U diag(S) VT, where U and VT are
 *> orthogonal and diag(S) is diagonal with the entries of the array S
 *> on its diagonal. The entries of S are the singular values,
 *> nonnegative and stored in decreasing order.  U and VT can be
@@ -43,14 +43,14 @@
 *> A is M by N. Let MNMIN = min( M, N ). S has dimension MNMIN.
 *> U can be M by M or M by MNMIN. VT can be N by N or MNMIN by N.
 *>
-*> When AB_DDRVBD is called, a number of matrix "sizes" (M's and N's)
+*> When DDRVBD is called, a number of matrix "sizes" (M's and N's)
 *> and a number of matrix "types" are specified.  For each size (M,N)
 *> and each type of matrix, and for the minimal workspace as well as
 *> workspace adequate to permit blocking, an  M x N  matrix "A" will be
 *> generated and used to test the SVD routines.  For each matrix, A will
 *> be factored as A = U diag(S) VT and the following 12 tests computed:
 *>
-*> Test for AB_AB_DGESVD:
+*> Test for DGESVD:
 *>
 *> (1)    | A - U diag(S) VT | / ( |A| max(M,N) ulp )
 *>
@@ -59,7 +59,7 @@
 *> (3)    | I - VT VT' | / ( N ulp )
 *>
 *> (4)    S contains MNMIN nonnegative values in decreasing order.
-*>        (Return 0 if true, 1/ULP if FALSE.)
+*>        (Return 0 if true, 1/ULP if false.)
 *>
 *> (5)    | U - Upartial | / ( M ulp ) where Upartial is a partially
 *>        computed U.
@@ -70,7 +70,7 @@
 *> (7)    | S - Spartial | / ( MNMIN ulp |S| ) where Spartial is the
 *>        vector of singular values from the partial SVD
 *>
-*> Test for AB_DGESDD:
+*> Test for DGESDD:
 *>
 *> (8)    | A - U diag(S) VT | / ( |A| max(M,N) ulp )
 *>
@@ -79,7 +79,7 @@
 *> (10)   | I - VT VT' | / ( N ulp )
 *>
 *> (11)   S contains MNMIN nonnegative values in decreasing order.
-*>        (Return 0 if true, 1/ULP if FALSE.)
+*>        (Return 0 if true, 1/ULP if false.)
 *>
 *> (12)   | U - Upartial | / ( M ulp ) where Upartial is a partially
 *>        computed U.
@@ -90,7 +90,7 @@
 *> (14)   | S - Spartial | / ( MNMIN ulp |S| ) where Spartial is the
 *>        vector of singular values from the partial SVD
 *>
-*> Test for AB_AB_DGESVJ:
+*> Test for DGESVJ:
 *>
 *> (15)   | A - U diag(S) VT | / ( |A| max(M,N) ulp )
 *>
@@ -99,9 +99,9 @@
 *> (17)   | I - VT VT' | / ( N ulp )
 *>
 *> (18)   S contains MNMIN nonnegative values in decreasing order.
-*>        (Return 0 if true, 1/ULP if FALSE.)
+*>        (Return 0 if true, 1/ULP if false.)
 *>
-*> Test for AB_DGEJSV:
+*> Test for DGEJSV:
 *>
 *> (19)   | A - U diag(S) VT | / ( |A| max(M,N) ulp )
 *>
@@ -110,9 +110,9 @@
 *> (21)   | I - VT VT' | / ( N ulp )
 *>
 *> (22)   S contains MNMIN nonnegative values in decreasing order.
-*>        (Return 0 if true, 1/ULP if FALSE.)
+*>        (Return 0 if true, 1/ULP if false.)
 *>
-*> Test for AB_AB_AB_DGESVDX( 'V', 'V', 'A' )/AB_AB_AB_DGESVDX( 'N', 'N', 'A' )
+*> Test for DGESVDX( 'V', 'V', 'A' )/DGESVDX( 'N', 'N', 'A' )
 *>
 *> (23)   | A - U diag(S) VT | / ( |A| max(M,N) ulp )
 *>
@@ -121,7 +121,7 @@
 *> (25)   | I - VT VT' | / ( N ulp )
 *>
 *> (26)   S contains MNMIN nonnegative values in decreasing order.
-*>        (Return 0 if true, 1/ULP if FALSE.)
+*>        (Return 0 if true, 1/ULP if false.)
 *>
 *> (27)   | U - Upartial | / ( M ulp ) where Upartial is a partially
 *>        computed U.
@@ -132,7 +132,7 @@
 *> (29)   | S - Spartial | / ( MNMIN ulp |S| ) where Spartial is the
 *>        vector of singular values from the partial SVD
 *>
-*> Test for AB_AB_AB_DGESVDX( 'V', 'V', 'I' )
+*> Test for DGESVDX( 'V', 'V', 'I' )
 *>
 *> (30)   | U' A VT''' - diag(S) | / ( |A| max(M,N) ulp )
 *>
@@ -140,7 +140,7 @@
 *>
 *> (32)   | I - VT VT' | / ( N ulp )
 *>
-*> Test for AB_AB_AB_DGESVDX( 'V', 'V', 'V' )
+*> Test for DGESVDX( 'V', 'V', 'V' )
 *>
 *> (33)   | U' A VT''' - diag(S) | / ( |A| max(M,N) ulp )
 *>
@@ -189,7 +189,7 @@
 *> \param[in] NTYPES
 *> \verbatim
 *>          NTYPES is INTEGER
-*>          The number of elements in DOTYPE.   If it is zero, AB_DDRVBD
+*>          The number of elements in DOTYPE.   If it is zero, DDRVBD
 *>          does nothing.  It must be at least zero.  If it is MAXTYP+1
 *>          and NSIZES is 1, then an additional type, MAXTYP+1 is
 *>          defined, which is to use whatever matrices are in A and B.
@@ -215,7 +215,7 @@
 *>          elements should be between 0 and 4095; if not they will be
 *>          reduced mod 4096.  Also, ISEED(4) must be odd.
 *>          On exit, ISEED is changed and can be used in the next call to
-*>          AB_DDRVBD to continue the same random number sequence.
+*>          DDRVBD to continue the same random number sequence.
 *> \endverbatim
 *>
 *> \param[in] THRESH
@@ -334,7 +334,7 @@
 *>          -12: LDU < 1 or LDU < MMAX.
 *>          -14: LDVT < 1 or LDVT < NMAX, where NMAX is max( NN(j) ).
 *>          -21: LWORK too small.
-*>          If  AB_DLATMS, or AB_AB_DGESVD returns an error code, the
+*>          If  DLATMS, or DGESVD returns an error code, the
 *>              absolute value of it is returned.
 *> \endverbatim
 *
@@ -351,8 +351,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_DDRVBD( NSIZES, MM, NN, NTYPES, DOTYPE, ISEED, THRES
-     $H,
+      SUBROUTINE DDRVBD( NSIZES, MM, NN, NTYPES, DOTYPE, ISEED, THRESH,
      $                   A, LDA, U, LDU, VT, LDVT, ASAV, USAV, VTSAV, S,
      $                   SSAV, E, WORK, LWORK, IWORK, NOUT, INFO )
 *
@@ -400,15 +399,13 @@
       DOUBLE PRECISION   RESULT( 40 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH, AB_DLARND
-      EXTERNAL           AB_DLAMCH, AB_DLARND
+      DOUBLE PRECISION   DLAMCH, DLARND
+      EXTERNAL           DLAMCH, DLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALASVM, AB_DBDT01, AB_DGEJSV, AB_DGESDD, AB_
-     $AB_DGESVD,
-     $                   AB_AB_AB_DGESVDX, AB_AB_DGESVJ, AB_DLABAD, AB_D
-     $LACPY, AB_DLASET,
-     $                   AB_DLATMS, AB_DORT01, AB_DORT03, AB_XERBLA
+      EXTERNAL           ALASVM, DBDT01, DGEJSV, DGESDD, DGESVD,
+     $                   DGESVDX, DGESVJ, DLABAD, DLACPY, DLASET,
+     $                   DLATMS, DORT01, DORT03, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, INT, MAX, MIN
@@ -472,7 +469,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DDRVBD', -INFO )
+         CALL XERBLA( 'DDRVBD', -INFO )
          RETURN
       END IF
 *
@@ -482,10 +479,10 @@
       PATH( 2: 3 ) = 'BD'
       NFAIL = 0
       NTEST = 0
-      UNFL = AB_DLAMCH( 'Safe minimum' )
+      UNFL = DLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      CALL AB_DLABAD( UNFL, OVFL )
-      ULP = AB_DLAMCH( 'Precision' )
+      CALL DLABAD( UNFL, OVFL )
+      ULP = DLAMCH( 'Precision' )
       RTUNFL = SQRT( UNFL )
       ULPINV = ONE / ULP
       INFOT = 0
@@ -520,13 +517,13 @@
 *
 *              Zero matrix
 *
-               CALL AB_DLASET( 'Full', M, N, ZERO, ZERO, A, LDA )
+               CALL DLASET( 'Full', M, N, ZERO, ZERO, A, LDA )
 *
             ELSE IF( JTYPE.EQ.2 ) THEN
 *
 *              Identity matrix
 *
-               CALL AB_DLASET( 'Full', M, N, ZERO, ONE, A, LDA )
+               CALL DLASET( 'Full', M, N, ZERO, ONE, A, LDA )
 *
             ELSE
 *
@@ -538,8 +535,7 @@
      $            ANORM = UNFL / ULP
                IF( JTYPE.EQ.5 )
      $            ANORM = OVFL*ULP
-               CALL AB_DLATMS( M, N, 'U', ISEED, 'N', S, 4, DBLE( MNMIN 
-     $),
+               CALL DLATMS( M, N, 'U', ISEED, 'N', S, 4, DBLE( MNMIN ),
      $                      ANORM, M-1, N-1, 'N', A, LDA, WORK, IINFO )
                IF( IINFO.NE.0 ) THEN
                   WRITE( NOUT, FMT = 9996 )'Generator', IINFO, M, N,
@@ -550,7 +546,7 @@
             END IF
 *
    30       CONTINUE
-            CALL AB_DLACPY( 'F', M, N, A, LDA, ASAV, LDA )
+            CALL DLACPY( 'F', M, N, A, LDA, ASAV, LDA )
 *
 *           Do for minimal and adequate (for blocking) workspace
 *
@@ -560,7 +556,7 @@
                   RESULT( J ) = -ONE
    40          CONTINUE
 *
-*              Test AB_AB_DGESVD: Factorize A
+*              Test DGESVD: Factorize A
 *
                IWTMP = MAX( 3*MIN( M, N )+MAX( M, N ), 5*MIN( M, N ) )
                LSWORK = IWTMP + ( IWS-1 )*( LWORK-IWTMP ) / 3
@@ -570,10 +566,9 @@
      $            LSWORK = LWORK
 *
                IF( IWS.GT.1 )
-     $            CALL AB_DLACPY( 'F', M, N, ASAV, LDA, A, LDA )
-               SRNAMT = 'AB_AB_DGESVD'
-               CALL AB_AB_DGESVD( 'A', 'A', M, N, A, LDA, SSAV, USAV, LD
-     $U,
+     $            CALL DLACPY( 'F', M, N, ASAV, LDA, A, LDA )
+               SRNAMT = 'DGESVD'
+               CALL DGESVD( 'A', 'A', M, N, A, LDA, SSAV, USAV, LDU,
      $                      VTSAV, LDVT, WORK, LSWORK, IINFO )
                IF( IINFO.NE.0 ) THEN
                   WRITE( NOUT, FMT = 9995 )'GESVD', IINFO, M, N, JTYPE,
@@ -584,14 +579,12 @@
 *
 *              Do tests 1--4
 *
-               CALL AB_DBDT01( M, N, 0, ASAV, LDA, USAV, LDU, SSAV, E,
+               CALL DBDT01( M, N, 0, ASAV, LDA, USAV, LDU, SSAV, E,
      $                      VTSAV, LDVT, WORK, RESULT( 1 ) )
                IF( M.NE.0 .AND. N.NE.0 ) THEN
-                  CALL AB_DORT01( 'Columns', M, M, USAV, LDU, WORK, LWOR
-     $K,
+                  CALL DORT01( 'Columns', M, M, USAV, LDU, WORK, LWORK,
      $                         RESULT( 2 ) )
-                  CALL AB_DORT01( 'Rows', N, N, VTSAV, LDVT, WORK, LWORK
-     $,
+                  CALL DORT01( 'Rows', N, N, VTSAV, LDVT, WORK, LWORK,
      $                         RESULT( 3 ) )
                END IF
                RESULT( 4 ) = ZERO
@@ -617,10 +610,9 @@
      $                   ( IJU.EQ.1 .AND. IJVT.EQ.1 ) )GO TO 70
                      JOBU = CJOB( IJU+1 )
                      JOBVT = CJOB( IJVT+1 )
-                     CALL AB_DLACPY( 'F', M, N, ASAV, LDA, A, LDA )
-                     SRNAMT = 'AB_AB_DGESVD'
-                     CALL AB_AB_DGESVD( JOBU, JOBVT, M, N, A, LDA, S, U,
-     $ LDU,
+                     CALL DLACPY( 'F', M, N, ASAV, LDA, A, LDA )
+                     SRNAMT = 'DGESVD'
+                     CALL DGESVD( JOBU, JOBVT, M, N, A, LDA, S, U, LDU,
      $                            VT, LDVT, WORK, LSWORK, IINFO )
 *
 *                    Compare U
@@ -628,18 +620,15 @@
                      DIF = ZERO
                      IF( M.GT.0 .AND. N.GT.0 ) THEN
                         IF( IJU.EQ.1 ) THEN
-                           CALL AB_DORT03( 'C', M, MNMIN, M, MNMIN, USAV
-     $,
+                           CALL DORT03( 'C', M, MNMIN, M, MNMIN, USAV,
      $                                  LDU, A, LDA, WORK, LWORK, DIF,
      $                                  IINFO )
                         ELSE IF( IJU.EQ.2 ) THEN
-                           CALL AB_DORT03( 'C', M, MNMIN, M, MNMIN, USAV
-     $,
+                           CALL DORT03( 'C', M, MNMIN, M, MNMIN, USAV,
      $                                  LDU, U, LDU, WORK, LWORK, DIF,
      $                                  IINFO )
                         ELSE IF( IJU.EQ.3 ) THEN
-                           CALL AB_DORT03( 'C', M, M, M, MNMIN, USAV, LD
-     $U,
+                           CALL DORT03( 'C', M, M, M, MNMIN, USAV, LDU,
      $                                  U, LDU, WORK, LWORK, DIF,
      $                                  IINFO )
                         END IF
@@ -651,17 +640,15 @@
                      DIF = ZERO
                      IF( M.GT.0 .AND. N.GT.0 ) THEN
                         IF( IJVT.EQ.1 ) THEN
-                           CALL AB_DORT03( 'R', N, MNMIN, N, MNMIN, VTSA
-     $V,
+                           CALL DORT03( 'R', N, MNMIN, N, MNMIN, VTSAV,
      $                                  LDVT, A, LDA, WORK, LWORK, DIF,
      $                                  IINFO )
                         ELSE IF( IJVT.EQ.2 ) THEN
-                           CALL AB_DORT03( 'R', N, MNMIN, N, MNMIN, VTSA
-     $V,
+                           CALL DORT03( 'R', N, MNMIN, N, MNMIN, VTSAV,
      $                                  LDVT, VT, LDVT, WORK, LWORK,
      $                                  DIF, IINFO )
                         ELSE IF( IJVT.EQ.3 ) THEN
-                           CALL AB_DORT03( 'R', N, N, N, MNMIN, VTSAV,
+                           CALL DORT03( 'R', N, N, N, MNMIN, VTSAV,
      $                                  LDVT, VT, LDVT, WORK, LWORK,
      $                                  DIF, IINFO )
                         END IF
@@ -683,7 +670,7 @@
    70             CONTINUE
    80          CONTINUE
 *
-*              Test AB_DGESDD: Factorize A
+*              Test DGESDD: Factorize A
 *
                IWTMP = 5*MNMIN*MNMIN + 9*MNMIN + MAX( M, N )
                LSWORK = IWTMP + ( IWS-1 )*( LWORK-IWTMP ) / 3
@@ -692,10 +679,9 @@
                IF( IWS.EQ.4 )
      $            LSWORK = LWORK
 *
-               CALL AB_DLACPY( 'F', M, N, ASAV, LDA, A, LDA )
-               SRNAMT = 'AB_DGESDD'
-               CALL AB_DGESDD( 'A', M, N, A, LDA, SSAV, USAV, LDU, VTSAV
-     $,
+               CALL DLACPY( 'F', M, N, ASAV, LDA, A, LDA )
+               SRNAMT = 'DGESDD'
+               CALL DGESDD( 'A', M, N, A, LDA, SSAV, USAV, LDU, VTSAV,
      $                      LDVT, WORK, LSWORK, IWORK, IINFO )
                IF( IINFO.NE.0 ) THEN
                   WRITE( NOUT, FMT = 9995 )'GESDD', IINFO, M, N, JTYPE,
@@ -706,14 +692,12 @@
 *
 *              Do tests 8--11
 *
-               CALL AB_DBDT01( M, N, 0, ASAV, LDA, USAV, LDU, SSAV, E,
+               CALL DBDT01( M, N, 0, ASAV, LDA, USAV, LDU, SSAV, E,
      $                      VTSAV, LDVT, WORK, RESULT( 8 ) )
                IF( M.NE.0 .AND. N.NE.0 ) THEN
-                  CALL AB_DORT01( 'Columns', M, M, USAV, LDU, WORK, LWOR
-     $K,
+                  CALL DORT01( 'Columns', M, M, USAV, LDU, WORK, LWORK,
      $                         RESULT( 9 ) )
-                  CALL AB_DORT01( 'Rows', N, N, VTSAV, LDVT, WORK, LWORK
-     $,
+                  CALL DORT01( 'Rows', N, N, VTSAV, LDVT, WORK, LWORK,
      $                         RESULT( 10 ) )
                END IF
                RESULT( 11 ) = ZERO
@@ -735,10 +719,9 @@
                RESULT( 14 ) = ZERO
                DO 110 IJQ = 0, 2
                   JOBQ = CJOB( IJQ+1 )
-                  CALL AB_DLACPY( 'F', M, N, ASAV, LDA, A, LDA )
-                  SRNAMT = 'AB_DGESDD'
-                  CALL AB_DGESDD( JOBQ, M, N, A, LDA, S, U, LDU, VT, LDV
-     $T,
+                  CALL DLACPY( 'F', M, N, ASAV, LDA, A, LDA )
+                  SRNAMT = 'DGESDD'
+                  CALL DGESDD( JOBQ, M, N, A, LDA, S, U, LDU, VT, LDVT,
      $                         WORK, LSWORK, IWORK, IINFO )
 *
 *                 Compare U
@@ -747,19 +730,16 @@
                   IF( M.GT.0 .AND. N.GT.0 ) THEN
                      IF( IJQ.EQ.1 ) THEN
                         IF( M.GE.N ) THEN
-                           CALL AB_DORT03( 'C', M, MNMIN, M, MNMIN, USAV
-     $,
+                           CALL DORT03( 'C', M, MNMIN, M, MNMIN, USAV,
      $                                  LDU, A, LDA, WORK, LWORK, DIF,
      $                                  INFO )
                         ELSE
-                           CALL AB_DORT03( 'C', M, MNMIN, M, MNMIN, USAV
-     $,
+                           CALL DORT03( 'C', M, MNMIN, M, MNMIN, USAV,
      $                                  LDU, U, LDU, WORK, LWORK, DIF,
      $                                  INFO )
                         END IF
                      ELSE IF( IJQ.EQ.2 ) THEN
-                        CALL AB_DORT03( 'C', M, MNMIN, M, MNMIN, USAV, L
-     $DU,
+                        CALL DORT03( 'C', M, MNMIN, M, MNMIN, USAV, LDU,
      $                               U, LDU, WORK, LWORK, DIF, INFO )
                      END IF
                   END IF
@@ -771,18 +751,16 @@
                   IF( M.GT.0 .AND. N.GT.0 ) THEN
                      IF( IJQ.EQ.1 ) THEN
                         IF( M.GE.N ) THEN
-                           CALL AB_DORT03( 'R', N, MNMIN, N, MNMIN, VTSA
-     $V,
+                           CALL DORT03( 'R', N, MNMIN, N, MNMIN, VTSAV,
      $                                  LDVT, VT, LDVT, WORK, LWORK,
      $                                  DIF, INFO )
                         ELSE
-                           CALL AB_DORT03( 'R', N, MNMIN, N, MNMIN, VTSA
-     $V,
+                           CALL DORT03( 'R', N, MNMIN, N, MNMIN, VTSAV,
      $                                  LDVT, A, LDA, WORK, LWORK, DIF,
      $                                  INFO )
                         END IF
                      ELSE IF( IJQ.EQ.2 ) THEN
-                        CALL AB_DORT03( 'R', N, MNMIN, N, MNMIN, VTSAV,
+                        CALL DORT03( 'R', N, MNMIN, N, MNMIN, VTSAV,
      $                               LDVT, VT, LDVT, WORK, LWORK, DIF,
      $                               INFO )
                      END IF
@@ -803,8 +781,8 @@
                   RESULT( 14 ) = MAX( RESULT( 14 ), DIF )
   110          CONTINUE
 *
-*              Test AB_AB_DGESVJ: Factorize A
-*              Note: AB_AB_DGESVJ does not work for M < N
+*              Test DGESVJ: Factorize A
+*              Note: DGESVJ does not work for M < N
 *
                RESULT( 15 ) = ZERO
                RESULT( 16 ) = ZERO
@@ -819,13 +797,12 @@
                   IF( IWS.EQ.4 )
      $               LSWORK = LWORK
 *
-                  CALL AB_DLACPY( 'F', M, N, ASAV, LDA, USAV, LDA )
-                  SRNAMT = 'AB_AB_DGESVJ'
-                  CALL AB_AB_DGESVJ( 'G', 'U', 'V', M, N, USAV, LDA, SSA
-     $V,
+                  CALL DLACPY( 'F', M, N, ASAV, LDA, USAV, LDA )
+                  SRNAMT = 'DGESVJ'
+                  CALL DGESVJ( 'G', 'U', 'V', M, N, USAV, LDA, SSAV,
      &                        0, A, LDVT, WORK, LWORK, INFO )
 *
-*                 AB_AB_DGESVJ retuns V not VT, so we transpose to use the same
+*                 DGESVJ retuns V not VT, so we transpose to use the same
 *                 test suite.
 *
                   DO J=1,N
@@ -843,13 +820,12 @@
 *
 *                 Do tests 15--18
 *
-                  CALL AB_DBDT01( M, N, 0, ASAV, LDA, USAV, LDU, SSAV, E
-     $,
+                  CALL DBDT01( M, N, 0, ASAV, LDA, USAV, LDU, SSAV, E,
      $                         VTSAV, LDVT, WORK, RESULT( 15 ) )
                   IF( M.NE.0 .AND. N.NE.0 ) THEN
-                     CALL AB_DORT01( 'Columns', M, M, USAV, LDU, WORK,
+                     CALL DORT01( 'Columns', M, M, USAV, LDU, WORK,
      $                            LWORK, RESULT( 16 ) )
-                     CALL AB_DORT01( 'Rows', N, N, VTSAV, LDVT, WORK,
+                     CALL DORT01( 'Rows', N, N, VTSAV, LDVT, WORK,
      $                            LWORK, RESULT( 17 ) )
                   END IF
                   RESULT( 18 ) = ZERO
@@ -865,8 +841,8 @@
                   END IF
                END IF
 *
-*              Test AB_DGEJSV: Factorize A
-*              Note: AB_DGEJSV does not work for M < N
+*              Test DGEJSV: Factorize A
+*              Note: DGEJSV does not work for M < N
 *
                RESULT( 19 ) = ZERO
                RESULT( 20 ) = ZERO
@@ -880,13 +856,13 @@
                   IF( IWS.EQ.4 )
      $               LSWORK = LWORK
 *
-                  CALL AB_DLACPY( 'F', M, N, ASAV, LDA, VTSAV, LDA )
-                  SRNAMT = 'AB_DGEJSV'
-                  CALL AB_DGEJSV( 'G', 'U', 'V', 'R', 'N', 'N',
+                  CALL DLACPY( 'F', M, N, ASAV, LDA, VTSAV, LDA )
+                  SRNAMT = 'DGEJSV'
+                  CALL DGEJSV( 'G', 'U', 'V', 'R', 'N', 'N',
      &                   M, N, VTSAV, LDA, SSAV, USAV, LDU, A, LDVT,
      &                   WORK, LWORK, IWORK, INFO )
 *
-*                 AB_DGEJSV retuns V not VT, so we transpose to use the same
+*                 DGEJSV retuns V not VT, so we transpose to use the same
 *                 test suite.
 *
                   DO 140 J=1,N
@@ -904,13 +880,12 @@
 *
 *                 Do tests 19--22
 *
-                  CALL AB_DBDT01( M, N, 0, ASAV, LDA, USAV, LDU, SSAV, E
-     $,
+                  CALL DBDT01( M, N, 0, ASAV, LDA, USAV, LDU, SSAV, E,
      $                         VTSAV, LDVT, WORK, RESULT( 19 ) )
                   IF( M.NE.0 .AND. N.NE.0 ) THEN
-                     CALL AB_DORT01( 'Columns', M, M, USAV, LDU, WORK,
+                     CALL DORT01( 'Columns', M, M, USAV, LDU, WORK,
      $                            LWORK, RESULT( 20 ) )
-                     CALL AB_DORT01( 'Rows', N, N, VTSAV, LDVT, WORK,
+                     CALL DORT01( 'Rows', N, N, VTSAV, LDVT, WORK,
      $                            LWORK, RESULT( 21 ) )
                   END IF
                   RESULT( 22 ) = ZERO
@@ -926,10 +901,10 @@
                   END IF
                END IF
 *
-*              Test AB_AB_AB_DGESVDX
+*              Test DGESVDX
 *
-               CALL AB_DLACPY( 'F', M, N, ASAV, LDA, A, LDA )
-               CALL AB_AB_AB_DGESVDX( 'V', 'V', 'A', M, N, A, LDA,
+               CALL DLACPY( 'F', M, N, ASAV, LDA, A, LDA )
+               CALL DGESVDX( 'V', 'V', 'A', M, N, A, LDA,
      $                       VL, VU, IL, IU, NS, SSAV, USAV, LDU,
      $                       VTSAV, LDVT, WORK, LWORK, IWORK,
      $                       IINFO )
@@ -945,14 +920,12 @@
                RESULT( 23 ) = ZERO
                RESULT( 24 ) = ZERO
                RESULT( 25 ) = ZERO
-               CALL AB_DBDT01( M, N, 0, ASAV, LDA, USAV, LDU, SSAV, E,
+               CALL DBDT01( M, N, 0, ASAV, LDA, USAV, LDU, SSAV, E,
      $                      VTSAV, LDVT, WORK, RESULT( 23 ) )
                IF( M.NE.0 .AND. N.NE.0 ) THEN
-                  CALL AB_DORT01( 'Columns', M, M, USAV, LDU, WORK, LWOR
-     $K,
+                  CALL DORT01( 'Columns', M, M, USAV, LDU, WORK, LWORK,
      $                         RESULT( 24 ) )
-                  CALL AB_DORT01( 'Rows', N, N, VTSAV, LDVT, WORK, LWORK
-     $,
+                  CALL DORT01( 'Rows', N, N, VTSAV, LDVT, WORK, LWORK,
      $                         RESULT( 25 ) )
                END IF
                RESULT( 26 ) = ZERO
@@ -979,9 +952,8 @@
                      JOBU = CJOBV( IJU+1 )
                      JOBVT = CJOBV( IJVT+1 )
                      RANGE = CJOBR( 1 )
-                     CALL AB_DLACPY( 'F', M, N, ASAV, LDA, A, LDA )
-                     CALL AB_AB_AB_DGESVDX( JOBU, JOBVT, RANGE, M, N, A,
-     $ LDA,
+                     CALL DLACPY( 'F', M, N, ASAV, LDA, A, LDA )
+                     CALL DGESVDX( JOBU, JOBVT, RANGE, M, N, A, LDA,
      $                             VL, VU, IL, IU, NS, S, U, LDU,
      $                             VT, LDVT, WORK, LWORK, IWORK,
      $                             IINFO )
@@ -991,8 +963,7 @@
                      DIF = ZERO
                      IF( M.GT.0 .AND. N.GT.0 ) THEN
                         IF( IJU.EQ.1 ) THEN
-                           CALL AB_DORT03( 'C', M, MNMIN, M, MNMIN, USAV
-     $,
+                           CALL DORT03( 'C', M, MNMIN, M, MNMIN, USAV,
      $                                  LDU, U, LDU, WORK, LWORK, DIF,
      $                                  IINFO )
                         END IF
@@ -1004,8 +975,7 @@
                      DIF = ZERO
                      IF( M.GT.0 .AND. N.GT.0 ) THEN
                         IF( IJVT.EQ.1 ) THEN
-                           CALL AB_DORT03( 'R', N, MNMIN, N, MNMIN, VTSA
-     $V,
+                           CALL DORT03( 'R', N, MNMIN, N, MNMIN, VTSAV,
      $                                  LDVT, VT, LDVT, WORK, LWORK,
      $                                  DIF, IINFO )
                         END IF
@@ -1027,7 +997,7 @@
   170             CONTINUE
   180          CONTINUE
 *
-*              Do tests 30--32: AB_AB_AB_DGESVDX( 'V', 'V', 'I' )
+*              Do tests 30--32: DGESVDX( 'V', 'V', 'I' )
 *
                DO 200 I = 1, 4
                   ISEED2( I ) = ISEED( I )
@@ -1036,16 +1006,16 @@
                   IL = 1
                   IU = MAX( 1, MNMIN )
                ELSE
-                  IL = 1 + INT( ( MNMIN-1 )*AB_DLARND( 1, ISEED2 ) )
-                  IU = 1 + INT( ( MNMIN-1 )*AB_DLARND( 1, ISEED2 ) )
+                  IL = 1 + INT( ( MNMIN-1 )*DLARND( 1, ISEED2 ) )
+                  IU = 1 + INT( ( MNMIN-1 )*DLARND( 1, ISEED2 ) )
                   IF( IU.LT.IL ) THEN
                      ITEMP = IU
                      IU = IL
                      IL = ITEMP
                   END IF
                END IF
-               CALL AB_DLACPY( 'F', M, N, ASAV, LDA, A, LDA )
-               CALL AB_AB_AB_DGESVDX( 'V', 'V', 'I', M, N, A, LDA,
+               CALL DLACPY( 'F', M, N, ASAV, LDA, A, LDA )
+               CALL DGESVDX( 'V', 'V', 'I', M, N, A, LDA,
      $                       VL, VU, IL, IU, NSI, S, U, LDU,
      $                       VT, LDVT, WORK, LWORK, IWORK,
      $                       IINFO )
@@ -1059,14 +1029,14 @@
                RESULT( 30 ) = ZERO
                RESULT( 31 ) = ZERO
                RESULT( 32 ) = ZERO
-               CALL AB_DBDT05( M, N, ASAV, LDA, S, NSI, U, LDU,
+               CALL DBDT05( M, N, ASAV, LDA, S, NSI, U, LDU,
      $                      VT, LDVT, WORK, RESULT( 30 ) )
-               CALL AB_DORT01( 'Columns', M, NSI, U, LDU, WORK, LWORK,
+               CALL DORT01( 'Columns', M, NSI, U, LDU, WORK, LWORK,
      $                      RESULT( 31 ) )
-               CALL AB_DORT01( 'Rows', NSI, N, VT, LDVT, WORK, LWORK,
+               CALL DORT01( 'Rows', NSI, N, VT, LDVT, WORK, LWORK,
      $                      RESULT( 32 ) )
 *
-*              Do tests 33--35: AB_AB_AB_DGESVDX( 'V', 'V', 'V' )
+*              Do tests 33--35: DGESVDX( 'V', 'V', 'V' )
 *
                IF( MNMIN.GT.0 .AND. NSI.GT.1 ) THEN
                   IF( IL.NE.1 ) THEN
@@ -1092,8 +1062,8 @@
                   VL = ZERO
                   VU = ONE
                END IF
-               CALL AB_DLACPY( 'F', M, N, ASAV, LDA, A, LDA )
-               CALL AB_AB_AB_DGESVDX( 'V', 'V', 'V', M, N, A, LDA,
+               CALL DLACPY( 'F', M, N, ASAV, LDA, A, LDA )
+               CALL DGESVDX( 'V', 'V', 'V', M, N, A, LDA,
      $                       VL, VU, IL, IU, NSV, S, U, LDU,
      $                       VT, LDVT, WORK, LWORK, IWORK,
      $                       IINFO )
@@ -1107,11 +1077,11 @@
                RESULT( 33 ) = ZERO
                RESULT( 34 ) = ZERO
                RESULT( 35 ) = ZERO
-               CALL AB_DBDT05( M, N, ASAV, LDA, S, NSV, U, LDU,
+               CALL DBDT05( M, N, ASAV, LDA, S, NSV, U, LDU,
      $                      VT, LDVT, WORK, RESULT( 33 ) )
-               CALL AB_DORT01( 'Columns', M, NSV, U, LDU, WORK, LWORK,
+               CALL DORT01( 'Columns', M, NSV, U, LDU, WORK, LWORK,
      $                      RESULT( 34 ) )
-               CALL AB_DORT01( 'Rows', NSV, N, VT, LDVT, WORK, LWORK,
+               CALL DORT01( 'Rows', NSV, N, VT, LDVT, WORK, LWORK,
      $                      RESULT( 35 ) )
 *
 *              End of Loop -- Check for RESULT(j) > THRESH
@@ -1134,10 +1104,10 @@
 *
 *     Summary
 *
-      CALL AB_ALASVM( PATH, NOUT, NFAIL, NTEST, 0 )
+      CALL ALASVM( PATH, NOUT, NFAIL, NTEST, 0 )
 *
  9999 FORMAT( ' SVD -- Real Singular Value Decomposition Driver ',
-     $      / ' Matrix types (see AB_DDRVBD for details):',
+     $      / ' Matrix types (see DDRVBD for details):',
      $      / / ' 1 = Zero matrix', / ' 2 = Identity matrix',
      $      / ' 3 = Evenly spaced singular values near 1',
      $      / ' 4 = Evenly spaced singular values near underflow',
@@ -1149,7 +1119,7 @@
      $      / ' 2 = | I - U**T U | / ( M ulp ) ',
      $      / ' 3 = | I - VT VT**T | / ( N ulp ) ',
      $      / ' 4 = 0 if S contains min(M,N) nonnegative values in',
-     $      ' decreasing order, ELSE 1/ulp',
+     $      ' decreasing order, else 1/ulp',
      $      / ' 5 = | U - Upartial | / ( M ulp )',
      $      / ' 6 = | VT - VTpartial | / ( N ulp )',
      $      / ' 7 = | S - Spartial | / ( min(M,N) ulp |S| )',
@@ -1157,7 +1127,7 @@
      $      / ' 9 = | I - U**T U | / ( M ulp ) ',
      $      / '10 = | I - VT VT**T | / ( N ulp ) ',
      $      / '11 = 0 if S contains min(M,N) nonnegative values in',
-     $      ' decreasing order, ELSE 1/ulp',
+     $      ' decreasing order, else 1/ulp',
      $      / '12 = | U - Upartial | / ( M ulp )',
      $      / '13 = | VT - VTpartial | / ( N ulp )',
      $      / '14 = | S - Spartial | / ( min(M,N) ulp |S| )',
@@ -1165,41 +1135,41 @@
      $      / '16 = | I - U**T U | / ( M ulp ) ',
      $      / '17 = | I - VT VT**T | / ( N ulp ) ',
      $      / '18 = 0 if S contains min(M,N) nonnegative values in',
-     $      ' decreasing order, ELSE 1/ulp',
+     $      ' decreasing order, else 1/ulp',
      $      / '19 = | U - Upartial | / ( M ulp )',
      $      / '20 = | VT - VTpartial | / ( N ulp )',
      $      / '21 = | S - Spartial | / ( min(M,N) ulp |S| )',
      $      / '22 = 0 if S contains min(M,N) nonnegative values in',
-     $      ' decreasing order, ELSE 1/ulp',
+     $      ' decreasing order, else 1/ulp',
      $      / '23 = | A - U diag(S) VT | / ( |A| max(M,N) ulp ),',
-     $      ' AB_AB_AB_DGESVDX(V,V,A) ',
+     $      ' DGESVDX(V,V,A) ',
      $      / '24 = | I - U**T U | / ( M ulp ) ',
      $      / '25 = | I - VT VT**T | / ( N ulp ) ',
      $      / '26 = 0 if S contains min(M,N) nonnegative values in',
-     $      ' decreasing order, ELSE 1/ulp',
+     $      ' decreasing order, else 1/ulp',
      $      / '27 = | U - Upartial | / ( M ulp )',
      $      / '28 = | VT - VTpartial | / ( N ulp )',
      $      / '29 = | S - Spartial | / ( min(M,N) ulp |S| )',
      $      / '30 = | U**T A VT**T - diag(S) | / ( |A| max(M,N) ulp ),',
-     $      ' AB_AB_AB_DGESVDX(V,V,I) ',
+     $      ' DGESVDX(V,V,I) ',
      $      / '31 = | I - U**T U | / ( M ulp ) ',
      $      / '32 = | I - VT VT**T | / ( N ulp ) ',
      $      / '33 = | U**T A VT**T - diag(S) | / ( |A| max(M,N) ulp ),',
-     $      ' AB_AB_AB_DGESVDX(V,V,V) ',
+     $      ' DGESVDX(V,V,V) ',
      $      / '34 = | I - U**T U | / ( M ulp ) ',
      $      / '35 = | I - VT VT**T | / ( N ulp ) ',
      $      / / )
  9997 FORMAT( ' M=', I5, ', N=', I5, ', type ', I1, ', IWS=', I1,
      $      ', seed=', 4( I4, ',' ), ' test(', I2, ')=', G11.4 )
- 9996 FORMAT( ' AB_DDRVBD: ', A, ' returned INFO=', I6, '.', / 9X, 'M=',
+ 9996 FORMAT( ' DDRVBD: ', A, ' returned INFO=', I6, '.', / 9X, 'M=',
      $      I6, ', N=', I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ),
      $      I5, ')' )
- 9995 FORMAT( ' AB_DDRVBD: ', A, ' returned INFO=', I6, '.', / 9X, 'M=',
+ 9995 FORMAT( ' DDRVBD: ', A, ' returned INFO=', I6, '.', / 9X, 'M=',
      $      I6, ', N=', I6, ', JTYPE=', I6, ', LSWORK=', I6, / 9X,
      $      'ISEED=(', 3( I5, ',' ), I5, ')' )
 *
       RETURN
 *
-*     End of AB_DDRVBD
+*     End of DDRVBD
 *
       END

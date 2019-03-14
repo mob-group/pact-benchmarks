@@ -1,4 +1,4 @@
-*> \brief \b AB_CLABRD reduces the first nb rows and columns of a general matrix to a bidiagonal form.
+*> \brief \b CLABRD reduces the first nb rows and columns of a general matrix to a bidiagonal form.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CLABRD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLABRD.f">
+*> Download CLABRD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clabrd.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLABRD.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clabrd.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLABRD.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clabrd.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CLABRD( M, N, NB, A, LDA, D, E, TAUQ, TAUP, X, LDX, Y,
+*       SUBROUTINE CLABRD( M, N, NB, A, LDA, D, E, TAUQ, TAUP, X, LDX, Y,
 *                          LDY )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CLABRD reduces the first NB rows and columns of a complex general
+*> CLABRD reduces the first NB rows and columns of a complex general
 *> m by n matrix A to upper or lower real bidiagonal form by a unitary
 *> transformation Q**H * A * P, and returns the matrices X and Y which
 *> are needed to apply the transformation to the unreduced part of A.
@@ -44,7 +44,7 @@
 *> If m >= n, A is reduced to upper bidiagonal form; if m < n, to lower
 *> bidiagonal form.
 *>
-*> This is an auxiliary routine called by AB_CGEBRD
+*> This is an auxiliary routine called by CGEBRD
 *> \endverbatim
 *
 *  Arguments:
@@ -209,8 +209,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_CLABRD( M, N, NB, A, LDA, D, E, TAUQ, TAUP, X, LDX, 
-     $Y,
+      SUBROUTINE CLABRD( M, N, NB, A, LDA, D, E, TAUQ, TAUP, X, LDX, Y,
      $                   LDY )
 *
 *  -- LAPACK auxiliary routine (version 3.7.1) --
@@ -239,7 +238,7 @@
       COMPLEX            ALPHA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CGEMV, AB_CLACGV, AB_AB_CLARFG, AB_CSCAL
+      EXTERNAL           CGEMV, CLACGV, CLARFG, CSCAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN
@@ -259,17 +258,17 @@
 *
 *           Update A(i:m,i)
 *
-            CALL AB_CLACGV( I-1, Y( I, 1 ), LDY )
-            CALL AB_CGEMV( 'No transpose', M-I+1, I-1, -ONE, A( I, 1 ),
+            CALL CLACGV( I-1, Y( I, 1 ), LDY )
+            CALL CGEMV( 'No transpose', M-I+1, I-1, -ONE, A( I, 1 ),
      $                  LDA, Y( I, 1 ), LDY, ONE, A( I, I ), 1 )
-            CALL AB_CLACGV( I-1, Y( I, 1 ), LDY )
-            CALL AB_CGEMV( 'No transpose', M-I+1, I-1, -ONE, X( I, 1 ),
+            CALL CLACGV( I-1, Y( I, 1 ), LDY )
+            CALL CGEMV( 'No transpose', M-I+1, I-1, -ONE, X( I, 1 ),
      $                  LDX, A( 1, I ), 1, ONE, A( I, I ), 1 )
 *
 *           Generate reflection Q(i) to annihilate A(i+1:m,i)
 *
             ALPHA = A( I, I )
-            CALL AB_AB_CLARFG( M-I+1, ALPHA, A( MIN( I+1, M ), I ), 1,
+            CALL CLARFG( M-I+1, ALPHA, A( MIN( I+1, M ), I ), 1,
      $                   TAUQ( I ) )
             D( I ) = ALPHA
             IF( I.LT.N ) THEN
@@ -277,62 +276,58 @@
 *
 *              Compute Y(i+1:n,i)
 *
-               CALL AB_CGEMV( 'Conjugate transpose', M-I+1, N-I, ONE,
+               CALL CGEMV( 'Conjugate transpose', M-I+1, N-I, ONE,
      $                     A( I, I+1 ), LDA, A( I, I ), 1, ZERO,
      $                     Y( I+1, I ), 1 )
-               CALL AB_CGEMV( 'Conjugate transpose', M-I+1, I-1, ONE,
+               CALL CGEMV( 'Conjugate transpose', M-I+1, I-1, ONE,
      $                     A( I, 1 ), LDA, A( I, I ), 1, ZERO,
      $                     Y( 1, I ), 1 )
-               CALL AB_CGEMV( 'No transpose', N-I, I-1, -ONE, Y( I+1, 1 
-     $),
+               CALL CGEMV( 'No transpose', N-I, I-1, -ONE, Y( I+1, 1 ),
      $                     LDY, Y( 1, I ), 1, ONE, Y( I+1, I ), 1 )
-               CALL AB_CGEMV( 'Conjugate transpose', M-I+1, I-1, ONE,
+               CALL CGEMV( 'Conjugate transpose', M-I+1, I-1, ONE,
      $                     X( I, 1 ), LDX, A( I, I ), 1, ZERO,
      $                     Y( 1, I ), 1 )
-               CALL AB_CGEMV( 'Conjugate transpose', I-1, N-I, -ONE,
+               CALL CGEMV( 'Conjugate transpose', I-1, N-I, -ONE,
      $                     A( 1, I+1 ), LDA, Y( 1, I ), 1, ONE,
      $                     Y( I+1, I ), 1 )
-               CALL AB_CSCAL( N-I, TAUQ( I ), Y( I+1, I ), 1 )
+               CALL CSCAL( N-I, TAUQ( I ), Y( I+1, I ), 1 )
 *
 *              Update A(i,i+1:n)
 *
-               CALL AB_CLACGV( N-I, A( I, I+1 ), LDA )
-               CALL AB_CLACGV( I, A( I, 1 ), LDA )
-               CALL AB_CGEMV( 'No transpose', N-I, I, -ONE, Y( I+1, 1 ),
+               CALL CLACGV( N-I, A( I, I+1 ), LDA )
+               CALL CLACGV( I, A( I, 1 ), LDA )
+               CALL CGEMV( 'No transpose', N-I, I, -ONE, Y( I+1, 1 ),
      $                     LDY, A( I, 1 ), LDA, ONE, A( I, I+1 ), LDA )
-               CALL AB_CLACGV( I, A( I, 1 ), LDA )
-               CALL AB_CLACGV( I-1, X( I, 1 ), LDX )
-               CALL AB_CGEMV( 'Conjugate transpose', I-1, N-I, -ONE,
+               CALL CLACGV( I, A( I, 1 ), LDA )
+               CALL CLACGV( I-1, X( I, 1 ), LDX )
+               CALL CGEMV( 'Conjugate transpose', I-1, N-I, -ONE,
      $                     A( 1, I+1 ), LDA, X( I, 1 ), LDX, ONE,
      $                     A( I, I+1 ), LDA )
-               CALL AB_CLACGV( I-1, X( I, 1 ), LDX )
+               CALL CLACGV( I-1, X( I, 1 ), LDX )
 *
 *              Generate reflection P(i) to annihilate A(i,i+2:n)
 *
                ALPHA = A( I, I+1 )
-               CALL AB_AB_CLARFG( N-I, ALPHA, A( I, MIN( I+2, N ) ),
+               CALL CLARFG( N-I, ALPHA, A( I, MIN( I+2, N ) ),
      $                      LDA, TAUP( I ) )
                E( I ) = ALPHA
                A( I, I+1 ) = ONE
 *
 *              Compute X(i+1:m,i)
 *
-               CALL AB_CGEMV( 'No transpose', M-I, N-I, ONE, A( I+1, I+1
-     $ ),
+               CALL CGEMV( 'No transpose', M-I, N-I, ONE, A( I+1, I+1 ),
      $                     LDA, A( I, I+1 ), LDA, ZERO, X( I+1, I ), 1 )
-               CALL AB_CGEMV( 'Conjugate transpose', N-I, I, ONE,
+               CALL CGEMV( 'Conjugate transpose', N-I, I, ONE,
      $                     Y( I+1, 1 ), LDY, A( I, I+1 ), LDA, ZERO,
      $                     X( 1, I ), 1 )
-               CALL AB_CGEMV( 'No transpose', M-I, I, -ONE, A( I+1, 1 ),
+               CALL CGEMV( 'No transpose', M-I, I, -ONE, A( I+1, 1 ),
      $                     LDA, X( 1, I ), 1, ONE, X( I+1, I ), 1 )
-               CALL AB_CGEMV( 'No transpose', I-1, N-I, ONE, A( 1, I+1 )
-     $,
+               CALL CGEMV( 'No transpose', I-1, N-I, ONE, A( 1, I+1 ),
      $                     LDA, A( I, I+1 ), LDA, ZERO, X( 1, I ), 1 )
-               CALL AB_CGEMV( 'No transpose', M-I, I-1, -ONE, X( I+1, 1 
-     $),
+               CALL CGEMV( 'No transpose', M-I, I-1, -ONE, X( I+1, 1 ),
      $                     LDX, X( 1, I ), 1, ONE, X( I+1, I ), 1 )
-               CALL AB_CSCAL( M-I, TAUP( I ), X( I+1, I ), 1 )
-               CALL AB_CLACGV( N-I, A( I, I+1 ), LDA )
+               CALL CSCAL( M-I, TAUP( I ), X( I+1, I ), 1 )
+               CALL CLACGV( N-I, A( I, I+1 ), LDA )
             END IF
    10    CONTINUE
       ELSE
@@ -343,21 +338,21 @@
 *
 *           Update A(i,i:n)
 *
-            CALL AB_CLACGV( N-I+1, A( I, I ), LDA )
-            CALL AB_CLACGV( I-1, A( I, 1 ), LDA )
-            CALL AB_CGEMV( 'No transpose', N-I+1, I-1, -ONE, Y( I, 1 ),
+            CALL CLACGV( N-I+1, A( I, I ), LDA )
+            CALL CLACGV( I-1, A( I, 1 ), LDA )
+            CALL CGEMV( 'No transpose', N-I+1, I-1, -ONE, Y( I, 1 ),
      $                  LDY, A( I, 1 ), LDA, ONE, A( I, I ), LDA )
-            CALL AB_CLACGV( I-1, A( I, 1 ), LDA )
-            CALL AB_CLACGV( I-1, X( I, 1 ), LDX )
-            CALL AB_CGEMV( 'Conjugate transpose', I-1, N-I+1, -ONE,
+            CALL CLACGV( I-1, A( I, 1 ), LDA )
+            CALL CLACGV( I-1, X( I, 1 ), LDX )
+            CALL CGEMV( 'Conjugate transpose', I-1, N-I+1, -ONE,
      $                  A( 1, I ), LDA, X( I, 1 ), LDX, ONE, A( I, I ),
      $                  LDA )
-            CALL AB_CLACGV( I-1, X( I, 1 ), LDX )
+            CALL CLACGV( I-1, X( I, 1 ), LDX )
 *
 *           Generate reflection P(i) to annihilate A(i,i+1:n)
 *
             ALPHA = A( I, I )
-            CALL AB_AB_CLARFG( N-I+1, ALPHA, A( I, MIN( I+1, N ) ), LDA,
+            CALL CLARFG( N-I+1, ALPHA, A( I, MIN( I+1, N ) ), LDA,
      $                   TAUP( I ) )
             D( I ) = ALPHA
             IF( I.LT.M ) THEN
@@ -365,67 +360,61 @@
 *
 *              Compute X(i+1:m,i)
 *
-               CALL AB_CGEMV( 'No transpose', M-I, N-I+1, ONE, A( I+1, I
-     $ ),
+               CALL CGEMV( 'No transpose', M-I, N-I+1, ONE, A( I+1, I ),
      $                     LDA, A( I, I ), LDA, ZERO, X( I+1, I ), 1 )
-               CALL AB_CGEMV( 'Conjugate transpose', N-I+1, I-1, ONE,
+               CALL CGEMV( 'Conjugate transpose', N-I+1, I-1, ONE,
      $                     Y( I, 1 ), LDY, A( I, I ), LDA, ZERO,
      $                     X( 1, I ), 1 )
-               CALL AB_CGEMV( 'No transpose', M-I, I-1, -ONE, A( I+1, 1 
-     $),
+               CALL CGEMV( 'No transpose', M-I, I-1, -ONE, A( I+1, 1 ),
      $                     LDA, X( 1, I ), 1, ONE, X( I+1, I ), 1 )
-               CALL AB_CGEMV( 'No transpose', I-1, N-I+1, ONE, A( 1, I )
-     $,
+               CALL CGEMV( 'No transpose', I-1, N-I+1, ONE, A( 1, I ),
      $                     LDA, A( I, I ), LDA, ZERO, X( 1, I ), 1 )
-               CALL AB_CGEMV( 'No transpose', M-I, I-1, -ONE, X( I+1, 1 
-     $),
+               CALL CGEMV( 'No transpose', M-I, I-1, -ONE, X( I+1, 1 ),
      $                     LDX, X( 1, I ), 1, ONE, X( I+1, I ), 1 )
-               CALL AB_CSCAL( M-I, TAUP( I ), X( I+1, I ), 1 )
-               CALL AB_CLACGV( N-I+1, A( I, I ), LDA )
+               CALL CSCAL( M-I, TAUP( I ), X( I+1, I ), 1 )
+               CALL CLACGV( N-I+1, A( I, I ), LDA )
 *
 *              Update A(i+1:m,i)
 *
-               CALL AB_CLACGV( I-1, Y( I, 1 ), LDY )
-               CALL AB_CGEMV( 'No transpose', M-I, I-1, -ONE, A( I+1, 1 
-     $),
+               CALL CLACGV( I-1, Y( I, 1 ), LDY )
+               CALL CGEMV( 'No transpose', M-I, I-1, -ONE, A( I+1, 1 ),
      $                     LDA, Y( I, 1 ), LDY, ONE, A( I+1, I ), 1 )
-               CALL AB_CLACGV( I-1, Y( I, 1 ), LDY )
-               CALL AB_CGEMV( 'No transpose', M-I, I, -ONE, X( I+1, 1 ),
+               CALL CLACGV( I-1, Y( I, 1 ), LDY )
+               CALL CGEMV( 'No transpose', M-I, I, -ONE, X( I+1, 1 ),
      $                     LDX, A( 1, I ), 1, ONE, A( I+1, I ), 1 )
 *
 *              Generate reflection Q(i) to annihilate A(i+2:m,i)
 *
                ALPHA = A( I+1, I )
-               CALL AB_AB_CLARFG( M-I, ALPHA, A( MIN( I+2, M ), I ), 1,
+               CALL CLARFG( M-I, ALPHA, A( MIN( I+2, M ), I ), 1,
      $                      TAUQ( I ) )
                E( I ) = ALPHA
                A( I+1, I ) = ONE
 *
 *              Compute Y(i+1:n,i)
 *
-               CALL AB_CGEMV( 'Conjugate transpose', M-I, N-I, ONE,
+               CALL CGEMV( 'Conjugate transpose', M-I, N-I, ONE,
      $                     A( I+1, I+1 ), LDA, A( I+1, I ), 1, ZERO,
      $                     Y( I+1, I ), 1 )
-               CALL AB_CGEMV( 'Conjugate transpose', M-I, I-1, ONE,
+               CALL CGEMV( 'Conjugate transpose', M-I, I-1, ONE,
      $                     A( I+1, 1 ), LDA, A( I+1, I ), 1, ZERO,
      $                     Y( 1, I ), 1 )
-               CALL AB_CGEMV( 'No transpose', N-I, I-1, -ONE, Y( I+1, 1 
-     $),
+               CALL CGEMV( 'No transpose', N-I, I-1, -ONE, Y( I+1, 1 ),
      $                     LDY, Y( 1, I ), 1, ONE, Y( I+1, I ), 1 )
-               CALL AB_CGEMV( 'Conjugate transpose', M-I, I, ONE,
+               CALL CGEMV( 'Conjugate transpose', M-I, I, ONE,
      $                     X( I+1, 1 ), LDX, A( I+1, I ), 1, ZERO,
      $                     Y( 1, I ), 1 )
-               CALL AB_CGEMV( 'Conjugate transpose', I, N-I, -ONE,
+               CALL CGEMV( 'Conjugate transpose', I, N-I, -ONE,
      $                     A( 1, I+1 ), LDA, Y( 1, I ), 1, ONE,
      $                     Y( I+1, I ), 1 )
-               CALL AB_CSCAL( N-I, TAUQ( I ), Y( I+1, I ), 1 )
+               CALL CSCAL( N-I, TAUQ( I ), Y( I+1, I ), 1 )
             ELSE
-               CALL AB_CLACGV( N-I+1, A( I, I ), LDA )
+               CALL CLACGV( N-I+1, A( I, I ), LDA )
             END IF
    20    CONTINUE
       END IF
       RETURN
 *
-*     End of AB_CLABRD
+*     End of CLABRD
 *
       END

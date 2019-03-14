@@ -1,4 +1,4 @@
-*> \brief \b AB_CPFTRF
+*> \brief \b CPFTRF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CPFTRF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CPFTRF.f">
+*> Download CPFTRF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpftrf.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CPFTRF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cpftrf.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CPFTRF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpftrf.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CPFTRF( TRANSR, UPLO, N, A, INFO )
+*       SUBROUTINE CPFTRF( TRANSR, UPLO, N, A, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          TRANSR, UPLO
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CPFTRF computes the Cholesky factorization of a complex Hermitian
+*> CPFTRF computes the Cholesky factorization of a complex Hermitian
 *> positive definite matrix A.
 *>
 *> The factorization has the form
@@ -209,7 +209,7 @@
 *> \ingroup complexOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_CPFTRF( TRANSR, UPLO, N, A, INFO )
+      SUBROUTINE CPFTRF( TRANSR, UPLO, N, A, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -235,11 +235,11 @@
       INTEGER            N1, N2, K
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_AB_CHERK, AB_CPOTRF, AB_CTRSM
+      EXTERNAL           XERBLA, CHERK, CPOTRF, CTRSM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MOD
@@ -249,17 +249,17 @@
 *     Test the input parameters.
 *
       INFO = 0
-      NORMALTRANSR = AB_LSAME( TRANSR, 'N' )
-      LOWER = AB_LSAME( UPLO, 'L' )
-      IF( .NOT.NORMALTRANSR .AND. .NOT.AB_LSAME( TRANSR, 'C' ) ) THEN
+      NORMALTRANSR = LSAME( TRANSR, 'N' )
+      LOWER = LSAME( UPLO, 'L' )
+      IF( .NOT.NORMALTRANSR .AND. .NOT.LSAME( TRANSR, 'C' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LOWER .AND. .NOT.AB_LSAME( UPLO, 'U' ) ) THEN
+      ELSE IF( .NOT.LOWER .AND. .NOT.LSAME( UPLO, 'U' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CPFTRF', -INFO )
+         CALL XERBLA( 'CPFTRF', -INFO )
          RETURN
       END IF
 *
@@ -304,16 +304,14 @@
 *             T1 -> a(0,0), T2 -> a(0,1), S -> a(n1,0)
 *             T1 -> a(0), T2 -> a(n), S -> a(n1)
 *
-               CALL AB_CPOTRF( 'L', N1, A( 0 ), N, INFO )
+               CALL CPOTRF( 'L', N1, A( 0 ), N, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL AB_CTRSM( 'R', 'L', 'C', 'N', N2, N1, CONE, A( 0 ), 
-     $N,
+               CALL CTRSM( 'R', 'L', 'C', 'N', N2, N1, CONE, A( 0 ), N,
      $                     A( N1 ), N )
-               CALL AB_AB_CHERK( 'U', 'N', N2, N1, -ONE, A( N1 ), N, ONE
-     $,
+               CALL CHERK( 'U', 'N', N2, N1, -ONE, A( N1 ), N, ONE,
      $                     A( N ), N )
-               CALL AB_CPOTRF( 'U', N2, A( N ), N, INFO )
+               CALL CPOTRF( 'U', N2, A( N ), N, INFO )
                IF( INFO.GT.0 )
      $            INFO = INFO + N1
 *
@@ -323,15 +321,14 @@
 *             T1 -> a(n1+1,0), T2 -> a(n1,0), S -> a(0,0)
 *             T1 -> a(n2), T2 -> a(n1), S -> a(0)
 *
-               CALL AB_CPOTRF( 'L', N1, A( N2 ), N, INFO )
+               CALL CPOTRF( 'L', N1, A( N2 ), N, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL AB_CTRSM( 'L', 'L', 'N', 'N', N1, N2, CONE, A( N2 ),
-     $ N,
+               CALL CTRSM( 'L', 'L', 'N', 'N', N1, N2, CONE, A( N2 ), N,
      $                     A( 0 ), N )
-               CALL AB_AB_CHERK( 'U', 'C', N2, N1, -ONE, A( 0 ), N, ONE,
+               CALL CHERK( 'U', 'C', N2, N1, -ONE, A( 0 ), N, ONE,
      $                     A( N1 ), N )
-               CALL AB_CPOTRF( 'U', N2, A( N1 ), N, INFO )
+               CALL CPOTRF( 'U', N2, A( N1 ), N, INFO )
                IF( INFO.GT.0 )
      $            INFO = INFO + N1
 *
@@ -347,16 +344,14 @@
 *              T1 -> A(0,0) , T2 -> A(1,0) , S -> A(0,n1)
 *              T1 -> a(0+0) , T2 -> a(1+0) , S -> a(0+n1*n1); lda=n1
 *
-               CALL AB_CPOTRF( 'U', N1, A( 0 ), N1, INFO )
+               CALL CPOTRF( 'U', N1, A( 0 ), N1, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL AB_CTRSM( 'L', 'U', 'C', 'N', N1, N2, CONE, A( 0 ), 
-     $N1,
+               CALL CTRSM( 'L', 'U', 'C', 'N', N1, N2, CONE, A( 0 ), N1,
      $                     A( N1*N1 ), N1 )
-               CALL AB_AB_CHERK( 'L', 'C', N2, N1, -ONE, A( N1*N1 ), N1,
-     $ ONE,
+               CALL CHERK( 'L', 'C', N2, N1, -ONE, A( N1*N1 ), N1, ONE,
      $                     A( 1 ), N1 )
-               CALL AB_CPOTRF( 'L', N2, A( 1 ), N1, INFO )
+               CALL CPOTRF( 'L', N2, A( 1 ), N1, INFO )
                IF( INFO.GT.0 )
      $            INFO = INFO + N1
 *
@@ -366,16 +361,14 @@
 *              T1 -> A(0,n1+1), T2 -> A(0,n1), S -> A(0,0)
 *              T1 -> a(n2*n2), T2 -> a(n1*n2), S -> a(0); lda = n2
 *
-               CALL AB_CPOTRF( 'U', N1, A( N2*N2 ), N2, INFO )
+               CALL CPOTRF( 'U', N1, A( N2*N2 ), N2, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL AB_CTRSM( 'R', 'U', 'N', 'N', N2, N1, CONE, A( N2*N2
-     $ ),
+               CALL CTRSM( 'R', 'U', 'N', 'N', N2, N1, CONE, A( N2*N2 ),
      $                     N2, A( 0 ), N2 )
-               CALL AB_AB_CHERK( 'L', 'N', N2, N1, -ONE, A( 0 ), N2, ONE
-     $,
+               CALL CHERK( 'L', 'N', N2, N1, -ONE, A( 0 ), N2, ONE,
      $                     A( N1*N2 ), N2 )
-               CALL AB_CPOTRF( 'L', N2, A( N1*N2 ), N2, INFO )
+               CALL CPOTRF( 'L', N2, A( N1*N2 ), N2, INFO )
                IF( INFO.GT.0 )
      $            INFO = INFO + N1
 *
@@ -397,16 +390,14 @@
 *              T1 -> a(1,0), T2 -> a(0,0), S -> a(k+1,0)
 *              T1 -> a(1), T2 -> a(0), S -> a(k+1)
 *
-               CALL AB_CPOTRF( 'L', K, A( 1 ), N+1, INFO )
+               CALL CPOTRF( 'L', K, A( 1 ), N+1, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL AB_CTRSM( 'R', 'L', 'C', 'N', K, K, CONE, A( 1 ), N+
-     $1,
+               CALL CTRSM( 'R', 'L', 'C', 'N', K, K, CONE, A( 1 ), N+1,
      $                     A( K+1 ), N+1 )
-               CALL AB_AB_CHERK( 'U', 'N', K, K, -ONE, A( K+1 ), N+1, ON
-     $E,
+               CALL CHERK( 'U', 'N', K, K, -ONE, A( K+1 ), N+1, ONE,
      $                     A( 0 ), N+1 )
-               CALL AB_CPOTRF( 'U', K, A( 0 ), N+1, INFO )
+               CALL CPOTRF( 'U', K, A( 0 ), N+1, INFO )
                IF( INFO.GT.0 )
      $            INFO = INFO + K
 *
@@ -416,14 +407,14 @@
 *              T1 -> a(k+1,0) ,  T2 -> a(k,0),   S -> a(0,0)
 *              T1 -> a(k+1), T2 -> a(k), S -> a(0)
 *
-               CALL AB_CPOTRF( 'L', K, A( K+1 ), N+1, INFO )
+               CALL CPOTRF( 'L', K, A( K+1 ), N+1, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL AB_CTRSM( 'L', 'L', 'N', 'N', K, K, CONE, A( K+1 ),
+               CALL CTRSM( 'L', 'L', 'N', 'N', K, K, CONE, A( K+1 ),
      $                     N+1, A( 0 ), N+1 )
-               CALL AB_AB_CHERK( 'U', 'C', K, K, -ONE, A( 0 ), N+1, ONE,
+               CALL CHERK( 'U', 'C', K, K, -ONE, A( 0 ), N+1, ONE,
      $                     A( K ), N+1 )
-               CALL AB_CPOTRF( 'U', K, A( K ), N+1, INFO )
+               CALL CPOTRF( 'U', K, A( K ), N+1, INFO )
                IF( INFO.GT.0 )
      $            INFO = INFO + K
 *
@@ -439,16 +430,14 @@
 *              T1 -> B(0,1), T2 -> B(0,0), S -> B(0,k+1)
 *              T1 -> a(0+k), T2 -> a(0+0), S -> a(0+k*(k+1)); lda=k
 *
-               CALL AB_CPOTRF( 'U', K, A( 0+K ), K, INFO )
+               CALL CPOTRF( 'U', K, A( 0+K ), K, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL AB_CTRSM( 'L', 'U', 'C', 'N', K, K, CONE, A( K ), N1
-     $,
+               CALL CTRSM( 'L', 'U', 'C', 'N', K, K, CONE, A( K ), N1,
      $                     A( K*( K+1 ) ), K )
-               CALL AB_AB_CHERK( 'L', 'C', K, K, -ONE, A( K*( K+1 ) ), K
-     $, ONE,
+               CALL CHERK( 'L', 'C', K, K, -ONE, A( K*( K+1 ) ), K, ONE,
      $                     A( 0 ), K )
-               CALL AB_CPOTRF( 'L', K, A( 0 ), K, INFO )
+               CALL CPOTRF( 'L', K, A( 0 ), K, INFO )
                IF( INFO.GT.0 )
      $            INFO = INFO + K
 *
@@ -458,14 +447,14 @@
 *              T1 -> B(0,k+1),     T2 -> B(0,k),   S -> B(0,0)
 *              T1 -> a(0+k*(k+1)), T2 -> a(0+k*k), S -> a(0+0)); lda=k
 *
-               CALL AB_CPOTRF( 'U', K, A( K*( K+1 ) ), K, INFO )
+               CALL CPOTRF( 'U', K, A( K*( K+1 ) ), K, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL AB_CTRSM( 'R', 'U', 'N', 'N', K, K, CONE,
+               CALL CTRSM( 'R', 'U', 'N', 'N', K, K, CONE,
      $                     A( K*( K+1 ) ), K, A( 0 ), K )
-               CALL AB_AB_CHERK( 'L', 'N', K, K, -ONE, A( 0 ), K, ONE,
+               CALL CHERK( 'L', 'N', K, K, -ONE, A( 0 ), K, ONE,
      $                     A( K*K ), K )
-               CALL AB_CPOTRF( 'L', K, A( K*K ), K, INFO )
+               CALL CPOTRF( 'L', K, A( K*K ), K, INFO )
                IF( INFO.GT.0 )
      $            INFO = INFO + K
 *
@@ -477,6 +466,6 @@
 *
       RETURN
 *
-*     End of AB_CPFTRF
+*     End of CPFTRF
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_DLASD2 merges the two sets of singular values together into a single sorted set. Used by AB_SBDSDC.
+*> \brief \b DLASD2 merges the two sets of singular values together into a single sorted set. Used by sbdsdc.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLASD2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLASD2.f">
+*> Download DLASD2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasd2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLASD2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlasd2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLASD2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasd2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLASD2( NL, NR, SQRE, K, D, Z, ALPHA, BETA, U, LDU, VT,
+*       SUBROUTINE DLASD2( NL, NR, SQRE, K, D, Z, ALPHA, BETA, U, LDU, VT,
 *                          LDVT, DSIGMA, U2, LDU2, VT2, LDVT2, IDXP, IDX,
 *                          IDXC, IDXQ, COLTYP, INFO )
 *
@@ -40,14 +40,14 @@
 *>
 *> \verbatim
 *>
-*> AB_DLASD2 merges the two sets of singular values together into a single
+*> DLASD2 merges the two sets of singular values together into a single
 *> sorted set.  Then it tries to deflate the size of the problem.
 *> There are two ways in which deflation can occur:  when two or more
 *> singular values are close together or if there is a tiny entry in the
 *> Z vector.  For each such occurrence the order of the related secular
 *> equation problem is reduced by one.
 *>
-*> AB_DLASD2 is called from AB_DLASD1.
+*> DLASD2 is called from DLASD1.
 *> \endverbatim
 *
 *  Arguments:
@@ -156,10 +156,10 @@
 *> \verbatim
 *>          U2 is DOUBLE PRECISION array, dimension(LDU2,N)
 *>         Contains a copy of the first K-1 left singular vectors which
-*>         will be used by AB_DLASD3 in a matrix multiply (AB_DGEMM) to solve
+*>         will be used by DLASD3 in a matrix multiply (DGEMM) to solve
 *>         for the new left singular vectors. U2 is arranged into four
 *>         blocks. The first block contains a column with 1 at NL+1 and
-*>         zero everywhere ELSE; the AB_SECOND block contains non-zero
+*>         zero everywhere else; the second block contains non-zero
 *>         entries only at and above NL; the third contains non-zero
 *>         entries only below NL+1; and the fourth is dense.
 *> \endverbatim
@@ -174,10 +174,10 @@
 *> \verbatim
 *>          VT2 is DOUBLE PRECISION array, dimension(LDVT2,N)
 *>         VT2**T contains a copy of the first K right singular vectors
-*>         which will be used by AB_DLASD3 in a matrix multiply (AB_DGEMM) to
+*>         which will be used by DLASD3 in a matrix multiply (DGEMM) to
 *>         solve for the new right singular vectors. VT2 is arranged into
 *>         three blocks. The first block contains a row that corresponds
-*>         to the special 0 diagonal element in SIGMA; the AB_SECOND block
+*>         to the special 0 diagonal element in SIGMA; the second block
 *>         contains non-zeros only at and before NL +1; the third block
 *>         contains non-zeros only at and after  NL +2.
 *> \endverbatim
@@ -209,7 +209,7 @@
 *>          IDXC is INTEGER array, dimension(N)
 *>         This will contain the permutation used to arrange the columns
 *>         of the deflated U matrix into three groups:  the first group
-*>         contains non-zero entries only at and above NL, the AB_SECOND
+*>         contains non-zero entries only at and above NL, the second
 *>         contains non-zero entries only below NL+2, and the third is
 *>         dense.
 *> \endverbatim
@@ -220,7 +220,7 @@
 *>         This contains the permutation which separately sorts the two
 *>         sub-problems in D into ascending order.  Note that entries in
 *>         the first hlaf of this permutation must first be moved one
-*>         position backward; and entries in the AB_SECOND half
+*>         position backward; and entries in the second half
 *>         must first have NL+1 added to their values.
 *> \endverbatim
 *>
@@ -265,8 +265,7 @@
 *>     California at Berkeley, USA
 *>
 *  =====================================================================
-      SUBROUTINE AB_DLASD2( NL, NR, SQRE, K, D, Z, ALPHA, BETA, U, LDU, 
-     $VT,
+      SUBROUTINE DLASD2( NL, NR, SQRE, K, D, Z, ALPHA, BETA, U, LDU, VT,
      $                   LDVT, DSIGMA, U2, LDU2, VT2, LDVT2, IDXP, IDX,
      $                   IDXC, IDXQ, COLTYP, INFO )
 *
@@ -303,12 +302,11 @@
       DOUBLE PRECISION   C, EPS, HLFTOL, S, TAU, TOL, Z1
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH, AB_DLAPY2
-      EXTERNAL           AB_DLAMCH, AB_DLAPY2
+      DOUBLE PRECISION   DLAMCH, DLAPY2
+      EXTERNAL           DLAMCH, DLAPY2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DCOPY, AB_DLACPY, AB_DLAMRG, AB_DLASET, AB_D
-     $ROT, AB_XERBLA
+      EXTERNAL           DCOPY, DLACPY, DLAMRG, DLASET, DROT, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -340,7 +338,7 @@
          INFO = -17
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DLASD2', -INFO )
+         CALL XERBLA( 'DLASD2', -INFO )
          RETURN
       END IF
 *
@@ -358,7 +356,7 @@
          IDXQ( I+1 ) = IDXQ( I ) + 1
    10 CONTINUE
 *
-*     Generate the AB_SECOND part of the vector Z.
+*     Generate the second part of the vector Z.
 *
       DO 20 I = NLP2, M
          Z( I ) = BETA*VT( I, NLP2 )
@@ -388,7 +386,7 @@
          IDXC( I ) = COLTYP( IDXQ( I ) )
    60 CONTINUE
 *
-      CALL AB_DLAMRG( NL, NR, DSIGMA( 2 ), 1, 1, IDX( 2 ) )
+      CALL DLAMRG( NL, NR, DSIGMA( 2 ), 1, 1, IDX( 2 ) )
 *
       DO 70 I = 2, N
          IDXI = 1 + IDX( I )
@@ -399,12 +397,12 @@
 *
 *     Calculate the allowable deflation tolerance
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
+      EPS = DLAMCH( 'Epsilon' )
       TOL = MAX( ABS( ALPHA ), ABS( BETA ) )
       TOL = EIGHT*EPS*MAX( ABS( D( N ) ), TOL )
 *
 *     There are 2 kinds of deflation -- first a value in the z-vector
-*     is small, AB_SECOND two (or more) singular values are very close
+*     is small, second two (or more) singular values are very close
 *     together (their difference is small).
 *
 *     If the value in the z-vector is small, we simply permute the
@@ -466,7 +464,7 @@
 *           Find sqrt(a**2+b**2) without overflow or
 *           destructive underflow.
 *
-            TAU = AB_DLAPY2( C, S )
+            TAU = DLAPY2( C, S )
             C = C / TAU
             S = -S / TAU
             Z( J ) = TAU
@@ -483,9 +481,8 @@
             IF( IDXJ.LE.NLP1 ) THEN
                IDXJ = IDXJ - 1
             END IF
-            CALL AB_DROT( N, U( 1, IDXJP ), 1, U( 1, IDXJ ), 1, C, S )
-            CALL AB_DROT( M, VT( IDXJP, 1 ), LDVT, VT( IDXJ, 1 ), LDVT, 
-     $C,
+            CALL DROT( N, U( 1, IDXJP ), 1, U( 1, IDXJ ), 1, C, S )
+            CALL DROT( M, VT( IDXJP, 1 ), LDVT, VT( IDXJ, 1 ), LDVT, C,
      $                 S )
             IF( COLTYP( J ).NE.COLTYP( JPREV ) ) THEN
                COLTYP( J ) = 3
@@ -537,7 +534,7 @@
 *     Fill out the IDXC array so that the permutation which it induces
 *     will place all type-1 columns first, all type-2 columns next,
 *     then all type-3's, and finally all type-4's, starting from the
-*     AB_SECOND column. This applies similarly to the rows of VT.
+*     second column. This applies similarly to the rows of VT.
 *
       DO 150 J = 2, N
          JP = IDXP( J )
@@ -560,8 +557,8 @@
          IF( IDXJ.LE.NLP1 ) THEN
             IDXJ = IDXJ - 1
          END IF
-         CALL AB_DCOPY( N, U( 1, IDXJ ), 1, U2( 1, J ), 1 )
-         CALL AB_DCOPY( M, VT( IDXJ, 1 ), LDVT, VT2( J, 1 ), LDVT2 )
+         CALL DCOPY( N, U( 1, IDXJ ), 1, U2( 1, J ), 1 )
+         CALL DCOPY( M, VT( IDXJ, 1 ), LDVT, VT2( J, 1 ), LDVT2 )
   160 CONTINUE
 *
 *     Determine DSIGMA(1), DSIGMA(2) and Z(1)
@@ -571,7 +568,7 @@
       IF( ABS( DSIGMA( 2 ) ).LE.HLFTOL )
      $   DSIGMA( 2 ) = HLFTOL
       IF( M.GT.N ) THEN
-         Z( 1 ) = AB_DLAPY2( Z1, Z( M ) )
+         Z( 1 ) = DLAPY2( Z1, Z( M ) )
          IF( Z( 1 ).LE.TOL ) THEN
             C = ONE
             S = ZERO
@@ -590,12 +587,12 @@
 *
 *     Move the rest of the updating row to Z.
 *
-      CALL AB_DCOPY( K-1, U2( 2, 1 ), 1, Z( 2 ), 1 )
+      CALL DCOPY( K-1, U2( 2, 1 ), 1, Z( 2 ), 1 )
 *
 *     Determine the first column of U2, the first row of VT2 and the
 *     last row of VT.
 *
-      CALL AB_DLASET( 'A', N, 1, ZERO, ZERO, U2, LDU2 )
+      CALL DLASET( 'A', N, 1, ZERO, ZERO, U2, LDU2 )
       U2( NLP1, 1 ) = ONE
       IF( M.GT.N ) THEN
          DO 170 I = 1, NLP1
@@ -607,25 +604,24 @@
             VT( M, I ) = C*VT( M, I )
   180    CONTINUE
       ELSE
-         CALL AB_DCOPY( M, VT( NLP1, 1 ), LDVT, VT2( 1, 1 ), LDVT2 )
+         CALL DCOPY( M, VT( NLP1, 1 ), LDVT, VT2( 1, 1 ), LDVT2 )
       END IF
       IF( M.GT.N ) THEN
-         CALL AB_DCOPY( M, VT( M, 1 ), LDVT, VT2( M, 1 ), LDVT2 )
+         CALL DCOPY( M, VT( M, 1 ), LDVT, VT2( M, 1 ), LDVT2 )
       END IF
 *
 *     The deflated singular values and their corresponding vectors go
 *     into the back of D, U, and V respectively.
 *
       IF( N.GT.K ) THEN
-         CALL AB_DCOPY( N-K, DSIGMA( K+1 ), 1, D( K+1 ), 1 )
-         CALL AB_DLACPY( 'A', N, N-K, U2( 1, K+1 ), LDU2, U( 1, K+1 ),
+         CALL DCOPY( N-K, DSIGMA( K+1 ), 1, D( K+1 ), 1 )
+         CALL DLACPY( 'A', N, N-K, U2( 1, K+1 ), LDU2, U( 1, K+1 ),
      $                LDU )
-         CALL AB_DLACPY( 'A', N-K, M, VT2( K+1, 1 ), LDVT2, VT( K+1, 1 )
-     $,
+         CALL DLACPY( 'A', N-K, M, VT2( K+1, 1 ), LDVT2, VT( K+1, 1 ),
      $                LDVT )
       END IF
 *
-*     Copy CTOT into COLTYP for referencing in AB_DLASD3.
+*     Copy CTOT into COLTYP for referencing in DLASD3.
 *
       DO 190 J = 1, 4
          COLTYP( J ) = CTOT( J )
@@ -633,6 +629,6 @@
 *
       RETURN
 *
-*     End of AB_DLASD2
+*     End of DLASD2
 *
       END

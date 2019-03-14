@@ -1,4 +1,4 @@
-*> \brief \b AB_SGGHRD
+*> \brief \b SGGHRD
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SGGHRD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SGGHRD.f">
+*> Download SGGHRD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgghrd.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SGGHRD.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgghrd.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SGGHRD.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgghrd.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SGGHRD( COMPQ, COMPZ, N, ILO, IHI, A, LDA, B, LDB, Q,
+*       SUBROUTINE SGGHRD( COMPQ, COMPZ, N, ILO, IHI, A, LDA, B, LDB, Q,
 *                          LDQ, Z, LDZ, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SGGHRD reduces a pair of real matrices (A,B) to generalized upper
+*> SGGHRD reduces a pair of real matrices (A,B) to generalized upper
 *> Hessenberg form using orthogonal transformations, where A is a
 *> general matrix and B is upper triangular.  The form of the
 *> generalized eigenvalue problem is
@@ -62,7 +62,7 @@
 *>      Q1 * B * Z1**T = (Q1*Q) * T * (Z1*Z)**T
 *>
 *> If Q1 is the orthogonal matrix from the QR factorization of B in the
-*> original equation A*x = lambda*B*x, then AB_SGGHRD reduces the original
+*> original equation A*x = lambda*B*x, then SGGHRD reduces the original
 *> problem to generalized Hessenberg form.
 *> \endverbatim
 *
@@ -107,7 +107,7 @@
 *>          ILO and IHI mark the rows and columns of A which are to be
 *>          reduced.  It is assumed that A is already upper triangular
 *>          in rows and columns 1:ILO-1 and IHI+1:N.  ILO and IHI are
-*>          normally set by a previous call to AB_SGGBAL; otherwise they
+*>          normally set by a previous call to SGGBAL; otherwise they
 *>          should be set to 1 and N respectively.
 *>          1 <= ILO <= IHI <= N, if N > 0; ILO=1 and IHI=0, if N=0.
 *> \endverbatim
@@ -204,8 +204,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_SGGHRD( COMPQ, COMPZ, N, ILO, IHI, A, LDA, B, LDB, Q
-     $,
+      SUBROUTINE SGGHRD( COMPQ, COMPZ, N, ILO, IHI, A, LDA, B, LDB, Q,
      $                   LDQ, Z, LDZ, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -234,11 +233,11 @@
       REAL               C, S, TEMP
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SLARTG, AB_SLASET, AB_SROT, AB_XERBLA
+      EXTERNAL           SLARTG, SLASET, SROT, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -247,13 +246,13 @@
 *
 *     Decode COMPQ
 *
-      IF( AB_LSAME( COMPQ, 'N' ) ) THEN
+      IF( LSAME( COMPQ, 'N' ) ) THEN
          ILQ = .FALSE.
          ICOMPQ = 1
-      ELSE IF( AB_LSAME( COMPQ, 'V' ) ) THEN
+      ELSE IF( LSAME( COMPQ, 'V' ) ) THEN
          ILQ = .TRUE.
          ICOMPQ = 2
-      ELSE IF( AB_LSAME( COMPQ, 'I' ) ) THEN
+      ELSE IF( LSAME( COMPQ, 'I' ) ) THEN
          ILQ = .TRUE.
          ICOMPQ = 3
       ELSE
@@ -262,13 +261,13 @@
 *
 *     Decode COMPZ
 *
-      IF( AB_LSAME( COMPZ, 'N' ) ) THEN
+      IF( LSAME( COMPZ, 'N' ) ) THEN
          ILZ = .FALSE.
          ICOMPZ = 1
-      ELSE IF( AB_LSAME( COMPZ, 'V' ) ) THEN
+      ELSE IF( LSAME( COMPZ, 'V' ) ) THEN
          ILZ = .TRUE.
          ICOMPZ = 2
-      ELSE IF( AB_LSAME( COMPZ, 'I' ) ) THEN
+      ELSE IF( LSAME( COMPZ, 'I' ) ) THEN
          ILZ = .TRUE.
          ICOMPZ = 3
       ELSE
@@ -298,16 +297,16 @@
          INFO = -13
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SGGHRD', -INFO )
+         CALL XERBLA( 'SGGHRD', -INFO )
          RETURN
       END IF
 *
 *     Initialize Q and Z if desired.
 *
       IF( ICOMPQ.EQ.3 )
-     $   CALL AB_SLASET( 'Full', N, N, ZERO, ONE, Q, LDQ )
+     $   CALL SLASET( 'Full', N, N, ZERO, ONE, Q, LDQ )
       IF( ICOMPZ.EQ.3 )
-     $   CALL AB_SLASET( 'Full', N, N, ZERO, ONE, Z, LDZ )
+     $   CALL SLASET( 'Full', N, N, ZERO, ONE, Z, LDZ )
 *
 *     Quick return if possible
 *
@@ -331,35 +330,32 @@
 *           Step 1: rotate rows JROW-1, JROW to kill A(JROW,JCOL)
 *
             TEMP = A( JROW-1, JCOL )
-            CALL AB_SLARTG( TEMP, A( JROW, JCOL ), C, S,
+            CALL SLARTG( TEMP, A( JROW, JCOL ), C, S,
      $                   A( JROW-1, JCOL ) )
             A( JROW, JCOL ) = ZERO
-            CALL AB_SROT( N-JCOL, A( JROW-1, JCOL+1 ), LDA,
+            CALL SROT( N-JCOL, A( JROW-1, JCOL+1 ), LDA,
      $                 A( JROW, JCOL+1 ), LDA, C, S )
-            CALL AB_SROT( N+2-JROW, B( JROW-1, JROW-1 ), LDB,
+            CALL SROT( N+2-JROW, B( JROW-1, JROW-1 ), LDB,
      $                 B( JROW, JROW-1 ), LDB, C, S )
             IF( ILQ )
-     $         CALL AB_SROT( N, Q( 1, JROW-1 ), 1, Q( 1, JROW ), 1, C, S
-     $ )
+     $         CALL SROT( N, Q( 1, JROW-1 ), 1, Q( 1, JROW ), 1, C, S )
 *
 *           Step 2: rotate columns JROW, JROW-1 to kill B(JROW,JROW-1)
 *
             TEMP = B( JROW, JROW )
-            CALL AB_SLARTG( TEMP, B( JROW, JROW-1 ), C, S,
+            CALL SLARTG( TEMP, B( JROW, JROW-1 ), C, S,
      $                   B( JROW, JROW ) )
             B( JROW, JROW-1 ) = ZERO
-            CALL AB_SROT( IHI, A( 1, JROW ), 1, A( 1, JROW-1 ), 1, C, S 
-     $)
-            CALL AB_SROT( JROW-1, B( 1, JROW ), 1, B( 1, JROW-1 ), 1, C,
+            CALL SROT( IHI, A( 1, JROW ), 1, A( 1, JROW-1 ), 1, C, S )
+            CALL SROT( JROW-1, B( 1, JROW ), 1, B( 1, JROW-1 ), 1, C,
      $                 S )
             IF( ILZ )
-     $         CALL AB_SROT( N, Z( 1, JROW ), 1, Z( 1, JROW-1 ), 1, C, S
-     $ )
+     $         CALL SROT( N, Z( 1, JROW ), 1, Z( 1, JROW-1 ), 1, C, S )
    30    CONTINUE
    40 CONTINUE
 *
       RETURN
 *
-*     End of AB_SGGHRD
+*     End of SGGHRD
 *
       END

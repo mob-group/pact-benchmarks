@@ -1,4 +1,4 @@
-*> \brief \b AB_CTGEX2 swaps adjacent diagonal blocks in an upper (quasi) triangular matrix pair by an unitary equivalence transformation.
+*> \brief \b CTGEX2 swaps adjacent diagonal blocks in an upper (quasi) triangular matrix pair by an unitary equivalence transformation.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CTGEX2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CTGEX2.f">
+*> Download CTGEX2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctgex2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CTGEX2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctgex2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CTGEX2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctgex2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
+*       SUBROUTINE CTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
 *                          LDZ, J1, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CTGEX2 swaps adjacent diagonal 1 by 1 blocks (A11,B11) and (A22,B22)
+*> CTGEX2 swaps adjacent diagonal 1 by 1 blocks (A11,B11) and (A22,B22)
 *> in an upper triangular matrix pair (A, B) by an unitary equivalence
 *> transformation.
 *>
@@ -187,7 +187,7 @@
 *>      Numerical Algorithms, 1996.
 *>
 *  =====================================================================
-      SUBROUTINE AB_CTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
+      SUBROUTINE CTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
      $                   LDZ, J1, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.1) --
@@ -228,11 +228,11 @@
       COMPLEX            S( LDST, LDST ), T( LDST, LDST ), WORK( 8 )
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH
-      EXTERNAL           AB_SLAMCH
+      REAL               SLAMCH
+      EXTERNAL           SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CLACPY, AB_CLARTG, AB_CLASSQ, AB_CROT
+      EXTERNAL           CLACPY, CLARTG, CLASSQ, CROT
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CONJG, MAX, REAL, SQRT
@@ -252,18 +252,18 @@
 *
 *     Make a local copy of selected block in (A, B)
 *
-      CALL AB_CLACPY( 'Full', M, M, A( J1, J1 ), LDA, S, LDST )
-      CALL AB_CLACPY( 'Full', M, M, B( J1, J1 ), LDB, T, LDST )
+      CALL CLACPY( 'Full', M, M, A( J1, J1 ), LDA, S, LDST )
+      CALL CLACPY( 'Full', M, M, B( J1, J1 ), LDB, T, LDST )
 *
 *     Compute the threshold for testing the acceptance of swapping.
 *
-      EPS = AB_SLAMCH( 'P' )
-      SMLNUM = AB_SLAMCH( 'S' ) / EPS
+      EPS = SLAMCH( 'P' )
+      SMLNUM = SLAMCH( 'S' ) / EPS
       SCALE = REAL( CZERO )
       SUM = REAL( CONE )
-      CALL AB_CLACPY( 'Full', M, M, S, LDST, WORK, M )
-      CALL AB_CLACPY( 'Full', M, M, T, LDST, WORK( M*M+1 ), M )
-      CALL AB_CLASSQ( 2*M*M, WORK, 1, SCALE, SUM )
+      CALL CLACPY( 'Full', M, M, S, LDST, WORK, M )
+      CALL CLACPY( 'Full', M, M, T, LDST, WORK( M*M+1 ), M )
+      CALL CLASSQ( 2*M*M, WORK, 1, SCALE, SUM )
       SA = SCALE*SQRT( SUM )
 *
 *     THRES has been changed from
@@ -283,17 +283,17 @@
       G = S( 2, 2 )*T( 1, 2 ) - T( 2, 2 )*S( 1, 2 )
       SA = ABS( S( 2, 2 ) )
       SB = ABS( T( 2, 2 ) )
-      CALL AB_CLARTG( G, F, CZ, SZ, CDUM )
+      CALL CLARTG( G, F, CZ, SZ, CDUM )
       SZ = -SZ
-      CALL AB_CROT( 2, S( 1, 1 ), 1, S( 1, 2 ), 1, CZ, CONJG( SZ ) )
-      CALL AB_CROT( 2, T( 1, 1 ), 1, T( 1, 2 ), 1, CZ, CONJG( SZ ) )
+      CALL CROT( 2, S( 1, 1 ), 1, S( 1, 2 ), 1, CZ, CONJG( SZ ) )
+      CALL CROT( 2, T( 1, 1 ), 1, T( 1, 2 ), 1, CZ, CONJG( SZ ) )
       IF( SA.GE.SB ) THEN
-         CALL AB_CLARTG( S( 1, 1 ), S( 2, 1 ), CQ, SQ, CDUM )
+         CALL CLARTG( S( 1, 1 ), S( 2, 1 ), CQ, SQ, CDUM )
       ELSE
-         CALL AB_CLARTG( T( 1, 1 ), T( 2, 1 ), CQ, SQ, CDUM )
+         CALL CLARTG( T( 1, 1 ), T( 2, 1 ), CQ, SQ, CDUM )
       END IF
-      CALL AB_CROT( 2, S( 1, 1 ), LDST, S( 2, 1 ), LDST, CQ, SQ )
-      CALL AB_CROT( 2, T( 1, 1 ), LDST, T( 2, 1 ), LDST, CQ, SQ )
+      CALL CROT( 2, S( 1, 1 ), LDST, S( 2, 1 ), LDST, CQ, SQ )
+      CALL CROT( 2, T( 1, 1 ), LDST, T( 2, 1 ), LDST, CQ, SQ )
 *
 *     Weak stability test: |S21| + |T21| <= O(EPS F-norm((S, T)))
 *
@@ -307,12 +307,12 @@
 *        Strong stability test:
 *           F-norm((A-QL**H*S*QR, B-QL**H*T*QR)) <= O(EPS*F-norm((A, B)))
 *
-         CALL AB_CLACPY( 'Full', M, M, S, LDST, WORK, M )
-         CALL AB_CLACPY( 'Full', M, M, T, LDST, WORK( M*M+1 ), M )
-         CALL AB_CROT( 2, WORK, 1, WORK( 3 ), 1, CZ, -CONJG( SZ ) )
-         CALL AB_CROT( 2, WORK( 5 ), 1, WORK( 7 ), 1, CZ, -CONJG( SZ ) )
-         CALL AB_CROT( 2, WORK, 2, WORK( 2 ), 2, CQ, -SQ )
-         CALL AB_CROT( 2, WORK( 5 ), 2, WORK( 6 ), 2, CQ, -SQ )
+         CALL CLACPY( 'Full', M, M, S, LDST, WORK, M )
+         CALL CLACPY( 'Full', M, M, T, LDST, WORK( M*M+1 ), M )
+         CALL CROT( 2, WORK, 1, WORK( 3 ), 1, CZ, -CONJG( SZ ) )
+         CALL CROT( 2, WORK( 5 ), 1, WORK( 7 ), 1, CZ, -CONJG( SZ ) )
+         CALL CROT( 2, WORK, 2, WORK( 2 ), 2, CQ, -SQ )
+         CALL CROT( 2, WORK( 5 ), 2, WORK( 6 ), 2, CQ, -SQ )
          DO 10 I = 1, 2
             WORK( I ) = WORK( I ) - A( J1+I-1, J1 )
             WORK( I+2 ) = WORK( I+2 ) - A( J1+I-1, J1+1 )
@@ -321,7 +321,7 @@
    10    CONTINUE
          SCALE = REAL( CZERO )
          SUM = REAL( CONE )
-         CALL AB_CLASSQ( 2*M*M, WORK, 1, SCALE, SUM )
+         CALL CLASSQ( 2*M*M, WORK, 1, SCALE, SUM )
          SS = SCALE*SQRT( SUM )
          STRONG = SS.LE.THRESH
          IF( .NOT.STRONG )
@@ -331,14 +331,10 @@
 *     If the swap is accepted ("weakly" and "strongly"), apply the
 *     equivalence transformations to the original matrix pair (A,B)
 *
-      CALL AB_CROT( J1+1, A( 1, J1 ), 1, A( 1, J1+1 ), 1, CZ, CONJG( SZ 
-     $) )
-      CALL AB_CROT( J1+1, B( 1, J1 ), 1, B( 1, J1+1 ), 1, CZ, CONJG( SZ 
-     $) )
-      CALL AB_CROT( N-J1+1, A( J1, J1 ), LDA, A( J1+1, J1 ), LDA, CQ, SQ
-     $ )
-      CALL AB_CROT( N-J1+1, B( J1, J1 ), LDB, B( J1+1, J1 ), LDB, CQ, SQ
-     $ )
+      CALL CROT( J1+1, A( 1, J1 ), 1, A( 1, J1+1 ), 1, CZ, CONJG( SZ ) )
+      CALL CROT( J1+1, B( 1, J1 ), 1, B( 1, J1+1 ), 1, CZ, CONJG( SZ ) )
+      CALL CROT( N-J1+1, A( J1, J1 ), LDA, A( J1+1, J1 ), LDA, CQ, SQ )
+      CALL CROT( N-J1+1, B( J1, J1 ), LDB, B( J1+1, J1 ), LDB, CQ, SQ )
 *
 *     Set  N1 by N2 (2,1) blocks to 0
 *
@@ -348,11 +344,9 @@
 *     Accumulate transformations into Q and Z if requested.
 *
       IF( WANTZ )
-     $   CALL AB_CROT( N, Z( 1, J1 ), 1, Z( 1, J1+1 ), 1, CZ, CONJG( SZ 
-     $) )
+     $   CALL CROT( N, Z( 1, J1 ), 1, Z( 1, J1+1 ), 1, CZ, CONJG( SZ ) )
       IF( WANTQ )
-     $   CALL AB_CROT( N, Q( 1, J1 ), 1, Q( 1, J1+1 ), 1, CQ, CONJG( SQ 
-     $) )
+     $   CALL CROT( N, Q( 1, J1 ), 1, Q( 1, J1+1 ), 1, CQ, CONJG( SQ ) )
 *
 *     Exit with INFO = 0 if swap was successfully performed.
 *
@@ -364,6 +358,6 @@
       INFO = 1
       RETURN
 *
-*     End of AB_CTGEX2
+*     End of CTGEX2
 *
       END

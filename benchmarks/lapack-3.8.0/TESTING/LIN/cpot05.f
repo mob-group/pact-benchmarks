@@ -1,4 +1,4 @@
-*> \brief \b AB_CPOT05
+*> \brief \b CPOT05
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CPOT05( UPLO, N, NRHS, A, LDA, B, LDB, X, LDX, XACT,
+*       SUBROUTINE CPOT05( UPLO, N, NRHS, A, LDA, B, LDB, X, LDX, XACT,
 *                          LDXACT, FERR, BERR, RESLTS )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CPOT05 tests the error bounds from iterative refinement for the
+*> CPOT05 tests the error bounds from iterative refinement for the
 *> computed solution to a system of equations A*X = B, where A is a
 *> Hermitian n by n matrix.
 *>
@@ -162,7 +162,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_CPOT05( UPLO, N, NRHS, A, LDA, B, LDB, X, LDX, XACT,
+      SUBROUTINE CPOT05( UPLO, N, NRHS, A, LDA, B, LDB, X, LDX, XACT,
      $                   LDXACT, FERR, BERR, RESLTS )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -193,10 +193,10 @@
       COMPLEX            ZDUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ICAMAX
-      REAL               AB_SLAMCH
-      EXTERNAL           AB_LSAME, AB_ICAMAX, AB_SLAMCH
+      LOGICAL            LSAME
+      INTEGER            ICAMAX
+      REAL               SLAMCH
+      EXTERNAL           LSAME, ICAMAX, SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, MIN, REAL
@@ -217,10 +217,10 @@
          RETURN
       END IF
 *
-      EPS = AB_SLAMCH( 'Epsilon' )
-      UNFL = AB_SLAMCH( 'Safe minimum' )
+      EPS = SLAMCH( 'Epsilon' )
+      UNFL = SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      UPPER = AB_LSAME( UPLO, 'U' )
+      UPPER = LSAME( UPLO, 'U' )
 *
 *     Test 1:  Compute the maximum of
 *        norm(X - XACT) / ( norm(X) * FERR )
@@ -228,7 +228,7 @@
 *
       ERRBND = ZERO
       DO 30 J = 1, NRHS
-         IMAX = AB_ICAMAX( N, X( 1, J ), 1 )
+         IMAX = ICAMAX( N, X( 1, J ), 1 )
          XNORM = MAX( CABS1( X( IMAX, J ) ), UNFL )
          DIFF = ZERO
          DO 10 I = 1, N
@@ -293,6 +293,6 @@
 *
       RETURN
 *
-*     End of AB_CPOT05
+*     End of CPOT05
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_CGTCON
+*> \brief \b CGTCON
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CGTCON + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CGTCON.f">
+*> Download CGTCON + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgtcon.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CGTCON.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgtcon.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CGTCON.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgtcon.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CGTCON( NORM, N, DL, D, DU, DU2, IPIV, ANORM, RCOND,
+*       SUBROUTINE CGTCON( NORM, N, DL, D, DU, DU2, IPIV, ANORM, RCOND,
 *                          WORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,9 +37,9 @@
 *>
 *> \verbatim
 *>
-*> AB_CGTCON estimates the reciprocal of the condition number of a complex
+*> CGTCON estimates the reciprocal of the condition number of a complex
 *> tridiagonal matrix A using the LU factorization as computed by
-*> AB_CGTTRF.
+*> CGTTRF.
 *>
 *> An estimate is obtained for norm(inv(A)), and the reciprocal of the
 *> condition number is computed as RCOND = 1 / (ANORM * norm(inv(A))).
@@ -67,7 +67,7 @@
 *> \verbatim
 *>          DL is COMPLEX array, dimension (N-1)
 *>          The (n-1) multipliers that define the matrix L from the
-*>          LU factorization of A as computed by AB_CGTTRF.
+*>          LU factorization of A as computed by CGTTRF.
 *> \endverbatim
 *>
 *> \param[in] D
@@ -86,7 +86,7 @@
 *> \param[in] DU2
 *> \verbatim
 *>          DU2 is COMPLEX array, dimension (N-2)
-*>          The (n-2) elements of the AB_SECOND superdiagonal of U.
+*>          The (n-2) elements of the second superdiagonal of U.
 *> \endverbatim
 *>
 *> \param[in] IPIV
@@ -138,7 +138,7 @@
 *> \ingroup complexGTcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_CGTCON( NORM, N, DL, D, DU, DU2, IPIV, ANORM, RCOND,
+      SUBROUTINE CGTCON( NORM, N, DL, D, DU, DU2, IPIV, ANORM, RCOND,
      $                   WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -171,11 +171,11 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CGTTRS, AB_CLACN2, AB_XERBLA
+      EXTERNAL           CGTTRS, CLACN2, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CMPLX
@@ -185,8 +185,8 @@
 *     Test the input arguments.
 *
       INFO = 0
-      ONENRM = NORM.EQ.'1' .OR. AB_LSAME( NORM, 'O' )
-      IF( .NOT.ONENRM .AND. .NOT.AB_LSAME( NORM, 'I' ) ) THEN
+      ONENRM = NORM.EQ.'1' .OR. LSAME( NORM, 'O' )
+      IF( .NOT.ONENRM .AND. .NOT.LSAME( NORM, 'I' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -194,7 +194,7 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CGTCON', -INFO )
+         CALL XERBLA( 'CGTCON', -INFO )
          RETURN
       END IF
 *
@@ -223,19 +223,19 @@
       END IF
       KASE = 0
    20 CONTINUE
-      CALL AB_CLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
+      CALL CLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
       IF( KASE.NE.0 ) THEN
          IF( KASE.EQ.KASE1 ) THEN
 *
 *           Multiply by inv(U)*inv(L).
 *
-            CALL AB_CGTTRS( 'No transpose', N, 1, DL, D, DU, DU2, IPIV,
+            CALL CGTTRS( 'No transpose', N, 1, DL, D, DU, DU2, IPIV,
      $                   WORK, N, INFO )
          ELSE
 *
 *           Multiply by inv(L**H)*inv(U**H).
 *
-            CALL AB_CGTTRS( 'Conjugate transpose', N, 1, DL, D, DU, DU2,
+            CALL CGTTRS( 'Conjugate transpose', N, 1, DL, D, DU, DU2,
      $                   IPIV, WORK, N, INFO )
          END IF
          GO TO 20
@@ -248,6 +248,6 @@
 *
       RETURN
 *
-*     End of AB_CGTCON
+*     End of CGTCON
 *
       END

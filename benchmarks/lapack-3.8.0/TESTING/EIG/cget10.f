@@ -1,4 +1,4 @@
-*> \brief \b AB_CGET10
+*> \brief \b CGET10
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CGET10( M, N, A, LDA, B, LDB, WORK, RWORK, RESULT )
+*       SUBROUTINE CGET10( M, N, A, LDA, B, LDB, WORK, RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDA, LDB, M, N
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CGET10 compares two matrices A and B and computes the ratio
+*> CGET10 compares two matrices A and B and computes the ratio
 *> RESULT = norm( A - B ) / ( norm(A) * M * EPS )
 *> \endverbatim
 *
@@ -97,7 +97,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_CGET10( M, N, A, LDA, B, LDB, WORK, RWORK, RESULT )
+      SUBROUTINE CGET10( M, N, A, LDA, B, LDB, WORK, RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -124,11 +124,11 @@
       REAL               ANORM, EPS, UNFL, WNORM
 *     ..
 *     .. External Functions ..
-      REAL               AB_SCASUM, AB_SLAMCH, AB_CLANGE
-      EXTERNAL           AB_SCASUM, AB_SLAMCH, AB_CLANGE
+      REAL               SCASUM, SLAMCH, CLANGE
+      EXTERNAL           SCASUM, SLAMCH, CLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CAXPY, AB_CCOPY
+      EXTERNAL           CAXPY, CCOPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, REAL
@@ -142,17 +142,17 @@
          RETURN
       END IF
 *
-      UNFL = AB_SLAMCH( 'Safe minimum' )
-      EPS = AB_SLAMCH( 'Precision' )
+      UNFL = SLAMCH( 'Safe minimum' )
+      EPS = SLAMCH( 'Precision' )
 *
       WNORM = ZERO
       DO 10 J = 1, N
-         CALL AB_CCOPY( M, A( 1, J ), 1, WORK, 1 )
-         CALL AB_CAXPY( M, CMPLX( -ONE ), B( 1, J ), 1, WORK, 1 )
-         WNORM = MAX( WNORM, AB_SCASUM( N, WORK, 1 ) )
+         CALL CCOPY( M, A( 1, J ), 1, WORK, 1 )
+         CALL CAXPY( M, CMPLX( -ONE ), B( 1, J ), 1, WORK, 1 )
+         WNORM = MAX( WNORM, SCASUM( N, WORK, 1 ) )
    10 CONTINUE
 *
-      ANORM = MAX( AB_CLANGE( '1', M, N, A, LDA, RWORK ), UNFL )
+      ANORM = MAX( CLANGE( '1', M, N, A, LDA, RWORK ), UNFL )
 *
       IF( ANORM.GT.WNORM ) THEN
          RESULT = ( WNORM / ANORM ) / ( M*EPS )
@@ -166,6 +166,6 @@
 *
       RETURN
 *
-*     End of AB_CGET10
+*     End of CGET10
 *
       END

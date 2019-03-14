@@ -1,4 +1,4 @@
-*> \brief \b AB_DGET31
+*> \brief \b DGET31
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DGET31( RMAX, LMAX, NINFO, KNT )
+*       SUBROUTINE DGET31( RMAX, LMAX, NINFO, KNT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            KNT, LMAX
@@ -24,13 +24,13 @@
 *>
 *> \verbatim
 *>
-*> AB_DGET31 tests AB_DLALN2, a routine for solving
+*> DGET31 tests DLALN2, a routine for solving
 *>
 *>    (ca A - w D)X = sB
 *>
 *> where A is an NA by NA matrix (NA=1 or 2 only), w is a real (NW=1) or
 *> complex (NW=2) constant, ca is a real constant, D is an NA by NA real
-*> diagonal matrix, and B is an NA by NW matrix (when NW=2 the AB_SECOND
+*> diagonal matrix, and B is an NA by NW matrix (when NW=2 the second
 *> column of B contains the imaginary part of the solution).  The code
 *> returns X and s, where s is a scale factor, less than or equal to 1,
 *> which is chosen to avoid overflow in X.
@@ -89,7 +89,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_DGET31( RMAX, LMAX, NINFO, KNT )
+      SUBROUTINE DGET31( RMAX, LMAX, NINFO, KNT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -129,11 +129,11 @@
      $                   X( 2, 2 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH
-      EXTERNAL           AB_DLAMCH
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLABAD, AB_DLALN2
+      EXTERNAL           DLABAD, DLALN2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -145,11 +145,11 @@
 *
 *     Get machine parameters
 *
-      EPS = AB_DLAMCH( 'P' )
-      UNFL = AB_DLAMCH( 'U' )
-      SMLNUM = AB_DLAMCH( 'S' ) / EPS
+      EPS = DLAMCH( 'P' )
+      UNFL = DLAMCH( 'U' )
+      SMLNUM = DLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL AB_DLABAD( SMLNUM, BIGNUM )
+      CALL DLABAD( SMLNUM, BIGNUM )
 *
 *     Set up test case parameters
 *
@@ -210,7 +210,7 @@
                                  WR = VWR( IWR )
                               END IF
                               WI = ZERO
-                              CALL AB_DLALN2( LTRANS( ITRANS ), NA, NW,
+                              CALL DLALN2( LTRANS( ITRANS ), NA, NW,
      $                                     SMIN, CA, A, 2, D1, D2, B, 2,
      $                                     WR, WI, X, 2, SCALE, XNORM,
      $                                     INFO )
@@ -268,8 +268,7 @@
                                  ELSE
                                     WI = VWI( IWI )
                                  END IF
-                                 CALL AB_DLALN2( LTRANS( ITRANS ), NA, N
-     $W,
+                                 CALL DLALN2( LTRANS( ITRANS ), NA, NW,
      $                                        SMIN, CA, A, 2, D1, D2, B,
      $                                        2, WR, WI, X, 2, SCALE,
      $                                        XNORM, INFO )
@@ -335,7 +334,7 @@
                                  WR = VWR( IWR )
                               END IF
                               WI = ZERO
-                              CALL AB_DLALN2( LTRANS( ITRANS ), NA, NW,
+                              CALL DLALN2( LTRANS( ITRANS ), NA, NW,
      $                                     SMIN, CA, A, 2, D1, D2, B, 2,
      $                                     WR, WI, X, 2, SCALE, XNORM,
      $                                     INFO )
@@ -422,8 +421,7 @@
                                  ELSE
                                     WI = VWI( IWI )
                                  END IF
-                                 CALL AB_DLALN2( LTRANS( ITRANS ), NA, N
-     $W,
+                                 CALL DLALN2( LTRANS( ITRANS ), NA, NW,
      $                                        SMIN, CA, A, 2, D1, D2, B,
      $                                        2, WR, WI, X, 2, SCALE,
      $                                        XNORM, INFO )
@@ -515,6 +513,6 @@
 *
       RETURN
 *
-*     End of AB_DGET31
+*     End of DGET31
 *
       END

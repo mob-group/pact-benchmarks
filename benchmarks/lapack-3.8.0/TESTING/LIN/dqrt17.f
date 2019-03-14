@@ -1,4 +1,4 @@
-*> \brief \b AB_DQRT17
+*> \brief \b DQRT17
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       DOUBLE PRECISION FUNCTION AB_DQRT17( TRANS, IRESID, M, N, NRHS, A,
+*       DOUBLE PRECISION FUNCTION DQRT17( TRANS, IRESID, M, N, NRHS, A,
 *                        LDA, X, LDX, B, LDB, C, WORK, LWORK )
 *
 *       .. Scalar Arguments ..
@@ -26,7 +26,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DQRT17 computes the ratio
+*> DQRT17 computes the ratio
 *>
 *>    || R'*op(A) ||/(||A||*alpha*max(M,N,NRHS)*eps)
 *>
@@ -147,7 +147,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION AB_DQRT17( TRANS, IRESID, M, N, NRHS, A,
+      DOUBLE PRECISION FUNCTION DQRT17( TRANS, IRESID, M, N, NRHS, A,
      $                 LDA, X, LDX, B, LDB, C, WORK, LWORK )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -178,33 +178,33 @@
       DOUBLE PRECISION   RWORK( 1 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE
-      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_DLANGE
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH, DLANGE
+      EXTERNAL           LSAME, DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DGEMM, AB_DLACPY, AB_DLASCL, AB_XERBLA
+      EXTERNAL           DGEMM, DLACPY, DLASCL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX
 *     ..
 *     .. Executable Statements ..
 *
-      AB_DQRT17 = ZERO
+      DQRT17 = ZERO
 *
-      IF( AB_LSAME( TRANS, 'N' ) ) THEN
+      IF( LSAME( TRANS, 'N' ) ) THEN
          NROWS = M
          NCOLS = N
-      ELSE IF( AB_LSAME( TRANS, 'T' ) ) THEN
+      ELSE IF( LSAME( TRANS, 'T' ) ) THEN
          NROWS = N
          NCOLS = M
       ELSE
-         CALL AB_XERBLA( 'AB_DQRT17', 1 )
+         CALL XERBLA( 'DQRT17', 1 )
          RETURN
       END IF
 *
       IF( LWORK.LT.NCOLS*NRHS ) THEN
-         CALL AB_XERBLA( 'AB_DQRT17', 13 )
+         CALL XERBLA( 'DQRT17', 13 )
          RETURN
       END IF
 *
@@ -212,33 +212,31 @@
          RETURN
       END IF
 *
-      NORMA = AB_DLANGE( 'One-norm', M, N, A, LDA, RWORK )
-      SMLNUM = AB_DLAMCH( 'Safe minimum' ) / AB_DLAMCH( 'Precision' )
+      NORMA = DLANGE( 'One-norm', M, N, A, LDA, RWORK )
+      SMLNUM = DLAMCH( 'Safe minimum' ) / DLAMCH( 'Precision' )
       BIGNUM = ONE / SMLNUM
       ISCL = 0
 *
 *     compute residual and scale it
 *
-      CALL AB_DLACPY( 'All', NROWS, NRHS, B, LDB, C, LDB )
-      CALL AB_DGEMM( TRANS, 'No transpose', NROWS, NRHS, NCOLS, -ONE, A,
+      CALL DLACPY( 'All', NROWS, NRHS, B, LDB, C, LDB )
+      CALL DGEMM( TRANS, 'No transpose', NROWS, NRHS, NCOLS, -ONE, A,
      $            LDA, X, LDX, ONE, C, LDB )
-      NORMRS = AB_DLANGE( 'Max', NROWS, NRHS, C, LDB, RWORK )
+      NORMRS = DLANGE( 'Max', NROWS, NRHS, C, LDB, RWORK )
       IF( NORMRS.GT.SMLNUM ) THEN
          ISCL = 1
-         CALL AB_DLASCL( 'General', 0, 0, NORMRS, ONE, NROWS, NRHS, C, L
-     $DB,
+         CALL DLASCL( 'General', 0, 0, NORMRS, ONE, NROWS, NRHS, C, LDB,
      $                INFO )
       END IF
 *
 *     compute R'*A
 *
-      CALL AB_DGEMM( 'Transpose', TRANS, NRHS, NCOLS, NROWS, ONE, C, LDB
-     $,
+      CALL DGEMM( 'Transpose', TRANS, NRHS, NCOLS, NROWS, ONE, C, LDB,
      $            A, LDA, ZERO, WORK, NRHS )
 *
 *     compute and properly scale error
 *
-      ERR = AB_DLANGE( 'One-norm', NRHS, NCOLS, WORK, NRHS, RWORK )
+      ERR = DLANGE( 'One-norm', NRHS, NCOLS, WORK, NRHS, RWORK )
       IF( NORMA.NE.ZERO )
      $   ERR = ERR / NORMA
 *
@@ -246,7 +244,7 @@
      $   ERR = ERR*NORMRS
 *
       IF( IRESID.EQ.1 ) THEN
-         NORMB = AB_DLANGE( 'One-norm', NROWS, NRHS, B, LDB, RWORK )
+         NORMB = DLANGE( 'One-norm', NROWS, NRHS, B, LDB, RWORK )
          IF( NORMB.NE.ZERO )
      $      ERR = ERR / NORMB
       ELSE
@@ -254,10 +252,9 @@
      $      ERR = ERR / NORMRS
       END IF
 *
-      AB_DQRT17 = ERR / ( AB_DLAMCH( 'Epsilon' )*DBLE( MAX( M, N, NRHS )
-     $ ) )
+      DQRT17 = ERR / ( DLAMCH( 'Epsilon' )*DBLE( MAX( M, N, NRHS ) ) )
       RETURN
 *
-*     End of AB_DQRT17
+*     End of DQRT17
 *
       END

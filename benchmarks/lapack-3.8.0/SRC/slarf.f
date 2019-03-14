@@ -1,4 +1,4 @@
-*> \brief \b AB_SLARF applies an elementary reflector to a general rectangular matrix.
+*> \brief \b SLARF applies an elementary reflector to a general rectangular matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLARF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLARF.f">
+*> Download SLARF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slarf.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLARF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slarf.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLARF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slarf.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLARF( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )
+*       SUBROUTINE SLARF( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          SIDE
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SLARF applies a real elementary reflector H to a real m by n matrix
+*> SLARF applies a real elementary reflector H to a real m by n matrix
 *> C, from either the left or the right. H is represented in the form
 *>
 *>       H = I - tau * v * v**T
@@ -122,7 +122,7 @@
 *> \ingroup realOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_SLARF( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )
+      SUBROUTINE SLARF( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -149,16 +149,16 @@
       INTEGER            I, LASTV, LASTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SGEMV, AB_SGER
+      EXTERNAL           SGEMV, SGER
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILASLR, AB_ILASLC
-      EXTERNAL           AB_LSAME, AB_ILASLR, AB_ILASLC
+      LOGICAL            LSAME
+      INTEGER            ILASLR, ILASLC
+      EXTERNAL           LSAME, ILASLR, ILASLC
 *     ..
 *     .. Executable Statements ..
 *
-      APPLYLEFT = AB_LSAME( SIDE, 'L' )
+      APPLYLEFT = LSAME( SIDE, 'L' )
       LASTV = 0
       LASTC = 0
       IF( TAU.NE.ZERO ) THEN
@@ -181,10 +181,10 @@
          END DO
          IF( APPLYLEFT ) THEN
 !     Scan for the last non-zero column in C(1:lastv,:).
-            LASTC = AB_ILASLC(LASTV, N, C, LDC)
+            LASTC = ILASLC(LASTV, N, C, LDC)
          ELSE
 !     Scan for the last non-zero row in C(:,1:lastv).
-            LASTC = AB_ILASLR(M, LASTV, C, LDC)
+            LASTC = ILASLR(M, LASTV, C, LDC)
          END IF
       END IF
 !     Note that lastc.eq.0 renders the BLAS operations null; no special
@@ -197,13 +197,12 @@
 *
 *           w(1:lastc,1) := C(1:lastv,1:lastc)**T * v(1:lastv,1)
 *
-            CALL AB_SGEMV( 'Transpose', LASTV, LASTC, ONE, C, LDC, V, IN
-     $CV,
+            CALL SGEMV( 'Transpose', LASTV, LASTC, ONE, C, LDC, V, INCV,
      $           ZERO, WORK, 1 )
 *
 *           C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**T
 *
-            CALL AB_SGER( LASTV, LASTC, -TAU, V, INCV, WORK, 1, C, LDC )
+            CALL SGER( LASTV, LASTC, -TAU, V, INCV, WORK, 1, C, LDC )
          END IF
       ELSE
 *
@@ -213,16 +212,16 @@
 *
 *           w(1:lastc,1) := C(1:lastc,1:lastv) * v(1:lastv,1)
 *
-            CALL AB_SGEMV( 'No transpose', LASTC, LASTV, ONE, C, LDC,
+            CALL SGEMV( 'No transpose', LASTC, LASTV, ONE, C, LDC,
      $           V, INCV, ZERO, WORK, 1 )
 *
 *           C(1:lastc,1:lastv) := C(...) - w(1:lastc,1) * v(1:lastv,1)**T
 *
-            CALL AB_SGER( LASTC, LASTV, -TAU, WORK, 1, V, INCV, C, LDC )
+            CALL SGER( LASTC, LASTV, -TAU, WORK, 1, V, INCV, C, LDC )
          END IF
       END IF
       RETURN
 *
-*     End of AB_SLARF
+*     End of SLARF
 *
       END

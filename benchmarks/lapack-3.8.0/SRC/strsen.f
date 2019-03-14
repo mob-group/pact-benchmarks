@@ -1,4 +1,4 @@
-*> \brief \b AB_STRSEN
+*> \brief \b STRSEN
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_STRSEN + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_STRSEN.f">
+*> Download STRSEN + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/strsen.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_STRSEN.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/strsen.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_STRSEN.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/strsen.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_STRSEN( JOB, COMPQ, SELECT, N, T, LDT, Q, LDQ, WR, WI,
+*       SUBROUTINE STRSEN( JOB, COMPQ, SELECT, N, T, LDT, Q, LDQ, WR, WI,
 *                          M, S, SEP, WORK, LWORK, IWORK, LIWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -39,7 +39,7 @@
 *>
 *> \verbatim
 *>
-*> AB_STRSEN reorders the real Schur factorization of a real matrix
+*> STRSEN reorders the real Schur factorization of a real matrix
 *> A = Q*T*Q**T, so that a selected cluster of eigenvalues appears in
 *> the leading diagonal blocks of the upper quasi-triangular matrix T,
 *> and the leading columns of Q form an orthonormal basis of the
@@ -48,7 +48,7 @@
 *> Optionally the routine computes the reciprocal condition numbers of
 *> the cluster of eigenvalues and/or the invariant subspace.
 *>
-*> T must be in Schur canonical form (as returned by AB_SHSEQR), that is,
+*> T must be in Schur canonical form (as returned by SHSEQR), that is,
 *> block upper triangular with 1-by-1 and 2-by-2 diagonal blocks; each
 *> 2-by-2 diagonal block has its diagonal elements equal and its
 *> off-diagonal elements of opposite sign.
@@ -189,7 +189,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -208,7 +208,7 @@
 *>          If LIWORK = -1, then a workspace query is assumed; the
 *>          routine only calculates the optimal size of the IWORK array,
 *>          returns this value as the first entry of the IWORK array, and
-*>          no error message related to LIWORK is issued by AB_XERBLA.
+*>          no error message related to LIWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -240,7 +240,7 @@
 *>
 *> \verbatim
 *>
-*>  AB_STRSEN first collects the selected eigenvalues by computing an
+*>  STRSEN first collects the selected eigenvalues by computing an
 *>  orthogonal transformation Z to move them to the top left corner of T.
 *>  In other words, the selected eigenvalues are the eigenvalues of T11
 *>  in:
@@ -311,8 +311,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_STRSEN( JOB, COMPQ, SELECT, N, T, LDT, Q, LDQ, WR, W
-     $I,
+      SUBROUTINE STRSEN( JOB, COMPQ, SELECT, N, T, LDT, Q, LDQ, WR, WI,
      $                   M, S, SEP, WORK, LWORK, IWORK, LIWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -349,13 +348,12 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_SLANGE
-      EXTERNAL           AB_LSAME, AB_SLANGE
+      LOGICAL            LSAME
+      REAL               SLANGE
+      EXTERNAL           LSAME, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SLACN2, AB_SLACPY, AB_STREXC, AB_STRSYL, AB_
-     $XERBLA
+      EXTERNAL           SLACN2, SLACPY, STREXC, STRSYL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -364,17 +362,17 @@
 *
 *     Decode and test the input parameters
 *
-      WANTBH = AB_LSAME( JOB, 'B' )
-      WANTS = AB_LSAME( JOB, 'E' ) .OR. WANTBH
-      WANTSP = AB_LSAME( JOB, 'V' ) .OR. WANTBH
-      WANTQ = AB_LSAME( COMPQ, 'V' )
+      WANTBH = LSAME( JOB, 'B' )
+      WANTS = LSAME( JOB, 'E' ) .OR. WANTBH
+      WANTSP = LSAME( JOB, 'V' ) .OR. WANTBH
+      WANTQ = LSAME( COMPQ, 'V' )
 *
       INFO = 0
       LQUERY = ( LWORK.EQ.-1 )
-      IF( .NOT.AB_LSAME( JOB, 'N' ) .AND. .NOT.WANTS .AND. .NOT.WANTSP )
+      IF( .NOT.LSAME( JOB, 'N' ) .AND. .NOT.WANTS .AND. .NOT.WANTSP )
      $     THEN
          INFO = -1
-      ELSE IF( .NOT.AB_LSAME( COMPQ, 'N' ) .AND. .NOT.WANTQ ) THEN
+      ELSE IF( .NOT.LSAME( COMPQ, 'N' ) .AND. .NOT.WANTQ ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
@@ -416,10 +414,10 @@
          IF(  WANTSP ) THEN
             LWMIN = MAX( 1, 2*NN )
             LIWMIN = MAX( 1, NN )
-         ELSE IF( AB_LSAME( JOB, 'N' ) ) THEN
+         ELSE IF( LSAME( JOB, 'N' ) ) THEN
             LWMIN = MAX( 1, N )
             LIWMIN = 1
-         ELSE IF( AB_LSAME( JOB, 'E' ) ) THEN
+         ELSE IF( LSAME( JOB, 'E' ) ) THEN
             LWMIN = MAX( 1, NN )
             LIWMIN = 1
          END IF
@@ -437,7 +435,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_STRSEN', -INFO )
+         CALL XERBLA( 'STRSEN', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -449,7 +447,7 @@
          IF( WANTS )
      $      S = ONE
          IF( WANTSP )
-     $      SEP = AB_SLANGE( '1', N, N, T, LDT, WORK )
+     $      SEP = SLANGE( '1', N, N, T, LDT, WORK )
          GO TO 40
       END IF
 *
@@ -476,8 +474,7 @@
                IERR = 0
                KK = K
                IF( K.NE.KS )
-     $            CALL AB_STREXC( COMPQ, N, T, LDT, Q, LDQ, KK, KS, WORK
-     $,
+     $            CALL STREXC( COMPQ, N, T, LDT, Q, LDQ, KK, KS, WORK,
      $                         IERR )
                IF( IERR.EQ.1 .OR. IERR.EQ.2 ) THEN
 *
@@ -502,14 +499,14 @@
 *
 *           T11*R - R*T22 = scale*T12
 *
-         CALL AB_SLACPY( 'F', N1, N2, T( 1, N1+1 ), LDT, WORK, N1 )
-         CALL AB_STRSYL( 'N', 'N', -1, N1, N2, T, LDT, T( N1+1, N1+1 ),
+         CALL SLACPY( 'F', N1, N2, T( 1, N1+1 ), LDT, WORK, N1 )
+         CALL STRSYL( 'N', 'N', -1, N1, N2, T, LDT, T( N1+1, N1+1 ),
      $                LDT, WORK, N1, SCALE, IERR )
 *
 *        Estimate the reciprocal of the condition number of the cluster
 *        of eigenvalues.
 *
-         RNORM = AB_SLANGE( 'F', N1, N2, WORK, N1, WORK )
+         RNORM = SLANGE( 'F', N1, N2, WORK, N1, WORK )
          IF( RNORM.EQ.ZERO ) THEN
             S = ONE
          ELSE
@@ -525,21 +522,20 @@
          EST = ZERO
          KASE = 0
    30    CONTINUE
-         CALL AB_SLACN2( NN, WORK( NN+1 ), WORK, IWORK, EST, KASE, ISAVE
-     $ )
+         CALL SLACN2( NN, WORK( NN+1 ), WORK, IWORK, EST, KASE, ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN
 *
 *              Solve  T11*R - R*T22 = scale*X.
 *
-               CALL AB_STRSYL( 'N', 'N', -1, N1, N2, T, LDT,
+               CALL STRSYL( 'N', 'N', -1, N1, N2, T, LDT,
      $                      T( N1+1, N1+1 ), LDT, WORK, N1, SCALE,
      $                      IERR )
             ELSE
 *
 *              Solve T11**T*R - R*T22**T = scale*X.
 *
-               CALL AB_STRSYL( 'T', 'T', -1, N1, N2, T, LDT,
+               CALL STRSYL( 'T', 'T', -1, N1, N2, T, LDT,
      $                      T( N1+1, N1+1 ), LDT, WORK, N1, SCALE,
      $                      IERR )
             END IF
@@ -570,6 +566,6 @@
 *
       RETURN
 *
-*     End of AB_STRSEN
+*     End of STRSEN
 *
       END

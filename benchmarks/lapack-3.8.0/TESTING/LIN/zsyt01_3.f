@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_ZSYT01_3
+*> \brief \b ZSYT01_3
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_ZSYT01_3( UPLO, N, A, LDA, AFAC, LDAFAC, E, IPIV, C,
+*       SUBROUTINE ZSYT01_3( UPLO, N, A, LDA, AFAC, LDAFAC, E, IPIV, C,
 *                            LDC, RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -29,9 +29,9 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_ZSYT01_3 reconstructs a symmetric indefinite matrix A from its
-*> block L*D*L' or U*D*U' factorization computed by AB_AB_ZSYTRF_RK
-*> (or AB_ZSYTRF_BK) and computes the residual
+*> ZSYT01_3 reconstructs a symmetric indefinite matrix A from its
+*> block L*D*L' or U*D*U' factorization computed by ZSYTRF_RK
+*> (or ZSYTRF_BK) and computes the residual
 *>    norm( C - A ) / ( N * norm(A) * EPS ),
 *> where C is the reconstructed matrix and EPS is the machine epsilon.
 *> \endverbatim
@@ -70,7 +70,7 @@
 *> \verbatim
 *>          AFAC is COMPLEX*16 array, dimension (LDAFAC,N)
 *>          Diagonal of the block diagonal matrix D and factors U or L
-*>          as computed by AB_AB_ZSYTRF_RK and AB_ZSYTRF_BK:
+*>          as computed by ZSYTRF_RK and ZSYTRF_BK:
 *>            a) ONLY diagonal elements of the symmetric block diagonal
 *>               matrix D on the diagonal of A, i.e. D(k,k) = A(k,k);
 *>               (superdiagonal (or subdiagonal) elements of D
@@ -99,7 +99,7 @@
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          The pivot indices from AB_AB_ZSYTRF_RK (or AB_ZSYTRF_BK).
+*>          The pivot indices from ZSYTRF_RK (or ZSYTRF_BK).
 *> \endverbatim
 *>
 *> \param[out] C
@@ -138,8 +138,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_ZSYT01_3( UPLO, N, A, LDA, AFAC, LDAFAC, E, IPIV,
-     $ C,
+      SUBROUTINE ZSYT01_3( UPLO, N, A, LDA, AFAC, LDAFAC, E, IPIV, C,
      $                     LDC, RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.1) --
@@ -173,13 +172,12 @@
       DOUBLE PRECISION   ANORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANSY
-      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_ZLANSY
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH, ZLANSY
+      EXTERNAL           LSAME, DLAMCH, ZLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZLASET, AB_AB_ZLAVSY_ROOK, AB_AB_AB_AB_ZSYCO
-     $NVF_ROOK
+      EXTERNAL           ZLASET, ZLAVSY_ROOK, ZSYCONVF_ROOK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE
@@ -195,31 +193,30 @@
 *
 *     a) Revert to multiplyers of L
 *
-      CALL AB_AB_AB_AB_ZSYCONVF_ROOK( UPLO, 'R', N, AFAC, LDAFAC, E, IPI
-     $V, INFO )
+      CALL ZSYCONVF_ROOK( UPLO, 'R', N, AFAC, LDAFAC, E, IPIV, INFO )
 *
 *     1) Determine EPS and the norm of A.
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
-      ANORM = AB_ZLANSY( '1', UPLO, N, A, LDA, RWORK )
+      EPS = DLAMCH( 'Epsilon' )
+      ANORM = ZLANSY( '1', UPLO, N, A, LDA, RWORK )
 *
 *     2) Initialize C to the identity matrix.
 *
-      CALL AB_ZLASET( 'Full', N, N, CZERO, CONE, C, LDC )
+      CALL ZLASET( 'Full', N, N, CZERO, CONE, C, LDC )
 *
-*     3) Call AB_AB_ZLAVSY_ROOK to form the product D * U' (or D * L' ).
+*     3) Call ZLAVSY_ROOK to form the product D * U' (or D * L' ).
 *
-      CALL AB_AB_ZLAVSY_ROOK( UPLO, 'Transpose', 'Non-unit', N, N, AFAC,
+      CALL ZLAVSY_ROOK( UPLO, 'Transpose', 'Non-unit', N, N, AFAC,
      $                  LDAFAC, IPIV, C, LDC, INFO )
 *
-*     4) Call AB_AB_ZLAVSY_ROOK again to multiply by U (or L ).
+*     4) Call ZLAVSY_ROOK again to multiply by U (or L ).
 *
-      CALL AB_AB_ZLAVSY_ROOK( UPLO, 'No transpose', 'Unit', N, N, AFAC,
+      CALL ZLAVSY_ROOK( UPLO, 'No transpose', 'Unit', N, N, AFAC,
      $                  LDAFAC, IPIV, C, LDC, INFO )
 *
 *     5) Compute the difference  C - A .
 *
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      IF( LSAME( UPLO, 'U' ) ) THEN
          DO J = 1, N
             DO I = 1, J
                C( I, J ) = C( I, J ) - A( I, J )
@@ -235,7 +232,7 @@
 *
 *     6) Compute norm( C - A ) / ( N * norm(A) * EPS )
 *
-      RESID = AB_ZLANSY( '1', UPLO, N, C, LDC, RWORK )
+      RESID = ZLANSY( '1', UPLO, N, C, LDC, RWORK )
 *
       IF( ANORM.LE.ZERO ) THEN
          IF( RESID.NE.ZERO )
@@ -247,11 +244,10 @@
 *
 *     b) Convert to factor of L (or U)
 *
-      CALL AB_AB_AB_AB_ZSYCONVF_ROOK( UPLO, 'C', N, AFAC, LDAFAC, E, IPI
-     $V, INFO )
+      CALL ZSYCONVF_ROOK( UPLO, 'C', N, AFAC, LDAFAC, E, IPIV, INFO )
 *
       RETURN
 *
-*     End of AB_AB_ZSYT01_3
+*     End of ZSYT01_3
 *
       END

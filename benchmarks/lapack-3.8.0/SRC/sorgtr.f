@@ -1,4 +1,4 @@
-*> \brief \b AB_SORGTR
+*> \brief \b SORGTR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SORGTR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SORGTR.f">
+*> Download SORGTR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sorgtr.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SORGTR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sorgtr.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SORGTR.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorgtr.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SORGTR( UPLO, N, A, LDA, TAU, WORK, LWORK, INFO )
+*       SUBROUTINE SORGTR( UPLO, N, A, LDA, TAU, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,9 +34,9 @@
 *>
 *> \verbatim
 *>
-*> AB_SORGTR generates a real orthogonal matrix Q which is defined as the
+*> SORGTR generates a real orthogonal matrix Q which is defined as the
 *> product of n-1 elementary reflectors of order N, as returned by
-*> AB_SSYTRD:
+*> SSYTRD:
 *>
 *> if UPLO = 'U', Q = H(n-1) . . . H(2) H(1),
 *>
@@ -50,9 +50,9 @@
 *> \verbatim
 *>          UPLO is CHARACTER*1
 *>          = 'U': Upper triangle of A contains elementary reflectors
-*>                 from AB_SSYTRD;
+*>                 from SSYTRD;
 *>          = 'L': Lower triangle of A contains elementary reflectors
-*>                 from AB_SSYTRD.
+*>                 from SSYTRD.
 *> \endverbatim
 *>
 *> \param[in] N
@@ -65,7 +65,7 @@
 *> \verbatim
 *>          A is REAL array, dimension (LDA,N)
 *>          On entry, the vectors which define the elementary reflectors,
-*>          as returned by AB_SSYTRD.
+*>          as returned by SSYTRD.
 *>          On exit, the N-by-N orthogonal matrix Q.
 *> \endverbatim
 *>
@@ -79,7 +79,7 @@
 *> \verbatim
 *>          TAU is REAL array, dimension (N-1)
 *>          TAU(i) must contain the scalar factor of the elementary
-*>          reflector H(i), as returned by AB_SSYTRD.
+*>          reflector H(i), as returned by SSYTRD.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -98,7 +98,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -121,7 +121,7 @@
 *> \ingroup realOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_SORGTR( UPLO, N, A, LDA, TAU, WORK, LWORK, INFO )
+      SUBROUTINE SORGTR( UPLO, N, A, LDA, TAU, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -147,12 +147,12 @@
       INTEGER            I, IINFO, J, LWKOPT, NB
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_ILAENV, AB_LSAME
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      EXTERNAL           ILAENV, LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SORGQL, AB_SORGQR, AB_XERBLA
+      EXTERNAL           SORGQL, SORGQR, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -163,8 +163,8 @@
 *
       INFO = 0
       LQUERY = ( LWORK.EQ.-1 )
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -176,16 +176,16 @@
 *
       IF( INFO.EQ.0 ) THEN
          IF ( UPPER ) THEN
-           NB = AB_ILAENV( 1, 'AB_SORGQL', ' ', N-1, N-1, N-1, -1 )
+           NB = ILAENV( 1, 'SORGQL', ' ', N-1, N-1, N-1, -1 )
          ELSE
-           NB = AB_ILAENV( 1, 'AB_SORGQR', ' ', N-1, N-1, N-1, -1 )
+           NB = ILAENV( 1, 'SORGQR', ' ', N-1, N-1, N-1, -1 )
          END IF
          LWKOPT = MAX( 1, N-1 )*NB
          WORK( 1 ) = LWKOPT
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SORGTR', -INFO )
+         CALL XERBLA( 'SORGTR', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -200,7 +200,7 @@
 *
       IF( UPPER ) THEN
 *
-*        Q was determined by a call to AB_SSYTRD with UPLO = 'U'
+*        Q was determined by a call to SSYTRD with UPLO = 'U'
 *
 *        Shift the vectors which define the elementary reflectors one
 *        column to the left, and set the last row and column of Q to
@@ -219,12 +219,11 @@
 *
 *        Generate Q(1:n-1,1:n-1)
 *
-         CALL AB_SORGQL( N-1, N-1, N-1, A, LDA, TAU, WORK, LWORK, IINFO 
-     $)
+         CALL SORGQL( N-1, N-1, N-1, A, LDA, TAU, WORK, LWORK, IINFO )
 *
       ELSE
 *
-*        Q was determined by a call to AB_SSYTRD with UPLO = 'L'.
+*        Q was determined by a call to SSYTRD with UPLO = 'L'.
 *
 *        Shift the vectors which define the elementary reflectors one
 *        column to the right, and set the first row and column of Q to
@@ -244,13 +243,13 @@
 *
 *           Generate Q(2:n,2:n)
 *
-            CALL AB_SORGQR( N-1, N-1, N-1, A( 2, 2 ), LDA, TAU, WORK,
+            CALL SORGQR( N-1, N-1, N-1, A( 2, 2 ), LDA, TAU, WORK,
      $                   LWORK, IINFO )
          END IF
       END IF
       WORK( 1 ) = LWKOPT
       RETURN
 *
-*     End of AB_SORGTR
+*     End of SORGTR
 *
       END

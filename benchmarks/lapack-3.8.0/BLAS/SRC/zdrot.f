@@ -1,4 +1,4 @@
-*> \brief \b ZAB_DROT
+*> \brief \b ZDROT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZAB_DROT( N, CX, INCX, CY, INCY, C, S )
+*       SUBROUTINE ZDROT( N, CX, INCX, CY, INCY, C, S )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCX, INCY, N
@@ -96,7 +96,7 @@
 *> \ingroup complex16_blas_level1
 *
 *  =====================================================================
-      SUBROUTINE ZAB_DROT( N, CX, INCX, CY, INCY, C, S )
+      SUBROUTINE ZDROT( N, CX, INCX, CY, INCY, C, S )
 *
 *  -- Reference BLAS level1 routine (version 3.7.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

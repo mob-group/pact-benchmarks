@@ -1,4 +1,4 @@
-*> \brief \b AB_DLAED4 used by AB_SSTEDC. Finds a single root of the secular equation.
+*> \brief \b DLAED4 used by sstedc. Finds a single root of the secular equation.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DLAED4 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLAED4.f">
+*> Download DLAED4 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaed4.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLAED4.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaed4.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLAED4.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaed4.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DLAED4( N, I, D, Z, DELTA, RHO, DLAM, INFO )
+*       SUBROUTINE DLAED4( N, I, D, Z, DELTA, RHO, DLAM, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            I, INFO, N
@@ -83,9 +83,9 @@
 *> \verbatim
 *>          DELTA is DOUBLE PRECISION array, dimension (N)
 *>         If N .GT. 2, DELTA contains (D(j) - lambda_I) in its  j-th
-*>         component.  If N = 1, then DELTA(1) = 1. If N = 2, see AB_DLAED5
+*>         component.  If N = 1, then DELTA(1) = 1. If N = 2, see DLAED5
 *>         for detail. The vector DELTA contains the information necessary
-*>         to construct the eigenvectors by AB_DLAED3 and AB_DLAED9.
+*>         to construct the eigenvectors by DLAED3 and DLAED9.
 *> \endverbatim
 *>
 *> \param[in] RHO
@@ -115,7 +115,7 @@
 *>  whether D(i) or D(i+1) is treated as the origin.
 *>
 *>            ORGATI = .true.    origin at i
-*>            ORGATI = .FALSE.   origin at i+1
+*>            ORGATI = .false.   origin at i+1
 *>
 *>   Logical variable SWTCH3 (switch-for-3-poles?) is for noting
 *>   if we are working with THREE poles!
@@ -143,7 +143,7 @@
 *>     at Berkeley, USA
 *>
 *  =====================================================================
-      SUBROUTINE AB_DLAED4( N, I, D, Z, DELTA, RHO, DLAM, INFO )
+      SUBROUTINE DLAED4( N, I, D, Z, DELTA, RHO, DLAM, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -179,11 +179,11 @@
       DOUBLE PRECISION   ZZ( 3 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH
-      EXTERNAL           AB_DLAMCH
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLAED5, AB_DLAED6
+      EXTERNAL           DLAED5, DLAED6
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT
@@ -205,13 +205,13 @@
          RETURN
       END IF
       IF( N.EQ.2 ) THEN
-         CALL AB_DLAED5( I, D, Z, DELTA, RHO, DLAM )
+         CALL DLAED5( I, D, Z, DELTA, RHO, DLAM )
          RETURN
       END IF
 *
 *     Compute machine epsilon
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
+      EPS = DLAMCH( 'Epsilon' )
       RHOINV = ONE / RHO
 *
 *     The case I = N
@@ -666,7 +666,7 @@
                ZZ( 3 ) = Z( IIP1 )*Z( IIP1 )
             END IF
             ZZ( 2 ) = Z( II )*Z( II )
-            CALL AB_DLAED6( NITER, ORGATI, C, DELTA( IIM1 ), ZZ, W, ETA,
+            CALL DLAED6( NITER, ORGATI, C, DELTA( IIM1 ), ZZ, W, ETA,
      $                   INFO )
             IF( INFO.NE.0 )
      $         GO TO 250
@@ -832,8 +832,7 @@
                      ZZ( 3 ) = Z( IIP1 )*Z( IIP1 )
                   END IF
                END IF
-               CALL AB_DLAED6( NITER, ORGATI, C, DELTA( IIM1 ), ZZ, W, E
-     $TA,
+               CALL DLAED6( NITER, ORGATI, C, DELTA( IIM1 ), ZZ, W, ETA,
      $                      INFO )
                IF( INFO.NE.0 )
      $            GO TO 250
@@ -913,6 +912,6 @@
 *
       RETURN
 *
-*     End of AB_DLAED4
+*     End of DLAED4
 *
       END

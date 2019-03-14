@@ -1,4 +1,4 @@
-*> \brief \b AB_SPBT02
+*> \brief \b SPBT02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SPBT02( UPLO, N, KD, NRHS, A, LDA, X, LDX, B, LDB,
+*       SUBROUTINE SPBT02( UPLO, N, KD, NRHS, A, LDA, X, LDX, B, LDB,
 *                          RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SPBT02 computes the residual for a solution of a symmetric banded
+*> SPBT02 computes the residual for a solution of a symmetric banded
 *> system of equations  A*x = b:
 *>    RESID = norm( B - A*X ) / ( norm(A) * norm(X) * EPS)
 *> where EPS is the machine precision.
@@ -72,7 +72,7 @@
 *>          UPLO = 'L', the lower triangular part of A is stored.  The
 *>          columns of the appropriate triangle are stored in the columns
 *>          of A and the diagonals of the triangle are stored in the rows
-*>          of A.  See AB_SPBTRF for further details.
+*>          of A.  See SPBTRF for further details.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -133,7 +133,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_SPBT02( UPLO, N, KD, NRHS, A, LDA, X, LDX, B, LDB,
+      SUBROUTINE SPBT02( UPLO, N, KD, NRHS, A, LDA, X, LDX, B, LDB,
      $                   RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -162,11 +162,11 @@
       REAL               ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      REAL               AB_SASUM, AB_SLAMCH, AB_SLANSB
-      EXTERNAL           AB_SASUM, AB_SLAMCH, AB_SLANSB
+      REAL               SASUM, SLAMCH, SLANSB
+      EXTERNAL           SASUM, SLAMCH, SLANSB
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SSBMV
+      EXTERNAL           SSBMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -182,8 +182,8 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = AB_SLAMCH( 'Epsilon' )
-      ANORM = AB_SLANSB( '1', UPLO, N, KD, A, LDA, RWORK )
+      EPS = SLAMCH( 'Epsilon' )
+      ANORM = SLANSB( '1', UPLO, N, KD, A, LDA, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
@@ -192,7 +192,7 @@
 *     Compute  B - A*X
 *
       DO 10 J = 1, NRHS
-         CALL AB_SSBMV( UPLO, N, KD, -ONE, A, LDA, X( 1, J ), 1, ONE,
+         CALL SSBMV( UPLO, N, KD, -ONE, A, LDA, X( 1, J ), 1, ONE,
      $               B( 1, J ), 1 )
    10 CONTINUE
 *
@@ -201,8 +201,8 @@
 *
       RESID = ZERO
       DO 20 J = 1, NRHS
-         BNORM = AB_SASUM( N, B( 1, J ), 1 )
-         XNORM = AB_SASUM( N, X( 1, J ), 1 )
+         BNORM = SASUM( N, B( 1, J ), 1 )
+         XNORM = SASUM( N, X( 1, J ), 1 )
          IF( XNORM.LE.ZERO ) THEN
             RESID = ONE / EPS
          ELSE
@@ -212,6 +212,6 @@
 *
       RETURN
 *
-*     End of AB_SPBT02
+*     End of SPBT02
 *
       END

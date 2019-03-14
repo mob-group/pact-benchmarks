@@ -1,5 +1,4 @@
-C> \brief \b AB_CPOTRF VARIANT: right looking block version of the algor
-     $ithm, calling Level 3 BLAS.
+C> \brief \b CPOTRF VARIANT: right looking block version of the algorithm, calling Level 3 BLAS.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -9,7 +8,7 @@ C> \brief \b AB_CPOTRF VARIANT: right looking block version of the algor
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CPOTRF ( UPLO, N, A, LDA, INFO )
+*       SUBROUTINE CPOTRF ( UPLO, N, A, LDA, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -25,7 +24,7 @@ C> \brief \b AB_CPOTRF VARIANT: right looking block version of the algor
 C>\details \b Purpose:
 C>\verbatim
 C>
-C> AB_CPOTRF computes the Cholesky factorization of a real Hermitian
+C> CPOTRF computes the Cholesky factorization of a real Hermitian
 C> positive definite matrix A.
 C>
 C> The factorization has the form
@@ -33,8 +32,7 @@ C>    A = U**H * U,  if UPLO = 'U', or
 C>    A = L  * L**H,  if UPLO = 'L',
 C> where U is an upper triangular matrix and L is lower triangular.
 C>
-C> This is the right looking block version of the algorithm, calling Lev
-     $el 3 BLAS.
+C> This is the right looking block version of the algorithm, calling Level 3 BLAS.
 C>
 C>\endverbatim
 *
@@ -57,8 +55,7 @@ C>
 C> \param[in,out] A
 C> \verbatim
 C>          A is COMPLEX array, dimension (LDA,N)
-C>          On entry, the Hermitian matrix A.  If UPLO = 'U', the leadin
-     $g
+C>          On entry, the Hermitian matrix A.  If UPLO = 'U', the leading
 C>          N-by-N upper triangular part of A contains the upper
 C>          triangular part of the matrix A, and the strictly lower
 C>          triangular part of A is not referenced.  If UPLO = 'L', the
@@ -101,7 +98,7 @@ C> \date December 2016
 C> \ingroup variantsPOcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_CPOTRF ( UPLO, N, A, LDA, INFO )
+      SUBROUTINE CPOTRF ( UPLO, N, A, LDA, INFO )
 *
 *  -- LAPACK computational routine (version 3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -128,13 +125,12 @@ C> \ingroup variantsPOcomputational
       INTEGER            J, JB, NB
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_LSAME, AB_ILAENV
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CGEMM, AB_CPOTF2, AB_AB_CHERK, AB_CTRSM, AB_
-     $XERBLA
+      EXTERNAL           CGEMM, CPOTF2, CHERK, CTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -144,8 +140,8 @@ C> \ingroup variantsPOcomputational
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -153,7 +149,7 @@ C> \ingroup variantsPOcomputational
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CPOTRF', -INFO )
+         CALL XERBLA( 'CPOTRF', -INFO )
          RETURN
       END IF
 *
@@ -164,12 +160,12 @@ C> \ingroup variantsPOcomputational
 *
 *     Determine the block size for this environment.
 *
-      NB = AB_ILAENV( 1, 'AB_CPOTRF', UPLO, N, -1, -1, -1 )
+      NB = ILAENV( 1, 'CPOTRF', UPLO, N, -1, -1, -1 )
       IF( NB.LE.1 .OR. NB.GE.N ) THEN
 *
 *        Use unblocked code.
 *
-         CALL AB_CPOTF2( UPLO, N, A, LDA, INFO )
+         CALL CPOTF2( UPLO, N, A, LDA, INFO )
       ELSE
 *
 *        Use blocked code.
@@ -185,7 +181,7 @@ C> \ingroup variantsPOcomputational
 *
                JB = MIN( NB, N-J+1 )
 
-               CALL AB_CPOTF2( 'Upper', JB, A( J, J ), LDA, INFO )
+               CALL CPOTF2( 'Upper', JB, A( J, J ), LDA, INFO )
 
                IF( INFO.NE.0 )
      $            GO TO 30
@@ -194,11 +190,10 @@ C> \ingroup variantsPOcomputational
 *
 *                 Updating the trailing submatrix.
 *
-                  CALL AB_CTRSM( 'Left', 'Upper', 'Conjugate Transpose',
+                  CALL CTRSM( 'Left', 'Upper', 'Conjugate Transpose',
      $                        'Non-unit', JB, N-J-JB+1, CONE, A( J, J ),
      $                        LDA, A( J, J+JB ), LDA )
-                  CALL AB_AB_CHERK( 'Upper', 'Conjugate transpose', N-J-
-     $JB+1,
+                  CALL CHERK( 'Upper', 'Conjugate transpose', N-J-JB+1,
      $                        JB, -ONE, A( J, J+JB ), LDA,
      $                        ONE, A( J+JB, J+JB ), LDA )
                END IF
@@ -215,7 +210,7 @@ C> \ingroup variantsPOcomputational
 *
                JB = MIN( NB, N-J+1 )
 
-               CALL AB_CPOTF2( 'Lower', JB, A( J, J ), LDA, INFO )
+               CALL CPOTF2( 'Lower', JB, A( J, J ), LDA, INFO )
 
                IF( INFO.NE.0 )
      $            GO TO 30
@@ -224,12 +219,11 @@ C> \ingroup variantsPOcomputational
 *
 *                Updating the trailing submatrix.
 *
-                 CALL AB_CTRSM( 'Right', 'Lower', 'Conjugate Transpose',
+                 CALL CTRSM( 'Right', 'Lower', 'Conjugate Transpose',
      $                       'Non-unit', N-J-JB+1, JB, CONE, A( J, J ),
      $                       LDA, A( J+JB, J ), LDA )
 
-                 CALL AB_AB_CHERK( 'Lower', 'No Transpose', N-J-JB+1, JB
-     $,
+                 CALL CHERK( 'Lower', 'No Transpose', N-J-JB+1, JB,
      $                       -ONE, A( J+JB, J ), LDA,
      $                       ONE, A( J+JB, J+JB ), LDA )
                END IF
@@ -244,6 +238,6 @@ C> \ingroup variantsPOcomputational
    40 CONTINUE
       RETURN
 *
-*     End of AB_CPOTRF
+*     End of CPOTRF
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_SLATRZ factors an upper trapezoidal matrix by means of orthogonal transformations.
+*> \brief \b SLATRZ factors an upper trapezoidal matrix by means of orthogonal transformations.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLATRZ + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLATRZ.f">
+*> Download SLATRZ + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slatrz.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLATRZ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slatrz.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLATRZ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slatrz.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLATRZ( M, N, L, A, LDA, TAU, WORK )
+*       SUBROUTINE SLATRZ( M, N, L, A, LDA, TAU, WORK )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            L, LDA, M, N
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SLATRZ factors the M-by-(M+L) real upper trapezoidal matrix
+*> SLATRZ factors the M-by-(M+L) real upper trapezoidal matrix
 *> [ A1 A2 ] = [ A(1:M,1:M) A(1:M,N-L+1:N) ] as ( R  0 ) * Z, by means
 *> of orthogonal transformations.  Z is an (M+L)-by-(M+L) orthogonal
 *> matrix and, R and A1 are M-by-M upper triangular matrices.
@@ -58,7 +58,7 @@
 *> \verbatim
 *>          L is INTEGER
 *>          The number of columns of the matrix A containing the
-*>          meaningful part of the HousehoAB_LDEr vectors. N-M >= L >= 0.
+*>          meaningful part of the Householder vectors. N-M >= L >= 0.
 *> \endverbatim
 *>
 *> \param[in,out] A
@@ -111,7 +111,7 @@
 *>
 *> \verbatim
 *>
-*>  The factorization is obtained by HousehoAB_LDEr's method.  The kth
+*>  The factorization is obtained by Householder's method.  The kth
 *>  transformation matrix, Z( k ), which is used to introduce zeros into
 *>  the ( m - k + 1 )th row of A, is given in the form
 *>
@@ -138,7 +138,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_SLATRZ( M, N, L, A, LDA, TAU, WORK )
+      SUBROUTINE SLATRZ( M, N, L, A, LDA, TAU, WORK )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -162,7 +162,7 @@
       INTEGER            I
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_AB_SLARFG, AB_SLARZ
+      EXTERNAL           SLARFG, SLARZ
 *     ..
 *     .. Executable Statements ..
 *
@@ -184,18 +184,17 @@
 *        Generate elementary reflector H(i) to annihilate
 *        [ A(i,i) A(i,n-l+1:n) ]
 *
-         CALL AB_AB_SLARFG( L+1, A( I, I ), A( I, N-L+1 ), LDA, TAU( I )
-     $ )
+         CALL SLARFG( L+1, A( I, I ), A( I, N-L+1 ), LDA, TAU( I ) )
 *
 *        Apply H(i) to A(1:i-1,i:n) from the right
 *
-         CALL AB_SLARZ( 'Right', I-1, N-I+1, L, A( I, N-L+1 ), LDA,
+         CALL SLARZ( 'Right', I-1, N-I+1, L, A( I, N-L+1 ), LDA,
      $               TAU( I ), A( 1, I ), LDA, WORK )
 *
    20 CONTINUE
 *
       RETURN
 *
-*     End of AB_SLATRZ
+*     End of SLATRZ
 *
       END

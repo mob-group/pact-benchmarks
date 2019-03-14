@@ -1,4 +1,4 @@
-*> \brief \b AB_CGET38
+*> \brief \b CGET38
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CGET38( RMAX, LMAX, NINFO, KNT, NIN )
+*       SUBROUTINE CGET38( RMAX, LMAX, NINFO, KNT, NIN )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            KNT, NIN
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CGET38 tests AB_CTRSEN, a routine for estimating condition numbers of a
+*> CGET38 tests CTRSEN, a routine for estimating condition numbers of a
 *> cluster of eigenvalues and/or its associated right invariant subspace
 *>
 *> The test matrices are read from a file with logical unit number NIN.
@@ -37,8 +37,8 @@
 *> \verbatim
 *>          RMAX is REAL array, dimension (3)
 *>          Values of the largest test ratios.
-*>          RMAX(1) = largest residuals from AB_CHST01 or comparing
-*>                    different calls to AB_CTRSEN
+*>          RMAX(1) = largest residuals from CHST01 or comparing
+*>                    different calls to CTRSEN
 *>          RMAX(2) = largest error in reciprocal condition
 *>                    numbers taking their conditioning into account
 *>          RMAX(3) = largest error in reciprocal condition
@@ -51,17 +51,17 @@
 *>          LMAX is INTEGER array, dimension (3)
 *>          LMAX(i) is example number where largest test ratio
 *>          RMAX(i) is achieved. Also:
-*>          If AB_CGEHRD returns INFO nonzero on example i, LMAX(1)=i
-*>          If AB_CHSEQR returns INFO nonzero on example i, LMAX(2)=i
-*>          If AB_CTRSEN returns INFO nonzero on example i, LMAX(3)=i
+*>          If CGEHRD returns INFO nonzero on example i, LMAX(1)=i
+*>          If CHSEQR returns INFO nonzero on example i, LMAX(2)=i
+*>          If CTRSEN returns INFO nonzero on example i, LMAX(3)=i
 *> \endverbatim
 *>
 *> \param[out] NINFO
 *> \verbatim
 *>          NINFO is INTEGER array, dimension (3)
-*>          NINFO(1) = No. of times AB_CGEHRD returned INFO nonzero
-*>          NINFO(2) = No. of times AB_CHSEQR returned INFO nonzero
-*>          NINFO(3) = No. of times AB_CTRSEN returned INFO nonzero
+*>          NINFO(1) = No. of times CGEHRD returned INFO nonzero
+*>          NINFO(2) = No. of times CHSEQR returned INFO nonzero
+*>          NINFO(3) = No. of times CTRSEN returned INFO nonzero
 *> \endverbatim
 *>
 *> \param[out] KNT
@@ -89,7 +89,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_CGET38( RMAX, LMAX, NINFO, KNT, NIN )
+      SUBROUTINE CGET38( RMAX, LMAX, NINFO, KNT, NIN )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -134,23 +134,22 @@
      $                   WORK( LWORK ), WTMP( LDT )
 *     ..
 *     .. External Functions ..
-      REAL               AB_CLANGE, AB_SLAMCH
-      EXTERNAL           AB_CLANGE, AB_SLAMCH
+      REAL               CLANGE, SLAMCH
+      EXTERNAL           CLANGE, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CGEHRD, AB_CHSEQR, AB_CHST01, AB_CLACPY, AB_
-     $CAB_SSCAL, AB_CTRSEN,
-     $                   AB_CUNGHR, AB_SLABAD
+      EXTERNAL           CGEHRD, CHSEQR, CHST01, CLACPY, CSSCAL, CTRSEN,
+     $                   CUNGHR, SLABAD
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          AIMAG, MAX, REAL, SQRT
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = AB_SLAMCH( 'P' )
-      SMLNUM = AB_SLAMCH( 'S' ) / EPS
+      EPS = SLAMCH( 'P' )
+      SMLNUM = SLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL AB_SLABAD( SMLNUM, BIGNUM )
+      CALL SLABAD( SMLNUM, BIGNUM )
 *
 *     EPSIN = 2**(-24) = precision to which input data computed
 *
@@ -183,25 +182,24 @@
    20 CONTINUE
       READ( NIN, FMT = * )SIN, SEPIN
 *
-      TNRM = AB_CLANGE( 'M', N, N, TMP, LDT, RWORK )
+      TNRM = CLANGE( 'M', N, N, TMP, LDT, RWORK )
       DO 200 ISCL = 1, 3
 *
 *        Scale input matrix
 *
          KNT = KNT + 1
-         CALL AB_CLACPY( 'F', N, N, TMP, LDT, T, LDT )
+         CALL CLACPY( 'F', N, N, TMP, LDT, T, LDT )
          VMUL = VAL( ISCL )
          DO 30 I = 1, N
-            CALL AB_CAB_SSCAL( N, VMUL, T( 1, I ), 1 )
+            CALL CSSCAL( N, VMUL, T( 1, I ), 1 )
    30    CONTINUE
          IF( TNRM.EQ.ZERO )
      $      VMUL = ONE
-         CALL AB_CLACPY( 'F', N, N, T, LDT, TSAV, LDT )
+         CALL CLACPY( 'F', N, N, T, LDT, TSAV, LDT )
 *
 *        Compute Schur form
 *
-         CALL AB_CGEHRD( N, 1, N, T, LDT, WORK( 1 ), WORK( N+1 ), LWORK-
-     $N,
+         CALL CGEHRD( N, 1, N, T, LDT, WORK( 1 ), WORK( N+1 ), LWORK-N,
      $                INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 1 ) = KNT
@@ -211,9 +209,8 @@
 *
 *        Generate unitary matrix
 *
-         CALL AB_CLACPY( 'L', N, N, T, LDT, Q, LDT )
-         CALL AB_CUNGHR( N, 1, N, Q, LDT, WORK( 1 ), WORK( N+1 ), LWORK-
-     $N,
+         CALL CLACPY( 'L', N, N, T, LDT, Q, LDT )
+         CALL CUNGHR( N, 1, N, Q, LDT, WORK( 1 ), WORK( N+1 ), LWORK-N,
      $                INFO )
 *
 *        Compute Schur form
@@ -223,8 +220,7 @@
                T( I, J ) = CZERO
    40       CONTINUE
    50    CONTINUE
-         CALL AB_CHSEQR( 'S', 'V', N, 1, N, T, LDT, W, Q, LDT, WORK, LWO
-     $RK,
+         CALL CHSEQR( 'S', 'V', N, 1, N, T, LDT, W, Q, LDT, WORK, LWORK,
      $                INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 2 ) = KNT
@@ -268,10 +264,9 @@
 *
 *        Compute condition numbers
 *
-         CALL AB_CLACPY( 'F', N, N, Q, LDT, QSAV, LDT )
-         CALL AB_CLACPY( 'F', N, N, T, LDT, TSAV1, LDT )
-         CALL AB_CTRSEN( 'B', 'V', SELECT, N, T, LDT, Q, LDT, WTMP, M, S
-     $,
+         CALL CLACPY( 'F', N, N, Q, LDT, QSAV, LDT )
+         CALL CLACPY( 'F', N, N, T, LDT, TSAV1, LDT )
+         CALL CTRSEN( 'B', 'V', SELECT, N, T, LDT, Q, LDT, WTMP, M, S,
      $                SEP, WORK, LWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -283,8 +278,7 @@
 *
 *        Compute residuals
 *
-         CALL AB_CHST01( N, 1, N, TSAV, LDT, T, LDT, Q, LDT, WORK, LWORK
-     $,
+         CALL CHST01( N, 1, N, TSAV, LDT, T, LDT, Q, LDT, WORK, LWORK,
      $                RWORK, RESULT )
          VMAX = MAX( RESULT( 1 ), RESULT( 2 ) )
          IF( VMAX.GT.RMAX( 1 ) ) THEN
@@ -408,12 +402,11 @@
 *        Update Q
 *
          VMAX = ZERO
-         CALL AB_CLACPY( 'F', N, N, TSAV1, LDT, TTMP, LDT )
-         CALL AB_CLACPY( 'F', N, N, QSAV, LDT, QTMP, LDT )
+         CALL CLACPY( 'F', N, N, TSAV1, LDT, TTMP, LDT )
+         CALL CLACPY( 'F', N, N, QSAV, LDT, QTMP, LDT )
          SEPTMP = -ONE
          STMP = -ONE
-         CALL AB_CTRSEN( 'E', 'V', SELECT, N, TTMP, LDT, QTMP, LDT, WTMP
-     $,
+         CALL CTRSEN( 'E', 'V', SELECT, N, TTMP, LDT, QTMP, LDT, WTMP,
      $                M, STMP, SEPTMP, WORK, LWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -436,12 +429,11 @@
 *        Compute invariant subspace condition number only and compare
 *        Update Q
 *
-         CALL AB_CLACPY( 'F', N, N, TSAV1, LDT, TTMP, LDT )
-         CALL AB_CLACPY( 'F', N, N, QSAV, LDT, QTMP, LDT )
+         CALL CLACPY( 'F', N, N, TSAV1, LDT, TTMP, LDT )
+         CALL CLACPY( 'F', N, N, QSAV, LDT, QTMP, LDT )
          SEPTMP = -ONE
          STMP = -ONE
-         CALL AB_CTRSEN( 'V', 'V', SELECT, N, TTMP, LDT, QTMP, LDT, WTMP
-     $,
+         CALL CTRSEN( 'V', 'V', SELECT, N, TTMP, LDT, QTMP, LDT, WTMP,
      $                M, STMP, SEPTMP, WORK, LWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -464,12 +456,11 @@
 *        Compute eigenvalue condition number only and compare
 *        Do not update Q
 *
-         CALL AB_CLACPY( 'F', N, N, TSAV1, LDT, TTMP, LDT )
-         CALL AB_CLACPY( 'F', N, N, QSAV, LDT, QTMP, LDT )
+         CALL CLACPY( 'F', N, N, TSAV1, LDT, TTMP, LDT )
+         CALL CLACPY( 'F', N, N, QSAV, LDT, QTMP, LDT )
          SEPTMP = -ONE
          STMP = -ONE
-         CALL AB_CTRSEN( 'E', 'N', SELECT, N, TTMP, LDT, QTMP, LDT, WTMP
-     $,
+         CALL CTRSEN( 'E', 'N', SELECT, N, TTMP, LDT, QTMP, LDT, WTMP,
      $                M, STMP, SEPTMP, WORK, LWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -492,12 +483,11 @@
 *        Compute invariant subspace condition number only and compare
 *        Do not update Q
 *
-         CALL AB_CLACPY( 'F', N, N, TSAV1, LDT, TTMP, LDT )
-         CALL AB_CLACPY( 'F', N, N, QSAV, LDT, QTMP, LDT )
+         CALL CLACPY( 'F', N, N, TSAV1, LDT, TTMP, LDT )
+         CALL CLACPY( 'F', N, N, QSAV, LDT, QTMP, LDT )
          SEPTMP = -ONE
          STMP = -ONE
-         CALL AB_CTRSEN( 'V', 'N', SELECT, N, TTMP, LDT, QTMP, LDT, WTMP
-     $,
+         CALL CTRSEN( 'V', 'N', SELECT, N, TTMP, LDT, QTMP, LDT, WTMP,
      $                M, STMP, SEPTMP, WORK, LWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -524,6 +514,6 @@
   200 CONTINUE
       GO TO 10
 *
-*     End of AB_CGET38
+*     End of CGET38
 *
       END

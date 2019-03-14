@@ -1,4 +1,4 @@
-*> \brief \b AB_ZQRT02
+*> \brief \b ZQRT02
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZQRT02( M, N, K, A, AF, Q, R, LDA, TAU, WORK, LWORK,
+*       SUBROUTINE ZQRT02( M, N, K, A, AF, Q, R, LDA, TAU, WORK, LWORK,
 *                          RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
@@ -26,11 +26,11 @@
 *>
 *> \verbatim
 *>
-*> AB_ZQRT02 tests AB_ZUNGQR, which generates an m-by-n matrix Q with
+*> ZQRT02 tests ZUNGQR, which generates an m-by-n matrix Q with
 *> orthonornmal columns that is defined as the product of k elementary
 *> reflectors.
 *>
-*> Given the QR factorization of an m-by-n matrix A, AB_ZQRT02 generates
+*> Given the QR factorization of an m-by-n matrix A, ZQRT02 generates
 *> the orthogonal matrix Q defined by the factorization of the first k
 *> columns of A; it compares R(1:n,1:k) with Q(1:m,1:n)'*A(1:m,1:k),
 *> and checks that the columns of Q are orthonormal.
@@ -62,14 +62,14 @@
 *> \param[in] A
 *> \verbatim
 *>          A is COMPLEX*16 array, dimension (LDA,N)
-*>          The m-by-n matrix A which was factorized by AB_ZQRT01.
+*>          The m-by-n matrix A which was factorized by ZQRT01.
 *> \endverbatim
 *>
 *> \param[in] AF
 *> \verbatim
 *>          AF is COMPLEX*16 array, dimension (LDA,N)
-*>          Details of the QR factorization of A, as returned by AB_AB_ZGEQRF.
-*>          See AB_AB_ZGEQRF for further details.
+*>          Details of the QR factorization of A, as returned by ZGEQRF.
+*>          See ZGEQRF for further details.
 *> \endverbatim
 *>
 *> \param[out] Q
@@ -132,7 +132,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZQRT02( M, N, K, A, AF, Q, R, LDA, TAU, WORK, LWORK,
+      SUBROUTINE ZQRT02( M, N, K, A, AF, Q, R, LDA, TAU, WORK, LWORK,
      $                   RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -162,12 +162,11 @@
       DOUBLE PRECISION   ANORM, EPS, RESID
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE, AB_ZLANSY
-      EXTERNAL           AB_DLAMCH, AB_ZLANGE, AB_ZLANSY
+      DOUBLE PRECISION   DLAMCH, ZLANGE, ZLANSY
+      EXTERNAL           DLAMCH, ZLANGE, ZLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZGEMM, AB_AB_ZHERK, AB_ZLACPY, AB_ZLASET, AB
-     $_ZUNGQR
+      EXTERNAL           ZGEMM, ZHERK, ZLACPY, ZLASET, ZUNGQR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCMPLX, MAX
@@ -180,34 +179,34 @@
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
+      EPS = DLAMCH( 'Epsilon' )
 *
 *     Copy the first k columns of the factorization to the array Q
 *
-      CALL AB_ZLASET( 'Full', M, N, ROGUE, ROGUE, Q, LDA )
-      CALL AB_ZLACPY( 'Lower', M-1, K, AF( 2, 1 ), LDA, Q( 2, 1 ), LDA )
+      CALL ZLASET( 'Full', M, N, ROGUE, ROGUE, Q, LDA )
+      CALL ZLACPY( 'Lower', M-1, K, AF( 2, 1 ), LDA, Q( 2, 1 ), LDA )
 *
 *     Generate the first n columns of the matrix Q
 *
-      SRNAMT = 'AB_ZUNGQR'
-      CALL AB_ZUNGQR( M, N, K, Q, LDA, TAU, WORK, LWORK, INFO )
+      SRNAMT = 'ZUNGQR'
+      CALL ZUNGQR( M, N, K, Q, LDA, TAU, WORK, LWORK, INFO )
 *
 *     Copy R(1:n,1:k)
 *
-      CALL AB_ZLASET( 'Full', N, K, DCMPLX( ZERO ), DCMPLX( ZERO ), R,
+      CALL ZLASET( 'Full', N, K, DCMPLX( ZERO ), DCMPLX( ZERO ), R,
      $             LDA )
-      CALL AB_ZLACPY( 'Upper', N, K, AF, LDA, R, LDA )
+      CALL ZLACPY( 'Upper', N, K, AF, LDA, R, LDA )
 *
 *     Compute R(1:n,1:k) - Q(1:m,1:n)' * A(1:m,1:k)
 *
-      CALL AB_ZGEMM( 'Conjugate transpose', 'No transpose', N, K, M,
+      CALL ZGEMM( 'Conjugate transpose', 'No transpose', N, K, M,
      $            DCMPLX( -ONE ), Q, LDA, A, LDA, DCMPLX( ONE ), R,
      $            LDA )
 *
 *     Compute norm( R - Q'*A ) / ( M * norm(A) * EPS ) .
 *
-      ANORM = AB_ZLANGE( '1', M, K, A, LDA, RWORK )
-      RESID = AB_ZLANGE( '1', N, K, R, LDA, RWORK )
+      ANORM = ZLANGE( '1', M, K, A, LDA, RWORK )
+      RESID = ZLANGE( '1', N, K, R, LDA, RWORK )
       IF( ANORM.GT.ZERO ) THEN
          RESULT( 1 ) = ( ( RESID / DBLE( MAX( 1, M ) ) ) / ANORM ) / EPS
       ELSE
@@ -216,20 +215,18 @@
 *
 *     Compute I - Q'*Q
 *
-      CALL AB_ZLASET( 'Full', N, N, DCMPLX( ZERO ), DCMPLX( ONE ), R, LD
-     $A )
-      CALL AB_AB_ZHERK( 'Upper', 'Conjugate transpose', N, M, -ONE, Q, L
-     $DA,
+      CALL ZLASET( 'Full', N, N, DCMPLX( ZERO ), DCMPLX( ONE ), R, LDA )
+      CALL ZHERK( 'Upper', 'Conjugate transpose', N, M, -ONE, Q, LDA,
      $            ONE, R, LDA )
 *
 *     Compute norm( I - Q'*Q ) / ( M * EPS ) .
 *
-      RESID = AB_ZLANSY( '1', 'Upper', N, R, LDA, RWORK )
+      RESID = ZLANSY( '1', 'Upper', N, R, LDA, RWORK )
 *
       RESULT( 2 ) = ( RESID / DBLE( MAX( 1, M ) ) ) / EPS
 *
       RETURN
 *
-*     End of AB_ZQRT02
+*     End of ZQRT02
 *
       END

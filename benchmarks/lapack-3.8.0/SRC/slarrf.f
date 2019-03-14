@@ -1,4 +1,4 @@
-*> \brief \b AB_SLARRF finds a new relatively robust representation such that at least one of the eigenvalues is relatively isolated.
+*> \brief \b SLARRF finds a new relatively robust representation such that at least one of the eigenvalues is relatively isolated.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SLARRF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLARRF.f">
+*> Download SLARRF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slarrf.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLARRF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slarrf.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLARRF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slarrf.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SLARRF( N, D, L, LD, CLSTRT, CLEND,
+*       SUBROUTINE SLARRF( N, D, L, LD, CLSTRT, CLEND,
 *                          W, WGAP, WERR,
 *                          SPDIAM, CLGAPL, CLGAPR, PIVMIN, SIGMA,
 *                          DPLUS, LPLUS, WORK, INFO )
@@ -40,7 +40,7 @@
 *>
 *> Given the initial representation L D L^T and its cluster of close
 *> eigenvalues (in a relative measure), W( CLSTRT ), W( CLSTRT+1 ), ...
-*> W( CLEND ), AB_SLARRF finds a new relatively robust representation
+*> W( CLEND ), SLARRF finds a new relatively robust representation
 *> L D L^T - SIGMA I = L(+) D(+) L(+)^T such that at least one of the
 *> eigenvalues of L(+) D(+) L(+)^T is relatively isolated.
 *> \endverbatim
@@ -188,7 +188,7 @@
 *> Christof Voemel, University of California, Berkeley, USA
 *
 *  =====================================================================
-      SUBROUTINE AB_SLARRF( N, D, L, LD, CLSTRT, CLEND,
+      SUBROUTINE SLARRF( N, D, L, LD, CLSTRT, CLEND,
      $                   W, WGAP, WERR,
      $                   SPDIAM, CLGAPL, CLGAPR, PIVMIN, SIGMA,
      $                   DPLUS, LPLUS, WORK, INFO )
@@ -221,17 +221,17 @@
       INTEGER            I, INDX, KTRY, KTRYMAX, SLEFT, SRIGHT, SHIFT
       PARAMETER          ( KTRYMAX = 1, SLEFT = 1, SRIGHT = 2 )
       REAL               AVGAP, BESTSHIFT, CLWDTH, EPS, FACT, FAIL,
-     $                   FAIL2, GROWTHBOUND, AB_LDELTA, LDMAX, LSIGMA,
+     $                   FAIL2, GROWTHBOUND, LDELTA, LDMAX, LSIGMA,
      $                   MAX1, MAX2, MINGAP, OLDP, PROD, RDELTA, RDMAX,
      $                   RRR1, RRR2, RSIGMA, S, SMLGROWTH, TMP, ZNM2
 *     ..
 *     .. External Functions ..
-      LOGICAL AB_SISNAN
-      REAL               AB_SLAMCH
-      EXTERNAL           AB_SISNAN, AB_SLAMCH
+      LOGICAL SISNAN
+      REAL               SLAMCH
+      EXTERNAL           SISNAN, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SCOPY
+      EXTERNAL           SCOPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS
@@ -247,7 +247,7 @@
       END IF
 *
       FACT = REAL(2**KTRYMAX)
-      EPS = AB_SLAMCH( 'Precision' )
+      EPS = SLAMCH( 'Precision' )
       SHIFT = 0
       FORCER = .FALSE.
 
@@ -284,12 +284,12 @@
       LDMAX = QUART * MINGAP + TWO * PIVMIN
       RDMAX = QUART * MINGAP + TWO * PIVMIN
 
-      AB_LDELTA = MAX(AVGAP,WGAP( CLSTRT ))/FACT
+      LDELTA = MAX(AVGAP,WGAP( CLSTRT ))/FACT
       RDELTA = MAX(AVGAP,WGAP( CLEND-1 ))/FACT
 *
 *     Initialize the record of the best representation found
 *
-      S = AB_SLAMCH( 'S' )
+      S = SLAMCH( 'S' )
       SMLGROWTH = ONE / S
       FAIL = REAL(N-1)*MINGAP/(SPDIAM*EPS)
       FAIL2 = REAL(N-1)*MINGAP/(SPDIAM*SQRT(EPS))
@@ -303,7 +303,7 @@
       SAWNAN1 = .FALSE.
       SAWNAN2 = .FALSE.
 *     Ensure that we do not back off too much of the initial shifts
-      AB_LDELTA = MIN(LDMAX,AB_LDELTA)
+      LDELTA = MIN(LDMAX,LDELTA)
       RDELTA = MIN(RDMAX,RDELTA)
 
 *     Compute the element growth when shifting to both ends of the cluster
@@ -331,7 +331,7 @@
          ENDIF
          MAX1 = MAX( MAX1,ABS(DPLUS(I+1)) )
  6    CONTINUE
-      SAWNAN1 = SAWNAN1 .OR.  AB_SISNAN( MAX1 )
+      SAWNAN1 = SAWNAN1 .OR.  SISNAN( MAX1 )
 
       IF( FORCER .OR.
      $   (MAX1.LE.GROWTHBOUND .AND. .NOT.SAWNAN1 ) ) THEN
@@ -362,7 +362,7 @@
          ENDIF
          MAX2 = MAX( MAX2,ABS(WORK(I+1)) )
  7    CONTINUE
-      SAWNAN2 = SAWNAN2 .OR.  AB_SISNAN( MAX2 )
+      SAWNAN2 = SAWNAN2 .OR.  SISNAN( MAX2 )
 
       IF( FORCER .OR.
      $   (MAX2.LE.GROWTHBOUND .AND. .NOT.SAWNAN2 ) ) THEN
@@ -458,11 +458,11 @@
       IF (KTRY.LT.KTRYMAX) THEN
 *        If we are here, both shifts failed also the RRR test.
 *        Back off to the outside
-         LSIGMA = MAX( LSIGMA - AB_LDELTA,
+         LSIGMA = MAX( LSIGMA - LDELTA,
      $     LSIGMA - LDMAX)
          RSIGMA = MIN( RSIGMA + RDELTA,
      $     RSIGMA + RDMAX )
-         AB_LDELTA = TWO * AB_LDELTA
+         LDELTA = TWO * LDELTA
          RDELTA = TWO * RDELTA
          KTRY = KTRY + 1
          GOTO 5
@@ -484,12 +484,12 @@
       IF (SHIFT.EQ.SLEFT) THEN
       ELSEIF (SHIFT.EQ.SRIGHT) THEN
 *        store new L and D back into DPLUS, LPLUS
-         CALL AB_SCOPY( N, WORK, 1, DPLUS, 1 )
-         CALL AB_SCOPY( N-1, WORK(N+1), 1, LPLUS, 1 )
+         CALL SCOPY( N, WORK, 1, DPLUS, 1 )
+         CALL SCOPY( N-1, WORK(N+1), 1, LPLUS, 1 )
       ENDIF
 
       RETURN
 *
-*     End of AB_SLARRF
+*     End of SLARRF
 *
       END

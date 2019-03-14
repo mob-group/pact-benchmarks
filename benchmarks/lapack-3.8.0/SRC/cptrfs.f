@@ -1,4 +1,4 @@
-*> \brief \b AB_CPTRFS
+*> \brief \b CPTRFS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CPTRFS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CPTRFS.f">
+*> Download CPTRFS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cptrfs.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CPTRFS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cptrfs.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CPTRFS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cptrfs.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CPTRFS( UPLO, N, NRHS, D, E, DF, EF, B, LDB, X, LDX,
+*       SUBROUTINE CPTRFS( UPLO, N, NRHS, D, E, DF, EF, B, LDB, X, LDX,
 *                          FERR, BERR, WORK, RWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -38,7 +38,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CPTRFS improves the computed solution to a system of linear
+*> CPTRFS improves the computed solution to a system of linear
 *> equations when the coefficient matrix is Hermitian positive definite
 *> and tridiagonal, and provides error bounds and backward error
 *> estimates for the solution.
@@ -88,14 +88,14 @@
 *> \verbatim
 *>          DF is REAL array, dimension (N)
 *>          The n diagonal elements of the diagonal matrix D from
-*>          the factorization computed by AB_CPTTRF.
+*>          the factorization computed by CPTTRF.
 *> \endverbatim
 *>
 *> \param[in] EF
 *> \verbatim
 *>          EF is COMPLEX array, dimension (N-1)
 *>          The (n-1) off-diagonal elements of the unit bidiagonal
-*>          factor U or L from the factorization computed by AB_CPTTRF
+*>          factor U or L from the factorization computed by CPTTRF
 *>          (see UPLO).
 *> \endverbatim
 *>
@@ -114,7 +114,7 @@
 *> \param[in,out] X
 *> \verbatim
 *>          X is COMPLEX array, dimension (LDX,NRHS)
-*>          On entry, the solution matrix X, as computed by AB_CPTTRS.
+*>          On entry, the solution matrix X, as computed by CPTTRS.
 *>          On exit, the improved solution matrix X.
 *> \endverbatim
 *>
@@ -180,7 +180,7 @@
 *> \ingroup complexPTcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_CPTRFS( UPLO, N, NRHS, D, E, DF, EF, B, LDB, X, LDX,
+      SUBROUTINE CPTRFS( UPLO, N, NRHS, D, E, DF, EF, B, LDB, X, LDX,
      $                   FERR, BERR, WORK, RWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -220,13 +220,13 @@
       COMPLEX            BI, CX, DX, EX, ZDUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_ISAMAX
-      REAL               AB_SLAMCH
-      EXTERNAL           AB_LSAME, AB_ISAMAX, AB_SLAMCH
+      LOGICAL            LSAME
+      INTEGER            ISAMAX
+      REAL               SLAMCH
+      EXTERNAL           LSAME, ISAMAX, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CAXPY, AB_CPTTRS, AB_XERBLA
+      EXTERNAL           CAXPY, CPTTRS, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CMPLX, CONJG, MAX, REAL
@@ -242,8 +242,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -255,7 +255,7 @@
          INFO = -11
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CPTRFS', -INFO )
+         CALL XERBLA( 'CPTRFS', -INFO )
          RETURN
       END IF
 *
@@ -272,8 +272,8 @@
 *     NZ = maximum number of nonzero elements in each row of A, plus 1
 *
       NZ = 4
-      EPS = AB_SLAMCH( 'Epsilon' )
-      SAFMIN = AB_SLAMCH( 'Safe minimum' )
+      EPS = SLAMCH( 'Epsilon' )
+      SAFMIN = SLAMCH( 'Safe minimum' )
       SAFE1 = NZ*SAFMIN
       SAFE2 = SAFE1 / EPS
 *
@@ -385,8 +385,8 @@
 *
 *           Update solution and try again.
 *
-            CALL AB_CPTTRS( UPLO, N, 1, DF, EF, WORK, N, INFO )
-            CALL AB_CAXPY( N, CMPLX( ONE ), WORK, 1, X( 1, J ), 1 )
+            CALL CPTTRS( UPLO, N, 1, DF, EF, WORK, N, INFO )
+            CALL CAXPY( N, CMPLX( ONE ), WORK, 1, X( 1, J ), 1 )
             LSTRES = BERR( J )
             COUNT = COUNT + 1
             GO TO 20
@@ -418,7 +418,7 @@
      $                      SAFE1
             END IF
    60    CONTINUE
-         IX = AB_ISAMAX( N, RWORK, 1 )
+         IX = ISAMAX( N, RWORK, 1 )
          FERR( J ) = RWORK( IX )
 *
 *        Estimate the norm of inv(A).
@@ -447,7 +447,7 @@
 *
 *        Compute norm(inv(A)) = max(x(i)), 1<=i<=n.
 *
-         IX = AB_ISAMAX( N, RWORK, 1 )
+         IX = ISAMAX( N, RWORK, 1 )
          FERR( J ) = FERR( J )*ABS( RWORK( IX ) )
 *
 *        Normalize error.
@@ -463,6 +463,6 @@
 *
       RETURN
 *
-*     End of AB_CPTRFS
+*     End of CPTRFS
 *
       END

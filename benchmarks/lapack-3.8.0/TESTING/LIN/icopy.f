@@ -1,4 +1,4 @@
-*> \brief \b AB_ICOPY
+*> \brief \b ICOPY
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ICOPY( N, SX, INCX, SY, INCY )
+*       SUBROUTINE ICOPY( N, SX, INCX, SY, INCY )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCX, INCY, N
@@ -23,7 +23,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ICOPY copies an integer vector x to an integer vector y.
+*> ICOPY copies an integer vector x to an integer vector y.
 *> Uses unrolled loops for increments equal to 1.
 *> \endverbatim
 *
@@ -73,7 +73,7 @@
 *> \ingroup aux_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ICOPY( N, SX, INCX, SY, INCY )
+      SUBROUTINE ICOPY( N, SX, INCX, SY, INCY )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -143,6 +143,6 @@
    50 CONTINUE
       RETURN
 *
-*     End of AB_ICOPY
+*     End of ICOPY
 *
       END

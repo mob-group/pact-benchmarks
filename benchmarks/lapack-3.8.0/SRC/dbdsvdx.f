@@ -1,4 +1,4 @@
-*> \brief \b AB_DBDSVDX
+*> \brief \b DBDSVDX
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DBDSVDX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DBDSVDX.f">
+*> Download DBDSVDX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dbdsvdx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DBDSVDX.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dbdsvdx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DBDSVDX.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dbdsvdx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*     SUBROUTINE AB_DBDSVDX( UPLO, JOBZ, RANGE, N, D, E, VL, VU, IL, IU,
+*     SUBROUTINE DBDSVDX( UPLO, JOBZ, RANGE, N, D, E, VL, VU, IL, IU,
 *    $                    NS, S, Z, LDZ, WORK, IWORK, INFO )
 *
 *     .. Scalar Arguments ..
@@ -37,14 +37,14 @@
 *>
 *> \verbatim
 *>
-*>  AB_DBDSVDX computes the singular value decomposition (SVD) of a real
+*>  DBDSVDX computes the singular value decomposition (SVD) of a real
 *>  N-by-N (upper or lower) bidiagonal matrix B, B = U * S * VT,
 *>  where S is a diagonal matrix with non-negative diagonal elements
 *>  (the singular values of B), and U and VT are orthogonal matrices
 *>  of left and right singular vectors, respectively.
 *>
 *>  Given an upper bidiagonal B with diagonal D = [ d_1 d_2 ... d_N ]
-*>  and superdiagonal E = [ e_1 e_2 ... e_N-1 ], AB_DBDSVDX computes the
+*>  and superdiagonal E = [ e_1 e_2 ... e_N-1 ], DBDSVDX computes the
 *>  singular value decompositon of B through the eigenvalues and
 *>  eigenvectors of the N*2-by-N*2 tridiagonal matrix
 *>
@@ -61,9 +61,9 @@
 *>
 *>  Given a TGK matrix, one can either a) compute -s,-v and change signs
 *>  so that the singular values (and corresponding vectors) are already in
-*>  descending order (as in AB_AB_DGESVD/AB_DGESDD) or b) compute s,v and reorder
-*>  the values (and corresponding vectors). AB_DBDSVDX implements a) by
-*>  calling AB_AB_DSTEVX (bisection plus inverse iteration, to be replaced
+*>  descending order (as in DGESVD/DGESDD) or b) compute s,v and reorder
+*>  the values (and corresponding vectors). DBDSVDX implements a) by
+*>  calling DSTEVX (bisection plus inverse iteration, to be replaced
 *>  with a version of the Multiple Relative Robust Representation
 *>  algorithm. (See P. Willems and B. Lang, A framework for the MR^3
 *>  algorithm: theory and implementation, SIAM J. Sci. Comput.,
@@ -195,7 +195,7 @@
 *>          IWORK is INTEGER array, dimension (12*N)
 *>          If JOBZ = 'V', then if INFO = 0, the first NS elements of
 *>          IWORK are zero. If INFO > 0, then IWORK contains the indices
-*>          of the eigenvectors that failed to converge in AB_AB_DSTEVX.
+*>          of the eigenvectors that failed to converge in DSTEVX.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -204,8 +204,8 @@
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
 *>          > 0:  if INFO = i, then i eigenvectors failed to converge
-*>                   in AB_AB_DSTEVX. The indices of the eigenvectors
-*>                   (as returned by AB_AB_DSTEVX) are stored in the
+*>                   in DSTEVX. The indices of the eigenvectors
+*>                   (as returned by DSTEVX) are stored in the
 *>                   array IWORK.
 *>                if INFO = N*2 + 1, an internal error occurred.
 *> \endverbatim
@@ -223,7 +223,7 @@
 *> \ingroup doubleOTHEReigen
 *
 *  =====================================================================
-      SUBROUTINE AB_DBDSVDX( UPLO, JOBZ, RANGE, N, D, E, VL, VU, IL, IU,
+      SUBROUTINE DBDSVDX( UPLO, JOBZ, RANGE, N, D, E, VL, VU, IL, IU,
      $                    NS, S, Z, LDZ, WORK, IWORK, INFO)
 *
 *  -- LAPACK driver routine (version 3.8.0) --
@@ -254,24 +254,22 @@
 *     .. Local Scalars ..
       CHARACTER          RNGVX
       LOGICAL            ALLSV, INDSV, LOWER, SPLIT, SVEQ0, VALSV, WANTZ
-      INTEGER            I, ICOLZ, IAB_DBEG, IDEND, IDTGK, IDPTR, IEPTR,
+      INTEGER            I, ICOLZ, IDBEG, IDEND, IDTGK, IDPTR, IEPTR,
      $                   IETGK, IIFAIL, IIWORK, ILTGK, IROWU, IROWV,
-     $                   IROWZ, IAB_SBEG, ISPLT, ITEMP, IUTGK, J, K,
+     $                   IROWZ, ISBEG, ISPLT, ITEMP, IUTGK, J, K,
      $                   NTGK, NRU, NRV, NSL
       DOUBLE PRECISION   ABSTOL, EPS, EMIN, MU, NRMU, NRMV, ORTOL, SMAX,
      $                   SMIN, SQRT2, THRESH, TOL, ULP,
      $                   VLTGK, VUTGK, ZJTJI
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      INTEGER            AB_IDAMAX
-      DOUBLE PRECISION   AB_DDOT, AB_DLAMCH, AB_DNRM2
-      EXTERNAL           AB_IDAMAX, AB_LSAME, AB_DAXPY, AB_DDOT, AB_DLAM
-     $CH, AB_DNRM2
+      LOGICAL            LSAME
+      INTEGER            IDAMAX
+      DOUBLE PRECISION   DDOT, DLAMCH, DNRM2
+      EXTERNAL           IDAMAX, LSAME, DAXPY, DDOT, DLAMCH, DNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_AB_DSTEVX, AB_DCOPY, AB_DLASET, AB_DSCAL, AB
-     $_DSWAP, AB_XERBLA
+      EXTERNAL           DSTEVX, DCOPY, DLASET, DSCAL, DSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, SIGN, SQRT
@@ -280,16 +278,16 @@
 *
 *     Test the input parameters.
 *
-      ALLSV = AB_LSAME( RANGE, 'A' )
-      VALSV = AB_LSAME( RANGE, 'V' )
-      INDSV = AB_LSAME( RANGE, 'I' )
-      WANTZ = AB_LSAME( JOBZ, 'V' )
-      LOWER = AB_LSAME( UPLO, 'L' )
+      ALLSV = LSAME( RANGE, 'A' )
+      VALSV = LSAME( RANGE, 'V' )
+      INDSV = LSAME( RANGE, 'I' )
+      WANTZ = LSAME( JOBZ, 'V' )
+      LOWER = LSAME( UPLO, 'L' )
 *
       INFO = 0
-      IF( .NOT.AB_LSAME( UPLO, 'U' ) .AND. .NOT.LOWER ) THEN
+      IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LOWER ) THEN
          INFO = -1
-      ELSE IF( .NOT.( WANTZ .OR. AB_LSAME( JOBZ, 'N' ) ) ) THEN
+      ELSE IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -2
       ELSE IF( .NOT.( ALLSV .OR. VALSV .OR. INDSV ) ) THEN
          INFO = -3
@@ -315,7 +313,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DBDSVDX', -INFO )
+         CALL XERBLA( 'DBDSVDX', -INFO )
          RETURN
       END IF
 *
@@ -341,13 +339,13 @@
          RETURN
       END IF
 *
-      ABSTOL = 2*AB_DLAMCH( 'Safe Minimum' )
-      ULP = AB_DLAMCH( 'Precision' )
-      EPS = AB_DLAMCH( 'Epsilon' )
+      ABSTOL = 2*DLAMCH( 'Safe Minimum' )
+      ULP = DLAMCH( 'Precision' )
+      EPS = DLAMCH( 'Epsilon' )
       SQRT2 = SQRT( 2.0D0 )
       ORTOL = SQRT( ULP )
 *
-*     Criterion for splitting is taken from AB_DBDSQR when singular
+*     Criterion for splitting is taken from DBDSQR when singular
 *     values are computed to relative accuracy TOL. (See J. Demmel and
 *     W. Kahan, Accurate singular values of bidiagonal matrices, SIAM
 *     J. Sci. and Stat. Comput., 11:873–912, 1990.)
@@ -356,9 +354,9 @@
 *
 *     Compute approximate maximum, minimum singular values.
 *
-      I = AB_IDAMAX( N, D, 1 )
+      I = IDAMAX( N, D, 1 )
       SMAX = ABS( D( I ) )
-      I = AB_IDAMAX( N-1, E, 1 )
+      I = IDAMAX( N-1, E, 1 )
       SMAX = MAX( SMAX, ABS( E( I ) ) )
 *
 *     Compute threshold for neglecting D's and E's.
@@ -383,7 +381,7 @@
       END DO
       IF( ABS( D( N ) ).LE.THRESH ) D( N ) = ZERO
 *
-*     Pointers for arrays used by AB_AB_DSTEVX.
+*     Pointers for arrays used by DSTEVX.
 *
       IDTGK = 1
       IETGK = IDTGK + N*2
@@ -391,7 +389,7 @@
       IIFAIL = 1
       IIWORK = IIFAIL + N*2
 *
-*     Set RNGVX, which corresponds to RANGE for AB_AB_DSTEVX in TGK mode.
+*     Set RNGVX, which corresponds to RANGE for DSTEVX in TGK mode.
 *     VL,VU or IL,IU are redefined to conform to implementation a)
 *     described in the leading comments.
 *
@@ -408,7 +406,7 @@
 *        of the active submatrix.
 *
          RNGVX = 'I'
-         IF( WANTZ ) CALL AB_DLASET( 'F', N*2, N+1, ZERO, ZERO, Z, LDZ )
+         IF( WANTZ ) CALL DLASET( 'F', N*2, N+1, ZERO, ZERO, Z, LDZ )
       ELSE IF( VALSV ) THEN
 *
 *        Find singular values in a half-open interval. We aim
@@ -419,23 +417,22 @@
          VLTGK = -VU
          VUTGK = -VL
          WORK( IDTGK:IDTGK+2*N-1 ) = ZERO
-         CALL AB_DCOPY( N, D, 1, WORK( IETGK ), 2 )
-         CALL AB_DCOPY( N-1, E, 1, WORK( IETGK+1 ), 2 )
-         CALL AB_AB_DSTEVX( 'N', 'V', N*2, WORK( IDTGK ), WORK( IETGK ),
+         CALL DCOPY( N, D, 1, WORK( IETGK ), 2 )
+         CALL DCOPY( N-1, E, 1, WORK( IETGK+1 ), 2 )
+         CALL DSTEVX( 'N', 'V', N*2, WORK( IDTGK ), WORK( IETGK ),
      $                VLTGK, VUTGK, ILTGK, ILTGK, ABSTOL, NS, S,
      $                Z, LDZ, WORK( ITEMP ), IWORK( IIWORK ),
      $                IWORK( IIFAIL ), INFO )
          IF( NS.EQ.0 ) THEN
             RETURN
          ELSE
-            IF( WANTZ ) CALL AB_DLASET( 'F', N*2, NS, ZERO, ZERO, Z, LDZ
-     $ )
+            IF( WANTZ ) CALL DLASET( 'F', N*2, NS, ZERO, ZERO, Z, LDZ )
          END IF
       ELSE IF( INDSV ) THEN
 *
 *        Find the IL-th through the IU-th singular values. We aim
 *        at -s (see leading comments) and indices are mapped into
-*        values, therefore mimicking AB_DSTEBZ, where
+*        values, therefore mimicking DSTEBZ, where
 *
 *        GL = GL - FUDGE*TNORM*ULP*N - FUDGE*TWO*PIVMIN
 *        GU = GU + FUDGE*TNORM*ULP*N + FUDGE*PIVMIN
@@ -444,44 +441,43 @@
          IUTGK = IU
          RNGVX = 'V'
          WORK( IDTGK:IDTGK+2*N-1 ) = ZERO
-         CALL AB_DCOPY( N, D, 1, WORK( IETGK ), 2 )
-         CALL AB_DCOPY( N-1, E, 1, WORK( IETGK+1 ), 2 )
-         CALL AB_AB_DSTEVX( 'N', 'I', N*2, WORK( IDTGK ), WORK( IETGK ),
+         CALL DCOPY( N, D, 1, WORK( IETGK ), 2 )
+         CALL DCOPY( N-1, E, 1, WORK( IETGK+1 ), 2 )
+         CALL DSTEVX( 'N', 'I', N*2, WORK( IDTGK ), WORK( IETGK ),
      $                VLTGK, VLTGK, ILTGK, ILTGK, ABSTOL, NS, S,
      $                Z, LDZ, WORK( ITEMP ), IWORK( IIWORK ),
      $                IWORK( IIFAIL ), INFO )
          VLTGK = S( 1 ) - FUDGE*SMAX*ULP*N
          WORK( IDTGK:IDTGK+2*N-1 ) = ZERO
-         CALL AB_DCOPY( N, D, 1, WORK( IETGK ), 2 )
-         CALL AB_DCOPY( N-1, E, 1, WORK( IETGK+1 ), 2 )
-         CALL AB_AB_DSTEVX( 'N', 'I', N*2, WORK( IDTGK ), WORK( IETGK ),
+         CALL DCOPY( N, D, 1, WORK( IETGK ), 2 )
+         CALL DCOPY( N-1, E, 1, WORK( IETGK+1 ), 2 )
+         CALL DSTEVX( 'N', 'I', N*2, WORK( IDTGK ), WORK( IETGK ),
      $                VUTGK, VUTGK, IUTGK, IUTGK, ABSTOL, NS, S,
      $                Z, LDZ, WORK( ITEMP ), IWORK( IIWORK ),
      $                IWORK( IIFAIL ), INFO )
          VUTGK = S( 1 ) + FUDGE*SMAX*ULP*N
          VUTGK = MIN( VUTGK, ZERO )
 *
-*        If VLTGK=VUTGK, AB_AB_DSTEVX returns an error message,
+*        If VLTGK=VUTGK, DSTEVX returns an error message,
 *        so if needed we change VUTGK slightly.
 *
          IF( VLTGK.EQ.VUTGK ) VLTGK = VLTGK - TOL
 *
-         IF( WANTZ ) CALL AB_DLASET( 'F', N*2, IU-IL+1, ZERO, ZERO, Z, L
-     $DZ)
+         IF( WANTZ ) CALL DLASET( 'F', N*2, IU-IL+1, ZERO, ZERO, Z, LDZ)
       END IF
 *
 *     Initialize variables and pointers for S, Z, and WORK.
 *
 *     NRU, NRV: number of rows in U and V for the active submatrix
-*     IAB_DBEG, IAB_SBEG: offsets for the entries of D and S
+*     IDBEG, ISBEG: offsets for the entries of D and S
 *     IROWZ, ICOLZ: offsets for the rows and columns of Z
 *     IROWU, IROWV: offsets for the rows of U and V
 *
       NS = 0
       NRU = 0
       NRV = 0
-      IAB_DBEG = 1
-      IAB_SBEG = 1
+      IDBEG = 1
+      ISBEG = 1
       IROWZ = 1
       ICOLZ = 1
       IROWU = 2
@@ -494,8 +490,8 @@
       S( 1:N ) = ZERO
       WORK( IETGK+2*N-1 ) = ZERO
       WORK( IDTGK:IDTGK+2*N-1 ) = ZERO
-      CALL AB_DCOPY( N, D, 1, WORK( IETGK ), 2 )
-      CALL AB_DCOPY( N-1, E, 1, WORK( IETGK+1 ), 2 )
+      CALL DCOPY( N, D, 1, WORK( IETGK ), 2 )
+      CALL DCOPY( N-1, E, 1, WORK( IETGK+1 ), 2 )
 *
 *
 *     Check for splits in two levels, outer level
@@ -507,20 +503,20 @@
 *           Split in E (this piece of B is square) or bottom
 *           of the (input bidiagonal) matrix.
 *
-            ISPLT = IAB_DBEG
+            ISPLT = IDBEG
             IDEND = IEPTR - 1
-            DO IDPTR = IAB_DBEG, IDEND, 2
+            DO IDPTR = IDBEG, IDEND, 2
                IF( WORK( IETGK+IDPTR-1 ).EQ.ZERO ) THEN
 *
 *                 Split in D (rectangular submatrix). Set the number
 *                 of rows in U and V (NRU and NRV) accordingly.
 *
-                  IF( IDPTR.EQ.IAB_DBEG ) THEN
+                  IF( IDPTR.EQ.IDBEG ) THEN
 *
 *                    D=0 at the top.
 *
                      SVEQ0 = .TRUE.
-                     IF( IAB_DBEG.EQ.IDEND) THEN
+                     IF( IDBEG.EQ.IDEND) THEN
                         NRU = 1
                         NRV = 1
                      END IF
@@ -531,15 +527,15 @@
                      SVEQ0 = .TRUE.
                      NRU = (IDEND-ISPLT)/2 + 1
                      NRV = NRU
-                     IF( ISPLT.NE.IAB_DBEG ) THEN
+                     IF( ISPLT.NE.IDBEG ) THEN
                         NRU = NRU + 1
                      END IF
                   ELSE
-                     IF( ISPLT.EQ.IAB_DBEG ) THEN
+                     IF( ISPLT.EQ.IDBEG ) THEN
 *
 *                       Split: top rectangular submatrix.
 *
-                        NRU = (IDPTR-IAB_DBEG)/2
+                        NRU = (IDPTR-IDBEG)/2
                         NRV = NRU + 1
                      ELSE
 *
@@ -553,11 +549,11 @@
 *
 *                 Last entry of D in the active submatrix.
 *
-                  IF( ISPLT.EQ.IAB_DBEG ) THEN
+                  IF( ISPLT.EQ.IDBEG ) THEN
 *
 *                    No split (trivial case).
 *
-                     NRU = (IDEND-IAB_DBEG)/2 + 1
+                     NRU = (IDEND-IDBEG)/2 + 1
                      NRV = NRU
                   ELSE
 *
@@ -590,22 +586,21 @@
                      END IF
                   END IF
 *
-*                 Workspace needed by AB_AB_DSTEVX:
+*                 Workspace needed by DSTEVX:
 *                 WORK( ITEMP: ): 2*5*NTGK
 *                 IWORK( 1: ): 2*6*NTGK
 *
-                  CALL AB_AB_DSTEVX( JOBZ, RNGVX, NTGK, WORK( IDTGK+ISPL
-     $T-1 ),
+                  CALL DSTEVX( JOBZ, RNGVX, NTGK, WORK( IDTGK+ISPLT-1 ),
      $                         WORK( IETGK+ISPLT-1 ), VLTGK, VUTGK,
-     $                         ILTGK, IUTGK, ABSTOL, NSL, S( IAB_SBEG ),
+     $                         ILTGK, IUTGK, ABSTOL, NSL, S( ISBEG ),
      $                         Z( IROWZ,ICOLZ ), LDZ, WORK( ITEMP ),
      $                         IWORK( IIWORK ), IWORK( IIFAIL ),
      $                         INFO )
                   IF( INFO.NE.0 ) THEN
-*                    Exit with the error code from AB_AB_DSTEVX.
+*                    Exit with the error code from DSTEVX.
                      RETURN
                   END IF
-                  EMIN = ABS( MAXVAL( S( IAB_SBEG:IAB_SBEG+NSL-1 ) ) )
+                  EMIN = ABS( MAXVAL( S( ISBEG:ISBEG+NSL-1 ) ) )
 *
                   IF( NSL.GT.0 .AND. WANTZ ) THEN
 *
@@ -639,52 +634,48 @@
                      END IF
 *
                      DO I = 0, MIN( NSL-1, NRU-1 )
-                        NRMU = AB_DNRM2( NRU, Z( IROWU, ICOLZ+I ), 2 )
+                        NRMU = DNRM2( NRU, Z( IROWU, ICOLZ+I ), 2 )
                         IF( NRMU.EQ.ZERO ) THEN
                            INFO = N*2 + 1
                            RETURN
                         END IF
-                        CALL AB_DSCAL( NRU, ONE/NRMU,
+                        CALL DSCAL( NRU, ONE/NRMU,
      $                              Z( IROWU,ICOLZ+I ), 2 )
                         IF( NRMU.NE.ONE .AND.
      $                      ABS( NRMU-ORTOL )*SQRT2.GT.ONE )
      $                      THEN
                            DO J = 0, I-1
-                              ZJTJI = -AB_DDOT( NRU, Z( IROWU, ICOLZ+J )
-     $,
+                              ZJTJI = -DDOT( NRU, Z( IROWU, ICOLZ+J ),
      $                                       2, Z( IROWU, ICOLZ+I ), 2 )
-                              CALL AB_DAXPY( NRU, ZJTJI,
+                              CALL DAXPY( NRU, ZJTJI,
      $                                    Z( IROWU, ICOLZ+J ), 2,
      $                                    Z( IROWU, ICOLZ+I ), 2 )
                            END DO
-                           NRMU = AB_DNRM2( NRU, Z( IROWU, ICOLZ+I ), 2 
-     $)
-                           CALL AB_DSCAL( NRU, ONE/NRMU,
+                           NRMU = DNRM2( NRU, Z( IROWU, ICOLZ+I ), 2 )
+                           CALL DSCAL( NRU, ONE/NRMU,
      $                                 Z( IROWU,ICOLZ+I ), 2 )
                         END IF
                      END DO
                      DO I = 0, MIN( NSL-1, NRV-1 )
-                        NRMV = AB_DNRM2( NRV, Z( IROWV, ICOLZ+I ), 2 )
+                        NRMV = DNRM2( NRV, Z( IROWV, ICOLZ+I ), 2 )
                         IF( NRMV.EQ.ZERO ) THEN
                            INFO = N*2 + 1
                            RETURN
                         END IF
-                        CALL AB_DSCAL( NRV, -ONE/NRMV,
+                        CALL DSCAL( NRV, -ONE/NRMV,
      $                              Z( IROWV,ICOLZ+I ), 2 )
                         IF( NRMV.NE.ONE .AND.
      $                      ABS( NRMV-ORTOL )*SQRT2.GT.ONE )
      $                      THEN
                            DO J = 0, I-1
-                              ZJTJI = -AB_DDOT( NRV, Z( IROWV, ICOLZ+J )
-     $,
+                              ZJTJI = -DDOT( NRV, Z( IROWV, ICOLZ+J ),
      $                                       2, Z( IROWV, ICOLZ+I ), 2 )
-                              CALL AB_DAXPY( NRU, ZJTJI,
+                              CALL DAXPY( NRU, ZJTJI,
      $                                    Z( IROWV, ICOLZ+J ), 2,
      $                                    Z( IROWV, ICOLZ+I ), 2 )
                            END DO
-                           NRMV = AB_DNRM2( NRV, Z( IROWV, ICOLZ+I ), 2 
-     $)
-                           CALL AB_DSCAL( NRV, ONE/NRMV,
+                           NRMV = DNRM2( NRV, Z( IROWV, ICOLZ+I ), 2 )
+                           CALL DSCAL( NRV, ONE/NRMV,
      $                                 Z( IROWV,ICOLZ+I ), 2 )
                         END IF
                      END DO
@@ -711,12 +702,12 @@
 *                 Absolute values of the eigenvalues of TGK.
 *
                   DO I = 0, NSL-1
-                     S( IAB_SBEG+I ) = ABS( S( IAB_SBEG+I ) )
+                     S( ISBEG+I ) = ABS( S( ISBEG+I ) )
                   END DO
 *
 *                 Update pointers for TGK, S and Z.
 *
-                  IAB_SBEG = IAB_SBEG + NSL
+                  ISBEG = ISBEG + NSL
                   IROWZ = IROWZ + NTGK
                   ICOLZ = ICOLZ + NSL
                   IROWU = IROWZ
@@ -735,14 +726,14 @@
 *              Bring back eigenvector corresponding
 *              to eigenvalue equal to zero.
 *
-               Z( IAB_DBEG:IDEND-NTGK+1,IAB_SBEG-1 ) =
-     $         Z( IAB_DBEG:IDEND-NTGK+1,IAB_SBEG-1 ) +
-     $         Z( IAB_DBEG:IDEND-NTGK+1,N+1 )
-               Z( IAB_DBEG:IDEND-NTGK+1,N+1 ) = 0
+               Z( IDBEG:IDEND-NTGK+1,ISBEG-1 ) =
+     $         Z( IDBEG:IDEND-NTGK+1,ISBEG-1 ) +
+     $         Z( IDBEG:IDEND-NTGK+1,N+1 )
+               Z( IDBEG:IDEND-NTGK+1,N+1 ) = 0
             END IF
             IROWV = IROWV - 1
             IROWU = IROWU + 1
-            IAB_DBEG = IEPTR + 1
+            IDBEG = IEPTR + 1
             SVEQ0 = .FALSE.
             SPLIT = .FALSE.
          END IF !** Check for split in E **!
@@ -763,8 +754,7 @@
          IF( K.NE.NS+1-I ) THEN
             S( K ) = S( NS+1-I )
             S( NS+1-I ) = SMIN
-            IF( WANTZ ) CALL AB_DSWAP( N*2, Z( 1,K ), 1, Z( 1,NS+1-I ), 
-     $1 )
+            IF( WANTZ ) CALL DSWAP( N*2, Z( 1,K ), 1, Z( 1,NS+1-I ), 1 )
          END IF
       END DO
 *
@@ -784,19 +774,19 @@
 *
       IF( WANTZ ) THEN
       DO I = 1, NS
-         CALL AB_DCOPY( N*2, Z( 1,I ), 1, WORK, 1 )
+         CALL DCOPY( N*2, Z( 1,I ), 1, WORK, 1 )
          IF( LOWER ) THEN
-            CALL AB_DCOPY( N, WORK( 2 ), 2, Z( N+1,I ), 1 )
-            CALL AB_DCOPY( N, WORK( 1 ), 2, Z( 1  ,I ), 1 )
+            CALL DCOPY( N, WORK( 2 ), 2, Z( N+1,I ), 1 )
+            CALL DCOPY( N, WORK( 1 ), 2, Z( 1  ,I ), 1 )
          ELSE
-            CALL AB_DCOPY( N, WORK( 2 ), 2, Z( 1  ,I ), 1 )
-            CALL AB_DCOPY( N, WORK( 1 ), 2, Z( N+1,I ), 1 )
+            CALL DCOPY( N, WORK( 2 ), 2, Z( 1  ,I ), 1 )
+            CALL DCOPY( N, WORK( 1 ), 2, Z( N+1,I ), 1 )
          END IF
       END DO
       END IF
 *
       RETURN
 *
-*     End of AB_DBDSVDX
+*     End of DBDSVDX
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_DGBTF2 computes the LU factorization of a general band matrix using the unblocked version of the algorithm.
+*> \brief \b DGBTF2 computes the LU factorization of a general band matrix using the unblocked version of the algorithm.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DGBTF2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGBTF2.f">
+*> Download DGBTF2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgbtf2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGBTF2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgbtf2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGBTF2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgbtf2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DGBTF2( M, N, KL, KU, AB, LDAB, IPIV, INFO )
+*       SUBROUTINE DGBTF2( M, N, KL, KU, AB, LDAB, IPIV, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, KL, KU, LDAB, M, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DGBTF2 computes an LU factorization of a real m-by-n band matrix A
+*> DGBTF2 computes an LU factorization of a real m-by-n band matrix A
 *> using partial pivoting with row interchanges.
 *>
 *> This is the unblocked version of the algorithm, calling Level 2 BLAS.
@@ -143,7 +143,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_DGBTF2( M, N, KL, KU, AB, LDAB, IPIV, INFO )
+      SUBROUTINE DGBTF2( M, N, KL, KU, AB, LDAB, IPIV, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -168,11 +168,11 @@
       INTEGER            I, J, JP, JU, KM, KV
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_IDAMAX
-      EXTERNAL           AB_IDAMAX
+      INTEGER            IDAMAX
+      EXTERNAL           IDAMAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DGER, AB_DSCAL, AB_DSWAP, AB_XERBLA
+      EXTERNAL           DGER, DSCAL, DSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -199,7 +199,7 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DGBTF2', -INFO )
+         CALL XERBLA( 'DGBTF2', -INFO )
          RETURN
       END IF
 *
@@ -237,7 +237,7 @@
 *        subdiagonal elements in the current column.
 *
          KM = MIN( KL, M-J )
-         JP = AB_IDAMAX( KM+1, AB( KV+1, J ), 1 )
+         JP = IDAMAX( KM+1, AB( KV+1, J ), 1 )
          IPIV( J ) = JP + J - 1
          IF( AB( KV+JP, J ).NE.ZERO ) THEN
             JU = MAX( JU, MIN( J+KU+JP-1, N ) )
@@ -245,20 +245,19 @@
 *           Apply interchange to columns J to JU.
 *
             IF( JP.NE.1 )
-     $         CALL AB_DSWAP( JU-J+1, AB( KV+JP, J ), LDAB-1,
+     $         CALL DSWAP( JU-J+1, AB( KV+JP, J ), LDAB-1,
      $                     AB( KV+1, J ), LDAB-1 )
 *
             IF( KM.GT.0 ) THEN
 *
 *              Compute multipliers.
 *
-               CALL AB_DSCAL( KM, ONE / AB( KV+1, J ), AB( KV+2, J ), 1 
-     $)
+               CALL DSCAL( KM, ONE / AB( KV+1, J ), AB( KV+2, J ), 1 )
 *
 *              Update trailing submatrix within the band.
 *
                IF( JU.GT.J )
-     $            CALL AB_DGER( KM, JU-J, -ONE, AB( KV+2, J ), 1,
+     $            CALL DGER( KM, JU-J, -ONE, AB( KV+2, J ), 1,
      $                       AB( KV, J+1 ), LDAB-1, AB( KV+1, J+1 ),
      $                       LDAB-1 )
             END IF
@@ -273,6 +272,6 @@
    40 CONTINUE
       RETURN
 *
-*     End of AB_DGBTF2
+*     End of DGBTF2
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_DTPRFS
+*> \brief \b DTPRFS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DTPRFS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DTPRFS.f">
+*> Download DTPRFS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dtprfs.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DTPRFS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dtprfs.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DTPRFS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtprfs.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DTPRFS( UPLO, TRANS, DIAG, N, NRHS, AP, B, LDB, X, LDX,
+*       SUBROUTINE DTPRFS( UPLO, TRANS, DIAG, N, NRHS, AP, B, LDB, X, LDX,
 *                          FERR, BERR, WORK, IWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,12 +37,12 @@
 *>
 *> \verbatim
 *>
-*> AB_DTPRFS provides error bounds and backward error estimates for the
+*> DTPRFS provides error bounds and backward error estimates for the
 *> solution to a system of linear equations with a triangular packed
 *> coefficient matrix.
 *>
-*> The solution matrix X must be computed by AB_DTPTRS or some other
-*> means before entering this routine.  AB_DTPRFS does not do iterative
+*> The solution matrix X must be computed by DTPTRS or some other
+*> means before entering this routine.  DTPRFS does not do iterative
 *> refinement because doing so cannot improve the backward error.
 *> \endverbatim
 *
@@ -172,8 +172,7 @@
 *> \ingroup doubleOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_DTPRFS( UPLO, TRANS, DIAG, N, NRHS, AP, B, LDB, X, L
-     $DX,
+      SUBROUTINE DTPRFS( UPLO, TRANS, DIAG, N, NRHS, AP, B, LDB, X, LDX,
      $                   FERR, BERR, WORK, IWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -209,33 +208,31 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DAXPY, AB_DCOPY, AB_DLACN2, AB_DTPMV, AB_DTP
-     $SV, AB_XERBLA
+      EXTERNAL           DAXPY, DCOPY, DLACN2, DTPMV, DTPSV, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DLAMCH
-      EXTERNAL           AB_LSAME, AB_DLAMCH
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           LSAME, DLAMCH
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      NOTRAN = AB_LSAME( TRANS, 'N' )
-      NOUNIT = AB_LSAME( DIAG, 'N' )
+      UPPER = LSAME( UPLO, 'U' )
+      NOTRAN = LSAME( TRANS, 'N' )
+      NOUNIT = LSAME( DIAG, 'N' )
 *
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) .AND. .N
-     $OT.
-     $         AB_LSAME( TRANS, 'C' ) ) THEN
+      ELSE IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) .AND. .NOT.
+     $         LSAME( TRANS, 'C' ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.NOUNIT .AND. .NOT.AB_LSAME( DIAG, 'U' ) ) THEN
+      ELSE IF( .NOT.NOUNIT .AND. .NOT.LSAME( DIAG, 'U' ) ) THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
@@ -247,7 +244,7 @@
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DTPRFS', -INFO )
+         CALL XERBLA( 'DTPRFS', -INFO )
          RETURN
       END IF
 *
@@ -270,8 +267,8 @@
 *     NZ = maximum number of nonzero elements in each row of A, plus 1
 *
       NZ = N + 1
-      EPS = AB_DLAMCH( 'Epsilon' )
-      SAFMIN = AB_DLAMCH( 'Safe minimum' )
+      EPS = DLAMCH( 'Epsilon' )
+      SAFMIN = DLAMCH( 'Safe minimum' )
       SAFE1 = NZ*SAFMIN
       SAFE2 = SAFE1 / EPS
 *
@@ -282,9 +279,9 @@
 *        Compute residual R = B - op(A) * X,
 *        where op(A) = A or A**T, depending on TRANS.
 *
-         CALL AB_DCOPY( N, X( 1, J ), 1, WORK( N+1 ), 1 )
-         CALL AB_DTPMV( UPLO, TRANS, DIAG, N, AP, WORK( N+1 ), 1 )
-         CALL AB_DAXPY( N, -ONE, B( 1, J ), 1, WORK( N+1 ), 1 )
+         CALL DCOPY( N, X( 1, J ), 1, WORK( N+1 ), 1 )
+         CALL DTPMV( UPLO, TRANS, DIAG, N, AP, WORK( N+1 ), 1 )
+         CALL DAXPY( N, -ONE, B( 1, J ), 1, WORK( N+1 ), 1 )
 *
 *        Compute componentwise relative backward error from formula
 *
@@ -421,7 +418,7 @@
 *        is incremented by SAFE1 if the i-th component of
 *        abs(op(A))*abs(X) + abs(B) is less than SAFE2.
 *
-*        Use AB_DLACN2 to estimate the infinity-norm of the matrix
+*        Use DLACN2 to estimate the infinity-norm of the matrix
 *           inv(op(A)) * diag(W),
 *        where W = abs(R) + NZ*EPS*( abs(op(A))*abs(X)+abs(B) )))
 *
@@ -435,16 +432,14 @@
 *
          KASE = 0
   210    CONTINUE
-         CALL AB_DLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK, FERR( J )
-     $,
+         CALL DLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK, FERR( J ),
      $                KASE, ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN
 *
 *              Multiply by diag(W)*inv(op(A)**T).
 *
-               CALL AB_DTPSV( UPLO, TRANST, DIAG, N, AP, WORK( N+1 ), 1 
-     $)
+               CALL DTPSV( UPLO, TRANST, DIAG, N, AP, WORK( N+1 ), 1 )
                DO 220 I = 1, N
                   WORK( N+I ) = WORK( I )*WORK( N+I )
   220          CONTINUE
@@ -455,7 +450,7 @@
                DO 230 I = 1, N
                   WORK( N+I ) = WORK( I )*WORK( N+I )
   230          CONTINUE
-               CALL AB_DTPSV( UPLO, TRANS, DIAG, N, AP, WORK( N+1 ), 1 )
+               CALL DTPSV( UPLO, TRANS, DIAG, N, AP, WORK( N+1 ), 1 )
             END IF
             GO TO 210
          END IF
@@ -473,6 +468,6 @@
 *
       RETURN
 *
-*     End of AB_DTPRFS
+*     End of DTPRFS
 *
       END

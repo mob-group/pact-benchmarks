@@ -1,4 +1,4 @@
-*> \brief \b AB_CPPRFS
+*> \brief \b CPPRFS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CPPRFS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CPPRFS.f">
+*> Download CPPRFS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpprfs.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CPPRFS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cpprfs.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CPPRFS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpprfs.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CPPRFS( UPLO, N, NRHS, AP, AFP, B, LDB, X, LDX, FERR,
+*       SUBROUTINE CPPRFS( UPLO, N, NRHS, AP, AFP, B, LDB, X, LDX, FERR,
 *                          BERR, WORK, RWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CPPRFS improves the computed solution to a system of linear
+*> CPPRFS improves the computed solution to a system of linear
 *> equations when the coefficient matrix is Hermitian positive definite
 *> and packed, and provides error bounds and backward error estimates
 *> for the solution.
@@ -80,7 +80,7 @@
 *> \verbatim
 *>          AFP is COMPLEX array, dimension (N*(N+1)/2)
 *>          The triangular factor U or L from the Cholesky factorization
-*>          A = U**H*U or A = L*L**H, as computed by AB_SPPTRF/AB_CPPTRF,
+*>          A = U**H*U or A = L*L**H, as computed by SPPTRF/CPPTRF,
 *>          packed columnwise in a linear array in the same format as A
 *>          (see AP).
 *> \endverbatim
@@ -100,7 +100,7 @@
 *> \param[in,out] X
 *> \verbatim
 *>          X is COMPLEX array, dimension (LDX,NRHS)
-*>          On entry, the solution matrix X, as computed by AB_CPPTRS.
+*>          On entry, the solution matrix X, as computed by CPPTRS.
 *>          On exit, the improved solution matrix X.
 *> \endverbatim
 *>
@@ -168,8 +168,7 @@
 *> \ingroup complexOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_CPPRFS( UPLO, N, NRHS, AP, AFP, B, LDB, X, LDX, FERR
-     $,
+      SUBROUTINE CPPRFS( UPLO, N, NRHS, AP, AFP, B, LDB, X, LDX, FERR,
      $                   BERR, WORK, RWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -211,16 +210,15 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CAXPY, AB_CCOPY, AB_CHPMV, AB_CLACN2, AB_CPP
-     $TRS, AB_XERBLA
+      EXTERNAL           CAXPY, CCOPY, CHPMV, CLACN2, CPPTRS, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, REAL
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      REAL               AB_SLAMCH
-      EXTERNAL           AB_LSAME, AB_SLAMCH
+      LOGICAL            LSAME
+      REAL               SLAMCH
+      EXTERNAL           LSAME, SLAMCH
 *     ..
 *     .. Statement Functions ..
       REAL               CABS1
@@ -233,8 +231,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -246,7 +244,7 @@
          INFO = -9
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CPPRFS', -INFO )
+         CALL XERBLA( 'CPPRFS', -INFO )
          RETURN
       END IF
 *
@@ -263,8 +261,8 @@
 *     NZ = maximum number of nonzero elements in each row of A, plus 1
 *
       NZ = N + 1
-      EPS = AB_SLAMCH( 'Epsilon' )
-      SAFMIN = AB_SLAMCH( 'Safe minimum' )
+      EPS = SLAMCH( 'Epsilon' )
+      SAFMIN = SLAMCH( 'Safe minimum' )
       SAFE1 = NZ*SAFMIN
       SAFE2 = SAFE1 / EPS
 *
@@ -280,9 +278,8 @@
 *
 *        Compute residual R = B - A * X
 *
-         CALL AB_CCOPY( N, B( 1, J ), 1, WORK, 1 )
-         CALL AB_CHPMV( UPLO, N, -CONE, AP, X( 1, J ), 1, CONE, WORK, 1 
-     $)
+         CALL CCOPY( N, B( 1, J ), 1, WORK, 1 )
+         CALL CHPMV( UPLO, N, -CONE, AP, X( 1, J ), 1, CONE, WORK, 1 )
 *
 *        Compute componentwise relative backward error from formula
 *
@@ -351,8 +348,8 @@
 *
 *           Update solution and try again.
 *
-            CALL AB_CPPTRS( UPLO, N, 1, AFP, WORK, N, INFO )
-            CALL AB_CAXPY( N, CONE, WORK, 1, X( 1, J ), 1 )
+            CALL CPPTRS( UPLO, N, 1, AFP, WORK, N, INFO )
+            CALL CAXPY( N, CONE, WORK, 1, X( 1, J ), 1 )
             LSTRES = BERR( J )
             COUNT = COUNT + 1
             GO TO 20
@@ -376,7 +373,7 @@
 *        is incremented by SAFE1 if the i-th component of
 *        abs(A)*abs(X) + abs(B) is less than SAFE2.
 *
-*        Use AB_CLACN2 to estimate the infinity-norm of the matrix
+*        Use CLACN2 to estimate the infinity-norm of the matrix
 *           inv(A) * diag(W),
 *        where W = abs(R) + NZ*EPS*( abs(A)*abs(X)+abs(B) )))
 *
@@ -391,13 +388,13 @@
 *
          KASE = 0
   100    CONTINUE
-         CALL AB_CLACN2( N, WORK( N+1 ), WORK, FERR( J ), KASE, ISAVE )
+         CALL CLACN2( N, WORK( N+1 ), WORK, FERR( J ), KASE, ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN
 *
 *              Multiply by diag(W)*inv(A**H).
 *
-               CALL AB_CPPTRS( UPLO, N, 1, AFP, WORK, N, INFO )
+               CALL CPPTRS( UPLO, N, 1, AFP, WORK, N, INFO )
                DO 110 I = 1, N
                   WORK( I ) = RWORK( I )*WORK( I )
   110          CONTINUE
@@ -408,7 +405,7 @@
                DO 120 I = 1, N
                   WORK( I ) = RWORK( I )*WORK( I )
   120          CONTINUE
-               CALL AB_CPPTRS( UPLO, N, 1, AFP, WORK, N, INFO )
+               CALL CPPTRS( UPLO, N, 1, AFP, WORK, N, INFO )
             END IF
             GO TO 100
          END IF
@@ -426,6 +423,6 @@
 *
       RETURN
 *
-*     End of AB_CPPRFS
+*     End of CPPRFS
 *
       END

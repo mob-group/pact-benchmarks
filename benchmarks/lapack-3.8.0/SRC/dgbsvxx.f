@@ -1,4 +1,4 @@
-*> \brief <b> AB_AB_AB_DGBSVXX computes the solution to system of linear equations A * X = B for GB matrices</b>
+*> \brief <b> DGBSVXX computes the solution to system of linear equations A * X = B for GB matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_AB_DGBSVXX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_AB_DGBSVXX.f">
+*> Download DGBSVXX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgbsvxx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_AB_DGBSVXX.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgbsvxx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_AB_DGBSVXX.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgbsvxx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_AB_DGBSVXX( FACT, TRANS, N, KL, KU, NRHS, AB, LDAB, AFB,
+*       SUBROUTINE DGBSVXX( FACT, TRANS, N, KL, KU, NRHS, AB, LDAB, AFB,
 *                           LDAFB, IPIV, EQUED, R, C, B, LDB, X, LDX,
 *                           RCOND, RPVGRW, BERR, N_ERR_BNDS,
 *                           ERR_BNDS_NORM, ERR_BNDS_COMP, NPARAMS, PARAMS,
@@ -45,24 +45,24 @@
 *>
 *> \verbatim
 *>
-*>    AB_AB_AB_DGBSVXX uses the LU factorization to compute the solution to a
+*>    DGBSVXX uses the LU factorization to compute the solution to a
 *>    double precision system of linear equations  A * X = B,  where A is an
 *>    N-by-N matrix and X and B are N-by-NRHS matrices.
 *>
 *>    If requested, both normwise and maximum componentwise error bounds
-*>    are returned. AB_AB_AB_DGBSVXX will return a solution with a tiny
+*>    are returned. DGBSVXX will return a solution with a tiny
 *>    guaranteed error (O(eps) where eps is the working machine
 *>    precision) unless the matrix is very ill-conditioned, in which
 *>    case a warning is returned. Relevant condition numbers also are
 *>    calculated and returned.
 *>
-*>    AB_AB_AB_DGBSVXX accepts user-provided factorizations and equilibration
+*>    DGBSVXX accepts user-provided factorizations and equilibration
 *>    factors; see the definitions of the FACT and EQUED options.
 *>    Solving with refinement and using a factorization from a previous
-*>    AB_AB_AB_DGBSVXX call will also produce a solution with either O(eps)
+*>    DGBSVXX call will also produce a solution with either O(eps)
 *>    errors or warnings, but we cannot make that claim for general
 *>    user-provided factorizations and equilibration factors if they
-*>    differ from what AB_AB_AB_DGBSVXX would itself produce.
+*>    differ from what DGBSVXX would itself produce.
 *> \endverbatim
 *
 *> \par Description:
@@ -203,7 +203,7 @@
 *>          AFB is DOUBLE PRECISION array, dimension (LDAFB,N)
 *>     If FACT = 'F', then AFB is an input argument and on entry
 *>     contains details of the LU factorization of the band matrix
-*>     A, as computed by AB_DGBTRF.  U is stored as an upper triangular
+*>     A, as computed by DGBTRF.  U is stored as an upper triangular
 *>     band matrix with KL+KU superdiagonals in rows 1 to KL+KU+1,
 *>     and the multipliers used during the factorization are stored
 *>     in rows KL+KU+2 to 2*KL+KU+1.  If EQUED .ne. 'N', then AFB is
@@ -230,7 +230,7 @@
 *>          IPIV is INTEGER array, dimension (N)
 *>     If FACT = 'F', then IPIV is an input argument and on entry
 *>     contains the pivot indices from the factorization A = P*L*U
-*>     as computed by AB_DGETRF; row i of the matrix was interchanged
+*>     as computed by DGETRF; row i of the matrix was interchanged
 *>     with row IPIV(i).
 *>
 *>     If FACT = 'N', then IPIV is an output argument and on exit
@@ -349,7 +349,7 @@
 *>     This also means that the solution X, estimated condition numbers,
 *>     and error bounds could be unreliable. If factorization fails with
 *>     0<INFO<=N, then this contains the reciprocal pivot growth factor
-*>     for the leading INFO columns of A.  In AB_AB_DGESVX, this quantity is
+*>     for the leading INFO columns of A.  In DGESVX, this quantity is
 *>     returned in WORK(1).
 *> \endverbatim
 *>
@@ -389,21 +389,21 @@
 *>     The first index in ERR_BNDS_NORM(i,:) corresponds to the ith
 *>     right-hand side.
 *>
-*>     The AB_SECOND index in ERR_BNDS_NORM(:,err) contains the following
+*>     The second index in ERR_BNDS_NORM(:,err) contains the following
 *>     three fields:
 *>     err = 1 "Trust/don't trust" boolean. Trust the answer if the
 *>              reciprocal condition number is less than the threshold
-*>              sqrt(n) * AB_DLAMCH('Epsilon').
+*>              sqrt(n) * dlamch('Epsilon').
 *>
 *>     err = 2 "Guaranteed" error bound: The estimated forward error,
 *>              almost certainly within a factor of 10 of the true error
 *>              so long as the next entry is greater than the threshold
-*>              sqrt(n) * AB_DLAMCH('Epsilon'). This error bound should only
+*>              sqrt(n) * dlamch('Epsilon'). This error bound should only
 *>              be trusted if the previous boolean is true.
 *>
 *>     err = 3  Reciprocal condition number: Estimated normwise
 *>              reciprocal condition number.  Compared with the threshold
-*>              sqrt(n) * AB_DLAMCH('Epsilon') to determine if the error
+*>              sqrt(n) * dlamch('Epsilon') to determine if the error
 *>              estimate is "guaranteed". These reciprocal condition
 *>              numbers are 1 / (norm(Z^{-1},inf) * norm(Z,inf)) for some
 *>              appropriately scaled matrix Z.
@@ -437,21 +437,21 @@
 *>     The first index in ERR_BNDS_COMP(i,:) corresponds to the ith
 *>     right-hand side.
 *>
-*>     The AB_SECOND index in ERR_BNDS_COMP(:,err) contains the following
+*>     The second index in ERR_BNDS_COMP(:,err) contains the following
 *>     three fields:
 *>     err = 1 "Trust/don't trust" boolean. Trust the answer if the
 *>              reciprocal condition number is less than the threshold
-*>              sqrt(n) * AB_DLAMCH('Epsilon').
+*>              sqrt(n) * dlamch('Epsilon').
 *>
 *>     err = 2 "Guaranteed" error bound: The estimated forward error,
 *>              almost certainly within a factor of 10 of the true error
 *>              so long as the next entry is greater than the threshold
-*>              sqrt(n) * AB_DLAMCH('Epsilon'). This error bound should only
+*>              sqrt(n) * dlamch('Epsilon'). This error bound should only
 *>              be trusted if the previous boolean is true.
 *>
 *>     err = 3  Reciprocal condition number: Estimated componentwise
 *>              reciprocal condition number.  Compared with the threshold
-*>              sqrt(n) * AB_DLAMCH('Epsilon') to determine if the error
+*>              sqrt(n) * dlamch('Epsilon') to determine if the error
 *>              estimate is "guaranteed". These reciprocal condition
 *>              numbers are 1 / (norm(Z^{-1},inf) * norm(Z,inf)) for some
 *>              appropriately scaled matrix Z.
@@ -500,7 +500,7 @@
 *>       PARAMS(LA_LINRX_CWISE_I = 3) : Flag determining if the code
 *>            will attempt to find a solution with small componentwise
 *>            relative error in the double-precision algorithm.  Positive
-*>            is true, 0.0 is FALSE.
+*>            is true, 0.0 is false.
 *>         Default: 1.0 (attempt componentwise convergence)
 *> \endverbatim
 *>
@@ -554,8 +554,7 @@
 *> \ingroup doubleGBsolve
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_AB_DGBSVXX( FACT, TRANS, N, KL, KU, NRHS, AB, LDA
-     $B, AFB,
+      SUBROUTINE DGBSVXX( FACT, TRANS, N, KL, KU, NRHS, AB, LDAB, AFB,
      $                    LDAFB, IPIV, EQUED, R, C, B, LDB, X, LDX,
      $                    RCOND, RPVGRW, BERR, N_ERR_BNDS,
      $                    ERR_BNDS_NORM, ERR_BNDS_COMP, NPARAMS, PARAMS,
@@ -602,14 +601,13 @@
      $                   ROWCND, SMLNUM
 *     ..
 *     .. External Functions ..
-      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_DLA_GBRPVGRW
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DLAMCH, AB_DLA_GBRPVGRW
+      EXTERNAL           LSAME, DLAMCH, DLA_GBRPVGRW
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH, DLA_GBRPVGRW
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_AB_DGBEQUB, AB_DGBTRF, AB_DGBTRS, AB_DLACPY,
-     $ AB_DLAQGB,
-     $                   AB_XERBLA, AB_AB_DLASCL2, AB_AB_DGBRFSX
+      EXTERNAL           DGBEQUB, DGBTRF, DGBTRS, DLACPY, DLAQGB,
+     $                   XERBLA, DLASCL2, DGBRFSX
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -617,34 +615,33 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-      NOFACT = AB_LSAME( FACT, 'N' )
-      EQUIL = AB_LSAME( FACT, 'E' )
-      NOTRAN = AB_LSAME( TRANS, 'N' )
-      SMLNUM = AB_DLAMCH( 'Safe minimum' )
+      NOFACT = LSAME( FACT, 'N' )
+      EQUIL = LSAME( FACT, 'E' )
+      NOTRAN = LSAME( TRANS, 'N' )
+      SMLNUM = DLAMCH( 'Safe minimum' )
       BIGNUM = ONE / SMLNUM
       IF( NOFACT .OR. EQUIL ) THEN
          EQUED = 'N'
          ROWEQU = .FALSE.
          COLEQU = .FALSE.
       ELSE
-         ROWEQU = AB_LSAME( EQUED, 'R' ) .OR. AB_LSAME( EQUED, 'B' )
-         COLEQU = AB_LSAME( EQUED, 'C' ) .OR. AB_LSAME( EQUED, 'B' )
+         ROWEQU = LSAME( EQUED, 'R' ) .OR. LSAME( EQUED, 'B' )
+         COLEQU = LSAME( EQUED, 'C' ) .OR. LSAME( EQUED, 'B' )
       END IF
 *
 *     Default is failure.  If an input parameter is wrong or
 *     factorization fails, make everything look horrible.  Only the
-*     pivot growth is set here, the rest is initialized in AB_AB_DGBRFSX.
+*     pivot growth is set here, the rest is initialized in DGBRFSX.
 *
       RPVGRW = ZERO
 *
-*     Test the input parameters.  PARAMS is not tested until AB_AB_DGBRFSX.
+*     Test the input parameters.  PARAMS is not tested until DGBRFSX.
 *
       IF( .NOT.NOFACT .AND. .NOT.EQUIL .AND. .NOT.
-     $     AB_LSAME( FACT, 'F' ) ) THEN
+     $     LSAME( FACT, 'F' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) .AND. .N
-     $OT.
-     $        AB_LSAME( TRANS, 'C' ) ) THEN
+      ELSE IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) .AND. .NOT.
+     $        LSAME( TRANS, 'C' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -658,8 +655,8 @@
          INFO = -8
       ELSE IF( LDAFB.LT.2*KL+KU+1 ) THEN
          INFO = -10
-      ELSE IF( AB_LSAME( FACT, 'F' ) .AND. .NOT.
-     $        ( ROWEQU .OR. COLEQU .OR. AB_LSAME( EQUED, 'N' ) ) ) THEN
+      ELSE IF( LSAME( FACT, 'F' ) .AND. .NOT.
+     $        ( ROWEQU .OR. COLEQU .OR. LSAME( EQUED, 'N' ) ) ) THEN
          INFO = -12
       ELSE
          IF( ROWEQU ) THEN
@@ -702,7 +699,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_AB_DGBSVXX', -INFO )
+         CALL XERBLA( 'DGBSVXX', -INFO )
          RETURN
       END IF
 *
@@ -710,18 +707,16 @@
 *
 *     Compute row and column scalings to equilibrate the matrix A.
 *
-         CALL AB_AB_DGBEQUB( N, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCN
-     $D,
+         CALL DGBEQUB( N, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND,
      $        AMAX, INFEQU )
          IF( INFEQU.EQ.0 ) THEN
 *
 *     Equilibrate the matrix.
 *
-            CALL AB_DLAQGB( N, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND
-     $,
+            CALL DLAQGB( N, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND,
      $           AMAX, EQUED )
-            ROWEQU = AB_LSAME( EQUED, 'R' ) .OR. AB_LSAME( EQUED, 'B' )
-            COLEQU = AB_LSAME( EQUED, 'C' ) .OR. AB_LSAME( EQUED, 'B' )
+            ROWEQU = LSAME( EQUED, 'R' ) .OR. LSAME( EQUED, 'B' )
+            COLEQU = LSAME( EQUED, 'C' ) .OR. LSAME( EQUED, 'B' )
          END IF
 *
 *     If the scaling factors are not applied, set them to 1.0.
@@ -741,9 +736,9 @@
 *     Scale the right hand side.
 *
       IF( NOTRAN ) THEN
-         IF( ROWEQU ) CALL AB_AB_DLASCL2(N, NRHS, R, B, LDB)
+         IF( ROWEQU ) CALL DLASCL2(N, NRHS, R, B, LDB)
       ELSE
-         IF( COLEQU ) CALL AB_AB_DLASCL2(N, NRHS, C, B, LDB)
+         IF( COLEQU ) CALL DLASCL2(N, NRHS, C, B, LDB)
       END IF
 *
       IF( NOFACT .OR. EQUIL ) THEN
@@ -755,7 +750,7 @@
                AFB( I, J ) = AB( I-KL, J )
  30         CONTINUE
  40      CONTINUE
-         CALL AB_DGBTRF( N, N, KL, KU, AFB, LDAFB, IPIV, INFO )
+         CALL DGBTRF( N, N, KL, KU, AFB, LDAFB, IPIV, INFO )
 *
 *        Return if INFO is non-zero.
 *
@@ -765,7 +760,7 @@
 *           Compute the reciprocal pivot growth factor of the
 *           leading rank-deficient INFO columns of A.
 *
-            RPVGRW = AB_DLA_GBRPVGRW( N, KL, KU, INFO, AB, LDAB, AFB,
+            RPVGRW = DLA_GBRPVGRW( N, KL, KU, INFO, AB, LDAB, AFB,
      $           LDAFB )
             RETURN
          END IF
@@ -773,19 +768,18 @@
 *
 *     Compute the reciprocal pivot growth factor RPVGRW.
 *
-      RPVGRW = AB_DLA_GBRPVGRW( N, KL, KU, N, AB, LDAB, AFB, LDAFB )
+      RPVGRW = DLA_GBRPVGRW( N, KL, KU, N, AB, LDAB, AFB, LDAFB )
 *
 *     Compute the solution matrix X.
 *
-      CALL AB_DLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
-      CALL AB_DGBTRS( TRANS, N, KL, KU, NRHS, AFB, LDAFB, IPIV, X, LDX,
+      CALL DLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
+      CALL DGBTRS( TRANS, N, KL, KU, NRHS, AFB, LDAFB, IPIV, X, LDX,
      $     INFO )
 *
 *     Use iterative refinement to improve the computed solution and
 *     compute error bounds and backward error estimates for it.
 *
-      CALL AB_AB_DGBRFSX( TRANS, EQUED, N, KL, KU, NRHS, AB, LDAB, AFB, 
-     $LDAFB,
+      CALL DGBRFSX( TRANS, EQUED, N, KL, KU, NRHS, AB, LDAB, AFB, LDAFB,
      $     IPIV, R, C, B, LDB, X, LDX, RCOND, BERR,
      $     N_ERR_BNDS, ERR_BNDS_NORM, ERR_BNDS_COMP, NPARAMS, PARAMS,
      $     WORK, IWORK, INFO )
@@ -793,13 +787,13 @@
 *     Scale solutions.
 *
       IF ( COLEQU .AND. NOTRAN ) THEN
-         CALL AB_AB_DLASCL2 ( N, NRHS, C, X, LDX )
+         CALL DLASCL2 ( N, NRHS, C, X, LDX )
       ELSE IF ( ROWEQU .AND. .NOT.NOTRAN ) THEN
-         CALL AB_AB_DLASCL2 ( N, NRHS, R, X, LDX )
+         CALL DLASCL2 ( N, NRHS, R, X, LDX )
       END IF
 *
       RETURN
 *
-*     End of AB_AB_AB_DGBSVXX
+*     End of DGBSVXX
 *
       END

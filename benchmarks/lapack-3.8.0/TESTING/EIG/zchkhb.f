@@ -1,4 +1,4 @@
-*> \brief \b AB_ZCHKHB
+*> \brief \b ZCHKHB
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZCHKHB( NSIZES, NN, NWDTHS, KK, NTYPES, DOTYPE, ISEED,
+*       SUBROUTINE ZCHKHB( NSIZES, NN, NWDTHS, KK, NTYPES, DOTYPE, ISEED,
 *                          THRESH, NOUNIT, A, LDA, SD, SE, U, LDU, WORK,
 *                          LWORK, RWORK, RESULT, INFO )
 *
@@ -30,27 +30,27 @@
 *>
 *> \verbatim
 *>
-*> AB_ZCHKHB tests the reduction of a Hermitian band matrix to tridiagonal
+*> ZCHKHB tests the reduction of a Hermitian band matrix to tridiagonal
 *> from, used with the Hermitian eigenvalue problem.
 *>
-*> AB_ZHBTRD factors a Hermitian band matrix A as  U S U* , where * means
+*> ZHBTRD factors a Hermitian band matrix A as  U S U* , where * means
 *> conjugate transpose, S is symmetric tridiagonal, and U is unitary.
-*> AB_ZHBTRD can use either just the lower or just the upper triangle
-*> of A; AB_ZCHKHB checks both cases.
+*> ZHBTRD can use either just the lower or just the upper triangle
+*> of A; ZCHKHB checks both cases.
 *>
-*> When AB_ZCHKHB is called, a number of matrix "sizes" ("n's"), a number
+*> When ZCHKHB is called, a number of matrix "sizes" ("n's"), a number
 *> of bandwidths ("k's"), and a number of matrix "types" are
 *> specified.  For each size ("n"), each bandwidth ("k") less than or
 *> equal to "n", and each type of matrix, one matrix will be generated
 *> and used to test the hermitian banded reduction routine.  For each
 *> matrix, a number of tests will be performed:
 *>
-*> (1)     | A - V S V* | / ( |A| n ulp )  computed by AB_ZHBTRD with
+*> (1)     | A - V S V* | / ( |A| n ulp )  computed by ZHBTRD with
 *>                                         UPLO='U'
 *>
 *> (2)     | I - UU* | / ( n ulp )
 *>
-*> (3)     | A - V S V* | / ( |A| n ulp )  computed by AB_ZHBTRD with
+*> (3)     | A - V S V* | / ( |A| n ulp )  computed by ZHBTRD with
 *>                                         UPLO='L'
 *>
 *> (4)     | I - UU* | / ( n ulp )
@@ -102,7 +102,7 @@
 *> \verbatim
 *>          NSIZES is INTEGER
 *>          The number of sizes of matrices to use.  If it is zero,
-*>          AB_ZCHKHB does nothing.  It must be at least zero.
+*>          ZCHKHB does nothing.  It must be at least zero.
 *> \endverbatim
 *>
 *> \param[in] NN
@@ -117,7 +117,7 @@
 *> \verbatim
 *>          NWDTHS is INTEGER
 *>          The number of bandwidths to use.  If it is zero,
-*>          AB_ZCHKHB does nothing.  It must be at least zero.
+*>          ZCHKHB does nothing.  It must be at least zero.
 *> \endverbatim
 *>
 *> \param[in] KK
@@ -130,7 +130,7 @@
 *> \param[in] NTYPES
 *> \verbatim
 *>          NTYPES is INTEGER
-*>          The number of elements in DOTYPE.   If it is zero, AB_ZCHKHB
+*>          The number of elements in DOTYPE.   If it is zero, ZCHKHB
 *>          does nothing.  It must be at least zero.  If it is MAXTYP+1
 *>          and NSIZES is 1, then an additional type, MAXTYP+1 is
 *>          defined, which is to use whatever matrix is in A.  This
@@ -160,7 +160,7 @@
 *>          congruential sequence limited to small integers, and so
 *>          should produce machine independent random numbers. The
 *>          values of ISEED are changed on exit, and can be used in the
-*>          next call to AB_ZCHKHB to continue the same random number
+*>          next call to ZCHKHB to continue the same random number
 *>          sequence.
 *> \endverbatim
 *>
@@ -201,20 +201,20 @@
 *> \verbatim
 *>          SD is DOUBLE PRECISION array, dimension (max(NN))
 *>          Used to hold the diagonal of the tridiagonal matrix computed
-*>          by AB_ZHBTRD.
+*>          by ZHBTRD.
 *> \endverbatim
 *>
 *> \param[out] SE
 *> \verbatim
 *>          SE is DOUBLE PRECISION array, dimension (max(NN))
 *>          Used to hold the off-diagonal of the tridiagonal matrix
-*>          computed by AB_ZHBTRD.
+*>          computed by ZHBTRD.
 *> \endverbatim
 *>
 *> \param[out] U
 *> \verbatim
 *>          U is COMPLEX*16 array, dimension (LDU, max(NN))
-*>          Used to hold the unitary matrix computed by AB_ZHBTRD.
+*>          Used to hold the unitary matrix computed by ZHBTRD.
 *> \endverbatim
 *>
 *> \param[in] LDU
@@ -294,8 +294,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_ZCHKHB( NSIZES, NN, NWDTHS, KK, NTYPES, DOTYPE, ISEE
-     $D,
+      SUBROUTINE ZCHKHB( NSIZES, NN, NWDTHS, KK, NTYPES, DOTYPE, ISEED,
      $                   THRESH, NOUNIT, A, LDA, SD, SE, U, LDU, WORK,
      $                   LWORK, RWORK, RESULT, INFO )
 *
@@ -343,13 +342,12 @@
      $                   KMODE( MAXTYP ), KTYPE( MAXTYP )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH
-      EXTERNAL           AB_DLAMCH
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLASUM, AB_XERBLA, AB_ZHBT21, AB_ZHBTRD, AB_
-     $ZLACPY, AB_ZLASET,
-     $                   AB_ZLATMR, AB_ZLATMS
+      EXTERNAL           DLASUM, XERBLA, ZHBT21, ZHBTRD, ZLACPY, ZLASET,
+     $                   ZLATMR, ZLATMS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCONJG, MAX, MIN, SQRT
@@ -408,7 +406,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZCHKHB', -INFO )
+         CALL XERBLA( 'ZCHKHB', -INFO )
          RETURN
       END IF
 *
@@ -419,9 +417,9 @@
 *
 *     More Important constants
 *
-      UNFL = AB_DLAMCH( 'Safe minimum' )
+      UNFL = DLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
+      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
       ULPINV = ONE / ULP
       RTUNFL = SQRT( UNFL )
       RTOVFL = SQRT( OVFL )
@@ -498,7 +496,7 @@
 *
    70          CONTINUE
 *
-               CALL AB_ZLASET( 'Full', LDA, N, CZERO, CZERO, A, LDA )
+               CALL ZLASET( 'Full', LDA, N, CZERO, CZERO, A, LDA )
                IINFO = 0
                IF( JTYPE.LE.15 ) THEN
                   COND = ULPINV
@@ -525,7 +523,7 @@
 *
 *                 Diagonal Matrix, [Eigen]values Specified
 *
-                  CALL AB_ZLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE,
+                  CALL ZLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE,
      $                         COND, ANORM, 0, 0, 'Q', A( K+1, 1 ), LDA,
      $                         WORK, IINFO )
 *
@@ -533,7 +531,7 @@
 *
 *                 Hermitian, eigenvalues specified
 *
-                  CALL AB_ZLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE,
+                  CALL ZLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE,
      $                         COND, ANORM, K, K, 'Q', A, LDA, WORK,
      $                         IINFO )
 *
@@ -541,7 +539,7 @@
 *
 *                 Diagonal, random eigenvalues
 *
-                  CALL AB_ZLATMR( N, N, 'S', ISEED, 'H', WORK, 6, ONE,
+                  CALL ZLATMR( N, N, 'S', ISEED, 'H', WORK, 6, ONE,
      $                         CONE, 'T', 'N', WORK( N+1 ), 1, ONE,
      $                         WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, 0, 0,
      $                         ZERO, ANORM, 'Q', A( K+1, 1 ), LDA,
@@ -551,7 +549,7 @@
 *
 *                 Hermitian, random eigenvalues
 *
-                  CALL AB_ZLATMR( N, N, 'S', ISEED, 'H', WORK, 6, ONE,
+                  CALL ZLATMR( N, N, 'S', ISEED, 'H', WORK, 6, ONE,
      $                         CONE, 'T', 'N', WORK( N+1 ), 1, ONE,
      $                         WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, K, K,
      $                         ZERO, ANORM, 'Q', A, LDA, IDUMMA, IINFO )
@@ -560,7 +558,7 @@
 *
 *                 Positive definite, eigenvalues specified.
 *
-                  CALL AB_ZLATMS( N, N, 'S', ISEED, 'P', RWORK, IMODE,
+                  CALL ZLATMS( N, N, 'S', ISEED, 'P', RWORK, IMODE,
      $                         COND, ANORM, K, K, 'Q', A, LDA,
      $                         WORK( N+1 ), IINFO )
 *
@@ -570,7 +568,7 @@
 *
                   IF( N.GT.1 )
      $               K = MAX( 1, K )
-                  CALL AB_ZLATMS( N, N, 'S', ISEED, 'P', RWORK, IMODE,
+                  CALL ZLATMS( N, N, 'S', ISEED, 'P', RWORK, IMODE,
      $                         COND, ANORM, 1, 1, 'Q', A( K, 1 ), LDA,
      $                         WORK, IINFO )
                   DO 90 I = 2, N
@@ -596,17 +594,16 @@
 *
   100          CONTINUE
 *
-*              Call AB_ZHBTRD to compute S and U from upper triangle.
+*              Call ZHBTRD to compute S and U from upper triangle.
 *
-               CALL AB_ZLACPY( ' ', K+1, N, A, LDA, WORK, LDA )
+               CALL ZLACPY( ' ', K+1, N, A, LDA, WORK, LDA )
 *
                NTEST = 1
-               CALL AB_ZHBTRD( 'V', 'U', N, K, WORK, LDA, SD, SE, U, LDU
-     $,
+               CALL ZHBTRD( 'V', 'U', N, K, WORK, LDA, SD, SE, U, LDU,
      $                      WORK( LDA*N+1 ), IINFO )
 *
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'AB_ZHBTRD(U)', IINFO, N,
+                  WRITE( NOUNIT, FMT = 9999 )'ZHBTRD(U)', IINFO, N,
      $               JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -619,7 +616,7 @@
 *
 *              Do tests 1 and 2
 *
-               CALL AB_ZHBT21( 'Upper', N, K, 1, A, LDA, SD, SE, U, LDU,
+               CALL ZHBT21( 'Upper', N, K, 1, A, LDA, SD, SE, U, LDU,
      $                      WORK, RWORK, RESULT( 1 ) )
 *
 *              Convert A from Upper-Triangle-Only storage to
@@ -636,17 +633,16 @@
   130             CONTINUE
   140          CONTINUE
 *
-*              Call AB_ZHBTRD to compute S and U from lower triangle
+*              Call ZHBTRD to compute S and U from lower triangle
 *
-               CALL AB_ZLACPY( ' ', K+1, N, A, LDA, WORK, LDA )
+               CALL ZLACPY( ' ', K+1, N, A, LDA, WORK, LDA )
 *
                NTEST = 3
-               CALL AB_ZHBTRD( 'V', 'L', N, K, WORK, LDA, SD, SE, U, LDU
-     $,
+               CALL ZHBTRD( 'V', 'L', N, K, WORK, LDA, SD, SE, U, LDU,
      $                      WORK( LDA*N+1 ), IINFO )
 *
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'AB_ZHBTRD(L)', IINFO, N,
+                  WRITE( NOUNIT, FMT = 9999 )'ZHBTRD(L)', IINFO, N,
      $               JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -660,7 +656,7 @@
 *
 *              Do tests 3 and 4
 *
-               CALL AB_ZHBT21( 'Lower', N, K, 1, A, LDA, SD, SE, U, LDU,
+               CALL ZHBT21( 'Lower', N, K, 1, A, LDA, SD, SE, U, LDU,
      $                      WORK, RWORK, RESULT( 3 ) )
 *
 *              End of Loop -- Check for RESULT(j) > THRESH
@@ -674,7 +670,7 @@
                   IF( RESULT( JR ).GE.THRESH ) THEN
 *
 *                    If this is the first test to fail,
-*                    print a AB_HEADER to the data file.
+*                    print a header to the data file.
 *
                      IF( NERRS.EQ.0 ) THEN
                         WRITE( NOUNIT, FMT = 9998 )'ZHB'
@@ -696,15 +692,15 @@
 *
 *     Summary
 *
-      CALL AB_DLASUM( 'ZHB', NOUNIT, NERRS, NTESTT )
+      CALL DLASUM( 'ZHB', NOUNIT, NERRS, NTESTT )
       RETURN
 *
- 9999 FORMAT( ' AB_ZCHKHB: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
+ 9999 FORMAT( ' ZCHKHB: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
  9998 FORMAT( / 1X, A3,
      $     ' -- Complex Hermitian Banded Tridiagonal Reduction Routines'
      $       )
- 9997 FORMAT( ' Matrix types (see AB_DCHK23 for details): ' )
+ 9997 FORMAT( ' Matrix types (see DCHK23 for details): ' )
 *
  9996 FORMAT( / ' Special Matrices:',
      $      / '  1=Zero matrix.                        ',
@@ -733,6 +729,6 @@
  9993 FORMAT( ' N=', I5, ', K=', I4, ', seed=', 4( I4, ',' ), ' type ',
      $      I2, ', test(', I2, ')=', G10.3 )
 *
-*     End of AB_ZCHKHB
+*     End of ZCHKHB
 *
       END

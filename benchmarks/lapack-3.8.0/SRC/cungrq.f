@@ -1,4 +1,4 @@
-*> \brief \b AB_CUNGRQ
+*> \brief \b CUNGRQ
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CUNGRQ + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CUNGRQ.f">
+*> Download CUNGRQ + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cungrq.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CUNGRQ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cungrq.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CUNGRQ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cungrq.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CUNGRQ( M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
+*       SUBROUTINE CUNGRQ( M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, K, LDA, LWORK, M, N
@@ -33,13 +33,13 @@
 *>
 *> \verbatim
 *>
-*> AB_CUNGRQ generates an M-by-N complex matrix Q with orthonormal rows,
+*> CUNGRQ generates an M-by-N complex matrix Q with orthonormal rows,
 *> which is defined as the last M rows of a product of K elementary
 *> reflectors of order N
 *>
 *>       Q  =  H(1)**H H(2)**H . . . H(k)**H
 *>
-*> as returned by AB_CGERQF.
+*> as returned by CGERQF.
 *> \endverbatim
 *
 *  Arguments:
@@ -69,7 +69,7 @@
 *>          A is COMPLEX array, dimension (LDA,N)
 *>          On entry, the (m-k+i)-th row must contain the vector which
 *>          defines the elementary reflector H(i), for i = 1,2,...,k, as
-*>          returned by AB_CGERQF in the last k rows of its array argument
+*>          returned by CGERQF in the last k rows of its array argument
 *>          A.
 *>          On exit, the M-by-N matrix Q.
 *> \endverbatim
@@ -84,7 +84,7 @@
 *> \verbatim
 *>          TAU is COMPLEX array, dimension (K)
 *>          TAU(i) must contain the scalar factor of the elementary
-*>          reflector H(i), as returned by AB_CGERQF.
+*>          reflector H(i), as returned by CGERQF.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -103,7 +103,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -126,7 +126,7 @@
 *> \ingroup complexOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_CUNGRQ( M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
+      SUBROUTINE CUNGRQ( M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -152,15 +152,14 @@
      $                   LWKOPT, NB, NBMIN, NX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_AB_CLARFB, AB_AB_CLARFT, AB_CUNGR2, AB_XERBL
-     $A
+      EXTERNAL           CLARFB, CLARFT, CUNGR2, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ILAENV
-      EXTERNAL           AB_ILAENV
+      INTEGER            ILAENV
+      EXTERNAL           ILAENV
 *     ..
 *     .. Executable Statements ..
 *
@@ -182,7 +181,7 @@
          IF( M.LE.0 ) THEN
             LWKOPT = 1
          ELSE
-            NB = AB_ILAENV( 1, 'AB_CUNGRQ', ' ', M, N, K, -1 )
+            NB = ILAENV( 1, 'CUNGRQ', ' ', M, N, K, -1 )
             LWKOPT = M*NB
          END IF
          WORK( 1 ) = LWKOPT
@@ -193,7 +192,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CUNGRQ', -INFO )
+         CALL XERBLA( 'CUNGRQ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -212,7 +211,7 @@
 *
 *        Determine when to cross over from blocked to unblocked code.
 *
-         NX = MAX( 0, AB_ILAENV( 3, 'AB_CUNGRQ', ' ', M, N, K, -1 ) )
+         NX = MAX( 0, ILAENV( 3, 'CUNGRQ', ' ', M, N, K, -1 ) )
          IF( NX.LT.K ) THEN
 *
 *           Determine if workspace is large enough for blocked code.
@@ -225,8 +224,7 @@
 *              determine the minimum value of NB.
 *
                NB = LWORK / LDWORK
-               NBMIN = MAX( 2, AB_ILAENV( 2, 'AB_CUNGRQ', ' ', M, N, K, 
-     $-1 ) )
+               NBMIN = MAX( 2, ILAENV( 2, 'CUNGRQ', ' ', M, N, K, -1 ) )
             END IF
          END IF
       END IF
@@ -251,7 +249,7 @@
 *
 *     Use unblocked code for the first or only block.
 *
-      CALL AB_CUNGR2( M-KK, N-KK, K-KK, A, LDA, TAU, WORK, IINFO )
+      CALL CUNGR2( M-KK, N-KK, K-KK, A, LDA, TAU, WORK, IINFO )
 *
       IF( KK.GT.0 ) THEN
 *
@@ -265,13 +263,12 @@
 *              Form the triangular factor of the block reflector
 *              H = H(i+ib-1) . . . H(i+1) H(i)
 *
-               CALL AB_AB_CLARFT( 'Backward', 'Rowwise', N-K+I+IB-1, IB,
+               CALL CLARFT( 'Backward', 'Rowwise', N-K+I+IB-1, IB,
      $                      A( II, 1 ), LDA, TAU( I ), WORK, LDWORK )
 *
 *              Apply H**H to A(1:m-k+i-1,1:n-k+i+ib-1) from the right
 *
-               CALL AB_AB_CLARFB( 'Right', 'Conjugate transpose', 'Backw
-     $ard',
+               CALL CLARFB( 'Right', 'Conjugate transpose', 'Backward',
      $                      'Rowwise', II-1, N-K+I+IB-1, IB, A( II, 1 ),
      $                      LDA, WORK, LDWORK, A, LDA, WORK( IB+1 ),
      $                      LDWORK )
@@ -279,8 +276,7 @@
 *
 *           Apply H**H to columns 1:n-k+i+ib-1 of current block
 *
-            CALL AB_CUNGR2( IB, N-K+I+IB-1, IB, A( II, 1 ), LDA, TAU( I 
-     $),
+            CALL CUNGR2( IB, N-K+I+IB-1, IB, A( II, 1 ), LDA, TAU( I ),
      $                   WORK, IINFO )
 *
 *           Set columns n-k+i+ib:n of current block to zero
@@ -296,6 +292,6 @@
       WORK( 1 ) = IWS
       RETURN
 *
-*     End of AB_CUNGRQ
+*     End of CUNGRQ
 *
       END

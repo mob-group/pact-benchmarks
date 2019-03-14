@@ -1,4 +1,4 @@
-*> \brief \b AB_CGET24
+*> \brief \b CGET24
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CGET24( COMP, JTYPE, THRESH, ISEED, NOUNIT, N, A, LDA,
+*       SUBROUTINE CGET24( COMP, JTYPE, THRESH, ISEED, NOUNIT, N, A, LDA,
 *                          H, HT, W, WT, WTMP, VS, LDVS, VS1, RCDEIN,
 *                          RCDVIN, NSLCT, ISLCT, ISRT, RESULT, WORK,
 *                          LWORK, RWORK, BWORK, INFO )
@@ -34,8 +34,8 @@
 *>
 *> \verbatim
 *>
-*>    AB_CGET24 checks the nonsymmetric eigenvalue (Schur form) problem
-*>    expert driver AB_AB_CGEESX.
+*>    CGET24 checks the nonsymmetric eigenvalue (Schur form) problem
+*>    expert driver CGEESX.
 *>
 *>    If COMP = .FALSE., the first 13 of the following tests will be
 *>    be performed on the input matrix A, and also tests 14 and 15
@@ -104,7 +104,7 @@
 *>    (16)  |RCONDE - RCDEIN| / cond(RCONDE)
 *>
 *>       RCONDE is the reciprocal average eigenvalue condition number
-*>       computed by AB_AB_CGEESX and RCDEIN (the precomputed true value)
+*>       computed by CGEESX and RCDEIN (the precomputed true value)
 *>       is supplied as input.  cond(RCONDE) is the condition number
 *>       of RCONDE, and takes errors in computing RCONDE into account,
 *>       so that the resulting quantity should be O(ULP). cond(RCONDE)
@@ -113,7 +113,7 @@
 *>    (17)  |RCONDV - RCDVIN| / cond(RCONDV)
 *>
 *>       RCONDV is the reciprocal right invariant subspace condition
-*>       number computed by AB_AB_CGEESX and RCDVIN (the precomputed true
+*>       number computed by CGEESX and RCDVIN (the precomputed true
 *>       value) is supplied as input. cond(RCONDV) is the condition
 *>       number of RCONDV, and takes errors in computing RCONDV into
 *>       account, so that the resulting quantity should be O(ULP).
@@ -188,13 +188,13 @@
 *> \param[out] H
 *> \verbatim
 *>          H is COMPLEX array, dimension (LDA, N)
-*>          Another copy of the test matrix A, modified by AB_AB_CGEESX.
+*>          Another copy of the test matrix A, modified by CGEESX.
 *> \endverbatim
 *>
 *> \param[out] HT
 *> \verbatim
 *>          HT is COMPLEX array, dimension (LDA, N)
-*>          Yet another copy of the test matrix A, modified by AB_AB_CGEESX.
+*>          Yet another copy of the test matrix A, modified by CGEESX.
 *> \endverbatim
 *>
 *> \param[out] W
@@ -207,7 +207,7 @@
 *> \verbatim
 *>          WT is COMPLEX array, dimension (N)
 *>          Like W, this array contains the eigenvalues of A,
-*>          but those computed when AB_AB_CGEESX only computes a partial
+*>          but those computed when CGEESX only computes a partial
 *>          eigendecomposition, i.e. not Schur vectors
 *> \endverbatim
 *>
@@ -293,7 +293,7 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The number of entries in WORK to be passed to AB_AB_CGEESX. This
+*>          The number of entries in WORK to be passed to CGEESX. This
 *>          must be at least 2*N, and N*(N+1)/2 if tests 14--16 are to
 *>          be performed.
 *> \endverbatim
@@ -313,7 +313,7 @@
 *>          INFO is INTEGER
 *>          If 0,  successful exit.
 *>          If <0, input parameter -INFO had an incorrect value.
-*>          If >0, AB_AB_CGEESX returned an error code, the absolute
+*>          If >0, CGEESX returned an error code, the absolute
 *>                 value of which is returned.
 *> \endverbatim
 *
@@ -330,8 +330,7 @@
 *> \ingroup complex_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_CGET24( COMP, JTYPE, THRESH, ISEED, NOUNIT, N, A, LD
-     $A,
+      SUBROUTINE CGET24( COMP, JTYPE, THRESH, ISEED, NOUNIT, N, A, LDA,
      $                   H, HT, W, WT, WTMP, VS, LDVS, VS1, RCDEIN,
      $                   RCDVIN, NSLCT, ISLCT, ISRT, RESULT, WORK,
      $                   LWORK, RWORK, BWORK, INFO )
@@ -380,13 +379,12 @@
       INTEGER            IPNT( 20 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_CSLECT
-      REAL               AB_CLANGE, AB_SLAMCH
-      EXTERNAL           AB_CSLECT, AB_CLANGE, AB_SLAMCH
+      LOGICAL            CSLECT
+      REAL               CLANGE, SLAMCH
+      EXTERNAL           CSLECT, CLANGE, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CCOPY, AB_AB_CGEESX, AB_CGEMM, AB_CLACPY, AB
-     $_CUNT01, AB_XERBLA
+      EXTERNAL           CCOPY, CGEESX, CGEMM, CLACPY, CUNT01, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, MIN, REAL
@@ -421,7 +419,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_CGET24', -INFO )
+         CALL XERBLA( 'CGET24', -INFO )
          RETURN
       END IF
 *
@@ -436,8 +434,8 @@
 *
 *     Important constants
 *
-      SMLNUM = AB_SLAMCH( 'Safe minimum' )
-      ULP = AB_SLAMCH( 'Precision' )
+      SMLNUM = SLAMCH( 'Safe minimum' )
+      ULP = SLAMCH( 'Precision' )
       ULPINV = ONE / ULP
 *
 *     Perform tests (1)-(13)
@@ -454,26 +452,24 @@
 *
 *        Compute Schur form and Schur vectors, and test them
 *
-         CALL AB_CLACPY( 'F', N, N, A, LDA, H, LDA )
-         CALL AB_AB_CGEESX( 'V', SORT, AB_CSLECT, 'N', N, H, LDA, SDIM, 
-     $W, VS,
+         CALL CLACPY( 'F', N, N, A, LDA, H, LDA )
+         CALL CGEESX( 'V', SORT, CSLECT, 'N', N, H, LDA, SDIM, W, VS,
      $                LDVS, RCONDE, RCONDV, WORK, LWORK, RWORK, BWORK,
      $                IINFO )
          IF( IINFO.NE.0 ) THEN
             RESULT( 1+RSUB ) = ULPINV
             IF( JTYPE.NE.22 ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'AB_AB_CGEESX1', IINFO, N, JTY
-     $PE,
+               WRITE( NOUNIT, FMT = 9998 )'CGEESX1', IINFO, N, JTYPE,
      $            ISEED
             ELSE
-               WRITE( NOUNIT, FMT = 9999 )'AB_AB_CGEESX1', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'CGEESX1', IINFO, N,
      $            ISEED( 1 )
             END IF
             INFO = ABS( IINFO )
             RETURN
          END IF
          IF( ISORT.EQ.0 ) THEN
-            CALL AB_CCOPY( N, W, 1, WTMP, 1 )
+            CALL CCOPY( N, W, 1, WTMP, 1 )
          END IF
 *
 *        Do Test (1) or Test (7)
@@ -490,21 +486,20 @@
 *
 *        Copy A to VS1, used as workspace
 *
-         CALL AB_CLACPY( ' ', N, N, A, LDA, VS1, LDVS )
+         CALL CLACPY( ' ', N, N, A, LDA, VS1, LDVS )
 *
 *        Compute Q*H and store in HT.
 *
-         CALL AB_CGEMM( 'No transpose', 'No transpose', N, N, N, CONE, V
-     $S,
+         CALL CGEMM( 'No transpose', 'No transpose', N, N, N, CONE, VS,
      $               LDVS, H, LDA, CZERO, HT, LDA )
 *
 *        Compute A - Q*H*Q'
 *
-         CALL AB_CGEMM( 'No transpose', 'Conjugate transpose', N, N, N,
+         CALL CGEMM( 'No transpose', 'Conjugate transpose', N, N, N,
      $               -CONE, HT, LDA, VS, LDVS, CONE, VS1, LDVS )
 *
-         ANORM = MAX( AB_CLANGE( '1', N, N, A, LDA, RWORK ), SMLNUM )
-         WNORM = AB_CLANGE( '1', N, N, VS1, LDVS, RWORK )
+         ANORM = MAX( CLANGE( '1', N, N, A, LDA, RWORK ), SMLNUM )
+         WNORM = CLANGE( '1', N, N, VS1, LDVS, RWORK )
 *
          IF( ANORM.GT.WNORM ) THEN
             RESULT( 2+RSUB ) = ( WNORM / ANORM ) / ( N*ULP )
@@ -520,7 +515,7 @@
 *
 *        Test (3) or (9):  Compute norm( I - Q'*Q ) / ( N * ULP )
 *
-         CALL AB_CUNT01( 'Columns', N, N, VS, LDVS, WORK, LWORK, RWORK,
+         CALL CUNT01( 'Columns', N, N, VS, LDVS, WORK, LWORK, RWORK,
      $                RESULT( 3+RSUB ) )
 *
 *        Do Test (4) or Test (10)
@@ -533,19 +528,17 @@
 *
 *        Do Test (5) or Test (11)
 *
-         CALL AB_CLACPY( 'F', N, N, A, LDA, HT, LDA )
-         CALL AB_AB_CGEESX( 'N', SORT, AB_CSLECT, 'N', N, HT, LDA, SDIM,
-     $ WT, VS,
+         CALL CLACPY( 'F', N, N, A, LDA, HT, LDA )
+         CALL CGEESX( 'N', SORT, CSLECT, 'N', N, HT, LDA, SDIM, WT, VS,
      $                LDVS, RCONDE, RCONDV, WORK, LWORK, RWORK, BWORK,
      $                IINFO )
          IF( IINFO.NE.0 ) THEN
             RESULT( 5+RSUB ) = ULPINV
             IF( JTYPE.NE.22 ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'AB_AB_CGEESX2', IINFO, N, JTY
-     $PE,
+               WRITE( NOUNIT, FMT = 9998 )'CGEESX2', IINFO, N, JTYPE,
      $            ISEED
             ELSE
-               WRITE( NOUNIT, FMT = 9999 )'AB_AB_CGEESX2', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'CGEESX2', IINFO, N,
      $            ISEED( 1 )
             END IF
             INFO = ABS( IINFO )
@@ -574,12 +567,11 @@
             RESULT( 13 ) = ZERO
             KNTEIG = 0
             DO 80 I = 1, N
-               IF( AB_CSLECT( W( I ) ) )
+               IF( CSLECT( W( I ) ) )
      $            KNTEIG = KNTEIG + 1
                IF( I.LT.N ) THEN
-                  IF( AB_CSLECT( W( I+1 ) ) .AND.
-     $                ( .NOT.AB_CSLECT( W( I ) ) ) )RESULT( 13 ) = ULPIN
-     $V
+                  IF( CSLECT( W( I+1 ) ) .AND.
+     $                ( .NOT.CSLECT( W( I ) ) ) )RESULT( 13 ) = ULPINV
                END IF
    80       CONTINUE
             IF( SDIM.NE.KNTEIG )
@@ -598,20 +590,18 @@
          SORT = 'S'
          RESULT( 14 ) = ZERO
          RESULT( 15 ) = ZERO
-         CALL AB_CLACPY( 'F', N, N, A, LDA, HT, LDA )
-         CALL AB_AB_CGEESX( 'V', SORT, AB_CSLECT, 'B', N, HT, LDA, SDIM1
-     $, WT,
+         CALL CLACPY( 'F', N, N, A, LDA, HT, LDA )
+         CALL CGEESX( 'V', SORT, CSLECT, 'B', N, HT, LDA, SDIM1, WT,
      $                VS1, LDVS, RCONDE, RCONDV, WORK, LWORK, RWORK,
      $                BWORK, IINFO )
          IF( IINFO.NE.0 ) THEN
             RESULT( 14 ) = ULPINV
             RESULT( 15 ) = ULPINV
             IF( JTYPE.NE.22 ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'AB_AB_CGEESX3', IINFO, N, JTY
-     $PE,
+               WRITE( NOUNIT, FMT = 9998 )'CGEESX3', IINFO, N, JTYPE,
      $            ISEED
             ELSE
-               WRITE( NOUNIT, FMT = 9999 )'AB_AB_CGEESX3', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'CGEESX3', IINFO, N,
      $            ISEED( 1 )
             END IF
             INFO = ABS( IINFO )
@@ -635,20 +625,18 @@
 *
 *        Compute both RCONDE and RCONDV without VS, and compare
 *
-         CALL AB_CLACPY( 'F', N, N, A, LDA, HT, LDA )
-         CALL AB_AB_CGEESX( 'N', SORT, AB_CSLECT, 'B', N, HT, LDA, SDIM1
-     $, WT,
+         CALL CLACPY( 'F', N, N, A, LDA, HT, LDA )
+         CALL CGEESX( 'N', SORT, CSLECT, 'B', N, HT, LDA, SDIM1, WT,
      $                VS1, LDVS, RCNDE1, RCNDV1, WORK, LWORK, RWORK,
      $                BWORK, IINFO )
          IF( IINFO.NE.0 ) THEN
             RESULT( 14 ) = ULPINV
             RESULT( 15 ) = ULPINV
             IF( JTYPE.NE.22 ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'AB_AB_CGEESX4', IINFO, N, JTY
-     $PE,
+               WRITE( NOUNIT, FMT = 9998 )'CGEESX4', IINFO, N, JTYPE,
      $            ISEED
             ELSE
-               WRITE( NOUNIT, FMT = 9999 )'AB_AB_CGEESX4', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'CGEESX4', IINFO, N,
      $            ISEED( 1 )
             END IF
             INFO = ABS( IINFO )
@@ -679,19 +667,17 @@
 *
 *        Compute RCONDE with VS, and compare
 *
-         CALL AB_CLACPY( 'F', N, N, A, LDA, HT, LDA )
-         CALL AB_AB_CGEESX( 'V', SORT, AB_CSLECT, 'E', N, HT, LDA, SDIM1
-     $, WT,
+         CALL CLACPY( 'F', N, N, A, LDA, HT, LDA )
+         CALL CGEESX( 'V', SORT, CSLECT, 'E', N, HT, LDA, SDIM1, WT,
      $                VS1, LDVS, RCNDE1, RCNDV1, WORK, LWORK, RWORK,
      $                BWORK, IINFO )
          IF( IINFO.NE.0 ) THEN
             RESULT( 14 ) = ULPINV
             IF( JTYPE.NE.22 ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'AB_AB_CGEESX5', IINFO, N, JTY
-     $PE,
+               WRITE( NOUNIT, FMT = 9998 )'CGEESX5', IINFO, N, JTYPE,
      $            ISEED
             ELSE
-               WRITE( NOUNIT, FMT = 9999 )'AB_AB_CGEESX5', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'CGEESX5', IINFO, N,
      $            ISEED( 1 )
             END IF
             INFO = ABS( IINFO )
@@ -720,19 +706,17 @@
 *
 *        Compute RCONDE without VS, and compare
 *
-         CALL AB_CLACPY( 'F', N, N, A, LDA, HT, LDA )
-         CALL AB_AB_CGEESX( 'N', SORT, AB_CSLECT, 'E', N, HT, LDA, SDIM1
-     $, WT,
+         CALL CLACPY( 'F', N, N, A, LDA, HT, LDA )
+         CALL CGEESX( 'N', SORT, CSLECT, 'E', N, HT, LDA, SDIM1, WT,
      $                VS1, LDVS, RCNDE1, RCNDV1, WORK, LWORK, RWORK,
      $                BWORK, IINFO )
          IF( IINFO.NE.0 ) THEN
             RESULT( 14 ) = ULPINV
             IF( JTYPE.NE.22 ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'AB_AB_CGEESX6', IINFO, N, JTY
-     $PE,
+               WRITE( NOUNIT, FMT = 9998 )'CGEESX6', IINFO, N, JTYPE,
      $            ISEED
             ELSE
-               WRITE( NOUNIT, FMT = 9999 )'AB_AB_CGEESX6', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'CGEESX6', IINFO, N,
      $            ISEED( 1 )
             END IF
             INFO = ABS( IINFO )
@@ -761,19 +745,17 @@
 *
 *        Compute RCONDV with VS, and compare
 *
-         CALL AB_CLACPY( 'F', N, N, A, LDA, HT, LDA )
-         CALL AB_AB_CGEESX( 'V', SORT, AB_CSLECT, 'V', N, HT, LDA, SDIM1
-     $, WT,
+         CALL CLACPY( 'F', N, N, A, LDA, HT, LDA )
+         CALL CGEESX( 'V', SORT, CSLECT, 'V', N, HT, LDA, SDIM1, WT,
      $                VS1, LDVS, RCNDE1, RCNDV1, WORK, LWORK, RWORK,
      $                BWORK, IINFO )
          IF( IINFO.NE.0 ) THEN
             RESULT( 15 ) = ULPINV
             IF( JTYPE.NE.22 ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'AB_AB_CGEESX7', IINFO, N, JTY
-     $PE,
+               WRITE( NOUNIT, FMT = 9998 )'CGEESX7', IINFO, N, JTYPE,
      $            ISEED
             ELSE
-               WRITE( NOUNIT, FMT = 9999 )'AB_AB_CGEESX7', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'CGEESX7', IINFO, N,
      $            ISEED( 1 )
             END IF
             INFO = ABS( IINFO )
@@ -802,19 +784,17 @@
 *
 *        Compute RCONDV without VS, and compare
 *
-         CALL AB_CLACPY( 'F', N, N, A, LDA, HT, LDA )
-         CALL AB_AB_CGEESX( 'N', SORT, AB_CSLECT, 'V', N, HT, LDA, SDIM1
-     $, WT,
+         CALL CLACPY( 'F', N, N, A, LDA, HT, LDA )
+         CALL CGEESX( 'N', SORT, CSLECT, 'V', N, HT, LDA, SDIM1, WT,
      $                VS1, LDVS, RCNDE1, RCNDV1, WORK, LWORK, RWORK,
      $                BWORK, IINFO )
          IF( IINFO.NE.0 ) THEN
             RESULT( 15 ) = ULPINV
             IF( JTYPE.NE.22 ) THEN
-               WRITE( NOUNIT, FMT = 9998 )'AB_AB_CGEESX8', IINFO, N, JTY
-     $PE,
+               WRITE( NOUNIT, FMT = 9998 )'CGEESX8', IINFO, N, JTYPE,
      $            ISEED
             ELSE
-               WRITE( NOUNIT, FMT = 9999 )'AB_AB_CGEESX8', IINFO, N,
+               WRITE( NOUNIT, FMT = 9999 )'CGEESX8', IINFO, N,
      $            ISEED( 1 )
             END IF
             INFO = ABS( IINFO )
@@ -851,7 +831,7 @@
       IF( COMP ) THEN
 *
 *        First set up SELOPT, SELDIM, SELVAL, SELWR and SELWI so that
-*        the logical function AB_CSLECT selects the eigenvalues specified
+*        the logical function CSLECT selects the eigenvalues specified
 *        by NSLCT, ISLCT and ISRT.
 *
          SELDIM = N
@@ -894,16 +874,14 @@
 *
 *        Compute condition numbers
 *
-         CALL AB_CLACPY( 'F', N, N, A, LDA, HT, LDA )
-         CALL AB_AB_CGEESX( 'N', 'S', AB_CSLECT, 'B', N, HT, LDA, SDIM1,
-     $ WT, VS1,
+         CALL CLACPY( 'F', N, N, A, LDA, HT, LDA )
+         CALL CGEESX( 'N', 'S', CSLECT, 'B', N, HT, LDA, SDIM1, WT, VS1,
      $                LDVS, RCONDE, RCONDV, WORK, LWORK, RWORK, BWORK,
      $                IINFO )
          IF( IINFO.NE.0 ) THEN
             RESULT( 16 ) = ULPINV
             RESULT( 17 ) = ULPINV
-            WRITE( NOUNIT, FMT = 9999 )'AB_AB_CGEESX9', IINFO, N, ISEED(
-     $ 1 )
+            WRITE( NOUNIT, FMT = 9999 )'CGEESX9', IINFO, N, ISEED( 1 )
             INFO = ABS( IINFO )
             GO TO 270
          END IF
@@ -911,7 +889,7 @@
 *        Compare condition number for average of selected eigenvalues
 *        taking its condition number into account
 *
-         ANORM = AB_CLANGE( '1', N, N, A, LDA, RWORK )
+         ANORM = CLANGE( '1', N, N, A, LDA, RWORK )
          V = MAX( REAL( N )*EPS*ANORM, SMLNUM )
          IF( ANORM.EQ.ZERO )
      $      V = ONE
@@ -970,13 +948,13 @@
 *
       END IF
 *
- 9999 FORMAT( ' AB_CGET24: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
+ 9999 FORMAT( ' CGET24: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', INPUT EXAMPLE NUMBER = ', I4 )
- 9998 FORMAT( ' AB_CGET24: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
+ 9998 FORMAT( ' CGET24: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
 *
       RETURN
 *
-*     End of AB_CGET24
+*     End of CGET24
 *
       END

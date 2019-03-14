@@ -1,4 +1,4 @@
-*> \brief \b AB_CLAGS2
+*> \brief \b CLAGS2
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_CLAGS2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLAGS2.f">
+*> Download CLAGS2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clags2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLAGS2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clags2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLAGS2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clags2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CLAGS2( UPPER, A1, A2, A3, B1, B2, B3, CSU, SNU, CSV,
+*       SUBROUTINE CLAGS2( UPPER, A1, A2, A3, B1, B2, B3, CSU, SNU, CSV,
 *                          SNV, CSQ, SNQ )
 *
 *       .. Scalar Arguments ..
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CLAGS2 computes 2-by-2 unitary matrices U, V and Q, such
+*> CLAGS2 computes 2-by-2 unitary matrices U, V and Q, such
 *> that if ( UPPER ) then
 *>
 *>           U**H *A*Q = U**H *( A1 A2 )*Q = ( x  0  )
@@ -61,7 +61,7 @@
 *> input 2-by-2 matrix A is not zero, then the transformed (1,1) entry
 *> of A is not zero. If the input matrices A and B are both not zero,
 *> then the transformed (2,2) element of B is not zero, except when the
-*> first rows of input A and B are parallel and the AB_SECOND rows are
+*> first rows of input A and B are parallel and the second rows are
 *> zero.
 *> \endverbatim
 *
@@ -155,8 +155,7 @@
 *> \ingroup complexOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE AB_CLAGS2( UPPER, A1, A2, A3, B1, B2, B3, CSU, SNU, CSV
-     $,
+      SUBROUTINE CLAGS2( UPPER, A1, A2, A3, B1, B2, B3, CSU, SNU, CSV,
      $                   SNV, CSQ, SNQ )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -184,7 +183,7 @@
      $                   VB12, VB21, VB22
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_CLARTG, AB_SLASV2
+      EXTERNAL           CLARTG, SLASV2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CMPLX, CONJG, REAL
@@ -221,7 +220,7 @@
 *         ( CSL -SNL )*( A B )*(  CSR  SNR ) = ( R 0 )
 *         ( SNL  CSL ) ( 0 D ) ( -SNR  CSR )   ( 0 T )
 *
-         CALL AB_SLASV2( A, FB, D, S1, S2, SNR, CSR, SNL, CSL )
+         CALL SLASV2( A, FB, D, S1, S2, SNR, CSR, SNL, CSL )
 *
          IF( ABS( CSL ).GE.ABS( SNL ) .OR. ABS( CSR ).GE.ABS( SNR ) )
      $        THEN
@@ -241,17 +240,17 @@
 *           zero (1,2) elements of U**H *A and V**H *B
 *
             IF( ( ABS( UA11R )+ABS1( UA12 ) ).EQ.ZERO ) THEN
-               CALL AB_CLARTG( -CMPLX( VB11R ), CONJG( VB12 ), CSQ, SNQ,
+               CALL CLARTG( -CMPLX( VB11R ), CONJG( VB12 ), CSQ, SNQ,
      $                      R )
             ELSE IF( ( ABS( VB11R )+ABS1( VB12 ) ).EQ.ZERO ) THEN
-               CALL AB_CLARTG( -CMPLX( UA11R ), CONJG( UA12 ), CSQ, SNQ,
+               CALL CLARTG( -CMPLX( UA11R ), CONJG( UA12 ), CSQ, SNQ,
      $                      R )
             ELSE IF( AUA12 / ( ABS( UA11R )+ABS1( UA12 ) ).LE.AVB12 /
      $               ( ABS( VB11R )+ABS1( VB12 ) ) ) THEN
-               CALL AB_CLARTG( -CMPLX( UA11R ), CONJG( UA12 ), CSQ, SNQ,
+               CALL CLARTG( -CMPLX( UA11R ), CONJG( UA12 ), CSQ, SNQ,
      $                      R )
             ELSE
-               CALL AB_CLARTG( -CMPLX( VB11R ), CONJG( VB12 ), CSQ, SNQ,
+               CALL CLARTG( -CMPLX( VB11R ), CONJG( VB12 ), CSQ, SNQ,
      $                      R )
             END IF
 *
@@ -277,18 +276,14 @@
 *           zero (2,2) elements of U**H *A and V**H *B, and then swap.
 *
             IF( ( ABS1( UA21 )+ABS1( UA22 ) ).EQ.ZERO ) THEN
-               CALL AB_CLARTG( -CONJG( VB21 ), CONJG( VB22 ), CSQ, SNQ, 
-     $R )
+               CALL CLARTG( -CONJG( VB21 ), CONJG( VB22 ), CSQ, SNQ, R )
             ELSE IF( ( ABS1( VB21 )+ABS( VB22 ) ).EQ.ZERO ) THEN
-               CALL AB_CLARTG( -CONJG( UA21 ), CONJG( UA22 ), CSQ, SNQ, 
-     $R )
+               CALL CLARTG( -CONJG( UA21 ), CONJG( UA22 ), CSQ, SNQ, R )
             ELSE IF( AUA22 / ( ABS1( UA21 )+ABS1( UA22 ) ).LE.AVB22 /
      $               ( ABS1( VB21 )+ABS1( VB22 ) ) ) THEN
-               CALL AB_CLARTG( -CONJG( UA21 ), CONJG( UA22 ), CSQ, SNQ, 
-     $R )
+               CALL CLARTG( -CONJG( UA21 ), CONJG( UA22 ), CSQ, SNQ, R )
             ELSE
-               CALL AB_CLARTG( -CONJG( VB21 ), CONJG( VB22 ), CSQ, SNQ, 
-     $R )
+               CALL CLARTG( -CONJG( VB21 ), CONJG( VB22 ), CSQ, SNQ, R )
             END IF
 *
             CSU = SNL
@@ -322,7 +317,7 @@
 *         ( CSL -SNL )*( A 0 )*(  CSR  SNR ) = ( R 0 )
 *         ( SNL  CSL ) ( C D ) ( -SNR  CSR )   ( 0 T )
 *
-         CALL AB_SLASV2( A, FC, D, S1, S2, SNR, CSR, SNL, CSL )
+         CALL SLASV2( A, FC, D, S1, S2, SNR, CSR, SNL, CSL )
 *
          IF( ABS( CSR ).GE.ABS( SNR ) .OR. ABS( CSL ).GE.ABS( SNL ) )
      $        THEN
@@ -342,14 +337,14 @@
 *           zero (2,1) elements of U**H *A and V**H *B.
 *
             IF( ( ABS1( UA21 )+ABS( UA22R ) ).EQ.ZERO ) THEN
-               CALL AB_CLARTG( CMPLX( VB22R ), VB21, CSQ, SNQ, R )
+               CALL CLARTG( CMPLX( VB22R ), VB21, CSQ, SNQ, R )
             ELSE IF( ( ABS1( VB21 )+ABS( VB22R ) ).EQ.ZERO ) THEN
-               CALL AB_CLARTG( CMPLX( UA22R ), UA21, CSQ, SNQ, R )
+               CALL CLARTG( CMPLX( UA22R ), UA21, CSQ, SNQ, R )
             ELSE IF( AUA21 / ( ABS1( UA21 )+ABS( UA22R ) ).LE.AVB21 /
      $               ( ABS1( VB21 )+ABS( VB22R ) ) ) THEN
-               CALL AB_CLARTG( CMPLX( UA22R ), UA21, CSQ, SNQ, R )
+               CALL CLARTG( CMPLX( UA22R ), UA21, CSQ, SNQ, R )
             ELSE
-               CALL AB_CLARTG( CMPLX( VB22R ), VB21, CSQ, SNQ, R )
+               CALL CLARTG( CMPLX( VB22R ), VB21, CSQ, SNQ, R )
             END IF
 *
             CSU = CSR
@@ -374,14 +369,14 @@
 *           zero (1,1) elements of U**H *A and V**H *B, and then swap.
 *
             IF( ( ABS1( UA11 )+ABS1( UA12 ) ).EQ.ZERO ) THEN
-               CALL AB_CLARTG( VB12, VB11, CSQ, SNQ, R )
+               CALL CLARTG( VB12, VB11, CSQ, SNQ, R )
             ELSE IF( ( ABS1( VB11 )+ABS1( VB12 ) ).EQ.ZERO ) THEN
-               CALL AB_CLARTG( UA12, UA11, CSQ, SNQ, R )
+               CALL CLARTG( UA12, UA11, CSQ, SNQ, R )
             ELSE IF( AUA11 / ( ABS1( UA11 )+ABS1( UA12 ) ).LE.AVB11 /
      $               ( ABS1( VB11 )+ABS1( VB12 ) ) ) THEN
-               CALL AB_CLARTG( UA12, UA11, CSQ, SNQ, R )
+               CALL CLARTG( UA12, UA11, CSQ, SNQ, R )
             ELSE
-               CALL AB_CLARTG( VB12, VB11, CSQ, SNQ, R )
+               CALL CLARTG( VB12, VB11, CSQ, SNQ, R )
             END IF
 *
             CSU = SNR
@@ -395,6 +390,6 @@
 *
       RETURN
 *
-*     End of AB_CLAGS2
+*     End of CLAGS2
 *
       END

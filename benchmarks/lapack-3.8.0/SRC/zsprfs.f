@@ -1,4 +1,4 @@
-*> \brief \b AB_AB_ZSPRFS
+*> \brief \b ZSPRFS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_ZSPRFS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_ZSPRFS.f">
+*> Download ZSPRFS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zsprfs.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_ZSPRFS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zsprfs.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_ZSPRFS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsprfs.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_ZSPRFS( UPLO, N, NRHS, AP, AFP, IPIV, B, LDB, X, LDX,
+*       SUBROUTINE ZSPRFS( UPLO, N, NRHS, AP, AFP, IPIV, B, LDB, X, LDX,
 *                          FERR, BERR, WORK, RWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -38,7 +38,7 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_ZSPRFS improves the computed solution to a system of linear
+*> ZSPRFS improves the computed solution to a system of linear
 *> equations when the coefficient matrix is symmetric indefinite
 *> and packed, and provides error bounds and backward error estimates
 *> for the solution.
@@ -83,7 +83,7 @@
 *>          The factored form of the matrix A.  AFP contains the block
 *>          diagonal matrix D and the multipliers used to obtain the
 *>          factor U or L from the factorization A = U*D*U**T or
-*>          A = L*D*L**T as computed by AB_ZSPTRF, stored as a packed
+*>          A = L*D*L**T as computed by ZSPTRF, stored as a packed
 *>          triangular matrix.
 *> \endverbatim
 *>
@@ -91,7 +91,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D
-*>          as determined by AB_ZSPTRF.
+*>          as determined by ZSPTRF.
 *> \endverbatim
 *>
 *> \param[in] B
@@ -109,7 +109,7 @@
 *> \param[in,out] X
 *> \verbatim
 *>          X is COMPLEX*16 array, dimension (LDX,NRHS)
-*>          On entry, the solution matrix X, as computed by AB_ZSPTRS.
+*>          On entry, the solution matrix X, as computed by ZSPTRS.
 *>          On exit, the improved solution matrix X.
 *> \endverbatim
 *>
@@ -177,8 +177,7 @@
 *> \ingroup complex16OTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_AB_ZSPRFS( UPLO, N, NRHS, AP, AFP, IPIV, B, LDB, X, 
-     $LDX,
+      SUBROUTINE ZSPRFS( UPLO, N, NRHS, AP, AFP, IPIV, B, LDB, X, LDX,
      $                   FERR, BERR, WORK, RWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -221,16 +220,15 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZAXPY, AB_ZCOPY, AB_ZLACN2, AB_ZS
-     $PMV, AB_ZSPTRS
+      EXTERNAL           XERBLA, ZAXPY, ZCOPY, ZLACN2, ZSPMV, ZSPTRS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DLAMCH
-      EXTERNAL           AB_LSAME, AB_DLAMCH
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           LSAME, DLAMCH
 *     ..
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABS1
@@ -243,8 +241,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -256,7 +254,7 @@
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_ZSPRFS', -INFO )
+         CALL XERBLA( 'ZSPRFS', -INFO )
          RETURN
       END IF
 *
@@ -273,8 +271,8 @@
 *     NZ = maximum number of nonzero elements in each row of A, plus 1
 *
       NZ = N + 1
-      EPS = AB_DLAMCH( 'Epsilon' )
-      SAFMIN = AB_DLAMCH( 'Safe minimum' )
+      EPS = DLAMCH( 'Epsilon' )
+      SAFMIN = DLAMCH( 'Safe minimum' )
       SAFE1 = NZ*SAFMIN
       SAFE2 = SAFE1 / EPS
 *
@@ -290,8 +288,8 @@
 *
 *        Compute residual R = B - A * X
 *
-         CALL AB_ZCOPY( N, B( 1, J ), 1, WORK, 1 )
-         CALL AB_ZSPMV( UPLO, N, -ONE, AP, X( 1, J ), 1, ONE, WORK, 1 )
+         CALL ZCOPY( N, B( 1, J ), 1, WORK, 1 )
+         CALL ZSPMV( UPLO, N, -ONE, AP, X( 1, J ), 1, ONE, WORK, 1 )
 *
 *        Compute componentwise relative backward error from formula
 *
@@ -359,8 +357,8 @@
 *
 *           Update solution and try again.
 *
-            CALL AB_ZSPTRS( UPLO, N, 1, AFP, IPIV, WORK, N, INFO )
-            CALL AB_ZAXPY( N, ONE, WORK, 1, X( 1, J ), 1 )
+            CALL ZSPTRS( UPLO, N, 1, AFP, IPIV, WORK, N, INFO )
+            CALL ZAXPY( N, ONE, WORK, 1, X( 1, J ), 1 )
             LSTRES = BERR( J )
             COUNT = COUNT + 1
             GO TO 20
@@ -384,7 +382,7 @@
 *        is incremented by SAFE1 if the i-th component of
 *        abs(A)*abs(X) + abs(B) is less than SAFE2.
 *
-*        Use AB_ZLACN2 to estimate the infinity-norm of the matrix
+*        Use ZLACN2 to estimate the infinity-norm of the matrix
 *           inv(A) * diag(W),
 *        where W = abs(R) + NZ*EPS*( abs(A)*abs(X)+abs(B) )))
 *
@@ -399,13 +397,13 @@
 *
          KASE = 0
   100    CONTINUE
-         CALL AB_ZLACN2( N, WORK( N+1 ), WORK, FERR( J ), KASE, ISAVE )
+         CALL ZLACN2( N, WORK( N+1 ), WORK, FERR( J ), KASE, ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN
 *
 *              Multiply by diag(W)*inv(A**T).
 *
-               CALL AB_ZSPTRS( UPLO, N, 1, AFP, IPIV, WORK, N, INFO )
+               CALL ZSPTRS( UPLO, N, 1, AFP, IPIV, WORK, N, INFO )
                DO 110 I = 1, N
                   WORK( I ) = RWORK( I )*WORK( I )
   110          CONTINUE
@@ -416,7 +414,7 @@
                DO 120 I = 1, N
                   WORK( I ) = RWORK( I )*WORK( I )
   120          CONTINUE
-               CALL AB_ZSPTRS( UPLO, N, 1, AFP, IPIV, WORK, N, INFO )
+               CALL ZSPTRS( UPLO, N, 1, AFP, IPIV, WORK, N, INFO )
             END IF
             GO TO 100
          END IF
@@ -434,6 +432,6 @@
 *
       RETURN
 *
-*     End of AB_AB_ZSPRFS
+*     End of ZSPRFS
 *
       END

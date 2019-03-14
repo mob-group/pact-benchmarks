@@ -1,4 +1,4 @@
-*> \brief \b AB_CCHKQL
+*> \brief \b CCHKQL
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_CCHKQL( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVAL,
+*       SUBROUTINE CCHKQL( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVAL,
 *                          NRHS, THRESH, TSTERR, NMAX, A, AF, AQ, AL, AC,
 *                          B, X, XACT, TAU, WORK, RWORK, NOUT )
 *
@@ -32,7 +32,7 @@
 *>
 *> \verbatim
 *>
-*> AB_CCHKQL tests AB_CGEQLF, AB_CUNGQL and AB_CUNMQL.
+*> CCHKQL tests CGEQLF, CUNGQL and CUNMQL.
 *> \endverbatim
 *
 *  Arguments:
@@ -192,8 +192,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_CCHKQL( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVA
-     $L,
+      SUBROUTINE CCHKQL( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVAL,
      $                   NRHS, THRESH, TSTERR, NMAX, A, AF, AQ, AL, AC,
      $                   B, X, XACT, TAU, WORK, RWORK, NOUT )
 *
@@ -239,11 +238,9 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALAERH, AB_ALAHD, AB_ALASUM, AB_CERRQL, AB_C
-     $GEQLS, AB_CGET02,
-     $                   AB_CLACPY, AB_CLARHS, AB_CLATB4, AB_CLATMS, AB_
-     $CQLT01, AB_CQLT02,
-     $                   AB_CQLT03, AB_XLAENV
+      EXTERNAL           ALAERH, ALAHD, ALASUM, CERRQL, CGEQLS, CGET02,
+     $                   CLACPY, CLARHS, CLATB4, CLATMS, CQLT01, CQLT02,
+     $                   CQLT03, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -276,9 +273,9 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL AB_CERRQL( PATH, NOUT )
+     $   CALL CERRQL( PATH, NOUT )
       INFOT = 0
-      CALL AB_XLAENV( 2, 2 )
+      CALL XLAENV( 2, 2 )
 *
       LDA = NMAX
       LWORK = NMAX*MAX( NMAX, NRHS )
@@ -300,30 +297,28 @@
                IF( .NOT.DOTYPE( IMAT ) )
      $            GO TO 50
 *
-*              Set up parameters with AB_CLATB4 and generate a test matrix
-*              with AB_CLATMS.
+*              Set up parameters with CLATB4 and generate a test matrix
+*              with CLATMS.
 *
-               CALL AB_CLATB4( PATH, IMAT, M, N, TYPE, KL, KU, ANORM, MO
-     $DE,
+               CALL CLATB4( PATH, IMAT, M, N, TYPE, KL, KU, ANORM, MODE,
      $                      CNDNUM, DIST )
 *
-               SRNAMT = 'AB_CLATMS'
-               CALL AB_CLATMS( M, N, DIST, ISEED, TYPE, RWORK, MODE,
+               SRNAMT = 'CLATMS'
+               CALL CLATMS( M, N, DIST, ISEED, TYPE, RWORK, MODE,
      $                      CNDNUM, ANORM, KL, KU, 'No packing', A, LDA,
      $                      WORK, INFO )
 *
-*              Check error code from AB_CLATMS.
+*              Check error code from CLATMS.
 *
                IF( INFO.NE.0 ) THEN
-                  CALL AB_ALAERH( PATH, 'AB_CLATMS', INFO, 0, ' ', M, N,
-     $ -1,
+                  CALL ALAERH( PATH, 'CLATMS', INFO, 0, ' ', M, N, -1,
      $                         -1, -1, IMAT, NFAIL, NERRS, NOUT )
                   GO TO 50
                END IF
 *
 *              Set some values for K: the first value must be MINMN,
-*              corresponding to the call of AB_CQLT01; other values are
-*              used in the calls of AB_CQLT02, and must not exceed MINMN.
+*              corresponding to the call of CQLT01; other values are
+*              used in the calls of CQLT02, and must not exceed MINMN.
 *
                KVAL( 1 ) = MINMN
                KVAL( 2 ) = 0
@@ -348,39 +343,37 @@
 *
                   DO 30 INB = 1, NNB
                      NB = NBVAL( INB )
-                     CALL AB_XLAENV( 1, NB )
+                     CALL XLAENV( 1, NB )
                      NX = NXVAL( INB )
-                     CALL AB_XLAENV( 3, NX )
+                     CALL XLAENV( 3, NX )
                      DO I = 1, NTESTS
                         RESULT( I ) = ZERO
                      END DO
                      NT = 2
                      IF( IK.EQ.1 ) THEN
 *
-*                       Test AB_CGEQLF
+*                       Test CGEQLF
 *
-                        CALL AB_CQLT01( M, N, A, AF, AQ, AL, LDA, TAU,
+                        CALL CQLT01( M, N, A, AF, AQ, AL, LDA, TAU,
      $                               WORK, LWORK, RWORK, RESULT( 1 ) )
                      ELSE IF( M.GE.N ) THEN
 *
-*                       Test AB_CUNGQL, using factorization
-*                       returned by AB_CQLT01
+*                       Test CUNGQL, using factorization
+*                       returned by CQLT01
 *
-                        CALL AB_CQLT02( M, N, K, A, AF, AQ, AL, LDA, TAU
-     $,
+                        CALL CQLT02( M, N, K, A, AF, AQ, AL, LDA, TAU,
      $                               WORK, LWORK, RWORK, RESULT( 1 ) )
                      END IF
                      IF( M.GE.K ) THEN
 *
-*                       Test AB_CUNMQL, using factorization returned
-*                       by AB_CQLT01
+*                       Test CUNMQL, using factorization returned
+*                       by CQLT01
 *
-                        CALL AB_CQLT03( M, N, K, AF, AC, AL, AQ, LDA, TA
-     $U,
+                        CALL CQLT03( M, N, K, AF, AC, AL, AQ, LDA, TAU,
      $                               WORK, LWORK, RWORK, RESULT( 3 ) )
                         NT = NT + 4
 *
-*                       If M>=N and K=N, call AB_CGEQLS to solve a system
+*                       If M>=N and K=N, call CGEQLS to solve a system
 *                       with NRHS right hand sides and compute the
 *                       residual.
 *
@@ -389,28 +382,26 @@
 *                          Generate a solution and set the right
 *                          hand side.
 *
-                           SRNAMT = 'AB_CLARHS'
-                           CALL AB_CLARHS( PATH, 'New', 'Full',
+                           SRNAMT = 'CLARHS'
+                           CALL CLARHS( PATH, 'New', 'Full',
      $                                  'No transpose', M, N, 0, 0,
      $                                  NRHS, A, LDA, XACT, LDA, B, LDA,
      $                                  ISEED, INFO )
 *
-                           CALL AB_CLACPY( 'Full', M, NRHS, B, LDA, X,
+                           CALL CLACPY( 'Full', M, NRHS, B, LDA, X,
      $                                  LDA )
-                           SRNAMT = 'AB_CGEQLS'
-                           CALL AB_CGEQLS( M, N, NRHS, AF, LDA, TAU, X,
+                           SRNAMT = 'CGEQLS'
+                           CALL CGEQLS( M, N, NRHS, AF, LDA, TAU, X,
      $                                  LDA, WORK, LWORK, INFO )
 *
-*                          Check error code from AB_CGEQLS.
+*                          Check error code from CGEQLS.
 *
                            IF( INFO.NE.0 )
-     $                        CALL AB_ALAERH( PATH, 'AB_CGEQLS', INFO, 0
-     $, ' ',
+     $                        CALL ALAERH( PATH, 'CGEQLS', INFO, 0, ' ',
      $                                     M, N, NRHS, -1, NB, IMAT,
      $                                     NFAIL, NERRS, NOUT )
 *
-                           CALL AB_CGET02( 'No transpose', M, N, NRHS, A
-     $,
+                           CALL CGET02( 'No transpose', M, N, NRHS, A,
      $                                  LDA, X( M-N+1 ), LDA, B, LDA,
      $                                  RWORK, RESULT( 7 ) )
                            NT = NT + 1
@@ -423,7 +414,7 @@
                      DO 20 I = 1, NT
                         IF( RESULT( I ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
-     $                        CALL AB_ALAHD( NOUT, PATH )
+     $                        CALL ALAHD( NOUT, PATH )
                            WRITE( NOUT, FMT = 9999 )M, N, K, NB, NX,
      $                        IMAT, I, RESULT( I )
                            NFAIL = NFAIL + 1
@@ -438,12 +429,12 @@
 *
 *     Print a summary of the results.
 *
-      CALL AB_ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
+      CALL ALASUM( PATH, NOUT, NFAIL, NRUN, NERRS )
 *
  9999 FORMAT( ' M=', I5, ', N=', I5, ', K=', I5, ', NB=', I4, ', NX=',
      $      I5, ', type ', I2, ', test(', I2, ')=', G12.5 )
       RETURN
 *
-*     End of AB_CCHKQL
+*     End of CCHKQL
 *
       END

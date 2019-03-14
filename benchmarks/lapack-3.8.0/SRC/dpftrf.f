@@ -1,4 +1,4 @@
-*> \brief \b AB_DPFTRF
+*> \brief \b DPFTRF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_DPFTRF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DPFTRF.f">
+*> Download DPFTRF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dpftrf.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DPFTRF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dpftrf.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DPFTRF.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpftrf.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DPFTRF( TRANSR, UPLO, N, A, INFO )
+*       SUBROUTINE DPFTRF( TRANSR, UPLO, N, A, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          TRANSR, UPLO
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DPFTRF computes the Cholesky factorization of a real symmetric
+*> DPFTRF computes the Cholesky factorization of a real symmetric
 *> positive definite matrix A.
 *>
 *> The factorization has the form
@@ -196,7 +196,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_DPFTRF( TRANSR, UPLO, N, A, INFO )
+      SUBROUTINE DPFTRF( TRANSR, UPLO, N, A, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -221,11 +221,11 @@
       INTEGER            N1, N2, K
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_AB_DSYRK, AB_DPOTRF, AB_DTRSM
+      EXTERNAL           XERBLA, DSYRK, DPOTRF, DTRSM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MOD
@@ -235,17 +235,17 @@
 *     Test the input parameters.
 *
       INFO = 0
-      NORMALTRANSR = AB_LSAME( TRANSR, 'N' )
-      LOWER = AB_LSAME( UPLO, 'L' )
-      IF( .NOT.NORMALTRANSR .AND. .NOT.AB_LSAME( TRANSR, 'T' ) ) THEN
+      NORMALTRANSR = LSAME( TRANSR, 'N' )
+      LOWER = LSAME( UPLO, 'L' )
+      IF( .NOT.NORMALTRANSR .AND. .NOT.LSAME( TRANSR, 'T' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LOWER .AND. .NOT.AB_LSAME( UPLO, 'U' ) ) THEN
+      ELSE IF( .NOT.LOWER .AND. .NOT.LSAME( UPLO, 'U' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DPFTRF', -INFO )
+         CALL XERBLA( 'DPFTRF', -INFO )
          RETURN
       END IF
 *
@@ -290,16 +290,14 @@
 *             T1 -> a(0,0), T2 -> a(0,1), S -> a(n1,0)
 *             T1 -> a(0), T2 -> a(n), S -> a(n1)
 *
-               CALL AB_DPOTRF( 'L', N1, A( 0 ), N, INFO )
+               CALL DPOTRF( 'L', N1, A( 0 ), N, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL AB_DTRSM( 'R', 'L', 'T', 'N', N2, N1, ONE, A( 0 ), N
-     $,
+               CALL DTRSM( 'R', 'L', 'T', 'N', N2, N1, ONE, A( 0 ), N,
      $                     A( N1 ), N )
-               CALL AB_AB_DSYRK( 'U', 'N', N2, N1, -ONE, A( N1 ), N, ONE
-     $,
+               CALL DSYRK( 'U', 'N', N2, N1, -ONE, A( N1 ), N, ONE,
      $                     A( N ), N )
-               CALL AB_DPOTRF( 'U', N2, A( N ), N, INFO )
+               CALL DPOTRF( 'U', N2, A( N ), N, INFO )
                IF( INFO.GT.0 )
      $            INFO = INFO + N1
 *
@@ -309,15 +307,14 @@
 *             T1 -> a(n1+1,0), T2 -> a(n1,0), S -> a(0,0)
 *             T1 -> a(n2), T2 -> a(n1), S -> a(0)
 *
-               CALL AB_DPOTRF( 'L', N1, A( N2 ), N, INFO )
+               CALL DPOTRF( 'L', N1, A( N2 ), N, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL AB_DTRSM( 'L', 'L', 'N', 'N', N1, N2, ONE, A( N2 ), 
-     $N,
+               CALL DTRSM( 'L', 'L', 'N', 'N', N1, N2, ONE, A( N2 ), N,
      $                     A( 0 ), N )
-               CALL AB_AB_DSYRK( 'U', 'T', N2, N1, -ONE, A( 0 ), N, ONE,
+               CALL DSYRK( 'U', 'T', N2, N1, -ONE, A( 0 ), N, ONE,
      $                     A( N1 ), N )
-               CALL AB_DPOTRF( 'U', N2, A( N1 ), N, INFO )
+               CALL DPOTRF( 'U', N2, A( N1 ), N, INFO )
                IF( INFO.GT.0 )
      $            INFO = INFO + N1
 *
@@ -333,16 +330,14 @@
 *              T1 -> A(0,0) , T2 -> A(1,0) , S -> A(0,n1)
 *              T1 -> a(0+0) , T2 -> a(1+0) , S -> a(0+n1*n1); lda=n1
 *
-               CALL AB_DPOTRF( 'U', N1, A( 0 ), N1, INFO )
+               CALL DPOTRF( 'U', N1, A( 0 ), N1, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL AB_DTRSM( 'L', 'U', 'T', 'N', N1, N2, ONE, A( 0 ), N
-     $1,
+               CALL DTRSM( 'L', 'U', 'T', 'N', N1, N2, ONE, A( 0 ), N1,
      $                     A( N1*N1 ), N1 )
-               CALL AB_AB_DSYRK( 'L', 'T', N2, N1, -ONE, A( N1*N1 ), N1,
-     $ ONE,
+               CALL DSYRK( 'L', 'T', N2, N1, -ONE, A( N1*N1 ), N1, ONE,
      $                     A( 1 ), N1 )
-               CALL AB_DPOTRF( 'L', N2, A( 1 ), N1, INFO )
+               CALL DPOTRF( 'L', N2, A( 1 ), N1, INFO )
                IF( INFO.GT.0 )
      $            INFO = INFO + N1
 *
@@ -352,16 +347,14 @@
 *              T1 -> A(0,n1+1), T2 -> A(0,n1), S -> A(0,0)
 *              T1 -> a(n2*n2), T2 -> a(n1*n2), S -> a(0); lda = n2
 *
-               CALL AB_DPOTRF( 'U', N1, A( N2*N2 ), N2, INFO )
+               CALL DPOTRF( 'U', N1, A( N2*N2 ), N2, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL AB_DTRSM( 'R', 'U', 'N', 'N', N2, N1, ONE, A( N2*N2 
-     $),
+               CALL DTRSM( 'R', 'U', 'N', 'N', N2, N1, ONE, A( N2*N2 ),
      $                     N2, A( 0 ), N2 )
-               CALL AB_AB_DSYRK( 'L', 'N', N2, N1, -ONE, A( 0 ), N2, ONE
-     $,
+               CALL DSYRK( 'L', 'N', N2, N1, -ONE, A( 0 ), N2, ONE,
      $                     A( N1*N2 ), N2 )
-               CALL AB_DPOTRF( 'L', N2, A( N1*N2 ), N2, INFO )
+               CALL DPOTRF( 'L', N2, A( N1*N2 ), N2, INFO )
                IF( INFO.GT.0 )
      $            INFO = INFO + N1
 *
@@ -383,16 +376,14 @@
 *              T1 -> a(1,0), T2 -> a(0,0), S -> a(k+1,0)
 *              T1 -> a(1), T2 -> a(0), S -> a(k+1)
 *
-               CALL AB_DPOTRF( 'L', K, A( 1 ), N+1, INFO )
+               CALL DPOTRF( 'L', K, A( 1 ), N+1, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL AB_DTRSM( 'R', 'L', 'T', 'N', K, K, ONE, A( 1 ), N+1
-     $,
+               CALL DTRSM( 'R', 'L', 'T', 'N', K, K, ONE, A( 1 ), N+1,
      $                     A( K+1 ), N+1 )
-               CALL AB_AB_DSYRK( 'U', 'N', K, K, -ONE, A( K+1 ), N+1, ON
-     $E,
+               CALL DSYRK( 'U', 'N', K, K, -ONE, A( K+1 ), N+1, ONE,
      $                     A( 0 ), N+1 )
-               CALL AB_DPOTRF( 'U', K, A( 0 ), N+1, INFO )
+               CALL DPOTRF( 'U', K, A( 0 ), N+1, INFO )
                IF( INFO.GT.0 )
      $            INFO = INFO + K
 *
@@ -402,14 +393,14 @@
 *              T1 -> a(k+1,0) ,  T2 -> a(k,0),   S -> a(0,0)
 *              T1 -> a(k+1), T2 -> a(k), S -> a(0)
 *
-               CALL AB_DPOTRF( 'L', K, A( K+1 ), N+1, INFO )
+               CALL DPOTRF( 'L', K, A( K+1 ), N+1, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL AB_DTRSM( 'L', 'L', 'N', 'N', K, K, ONE, A( K+1 ),
+               CALL DTRSM( 'L', 'L', 'N', 'N', K, K, ONE, A( K+1 ),
      $                     N+1, A( 0 ), N+1 )
-               CALL AB_AB_DSYRK( 'U', 'T', K, K, -ONE, A( 0 ), N+1, ONE,
+               CALL DSYRK( 'U', 'T', K, K, -ONE, A( 0 ), N+1, ONE,
      $                     A( K ), N+1 )
-               CALL AB_DPOTRF( 'U', K, A( K ), N+1, INFO )
+               CALL DPOTRF( 'U', K, A( K ), N+1, INFO )
                IF( INFO.GT.0 )
      $            INFO = INFO + K
 *
@@ -425,15 +416,14 @@
 *              T1 -> B(0,1), T2 -> B(0,0), S -> B(0,k+1)
 *              T1 -> a(0+k), T2 -> a(0+0), S -> a(0+k*(k+1)); lda=k
 *
-               CALL AB_DPOTRF( 'U', K, A( 0+K ), K, INFO )
+               CALL DPOTRF( 'U', K, A( 0+K ), K, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL AB_DTRSM( 'L', 'U', 'T', 'N', K, K, ONE, A( K ), N1,
+               CALL DTRSM( 'L', 'U', 'T', 'N', K, K, ONE, A( K ), N1,
      $                     A( K*( K+1 ) ), K )
-               CALL AB_AB_DSYRK( 'L', 'T', K, K, -ONE, A( K*( K+1 ) ), K
-     $, ONE,
+               CALL DSYRK( 'L', 'T', K, K, -ONE, A( K*( K+1 ) ), K, ONE,
      $                     A( 0 ), K )
-               CALL AB_DPOTRF( 'L', K, A( 0 ), K, INFO )
+               CALL DPOTRF( 'L', K, A( 0 ), K, INFO )
                IF( INFO.GT.0 )
      $            INFO = INFO + K
 *
@@ -443,14 +433,14 @@
 *              T1 -> B(0,k+1),     T2 -> B(0,k),   S -> B(0,0)
 *              T1 -> a(0+k*(k+1)), T2 -> a(0+k*k), S -> a(0+0)); lda=k
 *
-               CALL AB_DPOTRF( 'U', K, A( K*( K+1 ) ), K, INFO )
+               CALL DPOTRF( 'U', K, A( K*( K+1 ) ), K, INFO )
                IF( INFO.GT.0 )
      $            RETURN
-               CALL AB_DTRSM( 'R', 'U', 'N', 'N', K, K, ONE,
+               CALL DTRSM( 'R', 'U', 'N', 'N', K, K, ONE,
      $                     A( K*( K+1 ) ), K, A( 0 ), K )
-               CALL AB_AB_DSYRK( 'L', 'N', K, K, -ONE, A( 0 ), K, ONE,
+               CALL DSYRK( 'L', 'N', K, K, -ONE, A( 0 ), K, ONE,
      $                     A( K*K ), K )
-               CALL AB_DPOTRF( 'L', K, A( K*K ), K, INFO )
+               CALL DPOTRF( 'L', K, A( K*K ), K, INFO )
                IF( INFO.GT.0 )
      $            INFO = INFO + K
 *
@@ -462,6 +452,6 @@
 *
       RETURN
 *
-*     End of AB_DPFTRF
+*     End of DPFTRF
 *
       END

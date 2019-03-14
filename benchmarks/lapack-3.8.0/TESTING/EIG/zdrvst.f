@@ -1,4 +1,4 @@
-*> \brief \b AB_ZDRVST
+*> \brief \b ZDRVST
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZDRVST( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+*       SUBROUTINE ZDRVST( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
 *                          NOUNIT, A, LDA, D1, D2, D3, WA1, WA2, WA3, U,
 *                          LDU, V, TAU, Z, WORK, LWORK, RWORK, LRWORK,
 *                          IWORK, LIWORK, RESULT, INFO )
@@ -33,45 +33,45 @@
 *>
 *> \verbatim
 *>
-*>      AB_ZDRVST  checks the Hermitian eigenvalue problem drivers.
+*>      ZDRVST  checks the Hermitian eigenvalue problem drivers.
 *>
-*>              AB_AB_ZHEEVD computes all eigenvalues and, optionally,
+*>              ZHEEVD computes all eigenvalues and, optionally,
 *>              eigenvectors of a complex Hermitian matrix,
 *>              using a divide-and-conquer algorithm.
 *>
-*>              AB_AB_ZHEEVX computes selected eigenvalues and, optionally,
+*>              ZHEEVX computes selected eigenvalues and, optionally,
 *>              eigenvectors of a complex Hermitian matrix.
 *>
-*>              AB_AB_ZHEEVR computes selected eigenvalues and, optionally,
+*>              ZHEEVR computes selected eigenvalues and, optionally,
 *>              eigenvectors of a complex Hermitian matrix
 *>              using the Relatively Robust Representation where it can.
 *>
-*>              AB_AB_ZHPEVD computes all eigenvalues and, optionally,
+*>              ZHPEVD computes all eigenvalues and, optionally,
 *>              eigenvectors of a complex Hermitian matrix in packed
 *>              storage, using a divide-and-conquer algorithm.
 *>
-*>              AB_AB_ZHPEVX computes selected eigenvalues and, optionally,
+*>              ZHPEVX computes selected eigenvalues and, optionally,
 *>              eigenvectors of a complex Hermitian matrix in packed
 *>              storage.
 *>
-*>              AB_AB_ZHBEVD computes all eigenvalues and, optionally,
+*>              ZHBEVD computes all eigenvalues and, optionally,
 *>              eigenvectors of a complex Hermitian band matrix,
 *>              using a divide-and-conquer algorithm.
 *>
-*>              AB_AB_ZHBEVX computes selected eigenvalues and, optionally,
+*>              ZHBEVX computes selected eigenvalues and, optionally,
 *>              eigenvectors of a complex Hermitian band matrix.
 *>
-*>              AB_ZHEEV computes all eigenvalues and, optionally,
+*>              ZHEEV computes all eigenvalues and, optionally,
 *>              eigenvectors of a complex Hermitian matrix.
 *>
-*>              AB_ZHPEV computes all eigenvalues and, optionally,
+*>              ZHPEV computes all eigenvalues and, optionally,
 *>              eigenvectors of a complex Hermitian matrix in packed
 *>              storage.
 *>
-*>              AB_ZHBEV computes all eigenvalues and, optionally,
+*>              ZHBEV computes all eigenvalues and, optionally,
 *>              eigenvectors of a complex Hermitian band matrix.
 *>
-*>      When AB_ZDRVST is called, a number of matrix "sizes" ("n's") and a
+*>      When ZDRVST is called, a number of matrix "sizes" ("n's") and a
 *>      number of matrix "types" are specified.  For each size ("n")
 *>      and each type of matrix, one matrix will be generated and used
 *>      to test the appropriate drivers.  For each matrix and each
@@ -138,7 +138,7 @@
 *> \verbatim
 *>  NSIZES  INTEGER
 *>          The number of sizes of matrices to use.  If it is zero,
-*>          AB_ZDRVST does nothing.  It must be at least zero.
+*>          ZDRVST does nothing.  It must be at least zero.
 *>          Not modified.
 *>
 *>  NN      INTEGER array, dimension (NSIZES)
@@ -148,7 +148,7 @@
 *>          Not modified.
 *>
 *>  NTYPES  INTEGER
-*>          The number of elements in DOTYPE.   If it is zero, AB_ZDRVST
+*>          The number of elements in DOTYPE.   If it is zero, ZDRVST
 *>          does nothing.  It must be at least zero.  If it is MAXTYP+1
 *>          and NSIZES is 1, then an additional type, MAXTYP+1 is
 *>          defined, which is to use whatever matrix is in A.  This
@@ -174,7 +174,7 @@
 *>          congruential sequence limited to small integers, and so
 *>          should produce machine independent random numbers. The
 *>          values of ISEED are changed on exit, and can be used in the
-*>          next call to AB_ZDRVST to continue the same random number
+*>          next call to ZDRVST to continue the same random number
 *>          sequence.
 *>          Modified.
 *>
@@ -204,19 +204,19 @@
 *>          Not modified.
 *>
 *>  D1      DOUBLE PRECISION array, dimension (max(NN))
-*>          The eigenvalues of A, as computed by AB_ZSTEQR simlutaneously
+*>          The eigenvalues of A, as computed by ZSTEQR simlutaneously
 *>          with Z.  On exit, the eigenvalues in D1 correspond with the
 *>          matrix in A.
 *>          Modified.
 *>
 *>  D2      DOUBLE PRECISION array, dimension (max(NN))
-*>          The eigenvalues of A, as computed by AB_ZSTEQR if Z is not
+*>          The eigenvalues of A, as computed by ZSTEQR if Z is not
 *>          computed.  On exit, the eigenvalues in D2 correspond with
 *>          the matrix in A.
 *>          Modified.
 *>
 *>  D3      DOUBLE PRECISION array, dimension (max(NN))
-*>          The eigenvalues of A, as computed by AB_DSTERF.  On exit, the
+*>          The eigenvalues of A, as computed by DSTERF.  On exit, the
 *>          eigenvalues in D3 correspond with the matrix in A.
 *>          Modified.
 *>
@@ -227,7 +227,7 @@
 *>  WA3     DOUBLE PRECISION array, dimension
 *>
 *>  U       COMPLEX*16 array, dimension (LDU, max(NN))
-*>          The unitary matrix computed by AB_ZHETRD + ZUNGC3.
+*>          The unitary matrix computed by ZHETRD + ZUNGC3.
 *>          Modified.
 *>
 *>  LDU     INTEGER
@@ -236,18 +236,18 @@
 *>          Not modified.
 *>
 *>  V       COMPLEX*16 array, dimension (LDU, max(NN))
-*>          The HoushoAB_LDEr vectors computed by AB_ZHETRD in reducing A to
+*>          The Housholder vectors computed by ZHETRD in reducing A to
 *>          tridiagonal form.
 *>          Modified.
 *>
 *>  TAU     COMPLEX*16 array, dimension (max(NN))
-*>          The HousehoAB_LDEr factors computed by AB_ZHETRD in reducing A
+*>          The Householder factors computed by ZHETRD in reducing A
 *>          to tridiagonal form.
 *>          Modified.
 *>
 *>  Z       COMPLEX*16 array, dimension (LDU, max(NN))
-*>          The unitary matrix of eigenvectors computed by AB_AB_ZHEEVD,
-*>          AB_AB_ZHEEVX, AB_AB_ZHPEVD, AB_AB_CHPEVX, AB_AB_ZHBEVD, and AB_AB_CHBEVX.
+*>          The unitary matrix of eigenvectors computed by ZHEEVD,
+*>          ZHEEVX, ZHPEVD, CHPEVX, ZHBEVD, and CHBEVX.
 *>          Modified.
 *>
 *>  WORK  - COMPLEX*16 array of dimension ( LWORK )
@@ -288,7 +288,7 @@
 *>           -9: LDA < 1 or LDA < NMAX, where NMAX is max( NN(j) ).
 *>          -16: LDU < 1 or LDU < NMAX.
 *>          -21: LWORK too small.
-*>          If  AB_DLATMR, AB_SLATMS, AB_ZHETRD, DORGC3, AB_ZSTEQR, AB_DSTERF,
+*>          If  DLATMR, SLATMS, ZHETRD, DORGC3, ZSTEQR, DSTERF,
 *>              or DORMC2 returns an error code, the
 *>              absolute value of it is returned.
 *>          Modified.
@@ -305,7 +305,7 @@
 *>       NMAX            Largest value in NN.
 *>       NMATS           The number of matrices generated so far.
 *>       NERRS           The number of tests which have exceeded THRESH
-*>                       so far (computed by AB_DLAFTS).
+*>                       so far (computed by DLAFTS).
 *>       COND, IMODE     Values to be passed to the matrix generators.
 *>       ANORM           Norm of A; passed to matrix generators.
 *>
@@ -333,7 +333,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_ZDRVST( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+      SUBROUTINE ZDRVST( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
      $                   NOUNIT, A, LDA, D1, D2, D3, WA1, WA2, WA3, U,
      $                   LDU, V, TAU, Z, WORK, LWORK, RWORK, LRWORK,
      $                   IWORK, LIWORK, RESULT, INFO )
@@ -390,17 +390,14 @@
      $                   KTYPE( MAXTYP )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH, AB_DLARND, AB_DSXT1
-      EXTERNAL           AB_DLAMCH, AB_DLARND, AB_DSXT1
+      DOUBLE PRECISION   DLAMCH, DLARND, DSXT1
+      EXTERNAL           DLAMCH, DLARND, DSXT1
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ALASVM, AB_DLABAD, AB_DLAFTS, AB_XERBLA, AB_
-     $ZHBEV, AB_AB_ZHBEVD,
-     $                   AB_AB_ZHBEVX, AB_ZHEEV, AB_AB_ZHEEVD, AB_AB_ZHE
-     $EVR, AB_AB_ZHEEVX, AB_ZHET21,
-     $                   AB_ZHET22, AB_ZHPEV, AB_AB_ZHPEVD, AB_AB_ZHPEVX
-     $, AB_ZLACPY, AB_ZLASET,
-     $                   AB_ZLATMR, AB_ZLATMS
+      EXTERNAL           ALASVM, DLABAD, DLAFTS, XERBLA, ZHBEV, ZHBEVD,
+     $                   ZHBEVX, ZHEEV, ZHEEVD, ZHEEVR, ZHEEVX, ZHET21,
+     $                   ZHET22, ZHPEV, ZHPEVD, ZHPEVX, ZLACPY, ZLASET,
+     $                   ZLATMR, ZLATMS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, INT, LOG, MAX, MIN, SQRT
@@ -444,7 +441,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZDRVST', -INFO )
+         CALL XERBLA( 'ZDRVST', -INFO )
          RETURN
       END IF
 *
@@ -455,10 +452,10 @@
 *
 *     More Important constants
 *
-      UNFL = AB_DLAMCH( 'Safe minimum' )
-      OVFL = AB_DLAMCH( 'Overflow' )
-      CALL AB_DLABAD( UNFL, OVFL )
-      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
+      UNFL = DLAMCH( 'Safe minimum' )
+      OVFL = DLAMCH( 'Overflow' )
+      CALL DLABAD( UNFL, OVFL )
+      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
       ULPINV = ONE / ULP
       RTUNFL = SQRT( UNFL )
       RTOVFL = SQRT( OVFL )
@@ -546,7 +543,7 @@
 *
    70       CONTINUE
 *
-            CALL AB_ZLASET( 'Full', LDA, N, CZERO, CZERO, A, LDA )
+            CALL ZLASET( 'Full', LDA, N, CZERO, CZERO, A, LDA )
             IINFO = 0
             COND = ULPINV
 *
@@ -569,24 +566,21 @@
 *
 *              Diagonal Matrix, [Eigen]values Specified
 *
-               CALL AB_ZLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND
-     $,
+               CALL ZLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND,
      $                      ANORM, 0, 0, 'N', A, LDA, WORK, IINFO )
 *
             ELSE IF( ITYPE.EQ.5 ) THEN
 *
 *              Hermitian, eigenvalues specified
 *
-               CALL AB_ZLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND
-     $,
+               CALL ZLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND,
      $                      ANORM, N, N, 'N', A, LDA, WORK, IINFO )
 *
             ELSE IF( ITYPE.EQ.7 ) THEN
 *
 *              Diagonal, random eigenvalues
 *
-               CALL AB_ZLATMR( N, N, 'S', ISEED, 'H', WORK, 6, ONE, CONE
-     $,
+               CALL ZLATMR( N, N, 'S', ISEED, 'H', WORK, 6, ONE, CONE,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, 0, 0,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -595,8 +589,7 @@
 *
 *              Hermitian, random eigenvalues
 *
-               CALL AB_ZLATMR( N, N, 'S', ISEED, 'H', WORK, 6, ONE, CONE
-     $,
+               CALL ZLATMR( N, N, 'S', ISEED, 'H', WORK, 6, ONE, CONE,
      $                      'T', 'N', WORK( N+1 ), 1, ONE,
      $                      WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, N, N,
      $                      ZERO, ANORM, 'NO', A, LDA, IWORK, IINFO )
@@ -605,15 +598,14 @@
 *
 *              Hermitian banded, eigenvalues specified
 *
-               IHBW = INT( ( N-1 )*AB_DLARND( 1, ISEED3 ) )
-               CALL AB_ZLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND
-     $,
+               IHBW = INT( ( N-1 )*DLARND( 1, ISEED3 ) )
+               CALL ZLATMS( N, N, 'S', ISEED, 'H', RWORK, IMODE, COND,
      $                      ANORM, IHBW, IHBW, 'Z', U, LDU, WORK,
      $                      IINFO )
 *
 *              Store as dense matrix for most routines.
 *
-               CALL AB_ZLASET( 'Full', LDA, N, CZERO, CZERO, A, LDA )
+               CALL ZLASET( 'Full', LDA, N, CZERO, CZERO, A, LDA )
                DO 100 IDIAG = -IHBW, IHBW
                   IROW = IHBW - IDIAG + 1
                   J1 = MAX( 1, IDIAG+1 )
@@ -641,8 +633,8 @@
                IL = 1
                IU = N
             ELSE
-               IL = 1 + INT( ( N-1 )*AB_DLARND( 1, ISEED2 ) )
-               IU = 1 + INT( ( N-1 )*AB_DLARND( 1, ISEED2 ) )
+               IL = 1 + INT( ( N-1 )*DLARND( 1, ISEED2 ) )
+               IU = 1 + INT( ( N-1 )*DLARND( 1, ISEED2 ) )
                IF( IL.GT.IU ) THEN
                   ITEMP = IL
                   IL = IU
@@ -660,16 +652,15 @@
                   UPLO = 'U'
                END IF
 *
-*              Call AB_AB_ZHEEVD and AB_AB_CHEEVX.
+*              Call ZHEEVD and CHEEVX.
 *
-               CALL AB_ZLACPY( ' ', N, N, A, LDA, V, LDU )
+               CALL ZLACPY( ' ', N, N, A, LDA, V, LDU )
 *
                NTEST = NTEST + 1
-               CALL AB_AB_ZHEEVD( 'V', UPLO, N, A, LDU, D1, WORK, LWEDC,
+               CALL ZHEEVD( 'V', UPLO, N, A, LDU, D1, WORK, LWEDC,
      $                      RWORK, LRWEDC, IWORK, LIWEDC, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZHEEVD(V,' // UPLO /
-     $/
+                  WRITE( NOUNIT, FMT = 9999 )'ZHEEVD(V,' // UPLO //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -684,17 +675,16 @@
 *
 *              Do tests 1 and 2.
 *
-               CALL AB_ZHET21( 1, UPLO, N, 0, V, LDU, D1, D2, A, LDU, Z,
+               CALL ZHET21( 1, UPLO, N, 0, V, LDU, D1, D2, A, LDU, Z,
      $                      LDU, TAU, WORK, RWORK, RESULT( NTEST ) )
 *
-               CALL AB_ZLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL ZLACPY( ' ', N, N, V, LDU, A, LDA )
 *
                NTEST = NTEST + 2
-               CALL AB_AB_ZHEEVD( 'N', UPLO, N, A, LDU, D3, WORK, LWEDC,
+               CALL ZHEEVD( 'N', UPLO, N, A, LDU, D3, WORK, LWEDC,
      $                      RWORK, LRWEDC, IWORK, LIWEDC, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZHEEVD(N,' // UPLO /
-     $/
+                  WRITE( NOUNIT, FMT = 9999 )'ZHEEVD(N,' // UPLO //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -717,7 +707,7 @@
      $                           ULP*MAX( TEMP1, TEMP2 ) )
 *
   130          CONTINUE
-               CALL AB_ZLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL ZLACPY( ' ', N, N, V, LDU, A, LDA )
 *
                NTEST = NTEST + 1
 *
@@ -743,13 +733,11 @@
                   VU = ONE
                END IF
 *
-               CALL AB_AB_ZHEEVX( 'V', 'A', UPLO, N, A, LDU, VL, VU, IL,
-     $ IU,
+               CALL ZHEEVX( 'V', 'A', UPLO, N, A, LDU, VL, VU, IL, IU,
      $                      ABSTOL, M, WA1, Z, LDU, WORK, LWORK, RWORK,
      $                      IWORK, IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZHEEVX(V,A,' // UPLO
-     $ //
+                  WRITE( NOUNIT, FMT = 9999 )'ZHEEVX(V,A,' // UPLO //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -764,20 +752,17 @@
 *
 *              Do tests 4 and 5.
 *
-               CALL AB_ZLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL ZLACPY( ' ', N, N, V, LDU, A, LDA )
 *
-               CALL AB_ZHET21( 1, UPLO, N, 0, A, LDU, WA1, D2, Z, LDU, V
-     $,
+               CALL ZHET21( 1, UPLO, N, 0, A, LDU, WA1, D2, Z, LDU, V,
      $                      LDU, TAU, WORK, RWORK, RESULT( NTEST ) )
 *
                NTEST = NTEST + 2
-               CALL AB_AB_ZHEEVX( 'N', 'A', UPLO, N, A, LDU, VL, VU, IL,
-     $ IU,
+               CALL ZHEEVX( 'N', 'A', UPLO, N, A, LDU, VL, VU, IL, IU,
      $                      ABSTOL, M2, WA2, Z, LDU, WORK, LWORK, RWORK,
      $                      IWORK, IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZHEEVX(N,A,' // UPLO
-     $ //
+                  WRITE( NOUNIT, FMT = 9999 )'ZHEEVX(N,A,' // UPLO //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -800,17 +785,15 @@
      $                           ULP*MAX( TEMP1, TEMP2 ) )
 *
   150          CONTINUE
-               CALL AB_ZLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL ZLACPY( ' ', N, N, V, LDU, A, LDA )
 *
                NTEST = NTEST + 1
 *
-               CALL AB_AB_ZHEEVX( 'V', 'I', UPLO, N, A, LDU, VL, VU, IL,
-     $ IU,
+               CALL ZHEEVX( 'V', 'I', UPLO, N, A, LDU, VL, VU, IL, IU,
      $                      ABSTOL, M2, WA2, Z, LDU, WORK, LWORK, RWORK,
      $                      IWORK, IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZHEEVX(V,I,' // UPLO
-     $ //
+                  WRITE( NOUNIT, FMT = 9999 )'ZHEEVX(V,I,' // UPLO //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -823,21 +806,18 @@
 *
 *              Do tests 7 and 8.
 *
-               CALL AB_ZLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL ZLACPY( ' ', N, N, V, LDU, A, LDA )
 *
-               CALL AB_ZHET22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LD
-     $U,
+               CALL ZHET22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LDU,
      $                      V, LDU, TAU, WORK, RWORK, RESULT( NTEST ) )
 *
                NTEST = NTEST + 2
 *
-               CALL AB_AB_ZHEEVX( 'N', 'I', UPLO, N, A, LDU, VL, VU, IL,
-     $ IU,
+               CALL ZHEEVX( 'N', 'I', UPLO, N, A, LDU, VL, VU, IL, IU,
      $                      ABSTOL, M3, WA3, Z, LDU, WORK, LWORK, RWORK,
      $                      IWORK, IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZHEEVX(N,I,' // UPLO
-     $ //
+                  WRITE( NOUNIT, FMT = 9999 )'ZHEEVX(N,I,' // UPLO //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -850,10 +830,8 @@
 *
 *              Do test 9.
 *
-               TEMP1 = AB_DSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL 
-     $)
-               TEMP2 = AB_DSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL 
-     $)
+               TEMP1 = DSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL )
+               TEMP2 = DSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL )
                IF( N.GT.0 ) THEN
                   TEMP3 = MAX( ABS( WA1( 1 ) ), ABS( WA1( N ) ) )
                ELSE
@@ -863,17 +841,15 @@
      $                           MAX( UNFL, TEMP3*ULP )
 *
   160          CONTINUE
-               CALL AB_ZLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL ZLACPY( ' ', N, N, V, LDU, A, LDA )
 *
                NTEST = NTEST + 1
 *
-               CALL AB_AB_ZHEEVX( 'V', 'V', UPLO, N, A, LDU, VL, VU, IL,
-     $ IU,
+               CALL ZHEEVX( 'V', 'V', UPLO, N, A, LDU, VL, VU, IL, IU,
      $                      ABSTOL, M2, WA2, Z, LDU, WORK, LWORK, RWORK,
      $                      IWORK, IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZHEEVX(V,V,' // UPLO
-     $ //
+                  WRITE( NOUNIT, FMT = 9999 )'ZHEEVX(V,V,' // UPLO //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -886,21 +862,18 @@
 *
 *              Do tests 10 and 11.
 *
-               CALL AB_ZLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL ZLACPY( ' ', N, N, V, LDU, A, LDA )
 *
-               CALL AB_ZHET22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LD
-     $U,
+               CALL ZHET22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LDU,
      $                      V, LDU, TAU, WORK, RWORK, RESULT( NTEST ) )
 *
                NTEST = NTEST + 2
 *
-               CALL AB_AB_ZHEEVX( 'N', 'V', UPLO, N, A, LDU, VL, VU, IL,
-     $ IU,
+               CALL ZHEEVX( 'N', 'V', UPLO, N, A, LDU, VL, VU, IL, IU,
      $                      ABSTOL, M3, WA3, Z, LDU, WORK, LWORK, RWORK,
      $                      IWORK, IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZHEEVX(N,V,' // UPLO
-     $ //
+                  WRITE( NOUNIT, FMT = 9999 )'ZHEEVX(N,V,' // UPLO //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -918,10 +891,8 @@
 *
 *              Do test 12.
 *
-               TEMP1 = AB_DSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL 
-     $)
-               TEMP2 = AB_DSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL 
-     $)
+               TEMP1 = DSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL )
+               TEMP2 = DSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL )
                IF( N.GT.0 ) THEN
                   TEMP3 = MAX( ABS( WA1( 1 ) ), ABS( WA1( N ) ) )
                ELSE
@@ -932,9 +903,9 @@
 *
   170          CONTINUE
 *
-*              Call AB_AB_ZHPEVD and AB_AB_CHPEVX.
+*              Call ZHPEVD and CHPEVX.
 *
-               CALL AB_ZLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL ZLACPY( ' ', N, N, V, LDU, A, LDA )
 *
 *              Load array WORK with the upper or lower triangular
 *              part of the matrix in packed form.
@@ -959,12 +930,11 @@
 *
                NTEST = NTEST + 1
                INDWRK = N*( N+1 ) / 2 + 1
-               CALL AB_AB_ZHPEVD( 'V', UPLO, N, WORK, D1, Z, LDU,
+               CALL ZHPEVD( 'V', UPLO, N, WORK, D1, Z, LDU,
      $                      WORK( INDWRK ), LWEDC, RWORK, LRWEDC, IWORK,
      $                      LIWEDC, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZHPEVD(V,' // UPLO /
-     $/
+                  WRITE( NOUNIT, FMT = 9999 )'ZHPEVD(V,' // UPLO //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -979,7 +949,7 @@
 *
 *              Do tests 13 and 14.
 *
-               CALL AB_ZHET21( 1, UPLO, N, 0, A, LDA, D1, D2, Z, LDU, V,
+               CALL ZHET21( 1, UPLO, N, 0, A, LDA, D1, D2, Z, LDU, V,
      $                      LDU, TAU, WORK, RWORK, RESULT( NTEST ) )
 *
                IF( IUPLO.EQ.1 ) THEN
@@ -1002,12 +972,11 @@
 *
                NTEST = NTEST + 2
                INDWRK = N*( N+1 ) / 2 + 1
-               CALL AB_AB_ZHPEVD( 'N', UPLO, N, WORK, D3, Z, LDU,
+               CALL ZHPEVD( 'N', UPLO, N, WORK, D3, Z, LDU,
      $                      WORK( INDWRK ), LWEDC, RWORK, LRWEDC, IWORK,
      $                      LIWEDC, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZHPEVD(N,' // UPLO /
-     $/
+                  WRITE( NOUNIT, FMT = 9999 )'ZHPEVD(N,' // UPLO //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1075,13 +1044,11 @@
                   VU = ONE
                END IF
 *
-               CALL AB_AB_ZHPEVX( 'V', 'A', UPLO, N, WORK, VL, VU, IL, I
-     $U,
+               CALL ZHPEVX( 'V', 'A', UPLO, N, WORK, VL, VU, IL, IU,
      $                      ABSTOL, M, WA1, Z, LDU, V, RWORK, IWORK,
      $                      IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZHPEVX(V,A,' // UPLO
-     $ //
+                  WRITE( NOUNIT, FMT = 9999 )'ZHPEVX(V,A,' // UPLO //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1096,8 +1063,7 @@
 *
 *              Do tests 16 and 17.
 *
-               CALL AB_ZHET21( 1, UPLO, N, 0, A, LDU, WA1, D2, Z, LDU, V
-     $,
+               CALL ZHET21( 1, UPLO, N, 0, A, LDU, WA1, D2, Z, LDU, V,
      $                      LDU, TAU, WORK, RWORK, RESULT( NTEST ) )
 *
                NTEST = NTEST + 2
@@ -1120,13 +1086,11 @@
   350             CONTINUE
                END IF
 *
-               CALL AB_AB_ZHPEVX( 'N', 'A', UPLO, N, WORK, VL, VU, IL, I
-     $U,
+               CALL ZHPEVX( 'N', 'A', UPLO, N, WORK, VL, VU, IL, IU,
      $                      ABSTOL, M2, WA2, Z, LDU, V, RWORK, IWORK,
      $                      IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZHPEVX(N,A,' // UPLO
-     $ //
+                  WRITE( NOUNIT, FMT = 9999 )'ZHPEVX(N,A,' // UPLO //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1168,13 +1132,11 @@
   410             CONTINUE
                END IF
 *
-               CALL AB_AB_ZHPEVX( 'V', 'I', UPLO, N, WORK, VL, VU, IL, I
-     $U,
+               CALL ZHPEVX( 'V', 'I', UPLO, N, WORK, VL, VU, IL, IU,
      $                      ABSTOL, M2, WA2, Z, LDU, V, RWORK, IWORK,
      $                      IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZHPEVX(V,I,' // UPLO
-     $ //
+                  WRITE( NOUNIT, FMT = 9999 )'ZHPEVX(V,I,' // UPLO //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1189,8 +1151,7 @@
 *
 *              Do tests 19 and 20.
 *
-               CALL AB_ZHET22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LD
-     $U,
+               CALL ZHET22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LDU,
      $                      V, LDU, TAU, WORK, RWORK, RESULT( NTEST ) )
 *
                NTEST = NTEST + 2
@@ -1213,13 +1174,11 @@
   450             CONTINUE
                END IF
 *
-               CALL AB_AB_ZHPEVX( 'N', 'I', UPLO, N, WORK, VL, VU, IL, I
-     $U,
+               CALL ZHPEVX( 'N', 'I', UPLO, N, WORK, VL, VU, IL, IU,
      $                      ABSTOL, M3, WA3, Z, LDU, V, RWORK, IWORK,
      $                      IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZHPEVX(N,I,' // UPLO
-     $ //
+                  WRITE( NOUNIT, FMT = 9999 )'ZHPEVX(N,I,' // UPLO //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1232,10 +1191,8 @@
 *
 *              Do test 21.
 *
-               TEMP1 = AB_DSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL 
-     $)
-               TEMP2 = AB_DSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL 
-     $)
+               TEMP1 = DSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL )
+               TEMP2 = DSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL )
                IF( N.GT.0 ) THEN
                   TEMP3 = MAX( ABS( WA1( 1 ) ), ABS( WA1( N ) ) )
                ELSE
@@ -1264,13 +1221,11 @@
   500             CONTINUE
                END IF
 *
-               CALL AB_AB_ZHPEVX( 'V', 'V', UPLO, N, WORK, VL, VU, IL, I
-     $U,
+               CALL ZHPEVX( 'V', 'V', UPLO, N, WORK, VL, VU, IL, IU,
      $                      ABSTOL, M2, WA2, Z, LDU, V, RWORK, IWORK,
      $                      IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZHPEVX(V,V,' // UPLO
-     $ //
+                  WRITE( NOUNIT, FMT = 9999 )'ZHPEVX(V,V,' // UPLO //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1285,8 +1240,7 @@
 *
 *              Do tests 22 and 23.
 *
-               CALL AB_ZHET22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LD
-     $U,
+               CALL ZHET22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LDU,
      $                      V, LDU, TAU, WORK, RWORK, RESULT( NTEST ) )
 *
                NTEST = NTEST + 2
@@ -1309,13 +1263,11 @@
   540             CONTINUE
                END IF
 *
-               CALL AB_AB_ZHPEVX( 'N', 'V', UPLO, N, WORK, VL, VU, IL, I
-     $U,
+               CALL ZHPEVX( 'N', 'V', UPLO, N, WORK, VL, VU, IL, IU,
      $                      ABSTOL, M3, WA3, Z, LDU, V, RWORK, IWORK,
      $                      IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZHPEVX(N,V,' // UPLO
-     $ //
+                  WRITE( NOUNIT, FMT = 9999 )'ZHPEVX(N,V,' // UPLO //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1333,10 +1285,8 @@
 *
 *              Do test 24.
 *
-               TEMP1 = AB_DSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL 
-     $)
-               TEMP2 = AB_DSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL 
-     $)
+               TEMP1 = DSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL )
+               TEMP2 = DSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL )
                IF( N.GT.0 ) THEN
                   TEMP3 = MAX( ABS( WA1( 1 ) ), ABS( WA1( N ) ) )
                ELSE
@@ -1347,7 +1297,7 @@
 *
   550          CONTINUE
 *
-*              Call AB_AB_ZHBEVD and AB_AB_CHBEVX.
+*              Call ZHBEVD and CHBEVX.
 *
                IF( JTYPE.LE.7 ) THEN
                   KD = 0
@@ -1375,12 +1325,10 @@
                END IF
 *
                NTEST = NTEST + 1
-               CALL AB_AB_ZHBEVD( 'V', UPLO, N, KD, V, LDU, D1, Z, LDU, 
-     $WORK,
+               CALL ZHBEVD( 'V', UPLO, N, KD, V, LDU, D1, Z, LDU, WORK,
      $                      LWEDC, RWORK, LRWEDC, IWORK, LIWEDC, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9998 )'AB_AB_ZHBEVD(V,' // UPLO /
-     $/
+                  WRITE( NOUNIT, FMT = 9998 )'ZHBEVD(V,' // UPLO //
      $               ')', IINFO, N, KD, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1395,7 +1343,7 @@
 *
 *              Do tests 25 and 26.
 *
-               CALL AB_ZHET21( 1, UPLO, N, 0, A, LDA, D1, D2, Z, LDU, V,
+               CALL ZHET21( 1, UPLO, N, 0, A, LDA, D1, D2, Z, LDU, V,
      $                      LDU, TAU, WORK, RWORK, RESULT( NTEST ) )
 *
                IF( IUPLO.EQ.1 ) THEN
@@ -1413,12 +1361,10 @@
                END IF
 *
                NTEST = NTEST + 2
-               CALL AB_AB_ZHBEVD( 'N', UPLO, N, KD, V, LDU, D3, Z, LDU, 
-     $WORK,
+               CALL ZHBEVD( 'N', UPLO, N, KD, V, LDU, D3, Z, LDU, WORK,
      $                      LWEDC, RWORK, LRWEDC, IWORK, LIWEDC, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9998 )'AB_AB_ZHBEVD(N,' // UPLO /
-     $/
+                  WRITE( NOUNIT, FMT = 9998 )'ZHBEVD(N,' // UPLO //
      $               ')', IINFO, N, KD, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1459,13 +1405,11 @@
                END IF
 *
                NTEST = NTEST + 1
-               CALL AB_AB_ZHBEVX( 'V', 'A', UPLO, N, KD, V, LDU, U, LDU,
-     $ VL,
+               CALL ZHBEVX( 'V', 'A', UPLO, N, KD, V, LDU, U, LDU, VL,
      $                      VU, IL, IU, ABSTOL, M, WA1, Z, LDU, WORK,
      $                      RWORK, IWORK, IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZHBEVX(V,A,' // UPLO
-     $ //
+                  WRITE( NOUNIT, FMT = 9999 )'ZHBEVX(V,A,' // UPLO //
      $               ')', IINFO, N, KD, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1480,8 +1424,7 @@
 *
 *              Do tests 28 and 29.
 *
-               CALL AB_ZHET21( 1, UPLO, N, 0, A, LDU, WA1, D2, Z, LDU, V
-     $,
+               CALL ZHET21( 1, UPLO, N, 0, A, LDU, WA1, D2, Z, LDU, V,
      $                      LDU, TAU, WORK, RWORK, RESULT( NTEST ) )
 *
                NTEST = NTEST + 2
@@ -1500,13 +1443,11 @@
   730             CONTINUE
                END IF
 *
-               CALL AB_AB_ZHBEVX( 'N', 'A', UPLO, N, KD, V, LDU, U, LDU,
-     $ VL,
+               CALL ZHBEVX( 'N', 'A', UPLO, N, KD, V, LDU, U, LDU, VL,
      $                      VU, IL, IU, ABSTOL, M2, WA2, Z, LDU, WORK,
      $                      RWORK, IWORK, IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9998 )'AB_AB_ZHBEVX(N,A,' // UPLO
-     $ //
+                  WRITE( NOUNIT, FMT = 9998 )'ZHBEVX(N,A,' // UPLO //
      $               ')', IINFO, N, KD, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1547,13 +1488,11 @@
   790             CONTINUE
                END IF
 *
-               CALL AB_AB_ZHBEVX( 'V', 'I', UPLO, N, KD, V, LDU, U, LDU,
-     $ VL,
+               CALL ZHBEVX( 'V', 'I', UPLO, N, KD, V, LDU, U, LDU, VL,
      $                      VU, IL, IU, ABSTOL, M2, WA2, Z, LDU, WORK,
      $                      RWORK, IWORK, IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9998 )'AB_AB_ZHBEVX(V,I,' // UPLO
-     $ //
+                  WRITE( NOUNIT, FMT = 9998 )'ZHBEVX(V,I,' // UPLO //
      $               ')', IINFO, N, KD, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1568,8 +1507,7 @@
 *
 *              Do tests 31 and 32.
 *
-               CALL AB_ZHET22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LD
-     $U,
+               CALL ZHET22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LDU,
      $                      V, LDU, TAU, WORK, RWORK, RESULT( NTEST ) )
 *
                NTEST = NTEST + 2
@@ -1587,13 +1525,11 @@
   820                CONTINUE
   830             CONTINUE
                END IF
-               CALL AB_AB_ZHBEVX( 'N', 'I', UPLO, N, KD, V, LDU, U, LDU,
-     $ VL,
+               CALL ZHBEVX( 'N', 'I', UPLO, N, KD, V, LDU, U, LDU, VL,
      $                      VU, IL, IU, ABSTOL, M3, WA3, Z, LDU, WORK,
      $                      RWORK, IWORK, IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9998 )'AB_AB_ZHBEVX(N,I,' // UPLO
-     $ //
+                  WRITE( NOUNIT, FMT = 9998 )'ZHBEVX(N,I,' // UPLO //
      $               ')', IINFO, N, KD, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1606,10 +1542,8 @@
 *
 *              Do test 33.
 *
-               TEMP1 = AB_DSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL 
-     $)
-               TEMP2 = AB_DSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL 
-     $)
+               TEMP1 = DSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL )
+               TEMP2 = DSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL )
                IF( N.GT.0 ) THEN
                   TEMP3 = MAX( ABS( WA1( 1 ) ), ABS( WA1( N ) ) )
                ELSE
@@ -1636,13 +1570,11 @@
   870                CONTINUE
   880             CONTINUE
                END IF
-               CALL AB_AB_ZHBEVX( 'V', 'V', UPLO, N, KD, V, LDU, U, LDU,
-     $ VL,
+               CALL ZHBEVX( 'V', 'V', UPLO, N, KD, V, LDU, U, LDU, VL,
      $                      VU, IL, IU, ABSTOL, M2, WA2, Z, LDU, WORK,
      $                      RWORK, IWORK, IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9998 )'AB_AB_ZHBEVX(V,V,' // UPLO
-     $ //
+                  WRITE( NOUNIT, FMT = 9998 )'ZHBEVX(V,V,' // UPLO //
      $               ')', IINFO, N, KD, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1657,8 +1589,7 @@
 *
 *              Do tests 34 and 35.
 *
-               CALL AB_ZHET22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LD
-     $U,
+               CALL ZHET22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LDU,
      $                      V, LDU, TAU, WORK, RWORK, RESULT( NTEST ) )
 *
                NTEST = NTEST + 2
@@ -1676,13 +1607,11 @@
   910                CONTINUE
   920             CONTINUE
                END IF
-               CALL AB_AB_ZHBEVX( 'N', 'V', UPLO, N, KD, V, LDU, U, LDU,
-     $ VL,
+               CALL ZHBEVX( 'N', 'V', UPLO, N, KD, V, LDU, U, LDU, VL,
      $                      VU, IL, IU, ABSTOL, M3, WA3, Z, LDU, WORK,
      $                      RWORK, IWORK, IWORK( 5*N+1 ), IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9998 )'AB_AB_ZHBEVX(N,V,' // UPLO
-     $ //
+                  WRITE( NOUNIT, FMT = 9998 )'ZHBEVX(N,V,' // UPLO //
      $               ')', IINFO, N, KD, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1700,10 +1629,8 @@
 *
 *              Do test 36.
 *
-               TEMP1 = AB_DSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL 
-     $)
-               TEMP2 = AB_DSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL 
-     $)
+               TEMP1 = DSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL )
+               TEMP2 = DSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL )
                IF( N.GT.0 ) THEN
                   TEMP3 = MAX( ABS( WA1( 1 ) ), ABS( WA1( N ) ) )
                ELSE
@@ -1714,17 +1641,15 @@
 *
   930          CONTINUE
 *
-*              Call AB_ZHEEV
+*              Call ZHEEV
 *
-               CALL AB_ZLACPY( ' ', N, N, A, LDA, V, LDU )
+               CALL ZLACPY( ' ', N, N, A, LDA, V, LDU )
 *
                NTEST = NTEST + 1
-               CALL AB_ZHEEV( 'V', UPLO, N, A, LDU, D1, WORK, LWORK, RWO
-     $RK,
+               CALL ZHEEV( 'V', UPLO, N, A, LDU, D1, WORK, LWORK, RWORK,
      $                     IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'AB_ZHEEV(V,' // UPLO // ')
-     $',
+                  WRITE( NOUNIT, FMT = 9999 )'ZHEEV(V,' // UPLO // ')',
      $               IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1739,18 +1664,16 @@
 *
 *              Do tests 37 and 38
 *
-               CALL AB_ZHET21( 1, UPLO, N, 0, V, LDU, D1, D2, A, LDU, Z,
+               CALL ZHET21( 1, UPLO, N, 0, V, LDU, D1, D2, A, LDU, Z,
      $                      LDU, TAU, WORK, RWORK, RESULT( NTEST ) )
 *
-               CALL AB_ZLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL ZLACPY( ' ', N, N, V, LDU, A, LDA )
 *
                NTEST = NTEST + 2
-               CALL AB_ZHEEV( 'N', UPLO, N, A, LDU, D3, WORK, LWORK, RWO
-     $RK,
+               CALL ZHEEV( 'N', UPLO, N, A, LDU, D3, WORK, LWORK, RWORK,
      $                     IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'AB_ZHEEV(N,' // UPLO // ')
-     $',
+                  WRITE( NOUNIT, FMT = 9999 )'ZHEEV(N,' // UPLO // ')',
      $               IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1774,9 +1697,9 @@
 *
   950          CONTINUE
 *
-               CALL AB_ZLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL ZLACPY( ' ', N, N, V, LDU, A, LDA )
 *
-*              Call AB_ZHPEV
+*              Call ZHPEV
 *
 *              Load array WORK with the upper or lower triangular
 *              part of the matrix in packed form.
@@ -1801,11 +1724,10 @@
 *
                NTEST = NTEST + 1
                INDWRK = N*( N+1 ) / 2 + 1
-               CALL AB_ZHPEV( 'V', UPLO, N, WORK, D1, Z, LDU,
+               CALL ZHPEV( 'V', UPLO, N, WORK, D1, Z, LDU,
      $                     WORK( INDWRK ), RWORK, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'AB_ZHPEV(V,' // UPLO // ')
-     $',
+                  WRITE( NOUNIT, FMT = 9999 )'ZHPEV(V,' // UPLO // ')',
      $               IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1820,7 +1742,7 @@
 *
 *              Do tests 40 and 41.
 *
-               CALL AB_ZHET21( 1, UPLO, N, 0, A, LDA, D1, D2, Z, LDU, V,
+               CALL ZHET21( 1, UPLO, N, 0, A, LDA, D1, D2, Z, LDU, V,
      $                      LDU, TAU, WORK, RWORK, RESULT( NTEST ) )
 *
                IF( IUPLO.EQ.1 ) THEN
@@ -1843,11 +1765,10 @@
 *
                NTEST = NTEST + 2
                INDWRK = N*( N+1 ) / 2 + 1
-               CALL AB_ZHPEV( 'N', UPLO, N, WORK, D3, Z, LDU,
+               CALL ZHPEV( 'N', UPLO, N, WORK, D3, Z, LDU,
      $                     WORK( INDWRK ), RWORK, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'AB_ZHPEV(N,' // UPLO // ')
-     $',
+                  WRITE( NOUNIT, FMT = 9999 )'ZHPEV(N,' // UPLO // ')',
      $               IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1871,7 +1792,7 @@
 *
  1050          CONTINUE
 *
-*              Call AB_ZHBEV
+*              Call ZHBEV
 *
                IF( JTYPE.LE.7 ) THEN
                   KD = 0
@@ -1899,12 +1820,10 @@
                END IF
 *
                NTEST = NTEST + 1
-               CALL AB_ZHBEV( 'V', UPLO, N, KD, V, LDU, D1, Z, LDU, WORK
-     $,
+               CALL ZHBEV( 'V', UPLO, N, KD, V, LDU, D1, Z, LDU, WORK,
      $                     RWORK, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9998 )'AB_ZHBEV(V,' // UPLO // ')
-     $',
+                  WRITE( NOUNIT, FMT = 9998 )'ZHBEV(V,' // UPLO // ')',
      $               IINFO, N, KD, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1919,7 +1838,7 @@
 *
 *              Do tests 43 and 44.
 *
-               CALL AB_ZHET21( 1, UPLO, N, 0, A, LDA, D1, D2, Z, LDU, V,
+               CALL ZHET21( 1, UPLO, N, 0, A, LDA, D1, D2, Z, LDU, V,
      $                      LDU, TAU, WORK, RWORK, RESULT( NTEST ) )
 *
                IF( IUPLO.EQ.1 ) THEN
@@ -1937,12 +1856,10 @@
                END IF
 *
                NTEST = NTEST + 2
-               CALL AB_ZHBEV( 'N', UPLO, N, KD, V, LDU, D3, Z, LDU, WORK
-     $,
+               CALL ZHBEV( 'N', UPLO, N, KD, V, LDU, D3, Z, LDU, WORK,
      $                     RWORK, IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9998 )'AB_ZHBEV(N,' // UPLO // ')
-     $',
+                  WRITE( NOUNIT, FMT = 9998 )'ZHBEV(N,' // UPLO // ')',
      $               IINFO, N, KD, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1966,16 +1883,14 @@
                RESULT( NTEST ) = TEMP2 / MAX( UNFL,
      $                           ULP*MAX( TEMP1, TEMP2 ) )
 *
-               CALL AB_ZLACPY( ' ', N, N, A, LDA, V, LDU )
+               CALL ZLACPY( ' ', N, N, A, LDA, V, LDU )
                NTEST = NTEST + 1
-               CALL AB_AB_ZHEEVR( 'V', 'A', UPLO, N, A, LDU, VL, VU, IL,
-     $ IU,
+               CALL ZHEEVR( 'V', 'A', UPLO, N, A, LDU, VL, VU, IL, IU,
      $                      ABSTOL, M, WA1, Z, LDU, IWORK, WORK, LWORK,
      $                      RWORK, LRWORK, IWORK( 2*N+1 ), LIWORK-2*N,
      $                      IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZHEEVR(V,A,' // UPLO
-     $ //
+                  WRITE( NOUNIT, FMT = 9999 )'ZHEEVR(V,A,' // UPLO //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -1990,21 +1905,18 @@
 *
 *              Do tests 45 and 46 (or ... )
 *
-               CALL AB_ZLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL ZLACPY( ' ', N, N, V, LDU, A, LDA )
 *
-               CALL AB_ZHET21( 1, UPLO, N, 0, A, LDU, WA1, D2, Z, LDU, V
-     $,
+               CALL ZHET21( 1, UPLO, N, 0, A, LDU, WA1, D2, Z, LDU, V,
      $                      LDU, TAU, WORK, RWORK, RESULT( NTEST ) )
 *
                NTEST = NTEST + 2
-               CALL AB_AB_ZHEEVR( 'N', 'A', UPLO, N, A, LDU, VL, VU, IL,
-     $ IU,
+               CALL ZHEEVR( 'N', 'A', UPLO, N, A, LDU, VL, VU, IL, IU,
      $                      ABSTOL, M2, WA2, Z, LDU, IWORK, WORK, LWORK,
      $                      RWORK, LRWORK, IWORK( 2*N+1 ), LIWORK-2*N,
      $                      IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZHEEVR(N,A,' // UPLO
-     $ //
+                  WRITE( NOUNIT, FMT = 9999 )'ZHEEVR(N,A,' // UPLO //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -2029,15 +1941,13 @@
  1170          CONTINUE
 *
                NTEST = NTEST + 1
-               CALL AB_ZLACPY( ' ', N, N, V, LDU, A, LDA )
-               CALL AB_AB_ZHEEVR( 'V', 'I', UPLO, N, A, LDU, VL, VU, IL,
-     $ IU,
+               CALL ZLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL ZHEEVR( 'V', 'I', UPLO, N, A, LDU, VL, VU, IL, IU,
      $                      ABSTOL, M2, WA2, Z, LDU, IWORK, WORK, LWORK,
      $                      RWORK, LRWORK, IWORK( 2*N+1 ), LIWORK-2*N,
      $                      IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZHEEVR(V,I,' // UPLO
-     $ //
+                  WRITE( NOUNIT, FMT = 9999 )'ZHEEVR(V,I,' // UPLO //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -2052,22 +1962,19 @@
 *
 *              Do tests 48 and 49 (or +??)
 *
-               CALL AB_ZLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL ZLACPY( ' ', N, N, V, LDU, A, LDA )
 *
-               CALL AB_ZHET22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LD
-     $U,
+               CALL ZHET22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LDU,
      $                      V, LDU, TAU, WORK, RWORK, RESULT( NTEST ) )
 *
                NTEST = NTEST + 2
-               CALL AB_ZLACPY( ' ', N, N, V, LDU, A, LDA )
-               CALL AB_AB_ZHEEVR( 'N', 'I', UPLO, N, A, LDU, VL, VU, IL,
-     $ IU,
+               CALL ZLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL ZHEEVR( 'N', 'I', UPLO, N, A, LDU, VL, VU, IL, IU,
      $                      ABSTOL, M3, WA3, Z, LDU, IWORK, WORK, LWORK,
      $                      RWORK, LRWORK, IWORK( 2*N+1 ), LIWORK-2*N,
      $                      IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZHEEVR(N,I,' // UPLO
-     $ //
+                  WRITE( NOUNIT, FMT = 9999 )'ZHEEVR(N,I,' // UPLO //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -2080,24 +1987,20 @@
 *
 *              Do test 50 (or +??)
 *
-               TEMP1 = AB_DSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL 
-     $)
-               TEMP2 = AB_DSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL 
-     $)
+               TEMP1 = DSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL )
+               TEMP2 = DSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL )
                RESULT( NTEST ) = ( TEMP1+TEMP2 ) /
      $                           MAX( UNFL, ULP*TEMP3 )
  1180          CONTINUE
 *
                NTEST = NTEST + 1
-               CALL AB_ZLACPY( ' ', N, N, V, LDU, A, LDA )
-               CALL AB_AB_ZHEEVR( 'V', 'V', UPLO, N, A, LDU, VL, VU, IL,
-     $ IU,
+               CALL ZLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL ZHEEVR( 'V', 'V', UPLO, N, A, LDU, VL, VU, IL, IU,
      $                      ABSTOL, M2, WA2, Z, LDU, IWORK, WORK, LWORK,
      $                      RWORK, LRWORK, IWORK( 2*N+1 ), LIWORK-2*N,
      $                      IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZHEEVR(V,V,' // UPLO
-     $ //
+                  WRITE( NOUNIT, FMT = 9999 )'ZHEEVR(V,V,' // UPLO //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -2112,22 +2015,19 @@
 *
 *              Do tests 51 and 52 (or +??)
 *
-               CALL AB_ZLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL ZLACPY( ' ', N, N, V, LDU, A, LDA )
 *
-               CALL AB_ZHET22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LD
-     $U,
+               CALL ZHET22( 1, UPLO, N, M2, 0, A, LDU, WA2, D2, Z, LDU,
      $                      V, LDU, TAU, WORK, RWORK, RESULT( NTEST ) )
 *
                NTEST = NTEST + 2
-               CALL AB_ZLACPY( ' ', N, N, V, LDU, A, LDA )
-               CALL AB_AB_ZHEEVR( 'N', 'V', UPLO, N, A, LDU, VL, VU, IL,
-     $ IU,
+               CALL ZLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL ZHEEVR( 'N', 'V', UPLO, N, A, LDU, VL, VU, IL, IU,
      $                      ABSTOL, M3, WA3, Z, LDU, IWORK, WORK, LWORK,
      $                      RWORK, LRWORK, IWORK( 2*N+1 ), LIWORK-2*N,
      $                      IINFO )
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'AB_AB_ZHEEVR(N,V,' // UPLO
-     $ //
+                  WRITE( NOUNIT, FMT = 9999 )'ZHEEVR(N,V,' // UPLO //
      $               ')', IINFO, N, JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -2145,10 +2045,8 @@
 *
 *              Do test 52 (or +??)
 *
-               TEMP1 = AB_DSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL 
-     $)
-               TEMP2 = AB_DSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL 
-     $)
+               TEMP1 = DSXT1( 1, WA2, M2, WA3, M3, ABSTOL, ULP, UNFL )
+               TEMP2 = DSXT1( 1, WA3, M3, WA2, M2, ABSTOL, ULP, UNFL )
                IF( N.GT.0 ) THEN
                   TEMP3 = MAX( ABS( WA1( 1 ) ), ABS( WA1( N ) ) )
                ELSE
@@ -2157,7 +2055,7 @@
                RESULT( NTEST ) = ( TEMP1+TEMP2 ) /
      $                           MAX( UNFL, TEMP3*ULP )
 *
-               CALL AB_ZLACPY( ' ', N, N, V, LDU, A, LDA )
+               CALL ZLACPY( ' ', N, N, V, LDU, A, LDA )
 *
 *
 *
@@ -2172,7 +2070,7 @@
 *           End of Loop -- Check for RESULT(j) > THRESH
 *
             NTESTT = NTESTT + NTEST
-            CALL AB_DLAFTS( 'ZST', N, N, JTYPE, NTEST, RESULT, IOLDSD,
+            CALL DLAFTS( 'ZST', N, N, JTYPE, NTEST, RESULT, IOLDSD,
      $                   THRESH, NOUNIT, NERRS )
 *
  1210    CONTINUE
@@ -2180,16 +2078,16 @@
 *
 *     Summary
 *
-      CALL AB_ALASVM( 'ZST', NOUNIT, NERRS, NTESTT, 0 )
+      CALL ALASVM( 'ZST', NOUNIT, NERRS, NTESTT, 0 )
 *
- 9999 FORMAT( ' AB_ZDRVST: ', A, ' returned INFO=', I6, / 9X, 'N=', I6,
+ 9999 FORMAT( ' ZDRVST: ', A, ' returned INFO=', I6, / 9X, 'N=', I6,
      $      ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
- 9998 FORMAT( ' AB_ZDRVST: ', A, ' returned INFO=', I6, / 9X, 'N=', I6,
+ 9998 FORMAT( ' ZDRVST: ', A, ' returned INFO=', I6, / 9X, 'N=', I6,
      $      ', KD=', I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5,
      $      ')' )
 *
       RETURN
 *
-*     End of AB_ZDRVST
+*     End of ZDRVST
 *
       END

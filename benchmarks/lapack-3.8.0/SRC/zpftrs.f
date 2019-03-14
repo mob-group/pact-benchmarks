@@ -1,4 +1,4 @@
-*> \brief \b AB_ZPFTRS
+*> \brief \b ZPFTRS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZPFTRS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZPFTRS.f">
+*> Download ZPFTRS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zpftrs.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZPFTRS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zpftrs.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZPFTRS.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpftrs.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZPFTRS( TRANSR, UPLO, N, NRHS, A, B, LDB, INFO )
+*       SUBROUTINE ZPFTRS( TRANSR, UPLO, N, NRHS, A, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          TRANSR, UPLO
@@ -34,9 +34,9 @@
 *>
 *> \verbatim
 *>
-*> AB_ZPFTRS solves a system of linear equations A*X = B with a Hermitian
+*> ZPFTRS solves a system of linear equations A*X = B with a Hermitian
 *> positive definite matrix A using the Cholesky factorization
-*> A = U**H*U or A = L*L**H computed by AB_ZPFTRF.
+*> A = U**H*U or A = L*L**H computed by ZPFTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -73,7 +73,7 @@
 *> \verbatim
 *>          A is COMPLEX*16 array, dimension ( N*(N+1)/2 );
 *>          The triangular factor U or L from the Cholesky factorization
-*>          of RFP A = U**H*U or RFP A = L*L**H, as computed by AB_ZPFTRF.
+*>          of RFP A = U**H*U or RFP A = L*L**H, as computed by ZPFTRF.
 *>          See note below for more details about RFP A.
 *> \endverbatim
 *>
@@ -218,7 +218,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_ZPFTRS( TRANSR, UPLO, N, NRHS, A, B, LDB, INFO )
+      SUBROUTINE ZPFTRS( TRANSR, UPLO, N, NRHS, A, B, LDB, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -243,11 +243,11 @@
       LOGICAL            LOWER, NORMALTRANSR
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME
+      LOGICAL            LSAME
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZTFSM
+      EXTERNAL           XERBLA, ZTFSM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -257,11 +257,11 @@
 *     Test the input parameters.
 *
       INFO = 0
-      NORMALTRANSR = AB_LSAME( TRANSR, 'N' )
-      LOWER = AB_LSAME( UPLO, 'L' )
-      IF( .NOT.NORMALTRANSR .AND. .NOT.AB_LSAME( TRANSR, 'C' ) ) THEN
+      NORMALTRANSR = LSAME( TRANSR, 'N' )
+      LOWER = LSAME( UPLO, 'L' )
+      IF( .NOT.NORMALTRANSR .AND. .NOT.LSAME( TRANSR, 'C' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LOWER .AND. .NOT.AB_LSAME( UPLO, 'U' ) ) THEN
+      ELSE IF( .NOT.LOWER .AND. .NOT.LSAME( UPLO, 'U' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -271,7 +271,7 @@
          INFO = -7
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZPFTRS', -INFO )
+         CALL XERBLA( 'ZPFTRS', -INFO )
          RETURN
       END IF
 *
@@ -283,23 +283,19 @@
 *     start execution: there are two triangular solves
 *
       IF( LOWER ) THEN
-         CALL AB_ZTFSM( TRANSR, 'L', UPLO, 'N', 'N', N, NRHS, CONE, A, B
-     $,
+         CALL ZTFSM( TRANSR, 'L', UPLO, 'N', 'N', N, NRHS, CONE, A, B,
      $               LDB )
-         CALL AB_ZTFSM( TRANSR, 'L', UPLO, 'C', 'N', N, NRHS, CONE, A, B
-     $,
+         CALL ZTFSM( TRANSR, 'L', UPLO, 'C', 'N', N, NRHS, CONE, A, B,
      $               LDB )
       ELSE
-         CALL AB_ZTFSM( TRANSR, 'L', UPLO, 'C', 'N', N, NRHS, CONE, A, B
-     $,
+         CALL ZTFSM( TRANSR, 'L', UPLO, 'C', 'N', N, NRHS, CONE, A, B,
      $               LDB )
-         CALL AB_ZTFSM( TRANSR, 'L', UPLO, 'N', 'N', N, NRHS, CONE, A, B
-     $,
+         CALL ZTFSM( TRANSR, 'L', UPLO, 'N', 'N', N, NRHS, CONE, A, B,
      $               LDB )
       END IF
 *
       RETURN
 *
-*     End of AB_ZPFTRS
+*     End of ZPFTRS
 *
       END

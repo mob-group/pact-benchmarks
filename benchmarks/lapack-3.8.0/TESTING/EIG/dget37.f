@@ -1,4 +1,4 @@
-*> \brief \b AB_DGET37
+*> \brief \b DGET37
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DGET37( RMAX, LMAX, NINFO, KNT, NIN )
+*       SUBROUTINE DGET37( RMAX, LMAX, NINFO, KNT, NIN )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            KNT, NIN
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DGET37 tests AB_DTRSNA, a routine for estimating condition numbers of
+*> DGET37 tests DTRSNA, a routine for estimating condition numbers of
 *> eigenvalues and/or right eigenvectors of a matrix.
 *>
 *> The test matrices are read from a file with logical unit number NIN.
@@ -37,7 +37,7 @@
 *> \verbatim
 *>          RMAX is DOUBLE PRECISION array, dimension (3)
 *>          Value of the largest test ratio.
-*>          RMAX(1) = largest ratio comparing different calls to AB_DTRSNA
+*>          RMAX(1) = largest ratio comparing different calls to DTRSNA
 *>          RMAX(2) = largest error in reciprocal condition
 *>                    numbers taking their conditioning into account
 *>          RMAX(3) = largest error in reciprocal condition
@@ -50,17 +50,17 @@
 *>          LMAX is INTEGER array, dimension (3)
 *>          LMAX(i) is example number where largest test ratio
 *>          RMAX(i) is achieved. Also:
-*>          If AB_DGEHRD returns INFO nonzero on example i, LMAX(1)=i
-*>          If AB_DHSEQR returns INFO nonzero on example i, LMAX(2)=i
-*>          If AB_DTRSNA returns INFO nonzero on example i, LMAX(3)=i
+*>          If DGEHRD returns INFO nonzero on example i, LMAX(1)=i
+*>          If DHSEQR returns INFO nonzero on example i, LMAX(2)=i
+*>          If DTRSNA returns INFO nonzero on example i, LMAX(3)=i
 *> \endverbatim
 *>
 *> \param[out] NINFO
 *> \verbatim
 *>          NINFO is INTEGER array, dimension (3)
-*>          NINFO(1) = No. of times AB_DGEHRD returned INFO nonzero
-*>          NINFO(2) = No. of times AB_DHSEQR returned INFO nonzero
-*>          NINFO(3) = No. of times AB_DTRSNA returned INFO nonzero
+*>          NINFO(1) = No. of times DGEHRD returned INFO nonzero
+*>          NINFO(2) = No. of times DHSEQR returned INFO nonzero
+*>          NINFO(3) = No. of times DTRSNA returned INFO nonzero
 *> \endverbatim
 *>
 *> \param[out] KNT
@@ -88,7 +88,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_DGET37( RMAX, LMAX, NINFO, KNT, NIN )
+      SUBROUTINE DGET37( RMAX, LMAX, NINFO, KNT, NIN )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -130,23 +130,22 @@
      $                   WRTMP( LDT )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE
-      EXTERNAL           AB_DLAMCH, AB_DLANGE
+      DOUBLE PRECISION   DLAMCH, DLANGE
+      EXTERNAL           DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DCOPY, AB_DGEHRD, AB_DHSEQR, AB_DLABAD, AB_D
-     $LACPY, AB_DSCAL,
-     $                   AB_DTREVC, AB_DTRSNA
+      EXTERNAL           DCOPY, DGEHRD, DHSEQR, DLABAD, DLACPY, DSCAL,
+     $                   DTREVC, DTRSNA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX, SQRT
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = AB_DLAMCH( 'P' )
-      SMLNUM = AB_DLAMCH( 'S' ) / EPS
+      EPS = DLAMCH( 'P' )
+      SMLNUM = DLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL AB_DLABAD( SMLNUM, BIGNUM )
+      CALL DLABAD( SMLNUM, BIGNUM )
 *
 *     EPSIN = 2**(-24) = precision to which input data computed
 *
@@ -180,7 +179,7 @@
       DO 30 I = 1, N
          READ( NIN, FMT = * )WRIN( I ), WIIN( I ), SIN( I ), SEPIN( I )
    30 CONTINUE
-      TNRM = AB_DLANGE( 'M', N, N, TMP, LDT, WORK )
+      TNRM = DLANGE( 'M', N, N, TMP, LDT, WORK )
 *
 *     Begin test
 *
@@ -189,18 +188,17 @@
 *        Scale input matrix
 *
          KNT = KNT + 1
-         CALL AB_DLACPY( 'F', N, N, TMP, LDT, T, LDT )
+         CALL DLACPY( 'F', N, N, TMP, LDT, T, LDT )
          VMUL = VAL( ISCL )
          DO 40 I = 1, N
-            CALL AB_DSCAL( N, VMUL, T( 1, I ), 1 )
+            CALL DSCAL( N, VMUL, T( 1, I ), 1 )
    40    CONTINUE
          IF( TNRM.EQ.ZERO )
      $      VMUL = ONE
 *
 *        Compute eigenvalues and eigenvectors
 *
-         CALL AB_DGEHRD( N, 1, N, T, LDT, WORK( 1 ), WORK( N+1 ), LWORK-
-     $N,
+         CALL DGEHRD( N, 1, N, T, LDT, WORK( 1 ), WORK( N+1 ), LWORK-N,
      $                INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 1 ) = KNT
@@ -215,8 +213,7 @@
 *
 *        Compute Schur form
 *
-         CALL AB_DHSEQR( 'S', 'N', N, 1, N, T, LDT, WR, WI, DUM, 1, WORK
-     $,
+         CALL DHSEQR( 'S', 'N', N, 1, N, T, LDT, WR, WI, DUM, 1, WORK,
      $                LWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 2 ) = KNT
@@ -226,12 +223,12 @@
 *
 *        Compute eigenvectors
 *
-         CALL AB_DTREVC( 'Both', 'All', SELECT, N, T, LDT, LE, LDT, RE,
+         CALL DTREVC( 'Both', 'All', SELECT, N, T, LDT, LE, LDT, RE,
      $                LDT, N, M, WORK, INFO )
 *
 *        Compute condition numbers
 *
-         CALL AB_DTRSNA( 'Both', 'All', SELECT, N, T, LDT, LE, LDT, RE,
+         CALL DTRSNA( 'Both', 'All', SELECT, N, T, LDT, LE, LDT, RE,
      $                LDT, S, SEP, N, M, WORK, N, IWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -242,11 +239,11 @@
 *        Sort eigenvalues and condition numbers lexicographically
 *        to compare with inputs
 *
-         CALL AB_DCOPY( N, WR, 1, WRTMP, 1 )
-         CALL AB_DCOPY( N, WI, 1, WITMP, 1 )
-         CALL AB_DCOPY( N, S, 1, STMP, 1 )
-         CALL AB_DCOPY( N, SEP, 1, SEPTMP, 1 )
-         CALL AB_DSCAL( N, ONE / VMUL, SEPTMP, 1 )
+         CALL DCOPY( N, WR, 1, WRTMP, 1 )
+         CALL DCOPY( N, WI, 1, WITMP, 1 )
+         CALL DCOPY( N, S, 1, STMP, 1 )
+         CALL DCOPY( N, SEP, 1, SEPTMP, 1 )
+         CALL DSCAL( N, ONE / VMUL, SEPTMP, 1 )
          DO 80 I = 1, N - 1
             KMIN = I
             VRMIN = WRTMP( I )
@@ -327,8 +324,7 @@
                VMAX = ONE / EPS
             ELSE IF( SEPIN( I )-TOLIN.GT.SEPTMP( I )+TOL ) THEN
                VMAX = ( SEPIN( I )-TOLIN ) / ( SEPTMP( I )+TOL )
-            ELSE IF( SEPIN( I )+TOLIN.LT.EPS*( SEPTMP( I )-TOL ) ) TH
-     $EN
+            ELSE IF( SEPIN( I )+TOLIN.LT.EPS*( SEPTMP( I )-TOL ) ) THEN
                VMAX = ONE / EPS
             ELSE IF( SEPIN( I )+TOLIN.LT.SEPTMP( I )-TOL ) THEN
                VMAX = ( SEPTMP( I )-TOL ) / ( SEPIN( I )+TOLIN )
@@ -395,10 +391,9 @@
 *
          VMAX = ZERO
          DUM( 1 ) = -ONE
-         CALL AB_DCOPY( N, DUM, 0, STMP, 1 )
-         CALL AB_DCOPY( N, DUM, 0, SEPTMP, 1 )
-         CALL AB_DTRSNA( 'Eigcond', 'All', SELECT, N, T, LDT, LE, LDT, R
-     $E,
+         CALL DCOPY( N, DUM, 0, STMP, 1 )
+         CALL DCOPY( N, DUM, 0, SEPTMP, 1 )
+         CALL DTRSNA( 'Eigcond', 'All', SELECT, N, T, LDT, LE, LDT, RE,
      $                LDT, STMP, SEPTMP, N, M, WORK, N, IWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -414,10 +409,9 @@
 *
 *        Compute eigenvector condition numbers only and compare
 *
-         CALL AB_DCOPY( N, DUM, 0, STMP, 1 )
-         CALL AB_DCOPY( N, DUM, 0, SEPTMP, 1 )
-         CALL AB_DTRSNA( 'Veccond', 'All', SELECT, N, T, LDT, LE, LDT, R
-     $E,
+         CALL DCOPY( N, DUM, 0, STMP, 1 )
+         CALL DCOPY( N, DUM, 0, SEPTMP, 1 )
+         CALL DTRSNA( 'Veccond', 'All', SELECT, N, T, LDT, LE, LDT, RE,
      $                LDT, STMP, SEPTMP, N, M, WORK, N, IWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -436,9 +430,9 @@
          DO 150 I = 1, N
             SELECT( I ) = .TRUE.
   150    CONTINUE
-         CALL AB_DCOPY( N, DUM, 0, STMP, 1 )
-         CALL AB_DCOPY( N, DUM, 0, SEPTMP, 1 )
-         CALL AB_DTRSNA( 'Bothcond', 'Some', SELECT, N, T, LDT, LE, LDT,
+         CALL DCOPY( N, DUM, 0, STMP, 1 )
+         CALL DCOPY( N, DUM, 0, SEPTMP, 1 )
+         CALL DTRSNA( 'Bothcond', 'Some', SELECT, N, T, LDT, LE, LDT,
      $                RE, LDT, STMP, SEPTMP, N, M, WORK, N, IWORK,
      $                INFO )
          IF( INFO.NE.0 ) THEN
@@ -455,10 +449,9 @@
 *
 *        Compute eigenvalue condition numbers using SELECT and compare
 *
-         CALL AB_DCOPY( N, DUM, 0, STMP, 1 )
-         CALL AB_DCOPY( N, DUM, 0, SEPTMP, 1 )
-         CALL AB_DTRSNA( 'Eigcond', 'Some', SELECT, N, T, LDT, LE, LDT, 
-     $RE,
+         CALL DCOPY( N, DUM, 0, STMP, 1 )
+         CALL DCOPY( N, DUM, 0, SEPTMP, 1 )
+         CALL DTRSNA( 'Eigcond', 'Some', SELECT, N, T, LDT, LE, LDT, RE,
      $                LDT, STMP, SEPTMP, N, M, WORK, N, IWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -474,10 +467,9 @@
 *
 *        Compute eigenvector condition numbers using SELECT and compare
 *
-         CALL AB_DCOPY( N, DUM, 0, STMP, 1 )
-         CALL AB_DCOPY( N, DUM, 0, SEPTMP, 1 )
-         CALL AB_DTRSNA( 'Veccond', 'Some', SELECT, N, T, LDT, LE, LDT, 
-     $RE,
+         CALL DCOPY( N, DUM, 0, STMP, 1 )
+         CALL DCOPY( N, DUM, 0, SEPTMP, 1 )
+         CALL DTRSNA( 'Veccond', 'Some', SELECT, N, T, LDT, LE, LDT, RE,
      $                LDT, STMP, SEPTMP, N, M, WORK, N, IWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -508,10 +500,10 @@
                   IFND = 1
                   LCMP( 2 ) = I
                   LCMP( 3 ) = I + 1
-                  CALL AB_DCOPY( N, RE( 1, I ), 1, RE( 1, 2 ), 1 )
-                  CALL AB_DCOPY( N, RE( 1, I+1 ), 1, RE( 1, 3 ), 1 )
-                  CALL AB_DCOPY( N, LE( 1, I ), 1, LE( 1, 2 ), 1 )
-                  CALL AB_DCOPY( N, LE( 1, I+1 ), 1, LE( 1, 3 ), 1 )
+                  CALL DCOPY( N, RE( 1, I ), 1, RE( 1, 2 ), 1 )
+                  CALL DCOPY( N, RE( 1, I+1 ), 1, RE( 1, 3 ), 1 )
+                  CALL DCOPY( N, LE( 1, I ), 1, LE( 1, 2 ), 1 )
+                  CALL DCOPY( N, LE( 1, I+1 ), 1, LE( 1, 3 ), 1 )
                END IF
   190       CONTINUE
             IF( IFND.EQ.0 ) THEN
@@ -529,8 +521,8 @@
                ELSE
                   LCMP( 3 ) = I
                   IFND = 1
-                  CALL AB_DCOPY( N, RE( 1, I ), 1, RE( 1, 3 ), 1 )
-                  CALL AB_DCOPY( N, LE( 1, I ), 1, LE( 1, 3 ), 1 )
+                  CALL DCOPY( N, RE( 1, I ), 1, RE( 1, 3 ), 1 )
+                  CALL DCOPY( N, LE( 1, I ), 1, LE( 1, 3 ), 1 )
                END IF
   200       CONTINUE
             IF( IFND.EQ.0 ) THEN
@@ -542,9 +534,9 @@
 *
 *        Compute all selected condition numbers
 *
-         CALL AB_DCOPY( ICMP, DUM, 0, STMP, 1 )
-         CALL AB_DCOPY( ICMP, DUM, 0, SEPTMP, 1 )
-         CALL AB_DTRSNA( 'Bothcond', 'Some', SELECT, N, T, LDT, LE, LDT,
+         CALL DCOPY( ICMP, DUM, 0, STMP, 1 )
+         CALL DCOPY( ICMP, DUM, 0, SEPTMP, 1 )
+         CALL DTRSNA( 'Bothcond', 'Some', SELECT, N, T, LDT, LE, LDT,
      $                RE, LDT, STMP, SEPTMP, N, M, WORK, N, IWORK,
      $                INFO )
          IF( INFO.NE.0 ) THEN
@@ -562,10 +554,9 @@
 *
 *        Compute selected eigenvalue condition numbers
 *
-         CALL AB_DCOPY( ICMP, DUM, 0, STMP, 1 )
-         CALL AB_DCOPY( ICMP, DUM, 0, SEPTMP, 1 )
-         CALL AB_DTRSNA( 'Eigcond', 'Some', SELECT, N, T, LDT, LE, LDT, 
-     $RE,
+         CALL DCOPY( ICMP, DUM, 0, STMP, 1 )
+         CALL DCOPY( ICMP, DUM, 0, SEPTMP, 1 )
+         CALL DTRSNA( 'Eigcond', 'Some', SELECT, N, T, LDT, LE, LDT, RE,
      $                LDT, STMP, SEPTMP, N, M, WORK, N, IWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -582,10 +573,9 @@
 *
 *        Compute selected eigenvector condition numbers
 *
-         CALL AB_DCOPY( ICMP, DUM, 0, STMP, 1 )
-         CALL AB_DCOPY( ICMP, DUM, 0, SEPTMP, 1 )
-         CALL AB_DTRSNA( 'Veccond', 'Some', SELECT, N, T, LDT, LE, LDT, 
-     $RE,
+         CALL DCOPY( ICMP, DUM, 0, STMP, 1 )
+         CALL DCOPY( ICMP, DUM, 0, SEPTMP, 1 )
+         CALL DTRSNA( 'Veccond', 'Some', SELECT, N, T, LDT, LE, LDT, RE,
      $                LDT, STMP, SEPTMP, N, M, WORK, N, IWORK, INFO )
          IF( INFO.NE.0 ) THEN
             LMAX( 3 ) = KNT
@@ -607,6 +597,6 @@
   240 CONTINUE
       GO TO 10
 *
-*     End of AB_DGET37
+*     End of DGET37
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_ZGET10
+*> \brief \b ZGET10
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZGET10( M, N, A, LDA, B, LDB, WORK, RWORK, RESULT )
+*       SUBROUTINE ZGET10( M, N, A, LDA, B, LDB, WORK, RWORK, RESULT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDA, LDB, M, N
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZGET10 compares two matrices A and B and computes the ratio
+*> ZGET10 compares two matrices A and B and computes the ratio
 *> RESULT = norm( A - B ) / ( norm(A) * M * EPS )
 *> \endverbatim
 *
@@ -97,7 +97,7 @@
 *> \ingroup complex16_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_ZGET10( M, N, A, LDA, B, LDB, WORK, RWORK, RESULT )
+      SUBROUTINE ZGET10( M, N, A, LDA, B, LDB, WORK, RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -124,11 +124,11 @@
       DOUBLE PRECISION   ANORM, EPS, UNFL, WNORM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH, AB_DZASUM, AB_ZLANGE
-      EXTERNAL           AB_DLAMCH, AB_DZASUM, AB_ZLANGE
+      DOUBLE PRECISION   DLAMCH, DZASUM, ZLANGE
+      EXTERNAL           DLAMCH, DZASUM, ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZAXPY, AB_ZCOPY
+      EXTERNAL           ZAXPY, ZCOPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCMPLX, MAX, MIN
@@ -142,17 +142,17 @@
          RETURN
       END IF
 *
-      UNFL = AB_DLAMCH( 'Safe minimum' )
-      EPS = AB_DLAMCH( 'Precision' )
+      UNFL = DLAMCH( 'Safe minimum' )
+      EPS = DLAMCH( 'Precision' )
 *
       WNORM = ZERO
       DO 10 J = 1, N
-         CALL AB_ZCOPY( M, A( 1, J ), 1, WORK, 1 )
-         CALL AB_ZAXPY( M, DCMPLX( -ONE ), B( 1, J ), 1, WORK, 1 )
-         WNORM = MAX( WNORM, AB_DZASUM( N, WORK, 1 ) )
+         CALL ZCOPY( M, A( 1, J ), 1, WORK, 1 )
+         CALL ZAXPY( M, DCMPLX( -ONE ), B( 1, J ), 1, WORK, 1 )
+         WNORM = MAX( WNORM, DZASUM( N, WORK, 1 ) )
    10 CONTINUE
 *
-      ANORM = MAX( AB_ZLANGE( '1', M, N, A, LDA, RWORK ), UNFL )
+      ANORM = MAX( ZLANGE( '1', M, N, A, LDA, RWORK ), UNFL )
 *
       IF( ANORM.GT.WNORM ) THEN
          RESULT = ( WNORM / ANORM ) / ( M*EPS )
@@ -166,6 +166,6 @@
 *
       RETURN
 *
-*     End of AB_ZGET10
+*     End of ZGET10
 *
       END

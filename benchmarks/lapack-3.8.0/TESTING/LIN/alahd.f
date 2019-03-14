@@ -1,4 +1,4 @@
-*> \brief \b AB_ALAHD
+*> \brief \b ALAHD
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ALAHD( IOUNIT, PATH )
+*       SUBROUTINE ALAHD( IOUNIT, PATH )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ALAHD prints AB_HEADER information for the different test paths.
+*> ALAHD prints header information for the different test paths.
 *> \endverbatim
 *
 *  Arguments:
@@ -30,14 +30,14 @@
 *> \param[in] IOUNIT
 *> \verbatim
 *>          IOUNIT is INTEGER
-*>          The unit number to which the AB_HEADER information should be
+*>          The unit number to which the header information should be
 *>          printed.
 *> \endverbatim
 *>
 *> \param[in] PATH
 *> \verbatim
 *>          PATH is CHARACTER*3
-*>          The name of the path for which the AB_HEADER information is to
+*>          The name of the path for which the header information is to
 *>          be printed.  Current paths are
 *>             _GE:  General matrices
 *>             _GB:  General band
@@ -103,7 +103,7 @@
 *> \ingroup aux_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ALAHD( IOUNIT, PATH )
+      SUBROUTINE ALAHD( IOUNIT, PATH )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -126,8 +126,8 @@
       CHARACTER*9        SYM
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME, AB_AB_LSAMEN
-      EXTERNAL           AB_LSAME, AB_AB_LSAMEN
+      LOGICAL            LSAME, LSAMEN
+      EXTERNAL           LSAME, LSAMEN
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          LEN_TRIM
@@ -139,12 +139,12 @@
       C1 = PATH( 1: 1 )
       C3 = PATH( 3: 3 )
       P2 = PATH( 2: 3 )
-      SORD = AB_LSAME( C1, 'S' ) .OR. AB_LSAME( C1, 'D' )
-      CORZ = AB_LSAME( C1, 'C' ) .OR. AB_LSAME( C1, 'Z' )
+      SORD = LSAME( C1, 'S' ) .OR. LSAME( C1, 'D' )
+      CORZ = LSAME( C1, 'C' ) .OR. LSAME( C1, 'Z' )
       IF( .NOT.( SORD .OR. CORZ ) )
      $   RETURN
 *
-      IF( AB_AB_LSAMEN( 2, P2, 'GE' ) ) THEN
+      IF( LSAMEN( 2, P2, 'GE' ) ) THEN
 *
 *        GE: General dense
 *
@@ -162,7 +162,7 @@
          WRITE( IOUNIT, FMT = 9955 )8
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, P2, 'GB' ) ) THEN
+      ELSE IF( LSAMEN( 2, P2, 'GB' ) ) THEN
 *
 *        GB: General band
 *
@@ -179,7 +179,7 @@
          WRITE( IOUNIT, FMT = 9955 )7
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, P2, 'GT' ) ) THEN
+      ELSE IF( LSAMEN( 2, P2, 'GT' ) ) THEN
 *
 *        GT: General tridiagonal
 *
@@ -195,8 +195,7 @@
          WRITE( IOUNIT, FMT = 9955 )7
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, P2, 'PO' ) .OR. AB_AB_LSAMEN( 2, P2, 
-     $'PP' ) ) THEN
+      ELSE IF( LSAMEN( 2, P2, 'PO' ) .OR. LSAMEN( 2, P2, 'PP' ) ) THEN
 *
 *        PO: Positive definite full
 *        PP: Positive definite packed
@@ -206,7 +205,7 @@
          ELSE
             SYM = 'Hermitian'
          END IF
-         IF( AB_LSAME( C3, 'O' ) ) THEN
+         IF( LSAME( C3, 'O' ) ) THEN
             WRITE( IOUNIT, FMT = 9996 )PATH, SYM
          ELSE
             WRITE( IOUNIT, FMT = 9995 )PATH, SYM
@@ -224,7 +223,7 @@
          WRITE( IOUNIT, FMT = 9955 )8
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, P2, 'PS' ) ) THEN
+      ELSE IF( LSAMEN( 2, P2, 'PS' ) ) THEN
 *
 *        PS: Positive semi-definite full
 *
@@ -233,7 +232,7 @@
          ELSE
             SYM = 'Hermitian'
          END IF
-         IF( AB_LSAME( C1, 'S' ) .OR. AB_LSAME( C1, 'C' ) ) THEN
+         IF( LSAME( C1, 'S' ) .OR. LSAME( C1, 'C' ) ) THEN
             EIGCNM = '1E04'
          ELSE
             EIGCNM = '1D12'
@@ -246,7 +245,7 @@
          WRITE( IOUNIT, FMT = '( '' Test ratio:'' )' )
          WRITE( IOUNIT, FMT = 8950 )
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
-      ELSE IF( AB_AB_LSAMEN( 2, P2, 'PB' ) ) THEN
+      ELSE IF( LSAMEN( 2, P2, 'PB' ) ) THEN
 *
 *        PB: Positive definite band
 *
@@ -267,7 +266,7 @@
          WRITE( IOUNIT, FMT = 9955 )7
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, P2, 'PT' ) ) THEN
+      ELSE IF( LSAMEN( 2, P2, 'PT' ) ) THEN
 *
 *        PT: Positive definite tridiagonal
 *
@@ -287,12 +286,12 @@
          WRITE( IOUNIT, FMT = 9955 )7
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, P2, 'SY' )  ) THEN
+      ELSE IF( LSAMEN( 2, P2, 'SY' )  ) THEN
 *
 *        SY: Symmetric indefinite full,
 *            with partial (Bunch-Kaufman) pivoting algorithm
 *
-         IF( AB_LSAME( C3, 'Y' ) ) THEN
+         IF( LSAME( C3, 'Y' ) ) THEN
             WRITE( IOUNIT, FMT = 9992 )PATH, 'Symmetric'
          ELSE
             WRITE( IOUNIT, FMT = 9991 )PATH, 'Symmetric'
@@ -315,8 +314,7 @@
          WRITE( IOUNIT, FMT = 9955 )9
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, P2, 'SR' ) .OR. AB_AB_LSAMEN( 2, P2, 
-     $'SK') ) THEN
+      ELSE IF( LSAMEN( 2, P2, 'SR' ) .OR. LSAMEN( 2, P2, 'SK') ) THEN
 *
 *        SR: Symmetric indefinite full,
 *            with rook (bounded Bunch-Kaufman) pivoting algorithm
@@ -348,12 +346,12 @@
          WRITE( IOUNIT, FMT = 9955 )7
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, P2, 'SP' ) ) THEN
+      ELSE IF( LSAMEN( 2, P2, 'SP' ) ) THEN
 *
 *        SP: Symmetric indefinite packed,
 *            with partial (Bunch-Kaufman) pivoting algorithm
 *
-         IF( AB_LSAME( C3, 'Y' ) ) THEN
+         IF( LSAME( C3, 'Y' ) ) THEN
             WRITE( IOUNIT, FMT = 9992 )PATH, 'Symmetric'
          ELSE
             WRITE( IOUNIT, FMT = 9991 )PATH, 'Symmetric'
@@ -375,7 +373,7 @@
          WRITE( IOUNIT, FMT = 9955 )8
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, P2, 'HA' )  ) THEN
+      ELSE IF( LSAMEN( 2, P2, 'HA' )  ) THEN
 *
 *        HA: Hermitian,
 *            with Assen Algorithm
@@ -397,7 +395,7 @@
          WRITE( IOUNIT, FMT = 9955 )9
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, P2, 'HE' )  ) THEN
+      ELSE IF( LSAMEN( 2, P2, 'HE' )  ) THEN
 *
 *        HE: Hermitian indefinite full,
 *            with partial (Bunch-Kaufman) pivoting algorithm
@@ -419,8 +417,7 @@
          WRITE( IOUNIT, FMT = 9955 )9
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, P2, 'HR' ) .OR. AB_AB_LSAMEN( 2, P2, 
-     $'HR' ) ) THEN
+      ELSE IF( LSAMEN( 2, P2, 'HR' ) .OR. LSAMEN( 2, P2, 'HR' ) ) THEN
 *
 *        HR: Hermitian indefinite full,
 *            with rook (bounded Bunch-Kaufman) pivoting algorithm
@@ -448,12 +445,12 @@
          WRITE( IOUNIT, FMT = 9955 )7
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, P2, 'HP' ) ) THEN
+      ELSE IF( LSAMEN( 2, P2, 'HP' ) ) THEN
 *
 *        HP: Hermitian indefinite packed,
 *            with partial (Bunch-Kaufman) pivoting algorithm
 *
-         IF( AB_LSAME( C3, 'E' ) ) THEN
+         IF( LSAME( C3, 'E' ) ) THEN
             WRITE( IOUNIT, FMT = 9992 )PATH, 'Hermitian'
          ELSE
             WRITE( IOUNIT, FMT = 9991 )PATH, 'Hermitian'
@@ -471,13 +468,12 @@
          WRITE( IOUNIT, FMT = 9955 )8
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, P2, 'TR' ) .OR. AB_AB_LSAMEN( 2, P2, 
-     $'TP' ) ) THEN
+      ELSE IF( LSAMEN( 2, P2, 'TR' ) .OR. LSAMEN( 2, P2, 'TP' ) ) THEN
 *
 *        TR: Triangular full
 *        TP: Triangular packed
 *
-         IF( AB_LSAME( C3, 'R' ) ) THEN
+         IF( LSAME( C3, 'R' ) ) THEN
             WRITE( IOUNIT, FMT = 9990 )PATH
             SUBNAM = PATH( 1: 1 ) // 'LATRS'
          ELSE
@@ -497,7 +493,7 @@
          WRITE( IOUNIT, FMT = 9951 )SUBNAM(1:LEN_TRIM( SUBNAM )), 8
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, P2, 'TB' ) ) THEN
+      ELSE IF( LSAMEN( 2, P2, 'TB' ) ) THEN
 *
 *        TB: Triangular band
 *
@@ -515,7 +511,7 @@
          WRITE( IOUNIT, FMT = 9951 )SUBNAM(1:LEN_TRIM( SUBNAM )), 7
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, P2, 'QR' ) ) THEN
+      ELSE IF( LSAMEN( 2, P2, 'QR' ) ) THEN
 *
 *        QR decomposition of rectangular matrices
 *
@@ -534,7 +530,7 @@
          WRITE( IOUNIT, FMT = 6660 )9
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, P2, 'LQ' ) ) THEN
+      ELSE IF( LSAMEN( 2, P2, 'LQ' ) ) THEN
 *
 *        LQ decomposition of rectangular matrices
 *
@@ -551,7 +547,7 @@
          WRITE( IOUNIT, FMT = 9960 )7
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, P2, 'QL' ) ) THEN
+      ELSE IF( LSAMEN( 2, P2, 'QL' ) ) THEN
 *
 *        QL decomposition of rectangular matrices
 *
@@ -568,7 +564,7 @@
          WRITE( IOUNIT, FMT = 9960 )7
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, P2, 'RQ' ) ) THEN
+      ELSE IF( LSAMEN( 2, P2, 'RQ' ) ) THEN
 *
 *        RQ decomposition of rectangular matrices
 *
@@ -585,7 +581,7 @@
          WRITE( IOUNIT, FMT = 9960 )7
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, P2, 'QP' ) ) THEN
+      ELSE IF( LSAMEN( 2, P2, 'QP' ) ) THEN
 *
 *        QR decomposition with column pivoting
 *
@@ -597,7 +593,7 @@
          WRITE( IOUNIT, FMT = 9938 )3
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, P2, 'TZ' ) ) THEN
+      ELSE IF( LSAMEN( 2, P2, 'TZ' ) ) THEN
 *
 *        TZ:  Trapezoidal
 *
@@ -610,7 +606,7 @@
          WRITE( IOUNIT, FMT = 9938 )3
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, P2, 'LS' ) ) THEN
+      ELSE IF( LSAMEN( 2, P2, 'LS' ) ) THEN
 *
 *        LS:  Least Squares driver routines for
 *             LS, LSD, LSS, LSX and LSY.
@@ -627,7 +623,7 @@
          WRITE( IOUNIT, FMT = 9920 )
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, P2, 'LU' ) ) THEN
+      ELSE IF( LSAMEN( 2, P2, 'LU' ) ) THEN
 *
 *        LU factorization variants
 *
@@ -638,7 +634,7 @@
          WRITE( IOUNIT, FMT = 9962 )1
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, P2, 'CH' ) ) THEN
+      ELSE IF( LSAMEN( 2, P2, 'CH' ) ) THEN
 *
 *        Cholesky factorization variants
 *
@@ -649,7 +645,7 @@
          WRITE( IOUNIT, FMT = 9954 )1
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, P2, 'QS' ) ) THEN
+      ELSE IF( LSAMEN( 2, P2, 'QS' ) ) THEN
 *
 *        QR factorization variants
 *
@@ -658,7 +654,7 @@
          WRITE( IOUNIT, FMT = 9970 )
          WRITE( IOUNIT, FMT = '( '' Test ratios:'' )' )
 *
-      ELSE IF( AB_AB_LSAMEN( 2, P2, 'QT' ) ) THEN
+      ELSE IF( LSAMEN( 2, P2, 'QT' ) ) THEN
 *
 *        QRT (general matrices)
 *
@@ -671,7 +667,7 @@
          WRITE( IOUNIT, FMT = 8015 ) 5
          WRITE( IOUNIT, FMT = 8016 ) 6
 *
-      ELSE IF( AB_AB_LSAMEN( 2, P2, 'QX' ) ) THEN
+      ELSE IF( LSAMEN( 2, P2, 'QX' ) ) THEN
 *
 *        QRT (triangular-pentagonal)
 *
@@ -684,7 +680,7 @@
          WRITE( IOUNIT, FMT = 8021 ) 5
          WRITE( IOUNIT, FMT = 8022 ) 6
 *
-      ELSE IF( AB_AB_LSAMEN( 2, P2, 'TQ' ) ) THEN
+      ELSE IF( LSAMEN( 2, P2, 'TQ' ) ) THEN
 *
 *        QRT (triangular-pentagonal)
 *
@@ -697,7 +693,7 @@
          WRITE( IOUNIT, FMT = 8027 ) 5
          WRITE( IOUNIT, FMT = 8028 ) 6
 *
-      ELSE IF( AB_AB_LSAMEN( 2, P2, 'XQ' ) ) THEN
+      ELSE IF( LSAMEN( 2, P2, 'XQ' ) ) THEN
 *
 *        QRT (triangular-pentagonal)
 *
@@ -710,7 +706,7 @@
          WRITE( IOUNIT, FMT = 8033 ) 5
          WRITE( IOUNIT, FMT = 8034 ) 6
 *
-      ELSE IF( AB_AB_LSAMEN( 2, P2, 'TS' ) ) THEN
+      ELSE IF( LSAMEN( 2, P2, 'TS' ) ) THEN
 *
 *        QRT (triangular-pentagonal)
 *
@@ -725,12 +721,12 @@
 *
       ELSE
 *
-*        Print error message if no AB_HEADER is available.
+*        Print error message if no header is available.
 *
          WRITE( IOUNIT, FMT = 9980 )PATH
       END IF
 *
-*     First line of AB_HEADER
+*     First line of header
 *
  9999 FORMAT( / 1X, A3, ':  General dense matrices' )
  9998 FORMAT( / 1X, A3, ':  General band matrices' )
@@ -759,7 +755,7 @@
  9983 FORMAT( / 1X, A3, ':  LU factorization variants' )
  9982 FORMAT( / 1X, A3, ':  Cholesky factorization variants' )
  9981 FORMAT( / 1X, A3, ':  QR factorization variants' )
- 9980 FORMAT( / 1X, A3, ':  No AB_HEADER available' )
+ 9980 FORMAT( / 1X, A3, ':  No header available' )
  8000 FORMAT( / 1X, A3, ':  QRT factorization for general matrices' )
  8001 FORMAT( / 1X, A3, ':  QRT factorization for ',
      $       'triangular-pentagonal matrices' )
@@ -909,7 +905,7 @@
      $      '1. Zero matrix', 21X, '4. First n/2 columns fixed', / 4X,
      $      '2. One small eigenvalue', 12X, '5. Last n/2 columns fixed',
      $      / 4X, '3. Geometric distribution', 10X,
-     $      '6. Every AB_SECOND column fixed' )
+     $      '6. Every second column fixed' )
 *
 *     TZ matrix types
 *
@@ -1088,6 +1084,6 @@
 *
       RETURN
 *
-*     End of AB_ALAHD
+*     End of ALAHD
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b AB_DCHKSB
+*> \brief \b DCHKSB
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DCHKSB( NSIZES, NN, NWDTHS, KK, NTYPES, DOTYPE, ISEED,
+*       SUBROUTINE DCHKSB( NSIZES, NN, NWDTHS, KK, NTYPES, DOTYPE, ISEED,
 *                          THRESH, NOUNIT, A, LDA, SD, SE, U, LDU, WORK,
 *                          LWORK, RESULT, INFO )
 *
@@ -30,27 +30,27 @@
 *>
 *> \verbatim
 *>
-*> AB_DCHKSB tests the reduction of a symmetric band matrix to tridiagonal
+*> DCHKSB tests the reduction of a symmetric band matrix to tridiagonal
 *> form, used with the symmetric eigenvalue problem.
 *>
-*> AB_DSBTRD factors a symmetric band matrix A as  U S U' , where ' means
+*> DSBTRD factors a symmetric band matrix A as  U S U' , where ' means
 *> transpose, S is symmetric tridiagonal, and U is orthogonal.
-*> AB_DSBTRD can use either just the lower or just the upper triangle
-*> of A; AB_DCHKSB checks both cases.
+*> DSBTRD can use either just the lower or just the upper triangle
+*> of A; DCHKSB checks both cases.
 *>
-*> When AB_DCHKSB is called, a number of matrix "sizes" ("n's"), a number
+*> When DCHKSB is called, a number of matrix "sizes" ("n's"), a number
 *> of bandwidths ("k's"), and a number of matrix "types" are
 *> specified.  For each size ("n"), each bandwidth ("k") less than or
 *> equal to "n", and each type of matrix, one matrix will be generated
 *> and used to test the symmetric banded reduction routine.  For each
 *> matrix, a number of tests will be performed:
 *>
-*> (1)     | A - V S V' | / ( |A| n ulp )  computed by AB_DSBTRD with
+*> (1)     | A - V S V' | / ( |A| n ulp )  computed by DSBTRD with
 *>                                         UPLO='U'
 *>
 *> (2)     | I - UU' | / ( n ulp )
 *>
-*> (3)     | A - V S V' | / ( |A| n ulp )  computed by AB_DSBTRD with
+*> (3)     | A - V S V' | / ( |A| n ulp )  computed by DSBTRD with
 *>                                         UPLO='L'
 *>
 *> (4)     | I - UU' | / ( n ulp )
@@ -102,7 +102,7 @@
 *> \verbatim
 *>          NSIZES is INTEGER
 *>          The number of sizes of matrices to use.  If it is zero,
-*>          AB_DCHKSB does nothing.  It must be at least zero.
+*>          DCHKSB does nothing.  It must be at least zero.
 *> \endverbatim
 *>
 *> \param[in] NN
@@ -117,7 +117,7 @@
 *> \verbatim
 *>          NWDTHS is INTEGER
 *>          The number of bandwidths to use.  If it is zero,
-*>          AB_DCHKSB does nothing.  It must be at least zero.
+*>          DCHKSB does nothing.  It must be at least zero.
 *> \endverbatim
 *>
 *> \param[in] KK
@@ -130,7 +130,7 @@
 *> \param[in] NTYPES
 *> \verbatim
 *>          NTYPES is INTEGER
-*>          The number of elements in DOTYPE.   If it is zero, AB_DCHKSB
+*>          The number of elements in DOTYPE.   If it is zero, DCHKSB
 *>          does nothing.  It must be at least zero.  If it is MAXTYP+1
 *>          and NSIZES is 1, then an additional type, MAXTYP+1 is
 *>          defined, which is to use whatever matrix is in A.  This
@@ -160,7 +160,7 @@
 *>          congruential sequence limited to small integers, and so
 *>          should produce machine independent random numbers. The
 *>          values of ISEED are changed on exit, and can be used in the
-*>          next call to AB_DCHKSB to continue the same random number
+*>          next call to DCHKSB to continue the same random number
 *>          sequence.
 *> \endverbatim
 *>
@@ -201,20 +201,20 @@
 *> \verbatim
 *>          SD is DOUBLE PRECISION array, dimension (max(NN))
 *>          Used to hold the diagonal of the tridiagonal matrix computed
-*>          by AB_DSBTRD.
+*>          by DSBTRD.
 *> \endverbatim
 *>
 *> \param[out] SE
 *> \verbatim
 *>          SE is DOUBLE PRECISION array, dimension (max(NN))
 *>          Used to hold the off-diagonal of the tridiagonal matrix
-*>          computed by AB_DSBTRD.
+*>          computed by DSBTRD.
 *> \endverbatim
 *>
 *> \param[out] U
 *> \verbatim
 *>          U is DOUBLE PRECISION array, dimension (LDU, max(NN))
-*>          Used to hold the orthogonal matrix computed by AB_DSBTRD.
+*>          Used to hold the orthogonal matrix computed by DSBTRD.
 *> \endverbatim
 *>
 *> \param[in] LDU
@@ -289,8 +289,7 @@
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_DCHKSB( NSIZES, NN, NWDTHS, KK, NTYPES, DOTYPE, ISEE
-     $D,
+      SUBROUTINE DCHKSB( NSIZES, NN, NWDTHS, KK, NTYPES, DOTYPE, ISEED,
      $                   THRESH, NOUNIT, A, LDA, SD, SE, U, LDU, WORK,
      $                   LWORK, RESULT, INFO )
 *
@@ -335,13 +334,12 @@
      $                   KMODE( MAXTYP ), KTYPE( MAXTYP )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   AB_DLAMCH
-      EXTERNAL           AB_DLAMCH
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLACPY, AB_DLASET, AB_DLASUM, AB_DLATMR, AB_
-     $DLATMS, AB_DSBT21,
-     $                   AB_DSBTRD, AB_XERBLA
+      EXTERNAL           DLACPY, DLASET, DLASUM, DLATMR, DLATMS, DSBT21,
+     $                   DSBTRD, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN, SQRT
@@ -400,7 +398,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_DCHKSB', -INFO )
+         CALL XERBLA( 'DCHKSB', -INFO )
          RETURN
       END IF
 *
@@ -411,9 +409,9 @@
 *
 *     More Important constants
 *
-      UNFL = AB_DLAMCH( 'Safe minimum' )
+      UNFL = DLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
-      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
+      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
       ULPINV = ONE / ULP
       RTUNFL = SQRT( UNFL )
       RTOVFL = SQRT( OVFL )
@@ -490,7 +488,7 @@
 *
    70          CONTINUE
 *
-               CALL AB_DLASET( 'Full', LDA, N, ZERO, ZERO, A, LDA )
+               CALL DLASET( 'Full', LDA, N, ZERO, ZERO, A, LDA )
                IINFO = 0
                IF( JTYPE.LE.15 ) THEN
                   COND = ULPINV
@@ -517,8 +515,7 @@
 *
 *                 Diagonal Matrix, [Eigen]values Specified
 *
-                  CALL AB_DLATMS( N, N, 'S', ISEED, 'S', WORK, IMODE, CO
-     $ND,
+                  CALL DLATMS( N, N, 'S', ISEED, 'S', WORK, IMODE, COND,
      $                         ANORM, 0, 0, 'Q', A( K+1, 1 ), LDA,
      $                         WORK( N+1 ), IINFO )
 *
@@ -526,8 +523,7 @@
 *
 *                 Symmetric, eigenvalues specified
 *
-                  CALL AB_DLATMS( N, N, 'S', ISEED, 'S', WORK, IMODE, CO
-     $ND,
+                  CALL DLATMS( N, N, 'S', ISEED, 'S', WORK, IMODE, COND,
      $                         ANORM, K, K, 'Q', A, LDA, WORK( N+1 ),
      $                         IINFO )
 *
@@ -535,8 +531,7 @@
 *
 *                 Diagonal, random eigenvalues
 *
-                  CALL AB_DLATMR( N, N, 'S', ISEED, 'S', WORK, 6, ONE, O
-     $NE,
+                  CALL DLATMR( N, N, 'S', ISEED, 'S', WORK, 6, ONE, ONE,
      $                         'T', 'N', WORK( N+1 ), 1, ONE,
      $                         WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, 0, 0,
      $                         ZERO, ANORM, 'Q', A( K+1, 1 ), LDA,
@@ -546,8 +541,7 @@
 *
 *                 Symmetric, random eigenvalues
 *
-                  CALL AB_DLATMR( N, N, 'S', ISEED, 'S', WORK, 6, ONE, O
-     $NE,
+                  CALL DLATMR( N, N, 'S', ISEED, 'S', WORK, 6, ONE, ONE,
      $                         'T', 'N', WORK( N+1 ), 1, ONE,
      $                         WORK( 2*N+1 ), 1, ONE, 'N', IDUMMA, K, K,
      $                         ZERO, ANORM, 'Q', A, LDA, IDUMMA, IINFO )
@@ -556,8 +550,7 @@
 *
 *                 Positive definite, eigenvalues specified.
 *
-                  CALL AB_DLATMS( N, N, 'S', ISEED, 'P', WORK, IMODE, CO
-     $ND,
+                  CALL DLATMS( N, N, 'S', ISEED, 'P', WORK, IMODE, COND,
      $                         ANORM, K, K, 'Q', A, LDA, WORK( N+1 ),
      $                         IINFO )
 *
@@ -567,8 +560,7 @@
 *
                   IF( N.GT.1 )
      $               K = MAX( 1, K )
-                  CALL AB_DLATMS( N, N, 'S', ISEED, 'P', WORK, IMODE, CO
-     $ND,
+                  CALL DLATMS( N, N, 'S', ISEED, 'P', WORK, IMODE, COND,
      $                         ANORM, 1, 1, 'Q', A( K, 1 ), LDA,
      $                         WORK( N+1 ), IINFO )
                   DO 90 I = 2, N
@@ -594,17 +586,16 @@
 *
   100          CONTINUE
 *
-*              Call AB_DSBTRD to compute S and U from upper triangle.
+*              Call DSBTRD to compute S and U from upper triangle.
 *
-               CALL AB_DLACPY( ' ', K+1, N, A, LDA, WORK, LDA )
+               CALL DLACPY( ' ', K+1, N, A, LDA, WORK, LDA )
 *
                NTEST = 1
-               CALL AB_DSBTRD( 'V', 'U', N, K, WORK, LDA, SD, SE, U, LDU
-     $,
+               CALL DSBTRD( 'V', 'U', N, K, WORK, LDA, SD, SE, U, LDU,
      $                      WORK( LDA*N+1 ), IINFO )
 *
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'AB_DSBTRD(U)', IINFO, N,
+                  WRITE( NOUNIT, FMT = 9999 )'DSBTRD(U)', IINFO, N,
      $               JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -617,7 +608,7 @@
 *
 *              Do tests 1 and 2
 *
-               CALL AB_DSBT21( 'Upper', N, K, 1, A, LDA, SD, SE, U, LDU,
+               CALL DSBT21( 'Upper', N, K, 1, A, LDA, SD, SE, U, LDU,
      $                      WORK, RESULT( 1 ) )
 *
 *              Convert A from Upper-Triangle-Only storage to
@@ -634,17 +625,16 @@
   130             CONTINUE
   140          CONTINUE
 *
-*              Call AB_DSBTRD to compute S and U from lower triangle
+*              Call DSBTRD to compute S and U from lower triangle
 *
-               CALL AB_DLACPY( ' ', K+1, N, A, LDA, WORK, LDA )
+               CALL DLACPY( ' ', K+1, N, A, LDA, WORK, LDA )
 *
                NTEST = 3
-               CALL AB_DSBTRD( 'V', 'L', N, K, WORK, LDA, SD, SE, U, LDU
-     $,
+               CALL DSBTRD( 'V', 'L', N, K, WORK, LDA, SD, SE, U, LDU,
      $                      WORK( LDA*N+1 ), IINFO )
 *
                IF( IINFO.NE.0 ) THEN
-                  WRITE( NOUNIT, FMT = 9999 )'AB_DSBTRD(L)', IINFO, N,
+                  WRITE( NOUNIT, FMT = 9999 )'DSBTRD(L)', IINFO, N,
      $               JTYPE, IOLDSD
                   INFO = ABS( IINFO )
                   IF( IINFO.LT.0 ) THEN
@@ -658,7 +648,7 @@
 *
 *              Do tests 3 and 4
 *
-               CALL AB_DSBT21( 'Lower', N, K, 1, A, LDA, SD, SE, U, LDU,
+               CALL DSBT21( 'Lower', N, K, 1, A, LDA, SD, SE, U, LDU,
      $                      WORK, RESULT( 3 ) )
 *
 *              End of Loop -- Check for RESULT(j) > THRESH
@@ -672,7 +662,7 @@
                   IF( RESULT( JR ).GE.THRESH ) THEN
 *
 *                    If this is the first test to fail,
-*                    print a AB_HEADER to the data file.
+*                    print a header to the data file.
 *
                      IF( NERRS.EQ.0 ) THEN
                         WRITE( NOUNIT, FMT = 9998 )'DSB'
@@ -694,15 +684,15 @@
 *
 *     Summary
 *
-      CALL AB_DLASUM( 'DSB', NOUNIT, NERRS, NTESTT )
+      CALL DLASUM( 'DSB', NOUNIT, NERRS, NTESTT )
       RETURN
 *
- 9999 FORMAT( ' AB_DCHKSB: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
+ 9999 FORMAT( ' DCHKSB: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',
      $      I6, ', JTYPE=', I6, ', ISEED=(', 3( I5, ',' ), I5, ')' )
 *
  9998 FORMAT( / 1X, A3,
      $      ' -- Real Symmetric Banded Tridiagonal Reduction Routines' )
- 9997 FORMAT( ' Matrix types (see AB_DCHKSB for details): ' )
+ 9997 FORMAT( ' Matrix types (see DCHKSB for details): ' )
 *
  9996 FORMAT( / ' Special Matrices:',
      $      / '  1=Zero matrix.                        ',
@@ -731,6 +721,6 @@
  9993 FORMAT( ' N=', I5, ', K=', I4, ', seed=', 4( I4, ',' ), ' type ',
      $      I2, ', test(', I2, ')=', G10.3 )
 *
-*     End of AB_DCHKSB
+*     End of DCHKSB
 *
       END

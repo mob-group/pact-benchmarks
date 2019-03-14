@@ -1,4 +1,4 @@
-*> \brief \b AB_DTPT01
+*> \brief \b DTPT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_DTPT01( UPLO, DIAG, N, AP, AINVP, RCOND, WORK, RESID )
+*       SUBROUTINE DTPT01( UPLO, DIAG, N, AP, AINVP, RCOND, WORK, RESID )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          DIAG, UPLO
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> AB_DTPT01 computes the residual for a triangular matrix A times its
+*> DTPT01 computes the residual for a triangular matrix A times its
 *> inverse when A is stored in packed format:
 *>    RESID = norm(A*AINV - I) / ( N * norm(A) * norm(AINV) * EPS ),
 *> where EPS is the machine epsilon.
@@ -106,8 +106,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_DTPT01( UPLO, DIAG, N, AP, AINVP, RCOND, WORK, RESID
-     $ )
+      SUBROUTINE DTPT01( UPLO, DIAG, N, AP, AINVP, RCOND, WORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -135,12 +134,12 @@
       DOUBLE PRECISION   AINVNM, ANORM, EPS
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DLAMCH, AB_DLANTP
-      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_DLANTP
+      LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH, DLANTP
+      EXTERNAL           LSAME, DLAMCH, DLANTP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DTPMV
+      EXTERNAL           DTPMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE
@@ -157,9 +156,9 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0 or AINVNM = 0.
 *
-      EPS = AB_DLAMCH( 'Epsilon' )
-      ANORM = AB_DLANTP( '1', UPLO, DIAG, N, AP, WORK )
-      AINVNM = AB_DLANTP( '1', UPLO, DIAG, N, AINVP, WORK )
+      EPS = DLAMCH( 'Epsilon' )
+      ANORM = DLANTP( '1', UPLO, DIAG, N, AP, WORK )
+      AINVNM = DLANTP( '1', UPLO, DIAG, N, AINVP, WORK )
       IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
          RCOND = ZERO
          RESID = ONE / EPS
@@ -169,8 +168,8 @@
 *
 *     Compute A * AINV, overwriting AINV.
 *
-      UNITD = AB_LSAME( DIAG, 'U' )
-      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+      UNITD = LSAME( DIAG, 'U' )
+      IF( LSAME( UPLO, 'U' ) ) THEN
          JC = 1
          DO 10 J = 1, N
             IF( UNITD )
@@ -178,7 +177,7 @@
 *
 *           Form the j-th column of A*AINV
 *
-            CALL AB_DTPMV( 'Upper', 'No transpose', DIAG, J, AP,
+            CALL DTPMV( 'Upper', 'No transpose', DIAG, J, AP,
      $                  AINVP( JC ), 1 )
 *
 *           Subtract 1 from the diagonal
@@ -194,8 +193,7 @@
 *
 *           Form the j-th column of A*AINV
 *
-            CALL AB_DTPMV( 'Lower', 'No transpose', DIAG, N-J+1, AP( JC 
-     $),
+            CALL DTPMV( 'Lower', 'No transpose', DIAG, N-J+1, AP( JC ),
      $                  AINVP( JC ), 1 )
 *
 *           Subtract 1 from the diagonal
@@ -207,12 +205,12 @@
 *
 *     Compute norm(A*AINV - I) / (N * norm(A) * norm(AINV) * EPS)
 *
-      RESID = AB_DLANTP( '1', UPLO, 'Non-unit', N, AINVP, WORK )
+      RESID = DLANTP( '1', UPLO, 'Non-unit', N, AINVP, WORK )
 *
       RESID = ( ( RESID*RCOND ) / DBLE( N ) ) / EPS
 *
       RETURN
 *
-*     End of AB_DTPT01
+*     End of DTPT01
 *
       END

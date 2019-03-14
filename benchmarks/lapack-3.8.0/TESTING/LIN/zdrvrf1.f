@@ -1,4 +1,4 @@
-*> \brief \b AB_ZDRVRF1
+*> \brief \b ZDRVRF1
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZDRVRF1( NOUT, NN, NVAL, THRESH, A, LDA, ARF, WORK )
+*       SUBROUTINE ZDRVRF1( NOUT, NN, NVAL, THRESH, A, LDA, ARF, WORK )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDA, NN, NOUT
@@ -26,8 +26,8 @@
 *>
 *> \verbatim
 *>
-*> AB_ZDRVRF1 tests the LAPACK RFP routines:
-*>     AB_ZLANHF.F
+*> ZDRVRF1 tests the LAPACK RFP routines:
+*>     ZLANHF.F
 *> \endverbatim
 *
 *  Arguments:
@@ -93,7 +93,7 @@
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE AB_ZDRVRF1( NOUT, NN, NVAL, THRESH, A, LDA, ARF, WORK )
+      SUBROUTINE ZDRVRF1( NOUT, NN, NVAL, THRESH, A, LDA, ARF, WORK )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -130,12 +130,12 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      COMPLEX*16         AB_ZLARND
-      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANHE, AB_ZLANHF
-      EXTERNAL           AB_DLAMCH, AB_ZLARND, AB_ZLANHE, AB_ZLANHF
+      COMPLEX*16         ZLARND
+      DOUBLE PRECISION   DLAMCH, ZLANHE, ZLANHF
+      EXTERNAL           DLAMCH, ZLARND, ZLANHE, ZLANHF
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_ZTRTTF
+      EXTERNAL           ZTRTTF
 *     ..
 *     .. Scalars in Common ..
       CHARACTER*32       SRNAMT
@@ -161,8 +161,8 @@
          ISEED( I ) = ISEEDY( I )
    10 CONTINUE
 *
-      EPS = AB_DLAMCH( 'Precision' )
-      SMALL = AB_DLAMCH( 'Safe minimum' )
+      EPS = DLAMCH( 'Precision' )
+      SMALL = DLAMCH( 'Safe minimum' )
       LARGE = ONE / SMALL
       SMALL = SMALL * LDA * LDA
       LARGE = LARGE / LDA / LDA
@@ -181,7 +181,7 @@
 *
             DO J = 1, N
                DO I = 1, N
-                  A( I, J) = AB_ZLARND( 4, ISEED )
+                  A( I, J) = ZLARND( 4, ISEED )
                END DO
             END DO
 *
@@ -213,10 +213,10 @@
 *
                   CFORM = FORMS( IFORM )
 *
-                  SRNAMT = 'AB_ZTRTTF'
-                  CALL AB_ZTRTTF( CFORM, UPLO, N, A, LDA, ARF, INFO )
+                  SRNAMT = 'ZTRTTF'
+                  CALL ZTRTTF( CFORM, UPLO, N, A, LDA, ARF, INFO )
 *
-*                 Check error code from AB_ZTRTTF
+*                 Check error code from ZTRTTF
 *
                   IF( INFO.NE.0 ) THEN
                      IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 ) THEN
@@ -233,9 +233,8 @@
 *                    Check all four norms: 'M', '1', 'I', 'F'
 *
                      NORM = NORMS( INORM )
-                     NORMARF = AB_ZLANHF( NORM, CFORM, UPLO, N, ARF, WOR
-     $K )
-                     NORMA = AB_ZLANHE( NORM, UPLO, N, A, LDA, WORK )
+                     NORMARF = ZLANHF( NORM, CFORM, UPLO, N, ARF, WORK )
+                     NORMA = ZLANHE( NORM, UPLO, N, A, LDA, WORK )
 *
                      RESULT(1) = ( NORMA - NORMARF ) / NORMA / EPS
                      NRUN = NRUN + 1
@@ -245,7 +244,7 @@
                            WRITE( NOUT, * )
                            WRITE( NOUT, FMT = 9999 )
                         END IF
-                        WRITE( NOUT, FMT = 9997 ) 'AB_ZLANHF',
+                        WRITE( NOUT, FMT = 9997 ) 'ZLANHF',
      +                      N, IIT, UPLO, CFORM, NORM, RESULT(1)
                         NFAIL = NFAIL + 1
                      END IF
@@ -258,15 +257,15 @@
 *     Print a summary of the results.
 *
       IF ( NFAIL.EQ.0 ) THEN
-         WRITE( NOUT, FMT = 9996 ) 'AB_ZLANHF', NRUN
+         WRITE( NOUT, FMT = 9996 ) 'ZLANHF', NRUN
       ELSE
-         WRITE( NOUT, FMT = 9995 ) 'AB_ZLANHF', NFAIL, NRUN
+         WRITE( NOUT, FMT = 9995 ) 'ZLANHF', NFAIL, NRUN
       END IF
       IF ( NERRS.NE.0 ) THEN
-         WRITE( NOUT, FMT = 9994 ) NERRS, 'AB_ZLANHF'
+         WRITE( NOUT, FMT = 9994 ) NERRS, 'ZLANHF'
       END IF
 *
- 9999 FORMAT( 1X, ' *** Error(s) or Failure(s) while testing AB_ZLANHF
+ 9999 FORMAT( 1X, ' *** Error(s) or Failure(s) while testing ZLANHF
      +         ***')
  9998 FORMAT( 1X, '     Error in ',A6,' with UPLO=''',A1,''', FORM=''',
      +        A1,''', N=',I5)
@@ -280,6 +279,6 @@
 *
       RETURN
 *
-*     End of AB_ZDRVRF1
+*     End of ZDRVRF1
 *
       END

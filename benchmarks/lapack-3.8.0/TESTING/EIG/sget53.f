@@ -1,4 +1,4 @@
-*> \brief \b AB_SGET53
+*> \brief \b SGET53
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SGET53( A, LDA, B, LDB, SCALE, WR, WI, RESULT, INFO )
+*       SUBROUTINE SGET53( A, LDA, B, LDB, SCALE, WR, WI, RESULT, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, LDB
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SGET53  checks the generalized eigenvalues computed by AB_SLAG2.
+*> SGET53  checks the generalized eigenvalues computed by SLAG2.
 *>
 *> The basic test for an eigenvalue is:
 *>
@@ -124,8 +124,7 @@
 *> \ingroup single_eig
 *
 *  =====================================================================
-      SUBROUTINE AB_SGET53( A, LDA, B, LDB, SCALE, WR, WI, RESULT, INFO 
-     $)
+      SUBROUTINE SGET53( A, LDA, B, LDB, SCALE, WR, WI, RESULT, INFO )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -148,13 +147,12 @@
 *     ..
 *     .. Local Scalars ..
       REAL               ABSW, ANORM, BNORM, CI11, CI12, CI22, CNORM,
-     $                   CR11, CR12, CR21, CR22, AB_CSCALE, DETI, DETR, 
-     $S1,
+     $                   CR11, CR12, CR21, CR22, CSCALE, DETI, DETR, S1,
      $                   SAFMIN, SCALES, SIGMIN, TEMP, ULP, WIS, WRS
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH
-      EXTERNAL           AB_SLAMCH
+      REAL               SLAMCH
+      EXTERNAL           SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -171,8 +169,8 @@
 *
 *     Machine constants and norms
 *
-      SAFMIN = AB_SLAMCH( 'Safe minimum' )
-      ULP = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
+      SAFMIN = SLAMCH( 'Safe minimum' )
+      ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
       ABSW = ABS( WRS ) + ABS( WIS )
       ANORM = MAX( ABS( A( 1, 1 ) )+ABS( A( 2, 1 ) ),
      $        ABS( A( 1, 2 ) )+ABS( A( 2, 2 ) ), SAFMIN )
@@ -240,17 +238,17 @@
 *
       CNORM = MAX( ABS( CR11 )+ABS( CI11 )+ABS( CR21 ),
      $        ABS( CR12 )+ABS( CI12 )+ABS( CR22 )+ABS( CI22 ), SAFMIN )
-      AB_CSCALE = ONE / SQRT( CNORM )
-      DETR = ( AB_CSCALE*CR11 )*( AB_CSCALE*CR22 ) -
-     $       ( AB_CSCALE*CI11 )*( AB_CSCALE*CI22 ) -
-     $       ( AB_CSCALE*CR12 )*( AB_CSCALE*CR21 )
-      DETI = ( AB_CSCALE*CR11 )*( AB_CSCALE*CI22 ) +
-     $       ( AB_CSCALE*CI11 )*( AB_CSCALE*CR22 ) -
-     $       ( AB_CSCALE*CI12 )*( AB_CSCALE*CR21 )
+      CSCALE = ONE / SQRT( CNORM )
+      DETR = ( CSCALE*CR11 )*( CSCALE*CR22 ) -
+     $       ( CSCALE*CI11 )*( CSCALE*CI22 ) -
+     $       ( CSCALE*CR12 )*( CSCALE*CR21 )
+      DETI = ( CSCALE*CR11 )*( CSCALE*CI22 ) +
+     $       ( CSCALE*CI11 )*( CSCALE*CR22 ) -
+     $       ( CSCALE*CI12 )*( CSCALE*CR21 )
       SIGMIN = ABS( DETR ) + ABS( DETI )
       RESULT = SIGMIN / S1
       RETURN
 *
-*     End of AB_SGET53
+*     End of SGET53
 *
       END

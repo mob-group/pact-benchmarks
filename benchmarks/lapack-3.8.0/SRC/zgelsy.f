@@ -1,4 +1,4 @@
-*> \brief <b> AB_AB_ZGELSY solves overdetermined or underdetermined systems for GE matrices</b>
+*> \brief <b> ZGELSY solves overdetermined or underdetermined systems for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_AB_ZGELSY + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_AB_ZGELSY.f">
+*> Download ZGELSY + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgelsy.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_AB_ZGELSY.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgelsy.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_AB_ZGELSY.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgelsy.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_AB_ZGELSY( M, N, NRHS, A, LDA, B, LDB, JPVT, RCOND, RANK,
+*       SUBROUTINE ZGELSY( M, N, NRHS, A, LDA, B, LDB, JPVT, RCOND, RANK,
 *                          WORK, LWORK, RWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> AB_AB_ZGELSY computes the minimum-norm solution to a complex linear least
+*> ZGELSY computes the minimum-norm solution to a complex linear least
 *> squares problem:
 *>     minimize || A * X - B ||
 *> using a complete orthogonal factorization of A.  A is an M-by-N
@@ -166,13 +166,13 @@
 *>          The block algorithm requires that:
 *>            LWORK >= MN + MAX( 2*MN, NB*(N+1), MN+MN*NB, MN+NB*NRHS )
 *>          where NB is an upper bound on the blocksize returned
-*>          by AB_ILAENV for the routines AB_ZGEQP3, AB_ZTZRZF, AB_CTZRQF, AB_ZUNMQR,
-*>          and AB_ZUNMRZ.
+*>          by ILAENV for the routines ZGEQP3, ZTZRZF, CTZRQF, ZUNMQR,
+*>          and ZUNMRZ.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by AB_XERBLA.
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -207,8 +207,7 @@
 *>    G. Quintana-Orti, Depto. de Informatica, Universidad Jaime I, Spain \n
 *>
 *  =====================================================================
-      SUBROUTINE AB_AB_ZGELSY( M, N, NRHS, A, LDA, B, LDB, JPVT, RCOND, 
-     $RANK,
+      SUBROUTINE ZGELSY( M, N, NRHS, A, LDA, B, LDB, JPVT, RCOND, RANK,
      $                   WORK, LWORK, RWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -246,15 +245,13 @@
       COMPLEX*16         C1, C2, S1, S2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_DLABAD, AB_XERBLA, AB_ZCOPY, AB_ZGEQP3, AB_Z
-     $LAIC1, AB_ZLASCL,
-     $                   AB_ZLASET, AB_ZTRSM, AB_ZTZRZF, AB_ZUNMQR, AB_Z
-     $UNMRZ
+      EXTERNAL           DLABAD, XERBLA, ZCOPY, ZGEQP3, ZLAIC1, ZLASCL,
+     $                   ZLASET, ZTRSM, ZTZRZF, ZUNMQR, ZUNMRZ
 *     ..
 *     .. External Functions ..
-      INTEGER            AB_ILAENV
-      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE
-      EXTERNAL           AB_ILAENV, AB_DLAMCH, AB_ZLANGE
+      INTEGER            ILAENV
+      DOUBLE PRECISION   DLAMCH, ZLANGE
+      EXTERNAL           ILAENV, DLAMCH, ZLANGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCMPLX, MAX, MIN
@@ -268,10 +265,10 @@
 *     Test the input arguments.
 *
       INFO = 0
-      NB1 = AB_ILAENV( 1, 'AB_AB_ZGEQRF', ' ', M, N, -1, -1 )
-      NB2 = AB_ILAENV( 1, 'AB_ZGERQF', ' ', M, N, -1, -1 )
-      NB3 = AB_ILAENV( 1, 'AB_ZUNMQR', ' ', M, N, NRHS, -1 )
-      NB4 = AB_ILAENV( 1, 'AB_ZUNMRQ', ' ', M, N, NRHS, -1 )
+      NB1 = ILAENV( 1, 'ZGEQRF', ' ', M, N, -1, -1 )
+      NB2 = ILAENV( 1, 'ZGERQF', ' ', M, N, -1, -1 )
+      NB3 = ILAENV( 1, 'ZUNMQR', ' ', M, N, NRHS, -1 )
+      NB4 = ILAENV( 1, 'ZUNMRQ', ' ', M, N, NRHS, -1 )
       NB = MAX( NB1, NB2, NB3, NB4 )
       LWKOPT = MAX( 1, MN+2*N+NB*( N+1 ), 2*MN+NB*NRHS )
       WORK( 1 ) = DCMPLX( LWKOPT )
@@ -292,7 +289,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_AB_ZGELSY', -INFO )
+         CALL XERBLA( 'ZGELSY', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -307,62 +304,60 @@
 *
 *     Get machine parameters
 *
-      SMLNUM = AB_DLAMCH( 'S' ) / AB_DLAMCH( 'P' )
+      SMLNUM = DLAMCH( 'S' ) / DLAMCH( 'P' )
       BIGNUM = ONE / SMLNUM
-      CALL AB_DLABAD( SMLNUM, BIGNUM )
+      CALL DLABAD( SMLNUM, BIGNUM )
 *
 *     Scale A, B if max entries outside range [SMLNUM,BIGNUM]
 *
-      ANRM = AB_ZLANGE( 'M', M, N, A, LDA, RWORK )
+      ANRM = ZLANGE( 'M', M, N, A, LDA, RWORK )
       IASCL = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
 *
 *        Scale matrix norm up to SMLNUM
 *
-         CALL AB_ZLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, A, LDA, INFO )
+         CALL ZLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, A, LDA, INFO )
          IASCL = 1
       ELSE IF( ANRM.GT.BIGNUM ) THEN
 *
 *        Scale matrix norm down to BIGNUM
 *
-         CALL AB_ZLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, A, LDA, INFO )
+         CALL ZLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, A, LDA, INFO )
          IASCL = 2
       ELSE IF( ANRM.EQ.ZERO ) THEN
 *
 *        Matrix all zero. Return zero solution.
 *
-         CALL AB_ZLASET( 'F', MAX( M, N ), NRHS, CZERO, CZERO, B, LDB )
+         CALL ZLASET( 'F', MAX( M, N ), NRHS, CZERO, CZERO, B, LDB )
          RANK = 0
          GO TO 70
       END IF
 *
-      BNRM = AB_ZLANGE( 'M', M, NRHS, B, LDB, RWORK )
+      BNRM = ZLANGE( 'M', M, NRHS, B, LDB, RWORK )
       IBSCL = 0
       IF( BNRM.GT.ZERO .AND. BNRM.LT.SMLNUM ) THEN
 *
 *        Scale matrix norm up to SMLNUM
 *
-         CALL AB_ZLASCL( 'G', 0, 0, BNRM, SMLNUM, M, NRHS, B, LDB, INFO 
-     $)
+         CALL ZLASCL( 'G', 0, 0, BNRM, SMLNUM, M, NRHS, B, LDB, INFO )
          IBSCL = 1
       ELSE IF( BNRM.GT.BIGNUM ) THEN
 *
 *        Scale matrix norm down to BIGNUM
 *
-         CALL AB_ZLASCL( 'G', 0, 0, BNRM, BIGNUM, M, NRHS, B, LDB, INFO 
-     $)
+         CALL ZLASCL( 'G', 0, 0, BNRM, BIGNUM, M, NRHS, B, LDB, INFO )
          IBSCL = 2
       END IF
 *
 *     Compute QR factorization with column pivoting of A:
 *        A * P = Q * R
 *
-      CALL AB_ZGEQP3( M, N, A, LDA, JPVT, WORK( 1 ), WORK( MN+1 ),
+      CALL ZGEQP3( M, N, A, LDA, JPVT, WORK( 1 ), WORK( MN+1 ),
      $             LWORK-MN, RWORK, INFO )
       WSIZE = MN + DBLE( WORK( MN+1 ) )
 *
 *     complex workspace: MN+NB*(N+1). real workspace 2*N.
-*     Details of HousehoAB_LDEr rotations stored in WORK(1:MN).
+*     Details of Householder rotations stored in WORK(1:MN).
 *
 *     Determine RANK using incremental condition estimation
 *
@@ -372,7 +367,7 @@
       SMIN = SMAX
       IF( ABS( A( 1, 1 ) ).EQ.ZERO ) THEN
          RANK = 0
-         CALL AB_ZLASET( 'F', MAX( M, N ), NRHS, CZERO, CZERO, B, LDB )
+         CALL ZLASET( 'F', MAX( M, N ), NRHS, CZERO, CZERO, B, LDB )
          GO TO 70
       ELSE
          RANK = 1
@@ -381,9 +376,9 @@
    10 CONTINUE
       IF( RANK.LT.MN ) THEN
          I = RANK + 1
-         CALL AB_ZLAIC1( IMIN, RANK, WORK( ISMIN ), SMIN, A( 1, I ),
+         CALL ZLAIC1( IMIN, RANK, WORK( ISMIN ), SMIN, A( 1, I ),
      $                A( I, I ), SMINPR, S1, C1 )
-         CALL AB_ZLAIC1( IMAX, RANK, WORK( ISMAX ), SMAX, A( 1, I ),
+         CALL ZLAIC1( IMAX, RANK, WORK( ISMAX ), SMAX, A( 1, I ),
      $                A( I, I ), SMAXPR, S2, C2 )
 *
          IF( SMAXPR*RCOND.LE.SMINPR ) THEN
@@ -409,16 +404,15 @@
 *     [R11,R12] = [ T11, 0 ] * Y
 *
       IF( RANK.LT.N )
-     $   CALL AB_ZTZRZF( RANK, N, A, LDA, WORK( MN+1 ), WORK( 2*MN+1 ),
+     $   CALL ZTZRZF( RANK, N, A, LDA, WORK( MN+1 ), WORK( 2*MN+1 ),
      $                LWORK-2*MN, INFO )
 *
 *     complex workspace: 2*MN.
-*     Details of HousehoAB_LDEr rotations stored in WORK(MN+1:2*MN)
+*     Details of Householder rotations stored in WORK(MN+1:2*MN)
 *
 *     B(1:M,1:NRHS) := Q**H * B(1:M,1:NRHS)
 *
-      CALL AB_ZUNMQR( 'Left', 'Conjugate transpose', M, NRHS, MN, A, LDA
-     $,
+      CALL ZUNMQR( 'Left', 'Conjugate transpose', M, NRHS, MN, A, LDA,
      $             WORK( 1 ), B, LDB, WORK( 2*MN+1 ), LWORK-2*MN, INFO )
       WSIZE = MAX( WSIZE, 2*MN+DBLE( WORK( 2*MN+1 ) ) )
 *
@@ -426,7 +420,7 @@
 *
 *     B(1:RANK,1:NRHS) := inv(T11) * B(1:RANK,1:NRHS)
 *
-      CALL AB_ZTRSM( 'Left', 'Upper', 'No transpose', 'Non-unit', RANK,
+      CALL ZTRSM( 'Left', 'Upper', 'No transpose', 'Non-unit', RANK,
      $            NRHS, CONE, A, LDA, B, LDB )
 *
       DO 40 J = 1, NRHS
@@ -438,7 +432,7 @@
 *     B(1:N,1:NRHS) := Y**H * B(1:N,1:NRHS)
 *
       IF( RANK.LT.N ) THEN
-         CALL AB_ZUNMRZ( 'Left', 'Conjugate transpose', N, NRHS, RANK,
+         CALL ZUNMRZ( 'Left', 'Conjugate transpose', N, NRHS, RANK,
      $                N-RANK, A, LDA, WORK( MN+1 ), B, LDB,
      $                WORK( 2*MN+1 ), LWORK-2*MN, INFO )
       END IF
@@ -451,7 +445,7 @@
          DO 50 I = 1, N
             WORK( JPVT( I ) ) = B( I, J )
    50    CONTINUE
-         CALL AB_ZCOPY( N, WORK( 1 ), 1, B( 1, J ), 1 )
+         CALL ZCOPY( N, WORK( 1 ), 1, B( 1, J ), 1 )
    60 CONTINUE
 *
 *     complex workspace: N.
@@ -459,22 +453,18 @@
 *     Undo scaling
 *
       IF( IASCL.EQ.1 ) THEN
-         CALL AB_ZLASCL( 'G', 0, 0, ANRM, SMLNUM, N, NRHS, B, LDB, INFO 
-     $)
-         CALL AB_ZLASCL( 'U', 0, 0, SMLNUM, ANRM, RANK, RANK, A, LDA,
+         CALL ZLASCL( 'G', 0, 0, ANRM, SMLNUM, N, NRHS, B, LDB, INFO )
+         CALL ZLASCL( 'U', 0, 0, SMLNUM, ANRM, RANK, RANK, A, LDA,
      $                INFO )
       ELSE IF( IASCL.EQ.2 ) THEN
-         CALL AB_ZLASCL( 'G', 0, 0, ANRM, BIGNUM, N, NRHS, B, LDB, INFO 
-     $)
-         CALL AB_ZLASCL( 'U', 0, 0, BIGNUM, ANRM, RANK, RANK, A, LDA,
+         CALL ZLASCL( 'G', 0, 0, ANRM, BIGNUM, N, NRHS, B, LDB, INFO )
+         CALL ZLASCL( 'U', 0, 0, BIGNUM, ANRM, RANK, RANK, A, LDA,
      $                INFO )
       END IF
       IF( IBSCL.EQ.1 ) THEN
-         CALL AB_ZLASCL( 'G', 0, 0, SMLNUM, BNRM, N, NRHS, B, LDB, INFO 
-     $)
+         CALL ZLASCL( 'G', 0, 0, SMLNUM, BNRM, N, NRHS, B, LDB, INFO )
       ELSE IF( IBSCL.EQ.2 ) THEN
-         CALL AB_ZLASCL( 'G', 0, 0, BIGNUM, BNRM, N, NRHS, B, LDB, INFO 
-     $)
+         CALL ZLASCL( 'G', 0, 0, BIGNUM, BNRM, N, NRHS, B, LDB, INFO )
       END IF
 *
    70 CONTINUE
@@ -482,6 +472,6 @@
 *
       RETURN
 *
-*     End of AB_AB_ZGELSY
+*     End of ZGELSY
 *
       END

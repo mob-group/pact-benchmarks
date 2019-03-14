@@ -1,4 +1,4 @@
-*> \brief \b AB_SGETF2 computes the LU factorization of a general m-by-n matrix using partial pivoting with row interchanges (unblocked algorithm).
+*> \brief \b SGETF2 computes the LU factorization of a general m-by-n matrix using partial pivoting with row interchanges (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_SGETF2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SGETF2.f">
+*> Download SGETF2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgetf2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SGETF2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgetf2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SGETF2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgetf2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_SGETF2( M, N, A, LDA, IPIV, INFO )
+*       SUBROUTINE SGETF2( M, N, A, LDA, IPIV, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, M, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> AB_SGETF2 computes an LU factorization of a general m-by-n matrix A
+*> SGETF2 computes an LU factorization of a general m-by-n matrix A
 *> using partial pivoting with row interchanges.
 *>
 *> The factorization has the form
@@ -106,7 +106,7 @@
 *> \ingroup realGEcomputational
 *
 *  =====================================================================
-      SUBROUTINE AB_SGETF2( M, N, A, LDA, IPIV, INFO )
+      SUBROUTINE SGETF2( M, N, A, LDA, IPIV, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -132,12 +132,12 @@
       INTEGER            I, J, JP
 *     ..
 *     .. External Functions ..
-      REAL               AB_SLAMCH
-      INTEGER            AB_ISAMAX
-      EXTERNAL           AB_SLAMCH, AB_ISAMAX
+      REAL               SLAMCH
+      INTEGER            ISAMAX
+      EXTERNAL           SLAMCH, ISAMAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_SGER, AB_SSCAL, AB_SSWAP, AB_XERBLA
+      EXTERNAL           SGER, SSCAL, SSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -155,7 +155,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_SGETF2', -INFO )
+         CALL XERBLA( 'SGETF2', -INFO )
          RETURN
       END IF
 *
@@ -166,26 +166,26 @@
 *
 *     Compute machine safe minimum
 *
-      SFMIN = AB_SLAMCH('S')
+      SFMIN = SLAMCH('S')
 *
       DO 10 J = 1, MIN( M, N )
 *
 *        Find pivot and test for singularity.
 *
-         JP = J - 1 + AB_ISAMAX( M-J+1, A( J, J ), 1 )
+         JP = J - 1 + ISAMAX( M-J+1, A( J, J ), 1 )
          IPIV( J ) = JP
          IF( A( JP, J ).NE.ZERO ) THEN
 *
 *           Apply the interchange to columns 1:N.
 *
             IF( JP.NE.J )
-     $         CALL AB_SSWAP( N, A( J, 1 ), LDA, A( JP, 1 ), LDA )
+     $         CALL SSWAP( N, A( J, 1 ), LDA, A( JP, 1 ), LDA )
 *
 *           Compute elements J+1:M of J-th column.
 *
             IF( J.LT.M ) THEN
                IF( ABS(A( J, J )) .GE. SFMIN ) THEN
-                  CALL AB_SSCAL( M-J, ONE / A( J, J ), A( J+1, J ), 1 )
+                  CALL SSCAL( M-J, ONE / A( J, J ), A( J+1, J ), 1 )
                ELSE
                  DO 20 I = 1, M-J
                     A( J+I, J ) = A( J+I, J ) / A( J, J )
@@ -202,13 +202,12 @@
 *
 *           Update trailing submatrix.
 *
-            CALL AB_SGER( M-J, N-J, -ONE, A( J+1, J ), 1, A( J, J+1 ), L
-     $DA,
+            CALL SGER( M-J, N-J, -ONE, A( J+1, J ), 1, A( J, J+1 ), LDA,
      $                 A( J+1, J+1 ), LDA )
          END IF
    10 CONTINUE
       RETURN
 *
-*     End of AB_SGETF2
+*     End of SGETF2
 *
       END

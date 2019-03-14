@@ -1,4 +1,4 @@
-*> \brief \b AB_ZHETD2 reduces a Hermitian matrix to real symmetric tridiagonal form by an unitary similarity transformation (unblocked algorithm).
+*> \brief \b ZHETD2 reduces a Hermitian matrix to real symmetric tridiagonal form by an unitary similarity transformation (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download AB_ZHETD2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZHETD2.f">
+*> Download ZHETD2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhetd2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZHETD2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhetd2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZHETD2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhetd2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE AB_ZHETD2( UPLO, N, A, LDA, D, E, TAU, INFO )
+*       SUBROUTINE ZHETD2( UPLO, N, A, LDA, D, E, TAU, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> AB_ZHETD2 reduces a complex Hermitian matrix A to real symmetric
+*> ZHETD2 reduces a complex Hermitian matrix A to real symmetric
 *> tridiagonal form T by a unitary similarity transformation:
 *> Q**H * A * Q = T.
 *> \endverbatim
@@ -173,7 +173,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE AB_ZHETD2( UPLO, N, A, LDA, D, E, TAU, INFO )
+      SUBROUTINE ZHETD2( UPLO, N, A, LDA, D, E, TAU, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -203,13 +203,12 @@
       COMPLEX*16         ALPHA, TAUI
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, AB_ZAXPY, AB_ZHEMV, AB_AB_ZHER2, AB_
-     $AB_ZLARFG
+      EXTERNAL           XERBLA, ZAXPY, ZHEMV, ZHER2, ZLARFG
 *     ..
 *     .. External Functions ..
-      LOGICAL            AB_LSAME
-      COMPLEX*16         AB_ZDOTC
-      EXTERNAL           AB_LSAME, AB_ZDOTC
+      LOGICAL            LSAME
+      COMPLEX*16         ZDOTC
+      EXTERNAL           LSAME, ZDOTC
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX, MIN
@@ -219,8 +218,8 @@
 *     Test the input parameters
 *
       INFO = 0
-      UPPER = AB_LSAME( UPLO, 'U')
-      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
+      UPPER = LSAME( UPLO, 'U')
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -228,7 +227,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL AB_XERBLA( 'AB_ZHETD2', -INFO )
+         CALL XERBLA( 'ZHETD2', -INFO )
          RETURN
       END IF
 *
@@ -248,7 +247,7 @@
 *           to annihilate A(1:i-1,i+1)
 *
             ALPHA = A( I, I+1 )
-            CALL AB_AB_ZLARFG( I, ALPHA, A( 1, I+1 ), 1, TAUI )
+            CALL ZLARFG( I, ALPHA, A( 1, I+1 ), 1, TAUI )
             E( I ) = ALPHA
 *
             IF( TAUI.NE.ZERO ) THEN
@@ -259,20 +258,18 @@
 *
 *              Compute  x := tau * A * v  storing x in TAU(1:i)
 *
-               CALL AB_ZHEMV( UPLO, I, TAUI, A, LDA, A( 1, I+1 ), 1, ZER
-     $O,
+               CALL ZHEMV( UPLO, I, TAUI, A, LDA, A( 1, I+1 ), 1, ZERO,
      $                     TAU, 1 )
 *
 *              Compute  w := x - 1/2 * tau * (x**H * v) * v
 *
-               ALPHA = -HALF*TAUI*AB_ZDOTC( I, TAU, 1, A( 1, I+1 ), 1 )
-               CALL AB_ZAXPY( I, ALPHA, A( 1, I+1 ), 1, TAU, 1 )
+               ALPHA = -HALF*TAUI*ZDOTC( I, TAU, 1, A( 1, I+1 ), 1 )
+               CALL ZAXPY( I, ALPHA, A( 1, I+1 ), 1, TAU, 1 )
 *
 *              Apply the transformation as a rank-2 update:
 *                 A := A - v * w**H - w * v**H
 *
-               CALL AB_AB_ZHER2( UPLO, I, -ONE, A( 1, I+1 ), 1, TAU, 1, 
-     $A,
+               CALL ZHER2( UPLO, I, -ONE, A( 1, I+1 ), 1, TAU, 1, A,
      $                     LDA )
 *
             ELSE
@@ -294,8 +291,7 @@
 *           to annihilate A(i+2:n,i)
 *
             ALPHA = A( I+1, I )
-            CALL AB_AB_ZLARFG( N-I, ALPHA, A( MIN( I+2, N ), I ), 1, TAU
-     $I )
+            CALL ZLARFG( N-I, ALPHA, A( MIN( I+2, N ), I ), 1, TAUI )
             E( I ) = ALPHA
 *
             IF( TAUI.NE.ZERO ) THEN
@@ -306,21 +302,19 @@
 *
 *              Compute  x := tau * A * v  storing y in TAU(i:n-1)
 *
-               CALL AB_ZHEMV( UPLO, N-I, TAUI, A( I+1, I+1 ), LDA,
+               CALL ZHEMV( UPLO, N-I, TAUI, A( I+1, I+1 ), LDA,
      $                     A( I+1, I ), 1, ZERO, TAU( I ), 1 )
 *
 *              Compute  w := x - 1/2 * tau * (x**H * v) * v
 *
-               ALPHA = -HALF*TAUI*AB_ZDOTC( N-I, TAU( I ), 1, A( I+1, I 
-     $),
+               ALPHA = -HALF*TAUI*ZDOTC( N-I, TAU( I ), 1, A( I+1, I ),
      $                 1 )
-               CALL AB_ZAXPY( N-I, ALPHA, A( I+1, I ), 1, TAU( I ), 1 )
+               CALL ZAXPY( N-I, ALPHA, A( I+1, I ), 1, TAU( I ), 1 )
 *
 *              Apply the transformation as a rank-2 update:
 *                 A := A - v * w**H - w * v**H
 *
-               CALL AB_AB_ZHER2( UPLO, N-I, -ONE, A( I+1, I ), 1, TAU( I
-     $ ), 1,
+               CALL ZHER2( UPLO, N-I, -ONE, A( I+1, I ), 1, TAU( I ), 1,
      $                     A( I+1, I+1 ), LDA )
 *
             ELSE
@@ -335,6 +329,6 @@
 *
       RETURN
 *
-*     End of AB_ZHETD2
+*     End of ZHETD2
 *
       END
