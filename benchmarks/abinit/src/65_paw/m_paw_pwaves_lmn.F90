@@ -163,7 +163,7 @@ subroutine paw_pwaves_lmn_init(Paw_onsite,my_natom,natom,ntypat,rprimd,xcart,Paw
  integer :: itypat,ln_size,lmn_size,mesh_size,inl,iatom,iatom1,my_comm_atom,my_optgrad
  integer :: nfgd,ifgd,ipsang,option_ylmr,normchoice,ii,jlmn,jl,jm,jlm,jln
  logical :: my_atmtab_allocated,paral_atom
- real(dp) :: phj,rR,tphj,ybcbeg,ybcend
+ real(dp) :: phj,rR,tphj,ybAB_CBEG,ybcend
 !arrays
  integer, allocatable :: iperm(:)
  integer,ABI_CONTIGUOUS pointer :: indlmn(:,:)
@@ -199,13 +199,13 @@ subroutine paw_pwaves_lmn_init(Paw_onsite,my_natom,natom,ntypat,rprimd,xcart,Paw
    ABI_MALLOC(Paw_lmn_spline(itypat)%tphi,(mesh_size,ln_size))
 
    do inl=1,ln_size ! Calculate 2nd derivatives of %phi and %tphi for each ln component.
-     ybcbeg=zero; ybcend=zero
+     ybAB_CBEG=zero; ybcend=zero
      call paw_spline(Pawrad(itypat)%rad,Pawtab(itypat)%phi(:,inl), mesh_size,&
-&                    ybcbeg,ybcend,Paw_lmn_spline(itypat)%phi(:,inl))
+&                    ybAB_CBEG,ybcend,Paw_lmn_spline(itypat)%phi(:,inl))
 
-     ybcbeg=zero; ybcend=zero
+     ybAB_CBEG=zero; ybcend=zero
      call paw_spline(Pawrad(itypat)%rad,Pawtab(itypat)%tphi(:,inl),mesh_size,&
-&                    ybcbeg,ybcend,Paw_lmn_spline(itypat)%tphi(:,inl))
+&                    ybAB_CBEG,ybcend,Paw_lmn_spline(itypat)%tphi(:,inl))
    end do
  end do
  !
@@ -312,9 +312,9 @@ subroutine paw_pwaves_lmn_init(Paw_onsite,my_natom,natom,ntypat,rprimd,xcart,Paw
      !
      ! * compute d phi/dr, interpolate onto points and reorder indices.
      if (my_optgrad==1) then
-       ybcbeg=zero; ybcend=zero
+       ybAB_CBEG=zero; ybcend=zero
        call nderiv_gen(gg,Pawtab(itypat)%phi(:,inl),Pawrad(itypat))
-       call paw_spline(Pawrad(itypat)%rad,gg,mesh_size,ybcbeg,ybcend,&
+       call paw_spline(Pawrad(itypat)%rad,gg,mesh_size,ybAB_CBEG,ybcend,&
 &                      Paw_lmn_spline(itypat)%phi(:,inl))
        call paw_splint(mesh_size,Pawrad(itypat)%rad,Paw_lmn_spline(itypat)%phi(:,inl),&
 &                      Paw_lmn_spline(itypat)%phi(:,inl),nfgd,nrm_sort,ff)
@@ -332,9 +332,9 @@ subroutine paw_pwaves_lmn_init(Paw_onsite,my_natom,natom,ntypat,rprimd,xcart,Paw
        tphigrd(ii,inl) = ff(ifgd)
      end do
      if (my_optgrad==1) then
-       ybcbeg=zero; ybcend=zero
+       ybAB_CBEG=zero; ybcend=zero
        call nderiv_gen(gg,Pawtab(itypat)%tphi(:,inl),Pawrad(itypat))
-       call paw_spline(Pawrad(itypat)%rad,gg,mesh_size,ybcbeg,ybcend,&
+       call paw_spline(Pawrad(itypat)%rad,gg,mesh_size,ybAB_CBEG,ybcend,&
 &                      Paw_lmn_spline(itypat)%tphi(:,inl))
        call paw_splint(mesh_size,Pawrad(itypat)%rad,Paw_lmn_spline(itypat)%tphi(:,inl),&
 &                      Paw_lmn_spline(itypat)%phi(:,inl),nfgd,nrm_sort,ff)

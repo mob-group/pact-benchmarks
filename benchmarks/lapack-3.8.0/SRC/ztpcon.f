@@ -164,8 +164,8 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_IZAMAX
-      DOUBLE PRECISION   DLAMCH, AB_ZLANTP
-      EXTERNAL           AB_LSAME, AB_IZAMAX, DLAMCH, AB_ZLANTP
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANTP
+      EXTERNAL           AB_LSAME, AB_IZAMAX, AB_DLAMCH, AB_ZLANTP
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_XERBLA, AB_ZDRSCL, AB_ZLACN2, AB_ZLATPS
@@ -210,7 +210,7 @@
       END IF
 *
       RCOND = ZERO
-      SMLNUM = DLAMCH( 'Safe minimum' )*DBLE( MAX( 1, N ) )
+      SMLNUM = AB_DLAMCH( 'Safe minimum' )*DBLE( MAX( 1, N ) )
 *
 *     Compute the norm of the triangular matrix A.
 *

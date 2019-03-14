@@ -135,7 +135,7 @@ call timab(GWLS_TIMAB,OPTION_TIMAB,tsec)
 !--------------------------------------------------------------------------------
 ! Implement Gram-Schmidt.
 !--------------------------------------------------------------------------------
-call extract_QR_Householder(mpi_communicator,Hsize,Xsize,Xmatrix,Rmatrix)
+call extract_QR_HousehoAB_LDEr(mpi_communicator,Hsize,Xsize,Xmatrix,Rmatrix)
 
 OPTION_TIMAB = 2
 call timab(GWLS_TIMAB,OPTION_TIMAB,tsec)
@@ -222,7 +222,7 @@ else
   ABI_ALLOCATE(svd_tmp,(Hsize,lsolutions_max))
 
   ! Rmatrix is overwritten with U matrix from SVD. Update the svd_matrix
-  call ZGEMM(            'N',   & ! Leave first array as is
+  call AB_ZGEMM(            'N',   & ! Leave first array as is
   'N',   & ! Leave second array as is
   Hsize,   & ! the number of rows of the  matrix op( A )
   lsolutions_max,   & ! the number of columns of the  matrix op( B )
@@ -315,7 +315,7 @@ ABI_ALLOCATE(rwork_svd    ,(5*min(Hsize,lsolutions_max)))
 ABI_ALLOCATE(work_svd,(1))
 lwork_svd = -1
 
-call zgesvd('O',            & ! The first min(m,n) columns of U (the left singular vectors) are overwritten on the array A;
+call AB_ZGESVd('O',            & ! The first min(m,n) columns of U (the left singular vectors) are overwritten on the array A;
 'N',            & ! no column vectors of V are computed
 Hsize,          & ! number of rows of the matrix
 lsolutions_max, & ! number of columns of the matrix
@@ -338,7 +338,7 @@ if ( info_zgesvd /= 0) then
   open(debug_unit,file=trim(debug_filename),status='unknown')
 
   write(debug_unit,'(A)')      '*********************************************************************************************'
-  write(debug_unit,'(A,I4,A)') '*      ERROR: info = ',info_zgesvd,' in ZGESVD(1), gwls_QR_factorization'
+  write(debug_unit,'(A,I4,A)') '*      ERROR: info = ',info_zgesvd,' in AB_ZGESVD(1), gwls_QR_factorization'
   write(debug_unit,'(A)')      '*********************************************************************************************'
 
   close(debug_unit)
@@ -358,7 +358,7 @@ ABI_ALLOCATE(work_svd,(lwork_svd))
 
 ! computation run
 
-call zgesvd('O',            & ! The first min(m,n) columns of U (the left singular vectors) are overwritten on the array A;
+call AB_ZGESVd('O',            & ! The first min(m,n) columns of U (the left singular vectors) are overwritten on the array A;
 'N',            & ! no column vectors of V are computed
 Hsize,          & ! number of rows of the matrix
 lsolutions_max, & ! number of columns of the matrix
@@ -381,7 +381,7 @@ if ( info_zgesvd /= 0) then
   open(debug_unit,file=trim(debug_filename),status='unknown')
 
   write(debug_unit,'(A)')      '*********************************************************************************************'
-  write(debug_unit,'(A,I4,A)') '*      ERROR: info = ',info_zgesvd,' in ZGESVD(2), gwls_QR_factorization'
+  write(debug_unit,'(A,I4,A)') '*      ERROR: info = ',info_zgesvd,' in AB_ZGESVD(2), gwls_QR_factorization'
   write(debug_unit,'(A)')      '*********************************************************************************************'
 
   close(debug_unit)
@@ -403,9 +403,9 @@ end subroutine extract_SVD_lapack
 
 
 
-!!****f* m_hamiltonian/extract_QR_Householder
+!!****f* m_hamiltonian/extract_QR_HousehoAB_LDEr
 !! NAME
-!!  extract_QR_Householder
+!!  extract_QR_HousehoAB_LDEr
 !!
 !! FUNCTION
 !!  .
@@ -422,7 +422,7 @@ end subroutine extract_SVD_lapack
 !!
 !! SOURCE
 
-subroutine extract_QR_Householder(mpi_communicator,Hsize,Xsize,Xmatrix,Rmatrix)
+subroutine extract_QR_HousehoAB_LDEr(mpi_communicator,Hsize,Xsize,Xmatrix,Rmatrix)
 !--------------------------------------------------------------------------
 ! This function computes the QR factorization:
 !
@@ -433,7 +433,7 @@ subroutine extract_QR_Householder(mpi_communicator,Hsize,Xsize,Xmatrix,Rmatrix)
 !
 ! On output, the matrix X is replaced by Q.
 !
-! This routine uses Householder operations to generate Q and R.
+! This routine uses HousehoAB_LDEr operations to generate Q and R.
 ! Special attention is given to the fact that the matrix may be 
 ! distributed across processors and MPI communication is necessary.
 ! 
@@ -442,7 +442,7 @@ subroutine extract_QR_Householder(mpi_communicator,Hsize,Xsize,Xmatrix,Rmatrix)
 !This section has been created automatically by the script Abilint (TD).
 !Do not modify the following lines by hand.
 #undef ABI_FUNC
-#define ABI_FUNC 'extract_QR_Householder'
+#define ABI_FUNC 'extract_QR_HousehoAB_LDEr'
 !End of the abilint section
 
 implicit none
@@ -494,7 +494,7 @@ logical :: head_node
 
 
 !--------------------------------------------------------------------------------
-! Implement Householder algorithm, in parallel
+! Implement HousehoAB_LDEr algorithm, in parallel
 !--------------------------------------------------------------------------------
 mpi_nproc        = xmpi_comm_size(mpi_communicator)
 
@@ -646,7 +646,7 @@ if (abs(norm_x) > tol14) then
   ! Update the A matrix
 
   ! Compute v^dagger . A
-  !call ZGEMM(            'C',   & ! Hermitian conjugate the first array
+  !call AB_ZGEMM(            'C',   & ! Hermitian conjugate the first array
   !                       'N',   & ! Leave second array as is
   !                         1,   & ! the number of rows of the  matrix op( A )
   !                 Xsize-j+1,   & ! the number of columns of the  matrix op( B )
@@ -727,7 +727,7 @@ vj(:) = V_matrix(:,j)
 ! Update the A matrix
 
 ! Compute v^dagger . A
-!call ZGEMM(            'C',   & ! Hermitian conjugate the first array
+!call AB_ZGEMM(            'C',   & ! Hermitian conjugate the first array
 !                       'N',   & ! Leave second array as is
 !                         1,   & ! the number of rows of the  matrix op( A )
 !                     Xsize,   & ! the number of columns of the  matrix op( B )
@@ -885,7 +885,7 @@ ABI_DEALLOCATE(list_beta)
 30 format(1000(F22.16,2X,F22.16,5X))
 40 format(A,1000(F22.16,5X))
 
-end subroutine extract_QR_Householder
+end subroutine extract_QR_HousehoAB_LDEr
 !!***
 
 

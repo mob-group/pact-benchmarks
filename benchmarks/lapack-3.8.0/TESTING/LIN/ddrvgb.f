@@ -221,8 +221,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      DOUBLE PRECISION   DGET06, DLAMCH, DLANGB, DLANGE, DLANTB
-      EXTERNAL           LSAME, DGET06, DLAMCH, DLANGB, DLANGE, DLANTB
+      DOUBLE PRECISION   DGET06, AB_DLAMCH, DLANGB, DLANGE, DLANTB
+      EXTERNAL           LSAME, DGET06, AB_DLAMCH, DLANGB, DLANGE, DLANTB
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALADHD, ALAERH, ALASVM, DERRVX, DGBEQU, DGBSV,
@@ -678,7 +678,7 @@
                            END IF
                            RESULT( 7 ) = ABS( RPVGRW-WORK( 1 ) ) /
      $                                   MAX( WORK( 1 ), RPVGRW ) /
-     $                                   DLAMCH( 'E' )
+     $                                   AB_DLAMCH( 'E' )
 *
                            IF( .NOT.PREFAC ) THEN
 *

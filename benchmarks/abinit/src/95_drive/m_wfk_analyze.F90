@@ -174,7 +174,7 @@ subroutine wfk_analyze(acell,codvsn,dtfil,dtset,pawang,pawrad,pawtab,psps,rprim,
  real(dp) :: ecore,ecut_eff,ecutdg_eff,gsqcutc_eff,gsqcutf_eff,gsqcut_shp
  !real(dp) :: edos_step,edos_broad
  !real(dp) :: cpu,wall,gflops
- !real(dp) :: ex_energy,gsqcutc_eff,gsqcutf_eff,nelect,norm,oldefermi
+ !real(dp) :: ex_energy,gsqcutc_eff,gsqcutf_eff,nelect,norm,oAB_LDEfermi
  character(len=500) :: msg
  character(len=fnlen) :: wfk0_path,wfkfull_path
  logical :: call_pawinit, use_paw_aeur
@@ -208,7 +208,7 @@ subroutine wfk_analyze(acell,codvsn,dtfil,dtset,pawang,pawrad,pawtab,psps,rprim,
  DBG_ENTER('COLL')
 
  ! abirules!
- if (.False.) write(std_out,*)acell,codvsn,rprim,xred
+ if (.false.) write(std_out,*)acell,codvsn,rprim,xred
 
  comm = xmpi_world; nprocs = xmpi_comm_size(comm); my_rank = xmpi_comm_rank(comm)
 
@@ -229,7 +229,7 @@ subroutine wfk_analyze(acell,codvsn,dtfil,dtset,pawang,pawrad,pawtab,psps,rprim,
  call hdr_vs_dtset(wfk0_hdr,dtset)
 
  call crystal_from_hdr(cryst,wfk0_hdr,timrev2)
- call crystal_print(cryst,header="crystal structure from WFK file")
+ call crystal_print(cryst,AB_HEADER="crystal structure from WFK file")
 
  ebands = ebands_from_hdr(wfk0_hdr,maxval(wfk0_hdr%nband),gs_eigen)
 
@@ -263,7 +263,7 @@ subroutine wfk_analyze(acell,codvsn,dtfil,dtset,pawang,pawrad,pawtab,psps,rprim,
  !end if
 
  !call ebands_update_occ(ebands, spinmagntarget)
- call ebands_print(ebands,header="Ground state energies",prtvol=dtset%prtvol)
+ call ebands_print(ebands,AB_HEADER="Ground state energies",prtvol=dtset%prtvol)
  ABI_FREE(gs_eigen)
 
  ! Compute electron DOS.
@@ -304,8 +304,8 @@ subroutine wfk_analyze(acell,codvsn,dtfil,dtset,pawang,pawrad,pawtab,psps,rprim,
  call pawfgr_init(pawfgr,dtset,mgfftf,nfftf,ecut_eff,ecutdg_eff,ngfftc,ngfftf,&
 & gsqcutc_eff=gsqcutc_eff,gsqcutf_eff=gsqcutf_eff,gmet=cryst%gmet,k0=k0)
 
- call print_ngfft(ngfftc,header='Coarse FFT mesh used for the wavefunctions')
- call print_ngfft(ngfftf,header='Dense FFT mesh used for densities and potentials')
+ call print_ngfft(ngfftc,AB_HEADER='Coarse FFT mesh used for the wavefunctions')
+ call print_ngfft(ngfftf,AB_HEADER='Dense FFT mesh used for densities and potentials')
 
  ! Fake MPI_type for the sequential part.
  call initmpi_seq(mpi_enreg)
@@ -375,7 +375,7 @@ subroutine wfk_analyze(acell,codvsn,dtfil,dtset,pawang,pawrad,pawtab,psps,rprim,
 
    if (my_rank == master) call pawtab_print(pawtab, unit=std_out)
 
-   ! Get Pawrhoij from the header of the WFK file.
+   ! Get Pawrhoij from the AB_HEADER of the WFK file.
    call pawrhoij_copy(wfk0_hdr%pawrhoij,pawrhoij)
 
    ! Variables/arrays related to the fine FFT grid ===
@@ -440,7 +440,7 @@ subroutine wfk_analyze(acell,codvsn,dtfil,dtset,pawang,pawrad,pawtab,psps,rprim,
    call read_wfd()
 
    ABI_DT_MALLOC(esymm,(wfd%nkibz,wfd%nsppol))
-   use_paw_aeur=.False. ! should pass ngfftf but the dense mesh is not forced to be symmetric
+   use_paw_aeur=.false. ! should pass ngfftf but the dense mesh is not forced to be symmetric
 
    do spin=1,wfd%nsppol
      do ik_ibz=1,wfd%nkibz
@@ -457,7 +457,7 @@ subroutine wfk_analyze(acell,codvsn,dtfil,dtset,pawang,pawrad,pawtab,psps,rprim,
  !case (WFK_TASK_UR)
  !  ! plot KSS wavefunctions. Change bks_mask to select particular states.
  !  ABI_MALLOC(bks_mask,(Wfd%mband,Wfd%nkibz,Wfd%nsppol))
- !  bks_mask=.False.; bks_mask(1:4,1,1)=.True.
+ !  bks_mask=.false.; bks_mask(1:4,1,1)=.True.
  !  call wfd_plot_ur(Wfd,Cryst,Psps,Pawtab,Pawrad,ngfftf,bks_mask)
  !  ABI_FREE(bks_mask)
 
@@ -549,7 +549,7 @@ subroutine read_wfd()
 
    ABI_MALLOC(keep_ur, (ebands%mband, ebands%nkpt, ebands%nsppol))
    ABI_MALLOC(bks_mask, (ebands%mband, ebands%nkpt, ebands%nsppol))
-   keep_ur = .False.; bks_mask = .True.
+   keep_ur = .false.; bks_mask = .True.
 
    call wfd_init(wfd,cryst,pawtab,psps,keep_ur,dtset%paral_kgb,dummy_npw,&
    ebands%mband,ebands%nband,ebands%nkpt,dtset%nsppol,bks_mask,&

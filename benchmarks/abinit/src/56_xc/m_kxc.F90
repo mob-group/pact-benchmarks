@@ -1372,7 +1372,7 @@ subroutine kxc_ADA(Dtset,Cryst,ixc,ngfft,nfft,nspden,rhor,&
  real(dp),allocatable :: rhog(:,:),vhartr(:),vxclda(:,:)
  real(dp),allocatable :: xccc3d(:),my_rhor(:,:)
  real(dp),allocatable :: my_kxcg(:,:)
- real(dp),allocatable :: rhotilder(:,:)
+ real(dp),allocatable :: rhotiAB_LDEr(:,:)
  complex(gwpc),allocatable :: my_fxc_ADA_ggpq(:,:,:)
  complex(gwpc),allocatable :: FT_fxc_ADA_ggpq(:,:,:),dummy(:,:)
  real(dp),allocatable :: rvec(:,:),my_fxc_ADA_rrp(:,:)
@@ -1463,13 +1463,13 @@ subroutine kxc_ADA(Dtset,Cryst,ixc,ngfft,nfft,nspden,rhor,&
 
 !Calculate the smeared density
  ABI_MALLOC(my_rhor,(nfft,nspden))
- ABI_MALLOC(rhotilder,(nfft,nspden))
+ ABI_MALLOC(rhotiAB_LDEr,(nfft,nspden))
  ucvol = Cryst%ucvol
  my_rhor = rhor
 !do isp = 1,nsppol
-!call calc_smeared_density(my_rhor(:,isp),1,rhotilder(:,isp),nfft,ngfft,npw,&
+!call calc_smeared_density(my_rhor(:,isp),1,rhotiAB_LDEr(:,isp),nfft,ngfft,npw,&
 !&   gvec,Cryst%gprimd,Cryst%ucvol,MPI_enreg_seq,paral_kgb0,kappa_in=kappa)
-!my_rhor(:,isp) = rhotilder(:,isp)
+!my_rhor(:,isp) = rhotiAB_LDEr(:,isp)
 !end do
 
 !DEBUG print smeared density
@@ -1562,7 +1562,7 @@ subroutine kxc_ADA(Dtset,Cryst,ixc,ngfft,nfft,nspden,rhor,&
 !set up ADA vertex
  ABI_MALLOC(my_fxc_ADA_ggpq,(npw,npw,nqibz))
  my_fxc_ADA_ggpq = czero
-!Calculate f_xc(R,R')=(kappa^2/2)K_xc[\tilde{n}](G-G')
+!Calculate f_xc(R,R')=(kappa^2/2)K_xc[\tiAB_LDE{n}](G-G')
 !x(1/(kappa^2+|q+G|^2) + 1/(kappa^2+|q+G'|^2
 !First get G vectors and indices
 
@@ -1626,7 +1626,7 @@ subroutine kxc_ADA(Dtset,Cryst,ixc,ngfft,nfft,nspden,rhor,&
 !  DEBUG Check FT to real space
 !  The real-space expression is:
 !  f_xc(R,R')=(1/2)(kappa^2/(4*Pi))
-!  \{K_xc[\tilde{n(R)}]+K_xc[\tilde{n(R')}]\}
+!  \{K_xc[\tiAB_LDE{n(R)}]+K_xc[\tiAB_LDE{n(R')}]\}
 !  x exp(-kappa|R-R'|)/|R-R'|
    ABI_MALLOC(my_fxc_ADA_rrp,(nfft,nfft))
    ABI_MALLOC(FT_fxc_ADA_ggpq,(npw,npw,nqibz))
@@ -1747,7 +1747,7 @@ subroutine kxc_ADA(Dtset,Cryst,ixc,ngfft,nfft,nspden,rhor,&
  call destroy_mpi_enreg(MPI_enreg_seq)
  ABI_FREE(my_kxcg)
  ABI_FREE(my_rhor)
- ABI_FREE(rhotilder)
+ ABI_FREE(rhotiAB_LDEr)
  ABI_FREE(rhog)
  ABI_FREE(kxcr)
 

@@ -108,7 +108,7 @@ contains
 !!      cgcprj_cholesky,wf_mixing
 !!
 !! CHILDREN
-!!      dotprod_g,pawcprj_alloc,pawcprj_free,pawcprj_get,zhpev
+!!      dotprod_g,pawcprj_alloc,pawcprj_free,pawcprj_get,AB_ZHPEV
 !!
 !! SOURCE
 
@@ -145,7 +145,7 @@ subroutine dotprod_set_cgcprj(atindx1,cg1,cg2,cprj1,cprj2,dimcprj,hermitian,&
  real(dp) :: dotr,doti
 !arrays
  real(dp),allocatable :: cwavef1(:,:),cwavef2(:,:),proj(:,:,:)
- real(dp),allocatable :: eigval(:),eigvec(:,:,:),matrx(:,:),zhpev1(:,:),zhpev2(:)
+ real(dp),allocatable :: eigval(:),eigvec(:,:,:),matrx(:,:),AB_ZHPEV1(:,:),AB_ZHPEV2(:)
  type(pawcprj_type),allocatable :: cprj1_k(:,:),cprj2_k(:,:)
 
 ! *************************************************************************
@@ -197,7 +197,7 @@ subroutine dotprod_set_cgcprj(atindx1,cg1,cg2,cprj1,cprj2,dimcprj,hermitian,&
    do ibd2=1,max_nbd2
 
 !    XG171222 Note that this copy step, being inside the ibd1 loop, is quite detrimental.
-!    It might be reduced by copying several cwavef2, and use a ZGEMM type of approach.
+!    It might be reduced by copying several cwavef2, and use a AB_ZGEMM type of approach.
 
 !    Extract wavefunction information
      do ig=1,npw*nspinor
@@ -359,18 +359,18 @@ subroutine dotprod_set_cgcprj(atindx1,cg1,cg2,cprj1,cprj2,dimcprj,hermitian,&
      end do
    end do
 
-   ABI_ALLOCATE(zhpev1,(2,2*nbd-1))
-   ABI_ALLOCATE(zhpev2,(3*nbd-2))
+   ABI_ALLOCATE(AB_ZHPEV1,(2,2*nbd-1))
+   ABI_ALLOCATE(AB_ZHPEV2,(3*nbd-2))
    ABI_ALLOCATE(eigval,(nbd))
    ABI_ALLOCATE(eigvec,(2,nbd,nbd))
 
-   call ZHPEV ('V','U',nbd,matrx,eigval,eigvec,nbd,zhpev1,zhpev2,ier)
+   call AB_ZHPEV ('V','U',nbd,matrx,eigval,eigvec,nbd,AB_ZHPEV1,AB_ZHPEV2,ier)
 
 !write(std_out,*)' eigval=',eigval
 
    ABI_DEALLOCATE(matrx)
-   ABI_DEALLOCATE(zhpev1)
-   ABI_DEALLOCATE(zhpev2)
+   ABI_DEALLOCATE(AB_ZHPEV1)
+   ABI_DEALLOCATE(AB_ZHPEV2)
    ABI_DEALLOCATE(eigval)
    ABI_DEALLOCATE(eigvec)
 
@@ -697,7 +697,7 @@ end subroutine dotprodm_sumdiag_cgcprj
 !!      cgcprj_cholesky,wf_mixing
 !!
 !! CHILDREN
-!!      pawcprj_alloc,pawcprj_free,pawcprj_lincom,zgemm
+!!      pawcprj_alloc,pawcprj_free,pawcprj_lincom,AB_ZGEMM
 !!
 !! SOURCE
 
@@ -756,7 +756,7 @@ end subroutine dotprodm_sumdiag_cgcprj
 !Take care of the plane wave part
  ABI_ALLOCATE(cgout_,(2,npw*nspinor*nband_out))
 
- call zgemm('N','N',npw*nspinor,nband_out,nband_in,dcmplx(1._dp), &
+ call AB_ZGEMM('N','N',npw*nspinor,nband_out,nband_in,dcmplx(1._dp), &
 & cg(:,icg+1:icg+npw*nspinor*nband_in),npw*nspinor, &
 & alpha_mn,nband_in,dcmplx(0._dp),cgout_,npw*nspinor)
 
@@ -835,7 +835,7 @@ end subroutine lincom_cgcprj
 !!      wf_mixing
 !!
 !! CHILDREN
-!!      dotprod_set_cgcprj,lincom_cgcprj,zpotrf,ztrsm
+!!      dotprod_set_cgcprj,lincom_cgcprj,AB_ZPOTRF,AB_ZTRSM
 !!
 !! SOURCE
 
@@ -879,14 +879,14 @@ end subroutine lincom_cgcprj
 & mpi_enreg,natom,nattyp,nband,nband,npw,nspinor,nsppol,ntypat,pawtab,smn,usepaw)
 
 !Cholesky factorization: O = U^H U with U upper triangle matrix.
- call ZPOTRF('U',nband,smn,nband,ierr)
+ call AB_ZPOTRF('U',nband,smn,nband,ierr)
 
 !Solve X U = 1.
  dmn=zero
  do ii=1,nband
    dmn(1,ii,ii)=one
  end do
- call ZTRSM('Right','Upper','Normal','Normal',nband,nband,cone,smn,nband,dmn,nband)
+ call AB_ZTRSM('Right','Upper','Normal','Normal',nband,nband,cone,smn,nband,dmn,nband)
 
  inplace=1
 !This call does not take into account the fact that X=dmn is an upper triangular matrix...

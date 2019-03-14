@@ -153,8 +153,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               SLAMCH, SLANSY
-      EXTERNAL           LSAME, SLAMCH, SLANSY
+      REAL               AB_SLAMCH, SLANSY
+      EXTERNAL           LSAME, AB_SLAMCH, SLANSY
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SLASET, SLAVSY, SSWAP, STRMM, SLACPY
@@ -173,7 +173,7 @@
 *
 *     Determine EPS and the norm of A.
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       ANORM = SLANSY( '1', UPLO, N, A, LDA, RWORK )
 *
 *     Initialize C to the tridiagonal matrix T.

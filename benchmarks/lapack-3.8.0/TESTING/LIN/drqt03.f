@@ -165,8 +165,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, DLANGE
-      EXTERNAL           LSAME, DLAMCH, DLANGE
+      DOUBLE PRECISION   AB_DLAMCH, DLANGE
+      EXTERNAL           LSAME, AB_DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGEMM, DLACPY, DLARNV, DLASET, DORGRQ, DORMRQ
@@ -188,7 +188,7 @@
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       MINMN = MIN( M, N )
 *
 *     Quick return if possible

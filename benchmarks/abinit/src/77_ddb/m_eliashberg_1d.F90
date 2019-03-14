@@ -466,7 +466,7 @@ subroutine eli_diag_m_1d (delta_1d,lambda_1d,maxeigval,mustar,nmatsu,tc,z_1d)
  end if
 
  lwork = 3*(2*nmatsu+1)
- call DSYEV('V', 'U', 2*nmatsu+1, symm_mtm, 2*nmatsu+1, mtm_eig, work, lwork, info )
+ call AB_DSYEV('V', 'U', 2*nmatsu+1, symm_mtm, 2*nmatsu+1, mtm_eig, work, lwork, info )
 
  write(std_out,*) 'last eigenvalues = '
  write(std_out,*) mtm_eig(2*nmatsu-9:2*nmatsu+1)

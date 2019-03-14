@@ -116,8 +116,8 @@
       DOUBLE PRECISION   RWORK( 1 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLANGE
-      EXTERNAL           DLAMCH, DLANGE
+      DOUBLE PRECISION   AB_DLAMCH, DLANGE
+      EXTERNAL           AB_DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DLASET, DORMRZ, XERBLA
@@ -160,7 +160,7 @@
    10 CONTINUE
 *
       DRZT02 = DLANGE( 'One-norm', N, N, WORK, N, RWORK ) /
-     $         ( DLAMCH( 'Epsilon' )*DBLE( MAX( M, N ) ) )
+     $         ( AB_DLAMCH( 'Epsilon' )*DBLE( MAX( M, N ) ) )
       RETURN
 *
 *     End of DRZT02

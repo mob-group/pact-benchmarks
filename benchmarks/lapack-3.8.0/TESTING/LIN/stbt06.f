@@ -149,8 +149,8 @@
       REAL               ANORM, BIGNUM, EPS, RMAX, RMIN, SMLNUM
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLANTB
-      EXTERNAL           SLAMCH, SLANTB
+      REAL               AB_SLAMCH, SLANTB
+      EXTERNAL           AB_SLAMCH, SLANTB
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -160,7 +160,7 @@
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       RMAX = MAX( RCOND, RCONDC )
       RMIN = MIN( RCOND, RCONDC )
 *
@@ -192,7 +192,7 @@
 *        estimate multiplied by BIGNUM/TMAX, where TMAX is the maximum
 *        element in absolute value in A.
 *
-         SMLNUM = SLAMCH( 'Safe minimum' )
+         SMLNUM = AB_SLAMCH( 'Safe minimum' )
          BIGNUM = ONE / SMLNUM
          CALL SLABAD( SMLNUM, BIGNUM )
          ANORM = SLANTB( 'M', UPLO, DIAG, N, KD, AB, LDAB, WORK )

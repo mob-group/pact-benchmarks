@@ -263,15 +263,15 @@
 *     ..
 *     .. External Functions ..
       LOGICAL AB_DISNAN
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           AB_DISNAN, DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DISNAN, AB_DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = DLAMCH( 'Precision' )
+      EPS = AB_DLAMCH( 'Precision' )
 
 
       IF( R.EQ.0 ) THEN

@@ -373,7 +373,7 @@ end subroutine gp1cc
 !! gpp1cc
 !!
 !! FUNCTION
-!! Second derivative of gg wrt xx.
+!! second derivative of gg wrt xx.
 !!
 !! INPUTS
 !!  xx= abscisse to which gpp1cc_xx is calculated

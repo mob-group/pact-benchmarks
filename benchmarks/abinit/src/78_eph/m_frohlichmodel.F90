@@ -263,7 +263,7 @@ subroutine frohlichmodel(cryst,dtfil,dtset,ebands,efmasdeg,efmasval,ifc)
        lwork=-1
        ABI_ALLOCATE(rwork,(3*deg_dim-2))
        ABI_ALLOCATE(work,(1))
-       call zheev('V','U',deg_dim,eigenvec,deg_dim,eigenval,work,lwork,rwork,info)
+       call AB_ZHEEV('V','U',deg_dim,eigenvec,deg_dim,eigenval,work,lwork,rwork,info)
        lwork=int(work(1))
        ABI_DEALLOCATE(work)
        ABI_ALLOCATE(work,(lwork))
@@ -284,7 +284,7 @@ subroutine frohlichmodel(cryst,dtfil,dtset,ebands,efmasdeg,efmasval,ifc)
        else
          eigenvec = f3d ; eigenval = zero
          work=zero      ; rwork=zero
-         call zheev('V','U',deg_dim,eigenvec,deg_dim,eigenval,work,lwork,rwork,info)
+         call AB_ZHEEV('V','U',deg_dim,eigenvec,deg_dim,eigenval,work,lwork,rwork,info)
        endif
 
        m_avg = m_avg + weight_qdir(iqdir)*eigenval

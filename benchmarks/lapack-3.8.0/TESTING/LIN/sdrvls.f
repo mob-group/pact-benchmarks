@@ -241,8 +241,8 @@
       INTEGER, ALLOCATABLE :: IWORK (:)
 *     ..
 *     .. External Functions ..
-      REAL               SASUM, SLAMCH, SQRT12, SQRT14, SQRT17
-      EXTERNAL           SASUM, SLAMCH, SQRT12, SQRT14, SQRT17
+      REAL               SASUM, AB_SLAMCH, SQRT12, SQRT14, SQRT17
+      EXTERNAL           SASUM, AB_SLAMCH, SQRT12, SQRT14, SQRT17
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASVM, SAXPY, SERRLS, SGELS,
@@ -277,7 +277,7 @@
       DO 10 I = 1, 4
          ISEED( I ) = ISEEDY( I )
    10 CONTINUE
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
 *
 *     Threshold for rank estimation
 *

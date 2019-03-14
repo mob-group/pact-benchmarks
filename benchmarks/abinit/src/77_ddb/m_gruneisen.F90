@@ -181,7 +181,7 @@ type(gruns_t) function gruns_new(ddb_paths, inp, comm) result(new)
    call ddb_from_file(new%ddb_vol(ivol), ddb_paths(ivol), inp%brav, natom, natifc0, atifc0, new%cryst_vol(ivol), comm)
    ABI_FREE(atifc0)
    if (my_rank == master) then
-     call crystal_print(new%cryst_vol(ivol), header=sjoin("Structure for ivol:", itoa(ivol)), unit=ab_out, prtvol=-1)
+     call crystal_print(new%cryst_vol(ivol), AB_HEADER=sjoin("Structure for ivol:", itoa(ivol)), unit=ab_out, prtvol=-1)
    end if
 
    ! Get Dielectric Tensor and Effective Charges
@@ -310,7 +310,7 @@ subroutine gruns_fourq(gruns, qpt, wvols, gvals, dwdq, phdispl_cart)
    call massmult_and_breaksym(gruns%cryst_vol(ivol)%natom, gruns%cryst_vol(ivol)%ntypat, &
      gruns%cryst_vol(ivol)%typat, gruns%ifc_vol(ivol)%amu, d2cart(:,:,:,ivol))
 
-   !call zgemm('N','N',natom3,natom3,natom3,cone,d2cart(:,:,:,ivol),natom3,eigvec(:,:,:,ivol),natom3,czero,omat,natom3)
+   !call AB_ZGEMM('N','N',natom3,natom3,natom3,cone,d2cart(:,:,:,ivol),natom3,eigvec(:,:,:,ivol),natom3,czero,omat,natom3)
    !do nu=1,natom3
    !  write(std_out,*)"H|psi> - w**2 |psi>",maxval(abs(omat(:,:,nu) - wvols(nu,ivol) ** 2 * eigvec(:,:,nu,ivol)))
    !end do
@@ -325,7 +325,7 @@ subroutine gruns_fourq(gruns, qpt, wvols, gvals, dwdq, phdispl_cart)
  dddv = dddv / gruns%delta_vol
 
  ! Compute -V0/(2w(q)**2) <u(q)|dD(q)/dq|u(q)>
- call zgemm('N','N',natom3,natom3,natom3,cone,dddv,natom3,eigvec(:,:,:,gruns%iv0),natom3,czero,omat,natom3)
+ call AB_ZGEMM('N','N',natom3,natom3,natom3,cone,dddv,natom3,eigvec(:,:,:,gruns%iv0),natom3,czero,omat,natom3)
  do nu=1,natom3
    if (abs(wvols(nu, gruns%iv0)) > tol12) then
      dot = cg_zdotc(natom3, eigvec(1,1,nu, gruns%iv0), omat(1,1,nu))

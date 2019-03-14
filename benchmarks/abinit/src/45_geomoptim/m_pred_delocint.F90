@@ -58,7 +58,7 @@ contains
 !! Given a starting point xred that is a vector of length 3*(natom-1)
 !! (reduced nuclei coordinates),
 !! and unit cell parameters (acell and rprimd) the
-!! Broyden-Fletcher-Goldfarb-Shanno minimization is performed on the
+!! Broyden-FletAB_CHER-Goldfarb-Shanno minimization is performed on the
 !! total energy function, using its gradient (atomic forces and stresses)
 !  as calculated by the routine scfcv. Some atoms can be kept fixed,
 !! while the optimization of unit cell
@@ -654,7 +654,7 @@ end subroutine pred_delocint
 !!  given values of the delocalized coordinates. The relationship
 !!  is non-linear, so use an iterative scheme, as in Baker
 !!  JCP .105. 192 (1996).
-!!  Older reference: Pulay and co. JACS 101 2550 (1979)
+!!  OAB_LDEr reference: Pulay and co. JACS 101 2550 (1979)
 !!
 !! INPUTS
 !!   deloc <type(delocint)>=Important variables for
@@ -698,7 +698,7 @@ end subroutine pred_delocint
 !!      pred_delocint
 !!
 !! CHILDREN
-!!      dgemv,wrtout,xcart2deloc
+!!      AB_DGEMV,wrtout,xcart2deloc
 !!
 !! SOURCE
 
@@ -728,8 +728,8 @@ subroutine deloc2xcart(deloc,natom,rprimd,xcart,deloc_int,btinv,u_matrix)
  integer :: iiter,iprim,niter
  integer :: ii
  real(dp) :: minmix, maxmix
- real(dp) :: mix,tot_diff, toldeloc
- real(dp) :: lntoldeloc
+ real(dp) :: mix,tot_diff, toAB_LDEloc
+ real(dp) :: lntoAB_LDEloc
  logical  :: DEBUG=.FALSE.
 !arrays
  real(dp) :: btinv_tmp(3*(natom-1),3*natom)
@@ -787,14 +787,14 @@ subroutine deloc2xcart(deloc,natom,rprimd,xcart,deloc_int,btinv,u_matrix)
  cgrad(:) = zero
  maxmix = 0.9_dp
  minmix = 0.2_dp
- toldeloc = tol10
- lntoldeloc = log(toldeloc)
+ toAB_LDEloc = tol10
+ lntoAB_LDEloc = log(toAB_LDEloc)
 
  do iiter=1,niter
    if (iiter==1) then
      mix= minmix
    else
-     mix = minmix + (maxmix-minmix)*(log(tot_diff)-lntoldeloc) / lntoldeloc
+     mix = minmix + (maxmix-minmix)*(log(tot_diff)-lntoAB_LDEloc) / lntoAB_LDEloc
    end if
    if (mix < minmix) mix = minmix
    if (mix > maxmix) mix = maxmix
@@ -809,12 +809,12 @@ subroutine deloc2xcart(deloc,natom,rprimd,xcart,deloc_int,btinv,u_matrix)
    xdeloc_diff(:) = deloc_int(:) - deloc_int_now(:)
 
    tot_diff = sum(abs(xdeloc_diff))
-   if (tot_diff < toldeloc) exit
+   if (tot_diff < toAB_LDEloc) exit
 
    cgrad_old(:) = cgrad(:)
 
 !  gradient vector = btinv^{T} * xdeloc_diff
-   call dgemv('T',3*(natom-1),3*natom,one,&
+   call AB_DGEMV('T',3*(natom-1),3*natom,one,&
 &   btinv,3*(natom-1),xdeloc_diff,1,zero,cgrad,1)
  end do
 !end iiter do
@@ -881,7 +881,7 @@ end subroutine deloc2xcart
 !!      pred_delocint,xfh_recover_deloc
 !!
 !! CHILDREN
-!!      dgemm,dgemv,wrtout
+!!      AB_DGEMM,AB_DGEMV,wrtout
 !!
 !! SOURCE
 
@@ -913,11 +913,11 @@ subroutine fred2fdeloc(btinv,deloc_force,fred,natom,gprimd)
 
 !make cartesian forces
 
- call dgemm('N','N',3,natom,3,one,&
+ call AB_DGEMM('N','N',3,natom,3,one,&
 & gprimd,3,fred,3,zero,fcart,3)
 
 !turn cartesian to delocalized forces
- call dgemv('N',3*(natom-1),3*natom,one,&
+ call AB_DGEMV('N',3*(natom-1),3*natom,one,&
 & btinv,3*(natom-1),fcart,1,zero,deloc_force,1)
 
  write (message,'(a)') 'fred2fdeloc : deloc_force = '
@@ -1640,7 +1640,7 @@ logical :: DEBUG=.FALSE.
 
 !calculate value of delocalized internals
 
- call dgemv('T',deloc%ninternal,3*(natom-1),one,&
+ call AB_DGEMV('T',deloc%ninternal,3*(natom-1),one,&
 & u_matrix,deloc%ninternal,prim_int,1,zero,deloc_int,1)
 
 end subroutine xcart2deloc
@@ -1698,14 +1698,14 @@ end subroutine xcart2deloc
 !******************************************************************
 
 !f matrix = B^{T} B
- call dgemm('T','N',3*natom,3*natom,ninternal,one,&
+ call AB_DGEMM('T','N',3*natom,3*natom,ninternal,one,&
 & b_matrix,ninternal,b_matrix,ninternal,zero,f_matrix,3*natom)
 
  lwork = max(1,3*3*natom-1)
  ABI_ALLOCATE(work,(lwork))
  s_matrix(:,:) = f_matrix(:,:)
 
- call dsyev('V','L',3*natom,s_matrix,3*natom,f_eigs,work,lwork,info)
+ call AB_DSYEV('V','L',3*natom,s_matrix,3*natom,f_eigs,work,lwork,info)
 
  ABI_DEALLOCATE(work)
 
@@ -1729,7 +1729,7 @@ end subroutine xcart2deloc
 
  u_matrix_old(:,:) = u_matrix(:,:)
 
- call dgemm('N','N',ninternal,3*(natom-1),3*natom,one,&
+ call AB_DGEMM('N','N',ninternal,3*(natom-1),3*natom,one,&
 & b_matrix,ninternal,s_red,3*natom,zero,u_matrix,ninternal)
 
 

@@ -66,7 +66,7 @@ module m_initcuda
 
  private ::            &
    prt_device_info !, &    ! To print information about GPU
- !  get_fastest_devices   ! Get fastest GPU devices
+ !  get_faAB_STEST_devices   ! Get faAB_STEST GPU devices
 
  public ::             &
    InitGPU,            & ! Initialise GPU
@@ -374,7 +374,7 @@ end subroutine Get_Mem_Dev
  character(len=500) :: msg
  type(devGPU_type) :: gpuinfo
 !arrays
- integer,allocatable :: fastest_devices(:)
+ integer,allocatable :: faAB_STEST_devices(:)
 ! *********************************************************************
 
  if (use_gpu_cuda==0) return
@@ -390,10 +390,10 @@ end subroutine Get_Mem_Dev
    if(nb_devices==1) then
      device=0
    else if(all(gpu_devices_node(1:nb_devices)==-1)) then
-     ABI_ALLOCATE(fastest_devices,(0:nproc-1))
-     call get_fastest_devices(fastest_devices,nb_devices)
-     device=fastest_devices(me)
-     ABI_DEALLOCATE(fastest_devices)
+     ABI_ALLOCATE(faAB_STEST_devices,(0:nproc-1))
+     call get_faAB_STEST_devices(faAB_STEST_devices,nb_devices)
+     device=faAB_STEST_devices(me)
+     ABI_DEALLOCATE(faAB_STEST_devices)
    else
      jj=nb_devices
      do ii=jj,2,-1
@@ -474,9 +474,9 @@ end subroutine Get_Mem_Dev
 !!***
 
 
-!!****f* m_initcuda/get_fastest_devices
+!!****f* m_initcuda/get_faAB_STEST_devices
 !! NAME
-!! get_fastest_devices
+!! get_faAB_STEST_devices
 !!
 !! FUNCTION
 !! In case of multiple devices, sort them by performances
@@ -489,13 +489,13 @@ end subroutine Get_Mem_Dev
 !!
 !! SOURCE
 
- subroutine get_fastest_devices(devices,nb_devices)
+ subroutine get_faAB_STEST_devices(devices,nb_devices)
 
 
 !This section has been created automatically by the script Abilint (TD).
 !Do not modify the following lines by hand.
 #undef ABI_FUNC
-#define ABI_FUNC 'get_fastest_devices'
+#define ABI_FUNC 'get_faAB_STEST_devices'
 !End of the abilint section
 
  implicit none
@@ -634,7 +634,7 @@ contains
  end subroutine my_sort
 !!***
 
- end subroutine get_fastest_devices
+ end subroutine get_faAB_STEST_devices
 !!***
 
 end module m_initcuda

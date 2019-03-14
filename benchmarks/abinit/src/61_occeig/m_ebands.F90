@@ -68,7 +68,7 @@ MODULE m_ebands
  private
 
  public :: ebands_init             ! Main creation method.
- public :: ebands_from_hdr         ! Init object from the abinit header.
+ public :: ebands_from_hdr         ! Init object from the abinit AB_HEADER.
  public :: ebands_from_dtset       ! Init object from the abinit dataset.
  public :: ebands_free             ! Destruction method.
  public :: ebands_copy             ! Deep copy of the ebands_t.
@@ -451,7 +451,7 @@ end subroutine gaps_free
 !!
 !! INPUTS
 !!  gaps<gaps_t>=Object with info on the gaps.
-!!  [header]=Optional title.
+!!  [AB_HEADER]=Optional title.
 !!  [unit]=Optional unit for output (std_out if not specified)
 !!  [mode_paral]=Either "COLL" or "PERS", former is default.
 !!
@@ -466,7 +466,7 @@ end subroutine gaps_free
 !!
 !! SOURCE
 
-subroutine gaps_print(gaps,header,unit,mode_paral)
+subroutine gaps_print(gaps,AB_HEADER,unit,mode_paral)
 
 
 !This section has been created automatically by the script Abilint (TD).
@@ -481,7 +481,7 @@ subroutine gaps_print(gaps,header,unit,mode_paral)
 !scalars
  integer,intent(in),optional :: unit
  character(len=4),intent(in),optional :: mode_paral
- character(len=*),intent(in),optional :: header
+ character(len=*),intent(in),optional :: AB_HEADER
  type(gaps_t),intent(in)  :: gaps
 
 !Local variables-------------------------------
@@ -500,7 +500,7 @@ subroutine gaps_print(gaps,header,unit,mode_paral)
 
    if (spin==1) then
      msg=ch10
-     if (PRESENT(header)) msg=ch10//' === '//TRIM(ADJUSTL(header))//' === '
+     if (PRESENT(AB_HEADER)) msg=ch10//' === '//TRIM(ADJUSTL(AB_HEADER))//' === '
      call wrtout(my_unt,msg,my_mode)
    end if
 
@@ -619,7 +619,7 @@ subroutine ebands_init(bantot,ebands,nelect,doccde,eig,istwfk,kptns,&
 ! *************************************************************************
 
  ! Copy the scalars
- ! MG TODO here there is a inconsistency in the way occ are treated in the header
+ ! MG TODO here there is a inconsistency in the way occ are treated in the AB_HEADER
  ! (only the states used, bantot. are saved, and the way occ. and energies
  ! are passed to routines (mband,nkpt,nsppol). It might happen that bantot<mband*nktp*nsppol
  ! this should not lead to problems since arrays are passed by reference
@@ -683,11 +683,11 @@ end subroutine ebands_init
 !! ebands_from_hdr
 !!
 !! FUNCTION
-!! This subroutine initializes the ebands_t datatype from the abinit header by
+!! This subroutine initializes the ebands_t datatype from the abinit AB_HEADER by
 !! calling the main creation method.
 !!
 !! INPUTS
-!!  Hdr<hdr_type>=Abinit header.
+!!  Hdr<hdr_type>=Abinit AB_HEADER.
 !!  mband=Maximum number of bands.
 !!  ene3d(mband,Hdr%nkpt,Hdr%nsppol)=Energies.
 !!  [nelect]=Number of electrons per unit cell.
@@ -745,7 +745,7 @@ type(ebands_t) function ebands_from_hdr(hdr, mband, ene3d, nelect) result(ebands
 &  hdr%npwarr,hdr%nsppol,hdr%nspinor,hdr%tphysel,hdr%tsmear,hdr%occopt,hdr%occ,hdr%wtk,&
 &  hdr%charge, hdr%kptopt, hdr%kptrlatt_orig, hdr%nshiftk_orig, hdr%shiftk_orig, hdr%kptrlatt, hdr%nshiftk, hdr%shiftk)
 
- ! Copy the fermi level reported in the header
+ ! Copy the fermi level reported in the AB_HEADER
  ebands%fermie = hdr%fermie
 
  ABI_FREE(ugly_doccde)
@@ -1004,7 +1004,7 @@ end subroutine ebands_copy
 !! INPUTS
 !!  ebands<ebands_t>The type containing the data.
 !!  [unit]=Unit number (std_out if None)
-!!  [header]=title for info
+!!  [AB_HEADER]=title for info
 !!  [prtvol]=Verbosity level (0 if None)
 !!  [mode_paral]=Either 'COLL' or 'PERS' ('COLL' if None).
 !!
@@ -1019,7 +1019,7 @@ end subroutine ebands_copy
 !!
 !! SOURCE
 
-subroutine ebands_print(ebands,header,unit,prtvol,mode_paral)
+subroutine ebands_print(ebands,AB_HEADER,unit,prtvol,mode_paral)
 
 
 !This section has been created automatically by the script Abilint (TD).
@@ -1033,7 +1033,7 @@ subroutine ebands_print(ebands,header,unit,prtvol,mode_paral)
 !Arguments ------------------------------------
 !scalars
  integer,optional,intent(in) :: prtvol,unit
- character(len=*),optional,intent(in) :: header
+ character(len=*),optional,intent(in) :: AB_HEADER
  character(len=4),optional,intent(in) :: mode_paral
  type(ebands_t),intent(in) :: ebands
 
@@ -1048,7 +1048,7 @@ subroutine ebands_print(ebands,header,unit,prtvol,mode_paral)
  my_mode  ='COLL' ; if (PRESENT(mode_paral)) my_mode  =mode_paral
 
  msg=' ==== Info on the ebands_t ==== '
- if (PRESENT(header)) msg=' ==== '//TRIM(ADJUSTL(header))//' ==== '
+ if (PRESENT(AB_HEADER)) msg=' ==== '//TRIM(ADJUSTL(AB_HEADER))//' ==== '
  call wrtout(my_unt,msg,my_mode)
 
  write(msg,'(6(a,i0,a))')&
@@ -2613,7 +2613,7 @@ end subroutine ebands_set_nelect
 !!
 !! INPUTS
 !!  ebands<ebands_t>=Info on the band structure, the smearing technique and the physical temperature used.
-!!  [header]=Optional title.
+!!  [AB_HEADER]=Optional title.
 !!  [kmask]=Logical mask used to exclude k-points.
 !!  [unit]=Optional unit for output (std_out if not specified)
 !!  [mode_paral]=Either "COLL" or "PERS", former is default.
@@ -2634,7 +2634,7 @@ end subroutine ebands_set_nelect
 !!
 !! SOURCE
 
-subroutine ebands_report_gap(ebands,header,kmask,unit,mode_paral,gaps)
+subroutine ebands_report_gap(ebands,AB_HEADER,kmask,unit,mode_paral,gaps)
 
 
 !This section has been created automatically by the script Abilint (TD).
@@ -2649,7 +2649,7 @@ subroutine ebands_report_gap(ebands,header,kmask,unit,mode_paral,gaps)
 !scalars
  integer,intent(in),optional :: unit
  character(len=4),intent(in),optional :: mode_paral
- character(len=*),intent(in),optional :: header
+ character(len=*),intent(in),optional :: AB_HEADER
  type(ebands_t),intent(in)  :: ebands
 !arrays
  real(dp),optional,intent(out) :: gaps(3,ebands%nsppol)
@@ -2696,7 +2696,7 @@ subroutine ebands_report_gap(ebands,header,kmask,unit,mode_paral,gaps)
    first=first+1
    if (first==1) then
      msg=ch10
-     if (PRESENT(header)) msg=ch10//' === '//TRIM(ADJUSTL(header))//' === '
+     if (PRESENT(AB_HEADER)) msg=ch10//' === '//TRIM(ADJUSTL(AB_HEADER))//' === '
      call wrtout(my_unt,msg,my_mode)
    end if
 
@@ -2816,7 +2816,7 @@ integer function ebands_ncwrite(ebands,ncid) result(ncerr)
  !write_kptrlatt = (SUM(ABS(ebands%kptrlatt))/=0)
  !write_kptrlatt = (ebands%kptopt /= 0)
 
- ngkpt = 0; write_ngkpt = .False.
+ ngkpt = 0; write_ngkpt = .false.
  if (isdiagmat(ebands%kptrlatt) .and. ebands%nshiftk == 1) then
     write_ngkpt = .True.
     do ii=1,3
@@ -3184,7 +3184,7 @@ type(edos_t) function ebands_get_edos(ebands,cryst,intmeth,step,broad,comm) resu
    edos%gef(spin) = edos%dos(ief,spin)
  end do
 
- if (.False.) then
+ if (.false.) then
    write(std_out,*)"fermie from ebands: ",ebands%fermie
    write(std_out,*)"fermie from IDOS: ",edos%mesh(ief)
    write(std_out,*)"gef:from ebands%fermie: " ,edos%dos(bisect(edos%mesh, ebands%fermie), 0)
@@ -3300,7 +3300,7 @@ subroutine edos_write(edos, path)
    MSG_ERROR(msg)
  end if
 
- ! Write header.
+ ! Write AB_HEADER.
  write(unt,'(a)')'# Electron density of states: Energy in eV, DOS in states/eV per unit cell.'
  write(unt,"(a)")"# The zero of energies corresponds to the Fermi level."
 
@@ -3673,7 +3673,7 @@ subroutine ebands_expandk(inb, cryst, ecut_eff, force_istwfk1, dksqmax, bz2ibz, 
 
  timrev = kpts_timrev_from_kptopt(inb%kptopt)
  call listkk(dksqmax,cryst%gmet,bz2ibz,inb%kptns,kfull,inb%nkpt,nkfull,cryst%nsym,&
-   sppoldbl,cryst%symafm,cryst%symrel,timrev,use_symrec=.False.)
+   sppoldbl,cryst%symafm,cryst%symrel,timrev,use_symrec=.false.)
 
  ABI_MALLOC(wtk, (nkfull))
  wtk = one / nkfull ! weights normalized to one
@@ -3975,7 +3975,7 @@ end function ebspl_new
 !!    The routine does not reorder the interpolated eigenvalues
 !!    to be consistent with the interpolation of the derivatives.
 !!  [oder1(3)]=First-order derivatives wrt k in reduced coordinates.
-!!  [oder2(3,3)]=Second-order derivatives wrt k in reduced coordinates.
+!!  [oder2(3,3)]=second-order derivatives wrt k in reduced coordinates.
 !!
 !! PARENTS
 !!      m_ebands
@@ -5496,7 +5496,7 @@ subroutine ebands_interpolate_kpath(ebands, dtset, cryst, band_block, prefix, co
  end if
 
  kpath = kpath_new(bounds, cryst%gprimd, ndivsm)
- call kpath_print(kpath, header="Interpolating energies on k-path", unit=std_out)
+ call kpath_print(kpath, AB_HEADER="Interpolating energies on k-path", unit=std_out)
  ABI_FREE(bounds)
 
  ! Interpolate bands on k-path.

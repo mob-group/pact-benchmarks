@@ -144,8 +144,8 @@
       REAL               SMIN, BASE, TMP
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_XERBLA
@@ -178,7 +178,7 @@
          RETURN
       END IF
 
-      BASE = SLAMCH( 'B' )
+      BASE = AB_SLAMCH( 'B' )
       TMP = -0.5 / LOG ( BASE )
 *
 *     Find the minimum and maximum diagonal elements.

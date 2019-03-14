@@ -248,16 +248,16 @@ subroutine wrap_CHEEV(jobz,uplo,n,a,w)
  ABI_MALLOC(work, (lwork))
  ABI_MALLOC(rwork, (MAX(1,3*n-2)))
 
- call CHEEV(jobz,uplo,n,a,n,w,work,lwork,rwork,info)
+ call AB_CHEEV(jobz,uplo,n,a,n,w,work,lwork,rwork,info)
 
  if (info < 0) then
-  write(msg,'(a,i0,a)')"The ",-info,"-th argument of CHEEV had an illegal value."
+  write(msg,'(a,i0,a)')"The ",-info,"-th argument of AB_CHEEV had an illegal value."
   MSG_ERROR(msg)
  end if
 
  if (info > 0) then
   write(msg,'(2a,i0,a)')&
-&  "CHEEV: the algorithm failed to converge; ",ch10,&
+&  "AB_CHEEV: the algorithm failed to converge; ",ch10,&
 &  info," off-diagonal elements of an intermediate tridiagonal form did not converge to zero. "
   MSG_ERROR(msg)
  end if
@@ -374,16 +374,16 @@ subroutine wrap_ZHEEV(jobz,uplo,n,a,w,comm)
   ABI_MALLOC(work, (lwork))
   ABI_MALLOC(rwork, (MAX(1,3*n-2)))
 
-  call ZHEEV(jobz,uplo,n,a,n,w,work,lwork,rwork,info)
+  call AB_ZHEEV(jobz,uplo,n,a,n,w,work,lwork,rwork,info)
 
   if (info < 0) then
-   write(msg,'(a,i0,a)')" The ",-info,"-th argument of ZHEEV had an illegal value."
+   write(msg,'(a,i0,a)')" The ",-info,"-th argument of AB_ZHEEV had an illegal value."
    MSG_ERROR(msg)
   end if
 
   if (info > 0) then
    write(msg,'(2a,i0,a)')&
-&   "ZHEEV: the algorithm failed to converge; ",ch10,&
+&   "AB_ZHEEV: the algorithm failed to converge; ",ch10,&
 &   info," off-diagonal elements of an intermediate tridiagonal form did not converge to zero. "
    MSG_ERROR(msg)
   end if
@@ -414,7 +414,7 @@ subroutine wrap_ZHEEV(jobz,uplo,n,a,w,comm)
   end if
 
   ! Solve the problem with scaLAPACK.
-  call slk_pzheev(jobz,uplo,Slk_mat,Slk_vec,w)
+  call slk_pAB_ZHEEV(jobz,uplo,Slk_mat,Slk_vec,w)
 
   call destruction_matrix_scalapack(Slk_mat)
 
@@ -553,16 +553,16 @@ subroutine wrap_DSYEV_ZHEEV(jobz,uplo,cplex,n,a,w,comm)
 
    ABI_MALLOC(work_real,(lwork))
 
-   call DSYEV(jobz,uplo,n,a,n,w,work_real,lwork,info)
+   call AB_DSYEV(jobz,uplo,n,a,n,w,work_real,lwork,info)
 
    if (info < 0) then
-    write(msg,'(a,i0,a)')" The ",-info,"-th argument of DSYEV had an illegal value."
+    write(msg,'(a,i0,a)')" The ",-info,"-th argument of AB_DSYEV had an illegal value."
     MSG_ERROR(msg)
    end if
 
    if (info > 0) then
     write(msg,'(2a,i0,a)')&
-&    "DSYEV: the algorithm failed to converge; ",ch10,&
+&    "AB_DSYEV: the algorithm failed to converge; ",ch10,&
 &    info," off-diagonal elements of an intermediate tridiagonal form did not converge to zero. "
     MSG_ERROR(msg)
    end if
@@ -578,16 +578,16 @@ subroutine wrap_DSYEV_ZHEEV(jobz,uplo,cplex,n,a,w,comm)
    ABI_MALLOC(work_cplx, (lwork))
    ABI_MALLOC(rwork, (MAX(1,3*n-2)))
 
-   call ZHEEV(jobz,uplo,n,a,n,w,work_cplx,lwork,rwork,info)
+   call AB_ZHEEV(jobz,uplo,n,a,n,w,work_cplx,lwork,rwork,info)
 
    if (info < 0) then
-    write(msg,'(a,i0,a)')" The ",-info,"-th argument of ZHEEV had an illegal value."
+    write(msg,'(a,i0,a)')" The ",-info,"-th argument of AB_ZHEEV had an illegal value."
     MSG_ERROR(msg)
    end if
 
    if (info > 0) then
     write(msg,'(2a,i0,a)')&
-&    "ZHEEV: the algorithm failed to converge; ",ch10,&
+&    "AB_ZHEEV: the algorithm failed to converge; ",ch10,&
 &    info," off-diagonal elements of an intermediate tridiagonal form did not converge to zero. "
     MSG_ERROR(msg)
    end if
@@ -622,7 +622,7 @@ subroutine wrap_DSYEV_ZHEEV(jobz,uplo,cplex,n,a,w,comm)
 !  end if
 !
 !  ! Solve the problem with scaLAPACK.
-!  call slk_pzheev(jobz,uplo,Slk_mat,Slk_vec,w)
+!  call slk_pAB_ZHEEV(jobz,uplo,Slk_mat,Slk_vec,w)
 !
 !  call destruction_matrix_scalapack(Slk_mat)
 !
@@ -739,16 +739,16 @@ subroutine wrap_CHPEV(jobz,uplo,n,ap,w,z,ldz)
  ABI_MALLOC(work, (MAX(1,2*n-1)))
  ABI_MALLOC(rwork, (MAX(1,3*n-2)))
 
- call CHPEV( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, RWORK, INFO )
+ call AB_CHPEV( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, RWORK, INFO )
 
  if (info < 0) then
-  write(msg,'(a,i0,a)')" The ",-info,"-th argument of ZHEEV had an illegal value."
+  write(msg,'(a,i0,a)')" The ",-info,"-th argument of AB_ZHEEV had an illegal value."
   MSG_ERROR(msg)
  end if
 
  if (info > 0) then
   write(msg,'(2a,i0,a)')&
-&  "ZHPEV: the algorithm failed to converge; ",ch10,&
+&  "AB_ZHPEV: the algorithm failed to converge; ",ch10,&
 &  info," off-diagonal elements of an intermediate tridiagonal form did not converge to zero. "
   MSG_ERROR(msg)
  end if
@@ -879,16 +879,16 @@ subroutine wrap_ZHPEV(jobz,uplo,n,ap,w,z,ldz,comm)
   ABI_MALLOC(work, (MAX(1,2*n-1)))
   ABI_MALLOC(rwork, (MAX(1,3*n-2)))
 
-  call ZHPEV(jobz,uplo,n,ap,w,z,ldz,work,rwork,info)
+  call AB_ZHPEV(jobz,uplo,n,ap,w,z,ldz,work,rwork,info)
 
   if (info < 0) then
-   write(msg,'(a,i0,a)')" The ",-info,"-th argument of ZHPEV had an illegal value."
+   write(msg,'(a,i0,a)')" The ",-info,"-th argument of AB_ZHPEV had an illegal value."
    MSG_ERROR(msg)
   end if
 
   if (info > 0) then
    write(msg,'(2a,i0,a)')&
-&   "ZHPEV: the algorithm failed to converge; ",ch10,&
+&   "AB_ZHPEV: the algorithm failed to converge; ",ch10,&
 &   info," off-diagonal elements of an intermediate tridiagonal form did not converge to zero. "
    MSG_ERROR(msg)
   end if
@@ -918,7 +918,7 @@ subroutine wrap_ZHPEV(jobz,uplo,n,ap,w,z,ldz,comm)
    end if
 
    ! Solve the problem with scaLAPACK.
-   call slk_pzheev(jobz,uplo,Slk_mat,Slk_vec,w)
+   call slk_pAB_ZHEEV(jobz,uplo,Slk_mat,Slk_vec,w)
 
    call destruction_matrix_scalapack(Slk_mat)
 
@@ -1064,22 +1064,22 @@ subroutine wrap_ZHEGV(itype,jobz,uplo,n,a,b,w,comm)
   ABI_MALLOC(work, (lwork))
   ABI_MALLOC(rwork, (MAX(1,3*n-2)))
 
-  call ZHEGV(itype,jobz,uplo,n,a,n,b,n,w,work,lwork,rwork,info)
+  call AB_ZHEGV(itype,jobz,uplo,n,a,n,b,n,w,work,lwork,rwork,info)
 
   if (info < 0) then
-   write(msg,'(a,i0,a)')" The ",-info,"-th argument of ZHEGV had an illegal value."
+   write(msg,'(a,i0,a)')" The ",-info,"-th argument of AB_ZHEGV had an illegal value."
    MSG_ERROR(msg)
   end if
 
   if (info > 0) then
    if (info<= n) then
     write(msg,'(2a,i0,a)')&
-&    "ZHEGV failed to converge: ",ch10,&
+&    "AB_ZHEGV failed to converge: ",ch10,&
 &    info," off-diagonal elements of an intermediate tridiagonal form did not converge to zero. "
    else
     ii = info -n
     write(msg,'(3a,i0,3a)')&
-&   "ZHEGV failed to converge: ",ch10,&
+&   "AB_ZHEGV failed to converge: ",ch10,&
 &   "The leading minor of order ",ii," of B is not positive definite. ",ch10,&
 &   "The factorization of B could not be completed and no eigenvalues or eigenvectors were computed."
    end if
@@ -1110,9 +1110,9 @@ subroutine wrap_ZHEGV(itype,jobz,uplo,n,a,b,w,comm)
   call slk_matrix_from_global_dpc_2D(Slk_matB,uplo,b)
 
   ! Solve the problem with scaLAPACK.
-  MSG_ERROR("slk_pZHEGV not yet coded")
+  MSG_ERROR("slk_pAB_ZHEGV not yet coded")
   ! TODO
-  !% call slk_pzhegv(itype,jobz,uplo,Slk_matA,Slk_matB,w)
+  !% call slk_pAB_ZHEGV(itype,jobz,uplo,Slk_matA,Slk_matB,w)
 
   call destruction_matrix_scalapack(Slk_matB)
 
@@ -1278,22 +1278,22 @@ subroutine wrap_DSYGV_ZHEGV(itype,jobz,uplo,cplex,n,a,b,w,comm)
 
    ABI_MALLOC(work_real,(lwork))
 
-   call DSYGV(itype,jobz,uplo,n,a,n,b,n,w,work_real,lwork,info)
+   call AB_DSYGV(itype,jobz,uplo,n,a,n,b,n,w,work_real,lwork,info)
 
    if (info < 0) then
-    write(msg,'(a,i0,a)')" The ",-info,"-th argument of DSYGV had an illegal value."
+    write(msg,'(a,i0,a)')" The ",-info,"-th argument of AB_DSYGV had an illegal value."
     MSG_ERROR(msg)
    end if
 
    if (info > 0) then
     if (info<= n) then
      write(msg,'(2a,i0,a)')&
-&     " DSYGV failed to converge: ",ch10,&
+&     " AB_DSYGV failed to converge: ",ch10,&
 &     info," off-diagonal elements of an intermediate tridiagonal form did not converge to zero. "
     else
      ii = info -n
      write(msg,'(3a,i0,3a)')&
-&    "DSYGV failed to converge: ",ch10,&
+&    "AB_DSYGV failed to converge: ",ch10,&
 &    "The leading minor of order ",ii," of B is not positive definite. ",ch10,&
 &    "The factorization of B could not be completed and no eigenvalues or eigenvectors were computed."
     end if
@@ -1311,22 +1311,22 @@ subroutine wrap_DSYGV_ZHEGV(itype,jobz,uplo,cplex,n,a,b,w,comm)
    ABI_MALLOC(work_cplx,(lwork))
    ABI_MALLOC(rwork,(MAX(1,3*n-2)))
 
-   call ZHEGV(itype,jobz,uplo,n,a,n,b,n,w,work_cplx,lwork,rwork,info)
+   call AB_ZHEGV(itype,jobz,uplo,n,a,n,b,n,w,work_cplx,lwork,rwork,info)
 
    if (info < 0) then
-    write(msg,'(a,i0,a)')" The ",-info,"-th argument of ZHEGV had an illegal value."
+    write(msg,'(a,i0,a)')" The ",-info,"-th argument of AB_ZHEGV had an illegal value."
     MSG_ERROR(msg)
    end if
 
    if (info > 0) then
     if (info<= n) then
      write(msg,'(2a,i0,a)')&
-&     "ZHEEV failed to converge: ",ch10,&
+&     "AB_ZHEEV failed to converge: ",ch10,&
 &     info," off-diagonal elements of an intermediate tridiagonal form did not converge to zero. "
     else
      ii = info -n
      write(msg,'(3a,i0,3a)')&
-&    "ZHEEV failed to converge: ",ch10,&
+&    "AB_ZHEEV failed to converge: ",ch10,&
 &    "The leading minor of order ",ii," of B is not positive definite. ",ch10,&
 &    "The factorization of B could not be completed and no eigenvalues or eigenvectors were computed."
     end if
@@ -1361,9 +1361,9 @@ subroutine wrap_DSYGV_ZHEGV(itype,jobz,uplo,cplex,n,a,b,w,comm)
   ! call slk_matrix_from_global_dpc_2D(Slk_matB,uplo,b)
 
   ! ! Solve the problem with scaLAPACK.
-  ! MSG_ERROR("slk_pZHEGV not yet coded")
+  ! MSG_ERROR("slk_pAB_ZHEGV not yet coded")
   ! ! TODO
-  ! call slk_pzhegv(itype,jobz,uplo,Slk_matA,Slk_matB,w)
+  ! call slk_pAB_ZHEGV(itype,jobz,uplo,Slk_matA,Slk_matB,w)
 
   ! call destruction_matrix_scalapack(Slk_matB)
   !
@@ -1448,10 +1448,10 @@ end subroutine wrap_DSYGV_ZHEGV
 !!          by reducing A to tridiagonal form.
 !!
 !!          Eigenvalues will be computed most accurately when ABSTOL is
-!!          set to twice the underflow threshold 2*DLAMCH('S'), not zero.
+!!          set to twice the underflow threshold 2*AB_DLAMCH('S'), not zero.
 !!          If this routine returns with INFO>0, indicating that some
 !!          eigenvectors did not converge, try setting ABSTOL to
-!!          2*DLAMCH('S').
+!!          2*AB_DLAMCH('S').
 !!
 !!          See "Computing Small Singular Values of Bidiagonal Matrices
 !!          with Guaranteed High Relative Accuracy," by Demmel and
@@ -1567,16 +1567,16 @@ subroutine wrap_ZHEEVX(jobz,range,uplo,n,a,vl,vu,il,iu,abstol,m,w,z,ldz,comm)
   ABI_MALLOC(iwork,(5*n))
   ABI_MALLOC(ifail,(n))
 
-  call ZHEEVX(jobz,range,uplo,n,a,n,vl,vu,il,iu,abstol,m,w,z,ldz,work,lwork,rwork,iwork,ifail,info)
+  call AB_ZHEEVX(jobz,range,uplo,n,a,n,vl,vu,il,iu,abstol,m,w,z,ldz,work,lwork,rwork,iwork,ifail,info)
 
   if (info < 0) then
-   write(msg,'(a,i0,a)')" The ",-info,"-th argument of ZHEEVX had an illegal value."
+   write(msg,'(a,i0,a)')" The ",-info,"-th argument of AB_ZHEEVX had an illegal value."
    MSG_ERROR(msg)
   end if
 
   if (info > 0) then
    write(msg,'(2a,i0,a)')&
-&   "ZHEEVX: the algorithm failed to converge; ",ch10,&
+&   "AB_ZHEEVX: the algorithm failed to converge; ",ch10,&
 &   info,"eigenvectors failed to converge. "
    MSG_ERROR(msg)
   end if
@@ -1609,7 +1609,7 @@ subroutine wrap_ZHEEVX(jobz,range,uplo,n,a,vl,vu,il,iu,abstol,m,w,z,ldz,comm)
   end if
 
   ! Solve the problem.
-  call slk_pzheevx(jobz,range,uplo,Slk_mat,vl,vu,il,iu,abstol,Slk_vec,m,w)
+  call slk_pAB_ZHEEVx(jobz,range,uplo,Slk_mat,vl,vu,il,iu,abstol,Slk_vec,m,w)
 
   call destruction_matrix_scalapack(Slk_mat)
 
@@ -1697,10 +1697,10 @@ end subroutine wrap_ZHEEVX
 !!          by reducing A to tridiagonal form.
 !!
 !!          Eigenvalues will be computed most accurately when ABSTOL is
-!!          set to twice the underflow threshold 2*DLAMCH('S'), not zero.
+!!          set to twice the underflow threshold 2*AB_DLAMCH('S'), not zero.
 !!          If this routine returns with INFO>0, indicating that some
 !!          eigenvectors did not converge, try setting ABSTOL to
-!!          2*DLAMCH('S').
+!!          2*AB_DLAMCH('S').
 !!
 !!          See "Computing Small Singular Values of Bidiagonal Matrices
 !!          with Guaranteed High Relative Accuracy," by Demmel and
@@ -1824,16 +1824,16 @@ subroutine wrap_DSYEVX_ZHEEVX(jobz,range,uplo,cplex,n,a,vl,vu,il,iu,abstol,m,w,z
    ABI_MALLOC(iwork,(5*n))
    ABI_MALLOC(ifail,(n))
 
-   call DSYEVX(jobz,range,uplo,n,a,n,vl,vu,il,iu,abstol,m,w,z,ldz,work_real,lwork,iwork,ifail,info)
+   call AB_DSYEVX(jobz,range,uplo,n,a,n,vl,vu,il,iu,abstol,m,w,z,ldz,work_real,lwork,iwork,ifail,info)
 
    if (info < 0) then
-    write(msg,'(a,i0,a)')" The ",-info,"-th argument of DSYEVX had an illegal value."
+    write(msg,'(a,i0,a)')" The ",-info,"-th argument of AB_DSYEVX had an illegal value."
     MSG_ERROR(msg)
    end if
 
    if (info > 0) then
     write(msg,'(2a,i0,a)')&
-&    "DSYEVX: the algorithm failed to converge; ",ch10,&
+&    "AB_DSYEVX: the algorithm failed to converge; ",ch10,&
 &    info,"eigenvectors failed to converge. "
     MSG_ERROR(msg)
    end if
@@ -1853,16 +1853,16 @@ subroutine wrap_DSYEVX_ZHEEVX(jobz,range,uplo,cplex,n,a,vl,vu,il,iu,abstol,m,w,z
    ABI_MALLOC(iwork,(5*n))
    ABI_MALLOC(ifail,(n))
 
-   call ZHEEVX(jobz,range,uplo,n,a,n,vl,vu,il,iu,abstol,m,w,z,ldz,work_cplx,lwork,rwork,iwork,ifail,info)
+   call AB_ZHEEVX(jobz,range,uplo,n,a,n,vl,vu,il,iu,abstol,m,w,z,ldz,work_cplx,lwork,rwork,iwork,ifail,info)
 
    if (info < 0) then
-    write(msg,'(a,i0,a)')" The ",-info,"-th argument of ZHEEVX had an illegal value."
+    write(msg,'(a,i0,a)')" The ",-info,"-th argument of AB_ZHEEVX had an illegal value."
     MSG_ERROR(msg)
    end if
 
    if (info > 0) then
     write(msg,'(2a,i0,a)')&
-&    "ZHEEVX: the algorithm failed to converge; ",ch10,&
+&    "AB_ZHEEVX: the algorithm failed to converge; ",ch10,&
 &    info,"eigenvectors failed to converge. "
     MSG_ERROR(msg)
    end if
@@ -1899,7 +1899,7 @@ subroutine wrap_DSYEVX_ZHEEVX(jobz,range,uplo,cplex,n,a,vl,vu,il,iu,abstol,m,w,z
   ! end if
 
   ! ! Solve the problem.
-  ! call slk_pzheevx(jobz,range,uplo,Slk_mat,vl,vu,il,iu,abstol,Slk_vec,m,w)
+  ! call slk_pAB_ZHEEVx(jobz,range,uplo,Slk_mat,vl,vu,il,iu,abstol,Slk_vec,m,w)
 
   ! call destruction_matrix_scalapack(Slk_mat)
   !
@@ -1988,10 +1988,10 @@ end subroutine wrap_DSYEVX_ZHEEVX
 !!          by reducing A to tridiagonal form.
 !!
 !!          Eigenvalues will be computed most accurately when ABSTOL is
-!!          set to twice the underflow threshold 2*DLAMCH('S'), not zero.
+!!          set to twice the underflow threshold 2*AB_DLAMCH('S'), not zero.
 !!          If this routine returns with INFO>0, indicating that some
 !!          eigenvectors did not converge, try setting ABSTOL to
-!!          2*DLAMCH('S').
+!!          2*AB_DLAMCH('S').
 !!
 !!  LDZ     (input) INTEGER
 !!          The leading dimension of the array Z.  LDZ >= 1, and if
@@ -2114,21 +2114,21 @@ subroutine wrap_ZHEGVX(itype,jobz,range,uplo,n,a,b,vl,vu,il,iu,abstol,m,w,z,ldz,
   ABI_MALLOC(iwork,(5*n))
   ABI_MALLOC(ifail,(n))
 
-  call ZHEGVX(itype,jobz,range,uplo,n,a,n,b,n,vl,vu,il,iu,abstol,m,w,z,ldz,work,lwork,rwork,iwork,ifail,info)
+  call AB_ZHEGVX(itype,jobz,range,uplo,n,a,n,b,n,vl,vu,il,iu,abstol,m,w,z,ldz,work,lwork,rwork,iwork,ifail,info)
 
   if (info < 0) then
-   write(msg,'(a,i0,a)')" The ",-info,"-th argument of ZHEGVX had an illegal value."
+   write(msg,'(a,i0,a)')" The ",-info,"-th argument of AB_ZHEGVX had an illegal value."
    MSG_ERROR(msg)
   end if
 
   if (info > 0) then
    if (info<= n) then
     write(msg,'(a,i0,a)')&
-&    "ZHEGVX failed to converge: ",info," eigenvectors failed to converge. "
+&    "AB_ZHEGVX failed to converge: ",info," eigenvectors failed to converge. "
    else
     ii = info -n
     write(msg,'(3a,i0,3a)')&
-&   "ZHEEVX failed to converge: ",ch10,&
+&   "AB_ZHEEVX failed to converge: ",ch10,&
 &   "The leading minor of order ",ii," of B is not positive definite. ",ch10,&
 &   "The factorization of B could not be completed and no eigenvalues or eigenvectors were computed."
    end if
@@ -2166,9 +2166,9 @@ subroutine wrap_ZHEGVX(itype,jobz,range,uplo,n,a,b,vl,vu,il,iu,abstol,m,w,z,ldz,
   end if
 
   ! Solve the problem.
-  MSG_ERROR("slk_pZHEGVX not coded yet")
+  MSG_ERROR("slk_pAB_ZHEGVX not coded yet")
   ! TODO write the scaLAPACK wrapper.
-  !call slk_pZHEGVX(itype,jobz,range,uplo,Slk_matA,Slk_matB,vl,vu,il,iu,abstol,Slk_vec,m,w)
+  !call slk_pAB_ZHEGVX(itype,jobz,range,uplo,Slk_matA,Slk_matB,vl,vu,il,iu,abstol,Slk_vec,m,w)
 
   call destruction_matrix_scalapack(Slk_matA)
   call destruction_matrix_scalapack(Slk_matB)
@@ -2264,10 +2264,10 @@ end subroutine wrap_ZHEGVX
 !!          by reducing A to tridiagonal form.
 !!
 !!          Eigenvalues will be computed most accurately when ABSTOL is
-!!          set to twice the underflow threshold 2*DLAMCH('S'), not zero.
+!!          set to twice the underflow threshold 2*AB_DLAMCH('S'), not zero.
 !!          If this routine returns with INFO>0, indicating that some
 !!          eigenvectors did not converge, try setting ABSTOL to
-!!          2*DLAMCH('S').
+!!          2*AB_DLAMCH('S').
 !!
 !!  LDZ     (input) INTEGER
 !!          The leading dimension of the array Z.  LDZ >= 1, and if
@@ -2399,21 +2399,21 @@ subroutine wrap_DSYGVX_ZHEGVX(itype,jobz,range,uplo,cplex,n,a,b,vl,vu,il,iu,abst
    ABI_MALLOC(iwork,(5*n))
    ABI_MALLOC(ifail,(n))
 
-   call DSYGVX(itype,jobz,range,uplo,n,a,n,b,n,vl,vu,il,iu,abstol,m,w,z,ldz,work_real,lwork,iwork,ifail,info)
+   call AB_DSYGVX(itype,jobz,range,uplo,n,a,n,b,n,vl,vu,il,iu,abstol,m,w,z,ldz,work_real,lwork,iwork,ifail,info)
 
    if (info < 0) then
-    write(msg,'(a,i0,a)')" The ",-info,"-th argument of DSYGVX had an illegal value."
+    write(msg,'(a,i0,a)')" The ",-info,"-th argument of AB_DSYGVX had an illegal value."
     MSG_ERROR(msg)
    end if
 
    if (info > 0) then
     if (info<= n) then
      write(msg,'(a,i0,a)')&
-&     " DSYGVX failed to converge: ",info," eigenvectors failed to converge. "
+&     " AB_DSYGVX failed to converge: ",info," eigenvectors failed to converge. "
     else
      ii = info -n
      write(msg,'(3a,i0,3a)')&
-&    " DSYGVX failed to converge: ",ch10,&
+&    " AB_DSYGVX failed to converge: ",ch10,&
 &    " The leading minor of order ",ii," of B is not positive definite. ",ch10,&
 &    " The factorization of B could not be completed and no eigenvalues or eigenvectors were computed."
     end if
@@ -2435,23 +2435,23 @@ subroutine wrap_DSYGVX_ZHEGVX(itype,jobz,range,uplo,cplex,n,a,b,vl,vu,il,iu,abst
    ABI_MALLOC(iwork,(5*n))
    ABI_MALLOC(ifail,(n))
 
-   !write(std_out,*)"Calling ZHEGVX"
+   !write(std_out,*)"Calling AB_ZHEGVX"
 
-   call ZHEGVX(itype,jobz,range,uplo,n,a,n,b,n,vl,vu,il,iu,abstol,m,w,z,ldz,work_cplx,lwork,rwork,iwork,ifail,info)
+   call AB_ZHEGVX(itype,jobz,range,uplo,n,a,n,b,n,vl,vu,il,iu,abstol,m,w,z,ldz,work_cplx,lwork,rwork,iwork,ifail,info)
 
    if (info < 0) then
-    write(msg,'(a,i0,a)')"The ",-info,"-th argument of ZHEGVX had an illegal value."
+    write(msg,'(a,i0,a)')"The ",-info,"-th argument of AB_ZHEGVX had an illegal value."
     MSG_ERROR(msg)
    end if
 
    if (info > 0) then
     if (info<= n) then
      write(msg,'(a,i0,a)')&
-&     "ZHEGVX failed to converge: ",info," eigenvectors failed to converge. "
+&     "AB_ZHEGVX failed to converge: ",info," eigenvectors failed to converge. "
     else
      ii = info -n
      write(msg,'(3a,i0,3a)')&
-&    "ZHEEVX failed to converge: ",ch10,&
+&    "AB_ZHEEVX failed to converge: ",ch10,&
 &    "The leading minor of order ",ii," of B is not positive definite. ",ch10,&
 &    "The factorization of B could not be completed and no eigenvalues or eigenvectors were computed."
     end if
@@ -2493,9 +2493,9 @@ subroutine wrap_DSYGVX_ZHEGVX(itype,jobz,range,uplo,cplex,n,a,b,vl,vu,il,iu,abst
   ! end if
 
   ! ! Solve the problem.
-  ! MSG_ERROR("slk_pZHEGVX not coded yet")
+  ! MSG_ERROR("slk_pAB_ZHEGVX not coded yet")
   ! ! TODO write the scaLAPACK wrapper.
-  ! call slk_pZHEGVX(itype,jobz,range,uplo,Slk_matA,Slk_matB,vl,vu,il,iu,abstol,Slk_vec,m,w)
+  ! call slk_pAB_ZHEGVX(itype,jobz,range,uplo,Slk_matA,Slk_matB,vl,vu,il,iu,abstol,Slk_vec,m,w)
 
   ! call destruction_matrix_scalapack(Slk_matA)
   ! call destruction_matrix_scalapack(Slk_matB)
@@ -2626,16 +2626,16 @@ subroutine wrap_CGEEV(jobvl,jobvr,n,a,lda,w,vl,ldvl,vr,ldvr)
  ABI_MALLOC(work,(lwork))
  ABI_MALLOC(rwork,(2*n))
 
- call CGEEV(jobvl,jobvr,n,a,lda,w,vl,ldvl,vr,ldvr,work,lwork,rwork,info)
+ call AB_CGEEV(jobvl,jobvr,n,a,lda,w,vl,ldvl,vr,ldvr,work,lwork,rwork,info)
 
  if (info < 0) then
-  write(msg,'(a,i0,a)')" The ",-info,"-th argument of CGEEV had an illegal value."
+  write(msg,'(a,i0,a)')" The ",-info,"-th argument of AB_CGEEV had an illegal value."
   MSG_ERROR(msg)
  end if
 
  if (info > 0) then
   write(msg,'(3a,i0,a,i0,a)')&
-&  "CGEEV: The QR algorithm failed to compute all the eigenvalues, and no eigenvectors have been computed;",ch10,&
+&  "AB_CGEEV: The QR algorithm failed to compute all the eigenvalues, and no eigenvectors have been computed;",ch10,&
 &  "Elements ",info+1,":",n," of W contain eigenvalues which have converged. "
   MSG_ERROR(msg)
  end if
@@ -2663,7 +2663,7 @@ end subroutine wrap_CGEEV
 !!
 !!  The computed eigenvectors are normalized to have Euclidean norm
 !!  equal to 1 and largest component real.
-!!  No scalapack version is available (PZGEEV is not provided by the Scalapack team)
+!!  No scalapack version is available (PAB_ZGEEV is not provided by the Scalapack team)
 !!
 !! INPUTS
 !!   JOBVL   (input) CHARACTER*1
@@ -2761,16 +2761,16 @@ subroutine wrap_ZGEEV(jobvl,jobvr,n,a,lda,w,vl,ldvl,vr,ldvr)
   ABI_MALLOC(work,(lwork))
   ABI_MALLOC(rwork,(2*n))
 
-  call ZGEEV(jobvl,jobvr,n,a,lda,w,vl,ldvl,vr,ldvr,work,lwork,rwork,info)
+  call AB_ZGEEV(jobvl,jobvr,n,a,lda,w,vl,ldvl,vr,ldvr,work,lwork,rwork,info)
 
   if (info < 0) then
-   write(msg,'(a,i0,a)')" The ",-info,"-th argument of ZGEEV had an illegal value."
+   write(msg,'(a,i0,a)')" The ",-info,"-th argument of AB_ZGEEV had an illegal value."
    MSG_ERROR(msg)
   end if
 
   if (info > 0) then
    write(msg,'(3a,i0,a,i0,a)')&
-&   "ZGEEV: The QR algorithm failed to compute all the eigenvalues, and no eigenvectors have been computed;",ch10,&
+&   "AB_ZGEEV: The QR algorithm failed to compute all the eigenvalues, and no eigenvectors have been computed;",ch10,&
 &   "Elements ",info+1,":",n," of W contain eigenvalues which have converged. "
    MSG_ERROR(msg)
   end if
@@ -2797,8 +2797,8 @@ end subroutine wrap_ZGEEV
 !!
 !! FUNCTION
 !! Invert a general matrix of complex elements in single precision.
-!!  CGETRF computes an LU factorization of a general N-by-N matrix A using partial pivoting with row interchanges.
-!!  CGETRI computes the inverse of a matrix using the LU factorization computed by CGETRF.
+!!  AB_CGETRF computes an LU factorization of a general N-by-N matrix A using partial pivoting with row interchanges.
+!!  AB_CGETRI computes the inverse of a matrix using the LU factorization computed by AB_CGETRF.
 !!
 !! INPUTS
 !! n=size of complex matrix a
@@ -2869,10 +2869,10 @@ subroutine cginv(a,n,comm)
 
   ABI_MALLOC(ipiv,(n))
 
-  call CGETRF(n,n,a,n,ipiv,info) ! P* L* U  Factorization.
+  call AB_CGETRF(n,n,a,n,ipiv,info) ! P* L* U  Factorization.
 
   if (info < 0) then
-   write(msg,'(a,i0,a)')" The ",-info,"-th argument of CGETRF had an illegal value."
+   write(msg,'(a,i0,a)')" The ",-info,"-th argument of AB_CGETRF had an illegal value."
    MSG_ERROR(msg)
   end if
 
@@ -2889,10 +2889,10 @@ subroutine cginv(a,n,comm)
 
   ABI_MALLOC(work,(lwork))
 
-  call CGETRI(n,a,n,ipiv,work,lwork,info) ! Inverts U and the computes inv(A)
+  call AB_CGETRI(n,a,n,ipiv,work,lwork,info) ! Inverts U and the computes inv(A)
 
   if (info < 0) then
-   write(msg,'(a,i0,a)')" The ",-info,"-th argument of CGETRI had an illegal value."
+   write(msg,'(a,i0,a)')" The ",-info,"-th argument of AB_CGETRI had an illegal value."
    MSG_ERROR(msg)
   end if
 
@@ -2924,9 +2924,9 @@ subroutine cginv(a,n,comm)
   write(msg,'(2(a,i0))')" Using scaLAPACK version with nprocs = ",nprocs,"; block size = ",tbloc
   call wrtout(std_out,msg,"COLL")
 
-  ! IMPORTANT NOTE: PZGETRF requires square block decomposition i.e.,  MB_A = NB_A.
+  ! IMPORTANT NOTE: PAB_ZGETRF requires square block decomposition i.e.,  MB_A = NB_A.
   if ( Slk_mat%descript%tab(MB_)/=Slk_mat%descript%tab(NB_) ) then
-   msg ="PZGETRF requires square block decomposition i.e.,  MB_A = NB_A."
+   msg ="PAB_ZGETRF requires square block decomposition i.e.,  MB_A = NB_A."
    MSG_ERROR(msg)
   end if
 
@@ -2935,23 +2935,23 @@ subroutine cginv(a,n,comm)
   ipiv_size = my_locr(Slk_mat) + Slk_mat%descript%tab(MB_)
   ABI_MALLOC(ipiv,(ipiv_size))
 
-  call PCGETRF(Slk_mat%sizeb_global(1),Slk_mat%sizeb_global(2),Slk_mat%buffer_cplx_sp,&
+  call PAB_CGETRF(Slk_mat%sizeb_global(1),Slk_mat%sizeb_global(2),Slk_mat%buffer_cplx_sp,&
 &   1,1,Slk_mat%descript%tab,ipiv,info) ! P * L * U  Factorization.
 
   if (info/=0) then
-   write(msg,'(a,i0)')"PCGETRF returned info= ",info
+   write(msg,'(a,i0)')"PAB_CGETRF returned info= ",info
    MSG_ERROR(msg)
   end if
 
-  ! Get optimal size of workspace for PCGETRI.
+  ! Get optimal size of workspace for PAB_CGETRI.
   lwork=-1; liwork=-1
   ABI_MALLOC(work,(1))
   ABI_MALLOC(iwork,(1))
 
-  call PCGETRI(Slk_mat%sizeb_global(1),Slk_mat%buffer_cplx_sp,1,1,Slk_mat%descript%tab,ipiv,&
+  call PAB_CGETRI(Slk_mat%sizeb_global(1),Slk_mat%buffer_cplx_sp,1,1,Slk_mat%descript%tab,ipiv,&
 &  work,lwork,iwork,liwork,info)
 
-  ABI_CHECK(info==0,"PZGETRI: Error during compuation of workspace size")
+  ABI_CHECK(info==0,"PAB_ZGETRI: Error during compuation of workspace size")
 
   lwork = NINT(DBLE(work(1))); liwork=iwork(1)
   ABI_FREE(work)
@@ -2961,11 +2961,11 @@ subroutine cginv(a,n,comm)
   ABI_MALLOC(work,(lwork))
   ABI_MALLOC(iwork,(liwork))
 
-  call PCGETRI(Slk_mat%sizeb_global(1),Slk_mat%buffer_cplx_sp,1,1,Slk_mat%descript%tab,ipiv,&
+  call PAB_CGETRI(Slk_mat%sizeb_global(1),Slk_mat%buffer_cplx_sp,1,1,Slk_mat%descript%tab,ipiv,&
 &  work,lwork,iwork,liwork,info)
 
   if (info/=0) then
-   write(msg,'(a,i0)')"PZGETRI returned info= ",info
+   write(msg,'(a,i0)')"PAB_ZGETRI returned info= ",info
    MSG_ERROR(msg)
   end if
 
@@ -3001,8 +3001,8 @@ end subroutine cginv
 !!
 !! FUNCTION
 !! Invert a general matrix of complex elements in double precision.
-!!  ZGETRF computes an LU factorization of a general N-by-N matrix A using partial pivoting with row interchanges.
-!!  ZGETRI computes the inverse of a matrix using the LU factorization computed by ZGETRF.
+!!  AB_ZGETRF computes an LU factorization of a general N-by-N matrix A using partial pivoting with row interchanges.
+!!  AB_ZGETRI computes the inverse of a matrix using the LU factorization computed by AB_ZGETRF.
 !!
 !! INPUTS
 !! n=size of complex matrix a
@@ -3068,10 +3068,10 @@ subroutine zginv(a,n,comm)
  CASE (.FALSE.)
 
   ABI_MALLOC(ipiv,(n))
-  call ZGETRF(n,n,a,n,ipiv,info) ! P* L* U  Factorization.
+  call AB_ZGETRF(n,n,a,n,ipiv,info) ! P* L* U  Factorization.
 
   if (info < 0) then
-   write(msg,'(a,i0,a)')" The ",-info,"-th argument of ZGETRF had an illegal value."
+   write(msg,'(a,i0,a)')" The ",-info,"-th argument of AB_ZGETRF had an illegal value."
    MSG_ERROR(msg)
   end if
 
@@ -3088,10 +3088,10 @@ subroutine zginv(a,n,comm)
 
   ABI_MALLOC(work,(lwork))
 
-  call ZGETRI(n,a,n,ipiv,work,lwork,info) ! Invert U and then compute inv(A)
+  call AB_ZGETRI(n,a,n,ipiv,work,lwork,info) ! Invert U and then compute inv(A)
 
   if (info < 0) then
-   write(msg,'(a,i0,a)')" The ",-info,"-th argument of ZGETRI had an illegal value."
+   write(msg,'(a,i0,a)')" The ",-info,"-th argument of AB_ZGETRI had an illegal value."
    MSG_ERROR(msg)
   end if
 
@@ -3223,13 +3223,13 @@ subroutine zhpd_invert(uplo,a,n,comm)
  SELECT CASE(use_scalapack)
 
  CASE (.FALSE.)
-   ! *  ZPOTRF computes the Cholesky factorization of a complex Hermitian positive definite.
+   ! *  AB_ZPOTRF computes the Cholesky factorization of a complex Hermitian positive definite.
    ! *     A = U**H * U,  if UPLO = 'U', or
    ! *     A = L  * L**H,  if UPLO = 'L',
-   call ZPOTRF(uplo,n,a,n,info)
+   call AB_ZPOTRF(uplo,n,a,n,info)
 
    if (info < 0) then
-     write(msg,'(a,i0,a)')" The ",-info,"-th argument of ZPOTRF had an illegal value."
+     write(msg,'(a,i0,a)')" The ",-info,"-th argument of AB_ZPOTRF had an illegal value."
      MSG_ERROR(msg)
    end if
 
@@ -3240,15 +3240,15 @@ subroutine zhpd_invert(uplo,a,n,comm)
     MSG_ERROR(msg)
    end if
    !
-   ! *  ZPOTRI computes the inverse of a complex Hermitian positive definite
+   ! *  AB_ZPOTRI computes the inverse of a complex Hermitian positive definite
    ! *  matrix A using the Cholesky factorization A = U**H*U or A = L*L**H
-   ! *  computed by ZPOTRF.
+   ! *  computed by AB_ZPOTRF.
    ! *  On exit, the upper or lower triangle of the (Hermitian)
    ! *  inverse of A, overwriting the input factor U or L.
-   call ZPOTRI(uplo,n,a,n,info)
+   call AB_ZPOTRI(uplo,n,a,n,info)
 
   if (info < 0) then
-    write(msg,'(a,i0,a)')" The ",-info,"-th argument of ZPOTRI had an illegal value."
+    write(msg,'(a,i0,a)')" The ",-info,"-th argument of AB_ZPOTRI had an illegal value."
     MSG_ERROR(msg)
   end if
 
@@ -3395,7 +3395,7 @@ end subroutine test_xginv
 !!      strainsym
 !!
 !! CHILDREN
-!!      dbgmdi,dbgmlu,dgeicd,dgetrf,dgetri
+!!      dbgmdi,dbgmlu,dgeicd,AB_DGETRF,AB_DGETRI
 !!
 !! SOURCE
 
@@ -3482,23 +3482,23 @@ subroutine matrginv(a,lda,n)
 
 #else
 
- call dgetrf(n,n,a,lda,ipvt,ierr)
+ call AB_DGETRF(n,n,a,lda,ipvt,ierr)
  if(ierr /= 0) then
    write(message, '(10a)' ) ch10,&
 &   ' matrginv : BUG -',ch10,&
 &   '  The matrix that has been passed in argument of this subroutine',ch10,&
 &   '  is probably either singular or nearly singular.',ch10,&
-&   '  The LAPACK routine dgetrf failed.',ch10,&
+&   '  The LAPACK routine AB_DGETRF failed.',ch10,&
 &   '  Action: Contact ABINIT group '
    MSG_ERROR(message)
  end if
- call dgetri(n,a,lda,ipvt,work,n,ierr)
+ call AB_DGETRI(n,a,lda,ipvt,work,n,ierr)
  if(ierr /= 0) then
    write(message, '(10a)' ) ch10,&
 &   ' matrginv : BUG -',ch10,&
 &   '  The matrix that has been passed in argument of this subroutine',ch10,&
 &   '  is probably either singular or nearly singular.',ch10,&
-&   '  The LAPACK routine dgetri failed.',ch10,&
+&   '  The LAPACK routine AB_DGETRI failed.',ch10,&
 &   '  Action: Contact ABINIT group '
    MSG_ERROR(message)
  end if
@@ -3528,7 +3528,7 @@ end subroutine matrginv
 !!      chkdilatmx
 !!
 !! CHILDREN
-!!      zhpev
+!!      AB_ZHPEV
 !!
 !! SOURCE
 
@@ -3552,7 +3552,7 @@ subroutine matr3eigval(eigval,matr)
 !scalars
  integer :: ier
 !arrays
- real(dp) :: eigvec(2,3,3),matrx(2,6),zhpev1(2,2*3-1),zhpev2(3*3-2)
+ real(dp) :: eigvec(2,3,3),matrx(2,6),AB_ZHPEV1(2,2*3-1),AB_ZHPEV2(3*3-2)
 
 ! *************************************************************************
 
@@ -3564,7 +3564,7 @@ subroutine matr3eigval(eigval,matr)
  matrx(1,6)=matr(3,3)
  matrx(2,:)=zero
 
- call ZHPEV ('V','U',3,matrx,eigval,eigvec,3,zhpev1,zhpev2,ier)
+ call AB_ZHPEV ('V','U',3,matrx,eigval,eigvec,3,AB_ZHPEV1,AB_ZHPEV2,ier)
 !write(std_out,*)' eigval=',eigval
 
 end subroutine matr3eigval
@@ -4026,7 +4026,7 @@ subroutine dzgedi(a,lda,n,ipvt,det,work,job)
          do 100 k = 1, n
             !a(k,k) = (1.0d0,0.0d0)/a(k,k)
             !t = -a(k,k)
-            !call zscal(k-1,t,a(1,k),1)
+            !call AB_ZSCAL(k-1,t,a(1,k),1)
             rinv2 = 1.d0/(a(1,k,k)**2+a(2,k,k)**2)
             a(1,k,k) =  rinv2*a(1,k,k)
             a(2,k,k) = -rinv2*a(2,k,k)
@@ -4042,7 +4042,7 @@ subroutine dzgedi(a,lda,n,ipvt,det,work,job)
             do 80 j = kp1, n
                !t = a(k,j)
                !a(k,j) = (0.0d0,0.0d0)
-               !call zaxpy(k,t,a(1,k),1,a(1,j),1)
+               !call AB_ZAXPY(k,t,a(1,k),1,a(1,j),1)
                rkj(1) = a(1,k,j); rkj(2) = a(2,k,j)
                a(1,k,j) = 0.d0; a(2,k,j) = 0.d0
                do i=1,k
@@ -4068,7 +4068,7 @@ subroutine dzgedi(a,lda,n,ipvt,det,work,job)
   110       continue
             do 120 j = kp1, n
                r(1) = work(1,j); r(2) = work(2,j)
-               !call zaxpy(n,t,a(1,j),1,a(1,k),1)
+               !call AB_ZAXPY(n,t,a(1,j),1,a(1,k),1)
                do i=1,n
                   a(1,i,k)=r(1)*a(1,i,j)-r(2)*a(2,i,j)+a(1,i,k)
                   a(2,i,k)=r(2)*a(1,i,j)+r(1)*a(2,i,j)+a(2,i,k)
@@ -4076,7 +4076,7 @@ subroutine dzgedi(a,lda,n,ipvt,det,work,job)
   120       continue
             l = ipvt(k)
             if (l .ne. k) then
-               !call zswap(n,a(1,k),1,a(1,l),1)
+               !call AB_ZSWAP(n,a(1,k),1,a(1,l),1)
                do i=1,n
                   r(1) = a(1,i,k); r(2) = a(2,i,k)
                   a(1,i,k) = a(1,i,l); a(2,i,k) = a(2,i,l)
@@ -4188,7 +4188,7 @@ subroutine dzgefa(a,lda,n,ipvt,info)
 !
 !        find l = pivot index
 !
-         !l = izamax(n-k+1,a(k,k),1) + k - 1
+         !l = AB_IZAMAX(n-k+1,a(k,k),1) + k - 1
          rmax=0.d0
          l=0
          do i=k,n
@@ -4217,7 +4217,7 @@ subroutine dzgefa(a,lda,n,ipvt,info)
             rinv2 = 1.d0/(a(1,k,k)**2+a(2,k,k)**2)
             rk(1) = -rinv2*a(1,k,k)
             rk(2) =  rinv2*a(2,k,k)
-            !call zscal(n-k,t,a(k+1,k),1)
+            !call AB_ZSCAL(n-k,t,a(k+1,k),1)
             do i=k+1,n
                r(1)=a(1,i,k)
                r(2)=a(2,i,k)
@@ -4233,7 +4233,7 @@ subroutine dzgefa(a,lda,n,ipvt,info)
                   a(1,l,j) = a(1,k,j); a(2,l,j) = a(2,k,j)
                   a(1,k,j) = rlj(1); a(2,k,j) = rlj(2)
    20          continue
-               !call zaxpy(n-k,t,a(1,k+1,k),1,a(1,k+1,j),1)
+               !call AB_ZAXPY(n-k,t,a(1,k+1,k),1,a(1,k+1,j),1)
                do i=k+1,n
                   a(1,i,j)=rlj(1)*a(1,i,k)-rlj(2)*a(2,i,k)+a(1,i,j)
                   a(2,i,j)=rlj(2)*a(1,i,k)+rlj(1)*a(2,i,k)+a(2,i,j)

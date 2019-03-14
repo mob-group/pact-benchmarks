@@ -288,7 +288,7 @@ subroutine clib_print_mallinfo(Minfo,unt)
 ! *********************************************************************
 
  write(unt,*)' Total space in arena            : ',Minfo%arena
- write(unt,*)' Space in holding block headers  : ',Minfo%hblkhd
+ write(unt,*)' Space in holding block AB_HEADERs  : ',Minfo%hblkhd
  write(unt,*)' Space in small blocks in use    : ',Minfo%usmblks
  write(unt,*)' Space in free small blocks      : ',Minfo%fsmblks
  write(unt,*)' Space in ordinary blocks in use : ',Minfo%uordblks

@@ -189,9 +189,9 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME
-      DOUBLE PRECISION   DLAMCH, AB_ZLANGE
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE
       COMPLEX*16         AB_ZDOTC, AB_ZDOTU, AB_ZLADIV
-      EXTERNAL           AB_LSAME, DLAMCH, AB_ZLANGE, AB_ZDOTC, AB_ZDOTU
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_ZLANGE, AB_ZDOTC, AB_ZDOTU
      $, AB_ZLADIV
 *     ..
 *     .. External Subroutines ..
@@ -238,8 +238,8 @@
 *
 *     Set constants to control overflow
 *
-      EPS = DLAMCH( 'P' )
-      SMLNUM = DLAMCH( 'S' )
+      EPS = AB_DLAMCH( 'P' )
+      SMLNUM = AB_DLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
       CALL AB_DLABAD( SMLNUM, BIGNUM )
       SMLNUM = SMLNUM*DBLE( M*N ) / EPS

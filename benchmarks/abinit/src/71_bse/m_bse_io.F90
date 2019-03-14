@@ -63,10 +63,10 @@ MODULE m_bse_io
  public  :: rrs_of_glob              ! [+1,-1,0] if (row_glob,col_glob) belongs to the [ resonant, anti-resonant, (anti)coupling block ]
  public  :: ccs_of_glob              ! [+1,-1,0] if (row_glob,col_glob) belongs to the [ coupling, anti-coupling, (anti)resonant block ]
  public  :: offset_in_file           ! Function used to describe the way the Hamiltonian is stored on disk.
- public  :: exc_write_bshdr          ! Writes the Header of the (BSR|BSC) files storing the excitonic Hamiltonian.
- public  :: exc_read_bshdr           ! Reads the Header of the (BSR|BSC) files.
- public  :: exc_skip_bshdr           ! Skip the Header of the (BSR|BSC) files. Fortran version.
- public  :: exc_skip_bshdr_mpio      ! Skip the Header of the (BSR|BSC) files. MPI-IO  version.
+ public  :: exc_write_bshdr          ! Writes the AB_HEADER of the (BSR|BSC) files storing the excitonic Hamiltonian.
+ public  :: exc_read_bshdr           ! Reads the AB_HEADER of the (BSR|BSC) files.
+ public  :: exc_skip_bshdr           ! Skip the AB_HEADER of the (BSR|BSC) files. Fortran version.
+ public  :: exc_skip_bshdr_mpio      ! Skip the AB_HEADER of the (BSR|BSC) files. MPI-IO  version.
  public  :: exc_read_eigen           ! Read selected energies and eigenvectors from the BSEIG file.
  public  :: exc_amplitude            ! Calculate the amplitude function F(w) = \sum_t |<t|exc_vec>|^2 \delta(ww- ene_t) where t is the eh transition.
  public  :: exc_write_optme          ! Writes the OME file storing the optical matrix elements
@@ -83,12 +83,12 @@ CONTAINS  !====================================================================
 !!  exc_write_bshdr
 !!
 !! FUNCTION
-!!   Writes the header of the (BSR|BSC) files storing the excitonic Hamiltonian.
+!!   Writes the AB_HEADER of the (BSR|BSC) files storing the excitonic Hamiltonian.
 !!
 !! INPUTS
 !!  funt=Fortran unit number.
 !!  Bsp<excparam>=Structure storing the parameters of the run.
-!!  Hdr<hdr_type>=The abinit header.
+!!  Hdr<hdr_type>=The abinit AB_HEADER.
 !!
 !! OUTPUT
 !!  Only writing
@@ -144,13 +144,13 @@ end subroutine exc_write_bshdr
 !!  exc_read_bshdr
 !!
 !! FUNCTION
-!!  Reads the header of the (BSR|BSC) files storing the excitonic Hamiltonian.
+!!  Reads the AB_HEADER of the (BSR|BSC) files storing the excitonic Hamiltonian.
 !!  and performs basilar consistency checks.
 !!
 !! INPUTS
 !!  funt=Unit number.
 !!  Bsp<excparam>=Structure storing the parameters of the run.
-!!  Hdr<hdr_type>=The abinit header.
+!!  Hdr<hdr_type>=The abinit AB_HEADER.
 !!
 !! OUTPUT
 !!  fform=Integer defining the file format.
@@ -192,7 +192,7 @@ subroutine exc_read_bshdr(funt,Bsp,fform,ierr)
 
  ierr=0
 
- ! Read the header and perform consistency checks.
+ ! Read the AB_HEADER and perform consistency checks.
  call hdr_fort_read(hdr, funt, fform, rewind=.True.)
  ABI_CHECK(fform /= 0, "hdr_fort_read returned fform == 0")
 
@@ -220,7 +220,7 @@ end subroutine exc_read_bshdr
 !!  exc_skip_bshdr
 !!
 !! FUNCTION
-!!   Skip the header of the (BSR|BSC) files storing the excitonic Hamiltonian. Fortran version.
+!!   Skip the AB_HEADER of the (BSR|BSC) files storing the excitonic Hamiltonian. Fortran version.
 !!
 !! INPUTS
 !!  funt=Unit number.
@@ -229,7 +229,7 @@ end subroutine exc_read_bshdr
 !!  ierr=Status error.
 !!
 !! SIDE EFFECTS
-!!  Skip the header.
+!!  Skip the AB_HEADER.
 !!
 !! PARENTS
 !!      exc_build_block
@@ -279,7 +279,7 @@ end subroutine exc_skip_bshdr
 !!  exc_skip_bshdr_mpio
 !!
 !! FUNCTION
-!!   Skip the header of the (BSR|BSC) files storing the excitonic Hamiltonian. MPI-IO version.
+!!   Skip the AB_HEADER of the (BSR|BSC) files storing the excitonic Hamiltonian. MPI-IO version.
 !!
 !! INPUTS
 !!  mpifh=MPI-IO file handler.
@@ -557,9 +557,9 @@ subroutine exc_read_rcblock(fname,Bsp,is_resonant,diago_is_real,nsppol,nreh,hsiz
      MSG_ERROR(msg)
    end if
    !
-   ! Read the header and perform consistency checks.
+   ! Read the AB_HEADER and perform consistency checks.
    call exc_read_bshdr(funit,Bsp,fform,ierr)
-   ABI_CHECK(ierr==0,"Wrong BSE header")
+   ABI_CHECK(ierr==0,"Wrong BSE AB_HEADER")
    !
    ! Construct full excitonic Hamiltonian using symmetries.
    if (nsppol==1) then
@@ -690,7 +690,7 @@ subroutine exc_read_rcblock(fname,Bsp,is_resonant,diago_is_real,nsppol,nreh,hsiz
    call MPI_FILE_GET_SIZE(mpifh,fsize,mpierr)
    write(std_out,*)" file size is ",fsize
    !
-   ! Skip the header and find the offset for reading the matrix.
+   ! Skip the AB_HEADER and find the offset for reading the matrix.
    call exc_skip_bshdr_mpio(mpifh,xmpio_collective,ehdr_offset)
    !
    ! Read my columns from file.

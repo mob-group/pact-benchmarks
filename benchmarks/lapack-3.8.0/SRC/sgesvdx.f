@@ -306,8 +306,8 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_ILAENV
-      REAL               SLAMCH, AB_SLANGE
-      EXTERNAL           AB_LSAME, AB_ILAENV, SLAMCH, AB_SLANGE
+      REAL               AB_SLAMCH, AB_SLANGE
+      EXTERNAL           AB_LSAME, AB_ILAENV, AB_SLAMCH, AB_SLANGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, SQRT
@@ -318,7 +318,7 @@
 *
       NS = 0
       INFO = 0
-      ABSTOL = 2*SLAMCH('S')
+      ABSTOL = 2*AB_SLAMCH('S')
       LQUERY = ( LWORK.EQ.-1 )
       MINMN = MIN( M, N )
 
@@ -515,8 +515,8 @@
 *
 *     Get machine constants
 *
-      EPS = SLAMCH( 'P' )
-      SMLNUM = SQRT( SLAMCH( 'S' ) ) / EPS
+      EPS = AB_SLAMCH( 'P' )
+      SMLNUM = SQRT( AB_SLAMCH( 'S' ) ) / EPS
       BIGNUM = ONE / SMLNUM
 *
 *     Scale A if max element outside range [SMLNUM,BIGNUM]

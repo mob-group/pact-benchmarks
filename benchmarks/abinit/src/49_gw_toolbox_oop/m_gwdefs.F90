@@ -224,15 +224,15 @@ MODULE m_gwdefs
   integer :: nJ                     ! Number of components (columns) in the chi0 matrix.
   integer :: npwvec                 ! Max between npwe and npwwfn, used to pass the dimension of arrays e.g gvec
   integer :: npwwfn                 ! Number of planewaves for wavefunctions
-  integer :: npwe                   ! Number of planewaves for $\tilde \epsilon$
+  integer :: npwe                   ! Number of planewaves for $\tiAB_LDE \epsilon$
   integer :: npwepG0                ! Number of planewaves in the enlarged sphere G-G0, to account for umklapp G0 vectors
-  integer :: nbnds                  ! Number of bands used to evaluate $\tilde \epsilon$
+  integer :: nbnds                  ! Number of bands used to evaluate $\tiAB_LDE \epsilon$
   integer :: nkibz                  ! Number of k-points in the IBZ
   integer :: nsppol                 ! 1 for spin unpolarized, 2 for collinear spin polarized
   integer :: nqcalc                 ! Number of q-points that are calculated (subset of qibz)
   integer :: nqibz                  ! Number of q-points in the IBZ
   integer :: nqlwl                  ! Number of directions to analyze the non analytical behavior for q-->0
-  integer :: nomega                 ! Number of frequencies where evaluate $\tilde \epsilon (\omega)$
+  integer :: nomega                 ! Number of frequencies where evaluate $\tiAB_LDE \epsilon (\omega)$
   integer :: nomegaer,nomegaei      ! Number of real and imaginary frequencies, respectively
   integer :: nomegaec               ! Number of frequencies on a grid in the complex plane nomegaec = nomegaei*(nomegaer-1)
   integer :: nomegasf               ! Number of frequencies used for the spectral function

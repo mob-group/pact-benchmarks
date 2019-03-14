@@ -81,7 +81,7 @@ contains
 !!      mover
 !!
 !! CHILDREN
-!!      dcopy,dgemv,dsysv,hessinit,hessupdt,hist2var,var2hist,xcart2xred
+!!      AB_DCOPY,AB_DGEMV,AB_DSYSV,hessinit,hessupdt,hist2var,var2hist,xcart2xred
 !!      xred2xcart
 !!
 !! SOURCE
@@ -306,7 +306,7 @@ implicit none
  do ii=1,diisSize,1
    fcart_tmp(:)=RESHAPE( fcart_hist(:,:,ii), (/ ndim /) )
 !  *  BLAS ROUTINE LEVEL 2
-!  *  DGEMV  performs one of the matrix-vector operations
+!  *  AB_DGEMV  performs one of the matrix-vector operations
 !  *
 !  *     y := alpha*A*x + beta*y,   or   y := alpha*A'*x + beta*y,
 !  *
@@ -316,7 +316,7 @@ implicit none
 !  Here we are computing:
 !  error(ndim) := 1*hessin(ndim x ndim)*fcart(ndim) + 0*error(ndim)
 !
-   call DGEMV('N',ndim,ndim,one,hessin,&
+   call AB_DGEMV('N',ndim,ndim,one,hessin,&
 &   ndim,fcart_tmp,1,zero,error_tmp,1)
    error(:,:,ii)=RESHAPE( error_tmp, (/ 3, ab_mover%natom /) )
 
@@ -363,7 +363,7 @@ implicit none
  if(zDEBUG) write(std_out,*) "DIIS matrix", diisSize+1,'x',diisSize+1
  do ii = 1, diisSize, 1
    do jj = ii, diisSize, 1
-     diisMatrix(jj, ii) = ddot(ndim, error(1,1,ii),&
+     diisMatrix(jj, ii) = AB_DDOT(ndim, error(1,1,ii),&
 &     1, error(1,1,jj),1)
      diisMatrix(ii, jj) = diisMatrix(jj, ii)
    end do
@@ -383,17 +383,17 @@ implicit none
  ABI_ALLOCATE(workMatrix,(diisSize + 1, diisSize + 1))
  ABI_ALLOCATE(workArray,((diisSize + 1) ** 2))
  ABI_ALLOCATE(ipiv,(diisSize + 1))
-!*     DCOPY(N,DX,INCX,DY,INCY)
+!*     AB_DCOPY(N,DX,INCX,DY,INCY)
 !*     copies a vector, x, to a vector, y.
 !*     uses unrolled loops for increments equal to one.
- call DCOPY((diisSize + 1) ** 2, diisMatrix(1:diisSize + 1, 1:diisSize + 1), 1, workMatrix, 1)
+ call AB_DCOPY((diisSize + 1) ** 2, diisMatrix(1:diisSize + 1, 1:diisSize + 1), 1, workMatrix, 1)
 
-!*     DSYSV( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK, LWORK, INFO )
+!*     AB_DSYSV( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK, LWORK, INFO )
 !*
 !*  Purpose
 !*  =======
 !*
-!*  DSYSV computes the solution to a real system of linear equations
+!*  AB_DSYSV computes the solution to a real system of linear equations
 !*     A * X = B,
 !*  where A is an N-by-N symmetric matrix and X and B are N-by-NRHS
 !*  matrices.
@@ -433,14 +433,14 @@ implicit none
 !*          On exit, if INFO = 0, the block diagonal matrix D and the
 !*          multipliers used to obtain the factor U or L from the
 !*          factorization A = U*D*U**T or A = L*D*L**T as computed by
-!*          DSYTRF.
+!*          AB_DSYTRF.
 !*
 !*  LDA     (input) INTEGER
 !*          The leading dimension of the array A.  LDA >= max(1,N).
 !*
 !*  IPIV    (output) INTEGER array, dimension (N)
 !*          Details of the interchanges and the block structure of D, as
-!*          determined by DSYTRF.  If IPIV(k) > 0, then rows and columns
+!*          determined by AB_DSYTRF.  If IPIV(k) > 0, then rows and columns
 !*          k and IPIV(k) were interchanged, and D(k,k) is a 1-by-1
 !*          diagonal block.  If UPLO = 'U' and IPIV(k) = IPIV(k-1) < 0,
 !*          then rows and columns k-1 and -IPIV(k) were interchanged and
@@ -462,12 +462,12 @@ implicit none
 !*  LWORK   (input) INTEGER
 !*          The length of WORK.  LWORK >= 1, and for best performance
 !*          LWORK >= max(1,N*NB), where NB is the optimal blocksize for
-!*          DSYTRF.
+!*          AB_DSYTRF.
 !*
 !*          If LWORK = -1, then a workspace query is assumed; the routine
 !*          only calculates the optimal size of the WORK array, returns
 !*          this value as the first entry of the WORK array, and no error
-!*          message related to LWORK is issued by XERBLA.
+!*          message related to LWORK is issued by AB_XERBLA.
 !*
 !*  INFO    (output) INTEGER
 !*          = 0: successful exit
@@ -490,7 +490,7 @@ implicit none
    end do
  end if
 
- call DSYSV('L', diisSize + 1, 1, workMatrix, &
+ call AB_DSYSV('L', diisSize + 1, 1, workMatrix, &
 & diisSize + 1, ipiv, diisCoeff, diisSize + 1, &
 & workArray, (diisSize + 1) ** 2, info)
 
@@ -561,7 +561,7 @@ implicit none
  xcart_tmp(:)=RESHAPE( xcart(:,:), (/ 3*ab_mover%natom /) )
 
 !*  BLAS ROUTINE LEVEL 2
-!*  DGEMV  performs one of the matrix-vector operations
+!*  AB_DGEMV  performs one of the matrix-vector operations
 !*
 !*     y := alpha*A*x + beta*y,   or   y := alpha*A'*x + beta*y,
 !*
@@ -571,7 +571,7 @@ implicit none
 !Here we are computing:
 !xcart_tmp(ndim) := -1*hessin(ndim x ndim)*error_tmp(ndim) + 1*xcart_tmp(ndim)
 !
- call DGEMV('N', ndim, ndim, -one , hessin, &
+ call AB_DGEMV('N', ndim, ndim, -one , hessin, &
 & ndim, error_tmp, 1, one, xcart_tmp, 1)
  xcart(:,:)=RESHAPE( xcart_tmp(:), (/ 3, ab_mover%natom /) )
 

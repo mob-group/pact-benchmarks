@@ -419,7 +419,7 @@ subroutine screening(acell,codvsn,Dtfil,Dtset,Pawang,Pawrad,Pawtab,Psps,rprim)
 
    if (my_rank == master) call pawtab_print(Pawtab)
 
-   ! Get Pawrhoij from the header of the WFK file.
+   ! Get Pawrhoij from the AB_HEADER of the WFK file.
    call pawrhoij_copy(Hdr_wfk%Pawrhoij,Pawrhoij)
 
    ! Re-symmetrize symrhoij.
@@ -674,7 +674,7 @@ subroutine screening(acell,codvsn,Dtfil,Dtset,Pawang,Pawrad,Pawtab,Psps,rprim)
  end if
 
  ! This test has been disabled (too expensive!)
- if (.False.) call wfd_test_ortho(Wfd,Cryst,Pawtab,unit=ab_out,mode_paral="COLL")
+ if (.false.) call wfd_test_ortho(Wfd,Cryst,Pawtab,unit=ab_out,mode_paral="COLL")
 
  call timab(316,2,tsec) ! screening(wfs
  call timab(319,1,tsec) ! screening(1)
@@ -1168,7 +1168,7 @@ subroutine screening(acell,codvsn,Dtfil,Dtset,Pawang,Pawrad,Pawtab,Psps,rprim)
        ABI_FREE(chi0intra_head)
      end if
 
-     if (.False.) then
+     if (.false.) then
        lwl_fname = strcat(dtfil%filnam_ds(4), "_LWL")
        call lwl_write(lwl_fname,cryst,vcp,ep%npwe,ep%nomega,gsph_epsg0%gvec,chi0,chi0_head,chi0_lwing,chi0_uwing,comm)
      end if
@@ -1216,7 +1216,7 @@ subroutine screening(acell,codvsn,Dtfil,Dtset,Pawang,Pawrad,Pawtab,Psps,rprim)
    end if
 
    ! Write chi0 to _SUSC file
-   ! Master creates and write the header if this is the first q-point calculated.
+   ! Master creates and write the AB_HEADER if this is the first q-point calculated.
    if (Dtset%prtsuscep>0 .and. my_rank==master) then
      title(1)='CHI0 file: chi0'
      title(2)=' '
@@ -1225,7 +1225,7 @@ subroutine screening(acell,codvsn,Dtfil,Dtset,Pawang,Pawrad,Pawtab,Psps,rprim)
        title(1)=title(1)(1:21)//', calculated using inclvkb = '//string
      end if
 
-     ! Open file and write header for polarizability files.
+     ! Open file and write AB_HEADER for polarizability files.
      if (is_first_qcalc) then
        ikxc=0; test_type=0; tordering=1
        hchi0 = hscr_new("polarizability",dtset,ep,hdr_local,ikxc,test_type,tordering,title,Ep%npwe,Gsph_epsG0%gvec)
@@ -1262,7 +1262,7 @@ subroutine screening(acell,codvsn,Dtfil,Dtset,Pawang,Pawrad,Pawtab,Psps,rprim)
    end if
 
 !  ==========================================================
-!  === Calculate RPA \tilde\epsilon^{-1} overwriting chi0 ===
+!  === Calculate RPA \tiAB_LDE\epsilon^{-1} overwriting chi0 ===
 !  ==========================================================
    approx_type=0 ! RPA
    option_test=0 ! TESTPARTICLE
@@ -1446,8 +1446,8 @@ subroutine screening(acell,codvsn,Dtfil,Dtset,Pawang,Pawrad,Pawtab,Psps,rprim)
      title(2)(14:17)=ctype !this has to be modified
 
      if (is_first_qcalc) then
-       ! === Open file and write the header for the SCR file ===
-       ! * Here we write the RPA approximation for \tilde\epsilon^{-1}
+       ! === Open file and write the AB_HEADER for the SCR file ===
+       ! * Here we write the RPA approximation for \tiAB_LDE\epsilon^{-1}
        ikxc=0; test_type=0; tordering=1
        hem1 = hscr_new("inverse_dielectric_function",dtset,ep,hdr_local,ikxc,test_type,tordering,title,&
 &       Ep%npwe,Gsph_epsG0%gvec)
@@ -1582,7 +1582,7 @@ end subroutine screening
 !! Ltg_q(:)<littlegroup_t>,=
 !! Ep<em1params_t>=Parameters for the screening calculation.
 !!  Most part of it is Initialized and checked.
-!! Hdr_wfk type(Hdr_type)=Header of the KSS file.
+!! Hdr_wfk type(Hdr_type)=AB_HEADER of the KSS file.
 !! Cryst<crystal_t>=Definition of the unit cell and its symmetries.
 !! Kmesh<kmesh_t>=Structure defining the k-point sampling (wavefunctions).
 !! Qmesh<kmesh_t>=Structure defining the q-point sampling (screening)
@@ -1703,7 +1703,7 @@ subroutine setup_screening(codvsn,acell,rprim,ngfftf,wfk_fname,dtfil,Dtset,Psps,
  Ep%npwwfn=Dtset%npwwfn
  Ep%npwvec=MAX(Ep%npwe,Ep%npwwfn)
 
- timrev = 2 ! This information is not reported in the header
+ timrev = 2 ! This information is not reported in the AB_HEADER
             ! 1 --> do not use time-reversal symmetry
             ! 2 --> take advantage of time-reversal symmetry
  if (any(dtset%kptopt == [3, 4])) timrev = 1
@@ -2095,7 +2095,7 @@ subroutine setup_screening(codvsn,acell,rprim,ngfftf,wfk_fname,dtfil,Dtset,Psps,
    Ep%qcalc(:,:)=Ep%qibz(:,:)
  end if
 
- ! To write the SCR header correctly, with heads and wings, we have
+ ! To write the SCR AB_HEADER correctly, with heads and wings, we have
  ! to make sure that q==0, if present, is the first q-point in the list.
  !has_q0=(ANY(normv(Ep%qcalc(:,:),gmet,'G')<GW_TOLQ0)) !commented to avoid problems with sunstudio12
  has_q0=.FALSE.
@@ -2164,10 +2164,10 @@ subroutine setup_screening(codvsn,acell,rprim,ngfftf,wfk_fname,dtfil,Dtset,Psps,
  ABI_FREE(eigen)
  ABI_FREE(npwarr)
 
- ! Initialize abinit header for the screening part
+ ! Initialize abinit AB_HEADER for the screening part
  call hdr_init(KS_BSt,codvsn,Dtset,Hdr_out,Pawtab,pertcase0,Psps,wvl)
 
- ! Get Pawrhoij from the header.
+ ! Get Pawrhoij from the AB_HEADER.
  ABI_DT_MALLOC(Pawrhoij,(Cryst%natom*Dtset%usepaw))
  if (Dtset%usepaw==1) then
    call pawrhoij_alloc(Pawrhoij,1,Dtset%nspden,Dtset%nspinor,Dtset%nsppol,Cryst%typat,pawtab=Pawtab)

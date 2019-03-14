@@ -673,12 +673,12 @@ contains
     real(dp) :: R_sc_d(3), sc_mat(3,3)
 
     integer:: ipriv(3), info
-    !call dgesv( n, nrhs, a, lda, ipiv, b, ldb, info )
+    !call AB_DGESV( n, nrhs, a, lda, ipiv, b, ldb, info )
     sc_mat(:,:)=scell%rlatt
     R_sc_d(:)=R(:)
     !print *, sc_mat
     !print *, R_sc_d
-    call dgesv(3, 1, sc_mat, 3, ipriv, R_sc_d, 3, info)
+    call AB_DGESV(3, 1, sc_mat, 3, ipriv, R_sc_d, 3, info)
     if ( info/=0 ) then
        print *, "Failed to find R_sc"
     end if

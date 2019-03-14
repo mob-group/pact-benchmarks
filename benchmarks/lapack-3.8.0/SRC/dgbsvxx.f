@@ -602,9 +602,9 @@
      $                   ROWCND, SMLNUM
 *     ..
 *     .. External Functions ..
-      EXTERNAL           AB_LSAME, DLAMCH, AB_DLA_GBRPVGRW
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_DLA_GBRPVGRW
       LOGICAL            AB_LSAME
-      DOUBLE PRECISION   DLAMCH, AB_DLA_GBRPVGRW
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLA_GBRPVGRW
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_DGBEQUB, AB_DGBTRF, AB_DGBTRS, AB_DLACPY, AB
@@ -620,7 +620,7 @@
       NOFACT = AB_LSAME( FACT, 'N' )
       EQUIL = AB_LSAME( FACT, 'E' )
       NOTRAN = AB_LSAME( TRANS, 'N' )
-      SMLNUM = DLAMCH( 'Safe minimum' )
+      SMLNUM = AB_DLAMCH( 'Safe minimum' )
       BIGNUM = ONE / SMLNUM
       IF( NOFACT .OR. EQUIL ) THEN
          EQUED = 'N'

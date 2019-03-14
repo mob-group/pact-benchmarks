@@ -160,8 +160,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      DOUBLE PRECISION   DASUM, DLAMCH, DLANGE
-      EXTERNAL           LSAME, DASUM, DLAMCH, DLANGE
+      DOUBLE PRECISION   DASUM, AB_DLAMCH, DLANGE
+      EXTERNAL           LSAME, DASUM, AB_DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGEMM
@@ -188,7 +188,7 @@
          N2 = N
       END IF
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
 *
 *     Compute  B - A*X  (or  B - A'*X ) and store in B.
 *

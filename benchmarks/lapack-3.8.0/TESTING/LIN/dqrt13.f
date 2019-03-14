@@ -116,8 +116,8 @@
       DOUBLE PRECISION   BIGNUM, SMLNUM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DASUM, DLAMCH, DLANGE
-      EXTERNAL           DASUM, DLAMCH, DLANGE
+      DOUBLE PRECISION   DASUM, AB_DLAMCH, DLANGE
+      EXTERNAL           DASUM, AB_DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DLABAD, DLARNV, DLASCL
@@ -147,10 +147,10 @@
 *
       IF( SCALE.NE.1 ) THEN
          NORMA = DLANGE( 'Max', M, N, A, LDA, DUMMY )
-         SMLNUM = DLAMCH( 'Safe minimum' )
+         SMLNUM = AB_DLAMCH( 'Safe minimum' )
          BIGNUM = ONE / SMLNUM
          CALL DLABAD( SMLNUM, BIGNUM )
-         SMLNUM = SMLNUM / DLAMCH( 'Epsilon' )
+         SMLNUM = SMLNUM / AB_DLAMCH( 'Epsilon' )
          BIGNUM = ONE / SMLNUM
 *
          IF( SCALE.EQ.2 ) THEN

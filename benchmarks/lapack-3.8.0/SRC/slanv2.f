@@ -149,15 +149,15 @@
      $                   SAC, SCALE, SIGMA, SN1, TAU, TEMP, Z
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, AB_SLAPY2
-      EXTERNAL           SLAMCH, AB_SLAPY2
+      REAL               AB_SLAMCH, AB_SLAPY2
+      EXTERNAL           AB_SLAMCH, AB_SLAPY2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SIGN, SQRT
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = SLAMCH( 'P' )
+      EPS = AB_SLAMCH( 'P' )
       IF( C.EQ.ZERO ) THEN
          CS = ONE
          SN = ZERO

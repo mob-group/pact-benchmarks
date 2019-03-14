@@ -154,8 +154,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, DLANSY
-      EXTERNAL           LSAME, DLAMCH, DLANSY
+      DOUBLE PRECISION   AB_DLAMCH, DLANSY
+      EXTERNAL           LSAME, AB_DLAMCH, DLANSY
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DLASET, DLAVSY
@@ -174,7 +174,7 @@
 *
 *     Determine EPS and the norm of A.
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       ANORM = DLANSY( '1', UPLO, N, A, LDA, RWORK )
 *
 *     Initialize C to the tridiagonal matrix T.

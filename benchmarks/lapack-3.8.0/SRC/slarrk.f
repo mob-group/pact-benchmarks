@@ -171,8 +171,8 @@
      $                   TMP2, TNORM
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL   SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL   AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, INT, LOG, MAX
@@ -187,7 +187,7 @@
       END IF
 *
 *     Get machine constants
-      EPS = SLAMCH( 'P' )
+      EPS = AB_SLAMCH( 'P' )
 
       TNORM = MAX( ABS( GL ), ABS( GU ) )
       RTOLI = RELTOL

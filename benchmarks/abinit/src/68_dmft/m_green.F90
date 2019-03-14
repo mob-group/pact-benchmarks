@@ -2039,13 +2039,13 @@ subroutine fourier_green(cryst_struc,green,paw_dmft,pawang,opt_ksloc,opt_tw)
  integer :: iatom,ib,ib1,ierr,ifreq,ikpt,im,im1,iparal,is,ispinor,ispinor1,itau
  integer :: mband,mbandc,myproc,natom,ndim,nkpt,nproc,nspinor,nsppol,spacecomm!,opt_four
  character(len=500) :: message
-! complex(dpc):: ybcbeg,ybcend
+! complex(dpc):: ybAB_CBEG,ybcend
 ! arrays
  complex(dpc), allocatable :: fw(:)
  complex(dpc), allocatable :: ft(:)
  type(green_type) :: green_temp
 ! *********************************************************************
-! ybcbeg=czero
+! ybAB_CBEG=czero
 ! ybcend=czero
 
 ! define spaceComm, myproc, and nproc from world communicator
@@ -3352,7 +3352,7 @@ subroutine fermi_green(cryst_struc,green,paw_dmft,pawang,self)
  call wrtout(std_out,message,'COLL')
 
 !=============
-!headers
+!AB_HEADERs
 !=============
  write(message,'(2a)') ch10, "  |---Newton method to search Fermi level ------------|"
  call wrtout(std_out,message,'COLL')

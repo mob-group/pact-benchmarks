@@ -92,8 +92,8 @@
      $                   WORK( LDWORK, LDWORK )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, ZLANGE
-      EXTERNAL           DLAMCH, ZLANGE
+      DOUBLE PRECISION   AB_DLAMCH, ZLANGE
+      EXTERNAL           AB_DLAMCH, ZLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZGEMM, ZGGBAK, ZGGBAL, ZLACPY
@@ -117,7 +117,7 @@
       KNT = 0
       RMAX = ZERO
 *
-      EPS = DLAMCH( 'Precision' )
+      EPS = AB_DLAMCH( 'Precision' )
 *
    10 CONTINUE
       READ( NIN, FMT = * )N, M

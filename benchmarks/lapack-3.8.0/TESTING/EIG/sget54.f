@@ -184,8 +184,8 @@
       REAL               DUM( 1 )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLANGE
-      EXTERNAL           SLAMCH, SLANGE
+      REAL               AB_SLAMCH, SLANGE
+      EXTERNAL           AB_SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGEMM, SLACPY
@@ -201,8 +201,8 @@
 *
 *     Constants
 *
-      UNFL = SLAMCH( 'Safe minimum' )
-      ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
+      ULP = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
 *
 *     compute the norm of (A,B)
 *

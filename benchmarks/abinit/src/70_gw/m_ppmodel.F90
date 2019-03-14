@@ -107,7 +107,7 @@ MODULE m_ppmodel
    ! Number of q-points in the IBZ
 
    integer :: npwc
-   ! Number of G vectors in $\tilde \epsilon $
+   ! Number of G vectors in $\tiAB_LDE \epsilon $
 
    integer :: userho
    ! 1 if the ppmodel requires rho(G).
@@ -138,21 +138,21 @@ MODULE m_ppmodel
    ! Flag defining the status of the tables for the different q. See the PPM_TAB flags.
 
    type(array2_gwpc_t),pointer :: bigomegatwsq_qbz   => null()
-   ! (Points|Stores) the symmetrized plasmon pole parameters $\tilde\Omega^2_{G Gp}(q_bz)$.
+   ! (Points|Stores) the symmetrized plasmon pole parameters $\tiAB_LDE\Omega^2_{G Gp}(q_bz)$.
 
    type(array2_gwpc_t),pointer :: omegatw_qbz  => null()
-   ! (Points|Stores) the symmetrized plasmon pole parameters $\tilde\omega_{G Gp}(q_bz)$.
+   ! (Points|Stores) the symmetrized plasmon pole parameters $\tiAB_LDE\omega_{G Gp}(q_bz)$.
 
    type(array2_gwpc_t),pointer :: eigpot_qbz   => null()
    ! (Points|Stores) the eigvectors of the symmetrized inverse dielectric matrix
 
    type(array2_gwpc_t),allocatable :: bigomegatwsq(:)
    ! bigomegatwsq(nqibz)%value(npwc,dm2_botsq)
-   ! Plasmon pole parameters $\tilde\Omega^2_{G Gp}(q)$.
+   ! Plasmon pole parameters $\tiAB_LDE\Omega^2_{G Gp}(q)$.
 
    type(array2_gwpc_t),allocatable :: omegatw(:)
    ! omegatw(nqibz)%value(npwc,dm2_otq)
-   ! Plasmon pole parameters $\tilde\omega_{G Gp}(q)$.
+   ! Plasmon pole parameters $\tiAB_LDE\omega_{G Gp}(q)$.
 
    type(array2_gwpc_t),allocatable :: eigpot(:)
    ! eigpot(nqibz)%value(dm_eig,dm_eig)
@@ -208,7 +208,7 @@ CONTAINS  !=====================================================================
 !!  In this case,indeed, the equation is different since we have to consider G-G0.
 !!  There is however a check in sigma
 !!
-!!  * Remember the symmetry properties of \tilde\espilon^{-1}
+!!  * Remember the symmetry properties of \tiAB_LDE\espilon^{-1}
 !!    If q_bz=Sq_ibz+G0:
 !!
 !!    $\epsilon^{-1}_{SG1-G0,SG2-G0}(q_bz) = e^{+iS(G2-G1).\tau}\epsilon^{-1}_{G1,G2)}(q)
@@ -1239,9 +1239,9 @@ subroutine get_ppm_eigenvalues(PPm,iqibz,zcut,nomega,omega,Vcp,eigenvalues)
      Afull=em1q(:,:,iomega)
 
      !for the moment no sort, maybe here I should sort using the real part?
-     call ZGEES('V','N',sortcplx,PPm%npwc,Afull,PPm%npwc,sdim,wwc,vs,PPm%npwc,work,lwork,rwork,bwork,info)
+     call AB_ZGEES('V','N',sortcplx,PPm%npwc,Afull,PPm%npwc,sdim,wwc,vs,PPm%npwc,work,lwork,rwork,bwork,info)
      if (info/=0) then
-      write(msg,'(2a,i10)')' get_ppm_eigenvalues : Error in ZGEES, diagonalizing complex matrix, info = ',info
+      write(msg,'(2a,i10)')' get_ppm_eigenvalues : Error in AB_ZGEES, diagonalizing complex matrix, info = ',info
       call wrtout(std_out,msg,'COLL')
      end if
 
@@ -1276,7 +1276,7 @@ subroutine get_ppm_eigenvalues(PPm,iqibz,zcut,nomega,omega,Vcp,eigenvalues)
      end do
 
      ! For the moment we require also the eigenvectors.
-     call ZHPEV('V','U',PPm%npwc,Adpp,ww,eigvec,PPm%npwc,work,rwork,info)
+     call AB_ZHPEV('V','U',PPm%npwc,Adpp,ww,eigvec,PPm%npwc,work,rwork,info)
 
      if (info/=0) then
        write(msg,'(2a,i10)')' get_ppm_eigenvalues : Error diagonalizing matrix, info = ',info
@@ -1465,9 +1465,9 @@ end subroutine cppm1par
 !! OUTPUT
 !!  bigomegatwsq(npwc,npwc)= squared bare plasma frequencies
 !!   \Omega^2_{G1 G2}(q) = 4\pi \frac {(q+G1).(q+G2)}/{|q+G1|^2} n(G1-G2)
-!!  omegatw(npwc,npwc)= plasmon frequencies \tilde\omega_{G1 G2}(q) where:
-!!  \tilde\omega^2_{G1 G2}(q) =
-!!    \frac {\Omega^2_{G1 G2}(q)} {\delta_{G1 G2}-\tilde\epsilon^{-1}_{G1 G2} (q, \omega=0)}
+!!  omegatw(npwc,npwc)= plasmon frequencies \tiAB_LDE\omega_{G1 G2}(q) where:
+!!  \tiAB_LDE\omega^2_{G1 G2}(q) =
+!!    \frac {\Omega^2_{G1 G2}(q)} {\delta_{G1 G2}-\tiAB_LDE\epsilon^{-1}_{G1 G2} (q, \omega=0)}
 !!
 !! PARENTS
 !!      m_ppmodel
@@ -1733,9 +1733,9 @@ subroutine cppm3par(qpt,npwc,epsm1,ngfftf,gvec,gprimd,rhor,nfftf,bigomegatwsq,om
  type(MPI_type) :: MPI_enreg_seq
 !arrays
  real(dp) :: b1(3),b2(3),b3(3),gppq(3),gpq(3),qlist(3,1)
- real(dp),allocatable :: eigval(:),qplusg(:),rhog_dp(:,:),zhpev2(:),tmp_rhor(:)
+ real(dp),allocatable :: eigval(:),qplusg(:),rhog_dp(:,:),AB_ZHPEV2(:),tmp_rhor(:)
  complex(dpc),allocatable :: eigvec(:,:),matr(:),mm(:,:),rhog(:),rhogg(:,:)
- complex(dpc),allocatable :: zhpev1(:),zz(:)
+ complex(dpc),allocatable :: AB_ZHPEV1(:),zz(:)
 
 !*************************************************************************
 
@@ -1835,7 +1835,7 @@ subroutine cppm3par(qpt,npwc,epsm1,ngfftf,gvec,gprimd,rhor,nfftf,bigomegatwsq,om
 
  ABI_MALLOC(qplusg,(npwc))
 
- ! Store the susceptibility matrix in upper mode before calling zhpev.
+ ! Store the susceptibility matrix in upper mode before calling AB_ZHPEV.
  ABI_STAT_MALLOC(matr,(npwc*(npwc+1)/2), ierr)
  ABI_CHECK(ierr==0, 'matr of memory')
 
@@ -1846,13 +1846,13 @@ subroutine cppm3par(qpt,npwc,epsm1,ngfftf,gvec,gprimd,rhor,nfftf,bigomegatwsq,om
    end do
  end do
 
- ABI_MALLOC(zhpev2,(3*npwc-2))
- ABI_MALLOC(zhpev1,(2*npwc-1))
+ ABI_MALLOC(AB_ZHPEV2,(3*npwc-2))
+ ABI_MALLOC(AB_ZHPEV1,(2*npwc-1))
 
- call ZHPEV('V','U',npwc,matr,eigval,eigvec,npwc,zhpev1,zhpev2,ierr)
+ call AB_ZHPEV('V','U',npwc,matr,eigval,eigvec,npwc,AB_ZHPEV1,AB_ZHPEV2,ierr)
  ABI_FREE(matr)
- ABI_FREE(zhpev2)
- ABI_FREE(zhpev1)
+ ABI_FREE(AB_ZHPEV2)
+ ABI_FREE(AB_ZHPEV1)
 
  if (ierr<0) then
    write (msg,'(2a,i4,a)')&
@@ -1873,7 +1873,7 @@ subroutine cppm3par(qpt,npwc,epsm1,ngfftf,gvec,gprimd,rhor,nfftf,bigomegatwsq,om
  ! the calculation of the generalized overlap matrix
  ! Note: the eigenpotentials has to be calculated on the FFT (G-Gp) index
  !
- ! Save eigenvectors of \tilde\epsilon^{-1}
+ ! Save eigenvectors of \tiAB_LDE\epsilon^{-1}
  ! MG well it is better to save \Theta otherwise
  ! we have to calculare \Theta for each band, spin, k-point but oh well
  eigtot=eigvec
@@ -1884,9 +1884,9 @@ subroutine cppm3par(qpt,npwc,epsm1,ngfftf,gvec,gprimd,rhor,nfftf,bigomegatwsq,om
  ! Basic Equation:
  !
  ! \Theta_{q,ii}(G)=\Psi_{q,ii}(G)/|q+G|
- ! where \Psi_{q,ii}(G) is the eigenvector of \tilde\epsilon^{-1}
+ ! where \Psi_{q,ii}(G) is the eigenvector of \tiAB_LDE\epsilon^{-1}
 
- ! \tilde\omega_{ii,q}^2= 4\pi (1-eigenval(ii,q)))
+ ! \tiAB_LDE\omega_{ii,q}^2= 4\pi (1-eigenval(ii,q)))
  ! \sum_{G,Gp} \Theta^*_{q,ii}(G) (q+G)\cdot(q+Gp) n(G-Gp) \Theta_{q,ii}(Gp)
 
  do ii=1,npwc !DM band
@@ -2093,8 +2093,8 @@ subroutine cppm4par(qpt,npwc,epsm1,ngfftf,gvec,gprimd,rhor,nfftf,bigomegatwsq,om
 
  ABI_MALLOC(qplusg,(npwc))
  !
- ! Extract the full polarizability from \tilde \epsilon^{-1}
- ! \tilde\epsilon^{-1}_{G1 G2} = \delta_{G1 G2} + 4\pi \frac{\chi_{G1 G2}}{|q+G1| |q+G2|}
+ ! Extract the full polarizability from \tiAB_LDE \epsilon^{-1}
+ ! \tiAB_LDE\epsilon^{-1}_{G1 G2} = \delta_{G1 G2} + 4\pi \frac{\chi_{G1 G2}}{|q+G1| |q+G2|}
  chitmp(:,:)=epsm1(:,:)
 
  qlist(:,1) = qpt
@@ -2173,7 +2173,7 @@ subroutine cppm4par(qpt,npwc,epsm1,ngfftf,gvec,gprimd,rhor,nfftf,bigomegatwsq,om
    omegatw(ii)=SQRT(-1/eigval(ii))
    !
    ! Calculate and save scaled plasmon-pole eigenvectors
-   ! defined as \sqrt{4\pi} \frac{Mx}{\sqrt{\tilde\omega} |q+G|}
+   ! defined as \sqrt{4\pi} \frac{Mx}{\sqrt{\tiAB_LDE\omega} |q+G|}
    tmp1(:)=eigvec(:,ii)
 
    do ig=1,npwc

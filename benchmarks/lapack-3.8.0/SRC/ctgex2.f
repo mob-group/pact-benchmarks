@@ -228,8 +228,8 @@
       COMPLEX            S( LDST, LDST ), T( LDST, LDST ), WORK( 8 )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_CLACPY, AB_CLARTG, AB_CLASSQ, AB_CROT
@@ -257,8 +257,8 @@
 *
 *     Compute the threshold for testing the acceptance of swapping.
 *
-      EPS = SLAMCH( 'P' )
-      SMLNUM = SLAMCH( 'S' ) / EPS
+      EPS = AB_SLAMCH( 'P' )
+      SMLNUM = AB_SLAMCH( 'S' ) / EPS
       SCALE = REAL( CZERO )
       SUM = REAL( CONE )
       CALL AB_CLACPY( 'Full', M, M, S, LDST, WORK, M )

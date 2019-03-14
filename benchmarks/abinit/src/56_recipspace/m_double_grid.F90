@@ -236,7 +236,7 @@ subroutine double_grid_init(Kmesh_coarse,Kmesh_dense,kptrlatt_coarse,kmult,grid)
  curmat(:,:) = grid%kptrlatt_coarse(:,:)
 
  ! Gaussian elimination
- call dgetrf(3,3,curmat,3,ipiv,info)
+ call AB_DGETRF(3,3,curmat,3,ipiv,info)
 
  grid%nbz_closedcoarse = 1
 
@@ -868,9 +868,9 @@ end subroutine double_grid_free
 !!  qptrlatt(3,3) = qptrlatt of the considered calculation (this is obtained
 !!              from the input variable ngqpt and shiftq.
 !!  kpt_fine(3,nkpt_fine) = this table contain all the k-points of the fine grid
-!!              in the full BZ (no sym op. allowed) and is read from the header
+!!              in the full BZ (no sym op. allowed) and is read from the AB_HEADER
 !!              of the dense WF file.
-!!  nkpt_fine = number of k-points of the fine grid read from the header of the
+!!  nkpt_fine = number of k-points of the fine grid read from the AB_HEADER of the
 !!              dense WF file.
 !!
 !! OUTPUT
@@ -991,21 +991,21 @@ subroutine kptfine_av(center,qptrlatt,kpt_fine,nkpt_fine,kpt_fine_sub,nkpt_sub,w
 &         (ABS(kpt_fine_ref(1)-center_ref(1)+0.5) < tol8)) then
            if(found(1)) then
              wgt_sub(ikpt) = wgt_sub(ikpt)*0.5
-             found(1) = .False.
+             found(1) = .false.
            end if
          end if
          if((ABS(kpt_fine_ref(2)-center_ref(2)-0.5) < tol8) .or.&
 &         (ABS(kpt_fine_ref(2)-center_ref(2)+0.5) < tol8)) then
            if(found(2)) then
              wgt_sub(ikpt) = wgt_sub(ikpt)*0.5
-             found(2) = .False.
+             found(2) = .false.
            end if
          end if
          if((ABS(kpt_fine_ref(3)-center_ref(3)-0.5)< tol8) .or.&
 &         (ABS(kpt_fine_ref(3)-center_ref(3)+0.5) < tol8)) then
            if(found(3)) then
              wgt_sub(ikpt) = wgt_sub(ikpt)*0.5
-             found(3) = .False.
+             found(3) = .false.
            end if
          end if
        end do

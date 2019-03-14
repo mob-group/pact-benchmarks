@@ -169,8 +169,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME
-      REAL               SLAMCH
-      EXTERNAL           AB_LSAME, SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -186,7 +186,7 @@
 *
 *     Initialize LARGE and SMALL.
 *
-      SMALL = SLAMCH( 'Safe minimum' ) / SLAMCH( 'Precision' )
+      SMALL = AB_SLAMCH( 'Safe minimum' ) / AB_SLAMCH( 'Precision' )
       LARGE = ONE / SMALL
 *
       IF( SCOND.GE.THRESH .AND. AMAX.GE.SMALL .AND. AMAX.LE.LARGE ) THEN

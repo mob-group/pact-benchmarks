@@ -128,12 +128,12 @@
       DOUBLE PRECISION   RMAX
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. Executable Statements ..
 *
-      RMAX = SLAMCH( 'O' )
+      RMAX = AB_SLAMCH( 'O' )
       DO 20 J = 1, N
          DO 10 I = 1, M
             IF( ( A( I, J ).LT.-RMAX ) .OR. ( A( I, J ).GT.RMAX ) ) THEN

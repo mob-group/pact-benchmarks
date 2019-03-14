@@ -265,8 +265,8 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_ISAMAX
-      REAL               AB_SDOT, SLAMCH, AB_SNRM2
-      EXTERNAL           AB_ISAMAX, AB_LSAME, AB_SAXPY, AB_SDOT, SLAMCH,
+      REAL               AB_SDOT, AB_SLAMCH, AB_SNRM2
+      EXTERNAL           AB_ISAMAX, AB_LSAME, AB_SAXPY, AB_SDOT, AB_SLAMCH,
      $ AB_SNRM2
 *     ..
 *     .. External Subroutines ..
@@ -341,9 +341,9 @@
          RETURN
       END IF
 *
-      ABSTOL = 2*SLAMCH( 'Safe Minimum' )
-      ULP = SLAMCH( 'Precision' )
-      EPS = SLAMCH( 'Epsilon' )
+      ABSTOL = 2*AB_SLAMCH( 'Safe Minimum' )
+      ULP = AB_SLAMCH( 'Precision' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       SQRT2 = SQRT( 2.0E0 )
       ORTOL = SQRT( ULP )
 *

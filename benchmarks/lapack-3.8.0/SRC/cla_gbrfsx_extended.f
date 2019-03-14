@@ -475,7 +475,7 @@
      $                   BLAS_CGBMV2_X, AB_CLA_GBAMV, AB_CLA_WWADDW, SLA
      $MCH,
      $                   AB_CHLA_TRANSTYPE, AB_CLA_LIN_BERR
-      REAL               SLAMCH
+      REAL               AB_SLAMCH
       CHARACTER          AB_CHLA_TRANSTYPE
 *     ..
 *     .. Intrinsic Functions..
@@ -491,8 +491,8 @@
 *
       IF (INFO.NE.0) RETURN
       TRANS = AB_CHLA_TRANSTYPE(TRANS_TYPE)
-      EPS = SLAMCH( 'Epsilon' )
-      HUGEVAL = SLAMCH( 'Overflow' )
+      EPS = AB_SLAMCH( 'Epsilon' )
+      HUGEVAL = AB_SLAMCH( 'Overflow' )
 *     Force HUGEVAL to Inf
       HUGEVAL = HUGEVAL * HUGEVAL
 *     Using HUGEVAL may lead to spurious underflows.

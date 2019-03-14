@@ -454,8 +454,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
-      REAL               SLAMCH, SLARND
-      EXTERNAL           ILAENV, SLAMCH, SLARND
+      REAL               AB_SLAMCH, SLARND
+      EXTERNAL           ILAENV, AB_SLAMCH, SLARND
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, SGET52, SGGEV3, SLABAD, SLACPY, SLARFG,
@@ -545,8 +545,8 @@
       IF( NSIZES.EQ.0 .OR. NTYPES.EQ.0 )
      $   RETURN
 *
-      SAFMIN = SLAMCH( 'Safe minimum' )
-      ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
+      SAFMIN = AB_SLAMCH( 'Safe minimum' )
+      ULP = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
       SAFMIN = SAFMIN / ULP
       SAFMAX = ONE / SAFMIN
       CALL SLABAD( SAFMIN, SAFMAX )

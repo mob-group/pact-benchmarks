@@ -119,7 +119,7 @@ end subroutine ilm2lm
 !!
 !! INPUTS
 !!  ln_size= Total number of nl components
-!!  lmn_size= Second dimension in indlmn. Total number of (l,m,n) components for this atom.
+!!  lmn_size= second dimension in indlmn. Total number of (l,m,n) components for this atom.
 !!  orbitals(ln_size)=Give the value of l for each element of the augmented basis set.
 !!
 !! OUTPUT

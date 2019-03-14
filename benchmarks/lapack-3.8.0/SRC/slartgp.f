@@ -120,8 +120,8 @@
       REAL               EPS, F1, G1, SAFMIN, SAFMN2, SAFMX2, SCALE
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, INT, LOG, MAX, SIGN, SQRT
@@ -135,10 +135,10 @@
 *     .. Executable Statements ..
 *
 *     IF( FIRST ) THEN
-         SAFMIN = SLAMCH( 'S' )
-         EPS = SLAMCH( 'E' )
-         SAFMN2 = SLAMCH( 'B' )**INT( LOG( SAFMIN / EPS ) /
-     $            LOG( SLAMCH( 'B' ) ) / TWO )
+         SAFMIN = AB_SLAMCH( 'S' )
+         EPS = AB_SLAMCH( 'E' )
+         SAFMN2 = AB_SLAMCH( 'B' )**INT( LOG( SAFMIN / EPS ) /
+     $            LOG( AB_SLAMCH( 'B' ) ) / TWO )
          SAFMX2 = ONE / SAFMN2
 *        FIRST = .FALSE.
 *     END IF

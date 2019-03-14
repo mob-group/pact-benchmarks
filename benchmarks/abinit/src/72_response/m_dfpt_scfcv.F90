@@ -130,7 +130,7 @@ contains
 !!  eii=2nd derivative of pseudopotential core energy (hartree)
 !!  evdw=DFT-D semi-empirical part of 2nd-order total energy
 !!  fermie=fermi energy (Hartree)
-!!  hdr <type(hdr_type)>=the header of wf, den and pot files
+!!  hdr <type(hdr_type)>=the AB_HEADER of wf, den and pot files
 !!  idir=direction of the current perturbation
 !!  indkpt1(nkpt_rbz)=non-symmetrized indices of the k-points
 !!  indsy1(4,nsym1,natom)=indirect indexing array for atom labels
@@ -772,7 +772,7 @@ subroutine dfpt_scfcv(atindx,blkflg,cg,cgq,cg1,cg1_active,cplex,cprj,cprjq,cpus,
 &     dtset%ixc,kxc,mpi_enreg,dtset%natom,nfftf,ngfftf,nhat,nhat1,nhat1gr,nhat1grdim,&
 &     nkxc,nspden,n3xccc,optene,option,dtset%paral_kgb,dtset%qptn,&
 &     rhog,rhog1,rhor,rhor1,rprimd,ucvol,psps%usepaw,usexcnhat,vhartr1,vpsp1,&
-&     nvresid1,res2,vtrial1,vxc,vxc1,xccc3d1,dtset%ixcrot)
+&     nvresid1,res2,vtrial1,vxc,vxc1,xccc3d1,dtset%ixAB_CROT)
 
      if(.not.kramers_deg) then
        vtrial1_pq=vtrial1 !save trial potential at +q
@@ -1041,7 +1041,7 @@ subroutine dfpt_scfcv(atindx,blkflg,cg,cgq,cg1,cg1_active,cplex,cprj,cprjq,cpus,
      call dfpt_rhotov(cplex,ehart01,ehart1,elpsp1,exc1,elmag1,gsqcut,idir,ipert,&
 &     dtset%ixc,kxc,mpi_enreg,dtset%natom,nfftf,ngfftf,nhat,nhat1,nhat1gr,nhat1grdim,nkxc,&
 &     nspden,n3xccc,optene,optres,dtset%paral_kgb,dtset%qptn,rhog,rhog1,rhor,rhor1,&
-&     rprimd,ucvol,psps%usepaw,usexcnhat,vhartr1,vpsp1,nvresid1,res2,vtrial1,vxc,vxc1,xccc3d1,dtset%ixcrot)
+&     rprimd,ucvol,psps%usepaw,usexcnhat,vhartr1,vpsp1,nvresid1,res2,vtrial1,vxc,vxc1,xccc3d1,dtset%ixAB_CROT)
    end if
 
 !  ######################################################################
@@ -1389,7 +1389,7 @@ subroutine dfpt_scfcv(atindx,blkflg,cg,cgq,cg1,cg1_active,cplex,cprj,cprjq,cpus,
 & quit,res2,resid,residm,response,&
 & tollist,psps%usepaw,vxcavg,wtk_rbz,xred,conv_retcode)
 
-!Update the content of the header (evolving variables)
+!Update the content of the AB_HEADER (evolving variables)
  bantot_rbz = sum(nband_rbz(1:nkpt_rbz*dtset%nsppol))
  call hdr_update(hdr,bantot_rbz,etotal,fermie,&
 & residm,rprimd,occ_rbz,pawrhoij1,xred,dtset%amu_orig(:,1),&

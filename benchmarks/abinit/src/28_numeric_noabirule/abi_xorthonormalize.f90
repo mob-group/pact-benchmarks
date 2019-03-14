@@ -189,10 +189,10 @@ subroutine ortho_reim(blockvectorx,blockvectorbx,blocksize,spaceComm,sqgram,vect
  call xmpi_sum(sqgram,spaceComm,ierr)
 
  !Cholesky factorization of sqgram (ouside upper Triangular of sqgram)
- call abi_d2zpotrf('u',blocksize,sqgram,blocksize,info) !vz_d
+ call abi_d2AB_ZPOTRF('u',blocksize,sqgram,blocksize,info) !vz_d
 
  if (info /= 0 )  then
-   write(message,'(a,i0)')'dpotrf, info=',info
+   write(message,'(a,i0)')'AB_DPOTRF, info=',info
    MSG_ERROR(message)
  end if
 
@@ -237,7 +237,7 @@ end subroutine ortho_reim
 !!      lobpcgccIIIwf,lobpcgccIIwf,m_lobpcg,pw_orthon
 !!
 !! CHILDREN
-!!      wrtout,xmpi_sum,zgemm,zpotrf,ztrsm
+!!      wrtout,xmpi_sum,AB_ZGEMM,AB_ZPOTRF,AB_ZTRSM
 !!
 !! SOURCE
 subroutine zorthonormalize(blockvectorx,blockvectorbx,blocksize,spaceComm,sqgram,vectsize)
@@ -273,7 +273,7 @@ subroutine zorthonormalize(blockvectorx,blockvectorbx,blocksize,spaceComm,sqgram
  call abi_xpotrf('u',blocksize,sqgram,blocksize,info)
 
  if (info /= 0 )  then
-   write(message,'(a,i0)')'zpotrf, info=',info
+   write(message,'(a,i0)')'AB_ZPOTRF, info=',info
    MSG_ERROR(message)
  end if
 

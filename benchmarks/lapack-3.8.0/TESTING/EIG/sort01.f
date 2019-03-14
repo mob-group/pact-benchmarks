@@ -143,8 +143,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               SDOT, SLAMCH, SLANSY
-      EXTERNAL           LSAME, SDOT, SLAMCH, SLANSY
+      REAL               SDOT, AB_SLAMCH, SLANSY
+      EXTERNAL           LSAME, SDOT, AB_SLAMCH, SLANSY
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SLASET, SSYRK
@@ -161,7 +161,7 @@
       IF( M.LE.0 .OR. N.LE.0 )
      $   RETURN
 *
-      EPS = SLAMCH( 'Precision' )
+      EPS = AB_SLAMCH( 'Precision' )
       IF( M.LT.N .OR. ( M.EQ.N .AND. LSAME( ROWCOL, 'R' ) ) ) THEN
          TRANSU = 'N'
          K = N

@@ -307,8 +307,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME
-      DOUBLE PRECISION   DLAMCH, AB_ZLANHP
-      EXTERNAL           AB_LSAME, DLAMCH, AB_ZLANHP
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANHP
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_ZLANHP
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_XERBLA, AB_ZCOPY, AB_ZHPCON, AB_ZHPRFS, AB_Z
@@ -381,7 +381,7 @@
 *
 *     Set INFO = N+1 if the matrix is singular to working precision.
 *
-      IF( RCOND.LT.DLAMCH( 'Epsilon' ) )
+      IF( RCOND.LT.AB_DLAMCH( 'Epsilon' ) )
      $   INFO = N + 1
 *
       RETURN

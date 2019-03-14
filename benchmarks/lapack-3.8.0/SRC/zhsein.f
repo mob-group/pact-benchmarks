@@ -279,8 +279,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME, AB_DISNAN
-      DOUBLE PRECISION   DLAMCH, AB_ZLANHS
-      EXTERNAL           AB_LSAME, DLAMCH, AB_ZLANHS, AB_DISNAN
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANHS
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_ZLANHS, AB_DISNAN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_XERBLA, AB_ZLAEIN
@@ -345,8 +345,8 @@
 *
 *     Set machine-dependent constants.
 *
-      UNFL = DLAMCH( 'Safe minimum' )
-      ULP = DLAMCH( 'Precision' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
+      ULP = AB_DLAMCH( 'Precision' )
       SMLNUM = UNFL*( N / ULP )
 *
       LDWORK = N

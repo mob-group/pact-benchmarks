@@ -143,8 +143,8 @@
       DOUBLE PRECISION   D, EMIN, SAFMIN, TEMP
 *     ..
 *     .. External Function ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN
@@ -154,7 +154,7 @@
       IF( ( N0-I0-1 ).LE.0 )
      $   RETURN
 *
-      SAFMIN = DLAMCH( 'Safe minimum' )
+      SAFMIN = AB_DLAMCH( 'Safe minimum' )
       J4 = 4*I0 + PP - 3
       EMIN = Z( J4+4 )
       D = Z( J4 )

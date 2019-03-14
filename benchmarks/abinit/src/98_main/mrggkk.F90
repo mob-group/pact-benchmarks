@@ -21,13 +21,13 @@
 !!  (main routine)
 !!
 !! NOTES
-!! GKK file structure is composed of header records and eigenvalue arrays,
+!! GKK file structure is composed of AB_HEADER records and eigenvalue arrays,
 !! in binary or ascii:
-!!   GS header = hdr
+!!   GS AB_HEADER = hdr
 !!   GS eigenvalues = eigen
 !!   number of perturbations = ntot
 !!   for each perturbation
-!!      1WF header = hdr1
+!!      1WF AB_HEADER = hdr1
 !!      1st order eigenvalues = eigen1
 !!
 !! PARENTS
@@ -173,7 +173,7 @@ program mrggkk
    ios = open_file(outfile,message,unit=unitout,form='formatted')
    rdwrout = 4
  else if (binascii == 2) then
-   !  this is for simple "short" output of the matrices, without headers or imaginary part
+   !  this is for simple "short" output of the matrices, without AB_HEADERs or imaginary part
    ios = open_file(outfile,message,unit=unitout,form='formatted')
    rdwrout = 4
  else
@@ -192,7 +192,7 @@ program mrggkk
 
  call wfk_open_read(GS_wfk,filegs,formeig0,iomode,unitgs,comm)
 
-!Copy header of GS file to output.
+!Copy AB_HEADER of GS file to output.
  if (binascii /= 2) then
    if (rdwrout == 4) then
      call hdr_echo(GS_wfk%Hdr, GS_wfk%fform, rdwrout)
@@ -202,7 +202,7 @@ program mrggkk
    end if
  end if
 
- call wrtout(std_out,' header echoed to output file',"COLL")
+ call wrtout(std_out,' AB_HEADER echoed to output file',"COLL")
 
  ABI_MALLOC(eig_k,(GS_wfk%mband))
 
@@ -254,7 +254,7 @@ program mrggkk
 
    call wfk_open_read(PH_wfk,file1wf,formeig1,iomode,unit1wf,comm,Hdr_out=hdr1)
 
-!  copy header of 1WF file to output
+!  copy AB_HEADER of 1WF file to output
    if (binascii /= 2) then
      if (rdwrout == 4) then
        call hdr_echo(hdr1, PH_wfk%fform, rdwrout)
@@ -318,7 +318,7 @@ program mrggkk
 
    ABI_FREE(eig_k)
 
-!  clean header to deallocate everything
+!  clean AB_HEADER to deallocate everything
    call hdr_free(hdr1)
 
    call wfk_close(PH_wfk)
@@ -342,8 +342,8 @@ program mrggkk
    end if
    rewind (unitgkk)
 
-!  read in header of GS file and eigenvalues
-!  could force a comparison of header with global header above for consistency
+!  read in AB_HEADER of GS file and eigenvalues
+!  could force a comparison of AB_HEADER with global AB_HEADER above for consistency
    call hdr_fort_read(hdr, unitgkk, fform)
    ABI_CHECK(fform /= 0, sjoin("fform == 0 while reading:", filegkk))
 
@@ -365,14 +365,14 @@ program mrggkk
 
    ABI_MALLOC(eig_k,(2*mband*mband))
    do i1wf=1,n1wf
-!    read in header of 1WF file
+!    read in AB_HEADER of 1WF file
      call hdr_fort_read(hdr1, unitgkk, fform)
      if (fform == 0) then
-       write(message,'(a,i0,a)')' 1WF header number ',i1wf,' was mis-read. fform == 0'
+       write(message,'(a,i0,a)')' 1WF AB_HEADER number ',i1wf,' was mis-read. fform == 0'
        MSG_ERROR(message)
      end if
 
-!    copy header of 1WF file to output
+!    copy AB_HEADER of 1WF file to output
      if (binascii /= 2) then
        if (rdwrout == 4) then
          call hdr_echo(hdr1, fform, rdwrout)

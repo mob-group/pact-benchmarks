@@ -605,7 +605,7 @@ end function iter2_yield
 !!
 !! SOURCE
 
-subroutine iter2_print(Iter2,header,unit,mode_paral,prtvol)
+subroutine iter2_print(Iter2,AB_HEADER,unit,mode_paral,prtvol)
 
 
 !This section has been created automatically by the script Abilint (TD).
@@ -620,7 +620,7 @@ subroutine iter2_print(Iter2,header,unit,mode_paral,prtvol)
 !scalars
  integer,optional,intent(in) :: unit,prtvol
  character(len=4),optional,intent(in) :: mode_paral
- character(len=*),optional,intent(in) :: header
+ character(len=*),optional,intent(in) :: AB_HEADER
  type(iter2_t),intent(in) :: Iter2
 
 !Local variables-------------------------------
@@ -634,7 +634,7 @@ subroutine iter2_print(Iter2,header,unit,mode_paral,prtvol)
  my_mode  ='COLL' ; if (PRESENT(mode_paral)) my_mode  =mode_paral
 
  msg=' ==== Content of the iter2_t object ==== '
- if (PRESENT(header)) msg=' ==== '//TRIM(ADJUSTL(header))//' ==== '
+ if (PRESENT(AB_HEADER)) msg=' ==== '//TRIM(ADJUSTL(AB_HEADER))//' ==== '
  call wrtout(my_unt,msg,my_mode)
 
  ntot = PRODUCT(Iter2%sizes)

@@ -184,8 +184,8 @@
       INTRINSIC          ABS, MAX
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_XERBLA
@@ -210,7 +210,7 @@
          RETURN
       END IF
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
 *
       TL = MAX( TOL, EPS )
       SCALE1 = ABS( A( 1 ) ) + ABS( B( 1 ) )

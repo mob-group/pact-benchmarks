@@ -137,9 +137,9 @@
       COMPLEX*16         T
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, ZLANGE
+      DOUBLE PRECISION   AB_DLAMCH, ZLANGE
       COMPLEX*16         ZDOTU
-      EXTERNAL           DLAMCH, ZLANGE, ZDOTU
+      EXTERNAL           AB_DLAMCH, ZLANGE, ZDOTU
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZGEMV, ZLASWP, ZSCAL, ZTRMV
@@ -158,7 +158,7 @@
 *
 *     Determine EPS and the norm of A.
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       ANORM = ZLANGE( '1', M, N, A, LDA, RWORK )
 *
 *     Compute the product L*U and overwrite AFAC with the result.

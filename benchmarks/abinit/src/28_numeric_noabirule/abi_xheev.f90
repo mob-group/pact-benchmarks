@@ -133,7 +133,7 @@
  !  In Plasma v 2.4.6, eigen routines support only
  !the eigenvalues computation (jobz=N) and not the
  !full eigenvectors bases determination (jobz=V)
- if (LSAME(jobz,'N')) then
+ if (AB_LSAME(jobz,'N')) then
     jobz_plasma_a = jobz_plasma(jobz)
 
     if ( cplx_ == 2 .and. present(rwork)) then
@@ -150,13 +150,13 @@
  else
 #endif
    if ( cplx_ == 2 .and. present(rwork)) then
-      call zheev(jobz,uplo,n,a,lda,w,work,lwork/2,rwork,info)
+      call AB_ZHEEV(jobz,uplo,n,a,lda,w,work,lwork/2,rwork,info)
    else
 #ifdef FC_NAG
       ! MG: This hack needed to pass paral[25] paral[29] and mpiio on nag@petrus with np=4
       if (n < 0) write(std_out, *)"work: ",work(1:3)
 #endif
-      call dsyev(jobz,uplo,n,a,lda,w,work,lwork,info)
+      call AB_DSYEV(jobz,uplo,n,a,lda,w,work,lwork,info)
    endif
 #ifdef HAVE_LINALG_PLASMA
  end if
@@ -273,7 +273,7 @@ subroutine abi_cheev(jobz,uplo,n,a,lda,w,work,lwork,rwork,info)
  !  In Plasma v 2.4.6, eigen routines support only
  !the eigenvalues computation (jobz=N) and not the
  !full eigenvectors bases determination (jobz=V)
- if (LSAME(jobz,'N')) then
+ if (AB_LSAME(jobz,'N')) then
     jobz_plasma_a = jobz_plasma(jobz)
 
     call PLASMA_Alloc_Workspace_cheev(n,n,plasma_work,info)
@@ -284,7 +284,7 @@ subroutine abi_cheev(jobz,uplo,n,a,lda,w,work,lwork,rwork,info)
     call PLASMA_Dealloc_handle(plasma_work,info)
  else
 #endif
-   call cheev(jobz,uplo,n,a,lda,w,work,lwork,rwork,info)
+   call AB_CHEEV(jobz,uplo,n,a,lda,w,work,lwork,rwork,info)
 #ifdef HAVE_LINALG_PLASMA
  end if
 #endif
@@ -381,7 +381,7 @@ subroutine abi_zheev(jobz,uplo,n,a,lda,w,work,lwork,rwork,info)
  !  In Plasma v 2.4.6, eigen routines support only
  !the eigenvalues computation (jobz=N) and not the
  !full eigenvectors bases determination (jobz=V)
- if (LSAME(jobz,'N')) then
+ if (AB_LSAME(jobz,'N')) then
     jobz_plasma_a = jobz_plasma(jobz)
 
     call PLASMA_Alloc_Workspace_zheev(n,n,plasma_work,info)
@@ -392,7 +392,7 @@ subroutine abi_zheev(jobz,uplo,n,a,lda,w,work,lwork,rwork,info)
     call PLASMA_Dealloc_handle(plasma_work,info)
  else
 #endif
-   call zheev(jobz,uplo,n,a,lda,w,work,lwork,rwork,info)
+   call AB_ZHEEV(jobz,uplo,n,a,lda,w,work,lwork,rwork,info)
 #ifdef HAVE_LINALG_PLASMA
  end if
 #endif

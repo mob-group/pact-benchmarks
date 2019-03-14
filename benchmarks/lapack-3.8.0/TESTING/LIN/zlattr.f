@@ -172,9 +172,9 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            IZAMAX
-      DOUBLE PRECISION   DLAMCH, DLARND
+      DOUBLE PRECISION   AB_DLAMCH, DLARND
       COMPLEX*16         ZLARND
-      EXTERNAL           LSAME, IZAMAX, DLAMCH, DLARND, ZLARND
+      EXTERNAL           LSAME, IZAMAX, AB_DLAMCH, DLARND, ZLARND
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DLABAD, DLARNV, ZCOPY, ZDSCAL, ZLARNV, ZLATB4,
@@ -187,8 +187,8 @@
 *
       PATH( 1: 1 ) = 'Zomplex precision'
       PATH( 2: 3 ) = 'TR'
-      UNFL = DLAMCH( 'Safe minimum' )
-      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
+      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
       SMLNUM = UNFL
       BIGNUM = ( ONE-ULP ) / SMLNUM
       CALL DLABAD( SMLNUM, BIGNUM )

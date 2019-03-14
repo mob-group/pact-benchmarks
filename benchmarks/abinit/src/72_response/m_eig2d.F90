@@ -97,7 +97,7 @@ MODULE m_eig2d
 
   real(dp),allocatable :: eigr2d(:,:,:,:,:,:,:)
   ! eigr2d(2,mband*nsppol,nkpt,3,natom,3,natom)
-  ! Second-order derivative of eigenergies (real,im) at each
+  ! second-order derivative of eigenergies (real,im) at each
   ! spin,band,k-point,dir1,dir2,natom1,natom2 .
 
 
@@ -128,7 +128,7 @@ MODULE m_eig2d
 
   real(dp),allocatable :: fan2d(:,:,:,:,:,:,:)
   ! fan2d(2*mband*nsppol,nkpt,3,natom,3,natom,mband)
-  ! Second-order derivative of the eigenergies (real,im) at each
+  ! second-order derivative of the eigenergies (real,im) at each
   ! ispin,iband(real,im),k-point,dir1,dir2,natom1,natom2,jband
 
  end type fan_t
@@ -159,7 +159,7 @@ MODULE m_eig2d
 
   real(dp),allocatable :: gkk2d(:,:,:,:,:)
   ! gkk2d(2*mband*nsppol,nkpt,ncart,natom,mband)
-  ! Second-order derivative of the eigenergies (real,im) at each
+  ! second-order derivative of the eigenergies (real,im) at each
   ! ispin,iband(real,im),k-point,dir1,natom1,jband
 
  end type gkk_t
@@ -877,9 +877,9 @@ end subroutine gkk_free
 !!  eigenq_fine(mband_fine,mkpt_fine,nsppol_fine) = OPTIONAL, 0-order eigenvalues
 !!            at all shifted K-points: <k+Q,n'|H(0)|k+Q,n'> (hartree) of the
 !!            fine grid. This information is read from the WF dense k-grid file.
-!!  hdr_fine = OPTIONAL, header of the WF file of the fine k-point grid. This
+!!  hdr_fine = OPTIONAL, AB_HEADER of the WF file of the fine k-point grid. This
 !!            variable is required for the k-interpolation routine.
-!!  hdr0     = OPTIONAL, header of the GS WF file of the corse k-point grid. This
+!!  hdr0     = OPTIONAL, AB_HEADER of the GS WF file of the corse k-point grid. This
 !!            variable is required for the k-interpolation routine.
 !!
 !! OUTPUT
@@ -1375,9 +1375,9 @@ end subroutine eig2stern
 !!  eigenq_fine(mband_fine,mkpt_fine,nsppol_fine) = OPTIONAL, 0-order eigenvalues
 !!            at all shifted K-points: <k+Q,n'|H(0)|k+Q,n'> (hartree) of the
 !!            fine grid. This information is read from the WF dense k-grid file.
-!!  hdr_fine = OPTIONAL, header of the WF file of the fine k-point grid. This
+!!  hdr_fine = OPTIONAL, AB_HEADER of the WF file of the fine k-point grid. This
 !!            variable is required for the k-interpolation routine.
-!!  hdr0     = header of the GS WF file of the corse k-point grid.
+!!  hdr0     = AB_HEADER of the GS WF file of the corse k-point grid.
 !!
 !!
 !! OUTPUT
@@ -1841,7 +1841,7 @@ subroutine eig2tot(dtfil,xred,psps,pawtab,natom,bdeigrf,clflg,dim_eig2nkq,eigen0
 &   hdr0%charge, hdr0%kptopt, hdr0%kptrlatt_orig, hdr0%nshiftk_orig, hdr0%shiftk_orig, &
 &   hdr0%kptrlatt, hdr0%nshiftk, hdr0%shiftk)
 
-!  Second order derivative EIGR2D (real and Im)
+!  second order derivative EIGR2D (real and Im)
    if(ieig2rf == 3 ) then
      call eigr2d_init(eig2nkq,eigr2d,dtset%mband,hdr0%nsppol,nkpt_rbz,dtset%natom)
    end if

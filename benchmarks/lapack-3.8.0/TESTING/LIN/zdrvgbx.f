@@ -227,9 +227,9 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      DOUBLE PRECISION   DGET06, DLAMCH, ZLANGB, ZLANGE, ZLANTB,
+      DOUBLE PRECISION   DGET06, AB_DLAMCH, ZLANGB, ZLANGE, ZLANTB,
      $                   ZLA_GBRPVGRW
-      EXTERNAL           LSAME, DGET06, DLAMCH, ZLANGB, ZLANGE, ZLANTB,
+      EXTERNAL           LSAME, DGET06, AB_DLAMCH, ZLANGB, ZLANGE, ZLANTB,
      $                   ZLA_GBRPVGRW
 *     ..
 *     .. External Subroutines ..
@@ -687,7 +687,7 @@
                            END IF
                            RESULT( 7 ) = ABS( RPVGRW-RWORK( 2*NRHS+1 ) )
      $                                    / MAX( RWORK( 2*NRHS+1 ),
-     $                                   RPVGRW ) / DLAMCH( 'E' )
+     $                                   RPVGRW ) / AB_DLAMCH( 'E' )
 *
                            IF( .NOT.PREFAC ) THEN
 *
@@ -878,7 +878,7 @@ c                     write(*,*) 'begin zgbsvxx testing'
 
                      RESULT( 7 ) = ABS( RPVGRW-rpvgrw_svxx ) /
      $                             MAX( rpvgrw_svxx, RPVGRW ) /
-     $                             DLAMCH( 'E' )
+     $                             AB_DLAMCH( 'E' )
 *
                      IF( .NOT.PREFAC ) THEN
 *

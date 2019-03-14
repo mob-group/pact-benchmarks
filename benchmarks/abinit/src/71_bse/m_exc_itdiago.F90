@@ -147,7 +147,7 @@ subroutine exc_iterative_diago(BSp,BS_files,Hdr_bse,prtvol,comm)
  real(dp) :: cg_gamma,dotgg,old_dotgg
  real(dp) :: max_resid,costh,sinth
  complex(dpc) :: zz,kprc
- logical,parameter :: DEBUGME=.False.
+ logical,parameter :: DEBUGME=.false.
  logical :: use_mpio,is_resonant,diago_is_real
  character(len=500) :: msg
  character(len=fnlen) :: hexc_fname,ihexc_fname,oeig_fname
@@ -707,7 +707,7 @@ subroutine exc_init_phi_block(ihexc_fname,use_mpio,comm)
    ! 3x5x7x11x13x17x19x23x29x31, that is, larger than 2**32, the largest integer*4
    ! fold1 is between 0 and 34, fold2 is between 0 and 114. As sums of five
    ! uniform random variables, their distribution is close to a gaussian
-   ! the gaussian distributions are folded, in order to be back to a uniform distribution
+   ! the gaussian distributions are foAB_LDEd, in order to be back to a uniform distribution
    ! foldre is between 0 and 20, foldim is between 0 and 18.
    !
    do state=1,nstates
@@ -774,7 +774,7 @@ subroutine exc_init_phi_block(ihexc_fname,use_mpio,comm)
      call xmpio_create_fsubarray_2D(array_of_sizes,array_of_subsizes,array_of_starts,old_type,eig_type,my_offpad,mpi_err)
      ABI_CHECK_MPI(mpi_err,"fsubarray_2D")
      !
-     ! Each node uses a different offset to skip the header and the blocks written by the other CPUs.
+     ! Each node uses a different offset to skip the AB_HEADER and the blocks written by the other CPUs.
      my_offset = ehdr_offset + my_offpad
 
      call MPI_FILE_SET_VIEW(mpi_fh, my_offset, etype, eig_type, 'native', MPI_INFO_NULL, mpi_err)
@@ -791,7 +791,7 @@ subroutine exc_init_phi_block(ihexc_fname,use_mpio,comm)
      ! check the fortran markers.
      ABI_MALLOC(bsize_frecord,(nstates))
      bsize_frecord = hexc_size * xmpi_bsize_dpc
-     ! ehdr_offset points to the end of the header.
+     ! ehdr_offset points to the end of the AB_HEADER.
      call xmpio_check_frmarkers(mpi_fh,ehdr_offset,xmpio_collective,nstates,bsize_frecord,ierr)
      ABI_CHECK(ierr==0,"Error in Fortran markers")
      ABI_FREE(bsize_frecord)
@@ -874,7 +874,7 @@ subroutine exc_write_phi_block(oeig_fname,use_mpio)
 
  if (.not.use_mpio) then
 
-   ! * Master writes the header.
+   ! * Master writes the AB_HEADER.
    if (my_rank==master) then
      call wrtout(std_out," Writing eigenstates on file "//TRIM(oeig_fname)//" via Fortran-IO","COLL")
      if (open_file(oeig_fname,msg, newunit=eig_unt, form='unformatted') /= 0) then
@@ -904,9 +904,9 @@ subroutine exc_write_phi_block(oeig_fname,use_mpio)
 #ifdef HAVE_MPI_IO
    call wrtout(std_out," Writing eigenstates on file "//TRIM(oeig_fname)//" with MPI-IO","COLL")
 
-   ! Write the header.
+   ! Write the AB_HEADER.
    if (my_rank==master) then
-     ! Write header using Fortran primitives.
+     ! Write AB_HEADER using Fortran primitives.
      if (open_file(oeig_fname,msg,newunit=eig_unt,form='unformatted') /= 0) then
        MSG_ERROR(msg)
      end if
@@ -943,7 +943,7 @@ subroutine exc_write_phi_block(oeig_fname,use_mpio)
    call xmpio_create_fsubarray_2D(array_of_sizes,array_of_subsizes,array_of_starts,old_type,eig_type,my_offpad,mpi_err)
    ABI_CHECK_MPI(mpi_err,"fsubarray_2D")
    !
-   ! Each node uses a different offset to skip the header and the blocks written by the other CPUs.
+   ! Each node uses a different offset to skip the AB_HEADER and the blocks written by the other CPUs.
    my_offset = ehdr_offset + my_offpad
 
    call MPI_FILE_SET_VIEW(mpi_fh, my_offset, etype, eig_type, 'native', MPI_INFO_NULL, mpi_err)
@@ -959,7 +959,7 @@ subroutine exc_write_phi_block(oeig_fname,use_mpio)
    ! It seems that personal calls make the code stuck
    ABI_MALLOC(bsize_frecord,(nstates))
    bsize_frecord = hexc_size * xmpi_bsize_dpc
-   ! ehdr_offset points to the end of the header.
+   ! ehdr_offset points to the end of the AB_HEADER.
    call xmpio_write_frmarkers(mpi_fh,ehdr_offset,xmpio_collective,nstates,bsize_frecord,ierr)
    ABI_CHECK(ierr==0,"Error while writing Fortran markers")
    ABI_FREE(bsize_frecord)
@@ -1084,7 +1084,7 @@ subroutine exc_subspace_rotation()
  ABI_MALLOC(phi_tmp,(my_nt,nstates))
  phi_tmp = phi_block
 
- call ZGEMM('N','N',my_nt,nstates,nstates,cone,phi_tmp,my_nt,sub_ham,nstates,czero,phi_block,my_nt)
+ call AB_ZGEMM('N','N',my_nt,nstates,nstates,cone,phi_tmp,my_nt,sub_ham,nstates,czero,phi_block,my_nt)
 
  ABI_FREE(phi_tmp)
 #else
@@ -1141,7 +1141,7 @@ subroutine exc_cholesky_ortho()
 #if defined HAVE_BSE_UNPACKED
  overlap = czero
 
- call ZGEMM('C','N',nstates,nstates,my_nt,cone,phi_block,my_nt,phi_block,my_nt,czero,overlap,nstates)
+ call AB_ZGEMM('C','N',nstates,nstates,my_nt,cone,phi_block,my_nt,phi_block,my_nt,czero,overlap,nstates)
  call xmpi_sum(overlap,comm,ierr)
 
  do ii=1,nstates
@@ -1149,9 +1149,9 @@ subroutine exc_cholesky_ortho()
  end do
 
  ! 2) Cholesky factorization: overlap = U^H U with U upper triangle matrix.
- call ZPOTRF('U',nstates,overlap,nstates,my_info)
+ call AB_ZPOTRF('U',nstates,overlap,nstates,my_info)
  if (my_info/=0)  then
-   write(msg,'(a,i3)')' ZPOTRF returned info= ',my_info
+   write(msg,'(a,i3)')' AB_ZPOTRF returned info= ',my_info
    MSG_ERROR(msg)
  end if
 
@@ -1170,15 +1170,15 @@ subroutine exc_cholesky_ortho()
  call xmpi_sum(povlp,comm,ierr)
 
  ! 2) Cholesky factorization: overlap = U^H U with U upper triangle matrix.
- call ZPPTRF("U",nstates,povlp,my_info)
+ call AB_ZPPTRF("U",nstates,povlp,my_info)
  if (my_info/=0)  then
-   write(msg,'(a,i3)')' ZPPTRF returned info= ',my_info
+   write(msg,'(a,i3)')' AB_ZPPTRF returned info= ',my_info
    MSG_ERROR(msg)
  end if
  !call xmpi_sum(povlp,comm,ierr)
  !povlp=povlp/nproc
 
- !unpack povlp to prepare call to ZTRSM.
+ !unpack povlp to prepare call to AB_ZTRSM.
  ipack=0
  do jj=1,nstates
    do ii=1,jj
@@ -1194,11 +1194,11 @@ subroutine exc_cholesky_ortho()
  ABI_FREE(povlp)
 #endif
 
- ! Check if this can be done with Scalapack. Direct PZTRSM is not provided
+ ! Check if this can be done with Scalapack. Direct PAB_ZTRSM is not provided
 
  ! 3) Solve X U = phi_block, on exit the phi_block treated by this node is orthonormalized.
- !call ZTRSM('R','U','N','N',hexc_size,nstates,cone,overlap,nstates,phi_block,hexc_size)
- call ZTRSM('Right','Upper','Normal','Normal',my_nt,nstates,cone,overlap,nstates,phi_block,my_nt)
+ !call AB_ZTRSM('R','U','N','N',hexc_size,nstates,cone,overlap,nstates,phi_block,hexc_size)
+ call AB_ZTRSM('Right','Upper','Normal','Normal',my_nt,nstates,cone,overlap,nstates,phi_block,my_nt)
  ABI_FREE(overlap)
 
 end subroutine exc_cholesky_ortho

@@ -217,8 +217,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      DOUBLE PRECISION   DGET06, DLAMCH, ZLANGE, ZLANTR, ZLA_GERPVGRW
-      EXTERNAL           LSAME, DGET06, DLAMCH, ZLANGE, ZLANTR,
+      DOUBLE PRECISION   DGET06, AB_DLAMCH, ZLANGE, ZLANTR, ZLA_GERPVGRW
+      EXTERNAL           LSAME, DGET06, AB_DLAMCH, ZLANGE, ZLANTR,
      $                   ZLA_GERPVGRW
 *     ..
 *     .. External Subroutines ..
@@ -578,7 +578,7 @@
                      END IF
                      RESULT( 7 ) = ABS( RPVGRW-RWORK( 2*NRHS+1 ) ) /
      $                             MAX( RWORK( 2*NRHS+1 ), RPVGRW ) /
-     $                             DLAMCH( 'E' )
+     $                             AB_DLAMCH( 'E' )
 *
                      IF( .NOT.PREFAC ) THEN
 *
@@ -754,7 +754,7 @@
 
                      RESULT( 7 ) = ABS( RPVGRW-rpvgrw_svxx ) /
      $                             MAX( rpvgrw_svxx, RPVGRW ) /
-     $                             DLAMCH( 'E' )
+     $                             AB_DLAMCH( 'E' )
 *
                      IF( .NOT.PREFAC ) THEN
 *

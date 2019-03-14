@@ -791,7 +791,7 @@ end subroutine melements_mpisum
 !!  [unit]=the unit number for output, defaults to std_out
 !!  [prtvol]=verbosity level, defaults to 0
 !!  [mode_paral]=either "COLL" or "PERS", default to "COLL"
-!!  [header]=title for info
+!!  [AB_HEADER]=title for info
 !!
 !! OUTPUT
 !!  Only writing
@@ -804,7 +804,7 @@ end subroutine melements_mpisum
 !!
 !! SOURCE
 
-subroutine melements_print(Mels,names_list,header,unit,prtvol,mode_paral)
+subroutine melements_print(Mels,names_list,AB_HEADER,unit,prtvol,mode_paral)
 
 
 !This section has been created automatically by the script Abilint (TD).
@@ -820,7 +820,7 @@ subroutine melements_print(Mels,names_list,header,unit,prtvol,mode_paral)
  type(melements_t),intent(in) :: Mels
  integer,optional,intent(in) :: prtvol,unit
  character(len=*),optional,intent(in) :: names_list(:)
- character(len=*),optional,intent(in) :: header
+ character(len=*),optional,intent(in) :: AB_HEADER
  character(len=4),optional,intent(in) :: mode_paral
 
 !Local variables-------------------------------
@@ -877,7 +877,7 @@ subroutine melements_print(Mels,names_list,header,unit,prtvol,mode_paral)
  end do
 
  write(msg,'(2a)')ch10,' === Matrix Elements stored in Mels% [eV] === '
- if (PRESENT(header)) write(msg,'(4a)')ch10,' === '//TRIM(ADJUSTL(header))//' [eV] === '
+ if (PRESENT(AB_HEADER)) write(msg,'(4a)')ch10,' === '//TRIM(ADJUSTL(AB_HEADER))//' [eV] === '
  call wrtout(my_unt,msg,my_mode)
  if (Mels%nspinor == 2) then
    call wrtout(my_unt, "Sum_ab M_ab, M_11, M_22, Re(M_12), IM(Re_12)" ,my_mode)

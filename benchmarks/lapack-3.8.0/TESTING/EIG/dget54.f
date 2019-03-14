@@ -184,8 +184,8 @@
       DOUBLE PRECISION   DUM( 1 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLANGE
-      EXTERNAL           DLAMCH, DLANGE
+      DOUBLE PRECISION   AB_DLAMCH, DLANGE
+      EXTERNAL           AB_DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGEMM, DLACPY
@@ -201,8 +201,8 @@
 *
 *     Constants
 *
-      UNFL = DLAMCH( 'Safe minimum' )
-      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
+      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
 *
 *     compute the norm of (A,B)
 *

@@ -368,7 +368,7 @@ end subroutine atomdata_from_znucl
 !! OUTPUT
 !!
 !! PARENTS
-!!      append_xyz,m_atomdata,upf2abinit,upfheader2abi
+!!      append_xyz,m_atomdata,upf2abinit,upfAB_HEADER2abi
 !!
 !! CHILDREN
 !!

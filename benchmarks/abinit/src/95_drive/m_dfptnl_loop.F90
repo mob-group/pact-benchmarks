@@ -128,7 +128,7 @@ contains
 !!  d3etot_9(2,3,mpert,3,mpert,3,mpert) = 9th term of d3etot
 !!
 !! SIDE EFFECTS
-!!  hdr <type(hdr_type)>=the header of wf, den and pot files
+!!  hdr <type(hdr_type)>=the AB_HEADER of wf, den and pot files
 !!
 !! PARENTS
 !!      nonlinear
@@ -424,7 +424,7 @@ subroutine dfptnl_loop(atindx,blkflg,cg,dtfil,dtset,d3etot,eigen0,gmet,gprimd,gs
        flag1 = 0
        rho1r1(:,:) = zero
        if (dtset%get1den /= 0 .or. dtset%ird1den /= 0) then
-         call appdig(pert1case,dtfil%fildens1in,fiden1i)
+         call appdig(pert1case,dtfil%fiAB_LDEns1in,fiden1i)
          call status(counter,dtfil%filstat,iexit,level,'call ioarr    ')
 
          call read_rhor(fiden1i, cplex, dtset%nspden, nfftf, ngfftf, rdwrpaw, mpi_enreg, rho1r1, &
@@ -474,7 +474,7 @@ subroutine dfptnl_loop(atindx,blkflg,cg,dtfil,dtset,d3etot,eigen0,gmet,gprimd,gs
              rho3r1(:,:) = zero
              if (dtset%get1den /= 0 .or. dtset%ird1den /= 0) then
 
-               call appdig(pert3case,dtfil%fildens1in,fiden1i)
+               call appdig(pert3case,dtfil%fiAB_LDEns1in,fiden1i)
                call status(counter,dtfil%filstat,iexit,level,'call ioarr    ')
 
                call read_rhor(fiden1i, cplex, dtset%nspden, nfftf, ngfftf, rdwrpaw, mpi_enreg, rho3r1, &
@@ -535,7 +535,7 @@ subroutine dfptnl_loop(atindx,blkflg,cg,dtfil,dtset,d3etot,eigen0,gmet,gprimd,gs
 
                    if (dtset%get1den /= 0 .or. dtset%ird1den /= 0) then
 
-                     call appdig(pert2case,dtfil%fildens1in,fiden1i)
+                     call appdig(pert2case,dtfil%fiAB_LDEns1in,fiden1i)
                      call status(counter,dtfil%filstat,iexit,level,'call ioarr    ')
 
                      call read_rhor(fiden1i, cplex, dtset%nspden, nfftf, ngfftf, rdwrpaw, mpi_enreg, rho2r1, &
@@ -638,7 +638,7 @@ subroutine dfptnl_loop(atindx,blkflg,cg,dtfil,dtset,d3etot,eigen0,gmet,gprimd,gs
 &                   gsqcut,i2dir,i2pert,dtset%ixc,kxc,mpi_enreg,dtset%natom,nfftf,ngfftf,nhat,&
 &                   nhat1_i2pert,nhat1gr,nhat1grdim,nkxc,nspden,n3xccc,optene,option,dtset%paral_kgb,&
 &                   dtset%qptn,rhog,rho2g1,rhor,rho2r1,rprimd,ucvol,psps%usepaw,usexcnhat,vhartr1_i2pert,&
-&                   vpsp1,vresid_dum,dummy_real,vtrial1_i2pert,vxc,vxc1_i2pert,xccc3d2,dtset%ixcrot)
+&                   vpsp1,vresid_dum,dummy_real,vtrial1_i2pert,vxc,vxc1_i2pert,xccc3d2,dtset%ixAB_CROT)
 
                    if (psps%usepaw==1.and.usexcnhat==0) then
                      rho2r1(:,:) = rho2r1(:,:) - nhat1_i2pert(:,:)

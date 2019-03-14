@@ -1462,7 +1462,7 @@ subroutine scfcge(cplex,dbl_nnsclo,dtn_pc,etotal,f_atm,&
    else
 !    This part corresponds to conjugate gradient
 !    A 2D minimisation is performed
-!    oldest direction is labelled 2
+!    oAB_LDEst direction is labelled 2
 !    newest direction is labelled 1
      de1=dedv_old ;  de2=dedv_old2
      d2e11=(dedv_new-dedv_old)/lambda_new
@@ -2020,7 +2020,7 @@ end subroutine scfeig
 !!      m_ab7_mixing
 !!
 !! CHILDREN
-!!      dgetrf,dgetri,dotprodm_v,sqnormm_v,wrtout,xmpi_sum
+!!      AB_DGETRF,AB_DGETRI,dotprodm_v,sqnormm_v,wrtout,xmpi_sum
 !!
 !! SOURCE
 
@@ -2302,8 +2302,8 @@ subroutine scfopt(cplex,f_fftgr,f_paw,iscf,istep,i_vrespc,i_vtrial,&
    amatinv(1:niter,1:niter)=amat(1:niter,1:niter)
    ABI_ALLOCATE(ipiv,(niter))
    ABI_ALLOCATE(rwork,(niter))
-   call dgetrf(niter,niter,amatinv,niter,ipiv,ierr)
-   call dgetri(niter,amatinv,niter,ipiv,rwork,niter,ierr)
+   call AB_DGETRF(niter,niter,amatinv,niter,ipiv,ierr)
+   call AB_DGETRI(niter,amatinv,niter,ipiv,rwork,niter,ierr)
    ABI_DEALLOCATE(ipiv)
    ABI_DEALLOCATE(rwork)
 

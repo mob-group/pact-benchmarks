@@ -71,8 +71,8 @@ contains
 !!  ndtset=number of datasets
 !!  ndtset_alloc=number of datasets, corrected for allocation of at least one data set.
 !!  npsp=number of pseudopotentials
-!!  pspheads(npsp)=<type pspheader_type>all the important information from the
-!!   pseudopotential file header, as well as the psp file name
+!!  pspheads(npsp)=<type pspAB_HEADER_type>all the important information from the
+!!   pseudopotential file AB_HEADER, as well as the psp file name
 !!
 !! OUTPUT
 !!
@@ -104,7 +104,7 @@ subroutine chkinp(dtsets,iout,mpi_enregs,ndtset,ndtset_alloc,npsp,pspheads)
  type(MPI_type),intent(in) :: mpi_enregs(0:ndtset_alloc)
 !arrays
  type(dataset_type),intent(in) :: dtsets(0:ndtset_alloc)
- type(pspheader_type),intent(in) :: pspheads(npsp)
+ type(pspAB_HEADER_type),intent(in) :: pspheads(npsp)
 
 !Local variables-------------------------------
 !scalars
@@ -1251,8 +1251,8 @@ subroutine chkinp(dtsets,iout,mpi_enregs,ndtset,ndtset_alloc,npsp,pspheads)
 !  ixcpositron
    call chkint_eq(0,0,cond_string,cond_values,ierr,'ixcpositron',dt%ixcpositron,8,(/0,-1,1,11,2,3,31,4/),iout)
 
-!  ixcrot
-   call chkint_eq(0,0,cond_string,cond_values,ierr,'ixcrot',dt%ixcrot,3,(/1,2,3/),iout)
+!  ixAB_CROT
+   call chkint_eq(0,0,cond_string,cond_values,ierr,'ixAB_CROT',dt%ixAB_CROT,3,(/1,2,3/),iout)
 
 !  tim1rev
    call chkint_eq(0,0,cond_string,cond_values,ierr,'tim1rev',dt%tim1rev,2,(/0,1/),iout)
@@ -1290,10 +1290,10 @@ subroutine chkinp(dtsets,iout,mpi_enregs,ndtset,ndtset_alloc,npsp,pspheads)
 !    slabwsrad must be positive
      cond_string(1)='jellslab' ; cond_values(1)=dt%jellslab
      call chkdpr(1,0,cond_string,cond_values,ierr,'slabwsrad',dt%slabwsrad,1,zero,iout)
-!    slabzbeg must be positive
-     call chkdpr(1,0,cond_string,cond_values,ierr,'slabzbeg',dt%slabzbeg,1,zero,iout)
-!    slabzend must be bigger than slabzbeg
-     call chkdpr(1,0,cond_string,cond_values,ierr,'slabzend',dt%slabzend,1,dt%slabzbeg,iout)
+!    slabAB_ZBEG must be positive
+     call chkdpr(1,0,cond_string,cond_values,ierr,'slabAB_ZBEG',dt%slabAB_ZBEG,1,zero,iout)
+!    slabzend must be bigger than slabAB_ZBEG
+     call chkdpr(1,0,cond_string,cond_values,ierr,'slabzend',dt%slabzend,1,dt%slabAB_ZBEG,iout)
 !    rprimd(3,3) must be bigger than slabzend
      call chkdpr(1,0,cond_string,cond_values,ierr,'rprimd33',rprimd(3,3),1,dt%slabzend,iout)
 !    Third real space primitive translation has to be orthogonal to the other ones,
@@ -1311,14 +1311,14 @@ subroutine chkinp(dtsets,iout,mpi_enregs,ndtset,ndtset_alloc,npsp,pspheads)
 !    Atoms have to be placed in the vacuum space
      do iatom=1,natom
        zatom=(dt%xred_orig(3,iatom,intimage)-anint(dt%xred_orig(3,iatom,intimage)-half+tol6))*rprimd(3,3)
-       if(abs(zatom-dt%slabzbeg)<tol8 .or. abs(zatom-dt%slabzend)<tol8) then
+       if(abs(zatom-dt%slabAB_ZBEG)<tol8 .or. abs(zatom-dt%slabzend)<tol8) then
          if(dt%znucl(dt%typat(iatom))>tol6) then
            write(message,'(a,i0,a)')'atom number=',iatom,' lies precisely on the jellium edge !'
            MSG_WARNING(message)
          end if
          cycle
        end if
-       if(zatom>dt%slabzbeg .and. zatom<dt%slabzend) then
+       if(zatom>dt%slabAB_ZBEG .and. zatom<dt%slabzend) then
          write(message,'(a,i0,a)')' atom number=',iatom,' is inside the jellium slab.'
          MSG_ERROR_NOSTOP(message, ierr)
        end if
@@ -2652,18 +2652,18 @@ subroutine chkinp(dtsets,iout,mpi_enregs,ndtset,ndtset_alloc,npsp,pspheads)
      call chkint_eq(0,1,cond_string,cond_values,ierr,'prtkden',dt%prtkden,1,(/0/),iout)
    end if
 
-!  prtlden
+!  prtAB_LDEn
    call chkint(0,0,cond_string,cond_values,ierr,&
-&   'prtlden',dt%prtlden,1,(/0/),1,0,iout)
+&   'prtAB_LDEn',dt%prtAB_LDEn,1,(/0/),1,0,iout)
    if(optdriver/=RUNL_GSTATE)then
      cond_string(1)='optdriver' ; cond_values(1)=optdriver
      call chkint(0,1,cond_string,cond_values,ierr,&
-&     'prtlden',dt%prtlden,1,(/0/),0,0,iout)
+&     'prtAB_LDEn',dt%prtAB_LDEn,1,(/0/),0,0,iout)
    end if
    if(usepaw/=0)then
      cond_string(1)='usepaw' ; cond_values(1)=usepaw
      call chkint(0,1,cond_string,cond_values,ierr,&
-&     'prtlden',dt%prtlden,1,(/0/),0,0,iout)
+&     'prtAB_LDEn',dt%prtAB_LDEn,1,(/0/),0,0,iout)
    end if
 
 !  prtstm
@@ -2747,12 +2747,12 @@ subroutine chkinp(dtsets,iout,mpi_enregs,ndtset,ndtset_alloc,npsp,pspheads)
 !  If PAW and (prtdos==3 or dt%prtdensph==1), must be greater than PAW radius
    if(usepaw==1.and.(dt%prtdos==3.or.dt%prtdensph==1))then
      do itypat=1,dt%ntypat
-       if (pspheads(itypat)%pawheader%rpaw>dt%ratsph(itypat)) then
+       if (pspheads(itypat)%pawAB_HEADER%rpaw>dt%ratsph(itypat)) then
          write(message, '(7a,i2,a,f15.12,3a)' )&
 &         'Projected DOS/density is required in the framework of PAW !',ch10,&
 &         'The radius of spheres in which DOS/density has to be projected',ch10,&
 &         'must be greater or equal than the (max.) PAW radius !',ch10,&
-&         'Rpaw(atom_type ',itypat,')= ',pspheads(itypat)%pawheader%rpaw,' au',ch10,&
+&         'Rpaw(atom_type ',itypat,')= ',pspheads(itypat)%pawAB_HEADER%rpaw,' au',ch10,&
 &         'Action: modify value of ratsph in input file.'
          MSG_ERROR_NOSTOP(message, ierr)
        end if

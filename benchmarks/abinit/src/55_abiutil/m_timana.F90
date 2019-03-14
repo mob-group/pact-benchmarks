@@ -676,7 +676,7 @@ subroutine timana(mpi_enreg,natom,nband,ndtset,nfft,nkpt,npwtot,nsppol,timopt)
 
 
  names(710)='inwffil                         '
- names(711)='inwffil(read header)            '
+ names(711)='inwffil(read AB_HEADER)            '
  names(712)='inwffil(init params)            '
  names(713)='inwffil(prepa wfsinp)           '
  names(714)='inwffil(call wfsinp)            '

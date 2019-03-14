@@ -83,8 +83,8 @@
      $                   BIN( LDB, LDB )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, ZLANGE
-      EXTERNAL           DLAMCH, ZLANGE
+      DOUBLE PRECISION   AB_DLAMCH, ZLANGE
+      EXTERNAL           AB_DLAMCH, ZLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZGGBAL
@@ -101,7 +101,7 @@
       KNT = 0
       RMAX = ZERO
 *
-      EPS = DLAMCH( 'Precision' )
+      EPS = AB_DLAMCH( 'Precision' )
 *
    10 CONTINUE
 *

@@ -120,7 +120,7 @@ MODULE m_scf_history
    ! For the density-based schemes (with or without wavefunctions) : 
    ! hindex(history_size)
    ! hindex(1) is the newest SCF cycle
-   ! hindex(history_size) is the oldest SCF cycle
+   ! hindex(history_size) is the oAB_LDEst SCF cycle
    !
    ! For wavefunction-based schemes (outer loop of a double loop SCF):
    ! hindex(2*history_size+1)
@@ -159,8 +159,8 @@ MODULE m_scf_history
     ! taur_last(nfft,nspden*usekden)
     ! Last computed kinetic energy density (in real space)
 
-   real(dp),allocatable :: xreddiff(:,:,:)
-    ! xreddiff(3,natom,history_size)
+   real(dp),allocatable :: xreAB_DDIFF(:,:,:)
+    ! xreAB_DDIFF(3,natom,history_size)
     ! Difference of reduced coordinates of atoms between a
     ! SCF cycle and the previous
 
@@ -212,7 +212,7 @@ CONTAINS !===========================================================
 !!  scf_history=<type(scf_history_type)>=scf_history datastructure
 !!    hindex is always allocated
 !!    The density/potential arrays that are possibly allocated are : atmrho_last, deltarhor, 
-!!      pawrhoij, pawrhoij_last, rhor_last, taur_last, xreddiff, xred_last.
+!!      pawrhoij, pawrhoij_last, rhor_last, taur_last, xreAB_DDIFF, xred_last.
 !!    The wfs arrays that are possibly allocated are : cg, cprj and eigen
 !!
 !! PARENTS
@@ -309,7 +309,7 @@ subroutine scf_history_init(dtset,mpi_enreg,usecg,scf_history)
 
      if (usecg<2) then 
        ABI_ALLOCATE(scf_history%deltarhor,(nfft,dtset%nspden,scf_history%history_size))
-       ABI_ALLOCATE(scf_history%xreddiff,(3,dtset%natom,scf_history%history_size))
+       ABI_ALLOCATE(scf_history%xreAB_DDIFF,(3,dtset%natom,scf_history%history_size))
        ABI_ALLOCATE(scf_history%atmrho_last,(nfft))
        if (dtset%usepaw==1) then
          ABI_DATATYPE_ALLOCATE(scf_history%pawrhoij,(my_natom,scf_history%history_size))
@@ -402,8 +402,8 @@ subroutine scf_history_free(scf_history)
  if (allocated(scf_history%deltarhor))    then
    ABI_DEALLOCATE(scf_history%deltarhor)
  end if
- if (allocated(scf_history%xreddiff))     then
-   ABI_DEALLOCATE(scf_history%xreddiff)
+ if (allocated(scf_history%xreAB_DDIFF))     then
+   ABI_DEALLOCATE(scf_history%xreAB_DDIFF)
  end if
  if (allocated(scf_history%atmrho_last))  then
    ABI_DEALLOCATE(scf_history%atmrho_last)

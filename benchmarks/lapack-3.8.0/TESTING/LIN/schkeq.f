@@ -87,8 +87,8 @@
      $                   RPOW( NPOW )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGBEQU, SGEEQU, SPBEQU, SPOEQU, SPPEQU
@@ -101,7 +101,7 @@
       PATH( 1:1 ) = 'Single precision'
       PATH( 2:3 ) = 'EQ'
 *
-      EPS = SLAMCH( 'P' )
+      EPS = AB_SLAMCH( 'P' )
       DO 10 I = 1, 5
          RESLTS( I ) = ZERO
    10 CONTINUE

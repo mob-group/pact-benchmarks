@@ -495,8 +495,8 @@
      $                   AB_XERBLA
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SIGN, SQRT
@@ -529,8 +529,8 @@
 *
 *     Get machine constants
 *
-      EPS = DLAMCH( 'P' )
-      SMLNUM = DLAMCH( 'S' ) / EPS
+      EPS = AB_DLAMCH( 'P' )
+      SMLNUM = AB_DLAMCH( 'S' ) / EPS
       IERR = 0
 *
       WANTP = IJOB.EQ.1 .OR. IJOB.GE.4

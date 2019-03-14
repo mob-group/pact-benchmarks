@@ -361,12 +361,12 @@ subroutine pawxc_size_dvxc_local()
 !B- Exc+Vxc and other derivatives
 !  Definition of ndvxc and nvxcdgr, 2nd dimension of the arrays of 2nd-order derivatives
    if (ixc==1 .or. ixc==21 .or. ixc==22 .or. (ixc>=7 .and. ixc<=10) .or. ixc==13) then
-!    Routine xcspol: new Teter fit (4/93) to Ceperley-Alder data, with spin-pol option routine xcspol
+!    Routine xcspol: new Teter fit (4/93) to Ceperley-AAB_LDEr data, with spin-pol option routine xcspol
 !    Routine xcpbe, with different options (optpbe) and orders (order)
      ndvxc=min(nspden,2)+1
    else if (ixc>=2 .and. ixc<=6) then
-!    Perdew-Zunger fit to Ceperly-Alder data (no spin-pol)     !routine xcpzca
-!    Teter fit (4/91) to Ceperley-Alder values (no spin-pol)   !routine xctetr
+!    Perdew-Zunger fit to Ceperly-AAB_LDEr data (no spin-pol)     !routine xcpzca
+!    Teter fit (4/91) to Ceperley-AAB_LDEr values (no spin-pol)   !routine xctetr
 !    Wigner xc (no spin-pol)                                   !routine xcwign
 !    Hedin-Lundqvist xc (no spin-pol)                          !routine xchelu
 !    X-alpha (no spin-pol)                                     !routine xcxalp
@@ -3330,7 +3330,7 @@ end subroutine pawxcsphpositron
 !!    Sum1(2)=Sum_L{Rho1_L(r)*Rho2_L(r)}
 !!    Sum1(3)=Sum_L{Rho2_L(r)**2}
 !!    With L>0
-!!  Second order sums:
+!!  second order sums:
 !!    Sum2(L,1)=Sum_L1_L2{Rho1_L1(r)*Rho1_L1(r)*Gaunt_(L,L1,L2)}
 !!    Sum2(L,2)=Sum_L1_L2{Rho1_L1(r)*Rho2_L2(r)*Gaunt_(L,L1,L2)}
 !!    Sum2(L,3)=Sum_L1_L2{Rho2_L2(r)*Rho2_L2(r)*Gaunt_(L,L1,L2)}
@@ -4392,7 +4392,7 @@ end subroutine pawxcsphpositron
        end if
      end if
 
-!    Second order development
+!    second order development
      if (pawxcdev>=2) then
        LIBPAW_ALLOCATE(gg,(nrad))
 
@@ -5277,7 +5277,7 @@ subroutine pawxcmpositron(calctype,corexc,enxc,enxcdc,ixcpositron,lm_size,lmsele
 &       +half*(v1sum(:,1)*d1vxc(:,1)+v1sum(:,3)*d1vxc(:,3))
      end if
 
-!    Second order development
+!    second order development
      if (pawxcdev>=2) then
        LIBPAW_ALLOCATE(gg,(nrad))
        gg=zero

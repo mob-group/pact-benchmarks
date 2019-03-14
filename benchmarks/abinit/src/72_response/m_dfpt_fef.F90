@@ -273,7 +273,7 @@ subroutine dfptff_initberry(dtefield,dtset,gmet,kg,kg1,mband,mkmem,mpi_enreg,&
          end if
        end do
 
-!      Second: k - dk
+!      second: k - dk
        do ikpt1 = 1, nkpt
          diffk(:) = abs(dtset%kptns(:,ikpt1) - dtset%kptns(:,ikpt) + dk(:))
          if(sum(abs(diffk(:) - nint(diffk(:)))) < 3*tol8) then
@@ -974,7 +974,7 @@ subroutine dfptff_gradberry(cg,cg1,dtefield,grad_berry,ikpt,isppol,mband,mpw,mpw
      end if
    end do
 
-!  Second part of gradient of Berry phase++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+!  second part of gradient of Berry phase++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
    vect1(:,0) = zero ; vect2(:,0) = zero
 
@@ -1397,7 +1397,7 @@ subroutine dfptff_gbefd(cg,cg1,dtefield,grad_berry,idir_efield,ikpt,isppol,mband
      end if
    end do
 
-!  Second part of gradient of Berry phase++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+!  second part of gradient of Berry phase++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
    vect1(:,0) = zero ; vect2(:,0) = zero
 

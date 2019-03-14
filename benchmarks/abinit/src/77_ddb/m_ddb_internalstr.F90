@@ -82,7 +82,7 @@ contains
 !!      anaddb,m_effective_potential_file
 !!
 !! CHILDREN
-!!      asria_corr,wrtout,zhpev
+!!      asria_corr,wrtout,AB_ZHPEV
 !!
 !! SOURCE
 
@@ -125,8 +125,8 @@ natom,nblok,prt_internalstr)
  real(dp) :: Cpmatr(3*natom,3*natom),Nmatr(3*natom,3*natom),deviation(3,6)
  real(dp) :: eigval(3*natom-3),eigvalp(3*natom),eigvec(2,3*natom-3,3*natom-3)
  real(dp) :: eigvecp(2,3*natom,3*natom),instrain_dis(6,3*natom)
- real(dp) :: kmatrix(3*natom,3*natom),zhpev1(2,2*3*natom-4)
- real(dp) :: zhpev1p(2,2*3*natom-1),zhpev2(3*3*natom-5),zhpev2p(3*3*natom-2)
+ real(dp) :: kmatrix(3*natom,3*natom),AB_ZHPEV1(2,2*3*natom-4)
+ real(dp) :: AB_ZHPEV1p(2,2*3*natom-1),AB_ZHPEV2(3*3*natom-5),AB_ZHPEV2p(3*3*natom-2)
  real(dp) :: d2cart(2,3*natom,3*natom)
 
 !***************************************************************
@@ -298,9 +298,9 @@ natom,nblok,prt_internalstr)
  end do
 
 !Bpmatr(2,:) is the imaginary part of the force matrix
-!then call the subroutines CHPEV and ZHPEV to get the eigenvectors
- call ZHPEV ('V','U',3*natom,Bpmatr,eigvalp,eigvecp,3*natom,zhpev1p,zhpev2p,ier)
- ABI_CHECK(ier == 0, sjoin("ZHPEV returned:", itoa(ier)))
+!then call the subroutines AB_CHPEV and AB_ZHPEV to get the eigenvectors
+ call AB_ZHPEV ('V','U',3*natom,Bpmatr,eigvalp,eigvecp,3*natom,AB_ZHPEV1p,AB_ZHPEV2p,ier)
+ ABI_CHECK(ier == 0, sjoin("AB_ZHPEV returned:", itoa(ier)))
 
 !DEBUG
 !the eigenval and eigenvec
@@ -385,9 +385,9 @@ natom,nblok,prt_internalstr)
  end do
  Bmatr(2,:)=0.0_dp
 
-!Call the subroutines CHPEV and ZHPEV to get the eigenvectors and the eigenvalues
- call ZHPEV ('V','U',3*natom-3,Bmatr,eigval,eigvec,3*natom-3,zhpev1,zhpev2,ier)
- ABI_CHECK(ier == 0, sjoin("ZHPEV returned:", itoa(ier)))
+!Call the subroutines AB_CHPEV and AB_ZHPEV to get the eigenvectors and the eigenvalues
+ call AB_ZHPEV ('V','U',3*natom-3,Bmatr,eigval,eigvec,3*natom-3,AB_ZHPEV1,AB_ZHPEV2,ier)
+ ABI_CHECK(ier == 0, sjoin("AB_ZHPEV returned:", itoa(ier)))
 
 !Check the unstable phonon modes, if the first is negative then print
 !warning message

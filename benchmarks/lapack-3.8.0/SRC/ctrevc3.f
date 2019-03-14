@@ -284,8 +284,8 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_ILAENV, AB_ICAMAX
-      REAL   SLAMCH, AB_SCASUM
-      EXTERNAL           AB_LSAME, AB_ILAENV, AB_ICAMAX, SLAMCH, AB_SCAS
+      REAL   AB_SLAMCH, AB_SCASUM
+      EXTERNAL           AB_LSAME, AB_ILAENV, AB_ICAMAX, AB_SLAMCH, AB_SCAS
      $UM
 *     ..
 *     .. External Subroutines ..
@@ -377,10 +377,10 @@
 *
 *     Set the constants to control overflow.
 *
-      UNFL = SLAMCH( 'Safe minimum' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
       CALL AB_SLABAD( UNFL, OVFL )
-      ULP = SLAMCH( 'Precision' )
+      ULP = AB_SLAMCH( 'Precision' )
       SMLNUM = UNFL*( N / ULP )
 *
 *     Store the diagonal elements of T in working array WORK.

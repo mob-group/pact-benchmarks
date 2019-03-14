@@ -265,8 +265,8 @@
      $                   TAUL( LDST ), TAUR( LDST ), TCPY( LDST, LDST )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_SGEMM, AB_SGEQR2, AB_SGERQ2, AB_SLACPY, AB_S
@@ -307,8 +307,8 @@
 *
 *     Compute threshold for testing acceptance of swapping.
 *
-      EPS = SLAMCH( 'P' )
-      SMLNUM = SLAMCH( 'S' ) / EPS
+      EPS = AB_SLAMCH( 'P' )
+      SMLNUM = AB_SLAMCH( 'S' ) / EPS
       AB_DSCALE = ZERO
       DSUM = ONE
       CALL AB_SLACPY( 'Full', M, M, S, LDST, WORK, M )

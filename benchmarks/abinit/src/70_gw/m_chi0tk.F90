@@ -969,7 +969,7 @@ subroutine accumulate_sfchi0_q0(ikbz,isym_kbz,itim_kbz,nspinor,symchi,npwepG0,np
    ! rhotwg(1)=-R^-1q*conjg(rhotwx_ibz) for inversion
    if (wl<huge(0.0_dp)*1.d-11) then
      !this is awful but it is still a first coding
-     ! Num is single precision needed for cgerc check factocc
+     ! Num is single precision needed for AB_CGERC check factocc
      num=-wl*factocc
      call XGERC(npwe,npwe,num,rhotwg,1,rhotwg,1,sf_chi0(:,:,iomegal),npwe)
    end if
@@ -994,7 +994,7 @@ subroutine accumulate_sfchi0_q0(ikbz,isym_kbz,itim_kbz,nspinor,symchi,npwepG0,np
    do jdir=1,3
      if (wl<huge(0.0_dp)*1.d-11) then
        ! this is awful but it is still a first coding
-       ! Num is single precision needed for cgerc check factocc
+       ! Num is single precision needed for AB_CGERC check factocc
        num=-wl*factocc
        sf_uwing(:,iomegal,jdir) = sf_uwing(:,iomegal,jdir) + num * mir_kbz(jdir) * CONJG(rhotwg(1:npwepG0))
        sf_lwing(:,iomegal,jdir) = sf_lwing(:,iomegal,jdir) + num * rhotwg(1:npwepG0) * CONJG(mir_kbz(jdir))
@@ -1070,7 +1070,7 @@ subroutine accumulate_sfchi0_q0(ikbz,isym_kbz,itim_kbz,nspinor,symchi,npwepG0,np
          do jdir=1,3
            if (wl<huge(0.0_dp)*1.d-11) then
              ! this is awful but it is still a first coding
-             ! Num is single precision needed for cgerc check factocc
+             ! Num is single precision needed for AB_CGERC check factocc
              num=-wl*factocc
              sf_uwing(:,iomegal,jdir) = sf_uwing(:,iomegal,jdir) + num * mir_kbz(jdir) * CONJG(rhotwg_sym(1:npwe))
              sf_lwing(:,iomegal,jdir) = sf_lwing(:,iomegal,jdir) + num * rhotwg_sym(1:npwe) * CONJG(mir_kbz(jdir))

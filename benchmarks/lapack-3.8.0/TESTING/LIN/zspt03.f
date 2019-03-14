@@ -138,9 +138,9 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, ZLANGE, ZLANSP
+      DOUBLE PRECISION   AB_DLAMCH, ZLANGE, ZLANSP
       COMPLEX*16         ZDOTU
-      EXTERNAL           LSAME, DLAMCH, ZLANGE, ZLANSP, ZDOTU
+      EXTERNAL           LSAME, AB_DLAMCH, ZLANGE, ZLANSP, ZDOTU
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE
@@ -157,7 +157,7 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0 or AINVNM = 0.
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       ANORM = ZLANSP( '1', UPLO, N, A, RWORK )
       AINVNM = ZLANSP( '1', UPLO, N, AINV, RWORK )
       IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN

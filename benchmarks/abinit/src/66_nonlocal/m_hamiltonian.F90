@@ -96,7 +96,7 @@ module m_hamiltonian
    !                     dimekb1=cplex_dij*lmnmax*(lmnmax+1)/2
 
   integer :: dimekb2
-   ! Second dimension of Ekb
+   ! second dimension of Ekb
    ! ->Norm conserving psps: dimekb2=ntypat
    ! ->PAW                 : dimekb2=natom
 
@@ -423,7 +423,7 @@ module m_hamiltonian
    ! First dimension of E1kb, derivative of Ekb with respect to a perturbation
 
   integer :: dime1kb2
-   ! Second dimension of E1kb, derivative of Ekb with respect to a perturbation
+   ! second dimension of E1kb, derivative of Ekb with respect to a perturbation
    ! NCPP: dime1kb2=ntypat, PAW: dime1kb2=natom
 
   integer :: npw_k

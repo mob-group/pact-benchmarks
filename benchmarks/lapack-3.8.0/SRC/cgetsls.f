@@ -193,8 +193,8 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_ILAENV
-      REAL               SLAMCH, AB_CLANGE
-      EXTERNAL           AB_LSAME, AB_ILAENV, AB_SLABAD, SLAMCH, AB_CLAN
+      REAL               AB_SLAMCH, AB_CLANGE
+      EXTERNAL           AB_LSAME, AB_ILAENV, AB_SLABAD, AB_SLAMCH, AB_CLAN
      $GE
 *     ..
 *     .. External Subroutines ..
@@ -300,7 +300,7 @@
 *
 *     Get machine parameters
 *
-       SMLNUM = SLAMCH( 'S' ) / SLAMCH( 'P' )
+       SMLNUM = AB_SLAMCH( 'S' ) / AB_SLAMCH( 'P' )
        BIGNUM = ONE / SMLNUM
        CALL AB_SLABAD( SMLNUM, BIGNUM )
 *

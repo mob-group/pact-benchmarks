@@ -251,7 +251,7 @@ contains
              end do
            end if
 
-!          Second half of the (n,m) matrix
+!          second half of the (n,m) matrix
            if (ib/=jb) then
              tnm(1,1:3,jb,ib)= tnm(1,1:3,ib,jb)
              tnm(2,1:3,jb,ib)=-tnm(2,1:3,ib,jb)

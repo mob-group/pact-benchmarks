@@ -107,9 +107,9 @@ module m_ksdiago
    ! where |T| is the 1-norm of the tridiagonal matrix obtained by reducing A to tridiagonal form.
    !
    ! Eigenvalues will be computed most accurately when ABSTOL is
-   ! set to twice the underflow threshold 2*DLAMCH('S'), not zero.
+   ! set to twice the underflow threshold 2*AB_DLAMCH('S'), not zero.
    ! If this routine returns with INFO>0, indicating that some
-   ! eigenvectors did not converge, try setting ABSTOL to 2*DLAMCH('S').
+   ! eigenvectors did not converge, try setting ABSTOL to 2*AB_DLAMCH('S').
 
   real(dp) :: ecut
    ! The cutoff energy for the plane wave basis set.
@@ -853,7 +853,7 @@ subroutine init_ddiago_ctl(Dctl,jobz,isppol,nspinor,ecut,kpoint,nloalg,gmet,&
  END SELECT
 
  ! Consider the case in which we asked for the entire set of eigenvectors
- ! but the number of bands is less that npw_k. Therefore have to prepare the call to ZHEEVX.
+ ! but the number of bands is less that npw_k. Therefore have to prepare the call to AB_ZHEEVX.
  ! TODO this has to be done in a cleaner way.
  if (Dctl%range=="A".and. (.not.Dctl%do_full_diago)) then
    Dctl%range="I"

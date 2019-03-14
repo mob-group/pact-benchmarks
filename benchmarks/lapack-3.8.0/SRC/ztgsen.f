@@ -480,8 +480,8 @@
       INTRINSIC          ABS, DCMPLX, DCONJG, MAX, SQRT
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. Executable Statements ..
 *
@@ -583,7 +583,7 @@
 *
 *     Get machine constant
 *
-      SAFMIN = DLAMCH( 'S' )
+      SAFMIN = AB_DLAMCH( 'S' )
 *
 *     Collect the selected blocks at the top-left corner of (A, B).
 *

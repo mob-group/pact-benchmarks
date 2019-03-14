@@ -74,15 +74,15 @@
       DOUBLE PRECISION   EPS, RAT
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       IF( RCOND.GT.ZERO ) THEN
          IF( RCONDC.GT.ZERO ) THEN
             RAT = MAX( RCOND, RCONDC ) / MIN( RCOND, RCONDC ) -

@@ -137,7 +137,7 @@ contains
  character(len=500) :: message
 !arrays
  integer,allocatable :: class(:,:),natomcl(:),typecl(:)
- real(dp) :: diff(3),efieldrot(3),sxred0(3),symnucdipmom2(3)
+ real(dp) :: diff(3),efielAB_DROT(3),sxred0(3),symnucdipmom2(3)
  real(dp) :: symspinat2(3),symxred2(3),trialnons(3)
  real(dp),allocatable :: spinatcl(:,:),spinatred(:,:)
 
@@ -291,10 +291,10 @@ contains
 !  ji: Check whether symmetry operation leaves efield invariant
    if (berryopt==4 .or. berryopt==6 .or. berryopt==7 .or. &
 &   berryopt==14 .or. berryopt==16 .or. berryopt==17) then
-     efieldrot(:) = ptsymrel(:,1,isym)*efield(1) +  &
+     efielAB_DROT(:) = ptsymrel(:,1,isym)*efield(1) +  &
 &     ptsymrel(:,2,isym)*efield(2) +  &
 &     ptsymrel(:,3,isym)*efield(3)
-     diff(:)=efield(:)-efieldrot(:)
+     diff(:)=efield(:)-efielAB_DROT(:)
      if( (diff(1)**2+diff(2)**2+diff(3)**2) > tolsym**2 ) cycle
    end if
 

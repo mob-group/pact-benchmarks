@@ -163,8 +163,8 @@
       REAL               ANORM, EPS, RESID
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLANGE, SLANSY
-      EXTERNAL           SLAMCH, SLANGE, SLANSY
+      REAL               AB_SLAMCH, SLANGE, SLANSY
+      EXTERNAL           AB_SLAMCH, SLANGE, SLANSY
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGEMM, SLACPY, SLASET, SORGRQ, SSYRK
@@ -188,7 +188,7 @@
          RETURN
       END IF
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
 *
 *     Copy the last k rows of the factorization to the array Q
 *

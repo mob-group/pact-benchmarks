@@ -175,8 +175,8 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, ZQRT12, ZRZT01, ZRZT02
-      EXTERNAL           DLAMCH, ZQRT12, ZRZT01, ZRZT02
+      DOUBLE PRECISION   AB_DLAMCH, ZQRT12, ZRZT01, ZRZT02
+      EXTERNAL           AB_DLAMCH, ZQRT12, ZRZT01, ZRZT02
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAHD, ALASUM, DLAORD, ZERRTZ, ZGEQR2, ZLACPY,
@@ -209,7 +209,7 @@
       DO 10 I = 1, 4
          ISEED( I ) = ISEEDY( I )
    10 CONTINUE
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
 *
 *     Test the error exits
 *

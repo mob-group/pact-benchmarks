@@ -443,8 +443,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            SSLECT
-      REAL               SLAMCH
-      EXTERNAL           SSLECT, SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           SSLECT, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGEES, SHST01, SLABAD, SLACPY, SLASUM, SLATME,
@@ -515,10 +515,10 @@
 *
 *     More Important constants
 *
-      UNFL = SLAMCH( 'Safe minimum' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
       CALL SLABAD( UNFL, OVFL )
-      ULP = SLAMCH( 'Precision' )
+      ULP = AB_SLAMCH( 'Precision' )
       ULPINV = ONE / ULP
       RTULP = SQRT( ULP )
       RTULPI = ONE / RTULP

@@ -535,7 +535,7 @@ MODULE m_pawtab
 
   real(dp), allocatable :: vhtnzc(:)
    ! vhtnzc(mesh_size)
-   ! Hartree potential for pseudized Zc density, v_H[\tilde{n}_{Zc}]
+   ! Hartree potential for pseudized Zc density, v_H[\tiAB_LDE{n}_{Zc}]
    ! read in from PAW file
 
   real(dp), allocatable :: VHnZC(:)
@@ -1131,7 +1131,7 @@ end subroutine pawtab_set_flags_1D
 !!
 !! SOURCE
 
-subroutine pawtab_print(Pawtab,header,unit,prtvol,mode_paral)
+subroutine pawtab_print(Pawtab,AB_HEADER,unit,prtvol,mode_paral)
 
 
 !This section has been created automatically by the script Abilint (TD).
@@ -1146,7 +1146,7 @@ subroutine pawtab_print(Pawtab,header,unit,prtvol,mode_paral)
 !scalars
  integer,optional,intent(in) :: unit,prtvol
  character(len=4),optional,intent(in) :: mode_paral
- character(len=*),optional,intent(in) :: header
+ character(len=*),optional,intent(in) :: AB_HEADER
 !arrays
  type(Pawtab_type) :: Pawtab(:)
 
@@ -1166,7 +1166,7 @@ subroutine pawtab_print(Pawtab,header,unit,prtvol,mode_paral)
 &  ' ==================================== ',ch10,&
 &  ' ==== Info on PAW TABulated data ==== ',ch10,&
 &  ' ==================================== ',ch10
- if (PRESENT(header)) msg=' ==== '//TRIM(ADJUSTL(header))//' ==== '
+ if (PRESENT(AB_HEADER)) msg=' ==== '//TRIM(ADJUSTL(AB_HEADER))//' ==== '
  call wrtout(my_unt,msg,my_mode)
 
  ntypat=SIZE(Pawtab(:))

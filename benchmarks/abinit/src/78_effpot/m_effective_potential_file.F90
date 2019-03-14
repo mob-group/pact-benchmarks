@@ -647,7 +647,7 @@ subroutine effective_potential_file_getDimSystem(filename,natom,ntypat,nqpt,nrpt
 
    call ddb_hdr_free(ddb_hdr)
 
-!  Must read some value to initialze  array (nprt for ifc)
+!  Must read some value to initiaAB_LZE  array (nprt for ifc)
 !   call bigbx9(inp%brav,dummy_cell,0,1,inp%ngqpt,inp%nqshft,nrpt,ddb%rprim,dummy_rpt)
 
  else if (filetype==2 .or. filetype==23) then
@@ -1719,7 +1719,7 @@ end subroutine system_getDimFromXML
          end if
 
          if ((line(1:12)=='<local_force')) then
-           found2 = .False.
+           found2 = .false.
            irpt1 = irpt1 + 1
            do while (.not.found2)
              read(funit,'(a)',iostat=ios) readline
@@ -1771,7 +1771,7 @@ end subroutine system_getDimFromXML
 
          if ((line(1:12)=='<total_force')) then
            irpt2 = irpt2 + 1
-           found2 = .False.
+           found2 = .false.
            do while (.not.found2)
              read(funit,'(a)',iostat=ios) readline
              call rmtabfromline(readline)
@@ -3162,7 +3162,7 @@ subroutine coeffs_xml2effpot(eff_pot,filename,comm)
          call rmtabfromline(readline)
          line=adjustl(readline)
          if ((line(1:12)==char(60)//'coefficient')) then
-!          Read headers of coefficient
+!          Read AB_HEADERs of coefficient
            call rdfromline('text',line,strg)
            if (strg/="") then
              name=trim(strg)
@@ -3174,7 +3174,7 @@ subroutine coeffs_xml2effpot(eff_pot,filename,comm)
            else
              coefficient(1) = zero
            end if
-!          End read headers of coefficient
+!          End read AB_HEADERs of coefficient
 !          Reset counter
            found  = .false.
            atindx = 0;  cell   = 0 ;  direction = 0

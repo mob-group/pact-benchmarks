@@ -211,8 +211,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            AB_IDAMAX
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           AB_IDAMAX, DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_IDAMAX, AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_DCOPY, AB_DSWAP
@@ -239,8 +239,8 @@
 *
 *     Set constants to control overflow
 *
-      EPS = DLAMCH( 'P' )
-      SMLNUM = DLAMCH( 'S' ) / EPS
+      EPS = AB_DLAMCH( 'P' )
+      SMLNUM = AB_DLAMCH( 'S' ) / EPS
       SGN = ISGN
 *
       K = N1 + N1 + N2 - 2

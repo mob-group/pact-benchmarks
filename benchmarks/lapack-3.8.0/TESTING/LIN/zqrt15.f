@@ -182,8 +182,8 @@
       DOUBLE PRECISION   DUMMY( 1 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DASUM, DLAMCH, DLARND, DZNRM2, ZLANGE
-      EXTERNAL           DASUM, DLAMCH, DLARND, DZNRM2, ZLANGE
+      DOUBLE PRECISION   DASUM, AB_DLAMCH, DLARND, DZNRM2, ZLANGE
+      EXTERNAL           DASUM, AB_DLAMCH, DLARND, DZNRM2, ZLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DLABAD, DLAORD, DLASCL, XERBLA, ZDSCAL, ZGEMM,
@@ -200,10 +200,10 @@
          RETURN
       END IF
 *
-      SMLNUM = DLAMCH( 'Safe minimum' )
+      SMLNUM = AB_DLAMCH( 'Safe minimum' )
       BIGNUM = ONE / SMLNUM
       CALL DLABAD( SMLNUM, BIGNUM )
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       SMLNUM = ( SMLNUM / EPS ) / EPS
       BIGNUM = ONE / SMLNUM
 *

@@ -92,8 +92,8 @@
      $                   WORK( LDWORK, LDWORK )
 *     ..
 *     .. External Functions ..
-      REAL               CLANGE, SLAMCH
-      EXTERNAL           CLANGE, SLAMCH
+      REAL               CLANGE, AB_SLAMCH
+      EXTERNAL           CLANGE, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGEMM, CGGBAK, CGGBAL, CLACPY
@@ -117,7 +117,7 @@
       KNT = 0
       RMAX = ZERO
 *
-      EPS = SLAMCH( 'Precision' )
+      EPS = AB_SLAMCH( 'Precision' )
 *
    10 CONTINUE
       READ( NIN, FMT = * )N, M

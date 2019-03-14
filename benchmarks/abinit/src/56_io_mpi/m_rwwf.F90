@@ -76,7 +76,7 @@ contains
 !!  formeig=format of the eigenvalues
 !!     0 => vector of eigenvalues
 !!     1 => hermitian matrix of eigenvalues
-!!  headform=format of the header of the wf file, also governing the k block format
+!!  headform=format of the AB_HEADER of the wf file, also governing the k block format
 !!    in case headform=0, use the default (current) format and headform
 !!  icg=shift to be given to the location of the cg array
 !!  ikpt=index of current k point (only needed for error message)
@@ -215,7 +215,7 @@ end subroutine rwwf
 !!  formeig=format of the eigenvalues
 !!   0 => vector of eigenvalues (for Ground-State files)
 !!   1 => hermitian matrix of eigenvalues (for Response-Function files)
-!!  headform=format of the header of the wf file, also governing the k block format
+!!  headform=format of the AB_HEADER of the wf file, also governing the k block format
 !!   in case headform=0, use the default (current) format and headform
 !!  ikpt=index of current k point (only needed for error message)
 !!  isppol=spin polarization currently treated (only needed for error message)

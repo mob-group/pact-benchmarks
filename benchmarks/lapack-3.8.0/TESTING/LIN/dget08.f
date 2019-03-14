@@ -161,8 +161,8 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            IDAMAX
-      DOUBLE PRECISION   DLAMCH, DLANGE
-      EXTERNAL           LSAME, IDAMAX, DLAMCH, DLANGE
+      DOUBLE PRECISION   AB_DLAMCH, DLANGE
+      EXTERNAL           LSAME, IDAMAX, AB_DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGEMM
@@ -189,7 +189,7 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       ANORM = DLANGE( 'I', N1, N2, A, LDA, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS

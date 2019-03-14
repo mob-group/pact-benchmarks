@@ -150,8 +150,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               SLAMCH, SLANTR
-      EXTERNAL           LSAME, SLAMCH, SLANTR
+      REAL               AB_SLAMCH, SLANTR
+      EXTERNAL           LSAME, AB_SLAMCH, SLANTR
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           STRMV
@@ -171,7 +171,7 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0 or AINVNM = 0.
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       ANORM = SLANTR( '1', UPLO, DIAG, N, N, A, LDA, WORK )
       AINVNM = SLANTR( '1', UPLO, DIAG, N, N, AINV, LDAINV, WORK )
       IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN

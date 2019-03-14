@@ -481,10 +481,10 @@ subroutine tdep_calc_dij(dij,eigenV,iqpt,InVar,Lattice,omega,Phij_NN,qpt_cart,Rl
 !FB    end do
 !FB  end do  
 !FB  eigenV(:,:)=dij(:,:)
-!FB  call ZHEGV(1,'V','U',3*InVar%natom_unitcell,eigenV(:,:),3*InVar%natom_unitcell,mass_mat(:,:),3*InVar%natom_unitcell,omega(:),WORKC,LWORK,RWORK,INFO)
+!FB  call AB_ZHEGV(1,'V','U',3*InVar%natom_unitcell,eigenV(:,:),3*InVar%natom_unitcell,mass_mat(:,:),3*InVar%natom_unitcell,omega(:),WORKC,LWORK,RWORK,INFO)
 !FB  ABI_FREE(mass_mat)
   eigenV(:,:)=dij(:,:)
-  call ZHEEV('V','U',3*InVar%natom_unitcell,eigenV(:,:),3*InVar%natom_unitcell,omega(:),WORKC,LWORK,RWORK,INFO)
+  call AB_ZHEEV('V','U',3*InVar%natom_unitcell,eigenV(:,:),3*InVar%natom_unitcell,omega(:),WORKC,LWORK,RWORK,INFO)
 
 ! Normalization of the eigenvectors
   nmode=3*InVar%natom_unitcell
@@ -600,8 +600,8 @@ subroutine tdep_build_phij33(isym,Phij_ref,Phij_33,Sym,trans)
 
 
 ! Transform in the new basis wrt S_ref
-  call DGEMM('N','N',3,3,3,1.d0,Sym%S_ref(:,:,isym,1),3,Phij_ref,3,0.d0,Phij_tmp,3)
-  call DGEMM('N','N',3,3,3,1.d0,Phij_tmp,3,Sym%S_inv(:,:,isym,1),3,0.d0,Phij_33,3)
+  call AB_DGEMM('N','N',3,3,3,1.d0,Sym%S_ref(:,:,isym,1),3,Phij_ref,3,0.d0,Phij_tmp,3)
+  call AB_DGEMM('N','N',3,3,3,1.d0,Phij_tmp,3,Sym%S_inv(:,:,isym,1),3,0.d0,Phij_33,3)
 
   if ((trans.lt.1).or.(trans.gt.2)) then
     MSG_BUG('This value of the symmetry index is not permitted')

@@ -144,7 +144,7 @@ MODULE m_wfk
    ! TODO: this should be reported somewhere in the WFK file, at present is passed to wfk_open
 
   integer :: fform
-   ! File type format of the header
+   ! File type format of the AB_HEADER
 
   integer :: rw_mode = WFK_NOMODE
    ! (Read|Write) mode
@@ -174,7 +174,7 @@ MODULE m_wfk
   !logical :: debug=.TRUE.
 
   type(hdr_type) :: Hdr
-   ! Abinit header.
+   ! Abinit AB_HEADER.
 
   integer,allocatable :: nband(:,:)
   ! nband(nkpt,nsppol) = Number of bands at each (k,s)
@@ -195,7 +195,7 @@ MODULE m_wfk
 
   integer(XMPI_OFFSET_KIND),allocatable :: offset_ks(:,:,:)
    ! offset_ks(k,s,1) : offset of the record: npw, nspinor, nband_disk.
-   ! offset_ks(k,s,2) : offset of the Second record: (k+G) vectors.
+   ! offset_ks(k,s,2) : offset of the second record: (k+G) vectors.
    ! offset_ks(k,s,3) : offset of the third record eigenvalues.
    ! offset_ks(k,s,4) : offset of the fourth record (wavefunction coefficients).
    !
@@ -204,7 +204,7 @@ MODULE m_wfk
    ! **********************************************************************
 
   integer(XMPI_OFFSET_KIND) :: hdr_offset
-   ! offset of the header
+   ! offset of the AB_HEADER
    ! TODO this should be the output of a hdr method!
 
   integer(XMPI_OFFSET_KIND) :: chunk_bsize
@@ -295,7 +295,7 @@ CONTAINS
 !!
 !! OUTPUT
 !!  Wfk<type(wfk_t)> = WFK handler initialized and set in read mode
-!!  [Hdr_out]=Copy of the abinit header
+!!  [Hdr_out]=Copy of the abinit AB_HEADER
 !!
 !! PARENTS
 !!      conducti_nc,d2frnl,dfpt_looppert,dfpt_nstdy,dfpt_nstpaw,fold2Bloch
@@ -354,13 +354,13 @@ subroutine wfk_open_read(Wfk,fname,formeig,iomode,funt,comm,Hdr_out)
  Wfk%my_rank   = xmpi_comm_rank(comm)
  Wfk%nproc     = xmpi_comm_size(comm)
 
- ! Reads fform and the Header.
+ ! Reads fform and the AB_HEADER.
  call hdr_read_from_fname(Wfk%Hdr,fname,Wfk%fform,comm)
  ABI_CHECK(Wfk%fform/=0,"fform ==0")
 
  if (Wfk%debug) call hdr_echo(Wfk%Hdr,Wfk%fform,4,unit=std_out)
 
- ! Copy the header if required.
+ ! Copy the AB_HEADER if required.
  if (present(Hdr_out)) call hdr_copy(Wfk%Hdr,Hdr_out)
 
  ! Useful dimensions
@@ -376,7 +376,7 @@ subroutine wfk_open_read(Wfk,fname,formeig,iomode,funt,comm,Hdr_out)
  select case (wfk%iomode)
  case (IO_MODE_FORTRAN)
    ! All processors see a local Fortran binary file.
-   ! Each node opens the file, skip the header and set f90_fptr.
+   ! Each node opens the file, skip the AB_HEADER and set f90_fptr.
    Wfk%fh = funt
    if (open_file(Wfk%fname,msg,unit=Wfk%fh,form="unformatted", status="old", action="read") /= 0) then
      MSG_ERROR(msg)
@@ -434,7 +434,7 @@ end subroutine wfk_open_read
 !!  iomode = access mode
 !!  funt = Fortran unit numer for  Only used if iomode == IO_MODE_FORTRAN
 !!  comm = MPI communicator (used for MPI-IO)
-!!  [write_hdr]=True if the header should be written (default)
+!!  [write_hdr]=True if the AB_HEADER should be written (default)
 !!  [write_frm]=True if the fortran record markers should be written (default). Only if Fortran binary file.
 !!
 !! OUTPUT
@@ -508,10 +508,10 @@ subroutine wfk_open_write(Wfk,Hdr,fname,formeig,iomode,funt,comm,write_hdr,write
  Wfk%nproc     = xmpi_comm_size(comm)
  Wfk%fform     = 2
 
- ! Copy the header
+ ! Copy the AB_HEADER
  call hdr_copy(Hdr,Wfk%Hdr)
 
- ! Master writes fform and the Header (write it afterwards if IO_MODE_ETSF)
+ ! Master writes fform and the AB_HEADER (write it afterwards if IO_MODE_ETSF)
  if (Wfk%my_rank==Wfk%master .and. do_write_hdr .and. iomode /= IO_MODE_ETSF) then
    call hdr_write_to_fname(Wfk%Hdr,Wfk%fname,Wfk%fform)
    if (Wfk%debug) call hdr_echo(Wfk%Hdr,Wfk%fform,4,unit=std_out)
@@ -656,7 +656,7 @@ end subroutine wfk_open_write
 !!
 !! FUNCTION
 !!  Close the wavefunction file handler and release the memory allocated
-!!  Delete the file if `delete` is True. Default: False
+!!  Delete the file if `delete` is True. Default: false
 !!
 !! PARENTS
 !!      conducti_nc,d2frnl,dfpt_nstdy,dfpt_nstpaw,dfpt_scfcv,fold2Bloch,initwf
@@ -768,7 +768,7 @@ end subroutine wfk_close
 !!
 !! INPUTS
 !!  wfk<type(wfk_t)> = WFK handler
-!!  [header]=String to be printed as header for additional info.
+!!  [AB_HEADER]=String to be printed as AB_HEADER for additional info.
 !!  [unit]=Unit number for output. Defaults to std_out
 !!  [prtvol]=Verbosity level
 !!
@@ -781,7 +781,7 @@ end subroutine wfk_close
 !!
 !! SOURCE
 
-subroutine wfk_print(wfk,unit,header,prtvol)
+subroutine wfk_print(wfk,unit,AB_HEADER,prtvol)
 
 
 !This section has been created automatically by the script Abilint (TD).
@@ -796,7 +796,7 @@ subroutine wfk_print(wfk,unit,header,prtvol)
 !scalars
  type(wfk_t),intent(inout) :: wfk
  integer,optional,intent(in) :: unit,prtvol
- character(len=*),optional,intent(in) :: header
+ character(len=*),optional,intent(in) :: AB_HEADER
 
 !Local variables-------------------------------
  integer,parameter :: rdwr4=4
@@ -809,7 +809,7 @@ subroutine wfk_print(wfk,unit,header,prtvol)
  my_prtvol = 0; if (present(prtvol)) my_prtvol = prtvol
 
  msg=' ==== Info on the wfk_t object ==== '
- if (present(header)) msg=' ==== '//trim(adjustl(header))//' ==== '
+ if (present(AB_HEADER)) msg=' ==== '//trim(adjustl(AB_HEADER))//' ==== '
  call wrtout(my_unt,msg)
  call wrtout(my_unt, sjoin(" iomode = ",itoa(wfk%iomode)))
 
@@ -969,9 +969,9 @@ end function wfk_findk
 !!
 !! INPUTS
 !!  ncid=netcdf file handler.
-!!  hdr<hdr_tyep>=Abinit header
-!!  fform=File type format of the header
-!!  [write_hdr]=True if the header should be written (default)
+!!  hdr<hdr_tyep>=Abinit AB_HEADER
+!!  fform=File type format of the AB_HEADER
+!!  [write_hdr]=True if the AB_HEADER should be written (default)
 !!  [iskss]=True if this is a KSS file (activate kdependent=No)
 !!
 !! PARENTS
@@ -1009,12 +1009,12 @@ subroutine wfk_ncdef_dims_vars(ncid, hdr, fform, write_hdr, iskss)
 ! *************************************************************************
 
  do_write_hdr = .True.; if (present(write_hdr)) do_write_hdr = write_hdr
- my_iskss = .False.; if (present(iskss)) my_iskss = iskss
+ my_iskss = .false.; if (present(iskss)) my_iskss = iskss
  if (do_write_hdr) then
    NCF_CHECK(hdr_ncwrite(hdr, ncid, fform, nc_define=.True.))
  end if
 
- ! Add the etsf header.
+ ! Add the etsf AB_HEADER.
  title = sjoin("WFK file generated by Abinit, version: ",  abinit_version)
  if (my_iskss) title = sjoin("KSS file generated by Abinit, version: ",  abinit_version)
  history = sjoin("Generated on: ", asctime())
@@ -1152,7 +1152,7 @@ integer function wfk_compare(wfk1, wfk2) result(ierr)
    ierr = ierr + 1; MSG_WARNING("Different kptns array")
  end if
 
- ! Call hdr_check to get a nice diff of the header but don't check restart and restartpaw.
+ ! Call hdr_check to get a nice diff of the AB_HEADER but don't check restart and restartpaw.
  call hdr_check(wfk1%fform,wfk2%fform,wfk1%hdr,wfk2%hdr,"PERS",restart,restartpaw)
 
 end function wfk_compare
@@ -1650,7 +1650,7 @@ subroutine wfk_read_bks(wfk, band, ik_ibz, spin, sc_mode, cg_bks, eig1_bks)
    ABI_CHECK(size(cg_bks, dim=2) >= npw_disk*wfk%nspinor,"cg_bks too small")
    ABI_CHECK(size(eig1_bks) >= 2*nband_disk, "eig1_bks too small")
 
- if (.False.) then
+ if (.false.) then
  !if (.True.) then
    ! Due to the API of wfk_read_band_block, we have to read the full set of eigenvalues
    ! and then extract the relevant band
@@ -2921,7 +2921,7 @@ end subroutine wfk_read_eigk
 !! OUTPUTS
 !!  eigen = In input: nullified pointer
 !!          In output: eigen(mband,nkpt,nsppol) contains the GS eigevalues.
-!!  Hdr_out<hdr_type>=The header of the file
+!!  Hdr_out<hdr_type>=The AB_HEADER of the file
 !!
 !! PARENTS
 !!      dfpt_looppert,eph,m_wfk,setup_bse,setup_bse_interp,setup_screening
@@ -3088,7 +3088,7 @@ end subroutine wfk_write_h1mat
 !!  eigen(2*hdr_out%mband**2*hdr_out%nkpt*hdr_out%nsppol)=Array with the matrix elements of H1
 !!   packed in the first positions. The array is allocated by the procedure.
 !!
-!!  Hdr_out<hdr_type>=The header of the file
+!!  Hdr_out<hdr_type>=The AB_HEADER of the file
 !!
 !! PARENTS
 !!      m_ddk
@@ -3171,7 +3171,7 @@ end subroutine wfk_read_h1mat
 !!  wfk_rewind
 !!
 !! FUNCTION
-!!  Rewind the file, skip the header and modifies Wfk%f90_fptr $
+!!  Rewind the file, skip the AB_HEADER and modifies Wfk%f90_fptr $
 !!  Mainly used for debugging purposes when IO_MODE_FORTRAN is used.
 !!
 !! PARENTS
@@ -3395,8 +3395,8 @@ subroutine wfk_compute_offsets(Wfk)
    ! Compute record number for Fortran IO
    ABI_MALLOC(Wfk%recn_ks,(Wfk%nkpt,Wfk%nsppol,REC_NUM))
 
-   ! We start to count the number of Fortran records from the end of the Header
-   ! Hence recn gives the relative position from the header, it's not an absolute position.
+   ! We start to count the number of Fortran records from the end of the AB_HEADER
+   ! Hence recn gives the relative position from the AB_HEADER, it's not an absolute position.
    base = 0
    do spin=1,Wfk%nsppol
      do ik_ibz=1,Wfk%nkpt
@@ -3427,7 +3427,7 @@ subroutine wfk_compute_offsets(Wfk)
    bsize_frm    = xmpio_bsize_frm    ! Byte length of the Fortran record marker.
    mpi_type_frm = xmpio_mpi_type_frm ! MPI type of the record marker.
 
-   ! The offset of the Header. TODO
+   ! The offset of the AB_HEADER. TODO
    ! hdr_offset(Hdr)
    offset = Wfk%hdr_offset
 
@@ -3450,7 +3450,7 @@ subroutine wfk_compute_offsets(Wfk)
        Wfk%offset_ks(ik_ibz,spin,REC_KG) = offset
        !
        !---------------------------------------------------------------------------
-       ! Second record: (k+G) vectors
+       ! second record: (k+G) vectors
        ! kg_k(1:3,1:npw_k)
        !---------------------------------------------------------------------------
        offset = offset + 3*npw_k*xmpi_bsize_int + 2*bsize_frm
@@ -3538,7 +3538,7 @@ subroutine wfk_show_offsets(Wfk)
  select case (Wfk%iomode)
 
  case (IO_MODE_FORTRAN)
-   write(std_out,*)"Record number relative to the header."
+   write(std_out,*)"Record number relative to the AB_HEADER."
    do spin=1,Wfk%nsppol
      do ik_ibz=1,Wfk%nkpt
        write(std_out,"(a,2(i0,2x),a,4(a,i0,a))")                   &
@@ -4136,7 +4136,7 @@ subroutine wfk_tofullbz(in_path, dtset, psps, pawtab, out_path)
 
  call crystal_from_hdr(cryst, in_wfk%hdr, 2)
 
- ! Build new header for out_wfk. This is the most delicate part since all the arrays in hdr_full
+ ! Build new AB_HEADER for out_wfk. This is the most delicate part since all the arrays in hdr_full
  ! that depend on k-points must be consistent with kfull and nkfull.
  call ebands_expandk(ebands_ibz, cryst, ecut_eff, force_istwfk1, dksqmax, bz2ibz, ebands_full)
 
@@ -4152,7 +4152,7 @@ subroutine wfk_tofullbz(in_path, dtset, psps, pawtab, out_path)
  nkfull = ebands_full%nkpt
  kfull => ebands_full%kptns
 
- ! Build new header and update pawrhoij.
+ ! Build new AB_HEADER and update pawrhoij.
  call hdr_init_lowlvl(hdr_kfull,ebands_full,psps,pawtab,dummy_wvl,abinit_version,&
    ihdr%pertcase,ihdr%natom,ihdr%nsym,ihdr%nspden,ihdr%ecut,dtset%pawecutdg,ihdr%ecutsm,dtset%dilatmx,&
    ihdr%intxc,ihdr%ixc,ihdr%stmbias,ihdr%usewvl,dtset%pawcpxocc,dtset%pawspnorb,dtset%ngfft,dtset%ngfftdg,ihdr%so_psp,&
@@ -4551,7 +4551,7 @@ subroutine wfk_prof(wfk_fname, formeig, nband, comm)
            nband_disk = Hdr%nband(ik_ibz+(spin-1)*Hdr%nkpt)
 
            ABI_MALLOC(my_bmask,(MAXVAL(Hdr%nband)))
-           my_bmask=.False.; my_bmask(1:nband_read) = .True.
+           my_bmask=.false.; my_bmask(1:nband_read) = .True.
 
            ABI_MALLOC(eig_k,((2*nband_disk)**formeig*nband_disk))
            ABI_MALLOC(kg_k,(3,npw_disk))

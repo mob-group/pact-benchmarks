@@ -242,8 +242,8 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_ILAENV
-      DOUBLE PRECISION   DLAMCH, AB_DLANST
-      EXTERNAL           AB_LSAME, AB_ILAENV, DLAMCH, AB_DLANST
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANST
+      EXTERNAL           AB_LSAME, AB_ILAENV, AB_DLAMCH, AB_DLANST
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_DLASCL, AB_DLASET, AB_DSTEDC, AB_DSTEQR, AB_
@@ -385,7 +385,7 @@
          IF( ORGNRM.EQ.ZERO )
      $      GO TO 70
 *
-         EPS = DLAMCH( 'Epsilon' )
+         EPS = AB_DLAMCH( 'Epsilon' )
 *
          START = 1
 *

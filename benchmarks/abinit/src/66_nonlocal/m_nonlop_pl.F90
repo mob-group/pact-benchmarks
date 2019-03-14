@@ -41,7 +41,7 @@ module m_nonlop_pl
  use m_metstr
  use m_opernl
 
- use m_geometry,   only : strconv
+ use m_geometry,   only : AB_STRCONv
  use m_kg,         only : ph1d3d
  use m_contract,   only : cont22cso, cont22so, cont24, cont33cso, cont33so, cont35, cont22, cont3, cont13, &
                           metcon, metcon_so, metric_so
@@ -177,7 +177,7 @@ contains
 !!      cont13,cont22,cont22cso,cont22so,cont24,cont3,cont33cso,cont33so,cont35
 !!      contistr01,contistr03,contistr12,contstr21,contstr23,contstr25
 !!      contstr25a,contstr26,ddkten,metcon,metcon_so,metric_so,metstr,opernl2
-!!      opernl3,opernl4a,opernl4b,ph1d3d,scalewf_nonlop,strconv,strsocv,trace2
+!!      opernl3,opernl4a,opernl4b,ph1d3d,scalewf_nonlop,AB_STRCONv,strsocv,trace2
 !!      xmpi_sum
 !!
 !! SOURCE
@@ -1266,7 +1266,7 @@ subroutine nonlop_pl(choice,dimekb1,dimekb2,dimffnlin,dimffnlout,ekb,enlout,&
  if ((choice==3.or.choice==23) .and. signs==1) then
 !  Convert strsnl from reduced to cartesian coordinates
    strsnl_out(:)=0.d0
-   call strconv(strsnl,gprimd,strsnl_out)
+   call AB_STRCONv(strsnl,gprimd,strsnl_out)
    strsnl(:) = strsnl_out(:)
 !  Add diagonal part (fill up first 6 components of enlout with
 !  these gradients; elements 7,8,9 of enlout are not used)

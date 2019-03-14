@@ -160,8 +160,8 @@
       REAL               ANORM, TEMP1, TEMP2, ULP, UNFL, WNORM
 *     ..
 *     .. External Functions ..
-      REAL               CLANGE, CLANHE, SLAMCH
-      EXTERNAL           CLANGE, CLANHE, SLAMCH
+      REAL               CLANGE, CLANHE, AB_SLAMCH
+      EXTERNAL           CLANGE, CLANHE, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGEMM, CHER, CHER2, CLASET
@@ -178,8 +178,8 @@
       IF( N.LE.0 )
      $   RETURN
 *
-      UNFL = SLAMCH( 'Safe minimum' )
-      ULP = SLAMCH( 'Precision' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
+      ULP = AB_SLAMCH( 'Precision' )
 *
 *     Do Test 1
 *

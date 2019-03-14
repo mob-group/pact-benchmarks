@@ -112,11 +112,11 @@
       EXTERNAL           AB_DLARTGP
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION        DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION        AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     .. Executable Statements ..
 *
-      THRESH = DLAMCH('E')
+      THRESH = AB_DLAMCH('E')
 *
 *     Compute the first column of B**T*B - SIGMA^2*I, up to a scale
 *     factor.

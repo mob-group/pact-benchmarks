@@ -133,8 +133,8 @@
      $                   WR( LDT ), WRTMP( LDT )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLANGE
-      EXTERNAL           SLAMCH, SLANGE
+      REAL               AB_SLAMCH, SLANGE
+      EXTERNAL           AB_SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SCOPY, SGEHRD, SHSEQR, SHST01, SLABAD, SLACPY,
@@ -145,8 +145,8 @@
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = SLAMCH( 'P' )
-      SMLNUM = SLAMCH( 'S' ) / EPS
+      EPS = AB_SLAMCH( 'P' )
+      SMLNUM = AB_SLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
       CALL SLABAD( SMLNUM, BIGNUM )
 *

@@ -354,8 +354,8 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_IDAMAX, AB_ILAENV
-      DOUBLE PRECISION   DLAMCH, AB_DLANGE, AB_DLAPY2, AB_DNRM2
-      EXTERNAL           AB_LSAME, AB_IDAMAX, AB_ILAENV, DLAMCH, AB_DLAN
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE, AB_DLAPY2, AB_DNRM2
+      EXTERNAL           AB_LSAME, AB_IDAMAX, AB_ILAENV, AB_DLAMCH, AB_DLAN
      $GE, AB_DLAPY2,
      $                   AB_DNRM2
 *     ..
@@ -487,8 +487,8 @@
 *
 *     Get machine constants
 *
-      EPS = DLAMCH( 'P' )
-      SMLNUM = DLAMCH( 'S' )
+      EPS = AB_DLAMCH( 'P' )
+      SMLNUM = AB_DLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
       CALL AB_DLABAD( SMLNUM, BIGNUM )
       SMLNUM = SQRT( SMLNUM ) / EPS

@@ -73,7 +73,7 @@ module m_abi_linalg
 ! Set to True in linalg_allow_plasma
  public :: linalg_allow_plasma
 
- logical,private,save :: XPLASMA_ISON = .False.
+ logical,private,save :: XPLASMA_ISON = .false.
 
 !----------------------------------------------------------------------
 !!***
@@ -118,7 +118,7 @@ module m_abi_linalg
  public :: abi_xgemm
  interface abi_xgemm
     module procedure abi_zgemm_2d
-    module procedure abi_d2zgemm
+    module procedure abi_d2AB_ZGEMM
  end interface
  !----------------------------------------------------------------------
  public :: abi_xcopy
@@ -130,19 +130,19 @@ module m_abi_linalg
     module procedure abi_dcopy_2d     ! FIXME To be removed. One can pass the base adress of the array!
     module procedure abi_dcopy_0d_1d
     module procedure abi_dcopy_1d_0d
-    module procedure abi_d2zcopy_2d  ! FIXME To be removed. One can pass the base adress of the array!
-    module procedure abi_z2dcopy_2d  ! FIXME To be removed. One can pass the base adress of the array!
+    module procedure abi_d2AB_ZCOPY_2d  ! FIXME To be removed. One can pass the base adress of the array!
+    module procedure abi_z2AB_DCOPY_2d  ! FIXME To be removed. One can pass the base adress of the array!
  end interface
  !----------------------------------------------------------------------
  public :: abi_xtrsm
  interface abi_xtrsm
     module procedure abi_ztrsm
     module procedure abi_dtrsm
-    module procedure abi_d2ztrsm
-    !module procedure abi_d2ztrsm_3d
+    module procedure abi_d2AB_ZTRSM
+    !module procedure abi_d2AB_ZTRSM_3d
  end interface
 
- public :: abi_d2ztrsm_3d ! Used in bestwfk TODO to be Removed
+ public :: abi_d2AB_ZTRSM_3d ! Used in bestwfk TODO to be Removed
  !----------------------------------------------------------------------
 
  !LAPACK INTERFACE
@@ -190,7 +190,7 @@ module m_abi_linalg
  !----------------------------------------------------------------------
  interface abi_xpotrf
     !module procedure abi_dpotrf
-    module procedure abi_d2zpotrf
+    module procedure abi_d2AB_ZPOTRF
     module procedure abi_zpotrf_2d
  end interface
  !----------------------------------------------------------------------
@@ -219,7 +219,7 @@ module m_abi_linalg
 
  public :: gpu_xorthonormalize
 
- logical,external :: LSAME
+ logical,external :: AB_LSAME
 
  ! Timab slots, used if we want to profile BLAS calls
  ! Fine-grained profiling, must be enabled with the CPP option DEV_LINALG_TIMING
@@ -237,22 +237,22 @@ module m_abi_linalg
 #define DEV_LINALG_TIMING 1
 
 ! Support for [Z,C]GEMM3M routines
- logical,save,private :: XGEMM3M_ISON=.False.
+ logical,save,private :: XGEMM3M_ISON=.false.
  ! True if [Z,C]GEMM3M can be used (can be set with linalg_allow_gemm3m)
 
  public :: linalg_allow_gemm3m
 
  ! Thresholds for the activation of [Z,C]GEMM3M
- integer,parameter,private :: ZGEMM3M_LIMIT=325000
- integer,parameter,private :: CGEMM3M_LIMIT=200000
+ integer,parameter,private :: AB_ZGEMM3M_LIMIT=325000
+ integer,parameter,private :: AB_CGEMM3M_LIMIT=200000
 
 ! Handy macros
 #ifdef HAVE_LINALG_GEMM3M
-#define _ZGEMM3M ZGEMM3M
-#define _CGEMM3M CGEMM3M
+#define _ZGEMM3M AB_ZGEMM3M
+#define _CGEMM3M AB_CGEMM3M
 #else
-#define _ZGEMM3M ZGEMM
-#define _CGEMM3M CGEMM
+#define _ZGEMM3M AB_ZGEMM
+#define _CGEMM3M AB_CGEMM
 #endif
 
 
@@ -615,24 +615,24 @@ end subroutine linalg_allow_gemm3m
 !!  use_zgemm3m
 !!
 !! FUNCTION
-!!  Enable the use of ZGEMM3M
+!!  Enable the use of AB_ZGEMM3M
 !!
 !! PARENTS
 !!
 !! NOTES
-!!  The CGEMM3M and ZGEMM3M routines use an algorithm requiring 3 real matrix
+!!  The AB_CGEMM3M and AB_ZGEMM3M routines use an algorithm requiring 3 real matrix
 !!  multiplications and 5 real matrix additions to compute the complex matrix
-!!  product; CGEMM(3S) and ZGEMM(3S) use 4 real matrix multiplications and 2
+!!  product; AB_CGEMM(3S) and AB_ZGEMM(3S) use 4 real matrix multiplications and 2
 !!  real matrix additions. Because the matrix multiplication time is usually
-!!  the limiting performance factor in these routines, CGEMM3M and ZGEMM3M
-!!  may run up to 33 percent faster than CGEMM and ZGEMM.  Because of other
+!!  the limiting performance factor in these routines, AB_CGEMM3M and AB_ZGEMM3M
+!!  may run up to 33 percent faster than AB_CGEMM and AB_ZGEMM.  Because of other
 !!  overhead associated with the 3M routines, however, these performance
 !!  improvements may not always be realized.  For example, on one processor
 !!  the 3M routines will generally run more slowly than the standard complex
 !!  matrix multiplication routines when m * n * k < FACTOR, where m, n, and k
 !!  are the input matrix dimensions and FACTOR is approximately 200000 for
-!!  CGEMM3M and 325000 for ZGEMM3M.
-!!  from: http://techpubs.sgi.com/library/tpl/cgi-bin/getdoc.cgi?coll=0650&db=man&raw=1&fname=/usr/share/catman/p_man/cat3/SCSL/ZGEMM3M.z
+!!  AB_CGEMM3M and 325000 for AB_ZGEMM3M.
+!!  from: http://techpubs.sgi.com/library/tpl/cgi-bin/getdoc.cgi?coll=0650&db=man&raw=1&fname=/usr/share/catman/p_man/cat3/SCSL/AB_ZGEMM3M.z
 !!
 !! SOURCE
 
@@ -653,11 +653,11 @@ pure logical function use_zgemm3m(m,n,k)
 
 ! *************************************************************************
 
- use_zgemm3m = .False.
- if (XGEMM3M_ISON) use_zgemm3m = ((m * n * k) > ZGEMM3M_LIMIT)
+ use_zgemm3m = .false.
+ if (XGEMM3M_ISON) use_zgemm3m = ((m * n * k) > AB_ZGEMM3M_LIMIT)
 
 #ifndef HAVE_LINALG_GEMM3M
- use_zgemm3m = .False.
+ use_zgemm3m = .false.
 #endif
 
 end function use_zgemm3m
@@ -670,7 +670,7 @@ end function use_zgemm3m
 !!  use_cgemm3m
 !!
 !! FUNCTION
-!!  Enable the use of CGEMM3M
+!!  Enable the use of AB_CGEMM3M
 !!
 !! PARENTS
 !!
@@ -696,10 +696,10 @@ pure logical function use_cgemm3m(m,n,k)
 
 ! *************************************************************************
 
- use_cgemm3m = .False.
- if (XGEMM3M_ISON) use_cgemm3m = ((m * n * k) > CGEMM3M_LIMIT)
+ use_cgemm3m = .false.
+ if (XGEMM3M_ISON) use_cgemm3m = ((m * n * k) > AB_CGEMM3M_LIMIT)
 #ifndef HAVE_LINALG_GEMM3M
- use_cgemm3m = .False.
+ use_cgemm3m = .false.
 #endif
 
 end function use_cgemm3m
@@ -712,7 +712,7 @@ end function use_cgemm3m
 !!
 !! FUNCTION
 !!  Programmatic interface to enable the use of PLASMA
-!!  False to disable PLASMA version.
+!!  false to disable PLASMA version.
 !!
 !! SOURCE
 
@@ -738,7 +738,7 @@ subroutine linalg_allow_plasma(bool)
  ! Just to be on the safe-side.
  ! I have to use a weird set of branches to make abirules happy in the BLAS/LAPACK
  ! wrappers, and one cannot set XPLASMA_MODE to .True. if PLASMA is not available.
- XPLASMA_ISON = .False.
+ XPLASMA_ISON = .false.
 #endif
 
 end subroutine linalg_allow_plasma
@@ -771,7 +771,7 @@ integer function uplo_plasma(uplo)
 
 ! *************************************************************************
 
- if (LSAME(uplo,'U')) then
+ if (AB_LSAME(uplo,'U')) then
     uplo_plasma = PlasmaUpper
  else
     uplo_plasma = PlasmaLower
@@ -809,9 +809,9 @@ integer function trans_plasma(trans)
 
 ! *************************************************************************
 
- if (LSAME(trans,'C')) then
+ if (AB_LSAME(trans,'C')) then
    trans_plasma = PlasmaConjTrans
- else if (LSAME(trans,'T')) then
+ else if (AB_LSAME(trans,'T')) then
    trans_plasma = PlasmaTrans
  else
    trans_plasma = PlasmaNoTrans
@@ -849,7 +849,7 @@ integer function side_plasma(side)
 
 ! *************************************************************************
 
- if(LSAME(side,'L')) then
+ if(AB_LSAME(side,'L')) then
     side_plasma = PlasmaLeft
  else
     side_plasma = PlasmaRight
@@ -887,7 +887,7 @@ integer function diag_plasma(diag)
 
 ! *************************************************************************
 
- if (LSAME(diag,'U')) then
+ if (AB_LSAME(diag,'U')) then
    diag_plasma = PlasmaUnit
  else
    diag_plasma = PlasmaNonUnit
@@ -925,7 +925,7 @@ integer function jobz_plasma(jobz)
 
 ! *************************************************************************
 
- if (LSAME(jobz,'N')) then
+ if (AB_LSAME(jobz,'N')) then
    jobz_plasma = PlasmaNoVec
  else
    jobz_plasma = PlasmaVec

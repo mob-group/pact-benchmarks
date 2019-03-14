@@ -129,8 +129,8 @@
      $                   X( 2, 2 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DLABAD, DLALN2
@@ -145,9 +145,9 @@
 *
 *     Get machine parameters
 *
-      EPS = DLAMCH( 'P' )
-      UNFL = DLAMCH( 'U' )
-      SMLNUM = DLAMCH( 'S' ) / EPS
+      EPS = AB_DLAMCH( 'P' )
+      UNFL = AB_DLAMCH( 'U' )
+      SMLNUM = AB_DLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
       CALL DLABAD( SMLNUM, BIGNUM )
 *

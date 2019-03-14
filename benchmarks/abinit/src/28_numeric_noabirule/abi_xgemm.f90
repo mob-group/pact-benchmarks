@@ -83,7 +83,7 @@
    if (use_zgemm3m(m,n,k)) then
      call _ZGEMM3M(TRANSA,TRANSB,M,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
    else
-     call zgemm(TRANSA,TRANSB,M,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+     call AB_ZGEMM(TRANSA,TRANSB,M,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
    end if
  end if
 
@@ -96,9 +96,9 @@ end subroutine abi_zgemm_2d
 
 !----------------------------------------------------------------------
 
-!!****f* m_abi_linalg/abi_d2zgemm
+!!****f* m_abi_linalg/abi_d2AB_ZGEMM
 !! NAME
-!! abi_d2zgemm
+!! abi_d2AB_ZGEMM
 !!
 !! FUNCTION
 !!
@@ -112,13 +112,13 @@ end subroutine abi_zgemm_2d
 !!
 !! SOURCE
 !!
-subroutine abi_d2zgemm(TRANSA,TRANSB,M,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC,&
+subroutine abi_d2AB_ZGEMM(TRANSA,TRANSB,M,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC,&
 &       x_cplx)
 
 !This section has been created automatically by the script Abilint (TD).
 !Do not modify the following lines by hand.
 #undef ABI_FUNC
-#define ABI_FUNC 'abi_d2zgemm'
+#define ABI_FUNC 'abi_d2AB_ZGEMM'
 !End of the abilint section
 
  implicit none
@@ -167,10 +167,10 @@ subroutine abi_d2zgemm(TRANSA,TRANSB,M,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC,&
      if (use_zgemm3m(m,n,k)) then
        call _ZGEMM3M(TRANSA,TRANSB,M,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
      else
-       call zgemm(TRANSA,TRANSB,M,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+       call AB_ZGEMM(TRANSA,TRANSB,M,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
      end if
    else
-     call dgemm(TRANSA,TRANSB,M,N,K,real(ALPHA,dp),A,LDA,B,LDB,real(BETA,dp),C,LDC)
+     call AB_DGEMM(TRANSA,TRANSB,M,N,K,real(ALPHA,dp),A,LDA,B,LDB,real(BETA,dp),C,LDC)
    end if
  end if
 
@@ -178,7 +178,7 @@ subroutine abi_d2zgemm(TRANSA,TRANSB,M,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC,&
  call timab(TIMAB_XGEMM,2,tsec)
 #endif
 
-end subroutine abi_d2zgemm
+end subroutine abi_d2AB_ZGEMM
 !!***
 
 !----------------------------------------------------------------------

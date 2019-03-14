@@ -183,9 +183,9 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_ICAMAX
-      REAL               SLAMCH
+      REAL               AB_SLAMCH
       COMPLEX            AB_CDOTC
-      EXTERNAL           AB_LSAME, AB_ICAMAX, SLAMCH, AB_CDOTC
+      EXTERNAL           AB_LSAME, AB_ICAMAX, AB_SLAMCH, AB_CDOTC
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_CAXPY, AB_CLACN2, AB_CLATBS, AB_CSRSCL, AB_X
@@ -234,7 +234,7 @@
          RETURN
       END IF
 *
-      SMLNUM = SLAMCH( 'Safe minimum' )
+      SMLNUM = AB_SLAMCH( 'Safe minimum' )
 *
 *     Estimate the norm of inv(A).
 *

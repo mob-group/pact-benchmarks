@@ -86,8 +86,8 @@
      $                   VRF( LDVR, LDVR ), WORK( LDWORK, LDWORK )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLANGE
-      EXTERNAL           SLAMCH, SLANGE
+      REAL               AB_SLAMCH, SLANGE
+      EXTERNAL           AB_SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGEMM, SGGBAK, SGGBAL, SLACPY
@@ -107,7 +107,7 @@
       KNT = 0
       RMAX = ZERO
 *
-      EPS = SLAMCH( 'Precision' )
+      EPS = AB_SLAMCH( 'Precision' )
 *
    10 CONTINUE
       READ( NIN, FMT = * )N, M

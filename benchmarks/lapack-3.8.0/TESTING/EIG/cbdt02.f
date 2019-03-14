@@ -145,8 +145,8 @@
       REAL               BNORM, EPS, REALMN
 *     ..
 *     .. External Functions ..
-      REAL               CLANGE, SCASUM, SLAMCH
-      EXTERNAL           CLANGE, SCASUM, SLAMCH
+      REAL               CLANGE, SCASUM, AB_SLAMCH
+      EXTERNAL           CLANGE, SCASUM, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CCOPY, CGEMV
@@ -162,7 +162,7 @@
       IF( M.LE.0 .OR. N.LE.0 )
      $   RETURN
       REALMN = REAL( MAX( M, N ) )
-      EPS = SLAMCH( 'Precision' )
+      EPS = AB_SLAMCH( 'Precision' )
 *
 *     Compute norm( B - U * C )
 *

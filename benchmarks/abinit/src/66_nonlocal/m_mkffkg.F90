@@ -375,7 +375,7 @@ subroutine dfpt_mkffkg(choice,ffkg,ffnl,gmet,idir,indlmn,ipw1,ispinor,itypat,&
 !This is the number of composite projectors for the energy
  nffkge=iffkg
 
-!Second, treat forces : actually, this part could be rationalized,
+!second, treat forces : actually, this part could be rationalized,
 !since the outcome is a multiplication by three of the number
 !of composite projectors for the energy, while less should be needed
  if((choice==2.or.choice==23) .and. ndgxdt/=1)then
@@ -522,7 +522,7 @@ subroutine dfpt_mkffkg(choice,ffkg,ffnl,gmet,idir,indlmn,ipw1,ispinor,itypat,&
              if(ilang==2 .or. ilang==4)parity(iffkg)=1
            end do
 
-!          Second set of terms
+!          second set of terms
 !          number of unique tensor components
            ilangx=((ilang+1)*(ilang+2))/2
 
@@ -950,7 +950,7 @@ subroutine mkffkg(choice,ffkg,ffnl,gmet,idir,indlmn,ipw1,ispinor,itypat,&
 !This is the number of composite projectors for the energy
  nffkge=iffkg
 
-!Second, treat forces : actually, this part could be rationalized,
+!second, treat forces : actually, this part could be rationalized,
 !since the outcome is a multiplication by three of the number
 !of composite projectors for the energy, while less should be needed
  if((choice==2.or.choice==23) .and. ndgxdt/=1)then
@@ -1095,7 +1095,7 @@ subroutine mkffkg(choice,ffkg,ffnl,gmet,idir,indlmn,ipw1,ispinor,itypat,&
              if(ilang==2 .or. ilang==4)parity(iffkg)=1
            end do
 
-!          Second set of terms
+!          second set of terms
 !          number of unique tensor components
            ilangx=((ilang+1)*(ilang+2))/2
 

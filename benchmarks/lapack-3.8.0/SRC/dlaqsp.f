@@ -151,8 +151,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           AB_LSAME, DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_LSAME, AB_DLAMCH
 *     ..
 *     .. Executable Statements ..
 *
@@ -165,7 +165,7 @@
 *
 *     Initialize LARGE and SMALL.
 *
-      SMALL = DLAMCH( 'Safe minimum' ) / DLAMCH( 'Precision' )
+      SMALL = AB_DLAMCH( 'Safe minimum' ) / AB_DLAMCH( 'Precision' )
       LARGE = ONE / SMALL
 *
       IF( SCOND.GE.THRESH .AND. AMAX.GE.SMALL .AND. AMAX.LE.LARGE ) THEN

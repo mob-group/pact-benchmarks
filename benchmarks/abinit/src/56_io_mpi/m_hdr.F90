@@ -4,7 +4,7 @@
 !! m_hdr
 !!
 !! FUNCTION
-!! This module contains the definition of the abinit header (TODO) and its methods
+!! This module contains the definition of the abinit AB_HEADER (TODO) and its methods
 !! If you have to change the hdr, pay attention to the following subroutines:
 !!
 !!   hdr_malloc, hdr_init_lowlvl, hdr_free, hdr_bcast and the IO routines
@@ -75,27 +75,27 @@ MODULE m_hdr
  public :: fform_from_ext          ! Return the value of fform to be used from the file extension.
  public :: varname_from_fname      ! Return the name of the netcdf variable stored in a file from the file extension.
 
- public :: hdr_init                ! Initialize the header and most of its content from dtset and psps.
+ public :: hdr_init                ! Initialize the AB_HEADER and most of its content from dtset and psps.
  public :: hdr_init_lowlvl         ! Low level initialization method for Hdr (no dtset).
- public :: hdr_free                ! Deallocates the components of the header.
- public :: hdr_copy                ! Deep copy of the Header.
+ public :: hdr_free                ! Deallocates the components of the AB_HEADER.
+ public :: hdr_copy                ! Deep copy of the AB_HEADER.
  public :: hdr_nelect_fromocc      ! Returns the number of electrons calculated from the occupation factors Hdr%occ
- public :: hdr_mpio_skip           ! Skip the abinit header using MPI-IO routines.
-                                   ! Return the offset of the first Fortran record after the header.
- public :: hdr_bsize_frecords      ! Compute the size of the Fortran records from the header and formeig.
- public :: hdr_bcast               ! Broadcast the header.
- public :: hdr_update              ! Update the header.
- public :: hdr_read_from_fname     ! Read the header (requires a string with the file name).
- public :: hdr_write_to_fname      ! Write the header (requires a string with the file name).
- public :: hdr_skip                ! Skip the header.
- public :: hdr_io                  ! IO of the header.
- public :: hdr_echo                ! Echo the header.
- public :: hdr_fort_read           ! Reads the header from a logical unit associated to an unformatted file.
- public :: hdr_ncread              ! Reads the header from a Netcdf file.
- public :: hdr_fort_write          ! Writes the header and fform to unformatted file
- public :: hdr_ncwrite             ! Writes the header and fform to a Netcdf file.
- public :: hdr_check               ! Compare two headers.
- public :: hdr_vs_dtset            ! Check the compatibility of header with dtset.
+ public :: hdr_mpio_skip           ! Skip the abinit AB_HEADER using MPI-IO routines.
+                                   ! Return the offset of the first Fortran record after the AB_HEADER.
+ public :: hdr_bsize_frecords      ! Compute the size of the Fortran records from the AB_HEADER and formeig.
+ public :: hdr_bcast               ! Broadcast the AB_HEADER.
+ public :: hdr_update              ! Update the AB_HEADER.
+ public :: hdr_read_from_fname     ! Read the AB_HEADER (requires a string with the file name).
+ public :: hdr_write_to_fname      ! Write the AB_HEADER (requires a string with the file name).
+ public :: hdr_skip                ! Skip the AB_HEADER.
+ public :: hdr_io                  ! IO of the AB_HEADER.
+ public :: hdr_echo                ! Echo the AB_HEADER.
+ public :: hdr_fort_read           ! Reads the AB_HEADER from a logical unit associated to an unformatted file.
+ public :: hdr_ncread              ! Reads the AB_HEADER from a Netcdf file.
+ public :: hdr_fort_write          ! Writes the AB_HEADER and fform to unformatted file
+ public :: hdr_ncwrite             ! Writes the AB_HEADER and fform to a Netcdf file.
+ public :: hdr_check               ! Compare two AB_HEADERs.
+ public :: hdr_vs_dtset            ! Check the compatibility of AB_HEADER with dtset.
 
 ! Generic interface of the routines hdr_skip
  interface hdr_skip
@@ -121,8 +121,8 @@ MODULE m_hdr
 !!  abifile_t
 !!
 !! FUNCTION
-!!  Gather information about a binary file with header.
-!!  Every file with header must be registered in all_abifiles, see below.
+!!  Gather information about a binary file with AB_HEADER.
+!!  Every file with AB_HEADER must be registered in all_abifiles, see below.
 !!
 !! SOURCE
 
@@ -158,12 +158,12 @@ MODULE m_hdr
  !    "potential" for potential files, "data" for generic data a.k.a. internal files e.g. GKK matrix elements.
  !
  ! *) varname can appear multiple times, in this case the entries should be ordered chronologically
- !    i.e. the most recent format should follow the older ones. This could be useful if we decide to
+ !    i.e. the most recent format should follow the oAB_LDEr ones. This could be useful if we decide to
  !    remove pawrhoij from a particular file. Let's assume, for example, that we've decided to remove
  !    pawrhoij from the POT file. In this case, abifiles should contain:
  !
  !        abifile_t(varname="potential", fform=102), &                         ! old file with pawrhoij
- !        abifile_t(varname="potential", fform=202, has_pawrhoij=.False.) &    ! new file wo pawrhoij
+ !        abifile_t(varname="potential", fform=202, has_pawrhoij=.false.) &    ! new file wo pawrhoij
  !
  ! *) The file extensions is used in fform_from_ext and varname_from_fname.
  !    fform_from_ext returns the most recent fform associated to a file extension.
@@ -189,7 +189,7 @@ MODULE m_hdr
     abifile_t(varname="pawrhor_core", fform=56, ext="ATMDEN_CORE", class="density"), &
     abifile_t(varname="pawrhor_val", fform=57, ext="ATMDEN_VAL", class="density"), &
     abifile_t(varname="pawrhor_full", fform=58, ext="ATMDEN_FULL", class="density"), &
-    abifile_t(varname="pawrhor_ntilde_minus_nhat", fform=59, ext="N_TILDE", class="density"), &
+    abifile_t(varname="pawrhor_ntiAB_LDE_minus_nhat", fform=59, ext="N_TIAB_LDE", class="density"), &
     abifile_t(varname="pawrhor_n_one", fform=60, ext="N_ONE", class="density"), &
     abifile_t(varname="pawrhor_nt_one", fform=61, ext="NT_ONE", class="density"), &
     abifile_t(varname="qp_rhor", fform=62, ext="QP_DEN", class="density"), &
@@ -204,7 +204,7 @@ MODULE m_hdr
     abifile_t(varname="elfr", fform=64, ext="ELF", class="density"), &
     abifile_t(varname="elfr_up", fform=65, ext="ELF_UP", class="density"), &
     abifile_t(varname="elfr_down", fform=66, ext="ELF_DOWN", class="density"), &
-    abifile_t(varname="laprhor", fform=71, ext="LDEN", class="density"), &
+    abifile_t(varname="laprhor", fform=71, ext="AB_LDEN", class="density"), &
 
     ! Files with potentials
     ! Official
@@ -409,7 +409,7 @@ character(len=nctk_slen) function varname_from_fname(filename) result(varname)
    varname = "grhor_3"
  case ("KDEN")
    varname = "kinedr"
- case ("LDEN")
+ case ("AB_LDEN")
    varname = "laprhor"
  case ("POT")
    varname = "vtrial"
@@ -426,7 +426,7 @@ character(len=nctk_slen) function varname_from_fname(filename) result(varname)
  case ("VCLMB")
    varname = "vhartree_vloc"
  case default
-   found = .False.
+   found = .false.
  end select
 
  if (found) return
@@ -763,7 +763,7 @@ end subroutine hdr_malloc
 !! hdr_init
 !!
 !! FUNCTION
-!! This subroutine initializes the header structured datatype
+!! This subroutine initializes the AB_HEADER structured datatype
 !! and most of its content from dtset and psps, and put default values for evolving variables.
 !!
 !! INPUTS
@@ -778,7 +778,7 @@ end subroutine hdr_malloc
 !! my_atomtab(:)=Index of the atoms (in global numbering ) treated by current proc (Optional)
 !!
 !! OUTPUT
-!! hdr <type(hdr_type)>=the header, initialized, and for most part of
+!! hdr <type(hdr_type)>=the AB_HEADER, initialized, and for most part of
 !!   it, contain its definite values, except for evolving variables
 !!
 !! PARENTS
@@ -880,10 +880,10 @@ end subroutine hdr_init
 !! hdr_free
 !!
 !! FUNCTION
-!! This subroutine deallocates the components of the header structured datatype
+!! This subroutine deallocates the components of the AB_HEADER structured datatype
 !!
 !! INPUTS
-!! hdr <type(hdr_type)>=the header
+!! hdr <type(hdr_type)>=the AB_HEADER
 !!
 !! OUTPUT
 !!  (only deallocate)
@@ -1020,16 +1020,16 @@ end subroutine hdr_free
 !! hdr_copy
 !!
 !! FUNCTION
-!! Deep copy of the abinit header.
+!! Deep copy of the abinit AB_HEADER.
 !!
 !! INPUTS
-!!  Hdr_in=The header to be copied.
+!!  Hdr_in=The AB_HEADER to be copied.
 !!
 !! OUTPUT
 !!  Hdr_cp=The deep copy of Hdr_in.
 !!
 !! NOTES
-!!  The present version deals with versions of the header up to 56.
+!!  The present version deals with versions of the AB_HEADER up to 56.
 !!
 !! PARENTS
 !!      dfpt_looppert,m_io_kss,m_io_screening,m_wfk,optic
@@ -1222,10 +1222,10 @@ end function hdr_nelect_fromocc
 !! hdr_init_lowlvl
 !!
 !! FUNCTION
-!! This subroutine initializes the header structured datatype
+!! This subroutine initializes the AB_HEADER structured datatype
 !! and most of its content from psps and other input variables that
 !! are passed explicitly. It also use default values for evolving variables.
-!! Note that Dtset is not required thus rendering the initialization of the header
+!! Note that Dtset is not required thus rendering the initialization of the AB_HEADER
 !! much easier.
 !!
 !! INPUTS
@@ -1239,7 +1239,7 @@ end function hdr_nelect_fromocc
 !! For the meaning of the other varialble see the definition of dataset_type.
 !!
 !! OUTPUT
-!! hdr <type(hdr_type)>=the header, initialized, and for most part of
+!! hdr <type(hdr_type)>=the AB_HEADER, initialized, and for most part of
 !!   it, contain its definite values, except for evolving variables
 !!
 !! PARENTS
@@ -1446,9 +1446,9 @@ end subroutine hdr_init_lowlvl
 !! hdr_read_from_fname
 !!
 !! FUNCTION
-!!  Read the header from file fname.
+!!  Read the AB_HEADER from file fname.
 !!  Use Fortran IO or Netcdf depending on the extension of the file
-!!  Only rank0 process reads the header and then broadcast data to the other
+!!  Only rank0 process reads the AB_HEADER and then broadcast data to the other
 !!  processes inside comm.
 !!
 !! INPUTS
@@ -1456,7 +1456,7 @@ end subroutine hdr_init_lowlvl
 !!  comm = MPI communicator.
 !!
 !! OUTPUT
-!!  Hdr<hdr_type>=The abinit header.
+!!  Hdr<hdr_type>=The abinit AB_HEADER.
 !!  fform=Kind of the array in the file (0 signals an error)
 !!
 !! PARENTS
@@ -1501,7 +1501,7 @@ subroutine hdr_read_from_fname(Hdr,fname,fform,comm)
 
  if (my_rank == master) then
    if (.not.isncfile(my_fname)) then
-     ! Use Fortran IO to open the file and read the header.
+     ! Use Fortran IO to open the file and read the AB_HEADER.
      if (open_file(my_fname,msg,newunit=fh,form="unformatted", status="old") /= 0) then
        MSG_ERROR(msg)
      end if
@@ -1511,7 +1511,7 @@ subroutine hdr_read_from_fname(Hdr,fname,fform,comm)
      close(fh)
 
    else
-     ! Use Netcdf to open the file and read the header.
+     ! Use Netcdf to open the file and read the AB_HEADER.
 #ifdef HAVE_NETCDF
      NCF_CHECK(nctk_open_read(fh, my_fname, xmpi_comm_self))
      call hdr_ncread(Hdr,fh, fform)
@@ -1523,7 +1523,7 @@ subroutine hdr_read_from_fname(Hdr,fname,fform,comm)
    end if
  end if
 
- ! Broadcast fform and the header.
+ ! Broadcast fform and the AB_HEADER.
  if (xmpi_comm_size(comm) > 1) then
    call hdr_bcast(Hdr,master,my_rank,comm)
    call xmpi_bcast(fform,master,comm,mpierr)
@@ -1539,13 +1539,13 @@ end subroutine hdr_read_from_fname
 !! hdr_write_to_fname
 !!
 !! FUNCTION
-!!  Write the header and fform to file fname.
+!!  Write the AB_HEADER and fform to file fname.
 !!  Use Fortran IO or Netcdf depending on the extension of the file
 !!
 !! INPUTS
 !!  fname=String with the name of the file.
 !!  fform=Kind of the array in the file
-!!  Hdr<hdr_type>=The abinit header.
+!!  Hdr<hdr_type>=The abinit AB_HEADER.
 !!
 !! OUTPUT
 !!  Only writing.
@@ -1580,16 +1580,16 @@ subroutine hdr_write_to_fname(Hdr,fname,fform)
 ! *************************************************************************
 
  if (.not.isncfile(fname)) then
-   ! Use Fortran IO to write the header.
+   ! Use Fortran IO to write the AB_HEADER.
    if (open_file(fname,msg,newunit=fh,form="unformatted", status="unknown") /= 0) then
      MSG_ERROR(msg)
    end if
    call hdr_fort_write(Hdr,fh,fform,ierr)
-   ABI_CHECK(ierr==0, sjoin("Error while writing Abinit header to file:", fname))
+   ABI_CHECK(ierr==0, sjoin("Error while writing Abinit AB_HEADER to file:", fname))
    close(fh)
 
  else
-   ! Use Netcdf to open the file and write the header.
+   ! Use Netcdf to open the file and write the AB_HEADER.
 #ifdef HAVE_NETCDF
    if (file_exists(fname)) then
      NCF_CHECK(nctk_open_modify(fh,fname, xmpi_comm_self))
@@ -1614,7 +1614,7 @@ end subroutine hdr_write_to_fname
 !!  hdr_mio_skip
 !!
 !! FUNCTION
-!!  Skip the abinit header in MPI-IO mode. This routine uses local MPI-IO calls hence
+!!  Skip the abinit AB_HEADER in MPI-IO mode. This routine uses local MPI-IO calls hence
 !!  it can be safely called by master node only. Note however that in this case the
 !!  offset has to be communicated to the other nodes.
 !!
@@ -1625,13 +1625,13 @@ end subroutine hdr_write_to_fname
 !!  We don't need to read record to skip. We just need to compute the offset from the dimensions.
 !!  The algorithm is as follows:
 !!
-!!   1) master reads and broadcast the header.
-!!   2) The offset is computed from the header
+!!   1) master reads and broadcast the AB_HEADER.
+!!   2) The offset is computed from the AB_HEADER
 !!   3) Open the file with MPI and use the offset to point the data to be read.
 !!
 !! OUTPUT
 !!  fform=kind of the array in the file
-!!  offset=The offset of the Fortran record located immediately below the Abinit header.
+!!  offset=The offset of the Fortran record located immediately below the Abinit AB_HEADER.
 !!
 !! SOURCE
 
@@ -1735,10 +1735,10 @@ end subroutine hdr_mpio_skip
 !!  hdr_bsize_frecords
 !!
 !! FUNCTION
-!!  Compute the size of the Fortran records of the WFK file from the header and formeig.
+!!  Compute the size of the Fortran records of the WFK file from the AB_HEADER and formeig.
 !!
 !! INPUTS
-!!  Hdr<hdr_type>=The abinit header.
+!!  Hdr<hdr_type>=The abinit AB_HEADER.
 !!  formeig = 0 for GS WFK, 1 for response function WFK.
 !!
 !! OUTPUTS
@@ -1846,7 +1846,7 @@ end subroutine hdr_bsize_frecords
 !! FUNCTION
 !! This subroutine deals with the I/O of the hdr_type
 !! structured variables (read/write/echo).
-!! According to the value of rdwr, it reads the header
+!! According to the value of rdwr, it reads the AB_HEADER
 !! of a file, writes it, or echo the value of the structured
 !! variable to a file.
 !! Note that, when reading, different records of hdr
@@ -1858,10 +1858,10 @@ end subroutine hdr_bsize_frecords
 !!  hdr_io_wfftype to which a wffil datatype is given
 !!
 !! INPUTS
-!!  rdwr= if 1, read the hdr structured variable from the header of the file,
-!!        if 2, write the header to unformatted file
-!!        if 3, echo part of the header to formatted file (records 1 and 2)
-!!        if 4, echo the header to formatted file
+!!  rdwr= if 1, read the hdr structured variable from the AB_HEADER of the file,
+!!        if 2, write the AB_HEADER to unformatted file
+!!        if 3, echo part of the AB_HEADER to formatted file (records 1 and 2)
+!!        if 4, echo the AB_HEADER to formatted file
 !!        if 5, read the hdr without rewinding (unformatted)
 !!        if 6, write the hdr without rewinding (unformatted)
 !!  unitfi=unit number of the file (unformatted if rdwr=1, 2, 5 or 6 formatted if rdwr=3,4)
@@ -1874,7 +1874,7 @@ end subroutine hdr_bsize_frecords
 !!  fform=kind of the array in the file
 !!   if rdwr=1,5 : will be output ; if the reading fail, return fform=0
 !!   if rdwr=2,3,4,6 : should be input, will be written or echo to file
-!!  hdr <type(hdr_type)>=the header structured variable
+!!  hdr <type(hdr_type)>=the AB_HEADER structured variable
 !!   if rdwr=1,5 : will be output
 !!   if rdwr=2,3,4,6 : should be input, will be written or echo to file
 !!
@@ -1968,7 +1968,7 @@ end subroutine hdr_io_wfftype
 !!
 !! FUNCTION
 !! This subroutine deals with the I/O of the hdr_type structured variables (read/write/echo).
-!! According to the value of rdwr, it reads the header of a file, writes it, or echo the value of the structured
+!! According to the value of rdwr, it reads the AB_HEADER of a file, writes it, or echo the value of the structured
 !! variable to a file. Note that, when reading, different records of hdr are allocated here, according to the values of the
 !! read variables. Records of hdr should be deallocated correctly by a call to hdr_free when hdr is not used anymore.
 !! Two instances of the hdr_io routines are defined :
@@ -1976,10 +1976,10 @@ end subroutine hdr_io_wfftype
 !!   hdr_io_wfftype to which a wffil datatype is given
 !!
 !! INPUTS
-!!  rdwr= if 1, read the hdr structured variable from the header of the file,
-!!        if 2, write the header to unformatted file
-!!        if 3, echo part of the header to formatted file (records 1 and 2)
-!!        if 4, echo the header to formatted file
+!!  rdwr= if 1, read the hdr structured variable from the AB_HEADER of the file,
+!!        if 2, write the AB_HEADER to unformatted file
+!!        if 3, echo part of the AB_HEADER to formatted file (records 1 and 2)
+!!        if 4, echo the AB_HEADER to formatted file
 !!        if 5, read the hdr without rewinding (unformatted)
 !!        if 6, write the hdr without rewinding (unformatted)
 !!  unitfi=unit number of the file (unformatted if rdwr=1, 2, 5 or 6 formatted if rdwr=3,4)
@@ -1992,7 +1992,7 @@ end subroutine hdr_io_wfftype
 !!  fform=kind of the array in the file
 !!   if rdwr=1,5 : will be output ; if the reading fail, return fform=0
 !!   if rdwr=2,3,4,6 : should be input, will be written or echo to file
-!!  hdr <type(hdr_type)>=the header structured variable
+!!  hdr <type(hdr_type)>=the AB_HEADER structured variable
 !!   if rdwr=1,5 : will be output
 !!   if rdwr=2,3,4,6 : should be input, will be written or echo to file
 !!
@@ -2034,15 +2034,15 @@ subroutine hdr_io_int(fform,hdr,rdwr,unitfi)
 
  select case(rdwr)
  case (1, 5)
-   ! Reading the header of an unformatted file
+   ! Reading the AB_HEADER of an unformatted file
     call hdr_fort_read(Hdr,unitfi,fform,rewind=(rdwr==1))
 
  case (2, 6)
-   ! Writing the header of an unformatted file
+   ! Writing the AB_HEADER of an unformatted file
    call hdr_fort_write(Hdr,unitfi,fform,ierr,rewind=(rdwr==2))
 
  case (3, 4)
-   !  Writing the header of a formatted file
+   !  Writing the AB_HEADER of a formatted file
    call hdr_echo(Hdr,fform,rdwr,unit=unitfi)
  case default
    MSG_ERROR(sjoin("Wrong value for rdwr: ",itoa(rdwr)))
@@ -2059,12 +2059,12 @@ end subroutine hdr_io_int
 !! hdr_echo
 !!
 !! FUNCTION
-!! Echo the header
+!! Echo the AB_HEADER
 !!
 !! INPUTS
-!!  hdr <type(hdr_type)>=the header structured variable
-!!  rdwr= if 3, echo part of the header to formatted file (records 1 and 2)
-!!        if 4, echo the header to formatted file
+!!  hdr <type(hdr_type)>=the AB_HEADER structured variable
+!!  rdwr= if 3, echo part of the AB_HEADER to formatted file (records 1 and 2)
+!!        if 4, echo the AB_HEADER to formatted file
 !!  fform=kind of the array in the file
 !!  [unit]=unit number of the formatted file [DEFAULT: std_out]
 !!
@@ -2105,13 +2105,13 @@ subroutine hdr_echo(Hdr,fform,rdwr,unit)
  ount = std_out; if (present(unit)) ount = unit; if (ount == dev_null) return
 
  write(ount,'(a)')' ==============================================================================='
- if (rdwr==3) write(ount, '(a)' ) ' ECHO of part of the ABINIT file header '
- if (rdwr==4) write(ount, '(a)' ) ' ECHO of the ABINIT file header '
+ if (rdwr==3) write(ount, '(a)' ) ' ECHO of part of the ABINIT file AB_HEADER '
+ if (rdwr==4) write(ount, '(a)' ) ' ECHO of the ABINIT file AB_HEADER '
  write(ount, '(a)' ) ' '
  write(ount, '(a)' ) ' First record :'
  write(ount, '(a,a6,2i5)' )  '.codvsn,headform,fform = ',hdr%codvsn, hdr%headform, fform
  write(ount, '(a)' ) ' '
- write(ount, '(a)' ) ' Second record :'
+ write(ount, '(a)' ) ' second record :'
  write(ount, '(a,4i6)') ' bantot,intxc,ixc,natom  =',hdr%bantot, hdr%intxc, hdr%ixc, hdr%natom
  write(ount, '(a,4i6)') ' ngfft(1:3),nkpt         =',hdr%ngfft(1:3), hdr%nkpt
  write(ount, '(a,2i6)') ' nspden,nspinor          =',hdr%nspden, hdr%nspinor
@@ -2144,7 +2144,7 @@ subroutine hdr_echo(Hdr,fform,rdwr,unit)
 
  write(ount, '(a)' )
  if (rdwr==3)then
-   write(ount, '(a,i3,a)' ) ' The header contain ',hdr%npsp+2,' additional records.'
+   write(ount, '(a,i3,a)' ) ' The AB_HEADER contain ',hdr%npsp+2,' additional records.'
  else
    write(ount, '(a)' ) ' Third record :'
    write(ount, '(a,(12i4,8x))') ' istwfk=',hdr%istwfk
@@ -2214,8 +2214,8 @@ subroutine hdr_echo(Hdr,fform,rdwr,unit)
      call pawrhoij_io(hdr%pawrhoij,ount,hdr%nsppol,hdr%nspinor,hdr%nspden,hdr%lmn_size,hdr%typat,hdr%headform,"Echo")
    end if
 
-   if (rdwr==3)write(ount, '(a)' ) ' End the ECHO of part of the ABINIT file header '
-   if (rdwr==4)write(ount, '(a)' ) ' End the ECHO of the ABINIT file header '
+   if (rdwr==3)write(ount, '(a)' ) ' End the ECHO of part of the ABINIT file AB_HEADER '
+   if (rdwr==4)write(ount, '(a)' ) ' End the ECHO of the ABINIT file AB_HEADER '
    write(ount,'(a)')' ==============================================================================='
  end if ! rdwr is 3 or 4
 
@@ -2231,7 +2231,7 @@ end subroutine hdr_echo
 !! hdr_skip_int
 !!
 !! FUNCTION
-!! Skip wavefunction or density file header, after having rewound the file.
+!! Skip wavefunction or density file AB_HEADER, after having rewound the file.
 !! Two instances of the hdr_skip routines are defined:
 !!  hdr_skip_int to which only the unit number is given
 !!  hdr_skip_wfftype to which a wffil datatype is given
@@ -2291,7 +2291,7 @@ end subroutine hdr_skip_int
 !! hdr_skip_wfftype
 !!
 !! FUNCTION
-!! Skip wavefunction or density file header, after having rewound the file.
+!! Skip wavefunction or density file AB_HEADER, after having rewound the file.
 !! Two instances of the hdr_skip routines are defined :
 !!  hdr_skip_int to which only the unit number is given
 !!  hdr_skip_wfftype to which a wffil datatype is given
@@ -2365,7 +2365,7 @@ subroutine hdr_skip_wfftype(wff,ierr)
 
    read (unit, err=10, iomsg=errmsg) integers(1:13),npsp,integers(15:17),usepaw
 
-!  Skip rest of header records
+!  Skip rest of AB_HEADER records
    do mu=1,3+npsp
      read (unit, err=10, iomsg=errmsg)
    end do
@@ -2452,10 +2452,10 @@ end subroutine hdr_skip_wfftype
 !! hdr_update
 !!
 !! FUNCTION
-!! This subroutine update the header structured datatype.
+!! This subroutine update the AB_HEADER structured datatype.
 !! Most of its records had been initialized correctly, but some corresponds
 !! to evolving variables, or change with the context (like fform),
-!! This routine is to be called before writing the header
+!! This routine is to be called before writing the AB_HEADER
 !! to a file, in order to have up-to-date information.
 !!
 !! INPUTS
@@ -2472,7 +2472,7 @@ end subroutine hdr_skip_wfftype
 !! amu(ntypat)=masses in atomic mass units for each kind of atom in cell.
 !!
 !! OUTPUT
-!! hdr <type(hdr_type)>=the header, initialized, and for most part of
+!! hdr <type(hdr_type)>=the AB_HEADER, initialized, and for most part of
 !!   it, contain its definite values, except for evolving variables
 !!
 !! PARENTS
@@ -2540,10 +2540,10 @@ end subroutine hdr_update
 !! hdr_bcast
 !!
 !! FUNCTION
-!! This subroutine transmits the header structured datatype
+!! This subroutine transmits the AB_HEADER structured datatype
 !! initialized on one processor (or a group of processor),
 !! to the other processors. It also allocate the needed
-!! part of the header.
+!! part of the AB_HEADER.
 !!
 !! INPUTS
 !!  master = id of the master process
@@ -2554,7 +2554,7 @@ end subroutine hdr_update
 !!  (no output)
 !!
 !! SIDE EFFECTS
-!!  hdr <type(hdr_type)>=the header. For the master, it is already
+!!  hdr <type(hdr_type)>=the AB_HEADER. For the master, it is already
 !!   initialized entirely, while for the other procs, everything has
 !!   to be transmitted.
 !!
@@ -2874,16 +2874,16 @@ end subroutine hdr_bcast
 !! hdr_fort_read
 !!
 !! FUNCTION
-!! Reads the header from a logical unit associated to a unformatted file.
+!! Reads the AB_HEADER from a logical unit associated to a unformatted file.
 !! Note that, when reading, different records of hdr are allocated here, according to the values of the
 !! read variables. Records of hdr should be deallocated correctly by a call to hdr_free when hdr is not used anymore.
 !!
 !! INPUTS
 !!  unit=unit number of the unformatted file
-!!  [rewind]=True to rewind the file. Default: False
+!!  [rewind]=True to rewind the file. Default: false
 !!
 !! OUTPUT
-!!  Hdr<hdr_type>=The header of the file fully initialized (if fform /=0)
+!!  Hdr<hdr_type>=The AB_HEADER of the file fully initialized (if fform /=0)
 !!  fform=kind of the array in the file.  if the reading fail, return fform=0
 !!
 !! NOTES
@@ -2973,7 +2973,7 @@ subroutine hdr_fort_read(Hdr,unit,fform,rewind)
  call hdr_set_occ(hdr, occ3d)
  ABI_FREE(occ3d)
 
-! Reading the final record of the header  ---------------------------------
+! Reading the final record of the AB_HEADER  ---------------------------------
  read(unit, err=10, iomsg=errmsg) hdr%residm, hdr%xred(:,:), hdr%etot, hdr%fermie, hdr%amu(:)
 
  read(unit, err=10, iomsg=errmsg)&
@@ -3222,13 +3222,13 @@ end subroutine hdr_ncread
 !! hdr_fort_write
 !!
 !! FUNCTION
-!!  Writes the header and fform to unformatted file
+!!  Writes the AB_HEADER and fform to unformatted file
 !!
 !! INPUTS
-!!  Hdr<hdr_type>=The header of the file.
+!!  Hdr<hdr_type>=The AB_HEADER of the file.
 !!  fform=kind of the array in the file
 !!  unit=unit number of the unformatted file
-!!  [rewind]=True to rewind the file. Default: False
+!!  [rewind]=True to rewind the file. Default: false
 !!
 !! OUTPUT
 !!  ierr=Exit status
@@ -3335,7 +3335,7 @@ end subroutine hdr_fort_write
 !!  fform=kind of the array in the file
 !!  ncid=the unit of the open NetCDF file.
 !!  [nc_define]=Optional flag. If True, the basic dimensions required by the ETSF specification
-!!    are written. Default: False.
+!!    are written. Default: false.
 !!
 !! OUTPUT
 !!  Only writing
@@ -3380,7 +3380,7 @@ integer function hdr_ncwrite(hdr, ncid, fform, nc_define) result(ncerr)
  call check_fform(fform)
 
  !@hdr_type
- my_define = .False.; if (present(nc_define)) my_define = nc_define
+ my_define = .false.; if (present(nc_define)) my_define = nc_define
  ncerr = nf90_noerr
 
  k_dependent = "no"; if (any(hdr%nband(1) /= hdr%nband)) k_dependent = "yes"
@@ -3404,7 +3404,7 @@ integer function hdr_ncwrite(hdr, ncid, fform, nc_define) result(ncerr)
      !nctkdim_t("nshiftk", ebands%nshiftk)], &
    NCF_CHECK(ncerr)
 
-   ! Define part of geometry section contained in the header.
+   ! Define part of geometry section contained in the AB_HEADER.
    ncerr = nctk_def_arrays(ncid, [ &
     ! Atomic structure and symmetry operations
     nctkarr_t("primitive_vectors", "dp", "number_of_cartesian_directions, number_of_vectors"), &
@@ -3784,13 +3784,13 @@ end subroutine hdr_get_occ3d
 !! hdr_check
 !!
 !! FUNCTION
-!! This subroutine compare the header structured variable (hdr)
+!! This subroutine compare the AB_HEADER structured variable (hdr)
 !! from input data (mostly dtset and psps) with the one (hdr0) of
 !! an input data file (e.g. wf, density, potential).
 !! Various values are checked for agreement or near agreement in the
 !! case of floating point numbers.  The program will exit or produce
 !! warning messages when unexpected values are found.
-!! A record of the comparison of the headers is written to stdout.
+!! A record of the comparison of the AB_HEADERs is written to stdout.
 !!
 !! Decisions have been taken about whether a restart is allowed.
 !! In the self-consistent case, a restart will always be allowed, but
@@ -3803,8 +3803,8 @@ end subroutine hdr_get_occ3d
 !!  fform=integer specification of data type (expected)
 !!  fform0=integer specification of data type (from disk file)
 !!  mode_paral: COLL or PERS, for all wrtout calls
-!!  hdr <type(hdr_type)>=the header structured variable from dtset and psps
-!!  hdr0<type(hdr_type)>=the header structured variable from the disk file
+!!  hdr <type(hdr_type)>=the AB_HEADER structured variable from dtset and psps
+!!  hdr0<type(hdr_type)>=the AB_HEADER structured variable from the disk file
 !!
 !! OUTPUT
 !!  restart=1 if direct restart, =2 if translation is needed, =0 if no
@@ -3911,10 +3911,10 @@ subroutine hdr_check(fform,fform0,hdr,hdr0,mode_paral,restart,restartpaw)
  tlmn = 0; tng = 0; tpaw = 0; tprim = 0; tpsch = 0; tpseu = 0;
  tspinor=0; tsym = 0; twfk = 0 ; txred = 0 ; twvl = 0 ; tgrid = 0
 
-!Write out a header
+!Write out a AB_HEADER
  write(msg,'(a1,80a,2a1,10x,a,3a1,8x,a,25x,a,a1,8x,19a,25x,12a,a1)' )&
 & ch10,('=',ii=1,80),ch10,ch10,&
-& '- hdr_check: checking restart file header for consistency -',&
+& '- hdr_check: checking restart file AB_HEADER for consistency -',&
 & (ch10,ii=1,3),'current calculation','restart file',ch10,('-',ii=1,19),('-',ii=1,12),ch10
  call wrtout(std_out,msg,mode_paral)
 
@@ -3938,7 +3938,7 @@ subroutine hdr_check(fform,fform0,hdr,hdr0,mode_paral,restart,restartpaw)
 & '. ABINIT  code version ',hdr%codvsn,'|','  ABINIT  code version ',hdr0%codvsn
  call wrtout(std_out,msg,mode_paral)
 
-!Check fform from input, not from header file
+!Check fform from input, not from AB_HEADER file
  if ( fform /= fform0) then
    write(msg,'(a,i0,a,i0,a)')'input fform=',fform,' differs from disk file fform=',fform0,'.'
    MSG_ERROR(msg)
@@ -3955,7 +3955,7 @@ subroutine hdr_check(fform,fform0,hdr,hdr0,mode_paral,restart,restartpaw)
  call wrtout(std_out,msg,mode_paral)
 
  if (hdr%usewvl == 0) then
-!  Note that the header actually contains ecut_eff=ecut*dilatmx**2
+!  Note that the AB_HEADER actually contains ecut_eff=ecut*dilatmx**2
    write(msg,'(a,i3,a,f12.7,8x,a,a,i3,a,f12.7)')&
 &   '  ntypat',hdr %ntypat,' ecut_eff',hdr %ecut_eff,'|',&
 &   '  ntypat',hdr0%ntypat,' ecut_eff',hdr0%ecut_eff
@@ -4443,11 +4443,11 @@ subroutine hdr_check(fform,fform0,hdr,hdr0,mode_paral,restart,restartpaw)
  end if
 
 !Should perform some checks related to pertcase and qptn,
-!that have been introduced in the header in v4.1
+!that have been introduced in the AB_HEADER in v4.1
 !Warning : a GS file might be read, while the hdr corresponds
 !to a RF file (to initialize k+q), and vice-versa (in nonlinear).
 
-!Now check agreement of psp headers too
+!Now check agreement of psp AB_HEADERs too
  if (hdr%npsp==hdr0%npsp) then
    npsp=hdr%npsp
    itest=0
@@ -4495,7 +4495,7 @@ subroutine hdr_check(fform,fform0,hdr,hdr0,mode_paral,restart,restartpaw)
        itest=1; tpsch=1
      end if
 
-!    Second, test
+!    second, test
 !    NOTE, XG 000719 : should do something about pspso
 !    NOTE, XG 020716 : znucl and zion are not written
      if (abs(hdr%znuclpsp(ipsp)-hdr0%znuclpsp(ipsp))>tol6) itest=1
@@ -4508,7 +4508,7 @@ subroutine hdr_check(fform,fform0,hdr,hdr0,mode_paral,restart,restartpaw)
    end do
 
    if (itest==1) then
-     msg = 'input psp header does not agree perfectly with disk file psp header.'
+     msg = 'input psp AB_HEADER does not agree perfectly with disk file psp AB_HEADER.'
      MSG_WARNING(msg)
      tpseu=1
    end if
@@ -4728,12 +4728,12 @@ end subroutine hdr_check
 !! hdr_vs_dtset
 !!
 !! FUNCTION
-!!  Check the compatibility of the Abinit header with respect to the
+!!  Check the compatibility of the Abinit AB_HEADER with respect to the
 !!  input variables defined in the input file.
 !!
 !! INPUTS
 !!  Dtset<type(dataset_type)>=all input variables for this dataset
-!!  Hdr <type(hdr_type)>=the header structured variable
+!!  Hdr <type(hdr_type)>=the AB_HEADER structured variable
 !!
 !! OUTPUT
 !!  Only check
@@ -4788,7 +4788,7 @@ subroutine hdr_vs_dtset(Hdr,Dtset)
 !=== The number of fatal errors must be zero ===
  if (ierr/=0) then
    write(msg,'(3a)')&
-&   'Cannot continue, basic dimensions reported in the header do not agree with input file. ',ch10,&
+&   'Cannot continue, basic dimensions reported in the AB_HEADER do not agree with input file. ',ch10,&
 &   'Check consistency between the content of the external file and the input file. '
    MSG_ERROR(msg)
  end if
@@ -4803,7 +4803,7 @@ subroutine hdr_vs_dtset(Hdr,Dtset)
  if ( (ANY(ABS(Hdr%rprimd-Dtset%rprimd_orig(1:3,1:3,1))>tol6)) ) then
    write(msg,'(6a)')ch10,&
 &   ' hdr_vs_dtset : ERROR - ',ch10,&
-&   ' real lattice vectors read from Header ',ch10,&
+&   ' real lattice vectors read from AB_HEADER ',ch10,&
 &   ' differ from the values specified in the input file'
    call wrtout(std_out,msg,'COLL')
    write(msg,'(3a,3(3es16.6),3a,3(3es16.6),3a)')ch10,&
@@ -4819,7 +4819,7 @@ subroutine hdr_vs_dtset(Hdr,Dtset)
  if (.not.tsymrel) then
    write(msg,'(6a)')ch10,&
 &   ' hdr_vs_dtset : ERROR - ',ch10,&
-&   ' real space symmetries read from Header ',ch10,&
+&   ' real space symmetries read from AB_HEADER ',ch10,&
 &   ' differ from the values inferred from the input file'
    call wrtout(std_out,msg,'COLL')
    tsymrel=.FALSE.
@@ -4829,7 +4829,7 @@ subroutine hdr_vs_dtset(Hdr,Dtset)
  if (.not.ttnons) then
    write(msg,'(6a)')ch10,&
 &   ' hdr_vs_dtset : ERROR - ',ch10,&
-&   ' fractional translations read from Header ',ch10,&
+&   ' fractional translations read from AB_HEADER ',ch10,&
 &   ' differ from the values inferred from the input file'
    call wrtout(std_out,msg,'COLL')
    ttnons=.FALSE.
@@ -4839,14 +4839,14 @@ subroutine hdr_vs_dtset(Hdr,Dtset)
  if (.not.tsymafm) then
    write(msg,'(6a)')ch10,&
 &   ' hdr_vs_dtset : ERROR - ',ch10,&
-&   ' AFM symmetries read from Header ',ch10,&
+&   ' AFM symmetries read from AB_HEADER ',ch10,&
 &   ' differ from the values inferred from the input file'
    call wrtout(std_out,msg,'COLL')
    tsymafm=.FALSE.
  end if
 
  if (.not.(tsymrel.and.ttnons.and.tsymafm)) then
-   write(msg,'(a)')' Header '
+   write(msg,'(a)')' AB_HEADER '
    call wrtout(std_out,msg,'COLL')
    call print_symmetries(Hdr%nsym,Hdr%symrel,Hdr%tnons,Hdr%symafm)
    write(msg,'(a)')' Dtset  '
@@ -4898,7 +4898,7 @@ subroutine hdr_vs_dtset(Hdr,Dtset)
  if ( (ANY(ABS(Hdr%kptns(:,:)-Dtset%kpt(:,1:Dtset%nkpt))>tol6)) ) then
    write(msg,'(9a)')ch10,&
 &   ' hdr_vs_dtset : ERROR - ',ch10,&
-&   '  k-points read from Header ',ch10,&
+&   '  k-points read from AB_HEADER ',ch10,&
 &   '  differ from the values specified in the input file',ch10,&
 &   '  k-points from Hdr file                        | k-points from input file ',ch10
    call wrtout(std_out,msg,'COLL')
@@ -4912,7 +4912,7 @@ subroutine hdr_vs_dtset(Hdr,Dtset)
  if (ANY(ABS(Hdr%wtk(:)-Dtset%wtk(1:Dtset%nkpt))>tol6)) then
    write(msg,'(9a)')ch10,&
 &   ' hdr_vs_dtset : ERROR - ',ch10,&
-&   '  k-point weights read from Header ',ch10,&
+&   '  k-point weights read from AB_HEADER ',ch10,&
 &   '  differ from the values specified in the input file',ch10,&
 &   '  Hdr file  |  File ',ch10
    call wrtout(std_out,msg,'COLL')
@@ -4927,7 +4927,7 @@ subroutine hdr_vs_dtset(Hdr,Dtset)
  if ( (ANY(Hdr%istwfk(:)/=Dtset%istwfk(1:Dtset%nkpt))) ) then
    write(msg,'(9a)')ch10,&
 &   ' hdr_vs_dtset : ERROR - ',ch10,&
-&   '  istwfk read from Header ',ch10,&
+&   '  istwfk read from AB_HEADER ',ch10,&
 &   '  differ from the values specified in the input file',ch10,&
 &   '  Hdr | input ',ch10
    call wrtout(std_out,msg,'COLL')

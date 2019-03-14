@@ -515,7 +515,7 @@ hermitian_static_eps_m1_minus_eps_model_m1(:,:) = eps_m1_minus_eps_model_m1(:,:,
 ! WORK QUERRY
 lwork = -1
 ABI_ALLOCATE(work, (1))
-call ZHEEV( 'V',        & ! Compute eigenvectors and eigenvalues
+call AB_ZHEEV( 'V',        & ! Compute eigenvectors and eigenvalues
 'U',        & ! use Upper triangular part 
 lmax,        & ! order of matrix
 hermitian_static_eps_m1_minus_eps_model_m1,  & ! initial matrix on input; eigenvectors on output
@@ -530,7 +530,7 @@ if ( info /= 0) then
   open(debug_unit,file=trim(debug_filename),status='unknown')
 
   write(debug_unit,'(A)')      '*********************************************************************************************'
-  write(debug_unit,'(A,I4,A)') '*      ERROR: info = ',info,' in ZHEEV (1), gwls_ComputeCorrelationEnergy'
+  write(debug_unit,'(A,I4,A)') '*      ERROR: info = ',info,' in AB_ZHEEV (1), gwls_ComputeCorrelationEnergy'
   write(debug_unit,'(A)')      '*********************************************************************************************'
 
   close(debug_unit)
@@ -541,7 +541,7 @@ end if
 lwork = nint(dble(work(1)))
 ABI_DEALLOCATE(work)
 ABI_ALLOCATE(work, (lwork))
-call ZHEEV( 'V',        & ! Compute eigenvectors and eigenvalues
+call AB_ZHEEV( 'V',        & ! Compute eigenvectors and eigenvalues
 'U',        & ! use Upper triangular part 
 lmax,        & ! order of matrix
 hermitian_static_eps_m1_minus_eps_model_m1,  & ! initial matrix on input; eigenvectors on output
@@ -556,7 +556,7 @@ if ( info /= 0) then
   open(debug_unit,file=trim(debug_filename),status='unknown')
 
   write(debug_unit,'(A)')      '*********************************************************************************************'
-  write(debug_unit,'(A,I4,A)') '*      ERROR: info = ',info,' in ZHEEV (2), gwls_ComputeCorrelationEnergy'
+  write(debug_unit,'(A,I4,A)') '*      ERROR: info = ',info,' in AB_ZHEEV (2), gwls_ComputeCorrelationEnergy'
   write(debug_unit,'(A)')      '*********************************************************************************************'
 
   close(debug_unit)
@@ -582,7 +582,7 @@ ABI_DEALLOCATE(rwork)
 !--------------------------------------------------------------------------------
 hermitian_static_eps_m1_minus_eps_model_m1 = conjg(hermitian_static_eps_m1_minus_eps_model_m1)
 
-call ZGEMM('N','N',npw_k,lmax,lmax,cmplx_1,Lbasis_lanczos,npw_k,  &
+call AB_ZGEMM('N','N',npw_k,lmax,lmax,cmplx_1,Lbasis_lanczos,npw_k,  &
 hermitian_static_eps_m1_minus_eps_model_m1, &
 lmax,cmplx_0,Lbasis_diagonalize_dielectric_terms,npw_k)
 
@@ -1054,7 +1054,7 @@ kmax_numeric  = dtset%gwls_kmax_numeric
 n_ext_freq    = dtset%gw_customnfreqsp
 
 
-use_model     = .False.
+use_model     = .false.
 
 
 call cpu_time(setup_time1)

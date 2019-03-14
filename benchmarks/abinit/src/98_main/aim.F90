@@ -328,7 +328,7 @@ program aim
      end if
    end if
 
-   if (aim_dtset%plden==1) then
+   if (aim_dtset%pAB_LDEn==1) then
      hname(fin+2:fin+4)='pld'
      if (open_file(hname(1:fin+5),msg,unit=untp,status='unknown',form='formatted') /= 0) then
        MSG_ERROR(msg)
@@ -383,7 +383,7 @@ program aim
    if (aim_dtset%denout/=0) close(untd)
    if (aim_dtset%lapout/=0) close(untl)
    if (aim_dtset%gpsurf/=0) close(untg)
-   if (aim_dtset%plden/=0) close(untp)
+   if (aim_dtset%pAB_LDEn/=0) close(untp)
  end if
 
  call aim_shutdown()

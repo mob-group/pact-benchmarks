@@ -786,7 +786,7 @@ subroutine fftpad_one_nothreadsafe(fftcache,mgfft,nd1,nd2,nd3,n1,n2,n3,arr,ftarr
 !  -- only need to zero specified ranges of z
    arr(:,:,:,n3p+1:g3min+n3)=0.0d0
 
-!  Second y transform: z=g3min+1..0 (wrapped around)
+!  second y transform: z=g3min+1..0 (wrapped around)
    n3p=-g3min
    if (n3p>0) then
      n3i=1+g3min+n3 ; n1i=1
@@ -830,7 +830,7 @@ subroutine fftpad_one_nothreadsafe(fftcache,mgfft,nd1,nd2,nd3,n1,n2,n3,arr,ftarr
    call sg_ffty(fftcache,mfac,mg,nd1,nd2,nd3,n1i,n1,n3i,n3p,ftarr,arr,&
 &   trig,aft,now,bef,ris,ind,ic)
 
-!  Second y transform: z=g3min+1..0 (wrapped around)
+!  second y transform: z=g3min+1..0 (wrapped around)
    n3p=-g3min
    if (n3p>0) then
      n1i=1 ; n3i=1+g3min+n3
@@ -1052,7 +1052,7 @@ subroutine sg_fftpx(fftcache,mfac,mg,mgfft,nd1,nd2,nd3,n2,n3,&
              end do
            end do
 
-!          Second step of factor 4
+!          second step of factor 4
            do ia=1,aft(i)-1
              indx=ind(ia*4*bef(i)+1)-1
              indx=indx*bef(i)
@@ -1119,7 +1119,7 @@ subroutine sg_fftpx(fftcache,mfac,mg,mgfft,nd1,nd2,nd3,n2,n3,&
              end do
            end do
 
-!          Second step of radix 2
+!          second step of radix 2
            do ia=1,aft(i)-1
              indx=ind(ia*2*bef(i)+1)-1
              indx=indx*bef(i)
@@ -1171,7 +1171,7 @@ subroutine sg_fftpx(fftcache,mfac,mg,mgfft,nd1,nd2,nd3,n2,n3,&
              end do
            end do
 
-!          Second step of radix 3
+!          second step of radix 3
            do ia=1,aft(i)-1
              indx=ind(ia*3*bef(i)+1)-1
              indx=indx*bef(i)
@@ -1258,7 +1258,7 @@ subroutine sg_fftpx(fftcache,mfac,mg,mgfft,nd1,nd2,nd3,n2,n3,&
              end do
            end do
 
-!          Second step of radix 5
+!          second step of radix 5
            do ia=1,aft(i)-1
              indx=ind(ia*5*bef(i)+1)-1
              indx=indx*bef(i)
@@ -1365,7 +1365,7 @@ subroutine sg_fftpx(fftcache,mfac,mg,mgfft,nd1,nd2,nd3,n2,n3,&
            zbr(2,ind(ia*4+4),j,g3) = r - s*ris
          end do
 
-!        Second step of radix 4
+!        second step of radix 4
          do ia=1,aft(ic)-1
            indx=ind(ia*4+1)-1
            cr2=trig(1,indx)
@@ -1422,7 +1422,7 @@ subroutine sg_fftpx(fftcache,mfac,mg,mgfft,nd1,nd2,nd3,n2,n3,&
            zbr(2,ind(ia*2+2),j,g3) = -s2 + s1
          end do
 
-!        Second step of radix 2
+!        second step of radix 2
          do ia=1,aft(ic)-1
            indx=ind(ia*2+1)-1
            cr2=trig(1,indx)
@@ -1546,7 +1546,7 @@ subroutine sg_fftpx(fftcache,mfac,mg,mgfft,nd1,nd2,nd3,n2,n3,&
            zbr(2,ind(ia*5+4),j,g3) = r - sin2*s
          end do
 
-!        Second step of radix 5
+!        second step of radix 5
          do ia=1,aft(ic)-1
            indx=ind(ia*5+1)-1
            cr2=trig(1,indx)
@@ -1778,7 +1778,7 @@ subroutine sg_fftx(fftcache,mfac,mg,nd1,nd2,nd3,n2,n3,z,zbr,&
            end do
          end do
 
-!        Second step of factor 4
+!        second step of factor 4
          do ia=1,aft(i)-1
            indx=ind(ia*4*bef(i)+1)-1
            indx=indx*bef(i)
@@ -1845,7 +1845,7 @@ subroutine sg_fftx(fftcache,mfac,mg,nd1,nd2,nd3,n2,n3,z,zbr,&
            end do
          end do
 
-!        Second step of factor 2
+!        second step of factor 2
          do ia=1,aft(i)-1
            indx=ind(ia*2*bef(i)+1)-1
            indx=indx*bef(i)
@@ -1897,7 +1897,7 @@ subroutine sg_fftx(fftcache,mfac,mg,nd1,nd2,nd3,n2,n3,z,zbr,&
            end do
          end do
 
-!        Second step of factor 3
+!        second step of factor 3
          do ia=1,aft(i)-1
            indx=ind(ia*3*bef(i)+1)-1
            indx=indx*bef(i)
@@ -1984,7 +1984,7 @@ subroutine sg_fftx(fftcache,mfac,mg,nd1,nd2,nd3,n2,n3,z,zbr,&
            end do
          end do
 
-!        Second step of factor 5
+!        second step of factor 5
          do ia=1,aft(i)-1
            indx=ind(ia*5*bef(i)+1)-1
            indx=indx*bef(i)
@@ -2093,7 +2093,7 @@ subroutine sg_fftx(fftcache,mfac,mg,nd1,nd2,nd3,n2,n3,z,zbr,&
          zbr(2,ind(ia*4+4),j,i3) = r - s*ris
        end do
 
-!      Second step of factor 4
+!      second step of factor 4
        do ia=1,aft(ic)-1
          indx=ind(ia*4+1)-1
          cr2=trig(1,indx)
@@ -2150,7 +2150,7 @@ subroutine sg_fftx(fftcache,mfac,mg,nd1,nd2,nd3,n2,n3,z,zbr,&
          zbr(2,ind(ia*2+2),j,i3) = -s2 + s1
        end do
 
-!      Second step of factor 2
+!      second step of factor 2
        do ia=1,aft(ic)-1
          indx=ind(ia*2+1)-1
          cr2=trig(1,indx)
@@ -2196,7 +2196,7 @@ subroutine sg_fftx(fftcache,mfac,mg,nd1,nd2,nd3,n2,n3,z,zbr,&
          zbr(2,ind(ia*3+3),j,i3) = s1 - r2*bb
        end do
 
-!      Second step of factor 3
+!      second step of factor 3
        do ia=1,aft(ic)-1
          indx=ind(ia*3+1)-1
          cr2=trig(1,indx)
@@ -2275,7 +2275,7 @@ subroutine sg_fftx(fftcache,mfac,mg,nd1,nd2,nd3,n2,n3,z,zbr,&
          zbr(2,ind(ia*5+4),j,i3) = r - sin2*s
        end do
 
-!      Second step of factor 5
+!      second step of factor 5
        do ia=1,aft(ic)-1
          indx=ind(ia*5+1)-1
          cr2=trig(1,indx)
@@ -2474,7 +2474,7 @@ subroutine sg_ffty(fftcache,mfac,mg,nd1,nd2,nd3,n1i,n1,n3i,n3,&
          end do ! j1
        end do ! ib
 
-!      Second step of radix 4
+!      second step of radix 4
        do ia=1,aft(i)-1
          indx=ind(ia*4*bef(i)+1)-1
          indx=indx*bef(i)
@@ -2542,7 +2542,7 @@ subroutine sg_ffty(fftcache,mfac,mg,nd1,nd2,nd3,n1i,n1,n3i,n3,&
          end do
        end do
 
-!      Second step of radix 2
+!      second step of radix 2
        do ia=1,aft(i)-1
          indx=ind(ia*2*bef(i)+1)-1
          indx=indx*bef(i)
@@ -2594,7 +2594,7 @@ subroutine sg_ffty(fftcache,mfac,mg,nd1,nd2,nd3,n1i,n1,n3i,n3,&
          end do
        end do
 
-!      Second step of radix 3
+!      second step of radix 3
        do ia=1,aft(i)-1
          indx=ind(ia*3*bef(i)+1)-1
          indx=indx*bef(i)
@@ -2681,7 +2681,7 @@ subroutine sg_ffty(fftcache,mfac,mg,nd1,nd2,nd3,n1i,n1,n3i,n3,&
          end do
        end do
 
-!      Second step of radix 5
+!      second step of radix 5
        do ia=1,aft(i)-1
          indx=ind(ia*5*bef(i)+1)-1
          indx=indx*bef(i)
@@ -2787,7 +2787,7 @@ subroutine sg_ffty(fftcache,mfac,mg,nd1,nd2,nd3,n1i,n1,n3i,n3,&
        zbr(2,j1,ind(ia*4+4),j2) = r - s*ris
      end do
 
-!    Second step of radix 4
+!    second step of radix 4
      do ia=1,aft(ic)-1
        indx=ind(ia*4+1)-1
        cr2=trig(1,indx)
@@ -2843,7 +2843,7 @@ subroutine sg_ffty(fftcache,mfac,mg,nd1,nd2,nd3,n1i,n1,n3i,n3,&
        zbr(2,j1,ind(ia*2+2),j2) = -s2 + s1
      end do
 
-!    Second step of radix 2
+!    second step of radix 2
      do ia=1,aft(ic)-1
        indx=ind(ia*2+1)-1
        cr2=trig(1,indx)
@@ -2888,7 +2888,7 @@ subroutine sg_ffty(fftcache,mfac,mg,nd1,nd2,nd3,n1i,n1,n3i,n3,&
        zbr(2,j1,ind(ia*3+3),j2) = s1 - r2*bb
      end do
 
-!    Second step of radix 3
+!    second step of radix 3
      do ia=1,aft(ic)-1
        indx=ind(ia*3+1)-1
        cr2=trig(1,indx)
@@ -2966,7 +2966,7 @@ subroutine sg_ffty(fftcache,mfac,mg,nd1,nd2,nd3,n1i,n1,n3i,n3,&
        zbr(2,j1,ind(ia*5+4),j2) = r - sin2*s
      end do
 
-!    Second step of radix 5
+!    second step of radix 5
      do ia=1,aft(ic)-1
        indx=ind(ia*5+1)-1
        cr2=trig(1,indx)
@@ -3155,7 +3155,7 @@ subroutine sg_fftz(mfac,mg,nd1,nd2,nd3,n1,n2i,n2,z,zbr,trig,aft,now,bef,ris,ind,
 !$OMP END PARALLEL DO
      end do ! ib
 
-!    Second step of radix 4
+!    second step of radix 4
      do ia=1,aft(i)-1
        indx=ind(ia*4*b_i+1)-1
        indx=indx*b_i
@@ -3233,7 +3233,7 @@ subroutine sg_fftz(mfac,mg,nd1,nd2,nd3,n1,n2i,n2,z,zbr,trig,aft,now,bef,ris,ind,
 !$OMP END PARALLEL DO
      end do ! ib
 
-!    Second step of radix 2
+!    second step of radix 2
      do ia=1,aft(i)-1
        indx=ind(ia*2*b_i+1)-1
        indx=indx*b_i
@@ -3296,7 +3296,7 @@ subroutine sg_fftz(mfac,mg,nd1,nd2,nd3,n1,n2i,n2,z,zbr,trig,aft,now,bef,ris,ind,
 !$OMP END PARALLEL DO
      end do ! ib
 
-!    Second step of radix 3
+!    second step of radix 3
      do ia=1,aft(i)-1
        indx=ind(ia*3*b_i+1)-1
        indx=indx*b_i
@@ -3393,7 +3393,7 @@ subroutine sg_fftz(mfac,mg,nd1,nd2,nd3,n1,n2i,n2,z,zbr,trig,aft,now,bef,ris,ind,
 !$OMP END PARALLEL DO
      end do ! ib
 
-!    Second step of radix 5
+!    second step of radix 5
      do ia=1,aft(i)-1
        indx=ind(ia*5*b_i+1)-1
        indx=indx*b_i
@@ -3510,7 +3510,7 @@ subroutine sg_fftz(mfac,mg,nd1,nd2,nd3,n1,n2i,n2,z,zbr,trig,aft,now,bef,ris,ind,
    end do ! i2
 !$OMP END PARALLEL DO
 
-!  Second step of radix 4
+!  second step of radix 4
    do ia=1,aft(ic)-1
      indx=ind(ia*4+1)-1
      cr2=trig(1,indx)
@@ -3577,7 +3577,7 @@ subroutine sg_fftz(mfac,mg,nd1,nd2,nd3,n1,n2i,n2,z,zbr,trig,aft,now,bef,ris,ind,
    end do ! i2
 !$OMP END PARALLEL DO
 
-!  Second step of radix 2
+!  second step of radix 2
    do ia=1,aft(ic)-1
      indx=ind(ia*2+1)-1
      cr2=trig(1,indx)
@@ -3632,7 +3632,7 @@ subroutine sg_fftz(mfac,mg,nd1,nd2,nd3,n1,n2i,n2,z,zbr,trig,aft,now,bef,ris,ind,
    end do ! i2
 !$OMP END PARALLEL DO
 
-!  Second step of radix 3
+!  second step of radix 3
    do ia=1,aft(ic)-1
      indx=ind(ia*3+1)-1
      cr2=trig(1,indx)
@@ -3720,7 +3720,7 @@ subroutine sg_fftz(mfac,mg,nd1,nd2,nd3,n1,n2i,n2,z,zbr,trig,aft,now,bef,ris,ind,
    end do ! i2
 !$OMP END PARALLEL DO
 
-!  Second step of radix 5
+!  second step of radix 5
    do ia=1,aft(ic)-1
      indx=ind(ia*5+1)-1
      cr2=trig(1,indx)

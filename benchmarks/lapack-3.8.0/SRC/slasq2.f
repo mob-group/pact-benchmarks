@@ -147,8 +147,8 @@
       EXTERNAL           AB_SLASQ3, AB_SLASRT, AB_XERBLA
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL, SQRT
@@ -159,8 +159,8 @@
 *     (in case AB_SLASQ2 is not called by AB_SLASQ1)
 *
       INFO = 0
-      EPS = SLAMCH( 'Precision' )
-      SAFMIN = SLAMCH( 'Safe minimum' )
+      EPS = AB_SLAMCH( 'Precision' )
+      SAFMIN = AB_SLAMCH( 'Safe minimum' )
       TOL = EPS*HUNDRD
       TOL2 = TOL**2
 *

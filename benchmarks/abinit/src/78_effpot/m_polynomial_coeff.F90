@@ -829,8 +829,8 @@ end subroutine polynomial_coeff_MPIrecv
 !! filename = optional,the name of output file
 !!                     default is coefficients.xml
 !! unit = optional,unit of the output file
-!! newfile = optional, TRUE the coefficients are print in new XML (print the headers)
-!!                     FALSE (requieres unit) will not print the headers
+!! newfile = optional, TRUE the coefficients are print in new XML (print the AB_HEADERs)
+!!                     FALSE (requieres unit) will not print the AB_HEADERs
 !! replace = optional, TRUE replace filename if filename exists
 !!                     FALSE, default not replace if filename exists
 !!
@@ -925,7 +925,7 @@ subroutine polynomial_coeff_writeXML(coeffs,ncoeff,filename,unit,newfile,replace
      open(unit=unit_xml,file=namefile,position="append")
    end if
 
-!  Write header
+!  Write AB_HEADER
    if (need_header)then
      write(message,'(a,a,a)')ch10,&
 &         ' Generation of the xml file for the fitted polynomial in ',namefile
@@ -935,7 +935,7 @@ subroutine polynomial_coeff_writeXML(coeffs,ncoeff,filename,unit,newfile,replace
      WRITE(unit_xml,'("<?xml version=""1.0"" ?>")')
    end if
    WRITE(unit_xml,'("<Heff_definition>")')
-   !   Close header
+   !   Close AB_HEADER
    do icoeff = 1, ncoeff
       WRITE(unit_xml,'("  <coefficient number=""",I0,""" value=""",E19.10,""" text=""",a,""">")') &
          icoeff,coeffs(icoeff)%coefficient,trim(coeffs(icoeff)%name)

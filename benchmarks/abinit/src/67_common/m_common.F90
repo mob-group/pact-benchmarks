@@ -1052,13 +1052,13 @@ end subroutine setup1
 !! adapted for nonself-consistent calculations, within the loops.
 !! If option=3, print out eigenvalues, in a format
 !! adapted for nonself-consistent calculations, at the end of the job.
-!! If option=4, print out derivatives of eigenvalues (same format as option==3, except header that is printed)
+!! If option=4, print out derivatives of eigenvalues (same format as option==3, except AB_HEADER that is printed)
 !! If option=5, print out Fan contribution to zero-point motion correction to eigenvalues (averaged)
-!!                  (same format as option==3, except header that is printed)
+!!                  (same format as option==3, except AB_HEADER that is printed)
 !! If option=6, print out DDW contribution to zero-point motion correction to eigenvalues (averaged)
-!!                  (same format as option==3, except header that is printed)
+!!                  (same format as option==3, except AB_HEADER that is printed)
 !! If option=7, print out Fan+DDW contribution to zero-point motion correction to eigenvalues (averaged)
-!!                  (same format as option==3, except header that is printed)
+!!                  (same format as option==3, except AB_HEADER that is printed)
 !!
 !! INPUTS
 !!  eigen(mband*nkpt*nsppol)=eigenvalues (hartree)

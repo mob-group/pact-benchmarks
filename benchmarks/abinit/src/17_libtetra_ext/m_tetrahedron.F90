@@ -748,14 +748,14 @@ subroutine tetra_blochl_weights(tetra,eigen_in,enemin,enemax,max_occ,nene,nkpt,&
    call get_onetetra_(tetra,itetra,eigen_1tetra,enemin,enemax,max_occ,nene,bcorr,tweight_tmp,dtweightde_tmp)
 
    ! NOTE: the following blas calls are not working systematically, or do not give speed ups, strange...
-   !call daxpy (nene, 1.d0,    tweight_tmp(:,1), 1,    tweight_t(:,ind_ibz(1)), 1)
-   !call daxpy (nene, 1.d0,    tweight_tmp(:,2), 1,    tweight_t(:,ind_ibz(2)), 1)
-   !call daxpy (nene, 1.d0,    tweight_tmp(:,3), 1,    tweight_t(:,ind_ibz(3)), 1)
-   !call daxpy (nene, 1.d0,    tweight_tmp(:,4), 1,    tweight_t(:,ind_ibz(4)), 1)
-   !call daxpy (nene, 1.d0, dtweightde_tmp(:,1), 1, dtweightde_t(:,ind_ibz(1)), 1)
-   !call daxpy (nene, 1.d0, dtweightde_tmp(:,2), 1, dtweightde_t(:,ind_ibz(2)), 1)
-   !call daxpy (nene, 1.d0, dtweightde_tmp(:,3), 1, dtweightde_t(:,ind_ibz(3)), 1)
-   !call daxpy (nene, 1.d0, dtweightde_tmp(:,4), 1, dtweightde_t(:,ind_ibz(4)), 1)
+   !call AB_DAXPY (nene, 1.d0,    tweight_tmp(:,1), 1,    tweight_t(:,ind_ibz(1)), 1)
+   !call AB_DAXPY (nene, 1.d0,    tweight_tmp(:,2), 1,    tweight_t(:,ind_ibz(2)), 1)
+   !call AB_DAXPY (nene, 1.d0,    tweight_tmp(:,3), 1,    tweight_t(:,ind_ibz(3)), 1)
+   !call AB_DAXPY (nene, 1.d0,    tweight_tmp(:,4), 1,    tweight_t(:,ind_ibz(4)), 1)
+   !call AB_DAXPY (nene, 1.d0, dtweightde_tmp(:,1), 1, dtweightde_t(:,ind_ibz(1)), 1)
+   !call AB_DAXPY (nene, 1.d0, dtweightde_tmp(:,2), 1, dtweightde_t(:,ind_ibz(2)), 1)
+   !call AB_DAXPY (nene, 1.d0, dtweightde_tmp(:,3), 1, dtweightde_t(:,ind_ibz(3)), 1)
+   !call AB_DAXPY (nene, 1.d0, dtweightde_tmp(:,4), 1, dtweightde_t(:,ind_ibz(4)), 1)
    tweight_t(:,ind_ibz(1)) = tweight_t(:,ind_ibz(1)) + tweight_tmp(:,1)
    tweight_t(:,ind_ibz(2)) = tweight_t(:,ind_ibz(2)) + tweight_tmp(:,2)
    tweight_t(:,ind_ibz(3)) = tweight_t(:,ind_ibz(3)) + tweight_tmp(:,3)
@@ -1284,10 +1284,10 @@ subroutine get_dbl_tetra_weight(eigen1_in,eigen2_in,enemin1,enemax1,enemin2,enem
    !  end degenerate tetrahedron if
 
    ! NOTE: the following blas calls are not working systematically, or do not give speed ups, strange...
-   !   call daxpy (nene, 1.d0, dtweightde_tmp(:,1), 1, dtweightde_t(:,ind_ibz(1)), 1)
-   !   call daxpy (nene, 1.d0, dtweightde_tmp(:,2), 1, dtweightde_t(:,ind_ibz(2)), 1)
-   !   call daxpy (nene, 1.d0, dtweightde_tmp(:,3), 1, dtweightde_t(:,ind_ibz(3)), 1)
-   !   call daxpy (nene, 1.d0, dtweightde_tmp(:,4), 1, dtweightde_t(:,ind_ibz(4)), 1)
+   !   call AB_DAXPY (nene, 1.d0, dtweightde_tmp(:,1), 1, dtweightde_t(:,ind_ibz(1)), 1)
+   !   call AB_DAXPY (nene, 1.d0, dtweightde_tmp(:,2), 1, dtweightde_t(:,ind_ibz(2)), 1)
+   !   call AB_DAXPY (nene, 1.d0, dtweightde_tmp(:,3), 1, dtweightde_t(:,ind_ibz(3)), 1)
+   !   call AB_DAXPY (nene, 1.d0, dtweightde_tmp(:,4), 1, dtweightde_t(:,ind_ibz(4)), 1)
 
    do ieps2 = 1, nene2
      dtweightde(ind_k(1),:,ieps2) = dtweightde(ind_k(1),:,ieps2) + dtweightde_tmp(1,ieps2,:)
@@ -1443,7 +1443,7 @@ logical function tetralib_has_mpi() result(ans)
 #define ABI_FUNC 'tetralib_has_mpi'
 !End of the abilint section
 
-  ans = .False.
+  ans = .false.
 #ifdef HAVE_MPI
   ans = .True.
 #endif

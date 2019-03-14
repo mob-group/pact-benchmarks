@@ -134,8 +134,8 @@
       REAL               AINVNM, ANORM, EPS
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLANGE
-      EXTERNAL           SLAMCH, SLANGE
+      REAL               AB_SLAMCH, SLANGE
+      EXTERNAL           AB_SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGEMM
@@ -155,7 +155,7 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0 or AINVNM = 0.
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       ANORM = SLANGE( '1', N, N, A, LDA, RWORK )
       AINVNM = SLANGE( '1', N, N, AINV, LDAINV, RWORK )
       IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN

@@ -117,10 +117,10 @@
       COMPLEX            TQUERY( 5 ), WORKQUERY
 *     ..
 *     .. External Functions ..
-      REAL     SLAMCH, CLANGE, CLANSY
+      REAL     AB_SLAMCH, CLANGE, CLANSY
       LOGICAL  LSAME
       INTEGER  ILAENV
-      EXTERNAL SLAMCH, CLANGE, CLANSY, LSAME, ILAENV
+      EXTERNAL AB_SLAMCH, CLANGE, CLANSY, LSAME, ILAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC  MAX, MIN
@@ -141,7 +141,7 @@
 *
       TESTZEROS = .FALSE.
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       K = MIN(M,N)
       L = MAX(M,N,1)
       MNB = MAX ( MB, NB)

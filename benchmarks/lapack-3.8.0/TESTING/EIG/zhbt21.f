@@ -181,8 +181,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, ZLANGE, ZLANHB, ZLANHP
-      EXTERNAL           LSAME, DLAMCH, ZLANGE, ZLANHB, ZLANHP
+      DOUBLE PRECISION   AB_DLAMCH, ZLANGE, ZLANHB, ZLANHP
+      EXTERNAL           LSAME, AB_DLAMCH, ZLANGE, ZLANHB, ZLANHP
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZGEMM, ZHPR, ZHPR2
@@ -209,8 +209,8 @@
          CUPLO = 'L'
       END IF
 *
-      UNFL = DLAMCH( 'Safe minimum' )
-      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
+      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
 *
 *     Some Error Checks
 *

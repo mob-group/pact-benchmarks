@@ -175,8 +175,8 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      REAL               CQRT12, CRZT01, CRZT02, SLAMCH
-      EXTERNAL           CQRT12, CRZT01, CRZT02, SLAMCH
+      REAL               CQRT12, CRZT01, CRZT02, AB_SLAMCH
+      EXTERNAL           CQRT12, CRZT01, CRZT02, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAHD, ALASUM, CERRTZ, CGEQR2, CLACPY, CLASET,
@@ -209,7 +209,7 @@
       DO 10 I = 1, 4
          ISEED( I ) = ISEEDY( I )
    10 CONTINUE
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
 *
 *     Test the error exits
 *

@@ -155,7 +155,7 @@ MODULE m_fft
 #ifdef HAVE_MPI_IALLTOALL
  logical,save,private :: ALLOW_IALLTOALL = .True.
 #else
- logical,save,private :: ALLOW_IALLTOALL = .False.
+ logical,save,private :: ALLOW_IALLTOALL = .false.
 #endif
 
 CONTAINS  !===========================================================
@@ -197,7 +197,7 @@ subroutine fft_allow_ialltoall(bool)
 
  ALLOW_IALLTOALL = bool
 #ifndef HAVE_MPI_IALLTOALL
- ALLOW_IALLTOALL = .False.
+ ALLOW_IALLTOALL = .false.
 #endif
 
 end subroutine fft_allow_ialltoall
@@ -998,7 +998,7 @@ subroutine fftpad_spc(ff,ngfft,nx,ny,nz,ldx,ldy,ldz,ndat,mgfft,isign,gbound)
 
  case (FFT_SG)
    ! Goedecker"s routines.
-   ! TODO: sg_fftpad is not the fastest routine, here I should call sg_fftrisc but I need
+   ! TODO: sg_fftpad is not the faAB_STEST routine, here I should call sg_fftrisc but I need
    ! kg_kin that are not available in rho_tw_g, actually one should pass G-G0 due to
    ! the shift introduced by the umklapp.
    ncount = ldx*ldy*ldz*ndat
@@ -1106,21 +1106,21 @@ subroutine fftpad_dpc(ff,ngfft,nx,ny,nz,ldx,ldy,ldz,ndat,mgfft,isign,gbound)
 
  case (FFT_SG)
    ! Goedecker"s routines.
-   ! TODO: sg_fftpad is not the fastest routine, here I should call sg_fftrisc but I need
+   ! TODO: sg_fftpad is not the faAB_STEST routine, here I should call sg_fftrisc but I need
    ! kg_kin that are not available in rho_tw_g, actually one should pass G-G0 due to
    ! the shift introduced by the umklapp.
    ncount = ldx*ldy*ldz*ndat
 
    ABI_MALLOC(fofr, (2,ldx,ldy,ldz,ndat))
-!  call ZCOPY(ncount,ff,1,fofr,1) !vz_d
-!  call DCOPY(2*ncount,ff,1,fofr,1)  ! MG
-   ! alternatif of ZCOPY from vz
+!  call AB_ZCOPY(ncount,ff,1,fofr,1) !vz_d
+!  call AB_DCOPY(2*ncount,ff,1,fofr,1)  ! MG
+   ! alternatif of AB_ZCOPY from vz
    ABI_ALLOCATE(fofrvz,(2,ncount))     !vz_d
    do ivz=1,ncount                !vz_d
       fofrvz(1,ivz)= real(ff(ivz))  !vz_d
       fofrvz(2,ivz)=aimag(ff(ivz))  !vz_d
    end do                         !vz_d
-   call DCOPY(2*ncount,fofrvz,1,fofr,1) !vz_d
+   call AB_DCOPY(2*ncount,fofrvz,1,fofr,1) !vz_d
    ABI_DEALLOCATE(fofrvz)             !vz_d
 
    call C_F_pointer(C_loc(ff),fpt_ftarr, shape=(/2,ldx,ldy,ldz,ndat/))
@@ -1379,7 +1379,7 @@ function fftbox_utests(fftalg,ndat,nthreads,unit) result(nfailed)
    end do
 
    ! Set the augmentation region to zero, because FFTW3 wrappers
-   ! use zscal to scale the results.
+   ! use AB_ZSCAL to scale the results.
    call cplx_setaug_zero_spc(nx,ny,nz,ldx,ldy,ldz,ndat,ff_refsp)
    ffsp = ff_refsp
 
@@ -1432,7 +1432,7 @@ function fftbox_utests(fftalg,ndat,nthreads,unit) result(nfailed)
    end do
 
    ! Set the augmentation region to zero, because FFTW3 wrappers
-   ! use zscal to scale the results.
+   ! use AB_ZSCAL to scale the results.
    call cplx_setaug_zero_dpc(nx,ny,nz,ldx,ldy,ldz,ndat,ff_ref)
    ff = ff_ref
 
@@ -2462,7 +2462,7 @@ end function fftu_mpi_utests
 !!      tddft,vtowfk
 !!
 !! CHILDREN
-!!      ccfft,cg_addtorho,cg_box2gsph,dcopy,dfti_seqfourwf,fftw3_seqfourwf
+!!      ccfft,cg_addtorho,cg_box2gsph,AB_DCOPY,dfti_seqfourwf,fftw3_seqfourwf
 !!      fourwf_mpi,gpu_fourwf,ptabs_fourwf,sg_fftpad,sg_fftrisc,sg_fftrisc_2
 !!      sphere,sphere_fft,timab,xmpi_sum
 !!
@@ -2766,13 +2766,13 @@ subroutine fourwf(cplex,denpot,fofgin,fofgout,fofr,gboundin,gboundout,istwf_k,&
      if (option==0) then
        if (fftalgc==0) then
          if (fftalga/=4) then
-           call DCOPY(2*n4*n5*n6*ndat,work1,1,fofr,1)
+           call AB_DCOPY(2*n4*n5*n6*ndat,work1,1,fofr,1)
          else
-           call DCOPY(2*n4*n5*n6*ndat,work4,1,fofr,1)
+           call AB_DCOPY(2*n4*n5*n6*ndat,work4,1,fofr,1)
          end if
        else
          ! Results are copied to fofr.
-         call DCOPY(2*n4*n5*n6*ndat,work1,1,fofr,1)
+         call AB_DCOPY(2*n4*n5*n6*ndat,work1,1,fofr,1)
        end if
      end if
 
@@ -3878,7 +3878,7 @@ subroutine fourwf_mpi(cplex,denpot,fofgin,fofgout,fofr,&
  !write(std_out,*)"in fourwf_mpi with fftalg: ",fftalg,fftalgc
 
 ! We use the non-blocking version if IALLTOALL is available and ndat > 1.
- use_ialltoall = .False.
+ use_ialltoall = .false.
 #ifdef HAVE_MPI_IALLTOALL
  use_ialltoall = (ndat > 1)
 #endif
@@ -3917,7 +3917,7 @@ subroutine fourwf_mpi(cplex,denpot,fofgin,fofgout,fofr,&
    m1i=max1i-min1i+1; md1i=2*(m1i/2)+1
    m2i=max2i-min2i+1; md2i=2*(m2i/2)+1
 
-   !if (.False.) then
+   !if (.false.) then
    if (nproc_fft/=1) then
      ! Increase max2i in order to have m2i divisible by nproc_fft
      min2i_moins=(((m2i-1)/nproc_fft+1)*nproc_fft-m2i)/2
@@ -4810,7 +4810,7 @@ end subroutine fftpac
 !!  sizeindex=size of the index array (different form nright, because it is global to all proccessors)
 !!
 !! OUTPUT
-!!  left(2,nleft)=the elements of the right hand side, at the correct palce in the correct processor
+!!  left(2,nleft)=the elements of the right hand side, at the correct paAB_LCE in the correct processor
 !!
 !! NOTES
 !!  A lot of things to improve.

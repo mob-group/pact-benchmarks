@@ -393,8 +393,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            DSLECT
-      DOUBLE PRECISION   DLAMCH, DLANGE
-      EXTERNAL           DSLECT, DLAMCH, DLANGE
+      DOUBLE PRECISION   AB_DLAMCH, DLANGE
+      EXTERNAL           DSLECT, AB_DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DCOPY, DGEESX, DGEMM, DLACPY, DORT01, XERBLA
@@ -437,8 +437,8 @@
 *
 *     Important constants
 *
-      SMLNUM = DLAMCH( 'Safe minimum' )
-      ULP = DLAMCH( 'Precision' )
+      SMLNUM = AB_DLAMCH( 'Safe minimum' )
+      ULP = AB_DLAMCH( 'Precision' )
       ULPINV = ONE / ULP
 *
 *     Perform tests (1)-(13)

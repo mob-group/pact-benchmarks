@@ -211,8 +211,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            AB_ISAMAX
-      REAL               SLAMCH
-      EXTERNAL           AB_ISAMAX, SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_ISAMAX, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_SCOPY, AB_SSWAP
@@ -239,8 +239,8 @@
 *
 *     Set constants to control overflow
 *
-      EPS = SLAMCH( 'P' )
-      SMLNUM = SLAMCH( 'S' ) / EPS
+      EPS = AB_SLAMCH( 'P' )
+      SMLNUM = AB_SLAMCH( 'S' ) / EPS
       SGN = ISGN
 *
       K = N1 + N1 + N2 - 2

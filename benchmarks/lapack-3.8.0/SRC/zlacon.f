@@ -144,8 +144,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            AB_IZMAX1
-      DOUBLE PRECISION   DLAMCH, AB_DZSUM1
-      EXTERNAL           AB_IZMAX1, DLAMCH, AB_DZSUM1
+      DOUBLE PRECISION   AB_DLAMCH, AB_DZSUM1
+      EXTERNAL           AB_IZMAX1, AB_DLAMCH, AB_DZSUM1
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_ZCOPY
@@ -158,7 +158,7 @@
 *     ..
 *     .. Executable Statements ..
 *
-      SAFMIN = DLAMCH( 'Safe minimum' )
+      SAFMIN = AB_DLAMCH( 'Safe minimum' )
       IF( KASE.EQ.0 ) THEN
          DO 10 I = 1, N
             X( I ) = DCMPLX( ONE / DBLE( N ) )

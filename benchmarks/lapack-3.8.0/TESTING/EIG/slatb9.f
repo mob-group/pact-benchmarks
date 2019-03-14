@@ -196,8 +196,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAMEN
-      REAL               SLAMCH
-      EXTERNAL           LSAMEN, SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           LSAMEN, AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT
@@ -217,10 +217,10 @@
 *
       IF( FIRST ) THEN
          FIRST = .FALSE.
-         EPS = SLAMCH( 'Precision' )
+         EPS = AB_SLAMCH( 'Precision' )
          BADC2 = TENTH / EPS
          BADC1 = SQRT( BADC2 )
-         SMALL = SLAMCH( 'Safe minimum' )
+         SMALL = AB_SLAMCH( 'Safe minimum' )
          LARGE = ONE / SMALL
 *
 *        If it looks like we're on a Cray, take the square root of

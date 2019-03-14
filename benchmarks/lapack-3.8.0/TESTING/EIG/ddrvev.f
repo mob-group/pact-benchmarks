@@ -451,8 +451,8 @@
       DOUBLE PRECISION   DUM( 1 ), RES( 2 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLAPY2, DNRM2
-      EXTERNAL           DLAMCH, DLAPY2, DNRM2
+      DOUBLE PRECISION   AB_DLAMCH, DLAPY2, DNRM2
+      EXTERNAL           AB_DLAMCH, DLAPY2, DNRM2
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGEEV, DGET22, DLABAD, DLACPY, DLASET, DLASUM,
@@ -526,10 +526,10 @@
 *
 *     More Important constants
 *
-      UNFL = DLAMCH( 'Safe minimum' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
       CALL DLABAD( UNFL, OVFL )
-      ULP = DLAMCH( 'Precision' )
+      ULP = AB_DLAMCH( 'Precision' )
       ULPINV = ONE / ULP
       RTULP = SQRT( ULP )
       RTULPI = ONE / RTULP

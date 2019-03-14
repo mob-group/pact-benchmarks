@@ -199,8 +199,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               SLAMCH, SLANGE
-      EXTERNAL           LSAME, SLAMCH, SLANGE
+      REAL               AB_SLAMCH, SLANGE
+      EXTERNAL           LSAME, AB_SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SAXPY, SGEMM, SLASET
@@ -217,8 +217,8 @@
       IF( N.LE.0 )
      $   RETURN
 *
-      UNFL = SLAMCH( 'Safe minimum' )
-      ULP = SLAMCH( 'Precision' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
+      ULP = AB_SLAMCH( 'Precision' )
 *
       ITRNSE = 0
       INCE = 1

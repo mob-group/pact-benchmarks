@@ -162,8 +162,8 @@
       COMPLEX*16         LI
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, ZLANGT, ZLANHS
-      EXTERNAL           DLAMCH, ZLANGT, ZLANHS
+      DOUBLE PRECISION   AB_DLAMCH, ZLANGT, ZLANHS
+      EXTERNAL           AB_DLAMCH, ZLANGT, ZLANHS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN
@@ -180,7 +180,7 @@
          RETURN
       END IF
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
 *
 *     Copy the matrix U to WORK.
 *

@@ -257,7 +257,7 @@ subroutine psp2in(dtset,ekb,epsatm,ffspl,indlmn,ipsp,lmax,nproj,psps,vlspl,dvlsp
  ABI_DEALLOCATE(dvloc)
 
 
-!Second, compute KB energies and form factors and fit splines
+!second, compute KB energies and form factors and fit splines
  ekb(:)=0.0d0
 !First check if any nonlocal projectors are being used
  if (maxval(nproj(1:lmax+1))>0) then
@@ -980,7 +980,7 @@ subroutine psp3in(dtset, ekb, epsatm, ffspl, indlmn, ipsp, lmax, nproj, psps, ps
  ABI_DEALLOCATE(work_space)
  ABI_DEALLOCATE(work_spl)
 
-!Second, compute KB energies and form factors and fit splines
+!second, compute KB energies and form factors and fit splines
  ekb(:)=zero
 
 !Check if any nonlocal projectors are being used
@@ -1069,7 +1069,7 @@ end subroutine psp3in
 !!      psp3in
 !!
 !! CHILDREN
-!!      spline,zhpev
+!!      spline,AB_ZHPEV
 !!
 !! SOURCE
 
@@ -1142,7 +1142,7 @@ subroutine psp3nl(ekb,ffspl,h11s,h22s,h33s,h11p,h22p,h33p,h11d,h22d,&
    ABI_ALLOCATE(zz,(2,nproj,nproj))
 
    if (nproj > 1) then
-     call ZHPEV(jobz,uplo,nproj,ap,ww,zz,ldz,work1,rwork1,info)
+     call AB_ZHPEV(jobz,uplo,nproj,ap,ww,zz,ldz,work1,rwork1,info)
      uu(:,:)=zz(1,:,:)
    else
      ww(1)=h11s
@@ -1224,7 +1224,7 @@ subroutine psp3nl(ekb,ffspl,h11s,h22s,h33s,h11p,h22p,h33p,h11d,h22d,&
    ABI_ALLOCATE(zz,(2,nproj,nproj))
 
    if (nproj > 1) then
-     call ZHPEV(jobz,uplo,nproj,ap,ww,zz,ldz,work1,rwork1,info)
+     call AB_ZHPEV(jobz,uplo,nproj,ap,ww,zz,ldz,work1,rwork1,info)
      uu(:,:)=zz(1,:,:)
    else
      ww(1)=h11p
@@ -1313,7 +1313,7 @@ subroutine psp3nl(ekb,ffspl,h11s,h22s,h33s,h11p,h22p,h33p,h11d,h22d,&
    ABI_ALLOCATE(zz,(2,nproj,nproj))
 
    if (nproj > 1) then
-     call ZHPEV(jobz,uplo,nproj,ap,ww,zz,ldz,work1,rwork1,info)
+     call AB_ZHPEV(jobz,uplo,nproj,ap,ww,zz,ldz,work1,rwork1,info)
      uu(:,:)=zz(1,:,:)
    else
      ww(1)=h11d
@@ -1611,7 +1611,7 @@ subroutine psp10in(dtset, ekb, epsatm, ffspl, indlmn, ipsp, lmax, nproj, psps, p
  ABI_DEALLOCATE(work_space)
  ABI_DEALLOCATE(work_spl)
 
-!Second, compute KB energies and form factors and fit splines
+!second, compute KB energies and form factors and fit splines
  ekb(:)=zero
 
 !Check if any nonlocal projectors are being used
@@ -1701,7 +1701,7 @@ end subroutine psp10in
 !!      psp10in
 !!
 !! CHILDREN
-!!      spline,zhpev
+!!      spline,AB_ZHPEV
 !!
 !! SOURCE
 
@@ -1765,7 +1765,7 @@ subroutine psp10nl(ekb,ffspl,hij,lmax,mproj,mpsang,mqgrid,nproj,qgrid,rr)
      ABI_ALLOCATE(zz,(2,numproj,numproj))
 
      if (numproj > 1) then
-       call ZHPEV(jobz,uplo,numproj,ap,ww,zz,numproj,work1,rwork1,info)
+       call AB_ZHPEV(jobz,uplo,numproj,ap,ww,zz,numproj,work1,rwork1,info)
        uu(:,:)=zz(1,:,:)
      else
        ww(1)=hij(ll,1,1)

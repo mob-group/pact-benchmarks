@@ -151,8 +151,8 @@
       DOUBLE PRECISION   ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DZASUM, ZLANSP
-      EXTERNAL           DLAMCH, DZASUM, ZLANSP
+      DOUBLE PRECISION   AB_DLAMCH, DZASUM, ZLANSP
+      EXTERNAL           AB_DLAMCH, DZASUM, ZLANSP
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZSPMV
@@ -171,7 +171,7 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       ANORM = ZLANSP( '1', UPLO, N, A, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS

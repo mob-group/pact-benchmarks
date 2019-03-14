@@ -202,7 +202,7 @@ subroutine elphon(anaddb_dtset,Cryst,Ifc,filnam,comm)
  integer,allocatable :: pair2red(:,:), red2pair(:,:)
  !real(dp) :: acell_in(3),rprim_in(3,3),rprim(3,3),acell(3),
  real(dp) :: kpt(3),shiftk(3)
- real(dp),allocatable :: wtk_fullbz(:),wtk_folded(:)
+ real(dp),allocatable :: wtk_fullbz(:),wtk_foAB_LDEd(:)
  real(dp),allocatable :: a2f_1d(:),dos_phon(:)
  real(dp),allocatable :: eigenGS(:,:,:),eigenGS_fine(:,:,:)
  real(dp),allocatable :: v_surf(:,:,:,:,:,:)
@@ -350,11 +350,11 @@ subroutine elphon(anaddb_dtset,Cryst,Ifc,filnam,comm)
  call ep_setupqpt(elph_ds,cryst,anaddb_dtset,qptrlatt,timrev)
 
 !====================================
-!Read the GS header of the GKK file
+!Read the GS AB_HEADER of the GKK file
 !this will give the phon grid of k
 !and the Fermi surface integration weights
 !====================================
- call wrtout (std_out,' elphon: reading and checking the GS header of the GKK file','COLL')
+ call wrtout (std_out,' elphon: reading and checking the GS AB_HEADER of the GKK file','COLL')
 
  if (master == me) then
    call rchkGSheader(hdr,natom,nband,unitgkk)
@@ -565,11 +565,11 @@ subroutine elphon(anaddb_dtset,Cryst,Ifc,filnam,comm)
 
    ABI_ALLOCATE(indkpt1,(elph_ds%k_phon%nkpt))
    ABI_ALLOCATE(wtk_fullbz,(elph_ds%k_phon%nkpt))
-   ABI_ALLOCATE(wtk_folded,(elph_ds%k_phon%nkpt))
+   ABI_ALLOCATE(wtk_foAB_LDEd,(elph_ds%k_phon%nkpt))
 
    wtk_fullbz(:) = one/dble(elph_ds%k_phon%nkpt) !weights normalized to unity
    call symkpt(0,cryst%gmet,indkpt1,0,elph_ds%k_phon%kpt,elph_ds%k_phon%nkpt,elph_ds%k_phon%new_nkptirr,&
-&   Cryst%nsym,Cryst%symrec,timrev,wtk_fullbz,wtk_folded)
+&   Cryst%nsym,Cryst%symrec,timrev,wtk_fullbz,wtk_foAB_LDEd)
 
    write (message,'(2a,i0)')ch10,' Number of irreducible k-points = ',elph_ds%k_phon%new_nkptirr
    call wrtout(std_out,message,'COLL')
@@ -580,10 +580,10 @@ subroutine elphon(anaddb_dtset,Cryst,Ifc,filnam,comm)
 
    ikpt_irr = 0
    do ikpt=1,elph_ds%k_phon%nkpt
-     if (wtk_folded(ikpt) /= zero) then
+     if (wtk_foAB_LDEd(ikpt) /= zero) then
        ikpt_irr = ikpt_irr + 1
        elph_ds%k_phon%new_kptirr(:,ikpt_irr) = elph_ds%k_phon%kpt(:,ikpt)
-       elph_ds%k_phon%new_wtkirr(ikpt_irr) = wtk_folded(ikpt)
+       elph_ds%k_phon%new_wtkirr(ikpt_irr) = wtk_foAB_LDEd(ikpt)
        elph_ds%k_phon%new_irredtoGS(ikpt_irr) = ikpt
      end if
    end do
@@ -594,7 +594,7 @@ subroutine elphon(anaddb_dtset,Cryst,Ifc,filnam,comm)
 
    ABI_DEALLOCATE(indkpt1)
    ABI_DEALLOCATE(wtk_fullbz)
-   ABI_DEALLOCATE(wtk_folded)
+   ABI_DEALLOCATE(wtk_foAB_LDEd)
  end if
 
 !====================================================================
@@ -626,9 +626,9 @@ subroutine elphon(anaddb_dtset,Cryst,Ifc,filnam,comm)
      if (open_file("densergrid_GKK",message,newunit=unitfskgrid,form="unformatted",status="old") /=0) then
        MSG_ERROR(message)
      end if
-     !read the header of file
+     !read the AB_HEADER of file
      call hdr_fort_read(hdr1, unitfskgrid, fform)
-     ABI_CHECK(fform/=0,'denser grid GKK header was mis-read. fform == 0')
+     ABI_CHECK(fform/=0,'denser grid GKK AB_HEADER was mis-read. fform == 0')
    end if
    call hdr_bcast(hdr1,master,me,comm)
 
@@ -966,7 +966,7 @@ subroutine elphon(anaddb_dtset,Cryst,Ifc,filnam,comm)
 
    use_afm=(hdr%nsppol==1.and.hdr%nspden==2)
 !  MG FIXME warning time reversal is always assumed to be present.
-!  the header should report this information.
+!  the AB_HEADER should report this information.
 
    use_tr=(timrev==1)
 
@@ -1464,7 +1464,7 @@ subroutine outelph(elph_ds,enunit,fname)
  nqptirred = elph_ds%nqptirred
 
 !==========================================================
-!write header
+!write AB_HEADER
 !==========================================================
  if (open_file(fname,msg,newunit=nfile,form="formatted",status="unknown") /= 0) then
    MSG_ERROR(msg)
@@ -1770,14 +1770,14 @@ end subroutine outelph
 !! rchkGSheader
 !!
 !! FUNCTION
-!! This routine reads the GS header information in the GKK file and checks it
+!! This routine reads the GS AB_HEADER information in the GKK file and checks it
 !!
 !! INPUTS
 !!  natom = number of atoms from DDB, for check
 !!  kptirr_phon = coordinates of the irreducible kpoints close to the FS
 !!
 !! OUTPUT
-!!  hdr = header information
+!!  hdr = AB_HEADER information
 !!  nband = number of bands for rest of calculation
 !!          should be the same for all kpts
 !!
@@ -1813,14 +1813,14 @@ subroutine rchkGSheader (hdr,natom,nband,unitgkk)
 
 ! *************************************************************************
 !
-!read in general header of _GKK file
+!read in general AB_HEADER of _GKK file
 !this is where we get nkpt, ngkpt(:,:)... which are also read in
 !rdddb9 and inprep8. Probably should do some checking to avoid
 !using ddb files from other configurations
 !
  rewind(unitgkk)
  call hdr_fort_read(hdr, unitgkk, fform)
- ABI_CHECK(fform/=0," GKK header mis-read. fform == 0")
+ ABI_CHECK(fform/=0," GKK AB_HEADER mis-read. fform == 0")
 
  if (hdr%natom /= natom) then
    MSG_ERROR('natom in gkk file is different from anaddb input')
@@ -1925,7 +1925,7 @@ subroutine mkFSkgrid (elph_k, nsym, symrec, timrev)
  call mkkptrank (elph_k%kptirr,elph_k%nkptirr,elph_k%kptrank_t)
  ABI_ALLOCATE(rankallk,(elph_k%kptrank_t%max_rank))
 
-!elph_k%kptrank_t%invrank is used as a placeholder in the following loop
+!elph_k%kptrank_t%invrank is used as a placehoAB_LDEr in the following loop
  rankallk = -1
  elph_k%kptrank_t%invrank = -1
 
@@ -2078,7 +2078,7 @@ end subroutine mkFSkgrid
 !!
 !! CHILDREN
 !!      d2c_wtq,ep_ph_weights,ftgam,ftgam_init,gam_mult_displ,ifc_fourq
-!!      phdispl_cart2red,simpson_int,wrtout,zgemm
+!!      phdispl_cart2red,simpson_int,wrtout,AB_ZGEMM
 !!
 !! NOTES
 !!   copied from ftiaf9.f
@@ -2122,7 +2122,7 @@ subroutine mka2f(Cryst,ifc,a2f_1d,dos_phon,elph_ds,kptrlatt,mustar)
  real(dp) :: omegalog(elph_ds%nsppol)
  real(dp) :: omlog_qn
  real(dp) :: tc_macmill,a2fsmear,domega,omega_min,omega_max
- real(dp) :: gaussval, gaussprefactor, gaussfactor, gaussmaxval, xx
+ real(dp) :: gaussval, gauAB_SSPRefactor, gaussfactor, gaussmaxval, xx
  character(len=500) :: msg
  character(len=fnlen) :: fname,base_name
 !arrays
@@ -2183,7 +2183,7 @@ subroutine mka2f(Cryst,ifc,a2f_1d,dos_phon,elph_ds,kptrlatt,mustar)
  omega_min       = elph_ds%omega_min
  omega_max       = elph_ds%omega_max
 
- gaussprefactor = sqrt(piinv) / a2fsmear
+ gauAB_SSPRefactor = sqrt(piinv) / a2fsmear
  gaussfactor = one / a2fsmear
  gaussmaxval = sqrt(-log(1.d-100))
 
@@ -2195,7 +2195,7 @@ subroutine mka2f(Cryst,ifc,a2f_1d,dos_phon,elph_ds,kptrlatt,mustar)
 
  !write (std_out,*) ' a2f function integrated over the FS'
 
-!output the a2f_1d header
+!output the a2f_1d AB_HEADER
  write (unit_a2f,'(a)')                 '#'
  write (unit_a2f,'(a)')                 '# ABINIT package : a2f file'
  write (unit_a2f,'(a)')                 '#'
@@ -2211,7 +2211,7 @@ subroutine mka2f(Cryst,ifc,a2f_1d,dos_phon,elph_ds,kptrlatt,mustar)
    MSG_ERROR(msg)
  end if
 
- ! output the phonon DOS header
+ ! output the phonon DOS AB_HEADER
  write (unit_phdos,'(a)')                '#'
  write (unit_phdos,'(a)')                '# ABINIT package : phonon DOS file'
  write (unit_phdos,'(a)')                '#'
@@ -2321,10 +2321,10 @@ subroutine mka2f(Cryst,ifc,a2f_1d,dos_phon,elph_ds,kptrlatt,mustar)
      else if (ep_scalprod == 1) then
 
 !      MJV NOTE : gam_now is being recast as a (3*natom)**2 matrix here
-       call ZGEMM ( 'N', 'N', 3*natom, 3*natom, 3*natom, cone, gam_now, 3*natom,&
+       call AB_ZGEMM ( 'N', 'N', 3*natom, 3*natom, 3*natom, cone, gam_now, 3*natom,&
 &       pheigvec, 3*natom, czero, tmp_gam1, 3*natom)
 
-       call ZGEMM ( 'C', 'N', 3*natom, 3*natom, 3*natom, cone, pheigvec, 3*natom,&
+       call AB_ZGEMM ( 'C', 'N', 3*natom, 3*natom, 3*natom, cone, pheigvec, 3*natom,&
 &       tmp_gam1, 3*natom, czero, tmp_gam2, 3*natom)
 
        diagerr = zero
@@ -2393,7 +2393,7 @@ subroutine mka2f(Cryst,ifc,a2f_1d,dos_phon,elph_ds,kptrlatt,mustar)
          omega = omega + domega
          if (abs(xx) > gaussmaxval) cycle
 
-         gaussval = gaussprefactor*exp(-xx*xx)
+         gaussval = gauAB_SSPRefactor*exp(-xx*xx)
          tmp_a2f(iomega) = tmp_a2f(iomega) + gaussval*a2fprefactor
          tmp_phondos(iomega) = tmp_phondos(iomega) + gaussval
        end do
@@ -2659,7 +2659,7 @@ subroutine mka2fQgrid(elph_ds,fname)
 !Local variables -------------------------
 !scalars
  integer :: ibranch,iomega,iost,ismear,isppol,nsmear,nunit,qptirred
- real(dp) :: a2f_factor,estep,gaussfactor,gaussprefactor,gaussval,lambda_iso
+ real(dp) :: a2f_factor,estep,gaussfactor,gauAB_SSPRefactor,gaussval,lambda_iso
  real(dp) :: omega,omegalog,omegastep,smear,tc_macmill,weight,xx
  character(len=500) :: msg
 !arrays
@@ -2719,7 +2719,7 @@ subroutine mka2fQgrid(elph_ds,fname)
  do ismear=0,nsmear-1
 
    smear = elph_ds%a2fsmear+ismear*estep
-   gaussprefactor = sqrt(piinv) / smear
+   gauAB_SSPRefactor = sqrt(piinv) / smear
    gaussfactor = one / smear
 
    do isppol=1,elph_ds%nsppol  ! spin pol channels
@@ -2739,7 +2739,7 @@ subroutine mka2fQgrid(elph_ds,fname)
 
          do iomega=1,elph_ds%na2f
            xx = (omega-elph_ds%qgrid_data(qptirred,ibranch,isppol,1))*gaussfactor
-           gaussval = gaussprefactor*exp(-xx*xx)
+           gaussval = gauAB_SSPRefactor*exp(-xx*xx)
            tmpa2f(iomega) = tmpa2f(iomega) + gaussval*a2f_factor
            omega = omega+omegastep
          end do
@@ -2826,8 +2826,8 @@ end subroutine mka2fQgrid
 !!
 !! INPUTS
 !!   nkptirr = number of irreducible FS kpoints
-!!   nkpt = input nkpt from header
-!!   kptns = input kpt from header
+!!   nkpt = input nkpt from AB_HEADER
+!!   kptns = input kpt from AB_HEADER
 !!
 !! OUTPUT
 !!   FSirredtoGS = mapping of irreducible kpoints to GS set
@@ -2974,7 +2974,7 @@ subroutine ep_setupqpt (elph_ds,crystal,anaddb_dtset,qptrlatt,timrev)
  integer :: vacuum(3)
  integer,allocatable :: indqpt1(:)
  real(dp) :: kpt(3)
- real(dp),allocatable :: wtq_folded(:)
+ real(dp),allocatable :: wtq_foAB_LDEd(:)
  real(dp), allocatable :: wtq(:),qpt_full(:,:),tmpshifts(:,:)
 
 ! *********************************************************************
@@ -3080,7 +3080,7 @@ subroutine ep_setupqpt (elph_ds,crystal,anaddb_dtset,qptrlatt,timrev)
  call wrtout(std_out,' setqgrid : calling symkpt to find irred q points',"COLL")
 
  ABI_ALLOCATE(indqpt1,(elph_ds%nqpt_full))
- ABI_ALLOCATE(wtq_folded,(elph_ds%nqpt_full))
+ ABI_ALLOCATE(wtq_foAB_LDEd,(elph_ds%nqpt_full))
  ABI_ALLOCATE(wtq,(elph_ds%nqpt_full))
 
  wtq(:) = one/dble(elph_ds%nqpt_full) !weights normalized to unity
@@ -3092,7 +3092,7 @@ subroutine ep_setupqpt (elph_ds,crystal,anaddb_dtset,qptrlatt,timrev)
  iout=0 !do not write to ab_out
 !should we save indqpt1 for use inside elph_ds?
  call symkpt(0,crystal%gmet,indqpt1,iout,elph_ds%qpt_full,elph_ds%nqpt_full,nqpt1,crystal%nsym,crystal%symrec,&
-& timrev,wtq,wtq_folded)
+& timrev,wtq,wtq_foAB_LDEd)
 
  write (message,'(2a,i0)')ch10,' Number of irreducible q-points = ',nqpt1
  call wrtout(std_out,message,'COLL')
@@ -3101,8 +3101,8 @@ subroutine ep_setupqpt (elph_ds,crystal,anaddb_dtset,qptrlatt,timrev)
  call wrtout(std_out,' === Irreducible q points with weights ==== ','COLL')
 
  do iqpt=1,elph_ds%nqpt_full
-   if (wtq_folded(iqpt) /= zero) then
-     write (message,'(1x,i4,a2,4es16.8)')iqpt,') ',elph_ds%qpt_full(:,iqpt),wtq_folded(iqpt)
+   if (wtq_foAB_LDEd(iqpt) /= zero) then
+     write (message,'(1x,i4,a2,4es16.8)')iqpt,') ',elph_ds%qpt_full(:,iqpt),wtq_foAB_LDEd(iqpt)
      call wrtout(std_out,message,'COLL')
    end if
  end do
@@ -3111,10 +3111,10 @@ subroutine ep_setupqpt (elph_ds,crystal,anaddb_dtset,qptrlatt,timrev)
 
  ABI_ALLOCATE(elph_ds%wtq,(elph_ds%nqpt_full))
 
- elph_ds%wtq(:)=wtq_folded(:)
+ elph_ds%wtq(:)=wtq_foAB_LDEd(:)
 !MEMO indqpt could be useful to test the qgrid read by abinit
  ABI_DEALLOCATE(indqpt1)
- ABI_DEALLOCATE(wtq_folded)
+ ABI_DEALLOCATE(wtq_foAB_LDEd)
  ABI_DEALLOCATE(wtq)
 
 end subroutine ep_setupqpt
@@ -3144,7 +3144,7 @@ end subroutine ep_setupqpt
 !!
 !! CHILDREN
 !!      ftgam,ftgam_init,gam_mult_displ,ifc_fourq,make_path,phdispl_cart2red
-!!      wrap2_pmhalf,wrtout,zgemm
+!!      wrap2_pmhalf,wrtout,AB_ZGEMM
 !!
 !! SOURCE
 
@@ -3209,7 +3209,7 @@ subroutine mkph_linwid(Cryst,ifc,elph_ds,nqpath,qpath_vertices)
  indxprtqpt = 0
 
 !==========================================================
-!Open _LWD file and write header
+!Open _LWD file and write AB_HEADER
 !==========================================================
  fname=trim(base_name) // '_LWD'
  if (open_file(fname,msg,newunit=unit_lwd,status="unknown") /= 0) then
@@ -3239,7 +3239,7 @@ subroutine mkph_linwid(Cryst,ifc,elph_ds,nqpath,qpath_vertices)
  write (unit_lwd,'(a)')'#'
 
 !==========================================================
-!Open _BST file and write header
+!Open _BST file and write AB_HEADER
 !==========================================================
  fname=trim(base_name) // '_BST'
  if (open_file(fname,msg,newunit=unit_bs,status="unknown") /= 0) then
@@ -3260,7 +3260,7 @@ subroutine mkph_linwid(Cryst,ifc,elph_ds,nqpath,qpath_vertices)
 
 !MG20060606
 !==========================================================
-!open _LAMBDA file and write header
+!open _LAMBDA file and write AB_HEADER
 !contains \omega(q,n) and \lambda(q,n) and can be plotted using xmgrace
 !==========================================================
  fname=trim(base_name) // '_LAMBDA'
@@ -3360,10 +3360,10 @@ subroutine mkph_linwid(Cryst,ifc,elph_ds,nqpath,qpath_vertices)
 !
 !      Diagonalize gamma matrix at qpoint (complex matrix).
 !      MJV NOTE: gam_now is recast implicitly here to matrix
-       call ZGEMM ( 'N', 'N', 3*natom, 3*natom, 3*natom, c1, gam_now, 3*natom,&
+       call AB_ZGEMM ( 'N', 'N', 3*natom, 3*natom, 3*natom, c1, gam_now, 3*natom,&
 &       pheigvec, 3*natom, c0, tmpgam1, 3*natom)
 
-       call ZGEMM ( 'C', 'N', 3*natom, 3*natom, 3*natom, c1, pheigvec, 3*natom,&
+       call AB_ZGEMM ( 'C', 'N', 3*natom, 3*natom, 3*natom, c1, pheigvec, 3*natom,&
 &       tmpgam1, 3*natom, c0, tmpgam2, 3*natom)
 
        diagerr = zero
@@ -3478,7 +3478,7 @@ end subroutine mkph_linwid
 !!
 !! INPUTS
 !!  eigenGS = ground state eigenvalues
-!!  hdr = header from input GS file
+!!  hdr = AB_HEADER from input GS file
 !!  ep_b_min, ep_b_max=A non-zero value is used to impose certain bands.
 !!  fermie=Fermi level.
 !!  eigenGS(hdr%nband(1),hdr%nkpt,hdr%nsppol)=Energies.
@@ -3753,7 +3753,7 @@ end subroutine get_all_gkk2
 !!      get_all_gkk2
 !!
 !! CHILDREN
-!!      ftgkk,ifc_fourq,wrap2_pmhalf,zhpev
+!!      ftgkk,ifc_fourq,wrap2_pmhalf,AB_ZHPEV
 !!
 !! SOURCE
 
@@ -3778,7 +3778,7 @@ subroutine interpolate_gkk(crystal,ifc,elph_ds,kpt_phon)
 
 !Local variables-------------------------------
   ! output variables for dfpt_phfrq
-! variables for zhpev
+! variables for AB_ZHPEV
 ! variables for phonon interpolation
 !scalars
  integer :: i1,i2,ikpt_phon2,iFSqpt,ib1,ib2,ier,ii
@@ -3793,8 +3793,8 @@ subroutine interpolate_gkk(crystal,ifc,elph_ds,kpt_phon)
  real(dp) :: pheigvec(2*elph_ds%nbranch*elph_ds%nbranch)
  real(dp) :: phfrq_tmp(elph_ds%nbranch),qphon(3),redkpt(3)
  real(dp),allocatable :: gkk2_diag_tmp(:,:,:,:),gkk2_tmp(:,:,:,:,:,:,:)
- real(dp),allocatable :: matrx(:,:),zhpev1(:,:)
- real(dp),allocatable :: zhpev2(:)
+ real(dp),allocatable :: matrx(:,:),AB_ZHPEV1(:,:)
+ real(dp),allocatable :: AB_ZHPEV2(:)
 
 ! *************************************************************************
 
@@ -3828,8 +3828,8 @@ subroutine interpolate_gkk(crystal,ifc,elph_ds,kpt_phon)
 !ENDDEBUG
  ABI_ALLOCATE(gkk2_tmp,(2,sz1,sz1,sz2,sz2,sz3,1))
  ABI_ALLOCATE(gkk2_diag_tmp,(sz1,sz1,sz2,sz3))
- ABI_ALLOCATE(zhpev1,(2,2*3*natom-1))
- ABI_ALLOCATE(zhpev2,(3*3*natom-2))
+ ABI_ALLOCATE(AB_ZHPEV1,(2,2*3*natom-1))
+ ABI_ALLOCATE(AB_ZHPEV2,(3*3*natom-2))
  ABI_ALLOCATE(matrx,(2,(3*natom*(3*natom+1))/2))
 
  qphnrm = one
@@ -3937,8 +3937,8 @@ subroutine interpolate_gkk(crystal,ifc,elph_ds,kpt_phon)
              ii=ii+1
            end do
          end do
-         call ZHPEV ('N','U',3*natom,matrx,eigval,eigvec,3*natom,zhpev1,&
-&         zhpev2,ier)
+         call AB_ZHPEV ('N','U',3*natom,matrx,eigval,eigvec,3*natom,AB_ZHPEV1,&
+&         AB_ZHPEV2,ier)
 
          gkk2_diag_tmp(ib2,ib1,:,ikpt_phon2) = eigval(:)
          do i1=1,3*natom
@@ -3966,8 +3966,8 @@ subroutine interpolate_gkk(crystal,ifc,elph_ds,kpt_phon)
 !end do on iFSqpt
 
  ABI_DEALLOCATE(matrx)
- ABI_DEALLOCATE(zhpev1)
- ABI_DEALLOCATE(zhpev2)
+ ABI_DEALLOCATE(AB_ZHPEV1)
+ ABI_DEALLOCATE(AB_ZHPEV2)
 
 end subroutine interpolate_gkk
 !!***
@@ -3995,7 +3995,7 @@ end subroutine interpolate_gkk
 !!   %k_phon%wtk = integration weights for bands and kpoints near the FS
 !!   gkk_flag = flag to
 !!   nband = number of bands
-!!   n1wf = number of file headers from perturbation calculations
+!!   n1wf = number of file AB_HEADERs from perturbation calculations
 !!      which are present in the initial gkk input file.
 !!   onegkksize = size of one record of the new gkk output file, in bytes
 !!   qpttoqpt = mapping of qpoints onto each other under symmetries
@@ -4311,7 +4311,7 @@ end subroutine get_all_gkr
 !!      get_all_gkq
 !!
 !! CHILDREN
-!!      xmpi_sum,zgemm
+!!      xmpi_sum,AB_ZGEMM
 !!
 !! SOURCE
 
@@ -4465,10 +4465,10 @@ subroutine complete_gkk(elph_ds,gkk_flag,gprimd,indsym,natom,nsym,qpttoqpt,rprim
              tmp_mat2(:,:,:) = zero
              tmp_mat(:,:,:) = reshape(gkk_qpt_tmp(:,ib1,:,ikpt_phon,isppol),&
 &             (/2,elph_ds%nbranch,elph_ds%nbranch/))
-             call ZGEMM ('N','N',elph_ds%nbranch,elph_ds%nbranch,elph_ds%nbranch,&
+             call AB_ZGEMM ('N','N',elph_ds%nbranch,elph_ds%nbranch,elph_ds%nbranch,&
 &             c_one,ss_allatoms,elph_ds%nbranch,tmp_mat,elph_ds%nbranch,c_zero,&
 &             tmp_mat2,elph_ds%nbranch)
-             call ZGEMM ('N','T',elph_ds%nbranch,elph_ds%nbranch,elph_ds%nbranch,&
+             call AB_ZGEMM ('N','T',elph_ds%nbranch,elph_ds%nbranch,elph_ds%nbranch,&
 &             c_one,tmp_mat2,elph_ds%nbranch,ss_allatoms,elph_ds%nbranch,c_zero,&
 &             tmp_mat,elph_ds%nbranch)
 
@@ -4551,10 +4551,10 @@ subroutine complete_gkk(elph_ds,gkk_flag,gprimd,indsym,natom,nsym,qpttoqpt,rprim
              tmp_mat2(:,:,:) = zero
              tmp_mat(:,:,:) = reshape(gkk_qpt_new(:,ib1,:,ikpt_phon,isppol),&
 &             (/2,elph_ds%nbranch,elph_ds%nbranch/))
-             call ZGEMM ('N','N',elph_ds%nbranch,elph_ds%nbranch,elph_ds%nbranch,&
+             call AB_ZGEMM ('N','N',elph_ds%nbranch,elph_ds%nbranch,elph_ds%nbranch,&
 &             c_one,ss_allatoms,elph_ds%nbranch,tmp_mat,elph_ds%nbranch,c_zero,&
 &             tmp_mat2,elph_ds%nbranch)
-             call ZGEMM ('N','T',elph_ds%nbranch,elph_ds%nbranch,elph_ds%nbranch,&
+             call AB_ZGEMM ('N','T',elph_ds%nbranch,elph_ds%nbranch,elph_ds%nbranch,&
 &             c_one,tmp_mat2,elph_ds%nbranch,ss_allatoms,elph_ds%nbranch,c_zero,&
 &             tmp_mat,elph_ds%nbranch)
 

@@ -404,7 +404,7 @@ subroutine exc_build_block(BSp,Cryst,Kmesh,Qmesh,ktabr,Gsph_x,Gsph_c,Vcp,Wfd,W,H
  call wrtout(std_out,msg,"COLL",do_flush=.True.)
  call wrtout(ab_out,msg,"COLL",do_flush=.True.)
  !
- ! Master writes the BSE header with Fortran IO.
+ ! Master writes the BSE AB_HEADER with Fortran IO.
  if (my_rank==master) then
 
    if (open_file(fname,msg,newunit=bsh_unt,form="unformatted",action="write") /= 0) then
@@ -414,7 +414,7 @@ subroutine exc_build_block(BSp,Cryst,Kmesh,Qmesh,ktabr,Gsph_x,Gsph_c,Vcp,Wfd,W,H
    ! To force the writing (needed for MPI-IO).
    close(bsh_unt)
 
-   if (.not.use_mpiio) then ! Reopen the file and skip the header.
+   if (.not.use_mpiio) then ! Reopen the file and skip the AB_HEADER.
      if (open_file(fname,msg,newunit=bsh_unt,form="unformatted",action="readwrite") /= 0) then
         MSG_ERROR(msg)
      end if
@@ -442,7 +442,7 @@ subroutine exc_build_block(BSp,Cryst,Kmesh,Qmesh,ktabr,Gsph_x,Gsph_c,Vcp,Wfd,W,H
      close(a_unt)
      close(b_unt)
      close(c_unt)
-     if (.not.use_mpiio) then ! Reopen the file and skip the header.
+     if (.not.use_mpiio) then ! Reopen the file and skip the AB_HEADER.
        tmpfname(ii-2:ii+1) = 'ABSR'
        if (open_file(tmpfname,msg,newunit=a_unt,form='unformatted',action="readwrite") /= 0) then
           MSG_ERROR(msg)
@@ -473,7 +473,7 @@ subroutine exc_build_block(BSp,Cryst,Kmesh,Qmesh,ktabr,Gsph_x,Gsph_c,Vcp,Wfd,W,H
    call MPI_FILE_OPEN(comm, fname, amode, MPI_INFO_NULL, mpi_fh, mpi_err)
    ABI_CHECK_MPI(mpi_err,"opening: "//TRIM(fname))
 
-   ! Skip the header.
+   ! Skip the AB_HEADER.
    call exc_skip_bshdr_mpio(mpi_fh,xmpio_collective,ehdr_offset)
 
    ! Precompute the offset of the each block including the Fortran markers.
@@ -1129,7 +1129,7 @@ subroutine exc_build_block(BSp,Cryst,Kmesh,Qmesh,ktabr,Gsph_x,Gsph_c,Vcp,Wfd,W,H
    end if
 
 !DBYG
-   if (.False.) then
+   if (.false.) then
      dump_unt = get_unit()
      dump_unt = 999
      msg=' Coupling Hamiltonian matrix elements: '
@@ -1206,7 +1206,7 @@ subroutine exc_build_block(BSp,Cryst,Kmesh,Qmesh,ktabr,Gsph_x,Gsph_c,Vcp,Wfd,W,H
        MSG_ERROR(msg)
      end if
      !
-     ! Each node uses a different offset to skip the header and the blocks written by the other CPUs.
+     ! Each node uses a different offset to skip the AB_HEADER and the blocks written by the other CPUs.
      my_offset = offset_of_block(block) + my_offset
 
      call MPI_FILE_SET_VIEW(mpi_fh, my_offset, MPI_BYTE, hmat_type, 'native', MPI_INFO_NULL, mpi_err)
@@ -1229,7 +1229,7 @@ subroutine exc_build_block(BSp,Cryst,Kmesh,Qmesh,ktabr,Gsph_x,Gsph_c,Vcp,Wfd,W,H
      neh2=BSp%nreh(block)
      ABI_MALLOC(bsize_frecord,(neh2))
      bsize_frecord = (/(col_glob * xmpi_bsize_dpc, col_glob=1,neh2)/)
-     ! ehdr_offset points to the end of the header.
+     ! ehdr_offset points to the end of the AB_HEADER.
      !call xmpio_write_frmarkers(mpi_fh,ehdr_offset,xmpio_collective,neh2,bsize_frecord,mpi_err)
      my_offset = offset_of_block(block)
      call xmpio_write_frmarkers(mpi_fh,my_offset,xmpio_collective,neh2,bsize_frecord,ierr)
@@ -1551,7 +1551,7 @@ subroutine exc_build_block(BSp,Cryst,Kmesh,Qmesh,ktabr,Gsph_x,Gsph_c,Vcp,Wfd,W,H
      call xmpio_create_fsubarray_2D((/neh1,my_ncols/),(/neh1,my_ncols/),(/1,1/),old_type,hmat_type,my_offpad,mpi_err)
      ABI_CHECK_MPI(mpi_err,"fsubarray_2D")
      !
-     ! Each node uses a different offset to skip the header and the blocks written by the other CPUs.
+     ! Each node uses a different offset to skip the AB_HEADER and the blocks written by the other CPUs.
      prev_nels=0
      prev_ncols=0
      if (my_rank>0) then
@@ -1576,7 +1576,7 @@ subroutine exc_build_block(BSp,Cryst,Kmesh,Qmesh,ktabr,Gsph_x,Gsph_c,Vcp,Wfd,W,H
      ! Master writes the Fortran record markers.
      ABI_MALLOC(bsize_frecord,(neh2))
      bsize_frecord = neh1 * xmpi_bsize_dpc
-     ! ehdr_offset points to the end of the header.
+     ! ehdr_offset points to the end of the AB_HEADER.
      !call xmpio_write_frmarkers(mpi_fh,ehdr_offset,xmpio_collective,neh2,bsize_frecord,mpi_err)
      my_offset = offset_of_block(block)
      call xmpio_write_frmarkers(mpi_fh,my_offset,xmpio_collective,neh2,bsize_frecord,ierr)

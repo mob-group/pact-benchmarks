@@ -116,8 +116,8 @@
       REAL               RWORK( 1 )
 *     ..
 *     .. External Functions ..
-      REAL               CLANGE, SLAMCH
-      EXTERNAL           CLANGE, SLAMCH
+      REAL               CLANGE, AB_SLAMCH
+      EXTERNAL           CLANGE, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CLASET, CUNMRZ, XERBLA
@@ -160,7 +160,7 @@
    10 CONTINUE
 *
       CRZT02 = CLANGE( 'One-norm', N, N, WORK, N, RWORK ) /
-     $         ( SLAMCH( 'Epsilon' )*REAL( MAX( M, N ) ) )
+     $         ( AB_SLAMCH( 'Epsilon' )*REAL( MAX( M, N ) ) )
       RETURN
 *
 *     End of CRZT02

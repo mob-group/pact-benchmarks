@@ -792,7 +792,7 @@ subroutine psichi_print(dtset,nattyp,ntypat,nkpt,my_nspinor,&
    end if
    rewind(unt)
 
-!  Header for calc_uCRPA.F90
+!  AB_HEADER for calc_uCRPA.F90
    if  (COUNT(pawtab(:)%lpawu.NE.-1).EQ.1) then
      do  itypat=1,ntypat
        if(t2g) then

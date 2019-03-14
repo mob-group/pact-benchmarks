@@ -151,8 +151,8 @@
       DOUBLE PRECISION   ANORM, EPS, T
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DASUM, DLAMCH
-      EXTERNAL           DASUM, DLAMCH
+      DOUBLE PRECISION   DASUM, AB_DLAMCH
+      EXTERNAL           DASUM, AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DAXPY, DCOPY
@@ -170,7 +170,7 @@
 *
 *     Determine EPS and the norm of A.
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       KD = KU + 1
       ANORM = ZERO
       DO 10 J = 1, N

@@ -561,7 +561,7 @@ subroutine slatrad_cshell_init(Slatrad3l,ln2_size,Pawrad,Pawtab,Atm,Atmrad,kln_m
  integer :: il,iln,ilnc,isl,in,jl,jln,jn,kln,ll,lnc_size
  integer :: lslat_max,lslat_min,lc_max,nintg
  integer :: lmn_size,lmn2_size,do_spline,ln_size,whichdenser,isppol
- real(dp) :: intg,intg1,ybcbeg,ybcend
+ real(dp) :: intg,intg1,ybAB_CBEG,ybcend
  logical :: hasameq
 !arrays
  integer,allocatable :: kln2ln(:,:)
@@ -613,8 +613,8 @@ subroutine slatrad_cshell_init(Slatrad3l,ln2_size,Pawrad,Pawtab,Atm,Atmrad,kln_m
 
    do iln=1,ln_size
      phi_in => Pawtab%phi(:,iln)
-     ypp(:) = zero; ybcbeg = zero; ybcend = zero
-     call spline(crad,phi_in,cmesh_size,ybcbeg,ybcend,ypp)
+     ypp(:) = zero; ybAB_CBEG = zero; ybcend = zero
+     call spline(crad,phi_in,cmesh_size,ybAB_CBEG,ybcend,ypp)
      call splint(cmesh_size,crad,phi_in,ypp,dmesh_size,drad,phi_spl(:,iln))
    end do
 
@@ -924,7 +924,7 @@ subroutine paw_mkdijexc_core(ndij,cplex_dij,lmn2_size_max,Cryst,Pawtab,Pawrad,di
 !scalars
  integer :: itypat,ic,ierr,lmn_size,lmn2_size,ln_size,isppol
  real(dp) :: rcut
- character(len=500) :: header,msg
+ character(len=500) :: AB_HEADER,msg
  character(len=fnlen) :: fcore,string
 !arrays
  integer,allocatable :: phi_indln(:,:)
@@ -960,8 +960,8 @@ subroutine paw_mkdijexc_core(ndij,cplex_dij,lmn2_size_max,Cryst,Pawtab,Pawrad,di
      msg = " Error reading core orbitals from file: "//TRIM(fcore)
      MSG_ERROR(msg)
    end if
-   write(header,'(a,i4,a)')" === Atom type = ",itypat," === "
-   call print_atomorb(Atm(itypat),header,unit=std_out,prtvol=pawprtvol)
+   write(AB_HEADER,'(a,i4,a)')" === Atom type = ",itypat," === "
+   call print_atomorb(Atm(itypat),AB_HEADER,unit=std_out,prtvol=pawprtvol)
    !
    ! * Calculate $ \<\phi_i|Sigma_x^\core|\phi_j\> $ for this atom type.
    lmn_size  = Pawtab(itypat)%lmn_size

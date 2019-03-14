@@ -221,8 +221,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               CLANGB, CLANGE, CLANTB, SGET06, SLAMCH
-      EXTERNAL           LSAME, CLANGB, CLANGE, CLANTB, SGET06, SLAMCH
+      REAL               CLANGB, CLANGE, CLANTB, SGET06, AB_SLAMCH
+      EXTERNAL           LSAME, CLANGB, CLANGE, CLANTB, SGET06, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALADHD, ALAERH, ALASVM, CERRVX, CGBEQU, CGBSV,
@@ -678,7 +678,7 @@
                            END IF
                            RESULT( 7 ) = ABS( RPVGRW-RWORK( 2*NRHS+1 ) )
      $                                    / MAX( RWORK( 2*NRHS+1 ),
-     $                                   RPVGRW ) / SLAMCH( 'E' )
+     $                                   RPVGRW ) / AB_SLAMCH( 'E' )
 *
                            IF( .NOT.PREFAC ) THEN
 *

@@ -162,8 +162,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               CLANGE, SCASUM, SLAMCH
-      EXTERNAL           LSAME, CLANGE, SCASUM, SLAMCH
+      REAL               CLANGE, SCASUM, AB_SLAMCH
+      EXTERNAL           LSAME, CLANGE, SCASUM, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGEMM
@@ -190,7 +190,7 @@
          N2 = N
       END IF
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
 *
 *     Compute  B - A*X  (or  B - A'*X ) and store in B.
 *

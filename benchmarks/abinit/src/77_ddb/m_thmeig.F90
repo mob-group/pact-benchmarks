@@ -125,7 +125,7 @@ subroutine thmeig(inp, ddb, crystal, &
  real(dp) :: ucvol
  real(dp) :: g2fsmear,temperinc,tempermin
  real(dp) :: bosein,deltaene,det,domega,enemax,enemin,fact2i,fact2r,factr
- real(dp) :: gaussfactor,gaussprefactor,gaussval,invdet,omega,omega_max,omega_min,qnrm,qptrlen
+ real(dp) :: gaussfactor,gauAB_SSPRefactor,gaussval,invdet,omega,omega_max,omega_min,qnrm,qptrlen
  real(dp) :: rcvol,tmp,tol,vec1i,vec1r,vec2i,vec2r,veci,vecr,xx
  real(dp) :: tolsym,tolsym8  !new
  character(len=500) :: message
@@ -678,7 +678,7 @@ subroutine thmeig(inp, ddb, crystal, &
    omega_max = omega_max + 0.1 * omega_max
    domega = (omega_max-omega_min)/(ng2f-one)
 
-   gaussprefactor = sqrt(piinv) / g2fsmear
+   gauAB_SSPRefactor = sqrt(piinv) / g2fsmear
    gaussfactor = one / g2fsmear
 
    g2f(:,:,:) = zero
@@ -691,7 +691,7 @@ subroutine thmeig(inp, ddb, crystal, &
        tmpphondos(:) = zero
        do iomega=1,ng2f
          xx = (omega-phfreq(imod,iqpt))*gaussfactor
-         gaussval = gaussprefactor*exp(-xx*xx)
+         gaussval = gauAB_SSPRefactor*exp(-xx*xx)
          tmpg2f(:,:,iomega) = tmpg2f(:,:,iomega) + gaussval*dednr(:,:,imod,iqpt)
          tmpphondos(iomega) = tmpphondos(iomega) + gaussval
          omega = omega+domega

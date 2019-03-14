@@ -117,7 +117,7 @@ MODULE m_ddk
   integer :: prtvol=0
    ! Verbosity level
 
-  logical :: debug=.False.
+  logical :: debug=.false.
    ! Debug flag
 
   character(len=fnlen) :: paths(3) = ABI_NOFILE
@@ -211,7 +211,7 @@ subroutine ddk_init(ddk, paths, comm)
    ddk%use_ncddk(ii) = endswith(paths(ii), "_EVK.nc")
    call hdr_read_from_fname(hdrs(ii), paths(ii), fforms(ii), comm)
    if (ddk%debug) call hdr_echo(hdrs(ii), fforms(ii), 4, unit=std_out)
-   ! check that 2 headers are compatible
+   ! check that 2 AB_HEADERs are compatible
    if (ii > 1) call hdr_check(fform2, fform2, hdrs(ii-1), hdrs(ii), 'COLL', restart, restartpaw)
  end do
 
@@ -419,7 +419,7 @@ subroutine eph_ddk(wfk_path,dtfil,dtset,&
  ABI_FREE(keep_ur)
  ABI_FREE(nband)
 
- call wfd_print(in_wfd,header="Wavefunctions on the k-points grid",mode_paral='PERS')
+ call wfd_print(in_wfd,AB_HEADER="Wavefunctions on the k-points grid",mode_paral='PERS')
 
  !Read Wavefunctions
  iomode = iomode_from_fname(wfk_path)
@@ -657,17 +657,17 @@ subroutine ddk_read_fsvelocities(ddk, fstab, comm)
  end do ! idir
 
  ! process the eigenvalues(1): rotate to cartesian and divide by 2 pi
- ! use DGEMM better here on whole matrix and then reshape?
+ ! use AB_DGEMM better here on whole matrix and then reshape?
  vdim = ddk%maxnb*ddk%nkfs*ddk%nsppol
  ABI_MALLOC(velocityp, (3,vdim))
  velocityp = zero
- call dgemm('n','n',3,vdim,3,one,ddk%cryst%rprimd,3,ddk%velocity,3,zero,velocityp,3)
+ call AB_DGEMM('n','n',3,vdim,3,one,ddk%cryst%rprimd,3,ddk%velocity,3,zero,velocityp,3)
 
 ! do isppol = 1, ddk%nsppol
 !   do ikpt = 1, ddk%nkfs
 !     do iband = 1, ddk%maxnb
 !       tmpveloc = ddk%velocity (:, iband, ikpt, isppol)
-!       call dgemm('n','n',3,3,3,one,ddk%cryst%rprimd,3,tmpveloc,3,zero,tmpveloc2,3)
+!       call AB_DGEMM('n','n',3,3,3,one,ddk%cryst%rprimd,3,tmpveloc,3,zero,tmpveloc2,3)
 !       ddk%velocity (:, iband, ikpt, isppol) = tmpveloc2
 !     end do
 !   end do
@@ -848,7 +848,7 @@ end subroutine ddk_free
 !!
 !! SOURCE
 
-subroutine ddk_print(ddk, header, unit, prtvol, mode_paral)
+subroutine ddk_print(ddk, AB_HEADER, unit, prtvol, mode_paral)
 
 
 !This section has been created automatically by the script Abilint (TD).
@@ -863,7 +863,7 @@ subroutine ddk_print(ddk, header, unit, prtvol, mode_paral)
 !scalars
  integer,optional,intent(in) :: prtvol,unit
  character(len=4),optional,intent(in) :: mode_paral
- character(len=*),optional,intent(in) :: header
+ character(len=*),optional,intent(in) :: AB_HEADER
  type(ddk_t),intent(in) :: ddk
 
 !Local variables-------------------------------
@@ -879,7 +879,7 @@ subroutine ddk_print(ddk, header, unit, prtvol, mode_paral)
  my_mode='COLL' ; if (PRESENT(mode_paral)) my_mode  =mode_paral
 
  msg=' ==== Info on the ddk% object ==== '
- if (PRESENT(header)) msg=' ==== '//TRIM(ADJUSTL(header))//' ==== '
+ if (PRESENT(AB_HEADER)) msg=' ==== '//TRIM(ADJUSTL(AB_HEADER))//' ==== '
  call wrtout(my_unt,msg,my_mode)
 
  write(std_out,*)"Number of FS bands: ",ddk%maxnb

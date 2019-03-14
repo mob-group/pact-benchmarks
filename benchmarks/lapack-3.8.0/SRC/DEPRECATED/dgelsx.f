@@ -208,8 +208,8 @@
      $                   SMAXPR, SMIN, SMINPR, SMLNUM, T1, T2
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, AB_DLANGE
-      EXTERNAL           DLAMCH, AB_DLANGE
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE
+      EXTERNAL           AB_DLAMCH, AB_DLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_DGEQPF, AB_DLAIC1, AB_DLASCL, AB_DLASET, AB_
@@ -254,7 +254,7 @@
 *
 *     Get machine parameters
 *
-      SMLNUM = DLAMCH( 'S' ) / DLAMCH( 'P' )
+      SMLNUM = AB_DLAMCH( 'S' ) / AB_DLAMCH( 'P' )
       BIGNUM = ONE / SMLNUM
       CALL AB_DLABAD( SMLNUM, BIGNUM )
 *

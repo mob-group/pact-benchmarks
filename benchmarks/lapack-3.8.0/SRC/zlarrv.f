@@ -333,8 +333,8 @@
      $                   SIGMA, SPDIAM, SSIGMA, TAU, TMP, TOL, ZTZ
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_DCOPY, AB_DLARRB, AB_DLARRF, AB_ZDSCAL, AB_Z
@@ -399,7 +399,7 @@
       CALL AB_ZLASET( 'Full', N, ZUSEDW, CZERO, CZERO,
      $                    Z(1,ZUSEDL), LDZ )
 
-      EPS = DLAMCH( 'Precision' )
+      EPS = AB_DLAMCH( 'Precision' )
       RQTOL = TWO * EPS
 *
 *     Set expert flags for standard code.

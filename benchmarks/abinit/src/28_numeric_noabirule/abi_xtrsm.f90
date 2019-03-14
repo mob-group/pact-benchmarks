@@ -72,7 +72,7 @@ subroutine abi_ztrsm(side,uplo,transa,diag,m,n,alpha,a,lda,b,ldb)
 &     m,n,alpha,c_loc(a),lda,c_loc(b),ldb)
 #endif
  else
-   call ztrsm(side,uplo,transa,diag,m,n,alpha,a,lda,b,ldb)
+   call AB_ZTRSM(side,uplo,transa,diag,m,n,alpha,a,lda,b,ldb)
  end if
 
 #ifdef DEV_LINALG_TIMING
@@ -141,9 +141,9 @@ end subroutine abi_ztrsm
 #endif
  else
    if(cplx_ == 2) then
-      call ztrsm(side,uplo,transa,diag,m,n,cmplx(alpha,0.d0,dpc),a,lda,b,ldb)
+      call AB_ZTRSM(side,uplo,transa,diag,m,n,cmplx(alpha,0.d0,dpc),a,lda,b,ldb)
    else
-      call dtrsm(side,uplo,transa,diag,m,n,alpha,a,lda,b,ldb)
+      call AB_DTRSM(side,uplo,transa,diag,m,n,alpha,a,lda,b,ldb)
    end if
  end if
 
@@ -156,9 +156,9 @@ end subroutine abi_dtrsm
 
 !----------------------------------------------------------------------
 
-!!****f* m_abi_linalg/abi_d2ztrsm
+!!****f* m_abi_linalg/abi_d2AB_ZTRSM
 !! NAME
-!! abi_d2ztrsm
+!! abi_d2AB_ZTRSM
 !!
 !! FUNCTION
 !!
@@ -168,13 +168,13 @@ end subroutine abi_dtrsm
 !!
 !! SOURCE
 
- subroutine abi_d2ztrsm(side,uplo,transa,diag,m,n,alpha,a,lda,b,ldb,&
+ subroutine abi_d2AB_ZTRSM(side,uplo,transa,diag,m,n,alpha,a,lda,b,ldb,&
 &  x_cplx)
 
 !This section has been created automatically by the script Abilint (TD).
 !Do not modify the following lines by hand.
 #undef ABI_FUNC
-#define ABI_FUNC 'abi_d2ztrsm'
+#define ABI_FUNC 'abi_d2AB_ZTRSM'
 !End of the abilint section
 
  implicit none
@@ -212,9 +212,9 @@ end subroutine abi_dtrsm
 #endif
  else
    if(cplx_ == 2) then
-      call ztrsm(side,uplo,transa,diag,m,n,alpha,a,lda,b,ldb)
+      call AB_ZTRSM(side,uplo,transa,diag,m,n,alpha,a,lda,b,ldb)
    else
-      call dtrsm(side,uplo,transa,diag,m,n,real(alpha,dp),a,lda,b,ldb)
+      call AB_DTRSM(side,uplo,transa,diag,m,n,real(alpha,dp),a,lda,b,ldb)
    end if
  end if
 
@@ -222,14 +222,14 @@ end subroutine abi_dtrsm
  call timab(TIMAB_XTRSM,2,tsec)
 #endif
 
-end subroutine abi_d2ztrsm
+end subroutine abi_d2AB_ZTRSM
 !!***
 
 !----------------------------------------------------------------------
 
-!!****f* m_abi_linalg/abi_d2ztrsm_3d
+!!****f* m_abi_linalg/abi_d2AB_ZTRSM_3d
 !! NAME
-!! abi_d2ztrsm_3d
+!! abi_d2AB_ZTRSM_3d
 !!
 !! FUNCTION
 !!
@@ -240,12 +240,12 @@ end subroutine abi_d2ztrsm
 !! SOURCE
 !!
 
-  subroutine abi_d2ztrsm_3d(side,uplo,transa,diag,m,n,alpha,a,lda,b,ldb)
+  subroutine abi_d2AB_ZTRSM_3d(side,uplo,transa,diag,m,n,alpha,a,lda,b,ldb)
 
 !This section has been created automatically by the script Abilint (TD).
 !Do not modify the following lines by hand.
 #undef ABI_FUNC
-#define ABI_FUNC 'abi_d2ztrsm_3d'
+#define ABI_FUNC 'abi_d2AB_ZTRSM_3d'
 !End of the abilint section
 
  implicit none
@@ -273,14 +273,14 @@ end subroutine abi_d2ztrsm
 &    m,n,alpha,c_loc(a),lda,c_loc(b),ldb)
 #endif
  else
-   call ztrsm(side,uplo,transa,diag,m,n,alpha,a,lda,b,ldb)
+   call AB_ZTRSM(side,uplo,transa,diag,m,n,alpha,a,lda,b,ldb)
  end if
 
 #ifdef DEV_LINALG_TIMING
  call timab(TIMAB_XTRSM,2,tsec)
 #endif
 
-end subroutine abi_d2ztrsm_3d
+end subroutine abi_d2AB_ZTRSM_3d
 !!***
 
 !----------------------------------------------------------------------

@@ -377,7 +377,7 @@ subroutine classify_bands(Wfd,use_paw_aeur,first_band,last_band,ik_ibz,spin,ngff
        end if
      end if
 
-     do ib2=ib_start,ib_stop ! Second band index in the degenerate set.
+     do ib2=ib_start,ib_stop ! second band index in the degenerate set.
 
        if (Bsym%only_trace.and.ib1/=ib2) CYCLE ! Only the diagonal is needed.
 

@@ -437,8 +437,8 @@
       DOUBLE PRECISION   RESULT( 35 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLARND
-      EXTERNAL           DLAMCH, DLARND
+      DOUBLE PRECISION   AB_DLAMCH, DLARND
+      EXTERNAL           AB_DLAMCH, DLARND
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, XERBLA, ZBDT01, ZBDT05, ZGESDD,
@@ -521,9 +521,9 @@
 *
 *     More Important constants
 *
-      UNFL = DLAMCH( 'S' )
+      UNFL = AB_DLAMCH( 'S' )
       OVFL = ONE / UNFL
-      ULP = DLAMCH( 'E' )
+      ULP = AB_DLAMCH( 'E' )
       ULPINV = ONE / ULP
       RTUNFL = SQRT( UNFL )
 *
@@ -710,7 +710,7 @@
 *
                      DIF = ZERO
                      DIV = MAX( DBLE( MNMIN )*ULP*S( 1 ),
-     $                     DLAMCH( 'Safe minimum' ) )
+     $                     AB_DLAMCH( 'Safe minimum' ) )
                      DO 80 I = 1, MNMIN - 1
                         IF( SSAV( I ).LT.SSAV( I+1 ) )
      $                     DIF = ULPINV
@@ -826,7 +826,7 @@
 *
                   DIF = ZERO
                   DIV = MAX( DBLE( MNMIN )*ULP*S( 1 ),
-     $                  DLAMCH( 'Safe minimum' ) )
+     $                  AB_DLAMCH( 'Safe minimum' ) )
                   DO 120 I = 1, MNMIN - 1
                      IF( SSAV( I ).LT.SSAV( I+1 ) )
      $                  DIF = ULPINV
@@ -1051,7 +1051,7 @@
 *
                      DIF = ZERO
                      DIV = MAX( DBLE( MNMIN )*ULP*S( 1 ),
-     $                     DLAMCH( 'Safe minimum' ) )
+     $                     AB_DLAMCH( 'Safe minimum' ) )
                      DO 150 I = 1, MNMIN - 1
                         IF( SSAV( I ).LT.SSAV( I+1 ) )
      $                     DIF = ULPINV

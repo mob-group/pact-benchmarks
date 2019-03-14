@@ -162,8 +162,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, DZASUM, ZLANGE
-      EXTERNAL           LSAME, DLAMCH, DZASUM, ZLANGE
+      DOUBLE PRECISION   AB_DLAMCH, DZASUM, ZLANGE
+      EXTERNAL           LSAME, AB_DLAMCH, DZASUM, ZLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZGEMM
@@ -190,7 +190,7 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       ANORM = ZLANGE( '1', M, N, A, LDA, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS

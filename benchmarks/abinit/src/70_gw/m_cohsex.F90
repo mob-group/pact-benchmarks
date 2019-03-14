@@ -113,7 +113,7 @@ contains
 !! Psps <type(pseudopotential_type)>=variables related to pseudopotentials
 !!    %usepaw=1 for PAW, 0 for NC pseudopotentials.
 !! Qmesh <kmesh_t> : datatype gathering information of the q-mesh used
-!!    %ibz=q points where $\tilde\epsilon^{-1}$ has been computed
+!!    %ibz=q points where $\tiAB_LDE\epsilon^{-1}$ has been computed
 !!    %bz(3,nqbz)=coordinates of all q-points in BZ
 !! Sigp <sigparams_t> (see the definition of this structured datatype)
 !! Cryst<crystal_t>=Info on unit cell and symmetries
@@ -133,7 +133,7 @@ contains
 !! OUTPUT
 !!
 !! NOTES
-!!  1) The treatment of the divergence of Gygi+Baldereschi (PRB 1986) [[cite:Gigy1986]] is included.
+!!  1) The treatment of the divergence of Gygi+BaAB_LDEreschi (PRB 1986) [[cite:Gigy1986]] is included.
 !!  2) The calculation of energy derivative is based on finite elements.
 !!  3) On the symmetrization of Sigma matrix elements ***/
 !!        If  Sk = k+G0 then  M_G(k, Sq)= e^{-i( Sq+G).t} M_{ S^-1(G}   (k,q)
@@ -868,7 +868,7 @@ end subroutine cohsex_me
 !! ngfft(18)=contain all needed information about 3D FFT for GW wavefuntions,
 !!  see ~abinit/doc/variables/vargs.htm#ngfft
 !! nsig_ab=Number of components in the self-energy operator (1 for collinear magnetism)
-!! npwc=number of plane waves in $\tilde epsilon^{-1}$
+!! npwc=number of plane waves in $\tiAB_LDE epsilon^{-1}$
 !! nspinor=Number of spinorial components.
 !! nfftot=number of points in real space
 !! i_sz=contribution arising from the integrable coulombian singularity at q==0
@@ -876,7 +876,7 @@ end subroutine cohsex_me
 !! 4pi in the coulombian potential is included in the definition of i_sz
 !! gvec(3,npwc)=G vectors in reduced coordinates
 !! vc_sqrt(npwc)= square root of the coulombian matrix elements for this q-point
-!! epsm1q_o(npwc,npwc)= contains $\tilde epsilon^{-1}(q,w=0) - \delta_{G Gp}$ for
+!! epsm1q_o(npwc,npwc)= contains $\tiAB_LDE epsilon^{-1}(q,w=0) - \delta_{G Gp}$ for
 !!  the particular q-point considered in the sum
 !! wfg2_jk(nsig_ab*nfftot)= Fourier Transform of $\u_{jb k}^*(r) u_{kb k}$
 !!  jb,kb=left and righ band indeces definining the left and right states where the

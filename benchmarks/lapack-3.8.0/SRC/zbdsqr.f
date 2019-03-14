@@ -267,8 +267,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           AB_LSAME, DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_LSAME, AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_DLARTG, AB_DLAS2, AB_DLASQ1, AB_DLASV2, AB_X
@@ -334,8 +334,8 @@
 *
 *     Get machine constants
 *
-      EPS = DLAMCH( 'Epsilon' )
-      UNFL = DLAMCH( 'Safe minimum' )
+      EPS = AB_DLAMCH( 'Epsilon' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
 *
 *     If matrix lower bidiagonal, rotate to be upper bidiagonal
 *     by applying Givens rotations on the left

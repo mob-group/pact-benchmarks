@@ -83,8 +83,8 @@
      $                   BIN( LDB, LDB )
 *     ..
 *     .. External Functions ..
-      REAL               CLANGE, SLAMCH
-      EXTERNAL           CLANGE, SLAMCH
+      REAL               CLANGE, AB_SLAMCH
+      EXTERNAL           CLANGE, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGGBAL
@@ -101,7 +101,7 @@
       KNT = 0
       RMAX = ZERO
 *
-      EPS = SLAMCH( 'Precision' )
+      EPS = AB_SLAMCH( 'Precision' )
 *
    10 CONTINUE
 *

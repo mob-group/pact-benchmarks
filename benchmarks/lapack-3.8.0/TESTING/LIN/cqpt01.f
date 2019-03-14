@@ -148,8 +148,8 @@
       REAL               RWORK( 1 )
 *     ..
 *     .. External Functions ..
-      REAL               CLANGE, SLAMCH
-      EXTERNAL           CLANGE, SLAMCH
+      REAL               CLANGE, AB_SLAMCH
+      EXTERNAL           CLANGE, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CAXPY, CCOPY, CUNMQR, XERBLA
@@ -199,7 +199,7 @@
    50 CONTINUE
 *
       CQPT01 = CLANGE( 'One-norm', M, N, WORK, M, RWORK ) /
-     $         ( REAL( MAX( M, N ) )*SLAMCH( 'Epsilon' ) )
+     $         ( REAL( MAX( M, N ) )*AB_SLAMCH( 'Epsilon' ) )
       IF( NORMA.NE.ZERO )
      $   CQPT01 = CQPT01 / NORMA
 *

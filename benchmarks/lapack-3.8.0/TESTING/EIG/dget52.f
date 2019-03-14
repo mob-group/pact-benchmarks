@@ -229,8 +229,8 @@
      $                   SAFMIN, SALFI, SALFR, SBETA, SCALE, TEMP1, ULP
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLANGE
-      EXTERNAL           DLAMCH, DLANGE
+      DOUBLE PRECISION   AB_DLAMCH, DLANGE
+      EXTERNAL           AB_DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGEMV
@@ -245,9 +245,9 @@
       IF( N.LE.0 )
      $   RETURN
 *
-      SAFMIN = DLAMCH( 'Safe minimum' )
+      SAFMIN = AB_DLAMCH( 'Safe minimum' )
       SAFMAX = ONE / SAFMIN
-      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
+      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
 *
       IF( LEFT ) THEN
          TRANS = 'T'

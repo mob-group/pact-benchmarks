@@ -254,8 +254,8 @@
       REAL               CI( 2, 2 ), CIV( 4 ), CR( 2, 2 ), CRV( 4 )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_SLADIV
@@ -277,7 +277,7 @@
 *
 *     Compute BIGNUM
 *
-      SMLNUM = TWO*SLAMCH( 'Safe minimum' )
+      SMLNUM = TWO*AB_SLAMCH( 'Safe minimum' )
       BIGNUM = ONE / SMLNUM
       SMINI = MAX( SMIN, SMLNUM )
 *

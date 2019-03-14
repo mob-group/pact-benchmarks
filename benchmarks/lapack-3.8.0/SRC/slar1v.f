@@ -263,15 +263,15 @@
 *     ..
 *     .. External Functions ..
       LOGICAL AB_SISNAN
-      REAL               SLAMCH
-      EXTERNAL           AB_SISNAN, SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SISNAN, AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = SLAMCH( 'Precision' )
+      EPS = AB_SLAMCH( 'Precision' )
 
 
       IF( R.EQ.0 ) THEN

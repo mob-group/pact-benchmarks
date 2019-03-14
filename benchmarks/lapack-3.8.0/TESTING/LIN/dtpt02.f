@@ -167,8 +167,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      DOUBLE PRECISION   DASUM, DLAMCH, DLANTP
-      EXTERNAL           LSAME, DASUM, DLAMCH, DLANTP
+      DOUBLE PRECISION   DASUM, AB_DLAMCH, DLANTP
+      EXTERNAL           LSAME, DASUM, AB_DLAMCH, DLANTP
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DAXPY, DCOPY, DTPMV
@@ -195,7 +195,7 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN

@@ -142,7 +142,7 @@ end subroutine pred_simple
 !!
 !! FUNCTION
 !! Simple preconditioner, compute the force constant matrix
-!! using the Badger's rule:
+!! using the BaAB_DGER's rule:
 !!
 !!                F=A/(r-B)^3
 !!
@@ -159,7 +159,7 @@ end subroutine pred_simple
 !!      mover
 !!
 !! CHILDREN
-!!      bonds_free,dsyev,dsysv,fcart2fred,make_bonds_new,xred2xcart
+!!      bonds_free,AB_DSYEV,AB_DSYSV,fcart2fred,make_bonds_new,xred2xcart
 !!
 !! SOURCE
 
@@ -186,7 +186,7 @@ subroutine prec_simple(ab_mover,forstr,hist,icycle,itime,iexit)
 !scalars
  integer :: period,ii,jj,index,kk,ksub,jsub
  integer :: info,lwork,new_order_forces
- real(dp) :: Z,badgerfactor,lambda,sigma,val_rms
+ real(dp) :: Z,baAB_DGERfactor,lambda,sigma,val_rms
  integer,save :: order_forces
  logical :: Compute_Matrix
 !arrays
@@ -201,7 +201,7 @@ subroutine prec_simple(ab_mover,forstr,hist,icycle,itime,iexit)
  real(dp) :: w(3*ab_mover%natom)
  real(dp),allocatable :: matrix_tmp(:,:)
  real(dp),allocatable :: work(:)
- real(dp) :: badger(6,6)
+ real(dp) :: baAB_DGER(6,6)
  real(dp),allocatable,save :: matrix(:,:)
  character(len=18)   :: fmt
 
@@ -217,14 +217,14 @@ subroutine prec_simple(ab_mover,forstr,hist,icycle,itime,iexit)
  end if
 
 !##########################################################
-!### 01. Show the Precondition parameters, set the badger
+!### 01. Show the Precondition parameters, set the baAB_DGER
 !###     matrix.
 
  write(std_out,*) 'Precondition option',ab_mover%goprecon
  write(std_out,*) 'Precondition parameters',ab_mover%goprecprm
  lambda=ab_mover%goprecprm(1)
 
- badger(:,:)=reshape( (/ -0.2573, 0.3401, 0.6937, 0.7126, 0.8335, 0.9491,&
+ baAB_DGER(:,:)=reshape( (/ -0.2573, 0.3401, 0.6937, 0.7126, 0.8335, 0.9491,&
 & 0.3401, 0.9652, 1.2843, 1.4725, 1.6549, 1.7190,&
 & 0.6937, 1.2843, 1.6925, 1.8238, 2.1164, 2.3185,&
 & 0.7126, 1.4725, 1.8238, 2.0203, 2.2137, 2.5206,&
@@ -356,9 +356,9 @@ subroutine prec_simple(ab_mover,forstr,hist,icycle,itime,iexit)
      write(std_out,*) 'Bond number:',ii
      if (iatoms(1,ii)>0 .and. iatoms(2,ii)>0) then
        write(std_out,*) 'Between atoms:',iatoms(1,ii),' and ',iatoms(2,ii)
-       badgerfactor=badger(periods(1,ii),periods(2,ii))
+       baAB_DGERfactor=baAB_DGER(periods(1,ii),periods(2,ii))
        write(std_out,*) 'Periods of atoms:',periods(1,ii),' and ',periods(2,ii)
-       write(std_out,*) 'Badger factor:',badgerfactor
+       write(std_out,*) 'BaAB_DGER factor:',baAB_DGERfactor
 
 !      Compute the diadic product and
 !      Insert the matrix into the big one
@@ -368,23 +368,23 @@ subroutine prec_simple(ab_mover,forstr,hist,icycle,itime,iexit)
            jsub=3*(iatoms(1,ii)-1)+jj
            ksub=3*(iatoms(2,ii)-1)+kk
            matrix(jsub,ksub)=matrix(jsub,ksub)-&
-&           badgerfactor*bonds%bond_vect(jj,ii)*bonds%bond_vect(kk,ii)
+&           baAB_DGERfactor*bonds%bond_vect(jj,ii)*bonds%bond_vect(kk,ii)
 
            jsub=3*(iatoms(2,ii)-1)+jj
            ksub=3*(iatoms(1,ii)-1)+kk
            matrix(jsub,ksub)=matrix(jsub,ksub)-&
-&           badgerfactor*bonds%bond_vect(jj,ii)*bonds%bond_vect(kk,ii)
+&           baAB_DGERfactor*bonds%bond_vect(jj,ii)*bonds%bond_vect(kk,ii)
 
 !          The diagonal blocks
            jsub=3*(iatoms(1,ii)-1)+jj
            ksub=3*(iatoms(1,ii)-1)+kk
            matrix(jsub,ksub)=matrix(jsub,ksub)+&
-&           badgerfactor*bonds%bond_vect(jj,ii)*bonds%bond_vect(kk,ii)
+&           baAB_DGERfactor*bonds%bond_vect(jj,ii)*bonds%bond_vect(kk,ii)
 
            jsub=3*(iatoms(2,ii)-1)+jj
            ksub=3*(iatoms(2,ii)-1)+kk
            matrix(jsub,ksub)=matrix(jsub,ksub)+&
-&           badgerfactor*bonds%bond_vect(jj,ii)*bonds%bond_vect(kk,ii)
+&           baAB_DGERfactor*bonds%bond_vect(jj,ii)*bonds%bond_vect(kk,ii)
 
          end do !do kk=1,3
        end do !do jj=1,3
@@ -413,15 +413,15 @@ subroutine prec_simple(ab_mover,forstr,hist,icycle,itime,iexit)
 
    ABI_ALLOCATE(work,(1))
    lwork=-1
-   call DSYEV('V', 'U', 3*ab_mover%natom, matrix_tmp, 3*ab_mover%natom, w , work, lwork, info )
+   call AB_DSYEV('V', 'U', 3*ab_mover%natom, matrix_tmp, 3*ab_mover%natom, w , work, lwork, info )
    lwork=work(1)
-   write(std_out,*) '[DSYEV] Recommended lwork=',lwork
+   write(std_out,*) '[AB_DSYEV] Recommended lwork=',lwork
    ABI_DEALLOCATE(work)
    ABI_ALLOCATE(work,(lwork))
-   call DSYEV('V', 'U', 3*ab_mover%natom, matrix_tmp, 3*ab_mover%natom, w , work, lwork, info )
+   call AB_DSYEV('V', 'U', 3*ab_mover%natom, matrix_tmp, 3*ab_mover%natom, w , work, lwork, info )
    ABI_DEALLOCATE(work)
    ABI_DEALLOCATE(matrix_tmp)
-   write(std_out,*) 'DSYEV info=',info
+   write(std_out,*) 'AB_DSYEV info=',info
    write(std_out,*) 'Eigenvalues:'
    write(std_out,fmt) w(:)
 
@@ -451,22 +451,22 @@ subroutine prec_simple(ab_mover,forstr,hist,icycle,itime,iexit)
    end do
  end if
 
-!call dsysv( uplo, n, nrhs, a, lda, ipiv, b, ldb, work, lwork, info )
+!call AB_DSYSV( uplo, n, nrhs, a, lda, ipiv, b, ldb, work, lwork, info )
 !MGNAG FIXME: This call causes a floating point exception if NAG+MKL
  ABI_ALLOCATE(work,(1))
  lwork=-1
- call DSYSV( 'U', 3*ab_mover%natom, 1, matrix,&
+ call AB_DSYSV( 'U', 3*ab_mover%natom, 1, matrix,&
 & 3*ab_mover%natom, ipiv, B, 3*ab_mover%natom, work, lwork, info )
 
  lwork=work(1)
- write(std_out,*) '[DSYSV] Recomended lwork=',lwork
+ write(std_out,*) '[AB_DSYSV] Recomended lwork=',lwork
  ABI_DEALLOCATE(work)
  ABI_ALLOCATE(work,(lwork))
- call DSYSV( 'U', 3*ab_mover%natom, 1, matrix,&
+ call AB_DSYSV( 'U', 3*ab_mover%natom, 1, matrix,&
 & 3*ab_mover%natom, ipiv, B, 3*ab_mover%natom, work, lwork, info )
  ABI_DEALLOCATE(work)
 
- write(std_out,*) 'DSYSV info=',info
+ write(std_out,*) 'AB_DSYSV info=',info
  write(std_out,*) 'Solution:'
  write(std_out,fmt) B(:)
 

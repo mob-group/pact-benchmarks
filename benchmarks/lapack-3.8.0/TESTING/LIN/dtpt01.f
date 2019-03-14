@@ -135,8 +135,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, DLANTP
-      EXTERNAL           LSAME, DLAMCH, DLANTP
+      DOUBLE PRECISION   AB_DLAMCH, DLANTP
+      EXTERNAL           LSAME, AB_DLAMCH, DLANTP
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DTPMV
@@ -156,7 +156,7 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0 or AINVNM = 0.
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       ANORM = DLANTP( '1', UPLO, DIAG, N, AP, WORK )
       AINVNM = DLANTP( '1', UPLO, DIAG, N, AINVP, WORK )
       IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN

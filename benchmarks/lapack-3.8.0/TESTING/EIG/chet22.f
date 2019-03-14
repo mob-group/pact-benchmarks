@@ -188,8 +188,8 @@
       REAL               ANORM, ULP, UNFL, WNORM
 *     ..
 *     .. External Functions ..
-      REAL               CLANHE, SLAMCH
-      EXTERNAL           CLANHE, SLAMCH
+      REAL               CLANHE, AB_SLAMCH
+      EXTERNAL           CLANHE, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGEMM, CHEMM
@@ -204,8 +204,8 @@
       IF( N.LE.0 .OR. M.LE.0 )
      $   RETURN
 *
-      UNFL = SLAMCH( 'Safe minimum' )
-      ULP = SLAMCH( 'Precision' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
+      ULP = AB_SLAMCH( 'Precision' )
 *
 *     Do Test 1
 *

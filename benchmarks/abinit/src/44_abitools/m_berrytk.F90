@@ -132,7 +132,7 @@ contains
 !!    for a group of valence bands defined by minbd and maxbd.
 !!
 !! PARENTS
-!!      berryphase_new,cgwf,chern_number,getcgqphase,make_grad_berry
+!!      berryphase_new,cgwf,AB_CHERn_number,getcgqphase,make_grad_berry
 !!
 !! CHILDREN
 !!      dzgedi,dzgefa,overlap_g
@@ -666,7 +666,7 @@ end subroutine smatrix
 !!               in atomic units
 !!
 !! NOTES
-!! - The sum of the electronic and ionic Berry phase is folded into
+!! - The sum of the electronic and ionic Berry phase is foAB_LDEd into
 !!   [-1,1] before it is transformed to cartesian coordinates.
 !!   This means that in some cases, ptot_cart /= pel_cart + pion_cart
 !!
@@ -713,7 +713,7 @@ subroutine polcart(red_ptot,pel,pel_cart,pelev,pion,pion_cart,polunit,&
  real(dp) :: pel_mks(3),pelev_mks(3),pion_mks(3),ptot(3),ptot_mks(3)
 
 ! ***********************************************************************
-!!REC Note ptot has already been folded and kept onto same branch
+!!REC Note ptot has already been foAB_LDEd and kept onto same branch
 !unless ptot=0d0, in which case ptot has not been computed yet
  if( sum(abs(red_ptot(:))) < tol8 )then
    ptot(:) = pel(:) + pion(:)
@@ -767,7 +767,7 @@ subroutine polcart(red_ptot,pel,pel_cart,pelev,pion,pion_cart,polunit,&
    write(message,'(7(a),3(e16.9,2x),a,a,3(e16.9,2x))')ch10,&
 &   ' Polarization in cartesian coordinates (a.u.):',ch10,&
 &   ' (the sum of the electronic and ionic Berry phase',&
-&   ' has been folded into [-1, 1])',ch10,&
+&   ' has been foAB_LDEd into [-1, 1])',ch10,&
 &   '     Electronic berry phase:       ', (pel_cart(idir), idir = 1, 3)
    call wrtout(unit_out,message,'COLL')
    if(usepaw==1) then
@@ -794,7 +794,7 @@ subroutine polcart(red_ptot,pel,pel_cart,pelev,pion,pion_cart,polunit,&
    write(message,'(7(a),3(e16.9,2x),a,a,3(e16.9,2x),a,a,3(e16.9,2x),a,a,3(e16.9,2x))')ch10,&
 &   ' Polarization in cartesian coordinates (C/m^2):',ch10,&
 &   ' (the sum of the electronic and ionic Berry phase',&
-&   ' has been folded into [-1, 1])',ch10,&
+&   ' has been foAB_LDEd into [-1, 1])',ch10,&
 &   '     Electronic berry phase:       ', (pel_mks(idir), idir = 1, 3)
    call wrtout(unit_out,message,'COLL')
    if(usepaw==1) then

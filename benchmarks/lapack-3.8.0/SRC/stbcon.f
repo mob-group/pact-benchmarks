@@ -177,8 +177,8 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_ISAMAX
-      REAL               SLAMCH, AB_SLANTB
-      EXTERNAL           AB_LSAME, AB_ISAMAX, SLAMCH, AB_SLANTB
+      REAL               AB_SLAMCH, AB_SLANTB
+      EXTERNAL           AB_LSAME, AB_ISAMAX, AB_SLAMCH, AB_SLANTB
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_SLACN2, AB_SLATBS, AB_SRSCL, AB_XERBLA
@@ -221,7 +221,7 @@
       END IF
 *
       RCOND = ZERO
-      SMLNUM = SLAMCH( 'Safe minimum' )*REAL( MAX( 1, N ) )
+      SMLNUM = AB_SLAMCH( 'Safe minimum' )*REAL( MAX( 1, N ) )
 *
 *     Compute the norm of the triangular matrix A.
 *

@@ -174,9 +174,9 @@
       LOGICAL            UPPER
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
       LOGICAL            AB_LSAME, AB_DISNAN
-      EXTERNAL           DLAMCH, AB_LSAME, AB_DISNAN
+      EXTERNAL           AB_DLAMCH, AB_LSAME, AB_DISNAN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_ZDSCAL, AB_ZGEMV, AB_ZLACGV, AB_ZSWAP, AB_XE
@@ -230,7 +230,7 @@
 *     Compute stopping value if not supplied
 *
       IF( TOL.LT.ZERO ) THEN
-         DSTOP = N * DLAMCH( 'Epsilon' ) * AJJ
+         DSTOP = N * AB_DLAMCH( 'Epsilon' ) * AJJ
       ELSE
          DSTOP = TOL
       END IF

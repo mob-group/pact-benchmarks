@@ -372,8 +372,8 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_ILAENV
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           AB_LSAME, AB_ILAENV, DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_LSAME, AB_ILAENV, AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_DLAEBZ
@@ -439,8 +439,8 @@
       IF( IRANGE.EQ.INDRNG .AND. IL.EQ.1 .AND. IU.EQ.N ) IRANGE = 1
 
 *     Get machine constants
-      EPS = DLAMCH( 'P' )
-      UFLOW = DLAMCH( 'U' )
+      EPS = AB_DLAMCH( 'P' )
+      UFLOW = AB_DLAMCH( 'U' )
 
 
 *     Special Case when N=1

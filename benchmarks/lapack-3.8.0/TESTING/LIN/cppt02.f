@@ -151,8 +151,8 @@
       REAL               ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      REAL               CLANHP, SCASUM, SLAMCH
-      EXTERNAL           CLANHP, SCASUM, SLAMCH
+      REAL               CLANHP, SCASUM, AB_SLAMCH
+      EXTERNAL           CLANHP, SCASUM, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CHPMV
@@ -171,7 +171,7 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       ANORM = CLANHP( '1', UPLO, N, A, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS

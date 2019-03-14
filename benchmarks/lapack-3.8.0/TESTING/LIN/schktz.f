@@ -170,8 +170,8 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SQRT12, SRZT01, SRZT02
-      EXTERNAL           SLAMCH, SQRT12, SRZT01, SRZT02
+      REAL               AB_SLAMCH, SQRT12, SRZT01, SRZT02
+      EXTERNAL           AB_SLAMCH, SQRT12, SRZT01, SRZT02
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAHD, ALASUM, SERRTZ, SGEQR2, SLACPY, SLAORD,
@@ -204,7 +204,7 @@
       DO 10 I = 1, 4
          ISEED( I ) = ISEEDY( I )
    10 CONTINUE
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
 *
 *     Test the error exits
 *

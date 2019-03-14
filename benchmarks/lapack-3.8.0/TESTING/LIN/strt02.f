@@ -177,8 +177,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               SASUM, SLAMCH, SLANTR
-      EXTERNAL           LSAME, SASUM, SLAMCH, SLANTR
+      REAL               SASUM, AB_SLAMCH, SLANTR
+      EXTERNAL           LSAME, SASUM, AB_SLAMCH, SLANTR
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SAXPY, SCOPY, STRMV
@@ -205,7 +205,7 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN

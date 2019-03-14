@@ -443,7 +443,7 @@ subroutine setvtr(atindx1,dtset,energies,gmet,gprimd,grchempottn,grewtn,grvdw,gs
    ABI_ALLOCATE(rhojellr,(nfft))
    option=1
    call jellium(gmet,gsqcut,mpi_enreg,nfft,ngfft,dtset%nspden,option,mpi_enreg%paral_kgb,&
-&   dtset%slabwsrad,rhojellg,rhojellr,rprimd,vjell,dtset%slabzbeg,dtset%slabzend)
+&   dtset%slabwsrad,rhojellg,rhojellr,rprimd,vjell,dtset%slabAB_ZBEG,dtset%slabzend)
 !  Compute background-background energy
    call dotprod_vn(1,rhojellr,ebb,doti,nfft,nfftot,1,1,vjell,ucvol,mpi_comm_sphgrid=mpi_comm_sphgrid)
    ebb=half*ebb

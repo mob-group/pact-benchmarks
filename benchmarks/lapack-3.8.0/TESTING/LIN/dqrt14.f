@@ -145,8 +145,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, DLANGE
-      EXTERNAL           LSAME, DLAMCH, DLANGE
+      DOUBLE PRECISION   AB_DLAMCH, DLANGE
+      EXTERNAL           LSAME, AB_DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGELQ2, DGEQR2, DLACPY, DLASCL, XERBLA
@@ -251,7 +251,7 @@
 *
       END IF
 *
-      DQRT14 = ERR / ( DBLE( MAX( M, N, NRHS ) )*DLAMCH( 'Epsilon' ) )
+      DQRT14 = ERR / ( DBLE( MAX( M, N, NRHS ) )*AB_DLAMCH( 'Epsilon' ) )
 *
       RETURN
 *

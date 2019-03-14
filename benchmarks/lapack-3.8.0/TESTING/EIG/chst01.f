@@ -165,8 +165,8 @@
       REAL               ANORM, EPS, OVFL, SMLNUM, UNFL, WNORM
 *     ..
 *     .. External Functions ..
-      REAL               CLANGE, SLAMCH
-      EXTERNAL           CLANGE, SLAMCH
+      REAL               CLANGE, AB_SLAMCH
+      EXTERNAL           CLANGE, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGEMM, CLACPY, CUNT01, SLABAD
@@ -184,8 +184,8 @@
          RETURN
       END IF
 *
-      UNFL = SLAMCH( 'Safe minimum' )
-      EPS = SLAMCH( 'Precision' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
+      EPS = AB_SLAMCH( 'Precision' )
       OVFL = ONE / UNFL
       CALL SLABAD( UNFL, OVFL )
       SMLNUM = UNFL*N / EPS

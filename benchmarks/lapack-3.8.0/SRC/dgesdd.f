@@ -270,8 +270,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME
-      DOUBLE PRECISION   DLAMCH, AB_DLANGE
-      EXTERNAL           DLAMCH, AB_DLANGE, AB_LSAME
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE
+      EXTERNAL           AB_DLAMCH, AB_DLANGE, AB_LSAME
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          INT, MAX, MIN, SQRT
@@ -598,8 +598,8 @@
 *
 *     Get machine constants
 *
-      EPS = DLAMCH( 'P' )
-      SMLNUM = SQRT( DLAMCH( 'S' ) ) / EPS
+      EPS = AB_DLAMCH( 'P' )
+      SMLNUM = SQRT( AB_DLAMCH( 'S' ) ) / EPS
       BIGNUM = ONE / SMLNUM
 *
 *     Scale A if max element outside range [SMLNUM,BIGNUM]

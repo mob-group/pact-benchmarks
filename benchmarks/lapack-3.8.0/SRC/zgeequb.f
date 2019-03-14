@@ -173,8 +173,8 @@
       COMPLEX*16         ZDUM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_XERBLA
@@ -216,9 +216,9 @@
 *
 *     Get machine constants.  Assume SMLNUM is a power of the radix.
 *
-      SMLNUM = DLAMCH( 'S' )
+      SMLNUM = AB_DLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
-      RADIX = DLAMCH( 'B' )
+      RADIX = AB_DLAMCH( 'B' )
       LOGRDX = LOG( RADIX )
 *
 *     Compute row scale factors.

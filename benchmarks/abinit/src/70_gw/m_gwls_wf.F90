@@ -265,18 +265,18 @@ end function scprod_kc
 !! *************************************************************************
 !  ABI_ALLOCATE(eq_lin,(4,k))
 !
-!  !Copy the input data into 4 vectors that will be overwritten by dgtsv()
+!  !Copy the input data into 4 vectors that will be overwritten by AB_DGTSV()
 !  eq_lin = zero
 !  eq_lin(1,1:k-1) = beta       !sub-diagonal (only the 1:kmax-1 elements are used)
 !  eq_lin(2,:) = alpha      !diagonal
 !  eq_lin(3,1:k-1) = beta       !supra-diagonal (only the 1:kmax-1 elements are used)
 !  eq_lin(4,1) = 1.0        !the RHS vector to the linear equation (here, |1,0,0,...>)
 !
-!  !DGTSV( N, NRHS, DL, D, DU, B, LDB, INFO )
-!  !dgtsv(matrix size, # of column of RHS, sub-diagonal elements, diagonal elements, super-diagonal elements, 
+!  !AB_DGTSV( N, NRHS, DL, D, DU, B, LDB, INFO )
+!  !AB_DGTSV(matrix size, # of column of RHS, sub-diagonal elements, diagonal elements, super-diagonal elements, 
 !  !      RHS of equation (solution of equation at end of routine), size of RHS vector, 
 !  !      error message integer (0: success, -i: illegal ith argument, i: ith factorization failed))
-!  call dgtsv(k,1,eq_lin(1,1:k-1),eq_lin(2,:),eq_lin(3,1:k-1),eq_lin(4,:),k,i)
+!  call AB_DGTSV(k,1,eq_lin(1,1:k-1),eq_lin(2,:),eq_lin(3,1:k-1),eq_lin(4,:),k,i)
 !  !Do the scalar product between the <qr_k|sv|ne>=(1,0,0,...) vector and the solution x to T*x=(1,0,0,...) to obtain contribution
 !  !to SEX, at order k, from orbital n.
 !  !We now replace the screened coulomb interaction by the coulomb hole...
@@ -331,7 +331,7 @@ end function scprod_kc
 !  b=zero
 !  ipiv=zero
 !
-!  !Copy the input data into 4 vectors that will be overwritten by dgtsv()
+!  !Copy the input data into 4 vectors that will be overwritten by AB_DGTSV()
 !   !do j=1,k*nseeds
 !   ! do i=max(1,j-nseeds),min(k*nseeds,j+nseeds)
 !   !  ab(2*nseeds+1+i-j,j) = cmplx(alpha
@@ -358,7 +358,7 @@ end function scprod_kc
 !  b(1,1) = (1.0,0.0)
 !
 !  !write(std_out,*)  "Solving..."
-!  call zgesv(kmax*nseeds,1,a,kmax*nseeds,ipiv,b,kmax*nseeds,i)
+!  call AB_ZGESV(kmax*nseeds,1,a,kmax*nseeds,ipiv,b,kmax*nseeds,i)
 !  !Do the scalar product between the <qr_k|sv|ne>=(1,0,0,...) vector and the solution x to T*x=(1,0,0,...) to obtain contribution
 !  !to SEX, at order k, from orbital n 
 !  !write(std_out,*)  "Obtaining contribution..."

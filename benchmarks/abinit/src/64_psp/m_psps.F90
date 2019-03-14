@@ -40,7 +40,7 @@ module m_psps
  use m_fstrings,      only : itoa, sjoin, yesno
  use m_io_tools,      only : open_file
  use m_symtk,         only : matr3inv
- use defs_datatypes,  only : pspheader_type, pseudopotential_type, pseudopotential_gth_type, nctab_t
+ use defs_datatypes,  only : pspAB_HEADER_type, pseudopotential_type, pseudopotential_gth_type, nctab_t
  use defs_abitypes,   only : dataset_type
  use m_paw_numeric,   only : paw_spline
  use m_pawrad,        only : pawrad_type, pawrad_init, pawrad_free, simp_gen
@@ -165,8 +165,8 @@ end subroutine test_xml_xmlpaw_upf
 !!
 !! INPUTS
 !! npsp=the number of read pseudo files.
-!! pspheads(npsp)=<type pspheader_type>all the important information from the
-!!   pseudopotential file header, as well as the psp file name
+!! pspheads(npsp)=<type pspAB_HEADER_type>all the important information from the
+!!   pseudopotential file AB_HEADER, as well as the psp file name
 !!
 !! OUTPUT
 !!
@@ -197,7 +197,7 @@ subroutine psps_init_global(mtypalch, npsp, psps, pspheads)
  integer,intent(in) :: mtypalch,npsp
  type(pseudopotential_type),intent(inout) :: psps
 !arrays
- type(pspheader_type),intent(in) :: pspheads(npsp)
+ type(pspAB_HEADER_type),intent(in) :: pspheads(npsp)
 
 !Local variables-------------------------------
 !scalars
@@ -261,8 +261,8 @@ end subroutine psps_init_global
 !!
 !! INPUTS
 !! dtset=<type dataset_type>a given dataset
-!! pspheads(npsp)=<type pspheader_type>all the important information from the
-!!   pseudopotential file header, as well as the psp file name
+!! pspheads(npsp)=<type pspAB_HEADER_type>all the important information from the
+!!   pseudopotential file AB_HEADER, as well as the psp file name
 !!
 !! OUTPUT
 !!
@@ -294,7 +294,7 @@ subroutine psps_init_from_dtset(dtset, idtset, psps, pspheads)
  type(dataset_type),intent(in) :: dtset
  type(pseudopotential_type),intent(inout) :: psps
 !arrays
- type(pspheader_type),intent(in) :: pspheads(psps%npsp)
+ type(pspAB_HEADER_type),intent(in) :: pspheads(psps%npsp)
 
 !Local variables-------------------------------
 !scalars
@@ -484,7 +484,7 @@ subroutine psps_init_from_dtset(dtset, idtset, psps, pspheads)
      ! If you change usepaw in the input, you will get what you deserve!
      ABI_DT_MALLOC(psps%nctab, (dtset%ntypat))
      do itypat=1,dtset%ntypat
-       call nctab_init(psps%nctab(itypat), psps%mqgrid_vl, .False., .False.)
+       call nctab_init(psps%nctab(itypat), psps%mqgrid_vl, .false., .false.)
      end do
    end if
 
@@ -1468,12 +1468,12 @@ subroutine nctab_free(nctab)
 
  nctab%mqgrid_vl = 0
 
- nctab%has_tvale = .False.
+ nctab%has_tvale = .false.
  if (allocated(nctab%tvalespl)) then
    ABI_FREE(nctab%tvalespl)
  end if
 
- nctab%has_tcore = .False.
+ nctab%has_tcore = .false.
  if (allocated(nctab%tcorespl)) then
    ABI_FREE(nctab%tcorespl)
  end if
@@ -1672,7 +1672,7 @@ subroutine nctab_eval_tcorespl(nctab, n1xccc, xcccrc, xccc1d, mqgrid_vl, qgrid_v
 
  ! Skip loop if this atom has no core charge
  if (abs(xcccrc) < tol16) then
-   nctab%has_tcore = .False.
+   nctab%has_tcore = .false.
    return
  end if
 
@@ -1754,11 +1754,11 @@ subroutine nctab_mixalch(nctabs, npspalch, ntypalch, algalch, mixalch, mixtabs)
 
    ! has_tcore is true is at least one pseudo has nlcc.
    ! has_tvale is true if *all* mixed pseudos have the PS valence charge.
-   has_tcore = .False.; has_tvale = .True.
+   has_tcore = .false.; has_tvale = .True.
    do ipspalch=1,npspalch
      if (abs(mixalch(ipspalch,itypalch)) < tol6) cycle
      if (nctabs(ipspalch)%has_tcore) has_tcore = .True.
-     if (.not. nctabs(ipspalch)%has_tvale) has_tvale = .False.
+     if (.not. nctabs(ipspalch)%has_tvale) has_tvale = .false.
    end do
    !write(std_out,*)has_tvale, has_tcore
 

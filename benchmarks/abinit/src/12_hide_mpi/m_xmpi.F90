@@ -2691,7 +2691,7 @@ pure function xmpi_distrib_with_replicas(itask,ntasks,rank,nprocs) result(bool)
    !write(std_out,*)"mnp_pool",mnp_pool,"nprocs, ntasks",nprocs,ntasks
 
    rk_base = MODULO(itask-1, nprocs)
-   bool = .False.
+   bool = .false.
    do ii=1,mnp_pool+1
      if (rank == rk_base + (ii-1) * ntasks) then
         bool = .True.; exit

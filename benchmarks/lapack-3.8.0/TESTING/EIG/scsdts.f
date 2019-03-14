@@ -259,8 +259,8 @@
       REAL               EPS2, RESID, ULP, ULPINV
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLANGE, SLANSY
-      EXTERNAL           SLAMCH, SLANGE, SLANSY
+      REAL               AB_SLAMCH, SLANGE, SLANSY
+      EXTERNAL           AB_SLAMCH, SLANGE, SLANSY
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGEMM, SLACPY, SLASET, AB_sorcsd, AB_sorcsd2BY1
@@ -272,7 +272,7 @@
 *     ..
 *     .. Executable Statements ..
 *
-      ULP = SLAMCH( 'Precision' )
+      ULP = AB_SLAMCH( 'Precision' )
       ULPINV = REALONE / ULP
 *
 *     The first half of the routine checks the 2-by-2 CSD

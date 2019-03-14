@@ -211,7 +211,7 @@ subroutine vtorhorec(dtset,&
  trotter = dtset%recptrott  !--trotter parameter
  nelect  = dtset%nelect     !--number of electrons
 
- toldrho = dtset%rectolden  !--tollerance for density
+ toldrho = dtset%rectoAB_LDEn  !--tollerance for density
  tolrec  = toldrho*1.d-2    !--tollerance for local density
 
  tsmear  = dtset%tsmear     !--temperature
@@ -261,7 +261,7 @@ subroutine vtorhorec(dtset,&
  exppot = zero
  nullify(gcart_loc)
 
- if(dtset%rectesteg==1)then
+ if(dtset%reAB_CTESTeg==1)then
 !  --Free electron gas case
    exppot = one
  else
@@ -643,7 +643,7 @@ subroutine vtorhorec(dtset,&
 !--find the good mu by imposing the electrons number
  call fermisolverec(rset%efermi,rholocal,alocal,b2local,rset%debug,&
 & rset%min_nrec,tsmear,trotter,nelect,tol10,100, &
-& rset%par%ntranche,rset%mpi,inf_ucvol,& !.False. .and.&
+& rset%par%ntranche,rset%mpi,inf_ucvol,& !.false. .and.&
 & (rset%tp==2 .or. rset%tp==3) .and. trotter>1)
 
 !#################################################################
@@ -656,7 +656,7 @@ subroutine vtorhorec(dtset,&
 
 !  --Seek for the min of the path integral
    potmin = zero;  nlpotmin = zero
-   if(dtset%rectesteg/=1) potmin = minval(vtrial(:,1))
+   if(dtset%reAB_CTESTeg/=1) potmin = minval(vtrial(:,1))
    if(rset%nl%nlpsp)  nlpotmin = minval(rset%nl%eival(:,:,:))
    xmax = exp(-ratio2*(potmin+nlpotmin-rset%efermi))
 
@@ -2380,7 +2380,7 @@ subroutine first_rec(dtset,psps,rset)
 &         rho,&
 &         0, rset%efermi,tsmear,rtrotter,dim_trott, &
 &         rset%ZT_p, &
-&         dtset%rectolden,dtset%typat, &
+&         dtset%rectoAB_LDEn,dtset%typat, &
 &         rset%nl,&
 &         rset%mpi,nfftrec,ngfftrec,rset%inf,&
 &         6,dtset%natom,dm_projec,0)
@@ -2395,7 +2395,7 @@ subroutine first_rec(dtset,psps,rset)
 &         rho,&
 &         0, rset%efermi,tsmear,rtrotter,dim_trott, &
 &         rset%ZT_p, &
-&         dtset%rectolden,dtset%typat, &
+&         dtset%rectoAB_LDEn,dtset%typat, &
 &         rset%nl,&
 &         rset%mpi,nfftrec,ngfftrec,rset%inf,&
 &         6,dtset%natom,dm_projec,0)
@@ -2419,7 +2419,7 @@ subroutine first_rec(dtset,psps,rset)
      ABI_ALLOCATE(b2loc_cu,(rset_test%GPU%par%npt))
      call timein(tsec2(1),tsec2(2))
      call cudarec(rset_test, exppot,aloc_cu,b2loc_cu,&
-&     beta,trotter,dtset%rectolden,dtset%recgratio,dtset%ngfft,max_rec)
+&     beta,trotter,dtset%rectoAB_LDEn,dtset%recgratio,dtset%ngfft,max_rec)
      call timein(tsec3(1),tsec3(2))
      ABI_DEALLOCATE(aloc_cu)
      ABI_DEALLOCATE(b2loc_cu)
@@ -2820,7 +2820,7 @@ subroutine recursion(exppot,coordx,coordy,coordz,an,bn2,rho_out, &
 
    vn = inf_ucvol * exppot * vn
 
-!  --Second Non-local psp contribution: (Id+sum_atom E(r,r1))vn
+!  --second Non-local psp contribution: (Id+sum_atom E(r,r1))vn
    if(nlrec%nlpsp) then
      call timab(timab_id,2,tsec)
      call vn_nl_rec(vn,natom,typat,ngfft(:3),inf_ucvol,nlrec,projec)
@@ -2832,7 +2832,7 @@ subroutine recursion(exppot,coordx,coordy,coordz,an,bn2,rho_out, &
 
 !  --Multiplication of a and b2 coef by exp(beta*fermie/(two*rtrotter)) must be done in the continued fraction computation
 !  --Computation of a and b2
-   an(irec) = inf_ucvol*ddot(nfft,vn,1,un,1)
+   an(irec) = inf_ucvol*AB_DDOT(nfft,vn,1,un,1)
 
 !  --an must be positive real
 !  --We must compute bn2 and prepare for the next iteration
@@ -3045,7 +3045,7 @@ subroutine recursion_nl(exppot,un,rho_out,rset,ngfft, &
 !  --Computation of exp(-beta*V/2*p)*vn
    vn = inf_ucvol * exppot * vn
 
-!  --Second Non-local psp contribution: (Id+sum_atom E(r,r1))vn
+!  --second Non-local psp contribution: (Id+sum_atom E(r,r1))vn
    call timab(608,2,tsec)
    call vn_nl_rec(vn,natom,typat,rset%ngfftrec(:3),inf_ucvol,rset%nl,projec)
    call timab(608,1,tsec)
@@ -3056,7 +3056,7 @@ subroutine recursion_nl(exppot,un,rho_out,rset,ngfft, &
 
 !  --Multiplication of a and b2 coef by exp(beta*fermie/(2.d0*rtrotter)) must be done in the continued fraction computation
 !  --Computation of a and b2
-   an(irec) = inf_ucvol*ddot(rset%nfftrec,vn,1,un,1)      !--an must be positive real
+   an(irec) = inf_ucvol*AB_DDOT(rset%nfftrec,vn,1,un,1)      !--an must be positive real
 
 !  --We must compute bn2 and prepare for the next iteration
    if(irec<rset%min_nrec)then
@@ -3187,7 +3187,7 @@ subroutine vn_nl_rec(vn,natom,typat,ngfftrec,inf_ucvol,nlrec,projec)
          il = 1+nlrec%indlmn(1,jlmn,ipsp)
          in = nlrec%indlmn(3,ilmn,ipsp)
          jn = nlrec%indlmn(3,jlmn,ipsp)
-         vn_nl_loc = ddot(nfftrec,projec(:,:,:,jlmn,iatom),1,vtempo,1)
+         vn_nl_loc = AB_DDOT(nfftrec,projec(:,:,:,jlmn,iatom),1,vtempo,1)
          vn_nl = vn_nl+projec(:,:,:,ilmn,iatom)*vn_nl_loc*nlrec%mat_exp_psp_nl(in,jn,il,ipsp)
        end if
      end do

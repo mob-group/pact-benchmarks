@@ -15,10 +15,10 @@
 !! WARNING
 !!  These routines are used both by real and complex arrays
 !!  and are commented (no interface):
-!!  - ztrsm, zgemm, zgemv, zhemm, zherk, zher, zgerc
-!!  - zcopy, zaxpy, zdscal, zscal, zdotc
-!!  - zhpev, zgsev, zheev, zgetrf, zpotrf, zhegv, zhpevx
-!!  - zhpgv, zhegst
+!!  - AB_ZTRSM, AB_ZGEMM, AB_ZGEMV, AB_ZHEMM, AB_ZHERk, AB_ZHER, AB_ZGERC
+!!  - AB_ZCOPY, AB_ZAXPY, AB_ZDSCAL, AB_ZSCAL, AB_ZDOTC
+!!  - AB_ZHPEV, zgsev, AB_ZHEEV, AB_ZGETRF, AB_ZPOTRF, AB_ZHEGV, AB_ZHPEVx
+!!  - AB_ZHPGV, AB_ZHEGST
 !!
 !! SOURCE
 
@@ -31,7 +31,7 @@ module m_linalg_interfaces
  implicit none
 
  interface
-  subroutine caxpy(n,ca,cx,incx,cy,incy)
+  subroutine AB_CAXPY(n,ca,cx,incx,cy,incy)
    implicit none
    integer :: incx
    integer :: incy
@@ -39,36 +39,36 @@ module m_linalg_interfaces
    complex :: ca
    complex :: cx(*)
    complex :: cy(*)
-  end subroutine caxpy
+  end subroutine AB_CAXPY
  end interface
 
  interface
-  subroutine ccopy(n,cx,incx,cy,incy)
+  subroutine AB_CCOPY(n,cx,incx,cy,incy)
    implicit none
    integer, intent(in) :: incx, incy, n    !vz_i
    complex, intent(in) :: cx(*)    !vz_i
    complex, intent(inout) :: cy(*)    !vz_i
-  end subroutine ccopy
+  end subroutine AB_CCOPY
  end interface
 
  interface
-  complex function cdotc(n,cx,incx,cy,incy)
+  complex function AB_CDOTC(n,cx,incx,cy,incy)
    implicit none
    integer, intent(in) :: incx, incy, n    !vz_i
    complex, intent(in) :: cx(*), cy(*)    !vz_i
-  end function cdotc
+  end function AB_CDOTC
  end interface
 
  interface
-  complex function cdotu(n,cx,incx,cy,incy)
+  complex function AB_CDOTU(n,cx,incx,cy,incy)
    implicit none
    integer, intent(in) :: incx, incy, n    !vz_i
    complex, intent(in) :: cx(*), cy(*)    !vz_i
-  end function cdotu
+  end function AB_CDOTU
  end interface
 
  interface
-  subroutine cgbmv ( TRANS, M, N, KL, KU, ALPHA, A, LDA, X, INCX,&  
+  subroutine AB_CGBMV ( TRANS, M, N, KL, KU, ALPHA, A, LDA, X, INCX,&  
  BETA, Y, INCY )
    implicit none
    integer :: INCX
@@ -84,11 +84,11 @@ module m_linalg_interfaces
    character*1 :: TRANS
    complex :: X( * )
    complex :: Y( * )
-  end subroutine cgbmv
+  end subroutine AB_CGBMV
  end interface
 
  interface
-  subroutine cgemm ( TRANSA, TRANSB, M, N, K, ALPHA, A, LDA, B, LDB,&  
+  subroutine AB_CGEMM ( TRANSA, TRANSB, M, N, K, ALPHA, A, LDA, B, LDB,&  
  BETA, C, LDC )
    implicit none
    integer,intent(in) :: K,lda,ldb,ldc,m,n    !vz_i
@@ -99,11 +99,11 @@ module m_linalg_interfaces
    complex,intent(inout) :: C( LDC, * )    !vz_i
    character*1,intent(in) :: TRANSA    !vz_i
    character*1,intent(in) :: TRANSB    !vz_i
-  end subroutine cgemm
+  end subroutine AB_CGEMM
  end interface
 
  interface
-  subroutine cgemv ( TRANS, M, N, ALPHA, A, LDA, X, INCX,&  
+  subroutine AB_CGEMV ( TRANS, M, N, ALPHA, A, LDA, X, INCX,&  
  BETA, Y, INCY )
    implicit none
    integer, intent(in) :: INCX, incy, lda, m, n    !vz_i
@@ -112,21 +112,21 @@ module m_linalg_interfaces
    character*1, intent(in) :: TRANS    !vz_i
    complex, intent(in) :: X( * )    !vz_i
    complex, intent(inout) :: Y( * )    !vz_i
-  end subroutine cgemv
+  end subroutine AB_CGEMV
  end interface
 
  interface
-  subroutine cgerc ( M, N, ALPHA, X, INCX, Y, INCY, A, LDA )
+  subroutine AB_CGERC ( M, N, ALPHA, X, INCX, Y, INCY, A, LDA )
    implicit none
    integer, intent(in) :: INCX, incy, lda, m, n    !vz_i
    complex, intent(inout) :: A( LDA, * )    !vz_i
    complex, intent(in) :: ALPHA    !vz_i
    complex, intent(in) :: X( * ), Y( * )    !vz_i
-  end subroutine cgerc
+  end subroutine AB_CGERC
  end interface
 
  interface
-  subroutine cgeru ( M, N, ALPHA, X, INCX, Y, INCY, A, LDA )
+  subroutine AB_CGERU ( M, N, ALPHA, X, INCX, Y, INCY, A, LDA )
    implicit none
    integer :: INCX
    integer :: INCY
@@ -137,11 +137,11 @@ module m_linalg_interfaces
    complex :: ALPHA
    complex :: X( * )
    complex :: Y( * )
-  end subroutine cgeru
+  end subroutine AB_CGERU
  end interface
 
  interface
-  subroutine chbmv ( UPLO, N, K, ALPHA, A, LDA, X, INCX,&  
+  subroutine AB_CHBMV ( UPLO, N, K, ALPHA, A, LDA, X, INCX,&  
  BETA, Y, INCY )
    implicit none
    integer :: INCX
@@ -155,11 +155,11 @@ module m_linalg_interfaces
    character*1 :: UPLO
    complex :: X( * )
    complex :: Y( * )
-  end subroutine chbmv
+  end subroutine AB_CHBMV
  end interface
 
  interface
-  subroutine chemm ( SIDE, UPLO, M, N, ALPHA, A, LDA, B, LDB,&  
+  subroutine AB_CHEMM ( SIDE, UPLO, M, N, ALPHA, A, LDA, B, LDB,&  
  BETA, C, LDC )
    implicit none
    integer :: LDA
@@ -174,11 +174,11 @@ module m_linalg_interfaces
    complex :: C( LDC, * )
    character*1 :: SIDE
    character*1 :: UPLO
-  end subroutine chemm
+  end subroutine AB_CHEMM
  end interface
 
  interface
-  subroutine chemv ( UPLO, N, ALPHA, A, LDA, X, INCX,&  
+  subroutine AB_CHEMV ( UPLO, N, ALPHA, A, LDA, X, INCX,&  
  BETA, Y, INCY )
    implicit none
    integer :: INCX
@@ -191,11 +191,11 @@ module m_linalg_interfaces
    character*1 :: UPLO
    complex :: X( * )
    complex :: Y( * )
-  end subroutine chemv
+  end subroutine AB_CHEMV
  end interface
 
  interface
-  subroutine cher  ( UPLO, N, ALPHA, X, INCX, A, LDA )
+  subroutine AB_CHER  ( UPLO, N, ALPHA, X, INCX, A, LDA )
    implicit none
    integer :: INCX
    integer :: LDA
@@ -204,11 +204,11 @@ module m_linalg_interfaces
    real :: ALPHA
    character*1 :: UPLO
    complex :: X( * )
-  end subroutine cher
+  end subroutine AB_CHER
  end interface
 
  interface
-  subroutine cher2 ( UPLO, N, ALPHA, X, INCX, Y, INCY, A, LDA )
+  subroutine AB_CHER2 ( UPLO, N, ALPHA, X, INCX, Y, INCY, A, LDA )
    implicit none
    integer :: INCX
    integer :: INCY
@@ -219,11 +219,11 @@ module m_linalg_interfaces
    character*1 :: UPLO
    complex :: X( * )
    complex :: Y( * )
-  end subroutine cher2
+  end subroutine AB_CHER2
  end interface
 
  interface
-  subroutine cher2k( UPLO, TRANS, N, K, ALPHA, A, LDA, B, LDB,&  
+  subroutine AB_CHER2k( UPLO, TRANS, N, K, ALPHA, A, LDA, B, LDB,&  
  BETA, C, LDC )
    implicit none
    integer :: K
@@ -238,11 +238,11 @@ module m_linalg_interfaces
    complex :: C( LDC, * )
    character*1 :: TRANS
    character*1 :: UPLO
-  end subroutine cher2k
+  end subroutine AB_CHER2k
  end interface
 
  interface
-  subroutine cherk ( UPLO, TRANS, N, K, ALPHA, A, LDA,&  
+  subroutine AB_CHERk ( UPLO, TRANS, N, K, ALPHA, A, LDA,&  
  BETA, C, LDC )
    implicit none
    integer, intent(in) :: K,lda,ldc,n    !vz_i
@@ -252,11 +252,11 @@ module m_linalg_interfaces
    complex,intent(inout) :: C( LDC, * )    !vz_i
    character*1,intent(in) :: TRANS    !vz_i
    character*1,intent(in) :: UPLO    !vz_i
-  end subroutine cherk
+  end subroutine AB_CHERk
  end interface
 
  interface
-  subroutine chpmv ( UPLO, N, ALPHA, AP, X, INCX, BETA, Y, INCY )
+  subroutine AB_CHPMV ( UPLO, N, ALPHA, AP, X, INCX, BETA, Y, INCY )
    implicit none
    integer :: INCX
    integer :: INCY
@@ -267,11 +267,11 @@ module m_linalg_interfaces
    character*1 :: UPLO
    complex :: X( * )
    complex :: Y( * )
-  end subroutine chpmv
+  end subroutine AB_CHPMV
  end interface
 
  interface
-  subroutine chpr  ( UPLO, N, ALPHA, X, INCX, AP )
+  subroutine AB_CHPR  ( UPLO, N, ALPHA, X, INCX, AP )
    implicit none
    integer :: INCX
    integer :: N
@@ -279,11 +279,11 @@ module m_linalg_interfaces
    complex :: AP( * )
    character*1 :: UPLO
    complex :: X( * )
-  end subroutine chpr
+  end subroutine AB_CHPR
  end interface
 
  interface
-  subroutine chpr2 ( UPLO, N, ALPHA, X, INCX, Y, INCY, AP )
+  subroutine AB_CHPR2 ( UPLO, N, ALPHA, X, INCX, Y, INCY, AP )
    implicit none
    integer :: INCX
    integer :: INCY
@@ -293,31 +293,31 @@ module m_linalg_interfaces
    character*1 :: UPLO
    complex :: X( * )
    complex :: Y( * )
-  end subroutine chpr2
+  end subroutine AB_CHPR2
  end interface
 
  interface
-  subroutine crotg(ca,cb,c,s)
+  subroutine AB_CROTg(ca,cb,c,s)
    implicit none
    real :: c
    complex :: ca
    complex :: cb
    complex :: s
-  end subroutine crotg
+  end subroutine AB_CROTg
  end interface
 
  interface
-  subroutine  cscal(n,ca,cx,incx)
+  subroutine  AB_CSCAL(n,ca,cx,incx)
    implicit none
    integer :: incx
    integer :: n
    complex :: ca
    complex :: cx(*)
-  end subroutine cscal
+  end subroutine AB_CSCAL
  end interface
 
  interface
-  subroutine  csrot (n,cx,incx,cy,incy,c,s)
+  subroutine  AB_CSROT (n,cx,incx,cy,incy,c,s)
    implicit none
    integer :: incx
    integer :: incy
@@ -326,32 +326,32 @@ module m_linalg_interfaces
    real :: s
    complex :: cx(1)
    complex :: cy(1)
-  end subroutine csrot
+  end subroutine AB_CSROT
  end interface
 
  interface
-  subroutine  csscal(n,sa,cx,incx)
+  subroutine  AB_CSSCAL(n,sa,cx,incx)
    implicit none
    integer :: incx
    integer :: n
    real :: sa
    complex :: cx(*)
-  end subroutine csscal
+  end subroutine AB_CSSCAL
  end interface
 
  interface
-  subroutine  cswap (n,cx,incx,cy,incy)
+  subroutine  AB_CSWAP (n,cx,incx,cy,incy)
    implicit none
    integer :: incx
    integer :: incy
    integer :: n
    complex :: cx(*)
    complex :: cy(*)
-  end subroutine cswap
+  end subroutine AB_CSWAP
  end interface
 
  interface
-  subroutine csymm ( SIDE, UPLO, M, N, ALPHA, A, LDA, B, LDB,&  
+  subroutine AB_CSYMM ( SIDE, UPLO, M, N, ALPHA, A, LDA, B, LDB,&  
  BETA, C, LDC )
    implicit none
    integer :: LDA
@@ -366,11 +366,11 @@ module m_linalg_interfaces
    complex :: C( LDC, * )
    character*1 :: SIDE
    character*1 :: UPLO
-  end subroutine csymm
+  end subroutine AB_CSYMM
  end interface
 
  interface
-  subroutine csyr2k( UPLO, TRANS, N, K, ALPHA, A, LDA, B, LDB,&  
+  subroutine AB_CSYR2k( UPLO, TRANS, N, K, ALPHA, A, LDA, B, LDB,&  
  BETA, C, LDC )
    implicit none
    integer :: K
@@ -385,11 +385,11 @@ module m_linalg_interfaces
    complex :: C( LDC, * )
    character*1 :: TRANS
    character*1 :: UPLO
-  end subroutine csyr2k
+  end subroutine AB_CSYR2k
  end interface
 
  interface
-  subroutine csyrk ( UPLO, TRANS, N, K, ALPHA, A, LDA,&  
+  subroutine AB_CSYRk ( UPLO, TRANS, N, K, ALPHA, A, LDA,&  
  BETA, C, LDC )
    implicit none
    integer :: K
@@ -402,11 +402,11 @@ module m_linalg_interfaces
    complex :: C( LDC, * )
    character*1 :: TRANS
    character*1 :: UPLO
-  end subroutine csyrk
+  end subroutine AB_CSYRk
  end interface
 
  interface
-  subroutine ctbmv ( UPLO, TRANS, DIAG, N, K, A, LDA, X, INCX )
+  subroutine AB_CTBMV ( UPLO, TRANS, DIAG, N, K, A, LDA, X, INCX )
    implicit none
    integer :: INCX
    integer :: K
@@ -417,11 +417,11 @@ module m_linalg_interfaces
    character*1 :: TRANS
    character*1 :: UPLO
    complex :: X( * )
-  end subroutine ctbmv
+  end subroutine AB_CTBMV
  end interface
 
  interface
-  subroutine ctbsv ( UPLO, TRANS, DIAG, N, K, A, LDA, X, INCX )
+  subroutine AB_CTBSV ( UPLO, TRANS, DIAG, N, K, A, LDA, X, INCX )
    implicit none
    integer :: INCX
    integer :: K
@@ -432,11 +432,11 @@ module m_linalg_interfaces
    character*1 :: TRANS
    character*1 :: UPLO
    complex :: X( * )
-  end subroutine ctbsv
+  end subroutine AB_CTBSV
  end interface
 
  interface
-  subroutine ctpmv ( UPLO, TRANS, DIAG, N, AP, X, INCX )
+  subroutine AB_CTPMV ( UPLO, TRANS, DIAG, N, AP, X, INCX )
    implicit none
    integer :: INCX
    integer :: N
@@ -445,11 +445,11 @@ module m_linalg_interfaces
    character*1 :: TRANS
    character*1 :: UPLO
    complex :: X( * )
-  end subroutine ctpmv
+  end subroutine AB_CTPMV
  end interface
 
  interface
-  subroutine ctpsv ( UPLO, TRANS, DIAG, N, AP, X, INCX )
+  subroutine AB_CTPSV ( UPLO, TRANS, DIAG, N, AP, X, INCX )
    implicit none
    integer :: INCX
    integer :: N
@@ -458,11 +458,11 @@ module m_linalg_interfaces
    character*1 :: TRANS
    character*1 :: UPLO
    complex :: X( * )
-  end subroutine ctpsv
+  end subroutine AB_CTPSV
  end interface
 
  interface
-  subroutine ctrmm ( SIDE, UPLO, TRANSA, DIAG, M, N, ALPHA, A, LDA,&  
+  subroutine AB_CTRMM ( SIDE, UPLO, TRANSA, DIAG, M, N, ALPHA, A, LDA,&  
  B, LDB )
    implicit none
    integer :: LDA
@@ -476,11 +476,11 @@ module m_linalg_interfaces
    character*1 :: SIDE
    character*1 :: TRANSA
    character*1 :: UPLO
-  end subroutine ctrmm
+  end subroutine AB_CTRMM
  end interface
 
  interface
-  subroutine ctrmv ( UPLO, TRANS, DIAG, N, A, LDA, X, INCX )
+  subroutine AB_CTRMV ( UPLO, TRANS, DIAG, N, A, LDA, X, INCX )
    implicit none
    integer :: INCX
    integer :: LDA
@@ -490,11 +490,11 @@ module m_linalg_interfaces
    character*1 :: TRANS
    character*1 :: UPLO
    complex :: X( * )
-  end subroutine ctrmv
+  end subroutine AB_CTRMV
  end interface
 
  interface
-  subroutine ctrsm ( SIDE, UPLO, TRANSA, DIAG, M, N, ALPHA, A, LDA,&  
+  subroutine AB_CTRSM ( SIDE, UPLO, TRANSA, DIAG, M, N, ALPHA, A, LDA,&  
  B, LDB )
    implicit none
    integer :: LDA
@@ -508,11 +508,11 @@ module m_linalg_interfaces
    character*1 :: SIDE
    character*1 :: TRANSA
    character*1 :: UPLO
-  end subroutine ctrsm
+  end subroutine AB_CTRSM
  end interface
 
  interface
-  subroutine ctrsv ( UPLO, TRANS, DIAG, N, A, LDA, X, INCX )
+  subroutine AB_CTRSV ( UPLO, TRANS, DIAG, N, A, LDA, X, INCX )
    implicit none
    integer :: INCX
    integer :: LDA
@@ -522,20 +522,20 @@ module m_linalg_interfaces
    character*1 :: TRANS
    character*1 :: UPLO
    complex :: X( * )
-  end subroutine ctrsv
+  end subroutine AB_CTRSV
  end interface
 
  interface
-  double precision function dasum(n,dx,incx)
+  double precision function AB_DASUM(n,dx,incx)
    implicit none
    integer :: incx
    integer :: n
    double precision :: dx(*)
-  end function dasum
+  end function AB_DASUM
  end interface
 
  interface
-  subroutine daxpy(n,da,dx,incx,dy,incy)
+  subroutine AB_DAXPY(n,da,dx,incx,dy,incy)
    implicit none
    integer :: incx
    integer :: incy
@@ -543,40 +543,40 @@ module m_linalg_interfaces
    double precision :: da
    double precision :: dx(*)
    double precision :: dy(*)
-  end subroutine daxpy
+  end subroutine AB_DAXPY
  end interface
 
  interface
-  double precision function dcabs1(z)
+  double precision function AB_DCABS1(z)
    implicit none
    double complex :: z
-  end function dcabs1
+  end function AB_DCABS1
  end interface
 
  !interface
- ! subroutine  dcopy(n,dx,incx,dy,incy)
+ ! subroutine  AB_DCOPY(n,dx,incx,dy,incy)
  !  implicit none
  !  integer :: incx
  !  integer :: incy
  !  integer :: n
  !  double precision :: dx(*)
  !  double precision :: dy(*)
- ! end subroutine dcopy
+ ! end subroutine AB_DCOPY
  !end interface
 
  interface
-  double precision function ddot(n,dx,incx,dy,incy)
+  double precision function AB_DDOT(n,dx,incx,dy,incy)
    implicit none
    integer,intent(in) :: incx
    integer,intent(in) :: incy
    integer,intent(in) :: n
    double precision,intent(in) :: dx(*)
    double precision,intent(in) :: dy(*)
-  end function ddot
+  end function AB_DDOT
  end interface
 
  interface
-  subroutine dgbmv ( TRANS, M, N, KL, KU, ALPHA, A, LDA, X, INCX,&  
+  subroutine AB_DGBMV ( TRANS, M, N, KL, KU, ALPHA, A, LDA, X, INCX,&  
  BETA, Y, INCY )
    implicit none
    integer :: INCX
@@ -592,11 +592,11 @@ module m_linalg_interfaces
    character*1 :: TRANS
    double precision :: X( * )
    double precision :: Y( * )
-  end subroutine dgbmv
+  end subroutine AB_DGBMV
  end interface
 
  interface
-  subroutine dgemm ( TRANSA, TRANSB, M, N, K, ALPHA, A, LDA, B, LDB,&  
+  subroutine AB_DGEMM ( TRANSA, TRANSB, M, N, K, ALPHA, A, LDA, B, LDB,&  
  BETA, C, LDC )
    implicit none
    integer,intent(in) :: K,lda,ldb,ldc,m,n    !vz_i
@@ -607,11 +607,11 @@ module m_linalg_interfaces
    double precision,intent(inout) :: C( LDC, * )    !vz_i
    character*1,intent(in) :: TRANSA    !vz_i
    character*1,intent(in) :: TRANSB    !vz_i
-  end subroutine dgemm
+  end subroutine AB_DGEMM
  end interface
 
  interface
-  subroutine dgemv ( TRANS, M, N, ALPHA, A, LDA, X, INCX,&  
+  subroutine AB_DGEMV ( TRANS, M, N, ALPHA, A, LDA, X, INCX,&  
  BETA, Y, INCY )
    implicit none
    integer, intent(in) :: INCX,incy,lda,m,n    !vz_i
@@ -621,11 +621,11 @@ module m_linalg_interfaces
    character*1, intent(in) :: TRANS    !vz_i
    double precision, intent(in) :: X( * )    !vz_i
    double precision, intent(inout) :: Y( * )    !vz_i
-  end subroutine dgemv
+  end subroutine AB_DGEMV
  end interface
 
  interface
-  subroutine dger  ( M, N, ALPHA, X, INCX, Y, INCY, A, LDA )
+  subroutine AB_DGER  ( M, N, ALPHA, X, INCX, Y, INCY, A, LDA )
    implicit none
    integer :: INCX
    integer :: INCY
@@ -636,19 +636,19 @@ module m_linalg_interfaces
    double precision :: ALPHA
    double precision :: X( * )
    double precision :: Y( * )
-  end subroutine dger
+  end subroutine AB_DGER
  end interface
 
  interface
-  double precision function dnrm2 ( N, X, INCX )
+  double precision function AB_DNRM2 ( N, X, INCX )
    implicit none
    integer, intent(in) :: INCX, n    !vz_i
    double precision,intent(in) :: X( * )    !vz_i
-  end function dnrm2
+  end function AB_DNRM2
  end interface
 
  interface
-  subroutine  drot (n,dx,incx,dy,incy,c,s)
+  subroutine  AB_DROT (n,dx,incx,dy,incy,c,s)
    implicit none
    integer :: incx
    integer :: incy
@@ -657,21 +657,21 @@ module m_linalg_interfaces
    double precision :: s
    double precision :: dx(*)
    double precision :: dy(*)
-  end subroutine drot
+  end subroutine AB_DROT
  end interface
 
  interface
-  subroutine drotg(da,db,c,s)
+  subroutine AB_DROTg(da,db,c,s)
    implicit none
    double precision :: c
    double precision :: da
    double precision :: db
    double precision :: s
-  end subroutine drotg
+  end subroutine AB_DROTg
  end interface
 
  interface
-  subroutine drotm (N,DX,INCX,DY,INCY,DPARAM)
+  subroutine AB_DROTm (N,DX,INCX,DY,INCY,DPARAM)
    implicit none
    integer :: INCX
    integer :: INCY
@@ -679,22 +679,22 @@ module m_linalg_interfaces
    double precision :: DPARAM(5)
    double precision :: DX(1)
    double precision :: DY(1)
-  end subroutine drotm
+  end subroutine AB_DROTm
  end interface
 
  interface
-  subroutine drotmg (DD1,DD2,DX1,DY1,DPARAM)
+  subroutine AB_DROTmg (DD1,DD2,DX1,DY1,DPARAM)
    implicit none
    double precision :: DD1
    double precision :: DD2
    double precision :: DPARAM(5)
    double precision :: DX1
    double precision :: DY1
-  end subroutine drotmg
+  end subroutine AB_DROTmg
  end interface
 
  interface
-  subroutine dsbmv ( UPLO, N, K, ALPHA, A, LDA, X, INCX,&  
+  subroutine AB_DSBMV ( UPLO, N, K, ALPHA, A, LDA, X, INCX,&  
  BETA, Y, INCY )
    implicit none
    integer :: INCX
@@ -708,43 +708,43 @@ module m_linalg_interfaces
    character*1 :: UPLO
    double precision :: X( * )
    double precision :: Y( * )
-  end subroutine dsbmv
+  end subroutine AB_DSBMV
  end interface
 
  interface
-  subroutine  dscal(n,da,dx,incx)
+  subroutine  AB_DSCAL(n,da,dx,incx)
    implicit none
    integer :: incx
    integer :: n
    double precision :: da
    double precision :: dx(*)
-  end subroutine dscal
+  end subroutine AB_DSCAL
  end interface
 
  interface
-  double precision function dsdot (N, SX, INCX, SY, INCY)
+  double precision function AB_DSDOT (N, SX, INCX, SY, INCY)
    implicit none
    integer :: INCX
    integer :: INCY
    integer :: N
    real :: SX(*)
    real :: SY(*)
-  end function dsdot
+  end function AB_DSDOT
  end interface
 
  interface
-  subroutine  dswap (n,dx,incx,dy,incy)
+  subroutine  AB_DSWAP (n,dx,incx,dy,incy)
    implicit none
    integer :: incx
    integer :: incy
    integer :: n
    double precision :: dx(*)
    double precision :: dy(*)
-  end subroutine dswap
+  end subroutine AB_DSWAP
  end interface
 
  interface
-  subroutine dsymm ( SIDE, UPLO, M, N, ALPHA, A, LDA, B, LDB,&  
+  subroutine AB_DSYMM ( SIDE, UPLO, M, N, ALPHA, A, LDA, B, LDB,&  
  BETA, C, LDC )
    implicit none
    integer :: LDA
@@ -759,11 +759,11 @@ module m_linalg_interfaces
    double precision :: C( LDC, * )
    character*1 :: SIDE
    character*1 :: UPLO
-  end subroutine dsymm
+  end subroutine AB_DSYMM
  end interface
 
  interface
-  subroutine dsymv ( UPLO, N, ALPHA, A, LDA, X, INCX,&  
+  subroutine AB_DSYMV ( UPLO, N, ALPHA, A, LDA, X, INCX,&  
  BETA, Y, INCY )
    implicit none
    integer :: INCX
@@ -776,11 +776,11 @@ module m_linalg_interfaces
    character*1 :: UPLO
    double precision :: X( * )
    double precision :: Y( * )
-  end subroutine dsymv
+  end subroutine AB_DSYMV
  end interface
 
  interface
-  subroutine dtrmm ( SIDE, UPLO, TRANSA, DIAG, M, N, ALPHA, A, LDA,&  
+  subroutine AB_DTRMM ( SIDE, UPLO, TRANSA, DIAG, M, N, ALPHA, A, LDA,&  
  B, LDB )
    implicit none
    integer :: LDA
@@ -794,11 +794,11 @@ module m_linalg_interfaces
    character*1 :: SIDE
    character*1 :: TRANSA
    character*1 :: UPLO
-  end subroutine dtrmm
+  end subroutine AB_DTRMM
  end interface
 
  interface
-  subroutine dtrmv ( UPLO, TRANS, DIAG, N, A, LDA, X, INCX )
+  subroutine AB_DTRMV ( UPLO, TRANS, DIAG, N, A, LDA, X, INCX )
    implicit none
    integer :: INCX
    integer :: LDA
@@ -808,11 +808,11 @@ module m_linalg_interfaces
    character*1 :: TRANS
    character*1 :: UPLO
    double precision :: X( * )
-  end subroutine dtrmv
+  end subroutine AB_DTRMV
  end interface
 
  interface
-  subroutine dtrsm ( SIDE, UPLO, TRANSA, DIAG, M, N, ALPHA, A, LDA,&  
+  subroutine AB_DTRSM ( SIDE, UPLO, TRANSA, DIAG, M, N, ALPHA, A, LDA,&  
  B, LDB )
    implicit none
    integer :: LDA
@@ -826,11 +826,11 @@ module m_linalg_interfaces
    character*1 :: SIDE
    character*1 :: TRANSA
    character*1 :: UPLO
-  end subroutine dtrsm
+  end subroutine AB_DTRSM
  end interface
 
  interface
-  subroutine dtrsv ( UPLO, TRANS, DIAG, N, A, LDA, X, INCX )
+  subroutine AB_DTRSV ( UPLO, TRANS, DIAG, N, A, LDA, X, INCX )
    implicit none
    integer :: INCX
    integer :: LDA
@@ -840,73 +840,73 @@ module m_linalg_interfaces
    character*1 :: TRANS
    character*1 :: UPLO
    double precision :: X( * )
-  end subroutine dtrsv
+  end subroutine AB_DTRSV
  end interface
 
  interface
-  double precision function dzasum(n,zx,incx)
+  double precision function AB_DZASUM(n,zx,incx)
    implicit none
    integer :: incx
    integer :: n
    double complex :: zx(*)
-  end function dzasum
+  end function AB_DZASUM
  end interface
 
  interface
-  double precision function dznrm2( N, X, INCX )
+  double precision function AB_DZNRM2( N, X, INCX )
    implicit none
    integer, intent(in) :: INCX, n    !vz_i
    complex*16,intent(in) :: X( * )    !vz_i
-  end function dznrm2
+  end function AB_DZNRM2
  end interface
 
  interface
-  integer function icamax(n,cx,incx)
+  integer function AB_ICAMAX(n,cx,incx)
    implicit none
    integer :: incx
    integer :: n
    complex :: cx(*)
-  end function icamax
+  end function AB_ICAMAX
  end interface
 
  interface
-  integer function idamax(n,dx,incx)
+  integer function AB_IDAMAX(n,dx,incx)
    implicit none
    integer :: incx
    integer :: n
    double precision :: dx(*)
-  end function idamax
+  end function AB_IDAMAX
  end interface
 
  interface
-  integer function isamax(n,sx,incx)
+  integer function AB_ISAMAX(n,sx,incx)
    implicit none
    integer :: incx
    integer :: n
    real :: sx(*)
-  end function isamax
+  end function AB_ISAMAX
  end interface
 
  interface
-  integer function izamax(n,zx,incx)
+  integer function AB_IZAMAX(n,zx,incx)
    implicit none
    integer :: incx
    integer :: n
    double complex :: zx(*)
-  end function izamax
+  end function AB_IZAMAX
  end interface
 
  interface
-  real function sasum(n,sx,incx)
+  real function AB_SASUM(n,sx,incx)
    implicit none
    integer :: incx
    integer :: n
    real :: sx(*)
-  end function sasum
+  end function AB_SASUM
  end interface
 
  interface
-  subroutine saxpy(n,sa,sx,incx,sy,incy)
+  subroutine AB_SAXPY(n,sa,sx,incx,sy,incy)
    implicit none
    integer :: incx
    integer :: incy
@@ -914,48 +914,48 @@ module m_linalg_interfaces
    real :: sa
    real :: sx(*)
    real :: sy(*)
-  end subroutine saxpy
+  end subroutine AB_SAXPY
  end interface
 
  interface
-  real function scasum(n,cx,incx)
+  real function AB_SCASUM(n,cx,incx)
    implicit none
    integer :: incx
    integer :: n
    complex :: cx(*)
-  end function scasum
+  end function AB_SCASUM
  end interface
 
  interface
-  real function scnrm2( N, X, INCX )
+  real function AB_SCNRM2( N, X, INCX )
    implicit none
    integer, intent(in) :: INCX, n    !vz_i
    complex, intent(in) :: X( * )    !vz_i
-  end function scnrm2
+  end function AB_SCNRM2
  end interface
 
  interface
-  subroutine scopy(n,sx,incx,sy,incy)
+  subroutine AB_SCOPY(n,sx,incx,sy,incy)
    implicit none
    integer, intent(in) :: incx,incy,n    !vz_i
    real, intent(in) :: sx(*)    !vz_i
    real, intent(inout) :: sy(*)    !vz_i
-  end subroutine scopy
+  end subroutine AB_SCOPY
  end interface
 
  interface
-  real function sdot(n,sx,incx,sy,incy)
+  real function AB_SDOT(n,sx,incx,sy,incy)
    implicit none
    integer :: incx
    integer :: incy
    integer :: n
    real :: sx(*)
    real :: sy(*)
-  end function sdot
+  end function AB_SDOT
  end interface
 
  interface
-  real function sdsdot (N, SB, SX, INCX, SY, INCY)
+  real function AB_SDSDOT (N, SB, SX, INCX, SY, INCY)
    implicit none
    integer :: INCX
    integer :: INCY
@@ -963,11 +963,11 @@ module m_linalg_interfaces
    real :: SB
    real :: SX(*)
    real :: SY(*)
-  end function sdsdot
+  end function AB_SDSDOT
  end interface
 
  interface
-  subroutine sgbmv ( TRANS, M, N, KL, KU, ALPHA, A, LDA, X, INCX,&  
+  subroutine AB_SGBMV ( TRANS, M, N, KL, KU, ALPHA, A, LDA, X, INCX,&  
  BETA, Y, INCY )
    implicit none
    integer :: INCX
@@ -983,11 +983,11 @@ module m_linalg_interfaces
    character*1 :: TRANS
    real :: X( * )
    real :: Y( * )
-  end subroutine sgbmv
+  end subroutine AB_SGBMV
  end interface
 
  interface
-  subroutine sgemm ( TRANSA, TRANSB, M, N, K, ALPHA, A, LDA, B, LDB,&  
+  subroutine AB_SGEMM ( TRANSA, TRANSB, M, N, K, ALPHA, A, LDA, B, LDB,&  
  BETA, C, LDC )
    implicit none
    integer, intent(in) :: K,lda,ldb,ldc,m,n    !vz_i
@@ -998,11 +998,11 @@ module m_linalg_interfaces
    real,intent(inout) :: C( LDC, * )    !vz_i
    character*1,intent(in) :: TRANSA    !vz_i
    character*1,intent(in) :: TRANSB    !vz_i
-  end subroutine sgemm
+  end subroutine AB_SGEMM
  end interface
 
  interface
-  subroutine sgemv ( TRANS, M, N, ALPHA, A, LDA, X, INCX,&  
+  subroutine AB_SGEMV ( TRANS, M, N, ALPHA, A, LDA, X, INCX,&  
  BETA, Y, INCY )
    implicit none
    integer,intent(in) :: INCX, incy, lda,m,n    !vz_i
@@ -1012,11 +1012,11 @@ module m_linalg_interfaces
    character*1,intent(in) :: TRANS    !vz_i
    real,intent(in) :: X( * )    !vz_i
    real,intent(inout) :: Y( * )    !vz_i
-  end subroutine sgemv
+  end subroutine AB_SGEMV
  end interface
 
  interface
-  subroutine sger  ( M, N, ALPHA, X, INCX, Y, INCY, A, LDA )
+  subroutine AB_SGER  ( M, N, ALPHA, X, INCX, Y, INCY, A, LDA )
    implicit none
    integer :: INCX
    integer :: INCY
@@ -1027,19 +1027,19 @@ module m_linalg_interfaces
    real :: ALPHA
    real :: X( * )
    real :: Y( * )
-  end subroutine sger
+  end subroutine AB_SGER
  end interface
 
  interface
-  real function snrm2 ( N, X, INCX )
+  real function AB_SNRM2 ( N, X, INCX )
    implicit none
    integer,intent(in) :: INCX,n    !vz_i
    real,intent(in) :: X( * )    !vz_i
-  end function snrm2
+  end function AB_SNRM2
  end interface
 
  interface
-  subroutine srot (n,sx,incx,sy,incy,c,s)
+  subroutine AB_SROT (n,sx,incx,sy,incy,c,s)
    implicit none
    integer :: incx
    integer :: incy
@@ -1048,21 +1048,21 @@ module m_linalg_interfaces
    real :: s
    real :: sx(*)
    real :: sy(*)
-  end subroutine srot
+  end subroutine AB_SROT
  end interface
 
  interface
-  subroutine srotg(sa,sb,c,s)
+  subroutine AB_SROTg(sa,sb,c,s)
    implicit none
    real :: c
    real :: s
    real :: sa
    real :: sb
-  end subroutine srotg
+  end subroutine AB_SROTg
  end interface
 
  interface
-  subroutine srotm (N,SX,INCX,SY,INCY,SPARAM)
+  subroutine AB_SROTm (N,SX,INCX,SY,INCY,SPARAM)
    implicit none
    integer :: INCX
    integer :: INCY
@@ -1070,22 +1070,22 @@ module m_linalg_interfaces
    real :: SPARAM(5)
    real :: SX(1)
    real :: SY(1)
-  end subroutine srotm
+  end subroutine AB_SROTm
  end interface
 
  interface
-  subroutine srotmg (SD1,SD2,SX1,SY1,SPARAM)
+  subroutine AB_SROTmg (SD1,SD2,SX1,SY1,SPARAM)
    implicit none
    real :: SD1
    real :: SD2
    real :: SPARAM(5)
    real :: SX1
    real :: SY1
-  end subroutine srotmg
+  end subroutine AB_SROTmg
  end interface
 
  interface
-  subroutine ssbmv ( UPLO, N, K, ALPHA, A, LDA, X, INCX,&  
+  subroutine AB_SSBMV ( UPLO, N, K, ALPHA, A, LDA, X, INCX,&  
  BETA, Y, INCY )
    implicit none
    integer :: INCX
@@ -1099,21 +1099,21 @@ module m_linalg_interfaces
    character*1 :: UPLO
    real :: X( * )
    real :: Y( * )
-  end subroutine ssbmv
+  end subroutine AB_SSBMV
  end interface
 
  interface
-  subroutine sscal(n,sa,sx,incx)
+  subroutine AB_SSCAL(n,sa,sx,incx)
    implicit none
    integer :: incx
    integer :: n
    real :: sa
    real :: sx(*)
-  end subroutine sscal
+  end subroutine AB_SSCAL
  end interface
 
  interface
-  subroutine sspmv ( UPLO, N, ALPHA, AP, X, INCX, BETA, Y, INCY )
+  subroutine AB_SSPMV ( UPLO, N, ALPHA, AP, X, INCX, BETA, Y, INCY )
    implicit none
    integer :: INCX
    integer :: INCY
@@ -1124,11 +1124,11 @@ module m_linalg_interfaces
    character*1 :: UPLO
    real :: X( * )
    real :: Y( * )
-  end subroutine sspmv
+  end subroutine AB_SSPMV
  end interface
 
  interface
-  subroutine sspr  ( UPLO, N, ALPHA, X, INCX, AP )
+  subroutine AB_SSPR  ( UPLO, N, ALPHA, X, INCX, AP )
    implicit none
    integer :: INCX
    integer :: N
@@ -1136,11 +1136,11 @@ module m_linalg_interfaces
    real :: AP( * )
    character*1 :: UPLO
    real :: X( * )
-  end subroutine sspr
+  end subroutine AB_SSPR
  end interface
 
  interface
-  subroutine sspr2 ( UPLO, N, ALPHA, X, INCX, Y, INCY, AP )
+  subroutine AB_SSPR2 ( UPLO, N, ALPHA, X, INCX, Y, INCY, AP )
    implicit none
    integer :: INCX
    integer :: INCY
@@ -1150,22 +1150,22 @@ module m_linalg_interfaces
    character*1 :: UPLO
    real :: X( * )
    real :: Y( * )
-  end subroutine sspr2
+  end subroutine AB_SSPR2
  end interface
 
  interface
-  subroutine sswap (n,sx,incx,sy,incy)
+  subroutine AB_SSWAP (n,sx,incx,sy,incy)
    implicit none
    integer :: incx
    integer :: incy
    integer :: n
    real :: sx(*)
    real :: sy(*)
-  end subroutine sswap
+  end subroutine AB_SSWAP
  end interface
 
  interface
-  subroutine ssymm ( SIDE, UPLO, M, N, ALPHA, A, LDA, B, LDB,&  
+  subroutine AB_SSYMM ( SIDE, UPLO, M, N, ALPHA, A, LDA, B, LDB,&  
  BETA, C, LDC )
    implicit none
    integer :: LDA
@@ -1180,11 +1180,11 @@ module m_linalg_interfaces
    real :: C( LDC, * )
    character*1 :: SIDE
    character*1 :: UPLO
-  end subroutine ssymm
+  end subroutine AB_SSYMM
  end interface
 
  interface
-  subroutine ssymv ( UPLO, N, ALPHA, A, LDA, X, INCX,&  
+  subroutine AB_SSYMV ( UPLO, N, ALPHA, A, LDA, X, INCX,&  
  BETA, Y, INCY )
    implicit none
    integer :: INCX
@@ -1197,11 +1197,11 @@ module m_linalg_interfaces
    character*1 :: UPLO
    real :: X( * )
    real :: Y( * )
-  end subroutine ssymv
+  end subroutine AB_SSYMV
  end interface
 
  interface
-  subroutine ssyr  ( UPLO, N, ALPHA, X, INCX, A, LDA )
+  subroutine AB_SSYR  ( UPLO, N, ALPHA, X, INCX, A, LDA )
    implicit none
    integer :: INCX
    integer :: LDA
@@ -1210,11 +1210,11 @@ module m_linalg_interfaces
    real :: ALPHA
    character*1 :: UPLO
    real :: X( * )
-  end subroutine ssyr
+  end subroutine AB_SSYR
  end interface
 
  interface
-  subroutine ssyr2 ( UPLO, N, ALPHA, X, INCX, Y, INCY, A, LDA )
+  subroutine AB_SSYR2 ( UPLO, N, ALPHA, X, INCX, Y, INCY, A, LDA )
    implicit none
    integer :: INCX
    integer :: INCY
@@ -1225,11 +1225,11 @@ module m_linalg_interfaces
    character*1 :: UPLO
    real :: X( * )
    real :: Y( * )
-  end subroutine ssyr2
+  end subroutine AB_SSYR2
  end interface
 
  interface
-  subroutine ssyr2k( UPLO, TRANS, N, K, ALPHA, A, LDA, B, LDB,&  
+  subroutine AB_SSYR2k( UPLO, TRANS, N, K, ALPHA, A, LDA, B, LDB,&  
  BETA, C, LDC )
    implicit none
    integer :: K
@@ -1244,11 +1244,11 @@ module m_linalg_interfaces
    real :: C( LDC, * )
    character*1 :: TRANS
    character*1 :: UPLO
-  end subroutine ssyr2k
+  end subroutine AB_SSYR2k
  end interface
 
  interface
-  subroutine ssyrk ( UPLO, TRANS, N, K, ALPHA, A, LDA,&  
+  subroutine AB_SSYRk ( UPLO, TRANS, N, K, ALPHA, A, LDA,&  
  BETA, C, LDC )
    implicit none
    integer :: K
@@ -1261,11 +1261,11 @@ module m_linalg_interfaces
    real :: C( LDC, * )
    character*1 :: TRANS
    character*1 :: UPLO
-  end subroutine ssyrk
+  end subroutine AB_SSYRk
  end interface
 
  interface
-  subroutine stbmv ( UPLO, TRANS, DIAG, N, K, A, LDA, X, INCX )
+  subroutine AB_STBMV ( UPLO, TRANS, DIAG, N, K, A, LDA, X, INCX )
    implicit none
    integer :: INCX
    integer :: K
@@ -1276,11 +1276,11 @@ module m_linalg_interfaces
    character*1 :: TRANS
    character*1 :: UPLO
    real :: X( * )
-  end subroutine stbmv
+  end subroutine AB_STBMV
  end interface
 
  interface
-  subroutine stbsv ( UPLO, TRANS, DIAG, N, K, A, LDA, X, INCX )
+  subroutine AB_STBSV ( UPLO, TRANS, DIAG, N, K, A, LDA, X, INCX )
    implicit none
    integer :: INCX
    integer :: K
@@ -1291,11 +1291,11 @@ module m_linalg_interfaces
    character*1 :: TRANS
    character*1 :: UPLO
    real :: X( * )
-  end subroutine stbsv
+  end subroutine AB_STBSV
  end interface
 
  interface
-  subroutine stpmv ( UPLO, TRANS, DIAG, N, AP, X, INCX )
+  subroutine AB_STPMV ( UPLO, TRANS, DIAG, N, AP, X, INCX )
    implicit none
    integer :: INCX
    integer :: N
@@ -1304,11 +1304,11 @@ module m_linalg_interfaces
    character*1 :: TRANS
    character*1 :: UPLO
    real :: X( * )
-  end subroutine stpmv
+  end subroutine AB_STPMV
  end interface
 
  interface
-  subroutine stpsv ( UPLO, TRANS, DIAG, N, AP, X, INCX )
+  subroutine AB_STPSV ( UPLO, TRANS, DIAG, N, AP, X, INCX )
    implicit none
    integer :: INCX
    integer :: N
@@ -1317,11 +1317,11 @@ module m_linalg_interfaces
    character*1 :: TRANS
    character*1 :: UPLO
    real :: X( * )
-  end subroutine stpsv
+  end subroutine AB_STPSV
  end interface
 
  interface
-  subroutine strmm ( SIDE, UPLO, TRANSA, DIAG, M, N, ALPHA, A, LDA,&  
+  subroutine AB_STRMM ( SIDE, UPLO, TRANSA, DIAG, M, N, ALPHA, A, LDA,&  
  B, LDB )
    implicit none
    integer :: LDA
@@ -1335,11 +1335,11 @@ module m_linalg_interfaces
    character*1 :: SIDE
    character*1 :: TRANSA
    character*1 :: UPLO
-  end subroutine strmm
+  end subroutine AB_STRMM
  end interface
 
  interface
-  subroutine strmv ( UPLO, TRANS, DIAG, N, A, LDA, X, INCX )
+  subroutine AB_STRMV ( UPLO, TRANS, DIAG, N, A, LDA, X, INCX )
    implicit none
    integer :: INCX
    integer :: LDA
@@ -1349,11 +1349,11 @@ module m_linalg_interfaces
    character*1 :: TRANS
    character*1 :: UPLO
    real :: X( * )
-  end subroutine strmv
+  end subroutine AB_STRMV
  end interface
 
  interface
-  subroutine strsm ( SIDE, UPLO, TRANSA, DIAG, M, N, ALPHA, A, LDA,&  
+  subroutine AB_STRSM ( SIDE, UPLO, TRANSA, DIAG, M, N, ALPHA, A, LDA,&  
  B, LDB )
    implicit none
    integer :: LDA
@@ -1367,11 +1367,11 @@ module m_linalg_interfaces
    character*1 :: SIDE
    character*1 :: TRANSA
    character*1 :: UPLO
-  end subroutine strsm
+  end subroutine AB_STRSM
  end interface
 
  interface
-  subroutine strsv ( UPLO, TRANS, DIAG, N, A, LDA, X, INCX )
+  subroutine AB_STRSV ( UPLO, TRANS, DIAG, N, A, LDA, X, INCX )
    implicit none
    integer :: INCX
    integer :: LDA
@@ -1381,11 +1381,11 @@ module m_linalg_interfaces
    character*1 :: TRANS
    character*1 :: UPLO
    real :: X( * )
-  end subroutine strsv
+  end subroutine AB_STRSV
  end interface
 
  !interface
- ! subroutine zaxpy(n,za,zx,incx,zy,incy)
+ ! subroutine AB_ZAXPY(n,za,zx,incx,zy,incy)
  !  implicit none
  !  integer :: incx
  !  integer :: incy
@@ -1393,41 +1393,41 @@ module m_linalg_interfaces
  !  double complex :: za
  !  double complex :: zx(*)
  !  double complex :: zy(*)
- ! end subroutine zaxpy
+ ! end subroutine AB_ZAXPY
  !end interface
 
  !interface
- ! subroutine  zcopy(n,zx,incx,zy,incy)
+ ! subroutine  AB_ZCOPY(n,zx,incx,zy,incy)
  !  implicit none
  !  integer :: incx
  !  integer :: incy
  !  integer :: n
  !  double complex :: zx(*)
  !  double complex :: zy(*)
- ! end subroutine zcopy
+ ! end subroutine AB_ZCOPY
  !end interface
 
  !interface
- ! double complex function zdotc(n,zx,incx,zy,incy)
+ ! double complex function AB_ZDOTC(n,zx,incx,zy,incy)
  !  implicit none
  !  integer :: incx
  !  integer :: incy
  !  integer :: n
  !  double complex :: zx(*)
  !  double complex :: zy(*)
- ! end function zdotc
+ ! end function AB_ZDOTC
  !end interface
 
  interface
-  double complex function zdotu(n,zx,incx,zy,incy)
+  double complex function AB_ZDOTU(n,zx,incx,zy,incy)
    implicit none
    integer, intent(in) :: incx, incy, n    !vz_i
    double complex, intent(in) :: zx(*), zy(*)    !vz_i
-  end function zdotu
+  end function AB_ZDOTU
  end interface
 
  interface
-  subroutine zdrot( N, CX, INCX, CY, INCY, C, S )
+  subroutine AB_ZDROT( N, CX, INCX, CY, INCY, C, S )
    implicit none
    integer :: INCX
    integer :: INCY
@@ -1436,21 +1436,21 @@ module m_linalg_interfaces
    complex*16 :: CX( * )
    complex*16 :: CY( * )
    double precision :: S
-  end subroutine zdrot
+  end subroutine AB_ZDROT
  end interface
 
  !interface
- ! subroutine  zdscal(n,da,zx,incx)
+ ! subroutine  AB_ZDSCAL(n,da,zx,incx)
  !  implicit none
  !  integer :: incx
  !  integer :: n
  !  double precision :: da
  !  double complex :: zx(*)
- ! end subroutine zdscal
+ ! end subroutine AB_ZDSCAL
  !end interface
 
  interface
-  subroutine zgbmv ( TRANS, M, N, KL, KU, ALPHA, A, LDA, X, INCX,&  
+  subroutine AB_ZGBMV ( TRANS, M, N, KL, KU, ALPHA, A, LDA, X, INCX,&  
  BETA, Y, INCY )
    implicit none
    integer :: INCX
@@ -1466,11 +1466,11 @@ module m_linalg_interfaces
    character*1 :: TRANS
    complex*16 :: X( * )
    complex*16 :: Y( * )
-  end subroutine zgbmv
+  end subroutine AB_ZGBMV
  end interface
 
  !interface
- ! subroutine zgemm ( TRANSA, TRANSB, M, N, K, ALPHA, A, LDA, B, LDB, BETA, C, LDC )
+ ! subroutine AB_ZGEMM ( TRANSA, TRANSB, M, N, K, ALPHA, A, LDA, B, LDB, BETA, C, LDC )
  !  implicit none
  !  integer :: K
  !  integer :: LDA
@@ -1485,11 +1485,11 @@ module m_linalg_interfaces
  !  complex*16 :: C( LDC, * )
  !  character*1 :: TRANSA
  !  character*1 :: TRANSB
- ! end subroutine zgemm
+ ! end subroutine AB_ZGEMM
  !end interface
 
  !interface
- ! subroutine zgemv ( TRANS, M, N, ALPHA, A, LDA, X, INCX, BETA, Y, INCY )
+ ! subroutine AB_ZGEMV ( TRANS, M, N, ALPHA, A, LDA, X, INCX, BETA, Y, INCY )
  !  implicit none
  !  integer :: INCX
  !  integer :: INCY
@@ -1502,11 +1502,11 @@ module m_linalg_interfaces
  !  character*1 :: TRANS
  !  complex*16 :: X( * )
  !  complex*16 :: Y( * )
- ! end subroutine zgemv
+ ! end subroutine AB_ZGEMV
  !end interface
 
  !interface
- ! subroutine zgerc ( M, N, ALPHA, X, INCX, Y, INCY, A, LDA )
+ ! subroutine AB_ZGERC ( M, N, ALPHA, X, INCX, Y, INCY, A, LDA )
  !  implicit none
  !  integer :: INCX
  !  integer :: INCY
@@ -1517,11 +1517,11 @@ module m_linalg_interfaces
  !  complex*16 :: ALPHA
  !  complex*16 :: X( * )
  !  complex*16 :: Y( * )
- ! end subroutine zgerc
+ ! end subroutine AB_ZGERC
  !end interface
 
  interface
-  subroutine zgeru ( M, N, ALPHA, X, INCX, Y, INCY, A, LDA )
+  subroutine AB_ZGERU ( M, N, ALPHA, X, INCX, Y, INCY, A, LDA )
    implicit none
    integer :: INCX
    integer :: INCY
@@ -1532,11 +1532,11 @@ module m_linalg_interfaces
    complex*16 :: ALPHA
    complex*16 :: X( * )
    complex*16 :: Y( * )
-  end subroutine zgeru
+  end subroutine AB_ZGERU
  end interface
 
  interface
-  subroutine zhbmv ( UPLO, N, K, ALPHA, A, LDA, X, INCX,&  
+  subroutine AB_ZHBMV ( UPLO, N, K, ALPHA, A, LDA, X, INCX,&  
  BETA, Y, INCY )
    implicit none
    integer :: INCX
@@ -1550,11 +1550,11 @@ module m_linalg_interfaces
    character*1 :: UPLO
    complex*16 :: X( * )
    complex*16 :: Y( * )
-  end subroutine zhbmv
+  end subroutine AB_ZHBMV
  end interface
 
  !interface
- ! subroutine zhemm ( SIDE, UPLO, M, N, ALPHA, A, LDA, B, LDB, BETA, C, LDC )
+ ! subroutine AB_ZHEMM ( SIDE, UPLO, M, N, ALPHA, A, LDA, B, LDB, BETA, C, LDC )
  !  implicit none
  !  integer :: LDA
  !  integer :: LDB
@@ -1568,11 +1568,11 @@ module m_linalg_interfaces
  !  complex*16 :: C( LDC, * )
  !  character*1 :: SIDE
  !  character*1 :: UPLO
- ! end subroutine zhemm
+ ! end subroutine AB_ZHEMM
  !end interface
 
  interface
-  subroutine zhemv ( UPLO, N, ALPHA, A, LDA, X, INCX,&  
+  subroutine AB_ZHEMV ( UPLO, N, ALPHA, A, LDA, X, INCX,&  
  BETA, Y, INCY )
    implicit none
    integer :: INCX
@@ -1585,11 +1585,11 @@ module m_linalg_interfaces
    character*1 :: UPLO
    complex*16 :: X( * )
    complex*16 :: Y( * )
-  end subroutine zhemv
+  end subroutine AB_ZHEMV
  end interface
 
  !interface
- ! subroutine zher  ( UPLO, N, ALPHA, X, INCX, A, LDA )
+ ! subroutine AB_ZHER  ( UPLO, N, ALPHA, X, INCX, A, LDA )
  !  implicit none
  !  integer :: INCX
  !  integer :: LDA
@@ -1598,11 +1598,11 @@ module m_linalg_interfaces
  !  double precision :: ALPHA
  !  character*1 :: UPLO
  !  complex*16 :: X( * )
- ! end subroutine zher
+ ! end subroutine AB_ZHER
  !end interface
 
  interface
-  subroutine zher2 ( UPLO, N, ALPHA, X, INCX, Y, INCY, A, LDA )
+  subroutine AB_ZHER2 ( UPLO, N, ALPHA, X, INCX, Y, INCY, A, LDA )
    implicit none
    integer :: INCX
    integer :: INCY
@@ -1613,11 +1613,11 @@ module m_linalg_interfaces
    character*1 :: UPLO
    complex*16 :: X( * )
    complex*16 :: Y( * )
-  end subroutine zher2
+  end subroutine AB_ZHER2
  end interface
 
  interface
-  subroutine zher2k( UPLO, TRANS, N, K, ALPHA, A, LDA, B, LDB, BETA,&  
+  subroutine AB_ZHER2k( UPLO, TRANS, N, K, ALPHA, A, LDA, B, LDB, BETA,&  
  C, LDC )
    implicit none
    integer :: K
@@ -1632,11 +1632,11 @@ module m_linalg_interfaces
    complex*16 :: C( LDC, * )
    character :: TRANS
    character :: UPLO
-  end subroutine zher2k
+  end subroutine AB_ZHER2k
  end interface
 
  !interface
- ! subroutine zherk( UPLO, TRANS, N, K, ALPHA, A, LDA, BETA, C, LDC )
+ ! subroutine AB_ZHERk( UPLO, TRANS, N, K, ALPHA, A, LDA, BETA, C, LDC )
  !  implicit none
  !  integer :: K
  !  integer :: LDA
@@ -1648,11 +1648,11 @@ module m_linalg_interfaces
  !  complex*16 :: C( LDC, * )
  !  character :: TRANS
  !  character :: UPLO
- ! end subroutine zherk
+ ! end subroutine AB_ZHERk
  !end interface
 
  interface
-  subroutine zhpmv ( UPLO, N, ALPHA, AP, X, INCX, BETA, Y, INCY )
+  subroutine AB_ZHPMV ( UPLO, N, ALPHA, AP, X, INCX, BETA, Y, INCY )
    implicit none
    integer :: INCX
    integer :: INCY
@@ -1663,11 +1663,11 @@ module m_linalg_interfaces
    character*1 :: UPLO
    complex*16 :: X( * )
    complex*16 :: Y( * )
-  end subroutine zhpmv
+  end subroutine AB_ZHPMV
  end interface
 
  interface
-  subroutine zhpr  ( UPLO, N, ALPHA, X, INCX, AP )
+  subroutine AB_ZHPR  ( UPLO, N, ALPHA, X, INCX, AP )
    implicit none
    integer :: INCX
    integer :: N
@@ -1675,11 +1675,11 @@ module m_linalg_interfaces
    complex*16 :: AP( * )
    character*1 :: UPLO
    complex*16 :: X( * )
-  end subroutine zhpr
+  end subroutine AB_ZHPR
  end interface
 
  interface
-  subroutine zhpr2 ( UPLO, N, ALPHA, X, INCX, Y, INCY, AP )
+  subroutine AB_ZHPR2 ( UPLO, N, ALPHA, X, INCX, Y, INCY, AP )
    implicit none
    integer :: INCX
    integer :: INCY
@@ -1689,42 +1689,42 @@ module m_linalg_interfaces
    character*1 :: UPLO
    complex*16 :: X( * )
    complex*16 :: Y( * )
-  end subroutine zhpr2
+  end subroutine AB_ZHPR2
  end interface
 
  interface
-  subroutine zrotg(ca,cb,c,s)
+  subroutine AB_ZROTg(ca,cb,c,s)
    implicit none
    double precision :: c
    double complex :: ca
    double complex :: cb
    double complex :: s
-  end subroutine zrotg
+  end subroutine AB_ZROTg
  end interface
 
  !interface
- ! subroutine  zscal(n,za,zx,incx)
+ ! subroutine  AB_ZSCAL(n,za,zx,incx)
  !  implicit none
  !  integer :: incx
  !  integer :: n
  !  double complex :: za
  !  double complex :: zx(*)
- ! end subroutine zscal
+ ! end subroutine AB_ZSCAL
  !end interface
 
  interface
-  subroutine  zswap (n,zx,incx,zy,incy)
+  subroutine  AB_ZSWAP (n,zx,incx,zy,incy)
    implicit none
    integer :: incx
    integer :: incy
    integer :: n
    double complex :: zx(*)
    double complex :: zy(*)
-  end subroutine zswap
+  end subroutine AB_ZSWAP
  end interface
 
  interface
-  subroutine zsymm ( SIDE, UPLO, M, N, ALPHA, A, LDA, B, LDB,&  
+  subroutine AB_ZSYMM ( SIDE, UPLO, M, N, ALPHA, A, LDA, B, LDB,&  
  BETA, C, LDC )
    implicit none
    integer :: LDA
@@ -1739,11 +1739,11 @@ module m_linalg_interfaces
    complex*16 :: C( LDC, * )
    character*1 :: SIDE
    character*1 :: UPLO
-  end subroutine zsymm
+  end subroutine AB_ZSYMM
  end interface
 
  interface
-  subroutine zsyr2k( UPLO, TRANS, N, K, ALPHA, A, LDA, B, LDB,&  
+  subroutine AB_ZSYR2k( UPLO, TRANS, N, K, ALPHA, A, LDA, B, LDB,&  
  BETA, C, LDC )
    implicit none
    integer :: K
@@ -1758,11 +1758,11 @@ module m_linalg_interfaces
    complex*16 :: C( LDC, * )
    character*1 :: TRANS
    character*1 :: UPLO
-  end subroutine zsyr2k
+  end subroutine AB_ZSYR2k
  end interface
 
  interface
-  subroutine zsyrk ( UPLO, TRANS, N, K, ALPHA, A, LDA,&  
+  subroutine AB_ZSYRk ( UPLO, TRANS, N, K, ALPHA, A, LDA,&  
  BETA, C, LDC )
    implicit none
    integer :: K
@@ -1775,11 +1775,11 @@ module m_linalg_interfaces
    complex*16 :: C( LDC, * )
    character*1 :: TRANS
    character*1 :: UPLO
-  end subroutine zsyrk
+  end subroutine AB_ZSYRk
  end interface
 
  interface
-  subroutine ztbmv ( UPLO, TRANS, DIAG, N, K, A, LDA, X, INCX )
+  subroutine AB_ZTBMV ( UPLO, TRANS, DIAG, N, K, A, LDA, X, INCX )
    implicit none
    integer :: INCX
    integer :: K
@@ -1790,11 +1790,11 @@ module m_linalg_interfaces
    character*1 :: TRANS
    character*1 :: UPLO
    complex*16 :: X( * )
-  end subroutine ztbmv
+  end subroutine AB_ZTBMV
  end interface
 
  interface
-  subroutine ztbsv ( UPLO, TRANS, DIAG, N, K, A, LDA, X, INCX )
+  subroutine AB_ZTBSV ( UPLO, TRANS, DIAG, N, K, A, LDA, X, INCX )
    implicit none
    integer :: INCX
    integer :: K
@@ -1805,11 +1805,11 @@ module m_linalg_interfaces
    character*1 :: TRANS
    character*1 :: UPLO
    complex*16 :: X( * )
-  end subroutine ztbsv
+  end subroutine AB_ZTBSV
  end interface
 
  interface
-  subroutine ztpmv ( UPLO, TRANS, DIAG, N, AP, X, INCX )
+  subroutine AB_ZTPMV ( UPLO, TRANS, DIAG, N, AP, X, INCX )
    implicit none
    integer :: INCX
    integer :: N
@@ -1818,11 +1818,11 @@ module m_linalg_interfaces
    character*1 :: TRANS
    character*1 :: UPLO
    complex*16 :: X( * )
-  end subroutine ztpmv
+  end subroutine AB_ZTPMV
  end interface
 
  interface
-  subroutine ztpsv ( UPLO, TRANS, DIAG, N, AP, X, INCX )
+  subroutine AB_ZTPSV ( UPLO, TRANS, DIAG, N, AP, X, INCX )
    implicit none
    integer :: INCX
    integer :: N
@@ -1831,11 +1831,11 @@ module m_linalg_interfaces
    character*1 :: TRANS
    character*1 :: UPLO
    complex*16 :: X( * )
-  end subroutine ztpsv
+  end subroutine AB_ZTPSV
  end interface
 
  interface
-  subroutine ztrmm ( SIDE, UPLO, TRANSA, DIAG, M, N, ALPHA, A, LDA,&  
+  subroutine AB_ZTRMM ( SIDE, UPLO, TRANSA, DIAG, M, N, ALPHA, A, LDA,&  
  B, LDB )
    implicit none
    integer :: LDA
@@ -1849,11 +1849,11 @@ module m_linalg_interfaces
    character*1 :: SIDE
    character*1 :: TRANSA
    character*1 :: UPLO
-  end subroutine ztrmm
+  end subroutine AB_ZTRMM
  end interface
 
  interface
-  subroutine ztrmv ( UPLO, TRANS, DIAG, N, A, LDA, X, INCX )
+  subroutine AB_ZTRMV ( UPLO, TRANS, DIAG, N, A, LDA, X, INCX )
    implicit none
    integer :: INCX
    integer :: LDA
@@ -1863,11 +1863,11 @@ module m_linalg_interfaces
    character*1 :: TRANS
    character*1 :: UPLO
    complex*16 :: X( * )
-  end subroutine ztrmv
+  end subroutine AB_ZTRMV
  end interface
 
  !interface
- ! subroutine ztrsm ( SIDE, UPLO, TRANSA, DIAG, M, N, ALPHA, A, LDA, B, LDB )
+ ! subroutine AB_ZTRSM ( SIDE, UPLO, TRANSA, DIAG, M, N, ALPHA, A, LDA, B, LDB )
  !  implicit none
  !  integer :: LDA
  !  integer :: LDB
@@ -1880,11 +1880,11 @@ module m_linalg_interfaces
  !  character*1 :: SIDE
  !  character*1 :: TRANSA
  !  character*1 :: UPLO
- ! end subroutine ztrsm
+ ! end subroutine AB_ZTRSM
  !end interface
 
  interface
-  subroutine ztrsv ( UPLO, TRANS, DIAG, N, A, LDA, X, INCX )
+  subroutine AB_ZTRSV ( UPLO, TRANS, DIAG, N, A, LDA, X, INCX )
    implicit none
    integer :: INCX
    integer :: LDA
@@ -1894,11 +1894,11 @@ module m_linalg_interfaces
    character*1 :: TRANS
    character*1 :: UPLO
    complex*16 :: X( * )
-  end subroutine ztrsv
+  end subroutine AB_ZTRSV
  end interface
 
  interface
-  subroutine cgetf2( M, N, A, LDA, IPIV, INFO )
+  subroutine AB_CGETF2( M, N, A, LDA, IPIV, INFO )
    implicit none
    integer :: INFO
    integer :: IPIV( * )
@@ -1906,11 +1906,11 @@ module m_linalg_interfaces
    integer :: M
    integer :: N
    complex :: A( LDA, * )
-  end subroutine cgetf2
+  end subroutine AB_CGETF2
  end interface
 
  interface
-  subroutine cgetrf( M, N, A, LDA, IPIV, INFO )
+  subroutine AB_CGETRF( M, N, A, LDA, IPIV, INFO )
    implicit none
    integer :: INFO
    integer :: IPIV( * )
@@ -1918,11 +1918,11 @@ module m_linalg_interfaces
    integer :: M
    integer :: N
    complex :: A( LDA, * )
-  end subroutine cgetrf
+  end subroutine AB_CGETRF
  end interface
 
  interface
-  subroutine cgetri( N, A, LDA, IPIV, WORK, LWORK, INFO )
+  subroutine AB_CGETRI( N, A, LDA, IPIV, WORK, LWORK, INFO )
    implicit none
    integer :: INFO
    integer :: IPIV( * )
@@ -1931,11 +1931,11 @@ module m_linalg_interfaces
    integer :: N
    complex :: A( LDA, * )
    complex :: WORK( * )
-  end subroutine cgetri
+  end subroutine AB_CGETRI
  end interface
 
  interface
-  subroutine chpev( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, RWORK,&  
+  subroutine AB_CHPEV( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, RWORK,&  
  INFO )
    implicit none
    integer :: INFO
@@ -1948,11 +1948,11 @@ module m_linalg_interfaces
    real :: W( * )
    complex :: WORK( * )
    complex :: Z( LDZ, * )
-  end subroutine chpev
+  end subroutine AB_CHPEV
  end interface
 
  interface
-  subroutine chptrd( UPLO, N, AP, D, E, TAU, INFO )
+  subroutine AB_CHPTRD( UPLO, N, AP, D, E, TAU, INFO )
    implicit none
    integer :: INFO
    integer :: N
@@ -1961,30 +1961,30 @@ module m_linalg_interfaces
    real :: E( * )
    complex :: TAU( * )
    character :: UPLO
-  end subroutine chptrd
+  end subroutine AB_CHPTRD
  end interface
 
  interface
-  complex function cladiv( X, Y )
+  complex function AB_CLADIV( X, Y )
    implicit none
    complex :: X
    complex :: Y
-  end function cladiv
+  end function AB_CLADIV
  end interface
 
  interface
-  real function clanhp( NORM, UPLO, N, AP, WORK )
+  real function AB_CLANHP( NORM, UPLO, N, AP, WORK )
    implicit none
    integer :: N
    complex :: AP( * )
    character :: NORM
    character :: UPLO
    real :: WORK( * )
-  end function clanhp
+  end function AB_CLANHP
  end interface
 
  interface
-  subroutine clarf( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )
+  subroutine AB_CLARF( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )
    implicit none
    integer :: INCV
    integer :: LDC
@@ -1995,22 +1995,22 @@ module m_linalg_interfaces
    complex :: TAU
    complex :: V( * )
    complex :: WORK( * )
-  end subroutine clarf
+  end subroutine AB_CLARF
  end interface
 
  interface
-  subroutine clarfg( N, ALPHA, X, INCX, TAU )
+  subroutine AB_CLARFg( N, ALPHA, X, INCX, TAU )
    implicit none
    integer :: INCX
    integer :: N
    complex :: ALPHA
    complex :: TAU
    complex :: X( * )
-  end subroutine clarfg
+  end subroutine AB_CLARFg
  end interface
 
  interface
-  subroutine clasr( SIDE, PIVOT, DIRECT, M, N, C, S, A, LDA )
+  subroutine AB_CLASR( SIDE, PIVOT, DIRECT, M, N, C, S, A, LDA )
    implicit none
    integer :: LDA
    integer :: M
@@ -2021,22 +2021,22 @@ module m_linalg_interfaces
    character :: PIVOT
    real :: S( * )
    character :: SIDE
-  end subroutine clasr
+  end subroutine AB_CLASR
  end interface
 
  interface
-  subroutine classq( N, X, INCX, SCALE, SUMSQ )
+  subroutine AB_CLASSQ( N, X, INCX, SCALE, SUMSQ )
    implicit none
    integer :: INCX
    integer :: N
    real :: SCALE
    real :: SUMSQ
    complex :: X( * )
-  end subroutine classq
+  end subroutine AB_CLASSQ
  end interface
 
  interface
-  subroutine claswp( N, A, LDA, K1, K2, IPIV, INCX )
+  subroutine AB_CLASWP( N, A, LDA, K1, K2, IPIV, INCX )
    implicit none
    integer :: INCX
    integer :: IPIV( * )
@@ -2045,7 +2045,7 @@ module m_linalg_interfaces
    integer :: LDA
    integer :: N
    complex :: A( LDA, * )
-  end subroutine claswp
+  end subroutine AB_CLASWP
  end interface
 
  interface
@@ -2061,7 +2061,7 @@ module m_linalg_interfaces
  end interface
 
  interface
-  subroutine csteqr( COMPZ, N, D, E, Z, LDZ, WORK, INFO )
+  subroutine AB_CSTEQR( COMPZ, N, D, E, Z, LDZ, WORK, INFO )
    implicit none
    integer :: INFO
    integer :: LDZ
@@ -2071,11 +2071,11 @@ module m_linalg_interfaces
    real :: E( * )
    real :: WORK( * )
    complex :: Z( LDZ, * )
-  end subroutine csteqr
+  end subroutine AB_CSTEQR
  end interface
 
  interface
-  subroutine ctrtri( UPLO, DIAG, N, A, LDA, INFO )
+  subroutine AB_CTRTRI( UPLO, DIAG, N, A, LDA, INFO )
    implicit none
    integer :: INFO
    integer :: LDA
@@ -2083,11 +2083,11 @@ module m_linalg_interfaces
    complex :: A( LDA, * )
    character :: DIAG
    character :: UPLO
-  end subroutine ctrtri
+  end subroutine AB_CTRTRI
  end interface
 
  interface
-  subroutine cung2l( M, N, K, A, LDA, TAU, WORK, INFO )
+  subroutine AB_CUNG2L( M, N, K, A, LDA, TAU, WORK, INFO )
    implicit none
    integer :: INFO
    integer :: K
@@ -2097,11 +2097,11 @@ module m_linalg_interfaces
    complex :: A( LDA, * )
    complex :: TAU( * )
    complex :: WORK( * )
-  end subroutine cung2l
+  end subroutine AB_CUNG2L
  end interface
 
  interface
-  subroutine cung2r( M, N, K, A, LDA, TAU, WORK, INFO )
+  subroutine AB_CUNG2R( M, N, K, A, LDA, TAU, WORK, INFO )
    implicit none
    integer :: INFO
    integer :: K
@@ -2111,11 +2111,11 @@ module m_linalg_interfaces
    complex :: A( LDA, * )
    complex :: TAU( * )
    complex :: WORK( * )
-  end subroutine cung2r
+  end subroutine AB_CUNG2R
  end interface
 
  interface
-  subroutine cupgtr( UPLO, N, AP, TAU, Q, LDQ, WORK, INFO )
+  subroutine AB_CUPGTR( UPLO, N, AP, TAU, Q, LDQ, WORK, INFO )
    implicit none
    integer :: INFO
    integer :: LDQ
@@ -2125,11 +2125,11 @@ module m_linalg_interfaces
    complex :: TAU( * )
    character :: UPLO
    complex :: WORK( * )
-  end subroutine cupgtr
+  end subroutine AB_CUPGTR
  end interface
 
  interface
-  subroutine dbdsqr( UPLO, N, NCVT, NRU, NCC, D, E, VT, LDVT, U,&  
+  subroutine AB_DBDSQR( UPLO, N, NCVT, NRU, NCC, D, E, VT, LDVT, U,&  
  LDU, C, LDC, WORK, INFO )
    implicit none
    integer :: INFO
@@ -2147,11 +2147,11 @@ module m_linalg_interfaces
    character :: UPLO
    double precision :: VT( LDVT, * )
    double precision :: WORK( * )
-  end subroutine dbdsqr
+  end subroutine AB_DBDSQR
  end interface
 
  interface
-  subroutine dgebd2( M, N, A, LDA, D, E, TAUQ, TAUP, WORK, INFO )
+  subroutine AB_DGEBD2( M, N, A, LDA, D, E, TAUQ, TAUP, WORK, INFO )
    implicit none
    integer :: INFO
    integer :: LDA
@@ -2163,11 +2163,11 @@ module m_linalg_interfaces
    double precision :: TAUP( * )
    double precision :: TAUQ( * )
    double precision :: WORK( * )
-  end subroutine dgebd2
+  end subroutine AB_DGEBD2
  end interface
 
  interface
-  subroutine dgebrd( M, N, A, LDA, D, E, TAUQ, TAUP, WORK, LWORK,&  
+  subroutine AB_DGEBRD( M, N, A, LDA, D, E, TAUQ, TAUP, WORK, LWORK,&  
  INFO )
    implicit none
    integer :: INFO
@@ -2181,11 +2181,11 @@ module m_linalg_interfaces
    double precision :: TAUP( * )
    double precision :: TAUQ( * )
    double precision :: WORK( * )
-  end subroutine dgebrd
+  end subroutine AB_DGEBRD
  end interface
 
  interface
-  subroutine dgelq2( M, N, A, LDA, TAU, WORK, INFO )
+  subroutine AB_DGELQ2( M, N, A, LDA, TAU, WORK, INFO )
    implicit none
    integer :: INFO
    integer :: LDA
@@ -2194,11 +2194,11 @@ module m_linalg_interfaces
    double precision :: A( LDA, * )
    double precision :: TAU( * )
    double precision :: WORK( * )
-  end subroutine dgelq2
+  end subroutine AB_DGELQ2
  end interface
 
  interface
-  subroutine dgelqf( M, N, A, LDA, TAU, WORK, LWORK, INFO )
+  subroutine AB_DGELQf( M, N, A, LDA, TAU, WORK, LWORK, INFO )
    implicit none
    integer :: INFO
    integer :: LDA
@@ -2208,11 +2208,11 @@ module m_linalg_interfaces
    double precision :: A( LDA, * )
    double precision :: TAU( * )
    double precision :: WORK( * )
-  end subroutine dgelqf
+  end subroutine AB_DGELQf
  end interface
 
  interface
-  subroutine dgelss( M, N, NRHS, A, LDA, B, LDB, S, RCOND, RANK,&  
+  subroutine AB_DGELSs( M, N, NRHS, A, LDA, B, LDB, S, RCOND, RANK,&  
  WORK, LWORK, INFO )
    implicit none
    integer :: INFO
@@ -2228,11 +2228,11 @@ module m_linalg_interfaces
    double precision :: RCOND
    double precision :: S( * )
    double precision :: WORK( * )
-  end subroutine dgelss
+  end subroutine AB_DGELSs
  end interface
 
  interface
-  subroutine dgeqr2( M, N, A, LDA, TAU, WORK, INFO )
+  subroutine AB_DGEQR2( M, N, A, LDA, TAU, WORK, INFO )
    implicit none
    integer :: INFO
    integer :: LDA
@@ -2241,11 +2241,11 @@ module m_linalg_interfaces
    double precision :: A( LDA, * )
    double precision :: TAU( * )
    double precision :: WORK( * )
-  end subroutine dgeqr2
+  end subroutine AB_DGEQR2
  end interface
 
  interface
-  subroutine dgeqrf( M, N, A, LDA, TAU, WORK, LWORK, INFO )
+  subroutine AB_DGEQRf( M, N, A, LDA, TAU, WORK, LWORK, INFO )
    implicit none
    integer :: INFO
    integer :: LDA
@@ -2255,11 +2255,11 @@ module m_linalg_interfaces
    double precision :: A( LDA, * )
    double precision :: TAU( * )
    double precision :: WORK( * )
-  end subroutine dgeqrf
+  end subroutine AB_DGEQRf
  end interface
 
  interface
-  subroutine dgesvd( JOBU, JOBVT, M, N, A, LDA, S, U, LDU, VT, LDVT,&  
+  subroutine AB_DGESVd( JOBU, JOBVT, M, N, A, LDA, S, U, LDU, VT, LDVT,&  
  WORK, LWORK, INFO )
    implicit none
    integer :: INFO
@@ -2276,11 +2276,11 @@ module m_linalg_interfaces
    double precision :: U( LDU, * )
    double precision :: VT( LDVT, * )
    double precision :: WORK( * )
-  end subroutine dgesvd
+  end subroutine AB_DGESVd
  end interface
 
  interface
-  subroutine dgetf2( M, N, A, LDA, IPIV, INFO )
+  subroutine AB_DGETF2( M, N, A, LDA, IPIV, INFO )
    implicit none
    integer :: INFO
    integer :: IPIV( * )
@@ -2288,11 +2288,11 @@ module m_linalg_interfaces
    integer :: M
    integer :: N
    double precision :: A( LDA, * )
-  end subroutine dgetf2
+  end subroutine AB_DGETF2
  end interface
 
  interface
-  subroutine dgetrf( M, N, A, LDA, IPIV, INFO )
+  subroutine AB_DGETRF( M, N, A, LDA, IPIV, INFO )
    implicit none
    integer :: INFO
    integer :: IPIV( * )
@@ -2300,11 +2300,11 @@ module m_linalg_interfaces
    integer :: M
    integer :: N
    double precision :: A( LDA, * )
-  end subroutine dgetrf
+  end subroutine AB_DGETRF
  end interface
 
  interface
-  subroutine dgetri( N, A, LDA, IPIV, WORK, LWORK, INFO )
+  subroutine AB_DGETRI( N, A, LDA, IPIV, WORK, LWORK, INFO )
    implicit none
    integer :: INFO
    integer :: IPIV( * )
@@ -2313,11 +2313,11 @@ module m_linalg_interfaces
    integer :: N
    double precision :: A( LDA, * )
    double precision :: WORK( * )
-  end subroutine dgetri
+  end subroutine AB_DGETRI
  end interface
 
  interface
-  subroutine dopgtr( UPLO, N, AP, TAU, Q, LDQ, WORK, INFO )
+  subroutine AB_DOPGTR( UPLO, N, AP, TAU, Q, LDQ, WORK, INFO )
    implicit none
    integer :: INFO
    integer :: LDQ
@@ -2327,11 +2327,11 @@ module m_linalg_interfaces
    double precision :: TAU( * )
    character :: UPLO
    double precision :: WORK( * )
-  end subroutine dopgtr
+  end subroutine AB_DOPGTR
  end interface
 
  interface
-  subroutine dorg2l( M, N, K, A, LDA, TAU, WORK, INFO )
+  subroutine AB_DORG2L( M, N, K, A, LDA, TAU, WORK, INFO )
    implicit none
    integer :: INFO
    integer :: K
@@ -2341,11 +2341,11 @@ module m_linalg_interfaces
    double precision :: A( LDA, * )
    double precision :: TAU( * )
    double precision :: WORK( * )
-  end subroutine dorg2l
+  end subroutine AB_DORG2L
  end interface
 
  interface
-  subroutine dorg2r( M, N, K, A, LDA, TAU, WORK, INFO )
+  subroutine AB_DORG2R( M, N, K, A, LDA, TAU, WORK, INFO )
    implicit none
    integer :: INFO
    integer :: K
@@ -2355,11 +2355,11 @@ module m_linalg_interfaces
    double precision :: A( LDA, * )
    double precision :: TAU( * )
    double precision :: WORK( * )
-  end subroutine dorg2r
+  end subroutine AB_DORG2R
  end interface
 
  interface
-  subroutine dorgbr( VECT, M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
+  subroutine AB_DORGBR( VECT, M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
    implicit none
    integer :: INFO
    integer :: K
@@ -2371,11 +2371,11 @@ module m_linalg_interfaces
    double precision :: TAU( * )
    character :: VECT
    double precision :: WORK( * )
-  end subroutine dorgbr
+  end subroutine AB_DORGBR
  end interface
 
  interface
-  subroutine dorgl2( M, N, K, A, LDA, TAU, WORK, INFO )
+  subroutine AB_DORGL2( M, N, K, A, LDA, TAU, WORK, INFO )
    implicit none
    integer :: INFO
    integer :: K
@@ -2385,26 +2385,11 @@ module m_linalg_interfaces
    double precision :: A( LDA, * )
    double precision :: TAU( * )
    double precision :: WORK( * )
-  end subroutine dorgl2
+  end subroutine AB_DORGL2
  end interface
 
  interface
-  subroutine dorglq( M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
-   implicit none
-   integer :: INFO
-   integer :: K
-   integer :: LDA
-   integer :: LWORK
-   integer :: M
-   integer :: N
-   double precision :: A( LDA, * )
-   double precision :: TAU( * )
-   double precision :: WORK( * )
-  end subroutine dorglq
- end interface
-
- interface
-  subroutine dorgql( M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
+  subroutine AB_DORGLQ( M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
    implicit none
    integer :: INFO
    integer :: K
@@ -2415,11 +2400,11 @@ module m_linalg_interfaces
    double precision :: A( LDA, * )
    double precision :: TAU( * )
    double precision :: WORK( * )
-  end subroutine dorgql
+  end subroutine AB_DORGLQ
  end interface
 
  interface
-  subroutine dorgqr( M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
+  subroutine AB_DORGQL( M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
    implicit none
    integer :: INFO
    integer :: K
@@ -2430,11 +2415,26 @@ module m_linalg_interfaces
    double precision :: A( LDA, * )
    double precision :: TAU( * )
    double precision :: WORK( * )
-  end subroutine dorgqr
+  end subroutine AB_DORGQL
  end interface
 
  interface
-  subroutine dorgtr( UPLO, N, A, LDA, TAU, WORK, LWORK, INFO )
+  subroutine AB_DORGQR( M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
+   implicit none
+   integer :: INFO
+   integer :: K
+   integer :: LDA
+   integer :: LWORK
+   integer :: M
+   integer :: N
+   double precision :: A( LDA, * )
+   double precision :: TAU( * )
+   double precision :: WORK( * )
+  end subroutine AB_DORGQR
+ end interface
+
+ interface
+  subroutine AB_DORGTR( UPLO, N, A, LDA, TAU, WORK, LWORK, INFO )
    implicit none
    integer :: INFO
    integer :: LDA
@@ -2444,11 +2444,11 @@ module m_linalg_interfaces
    double precision :: TAU( * )
    character :: UPLO
    double precision :: WORK( LWORK )
-  end subroutine dorgtr
+  end subroutine AB_DORGTR
  end interface
 
  interface
-  subroutine dorm2r( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,&  
+  subroutine AB_DORM2R( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,&  
  WORK, INFO )
    implicit none
    integer :: INFO
@@ -2463,11 +2463,11 @@ module m_linalg_interfaces
    double precision :: TAU( * )
    character :: TRANS
    double precision :: WORK( * )
-  end subroutine dorm2r
+  end subroutine AB_DORM2R
  end interface
 
  interface
-  subroutine dormbr( VECT, SIDE, TRANS, M, N, K, A, LDA, TAU, C,&  
+  subroutine AB_DORMBR( VECT, SIDE, TRANS, M, N, K, A, LDA, TAU, C,&  
  LDC, WORK, LWORK, INFO )
    implicit none
    integer :: INFO
@@ -2484,11 +2484,11 @@ module m_linalg_interfaces
    character :: TRANS
    character :: VECT
    double precision :: WORK( * )
-  end subroutine dormbr
+  end subroutine AB_DORMBR
  end interface
 
  interface
-  subroutine dorml2( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,&  
+  subroutine AB_DORML2( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,&  
  WORK, INFO )
    implicit none
    integer :: INFO
@@ -2503,11 +2503,11 @@ module m_linalg_interfaces
    double precision :: TAU( * )
    character :: TRANS
    double precision :: WORK( * )
-  end subroutine dorml2
+  end subroutine AB_DORML2
  end interface
 
  interface
-  subroutine dormlq( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,&  
+  subroutine AB_DORMLQ( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,&  
  WORK, LWORK, INFO )
    implicit none
    integer :: INFO
@@ -2523,11 +2523,11 @@ module m_linalg_interfaces
    double precision :: TAU( * )
    character :: TRANS
    double precision :: WORK( * )
-  end subroutine dormlq
+  end subroutine AB_DORMLQ
  end interface
 
  interface
-  subroutine dormqr( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,&  
+  subroutine AB_DORMQR( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,&  
  WORK, LWORK, INFO )
    implicit none
    integer :: INFO
@@ -2543,11 +2543,11 @@ module m_linalg_interfaces
    double precision :: TAU( * )
    character :: TRANS
    double precision :: WORK( * )
-  end subroutine dormqr
+  end subroutine AB_DORMQR
  end interface
 
  interface
-  subroutine dposv( UPLO, N, NRHS, A, LDA, B, LDB, INFO )
+  subroutine AB_DPOSV( UPLO, N, NRHS, A, LDA, B, LDB, INFO )
    implicit none
    integer :: INFO
    integer :: LDA
@@ -2557,33 +2557,33 @@ module m_linalg_interfaces
    double precision :: A( LDA, * )
    double precision :: B( LDB, * )
    character :: UPLO
-  end subroutine dposv
+  end subroutine AB_DPOSV
  end interface
 
  interface
-  subroutine dpotf2( UPLO, N, A, LDA, INFO )
+  subroutine AB_DPOTF2( UPLO, N, A, LDA, INFO )
    implicit none
    integer :: INFO
    integer :: LDA
    integer :: N
    double precision :: A( LDA, * )
    character :: UPLO
-  end subroutine dpotf2
+  end subroutine AB_DPOTF2
  end interface
 
  interface
-  subroutine dpotrf( UPLO, N, A, LDA, INFO )
+  subroutine AB_DPOTRF( UPLO, N, A, LDA, INFO )
    implicit none
    integer :: INFO
    integer :: LDA
    integer :: N
    double precision :: A( LDA, * )
    character :: UPLO
-  end subroutine dpotrf
+  end subroutine AB_DPOTRF
  end interface
 
  interface
-  subroutine dpotrs( UPLO, N, NRHS, A, LDA, B, LDB, INFO )
+  subroutine AB_DPOTRS( UPLO, N, NRHS, A, LDA, B, LDB, INFO )
    implicit none
    integer :: INFO
    integer :: LDA
@@ -2593,21 +2593,21 @@ module m_linalg_interfaces
    double precision :: A( LDA, * )
    double precision :: B( LDB, * )
    character :: UPLO
-  end subroutine dpotrs
+  end subroutine AB_DPOTRS
  end interface
 
  interface
-  subroutine dpptrf( UPLO, N, AP, INFO )
+  subroutine AB_DPPTRF( UPLO, N, AP, INFO )
    implicit none
    integer :: INFO
    integer :: N
    double precision :: AP( * )
    character :: UPLO
-  end subroutine dpptrf
+  end subroutine AB_DPPTRF
  end interface
 
  interface
-  subroutine dspgst( ITYPE, UPLO, N, AP, BP, INFO )
+  subroutine AB_DSPGST( ITYPE, UPLO, N, AP, BP, INFO )
    implicit none
    integer :: INFO
    integer :: ITYPE
@@ -2615,11 +2615,11 @@ module m_linalg_interfaces
    double precision :: AP( * )
    double precision :: BP( * )
    character :: UPLO
-  end subroutine dspgst
+  end subroutine AB_DSPGST
  end interface
 
  interface
-  subroutine dspgv( ITYPE, JOBZ, UPLO, N, AP, BP, W, Z, LDZ, WORK,&
+  subroutine AB_DSPGV( ITYPE, JOBZ, UPLO, N, AP, BP, W, Z, LDZ, WORK,&
  INFO )
    implicit none
    integer :: INFO
@@ -2633,21 +2633,21 @@ module m_linalg_interfaces
    double precision :: Z( LDZ, * )
    character :: JOBZ
    character :: UPLO
-  end subroutine dspgv
+  end subroutine AB_DSPGV
  end interface
 
  interface
-  subroutine drscl( N, SA, SX, INCX )
+  subroutine AB_DRSCL( N, SA, SX, INCX )
    implicit none
    integer :: INCX
    integer :: N
    double precision :: SA
    double precision :: SX( * )
-  end subroutine drscl
+  end subroutine AB_DRSCL
  end interface
 
  interface
-  subroutine dspev( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, INFO )
+  subroutine AB_DSPEV( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, INFO )
    implicit none
    integer :: INFO
    integer :: LDZ
@@ -2658,11 +2658,11 @@ module m_linalg_interfaces
    double precision :: W( * )
    double precision :: WORK( * )
    double precision :: Z( LDZ, * )
-  end subroutine dspev
+  end subroutine AB_DSPEV
  end interface
 
  interface
-  subroutine dsptrd( UPLO, N, AP, D, E, TAU, INFO )
+  subroutine AB_DSPTRD( UPLO, N, AP, D, E, TAU, INFO )
    implicit none
    integer :: INFO
    integer :: N
@@ -2671,11 +2671,11 @@ module m_linalg_interfaces
    double precision :: E( * )
    double precision :: TAU( * )
    character :: UPLO
-  end subroutine dsptrd
+  end subroutine AB_DSPTRD
  end interface
 
  interface
-  subroutine dstebz( RANGE, ORDER, N, VL, VU, IL, IU, ABSTOL, D, E,&  
+  subroutine AB_DSTEBZ( RANGE, ORDER, N, VL, VU, IL, IU, ABSTOL, D, E,&  
  M, NSPLIT, W, IBLOCK, ISPLIT, WORK, IWORK,&  
  INFO )
    implicit none
@@ -2697,11 +2697,11 @@ module m_linalg_interfaces
    double precision :: VU
    double precision :: W( * )
    double precision :: WORK( * )
-  end subroutine dstebz
+  end subroutine AB_DSTEBZ
  end interface
 
  interface
-  subroutine dsteqr( COMPZ, N, D, E, Z, LDZ, WORK, INFO )
+  subroutine AB_DSTEQR( COMPZ, N, D, E, Z, LDZ, WORK, INFO )
    implicit none
    integer :: INFO
    integer :: LDZ
@@ -2711,21 +2711,21 @@ module m_linalg_interfaces
    double precision :: E( * )
    double precision :: WORK( * )
    double precision :: Z( LDZ, * )
-  end subroutine dsteqr
+  end subroutine AB_DSTEQR
  end interface
 
  interface
-  subroutine dsterf( N, D, E, INFO )
+  subroutine AB_DSTERF( N, D, E, INFO )
    implicit none
    integer :: INFO
    integer :: N
    double precision :: D( * )
    double precision :: E( * )
-  end subroutine dsterf
+  end subroutine AB_DSTERF
  end interface
 
  interface
-  subroutine dsyev( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, INFO )
+  subroutine AB_DSYEV( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, INFO )
    implicit none
    integer :: INFO
    integer :: LDA
@@ -2736,11 +2736,11 @@ module m_linalg_interfaces
    character :: UPLO
    double precision :: W( * )
    double precision :: WORK( * )
-  end subroutine dsyev
+  end subroutine AB_DSYEV
  end interface
 
  interface
-  subroutine dsygs2( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
+  subroutine AB_DSYGS2( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
    implicit none
    integer :: INFO
    integer :: ITYPE
@@ -2750,11 +2750,11 @@ module m_linalg_interfaces
    double precision :: A( LDA, * )
    double precision :: B( LDB, * )
    character :: UPLO
-  end subroutine dsygs2
+  end subroutine AB_DSYGS2
  end interface
 
  interface
-  subroutine dsygst( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
+  subroutine AB_DSYGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
    implicit none
    integer :: INFO
    integer :: ITYPE
@@ -2764,11 +2764,11 @@ module m_linalg_interfaces
    double precision :: A( LDA, * )
    double precision :: B( LDB, * )
    character :: UPLO
-  end subroutine dsygst
+  end subroutine AB_DSYGST
  end interface
 
  interface
-  subroutine dsygv( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W, WORK,&  
+  subroutine AB_DSYGV( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W, WORK,&  
  LWORK, INFO )
    implicit none
    integer :: INFO
@@ -2783,11 +2783,11 @@ module m_linalg_interfaces
    character :: UPLO
    double precision :: W( * )
    double precision :: WORK( * )
-  end subroutine dsygv
+  end subroutine AB_DSYGV
  end interface
 
  interface
-  subroutine dsysv( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,&  
+  subroutine AB_DSYSV( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,&  
  LWORK, INFO )
    implicit none
    integer :: INFO
@@ -2801,11 +2801,11 @@ module m_linalg_interfaces
    double precision :: B( LDB, * )
    character :: UPLO
    double precision :: WORK( * )
-  end subroutine dsysv
+  end subroutine AB_DSYSV
  end interface
 
  interface
-  subroutine dsytd2( UPLO, N, A, LDA, D, E, TAU, INFO )
+  subroutine AB_DSYTD2( UPLO, N, A, LDA, D, E, TAU, INFO )
    implicit none
    integer :: INFO
    integer :: LDA
@@ -2815,11 +2815,11 @@ module m_linalg_interfaces
    double precision :: E( * )
    double precision :: TAU( * )
    character :: UPLO
-  end subroutine dsytd2
+  end subroutine AB_DSYTD2
  end interface
 
  interface
-  subroutine dsytf2( UPLO, N, A, LDA, IPIV, INFO )
+  subroutine AB_DSYTF2( UPLO, N, A, LDA, IPIV, INFO )
    implicit none
    integer :: INFO
    integer :: IPIV( * )
@@ -2827,11 +2827,11 @@ module m_linalg_interfaces
    integer :: N
    double precision :: A( LDA, * )
    character :: UPLO
-  end subroutine dsytf2
+  end subroutine AB_DSYTF2
  end interface
 
  interface
-  subroutine dsytrd( UPLO, N, A, LDA, D, E, TAU, WORK, LWORK, INFO )
+  subroutine AB_DSYTRD( UPLO, N, A, LDA, D, E, TAU, WORK, LWORK, INFO )
    implicit none
    integer :: INFO
    integer :: LDA
@@ -2843,11 +2843,11 @@ module m_linalg_interfaces
    double precision :: TAU( * )
    character :: UPLO
    double precision :: WORK( * )
-  end subroutine dsytrd
+  end subroutine AB_DSYTRD
  end interface
 
  interface
-  subroutine dsytrf( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
+  subroutine AB_DSYTRF( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
    implicit none
    integer :: INFO
    integer :: IPIV( * )
@@ -2857,11 +2857,11 @@ module m_linalg_interfaces
    double precision :: A( LDA, * )
    character :: UPLO
    double precision :: WORK( * )
-  end subroutine dsytrf
+  end subroutine AB_DSYTRF
  end interface
 
  interface
-  subroutine dsytrs( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+  subroutine AB_DSYTRS( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
    implicit none
    integer :: INFO
    integer :: IPIV( * )
@@ -2872,11 +2872,11 @@ module m_linalg_interfaces
    double precision :: A( LDA, * )
    double precision :: B( LDB, * )
    character :: UPLO
-  end subroutine dsytrs
+  end subroutine AB_DSYTRS
  end interface
 
  interface
-  subroutine dtrti2( UPLO, DIAG, N, A, LDA, INFO )
+  subroutine AB_DTRTI2( UPLO, DIAG, N, A, LDA, INFO )
    implicit none
    integer :: INFO
    integer :: LDA
@@ -2884,11 +2884,11 @@ module m_linalg_interfaces
    double precision :: A( LDA, * )
    character :: DIAG
    character :: UPLO
-  end subroutine dtrti2
+  end subroutine AB_DTRTI2
  end interface
 
  interface
-  subroutine dtrtri( UPLO, DIAG, N, A, LDA, INFO )
+  subroutine AB_DTRTRI( UPLO, DIAG, N, A, LDA, INFO )
    implicit none
    integer :: INFO
    integer :: LDA
@@ -2896,39 +2896,39 @@ module m_linalg_interfaces
    double precision :: A( LDA, * )
    character :: DIAG
    character :: UPLO
-  end subroutine dtrtri
+  end subroutine AB_DTRTRI
  end interface
 
  interface
-  double precision function dzsum1( N, CX, INCX )
+  double precision function AB_DZSUM1( N, CX, INCX )
    implicit none
    integer :: INCX
    integer :: N
    complex*16 :: CX( * )
-  end function dzsum1
+  end function AB_DZSUM1
  end interface
 
  interface
-  integer function izmax1( N, CX, INCX )
+  integer function AB_IZMAX1( N, CX, INCX )
    implicit none
    integer :: INCX
    integer :: N
    complex*16 :: CX( * )
-  end function izmax1
+  end function AB_IZMAX1
  end interface
 
  interface
-  subroutine ssterf( N, D, E, INFO )
+  subroutine AB_SSTERF( N, D, E, INFO )
    implicit none
    integer :: INFO
    integer :: N
    real :: D( * )
    real :: E( * )
-  end subroutine ssterf
+  end subroutine AB_SSTERF
  end interface
 
  interface
-  subroutine zbdsqr( UPLO, N, NCVT, NRU, NCC, D, E, VT, LDVT, U,&  
+  subroutine AB_ZBDSQR( UPLO, N, NCVT, NRU, NCC, D, E, VT, LDVT, U,&  
  LDU, C, LDC, RWORK, INFO )
    implicit none
    integer :: INFO
@@ -2946,11 +2946,11 @@ module m_linalg_interfaces
    complex*16 :: U( LDU, * )
    character :: UPLO
    complex*16 :: VT( LDVT, * )
-  end subroutine zbdsqr
+  end subroutine AB_ZBDSQR
  end interface
 
  interface
-  subroutine zgebak( JOB, SIDE, N, ILO, IHI, SCALE, M, V, LDV,&  
+  subroutine AB_ZGEBAK( JOB, SIDE, N, ILO, IHI, SCALE, M, V, LDV,&  
  INFO )
    implicit none
    integer :: IHI
@@ -2963,11 +2963,11 @@ module m_linalg_interfaces
    double precision :: SCALE( * )
    character :: SIDE
    complex*16 :: V( LDV, * )
-  end subroutine zgebak
+  end subroutine AB_ZGEBAK
  end interface
 
  interface
-  subroutine zgebal( JOB, N, A, LDA, ILO, IHI, SCALE, INFO )
+  subroutine AB_ZGEBAL( JOB, N, A, LDA, ILO, IHI, SCALE, INFO )
    implicit none
    integer :: IHI
    integer :: ILO
@@ -2977,11 +2977,11 @@ module m_linalg_interfaces
    complex*16 :: A( LDA, * )
    character :: JOB
    double precision :: SCALE( * )
-  end subroutine zgebal
+  end subroutine AB_ZGEBAL
  end interface
 
  interface
-  subroutine zgebd2( M, N, A, LDA, D, E, TAUQ, TAUP, WORK, INFO )
+  subroutine AB_ZGEBD2( M, N, A, LDA, D, E, TAUQ, TAUP, WORK, INFO )
    implicit none
    integer :: INFO
    integer :: LDA
@@ -2993,11 +2993,11 @@ module m_linalg_interfaces
    complex*16 :: TAUP( * )
    complex*16 :: TAUQ( * )
    complex*16 :: WORK( * )
-  end subroutine zgebd2
+  end subroutine AB_ZGEBD2
  end interface
 
  interface
-  subroutine zgebrd( M, N, A, LDA, D, E, TAUQ, TAUP, WORK, LWORK,&  
+  subroutine AB_ZGEBRD( M, N, A, LDA, D, E, TAUQ, TAUP, WORK, LWORK,&  
  INFO )
    implicit none
    integer :: INFO
@@ -3011,11 +3011,11 @@ module m_linalg_interfaces
    complex*16 :: TAUP( * )
    complex*16 :: TAUQ( * )
    complex*16 :: WORK( * )
-  end subroutine zgebrd
+  end subroutine AB_ZGEBRD
  end interface
 
  interface
-  subroutine zgees( JOBVS, SORT, SELECT, N, A, LDA, SDIM, W, VS,&  
+  subroutine AB_ZGEES( JOBVS, SORT, SELECT, N, A, LDA, SDIM, W, VS,&  
  LDVS, WORK, LWORK, RWORK, BWORK, INFO )
    implicit none
    integer :: INFO
@@ -3033,11 +3033,11 @@ module m_linalg_interfaces
    complex*16 :: VS( LDVS, * )
    complex*16 :: W( * )
    complex*16 :: WORK( * )
-  end subroutine zgees
+  end subroutine AB_ZGEES
  end interface
 
  interface
-  subroutine zgeev( JOBVL, JOBVR, N, A, LDA, W, VL, LDVL, VR, LDVR,&
+  subroutine AB_ZGEEV( JOBVL, JOBVR, N, A, LDA, W, VL, LDVL, VR, LDVR,&
                     WORK, LWORK, RWORK, INFO )
    implicit none
    character :: JOBVL
@@ -3054,11 +3054,11 @@ module m_linalg_interfaces
    complex*16 :: VR( LDVR, * )
    complex*16 :: W( * )
    complex*16 :: WORK( * )
-  end subroutine zgeev
+  end subroutine AB_ZGEEV
  end interface
 
  interface
-  subroutine zgehd2( N, ILO, IHI, A, LDA, TAU, WORK, INFO )
+  subroutine AB_ZGEHD2( N, ILO, IHI, A, LDA, TAU, WORK, INFO )
    implicit none
    integer :: IHI
    integer :: ILO
@@ -3068,11 +3068,11 @@ module m_linalg_interfaces
    complex*16 :: A( LDA, * )
    complex*16 :: TAU( * )
    complex*16 :: WORK( * )
-  end subroutine zgehd2
+  end subroutine AB_ZGEHD2
  end interface
 
  interface
-  subroutine zgehrd( N, ILO, IHI, A, LDA, TAU, WORK, LWORK, INFO )
+  subroutine AB_ZGEHRD( N, ILO, IHI, A, LDA, TAU, WORK, LWORK, INFO )
    implicit none
    integer :: IHI
    integer :: ILO
@@ -3083,11 +3083,11 @@ module m_linalg_interfaces
    complex*16 :: A( LDA, * )
    complex*16 :: TAU( * )
    complex*16 :: WORK( LWORK )
-  end subroutine zgehrd
+  end subroutine AB_ZGEHRD
  end interface
 
  interface
-  subroutine zgelq2( M, N, A, LDA, TAU, WORK, INFO )
+  subroutine AB_ZGELQ2( M, N, A, LDA, TAU, WORK, INFO )
    implicit none
    integer :: INFO
    integer :: LDA
@@ -3096,38 +3096,11 @@ module m_linalg_interfaces
    complex*16 :: A( LDA, * )
    complex*16 :: TAU( * )
    complex*16 :: WORK( * )
-  end subroutine zgelq2
+  end subroutine AB_ZGELQ2
  end interface
 
  interface
-  subroutine zgelqf( M, N, A, LDA, TAU, WORK, LWORK, INFO )
-   implicit none
-   integer :: INFO
-   integer :: LDA
-   integer :: LWORK
-   integer :: M
-   integer :: N
-   complex*16 :: A( LDA, * )
-   complex*16 :: TAU( * )
-   complex*16 :: WORK( * )
-  end subroutine zgelqf
- end interface
-
- interface
-  subroutine zgeqr2( M, N, A, LDA, TAU, WORK, INFO )
-   implicit none
-   integer :: INFO
-   integer :: LDA
-   integer :: M
-   integer :: N
-   complex*16 :: A( LDA, * )
-   complex*16 :: TAU( * )
-   complex*16 :: WORK( * )
-  end subroutine zgeqr2
- end interface
-
- interface
-  subroutine zgeqrf( M, N, A, LDA, TAU, WORK, LWORK, INFO )
+  subroutine AB_ZGELQf( M, N, A, LDA, TAU, WORK, LWORK, INFO )
    implicit none
    integer :: INFO
    integer :: LDA
@@ -3137,11 +3110,38 @@ module m_linalg_interfaces
    complex*16 :: A( LDA, * )
    complex*16 :: TAU( * )
    complex*16 :: WORK( * )
-  end subroutine zgeqrf
+  end subroutine AB_ZGELQf
+ end interface
+
+ interface
+  subroutine AB_ZGEQR2( M, N, A, LDA, TAU, WORK, INFO )
+   implicit none
+   integer :: INFO
+   integer :: LDA
+   integer :: M
+   integer :: N
+   complex*16 :: A( LDA, * )
+   complex*16 :: TAU( * )
+   complex*16 :: WORK( * )
+  end subroutine AB_ZGEQR2
+ end interface
+
+ interface
+  subroutine AB_ZGEQRf( M, N, A, LDA, TAU, WORK, LWORK, INFO )
+   implicit none
+   integer :: INFO
+   integer :: LDA
+   integer :: LWORK
+   integer :: M
+   integer :: N
+   complex*16 :: A( LDA, * )
+   complex*16 :: TAU( * )
+   complex*16 :: WORK( * )
+  end subroutine AB_ZGEQRf
  end interface
 
  !interface
- ! subroutine zgesv( N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+ ! subroutine AB_ZGESV( N, NRHS, A, LDA, IPIV, B, LDB, INFO )
  !  implicit none
  !  integer :: INFO
  !  integer :: IPIV( * )
@@ -3151,11 +3151,11 @@ module m_linalg_interfaces
  !  integer :: NRHS
  !  complex*16 :: A( LDA, * )
  !  complex*16 :: B( LDB, * )
- ! end subroutine zgesv
+ ! end subroutine AB_ZGESV
  !end interface
 
  interface
-  subroutine zgesvd( JOBU, JOBVT, M, N, A, LDA, S, U, LDU, VT, LDVT,&  
+  subroutine AB_ZGESVd( JOBU, JOBVT, M, N, A, LDA, S, U, LDU, VT, LDVT,&  
  WORK, LWORK, RWORK, INFO )
    implicit none
    integer :: INFO
@@ -3173,11 +3173,11 @@ module m_linalg_interfaces
    complex*16 :: U( LDU, * )
    complex*16 :: VT( LDVT, * )
    complex*16 :: WORK( * )
-  end subroutine zgesvd
+  end subroutine AB_ZGESVd
  end interface
 
  interface
-  subroutine zgetf2( M, N, A, LDA, IPIV, INFO )
+  subroutine AB_ZGETF2( M, N, A, LDA, IPIV, INFO )
    implicit none
    integer :: INFO
    integer :: IPIV( * )
@@ -3185,11 +3185,11 @@ module m_linalg_interfaces
    integer :: M
    integer :: N
    complex*16 :: A( LDA, * )
-  end subroutine zgetf2
+  end subroutine AB_ZGETF2
  end interface
 
  interface
-  subroutine zgetri( N, A, LDA, IPIV, WORK, LWORK, INFO )
+  subroutine AB_ZGETRI( N, A, LDA, IPIV, WORK, LWORK, INFO )
    implicit none
    integer :: INFO 
    integer :: LDA
@@ -3198,11 +3198,11 @@ module m_linalg_interfaces
    integer :: IPIV( * )
    complex*16 :: A( LDA, * )
    complex*16 :: WORK( * )
-  end subroutine zgetri
+  end subroutine AB_ZGETRI
  end interface
 
  !interface 
- ! subroutine zgetrf( M, N, A, LDA, IPIV, INFO )
+ ! subroutine AB_ZGETRF( M, N, A, LDA, IPIV, INFO )
  !  implicit none
  !  integer :: INFO
  !  integer :: IPIV( * )
@@ -3210,11 +3210,11 @@ module m_linalg_interfaces
  !  integer :: M
  !  integer :: N
  !  complex*16 :: A( LDA, * )
- ! end subroutine zgetrf
+ ! end subroutine AB_ZGETRF
  !end interface
 
  interface
-  subroutine zgetrs( TRANS, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+  subroutine AB_ZGETRS( TRANS, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
    implicit none
    integer :: INFO
    integer :: IPIV( * )
@@ -3225,11 +3225,11 @@ module m_linalg_interfaces
    complex*16 :: A( LDA, * )
    complex*16 :: B( LDB, * )
    character :: TRANS
-  end subroutine zgetrs
+  end subroutine AB_ZGETRS
  end interface
 
  !interface
- ! subroutine zheev( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, RWORK, INFO )
+ ! subroutine AB_ZHEEV( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, RWORK, INFO )
  !  implicit none
  !  integer :: INFO
  !  integer :: LDA
@@ -3241,11 +3241,11 @@ module m_linalg_interfaces
  !  character :: UPLO
  !  double precision :: W( * )
  !  complex*16 :: WORK( * )
- ! end subroutine zheev
+ ! end subroutine AB_ZHEEV
  !end interface
 
  interface
-  subroutine zhegs2( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
+  subroutine AB_ZHEGS2( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
    implicit none
    integer :: INFO
    integer :: ITYPE
@@ -3255,11 +3255,11 @@ module m_linalg_interfaces
    complex*16 :: A( LDA, * )
    complex*16 :: B( LDB, * )
    character :: UPLO
-  end subroutine zhegs2
+  end subroutine AB_ZHEGS2
  end interface
 
  !interface
- ! subroutine zhegst( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
+ ! subroutine AB_ZHEGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
  !  implicit none
  !  integer :: INFO
  !  integer :: ITYPE
@@ -3269,11 +3269,11 @@ module m_linalg_interfaces
  !  complex*16 :: A( LDA, * )
  !  complex*16 :: B( LDB, * )
  !  character :: UPLO
- ! end subroutine zhegst
+ ! end subroutine AB_ZHEGST
  !end interface
 
  !interface
- ! subroutine zhegv( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W, WORK,&  
+ ! subroutine AB_ZHEGV( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W, WORK,&  
  !  LWORK, RWORK, INFO )
  !  implicit none
  !  integer :: INFO
@@ -3289,11 +3289,11 @@ module m_linalg_interfaces
  !  character :: UPLO
  !  double precision :: W( * )
  !  complex*16 :: WORK( * )
- ! end subroutine zhegv
+ ! end subroutine AB_ZHEGV
  !end interface
 
  interface
-  subroutine zhetd2( UPLO, N, A, LDA, D, E, TAU, INFO )
+  subroutine AB_ZHETD2( UPLO, N, A, LDA, D, E, TAU, INFO )
    implicit none
    integer :: INFO
    integer :: LDA
@@ -3303,11 +3303,11 @@ module m_linalg_interfaces
    double precision :: E( * )
    complex*16 :: TAU( * )
    character :: UPLO
-  end subroutine zhetd2
+  end subroutine AB_ZHETD2
  end interface
 
  interface
-  subroutine zhetrd( UPLO, N, A, LDA, D, E, TAU, WORK, LWORK, INFO )
+  subroutine AB_ZHETRD( UPLO, N, A, LDA, D, E, TAU, WORK, LWORK, INFO )
    implicit none
    integer :: INFO
    integer :: LDA
@@ -3319,11 +3319,11 @@ module m_linalg_interfaces
    complex*16 :: TAU( * )
    character :: UPLO
    complex*16 :: WORK( * )
-  end subroutine zhetrd
+  end subroutine AB_ZHETRD
  end interface
 
  !interface
- ! subroutine zhpev( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, RWORK, INFO )
+ ! subroutine AB_ZHPEV( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, RWORK, INFO )
  !  implicit none
  !  integer :: INFO
  !  integer :: LDZ
@@ -3335,11 +3335,11 @@ module m_linalg_interfaces
  !  double precision :: W( * )
  !  complex*16 :: WORK( * )
  !  complex*16 :: Z( LDZ, * )
- ! end subroutine zhpev
+ ! end subroutine AB_ZHPEV
  !end interface
 
  !interface
- ! subroutine zhpevx( JOBZ, RANGE, UPLO, N, AP, VL, VU, IL, IU,&  
+ ! subroutine AB_ZHPEVx( JOBZ, RANGE, UPLO, N, AP, VL, VU, IL, IU,&  
  !  ABSTOL, M, W, Z, LDZ, WORK, RWORK, IWORK,&  
  !  IFAIL, INFO )
  !  implicit none
@@ -3362,11 +3362,11 @@ module m_linalg_interfaces
  !  double precision :: W( * )
  !  complex*16 :: WORK( * )
  !  complex*16 :: Z( LDZ, * )
- ! end subroutine zhpevx
+ ! end subroutine AB_ZHPEVx
  !end interface
 
  interface
-  subroutine zhpgst( ITYPE, UPLO, N, AP, BP, INFO )
+  subroutine AB_ZHPGST( ITYPE, UPLO, N, AP, BP, INFO )
    implicit none
    integer :: INFO
    integer :: ITYPE
@@ -3374,11 +3374,11 @@ module m_linalg_interfaces
    complex*16 :: AP( * )
    complex*16 :: BP( * )
    character :: UPLO
-  end subroutine zhpgst
+  end subroutine AB_ZHPGST
  end interface
 
  !interface
- ! subroutine zhpgv( ITYPE, JOBZ, UPLO, N, AP, BP, W, Z, LDZ, WORK,&  
+ ! subroutine AB_ZHPGV( ITYPE, JOBZ, UPLO, N, AP, BP, W, Z, LDZ, WORK,&  
  !  RWORK, INFO )
  !  implicit none
  !  integer :: INFO
@@ -3393,11 +3393,11 @@ module m_linalg_interfaces
  !  double precision :: W( * )
  !  complex*16 :: WORK( * )
  !  complex*16 :: Z( LDZ, * )
- ! end subroutine zhpgv
+ ! end subroutine AB_ZHPGV
  !end interface
 
  interface
-  subroutine zhptrd( UPLO, N, AP, D, E, TAU, INFO )
+  subroutine AB_ZHPTRD( UPLO, N, AP, D, E, TAU, INFO )
    implicit none
    integer :: INFO
    integer :: N
@@ -3406,11 +3406,11 @@ module m_linalg_interfaces
    double precision :: E( * )
    complex*16 :: TAU( * )
    character :: UPLO
-  end subroutine zhptrd
+  end subroutine AB_ZHPTRD
  end interface
 
  interface
-  subroutine zhseqr( JOB, COMPZ, N, ILO, IHI, H, LDH, W, Z, LDZ,&  
+  subroutine AB_ZHSEQR( JOB, COMPZ, N, ILO, IHI, H, LDH, W, Z, LDZ,&  
  WORK, LWORK, INFO )
    implicit none
    integer :: IHI
@@ -3426,11 +3426,11 @@ module m_linalg_interfaces
    complex*16 :: W( * )
    complex*16 :: WORK( * )
    complex*16 :: Z( LDZ, * )
-  end subroutine zhseqr
+  end subroutine AB_ZHSEQR
  end interface
 
  interface
-  subroutine zlabrd( M, N, NB, A, LDA, D, E, TAUQ, TAUP, X, LDX, Y,&  
+  subroutine AB_ZLABRD( M, N, NB, A, LDA, D, E, TAUQ, TAUP, X, LDX, Y,&  
  LDY )
    implicit none
    integer :: LDA
@@ -3446,31 +3446,31 @@ module m_linalg_interfaces
    complex*16 :: TAUQ( * )
    complex*16 :: X( LDX, * )
    complex*16 :: Y( LDY, * )
-  end subroutine zlabrd
+  end subroutine AB_ZLABRD
  end interface
 
  interface
-  subroutine zlacgv( N, X, INCX )
+  subroutine AB_ZLACGV( N, X, INCX )
    implicit none
    integer :: INCX
    integer :: N
    complex*16 :: X( * )
-  end subroutine zlacgv
+  end subroutine AB_ZLACGV
  end interface
 
  interface
-  subroutine zlacon( N, V, X, EST, KASE )
+  subroutine AB_ZLACON( N, V, X, EST, KASE )
    implicit none
    integer :: KASE
    integer :: N
    double precision :: EST
    complex*16 :: V( N )
    complex*16 :: X( N )
-  end subroutine zlacon
+  end subroutine AB_ZLACON
  end interface
 
  interface
-  subroutine zlacpy( UPLO, M, N, A, LDA, B, LDB )
+  subroutine AB_ZLACPY( UPLO, M, N, A, LDA, B, LDB )
    implicit none
    integer :: LDA
    integer :: LDB
@@ -3479,19 +3479,19 @@ module m_linalg_interfaces
    complex*16 :: A( LDA, * )
    complex*16 :: B( LDB, * )
    character :: UPLO
-  end subroutine zlacpy
+  end subroutine AB_ZLACPY
  end interface
 
  interface
-  double complex function zladiv( X, Y )
+  double complex function AB_ZLADIV( X, Y )
    implicit none
    complex*16 :: X
    complex*16 :: Y
-  end function zladiv
+  end function AB_ZLADIV
  end interface
 
  interface
-  subroutine zlahqr( WANTT, WANTZ, N, ILO, IHI, H, LDH, W, ILOZ,&  
+  subroutine AB_ZLAHQR( WANTT, WANTZ, N, ILO, IHI, H, LDH, W, ILOZ,&  
  IHIZ, Z, LDZ, INFO )
    implicit none
    integer :: IHI
@@ -3507,11 +3507,11 @@ module m_linalg_interfaces
    logical :: WANTT
    logical :: WANTZ
    complex*16 :: Z( LDZ, * )
-  end subroutine zlahqr
+  end subroutine AB_ZLAHQR
  end interface
 
  interface
-  subroutine zlahrd( N, K, NB, A, LDA, TAU, T, LDT, Y, LDY )
+  subroutine AB_ZLAHRD( N, K, NB, A, LDA, TAU, T, LDT, Y, LDY )
    implicit none
    integer :: K
    integer :: LDA
@@ -3523,11 +3523,11 @@ module m_linalg_interfaces
    complex*16 :: T( LDT, NB )
    complex*16 :: TAU( NB )
    complex*16 :: Y( LDY, NB )
-  end subroutine zlahrd
+  end subroutine AB_ZLAHRD
  end interface
 
  interface
-  subroutine zlahr2( N, K, NB, A, LDA, TAU, T, LDT, Y, LDY )
+  subroutine AB_ZLAHR2( N, K, NB, A, LDA, TAU, T, LDT, Y, LDY )
    implicit none
    integer :: K
    integer :: LDA
@@ -3539,11 +3539,11 @@ module m_linalg_interfaces
    complex*16 :: T( LDT, NB )
    complex*16 :: TAU( NB )
    complex*16 :: Y( LDY, NB )
-  end subroutine zlahr2
+  end subroutine AB_ZLAHR2
  end interface
 
  interface
-  double precision function zlange( NORM, M, N, A, LDA, WORK )
+  double precision function AB_ZLANGE( NORM, M, N, A, LDA, WORK )
    implicit none
    integer :: LDA
    integer :: M
@@ -3551,11 +3551,11 @@ module m_linalg_interfaces
    complex*16 :: A( LDA, * )
    character :: NORM
    double precision :: WORK( * )
-  end function zlange
+  end function AB_ZLANGE
  end interface
 
  interface
-  double precision function zlanhe( NORM, UPLO, N, A, LDA, WORK )
+  double precision function AB_ZLANHE( NORM, UPLO, N, A, LDA, WORK )
    implicit none
    integer :: LDA
    integer :: N
@@ -3563,33 +3563,33 @@ module m_linalg_interfaces
    character :: NORM
    character :: UPLO
    double precision :: WORK( * )
-  end function zlanhe
+  end function AB_ZLANHE
  end interface
 
  interface
-  double precision function zlanhp( NORM, UPLO, N, AP, WORK )
+  double precision function AB_ZLANHP( NORM, UPLO, N, AP, WORK )
    implicit none
    integer :: N
    complex*16 :: AP( * )
    character :: NORM
    character :: UPLO
    double precision :: WORK( * )
-  end function zlanhp
+  end function AB_ZLANHP
  end interface
 
  interface
-  double precision function zlanhs( NORM, N, A, LDA, WORK )
+  double precision function AB_ZLANHS( NORM, N, A, LDA, WORK )
    implicit none
    integer :: LDA
    integer :: N
    complex*16 :: A( LDA, * )
    character :: NORM
    double precision :: WORK( * )
-  end function zlanhs
+  end function AB_ZLANHS
  end interface
 
  interface
-  subroutine zlaqr0( WANTT, WANTZ, N, ILO, IHI, H, LDH, W, ILOZ,&
+  subroutine AB_ZLAQR0( WANTT, WANTZ, N, ILO, IHI, H, LDH, W, ILOZ,&
  IHIZ, Z, LDZ, WORK, LWORK, INFO )
    implicit none
    integer :: IHI
@@ -3609,11 +3609,11 @@ module m_linalg_interfaces
 
    logical :: WANTT
    logical :: WANTZ
-  end subroutine zlaqr0
+  end subroutine AB_ZLAQR0
  end interface
 
  interface
-  subroutine zlaqr1( N, H, LDH, S1, S2, V )
+  subroutine AB_ZLAQR1( N, H, LDH, S1, S2, V )
    implicit none
    integer :: LDH
    integer :: N
@@ -3621,11 +3621,11 @@ module m_linalg_interfaces
    complex*16 :: S2
    complex*16 :: H( LDH, * )
    complex*16 :: V( * )
-  end subroutine zlaqr1
+  end subroutine AB_ZLAQR1
  end interface
 
  interface
-  subroutine zlaqr2( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH, ILOZ,&
+  subroutine AB_ZLAQR2( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH, ILOZ,&
  IHIZ, Z, LDZ, NS, ND, SH, V, LDV, NH, T, LDT,&
  NV, WV, LDWV, WORK, LWORK )
    implicit none
@@ -3635,11 +3635,11 @@ module m_linalg_interfaces
    logical :: WANTT, WANTZ
    complex*16 :: H( LDH, * ), SH( * ), T( LDT, * )
    complex*16 :: V( LDV, * ),WORK( * ), WV( LDWV, * ), Z( LDZ, * )
-  end subroutine zlaqr2
+  end subroutine AB_ZLAQR2
  end interface
 
  interface
-  subroutine zlaqr3( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH, ILOZ,&
+  subroutine AB_ZLAQR3( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH, ILOZ,&
  IHIZ, Z, LDZ, NS, ND, SH, V, LDV, NH, T, LDT,&
  NV, WV, LDWV, WORK, LWORK )
    implicit none
@@ -3648,21 +3648,21 @@ module m_linalg_interfaces
    logical :: WANTT, WANTZ
    complex*16 :: H( LDH, * ), SH( * ), T( LDT, * )
    complex*16 :: V( LDV, * ),WORK( * ), WV( LDWV, * ), Z( LDZ, * )
-  end subroutine zlaqr3
+  end subroutine AB_ZLAQR3
  end interface
 
  interface
-  subroutine zlaqr4( WANTT, WANTZ, N, ILO, IHI, H, LDH, W, ILOZ,&
+  subroutine AB_ZLAQR4( WANTT, WANTZ, N, ILO, IHI, H, LDH, W, ILOZ,&
  IHIZ, Z, LDZ, WORK, LWORK, INFO )
    implicit none
    integer :: IHI, IHIZ, ILO, ILOZ, INFO, LDH, LDZ, LWORK, N
    logical :: WANTT, WANTZ
    complex*16 :: H( LDH, * ), W( * ), WORK( * ), Z( LDZ, * )
-  end subroutine zlaqr4
+  end subroutine AB_ZLAQR4
  end interface
 
  interface
-  subroutine zlaqr5( WANTT, WANTZ, KACC22, N, KTOP, KBOT, NSHFTS, S,&
+  subroutine AB_ZLAQR5( WANTT, WANTZ, KACC22, N, KTOP, KBOT, NSHFTS, S,&
  H, LDH, ILOZ, IHIZ, Z, LDZ, V, LDV, U, LDU, NV,&
  WV, LDWV, NH, WH, LDWH )
    implicit none
@@ -3671,11 +3671,11 @@ module m_linalg_interfaces
    logical :: WANTT, WANTZ
    complex*16 :: H( LDH, * ), S( * ), U( LDU, * ), V( LDV, * )
    complex*16 :: WH( LDWH, * ), WV( LDWV, * ), Z( LDZ, * )
-  end subroutine zlaqr5
+  end subroutine AB_ZLAQR5
  end interface
 
  interface
-  subroutine zlarf( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )
+  subroutine AB_ZLARF( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )
    implicit none
    integer :: INCV
    integer :: LDC
@@ -3686,11 +3686,11 @@ module m_linalg_interfaces
    complex*16 :: TAU
    complex*16 :: V( * )
    complex*16 :: WORK( * )
-  end subroutine zlarf
+  end subroutine AB_ZLARF
  end interface
 
  interface
-  subroutine zlarfb( SIDE, TRANS, DIRECT, STOREV, M, N, K, V, LDV,&  
+  subroutine AB_ZLARFb( SIDE, TRANS, DIRECT, STOREV, M, N, K, V, LDV,&  
  T, LDT, C, LDC, WORK, LDWORK )
    implicit none
    integer :: K
@@ -3708,22 +3708,22 @@ module m_linalg_interfaces
    character :: TRANS
    complex*16 :: V( LDV, * )
    complex*16 :: WORK( LDWORK, * )
-  end subroutine zlarfb
+  end subroutine AB_ZLARFb
  end interface
 
  interface
-  subroutine zlarfg( N, ALPHA, X, INCX, TAU )
+  subroutine AB_ZLARFg( N, ALPHA, X, INCX, TAU )
    implicit none
    integer :: INCX
    integer :: N
    complex*16 :: ALPHA
    complex*16 :: TAU
    complex*16 :: X( * )
-  end subroutine zlarfg
+  end subroutine AB_ZLARFg
  end interface
 
  interface
-  subroutine zlarft( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
+  subroutine AB_ZLARFt( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
    implicit none
    integer :: K
    integer :: LDT
@@ -3734,11 +3734,11 @@ module m_linalg_interfaces
    complex*16 :: T( LDT, * )
    complex*16 :: TAU( * )
    complex*16 :: V( LDV, * )
-  end subroutine zlarft
+  end subroutine AB_ZLARFt
  end interface
 
  interface
-  subroutine zlarfx( SIDE, M, N, V, TAU, C, LDC, WORK )
+  subroutine AB_ZLARFx( SIDE, M, N, V, TAU, C, LDC, WORK )
    implicit none
    integer :: LDC
    integer :: M
@@ -3748,22 +3748,22 @@ module m_linalg_interfaces
    complex*16 :: TAU
    complex*16 :: V( * )
    complex*16 :: WORK( * )
-  end subroutine zlarfx
+  end subroutine AB_ZLARFx
  end interface
 
  interface
-  subroutine zlartg( F, G, CS, SN, R )
+  subroutine AB_ZLARTG( F, G, CS, SN, R )
    implicit none
    double precision :: CS
    complex*16 :: F
    complex*16 :: G
    complex*16 :: R
    complex*16 :: SN
-  end subroutine zlartg
+  end subroutine AB_ZLARTG
  end interface
 
  interface
-  subroutine zlascl( TYPE, KL, KU, CFROM, CTO, M, N, A, LDA, INFO )
+  subroutine AB_ZLASCL( TYPE, KL, KU, CFROM, CTO, M, N, A, LDA, INFO )
    implicit none
    integer :: INFO
    integer :: KL
@@ -3775,11 +3775,11 @@ module m_linalg_interfaces
    double precision :: CFROM
    double precision :: CTO
    character :: TYPE
-  end subroutine zlascl
+  end subroutine AB_ZLASCL
  end interface
 
  interface
-  subroutine zlaset( UPLO, M, N, ALPHA, BETA, A, LDA )
+  subroutine AB_ZLASET( UPLO, M, N, ALPHA, BETA, A, LDA )
    implicit none
    integer :: LDA
    integer :: M
@@ -3788,11 +3788,11 @@ module m_linalg_interfaces
    complex*16 :: ALPHA
    complex*16 :: BETA
    character :: UPLO
-  end subroutine zlaset
+  end subroutine AB_ZLASET
  end interface
 
  interface
-  subroutine zlasr( SIDE, PIVOT, DIRECT, M, N, C, S, A, LDA )
+  subroutine AB_ZLASR( SIDE, PIVOT, DIRECT, M, N, C, S, A, LDA )
    implicit none
    integer :: LDA
    integer :: M
@@ -3803,22 +3803,22 @@ module m_linalg_interfaces
    character :: PIVOT
    double precision :: S( * )
    character :: SIDE
-  end subroutine zlasr
+  end subroutine AB_ZLASR
  end interface
 
  interface
-  subroutine zlassq( N, X, INCX, SCALE, SUMSQ )
+  subroutine AB_ZLASSQ( N, X, INCX, SCALE, SUMSQ )
    implicit none
    integer :: INCX
    integer :: N
    double precision :: SCALE
    double precision :: SUMSQ
    complex*16 :: X( * )
-  end subroutine zlassq
+  end subroutine AB_ZLASSQ
  end interface
 
  interface
-  subroutine zlaswp( N, A, LDA, K1, K2, IPIV, INCX )
+  subroutine AB_ZLASWP( N, A, LDA, K1, K2, IPIV, INCX )
    implicit none
    integer :: INCX
    integer :: IPIV( * )
@@ -3827,11 +3827,11 @@ module m_linalg_interfaces
    integer :: LDA
    integer :: N
    complex*16 :: A( LDA, * )
-  end subroutine zlaswp
+  end subroutine AB_ZLASWP
  end interface
 
  interface
-  subroutine zlatrd( UPLO, N, NB, A, LDA, E, TAU, W, LDW )
+  subroutine AB_ZLATRD( UPLO, N, NB, A, LDA, E, TAU, W, LDW )
    implicit none
    integer :: LDA
    integer :: LDW
@@ -3842,11 +3842,11 @@ module m_linalg_interfaces
    complex*16 :: TAU( * )
    character :: UPLO
    complex*16 :: W( LDW, * )
-  end subroutine zlatrd
+  end subroutine AB_ZLATRD
  end interface
 
  interface
-  subroutine zlatrs( UPLO, TRANS, DIAG, NORMIN, N, A, LDA, X, SCALE,&
+  subroutine AB_ZLATRS( UPLO, TRANS, DIAG, NORMIN, N, A, LDA, X, SCALE,&
  CNORM, INFO )
    implicit none
    character :: DIAG, NORMIN, TRANS, UPLO
@@ -3854,7 +3854,7 @@ module m_linalg_interfaces
    double precision :: SCALE      
    double precision :: CNORM( * )
    complex*16 :: A( LDA, * ), X( * )
-  end subroutine zlatrs
+  end subroutine AB_ZLATRS
  end interface
 
  interface
@@ -3870,39 +3870,39 @@ module m_linalg_interfaces
  end interface
 
  interface
-  subroutine zpotf2( UPLO, N, A, LDA, INFO )
+  subroutine AB_ZPOTF2( UPLO, N, A, LDA, INFO )
    implicit none
    integer :: INFO
    integer :: LDA
    integer :: N
    complex*16 :: A( LDA, * )
    character :: UPLO
-  end subroutine zpotf2
+  end subroutine AB_ZPOTF2
  end interface
 
  !interface
- ! subroutine zpotrf( UPLO, N, A, LDA, INFO )
+ ! subroutine AB_ZPOTRF( UPLO, N, A, LDA, INFO )
  !  implicit none
  !  integer :: INFO
  !  integer :: LDA
  !  integer :: N
  !  complex*16 :: A( LDA, * )
  !  character :: UPLO
- ! end subroutine zpotrf
+ ! end subroutine AB_ZPOTRF
  !end interface
 
  interface
-  subroutine zpptrf( UPLO, N, AP, INFO )
+  subroutine AB_ZPPTRF( UPLO, N, AP, INFO )
    implicit none
    integer :: INFO
    integer :: N
    complex*16 :: AP( * )
    character :: UPLO
-  end subroutine zpptrf
+  end subroutine AB_ZPPTRF
  end interface
 
  interface
-  subroutine zrot( N, CX, INCX, CY, INCY, C, S )
+  subroutine AB_ZROT( N, CX, INCX, CY, INCY, C, S )
    implicit none
    integer :: INCX
    integer :: INCY
@@ -3911,11 +3911,11 @@ module m_linalg_interfaces
    complex*16 :: CX( * )
    complex*16 :: CY( * )
    complex*16 :: S
-  end subroutine zrot
+  end subroutine AB_ZROT
  end interface
 
  interface
-  subroutine ztrevc( SIDE, HOWMNY, SELECT, N, T, LDT, VL, LDVL, VR,&
+  subroutine AB_ZTREVC( SIDE, HOWMNY, SELECT, N, T, LDT, VL, LDVL, VR,&
                      LDVR, MM, M, WORK, RWORK, INFO )
    implicit none
    character :: HOWMNY, SIDE
@@ -3924,11 +3924,11 @@ module m_linalg_interfaces
    double precision :: RWORK( * )
    complex*16 :: T( LDT, * ), VL( LDVL, * ), VR( LDVR, * )
    complex*16 :: WORK( * )
-  end subroutine ztrevc
+  end subroutine AB_ZTREVC
  end interface
 
  interface
-  subroutine ztrexc( COMPQ, N, T, LDT, Q, LDQ, IFST, ILST, INFO )
+  subroutine AB_ZTREXC( COMPQ, N, T, LDT, Q, LDQ, IFST, ILST, INFO )
    implicit none
    integer :: IFST
    integer :: ILST
@@ -3939,11 +3939,11 @@ module m_linalg_interfaces
    character :: COMPQ
    complex*16 :: Q( LDQ, * )
    complex*16 :: T( LDT, * )
-  end subroutine ztrexc
+  end subroutine AB_ZTREXC
  end interface
 
  interface
-  subroutine ztrsen( JOB, COMPQ, SELECT, N, T, LDT, Q, LDQ, W, M, S,&  
+  subroutine AB_ZTRSEN( JOB, COMPQ, SELECT, N, T, LDT, Q, LDQ, W, M, S,&  
  SEP, WORK, LWORK, INFO )
    implicit none
    integer :: INFO
@@ -3961,11 +3961,11 @@ module m_linalg_interfaces
    complex*16 :: T( LDT, * )
    complex*16 :: W( * )
    complex*16 :: WORK( * )
-  end subroutine ztrsen
+  end subroutine AB_ZTRSEN
  end interface
 
  interface
-  subroutine ztrsyl( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB, C,&  
+  subroutine AB_ZTRSYL( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB, C,&  
  LDC, SCALE, INFO )
    implicit none
    integer :: INFO
@@ -3981,11 +3981,11 @@ module m_linalg_interfaces
    double precision :: SCALE
    character :: TRANA
    character :: TRANB
-  end subroutine ztrsyl
+  end subroutine AB_ZTRSYL
  end interface
 
  interface
-  subroutine ztrti2( UPLO, DIAG, N, A, LDA, INFO )
+  subroutine AB_ZTRTI2( UPLO, DIAG, N, A, LDA, INFO )
    implicit none
    character :: DIAG
    character :: UPLO
@@ -3993,11 +3993,11 @@ module m_linalg_interfaces
    integer :: LDA
    integer :: N
    complex*16 :: A( LDA, * )
-  end subroutine ztrti2
+  end subroutine AB_ZTRTI2
  end interface
 
  interface
-  subroutine ztrtri( UPLO, DIAG, N, A, LDA, INFO )
+  subroutine AB_ZTRTRI( UPLO, DIAG, N, A, LDA, INFO )
    implicit none
    character :: DIAG
    character :: UPLO
@@ -4005,15 +4005,15 @@ module m_linalg_interfaces
    integer :: LDA
    integer :: N
    complex*16 :: A( LDA, * )
-  end subroutine ztrtri
+  end subroutine AB_ZTRTRI
  end interface
 
  interface
-  subroutine zungqr( M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
+  subroutine AB_ZUNGQR( M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
    implicit none
    integer :: INFO, K, LDA, LWORK, M, N
    complex*16 :: A( LDA, * ), TAU( * ), WORK( * )
-  end subroutine zungqr
+  end subroutine AB_ZUNGQR
  end interface
 
 end module m_linalg_interfaces

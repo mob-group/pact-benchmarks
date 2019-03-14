@@ -205,8 +205,8 @@
       DOUBLE PRECISION   ANORM, BNORM, RESID, ULP, UNFL
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLANGE, DLANSY
-      EXTERNAL           DLAMCH, DLANGE, DLANSY
+      DOUBLE PRECISION   AB_DLAMCH, DLANGE, DLANSY
+      EXTERNAL           AB_DLAMCH, DLANGE, DLANSY
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGEMM, DGGQRF, DLACPY, DLASET, DORGQR, DORGRQ,
@@ -217,8 +217,8 @@
 *     ..
 *     .. Executable Statements ..
 *
-      ULP = DLAMCH( 'Precision' )
-      UNFL = DLAMCH( 'Safe minimum' )
+      ULP = AB_DLAMCH( 'Precision' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
 *
 *     Copy the matrix A to the array AF.
 *

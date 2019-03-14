@@ -1,10 +1,10 @@
 !{\src2tex{textfont=tt}}
-!!****m* ABINIT/m_spgbuilder
+!!****m* ABINIT/m_spgbuiAB_LDEr
 !! NAME
-!! m_spgbuilder
+!! m_spgbuiAB_LDEr
 !!
 !! FUNCTION
-!!  Spacegroup builder.
+!!  Spacegroup buiAB_LDEr.
 !!
 !! COPYRIGHT
 !!  Copyright (C) 2008-2018 ABINIT group (RC, XG)
@@ -24,7 +24,7 @@
 
 #include "abi_common.h"
 
-module m_spgbuilder
+module m_spgbuiAB_LDEr
 
  use defs_basis
  use m_errors
@@ -46,7 +46,7 @@ module m_spgbuilder
 contains
 !!***
 
-!!****f* m_spgbuilder/gensymspgr
+!!****f* m_spgbuiAB_LDEr/gensymspgr
 !! NAME
 !! gensymspgr
 !!
@@ -424,7 +424,7 @@ subroutine gensymspgr(brvltt,msym,nsym,shubnikov,spgaxor,spgorig,spgroup,spgroup
        symrel(:,:,nsym+ii)=symrel(:,:,ii)
        symafm(nsym+ii)=symafm(ii)
      end do
-!      Second translation: b/2+c/2
+!      second translation: b/2+c/2
      do ii=1,nsym
        tnons(1,2*nsym+ii)=tnons(1,ii)
        tnons(2,2*nsym+ii)=tnons(2,ii)+0.5
@@ -468,7 +468,7 @@ subroutine gensymspgr(brvltt,msym,nsym,shubnikov,spgaxor,spgorig,spgroup,spgroup
      symrel(:,:,nsym+ii)=symrel(:,:,ii)
      symafm(nsym+ii)=symafm(ii)
    end do
-!    Second translation (1/3,2/3,2/3)
+!    second translation (1/3,2/3,2/3)
    do ii=1,nsym
      tnons(1,2*nsym+ii)=tnons(1,ii)+third
      tnons(2,2*nsym+ii)=tnons(2,ii)+two_thirds
@@ -574,7 +574,7 @@ subroutine gensymspgr(brvltt,msym,nsym,shubnikov,spgaxor,spgorig,spgroup,spgroup
 end subroutine gensymspgr
 !!***
 
-!!****f* m_spgbuilder/gensymshub
+!!****f* m_spgbuiAB_LDEr/gensymshub
 !! NAME
 !! gensymshub
 !!
@@ -1284,7 +1284,7 @@ subroutine gensymshub(genafm,spgroup,spgroupma,shubnikov)
 end subroutine gensymshub
 !!***
 
-!!****f* m_spgbuilder/gensymshub4
+!!****f* m_spgbuiAB_LDEr/gensymshub4
 !! NAME
 !! gensymshub4
 !!
@@ -1364,5 +1364,5 @@ subroutine gensymshub4(genafm,msym,nsym,symafm,symrel,tnons)
 end subroutine gensymshub4
 !!***
 
-end module m_spgbuilder
+end module m_spgbuiAB_LDEr
 !!***

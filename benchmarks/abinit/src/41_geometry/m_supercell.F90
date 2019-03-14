@@ -568,7 +568,7 @@ subroutine prt_supercell (filename, scell, title1, title2)
     MSG_ERROR(msg)
   end if
 
-! print header
+! print AB_HEADER
   write (scunit, '(a)') '#'
   write (scunit, '(a)') '# anaddb file with frozen phonon mode in supercell'
   write (scunit, '(a)') '# !!!   Do not forget to adjust nband   !!! '

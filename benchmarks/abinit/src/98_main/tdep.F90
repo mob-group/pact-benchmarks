@@ -162,7 +162,7 @@ program tdep
  norder=3**order
  write(InVar%stdout,*) ' '
  write(InVar%stdout,*) '#############################################################################'
- write(InVar%stdout,*) '############################## SECOND ORDER  ################################'
+ write(InVar%stdout,*) '############################## second ORDER  ################################'
  write(InVar%stdout,*) '################ Now, find the number of coefficients for ###################'
  write(InVar%stdout,*) '########################## a reference interaction ##########################'
  write(InVar%stdout,*) '#############################################################################'

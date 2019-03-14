@@ -114,8 +114,8 @@
       DOUBLE PRECISION   AA, BB, CC, DD, AB, CD, S, OV, UN, BE, EPS
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_DLADIV1
@@ -133,9 +133,9 @@
       CD = MAX( ABS(C), ABS(D) )
       S = 1.0D0
 
-      OV = DLAMCH( 'Overflow threshold' )
-      UN = DLAMCH( 'Safe minimum' )
-      EPS = DLAMCH( 'Epsilon' )
+      OV = AB_DLAMCH( 'Overflow threshold' )
+      UN = AB_DLAMCH( 'Safe minimum' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       BE = BS / (EPS*EPS)
 
       IF( AB >= HALF*OV ) THEN

@@ -320,8 +320,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME
-      DOUBLE PRECISION   DLAMCH, AB_ZLANGE
-      EXTERNAL           AB_LSAME, DLAMCH, AB_ZLANGE
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_ZLANGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT
@@ -423,8 +423,8 @@
 *
 *     Get machine constants
 *
-      EPS = DLAMCH( 'P' )
-      SMLNUM = DLAMCH( 'S' )
+      EPS = AB_DLAMCH( 'P' )
+      SMLNUM = AB_DLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
       CALL AB_DLABAD( SMLNUM, BIGNUM )
       SMLNUM = SQRT( SMLNUM ) / EPS

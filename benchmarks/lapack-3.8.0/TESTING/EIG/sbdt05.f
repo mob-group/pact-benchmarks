@@ -151,8 +151,8 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ISAMAX
-      REAL               SASUM, SLAMCH, SLANGE
-      EXTERNAL           LSAME, ISAMAX, SASUM, SLAMCH, SLANGE
+      REAL               SASUM, AB_SLAMCH, SLANGE
+      EXTERNAL           LSAME, ISAMAX, SASUM, AB_SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGEMM
@@ -168,7 +168,7 @@
       IF( MIN( M, N ).LE.0 .OR. NS.LE.0 )
      $   RETURN
 *
-      EPS = SLAMCH( 'Precision' )
+      EPS = AB_SLAMCH( 'Precision' )
       ANORM = SLANGE( 'M', M, N, A, LDA, WORK )
 *
 *     Compute U' * A * V.

@@ -106,10 +106,10 @@
       INTEGER            ISEED( 4 )
 *     ..
 *     .. External Functions ..
-      REAL     SLAMCH
+      REAL     AB_SLAMCH
       REAL     CLANGE, CLANSY
       LOGICAL  LSAME
-      EXTERNAL SLAMCH, CLANGE, CLANSY, LSAME
+      EXTERNAL AB_SLAMCH, CLANGE, CLANSY, LSAME
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC  MAX, MIN
@@ -117,7 +117,7 @@
 *     .. Data statements ..
       DATA ISEED / 1988, 1989, 1990, 1991 /
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       K = MIN(M,N)
       LL = MAX(M,N)
       LWORK = MAX(2,LL)*MAX(2,LL)*NB

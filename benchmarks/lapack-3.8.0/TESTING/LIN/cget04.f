@@ -128,8 +128,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            ICAMAX
-      REAL               SLAMCH
-      EXTERNAL           ICAMAX, SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           ICAMAX, AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, REAL
@@ -151,7 +151,7 @@
 *
 *     Exit with RESID = 1/EPS if RCOND is invalid.
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       IF( RCOND.LT.ZERO ) THEN
          RESID = 1.0 / EPS
          RETURN

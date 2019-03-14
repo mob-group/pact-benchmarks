@@ -360,8 +360,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME
-      REAL               SLAMCH, AB_SLANST
-      EXTERNAL           AB_LSAME, SLAMCH, AB_SLANST
+      REAL               AB_SLAMCH, AB_SLANST
+      EXTERNAL           AB_LSAME, AB_SLAMCH, AB_SLANST
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_SCOPY, AB_SLAE2, AB_SLAEV2, AB_SLARRC, AB_SL
@@ -437,8 +437,8 @@
 *
 *     Get machine constants.
 *
-      SAFMIN = SLAMCH( 'Safe minimum' )
-      EPS = SLAMCH( 'Precision' )
+      SAFMIN = AB_SLAMCH( 'Safe minimum' )
+      EPS = AB_SLAMCH( 'Precision' )
       SMLNUM = SAFMIN / EPS
       BIGNUM = ONE / SMLNUM
       RMIN = SQRT( SMLNUM )

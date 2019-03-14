@@ -169,8 +169,8 @@
       DOUBLE PRECISION   CJ, LARGE, SMALL
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. Executable Statements ..
 *
@@ -183,7 +183,7 @@
 *
 *     Initialize LARGE and SMALL.
 *
-      SMALL = DLAMCH( 'Safe minimum' ) / DLAMCH( 'Precision' )
+      SMALL = AB_DLAMCH( 'Safe minimum' ) / AB_DLAMCH( 'Precision' )
       LARGE = ONE / SMALL
 *
       IF( ROWCND.GE.THRESH .AND. AMAX.GE.SMALL .AND. AMAX.LE.LARGE )

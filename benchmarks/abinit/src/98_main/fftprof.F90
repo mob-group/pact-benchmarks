@@ -113,7 +113,7 @@ program fftprof
  integer :: iset,iall,inplace,nsets,avail,ith,idx,ut_nfft,ut_mgfft
  integer :: nfftalgs,alg,fftalg,fftalga,fftalgc,nfailed,ierr,paral_kgb
  character(len=24) :: codename
- character(len=500) :: header,msg
+ character(len=500) :: AB_HEADER,msg
  real(dp),parameter :: boxcutmin2=two
  real(dp) :: ucvol
  logical :: test_fourdp,test_fourwf,test_gw,do_seq_bench,do_seq_utests
@@ -159,7 +159,7 @@ program fftprof
 #endif
 
  if (iam_master) then
-   ! Print header and read input file.
+   ! Print AB_HEADER and read input file.
    codename='FFTPROF'//REPEAT(' ',17)
    call herald(codename,abinit_version,std_out)
 
@@ -328,9 +328,9 @@ program fftprof
      MSG_ERROR("Consistency check assumes equal FFT meshes. Cannot continue")
    end if
    if (it == 1) then
-     call fft_test_print(Ftest(it)) !,header)
+     call fft_test_print(Ftest(it)) !,AB_HEADER)
    else if (fft_setups(1,it) /= fft_setups(1,it-1)) then
-     call fft_test_print(Ftest(it)) !,header)
+     call fft_test_print(Ftest(it)) !,AB_HEADER)
    end if
  end do
  !
@@ -341,9 +341,9 @@ program fftprof
    do isign=-1,1,2
      do cplex=1,2
        do it=1,ntests
-         call time_fourdp(Ftest(it),isign,cplex,header,Ftprof(it))
+         call time_fourdp(Ftest(it),isign,cplex,AB_HEADER,Ftprof(it))
        end do
-       call fftprof_print(Ftprof,header)
+       call fftprof_print(Ftprof,AB_HEADER)
        call fftprof_free(Ftprof)
      end do
    end do
@@ -367,9 +367,9 @@ program fftprof
      option_fourwf = fourwf_params(1,iset)
      cplex         = fourwf_params(2,iset)
      do it=1,ntests
-       call time_fourwf(Ftest(it),cplex,option_fourwf,header,Ftprof(it))
+       call time_fourwf(Ftest(it),cplex,option_fourwf,AB_HEADER,Ftprof(it))
      end do
-     call fftprof_print(Ftprof,header)
+     call fftprof_print(Ftprof,AB_HEADER)
      call fftprof_free(Ftprof)
    end do
    ABI_FREE(fourwf_params)
@@ -386,9 +386,9 @@ program fftprof
    do isign=-1,1,2
      do inplace=0,1
        do it=1,ntests
-         call time_fftbox(Ftest(it),isign,inplace,header,Ftprof(it))
+         call time_fftbox(Ftest(it),isign,inplace,AB_HEADER,Ftprof(it))
        end do
-       call fftprof_print(Ftprof,header)
+       call fftprof_print(Ftprof,AB_HEADER)
        call fftprof_free(Ftprof)
      end do
    end do
@@ -396,9 +396,9 @@ program fftprof
    ! ==== zero padded with complex arrays ====
    do isign=-1,1,2
      do it=1,ntests
-       call time_fftu(Ftest(it),isign,header,Ftprof(it))
+       call time_fftu(Ftest(it),isign,AB_HEADER,Ftprof(it))
      end do
-     call fftprof_print(Ftprof,header)
+     call fftprof_print(Ftprof,AB_HEADER)
      call fftprof_free(Ftprof)
    end do
    !
@@ -413,9 +413,9 @@ program fftprof
 
    do use_padfft=0,1
      do it=1,ntests
-       call time_rhotwg(Ftest(it),map2sphere,use_padfft,osc_npw,osc_gvec,header,Ftprof(it))
+       call time_rhotwg(Ftest(it),map2sphere,use_padfft,osc_npw,osc_gvec,AB_HEADER,Ftprof(it))
      end do
-     call fftprof_print(Ftprof,header)
+     call fftprof_print(Ftprof,AB_HEADER)
      call fftprof_free(Ftprof)
    end do
 

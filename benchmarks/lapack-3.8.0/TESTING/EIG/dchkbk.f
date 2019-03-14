@@ -81,8 +81,8 @@
       DOUBLE PRECISION   E( LDE, LDE ), EIN( LDE, LDE ), SCALE( LDE )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGEBAK
@@ -97,8 +97,8 @@
       NINFO = 0
       KNT = 0
       RMAX = ZERO
-      EPS = DLAMCH( 'E' )
-      SAFMIN = DLAMCH( 'S' )
+      EPS = AB_DLAMCH( 'E' )
+      SAFMIN = AB_DLAMCH( 'S' )
 *
    10 CONTINUE
 *

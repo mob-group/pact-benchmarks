@@ -555,7 +555,7 @@ integer,optional,intent(in) :: comm_atom
     end do
  end if
 
-!Second case: a gather
+!second case: a gather
  if (paral_case==2) then
    call pawfgrtab_gather(pawfgrtab_in,pawfgrtab_cp,my_comm_atom,istat,my_atmtab)
  end if
@@ -755,7 +755,7 @@ subroutine pawfgrtab_gather(pawfgrtab,pawfgrtab_gathered,comm_atom,istat, &
 !Set up parallelism over atoms
  paral_atom=(my_natom/=natom)
  nullify(my_atmtab);if (present(mpi_atmtab)) my_atmtab => mpi_atmtab
- my_atmtab_allocated = .False.
+ my_atmtab_allocated = .false.
  if (paral_atom) then
    call get_my_atmtab(comm_atom,my_atmtab,my_atmtab_allocated,paral_atom,natom,my_natom_ref=my_natom)
  end if

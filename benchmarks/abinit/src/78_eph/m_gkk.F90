@@ -227,12 +227,12 @@ subroutine eph_gkk(wfk0_path,wfq_path,dtfil,ngfft,ngfftf,dtset,cryst,ebands_k,eb
  ABI_MALLOC(nband, (nkpt, nsppol))
  ABI_MALLOC(bks_mask,(mband, nkpt, nsppol))
  ABI_MALLOC(keep_ur,(mband, nkpt ,nsppol))
- nband=mband; bks_mask=.False.; keep_ur=.False.
+ nband=mband; bks_mask=.false.; keep_ur=.false.
 
  ABI_MALLOC(nband_kq, (nkpt_kq, nsppol))
  ABI_MALLOC(bks_mask_kq,(mband_kq, nkpt_kq, nsppol))
  ABI_MALLOC(keep_ur_kq,(mband_kq, nkpt_kq ,nsppol))
- nband_kq=mband_kq; bks_mask_kq=.False.; keep_ur_kq=.False.
+ nband_kq=mband_kq; bks_mask_kq=.false.; keep_ur_kq=.false.
 
 
  ! Distribute the k-points over the processors
@@ -254,13 +254,13 @@ subroutine eph_gkk(wfk0_path,wfq_path,dtfil,ngfft,ngfftf,dtset,cryst,ebands_k,eb
    nspden,nspinor,dtset%ecutsm,dtset%dilatmx,ebands_k%istwfk,ebands_k%kptns,ngfft,&
    dummy_gvec,dtset%nloalg,dtset%prtvol,dtset%pawprtvol,comm,opt_ecut=ecut)
 
- call wfd_print(wfd_k,header="Wavefunctions on the k-points grid",mode_paral='PERS')
+ call wfd_print(wfd_k,AB_HEADER="Wavefunctions on the k-points grid",mode_paral='PERS')
 
  call wfd_init(wfd_kq,cryst,pawtab,psps,keep_ur_kq,dtset%paral_kgb,dummy_npw,mband_kq,nband_kq,nkpt_kq,nsppol,bks_mask_kq,&
    nspden,nspinor,dtset%ecutsm,dtset%dilatmx,ebands_kq%istwfk,ebands_kq%kptns,ngfft,&
    dummy_gvec,dtset%nloalg,dtset%prtvol,dtset%pawprtvol,comm,opt_ecut=ecut)
 
- call wfd_print(wfd_kq,header="Wavefunctions on the q-shifted k-points grid",mode_paral='PERS')
+ call wfd_print(wfd_kq,AB_HEADER="Wavefunctions on the q-shifted k-points grid",mode_paral='PERS')
 
  ABI_FREE(nband)
  ABI_FREE(bks_mask)
@@ -272,11 +272,11 @@ subroutine eph_gkk(wfk0_path,wfq_path,dtfil,ngfft,ngfftf,dtset,cryst,ebands_k,eb
  ! Read wafefunctions on the k-points grid and q-shifted k-points grid.
  iomode = iomode_from_fname(wfk0_path)
  call wfd_read_wfk(wfd_k,wfk0_path,iomode)
- if (.False.) call wfd_test_ortho(wfd_k,cryst,pawtab,unit=std_out,mode_paral="PERS")
+ if (.false.) call wfd_test_ortho(wfd_k,cryst,pawtab,unit=std_out,mode_paral="PERS")
 
  iomode = iomode_from_fname(wfq_path)
  call wfd_read_wfk(wfd_kq,wfq_path,iomode)
- if (.False.) call wfd_test_ortho(wfd_kq,cryst,pawtab,unit=std_out,mode_paral="PERS")
+ if (.false.) call wfd_test_ortho(wfd_kq,cryst,pawtab,unit=std_out,mode_paral="PERS")
 
  ! ph1d(2,3*(2*mgfft+1)*natom)=one-dimensional structure factor information on the coarse grid.
  ABI_MALLOC(ph1d, (2,3*(2*mgfft+1)*natom))

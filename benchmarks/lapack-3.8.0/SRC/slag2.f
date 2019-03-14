@@ -84,8 +84,8 @@
 *> \verbatim
 *>          SAFMIN is REAL
 *>          The smallest positive number s.t. 1/SAFMIN does not
-*>          overflow.  (This should always be SLAMCH('S') -- it is an
-*>          argument in order to avoid having to call SLAMCH frequently.)
+*>          overflow.  (This should always be AB_SLAMCH('S') -- it is an
+*>          argument in order to avoid having to call AB_SLAMCH frequently.)
 *> \endverbatim
 *>
 *> \param[out] SCALE1

@@ -557,9 +557,9 @@
       COMPLEX            CDUMMA( 4 )
 *     ..
 *     .. External Functions ..
-      REAL               CLANGE, SLAMCH
+      REAL               CLANGE, AB_SLAMCH
       COMPLEX            CLARND
-      EXTERNAL           CLANGE, SLAMCH, CLARND
+      EXTERNAL           CLANGE, AB_SLAMCH, CLARND
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGEQR2, CGET51, CGET52, CGGHRD, CHGEQZ, CLACPY,
@@ -638,8 +638,8 @@
       IF( NSIZES.EQ.0 .OR. NTYPES.EQ.0 )
      $   RETURN
 *
-      SAFMIN = SLAMCH( 'Safe minimum' )
-      ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
+      SAFMIN = AB_SLAMCH( 'Safe minimum' )
+      ULP = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
       SAFMIN = SAFMIN / ULP
       SAFMAX = ONE / SAFMIN
       CALL SLABAD( SAFMIN, SAFMAX )

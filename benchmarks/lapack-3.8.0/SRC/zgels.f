@@ -215,8 +215,8 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_ILAENV
-      DOUBLE PRECISION   DLAMCH, AB_ZLANGE
-      EXTERNAL           AB_LSAME, AB_ILAENV, DLAMCH, AB_ZLANGE
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE
+      EXTERNAL           AB_LSAME, AB_ILAENV, AB_DLAMCH, AB_ZLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_DLABAD, AB_XERBLA, AB_ZGELQF, AB_ZGEQRF, AB_
@@ -305,7 +305,7 @@
 *
 *     Get machine parameters
 *
-      SMLNUM = DLAMCH( 'S' ) / DLAMCH( 'P' )
+      SMLNUM = AB_DLAMCH( 'S' ) / AB_DLAMCH( 'P' )
       BIGNUM = ONE / SMLNUM
       CALL AB_DLABAD( SMLNUM, BIGNUM )
 *

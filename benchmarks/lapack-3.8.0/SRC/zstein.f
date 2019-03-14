@@ -221,8 +221,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            AB_IDAMAX
-      DOUBLE PRECISION   DLAMCH, AB_DNRM2
-      EXTERNAL           AB_IDAMAX, DLAMCH, AB_DNRM2
+      DOUBLE PRECISION   AB_DLAMCH, AB_DNRM2
+      EXTERNAL           AB_IDAMAX, AB_DLAMCH, AB_DNRM2
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_DCOPY, AB_DLAGTF, AB_DLAGTS, AB_DLARNV, AB_D
@@ -277,7 +277,7 @@
 *
 *     Get machine constants.
 *
-      EPS = DLAMCH( 'Precision' )
+      EPS = AB_DLAMCH( 'Precision' )
 *
 *     Initialize seed for random number generator AB_DLARNV.
 *

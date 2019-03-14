@@ -53,7 +53,7 @@ subroutine iorho( task, fname, cell, mesh, nsm, maxp, nspin, f, found )
 ! integer nsm             : Number of sub-mesh points per mesh point
 !                           (not used in this version)
 ! integer maxp            : First dimension of array rho
-! integer nspin           : Second dimension of array rho
+! integer nspin           : second dimension of array rho
 ! ************************** OUTPUT **********************************
 ! integer maxp            : Required first dimension of array rho,
 !                           equal to mesh(1)*mesh(2)*mesh(3)
@@ -476,7 +476,7 @@ subroutine thetaft(n,L,lav,ft)
         return
 end subroutine thetaft
 
-DOUBLE PRECISION FUNCTION VOLCEL( C )
+DOUBLE PRECISION FUNCTION VOAB_LCEL( C )
 
 ! Copyright (C) 1999-2003 (P. Ordejon, J. Junquera)
 ! This file is distributed under the terms of the
@@ -488,17 +488,17 @@ DOUBLE PRECISION FUNCTION VOLCEL( C )
 !This section has been created automatically by the script Abilint (TD).
 !Do not modify the following lines by hand.
 #undef ABI_FUNC
-#define ABI_FUNC 'VOLCEL'
+#define ABI_FUNC 'VOAB_LCEL'
 !End of the abilint section
 
       IMPLICIT NONE
 
       DOUBLE PRECISION C(3,3)
-      VOLCEL = ( C(2,1)*C(3,2) - C(3,1)*C(2,2) ) * C(1,3) +&
+      VOAB_LCEL = ( C(2,1)*C(3,2) - C(3,1)*C(2,2) ) * C(1,3) +&
      &         ( C(3,1)*C(1,2) - C(1,1)*C(3,2) ) * C(2,3) +&
      &         ( C(1,1)*C(2,2) - C(2,1)*C(1,2) ) * C(3,3)
-      VOLCEL = ABS( VOLCEL )
-END FUNCTION VOLCEL
+      VOAB_LCEL = ABS( VOAB_LCEL )
+END FUNCTION VOAB_LCEL
 
 end module m_macroave
 !!***

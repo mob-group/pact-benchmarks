@@ -176,8 +176,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            IDAMAX
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           IDAMAX, DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           IDAMAX, AB_DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -192,8 +192,8 @@
          RETURN
       END IF
 *
-      EPS = DLAMCH( 'Epsilon' )
-      UNFL = DLAMCH( 'Safe minimum' )
+      EPS = AB_DLAMCH( 'Epsilon' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
       NZ = 4
 *

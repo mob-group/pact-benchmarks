@@ -921,8 +921,8 @@ end subroutine print_efmas
 !!      dfpt_looppert
 !!
 !! CHILDREN
-!!      cgqf,dgemm,dgetrf,dgetri,dotprod_g,dsyev,print_tr_efmas,zgemm,zgetrf
-!!      zgetri,zheev
+!!      cgqf,AB_DGEMM,AB_DGETRF,AB_DGETRI,dotprod_g,AB_DSYEV,print_tr_efmas,AB_ZGEMM,AB_ZGETRF
+!!      AB_ZGETRI,AB_ZHEEV
 !!
 !! SOURCE
 
@@ -1160,7 +1160,7 @@ end subroutine print_efmas
               write(std_out,'(3f12.8,2(a,3f12.8))')&
 &               real(eig2_diag_cart(adir,:,iband,jband),dp),' |',real(eig2_paral(adir,:),dp),' |',real(eig2_gauge_change(adir,:),dp)
             end do
-            write(std_out,'(a)') 'H. in parallel gauge  = Second der. of H     + First derivatives    + First derivatives^T'
+            write(std_out,'(a)') 'H. in parallel gauge  = second der. of H     + First derivatives    + First derivatives^T'
             do adir=1,3
               write(std_out,'(3f12.8,2(a,3f12.8))') real(eig2_paral(adir,:),dp),' |',real(eig2_ch2c(adir,:),dp),' |', &
 &                                                   real(eig2_part(adir,:),dp)
@@ -1224,8 +1224,8 @@ end subroutine print_efmas
 !!      dfpt_looppert
 !!
 !! CHILDREN
-!!      cgqf,dgemm,dgetrf,dgetri,dotprod_g,dsyev,print_tr_efmas,zgemm,zgetrf
-!!      zgetri,zheev
+!!      cgqf,AB_DGEMM,AB_DGETRF,AB_DGETRI,dotprod_g,AB_DSYEV,print_tr_efmas,AB_ZGEMM,AB_ZGETRF
+!!      AB_ZGETRI,AB_ZHEEV
 !!
 !! SOURCE
 
@@ -1322,9 +1322,9 @@ end subroutine print_efmas
 !HERE ALLOCATE
 
   gprimd = rprimd
-  call dgetrf(mdim,mdim,gprimd,mdim,ipiv,info)
+  call AB_DGETRF(mdim,mdim,gprimd,mdim,ipiv,info)
   ABI_ALLOCATE(rwork,(3))
-  call dgetri(mdim,gprimd,mdim,ipiv,rwork,3,info)
+  call AB_DGETRI(mdim,gprimd,mdim,ipiv,rwork,3,info)
   ABI_DEALLOCATE(rwork)
   gprimd = two_pi*transpose(gprimd)
 
@@ -1407,9 +1407,9 @@ end subroutine print_efmas
 
             !Compute effective mass tensor from second derivative matrix. Simple inversion.
             eff_mass(:,:) = eig2_diag_cart(1:mdim,1:mdim,iband,jband)
-            call zgetrf(mdim,mdim,eff_mass(1:mdim,1:mdim),mdim,ipiv,info)
+            call AB_ZGETRF(mdim,mdim,eff_mass(1:mdim,1:mdim),mdim,ipiv,info)
             ABI_ALLOCATE(work,(3))
-            call zgetri(mdim,eff_mass(1:mdim,1:mdim),mdim,ipiv,work,3,info)
+            call AB_ZGETRI(mdim,eff_mass(1:mdim,1:mdim),mdim,ipiv,work,3,info)
             ABI_DEALLOCATE(work)
 
             !DIAGONALIZATION
@@ -1420,13 +1420,13 @@ end subroutine print_efmas
             transport_eqv_eigvec(:,:,iband) = real(eff_mass(1:mdim,1:mdim),dp)
             lwork=-1
             ABI_ALLOCATE(rwork,(1))
-            call dsyev('V','U',mdim,transport_eqv_eigvec(:,:,iband),mdim,transport_eqv_eigval(:,iband),rwork,lwork,info)
+            call AB_DSYEV('V','U',mdim,transport_eqv_eigvec(:,:,iband),mdim,transport_eqv_eigval(:,iband),rwork,lwork,info)
             lwork = max(1, 3*mdim-1) ! lwork >= max(1, 3*mdim-1)
             ABI_DEALLOCATE(rwork)
 
             ABI_ALLOCATE(rwork,(lwork))
             rwork=zero
-            call dsyev('V','U',mdim,transport_eqv_eigvec(:,:,iband),mdim,transport_eqv_eigval(:,iband),rwork,lwork,info)
+            call AB_DSYEV('V','U',mdim,transport_eqv_eigvec(:,:,iband),mdim,transport_eqv_eigval(:,iband),rwork,lwork,info)
             ABI_DEALLOCATE(rwork)
             transport_eqv_eigvec(:,:,iband) = transpose(transport_eqv_eigvec(:,:,iband)) !So that lines contain eigenvectors.
 
@@ -1590,13 +1590,13 @@ end subroutine print_efmas
             lwork=-1
             ABI_ALLOCATE(work,(1))
             ABI_ALLOCATE(rwork,(3*deg_dim-2))
-            call zheev('V','U',deg_dim,eigenvec,deg_dim,eigenval,work,lwork,rwork,info)
+            call AB_ZHEEV('V','U',deg_dim,eigenvec,deg_dim,eigenval,work,lwork,rwork,info)
             lwork=int(work(1))
             ABI_DEALLOCATE(work)
             eigenval = zero
             ABI_ALLOCATE(work,(lwork))
             work=zero; rwork=zero
-            call zheev('V','U',deg_dim,eigenvec,deg_dim,eigenval,work,lwork,rwork,info)
+            call AB_ZHEEV('V','U',deg_dim,eigenvec,deg_dim,eigenval,work,lwork,rwork,info)
             ABI_DEALLOCATE(rwork)
             ABI_DEALLOCATE(work)
             unitary_tr = eigenvec !OUT
@@ -1700,13 +1700,13 @@ end subroutine print_efmas
           lwork=-1
           ABI_ALLOCATE(work,(1))
           ABI_ALLOCATE(rwork,(3*deg_dim-2))
-          call zheev('V','U',deg_dim,eigenvec,deg_dim,eigenval,work,lwork,rwork,info)
+          call AB_ZHEEV('V','U',deg_dim,eigenvec,deg_dim,eigenval,work,lwork,rwork,info)
           lwork=int(work(1))
           ABI_DEALLOCATE(work)
           eigenval = zero
           ABI_ALLOCATE(work,(lwork))
           work=zero; rwork=zero
-          call zheev('V','U',deg_dim,eigenvec,deg_dim,eigenval,work,lwork,rwork,info)
+          call AB_ZHEEV('V','U',deg_dim,eigenvec,deg_dim,eigenval,work,lwork,rwork,info)
           ABI_DEALLOCATE(rwork)
           ABI_DEALLOCATE(work)
           unitary_tr = eigenvec !OUT
@@ -1719,13 +1719,13 @@ end subroutine print_efmas
           transport_eqv_eigvec(:,:,iband) = transport_tensor(:,:,iband)
           lwork=-1
           ABI_ALLOCATE(rwork,(1))
-          call dsyev('V','U',mdim,transport_eqv_eigvec(:,:,iband),mdim,transport_tensor_eig,rwork,lwork,info)
+          call AB_DSYEV('V','U',mdim,transport_eqv_eigvec(:,:,iband),mdim,transport_tensor_eig,rwork,lwork,info)
           lwork=int(rwork(1))
           ABI_DEALLOCATE(rwork)
           transport_tensor_eig = zero
           ABI_ALLOCATE(rwork,(lwork))
           rwork=zero
-          call dsyev('V','U',mdim,transport_eqv_eigvec(:,:,iband),mdim,transport_tensor_eig,rwork,lwork,info)
+          call AB_DSYEV('V','U',mdim,transport_eqv_eigvec(:,:,iband),mdim,transport_tensor_eig,rwork,lwork,info)
           ABI_DEALLOCATE(rwork)
           transport_eqv_eigvec(:,:,iband) = transpose(transport_eqv_eigvec(:,:,iband)) !So that lines contain eigenvectors.
 
@@ -1851,13 +1851,13 @@ end subroutine print_efmas
           lwork=-1
           ABI_ALLOCATE(work,(1))
           ABI_ALLOCATE(rwork,(3*deg_dim-2))
-          call zheev('V','U',deg_dim,eigenvec,deg_dim,eigenval,work,lwork,rwork,info)
+          call AB_ZHEEV('V','U',deg_dim,eigenvec,deg_dim,eigenval,work,lwork,rwork,info)
           lwork=int(work(1))
           ABI_DEALLOCATE(work)
           eigenval = zero
           ABI_ALLOCATE(work,(lwork))
           work=zero; rwork=zero
-          call zheev('V','U',deg_dim,eigenvec,deg_dim,eigenval,work,lwork,rwork,info)
+          call AB_ZHEEV('V','U',deg_dim,eigenvec,deg_dim,eigenval,work,lwork,rwork,info)
           ABI_DEALLOCATE(rwork)
           ABI_DEALLOCATE(work)
           unitary_tr = eigenvec !OUT
@@ -1919,13 +1919,13 @@ end subroutine print_efmas
           lwork=-1
           ABI_ALLOCATE(work,(1))
           ABI_ALLOCATE(rwork,(3*deg_dim-2))
-          call zheev('V','U',deg_dim,eigenvec,deg_dim,eigenval,work,lwork,rwork,info)
+          call AB_ZHEEV('V','U',deg_dim,eigenvec,deg_dim,eigenval,work,lwork,rwork,info)
           lwork=int(work(1))
           ABI_DEALLOCATE(work)
           eigenval = zero
           ABI_ALLOCATE(work,(lwork))
           work=zero; rwork=zero
-          call zheev('V','U',deg_dim,eigenvec,deg_dim,eigenval,work,lwork,rwork,info)
+          call AB_ZHEEV('V','U',deg_dim,eigenvec,deg_dim,eigenval,work,lwork,rwork,info)
           ABI_DEALLOCATE(rwork)
           ABI_DEALLOCATE(work)
           unitary_tr = eigenvec !OUT
@@ -1938,13 +1938,13 @@ end subroutine print_efmas
           cart_rotation = transport_tensor(:,:,iband)
           lwork=-1
           ABI_ALLOCATE(rwork,(1))
-          call dsyev('V','U',mdim,cart_rotation,mdim,transport_tensor_eig,rwork,lwork,info)
+          call AB_DSYEV('V','U',mdim,cart_rotation,mdim,transport_tensor_eig,rwork,lwork,info)
           lwork=int(rwork(1))
           ABI_DEALLOCATE(rwork)
           transport_tensor_eig = zero
           ABI_ALLOCATE(rwork,(lwork))
           rwork=zero
-          call dsyev('V','U',mdim,cart_rotation,mdim,transport_tensor_eig,rwork,lwork,info)
+          call AB_DSYEV('V','U',mdim,cart_rotation,mdim,transport_tensor_eig,rwork,lwork,info)
           ABI_DEALLOCATE(rwork)
           transport_eqv_eigvec(:,:,iband) = transpose(cart_rotation(:,:)) !So that lines contain eigenvectors, not columns.
 
@@ -2024,13 +2024,13 @@ end subroutine print_efmas
         lwork=-1
         ABI_ALLOCATE(work,(1))
         ABI_ALLOCATE(rwork,(3*deg_dim-2))
-        call zheev('V','U',deg_dim,eigenvec,deg_dim,eigenval,work,lwork,rwork,info)
+        call AB_ZHEEV('V','U',deg_dim,eigenvec,deg_dim,eigenval,work,lwork,rwork,info)
         lwork=int(work(1))
         ABI_DEALLOCATE(work)
         eigenval = zero
         ABI_ALLOCATE(work,(lwork))
         work=zero; rwork=zero
-        call zheev('V','U',deg_dim,eigenvec,deg_dim,eigenval,work,lwork,rwork,info)
+        call AB_ZHEEV('V','U',deg_dim,eigenvec,deg_dim,eigenval,work,lwork,rwork,info)
         ABI_DEALLOCATE(rwork)
         ABI_DEALLOCATE(work)
         unitary_tr = eigenvec !OUT
@@ -2049,13 +2049,13 @@ end subroutine print_efmas
           lwork=-1
           ABI_ALLOCATE(work,(1))
           ABI_ALLOCATE(rwork,(3*deg_dim-2))
-          call zheev('V','U',deg_dim,eigenvec,deg_dim,eigenval,work,lwork,rwork,info)
+          call AB_ZHEEV('V','U',deg_dim,eigenvec,deg_dim,eigenval,work,lwork,rwork,info)
           lwork=int(work(1))
           ABI_DEALLOCATE(work)
           eigenval = zero
           ABI_ALLOCATE(work,(lwork))
           work=zero; rwork=zero
-          call zheev('V','U',deg_dim,eigenvec,deg_dim,eigenval,work,lwork,rwork,info)
+          call AB_ZHEEV('V','U',deg_dim,eigenvec,deg_dim,eigenval,work,lwork,rwork,info)
           ABI_DEALLOCATE(rwork)
           ABI_DEALLOCATE(work)
           eigf3d = eigenval     !OUT
@@ -2179,7 +2179,7 @@ function MATMUL_DP(aa,bb,mm,nn,transa,transb)
    end if
  end if
 
- call DGEMM(transa_,transb_,mm,nn,kk,one,aa,lda,bb,ldb,zero,MATMUL_DP,mm)
+ call AB_DGEMM(transa_,transb_,mm,nn,kk,one,aa,lda,bb,ldb,zero,MATMUL_DP,mm)
 
 end function MATMUL_DP
 !!***
@@ -2258,7 +2258,7 @@ function MATMUL_DPC(aa,bb,mm,nn,transa,transb)
    end if
  end if
 
- call ZGEMM(transa_,transb_,mm,nn,kk,cone,aa,lda,bb,ldb,czero,MATMUL_DPC,mm)
+ call AB_ZGEMM(transa_,transb_,mm,nn,kk,cone,aa,lda,bb,ldb,czero,MATMUL_DPC,mm)
 
 end function MATMUL_DPC
 !!***

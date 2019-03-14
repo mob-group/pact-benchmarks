@@ -171,8 +171,8 @@
       INTRINSIC          ABS, SIGN, SQRT
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. Executable Statements ..
 *
@@ -216,7 +216,7 @@
          GASMAL = .TRUE.
          IF( GA.GT.FA ) THEN
             PMAX = 2
-            IF( ( FA / GA ).LT.SLAMCH( 'EPS' ) ) THEN
+            IF( ( FA / GA ).LT.AB_SLAMCH( 'EPS' ) ) THEN
 *
 *              Case of very large GA
 *

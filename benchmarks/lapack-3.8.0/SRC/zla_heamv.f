@@ -205,8 +205,8 @@
       COMPLEX*16         ZDUM
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, DLAMCH
-      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           AB_XERBLA, AB_DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
 *     ..
 *     .. External Functions ..
       EXTERNAL           AB_ILAUPLO
@@ -264,7 +264,7 @@
 *     Set SAFE1 essentially to be the underflow threshold times the
 *     number of additions in each row.
 *
-      SAFE1 = DLAMCH( 'Safe minimum' )
+      SAFE1 = AB_DLAMCH( 'Safe minimum' )
       SAFE1 = (N+1)*SAFE1
 *
 *     Form  y := alpha*abs(A)*abs(x) + beta*abs(y).

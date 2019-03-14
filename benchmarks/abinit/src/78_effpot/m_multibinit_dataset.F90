@@ -2197,7 +2197,7 @@ subroutine outvars_multibinit (multibinit_dtset,nunit)
 
 !List of vector 2  (cartesian coordinates)
  if(multibinit_dtset%nph2l/=0)then
-   write(nunit,'(a)')' Second list of wavevector (cart. coord.) :'
+   write(nunit,'(a)')' second list of wavevector (cart. coord.) :'
    write(nunit,'(3x,a9,3i10)')'    nph2l',multibinit_dtset%nph2l
    write(nunit,'(3x,a9)')'    qph2l'
    do iph2=1,multibinit_dtset%nph2l

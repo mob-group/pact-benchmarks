@@ -152,8 +152,8 @@
       COMPLEX*16         T
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DZASUM
-      EXTERNAL           DLAMCH, DZASUM
+      DOUBLE PRECISION   AB_DLAMCH, DZASUM
+      EXTERNAL           AB_DLAMCH, DZASUM
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZAXPY, ZCOPY
@@ -171,7 +171,7 @@
 *
 *     Determine EPS and the norm of A.
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       KD = KU + 1
       ANORM = ZERO
       DO 10 J = 1, N

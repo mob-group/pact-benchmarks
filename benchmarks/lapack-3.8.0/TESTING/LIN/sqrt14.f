@@ -145,8 +145,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               SLAMCH, SLANGE
-      EXTERNAL           LSAME, SLAMCH, SLANGE
+      REAL               AB_SLAMCH, SLANGE
+      EXTERNAL           LSAME, AB_SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGELQ2, SGEQR2, SLACPY, SLASCL, XERBLA
@@ -251,7 +251,7 @@
 *
       END IF
 *
-      SQRT14 = ERR / ( REAL( MAX( M, N, NRHS ) )*SLAMCH( 'Epsilon' ) )
+      SQRT14 = ERR / ( REAL( MAX( M, N, NRHS ) )*AB_SLAMCH( 'Epsilon' ) )
 *
       RETURN
 *

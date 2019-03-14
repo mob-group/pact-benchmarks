@@ -210,8 +210,8 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_ISAMAX
-      REAL               AB_SDOT, SLAMCH
-      EXTERNAL           AB_LSAME, AB_ISAMAX, AB_SDOT, SLAMCH
+      REAL               AB_SDOT, AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_ISAMAX, AB_SDOT, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_SAXPY, AB_SSCAL, AB_SSWAP, AB_XERBLA
@@ -519,7 +519,7 @@
 *     End generalized conjugate gradient iteration
 *
   350 CONTINUE
-      SFMIN = SLAMCH( 'S' )
+      SFMIN = AB_SLAMCH( 'S' )
       SFMAX = ONE / SFMIN
       LSFMIN = INT( LOG10( SFMIN ) / BASL+ONE )
       LSFMAX = INT( LOG10( SFMAX ) / BASL )

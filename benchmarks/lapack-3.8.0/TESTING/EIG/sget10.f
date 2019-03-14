@@ -117,8 +117,8 @@
       REAL               ANORM, EPS, UNFL, WNORM
 *     ..
 *     .. External Functions ..
-      REAL               SASUM, SLAMCH, SLANGE
-      EXTERNAL           SASUM, SLAMCH, SLANGE
+      REAL               SASUM, AB_SLAMCH, SLANGE
+      EXTERNAL           SASUM, AB_SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SAXPY, SCOPY
@@ -135,8 +135,8 @@
          RETURN
       END IF
 *
-      UNFL = SLAMCH( 'Safe minimum' )
-      EPS = SLAMCH( 'Precision' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
+      EPS = AB_SLAMCH( 'Precision' )
 *
       WNORM = ZERO
       DO 10 J = 1, N

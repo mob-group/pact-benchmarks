@@ -137,8 +137,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               SLAMCH, SLANSP, SLANSY
-      EXTERNAL           LSAME, SLAMCH, SLANSP, SLANSY
+      REAL               AB_SLAMCH, SLANSP, SLANSY
+      EXTERNAL           LSAME, AB_SLAMCH, SLANSP, SLANSY
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SLAVSP, SLASET
@@ -157,7 +157,7 @@
 *
 *     Determine EPS and the norm of A.
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       ANORM = SLANSP( '1', UPLO, N, A, RWORK )
 *
 *     Initialize C to the identity matrix.

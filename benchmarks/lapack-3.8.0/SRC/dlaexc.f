@@ -172,8 +172,8 @@
      $                   X( LDX, 2 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, AB_DLANGE
-      EXTERNAL           DLAMCH, AB_DLANGE
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE
+      EXTERNAL           AB_DLAMCH, AB_DLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_DLACPY, AB_DLANV2, AB_DLARFG, AB_DLARFX, AB_
@@ -241,8 +241,8 @@
 *        Compute machine-dependent threshold for test for accepting
 *        swap.
 *
-         EPS = DLAMCH( 'P' )
-         SMLNUM = DLAMCH( 'S' ) / EPS
+         EPS = AB_DLAMCH( 'P' )
+         SMLNUM = AB_DLAMCH( 'S' ) / EPS
          THRESH = MAX( TEN*EPS*DNORM, SMLNUM )
 *
 *        Solve T11*X - X*T22 = scale*T12 for X.

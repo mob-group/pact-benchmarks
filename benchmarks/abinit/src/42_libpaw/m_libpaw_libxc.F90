@@ -65,7 +65,7 @@ module m_libpaw_libxc_funcs
  public :: libpaw_libxc_gga_from_hybrid    ! Return the id of the XC-GGA used for the hybrid
 
 !Private functions
- private :: libpaw_libxc_constants_load    ! Load libXC constants from C headers
+ private :: libpaw_libxc_constants_load    ! Load libXC constants from C AB_HEADERs
  private :: libpaw_libxc_set_tb09          ! Compute c parameter for Tran-Blaha 2009 functional
  private :: char_f_to_c                    ! Convert a string from Fortran to C
  private :: char_c_to_f                    ! Convert a string from C to Fortran
@@ -337,7 +337,7 @@ contains
 !!  libpaw_libxc_constants_load
 !!
 !! FUNCTION
-!!  Load libXC constants from C headers
+!!  Load libXC constants from C AB_HEADERs
 !!
 !! PARENTS
 !!      m_libpaw_libxc

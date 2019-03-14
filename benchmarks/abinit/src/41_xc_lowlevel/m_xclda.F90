@@ -37,7 +37,7 @@ module m_xclda
  private
 !!***
 
- public :: xcpzca     ! Perdew-Zunger parameterization of Ceperly-Alder electron gas energy data.
+ public :: xcpzca     ! Perdew-Zunger parameterization of Ceperly-AAB_LDEr electron gas energy data.
  public :: xcspol     ! Spin-polarized exchange and correlation, parameterized by Mike Teter
  public :: xctetr     ! Teter exchange and correlation --Mike Teter s fit
  public :: xcwign     ! Wigner exchange and correlation.
@@ -58,9 +58,9 @@ contains
 !! Returns exc, vxc, and d(vxc)/d($\rho$) from input rho.
 !!
 !! NOTE
-!! Perdew-Zunger parameterization of Ceperly-Alder electron gas energy data.
+!! Perdew-Zunger parameterization of Ceperly-AAB_LDEr electron gas energy data.
 !! J. Perdew and A. Zunger, Phys. Rev. B 23, 5048 (1981) [[cite:Perdew1981]]
-!! D.M. Ceperley and B.J. Alder, Phys. Rev. Lett. 45, 566 (1980) [[cite:Ceperley1980]]
+!! D.M. Ceperley and B.J. AAB_LDEr, Phys. Rev. Lett. 45, 566 (1980) [[cite:Ceperley1980]]
 !!
 !! INPUTS
 !!  npt=number of real space points on which density is provided
@@ -122,7 +122,7 @@ subroutine xcpzca(exc,npt,order,rhor,rspts,vxc,&  !Mandatory arguments
 !Checks the values of order
  if(order<0 .or. order>2)then
    write(message, '(a,a,a,i0)' )&
-&   'With Perdew-Zunger Ceperley-Alder xc functional, the only',ch10,&
+&   'With Perdew-Zunger Ceperley-AAB_LDEr xc functional, the only',ch10,&
 &   'allowed values for order are 0, 1 or 2, while it is found to be',order
    MSG_BUG(message)
  end if
@@ -729,19 +729,19 @@ end subroutine xcspol
 !!
 !! NOTES
 !! Teter exchange and correlation (xc)--Mike Teter s fit
-!! to Ceperly-Alder electron gas energy data.  Data from
-!! D.M. Ceperley and B.J. Alder, Phys. Rev. Lett. 45, 566 (1980) [[cite:Ceperley1980]]
+!! to Ceperly-AAB_LDEr electron gas energy data.  Data from
+!! D.M. Ceperley and B.J. AAB_LDEr, Phys. Rev. Lett. 45, 566 (1980) [[cite:Ceperley1980]]
 !! and private communication from authors.
 !! This form is based on Mike Teter s rational polynomial
 !! exc=-(a0+a1*rs+a2*rs**2+a3*rs**3)/(b1*rs+b2*rs**2+b3*rs**3+b4*rs**4)
 !! where the parameters of the fit are fit to reproduce
-!! Ceperley-Alder data and the high density limit (rs->0)
+!! Ceperley-AAB_LDEr data and the high density limit (rs->0)
 !! of the electron gas (pure exchange).
 !! rs = $(3/(4\pi))^{1/3} * \rho(r)^{-1/3}$.
 !! b1 must be 1 and a0 must be $(3/4)(3/(2\pi))^{2/3}$.
 !! Fit is by Mike Teter, Corning Incorporated.
 !! Note that d(vxc)/d($\rho$) gets a little wild at small rho.
-!! d$^2$(Vxc)/d$(\rho)^2$ is probably wilder.
+!! d$^2$(Vxc)/d$(\rho)^2$ is probably wiAB_LDEr.
 !!
 !! Some notation:  (XG 990224, sign convention should be changed, see xcspol.f)
 !!  $Exc = N1/D1$ with $N1=-(a0+a1*rs+...)$ given above and
@@ -804,7 +804,7 @@ subroutine xctetr(exc,npt,order,rhor,rspts,vxc,& !Mandatory arguments
 !Checks the values of order
  if(order<0 .or. order>3)then
    write(message, '(a,a,a,i6)' )&
-&   'With Teter 91 Ceperley-Alder xc functional, the only',ch10,&
+&   'With Teter 91 Ceperley-AAB_LDEr xc functional, the only',ch10,&
 &   'allowed values for order are 0, 1, 2 or 3, while it is found to be',order
    MSG_BUG(message)
  end if

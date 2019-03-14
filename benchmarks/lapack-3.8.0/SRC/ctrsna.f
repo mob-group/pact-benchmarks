@@ -287,9 +287,9 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_ICAMAX
-      REAL               AB_SCNRM2, SLAMCH
+      REAL               AB_SCNRM2, AB_SLAMCH
       COMPLEX            AB_CDOTC
-      EXTERNAL           AB_LSAME, AB_ICAMAX, AB_SCNRM2, SLAMCH, AB_CDOT
+      EXTERNAL           AB_LSAME, AB_ICAMAX, AB_SCNRM2, AB_SLAMCH, AB_CDOT
      $C
 *     ..
 *     .. External Subroutines ..
@@ -371,8 +371,8 @@
 *
 *     Get machine constants
 *
-      EPS = SLAMCH( 'P' )
-      SMLNUM = SLAMCH( 'S' ) / EPS
+      EPS = AB_SLAMCH( 'P' )
+      SMLNUM = AB_SLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
       CALL AB_SLABAD( SMLNUM, BIGNUM )
 *

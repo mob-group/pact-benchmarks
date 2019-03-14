@@ -91,8 +91,8 @@
       COMPLEX            A( NSZ, NSZ ), AB( NSZB, NSZ ), AP( NSZP )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGBEQU, CGEEQU, CPBEQU, CPOEQU, CPPEQU
@@ -105,7 +105,7 @@
       PATH( 1:1 ) = 'Complex precision'
       PATH( 2:3 ) = 'EQ'
 *
-      EPS = SLAMCH( 'P' )
+      EPS = AB_SLAMCH( 'P' )
       DO 10 I = 1, 5
          RESLTS( I ) = ZERO
    10 CONTINUE

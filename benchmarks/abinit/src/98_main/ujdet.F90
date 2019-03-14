@@ -125,11 +125,11 @@ program ujdet
      MSG_ERROR(message)
    end if
    rewind(unit=ab_out)
-!  Print header
+!  Print AB_HEADER
    call herald(codename,abinit_version,ab_out)
  end if
 
-!Print header
+!Print AB_HEADER
  call herald(codename,abinit_version,std_out)
 
 !Read the file, stringify it and return the number of datasets. (main/abinit.F90)

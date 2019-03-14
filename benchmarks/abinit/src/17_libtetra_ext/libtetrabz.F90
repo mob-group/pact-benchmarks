@@ -21,7 +21,7 @@
 ! THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
 ! OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 ! MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-! IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+! IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOAB_LDERS BE LIABLE FOR ANY
 ! CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 ! TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 ! SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
@@ -33,7 +33,7 @@ MODULE libtetrabz
   USE libtetrabz_dos_mod,      ONLY : libtetrabz_dos
   USE libtetrabz_dos_mod,      ONLY : libtetrabz_intdos
   USE libtetrabz_dblstep_mod,  ONLY : libtetrabz_dblstep
-  USE libtetrabz_dbldelta_mod, ONLY : libtetrabz_dbldelta
+  USE libtetrabz_dbAB_LDElta_mod, ONLY : libtetrabz_dbAB_LDElta
   USE libtetrabz_polstat_mod,  ONLY : libtetrabz_polstat
   USE libtetrabz_fermigr_mod,  ONLY : libtetrabz_fermigr
   USE libtetrabz_polcmplx_mod, ONLY : libtetrabz_polcmplx

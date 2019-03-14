@@ -112,8 +112,8 @@
       REAL               ANRM, BIGNUM, NRMSVL, SMLNUM
 *     ..
 *     .. External Functions ..
-      REAL               SASUM, SLAMCH, SLANGE, SNRM2
-      EXTERNAL           SASUM, SLAMCH, SLANGE, SNRM2
+      REAL               SASUM, AB_SLAMCH, SLANGE, SNRM2
+      EXTERNAL           SASUM, AB_SLAMCH, SLANGE, SNRM2
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SAXPY, SBDSQR, SGEBD2, SLABAD, SLASCL, SLASET,
@@ -156,7 +156,7 @@
 *
 *     Get machine parameters
 *
-      SMLNUM = SLAMCH( 'S' ) / SLAMCH( 'P' )
+      SMLNUM = AB_SLAMCH( 'S' ) / AB_SLAMCH( 'P' )
       BIGNUM = ONE / SMLNUM
       CALL SLABAD( SMLNUM, BIGNUM )
 *
@@ -211,7 +211,7 @@
 *
       CALL SAXPY( MN, -ONE, S, 1, WORK( M*N+1 ), 1 )
       SQRT12 = SASUM( MN, WORK( M*N+1 ), 1 ) /
-     $         ( SLAMCH( 'Epsilon' )*REAL( MAX( M, N ) ) )
+     $         ( AB_SLAMCH( 'Epsilon' )*REAL( MAX( M, N ) ) )
       IF( NRMSVL.NE.ZERO )
      $   SQRT12 = SQRT12 / NRMSVL
 *

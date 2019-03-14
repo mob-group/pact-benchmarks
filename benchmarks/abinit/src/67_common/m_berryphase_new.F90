@@ -90,7 +90,7 @@ contains
 !! dtset <type(dataset_type)>=all input variables in this dataset
 !! psps <type(pseudopotential_type)>=variables related to pseudopotentials
 !! gprimd(3,3)=reciprocal space dimensional primitive translations
-!! hdr <type(hdr_type)>=the header of wf, den and pot files
+!! hdr <type(hdr_type)>=the AB_HEADER of wf, den and pot files
 !! indlmn(6,lmnmax,ntypat)
 !!   array giving l,m,n,lm,ln,spin for i=ln  (if useylm=0)
 !!                                  or i=lmn (if useylm=1)
@@ -1285,7 +1285,7 @@ subroutine berryphase_new(atindx1,cg,cprj,dtefield,dtfil,dtset,psps,&
 !        correction to obtain a smouth logarithm of the determinant
          ABI_ALLOCATE(str_flag,(nstr))
 !        DEBUG
-!        since we don't have any case of non-nul Chern number,
+!        since we don't have any case of non-nul AB_CHERn number,
 !        we must change the det_string value "by brute force" if we want debug this
 !        allocate(det_string_test(2,dtefield%nstr(idir)))
 !        det_string_test(:,:)=det_string(:,:)
@@ -1486,11 +1486,11 @@ subroutine berryphase_new(atindx1,cg,cprj,dtefield,dtfil,dtset,psps,&
        end if
 
 !      REC start
-       if(abs(dtset%polcen(idir))>tol8)then
-         poltot = poltot-dtset%polcen(idir)
+       if(abs(dtset%poAB_LCEn(idir))>tol8)then
+         poltot = poltot-dtset%poAB_LCEn(idir)
          write(message,'(a,f15.10)') &
 &         '    Translating Polarization by P0 for centrosymmetric cell: ',&
-&         dtset%polcen(idir)
+&         dtset%poAB_LCEn(idir)
          call wrtout(std_out,message,'COLL')
          if (unit_out /= 0) then
            call wrtout(unit_out,message,'COLL')
@@ -1781,7 +1781,7 @@ end subroutine berryphase_new
 !! Input/Output
 !! dtset <type(dataset_type)>=all input variables in this dataset
 !! dtefield <type(efield_type)> = efield variables
-!! hdr <type(hdr_type)>=the header of wf, den and pot files
+!! hdr <type(hdr_type)>=the AB_HEADER of wf, den and pot files
 !! mpi_enreg=information about MPI parallelization
 !! ptot_cart(3)=total polarization in cartesian coordinates
 !! xred(3,natom)=reduced atomic coordinates
@@ -3476,7 +3476,7 @@ subroutine initberry(dtefield,dtset,gmet,gprimd,kg,mband,&
            !      end if
            !      end do
 
-           !      Second: k - dk
+           !      second: k - dk
            !      do ikpt1 = 1, dtefield%fnkpt
            !      diffk(:) = abs(dtefield%fkptns(:,ikpt1) - &
            !      &         dtefield%fkptns(:,ikpt) + dk(:))

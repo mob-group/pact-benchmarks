@@ -644,8 +644,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
-      REAL               SLAMCH, SLARND, SSXT1
-      EXTERNAL           ILAENV, SLAMCH, SLARND, SSXT1
+      REAL               AB_SLAMCH, SLARND, SSXT1
+      EXTERNAL           ILAENV, AB_SLAMCH, SLARND, SSXT1
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SCOPY, SLABAD, SLACPY, SLASET, SLASUM, SLATMR,
@@ -716,10 +716,10 @@
 *
 *     More Important constants
 *
-      UNFL = SLAMCH( 'Safe minimum' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
       CALL SLABAD( UNFL, OVFL )
-      ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
+      ULP = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
       ULPINV = ONE / ULP
       LOG2UI = INT( LOG( ULPINV ) / LOG( TWO ) )
       RTUNFL = SQRT( UNFL )

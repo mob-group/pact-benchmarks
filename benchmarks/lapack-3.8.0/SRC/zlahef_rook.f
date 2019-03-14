@@ -219,8 +219,8 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_IZAMAX
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           AB_LSAME, AB_IZAMAX, DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_LSAME, AB_IZAMAX, AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_ZCOPY, AB_ZDSCAL, AB_ZGEMM, AB_ZGEMV, AB_ZLA
@@ -245,7 +245,7 @@
 *
 *     Compute machine safe minimum
 *
-      SFMIN = DLAMCH( 'S' )
+      SFMIN = AB_DLAMCH( 'S' )
 *
       IF( AB_LSAME( UPLO, 'U' ) ) THEN
 *

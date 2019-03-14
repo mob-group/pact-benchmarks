@@ -1267,7 +1267,7 @@ SUBROUTINE Ctqmcoffdiag_setMu(op, levels)
     CALL WARNALL("Ctqmcoffdiag_setMu : Taking energy levels from weiss G(iw)")
 
   op%mu(:)=-levels(:)  ! levels = \epsilon_j - \mu
-  !op%mu =\tilde{\mu} = \mu -\epsilon_j
+  !op%mu =\tiAB_LDE{\mu} = \mu -\epsilon_j
   op%opt_levels = 1
 END SUBROUTINE Ctqmcoffdiag_setMu
 !!***
@@ -2828,7 +2828,7 @@ SUBROUTINE Ctqmcoffdiag_trySwap(op,flav_i,flav_j)
     detold     = BathOperatoroffdiag_getDetF(op%Bath) ! use op%Bath%M
 
     ! ===========================================
-    ! Second build M_update matrix to compute determinant after.
+    ! second build M_update matrix to compute determinant after.
     ! ===========================================
     !CALL ListCdagCoffdiag_print(particle)
     call BathOperatoroffdiag_recomputeM(op%Bath,op%impurity%particles,flavor_i,flavor_j) ! compute op%Bath%M_update

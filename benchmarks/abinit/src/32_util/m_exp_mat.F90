@@ -65,7 +65,7 @@ CONTAINS  !===========================================================
  !! PARENTS
 !!
  !! CHILDREN  
-!!      zgeev,zgetrf,zgetri
+!!      AB_ZGEEV,AB_ZGETRF,AB_ZGETRI
 !!
  !! SOURCE
 
@@ -105,7 +105,7 @@ CONTAINS  !===========================================================
   ABI_ALLOCATE(uu,(mat_a_size,mat_a_size))
 
   !Now it calculates the eigenvalues and eigenvectors of the matrix
-  call ZGEEV('No left vectors','Vectors (right)',mat_a_size, mat_a, mat_a_size,ww,&
+  call AB_ZGEEV('No left vectors','Vectors (right)',mat_a_size, mat_a, mat_a_size,ww,&
     vl,1,uu, mat_a_size, work, lwork, rwork, info)
   if (info/=0) then
    write(msg,'(a,i4)')'Wrong value for rwork ',info
@@ -147,13 +147,13 @@ CONTAINS  !===========================================================
   mat_a(:,:) = matmul(uu,mat_a)
 
   !the inverse of the eigenvectors matrix
-  call ZGETRF( mat_a_size, mat_a_size, uu,mat_a_size, ipvt, info )
+  call AB_ZGETRF( mat_a_size, mat_a_size, uu,mat_a_size, ipvt, info )
   if (info/=0) then
    write(msg,'(a,i4)')'Wrong value for rwork ',info
    MSG_BUG(msg)
   end if
 
-  call ZGETRI( mat_a_size, uu, mat_a_size, ipvt, work, lwork, info )
+  call AB_ZGETRI( mat_a_size, uu, mat_a_size, ipvt, work, lwork, info )
   if (info/=0) then
    write(msg,'(a,i4)')'Wrong value for rwork ',info
    MSG_BUG(msg)

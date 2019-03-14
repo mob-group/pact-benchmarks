@@ -163,8 +163,8 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            IDAMAX
-      DOUBLE PRECISION   DLAMCH, DZASUM
-      EXTERNAL           LSAME, IDAMAX, DLAMCH, DZASUM
+      DOUBLE PRECISION   AB_DLAMCH, DZASUM
+      EXTERNAL           LSAME, IDAMAX, AB_DLAMCH, DZASUM
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZGEMV
@@ -245,7 +245,7 @@
 *
 *     Compute norm(B - U * S * V') / ( n * norm(B) * EPS )
 *
-      EPS = DLAMCH( 'Precision' )
+      EPS = AB_DLAMCH( 'Precision' )
 *
       IF( BNORM.LE.ZERO ) THEN
          IF( RESID.NE.ZERO )

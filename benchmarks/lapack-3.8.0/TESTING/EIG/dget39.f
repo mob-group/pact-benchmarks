@@ -129,8 +129,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            IDAMAX
-      DOUBLE PRECISION   DASUM, DDOT, DLAMCH, DLANGE
-      EXTERNAL           IDAMAX, DASUM, DDOT, DLAMCH, DLANGE
+      DOUBLE PRECISION   DASUM, DDOT, AB_DLAMCH, DLANGE
+      EXTERNAL           IDAMAX, DASUM, DDOT, AB_DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DCOPY, DGEMV, DLABAD, DLAQTR
@@ -159,8 +159,8 @@
 *
 *     Get machine parameters
 *
-      EPS = DLAMCH( 'P' )
-      SMLNUM = DLAMCH( 'S' )
+      EPS = AB_DLAMCH( 'P' )
+      SMLNUM = AB_DLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
       CALL DLABAD( SMLNUM, BIGNUM )
 *

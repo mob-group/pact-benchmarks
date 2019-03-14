@@ -133,8 +133,8 @@
       DOUBLE PRECISION   ANORM, EPS, T
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DDOT, DLAMCH, DLANGE
-      EXTERNAL           DDOT, DLAMCH, DLANGE
+      DOUBLE PRECISION   DDOT, AB_DLAMCH, DLANGE
+      EXTERNAL           DDOT, AB_DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGEMV, DLASWP, DSCAL, DTRMV
@@ -153,7 +153,7 @@
 *
 *     Determine EPS and the norm of A.
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       ANORM = DLANGE( '1', M, N, A, LDA, RWORK )
 *
 *     Compute the product L*U and overwrite AFAC with the result.

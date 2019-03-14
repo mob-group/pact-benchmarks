@@ -55,7 +55,7 @@ MODULE m_optic_tools
  public :: pmat2cart
  public :: pmat_renorm
  public :: linopt           ! Compute dielectric function for semiconductors
- public :: nlinopt          ! Second harmonic generation susceptibility for semiconductors
+ public :: nlinopt          ! second harmonic generation susceptibility for semiconductors
  public :: linelop          ! Linear electro-optic susceptibility for semiconductors
  public :: nonlinopt
 
@@ -120,8 +120,8 @@ subroutine sym2cart(gprimd,nsym,rprimd,symrel,symcart)
  do isym=1,nsym
    rsym(:,:) = dble(symrel(:,:,isym))
 !  write(std_out,*) 'rsym = ',rsym
-   call dgemm('N','N',3,3,3,one,rprimd,3,rsym,  3,zero,tmp,     3)
-   call dgemm('N','N',3,3,3,one,tmp,   3,gprimd,3,zero,rsymcart,3)
+   call AB_DGEMM('N','N',3,3,3,one,rprimd,3,rsym,  3,zero,tmp,     3)
+   call AB_DGEMM('N','N',3,3,3,one,tmp,   3,gprimd,3,zero,rsymcart,3)
 !  write(std_out,*) 'rsymcart = ',rsymcart
    symcart(:,:,isym) = rsymcart(:,:)
 ! purify symops in cartesian dp coordinates
@@ -202,7 +202,7 @@ subroutine getwtk(kpt,nkpt,nsym,symrel,wtk)
    kptstar(:,:) = zero
    do isym=1,nsym
 
-     call dgemv('N',3,3,one,rsymrel(:,:,isym),3,kpt(:,ikpt),1,zero,symkpt,1)
+     call AB_DGEMV('N',3,3,one,rsymrel(:,:,isym),3,kpt(:,ikpt),1,zero,symkpt,1)
 
 !    is symkpt already in star?
      do itim=0,1
@@ -823,7 +823,7 @@ end subroutine linopt
 !!  ChiTot.out : Im\chi_{v1v2v3}(2\omega,\omega,-\omega) and Re\chi_{v1v2v3}(2\omega,\omega,-\omega)
 !!  ChiIm.out  : contributions to the Im\chi_{v1v2v3}(2\omega,\omega,-\omega) from various terms
 !!  ChiRe.out  : contributions to Re\chi_{v1v2v3}(2\omega,\omega,-\omega) from various terms
-!!  ChiAbs.out : abs\chi_{v1v2v3}(2\omega,\omega,-\omega). The headers in these files contain
+!!  ChiAbs.out : abs\chi_{v1v2v3}(2\omega,\omega,-\omega). The AB_HEADERs in these files contain
 !!  information about the calculation.
 !!
 !! PARENTS
@@ -1426,7 +1426,7 @@ complex(dpc), allocatable :: intra1wS(:),chi2tot(:)
    if (open_file(fnam7,msg,newunit=fout7,action='WRITE',form='FORMATTED') /= 0) then
      MSG_ERROR(msg)
    end if
-!  write headers
+!  write AB_HEADERs
    write(fout1, '(a,3i3)' ) ' #calculated the component:',v1,v2,v3
    write(fout1, '(a,es16.6)' ) ' #tolerance:',tol
    write(fout1, '(a,es16.6,a)' ) ' #broadening:',brod,'Ha'
@@ -1607,7 +1607,7 @@ end subroutine nlinopt
 !!  ChiEOTot.out : Im\chi_{v1v2v3}(\omega,\omega,0) and Re\chi_{v1v2v3}(\omega,\omega,0)
 !!  ChiEOIm.out  : contributions to the Im\chi_{v1v2v3}(\omega,\omega,0) from various terms
 !!  ChiEORe.out  : contributions to Re\chi_{v1v2v3}(\omega,\omega,-0) from various terms
-!!  ChiEOAbs.out : abs\chi_{v1v2v3}(\omega,\omega,0). The headers in these files contain
+!!  ChiEOAbs.out : abs\chi_{v1v2v3}(\omega,\omega,0). The AB_HEADERs in these files contain
 !!  information about the calculation.
 !!
 !!  NOTES:
@@ -1695,7 +1695,7 @@ integer :: start4(4),count4(4)
  complex(dpc), allocatable :: chi2tot(:)
  complex(dpc) :: num1, num2, den1, den2, term1, term2
  complex(dpc) :: chi1, chi1_1, chi1_2, chi2_1b, chi2_2b
- complex(dpc), allocatable :: chi2(:) ! Second term that depends on the frequency ! (omega)
+ complex(dpc), allocatable :: chi2(:) ! second term that depends on the frequency ! (omega)
  complex(dpc) :: eta1, eta2, eta2_1, eta2_2
  complex(dpc) :: sigma1, sigma1_1, sigma1_2, sigma2
  !Parallelism
@@ -2036,7 +2036,7 @@ integer :: start4(4),count4(4)
    if (open_file(fnam5,msg,newunit=fout5,action='WRITE',form='FORMATTED') /= 0) then
      MSG_ERROR(msg)
    end if
-   ! write headers
+   ! write AB_HEADERs
    write(fout1, '(a,3i3)' ) ' #calculated the component:',v1,v2,v3
    write(fout1, '(a,es16.6)' ) ' #tolerance:',tol
    write(fout1, '(a,es16.6,a)' ) ' #broadening:',brod,'Ha'
@@ -2188,7 +2188,7 @@ end subroutine linelop
 !!  ChiEOTot.out : Im\chi_{v1v2v3}(\omega,\omega,0) and Re\chi_{v1v2v3}(\omega,\omega,0)
 !!  ChiEOIm.out  : contributions to the Im\chi_{v1v2v3}(\omega,\omega,0) from various terms
 !!  ChiEORe.out  : contributions to Re\chi_{v1v2v3}(\omega,\omega,-0) from various terms
-!!  ChiEOAbs.out : abs\chi_{v1v2v3}(\omega,\omega,0). The headers in these files contain
+!!  ChiEOAbs.out : abs\chi_{v1v2v3}(\omega,\omega,0). The AB_HEADERs in these files contain
 !!  information about the calculation.
 !!  ncid=Netcdf id to save output data.
 !!
@@ -2272,8 +2272,8 @@ character(len=fnlen) :: fnam1,fnam2,fnam3,fnam4,fnam5,fnam6,fnam7
  complex(dpc), allocatable :: sigmaw(:) ! \frac{i}{\omega} \sigma_{II}^{abc}(-\omega,\omega,0)
  complex(dpc) :: num1, num2, den1, den2, term1, term2
  complex(dpc) :: chi1, chi2_1, chi2_2
- complex(dpc), allocatable :: chi2(:) ! Second term that depends on the frequency ! (omega)
- complex(dpc), allocatable :: eta1(:) ! Second term that depends on the frequency ! (omega)
+ complex(dpc), allocatable :: chi2(:) ! second term that depends on the frequency ! (omega)
+ complex(dpc), allocatable :: eta1(:) ! second term that depends on the frequency ! (omega)
  complex(dpc), allocatable :: chi2tot(:)
  complex(dpc) :: eta1_1, eta1_2, eta2_1, eta2_2
  complex(dpc) :: sigma2_1, sigma1
@@ -2654,7 +2654,7 @@ character(len=fnlen) :: fnam1,fnam2,fnam3,fnam4,fnam5,fnam6,fnam7
    if (open_file(fnam7,msg,newunit=fout7,action='WRITE',form='FORMATTED') /= 0) then
      MSG_ERROR(msg)
    end if
-  !!write headers
+  !!write AB_HEADERs
    write(fout1, '(a,3i3)' ) ' #calculated the component:',v1,v2,v3
    write(fout1, '(a,es16.6)' ) ' #tolerance:',tol
    write(fout1, '(a,es16.6,a)' ) ' #broadening:',brod,'Ha'

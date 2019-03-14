@@ -162,8 +162,8 @@
       DOUBLE PRECISION   ANORM, EPS, RESID
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, ZLANGE, ZLANSY
-      EXTERNAL           DLAMCH, ZLANGE, ZLANSY
+      DOUBLE PRECISION   AB_DLAMCH, ZLANGE, ZLANSY
+      EXTERNAL           AB_DLAMCH, ZLANGE, ZLANSY
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZGEMM, ZHERK, ZLACPY, ZLASET, ZUNGQR
@@ -179,7 +179,7 @@
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
 *
 *     Copy the first k columns of the factorization to the array Q
 *

@@ -564,7 +564,7 @@ subroutine init_peaks_from_grid(omega,fval,nomega,nfreqre,nfreqim,coeff,ncoeff,p
         b2   = AIMAG(omega(nfreqre+1))
         val2 = AIMAG(fval(nfreqre+1))
         write(std_out,*) '1: ploc:',ploc(ip),' b2:',b2,' val2:',val2
-      else ! Second value will be in c-plane
+      else ! second value will be in c-plane
         idx  = nfreqre+nfreqim+ploc(ip)-1
         b2   = AIMAG(omega(idx))
         val2 = AIMAG(fval(idx))

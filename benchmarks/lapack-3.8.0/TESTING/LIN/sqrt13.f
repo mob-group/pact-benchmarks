@@ -116,8 +116,8 @@
       REAL               BIGNUM, SMLNUM
 *     ..
 *     .. External Functions ..
-      REAL               SASUM, SLAMCH, SLANGE
-      EXTERNAL           SASUM, SLAMCH, SLANGE
+      REAL               SASUM, AB_SLAMCH, SLANGE
+      EXTERNAL           SASUM, AB_SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SLABAD, SLARNV, SLASCL
@@ -147,10 +147,10 @@
 *
       IF( SCALE.NE.1 ) THEN
          NORMA = SLANGE( 'Max', M, N, A, LDA, DUMMY )
-         SMLNUM = SLAMCH( 'Safe minimum' )
+         SMLNUM = AB_SLAMCH( 'Safe minimum' )
          BIGNUM = ONE / SMLNUM
          CALL SLABAD( SMLNUM, BIGNUM )
-         SMLNUM = SMLNUM / SLAMCH( 'Epsilon' )
+         SMLNUM = SMLNUM / AB_SLAMCH( 'Epsilon' )
          BIGNUM = ONE / SMLNUM
 *
          IF( SCALE.EQ.2 ) THEN

@@ -151,8 +151,8 @@
       REAL               ANORM, EPS, T
 *     ..
 *     .. External Functions ..
-      REAL               SASUM, SLAMCH
-      EXTERNAL           SASUM, SLAMCH
+      REAL               SASUM, AB_SLAMCH
+      EXTERNAL           SASUM, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SAXPY, SCOPY
@@ -170,7 +170,7 @@
 *
 *     Determine EPS and the norm of A.
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       KD = KU + 1
       ANORM = ZERO
       DO 10 J = 1, N

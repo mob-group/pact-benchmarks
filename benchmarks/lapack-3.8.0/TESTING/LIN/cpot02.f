@@ -155,8 +155,8 @@
       REAL               ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      REAL               CLANHE, SCASUM, SLAMCH
-      EXTERNAL           CLANHE, SCASUM, SLAMCH
+      REAL               CLANHE, SCASUM, AB_SLAMCH
+      EXTERNAL           CLANHE, SCASUM, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CHEMM
@@ -175,7 +175,7 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       ANORM = CLANHE( '1', UPLO, N, A, LDA, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS

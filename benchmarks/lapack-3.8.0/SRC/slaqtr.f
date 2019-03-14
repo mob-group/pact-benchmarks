@@ -197,8 +197,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            AB_ISAMAX
-      REAL               AB_SASUM, AB_SDOT, SLAMCH, AB_SLANGE
-      EXTERNAL           AB_ISAMAX, AB_SASUM, AB_SDOT, SLAMCH, AB_SLANGE
+      REAL               AB_SASUM, AB_SDOT, AB_SLAMCH, AB_SLANGE
+      EXTERNAL           AB_ISAMAX, AB_SASUM, AB_SDOT, AB_SLAMCH, AB_SLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_SAXPY, AB_SLADIV, AB_SLALN2, AB_SSCAL
@@ -220,8 +220,8 @@
 *
 *     Set constants to control overflow
 *
-      EPS = SLAMCH( 'P' )
-      SMLNUM = SLAMCH( 'S' ) / EPS
+      EPS = AB_SLAMCH( 'P' )
+      SMLNUM = AB_SLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
 *
       XNORM = AB_SLANGE( 'M', N, N, T, LDT, D )

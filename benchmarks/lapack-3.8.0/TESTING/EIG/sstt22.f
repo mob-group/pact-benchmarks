@@ -163,8 +163,8 @@
       REAL               ANORM, AUKJ, ULP, UNFL, WNORM
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLANGE, SLANSY
-      EXTERNAL           SLAMCH, SLANGE, SLANSY
+      REAL               AB_SLAMCH, SLANGE, SLANSY
+      EXTERNAL           AB_SLAMCH, SLANGE, SLANSY
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGEMM
@@ -179,8 +179,8 @@
       IF( N.LE.0 .OR. M.LE.0 )
      $   RETURN
 *
-      UNFL = SLAMCH( 'Safe minimum' )
-      ULP = SLAMCH( 'Epsilon' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
+      ULP = AB_SLAMCH( 'Epsilon' )
 *
 *     Do Test 1
 *

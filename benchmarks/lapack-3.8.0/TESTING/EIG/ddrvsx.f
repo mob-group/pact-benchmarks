@@ -507,8 +507,8 @@
       COMMON             / SSLCT / SELOPT, SELDIM, SELVAL, SELWR, SELWI
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGET24, DLABAD, DLASET, DLASUM, DLATME, DLATMR,
@@ -584,10 +584,10 @@
 *
 *     More Important constants
 *
-      UNFL = DLAMCH( 'Safe minimum' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
       CALL DLABAD( UNFL, OVFL )
-      ULP = DLAMCH( 'Precision' )
+      ULP = AB_DLAMCH( 'Precision' )
       ULPINV = ONE / ULP
       RTULP = SQRT( ULP )
       RTULPI = ONE / RTULP

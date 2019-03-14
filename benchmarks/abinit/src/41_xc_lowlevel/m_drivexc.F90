@@ -465,10 +465,10 @@ subroutine echo_xc_name (ixc)
      message = 'LDA: new Teter (4/93) with spin-polarized option - ixc=1'
      citation = 'S. Goedecker, M. Teter, J. Huetter, PRB 54, 1703 (1996)' ! [[cite:Goedecker1996]]
    case (2)
-     message = 'LDA: Perdew-Zunger-Ceperley-Alder - ixc=2'
+     message = 'LDA: Perdew-Zunger-Ceperley-AAB_LDEr - ixc=2'
      citation = 'J.P.Perdew and A.Zunger, PRB 23, 5048 (1981) ' ! [[cite:Perdew1981]]
    case (3)
-     message = 'LDA: old Teter (4/91) fit to Ceperley-Alder data - ixc=3'
+     message = 'LDA: old Teter (4/91) fit to Ceperley-AAB_LDEr data - ixc=3'
      citation = ''
    case (4)
      message = 'LDA: Wigner - ixc=4'
@@ -480,7 +480,7 @@ subroutine echo_xc_name (ixc)
      message = 'LDA: "X-alpha" xc - ixc=6'
      citation = 'Slater J. C., Phys. Rev. 81, 385 (1951)' ! [[cite:Slater1951]]
    case (7)
-     message = 'LDA: Perdew-Wang 92 LSD fit to Ceperley-Alder data - ixc=7'
+     message = 'LDA: Perdew-Wang 92 LSD fit to Ceperley-AAB_LDEr data - ixc=7'
      citation = 'J.P.Perdew and Y.Wang, PRB 45, 13244 (1992)' ! [[cite:Perdew1992a]]
    case (8)
      message = 'LDA: Perdew-Wang 92 LSD , exchange-only - ixc=8'
@@ -763,12 +763,12 @@ subroutine size_dvxc(ixc,ndvxc,ngr2,nd2vxc,nspden,nvxcdgr,order,&
 !  Definition of ndvxc and nvxcdgr, 2nd dimension of the arrays of 2nd-order derivatives
 !  -------------------------------------------------------------------------------------
    if (ixc==1 .or. ixc==21 .or. ixc==22 .or. (ixc>=7 .and. ixc<=10) .or. ixc==13) then
-!    Routine xcspol: new Teter fit (4/93) to Ceperley-Alder data, with spin-pol option routine xcspol
+!    Routine xcspol: new Teter fit (4/93) to Ceperley-AAB_LDEr data, with spin-pol option routine xcspol
 !    Routine xcpbe, with different options (optpbe) and orders (order)
      ndvxc=min(nspden,2)+1
    else if (ixc>=2 .and. ixc<=6) then
-!    Perdew-Zunger fit to Ceperly-Alder data (no spin-pol)     !routine xcpzca
-!    Teter fit (4/91) to Ceperley-Alder values (no spin-pol)   !routine xctetr
+!    Perdew-Zunger fit to Ceperly-AAB_LDEr data (no spin-pol)     !routine xcpzca
+!    Teter fit (4/91) to Ceperley-AAB_LDEr values (no spin-pol)   !routine xctetr
 !    Wigner xc (no spin-pol)                                   !routine xcwign
 !    Hedin-Lundqvist xc (no spin-pol)                          !routine xchelu
 !    X-alpha (no spin-pol)                                     !routine xcxalp
@@ -1477,16 +1477,16 @@ subroutine drivexc(exc,ixc,npts,nspden,order,rho_updn,vxcrho,ndvxc,ngr2,nd2vxc,n
    if(present(vxclrho)) vxclrho(:,:)=zero
    if(present(vxctau)) vxctau(:,:)=zero
 
-!>>>>> New Teter fit (4/93) to Ceperley-Alder data, with spin-pol option
+!>>>>> New Teter fit (4/93) to Ceperley-AAB_LDEr data, with spin-pol option
  else if (ixc==1 .or. ixc==21 .or. ixc==22) then
-!  new Teter fit (4/93) to Ceperley-Alder data, with spin-pol option
+!  new Teter fit (4/93) to Ceperley-AAB_LDEr data, with spin-pol option
    if (order**2 <= 1) then
      call xcspol(exc,npts,nspden,order,rspts,vxcrho,zeta,ndvxc)
    else
      call xcspol(exc,npts,nspden,order,rspts,vxcrho,zeta,ndvxc,dvxc)
    end if
 
-!>>>>> Perdew-Zunger fit to Ceperly-Alder data (no spin-pol)
+!>>>>> Perdew-Zunger fit to Ceperly-AAB_LDEr data (no spin-pol)
  else if (ixc==2) then
    if (order**2 <= 1) then
      call xcpzca(exc,npts,order,rhotot,rspts,vxcrho(:,1))
@@ -1494,7 +1494,7 @@ subroutine drivexc(exc,ixc,npts,nspden,order,rho_updn,vxcrho,ndvxc,ngr2,nd2vxc,n
      call xcpzca(exc,npts,order,rhotot,rspts,vxcrho(:,1),dvxc)
    end if
 
-!>>>>> Teter fit (4/91) to Ceperley-Alder values (no spin-pol)
+!>>>>> Teter fit (4/91) to Ceperley-AAB_LDEr values (no spin-pol)
  else if (ixc==3) then
    if (order**2 <= 1) then
      call xctetr(exc,npts,order,rhotot,rspts,vxcrho(:,1))

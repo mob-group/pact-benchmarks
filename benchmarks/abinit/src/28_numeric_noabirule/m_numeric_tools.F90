@@ -956,7 +956,7 @@ pure logical function isdiagmat_int(mat) result(ans)
    do ii=1,size(mat,dim=1)
      if (ii == jj) cycle
      if (mat(ii,jj) /= 0) then
-       ans = .False.; return
+       ans = .false.; return
      end if
    end do
  end do
@@ -1009,7 +1009,7 @@ pure logical function isdiagmat_rdp(mat, atol) result(ans)
    do ii=1,size(mat,dim=1)
      if (ii == jj) cycle
      if (abs(mat(ii,jj)) > my_atol) then
-       ans = .False.; return
+       ans = .false.; return
      end if
    end do
  end do
@@ -1024,7 +1024,7 @@ end function isdiagmat_rdp
 !!  l2int_1D
 !!
 !! FUNCTION
-!!  Convert a logical array into an int array (True --> 1, False --> 0)
+!!  Convert a logical array into an int array (True --> 1, false --> 0)
 !!
 !! INPUTS
 !!  larr(:)=the input logical array
@@ -1065,7 +1065,7 @@ end function l2int_1D
 !!  l2int_2D
 !!
 !! FUNCTION
-!!  Convert a logical array into an int array (True --> 1, False --> 0)
+!!  Convert a logical array into an int array (True --> 1, false --> 0)
 !!
 !! INPUTS
 !!  larr(:)=the input logical array
@@ -1106,7 +1106,7 @@ end function l2int_2D
 !!  l2int_3D
 !!
 !! FUNCTION
-!!  Convert a logical array into an int array (True --> 1, False --> 0)
+!!  Convert a logical array into an int array (True --> 1, false --> 0)
 !!
 !! INPUTS
 !!  larr(:)=the input logical array
@@ -2097,7 +2097,7 @@ end function imin_loc_rdp
 !! FUNCTION
 !!  Find the index of the first occurrence of .True. in a logical array.
 !!  Return -1 if not found. If back is True, the search starts from the
-!!  last element of the array (default: False).
+!!  last element of the array (default: false).
 !!
 !! INPUTS
 !!  mask(:)=Input logical mask
@@ -2132,7 +2132,7 @@ integer pure function lfind(mask, back)
 
 !************************************************************************
 
- do_back = .False.; if (present(back)) do_back = back
+ do_back = .false.; if (present(back)) do_back = back
  lfind = -1; nitems = size(mask); if (nitems == 0) return
 
  if (do_back) then
@@ -2317,7 +2317,7 @@ subroutine mask2blocks(mask,nblocks,blocks)
  do ii=start+1,nitems
    if (.not.mask(ii)) then
      if (inblock) then
-       inblock = .False.
+       inblock = .false.
        work(2,nblocks) = ii - 1
      end if
    else
@@ -2621,7 +2621,7 @@ subroutine llsfit_svd(xx,yy,sigma,nfuncs,funcs,chisq,par,var,cov,info)
  ABI_MALLOC(S,(nfuncs))
  ABI_MALLOC(Vt,(nfuncs,nfuncs))
 
- call DGESVD('A','A',npts,nfuncs,dmat,npts,S,U,npts,Vt,nfuncs,work,lwork,info)
+ call AB_DGESVD('A','A',npts,nfuncs,dmat,npts,S,U,npts,Vt,nfuncs,work,lwork,info)
  ABI_FREE(work)
  GOTO 10
  !
@@ -4370,7 +4370,7 @@ subroutine print_arr1d_spc(arr,max_r,unit,mode_paral)
  write(fmt1,*)'(3x,',mr,'f8.3)'
 
  write(msg,fmth)(ii,ii=1,mr)
- call wrtout(unt,msg,mode) !header
+ call wrtout(unt,msg,mode) !AB_HEADER
  write(msg,fmt1)REAL (arr(1:mr))
  call wrtout(unt,msg,mode) !real part
  write(msg,fmt1)AIMAG(arr(1:mr))
@@ -4439,7 +4439,7 @@ subroutine print_arr1d_dpc(arr,max_r,unit,mode_paral)
  write(fmt1,*)'(3x,',mr,'f8.3)'
 
  write(msg,fmth)(ii,ii=1,mr)
- call wrtout(unt,msg,mode) !header
+ call wrtout(unt,msg,mode) !AB_HEADER
  write(msg,fmt1)REAL (arr(1:mr))
  call wrtout(unt,msg,mode) !real part
  write(msg,fmt1)AIMAG(arr(1:mr))
@@ -4511,7 +4511,7 @@ subroutine print_arr2d_spc(arr,max_r,max_c,unit,mode_paral)
  write(fmt2,*)'(5x   ,',mc,'f8.3,a)'
 
  write(msg,fmth)(jj,jj=1,mc)
- call wrtout(unt,msg,mode) !header
+ call wrtout(unt,msg,mode) !AB_HEADER
  do ii=1,mr
    write(msg,fmt1)ii,REAL(arr(ii,1:mc))
    call wrtout(unt,msg,mode) !real part
@@ -4585,7 +4585,7 @@ subroutine print_arr2d_dpc(arr,max_r,max_c,unit,mode_paral)
  write(fmt2,*)'(5x   ,',mc,'f8.3,a)'
 
  write(msg,fmth)(jj,jj=1,mc)
- call wrtout(unt,msg,mode) !header
+ call wrtout(unt,msg,mode) !AB_HEADER
  do ii=1,mr
    write(msg,fmt1)ii,REAL(arr(ii,1:mc))
    call wrtout(unt,msg,mode) !real part
@@ -6421,7 +6421,7 @@ subroutine nderiv(hh,yy,zz,ndim,norder)
    zz(ndim-2)=cc
    zz(ndim-3)=bb
 
-!  SECOND DERIVATIVE
+!  second DERIVATIVE
 !  =================
  else
    h1=h1/hh
@@ -6611,7 +6611,7 @@ function uniformrandom(seed)
 !  First generator
    ii1=mod(ic1-seed,im1)
    ii1=mod(ia1*ii1+ic1,im1)
-!  Second generator
+!  second generator
    ii2=mod(ii1,im2)
    ii1=mod(ia1*ii1+ic1,im1)
 !  Third generator

@@ -485,7 +485,7 @@ subroutine dos_calcnwrite(dos,dtset,crystal,ebands,fildata,comm)
    end if
  end if
 
- ! Write the header of the DOS file, and determine the energy range and spacing
+ ! Write the AB_HEADER of the DOS file, and determine the energy range and spacing
  prtdos=dtset%prtdos
  buffer=0.01_dp ! Size of the buffer around the min and max ranges
 
@@ -614,7 +614,7 @@ subroutine dos_calcnwrite(dos,dtset,crystal,ebands,fildata,comm)
    ! Write the DOS value in the DOS file
    ! Print the data for this energy. Note the upper limit (dos_max), to be consistent with the format.
    ! The use of "E" format is not adequate, for portability of the self-testing procedure.
-   ! header lines depend on the type of DOS (projected etc...) which is output
+   ! AB_HEADER lines depend on the type of DOS (projected etc...) which is output
 
    if (.not. iam_master) goto 10
    call write_extra_headers()
@@ -1417,7 +1417,7 @@ subroutine dens_in_sph(cmax,cg,gmet,istwfk,kg_k,natom,ngfft,mpi_enreg,npw_k,&
  end do
 
 !-----------------------------------------------------------------
-!For each atom call sphericaldens to calculate
+!For each atom call sphericaAB_LDEns to calculate
 !n(G) * 1/|G|^3  *  int_0^2*\pi*r_{max}*|G| 4 \pi y^2 j_0 (y) dy
 !for all G vectors put into array sphrhog
 !scalar product of phase factors with spherically convoluted density
@@ -1432,7 +1432,7 @@ subroutine dens_in_sph(cmax,cg,gmet,istwfk,kg_k,natom,ngfft,mpi_enreg,npw_k,&
 
  do iatom=1,natom
 
-   call sphericaldens(rhog,gnorm,nfft,rmax(iatom),sphrhog)
+   call sphericaAB_LDEns(rhog,gnorm,nfft,rmax(iatom),sphrhog)
 !  -----------------------------------------------------------------
 !  Compute the phases for the whole set of fft vectors
 !  -----------------------------------------------------------------
@@ -1460,9 +1460,9 @@ subroutine dens_in_sph(cmax,cg,gmet,istwfk,kg_k,natom,ngfft,mpi_enreg,npw_k,&
 end subroutine dens_in_sph
 !!***
 
-!!****f* m_epjdos/sphericaldens
+!!****f* m_epjdos/sphericaAB_LDEns
 !! NAME
-!! sphericaldens
+!! sphericaAB_LDEns
 !!
 !! FUNCTION
 !! Compute the convolution of a function with
@@ -1492,13 +1492,13 @@ end subroutine dens_in_sph
 !!
 !! SOURCE
 
-subroutine sphericaldens(fofg,gnorm,nfft,rmax,sphfofg)
+subroutine sphericaAB_LDEns(fofg,gnorm,nfft,rmax,sphfofg)
 
 
 !This section has been created automatically by the script Abilint (TD).
 !Do not modify the following lines by hand.
 #undef ABI_FUNC
-#define ABI_FUNC 'sphericaldens'
+#define ABI_FUNC 'sphericaAB_LDEns'
 !End of the abilint section
 
  implicit none
@@ -1533,7 +1533,7 @@ subroutine sphericaldens(fofg,gnorm,nfft,rmax,sphfofg)
    end if
  end do
 
-end subroutine sphericaldens
+end subroutine sphericaAB_LDEns
 !!***
 
 !!****f* m_epjdos/prtfatbands
@@ -1795,7 +1795,7 @@ end subroutine prtfatbands
 !! INPUTS
 !!  crystal<crystal_t>=Object defining the unit cell and its symmetries.
 !!  ebands<ebands_t>=Band structure data.
-!!  hdr<hdr_t>=Abinit header
+!!  hdr<hdr_t>=Abinit AB_HEADER
 !!  dtset<dtset_type>=Dataset type
 !!  psps <type(pseudopotential_type)>=variables related to pseudopotentials
 !!  pawtab(ntypat*usepaw) <type(pawtab_type)>=paw tabulated starting data
@@ -1852,7 +1852,7 @@ subroutine fatbands_ncwrite(dos, crystal, ebands, hdr, dtset, psps, pawtab, ncid
  fform = fform_from_ext("FATBANDS.nc")
  ABI_CHECK(fform /= 0, "Cannot find fform associated to FATBANDS.nc")
 
- ! Write header, crystal structure and band energies.
+ ! Write AB_HEADER, crystal structure and band energies.
  NCF_CHECK(hdr_ncwrite(hdr, ncid, fform, nc_define=.True.))
  NCF_CHECK(crystal_ncwrite(crystal, ncid))
  NCF_CHECK(ebands_ncwrite(ebands, ncid))
@@ -2046,7 +2046,7 @@ subroutine partial_dos_fractions(dos,crystal,dtset,eigen,occ,npwarr,kg,cg,mcg,co
 
 !Local variables-------------------------------
 !scalars
- logical,parameter :: write_procar = .False.
+ logical,parameter :: write_procar = .false.
  integer,parameter :: prtsphere0=0 ! do not output all the band by band details for projections.
  integer :: shift_b,shift_sk,iat,iatom,iband,ierr,ikpt,ilang,ioffkg,is1, is2, isoff
  integer :: ipw,isppol,ixint,mbess,mcg_disk,me_kpt,shift_cg
@@ -2109,7 +2109,7 @@ subroutine partial_dos_fractions(dos,crystal,dtset,eigen,occ,npwarr,kg,cg,mcg,co
  call cwtime(cpu, wall, gflops, "start")
 
  if (write_procar) then
-   ! open file for each proc, and print header for master node
+   ! open file for each proc, and print AB_HEADER for master node
    call int2char4(me_kpt, ikproc_str)
    filename = 'PROCAR_'//ikproc_str
    if (open_file(filename, msg, newunit=unit_procar, form="formatted", action="write") /= 0) then

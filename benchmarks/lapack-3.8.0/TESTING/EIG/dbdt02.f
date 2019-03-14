@@ -136,8 +136,8 @@
       DOUBLE PRECISION   BNORM, EPS, REALMN
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DASUM, DLAMCH, DLANGE
-      EXTERNAL           DASUM, DLAMCH, DLANGE
+      DOUBLE PRECISION   DASUM, AB_DLAMCH, DLANGE
+      EXTERNAL           DASUM, AB_DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DCOPY, DGEMV
@@ -153,7 +153,7 @@
       IF( M.LE.0 .OR. N.LE.0 )
      $   RETURN
       REALMN = DBLE( MAX( M, N ) )
-      EPS = DLAMCH( 'Precision' )
+      EPS = AB_DLAMCH( 'Precision' )
 *
 *     Compute norm( B - U * C )
 *

@@ -179,8 +179,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, DLANGE
-      EXTERNAL           LSAME, DLAMCH, DLANGE
+      DOUBLE PRECISION   AB_DLAMCH, DLANGE
+      EXTERNAL           LSAME, AB_DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGEMM, DLACPY, DLASCL, XERBLA
@@ -213,7 +213,7 @@
       END IF
 *
       NORMA = DLANGE( 'One-norm', M, N, A, LDA, RWORK )
-      SMLNUM = DLAMCH( 'Safe minimum' ) / DLAMCH( 'Precision' )
+      SMLNUM = AB_DLAMCH( 'Safe minimum' ) / AB_DLAMCH( 'Precision' )
       BIGNUM = ONE / SMLNUM
       ISCL = 0
 *
@@ -252,7 +252,7 @@
      $      ERR = ERR / NORMRS
       END IF
 *
-      DQRT17 = ERR / ( DLAMCH( 'Epsilon' )*DBLE( MAX( M, N, NRHS ) ) )
+      DQRT17 = ERR / ( AB_DLAMCH( 'Epsilon' )*DBLE( MAX( M, N, NRHS ) ) )
       RETURN
 *
 *     End of DQRT17

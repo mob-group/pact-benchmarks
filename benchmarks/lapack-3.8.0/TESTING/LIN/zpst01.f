@@ -168,9 +168,9 @@
 *     ..
 *     .. External Functions ..
       COMPLEX*16         ZDOTC
-      DOUBLE PRECISION   DLAMCH, ZLANHE
+      DOUBLE PRECISION   AB_DLAMCH, ZLANHE
       LOGICAL            LSAME
-      EXTERNAL           ZDOTC, DLAMCH, ZLANHE, LSAME
+      EXTERNAL           ZDOTC, AB_DLAMCH, ZLANHE, LSAME
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZHER, ZSCAL, ZTRMV
@@ -189,7 +189,7 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       ANORM = ZLANHE( '1', UPLO, N, A, LDA, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS

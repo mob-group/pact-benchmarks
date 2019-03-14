@@ -161,8 +161,8 @@
       REAL               ANORM, EPS, LI
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLANGT, SLANHS
-      EXTERNAL           SLAMCH, SLANGT, SLANHS
+      REAL               AB_SLAMCH, SLANGT, SLANHS
+      EXTERNAL           AB_SLAMCH, SLANGT, SLANHS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN
@@ -179,7 +179,7 @@
          RETURN
       END IF
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
 *
 *     Copy the matrix U to WORK.
 *

@@ -173,13 +173,13 @@
 *> \param[in] EPS
 *> \verbatim
 *>          EPS is REAL
-*>          EPS = SLAMCH('Epsilon')
+*>          EPS = AB_SLAMCH('Epsilon')
 *> \endverbatim
 *>
 *> \param[in] SFMIN
 *> \verbatim
 *>          SFMIN is REAL
-*>          SFMIN = SLAMCH('Safe Minimum')
+*>          SFMIN = AB_SLAMCH('Safe Minimum')
 *> \endverbatim
 *>
 *> \param[in] TOL

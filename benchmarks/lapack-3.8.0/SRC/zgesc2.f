@@ -145,8 +145,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            AB_IZAMAX
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           AB_IZAMAX, DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_IZAMAX, AB_DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCMPLX
@@ -155,8 +155,8 @@
 *
 *     Set constant to control overflow
 *
-      EPS = DLAMCH( 'P' )
-      SMLNUM = DLAMCH( 'S' ) / EPS
+      EPS = AB_DLAMCH( 'P' )
+      SMLNUM = AB_DLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
       CALL AB_DLABAD( SMLNUM, BIGNUM )
 *

@@ -59,7 +59,7 @@ contains
   LWORK=3*(ntotcoeff)**2+max(3*InVar%natom*InVar%nstep,4*(ntotcoeff)**2+4*(ntotcoeff))
   ABI_MALLOC(WORK,(LWORK))
   ABI_MALLOC(IWORK,(8*(ntotcoeff))) ; WORK(:)=0.d0
-  call DGESDD('S',3*InVar%natom*InVar%nstep,ntotcoeff,CoeffMoore%fcoeff,3*InVar%natom*InVar%nstep,&
+  call AB_DGESDD('S',3*InVar%natom*InVar%nstep,ntotcoeff,CoeffMoore%fcoeff,3*InVar%natom*InVar%nstep,&
 &   sigma,matU,3*InVar%natom*InVar%nstep,transmatV,ntotcoeff,WORK,LWORK,IWORK,INFO) 
   ABI_FREE(CoeffMoore%fcoeff)
   ABI_FREE(WORK)
@@ -79,19 +79,19 @@ contains
   
   write(InVar%stdout,*) ' Calculation of the pseudo-inverse...'
   ABI_MALLOC(tmp1,(ntotcoeff,3*InVar%natom*InVar%nstep)) ; tmp1(:,:)=0.d0
-  call DGEMM('N','T',ntotcoeff,3*InVar%natom*InVar%nstep,ntotcoeff,1.d0,pseudo_sigma,ntotcoeff,matU,&
+  call AB_DGEMM('N','T',ntotcoeff,3*InVar%natom*InVar%nstep,ntotcoeff,1.d0,pseudo_sigma,ntotcoeff,matU,&
 &   3*InVar%natom*InVar%nstep,1.d0,tmp1,ntotcoeff)
   ABI_FREE(matU)
   ABI_FREE(pseudo_sigma)
   ABI_MALLOC(pseudo_inverse,(ntotcoeff,3*InVar%natom*InVar%nstep)) ; pseudo_inverse(:,:)=0.d0
-  call DGEMM('T','N',ntotcoeff,3*InVar%natom*InVar%nstep,ntotcoeff,1.d0,transmatV,ntotcoeff,&
+  call AB_DGEMM('T','N',ntotcoeff,3*InVar%natom*InVar%nstep,ntotcoeff,1.d0,transmatV,ntotcoeff,&
 &   tmp1,ntotcoeff,1.d0,pseudo_inverse,ntotcoeff)
   ABI_FREE(tmp1)
   ABI_FREE(transmatV)
   ABI_MALLOC(fcart_tmp,(3*InVar%natom*InVar%nstep,1)); fcart_tmp(:,:)=zero  
   fcart_tmp(:,1)=Forces_MD(:)
 ! NOTE, we have to solve F_ij = -\sum_j \Phi_ij u_j, so we add a minus sign to the pseudo_inverse  
-  call DGEMM('N','N',ntotcoeff,1,3*InVar%natom*InVar%nstep,1.d0,-pseudo_inverse,ntotcoeff,fcart_tmp,&
+  call AB_DGEMM('N','N',ntotcoeff,1,3*InVar%natom*InVar%nstep,1.d0,-pseudo_inverse,ntotcoeff,fcart_tmp,&
 &   3*InVar%natom*InVar%nstep,1.d0,Phij_coeff,ntotcoeff)
   ABI_FREE(fcart_tmp)
   ABI_FREE(pseudo_inverse)
@@ -179,10 +179,10 @@ contains
           Rlatt(3)=real(kk-1)
 !         Then compute the reduced positions
           tmp(:)=Rlatt(:)+InVar%xred_unitcell(:,iatcell)
-          call DGEMV('T',3,3,1.d0,Lattice%multiplicitym1(:,:),3,tmp(:),1,0.d0,xred_tmp(:),1)
+          call AB_DGEMV('T',3,3,1.d0,Lattice%multiplicitym1(:,:),3,tmp(:),1,0.d0,xred_tmp(:),1)
 
 !         If the first atom of the pattern is in the [0;1[ range then keep all the
-!         atoms of the pattern (even if the others are outside the box). Elsewhere, 
+!         atoms of the pattern (even if the others are outside the box). ELSEwhere, 
 !         none are taken.
           if (iatcell==1) then
             if (minval(xred_tmp(:)).lt.0.d0.or.maxval(xred_tmp(:)).ge.(1.d0-1.d-12)) then
@@ -197,7 +197,7 @@ contains
             MSG_ERROR('The number of atoms found in the bigbox exceeds natom' )
           end if  
           xred_ideal(:,iatom)=xred_tmp(:)
-          call DGEMV('T',3,3,1.d0,Lattice%multiplicitym1(:,:),3,Rlatt(:),1,0.d0,Rlatt_red(:,1,iatom),1)
+          call AB_DGEMV('T',3,3,1.d0,Lattice%multiplicitym1(:,:),3,Rlatt(:),1,0.d0,Rlatt_red(:,1,iatom),1)
           iatom=iatom+1
         end do   
       end do
@@ -213,7 +213,7 @@ contains
     do fatom=1,InVar%natom
       tmp(:)=xred_ideal(:,fatom)-xred_ideal(:,eatom)
       call tdep_make_inbox(tmp,1,1d-3)
-      call DGEMV('T',3,3,1.d0,Lattice%rprimd_MD(:,:),3,tmp(:),1,0.d0,distance(eatom,fatom,2:4),1)
+      call AB_DGEMV('T',3,3,1.d0,Lattice%rprimd_MD(:,:),3,tmp(:),1,0.d0,distance(eatom,fatom,2:4),1)
       do ii=1,3
 !       Remove the rounding errors before writing (for non regression testing purposes)
         if (abs(distance(eatom,fatom,ii+1)).lt.tol8) distance(eatom,fatom,ii+1)=zero
@@ -458,10 +458,10 @@ contains
 ! --> In cartesian coordinates  
   do iatom=1,InVar%natom
     tmp(:)=zero
-    call DGEMV('T',3,3,1.d0,Lattice%rprimd_MD(:,:),3,xred_ideal (:,iatom),1,0.d0,tmp(:),1)
+    call AB_DGEMV('T',3,3,1.d0,Lattice%rprimd_MD(:,:),3,xred_ideal (:,iatom),1,0.d0,tmp(:),1)
     write(31,'(a,1x,3(f10.6,1x))') 'Icart',tmp(:)
     tmp(:)=zero
-    call DGEMV('T',3,3,1.d0,Lattice%rprimd_MD(:,:),3,xred_center(:,FromIdeal2Average(iatom)),1,0.d0,tmp(:),1)
+    call AB_DGEMV('T',3,3,1.d0,Lattice%rprimd_MD(:,:),3,xred_center(:,FromIdeal2Average(iatom)),1,0.d0,tmp(:),1)
     write(31,'(a,1x,3(f10.6,1x))') 'Ccart',tmp(:)
   end do  
   close(31)
@@ -473,7 +473,7 @@ contains
 !FB    do fatom=1,InVar%natom
 !FB      tmp(:)=xred_center(:,FromIdeal2Average(fatom))-xred_center(:,FromIdeal2Average(eatom))
 !FB      call tdep_make_inbox(tmp,1,1d-3)
-!FB      call DGEMV('T',3,3,1.d0,Lattice%rprimd_MD(:,:),3,tmp(:),1,0.d0,distance_average(eatom,fatom,2:4),1)
+!FB      call AB_DGEMV('T',3,3,1.d0,Lattice%rprimd_MD(:,:),3,tmp(:),1,0.d0,distance_average(eatom,fatom,2:4),1)
 !FB      do ii=1,3
 !FB!       Remove the rounding errors before writing (for non regression testing purposes)
 !FB        if (abs(distance_average(eatom,fatom,ii+1)).lt.tol8) distance_average(eatom,fatom,ii+1)=zero
@@ -499,15 +499,15 @@ contains
   ABI_MALLOC(xcart_average,(3,InVar%natom))            ; xcart_average(:,:)=0.d0
   ABI_MALLOC(ucart_tmp    ,(3,InVar%natom,InVar%nstep)); ucart_tmp(:,:,:)=0.d0
   do iatom=1,InVar%natom
-    call DGEMV('T',3,3,1.d0,Lattice%rprimd_MD(:,:),3,xred_ideal  (:,iatom),1,0.d0,xcart_ideal  (:,iatom),1)
-    call DGEMV('T',3,3,1.d0,Lattice%rprimd_MD(:,:),3,xred_average(:,iatom),1,0.d0,xcart_average(:,iatom),1)
+    call AB_DGEMV('T',3,3,1.d0,Lattice%rprimd_MD(:,:),3,xred_ideal  (:,iatom),1,0.d0,xcart_ideal  (:,iatom),1)
+    call AB_DGEMV('T',3,3,1.d0,Lattice%rprimd_MD(:,:),3,xred_average(:,iatom),1,0.d0,xcart_average(:,iatom),1)
     do iatcell=1,InVar%natom_unitcell
-      call DGEMV('T',3,3,1.d0,Lattice%rprimd_MD(:,:),3,Rlatt_red(:,iatcell,iatom),1,0.d0,Rlatt_cart(:,iatcell,iatom),1)
+      call AB_DGEMV('T',3,3,1.d0,Lattice%rprimd_MD(:,:),3,Rlatt_red(:,iatcell,iatom),1,0.d0,Rlatt_cart(:,iatcell,iatom),1)
     end do  
   end do
   do istep=1,InVar%nstep
     do iatom=1,InVar%natom
-      call DGEMV('T',3,3,1.d0,Lattice%rprimd_MD(:,:),3,InVar%xred(:,FromIdeal2Average(iatom),istep),&
+      call AB_DGEMV('T',3,3,1.d0,Lattice%rprimd_MD(:,:),3,InVar%xred(:,FromIdeal2Average(iatom),istep),&
 &       1,0.d0,xcart(:,FromIdeal2Average(iatom),istep),1)
       if (InVar%Use_ideal_positions.eq.0) then
         ucart_tmp(:,iatom,istep)=xcart(:,FromIdeal2Average(iatom),istep)-xcart_average(:,FromIdeal2Average(iatom))
@@ -548,7 +548,7 @@ contains
   end do  
   do iatom=1,InVar%natom
     do iatcell=1,InVar%natom_unitcell
-      call DGEMV('T',3,3,1.d0,rprimd_MD_tmp(:,:),3,Rlatt_red(:,iatcell,iatom),1,0.d0,Rlatt4dos(:,iatcell,iatom),1)
+      call AB_DGEMV('T',3,3,1.d0,rprimd_MD_tmp(:,:),3,Rlatt_red(:,iatcell,iatom),1,0.d0,Rlatt4dos(:,iatcell,iatom),1)
     end do  
   end do
 
@@ -1009,7 +1009,7 @@ subroutine tdep_calc_nbcoeff(distance,iatcell,InVar,ishell,jatom,katom,ncoeff,no
     LWORK=4*3
     ABI_MALLOC(WORK,(LWORK)); WORK(:)=zero
 !   This one is real and could be non-symmetric
-    call dgeev( 'N', 'V', 3, eigvec, 3, WR, WI, VL, 3, VR, 3, WORK, LWORK, INFO)
+    call AB_DGEEV( 'N', 'V', 3, eigvec, 3, WR, WI, VL, 3, VR, 3, WORK, LWORK, INFO)
     ABI_FREE(WORK)
 
 !   Build the real and imaginary parts of the eigenvectors and eigenvalues
@@ -1242,7 +1242,7 @@ subroutine tdep_calc_nbcoeff(distance,iatcell,InVar,ishell,jatom,katom,ncoeff,no
     MSG_ERROR('There are too many independant vectors')
   end if
 
-! On cherche les (norder-ncount) vecteurs orthogonaux aux vecteurs non-nuls
+! On AB_CHERche les (norder-ncount) vecteurs orthogonaux aux vecteurs non-nuls
 ! --> Orthogonalisation de Gram-Schmidt
   ABI_MALLOC(tab_vec,(norder,norder)); tab_vec(:,:)=czero
   do kk=1,norder

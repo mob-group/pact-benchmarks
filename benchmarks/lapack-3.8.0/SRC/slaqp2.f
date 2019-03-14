@@ -181,13 +181,13 @@
 *     ..
 *     .. External Functions ..
       INTEGER            AB_ISAMAX
-      REAL               SLAMCH, AB_SNRM2
-      EXTERNAL           AB_ISAMAX, SLAMCH, AB_SNRM2
+      REAL               AB_SLAMCH, AB_SNRM2
+      EXTERNAL           AB_ISAMAX, AB_SLAMCH, AB_SNRM2
 *     ..
 *     .. Executable Statements ..
 *
       MN = MIN( M-OFFSET, N )
-      TOL3Z = SQRT(SLAMCH('Epsilon'))
+      TOL3Z = SQRT(AB_SLAMCH('Epsilon'))
 *
 *     Compute factorization.
 *

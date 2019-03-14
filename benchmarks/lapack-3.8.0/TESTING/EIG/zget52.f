@@ -195,8 +195,8 @@
       COMPLEX*16         ACOEFF, ALPHAI, BCOEFF, BETAI, X
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, ZLANGE
-      EXTERNAL           DLAMCH, ZLANGE
+      DOUBLE PRECISION   AB_DLAMCH, ZLANGE
+      EXTERNAL           AB_DLAMCH, ZLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZGEMV
@@ -217,9 +217,9 @@
       IF( N.LE.0 )
      $   RETURN
 *
-      SAFMIN = DLAMCH( 'Safe minimum' )
+      SAFMIN = AB_DLAMCH( 'Safe minimum' )
       SAFMAX = ONE / SAFMIN
-      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
+      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
 *
       IF( LEFT ) THEN
          TRANS = 'C'

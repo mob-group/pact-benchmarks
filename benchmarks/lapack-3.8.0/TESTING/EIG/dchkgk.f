@@ -86,8 +86,8 @@
      $                   VRF( LDVR, LDVR ), WORK( LDWORK, LDWORK )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLANGE
-      EXTERNAL           DLAMCH, DLANGE
+      DOUBLE PRECISION   AB_DLAMCH, DLANGE
+      EXTERNAL           AB_DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGEMM, DGGBAK, DGGBAL, DLACPY
@@ -107,7 +107,7 @@
       KNT = 0
       RMAX = ZERO
 *
-      EPS = DLAMCH( 'Precision' )
+      EPS = AB_DLAMCH( 'Precision' )
 *
    10 CONTINUE
       READ( NIN, FMT = * )N, M

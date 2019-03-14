@@ -403,7 +403,7 @@ subroutine outnesting(base_name,gmet,gprimd,kptrlatt,nestordered,nkpt,nqpath,prt
    MSG_BUG(message)
  end if
 
- ! open output file and write header
+ ! open output file and write AB_HEADER
  if (open_file(base_name,message,newunit=unit_nest,status="unknown",form="formatted",action="write") /= 0) then
     MSG_ERROR(message)
  end if

@@ -480,7 +480,7 @@ integer function symkchk(kptns,nkpt,nsym,symrec,timrev,errmsg) result(ierr)
 &         +kptns(3,ikpt)*symrec(ii,3,isym)
        end do
 
-!      Second loop k-points
+!      second loop k-points
        do ikpt2=1,nkpt
 
 !        Test for match of symmetric and any vector (including original)
@@ -1018,7 +1018,7 @@ subroutine getkgrid(chksymbreak,iout,iscf,kpt,kptopt,kptrlatt,kptrlen,&
  real(dp) :: gmet_super(3,3),gprimd(3,3),gprimd_super(3,3),klatt2(3,3)
  real(dp) :: klatt3(3,3),kptrlattr(3,3),ktransf(3,3),ktransf_invt(3,3)
  real(dp) :: metmin(3,3),minim(3,3),rmet(3,3),rmet_super(3,3),rprimd_super(3,3)
- real(dp),allocatable :: deltak(:,:),kpt_fullbz(:,:),shiftk2(:,:),shiftk3(:,:),spkpt(:,:),wtk_folded(:),wtk_fullbz(:)
+ real(dp),allocatable :: deltak(:,:),kpt_fullbz(:,:),shiftk2(:,:),shiftk3(:,:),spkpt(:,:),wtk_foAB_LDEd(:),wtk_fullbz(:)
 
 ! *************************************************************************
 
@@ -1332,7 +1332,7 @@ subroutine getkgrid(chksymbreak,iout,iscf,kpt,kptopt,kptrlatt,kptrlen,&
    ABI_ALLOCATE(indkpt,(nkpt_fullbz))
    ABI_ALLOCATE(kpt_fullbz,(3,nkpt_fullbz))
    ABI_ALLOCATE(wtk_fullbz,(nkpt_fullbz))
-   ABI_ALLOCATE(wtk_folded,(nkpt_fullbz))
+   ABI_ALLOCATE(wtk_foAB_LDEd,(nkpt_fullbz))
 
    kpt_fullbz(:,:)=spkpt(:,1:nkpt_fullbz)
    wtk_fullbz(1:nkpt_fullbz)=1.0_dp/dble(nkpt_fullbz)
@@ -1340,7 +1340,7 @@ subroutine getkgrid(chksymbreak,iout,iscf,kpt,kptopt,kptrlatt,kptrlen,&
    timrev=1;if (kptopt==4) timrev=0
 
    call symkpt(chksymbreak,gmet,indkpt,iout,kpt_fullbz,nkpt_fullbz,&
-&   nkpt_computed,nsym_used,symrec,timrev,wtk_fullbz,wtk_folded)
+&   nkpt_computed,nsym_used,symrec,timrev,wtk_fullbz,wtk_foAB_LDEd)
 
    ABI_DEALLOCATE(symrec)
    ABI_DEALLOCATE(wtk_fullbz)
@@ -1369,14 +1369,14 @@ subroutine getkgrid(chksymbreak,iout,iscf,kpt,kptopt,kptrlatt,kptrlen,&
    if(nkpt/=0)then
      do ikpt=1,nkpt
        kpt(:,ikpt)=kpt_fullbz(:,indkpt(ikpt))
-       if(iscf>=0 .or. iscf==-3 .or. iscf==-1.or.iscf==-2)wtk(ikpt)=wtk_folded(indkpt(ikpt))
+       if(iscf>=0 .or. iscf==-3 .or. iscf==-1.or.iscf==-2)wtk(ikpt)=wtk_foAB_LDEd(indkpt(ikpt))
      end do
    end if
 
    ABI_DEALLOCATE(indkpt)
    ABI_DEALLOCATE(kpt_fullbz)
    ABI_DEALLOCATE(spkpt)
-   ABI_DEALLOCATE(wtk_folded)
+   ABI_DEALLOCATE(wtk_foAB_LDEd)
 
  else if(kptopt==3)then
 
@@ -1862,7 +1862,7 @@ subroutine smpbz(brav,iout,kptrlatt,mkpt,nkpt,nshiftk,option,shiftk,spkpt,downsa
 
 !DEBUG
 !        write(std_out,*)' First primitive vector of the k lattice :',klatt(:,1)
-!        write(std_out,*)' Second primitive vector of the k lattice :',klatt(:,2)
+!        write(std_out,*)' second primitive vector of the k lattice :',klatt(:,2)
 !        write(std_out,*)' Third primitive vector of the k lattice :',klatt(:,3)
 !ENDDEBUG
 

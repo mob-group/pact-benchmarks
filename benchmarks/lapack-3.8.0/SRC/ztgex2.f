@@ -228,8 +228,8 @@
       COMPLEX*16         S( LDST, LDST ), T( LDST, LDST ), WORK( 8 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_ZLACPY, AB_ZLARTG, AB_ZLASSQ, AB_ZROT
@@ -257,8 +257,8 @@
 *
 *     Compute the threshold for testing the acceptance of swapping.
 *
-      EPS = DLAMCH( 'P' )
-      SMLNUM = DLAMCH( 'S' ) / EPS
+      EPS = AB_DLAMCH( 'P' )
+      SMLNUM = AB_DLAMCH( 'S' ) / EPS
       SCALE = DBLE( CZERO )
       SUM = DBLE( CONE )
       CALL AB_ZLACPY( 'Full', M, M, S, LDST, WORK, M )

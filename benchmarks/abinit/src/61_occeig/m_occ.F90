@@ -269,7 +269,7 @@ subroutine getnel(doccde,dosdeltae,eigen,entropy,fermie,maxocc,mband,nband,&
    end if
    nene=nint((enemax-enemin)/deltaene)+1
 
-!  Write the header of the DOS file, and also decides the energy range and increment
+!  Write the AB_HEADER of the DOS file, and also decides the energy range and increment
    call dos_hdr_write(deltaene,eigen,enemax,enemin,fermie,mband,nband,nene,&
 &   nkpt,nsppol,occopt,prtdos1,tphysel,tsmear,unitdos)
 
@@ -1433,7 +1433,7 @@ end subroutine occeig
 !! dos_hdr_write
 !!
 !! FUNCTION
-!! Write the header of the DOS files, for both smearing and tetrahedron methods.
+!! Write the AB_HEADER of the DOS files, for both smearing and tetrahedron methods.
 !!
 !! INPUTS
 !! deltaene=increment of DOS energy arguments

@@ -399,8 +399,8 @@
 *     .. External Functions ..
       LOGICAL            SLCTSX
       INTEGER            ILAENV
-      REAL               SLAMCH, SLANGE
-      EXTERNAL           SLCTSX, ILAENV, SLAMCH, SLANGE
+      REAL               AB_SLAMCH, SLANGE
+      EXTERNAL           SLCTSX, ILAENV, AB_SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, SGESVD, SGET51, SGET53, SGGESX, SLABAD,
@@ -478,9 +478,9 @@ c        MINWRK = MAX( 10*( NSIZE+1 ), 5*NSIZE*NSIZE / 2-2 )
 *
 *     Important constants
 *
-      ULP = SLAMCH( 'P' )
+      ULP = AB_SLAMCH( 'P' )
       ULPINV = ONE / ULP
-      SMLNUM = SLAMCH( 'S' ) / ULP
+      SMLNUM = AB_SLAMCH( 'S' ) / ULP
       BIGNUM = ONE / SMLNUM
       CALL SLABAD( SMLNUM, BIGNUM )
       THRSH2 = TEN*THRESH

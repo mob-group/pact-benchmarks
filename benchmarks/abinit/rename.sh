@@ -32,6 +32,10 @@ done < blasfns.txt
 # }
 
 sed -r -i "$comm" "${files[@]}"
+sed -i 's/FAAB_LSE/FALSE/g' "${files[@]}"
+sed -i 's/EAB_LSE/ELSE/g' "${files[@]}"
+sed -i 's/faab_lse/false/g' "${files[@]}"
+sed -i 's/eab_lse/else/g' "${files[@]}"
 
 # for f in "${files[@]}"; do
 #   rename_one "$f"

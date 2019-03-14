@@ -424,7 +424,7 @@ subroutine init_atomorb(Atm,Atmrad,rcut,filename,prtvol,ierr)
  Atm%l_size =2*lmax+1
 
  !4)
-!Read psp version in line 4 of the header
+!Read psp version in line 4 of the AB_HEADER
  version=1
  read(unt,'(a80)',ERR=10) line
  line=ADJUSTL(line)
@@ -584,7 +584,7 @@ subroutine init_atomorb(Atm,Atmrad,rcut,filename,prtvol,ierr)
  end if
 
  Atm%mesh_size = Atmrad%mesh_size
- call pawrad_print(Atmrad,header="Final mesh",prtvol=prtvol)
+ call pawrad_print(Atmrad,AB_HEADER="Final mesh",prtvol=prtvol)
 
  ABI_MALLOC(radens,(Atm%mesh_size,Atm%nspden))
  call get_atomorb_charge(Atm,Atmrad,charge,radens=radens)
@@ -789,7 +789,7 @@ subroutine get_overlap(Atm,Atmesh,Radmesh2,isppol,nphi,phi,phi_indln,overlap)
 !scalars
  integer :: iln_atm,iphi,ll_phi,ll_atm,do_spline,iln
  integer :: whichdenser,size4spl,my_mesh_size
- real(dp) :: ybcbeg,ybcend,intg
+ real(dp) :: ybAB_CBEG,ybcend,intg
  logical :: hasameq
 !arrays
  real(dp),pointer :: ff_spl(:,:)
@@ -821,8 +821,8 @@ subroutine get_overlap(Atm,Atmesh,Radmesh2,isppol,nphi,phi,phi_indln,overlap)
    ABI_MALLOC(ypp,(size4spl))
 
    do iln=1,nphi
-     ypp(:) = zero; ybcbeg = zero; ybcend = zero
-     call spline(rad4spl,phi(:,iln),size4spl,ybcbeg,ybcend,ypp)
+     ypp(:) = zero; ybAB_CBEG = zero; ybcend = zero
+     call spline(rad4spl,phi(:,iln),size4spl,ybAB_CBEG,ybcend,ypp)
 
      call splint(size4spl,rad4spl,phi(:,iln),ypp,my_mesh_size,my_pts,ff_spl(:,iln))
    end do
@@ -879,7 +879,7 @@ end subroutine get_overlap
 !!
 !! SOURCE
 
-subroutine print_atomorb(Atm,header,unit,prtvol,mode_paral)
+subroutine print_atomorb(Atm,AB_HEADER,unit,prtvol,mode_paral)
 
 
 !This section has been created automatically by the script Abilint (TD).
@@ -894,7 +894,7 @@ subroutine print_atomorb(Atm,header,unit,prtvol,mode_paral)
 !scalars
  type(atomorb_type),intent(in) :: Atm
  integer,optional,intent(in) :: prtvol,unit
- character(len=*),optional,intent(in) :: header
+ character(len=*),optional,intent(in) :: AB_HEADER
  character(len=4),optional,intent(in) :: mode_paral
 
 !Local variables-------------------------------
@@ -909,7 +909,7 @@ subroutine print_atomorb(Atm,header,unit,prtvol,mode_paral)
  my_mode  ='COLL' ; if (PRESENT(mode_paral)) my_mode  =mode_paral
 
  msg=' ==== Info on the atomorb_type ==== '
- if (PRESENT(header)) msg=header
+ if (PRESENT(AB_HEADER)) msg=AB_HEADER
  call wrtout(my_unt,msg,my_mode)
 
  select case (Atm%method)

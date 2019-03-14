@@ -174,9 +174,9 @@
       LOGICAL            UPPER
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
+      REAL               AB_SLAMCH
       LOGICAL            AB_LSAME, AB_SISNAN
-      EXTERNAL           SLAMCH, AB_LSAME, AB_SISNAN
+      EXTERNAL           AB_SLAMCH, AB_LSAME, AB_SISNAN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_CGEMV, AB_CLACGV, AB_CSSCAL, AB_CSWAP, AB_XE
@@ -230,7 +230,7 @@
 *     Compute stopping value if not supplied
 *
       IF( TOL.LT.ZERO ) THEN
-         SSTOP = N * SLAMCH( 'Epsilon' ) * AJJ
+         SSTOP = N * AB_SLAMCH( 'Epsilon' ) * AJJ
       ELSE
          SSTOP = TOL
       END IF

@@ -340,8 +340,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
-      REAL               SLAMCH, SLANGE
-      EXTERNAL           ILAENV, SLAMCH, SLANGE
+      REAL               AB_SLAMCH, SLANGE
+      EXTERNAL           ILAENV, AB_SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, SGET52, SGGEVX, SLACPY, SLATM6, XERBLA
@@ -396,7 +396,7 @@
       END IF
 *
       N = 5
-      ULP = SLAMCH( 'P' )
+      ULP = AB_SLAMCH( 'P' )
       ULPINV = ONE / ULP
       THRSH2 = TEN*THRESH
       NERRS = 0

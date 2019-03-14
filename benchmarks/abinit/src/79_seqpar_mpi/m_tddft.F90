@@ -117,7 +117,7 @@ contains
 !!   ''Time-Dependent Density Functional Response Theory of Molecular
 !!     systems: Theory, Computational Methods, and Functionals'', by M.E. Casida,
 !!   in Recent Developments and Applications of Modern Density Functional
-!!   Theory, edited by J.M. Seminario (Elsevier, Amsterdam, 1996).
+!!   Theory, edited by J.M. Seminario (ELSEvier, Amsterdam, 1996).
 !!
 !! PARENTS
 !!      vtorho
@@ -125,7 +125,7 @@ contains
 !! CHILDREN
 !!      fourdp,fourwf,hartre,matr3inv,mpi_bcast,mpi_gatherv,mpi_reduce
 !!      mpi_scatterv,sort_dp,sphereboundary,timab,wrtout,xmpi_barrier
-!!      xmpi_bcast,xmpi_exch,xmpi_sum,zhpev
+!!      xmpi_bcast,xmpi_exch,xmpi_sum,AB_ZHPEV
 !!
 !! SOURCE
 
@@ -200,8 +200,8 @@ contains
  real(dp),allocatable :: osc_str(:,:),pos(:,:),rhoaug(:,:,:),rhog(:,:)
  real(dp),allocatable :: sexc(:,:),sqrtks(:),vec(:,:,:),vhartr(:),wfprod(:,:,:)
  real(dp) :: omega_tddft_casida_dummy(2/nsppol)
- real(dp),allocatable :: wfraug(:,:,:,:),wfrspa(:,:,:,:),work(:),zhpev1(:,:)
- real(dp),allocatable :: zhpev2(:)
+ real(dp),allocatable :: wfraug(:,:,:,:),wfrspa(:,:,:,:),work(:),AB_ZHPEV1(:,:)
+ real(dp),allocatable :: AB_ZHPEV2(:)
 #if defined HAVE_MPI
  integer :: iproc
  integer :: ipwnbd
@@ -1406,8 +1406,8 @@ contains
      if(pole_approx==0)then
 
        ABI_ALLOCATE(matr,(nexcit_win*(nexcit_win+1)))
-       ABI_ALLOCATE(zhpev1,(2,2*nexcit_win-1))
-       ABI_ALLOCATE(zhpev2,(3*nexcit_win-2))
+       ABI_ALLOCATE(AB_ZHPEV1,(2,2*nexcit_win-1))
+       ABI_ALLOCATE(AB_ZHPEV2,(3*nexcit_win-2))
        matr(:)=zero
        ier=0
 !      DEBUG
@@ -1415,7 +1415,7 @@ contains
 !      ENDDEBUG
 
 
-!      Store the matrix in proper mode before calling zhpev
+!      Store the matrix in proper mode before calling AB_ZHPEV
 
        index=1
        do iexcit=1,nexcit_win
@@ -1440,12 +1440,12 @@ contains
 !      write(std_out,*)' after filling    matrices     '
 !      ENDDEBUG
 
-       call ZHPEV ('V','U',nexcit_win,matr,eexcit2,vec,nexcit_win,zhpev1,&
-&       zhpev2,ier)
+       call AB_ZHPEV ('V','U',nexcit_win,matr,eexcit2,vec,nexcit_win,AB_ZHPEV1,&
+&       AB_ZHPEV2,ier)
 
        ABI_DEALLOCATE(matr)
-       ABI_DEALLOCATE(zhpev1)
-       ABI_DEALLOCATE(zhpev2)
+       ABI_DEALLOCATE(AB_ZHPEV1)
+       ABI_DEALLOCATE(AB_ZHPEV2)
 !      DEBUG
 !      write(std_out,*)' after deallocating matrices     '
 !      ENDDEBUG

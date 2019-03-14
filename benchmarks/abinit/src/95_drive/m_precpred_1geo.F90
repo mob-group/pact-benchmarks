@@ -253,7 +253,7 @@ real(dp), allocatable :: xred(:,:)
          call hist2var(acell,hist,ab_mover%natom,rprimd,xred,DEBUG)
          call crystal_init(amu_curr,crystal,0,ab_mover%natom,&
 &         npsp,ab_mover%ntypat,ab_mover%nsym,rprimd,ab_mover%typat,xred,&
-&         [(-one, ii=1,ab_mover%ntypat)],ab_mover%znucl,2,.False.,.False.,"dilatmx_structure",&
+&         [(-one, ii=1,ab_mover%ntypat)],ab_mover%znucl,2,.false.,.false.,"dilatmx_structure",&
 &         symrel=ab_mover%symrel,tnons=ab_mover%tnons,symafm=ab_mover%symafm)
 
 #ifdef HAVE_NETCDF

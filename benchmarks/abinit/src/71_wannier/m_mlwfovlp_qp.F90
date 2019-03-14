@@ -81,7 +81,7 @@ contains
 !!  nspden=number of spin-density components
 !!  nsppol=1 for unpolarized, 2 for spin-polarized
 !!  rprimd(3,3)=dimensional primitive translations for real space (bohr)
-!!  Hdr<Hdr_type>=The m_mlwfovlp_qp header.
+!!  Hdr<Hdr_type>=The m_mlwfovlp_qp AB_HEADER.
 !!  MPI_enreg=information about MPI parallelization
 !!  Cprj_BZ(natom,nspinor*mband*mkmem*nsppol)= <p_lmn|Cnk> coefficients for each WF |Cnk> and each |p_lmn> non-local projector
 !!
@@ -107,7 +107,7 @@ contains
 !! CHILDREN
 !!      crystal_free,crystal_from_hdr,destroy_mpi_enreg,ebands_free,ebands_init
 !!      initmpi_seq,kmesh_free,kmesh_init,listkk,metric,pawcprj_getdim,rdgw
-!!      rdqps,sort_dp,update_cprj,wrtout,zgemm
+!!      rdqps,sort_dp,update_cprj,wrtout,AB_ZGEMM
 !!
 !! SOURCE
 
@@ -386,7 +386,7 @@ subroutine mlwfovlp_qp(cg,Cprj_BZ,dtset,dtfil,eigen,mband,mcg,mcprj,mkmem,mpw,na
       MSG_BUG(msg)
     end if
 
-    call ZGEMM('N','N',npw_k,mband,mband,cone,cg_k,mpw,m_tmp,mband,czero,cg_qpk,mpw)
+    call AB_ZGEMM('N','N',npw_k,mband,mband,cone,cg_k,mpw,m_tmp,mband,czero,cg_qpk,mpw)
 
     ! === Orthonormality test ===
     ! * nband >= maxval(bndgw) for this to pass, but may be less than nband used in GW.

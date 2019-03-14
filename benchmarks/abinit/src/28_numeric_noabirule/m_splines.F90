@@ -223,7 +223,7 @@ end subroutine splfit
 !!
 !! INPUTS
 !!    Input, integer N, the number of data points; N must be at least 2.
-!!    In the special case where N = 2 and IBCBEG = IBCEND = 0, the
+!!    In the special case where N = 2 and IBAB_CBEG = IBCEND = 0, the
 !!    spline will actually be linear.
 !!
 !!    Input, double precision T(N), the knot values, that is, the points where data
@@ -231,8 +231,8 @@ end subroutine splfit
 !!
 !!    Input, double precision Y(N), the data values to be interpolated.
 !!
-!!    Input, double precision YBCBEG, YBCEND, the values to be used in the boundary
-!!    conditions if IBCBEG or IBCEND is equal to 1 or 2.
+!!    Input, double precision YBAB_CBEG, YBCEND, the values to be used in the boundary
+!!    conditions if IBAB_CBEG or IBCEND is equal to 1 or 2.
 !!
 !! OUTPUT
 !!    Output, double precision YPP(N), the second derivatives of the cubic spline.
@@ -250,7 +250,7 @@ end subroutine splfit
 !!
 !! SOURCE
 
-subroutine spline( t, y, n, ybcbeg, ybcend, ypp )
+subroutine spline( t, y, n, ybAB_CBEG, ybcend, ypp )
 
 !*******************************************************************************
 !
@@ -335,7 +335,7 @@ subroutine spline( t, y, n, ybcbeg, ybcend, ypp )
 !  Parameters:
 !
 !    Input, integer N, the number of data points; N must be at least 2.
-!    In the special case where N = 2 and IBCBEG = IBCEND = 0, the
+!    In the special case where N = 2 and IBAB_CBEG = IBCEND = 0, the
 !    spline will actually be linear.
 !
 !    Input, double precision T(N), the knot values, that is, the points where data
@@ -343,8 +343,8 @@ subroutine spline( t, y, n, ybcbeg, ybcend, ypp )
 !
 !    Input, double precision Y(N), the data values to be interpolated.
 !
-!    Input, double precision YBCBEG, YBCEND, the values to be used in the boundary
-!    conditions if IBCBEG or IBCEND is equal to 1 or 2.
+!    Input, double precision YBAB_CBEG, YBCEND, the values to be used in the boundary
+!    conditions if IBAB_CBEG or IBCEND is equal to 1 or 2.
 !
 !    Output, double precision YPP(N), the second derivatives of the cubic spline.
 !
@@ -352,14 +352,14 @@ subroutine spline( t, y, n, ybcbeg, ybcend, ypp )
 !
 !
 !    XG041127 : In the initial implementation, one had the control on
-!     IBCBEG and IBCEND. Now, they are determined by the values
-!     of YBCBEG, YBCEND. Option 2 has been disabled.
+!     IBAB_CBEG and IBCEND. Now, they are determined by the values
+!     of YBAB_CBEG, YBCEND. Option 2 has been disabled.
 !
-!    Input, integer IBCBEG, left boundary condition flag:
+!    Input, integer IBAB_CBEG, left boundary condition flag:
 !
 !      0: the spline should be a quadratic over the first interval;
-!      1: the first derivative at the left endpoint should be YBCBEG;
-!      2: the second derivative at the left endpoint should be YBCBEG.
+!      1: the first derivative at the left endpoint should be YBAB_CBEG;
+!      2: the second derivative at the left endpoint should be YBAB_CBEG.
 !
 !    Input, integer IBCEND, right boundary condition flag:
 !
@@ -378,12 +378,12 @@ subroutine spline( t, y, n, ybcbeg, ybcend, ypp )
   integer, intent(in) :: n
   real(dp), intent(in) :: t(n)
   real(dp), intent(in) :: y(n)
-  real(dp), intent(in) :: ybcbeg
+  real(dp), intent(in) :: ybAB_CBEG
   real(dp), intent(in) :: ybcend
 
   real(dp), intent(out) :: ypp(n)
 
-  integer :: ibcbeg
+  integer :: ibAB_CBEG
   integer :: ibcend
   integer :: i,k
   real(dp) :: ratio,pinv
@@ -413,18 +413,18 @@ subroutine spline( t, y, n, ybcbeg, ybcend, ypp )
   end do
 !
 !  XG041127
-  ibcbeg=1 ; ibcend=1
-  if(ybcbeg>1.0d+30)ibcbeg=0
+  ibAB_CBEG=1 ; ibcend=1
+  if(ybAB_CBEG>1.0d+30)ibAB_CBEG=0
   if(ybcend>1.0d+30)ibcend=0
 !
 !  Set the first and last equations.
 !
-  if ( ibcbeg == 0 ) then
+  if ( ibAB_CBEG == 0 ) then
     ypp(1) = 0.d0
     tmp(1) = 0.d0
-  else if ( ibcbeg == 1 ) then
+  else if ( ibAB_CBEG == 1 ) then
     ypp(1) = -0.5d0
-    tmp(1) = (3.d0/(t(2)-t(1)))*((y(2)-y(1))/(t(2)-t(1))-ybcbeg)
+    tmp(1) = (3.d0/(t(2)-t(1)))*((y(2)-y(1))/(t(2)-t(1))-ybAB_CBEG)
   end if
   if ( ibcend == 0 ) then
     ypp(n) = 0.d0
@@ -599,14 +599,14 @@ subroutine spline_c( nomega_lo, nomega_li, omega_lo, omega_li, splined_li, tospl
 
 !Local variables---------------------------------------
 !scalars
- complex(dpc) :: ybcbeg, ybcend
+ complex(dpc) :: ybAB_CBEG, ybcend
  complex(dpc), allocatable :: ysplin2_lo(:)
 
- ybcbeg=czero
+ ybAB_CBEG=czero
  ybcend=czero
 
  ABI_ALLOCATE(ysplin2_lo,(nomega_lo))
- call spline_complex(omega_lo, tospline_lo, nomega_lo, ybcbeg, ybcend, ysplin2_lo)
+ call spline_complex(omega_lo, tospline_lo, nomega_lo, ybAB_CBEG, ybcend, ysplin2_lo)
  call splint_complex( nomega_lo, omega_lo, tospline_lo,ysplin2_lo, nomega_li, omega_li, splined_li)
  ABI_DEALLOCATE(ysplin2_lo)
 
@@ -625,7 +625,7 @@ end subroutine spline_c
 !!
 !! INPUTS
 !!    Input, integer N, the number of data points; N must be at least 2.
-!!    In the special case where N = 2 and IBCBEG = IBCEND = 0, the
+!!    In the special case where N = 2 and IBAB_CBEG = IBCEND = 0, the
 !!    spline will actually be linear.
 !!
 !!    Input, double precision T(N), the knot values, that is, the points where data
@@ -633,8 +633,8 @@ end subroutine spline_c
 !!
 !!    Input, complex Y(N), the data values to be interpolated.
 !!
-!!    Input, complex YBCBEG, YBCEND, the values to be used in the boundary
-!!    conditions if IBCBEG or IBCEND is equal to 1 or 2.
+!!    Input, complex YBAB_CBEG, YBCEND, the values to be used in the boundary
+!!    conditions if IBAB_CBEG or IBCEND is equal to 1 or 2.
 !!
 !! OUTPUT
 !!    Output, complex YPP(N), the second derivatives of the cubic spline.
@@ -646,7 +646,7 @@ end subroutine spline_c
 !!
 !! SOURCE
 
-subroutine spline_complex( t, y, n, ybcbeg, ybcend, ypp )
+subroutine spline_complex( t, y, n, ybAB_CBEG, ybcend, ypp )
 
 
 !This section has been created automatically by the script Abilint (TD).
@@ -660,16 +660,16 @@ subroutine spline_complex( t, y, n, ybcbeg, ybcend, ypp )
  integer, intent(in) :: n
  real(dp), intent(in) :: t(n)
  complex(dpc), intent(in) :: y(n)
- complex(dpc), intent(in) :: ybcbeg
+ complex(dpc), intent(in) :: ybAB_CBEG
  complex(dpc), intent(in) :: ybcend
  complex(dpc), intent(out) :: ypp(n)
 
  real(dp), allocatable :: y_r(:)
- real(dp) :: ybcbeg_r
+ real(dp) :: ybAB_CBEG_r
  real(dp) :: ybcend_r
  real(dp), allocatable :: ypp_r(:)
  real(dp), allocatable :: y_i(:)
- real(dp) :: ybcbeg_i
+ real(dp) :: ybAB_CBEG_i
  real(dp) :: ybcend_i
  real(dp), allocatable :: ypp_i(:)
 
@@ -679,12 +679,12 @@ subroutine spline_complex( t, y, n, ybcbeg, ybcend, ypp )
  ABI_ALLOCATE(ypp_i,(n))
  y_r=real(y)
  y_i=aimag(y)    !vz_d
- ybcbeg_r=real(ybcbeg)
- ybcbeg_i=aimag(ybcbeg)    !vz_d
+ ybAB_CBEG_r=real(ybAB_CBEG)
+ ybAB_CBEG_i=aimag(ybAB_CBEG)    !vz_d
  ybcend_r=real(ybcend)
  ybcend_i=aimag(ybcend)    !vz_d
- call spline( t, y_r, n, ybcbeg_r, ybcend_r, ypp_r )
- call spline( t, y_i, n, ybcbeg_i, ybcend_i, ypp_i )
+ call spline( t, y_r, n, ybAB_CBEG_r, ybcend_r, ypp_r )
+ call spline( t, y_i, n, ybAB_CBEG_i, ybcend_i, ypp_i )
  ypp=cmplx(ypp_r,ypp_i)
  ABI_DEALLOCATE(y_r)
  ABI_DEALLOCATE(ypp_r)
@@ -960,7 +960,7 @@ end subroutine spline_integrate
 !!  A SINGLE VALUED FUNCTION Y=Y(X).
 !!
 !!  THE SUBROUTINE ALSO CALCULATES FIRST DERIVATIVES DV(X) AND
-!!  SECOND DERIVATIVE DV2(X)
+!!  second DERIVATIVE DV2(X)
 !
 !!  THE INPUT PARAMETERS ARE;
 !!

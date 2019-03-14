@@ -585,7 +585,7 @@ subroutine gstate(args_gs,acell,codvsn,cpui,dtfil,dtset,iexit,initialized,&
 &   comm_atom=mpi_enreg%comm_atom,mpi_atmtab=mpi_enreg%my_atmtab)
  end if
 
-!Initialize header
+!Initialize AB_HEADER
  gscase=0
  call hdr_init(bstruct,codvsn,dtset,hdr,pawtab,gscase,psps,wvl%descr,&
 & comm_atom=mpi_enreg%comm_atom,mpi_atmtab=mpi_enreg%my_atmtab)
@@ -593,7 +593,7 @@ subroutine gstate(args_gs,acell,codvsn,cpui,dtfil,dtset,iexit,initialized,&
 !Clean band structure datatype (should use it more in the future !)
  call ebands_free(bstruct)
 
-!Update header, with evolving variables, when available
+!Update AB_HEADER, with evolving variables, when available
 !Here, rprimd, xred and occ are available
  etot=hdr%etot ; fermie=hdr%fermie ; residm=hdr%residm
  call hdr_update(hdr,bantot,etot,fermie,&
@@ -782,7 +782,7 @@ subroutine gstate(args_gs,acell,codvsn,cpui,dtfil,dtset,iexit,initialized,&
 
  if (psps%usepaw==1.and.dtfil%ireadwf==1)then
    call pawrhoij_copy(hdr%pawrhoij,pawrhoij,comm_atom=mpi_enreg%comm_atom,mpi_atmtab=mpi_enreg%my_atmtab)
-!  Has to update header again (because pawrhoij has changed)  -  MT 2007-10-22: Why ?
+!  Has to update AB_HEADER again (because pawrhoij has changed)  -  MT 2007-10-22: Why ?
 !  call hdr_update(hdr,bantot,etot,fermie,residm,rprimd,occ,pawrhoij,xred,args_gs%amu, &
 !  &                  comm_atom=mpi_enreg%comm_atom,mpi_atmtab=mpi_enreg%my_atmtab)
  end if
@@ -1083,14 +1083,14 @@ subroutine gstate(args_gs,acell,codvsn,cpui,dtfil,dtset,iexit,initialized,&
        ! Read density
        rdwrpaw=psps%usepaw; if(dtfil%ireadwf/=0) rdwrpaw=0
        if (dtset%usewvl==0) then
-         call read_rhor(dtfil%fildensin, cplex1, dtset%nspden, nfftf, ngfftf, rdwrpaw, &
+         call read_rhor(dtfil%fiAB_LDEnsin, cplex1, dtset%nspden, nfftf, ngfftf, rdwrpaw, &
          mpi_enreg, rhor, hdr_den, pawrhoij, comm, check_hdr=hdr, allow_interp=.True.)
          results_gs%etotal = hdr_den%etot; call hdr_free(hdr_den)
        else
          fform=52 ; accessfil=0
          if (dtset%iomode == IO_MODE_MPI ) accessfil=4
          if (dtset%iomode == IO_MODE_ETSF) accessfil=3
-         call ioarr(accessfil,rhor,dtset,results_gs%etotal,fform,dtfil%fildensin,hdr,&
+         call ioarr(accessfil,rhor,dtset,results_gs%etotal,fform,dtfil%fiAB_LDEnsin,hdr,&
 &         mpi_enreg,ngfftf,cplex1,nfftf,pawrhoij,1,rdwrpaw,wvl%den)
        end if
 
@@ -1158,7 +1158,7 @@ subroutine gstate(args_gs,acell,codvsn,cpui,dtfil,dtset,iexit,initialized,&
            option=2
            ABI_ALLOCATE(work,(nfftf))
            call jellium(gmet,gsqcut_eff,mpi_enreg,nfftf,ngfftf,dtset%nspden,&
-&           option,dtset%paral_kgb,dtset%slabwsrad,rhog,rhor,rprimd,work,dtset%slabzbeg,dtset%slabzend)
+&           option,dtset%paral_kgb,dtset%slabwsrad,rhog,rhor,rprimd,work,dtset%slabAB_ZBEG,dtset%slabzend)
            ABI_DEALLOCATE(work)
          end if ! of usejell
 !        Kinetic energy density initialized to zero (used only in metaGGAs ... )
@@ -1199,7 +1199,7 @@ subroutine gstate(args_gs,acell,codvsn,cpui,dtfil,dtset,iexit,initialized,&
 !    One might make them separate variables.
 
     ! Read density and get Fermi level from hdr_den
-     call read_rhor(dtfil%fildensin, cplex1, dtset%nspden, nfftf, ngfftf, rdwrpaw, &
+     call read_rhor(dtfil%fiAB_LDEnsin, cplex1, dtset%nspden, nfftf, ngfftf, rdwrpaw, &
      mpi_enreg, rhor, hdr_den, pawrhoij, comm, check_hdr=hdr)
      results_gs%etotal = hdr_den%etot; results_gs%energies%e_fermie = hdr_den%fermie
      call hdr_free(hdr_den)
@@ -1398,7 +1398,7 @@ subroutine gstate(args_gs,acell,codvsn,cpui,dtfil,dtset,iexit,initialized,&
 !!    deallocate(xcart)
 !! end if
 
-!Update the header, before using it
+!Update the AB_HEADER, before using it
  call hdr_update(hdr,bantot,results_gs%etotal,results_gs%energies%e_fermie,&
 & results_gs%residm,rprimd,occ,pawrhoij,xred,args_gs%amu,&
 & comm_atom=mpi_enreg%comm_atom,mpi_atmtab=mpi_enreg%my_atmtab)
@@ -1416,7 +1416,7 @@ subroutine gstate(args_gs,acell,codvsn,cpui,dtfil,dtset,iexit,initialized,&
  !write(std_out,*)"efermi after ebands_init",ebands%fermie
 
  ! Compute and print the gaps.
- call ebands_report_gap(ebands,header="Gap info",unit=std_out,mode_paral="COLL",gaps=results_gs%gaps)
+ call ebands_report_gap(ebands,AB_HEADER="Gap info",unit=std_out,mode_paral="COLL",gaps=results_gs%gaps)
 
  if(dtset%nqpt==0)filnam=dtfil%fnameabo_wfk
  if(dtset%nqpt==1)filnam=dtfil%fnameabo_wfq
@@ -1425,7 +1425,7 @@ subroutine gstate(args_gs,acell,codvsn,cpui,dtfil,dtset,iexit,initialized,&
  !write(std_out,*)"conv_retcode", conv_retcode
  write_wfk = .True.
  if (dtset%prtwf==-1 .and. conv_retcode == 0) then
-   write_wfk = .False.
+   write_wfk = .false.
    message = "GS calculation converged with prtwf=-1 --> Skipping WFK file output"
    call wrtout(ab_out, message, "COLL")
    MSG_COMMENT(message)
@@ -1730,7 +1730,7 @@ subroutine gstate(args_gs,acell,codvsn,cpui,dtfil,dtset,iexit,initialized,&
    call CleanRec(rec_set)
  end if
 
-!Clean the header
+!Clean the AB_HEADER
  call hdr_free(hdr)
  call ebands_free(ebands)
 

@@ -203,8 +203,8 @@
       DOUBLE PRECISION   ALPHA, CL, CR, SAFMIN, SL, SR, SV1, SV2, TEMP
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLARAN, DLARND
-      EXTERNAL           DLAMCH, DLARAN, DLARND
+      DOUBLE PRECISION   AB_DLAMCH, DLARAN, DLARND
+      EXTERNAL           AB_DLAMCH, DLARAN, DLARND
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DLASET
@@ -388,7 +388,7 @@
 *        random rotations to make 2x2 blocks.
 *
          IF( ISIGN.EQ.2 .AND. ITYPE.NE.2 .AND. ITYPE.NE.3 ) THEN
-            SAFMIN = DLAMCH( 'S' )
+            SAFMIN = AB_DLAMCH( 'S' )
             DO 290 JD = KBEG, KEND - 1, 2
                IF( DLARAN( ISEED ).GT.HALF ) THEN
 *

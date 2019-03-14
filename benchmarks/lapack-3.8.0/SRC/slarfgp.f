@@ -128,8 +128,8 @@
       REAL               BETA, BIGNUM, SAVEALPHA, SMLNUM, XNORM
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, AB_SLAPY2, AB_SNRM2
-      EXTERNAL           SLAMCH, AB_SLAPY2, AB_SNRM2
+      REAL               AB_SLAMCH, AB_SLAPY2, AB_SNRM2
+      EXTERNAL           AB_SLAMCH, AB_SLAPY2, AB_SNRM2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, SIGN
@@ -169,7 +169,7 @@
 *        general case
 *
          BETA = SIGN( AB_SLAPY2( ALPHA, XNORM ), ALPHA )
-         SMLNUM = SLAMCH( 'S' ) / SLAMCH( 'E' )
+         SMLNUM = AB_SLAMCH( 'S' ) / AB_SLAMCH( 'E' )
          KNT = 0
          IF( ABS( BETA ).LT.SMLNUM ) THEN
 *

@@ -268,8 +268,8 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_ISAMAX
-      REAL               AB_SASUM, AB_SDOT, SLAMCH
-      EXTERNAL           AB_LSAME, AB_ISAMAX, AB_SASUM, AB_SDOT, SLAMCH
+      REAL               AB_SASUM, AB_SDOT, AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_ISAMAX, AB_SASUM, AB_SDOT, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_SAXPY, AB_SSCAL, AB_STRSV, AB_XERBLA
@@ -313,7 +313,7 @@
 *
 *     Determine machine dependent parameters to control overflow.
 *
-      SMLNUM = SLAMCH( 'Safe minimum' ) / SLAMCH( 'Precision' )
+      SMLNUM = AB_SLAMCH( 'Safe minimum' ) / AB_SLAMCH( 'Precision' )
       BIGNUM = ONE / SMLNUM
       SCALE = ONE
 *

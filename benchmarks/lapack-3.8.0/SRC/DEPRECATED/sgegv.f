@@ -350,8 +350,8 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_ILAENV
-      REAL               SLAMCH, AB_SLANGE
-      EXTERNAL           AB_ILAENV, AB_LSAME, SLAMCH, AB_SLANGE
+      REAL               AB_SLAMCH, AB_SLANGE
+      EXTERNAL           AB_ILAENV, AB_LSAME, AB_SLAMCH, AB_SLANGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, INT, MAX
@@ -431,8 +431,8 @@
 *
 *     Get machine constants
 *
-      EPS = SLAMCH( 'E' )*SLAMCH( 'B' )
-      SAFMIN = SLAMCH( 'S' )
+      EPS = AB_SLAMCH( 'E' )*AB_SLAMCH( 'B' )
+      SAFMIN = AB_SLAMCH( 'S' )
       SAFMIN = SAFMIN + SAFMIN
       SAFMAX = ONE / SAFMIN
       ONEPLS = ONE + ( 4*EPS )

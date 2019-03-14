@@ -30,13 +30,13 @@
 *>
 *> \verbatim
 *>
-*> AB_DLABAD takes as input the values computed by DLAMCH for underflow and
+*> AB_DLABAD takes as input the values computed by AB_DLAMCH for underflow and
 *> overflow, and returns the square root of each of these values if the
 *> log of LARGE is sufficiently large.  This subroutine is intended to
 *> identify machines with a large exponent range, such as the Crays, and
 *> redefine the underflow and overflow limits to be the square roots of
-*> the values computed by DLAMCH.  This subroutine is needed because
-*> DLAMCH does not compensate for poor arithmetic in the upper half of
+*> the values computed by AB_DLAMCH.  This subroutine is needed because
+*> AB_DLAMCH does not compensate for poor arithmetic in the upper half of
 *> the exponent range, as is found on a Cray.
 *> \endverbatim
 *
@@ -46,7 +46,7 @@
 *> \param[in,out] SMALL
 *> \verbatim
 *>          SMALL is DOUBLE PRECISION
-*>          On entry, the underflow threshold as computed by DLAMCH.
+*>          On entry, the underflow threshold as computed by AB_DLAMCH.
 *>          On exit, if LOG10(LARGE) is sufficiently large, the square
 *>          root of SMALL, otherwise unchanged.
 *> \endverbatim
@@ -54,7 +54,7 @@
 *> \param[in,out] LARGE
 *> \verbatim
 *>          LARGE is DOUBLE PRECISION
-*>          On entry, the overflow threshold as computed by DLAMCH.
+*>          On entry, the overflow threshold as computed by AB_DLAMCH.
 *>          On exit, if LOG10(LARGE) is sufficiently large, the square
 *>          root of LARGE, otherwise unchanged.
 *> \endverbatim

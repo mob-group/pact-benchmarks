@@ -5,7 +5,7 @@
 !!
 !! FUNCTION
 !! Main routine for the analysis of the density and potential files,
-!! as well as other files with the ABINIT header.
+!! as well as other files with the ABINIT AB_HEADER.
 !!
 !! COPYRIGHT
 !! Copyright (C) 1999-2018 ABINIT group (GMR, RC, LSI, XG, NCJ, JFB, MCote, LPizzagalli)
@@ -167,19 +167,19 @@ program cut3d
 !  Treat the different cases: formatted or unformatted
    iomode = IO_MODE_FORTRAN; if (endswith(filrho, ".nc")) iomode = IO_MODE_ETSF
    if (iomode == IO_MODE_FORTRAN) then
-     write(std_out,"(a)") '- Your file contains unformatted binary header + 3D data'
+     write(std_out,"(a)") '- Your file contains unformatted binary AB_HEADER + 3D data'
    else
      write(std_out,"(a)") '- Your file contains ETSF data'
    end if
 
-   ! Read the header and extract dimensions.
+   ! Read the AB_HEADER and extract dimensions.
    write(std_out,*)
    call hdr_read_from_fname(hdr, filrho, fform0, comm)
    ABI_CHECK(fform0 /= 0, "hdr_read returned fform = 0")
    abifile = abifile_from_fform(fform0)
    ABI_CHECK(abifile%fform /= 0, "Cannot detect abifile from fform")
 
-!  Echo part of the header
+!  Echo part of the AB_HEADER
    call hdr_echo(hdr, fform0, 4)
 
    nr1=hdr%ngfft(1); nr2=hdr%ngfft(2); nr3=hdr%ngfft(3)

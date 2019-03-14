@@ -153,8 +153,8 @@
       DOUBLE PRECISION   ANORM, EPS, RESID
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, ZLANGE, ZLANSY
-      EXTERNAL           DLAMCH, ZLANGE, ZLANSY
+      DOUBLE PRECISION   AB_DLAMCH, ZLANGE, ZLANSY
+      EXTERNAL           AB_DLAMCH, ZLANGE, ZLANSY
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZGEMM, ZGERQF, ZHERK, ZLACPY, ZLASET, ZUNGRQ
@@ -171,7 +171,7 @@
 *     .. Executable Statements ..
 *
       MINMN = MIN( M, N )
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
 *
 *     Copy the matrix A to the array AF.
 *

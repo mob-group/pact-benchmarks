@@ -167,7 +167,7 @@ include 'mpif.h'
    !    1 => hermitian matrix of eigenvalues
 
   integer :: headform
-   ! headform=format of the header
+   ! headform=format of the AB_HEADER
 
   integer ::  kgwff
    ! kgwff  if 1 , read or write kg_k ; if 0, do not care about kg_k
@@ -234,8 +234,8 @@ CONTAINS
 !!  getRecordMarkerLength_wffile
 !!
 !! FUNCTION
-!!  Get the record marker length of the FORTRAN header of a file to access it in MPI/IO.
-!!  This routine assumes that the header has been written (and flushed) in the file.
+!!  Get the record marker length of the FORTRAN AB_HEADER of a file to access it in MPI/IO.
+!!  This routine assumes that the AB_HEADER has been written (and flushed) in the file.
 !!
 !! SIDE EFFECTS
 !!  wff=<type(wffile_type)>=structured info for reading/writing the wavefunctions
@@ -315,7 +315,7 @@ subroutine getRecordMarkerLength_wffile(wff)
     end do
 
     if (ierr/=MPI_SUCCESS) then
-     MSG_BUG("Header problem")
+     MSG_BUG("AB_HEADER problem")
     end if
 
    if (ii==iimax.and.wff%nbOct_recMarker<=0) then
@@ -339,7 +339,7 @@ subroutine getRecordMarkerLength_wffile(wff)
      MSG_ERROR(msg)
    else
      write(msg,'(a,i0)') &
-&     '  MPI/IO accessing FORTRAN file header: detected record mark length=',wff%nbOct_recMarker
+&     '  MPI/IO accessing FORTRAN file AB_HEADER: detected record mark length=',wff%nbOct_recMarker
      MSG_COMMENT(msg)
    end if
 
@@ -1773,7 +1773,7 @@ subroutine WffReadNpwRec(ierr,ikpt,isppol,nband_disk,npw,nspinor,wff)
    !      if (rank==master) call mpifoo_seq()
 
    MSG_WARNING("Skipping read in WffReadNpwRec. Keep fingers crossed")
-   ! MG: Must initialze these values somehow to avoid overflows.
+   ! MG: Must initiaAB_LZE these values somehow to avoid overflows.
    npw = 0; nspinor = 0; nband_disk = 0
  end if
 

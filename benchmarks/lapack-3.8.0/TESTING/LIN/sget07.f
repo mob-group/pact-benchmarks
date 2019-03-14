@@ -194,8 +194,8 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ISAMAX
-      REAL               SLAMCH
-      EXTERNAL           LSAME, ISAMAX, SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           LSAME, ISAMAX, AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -210,8 +210,8 @@
          RETURN
       END IF
 *
-      EPS = SLAMCH( 'Epsilon' )
-      UNFL = SLAMCH( 'Safe minimum' )
+      EPS = AB_SLAMCH( 'Epsilon' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
       NOTRAN = LSAME( TRANS, 'N' )
 *

@@ -200,7 +200,7 @@ contains
 
 
     !TODO hexu: mxhist, has_latt, natom should be input with their true values when lattice part also added
-    call spin_hist_t_init(hist=self%spin_hist, nmatom=self%nmatoms, mxhist=3, has_latt=.False.)
+    call spin_hist_t_init(hist=self%spin_hist, nmatom=self%nmatoms, mxhist=3, has_latt=.false.)
     call spin_hist_t_set_params(self%spin_hist, spin_nctime=self%params%spin_nctime, &
             &     spin_temperature=self%params%spin_temperature)
     !TODO
@@ -470,7 +470,7 @@ contains
     real(dp) :: S_tmp(3,self%nmatoms), etot
     call spin_mover_t_run_one_step(self%spin_mover, self%spin_calculator, &
          spin_hist_t_get_S(self%spin_hist),S_tmp, etot)
-    call spin_hist_t_set_vars(self%spin_hist, S=S_tmp, etot=etot, inc=.False.)
+    call spin_hist_t_set_vars(self%spin_hist, S=S_tmp, etot=etot, inc=.false.)
   end subroutine spin_model_t_run_one_step
   !!***
 

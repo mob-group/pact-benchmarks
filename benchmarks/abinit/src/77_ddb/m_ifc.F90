@@ -447,7 +447,7 @@ subroutine ifc_init(ifc,crystal,ddb,brav,asr,symdynmat,dipdip,&
  real(dp) :: eigvec(2,3,Crystal%natom,3,Crystal%natom)
  real(dp),allocatable :: dyew(:,:,:,:,:),out_d2cart(:,:,:,:,:)
  real(dp),allocatable :: dynmatfull(:,:,:,:,:,:),dynmat_sr(:,:,:,:,:,:),dynmat_lr(:,:,:,:,:,:) ! for OmegaSRLR
- real(dp),allocatable :: wtq(:),wtq_folded(:),qbz(:,:)
+ real(dp),allocatable :: wtq(:),wtq_foAB_LDEd(:),qbz(:,:)
 
 !******************************************************************
 
@@ -507,21 +507,21 @@ subroutine ifc_init(ifc,crystal,ddb,brav,asr,symdynmat,dipdip,&
 
  ! Find the irreducible zone (qibz)
  ABI_MALLOC(ibz2bz, (nqbz))
- ABI_MALLOC(wtq_folded, (nqbz))
+ ABI_MALLOC(wtq_foAB_LDEd, (nqbz))
  ABI_MALLOC(wtq, (nqbz))
  wtq = one / nqbz ! Weights sum up to one
 
  call symkpt(chksymbreak0,crystal%gmet,ibz2bz,iout0,qbz,nqbz,ifc%nqibz,crystal%nsym,&
-   crystal%symrec,timrev1,wtq,wtq_folded)
+   crystal%symrec,timrev1,wtq,wtq_foAB_LDEd)
 
  ABI_MALLOC(ifc%qibz, (3,ifc%nqibz))
  ABI_MALLOC(ifc%wtq, (ifc%nqibz))
  do iq_ibz=1,ifc%nqibz
    ifc%qibz(:,iq_ibz) = qbz(:, ibz2bz(iq_ibz))
-   ifc%wtq(iq_ibz) = wtq_folded(ibz2bz(iq_ibz))
+   ifc%wtq(iq_ibz) = wtq_foAB_LDEd(ibz2bz(iq_ibz))
  end do
  ABI_FREE(ibz2bz)
- ABI_FREE(wtq_folded)
+ ABI_FREE(wtq_foAB_LDEd)
  ABI_FREE(wtq)
 
  ABI_MALLOC(Ifc%dynmat,(2,3,natom,3,natom,nqbz))
@@ -851,7 +851,7 @@ subroutine ifc_init_fromFile(dielt,filename,Ifc,natom,ngqpt,nqshift,qshift,ucell
 !! INPUTS
 !!  [unit]=Unit number for output. Defaults to std_out
 !!  [prtvol]=Verbosity level.
-!!  [header]=String to be printed as header for additional info.
+!!  [AB_HEADER]=String to be printed as AB_HEADER for additional info.
 !!
 !! OUTPUT
 !!  Only printing
@@ -864,7 +864,7 @@ subroutine ifc_init_fromFile(dielt,filename,Ifc,natom,ngqpt,nqshift,qshift,ucell
 !!
 !! SOURCE
 
-subroutine ifc_print(ifc,header,unit,prtvol)
+subroutine ifc_print(ifc,AB_HEADER,unit,prtvol)
 
 
 !This section has been created automatically by the script Abilint (TD).
@@ -878,7 +878,7 @@ subroutine ifc_print(ifc,header,unit,prtvol)
 !Arguments ------------------------------------
 !scalars
  integer,optional,intent(in) :: unit,prtvol
- character(len=*),optional,intent(in) :: header
+ character(len=*),optional,intent(in) :: AB_HEADER
  type(ifc_type),intent(in) :: ifc
 
 !Local variables-------------------------------
@@ -890,7 +890,7 @@ subroutine ifc_print(ifc,header,unit,prtvol)
  my_prtvol = 0; if (present(prtvol)) my_prtvol = prtvol
 
  msg = ' ==== Info on the ifc% object ==== '
- if (present(header)) msg = ' ==== '//trim(adjustl(header))//' ==== '
+ if (present(AB_HEADER)) msg = ' ==== '//trim(adjustl(AB_HEADER))//' ==== '
  call wrtout(unt, msg)
 
  call wrtout(unt,' Real(R)+Recip(G) space primitive vectors, cartesian coordinates (Bohr,Bohr^-1):')
@@ -1159,7 +1159,7 @@ subroutine ifc_get_dwdq(ifc, cryst, qpt, phfrq, eigvec, dwdq)
 
  ! Compute 1/(2w(q)) <u(q)|dD(q)/dq|u(q)>
  do ii=1,3
-   call zgemm('N','N',natom3,natom3,natom3,cone,dddq(:,:,:,ii),natom3,eigvec,natom3,czero,omat,natom3)
+   call AB_ZGEMM('N','N',natom3,natom3,natom3,cone,dddq(:,:,:,ii),natom3,eigvec,natom3,czero,omat,natom3)
    do nu=1,natom3
      if (abs(phfrq(nu)) > tol12) then
        dot = cg_zdotc(natom3, eigvec(1,1,nu), omat(1,1,nu))
@@ -2359,7 +2359,7 @@ implicit none
        if (iout > 0) then
          write(iout, '(a)' )' Transformation to local coordinates '
          write(iout, '(a,3f16.6)' )' First  local vector :',vect1
-         write(iout, '(a,3f16.6)' )' Second local vector :',vect2
+         write(iout, '(a,3f16.6)' )' second local vector :',vect2
          write(iout, '(a,3f16.6)' )' Third  local vector :',vect3
        end if
        call ifclo9(rsiaf(:,:,ii),rsloc,vect1,vect2,vect3)
@@ -2680,7 +2680,7 @@ subroutine ifc_outphbtrap(ifc, cryst, ngqpt, nqshft, qshft, basename)
  end if
 
  write (unit_btrap,'(a)') '#'
- write (unit_btrap,'(a)') '# ABINIT package : Boltztrap phonon file. With old BT versions remove this header before feeding to BT'
+ write (unit_btrap,'(a)') '# ABINIT package : Boltztrap phonon file. With old BT versions remove this AB_HEADER before feeding to BT'
  write (unit_btrap,'(a)') '#    for compatibility with PHON output the freq are in Ry (before the square)'
  write (unit_btrap,'(a)') '#'
  write (unit_btrap,'(a)') '#    nq, nband  '
@@ -2804,7 +2804,7 @@ subroutine ifc_printbxsf(ifc, cryst, ngqpt, nqshft, qshft, path, comm)
  if (my_rank == master) then
    dummy_symafm = 1
    call printbxsf(freqs_qibz, zero, zero, cryst%gprimd, qptrlatt, 3*cryst%natom,&
-     nqibz, qibz, cryst%nsym, .False., cryst%symrec, dummy_symafm, .True., nsppol1, qshft, nqshft, path, ierr)
+     nqibz, qibz, cryst%nsym, .false., cryst%symrec, dummy_symafm, .True., nsppol1, qshft, nqshft, path, ierr)
    if (ierr /=0) then
      msg = "Cannot produce BXSF file with phonon isosurface, see log file for more info"
      MSG_WARNING(msg)
@@ -3249,7 +3249,7 @@ type(skw_t) function ifc_build_skw(ifc, cryst, ngqpt, nshiftq, shiftq, comm) res
  params = zero; params(1) = 120
  new = skw_new(cryst, params, 1, natom3, nqibz, 1, qibz, ibz_freqs, [0,0], comm)
 
- if (.False. .and. my_rank == master) then
+ if (.false. .and. my_rank == master) then
    ! Test whether SKW preserves symmetries.
    ! Build mapping qbz --> IBZ (q --> -q symmetry is always used)
    ABI_MALLOC(bz2ibz, (nqbz*sppoldbl1,6))
@@ -3361,7 +3361,7 @@ subroutine ifc_test_phinterp(ifc, cryst, ngqpt, nshiftq, shiftq, ords, comm, tes
  natom3 = 3 * cryst%natom
 
  ! Test computation of group velocities
- do_dwdq = .False.; if (present(test_dwdq)) do_dwdq = test_dwdq
+ do_dwdq = .false.; if (present(test_dwdq)) do_dwdq = test_dwdq
  if (do_dwdq) then
    call wrtout(std_out, "Testing computation of group velocities.")
    q1 = zero; q2 = [half, zero, zero]

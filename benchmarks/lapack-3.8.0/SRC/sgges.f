@@ -334,8 +334,8 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_ILAENV
-      REAL               SLAMCH, AB_SLANGE
-      EXTERNAL           AB_LSAME, AB_ILAENV, SLAMCH, AB_SLANGE
+      REAL               AB_SLAMCH, AB_SLANGE
+      EXTERNAL           AB_LSAME, AB_ILAENV, AB_SLAMCH, AB_SLANGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -437,8 +437,8 @@
 *
 *     Get machine constants
 *
-      EPS = SLAMCH( 'P' )
-      SAFMIN = SLAMCH( 'S' )
+      EPS = AB_SLAMCH( 'P' )
+      SAFMIN = AB_SLAMCH( 'S' )
       SAFMAX = ONE / SAFMIN
       CALL AB_SLABAD( SAFMIN, SAFMAX )
       SMLNUM = SQRT( SAFMIN ) / EPS

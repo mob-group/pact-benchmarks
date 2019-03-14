@@ -268,8 +268,8 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_ILAENV
-      REAL               AB_CLANGE, SLAMCH
-      EXTERNAL           AB_ILAENV, AB_LSAME, AB_CLANGE, SLAMCH
+      REAL               AB_CLANGE, AB_SLAMCH
+      EXTERNAL           AB_ILAENV, AB_LSAME, AB_CLANGE, AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          INT, MAX
@@ -348,8 +348,8 @@
 *
 *     Get machine constants
 *
-      EPS = SLAMCH( 'E' )*SLAMCH( 'B' )
-      SAFMIN = SLAMCH( 'S' )
+      EPS = AB_SLAMCH( 'E' )*AB_SLAMCH( 'B' )
+      SAFMIN = AB_SLAMCH( 'S' )
       SMLNUM = N*SAFMIN / EPS
       BIGNUM = ONE / SMLNUM
 *

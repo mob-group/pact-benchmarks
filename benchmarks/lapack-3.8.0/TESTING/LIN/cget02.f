@@ -162,8 +162,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               CLANGE, SCASUM, SLAMCH
-      EXTERNAL           LSAME, CLANGE, SCASUM, SLAMCH
+      REAL               CLANGE, SCASUM, AB_SLAMCH
+      EXTERNAL           LSAME, CLANGE, SCASUM, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGEMM
@@ -190,7 +190,7 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       ANORM = CLANGE( '1', M, N, A, LDA, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS

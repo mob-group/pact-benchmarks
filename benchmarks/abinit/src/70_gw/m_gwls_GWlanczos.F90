@@ -81,7 +81,7 @@ contains
 !!      gwls_ComputePoles,gwls_GenerateEpsilon
 !!
 !! CHILDREN
-!!      zgemm,zhbev
+!!      AB_ZGEMM,AB_ZHBEV
 !!
 !! SOURCE
 
@@ -190,7 +190,7 @@ end subroutine get_seeds
 !!      gwls_ComputePoles,gwls_GenerateEpsilon,gwls_LanczosResolvents
 !!
 !! CHILDREN
-!!      zgemm,zhbev
+!!      AB_ZGEMM,AB_ZHBEV
 !!
 !! SOURCE
 
@@ -349,7 +349,7 @@ itime = itime+1
 call cpu_time(time1)
 ! compute the alpha array, alpha = X^d.A.X
 
-call ZGEMM(              'C',   & ! take Hermitian conjugate of first array
+call AB_ZGEMM(              'C',   & ! take Hermitian conjugate of first array
 'N',   & ! leave second array as is
 nseeds,   & ! the number  of rows of the  matrix op( A )
 nseeds,   & ! the number  of columns of the  matrix op( B )
@@ -372,7 +372,7 @@ list_time(itime) = list_time(itime) + time2-time1
 itime = itime+1
 call cpu_time(time1)
 ! update the residual array, rk = rk-X.alpha
-call ZGEMM(              'N',   & ! leave first array as is
+call AB_ZGEMM(              'N',   & ! leave first array as is
 'N',   & ! leave second array as is
 Hsize,   & ! the number  of rows of the  matrix op( A )
 nseeds,   & ! the number  of columns of the  matrix op( B )
@@ -392,7 +392,7 @@ list_time(itime) = list_time(itime) + time2-time1
 if (k .eq. 1 .and. present(X0) .and. present(beta0)) then
   ! if k == 1, and X0,beta0 are present,
   !  update the residual array, r1 = r1-X_{0}.beta^d_{0}
-  call ZGEMM(                'N',   & ! leave first array as is
+  call AB_ZGEMM(                'N',   & ! leave first array as is
   'C',   & ! Hermitian conjugate the second array
   Hsize,   & ! the number  of rows of the  matrix op( A )
   nseeds,   & ! the number  of columns of the  matrix op( B )
@@ -413,7 +413,7 @@ call cpu_time(time1)
 if (k .gt. 1) then
 
   ! if k > 1, update the residual array, rk = rk-X_{k-1}.beta^d_{k-1}
-  call ZGEMM(                'N',   & ! leave first array as is
+  call AB_ZGEMM(                'N',   & ! leave first array as is
   'C',   & ! Hermitian conjugate the second array
   Hsize,   & ! the number  of rows of the  matrix op( A )
   nseeds,   & ! the number  of columns of the  matrix op( B )
@@ -500,7 +500,7 @@ end subroutine block_lanczos_algorithm
 !!      gwls_ComputePoles,gwls_GenerateEpsilon,gwls_LanczosResolvents
 !!
 !! CHILDREN
-!!      zgemm,zhbev
+!!      AB_ZGEMM,AB_ZHBEV
 !!
 !! SOURCE
 
@@ -620,7 +620,7 @@ ABI_ALLOCATE(eigenvectors, (nseeds*kmax,nseeds*kmax))
 ABI_ALLOCATE(work,(nseeds*kmax))
 ABI_ALLOCATE(rwork,(3*nseeds*kmax-2))
 
-call ZHBEV(                     'V',      & ! compute eigenvalues and eigenvectors
+call AB_ZHBEV(                     'V',      & ! compute eigenvalues and eigenvectors
 'L',      & ! lower triangular part of matrix is stored in banded_matrix
 nseeds*kmax,      & ! dimension of matrix
 kd,      & ! number of superdiagonals in banded matrix
@@ -639,7 +639,7 @@ if ( info /= 0) then
   open(debug_unit,file=trim(debug_filename),status='unknown')
 
   write(debug_unit,'(A)')      '*********************************************************************************************'
-  write(debug_unit,'(A,I4,A)') '*      ERROR: info = ',info,' in ZHBEV (1), gwls_GWlanczos'
+  write(debug_unit,'(A,I4,A)') '*      ERROR: info = ',info,' in AB_ZHBEV (1), gwls_GWlanczos'
   write(debug_unit,'(A)')      '*********************************************************************************************'
 
   close(debug_unit)
@@ -673,7 +673,7 @@ end if
 ABI_ALLOCATE(Lbasis_tmp, (Hsize,nseeds*kmax))  
 
 ! Compute C = A * B, where A = Lbasis, B = eigenvectors, and C = Lbasis_tmp
-call ZGEMM(     'N',     & ! leave array A as is
+call AB_ZGEMM(     'N',     & ! leave array A as is
 'N',     & ! leave array B as is
 Hsize,     & ! number of rows of A
 nseeds*kmax,     & ! number of columns of B

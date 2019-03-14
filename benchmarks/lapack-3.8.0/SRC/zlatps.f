@@ -263,9 +263,9 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_IDAMAX, AB_IZAMAX
-      DOUBLE PRECISION   DLAMCH, AB_DZASUM
+      DOUBLE PRECISION   AB_DLAMCH, AB_DZASUM
       COMPLEX*16         AB_ZDOTC, AB_ZDOTU, AB_ZLADIV
-      EXTERNAL           AB_LSAME, AB_IDAMAX, AB_IZAMAX, DLAMCH, AB_DZAS
+      EXTERNAL           AB_LSAME, AB_IDAMAX, AB_IZAMAX, AB_DLAMCH, AB_DZAS
      $UM, AB_ZDOTC,
      $                   AB_ZDOTU, AB_ZLADIV
 *     ..
@@ -318,10 +318,10 @@
 *
 *     Determine machine dependent parameters to control overflow.
 *
-      SMLNUM = DLAMCH( 'Safe minimum' )
+      SMLNUM = AB_DLAMCH( 'Safe minimum' )
       BIGNUM = ONE / SMLNUM
       CALL AB_DLABAD( SMLNUM, BIGNUM )
-      SMLNUM = SMLNUM / DLAMCH( 'Precision' )
+      SMLNUM = SMLNUM / AB_DLAMCH( 'Precision' )
       BIGNUM = ONE / SMLNUM
       SCALE = ONE
 *

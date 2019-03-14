@@ -5,7 +5,7 @@
 !!
 !! FUNCTION
 !!  This module provides several routines for the application of a
-!!  Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimization algorithm.
+!!  Broyden-FletAB_CHER-Goldfarb-Shanno (BFGS) minimization algorithm.
 !!
 !! COPYRIGHT
 !! Copyright (C) 2012-2018 ABINIT group (XG,JCC)

@@ -962,7 +962,7 @@ subroutine indefo1(dtset)
  dtset%rprim_orig(2,2,:)=one
  dtset%rprim_orig(3,3,:)=one
 !S
- dtset%slabzbeg=zero
+ dtset%slabAB_ZBEG=zero
  dtset%slabzend=zero
  dtset%so_psp(:)=1
  dtset%spinat(:,:)=zero
@@ -1446,7 +1446,7 @@ subroutine invars1(bravais,dtset,iout,jdtset,lenstr,mband_upper,msym,npsp1,&
 &   msym,natom,dtset%nimage,dtset%npsp,npspalch,dtset%nspden,dtset%nsppol,&
 &   dtset%nsym,ntypalch,dtset%ntypat,nucdipmom,dtset%nzchempot,&
 &   dtset%pawspnorb,dtset%ptgroupma,ratsph,&
-&   rprim,dtset%slabzbeg,dtset%slabzend,dtset%spgroup,spinat,&
+&   rprim,dtset%slabAB_ZBEG,dtset%slabzend,dtset%spgroup,spinat,&
 &   string,dtset%supercell_latt,symafm,dtset%symmorphi,symrel,tnons,dtset%tolsym,&
 &   typat,vel,vel_cell,xred,znucl)
    dtset%iatfix(1:3,1:natom)=iatfix(1:3,1:natom)
@@ -2377,7 +2377,7 @@ subroutine indefo(dtsets,ndtset_alloc,nprocs)
    dtsets(idtset)%ixc=1
    dtsets(idtset)%ixc_sigma=1
    dtsets(idtset)%ixcpositron=1
-   dtsets(idtset)%ixcrot=3
+   dtsets(idtset)%ixAB_CROT=3
 !  J
    dtsets(idtset)%f4of2_sla(:)=-one
    dtsets(idtset)%f6of2_sla(:)=-one
@@ -2560,7 +2560,7 @@ subroutine indefo(dtsets,ndtset_alloc,nprocs)
    dtsets(idtset)%plowan_nt=0
    dtsets(idtset)%plowan_realspace=0
    dtsets(idtset)%pol(:)=zero
-   dtsets(idtset)%polcen(:)=zero
+   dtsets(idtset)%poAB_LCEn(:)=zero
    dtsets(idtset)%posdoppler=0
    dtsets(idtset)%positron=0
    dtsets(idtset)%posnstep=50
@@ -2592,7 +2592,7 @@ subroutine indefo(dtsets,ndtset_alloc,nprocs)
    dtsets(idtset)%prtgkk=0
    dtsets(idtset)%prtkden=0
    dtsets(idtset)%prtkpt = -1
-   dtsets(idtset)%prtlden=0
+   dtsets(idtset)%prtAB_LDEn=0
    dtsets(idtset)%prtnabla=0
    dtsets(idtset)%prtnest=0
    dtsets(idtset)%prtphdos=1
@@ -2635,8 +2635,8 @@ subroutine indefo(dtsets,ndtset_alloc,nprocs)
    dtsets(idtset)%recnrec=10
    dtsets(idtset)%recrcut=zero
    dtsets(idtset)%recptrott=0
-   dtsets(idtset)%rectesteg=0
-   dtsets(idtset)%rectolden=zero
+   dtsets(idtset)%reAB_CTESTeg=0
+   dtsets(idtset)%rectoAB_LDEn=zero
    dtsets(idtset)%rcut=zero
    dtsets(idtset)%restartxf=0
    dtsets(idtset)%rfasr=0

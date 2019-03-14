@@ -665,8 +665,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
-      DOUBLE PRECISION   DLAMCH, DLARND, DSXT1
-      EXTERNAL           ILAENV, DLAMCH, DLARND, DSXT1
+      DOUBLE PRECISION   AB_DLAMCH, DLARND, DSXT1
+      EXTERNAL           ILAENV, AB_DLAMCH, DLARND, DSXT1
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DCOPY, DLABAD, DLACPY, DLASET, DLASUM, DLATMR,
@@ -738,10 +738,10 @@
 *
 *     More Important constants
 *
-      UNFL = DLAMCH( 'Safe minimum' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
       CALL DLABAD( UNFL, OVFL )
-      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
+      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
       ULPINV = ONE / ULP
       LOG2UI = INT( LOG( ULPINV ) / LOG( TWO ) )
       RTUNFL = SQRT( UNFL )

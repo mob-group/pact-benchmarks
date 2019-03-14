@@ -444,7 +444,7 @@ recursive subroutine instrng(filnam,lenstr,option,strln,string)
 !  Keeps reading lines until end of input file
    read (unit=input_unit,fmt= '(a)' ,iostat=ios) line(1:fnlen+20)
 !  Hello ! This is a commentary. Please, do not remove me.
-!  In fact, this commentary protect tests_v4 t47 for miscopying
+!  In fact, this commentary protect tests_v4 t47 for miAB_SCOPYing
 !  the input file into the output string. It _is_ strange.
 !  The number of lines in the commentary is also resulting from
 !  a long tuning..

@@ -54,7 +54,7 @@
 *> \param[in] NZ
 *> \verbatim
 *>          NZ is INTEGER
-*>     We add (NZ+1)*SLAMCH( 'Safe minimum' ) to R(i) in the numerator to
+*>     We add (NZ+1)*AB_SLAMCH( 'Safe minimum' ) to R(i) in the numerator to
 *>     guard against spuriously zero residuals. Default value is N.
 *> \endverbatim
 *>
@@ -125,8 +125,8 @@
       INTRINSIC          ABS, REAL, DIMAG, MAX
 *     ..
 *     .. External Functions ..
-      EXTERNAL           DLAMCH
-      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           AB_DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
       DOUBLE PRECISION   SAFE1
 *     ..
 *     .. Statement Functions ..
@@ -141,7 +141,7 @@
 *     residuals.  A similar safeguard is in the CLA_yyAMV routine used
 *     to compute AYB.
 *
-      SAFE1 = DLAMCH( 'Safe minimum' )
+      SAFE1 = AB_DLAMCH( 'Safe minimum' )
       SAFE1 = (NZ+1)*SAFE1
 
       DO J = 1, NRHS

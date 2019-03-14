@@ -710,7 +710,7 @@ subroutine rw_self(self,paw_dmft,prtopt,opt_rw,istep_iter,opt_char)
            !write(std_out,*) "6",nrecl
 
 !          ===========================
-!           == Check Header
+!           == Check AB_HEADER
 !          ===========================
            if(optrw==2) then
              write(message,'(3a,5i5,2x,e25.17)') "# natom,nsppol,nspinor,ndim,nw,fermilevel",ch10&
@@ -721,7 +721,7 @@ subroutine rw_self(self,paw_dmft,prtopt,opt_rw,istep_iter,opt_char)
              read(unitselffunc_arr(iall),*,iostat=ioerr)&
 &              chtemp,natom_read,nsppol_read,nspinor_read,ndim_read,nw_read,fermie_read
              if(ioerr<0) then
-!              write(std_out,*)" HEADER IOERR"
+!              write(std_out,*)" AB_HEADER IOERR"
 !              write(std_out,'(a4,2x,31(e15.8,2x))') chtemp,natom_read,nsppol_read,nspinor_read,ndim_read,nw_read,fermie_read
              endif
              if(ioerr==0) then

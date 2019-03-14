@@ -522,7 +522,7 @@ end subroutine point_group_init
 !!
 !! SOURCE
 
-subroutine point_group_print(Ptg,header,unit,mode_paral,prtvol)
+subroutine point_group_print(Ptg,AB_HEADER,unit,mode_paral,prtvol)
 
 
 !This section has been created automatically by the script Abilint (TD).
@@ -537,7 +537,7 @@ subroutine point_group_print(Ptg,header,unit,mode_paral,prtvol)
 !scalars
  integer,optional,intent(in) :: unit,prtvol
  character(len=4),optional,intent(in) :: mode_paral
- character(len=*),optional,intent(in) :: header
+ character(len=*),optional,intent(in) :: AB_HEADER
  type(point_group_t),target,intent(in) :: Ptg
 
 !Local variables-------------------------------
@@ -553,7 +553,7 @@ subroutine point_group_print(Ptg,header,unit,mode_paral,prtvol)
  my_mode  ='COLL' ; if (PRESENT(mode_paral)) my_mode  =mode_paral
 
  msg=' ==== Point Group Table ==== '
- if (PRESENT(header)) msg=' ==== '//TRIM(ADJUSTL(header))//' ==== '
+ if (PRESENT(AB_HEADER)) msg=' ==== '//TRIM(ADJUSTL(AB_HEADER))//' ==== '
  call wrtout(my_unt,msg,my_mode)
 
  write(std_out,*)REPEAT("=",80)
@@ -819,7 +819,7 @@ subroutine groupk_from_file(Lgrps,spgroup,fname,nkpt,klist,ierr)
    MSG_ERROR(msg)
  end if
 
- read(unt,*,ERR=10)          ! Skip the header.
+ read(unt,*,ERR=10)          ! Skip the AB_HEADER.
  read(unt,*,ERR=10) fvers    ! File version.
  if (fvers > last_file_version) then
    write(msg,"(2(a,i0))")" Found file format= ",fvers," but the latest supported version is: ",last_file_version

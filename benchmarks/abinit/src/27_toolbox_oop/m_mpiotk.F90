@@ -71,7 +71,7 @@ CONTAINS
 !!  no_mpiotk
 !!
 !! FUNCTION
-!!   Empty placeholder.
+!!   Empty placehoAB_LDEr.
 !!
 !! PARENTS
 !!

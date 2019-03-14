@@ -440,13 +440,13 @@ subroutine rayleigh_ritz_distributed(cg,ghc,gsc,gvnlc,eig,istwf_k,mpi_enreg,nban
    call xmpi_sum_master(ham_iproc, iproc, abi_communicator, ierr)
    call xmpi_sum_master(ovl_iproc, iproc, abi_communicator, ierr)
    if(iproc == abi_processor%myproc) then
-     ! DCOPY to bypass the real/complex issue
+     ! AB_DCOPY to bypass the real/complex issue
      if(cplx == 2) then
-       call DCOPY(cplx*buffsize_iproc(1)*buffsize_iproc(2), ham_iproc, 1, sca_ham%buffer_cplx, 1)
-       call DCOPY(cplx*buffsize_iproc(1)*buffsize_iproc(2), ovl_iproc, 1, sca_ovl%buffer_cplx, 1)
+       call AB_DCOPY(cplx*buffsize_iproc(1)*buffsize_iproc(2), ham_iproc, 1, sca_ham%buffer_cplx, 1)
+       call AB_DCOPY(cplx*buffsize_iproc(1)*buffsize_iproc(2), ovl_iproc, 1, sca_ovl%buffer_cplx, 1)
      else
-       call DCOPY(cplx*buffsize_iproc(1)*buffsize_iproc(2), ham_iproc, 1, sca_ham%buffer_real, 1)
-       call DCOPY(cplx*buffsize_iproc(1)*buffsize_iproc(2), ovl_iproc, 1, sca_ovl%buffer_real, 1)
+       call AB_DCOPY(cplx*buffsize_iproc(1)*buffsize_iproc(2), ham_iproc, 1, sca_ham%buffer_real, 1)
+       call AB_DCOPY(cplx*buffsize_iproc(1)*buffsize_iproc(2), ovl_iproc, 1, sca_ovl%buffer_real, 1)
      end if
    end if
 
@@ -512,9 +512,9 @@ subroutine rayleigh_ritz_distributed(cg,ghc,gsc,gvnlc,eig,istwf_k,mpi_enreg,nban
    ABI_ALLOCATE(evec_iproc, (cplx*buffsize_iproc(1), buffsize_iproc(2)))
    if(iproc == abi_processor%myproc) then
      if(cplx == 2) then
-       call DCOPY(cplx*buffsize_iproc(1)*buffsize_iproc(2), sca_evec%buffer_cplx, 1, evec_iproc, 1)
+       call AB_DCOPY(cplx*buffsize_iproc(1)*buffsize_iproc(2), sca_evec%buffer_cplx, 1, evec_iproc, 1)
      else
-       call DCOPY(cplx*buffsize_iproc(1)*buffsize_iproc(2), sca_evec%buffer_real, 1, evec_iproc, 1)
+       call AB_DCOPY(cplx*buffsize_iproc(1)*buffsize_iproc(2), sca_evec%buffer_real, 1, evec_iproc, 1)
      end if
    end if
    call xmpi_bcast(evec_iproc,iproc,abi_communicator,ierr)

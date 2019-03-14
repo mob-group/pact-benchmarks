@@ -183,9 +183,9 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_IZAMAX
-      DOUBLE PRECISION   DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
       COMPLEX*16         AB_ZDOTC
-      EXTERNAL           AB_LSAME, AB_IZAMAX, DLAMCH, AB_ZDOTC
+      EXTERNAL           AB_LSAME, AB_IZAMAX, AB_DLAMCH, AB_ZDOTC
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_XERBLA, AB_ZAXPY, AB_ZDRSCL, AB_ZLACN2, AB_Z
@@ -234,7 +234,7 @@
          RETURN
       END IF
 *
-      SMLNUM = DLAMCH( 'Safe minimum' )
+      SMLNUM = AB_DLAMCH( 'Safe minimum' )
 *
 *     Estimate the norm of inv(A).
 *

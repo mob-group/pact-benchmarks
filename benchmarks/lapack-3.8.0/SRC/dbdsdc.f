@@ -240,8 +240,8 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_ILAENV
-      DOUBLE PRECISION   DLAMCH, AB_DLANST
-      EXTERNAL           AB_LSAME, AB_ILAENV, DLAMCH, AB_DLANST
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANST
+      EXTERNAL           AB_LSAME, AB_ILAENV, AB_DLAMCH, AB_DLANST
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_DCOPY, AB_DLARTG, AB_DLASCL, AB_DLASD0, AB_D
@@ -386,7 +386,7 @@
       CALL AB_DLASCL( 'G', 0, 0, ORGNRM, ONE, N, 1, D, N, IERR )
       CALL AB_DLASCL( 'G', 0, 0, ORGNRM, ONE, NM1, 1, E, NM1, IERR )
 *
-      EPS = (0.9D+0)*DLAMCH( 'Epsilon' )
+      EPS = (0.9D+0)*AB_DLAMCH( 'Epsilon' )
 *
       MLVL = INT( LOG( DBLE( N ) / DBLE( SMLSIZ+1 ) ) / LOG( TWO ) ) + 1
       SMLSZP = SMLSIZ + 1

@@ -155,8 +155,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            IDAMAX
-      DOUBLE PRECISION   DLAMCH, DLANSY
-      EXTERNAL           IDAMAX, DLAMCH, DLANSY
+      DOUBLE PRECISION   AB_DLAMCH, DLANSY
+      EXTERNAL           IDAMAX, AB_DLAMCH, DLANSY
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DSYMM
@@ -175,7 +175,7 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       ANORM = DLANSY( 'I', UPLO, N, A, LDA, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS

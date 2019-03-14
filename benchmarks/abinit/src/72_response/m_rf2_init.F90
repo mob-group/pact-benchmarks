@@ -394,7 +394,7 @@ subroutine rf2_init(cg,cprj,rf2,dtset,dtfil,eig0_k,eig1_k,ffnl1,ffnl1_test,gs_ha
 !  First iteration (kdir1=1) :
 !  pert1 = rf2%iperts(1) along rf2%idirs(1)
 !  pert2 = rf2%iperts(2) along rf2%idirs(2)
-!  Second iteration (kdir1=2) :
+!  second iteration (kdir1=2) :
 !  pert1 = rf2%iperts(2) along rf2%idirs(2)
 !  pert2 = rf2%iperts(1) along rf2%idirs(1)
    idir1=rf2%idirs(kdir1)
@@ -671,7 +671,7 @@ subroutine rf2_init(cg,cprj,rf2,dtset,dtfil,eig0_k,eig1_k,ffnl1,ffnl1_test,gs_ha
 !  First iteration (kdir1=1) :
 !  pert1 = rf2%iperts(1) along rf2%idirs(1)
 !  pert2 = rf2%iperts(2) along rf2%idirs(2)
-!  Second iteration (kdir1=2) :
+!  second iteration (kdir1=2) :
 !  pert1 = rf2%iperts(2) along rf2%idirs(2)
 !  pert2 = rf2%iperts(1) along rf2%idirs(1)
    shift_dir1=(kdir1-1)*nband_k*size_wf

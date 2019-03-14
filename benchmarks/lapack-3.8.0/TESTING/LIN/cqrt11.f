@@ -120,8 +120,8 @@
       INTEGER            INFO, J
 *     ..
 *     .. External Functions ..
-      REAL               CLANGE, SLAMCH
-      EXTERNAL           CLANGE, SLAMCH
+      REAL               CLANGE, AB_SLAMCH
+      EXTERNAL           CLANGE, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CLASET, CUNM2R, XERBLA
@@ -165,7 +165,7 @@
    10 CONTINUE
 *
       CQRT11 = CLANGE( 'One-norm', M, M, WORK, M, RDUMMY ) /
-     $         ( REAL( M )*SLAMCH( 'Epsilon' ) )
+     $         ( REAL( M )*AB_SLAMCH( 'Epsilon' ) )
 *
       RETURN
 *

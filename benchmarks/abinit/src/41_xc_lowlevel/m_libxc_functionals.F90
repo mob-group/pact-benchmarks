@@ -84,7 +84,7 @@ module libxc_functionals
  public :: libxc_functionals_gga_from_hybrid    ! Return the id of the XC-GGA used for the hybrid
 
 !Private functions
- private :: libxc_functionals_constants_load    ! Load libXC constants from C headers
+ private :: libxc_functionals_constants_load    ! Load libXC constants from C AB_HEADERs
  private :: libxc_functionals_set_tb09          ! Compute c parameter for Tran-Blaha 2009 functional
  private :: xc_char_to_c                        ! Convert a string from Fortran to C
  private :: xc_char_to_f                        ! Convert a string from C to Fortran
@@ -338,7 +338,7 @@ contains
 !!  libxc_functionals_constants_load
 !!
 !! FUNCTION
-!!  Load libXC constants from C headers
+!!  Load libXC constants from C AB_HEADERs
 !!
 !! PARENTS
 !!      m_libxc_functionals

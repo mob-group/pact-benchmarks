@@ -1728,7 +1728,7 @@ subroutine gaussfit_rlsf(&
      alpha=alpha0+tmp1*alpha0
 !    Invert alpha matrix
      tmp1=alpha
-     call dgetrf(nparam,nparam,tmp1,nparam,ipvt,info)
+     call AB_DGETRF(nparam,nparam,tmp1,nparam,ipvt,info)
      if (.not.info==0) then
        if(verbosity>1) then
          write(msg,'(a)')'Matrix is singular'
@@ -1737,7 +1737,7 @@ subroutine gaussfit_rlsf(&
        chisq=-1.d0
        exit iter_loop
      end if
-     call dgetri(nparam,tmp1,nparam,ipvt,work,nparam,info)
+     call AB_DGETRI(nparam,tmp1,nparam,ipvt,work,nparam,info)
      deltapar=0.d0
      if (.not.info==0) then
        if(verbosity>2) then

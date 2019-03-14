@@ -242,8 +242,8 @@ MODULE m_fftw3
 !!        the F2003 interface
 !!     I don't have any problem in dropping support for old versions of FFTW3
 !!     We just have to handle the migration on the different slaves of the test farm
-!!     builders with MKL should use m_dfti.F90
-!!     builders with FFTW3 should provide a recent version of the library
+!!     buiAB_LDErs with MKL should use m_dfti.F90
+!!     buiAB_LDErs with FFTW3 should provide a recent version of the library
 !!
 #ifndef HAVE_FFT_FFTW3_MPI
  ! Fortran binding for fftw_malloc
@@ -1717,7 +1717,7 @@ subroutine fftw3_c2c_ip_dpc(nx,ny,nz,ldx,ldy,ldz,ndat,isign,ff,fftw_flags)
  call fftw3_destroy_plan(my_plan)
 
  if (isign==ABI_FFTW_FORWARD) then ! -1, FFTW returns not normalized FTs
-  call ZDSCAL(ldx*ldy*ldz*ndat, one/(nx*ny*nz), ff, 1)
+  call AB_ZDSCAL(ldx*ldy*ldz*ndat, one/(nx*ny*nz), ff, 1)
  end if
 
 #else
@@ -2014,7 +2014,7 @@ subroutine fftw3_r2c_op(nx,ny,nz,ldx,ldy,ldz,ndat,ff,gg,fftw_flags)
 
  call fftw3_destroy_plan(my_plan)
 
- call ZDSCAL(nhp*ndat, one/(nx*ny*nz), gg_hp, 1)  ! FFTW returns not normalized FTs
+ call AB_ZDSCAL(nhp*ndat, one/(nx*ny*nz), gg_hp, 1)  ! FFTW returns not normalized FTs
  ! Reconstruct full FFT: Hermitian redundancy: out[i] is the conjugate of out[n-i]
  padx = (nx/2+1)
 
@@ -2281,7 +2281,7 @@ subroutine fftw3_many_dft_op(nx,ny,nz,ldx,ldy,ldz,ndat,isign,fin,fout,fftw_flags
  call fftw3_destroy_plan(my_plan)
 
  if (isign==ABI_FFTW_FORWARD) then ! -1, FFTW returns not normalized FTs
-  call ZDSCAL(ldx*ldy*ldz*ndat, one/(nx*ny*nz), fout, 1)
+  call AB_ZDSCAL(ldx*ldy*ldz*ndat, one/(nx*ny*nz), fout, 1)
   !call cg_zscal(ldx*ldy*ldz*ndat, (/one/(nx*ny*nz), zero/), fout)
  end if
 
@@ -2374,7 +2374,7 @@ subroutine fftw3_many_dft_ip(nx,ny,nz,ldx,ldy,ldz,ndat,isign,finout,fftw_flags)
  call fftw3_destroy_plan(my_plan)
 
  if (isign==ABI_FFTW_FORWARD) then ! -1, FFTW returns not normalized FTs
-  call ZDSCAL(ldx*ldy*ldz*ndat, one/(nx*ny*nz), finout, 1)
+  call AB_ZDSCAL(ldx*ldy*ldz*ndat, one/(nx*ny*nz), finout, 1)
   !call cg_zscal(ldx*ldy*ldz*ndat, (/one/(nx*ny*nz),zero/), finout)
  end if
 

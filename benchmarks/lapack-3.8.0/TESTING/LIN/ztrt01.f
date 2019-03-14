@@ -152,8 +152,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, ZLANTR
-      EXTERNAL           LSAME, DLAMCH, ZLANTR
+      DOUBLE PRECISION   AB_DLAMCH, ZLANTR
+      EXTERNAL           LSAME, AB_DLAMCH, ZLANTR
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZTRMV
@@ -173,7 +173,7 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0 or AINVNM = 0.
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       ANORM = ZLANTR( '1', UPLO, DIAG, N, N, A, LDA, RWORK )
       AINVNM = ZLANTR( '1', UPLO, DIAG, N, N, AINV, LDAINV, RWORK )
       IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN

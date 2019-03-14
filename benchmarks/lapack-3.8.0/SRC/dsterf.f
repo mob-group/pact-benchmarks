@@ -115,8 +115,8 @@
      $                   SIGMA, SSFMAX, SSFMIN, RMAX
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, AB_DLANST, AB_DLAPY2
-      EXTERNAL           DLAMCH, AB_DLANST, AB_DLAPY2
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANST, AB_DLAPY2
+      EXTERNAL           AB_DLAMCH, AB_DLANST, AB_DLAPY2
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_DLAE2, AB_DLASCL, AB_DLASRT, AB_XERBLA
@@ -142,13 +142,13 @@
 *
 *     Determine the unit roundoff for this environment.
 *
-      EPS = DLAMCH( 'E' )
+      EPS = AB_DLAMCH( 'E' )
       EPS2 = EPS**2
-      SAFMIN = DLAMCH( 'S' )
+      SAFMIN = AB_DLAMCH( 'S' )
       SAFMAX = ONE / SAFMIN
       SSFMAX = SQRT( SAFMAX ) / THREE
       SSFMIN = SQRT( SAFMIN ) / EPS2
-      RMAX = DLAMCH( 'O' )
+      RMAX = AB_DLAMCH( 'O' )
 *
 *     Compute the eigenvalues of the tridiagonal matrix.
 *

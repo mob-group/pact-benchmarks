@@ -137,8 +137,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               SLAMCH, SLANGE, SLANSP
-      EXTERNAL           LSAME, SLAMCH, SLANGE, SLANSP
+      REAL               AB_SLAMCH, SLANGE, SLANSP
+      EXTERNAL           LSAME, AB_SLAMCH, SLANGE, SLANSP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          REAL
@@ -158,7 +158,7 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0 or AINVNM = 0.
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       ANORM = SLANSP( '1', UPLO, N, A, RWORK )
       AINVNM = SLANSP( '1', UPLO, N, AINV, RWORK )
       IF( ANORM.LE.ZERO .OR. AINVNM.EQ.ZERO ) THEN

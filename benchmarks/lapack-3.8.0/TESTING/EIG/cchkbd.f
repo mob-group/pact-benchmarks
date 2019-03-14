@@ -462,8 +462,8 @@
       REAL               DUMMA( 1 ), RESULT( 14 )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLARND
-      EXTERNAL           SLAMCH, SLARND
+      REAL               AB_SLAMCH, SLARND
+      EXTERNAL           AB_SLAMCH, SLARND
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASUM, CBDSQR, CBDT01, CBDT02, CBDT03,
@@ -549,10 +549,10 @@
       PATH( 2: 3 ) = 'BD'
       NFAIL = 0
       NTEST = 0
-      UNFL = SLAMCH( 'Safe minimum' )
-      OVFL = SLAMCH( 'Overflow' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
+      OVFL = AB_SLAMCH( 'Overflow' )
       CALL SLABAD( UNFL, OVFL )
-      ULP = SLAMCH( 'Precision' )
+      ULP = AB_SLAMCH( 'Precision' )
       ULPINV = ONE / ULP
       LOG2UI = INT( LOG( ULPINV ) / LOG( TWO ) )
       RTUNFL = SQRT( UNFL )

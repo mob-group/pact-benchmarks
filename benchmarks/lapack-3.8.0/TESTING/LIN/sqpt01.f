@@ -148,8 +148,8 @@
       REAL               RWORK( 1 )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLANGE
-      EXTERNAL           SLAMCH, SLANGE
+      REAL               AB_SLAMCH, SLANGE
+      EXTERNAL           AB_SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SAXPY, SCOPY, SORMQR, XERBLA
@@ -199,7 +199,7 @@
    50 CONTINUE
 *
       SQPT01 = SLANGE( 'One-norm', M, N, WORK, M, RWORK ) /
-     $         ( REAL( MAX( M, N ) )*SLAMCH( 'Epsilon' ) )
+     $         ( REAL( MAX( M, N ) )*AB_SLAMCH( 'Epsilon' ) )
       IF( NORMA.NE.ZERO )
      $   SQPT01 = SQPT01 / NORMA
 *

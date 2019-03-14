@@ -109,8 +109,8 @@
      $                   DUM( 1 ), VM1( 3 ), VM2( 3 )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLANGE
-      EXTERNAL           SLAMCH, SLANGE
+      REAL               AB_SLAMCH, SLANGE
+      EXTERNAL           AB_SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGEMM, STRSYL
@@ -133,8 +133,8 @@
 *
 *     Get machine parameters
 *
-      EPS = SLAMCH( 'P' )
-      SMLNUM = SLAMCH( 'S' )*FOUR / EPS
+      EPS = AB_SLAMCH( 'P' )
+      SMLNUM = AB_SLAMCH( 'S' )*FOUR / EPS
       BIGNUM = ONE / SMLNUM
       CALL SLABAD( SMLNUM, BIGNUM )
 *

@@ -93,7 +93,7 @@ CONTAINS  !=====================================================================
 !! atom type.
 !!
 !! PARENTS
-!!      chern_number
+!!      AB_CHERn_number
 !!
 !! CHILDREN
 !!      expibi,qijb_kk

@@ -189,8 +189,8 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ISAMAX
-      REAL               SLAMCH
-      EXTERNAL           LSAME, ISAMAX, SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           LSAME, ISAMAX, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SAXPY, SCOPY, SLABAD, SSCAL, STPMV
@@ -206,8 +206,8 @@
          RESID = ZERO
          RETURN
       END IF
-      EPS = SLAMCH( 'Epsilon' )
-      SMLNUM = SLAMCH( 'Safe minimum' )
+      EPS = AB_SLAMCH( 'Epsilon' )
+      SMLNUM = AB_SLAMCH( 'Safe minimum' )
       BIGNUM = ONE / SMLNUM
       CALL SLABAD( SMLNUM, BIGNUM )
 *

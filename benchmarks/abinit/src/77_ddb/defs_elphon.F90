@@ -785,7 +785,7 @@ end subroutine elph_k_procs
 !!      nmsq_gam_sumfs,nmsq_pure_gkk,nmsq_pure_gkk_sumfs,normsq_gkq
 !!
 !! CHILDREN
-!!      zgemm
+!!      AB_ZGEMM
 !!
 !! SOURCE
 
@@ -807,18 +807,18 @@ subroutine gam_mult_displ(nbranch, displ_red, gam_bare, gam_now)
  real(dp), intent(out) :: gam_now(2,nbranch,nbranch)
 
 !Local variables -------------------------
- real(dp) :: zgemm_tmp_mat(2,nbranch,nbranch)
+ real(dp) :: AB_ZGEMM_tmp_mat(2,nbranch,nbranch)
 
 ! *********************************************************************
 
  gam_now = zero
 
- call zgemm('c','n',nbranch,nbranch,nbranch,cone,&
+ call AB_ZGEMM('c','n',nbranch,nbranch,nbranch,cone,&
 & displ_red,nbranch,gam_bare,&
-& nbranch,czero,zgemm_tmp_mat,nbranch)
+& nbranch,czero,AB_ZGEMM_tmp_mat,nbranch)
 
- call zgemm('n','n',nbranch,nbranch,nbranch,cone,&
-& zgemm_tmp_mat,nbranch,displ_red,&
+ call AB_ZGEMM('n','n',nbranch,nbranch,nbranch,cone,&
+& AB_ZGEMM_tmp_mat,nbranch,displ_red,&
 & nbranch,czero,gam_now,nbranch)
 
 end subroutine gam_mult_displ
@@ -846,7 +846,7 @@ end subroutine gam_mult_displ
 !!      elphon,integrate_gamma_alt,m_phgamma
 !!
 !! CHILDREN
-!!      zgemm
+!!      AB_ZGEMM
 !!
 !! SOURCE
 
@@ -975,10 +975,10 @@ subroutine complete_gamma(Cryst,nbranch,nsppol,nqptirred,nqpt_full,ep_scalprod,q
          tmp_mat2(:,:,:) = zero
          tmp_mat(:,:,:) = reshape(gkk_qpt_tmp(:,:,isppol),(/2,nbranch,nbranch/))
 
-         call ZGEMM ('N','N',nbranch,nbranch,nbranch,&
+         call AB_ZGEMM ('N','N',nbranch,nbranch,nbranch,&
 &         c_one,ss_allatoms,nbranch,tmp_mat,nbranch,c_zero,tmp_mat2,nbranch)
 
-         call ZGEMM ('N','T',nbranch,nbranch,nbranch,&
+         call AB_ZGEMM ('N','T',nbranch,nbranch,nbranch,&
 &         c_one,tmp_mat2,nbranch,ss_allatoms,nbranch,c_zero,tmp_mat,nbranch)
 
 !        add to gkk_qpt_new
@@ -1041,10 +1041,10 @@ subroutine complete_gamma(Cryst,nbranch,nsppol,nqptirred,nqpt_full,ep_scalprod,q
          tmp_mat2(:,:,:) = zero
          tmp_mat(:,:,:) = reshape(gkk_qpt_new(:,:,isppol),(/2,nbranch,nbranch/))
 
-         call ZGEMM ('N','N',nbranch,nbranch,nbranch,&
+         call AB_ZGEMM ('N','N',nbranch,nbranch,nbranch,&
 &         c_one,ss_allatoms,nbranch,tmp_mat,nbranch,c_zero,tmp_mat2,nbranch)
 
-         call ZGEMM ('N','T',nbranch,nbranch,nbranch,&
+         call AB_ZGEMM ('N','T',nbranch,nbranch,nbranch,&
 &         c_one,tmp_mat2,nbranch,ss_allatoms,nbranch,c_zero,tmp_mat,nbranch)
 
 !        FIXME: the following could just be a reshape
@@ -1102,7 +1102,7 @@ end subroutine complete_gamma
 !!      elphon
 !!
 !! CHILDREN
-!!      dgemm
+!!      AB_DGEMM
 !!
 !! SOURCE
 
@@ -1255,17 +1255,17 @@ subroutine complete_gamma_tr(crystal,ep_scalprod,nbranch,nqptirred,nqpt_full,nsp
            tmp_mat2(:,:,:) = zero
            tmp_mat(:,:,:) = reshape(gkk_qpt_tmp(:,itensor,:,isppol),&
 &           (/2,nbranch,nbranch/))
-           call DGEMM ('N','N',nbranch,nbranch,nbranch,&
+           call AB_DGEMM ('N','N',nbranch,nbranch,nbranch,&
 &           one,ss_allatoms,nbranch,tmp_mat(1,:,:),nbranch,zero,&
 &           tmp_mat2(1,:,:),nbranch)
-           call DGEMM ('N','N',nbranch,nbranch,nbranch,&
+           call AB_DGEMM ('N','N',nbranch,nbranch,nbranch,&
 &           one,ss_allatoms,nbranch,tmp_mat(2,:,:),nbranch,zero,&
 &           tmp_mat2(2,:,:),nbranch)
 
-           call DGEMM ('N','T',nbranch,nbranch,nbranch,&
+           call AB_DGEMM ('N','T',nbranch,nbranch,nbranch,&
 &           one,tmp_mat2(1,:,:),nbranch,ss_allatoms,nbranch,zero,&
 &           tmp_mat(1,:,:),nbranch)
-           call DGEMM ('N','T',nbranch,nbranch,nbranch,&
+           call AB_DGEMM ('N','T',nbranch,nbranch,nbranch,&
 &           one,tmp_mat2(2,:,:),nbranch,ss_allatoms,nbranch,zero,&
 &           tmp_mat(2,:,:),nbranch)
 
@@ -1277,17 +1277,17 @@ subroutine complete_gamma_tr(crystal,ep_scalprod,nbranch,nqptirred,nqpt_full,nsp
            tmp_tensor2(:,:,:) = zero
            tmp_tensor(:,:,:) = reshape(gkk_qpt_tmp(:,:,imode,isppol),&
 &           (/2,3,3/))
-           call DGEMM ('N','N',3,3,3,&
+           call AB_DGEMM ('N','N',3,3,3,&
 &           one,sscart,3,tmp_tensor(1,:,:),3,zero,&
 &           tmp_tensor2(1,:,:),3)
-           call DGEMM ('N','T',3,3,3,&
+           call AB_DGEMM ('N','T',3,3,3,&
 &           one,tmp_tensor2(1,:,:),3,sscart,3,zero,&
 &           tmp_tensor(1,:,:),3)
 
-           call DGEMM ('N','N',3,3,3,&
+           call AB_DGEMM ('N','N',3,3,3,&
 &           one,sscart,3,tmp_tensor(2,:,:),3,zero,&
 &           tmp_tensor2(2,:,:),3)
-           call DGEMM ('N','T',3,3,3,&
+           call AB_DGEMM ('N','T',3,3,3,&
 &           one,tmp_tensor2(2,:,:),3,sscart,3,zero,&
 &           tmp_tensor(2,:,:),3)
 
@@ -1368,17 +1368,17 @@ subroutine complete_gamma_tr(crystal,ep_scalprod,nbranch,nqptirred,nqpt_full,nsp
 &           (/2,nbranch,nbranch/))
 
 
-           call DGEMM ('N','N',nbranch,nbranch,nbranch,&
+           call AB_DGEMM ('N','N',nbranch,nbranch,nbranch,&
 &           one,ss_allatoms,nbranch,tmp_mat(1,:,:),nbranch,zero,&
 &           tmp_mat2(1,:,:),nbranch)
-           call DGEMM ('N','N',nbranch,nbranch,nbranch,&
+           call AB_DGEMM ('N','N',nbranch,nbranch,nbranch,&
 &           one,ss_allatoms,nbranch,tmp_mat(2,:,:),nbranch,zero,&
 &           tmp_mat2(2,:,:),nbranch)
 
-           call DGEMM ('N','T',nbranch,nbranch,nbranch,&
+           call AB_DGEMM ('N','T',nbranch,nbranch,nbranch,&
 &           one,tmp_mat2(1,:,:),nbranch,ss_allatoms,nbranch,zero,&
 &           tmp_mat(1,:,:),nbranch)
-           call DGEMM ('N','T',nbranch,nbranch,nbranch,&
+           call AB_DGEMM ('N','T',nbranch,nbranch,nbranch,&
 &           one,tmp_mat2(2,:,:),nbranch,ss_allatoms,nbranch,zero,&
 &           tmp_mat(2,:,:),nbranch)
 
@@ -1391,17 +1391,17 @@ subroutine complete_gamma_tr(crystal,ep_scalprod,nbranch,nqptirred,nqpt_full,nsp
            tmp_tensor2(:,:,:) = zero
            tmp_tensor(:,:,:) = reshape(gkk_qpt_tmp(:,:,imode,isppol),&
 &           (/2,3,3/))
-           call DGEMM ('N','N',3,3,3,&
+           call AB_DGEMM ('N','N',3,3,3,&
 &           one,sscart,3,tmp_tensor(1,:,:),3,zero,&
 &           tmp_tensor2(1,:,:),3)
-           call DGEMM ('N','T',3,3,3,&
+           call AB_DGEMM ('N','T',3,3,3,&
 &           one,tmp_tensor2(1,:,:),3,sscart,3,zero,&
 &           tmp_tensor(1,:,:),3)
 
-           call DGEMM ('N','N',3,3,3,&
+           call AB_DGEMM ('N','N',3,3,3,&
 &           one,sscart,3,tmp_tensor(2,:,:),3,zero,&
 &           tmp_tensor2(2,:,:),3)
-           call DGEMM ('N','T',3,3,3,&
+           call AB_DGEMM ('N','T',3,3,3,&
 &           one,tmp_tensor2(2,:,:),3,sscart,3,zero,&
 &           tmp_tensor(2,:,:),3)
 

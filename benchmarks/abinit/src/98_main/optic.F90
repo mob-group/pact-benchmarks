@@ -139,7 +139,7 @@ program optic
  real(dp) :: tcpu,tcpui,twall,twalli,nelect
  logical :: do_antiresonant, do_temperature
  logical :: do_ep_renorm
- logical,parameter :: remove_inv = .False.
+ logical,parameter :: remove_inv = .false.
  type(hdr_type) :: hdr
  type(ebands_t) :: ks_ebands, eph_ebands
  type(crystal_t) :: cryst
@@ -250,7 +250,7 @@ program optic
    ! Open the Wavefunction files
    ! Note: Cannot use MPI-IO here because of prtwf=3.
    ! If prtwf==3, the DDK file does not contain the wavefunctions but
-   ! this info is not reported in the header and the offsets in wfk_compute_offsets
+   ! this info is not reported in the AB_HEADER and the offsets in wfk_compute_offsets
    ! are always computed assuming the presence of the cg
 
    ! TODO: one should perform basic consistency tests for the GS WFK and the EVK files, e.g.
@@ -260,11 +260,11 @@ program optic
    if (len_trim(msg) /= 0) MSG_ERROR(msg)
    if (iomode == IO_MODE_MPI) iomode = IO_MODE_FORTRAN
    call wfk_open_read(wfk0,wfkfile,formeig0,iomode,get_unit(),xmpi_comm_self)
-   ! Get header from the gs file
+   ! Get AB_HEADER from the gs file
    call hdr_copy(wfk0%hdr, hdr)
 
    ! Read ddk here from WFK files or afterwards from EVK.nc
-   use_ncddk = .False.
+   use_ncddk = .false.
    do ii=1,3
      use_ncddk(ii) = endswith(infiles(ii), "_EVK.nc")
      if (.not. use_ncddk(ii)) then
@@ -349,7 +349,7 @@ program optic
  call xmpi_bcast(ep_ntemp,master,comm,ierr)
  if (do_ep_renorm) call eprenorms_bcast(Epren, master, comm)
 
-!Extract info from the header
+!Extract info from the AB_HEADER
  headform=hdr%headform
  bantot=hdr%bantot
  ecut=hdr%ecut_eff
@@ -363,7 +363,7 @@ program optic
  ABI_ALLOCATE(nband,(nkpt*nsppol))
  ABI_ALLOCATE(occ,(bantot))
  !fermie=hdr%fermie
- ! YG Fermi energy contained in the header of a NSCF computation is always 0 !!
+ ! YG Fermi energy contained in the AB_HEADER of a NSCF computation is always 0 !!
  occ(1:bantot)=hdr%occ(1:bantot)
  nband(1:nkpt*nsppol)=hdr%nband(1:nkpt*nsppol)
 
@@ -479,7 +479,7 @@ program optic
 
  ABI_ALLOCATE(doccde,(mband*nkpt*nsppol))
 
- !Recompute fermie from header
+ !Recompute fermie from AB_HEADER
  !WARNING no garantie that it works for other materials than insulators
  nelect = hdr%nelect
  tphysel = zero
@@ -530,7 +530,7 @@ program optic
    ! Open netcdf file that will contain output results (only master is supposed to write)
    NCF_CHECK_MSG(nctk_open_create(optic_ncid, strcat(prefix, "_OPTIC.nc"), xmpi_comm_self), "Creating _OPTIC.nc")
 
-   ! Add header, crystal, and ks_ebands
+   ! Add AB_HEADER, crystal, and ks_ebands
    ! Note that we write the KS bands without EPH interaction (if any).
    NCF_CHECK(hdr_ncwrite(hdr, optic_ncid, 666, nc_define=.True.))
    NCF_CHECK(crystal_ncwrite(cryst, optic_ncid))
@@ -562,7 +562,7 @@ program optic
    end if
 
    if (num_nonlin_comp > 0) then
-     ! Second harmonic generation.
+     ! second harmonic generation.
      NCF_CHECK(nctk_def_dims(optic_ncid, nctkdim_t("shg_ncomp", num_nonlin_comp)))
      ncerr = nctk_def_arrays(optic_ncid, [ &
      nctkarr_t('shg_components', "int", "shg_ncomp"), &

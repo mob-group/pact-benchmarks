@@ -142,8 +142,8 @@ end subroutine tdep_make_inbox
   ABI_MALLOC(IPIV,(3))
   ABI_MALLOC(WORK,(3)) ; IPIV(:)=0 ; WORK(:)=0.d0
   multiplicitym1(:,:)=InVar%multiplicity(:,:)
-  call DGETRF(3,3,multiplicitym1,3,IPIV,INFO)
-  call DGETRI(3,multiplicitym1,3,IPIV,WORK,3,INFO)
+  call AB_DGETRF(3,3,multiplicitym1,3,IPIV,INFO)
+  call AB_DGETRI(3,multiplicitym1,3,IPIV,WORK,3,INFO)
   ABI_FREE(IPIV)
   ABI_FREE(WORK)
 
@@ -251,8 +251,8 @@ end subroutine tdep_make_inbox
   ABI_MALLOC(IPIV,(3))
   ABI_MALLOC(WORK,(3)) ; IPIV(:)=0 ; WORK(:)=0.d0
   rprimm1(:,:)=rprim(:,:)
-  call DGETRF(3,3,rprimm1,3,IPIV,INFO)
-  call DGETRI(3,rprimm1,3,IPIV,WORK,3,INFO)
+  call AB_DGETRF(3,3,rprimm1,3,IPIV,INFO)
+  call AB_DGETRI(3,rprimm1,3,IPIV,WORK,3,INFO)
   ABI_FREE(IPIV)
   ABI_FREE(WORK)
 
@@ -337,16 +337,16 @@ end subroutine tdep_make_inbox
   ABI_MALLOC(IPIV,(3))
   ABI_MALLOC(WORK,(3)) ; IPIV(:)=0 ; WORK(:)=0.d0
   rprimdtm1(:,:)=rprimdt(:,:)
-  call DGETRF(3,3,rprimdtm1,3,IPIV,INFO)
-  call DGETRI(3,rprimdtm1,3,IPIV,WORK,3,INFO)
+  call AB_DGETRF(3,3,rprimdtm1,3,IPIV,INFO)
+  call AB_DGETRI(3,rprimdtm1,3,IPIV,WORK,3,INFO)
   ABI_FREE(IPIV)
   ABI_FREE(WORK)
 
   ABI_MALLOC(IPIV,(3))
   ABI_MALLOC(WORK,(3)) ; IPIV(:)=0 ; WORK(:)=0.d0
   rprimdm1(:,:)=rprimd(:,:)
-  call DGETRF(3,3,rprimdm1,3,IPIV,INFO)
-  call DGETRI(3,rprimdm1,3,IPIV,WORK,3,INFO)
+  call AB_DGETRF(3,3,rprimdm1,3,IPIV,INFO)
+  call AB_DGETRI(3,rprimdm1,3,IPIV,WORK,3,INFO)
   ABI_FREE(IPIV)
   ABI_FREE(WORK)
 

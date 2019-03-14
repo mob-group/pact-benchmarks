@@ -131,7 +131,7 @@
       INTEGER            IWORK(NMAX), IPIV(NMAX)
 
 *     .. External Functions ..
-      REAL               SLAMCH
+      REAL               AB_SLAMCH
 
 *     .. External Subroutines ..
       EXTERNAL           SLAHILB, SGESVXX, SSYSVXX, SPOSVXX, SGBSVXX,
@@ -153,7 +153,7 @@
       UPLO = 'U'
       TRANS = 'N'
       EQUED = 'N'
-      EPS = SLAMCH('Epsilon')
+      EPS = AB_SLAMCH('Epsilon')
       NFAIL = 0
       N_AUX_TESTS = 0
       LDA = NMAX
@@ -320,13 +320,13 @@
                   CWISE_ERR = MAX(ABS(X(I,K) - INVHILB(I,K))
      $                 /ABS(INVHILB(I,K)), CWISE_ERR)
                ELSE IF (X(I, K) .NE. 0.0) THEN
-                  CWISE_ERR = SLAMCH('OVERFLOW')
+                  CWISE_ERR = AB_SLAMCH('OVERFLOW')
                END IF
             END DO
             IF (NORMT .NE. 0.0) THEN
                NWISE_ERR = NORMDIF / NORMT
             ELSE IF (NORMDIF .NE. 0.0) THEN
-               NWISE_ERR = SLAMCH('OVERFLOW')
+               NWISE_ERR = AB_SLAMCH('OVERFLOW')
             ELSE
                NWISE_ERR = 0.0
             ENDIF

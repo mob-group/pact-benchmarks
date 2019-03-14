@@ -104,15 +104,15 @@
       EXTERNAL           CERREC, CGET35, CGET36, CGET37, CGET38
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. Executable Statements ..
 *
       PATH( 1: 1 ) = 'Complex precision'
       PATH( 2: 3 ) = 'EC'
-      EPS = SLAMCH( 'P' )
-      SFMIN = SLAMCH( 'S' )
+      EPS = AB_SLAMCH( 'P' )
+      SFMIN = AB_SLAMCH( 'S' )
       WRITE( NOUT, FMT = 9994 )
       WRITE( NOUT, FMT = 9993 )EPS, SFMIN
       WRITE( NOUT, FMT = 9992 )THRESH

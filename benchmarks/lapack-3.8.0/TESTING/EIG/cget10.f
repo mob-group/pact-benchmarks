@@ -124,8 +124,8 @@
       REAL               ANORM, EPS, UNFL, WNORM
 *     ..
 *     .. External Functions ..
-      REAL               SCASUM, SLAMCH, CLANGE
-      EXTERNAL           SCASUM, SLAMCH, CLANGE
+      REAL               SCASUM, AB_SLAMCH, CLANGE
+      EXTERNAL           SCASUM, AB_SLAMCH, CLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CAXPY, CCOPY
@@ -142,8 +142,8 @@
          RETURN
       END IF
 *
-      UNFL = SLAMCH( 'Safe minimum' )
-      EPS = SLAMCH( 'Precision' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
+      EPS = AB_SLAMCH( 'Precision' )
 *
       WNORM = ZERO
       DO 10 J = 1, N

@@ -108,8 +108,8 @@
       DOUBLE PRECISION   D_WORK_ZPOT03( NMAX )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DSECND
-      EXTERNAL           DLAMCH, DSECND
+      DOUBLE PRECISION   AB_DLAMCH, DSECND
+      EXTERNAL           AB_DLAMCH, DSECND
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ILAVER, ZDRVRFP, ZDRVRF1, ZDRVRF2, ZDRVRF3,
@@ -220,11 +220,11 @@
 *
 *     Calculate and print the machine dependent constants.
 *
-      EPS = DLAMCH( 'Underflow threshold' )
+      EPS = AB_DLAMCH( 'Underflow threshold' )
       WRITE( NOUT, FMT = 9991 )'underflow', EPS
-      EPS = DLAMCH( 'Overflow threshold' )
+      EPS = AB_DLAMCH( 'Overflow threshold' )
       WRITE( NOUT, FMT = 9991 )'overflow ', EPS
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       WRITE( NOUT, FMT = 9991 )'precision', EPS
       WRITE( NOUT, FMT = * )
 *

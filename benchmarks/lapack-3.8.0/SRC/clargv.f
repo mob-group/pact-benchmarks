@@ -151,8 +151,8 @@
       COMPLEX            F, FF, FS, G, GS, R, SN
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, AB_SLAPY2
-      EXTERNAL           SLAMCH, AB_SLAPY2
+      REAL               AB_SLAMCH, AB_SLAPY2
+      EXTERNAL           AB_SLAMCH, AB_SLAPY2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CMPLX, CONJG, INT, LOG, MAX, REAL,
@@ -175,10 +175,10 @@
 *
 *     IF( FIRST ) THEN
 *        FIRST = .FALSE.
-         SAFMIN = SLAMCH( 'S' )
-         EPS = SLAMCH( 'E' )
-         SAFMN2 = SLAMCH( 'B' )**INT( LOG( SAFMIN / EPS ) /
-     $            LOG( SLAMCH( 'B' ) ) / TWO )
+         SAFMIN = AB_SLAMCH( 'S' )
+         EPS = AB_SLAMCH( 'E' )
+         SAFMN2 = AB_SLAMCH( 'B' )**INT( LOG( SAFMIN / EPS ) /
+     $            LOG( AB_SLAMCH( 'B' ) ) / TWO )
          SAFMX2 = ONE / SAFMN2
 *     END IF
       IX = 1

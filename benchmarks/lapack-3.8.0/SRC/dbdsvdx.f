@@ -265,8 +265,8 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_IDAMAX
-      DOUBLE PRECISION   AB_DDOT, DLAMCH, AB_DNRM2
-      EXTERNAL           AB_IDAMAX, AB_LSAME, AB_DAXPY, AB_DDOT, DLAMCH,
+      DOUBLE PRECISION   AB_DDOT, AB_DLAMCH, AB_DNRM2
+      EXTERNAL           AB_IDAMAX, AB_LSAME, AB_DAXPY, AB_DDOT, AB_DLAMCH,
      $ AB_DNRM2
 *     ..
 *     .. External Subroutines ..
@@ -341,9 +341,9 @@
          RETURN
       END IF
 *
-      ABSTOL = 2*DLAMCH( 'Safe Minimum' )
-      ULP = DLAMCH( 'Precision' )
-      EPS = DLAMCH( 'Epsilon' )
+      ABSTOL = 2*AB_DLAMCH( 'Safe Minimum' )
+      ULP = AB_DLAMCH( 'Precision' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       SQRT2 = SQRT( 2.0D0 )
       ORTOL = SQRT( ULP )
 *

@@ -209,8 +209,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            AB_ISAMAX
-      REAL               SLAMCH, AB_SLANST
-      EXTERNAL           AB_ISAMAX, SLAMCH, AB_SLANST
+      REAL               AB_SLAMCH, AB_SLANST
+      EXTERNAL           AB_ISAMAX, AB_SLAMCH, AB_SLANST
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_SCOPY, AB_SGEMM, AB_SLACPY, AB_SLALSA, AB_SL
@@ -239,7 +239,7 @@
          RETURN
       END IF
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
 *
 *     Set up the tolerance.
 *

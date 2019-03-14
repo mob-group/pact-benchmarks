@@ -110,15 +110,15 @@
      $                   SGET36, SGET37, SGET38, SGET39
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. Executable Statements ..
 *
       PATH( 1: 1 ) = 'Single precision'
       PATH( 2: 3 ) = 'EC'
-      EPS = SLAMCH( 'P' )
-      SFMIN = SLAMCH( 'S' )
+      EPS = AB_SLAMCH( 'P' )
+      SFMIN = AB_SLAMCH( 'S' )
 *
 *     Print header information
 *

@@ -242,8 +242,8 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_ILAENV
-      REAL               SLAMCH, AB_SLANST
-      EXTERNAL           AB_ILAENV, AB_LSAME, SLAMCH, AB_SLANST
+      REAL               AB_SLAMCH, AB_SLANST
+      EXTERNAL           AB_ILAENV, AB_LSAME, AB_SLAMCH, AB_SLANST
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_XERBLA, AB_CLACPY, AB_CLACRM, AB_CLAED0, AB_
@@ -385,7 +385,7 @@
          IF( ORGNRM.EQ.ZERO )
      $      GO TO 70
 *
-         EPS = SLAMCH( 'Epsilon' )
+         EPS = AB_SLAMCH( 'Epsilon' )
 *
          START = 1
 *

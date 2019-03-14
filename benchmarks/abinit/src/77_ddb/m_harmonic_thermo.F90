@@ -145,7 +145,7 @@ subroutine harmonic_thermo(Ifc,Crystal,amu,anaddb_dtset,iout,outfilename_radix,c
  real(dp),allocatable :: entropy0(:),free(:),free0(:),gdos(:,:),gg(:,:),gg_sum(:,:),gg_rest(:,:)
  real(dp),allocatable :: ggij(:,:,:,:),gij(:,:,:,:),gw(:,:),qpt2(:,:),spheat(:)
  real(dp),allocatable :: spheat0(:),spqpt2(:,:),wme(:),wtq(:),wtq2(:)
- real(dp),allocatable :: wtq_folded(:),vij(:,:,:)
+ real(dp),allocatable :: wtq_foAB_LDEd(:),vij(:,:,:)
  real(dp),allocatable :: phon_dos(:)
  logical,allocatable :: wgcnv(:),wgijcnv(:)
 
@@ -275,20 +275,20 @@ subroutine harmonic_thermo(Ifc,Crystal,amu,anaddb_dtset,iout,outfilename_radix,c
 
    ABI_ALLOCATE(indqpt1,(nspqpt))
    ABI_ALLOCATE(wtq,(nspqpt))
-   ABI_ALLOCATE(wtq_folded,(nspqpt))
+   ABI_ALLOCATE(wtq_foAB_LDEd,(nspqpt))
 
 !  Reduce the number of such points by symmetrization
    wtq(:)=1.0_dp
 
    timrev=1
-   call symkpt(0,Crystal%gmet,indqpt1,ab_out,spqpt2,nspqpt,nqpt2,Crystal%nsym,symrec,timrev,wtq,wtq_folded)
+   call symkpt(0,Crystal%gmet,indqpt1,ab_out,spqpt2,nspqpt,nqpt2,Crystal%nsym,symrec,timrev,wtq,wtq_foAB_LDEd)
    ABI_ALLOCATE(wtq2,(nqpt2))
    do iqpt2=1,nqpt2
-     wtq2(iqpt2)=wtq_folded(indqpt1(iqpt2))
+     wtq2(iqpt2)=wtq_foAB_LDEd(indqpt1(iqpt2))
      qpt2(:,iqpt2)=spqpt2(:,indqpt1(iqpt2))
      !write(std_out,*)' harmonic_thermo : iqpt2, wtq2 :',iqpt2,wtq2(iqpt2)
    end do
-   ABI_DEALLOCATE(wtq_folded)
+   ABI_DEALLOCATE(wtq_foAB_LDEd)
 
 !  Temporary counters are put zero.
 

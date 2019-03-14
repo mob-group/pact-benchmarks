@@ -110,15 +110,15 @@
      $                   DGET36, DGET37, DGET38, DGET39
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. Executable Statements ..
 *
       PATH( 1: 1 ) = 'Double precision'
       PATH( 2: 3 ) = 'EC'
-      EPS = DLAMCH( 'P' )
-      SFMIN = DLAMCH( 'S' )
+      EPS = AB_DLAMCH( 'P' )
+      SFMIN = AB_DLAMCH( 'S' )
 *
 *     Print header information
 *

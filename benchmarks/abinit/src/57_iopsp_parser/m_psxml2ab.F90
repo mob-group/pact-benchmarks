@@ -5,7 +5,7 @@
 !!
 !! FUNCTION
 !!  From a SIESTA XML format pseudopotential file
-!!  convert to abinit internal datastructures for pspheader.
+!!  convert to abinit internal datastructures for pspAB_HEADER.
 !!
 !! COPYRIGHT
 !! Copyright (C) 2005-2018 ABINIT group (MJV).
@@ -53,18 +53,18 @@ implicit none
 private
 
 #ifdef HAVE_PSML
-public :: psxml2abheader
+public :: psxml2abAB_HEADER
 !public :: psxml2abfull
 
 CONTAINS
 
-subroutine psxml2abheader(psxmlfile, psphead, atmsymb, creator, iwrite)
+subroutine psxml2abAB_HEADER(psxmlfile, psphead, atmsymb, creator, iwrite)
 
 
 !This section has been created automatically by the script Abilint (TD).
 !Do not modify the following lines by hand.
 #undef ABI_FUNC
-#define ABI_FUNC 'psxml2abheader'
+#define ABI_FUNC 'psxml2abAB_HEADER'
 !End of the abilint section
 
  implicit none
@@ -73,7 +73,7 @@ subroutine psxml2abheader(psxmlfile, psphead, atmsymb, creator, iwrite)
 !scalars
  integer, intent(in) :: iwrite
  character(len=fnlen), intent(in) :: psxmlfile
- type(pspheader_type),intent(inout) :: psphead
+ type(pspAB_HEADER_type),intent(inout) :: psphead
  character(len=3), intent(out) :: atmsymb
  character(len=30), intent(out) :: creator
 
@@ -378,7 +378,7 @@ subroutine psxml2abheader(psxmlfile, psphead, atmsymb, creator, iwrite)
 
  call ps_destroy(psxml)
 
-end subroutine psxml2abheader
+end subroutine psxml2abAB_HEADER
 !!***
 ! end test on compiling with LIBPSML enabled
 #endif

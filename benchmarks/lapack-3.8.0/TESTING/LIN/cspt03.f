@@ -138,9 +138,9 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               CLANGE, CLANSP, SLAMCH
+      REAL               CLANGE, CLANSP, AB_SLAMCH
       COMPLEX            CDOTU
-      EXTERNAL           LSAME, CLANGE, CLANSP, SLAMCH, CDOTU
+      EXTERNAL           LSAME, CLANGE, CLANSP, AB_SLAMCH, CDOTU
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          REAL
@@ -157,7 +157,7 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0 or AINVNM = 0.
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       ANORM = CLANSP( '1', UPLO, N, A, RWORK )
       AINVNM = CLANSP( '1', UPLO, N, AINV, RWORK )
       IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN

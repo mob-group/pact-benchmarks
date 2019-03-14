@@ -139,9 +139,9 @@
       INTEGER            I, IINFO, N1, N2
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
       INTEGER            AB_IZAMAX
-      EXTERNAL           DLAMCH, AB_IZAMAX
+      EXTERNAL           AB_DLAMCH, AB_IZAMAX
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_ZGEMM, AB_ZSCAL, AB_ZLASWP, AB_ZTRSM, AB_XER
@@ -188,7 +188,7 @@
 *
 *        Compute machine safe minimum
 *
-         SFMIN = DLAMCH('S')
+         SFMIN = AB_DLAMCH('S')
 *
 *        Find pivot and test for singularity
 *

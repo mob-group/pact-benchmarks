@@ -163,8 +163,8 @@
       REAL               BIGNUM, RCMAX, RCMIN, SMLNUM
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_XERBLA
@@ -200,7 +200,7 @@
 *
 *     Get machine constants.
 *
-      SMLNUM = SLAMCH( 'S' )
+      SMLNUM = AB_SLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
 *
 *     Compute row scale factors.

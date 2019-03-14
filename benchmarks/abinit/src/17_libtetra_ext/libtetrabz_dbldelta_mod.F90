@@ -21,23 +21,23 @@
 ! THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
 ! OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 ! MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-! IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+! IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOAB_LDERS BE LIABLE FOR ANY
 ! CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 ! TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 ! SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 !
-MODULE libtetrabz_dbldelta_mod
+MODULE libtetrabz_dbAB_LDElta_mod
   !
   IMPLICIT NONE
   !
   PRIVATE
-  PUBLIC :: libtetrabz_dbldelta
+  PUBLIC :: libtetrabz_dbAB_LDElta
   !
 CONTAINS
 !
 ! Compute doubledelta
 !
-SUBROUTINE libtetrabz_dbldelta(ltetra,bvec,nb,nge,eig1,eig2,ngw,wght,comm) 
+SUBROUTINE libtetrabz_dbAB_LDElta(ltetra,bvec,nb,nge,eig1,eig2,ngw,wght,comm) 
   !
   USE ISO_C_BINDING
   USE libtetrabz_common, ONLY : libtetrabz_initialize, libtetrabz_interpol_indx, libtetrabz_mpisum_dv
@@ -45,7 +45,7 @@ SUBROUTINE libtetrabz_dbldelta(ltetra,bvec,nb,nge,eig1,eig2,ngw,wght,comm)
 !This section has been created automatically by the script Abilint (TD).
 !Do not modify the following lines by hand.
 #undef ABI_FUNC
-#define ABI_FUNC 'libtetrabz_dbldelta'
+#define ABI_FUNC 'libtetrabz_dbAB_LDElta'
 !End of the abilint section
 
   IMPLICIT NONE
@@ -74,7 +74,7 @@ SUBROUTINE libtetrabz_dbldelta(ltetra,bvec,nb,nge,eig1,eig2,ngw,wght,comm)
   IF(linterpol) THEN
      !
      ALLOCATE(wghtd(nb*nb,1,nk_local))
-     CALL libtetrabz_dbldelta_main(wlsm,nt_local,ik_global,ik_local,nb,nkBZ,eig1,eig2,nk_local,wghtd)
+     CALL libtetrabz_dbAB_LDElta_main(wlsm,nt_local,ik_global,ik_local,nb,nkBZ,eig1,eig2,nk_local,wghtd)
      !
      ! Interpolation
      !
@@ -89,16 +89,16 @@ SUBROUTINE libtetrabz_dbldelta(ltetra,bvec,nb,nge,eig1,eig2,ngw,wght,comm)
      IF(PRESENT(comm)) CALL libtetrabz_mpisum_dv(comm, nb*nb*PRODUCT(ngw(1:3)), wght)
      !
   ELSE
-     CALL libtetrabz_dbldelta_main(wlsm,nt_local,ik_global,ik_local,nb,nkBZ,eig1,eig2,nk_local,wght)
+     CALL libtetrabz_dbAB_LDElta_main(wlsm,nt_local,ik_global,ik_local,nb,nkBZ,eig1,eig2,nk_local,wght)
   END IF
   !
   DEALLOCATE(ik_global, ik_local)
   !
-END SUBROUTINE libtetrabz_dbldelta
+END SUBROUTINE libtetrabz_dbAB_LDElta
 !
 ! Main SUBROUTINE for Delta(E1) * Delta(E2)
 !
-SUBROUTINE libtetrabz_dbldelta_main(wlsm,nt_local,ik_global,ik_local,nb,nkBZ,eig1,eig2,nk_local,dbldelta)
+SUBROUTINE libtetrabz_dbAB_LDElta_main(wlsm,nt_local,ik_global,ik_local,nb,nkBZ,eig1,eig2,nk_local,dbAB_LDElta)
   !
   USE libtetrabz_common, ONLY : libtetrabz_sort, &
   &                             libtetrabz_triangle_a1, libtetrabz_triangle_b1, &
@@ -107,7 +107,7 @@ SUBROUTINE libtetrabz_dbldelta_main(wlsm,nt_local,ik_global,ik_local,nb,nkBZ,eig
 !This section has been created automatically by the script Abilint (TD).
 !Do not modify the following lines by hand.
 #undef ABI_FUNC
-#define ABI_FUNC 'libtetrabz_dbldelta_main'
+#define ABI_FUNC 'libtetrabz_dbAB_LDElta_main'
 !End of the abilint section
 
   IMPLICIT NONE
@@ -115,16 +115,16 @@ SUBROUTINE libtetrabz_dbldelta_main(wlsm,nt_local,ik_global,ik_local,nb,nkBZ,eig
   INTEGER,INTENT(IN) :: nt_local, nb, nkBZ, nk_local, &
   &                     ik_global(20,nt_local), ik_local(20,nt_local)
   REAL(8),INTENT(IN) :: wlsm(4,20), eig1(nb,nkBZ), eig2(nb,nkBZ)
-  REAL(8),INTENT(OUT) :: dbldelta(nb,nb,nk_local)
+  REAL(8),INTENT(OUT) :: dbAB_LDElta(nb,nb,nk_local)
   !
   INTEGER :: ib, indx(4), it
   REAL(8) :: e(4), ei1(4,nb), ej1(4,nb), ej2(3,nb), V, thr = 1d-10, &
   &          tsmall(3,4), w1(nb,4), w2(nb,3)
   !
-  dbldelta(1:nb,1:nb,1:nk_local) = 0d0
+  dbAB_LDElta(1:nb,1:nb,1:nk_local) = 0d0
   !
   !$OMP PARALLEL DEFAULT(NONE) &
-  !$OMP & SHARED(dbldelta,eig1,eig2,ik_global,ik_local,nb,nt_local,thr,wlsm) &
+  !$OMP & SHARED(dbAB_LDElta,eig1,eig2,ik_global,ik_local,nb,nt_local,thr,wlsm) &
   !$OMP & PRIVATE(e,ei1,ej1,ej2,ib,indx,it,tsmall,V,w1,w2)
   !
   DO it = 1, nt_local
@@ -148,7 +148,7 @@ SUBROUTINE libtetrabz_dbldelta_main(wlsm,nt_local,ik_global,ik_local,nb,nkBZ,eig
            IF(V > thr) THEN
               !
               ej2(1:3,1:nb) = MATMUL(tsmall(1:3,1:4), ej1(indx(1:4),1:nb))
-              CALL libtetrabz_dbldelta2(nb,ej2,w2)
+              CALL libtetrabz_dbAB_LDElta2(nb,ej2,w2)
               w1(1:nb,indx(1:4)) = w1(1:nb,            indx(1:4)) &
               &       + V * MATMUL(w2(1:nb,1:3), tsmall(1:3,1:4))
               !
@@ -161,7 +161,7 @@ SUBROUTINE libtetrabz_dbldelta_main(wlsm,nt_local,ik_global,ik_local,nb,nkBZ,eig
            IF(V > thr) THEN
               !
               ej2(1:3,1:nb) = MATMUL(tsmall(1:3,1:4), ej1(indx(1:4),1:nb))
-              CALL libtetrabz_dbldelta2(nb,ej2,w2)
+              CALL libtetrabz_dbAB_LDElta2(nb,ej2,w2)
               w1(1:nb,indx(1:4)) = w1(1:nb,            indx(1:4)) &
               &       + V * MATMUL(w2(1:nb,1:3), tsmall(1:3,1:4))
               !
@@ -172,7 +172,7 @@ SUBROUTINE libtetrabz_dbldelta_main(wlsm,nt_local,ik_global,ik_local,nb,nkBZ,eig
            IF(V > thr) THEN
               !
               ej2(1:3,1:nb) = MATMUL(tsmall(1:3,1:4), ej1(indx(1:4),1:nb))
-              CALL libtetrabz_dbldelta2(nb,ej2,w2)
+              CALL libtetrabz_dbAB_LDElta2(nb,ej2,w2)
               w1(1:nb,indx(1:4)) = w1(1:nb,            indx(1:4)) &
               &       + V * MATMUL(w2(1:nb,1:3), tsmall(1:3,1:4))
               !
@@ -185,7 +185,7 @@ SUBROUTINE libtetrabz_dbldelta_main(wlsm,nt_local,ik_global,ik_local,nb,nkBZ,eig
            IF(V > thr) THEN
               !
               ej2(1:3,1:nb) = MATMUL(tsmall(1:3,1:4), ej1(indx(1:4),1:nb))
-              CALL libtetrabz_dbldelta2(nb,ej2,w2)
+              CALL libtetrabz_dbAB_LDElta2(nb,ej2,w2)
               w1(1:nb,indx(1:4)) = w1(1:nb,            indx(1:4)) &
               &       + V * MATMUL(w2(1:nb,1:3), tsmall(1:3,1:4))
               !
@@ -193,7 +193,7 @@ SUBROUTINE libtetrabz_dbldelta_main(wlsm,nt_local,ik_global,ik_local,nb,nkBZ,eig
            !
         END IF
         !
-        dbldelta(1:nb,ib,ik_local(1:20,it)) = dbldelta(1:nb,ib,   ik_local(1:20,it)) &
+        dbAB_LDElta(1:nb,ib,ik_local(1:20,it)) = dbAB_LDElta(1:nb,ib,   ik_local(1:20,it)) &
         &                                  + MATMUL(w1(1:nb,1:4), wlsm(1:4,1:20))
         !
      END DO ! ib
@@ -203,20 +203,20 @@ SUBROUTINE libtetrabz_dbldelta_main(wlsm,nt_local,ik_global,ik_local,nb,nkBZ,eig
   !
   !$OMP END PARALLEL
   !
-  dbldelta(1:nb,1:nb,1:nk_local) = dbldelta(1:nb,1:nb,1:nk_local) / DBLE(6 * nkBZ)
+  dbAB_LDElta(1:nb,1:nb,1:nk_local) = dbAB_LDElta(1:nb,1:nb,1:nk_local) / DBLE(6 * nkBZ)
   !
-END SUBROUTINE libtetrabz_dbldelta_main
+END SUBROUTINE libtetrabz_dbAB_LDElta_main
 !
 ! 2nd step of tetrahedra method.
 !
-SUBROUTINE libtetrabz_dbldelta2(nb,ej,w)
+SUBROUTINE libtetrabz_dbAB_LDElta2(nb,ej,w)
   !
   USE libtetrabz_common, ONLY : libtetrabz_sort
 
 !This section has been created automatically by the script Abilint (TD).
 !Do not modify the following lines by hand.
 #undef ABI_FUNC
-#define ABI_FUNC 'libtetrabz_dbldelta2'
+#define ABI_FUNC 'libtetrabz_dbAB_LDElta2'
 !End of the abilint section
 
   IMPLICIT NONE
@@ -262,6 +262,6 @@ SUBROUTINE libtetrabz_dbldelta2(nb,ej,w)
      !
   END DO ! ib
   !
-END SUBROUTINE libtetrabz_dbldelta2
+END SUBROUTINE libtetrabz_dbAB_LDElta2
 !
-END MODULE libtetrabz_dbldelta_mod
+END MODULE libtetrabz_dbAB_LDElta_mod

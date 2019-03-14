@@ -36,7 +36,7 @@ AC_DEFUN([_ABI_GPU_CHECK_CUDA],[
   LIBS="${abi_gpu_cuda_libs} ${LIBS}"
   AC_LANG_PUSH([C])
 
-  dnl Check usability of headers
+  dnl Check usability of AB_HEADERs
   AC_CHECK_HEADERS([cuda_runtime_api.h cufft.h cublas.h])
 
   dnl Look for libraries and routines
@@ -137,8 +137,8 @@ AC_DEFUN([_ABI_GPU_INIT_CUDA],[
       AC_MSG_RESULT([${NVCC}])
     fi
 
-    dnl Headers
-    AC_MSG_CHECKING([for Cuda headers])
+    dnl AB_HEADERs
+    AC_MSG_CHECKING([for Cuda AB_HEADERs])
     abi_result=""
     if test -s "${abi_gpu_cuda_root}/include/cuda_runtime_api.h"; then
       if test "${with_gpu_incs}" = ""; then

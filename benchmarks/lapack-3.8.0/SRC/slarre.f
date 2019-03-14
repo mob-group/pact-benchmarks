@@ -354,8 +354,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME
-      REAL                        SLAMCH
-      EXTERNAL           SLAMCH, AB_LSAME
+      REAL                        AB_SLAMCH
+      EXTERNAL           AB_SLAMCH, AB_LSAME
 
 *     ..
 *     .. External Subroutines ..
@@ -391,8 +391,8 @@
       M = 0
 
 *     Get machine constants
-      SAFMIN = SLAMCH( 'S' )
-      EPS = SLAMCH( 'P' )
+      SAFMIN = AB_SLAMCH( 'S' )
+      EPS = AB_SLAMCH( 'P' )
 
 *     Set parameters
       RTL = HNDRD*EPS

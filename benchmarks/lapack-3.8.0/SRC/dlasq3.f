@@ -215,9 +215,9 @@
       EXTERNAL           AB_DLASQ4, AB_DLASQ5, AB_DLASQ6
 *     ..
 *     .. External Function ..
-      DOUBLE PRECISION   DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
       LOGICAL            AB_DISNAN
-      EXTERNAL           AB_DISNAN, DLAMCH
+      EXTERNAL           AB_DISNAN, AB_DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT
@@ -225,7 +225,7 @@
 *     .. Executable Statements ..
 *
       N0IN = N0
-      EPS = DLAMCH( 'Precision' )
+      EPS = AB_DLAMCH( 'Precision' )
       TOL = EPS*HUNDRD
       TOL2 = TOL**2
 *

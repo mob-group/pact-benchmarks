@@ -82,8 +82,8 @@
      $                   SCALE( LDA ), SCALIN( LDA )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLANGE
-      EXTERNAL           DLAMCH, DLANGE
+      DOUBLE PRECISION   AB_DLAMCH, DLANGE
+      EXTERNAL           AB_DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGEBAL
@@ -100,8 +100,8 @@
       KNT = 0
       RMAX = ZERO
       VMAX = ZERO
-      SFMIN = DLAMCH( 'S' )
-      MEPS = DLAMCH( 'E' )
+      SFMIN = AB_DLAMCH( 'S' )
+      MEPS = AB_DLAMCH( 'E' )
 *
    10 CONTINUE
 *

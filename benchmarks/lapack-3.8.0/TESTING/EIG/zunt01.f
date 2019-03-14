@@ -155,9 +155,9 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, ZLANSY
+      DOUBLE PRECISION   AB_DLAMCH, ZLANSY
       COMPLEX*16         ZDOTC
-      EXTERNAL           LSAME, DLAMCH, ZLANSY, ZDOTC
+      EXTERNAL           LSAME, AB_DLAMCH, ZLANSY, ZDOTC
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZHERK, ZLASET
@@ -180,7 +180,7 @@
       IF( M.LE.0 .OR. N.LE.0 )
      $   RETURN
 *
-      EPS = DLAMCH( 'Precision' )
+      EPS = AB_DLAMCH( 'Precision' )
       IF( M.LT.N .OR. ( M.EQ.N .AND. LSAME( ROWCOL, 'R' ) ) ) THEN
          TRANSU = 'N'
          K = N

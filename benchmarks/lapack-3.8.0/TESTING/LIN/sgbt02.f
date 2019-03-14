@@ -165,8 +165,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               SASUM, SLAMCH
-      EXTERNAL           LSAME, SASUM, SLAMCH
+      REAL               SASUM, AB_SLAMCH
+      EXTERNAL           LSAME, SASUM, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGBMV
@@ -185,7 +185,7 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       KD = KU + 1
       ANORM = ZERO
       DO 10 J = 1, N

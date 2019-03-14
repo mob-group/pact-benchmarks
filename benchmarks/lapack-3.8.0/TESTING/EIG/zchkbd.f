@@ -462,8 +462,8 @@
       DOUBLE PRECISION   DUMMA( 1 ), RESULT( 14 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLARND
-      EXTERNAL           DLAMCH, DLARND
+      DOUBLE PRECISION   AB_DLAMCH, DLARND
+      EXTERNAL           AB_DLAMCH, DLARND
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASUM, DCOPY, DLABAD, DLAHD2, DSVDCH, XERBLA,
@@ -548,10 +548,10 @@
       PATH( 2: 3 ) = 'BD'
       NFAIL = 0
       NTEST = 0
-      UNFL = DLAMCH( 'Safe minimum' )
-      OVFL = DLAMCH( 'Overflow' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
+      OVFL = AB_DLAMCH( 'Overflow' )
       CALL DLABAD( UNFL, OVFL )
-      ULP = DLAMCH( 'Precision' )
+      ULP = AB_DLAMCH( 'Precision' )
       ULPINV = ONE / ULP
       LOG2UI = INT( LOG( ULPINV ) / LOG( TWO ) )
       RTUNFL = SQRT( UNFL )

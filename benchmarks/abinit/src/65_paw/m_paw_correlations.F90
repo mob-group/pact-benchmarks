@@ -1402,8 +1402,8 @@ CONTAINS  !=====================================================================
 !!      afterscfloop,pawdenpot,pawprt,scfcv,vtorho
 !!
 !! CHILDREN
-!!      dgemm,dsyev,free_my_atmtab,get_my_atmtab,mat_mlms2jmj,mat_slm2ylm
-!!      wrtout,zgemm,zheev
+!!      AB_DGEMM,AB_DSYEV,free_my_atmtab,get_my_atmtab,mat_mlms2jmj,mat_slm2ylm
+!!      wrtout,AB_ZGEMM,AB_ZHEEV
 !!
 !! SOURCE
 
@@ -1919,9 +1919,9 @@ subroutine setnoccmmp(compute_dmat,dimdmat,dmatpawu,dmatudiag,impose_dmat,indsym
          ABI_ALLOCATE(rwork,(lwork))
          ABI_ALLOCATE(eig,(ldim))
          do ispden=1,ndij
-           call dsyev('v','u',ldim,noccmmp_tmp(1,:,:,ispden),ldim,eig,rwork,lwork,info)
+           call AB_DSYEV('v','u',ldim,noccmmp_tmp(1,:,:,ispden),ldim,eig,rwork,lwork,info)
            if(info/=0) then
-             message=' Error in diagonalization of noccmmp (DSYEV)!'
+             message=' Error in diagonalization of noccmmp (AB_DSYEV)!'
              MSG_ERROR(message)
            end if
            do ilm=1,ldim
@@ -1937,9 +1937,9 @@ subroutine setnoccmmp(compute_dmat,dimdmat,dmatpawu,dmatudiag,impose_dmat,indsym
          ABI_ALLOCATE(rwork,(6*ldim-2))
          ABI_ALLOCATE(zwork,(lwork))
          ABI_ALLOCATE(eig,(2*ldim))
-         call zheev('v','u',2*ldim,znoccmmp_tmp,2*ldim,eig,zwork,lwork,rwork,info)
+         call AB_ZHEEV('v','u',2*ldim,znoccmmp_tmp,2*ldim,eig,zwork,lwork,rwork,info)
          if(info/=0) then
-           message=' Error in diagonalization of znoccmmp_tmp (zheev) !'
+           message=' Error in diagonalization of znoccmmp_tmp (AB_ZHEEV) !'
            MSG_ERROR(message)
          end if
          do ilm=1,2*ldim
@@ -1989,8 +1989,8 @@ subroutine setnoccmmp(compute_dmat,dimdmat,dmatpawu,dmatudiag,impose_dmat,indsym
          if (ndij/=4) then
            ABI_ALLOCATE(hdp2,(ldim,ldim))
            do ispden=1,ndij
-             call dgemm('n','t',ldim,ldim,ldim,one,hdp(:,:,ispden),ldim,noccmmp_tmp(1,:,:,ispden),ldim,zero,hdp2,ldim)
-             call dgemm('n','n',ldim,ldim,ldim,one,noccmmp_tmp(1,:,:,ispden),ldim,hdp2,ldim,zero,hdp(:,:,ispden),ldim)
+             call AB_DGEMM('n','t',ldim,ldim,ldim,one,hdp(:,:,ispden),ldim,noccmmp_tmp(1,:,:,ispden),ldim,zero,hdp2,ldim)
+             call AB_DGEMM('n','n',ldim,ldim,ldim,one,noccmmp_tmp(1,:,:,ispden),ldim,hdp2,ldim,zero,hdp(:,:,ispden),ldim)
              noccmmp_tmp(1,:,:,ispden)=hdp(:,:,ispden)
            end do ! ispden
            ABI_DEALLOCATE(hdp2)
@@ -1999,9 +1999,9 @@ subroutine setnoccmmp(compute_dmat,dimdmat,dmatpawu,dmatudiag,impose_dmat,indsym
            ABI_ALLOCATE(zhdp2,(2*ldim,2*ldim))
            zhdp(:,:)=cmplx(hdp(:,:,1),zero,kind=dp)
            zhdp2(:,:)=cmplx(zero,zero,kind=dp)
-           call zgemm('n','c',2*ldim,2*ldim,2*ldim,cone,zhdp,2*ldim,znoccmmp_tmp,2*ldim,czero,zhdp2,2*ldim)
+           call AB_ZGEMM('n','c',2*ldim,2*ldim,2*ldim,cone,zhdp,2*ldim,znoccmmp_tmp,2*ldim,czero,zhdp2,2*ldim)
            zhdp(:,:)=cmplx(zero,zero,kind=dp)
-           call zgemm('n','n',2*ldim,2*ldim,2*ldim,cone,znoccmmp_tmp,2*ldim,zhdp2,2*ldim,czero,zhdp,2*ldim)
+           call AB_ZGEMM('n','n',2*ldim,2*ldim,2*ldim,cone,znoccmmp_tmp,2*ldim,zhdp2,2*ldim,czero,zhdp,2*ldim)
            znoccmmp_tmp=zhdp
            ABI_DEALLOCATE(zhdp)
            ABI_DEALLOCATE(zhdp2)
@@ -2169,9 +2169,9 @@ subroutine setnoccmmp(compute_dmat,dimdmat,dmatpawu,dmatudiag,impose_dmat,indsym
        if (ndij/=4) then
          ABI_ALLOCATE(hdp2,(ldim,ldim))
          do ispden=1,ndij
-           call dgemm('n','t',ldim,ldim,ldim,one,&
+           call AB_DGEMM('n','t',ldim,ldim,ldim,one,&
 &           paw_ij(iatom)%noccmmp(1,:,:,ispden),ldim,noccmmp_tmp(1,:,:,ispden),ldim,zero,hdp2,ldim)
-           call dgemm('n','n',ldim,ldim,ldim,one,&
+           call AB_DGEMM('n','n',ldim,ldim,ldim,one,&
 &           noccmmp_tmp(1,:,:,ispden),ldim,hdp2,ldim,zero,paw_ij(iatom)%noccmmp(1,:,:,ispden),ldim)
          end do ! ispden
          ABI_DEALLOCATE(hdp2)
@@ -2188,8 +2188,8 @@ subroutine setnoccmmp(compute_dmat,dimdmat,dmatpawu,dmatudiag,impose_dmat,indsym
 &             cmplx(paw_ij(iatom)%noccmmp(1,im2,im1,3),-paw_ij(iatom)%noccmmp(1,im2,im1,4),kind=dp)  ! to be checked
            end do
          end do
-         call zgemm('n','c',2*ldim,2*ldim,2*ldim,cone,zhdp,2*ldim,znoccmmp_tmp,2*ldim,czero,zhdp2,2*ldim)
-         call zgemm('n','n',2*ldim,2*ldim,2*ldim,cone,znoccmmp_tmp,2*ldim,zhdp2,2*ldim,czero,zhdp,2*ldim)
+         call AB_ZGEMM('n','c',2*ldim,2*ldim,2*ldim,cone,zhdp,2*ldim,znoccmmp_tmp,2*ldim,czero,zhdp2,2*ldim)
+         call AB_ZGEMM('n','n',2*ldim,2*ldim,2*ldim,cone,znoccmmp_tmp,2*ldim,zhdp2,2*ldim,czero,zhdp,2*ldim)
          do jlm=1,ldim
            do ilm=1,ldim
              paw_ij(iatom)%noccmmp(1,ilm,jlm,1)= real(znoccmmp_tmp(     ilm,     jlm))  ! to be checked

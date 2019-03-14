@@ -158,8 +158,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               CLANGE, CLANSY, SLAMCH
-      EXTERNAL           LSAME, CLANGE, CLANSY, SLAMCH
+      REAL               CLANGE, CLANSY, AB_SLAMCH
+      EXTERNAL           LSAME, CLANGE, CLANSY, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CSYMM
@@ -179,7 +179,7 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0 or AINVNM = 0.
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       ANORM = CLANSY( '1', UPLO, N, A, LDA, RWORK )
       AINVNM = CLANSY( '1', UPLO, N, AINV, LDAINV, RWORK )
       IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN

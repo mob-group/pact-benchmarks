@@ -123,7 +123,7 @@ subroutine pawgylm(gylm,gylmgr,gylmgr2,lm_size,nfgd,optgr0,optgr1,optgr2,pawtab,
  integer,allocatable :: isort(:)
  real(dp),parameter :: ffact(1:9)=(/1._dp,3._dp,15._dp,105._dp,945._dp,10395._dp,&
 &                                   135135._dp,2027025._dp,34459425._dp/)
- real(dp),parameter :: toldev=tol3
+ real(dp),parameter :: toAB_LDEv=tol3
  real(dp) :: ss(3)
  real(dp),allocatable :: cc(:,:),d2gfact(:,:),d2shpfuncnum(:,:),dgfact(:,:)
  real(dp),allocatable :: dshpfuncnum(:,:),gfact(:,:)
@@ -369,7 +369,7 @@ subroutine pawgylm(gylm,gylmgr,gylmgr2,lm_size,nfgd,optgr0,optgr1,optgr2,pawtab,
      if (shape_type==1) then
        do ic=1,nfgd
          arg=rnrm(ic)
-         if (arg<toldev) then
+         if (arg<toAB_LDEv) then
            gfact(ic,0)=shapefunc1_0(arg)
          else if (arg<=rcut) then
            gfact(ic,0)=shapefunc1(arg)
@@ -378,7 +378,7 @@ subroutine pawgylm(gylm,gylmgr,gylmgr2,lm_size,nfgd,optgr0,optgr1,optgr2,pawtab,
      else ! shape_type==2
        do ic=1,nfgd
          arg=rnrm(ic)
-         if (arg<toldev) then
+         if (arg<toAB_LDEv) then
            gfact(ic,0)=shapefunc2_0(arg)
          else if (arg<=rcut) then
            gfact(ic,0)=shapefunc2(arg)
@@ -389,7 +389,7 @@ subroutine pawgylm(gylm,gylmgr,gylmgr2,lm_size,nfgd,optgr0,optgr1,optgr2,pawtab,
      if (shape_type==1) then
        do ic=1,nfgd
          arg=rnrm(ic)
-         if (arg<toldev) then
+         if (arg<toAB_LDEv) then
            gfact(ic,0)=shapefunc1_0(arg)
            if (lambda==2) then
              dgfact(ic,0)=dshpfunc1_ovr_0_2(arg)
@@ -404,7 +404,7 @@ subroutine pawgylm(gylm,gylmgr,gylmgr2,lm_size,nfgd,optgr0,optgr1,optgr2,pawtab,
      else ! shape_type==2
        do ic=1,nfgd
          arg=rnrm(ic)
-         if (arg<toldev) then
+         if (arg<toAB_LDEv) then
            gfact(ic,0)=shapefunc2_0(arg)
            dgfact(ic,0)=dshpfunc2_ovr_0(arg)
          else if (arg<=rcut) then
@@ -417,7 +417,7 @@ subroutine pawgylm(gylm,gylmgr,gylmgr2,lm_size,nfgd,optgr0,optgr1,optgr2,pawtab,
      if (shape_type==1) then
        do ic=1,nfgd
          arg=rnrm(ic)
-         if (arg<toldev) then
+         if (arg<toAB_LDEv) then
            gfact(ic,0)=shapefunc1_0(arg)
            if (lambda==2) then
              dgfact(ic,0)=dshpfunc1_ovr_0_2(arg)
@@ -445,7 +445,7 @@ subroutine pawgylm(gylm,gylmgr,gylmgr2,lm_size,nfgd,optgr0,optgr1,optgr2,pawtab,
      else ! shape_type==2
        do ic=1,nfgd
          arg=rnrm(ic)
-         if (arg<toldev) then
+         if (arg<toAB_LDEv) then
            gfact(ic,0)=shapefunc2_0(arg)
            dgfact(ic,0)=dshpfunc2_ovr_0(arg)
            d2gfact(ic,0)=d2shpfunc2_ovr2_0(arg)

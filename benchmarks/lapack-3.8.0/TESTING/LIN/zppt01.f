@@ -123,9 +123,9 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, ZLANHP
+      DOUBLE PRECISION   AB_DLAMCH, ZLANHP
       COMPLEX*16         ZDOTC
-      EXTERNAL           LSAME, DLAMCH, ZLANHP, ZDOTC
+      EXTERNAL           LSAME, AB_DLAMCH, ZLANHP, ZDOTC
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZHPR, ZSCAL, ZTPMV
@@ -144,7 +144,7 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       ANORM = ZLANHP( '1', UPLO, N, A, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS

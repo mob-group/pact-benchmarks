@@ -300,8 +300,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME
-      DOUBLE PRECISION   AB_DDOT, DLAMCH, AB_DLAPY2, AB_DNRM2
-      EXTERNAL           AB_LSAME, AB_DDOT, DLAMCH, AB_DLAPY2, AB_DNRM2
+      DOUBLE PRECISION   AB_DDOT, AB_DLAMCH, AB_DLAPY2, AB_DNRM2
+      EXTERNAL           AB_LSAME, AB_DDOT, AB_DLAMCH, AB_DLAPY2, AB_DNRM2
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_DLABAD, AB_DLACN2, AB_DLACPY, AB_DLAQTR, AB_
@@ -394,8 +394,8 @@
 *
 *     Get machine constants
 *
-      EPS = DLAMCH( 'P' )
-      SMLNUM = DLAMCH( 'S' ) / EPS
+      EPS = AB_DLAMCH( 'P' )
+      SMLNUM = AB_DLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
       CALL AB_DLABAD( SMLNUM, BIGNUM )
 *

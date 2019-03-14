@@ -399,8 +399,8 @@
       DOUBLE PRECISION   RESULT( 40 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLARND
-      EXTERNAL           DLAMCH, DLARND
+      DOUBLE PRECISION   AB_DLAMCH, DLARND
+      EXTERNAL           AB_DLAMCH, DLARND
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, DBDT01, DGEJSV, DGESDD, DGESVD,
@@ -479,10 +479,10 @@
       PATH( 2: 3 ) = 'BD'
       NFAIL = 0
       NTEST = 0
-      UNFL = DLAMCH( 'Safe minimum' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
       CALL DLABAD( UNFL, OVFL )
-      ULP = DLAMCH( 'Precision' )
+      ULP = AB_DLAMCH( 'Precision' )
       RTUNFL = SQRT( UNFL )
       ULPINV = ONE / ULP
       INFOT = 0

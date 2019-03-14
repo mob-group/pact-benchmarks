@@ -227,9 +227,9 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               CLANGB, CLANGE, CLANTB, SGET06, SLAMCH,
+      REAL               CLANGB, CLANGE, CLANTB, SGET06, AB_SLAMCH,
      $                   CLA_GBRPVGRW
-      EXTERNAL           LSAME, CLANGB, CLANGE, CLANTB, SGET06, SLAMCH,
+      EXTERNAL           LSAME, CLANGB, CLANGE, CLANTB, SGET06, AB_SLAMCH,
      $                   CLA_GBRPVGRW
 *     ..
 *     .. External Subroutines ..
@@ -687,7 +687,7 @@
                            END IF
                            RESULT( 7 ) = ABS( RPVGRW-RWORK( 2*NRHS+1 ) )
      $                                    / MAX( RWORK( 2*NRHS+1 ),
-     $                                   RPVGRW ) / SLAMCH( 'E' )
+     $                                   RPVGRW ) / AB_SLAMCH( 'E' )
 *
                            IF( .NOT.PREFAC ) THEN
 *
@@ -878,7 +878,7 @@ c                     write(*,*) 'begin cgbsvxx testing'
 
                      RESULT( 7 ) = ABS( RPVGRW-rpvgrw_svxx ) /
      $                             MAX( rpvgrw_svxx, RPVGRW ) /
-     $                             SLAMCH( 'E' )
+     $                             AB_SLAMCH( 'E' )
 *
                      IF( .NOT.PREFAC ) THEN
 *

@@ -139,9 +139,9 @@
       INTEGER            I, IINFO, N1, N2
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
+      REAL               AB_SLAMCH
       INTEGER            AB_ICAMAX
-      EXTERNAL           SLAMCH, AB_ICAMAX
+      EXTERNAL           AB_SLAMCH, AB_ICAMAX
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_CGEMM, AB_CSCAL, AB_CLASWP, AB_CTRSM, AB_XER
@@ -188,7 +188,7 @@
 *
 *        Compute machine safe minimum
 *
-         SFMIN = SLAMCH('S')
+         SFMIN = AB_SLAMCH('S')
 *
 *        Find pivot and test for singularity
 *

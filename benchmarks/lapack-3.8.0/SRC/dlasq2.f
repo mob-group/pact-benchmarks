@@ -148,8 +148,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            AB_ILAENV
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH, AB_ILAENV
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH, AB_ILAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN, SQRT
@@ -160,8 +160,8 @@
 *     (in case AB_DLASQ2 is not called by AB_DLASQ1)
 *
       INFO = 0
-      EPS = DLAMCH( 'Precision' )
-      SAFMIN = DLAMCH( 'Safe minimum' )
+      EPS = AB_DLAMCH( 'Precision' )
+      SAFMIN = AB_DLAMCH( 'Safe minimum' )
       TOL = EPS*HUNDRD
       TOL2 = TOL**2
 *

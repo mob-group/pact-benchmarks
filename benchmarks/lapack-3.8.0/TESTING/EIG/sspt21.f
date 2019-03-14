@@ -249,8 +249,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               SDOT, SLAMCH, SLANGE, SLANSP
-      EXTERNAL           LSAME, SDOT, SLAMCH, SLANGE, SLANSP
+      REAL               SDOT, AB_SLAMCH, SLANGE, SLANSP
+      EXTERNAL           LSAME, SDOT, AB_SLAMCH, SLANGE, SLANSP
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SAXPY, SCOPY, SGEMM, SLACPY, SLASET, SOPMTR,
@@ -279,8 +279,8 @@
          CUPLO = 'L'
       END IF
 *
-      UNFL = SLAMCH( 'Safe minimum' )
-      ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
+      ULP = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
 *
 *     Some Error Checks
 *

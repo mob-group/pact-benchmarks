@@ -133,13 +133,13 @@
       LOGICAL            UPPER
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
+      REAL               AB_SLAMCH
       LOGICAL            AB_LSAME
-      EXTERNAL           SLAMCH, AB_LSAME
+      EXTERNAL           AB_SLAMCH, AB_LSAME
 *     ..
 *     .. Executable Statements ..
 *
-      RMAX = SLAMCH( 'O' )
+      RMAX = AB_SLAMCH( 'O' )
       UPPER = AB_LSAME( UPLO, 'U' )
       IF( UPPER ) THEN
          DO 20 J = 1, N

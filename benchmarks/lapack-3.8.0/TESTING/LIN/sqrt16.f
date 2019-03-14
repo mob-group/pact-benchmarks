@@ -160,8 +160,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               SASUM, SLAMCH, SLANGE
-      EXTERNAL           LSAME, SASUM, SLAMCH, SLANGE
+      REAL               SASUM, AB_SLAMCH, SLANGE
+      EXTERNAL           LSAME, SASUM, AB_SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGEMM
@@ -188,7 +188,7 @@
          N2 = N
       END IF
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
 *
 *     Compute  B - A*X  (or  B - A'*X ) and store in B.
 *

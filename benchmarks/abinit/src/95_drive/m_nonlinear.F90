@@ -553,12 +553,12 @@ subroutine nonlinear(codvsn,dtfil,dtset,etotal,iexit,mpi_enreg,npwtot,occ,&
    ABI_DATATYPE_ALLOCATE(pawrhoij,(0))
  end if
 
-!Initialize header
+!Initialize AB_HEADER
  gscase=0
  call hdr_init(bstruct,codvsn,dtset,hdr,pawtab,gscase,psps,wvl%descr, &
 & comm_atom=mpi_enreg%comm_atom, mpi_atmtab=mpi_enreg%my_atmtab)
 
-!Update header, with evolving variables, when available
+!Update AB_HEADER, with evolving variables, when available
 !Here, rprimd, xred and occ are available
  etot=hdr%etot ; fermie=hdr%fermie ; residm=hdr%residm
 !If parallelism over atom, hdr is distributed
@@ -789,7 +789,7 @@ end if
    end if
 
 !    MT july 2013: Should we read rhoij from the density file ?
-   call read_rhor(dtfil%fildensin, cplex1, dtset%nspden, nfftf, ngfftf, rdwrpaw, mpi_enreg, rhor, &
+   call read_rhor(dtfil%fiAB_LDEnsin, cplex1, dtset%nspden, nfftf, ngfftf, rdwrpaw, mpi_enreg, rhor, &
    hdr_den, pawrhoij_read, spaceworld, check_hdr=hdr)
    call hdr_free(hdr_den)
 
@@ -1362,7 +1362,7 @@ end if
  ABI_DATATYPE_DEALLOCATE(paw_ij)
  ABI_DATATYPE_DEALLOCATE(pawfgrtab)
 
-!Clean the header
+!Clean the AB_HEADER
  call hdr_free(hdr)
 
 !As the etotal energy has no meaning here, we set it to zero

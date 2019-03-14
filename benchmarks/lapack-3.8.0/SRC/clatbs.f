@@ -276,7 +276,7 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_ICAMAX, AB_ISAMAX
-      REAL               AB_SCASUM, SLAMCH
+      REAL               AB_SCASUM, AB_SLAMCH
       COMPLEX            AB_CDOTC, AB_CDOTU, AB_CLADIV
       EXTERNAL           AB_LSAME, AB_ICAMAX, AB_ISAMAX, AB_SCASUM, SLAM
      $CH, AB_CDOTC,
@@ -335,10 +335,10 @@
 *
 *     Determine machine dependent parameters to control overflow.
 *
-      SMLNUM = SLAMCH( 'Safe minimum' )
+      SMLNUM = AB_SLAMCH( 'Safe minimum' )
       BIGNUM = ONE / SMLNUM
       CALL AB_SLABAD( SMLNUM, BIGNUM )
-      SMLNUM = SMLNUM / SLAMCH( 'Precision' )
+      SMLNUM = SMLNUM / AB_SLAMCH( 'Precision' )
       BIGNUM = ONE / SMLNUM
       SCALE = ONE
 *

@@ -120,8 +120,8 @@
       INTEGER            INFO, J
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLANGE
-      EXTERNAL           DLAMCH, DLANGE
+      DOUBLE PRECISION   AB_DLAMCH, DLANGE
+      EXTERNAL           AB_DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DLASET, DORM2R, XERBLA
@@ -165,7 +165,7 @@
    10 CONTINUE
 *
       DQRT11 = DLANGE( 'One-norm', M, M, WORK, M, RDUMMY ) /
-     $         ( DBLE( M )*DLAMCH( 'Epsilon' ) )
+     $         ( DBLE( M )*AB_DLAMCH( 'Epsilon' ) )
 *
       RETURN
 *

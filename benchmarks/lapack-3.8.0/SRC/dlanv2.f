@@ -149,15 +149,15 @@
      $                   SAC, SCALE, SIGMA, SN1, TAU, TEMP, Z
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, AB_DLAPY2
-      EXTERNAL           DLAMCH, AB_DLAPY2
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLAPY2
+      EXTERNAL           AB_DLAMCH, AB_DLAPY2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SIGN, SQRT
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = DLAMCH( 'P' )
+      EPS = AB_DLAMCH( 'P' )
       IF( C.EQ.ZERO ) THEN
          CS = ONE
          SN = ZERO

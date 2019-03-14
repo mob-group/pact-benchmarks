@@ -156,8 +156,8 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLANGE, SLARND
-      EXTERNAL           SLAMCH, SLANGE, SLARND
+      REAL               AB_SLAMCH, SLANGE, SLARND
+      EXTERNAL           AB_SLAMCH, SLANGE, SLARND
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           STRTTF, SGEQRF, SGEQLF, STFSM, STRSM
@@ -189,7 +189,7 @@
       DO 10 I = 1, 4
          ISEED( I ) = ISEEDY( I )
    10 CONTINUE
-      EPS = SLAMCH( 'Precision' )
+      EPS = AB_SLAMCH( 'Precision' )
 *
       DO 170 IIM = 1, NN
 *

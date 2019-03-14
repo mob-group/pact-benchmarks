@@ -462,7 +462,7 @@ end subroutine wvl_nl_gradient
 !!      afterscfloop
 !!
 !! CHILDREN
-!!      calculatetailcorrection,dcopy,wrtout,xmpi_allgatherv
+!!      calculatetailcorrection,AB_DCOPY,wrtout,xmpi_allgatherv
 !!
 !! SOURCE
 
@@ -545,7 +545,7 @@ subroutine wvl_tail_corrections(dtset, energies, etotal, mpi_enreg, psps, wvl, x
 &   wvl%den%denspot%pot_work, nsize * wvl%den%denspot%dpbox%ngatherarr(:,2), &
 &   nsize * wvl%den%denspot%dpbox%ngatherarr(:,3),spaceComm,ierr)
  else
-   call dcopy(wvl%descr%Glr%d%n1i * wvl%descr%Glr%d%n2i * &
+   call AB_DCOPY(wvl%descr%Glr%d%n1i * wvl%descr%Glr%d%n2i * &
 &   wvl%descr%Glr%d%n3i * dtset%nsppol,wvl%den%denspot%rhov,1,wvl%den%denspot%pot_work,1)
  end if
 

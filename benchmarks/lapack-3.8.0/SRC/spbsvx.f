@@ -374,8 +374,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME
-      REAL               SLAMCH, AB_SLANSB
-      EXTERNAL           AB_LSAME, SLAMCH, AB_SLANSB
+      REAL               AB_SLAMCH, AB_SLANSB
+      EXTERNAL           AB_LSAME, AB_SLAMCH, AB_SLANSB
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_SCOPY, AB_SLACPY, AB_SLAQSB, AB_SPBCON, AB_S
@@ -396,7 +396,7 @@
          RCEQU = .FALSE.
       ELSE
          RCEQU = AB_LSAME( EQUED, 'Y' )
-         SMLNUM = SLAMCH( 'Safe minimum' )
+         SMLNUM = AB_SLAMCH( 'Safe minimum' )
          BIGNUM = ONE / SMLNUM
       END IF
 *
@@ -541,7 +541,7 @@
 *
 *     Set INFO = N+1 if the matrix is singular to working precision.
 *
-      IF( RCOND.LT.SLAMCH( 'Epsilon' ) )
+      IF( RCOND.LT.AB_SLAMCH( 'Epsilon' ) )
      $   INFO = N + 1
 *
       RETURN

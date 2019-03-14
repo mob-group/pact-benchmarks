@@ -116,8 +116,8 @@
       REAL               RWORK( 1 )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLANGE
-      EXTERNAL           SLAMCH, SLANGE
+      REAL               AB_SLAMCH, SLANGE
+      EXTERNAL           AB_SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SLASET, SORMRZ, XERBLA
@@ -160,7 +160,7 @@
    10 CONTINUE
 *
       SRZT02 = SLANGE( 'One-norm', N, N, WORK, N, RWORK ) /
-     $         ( SLAMCH( 'Epsilon' )*REAL( MAX( M, N ) ) )
+     $         ( AB_SLAMCH( 'Epsilon' )*REAL( MAX( M, N ) ) )
       RETURN
 *
 *     End of SRZT02

@@ -119,8 +119,8 @@
      $                   T2( LDT, LDT ), TMP( LDT, LDT ), WORK( LWORK )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DHST01, DLACPY, DLASET, DTREXC
@@ -130,7 +130,7 @@
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = DLAMCH( 'P' )
+      EPS = AB_DLAMCH( 'P' )
       RMAX = ZERO
       LMAX = 0
       KNT = 0

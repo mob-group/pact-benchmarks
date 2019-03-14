@@ -41,8 +41,8 @@ MODULE m_matrix
 
 ! public :: init_matrix         ! Main creation method
  public :: invsqrt_matrix         ! inv of Sqrt of Matrix
- public :: blockdiago_fordsyev         ! inv of Sqrt of Matrix
- public :: blockdiago_forzheev         ! inv of Sqrt of Matrix
+ public :: blockdiago_forAB_DSYEV         ! inv of Sqrt of Matrix
+ public :: blockdiago_forAB_ZHEEV         ! inv of Sqrt of Matrix
 ! public :: inverse_matrix      ! Inverse matrix
 ! public :: nullify_matrix      ! Nullify the object
 ! public :: destroy_matrix      ! Frees the allocated memory
@@ -114,23 +114,23 @@ subroutine invsqrt_matrix(matrix,tndim)
  ABI_ALLOCATE(zwork,(lwork))
  ABI_ALLOCATE(eig,(tndim))
  
- call zheev('v','u',tndim,matrix,tndim,eig,zwork,lwork,rwork,info)
+ call AB_ZHEEV('v','u',tndim,matrix,tndim,eig,zwork,lwork,rwork,info)
  
  
  ABI_DEALLOCATE(zwork)
  ABI_DEALLOCATE(rwork)
  if(info/=0) then
-  message = 'Error in diagonalization of zmat (zheev) ! - '
+  message = 'Error in diagonalization of zmat (AB_ZHEEV) ! - '
   MSG_ERROR(message)
  end if
 
-!  == Secondly Compute sqrt(diagonalized matrix)
+!  == secondly Compute sqrt(diagonalized matrix)
  ABI_ALLOCATE(diag,(tndim,tndim))
  diag=czero
  do im=1,tndim
 
    if(eig(im)<tol16) then
-     message = "  - Eigenvalues from zheev are negative or zero ! - "
+     message = "  - Eigenvalues from AB_ZHEEV are negative or zero ! - "
      MSG_ERROR(message)
    else
      diag(im,im)=cmplx(sqrt(eig(im)),zero,kind=dp)
@@ -154,9 +154,9 @@ subroutine invsqrt_matrix(matrix,tndim)
     call wrtout(std_out,message,'COLL')
    end do
  endif
-!zgemm(A,B,C) : C = op(A) op(B)
- call zgemm('n','t',tndim,tndim,tndim,cone,diag,tndim,conjg(matrix),tndim,czero,zhdp2,tndim)
- call zgemm('n','n',tndim,tndim,tndim,cone,matrix,tndim,zhdp2,tndim,czero,sqrtmat,tndim)
+!AB_ZGEMM(A,B,C) : C = op(A) op(B)
+ call AB_ZGEMM('n','t',tndim,tndim,tndim,cone,diag,tndim,conjg(matrix),tndim,czero,zhdp2,tndim)
+ call AB_ZGEMM('n','n',tndim,tndim,tndim,cone,matrix,tndim,zhdp2,tndim,czero,sqrtmat,tndim)
 ! if(abs(pawprtvol)>=3) then
  if(pawprtvol>3) then
    write(message,'(3a)') ch10,"  - Sqrt root of matrix is - "
@@ -187,9 +187,9 @@ subroutine invsqrt_matrix(matrix,tndim)
  ABI_DEALLOCATE(sqrtmat)
 
 !  == Fifthly Check that O^{-0/5} O O{-0/5}=I
-!  zgemm(A,B,C) : C = op(A) op(B)
- call zgemm('n','n',tndim,tndim,tndim,cone,initialmatrix,tndim,sqrtmatinv,tndim,czero,zhdp2,tndim)
- call zgemm('n','n',tndim,tndim,tndim,cone,sqrtmatinv,tndim,zhdp2,tndim,czero,initialmatrix,tndim)
+!  AB_ZGEMM(A,B,C) : C = op(A) op(B)
+ call AB_ZGEMM('n','n',tndim,tndim,tndim,cone,initialmatrix,tndim,sqrtmatinv,tndim,czero,zhdp2,tndim)
+ call AB_ZGEMM('n','n',tndim,tndim,tndim,cone,sqrtmatinv,tndim,zhdp2,tndim,czero,initialmatrix,tndim)
  if(pawprtvol>3) then
    write(message,'(3a)') ch10,"  - O^{-0/5} O O^{-0/5}=I - "
    call wrtout(std_out,message,'COLL')
@@ -226,13 +226,13 @@ end subroutine invsqrt_matrix
 !!
 !! SOURCE
 
-subroutine blockdiago_fordsyev(matrix,tndim,eig)
+subroutine blockdiago_forAB_DSYEV(matrix,tndim,eig)
 
 
 !This section has been created automatically by the script Abilint (TD).
 !Do not modify the following lines by hand.
 #undef ABI_FUNC
-#define ABI_FUNC 'blockdiago_fordsyev'
+#define ABI_FUNC 'blockdiago_forAB_DSYEV'
 !End of the abilint section
 
  implicit none
@@ -260,7 +260,7 @@ subroutine blockdiago_fordsyev(matrix,tndim,eig)
  real(dp),allocatable :: Permutline(:,:)
  real(dp),allocatable :: matrix_save(:,:),W(:)
  integer,allocatable :: nonnul(:)
- integer,allocatable :: nonnuldege(:)
+ integer,allocatable :: nonnuAB_LDEge(:)
  logical :: testdege,swap
  
 ! *************************************************************************
@@ -405,9 +405,9 @@ subroutine blockdiago_fordsyev(matrix,tndim,eig)
    end do
  endif
  work=0.d0
- call dsyev('v','u',tndim,matrix_save,tndim,eig,work,lwork,info)
+ call AB_DSYEV('v','u',tndim,matrix_save,tndim,eig,work,lwork,info)
  if(info/=0) then
-  message = 'Error in diagonalization of matrix (dsyev) ! - '
+  message = 'Error in diagonalization of matrix (AB_DSYEV) ! - '
   MSG_ERROR(message)
  end if
  if(prtopt==1) then
@@ -421,13 +421,13 @@ subroutine blockdiago_fordsyev(matrix,tndim,eig)
  endif
 
 
-! call dsyev('v','u',tndim,A,LDA,W,WORKTMP,LWORK,INFO)
+! call AB_DSYEV('v','u',tndim,A,LDA,W,WORKTMP,LWORK,INFO)
 ! write(std_out,*) "optimal lwork",worktmp(1)
 
  work=0.d0
- call dsyev('v','u',tndim,matrix,tndim,eig,work,lwork,info)
+ call AB_DSYEV('v','u',tndim,matrix,tndim,eig,work,lwork,info)
  if(info/=0) then
-  message = 'Error in diagonalization of matrix (dsyev) ! - '
+  message = 'Error in diagonalization of matrix (AB_DSYEV) ! - '
   MSG_ERROR(message)
  end if
  if(prtopt==1) then
@@ -442,7 +442,7 @@ subroutine blockdiago_fordsyev(matrix,tndim,eig)
 
 
 !! REORDER EIGENVECTORS
- ABI_ALLOCATE(nonnuldege,(tndim))
+ ABI_ALLOCATE(nonnuAB_LDEge,(tndim))
  newstarting=1
  current_dege=1
  do im4=2,tndim
@@ -460,8 +460,8 @@ subroutine blockdiago_fordsyev(matrix,tndim,eig)
      shift=0
      do im1=1,tndim ! balaye les premiers coefficients puis les autres
 
-     !  if(im1==1) nonnuldege(im1)=0
-     !  if(im1>1) nonnuldege(im1)=nonnuldege(im1-1)
+     !  if(im1==1) nonnuAB_LDEge(im1)=0
+     !  if(im1>1) nonnuAB_LDEge(im1)=nonnuAB_LDEge(im1-1)
        maxvalue=0.00000001
        swap=.false.
        do im2=newstarting+shift,newstarting+current_dege-1
@@ -496,7 +496,7 @@ subroutine blockdiago_fordsyev(matrix,tndim,eig)
      current_dege=1
   endif
  enddo
- ABI_DEALLOCATE(nonnuldege)
+ ABI_DEALLOCATE(nonnuAB_LDEge)
  if(prtopt==1) then
    write(std_out,*) "Ordered Eigenvectors"
    do im1=1,tndim
@@ -576,7 +576,7 @@ subroutine blockdiago_fordsyev(matrix,tndim,eig)
 
  DBG_EXIT("COLL")
 
-end subroutine blockdiago_fordsyev
+end subroutine blockdiago_forAB_DSYEV
 !!***
 
 !! FUNCTION
@@ -595,13 +595,13 @@ end subroutine blockdiago_fordsyev
 !!
 !! SOURCE
 
-subroutine blockdiago_forzheev(matrix,tndim,eig)
+subroutine blockdiago_forAB_ZHEEV(matrix,tndim,eig)
 
 
 !This section has been created automatically by the script Abilint (TD).
 !Do not modify the following lines by hand.
 #undef ABI_FUNC
-#define ABI_FUNC 'blockdiago_forzheev'
+#define ABI_FUNC 'blockdiago_forAB_ZHEEV'
 !End of the abilint section
 
  implicit none
@@ -762,9 +762,9 @@ subroutine blockdiago_forzheev(matrix,tndim,eig)
     write(std_out,'(2(1x,30(1x,f22.18,f22.18)))') (Apermutline(im1,im2),im2=1,tndim)
  end do
  work=czero
- call zheev('v','u',tndim,matrix_save,tndim,eig,work,lwork,rwork,info)
+ call AB_ZHEEV('v','u',tndim,matrix_save,tndim,eig,work,lwork,rwork,info)
  if(info/=0) then
-  message = 'Error in diagonalization of matrix (zheev) ! - '
+  message = 'Error in diagonalization of matrix (AB_ZHEEV) ! - '
   MSG_ERROR(message)
  end if
  write(std_out,*) 'output',INFO
@@ -776,13 +776,13 @@ subroutine blockdiago_forzheev(matrix,tndim,eig)
  end do
 
 
-! call dsyev('v','u',tndim,A,LDA,W,WORKTMP,LWORK,INFO)
+! call AB_DSYEV('v','u',tndim,A,LDA,W,WORKTMP,LWORK,INFO)
 ! write(std_out,*) "optimal lwork",worktmp(1)
 
  work=czero
- call zheev('v','u',tndim,matrix,tndim,eig,work,lwork,rwork,info)
+ call AB_ZHEEV('v','u',tndim,matrix,tndim,eig,work,lwork,rwork,info)
  if(info/=0) then
-  message = 'Error in diagonalization of matrix (zheev) ! - '
+  message = 'Error in diagonalization of matrix (AB_ZHEEV) ! - '
   MSG_ERROR(message)
  end if
  write(std_out,*) 'output',INFO
@@ -840,7 +840,7 @@ subroutine blockdiago_forzheev(matrix,tndim,eig)
 
  DBG_EXIT("COLL")
 
-end subroutine blockdiago_forzheev
+end subroutine blockdiago_forAB_ZHEEV
 !!***
 
 END MODULE m_matrix

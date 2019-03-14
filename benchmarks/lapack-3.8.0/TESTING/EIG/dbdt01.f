@@ -165,8 +165,8 @@
       DOUBLE PRECISION   ANORM, EPS
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DASUM, DLAMCH, DLANGE
-      EXTERNAL           DASUM, DLAMCH, DLANGE
+      DOUBLE PRECISION   DASUM, AB_DLAMCH, DLANGE
+      EXTERNAL           DASUM, AB_DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DCOPY, DGEMV
@@ -264,7 +264,7 @@
 *     Compute norm(A - Q * B * P') / ( n * norm(A) * EPS )
 *
       ANORM = DLANGE( '1', M, N, A, LDA, WORK )
-      EPS = DLAMCH( 'Precision' )
+      EPS = AB_DLAMCH( 'Precision' )
 *
       IF( ANORM.LE.ZERO ) THEN
          IF( RESID.NE.ZERO )

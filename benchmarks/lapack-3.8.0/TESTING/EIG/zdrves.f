@@ -436,8 +436,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            ZSLECT
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           ZSLECT, DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           ZSLECT, AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DLABAD, DLASUM, XERBLA, ZGEES, ZHST01, ZLACPY,
@@ -508,10 +508,10 @@
 *
 *     More Important constants
 *
-      UNFL = DLAMCH( 'Safe minimum' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
       CALL DLABAD( UNFL, OVFL )
-      ULP = DLAMCH( 'Precision' )
+      ULP = AB_DLAMCH( 'Precision' )
       ULPINV = ONE / ULP
       RTULP = SQRT( ULP )
       RTULPI = ONE / RTULP

@@ -233,7 +233,7 @@ subroutine ewald(eew,gmet,grewtn,natom,ntypat,rmet,typat,ucvol,xred,zion)
 !normalize coordinate gradients by unit cell volume ucvol
  term=-2._dp/ucvol
  grewtn(:,:)=grewtn(:,:)*term
-!call DSCAL(3*natom,term,grewtn,1)
+!call AB_DSCAL(3*natom,term,grewtn,1)
 
 !Conduct real space summations
  reta=sqrt(eta)
@@ -718,7 +718,7 @@ subroutine ewald9(acell,dielt,dyew,gmet,gprim,natom,qphon,rmet,rprim,sumg0,ucvol
  step = (0.1_dp + y2max - y2min) / (ny2_spline - 1)
  stepm1 = one / step; step2div6 = step**2/six
  if (first_call) then
-   first_call = .False.
+   first_call = .false.
    do ii=1,ny2_spline
      y2 = y2min + (ii-1) * step
      y2vals(ii) = y2

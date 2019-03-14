@@ -465,7 +465,7 @@
      $HEMV_X,
      $                   BLAS_CHEMV2_X, AB_CLA_HEAMV, AB_CLA_WWADDW,
      $                   AB_CLA_LIN_BERR
-      REAL               SLAMCH
+      REAL               AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, REAL, AIMAG, MAX, MIN
@@ -499,8 +499,8 @@
          CALL AB_XERBLA( 'AB_CLA_HERFSX_EXTENDED', -INFO )
          RETURN
       END IF
-      EPS = SLAMCH( 'Epsilon' )
-      HUGEVAL = SLAMCH( 'Overflow' )
+      EPS = AB_SLAMCH( 'Epsilon' )
+      HUGEVAL = AB_SLAMCH( 'Overflow' )
 *     Force HUGEVAL to Inf
       HUGEVAL = HUGEVAL * HUGEVAL
 *     Using HUGEVAL may lead to spurious underflows.

@@ -188,8 +188,8 @@
       DOUBLE PRECISION   ANORM, ULP, UNFL, WNORM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, ZLANHE
-      EXTERNAL           DLAMCH, ZLANHE
+      DOUBLE PRECISION   AB_DLAMCH, ZLANHE
+      EXTERNAL           AB_DLAMCH, ZLANHE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZGEMM, ZHEMM, ZUNT01
@@ -204,8 +204,8 @@
       IF( N.LE.0 .OR. M.LE.0 )
      $   RETURN
 *
-      UNFL = DLAMCH( 'Safe minimum' )
-      ULP = DLAMCH( 'Precision' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
+      ULP = AB_DLAMCH( 'Precision' )
 *
 *     Do Test 1
 *

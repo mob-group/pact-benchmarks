@@ -303,8 +303,8 @@
       REAL               C, EPS, HLFTOL, S, TAU, TOL, Z1
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, AB_SLAPY2
-      EXTERNAL           SLAMCH, AB_SLAPY2
+      REAL               AB_SLAMCH, AB_SLAPY2
+      EXTERNAL           AB_SLAMCH, AB_SLAPY2
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_SCOPY, AB_SLACPY, AB_SLAMRG, AB_SLASET, AB_S
@@ -399,7 +399,7 @@
 *
 *     Calculate the allowable deflation tolerance
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       TOL = MAX( ABS( ALPHA ), ABS( BETA ) )
       TOL = EIGHT*EPS*MAX( ABS( D( N ) ), TOL )
 *

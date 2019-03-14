@@ -1163,7 +1163,7 @@ subroutine compute_coeff_plowannier(cryst_struc,cprj,dimcprj,dtset,eigen,fermie,
    !!    ABI_ALLOCATE(zwork,(lwork))
   !!     do ikpt = 1,wan%nkpt
  !!        matrix_to_diag(:,:) = operwan(ikpt,iatom1,iatom1)%atom(il1,il1)%matl(:,:,isppol,1,1)
-!!         call zheev('v','u',count,matrix_to_diag,count,eig,zwork,lwork,rwork,info)
+!!         call AB_ZHEEV('v','u',count,matrix_to_diag,count,eig,zwork,lwork,rwork,info)
  !!        if (info .eq. 0) then !!Correct diagonalization
   !!         matrix_to_diag = czero
    !!        do im1 = 1,count
@@ -1582,7 +1582,7 @@ subroutine compute_coeff_plowannier(cryst_struc,cprj,dimcprj,dtset,eigen,fermie,
          ABI_ALLOCATE(zwork,(lwork))
          do ikpt = 1,wan%nkpt
            matrix_to_diag(:,:) = operwan(ikpt,iatom1,iatom1)%atom(il1,il1)%matl(:,:,isppol,1,1)
-           call zheev('v','u',count,matrix_to_diag,count,eig,zwork,lwork,rwork,info)
+           call AB_ZHEEV('v','u',count,matrix_to_diag,count,eig,zwork,lwork,rwork,info)
            if (info .eq. 0) then !!Correct diagonalization
              matrix_to_diag = zero
              do im1 = 1,count
@@ -1640,7 +1640,7 @@ subroutine compute_coeff_plowannier(cryst_struc,cprj,dimcprj,dtset,eigen,fermie,
        end do !iatom1
 
        !Then, invert the matrix
-      call zheev('v','u',count,matrix_to_diag,count,eig,zwork,lwork,rwork,info)
+      call AB_ZHEEV('v','u',count,matrix_to_diag,count,eig,zwork,lwork,rwork,info)
        if (info .eq. 0) then ! Correct diagonalization
          matrix_to_diag = czero
          do im1 = 1,count

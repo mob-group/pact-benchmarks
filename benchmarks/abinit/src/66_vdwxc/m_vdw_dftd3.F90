@@ -769,7 +769,7 @@ real(dp),parameter:: rcov(vdw_nspecies)=&
            sum_dlc6ri=sum_dlc6ri+dlri*vdw_c6ref(itypat,jtypat,refi,refj)
            sum_dlc6rj=sum_dlc6rj+dlrj*vdw_c6ref(itypat,jtypat,refi,refj)
            if (need_hess) then
-!                  Second derivative of l(ia,ja). Once again, it is separately in
+!                  second derivative of l(ia,ja). Once again, it is separately in
 !                  different contributions:
 !                  d2lri: prefactor of dCNi/drk*dCNi/drl
 !                  d2lrj: prefactor of dCNj/drk*dCNj/drl
@@ -983,7 +983,7 @@ real(dp),parameter:: rcov(vdw_nspecies)=&
                        str_vdw_dftd3(alpha)=str_vdw_dftd3(alpha)-grad*vec(alpha)
                      end do
                    end if
-!                           Second derivative (if required)
+!                           second derivative (if required)
                    if (need_hess) then
                      if (vdw_xc==6) then
                        hess6 = (grad6*(alpha6*fdmp6*dmp6-8.0_dp)+&
@@ -1227,7 +1227,7 @@ real(dp),parameter:: rcov(vdw_nspecies)=&
              do beta=1,3
                ! Add the second derivative of C6 contribution to the internal strains
                ii = voigt1(alpha) ; jj=voigt2(alpha)
-               ! Second derivative of CN
+               ! second derivative of CN
                elt_vdw_dftd3(index_ka+beta,alpha)=elt_vdw_dftd3(index_ka+beta,alpha)+(e_alpha1(ia)+e_alpha2(ia))*&
 &               elt_cn(index_ka+beta,alpha,ia)
                ! Cross-derivatives of CN

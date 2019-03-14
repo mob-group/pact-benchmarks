@@ -166,13 +166,13 @@
       INTRINSIC          ABS, DCONJG, MAX, SQRT
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
       COMPLEX*16         AB_ZDOTC
-      EXTERNAL           DLAMCH, AB_ZDOTC
+      EXTERNAL           AB_DLAMCH, AB_ZDOTC
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       ALPHA = AB_ZDOTC( J, X, 1, W, 1 )
 *
       ABSALP = ABS( ALPHA )

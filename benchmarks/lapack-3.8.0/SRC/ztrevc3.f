@@ -284,8 +284,8 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_ILAENV, AB_IZAMAX
-      DOUBLE PRECISION   DLAMCH, AB_DZASUM
-      EXTERNAL           AB_LSAME, AB_ILAENV, AB_IZAMAX, DLAMCH, AB_DZAS
+      DOUBLE PRECISION   AB_DLAMCH, AB_DZASUM
+      EXTERNAL           AB_LSAME, AB_ILAENV, AB_IZAMAX, AB_DLAMCH, AB_DZAS
      $UM
 *     ..
 *     .. External Subroutines ..
@@ -377,10 +377,10 @@
 *
 *     Set the constants to control overflow.
 *
-      UNFL = DLAMCH( 'Safe minimum' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
       CALL AB_DLABAD( UNFL, OVFL )
-      ULP = DLAMCH( 'Precision' )
+      ULP = AB_DLAMCH( 'Precision' )
       SMLNUM = UNFL*( N / ULP )
 *
 *     Store the diagonal elements of T in working array WORK.

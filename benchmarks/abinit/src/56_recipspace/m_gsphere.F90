@@ -1678,7 +1678,7 @@ subroutine get_irredg(npw_k,nsym,pinv,gprimd,symrec,gcurr,nbasek,gbasek,cnormk)
      gcar(jj)=gcur(1)*gprimd(jj,1)+gcur(2)*gprimd(jj,2)+gcur(3)*gprimd(jj,3)
      norm=norm+gcar(jj)**2
    end do
-   eps = tol8 * norm; found = .False.; irr = 1
+   eps = tol8 * norm; found = .false.; irr = 1
    do while (.not.found .and. irr <= nbasek)  ! This loop can be optimized by looping inside the shell.
      if (abs(norm - cnormk(irr)) <= eps) then
        gbas(:) = gbasek(:,irr); isym = 1
@@ -2114,7 +2114,7 @@ end subroutine setshells
 !!
 !! INPUTS
 !!   npw1, kg1(3,npw1)=First list of G-vectors
-!!   npw2, kg2(3,npw2)=Second list of G-vectors
+!!   npw2, kg2(3,npw2)=second list of G-vectors
 !!
 !! OUTPUT
 !!   g2g1(npw2) = Mapping kg2 index --> kg1 index.

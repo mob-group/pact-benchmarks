@@ -146,7 +146,7 @@ subroutine mklocl_realspace(grtn,icoulomb,mpi_enreg,natom,nattyp,nfft,ngfft,nscf
   !testing variables
  !scalars
  integer,parameter :: nStep=2
- integer :: comm_fft,countParSeconde,i1,i2,i3
+ integer :: comm_fft,countParseconde,i1,i2,i3
  integer :: ia,ia1,ia2,igeo,ii,ind,itypat,ix,iy,iz,jj
  integer :: kk,me_fft,n1,n2,n3,n3d,n_interpol
  integer :: nproc_fft,tpsStart,tpsStop
@@ -267,8 +267,8 @@ subroutine mklocl_realspace(grtn,icoulomb,mpi_enreg,natom,nattyp,nfft,ngfft,nscf
  else
 
    if (testing) then
-     call system_clock(count_rate = countParSeconde)
-     call system_clock(tpsStart, count_rate = countParSeconde)
+     call system_clock(count_rate = countParseconde)
+     call system_clock(tpsStart, count_rate = countParseconde)
    end if
 
 !  dr is the r step in the sampling psps%vlspl
@@ -401,8 +401,8 @@ subroutine mklocl_realspace(grtn,icoulomb,mpi_enreg,natom,nattyp,nfft,ngfft,nscf
    end if
 
    if (testing .and. option == 2) then
-     call system_clock(tpsStop, count_rate = countParSeconde)
-     write(std_out,*) "Tps : ", real(tpsStop - tpsStart) / real(countParSeconde)
+     call system_clock(tpsStop, count_rate = countParseconde)
+     write(std_out,*) "Tps : ", real(tpsStop - tpsStart) / real(countParseconde)
    end if
 
    ia1=1
@@ -587,8 +587,8 @@ subroutine mklocl_realspace(grtn,icoulomb,mpi_enreg,natom,nattyp,nfft,ngfft,nscf
      end if
 
      if (testing) then
-       call system_clock(tpsStop, count_rate = countParSeconde)
-       write(std_out,*) "Tps : ", real(tpsStop - tpsStart) / real(countParSeconde)
+       call system_clock(tpsStop, count_rate = countParseconde)
+       write(std_out,*) "Tps : ", real(tpsStop - tpsStart) / real(countParseconde)
        write(std_out,*) grtn_cart_interpol
        MSG_ERROR("Testing section!")
      end if

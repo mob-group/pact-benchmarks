@@ -259,8 +259,8 @@
       DOUBLE PRECISION   EPS2, RESID, ULP, ULPINV
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, ZLANGE, ZLANHE
-      EXTERNAL           DLAMCH, ZLANGE, ZLANHE
+      DOUBLE PRECISION   AB_DLAMCH, ZLANGE, ZLANHE
+      EXTERNAL           AB_DLAMCH, ZLANGE, ZLANHE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZGEMM, ZHERK, ZLACPY, ZLASET, AB_zuncsd,
@@ -271,7 +271,7 @@
 *     ..
 *     .. Executable Statements ..
 *
-      ULP = DLAMCH( 'Precision' )
+      ULP = AB_DLAMCH( 'Precision' )
       ULPINV = REALONE / ULP
 *
 *     The first half of the routine checks the 2-by-2 CSD

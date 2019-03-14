@@ -81,8 +81,8 @@ contains
     write(75,'(3(f5.2,1x))') Sym%S_ref(1,1,isym,1),Sym%S_ref(1,2,isym,1),Sym%S_ref(1,3,isym,1)
     write(75,'(3(f5.2,1x))') Sym%S_ref(2,1,isym,1),Sym%S_ref(2,2,isym,1),Sym%S_ref(2,3,isym,1)
     write(75,'(3(f5.2,1x))') Sym%S_ref(3,1,isym,1),Sym%S_ref(3,2,isym,1),Sym%S_ref(3,3,isym,1)
-    call DGEMM('N','N',3,3,3,1.d0,Lattice%rprimdt,3,Sym%S_ref(:,:,isym,1),3,0.d0,tmp1,3)
-    call DGEMM('N','N',3,3,3,1.d0,tmp1,3,Lattice%rprimdtm1,3,0.d0,Sym%S_ref(:,:,isym,1),3)
+    call AB_DGEMM('N','N',3,3,3,1.d0,Lattice%rprimdt,3,Sym%S_ref(:,:,isym,1),3,0.d0,tmp1,3)
+    call AB_DGEMM('N','N',3,3,3,1.d0,tmp1,3,Lattice%rprimdtm1,3,0.d0,Sym%S_ref(:,:,isym,1),3)
     write(75,*) 'In cartesian coordinates:'
     write(75,'(3(f5.2,1x))') Sym%S_ref(1,1,isym,1),Sym%S_ref(1,2,isym,1),Sym%S_ref(1,3,isym,1)
     write(75,'(3(f5.2,1x))') Sym%S_ref(2,1,isym,1),Sym%S_ref(2,2,isym,1),Sym%S_ref(2,3,isym,1)
@@ -107,7 +107,7 @@ contains
 ! We verify that S.S^T = Id
   tmp1(:,:)=zero
   do isym=1,Sym%nsym
-    call DGEMM('T','N',3,3,3,1.d0,Sym%S_ref(:,:,isym,1),3,Sym%S_ref(:,:,isym,1),3,0.d0,tmp1,3)
+    call AB_DGEMM('T','N',3,3,3,1.d0,Sym%S_ref(:,:,isym,1),3,Sym%S_ref(:,:,isym,1),3,0.d0,tmp1,3)
     do ii=1,3
       do jj=1,3
         if ((ii/=jj.and.abs(tmp1(ii,jj)).gt.tol8).or.(ii==jj.and.abs(tmp1(ii,jj)-1.d0).gt.tol8)) then
@@ -167,7 +167,7 @@ contains
   if (InVar%natom_unitcell.gt.1) then
     do iatom_unitcell=2,InVar%natom_unitcell
       temp3(:,1)=xred_ideal(:,iatom_unitcell)-xred_ideal(:,1)
-      call DGEMV('T',3,3,1.d0,InVar%multiplicity(:,:),3,temp3(:,1),1,0.d0,xred_temp(:,iatom_unitcell),1)
+      call AB_DGEMV('T',3,3,1.d0,InVar%multiplicity(:,:),3,temp3(:,1),1,0.d0,xred_temp(:,iatom_unitcell),1)
       Sym%xred_zero(:,iatom_unitcell)=xred_temp(:,iatom_unitcell)
     end do
   end if
@@ -263,7 +263,7 @@ contains
 
 ! Store the positions of the atoms in the motif
   do iatom=1,InVar%natom_unitcell
-    call DGEMV('T',3,3,1.d0,InVar%multiplicity(:,:),3,xred_ideal(:,iatom),1,0.d0,tmp_store(:,iatom),1)
+    call AB_DGEMV('T',3,3,1.d0,InVar%multiplicity(:,:),3,xred_ideal(:,iatom),1,0.d0,tmp_store(:,iatom),1)
   end do
 ! Write the Indsym of the atoms included in the (reference) unitcell (i.e.: the motif)
   if (InVar%debug) then
@@ -289,7 +289,7 @@ contains
     if (InVar%debug) write(40,*) '=========================================='
     if (InVar%debug) write(40,'(a,i4,a,3(f10.5,1x))') 'For iatom=',iatom,' with xred=',xred_ideal(:,iatom)
 !   For a single iatom
-    call DGEMV('T',3,3,1.d0,InVar%multiplicity(:,:),3,xred_ideal(:,iatom),1,0.d0,tmpi(:,iatom),1)
+    call AB_DGEMV('T',3,3,1.d0,InVar%multiplicity(:,:),3,xred_ideal(:,iatom),1,0.d0,tmpi(:,iatom),1)
     iatom_unitcell=mod(iatom-1,InVar%natom_unitcell)+1
     vecti(:)=nint(tmpi(:,iatom)-tmp_store(:,iatom_unitcell))
     do isym=1,Sym%nptsym
@@ -321,7 +321,7 @@ contains
       temp3(:,1)=xred_ideal(:,jatom)-xred_ideal(:,iatom)
       call tdep_make_inbox(temp3(:,1),1,1d-3,temp3(:,1))
       temp3(:,1)=xred_ideal(:,iatom)+temp3(:,1)
-      call DGEMV('T',3,3,1.d0,InVar%multiplicity(:,:),3,temp3(:,1),1,0.d0,tmpj(:,jatom),1)
+      call AB_DGEMV('T',3,3,1.d0,InVar%multiplicity(:,:),3,temp3(:,1),1,0.d0,tmpj(:,jatom),1)
       jatom_unitcell=mod(jatom-1,InVar%natom_unitcell)+1
       vectj(:)=nint(tmpj(:,jatom)-tmp_store(:,jatom_unitcell))
       do isym=1,Sym%nptsym
@@ -378,12 +378,12 @@ contains
 
 ! Store the positions of the atoms in the motif
   do ii=1,InVar%natom_unitcell
-    call DGEMV('T',3,3,1.d0,InVar%multiplicity(:,:),3,xred_ideal(:,ii),1,0.d0,tmp_store(:,ii),1)
+    call AB_DGEMV('T',3,3,1.d0,InVar%multiplicity(:,:),3,xred_ideal(:,ii),1,0.d0,tmp_store(:,ii),1)
   end do
 
 ! Search the atom equivalent to iatom in the (reference) unitcell
   do ii=1,InVar%natom
-    call DGEMV('T',3,3,1.d0,InVar%multiplicity(:,:),3,xred_ideal(:,ii),1,0.d0,tmp(:,ii),1)
+    call AB_DGEMV('T',3,3,1.d0,InVar%multiplicity(:,:),3,xred_ideal(:,ii),1,0.d0,tmp(:,ii),1)
   end do
 ! Note that in the (present) particular case : iatom_unitcell=iatom and vecti(:)=zero
   iatom_unitcell=mod(iatom-1,InVar%natom_unitcell)+1
@@ -395,7 +395,7 @@ contains
   temp(:)=xred_ideal(:,jatom)-xred_ideal(:,iatom)
   call tdep_make_inbox(temp,1,1d-3,temp)
   temp(:)=xred_ideal(:,iatom)+temp(:)
-  call DGEMV('T',3,3,1.d0,InVar%multiplicity(:,:),3,temp(:),1,0.d0,tmp(:,jatom),1)
+  call AB_DGEMV('T',3,3,1.d0,InVar%multiplicity(:,:),3,temp(:),1,0.d0,tmp(:,jatom),1)
   jatom_unitcell=mod(jatom-1,InVar%natom_unitcell)+1
   vectj(:)=nint(tmp(:,jatom)-tmp_store(:,jatom_unitcell))
 
@@ -460,12 +460,12 @@ contains
 
 ! Store the positions of the atoms in the motif
   do ii=1,InVar%natom_unitcell
-    call DGEMV('T',3,3,1.d0,InVar%multiplicity(:,:),3,xred_ideal(:,ii),1,0.d0,tmp_store(:,ii),1)
+    call AB_DGEMV('T',3,3,1.d0,InVar%multiplicity(:,:),3,xred_ideal(:,ii),1,0.d0,tmp_store(:,ii),1)
   end do
 
 ! Search the atom equivalent to iatom in the (reference) unitcell
   do ii=1,InVar%natom
-    call DGEMV('T',3,3,1.d0,InVar%multiplicity(:,:),3,xred_ideal(:,ii),1,0.d0,tmp(:,ii),1)
+    call AB_DGEMV('T',3,3,1.d0,InVar%multiplicity(:,:),3,xred_ideal(:,ii),1,0.d0,tmp(:,ii),1)
   end do
 ! Note that in the (present) particular case : iatom_unitcell=iatom and vecti(:)=zero
   iatom_unitcell=mod(iatom-1,InVar%natom_unitcell)+1
@@ -477,7 +477,7 @@ contains
   temp(:)=xred_ideal(:,jatom)-xred_ideal(:,iatom)
   call tdep_make_inbox(temp,1,1d-3,temp)
   temp(:)=xred_ideal(:,iatom)+temp(:)
-  call DGEMV('T',3,3,1.d0,InVar%multiplicity(:,:),3,temp(:),1,0.d0,tmp(:,jatom),1)
+  call AB_DGEMV('T',3,3,1.d0,InVar%multiplicity(:,:),3,temp(:),1,0.d0,tmp(:,jatom),1)
   jatom_unitcell=mod(jatom-1,InVar%natom_unitcell)+1
   vectj(:)=nint(tmp(:,jatom)-tmp_store(:,jatom_unitcell))
 
@@ -487,7 +487,7 @@ contains
   temp(:)=xred_ideal(:,katom)-xred_ideal(:,iatom)
   call tdep_make_inbox(temp,1,1d-3,temp)
   temp(:)=xred_ideal(:,iatom)+temp(:)
-  call DGEMV('T',3,3,1.d0,InVar%multiplicity(:,:),3,temp(:),1,0.d0,tmp(:,katom),1)
+  call AB_DGEMV('T',3,3,1.d0,InVar%multiplicity(:,:),3,temp(:),1,0.d0,tmp(:,katom),1)
   katom_unitcell=mod(katom-1,InVar%natom_unitcell)+1
   vectk(:)=nint(tmp(:,katom)-tmp_store(:,katom_unitcell))
 
@@ -566,14 +566,14 @@ contains
 
 ! Store the positions of the atoms in the motif
   do ii=1,InVar%natom_unitcell
-    call DGEMV('T',3,3,1.d0,InVar%multiplicity(:,:),3,xred_ideal(:,ii),1,0.d0,tmp_store(:,ii),1)
+    call AB_DGEMV('T',3,3,1.d0,InVar%multiplicity(:,:),3,xred_ideal(:,ii),1,0.d0,tmp_store(:,ii),1)
   end do
 
 ! Search the matrix transformation going from (k,l) to (i,j)
   tmpi(:,:)=0.d0
   tmpj(:,:)=0.d0
 ! For a single iatom
-  call DGEMV('T',3,3,1.d0,InVar%multiplicity(:,:),3,xred_ideal(:,iatom),1,0.d0,tmpi(:,iatom),1)
+  call AB_DGEMV('T',3,3,1.d0,InVar%multiplicity(:,:),3,xred_ideal(:,iatom),1,0.d0,tmpi(:,iatom),1)
   iatom_unitcell=mod(iatom-1,InVar%natom_unitcell)+1
   vecti(:)=nint(tmpi(:,iatom)-tmp_store(:,iatom_unitcell))
   vectsym(:,:)=0
@@ -590,7 +590,7 @@ contains
   temp3(:,1)=xred_ideal(:,jatom)-xred_ideal(:,iatom)
   call tdep_make_inbox(temp3(:,1),1,1d-3,temp3(:,1))
   temp3(:,1)=xred_ideal(:,iatom)+temp3(:,1)
-  call DGEMV('T',3,3,1.d0,InVar%multiplicity(:,:),3,temp3(:,1),1,0.d0,tmpj(:,jatom),1)
+  call AB_DGEMV('T',3,3,1.d0,InVar%multiplicity(:,:),3,temp3(:,1),1,0.d0,tmpj(:,jatom),1)
   jatom_unitcell=mod(jatom-1,InVar%natom_unitcell)+1
   vectj(:)=nint(tmpj(:,jatom)-tmp_store(:,jatom_unitcell))
   vectsym(:,:)=0

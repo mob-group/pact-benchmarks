@@ -115,8 +115,8 @@
      $                   SIGMA, SSFMAX, SSFMIN
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, AB_SLANST, AB_SLAPY2
-      EXTERNAL           SLAMCH, AB_SLANST, AB_SLAPY2
+      REAL               AB_SLAMCH, AB_SLANST, AB_SLAPY2
+      EXTERNAL           AB_SLAMCH, AB_SLANST, AB_SLAPY2
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_SLAE2, AB_SLASCL, AB_SLASRT, AB_XERBLA
@@ -142,9 +142,9 @@
 *
 *     Determine the unit roundoff for this environment.
 *
-      EPS = SLAMCH( 'E' )
+      EPS = AB_SLAMCH( 'E' )
       EPS2 = EPS**2
-      SAFMIN = SLAMCH( 'S' )
+      SAFMIN = AB_SLAMCH( 'S' )
       SAFMAX = ONE / SAFMIN
       SSFMAX = SQRT( SAFMAX ) / THREE
       SSFMIN = SQRT( SAFMIN ) / EPS2

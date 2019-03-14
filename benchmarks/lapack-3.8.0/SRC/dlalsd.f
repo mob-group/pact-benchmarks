@@ -209,8 +209,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            AB_IDAMAX
-      DOUBLE PRECISION   DLAMCH, AB_DLANST
-      EXTERNAL           AB_IDAMAX, DLAMCH, AB_DLANST
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANST
+      EXTERNAL           AB_IDAMAX, AB_DLAMCH, AB_DLANST
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_DCOPY, AB_DGEMM, AB_DLACPY, AB_DLALSA, AB_DL
@@ -239,7 +239,7 @@
          RETURN
       END IF
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
 *
 *     Set up the tolerance.
 *

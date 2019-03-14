@@ -51,7 +51,7 @@ CONTAINS  !===========================================================
 !! NV= Number of vectors/coefficients
 !!
 !! OUTPUT
-!! wegihts= Calculated weights of a band in an unfolded state.
+!! wegihts= Calculated weights of a band in an unfoAB_LDEd state.
 !! Depends on the number of folds the WFK file was structured with.
 !!
 !! PARENTS
@@ -157,7 +157,7 @@ CONTAINS  !===========================================================
 !! NewK
 !!
 !! FUNCTION
-!! Part of fold2Bloch that determines the unfolded
+!! Part of fold2Bloch that determines the unfoAB_LDEd
 !! positions of each K point.
 !!
 !! INPUTS
@@ -165,7 +165,7 @@ CONTAINS  !===========================================================
 !! XX, YY, ZZ= Original K point coordinates
 !!
 !! OUTPUT
-!! nkval= Array of determined coordinates of unfolded K point locaations.
+!! nkval= Array of determined coordinates of unfoAB_LDEd K point locaations.
 !! Depends on the number of folds the WFK file was structured with.
 !!
 !! PARENTS

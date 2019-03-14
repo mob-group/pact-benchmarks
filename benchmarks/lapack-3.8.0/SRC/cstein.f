@@ -221,8 +221,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            AB_ISAMAX
-      REAL               SLAMCH, AB_SNRM2
-      EXTERNAL           AB_ISAMAX, SLAMCH, AB_SNRM2
+      REAL               AB_SLAMCH, AB_SNRM2
+      EXTERNAL           AB_ISAMAX, AB_SLAMCH, AB_SNRM2
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_SCOPY, AB_SLAGTF, AB_SLAGTS, AB_SLARNV, AB_S
@@ -277,7 +277,7 @@
 *
 *     Get machine constants.
 *
-      EPS = SLAMCH( 'Precision' )
+      EPS = AB_SLAMCH( 'Precision' )
 *
 *     Initialize seed for random number generator AB_SLARNV.
 *

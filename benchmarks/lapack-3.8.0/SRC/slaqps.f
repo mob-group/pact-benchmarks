@@ -211,15 +211,15 @@
 *     ..
 *     .. External Functions ..
       INTEGER            AB_ISAMAX
-      REAL               SLAMCH, AB_SNRM2
-      EXTERNAL           AB_ISAMAX, SLAMCH, AB_SNRM2
+      REAL               AB_SLAMCH, AB_SNRM2
+      EXTERNAL           AB_ISAMAX, AB_SLAMCH, AB_SNRM2
 *     ..
 *     .. Executable Statements ..
 *
       LASTRK = MIN( M, N+OFFSET )
       LSTICC = 0
       K = 0
-      TOL3Z = SQRT(SLAMCH('Epsilon'))
+      TOL3Z = SQRT(AB_SLAMCH('Epsilon'))
 *
 *     Beginning of while loop.
 *
@@ -351,7 +351,7 @@
 *
 *        NOTE: The computation of VN1( LSTICC ) relies on the fact that
 *        AB_SNRM2 does not fail on vectors with norm below the value of
-*        SQRT(DLAMCH('S'))
+*        SQRT(AB_DLAMCH('S'))
 *
          VN2( LSTICC ) = VN1( LSTICC )
          LSTICC = ITEMP

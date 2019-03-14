@@ -1776,7 +1776,7 @@ pure function startswith(string, prefix) result(ans)
  integer :: ii,lenstr,lenpre
 !************************************************************************
 
- ans = .False.
+ ans = .false.
  lenstr = len_trim(string); lenpre = len_trim(prefix)
  if (lenpre > lenstr) return
 
@@ -1816,7 +1816,7 @@ pure function endswith(string, suffix) result(ans)
  integer :: ii,p,lenstr,lensuf
 !************************************************************************
 
- ans = .False.
+ ans = .false.
  lenstr = len_trim(string); lensuf = len_trim(suffix)
  if (lensuf > lenstr) return
 

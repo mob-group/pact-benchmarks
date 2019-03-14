@@ -349,7 +349,7 @@ subroutine outwant(dtset,eig,cg,kg,npwarr,mband,mcg,nkpt,nsppol,mkmem,mpw,prtwan
  ngm=imax
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!PART ONE: writing the header
+!PART ONE: writing the AB_HEADER
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  write(unitwnt) alat
  write(unitwnt) ( drprim( i, 1 ), i = 1, 3 )  ! save A1

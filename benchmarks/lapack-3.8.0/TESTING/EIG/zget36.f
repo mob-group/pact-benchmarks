@@ -117,15 +117,15 @@
      $                   T2( LDT, LDT ), TMP( LDT, LDT ), WORK( LWORK )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZCOPY, ZHST01, ZLACPY, ZLASET, ZTREXC
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = DLAMCH( 'P' )
+      EPS = AB_DLAMCH( 'P' )
       RMAX = ZERO
       LMAX = 0
       KNT = 0

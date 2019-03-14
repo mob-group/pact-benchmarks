@@ -172,8 +172,8 @@
      $                   X( LDX, 2 )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, AB_SLANGE
-      EXTERNAL           SLAMCH, AB_SLANGE
+      REAL               AB_SLAMCH, AB_SLANGE
+      EXTERNAL           AB_SLAMCH, AB_SLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_SLACPY, AB_SLANV2, AB_SLARFG, AB_SLARFX, AB_
@@ -241,8 +241,8 @@
 *        Compute machine-dependent threshold for test for accepting
 *        swap.
 *
-         EPS = SLAMCH( 'P' )
-         SMLNUM = SLAMCH( 'S' ) / EPS
+         EPS = AB_SLAMCH( 'P' )
+         SMLNUM = AB_SLAMCH( 'S' ) / EPS
          THRESH = MAX( TEN*EPS*DNORM, SMLNUM )
 *
 *        Solve T11*X - X*T22 = scale*T12 for X.

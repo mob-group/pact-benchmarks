@@ -238,8 +238,8 @@
       REAL               ANORM, BNORM, RESID, TEMP, ULP, ULPINV, UNFL
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLANGE, SLANSY
-      EXTERNAL           SLAMCH, SLANGE, SLANSY
+      REAL               AB_SLAMCH, SLANGE, SLANSY
+      EXTERNAL           AB_SLAMCH, SLANGE, SLANSY
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SCOPY, SGEMM, SGGSVD3, SLACPY, SLASET, SSYRK
@@ -249,9 +249,9 @@
 *     ..
 *     .. Executable Statements ..
 *
-      ULP = SLAMCH( 'Precision' )
+      ULP = AB_SLAMCH( 'Precision' )
       ULPINV = ONE / ULP
-      UNFL = SLAMCH( 'Safe minimum' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
 *
 *     Copy the matrix A to the array AF.
 *

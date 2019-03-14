@@ -107,8 +107,8 @@
      $                   TOM, U, UNFL
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -117,8 +117,8 @@
 *
 *     Get machine constants
 *
-      UNFL = DLAMCH( 'Safe minimum' )
-      OVFL = DLAMCH( 'Overflow' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
+      OVFL = AB_DLAMCH( 'Overflow' )
 *
 *     Find largest entry
 *

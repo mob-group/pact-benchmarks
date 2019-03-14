@@ -197,7 +197,7 @@ contains
 !!  eigen(mband*nkpt*nsppol)=array for holding eigenvalues (hartree)
 !!  electronpositron <type(electronpositron_type)>=quantities for
 !!     the electron-positron annihilation
-!!  hdr <type(hdr_type)>=the header of wf, den and pot files
+!!  hdr <type(hdr_type)>=the AB_HEADER of wf, den and pot files
 !!  indsym(4,nsym,natom)=indirect indexing array for atom labels
 !!  initialized= if 0 the initialization of the gstate run is not yet finished
 !!  irrzon(nfft**(1-1/nsym),2,(nspden/nsppol)-3*(nspden/4))=irreducible zone data
@@ -1268,7 +1268,7 @@ subroutine scfcv_core(atindx,atindx1,cg,cprj,cpus,dmatpawu,dtefield,dtfil,dtorbm
 !    PAW only: we sometimes have to compute compensation density
 !    and eventually add it to density from WFs
      nhatgrdim=0
-     dummy_nhatgr = .False.
+     dummy_nhatgr = .false.
 !    This is executed only in the positron case.
      if (psps%usepaw==1.and.(dtset%positron>=0.or.ipositron/=1) &
 &     .and.((usexcnhat==0) &
@@ -1930,7 +1930,7 @@ subroutine scfcv_core(atindx,atindx1,cg,cprj,cpus,dmatpawu,dtefield,dtfil,dtorbm
    if (iwrite_fftdatar(mpi_enreg)) then
 
      if(dtset%prtden<0.or.dtset%prtkden<0) then
-!      Update the content of the header (evolving variables)
+!      Update the content of the AB_HEADER (evolving variables)
 !      Don't use parallelism over atoms because only me=0 accesses here
        bantot=hdr%bantot
        if (dtset%positron==0) then
@@ -2741,7 +2741,7 @@ end subroutine etotfor
 !! CHILDREN
 !!      cgcprj_cholesky,dotprod_set_cgcprj,dotprodm_sumdiag_cgcprj
 !!      lincom_cgcprj,pawcprj_alloc,pawcprj_axpby,pawcprj_free,pawcprj_get
-!!      pawcprj_getdim,pawcprj_lincom,pawcprj_put,timab,xmpi_sum,zgesv
+!!      pawcprj_getdim,pawcprj_lincom,pawcprj_put,timab,xmpi_sum,AB_ZGESV
 !!
 !! SOURCE
 
@@ -2983,11 +2983,11 @@ subroutine wf_mixing(atindx1,cg,cprj,dtset,istep,mcg,mcprj,mpi_enreg,&
 
        ABI_ALLOCATE(ipiv,(nbdmix))
 !      The smn is destroyed by the following inverse call
-       call zgesv(nbdmix,nbdmix,smn,nbdmix,ipiv,mmn,nbdmix,ierr)
+       call AB_ZGESV(nbdmix,nbdmix,smn,nbdmix,ipiv,mmn,nbdmix,ierr)
        ABI_DEALLOCATE(ipiv)
 !DEBUG
        if(ierr/=0)then
-         MSG_ERROR(' The call to cgesv general inversion routine failed')
+         MSG_ERROR(' The call to AB_CGESV general inversion routine failed')
        end if
 !ENDDEBUG
 
@@ -3136,7 +3136,7 @@ subroutine wf_mixing(atindx1,cg,cprj,dtset,istep,mcg,mcprj,mpi_enreg,&
    ABI_ALLOCATE(coeffs,(nset2))
    coeffs(:)=cone
 !  The res_mn is destroyed by the following inverse call
-   call zgesv(nset2,1,res_mn,wfmixalg-1,ipiv,coeffs,nset2,ierr)
+   call AB_ZGESV(nset2,1,res_mn,wfmixalg-1,ipiv,coeffs,nset2,ierr)
    ABI_DEALLOCATE(ipiv)
 !  The coefficients must sum to one
    sum_coeffs=sum(coeffs)

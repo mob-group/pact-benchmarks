@@ -172,8 +172,8 @@
       REAL               ANORM, EPS
 *     ..
 *     .. External Functions ..
-      REAL               CLANGE, SCASUM, SLAMCH
-      EXTERNAL           CLANGE, SCASUM, SLAMCH
+      REAL               CLANGE, SCASUM, AB_SLAMCH
+      EXTERNAL           CLANGE, SCASUM, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CCOPY, CGEMV
@@ -271,7 +271,7 @@
 *     Compute norm(A - Q * B * P') / ( n * norm(A) * EPS )
 *
       ANORM = CLANGE( '1', M, N, A, LDA, RWORK )
-      EPS = SLAMCH( 'Precision' )
+      EPS = AB_SLAMCH( 'Precision' )
 *
       IF( ANORM.LE.ZERO ) THEN
          IF( RESID.NE.ZERO )

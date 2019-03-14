@@ -92,8 +92,8 @@ contains
 !!      destruction_matrix_scalapack,end_scalapack,exc_fullh_from_blocks
 !!      exc_read_bshdr,exc_skip_bshdr_mpio,hermitianize,idx_glob
 !!      init_matrix_scalapack,init_scalapack,mpi_file_close,mpi_file_open
-!!      mpi_file_read_all,mpi_file_set_view,mpi_type_free,slk_pzgemm
-!!      slk_pzhegvx,slk_single_fview_read_mask,slk_write,slk_zinvert,wrtout
+!!      mpi_file_read_all,mpi_file_set_view,mpi_type_free,slk_pAB_ZGEMM
+!!      slk_pAB_ZHEGVx,slk_single_fview_read_mask,slk_write,slk_zinvert,wrtout
 !!      xgemm,xhdp_invert,xhegv,xhegvx,xmpi_barrier,xmpio_read_frm
 !!
 !! SOURCE
@@ -183,7 +183,7 @@ subroutine exc_diago_driver(Wfd,Bsp,BS_files,KS_BSt,QP_BSt,Cryst,Kmesh,Psps,&
    end select
    !
    if (my_rank==master) then
-     call ebands_report_gap(QP_BSt,header="QP bands",unit=std_out,gaps=gaps)
+     call ebands_report_gap(QP_BSt,AB_HEADER="QP bands",unit=std_out,gaps=gaps)
      gw_gap = MINVAL(gaps(2,:))
      call exc_print_eig(BSp,BS_files%out_eig,gw_gap,exc_gap)
    end if
@@ -230,8 +230,8 @@ end subroutine exc_diago_driver
 !!      destruction_matrix_scalapack,end_scalapack,exc_fullh_from_blocks
 !!      exc_read_bshdr,exc_skip_bshdr_mpio,hermitianize,idx_glob
 !!      init_matrix_scalapack,init_scalapack,mpi_file_close,mpi_file_open
-!!      mpi_file_read_all,mpi_file_set_view,mpi_type_free,slk_pzgemm
-!!      slk_pzhegvx,slk_single_fview_read_mask,slk_write,slk_zinvert,wrtout
+!!      mpi_file_read_all,mpi_file_set_view,mpi_type_free,slk_pAB_ZGEMM
+!!      slk_pAB_ZHEGVx,slk_single_fview_read_mask,slk_write,slk_zinvert,wrtout
 !!      xgemm,xhdp_invert,xhegv,xhegvx,xmpi_barrier,xmpio_read_frm
 !!
 !! SOURCE
@@ -278,7 +278,7 @@ subroutine exc_diago_resonant(Bsp,BS_files,Hdr_bse,prtvol,comm,Epren,Kmesh,Cryst
  integer(XMPI_OFFSET_KIND) :: ehdr_offset,fmarker
  integer :: block_sizes(2,3),array_of_sizes(2),gsub(2,2)
  logical,parameter :: is_fortran_file=.TRUE.
- real(dp),external :: PDLAMCH
+ real(dp),external :: PAB_DLAMCH
  type(matrix_scalapack)    :: Slk_mat,Slk_vec
  type(processor_scalapack) :: Slk_processor
 #endif
@@ -326,7 +326,7 @@ subroutine exc_diago_resonant(Bsp,BS_files,Hdr_bse,prtvol,comm,Epren,Kmesh,Cryst
  !use_scalapack = .FALSE.
  !use_scalapack = .TRUE.
  if (use_scalapack .and. nsppol == 2) then
-   use_scalapack = .False.
+   use_scalapack = .false.
    msg = "Scalapack with nsppol==2 not yet available. Using sequential version"
    MSG_WARNING(msg)
  end if
@@ -398,7 +398,7 @@ subroutine exc_diago_resonant(Bsp,BS_files,Hdr_bse,prtvol,comm,Epren,Kmesh,Cryst
      MSG_ERROR(msg)
    end if
    !
-   ! Read the header and perform consistency checks.
+   ! Read the AB_HEADER and perform consistency checks.
    call exc_read_bshdr(hreso_unt,Bsp,fform,ierr)
    ABI_CHECK(ierr==0,"Fatal error, cannot continue")
    !
@@ -416,7 +416,7 @@ subroutine exc_diago_resonant(Bsp,BS_files,Hdr_bse,prtvol,comm,Epren,Kmesh,Cryst
      ABI_MALLOC(bs2eph, (Kmesh%nbz*sppoldbl, 6))
      timrev = 1
      call listkk(dksqmax, Cryst%gmet, bs2eph, Epren%kpts, Kmesh%bz, Epren%nkpt, Kmesh%nbz, Cryst%nsym, &
-&       sppoldbl, Cryst%symafm, Cryst%symrel, timrev, use_symrec=.False.)
+&       sppoldbl, Cryst%symafm, Cryst%symrel, timrev, use_symrec=.false.)
    end if
 
    do itemp = 1, ntemp
@@ -430,7 +430,7 @@ subroutine exc_diago_resonant(Bsp,BS_files,Hdr_bse,prtvol,comm,Epren,Kmesh,Cryst
        MSG_ERROR(msg)
      end if
      !
-     ! Read the header and perform consistency checks.
+     ! Read the AB_HEADER and perform consistency checks.
      call exc_read_bshdr(hreso_unt,Bsp,fform,ierr)
      ABI_CHECK(ierr==0,"Fatal error, cannot continue")
      !
@@ -587,7 +587,7 @@ subroutine exc_diago_resonant(Bsp,BS_files,Hdr_bse,prtvol,comm,Epren,Kmesh,Cryst
    call MPI_FILE_OPEN(comm, hreso_fname, amode, MPI_INFO_NULL, mpi_fh, ierr)
    ABI_CHECK_MPI(ierr,"MPI_IO error opening file: "//TRIM(hreso_fname))
 
-   ! Skip the header and find the offset for reading the matrix.
+   ! Skip the AB_HEADER and find the offset for reading the matrix.
    call exc_skip_bshdr_mpio(mpi_fh,xmpio_collective,ehdr_offset)
    !
    ! Read scaLAPACK matrix from the file.
@@ -608,11 +608,11 @@ subroutine exc_diago_resonant(Bsp,BS_files,Hdr_bse,prtvol,comm,Epren,Kmesh,Cryst
    if (do_full_diago) then
      call wrtout(std_out," Performing full diagonalization with scaLAPACK...","COLL")
 
-     call slk_pzheev("Vectors","Upper",Slk_mat,Slk_vec,exc_ene)
+     call slk_pAB_ZHEEV("Vectors","Upper",Slk_mat,Slk_vec,exc_ene)
    else
      call wrtout(std_out," Performing partial diagonalization with scaLAPACK...","COLL")
-     il=1; iu=nstates; abstol=zero !ABSTOL = PDLAMCH(comm,'U')
-     call slk_pzheevx("Vectors","Index","Upper",Slk_mat,vl,vu,il,iu,abstol,Slk_vec,mene_found,exc_ene)
+     il=1; iu=nstates; abstol=zero !ABSTOL = PAB_DLAMCH(comm,'U')
+     call slk_pAB_ZHEEVx("Vectors","Index","Upper",Slk_mat,vl,vu,il,iu,abstol,Slk_vec,mene_found,exc_ene)
    end if
 
    exc_ene_c(:) = exc_ene(:)
@@ -727,8 +727,8 @@ end subroutine exc_diago_resonant
 !!      destruction_matrix_scalapack,end_scalapack,exc_fullh_from_blocks
 !!      exc_read_bshdr,exc_skip_bshdr_mpio,hermitianize,idx_glob
 !!      init_matrix_scalapack,init_scalapack,mpi_file_close,mpi_file_open
-!!      mpi_file_read_all,mpi_file_set_view,mpi_type_free,slk_pzgemm
-!!      slk_pzhegvx,slk_single_fview_read_mask,slk_write,slk_zinvert,wrtout
+!!      mpi_file_read_all,mpi_file_set_view,mpi_type_free,slk_pAB_ZGEMM
+!!      slk_pAB_ZHEGVx,slk_single_fview_read_mask,slk_write,slk_zinvert,wrtout
 !!      xgemm,xhdp_invert,xhegv,xhegvx,xmpi_barrier,xmpio_read_frm
 !!
 !! SOURCE
@@ -891,8 +891,8 @@ end subroutine exc_print_eig
 !!      destruction_matrix_scalapack,end_scalapack,exc_fullh_from_blocks
 !!      exc_read_bshdr,exc_skip_bshdr_mpio,hermitianize,idx_glob
 !!      init_matrix_scalapack,init_scalapack,mpi_file_close,mpi_file_open
-!!      mpi_file_read_all,mpi_file_set_view,mpi_type_free,slk_pzgemm
-!!      slk_pzhegvx,slk_single_fview_read_mask,slk_write,slk_zinvert,wrtout
+!!      mpi_file_read_all,mpi_file_set_view,mpi_type_free,slk_pAB_ZGEMM
+!!      slk_pAB_ZHEGVx,slk_single_fview_read_mask,slk_write,slk_zinvert,wrtout
 !!      xgemm,xhdp_invert,xhegv,xhegvx,xmpi_barrier,xmpio_read_frm
 !!
 !! SOURCE
@@ -944,7 +944,7 @@ subroutine exc_diago_coupling(Bsp,BS_files,Hdr_bse,prtvol,comm)
  end if
 
  if (nprocs > 1) then
-   MSG_WARNING("Scalapack does not provide ZGEEV, diagonalization is done in sequential!")
+   MSG_WARNING("Scalapack does not provide AB_ZGEEV, diagonalization is done in sequential!")
  end if
 
  exc_size = 2*SUM(BSp%nreh)
@@ -957,7 +957,7 @@ subroutine exc_diago_coupling(Bsp,BS_files,Hdr_bse,prtvol,comm)
    MSG_ERROR("BS_files%in_eig is defined!")
  end if
  !
- ! Only master performs the diagonalization since ScaLAPACK does not provide the parallel version of ZGEEV.
+ ! Only master performs the diagonalization since ScaLAPACK does not provide the parallel version of AB_ZGEEV.
  if (my_rank/=master) GOTO 10
 
  write(msg,'(a,i0)')' Direct diagonalization of the full excitonic Hamiltonian, Matrix size= ',exc_size
@@ -992,9 +992,9 @@ subroutine exc_diago_coupling(Bsp,BS_files,Hdr_bse,prtvol,comm)
    MSG_ERROR(msg)
  end if
  !
- ! Read the header and perform consistency checks.
+ ! Read the AB_HEADER and perform consistency checks.
  call exc_read_bshdr(hreso_unt,Bsp,fform,ierr)
- ABI_CHECK(ierr==0,"Wrong header")
+ ABI_CHECK(ierr==0,"Wrong AB_HEADER")
  !
  ! Construct resonant and anti-resonant part of the excitonic Hamiltonian using Hermiticity. File is always in double precision.
  ! Fill exc_ham with ( R  0 )
@@ -1018,9 +1018,9 @@ subroutine exc_diago_coupling(Bsp,BS_files,Hdr_bse,prtvol,comm)
    MSG_ERROR(msg)
  end if
  !
- ! Read the header and perform consistency checks.
+ ! Read the AB_HEADER and perform consistency checks.
  call exc_read_bshdr(hcoup_unt,Bsp,fform,ierr)
- ABI_CHECK(ierr==0,"Wrong header")
+ ABI_CHECK(ierr==0,"Wrong AB_HEADER")
  !
  ! Fill exc_ham with ( 0  C) to have ( R   C )
  !                   (-C* 0)         (-C* -R*)
@@ -1081,7 +1081,7 @@ subroutine exc_diago_coupling(Bsp,BS_files,Hdr_bse,prtvol,comm)
 
  nene_printed = MIN(32*nsppol,nstates); if (prtvol>10) nene_printed = nstates
 
- ! This is not portable as the the eigenvalues calculated by ZGEEV are not sorted.
+ ! This is not portable as the the eigenvalues calculated by AB_ZGEEV are not sorted.
  ! Even two subsequent calculations with the same input on the same machine
  ! might produce different orderings. Might sort the eigenvalues though, just for printing.
 
@@ -1175,8 +1175,8 @@ end subroutine exc_diago_coupling
 !!      destruction_matrix_scalapack,end_scalapack,exc_fullh_from_blocks
 !!      exc_read_bshdr,exc_skip_bshdr_mpio,hermitianize,idx_glob
 !!      init_matrix_scalapack,init_scalapack,mpi_file_close,mpi_file_open
-!!      mpi_file_read_all,mpi_file_set_view,mpi_type_free,slk_pzgemm
-!!      slk_pzhegvx,slk_single_fview_read_mask,slk_write,slk_zinvert,wrtout
+!!      mpi_file_read_all,mpi_file_set_view,mpi_type_free,slk_pAB_ZGEMM
+!!      slk_pAB_ZHEGVx,slk_single_fview_read_mask,slk_write,slk_zinvert,wrtout
 !!      xgemm,xhdp_invert,xhegv,xhegvx,xmpi_barrier,xmpio_read_frm
 !!
 !! SOURCE
@@ -1229,7 +1229,7 @@ subroutine exc_diago_coupling_hegv(Bsp,BS_files,Hdr_bse,prtvol,comm)
  integer,pointer :: myel2loc(:,:)
  complex(dpc),allocatable :: tmp_cbuffer(:)
  character(50) :: uplo
- real(dp),external :: PDLAMCH
+ real(dp),external :: PAB_DLAMCH
  type(matrix_scalapack)    :: Slk_F,Slk_Hbar,Slk_vec,Slk_ovlp,Slk_tmp
  type(processor_scalapack) :: Slk_processor
 #endif
@@ -1312,9 +1312,9 @@ subroutine exc_diago_coupling_hegv(Bsp,BS_files,Hdr_bse,prtvol,comm)
      MSG_ERROR(msg)
    end if
    !
-   ! Read the header and perform consistency checks.
+   ! Read the AB_HEADER and perform consistency checks.
    call exc_read_bshdr(hreso_unt,Bsp,fform,ierr)
-   ABI_CHECK(ierr==0,"Wrong header")
+   ABI_CHECK(ierr==0,"Wrong AB_HEADER")
    !
    ! Construct Hbar = ( R   C )
    !                  ( C*  R*)
@@ -1327,9 +1327,9 @@ subroutine exc_diago_coupling_hegv(Bsp,BS_files,Hdr_bse,prtvol,comm)
      MSG_ERROR(msg)
    end if
    !
-   ! Read the header and perform consistency checks.
+   ! Read the AB_HEADER and perform consistency checks.
    call exc_read_bshdr(hcoup_unt,Bsp,fform,ierr)
-   ABI_CHECK(ierr==0,"Wrong header")
+   ABI_CHECK(ierr==0,"Wrong AB_HEADER")
 
    row_sign=+1; diago_is_real=(.not.BSp%have_complex_ene) ! not used here.
    call exc_fullh_from_blocks(hcoup_unt,"Coupling",nsppol,row_sign,diago_is_real,Bsp%nreh,exc_size,exc_ham)
@@ -1461,7 +1461,7 @@ write(668,*)ovlp
    msg = " MPI_IO error opening file: "//TRIM(reso_fname)
    ABI_CHECK_MPI(mpi_err,msg)
    !
-   ! Skip the header and find the offset for reading the matrix.
+   ! Skip the AB_HEADER and find the offset for reading the matrix.
    call exc_skip_bshdr_mpio(mpi_fh,xmpio_collective,ehdr_offset)
    !
    ! Read  = ( R  - )
@@ -1530,7 +1530,7 @@ write(668,*)ovlp
    msg = " MPI_IO error opening file: "//TRIM(coup_fname)
    ABI_CHECK_MPI(mpi_err,msg)
    !
-   ! Skip the header and find the offset for reading the matrix.
+   ! Skip the AB_HEADER and find the offset for reading the matrix.
    call exc_skip_bshdr_mpio(mpi_fh,xmpio_collective,ehdr_offset)
 
    nullify(myel2loc)
@@ -1618,14 +1618,14 @@ write(668,*)ovlp
    call init_matrix_scalapack(Slk_vec,exc_size,exc_size,Slk_processor,istwfk1,tbloc=tbloc)
    !
    itype=2; vl=1; vu=1; il=1; iu=nstates
-   abstol=zero !ABSTOL = PDLAMCH(comm,'U')
+   abstol=zero !ABSTOL = PAB_DLAMCH(comm,'U')
 
 #if 1
    if (do_full_diago) then
-     call slk_pzhegvx(itype,"Vectors","All","Upper",Slk_F,Slk_Hbar,vl,vu,il,iu,abstol,Slk_vec,mene_found,exc_ene)
+     call slk_pAB_ZHEGVx(itype,"Vectors","All","Upper",Slk_F,Slk_Hbar,vl,vu,il,iu,abstol,Slk_vec,mene_found,exc_ene)
    else
      MSG_WARNING("Partial diago is still under testing")
-     call slk_pzhegvx(itype,"Vectors","Index","Upper",Slk_F,Slk_Hbar,vl,vu,il,iu,abstol,Slk_vec,mene_found,exc_ene)
+     call slk_pAB_ZHEGVx(itype,"Vectors","Index","Upper",Slk_F,Slk_Hbar,vl,vu,il,iu,abstol,Slk_vec,mene_found,exc_ene)
    end if
 #else
    call xhegv(itype,"Vectors","Upper",exc_size,Slk_F%buffer_cplx,Slk_Hbar%buffer_cplx,exc_ene)
@@ -1654,7 +1654,7 @@ write(668,*)ovlp
 
    call wrtout(std_out,ch10//" Writing eigenvalues and eigenvectors on file: "//TRIM(bseig_fname),"COLL")
    !
-   ! Open the file with Fortran-IO to write the Header.
+   ! Open the file with Fortran-IO to write the AB_HEADER.
    if (my_rank==master) then
      if (open_file(bseig_fname,msg,newunit=eig_unt,form="unformatted",action="write") /= 0) then
        MSG_ERROR(msg)
@@ -1674,7 +1674,7 @@ write(668,*)ovlp
    call MPI_FILE_OPEN(comm, bseig_fname, amode, MPI_INFO_NULL, mpi_fh, mpi_err)
    ABI_CHECK_MPI(mpi_err,"FILE_OPEN: "//TRIM(bseig_fname))
    !
-   ! Skip the header and find the offset for writing the matrix.
+   ! Skip the AB_HEADER and find the offset for writing the matrix.
    ehdr_offset=0
    !call hdr_mpio_skip(mpi_fh,fform,ehdr_offset)
 
@@ -1702,10 +1702,10 @@ write(668,*)ovlp
 
    !call init_matrix_scalapack(Slk_tmp,exc_size,exc_size,Slk_processor,istwfk1,tbloc=tbloc)
    !Slk_tmp%buffer_cplx = Slk_vec%buffer_cplx
-   !call slk_pzgemm("C","N",Slk_tmp,cone,Slk_vec,czero,Slk_ovlp)
+   !call slk_pAB_ZGEMM("C","N",Slk_tmp,cone,Slk_vec,czero,Slk_ovlp)
    !call destruction_matrix_scalapack(Slk_tmp)
 
-   call slk_pzgemm("C","N",Slk_vec,cone,Slk_vec,czero,Slk_ovlp)
+   call slk_pAB_ZGEMM("C","N",Slk_vec,cone,Slk_vec,czero,Slk_ovlp)
 
 #ifdef DEV_MG_DEBUG_THIS
    ABI_MALLOC(exc_ham,(exc_size,exc_size))

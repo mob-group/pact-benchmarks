@@ -483,7 +483,7 @@ end subroutine mep_qmin
 !!
 !! FUNCTION
 !!  Make a path (string of images) evolve according to a
-!!  local Broyden-Fletcher-Goldfarb-Shanno (BFGS) algorithm
+!!  local Broyden-FletAB_CHER-Goldfarb-Shanno (BFGS) algorithm
 !!
 !! INPUTS
 !!  itime=time step
@@ -673,7 +673,7 @@ end subroutine mep_lbfgs
 !!
 !! FUNCTION
 !!  Make a path (string of images) evolve according to a
-!!  global Broyden-Fletcher-Goldfarb-Shanno (BFGS) algorithm
+!!  global Broyden-FletAB_CHER-Goldfarb-Shanno (BFGS) algorithm
 !!
 !! INPUTS
 !!  itime=time step

@@ -64,7 +64,7 @@ contains
 !!
 !! INPUTS
 !!  filpsp = name of file with UPF data
-!!  psps = sturcture with global dimension data for pseudopotentials, header info ...
+!!  psps = sturcture with global dimension data for pseudopotentials, AB_HEADER info ...
 !!
 !! OUTPUT
 !!  pspxc = index of xc functional for this pseudo

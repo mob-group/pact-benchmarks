@@ -449,7 +449,7 @@ end subroutine conv
 !   from the m_splines module
 !   (/src/28_numeric_noabirule/m_splines.F90)
 
-subroutine spline( t, y, n, ybcbeg, ybcend, ypp )
+subroutine spline( t, y, n, ybAB_CBEG, ybcend, ypp )
 !
 !  Author:
 !
@@ -459,7 +459,7 @@ subroutine spline( t, y, n, ybcbeg, ybcend, ypp )
 !  Parameters:
 !
 !    Input, integer N, the number of data points; N must be at least 2. 
-!    In the special case where N = 2 and IBCBEG = IBCEND = 0, the 
+!    In the special case where N = 2 and IBAB_CBEG = IBCEND = 0, the 
 !    spline will actually be linear. 
 !
 !    Input, double precision T(N), the knot values, that is, the points where data
@@ -467,8 +467,8 @@ subroutine spline( t, y, n, ybcbeg, ybcend, ypp )
 !
 !    Input, double precision Y(N), the data values to be interpolated.
 !
-!    Input, double precision YBCBEG, YBCEND, the values to be used in the boundary
-!    conditions if IBCBEG or IBCEND is equal to 1 or 2.
+!    Input, double precision YBAB_CBEG, YBCEND, the values to be used in the boundary
+!    conditions if IBAB_CBEG or IBCEND is equal to 1 or 2.
 !
 !    Output, double precision YPP(N), the second derivatives of the cubic spline.
 
@@ -479,12 +479,12 @@ subroutine spline( t, y, n, ybcbeg, ybcend, ypp )
   integer, intent(in) :: n
   real(dp), intent(in) :: t(n)
   real(dp), intent(in) :: y(n)
-  real(dp), intent(in) :: ybcbeg
+  real(dp), intent(in) :: ybAB_CBEG
   real(dp), intent(in) :: ybcend
 
   real(dp), intent(out) :: ypp(n)
 
-  integer :: ibcbeg
+  integer :: ibAB_CBEG
   integer :: ibcend
   integer :: i,k
   real(dp) :: ratio,pinv
@@ -494,18 +494,18 @@ subroutine spline( t, y, n, ybcbeg, ybcend, ypp )
 
 !
 !  XG041127
-  ibcbeg=1 ; ibcend=1
-  if(ybcbeg>1.0d+30)ibcbeg=0
+  ibAB_CBEG=1 ; ibcend=1
+  if(ybAB_CBEG>1.0d+30)ibAB_CBEG=0
   if(ybcend>1.0d+30)ibcend=0
 !
 !  Set the first and last equations.
 !
-  if ( ibcbeg == 0 ) then
+  if ( ibAB_CBEG == 0 ) then
     ypp(1) = 0.d0
     tmp(1) = 0.d0
-  else if ( ibcbeg == 1 ) then
+  else if ( ibAB_CBEG == 1 ) then
     ypp(1) = -0.5d0
-    tmp(1) = (3.d0/(t(2)-t(1)))*((y(2)-y(1))/(t(2)-t(1))-ybcbeg)
+    tmp(1) = (3.d0/(t(2)-t(1)))*((y(2)-y(1))/(t(2)-t(1))-ybAB_CBEG)
   end if
   if ( ibcend == 0 ) then
     ypp(n) = 0.d0

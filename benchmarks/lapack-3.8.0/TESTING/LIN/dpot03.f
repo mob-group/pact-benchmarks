@@ -152,8 +152,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, DLANGE, DLANSY
-      EXTERNAL           LSAME, DLAMCH, DLANGE, DLANSY
+      DOUBLE PRECISION   AB_DLAMCH, DLANGE, DLANSY
+      EXTERNAL           LSAME, AB_DLAMCH, DLANGE, DLANSY
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DSYMM
@@ -173,7 +173,7 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0 or AINVNM = 0.
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       ANORM = DLANSY( '1', UPLO, N, A, LDA, RWORK )
       AINVNM = DLANSY( '1', UPLO, N, AINV, LDAINV, RWORK )
       IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN

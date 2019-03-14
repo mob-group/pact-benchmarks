@@ -503,7 +503,7 @@ implicit none
    MSG_ERROR(msg)
  end if
 
-! print header
+! print AB_HEADER
  write(msg,'(a,a)') ch10,&
 &  ' # At  T     F(J/mol-c)     E(J/mol-c)     S(J/(mol-c.K)) C(J/(mol-c.K)) Omega_mean(cm-1) from prtdos DOS'
  call wrtout(thermal_unit,msg,'COLL')
@@ -721,7 +721,7 @@ subroutine mkphdos(phdos, crystal, ifc, prtdos, dosdeltae, dossmear, dos_ngqpt, 
  integer :: iat,jat,idir,imode,io,iq_ibz,itype,nkpt_fullbz
  integer :: nqbz,ierr,natom,nomega,jdir, isym, nprocs, my_rank, ncid
  real(dp),parameter :: max_occ1=one, gaussmaxarg = sqrt(-log(1.d-90)), max_smallq = 0.0625_dp
- real(dp) :: nsmallq,gaussfactor,gaussprefactor,normq,debyefreq,rtmp
+ real(dp) :: nsmallq,gaussfactor,gauAB_SSPRefactor,normq,debyefreq,rtmp
  real(dp) :: cpu, wall, gflops
  character(len=500) :: msg
  character(len=80) :: errstr
@@ -808,7 +808,7 @@ subroutine mkphdos(phdos, crystal, ifc, prtdos, dosdeltae, dossmear, dos_ngqpt, 
  ! Parameters defining the gaussian approximant.
  if (prtdos == 1) then
    ! TODO: use dirac_delta and update reference files.
-   gaussprefactor = one / (dossmear * sqrt(two_pi))
+   gauAB_SSPRefactor = one / (dossmear * sqrt(two_pi))
    gaussfactor = one / (sqrt2 * dossmear)
    write(msg, '(4a,f8.5,2a,f8.5)') ch10, &
     ' mkphdos: calculating phonon DOS using gaussian method:',ch10, &
@@ -889,7 +889,7 @@ subroutine mkphdos(phdos, crystal, ifc, prtdos, dosdeltae, dossmear, dos_ngqpt, 
        ! Precompute \delta(w - w_{qnu}) * weight(q)
        xvals = (phdos%omega(:) - phfrq(imode)) * gaussfactor
        where (abs(xvals) < gaussmaxarg)
-         gvals_wtq = gaussprefactor * exp(-xvals*xvals) * wtq_ibz(iq_ibz)
+         gvals_wtq = gauAB_SSPRefactor * exp(-xvals*xvals) * wtq_ibz(iq_ibz)
        elsewhere
          gvals_wtq = zero
        end where
@@ -1922,7 +1922,7 @@ subroutine mkphbs(Ifc,Crystal,inp,ddb,asrq0,prefix,comm)
  integer :: rfphon(4),rfelfd(4),rfstrs(4)
  integer :: nomega, imode, iomega
  integer,allocatable :: ndiv(:)
- real(dp) :: omega, omega_min, gaussmaxarg, gaussfactor, gaussprefactor, xx
+ real(dp) :: omega, omega_min, gaussmaxarg, gaussfactor, gauAB_SSPRefactor, xx
  real(dp) :: speedofsound(3)
  real(dp) :: qphnrm(3), qphon(3), qphon_padded(3,3),res(3)
  real(dp) :: d2cart(2,ddb%msize),real_qphon(3)
@@ -2071,7 +2071,7 @@ subroutine mkphbs(Ifc,Crystal,inp,ddb,asrq0,prefix,comm)
  ABI_MALLOC(dos4bs,(nomega))
  dos4bs = zero
  gaussmaxarg = sqrt(-log(1.d-90))
- gaussprefactor = one/(inp%dossmear*sqrt(two_pi))
+ gauAB_SSPRefactor = one/(inp%dossmear*sqrt(two_pi))
  gaussfactor    = one/(sqrt2*inp%dossmear)
  do iphl1=1,nfineqpath
    do imode=1,3*natom
@@ -2079,7 +2079,7 @@ subroutine mkphbs(Ifc,Crystal,inp,ddb,asrq0,prefix,comm)
        omega = omega_min + (iomega-1) * inp%dosdeltae
        xx = (omega - save_phfrq(imode,iphl1)) * gaussfactor
        if(abs(xx) < gaussmaxarg) then
-         dos4bs(iomega) = dos4bs(iomega) + gaussprefactor*exp(-xx*xx)
+         dos4bs(iomega) = dos4bs(iomega) + gauAB_SSPRefactor*exp(-xx*xx)
        end if
      end do
    end do
@@ -2399,7 +2399,7 @@ subroutine phdos_print_msqd(PHdos, fname, ntemper, tempermin, temperinc)
    MSG_ERROR(msg)
  end if
 
-! write a header
+! write a AB_HEADER
    write (msg, '(2a)') '# mean square displacement for each atom as a function of T (bohr^2)'
 
 ! NB: this call to wrtout does not seem to work from the eph executable, even in sequential, and whether within or outside a clause for me==master.
@@ -2464,7 +2464,7 @@ subroutine phdos_print_msqd(PHdos, fname, ntemper, tempermin, temperinc)
    integ_msqd = zero
    tmp_msqd = reshape(PHdos%msqd_dos_atom(:,:,:,iatom), (/PHdos%nomega, 9/))
 ! perform all integrations as matrix multiplication: integ_msqd (idir, itemp) = [tmp_msqd(io,idir)]^T  * bose_msqd(io,itemp)
-   call DGEMM('T','N', 9, ntemper, PHdos%nomega, one, tmp_msqd,PHdos%nomega,&
+   call AB_DGEMM('T','N', 9, ntemper, PHdos%nomega, one, tmp_msqd,PHdos%nomega,&
 &      bose_msqd, PHdos%nomega, zero, integ_msqd, 9)
 ! NB: this presumes an equidistant omega grid
    integ_msqd = integ_msqd * (PHdos%omega(2)-PHdos%omega(1)) / PHdos%atom_mass(iatom)
@@ -2472,7 +2472,7 @@ subroutine phdos_print_msqd(PHdos, fname, ntemper, tempermin, temperinc)
    integ_msqv = zero
    tmp_msqv = reshape(PHdos%msqd_dos_atom(:,:,:,iatom), (/PHdos%nomega, 9/))
 ! perform all integrations as matrix multiplication: integ_msqv (idir, itemp) = [tmp_msqv(io,idir)]^T  * bose_msqv(io,itemp)
-   call DGEMM('T','N', 9, ntemper, PHdos%nomega, one, tmp_msqv,PHdos%nomega,&
+   call AB_DGEMM('T','N', 9, ntemper, PHdos%nomega, one, tmp_msqv,PHdos%nomega,&
 &      bose_msqv, PHdos%nomega, zero, integ_msqv, 9)
 ! NB: this presumes an equidistant omega grid
    integ_msqv = integ_msqv * (PHdos%omega(2)-PHdos%omega(1)) / PHdos%atom_mass(iatom)
@@ -2691,7 +2691,7 @@ end subroutine phonons_ncwrite
 
  close(iunit)
 
- if (.False.) then
+ if (.false.) then
    if (open_file(strcat(path, "_PHDISPL"), msg, unit=iunit, form="formatted", status="unknown", action="write") /= 0) then
      MSG_ERROR(msg)
    end if
@@ -2923,9 +2923,9 @@ subroutine phonons_writeEPS(natom,nqpts,ntypat,typat,phfreq,phdispl_cart)
  write(unt,'(a)') 'bind def'
  write(unt,'(a)') '/shd {dup dup currentrgbcolor 4 -2 roll mul 4 -2 roll mul'
  write(unt,'(a)') ' 4 -2 roll mul srgb} bind def'
- write(unt,'(a)') '/$F2psBegin {$F2psDict begin /$F2psEnteredState save def} def'
+ write(unt,'(a)') '/$F2pAB_SBEGin {$F2psDict begin /$F2psEnteredState save def} def'
  write(unt,'(a)') '/$F2psEnd {$F2psEnteredState restore end} def'
- write(unt,'(a)') '$F2psBegin'
+ write(unt,'(a)') '$F2pAB_SBEGin'
  write(unt,'(a)') '%%Page: 1 1'
  write(unt,'(a)') '10 setmiterlimit'
  write(unt,'(a)') '0.06000 0.06000 sc'

@@ -437,8 +437,8 @@
       REAL               RESULT( 35 )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLARND
-      EXTERNAL           SLAMCH, SLARND
+      REAL               AB_SLAMCH, SLARND
+      EXTERNAL           AB_SLAMCH, SLARND
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, XERBLA, CBDT01, CBDT05, CGESDD,
@@ -521,9 +521,9 @@
 *
 *     More Important constants
 *
-      UNFL = SLAMCH( 'S' )
+      UNFL = AB_SLAMCH( 'S' )
       OVFL = ONE / UNFL
-      ULP = SLAMCH( 'E' )
+      ULP = AB_SLAMCH( 'E' )
       ULPINV = ONE / ULP
       RTUNFL = SQRT( UNFL )
 *
@@ -710,7 +710,7 @@
 *
                      DIF = ZERO
                      DIV = MAX( REAL( MNMIN )*ULP*S( 1 ),
-     $                     SLAMCH( 'Safe minimum' ) )
+     $                     AB_SLAMCH( 'Safe minimum' ) )
                      DO 80 I = 1, MNMIN - 1
                         IF( SSAV( I ).LT.SSAV( I+1 ) )
      $                     DIF = ULPINV
@@ -826,7 +826,7 @@
 *
                   DIF = ZERO
                   DIV = MAX( REAL( MNMIN )*ULP*S( 1 ),
-     $                  SLAMCH( 'Safe minimum' ) )
+     $                  AB_SLAMCH( 'Safe minimum' ) )
                   DO 120 I = 1, MNMIN - 1
                      IF( SSAV( I ).LT.SSAV( I+1 ) )
      $                  DIF = ULPINV
@@ -1051,7 +1051,7 @@
 *
                      DIF = ZERO
                      DIV = MAX( REAL( MNMIN )*ULP*S( 1 ),
-     $                     SLAMCH( 'Safe minimum' ) )
+     $                     AB_SLAMCH( 'Safe minimum' ) )
                      DO 150 I = 1, MNMIN - 1
                         IF( SSAV( I ).LT.SSAV( I+1 ) )
      $                     DIF = ULPINV

@@ -316,8 +316,8 @@
       EXTERNAL           AB_SCOPY, AB_SLAMRG, AB_SROT, AB_XERBLA
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, AB_SLAPY2
-      EXTERNAL           SLAMCH, AB_SLAPY2
+      REAL               AB_SLAMCH, AB_SLAPY2
+      EXTERNAL           AB_SLAMCH, AB_SLAPY2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -403,7 +403,7 @@
 *
 *     Calculate the allowable deflation tolerence
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       TOL = MAX( ABS( ALPHA ), ABS( BETA ) )
       TOL = EIGHT*EIGHT*EPS*MAX( ABS( D( N ) ), TOL )
 *

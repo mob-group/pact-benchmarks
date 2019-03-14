@@ -171,8 +171,8 @@
       DOUBLE PRECISION   ANORM, ULP
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLANGE, DLANSY
-      EXTERNAL           DLAMCH, DLANGE, DLANSY
+      DOUBLE PRECISION   AB_DLAMCH, DLANGE, DLANSY
+      EXTERNAL           AB_DLAMCH, DLANGE, DLANSY
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DSCAL, DSYMM
@@ -183,7 +183,7 @@
       IF( N.LE.0 )
      $   RETURN
 *
-      ULP = DLAMCH( 'Epsilon' )
+      ULP = AB_DLAMCH( 'Epsilon' )
 *
 *     Compute product of 1-norms of A and Z.
 *

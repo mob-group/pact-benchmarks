@@ -121,7 +121,7 @@ MODULE m_energies
    ! Term related to energy, at frozen density
 
   real(dp) :: e_hybcomp_v0=zero
-   ! Second compensation energy in the case of hybrid functionals, due to the use of two different XC potentials
+   ! second compensation energy in the case of hybrid functionals, due to the use of two different XC potentials
    ! Term related to potential, at frozen density
 
   real(dp) :: e_hybcomp_v=zero

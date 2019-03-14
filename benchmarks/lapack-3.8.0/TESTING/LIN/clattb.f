@@ -175,9 +175,9 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ICAMAX
-      REAL               SLAMCH, SLARND
+      REAL               AB_SLAMCH, SLARND
       COMPLEX            CLARND
-      EXTERNAL           LSAME, ICAMAX, SLAMCH, SLARND, CLARND
+      EXTERNAL           LSAME, ICAMAX, AB_SLAMCH, SLARND, CLARND
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CCOPY, CLARNV, CLATB4, CLATMS, CSSCAL, CSWAP,
@@ -190,8 +190,8 @@
 *
       PATH( 1: 1 ) = 'Complex precision'
       PATH( 2: 3 ) = 'TB'
-      UNFL = SLAMCH( 'Safe minimum' )
-      ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
+      ULP = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
       SMLNUM = UNFL
       BIGNUM = ( ONE-ULP ) / SMLNUM
       CALL SLABAD( SMLNUM, BIGNUM )

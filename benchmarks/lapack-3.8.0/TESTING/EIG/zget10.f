@@ -124,8 +124,8 @@
       DOUBLE PRECISION   ANORM, EPS, UNFL, WNORM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DZASUM, ZLANGE
-      EXTERNAL           DLAMCH, DZASUM, ZLANGE
+      DOUBLE PRECISION   AB_DLAMCH, DZASUM, ZLANGE
+      EXTERNAL           AB_DLAMCH, DZASUM, ZLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZAXPY, ZCOPY
@@ -142,8 +142,8 @@
          RETURN
       END IF
 *
-      UNFL = DLAMCH( 'Safe minimum' )
-      EPS = DLAMCH( 'Precision' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
+      EPS = AB_DLAMCH( 'Precision' )
 *
       WNORM = ZERO
       DO 10 J = 1, N

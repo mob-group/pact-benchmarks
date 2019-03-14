@@ -1200,14 +1200,14 @@ subroutine linvmat(inmat,oumat,nat,nam,option,gam,prtvol)
  work=0_dp
  hma(:,:)=oumat
 
- call dgetrf(nnat,nnat,hma,nnat,ipvt,info)
+ call AB_DGETRF(nnat,nnat,hma,nnat,ipvt,info)
  if (.not.info==0) then
    write(message, '(3a)' ) 'Matrix '//trim(nam)//' is singular',ch10,'Probably too many symmetries kept'
    call wrtout(ab_out,message,'COLL')
    return
  end if
 
- call dgetri(nnat,hma,nnat,ipvt,work,nnat,info)
+ call AB_DGETRI(nnat,hma,nnat,ipvt,work,nnat,info)
  oumat=hma(:,:)
 
  write(message,fmt='(2a,a)')' ('//trim(nam)//trim(bastrin)//trim(gastrin)//')^(-1)'

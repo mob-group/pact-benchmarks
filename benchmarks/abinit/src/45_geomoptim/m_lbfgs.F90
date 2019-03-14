@@ -5,7 +5,7 @@
 !!
 !! FUNCTION
 !!  This module provides several routines for the application of a
-!!  Limited-memory Broyden-Fletcher-Goldfarb-Shanno (LBFGS) minimization algorithm.
+!!  Limited-memory Broyden-FletAB_CHER-Goldfarb-Shanno (LBFGS) minimization algorithm.
 !!  The working routines were based on the original implementation of J. Nocera available on netlib.org
 !!  They have been reshaped and translated into modern fortran here.
 !!
@@ -711,7 +711,7 @@ subroutine mcstep(STX,FX,DX,STY,FY,DY,STP,FP,DG,BRACKT,STPMIN,STPMAX,INFO)
     END IF
     BRACKT = .TRUE.
 !
-! SECOND CASE. A LOWER FUNCTION VALUE AND DERIVATIVES OF
+! second CASE. A LOWER FUNCTION VALUE AND DERIVATIVES OF
 ! OPPOSITE SIGN. THE MINIMUM IS BRACKETED. IF THE CUBIC
 ! STEP IS CLOSER TO STX THAN THE QUADRATIC (SECANT) STEP,
 ! THE CUBIC STEP IS TAKEN, ELSE THE QUADRATIC STEP IS TAKEN.

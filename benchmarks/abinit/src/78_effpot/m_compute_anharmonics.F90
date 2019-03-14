@@ -105,7 +105,7 @@ subroutine compute_anharmonics(eff_pot,filenames,inp,comm)
   real(dp) :: delta,delta1,delta2
   character(len=500) :: message
   character(len=fnlen):: name
-  logical :: files_availables = .True.,has_any_strain = .False.
+  logical :: files_availables = .True.,has_any_strain = .false.
   logical :: has_all_strain = .True.
   logical :: iam_master=.FALSE.
   integer,parameter :: master=0
@@ -217,7 +217,7 @@ subroutine compute_anharmonics(eff_pot,filenames,inp,comm)
 &       ') is not equal to the  ',ch10,'the number of cell  in ',trim(filenames(ii+5)),&
 &      ' (',eff_pots(ii)%harmonics_terms%ifcs%nrpt,')',ch10,'this files cannot be used',ch10
         MSG_WARNING(message)
-        file_usable(ii) = .False.
+        file_usable(ii) = .false.
       end if
       if (eff_pots(ii)%crystal%natom/=ref_eff_pot%crystal%natom) then
         write(message, '(a,I0,a,a,a,a,a,I0,a,a,a,a)' )&
@@ -225,7 +225,7 @@ subroutine compute_anharmonics(eff_pot,filenames,inp,comm)
 &      'the number of atoms  in ',trim(filenames(ii+5)),' (',eff_pots(ii)%crystal%natom,')',ch10,&
 &      'this files cannot be used',ch10
         MSG_WARNING(message)
-        file_usable(ii) = .False.
+        file_usable(ii) = .false.
       end if
       if (eff_pots(ii)%crystal%ntypat/=ref_eff_pot%crystal%ntypat) then
         write(message, '(a,I0,a,a,a,a,a,I0,a,a,a,a)' )&
@@ -235,7 +235,7 @@ subroutine compute_anharmonics(eff_pot,filenames,inp,comm)
 &       ' (',eff_pots(ii)%crystal%ntypat,')',&
 &       ch10,'this files can not be used',ch10
         MSG_WARNING(message)
-        file_usable(ii) = .False.
+        file_usable(ii) = .false.
       end if
     end do
   end if
@@ -297,7 +297,7 @@ subroutine compute_anharmonics(eff_pot,filenames,inp,comm)
 &       ' WARNING: There is only one strain ',trim(name),' in direction ',ii,ch10,&
 &       '          the finate diferences will not be centering'
         call wrtout(std_out,message,"COLL")
-        has_all_strain = .False.
+        has_all_strain = .false.
         have_strain(ii)=jj
       else
         if(jj==2)then
@@ -310,7 +310,7 @@ subroutine compute_anharmonics(eff_pot,filenames,inp,comm)
           write(message, '(a,a,a,I1,a,a)' )&
 &        ' WARNING: There is no strain ',trim(name),' in direction ',ii,ch10
           call wrtout(std_out,message,"COLL")
-          has_all_strain = .False.
+          has_all_strain = .false.
           if (inp%strcpling == 2) then
             do kk = 1,2
               delta = inp%delta_df
@@ -398,11 +398,11 @@ subroutine compute_anharmonics(eff_pot,filenames,inp,comm)
           end if
         end do
       else
-        files_availables = .False.
+        files_availables = .false.
       end if
     end do
   else
-    files_availables = .False.
+    files_availables = .false.
     write(message,'(a)') '  - No strain available -'
     call wrtout(ab_out,message,'COLL')
     call wrtout(std_out,message,'COLL')

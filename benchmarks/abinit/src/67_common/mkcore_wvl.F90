@@ -35,7 +35,7 @@ module m_mkcore_wvl
 
  use m_time,        only : timab
  use m_sort,        only : sort_dp
- use m_geometry,    only : xcart2xred, xred2xcart, metric, strconv
+ use m_geometry,    only : xcart2xred, xred2xcart, metric, AB_STRCONv
  use m_paw_numeric, only : paw_splint, paw_splint_der
  use m_pawrad,      only : pawrad_type, pawrad_init, pawrad_free
  use m_pawtab,      only : pawtab_type
@@ -109,7 +109,7 @@ contains
 !!
 !! CHILDREN
 !!      ext_buffers,ind_positions,metric,mkcore_inner,mkdenpos,pawrad_free
-!!      pawrad_init,strconv,timab,wrtout,xcart2xred,xmpi_sum,xred2xcart
+!!      pawrad_init,AB_STRCONv,timab,wrtout,xcart2xred,xmpi_sum,xred2xcart
 !!
 !! SOURCE
 
@@ -492,7 +492,7 @@ subroutine mkcore_wvl(atindx1,corstr,grxc,natom,nattyp,nfft,nspden,ntypat,n1xccc
    corstr(1)=corfra(1,1) ; corstr(2)=corfra(2,2)
    corstr(3)=corfra(3,3) ; corstr(4)=corfra(3,2)
    corstr(5)=corfra(3,1) ; corstr(6)=corfra(2,1)
-   call strconv(corstr,rprimd,corstr)
+   call AB_STRCONv(corstr,rprimd,corstr)
    corstr(1)=corstr(1)+strdia/real(ntot,dp)
    corstr(2)=corstr(2)+strdia/real(ntot,dp)
    corstr(3)=corstr(3)+strdia/real(ntot,dp)
@@ -554,7 +554,7 @@ end subroutine mkcore_wvl
 !!
 !! CHILDREN
 !!      ext_buffers,ind_positions,metric,mkcore_inner,mkdenpos,pawrad_free
-!!      pawrad_init,strconv,timab,wrtout,xcart2xred,xmpi_sum,xred2xcart
+!!      pawrad_init,AB_STRCONv,timab,wrtout,xcart2xred,xmpi_sum,xred2xcart
 !!
 !! SOURCE
 
@@ -864,7 +864,7 @@ subroutine mkcore_wvl_old(atindx1,corstr,dyfrx2,geocode,grxc,h,natom,&
    corstr(6)=corfra(2,1)
 
 !  Transform stress tensor from reduced coordinates to cartesian coordinates
-   call strconv(corstr,rprimd,corstr)
+   call AB_STRCONv(corstr,rprimd,corstr)
 
 !  Compute diagonal contribution to stress tensor (need input xccc3d)
 !  strdia = (1/N) Sum(r) [mu_xc_avg(r) * rho_core(r)]
@@ -1111,7 +1111,7 @@ end module m_mkcore_wvl
 !%% !!
 !%% !! CHILDREN
 !%% !!      ind_positions_,mkcore_inner,mkgrid_fft,pawrad_free,pawrad_init
-!%% !!      ptabs_fourdp,strconv,timab,wrtout,xcart2xred,xmpi_sum,xred2xcart
+!%% !!      ptabs_fourdp,AB_STRCONv,timab,wrtout,xcart2xred,xmpi_sum,xred2xcart
 !%% !!
 !%% !! SOURCE
 !%%
@@ -1127,7 +1127,7 @@ end module m_mkcore_wvl
 !%%  use m_xmpi
 !%%
 !%%  use m_time,     only : timab
-!%%  use m_geometry, only : xcart2xred, xred2xcart, strconv
+!%%  use m_geometry, only : xcart2xred, xred2xcart, AB_STRCONv
 !%%  use m_fft_mesh, only : mkgrid_fft
 !%%  use m_pawrad,   only : pawrad_type, pawrad_init, pawrad_free
 !%%  use m_pawtab,   only : pawtab_type
@@ -1425,7 +1425,7 @@ end module m_mkcore_wvl
 !%%    corstr(6)=corfra(2,1)
 !%%
 !%% !  Transform stress tensor from reduced coordinates to cartesian coordinates
-!%%    call strconv(corstr,rprimd,corstr)
+!%%    call AB_STRCONv(corstr,rprimd,corstr)
 !%%
 !%% !  Compute diagonal contribution to stress tensor (need input xccc3d)
 !%% !  strdia = (1/N) Sum(r) [mu_xc_avg(r) * rho_core(r)]

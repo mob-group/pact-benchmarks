@@ -176,8 +176,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           AB_LSAME, DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_LSAME, AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_DLACN2, AB_XERBLA, AB_DSYTRS
@@ -269,7 +269,7 @@
 *
 *     Estimate the norm of inv(op(A)).
 *
-      SMLNUM = DLAMCH( 'Safe minimum' )
+      SMLNUM = AB_DLAMCH( 'Safe minimum' )
       AINVNM = 0.0D+0
       NORMIN = 'N'
 

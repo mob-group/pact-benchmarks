@@ -176,8 +176,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            ISAMAX
-      REAL               SLAMCH
-      EXTERNAL           ISAMAX, SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           ISAMAX, AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -192,8 +192,8 @@
          RETURN
       END IF
 *
-      EPS = SLAMCH( 'Epsilon' )
-      UNFL = SLAMCH( 'Safe minimum' )
+      EPS = AB_SLAMCH( 'Epsilon' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
       NZ = 4
 *

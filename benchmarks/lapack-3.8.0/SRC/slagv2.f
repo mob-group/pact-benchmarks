@@ -187,16 +187,16 @@
       EXTERNAL           AB_SLAG2, AB_SLARTG, AB_SLASV2, AB_SROT
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, AB_SLAPY2
-      EXTERNAL           SLAMCH, AB_SLAPY2
+      REAL               AB_SLAMCH, AB_SLAPY2
+      EXTERNAL           AB_SLAMCH, AB_SLAPY2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
 *     ..
 *     .. Executable Statements ..
 *
-      SAFMIN = SLAMCH( 'S' )
-      ULP = SLAMCH( 'P' )
+      SAFMIN = AB_SLAMCH( 'S' )
+      ULP = AB_SLAMCH( 'P' )
 *
 *     Scale A
 *

@@ -1448,7 +1448,7 @@ end subroutine add_matlu
  use defs_basis
  use defs_wvltypes
  use m_crystal, only : crystal_t
- use m_matrix,         only : blockdiago_fordsyev,blockdiago_forzheev
+ use m_matrix,         only : blockdiago_forAB_DSYEV,blockdiago_forAB_ZHEEV
 
 !This section has been created automatically by the script Abilint (TD).
 !Do not modify the following lines by hand.
@@ -1650,11 +1650,11 @@ end subroutine add_matlu
 !&             (valuer(im1,im2),im2=1,tndim)
 !             call wrtout(std_out,message,'COLL')
 !           end do
-           !call dsyev('v','u',tndim,valuer,tndim,eig,work,lworkr,info)
+           !call AB_DSYEV('v','u',tndim,valuer,tndim,eig,work,lworkr,info)
            if (blockdiag) then
-             call blockdiago_fordsyev(valuer,tndim,eig)
+             call blockdiago_forAB_DSYEV(valuer,tndim,eig)
            else
-             call dsyev('v','u',tndim,valuer,tndim,eig,work,lworkr,info)
+             call AB_DSYEV('v','u',tndim,valuer,tndim,eig,work,lworkr,info)
            endif
 !!       For reproductibility
 !           ! valuer2: eigenvector for the perturb matrix
@@ -1662,7 +1662,7 @@ end subroutine add_matlu
 !           do im1=1,tndim
 !             valuer2(im1,im1)=float(im1)*0.00000000001+valuer2(im1,im1)
 !           enddo
-!           call dsyev('v','u',tndim,valuer2,tndim,eig,work,lworkr,info)
+!           call AB_DSYEV('v','u',tndim,valuer2,tndim,eig,work,lworkr,info)
 !           write(message,'(a)') ch10
 !           call wrtout(std_out,message,'COLL')
 !           write(message,'(a,i4,a,i4)')  "       valuer2 for atom",iatom,"  and isppol",isppol
@@ -1672,9 +1672,9 @@ end subroutine add_matlu
 !&             (valuer2(im1,im2),im2=1,tndim)
 !             call wrtout(std_out,message,'COLL')
 !           end do
-!           call dgemm('n','n',tndim,tndim,tndim,cone,valuer,tndim,&
+!           call AB_DGEMM('n','n',tndim,tndim,tndim,cone,valuer,tndim,&
 !&            valuer2,tndim,czero,valuer3                ,tndim)
-!           call dgemm('c','n',tndim,tndim,tndim,cone,valuer2,tndim,&
+!           call AB_DGEMM('c','n',tndim,tndim,tndim,cone,valuer2,tndim,&
 !&            valuer3                   ,tndim,czero,valuer4,tndim)
 !           ! valuer4: compute unpert matrix in the basis of the
 !           ! perturb basis
@@ -1687,7 +1687,7 @@ end subroutine add_matlu
 !&             (valuer4(im1,im2),im2=1,tndim)
 !             call wrtout(std_out,message,'COLL')
 !           end do
-!           call dsyev('v','u',tndim,valuer4,tndim,eig,work,lworkr,info)
+!           call AB_DSYEV('v','u',tndim,valuer4,tndim,eig,work,lworkr,info)
 !           ! valuer4: Diago valuer4 (nearly diag)
 !           write(message,'(a)') ch10
 !           call wrtout(std_out,message,'COLL')
@@ -1698,7 +1698,7 @@ end subroutine add_matlu
 !&             (valuer4(im1,im2),im2=1,tndim)
 !             call wrtout(std_out,message,'COLL')
 !           end do
-!           call dgemm('n','n',tndim,tndim,tndim,cone,valuer2,tndim,&
+!           call AB_DGEMM('n','n',tndim,tndim,tndim,cone,valuer2,tndim,&
 !&            valuer4,tndim,czero,valuer                ,tndim)
            write(6,*) "INFO",info
            gathermatlu(iatom)%value=cmplx(valuer,0.d0,kind=dp)
@@ -1714,8 +1714,8 @@ end subroutine add_matlu
              write(message,'(a)') " Local hamiltonian in correlated basis is complex"
              MSG_COMMENT(message)
            endif
-           call zheev('v','u',tndim,gathermatlu(iatom)%value,tndim,eig,zwork,lwork,rwork,info)
-           !call blockdiago_forzheev(gathermatlu(iatom)%value,tndim,eig)
+           call AB_ZHEEV('v','u',tndim,gathermatlu(iatom)%value,tndim,eig,zwork,lwork,rwork,info)
+           !call blockdiago_forAB_ZHEEV(gathermatlu(iatom)%value,tndim,eig)
          endif
          if(prtopt>=3) then
            write(message,'(a)') ch10
@@ -1809,9 +1809,9 @@ end subroutine add_matlu
              call wrtout(std_out,message,'COLL')
            end do
          endif
-         call zgemm('n','n',tndim,tndim,tndim,cone,gathermatlu(iatom)%value,tndim,&
+         call AB_ZGEMM('n','n',tndim,tndim,tndim,cone,gathermatlu(iatom)%value,tndim,&
 &          eigvectmatlu(iatom,1)%value,tndim,czero,temp_mat                ,tndim)
-         call zgemm('c','n',tndim,tndim,tndim,cone,eigvectmatlu(iatom,1)%value,tndim,&
+         call AB_ZGEMM('c','n',tndim,tndim,tndim,cone,eigvectmatlu(iatom,1)%value,tndim,&
 &          temp_mat                   ,tndim,czero,temp_mat2,tndim)
          eigvectmatlu(iatom,2)%value=eigvectmatlu(iatom,1)%value
          imc=0
@@ -1872,13 +1872,13 @@ end subroutine add_matlu
 !debug!      rotation matrix: gathermatlu
 !debug!      intermediate matrix: temp_mat
 !debug!      result matrix: temp_mat2
-!debug       call zgemm('n','c',tndim,tndim,tndim,cone,temp_mat2   ,tndim,&
+!debug       call AB_ZGEMM('n','c',tndim,tndim,tndim,cone,temp_mat2   ,tndim,&
 !debug&        temp_mat3,tndim,czero,temp_mat                ,tndim)
-!debug       call zgemm('n','n',tndim,tndim,tndim,cone,temp_mat3,tndim,&
+!debug       call AB_ZGEMM('n','n',tndim,tndim,tndim,cone,temp_mat3,tndim,&
 !debug&        temp_mat                   ,tndim,czero,temp_mat2,tndim)
-!debug!       call zgemm('n','c',tndim,tndim,tndim,cone,temp_mat2   ,tndim,&
+!debug!       call AB_ZGEMM('n','c',tndim,tndim,tndim,cone,temp_mat2   ,tndim,&
 !debug!&        gathermatlu(iatom)%value,tndim,czero,temp_mat                ,tndim)
-!debug!       call zgemm('n','n',tndim,tndim,tndim,cone,gathermatlu(iatom)%value,tndim,&
+!debug!       call AB_ZGEMM('n','n',tndim,tndim,tndim,cone,gathermatlu(iatom)%value,tndim,&
 !debug!&        temp_mat                   ,tndim,czero,temp_mat2,tndim)
 !debug         write(std_out,*) "result"
 !debug         do im1=1,tndim
@@ -2054,10 +2054,10 @@ end subroutine add_matlu
 !      intermediate matrix: temp_mat
 !      result matrix: gathermatlu
        ! temp_mat = gathermatlu * conjg(rot_mat)
-       call zgemm('n','c',tndim,tndim,tndim,cone,gathermatlu(iatom)%value   ,tndim,&
+       call AB_ZGEMM('n','c',tndim,tndim,tndim,cone,gathermatlu(iatom)%value   ,tndim,&
 &        rot_mat(iatom,isppol)%value,tndim,czero,temp_mat                ,tndim)
        ! gathermatlu = rot_mat * temp_mat = rot_mat * gathermatlu * conjg(rot_mat)
-       call zgemm('n','n',tndim,tndim,tndim,cone,rot_mat(iatom,isppol)%value,tndim,&
+       call AB_ZGEMM('n','n',tndim,tndim,tndim,cone,rot_mat(iatom,isppol)%value,tndim,&
 &        temp_mat                   ,tndim,czero,gathermatlu(iatom)%value,tndim)
      endif ! lpawu
    enddo ! iatom

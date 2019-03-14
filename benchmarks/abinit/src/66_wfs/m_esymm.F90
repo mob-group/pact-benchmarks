@@ -250,7 +250,7 @@ CONTAINS  !=====================================================================
 !!      classify_bands
 !!
 !! CHILDREN
-!!      xgeev,xginv,zpotrf,ztrsm
+!!      xgeev,xginv,AB_ZPOTRF,AB_ZTRSM
 !!
 !! SOURCE
 
@@ -848,7 +848,7 @@ end subroutine esymm_init
 !!      classify_bands
 !!
 !! CHILDREN
-!!      xgeev,xginv,zpotrf,ztrsm
+!!      xgeev,xginv,AB_ZPOTRF,AB_ZTRSM
 !!
 !! SOURCE
 
@@ -971,7 +971,7 @@ end subroutine esymm_print
 !!      m_esymm
 !!
 !! CHILDREN
-!!      xgeev,xginv,zpotrf,ztrsm
+!!      xgeev,xginv,AB_ZPOTRF,AB_ZTRSM
 !!
 !! SOURCE
 
@@ -1058,7 +1058,7 @@ end subroutine esymm_free_0D
 !! PARENTS
 !!
 !! CHILDREN
-!!      xgeev,xginv,zpotrf,ztrsm
+!!      xgeev,xginv,AB_ZPOTRF,AB_ZTRSM
 !!
 !! SOURCE
 
@@ -1106,7 +1106,7 @@ end subroutine esymm_free_2D
 !!      classify_bands
 !!
 !! CHILDREN
-!!      xgeev,xginv,zpotrf,ztrsm
+!!      xgeev,xginv,AB_ZPOTRF,AB_ZTRSM
 !!
 !! SOURCE
 
@@ -1134,7 +1134,7 @@ subroutine esymm_finalize(esymm,prtvol)
  !real(dp),parameter :: TOL_TRACE=0.01_dp,TOL_ORTHO=0.01_dp,TOL_UNITARY=0.01_dp ! Large tolerance is needed to avoid problems.
  !real(dp),parameter :: TOL_TRACE=tol3,TOL_ORTHO=tol3,TOL_UNITARY=tol3 ! Large tolerance is needed to avoid problems.
  real(dp) :: uerr,max_err
- complex(dpc) :: ctest
+ complex(dpc) :: AB_CTEST
  logical :: isnew
  character(len=500) :: msg
 !arrays
@@ -1293,12 +1293,12 @@ subroutine esymm_finalize(esymm,prtvol)
        ib1 = esymm%degs_bounds(1,idg1)
        irr_idx1 = esymm%b2irrep(ib1)
        if (irr_idx1 == 0) CYCLE
-       ctest=DOT_PRODUCT(trace1,trace2)/esymm%nsym_gk
-       if (irr_idx1==irr_idx2) ctest=ctest-one
-       max_err = MAX(max_err,ABS(ctest))
-       if (.FALSE..and.ABS(ctest)>tol3) then
+       AB_CTEST=DOT_PRODUCT(trace1,trace2)/esymm%nsym_gk
+       if (irr_idx1==irr_idx2) AB_CTEST=AB_CTEST-one
+       max_err = MAX(max_err,ABS(AB_CTEST))
+       if (.FALSE..and.ABS(AB_CTEST)>tol3) then
          write(msg,'(a,4i3,2es16.8)')&
-&          ' WARNING: should be delta_ij: cx1 cx2, irr1, irr2, ctest: ',idg1,idg2,irr_idx1,irr_idx2,ctest
+&          ' WARNING: should be delta_ij: cx1 cx2, irr1, irr2, AB_CTEST: ',idg1,idg2,irr_idx1,irr_idx2,AB_CTEST
          call wrtout(std_out,msg,"COLL")
        end if
      end do
@@ -1426,7 +1426,7 @@ end function which_irrep
 !!      calc_sigc_me,calc_sigx_me,cohsex_me
 !!
 !! CHILDREN
-!!      xgeev,xginv,zpotrf,ztrsm
+!!      xgeev,xginv,AB_ZPOTRF,AB_ZTRSM
 !!
 !! SOURCE
 
@@ -1476,7 +1476,7 @@ subroutine esymm_symmetrize_mels(esymm,lbnd,ubnd,in_me,out_me)
    if (esymm%can_use_tr) tr_Irrep1 => esymm%trCalc_irreps(idg1)
    irp1 = esymm%b2irrep(b1_start)
 
-   do idg2=1,esymm%ndegs ! Second loop over set of degenerate states.
+   do idg2=1,esymm%ndegs ! second loop over set of degenerate states.
      !write(std_out,*)" ==> Symmetrizing degenerate set ",idg1,idg2
      b2_start = esymm%degs_bounds(1,idg2)
      b2_stop  = esymm%degs_bounds(2,idg2)
@@ -1571,7 +1571,7 @@ end function esymm_failed
 !!      m_esymm
 !!
 !! CHILDREN
-!!      xgeev,xginv,zpotrf,ztrsm
+!!      xgeev,xginv,AB_ZPOTRF,AB_ZTRSM
 !!
 !! SOURCE
 
@@ -1623,11 +1623,11 @@ subroutine polish_irreps(Irreps)
      end do
      !
      ! 2) Cholesky factorization: overlap = U^H U with U upper triangle matrix.
-     call ZPOTRF('U',dim,overlap,dim,info)
-     ABI_CHECK(info == 0, sjoin('ZPOTRF returned info=', itoa(info)))
+     call AB_ZPOTRF('U',dim,overlap,dim,info)
+     ABI_CHECK(info == 0, sjoin('AB_ZPOTRF returned info=', itoa(info)))
 
      ! 3) Solve X U = Vr, on exit the Vr treated by this node is orthonormalized.
-     call ZTRSM('R','U','N','N',dim,dim,cone,overlap,dim,vr,dim)
+     call AB_ZTRSM('R','U','N','N',dim,dim,cone,overlap,dim,vr,dim)
 
      !write(std_out,*)"After ortho",MATMUL(TRANSPOSE(CONJG(vr)),vr)
 

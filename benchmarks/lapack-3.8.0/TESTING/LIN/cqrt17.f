@@ -179,8 +179,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               CLANGE, SLAMCH
-      EXTERNAL           LSAME, CLANGE, SLAMCH
+      REAL               CLANGE, AB_SLAMCH
+      EXTERNAL           LSAME, CLANGE, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGEMM, CLACPY, CLASCL, XERBLA
@@ -212,7 +212,7 @@
      $   RETURN
 *
       NORMA = CLANGE( 'One-norm', M, N, A, LDA, RWORK )
-      SMLNUM = SLAMCH( 'Safe minimum' ) / SLAMCH( 'Precision' )
+      SMLNUM = AB_SLAMCH( 'Safe minimum' ) / AB_SLAMCH( 'Precision' )
       BIGNUM = ONE / SMLNUM
       ISCL = 0
 *
@@ -252,7 +252,7 @@
      $      ERR = ERR / NORMRS
       END IF
 *
-      CQRT17 = ERR / ( SLAMCH( 'Epsilon' )*REAL( MAX( M, N, NRHS ) ) )
+      CQRT17 = ERR / ( AB_SLAMCH( 'Epsilon' )*REAL( MAX( M, N, NRHS ) ) )
       RETURN
 *
 *     End of CQRT17

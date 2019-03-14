@@ -130,8 +130,8 @@
       REAL               BETA, RSAFMN, SAFMIN, XNORM
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, AB_SLAPY2, AB_SNRM2
-      EXTERNAL           SLAMCH, AB_SLAPY2, AB_SNRM2
+      REAL               AB_SLAMCH, AB_SLAPY2, AB_SNRM2
+      EXTERNAL           AB_SLAMCH, AB_SLAPY2, AB_SNRM2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, SIGN
@@ -158,7 +158,7 @@
 *        general case
 *
          BETA = -SIGN( AB_SLAPY2( ALPHA, XNORM ), ALPHA )
-         SAFMIN = SLAMCH( 'S' ) / SLAMCH( 'E' )
+         SAFMIN = AB_SLAMCH( 'S' ) / AB_SLAMCH( 'E' )
          KNT = 0
          IF( ABS( BETA ).LT.SAFMIN ) THEN
 *

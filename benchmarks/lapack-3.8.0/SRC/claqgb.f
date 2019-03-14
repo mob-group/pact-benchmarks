@@ -187,8 +187,8 @@
       REAL               CJ, LARGE, SMALL
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -204,7 +204,7 @@
 *
 *     Initialize LARGE and SMALL.
 *
-      SMALL = SLAMCH( 'Safe minimum' ) / SLAMCH( 'Precision' )
+      SMALL = AB_SLAMCH( 'Safe minimum' ) / AB_SLAMCH( 'Precision' )
       LARGE = ONE / SMALL
 *
       IF( ROWCND.GE.THRESH .AND. AMAX.GE.SMALL .AND. AMAX.LE.LARGE )

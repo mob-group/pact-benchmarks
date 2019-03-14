@@ -267,8 +267,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME
-      REAL               SLAMCH, AB_SLANGE
-      EXTERNAL           AB_LSAME, SLAMCH, AB_SLANGE
+      REAL               AB_SLAMCH, AB_SLANGE
+      EXTERNAL           AB_LSAME, AB_SLAMCH, AB_SLANGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -365,8 +365,8 @@
 *
 *     Get machine constants
 *
-      EPS = SLAMCH( 'P' )
-      SMLNUM = SLAMCH( 'S' )
+      EPS = AB_SLAMCH( 'P' )
+      SMLNUM = AB_SLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
       CALL AB_SLABAD( SMLNUM, BIGNUM )
       SMLNUM = SQRT( SMLNUM ) / EPS

@@ -118,7 +118,7 @@ contains
 !!      mkkin,mkkpg,nonlop,paw_ij_free,paw_ij_init,paw_ij_nullify
 !!      paw_ij_reset_flags,pawaccrhoij,pawcprj_alloc,pawcprj_free,pawdij2e1kb
 !!      pawdijfr,pawfgrtab_free,pawfgrtab_init,pawgrnl,pawrhoij_free
-!!      pawrhoij_gather,pawrhoij_nullify,pawtab_get_lsize,strconv,symrhoij
+!!      pawrhoij_gather,pawrhoij_nullify,pawtab_get_lsize,AB_STRCONv,symrhoij
 !!      timab,wfk_close,wfk_open_read,wfk_read_bks,wrtout,xmpi_sum
 !!
 !! SOURCE
@@ -141,7 +141,7 @@ subroutine d2frnl(becfrnl,cg,dtfil,dtset,dyfrnl,dyfr_cplex,dyfr_nondiag,efmasdeg
  use m_wfk
 
  use m_time,     only : timab
- use m_geometry, only : metric, strconv
+ use m_geometry, only : metric, AB_STRCONv
  use m_efmas,    only : check_degeneracies
  use m_io_tools, only : file_exists
  use m_hdr,      only : hdr_skip
@@ -988,7 +988,7 @@ subroutine d2frnl(becfrnl,cg,dtfil,dtset,dyfrnl,dyfr_cplex,dyfr_nondiag,efmasdeg
              end do
            end if
            if(rfstrs/=0)then
-             call strconv(pawrhoij_tot(iatom)%grhoij(1:6,cplx*(klmn-1)+ii,isppol),gprimd,&
+             call AB_STRCONv(pawrhoij_tot(iatom)%grhoij(1:6,cplx*(klmn-1)+ii,isppol),gprimd,&
 &             pawrhoij_tot(iatom)%grhoij(1:6,cplx*(klmn-1)+ii,isppol))
            end if
          end do

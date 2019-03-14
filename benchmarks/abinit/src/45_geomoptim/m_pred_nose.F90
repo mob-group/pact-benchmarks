@@ -372,7 +372,7 @@ subroutine pred_nose(ab_mover,hist,itime,ntime,zDEBUG,iexit)
    end do
  end if
 
-!Second step of the velocity Verlet algorithm, uses the 'new forces'
+!second step of the velocity Verlet algorithm, uses the 'new forces'
 !Calculate v2nose
  v2nose=0.0_dp
  do kk=1,ab_mover%natom

@@ -165,8 +165,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               SLAMCH, SLANGE
-      EXTERNAL           LSAME, SLAMCH, SLANGE
+      REAL               AB_SLAMCH, SLANGE
+      EXTERNAL           LSAME, AB_SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGEMM, SLACPY, SLARNV, SLASET, SORGLQ, SORMLQ
@@ -188,7 +188,7 @@
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
 *
 *     Copy the first k rows of the factorization to the array Q
 *

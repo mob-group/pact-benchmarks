@@ -207,8 +207,8 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            IZAMAX
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           LSAME, IZAMAX, DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           LSAME, IZAMAX, AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZAXPY, ZCOPY, ZDSCAL, ZTBMV
@@ -224,8 +224,8 @@
          RESID = ZERO
          RETURN
       END IF
-      EPS = DLAMCH( 'Epsilon' )
-      SMLNUM = DLAMCH( 'Safe minimum' )
+      EPS = AB_DLAMCH( 'Epsilon' )
+      SMLNUM = AB_DLAMCH( 'Safe minimum' )
 *
 *     Compute the norm of the triangular matrix A using the column
 *     norms already computed by ZLATBS.

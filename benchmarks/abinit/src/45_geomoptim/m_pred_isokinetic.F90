@@ -238,7 +238,7 @@ subroutine pred_isokinetic(ab_mover,hist,itime,ntime,zDEBUG,iexit)
 
 !write(std_out,*) 'isokinetic 04'
 !##########################################################
-!### 04. Second half-velocity (Only after the first itime)
+!### 04. second half-velocity (Only after the first itime)
 
  if(itime>1) then
 

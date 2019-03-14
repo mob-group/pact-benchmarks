@@ -403,7 +403,7 @@ subroutine rotate_back_mag_dfpt(option,vxc1_in,vxc1_out,vxc,kxc,rho1,mag,vectsiz
  end if
 
  if((rotation_method==1.or.rotation_method==2).and.cplex==2) then
-     MSG_ERROR('rotation_method=1 and 2 are not available for cplex=2 case! use ixcrot=3')
+     MSG_ERROR('rotation_method=1 and 2 are not available for cplex=2 case! use ixAB_CROT=3')
  endif
 
 

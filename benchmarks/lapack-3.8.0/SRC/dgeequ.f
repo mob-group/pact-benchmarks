@@ -163,8 +163,8 @@
       DOUBLE PRECISION   BIGNUM, RCMAX, RCMIN, SMLNUM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_XERBLA
@@ -200,7 +200,7 @@
 *
 *     Get machine constants.
 *
-      SMLNUM = DLAMCH( 'S' )
+      SMLNUM = AB_DLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
 *
 *     Compute row scale factors.

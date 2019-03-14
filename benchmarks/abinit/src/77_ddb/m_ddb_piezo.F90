@@ -87,7 +87,7 @@ contains
 !!      anaddb
 !!
 !! CHILDREN
-!!      matrginv,wrtout,zhpev
+!!      matrginv,wrtout,AB_ZHPEV
 !!
 !! SOURCE
 
@@ -128,8 +128,8 @@ subroutine ddb_piezo(inp,blkval,dielt_rlx,elast,iblok,instrain,iout,mpert,natom,
  real(dp) :: eigvec(2,3*natom-3,3*natom-3),eigvecp(2,3*natom,3*natom)
  real(dp) :: elast_dis(6,6),g_tensor(3,6),h_tensor(3,6)
  real(dp) :: kmatrix(3*natom,3*natom),new1(6,3*natom),piezo_clamped(6,3)
- real(dp) :: piezo_correction(6,3),piezo_relaxed(6,3),zhpev1(2,2*3*natom-4)
- real(dp) :: zhpev1p(2,2*3*natom-1),zhpev2(3*3*natom-5),zhpev2p(3*3*natom-2)
+ real(dp) :: piezo_correction(6,3),piezo_relaxed(6,3),AB_ZHPEV1(2,2*3*natom-4)
+ real(dp) :: AB_ZHPEV1p(2,2*3*natom-1),AB_ZHPEV2(3*3*natom-5),AB_ZHPEV2p(3*3*natom-2)
  real(dp) :: zstar1(3,3*natom),zstar2(3*natom,3)
 
 !****************************************************************
@@ -250,9 +250,9 @@ subroutine ddb_piezo(inp,blkval,dielt_rlx,elast,iblok,instrain,iout,mpert,natom,
 
 !the imaginary part of the force matrix
  Bpmatr(2,:)=zero
-!then call the subroutines CHPEV and ZHPEV to get the eigenvectors
- call ZHPEV ('V','U',3*natom,Bpmatr,eigvalp,eigvecp,3*natom,zhpev1p,zhpev2p,ier)
- ABI_CHECK(ier == 0, sjoin("ZHPEV returned:", itoa(ier)))
+!then call the subroutines AB_CHPEV and AB_ZHPEV to get the eigenvectors
+ call AB_ZHPEV ('V','U',3*natom,Bpmatr,eigvalp,eigvecp,3*natom,AB_ZHPEV1p,AB_ZHPEV2p,ier)
+ ABI_CHECK(ier == 0, sjoin("AB_ZHPEV returned:", itoa(ier)))
 
 !DEBUG
 !the eigenval and eigenvec
@@ -336,9 +336,9 @@ subroutine ddb_piezo(inp,blkval,dielt_rlx,elast,iblok,instrain,iout,mpert,natom,
  end do
  Bmatr(2,:)=zero
 
-!call the subroutines CHPEV and ZHPEV to get the eigenvectors and the eigenvalues
- call ZHPEV ('V','U',3*natom-3,Bmatr,eigval,eigvec,3*natom-3,zhpev1,zhpev2,ier)
- ABI_CHECK(ier == 0, sjoin("ZHPEV returned:", itoa(ier)))
+!call the subroutines AB_CHPEV and AB_ZHPEV to get the eigenvectors and the eigenvalues
+ call AB_ZHPEV ('V','U',3*natom-3,Bmatr,eigval,eigvec,3*natom-3,AB_ZHPEV1,AB_ZHPEV2,ier)
+ ABI_CHECK(ier == 0, sjoin("AB_ZHPEV returned:", itoa(ier)))
 
 !check the unstable phonon modes, if the first is negative then print warning message
  if(eigval(1)<-1.0*tol8)then

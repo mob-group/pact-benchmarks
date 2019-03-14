@@ -95,7 +95,7 @@ contains
 !!      cleanup_lanczosresolvents
 !!      compute_resolvent_column_shift_lanczos_right_vectors
 !!      invert_general_matrix,setup_lanczosresolvents,wf_block_distribute
-!!      xmpi_allgather,xmpi_sum,zgemm,zgemv
+!!      xmpi_allgather,xmpi_sum,AB_ZGEMM,AB_ZGEMV
 !!
 !! SOURCE
 
@@ -335,7 +335,7 @@ if (l1 > lmax) cycle
 !  Compute Q^dagger | left_vectors > 
 
 ! computes C = alpha *  op(A).op(B) + beta * C
-call ZGEMM(                         'C', &  ! First array is hermitian conjugated 
+call AB_ZGEMM(                         'C', &  ! First array is hermitian conjugated 
 'N', &  ! second array is taken as is
 kmax_numeric, &  ! number of rows of matrix op(A)
 lmax, &  ! number of columns of matrix op(B)
@@ -374,7 +374,7 @@ call invert_general_matrix(kmax_numeric,shift_lanczos_matrix)
 
 ! compute y = alpha op(A).x + beta y
 
-call ZGEMV(                       'N', &! A matrix is as is
+call AB_ZGEMV(                       'N', &! A matrix is as is
 kmax_numeric, &! number of rows of matrix A
 kmax_numeric, &! number of columns of matrix A
 cmplx_1, &! alpha
@@ -389,7 +389,7 @@ work_vec, &! Y array
 
 ! matrix_elements = < right_vecs | work_vec > 
 
-call ZGEMV(                       'C', &! A matrix is hermitan conjugate
+call AB_ZGEMV(                       'C', &! A matrix is hermitan conjugate
 kmax_numeric, &! number of rows of matrix A
 lmax, &! number of columns of matrix A
 cmplx_1, &! alpha
@@ -486,7 +486,7 @@ end subroutine compute_projected_BT_shift_Lanczos
 !!      cleanup_lanczosresolvents
 !!      compute_resolvent_column_shift_lanczos_right_vectors
 !!      invert_general_matrix,setup_lanczosresolvents,wf_block_distribute
-!!      xmpi_allgather,xmpi_sum,zgemm,zgemv
+!!      xmpi_allgather,xmpi_sum,AB_ZGEMM,AB_ZGEMV
 !!
 !! SOURCE
 
@@ -735,7 +735,7 @@ if (l1 > lmax) cycle
 !  Compute Q^dagger | left_vectors > 
 
 ! computes C = alpha *  op(A).op(B) + beta * C
-call ZGEMM(                         'C', &  ! First array is hermitian conjugated 
+call AB_ZGEMM(                         'C', &  ! First array is hermitian conjugated 
 'N', &  ! second array is taken as is
 kmax_numeric, &  ! number of rows of matrix op(A)
 lmax, &  ! number of columns of matrix op(B)
@@ -774,7 +774,7 @@ call invert_general_matrix(kmax_numeric,shift_lanczos_matrix)
 
 ! compute y = alpha op(A).x + beta y
 
-call ZGEMV(                       'N', &! A matrix is as is
+call AB_ZGEMV(                       'N', &! A matrix is as is
 kmax_numeric, &! number of rows of matrix A
 kmax_numeric, &! number of columns of matrix A
 cmplx_1, &! alpha
@@ -789,7 +789,7 @@ work_vec, &! Y array
 
 ! matrix_elements = < right_vecs | work_vec > 
 
-call ZGEMV(                       'C', &! A matrix is hermitan conjugate
+call AB_ZGEMV(                       'C', &! A matrix is hermitan conjugate
 kmax_numeric, &! number of rows of matrix A
 lmax, &! number of columns of matrix A
 cmplx_1, &! alpha

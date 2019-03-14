@@ -133,8 +133,8 @@
       REAL               ANORM, EPS, T
 *     ..
 *     .. External Functions ..
-      REAL               SDOT, SLAMCH, SLANGE
-      EXTERNAL           SDOT, SLAMCH, SLANGE
+      REAL               SDOT, AB_SLAMCH, SLANGE
+      EXTERNAL           SDOT, AB_SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGEMV, SLASWP, SSCAL, STRMV
@@ -153,7 +153,7 @@
 *
 *     Determine EPS and the norm of A.
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       ANORM = SLANGE( '1', M, N, A, LDA, RWORK )
 *
 *     Compute the product L*U and overwrite AFAC with the result.

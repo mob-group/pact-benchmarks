@@ -778,7 +778,7 @@ subroutine printbxsf(eigen,ewind,fermie,gprimd,kptrlatt,mband,&
    ierr=ierr +1; RETURN
  end if
 
-! Write header
+! Write AB_HEADER
  write(ubxsf,*)' BEGIN_INFO'
  write(ubxsf,*)'   #'
  write(ubxsf,*)'   # this is a Band-XCRYSDEN-Structure-File for Visualization of Fermi Surface'
@@ -1023,7 +1023,7 @@ subroutine printvtk(eigen,v_surf,ewind,fermie,gprimd,kptrlatt,mband,&
    ierr=ierr +1; RETURN
  end if
 
-!write header
+!write AB_HEADER
  write(uvtk,"(a)") '# vtk DataFile Version 2.0'
  write(uvtk,"(a)") 'Eigen values for the Fermi surface'
  write(uvtk,"(a)") 'ASCII'

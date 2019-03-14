@@ -33,7 +33,7 @@ module m_mkcore
  use m_errors
  use m_linalg_interfaces
 
- use m_geometry,   only : strconv
+ use m_geometry,   only : AB_STRCONv
  use m_time,       only : timab
  use m_mpinfo,     only : ptabs_fourdp
  use m_sort,        only : sort_dp
@@ -241,7 +241,7 @@ subroutine mkcore(corstr,dyfrx2,grxc,mpi_enreg,natom,nfft,nspden,ntypat,n1,n1xcc
          end do
        end if
      end do
-!    call DCOPY(nfft,vxc,1,work,1)
+!    call AB_DCOPY(nfft,vxc,1,work,1)
    end if
  end if
 
@@ -500,7 +500,7 @@ subroutine mkcore(corstr,dyfrx2,grxc,mpi_enreg,natom,nfft,nspden,ntypat,n1,n1xcc
    corstr(6)=corfra(2,1)
 
 !  Transform stress tensor from reduced coordinates to cartesian coordinates
-   call strconv(corstr,rprimd,corstr)
+   call AB_STRCONv(corstr,rprimd,corstr)
 
 !  Compute diagonal contribution to stress tensor (need input xccc3d)
 !  strdia = (1/N) Sum(r) [mu_xc_avg(r) * rho_core(r)]
@@ -516,7 +516,7 @@ subroutine mkcore(corstr,dyfrx2,grxc,mpi_enreg,natom,nfft,nspden,ntypat,n1,n1xcc
      end if
    end do
    strdia=strdia/dble(nfftot)
-!  strdia=DDOT(nfft,work,1,xccc3d,1)/dble(nfftot)
+!  strdia=AB_DDOT(nfft,work,1,xccc3d,1)/dble(nfftot)
 
 !  Add diagonal term to stress tensor
    corstr(1)=corstr(1)+strdia
@@ -1055,7 +1055,7 @@ subroutine mkcore_alt(atindx1,corstr,dyfrx2,grxc,icoulomb,mpi_enreg,natom,nfft,n
    corstr(1)=corfra(1,1) ; corstr(2)=corfra(2,2)
    corstr(3)=corfra(3,3) ; corstr(4)=corfra(3,2)
    corstr(5)=corfra(3,1) ; corstr(6)=corfra(2,1)
-   call strconv(corstr,rprimd,corstr)
+   call AB_STRCONv(corstr,rprimd,corstr)
    corstr(1)=corstr(1)+strdia/real(nfftot,dp)
    corstr(2)=corstr(2)+strdia/real(nfftot,dp)
    corstr(3)=corstr(3)+strdia/real(nfftot,dp)

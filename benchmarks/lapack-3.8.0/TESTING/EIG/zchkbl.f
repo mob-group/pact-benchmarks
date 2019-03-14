@@ -83,8 +83,8 @@
       COMPLEX*16         A( LDA, LDA ), AIN( LDA, LDA )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, ZLANGE
-      EXTERNAL           DLAMCH, ZLANGE
+      DOUBLE PRECISION   AB_DLAMCH, ZLANGE
+      EXTERNAL           AB_DLAMCH, ZLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZGEBAL
@@ -107,8 +107,8 @@
       KNT = 0
       RMAX = ZERO
       VMAX = ZERO
-      SFMIN = DLAMCH( 'S' )
-      MEPS = DLAMCH( 'E' )
+      SFMIN = AB_DLAMCH( 'S' )
+      MEPS = AB_DLAMCH( 'E' )
 *
    10 CONTINUE
 *

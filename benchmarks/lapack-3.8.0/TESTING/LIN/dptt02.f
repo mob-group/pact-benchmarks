@@ -128,8 +128,8 @@
       DOUBLE PRECISION   ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DASUM, DLAMCH, DLANST
-      EXTERNAL           DASUM, DLAMCH, DLANST
+      DOUBLE PRECISION   DASUM, AB_DLAMCH, DLANST
+      EXTERNAL           DASUM, AB_DLAMCH, DLANST
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -152,7 +152,7 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN

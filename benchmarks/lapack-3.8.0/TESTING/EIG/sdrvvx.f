@@ -566,8 +566,8 @@
      $                   KTYPE( MAXTYP )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGET23, SLABAD, SLASUM, SLATME, SLATMR, SLATMS,
@@ -644,10 +644,10 @@
 *
 *     More Important constants
 *
-      UNFL = SLAMCH( 'Safe minimum' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
       CALL SLABAD( UNFL, OVFL )
-      ULP = SLAMCH( 'Precision' )
+      ULP = AB_SLAMCH( 'Precision' )
       ULPINV = ONE / ULP
       RTULP = SQRT( ULP )
       RTULPI = ONE / RTULP

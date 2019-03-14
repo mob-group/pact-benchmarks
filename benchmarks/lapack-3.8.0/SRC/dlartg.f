@@ -122,8 +122,8 @@
       DOUBLE PRECISION   EPS, F1, G1, SAFMIN, SAFMN2, SAFMX2, SCALE
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, INT, LOG, MAX, SQRT
@@ -137,10 +137,10 @@
 *     .. Executable Statements ..
 *
 *     IF( FIRST ) THEN
-         SAFMIN = DLAMCH( 'S' )
-         EPS = DLAMCH( 'E' )
-         SAFMN2 = DLAMCH( 'B' )**INT( LOG( SAFMIN / EPS ) /
-     $            LOG( DLAMCH( 'B' ) ) / TWO )
+         SAFMIN = AB_DLAMCH( 'S' )
+         EPS = AB_DLAMCH( 'E' )
+         SAFMN2 = AB_DLAMCH( 'B' )**INT( LOG( SAFMIN / EPS ) /
+     $            LOG( AB_DLAMCH( 'B' ) ) / TWO )
          SAFMX2 = ONE / SAFMN2
 *        FIRST = .FALSE.
 *     END IF

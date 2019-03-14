@@ -174,8 +174,8 @@
       COMPLEX*16         AUKJ
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, ZLANGE, ZLANSY
-      EXTERNAL           DLAMCH, ZLANGE, ZLANSY
+      DOUBLE PRECISION   AB_DLAMCH, ZLANGE, ZLANSY
+      EXTERNAL           AB_DLAMCH, ZLANGE, ZLANSY
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZGEMM
@@ -190,8 +190,8 @@
       IF( N.LE.0 .OR. M.LE.0 )
      $   RETURN
 *
-      UNFL = DLAMCH( 'Safe minimum' )
-      ULP = DLAMCH( 'Epsilon' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
+      ULP = AB_DLAMCH( 'Epsilon' )
 *
 *     Do Test 1
 *

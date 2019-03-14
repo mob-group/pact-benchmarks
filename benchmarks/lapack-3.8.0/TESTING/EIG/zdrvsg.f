@@ -417,8 +417,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, DLARND
-      EXTERNAL           LSAME, DLAMCH, DLARND
+      DOUBLE PRECISION   AB_DLAMCH, DLARND
+      EXTERNAL           LSAME, AB_DLAMCH, DLARND
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DLABAD, DLAFTS, DLASUM, XERBLA, ZHBGV, ZHBGVD,
@@ -482,10 +482,10 @@
 *
 *     More Important constants
 *
-      UNFL = DLAMCH( 'Safe minimum' )
-      OVFL = DLAMCH( 'Overflow' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
+      OVFL = AB_DLAMCH( 'Overflow' )
       CALL DLABAD( UNFL, OVFL )
-      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
+      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
       ULPINV = ONE / ULP
       RTUNFL = SQRT( UNFL )
       RTOVFL = SQRT( OVFL )

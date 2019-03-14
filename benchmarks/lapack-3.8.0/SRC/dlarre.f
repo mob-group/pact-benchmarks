@@ -354,8 +354,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME
-      DOUBLE PRECISION            DLAMCH
-      EXTERNAL           DLAMCH, AB_LSAME
+      DOUBLE PRECISION            AB_DLAMCH
+      EXTERNAL           AB_DLAMCH, AB_LSAME
 
 *     ..
 *     .. External Subroutines ..
@@ -391,8 +391,8 @@
       M = 0
 
 *     Get machine constants
-      SAFMIN = DLAMCH( 'S' )
-      EPS = DLAMCH( 'P' )
+      SAFMIN = AB_DLAMCH( 'S' )
+      EPS = AB_DLAMCH( 'P' )
 
 *     Set parameters
       RTL = SQRT(EPS)

@@ -253,8 +253,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            AB_ILAENV
-      REAL               AB_CLANGE, SLAMCH
-      EXTERNAL           AB_CLANGE, AB_ILAENV, SLAMCH
+      REAL               AB_CLANGE, AB_SLAMCH
+      EXTERNAL           AB_CLANGE, AB_ILAENV, AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL, CMPLX
@@ -307,7 +307,7 @@
 *
 *     Get machine parameters
 *
-      SMLNUM = SLAMCH( 'S' ) / SLAMCH( 'P' )
+      SMLNUM = AB_SLAMCH( 'S' ) / AB_SLAMCH( 'P' )
       BIGNUM = ONE / SMLNUM
       CALL AB_SLABAD( SMLNUM, BIGNUM )
 *

@@ -224,8 +224,8 @@
      $                   AB_ZTRSM, AB_ZTZRQF, AB_ZUNM2R
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, AB_ZLANGE
-      EXTERNAL           DLAMCH, AB_ZLANGE
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE
+      EXTERNAL           AB_DLAMCH, AB_ZLANGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DCONJG, MAX, MIN
@@ -265,7 +265,7 @@
 *
 *     Get machine parameters
 *
-      SMLNUM = DLAMCH( 'S' ) / DLAMCH( 'P' )
+      SMLNUM = AB_DLAMCH( 'S' ) / AB_DLAMCH( 'P' )
       BIGNUM = ONE / SMLNUM
       CALL AB_DLABAD( SMLNUM, BIGNUM )
 *

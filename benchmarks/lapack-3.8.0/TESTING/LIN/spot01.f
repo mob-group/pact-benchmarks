@@ -130,8 +130,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               SDOT, SLAMCH, SLANSY
-      EXTERNAL           LSAME, SDOT, SLAMCH, SLANSY
+      REAL               SDOT, AB_SLAMCH, SLANSY
+      EXTERNAL           LSAME, SDOT, AB_SLAMCH, SLANSY
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SSCAL, SSYR, STRMV
@@ -150,7 +150,7 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       ANORM = SLANSY( '1', UPLO, N, A, LDA, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS

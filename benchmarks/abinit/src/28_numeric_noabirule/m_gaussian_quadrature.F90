@@ -30,7 +30,7 @@ module m_gaussian_quadrature
 ! This module contains routines to generate the weights and positions at which to evaluate
 ! an integrand in order to produce a Gaussian quadrature of a given type.
 !
-! The code here was obtained from the internet (see header to subroutine cdgqf for further details).
+! The code here was obtained from the internet (see AB_HEADER to subroutine cdgqf for further details).
 ! The code was slightly modified to use doubles instead of floats in order to reach greater
 ! accuracy.
 !
@@ -1485,7 +1485,7 @@ function r8_gamma_gq ( x )
 !    Springer, 1976.
 !
 !    John Hart, Ward Cheney, Charles Lawson, Hans Maehly,
-!    Charles Mesztenyi, John Rice, Henry Thatcher,
+!    Charles Mesztenyi, John Rice, Henry ThatAB_CHER,
 !    Christoph Witzgall,
 !    Computer Approximations,
 !    Wiley, 1968,

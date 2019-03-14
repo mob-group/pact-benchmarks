@@ -432,9 +432,9 @@
 *     .. External Functions ..
       LOGICAL            CLCTES
       INTEGER            ILAENV
-      REAL               SLAMCH
+      REAL               AB_SLAMCH
       COMPLEX            CLARND
-      EXTERNAL           CLCTES, ILAENV, SLAMCH, CLARND
+      EXTERNAL           CLCTES, ILAENV, AB_SLAMCH, CLARND
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, CGET51, CGET54, CGGES, CLACPY, CLARFG,
@@ -532,8 +532,8 @@
       IF( NSIZES.EQ.0 .OR. NTYPES.EQ.0 )
      $   RETURN
 *
-      ULP = SLAMCH( 'Precision' )
-      SAFMIN = SLAMCH( 'Safe minimum' )
+      ULP = AB_SLAMCH( 'Precision' )
+      SAFMIN = AB_SLAMCH( 'Safe minimum' )
       SAFMIN = SAFMIN / ULP
       SAFMAX = ONE / SAFMIN
       CALL SLABAD( SAFMIN, SAFMAX )

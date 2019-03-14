@@ -104,7 +104,7 @@ contains
 !!    a block for the wfs (can be set to zero, though)
 !! 2) The core charge density differs: for pspcod=1, it is a
 !!    revised expression for core density of 5 Nov 1992, while
-!!    for pspcod=4, it is an older expression, of 7 May 1992 .
+!!    for pspcod=4, it is an oAB_LDEr expression, of 7 May 1992 .
 !!
 !! PARENTS
 !!      pspatm
@@ -1094,7 +1094,7 @@ subroutine sincos(iq,irmax,mmax,pspwk,rad,tpiq)
 
    else
 
-!    Here the fastest way, iteratively
+!    Here the faAB_STEST way, iteratively
      do ir=2,irmax
        prevsin=pspwk(ir,1,2)
        prevcos=pspwk(ir,2,2)

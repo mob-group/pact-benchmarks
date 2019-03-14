@@ -1151,7 +1151,7 @@ end subroutine mkkpg
 !! NOTES
 !!
 !! PARENTS
-!!      chern_number
+!!      AB_CHERn_number
 !!
 !! CHILDREN
 !!      kpgsph

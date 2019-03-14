@@ -104,15 +104,15 @@
       EXTERNAL           ZERREC, ZGET35, ZGET36, ZGET37, ZGET38
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. Executable Statements ..
 *
       PATH( 1: 1 ) = 'Zomplex precision'
       PATH( 2: 3 ) = 'EC'
-      EPS = DLAMCH( 'P' )
-      SFMIN = DLAMCH( 'S' )
+      EPS = AB_DLAMCH( 'P' )
+      SFMIN = AB_DLAMCH( 'S' )
       WRITE( NOUT, FMT = 9994 )
       WRITE( NOUT, FMT = 9993 )EPS, SFMIN
       WRITE( NOUT, FMT = 9992 )THRESH

@@ -65,8 +65,8 @@ contains
 !! ndtset=number of datasets
 !! ndtset_alloc=number of datasets, corrected for allocation of at least one data set.
 !! npsp=number of pseudopotentials
-!! pspheads(npsp)=<type pspheader_type>all the important informatio from the
-!!   pseudopotential file header, as well as the psp file name
+!! pspheads(npsp)=<type pspAB_HEADER_type>all the important informatio from the
+!!   pseudopotential file AB_HEADER, as well as the psp file name
 !!
 !! OUTPUT
 !!
@@ -175,7 +175,7 @@ subroutine driver(codvsn,cpui,dtsets,filnam,filstat,&
  !arrays
  character(len=fnlen),intent(in) :: filnam(5)
  type(dataset_type),intent(inout) :: dtsets(0:ndtset_alloc)
- type(pspheader_type),intent(in) :: pspheads(npsp)
+ type(pspAB_HEADER_type),intent(in) :: pspheads(npsp)
  type(results_out_type),target,intent(inout) :: results_out(0:ndtset_alloc)
 
  !Local variables-------------------------------

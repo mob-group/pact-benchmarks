@@ -161,7 +161,7 @@ MODULE m_paw_an
 
   real(dp), allocatable :: vht1 (:,:,:)
    ! vht1(cplex*mesh_size,lm_size,nspden)
-   ! Gives Hartree tilde potential LM-moments inside the sphere
+   ! Gives Hartree tiAB_LDE potential LM-moments inside the sphere
 
   real(dp), allocatable :: vxc1 (:,:,:)
    ! vxc1(cplex*mesh_size,lm_size or angl_size,nspden)
@@ -726,7 +726,7 @@ subroutine paw_an_copy(paw_an_in,paw_an_cpy,&
    end do
  end if
 
-!Second case: a gather
+!second case: a gather
  if (paral_case==2) then
    call paw_an_gather(paw_an_in,paw_an_cpy,-1,my_comm_atom,my_atmtab)
  end if

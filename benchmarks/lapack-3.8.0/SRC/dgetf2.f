@@ -132,9 +132,9 @@
       INTEGER            I, J, JP
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
       INTEGER            AB_IDAMAX
-      EXTERNAL           DLAMCH, AB_IDAMAX
+      EXTERNAL           AB_DLAMCH, AB_IDAMAX
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_DGER, AB_DSCAL, AB_DSWAP, AB_XERBLA
@@ -166,7 +166,7 @@
 *
 *     Compute machine safe minimum
 *
-      SFMIN = DLAMCH('S')
+      SFMIN = AB_DLAMCH('S')
 *
       DO 10 J = 1, MIN( M, N )
 *

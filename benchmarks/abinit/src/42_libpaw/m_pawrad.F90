@@ -427,7 +427,7 @@ end subroutine pawrad_free_1D
 !!
 !! INPUTS
 !!  Rmesh<pawrad_type>=Object defining the radial mesh
-!!  header=String for the header provided by the user.
+!!  AB_HEADER=String for the AB_HEADER provided by the user.
 !!  [unit]=Unit number for output, defaults to std_out
 !!  [prtvol]=Verbosity level, minimal if not specified.
 !!  [mode_paral]=Either "COLL" or "PERS". Passed to wrtout. Defaults to "COLL"
@@ -443,7 +443,7 @@ end subroutine pawrad_free_1D
 !!
 !! SOURCE
 
-subroutine pawrad_print(Rmesh,header,unit,prtvol,mode_paral)
+subroutine pawrad_print(Rmesh,AB_HEADER,unit,prtvol,mode_paral)
 
 
 !This section has been created automatically by the script Abilint (TD).
@@ -457,7 +457,7 @@ subroutine pawrad_print(Rmesh,header,unit,prtvol,mode_paral)
 !Arguments ------------------------------------
  integer,intent(in),optional :: prtvol,unit
  character(len=4),intent(in),optional :: mode_paral
- character(len=*),intent(in),optional :: header
+ character(len=*),intent(in),optional :: AB_HEADER
  type(pawrad_type),intent(in) :: Rmesh
 
 !Local variables-------------------------------
@@ -474,7 +474,7 @@ subroutine pawrad_print(Rmesh,header,unit,prtvol,mode_paral)
  my_mode  ='COLL' ; if (PRESENT(mode_paral)) my_mode  =mode_paral
 
  msg=ch10//' ==== Info on the Radial Mesh ==== '
- if (PRESENT(header)) msg=ch10//' ==== '//TRIM(ADJUSTL(header))//' ==== '
+ if (PRESENT(AB_HEADER)) msg=ch10//' ==== '//TRIM(ADJUSTL(AB_HEADER))//' ==== '
  call wrtout(my_unt,msg,my_mode)
 
  SELECT CASE (Rmesh%mesh_type)
@@ -1238,7 +1238,7 @@ subroutine nderiv_lin(hh,yy,zz,ndim,norder)
    zz(ndim-2)=cc
    zz(ndim-3)=bb
 
-!  SECOND DERIVATIVE
+!  second DERIVATIVE
 !  =================
  else
    h1=h1/hh

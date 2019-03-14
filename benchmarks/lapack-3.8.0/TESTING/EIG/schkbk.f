@@ -81,8 +81,8 @@
       REAL               E( LDE, LDE ), EIN( LDE, LDE ), SCALE( LDE )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGEBAK
@@ -97,8 +97,8 @@
       NINFO = 0
       KNT = 0
       RMAX = ZERO
-      EPS = SLAMCH( 'E' )
-      SAFMIN = SLAMCH( 'S' )
+      EPS = AB_SLAMCH( 'E' )
+      SAFMIN = AB_SLAMCH( 'S' )
 *
    10 CONTINUE
 *

@@ -168,9 +168,9 @@
 *     ..
 *     .. External Functions ..
       COMPLEX            CDOTC
-      REAL               CLANHE, SLAMCH
+      REAL               CLANHE, AB_SLAMCH
       LOGICAL            LSAME
-      EXTERNAL           CDOTC, CLANHE, SLAMCH, LSAME
+      EXTERNAL           CDOTC, CLANHE, AB_SLAMCH, LSAME
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CHER, CSCAL, CTRMV
@@ -189,7 +189,7 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       ANORM = CLANHE( '1', UPLO, N, A, LDA, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS

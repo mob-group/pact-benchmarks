@@ -151,8 +151,8 @@
       REAL               ANORM, TEMP1, TEMP2, ULP, UNFL, WNORM
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLANGE, SLANSY
-      EXTERNAL           SLAMCH, SLANGE, SLANSY
+      REAL               AB_SLAMCH, SLANGE, SLANSY
+      EXTERNAL           AB_SLAMCH, SLANGE, SLANSY
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGEMM, SLASET, SSYR, SSYR2
@@ -169,8 +169,8 @@
       IF( N.LE.0 )
      $   RETURN
 *
-      UNFL = SLAMCH( 'Safe minimum' )
-      ULP = SLAMCH( 'Precision' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
+      ULP = AB_SLAMCH( 'Precision' )
 *
 *     Do Test 1
 *

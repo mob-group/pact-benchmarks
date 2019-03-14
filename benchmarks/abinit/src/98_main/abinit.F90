@@ -34,7 +34,7 @@
 !! 7) Continue to analyze the input string, and allocate the remaining arrays.
 !!    Also modulate the timing according to timopt.
 !! 8) Finish to read the "file" file completely,
-!!    and also initialize pspheads (the pseudopotential header information)
+!!    and also initialize pspheads (the pseudopotential AB_HEADER information)
 !! 9) Provide defaults for the variables that have not yet been initialized.
 !! 10) Perform some global initialization, depending on the value of
 !! pseudopotentials, parallelism variables, or macro input variables
@@ -185,7 +185,7 @@ program abinit
  type(args_t) :: args
  type(dataset_type),pointer  :: dtsets(:)
  type(MPI_type),pointer :: mpi_enregs(:)
- type(pspheader_type),pointer :: pspheads(:)
+ type(pspAB_HEADER_type),pointer :: pspheads(:)
  type(results_out_type),allocatable,target :: results_out(:)
  type(results_out_type),pointer :: results_out_all(:)
  type(ab_dimensions) :: mxvals
@@ -209,7 +209,7 @@ program abinit
 !------------------------------------------------------------------------------
 
 !1) Eventually initialize MPI
-!Pay attention: it may be initialzed again in finddistrproc
+!Pay attention: it may be initiaAB_LZEd again in finddistrproc
 
  call xmpi_init()
  me=xmpi_comm_rank(xmpi_world)

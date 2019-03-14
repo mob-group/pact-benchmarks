@@ -443,8 +443,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            DSLECT
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DSLECT, DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           DSLECT, AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGEES, DHST01, DLABAD, DLACPY, DLASET, DLASUM,
@@ -515,10 +515,10 @@
 *
 *     More Important constants
 *
-      UNFL = DLAMCH( 'Safe minimum' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
       CALL DLABAD( UNFL, OVFL )
-      ULP = DLAMCH( 'Precision' )
+      ULP = AB_DLAMCH( 'Precision' )
       ULPINV = ONE / ULP
       RTULP = SQRT( ULP )
       RTULPI = ONE / RTULP

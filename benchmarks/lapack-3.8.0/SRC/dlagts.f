@@ -189,8 +189,8 @@
       INTRINSIC          ABS, MAX, SIGN
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_XERBLA
@@ -211,8 +211,8 @@
       IF( N.EQ.0 )
      $   RETURN
 *
-      EPS = DLAMCH( 'Epsilon' )
-      SFMIN = DLAMCH( 'Safe minimum' )
+      EPS = AB_DLAMCH( 'Epsilon' )
+      SFMIN = AB_DLAMCH( 'Safe minimum' )
       BIGNUM = ONE / SFMIN
 *
       IF( JOB.LT.0 ) THEN

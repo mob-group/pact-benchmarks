@@ -560,8 +560,8 @@
       REAL               DUMMA( 4 ), RMAGN( 0: 3 )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLANGE, SLARND
-      EXTERNAL           SLAMCH, SLANGE, SLARND
+      REAL               AB_SLAMCH, SLANGE, SLARND
+      EXTERNAL           AB_SLAMCH, SLANGE, SLARND
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGEQR2, SGET51, SGET52, SGGHRD, SHGEQZ, SLABAD,
@@ -640,8 +640,8 @@
       IF( NSIZES.EQ.0 .OR. NTYPES.EQ.0 )
      $   RETURN
 *
-      SAFMIN = SLAMCH( 'Safe minimum' )
-      ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
+      SAFMIN = AB_SLAMCH( 'Safe minimum' )
+      ULP = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
       SAFMIN = SAFMIN / ULP
       SAFMAX = ONE / SAFMIN
       CALL SLABAD( SAFMIN, SAFMAX )

@@ -1035,7 +1035,7 @@ end subroutine reduce
 !! FUNCTION
 !! Reads in the charge in mkdens3D format
 !! The file was opened in the calling program, unit number 19.
-!! The header was already read in the case of the unformatted file
+!! The AB_HEADER was already read in the case of the unformatted file
 !!
 !! INPUTS
 !! path=File name
@@ -1620,7 +1620,7 @@ subroutine cut3d_volumeint(gridtt,gridux,griddy,gridmz,natom,nr1,nr2,nr3,nspden,
    end if
  end do
 
-!Write the header of the Molekel input file
+!Write the AB_HEADER of the Molekel input file
 
  if (fileformattype==1 .or. fileformattype==2) then
    if (open_file(filnam,msg,newunit=unt,status='unknown') /= 0) then

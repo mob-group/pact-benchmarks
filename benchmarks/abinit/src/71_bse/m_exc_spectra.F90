@@ -154,7 +154,7 @@ subroutine build_spectra(BSp,BS_files,Cryst,Kmesh,KS_BSt,QP_BSt,Psps,Pawtab,Wfd,
  master  = Wfd%master
  nsppol  = Wfd%nsppol
 
- do_ep_renorm = .False.
+ do_ep_renorm = .false.
  ntemp = 1
  if (BSp%do_ep_renorm .and. PRESENT(Epren)) then
    do_ep_renorm = .True.

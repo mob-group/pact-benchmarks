@@ -88,7 +88,7 @@ contains
 !!      mover
 !!
 !! CHILDREN
-!!      dsyev,hist2var,isopress,isostress,isotemp,metric,mkrdim,var2hist,wrtout
+!!      AB_DSYEV,hist2var,isopress,isostress,isotemp,metric,mkrdim,var2hist,wrtout
 !!      xcart2xred,xred2xcart
 !!
 !! SOURCE
@@ -243,7 +243,7 @@ subroutine pred_isothermal(ab_mover,hist,itime,mttk_vars,ntime,zDEBUG,iexit)
 
 !write(std_out,*) 'isothermal 03'
 !##########################################################
-!### 05. Seconde half velocity step
+!### 05. seconde half velocity step
 
  if (itime>1) then
 
@@ -281,7 +281,7 @@ subroutine pred_isothermal(ab_mover,hist,itime,mttk_vars,ntime,zDEBUG,iexit)
    call metric(gmet,gprimd,-1,rmet,rprimd,ucvol)
 
    if(zDEBUG)then
-     write(std_out,*) 'Second half velocity step'
+     write(std_out,*) 'second half velocity step'
      write(std_out,*) 'Cell parameters:'
      write(std_out,*) 'rprimd:'
      do kk=1,3
@@ -508,7 +508,7 @@ subroutine pred_isothermal(ab_mover,hist,itime,mttk_vars,ntime,zDEBUG,iexit)
    call xred2xcart(ab_mover%natom,rprimd,xcart,xred)
 !  New positions
    mttk_vt(:,:)=mttk_vars%vboxg(:,:)
-   call dsyev('V','U',3,mttk_vt,3,mttk_veig,work,lwork,ierr)
+   call AB_DSYEV('V','U',3,mttk_vt,3,mttk_veig,work,lwork,ierr)
    mttk_tv(:,:)=transpose(mttk_vt)
    mttk_alc(:)=exp(ab_mover%dtion/two*mttk_veig(:))
    mttk_alc2(:)=(mttk_veig(:)*ab_mover%dtion/two)**2
@@ -646,7 +646,7 @@ end subroutine pred_isothermal
 !!      pred_isothermal
 !!
 !! CHILDREN
-!!      dsyev
+!!      AB_DSYEV
 !!
 !! SOURCE
 
@@ -792,7 +792,7 @@ end subroutine isotemp
 !!      pred_isothermal
 !!
 !! CHILDREN
-!!      dsyev
+!!      AB_DSYEV
 !!
 !! SOURCE
 
@@ -973,7 +973,7 @@ end subroutine isopress
 !!      pred_isothermal
 !!
 !! CHILDREN
-!!      dsyev
+!!      AB_DSYEV
 !!
 !! SOURCE
 
@@ -1116,7 +1116,7 @@ end subroutine isopress
 !Update the particle velocities
  trvg=(vboxg(1,1)+vboxg(2,2)+vboxg(3,3))/nfree
  vtemp(:,:)=vboxg(:,:)+(trvg+vlogs(1))*identity(:,:)
- call dsyev('V','U',3,vtemp,3,veig,work,lwork,info)
+ call AB_DSYEV('V','U',3,vtemp,3,veig,work,lwork,info)
 !On exit, we have vtemp=U such that tU vtemp U = veig
  tvtemp(:,:)=transpose(vtemp)
 

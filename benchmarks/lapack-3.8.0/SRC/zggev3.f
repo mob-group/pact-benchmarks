@@ -264,8 +264,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME
-      DOUBLE PRECISION   DLAMCH, AB_ZLANGE
-      EXTERNAL           AB_LSAME, DLAMCH, AB_ZLANGE
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_ZLANGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX, SQRT
@@ -371,8 +371,8 @@
 *
 *     Get machine constants
 *
-      EPS = DLAMCH( 'E' )*DLAMCH( 'B' )
-      SMLNUM = DLAMCH( 'S' )
+      EPS = AB_DLAMCH( 'E' )*AB_DLAMCH( 'B' )
+      SMLNUM = AB_DLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
       CALL AB_DLABAD( SMLNUM, BIGNUM )
       SMLNUM = SQRT( SMLNUM ) / EPS

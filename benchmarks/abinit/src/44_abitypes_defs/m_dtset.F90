@@ -197,7 +197,7 @@ subroutine dtset_chkneu(charge,dtset,occopt)
        end if
        ABI_DEALLOCATE(tmpocc)
 
-!      Second, treat the case in which one imposes the spin magnetization (only possible for nspden==2)
+!      second, treat the case in which one imposes the spin magnetization (only possible for nspden==2)
 !      Also treat antiferromagnetic case (nsppol==1, nspden==2), although spinmagntarget must be zero
      else if(abs(dtset%spinmagntarget+99.99_dp)>1.0d-10)then
        do isppol=1,dtset%nsppol
@@ -650,7 +650,7 @@ subroutine dtset_copy(dtout, dtin)
  dtout%ixc                = dtin%ixc
  dtout%ixc_sigma          = dtin%ixc_sigma
  dtout%ixcpositron        = dtin%ixcpositron
- dtout%ixcrot             = dtin%ixcrot
+ dtout%ixAB_CROT             = dtin%ixAB_CROT
  dtout%jdtset             = dtin%jdtset
  dtout%jellslab           = dtin%jellslab
  dtout%kptopt             = dtin%kptopt
@@ -816,7 +816,7 @@ subroutine dtset_copy(dtout, dtin)
  dtout%prtgkk             = dtin%prtgkk
  dtout%prtkden            = dtin%prtkden
  dtout%prtkpt             = dtin%prtkpt
- dtout%prtlden            = dtin%prtlden
+ dtout%prtAB_LDEn            = dtin%prtAB_LDEn
  dtout%prtnabla           = dtin%prtnabla
  dtout%prtnest            = dtin%prtnest
  dtout%prtphbands         = dtin%prtphbands
@@ -849,7 +849,7 @@ subroutine dtset_copy(dtout, dtin)
  dtout%recnpath           = dtin%recnpath
  dtout%recnrec            = dtin%recnrec
  dtout%recptrott          = dtin%recptrott
- dtout%rectesteg          = dtin%rectesteg
+ dtout%reAB_CTESTeg          = dtin%reAB_CTESTeg
  dtout%rcut               = dtin%rcut
  dtout%restartxf          = dtin%restartxf
  dtout%rfasr              = dtin%rfasr
@@ -865,7 +865,7 @@ subroutine dtset_copy(dtout, dtin)
  dtout%rhoqpmix           = dtin%rhoqpmix
  dtout%signperm           = dtin%signperm
  dtout%slabwsrad          = dtin%slabwsrad
- dtout%slabzbeg           = dtin%slabzbeg
+ dtout%slabAB_ZBEG           = dtin%slabAB_ZBEG
  dtout%slabzend           = dtin%slabzend
  dtout%slk_rankpp         = dtin%slk_rankpp
  dtout%smdelta            = dtin%smdelta
@@ -1023,7 +1023,7 @@ subroutine dtset_copy(dtout, dtin)
  dtout%ratsph_extra       = dtin%ratsph_extra
  dtout%recrcut            = dtin%recrcut
  dtout%recefermi          = dtin%recefermi
- dtout%rectolden          = dtin%rectolden
+ dtout%rectoAB_LDEn          = dtin%rectoAB_LDEn
  dtout%dfpt_sciss         = dtin%dfpt_sciss
  dtout%mbpt_sciss         = dtin%mbpt_sciss
  dtout%spinmagntarget     = dtin%spinmagntarget
@@ -1077,7 +1077,7 @@ subroutine dtset_copy(dtout, dtin)
  dtout%goprecprm(:)       = dtin%goprecprm(:)
  dtout%mdtemp(:)          = dtin%mdtemp(:)
  dtout%neb_spring(:)      = dtin%neb_spring(:)
- dtout%polcen(:)          = dtin%polcen(:)
+ dtout%poAB_LCEn(:)          = dtin%poAB_LCEn(:)
  dtout%qptn(:)            = dtin%qptn(:)
  dtout%pvelmax(:)         = dtin%pvelmax(:)
  dtout%red_efield(:)      = dtin%red_efield(:)
@@ -1652,7 +1652,7 @@ subroutine get_npert_rbz(dtset,nband_rbz,nkpt_rbz,npert)
  integer, allocatable :: pert_tmp(:,:), pert_calc(:,:)
  integer,allocatable :: symaf1(:),symrc1(:,:,:),symrl1(:,:,:),symrl1_tmp(:,:,:)
  real(dp) :: gmet(3,3),gprimd(3,3),rmet(3,3),rprimd(3,3)
- real(dp),allocatable :: tnons1_tmp(:,:),wtk_folded(:)
+ real(dp),allocatable :: tnons1_tmp(:,:),wtk_foAB_LDEd(:)
 
 ! *************************************************************************
 
@@ -1869,11 +1869,11 @@ subroutine get_npert_rbz(dtset,nband_rbz,nkpt_rbz,npert)
    end do
    ABI_DEALLOCATE(symrl1)
 
-   ABI_ALLOCATE(wtk_folded,(dtset%nkpt))
+   ABI_ALLOCATE(wtk_foAB_LDEd,(dtset%nkpt))
    timrev_pert=timrev
    if(dtset%ieig2rf>0) then
      call symkpt(0,gmet,indkpt1(:,icase),std_out,dtset%kptns,dtset%nkpt,nkpt_rbz(icase),&
-&     1,symrc1,0,dtset%wtk,wtk_folded)
+&     1,symrc1,0,dtset%wtk,wtk_foAB_LDEd)
    else
 !    For the time being, the time reversal symmetry is not used
 !    for ddk, elfd, mgfd perturbations.
@@ -1881,9 +1881,9 @@ subroutine get_npert_rbz(dtset,nband_rbz,nkpt_rbz,npert)
 &     ipert==dtset%natom+2 .or. dtset%berryopt==4 .or. dtset%berryopt==6 .or. dtset%berryopt==7  &
 &     .or. dtset%berryopt==14 .or. dtset%berryopt==16 .or. dtset%berryopt==17 )timrev_pert=0  !!HONG
      call symkpt(0,gmet,indkpt1(:,icase),std_out,dtset%kptns,dtset%nkpt,nkpt_rbz(icase),&
-     nsym1,symrc1,timrev_pert,dtset%wtk,wtk_folded)
+     nsym1,symrc1,timrev_pert,dtset%wtk,wtk_foAB_LDEd)
    end if
-   ABI_DEALLOCATE(wtk_folded)
+   ABI_DEALLOCATE(wtk_foAB_LDEd)
    ABI_DEALLOCATE(symrc1)
  end do
 
@@ -2069,7 +2069,7 @@ subroutine macroin(dtsets,ecut_tmp,lenstr,ndtset_alloc,string)
 !    dtsets(idtset)%nline    = maxval((/ int(dtsets(idtset)%natom/2) , 6 /))   ! using default value: \DeltaU< 1%
 !    dtsets(idtset)%nnsclo   = 4        ! using default value: \DeltaU< 1%
      dtsets(idtset)%tolvrs   = 10d-8    ! convergence on the potential; 10d-8^= 10d-5 on occupation
-     dtsets(idtset)%diemix   = 0.45_dp  ! fastest convergence: dn= E^(-istep * 0.229 )
+     dtsets(idtset)%diemix   = 0.45_dp  ! faAB_STEST convergence: dn= E^(-istep * 0.229 )
      dtsets(idtset)%dmatpuopt= 3        ! normalization of the occupation operator
 !    dtsets(idtset)%nstep    = 255      ! expected convergence after 10 \pm 3, 30 as in default normally suficient
 !    dtsets(idtset)%iscf     = 17       ! mixing on potential, 17: default for PAW
@@ -2461,7 +2461,7 @@ subroutine chkvars (string)
  list_vars=trim(list_vars)//' irdscr irdsuscep irdwfk irdwfq ird1den'
  list_vars=trim(list_vars)//' irdwfkfine'
  list_vars=trim(list_vars)//' ird1wf iscf isecur istatimg istatr'
- list_vars=trim(list_vars)//' istatshft istwfk ixc ixc_sigma ixcpositron ixcrot'
+ list_vars=trim(list_vars)//' istatshft istwfk ixc ixc_sigma ixcpositron ixAB_CROT'
  list_vars=trim(list_vars)//' irdvdw'
 !J
  list_vars=trim(list_vars)//' jdtset jellslab jfielddir jpawu'
@@ -2510,11 +2510,11 @@ subroutine chkvars (string)
  list_vars=trim(list_vars)//' ph_wstep ph_intmeth ph_smear ph_nqshift ph_qshift'
  list_vars=trim(list_vars)//' plowan_bandi plowan_bandf plowan_compute plowan_iatom plowan_it plowan_lcalc'
  list_vars=trim(list_vars)//' plowan_natom plowan_nbl plowan_nt plowan_projcalc plowan_realspace'
- list_vars=trim(list_vars)//' polcen posdoppler positron posnstep posocc postoldfe postoldff ppmfrq ppmodel'
+ list_vars=trim(list_vars)//' poAB_LCEn posdoppler positron posnstep posocc postoldfe postoldff ppmfrq ppmodel'
  list_vars=trim(list_vars)//' prepanl prepgkk papiopt'
  list_vars=trim(list_vars)//' prtatlist prtbbb prtbltztrp prtcif prtden'
  list_vars=trim(list_vars)//' prtdensph prtdipole prtdos prtdosm prtebands prtefg prtefmas prteig prtelf'
- list_vars=trim(list_vars)//' prtfc prtfull1wf prtfsurf prtgden prtgeo prtgsr prtgkk prtkden prtkpt prtlden'
+ list_vars=trim(list_vars)//' prtfc prtfull1wf prtfsurf prtgden prtgeo prtgsr prtgkk prtkden prtkpt prtAB_LDEn'
  list_vars=trim(list_vars)//' prt_model prtnabla prtnest prtphbands prtphdos prtphsurf prtposcar prtpot prtpsps'
  list_vars=trim(list_vars)//' prtspcur prtstm prtsuscep prtvclmb prtvha prtvdw prtvhxc prtkbff'
  list_vars=trim(list_vars)//' prtvol prtvpsp prtvxc prtwant prtwf prtwf_full prtxml prt1dm ptcharge'
@@ -2524,7 +2524,7 @@ subroutine chkvars (string)
  list_vars=trim(list_vars)//' qptopt qptrlatt quadmom'
 !R
  list_vars=trim(list_vars)//' random_atpos ratsph ratsph_extra rcut'
- list_vars=trim(list_vars)//' recefermi recgratio recnpath recnrec recptrott recrcut rectesteg rectolden'
+ list_vars=trim(list_vars)//' recefermi recgratio recnpath recnrec recptrott recrcut reAB_CTESTeg rectoAB_LDEn'
  list_vars=trim(list_vars)//' red_dfield red_efield red_efieldbar restartxf rfasr'
  list_vars=trim(list_vars)//' rfatpol rfddk rfdir rfelfd rfmagn rfmeth rfphon'
  list_vars=trim(list_vars)//' rfstrs rfuser rf2_dkdk rf2_dkde rf2_pert1_dir rf2_pert2_dir rhoqpmix rprim'
@@ -2534,7 +2534,7 @@ subroutine chkvars (string)
  list_vars=trim(list_vars)//' rf3atpol rf3dir rf3elfd rf3phon'
 !S
  list_vars=trim(list_vars)//' scalecart shiftk shiftq signperm'
- list_vars=trim(list_vars)//' slabwsrad slabzbeg slabzend slk_rankpp smdelta so_psp'
+ list_vars=trim(list_vars)//' slabwsrad slabAB_ZBEG slabzend slk_rankpp smdelta so_psp'
  list_vars=trim(list_vars)//' spbroad spgaxor spgorig spgroup spgroupma'
  list_vars=trim(list_vars)//' spin_dipdip spin_dt spin_dynamics spin_mag_field spin_nctime spin_ntime'
  list_vars=trim(list_vars)//' spin_n1l spin_n2l spin_qpoint spin_temperature spin_tolavg spin_tolvar'

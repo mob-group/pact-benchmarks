@@ -236,8 +236,8 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_ILAENV2STAGE
-      DOUBLE PRECISION   DLAMCH, AB_DLANSB
-      EXTERNAL           AB_LSAME, DLAMCH, AB_DLANSB, AB_ILAENV2STAGE
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANSB
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_DLANSB, AB_ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_DLASCL, AB_DSCAL, AB_DSTEQR, AB_DSTERF, AB_X
@@ -314,8 +314,8 @@
 *
 *     Get machine constants.
 *
-      SAFMIN = DLAMCH( 'Safe minimum' )
-      EPS    = DLAMCH( 'Precision' )
+      SAFMIN = AB_DLAMCH( 'Safe minimum' )
+      EPS    = AB_DLAMCH( 'Precision' )
       SMLNUM = SAFMIN / EPS
       BIGNUM = ONE / SMLNUM
       RMIN   = SQRT( SMLNUM )

@@ -106,8 +106,8 @@
       REAL               S_WORK_SPOT03( NMAX )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SECOND
-      EXTERNAL           SLAMCH, SECOND
+      REAL               AB_SLAMCH, SECOND
+      EXTERNAL           AB_SLAMCH, SECOND
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ILAVER, SDRVRFP, SDRVRF1, SDRVRF2, SDRVRF3,
@@ -218,11 +218,11 @@
 *
 *     Calculate and print the machine dependent constants.
 *
-      EPS = SLAMCH( 'Underflow threshold' )
+      EPS = AB_SLAMCH( 'Underflow threshold' )
       WRITE( NOUT, FMT = 9991 )'underflow', EPS
-      EPS = SLAMCH( 'Overflow threshold' )
+      EPS = AB_SLAMCH( 'Overflow threshold' )
       WRITE( NOUT, FMT = 9991 )'overflow ', EPS
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       WRITE( NOUT, FMT = 9991 )'precision', EPS
       WRITE( NOUT, FMT = * )
 *

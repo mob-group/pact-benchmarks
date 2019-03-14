@@ -143,8 +143,8 @@
       REAL               D, EMIN, SAFMIN, TEMP
 *     ..
 *     .. External Function ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN
@@ -154,7 +154,7 @@
       IF( ( N0-I0-1 ).LE.0 )
      $   RETURN
 *
-      SAFMIN = SLAMCH( 'Safe minimum' )
+      SAFMIN = AB_SLAMCH( 'Safe minimum' )
       J4 = 4*I0 + PP - 3
       EMIN = Z( J4+4 )
       D = Z( J4 )

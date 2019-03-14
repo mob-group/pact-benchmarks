@@ -124,8 +124,8 @@
       DOUBLE PRECISION   DUMMY( 1 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DASUM, DLAMCH, DNRM2, ZLANGE
-      EXTERNAL           DASUM, DLAMCH, DNRM2, ZLANGE
+      DOUBLE PRECISION   DASUM, AB_DLAMCH, DNRM2, ZLANGE
+      EXTERNAL           DASUM, AB_DLAMCH, DNRM2, ZLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DAXPY, DBDSQR, DLABAD, DLASCL, XERBLA, ZGEBD2,
@@ -165,7 +165,7 @@
 *
 *     Get machine parameters
 *
-      SMLNUM = DLAMCH( 'S' ) / DLAMCH( 'P' )
+      SMLNUM = AB_DLAMCH( 'S' ) / AB_DLAMCH( 'P' )
       BIGNUM = ONE / SMLNUM
       CALL DLABAD( SMLNUM, BIGNUM )
 *
@@ -220,7 +220,7 @@
 *
       CALL DAXPY( MN, -ONE, S, 1, RWORK( 1 ), 1 )
       ZQRT12 = DASUM( MN, RWORK( 1 ), 1 ) /
-     $         ( DLAMCH( 'Epsilon' )*DBLE( MAX( M, N ) ) )
+     $         ( AB_DLAMCH( 'Epsilon' )*DBLE( MAX( M, N ) ) )
       IF( NRMSVL.NE.ZERO )
      $   ZQRT12 = ZQRT12 / NRMSVL
 *

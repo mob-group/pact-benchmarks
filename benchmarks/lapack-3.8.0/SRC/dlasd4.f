@@ -191,8 +191,8 @@
       EXTERNAL           AB_DLAED6, AB_DLASD5
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT
@@ -221,7 +221,7 @@
 *
 *     Compute machine epsilon
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       RHOINV = ONE / RHO
       TAU2= ZERO
 *

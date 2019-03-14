@@ -336,8 +336,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME
-      REAL               SLAMCH
-      EXTERNAL           AB_LSAME, SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_SGEMV, AB_SLABAD, AB_SLACPY, AB_SLAG2, AB_SL
@@ -465,10 +465,10 @@
 *
 *     Machine Constants
 *
-      SAFMIN = SLAMCH( 'Safe minimum' )
+      SAFMIN = AB_SLAMCH( 'Safe minimum' )
       BIG = ONE / SAFMIN
       CALL AB_SLABAD( SAFMIN, BIG )
-      ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
+      ULP = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
       SMALL = SAFMIN*N / ULP
       BIG = ONE / SMALL
       BIGNUM = ONE / ( SAFMIN*N )

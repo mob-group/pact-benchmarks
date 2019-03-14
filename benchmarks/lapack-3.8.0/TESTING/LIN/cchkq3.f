@@ -199,8 +199,8 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      REAL               CQPT01, CQRT11, CQRT12, SLAMCH
-      EXTERNAL           CQPT01, CQRT11, CQRT12, SLAMCH
+      REAL               CQPT01, CQRT11, CQRT12, AB_SLAMCH
+      EXTERNAL           CQPT01, CQRT11, CQRT12, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAHD, ALASUM, CGEQP3, CLACPY, CLASET, CLATMS,
@@ -233,7 +233,7 @@
       DO 10 I = 1, 4
          ISEED( I ) = ISEEDY( I )
    10 CONTINUE
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       INFOT = 0
 *
       DO 90 IM = 1, NM

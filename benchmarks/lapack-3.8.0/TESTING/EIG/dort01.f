@@ -143,8 +143,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      DOUBLE PRECISION   DDOT, DLAMCH, DLANSY
-      EXTERNAL           LSAME, DDOT, DLAMCH, DLANSY
+      DOUBLE PRECISION   DDOT, AB_DLAMCH, DLANSY
+      EXTERNAL           LSAME, DDOT, AB_DLAMCH, DLANSY
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DLASET, DSYRK
@@ -161,7 +161,7 @@
       IF( M.LE.0 .OR. N.LE.0 )
      $   RETURN
 *
-      EPS = DLAMCH( 'Precision' )
+      EPS = AB_DLAMCH( 'Precision' )
       IF( M.LT.N .OR. ( M.EQ.N .AND. LSAME( ROWCOL, 'R' ) ) ) THEN
          TRANSU = 'N'
          K = N

@@ -87,8 +87,8 @@
      $                   RPOW( NPOW )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGBEQU, DGEEQU, DPBEQU, DPOEQU, DPPEQU
@@ -101,7 +101,7 @@
       PATH( 1: 1 ) = 'Double precision'
       PATH( 2: 3 ) = 'EQ'
 *
-      EPS = DLAMCH( 'P' )
+      EPS = AB_DLAMCH( 'P' )
       DO 10 I = 1, 5
          RESLTS( I ) = ZERO
    10 CONTINUE

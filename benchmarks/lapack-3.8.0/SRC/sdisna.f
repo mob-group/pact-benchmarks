@@ -43,10 +43,10 @@
 *> The bound on the error, measured by angle in radians, in the I-th
 *> computed vector is given by
 *>
-*>        SLAMCH( 'E' ) * ( ANORM / SEP( I ) )
+*>        AB_SLAMCH( 'E' ) * ( ANORM / SEP( I ) )
 *>
 *> where ANORM = 2-norm(A) = max( abs( D(j) ) ).  SEP(I) is not allowed
-*> to be smaller than SLAMCH( 'E' )*ANORM in order to limit the size of
+*> to be smaller than AB_SLAMCH( 'E' )*ANORM in order to limit the size of
 *> the error bound.
 *>
 *> AB_SDISNA may also be used to compute error bounds for eigenvectors of
@@ -143,8 +143,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME
-      REAL               SLAMCH
-      EXTERNAL           AB_LSAME, SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -203,7 +203,7 @@
 *     Compute reciprocal condition numbers
 *
       IF( K.EQ.1 ) THEN
-         SEP( 1 ) = SLAMCH( 'O' )
+         SEP( 1 ) = AB_SLAMCH( 'O' )
       ELSE
          OLDGAP = ABS( D( 2 )-D( 1 ) )
          SEP( 1 ) = OLDGAP
@@ -226,8 +226,8 @@
 *     Ensure that reciprocal condition numbers are not less than
 *     threshold, in order to limit the size of the error bound
 *
-      EPS = SLAMCH( 'E' )
-      SAFMIN = SLAMCH( 'S' )
+      EPS = AB_SLAMCH( 'E' )
+      SAFMIN = AB_SLAMCH( 'S' )
       ANORM = MAX( ABS( D( 1 ) ), ABS( D( K ) ) )
       IF( ANORM.EQ.ZERO ) THEN
          THRESH = EPS

@@ -129,9 +129,9 @@
       COMPLEX            SAVEALPHA
 *     ..
 *     .. External Functions ..
-      REAL               AB_SCNRM2, SLAMCH, AB_SLAPY3, AB_SLAPY2
+      REAL               AB_SCNRM2, AB_SLAMCH, AB_SLAPY3, AB_SLAPY2
       COMPLEX            AB_CLADIV
-      EXTERNAL           AB_SCNRM2, SLAMCH, AB_SLAPY3, AB_SLAPY2, AB_CLA
+      EXTERNAL           AB_SCNRM2, AB_SLAMCH, AB_SLAPY3, AB_SLAPY2, AB_CLA
      $DIV
 *     ..
 *     .. Intrinsic Functions ..
@@ -184,7 +184,7 @@
 *        general case
 *
          BETA = SIGN( AB_SLAPY3( ALPHR, ALPHI, XNORM ), ALPHR )
-         SMLNUM = SLAMCH( 'S' ) / SLAMCH( 'E' )
+         SMLNUM = AB_SLAMCH( 'S' ) / AB_SLAMCH( 'E' )
          BIGNUM = ONE / SMLNUM
 *
          KNT = 0

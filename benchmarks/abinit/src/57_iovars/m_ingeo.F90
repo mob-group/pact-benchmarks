@@ -35,7 +35,7 @@ module m_ingeo
  use m_sort
 
  use m_symtk,      only : mati3inv, chkorthsy, symrelrot, mati3det, symmetrize_rprimd, symmetrize_xred, symatm
- use m_spgbuilder, only : gensymspgr, gensymshub, gensymshub4
+ use m_spgbuiAB_LDEr, only : gensymspgr, gensymshub, gensymshub4
  use m_symfind,    only : symfind, symanal, symlatt
  use m_geometry,   only : mkradim, mkrdim, xcart2xred, xred2xcart, randomcellpos, metric
  use m_parser,     only : intagm
@@ -65,10 +65,10 @@ contains
 !! 4) Read the type of each atom in the primitive set
 !! 5) Read coordinates for each atom in the primitive set
 !! 6) Eventually read the symmetries
-!! 7) Checks whether the geometry builder must be used,
-!!    and call it if needed. Call eventually the symmetry builder and analyser
+!! 7) Checks whether the geometry buiAB_LDEr must be used,
+!!    and call it if needed. Call eventually the symmetry buiAB_LDEr and analyser
 !!    Make the adequate transfers if the geometry
-!!    builder is not needed.
+!!    buiAB_LDEr is not needed.
 !! 8) Initialize the fixing of atoms,
 !!    the initial velocities, and the initial atomic spin
 !!
@@ -99,7 +99,7 @@ contains
 !! genafm(3)=magnetic translation generator (in case of Shubnikov group type IV)
 !! iatfix(3,natom)=indices for atoms fixed along some (or all) directions
 !! jellslab=not zero if jellslab keyword is activated
-!! slabzbeg, slabzend= the z coordinates of beginning / end of the jellium slab
+!! slabAB_ZBEG, slabzend= the z coordinates of beginning / end of the jellium slab
 !! mixalch(npspalch,ntypalch)=alchemical mixing factors
 !! nsym=actual number of symmetries
 !! nucdipmom(3,natom)=nuclear magnetic dipole moment of each atom in atomic units
@@ -134,7 +134,7 @@ contains
 !!      invars1
 !!
 !! CHILDREN
-!!      atomdata_from_znucl,chkorthsy,fillcell,gensymshub,gensymshub4
+!!      atomdata_from_znucl,chkorthsy,filAB_LCEll,gensymshub,gensymshub4
 !!      gensymspgr,intagm_img,ingeobld,intagm,mati3inv,metric,mkradim,mkrdim
 !!      randomcellpos,symanal,symatm,symfind,symlatt,symmetrize_rprimd
 !!      symmetrize_xred,symrelrot,wrtout,xcart2xred,xred2xcart
@@ -145,7 +145,7 @@ subroutine ingeo (acell,amu,dtset,bravais,&
 & genafm,iatfix,icoulomb,iimage,iout,jdtset,jellslab,lenstr,mixalch,&
 & msym,natom,nimage,npsp,npspalch,nspden,nsppol,nsym,ntypalch,ntypat,&
 & nucdipmom,nzchempot,pawspnorb,&
-& ptgroupma,ratsph,rprim,slabzbeg,slabzend,spgroup,spinat,string,supercell_lattice,symafm,&
+& ptgroupma,ratsph,rprim,slabAB_ZBEG,slabzend,spgroup,spinat,string,supercell_lattice,symafm,&
 & symmorphi,symrel,tnons,tolsym,typat,vel,vel_cell,xred,znucl)
 
 
@@ -165,7 +165,7 @@ subroutine ingeo (acell,amu,dtset,bravais,&
  integer,intent(inout) :: natom,symmorphi
  integer,intent(out) :: icoulomb,jellslab,ptgroupma,spgroup !vz_i
  integer,intent(inout) :: nsym !vz_i
- real(dp),intent(out) :: slabzbeg,slabzend,tolsym
+ real(dp),intent(out) :: slabAB_ZBEG,slabzend,tolsym
  character(len=*),intent(in) :: string
 !arrays
  integer,intent(in) :: supercell_lattice(3,3)
@@ -340,11 +340,11 @@ subroutine ingeo (acell,amu,dtset,bravais,&
  call intagm(dprarr,intarr,jdtset,marr,1,string(1:lenstr),'jellslab',tread,'INT')
  if(tread==1) jellslab=intarr(1)
 
- slabzbeg=zero
+ slabAB_ZBEG=zero
  slabzend=zero
  if(jellslab/=0)then
-   call intagm(dprarr,intarr,jdtset,marr,1,string(1:lenstr),'slabzbeg',tread,'DPR')
-   if(tread==1) slabzbeg=dprarr(1)
+   call intagm(dprarr,intarr,jdtset,marr,1,string(1:lenstr),'slabAB_ZBEG',tread,'DPR')
+   if(tread==1) slabAB_ZBEG=dprarr(1)
 
    call intagm(dprarr,intarr,jdtset,marr,1,string(1:lenstr),'slabzend',tread,'DPR')
    if(tread==1) slabzend=dprarr(1)
@@ -483,7 +483,7 @@ subroutine ingeo (acell,amu,dtset,bravais,&
 !At this stage, the cartesian coordinates are known, for the atoms whose coordinates where read.
 
 !Here, allocate the variable that will contain the completed
-!sets of xcart, after the use of the geometry builder or the symmetry builder
+!sets of xcart, after the use of the geometry buiAB_LDEr or the symmetry buiAB_LDEr
  ABI_ALLOCATE(xcart,(3,natom))
 
 !7) Eventually read the symmetries
@@ -552,8 +552,8 @@ subroutine ingeo (acell,amu,dtset,bravais,&
  end if
 
 
-!8) Checks whether the geometry builder must be used, and call it if needed.
-!Call the symmetry builder and analyzer if needed.
+!8) Checks whether the geometry buiAB_LDEr must be used, and call it if needed.
+!Call the symmetry buiAB_LDEr and analyzer if needed.
 
 !At this stage, nsym might still contain the default 0, msym contains the default dtset%maxnsym.
 !The cartesian coordinates of the atoms of the primitive set are contained in xcart_read.
@@ -593,7 +593,7 @@ subroutine ingeo (acell,amu,dtset,bravais,&
      nucdipmom(1:3,1:natom) = reshape( dprarr(1:3*natom) , (/3,natom/) )
    end if
 
-!  Will use the geometry builder
+!  Will use the geometry buiAB_LDEr
    if(tnatrd/=1 .and. nobj/=0)then
      write(message, '(a,a,a,i0,a,a,a,a,a)' )&
 &     'The number of atoms to be read (natrd) must be initialized',ch10,&
@@ -838,7 +838,7 @@ subroutine ingeo (acell,amu,dtset,bravais,&
 
      if(natom/=natrd.and.multiplicity == 1)then
 !      Generate the full set of atoms from its knowledge in the irreducible part.
-       call fillcell(natom,natrd,nsym,nucdipmom,spinat,symafm,symrel,tnons,tolsym,typat,xred)
+       call filAB_LCEll(natom,natrd,nsym,nucdipmom,spinat,symafm,symrel,tnons,tolsym,typat,xred)
      end if
 
 !    Check whether the symmetry operations are consistent with the lattice vectors
@@ -1181,7 +1181,7 @@ end subroutine ingeo
 !! ingeobld
 !!
 !! FUNCTION
-!! The geometry builder.
+!! The geometry buiAB_LDEr.
 !! Start from the types and coordinates of the primitive atoms
 !! and produce the completed set of atoms, by using the definition
 !! of objects, then application of rotation, translation and repetition.
@@ -1647,7 +1647,7 @@ subroutine ingeobld (iout,jdtset,lenstr,natrd,natom,nobj,string,typat,typat_read
 
 !6) Produce full set of atoms
 
-!Print the initial atom coordinates if the geometry builder is used
+!Print the initial atom coordinates if the geometry buiAB_LDEr is used
  write(iout, '(/,a)' )  ' Cartesian coordinates of the primitive atoms '
  write(std_out,'(/,a)' )' Cartesian coordinates of the primitive atoms '
  write(iout,format01160) '      ',xcart_read(:,:)
@@ -1829,9 +1829,9 @@ subroutine ingeobld (iout,jdtset,lenstr,natrd,natom,nobj,string,typat,typat_read
 end subroutine ingeobld
 !!***
 
-!!****f* m_ingeo/fillcell
+!!****f* m_ingeo/filAB_LCEll
 !! NAME
-!! fillcell
+!! filAB_LCEll
 !!
 !! FUNCTION
 !! Computes the atomic position of all the atoms in the unit cell starting
@@ -1871,13 +1871,13 @@ end subroutine ingeobld
 !!
 !! SOURCE
 
-subroutine fillcell(natom,natrd,nsym,nucdipmom,spinat,symafm,symrel,tnons,tolsym,typat,xred)
+subroutine filAB_LCEll(natom,natrd,nsym,nucdipmom,spinat,symafm,symrel,tnons,tolsym,typat,xred)
 
 
 !This section has been created automatically by the script Abilint (TD).
 !Do not modify the following lines by hand.
 #undef ABI_FUNC
-#define ABI_FUNC 'fillcell'
+#define ABI_FUNC 'filAB_LCEll'
 !End of the abilint section
 
  implicit none
@@ -1904,7 +1904,7 @@ subroutine fillcell(natom,natrd,nsym,nucdipmom,spinat,symafm,symrel,tnons,tolsym
 ! *************************************************************************
 
 !DEBUG
-!write(std_out,*)' fillcell : enter with nsym, natrd= ',nsym,natrd
+!write(std_out,*)' filAB_LCEll : enter with nsym, natrd= ',nsym,natrd
 !write(std_out,*)' Describe the different symmetry operations (index,symrel,tnons,symafm)'
 !do ii=1,nsym
 !write(std_out,'(i3,2x,9i3,3es12.2,i3)')ii,symrel(:,:,ii),tnons(:,ii),symafm(ii)
@@ -1959,7 +1959,7 @@ subroutine fillcell(natom,natrd,nsym,nucdipmom,spinat,symafm,symrel,tnons,tolsym
  end do
 
 !DEBUG
-!write(std_out,*)' fillcell : Proposed coordinates ='
+!write(std_out,*)' filAB_LCEll : Proposed coordinates ='
 !do ii=1,curat
 !write(std_out,'(i4,3es16.6)' )ii,bckxred(:,ii)
 !end do
@@ -1990,14 +1990,14 @@ subroutine fillcell(natom,natrd,nsym,nucdipmom,spinat,symafm,symrel,tnons,tolsym
  spinat(1:3,1:natom)=bckspinat(1:3,1:natom)
 
 !DEBUG
-!write(std_out,*)' fillcell : exit with natom=',natom
+!write(std_out,*)' filAB_LCEll : exit with natom=',natom
 !write(std_out,*)' Describe the output atoms (index,typat,xred,spinat)'
 !do jj=1,natom
 !write(std_out,'(i3,2x,i3,6es12.2)')jj,typat(jj),xred(:,jj),spinat(:,jj)
 !end do
 !ENDDEBUG
 
-end subroutine fillcell
+end subroutine filAB_LCEll
 !!***
 
 !!****f* m_ingeo/invacuum

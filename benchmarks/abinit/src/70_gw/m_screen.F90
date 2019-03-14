@@ -330,7 +330,7 @@ CONTAINS  !=====================================================================
 !!  [unit]=Unit number for output
 !!  [prtvol]=Verbosity level
 !!  [mode_paral]=Either "COLL" or "PERS"
-!!  [header]=String to be printed as header for additional info.
+!!  [AB_HEADER]=String to be printed as AB_HEADER for additional info.
 !!
 !! OUTPUT
 !!  Only printing
@@ -343,7 +343,7 @@ CONTAINS  !=====================================================================
 !!
 !! SOURCE
 
-subroutine screen_info_print(W_info,header,unit,mode_paral,prtvol)
+subroutine screen_info_print(W_info,AB_HEADER,unit,mode_paral,prtvol)
 
 
 !This section has been created automatically by the script Abilint (TD).
@@ -358,7 +358,7 @@ subroutine screen_info_print(W_info,header,unit,mode_paral,prtvol)
 !scalars
  integer,optional,intent(in) :: unit,prtvol
  character(len=4),optional,intent(in) :: mode_paral
- character(len=*),optional,intent(in) :: header
+ character(len=*),optional,intent(in) :: AB_HEADER
  type(screen_info_t),intent(in) :: W_info
 
 !Local variables-------------------------------
@@ -373,7 +373,7 @@ subroutine screen_info_print(W_info,header,unit,mode_paral,prtvol)
  my_mode  ='COLL' ; if (PRESENT(mode_paral)) my_mode  =mode_paral
 
  msg=' ==== Info on the screen_info_t% object ==== '
- if (PRESENT(header)) msg=' ==== '//TRIM(ADJUSTL(header))//' ==== '
+ if (PRESENT(AB_HEADER)) msg=' ==== '//TRIM(ADJUSTL(AB_HEADER))//' ==== '
  call wrtout(my_unt,msg,my_mode)
 
 !integer
@@ -976,7 +976,7 @@ subroutine screen_init(W,W_Info,Cryst,Qmesh,Gsph,Vcp,ifname,mqmem,npw_asked,&
  !
  !@screen_info_t
  W%Info = W_info ! Copy basic parameters.
- call screen_info_print(W%Info,header="W info",unit=std_out)
+ call screen_info_print(W%Info,AB_HEADER="W info",unit=std_out)
 
  id_required  = W_Info%mat_type
  approx_type  = W_Info%vtx_family
@@ -1004,7 +1004,7 @@ subroutine screen_init(W,W_Info,Cryst,Qmesh,Gsph,Vcp,ifname,mqmem,npw_asked,&
  if (W%mqmem/=0) W%mqmem=W%nqibz
 
  ABI_MALLOC(W%keep_q,(W%nqibz))
- W%keep_q=.TRUE.; if (W%mqmem == 0) W%keep_q = .False.
+ W%keep_q=.TRUE.; if (W%mqmem == 0) W%keep_q = .false.
 
  if (W%mqmem/=0 .and. W%mqmem<W%nqibz) then
    ! Keep in memory the most representative q-points.
@@ -1057,10 +1057,10 @@ subroutine screen_init(W,W_Info,Cryst,Qmesh,Gsph,Vcp,ifname,mqmem,npw_asked,&
    if (endswith(W%fname, ".nc")) W%iomode = IO_MODE_ETSF
 
    call hscr_from_file(hscr,W%fname,fform,comm)
-   ! Echo of the header
+   ! Echo of the AB_HEADER
    if (my_rank == master .and. W%prtvol>0) call hscr_print(hscr)
 
-   ! Communicate the header and copy basic parameters.
+   ! Communicate the AB_HEADER and copy basic parameters.
    !call hscr_bcast(Hscr,master,my_rank,comm)
    mat_type_read = Hscr%id
    nqlwl         = Hscr%nqlwl
@@ -1431,7 +1431,7 @@ end subroutine screen_symmetrizer
 !!
 !! OUTPUT
 !!   out_ket(in_npw)= W |\phi\> in reciprocal space.
-!!   ZGEMV  performs one of the matrix-vector operations
+!!   AB_ZGEMV  performs one of the matrix-vector operations
 !!   *
 !!   *     y := alpha*A*x + beta*y,   or   y := alpha*A**T*x + beta*y,   or
 !!   *

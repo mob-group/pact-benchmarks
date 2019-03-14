@@ -2154,7 +2154,7 @@ end subroutine read_atomden
 !! There are two ways to compile the proto density in real space
 !! for a solid. One alternative is that the density is calculated
 !! for an extended grid encompassing the sphere of points around
-!! one atom, and the results are folded back into the unit cell.
+!! one atom, and the results are foAB_LDEd back into the unit cell.
 !! On the other hand one can, around each grid point, identify the
 !! number of atoms in a sphere equivalent to the length of the radial
 !! grid for each type of atom.
@@ -2206,7 +2206,7 @@ subroutine atomden(MPI_enreg,natom,ntypat,typat,ngrid,r_vec_grid,rho,a,b,c,atom_
  integer :: cnt,delta,i,l,m,n,iatom,itypat,igrid,ncells,n_grid_p
  integer :: ierr,spaceComm,nprocs,master,rank,remainder
  real(dp) :: a_norm,b_norm,c_norm
- real(dp) :: r_max,R_sphere_max,dp_dummy,ybcbeg,ybcend
+ real(dp) :: r_max,R_sphere_max,dp_dummy,ybAB_CBEG,ybcend
 !arrays
  integer :: n_equiv_atoms(ntypat),grid_index(ngrid)
  integer :: my_start_equiv_atoms(ntypat)
@@ -2476,11 +2476,11 @@ subroutine atomden(MPI_enreg,natom,ntypat,typat,ngrid,r_vec_grid,rho,a,b,c,atom_
      ABI_ALLOCATE(x_fit,(n_grid_p))
      ABI_ALLOCATE(y_fit,(n_grid_p))
      ypp = zero; y_fit = zero
-     ybcbeg = zero; ybcend = zero
+     ybAB_CBEG = zero; ybcend = zero
      x_fit = grid_distances(1:n_grid_p)
      call spline(atomrgrid(1:natomgr(itypat),itypat), &
 &     density(1:natomgr(itypat),itypat), &
-&     natomgr(itypat),ybcbeg,ybcend,ypp)
+&     natomgr(itypat),ybAB_CBEG,ybcend,ypp)
      call splint(natomgr(itypat),atomrgrid(1:natomgr(itypat),itypat), &
 &     density(1:natomgr(itypat),itypat),ypp,n_grid_p, &
 &     x_fit,y_fit)

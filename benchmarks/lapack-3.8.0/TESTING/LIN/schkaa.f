@@ -154,8 +154,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME, LSAMEN
-      REAL               SECOND, SLAMCH
-      EXTERNAL           LSAME, LSAMEN, SECOND, SLAMCH
+      REAL               SECOND, AB_SLAMCH
+      EXTERNAL           LSAME, LSAMEN, SECOND, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAREQ, SCHKEQ, SCHKGB, SCHKGE, SCHKGT, SCHKLQ,
@@ -371,11 +371,11 @@
 *
 *     Calculate and print the machine dependent constants.
 *
-      EPS = SLAMCH( 'Underflow threshold' )
+      EPS = AB_SLAMCH( 'Underflow threshold' )
       WRITE( NOUT, FMT = 9991 )'underflow', EPS
-      EPS = SLAMCH( 'Overflow threshold' )
+      EPS = AB_SLAMCH( 'Overflow threshold' )
       WRITE( NOUT, FMT = 9991 )'overflow ', EPS
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       WRITE( NOUT, FMT = 9991 )'precision', EPS
       WRITE( NOUT, FMT = * )
 *

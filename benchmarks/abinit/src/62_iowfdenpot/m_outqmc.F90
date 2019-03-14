@@ -64,7 +64,7 @@ contains
 !!  dtset <type(dataset_type)>=all input variables for this dataset
 !!  eigen(mband*nkpt*nsppol)=array for holding eigenvalues (hartree)
 !!  gprimd(3,3)=dimensional primitive translations for reciprocal space
-!!  hdr <type(hdr_type)>=the header of wf, den and pot files
+!!  hdr <type(hdr_type)>=the AB_HEADER of wf, den and pot files
 !!  kg(3,mpw*mkmem)=reduced planewave coordinates.
 !!  mcg=size of wave-functions array (cg) =mpw*nspinor*mband*mkmem*nsppol
 !!  mpi_enreg=information about MPI parallelization
@@ -200,7 +200,7 @@ subroutine outqmc(cg,dtset,eigen,gprimd,hdr,kg,mcg,mpi_enreg,npwarr,occ,psps,res
  case(1)
    dft_functional='L(S)DA (Teter/Pade parametrization)'
  case(2)
-   dft_functional='LDA (Perdew-Zunger-Ceperley-Alder parametrization)'
+   dft_functional='LDA (Perdew-Zunger-Ceperley-AAB_LDEr parametrization)'
  case(3)
    dft_functional='LDA (old Teter rational polynomial parametrization)'
  case(4)

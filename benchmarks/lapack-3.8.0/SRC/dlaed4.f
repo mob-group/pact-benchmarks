@@ -179,8 +179,8 @@
       DOUBLE PRECISION   ZZ( 3 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_DLAED5, AB_DLAED6
@@ -211,7 +211,7 @@
 *
 *     Compute machine epsilon
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       RHOINV = ONE / RHO
 *
 *     The case I = N

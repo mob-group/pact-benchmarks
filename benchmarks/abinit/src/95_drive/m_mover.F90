@@ -1757,7 +1757,7 @@ subroutine wrt_moldyn_netcdf(amass,dtset,itime,option,moldyn_file,mpi_enreg,&
 #endif
 
 !  ==========================================================================
-!  First time step: write header of netcdf file
+!  First time step: write AB_HEADER of netcdf file
 !  ==========================================================================
    if (itime==1.and.(option==1.or.option==3)) then
 

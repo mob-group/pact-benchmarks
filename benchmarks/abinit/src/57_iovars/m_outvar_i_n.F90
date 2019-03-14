@@ -491,9 +491,9 @@ subroutine outvar_i_n (dtsets,iout,&
  intarr(1,:)=dtsets(:)%ixcpositron
  call prttagm(dprarr,intarr,iout,jdtset_,2,marr,1,narrm,ncid,ndtset_alloc,'ixcpositron','INT',0)
 
-!ixcrot
- intarr(1,:)=dtsets(:)%ixcrot
- call prttagm(dprarr,intarr,iout,jdtset_,2,marr,1,narrm,ncid,ndtset_alloc,'ixcrot','INT',0)
+!ixAB_CROT
+ intarr(1,:)=dtsets(:)%ixAB_CROT
+ call prttagm(dprarr,intarr,iout,jdtset_,2,marr,1,narrm,ncid,ndtset_alloc,'ixAB_CROT','INT',0)
 
 !ixc_sigma
  intarr(1,:)=dtsets(:)%ixc_sigma

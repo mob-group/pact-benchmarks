@@ -58,13 +58,13 @@ CONTAINS
 !!
 !! INPUTS
 !!  * Input, integer N, the number of data points; N must be at least 2.
-!!    In the special case where N = 2 and IBCBEG = IBCEND = 0, the
+!!    In the special case where N = 2 and IBAB_CBEG = IBCEND = 0, the
 !!    spline will actually be linear.
 !!  * Input, real(dp) T(N), the knot values, that is, the points where data
 !!    is specified.  The knot values should be distinct, and increasing.
 !!  * Input, real(dp) Y(N), the data values to be interpolated.
-!!  * Input, real(dp) YBCBEG, YBCEND, the values to be used in the boundary
-!!    conditions if IBCBEG or IBCEND is equal to 1 or 2.
+!!  * Input, real(dp) YBAB_CBEG, YBCEND, the values to be used in the boundary
+!!    conditions if IBAB_CBEG or IBCEND is equal to 1 or 2.
 !!
 !! OUTPUT
 !!    Output, real(dp) YPP(N), the second derivatives of the cubic spline.
@@ -79,7 +79,7 @@ CONTAINS
 !!
 !! SOURCE
 
-subroutine paw_spline(t,y,n,ybcbeg,ybcend,ypp)
+subroutine paw_spline(t,y,n,ybAB_CBEG,ybcend,ypp)
 
 !*******************************************************************************
 !  Discussion:
@@ -146,14 +146,14 @@ implicit none
 !Arguments ------------------------------------
 !scalars
  integer,intent(in) :: n
- real(dp),intent(in) :: ybcbeg,ybcend
+ real(dp),intent(in) :: ybAB_CBEG,ybcend
 !arrays
  real(dp),intent(in) :: t(n),y(n)
  real(dp),intent(out) :: ypp(n)
 
 !Local variables-------------------------------
 !scalars
- integer :: ibcbeg,ibcend,i,k
+ integer :: ibAB_CBEG,ibcend,i,k
  real(dp) :: ratio,pinv
  character(len=500) :: msg
 !arrays
@@ -183,16 +183,16 @@ implicit none
    end if
  end do
 
- ibcbeg=1;if(ybcbeg>1.0d+30)ibcbeg=0
+ ibAB_CBEG=1;if(ybAB_CBEG>1.0d+30)ibAB_CBEG=0
  ibcend=1;if(ybcend>1.0d+30)ibcend=0
 
 !Set the first and last equations
- if (ibcbeg==0) then
+ if (ibAB_CBEG==0) then
    ypp(1) = 0._dp
    tmp(1) = 0._dp
- else if ( ibcbeg == 1 ) then
+ else if ( ibAB_CBEG == 1 ) then
    ypp(1) = -0.5_dp
-   tmp(1) = (3._dp/(t(2)-t(1)))*((y(2)-y(1))/(t(2)-t(1))-ybcbeg)
+   tmp(1) = (3._dp/(t(2)-t(1)))*((y(2)-y(1))/(t(2)-t(1))-ybAB_CBEG)
  end if
  if (ibcend==0) then
    ypp(n) = 0._dp

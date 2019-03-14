@@ -256,8 +256,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME
-      REAL               SLAMCH
-      EXTERNAL           AB_LSAME, SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_SLAMCH
 *     ..
 *     .. Statement Functions ..
       REAL               CABS1
@@ -317,8 +317,8 @@
 *     NZ = maximum number of nonzero elements in each row of A, plus 1
 *
       NZ = MIN( KL+KU+2, N+1 )
-      EPS = SLAMCH( 'Epsilon' )
-      SAFMIN = SLAMCH( 'Safe minimum' )
+      EPS = AB_SLAMCH( 'Epsilon' )
+      SAFMIN = AB_SLAMCH( 'Safe minimum' )
       SAFE1 = NZ*SAFMIN
       SAFE2 = SAFE1 / EPS
 *

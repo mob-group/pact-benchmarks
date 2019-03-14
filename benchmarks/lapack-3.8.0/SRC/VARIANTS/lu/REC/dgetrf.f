@@ -162,10 +162,10 @@ C> \ingroup variantsGEcomputational
       INTEGER            KSTART, IPIVSTART, JPIVSTART, KCOLS
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
       INTEGER            AB_IDAMAX
       LOGICAL            AB_DISNAN
-      EXTERNAL           DLAMCH, AB_IDAMAX, AB_DISNAN
+      EXTERNAL           AB_DLAMCH, AB_IDAMAX, AB_DISNAN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_DTRSM, AB_DSCAL, AB_XERBLA, AB_DLASWP
@@ -197,7 +197,7 @@ C> \ingroup variantsGEcomputational
 *
 *     Compute machine safe minimum
 *
-      SFMIN = DLAMCH( 'S' )
+      SFMIN = AB_DLAMCH( 'S' )
 *
       NSTEP = MIN( M, N )
       DO J = 1, NSTEP

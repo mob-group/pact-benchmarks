@@ -178,8 +178,8 @@
       REAL               ANORM, BNORM, EPS, XNORM, YNORM, DNORM, UNFL
 *     ..
 *     .. External Functions ..
-      REAL               SCASUM, SLAMCH, CLANGE
-      EXTERNAL           SCASUM, SLAMCH, CLANGE
+      REAL               SCASUM, AB_SLAMCH, CLANGE
+      EXTERNAL           SCASUM, AB_SLAMCH, CLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CLACPY
@@ -189,8 +189,8 @@
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = SLAMCH( 'Epsilon' )
-      UNFL = SLAMCH( 'Safe minimum' )
+      EPS = AB_SLAMCH( 'Epsilon' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
       ANORM = MAX( CLANGE( '1', N, M, A, LDA, RWORK ), UNFL )
       BNORM = MAX( CLANGE( '1', N, P, B, LDB, RWORK ), UNFL )
 *

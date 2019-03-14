@@ -26,7 +26,7 @@
 !! * datafil_type : the data (units,filenames) related to files
 !! * pseudopotential_type : for norm-conserving pseudopotential, all the
 !!   information
-!! * pspheader_type : for norm-conserving pseudopotentials, the header of the file
+!! * pspAB_HEADER_type : for norm-conserving pseudopotentials, the AB_HEADER of the file
 !!
 !! COPYRIGHT
 !! Copyright (C) 2001-2018 ABINIT group (XG)
@@ -211,12 +211,12 @@ module defs_datatypes
    ! Number of points in the reciprocal space grid on which
    ! the radial functions are specified (same grid as the one used for the local part).
 
-   logical :: has_tvale=.False.
+   logical :: has_tvale=.false.
     ! True if the norm-conserving pseudopotential provides the atomic pseudized valence density.
     ! If alchemy, has_tvale is True only if all the mixed pseudos
     ! have the valence charge in the pseudopotential file.
 
-   logical :: has_tcore=.False.
+   logical :: has_tcore=.false.
     ! True if the norm-conserving pseudopotential has the model core-charge for NLCC.
     ! If alchemy, has_tcore is True if at least one of the mixed pseudos has NLCC.
     ! See also tcorespl
@@ -282,12 +282,12 @@ module defs_datatypes
    !  If useylm=0, max number of (l,n)   comp. over all type of psps (lnproj)
    !  If useylm=1, max number of (l,m,n) comp. over all type of psps (lmnproj)
    !  If mpspso is 2, lmnmax takes into account the spin-orbit projectors,
-   !  so, it is equal to the max of lmnprojso or lnprojso, see pspheader_type
+   !  so, it is equal to the max of lmnprojso or lnprojso, see pspAB_HEADER_type
 
   integer :: lnmax
    !  Max. number of (l,n) components over all type of psps
    !  If mpspso is 2, lmnmax takes into account the spin-orbit projectors,
-   !  so, it is equal to the max of lnprojso, see pspheader_type
+   !  so, it is equal to the max of lnprojso, see pspAB_HEADER_type
 
   integer :: mproj
    ! Maximum number of non-local projectors over all angular momenta and type of psps
@@ -499,17 +499,17 @@ module defs_datatypes
 
 !----------------------------------------------------------------------
 
-!!****t* defs_datatypes/pspheader_paw_type
+!!****t* defs_datatypes/pspAB_HEADER_paw_type
 !! NAME
-!! pspheader_paw_type
+!! pspAB_HEADER_paw_type
 !!
 !! FUNCTION
-!! The pspheader_paw_type structured datatype gather additional information
-!! about a PAW pseudopotential file, from its header.
+!! The pspAB_HEADER_paw_type structured datatype gather additional information
+!! about a PAW pseudopotential file, from its AB_HEADER.
 !!
 !! SOURCE
 
- type pspheader_paw_type
+ type pspAB_HEADER_paw_type
 
 ! WARNING : if you modify this datatype, please check whether there might be creation/destruction/copy routines,
 ! declared in another part of ABINIT, that might need to take into account your modification.
@@ -525,22 +525,22 @@ module defs_datatypes
   real(dp) :: rpaw         ! Radius for paw spheres
   real(dp) :: rshp         ! Cut-off radius of shape function
 
- end type pspheader_paw_type
+ end type pspAB_HEADER_paw_type
 !!***
 
 !----------------------------------------------------------------------
 
-!!****t* defs_datatypes/pspheader_type
+!!****t* defs_datatypes/pspAB_HEADER_type
 !! NAME
-!! pspheader_type
+!! pspAB_HEADER_type
 !!
 !! FUNCTION
-!! The pspheader_type structured datatype gather different information
-!! about a pseudopotential file, from its header.
+!! The pspAB_HEADER_type structured datatype gather different information
+!! about a pseudopotential file, from its AB_HEADER.
 !!
 !! SOURCE
 
- type pspheader_type
+ type pspAB_HEADER_type
 
 ! WARNING : if you modify this datatype, please check whether there might be creation/destruction/copy routines,
 ! declared in another part of ABINIT, that might need to take into account your modification.
@@ -596,10 +596,10 @@ module defs_datatypes
   character(len=md5_slen) :: md5_checksum = md5_none
     ! md5 checksum read from file.
 
-  type(pspheader_paw_type) :: pawheader
+  type(pspAB_HEADER_paw_type) :: pawAB_HEADER
     ! only for PAW psps ; see m_pawpsp.
 
- end type pspheader_type
+ end type pspAB_HEADER_type
 !!***
 
 end module defs_datatypes

@@ -135,8 +135,8 @@
      $ASRT, AB_XERBLA
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -183,8 +183,8 @@
 *     Copy D and E into WORK (in the Z format) and scale (squaring the
 *     input data makes scaling by a power of the radix pointless).
 *
-      EPS = DLAMCH( 'Precision' )
-      SAFMIN = DLAMCH( 'Safe minimum' )
+      EPS = AB_DLAMCH( 'Precision' )
+      SAFMIN = AB_DLAMCH( 'Safe minimum' )
       SCALE = SQRT( EPS / SAFMIN )
       CALL AB_DCOPY( N, D, 1, WORK( 1 ), 2 )
       CALL AB_DCOPY( N-1, E, 1, WORK( 2 ), 2 )

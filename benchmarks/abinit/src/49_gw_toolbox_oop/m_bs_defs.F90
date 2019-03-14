@@ -387,7 +387,7 @@ end subroutine bs_parameters_free
 !!
 !! SOURCE
 
-subroutine print_bs_parameters(BSp,header,unit,mode_paral,prtvol) 
+subroutine print_bs_parameters(BSp,AB_HEADER,unit,mode_paral,prtvol) 
 
 
 !This section has been created automatically by the script Abilint (TD).
@@ -402,7 +402,7 @@ subroutine print_bs_parameters(BSp,header,unit,mode_paral,prtvol)
 !scalars
  integer,optional,intent(in) :: unit,prtvol
  character(len=4),optional,intent(in) :: mode_paral 
- character(len=*),optional,intent(in) :: header
+ character(len=*),optional,intent(in) :: AB_HEADER
  type(excparam),intent(inout) :: BSp
 
 !Local variables ------------------------------
@@ -418,7 +418,7 @@ subroutine print_bs_parameters(BSp,header,unit,mode_paral,prtvol)
  my_mode  ='COLL' ; if (PRESENT(mode_paral)) my_mode  =mode_paral
 
  msg=' ==== Parameters of the Bethe-Salpeter run ==== '
- if (PRESENT(header)) msg=' ==== '//TRIM(ADJUSTL(header))//' ==== '
+ if (PRESENT(AB_HEADER)) msg=' ==== '//TRIM(ADJUSTL(AB_HEADER))//' ==== '
  call wrtout(my_unt,msg,my_mode)
 
  select case (Bsp%algorithm)
@@ -852,7 +852,7 @@ end function repr_2trans
 !!  [unit]=Unit number for output
 !!  [prtvol]=Verbosity level
 !!  [mode_paral]=Either "COLL" or "PERS"
-!!  [header]=String to be printed as header for additional info.
+!!  [AB_HEADER]=String to be printed as AB_HEADER for additional info.
 !!
 !! OUTPUT
 !!  Only printing.
@@ -865,7 +865,7 @@ end function repr_2trans
 !!
 !! SOURCE
 
-subroutine print_bs_files(BS_files,header,unit,mode_paral,prtvol)                                   
+subroutine print_bs_files(BS_files,AB_HEADER,unit,mode_paral,prtvol)                                   
 
 
 !This section has been created automatically by the script Abilint (TD).
@@ -881,7 +881,7 @@ subroutine print_bs_files(BS_files,header,unit,mode_paral,prtvol)
  type(excfiles),intent(in) :: BS_files
  integer,optional,intent(in) :: unit,prtvol
  character(len=4),optional,intent(in) :: mode_paral 
- character(len=*),optional,intent(in) :: header
+ character(len=*),optional,intent(in) :: AB_HEADER
 !arrays
 
 !Local variables ------------------------------
@@ -897,7 +897,7 @@ subroutine print_bs_files(BS_files,header,unit,mode_paral,prtvol)
  my_mode  ='COLL' ; if (PRESENT(mode_paral)) my_mode  =mode_paral
                                                                     
  msg=' ==== Files used for the Bethe-Salpeter calculation  ==== '
- if (PRESENT(header)) msg=' ==== '//TRIM(ADJUSTL(header))//' ==== '
+ if (PRESENT(AB_HEADER)) msg=' ==== '//TRIM(ADJUSTL(AB_HEADER))//' ==== '
  call wrtout(my_unt,msg,my_mode)
 
  if (BS_files%in_hreso /= BSE_NOFILE) then

@@ -450,7 +450,7 @@ subroutine entropyDMFT_init(e_t,dt,pawtab,spacecomm,ifilename,ofilename)
       read(e_t%ofile,end=42) hdr, iostate
 
       if ( hdr /= HDR_NAME .or. iostate /= 1 ) then
-        write(msg,'(5a)') "File ", trim(e_t%filedata), " does not contain the proper header", ch10, &
+        write(msg,'(5a)') "File ", trim(e_t%filedata), " does not contain the proper AB_HEADER", ch10, &
         "-> No restart performed but full calculation."
         MSG_WARNING(msg)
         e_t%mylambda = 0

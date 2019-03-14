@@ -138,7 +138,7 @@ contains
 !!  gprimd(3,3)=dimensional reciprocal space primitive translations
 !!   (3x3 tensor) and grads wrt atomic coordinates (3*natom)
 !!  gsqcut=cutoff on (k+G)^2 (bohr^-2)
-!!  hdr <type(hdr_type)>=the header of wf, den and pot files
+!!  hdr <type(hdr_type)>=the AB_HEADER of wf, den and pot files
 !!  indsym(4,nsym,natom)=indirect indexing array for atom labels
 !!  irrzon(nfft**(1-1/nsym),2,(nspden/nsppol)-3*(nspden/4))=irreducible zone data
 !!  irrzondiel(nfftdiel**(1-1/nsym),2,(nspden/nsppol)-3*(nspden/4))=irreducible zone data for diel matrix
@@ -776,7 +776,7 @@ subroutine vtorho(afford,atindx,atindx1,cg,compch_fft,cprj,cpus,dbl_nnsclo,&
        ABI_ALLOCATE(cgq,(2,mcgq))
        ABI_ALLOCATE(pwnsfacq,(2,mkgq))
        if ( berryflag ) then
-         call cgq_builder(berryflag,cg,cgq,dtefield,dtset,ikpt,ikpt_loc,isppol,mcg,mcgq,&
+         call cgq_buiAB_LDEr(berryflag,cg,cgq,dtefield,dtset,ikpt,ikpt_loc,isppol,mcg,mcgq,&
 &         me_distrb,mkgq,mpi_enreg,my_nspinor,nband_k,nproc_distrb,&
 &         npwarr,pwnsfac,pwnsfacq,pwind_alloc,spaceComm_distrb)
          if (ikpt_loc > dtset%mkmem) then
@@ -2294,9 +2294,9 @@ subroutine wvl_comm_eigen()
 end subroutine vtorho
 !!***
 
-!!****f* ABINIT/cgq_builder
+!!****f* ABINIT/cgq_buiAB_LDEr
 !! NAME
-!! cgq_builder
+!! cgq_buiAB_LDEr
 !!
 !! FUNCTION
 !! This routine locates cgq for efield calculations, especially for parallel case
@@ -2342,7 +2342,7 @@ end subroutine vtorho
 !!
 !! SOURCE
 
-subroutine cgq_builder(berryflag,cg,cgq,dtefield,dtset,ikpt,ikpt_loc,isppol,mcg,mcgq,&
+subroutine cgq_buiAB_LDEr(berryflag,cg,cgq,dtefield,dtset,ikpt,ikpt_loc,isppol,mcg,mcgq,&
 &                      me_distrb,mkgq,mpi_enreg,my_nspinor,nband_k,nproc_distrb,&
 &                      npwarr,pwnsfac,pwnsfacq,pwind_alloc,spaceComm_distrb)
 
@@ -2350,7 +2350,7 @@ subroutine cgq_builder(berryflag,cg,cgq,dtefield,dtset,ikpt,ikpt_loc,isppol,mcg,
 !This section has been created automatically by the script Abilint (TD).
 !Do not modify the following lines by hand.
 #undef ABI_FUNC
-#define ABI_FUNC 'cgq_builder'
+#define ABI_FUNC 'cgq_buiAB_LDEr'
 !End of the abilint section
 
  implicit none
@@ -2380,7 +2380,7 @@ subroutine cgq_builder(berryflag,cg,cgq,dtefield,dtset,ikpt,ikpt_loc,isppol,mcg,
 ! *************************************************************************
 
 !DEBUG
-!write(std_out,'(a)')'cgq_builder enter'
+!write(std_out,'(a)')'cgq_buiAB_LDEr enter'
 !DEBUG
 
  if (mcgq==0.or.mkgq==0) return
@@ -2515,10 +2515,10 @@ subroutine cgq_builder(berryflag,cg,cgq,dtefield,dtset,ikpt,ikpt_loc,isppol,mcg,
  ABI_DEALLOCATE(flag_receive)
 
 !DEBUG
-!write(std_out,'(a)')'cgq_builder exit'
+!write(std_out,'(a)')'cgq_buiAB_LDEr exit'
 !END_DEBUG
 
-end subroutine cgq_builder
+end subroutine cgq_buiAB_LDEr
 !!***
 
 end module m_vtorho

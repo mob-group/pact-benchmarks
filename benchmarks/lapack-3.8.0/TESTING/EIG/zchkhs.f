@@ -460,8 +460,8 @@
       COMPLEX*16         CDUMMA( 4 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DLABAD, DLAFTS, DLASUM, XERBLA, ZCOPY, ZGEHRD,
@@ -525,10 +525,10 @@
 *
 *     More important constants
 *
-      UNFL = DLAMCH( 'Safe minimum' )
-      OVFL = DLAMCH( 'Overflow' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
+      OVFL = AB_DLAMCH( 'Overflow' )
       CALL DLABAD( UNFL, OVFL )
-      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
+      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
       ULPINV = ONE / ULP
       RTUNFL = SQRT( UNFL )
       RTOVFL = SQRT( OVFL )

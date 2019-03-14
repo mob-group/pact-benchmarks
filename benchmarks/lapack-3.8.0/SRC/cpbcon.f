@@ -167,8 +167,8 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_ICAMAX
-      REAL               SLAMCH
-      EXTERNAL           AB_LSAME, AB_ICAMAX, SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_ICAMAX, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_CLACN2, AB_CLATBS, AB_CSRSCL, AB_XERBLA
@@ -214,7 +214,7 @@
          RETURN
       END IF
 *
-      SMLNUM = SLAMCH( 'Safe minimum' )
+      SMLNUM = AB_SLAMCH( 'Safe minimum' )
 *
 *     Estimate the 1-norm of the inverse.
 *

@@ -208,8 +208,8 @@
       REAL               ANORM, BNORM, ULP, UNFL, RESID
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, CLANGE, CLANHE
-      EXTERNAL           SLAMCH, CLANGE, CLANHE
+      REAL               AB_SLAMCH, CLANGE, CLANHE
+      EXTERNAL           AB_SLAMCH, CLANGE, CLANHE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGEMM, CGGRQF, CLACPY, CLASET, CUNGQR,
@@ -220,8 +220,8 @@
 *     ..
 *     .. Executable Statements ..
 *
-      ULP = SLAMCH( 'Precision' )
-      UNFL = SLAMCH( 'Safe minimum' )
+      ULP = AB_SLAMCH( 'Precision' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
 *
 *     Copy the matrix A to the array AF.
 *

@@ -125,8 +125,8 @@
       DOUBLE PRECISION   EMIN, EPS, LOWER, MX, TUPPR, UNFLEP, UPPER
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DSTECT
@@ -152,8 +152,8 @@
 *
 *     Get machine constants
 *
-      EPS = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
-      UNFLEP = DLAMCH( 'Safe minimum' ) / EPS
+      EPS = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
+      UNFLEP = AB_DLAMCH( 'Safe minimum' ) / EPS
       EPS = TOL*EPS
 *
 *     Compute maximum absolute eigenvalue, error tolerance

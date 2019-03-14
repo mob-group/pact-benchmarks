@@ -104,14 +104,14 @@
       INTEGER            ISEED( 4 )
 *     ..
 *     .. External Functions ..
-      REAL        SLAMCH, SLANGE, SLANSY
+      REAL        AB_SLAMCH, SLANGE, SLANSY
       LOGICAL     LSAME
-      EXTERNAL    SLAMCH, SLANGE, SLANSY, LSAME
+      EXTERNAL    AB_SLAMCH, SLANGE, SLANSY, LSAME
 *     ..
 *     .. Data statements ..
       DATA ISEED / 1988, 1989, 1990, 1991 /
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       K = M
       N2 = M+N
       IF( N.GT.0 ) THEN

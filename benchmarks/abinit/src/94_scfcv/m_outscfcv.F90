@@ -63,7 +63,7 @@ contains
 !!  gmet(3,3)=reciprocal space metric tensor in bohr**-2.
 !!  gprimd(3,3)=dimensional reciprocal space primitive translations
 !!  grhor(nfft,nspden,3)= gradient of electron density in electrons/bohr**4, real space
-!!  hdr <type(hdr_type)>=the header of wf, den and pot files
+!!  hdr <type(hdr_type)>=the AB_HEADER of wf, den and pot files
 !!  kg(3,mpw*mkmem)=reduced planewave coordinates.
 !!  lrhor(nfft,nspden)= Laplacian of electron density in electrons/bohr**5, real space
 !!  mband=maximum number of bands
@@ -492,7 +492,7 @@ subroutine outscfcv(atindx1,cg,compch_fft,compch_sph,cprj,dimcprj,dmatpawu,dtfil
        call denfgr(atindx1,gmet,comm_fft,my_natom_tmp,natom,nattyp,ngfft,nhat,dtset%nspinor,nsppol,nspden,&
 &       ntypat,pawfgr,pawrad,pawrhoij_all,pawtab,prtvol,rhor,rhor_paw,rhor_n_one,&
 &       rhor_nt_one,rprimd,dtset%typat,ucvol,xred,&
-&       abs_n_tilde_nt_diff=nt_ntone_norm,znucl=dtset%znucl,&
+&       abs_n_tiAB_LDE_nt_diff=nt_ntone_norm,znucl=dtset%znucl,&
 &       comm_atom=mpi_enreg%comm_atom,mpi_atmtab=mpi_enreg%my_atmtab)
      end if
      if (mpi_enreg%paral_kgb==1.and.my_natom/=natom) then
@@ -557,21 +557,21 @@ subroutine outscfcv(atindx1,cg,compch_fft,compch_sph,cprj,dimcprj,dmatpawu,dtfil
      end if
 
      if (pawprtden==6) then ! Print all individual contributions to the density
-       ! N_TILDE - N_HAT
+       ! N_TIAB_LDE - N_HAT
        ! Use rhor_paw_val as temporary array
        if (.not.allocated(rhor_paw_val))  then
          ABI_ALLOCATE(rhor_paw_val,(pawfgr%nfft,nspden))
        end if
        rhor_paw_val = rhor - nhat
 
-       call fftdatar_write("pawrhor_ntilde_minus_nhat",dtfil%fnameabo_app_n_tilde,dtset%iomode,hdr,&
+       call fftdatar_write("pawrhor_ntiAB_LDE_minus_nhat",dtfil%fnameabo_app_n_tiAB_LDE,dtset%iomode,hdr,&
        crystal,ngfft,cplex1,nfft,nspden,rhor_paw_val,mpi_enreg,ebands=ebands)
 
 !      N_ONSITE
        call fftdatar_write("pawrhor_n_one",dtfil%fnameabo_app_n_one,dtset%iomode,hdr,&
        crystal,ngfft,cplex1,nfft,nspden,rhor_n_one,mpi_enreg,ebands=ebands)
 
-!      N_TILDE_ONSITE
+!      N_TIAB_LDE_ONSITE
        call fftdatar_write("pawrhor_nt_one",dtfil%fnameabo_app_nt_one,dtset%iomode,hdr,&
        crystal,ngfft,cplex1,nfft,nspden,rhor_nt_one,mpi_enreg,ebands=ebands)
 
@@ -769,7 +769,7 @@ subroutine outscfcv(atindx1,cg,compch_fft,compch_sph,cprj,dimcprj,dmatpawu,dtfil
    end if
 
 !  We output the Laplacian of density
-   if (dtset%prtlden/=0) then
+   if (dtset%prtAB_LDEn/=0) then
      call fftdatar_write("laprhor",dtfil%fnameabo_app_lden,dtset%iomode,hdr,&
      crystal,ngfft,cplex1,nfft,nspden,lrhor,mpi_enreg,ebands=ebands)
    end if

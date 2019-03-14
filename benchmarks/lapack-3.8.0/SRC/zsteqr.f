@@ -167,8 +167,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME
-      DOUBLE PRECISION   DLAMCH, AB_DLANST, AB_DLAPY2
-      EXTERNAL           AB_LSAME, DLAMCH, AB_DLANST, AB_DLAPY2
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANST, AB_DLAPY2
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_DLANST, AB_DLAPY2
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_DLAE2, AB_DLAEV2, AB_DLARTG, AB_DLASCL, AB_D
@@ -219,9 +219,9 @@
 *
 *     Determine the unit roundoff and over/underflow thresholds.
 *
-      EPS = DLAMCH( 'E' )
+      EPS = AB_DLAMCH( 'E' )
       EPS2 = EPS**2
-      SAFMIN = DLAMCH( 'S' )
+      SAFMIN = AB_DLAMCH( 'S' )
       SAFMAX = ONE / SAFMIN
       SSFMAX = SQRT( SAFMAX ) / THREE
       SSFMIN = SQRT( SAFMIN ) / EPS2

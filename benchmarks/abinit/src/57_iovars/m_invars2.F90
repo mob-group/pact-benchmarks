@@ -85,8 +85,8 @@ contains
 !!  ndtset_alloc=number of datasets, corrected for allocation of at least
 !!      one data set.
 !!  npsp=number of pseudopotentials
-!!  pspheads(npsp)=<type pspheader_type>all the important information from the
-!!   pseudopotential file header, as well as the psp file name
+!!  pspheads(npsp)=<type pspAB_HEADER_type>all the important information from the
+!!   pseudopotential file AB_HEADER, as well as the psp file name
 !!  string*(*)=character string containing all the input data.
 !!   Initialized previously in instrng.
 !!
@@ -126,7 +126,7 @@ subroutine invars2m(dtsets,iout,lenstr,mband_upper_,msym,ndtset,ndtset_alloc,nps
 !arrays
  integer,intent(in) :: mband_upper_(0:ndtset_alloc)
  type(dataset_type),intent(inout) :: dtsets(0:ndtset_alloc)
- type(pspheader_type),intent(in) :: pspheads(npsp)
+ type(pspAB_HEADER_type),intent(in) :: pspheads(npsp)
 
 !Local variables -------------------------------
 !scalars
@@ -513,7 +513,7 @@ subroutine invars2(bravais,dtset,iout,jdtset,lenstr,&
  call intagm(dprarr,intarr,jdtset,marr,1,string(1:lenstr),'freqspmin',tread,'ENE')
  if(tread==1) then ! If found, set it
    dtset%freqspmin=dprarr(1)
- else ! Else give it the value -freqspmax
+ else ! ELSE give it the value -freqspmax
    dtset%freqspmin=-dtset%freqspmax
  end if
 
@@ -834,11 +834,11 @@ subroutine invars2(bravais,dtset,iout,jdtset,lenstr,&
  call intagm(dprarr,intarr,jdtset,marr,1,string(1:lenstr),'recptrott',tread,'INT')
  if(tread==1) dtset%recptrott=intarr(1)
 
- call intagm(dprarr,intarr,jdtset,marr,1,string(1:lenstr),'rectesteg',tread,'INT')
- if(tread==1) dtset%rectesteg=intarr(1)
+ call intagm(dprarr,intarr,jdtset,marr,1,string(1:lenstr),'reAB_CTESTeg',tread,'INT')
+ if(tread==1) dtset%reAB_CTESTeg=intarr(1)
 
- call intagm(dprarr,intarr,jdtset,marr,1,string(1:lenstr),'rectolden',tread,'DPR')
- if(tread==1) dtset%rectolden=dprarr(1)
+ call intagm(dprarr,intarr,jdtset,marr,1,string(1:lenstr),'rectoAB_LDEn',tread,'DPR')
+ if(tread==1) dtset%rectoAB_LDEn=dprarr(1)
 
 !Constant NPT Molecular Dynamics Input variables
  call intagm(dprarr,intarr,jdtset,marr,1,string(1:lenstr),'noseinert',tread,'DPR')
@@ -1512,8 +1512,8 @@ subroutine invars2(bravais,dtset,iout,jdtset,lenstr,&
  end if
  ixc_current=dtset%ixc
 
- call intagm(dprarr,intarr,jdtset,marr,1,string(1:lenstr),'ixcrot',tread,'INT')
- if(tread==1) dtset%ixcrot=intarr(1)
+ call intagm(dprarr,intarr,jdtset,marr,1,string(1:lenstr),'ixAB_CROT',tread,'INT')
+ if(tread==1) dtset%ixAB_CROT=intarr(1)
 
 !Read the ixc for an advanced functional
 !If present, and relevant (only specific values for gcalctyp), the other internal variable will be adjusted to this other functional)
@@ -2328,8 +2328,8 @@ subroutine invars2(bravais,dtset,iout,jdtset,lenstr,&
  call intagm(dprarr,intarr,jdtset,marr,1,string(1:lenstr),'prtkden',tread,'INT')
  if(tread==1) dtset%prtkden=intarr(1)
 
- call intagm(dprarr,intarr,jdtset,marr,1,string(1:lenstr),'prtlden',tread,'INT')
- if(tread==1) dtset%prtlden=intarr(1)
+ call intagm(dprarr,intarr,jdtset,marr,1,string(1:lenstr),'prtAB_LDEn',tread,'INT')
+ if(tread==1) dtset%prtAB_LDEn=intarr(1)
 
  call intagm(dprarr,intarr,jdtset,marr,1,string(1:lenstr),'prtnabla',tread,'INT')
  if(tread==1) dtset%prtnabla=intarr(1)
@@ -3168,7 +3168,7 @@ subroutine invars2(bravais,dtset,iout,jdtset,lenstr,&
 !  This will be checked later
    areaxy=abs(dtset%rprimd_orig(1,1,1)*dtset%rprimd_orig(2,2,1)-dtset%rprimd_orig(1,2,1)*dtset%rprimd_orig(2,1,1))
    rhoavg=three/(four_pi*dtset%slabwsrad**3)
-   nelectjell=areaxy*(dtset%slabzend-dtset%slabzbeg)*rhoavg
+   nelectjell=areaxy*(dtset%slabzend-dtset%slabAB_ZBEG)*rhoavg
    charge=charge-nelectjell
  end if
 
@@ -3218,8 +3218,8 @@ subroutine invars2(bravais,dtset,iout,jdtset,lenstr,&
  call intagm(dprarr,intarr,jdtset,marr,1,string(1:lenstr),'ddamp',tread,'DPR')
  if (tread==1) dtset%ddamp = dprarr(1)
 
- call intagm(dprarr,intarr,jdtset,marr,3,string(1:lenstr),'polcen',tread,'DPR')
- if (tread==1) dtset%polcen(1:3) = dprarr(1:3)
+ call intagm(dprarr,intarr,jdtset,marr,3,string(1:lenstr),'poAB_LCEn',tread,'DPR')
+ if (tread==1) dtset%poAB_LCEn(1:3) = dprarr(1:3)
 
  call intagm(dprarr,intarr,jdtset,marr,ntypat,string(1:lenstr),'densty',tread,'DPR')
  if(tread==1) dtset%densty(1:ntypat,1)=dprarr(1:ntypat)

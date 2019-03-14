@@ -181,8 +181,8 @@
       REAL               ANORM, ULP
 *     ..
 *     .. External Functions ..
-      REAL               CLANGE, CLANHE, SLAMCH
-      EXTERNAL           CLANGE, CLANHE, SLAMCH
+      REAL               CLANGE, CLANHE, AB_SLAMCH
+      EXTERNAL           CLANGE, CLANHE, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CHEMM, CSSCAL
@@ -193,7 +193,7 @@
       IF( N.LE.0 )
      $   RETURN
 *
-      ULP = SLAMCH( 'Epsilon' )
+      ULP = AB_SLAMCH( 'Epsilon' )
 *
 *     Compute product of 1-norms of A and Z.
 *

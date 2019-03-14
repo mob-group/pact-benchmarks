@@ -666,7 +666,7 @@ end function gw_spectral_function
 !!
 !! SOURCE
 
-subroutine print_Sigma_perturbative(Sr,ik_ibz,iband,isp,unit,prtvol,mode_paral,witheader)
+subroutine print_Sigma_perturbative(Sr,ik_ibz,iband,isp,unit,prtvol,mode_paral,witAB_HEADER)
 
 
 !This section has been created automatically by the script Abilint (TD).
@@ -682,7 +682,7 @@ subroutine print_Sigma_perturbative(Sr,ik_ibz,iband,isp,unit,prtvol,mode_paral,w
  integer,intent(in) :: iband,ik_ibz,isp
  integer,optional,intent(in) :: prtvol,unit
  character(len=*),optional,intent(in) :: mode_paral
- logical,optional,intent(in) :: witheader
+ logical,optional,intent(in) :: witAB_HEADER
  type(sigma_t),intent(in) :: Sr
 
 !Local variables-------------------------------
@@ -697,8 +697,8 @@ subroutine print_Sigma_perturbative(Sr,ik_ibz,iband,isp,unit,prtvol,mode_paral,w
  verbose=0      ; if (PRESENT(prtvol    )) verbose=prtvol
  my_mode='COLL' ; if (PRESENT(mode_paral)) my_mode=mode_paral
 
- if (PRESENT(witheader)) then
-   if (witheader) then
+ if (PRESENT(witAB_HEADER)) then
+   if (witAB_HEADER) then
      call wrtout(my_unt,' Band     E0 <VxcLDA>   SigX SigC(E0)      Z dSigC/dE  Sig(E)    E-E0       E ',my_mode)
    end if
  end if

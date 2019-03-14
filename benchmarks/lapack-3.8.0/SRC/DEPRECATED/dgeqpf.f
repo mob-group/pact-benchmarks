@@ -174,8 +174,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            AB_IDAMAX
-      DOUBLE PRECISION   DLAMCH, AB_DNRM2
-      EXTERNAL           AB_IDAMAX, DLAMCH, AB_DNRM2
+      DOUBLE PRECISION   AB_DLAMCH, AB_DNRM2
+      EXTERNAL           AB_IDAMAX, AB_DLAMCH, AB_DNRM2
 *     ..
 *     .. Executable Statements ..
 *
@@ -195,7 +195,7 @@
       END IF
 *
       MN = MIN( M, N )
-      TOL3Z = SQRT(DLAMCH('Epsilon'))
+      TOL3Z = SQRT(AB_DLAMCH('Epsilon'))
 *
 *     Move initial columns up front
 *

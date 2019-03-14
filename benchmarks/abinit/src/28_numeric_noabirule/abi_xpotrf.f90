@@ -53,13 +53,13 @@ subroutine abi_dpotrf(uplo,n,a,lda,info)
 
 #ifdef HAVE_LINALG_PLASMA
  if (XPLASMA_ISON) then
-   ! write(std_out,*) "  abi_dpotrf => PLASMA dpotrf will be called "
+   ! write(std_out,*) "  abi_dpotrf => PLASMA AB_DPOTRF will be called "
    call PLASMA_dpotrf(uplo_plasma(uplo),n,a,lda,info)
    return
  end if
 #endif
 
- call dpotrf(uplo,n,a,lda,info)
+ call AB_DPOTRF(uplo,n,a,lda,info)
 
 end subroutine abi_dpotrf
 !!***
@@ -100,9 +100,9 @@ subroutine abi_zpotrf_2d(uplo,n,a,lda,info)
 end subroutine abi_zpotrf_2d
 !!***
 
-!!****f* m_abi_linalg/abi_d2zpotrf
+!!****f* m_abi_linalg/abi_d2AB_ZPOTRF
 !! NAME
-!! abi_d2zpotrf
+!! abi_d2AB_ZPOTRF
 !!
 !! FUNCTION
 !!
@@ -112,12 +112,12 @@ end subroutine abi_zpotrf_2d
 !!
 !! SOURCE
 
-subroutine abi_d2zpotrf(uplo,n,a,lda,info,x_cplx)
+subroutine abi_d2AB_ZPOTRF(uplo,n,a,lda,info,x_cplx)
 
 !This section has been created automatically by the script Abilint (TD).
 !Do not modify the following lines by hand.
 #undef ABI_FUNC
-#define ABI_FUNC 'abi_d2zpotrf'
+#define ABI_FUNC 'abi_d2AB_ZPOTRF'
 !End of the abilint section
 
  implicit none
@@ -148,12 +148,12 @@ subroutine abi_d2zpotrf(uplo,n,a,lda,info,x_cplx)
 #endif
 
  if(cplx_ == 2) then
-    call zpotrf(uplo,n,a,lda,info)
+    call AB_ZPOTRF(uplo,n,a,lda,info)
  else
-    call dpotrf(uplo,n,a,lda,info)
+    call AB_DPOTRF(uplo,n,a,lda,info)
  end if
 
-end subroutine abi_d2zpotrf
+end subroutine abi_d2AB_ZPOTRF
 !!***
 
 !!****f* m_abi_linalg/abi_zpotrf
@@ -187,13 +187,13 @@ subroutine abi_zpotrf(uplo,n,a,lda,info)
 
 #ifdef HAVE_LINALG_PLASMA
  if (XPLASMA_ISON) then
-   ! write(*,*) "  abi_zpotrf => PLASMA zpotrf will be called "
+   ! write(*,*) "  abi_zpotrf => PLASMA AB_ZPOTRF will be called "
    call PLASMA_zpotrf(uplo_plasma(uplo),n,a,lda,info)
    return
  end if
 #endif
 
- call zpotrf(uplo,n,a,lda,info)
+ call AB_ZPOTRF(uplo,n,a,lda,info)
 
 end subroutine abi_zpotrf
 !!***

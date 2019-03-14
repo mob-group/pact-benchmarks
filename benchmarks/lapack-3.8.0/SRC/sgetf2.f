@@ -132,9 +132,9 @@
       INTEGER            I, J, JP
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
+      REAL               AB_SLAMCH
       INTEGER            AB_ISAMAX
-      EXTERNAL           SLAMCH, AB_ISAMAX
+      EXTERNAL           AB_SLAMCH, AB_ISAMAX
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_SGER, AB_SSCAL, AB_SSWAP, AB_XERBLA
@@ -166,7 +166,7 @@
 *
 *     Compute machine safe minimum
 *
-      SFMIN = SLAMCH('S')
+      SFMIN = AB_SLAMCH('S')
 *
       DO 10 J = 1, MIN( M, N )
 *

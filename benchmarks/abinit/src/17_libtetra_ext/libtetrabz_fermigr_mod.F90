@@ -21,7 +21,7 @@
 ! THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
 ! OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 ! MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-! IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+! IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOAB_LDERS BE LIABLE FOR ANY
 ! CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 ! TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 ! SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
@@ -35,7 +35,7 @@ MODULE libtetrabz_fermigr_mod
   !
 CONTAINS
 !
-! Compute Fermi's golden rule
+! Compute Fermi's goAB_LDEn rule
 !
 SUBROUTINE libtetrabz_fermigr(ltetra,bvec,nb,nge,eig1,eig2,ngw,wght,ne,e0,comm) 
   !
@@ -96,7 +96,7 @@ SUBROUTINE libtetrabz_fermigr(ltetra,bvec,nb,nge,eig1,eig2,ngw,wght,ne,e0,comm)
   !
 END SUBROUTINE libtetrabz_fermigr
 !
-! Main SUBROUTINE for Fermi's Gorlden rule : Theta(- E1) * Theta(E2) * Delta(E2 - E1 - w)
+! Main SUBROUTINE for Fermi's GorAB_LDEn rule : Theta(- E1) * Theta(E2) * Delta(E2 - E1 - w)
 !
 SUBROUTINE libtetrabz_fermigr_main(wlsm,nt_local,ik_global,ik_local,nb,nkBZ,eig1,eig2,ne,e0,nk_local,fermigr)
   !

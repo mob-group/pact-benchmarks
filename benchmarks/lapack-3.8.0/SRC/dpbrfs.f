@@ -235,8 +235,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           AB_LSAME, DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_LSAME, AB_DLAMCH
 *     ..
 *     .. Executable Statements ..
 *
@@ -279,8 +279,8 @@
 *     NZ = maximum number of nonzero elements in each row of A, plus 1
 *
       NZ = MIN( N+1, 2*KD+2 )
-      EPS = DLAMCH( 'Epsilon' )
-      SAFMIN = DLAMCH( 'Safe minimum' )
+      EPS = AB_DLAMCH( 'Epsilon' )
+      SAFMIN = AB_DLAMCH( 'Safe minimum' )
       SAFE1 = NZ*SAFMIN
       SAFE2 = SAFE1 / EPS
 *

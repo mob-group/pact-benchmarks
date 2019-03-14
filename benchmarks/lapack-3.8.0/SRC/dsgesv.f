@@ -64,7 +64,7 @@
 *>     o RNRM is the infinity-norm of the residual
 *>     o XNRM is the infinity-norm of the solution
 *>     o ANRM is the infinity-operator-norm of the matrix A
-*>     o EPS is the machine epsilon returned by DLAMCH('Epsilon')
+*>     o EPS is the machine epsilon returned by AB_DLAMCH('Epsilon')
 *> The value ITERMAX and BWDMAX are fixed to 30 and 1.0D+00
 *> respectively.
 *> \endverbatim
@@ -236,8 +236,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            AB_IDAMAX
-      DOUBLE PRECISION   DLAMCH, AB_DLANGE
-      EXTERNAL           AB_IDAMAX, DLAMCH, AB_DLANGE
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE
+      EXTERNAL           AB_IDAMAX, AB_DLAMCH, AB_DLANGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, SQRT
@@ -281,7 +281,7 @@
 *     Compute some constants.
 *
       ANRM = AB_DLANGE( 'I', N, N, A, LDA, WORK )
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       CTE = ANRM*EPS*SQRT( DBLE( N ) )*BWDMAX
 *
 *     Set the indices PTSA, PTSX for referencing SA and SX in SWORK.

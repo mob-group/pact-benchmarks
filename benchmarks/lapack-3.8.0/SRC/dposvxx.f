@@ -536,9 +536,9 @@
      $                   SCOND, SMLNUM
 *     ..
 *     .. External Functions ..
-      EXTERNAL           AB_LSAME, DLAMCH, AB_DLA_PORPVGRW
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_DLA_PORPVGRW
       LOGICAL            AB_LSAME
-      DOUBLE PRECISION   DLAMCH, AB_DLA_PORPVGRW
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLA_PORPVGRW
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_DPOEQUB, AB_DPOTRF, AB_DPOTRS, AB_DLACPY, AB
@@ -553,7 +553,7 @@
       INFO = 0
       NOFACT = AB_LSAME( FACT, 'N' )
       EQUIL = AB_LSAME( FACT, 'E' )
-      SMLNUM = DLAMCH( 'Safe minimum' )
+      SMLNUM = AB_DLAMCH( 'Safe minimum' )
       BIGNUM = ONE / SMLNUM
       IF( NOFACT .OR. EQUIL ) THEN
          EQUED = 'N'

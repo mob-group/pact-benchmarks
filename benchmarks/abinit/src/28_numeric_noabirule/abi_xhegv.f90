@@ -129,7 +129,7 @@
  !  In Plasma v 2.4.6, eigen routines support only
  !the eigenvalues computation (jobz=N) and not the
  !full eigenvectors bases determination (jobz=V)
- if (LSAME(jobz,'N')) then
+ if (AB_LSAME(jobz,'N')) then
     jobz_plasma_a = jobz_plasma(jobz)
 
     MSG_ERROR("This code is broken")
@@ -151,9 +151,9 @@
  else
 #endif
  if ( cplx_ == 2 .and. present(rwork)) then
-    call zhegv(itype,jobz,uplo,n,a,lda,b,ldb,w,work,lwork/2,rwork,info)
+    call AB_ZHEGV(itype,jobz,uplo,n,a,lda,b,ldb,w,work,lwork/2,rwork,info)
  else
-    call dsygv(itype,jobz,uplo,n,a,lda,b,ldb,w,work,lwork,info)
+    call AB_DSYGV(itype,jobz,uplo,n,a,lda,b,ldb,w,work,lwork,info)
  endif
 #ifdef HAVE_LINALG_PLASMA
  end if
@@ -272,7 +272,7 @@ subroutine abi_chegv(itype,jobz,uplo,n,a,lda,b,ldb,w,work,lwork,rwork,info)
  !  In Plasma v 2.4.6, eigen routines support only
  !the eigenvalues computation (jobz=N) and not the
  !full eigenvectors bases determination (jobz=V)
- if (LSAME(jobz,'N')) then
+ if (AB_LSAME(jobz,'N')) then
     jobz_plasma_a = jobz_plasma(jobz)
 
     call PLASMA_Alloc_Workspace_chegv(n,n,plasma_work,info)
@@ -283,7 +283,7 @@ subroutine abi_chegv(itype,jobz,uplo,n,a,lda,b,ldb,w,work,lwork,rwork,info)
     call PLASMA_Dealloc_handle(plasma_work,info)
  else
 #endif
-   call chegv(itype,jobz,uplo,n,a,lda,b,ldb,w,work,lwork,rwork,info)
+   call AB_CHEGV(itype,jobz,uplo,n,a,lda,b,ldb,w,work,lwork,rwork,info)
 #ifdef HAVE_LINALG_PLASMA
  end if
 #endif
@@ -383,7 +383,7 @@ subroutine abi_zhegv(itype,jobz,uplo,n,a,lda,b,ldb,w,work,lwork,rwork,info)
  !  In Plasma v 2.4.6, eigen routines support only
  !the eigenvalues computation (jobz=N) and not the
  !full eigenvectors bases determination (jobz=V)
- if (LSAME(jobz,'N')) then
+ if (AB_LSAME(jobz,'N')) then
     jobz_plasma_a = jobz_plasma(jobz)
 
     call PLASMA_Alloc_Workspace_zhegv(n,n,plasma_work,info)
@@ -394,7 +394,7 @@ subroutine abi_zhegv(itype,jobz,uplo,n,a,lda,b,ldb,w,work,lwork,rwork,info)
     call PLASMA_Dealloc_handle(plasma_work,info)
  else
 #endif
-   call zhegv(itype,jobz,uplo,n,a,lda,b,ldb,w,work,lwork,rwork,info)
+   call AB_ZHEGV(itype,jobz,uplo,n,a,lda,b,ldb,w,work,lwork,rwork,info)
 #ifdef HAVE_LINALG_PLASMA
  end if
 #endif

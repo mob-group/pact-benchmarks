@@ -73,8 +73,8 @@ contains
 !!
 !! INPUTS
 !!  dtset <type(dataset_type)>=input variables.
-!!  hdr0 <type(hdr_type)>=the header of wf, den and pot files (read from restart)
-!!  hdr <type(hdr_type)>=the header of wf, den and pot files
+!!  hdr0 <type(hdr_type)>=the AB_HEADER of wf, den and pot files (read from restart)
+!!  hdr <type(hdr_type)>=the AB_HEADER of wf, den and pot files
 !!  mpi_enreg=informations about MPI parallelization
 !!  option=1 for reading a file following ABINIT format, -1 for a BigDFT format.
 !!  rprimd(3,3)=dimensional primitive translations in real space (bohr)
@@ -446,8 +446,8 @@ end subroutine wvl_wfsinp_reformat
 !!
 !! INPUTS
 !!  dtset <type(dataset_type)>=input variables.
-!!  hdr0 <type(hdr_type)>=the header of wf, den and pot files (read from restart)
-!!  hdr <type(hdr_type)>=the header of wf, den and pot files
+!!  hdr0 <type(hdr_type)>=the AB_HEADER of wf, den and pot files (read from restart)
+!!  hdr <type(hdr_type)>=the AB_HEADER of wf, den and pot files
 !!  ireadwf=1 for reading from file, 0 otherwise.
 !!  mpi_enreg=informations about MPI parallelization
 !!  option=1 for reading a file following ABINIT format, -1 for a BigDFT format.

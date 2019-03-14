@@ -19,7 +19,7 @@
 !! virtually all the variables used in a (well-written) FORTRAN 90 code
 !! the content of this file is derived from 'Numerical Recipes in Fortran 90'
 !! W.H. Press et al., volume 2 of 'Fortran Numerical Recipes', Cambridge
-!! University Press, Second Edition (1996), p. 937 and 1361
+!! University Press, second Edition (1996), p. 937 and 1361
 !!
 !! SOURCE
 
@@ -142,9 +142,9 @@ module defs_basis
  real(dp), parameter :: three_quarters=0.75_dp
  real(dp), parameter :: three_fifth=three/five
 
-!Real constants related to the golden number
+!Real constants related to the goAB_LDEn number
  real(dp), parameter :: gold=1.618033988749894848204586834365638117720309179_dp
- real(dp), parameter :: goldenratio=two-gold
+ real(dp), parameter :: goAB_LDEnratio=two-gold
 
 !Real constants derived from pi
  real(dp), parameter :: pi=3.141592653589793238462643383279502884197_dp

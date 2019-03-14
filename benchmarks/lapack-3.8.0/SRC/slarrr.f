@@ -122,8 +122,8 @@
 
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS
@@ -140,8 +140,8 @@
 *     As a default, do NOT go for relative-accuracy preserving computations.
       INFO = 1
 
-      SAFMIN = SLAMCH( 'Safe minimum' )
-      EPS = SLAMCH( 'Precision' )
+      SAFMIN = AB_SLAMCH( 'Safe minimum' )
+      EPS = AB_SLAMCH( 'Precision' )
       SMLNUM = SAFMIN / EPS
       RMIN = SQRT( SMLNUM )
 

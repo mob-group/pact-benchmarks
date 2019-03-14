@@ -263,7 +263,7 @@ module m_sigmaph
    ! vals(ntemp, max_nbcalc, natom*3, nqbz, 2)
    ! (nu, q)-resolved self-energy for given (k, spin)
    ! First slice: Fan term at omega=e0_KS
-   ! Second slice: DW term
+   ! second slice: DW term
 
   type(degtab_t),allocatable :: degtab(:,:)
    ! (nkcalc, nsppol)
@@ -444,19 +444,19 @@ subroutine sigmaph(wfk0_path,dtfil,ngfft,ngfftf,dtset,cryst,ebands,dvdb,ifc,&
  ABI_MALLOC(nband, (nkpt, nsppol))
  ABI_MALLOC(bks_mask,(mband, nkpt, nsppol))
  ABI_MALLOC(keep_ur,(mband, nkpt ,nsppol))
- nband=mband; bks_mask=.True.; keep_ur=.False.
+ nband=mband; bks_mask=.True.; keep_ur=.false.
 
  call wfd_init(wfd,cryst,pawtab,psps,keep_ur,dtset%paral_kgb,dummy_npw,mband,nband,nkpt,nsppol,bks_mask,&
    nspden,nspinor,dtset%ecutsm,dtset%dilatmx,ebands%istwfk,ebands%kptns,ngfft,&
    dummy_gvec,dtset%nloalg,dtset%prtvol,dtset%pawprtvol,comm,opt_ecut=ecut)
 
- call wfd_print(wfd,header="Wavefunctions for self-energy calculation.",mode_paral='PERS')
+ call wfd_print(wfd,AB_HEADER="Wavefunctions for self-energy calculation.",mode_paral='PERS')
  ABI_FREE(nband)
  ABI_FREE(bks_mask)
  ABI_FREE(keep_ur)
 
  call wfd_read_wfk(wfd, wfk0_path, iomode_from_fname(wfk0_path))
- if (.False.) call wfd_test_ortho(wfd, cryst, pawtab, unit=std_out, mode_paral="PERS")
+ if (.false.) call wfd_test_ortho(wfd, cryst, pawtab, unit=std_out, mode_paral="PERS")
 
  ! TODO FOR PAW
  usecprj = 0
@@ -658,7 +658,7 @@ subroutine sigmaph(wfk0_path,dtfil,ngfft,ngfftf,dtset,cryst,ebands,dvdb,ifc,&
        !
        kq = kk + qpt
        call listkk(dksqmax,cryst%gmet,indkk_kq,ebands%kptns,kq,ebands%nkpt,1,cryst%nsym,&
-         1,cryst%symafm,cryst%symrel,sigma%timrev,use_symrec=.False.)
+         1,cryst%symafm,cryst%symrel,sigma%timrev,use_symrec=.false.)
 
        if (dksqmax > tol12) then
          write(msg, '(3a,es16.6,7a)' )&
@@ -1073,7 +1073,7 @@ subroutine sigmaph(wfk0_path,dtfil,ngfft,ngfftf,dtset,cryst,ebands,dvdb,ifc,&
          ! gdw2_mn = diag(conjg(H) T H) / (2 w(qu,nu))
          ! tpp(natom3, natom3), hka_mn(natom3, nbsum, nbcalc_ks)
          ABI_MALLOC(wmat1, (natom3, nbsum, nbcalc_ks))
-         call zgemm("N", "N", natom3, nbsum*nbcalc_ks, natom3, cone, tpp, natom3, hka_mn, natom3, czero, wmat1, natom3)
+         call AB_ZGEMM("N", "N", natom3, nbsum*nbcalc_ks, natom3, cone, tpp, natom3, hka_mn, natom3, czero, wmat1, natom3)
 
          do ibsum=1,nbsum
            do ib_k=1,nbcalc_ks
@@ -1630,7 +1630,7 @@ type (sigmaph_t) function sigmaph_new(dtset, ecut, cryst, ebands, ifc, dtfil, co
      do spin=1,new%nsppol
        do ifo=1,3
          ik = gaps%fo_kpos(ifo, spin)
-         found = .False.; jj = 0
+         found = .false.; jj = 0
          do while (.not. found .and. jj < nk_found)
            jj = jj + 1; found = (kpos(jj) == ik)
          end do
@@ -1669,7 +1669,7 @@ type (sigmaph_t) function sigmaph_new(dtset, ecut, cryst, ebands, ifc, dtfil, co
  do ikcalc=1,new%nkcalc
    kk = new%kcalc(:,ikcalc)
    call listkk(dksqmax,cryst%gmet,indkk_k,ebands%kptns,kk,ebands%nkpt,1,cryst%nsym,&
-      1,cryst%symafm,cryst%symrel,new%timrev,use_symrec=.False.)
+      1,cryst%symafm,cryst%symrel,new%timrev,use_symrec=.false.)
 
    new%kcalc2ibz(ikcalc, :) = indkk_k(1, :)
 
@@ -1780,7 +1780,7 @@ type (sigmaph_t) function sigmaph_new(dtset, ecut, cryst, ebands, ifc, dtfil, co
    ABI_MALLOC(new%gfw_vals, (new%gfw_nomega, new%ntemp, 2, new%max_nbcalc))
  end if
 
- new%has_nuq_terms = .False.
+ new%has_nuq_terms = .false.
  if (new%has_nuq_terms) then
    ABI_CALLOC(new%vals_nuq, (new%ntemp, new%max_nbcalc, 3*cryst%natom, new%nqbz, 2))
  end if

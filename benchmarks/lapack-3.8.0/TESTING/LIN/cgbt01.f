@@ -152,8 +152,8 @@
       COMPLEX            T
 *     ..
 *     .. External Functions ..
-      REAL               SCASUM, SLAMCH
-      EXTERNAL           SCASUM, SLAMCH
+      REAL               SCASUM, AB_SLAMCH
+      EXTERNAL           SCASUM, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CAXPY, CCOPY
@@ -171,7 +171,7 @@
 *
 *     Determine EPS and the norm of A.
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       KD = KU + 1
       ANORM = ZERO
       DO 10 J = 1, N

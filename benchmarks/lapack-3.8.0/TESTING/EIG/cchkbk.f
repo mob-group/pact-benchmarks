@@ -83,8 +83,8 @@
       COMPLEX            E( LDE, LDE ), EIN( LDE, LDE )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGEBAK
@@ -105,8 +105,8 @@
       NINFO = 0
       KNT = 0
       RMAX = ZERO
-      EPS = SLAMCH( 'E' )
-      SAFMIN = SLAMCH( 'S' )
+      EPS = AB_SLAMCH( 'E' )
+      SAFMIN = AB_SLAMCH( 'S' )
 *
    10 CONTINUE
 *

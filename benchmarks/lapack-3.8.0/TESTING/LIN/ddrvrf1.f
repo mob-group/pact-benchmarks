@@ -128,8 +128,8 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLANSY, DLANSF, DLARND
-      EXTERNAL           DLAMCH, DLANSY, DLANSF, DLARND
+      DOUBLE PRECISION   AB_DLAMCH, DLANSY, DLANSF, DLARND
+      EXTERNAL           AB_DLAMCH, DLANSY, DLANSF, DLARND
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DTRTTF
@@ -158,8 +158,8 @@
          ISEED( I ) = ISEEDY( I )
    10 CONTINUE
 *
-      EPS = DLAMCH( 'Precision' )
-      SMALL = DLAMCH( 'Safe minimum' )
+      EPS = AB_DLAMCH( 'Precision' )
+      SMALL = AB_DLAMCH( 'Safe minimum' )
       LARGE = ONE / SMALL
       SMALL = SMALL * LDA * LDA
       LARGE = LARGE / LDA / LDA

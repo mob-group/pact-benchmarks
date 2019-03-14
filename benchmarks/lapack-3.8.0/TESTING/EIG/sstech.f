@@ -125,8 +125,8 @@
       REAL               EMIN, EPS, LOWER, MX, TUPPR, UNFLEP, UPPER
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SSTECT
@@ -152,8 +152,8 @@
 *
 *     Get machine constants
 *
-      EPS = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
-      UNFLEP = SLAMCH( 'Safe minimum' ) / EPS
+      EPS = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
+      UNFLEP = AB_SLAMCH( 'Safe minimum' ) / EPS
       EPS = TOL*EPS
 *
 *     Compute maximum absolute eigenvalue, error tolerance

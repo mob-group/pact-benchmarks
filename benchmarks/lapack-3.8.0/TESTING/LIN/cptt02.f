@@ -141,8 +141,8 @@
       REAL               ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      REAL               CLANHT, SCASUM, SLAMCH
-      EXTERNAL           CLANHT, SCASUM, SLAMCH
+      REAL               CLANHT, SCASUM, AB_SLAMCH
+      EXTERNAL           CLANHT, SCASUM, AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -165,7 +165,7 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN

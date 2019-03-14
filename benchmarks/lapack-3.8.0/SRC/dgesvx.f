@@ -382,8 +382,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME
-      DOUBLE PRECISION   DLAMCH, AB_DLANGE, AB_DLANTR
-      EXTERNAL           AB_LSAME, DLAMCH, AB_DLANGE, AB_DLANTR
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE, AB_DLANTR
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_DLANGE, AB_DLANTR
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_DGECON, AB_DGEEQU, AB_DGERFS, AB_DGETRF, AB_
@@ -406,7 +406,7 @@
       ELSE
          ROWEQU = AB_LSAME( EQUED, 'R' ) .OR. AB_LSAME( EQUED, 'B' )
          COLEQU = AB_LSAME( EQUED, 'C' ) .OR. AB_LSAME( EQUED, 'B' )
-         SMLNUM = DLAMCH( 'Safe minimum' )
+         SMLNUM = AB_DLAMCH( 'Safe minimum' )
          BIGNUM = ONE / SMLNUM
       END IF
 *
@@ -598,7 +598,7 @@
 *
 *     Set INFO = N+1 if the matrix is singular to working precision.
 *
-      IF( RCOND.LT.DLAMCH( 'Epsilon' ) )
+      IF( RCOND.LT.AB_DLAMCH( 'Epsilon' ) )
      $   INFO = N + 1
       RETURN
 *

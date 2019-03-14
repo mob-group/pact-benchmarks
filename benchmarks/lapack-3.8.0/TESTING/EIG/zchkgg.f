@@ -557,9 +557,9 @@
       COMPLEX*16         CDUMMA( 4 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, ZLANGE
+      DOUBLE PRECISION   AB_DLAMCH, ZLANGE
       COMPLEX*16         ZLARND
-      EXTERNAL           DLAMCH, ZLANGE, ZLARND
+      EXTERNAL           AB_DLAMCH, ZLANGE, ZLARND
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DLABAD, DLASUM, XERBLA, ZGEQR2, ZGET51, ZGET52,
@@ -638,8 +638,8 @@
       IF( NSIZES.EQ.0 .OR. NTYPES.EQ.0 )
      $   RETURN
 *
-      SAFMIN = DLAMCH( 'Safe minimum' )
-      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
+      SAFMIN = AB_DLAMCH( 'Safe minimum' )
+      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
       SAFMIN = SAFMIN / ULP
       SAFMAX = ONE / SAFMIN
       CALL DLABAD( SAFMIN, SAFMAX )

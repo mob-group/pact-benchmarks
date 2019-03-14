@@ -58,7 +58,7 @@ module m_afterscfloop
  use m_paw_nhat,         only : nhatgrid,wvl_nhatgrid
  use m_paw_occupancies,  only : pawmkrhoij
  use m_paw_correlations, only : setnoccmmp
- use m_orbmag,           only : chern_number,orbmag,orbmag_type
+ use m_orbmag,           only : AB_CHERn_number,orbmag,orbmag_type
  use m_fock,             only : fock_type
  use m_kg,               only : getph
  use m_spin_current,     only : spin_current
@@ -125,7 +125,7 @@ contains
 !!  grvdw(3,ngrvdw)=gradients of energy due to Van der Waals DFT-D2 dispersion (hartree)
 !!  gsqcut=cutoff value on G**2 for (large) sphere inside FFT box.
 !!                       gsqcut=(boxcut**2)*dtset%ecut/(2._dp*(Pi**2)
-!!  hdr <type(hdr_type)>=the header of wf, den and pot files
+!!  hdr <type(hdr_type)>=the AB_HEADER of wf, den and pot files
 !!  indsym(4,nsym,natom)=index showing transformation of atom labels
 !!                       under symmetry operations (computed in symatm)
 !!  irrzon(nfft**(1-1/nsym),2,(nspden/nsppol)-3*(nspden/4))=irreducible zone data
@@ -269,7 +269,7 @@ contains
 !!      scfcv
 !!
 !! CHILDREN
-!!      applyprojectorsonthefly,chern_number,denspot_free_history
+!!      applyprojectorsonthefly,AB_CHERn_number,denspot_free_history
 !!      eigensystem_info,elpolariz,energies_copy,exchange_electronpositron
 !!      forstr,getph,hdr_update,kswfn_free_scf_data,last_orthon,metric,mkrho
 !!      nhatgrid,nonlop_test,pawcprj_getdim,pawmkrho,pawmkrhoij,prtposcar
@@ -543,7 +543,7 @@ subroutine afterscfloop(atindx,atindx1,cg,computed_forces,cprj,cpus,&
 ! Orbital magnetization calculations
 !----------------------------------------------------------------------
  if(dtset%orbmag==1 .OR. dtset%orbmag==3) then
-    call chern_number(atindx1,cg,cprj,dtset,dtorbmag,gmet,gprimd,kg,&
+    call AB_CHERn_number(atindx1,cg,cprj,dtset,dtorbmag,gmet,gprimd,kg,&
          &            mcg,size(cprj,2),mpi_enreg,npwarr,pawang,pawrad,pawtab,pwind,pwind_alloc,&
          &            symrec,usecprj,psps%usepaw,xred)
  end if
@@ -561,20 +561,20 @@ subroutine afterscfloop(atindx,atindx1,cg,computed_forces,cprj,cpus,&
 !----------------------------------------------------------------------
 
 !We use routine xcden which get gradient of rhor (grhor), and eventually laplacian of rhor (lrhor).
- if(dtset%prtgden/=0 .or. dtset%prtlden/=0)then
+ if(dtset%prtgden/=0 .or. dtset%prtAB_LDEn/=0)then
 
 !  Compute gradient of the electron density
    ngrad=2
    cplex=1
    ishift=0
    ABI_ALLOCATE(rhonow,(nfftf,dtset%nspden,ngrad*ngrad))
-   if(dtset%prtlden/=0)then
+   if(dtset%prtAB_LDEn/=0)then
      nullify(lrhor)
      ABI_ALLOCATE(lrhor,(nfftf,dtset%nspden))
    end if
    write(message,'(a,a)') ch10, " Compute gradient of the electron density"
    call wrtout(ab_out,message,'COLL')
-   if(dtset%prtlden/=0) then
+   if(dtset%prtAB_LDEn/=0) then
      write(message,'(a)') " and also Compute Laplacian of the electron density"
      call wrtout(ab_out,message,'COLL')
    end if
@@ -583,7 +583,7 @@ subroutine afterscfloop(atindx,atindx1,cg,computed_forces,cprj,cpus,&
 
    ABI_ALLOCATE(qphon,(3))
    qphon(:)=zero
-   if(dtset%prtlden/=0) then
+   if(dtset%prtAB_LDEn/=0) then
      call xcden (cplex,gprimd,ishift,mpi_enreg,nfftf,ngfftf,ngrad,dtset%nspden,dtset%paral_kgb,qphon,rhor,rhonow,lrhonow=lrhor)
    else
      call xcden (cplex,gprimd,ishift,mpi_enreg,nfftf,ngfftf,ngrad,dtset%nspden,dtset%paral_kgb,qphon,rhor,rhonow)
@@ -624,7 +624,7 @@ subroutine afterscfloop(atindx,atindx1,cg,computed_forces,cprj,cpus,&
      call wrtout(ab_out,message,'COLL')
    end if
 
-   if(dtset%prtlden/=0) then
+   if(dtset%prtAB_LDEn/=0) then
 !    Print result for lrhor
      write(message,'(a,a)') ch10, " Result for Laplacian of the electron density :"
      call wrtout(ab_out,message,'COLL')
@@ -708,7 +708,7 @@ subroutine afterscfloop(atindx,atindx1,cg,computed_forces,cprj,cpus,&
 !      MSG_ERROR(message)
      end if
 
-     if((dtset%prtgden==0) .and. (dtset%prtlden==0)) then
+     if((dtset%prtgden==0) .and. (dtset%prtAB_LDEn==0)) then
 !      Compute gradient of the electron density
        ishift=0
        ABI_ALLOCATE(rhonow,(nfftf,dtset%nspden,ngrad*ngrad))
@@ -986,7 +986,7 @@ subroutine afterscfloop(atindx,atindx1,cg,computed_forces,cprj,cpus,&
 &   comm_atom=mpi_enreg%comm_atom,mpi_atmtab=mpi_enreg%my_atmtab)
  end if
 
-!Update the content of the header (evolving variables)
+!Update the content of the AB_HEADER (evolving variables)
  bantot=hdr%bantot
  if (dtset%positron==0) then
    call hdr_update(hdr,bantot,etotal,energies%e_fermie,residm,rprimd,occ,&

@@ -192,8 +192,8 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SQPT01, SQRT11, SQRT12
-      EXTERNAL           SLAMCH, SQPT01, SQRT11, SQRT12
+      REAL               AB_SLAMCH, SQPT01, SQRT11, SQRT12
+      EXTERNAL           AB_SLAMCH, SQPT01, SQRT11, SQRT12
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAHD, ALASUM, ICOPY, SGEQP3, SLACPY, SLAORD,
@@ -226,7 +226,7 @@
       DO 10 I = 1, 4
          ISEED( I ) = ISEEDY( I )
    10 CONTINUE
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       INFOT = 0
 *
       DO 90 IM = 1, NM

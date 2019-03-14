@@ -1741,7 +1741,7 @@ subroutine wfd_copy_cg(wfd,band,ik_ibz,spin,cg)
 
  siz = wfd%npwarr(ik_ibz) * wfd%nspinor
 #ifdef HAVE_GW_DPC
- call zcopy(siz, wfd%wave(band,ik_ibz,spin)%ug, 1, cg, 1)
+ call AB_ZCOPY(siz, wfd%wave(band,ik_ibz,spin)%ug, 1, cg, 1)
 #else
  cg(1,1:siz) = dble(wfd%wave(band,ik_ibz,spin)%ug)
  cg(2,1:siz) = aimag(wfd%wave(band,ik_ibz,spin)%ug)
@@ -1903,7 +1903,7 @@ end subroutine wfd_nullify
 !!
 !! INPUTS
 !!  Wfd<wfd_t>=The datatype.
-!!  [header]=String to be printed as header for additional info.
+!!  [AB_HEADER]=String to be printed as AB_HEADER for additional info.
 !!  [unit]=Unit number for output
 !!  [prtvol]=Verbosity level
 !!  [mode_paral]=Either "COLL" or "PERS". Defaults to "COLL".
@@ -1923,7 +1923,7 @@ end subroutine wfd_nullify
 !!
 !! SOURCE
 
-subroutine wfd_print(Wfd,header,unit,prtvol,mode_paral)
+subroutine wfd_print(Wfd,AB_HEADER,unit,prtvol,mode_paral)
 
 
 !This section has been created automatically by the script Abilint (TD).
@@ -1937,7 +1937,7 @@ subroutine wfd_print(Wfd,header,unit,prtvol,mode_paral)
 !Arguments ------------------------------------
  integer,optional,intent(in) :: unit,prtvol
  character(len=4),optional,intent(in) :: mode_paral
- character(len=*),optional,intent(in) :: header
+ character(len=*),optional,intent(in) :: AB_HEADER
  type(wfd_t),intent(in) :: Wfd
 
 !Local variables-------------------------------
@@ -1953,7 +1953,7 @@ subroutine wfd_print(Wfd,header,unit,prtvol,mode_paral)
  my_mode  ='COLL' ; if (PRESENT(mode_paral)) my_mode  =mode_paral
 
  msg=' ==== Info on the Wfd% object ==== '
- if (PRESENT(header)) msg=' ==== '//TRIM(ADJUSTL(header))//' ==== '
+ if (PRESENT(AB_HEADER)) msg=' ==== '//TRIM(ADJUSTL(AB_HEADER))//' ==== '
  call wrtout(my_unt,msg,my_mode)
 
  write(msg,'(3(a,i0,a),a,i0,2a,f5.1)')&
@@ -3099,7 +3099,7 @@ end function wfd_ihave_cprj
 !!   nproc_spin=Number of MPI nodes in comm_spin
 !!
 !! NOTES
-!!   Output variables are undefined if the function returns False.
+!!   Output variables are undefined if the function returns false.
 !!
 !! PARENTS
 !!
@@ -3125,7 +3125,7 @@ function wfd_itreat_spin(Wfd,spin,comm_spin,rank_spin,nproc_spin) result(ans)
 
 !************************************************************************
  comm_spin = Wfd%bks_comm(0,0,spin)
- ans = .False.; rank_spin = xmpi_undefined_rank; nproc_spin = -1
+ ans = .false.; rank_spin = xmpi_undefined_rank; nproc_spin = -1
 
  if (comm_spin /= xmpi_comm_null) then
    ans = .True.; rank_spin = xmpi_comm_rank(comm_spin); nproc_spin = xmpi_comm_size(comm_spin)
@@ -5687,8 +5687,8 @@ subroutine wfd_write_wfk(Wfd,Hdr,Bands,wfk_fname)
    MSG_ERROR("You need MPI-IO to write wavefunctions in parallel")
  end if
  !
- ! Check consistency between Wfd and Header!
- ! The ideal approach would be to generate the header from the Wfd but a lot of info are missing
+ ! Check consistency between Wfd and AB_HEADER!
+ ! The ideal approach would be to generate the AB_HEADER from the Wfd but a lot of info are missing
  ABI_CHECK(Wfd%nkibz == Hdr%nkpt,"Different number of k-points")
  ABI_CHECK(Wfd%nsppol == Hdr%nsppol,"Different number of spins")
  ABI_CHECK(Wfd%nspinor == Hdr%nspinor,"Different number of spinors")
@@ -5729,7 +5729,7 @@ subroutine wfd_write_wfk(Wfd,Hdr,Bands,wfk_fname)
 
  call cwtime(cpu,wall,gflops,"start")
 
- ! Master node opens the file and writes the Abinit header.
+ ! Master node opens the file and writes the Abinit AB_HEADER.
  if (iam_master) then
    call wfk_open_write(WfkFile,Hdr,wfk_fname,formeig0,iomode,get_unit(),xmpi_comm_self,write_hdr=.TRUE.,write_frm=.FALSE.)
  end if
@@ -5888,7 +5888,7 @@ subroutine wfd_read_wfk(Wfd,wfk_fname,iomode)
  call wfk_open_read(Wfk,wfk_fname,formeig0,iomode,wfk_unt,Wfd%comm,Hdr_out=Hdr)
 
  ! TODO: Perform consistency check btw Hdr and Wfd.
- ! Output the header of the GS wavefunction file.
+ ! Output the AB_HEADER of the GS wavefunction file.
  if (Wfd%prtvol>0) call hdr_echo(hdr, fform, 4, unit=std_out)
 
  mband_disk = MAXVAL(Hdr%nband)
@@ -6102,7 +6102,7 @@ end subroutine wfd_read_wfk
 !!
 !! FUNCTION
 !!  This routine opens the specified WFK file, initializes the wavefunction descriptor with the
-!!  values reported in the header and reads the wavefunctions from file. The API is very simple
+!!  values reported in the AB_HEADER and reads the wavefunctions from file. The API is very simple
 !!  and it does not allow the user to specify how the wavefunctions should be MPI distributed.
 !!  All the wavefunction are stored on each node, only the spin is distributed.
 !!
@@ -6169,13 +6169,13 @@ subroutine wfd_from_wfk(Wfd,wfk_fname,iomode,Psps,Pawtab,ngfft,nloalg,keep_ur,co
  nprocs = xmpi_comm_size(comm)
  my_rank = xmpi_comm_rank(comm)
 
- ! Read the Abinit header
+ ! Read the Abinit AB_HEADER
  call hdr_read_from_fname(Hdr,wfk_fname,fform,comm)
  if (fform==0) then
    MSG_ERROR("Received fform=0 while reading WFK file: "//trim(wfk_fname))
  end if
 
- ! Initialize the crystalline structure from the header.
+ ! Initialize the crystalline structure from the AB_HEADER.
  call crystal_from_hdr(Crystal,Hdr,timrev2)
 
  ! Initialize the wavefunction descriptor
@@ -6190,9 +6190,9 @@ subroutine wfd_from_wfk(Wfd,wfk_fname,iomode,Psps,Pawtab,ngfft,nloalg,keep_ur,co
  ! Distribute spin if nprocs > 1
  if (Hdr%nsppol == 2 .and. nprocs>1) then
    if (my_rank < nprocs/2) then
-      bks_mask(:,:,2) = .False.
+      bks_mask(:,:,2) = .false.
     else
-      bks_mask(:,:,1) = .False.
+      bks_mask(:,:,1) = .false.
     end if
  end if
 

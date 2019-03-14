@@ -182,8 +182,8 @@
       REAL               DUMMY( 1 )
 *     ..
 *     .. External Functions ..
-      REAL               CLANGE, SASUM, SCNRM2, SLAMCH, SLARND
-      EXTERNAL           CLANGE, SASUM, SCNRM2, SLAMCH, SLARND
+      REAL               CLANGE, SASUM, SCNRM2, AB_SLAMCH, SLARND
+      EXTERNAL           CLANGE, SASUM, SCNRM2, AB_SLAMCH, SLARND
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGEMM, CLARF, CLARNV, CLAROR, CLASCL, CLASET,
@@ -200,10 +200,10 @@
          RETURN
       END IF
 *
-      SMLNUM = SLAMCH( 'Safe minimum' )
+      SMLNUM = AB_SLAMCH( 'Safe minimum' )
       BIGNUM = ONE / SMLNUM
       CALL SLABAD( SMLNUM, BIGNUM )
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       SMLNUM = ( SMLNUM / EPS ) / EPS
       BIGNUM = ONE / SMLNUM
 *

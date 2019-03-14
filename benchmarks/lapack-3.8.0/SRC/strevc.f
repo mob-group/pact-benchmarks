@@ -254,8 +254,8 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_ISAMAX
-      REAL               AB_SDOT, SLAMCH
-      EXTERNAL           AB_LSAME, AB_ISAMAX, AB_SDOT, SLAMCH
+      REAL               AB_SDOT, AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_ISAMAX, AB_SDOT, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_SAXPY, AB_SCOPY, AB_SGEMV, AB_SLABAD, AB_SLA
@@ -344,10 +344,10 @@
 *
 *     Set the constants to control overflow.
 *
-      UNFL = SLAMCH( 'Safe minimum' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
       CALL AB_SLABAD( UNFL, OVFL )
-      ULP = SLAMCH( 'Precision' )
+      ULP = AB_SLAMCH( 'Precision' )
       SMLNUM = UNFL*( N / ULP )
       BIGNUM = ( ONE-ULP ) / SMLNUM
 *

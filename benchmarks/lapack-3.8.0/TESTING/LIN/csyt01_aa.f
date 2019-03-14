@@ -156,8 +156,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               SLAMCH, CLANSY
-      EXTERNAL           LSAME, SLAMCH, CLANSY
+      REAL               AB_SLAMCH, CLANSY
+      EXTERNAL           LSAME, AB_SLAMCH, CLANSY
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CLASET, CLAVSY
@@ -176,7 +176,7 @@
 *
 *     Determine EPS and the norm of A.
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       ANORM = CLANSY( '1', UPLO, N, A, LDA, RWORK )
 *
 *     Initialize C to the tridiagonal matrix T.

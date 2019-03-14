@@ -346,9 +346,9 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME
-      REAL               AB_SCNRM2, SLAMCH, AB_SLAPY2
+      REAL               AB_SCNRM2, AB_SLAMCH, AB_SLAPY2
       COMPLEX            AB_CDOTC
-      EXTERNAL           AB_LSAME, AB_SCNRM2, SLAMCH, AB_SLAPY2, AB_CDOT
+      EXTERNAL           AB_LSAME, AB_SCNRM2, AB_SLAMCH, AB_SLAPY2, AB_CDOT
      $C
 *     ..
 *     .. External Subroutines ..
@@ -430,8 +430,8 @@
 *
 *     Get machine constants
 *
-      EPS = SLAMCH( 'P' )
-      SMLNUM = SLAMCH( 'S' ) / EPS
+      EPS = AB_SLAMCH( 'P' )
+      SMLNUM = AB_SLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
       CALL AB_SLABAD( SMLNUM, BIGNUM )
       KS = 0

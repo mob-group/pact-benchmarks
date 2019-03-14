@@ -144,8 +144,8 @@
       DOUBLE PRECISION   SMIN, BASE, TMP
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_XERBLA
@@ -178,7 +178,7 @@
          RETURN
       END IF
 
-      BASE = DLAMCH( 'B' )
+      BASE = AB_DLAMCH( 'B' )
       TMP = -0.5D+0 / LOG ( BASE )
 *
 *     Find the minimum and maximum diagonal elements.

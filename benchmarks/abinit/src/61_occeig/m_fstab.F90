@@ -320,7 +320,7 @@ subroutine fstab_init(fstab, ebands, cryst, fsewin, integ_method, kptrlatt, nshi
 
  ! Compute k points from input file closest to the output file
  call listkk(dksqmax,cryst%gmet,indkk,ebands%kptns,kpt_full,ebands%nkpt,nkpt_full,cryst%nsym,&
-    sppoldbl,cryst%symafm,cryst%symrel,timrev,use_symrec=.False.)
+    sppoldbl,cryst%symafm,cryst%symrel,timrev,use_symrec=.false.)
 
  if (dksqmax > tol12) then
    write(msg, '(7a,es16.6,4a)' )&
@@ -377,7 +377,7 @@ subroutine fstab_init(fstab, ebands, cryst, fsewin, integ_method, kptrlatt, nshi
      !write(std_out,*)"eig_blow, eig_max, elow, ehigh:", &
      !  ebands%eig(blow, ik_ibz, spin), ebands%eig(nband_k, ik_ibz, spin), elow,ehigh
 
-     inwin = .False.; i1 = huge(1); i2 = -1
+     inwin = .false.; i1 = huge(1); i2 = -1
      do band=blow,nband_k
         !if (ebands%eig(band, ik_ibz, spin) > ehigh) exit
         !write(std_out,*)band, ebands%eig(band, ik_ibz, spin) >= elow, ebands%eig(band, ik_ibz, spin) <= ehigh
@@ -478,7 +478,7 @@ subroutine fstab_init(fstab, ebands, cryst, fsewin, integ_method, kptrlatt, nshi
      !write(std_out,*)"bmin, bmax for tetra: ",bmin,bmax
      ABI_CHECK(bmin /= huge(1) .and. bmax /= -huge(1), "No point on the Fermi surface!")
 
-     !call libtetrabz_dbldelta(ltetra, bvec, nb, nge, eig1, eig2, ngw, wght_bz, comm)
+     !call libtetrabz_dbAB_LDElta(ltetra, bvec, nb, nge, eig1, eig2, ngw, wght_bz, comm)
 
      do band=bmin,bmax
        ! Get the contribution of this band
@@ -686,7 +686,7 @@ end subroutine fstab_weights_ibz
 !!
 !! SOURCE
 
-subroutine fstab_print(fstab, header, unit, prtvol, mode_paral)
+subroutine fstab_print(fstab, AB_HEADER, unit, prtvol, mode_paral)
 
 
 !This section has been created automatically by the script Abilint (TD).
@@ -701,7 +701,7 @@ subroutine fstab_print(fstab, header, unit, prtvol, mode_paral)
 !scalars
  integer,optional,intent(in) :: prtvol,unit
  character(len=4),optional,intent(in) :: mode_paral
- character(len=*),optional,intent(in) :: header
+ character(len=*),optional,intent(in) :: AB_HEADER
  type(fstab_t),target,intent(in) :: fstab(:)
 
 !Local variables-------------------------------
@@ -718,7 +718,7 @@ subroutine fstab_print(fstab, header, unit, prtvol, mode_paral)
  my_mode='COLL' ; if (present(mode_paral)) my_mode = mode_paral
 
  msg=' ==== Info on the fstab% object ==== '
- if (PRESENT(header)) msg=' ==== '//TRIM(ADJUSTL(header))//' ==== '
+ if (PRESENT(AB_HEADER)) msg=' ==== '//TRIM(ADJUSTL(AB_HEADER))//' ==== '
  call wrtout(my_unt,msg,my_mode)
 
  if (fstab(1)%integ_method == 1) then

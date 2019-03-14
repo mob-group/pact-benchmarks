@@ -191,8 +191,8 @@
       EXTERNAL           AB_SLAED6, AB_SLASD5
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT
@@ -221,7 +221,7 @@
 *
 *     Compute machine epsilon
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       RHOINV = ONE / RHO
       TAU2= ZERO
 *

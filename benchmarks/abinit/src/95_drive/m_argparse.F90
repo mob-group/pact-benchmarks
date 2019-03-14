@@ -111,7 +111,7 @@ type(args_t) function args_parser() result(args)
 
 ! *************************************************************************
 
- args%exit = 0; ierr=0; verbose = .False.
+ args%exit = 0; ierr=0; verbose = .false.
 
 #ifndef HAVE_FC_COMMAND_ARGUMENT
  call wrtout(std_out,"get_command_argument is not supported by FC. Ignoring command lines options!")
@@ -325,7 +325,7 @@ pure logical function begins_with(arg, string) result(bool)
 !scalars
  character(len=*),intent(in) :: arg,string
 
- bool = .False.; if (len(arg) >= len(string)) bool = (arg(1:len(string)) == string)
+ bool = .false.; if (len(arg) >= len(string)) bool = (arg(1:len(string)) == string)
 
 end function begins_with
 !!***
@@ -368,7 +368,7 @@ logical function parse_yesno(arg, optname, default) result(bool)
  case ("=yes", "=y")
    bool = .True.
  case ("=no", "=n")
-   bool = .False.
+   bool = .false.
  case default
    write(std_out,*)"Wrong option ",trim(arg),". Will default to ",bool
    MSG_ERROR("Aborting now")

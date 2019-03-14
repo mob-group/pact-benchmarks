@@ -84,8 +84,8 @@
 *> \verbatim
 *>          SAFMIN is DOUBLE PRECISION
 *>          The smallest positive number s.t. 1/SAFMIN does not
-*>          overflow.  (This should always be DLAMCH('S') -- it is an
-*>          argument in order to avoid having to call DLAMCH frequently.)
+*>          overflow.  (This should always be AB_DLAMCH('S') -- it is an
+*>          argument in order to avoid having to call AB_DLAMCH frequently.)
 *> \endverbatim
 *>
 *> \param[out] SCALE1

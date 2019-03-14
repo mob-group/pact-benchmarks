@@ -157,8 +157,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               CLANGE, CLANHE, SLAMCH
-      EXTERNAL           LSAME, CLANGE, CLANHE, SLAMCH
+      REAL               CLANGE, CLANHE, AB_SLAMCH
+      EXTERNAL           LSAME, CLANGE, CLANHE, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CHEMM
@@ -178,7 +178,7 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0 or AINVNM = 0.
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       ANORM = CLANHE( '1', UPLO, N, A, LDA, RWORK )
       AINVNM = CLANHE( '1', UPLO, N, AINV, LDAINV, RWORK )
       IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN

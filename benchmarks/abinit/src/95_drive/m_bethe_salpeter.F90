@@ -340,7 +340,7 @@ subroutine bethe_salpeter(acell,codvsn,Dtfil,Dtset,Pawang,Pawrad,Pawtab,Psps,rpr
  call pawfgr_init(Pawfgr,Dtset,mgfftf,nfftf,ecut_eff,ecutdg_eff,ngfftc,ngfftf,&
 & gsqcutc_eff=gsqcutc_eff,gsqcutf_eff=gsqcutf_eff,gmet=gmet,k0=k0)
 
- call print_ngfft(ngfftf,header='Dense FFT mesh used for densities and potentials')
+ call print_ngfft(ngfftf,AB_HEADER='Dense FFT mesh used for densities and potentials')
  nfftf_tot=PRODUCT(ngfftf(1:3))
  !
  ! * Fake MPI_type for the sequential part.
@@ -369,7 +369,7 @@ subroutine bethe_salpeter(acell,codvsn,Dtfil,Dtset,Pawang,Pawrad,Pawtab,Psps,rpr
  nfft_osc  =nfftot_osc  !no FFT //
  mgfft_osc =MAXVAL(ngfft_osc(1:3))
 
- call print_ngfft(ngfft_osc,header='FFT mesh used for oscillator strengths')
+ call print_ngfft(ngfft_osc,AB_HEADER='FFT mesh used for oscillator strengths')
 
 !TRYING TO RECREATE AN "ABINIT ENVIRONMENT"
  KS_energies%e_corepsp=ecore/Cryst%ucvol
@@ -427,7 +427,7 @@ subroutine bethe_salpeter(acell,codvsn,Dtfil,Dtset,Pawang,Pawrad,Pawtab,Psps,rpr
    end if
    if (my_rank == master) call pawtab_print(Pawtab)
 
-   ! Get Pawrhoij from the header of the WFK file.
+   ! Get Pawrhoij from the AB_HEADER of the WFK file.
    call pawrhoij_copy(Hdr_wfk%pawrhoij,KS_Pawrhoij)
 
    ! Re-symmetrize symrhoij ===
@@ -528,7 +528,7 @@ subroutine bethe_salpeter(acell,codvsn,Dtfil,Dtset,Pawang,Pawrad,Pawtab,Psps,rpr
  ABI_FREE(nband)
  ABI_FREE(keep_ur)
 
- call wfd_print(Wfd,header="Wavefunctions used to construct the e-h basis set",mode_paral='PERS')
+ call wfd_print(Wfd,AB_HEADER="Wavefunctions used to construct the e-h basis set",mode_paral='PERS')
 
  call timab(651,2,tsec) ! bse(Init1)
  call timab(653,1,tsec) ! bse(rdkss)
@@ -536,7 +536,7 @@ subroutine bethe_salpeter(acell,codvsn,Dtfil,Dtset,Pawang,Pawrad,Pawtab,Psps,rpr
  call wfd_read_wfk(Wfd,wfk_fname,iomode_from_fname(wfk_fname))
 
  ! This test has been disabled (too expensive!)
- if (.False.) call wfd_test_ortho(Wfd,Cryst,Pawtab,unit=ab_out,mode_paral="COLL")
+ if (.false.) call wfd_test_ortho(Wfd,Cryst,Pawtab,unit=ab_out,mode_paral="COLL")
 
  call timab(653,2,tsec) ! bse(rdkss)
  call timab(655,1,tsec) ! bse(mkrho)
@@ -551,7 +551,7 @@ subroutine bethe_salpeter(acell,codvsn,Dtfil,Dtset,Pawang,Pawrad,Pawtab,Psps,rpr
    ! At present, no memory distribution, each node has the full set of states.
    ! albeit we allocate only the states that are used.
    ABI_MALLOC(bks_mask,(mband,Kmesh_dense%nibz,Dtset%nsppol))
-   bks_mask=.False.
+   bks_mask=.false.
    do spin=1,Bsp%nsppol
      bks_mask(Bsp%lomo_spin(spin):Bsp%humo_spin(spin),:,spin) = .True.
    end do
@@ -572,13 +572,13 @@ subroutine bethe_salpeter(acell,codvsn,Dtfil,Dtset,Pawang,Pawrad,Pawtab,Psps,rpr
    ABI_FREE(nband)
    ABI_FREE(keep_ur)
 
-   call wfd_print(Wfd_dense,header="Wavefunctions on the dense K-mesh used for interpolation",mode_paral='PERS')
+   call wfd_print(Wfd_dense,AB_HEADER="Wavefunctions on the dense K-mesh used for interpolation",mode_paral='PERS')
 
    iomode = iomode_from_fname(dtfil%fnameabi_wfkfine)
    call wfd_read_wfk(Wfd_dense,Dtfil%fnameabi_wfkfine,iomode)
 
    ! This test has been disabled (too expensive!)
-   if (.False.) call wfd_test_ortho(Wfd_dense,Cryst,Pawtab,unit=std_out,mode_paral="COLL")
+   if (.false.) call wfd_test_ortho(Wfd_dense,Cryst,Pawtab,unit=std_out,mode_paral="COLL")
  end if
 
  !=== Calculate the FFT index of $(R^{-1}(r-\tau))$ ===
@@ -1095,8 +1095,8 @@ end subroutine bethe_salpeter
 !! ngfft_osc(18)=Contain all needed information about the 3D FFT for the oscillator matrix elements.
 !!   See ~abinit/doc/variables/vargs.htm#ngfft
 !! Bsp<excparam>=Basic parameters defining the Bethe-Salpeter run. Completely initialed in output.
-!! Hdr_wfk<Hdr_type>=The header of the WFK file.
-!! Hdr_bse<Hdr_type>=Local header initialized from the parameters used for the Bethe-Salpeter calculation.
+!! Hdr_wfk<Hdr_type>=The AB_HEADER of the WFK file.
+!! Hdr_bse<Hdr_type>=Local AB_HEADER initialized from the parameters used for the Bethe-Salpeter calculation.
 !! BS_files<excfiles>=Files used in the calculation.
 !! w_file=File name used to construct W. Set to ABI_NOFILE if no external file is used.
 !!
@@ -1204,7 +1204,7 @@ subroutine setup_bse(codvsn,acell,rprim,ngfftf,ngfft_osc,Dtset,Dtfil,BS_files,Ps
  call mkrdim(acell,rprim,rprimd)
  call metric(gmet,gprimd,-1,rmet,rprimd,ucvol)
 
- ! Read energies and header from the WFK file.
+ ! Read energies and AB_HEADER from the WFK file.
  wfk_fname = dtfil%fnamewffk
  if (.not. file_exists(wfk_fname)) then
    wfk_fname = nctk_ncify(wfk_fname)
@@ -1218,7 +1218,7 @@ subroutine setup_bse(codvsn,acell,rprim,ngfftf,ngfft_osc,Dtset,Dtfil,BS_files,Ps
 
  ! === Create crystal_t data type ===
  !remove_inv= .FALSE. !(nsym_kss/=Hdr_wfk%nsym)
- timrev=  2 ! This information is not reported in the header
+ timrev=  2 ! This information is not reported in the AB_HEADER
             ! 1 => do not use time-reversal symmetry
             ! 2 => take advantage of time-reversal symmetry
 
@@ -1260,7 +1260,7 @@ subroutine setup_bse(codvsn,acell,rprim,ngfftf,ngfft_osc,Dtset,Dtfil,BS_files,Ps
      call wrtout(std_out,sjoin('Testing file: ', w_fname),"COLL")
 
      call hscr_from_file(hscr,w_fname,fform,xmpi_comm_self)
-     ! Echo the header.
+     ! Echo the AB_HEADER.
      if (Dtset%prtvol>0) call hscr_print(Hscr)
 
      npwe_file = Hscr%npwe ! Have to change %npweps if it was larger than dim on disk.
@@ -1313,7 +1313,7 @@ subroutine setup_bse(codvsn,acell,rprim,ngfftf,ngfft_osc,Dtset,Dtfil,BS_files,Ps
    ABI_MALLOC(qlwl,(3,nqlwl))
    qlwl(:,nqlwl)= GW_Q0_DEFAULT
    write(msg,'(3a,i2,a,3f9.6)')&
-&    "The Header of the screening file does not contain the list of q-point for the optical limit ",ch10,&
+&    "The AB_HEADER of the screening file does not contain the list of q-point for the optical limit ",ch10,&
 &    "Using nqlwl= ",nqlwl," and qlwl = ",qlwl(:,1)
    MSG_COMMENT(msg)
  end if
@@ -1634,7 +1634,7 @@ subroutine setup_bse(codvsn,acell,rprim,ngfftf,ngfft_osc,Dtset,Dtfil,BS_files,Ps
 
  call ebands_print(KS_BSt,"Band structure read from the WFK file",unit=std_out,prtvol=Dtset%prtvol)
 
- call ebands_report_gap(KS_BSt,header=" KS band structure",unit=std_out,mode_paral="COLL")
+ call ebands_report_gap(KS_BSt,AB_HEADER=" KS band structure",unit=std_out,mode_paral="COLL")
 
  ABI_MALLOC(val_indeces,(KS_BSt%nkpt,KS_BSt%nsppol))
  val_indeces = get_valence_idx(KS_BSt)
@@ -1650,10 +1650,10 @@ subroutine setup_bse(codvsn,acell,rprim,ngfftf,ngfft_osc,Dtset,Dtfil,BS_files,Ps
 
  ABI_FREE(val_indeces)
  !
- ! === Create the BSE header ===
+ ! === Create the BSE AB_HEADER ===
  call hdr_init(KS_BSt,codvsn,Dtset,Hdr_bse,Pawtab,pertcase0,Psps,wvl)
 
- ! === Get Pawrhoij from the header of the WFK file ===
+ ! === Get Pawrhoij from the AB_HEADER of the WFK file ===
  ABI_DT_MALLOC(Pawrhoij,(Cryst%natom*Dtset%usepaw))
  if (Dtset%usepaw==1) then
    call pawrhoij_alloc(Pawrhoij,1,Dtset%nspden,Dtset%nspinor,Dtset%nsppol,Cryst%typat,pawtab=Pawtab)
@@ -1792,7 +1792,7 @@ subroutine setup_bse(codvsn,acell,rprim,ngfftf,ngfft_osc,Dtset,Dtfil,BS_files,Ps
    MSG_ERROR(msg)
  END SELECT
 
- call ebands_report_gap(QP_BSt,header=" QP band structure",unit=std_out,mode_paral="COLL")
+ call ebands_report_gap(QP_BSt,AB_HEADER=" QP band structure",unit=std_out,mode_paral="COLL")
 
  ! Transitions are ALWAYS ordered in c-v-k mode with k being the slowest index.
  ! FIXME: linewidths not coded.
@@ -1876,8 +1876,8 @@ subroutine setup_bse(codvsn,acell,rprim,ngfftf,ngfft_osc,Dtset,Dtfil,BS_files,Ps
  end if
 
  msg=' Fundamental parameters for the solution of the Bethe-Salpeter equation:'
- call print_bs_parameters(BSp,unit=std_out,header=msg,mode_paral="COLL",prtvol=Dtset%prtvol)
- call print_bs_parameters(BSp,unit=ab_out, header=msg,mode_paral="COLL")
+ call print_bs_parameters(BSp,unit=std_out,AB_HEADER=msg,mode_paral="COLL",prtvol=Dtset%prtvol)
+ call print_bs_parameters(BSp,unit=ab_out, AB_HEADER=msg,mode_paral="COLL")
 
  if (ANY (Cryst%symrec(:,:,1) /= RESHAPE ( (/1,0,0,0,1,0,0,0,1/),(/3,3/) )) .or. &
 &    ANY( ABS(Cryst%tnons(:,1)) > tol6) ) then
@@ -2061,8 +2061,8 @@ end subroutine setup_bse
 !! ngfft_osc(18)=Contain all needed information about the 3D FFT for the oscillator matrix elements.
 !!   See ~abinit/doc/variables/vargs.htm#ngfft
 !! Bsp<excparam>=Basic parameters defining the Bethe-Salpeter run. Completely initialed in output.
-!! Hdr_wfk<Hdr_type>=The header of the WFK file.
-!! Hdr_bse<Hdr_type>=Local header initialized from the parameters used for the Bethe-Salpeter calculation.
+!! Hdr_wfk<Hdr_type>=The AB_HEADER of the WFK file.
+!! Hdr_bse<Hdr_type>=Local AB_HEADER initialized from the parameters used for the Bethe-Salpeter calculation.
 !! w_file=File name used to construct W. Set to ABI_NOFILE if no external file is used.
 !!
 !! PARENTS
@@ -2276,7 +2276,7 @@ subroutine setup_bse_interp(Dtset,Dtfil,BSp,Cryst,Kmesh,&
 
  call ebands_print(KS_BSt_dense,"Interpolated band structure read from the WFK file",unit=std_out,prtvol=Dtset%prtvol)
 
- call ebands_report_gap(KS_BSt_dense,header="Interpolated KS band structure",unit=std_out,mode_paral="COLL")
+ call ebands_report_gap(KS_BSt_dense,AB_HEADER="Interpolated KS band structure",unit=std_out,mode_paral="COLL")
 
  BSp%nkbz_interp = Kmesh_dense%nbz
 
@@ -2302,7 +2302,7 @@ subroutine setup_bse_interp(Dtset,Dtfil,BSp,Cryst,Kmesh,&
    MSG_ERROR(msg)
  END SELECT
 
- call ebands_report_gap(QP_BSt_dense,header=" Interpolated QP band structure",unit=std_out,mode_paral="COLL")
+ call ebands_report_gap(QP_BSt_dense,AB_HEADER=" Interpolated QP band structure",unit=std_out,mode_paral="COLL")
 
  ! Transitions are ALWAYS ordered in c-v-k mode with k being the slowest index.
  ! FIXME: linewidths not coded.

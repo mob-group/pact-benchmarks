@@ -5,7 +5,7 @@
 !!
 !! FUNCTION
 !!  This module contains several routines related to conductivity:
-!!    optical conductivity, X spectroscopy, linear susceptibility, ...
+!!    optical conductivity, X spectroAB_SCOPY, linear susceptibility, ...
 !!
 !! COPYRIGHT
 !! Copyright (C) 2018-2018 ABINIT group (SM,VR,FJ,MT,PGhosh)
@@ -316,7 +316,7 @@ CONTAINS  !=====================================================================
              end do
            end if
 
-!          Second half of the (n,m) matrix
+!          second half of the (n,m) matrix
            if (ib/=jb) then
              tnm(1,1:3,jb,ib)= tnm(1,1:3,ib,jb)
              tnm(2,1:3,jb,ib)=-tnm(2,1:3,ib,jb)
@@ -334,7 +334,7 @@ CONTAINS  !=====================================================================
 !      dg(:,ipw,nband_k)=cg(:,ipw+iwavef)*kpg_k(ipw,ii)
 !      end do
 !      end do
-!      call zgemm('C','N',nband_k,nband_k,npw_k*my_nspinor,one,dg,npw_k*my_nspinor,&
+!      call AB_ZGEMM('C','N',nband_k,nband_k,npw_k*my_nspinor,one,dg,npw_k*my_nspinor,&
 !      &                cg(:,1+icg:npw_k*my_nspinor*nband_k+icg),npw_k*my_nspinor,zero,tnm_tmp,nband_k)
 !      tnm(:,ii,:,:)=tnm_tmp(:,:,:)
 !      deallocate(dg,tnm_tmp)
@@ -398,7 +398,7 @@ CONTAINS  !=====================================================================
              end do !ispinor
            end if
 
-!          Second half of the (n,m) matrix
+!          second half of the (n,m) matrix
            if (ib/=jb) then
              tnm(1,1:3,jb,ib)=-tnm(1,1:3,ib,jb)
              tnm(2,1:3,jb,ib)= tnm(2,1:3,ib,jb)
@@ -916,7 +916,7 @@ CONTAINS  !=====================================================================
 !These default values are typical of sequential use
  iomode=IO_MODE_FORTRAN ; spaceComm=xmpi_comm_self; me=0
 
-! Read the header of the optic files
+! Read the AB_HEADER of the optic files
  call hdr_read_from_fname(hdr, filnam1, fform1, spaceComm)
  call hdr_free(hdr)
  if (fform1 /= 610) then
@@ -927,11 +927,11 @@ CONTAINS  !=====================================================================
  wfunt = get_unit()
  call WffOpen(iomode,spaceComm,filnam1,ierr,wff1,master,me,wfunt)
 
-!Read the header from Ground state file
+!Read the AB_HEADER from Ground state file
  rdwr=1
  call hdr_io(fform1,hdr,rdwr,wff1)
 
-!Extract info from the header
+!Extract info from the AB_HEADER
  headform=hdr%headform
  bantot=hdr%bantot
  nkpt=hdr%nkpt

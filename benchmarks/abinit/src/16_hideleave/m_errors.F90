@@ -1576,7 +1576,7 @@ end subroutine bigdft_lib_error
 !!   Set the signal handler for IBM XLF
 !!
 !! NOTES
-!!   See http://publib.boulder.ibm.com/infocenter/compbgpl/v9v111/index.jsp?topic=/com.ibm.xlf111.bg.doc/xlfopg/fptrap.htm
+!!   See http://publib.bouAB_LDEr.ibm.com/infocenter/compbgpl/v9v111/index.jsp?topic=/com.ibm.xlf111.bg.doc/xlfopg/fptrap.htm
 !!   The XL Fortran exception handlers and related routines are:
 !!   xl__ieee
 !!   Produces a traceback and an explanation of the signal and continues execution by supplying the default IEEE result
@@ -1814,7 +1814,7 @@ subroutine abi_abort(mode_paral,exit_status,print_config)
  end if
 
 !Dump configuration before exiting
- print_config_=.False.; if (present(print_config)) print_config_=print_config
+ print_config_=.false.; if (present(print_config)) print_config_=print_config
  if (print_config_) then
    call print_kinds()
    call xmpi_show_info()
@@ -1846,7 +1846,7 @@ subroutine abi_cabort() bind(C, name='abi_cabort')
 #define ABI_FUNC 'abi_cabort'
 !End of the abilint section
 
-  call abi_abort("COLL", exit_status=1, print_config=.False.)
+  call abi_abort("COLL", exit_status=1, print_config=.false.)
 
 end subroutine abi_cabort
 !!***

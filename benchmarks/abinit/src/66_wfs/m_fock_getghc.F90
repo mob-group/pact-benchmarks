@@ -793,8 +793,8 @@ end subroutine fock_getghc
 !!      bandfft_kpt_restoretabs,bandfft_kpt_savetabs,destroy_hamiltonian
 !!      dotprod_g,fock_getghc,init_hamiltonian,load_k_hamiltonian
 !!      load_spin_hamiltonian,mkffnl,mkkpg,pawcprj_alloc,pawcprj_free
-!!      pawcprj_get,pawcprj_reorder,prep_bandfft_tabs,timab,xmpi_sum,zpotrf
-!!      ztrtrs
+!!      pawcprj_get,pawcprj_reorder,prep_bandfft_tabs,timab,xmpi_sum,AB_ZPOTRF
+!!      AB_ZTRTRS
 !!
 !! SOURCE
 
@@ -1092,7 +1092,7 @@ subroutine fock2ACE(cg,cprj,fock,istwfk,kg,kpt,mband,mcg,mcprj,mgfft,mkmem,mpi_e
      mkl=-mkl
 
 ! Cholesky factorisation of -mkl=Lx(trans(L)*. On output mkl=L
-     call zpotrf("L",nband_k,mkl,nband_k,ierr)
+     call AB_ZPOTRF("L",nband_k,mkl,nband_k,ierr)
 
 ! calculate trans(L-1)
      ABI_ALLOCATE(bb,(2,nband_k,nband_k))
@@ -1100,7 +1100,7 @@ subroutine fock2ACE(cg,cprj,fock,istwfk,kg,kpt,mband,mcg,mcprj,mgfft,mkmem,mpi_e
      do kk=1,nband_k
        bb(1,kk,kk)=one
      end do
-     call ztrtrs("L","T","N",nband_k,nband_k,mkl,nband_k,bb,nband_k,ierr)
+     call AB_ZTRTRS("L","T","N",nband_k,nband_k,mkl,nband_k,bb,nband_k,ierr)
      fock%fockACE(ikpt,isppol)%xi=zero
 
 ! Calculate ksi

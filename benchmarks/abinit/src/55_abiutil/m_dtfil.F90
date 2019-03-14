@@ -140,7 +140,7 @@ subroutine dtfil_init(dtfil,dtset,filnam,filstat,idtset,jdtset_,mpi_enreg,ndtset
  character(len=9) :: stringvar
  character(len=15) :: stringfile
  character(len=500) :: message
- character(len=fnlen) :: filsus,filddbsin,fildens1in,fildensin,filpawdensin,filkdensin,filqps,filscr,fil_efmas
+ character(len=fnlen) :: filsus,filddbsin,fiAB_LDEns1in,fiAB_LDEnsin,filpawdensin,filkdensin,filqps,filscr,fil_efmas
  character(len=fnlen) :: fnamewff1,fnamewffddk,fnamewffdelfd,fnamewffdkdk,fnamewffdkde,fnamewffk,fnamewffq
  character(len=fnlen) :: filbseig,filfft,filhaydock,fil_bsreso,fil_bscoup
  character(len=fnlen) :: filwfkfine
@@ -272,7 +272,7 @@ subroutine dtfil_init(dtfil,dtset,filnam,filstat,idtset,jdtset_,mpi_enreg,ndtset
  call mkfilename(filnam,filddbsin,dtset%getddb,idtset,dtset%irdddb,jdtset_,&
 & ndtset,stringfile,stringvar,will_read)
 
-!According to getden, build _DEN file name, referred as fildensin
+!According to getden, build _DEN file name, referred as fiAB_LDEnsin
 !A default is available if getden is 0
  if (iimage>0.and.dtfil%getden_from_image/=0) then
    if (dtfil%getden_from_image==-1) then
@@ -285,10 +285,10 @@ subroutine dtfil_init(dtfil,dtset,filnam,filstat,idtset,jdtset_,mpi_enreg,ndtset
    stringfile='_DEN'
  end if
  stringvar='den'
- call mkfilename(filnam,fildensin,dtset%getden,idtset,dtset%irdden,jdtset_,&
+ call mkfilename(filnam,fiAB_LDEnsin,dtset%getden,idtset,dtset%irdden,jdtset_,&
 & ndtset,stringfile,stringvar,will_read)
 
- if(will_read==0)fildensin=trim(filnam_ds(3))//'_DEN'
+ if(will_read==0)fiAB_LDEnsin=trim(filnam_ds(3))//'_DEN'
  ireadden=will_read
 
  if ((dtset%optdriver==RUNL_GWLS.or.dtset%optdriver==RUNL_GSTATE) &
@@ -335,12 +335,12 @@ subroutine dtfil_init(dtfil,dtset,filnam,filstat,idtset,jdtset_,mpi_enreg,ndtset
    ireadkden=0
  end if
 
-!According to get1den, build _DEN file name, referred as fildens1in
+!According to get1den, build _DEN file name, referred as fiAB_LDEns1in
 !A default is available if get1den is 0
  stringfile='_DEN' ; stringvar='1den'
- call mkfilename(filnam,fildens1in,dtset%get1den,idtset,dtset%ird1den,jdtset_,&
+ call mkfilename(filnam,fiAB_LDEns1in,dtset%get1den,idtset,dtset%ird1den,jdtset_,&
 & ndtset,stringfile,stringvar,will_read)
- if(will_read==0)fildens1in=trim(filnam_ds(3))//'_DEN'
+ if(will_read==0)fiAB_LDEns1in=trim(filnam_ds(3))//'_DEN'
 
 !According to getefmas and irdefmas, build _EFMAS file name, referred as fil_efmas
 !A default is available if getefmas is 0
@@ -415,8 +415,8 @@ subroutine dtfil_init(dtfil,dtset,filnam,filstat,idtset,jdtset_,mpi_enreg,ndtset
  dtfil%fnameabi_scr  =filscr
  dtfil%fnameabi_efmas=fil_efmas
  dtfil%filddbsin     =filddbsin
- dtfil%fildensin     =fildensin
- dtfil%fildens1in    =fildens1in
+ dtfil%fiAB_LDEnsin     =fiAB_LDEnsin
+ dtfil%fiAB_LDEns1in    =fiAB_LDEns1in
  dtfil%filkdensin    =filkdensin
  dtfil%filpawdensin  =filpawdensin
  dtfil%fnameabi_wfkfine = filwfkfine
@@ -670,7 +670,7 @@ subroutine dtfil_init_time(dtfil,iapp)
  dtfil%fnameabo_app_atmden_core=trim(filapp)//'_ATMDEN_CORE'
  dtfil%fnameabo_app_atmden_val=trim(filapp)//'_ATMDEN_VAL'
  dtfil%fnameabo_app_atmden_full=trim(filapp)//'_ATMDEN_FULL'
- dtfil%fnameabo_app_n_tilde=trim(filapp)//'_N_TILDE'
+ dtfil%fnameabo_app_n_tiAB_LDE=trim(filapp)//'_N_TIAB_LDE'
  dtfil%fnameabo_app_n_one=trim(filapp)//'_N_ONE'
  dtfil%fnameabo_app_nt_one=trim(filapp)//'_NT_ONE'
  dtfil%fnameabo_app_bxsf=trim(filapp)//'_BXSF'

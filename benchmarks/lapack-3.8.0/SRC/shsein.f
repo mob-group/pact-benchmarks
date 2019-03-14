@@ -294,8 +294,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME, AB_SISNAN
-      REAL               SLAMCH, AB_SLANHS
-      EXTERNAL           AB_LSAME, SLAMCH, AB_SLANHS, AB_SISNAN
+      REAL               AB_SLAMCH, AB_SLANHS
+      EXTERNAL           AB_LSAME, AB_SLAMCH, AB_SLANHS, AB_SISNAN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_SLAEIN, AB_XERBLA
@@ -368,8 +368,8 @@
 *
 *     Set machine-dependent constants.
 *
-      UNFL = SLAMCH( 'Safe minimum' )
-      ULP = SLAMCH( 'Precision' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
+      ULP = AB_SLAMCH( 'Precision' )
       SMLNUM = UNFL*( N / ULP )
       BIGNUM = ( ONE-ULP ) / SMLNUM
 *

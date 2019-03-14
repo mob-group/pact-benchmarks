@@ -82,8 +82,8 @@
      $                   SCALE( LDA ), SCALIN( LDA )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLANGE
-      EXTERNAL           SLAMCH, SLANGE
+      REAL               AB_SLAMCH, SLANGE
+      EXTERNAL           AB_SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGEBAL
@@ -100,8 +100,8 @@
       KNT = 0
       RMAX = ZERO
       VMAX = ZERO
-      SFMIN = SLAMCH( 'S' )
-      MEPS = SLAMCH( 'E' )
+      SFMIN = AB_SLAMCH( 'S' )
+      MEPS = AB_SLAMCH( 'E' )
 *
    10 CONTINUE
 *

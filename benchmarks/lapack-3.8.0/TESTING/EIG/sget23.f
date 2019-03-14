@@ -424,8 +424,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               SLAMCH, SLAPY2, SNRM2
-      EXTERNAL           LSAME, SLAMCH, SLAPY2, SNRM2
+      REAL               AB_SLAMCH, SLAPY2, SNRM2
+      EXTERNAL           LSAME, AB_SLAMCH, SLAPY2, SNRM2
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGEEVX, SGET22, SLACPY, XERBLA
@@ -480,8 +480,8 @@
 *
 *     More Important constants
 *
-      ULP = SLAMCH( 'Precision' )
-      SMLNUM = SLAMCH( 'S' )
+      ULP = AB_SLAMCH( 'Precision' )
+      SMLNUM = AB_SLAMCH( 'S' )
       ULPINV = ONE / ULP
 *
 *     Compute eigenvalues and eigenvectors, and test them

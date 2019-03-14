@@ -181,7 +181,7 @@ contains
     self%mat(irow, icol)=val
   end subroutine dense_mat_insert
 
-  ! dense matrix-vector multiplication, using blas DGEMV
+  ! dense matrix-vector multiplication, using blas AB_DGEMV
   subroutine dense_mat_mv(self, x, b)
 
 
@@ -194,10 +194,10 @@ contains
     type(dense_mat) :: self
     real(dp), intent(in) :: x
     real(dp), intent(inout) :: b
-    call dgemv("N", self%nrow, self%ncol, 1.0d0,self%mat , 2,  x, 1, 0.0d0,  b, 1)
+    call AB_DGEMV("N", self%nrow, self%ncol, 1.0d0,self%mat , 2,  x, 1, 0.0d0,  b, 1)
   end subroutine dense_mat_mv
 
-  ! dense symmetric matrix-vector multiplication, using blas DSPMV
+  ! dense symmetric matrix-vector multiplication, using blas AB_DSPMV
   subroutine dense_mat_spmv(self, x, b)
 
 
@@ -210,8 +210,8 @@ contains
     type(dense_mat) :: self
     real(dp), intent(in) :: x
     real(dp), intent(inout) :: b
-    !  dspmv(uplo, n, alpha, ap, x, incx, beta, y, incy)
-    call dspmv('U', self%nrow, 1.0d0,self%mat , x, 1, 0.0d0, b, 1)
+    !  AB_DSPMV(uplo, n, alpha, ap, x, incx, beta, y, incy)
+    call AB_DSPMV('U', self%nrow, 1.0d0,self%mat , x, 1, 0.0d0, b, 1)
   end subroutine dense_mat_spmv
 
   ! COO matrix
@@ -798,19 +798,19 @@ endif
     type(CSR_mat), intent(in):: A
     real(dp), intent(in) :: x(A%ncol)
     real(dp), intent(out) :: y(A%nrow)
-    real(dp)::ddot
+    real(dp)::AB_DDOT
     integer::irow, i1, i2, i
-    !external ddot
+    !external AB_DDOT
     y(:)=0.0d0
     !!$OMP PARALLEL
     !$OMP PARALLEL DO private(i, i1, i2)
     do irow=1, A%nrow
 
-        ! benchmark: this version is the second fastest
+        ! benchmark: this version is the second faAB_STEST
         !y(irow)=dot_product(A%val(A%row_shift(irow):A%row_shift(irow+1)-1),  x(A%icol(A%row_shift(irow):A%row_shift(irow+1)-1)))
 
-        ! third fastest
-        !y(irow)=ddot(A%row_shift(irow+1)-A%row_shift(irow), A%val(A%row_shift(irow):A%row_shift(irow+1)-1),1, &
+        ! third faAB_STEST
+        !y(irow)=AB_DDOT(A%row_shift(irow+1)-A%row_shift(irow), A%val(A%row_shift(irow):A%row_shift(irow+1)-1),1, &
         !x(A%icol(A%row_shift(irow):A%row_shift(irow+1)-1)), 1)
 
         ! Slowest

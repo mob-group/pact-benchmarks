@@ -441,8 +441,8 @@
       COMPLEX            DUM( 1 )
 *     ..
 *     .. External Functions ..
-      REAL               SCNRM2, SLAMCH
-      EXTERNAL           SCNRM2, SLAMCH
+      REAL               SCNRM2, AB_SLAMCH
+      EXTERNAL           SCNRM2, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGEEV, CGET22, CLACPY, CLATME, CLATMR, CLATMS,
@@ -516,10 +516,10 @@
 *
 *     More Important constants
 *
-      UNFL = SLAMCH( 'Safe minimum' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
       CALL SLABAD( UNFL, OVFL )
-      ULP = SLAMCH( 'Precision' )
+      ULP = AB_SLAMCH( 'Precision' )
       ULPINV = ONE / ULP
       RTULP = SQRT( ULP )
       RTULPI = ONE / RTULP

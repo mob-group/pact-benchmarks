@@ -906,9 +906,9 @@ module m_xg
 
     select case(xgBlock1%space)
     case (SPACE_R,SPACE_CR)
-      call dcopy(size,xgBlock1%vecR,incx,xgBlock2%vecR,incy)
+      call AB_DCOPY(size,xgBlock1%vecR,incx,xgBlock2%vecR,incy)
     case(SPACE_C)
-      call zcopy(size,xgBlock1%vecC,incx,xgBlock2%vecC,incy)
+      call AB_ZCOPY(size,xgBlock1%vecC,incx,xgBlock2%vecC,incy)
     end select
     call timab(tim_copy,2,tsec)
 
@@ -1051,7 +1051,7 @@ module m_xg
 
     select case(xgBlock1%space)
     case (SPACE_R,SPACE_CR)
-      call dgemm(transa,transb,xgBlock3%rows, xgBlock3%cols, K, &
+      call AB_DGEMM(transa,transb,xgBlock3%rows, xgBlock3%cols, K, &
         alpha,xgBlock1%vecR, xgBlock1%LDim, &
         xgBlock2%vecR, xgBlock2%LDim, beta,xgBlock3%vecR,xgBlock3%LDim)
       if ( transa == xgBlock1%trans .and. (beta) < 1d-10) then
@@ -1060,7 +1060,7 @@ module m_xg
     case(SPACE_C)
       calpha = dcmplx(alpha,0.d0)
       cbeta = dcmplx(beta,0.d0)
-      call zgemm(transa,transb,xgBlock3%rows, xgBlock3%cols, K, &
+      call AB_ZGEMM(transa,transb,xgBlock3%rows, xgBlock3%cols, K, &
         calpha,xgBlock1%vecC, xgBlock1%LDim, &
         xgBlock2%vecC, xgBlock2%LDim, cbeta,xgBlock3%vecC,xgBlock3%LDim)
       if ( xgBlock3%spacedim_comm/= -1 .and. transa == xgBlock3%trans .and. abs(beta) < 1d-10 ) then
@@ -1112,7 +1112,7 @@ module m_xg
       K = xgBlock1%rows
     end if
 
-    call zgemm(transa,transb,xgBlock3%rows, xgBlock3%cols, K, &
+    call AB_ZGEMM(transa,transb,xgBlock3%rows, xgBlock3%cols, K, &
       alpha,xgBlock1%vecC, xgBlock1%LDim, &
       xgBlock2%vecC, xgBlock2%LDim, beta,xgBlock3%vecC,xgBlock3%LDim)
     if ( xgBlock3%spacedim_comm/= -1 .and. transa == xgBlock1%trans .and. abs(beta) < 1.d-10 ) then
@@ -1151,9 +1151,9 @@ module m_xg
 
     select case(xgBlock%space)
     case (SPACE_R,SPACE_CR)
-      call dpotrf(uplo,xgBlock%rows,xgBlock%vecR,xgBlock%LDim,info)
+      call AB_DPOTRF(uplo,xgBlock%rows,xgBlock%vecR,xgBlock%LDim,info)
     case (SPACE_C)
-      call zpotrf(uplo,xgBlock%rows,xgBlock%vecC,xgBlock%LDim,info)
+      call AB_ZPOTRF(uplo,xgBlock%rows,xgBlock%vecC,xgBlock%LDim,info)
     end select
 
     call timab(tim_potrf,2,tsec)
@@ -1197,7 +1197,7 @@ module m_xg
     case (SPACE_R,SPACE_CR)
       call checkResize(rwork,lrwork,8*xgBlock1%rows)
 
-      call dsyev(jobz,uplo,xgBlock1%cols, &
+      call AB_DSYEV(jobz,uplo,xgBlock1%cols, &
         xgBlock1%vecR,xgBlock1%LDim, &
       xgBlock3%vecR, &
       rwork, lrwork,info)
@@ -1207,7 +1207,7 @@ module m_xg
       call checkResize(rwork,lrwork,3*xgBlock1%cols-2)
       call checkResize(cwork,lcwork,lrwork)
 
-      call zheev(jobz,uplo,xgBlock1%cols, &
+      call AB_ZHEEV(jobz,uplo,xgBlock1%cols, &
         xgBlock1%vecC,xgBlock1%LDim, &
       xgBlock3%vecR, &
       cwork, lrwork, rwork, info)
@@ -1258,7 +1258,7 @@ module m_xg
     case (SPACE_R,SPACE_CR)
       call checkResize(rwork,lrwork,2*xgBlock1%rows*xgBlock1%rows+6*xgBlock1%rows+1)
 
-      call dsyevd(jobz,uplo,xgBlock1%cols, &
+      call AB_DSYEVd(jobz,uplo,xgBlock1%cols, &
         xgBlock1%vecR,xgBlock1%LDim, &
       xgBlock3%vecR, rwork, lrwork, &
       iwork, liwork,info)
@@ -1267,7 +1267,7 @@ module m_xg
       call checkResize(cwork,lcwork,xgBlock1%rows*xgBlock1%rows+2*xgBlock1%rows)
       call checkResize(rwork,lrwork,2*xgBlock1%rows*xgBlock1%rows+5*xgBlock1%rows+1)
 
-      call zheevd(jobz,uplo,xgBlock1%cols, &
+      call AB_ZHEEVd(jobz,uplo,xgBlock1%cols, &
         xgBlock1%vecC,xgBlock1%LDim, &
       xgBlock3%vecR, &
       cwork, lcwork, rwork, lrwork, iwork, liwork, info)
@@ -1334,7 +1334,7 @@ module m_xg
     case (SPACE_R,SPACE_CR)
       call checkResize(rwork,lrwork,3*xgBlock4%cols)
 
-      call dspev(jobz,uplo,xgBlock4%cols, &
+      call AB_DSPEV(jobz,uplo,xgBlock4%cols, &
         xgBlock1%vecR, xgBlock3%vecR, xgBlock4%vecR, xgBlock4%Ldim, &
       rwork, info)
 
@@ -1343,7 +1343,7 @@ module m_xg
       call checkResize(cwork,lcwork,2*xgBlock4%cols-1)
       call checkResize(rwork,lrwork,3*xgBlock4%cols-2)
 
-      call zhpev(jobz,uplo,xgBlock4%cols, &
+      call AB_ZHPEV(jobz,uplo,xgBlock4%cols, &
         xgBlock1%vecC, xgBlock3%vecR, xgBlock4%vecC, xgBlock4%Ldim, &
       cwork, rwork, info)
 
@@ -1402,7 +1402,7 @@ module m_xg
     case (SPACE_R,SPACE_CR)
       call checkResize(rwork,lrwork,xgBlock4%rows*xgBlock4%rows+6*xgBlock4%rows+1)
 
-      call dspevd(jobz,uplo,xgBlock4%cols, &
+      call AB_DSPEVd(jobz,uplo,xgBlock4%cols, &
         xgBlock1%vecR, xgBlock3%vecR, xgBlock4%vecR, xgBlock4%Ldim, &
         rwork, lrwork, iwork, liwork,info)
 
@@ -1411,7 +1411,7 @@ module m_xg
       call checkResize(cwork,lcwork,2*xgBlock4%rows)
       call checkResize(rwork,lrwork,2*xgBlock4%rows*xgBlock4%rows+5*xgBlock4%rows+1)
 
-      call zhpevd(jobz,uplo,xgBlock4%cols, &
+      call AB_ZHPEVd(jobz,uplo,xgBlock4%cols, &
         xgBlock1%vecC, xgBlock3%vecR, xgBlock4%vecC, xgBlock4%Ldim, &
       cwork, lcwork, rwork, lrwork, iwork, liwork, info)
 
@@ -1478,7 +1478,7 @@ module m_xg
     case (SPACE_R,SPACE_CR)
       call checkResize(rwork,lrwork,2*xgBlock1%rows*xgBlock1%rows+6*xgBlock1%rows+1)
 
-      call dsygv(itype, jobz, uplo, xgBlock1%rows, xgBlock1%vecR, xgBlock1%ldim, &
+      call AB_DSYGV(itype, jobz, uplo, xgBlock1%rows, xgBlock1%vecR, xgBlock1%ldim, &
         xgBlock2%vecR, xgBlock2%ldim, xgBlock3%vecR, rwork, lrwork, info)
 
     case (SPACE_C)
@@ -1486,7 +1486,7 @@ module m_xg
       call checkResize(cwork,lcwork,2*xgBlock1%rows-1)
       call checkResize(rwork,lrwork,3*xgBlock1%rows-2)
 
-      call zhegv(itype, jobz, uplo, xgBlock1%rows, xgBlock1%vecC, xgBlock1%ldim,&
+      call AB_ZHEGV(itype, jobz, uplo, xgBlock1%rows, xgBlock1%vecC, xgBlock1%ldim,&
         xgBlock2%vecC, xgBlock2%ldim, xgBlock3%vecR, cwork, lcwork, &
         rwork, info)
 
@@ -1558,7 +1558,7 @@ module m_xg
     case (SPACE_R,SPACE_CR)
       call checkResize(rwork,lrwork,8*xgBlock1%rows)
 
-      call dsygvx(itype,jobz,range,uplo,xgBlock1%rows, &
+      call AB_DSYGVx(itype,jobz,range,uplo,xgBlock1%rows, &
         xgBlock1%vecR,xgBlock1%LDim,xgBlock2%vecR,xgBlock2%LDim, &
       vl,vu,il,iu,abstol,&
       neigen,xgBlock3%vecR, xgBlock4%vecR, xgBlock4%LDim, &
@@ -1568,7 +1568,7 @@ module m_xg
       call checkResize(rwork,lrwork,7*xgBlock1%rows)
       call checkResize(cwork,lcwork,lrwork)
 
-      call zhegvx(itype,jobz,range,uplo,xgBlock1%rows, &
+      call AB_ZHEGVx(itype,jobz,range,uplo,xgBlock1%rows, &
         xgBlock1%vecC,xgBlock1%LDim,xgBlock2%vecC,xgBlock2%LDim, &
       vl,vu,il,iu,abstol,&
       neigen,xgBlock3%vecR, xgBlock4%vecC, xgBlock4%LDim, &
@@ -1627,7 +1627,7 @@ module m_xg
     case (SPACE_R,SPACE_CR)
       call checkResize(rwork,lrwork,2*xgBlock1%rows*xgBlock1%rows+6*xgBlock1%rows+1)
 
-      call dsygvd(itype, jobz, uplo, xgBlock1%rows, xgBlock1%vecR, xgBlock1%ldim, &
+      call AB_DSYGVd(itype, jobz, uplo, xgBlock1%rows, xgBlock1%vecR, xgBlock1%ldim, &
         xgBlock2%vecR, xgBlock2%ldim, xgBlock3%vecR, rwork, lrwork, iwork, liwork, info)
 
     case (SPACE_C)
@@ -1635,7 +1635,7 @@ module m_xg
       call checkResize(cwork,lcwork,xgBlock1%rows*xgBlock1%rows+2*xgBlock1%rows)
       call checkResize(rwork,lrwork,2*(xgBlock1%rows*xgBlock1%rows)+5*xgBlock1%rows+1)
 
-      call zhegvd(itype, jobz, uplo, xgBlock1%rows, xgBlock1%vecC, xgBlock1%ldim,&
+      call AB_ZHEGVd(itype, jobz, uplo, xgBlock1%rows, xgBlock1%vecC, xgBlock1%ldim,&
         xgBlock2%vecC, xgBlock2%ldim, xgBlock3%vecR, cwork, lcwork, &
         rwork, lrwork, iwork, liwork, info)
 
@@ -1706,7 +1706,7 @@ module m_xg
     case (SPACE_R,SPACE_CR)
       call checkResize(rwork,lrwork,3*xgBlock4%rows)
 
-      call dspgv(itype, jobz, uplo, xgBlock4%rows, xgBlock1%vecR, xgBlock2%vecR, &
+      call AB_DSPGV(itype, jobz, uplo, xgBlock4%rows, xgBlock1%vecR, xgBlock2%vecR, &
         xgBlock3%vecR, xgBlock4%vecR, xgBlock4%Ldim, rwork, info)
 
     case (SPACE_C)
@@ -1714,7 +1714,7 @@ module m_xg
       call checkResize(cwork,lcwork,2*xgBlock4%rows-1)
       call checkResize(rwork,lrwork,3*xgBlock4%rows-2)
 
-      call zhpgv(itype, jobz, uplo, xgBlock1%rows, xgBlock1%vecC, xgBlock2%vecC, &
+      call AB_ZHPGV(itype, jobz, uplo, xgBlock1%rows, xgBlock1%vecC, xgBlock2%vecC, &
         xgBlock3%vecR, xgBlock4%vecC, xgBlock4%Ldim, cwork, rwork, info)
 
       if ( int(cwork(1)) > lcwork ) then
@@ -1785,7 +1785,7 @@ module m_xg
     case (SPACE_R,SPACE_CR)
       call checkResize(rwork,lrwork,8*xgBlock4%rows)
 
-      call dspgvx(itype,jobz,range,uplo,xgBlock4%rows, &
+      call AB_DSPGVx(itype,jobz,range,uplo,xgBlock4%rows, &
         xgBlock1%vecR,xgBlock2%vecR, &
       vl,vu,il,iu,abstol,&
       neigen,xgBlock3%vecR, xgBlock4%vecR, xgBlock4%LDim, &
@@ -1795,7 +1795,7 @@ module m_xg
       call checkResize(rwork,lrwork,7*xgBlock1%rows)
       call checkResize(cwork,lcwork,2*xgBlock4%rows)
 
-      call zhpgvx(itype,jobz,range,uplo,xgBlock4%rows, &
+      call AB_ZHPGVx(itype,jobz,range,uplo,xgBlock4%rows, &
         xgBlock1%vecC,xgBlock2%vecC, &
       vl,vu,il,iu,abstol,&
       neigen,xgBlock3%vecR, xgBlock4%vecC, xgBlock4%LDim, &
@@ -1855,7 +1855,7 @@ module m_xg
     case (SPACE_R,SPACE_CR)
       call checkResize(rwork,lrwork,2*xgBlock4%rows*xgBlock4%rows+6*xgBlock4%rows+1)
 
-      call dspgvd(itype, jobz, uplo, xgBlock4%rows, xgBlock1%vecR, xgBlock2%vecR, &
+      call AB_DSPGVd(itype, jobz, uplo, xgBlock4%rows, xgBlock1%vecR, xgBlock2%vecR, &
         xgBlock3%vecR, xgBlock4%vecR, xgBlock4%Ldim, &
         rwork, lrwork, iwork, liwork, info)
 
@@ -1864,7 +1864,7 @@ module m_xg
       call checkResize(cwork,lcwork,2*xgBlock4%rows)
       call checkResize(rwork,lrwork,2*(xgBlock4%rows*xgBlock4%rows)+5*xgBlock4%rows+1)
 
-      call zhpgvd(itype, jobz, uplo, xgBlock4%rows, xgBlock1%vecC, xgBlock2%vecC, &
+      call AB_ZHPGVd(itype, jobz, uplo, xgBlock4%rows, xgBlock1%vecC, xgBlock2%vecC, &
         xgBlock3%vecR, xgBlock4%vecC, xgBlock4%Ldim, &
         cwork, lcwork, rwork, lrwork, iwork, liwork, info)
 
@@ -1921,11 +1921,11 @@ module m_xg
 
     select case(xgBlock1%space)
     case (SPACE_R,SPACE_CR)
-      call dtrsm(side,uplo,transa,diag,xgBlock2%rows,xgBlock2%cols, &
+      call AB_DTRSM(side,uplo,transa,diag,xgBlock2%rows,xgBlock2%cols, &
         alpha,xgBlock1%vecR,xgBlock1%LDim,xgBlock2%vecR,xgBlock2%LDim)
     case (SPACE_C)
       calpha = dcmplx(alpha,0.d0)
-      call ztrsm(side,uplo,transa,diag,xgBlock2%rows,xgBlock2%cols, &
+      call AB_ZTRSM(side,uplo,transa,diag,xgBlock2%rows,xgBlock2%cols, &
         calpha,xgBlock1%vecC,xgBlock1%LDim,xgBlock2%vecC,xgBlock2%LDim)
     end select
 
@@ -1963,7 +1963,7 @@ module m_xg
       MSG_ERROR("Not same space")
     end if
 
-    call ztrsm(side,uplo,transa,diag,xgBlock2%rows,xgBlock2%cols, &
+    call AB_ZTRSM(side,uplo,transa,diag,xgBlock2%rows,xgBlock2%cols, &
       alpha,xgBlock1%vecC,xgBlock1%LDim,xgBlock2%vecC,xgBlock2%LDim)
 
     call timab(tim_trsm,2,tsec)
@@ -2140,7 +2140,7 @@ module m_xg
           xgBlock1%vecR(row,col) = xgBlock1%vecR(row,col) + xgBlock2%vecR(row,col)
         end do
       end do
-      !call daxpy(xgBlock1%cols*xgBlock1%LDim,1.d0,xgBlock2%vecR,1,xgBlock1%vecR1)
+      !call AB_DAXPY(xgBlock1%cols*xgBlock1%LDim,1.d0,xgBlock2%vecR,1,xgBlock1%vecR1)
     case (SPACE_C)
       !$omp parallel do schedule(static)
       do col = 1, xgBlock2%cols
@@ -2148,7 +2148,7 @@ module m_xg
           xgBlock1%vecC(row,col) = xgBlock1%vecC(row,col) + xgBlock2%vecC(row,col)
         end do
       end do
-      !call zaxpy(xgBlock1%cols*xgBlock1%LDim,1.d0,xgBlock2%vecR,1,xgBlock1%vecR1)
+      !call AB_ZAXPY(xgBlock1%cols*xgBlock1%LDim,1.d0,xgBlock2%vecR,1,xgBlock1%vecR1)
     end select
 
   end subroutine xgBlock_add
@@ -2206,7 +2206,7 @@ module m_xg
     double precision, intent(  out), optional :: min_val
     integer         , intent(  out), optional :: min_elt
     integer :: icol
-    double precision,external :: ddot
+    double precision,external :: AB_DDOT
 
 
     if ( dot%space /= SPACE_R ) then
@@ -2218,7 +2218,7 @@ module m_xg
       !$omp parallel do shared(dot,xgBlock), &
       !$omp& schedule(static)
       do icol = 1, xgBlock%cols
-        dot%vecR(icol,1) = ddot(xgBlock%rows,xgBlock%vecR(:,icol),1,xgBlock%vecR(:,icol),1)
+        dot%vecR(icol,1) = AB_DDOT(xgBlock%rows,xgBlock%vecR(:,icol),1,xgBlock%vecR(:,icol),1)
       end do
       !$omp end parallel do
     case(SPACE_C)
@@ -2227,9 +2227,9 @@ module m_xg
       do icol = 1, xgBlock%cols
         ! Instead of calling a complex function to get only the real part of the
         ! resuld
-        !dot%vecR(icol,1) = dble(zdotc(xgBlock%rows,xgBlock%vecC(:,icol),1,xgBlock%vecC(:,icol),1))
+        !dot%vecR(icol,1) = dble(AB_ZDOTC(xgBlock%rows,xgBlock%vecC(:,icol),1,xgBlock%vecC(:,icol),1))
         ! Directely call a real function which gives what we want.
-        dot%vecR(icol,1) = ddot(2*xgBlock%rows,xgBlock%vecC(:,icol),1,xgBlock%vecC(:,icol),1)
+        dot%vecR(icol,1) = AB_DDOT(2*xgBlock%rows,xgBlock%vecC(:,icol),1,xgBlock%vecC(:,icol),1)
       end do
       !$omp end parallel do
     end select
@@ -2272,21 +2272,21 @@ module m_xg
     if ( xgBlock%ldim .eq. xgBlock%rows ) then
       select case(xgBlock%space)
       case (SPACE_R,SPACE_CR)
-        call dscal(xgBlock%ldim*xgBlock%cols/inc,val,xgBlock%vecR,inc)
+        call AB_DSCAL(xgBlock%ldim*xgBlock%cols/inc,val,xgBlock%vecR,inc)
       case (SPACE_C)
-        call zdscal(xgBlock%ldim*xgBlock%cols/inc,val,xgBlock%vecC,inc)
+        call AB_ZDSCAL(xgBlock%ldim*xgBlock%cols/inc,val,xgBlock%vecC,inc)
       end select
     else
       select case(xgBlock%space)
       case (SPACE_R,SPACE_CR)
         !$omp parallel do
         do i=1,xgBlock%cols
-          call dscal(xgBlock%rows/inc,val,xgBlock%vecR(:,i),inc)
+          call AB_DSCAL(xgBlock%rows/inc,val,xgBlock%vecR(:,i),inc)
         end do
       case (SPACE_C)
         !$omp parallel do
         do i=1,xgBlock%cols
-          call zdscal(xgBlock%rows/inc,val,xgBlock%vecC(:,i),inc)
+          call AB_ZDSCAL(xgBlock%rows/inc,val,xgBlock%vecC(:,i),inc)
         end do
       end select
     end if
@@ -2318,7 +2318,7 @@ module m_xg
       case (SPACE_R,SPACE_CR)
         MSG_ERROR("Scaling real vector with a complex not possible")
       case (SPACE_C)
-        call zscal(xgBlock%ldim*xgBlock%cols/inc,val,xgBlock%vecC,inc)
+        call AB_ZSCAL(xgBlock%ldim*xgBlock%cols/inc,val,xgBlock%vecC,inc)
       end select
     else
       select case(xgBlock%space)
@@ -2327,7 +2327,7 @@ module m_xg
       case (SPACE_C)
         !$omp parallel do
         do i=1,xgBlock%cols
-          call zscal(xgBlock%rows/inc,val,xgBlock%vecC(:,i),inc)
+          call AB_ZSCAL(xgBlock%rows/inc,val,xgBlock%vecC(:,i),inc)
         end do
       end select
     end if

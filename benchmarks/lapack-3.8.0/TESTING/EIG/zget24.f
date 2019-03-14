@@ -380,8 +380,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            ZSLECT
-      DOUBLE PRECISION   DLAMCH, ZLANGE
-      EXTERNAL           ZSLECT, DLAMCH, ZLANGE
+      DOUBLE PRECISION   AB_DLAMCH, ZLANGE
+      EXTERNAL           ZSLECT, AB_DLAMCH, ZLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           XERBLA, ZCOPY, ZGEESX, ZGEMM, ZLACPY, ZUNT01
@@ -434,8 +434,8 @@
 *
 *     Important constants
 *
-      SMLNUM = DLAMCH( 'Safe minimum' )
-      ULP = DLAMCH( 'Precision' )
+      SMLNUM = AB_DLAMCH( 'Safe minimum' )
+      ULP = AB_DLAMCH( 'Precision' )
       ULPINV = ONE / ULP
 *
 *     Perform tests (1)-(13)

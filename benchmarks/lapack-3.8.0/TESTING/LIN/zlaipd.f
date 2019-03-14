@@ -102,15 +102,15 @@
       DOUBLE PRECISION   BIGNUM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCMPLX
 *     ..
 *     .. Executable Statements ..
 *
-      BIGNUM = DLAMCH( 'Epsilon' ) / DLAMCH( 'Safe minimum' )
+      BIGNUM = AB_DLAMCH( 'Epsilon' ) / AB_DLAMCH( 'Safe minimum' )
       IA = 1
       IXA = INDA
       DO 10 I = 1, N

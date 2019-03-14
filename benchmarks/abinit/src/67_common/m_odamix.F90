@@ -616,7 +616,7 @@ subroutine odamix(deltae,dtset,elast,energies,etotal,&
 
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!!!!! Calcul des quantites qui dependent de rho_tilde_n+1 (rho apres mixing)
+!!!!! Calcul des quantites qui dependent de rho_tiAB_LDE_n+1 (rho apres mixing)
 
  if (usepaw==1) then
    if (ider>=0) then

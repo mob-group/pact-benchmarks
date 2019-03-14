@@ -71,7 +71,7 @@ MODULE m_ioarr
                                      ! from the file extension and the number of FFT processors:
  public :: fftdatar_write_from_hdr   ! Write an array in real-space to file plus crystal_t and ebands_t
  public :: read_rhor                 ! Read rhor from DEN file.
- public :: fort_denpot_skip          ! Skip the header and the DEN/POT records (Fortran format)
+ public :: fort_denpot_skip          ! Skip the AB_HEADER and the DEN/POT records (Fortran format)
 
  private :: denpot_spin_convert      ! Convert a density/potential from a spin representation to another
 
@@ -107,14 +107,14 @@ CONTAINS  !=====================================================================
 !!   2 for wf; 52 for density; 102 for potential
 !!   old format (prior to ABINITv2.0): 1, 51 and 101.
 !! fildata=file name
-!! hdr <type(hdr_type)>=the header of wf, den and pot files
+!! hdr <type(hdr_type)>=the AB_HEADER of wf, den and pot files
 !!  if rdwr=1 , used to compare with the hdr of the read disk file
-!!  if rdwr=2 , used as the header of the written disk file
+!!  if rdwr=2 , used as the AB_HEADER of the written disk file
 !! mpi_enreg=information about MPI parallelization
 !! rdwr=choice parameter, see above
 !! rdwrpaw=1 only if rhoij PAW quantities have to be read (if rdwr=1)
 !! [single_proc]=True if only ONE MPI process is calling this routine. This usually happens when
-!!   master calls ioarr to read data that is then broadcasted in the caller. Default: False.
+!!   master calls ioarr to read data that is then broadcasted in the caller. Default: false.
 !!   Note that singleproc is not compatible with FFT parallelism because nfft is assumed to be
 !!   the total number of points in the FFT mesh.
 !!
@@ -281,7 +281,7 @@ subroutine ioarr(accessfil,arr,dtset,etotal,fform,fildata,hdr,mpi_enreg, &
      ! the one used in the run. If not, we perform a Fourier interpolation, we write the
      ! interpolated rho(r) to a temporary file and we use this file to restart.
      if (ALLOW_FFTINTERP .and. usewvl==0) then
-       need_fftinterp = .False.; icheck_fft = .True.
+       need_fftinterp = .false.; icheck_fft = .True.
        ! only master checks the FFT mesh if MPI-IO. All processors read ngfft if Fortran-IO
        ! Note that, when Fortran-IO is used, we don't know if the routine is called
        ! by a single processor or by all procs in comm_cell hence we cannot broadcast my_fildata
@@ -366,7 +366,7 @@ subroutine ioarr(accessfil,arr,dtset,etotal,fform,fildata,hdr,mpi_enreg, &
        unt = get_unit()
        call WffOpen(iomode,spaceComm,my_fildata,ierr,wff,0,me,unt,spaceComm_io)
        call hdr_io(fform_dum,hdr0,rdwr,wff)
-       ! Compare the internal header and the header from the file
+       ! Compare the internal AB_HEADER and the AB_HEADER from the file
        call hdr_check(fform,fform_dum,hdr,hdr0,'COLL',restart,restartpaw)
 
      else
@@ -375,7 +375,7 @@ subroutine ioarr(accessfil,arr,dtset,etotal,fform,fildata,hdr,mpi_enreg, &
        end if
        ! Initialize hdr0, thanks to reading of unwff1
        call hdr_io(fform_dum,hdr0,rdwr,unt)
-       ! Compare the internal header and the header from the file
+       ! Compare the internal AB_HEADER and the AB_HEADER from the file
        call hdr_check(fform,fform_dum,hdr,hdr0,'COLL',restart,restartpaw)
      end if
      etotal=hdr0%etot
@@ -427,14 +427,14 @@ subroutine ioarr(accessfil,arr,dtset,etotal,fform,fildata,hdr,mpi_enreg, &
 #ifdef HAVE_NETCDF
    else if (accessfil == 3) then
 
-     ! Read the header and broadcast it in comm_cell
+     ! Read the AB_HEADER and broadcast it in comm_cell
      ! FIXME: Use xmpi_comm_self for the time-being because, in loper, ioarr
      ! is called by me==0
      call hdr_read_from_fname(hdr0, file_etsf, fform_dum, comm_cell)
      !call hdr_read_from_fname(hdr0, file_etsf, fform_dum, xmpi_comm_self)
      ABI_CHECK(fform_dum/=0, "hdr_read_from_fname returned fform 0")
 
-     ! Compare the internal header and the header from the file
+     ! Compare the internal AB_HEADER and the AB_HEADER from the file
      call hdr_check(fform, fform_dum, hdr, hdr0, 'COLL', restart, restartpaw)
 
 !    If nspden[file] /= nspden, need a temporary array
@@ -564,7 +564,7 @@ subroutine ioarr(accessfil,arr,dtset,etotal,fform,fildata,hdr,mpi_enreg, &
          MSG_ERROR(message)
        end if
 
-       ! Write header
+       ! Write AB_HEADER
        call hdr_io(fform,hdr,rdwr,unt)
      end if
 
@@ -592,7 +592,7 @@ subroutine ioarr(accessfil,arr,dtset,etotal,fform,fildata,hdr,mpi_enreg, &
 #ifdef HAVE_NETCDF
    else if ( accessfil == 3 ) then
 
-     ! Master in comm_fft creates the file and writes the header.
+     ! Master in comm_fft creates the file and writes the AB_HEADER.
      if (xmpi_comm_rank(comm_fft) == 0) then
        call hdr_write_to_fname(hdr, file_etsf, fform)
      end if
@@ -675,7 +675,7 @@ end subroutine ioarr
 !! varname=Name of the variable to write (used if ETSF-IO).
 !! path=File name
 !! iomode=
-!! hdr <type(hdr_type)>=the header of wf, den and pot files
+!! hdr <type(hdr_type)>=the AB_HEADER of wf, den and pot files
 !! crystal<crystal_t>= data type gathering info on symmetries and unit cell (used if etsf_io)
 !! ngfft(18)=contain all needed information about 3D FFT, see ~abinit/doc/variables/vargs.htm#ngfft
 !! cplex=1 for real array, 2 for complex
@@ -800,14 +800,14 @@ subroutine fftdatar_write(varname,path,iomode,hdr,crystal,ngfft,cplex,nfft,nspde
    end do
    ABI_CHECK(i3_glob /= n3 +1, "This processor does not have z-planes!")
 
-   ! Master writes the header.
+   ! Master writes the AB_HEADER.
    if (me_fft == master) call hdr_write_to_fname(hdr,path,fform)
    call xmpi_barrier(comm_fft) ! TODO: Non-blocking barrier.
 
    call MPI_FILE_OPEN(comm_fft, path, MPI_MODE_RDWR, xmpio_info, unt, mpierr)
    ABI_CHECK_MPI(mpierr,"MPI_FILE_OPEN")
 
-   ! Skip the header and get the offset of the header
+   ! Skip the AB_HEADER and get the offset of the AB_HEADER
    call hdr_mpio_skip(unt,fform,hdr_offset)
    !write(std_out,*)"i3_glob, nfft, hdr_offset,",i3_glob,nfft,hdr_offset,fftn3_distrib == me_fft
 
@@ -859,7 +859,7 @@ subroutine fftdatar_write(varname,path,iomode,hdr,crystal,ngfft,cplex,nfft,nspde
    NCF_CHECK(ncerr)
    call xmpi_barrier(comm_fft)
 
-   ! Master writes the header.
+   ! Master writes the AB_HEADER.
    if (xmpi_comm_rank(comm_fft) == master) then
      NCF_CHECK(nctk_open_modify(ncid, file_etsf, xmpi_comm_self))
      NCF_CHECK(hdr_ncwrite(hdr, ncid, fform, nc_define=.True.))
@@ -903,7 +903,7 @@ end subroutine fftdatar_write
 !!
 !! FUNCTION
 !! Write an array in real space on the FFT box to file.
-!! crystal and ebands are constructed from the Abinit header.
+!! crystal and ebands are constructed from the Abinit AB_HEADER.
 !!
 !! TODO
 !! This routine will be removed when crystal_t and ebands_t will become standard objects
@@ -1002,11 +1002,11 @@ end subroutine fftdatar_write_from_hdr
 !!   The routine will abort if restart cannot be performed.
 !! [allow_interp]=If True, the density read from file will be interpolated if the mesh differs from the one
 !!   expected by the caller. This option is usually used in **self-consistent** calculations.
-!!   If False (default), the code stops if the two meshes are different.
+!!   If false (default), the code stops if the two meshes are different.
 !!
 !! OUTPUT
 !! orhor(cplex*nfft,nspden)=The density on the real space mesh.
-!! ohdr=Abinit header read from file.
+!! ohdr=Abinit AB_HEADER read from file.
 !! pawrhoij(my_natom*usepaw) <type(pawrhoij_type)>= paw rhoij occupancies and related data. only
 !!   if pawread==1. The arrays is supposed to be already allocated in the caller and its
 !!   size must be consistent with the MPI communicator comm.
@@ -1086,12 +1086,12 @@ subroutine read_rhor(fname, cplex, nspden, nfft, ngfft, pawread, mpi_enreg, orho
 
  my_rank = xmpi_comm_rank(comm); nprocs = xmpi_comm_size(comm)
  n1 = ngfft(1); n2 = ngfft(2); n3 = ngfft(3); have_mpifft = (nfft /= product(ngfft(1:3)))
- allow_interp__ = .False.; if (present(allow_interp)) allow_interp__ = allow_interp
+ allow_interp__ = .false.; if (present(allow_interp)) allow_interp__ = allow_interp
 
  call wrtout(std_out, sjoin(" About to read data(r) from:", fname), 'COLL')
  call cwtime(cputime, walltime, gflops, "start")
 
- ! Master node opens the file, read the header and the FFT data
+ ! Master node opens the file, read the AB_HEADER and the FFT data
  ! This approach facilitates the interpolation of the density if in_ngfft(1:3) /= file_ngfft(1:3)
  if (my_rank == master) then
    my_fname = fname
@@ -1338,7 +1338,7 @@ end subroutine read_rhor
 !!  fort_denpot_skip
 !!
 !! FUNCTION
-!!  Skip the header and the DEN/POT records. Mainly used to append data to a pre-existent file.
+!!  Skip the AB_HEADER and the DEN/POT records. Mainly used to append data to a pre-existent file.
 !!  Return exit code.
 !!
 !! INPUTS
@@ -1516,7 +1516,7 @@ subroutine denpot_spin_convert(denpot_in,nspden_in,denpot_out,nspden_out,fform,&
 
  else
 
-!  Second case: POTENTIAL
+!  second case: POTENTIAL
 
    if      (nspden_in==1.and.nspden_out==2) then
      denpot_out(my_istart_out:my_istart_out+my_nelem-1,1)=denpot_in(my_istart_in:my_istart_in+my_nelem-1,1)

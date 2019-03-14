@@ -124,8 +124,8 @@
       REAL               DUMMY( 1 )
 *     ..
 *     .. External Functions ..
-      REAL               CLANGE, SASUM, SLAMCH, SNRM2
-      EXTERNAL           CLANGE, SASUM, SLAMCH, SNRM2
+      REAL               CLANGE, SASUM, AB_SLAMCH, SNRM2
+      EXTERNAL           CLANGE, SASUM, AB_SLAMCH, SNRM2
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGEBD2, CLASCL, CLASET, SAXPY, SBDSQR, SLABAD,
@@ -164,7 +164,7 @@
 *
 *     Get machine parameters
 *
-      SMLNUM = SLAMCH( 'S' ) / SLAMCH( 'P' )
+      SMLNUM = AB_SLAMCH( 'S' ) / AB_SLAMCH( 'P' )
       BIGNUM = ONE / SMLNUM
       CALL SLABAD( SMLNUM, BIGNUM )
 *
@@ -219,7 +219,7 @@
 *
       CALL SAXPY( MN, -ONE, S, 1, RWORK( 1 ), 1 )
       CQRT12 = SASUM( MN, RWORK( 1 ), 1 ) /
-     $         ( SLAMCH( 'Epsilon' )*REAL( MAX( M, N ) ) )
+     $         ( AB_SLAMCH( 'Epsilon' )*REAL( MAX( M, N ) ) )
       IF( NRMSVL.NE.ZERO )
      $   CQRT12 = CQRT12 / NRMSVL
 *

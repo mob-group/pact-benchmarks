@@ -139,7 +139,7 @@ contains
 !!  d3lo(2,3,mpert,3,mpert,3,mpert) = matrix of the 3DTEs
 !!
 !! SIDE EFFECTS
-!!  hdr <type(hdr_type)>=the header of wf, den and pot files
+!!  hdr <type(hdr_type)>=the AB_HEADER of wf, den and pot files
 !!
 !! PARENTS
 !!      nonlinear
@@ -307,7 +307,7 @@ subroutine pead_nl_loop(blkflg,cg,cgindex,dtfil,dtset,d3lo,&
        rho1r1(:,:) = 0._dp
        if (dtset%get1den /= 0 .or. dtset%ird1den /= 0) then
          rdwrpaw=0
-         call appdig(pert1case,dtfil%fildens1in,fiden1i)
+         call appdig(pert1case,dtfil%fiAB_LDEns1in,fiden1i)
          call status(counter,dtfil%filstat,iexit,level,'call ioarr    ')
 
          call read_rhor(fiden1i, cplex, dtset%nspden, nfft, dtset%ngfft, rdwrpaw, mpi_enreg, rho1r1, &
@@ -349,7 +349,7 @@ subroutine pead_nl_loop(blkflg,cg,cgindex,dtfil,dtset,d3lo,&
              rho3r1(:,:) = 0._dp
              if (dtset%get1den /= 0 .or. dtset%ird1den /= 0) then
                rdwrpaw=0
-               call appdig(pert3case,dtfil%fildens1in,fiden1i)
+               call appdig(pert3case,dtfil%fiAB_LDEns1in,fiden1i)
                call status(counter,dtfil%filstat,iexit,level,'call ioarr    ')
 
                call read_rhor(fiden1i, cplex, dtset%nspden, nfft, dtset%ngfft, rdwrpaw, mpi_enreg, rho3r1, &
@@ -427,7 +427,7 @@ subroutine pead_nl_loop(blkflg,cg,cgindex,dtfil,dtset,d3lo,&
 
                    if (dtset%get1den /= 0 .or. dtset%ird1den /= 0) then
                      rdwrpaw=0
-                     call appdig(pert2case,dtfil%fildens1in,fiden1i)
+                     call appdig(pert2case,dtfil%fiAB_LDEns1in,fiden1i)
                      call status(counter,dtfil%filstat,iexit,level,'call ioarr    ')
 
                      call read_rhor(fiden1i, cplex, dtset%nspden, nfft, dtset%ngfft, rdwrpaw, mpi_enreg, rho2r1, &

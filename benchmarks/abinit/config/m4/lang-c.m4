@@ -301,10 +301,10 @@ AC_DEFUN([_ABI_CHECK_CC_SUN],[
 # _ABI_CHECK_CC_HEADERS()
 # -----------------------
 #
-# Checks for header files.
+# Checks for AB_HEADER files.
 #
 AC_DEFUN([_ABI_CHECK_CC_HEADERS],[
-  dnl Init AC_MSG_CHECKING([for C header files])
+  dnl Init AC_MSG_CHECKING([for C AB_HEADER files])
   
   dnl The following line causes trouble to aclocal
   dnl AC_HEADER_STDC

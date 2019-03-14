@@ -130,8 +130,8 @@
       DOUBLE PRECISION   BETA, RSAFMN, SAFMIN, XNORM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, AB_DLAPY2, AB_DNRM2
-      EXTERNAL           DLAMCH, AB_DLAPY2, AB_DNRM2
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLAPY2, AB_DNRM2
+      EXTERNAL           AB_DLAMCH, AB_DLAPY2, AB_DNRM2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, SIGN
@@ -158,7 +158,7 @@
 *        general case
 *
          BETA = -SIGN( AB_DLAPY2( ALPHA, XNORM ), ALPHA )
-         SAFMIN = DLAMCH( 'S' ) / DLAMCH( 'E' )
+         SAFMIN = AB_DLAMCH( 'S' ) / AB_DLAMCH( 'E' )
          KNT = 0
          IF( ABS( BETA ).LT.SAFMIN ) THEN
 *

@@ -237,11 +237,11 @@ function cplx_real_zdotc(n,x,y) result(res)
  real(dp) :: res
 
 !Local variables-------------------------------
- real(dp),external :: ddot
+ real(dp),external :: AB_DDOT
 
 ! *************************************************************************
 
- res = ddot(2*n,x,1,y,1)
+ res = AB_DDOT(2*n,x,1,y,1)
 
 end function cplx_real_zdotc
 !!***
@@ -296,8 +296,8 @@ subroutine cplx_zaxpby(n,a,x,b,y)
 #ifdef HAVE_LINALG_AXPBY
  call zaxpby(n, a, x, 1, b, y, 1)
 #else
- call zscal(n, b, y, 1)
- call zaxpy(n, a, x, 1, y,1)
+ call AB_ZSCAL(n, b, y, 1)
+ call AB_ZAXPY(n, a, x, 1, y,1)
 #endif
 
 end subroutine cplx_zaxpby
@@ -374,9 +374,9 @@ subroutine cplx_zgemv(trans,nrows,ncols,mat,vec,matvec,alpha,beta)
  my_alpha = cone_dpc;  if (PRESENT(alpha)) my_alpha = alpha
  my_beta  = czero_dpc; if (PRESENT(beta))  my_beta  = beta
 
- call ZGEMM(trans,"N",mm,nn,kk,my_alpha,mat,lda,vec,ldb,my_beta,matvec,ldc)
+ call AB_ZGEMM(trans,"N",mm,nn,kk,my_alpha,mat,lda,vec,ldb,my_beta,matvec,ldc)
 
- !call ZGEMV(trans,mm,nn,my_alpha,mat,lda,vec,1,my_beta,matvec,1)
+ !call AB_ZGEMV(trans,mm,nn,my_alpha,mat,lda,vec,1,my_beta,matvec,1)
 
 end subroutine cplx_zgemv
 !!***
@@ -456,7 +456,7 @@ subroutine cplx_zgemm(transa,transb,npws,ncola,ncolb,amat,bmat,cmat,alpha,beta)
  my_alpha = cone_dpc;  if (PRESENT(alpha)) my_alpha = alpha
  my_beta  = czero_dpc; if (PRESENT(beta))  my_beta  = beta
 
- call ZGEMM(transa,transb,mm,nn,kk,my_alpha,amat,lda,bmat,ldb,my_beta,cmat,ldc)
+ call AB_ZGEMM(transa,transb,mm,nn,kk,my_alpha,amat,lda,bmat,ldb,my_beta,cmat,ldc)
 
 end subroutine cplx_zgemm
 !!***

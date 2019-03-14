@@ -355,7 +355,7 @@ subroutine dfpt_looppert(atindx,blkflg,codvsn,cpus,dim_eigbrd,dim_eig2nkq,doccde
  real(dp),allocatable :: cg1_active_mq(:,:),occk_mq(:)                 !
  real(dp),allocatable :: kmq(:,:),kmq_rbz(:,:),gh0c1_set_mq(:,:)        !
  real(dp),allocatable :: eigen_mq(:),gh1c_set_mq(:,:),docckde_mq(:),eigen1_mq(:)          !
- real(dp),allocatable :: vpsp1(:),work(:),wtk_folded(:),wtk_rbz(:),xccc3d1(:)
+ real(dp),allocatable :: vpsp1(:),work(:),wtk_foAB_LDEd(:),wtk_rbz(:),xccc3d1(:)
  real(dp),allocatable :: ylm(:,:),ylm1(:,:),ylmgr(:,:,:),ylmgr1(:,:,:),zeff(:,:,:)
  real(dp),allocatable :: phasecg(:,:),gauss(:,:)
  real(dp),allocatable :: gkk(:,:,:,:,:)
@@ -908,13 +908,13 @@ subroutine dfpt_looppert(atindx,blkflg,codvsn,cpus,dim_eigbrd,dim_eig2nkq,doccde
 !  Determine the subset of k-points needed in the "reduced Brillouin zone",
 !  and initialize other quantities
    ABI_ALLOCATE(indkpt1_tmp,(nkpt))
-   ABI_ALLOCATE(wtk_folded,(nkpt))
+   ABI_ALLOCATE(wtk_foAB_LDEd,(nkpt))
    indkpt1_tmp(:)=0 ; optthm=0
    timrev_pert=timrev
    if(dtset%ieig2rf>0) then
      timrev_pert=0
      call symkpt(0,gmet,indkpt1_tmp,ab_out,dtset%kptns,nkpt,nkpt_rbz,&
-&     1,symrc1,timrev_pert,dtset%wtk,wtk_folded)
+&     1,symrc1,timrev_pert,dtset%wtk,wtk_foAB_LDEd)
    else
 !    For the time being, the time reversal symmetry is not used
 !    for ddk, elfd, mgfd perturbations.
@@ -928,7 +928,7 @@ subroutine dfpt_looppert(atindx,blkflg,codvsn,cpus,dim_eigbrd,dim_eig2nkq,doccde
 !    The time reversal symmetry is not used for the BZ sampling when kptopt=3 or 4
      if (dtset%kptopt==3.or.dtset%kptopt==4) timrev_kpt = 0
      call symkpt(0,gmet,indkpt1_tmp,ab_out,dtset%kptns,nkpt,nkpt_rbz,&
-     nsym1,symrc1,timrev_kpt,dtset%wtk,wtk_folded)
+     nsym1,symrc1,timrev_kpt,dtset%wtk,wtk_foAB_LDEd)
    end if
 
    ABI_ALLOCATE(doccde_rbz,(dtset%mband*nkpt_rbz*dtset%nsppol))
@@ -947,7 +947,7 @@ subroutine dfpt_looppert(atindx,blkflg,codvsn,cpus,dim_eigbrd,dim_eig2nkq,doccde
      istwfk_rbz(ikpt)=dtset%istwfk(indkpt1(ikpt))
      kpq_rbz(:,ikpt)=kpq(:,indkpt1(ikpt))
      kpt_rbz(:,ikpt)=dtset%kptns(:,indkpt1(ikpt))
-     wtk_rbz(ikpt)=wtk_folded(indkpt1(ikpt))
+     wtk_rbz(ikpt)=wtk_foAB_LDEd(indkpt1(ikpt))
    end do
    if (.not.kramers_deg) then
      do ikpt=1,nkpt_rbz
@@ -955,7 +955,7 @@ subroutine dfpt_looppert(atindx,blkflg,codvsn,cpus,dim_eigbrd,dim_eig2nkq,doccde
      end do
    end if
    ABI_DEALLOCATE(indkpt1_tmp)
-   ABI_DEALLOCATE(wtk_folded)
+   ABI_DEALLOCATE(wtk_foAB_LDEd)
 
 !  Transfer occ to occ_rbz and doccde to doccde_rbz :
 !  this is a more delicate issue
@@ -1066,7 +1066,7 @@ subroutine dfpt_looppert(atindx,blkflg,codvsn,cpus,dim_eigbrd,dim_eig2nkq,doccde
 &   dtset%kptrlatt, dtset%nshiftk, dtset%shiftk)
    ABI_DEALLOCATE(eigen0)
 
-!  Initialize header, update it with evolving variables
+!  Initialize AB_HEADER, update it with evolving variables
    gscase=0 ! A GS WF file is read
    call hdr_init(ebands_k,codvsn,dtset,hdr0,pawtab,gscase,psps,wvl%descr,&
 &   comm_atom=mpi_enreg%comm_atom,mpi_atmtab=mpi_enreg%my_atmtab)
@@ -1218,7 +1218,7 @@ subroutine dfpt_looppert(atindx,blkflg,codvsn,cpus,dim_eigbrd,dim_eig2nkq,doccde
    end if
    ABI_DEALLOCATE(eigenq)
 
-!  Initialize header
+!  Initialize AB_HEADER
    call hdr_init(ebands_kq,codvsn,dtset,hdr,pawtab,pertcase,psps,wvl%descr, &
 &   comm_atom=mpi_enreg%comm_atom,mpi_atmtab=mpi_enreg%my_atmtab )
    if (.not.kramers_deg) then
@@ -1511,7 +1511,7 @@ subroutine dfpt_looppert(atindx,blkflg,codvsn,cpus,dim_eigbrd,dim_eig2nkq,doccde
      end if
    end if
 
-!  Eventually reytrieve 1st-order PAW occupancies from file header
+!  Eventually reytrieve 1st-order PAW occupancies from file AB_HEADER
    if (psps%usepaw==1.and.dtfil%ireadwf/=0) then
      call pawrhoij_copy(hdr%pawrhoij,pawrhoij1,comm_atom=mpi_enreg%comm_atom , &
 &     mpi_atmtab=mpi_enreg%my_atmtab)
@@ -1721,7 +1721,7 @@ subroutine dfpt_looppert(atindx,blkflg,codvsn,cpus,dim_eigbrd,dim_eig2nkq,doccde
      if (psps%usepaw == 0) then
        init_rhor1 = init_rhor1 .and. all(psps%nctab(:ntypat)%has_tvale)
      else
-       init_rhor1 = .False.
+       init_rhor1 = .false.
      end if
 
      if (init_rhor1) then
@@ -1807,11 +1807,11 @@ subroutine dfpt_looppert(atindx,blkflg,codvsn,cpus,dim_eigbrd,dim_eig2nkq,doccde
        ! Read rho1(r) from a disk file and broadcast data.
        rdwr=1;rdwrpaw=psps%usepaw;if(dtfil%ireadwf/=0) rdwrpaw=0
        if (ipert/=dtset%natom+11) then
-         call appdig(pertcase,dtfil%fildens1in,fiden1i)
+         call appdig(pertcase,dtfil%fiAB_LDEns1in,fiden1i)
        else ! For ipert==natom+11, we want to read the 1st order density from a previous calculation
-         call appdig(idir2+(dtset%natom+1)*3,dtfil%fildens1in,fiden1i)
+         call appdig(idir2+(dtset%natom+1)*3,dtfil%fiAB_LDEns1in,fiden1i)
        end if
-!       call appdig(pertcase,dtfil%fildens1in,fiden1i)
+!       call appdig(pertcase,dtfil%fiAB_LDEns1in,fiden1i)
        call read_rhor(fiden1i, cplex, dtset%nspden, nfftf, ngfftf, rdwrpaw, mpi_enreg, rhor1, &
        hdr_den, pawrhoij1, spaceComm, check_hdr=hdr)
        etotal = hdr_den%etot; call hdr_free(hdr_den)
@@ -2056,7 +2056,7 @@ subroutine dfpt_looppert(atindx,blkflg,codvsn,cpus,dim_eigbrd,dim_eig2nkq,doccde
    ! Write wavefunctions file only if convergence was not achieved.
    write_1wfk = .True.
    if (dtset%prtwf==-1 .and. dfpt_scfcv_retcode == 0) then
-     write_1wfk = .False.
+     write_1wfk = .false.
      call wrtout(ab_out," dfpt_looppert: DFPT cycle converged with prtwf=-1. Will skip output of the 1st-order WFK file.","COLL")
    end if
 
@@ -2280,7 +2280,7 @@ subroutine dfpt_looppert(atindx,blkflg,codvsn,cpus,dim_eigbrd,dim_eig2nkq,doccde
    if ((dtset%getwfkfine /= 0 .and. dtset%irdwfkfine ==0) .or.&
 &   (dtset%getwfkfine == 0 .and. dtset%irdwfkfine /=0) )  then
      call wrtout(std_out,'Reading the dense grid WF file',"COLL")
-!    We get the Abinit header of the file hdr_fine as ouput
+!    We get the Abinit AB_HEADER of the file hdr_fine as ouput
 !    We get eigenq_fine(mband,hdr_fine%nkpt,hdr_fine%nsppol) as ouput
      fname = dtfil%fnameabi_wfkfine
      if (dtset%iomode == IO_MODE_ETSF) fname = nctk_ncify(dtfil%fnameabi_wfkfine)
@@ -2360,7 +2360,7 @@ subroutine dfpt_looppert(atindx,blkflg,codvsn,cpus,dim_eigbrd,dim_eig2nkq,doccde
 &         hdr0%charge, hdr0%kptopt, hdr0%kptrlatt_orig, hdr0%nshiftk_orig, hdr0%shiftk_orig, &
 &         hdr0%kptrlatt, hdr0%nshiftk, hdr0%shiftk)
 
-!        Second order derivative EIGR2D (real and Im)
+!        second order derivative EIGR2D (real and Im)
          call eigr2d_init(eig2nkq,eigr2d,dtset%mband,hdr0%nsppol,nkpt_rbz,dtset%natom)
 #ifdef HAVE_NETCDF
          NCF_CHECK_MSG(nctk_open_create(ncid, fname, xmpi_comm_self), "Creating EIGR2D file")

@@ -185,10 +185,10 @@
 *>          generalized problem is transformed.
 *>
 *>          Eigenvalues will be computed most accurately when ABSTOL is
-*>          set to twice the underflow threshold 2*SLAMCH('S'), not zero.
+*>          set to twice the underflow threshold 2*AB_SLAMCH('S'), not zero.
 *>          If this routine returns with INFO>0, indicating that some
 *>          eigenvectors did not converge, try setting ABSTOL to
-*>          2*SLAMCH('S').
+*>          2*AB_SLAMCH('S').
 *> \endverbatim
 *>
 *> \param[out] M

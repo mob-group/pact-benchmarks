@@ -240,8 +240,8 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_ILAENV
-      REAL               SLAMCH, AB_SLANST
-      EXTERNAL           SLAMCH, AB_SLANST, AB_ILAENV, AB_LSAME
+      REAL               AB_SLAMCH, AB_SLANST
+      EXTERNAL           AB_SLAMCH, AB_SLANST, AB_ILAENV, AB_LSAME
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_SCOPY, AB_SLARTG, AB_SLASCL, AB_SLASD0, AB_S
@@ -386,7 +386,7 @@
       CALL AB_SLASCL( 'G', 0, 0, ORGNRM, ONE, N, 1, D, N, IERR )
       CALL AB_SLASCL( 'G', 0, 0, ORGNRM, ONE, NM1, 1, E, NM1, IERR )
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
 *
       MLVL = INT( LOG( REAL( N ) / REAL( SMLSIZ+1 ) ) / LOG( TWO ) ) + 1
       SMLSZP = SMLSIZ + 1

@@ -597,7 +597,7 @@ end subroutine libpaw_write_comm_set
 !!
 !! INPUTS
 !!  log_flag= new value for LOG file flag
-!!            True: the log file is filled; False: no the log file
+!!            True: the log file is filled; false: no the log file
 !!
 !! OUTPUT
 !!

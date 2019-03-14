@@ -425,8 +425,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               SLAMCH, SLARND
-      EXTERNAL           LSAME, SLAMCH, SLARND
+      REAL               AB_SLAMCH, SLARND
+      EXTERNAL           LSAME, AB_SLAMCH, SLARND
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SLABAD, SLAFTS, SLASUM, XERBLA, CHBGV, CHBGVD,
@@ -491,10 +491,10 @@
 *
 *     More Important constants
 *
-      UNFL = SLAMCH( 'Safe minimum' )
-      OVFL = SLAMCH( 'Overflow' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
+      OVFL = AB_SLAMCH( 'Overflow' )
       CALL SLABAD( UNFL, OVFL )
-      ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
+      ULP = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
       ULPINV = ONE / ULP
       RTUNFL = SQRT( UNFL )
       RTOVFL = SQRT( OVFL )

@@ -157,8 +157,8 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            IDAMAX
-      DOUBLE PRECISION   DASUM, DLAMCH, ZLANGE
-      EXTERNAL           LSAME, IDAMAX, DASUM, DLAMCH, ZLANGE
+      DOUBLE PRECISION   DASUM, AB_DLAMCH, ZLANGE
+      EXTERNAL           LSAME, IDAMAX, DASUM, AB_DLAMCH, ZLANGE
       DOUBLE PRECISION   DZASUM
 *     ..
 *     .. External Subroutines ..
@@ -175,7 +175,7 @@
       IF( MIN( M, N ).LE.0 .OR. NS.LE.0 )
      $   RETURN
 *
-      EPS = DLAMCH( 'Precision' )
+      EPS = AB_DLAMCH( 'Precision' )
       ANORM = ZLANGE( 'M', M, N, A, LDA, DUM )
 *
 *     Compute U' * A * V.

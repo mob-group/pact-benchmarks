@@ -192,7 +192,7 @@ subroutine psp8in(ekb,epsatm,ffspl,indlmn,lloc,lmax,lmnmax,lnmax,&
  call wrtout(ab_out,message,'COLL')
  call wrtout(std_out,message,'COLL')
 
-!place holder for future implementation of additional optional header
+!place hoAB_LDEr for future implementation of additional optional AB_HEADER
 !lines without invalidating existing psp files
 !Now (12/2014) extended to include spin-orbit projectors
 
@@ -200,7 +200,7 @@ subroutine psp8in(ekb,epsatm,ffspl,indlmn,lloc,lmax,lmnmax,lnmax,&
 ! of the *.psp8 file will be set to 1 (non- or scalar-relativistic)
 ! or 3 (relativistic) to signal this to Abinit that the file contains the pseudo valence charge.
 
- has_tvale = .False.
+ has_tvale = .false.
  read (tmp_unit,*, err=10, iomsg=errmsg) extension_switch
  if (any(extension_switch==[2, 3])) then
    read (tmp_unit,*, err=10, iomsg=errmsg) nproj_tmp(lmax+2:2*lmax+1)
@@ -600,7 +600,7 @@ subroutine psp8cc(mmax,n1xccc,rchrg,xccc1d)
  if(rchrg>rad(mmax)) then
    write(message, '(5a)' )&
 &   'Pseudopotential input file core charge mesh',ch10,&
-&   'is inconsistent with rchrg in header.',ch10,&
+&   'is inconsistent with rchrg in AB_HEADER.',ch10,&
 &   'Action: check your pseudopotential input file.'
    MSG_ERROR(message)
  end if

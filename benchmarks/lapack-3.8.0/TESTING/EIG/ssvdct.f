@@ -114,8 +114,8 @@
      $                   TOM, U, UNFL
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -124,7 +124,7 @@
 *
 *     Get machine constants
 *
-      UNFL = 2*SLAMCH( 'Safe minimum' )
+      UNFL = 2*AB_SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
 *
 *     Find largest entry

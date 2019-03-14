@@ -217,7 +217,7 @@ program mrgscr
    end do
  end if
 
- ! Read the header of each file.
+ ! Read the AB_HEADER of each file.
  do ifile=1,nfiles
    iomode = IO_MODE_FORTRAN; if (endswith(filenames(ifile), ".nc")) iomode = IO_MODE_ETSF
 
@@ -229,7 +229,7 @@ program mrgscr
      MSG_ERROR(sjoin("Cannot find any abifile object associated to fform1:", itoa(fform1)))
    end if
    if (abifile%class /= "polariz" .and. abifile%class /= "epsm1") then
-     MSG_ERROR(sjoin('Error while reading header, fform= ',itoa(fform1)))
+     MSG_ERROR(sjoin('Error while reading AB_HEADER, fform= ',itoa(fform1)))
    end if
    is_scr = abifile%class == "epsm1"
    is_sus = abifile%class == "polariz"
@@ -283,7 +283,7 @@ program mrgscr
  end if ! nfiles>1
 
 !=== Now check if the list of q-points is complete ===
-!* Here we assume that the k-mesh reported in the header is the same as that used during the sigma calculation.
+!* Here we assume that the k-mesh reported in the AB_HEADER is the same as that used during the sigma calculation.
  write(msg,'(3a)') ch10,' Checking if the list of q-points is complete. ',ch10
  call wrtout(std_out,msg,'COLL')
 

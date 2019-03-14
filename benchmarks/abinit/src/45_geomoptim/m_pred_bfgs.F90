@@ -52,12 +52,12 @@ contains
 !! pred_bfgs
 !!
 !! FUNCTION
-!! Ionmov predictors (2 & 3) Broyden-Fletcher-Goldfarb-Shanno
+!! Ionmov predictors (2 & 3) Broyden-FletAB_CHER-Goldfarb-Shanno
 !!
 !! IONMOV 2:
 !! Given a starting point xred that is a vector of length 3*natom
 !! (reduced nuclei coordinates), and unit cell parameters
-!! (acell and rprimd) the Broyden-Fletcher-Goldfarb-Shanno
+!! (acell and rprimd) the Broyden-FletAB_CHER-Goldfarb-Shanno
 !! minimization is performed on the total energy function, using
 !! its gradient (atomic forces and stresse) as calculated
 !! by the routine scfcv. Some atoms can be kept fixed,
@@ -69,7 +69,7 @@ contains
 !! Could see Numerical Recipes (Fortran), 1986, page 307.
 !!
 !! IONMOV 3:
-!! Conduct structural optimization using the Broyden-Fletcher-
+!! Conduct structural optimization using the Broyden-FletAB_CHER-
 !! Goldfarb-Shanno minimization (BFGS), modified to take into
 !! account the total energy as well as the gradients (as in usual
 !! BFGS). See the paper by Schlegel, J. Comp. Chem. 3, 214 (1982) [[cite:Schlegel1982]].
@@ -92,7 +92,7 @@ contains
 !!      mover
 !!
 !! CHILDREN
-!!      brdene,dgetrf,dgetri,fcart2fred,hessinit,hessupdt,hist2var,metric
+!!      brdene,AB_DGETRF,AB_DGETRI,fcart2fred,hessinit,hessupdt,hist2var,metric
 !!      mkrdim,var2hist,xfh_recover_new,xfpack_f2vout,xfpack_vin2x,xfpack_x2vin
 !!
 !! SOURCE
@@ -449,8 +449,8 @@ real(dp) :: xred(3,ab_mover%natom),strten(6)
          ABI_ALLOCATE(ipiv,(nitpul))
          ABI_ALLOCATE(rwork,(nitpul))
 !          amatinv=1.d5*amatinv
-         call dgetrf(nitpul,nitpul,amatinv,nitpul,ipiv,ierr)
-         call dgetri(nitpul,amatinv,nitpul,ipiv,rwork,nitpul,ierr)
+         call AB_DGETRF(nitpul,nitpul,amatinv,nitpul,ipiv,ierr)
+         call AB_DGETRI(nitpul,amatinv,nitpul,ipiv,rwork,nitpul,ierr)
 !          amatinv=1.d5*amatinv
          ABI_DEALLOCATE(ipiv)
          ABI_DEALLOCATE(rwork)
@@ -564,12 +564,12 @@ end subroutine pred_bfgs
 !! pred_lbfgs
 !!
 !! FUNCTION
-!! Ionmov predictors (22) Limited-memory Broyden-Fletcher-Goldfarb-Shanno
+!! Ionmov predictors (22) Limited-memory Broyden-FletAB_CHER-Goldfarb-Shanno
 !!
 !! IONMOV 22:
 !! Given a starting point xred that is a vector of length 3*natom
 !! (reduced nuclei coordinates), and unit cell parameters
-!! (acell and rprim) the L-Broyden-Fletcher-Goldfarb-Shanno
+!! (acell and rprim) the L-Broyden-FletAB_CHER-Goldfarb-Shanno
 !! minimization is performed on the total energy function, using
 !! its gradient (atomic forces and stress : fred or fcart and
 !! stress) as calculated by the routine scfcv. Some atoms can be

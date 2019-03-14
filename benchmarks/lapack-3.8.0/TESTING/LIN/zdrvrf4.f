@@ -150,9 +150,9 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLARND, ZLANGE
+      DOUBLE PRECISION   AB_DLAMCH, DLARND, ZLANGE
       COMPLEX*16         ZLARND
-      EXTERNAL           DLAMCH, DLARND, ZLANGE, ZLARND
+      EXTERNAL           AB_DLAMCH, DLARND, ZLANGE, ZLARND
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZHERK, ZHFRK, ZTFTTR, ZTRTTF
@@ -182,7 +182,7 @@
       DO 10 I = 1, 4
          ISEED( I ) = ISEEDY( I )
    10 CONTINUE
-      EPS = DLAMCH( 'Precision' )
+      EPS = AB_DLAMCH( 'Precision' )
 *
       DO 150 IIN = 1, NN
 *

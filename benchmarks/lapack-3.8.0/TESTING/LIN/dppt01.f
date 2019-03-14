@@ -119,8 +119,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      DOUBLE PRECISION   DDOT, DLAMCH, DLANSP
-      EXTERNAL           LSAME, DDOT, DLAMCH, DLANSP
+      DOUBLE PRECISION   DDOT, AB_DLAMCH, DLANSP
+      EXTERNAL           LSAME, DDOT, AB_DLAMCH, DLANSP
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DSCAL, DSPR, DTPMV
@@ -139,7 +139,7 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       ANORM = DLANSP( '1', UPLO, N, A, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS

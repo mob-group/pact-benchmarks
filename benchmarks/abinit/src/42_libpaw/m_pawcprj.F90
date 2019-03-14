@@ -119,7 +119,7 @@ CONTAINS
 !!
 !! PARENTS
 !!      berryphase_new,calc_optical_mels,calc_sigc_me,calc_sigx_me,calc_vhxc_me
-!!      calc_wf_qp,cchi0,cchi0q0,cchi0q0_intraband,cgwf,chebfi,chern_number
+!!      calc_wf_qp,cchi0,cchi0q0,cchi0q0_intraband,cgwf,chebfi,AB_CHERn_number
 !!      classify_bands,cohsex_me,ctocprj,d2frnl,m_datafordmft,debug_tools
 !!      dfpt_accrho,dfpt_cgwf,dfpt_looppert,dfpt_nstpaw,dfpt_scfcv,dfpt_vtowfk
 !!      dfpt_wfkfermi,dotprod_set_cgcprj,dotprodm_sumdiag_cgcprj,energy
@@ -205,7 +205,7 @@ end subroutine pawcprj_alloc
 !!
 !! PARENTS
 !!      berryphase_new,calc_optical_mels,calc_sigc_me,calc_sigx_me,calc_vhxc_me
-!!      calc_wf_qp,cchi0,cchi0q0,cchi0q0_intraband,cgwf,chebfi,chern_number
+!!      calc_wf_qp,cchi0,cchi0q0,cchi0q0_intraband,cgwf,chebfi,AB_CHERn_number
 !!      classify_bands,cohsex_me,ctocprj,d2frnl,datafordmft,debug_tools
 !!      dfpt_accrho,dfpt_cgwf,dfpt_looppert,dfpt_nstpaw,dfpt_scfcv,dfpt_vtowfk
 !!      dfpt_wfkfermi,dotprod_set_cgcprj,dotprodm_sumdiag_cgcprj,energy
@@ -1187,7 +1187,7 @@ end subroutine pawcprj_output
 !!  cprj_k(dimcp,nspinor*nband) <type(pawcprj_type)>= output cprj datastructure
 !!
 !! PARENTS
-!!      berryphase_new,cgwf,chern_number,datafordmft,dfpt_nstpaw,dfpt_vtowfk
+!!      berryphase_new,cgwf,AB_CHERn_number,datafordmft,dfpt_nstpaw,dfpt_vtowfk
 !!      dfpt_wfkfermi,dotprod_set_cgcprj,dotprodm_sumdiag_cgcprj,extrapwf
 !!      fock2ACE,forstrnps,m_plowannier,make_grad_berry,optics_paw
 !!      optics_paw_core,pawmkrhoij,posdoppler,rf2_init,smatrix_pawinit
@@ -2878,7 +2878,7 @@ end subroutine pawcprj_bcast
 !!  dimcprj(natom)=Number of nlm elements in the <p_{lmn}^i|\psi> matrix elements for i=1,...,natom.
 !!
 !! PARENTS
-!!      afterscfloop,berryphase_new,chern_number,dfpt_looppert,dfpt_scfcv
+!!      afterscfloop,berryphase_new,AB_CHERn_number,dfpt_looppert,dfpt_scfcv
 !!      extrapwf,forstr,getghc,initberry,m_fock,m_hamiltonian,mlwfovlp_qp
 !!      outkss,scfcv,smatrix_pawinit,wf_mixing
 !!

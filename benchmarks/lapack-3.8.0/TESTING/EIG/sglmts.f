@@ -174,8 +174,8 @@
       REAL               ANORM, BNORM, EPS, XNORM, YNORM, DNORM, UNFL
 *     ..
 *     .. External Functions ..
-      REAL               SASUM, SLAMCH, SLANGE
-      EXTERNAL           SASUM, SLAMCH, SLANGE
+      REAL               SASUM, AB_SLAMCH, SLANGE
+      EXTERNAL           SASUM, AB_SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SLACPY
@@ -185,8 +185,8 @@
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = SLAMCH( 'Epsilon' )
-      UNFL = SLAMCH( 'Safe minimum' )
+      EPS = AB_SLAMCH( 'Epsilon' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
       ANORM = MAX( SLANGE( '1', N, M, A, LDA, RWORK ), UNFL )
       BNORM = MAX( SLANGE( '1', N, P, B, LDB, RWORK ), UNFL )
 *

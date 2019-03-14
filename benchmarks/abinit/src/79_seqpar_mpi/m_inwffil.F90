@@ -92,7 +92,7 @@ contains
 !!    to generate the sphere of plane wave
 !!  exchn2n3d=if 1, n2 and n3 are exchanged
 !!  formeig=explained above
-!!  hdr <type(hdr_type)>=the header of wf, den and pot files
+!!  hdr <type(hdr_type)>=the AB_HEADER of wf, den and pot files
 !!  ireadwf=option parameter described above for wf initialization
 !!  istwfk(nkpt)=input option parameter that describes the storage of wfs to be initialized here.
 !!  kg(3,mpw*my_nkpt)=dimensionless coords of G vecs in basis sphere at k point
@@ -318,9 +318,9 @@ subroutine inwffil(ask_accurate,cg,dtset,ecut,ecut_eff,eigen,exchn2n3d,&
      MSG_ERROR(message)
    end if
 
-   call wrtout(std_out,'inwffil: examining the header of disk file '//TRIM(wff1%fname),'COLL')
+   call wrtout(std_out,'inwffil: examining the AB_HEADER of disk file '//TRIM(wff1%fname),'COLL')
 
-!  Check hdr0 versus hdr (and from now on ignore header consistency and write new info to header for each file)
+!  Check hdr0 versus hdr (and from now on ignore AB_HEADER consistency and write new info to AB_HEADER for each file)
    if (dtset%usewvl == 0) then
 !    wait for plane waves.
      fform=2
@@ -389,7 +389,7 @@ subroutine inwffil(ask_accurate,cg,dtset,ecut,ecut_eff,eigen,exchn2n3d,&
      mpi_enreg0 => mpi_enreg
    end if
 
-!  At this stage, the header of the file wff1i%unwff is read, and
+!  At this stage, the AB_HEADER of the file wff1i%unwff is read, and
 !  the pointer is ready to read the first wavefunction block.
 
 !  Compute k points from input file closest to the output file
@@ -446,7 +446,7 @@ subroutine inwffil(ask_accurate,cg,dtset,ecut,ecut_eff,eigen,exchn2n3d,&
  call timab(712,1,tsec)
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!At this stage, all the relevant information from the header of the disk file,
+!At this stage, all the relevant information from the AB_HEADER of the disk file,
 !has been exploited, and stored in variables, on all processors.
 !It is also contained in hdr0
 !(on all processors, except if restart=1 and localrdwf=0,
@@ -454,7 +454,7 @@ subroutine inwffil(ask_accurate,cg,dtset,ecut,ecut_eff,eigen,exchn2n3d,&
 !These information might be changed later, while processing the
 !wavefunction data, and converting it. The variable hdr0 might be kept
 !for further checking, or reference, or debugging, but at present,
-!it is simpler to close it. The other header, hdr, will be used for the new file, if any.
+!it is simpler to close it. The other AB_HEADER, hdr, will be used for the new file, if any.
 
  if(ask_accurate==1)then
 
@@ -852,7 +852,7 @@ subroutine inwffil(ask_accurate,cg,dtset,ecut,ecut_eff,eigen,exchn2n3d,&
            end do
          end if
        end do
-!      --- Second version: parallelization over spinors
+!      --- second version: parallelization over spinors
      else
 !      Compute some useful indexes
        ABI_ALLOCATE(indx,(imax))
@@ -1044,7 +1044,7 @@ end subroutine inwffil
 !!  exchn2n3d=if 1, n2 and n3 are exchanged
 !!  formeig=explained above
 !!  gmet(3,3), gmet0(3,3)=reciprocal space metrics (bohr^-2)
-!!  headform0=header format (might be needed to read the block of wfs)
+!!  headform0=AB_HEADER format (might be needed to read the block of wfs)
 !!  indkk(nkpt*sppoldbl,6)=describe k point number of kptns0 that allows to
 !!   generate wavefunctions closest to given kpt
 !!   indkk(:,1)=k point number of kptns0
@@ -1827,7 +1827,7 @@ end subroutine wfsinp
 !!
 !! INPUTS
 !! formeig=see above
-!! headform=header format (might be needed to read the block of wfs)
+!! headform=AB_HEADER format (might be needed to read the block of wfs)
 !! icg=shift to be given to the location of the data in the array cg
 !! ikpt= number of the k point of which the wf is initialised
 !! spin=spin index
@@ -2000,7 +2000,7 @@ end subroutine initwf
 !!             Note : must have fill/=0 in the parallel execution
 !!  formeig=if 0, GS format for wfs, eig and occ ; if 1, RF format.
 !!  gmet1(3,3), gmet2(3,3)=reciprocal space metrics (bohr^-2)
-!!  headform1=header format (might be needed to read the block of wfs)
+!!  headform1=AB_HEADER format (might be needed to read the block of wfs)
 !!  indkk(nkpt2*sppoldbl,6)=describe k point number of kptns1 that allows to
 !!   generate wavefunctions closest to given kpt2 (and possibly isppol2=2)
 !!   indkk(:,1)=k point number of kpt1
@@ -3223,7 +3223,7 @@ subroutine wfconv(ceksp2,cg1,cg2,debug,ecut1,ecut2,ecut2_eff,&
 !            uniform random variables, their distribution is close to a gaussian
              fold1=mod(seed,3)+mod(seed,5)+mod(seed,7)+mod(seed,11)+mod(seed,13)
              fold2=mod(seed,17)+mod(seed,19)+mod(seed,23)+mod(seed,29)+mod(seed,31)
-!            The gaussian distributions are folded, in order to be back to a uniform distribution
+!            The gaussian distributions are foAB_LDEd, in order to be back to a uniform distribution
 !            foldre is between 0 and 20, foldim is between 0 and 18
              foldre=mod(fold1+fold2,21)
              foldim=mod(3*fold1+2*fold2,19)
@@ -3296,7 +3296,7 @@ subroutine wfconv(ceksp2,cg1,cg2,debug,ecut1,ecut2,ecut2_eff,&
  end if
 
 !Orthogonalize GS wfs
- !if (.False.) then
+ !if (.false.) then
  if (optorth==1.and.formeig==0.and.mpi_enreg2%paral_kgb/=1) then
    ABI_ALLOCATE(dum,(2,0))
    ortalgo=0 !;ortalgo=3

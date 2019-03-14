@@ -174,8 +174,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME
-      REAL               SLAMCH
-      EXTERNAL           AB_LSAME, SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_SLACN2, AB_XERBLA, AB_SSYTRS
@@ -267,7 +267,7 @@
 *
 *     Estimate the norm of inv(op(A)).
 *
-      SMLNUM = SLAMCH( 'Safe minimum' )
+      SMLNUM = AB_SLAMCH( 'Safe minimum' )
       AINVNM = 0.0
       NORMIN = 'N'
 

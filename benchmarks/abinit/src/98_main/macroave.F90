@@ -6,8 +6,8 @@
 !! FUNCTION
 !! **********************************************************************
 !! The MACROAVE program implements the macroscopic average technique,
-!! introduced by A. Baldereschi and coworkers
-!! (A. Baldereschi, S. Baroni, and R. Resta, Phys. Rev. Lett. 61, 734 (1988) [[cite:Baldereschi1988]]).
+!! introduced by A. BaAB_LDEreschi and coworkers
+!! (A. BaAB_LDEreschi, S. Baroni, and R. Resta, Phys. Rev. Lett. 61, 734 (1988) [[cite:BaAB_LDEreschi1988]]).
 !! This is an extremely powerful method that relates
 !! microscopic quantities, typical outputs of first-principles codes,
 !! with macroscopic magnitudes, needed to perform electrostatic analysis.
@@ -379,7 +379,7 @@ program macroave
 
  L  = CELL(3,3)
  SUR = SURPLA( CELL ) ! surface of unit cell in xy plane, perpendicular to z
- VOL = VOLCEL( CELL )
+ VOL = VOAB_LCEL( CELL )
  DS = SUR/( MESH(1) * MESH(2) ) ! this seems adapted to arbitrary in-plane cells
  LENGTH = L/DBLE(N)
  NPOINTS = MESH(3)

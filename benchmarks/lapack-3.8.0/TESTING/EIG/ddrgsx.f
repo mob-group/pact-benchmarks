@@ -399,8 +399,8 @@
 *     .. External Functions ..
       LOGICAL            DLCTSX
       INTEGER            ILAENV
-      DOUBLE PRECISION   DLAMCH, DLANGE
-      EXTERNAL           DLCTSX, ILAENV, DLAMCH, DLANGE
+      DOUBLE PRECISION   AB_DLAMCH, DLANGE
+      EXTERNAL           DLCTSX, ILAENV, AB_DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, DGESVD, DGET51, DGET53, DGGESX, DLABAD,
@@ -477,9 +477,9 @@
 *
 *     Important constants
 *
-      ULP = DLAMCH( 'P' )
+      ULP = AB_DLAMCH( 'P' )
       ULPINV = ONE / ULP
-      SMLNUM = DLAMCH( 'S' ) / ULP
+      SMLNUM = AB_DLAMCH( 'S' ) / ULP
       BIGNUM = ONE / SMLNUM
       CALL DLABAD( SMLNUM, BIGNUM )
       THRSH2 = TEN*THRESH

@@ -176,8 +176,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               CLANTP, SCASUM, SLAMCH
-      EXTERNAL           LSAME, CLANTP, SCASUM, SLAMCH
+      REAL               CLANTP, SCASUM, AB_SLAMCH
+      EXTERNAL           LSAME, CLANTP, SCASUM, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CAXPY, CCOPY, CTPMV
@@ -204,7 +204,7 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN

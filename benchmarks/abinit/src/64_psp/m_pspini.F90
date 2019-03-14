@@ -41,7 +41,7 @@ module m_pspini
  use m_pawtab,    only : pawtab_type, pawtab_set_flags
  use m_psps,      only : psps_print, psps_ncwrite, nctab_init, nctab_free, nctab_mixalch, test_xml_xmlpaw_upf, &
                          nctab_eval_tcorespl
- use m_pawpsp,    only : pawpsp_bcast, pawpsp_read_pawheader, pawpsp_read_header_xml,&
+ use m_pawpsp,    only : pawpsp_bcast, pawpsp_read_pawAB_HEADER, pawpsp_read_header_xml,&
                          pawpsp_header_type, pawpsp_wvl, pawpsp_7in, pawpsp_17in
  use m_pawxmlps,  only : paw_setup_free,paw_setuploc
  use m_pspheads,  only : pawpsxml2ab
@@ -120,7 +120,7 @@ contains
 !! role, however). So, the pseudopotential data ought not be recomputed
 !! when gsqcut, gsqcutdg, mqgrid_ff, mqgrid_vl, npspso, ixc, dimekb and useylm do not change.
 !! In many cases, this routine is also called just to write the psp line
-!! of the header, without reading again the psp. This psp line
+!! of the AB_HEADER, without reading again the psp. This psp line
 !! is constant throughout run.
 !!
 !! PARENTS
@@ -406,7 +406,7 @@ subroutine pspini(dtset,dtfil,ecore,gencond,gsqcut,gsqcutdg,pawrad,pawtab,psps,r
      if (psps%usepaw == 0) then
        ABI_DT_MALLOC(nctab_alch, (npspalch))
        do ipspalch=1,npspalch
-         call nctab_init(nctab_alch(ipspalch), psps%mqgrid_vl, .False., .False.)
+         call nctab_init(nctab_alch(ipspalch), psps%mqgrid_vl, .false., .false.)
        end do
      end if
 
@@ -820,9 +820,9 @@ end subroutine pspcor
 !!
 !! CHILDREN
 !!      nctab_eval_tcorespl,pawpsp_17in,pawpsp_7in,pawpsp_bcast
-!!      pawpsp_read_header_xml,pawpsp_read_pawheader,pawpsp_wvl,psp10in,psp1in
+!!      pawpsp_read_header_xml,pawpsp_read_pawAB_HEADER,pawpsp_wvl,psp10in,psp1in
 !!      psp2in,psp3in,psp5in,psp6in,psp8in,psp9in,psp_dump_outputs
-!!      psxml2abheader,test_xml_xmlpaw_upf,timab,upf2abinit,wrtout
+!!      psxml2abAB_HEADER,test_xml_xmlpaw_upf,timab,upf2abinit,wrtout
 !!      wvl_descr_psp_fill
 !!
 !! SOURCE
@@ -868,7 +868,7 @@ subroutine pspatm(dq,dtset,dtfil,ekb,epsatm,ffspl,indlmn,ipsp,pawrad,pawtab,&
  character(len=fnlen) :: title
  character(len=fnlen) :: filnam
  type(pawpsp_header_type):: pawpsp_header
- type(pspheader_type) :: pspheads_tmp
+ type(pspAB_HEADER_type) :: pspheads_tmp
 !arrays
  integer,allocatable :: nproj(:)
  real(dp) :: tsec(2),ecut_tmp(3,2)
@@ -878,7 +878,7 @@ subroutine pspatm(dq,dtset,dtfil,ekb,epsatm,ffspl,indlmn,ipsp,pawrad,pawtab,&
 !!  usexml= 0 for non xml ps format ; =1 for xml ps format
  character(len=3) :: atmsymb
  character(len=30) :: creator
- type(pspheader_type) :: psphead
+ type(pspAB_HEADER_type) :: psphead
 #endif
 
 ! ******************************************************************************
@@ -896,7 +896,7 @@ subroutine pspatm(dq,dtset,dtfil,ekb,epsatm,ffspl,indlmn,ipsp,pawrad,pawtab,&
    ABI_CHECK(psps%usepaw==1, "paral_mode==1 is only compatible with PAW, see call to pawpsp_bcast below")
  end if
 
- nctab%has_tvale = .False.; nctab%has_tcore = .False.
+ nctab%has_tvale = .false.; nctab%has_tcore = .false.
 
  if (me==0) then
 !  Dimensions of form factors and Vloc q grids must be the same in Norm-Conserving case
@@ -960,11 +960,11 @@ subroutine pspatm(dq,dtset,dtfil,ekb,epsatm,ffspl,indlmn,ipsp,pawrad,pawtab,&
 ! the following is probably useless - already read in everything in inpspheads
 #if defined HAVE_PSML
 !     write(message,'(a,a)') &
-!&     '- pspatm: Reading pseudopotential header in XML form from ', trim(psps%filpsp(ipsp))
+!&     '- pspatm: Reading pseudopotential AB_HEADER in XML form from ', trim(psps%filpsp(ipsp))
 !     call wrtout(ab_out,message,'COLL')
 !     call wrtout(std_out,  message,'COLL')
 
-     call psxml2abheader( psps%filpsp(ipsp), psphead, atmsymb, creator, 0 )
+     call psxml2abAB_HEADER( psps%filpsp(ipsp), psphead, atmsymb, creator, 0 )
      znucl = psphead%znuclpsp
      zion = psphead%zionpsp
      pspdat = psphead%pspdat
@@ -1000,23 +1000,23 @@ subroutine pspatm(dq,dtset,dtfil,ekb,epsatm,ffspl,indlmn,ipsp,pawrad,pawtab,&
 ! END useless
    else if (usexml == 1 .and. xmlpaw == 1) then
      write(message,'(a,a)')  &
-&     '- pspatm : Reading pseudopotential header in XML form from ', trim(psps%filpsp(ipsp))
+&     '- pspatm : Reading pseudopotential AB_HEADER in XML form from ', trim(psps%filpsp(ipsp))
      call wrtout(ab_out,message,'COLL')
      call wrtout(std_out,  message,'COLL')
 
-!    Return header informations
+!    Return AB_HEADER informations
      call pawpsxml2ab(psps%filpsp(ipsp),ecut_tmp, pspheads_tmp,0)
      lmax=pspheads_tmp%lmax
      pspxc=pspheads_tmp%pspxc
      znucl=pspheads_tmp%znuclpsp
-     pawpsp_header%basis_size=pspheads_tmp%pawheader%basis_size
-     pawpsp_header%l_size=pspheads_tmp%pawheader%l_size
-     pawpsp_header%lmn_size=pspheads_tmp%pawheader%lmn_size
-     pawpsp_header%mesh_size=pspheads_tmp%pawheader%mesh_size
-     pawpsp_header%pawver=pspheads_tmp%pawheader%pawver
-     pawpsp_header%shape_type=pspheads_tmp%pawheader%shape_type
-     pawpsp_header%rpaw=pspheads_tmp%pawheader%rpaw
-     pawpsp_header%rshp=pspheads_tmp%pawheader%rshp
+     pawpsp_header%basis_size=pspheads_tmp%pawAB_HEADER%basis_size
+     pawpsp_header%l_size=pspheads_tmp%pawAB_HEADER%l_size
+     pawpsp_header%lmn_size=pspheads_tmp%pawAB_HEADER%lmn_size
+     pawpsp_header%mesh_size=pspheads_tmp%pawAB_HEADER%mesh_size
+     pawpsp_header%pawver=pspheads_tmp%pawAB_HEADER%pawver
+     pawpsp_header%shape_type=pspheads_tmp%pawAB_HEADER%shape_type
+     pawpsp_header%rpaw=pspheads_tmp%pawAB_HEADER%rpaw
+     pawpsp_header%rshp=pspheads_tmp%pawAB_HEADER%rshp
      lloc=0; pspcod=17
 
    else if (useupf == 1) then

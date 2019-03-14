@@ -285,10 +285,10 @@ type(skw_t) function skw_new(cryst, params, cplex, nband, nkpt, nsppol, kpts, ei
  call cwtime(cpu, wall, gflops, "start")
  ABI_MALLOC(ipiv, (nkpt-1))
 
- if (.False.) then
+ if (.false.) then
    ! General complex.
-   call zgesv(nkpt-1, bcount*nsppol, hmat, nkpt-1, ipiv, lambda, nkpt-1, ierr)
-   ABI_CHECK(ierr == 0, sjoin("ZGESV returned:", itoa(ierr)))
+   call AB_ZGESV(nkpt-1, bcount*nsppol, hmat, nkpt-1, ipiv, lambda, nkpt-1, ierr)
+   ABI_CHECK(ierr == 0, sjoin("AB_ZGESV returned:", itoa(ierr)))
  else
    ! Hermitian version
    do ii=1,nkpt-1
@@ -296,16 +296,16 @@ type(skw_t) function skw_new(cryst, params, cplex, nband, nkpt, nsppol, kpts, ei
    end do
    lwork = -1
    ABI_MALLOC(work, (1))
-   call zhesv("U", nkpt-1, bcount*nsppol, hmat, nkpt-1, ipiv, lambda, nkpt-1, work, lwork, ierr)
+   call AB_ZHESV("U", nkpt-1, bcount*nsppol, hmat, nkpt-1, ipiv, lambda, nkpt-1, work, lwork, ierr)
    lwork = nint(real(work(1)))
    ABI_FREE(work)
    ABI_MALLOC(work, (lwork))
-   call zhesv("U", nkpt-1, bcount*nsppol, hmat, nkpt-1, ipiv, lambda, nkpt-1, work, lwork, ierr)
-   ABI_CHECK(ierr == 0, sjoin("ZHESV returned:", itoa(ierr)))
+   call AB_ZHESV("U", nkpt-1, bcount*nsppol, hmat, nkpt-1, ipiv, lambda, nkpt-1, work, lwork, ierr)
+   ABI_CHECK(ierr == 0, sjoin("AB_ZHESV returned:", itoa(ierr)))
    ABI_FREE(work)
  end if
  call cwtime(cpu, wall, gflops, "stop")
- write(std_out,"(2(a,f6.2))")" ZHESV call: cpu: ",cpu,", wall: ",wall
+ write(std_out,"(2(a,f6.2))")" AB_ZHESV call: cpu: ",cpu,", wall: ",wall
 
  ! Compute coefficients
  ABI_MALLOC(new%coefs, (nr,bcount,nsppol))
@@ -470,7 +470,7 @@ end subroutine skw_print
 !!    The routine does not reorder the interpolated eigenvalues
 !!    to be consistent with the interpolation of the derivatives.
 !!  [oder1(3)]=First-order derivatives wrt k in reduced coordinates.
-!!  [oder2(3,3)]=Second-order derivatives wrt k in reduced coordinates.
+!!  [oder2(3,3)]=second-order derivatives wrt k in reduced coordinates.
 !!
 !! PARENTS
 !!      m_ebands,m_ifc,m_skw
@@ -570,7 +570,7 @@ end subroutine skw_eval_bks
 !!    The routine does not reorder the interpolated eigenvalues
 !!    to be consistent with the interpolation of the derivatives.
 !!  [oder1_mesh(3,nfft))]=First-order derivatives wrt k in reduced coordinates.
-!!  [oder2_mesh(3,3,nfft)]=Second-order derivatives wrt k in reduced coordinates.
+!!  [oder2_mesh(3,3,nfft)]=second-order derivatives wrt k in reduced coordinates.
 !!
 !! PARENTS
 !!

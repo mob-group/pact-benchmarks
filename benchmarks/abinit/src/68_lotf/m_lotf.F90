@@ -633,7 +633,7 @@ contains
        call dlvsum(lotfvar%me-1,lotfvar%nproc,forc0_dum,(nfitmax+1)*3)
      end if
 
-    !--Check1
+    !--AB_CHECK1
     !--(1) evaluate cost function: quadratic deviation from true forces
      dcost = zero
      do i = 1,nfit

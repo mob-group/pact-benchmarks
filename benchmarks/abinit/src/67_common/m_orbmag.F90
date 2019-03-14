@@ -108,7 +108,7 @@ module m_orbmag
      real(dp) :: sdeg               ! spin degeneracy: sdeg = 2 if nsppol = 1
 
      ! Real(dp) arrays
-     real(dp) :: chern(2,3)           ! result of chern number calculation
+     real(dp) :: AB_CHERn(2,3)           ! result of AB_CHERn number calculation
 
      real(dp) :: dkvecs(3,3)        ! dkvec(:,idir) = vector between a k-point and its nearest neighbour along idir
 
@@ -165,7 +165,7 @@ module m_orbmag
   ! Bound methods:
   public :: destroy_orbmag
   public :: initorbmag
-  public :: chern_number
+  public :: AB_CHERn_number
   public :: orbmag
   public :: ctocprjb
 
@@ -868,12 +868,12 @@ end subroutine initorbmag
 !!***
 
 !{\src2tex{textfont=tt}}
-!!****f* ABINIT/chern_number
+!!****f* ABINIT/AB_CHERn_number
 !! NAME
-!! chern_number
+!! AB_CHERn_number
 !!
 !! FUNCTION
-!! This routine computes the Chern number based on input wavefunctions.
+!! This routine computes the AB_CHERn number based on input wavefunctions.
 !! It is assumed that only completely filled bands are present.
 !!
 !! COPYRIGHT
@@ -917,7 +917,7 @@ end subroutine initorbmag
 !! NOTES
 !! See Ceresoli et al, PRB 74, 024408 (2006) [[cite:Ceresoli2006]],
 !! and Gonze and Zwanziger, PRB 84 064445 (2011) [[cite:Gonze2011a]].
-!! This routine computes the Chern number as
+!! This routine computes the AB_CHERn number as
 !! $C_\alpha = \frac{i}{2\pi}\int_{\mathrm{BZ}} dk \epsilon_{\alpha\beta\gamma}
 !! \mathrm{Tr}[\rho_k \partial_\beta \rho_k (1 - \rho_k) \partial_gamma\rho_k] $
 !! The derivative of the density operator is obtained from a discretized formula
@@ -935,7 +935,7 @@ end subroutine initorbmag
 !!
 !! SOURCE
 
-subroutine chern_number(atindx1,cg,cprj,dtset,dtorbmag,gmet,gprimd,kg,&
+subroutine AB_CHERn_number(atindx1,cg,cprj,dtset,dtorbmag,gmet,gprimd,kg,&
      &            mcg,mcprj,mpi_enreg,npwarr,pawang,pawrad,pawtab,pwind,pwind_alloc,&
      &            symrec,usecprj,usepaw,xred)
 
@@ -943,7 +943,7 @@ subroutine chern_number(atindx1,cg,cprj,dtset,dtorbmag,gmet,gprimd,kg,&
 !This section has been created automatically by the script Abilint (TD).
 !Do not modify the following lines by hand.
 #undef ABI_FUNC
-#define ABI_FUNC 'chern_number'
+#define ABI_FUNC 'AB_CHERn_number'
 !End of the abilint section
 
   implicit none
@@ -1008,7 +1008,7 @@ subroutine chern_number(atindx1,cg,cprj,dtset,dtorbmag,gmet,gprimd,kg,&
         call pawcprj_alloc(cprj_fkn,ncpgr,dimlmn)
      end if
   else
-     message = ' usepaw /= 1 but Chern number calculation requires PAW '
+     message = ' usepaw /= 1 but AB_CHERn number calculation requires PAW '
      MSG_ERROR(message)
   end if
 
@@ -1249,20 +1249,20 @@ subroutine chern_number(atindx1,cg,cprj,dtset,dtorbmag,gmet,gprimd,kg,&
 
   cnum(1,1:3) = MATMUL(gprimd,cnum(1,1:3))
   cnum(2,1:3) = MATMUL(gprimd,cnum(2,1:3))
-  dtorbmag%chern(1,1:3) = -cnum(2,1:3)/(two_pi*dtorbmag%fnkpt)
-  dtorbmag%chern(2,1:3) =  cnum(1,1:3)/(two_pi*dtorbmag%fnkpt)
+  dtorbmag%AB_CHERn(1,1:3) = -cnum(2,1:3)/(two_pi*dtorbmag%fnkpt)
+  dtorbmag%AB_CHERn(2,1:3) =  cnum(1,1:3)/(two_pi*dtorbmag%fnkpt)
 
   write(message,'(a,a,a)')ch10,'====================================================',ch10
   call wrtout(ab_out,message,'COLL')
 
-  write(message,'(a)')' Chern number C from orbital magnetization '
+  write(message,'(a)')' AB_CHERn number C from orbital magnetization '
   call wrtout(ab_out,message,'COLL')
   write(message,'(a,a)')'----C is a real vector, given along Cartesian directions----',ch10
   call wrtout(ab_out,message,'COLL')
 
   do adir = 1, 3
      write(message,'(a,i4,a,2es16.8)')' C(',adir,') : real, imag ',&
-          &   dtorbmag%chern(1,adir),dtorbmag%chern(2,adir)
+          &   dtorbmag%AB_CHERn(1,adir),dtorbmag%AB_CHERn(2,adir)
      call wrtout(ab_out,message,'COLL')
   end do
 
@@ -1298,7 +1298,7 @@ subroutine chern_number(atindx1,cg,cprj,dtset,dtorbmag,gmet,gprimd,kg,&
   ABI_DEALLOCATE(has_smat_indx)
   ABI_DEALLOCATE(smat_all_indx)
 
-end subroutine chern_number
+end subroutine AB_CHERn_number
 !!***
 
 !{\src2tex{textfont=tt}}

@@ -166,13 +166,13 @@
       INTRINSIC          ABS, CONJG, MAX, SQRT
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
+      REAL               AB_SLAMCH
       COMPLEX            AB_CDOTC
-      EXTERNAL           SLAMCH, AB_CDOTC
+      EXTERNAL           AB_SLAMCH, AB_CDOTC
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       ALPHA = AB_CDOTC( J, X, 1, W, 1 )
 *
       ABSALP = ABS( ALPHA )

@@ -63,7 +63,7 @@ CONTAINS  !=====================================================================
 !!                           from klmn=[(l,m,n),(lp,mp,np)]
 !! 4-Compute various factors/sizes (depending on (l,m,n))
 !! 5-Compute $q_ijL=\displaystyle
-!!                  \int_{0}^{r_c}{(\phi_i\phi_j-\widetilde{\phi_i}\widetilde{\phi_j}) r^l\,dr}
+!!                  \int_{0}^{r_c}{(\phi_i\phi_j-\widetiAB_LDE{\phi_i}\widetiAB_LDE{\phi_j}) r^l\,dr}
 !!                   Gaunt(l_i m_i,l_j m_j,l m))$
 !!           $S_ij=\displaystyle \sqrt{4 \pi} q_ij0$
 !! 6-Compute $e_ijkl= vh1_ijkl - Vhatijkl - Bijkl - Cijkl$
@@ -504,7 +504,7 @@ subroutine pawinit(gnt_option,gsqcut_eff,hyb_range_fock,lcutdens,lmix,mpsang,nph
 !    Compute:
 !    vhatL(r) according to eq. (A14) in Holzwarth et al., PRB 55, 2005 (1997) [[cite:Holzwarth1997]]
 !    intvhatL=$\int_{0}^{r_c}{vhatL(r) shapefunc_L(r) r^2\,dr}$
-!    vhatijL =$\int_{0}^{r_c}{vhatL(r) \tilde{\phi}_i \tilde{\phi}_j \,dr}$
+!    vhatijL =$\int_{0}^{r_c}{vhatL(r) \tiAB_LDE{\phi}_i \tiAB_LDE{\phi}_j \,dr}$
 !    -----------------------------------------------------------------
      ABI_ALLOCATE(vhatl,(mesh_size))
      ABI_ALLOCATE(vhatijl,(lmn2_size,l_size))
@@ -601,7 +601,7 @@ subroutine pawinit(gnt_option,gsqcut_eff,hyb_range_fock,lcutdens,lmix,mpsang,nph
          ff(2:mesh_size)=pawtab(itypat)%phiphj(2:mesh_size,kln)-pawtab(itypat)%tphitphj(2:mesh_size,kln)
          ! First, compute q_ij^00
          call simp_gen(intg,ff,pawrad(itypat))
-         ! Second, compute phi^2 - tphi^2 - 4pi*r^2 q_ij^00 g_0(r)
+         ! second, compute phi^2 - tphi^2 - 4pi*r^2 q_ij^00 g_0(r)
          ff(2:mesh_size)= ff(2:mesh_size) - intg*pawtab(itypat)%shapefunc(2:mesh_size,1)*rad(2:mesh_size)**2
          call poisson(ff,0,pawrad(itypat),work)
          ! work is r*vh; should be then multiplied by r to prepare the integration in the sphere
@@ -702,7 +702,7 @@ subroutine paw_gencond(Dtset,gnt_option,mode,call_pawinit)
 
 ! *********************************************************************
 
- call_pawinit = .False.
+ call_pawinit = .false.
  select case (mode)
  case ("test")
 

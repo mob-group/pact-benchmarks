@@ -73,7 +73,7 @@ contains
 !! dtfil <type(datafiles_type)>=variables related to files
 !! dtset <type(dataset_type)>=all input variables in this dataset
 !! gprimd(3,3)=reciprocal space dimensional primitive translations
-!! hdr <type(hdr_type)>=the header of wf, den and pot files
+!! hdr <type(hdr_type)>=the AB_HEADER of wf, den and pot files
 !! kg(3,mpw*mkmem)=reduced planewave coordinates
 !! mband=maximum number of bands
 !! mcg=size of wave-functions array (cg) =mpw*nspinor*mband*mkmem*nsppol
@@ -423,7 +423,7 @@ end subroutine elpolariz
 !!   spin up and spin down (bdberry(3:4) is irrelevant when nsppol=1)
 !!  cg(2,mcg)=planewave coefficients of wavefunctions
 !!  gprimd(3,3)=reciprocal space dimensional primitive translations
-!!  hdr <type(hdr_type)>=the header of wf, den and pot files
+!!  hdr <type(hdr_type)>=the AB_HEADER of wf, den and pot files
 !!  istwfk(nkpt_)=input option parameter that describes the storage of wfs
 !!  kberry(3,20)= different delta k for Berry phases(or du/dk),
 !!   in unit of kptrlatt only kberry(1:3,1:nberry) is relevant
@@ -538,7 +538,7 @@ subroutine uderiv(bdberry,cg,gprimd,hdr,istwfk,kberry,kg,kpt_,kptopt,kptrlatt,&
  real(dp) :: cg_disk(0,0,0)
  real(dp),allocatable :: cmatrix(:,:,:),dudk(:,:)
  real(dp),allocatable :: eig_dum_2(:),kpt(:,:)
- real(dp),allocatable :: occ_dum_2(:),phi(:,:,:),u_tilde(:,:,:,:),zgwork(:,:)
+ real(dp),allocatable :: occ_dum_2(:),phi(:,:,:),u_tiAB_LDE(:,:,:,:),zgwork(:,:)
  logical,allocatable :: shift_g_2(:,:)
 
 ! *************************************************************************
@@ -784,8 +784,8 @@ subroutine uderiv(bdberry,cg,gprimd,hdr,istwfk,kberry,kg,kpt_,kptopt,kptrlatt,&
 
        npw_k=npwarr(ikpt)
 
-       ABI_ALLOCATE(u_tilde,(2,npw_k,maxband,2))
-       u_tilde(1:2,1:npw_k,1:maxband,1:2)=0.0_dp
+       ABI_ALLOCATE(u_tiAB_LDE,(2,npw_k,maxband,2))
+       u_tiAB_LDE(1:2,1:npw_k,1:maxband,1:2)=0.0_dp
 
 !      ifor = 1,2 represents forward and backward neighbouring k points of ikpt
 !      respectively along dk direction
@@ -860,12 +860,12 @@ subroutine uderiv(bdberry,cg,gprimd,hdr,istwfk,kberry,kg,kpt_,kptopt,kptrlatt,&
 
          do iband=minband,maxband
            do ipw=1,npwarr(ikpt)
-             u_tilde(1,ipw,iband,ifor)= &
+             u_tiAB_LDE(1,ipw,iband,ifor)= &
 &             dot_product(cmatrix(1,minband:maxband,iband),&
 &             phi(1,ipw,minband:maxband))-&
 &             dot_product(cmatrix(2,minband:maxband,iband),&
 &             tr(jj)*phi(2,ipw,minband:maxband))
-             u_tilde(2,ipw,iband,ifor)= &
+             u_tiAB_LDE(2,ipw,iband,ifor)= &
 &             dot_product(cmatrix(1,minband:maxband,iband),&
 &             tr(jj)*phi(2,ipw,minband:maxband))+&
 &             dot_product(cmatrix(2,minband:maxband,iband),&
@@ -885,11 +885,11 @@ subroutine uderiv(bdberry,cg,gprimd,hdr,istwfk,kberry,kg,kpt_,kptopt,kptrlatt,&
 
          icg=(iband-minband)*npw_k
 
-         dudk(1,1+icg:npw_k+icg)=(u_tilde(1,1:npw_k,iband,1)-&
-&         u_tilde(1,1:npw_k,iband,2))/twodk
+         dudk(1,1+icg:npw_k+icg)=(u_tiAB_LDE(1,1:npw_k,iband,1)-&
+&         u_tiAB_LDE(1,1:npw_k,iband,2))/twodk
 
-         dudk(2,1+icg:npw_k+icg)=(u_tilde(2,1:npw_k,iband,1)-&
-&         u_tilde(2,1:npw_k,iband,2))/twodk
+         dudk(2,1+icg:npw_k+icg)=(u_tiAB_LDE(2,1:npw_k,iband,1)-&
+&         u_tiAB_LDE(2,1:npw_k,iband,2))/twodk
 
        end do
 
@@ -903,7 +903,7 @@ subroutine uderiv(bdberry,cg,gprimd,hdr,istwfk,kberry,kg,kpt_,kptopt,kptrlatt,&
        !call wfk_read_band_block(wfk, band_block, ikpt, isppol, sc_mode,
        !  kg_k=kg_kpt(:,:,ikpt), cg_k=dudk, eig_k=eig_dum, occ_k=occ_dum)
 
-       ABI_DEALLOCATE(u_tilde)
+       ABI_DEALLOCATE(u_tiAB_LDE)
 
      end do !ikpt
    end do  !isppol

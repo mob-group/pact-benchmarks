@@ -393,8 +393,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            SSLECT
-      REAL               SLAMCH, SLANGE
-      EXTERNAL           SSLECT, SLAMCH, SLANGE
+      REAL               AB_SLAMCH, SLANGE
+      EXTERNAL           SSLECT, AB_SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SCOPY, SGEESX, SGEMM, SLACPY, SORT01, XERBLA
@@ -437,8 +437,8 @@
 *
 *     Important constants
 *
-      SMLNUM = SLAMCH( 'Safe minimum' )
-      ULP = SLAMCH( 'Precision' )
+      SMLNUM = AB_SLAMCH( 'Safe minimum' )
+      ULP = AB_SLAMCH( 'Precision' )
       ULPINV = ONE / ULP
 *
 *     Perform tests (1)-(13)

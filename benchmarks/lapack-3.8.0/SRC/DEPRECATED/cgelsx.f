@@ -224,8 +224,8 @@
      $                   AB_CTZRQF, AB_CUNM2R, AB_SLABAD, AB_XERBLA
 *     ..
 *     .. External Functions ..
-      REAL               AB_CLANGE, SLAMCH
-      EXTERNAL           AB_CLANGE, SLAMCH
+      REAL               AB_CLANGE, AB_SLAMCH
+      EXTERNAL           AB_CLANGE, AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CONJG, MAX, MIN
@@ -265,7 +265,7 @@
 *
 *     Get machine parameters
 *
-      SMLNUM = SLAMCH( 'S' ) / SLAMCH( 'P' )
+      SMLNUM = AB_SLAMCH( 'S' ) / AB_SLAMCH( 'P' )
       BIGNUM = ONE / SMLNUM
       CALL AB_SLABAD( SMLNUM, BIGNUM )
 *

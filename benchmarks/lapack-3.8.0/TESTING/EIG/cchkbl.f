@@ -83,8 +83,8 @@
       COMPLEX            A( LDA, LDA ), AIN( LDA, LDA )
 *     ..
 *     .. External Functions ..
-      REAL               CLANGE, SLAMCH
-      EXTERNAL           CLANGE, SLAMCH
+      REAL               CLANGE, AB_SLAMCH
+      EXTERNAL           CLANGE, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGEBAL
@@ -107,8 +107,8 @@
       KNT = 0
       RMAX = ZERO
       VMAX = ZERO
-      SFMIN = SLAMCH( 'S' )
-      MEPS = SLAMCH( 'E' )
+      SFMIN = AB_SLAMCH( 'S' )
+      MEPS = AB_SLAMCH( 'E' )
 *
    10 CONTINUE
 *

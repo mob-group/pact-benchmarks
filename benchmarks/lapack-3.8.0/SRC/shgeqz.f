@@ -350,8 +350,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME
-      REAL               SLAMCH, AB_SLANHS, AB_SLAPY2, AB_SLAPY3
-      EXTERNAL           AB_LSAME, SLAMCH, AB_SLANHS, AB_SLAPY2, AB_SLAP
+      REAL               AB_SLAMCH, AB_SLANHS, AB_SLAPY2, AB_SLAPY3
+      EXTERNAL           AB_LSAME, AB_SLAMCH, AB_SLANHS, AB_SLAPY2, AB_SLAP
      $Y3
 *     ..
 *     .. External Subroutines ..
@@ -454,9 +454,9 @@
 *     Machine Constants
 *
       IN = IHI + 1 - ILO
-      SAFMIN = SLAMCH( 'S' )
+      SAFMIN = AB_SLAMCH( 'S' )
       SAFMAX = ONE / SAFMIN
-      ULP = SLAMCH( 'E' )*SLAMCH( 'B' )
+      ULP = AB_SLAMCH( 'E' )*AB_SLAMCH( 'B' )
       ANORM = AB_SLANHS( 'F', IN, H( ILO, ILO ), LDH, WORK )
       BNORM = AB_SLANHS( 'F', IN, T( ILO, ILO ), LDT, WORK )
       ATOL = MAX( SAFMIN, ULP*ANORM )

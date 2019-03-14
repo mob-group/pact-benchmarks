@@ -131,8 +131,8 @@
 *     ..
 *     .. External Functions ..
       COMPLEX            CLARND
-      REAL               SLAMCH, CLANHE, CLANHF
-      EXTERNAL           SLAMCH, CLARND, CLANHE, CLANHF
+      REAL               AB_SLAMCH, CLANHE, CLANHF
+      EXTERNAL           AB_SLAMCH, CLARND, CLANHE, CLANHF
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CTRTTF
@@ -161,8 +161,8 @@
          ISEED( I ) = ISEEDY( I )
    10 CONTINUE
 *
-      EPS = SLAMCH( 'Precision' )
-      SMALL = SLAMCH( 'Safe minimum' )
+      EPS = AB_SLAMCH( 'Precision' )
+      SMALL = AB_SLAMCH( 'Safe minimum' )
       LARGE = ONE / SMALL
       SMALL = SMALL * LDA * LDA
       LARGE = LARGE / LDA / LDA

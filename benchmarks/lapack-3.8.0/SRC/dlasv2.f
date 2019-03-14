@@ -171,8 +171,8 @@
       INTRINSIC          ABS, SIGN, SQRT
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. Executable Statements ..
 *
@@ -216,7 +216,7 @@
          GASMAL = .TRUE.
          IF( GA.GT.FA ) THEN
             PMAX = 2
-            IF( ( FA / GA ).LT.DLAMCH( 'EPS' ) ) THEN
+            IF( ( FA / GA ).LT.AB_DLAMCH( 'EPS' ) ) THEN
 *
 *              Case of very large GA
 *

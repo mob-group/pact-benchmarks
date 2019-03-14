@@ -372,8 +372,8 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_ILAENV
-      REAL               SLAMCH
-      EXTERNAL           AB_LSAME, AB_ILAENV, SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_ILAENV, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_SLAEBZ
@@ -439,8 +439,8 @@
       IF( IRANGE.EQ.INDRNG .AND. IL.EQ.1 .AND. IU.EQ.N ) IRANGE = 1
 
 *     Get machine constants
-      EPS = SLAMCH( 'P' )
-      UFLOW = SLAMCH( 'U' )
+      EPS = AB_SLAMCH( 'P' )
+      UFLOW = AB_SLAMCH( 'U' )
 
 
 *     Special Case when N=1

@@ -223,8 +223,8 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_ISAMAX, AB_ILAENV
-      REAL   SLAMCH, AB_SCNRM2, AB_CLANGE
-      EXTERNAL           AB_LSAME, AB_ISAMAX, AB_ILAENV, SLAMCH, AB_SCNR
+      REAL   AB_SLAMCH, AB_SCNRM2, AB_CLANGE
+      EXTERNAL           AB_LSAME, AB_ISAMAX, AB_ILAENV, AB_SLAMCH, AB_SCNR
      $M2, AB_CLANGE
 *     ..
 *     .. Intrinsic Functions ..
@@ -321,8 +321,8 @@
 *
 *     Get machine constants
 *
-      EPS = SLAMCH( 'P' )
-      SMLNUM = SLAMCH( 'S' )
+      EPS = AB_SLAMCH( 'P' )
+      SMLNUM = AB_SLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
       CALL AB_SLABAD( SMLNUM, BIGNUM )
       SMLNUM = SQRT( SMLNUM ) / EPS

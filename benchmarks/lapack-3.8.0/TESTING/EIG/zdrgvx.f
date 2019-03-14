@@ -335,8 +335,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
-      DOUBLE PRECISION   DLAMCH, ZLANGE
-      EXTERNAL           ILAENV, DLAMCH, ZLANGE
+      DOUBLE PRECISION   AB_DLAMCH, ZLANGE
+      EXTERNAL           ILAENV, AB_DLAMCH, ZLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, XERBLA, ZGET52, ZGGEVX, ZLACPY, ZLATM6
@@ -391,7 +391,7 @@
       END IF
 *
       N = 5
-      ULP = DLAMCH( 'P' )
+      ULP = AB_DLAMCH( 'P' )
       ULPINV = ONE / ULP
       THRSH2 = TEN*THRESH
       NERRS = 0

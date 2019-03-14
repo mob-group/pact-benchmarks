@@ -173,13 +173,13 @@
 *> \param[in] EPS
 *> \verbatim
 *>          EPS is DOUBLE PRECISION
-*>          EPS = DLAMCH('Epsilon')
+*>          EPS = AB_DLAMCH('Epsilon')
 *> \endverbatim
 *>
 *> \param[in] SFMIN
 *> \verbatim
 *>          SFMIN is DOUBLE PRECISION
-*>          SFMIN = DLAMCH('Safe Minimum')
+*>          SFMIN = AB_DLAMCH('Safe Minimum')
 *> \endverbatim
 *>
 *> \param[in] TOL

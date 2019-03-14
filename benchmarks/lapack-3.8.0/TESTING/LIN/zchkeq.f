@@ -91,8 +91,8 @@
       COMPLEX*16         A( NSZ, NSZ ), AB( NSZB, NSZ ), AP( NSZP )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZGBEQU, ZGEEQU, ZPBEQU, ZPOEQU, ZPPEQU
@@ -105,7 +105,7 @@
       PATH( 1: 1 ) = 'Zomplex precision'
       PATH( 2: 3 ) = 'EQ'
 *
-      EPS = DLAMCH( 'P' )
+      EPS = AB_DLAMCH( 'P' )
       DO 10 I = 1, 5
          RESLTS( I ) = ZERO
    10 CONTINUE

@@ -208,8 +208,8 @@
      $                   SMAXPR, SMIN, SMINPR, SMLNUM, T1, T2
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, AB_SLANGE
-      EXTERNAL           SLAMCH, AB_SLANGE
+      REAL               AB_SLAMCH, AB_SLANGE
+      EXTERNAL           AB_SLAMCH, AB_SLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_SGEQPF, AB_SLABAD, AB_SLAIC1, AB_SLASCL, AB_
@@ -254,7 +254,7 @@
 *
 *     Get machine parameters
 *
-      SMLNUM = SLAMCH( 'S' ) / SLAMCH( 'P' )
+      SMLNUM = AB_SLAMCH( 'S' ) / AB_SLAMCH( 'P' )
       BIGNUM = ONE / SMLNUM
       CALL AB_SLABAD( SMLNUM, BIGNUM )
 *

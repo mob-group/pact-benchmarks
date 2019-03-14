@@ -416,8 +416,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, DZNRM2
-      EXTERNAL           LSAME, DLAMCH, DZNRM2
+      DOUBLE PRECISION   AB_DLAMCH, DZNRM2
+      EXTERNAL           LSAME, AB_DLAMCH, DZNRM2
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           XERBLA, ZGEEVX, ZGET22, ZLACPY
@@ -474,8 +474,8 @@
 *
 *     More Important constants
 *
-      ULP = DLAMCH( 'Precision' )
-      SMLNUM = DLAMCH( 'S' )
+      ULP = AB_DLAMCH( 'Precision' )
+      SMLNUM = AB_DLAMCH( 'S' )
       ULPINV = ONE / ULP
 *
 *     Compute eigenvalues and eigenvectors, and test them

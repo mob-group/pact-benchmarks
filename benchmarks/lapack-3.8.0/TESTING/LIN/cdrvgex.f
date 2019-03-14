@@ -217,8 +217,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               CLANGE, CLANTR, SGET06, SLAMCH, CLA_GERPVGRW
-      EXTERNAL           LSAME, CLANGE, CLANTR, SGET06, SLAMCH,
+      REAL               CLANGE, CLANTR, SGET06, AB_SLAMCH, CLA_GERPVGRW
+      EXTERNAL           LSAME, CLANGE, CLANTR, SGET06, AB_SLAMCH,
      $                   CLA_GERPVGRW
 *     ..
 *     .. External Subroutines ..
@@ -578,7 +578,7 @@
                      END IF
                      RESULT( 7 ) = ABS( RPVGRW-RWORK( 2*NRHS+1 ) ) /
      $                             MAX( RWORK( 2*NRHS+1 ), RPVGRW ) /
-     $                             SLAMCH( 'E' )
+     $                             AB_SLAMCH( 'E' )
 *
                      IF( .NOT.PREFAC ) THEN
 *
@@ -754,7 +754,7 @@
 
                      RESULT( 7 ) = ABS( RPVGRW-rpvgrw_svxx ) /
      $                             MAX( rpvgrw_svxx, RPVGRW ) /
-     $                             SLAMCH( 'E' )
+     $                             AB_SLAMCH( 'E' )
 *
                      IF( .NOT.PREFAC ) THEN
 *

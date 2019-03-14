@@ -325,8 +325,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME
-      REAL               AB_CLANHS, SLAMCH
-      EXTERNAL           AB_LSAME, AB_CLANHS, SLAMCH
+      REAL               AB_CLANHS, AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_CLANHS, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_CLARTG, AB_CLASET, AB_CROT, AB_CSCAL, AB_XER
@@ -434,8 +434,8 @@
 *     Machine Constants
 *
       IN = IHI + 1 - ILO
-      SAFMIN = SLAMCH( 'S' )
-      ULP = SLAMCH( 'E' )*SLAMCH( 'B' )
+      SAFMIN = AB_SLAMCH( 'S' )
+      ULP = AB_SLAMCH( 'E' )*AB_SLAMCH( 'B' )
       ANORM = AB_CLANHS( 'F', IN, H( ILO, ILO ), LDH, RWORK )
       BNORM = AB_CLANHS( 'F', IN, T( ILO, ILO ), LDT, RWORK )
       ATOL = MAX( SAFMIN, ULP*ANORM )

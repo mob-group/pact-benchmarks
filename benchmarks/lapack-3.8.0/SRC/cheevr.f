@@ -206,7 +206,7 @@
 *>          Kahan, LAPACK Working Note #3.
 *>
 *>          If high relative accuracy is important, set ABSTOL to
-*>          SLAMCH( 'Safe minimum' ).  Doing so will guarantee that
+*>          AB_SLAMCH( 'Safe minimum' ).  Doing so will guarantee that
 *>          eigenvalues are computed to high relative accuracy when
 *>          possible in future releases.  The current code does not
 *>          make any guarantees about high relative accuracy, but
@@ -396,8 +396,8 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_ILAENV
-      REAL               AB_CLANSY, SLAMCH
-      EXTERNAL           AB_LSAME, AB_ILAENV, AB_CLANSY, SLAMCH
+      REAL               AB_CLANSY, AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_ILAENV, AB_CLANSY, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_CHETRD, AB_CSSCAL, AB_CSTEMR, AB_CSTEIN, AB_
@@ -511,8 +511,8 @@
 *
 *     Get machine constants.
 *
-      SAFMIN = SLAMCH( 'Safe minimum' )
-      EPS = SLAMCH( 'Precision' )
+      SAFMIN = AB_SLAMCH( 'Safe minimum' )
+      EPS = AB_SLAMCH( 'Precision' )
       SMLNUM = SAFMIN / EPS
       BIGNUM = ONE / SMLNUM
       RMIN = SQRT( SMLNUM )

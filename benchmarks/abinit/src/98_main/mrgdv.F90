@@ -18,7 +18,7 @@
 !!   version (integer)
 !!   number of potentials (integer)
 !!   for each potential:
-!!     Abinit header with info on the perturbation and the FFT mesh
+!!     Abinit AB_HEADER with info on the perturbation and the FFT mesh
 !!     potential on the FFT mesh
 !!
 !! PARENTS

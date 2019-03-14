@@ -455,8 +455,8 @@
       EXTERNAL           AB_ZAXPY, AB_ZCOPY, AB_ZPOTRS, AB_ZHEMV, BLAS_Z
      $HEMV_X,
      $                   BLAS_ZHEMV2_X, AB_ZLA_HEAMV, AB_ZLA_WWADDW,
-     $                   AB_ZLA_LIN_BERR, DLAMCH
-      DOUBLE PRECISION   DLAMCH
+     $                   AB_ZLA_LIN_BERR, AB_DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX, MIN
@@ -470,8 +470,8 @@
 *     .. Executable Statements ..
 *
       IF (INFO.NE.0) RETURN
-      EPS = DLAMCH( 'Epsilon' )
-      HUGEVAL = DLAMCH( 'Overflow' )
+      EPS = AB_DLAMCH( 'Epsilon' )
+      HUGEVAL = AB_DLAMCH( 'Overflow' )
 *     Force HUGEVAL to Inf
       HUGEVAL = HUGEVAL * HUGEVAL
 *     Using HUGEVAL may lead to spurious underflows.

@@ -128,8 +128,8 @@
       DOUBLE PRECISION   BETA, BIGNUM, SAVEALPHA, SMLNUM, XNORM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, AB_DLAPY2, AB_DNRM2
-      EXTERNAL           DLAMCH, AB_DLAPY2, AB_DNRM2
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLAPY2, AB_DNRM2
+      EXTERNAL           AB_DLAMCH, AB_DLAPY2, AB_DNRM2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, SIGN
@@ -169,7 +169,7 @@
 *        general case
 *
          BETA = SIGN( AB_DLAPY2( ALPHA, XNORM ), ALPHA )
-         SMLNUM = DLAMCH( 'S' ) / DLAMCH( 'E' )
+         SMLNUM = AB_DLAMCH( 'S' ) / AB_DLAMCH( 'E' )
          KNT = 0
          IF( ABS( BETA ).LT.SMLNUM ) THEN
 *

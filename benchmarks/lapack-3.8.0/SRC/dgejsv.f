@@ -131,10 +131,10 @@
 *>        Specifies the RANGE for the singular values. Issues the licence to
 *>        set to zero small positive singular values if they are outside
 *>        specified range. If A .NE. 0 is scaled so that the largest singular
-*>        value of c*A is around DSQRT(BIG), BIG=SLAMCH('O'), then JOBR issues
+*>        value of c*A is around DSQRT(BIG), BIG=AB_SLAMCH('O'), then JOBR issues
 *>        the licence to kill columns of A whose norm in c*A is less than
 *>        DSQRT(SFMIN) (for JOBR.EQ.'R'), or less than SMALL=SFMIN/EPSLN,
-*>        where SFMIN=SLAMCH('S'), EPSLN=SLAMCH('E').
+*>        where SFMIN=AB_SLAMCH('S'), EPSLN=AB_SLAMCH('E').
 *>       = 'N': Do not kill small columns of c*A. This option assumes that
 *>             BLAS and QR factorizations and triangular solvers are
 *>             implemented to work in that range. If the condition of A
@@ -419,7 +419,7 @@
 *>  the singular values in the range of normalized IEEE numbers is that the
 *>  spectral condition number kappa(A)=sigma_max(A)/sigma_min(A) does not
 *>  overflow. This code (AB_DGEJSV) is best used in this restricted range,
-*>  meaning that singular values of magnitude below ||A||_2 / DLAMCH('O') are
+*>  meaning that singular values of magnitude below ||A||_2 / AB_DLAMCH('O') are
 *>  returned as zeros. See JOBR for details on this.
 *>     Further, this implementation is somewhat slower than the one described
 *>  in [1,2] due to replacement of some non-LAPACK components, and because
@@ -511,10 +511,10 @@
       INTRINSIC DABS, DLOG, MAX, MIN, DBLE, IDNINT, DSIGN, DSQRT
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION  DLAMCH, AB_DNRM2
+      DOUBLE PRECISION  AB_DLAMCH, AB_DNRM2
       INTEGER   AB_IDAMAX
       LOGICAL   AB_LSAME
-      EXTERNAL  AB_IDAMAX, AB_LSAME, DLAMCH, AB_DNRM2
+      EXTERNAL  AB_IDAMAX, AB_LSAME, AB_DLAMCH, AB_DNRM2
 *     ..
 *     .. External Subroutines ..
       EXTERNAL  AB_DCOPY,  AB_DGELQF, AB_DGEQP3, AB_DGEQRF, AB_DLACPY, A
@@ -607,12 +607,12 @@
 *
 *     Set numerical parameters
 *
-*!    NOTE: Make sure DLAMCH() does not fail on the target architecture.
+*!    NOTE: Make sure AB_DLAMCH() does not fail on the target architecture.
 *
-      EPSLN = DLAMCH('Epsilon')
-      SFMIN = DLAMCH('SafeMinimum')
+      EPSLN = AB_DLAMCH('Epsilon')
+      SFMIN = AB_DLAMCH('SafeMinimum')
       SMALL = SFMIN / EPSLN
-      BIG   = DLAMCH('O')
+      BIG   = AB_DLAMCH('O')
 *     BIG   = ONE / SFMIN
 *
 *     Initialize SVA(1:N) = diag( ||A e_i||_2 )_1^N

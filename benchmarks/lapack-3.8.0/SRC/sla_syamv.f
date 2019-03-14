@@ -202,8 +202,8 @@
       INTEGER            I, INFO, IY, J, JX, KX, KY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           AB_XERBLA, SLAMCH
-      REAL               SLAMCH
+      EXTERNAL           AB_XERBLA, AB_SLAMCH
+      REAL               AB_SLAMCH
 *     ..
 *     .. External Functions ..
       EXTERNAL           AB_ILAUPLO
@@ -255,7 +255,7 @@
 *     Set SAFE1 essentially to be the underflow threshold times the
 *     number of additions in each row.
 *
-      SAFE1 = SLAMCH( 'Safe minimum' )
+      SAFE1 = AB_SLAMCH( 'Safe minimum' )
       SAFE1 = (N+1)*SAFE1
 *
 *     Form  y := alpha*abs(A)*abs(x) + beta*abs(y).

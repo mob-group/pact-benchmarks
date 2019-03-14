@@ -159,8 +159,8 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            IDAMAX
-      DOUBLE PRECISION   DLAMCH, DLARND
-      EXTERNAL           LSAME, IDAMAX, DLAMCH, DLARND
+      DOUBLE PRECISION   AB_DLAMCH, DLARND
+      EXTERNAL           LSAME, IDAMAX, AB_DLAMCH, DLARND
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DLABAD, DLARNV, DLATB4, DLATMS, DROT, DROTG,
@@ -173,8 +173,8 @@
 *
       PATH( 1: 1 ) = 'Double precision'
       PATH( 2: 3 ) = 'TP'
-      UNFL = DLAMCH( 'Safe minimum' )
-      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
+      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
       SMLNUM = UNFL
       BIGNUM = ( ONE-ULP ) / SMLNUM
       CALL DLABAD( SMLNUM, BIGNUM )

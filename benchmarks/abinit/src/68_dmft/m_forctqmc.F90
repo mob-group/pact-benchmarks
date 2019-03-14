@@ -804,7 +804,7 @@ subroutine qmc_prep_ctqmc(cryst_struc,green,self,hu,paw_dmft,pawang,pawprtvol,we
 
 ! ___________________________________________________________________________________
 !
-!  SECOND PART : BUILT HYBRIDIZATION FROM G0
+!  second PART : BUILT HYBRIDIZATION FROM G0
 ! ___________________________________________________________________________________
 !
 ! ===========================================================================================

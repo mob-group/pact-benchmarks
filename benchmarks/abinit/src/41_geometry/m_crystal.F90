@@ -208,7 +208,7 @@ CONTAINS  !=====================================================================
 !!  Only the first method is implemented, the second one should be
 !!  a wrapper for the symmetry finder library. To implement the
 !!  second case I have to add additional entries in the object
-!!  and I have also to pass an object describing the (optional) geometry builder.
+!!  and I have also to pass an object describing the (optional) geometry buiAB_LDEr.
 !!
 !! INPUTS
 !!  natom=number of atom
@@ -525,7 +525,7 @@ end subroutine crystal_free
 !!  [unit]=Unit number for output. Defaults to std_out
 !!  [prtvol]=Verbosity level. If prtvol== -1, only lattice parameters are printed. Defaults to 0
 !!  [mode_paral]=Either "COLL" or "PERS"
-!!  [header]=String to be printed as header for additional info.
+!!  [AB_HEADER]=String to be printed as AB_HEADER for additional info.
 !!
 !! OUTPUT
 !!  Only printing
@@ -539,7 +539,7 @@ end subroutine crystal_free
 !!
 !! SOURCE
 
-subroutine crystal_print(Cryst,header,unit,mode_paral,prtvol)
+subroutine crystal_print(Cryst,AB_HEADER,unit,mode_paral,prtvol)
 
 
 !This section has been created automatically by the script Abilint (TD).
@@ -554,7 +554,7 @@ subroutine crystal_print(Cryst,header,unit,mode_paral,prtvol)
 !scalars
  integer,optional,intent(in) :: unit,prtvol
  character(len=*),optional,intent(in) :: mode_paral
- character(len=*),optional,intent(in) :: header
+ character(len=*),optional,intent(in) :: AB_HEADER
  type(crystal_t),intent(in) :: Cryst
 
 !Local variables-------------------------------
@@ -568,7 +568,7 @@ subroutine crystal_print(Cryst,header,unit,mode_paral,prtvol)
  my_mode  ='COLL' ; if (PRESENT(mode_paral)) my_mode  =mode_paral
 
  msg=' ==== Info on the Cryst% object ==== '
- if (PRESENT(header)) msg=' ==== '//TRIM(ADJUSTL(header))//' ==== '
+ if (PRESENT(AB_HEADER)) msg=' ==== '//TRIM(ADJUSTL(AB_HEADER))//' ==== '
  call wrtout(my_unt,msg,my_mode)
 
  write(msg,'(a)')' Real(R)+Recip(G) space primitive vectors, cartesian coordinates (Bohr,Bohr^-1):'
@@ -904,7 +904,7 @@ end function symbol_type
 !!
 !! INPUTS
 !!  [include_timrev]=If True, time-reversal symmetry is included in the point group unless
-!!    the system has spatial inversion. Default: False
+!!    the system has spatial inversion. Default: false
 !!
 !! OUTPUT
 !!  ptg_nsym=Number of symmetries in the point group
@@ -952,7 +952,7 @@ subroutine crystal_point_group(cryst, ptg_nsym, ptg_symrel, ptg_symrec, has_inve
 
 ! *************************************************************************
 
- my_include_timrev = .False.; if (present(include_timrev)) my_include_timrev = include_timrev
+ my_include_timrev = .false.; if (present(include_timrev)) my_include_timrev = include_timrev
 
  tmp_nsym = 1; work_symrel(:,:,1) = cryst%symrel(:,:,1)
  do isym=2,cryst%nsym
@@ -967,7 +967,7 @@ subroutine crystal_point_group(cryst, ptg_nsym, ptg_symrel, ptg_symrec, has_inve
    end if
  end do
 
- has_inversion = .False.
+ has_inversion = .false.
  do isym=1,tmp_nsym
    if (all(work_symrel(:,:,isym) == inversion_3d) ) then
      has_inversion = .True.; exit
@@ -991,7 +991,7 @@ subroutine crystal_point_group(cryst, ptg_nsym, ptg_symrel, ptg_symrec, has_inve
    end do
  end if
 
- debug = .False.
+ debug = .false.
  if (debug) then
    ABI_CALLOC(tnons, (3, ptg_nsym))
    ABI_MALLOC(symafm, (ptg_nsym))

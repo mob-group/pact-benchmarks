@@ -34,7 +34,7 @@ module m_cgprj
  use defs_abitypes, only : MPI_type
  use defs_datatypes, only : pseudopotential_type
  use m_kg,       only : ph1d3d, mkkpg
- use m_geometry, only : strconv
+ use m_geometry, only : AB_STRCONv
  use m_mkffnl,   only : mkffnl
  use m_mpinfo,   only : proc_distrb_cycle
  use m_pawcprj,  only : pawcprj_type, pawcprj_alloc, pawcprj_put, pawcprj_free, &
@@ -443,7 +443,7 @@ contains
 !!
 !! CHILDREN
 !!      getcprj,mkffnl,mkkpg,pawcprj_alloc,pawcprj_free,pawcprj_mpi_sum
-!!      pawcprj_put,pawcprj_set_zero,ph1d3d,strconv,xmpi_allgather
+!!      pawcprj_put,pawcprj_set_zero,ph1d3d,AB_STRCONv,xmpi_allgather
 !!      xmpi_allgatherv,xmpi_alltoallv
 !!
 !! SOURCE
@@ -921,10 +921,10 @@ contains
        nlmn=cprj(iatom1,ii)%nlmn
        do kk=1,nlmn
          work(1:6)=cprj(iatom1,ii)%dcp(1,1:6,kk)
-         call strconv(work,gprimd,work)
+         call AB_STRCONv(work,gprimd,work)
          cprj(iatom1,ii)%dcp(1,1:6,kk)=work(1:6)
          work(1:6)=cprj(iatom1,ii)%dcp(2,1:6,kk)
-         call strconv(work,gprimd,work)
+         call AB_STRCONv(work,gprimd,work)
          cprj(iatom1,ii)%dcp(2,1:6,kk)=work(1:6)
        end do
      end do

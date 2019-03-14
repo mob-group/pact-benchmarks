@@ -299,9 +299,9 @@
      $                   LWKOPT, NMIN
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
+      REAL               AB_SLAMCH
       INTEGER            AB_ILAENV
-      EXTERNAL           SLAMCH, AB_ILAENV
+      EXTERNAL           AB_SLAMCH, AB_ILAENV
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_CCOPY, AB_CGEHRD, AB_CGEMM, AB_CLACPY, AB_CL
@@ -371,10 +371,10 @@
 *
 *     ==== Machine constants ====
 *
-      SAFMIN = SLAMCH( 'SAFE MINIMUM' )
+      SAFMIN = AB_SLAMCH( 'SAFE MINIMUM' )
       SAFMAX = RONE / SAFMIN
       CALL AB_SLABAD( SAFMIN, SAFMAX )
-      ULP = SLAMCH( 'PRECISION' )
+      ULP = AB_SLAMCH( 'PRECISION' )
       SMLNUM = SAFMIN*( REAL( N ) / ULP )
 *
 *     ==== Setup deflation window ====

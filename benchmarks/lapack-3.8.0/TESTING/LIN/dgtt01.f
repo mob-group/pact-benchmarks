@@ -161,8 +161,8 @@
       DOUBLE PRECISION   ANORM, EPS, LI
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLANGT, DLANHS
-      EXTERNAL           DLAMCH, DLANGT, DLANHS
+      DOUBLE PRECISION   AB_DLAMCH, DLANGT, DLANHS
+      EXTERNAL           AB_DLAMCH, DLANGT, DLANHS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN
@@ -179,7 +179,7 @@
          RETURN
       END IF
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
 *
 *     Copy the matrix U to WORK.
 *

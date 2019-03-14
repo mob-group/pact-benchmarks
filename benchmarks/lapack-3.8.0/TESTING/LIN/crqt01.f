@@ -153,8 +153,8 @@
       REAL               ANORM, EPS, RESID
 *     ..
 *     .. External Functions ..
-      REAL               CLANGE, CLANSY, SLAMCH
-      EXTERNAL           CLANGE, CLANSY, SLAMCH
+      REAL               CLANGE, CLANSY, AB_SLAMCH
+      EXTERNAL           CLANGE, CLANSY, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGEMM, CGERQF, CHERK, CLACPY, CLASET, CUNGRQ
@@ -171,7 +171,7 @@
 *     .. Executable Statements ..
 *
       MINMN = MIN( M, N )
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
 *
 *     Copy the matrix A to the array AF.
 *

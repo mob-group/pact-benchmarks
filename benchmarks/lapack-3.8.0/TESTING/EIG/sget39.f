@@ -129,8 +129,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            ISAMAX
-      REAL               SASUM, SDOT, SLAMCH, SLANGE
-      EXTERNAL           ISAMAX, SASUM, SDOT, SLAMCH, SLANGE
+      REAL               SASUM, SDOT, AB_SLAMCH, SLANGE
+      EXTERNAL           ISAMAX, SASUM, SDOT, AB_SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SCOPY, SGEMV, SLABAD, SLAQTR
@@ -159,8 +159,8 @@
 *
 *     Get machine parameters
 *
-      EPS = SLAMCH( 'P' )
-      SMLNUM = SLAMCH( 'S' )
+      EPS = AB_SLAMCH( 'P' )
+      SMLNUM = AB_SLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
       CALL SLABAD( SMLNUM, BIGNUM )
 *

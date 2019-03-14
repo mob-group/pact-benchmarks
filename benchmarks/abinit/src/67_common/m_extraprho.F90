@@ -74,7 +74,7 @@ contains
 !!  cg(2,mcg)= plane wave wavefunction coefficient
 !!  dtset <type(dataset_type)>=all input variables in this dataset
 !!   | densty(ntypat,4)=parameters for initialisation of the gaussian density
-!!   | jellslab,slabzbeg,slabzend,slabwsrad=parameters for jellium slab
+!!   | jellslab,slabAB_ZBEG,slabzend,slabwsrad=parameters for jellium slab
 !!   | natom=number of atoms in cell.
 !!   | nspden=number of spin-density components
 !!  gmet(3,3)=reciprocal space metric
@@ -218,8 +218,8 @@ subroutine extraprho(atindx,atindx1,cg,dtset,gmet,gprimd,gsqcut,istep,&
 
    diff_tpdt(1:3)=xred_tpdt(1:3,iatom)-xred_old(1:3,iatom)
    if (ind1>0) then
-     diff_t(1:3)=scf_history%xreddiff(1:3,iatom,ind1)
-     if (ind2>0) diff_tmdt(1:3)=scf_history%xreddiff(1:3,iatom,ind2)
+     diff_t(1:3)=scf_history%xreAB_DDIFF(1:3,iatom,ind1)
+     if (ind2>0) diff_tmdt(1:3)=scf_history%xreAB_DDIFF(1:3,iatom,ind2)
    end if
    do ii=1,3
      a11=a11+diff_t(ii)**2
@@ -231,7 +231,7 @@ subroutine extraprho(atindx,atindx1,cg,dtset,gmet,gprimd,gsqcut,istep,&
    end do
 
 !  Store reduced coordinates diffs in SCF history
-   scf_history%xreddiff(1:3,iatom,ind1new)=diff_tpdt(1:3)
+   scf_history%xreAB_DDIFF(1:3,iatom,ind1new)=diff_tpdt(1:3)
 
  end do
  ABI_DEALLOCATE(xred_tpdt)
@@ -357,7 +357,7 @@ subroutine extraprho(atindx,atindx1,cg,dtset,gmet,gprimd,gsqcut,istep,&
    ABI_ALLOCATE(work3,(2,nfft))
    work2(:,1)=scf_history%atmrho_last(:)
    call jellium(gmet,gsqcut,mpi_enreg,nfft,ngfft,1,option,dtset%paral_kgb,&
-&   dtset%slabwsrad,work3,work2,rprimd,work1,dtset%slabzbeg,dtset%slabzend)
+&   dtset%slabwsrad,work3,work2,rprimd,work1,dtset%slabAB_ZBEG,dtset%slabzend)
    scf_history%atmrho_last(:)=work2(:,1)
    ABI_DEALLOCATE(work1)
    ABI_DEALLOCATE(work2)
@@ -539,7 +539,7 @@ end subroutine extraprho
 !! CHILDREN
 !!      ctocprj,dotprod_g,getph,hermit,metric,pawcprj_alloc,pawcprj_copy
 !!      pawcprj_free,pawcprj_get,pawcprj_getdim,pawcprj_lincom,pawcprj_put
-!!      pawcprj_zaxpby,xmpi_allgather,xmpi_alltoallv,zgemm,zhpev
+!!      pawcprj_zaxpby,xmpi_allgather,xmpi_alltoallv,AB_ZGEMM,AB_ZHPEV
 !!
 !! SOURCE
 
@@ -585,7 +585,7 @@ subroutine extrapwf(atindx,atindx1,cg,dtset,istep,kg,mcg,mgfft,mpi_enreg,&
  real(dp),allocatable :: al(:,:),anm(:),cwavef(:,:),cwavef1(:,:),cwavef_tmp(:,:),deltawf1(:,:),deltawf2(:,:)
  real(dp),allocatable :: eig(:),evec(:,:)
  real(dp),allocatable :: unm(:,:,:)
- real(dp),allocatable :: work(:,:),work1(:,:),wf1(:,:),ylmgr_k(:,:,:),zhpev1(:,:),zhpev2(:)
+ real(dp),allocatable :: work(:,:),work1(:,:),wf1(:,:),ylmgr_k(:,:,:),AB_ZHPEV1(:,:),AB_ZHPEV2(:)
  complex(dpc),allocatable :: unm_tmp(:,:),anm_tmp(:,:)
  type(pawcprj_type),allocatable :: cprj(:,:),cprj_k(:,:),cprj_k1(:,:),cprj_k2(:,:),cprj_k3(:,:),cprj_k4(:,:)
 !complex(dpc) :: aa
@@ -844,7 +844,7 @@ subroutine extrapwf(atindx,atindx1,cg,dtset,istep,kg,mcg,mgfft,mpi_enreg,&
        ABI_ALLOCATE(anm_tmp,(nblockbd,nblockbd))
        ABI_ALLOCATE(anm,(nblockbd*(nblockbd+1)))
        unm_tmp(:,:)=cmplx(unm(1,:,:),unm(2,:,:),kind=dp)
-       call zgemm('C','N',nblockbd,nblockbd,nblockbd,dcmplx(1._dp), unm_tmp,nblockbd, &
+       call AB_ZGEMM('C','N',nblockbd,nblockbd,nblockbd,dcmplx(1._dp), unm_tmp,nblockbd, &
 &       unm_tmp,nblockbd,dcmplx(0._dp),anm_tmp,nblockbd)
        do iblockbd=1,nblockbd
          do iblockbd1=iblockbd,nblockbd
@@ -871,13 +871,13 @@ subroutine extrapwf(atindx,atindx1,cg,dtset,istep,kg,mcg,mgfft,mpi_enreg,&
 !      Diagonalize A
        ABI_ALLOCATE(eig,(nblockbd))
        ABI_ALLOCATE(evec,(2*nblockbd,nblockbd))
-       ABI_ALLOCATE(zhpev1,(2,2*nblockbd-1))
-       ABI_ALLOCATE(zhpev2,(3*nblockbd-2))
-       call zhpev('V','U',nblockbd,anm,eig,evec,nblockbd,zhpev1,&
-&       zhpev2,ierr)
+       ABI_ALLOCATE(AB_ZHPEV1,(2,2*nblockbd-1))
+       ABI_ALLOCATE(AB_ZHPEV2,(3*nblockbd-2))
+       call AB_ZHPEV('V','U',nblockbd,anm,eig,evec,nblockbd,AB_ZHPEV1,&
+&       AB_ZHPEV2,ierr)
        ABI_DEALLOCATE(anm)
-       ABI_DEALLOCATE(zhpev1)
-       ABI_DEALLOCATE(zhpev2)
+       ABI_DEALLOCATE(AB_ZHPEV1)
+       ABI_DEALLOCATE(AB_ZHPEV2)
 !      aa=dcmplx(0._dp)
 !      do iblockbd=1,nblockbd
 !      aa=aa+anm_tmp(1,iblockbd)*cmplx(evec((2*iblockbd-1),1),evec(2*iblockbd,1),kind=dp)
@@ -885,7 +885,7 @@ subroutine extrapwf(atindx,atindx1,cg,dtset,istep,kg,mcg,mgfft,mpi_enreg,&
 !      write(std_out,*) 'EIG', aa, eig(1)*evec(1,1),eig(1)*evec(2,1)
 
 !      Compute A'=evec*tU^/sqrt(eig)
-       call zgemm('C','C',nblockbd,nblockbd,nblockbd,dcmplx(1._dp),evec,nblockbd, &
+       call AB_ZGEMM('C','C',nblockbd,nblockbd,nblockbd,dcmplx(1._dp),evec,nblockbd, &
 &       unm_tmp,nblockbd,dcmplx(0._dp),anm_tmp,nblockbd)
        do iblockbd=1,nblockbd
          eigval=dsqrt(eig(iblockbd))
@@ -896,7 +896,7 @@ subroutine extrapwf(atindx,atindx1,cg,dtset,istep,kg,mcg,mgfft,mpi_enreg,&
 
 !      Compute tA^A'to come back to the initial subspace for the cg's
 
-       call zgemm('N','N',nblockbd,nblockbd,nblockbd,dcmplx(1._dp),evec,nblockbd, &
+       call AB_ZGEMM('N','N',nblockbd,nblockbd,nblockbd,dcmplx(1._dp),evec,nblockbd, &
 &       anm_tmp,nblockbd,dcmplx(0._dp),unm_tmp,nblockbd)
        anm_tmp=unm_tmp
 !      write(std_out,*) 'ANM_tmp'
@@ -908,13 +908,13 @@ subroutine extrapwf(atindx,atindx1,cg,dtset,istep,kg,mcg,mgfft,mpi_enreg,&
        ABI_ALLOCATE(work,(2,npw_nk*my_nspinor*nblockbd))
        ABI_ALLOCATE(work1,(2,my_nspinor*nblockbd*npw_nk))
        work1(:,:)=scf_history%cg(:,icg+1:icg+my_nspinor*nblockbd*npw_nk,ind1)
-       call zgemm('N','N',npw_nk*my_nspinor,nblockbd,nblockbd,dcmplx(1._dp), &
+       call AB_ZGEMM('N','N',npw_nk*my_nspinor,nblockbd,nblockbd,dcmplx(1._dp), &
 &       work1,npw_nk*my_nspinor, &
 &       anm_tmp,nblockbd,dcmplx(0._dp),work,npw_nk*my_nspinor)
        scf_history%cg(:,1+icg:npw_nk*my_nspinor*nblockbd+icg,ind1)=work(:,:)
 
        work1(:,:)=scf_history%cg(:,icg+1:icg+my_nspinor*nblockbd*npw_nk,ind2)
-       call zgemm('N','N',npw_nk*my_nspinor,nblockbd,nblockbd,dcmplx(1._dp), &
+       call AB_ZGEMM('N','N',npw_nk*my_nspinor,nblockbd,nblockbd,dcmplx(1._dp), &
 &       work1,npw_nk*my_nspinor, &
 &       anm_tmp,nblockbd,dcmplx(0._dp),work,npw_nk*my_nspinor)
        scf_history%cg(:,1+icg:npw_nk*my_nspinor*nblockbd+icg,ind2)=work(:,:)
@@ -1168,7 +1168,7 @@ end subroutine extrapwf
 !! CHILDREN
 !!      ctocprj,dotprod_g,getph,hermit,metric,pawcprj_alloc,pawcprj_copy
 !!      pawcprj_free,pawcprj_get,pawcprj_getdim,pawcprj_lincom,pawcprj_put
-!!      pawcprj_zaxpby,xmpi_allgather,xmpi_alltoallv,zgemm,zhpev
+!!      pawcprj_zaxpby,xmpi_allgather,xmpi_alltoallv,AB_ZGEMM,AB_ZHPEV
 !!
 !! SOURCE
 
@@ -1214,7 +1214,7 @@ subroutine extrapwf_biortho(atindx,atindx1,cg,dtset,istep,kg,mcg,mgfft,mpi_enreg
  real(dp),allocatable :: al(:,:),anm(:),cwavef(:,:),cwavef1(:,:),cwavef_tmp(:,:),deltawf1(:,:),deltawf2(:,:)
  real(dp),allocatable :: eig(:),evec(:,:)
  real(dp),allocatable :: unm(:,:,:)
- real(dp),allocatable :: work(:,:),work1(:,:),wf1(:,:),ylmgr_k(:,:,:),zhpev1(:,:),zhpev2(:)
+ real(dp),allocatable :: work(:,:),work1(:,:),wf1(:,:),ylmgr_k(:,:,:),AB_ZHPEV1(:,:),AB_ZHPEV2(:)
  complex(dpc),allocatable :: unm_tmp(:,:),anm_tmp(:,:)
  type(pawcprj_type),allocatable :: cprj(:,:),cprj_k(:,:),cprj_k1(:,:),cprj_k2(:,:),cprj_k3(:,:),cprj_k4(:,:)
 !complex(dpc) :: aa

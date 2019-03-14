@@ -579,7 +579,7 @@ subroutine green_atomic_hubbard(cryst_struc,green_hubbard,hu,level_diag,paw_dmft
            end do
 !          write(std_out,*) "Nelec",nelec,"iconfig",iconfig,"eleve",e_nelec(nelec)%config(iconfig)
 
-!          Second: Compute interaction part
+!          second: Compute interaction part
 !          do ielec=1,nelec-1 ! compute interaction among the nelec electrons in the configuration iconfig
 !          e_nelec(nelec)%config(iconfig)= e_nelec(nelec)%config(iconfig)   &
 !          &             + hu(cryst_struc%typat(iatom))%udens(occ_level(nelec)%repart(iconfig,ielec), &

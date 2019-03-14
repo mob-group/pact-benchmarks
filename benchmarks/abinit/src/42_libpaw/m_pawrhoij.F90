@@ -2318,7 +2318,7 @@ end subroutine pawrhoij_redistribute
 !!  nspden_in=Number of spin-density components. only used for reading.
 !!  nlmn_type(ntypat)= Number of (l,m,n) elements for the paw basis for each type of atom. Only used for reading.
 !!  typat(natom) =Type of each atom.
-!!  headform=Format of the abinit header (only used for reading as we need to know how to read
+!!  headform=Format of the abinit AB_HEADER (only used for reading as we need to know how to read
 !!    the data. Writing is always done using the latest headform.
 !!  rdwr_mode(len=*)=String defining the IO mode. Possible values (not case sensitive):
 !!    "W"= For writing to unitfi
@@ -2431,7 +2431,7 @@ subroutine pawrhoij_io(pawrhoij,unitfi,nsppol_in,nspinor_in,nspden_in,nlmn_type,
          read(unitfi,*) ((nsel44(ispden,iatom),ispden=1,nspden_in),iatom=1,natom)
 #ifdef LIBPAW_HAVE_NETCDF
        else if (iomode == netcdf_io) then
-         MSG_ERROR("header in 44-56 not compatible with Netcdf")
+         MSG_ERROR("AB_HEADER in 44-56 not compatible with Netcdf")
 #endif
        end if
        call pawrhoij_alloc(pawrhoij,1,nspden_in,nspinor_in,nsppol_in,typat,lmnsize=nlmn_type)
@@ -3670,7 +3670,7 @@ subroutine symrhoij(pawrhoij,pawrhoij_unsym,choice,gprimd,indsym,ipert,natom,nsy
                  rotgr(1:cplex_eff,mushift,iafm)=rotgr(1:cplex_eff,mushift,iafm)+sum1(1:cplex_eff)
                end do
              end if
-!            ===== Second derivatives vs atomic positions ====
+!            ===== second derivatives vs atomic positions ====
              if (choice==4.or.choice==24) then
                work1(1:cplex_eff,1,1)=sumgr(1:cplex_eff,1+ishift4);work1(1:cplex_eff,2,2)=sumgr(1:cplex_eff,2+ishift4)
                work1(1:cplex_eff,3,3)=sumgr(1:cplex_eff,3+ishift4);work1(1:cplex_eff,2,3)=sumgr(1:cplex_eff,4+ishift4)

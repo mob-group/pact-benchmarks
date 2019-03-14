@@ -205,8 +205,8 @@ subroutine read_gkk(elph_ds,Cryst,ifc,Bst,FSfullpqtofull,gkk_flag,n1wf,nband,ep_
 
 !===========================================================
 !Loop over all files we have
-!read in header for perturbation
-!should check that all files are complete, have same header
+!read in AB_HEADER for perturbation
+!should check that all files are complete, have same AB_HEADER
 !(taking into account the symmetries for the qpoint),
 !represent the correct qpoints ...
 !MG: this task should be performed in mrggkk
@@ -216,7 +216,7 @@ subroutine read_gkk(elph_ds,Cryst,ifc,Bst,FSfullpqtofull,gkk_flag,n1wf,nband,ep_
  do i1wf=1,n1wf
 
    if (master == me) then
-     write (msg,'(2a,i4,a,i4)')ch10,' read_gkk : reading 1WF header # ',i1wf,' /',n1wf
+     write (msg,'(2a,i4,a,i4)')ch10,' read_gkk : reading 1WF AB_HEADER # ',i1wf,' /',n1wf
      call wrtout(std_out,msg,'COLL')
 
 !    Could check for compatibility of natom, kpt grids, ecut, qpt with DDB grid...
@@ -224,11 +224,11 @@ subroutine read_gkk(elph_ds,Cryst,ifc,Bst,FSfullpqtofull,gkk_flag,n1wf,nband,ep_
 
      call hdr_fort_read(hdr1, unitgkk, fform)
      if (fform == 0) then
-       write (msg,'(a,i0,a)')' 1WF header number ',i1wf,' was mis-read. fform == 0'
+       write (msg,'(a,i0,a)')' 1WF AB_HEADER number ',i1wf,' was mis-read. fform == 0'
        MSG_ERROR(msg)
      end if
 
-     write(msg,'(a,i4)')' read_gkk : have read 1WF header #',i1wf
+     write(msg,'(a,i4)')' read_gkk : have read 1WF AB_HEADER #',i1wf
      call wrtout(std_out,msg,'COLL')
      write (msg,'(2a,i4,a)')ch10,' read_gkk : # of kpt for this perturbation: ',hdr1%nkpt,ch10
      call wrtout(std_out,msg,'COLL')
@@ -723,8 +723,8 @@ end subroutine read_gkk
 !!  bantot1 = total number of matrix elements for 1st order eigenvalues
 !!  eigen0 = GS eigenvalues
 !!  eigen1 = response function 1st order eigenvalue matrix
-!!  hdr0 = GS header
-!!  hdr1 = RF header
+!!  hdr0 = GS AB_HEADER
+!!  hdr1 = RF AB_HEADER
 !!  mpi_enreg=information about MPI parallelization
 !!
 !! PARENTS
@@ -781,7 +781,7 @@ subroutine outgkk(bantot0,bantot1,outfile,eigen0,eigen1,hdr0,hdr1,mpi_enreg,phas
    MSG_ERROR(msg)
  end if
 
-!output GS header
+!output GS AB_HEADER
  call hdr_fort_write(hdr0, unitout, fform, ierr)
  ABI_CHECK(ierr == 0 , "hdr_fort_write returned ierr != 0")
 
@@ -797,7 +797,7 @@ subroutine outgkk(bantot0,bantot1,outfile,eigen0,eigen1,hdr0,hdr1,mpi_enreg,phas
 !output number of gkk in this file (1)
  write (unitout) ntot
 
-!output RF header
+!output RF AB_HEADER
  call hdr_fort_write(hdr1, unitout, fform, ierr)
  ABI_CHECK(ierr == 0 , "hdr_fort_write returned ierr != 0")
 
@@ -1126,7 +1126,7 @@ subroutine read_el_veloc(nband_in,nkpt_in,kpt_in,nsppol_in,elph_tr_ds)
 !testing here, we are trusting users not to mix different ddk files...
  call inpgkk(eigen13,filnam3,hdr1)
 
-!Extract info from the header
+!Extract info from the AB_HEADER
  if(hdr1%nsppol /= nsppol_in) then
    MSG_ERROR('nsspol /= input nsppol')
  end if
@@ -1138,7 +1138,7 @@ subroutine read_el_veloc(nband_in,nkpt_in,kpt_in,nsppol_in,elph_tr_ds)
  end if
 
  write(std_out,*)
- write(std_out,*)                     'readings from read_el_veloc header'
+ write(std_out,*)                     'readings from read_el_veloc AB_HEADER'
  write(std_out,'(a,i8)')              ' natom                =',hdr1%natom
  write(std_out,'(a,3i8)')             ' nkpt,nband_in,mband  =',hdr1%nkpt,nband_in,mband
  write(std_out,'(a, f10.5,a)' )      ' ecut                 =',hdr1%ecut,' Ha'
@@ -1253,7 +1253,7 @@ subroutine inpgkk(eigen1,filegkk,hdr1)
  end if
 
 
-!read in header of GS file and eigenvalues
+!read in AB_HEADER of GS file and eigenvalues
  call hdr_fort_read(hdr0, unitgkk, fform)
  ABI_CHECK(fform /= 0, "hdr_fort_read returned fform == 0")
 
@@ -1281,10 +1281,10 @@ subroutine inpgkk(eigen1,filegkk,hdr1)
    MSG_ERROR(message)
  end if
 
-!read in header of 1WF file
+!read in AB_HEADER of 1WF file
  call hdr_fort_read(hdr1, unitgkk, fform)
  if (fform == 0) then
-   write(message,'(a,i0,a)')' 1WF header number ',i1wf,' was mis-read. fform == 0'
+   write(message,'(a,i0,a)')' 1WF AB_HEADER number ',i1wf,' was mis-read. fform == 0'
    MSG_ERROR(message)
  end if
 
@@ -1500,7 +1500,7 @@ end subroutine completeperts
 !!
 !! CHILDREN
 !!      gam_mult_displ,nmsq_gam,nmsq_gam_sumfs,nmsq_pure_gkk
-!!      nmsq_pure_gkk_sumfs,wrtout,xmpi_sum,zhpev
+!!      nmsq_pure_gkk_sumfs,wrtout,xmpi_sum,AB_ZHPEV
 !!
 !! SOURCE
 
@@ -1540,7 +1540,7 @@ subroutine normsq_gkq(displ_red,eigvec,elph_ds,FSfullpqtofull,&
  real(dp) :: gam_now2(2,elph_ds%nbranch,elph_ds%nbranch)
  real(dp) :: lambda(elph_ds%nsppol)
  real(dp),allocatable :: matrx(:,:),val(:),vec(:,:,:)
- real(dp),allocatable :: zhpev1(:,:),zhpev2(:)
+ real(dp),allocatable :: AB_ZHPEV1(:,:),AB_ZHPEV2(:)
 
 ! *************************************************************************
 
@@ -1656,17 +1656,17 @@ subroutine normsq_gkq(displ_red,eigvec,elph_ds,FSfullpqtofull,&
          ii=ii+1
        end do
      end do
-     ABI_ALLOCATE(zhpev1,(2,2*elph_ds%nbranch-1))
-     ABI_ALLOCATE(zhpev2,(3*elph_ds%nbranch-2))
+     ABI_ALLOCATE(AB_ZHPEV1,(2,2*elph_ds%nbranch-1))
+     ABI_ALLOCATE(AB_ZHPEV2,(3*elph_ds%nbranch-2))
      ABI_ALLOCATE(val,(elph_ds%nbranch))
      ABI_ALLOCATE(vec,(2,elph_ds%nbranch,elph_ds%nbranch))
-     call ZHPEV ('V','U',elph_ds%nbranch,matrx,val,vec,elph_ds%nbranch,zhpev1,zhpev2,ier)
+     call AB_ZHPEV ('V','U',elph_ds%nbranch,matrx,val,vec,elph_ds%nbranch,AB_ZHPEV1,AB_ZHPEV2,ier)
 
      write (std_out,*) ' normsq_gkq : accumulated eigenvalues isppol ',isppol, ' = '
      write (std_out,'(3E18.6)') val
      ABI_DEALLOCATE(matrx)
-     ABI_DEALLOCATE(zhpev1)
-     ABI_DEALLOCATE(zhpev2)
+     ABI_DEALLOCATE(AB_ZHPEV1)
+     ABI_DEALLOCATE(AB_ZHPEV2)
      ABI_DEALLOCATE(vec)
      ABI_DEALLOCATE(val)
    end do ! isppol
@@ -1718,7 +1718,7 @@ end subroutine normsq_gkq
 !!      normsq_gkq
 !!
 !! CHILDREN
-!!      gam_mult_displ,zgemm
+!!      gam_mult_displ,AB_ZGEMM
 !!
 !! SOURCE
 
@@ -1759,7 +1759,7 @@ subroutine nmsq_gam (accum_mat,accum_mat2,displ_red,eigvec,elph_ds,FSfullpqtoful
 !arrays
  real(dp) :: gkq_1band(2,elph_ds%nbranch,elph_ds%nbranch)
  real(dp) :: tmp_mat2(2,elph_ds%nbranch,elph_ds%nbranch)
- real(dp) :: zgemm_tmp_mat(2,elph_ds%nbranch,elph_ds%nbranch)
+ real(dp) :: AB_ZGEMM_tmp_mat(2,elph_ds%nbranch,elph_ds%nbranch)
 
 ! *************************************************************************
 
@@ -1790,9 +1790,9 @@ subroutine nmsq_gam (accum_mat,accum_mat2,displ_red,eigvec,elph_ds,FSfullpqtoful
 
          gkq_1band(:,:,:) = zero
 
-         zgemm_tmp_mat= reshape (h1_mat_el_sq(:,ibeff,:,ik_this_proc,isppol),(/2,elph_ds%nbranch,elph_ds%nbranch/))
+         AB_ZGEMM_tmp_mat= reshape (h1_mat_el_sq(:,ibeff,:,ik_this_proc,isppol),(/2,elph_ds%nbranch,elph_ds%nbranch/))
 
-         call gam_mult_displ(elph_ds%nbranch, displ_red, zgemm_tmp_mat, tmp_mat2)
+         call gam_mult_displ(elph_ds%nbranch, displ_red, AB_ZGEMM_tmp_mat, tmp_mat2)
 
 !        sum over bands
          do ipert1=1,elph_ds%nbranch
@@ -1829,11 +1829,11 @@ subroutine nmsq_gam (accum_mat,accum_mat2,displ_red,eigvec,elph_ds,FSfullpqtoful
          gkq_1band(:,:,:) = zero
 
 !        here eigvec is transposed and complexconjugated.
-         zgemm_tmp_mat=zero
-         call zgemm('n','c',elph_ds%nbranch,elph_ds%nbranch,elph_ds%nbranch,cone,&
-&         tmp_mat2,elph_ds%nbranch,eigvec,elph_ds%nbranch,czero,zgemm_tmp_mat,elph_ds%nbranch)
+         AB_ZGEMM_tmp_mat=zero
+         call AB_ZGEMM('n','c',elph_ds%nbranch,elph_ds%nbranch,elph_ds%nbranch,cone,&
+&         tmp_mat2,elph_ds%nbranch,eigvec,elph_ds%nbranch,czero,AB_ZGEMM_tmp_mat,elph_ds%nbranch)
 
-         gkq_1band = zgemm_tmp_mat
+         gkq_1band = AB_ZGEMM_tmp_mat
 
 !        gamma matrix contribution in cartesian coordinates (ie interpolatable form)
          h1_mat_el_sq(:,ibeff,:,ik_this_proc,isppol) = reshape(gkq_1band,(/2,elph_ds%nbranch*elph_ds%nbranch/))
@@ -1878,7 +1878,7 @@ end subroutine nmsq_gam
 !!      normsq_gkq
 !!
 !! CHILDREN
-!!      gam_mult_displ,zgemm
+!!      gam_mult_displ,AB_ZGEMM
 !!
 !! SOURCE
 
@@ -1917,7 +1917,7 @@ subroutine nmsq_gam_sumFS(accum_mat,accum_mat2,displ_red,eigvec,elph_ds,FSfullpq
  real(dp) :: gkq_sum_bands(2,elph_ds%nbranch,elph_ds%nbranch)
  real(dp) :: tmp_gkq_sum_bands(2,elph_ds%nbranch,elph_ds%nbranch)
  real(dp) :: tmp_mat2(2,elph_ds%nbranch,elph_ds%nbranch)
- real(dp),allocatable :: zgemm_tmp_mat(:,:,:)
+ real(dp),allocatable :: AB_ZGEMM_tmp_mat(:,:,:)
 
 ! *************************************************************************
 
@@ -1933,7 +1933,7 @@ subroutine nmsq_gam_sumFS(accum_mat,accum_mat2,displ_red,eigvec,elph_ds,FSfullpq
 !accum_mat and accum_mat2 are real, the imaginary part is used for debugging purpose
 !accum_mat2 is used to store the phonon-linewidhts before interpolation
 
- ABI_ALLOCATE(zgemm_tmp_mat ,(2,elph_ds%nbranch,elph_ds%nbranch))
+ ABI_ALLOCATE(AB_ZGEMM_tmp_mat ,(2,elph_ds%nbranch,elph_ds%nbranch))
 
  do isppol=1,elph_ds%nsppol
    do ik_this_proc =1, elph_ds%k_phon%my_nkpt
@@ -1954,9 +1954,9 @@ subroutine nmsq_gam_sumFS(accum_mat,accum_mat2,displ_red,eigvec,elph_ds,FSfullpq
          sd2 = elph_ds%k_phon%wtk(ib2,ikpt_phonq,isppol)
          ibeff=ib2+(ib1-1)*elph_ds%nFSband
 
-         zgemm_tmp_mat = reshape(h1_mat_el_sq(:,ibeff,:,isppol,ik_this_proc),(/2,elph_ds%nbranch,elph_ds%nbranch/))
+         AB_ZGEMM_tmp_mat = reshape(h1_mat_el_sq(:,ibeff,:,isppol,ik_this_proc),(/2,elph_ds%nbranch,elph_ds%nbranch/))
 
-         call gam_mult_displ(elph_ds%nbranch, displ_red, zgemm_tmp_mat, tmp_mat2)
+         call gam_mult_displ(elph_ds%nbranch, displ_red, AB_ZGEMM_tmp_mat, tmp_mat2)
 
 !        sum over bands in gkq_sum_bands
          do ipert1=1,elph_ds%nbranch
@@ -1996,11 +1996,11 @@ subroutine nmsq_gam_sumFS(accum_mat,accum_mat2,displ_red,eigvec,elph_ds,FSfullpq
      end do
 
 !    here eigvec is transposed and complex conjugated.
-     zgemm_tmp_mat=zero
-     call zgemm('n','c',elph_ds%nbranch,elph_ds%nbranch,elph_ds%nbranch,cone,&
-&     tmp_mat2,elph_ds%nbranch,eigvec,elph_ds%nbranch,czero,zgemm_tmp_mat,elph_ds%nbranch)
+     AB_ZGEMM_tmp_mat=zero
+     call AB_ZGEMM('n','c',elph_ds%nbranch,elph_ds%nbranch,elph_ds%nbranch,cone,&
+&     tmp_mat2,elph_ds%nbranch,eigvec,elph_ds%nbranch,czero,AB_ZGEMM_tmp_mat,elph_ds%nbranch)
 
-     gkq_sum_bands = zgemm_tmp_mat
+     gkq_sum_bands = AB_ZGEMM_tmp_mat
 
 !    ! gamma matrix contribution in cartesian coordinates (ie interpolatable form)
 !    gamma matrix contribution in reduced coordinates (ie interpolatable form)
@@ -2012,7 +2012,7 @@ subroutine nmsq_gam_sumFS(accum_mat,accum_mat2,displ_red,eigvec,elph_ds,FSfullpq
  end do
 !END loop over sppol
 
- ABI_DEALLOCATE(zgemm_tmp_mat)
+ ABI_DEALLOCATE(AB_ZGEMM_tmp_mat)
 
 end subroutine nmsq_gam_sumFS
 !!***
@@ -2084,7 +2084,7 @@ subroutine nmsq_pure_gkk(accum_mat,accum_mat2,displ_red,elph_ds,FSfullpqtofull,&
 !arrays
  real(dp) :: gkq_sum_bands(2,elph_ds%nbranch,elph_ds%nbranch)
  real(dp) :: tmp_mat2(2,elph_ds%nbranch,elph_ds%nbranch)
- real(dp) :: zgemm_tmp_mat(2,elph_ds%nbranch,elph_ds%nbranch)
+ real(dp) :: AB_ZGEMM_tmp_mat(2,elph_ds%nbranch,elph_ds%nbranch)
 
 ! *************************************************************************
 
@@ -2145,9 +2145,9 @@ subroutine nmsq_pure_gkk(accum_mat,accum_mat2,displ_red,elph_ds,FSfullpqtofull,&
 !  MG20060603
 !  do scalar product with the displ_red to calculate the ph lwdth before interpolation (stored in accum_mat2)
 
-   zgemm_tmp_mat = accum_mat(:,:,:,isppol)
+   AB_ZGEMM_tmp_mat = accum_mat(:,:,:,isppol)
 
-   call gam_mult_displ(elph_ds%nbranch, displ_red, zgemm_tmp_mat, tmp_mat2)
+   call gam_mult_displ(elph_ds%nbranch, displ_red, AB_ZGEMM_tmp_mat, tmp_mat2)
 
    do ipert1=1,elph_ds%nbranch
      accum_mat2(1,ipert1,ipert1,isppol) = accum_mat2(1,ipert1,ipert1,isppol) + tmp_mat2(1,ipert1,ipert1)
@@ -2223,7 +2223,7 @@ subroutine nmsq_pure_gkk_sumfs(accum_mat,accum_mat2,displ_red,elph_ds,FSfullpqto
 !arrays
  real(dp) :: gkq_sum_bands(2,elph_ds%nbranch,elph_ds%nbranch)
  real(dp) :: tmp_mat2(2,elph_ds%nbranch,elph_ds%nbranch)
- real(dp) :: zgemm_tmp_mat(2,elph_ds%nbranch,elph_ds%nbranch)
+ real(dp) :: AB_ZGEMM_tmp_mat(2,elph_ds%nbranch,elph_ds%nbranch)
 
 ! *************************************************************************
 
@@ -2279,9 +2279,9 @@ subroutine nmsq_pure_gkk_sumfs(accum_mat,accum_mat2,displ_red,elph_ds,FSfullpqto
 !MG20060603
 !do scalar product wit displ_red to calculate the ph lwdth before interpolation (stored in accum_mat2)
  do isppol=1,nsppol
-   zgemm_tmp_mat = accum_mat(:,:,:,isppol)
+   AB_ZGEMM_tmp_mat = accum_mat(:,:,:,isppol)
 !
-   call gam_mult_displ(nbranch, displ_red, zgemm_tmp_mat, tmp_mat2)
+   call gam_mult_displ(nbranch, displ_red, AB_ZGEMM_tmp_mat, tmp_mat2)
 
    do ipert1=1,nbranch
      accum_mat2(1,ipert1,ipert1,isppol) = accum_mat2(1,ipert1,ipert1,isppol) + tmp_mat2(1,ipert1,ipert1)

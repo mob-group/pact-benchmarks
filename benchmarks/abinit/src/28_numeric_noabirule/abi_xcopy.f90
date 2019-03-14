@@ -52,7 +52,7 @@
  call timab(TIMAB_XCOPY,1,tsec)
 #endif
 
- call zcopy(size,tsrc,incsrc,tdest,incdest)
+ call AB_ZCOPY(size,tsrc,incsrc,tdest,incdest)
 
 #ifdef DEV_LINALG_TIMING
  call timab(TIMAB_XCOPY,2,tsec)
@@ -136,9 +136,9 @@ end subroutine abi_zcopy_1d
 
  cplx_=1 ; if(PRESENT(x_cplx)) cplx_ = x_cplx
  if(cplx_ == 2) then
-    call zcopy(size,tsrc,incsrc,tdest,incdest)
+    call AB_ZCOPY(size,tsrc,incsrc,tdest,incdest)
  else
-    call dcopy(size,tsrc,incsrc,tdest,incdest)
+    call AB_DCOPY(size,tsrc,incsrc,tdest,incdest)
  end if
 
 #ifdef DEV_LINALG_TIMING
@@ -217,7 +217,7 @@ subroutine abi_dcopy_2d(size,tsrc,incsrc,tdest,incdest,x_cplx)
 !Only for lobpcgwf
  integer, intent(in), optional :: x_cplx
 
- ! write(*,*) "dcopy2D size=",size
+ ! write(*,*) "AB_DCOPY2D size=",size
  call abi_dcopy(size,tsrc(1,1),incsrc,tdest(1,1),incdest,x_cplx)
 
 end subroutine abi_dcopy_2d
@@ -293,9 +293,9 @@ subroutine abi_dcopy_1d_0d(size,tsrc,incsrc,tdest,incdest,x_cplx)
 end subroutine abi_dcopy_1d_0d
 !!***
 
-!!****f* m_abi_linalg/abi_d2zcopy_2d
+!!****f* m_abi_linalg/abi_d2AB_ZCOPY_2d
 !! NAME
-!! abi_d2zcopy_2d
+!! abi_d2AB_ZCOPY_2d
 !!
 !! FUNCTION
 !!
@@ -305,12 +305,12 @@ end subroutine abi_dcopy_1d_0d
 !!
 !! SOURCE
 
-  subroutine abi_d2zcopy_2d(size,tsrc,incsrc,tdest,incdest,x_cplx)
+  subroutine abi_d2AB_ZCOPY_2d(size,tsrc,incsrc,tdest,incdest,x_cplx)
 
 !This section has been created automatically by the script Abilint (TD).
 !Do not modify the following lines by hand.
 #undef ABI_FUNC
-#define ABI_FUNC 'abi_d2zcopy_2d'
+#define ABI_FUNC 'abi_d2AB_ZCOPY_2d'
 !End of the abilint section
 
  implicit none
@@ -334,21 +334,21 @@ end subroutine abi_dcopy_1d_0d
 
  cplx_=1 ; if(PRESENT(x_cplx)) cplx_ = x_cplx
  if(cplx_ == 2) then
-    call zcopy(size,tsrc,incsrc,tdest,incdest)
+    call AB_ZCOPY(size,tsrc,incsrc,tdest,incdest)
  else
-    call dcopy(size,tsrc,incsrc,tdest,incdest)
+    call AB_DCOPY(size,tsrc,incsrc,tdest,incdest)
  end if
 
 #ifdef DEV_LINALG_TIMING
  call timab(TIMAB_XCOPY,2,tsec)
 #endif
 
-end subroutine abi_d2zcopy_2d
+end subroutine abi_d2AB_ZCOPY_2d
 !!***
 
-!!****f* m_abi_linalg/abi_z2dcopy_2d
+!!****f* m_abi_linalg/abi_z2AB_DCOPY_2d
 !! NAME
-!! abi_z2dcopy_2d
+!! abi_z2AB_DCOPY_2d
 !!
 !! FUNCTION
 !!
@@ -358,12 +358,12 @@ end subroutine abi_d2zcopy_2d
 !!
 !! SOURCE
 
-subroutine abi_z2dcopy_2d(size,tsrc,incsrc,tdest,incdest,x_cplx)
+subroutine abi_z2AB_DCOPY_2d(size,tsrc,incsrc,tdest,incdest,x_cplx)
 
 !This section has been created automatically by the script Abilint (TD).
 !Do not modify the following lines by hand.
 #undef ABI_FUNC
-#define ABI_FUNC 'abi_z2dcopy_2d'
+#define ABI_FUNC 'abi_z2AB_DCOPY_2d'
 !End of the abilint section
 
  implicit none
@@ -386,14 +386,14 @@ subroutine abi_z2dcopy_2d(size,tsrc,incsrc,tdest,incdest,x_cplx)
 
  cplx_=1 ; if(PRESENT(x_cplx)) cplx_ = x_cplx
  if(cplx_ == 2) then
-    call zcopy(size,tsrc,incsrc,tdest,incdest)
+    call AB_ZCOPY(size,tsrc,incsrc,tdest,incdest)
  else
-    call dcopy(size,tsrc,incsrc,tdest,incdest)
+    call AB_DCOPY(size,tsrc,incsrc,tdest,incdest)
  end if
 
 #ifdef DEV_LINALG_TIMING
  call timab(TIMAB_XCOPY,2,tsec)
 #endif
 
-end subroutine abi_z2dcopy_2d
+end subroutine abi_z2AB_DCOPY_2d
 !!***

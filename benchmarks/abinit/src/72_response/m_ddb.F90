@@ -211,11 +211,11 @@ MODULE m_ddb
 
  ! Flags used to indentify the block type.
  !integer,private,parameter :: BLKTYPE_ETOT = 0         ! Total energy
- !integer,private,parameter :: BLKTYPE_2DE_NOSTAT = 1   ! Second order derivative of the energy (non-stationary expression)
- !integer,private,parameter :: BLKTYPE_2DE_STAT = 2     ! Second order derivative of the energy (stationary expression)
+ !integer,private,parameter :: BLKTYPE_2DE_NOSTAT = 1   ! second order derivative of the energy (non-stationary expression)
+ !integer,private,parameter :: BLKTYPE_2DE_STAT = 2     ! second order derivative of the energy (stationary expression)
  !integer,private,parameter :: BLKTYPE_3DE = 3          ! Third order derivative of the energy
  !integer,private,parameter :: BLKTYPE_1DE = 4          ! First order derivative of the energy
- !integer,private,parameter :: BLKTYPE_2DEIG = 5        ! Second order derivative of the eigenvalues
+ !integer,private,parameter :: BLKTYPE_2DEIG = 5        ! second order derivative of the eigenvalues
 
 CONTAINS  !===========================================================
 !!***
@@ -1188,7 +1188,7 @@ subroutine rdddb9(acell,atifc,amu,ddb,ddbun,filnam,gmet,gprim,indsym,iout,&
 
  DBG_ENTER("COLL")
 
-!Open the input derivative database file and read the header
+!Open the input derivative database file and read the AB_HEADER
  call ddb_hdr_open_read(ddb_hdr, filnam, ddbun, DDB_VERSION, msym=msym, mband=mband)
 
  !nkpt = ddb_hdr%nkpt
@@ -1845,7 +1845,7 @@ end subroutine ddb_from_file
 !!  EIG2D matrix has been calculated correctly ; 0 otherwise )
 !!
 !! SIDE EFFECT
-!! blkval2(2,msize,mband,nkpt)=Second order eigenvalues (EIG2D)
+!! blkval2(2,msize,mband,nkpt)=second order eigenvalues (EIG2D)
 !! is transformed from reduced coordinates to cartesian coordinates
 !!
 !! PARENTS
@@ -2031,7 +2031,7 @@ subroutine carteig2d(blkflg,blkval,carflg,d2cart,&
    end do
  end do
 
-!Second step
+!second step
  do ipert1=1,mpert
    do ipert2=1,mpert
      do ii=1,2
@@ -3422,7 +3422,7 @@ subroutine ddb_to_dtset(comm,dtset,filename,psps)
 ! Must read natom from the DDB before being able to allocate some arrays needed for invars9
  ddbun = get_unit()
  call ddb_hdr_open_read(ddb_hdr,filename,ddbun,DDB_VERSION,comm=comm)
-!close ddb file, just want to read the headers
+!close ddb file, just want to read the AB_HEADERs
  close(ddbun)
  dtset%ngfft = ddb_hdr%ngfft
 

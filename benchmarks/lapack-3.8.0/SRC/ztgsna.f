@@ -346,9 +346,9 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME
-      DOUBLE PRECISION   DLAMCH, AB_DLAPY2, AB_DZNRM2
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLAPY2, AB_DZNRM2
       COMPLEX*16         AB_ZDOTC
-      EXTERNAL           AB_LSAME, DLAMCH, AB_DLAPY2, AB_DZNRM2, AB_ZDOT
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_DLAPY2, AB_DZNRM2, AB_ZDOT
      $C
 *     ..
 *     .. External Subroutines ..
@@ -430,8 +430,8 @@
 *
 *     Get machine constants
 *
-      EPS = DLAMCH( 'P' )
-      SMLNUM = DLAMCH( 'S' ) / EPS
+      EPS = AB_DLAMCH( 'P' )
+      SMLNUM = AB_DLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
       CALL AB_DLABAD( SMLNUM, BIGNUM )
       KS = 0

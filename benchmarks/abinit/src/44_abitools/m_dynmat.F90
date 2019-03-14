@@ -246,9 +246,9 @@ subroutine asria_calc(asr,d2asr,d2cart,mpert,natom)
    constr_rhs(2,1:nconst) = matmul(constraints(1,:,:),d2cart_packed(2,:))
 
 !  lwork = 3*nd2_packed
-   call zgelss (nconst,nd2_packed,1,constraints,nconst,constr_rhs,nd2_packed,&
+   call AB_ZGELSs (nconst,nd2_packed,1,constraints,nconst,constr_rhs,nd2_packed,&
 &   singvals,-one,constrank,work,3*nd2_packed,rwork,info)
-   ABI_CHECK(info == 0, sjoin('zgelss returned:', itoa(info)))
+   ABI_CHECK(info == 0, sjoin('AB_ZGELSs returned:', itoa(info)))
 
 !  unpack
    do ipert2=1,natom
@@ -550,9 +550,9 @@ subroutine asrprs(asr,asrflag,rotinv,uinvers,vtinvers,singular,d2cart,mpert,nato
 
 !  singular value decomposition of superm
 
-   call dgesvd('A','O',superdim,superdim,superm,superdim,singular,umatrix,superdim, &
+   call AB_DGESVd('A','O',superdim,superdim,superm,superdim,singular,umatrix,superdim, &
 &   vtmatrix, 1, work,6*superdim,info)
-   ABI_CHECK(info == 0, sjoin('dgesvd returned:', itoa(info)))
+   ABI_CHECK(info == 0, sjoin('AB_DGESVd returned:', itoa(info)))
 
    ABI_DEALLOCATE(vtmatrix)
    ABI_DEALLOCATE(work)
@@ -806,7 +806,7 @@ subroutine cart29(blkflg,blkval,carflg,d2cart,&
    end do
  end do
 
-!Second step
+!second step
  do ipert1=1,mpert
    do ipert2=1,mpert
      do ii=1,2
@@ -1119,7 +1119,7 @@ subroutine d2cart_to_red(d2cart, d2red, gprimd, rprimd, mpert, natom, &
    end do
  end do
 
-!Second step
+!second step
  do ipert1=1,mpert
    do ipert2=1,mpert
      fac = one; if (ipert2==natom+2) fac = two_pi ** 2
@@ -2001,7 +2001,7 @@ end subroutine d2sym3
 !! First, the call of dfpt_ewald with q==0 should be done,
 !!   then the call to q0dy3_calc will produce
 !!   the dyewq0 matrix from the (q=0) dyew matrix
-!! Second, the call of dfpt_ewald with the real q (either =0 or diff 0)
+!! second, the call of dfpt_ewald with the real q (either =0 or diff 0)
 !!   should be done, then the call to q0dy3_apply
 !!   will produce the correct dynamical matrix dyew starting from
 !!   the previously calculated dyewq0 and the bare(non-corrected)
@@ -2085,7 +2085,7 @@ end subroutine q0dy3_apply
 !! First, the call of dfpt_ewald with q==0 should be done ,
 !!   then the call to q0dy3_calc will produce
 !!   the dyewq0 matrix from the (q=0) dyew matrix
-!! Second, the call of dfpt_ewald with the real q (either =0 or diff 0)
+!! second, the call of dfpt_ewald with the real q (either =0 or diff 0)
 !!   should be done, then the call to q0dy3_apply
 !!   will produce the correct dynamical matrix dyew starting from
 !!   the previously calculated dyewq0 and the bare(non-corrected)
@@ -5858,11 +5858,11 @@ subroutine dfpt_phfrq(amu,displ,d2cart,eigval,eigvec,indsym,&
  integer :: analyt,i1,i2,idir1,idir2,ier,ii,imode,ipert1,ipert2
  integer :: jmode,indexi,indexj,index
  real(dp) :: epsq,norm,qphon2
- logical,parameter :: debug = .False.
+ logical,parameter :: debug = .false.
  real(dp) :: sc_prod
 !arrays
  real(dp) :: qptn(3),dum(2,0)
- real(dp),allocatable :: matrx(:,:),zeff(:,:),zhpev1(:,:),zhpev2(:)
+ real(dp),allocatable :: matrx(:,:),zeff(:,:),AB_ZHPEV1(:,:),AB_ZHPEV2(:)
 
 ! *********************************************************************
 
@@ -5972,15 +5972,15 @@ subroutine dfpt_phfrq(amu,displ,d2cart,eigval,eigvec,indsym,&
    end do
  end do
 
- ABI_ALLOCATE(zhpev1,(2,2*3*natom-1))
- ABI_ALLOCATE(zhpev2,(3*3*natom-2))
+ ABI_ALLOCATE(AB_ZHPEV1,(2,2*3*natom-1))
+ ABI_ALLOCATE(AB_ZHPEV2,(3*3*natom-2))
 
- call ZHPEV ('V','U',3*natom,matrx,eigval,eigvec,3*natom,zhpev1,zhpev2,ier)
- ABI_CHECK(ier == 0, sjoin('zhpev returned:', itoa(ier)))
+ call AB_ZHPEV ('V','U',3*natom,matrx,eigval,eigvec,3*natom,AB_ZHPEV1,AB_ZHPEV2,ier)
+ ABI_CHECK(ier == 0, sjoin('AB_ZHPEV returned:', itoa(ier)))
 
  ABI_DEALLOCATE(matrx)
- ABI_DEALLOCATE(zhpev1)
- ABI_DEALLOCATE(zhpev2)
+ ABI_DEALLOCATE(AB_ZHPEV1)
+ ABI_DEALLOCATE(AB_ZHPEV2)
 
  if (debug) then
    ! Check the orthonormality of the eigenvectors

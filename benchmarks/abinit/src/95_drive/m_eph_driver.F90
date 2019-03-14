@@ -239,7 +239,7 @@ subroutine eph(acell,codvsn,dtfil,dtset,pawang,pawrad,pawtab,psps,rprim,xred)
  end if
 
  ! abirules!
- if (.False.) write(std_out,*)acell,codvsn,rprim,xred
+ if (.false.) write(std_out,*)acell,codvsn,rprim,xred
 
  comm = xmpi_world; nprocs = xmpi_comm_size(comm); my_rank = xmpi_comm_rank(comm)
 
@@ -302,7 +302,7 @@ subroutine eph(acell,codvsn,dtfil,dtset,pawang,pawrad,pawtab,psps,rprim,xred)
    call wrtout(ab_out, sjoin("- Reading DDK x from file:", ddk_path(1)))
    call wrtout(ab_out, sjoin("- Reading DDK y from file:", ddk_path(2)))
    call wrtout(ab_out, sjoin("- Reading DDK z from file:", ddk_path(3)))
-   ! Read header in DDK files and init basic dimensions.
+   ! Read AB_HEADER in DDK files and init basic dimensions.
    ! subdrivers will use ddk to get the matrix elements from file.
    call ddk_init(ddk, ddk_path, comm)
    ! TODO: Should perform consistency check
@@ -363,7 +363,7 @@ subroutine eph(acell,codvsn,dtfil,dtset,pawang,pawrad,pawtab,psps,rprim,xred)
    call hdr_vs_dtset(wfk0_hdr,dtset)
 
    call crystal_from_hdr(cryst,wfk0_hdr,timrev2)
-   call crystal_print(cryst,header="crystal structure from WFK file")
+   call crystal_print(cryst,AB_HEADER="crystal structure from WFK file")
 
    ebands = ebands_from_hdr(wfk0_hdr,maxval(wfk0_hdr%nband),gs_eigen)
    call hdr_free(wfk0_hdr)
@@ -373,7 +373,7 @@ subroutine eph(acell,codvsn,dtfil,dtset,pawang,pawrad,pawtab,psps,rprim,xred)
  ! Read WFQ and construct ebands on the shifted grid.
  if (use_wfq) then
    call wfk_read_eigenvalues(wfq_path,gs_eigen,wfq_hdr,comm) !,gs_occ)
-   ! GKA TODO: Have to construct a header with the proper set of q-shifted k-points then compare against file.
+   ! GKA TODO: Have to construct a AB_HEADER with the proper set of q-shifted k-points then compare against file.
    !call hdr_vs_dtset(wfq_hdr,dtset)
    ebands_kq = ebands_from_hdr(wfq_hdr,maxval(wfq_hdr%nband),gs_eigen)
    call hdr_free(wfq_hdr)
@@ -423,10 +423,10 @@ subroutine eph(acell,codvsn,dtfil,dtset,pawang,pawrad,pawtab,psps,rprim,xred)
    ! since occ are set to zero, and fermie is taken from the previous density.
    if (dtset%kptopt > 0) then
      call ebands_update_occ(ebands, dtset%spinmagntarget, prtvol=dtset%prtvol)
-     call ebands_print(ebands,header="Ground state energies",prtvol=dtset%prtvol)
+     call ebands_print(ebands,AB_HEADER="Ground state energies",prtvol=dtset%prtvol)
      if (use_wfq) then
        call ebands_update_occ(ebands_kq, dtset%spinmagntarget, prtvol=dtset%prtvol)
-       call ebands_print(ebands_kq,header="Ground state energies (K+Q)", prtvol=dtset%prtvol)
+       call ebands_print(ebands_kq,AB_HEADER="Ground state energies (K+Q)", prtvol=dtset%prtvol)
      end if
    end if
 
@@ -468,7 +468,7 @@ subroutine eph(acell,codvsn,dtfil,dtset,pawang,pawrad,pawtab,psps,rprim,xred)
    end if
  end if
 
- !if (.False.) then
+ !if (.false.) then
  !!if (.True.) then
  !  !call ebands_set_interpolator(ebands, cryst, bstart, bcount, mode, espline_ords, eskw_ratio, comm)
  !  call ebands_test_interpolator(ebands, dtset, cryst, dtfil%filnam_ds(4), comm)
@@ -519,7 +519,7 @@ subroutine eph(acell,codvsn,dtfil,dtset,pawang,pawrad,pawtab,psps,rprim,xred)
 
  ! Test B-spline interpolation of phonons
  !if (.True.) then
- if (.False.) then
+ if (.false.) then
    call ifc_test_phinterp(ifc, cryst, [8,8,8], 1, [zero,zero,zero], [3,3,3], comm)
    !call ifc_set_interpolator(ifc, cryst, nustart, nucount, mode, phspline_ords, phskw_ratio, comm)
    !call ifc_test_intepolator(ifc, dtset, dtfil, comm)
@@ -605,7 +605,7 @@ subroutine eph(acell,codvsn,dtfil,dtset,pawang,pawrad,pawtab,psps,rprim,xred)
    end if
 
    ! Compute \delta V_{q,nu)(r) and dump results to netcdf file.
-   if (.False. .and. my_rank == master) then
+   if (.false. .and. my_rank == master) then
      call ncwrite_v1qnu(dvdb, cryst, ifc, dvdb%nqpt, dvdb%qpts, dtset%prtvol, strcat(dtfil%filnam_ds(4), "_V1QNU.nc"))
    end if
  end if
@@ -616,8 +616,8 @@ subroutine eph(acell,codvsn,dtfil,dtset,pawang,pawrad,pawtab,psps,rprim,xred)
    call pawfgr_init(pawfgr,dtset,mgfftf,nfftf,ecut_eff,ecutdg_eff,ngfftc,ngfftf,&
    gsqcutc_eff=gsqcutc_eff,gsqcutf_eff=gsqcutf_eff,gmet=cryst%gmet,k0=k0)
 
-   call print_ngfft(ngfftc,header='Coarse FFT mesh used for the wavefunctions')
-   call print_ngfft(ngfftf,header='Dense FFT mesh used for densities and potentials')
+   call print_ngfft(ngfftc,AB_HEADER='Coarse FFT mesh used for the wavefunctions')
+   call print_ngfft(ngfftf,AB_HEADER='Dense FFT mesh used for densities and potentials')
 
    ! Fake MPI_type for the sequential part.
    call initmpi_seq(mpi_enreg)

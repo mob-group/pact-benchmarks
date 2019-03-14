@@ -157,8 +157,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               CLANHE, SLAMCH
-      EXTERNAL           LSAME, CLANHE, SLAMCH
+      REAL               CLANHE, AB_SLAMCH
+      EXTERNAL           LSAME, CLANHE, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CLAVHE, CLASET
@@ -177,7 +177,7 @@
 *
 *     Determine EPS and the norm of A.
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       ANORM = CLANHE( '1', UPLO, N, A, LDA, RWORK )
 *
 *     Check the imaginary parts of the diagonal elements and return with

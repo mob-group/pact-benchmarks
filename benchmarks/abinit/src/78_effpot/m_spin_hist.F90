@@ -101,7 +101,7 @@ module m_spin_hist
      logical :: has_latt
 
      ! arrays
-     !  placeholders for structure-related parameters. They are not used currently. 
+     !  placehoAB_LDErs for structure-related parameters. They are not used currently. 
      integer :: natom
      real(dp) :: acell(3)
      real(dp) :: rprimd(3,3)

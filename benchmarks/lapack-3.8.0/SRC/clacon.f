@@ -144,8 +144,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            AB_ICMAX1
-      REAL               AB_SCSUM1, SLAMCH
-      EXTERNAL           AB_ICMAX1, AB_SCSUM1, SLAMCH
+      REAL               AB_SCSUM1, AB_SLAMCH
+      EXTERNAL           AB_ICMAX1, AB_SCSUM1, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_CCOPY
@@ -158,7 +158,7 @@
 *     ..
 *     .. Executable Statements ..
 *
-      SAFMIN = SLAMCH( 'Safe minimum' )
+      SAFMIN = AB_SLAMCH( 'Safe minimum' )
       IF( KASE.EQ.0 ) THEN
          DO 10 I = 1, N
             X( I ) = CMPLX( ONE / REAL( N ) )

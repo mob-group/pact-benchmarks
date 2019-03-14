@@ -80,7 +80,7 @@ contains
 !!       end do
 !!
 !! nkibz = number of k-points in the irreducible set
-!! wtk_folded(nkbz)=weight assigned to each k point, taking into account the symmetries
+!! wtk_foAB_LDEd(nkbz)=weight assigned to each k point, taking into account the symmetries
 !!
 !! NOTES
 !! The decomposition of the symmetry group in its primitives might speed up the execution.
@@ -96,7 +96,7 @@ contains
 !! SOURCE
 
 subroutine symkpt(chksymbreak,gmet,ibz2bz,iout,kbz,nkbz,nkibz,nsym,&
-& symrec,timrev,wtk,wtk_folded)
+& symrec,timrev,wtk,wtk_foAB_LDEd)
 
  use defs_basis
  use m_abicore
@@ -119,7 +119,7 @@ subroutine symkpt(chksymbreak,gmet,ibz2bz,iout,kbz,nkbz,nkibz,nsym,&
  integer,intent(in) :: symrec(3,3,nsym)
  integer,intent(inout) :: ibz2bz(nkbz) !vz_i
  real(dp),intent(in) :: gmet(3,3),kbz(3,nkbz),wtk(nkbz)
- real(dp),intent(out) :: wtk_folded(nkbz)
+ real(dp),intent(out) :: wtk_foAB_LDEd(nkbz)
 
 !Local variables -------------------------
 !scalars
@@ -163,14 +163,14 @@ subroutine symkpt(chksymbreak,gmet,ibz2bz,iout,kbz,nkbz,nkibz,nsym,&
    identi=1
  end if
 
-!Initialise the wtk_folded array using the wtk array :
+!Initialise the wtk_foAB_LDEd array using the wtk array :
  do ikpt=1,nkbz
-   wtk_folded(ikpt)=wtk(ikpt)
+   wtk_foAB_LDEd(ikpt)=wtk(ikpt)
  end do
 
 !Here begins the serious business
 
-!If there is some possibility for a change (otherwise, wtk_folded is
+!If there is some possibility for a change (otherwise, wtk_foAB_LDEd is
 !correctly initialized to give no change) :
  if(nkbz/=1 .and. (nsym/=1 .or. timrev==1) )then
 
@@ -281,7 +281,7 @@ subroutine symkpt(chksymbreak,gmet,ibz2bz,iout,kbz,nkbz,nkibz,nsym,&
 
 !    Not worth to examine a k point that is a symmetric of another,
 !    which is the case if its weight has been set to 0 by previous folding
-     if(wtk_folded(ind_ikpt)<tol16)cycle
+     if(wtk_foAB_LDEd(ind_ikpt)<tol16)cycle
 
 !    Loop on the remaining k-points
      do ikpt2=ikpt+1,nkbz
@@ -295,7 +295,7 @@ subroutine symkpt(chksymbreak,gmet,ibz2bz,iout,kbz,nkbz,nkibz,nsym,&
        ind_ikpt2=list(ikpt2)
 
 !      If the second vector is already empty, no interest to treat it
-       if(wtk_folded(ind_ikpt2)<tol16)cycle
+       if(wtk_foAB_LDEd(ind_ikpt2)<tol16)cycle
 
        quit=0
        do isym=1,nsym
@@ -322,8 +322,8 @@ subroutine symkpt(chksymbreak,gmet,ibz2bz,iout,kbz,nkbz,nkibz,nsym,&
 
 !            Here, have successfully found a symmetrical k-vector
 !            Assign all the weight of the k-vector to its symmetrical
-             wtk_folded(ind_ikpt)=wtk_folded(ind_ikpt)+wtk_folded(ind_ikpt2)
-             wtk_folded(ind_ikpt2)=0._dp
+             wtk_foAB_LDEd(ind_ikpt)=wtk_foAB_LDEd(ind_ikpt)+wtk_foAB_LDEd(ind_ikpt2)
+             wtk_foAB_LDEd(ind_ikpt2)=0._dp
 
 !            Go to the next ikpt2 if the symmetric was found
              quit=1
@@ -344,7 +344,7 @@ subroutine symkpt(chksymbreak,gmet,ibz2bz,iout,kbz,nkbz,nkibz,nsym,&
 !Create the indexing array ibz2bz
  nkibz=0
  do ikpt=1,nkbz
-   if(wtk_folded(ikpt)>tol8)then
+   if(wtk_foAB_LDEd(ikpt)>tol8)then
      nkibz=nkibz+1
      ibz2bz(nkibz)=ikpt
    end if
@@ -375,7 +375,7 @@ subroutine symkpt(chksymbreak,gmet,ibz2bz,iout,kbz,nkbz,nkibz,nsym,&
 !    write(message, '(a)' )'   Here are the new weights :'
 !    call wrtout(std_out,message,'COLL')
 !    do ikpt=1,nkbz,6
-!    write(message, '(6f12.6)' ) wtk_folded(ikpt:min(nkbz,ikpt+5))
+!    write(message, '(6f12.6)' ) wtk_foAB_LDEd(ikpt:min(nkbz,ikpt+5))
 !    call wrtout(std_out,message,'COLL')
 !    end do
 !    ENDDEBUG

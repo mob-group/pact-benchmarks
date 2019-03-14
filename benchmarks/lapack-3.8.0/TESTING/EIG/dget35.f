@@ -109,8 +109,8 @@
      $                   DUM( 1 ), VM1( 3 ), VM2( 3 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLANGE
-      EXTERNAL           DLAMCH, DLANGE
+      DOUBLE PRECISION   AB_DLAMCH, DLANGE
+      EXTERNAL           AB_DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGEMM, DLABAD, DTRSYL
@@ -133,8 +133,8 @@
 *
 *     Get machine parameters
 *
-      EPS = DLAMCH( 'P' )
-      SMLNUM = DLAMCH( 'S' )*FOUR / EPS
+      EPS = AB_DLAMCH( 'P' )
+      SMLNUM = AB_DLAMCH( 'S' )*FOUR / EPS
       BIGNUM = ONE / SMLNUM
       CALL DLABAD( SMLNUM, BIGNUM )
 *

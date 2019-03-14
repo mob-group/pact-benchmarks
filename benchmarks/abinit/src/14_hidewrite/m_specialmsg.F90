@@ -379,7 +379,7 @@ end subroutine herald
 !!   'PERS' if the procs are calling the routine with different messages each to be written,
 !!          or if one proc is calling the routine
 !!   "INIT" to change the rank of the master node that prints the message if "COLL" is used.
-!!  [do_flush]=True to flush the unit. Defaults to .False.
+!!  [do_flush]=True to flush the unit. Defaults to .false.
 !!
 !! OUTPUT
 !!  (only writing)
@@ -394,7 +394,7 @@ end subroutine herald
 !!      berryphase_new,bethe_salpeter,bonds_lgth_angles,bsepostproc,calc_efg
 !!      calc_fc,calc_optical_mels,calc_rpa_functional,calc_sigc_me,calc_sigx_me
 !!      calc_ubare,calc_ucrpa,calc_vhxc_me,calcdensph,cchi0,cchi0q0
-!!      cchi0q0_intraband,cgwf,chebfi,chern_number,chiscwrt,chkdpr,chkinp
+!!      cchi0q0_intraband,cgwf,chebfi,AB_CHERn_number,chiscwrt,chkdpr,chkinp
 !!      chkint_prt,chkpawovlp,clnup1,clnup2,cohsex_me,compute_anharmonics
 !!      compute_kgb_indicator,compute_levels,constrf,cut3d,d2frnl,m_datafordmft
 !!      ddb_diel,ddb_elast,ddb_internalstr,ddb_interpolate,ddb_io_out,ddb_piezo
@@ -559,7 +559,7 @@ end subroutine wrtout
 !! INPUTS
 !!  unit=unit number for writing
 !!  message=(character(len=*)) message to be written
-!!  [do_flush]=True to flush the unit. Defaults to .False.
+!!  [do_flush]=True to flush the unit. Defaults to .false.
 !!
 !! OUTPUT
 !!  (only writing)

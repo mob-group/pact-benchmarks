@@ -455,8 +455,8 @@
       EXTERNAL           AB_CAXPY, AB_CCOPY, AB_CPOTRS, AB_CHEMV, BLAS_C
      $HEMV_X,
      $                   BLAS_CHEMV2_X, AB_CLA_HEAMV, AB_CLA_WWADDW,
-     $                   AB_CLA_LIN_BERR, SLAMCH
-      REAL               SLAMCH
+     $                   AB_CLA_LIN_BERR, AB_SLAMCH
+      REAL               AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, REAL, AIMAG, MAX, MIN
@@ -470,8 +470,8 @@
 *     .. Executable Statements ..
 *
       IF (INFO.NE.0) RETURN
-      EPS = SLAMCH( 'Epsilon' )
-      HUGEVAL = SLAMCH( 'Overflow' )
+      EPS = AB_SLAMCH( 'Epsilon' )
+      HUGEVAL = AB_SLAMCH( 'Overflow' )
 *     Force HUGEVAL to Inf
       HUGEVAL = HUGEVAL * HUGEVAL
 *     Using HUGEVAL may lead to spurious underflows.

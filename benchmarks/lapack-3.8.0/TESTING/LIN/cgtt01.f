@@ -162,8 +162,8 @@
       COMPLEX            LI
 *     ..
 *     .. External Functions ..
-      REAL               CLANGT, CLANHS, SLAMCH
-      EXTERNAL           CLANGT, CLANHS, SLAMCH
+      REAL               CLANGT, CLANHS, AB_SLAMCH
+      EXTERNAL           CLANGT, CLANHS, AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN
@@ -180,7 +180,7 @@
          RETURN
       END IF
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
 *
 *     Copy the matrix U to WORK.
 *

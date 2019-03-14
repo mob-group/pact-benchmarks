@@ -167,8 +167,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME
-      DOUBLE PRECISION   DLAMCH, AB_ZLANHP
-      EXTERNAL           AB_LSAME, DLAMCH, AB_ZLANHP
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANHP
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_ZLANHP
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_DSCAL, AB_DSTERF, AB_XERBLA, AB_ZDSCAL, AB_Z
@@ -217,8 +217,8 @@
 *
 *     Get machine constants.
 *
-      SAFMIN = DLAMCH( 'Safe minimum' )
-      EPS = DLAMCH( 'Precision' )
+      SAFMIN = AB_DLAMCH( 'Safe minimum' )
+      EPS = AB_DLAMCH( 'Precision' )
       SMLNUM = SAFMIN / EPS
       BIGNUM = ONE / SMLNUM
       RMIN = SQRT( SMLNUM )

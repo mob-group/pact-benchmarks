@@ -455,9 +455,9 @@
 *     ..
 *     .. External Functions ..
       EXTERNAL           AB_LSAME, AB_ILAPREC
-      EXTERNAL           DLAMCH, AB_ZLANHE, AB_ZLA_PORCOND_X, AB_ZLA_POR
+      EXTERNAL           AB_DLAMCH, AB_ZLANHE, AB_ZLA_PORCOND_X, AB_ZLA_POR
      $COND_C
-      DOUBLE PRECISION   DLAMCH, AB_ZLANHE, AB_ZLA_PORCOND_X, AB_ZLA_POR
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANHE, AB_ZLA_PORCOND_X, AB_ZLA_POR
      $COND_C
       LOGICAL            AB_LSAME
       INTEGER            AB_ILAPREC
@@ -478,7 +478,7 @@
 *
 *     Set default parameters.
 *
-      ILLRCOND_THRESH = DBLE( N ) * DLAMCH( 'Epsilon' )
+      ILLRCOND_THRESH = DBLE( N ) * AB_DLAMCH( 'Epsilon' )
       ITHRESH = INT( ITHRESH_DEFAULT )
       RTHRESH = RTHRESH_DEFAULT
       UNSTABLE_THRESH = DZTHRESH_DEFAULT
@@ -601,7 +601,7 @@
      $        INFO )
       END IF
 
-      ERR_LBND = MAX( 10.0D+0, SQRT( DBLE( N ) ) ) * DLAMCH( 'Epsilon' )
+      ERR_LBND = MAX( 10.0D+0, SQRT( DBLE( N ) ) ) * AB_DLAMCH( 'Epsilon' )
       IF ( N_ERR_BNDS .GE. 1 .AND. N_NORMS .GE. 1 ) THEN
 *
 *     Compute scaled normwise condition number cond(A*C).
@@ -652,7 +652,7 @@
 *     the inverse condition number is set to 0.0 when the estimated
 *     cwise error is at least CWISE_WRONG.
 *
-         CWISE_WRONG = SQRT( DLAMCH( 'Epsilon' ) )
+         CWISE_WRONG = SQRT( AB_DLAMCH( 'Epsilon' ) )
          DO J = 1, NRHS
             IF (ERR_BNDS_COMP( J, LA_LINRX_ERR_I ) .LT. CWISE_WRONG )
      $     THEN

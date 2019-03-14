@@ -400,7 +400,7 @@ subroutine vcoul_init(Vcp,Gsph,Cryst,Qmesh,Kmesh,rcut,icutcoul,vcutgeo,ecut,ng,n
 
    !
    ! Admittedly, it's a lot of duplication of code hereafter,
-   ! but I think it's the clearest and fastest way
+   ! but I think it's the clearest and faAB_STEST way
    !
    select case( TRIM(Vcp%mode) )
    case('MINIBZ')
@@ -818,7 +818,7 @@ subroutine vcoul_init(Vcp,Gsph,Cryst,Qmesh,Kmesh,rcut,icutcoul,vcutgeo,ecut,ng,n
    vcoul_lwl = four_pi/vcoul_lwl**2
    !
    ! === Integration of 1/q^2 singularity ===
-   ! * We use the auxiliary function of a Gygi-Baldereschi variant [[cite:Gigy1986]]
+   ! * We use the auxiliary function of a Gygi-BaAB_LDEreschi variant [[cite:Gigy1986]]
    q0_vol=(two_pi)**3/(Kmesh%nbz*ucvol) ; bz_geometry_factor=zero
    ! * the choice of alfa (the width of gaussian) is somehow empirical
    alfa = 150.0/ecut

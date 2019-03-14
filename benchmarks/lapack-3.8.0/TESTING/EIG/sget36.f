@@ -119,8 +119,8 @@
      $                   T2( LDT, LDT ), TMP( LDT, LDT ), WORK( LWORK )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SHST01, SLACPY, SLASET, STREXC
@@ -130,7 +130,7 @@
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = SLAMCH( 'P' )
+      EPS = AB_SLAMCH( 'P' )
       RMAX = ZERO
       LMAX = 0
       KNT = 0

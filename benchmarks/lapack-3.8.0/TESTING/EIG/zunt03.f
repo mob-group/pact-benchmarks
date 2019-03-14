@@ -192,8 +192,8 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            IZAMAX
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           LSAME, IZAMAX, DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           LSAME, IZAMAX, AB_DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCMPLX, MAX, MIN
@@ -243,7 +243,7 @@
 *
 *     Machine constants
 *
-      ULP = DLAMCH( 'Precision' )
+      ULP = AB_DLAMCH( 'Precision' )
 *
       IF( IRC.EQ.0 ) THEN
 *

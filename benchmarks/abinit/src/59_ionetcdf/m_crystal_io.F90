@@ -47,7 +47,7 @@ MODULE m_crystal_io
  private
 !!***
 
- public :: crystal_from_hdr      ! Initialize the object from the abinit header.
+ public :: crystal_from_hdr      ! Initialize the object from the abinit AB_HEADER.
  !public :: crystal_from_dtset    ! Initialize the object from the abinit dataset.
  public :: crystal_ncwrite       ! Dump the object in a netcdf file associated to a ncid.
  public :: crystal_ncwrite_path  ! Dump the object to file.
@@ -60,20 +60,20 @@ CONTAINS
 !!  crystal_from_hdr
 !!
 !! FUNCTION
-!!  Initializes a crystal_t data type starting from the abinit header.
+!!  Initializes a crystal_t data type starting from the abinit AB_HEADER.
 !!
 !! INPUTS
-!!  hdr<hdr_type>=the abinit header
+!!  hdr<hdr_type>=the abinit AB_HEADER
 !!  timrev ==2 => take advantage of time-reversal symmetry
 !!         ==1 ==> do not use time-reversal symmetry
 !!  remove_inv [optional]= if .TRUE. the inversion symmetry is removed from the set of operations
-!!  even if it is present in the header
+!!  even if it is present in the AB_HEADER
 !!
 !! OUTPUT
-!!  cryst<crystal_t>= the data type filled with data reported in the abinit header
+!!  cryst<crystal_t>= the data type filled with data reported in the abinit AB_HEADER
 !!
 !! TODO
-!!  Add information on the use of time-reversal in the Abinit header.
+!!  Add information on the use of time-reversal in the Abinit AB_HEADER.
 !!
 !! PARENTS
 !!      cut3d,eph,fold2Bloch,gstate,m_ddk,m_dvdb,m_ioarr,m_iowf,m_wfd,m_wfk

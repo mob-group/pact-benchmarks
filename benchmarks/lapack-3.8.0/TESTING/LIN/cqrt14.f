@@ -145,8 +145,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               CLANGE, SLAMCH
-      EXTERNAL           LSAME, CLANGE, SLAMCH
+      REAL               CLANGE, AB_SLAMCH
+      EXTERNAL           LSAME, CLANGE, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGELQ2, CGEQR2, CLACPY, CLASCL, XERBLA
@@ -251,7 +251,7 @@
 *
       END IF
 *
-      CQRT14 = ERR / ( REAL( MAX( M, N, NRHS ) )*SLAMCH( 'Epsilon' ) )
+      CQRT14 = ERR / ( REAL( MAX( M, N, NRHS ) )*AB_SLAMCH( 'Epsilon' ) )
 *
       RETURN
 *

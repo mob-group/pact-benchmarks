@@ -1143,7 +1143,7 @@ end subroutine paw_mkrhox
 !! FUNCTION
 !!  Evaluates the PAW onsite contribution to the oscillator strengths:
 !!  sum_{i,j} <\tpsi_{k-q,b1}|\cprj_i> <\cprj_j|\tpsi_{k,b2}>*
-!!   \[ <\phi_i|e^{-i(q+G).r}|\phi_j> - <\tilde\phi_i|e^{-i(q+G).r}|\tilde\phi_j> \].
+!!   \[ <\phi_i|e^{-i(q+G).r}|\phi_j> - <\tiAB_LDE\phi_i|e^{-i(q+G).r}|\tiAB_LDE\phi_j> \].
 !!
 !! INPUTS
 !! dim_rtwg=Define the size of the array rhotwg

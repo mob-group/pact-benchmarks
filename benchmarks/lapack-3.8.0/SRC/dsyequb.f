@@ -161,9 +161,9 @@
       LOGICAL            UP
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
       LOGICAL            AB_LSAME
-      EXTERNAL           DLAMCH, AB_LSAME
+      EXTERNAL           AB_DLAMCH, AB_LSAME
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_DLASSQ, AB_XERBLA
@@ -319,12 +319,12 @@
 
  999  CONTINUE
 
-      SMLNUM = DLAMCH( 'SAFEMIN' )
+      SMLNUM = AB_DLAMCH( 'SAFEMIN' )
       BIGNUM = ONE / SMLNUM
       SMIN = BIGNUM
       SMAX = ZERO
       T = ONE / SQRT( AVG )
-      BASE = DLAMCH( 'B' )
+      BASE = AB_DLAMCH( 'B' )
       U = ONE / LOG( BASE )
       DO I = 1, N
          S( I ) = BASE ** INT( U * LOG( S( I ) * T ) )

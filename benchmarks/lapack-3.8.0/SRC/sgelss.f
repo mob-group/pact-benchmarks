@@ -213,8 +213,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            AB_ILAENV
-      REAL               SLAMCH, AB_SLANGE
-      EXTERNAL           AB_ILAENV, SLAMCH, AB_SLANGE
+      REAL               AB_SLAMCH, AB_SLANGE
+      EXTERNAL           AB_ILAENV, AB_SLAMCH, AB_SLANGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -385,8 +385,8 @@
 *
 *     Get machine parameters
 *
-      EPS = SLAMCH( 'P' )
-      SFMIN = SLAMCH( 'S' )
+      EPS = AB_SLAMCH( 'P' )
+      SFMIN = AB_SLAMCH( 'S' )
       SMLNUM = SFMIN / EPS
       BIGNUM = ONE / SMLNUM
       CALL AB_SLABAD( SMLNUM, BIGNUM )

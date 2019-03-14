@@ -164,7 +164,7 @@ contains
 !!      etotfor,forstr
 !!
 !! CHILDREN
-!!      atm2fft,constrf,dgemv,fourdp,fred2fcart,fresid,fresidrsp,metric,mkcore
+!!      atm2fft,constrf,AB_DGEMV,fourdp,fred2fcart,fresid,fresidrsp,metric,mkcore
 !!      mkcore_alt,mkcore_wvl,mklocl,sygrad,timab,xchybrid_ncpp_cc,zerosym
 !!
 !! SOURCE
@@ -437,7 +437,7 @@ subroutine forces(atindx1,diffor,dtefield,dtset,favg,fcart,fock,&
 ! form fionred = rprimd^T * fioncart, note that forces transform
 ! oppositely to coordinates, because they are derivative with respect to
 ! coordinates
-     call dgemv('T',3,3,one,rprimd,3,fioncart,1,zero,fionred(1:3,iatom),1)
+     call AB_DGEMV('T',3,3,one,rprimd,3,fioncart,1,zero,fionred(1:3,iatom),1)
 !     do mu=1,3
 !       fionred(mu,iatom)=rprimd(1,mu)*fioncart(1) &
 !&       +rprimd(2,mu)*fioncart(2) &
@@ -979,7 +979,7 @@ subroutine fresid(dtset,gresid,mpi_enreg,nfft,ngfft,ntypat,option,&
 
  approp(:)=app_remain
 !First loop over atoms in unit cell : build appropriation function
-!Second loop : compute forces
+!second loop : compute forces
  do iloop=1,2
 
 !  Take into account the remaining density
@@ -1511,7 +1511,7 @@ end subroutine fresid
 !!      forces
 !!
 !! CHILDREN
-!!      dposv,prtxvf,wrtout,xred2xcart
+!!      AB_DPOSV,prtxvf,wrtout,xred2xcart
 !!
 !! SOURCE
 
@@ -1581,14 +1581,14 @@ subroutine constrf(diffor,fcart,forold,fred,iatfix,ionmov,maxfor,natom,&
 !the linear equations wmatrix*wcoeffs=fvector gives the coefficients
 !of wtatcon (wcoeffs) needed to compute the projected forces
  do iconeq2=1,nconeq
-   fvector(iconeq2)=ddot(3*natom,fcartvec,1,wtatconvec(1,iconeq2),1)
+   fvector(iconeq2)=AB_DDOT(3*natom,fcartvec,1,wtatconvec(1,iconeq2),1)
    do iconeq1=1,nconeq
-     wmatrix(iconeq1,iconeq2)=ddot(3*natom,wtatconvec(1,iconeq1),1,wtatconvec(1,iconeq2),1)
+     wmatrix(iconeq1,iconeq2)=AB_DDOT(3*natom,wtatconvec(1,iconeq1),1,wtatconvec(1,iconeq2),1)
    end do
  end do
 
 !Solve the system of linear equations, wmatrix*wcoeffs=fvector
- call dposv('U',nconeq,1,wmatrix,nconeq,fvector,nconeq,info)
+ call AB_DPOSV('U',nconeq,1,wmatrix,nconeq,fvector,nconeq,info)
 
  if (info/=0) then
    write(message, '(a,a,a,a,a)' )&

@@ -313,7 +313,7 @@ end subroutine pawmkrho
 !!   pawrad(ntypat) <type(pawrad_type)>= radial mesh data for each type of atom
 !!   pawrhoij(natom) <type(pawrhoij_type)>= rho_ij data for each atom
 !!   pawtab(ntypat) <type(pawtab_type)>= PAW functions around each type of atom
-!!   rhor(pawfgr%nfft,nspden)= input density ($\tilde{n}+\hat{n}$ in PAW case)
+!!   rhor(pawfgr%nfft,nspden)= input density ($\tiAB_LDE{n}+\hat{n}$ in PAW case)
 !!   rprimd(3,3)=dimensional primitive translations for real space (bohr)
 !!   typat(natom)= list of atom types
 !!   ucvol=unit cell volume (bohr**3)
@@ -330,8 +330,8 @@ end subroutine pawmkrho
 !!   Specifically, it removes $\hat{n}$ from rhor, and also computes the on-site PAW
 !!   terms. This is nothing other than the proper PAW treatment of the density
 !!   operator $|\mathbf{r}\rangle\langle\mathbf{r}|$, and yields the formula
-!!   $$\tilde{n}+\sum_{ij}\rho_ij\left[\varphi_i(\mathbf{r})\varphi_j(\mathbf{r})-
-!!   \tilde{\varphi}_i(\mathbf{r})\tilde{\varphi}_j(\mathbf{r})\right]$$
+!!   $$\tiAB_LDE{n}+\sum_{ij}\rho_ij\left[\varphi_i(\mathbf{r})\varphi_j(\mathbf{r})-
+!!   \tiAB_LDE{\varphi}_i(\mathbf{r})\tiAB_LDE{\varphi}_j(\mathbf{r})\right]$$
 !!   Notice that this formula is expressed on the fine grid, and requires
 !!   interpolating the PAW radial functions onto this grid, as well as calling
 !!   initylmr in order to get the angular functions on the grid points.
@@ -348,7 +348,7 @@ end subroutine pawmkrho
 
  subroutine denfgr(atindx1,gmet,spaceComm_in,my_natom,natom,nattyp,ngfft,nhat,nspinor,nsppol,nspden,ntypat, &
 & pawfgr,pawrad,pawrhoij,pawtab,prtvol,rhor,rhor_paw,rhor_n_one,rhor_nt_one,rprimd,typat,ucvol,xred,&
-& abs_n_tilde_nt_diff,znucl,mpi_atmtab,comm_atom) ! Optional arguments
+& abs_n_tiAB_LDE_nt_diff,znucl,mpi_atmtab,comm_atom) ! Optional arguments
 
 
 !This section has been created automatically by the script Abilint (TD).
@@ -375,7 +375,7 @@ end subroutine pawmkrho
  real(dp),intent(out) :: rhor_paw(pawfgr%nfft,nspden)
  real(dp),intent(out) :: rhor_n_one(pawfgr%nfft,nspden)
  real(dp),intent(out) :: rhor_nt_one(pawfgr%nfft,nspden)
- real(dp),optional,intent(out) :: abs_n_tilde_nt_diff(nspden)
+ real(dp),optional,intent(out) :: abs_n_tiAB_LDE_nt_diff(nspden)
  real(dp),optional,intent(in) :: znucl(ntypat)
  type(pawrad_type),intent(in) :: pawrad(ntypat)
  type(pawrhoij_type),intent(in) :: pawrhoij(my_natom)
@@ -390,7 +390,7 @@ end subroutine pawmkrho
  integer :: klmn,my_comm_atom,my_start_indx,my_end_indx
  integer :: nfgd,nnl,normchoice,nprocs,optcut,optgr0,optgr1,optgr2
  integer :: optrad,option,my_rank,remainder,tmp_unt
- real(dp) :: phj,phi,rR,tphj,tphi,ybcbeg,ybcend
+ real(dp) :: phj,phi,rR,tphj,tphi,ybAB_CBEG,ybcend
  logical :: my_atmtab_allocated,paral_atom
  character(len=500) :: message
 !arrays
@@ -539,13 +539,13 @@ end subroutine pawmkrho
    do inl = 1, nnl
 
 !    spline phi onto points
-     ypp(:) = zero; diag(:) = zero; ybcbeg = zero; ybcend = zero;
-     call spline(pawrad(itypat)%rad,pawtab(itypat)%phi(:,inl),pawtab(itypat)%mesh_size,ybcbeg,ybcend,ypp)
+     ypp(:) = zero; diag(:) = zero; ybAB_CBEG = zero; ybcend = zero;
+     call spline(pawrad(itypat)%rad,pawtab(itypat)%phi(:,inl),pawtab(itypat)%mesh_size,ybAB_CBEG,ybcend,ypp)
      call splint(pawtab(itypat)%mesh_size,pawrad(itypat)%rad,pawtab(itypat)%phi(:,inl),ypp,nfgd,nrm,phigrd(:,inl))
 
 !    next splint tphi onto points
-     ypp(:) = zero; diag(:) = zero; ybcbeg = zero; ybcend = zero;
-     call spline(pawrad(itypat)%rad,pawtab(itypat)%tphi(:,inl),pawtab(itypat)%mesh_size,ybcbeg,ybcend,ypp)
+     ypp(:) = zero; diag(:) = zero; ybAB_CBEG = zero; ybcend = zero;
+     call spline(pawrad(itypat)%rad,pawtab(itypat)%tphi(:,inl),pawtab(itypat)%mesh_size,ybAB_CBEG,ybcend,ypp)
      call splint(pawtab(itypat)%mesh_size,pawrad(itypat)%rad,pawtab(itypat)%tphi(:,inl),ypp,nfgd,nrm,tphigrd(:,inl))
 
 !    Find out the value of the basis function at zero using extrapolation
@@ -696,7 +696,7 @@ end subroutine pawmkrho
  call wrtout(std_out,' *** Partial contributions to PAW rhor summed ***','PERS')
  call xmpi_barrier(spaceComm_in)
 
-!Add the plane-wave contribution \tilde{n} and remove \hat{n}
+!Add the plane-wave contribution \tiAB_LDE{n} and remove \hat{n}
 !BE careful here since the storage mode of rhoij and rhor is different.
  select case (nspinor)
  case (1)
@@ -738,7 +738,7 @@ end subroutine pawmkrho
 !call wrtout(std_out,message,'COLL')
 !end if
 
- if (present(abs_n_tilde_nt_diff).AND.present(znucl)) then
+ if (present(abs_n_tiAB_LDE_nt_diff).AND.present(znucl)) then
    ABI_ALLOCATE(rhor_tmp,(pawfgr%nfft,nspden))
    do ispden=1,nspden
      rhor_tmp(:,ispden) = zero
@@ -758,26 +758,26 @@ end subroutine pawmkrho
      do ispden=1,nspden
 !      Write to xsf file
        call xred2xcart(natom,rprimd,xcart,xred)
-       write(xsf_fname,'(a,I0,a)') 'N_tilde_onsite_diff_sp',ispden,'.xsf'
+       write(xsf_fname,'(a,I0,a)') 'N_tiAB_LDE_onsite_diff_sp',ispden,'.xsf'
        if (open_file(xsf_fname,message, unit=tmp_unt,status='unknown',form='formatted') /= 0) then
          MSG_ERROR(message)
        end if
        call printxsf(ngfft(1),ngfft(2),ngfft(3),rhor_tmp(:,ispden),rprimd,&
 &       (/zero,zero,zero/),natom,ntypat,typat,xcart,znucl,tmp_unt,0)
        close(tmp_unt)
-       abs_n_tilde_nt_diff(ispden) = SUM(ABS(rhor_tmp(:,ispden)))/pawfgr%nfft
-       write(message,'(4(a),F16.9,2(a,I0),a)') ch10,'  Wrote xsf file with \tilde{n}-\tilde{n}^1.',ch10,&
-&       '  Value of norm |\tilde{n}-\tilde{n}^1|:',&
-&       abs_n_tilde_nt_diff(ispden),' spin: ',ispden,' of ',nspden,ch10
+       abs_n_tiAB_LDE_nt_diff(ispden) = SUM(ABS(rhor_tmp(:,ispden)))/pawfgr%nfft
+       write(message,'(4(a),F16.9,2(a,I0),a)') ch10,'  Wrote xsf file with \tiAB_LDE{n}-\tiAB_LDE{n}^1.',ch10,&
+&       '  Value of norm |\tiAB_LDE{n}-\tiAB_LDE{n}^1|:',&
+&       abs_n_tiAB_LDE_nt_diff(ispden),' spin: ',ispden,' of ',nspden,ch10
        call wrtout(std_out,message,'COLL')
      end do
    end if
    ABI_DEALLOCATE(rhor_tmp)
 
- else if ((present(abs_n_tilde_nt_diff).AND.(.NOT.present(znucl))) &
-&   .OR.(.NOT.present(abs_n_tilde_nt_diff).AND.(present(znucl)))) then
-   write(message,'(a)') ' Both abs_n_tilde_nt_diff *and* znucl must be passed',ch10,&
-&   'to denfgr for |\tilde{n}-\tilde{n}^1| norm evaluation.'
+ else if ((present(abs_n_tiAB_LDE_nt_diff).AND.(.NOT.present(znucl))) &
+&   .OR.(.NOT.present(abs_n_tiAB_LDE_nt_diff).AND.(present(znucl)))) then
+   write(message,'(a)') ' Both abs_n_tiAB_LDE_nt_diff *and* znucl must be passed',ch10,&
+&   'to denfgr for |\tiAB_LDE{n}-\tiAB_LDE{n}^1| norm evaluation.'
    MSG_ERROR(message)
  end if
 

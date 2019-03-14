@@ -305,8 +305,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME
-      REAL               SLAMCH, AB_SLANSP
-      EXTERNAL           AB_LSAME, SLAMCH, AB_SLANSP
+      REAL               AB_SLAMCH, AB_SLANSP
+      EXTERNAL           AB_LSAME, AB_SLAMCH, AB_SLANSP
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_SCOPY, AB_SLACPY, AB_SSPCON, AB_SSPRFS, AB_S
@@ -380,7 +380,7 @@
 *
 *     Set INFO = N+1 if the matrix is singular to working precision.
 *
-      IF( RCOND.LT.SLAMCH( 'Epsilon' ) )
+      IF( RCOND.LT.AB_SLAMCH( 'Epsilon' ) )
      $   INFO = N + 1
 *
       RETURN

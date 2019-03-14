@@ -179,8 +179,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, ZLANGE
-      EXTERNAL           LSAME, DLAMCH, ZLANGE
+      DOUBLE PRECISION   AB_DLAMCH, ZLANGE
+      EXTERNAL           LSAME, AB_DLAMCH, ZLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           XERBLA, ZGEMM, ZLACPY, ZLASCL
@@ -212,7 +212,7 @@
      $   RETURN
 *
       NORMA = ZLANGE( 'One-norm', M, N, A, LDA, RWORK )
-      SMLNUM = DLAMCH( 'Safe minimum' ) / DLAMCH( 'Precision' )
+      SMLNUM = AB_DLAMCH( 'Safe minimum' ) / AB_DLAMCH( 'Precision' )
       BIGNUM = ONE / SMLNUM
       ISCL = 0
 *
@@ -253,7 +253,7 @@
      $      ERR = ERR / NORMRS
       END IF
 *
-      ZQRT17 = ERR / ( DLAMCH( 'Epsilon' )*DBLE( MAX( M, N, NRHS ) ) )
+      ZQRT17 = ERR / ( AB_DLAMCH( 'Epsilon' )*DBLE( MAX( M, N, NRHS ) ) )
       RETURN
 *
 *     End of ZQRT17

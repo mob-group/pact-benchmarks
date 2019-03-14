@@ -167,8 +167,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME
-      REAL               SLAMCH, AB_SLANST, AB_SLAPY2
-      EXTERNAL           AB_LSAME, SLAMCH, AB_SLANST, AB_SLAPY2
+      REAL               AB_SLAMCH, AB_SLANST, AB_SLAPY2
+      EXTERNAL           AB_LSAME, AB_SLAMCH, AB_SLANST, AB_SLAPY2
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_CLASET, AB_CLASR, AB_CSWAP, AB_SLAE2, AB_SLA
@@ -219,9 +219,9 @@
 *
 *     Determine the unit roundoff and over/underflow thresholds.
 *
-      EPS = SLAMCH( 'E' )
+      EPS = AB_SLAMCH( 'E' )
       EPS2 = EPS**2
-      SAFMIN = SLAMCH( 'S' )
+      SAFMIN = AB_SLAMCH( 'S' )
       SAFMAX = ONE / SAFMIN
       SSFMAX = SQRT( SAFMAX ) / THREE
       SSFMIN = SQRT( SAFMIN ) / EPS2

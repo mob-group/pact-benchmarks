@@ -1006,11 +1006,11 @@ CONTAINS  !=====================================================================
 
  !  subroutine qrfac
 
- !  This subroutine uses Householder transformations with column pivoting
+ !  This subroutine uses HousehoAB_LDEr transformations with column pivoting
  !  (optional) to compute a qr factorization of the m by n matrix a.
  !  That is, qrfac determines an orthogonal matrix q, a permutation matrix p,
  !  and an upper trapezoidal matrix r with diagonal elements of nonincreasing
- !  magnitude, such that a*p = q*r.  The householder transformation for
+ !  magnitude, such that a*p = q*r.  The househoAB_LDEr transformation for
  !  column k, k = 1,2,...,min(m,n), is of the form
 
  !                        t
@@ -1092,7 +1092,7 @@ CONTAINS  !=====================================================================
    IF (pivot) ipvt(j) = j
  END DO
 
- !     Reduce a to r with Householder transformations.
+ !     Reduce a to r with HousehoAB_LDEr transformations.
 
  minmn = MIN(m,n)
  DO  j = 1, minmn
@@ -1116,7 +1116,7 @@ CONTAINS  !=====================================================================
    ipvt(j) = ipvt(kmax)
    ipvt(kmax) = k
 
- !     Compute the Householder transformation to reduce the
+ !     Compute the HousehoAB_LDEr transformation to reduce the
  !     j-th column of a to a multiple of the j-th unit vector.
 
    40 ajnorm = enorm(m-j+1, a(j:,j))

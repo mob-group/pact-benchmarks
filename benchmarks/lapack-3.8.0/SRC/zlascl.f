@@ -171,8 +171,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME, AB_DISNAN
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           AB_LSAME, DLAMCH, AB_DISNAN
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_DISNAN
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -243,7 +243,7 @@
 *
 *     Get machine parameters
 *
-      SMLNUM = DLAMCH( 'S' )
+      SMLNUM = AB_DLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
 *
       CFROMC = CFROM

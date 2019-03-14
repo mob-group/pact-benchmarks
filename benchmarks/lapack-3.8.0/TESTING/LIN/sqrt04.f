@@ -107,10 +107,10 @@
       EXTERNAL SGEMM, SLACPY, SLARNV, SGEMQRT, SLASET, SGEQRT, SSYRK
 *     ..
 *     .. External Functions ..
-      REAL SLAMCH
+      REAL AB_SLAMCH
       REAL SLANGE, SLANSY
       LOGICAL  LSAME
-      EXTERNAL SLAMCH, SLANGE, SLANSY, LSAME
+      EXTERNAL AB_SLAMCH, SLANGE, SLANSY, LSAME
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC  MAX, MIN
@@ -118,7 +118,7 @@
 *     .. Data statements ..
       DATA ISEED / 1988, 1989, 1990, 1991 /
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       K = MIN(M,N)
       L = MAX(M,N)
       LWORK = MAX(2,L)*MAX(2,L)*NB

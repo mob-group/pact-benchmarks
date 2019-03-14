@@ -154,7 +154,7 @@ subroutine dens_hirsh(mpoint,radii,aeden,npoint,minimal_den,grid_den, &
 !First width : perpendicular vector length
  vperp(:)=rprimd(:,1)-rprimd(:,2)*rmet(1,2)/rmet(2,2) -rprimd(:,3)*rmet(1,3)/rmet(3,3)
  width(1)=sqrt(dot_product(vperp,vperp))
-!Second width
+!second width
  vperp(:)=rprimd(:,2)-rprimd(:,1)*rmet(2,1)/rmet(1,1) -rprimd(:,3)*rmet(2,3)/rmet(3,3)
  width(2)=sqrt(dot_product(vperp,vperp))
 !Third width
@@ -1554,7 +1554,7 @@ subroutine printmagvtk(mpi_enreg,cplex,nspden,nfft,ngfft,rhor,rprimd,fname)
      end if
    end if
 
-    ! Write the header of the output vtk file
+    ! Write the AB_HEADER of the output vtk file
    write(denvtk,"(a)") '# vtk DataFile Version 2.0'
    write(denvtk,"(a)") 'Electron density components'
    write(denvtk,"(a)") 'ASCII'

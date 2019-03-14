@@ -26,7 +26,7 @@
 !! * datafiles_type: gather all the variables related to files
 !! * dataset_type : the "dataset" for the main abinit code
 !! * MPI_type : the data related to MPI parallelization
-!! * hdr_type : the header of wf, den and pot files
+!! * hdr_type : the AB_HEADER of wf, den and pot files
 !! * macro_uj_type : TO BE COMPLETED
 !!
 !! COPYRIGHT
@@ -96,7 +96,7 @@ module defs_abitypes
   integer :: nph    !! Warning : corresponds to the input variable nphi
   integer :: npt    !! Warning : corresponds to the input variable inpt
   integer :: nth    !! Warning : corresponds to the input variable ntheta
-  integer :: plden  !! Warning : not documented in help file ?!
+  integer :: pAB_LDEn  !! Warning : not documented in help file ?!
 
   integer :: ngrid(3)
 
@@ -122,7 +122,7 @@ module defs_abitypes
   real(dp) :: themax !! Warning : correspond to the input variable thetamax
   real(dp) :: themin !! Warning : correspond to the input variable thetamin
 
-  real(dp) :: foldep(3)
+  real(dp) :: foAB_LDEp(3)
   real(dp) :: scal(3)
   real(dp) :: vpts(3,4)
 
@@ -342,7 +342,7 @@ type dataset_type
  integer :: ixc
  integer :: ixc_sigma
  integer :: ixcpositron
- integer :: ixcrot
+ integer :: ixAB_CROT
  integer :: jdtset !  jdtset contains the current dataset number
  integer :: jellslab
  integer :: kptopt
@@ -505,7 +505,7 @@ type dataset_type
  integer :: prtgkk
  integer :: prtkden
  integer :: prtkpt
- integer :: prtlden
+ integer :: prtAB_LDEn
  integer :: prtnabla
  integer :: prtnest
  integer :: prtpmp
@@ -539,7 +539,7 @@ type dataset_type
  integer :: recnpath
  integer :: recnrec
  integer :: recptrott
- integer :: rectesteg
+ integer :: reAB_CTESTeg
  integer :: restartxf
  integer :: rfasr
  integer :: rfddk
@@ -742,11 +742,11 @@ type dataset_type
  real(dp) :: ratsph_extra
  real(dp) :: recrcut
  real(dp) :: recefermi
- real(dp) :: rectolden
+ real(dp) :: rectoAB_LDEn
  real(dp) :: rhoqpmix
  real(dp) :: rcut
  real(dp) :: slabwsrad
- real(dp) :: slabzbeg
+ real(dp) :: slabAB_ZBEG
  real(dp) :: slabzend
  real(dp) :: spbroad
  real(dp) :: spinmagntarget
@@ -812,7 +812,7 @@ type dataset_type
  real(dp) :: goprecprm(3)
  real(dp) :: neb_spring(2)
  real(dp) :: pol(3)
- real(dp) :: polcen(3)
+ real(dp) :: poAB_LCEn(3)
  real(dp) :: pvelmax(3)
  real(dp) :: qptn(3)
  real(dp) :: red_efield(3)
@@ -1335,7 +1335,7 @@ type dataset_type
    ! if dataset mode, and getden==0 : abi//'_DS'//trim(jdtset)//'DDB'
    ! if dataset mode, and getden/=0 : abo//'_DS'//trim(jgetden)//'DDB'
 
-  character(len=fnlen) :: fildensin
+  character(len=fnlen) :: fiAB_LDEnsin
    ! if no dataset mode             : abi//'DEN'
    ! if dataset mode, and getden==0 : abi//'_DS'//trim(jdtset)//'DEN'
    ! if dataset mode, and getden/=0 : abo//'_DS'//trim(jgetden)//'DEN'
@@ -1388,7 +1388,7 @@ type dataset_type
    ! (the final name is formed by appending the number of the perturbation)
    ! only useful in the response-function case
 
-  character(len=fnlen) :: fildens1in   ! to be described by MVeithen
+  character(len=fnlen) :: fiAB_LDEns1in   ! to be described by MVeithen
 
   character(len=fnlen) :: fname_tdwf
 
@@ -1527,7 +1527,7 @@ type dataset_type
   character(len=fnlen) :: fnameabo_app_atmden_core
   character(len=fnlen) :: fnameabo_app_atmden_full
   character(len=fnlen) :: fnameabo_app_atmden_val
-  character(len=fnlen) :: fnameabo_app_n_tilde
+  character(len=fnlen) :: fnameabo_app_n_tiAB_LDE
   character(len=fnlen) :: fnameabo_app_n_one
   character(len=fnlen) :: fnameabo_app_nt_one
   character(len=fnlen) :: fnameabo_app_bxsf
@@ -1574,8 +1574,8 @@ type dataset_type
 !! hdr_type
 !!
 !! FUNCTION
-!! It contains all the information needed to write a header for a wf, den or pot file.
-!! The structure of the header is explained in the abinit_help.html and other associated html files.
+!! It contains all the information needed to write a AB_HEADER for a wf, den or pot file.
+!! The structure of the AB_HEADER is explained in the abinit_help.html and other associated html files.
 !! The datatype is considered as an object, to which are attached a whole
 !! set of "methods", actually, different subroutines.
 !! A few of these subroutines are: hdr_init, hdr_update, hdr_free, hdr_check, hdr_io, hdr_skip.
@@ -1589,7 +1589,7 @@ type dataset_type
 
   integer :: bantot        ! total number of bands (sum of nband on all kpts and spins)
   integer :: date          ! starting date
-  integer :: headform      ! format of the header
+  integer :: headform      ! format of the AB_HEADER
   integer :: intxc         ! input variable
   integer :: ixc           ! input variable
   integer :: mband         ! maxval(hdr%nband)
@@ -1626,7 +1626,7 @@ type dataset_type
   real(dp) :: charge       ! input variable
 
 ! This record is not a part of the hdr_type, although it is present in the
-! header of the files. This is because it depends on the kind of file
+! AB_HEADER of the files. This is because it depends on the kind of file
 ! that is written, while all other information does not depend on it.
 ! It was preferred to let it be initialized or defined outside of hdr_type.
 ! integer :: fform         ! file format

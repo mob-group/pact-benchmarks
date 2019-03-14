@@ -162,8 +162,8 @@
       REAL               ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      REAL               SASUM, SLAMCH, SLANSB
-      EXTERNAL           SASUM, SLAMCH, SLANSB
+      REAL               SASUM, AB_SLAMCH, SLANSB
+      EXTERNAL           SASUM, AB_SLAMCH, SLANSB
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SSBMV
@@ -182,7 +182,7 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       ANORM = SLANSB( '1', UPLO, N, KD, A, LDA, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS

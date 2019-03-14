@@ -756,8 +756,8 @@ subroutine tgamma_symm(cryst,qpt,tgamma)
  natom3 = 3 * cryst%natom
 
  ! Reduced --> Cartesian
- call zgemm('N','N',natom3,natom3,natom3,cone,tgamma,natom3,umat,natom3,czero,tmp_mat,natom3)
- call zgemm('T','N',natom3,natom3,natom3,cone,umat,natom3,tmp_mat,natom3,czero,tgcart,natom3)
+ call AB_ZGEMM('N','N',natom3,natom3,natom3,cone,tgamma,natom3,umat,natom3,czero,tmp_mat,natom3)
+ call AB_ZGEMM('T','N',natom3,natom3,natom3,cone,umat,natom3,tmp_mat,natom3,czero,tgcart,natom3)
 
  ! Make the matrix hermitian
  call mkherm(tgcart,3*cryst%natom)
@@ -772,8 +772,8 @@ subroutine tgamma_symm(cryst,qpt,tgamma)
  end do
 
  ! Reduced --> Cartesian
- call zgemm('N','N',natom3,natom3,natom3,cone,tgcart,natom3,umat,natom3,czero,tmp_mat,natom3)
- call zgemm('T','N',natom3,natom3,natom3,cone,umat,natom3,tmp_mat,natom3,czero,tgamma,natom3)
+ call AB_ZGEMM('N','N',natom3,natom3,natom3,cone,tgcart,natom3,umat,natom3,czero,tmp_mat,natom3)
+ call AB_ZGEMM('T','N',natom3,natom3,natom3,cone,umat,natom3,tmp_mat,natom3,czero,tgamma,natom3)
 
 end subroutine tgamma_symm
 !!***
@@ -889,8 +889,8 @@ subroutine phgamma_eval_qibz(gams,cryst,ifc,iq_ibz,spin,phfrq,gamma_ph,lambda_ph
    ! MJV NOTE: gam_now is recast implicitly here to matrix
    gam_now = reshape(gams%vals_qibz(:,:,:,iq_ibz,spin), [2,natom3**2])
 
-   call ZGEMM('N','N',natom3,natom3,natom3,cone,gam_now, natom3,pheigvec,natom3,czero,tmp_gam1,natom3)
-   call ZGEMM('C','N',natom3,natom3,natom3,cone,pheigvec,natom3,tmp_gam1 ,natom3,czero,tmp_gam2,natom3)
+   call AB_ZGEMM('N','N',natom3,natom3,natom3,cone,gam_now, natom3,pheigvec,natom3,czero,tmp_gam1,natom3)
+   call AB_ZGEMM('C','N',natom3,natom3,natom3,cone,pheigvec,natom3,tmp_gam1 ,natom3,czero,tmp_gam2,natom3)
 
    diagerr = zero
    do nu2=1,natom3
@@ -1083,8 +1083,8 @@ subroutine phgamma_interp(gams,cryst,ifc,spin,qpt,phfrq,gamma_ph,lambda_ph,displ
  case (1)
    ! Diagonalize gamma matrix at qpoint (complex matrix).
    ! MJV NOTE: gam_now is recast implicitly here to matrix
-   call ZGEMM('N','N',natom3,natom3,natom3,cone,gam_now, natom3,pheigvec,natom3,czero,tmp_gam1,natom3)
-   call ZGEMM('C','N',natom3,natom3,natom3,cone,pheigvec,natom3,tmp_gam1 ,natom3,czero,tmp_gam2,natom3)
+   call AB_ZGEMM('N','N',natom3,natom3,natom3,cone,gam_now, natom3,pheigvec,natom3,czero,tmp_gam1,natom3)
+   call AB_ZGEMM('C','N',natom3,natom3,natom3,cone,pheigvec,natom3,tmp_gam1 ,natom3,czero,tmp_gam2,natom3)
 
    diagerr = zero
    do nu2=1,natom3
@@ -1449,8 +1449,8 @@ subroutine phgamma_vv_eval_qibz(gams,cryst,ifc,iq_ibz,spin,phfrq,gamma_in_ph,gam
        ! MJV NOTE: gam_now is recast implicitly here to matrix
        gam_now  = gams%vals_in_qibz(:,ii,:,:,iq_ibz,spin)
 
-       call ZGEMM('N','N',natom3,natom3,natom3,cone,gam_now, natom3,pheigvec,natom3,czero,tmp_gam1,natom3)
-       call ZGEMM('C','N',natom3,natom3,natom3,cone,pheigvec,natom3,tmp_gam1 ,natom3,czero,tmp_gam2,natom3)
+       call AB_ZGEMM('N','N',natom3,natom3,natom3,cone,gam_now, natom3,pheigvec,natom3,czero,tmp_gam1,natom3)
+       call AB_ZGEMM('C','N',natom3,natom3,natom3,cone,pheigvec,natom3,tmp_gam1 ,natom3,czero,tmp_gam2,natom3)
 
        diagerr = zero
        do nu2=1,natom3
@@ -1472,8 +1472,8 @@ subroutine phgamma_vv_eval_qibz(gams,cryst,ifc,iq_ibz,spin,phfrq,gamma_in_ph,gam
 
        gam_now  = gams%vals_out_qibz(:,ii,:,:,iq_ibz,spin)
 
-       call ZGEMM('N','N',natom3,natom3,natom3,cone,gam_now, natom3,pheigvec,natom3,czero,tmp_gam1,natom3)
-       call ZGEMM('C','N',natom3,natom3,natom3,cone,pheigvec,natom3,tmp_gam1 ,natom3,czero,tmp_gam2,natom3)
+       call AB_ZGEMM('N','N',natom3,natom3,natom3,cone,gam_now, natom3,pheigvec,natom3,czero,tmp_gam1,natom3)
+       call AB_ZGEMM('C','N',natom3,natom3,natom3,cone,pheigvec,natom3,tmp_gam1 ,natom3,czero,tmp_gam2,natom3)
 
        diagerr = zero
        do nu2=1,natom3
@@ -1657,8 +1657,8 @@ subroutine phgamma_vv_interp(gams,cryst,ifc,spin,qpt,phfrq,gamma_in_ph,gamma_out
      case (1)
        ! Diagonalize gamma matrix at qpoint (complex matrix).
        ! MJV NOTE: gam_now is recast implicitly here to matrix
-       call ZGEMM('N','N',natom3,natom3,natom3,cone,gam_in_now,natom3,pheigvec,natom3,czero,tmp_gam1,natom3)
-       call ZGEMM('C','N',natom3,natom3,natom3,cone,pheigvec,  natom3,tmp_gam1 ,natom3,czero,tmp_gam2,natom3)
+       call AB_ZGEMM('N','N',natom3,natom3,natom3,cone,gam_in_now,natom3,pheigvec,natom3,czero,tmp_gam1,natom3)
+       call AB_ZGEMM('C','N',natom3,natom3,natom3,cone,pheigvec,  natom3,tmp_gam1 ,natom3,czero,tmp_gam2,natom3)
 
        diagerr = zero
        do nu2=1,natom3
@@ -1678,8 +1678,8 @@ subroutine phgamma_vv_interp(gams,cryst,ifc,spin,qpt,phfrq,gamma_in_ph,gamma_out
          MSG_WARNING(msg)
        end if
 
-       call ZGEMM('N','N',natom3,natom3,natom3,cone,gam_out_now,natom3,pheigvec,natom3,czero,tmp_gam1,natom3)
-       call ZGEMM('C','N',natom3,natom3,natom3,cone,pheigvec,  natom3,tmp_gam1 ,natom3,czero,tmp_gam2,natom3)
+       call AB_ZGEMM('N','N',natom3,natom3,natom3,cone,gam_out_now,natom3,pheigvec,natom3,czero,tmp_gam1,natom3)
+       call AB_ZGEMM('C','N',natom3,natom3,natom3,cone,pheigvec,  natom3,tmp_gam1 ,natom3,czero,tmp_gam2,natom3)
 
        diagerr = zero
        do nu2=1,natom3
@@ -2074,7 +2074,7 @@ subroutine phgamma_linwid(gams,cryst,ifc,ndivsm,nvert,qverts,basename,ncid,wminm
    write(unt,'(a)')     '#'
    write(unt,'(a,i0,a)')'# Phonon frequencies, ph linewidths and lambda calculated on ',nqpt,' q-points'
    write(unt,"(a,i0)")  '# eph_scalprod = ',gams%eph_scalprod
-   call kpath_print(qpath, header="Description of the q-path:", unit=unt, pre="#")
+   call kpath_print(qpath, AB_HEADER="Description of the q-path:", unit=unt, pre="#")
    do ii=1,2; write(unt,'(a)')     "# "; end do
 
    write(unt,'(a,e16.6)')"# Total DOS at Fermi level ",sum(gams%n0)
@@ -2242,7 +2242,7 @@ end subroutine a2fw_free
 !!  nqshift=Number of shifts used to generated the Q-mesh.
 !!  qshift(3,nqshift)=The shifts.
 !!  comm=MPI communicator
-!!  [qintp]=If set to False, ngqgpt, nqshift, qshift and qptop  are ignored and
+!!  [qintp]=If set to false, ngqgpt, nqshift, qshift and qptop  are ignored and
 !!     A2F(w) is computed from the IBZ values stored in gams. Default: True i.e use Fourier interpolation.
 !!  [qptopt]=Controls the generation of the q-points. If not specified, the routine takes fully into account
 !!    the symmetries of the system to generate the q points in the IBZone i.e. qptopt=1
@@ -3121,7 +3121,7 @@ contains
 
 subroutine write_a2fw_header()
 
- ! Output the header.
+ ! Output the AB_HEADER.
 
 !This section has been created automatically by the script Abilint (TD).
 !Do not modify the following lines by hand.
@@ -3238,7 +3238,7 @@ contains
 
 subroutine write_a2fw_header()
 
- ! Output the header.
+ ! Output the AB_HEADER.
 
 !This section has been created automatically by the script Abilint (TD).
 !Do not modify the following lines by hand.
@@ -3608,7 +3608,7 @@ end subroutine a2fw_tr_free
 !!  nqshift=Number of shifts used to generated the Q-mesh.
 !!  qshift(3,nqshift)=The shifts.
 !!  comm=MPI communicator
-!!  [qintp]=If set to False, ngqgpt, nqshift, qshift and qptop  are ignored and
+!!  [qintp]=If set to false, ngqgpt, nqshift, qshift and qptop  are ignored and
 !!     A2F(w) is computed from the IBZ values stored in gams. Default: True i.e use Fourier interpolation.
 !!  [qptopt]=Controls the generation of the q-points. If not specified, the routine takes fully into account
 !!    the symmetries of the system to generate the q points in the IBZone i.e. qptopt=1
@@ -4137,7 +4137,7 @@ contains
 
 subroutine write_a2fw_tr_header()
 
- ! Output the header.
+ ! Output the AB_HEADER.
 
 !This section has been created automatically by the script Abilint (TD).
 !Do not modify the following lines by hand.
@@ -4489,7 +4489,7 @@ subroutine eph_phgamma(wfk0_path,dtfil,ngfft,ngfftf,dtset,cryst,ebands,dvdb,ddk,
  ABI_MALLOC(nband, (nkpt, nsppol))
  ABI_MALLOC(bks_mask,(mband, nkpt, nsppol))
  ABI_MALLOC(keep_ur,(mband, nkpt ,nsppol))
- nband=mband; bks_mask=.False.; keep_ur=.False.
+ nband=mband; bks_mask=.false.; keep_ur=.false.
 
  ! Only wavefunctions on the FS are stored in wfd.
  ! Need all k-points on the FS because of k+q, spin is not distributed for the time being.
@@ -4511,7 +4511,7 @@ subroutine eph_phgamma(wfk0_path,dtfil,ngfft,ngfftf,dtset,cryst,ebands,dvdb,ddk,
    nspden,nspinor,dtset%ecutsm,dtset%dilatmx,ebands%istwfk,ebands%kptns,ngfft,&
    dummy_gvec,dtset%nloalg,dtset%prtvol,dtset%pawprtvol,comm,opt_ecut=ecut)
 
- call wfd_print(wfd,header="Wavefunctions on the Fermi Surface",mode_paral='PERS')
+ call wfd_print(wfd,AB_HEADER="Wavefunctions on the Fermi Surface",mode_paral='PERS')
 
  ABI_FREE(nband)
  ABI_FREE(bks_mask)
@@ -4521,7 +4521,7 @@ subroutine eph_phgamma(wfk0_path,dtfil,ngfft,ngfftf,dtset,cryst,ebands,dvdb,ddk,
 
  call wfd_read_wfk(wfd,wfk0_path,iomode)
 
- if (.False.) call wfd_test_ortho(wfd,cryst,pawtab,unit=std_out,mode_paral="PERS")
+ if (.false.) call wfd_test_ortho(wfd,cryst,pawtab,unit=std_out,mode_paral="PERS")
 
  ! ph1d(2,3*(2*mgfft+1)*natom)=one-dimensional structure factor information on the coarse grid.
  ABI_MALLOC(ph1d, (2,3*(2*mgfft+1)*natom))
@@ -4763,7 +4763,7 @@ subroutine eph_phgamma(wfk0_path,dtfil,ngfft,ngfftf,dtset,cryst,ebands,dvdb,ddk,
        !g0_kq =  g0ibz_kq + g0bz_kq
 
        call listkk(dksqmax,cryst%gmet,indkk_kq,ebands%kptns,kq,ebands%nkpt,1,cryst%nsym,&
-          1,cryst%symafm,cryst%symrel,timrev1,use_symrec=.False.)
+          1,cryst%symafm,cryst%symrel,timrev1,use_symrec=.false.)
 
        if (dksqmax > tol12) then
          write(msg, '(3a,es16.6,7a)' )&
@@ -5173,7 +5173,7 @@ close(802)
 
  ! Compute a2Fw using ab-initio q-points (no interpolation)
  call a2fw_init(a2fw,gams,cryst,ifc,dtset%ph_intmeth,dtset%ph_wstep,wminmax,dtset%ph_smear,&
-   dtset%ph_ngqpt,dtset%ph_nqshift,dtset%ph_qshift,comm,qintp=.False.,qptopt=1)
+   dtset%ph_ngqpt,dtset%ph_nqshift,dtset%ph_qshift,comm,qintp=.false.,qptopt=1)
  if (my_rank == master) call a2fw_write(a2fw, strcat(dtfil%filnam_ds(4), "_NOINTP"), "_qcoarse", ncid)
 #ifdef DEV_MJV
  if (my_rank == master) call a2fw_ee_write(a2fw, strcat(dtfil%filnam_ds(4), "_NOINTP"))
@@ -5204,7 +5204,7 @@ close(802)
  if (dtset%eph_transport == 1) then
    ! Compute a2Fw_tr using ab-initio q-points (no interpolation)
    call a2fw_tr_init(a2fw_tr,gams,cryst,ifc,dtset%ph_intmeth,dtset%ph_wstep,wminmax,dtset%ph_smear,&
-     dtset%ph_ngqpt,dtset%ph_nqshift,dtset%ph_qshift,comm,qintp=.False.,qptopt=1)
+     dtset%ph_ngqpt,dtset%ph_nqshift,dtset%ph_qshift,comm,qintp=.false.,qptopt=1)
    if (my_rank == master) call a2fw_tr_write(a2fw_tr, strcat(dtfil%filnam_ds(4), "_NOINTP"), "_qcoarse", ncid)
    call a2fw_tr_free(a2fw_tr)
 

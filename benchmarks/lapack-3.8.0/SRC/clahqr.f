@@ -232,8 +232,8 @@
 *     ..
 *     .. External Functions ..
       COMPLEX            AB_CLADIV
-      REAL               SLAMCH
-      EXTERNAL           AB_CLADIV, SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_CLADIV, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_CCOPY, AB_CLARFG, AB_CSCAL, AB_SLABAD
@@ -298,10 +298,10 @@
 *
 *     Set machine-dependent constants for the stopping criterion.
 *
-      SAFMIN = SLAMCH( 'SAFE MINIMUM' )
+      SAFMIN = AB_SLAMCH( 'SAFE MINIMUM' )
       SAFMAX = RONE / SAFMIN
       CALL AB_SLABAD( SAFMIN, SAFMAX )
-      ULP = SLAMCH( 'PRECISION' )
+      ULP = AB_SLAMCH( 'PRECISION' )
       SMLNUM = SAFMIN*( REAL( NH ) / ULP )
 *
 *     I1 and I2 are the indices of the first row and last column of H

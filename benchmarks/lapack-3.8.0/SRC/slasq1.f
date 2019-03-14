@@ -135,8 +135,8 @@
      $ASRT, AB_XERBLA
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -183,8 +183,8 @@
 *     Copy D and E into WORK (in the Z format) and scale (squaring the
 *     input data makes scaling by a power of the radix pointless).
 *
-      EPS = SLAMCH( 'Precision' )
-      SAFMIN = SLAMCH( 'Safe minimum' )
+      EPS = AB_SLAMCH( 'Precision' )
+      SAFMIN = AB_SLAMCH( 'Safe minimum' )
       SCALE = SQRT( EPS / SAFMIN )
       CALL AB_SCOPY( N, D, 1, WORK( 1 ), 2 )
       CALL AB_SCOPY( N-1, E, 1, WORK( 2 ), 2 )

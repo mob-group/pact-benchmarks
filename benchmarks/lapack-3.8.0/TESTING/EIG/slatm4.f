@@ -203,8 +203,8 @@
       REAL               ALPHA, CL, CR, SAFMIN, SL, SR, SV1, SV2, TEMP
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLARAN, SLARND
-      EXTERNAL           SLAMCH, SLARAN, SLARND
+      REAL               AB_SLAMCH, SLARAN, SLARND
+      EXTERNAL           AB_SLAMCH, SLARAN, SLARND
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SLASET
@@ -388,7 +388,7 @@
 *        random rotations to make 2x2 blocks.
 *
          IF( ISIGN.EQ.2 .AND. ITYPE.NE.2 .AND. ITYPE.NE.3 ) THEN
-            SAFMIN = SLAMCH( 'S' )
+            SAFMIN = AB_SLAMCH( 'S' )
             DO 290 JD = KBEG, KEND - 1, 2
                IF( SLARAN( ISEED ).GT.HALF ) THEN
 *

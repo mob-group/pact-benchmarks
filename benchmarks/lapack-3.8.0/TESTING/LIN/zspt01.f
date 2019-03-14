@@ -143,8 +143,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, ZLANSP, ZLANSY
-      EXTERNAL           LSAME, DLAMCH, ZLANSP, ZLANSY
+      DOUBLE PRECISION   AB_DLAMCH, ZLANSP, ZLANSY
+      EXTERNAL           LSAME, AB_DLAMCH, ZLANSP, ZLANSY
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZLASET, ZLAVSP
@@ -163,7 +163,7 @@
 *
 *     Determine EPS and the norm of A.
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       ANORM = ZLANSP( '1', UPLO, N, A, RWORK )
 *
 *     Initialize C to the identity matrix.

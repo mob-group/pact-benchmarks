@@ -117,10 +117,10 @@
       COMPLEX*16         TQUERY( 5 ), WORKQUERY
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION DLAMCH, ZLANGE, ZLANSY
+      DOUBLE PRECISION AB_DLAMCH, ZLANGE, ZLANSY
       LOGICAL  LSAME
       INTEGER ILAENV
-      EXTERNAL DLAMCH, ZLANGE, ZLANSY, LSAME, ILAENV
+      EXTERNAL AB_DLAMCH, ZLANGE, ZLANSY, LSAME, ILAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC  MAX, MIN
@@ -141,7 +141,7 @@
 *
       TESTZEROS = .FALSE.
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       K = MIN(M,N)
       L = MAX(M,N,1)
       MNB = MAX ( MB, NB)

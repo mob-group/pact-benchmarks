@@ -96,7 +96,7 @@ contains
 !!      gwls_Projected_AT,gwls_Projected_BT
 !!
 !! CHILDREN
-!!      zgetrf,zgetri
+!!      AB_ZGETRF,AB_ZGETRI
 !!
 !! SOURCE
 
@@ -173,7 +173,7 @@ end subroutine setup_LanczosResolvents
 !!      gwls_Projected_AT,gwls_Projected_BT
 !!
 !! CHILDREN
-!!      zgetrf,zgetri
+!!      AB_ZGETRF,AB_ZGETRI
 !!
 !! SOURCE
 
@@ -221,7 +221,7 @@ end subroutine cleanup_LanczosResolvents
 !! PARENTS
 !!
 !! CHILDREN
-!!      zgetrf,zgetri
+!!      AB_ZGETRF,AB_ZGETRI
 !!
 !! SOURCE
 
@@ -285,7 +285,7 @@ end subroutine matrix_function_preconditioned_Hamiltonian
 !!      gwls_LanczosResolvents
 !!
 !! CHILDREN
-!!      zgetrf,zgetri
+!!      AB_ZGETRF,AB_ZGETRI
 !!
 !! SOURCE
 
@@ -334,7 +334,7 @@ end do
 ! compute the M matrix
 
 ! Compute Q^dagger . Q
-call ZGEMM('C','N',LR_kmax,LR_kmax,npw_g,cmplx_1,Hamiltonian_Qk,npw_g,Hamiltonian_Qk,npw_g,cmplx_0,LR_M_matrix,LR_kmax)
+call AB_ZGEMM('C','N',LR_kmax,LR_kmax,npw_g,cmplx_1,Hamiltonian_Qk,npw_g,Hamiltonian_Qk,npw_g,cmplx_0,LR_M_matrix,LR_kmax)
 call xmpi_sum(LR_M_matrix,mpi_communicator,ierr) ! sum on all processors working on FFT!
 
 do l = 1, LR_kmax
@@ -360,7 +360,7 @@ end subroutine build_preconditioned_Hamiltonian_Lanczos_basis
 !!      gwls_Projected_AT
 !!
 !! CHILDREN
-!!      zgetrf,zgetri
+!!      AB_ZGETRF,AB_ZGETRI
 !!
 !! SOURCE
 
@@ -425,11 +425,11 @@ call build_preconditioned_Hamiltonian_Lanczos_basis(seed_vector)
 ! Q^dagger . C^{-2} | seed > 
 work_array(:) = precondition_one_on_C(:)**2*seed_vector 
 
-call ZGEMV('C',npw_g,LR_kmax,cmplx_1,Hamiltonian_Qk,npw_g,work_array,1,cmplx_0,right_vec,1)
+call AB_ZGEMV('C',npw_g,LR_kmax,cmplx_1,Hamiltonian_Qk,npw_g,work_array,1,cmplx_0,right_vec,1)
 call xmpi_sum(right_vec,mpi_communicator,ierr) ! sum on all processors working on FFT!
 
 !  Q^dagger | left_vectors > 
-call ZGEMM('C','N',LR_kmax,nvec,npw_g,cmplx_1,Hamiltonian_Qk,npw_g,list_left_vectors,npw_g,cmplx_0,left_vecs,LR_kmax)
+call AB_ZGEMM('C','N',LR_kmax,nvec,npw_g,cmplx_1,Hamiltonian_Qk,npw_g,list_left_vectors,npw_g,cmplx_0,left_vecs,LR_kmax)
 call xmpi_sum(left_vecs,mpi_communicator,ierr) ! sum on all processors working on FFT!
 
 !----------------------------------------------------------------------------------------------------
@@ -453,11 +453,11 @@ call invert_general_matrix(LR_kmax,shift_lanczos_matrix)
 
 
 ! | work_vec > = M^{-1} . | right_vec >
-call ZGEMV('N',LR_kmax,LR_kmax,cmplx_1,shift_lanczos_matrix,LR_kmax,right_vec,1,cmplx_0,work_vec,1)
+call AB_ZGEMV('N',LR_kmax,LR_kmax,cmplx_1,shift_lanczos_matrix,LR_kmax,right_vec,1,cmplx_0,work_vec,1)
 
 
 ! matrix_elements = < right_vecs | work_vec > 
-call ZGEMV('C',LR_kmax,nvec,cmplx_1,left_vecs,LR_kmax,work_vec,1,cmplx_0,matrix_elements_resolvent(iz,:),1)
+call AB_ZGEMV('C',LR_kmax,nvec,cmplx_1,left_vecs,LR_kmax,work_vec,1,cmplx_0,matrix_elements_resolvent(iz,:),1)
 
 end do
 
@@ -481,7 +481,7 @@ end subroutine compute_resolvent_column_shift_lanczos
 !!      gwls_Projected_BT
 !!
 !! CHILDREN
-!!      zgetrf,zgetri
+!!      AB_ZGETRF,AB_ZGETRI
 !!
 !! SOURCE
 
@@ -535,7 +535,7 @@ call build_preconditioned_Hamiltonian_Lanczos_basis(seed_vector)
 ! Q^dagger . C^{-2} | seed > 
 work_array(:) = precondition_one_on_C(:)**2*seed_vector(:)
 
-call ZGEMV('C', npw_g, LR_kmax, cmplx_1, Hamiltonian_Qk, npw_g, work_array, 1, cmplx_0, right_vec, 1)
+call AB_ZGEMV('C', npw_g, LR_kmax, cmplx_1, Hamiltonian_Qk, npw_g, work_array, 1, cmplx_0, right_vec, 1)
 call xmpi_sum(right_vec,mpi_communicator,ierr) ! sum on all processors working on FFT!
 
 
@@ -559,7 +559,7 @@ end subroutine compute_resolvent_column_shift_lanczos_right_vectors
 !!      gwls_LanczosResolvents,gwls_Projected_BT
 !!
 !! CHILDREN
-!!      zgetrf,zgetri
+!!      AB_ZGETRF,AB_ZGETRI
 !!
 !! SOURCE
 
@@ -592,7 +592,7 @@ complex(dpc) :: work(n)
 
 ! *************************************************************************
 
-call ZGETRF( n, n, matrix, n, ipiv, info )
+call AB_ZGETRF( n, n, matrix, n, ipiv, info )
 if ( info /= 0) then        
   debug_unit = get_unit()
   write(debug_filename,'(A,I4.4,A)') 'LAPACK_DEBUG_PROC=',mpi_enreg%me,'.log'
@@ -600,7 +600,7 @@ if ( info /= 0) then
   open(debug_unit,file=trim(debug_filename),status='unknown')
 
   write(debug_unit,'(A)')      '*********************************************************************************************'
-  write(debug_unit,'(A,I4,A)') '*      ERROR: info = ',info,' in ZGETRF(1), gwls_LanczosResolvents'
+  write(debug_unit,'(A,I4,A)') '*      ERROR: info = ',info,' in AB_ZGETRF(1), gwls_LanczosResolvents'
   write(debug_unit,'(A)')      '*********************************************************************************************'
 
   close(debug_unit)
@@ -608,7 +608,7 @@ if ( info /= 0) then
 end if
 
 
-call ZGETRI( n, matrix, n, ipiv, work, n, info )
+call AB_ZGETRI( n, matrix, n, ipiv, work, n, info )
 
 if ( info /= 0) then        
   debug_unit = get_unit()
@@ -617,7 +617,7 @@ if ( info /= 0) then
   open(debug_unit,file=trim(debug_filename),status='unknown')
 
   write(debug_unit,'(A)')      '*********************************************************************************************'
-  write(debug_unit,'(A,I4,A)') '*      ERROR: info = ',info,' in ZGETRI(1), gwls_LanczosResolvents'
+  write(debug_unit,'(A,I4,A)') '*      ERROR: info = ',info,' in AB_ZGETRI(1), gwls_LanczosResolvents'
   write(debug_unit,'(A)')      '*********************************************************************************************'
 
   close(debug_unit)

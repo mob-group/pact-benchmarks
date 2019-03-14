@@ -115,10 +115,10 @@
       REAL               SWORK(NMAX*(NMAX+MAXRHS))
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DSECND
+      DOUBLE PRECISION   AB_DLAMCH, DSECND
       LOGICAL            LSAME, LSAMEN
-      REAL               SLAMCH
-      EXTERNAL           LSAME, LSAMEN, DLAMCH, DSECND, SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           LSAME, LSAMEN, AB_DLAMCH, DSECND, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAREQ, DDRVAB, DDRVAC, DERRAB, DERRAC,
@@ -221,19 +221,19 @@
 *
 *     Calculate and print the machine dependent constants.
 *
-      SEPS = SLAMCH( 'Underflow threshold' )
+      SEPS = AB_SLAMCH( 'Underflow threshold' )
       WRITE( NOUT, FMT = 9991 )'(single precision) underflow', SEPS
-      SEPS = SLAMCH( 'Overflow threshold' )
+      SEPS = AB_SLAMCH( 'Overflow threshold' )
       WRITE( NOUT, FMT = 9991 )'(single precision) overflow ', SEPS
-      SEPS = SLAMCH( 'Epsilon' )
+      SEPS = AB_SLAMCH( 'Epsilon' )
       WRITE( NOUT, FMT = 9991 )'(single precision) precision', SEPS
       WRITE( NOUT, FMT = * )
 *
-      EPS = DLAMCH( 'Underflow threshold' )
+      EPS = AB_DLAMCH( 'Underflow threshold' )
       WRITE( NOUT, FMT = 9991 )'(double precision) underflow', EPS
-      EPS = DLAMCH( 'Overflow threshold' )
+      EPS = AB_DLAMCH( 'Overflow threshold' )
       WRITE( NOUT, FMT = 9991 )'(double precision) overflow ', EPS
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       WRITE( NOUT, FMT = 9991 )'(double precision) precision', EPS
       WRITE( NOUT, FMT = * )
 *

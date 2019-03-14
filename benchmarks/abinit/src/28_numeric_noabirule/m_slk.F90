@@ -194,14 +194,14 @@ module m_slk
  !public :: my_locr
  !public :: my_locc
 
- public :: slk_pzgemm                        ! C := alpha*A*B - beta*C
+ public :: slk_pAB_ZGEMM                        ! C := alpha*A*B - beta*C
  public :: compute_eigen_problem             ! Calculation of eigenvalues and eigenvectors. A * X = lambda * X complex and real cases.
  public :: compute_generalized_eigen_problem ! compute_generalized_eigen_problem
  public :: compute_eigen1                    ! Calculation of eigenvalues and eigenvectors.  complex and real cases.
  public :: compute_eigen2                    ! Calculation of eigenvalues and eigenvectors: A * X = lambda * B * X complex and real cases.
- public :: slk_pzheev                        ! Eigenvalues and, optionally, eigenvectors of an Hermitian matrix A.  A * X = lambda * X
- public :: slk_pzheevx                       ! Eigenvalues and, optionally, eigenvectors of a complex hermitian matrix A. A * X = lambda *  X
- public :: slk_pzhegvx                       ! genvalues and, optionally, eigenvectors of a complex generalized  Hermitian-definite eigenproblem, of the form
+ public :: slk_pAB_ZHEEV                        ! Eigenvalues and, optionally, eigenvectors of an Hermitian matrix A.  A * X = lambda * X
+ public :: slk_pAB_ZHEEVx                       ! Eigenvalues and, optionally, eigenvectors of a complex hermitian matrix A. A * X = lambda *  X
+ public :: slk_pAB_ZHEGVx                       ! genvalues and, optionally, eigenvectors of a complex generalized  Hermitian-definite eigenproblem, of the form
                                              ! sub( A )*x=(lambda)*sub( B )*x,  sub( A )*sub( B )x=(lambda)*x,  or sub( B )*sub( A )*x=(lambda)*x.
  public :: slk_zinvert                       ! Compute the inverse of a complex matrix in double precision
  public :: slk_zdhp_invert                   ! Computes the inverse of a Hermitian positive definite matrix.
@@ -2005,9 +2005,9 @@ end function my_locc
 
 !----------------------------------------------------------------------
 
-!!****f* m_slk/slk_pzgemm
+!!****f* m_slk/slk_pAB_ZGEMM
 !! NAME
-!!  slk_pzgemm
+!!  slk_pAB_ZGEMM
 !!
 !! FUNCTION
 !!  Extended matrix*matrix product
@@ -2038,13 +2038,13 @@ end function my_locc
 !!
 !! SOURCE
 
-subroutine slk_pzgemm(transa,transb,matrix1,alpha,matrix2,beta,results)
+subroutine slk_pAB_ZGEMM(transa,transb,matrix1,alpha,matrix2,beta,results)
 
 
 !This section has been created automatically by the script Abilint (TD).
 !Do not modify the following lines by hand.
 #undef ABI_FUNC
-#define ABI_FUNC 'slk_pzgemm'
+#define ABI_FUNC 'slk_pAB_ZGEMM'
 !End of the abilint section
 
  implicit none
@@ -2057,13 +2057,13 @@ subroutine slk_pzgemm(transa,transb,matrix1,alpha,matrix2,beta,results)
 
 !************************************************************************
 
- call PZGEMM(transa,transb,matrix1%sizeb_global(1),matrix2%sizeb_global(2),&
+ call PAB_ZGEMM(transa,transb,matrix1%sizeb_global(1),matrix2%sizeb_global(2),&
 &  matrix1%sizeb_global(2),alpha,matrix1%buffer_cplx,1,1,&
 &  matrix1%descript%tab,matrix2%buffer_cplx,1,1,         &
 &  matrix2%descript%tab,beta,results%buffer_cplx,1,1,    &
 &  results%descript%tab)
 
-end subroutine slk_pzgemm
+end subroutine slk_pAB_ZGEMM
 !!***
 
 !----------------------------------------------------------------------
@@ -2162,7 +2162,7 @@ subroutine compute_eigen_problem(processor,matrix,results,eigen,comm,istwf_k)
 
   integer ::  M,NZ,IA,JA,IZ,JZ,ierr,TWORK_tmp(3),TWORK(3)
 
-  DOUBLE PRECISION, external :: PDLAMCH
+  DOUBLE PRECISION, external :: PAB_DLAMCH
 
 ! *************************************************************************
 
@@ -2178,7 +2178,7 @@ subroutine compute_eigen_problem(processor,matrix,results,eigen,comm,istwf_k)
 
   ! Get the size of the work arrays
   if (istwf_k/=2) then
-     call PZHEEVX('V','A','U',&
+     call PAB_ZHEEVX('V','A','U',&
 &      matrix%sizeb_global(2),&
 &      matrix%buffer_cplx,1,1,matrix%descript%tab, &
 &      ZERO,ZERO,IZERO,IZERO,ABSTOL,&
@@ -2187,7 +2187,7 @@ subroutine compute_eigen_problem(processor,matrix,results,eigen,comm,istwf_k)
 &      CWORK_tmp,-1,RWORK_tmp,-1,IWORK_tmp,-1,&
 &      IFAIL,ICLUSTR,GAP,INFO)
   else
-     call PDSYEVX('V','A','U',&
+     call PAB_DSYEVX('V','A','U',&
 &      matrix%sizeb_global(2),&
 &      matrix%buffer_real,1,1,matrix%descript%tab, &
 &      ZERO,ZERO,IZERO,IZERO,ABSTOL,&
@@ -2235,8 +2235,8 @@ subroutine compute_eigen_problem(processor,matrix,results,eigen,comm,istwf_k)
 
   ! Call the calculation routine
   if (istwf_k/=2) then
-  !   write(std_out,*) 'I am using PZHEEVX'
-     call PZHEEVX('V','A','U',&
+  !   write(std_out,*) 'I am using PAB_ZHEEVX'
+     call PAB_ZHEEVX('V','A','U',&
 &      matrix%sizeb_global(2),&
 &      matrix%buffer_cplx,1,1,matrix%descript%tab, &
 &      ZERO,ZERO,IZERO,IZERO,ABSTOL,&
@@ -2245,8 +2245,8 @@ subroutine compute_eigen_problem(processor,matrix,results,eigen,comm,istwf_k)
 &      CWORK,LCWORK,RWORK,LRWORK,IWORK,LIWORK,&
 &      IFAIL,ICLUSTR,GAP,INFO)
   else
-  !   write(std_out,*) ' I am using PDSYEVX'
-     call PDSYEVX('V','A','U',&
+  !   write(std_out,*) ' I am using PAB_DSYEVX'
+     call PAB_DSYEVX('V','A','U',&
 &      matrix%sizeb_global(2),&
 &      matrix%buffer_real,1,1,matrix%descript%tab, &
 &      ZERO,ZERO,IZERO,IZERO,ABSTOL,&
@@ -2532,7 +2532,7 @@ subroutine compute_generalized_eigen_problem(processor,matrix1,matrix2,results,e
 
   integer ::  M,NZ,IA,JA,IZ,JZ,ierr,TWORK_tmp(3),TWORK(3)
 
-  DOUBLE PRECISION, external :: PDLAMCH
+  DOUBLE PRECISION, external :: PAB_DLAMCH
 
 ! *************************************************************************
 
@@ -2548,7 +2548,7 @@ subroutine compute_generalized_eigen_problem(processor,matrix1,matrix2,results,e
 
   ! Get the size of the work arrays
   if (istwf_k/=2) then
-     call PZHEGVX(1,'V','A','U',&
+     call PAB_ZHEGVX(1,'V','A','U',&
 &      matrix1%sizeb_global(2),&
 &      matrix1%buffer_cplx,1,1,matrix1%descript%tab, &
 &      matrix2%buffer_cplx,1,1,matrix2%descript%tab, &
@@ -2558,7 +2558,7 @@ subroutine compute_generalized_eigen_problem(processor,matrix1,matrix2,results,e
 &      CWORK_tmp,-1,RWORK_tmp,-1,IWORK_tmp,-1,&
 &      IFAIL,ICLUSTR,GAP,INFO)
   else
-     call PDSYGVX(1,'V','A','U',&
+     call PAB_DSYGVX(1,'V','A','U',&
 &      matrix1%sizeb_global(2),&
 &      matrix1%buffer_real,1,1,matrix1%descript%tab, &
 &      matrix2%buffer_real,1,1,matrix2%descript%tab, &
@@ -2607,8 +2607,8 @@ subroutine compute_generalized_eigen_problem(processor,matrix1,matrix2,results,e
 
   ! Call the calculation routine
   if (istwf_k/=2) then
-  !   write(std_out,*) 'I am using PZHEGVX'
-     call PZHEGVX(1,'V','A','U',&
+  !   write(std_out,*) 'I am using PAB_ZHEGVX'
+     call PAB_ZHEGVX(1,'V','A','U',&
 &      matrix1%sizeb_global(2),&
 &      matrix1%buffer_cplx,1,1,matrix1%descript%tab, &
 &      matrix2%buffer_cplx,1,1,matrix2%descript%tab, &
@@ -2618,8 +2618,8 @@ subroutine compute_generalized_eigen_problem(processor,matrix1,matrix2,results,e
 &      CWORK,LCWORK,RWORK,LRWORK,IWORK,LIWORK,&
 &      IFAIL,ICLUSTR,GAP,INFO)
   else
-  !   write(std_out,*) 'I am using PDSYGVX'
-     call PDSYGVX(1,'V','A','U',&
+  !   write(std_out,*) 'I am using PAB_DSYGVX'
+     call PAB_DSYGVX(1,'V','A','U',&
 &      matrix1%sizeb_global(2),&
 &      matrix1%buffer_real,1,1,matrix1%descript%tab, &
 &      matrix2%buffer_real,1,1,matrix2%descript%tab, &
@@ -2929,12 +2929,12 @@ end subroutine compute_eigen2
 
 !----------------------------------------------------------------------
 
-!!****f* m_slk/slk_pzheev
+!!****f* m_slk/slk_pAB_ZHEEV
 !! NAME
-!! slk_pzheev
+!! slk_pAB_ZHEEV
 !!
 !! FUNCTION
-!!  slk_pzheev provides an object-oriented interface to the ScaLAPACK routine PHZEEV which computes selected
+!!  slk_pAB_ZHEEV provides an object-oriented interface to the ScaLAPACK routine PHZEEV which computes selected
 !!  eigenvalues and, optionally, eigenvectors of an Hermitian matrix A.
 !!   A * X = lambda * X
 !!
@@ -2967,13 +2967,13 @@ end subroutine compute_eigen2
 !!
 !! SOURCE
 
-subroutine slk_pzheev(jobz,uplo,Slk_mat,Slk_vec,w)
+subroutine slk_pAB_ZHEEV(jobz,uplo,Slk_mat,Slk_vec,w)
 
 
 !This section has been created automatically by the script Abilint (TD).
 !Do not modify the following lines by hand.
 #undef ABI_FUNC
-#define ABI_FUNC 'slk_pzheev'
+#define ABI_FUNC 'slk_pAB_ZHEEV'
 !End of the abilint section
 
  implicit none
@@ -3003,7 +3003,7 @@ subroutine slk_pzheev(jobz,uplo,Slk_mat,Slk_vec,w)
  ABI_MALLOC(work,(1))
  ABI_MALLOC(rwork,(1))
 
- call PZHEEV(jobz,uplo,Slk_mat%sizeb_global(2),Slk_mat%buffer_cplx,1,1,Slk_mat%descript%tab, &
+ call PAB_ZHEEV(jobz,uplo,Slk_mat%sizeb_global(2),Slk_mat%buffer_cplx,1,1,Slk_mat%descript%tab, &
 & w,Slk_vec%buffer_cplx,1,1,Slk_vec%descript%tab,work,lwork,rwork,lrwork,info)
 
  ABI_CHECK(info==0,"Error during the calculation of the workspace size")
@@ -3025,28 +3025,28 @@ subroutine slk_pzheev(jobz,uplo,Slk_mat,Slk_vec,w)
  ABI_MALLOC(work,(lwork))
  ABI_MALLOC(rwork,(lrwork))
 
- call PZHEEV(jobz,uplo,Slk_mat%sizeb_global(2),Slk_mat%buffer_cplx,1,1,Slk_mat%descript%tab, &
+ call PAB_ZHEEV(jobz,uplo,Slk_mat%sizeb_global(2),Slk_mat%buffer_cplx,1,1,Slk_mat%descript%tab, &
 & w,Slk_vec%buffer_cplx,1,1,Slk_vec%descript%tab,work,lwork,rwork,lrwork,info)
 
  if (info/=0) then
-   write(msg,'(a,i0)')"PZHEEV returned info= ",info
+   write(msg,'(a,i0)')"PAB_ZHEEV returned info= ",info
    MSG_ERROR(msg)
  end if
 
  ABI_FREE(work)
  ABI_FREE(rwork)
 
-end subroutine slk_pzheev
+end subroutine slk_pAB_ZHEEV
 !!***
 
 !----------------------------------------------------------------------
 
-!!****f* m_slk/slk_pzheevx
+!!****f* m_slk/slk_pAB_ZHEEVx
 !! NAME
-!!  slk_pzheevx
+!!  slk_pAB_ZHEEVx
 !!
 !! FUNCTION
-!!  slk_pzheevx provides an object-oriented interface to the ScaLAPACK routine PZHEEVX that
+!!  slk_pAB_ZHEEVx provides an object-oriented interface to the ScaLAPACK routine PAB_ZHEEVX that
 !!  computes selected eigenvalues and, optionally, eigenvectors of a complex hermitian matrix A.
 !!   A * X = lambda *  X
 !!
@@ -3087,7 +3087,7 @@ end subroutine slk_pzheev
 !!         IU <= N.  Not referenced if RANGE = "A" or "V"
 !!
 !!  ABSTOL  (global input) DOUBLE PRECISION
-!!          If JOBZ="V", setting ABSTOL to PDLAMCH( CONTEXT, "U") yields the most orthogonal eigenvectors.
+!!          If JOBZ="V", setting ABSTOL to PAB_DLAMCH( CONTEXT, "U") yields the most orthogonal eigenvectors.
 !!          The  absolute error tolerance for the eigenvalues.  An approximate eigenvalue is accepted as converged when
 !!          it is determined to lie in an interval [a,b] of width less than or equal to
 !!
@@ -3096,8 +3096,8 @@ end subroutine slk_pzheev
 !!          where EPS is the machine precision.  If ABSTOL is less than or equal to zero, then EPS*norm(T) will be used
 !!          in  its  place, where norm(T) is the 1-norm of the tridiagonal matrix obtained by reducing A to tridiagonal form.
 !!          Eigenvalues will be computed  most  accurately  when  ABSTOL  is  set  to  twice  the  underflow  threshold
-!!          2*PDLAMCH("S")  not  zero.   If  this routine returns with ((MOD(INFO,2).NE.0) .OR.  (MOD(INFO/8,2).NE.0)),
-!!          indicating that some eigenvalues or eigenvectors did not converge, try setting ABSTOL to 2*PDLAMCH("S").
+!!          2*PAB_DLAMCH("S")  not  zero.   If  this routine returns with ((MOD(INFO,2).NE.0) .OR.  (MOD(INFO/8,2).NE.0)),
+!!          indicating that some eigenvalues or eigenvectors did not converge, try setting ABSTOL to 2*PAB_DLAMCH("S").
 !!
 !! OUTPUT
 !!  mene_found= (global output) Total number of eigenvalues found.  0 <= mene_found <= N.
@@ -3118,13 +3118,13 @@ end subroutine slk_pzheev
 !!
 !! SOURCE
 
-subroutine slk_pzheevx(jobz,range,uplo,Slk_mat,vl,vu,il,iu,abstol,Slk_vec,mene_found,eigen)
+subroutine slk_pAB_ZHEEVx(jobz,range,uplo,Slk_mat,vl,vu,il,iu,abstol,Slk_vec,mene_found,eigen)
 
 
 !This section has been created automatically by the script Abilint (TD).
 !Do not modify the following lines by hand.
 #undef ABI_FUNC
-#define ABI_FUNC 'slk_pzheevx'
+#define ABI_FUNC 'slk_pAB_ZHEEVx'
 !End of the abilint section
 
  implicit none
@@ -3153,7 +3153,7 @@ subroutine slk_pzheevx(jobz,range,uplo,Slk_mat,vl,vu,il,iu,abstol,Slk_vec,mene_f
 
 !************************************************************************
 
-! abstol = PDLAMCH(Slk_vecprocessor%grid%ictxt,'U')
+! abstol = PAB_DLAMCH(Slk_vecprocessor%grid%ictxt,'U')
 
   orfac  = -one ! Only for eigenvectors: use default value 10d-3.
 ! Vectors within orfac*norm(A) will be reorthogonalized.
@@ -3174,7 +3174,7 @@ subroutine slk_pzheevx(jobz,range,uplo,Slk_mat,vl,vu,il,iu,abstol,Slk_vec,mene_f
 ! This is clearly seen in the source in which rwork(1:3) is accessed
 ! during the calcuation of the workspace size.
 
-  call PZHEEVX(jobz,range,uplo, Slk_mat%sizeb_global(2),Slk_mat%buffer_cplx,1,1,Slk_mat%descript%tab,&
+  call PAB_ZHEEVX(jobz,range,uplo, Slk_mat%sizeb_global(2),Slk_mat%buffer_cplx,1,1,Slk_mat%descript%tab,&
 &  vl,vu,il,iu,abstol,mene_found,nvec_calc,eigen,orfac,&
 &  Slk_vec%buffer_cplx,1,1,Slk_vec%descript%tab,&
 &  work,lwork,rwork,lrwork,iwork,liwork,ifail,iclustr,gap,info)
@@ -3218,26 +3218,26 @@ subroutine slk_pzheevx(jobz,range,uplo,Slk_mat,vl,vu,il,iu,abstol,Slk_vec,mene_f
 !
 ! Call the scaLAPACK routine.
 
-! write(std_out,*) 'I am using PZHEEVX'
-  call PZHEEVX(jobz,range,uplo, Slk_mat%sizeb_global(2),Slk_mat%buffer_cplx,1,1,Slk_mat%descript%tab,&
+! write(std_out,*) 'I am using PAB_ZHEEVX'
+  call PAB_ZHEEVX(jobz,range,uplo, Slk_mat%sizeb_global(2),Slk_mat%buffer_cplx,1,1,Slk_mat%descript%tab,&
 &  vl,vu,il,iu,abstol,mene_found,nvec_calc, eigen,orfac,&
 &  Slk_vec%buffer_cplx,1,1,Slk_vec%descript%tab,&
 &  work,lwork,rwork,lrwork,iwork,liwork,ifail,iclustr,gap,info)
 
 ! Handle the possible error.
   if (info < 0) then
-    write(msg,'(a,i7,a)')" The ",-info,"-th argument of PZHEEVX had an illegal value."
+    write(msg,'(a,i7,a)')" The ",-info,"-th argument of PAB_ZHEEVX had an illegal value."
     if (info==-25) msg = " LRWORK is too small to compute all the eigenvectors requested, no computation is performed"
     MSG_ERROR(msg)
   end if
 
   if (info > 0) then
-    write(msg,'(a,i7)') " PZHEEVX returned info: ",info
+    write(msg,'(a,i7)') " PAB_ZHEEVX returned info: ",info
     call wrtout(std_out,msg,"PERS")
     if (MOD(info,2)/=0)then
       write(msg,'(3a)')&
 &      " One or more eigenvectors failed to converge. ",ch10,&
-&      " Their indices are stored in IFAIL. Ensure ABSTOL=2.0*PDLAMCH('U')"
+&      " Their indices are stored in IFAIL. Ensure ABSTOL=2.0*PAB_DLAMCH('U')"
       call wrtout(std_out,msg,"PERS")
     end if
     if (MOD(info/2,2)/=0) then
@@ -3248,12 +3248,12 @@ subroutine slk_pzheevx(jobz,range,uplo,Slk_mat,vl,vu,il,iu,abstol,Slk_vec,mene_f
       call wrtout(std_out,msg,"PERS")
     end if
     if (MOD(info/4,2)/=0) then
-      write(msg,'(3a)')" Space limit prevented PZHEEVX from computing all of the eigenvectors between VL and VU. ",ch10,&
+      write(msg,'(3a)')" Space limit prevented PAB_ZHEEVX from computing all of the eigenvectors between VL and VU. ",ch10,&
 &      " The number of eigenvectors  computed  is returned in NZ."
       call wrtout(std_out,msg,"PERS")
     end if
     if (MOD(info/8,2)/=0) then
-      msg = " PZSTEBZ  failed to compute eigenvalues. Ensure ABSTOL=2.0*PDLAMCH('U')"
+      msg = " PZSTEBZ  failed to compute eigenvalues. Ensure ABSTOL=2.0*PAB_DLAMCH('U')"
       call wrtout(std_out,msg,"PERS")
     end if
     MSG_ERROR("Cannot continue")
@@ -3262,7 +3262,7 @@ subroutine slk_pzheevx(jobz,range,uplo,Slk_mat,vl,vu,il,iu,abstol,Slk_vec,mene_f
 ! Check the number of eigenvalues found wrt to the number of vectors calculated.
   if ( firstchar(jobz,(/'V','v'/)) .and. mene_found/=nvec_calc) then
     write(msg,'(5a)')&
-&    " The user supplied insufficient space and PZHEEVX is not able to detect this before beginning computation. ",ch10,&
+&    " The user supplied insufficient space and PAB_ZHEEVX is not able to detect this before beginning computation. ",ch10,&
 &    " To get all the  eigenvectors requested, the user must supply both sufficient space to hold the ",ch10,&
 &    " eigenvectors in Z (M .LE. DESCZ(N_)) and sufficient workspace to compute them. "
     MSG_ERROR(msg)
@@ -3278,17 +3278,17 @@ subroutine slk_pzheevx(jobz,range,uplo,Slk_mat,vl,vu,il,iu,abstol,Slk_vec,mene_f
     ABI_FREE(iclustr)
   end if
 
-end subroutine slk_pzheevx
+end subroutine slk_pAB_ZHEEVx
 !!***
 
 !----------------------------------------------------------------------
 
-!!****f* m_slk/slk_pzhegvx
+!!****f* m_slk/slk_pAB_ZHEGVx
 !! NAME
-!!  slk_pzhegvx
+!!  slk_pAB_ZHEGVx
 !!
 !! FUNCTION
-!!  slk_pzhegvx provides an object-oriented interface to the ScaLAPACK routine PZHEGVX that
+!!  slk_pAB_ZHEGVx provides an object-oriented interface to the ScaLAPACK routine PAB_ZHEGVX that
 !!  computes selected eigenvalues and, optionally, eigenvectors of a complex generalized
 !!  Hermitian-definite eigenproblem, of the form
 !!  sub( A )*x=(lambda)*sub( B )*x,  sub( A )*sub( B )x=(lambda)*x,  or sub( B )*sub( A )*x=(lambda)*x.
@@ -3339,7 +3339,7 @@ end subroutine slk_pzheevx
 !!         IU <= N.  Not referenced if RANGE = "A" or "V"
 !!
 !!  ABSTOL  (global input) DOUBLE PRECISION
-!!          If JOBZ="V", setting ABSTOL to PDLAMCH( CONTEXT, "U") yields the most orthogonal eigenvectors.
+!!          If JOBZ="V", setting ABSTOL to PAB_DLAMCH( CONTEXT, "U") yields the most orthogonal eigenvectors.
 !!          The  absolute error tolerance for the eigenvalues.  An approximate eigenvalue is accepted as converged when
 !!          it is determined to lie in an interval [a,b] of width less than or equal to
 !!
@@ -3348,8 +3348,8 @@ end subroutine slk_pzheevx
 !!          where EPS is the machine precision.  If ABSTOL is less than or equal to zero, then EPS*norm(T) will be used
 !!          in  its  place, where norm(T) is the 1-norm of the tridiagonal matrix obtained by reducing A to tridiagonal form.
 !!          Eigenvalues will be computed  most  accurately  when  ABSTOL  is  set  to  twice  the  underflow  threshold
-!!          2*PDLAMCH("S")  not  zero.   If  this routine returns with ((MOD(INFO,2).NE.0) .OR.  (MOD(INFO/8,2).NE.0)),
-!!          indicating that some eigenvalues or eigenvectors did not converge, try setting ABSTOL to 2*PDLAMCH("S").
+!!          2*PAB_DLAMCH("S")  not  zero.   If  this routine returns with ((MOD(INFO,2).NE.0) .OR.  (MOD(INFO/8,2).NE.0)),
+!!          indicating that some eigenvalues or eigenvectors did not converge, try setting ABSTOL to 2*PAB_DLAMCH("S").
 !!
 !! OUTPUT
 !!  mene_found= (global output) Total number of eigenvalues found.  0 <= mene_found <= N.
@@ -3408,13 +3408,13 @@ end subroutine slk_pzheevx
 !!
 !! SOURCE
 
-subroutine slk_pzhegvx(ibtype,jobz,range,uplo,Slk_matA,Slk_matB,vl,vu,il,iu,abstol,Slk_vec,mene_found,eigen)
+subroutine slk_pAB_ZHEGVx(ibtype,jobz,range,uplo,Slk_matA,Slk_matB,vl,vu,il,iu,abstol,Slk_vec,mene_found,eigen)
 
 
 !This section has been created automatically by the script Abilint (TD).
 !Do not modify the following lines by hand.
 #undef ABI_FUNC
-#define ABI_FUNC 'slk_pzhegvx'
+#define ABI_FUNC 'slk_pAB_ZHEGVx'
 !End of the abilint section
 
  implicit none
@@ -3445,7 +3445,7 @@ subroutine slk_pzhegvx(ibtype,jobz,range,uplo,Slk_matA,Slk_matB,vl,vu,il,iu,abst
 
 !************************************************************************
 
-! abstol = PDLAMCH(Slk_vecprocessor%grid%ictxt,'U')
+! abstol = PAB_DLAMCH(Slk_vecprocessor%grid%ictxt,'U')
 
  orfac  = -one ! Only for eigenvectors: use default value 10d-3.
 ! Vectors within orfac*norm(A) will be reorthogonalized.
@@ -3502,7 +3502,7 @@ subroutine slk_pzhegvx(ibtype,jobz,range,uplo,Slk_matA,Slk_matB,vl,vu,il,iu,abst
 !This is clearly seen in the source in which rwork(1:3) is accessed
 !during the calcuation of the workspace size.
 
- call pzhegvx(ibtype,jobz,range,uplo, Slk_matA%sizeb_global(2),Slk_matA%buffer_cplx,1,1,Slk_matA%descript%tab,&
+ call pAB_ZHEGVx(ibtype,jobz,range,uplo, Slk_matA%sizeb_global(2),Slk_matA%buffer_cplx,1,1,Slk_matA%descript%tab,&
 & Slk_matB%buffer_cplx,1,1,Slk_matB%descript%tab,&
 & vl,vu,il,iu,abstol,mene_found,nvec_calc,eigen,orfac,&
 & Slk_vec%buffer_cplx,1,1,Slk_vec%descript%tab,&
@@ -3547,8 +3547,8 @@ subroutine slk_pzhegvx(ibtype,jobz,range,uplo,Slk_matA,Slk_matB,vl,vu,il,iu,abst
 !
 !Call the scaLAPACK routine.
 
-!write(std_out,*) 'I am using PZHEGVX'
- call pzhegvx(ibtype,jobz,range,uplo, Slk_matA%sizeb_global(2),Slk_matA%buffer_cplx,1,1,Slk_matA%descript%tab,&
+!write(std_out,*) 'I am using PAB_ZHEGVX'
+ call pAB_ZHEGVx(ibtype,jobz,range,uplo, Slk_matA%sizeb_global(2),Slk_matA%buffer_cplx,1,1,Slk_matA%descript%tab,&
 & Slk_matB%buffer_cplx,1,1,Slk_matB%descript%tab,&
 & vl,vu,il,iu,abstol,mene_found,nvec_calc, eigen,orfac,&
 & Slk_vec%buffer_cplx,1,1,Slk_vec%descript%tab,&
@@ -3556,18 +3556,18 @@ subroutine slk_pzhegvx(ibtype,jobz,range,uplo,Slk_matA,Slk_matB,vl,vu,il,iu,abst
 
 !Handle the possible error.
  if (info < 0) then
-   write(msg,'(a,i7,a)')" The ",-info,"-th argument of PZHEGVX had an illegal value."
+   write(msg,'(a,i7,a)')" The ",-info,"-th argument of PAB_ZHEGVX had an illegal value."
    if (info==-25) msg = " LRWORK is too small to compute all the eigenvectors requested, no computation is performed"
    MSG_ERROR(msg)
  end if
 
  if (info > 0) then
-   write(msg,'(a,i7)') " PZHEGVX returned info: ",info
+   write(msg,'(a,i7)') " PAB_ZHEGVX returned info: ",info
    call wrtout(std_out,msg,"PERS")
    if (MOD(info,2)/=0)then
      write(msg,'(3a)')&
 &     " One or more eigenvectors failed to converge. ",ch10,&
-&     " Their indices are stored in IFAIL. Ensure ABSTOL=2.0*PDLAMCH('U')"
+&     " Their indices are stored in IFAIL. Ensure ABSTOL=2.0*PAB_DLAMCH('U')"
      call wrtout(std_out,msg,"PERS")
    end if
    if (MOD(info/2,2)/=0) then
@@ -3579,12 +3579,12 @@ subroutine slk_pzhegvx(ibtype,jobz,range,uplo,Slk_matA,Slk_matB,vl,vu,il,iu,abst
    end if
    if (MOD(info/4,2)/=0) then
      write(msg,'(3a)')&
-&     " Space limit prevented PZHEGVX from computing all of the eigenvectors between VL and VU. ",ch10,&
+&     " Space limit prevented PAB_ZHEGVX from computing all of the eigenvectors between VL and VU. ",ch10,&
 &     " The number of eigenvectors  computed  is returned in NZ."
      call wrtout(std_out,msg,"PERS")
    end if
    if (MOD(info/8,2)/=0) then
-     msg = " PZSTEBZ  failed to compute eigenvalues. Ensure ABSTOL=2.0*PDLAMCH('U')"
+     msg = " PZSTEBZ  failed to compute eigenvalues. Ensure ABSTOL=2.0*PAB_DLAMCH('U')"
      call wrtout(std_out,msg,"PERS")
    end if
    if (MOD(info/16,2)/=0) then
@@ -3599,7 +3599,7 @@ subroutine slk_pzhegvx(ibtype,jobz,range,uplo,Slk_matA,Slk_matB,vl,vu,il,iu,abst
 !Check the number of eigenvalues found wrt to the number of vectors calculated.
  if ( firstchar(jobz,(/'V','v'/)) .and. mene_found/=nvec_calc) then
    write(msg,'(5a)')&
-&   " The user supplied insufficient space and PZHEGVX is not able to detect this before beginning computation. ",ch10,&
+&   " The user supplied insufficient space and PAB_ZHEGVX is not able to detect this before beginning computation. ",ch10,&
 &   " To get all the  eigenvectors requested, the user must supply both sufficient space to hold the ",ch10,&
 &   " eigenvectors in Z (M .LE. DESCZ(N_)) and sufficient workspace to compute them. "
    MSG_ERROR(msg)
@@ -3615,7 +3615,7 @@ subroutine slk_pzhegvx(ibtype,jobz,range,uplo,Slk_matA,Slk_matB,vl,vu,il,iu,abst
  end if
  ABI_FREE(ifail)
 
-end subroutine slk_pzhegvx
+end subroutine slk_pAB_ZHEGVx
 !!***
 
 !----------------------------------------------------------------------
@@ -3668,32 +3668,32 @@ subroutine slk_zinvert(Slk_mat)
 
  ABI_CHECK(allocated(Slk_mat%buffer_cplx),"buffer_cplx not allocated")
 
-!IMPORTANT NOTE: PZGETRF requires square block decomposition i.e.,  MB_A = NB_A.
+!IMPORTANT NOTE: PAB_ZGETRF requires square block decomposition i.e.,  MB_A = NB_A.
  if ( Slk_mat%descript%tab(MB_)/=Slk_mat%descript%tab(NB_) ) then
-   msg =" PZGETRF requires square block decomposition i.e.,  MB_A = NB_A."
+   msg =" PAB_ZGETRF requires square block decomposition i.e.,  MB_A = NB_A."
    MSG_ERROR(msg)
  end if
 
  ipiv_size = my_locr(Slk_mat) + Slk_mat%descript%tab(MB_)
  ABI_MALLOC(ipiv,(ipiv_size))
 
- call PZGETRF(Slk_mat%sizeb_global(1),Slk_mat%sizeb_global(2),Slk_mat%buffer_cplx,&
+ call PAB_ZGETRF(Slk_mat%sizeb_global(1),Slk_mat%sizeb_global(2),Slk_mat%buffer_cplx,&
 & 1,1,Slk_mat%descript%tab,ipiv,info) ! P * L * U  Factorization.
 
  if (info/=0) then
-   write(msg,'(a,i7)')" PZGETRF returned info= ",info
+   write(msg,'(a,i7)')" PAB_ZGETRF returned info= ",info
    MSG_ERROR(msg)
  end if
 
-!Get optimal size of workspace for PZGETRI.
+!Get optimal size of workspace for PAB_ZGETRI.
  lwork=-1; liwork=-1
  ABI_MALLOC(work,(1))
  ABI_MALLOC(iwork,(1))
 
- call PZGETRI(Slk_mat%sizeb_global(1),Slk_mat%buffer_cplx,1,1,Slk_mat%descript%tab,ipiv,&
+ call PAB_ZGETRI(Slk_mat%sizeb_global(1),Slk_mat%buffer_cplx,1,1,Slk_mat%descript%tab,ipiv,&
 & work,lwork,iwork,liwork,info)
 
- ABI_CHECK(info==0,"PZGETRI: Error during compuation of workspace size")
+ ABI_CHECK(info==0,"PAB_ZGETRI: Error during compuation of workspace size")
 
  lwork = NINT(real(work(1))); liwork=iwork(1)
  ABI_FREE(work)
@@ -3703,11 +3703,11 @@ subroutine slk_zinvert(Slk_mat)
  ABI_MALLOC(work,(lwork))
  ABI_MALLOC(iwork,(liwork))
 
- call PZGETRI(Slk_mat%sizeb_global(1),Slk_mat%buffer_cplx,1,1,Slk_mat%descript%tab,ipiv,&
+ call PAB_ZGETRI(Slk_mat%sizeb_global(1),Slk_mat%buffer_cplx,1,1,Slk_mat%descript%tab,ipiv,&
 & work,lwork,iwork,liwork,info)
 
  if (info/=0) then
-   write(msg,'(a,i7)')" PZGETRI returned info= ",info
+   write(msg,'(a,i7)')" PAB_ZGETRI returned info= ",info
    MSG_ERROR(msg)
  end if
 
@@ -3775,23 +3775,23 @@ subroutine slk_zdhp_invert(Slk_mat,uplo)
 
  ABI_CHECK(allocated(Slk_mat%buffer_cplx),"buffer_cplx not allocated")
 
- ! *  ZPOTRF computes the Cholesky factorization of a complex Hermitian positive definite.
+ ! *  AB_ZPOTRF computes the Cholesky factorization of a complex Hermitian positive definite.
  ! *     A = U**H * U,   if UPLO = 'U', or
  ! *     A = L  * L**H,  if UPLO = 'L',
- call PZPOTRF(uplo,Slk_mat%sizeb_global(1),Slk_mat%buffer_cplx,1,1,Slk_mat%descript%tab,info)
+ call PAB_ZPOTRF(uplo,Slk_mat%sizeb_global(1),Slk_mat%buffer_cplx,1,1,Slk_mat%descript%tab,info)
 
  if (info/=0) then
-   write(msg,'(a,i0)')" PZPOTRF returned info= ",info
+   write(msg,'(a,i0)')" PAB_ZPOTRF returned info= ",info
    MSG_ERROR(msg)
  end if
  !
- ! PZPOTRI computes the inverse of a complex Hermitian positive definite
+ ! PAB_ZPOTRI computes the inverse of a complex Hermitian positive definite
  ! distributed matrix sub( A ) = A(IA:IA+N-1,JA:JA+N-1) using the
- ! Cholesky factorization sub( A ) = U**H*U or L*L**H computed by PZPOTRF.
- call PZPOTRI(uplo,Slk_mat%sizeb_global,Slk_mat%buffer_cplx,1,1,Slk_mat%descript%tab,info)
+ ! Cholesky factorization sub( A ) = U**H*U or L*L**H computed by PAB_ZPOTRF.
+ call PAB_ZPOTRI(uplo,Slk_mat%sizeb_global,Slk_mat%buffer_cplx,1,1,Slk_mat%descript%tab,info)
 
  if (info/=0) then
-   write(msg,'(a,i0)')" PZPOTRI returned info= ",info
+   write(msg,'(a,i0)')" PAB_ZPOTRI returned info= ",info
    MSG_ERROR(msg)
  end if
 
@@ -4093,7 +4093,7 @@ subroutine slk_read(Slk_mat,uplo,symtype,is_fortran_file,fname,mpi_fh,offset,fla
  logical :: do_open
  integer :: comm,my_flags,my_fh,buffer_size,ierr,col_glob
  integer :: nfrec,bsize_elm,mpi_type_elm
- complex(dpc) :: ctest
+ complex(dpc) :: AB_CTEST
  logical,parameter :: check_frm=.TRUE.
  integer(XMPI_OFFSET_KIND),allocatable :: bsize_frecord(:)
 !arrays
@@ -4155,10 +4155,10 @@ subroutine slk_read(Slk_mat,uplo,symtype,is_fortran_file,fname,mpi_fh,offset,fla
  call slk_symmetrize(Slk_mat,uplo,symtype)
 
 !BEGINDEBUG
-!call MPI_FILE_READ_AT(mpi_fh,my_offset+xmpio_bsize_frm,ctest,1,MPI_DOUBLE_complex,MPI_STATUS_IGNORE,ierr)
-!write(std_out,*)"ctest",ctest
-!call MPI_FILE_READ_AT(mpi_fh,my_offset+2*xmpio_bsize_frm,ctest,1,MPI_DOUBLE_complex,MPI_STATUS_IGNORE,ierr)
-!write(std_out,*)"ctest",ctest
+!call MPI_FILE_READ_AT(mpi_fh,my_offset+xmpio_bsize_frm,AB_CTEST,1,MPI_DOUBLE_complex,MPI_STATUS_IGNORE,ierr)
+!write(std_out,*)"AB_CTEST",AB_CTEST
+!call MPI_FILE_READ_AT(mpi_fh,my_offset+2*xmpio_bsize_frm,AB_CTEST,1,MPI_DOUBLE_complex,MPI_STATUS_IGNORE,ierr)
+!write(std_out,*)"AB_CTEST",AB_CTEST
 !ENDDEBUG
 
  !call print_arr(Slk_mat%buffer_cplx,max_r=10,max_c=10,unit=std_out,mode_paral="PERS")
@@ -5159,7 +5159,7 @@ end subroutine slk_my_rclist
 !!  no_scalapack
 !!
 !! FUNCTION
-!!   Empty placeholder.
+!!   Empty placehoAB_LDEr.
 !!
 !! PARENTS
 !!

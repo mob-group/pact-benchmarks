@@ -93,19 +93,19 @@ subroutine prt_mem_usage(nptrec,nfft)
   integer,intent(in) :: nptrec,nfft
 !Local ---------------------------
   integer :: ii
-  integer(kind=i4b) :: largeur,clargeur
+  integer(kind=i4b) :: largeur,AB_CLARGEur
   real(dp):: totmem,rpart
   character(500) :: msg
 ! *********************************************************************
 
   largeur  = cudap*nfft
-  clargeur = cudap*nfft*2
+  AB_CLARGEur = cudap*nfft*2
   !for CUDA version <3.0 :
   !   rpart = 3.d0*real(largeur,dp)/1048576.d0*real(nptrec,dp)
-  !   totmem = rpart+real(2*clargeur+largeur+(2*cudap+i2b)*nptrec,dp)/1048576.d0
+  !   totmem = rpart+real(2*AB_CLARGEur+largeur+(2*cudap+i2b)*nptrec,dp)/1048576.d0
   !for CUDA version 3.0 :
     rpart = 6.d0*real(largeur,dp)/1048576.d0*real(nptrec,dp)
-    totmem = rpart+real(clargeur+largeur+(2*cudap+i2b)*nptrec,dp)/1048576.d0
+    totmem = rpart+real(AB_CLARGEur+largeur+(2*cudap+i2b)*nptrec,dp)/1048576.d0
 
   write(msg,'(a,80a)')' ',('_',ii=1,80)
   call wrtout(std_out,msg,'COLL')
@@ -117,7 +117,7 @@ subroutine prt_mem_usage(nptrec,nfft)
     & '   Number of Points            ',nfft  ,ch10, &
     & '   Number of Vectors           ',nptrec,ch10, &
     & '   Size Real Vectors           ',largeur ,'bytes',ch10, &
-    & '   Size Complex Vectors        ',clargeur,'bytes',ch10, &
+    & '   Size Complex Vectors        ',AB_CLARGEur,'bytes',ch10, &
     & '   Size Matrix of Vectors      ',real(largeur*nptrec,dp)/1048576.d0,'Mbytes',ch10, &
     & '   Allocated Memory on GPU     ',totmem,'Mbytes',ch10
   call wrtout(std_out,msg,'COLL')

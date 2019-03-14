@@ -114,8 +114,8 @@
       REAL               AA, BB, CC, DD, AB, CD, S, OV, UN, BE, EPS
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_SLADIV1
@@ -133,9 +133,9 @@
       CD = MAX( ABS(C), ABS(D) )
       S = 1.0E0
 
-      OV = SLAMCH( 'Overflow threshold' )
-      UN = SLAMCH( 'Safe minimum' )
-      EPS = SLAMCH( 'Epsilon' )
+      OV = AB_SLAMCH( 'Overflow threshold' )
+      UN = AB_SLAMCH( 'Safe minimum' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       BE = BS / (EPS*EPS)
 
       IF( AB >= HALF*OV ) THEN

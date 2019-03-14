@@ -153,8 +153,8 @@
       REAL               ANORM, EPS, RESID
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLANGE, SLANSY
-      EXTERNAL           SLAMCH, SLANGE, SLANSY
+      REAL               AB_SLAMCH, SLANGE, SLANSY
+      EXTERNAL           AB_SLAMCH, SLANGE, SLANSY
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGEMM, SGEQLF, SLACPY, SLASET, SORGQL, SSYRK
@@ -171,7 +171,7 @@
 *     .. Executable Statements ..
 *
       MINMN = MIN( M, N )
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
 *
 *     Copy the matrix A to the array AF.
 *

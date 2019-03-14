@@ -201,8 +201,8 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            IZAMAX
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           LSAME, IZAMAX, DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           LSAME, IZAMAX, AB_DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX, MIN
@@ -223,8 +223,8 @@
          RETURN
       END IF
 *
-      EPS = DLAMCH( 'Epsilon' )
-      UNFL = DLAMCH( 'Safe minimum' )
+      EPS = AB_DLAMCH( 'Epsilon' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
       UPPER = LSAME( UPLO, 'U' )
       NZ = 2*MAX( KD, N-1 ) + 1

@@ -472,10 +472,10 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      REAL               SLAMCH
+      REAL               AB_SLAMCH
       EXTERNAL           AB_CLACN2, AB_CLACPY, AB_CLASSQ, AB_CSCAL, AB_C
      $TGEXC, AB_CTGSYL,
-     $                   SLAMCH, AB_XERBLA
+     $                   AB_SLAMCH, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CMPLX, CONJG, MAX, SQRT
@@ -580,7 +580,7 @@
 *
 *     Get machine constant
 *
-      SAFMIN = SLAMCH( 'S' )
+      SAFMIN = AB_SLAMCH( 'S' )
 *
 *     Collect the selected blocks at the top-left corner of (A, B).
 *

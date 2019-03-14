@@ -171,8 +171,8 @@
      $                   TMP2, TNORM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL   DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL   AB_DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, INT, LOG, MAX
@@ -187,7 +187,7 @@
       END IF
 *
 *     Get machine constants
-      EPS = DLAMCH( 'P' )
+      EPS = AB_DLAMCH( 'P' )
 
       TNORM = MAX( ABS( GL ), ABS( GU ) )
       RTOLI = RELTOL

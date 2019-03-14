@@ -325,8 +325,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME
-      DOUBLE PRECISION   DLAMCH, AB_ZLANHS
-      EXTERNAL           AB_LSAME, DLAMCH, AB_ZLANHS
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANHS
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_ZLANHS
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_XERBLA, AB_ZLARTG, AB_ZLASET, AB_ZROT, AB_ZS
@@ -435,8 +435,8 @@
 *     Machine Constants
 *
       IN = IHI + 1 - ILO
-      SAFMIN = DLAMCH( 'S' )
-      ULP = DLAMCH( 'E' )*DLAMCH( 'B' )
+      SAFMIN = AB_DLAMCH( 'S' )
+      ULP = AB_DLAMCH( 'E' )*AB_DLAMCH( 'B' )
       ANORM = AB_ZLANHS( 'F', IN, H( ILO, ILO ), LDH, RWORK )
       BNORM = AB_ZLANHS( 'F', IN, T( ILO, ILO ), LDT, RWORK )
       ATOL = MAX( SAFMIN, ULP*ANORM )

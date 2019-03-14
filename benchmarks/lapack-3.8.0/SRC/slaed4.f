@@ -179,8 +179,8 @@
       REAL               ZZ( 3 )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_SLAED5, AB_SLAED6
@@ -211,7 +211,7 @@
 *
 *     Compute machine epsilon
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       RHOINV = ONE / RHO
 *
 *     The case I = N

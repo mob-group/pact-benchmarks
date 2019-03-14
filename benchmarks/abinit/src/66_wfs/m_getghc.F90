@@ -1429,7 +1429,7 @@ end subroutine multithreaded_getghc
 !! NOTES
 !!  This routine applies the Hamiltonian due to an array of magnetic dipoles located
 !!  at the atomic nuclei to the input wavefunction. Strategy below is to take advantage of
-!!  Hermiticity to store H_ND in triangular form and then use a BLAS call to zhpmv to apply to
+!!  Hermiticity to store H_ND in triangular form and then use a BLAS call to AB_ZHPMV to apply to
 !!  input vector in one shot.
 !! Application of <k^prime|H|k> or <k|H|k^prime> not implemented!
 !!
@@ -1437,7 +1437,7 @@ end subroutine multithreaded_getghc
 !!      getghc
 !!
 !! CHILDREN
-!!      zhpmv
+!!      AB_ZHPMV
 !!
 !! SOURCE
 
@@ -1494,9 +1494,9 @@ subroutine getghcnd(cwavef,ghcnd,gs_ham,my_nspinor,ndat)
    inwave(1:gs_ham%npw_k) = cmplx(cwavef(1,1:gs_ham%npw_k),cwavef(2,1:gs_ham%npw_k),kind=dpc)
 
     ! apply hamiltonian hgg to input wavefunction inwave, result in hggc
-    ! ZHPMV is a level-2 BLAS routine, does Matrix x Vector multiplication for double complex
+    ! AB_ZHPMV is a level-2 BLAS routine, does Matrix x Vector multiplication for double complex
     ! objects, with the matrix as Hermitian in packed storage
-   call ZHPMV('L',cwavedim,cone,gs_ham%nucdipmom_k,inwave,1,czero,hggc,1)
+   call AB_ZHPMV('L',cwavedim,cone,gs_ham%nucdipmom_k,inwave,1,czero,hggc,1)
 
    ghcnd(1,1:gs_ham%npw_k) = real(hggc)
    ghcnd(2,1:gs_ham%npw_k) = aimag(hggc)

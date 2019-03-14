@@ -112,15 +112,15 @@
       INTEGER            ISEED( 4 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION DLAMCH
+      DOUBLE PRECISION AB_DLAMCH
       DOUBLE PRECISION ZLANGE, ZLANSY
       LOGICAL  LSAME
-      EXTERNAL DLAMCH, ZLANGE, ZLANSY, LSAME
+      EXTERNAL AB_DLAMCH, ZLANGE, ZLANSY, LSAME
 *     ..
 *     .. Data statements ..
       DATA ISEED / 1988, 1989, 1990, 1991 /
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       K = M
       N2 = M+N
       IF( N.GT.0 ) THEN

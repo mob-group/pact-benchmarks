@@ -52,7 +52,7 @@ contains
 !! outxml_open
 !!
 !! FUNCTION
-!! Open the XML log file, and write the header inside.
+!! Open the XML log file, and write the AB_HEADER inside.
 !! (see extras/post_processing/abinitRun.dtd)
 !! Warning: this method is not thread safe and should be called only by one thread.
 !!

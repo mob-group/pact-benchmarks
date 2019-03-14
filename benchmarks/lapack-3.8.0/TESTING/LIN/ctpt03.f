@@ -190,8 +190,8 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ICAMAX
-      REAL               SLAMCH
-      EXTERNAL           LSAME, ICAMAX, SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           LSAME, ICAMAX, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CAXPY, CCOPY, CSSCAL, CTPMV
@@ -207,8 +207,8 @@
          RESID = ZERO
          RETURN
       END IF
-      EPS = SLAMCH( 'Epsilon' )
-      SMLNUM = SLAMCH( 'Safe minimum' )
+      EPS = AB_SLAMCH( 'Epsilon' )
+      SMLNUM = AB_SLAMCH( 'Safe minimum' )
 *
 *     Compute the norm of the triangular matrix A using the column
 *     norms already computed by CLATPS.

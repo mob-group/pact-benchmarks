@@ -285,8 +285,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME
-      REAL               SLAMCH
-      EXTERNAL           AB_LSAME, SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_SLARTG, AB_SLAS2, AB_SLASQ1, AB_SLASR, AB_SL
@@ -352,8 +352,8 @@
 *
 *     Get machine constants
 *
-      EPS = SLAMCH( 'Epsilon' )
-      UNFL = SLAMCH( 'Safe minimum' )
+      EPS = AB_SLAMCH( 'Epsilon' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
 *
 *     If matrix lower bidiagonal, rotate to be upper bidiagonal
 *     by applying Givens rotations on the left

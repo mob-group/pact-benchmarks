@@ -140,9 +140,9 @@ contains
 !!      vtorho
 !!
 !! CHILDREN
-!!      build_h,cgwf,chebfi,dsymm,fourwf,fxphas,lobpcgwf,lobpcgwf2,meanvalue_g
+!!      build_h,cgwf,chebfi,AB_DSYMM,fourwf,fxphas,lobpcgwf,lobpcgwf2,meanvalue_g
 !!      nonlop,pawcprj_alloc,pawcprj_copy,pawcprj_free,pawcprj_put,prep_fourwf
-!!      prep_nonlop,pw_orthon,subdiago,timab,wrtout,xmpi_sum,zhemm
+!!      prep_nonlop,pw_orthon,subdiago,timab,wrtout,xmpi_sum,AB_ZHEMM
 !!
 !! NOTES
 !!  The cprj are distributed over band and spinors processors.
@@ -833,7 +833,7 @@ subroutine vtowfk(cg,cgq,cprj,cpus,dphase_k,dtefield,dtfil,dtset,&
      enl_k(1:nband_k)=zero
 
      if (istwf_k==1) then
-       call zhemm('l','l',nband_k,nband_k,cone,totvnl,nband_k,evec,nband_k,czero,mat1,nband_k)
+       call AB_ZHEMM('l','l',nband_k,nband_k,cone,totvnl,nband_k,evec,nband_k,czero,mat1,nband_k)
        do iband=1,nband_k
          res = cg_real_zdotc(nband_k,evec(:,iband),mat1(:,:,iband))
          enl_k(iband)= res
@@ -846,9 +846,9 @@ subroutine vtowfk(cg,cgq,cprj,cpus,dphase_k,dtefield,dtfil,dtset,&
            evec_loc(iband,jj)=evec(2*iband-1,jj)
          end do
        end do
-       call dsymm('l','l',nband_k,nband_k,one,totvnl,nband_k,evec_loc,nband_k,zero,mat_loc,nband_k)
+       call AB_DSYMM('l','l',nband_k,nband_k,one,totvnl,nband_k,evec_loc,nband_k,zero,mat_loc,nband_k)
        do iband=1,nband_k
-         enl_k(iband)=ddot(nband_k,evec_loc(:,iband),1,mat_loc(:,iband),1)
+         enl_k(iband)=AB_DDOT(nband_k,evec_loc(:,iband),1,mat_loc(:,iband),1)
        end do
        ABI_DEALLOCATE(evec_loc)
        ABI_DEALLOCATE(mat_loc)
@@ -866,7 +866,7 @@ subroutine vtowfk(cg,cgq,cprj,cpus,dphase_k,dtefield,dtfil,dtset,&
        end do
      end do
 
-     call zhemm('L','U',nband_k,nband_k,cone,matvnl,nband_k,evec,nband_k,czero,mat1,nband_k)
+     call AB_ZHEMM('L','U',nband_k,nband_k,cone,matvnl,nband_k,evec,nband_k,czero,mat1,nband_k)
 
 !$OMP PARALLEL DO PRIVATE(res)
      do iband=1,nband_k
@@ -1175,7 +1175,7 @@ subroutine fxphas(cg,gsc,icg,igsc,istwfk,mcg,mgsc,mpi_enreg,nband_k,npw_k,useove
      cimb(:)=buffer2(:,2)
    end if
 
-!  MG TODO: Scaling can be done with zscal
+!  MG TODO: Scaling can be done with AB_ZSCAL
 !$OMP PARALLEL DO PRIVATE(indx,xx,yy,cre,cim,gscre,gscim)
    do iband=1,nband_k
      indx=icg+(iband-1)*npw_k

@@ -247,8 +247,8 @@
       INTEGER, ALLOCATABLE :: IWORK (:)
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DASUM, DLAMCH, ZQRT12, ZQRT14, ZQRT17
-      EXTERNAL           DASUM, DLAMCH, ZQRT12, ZQRT14, ZQRT17
+      DOUBLE PRECISION   DASUM, AB_DLAMCH, ZQRT12, ZQRT14, ZQRT17
+      EXTERNAL           DASUM, AB_DLAMCH, ZQRT12, ZQRT14, ZQRT17
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASVM, DAXPY, DLASRT, XLAENV,
@@ -283,7 +283,7 @@
       DO 10 I = 1, 4
          ISEED( I ) = ISEEDY( I )
    10 CONTINUE
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
 *
 *     Threshold for rank estimation
 *

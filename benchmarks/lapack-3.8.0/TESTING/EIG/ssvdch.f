@@ -123,8 +123,8 @@
       REAL               EPS, LOWER, OVFL, TUPPR, UNFL, UNFLEP, UPPER
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SSVDCT
@@ -139,9 +139,9 @@
       INFO = 0
       IF( N.LE.0 )
      $   RETURN
-      UNFL = SLAMCH( 'Safe minimum' )
-      OVFL = SLAMCH( 'Overflow' )
-      EPS = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
+      OVFL = AB_SLAMCH( 'Overflow' )
+      EPS = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
 *
 *     UNFLEP is chosen so that when an eigenvalue is multiplied by the
 *     scale factor sqrt(OVFL)*sqrt(sqrt(UNFL))/MX in SSVDCT, it exceeds

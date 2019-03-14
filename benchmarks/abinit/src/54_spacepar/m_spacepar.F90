@@ -1919,7 +1919,7 @@ subroutine irrzg(irrzon,nspden,nsppol,nsym,n1,n2,n3,phnons,symafm,symrel,tnons)
 &       '  =>irrzon goes outside acceptable bounds.'
        MSG_BUG(message)
      end if
-!    Second index only goes up to nzone
+!    second index only goes up to nzone
      if(izonemax==0)then
        if (irrzon(izone,2,imagn)==0)izonemax=izone-1
      end if

@@ -165,8 +165,8 @@
      $                   THREE = 3.0D0, FOUR = 4.0D0, EIGHT = 8.0D0 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. Local Arrays ..
       DOUBLE PRECISION   AB_DSCALE( 3 ), AB_ZSCALE( 3 )
@@ -248,9 +248,9 @@
 *     SMINV2, EPS are not SAVEd anymore between one call to the
 *     others but recomputed at each call
 *
-      EPS = DLAMCH( 'Epsilon' )
-      BASE = DLAMCH( 'Base' )
-      SMALL1 = BASE**( INT( LOG( DLAMCH( 'SafMin' ) ) / LOG( BASE ) /
+      EPS = AB_DLAMCH( 'Epsilon' )
+      BASE = AB_DLAMCH( 'Base' )
+      SMALL1 = BASE**( INT( LOG( AB_DLAMCH( 'SafMin' ) ) / LOG( BASE ) /
      $         THREE ) )
       SMINV1 = ONE / SMALL1
       SMALL2 = SMALL1*SMALL1

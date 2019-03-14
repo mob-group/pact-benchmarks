@@ -336,8 +336,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           AB_LSAME, DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_LSAME, AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_DGEMV, AB_DLABAD, AB_DLACPY, AB_DLAG2, AB_DL
@@ -465,10 +465,10 @@
 *
 *     Machine Constants
 *
-      SAFMIN = DLAMCH( 'Safe minimum' )
+      SAFMIN = AB_DLAMCH( 'Safe minimum' )
       BIG = ONE / SAFMIN
       CALL AB_DLABAD( SAFMIN, BIG )
-      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
+      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
       SMALL = SAFMIN*N / ULP
       BIG = ONE / SMALL
       BIGNUM = ONE / ( SAFMIN*N )

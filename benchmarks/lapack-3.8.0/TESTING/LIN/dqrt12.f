@@ -112,8 +112,8 @@
       DOUBLE PRECISION   ANRM, BIGNUM, NRMSVL, SMLNUM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DASUM, DLAMCH, DLANGE, DNRM2
-      EXTERNAL           DASUM, DLAMCH, DLANGE, DNRM2
+      DOUBLE PRECISION   DASUM, AB_DLAMCH, DLANGE, DNRM2
+      EXTERNAL           DASUM, AB_DLAMCH, DLANGE, DNRM2
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DAXPY, DBDSQR, DGEBD2, DLABAD, DLASCL, DLASET,
@@ -156,7 +156,7 @@
 *
 *     Get machine parameters
 *
-      SMLNUM = DLAMCH( 'S' ) / DLAMCH( 'P' )
+      SMLNUM = AB_DLAMCH( 'S' ) / AB_DLAMCH( 'P' )
       BIGNUM = ONE / SMLNUM
       CALL DLABAD( SMLNUM, BIGNUM )
 *
@@ -211,7 +211,7 @@
 *
       CALL DAXPY( MN, -ONE, S, 1, WORK( M*N+1 ), 1 )
       DQRT12 = DASUM( MN, WORK( M*N+1 ), 1 ) /
-     $         ( DLAMCH( 'Epsilon' )*DBLE( MAX( M, N ) ) )
+     $         ( AB_DLAMCH( 'Epsilon' )*DBLE( MAX( M, N ) ) )
       IF( NRMSVL.NE.ZERO )
      $   DQRT12 = DQRT12 / NRMSVL
 *

@@ -120,8 +120,8 @@
       INTEGER            INFO, J
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLANGE
-      EXTERNAL           SLAMCH, SLANGE
+      REAL               AB_SLAMCH, SLANGE
+      EXTERNAL           AB_SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SLASET, SORM2R, XERBLA
@@ -165,7 +165,7 @@
    10 CONTINUE
 *
       SQRT11 = SLANGE( 'One-norm', M, M, WORK, M, RDUMMY ) /
-     $         ( REAL( M )*SLAMCH( 'Epsilon' ) )
+     $         ( REAL( M )*AB_SLAMCH( 'Epsilon' ) )
 *
       RETURN
 *

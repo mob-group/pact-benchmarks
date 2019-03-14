@@ -120,7 +120,7 @@ program mrgddb
      chkopt = 0
 
    else if (arg == "-f") then
-     cannot_overwrite = .False.
+     cannot_overwrite = .false.
 
    else if (arg == "-h" .or. arg == "--help") then
      ! Document the options.

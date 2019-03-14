@@ -1226,7 +1226,7 @@ SUBROUTINE Ctqmc_setMu(this, levels)
     CALL WARNALL("Ctqmc_setMu : Taking energy levels from weiss G(iw)")
 
   this%mu(:)=-levels  ! levels = \epsilon_j - \mu
-  !this%mu =\tilde{\mu} = \mu -\epsilon_j
+  !this%mu =\tiAB_LDE{\mu} = \mu -\epsilon_j
   CALL ImpurityOperator_setMu(this%Impurity,this%mu)
   this%opt_levels = 1
 END SUBROUTINE Ctqmc_setMu

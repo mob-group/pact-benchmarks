@@ -183,8 +183,8 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ISAMAX
-      REAL               SLAMCH
-      EXTERNAL           LSAME, ISAMAX, SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           LSAME, ISAMAX, AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL, SIGN
@@ -234,7 +234,7 @@
 *
 *     Machine constants
 *
-      ULP = SLAMCH( 'Precision' )
+      ULP = AB_SLAMCH( 'Precision' )
 *
       IF( IRC.EQ.0 ) THEN
 *

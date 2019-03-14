@@ -418,8 +418,8 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_ILAENV
-      DOUBLE PRECISION   DLAMCH, AB_DLANGE
-      EXTERNAL           AB_LSAME, AB_ILAENV, DLAMCH, AB_DLANGE
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANGE
+      EXTERNAL           AB_LSAME, AB_ILAENV, AB_DLAMCH, AB_DLANGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -549,8 +549,8 @@
 *
 *     Get machine constants
 *
-      EPS = DLAMCH( 'P' )
-      SAFMIN = DLAMCH( 'S' )
+      EPS = AB_DLAMCH( 'P' )
+      SAFMIN = AB_DLAMCH( 'S' )
       SAFMAX = ONE / SAFMIN
       CALL AB_DLABAD( SAFMIN, SAFMAX )
       SMLNUM = SQRT( SAFMIN ) / EPS

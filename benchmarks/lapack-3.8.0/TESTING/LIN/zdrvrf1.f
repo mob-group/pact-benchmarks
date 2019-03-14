@@ -131,8 +131,8 @@
 *     ..
 *     .. External Functions ..
       COMPLEX*16         ZLARND
-      DOUBLE PRECISION   DLAMCH, ZLANHE, ZLANHF
-      EXTERNAL           DLAMCH, ZLARND, ZLANHE, ZLANHF
+      DOUBLE PRECISION   AB_DLAMCH, ZLANHE, ZLANHF
+      EXTERNAL           AB_DLAMCH, ZLARND, ZLANHE, ZLANHF
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZTRTTF
@@ -161,8 +161,8 @@
          ISEED( I ) = ISEEDY( I )
    10 CONTINUE
 *
-      EPS = DLAMCH( 'Precision' )
-      SMALL = DLAMCH( 'Safe minimum' )
+      EPS = AB_DLAMCH( 'Precision' )
+      SMALL = AB_DLAMCH( 'Safe minimum' )
       LARGE = ONE / SMALL
       SMALL = SMALL * LDA * LDA
       LARGE = LARGE / LDA / LDA

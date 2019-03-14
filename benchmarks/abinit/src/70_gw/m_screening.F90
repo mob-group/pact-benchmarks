@@ -147,7 +147,7 @@ MODULE m_screening
   ! Frequencies used both along the real and the imaginary axis.
 
   type(hscr_t) :: Hscr
-  ! The header reported in the _SCR of _SUSC file.
+  ! The AB_HEADER reported in the _SCR of _SUSC file.
   ! This object contains information on the susceptibility or the inverse dielectric matrix
   ! as stored in the external file. These quantities do *NOT* correspond to the quantities
   ! used during the GW calculation since some parameters might differ, actually they might be smaller.
@@ -267,7 +267,7 @@ CONTAINS  !=====================================================================
 !!
 !! FUNCTION
 !! Deallocate all the pointers in Er that result to be associated.
-!! Perform also a cleaning of the Header.
+!! Perform also a cleaning of the AB_HEADER.
 !!
 !! INPUTS
 !!
@@ -523,7 +523,7 @@ end subroutine em1results_print
 !!  since we have to consider G-G0. The code however stops in sigma if a nonzero G0 is required
 !!  to reconstruct the BZ.
 !!
-!!  * Remember the symmetry properties of \tilde\espilon^{-1}
+!!  * Remember the symmetry properties of \tiAB_LDE\espilon^{-1}
 !!    If q_bz=Sq_ibz+G0:
 !!
 !!    $\epsilon^{-1}_{SG1-G0,SG2-G0}(q_bz) = e^{+iS(G2-G1).\tau}\epsilon^{-1}_{G1,G2)}(q)
@@ -657,7 +657,7 @@ end subroutine Epsm1_symmetrizer
 !!  since we have to consider G-G0. The code however stops in sigma if a nonzero G0 is required
 !!  to reconstruct the BZ.
 !!
-!!  * Remember the symmetry properties of \tilde\espilon^{-1}
+!!  * Remember the symmetry properties of \tiAB_LDE\espilon^{-1}
 !!    If q_bz=Sq_ibz+G0:
 !!
 !!    $\epsilon^{-1}_{SG1-G0,SG2-G0}(q_bz) = e^{+iS(G2-G1).\tau}\epsilon^{-1}_{G1,G2)}(q)
@@ -810,11 +810,11 @@ subroutine init_Er_from_file(Er,fname,mqmem,npwe_asked,comm)
  !@Epsilonm1_results
  my_rank = xmpi_comm_rank(comm)
 
- ! Read header from file.
+ ! Read AB_HEADER from file.
  call wrtout(std_out,sjoin('init_Er_from_file- testing file: ',fname),'COLL')
  call hscr_from_file(Er%hscr, fname, fform, comm)
 
- ! Master echoes the header.
+ ! Master echoes the AB_HEADER.
  if (my_rank==master) call hscr_print(er%hscr)
 
  ! Generic Info
@@ -1016,7 +1016,7 @@ subroutine mkdump_Er(Er,Vcp,npwe,gvec,nkxc,kxcg,id_required,approx_type,&
    !   for a subsequent use or calculate e^-1 keeping everything in memory.
 
    if (Er%mqmem==0) then
-     ! === Open file and write the header for the SCR file ===
+     ! === Open file and write the AB_HEADER for the SCR file ===
      ! * For the moment only master works.
 
      if (my_rank==master) then
@@ -1032,7 +1032,7 @@ subroutine mkdump_Er(Er,Vcp,npwe,gvec,nkxc,kxcg,id_required,approx_type,&
        end if
        call wrtout(std_out,sjoin('mkdump_Er: calculating and writing epsilon^-1 matrix on file: ',ofname),'COLL')
 
-       ! Update the entries in the header that have been modified.
+       ! Update the entries in the AB_HEADER that have been modified.
        ! TODO, write function to return title, just for info
        call hscr_copy(Er%Hscr,Hscr_cp)
        Hscr_cp%ID = id_required
@@ -1349,9 +1349,9 @@ subroutine decompose_epsm1(Er,iqibz,eigs)
      Afull=Er%epsm1(:,:,iw,iqibz)
 
      !for the moment no sort, maybe here I should sort using the real part?
-     call ZGEES('V','N',sortcplx,npwe,Afull,npwe,sdim,wwc,vs,npwe,work,lwork,rwork,bwork,info)
+     call AB_ZGEES('V','N',sortcplx,npwe,Afull,npwe,sdim,wwc,vs,npwe,work,lwork,rwork,bwork,info)
      if (info/=0) then
-       MSG_ERROR(sjoin("ZGEES returned info:",itoa(info)))
+       MSG_ERROR(sjoin("AB_ZGEES returned info:",itoa(info)))
      end if
 
      eigs(:,iw)=wwc(:)
@@ -1382,9 +1382,9 @@ subroutine decompose_epsm1(Er,iqibz,eigs)
      end do
 
      ! For the moment we require also the eigenvectors.
-     call ZHPEV('V','U',npwe,Adpp,ww,eigvec,npwe,work,rwork,info)
+     call AB_ZHPEV('V','U',npwe,Adpp,ww,eigvec,npwe,work,rwork,info)
      if (info/=0) then
-       MSG_ERROR(sjoin('ZHPEV returned info=', itoa(info)))
+       MSG_ERROR(sjoin('AB_ZHPEV returned info=', itoa(info)))
      end if
 
      negw=(COUNT((REAL(ww)<tol6)))
@@ -1426,7 +1426,7 @@ end subroutine decompose_epsm1
 !!  from the irreducible polarizability. The routine considers a single q-point, and
 !!  performs the following tasks:
 !!
-!!  1) Calculate $\tilde\epsilon^{-1}$ using different approximations:
+!!  1) Calculate $\tiAB_LDE\epsilon^{-1}$ using different approximations:
 !!      * RPA
 !!      * ALDA within TDDFT
 !!
@@ -1972,7 +1972,7 @@ end subroutine make_epsm1_driver
 !! rpa_symepsm1
 !!
 !! FUNCTION
-!!  Calculate RPA $\tilde\epsilon^{-1}$
+!!  Calculate RPA $\tiAB_LDE\epsilon^{-1}$
 !!
 !!  Use a special treatment of non-Analytic behavior of heads and wings in reciprocal space
 !!  calculating these quantities for different small q-directions specified by the user
@@ -2127,7 +2127,7 @@ end subroutine rpa_symepsm1
 !! atddft_symepsm1
 !!
 !! FUNCTION
-!!  Calculate $\tilde\epsilon^{-1}$ using ALDA within TDDFT
+!!  Calculate $\tiAB_LDE\epsilon^{-1}$ using ALDA within TDDFT
 !!
 !!  2) Use a special treatment of non-Analytic behavior of heads and wings in reciprocal space
 !!     calculating these quantities for different small q-directions specified by the user
@@ -2357,7 +2357,7 @@ end subroutine atddft_symepsm1
 !!  Let q be a versor in reciprocal space, the symmetrized dielectric matrix with bare coulomb interaction
 !!  can be written as
 !!
-!!  \tilde\epsilon = | q.Eq      q.Wl(G2) |  where   E_ij = \delta_ij -4\pi chi0_head_ij
+!!  \tiAB_LDE\epsilon = | q.Eq      q.Wl(G2) |  where   E_ij = \delta_ij -4\pi chi0_head_ij
 !!                   | q.Wl(G1)  B(G1,G2  |          Wl(G1) = -4\pi chi0_lwing(G1)
 !!                                                   Wu(G2) = -4\pi chi0_uwing(G1)
 !!  therefore, in Cartesian coordinates, we have:
@@ -2986,7 +2986,7 @@ subroutine screen_mdielf(iq_bz,npw,nomega,model_type,eps_inf,Cryst,Qmesh,Vcp,Gsp
    call xmpi_sum(w_qbz(:,:,iw),comm,ierr)
  end do
  !
- ! Calculate the symmetrized Em1. W = vc(G1)^{1/2} \tilde Em1 vc(G2)^{1/2} -------------------------
+ ! Calculate the symmetrized Em1. W = vc(G1)^{1/2} \tiAB_LDE Em1 vc(G2)^{1/2} -------------------------
  if (toupper(which)=="EM1") then
    do ig=1,npw
      isg = Gsph%rottb(ig,itim_q,isym_q)

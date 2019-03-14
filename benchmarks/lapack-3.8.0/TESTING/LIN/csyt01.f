@@ -156,8 +156,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               CLANSY, SLAMCH
-      EXTERNAL           LSAME, CLANSY, SLAMCH
+      REAL               CLANSY, AB_SLAMCH
+      EXTERNAL           LSAME, CLANSY, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CLASET, CLAVSY
@@ -176,7 +176,7 @@
 *
 *     Determine EPS and the norm of A.
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       ANORM = CLANSY( '1', UPLO, N, A, LDA, RWORK )
 *
 *     Initialize C to the identity matrix.

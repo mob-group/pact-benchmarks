@@ -363,8 +363,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME
-      REAL               AB_CLANGE, SLAMCH
-      EXTERNAL           AB_LSAME, AB_CLANGE, SLAMCH
+      REAL               AB_CLANGE, AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_CLANGE, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_CGGSVP, AB_CTGSJA, AB_SCOPY, AB_XERBLA
@@ -417,8 +417,8 @@
 *     Get machine precision and set up threshold for determining
 *     the effective numerical rank of the matrices A and B.
 *
-      ULP = SLAMCH( 'Precision' )
-      UNFL = SLAMCH( 'Safe Minimum' )
+      ULP = AB_SLAMCH( 'Precision' )
+      UNFL = AB_SLAMCH( 'Safe Minimum' )
       TOLA = MAX( M, N )*MAX( ANORM, UNFL )*ULP
       TOLB = MAX( P, N )*MAX( BNORM, UNFL )*ULP
 *

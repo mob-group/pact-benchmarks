@@ -635,7 +635,7 @@ end subroutine kmesh_free
 !!
 !! INPUTS
 !! Kmesh<kmesh_t>=the datatype to be printed
-!! [header]=optional header
+!! [AB_HEADER]=optional AB_HEADER
 !! [unit]=the unit number for output
 !! [prtvol]=verbosity level
 !! [mode_paral]=either "COLL" or "PERS"
@@ -651,7 +651,7 @@ end subroutine kmesh_free
 !!
 !! SOURCE
 
-subroutine kmesh_print(Kmesh,header,unit,prtvol,mode_paral)
+subroutine kmesh_print(Kmesh,AB_HEADER,unit,prtvol,mode_paral)
 
 
 !This section has been created automatically by the script Abilint (TD).
@@ -666,7 +666,7 @@ subroutine kmesh_print(Kmesh,header,unit,prtvol,mode_paral)
 !scalars
  integer,optional,intent(in) :: prtvol,unit
  character(len=4),optional,intent(in) :: mode_paral
- character(len=*),optional,intent(in) :: header
+ character(len=*),optional,intent(in) :: AB_HEADER
  type(kmesh_t),intent(in) :: Kmesh
 
 !Local variables-------------------------------
@@ -684,7 +684,7 @@ subroutine kmesh_print(Kmesh,header,unit,prtvol,mode_paral)
  my_mode='COLL' ; if (PRESENT(mode_paral)) my_mode  =mode_paral
 
  msg=' ==== Info on the Kmesh% object ==== '
- if (PRESENT(header)) msg=' ==== '//TRIM(ADJUSTL(header))//' ==== '
+ if (PRESENT(AB_HEADER)) msg=' ==== '//TRIM(ADJUSTL(AB_HEADER))//' ==== '
  call wrtout(my_unt,msg,my_mode)
 
  write(msg,'(a,i5,3a)')&
@@ -2646,7 +2646,7 @@ subroutine littlegroup_init(ext_pt,Kmesh,Cryst,use_umklp,Ltg,npwe,gvec)
  integer,allocatable :: indkpt1(:),symafm_ltg(:),symrec_Ltg(:,:,:)
  integer,pointer :: symafm(:),symrec(:,:,:)
  real(dp) :: knew(3)
- real(dp),allocatable :: ktest(:,:),wtk(:),wtk_folded(:)
+ real(dp),allocatable :: ktest(:,:),wtk(:),wtk_foAB_LDEd(:)
 
 !************************************************************************
 
@@ -2757,11 +2757,11 @@ subroutine littlegroup_init(ext_pt,Kmesh,Cryst,use_umklp,Ltg,npwe,gvec)
  ! Find the irreducible zone associated to ext_pt
  ! Do not use time-reversal since it has been manually introduced previously
  ABI_MALLOC(indkpt1,(nbz))
- ABI_MALLOC(wtk_folded,(nbz))
+ ABI_MALLOC(wtk_foAB_LDEd,(nbz))
  ABI_MALLOC(wtk,(nbz))
  wtk=one; iout=0; dummy_timrev=0
 
- call symkpt(0,Cryst%gmet,indkpt1,iout,Kmesh%bz,nbz,nkibzq,Ltg%nsym_Ltg,symrec_Ltg,dummy_timrev,wtk,wtk_folded)
+ call symkpt(0,Cryst%gmet,indkpt1,iout,Kmesh%bz,nbz,nkibzq,Ltg%nsym_Ltg,symrec_Ltg,dummy_timrev,wtk,wtk_foAB_LDEd)
 
  ABI_FREE(indkpt1)
  ABI_FREE(wtk)
@@ -2775,7 +2775,7 @@ subroutine littlegroup_init(ext_pt,Kmesh,Cryst,use_umklp,Ltg,npwe,gvec)
 
  ind=0; enough=0
  do ik=1,nbz
-   if (wtk_folded(ik)>tol8) then
+   if (wtk_foAB_LDEd(ik)>tol8) then
      ind=ind+1
      Ltg%ibzq(ik)=1
      Ltg%bz2ibz(ik) =ind
@@ -2899,9 +2899,9 @@ subroutine littlegroup_init(ext_pt,Kmesh,Cryst,use_umklp,Ltg,npwe,gvec)
 
 #ifdef DEBUG_MODE
  do ik=1,nbz
-   if (ABS(SUM(Ltg%wtksym(1,:,ik)+Ltg%wtksym(2,:,ik))-wtk_folded(ik))>tol6) then
-     write(std_out,*)' sum(Ltg%wtksym,ik)-wtk_folded(ik) = ',sum(Ltg%wtksym(1,:,ik)+Ltg%wtksym(2,:,ik))-wtk_folded(ik)
-     write(std_out,*)Ltg%wtksym(1,:,ik),Ltg%wtksym(2,:,ik),wtk_folded(ik)
+   if (ABS(SUM(Ltg%wtksym(1,:,ik)+Ltg%wtksym(2,:,ik))-wtk_foAB_LDEd(ik))>tol6) then
+     write(std_out,*)' sum(Ltg%wtksym,ik)-wtk_foAB_LDEd(ik) = ',sum(Ltg%wtksym(1,:,ik)+Ltg%wtksym(2,:,ik))-wtk_foAB_LDEd(ik)
+     write(std_out,*)Ltg%wtksym(1,:,ik),Ltg%wtksym(2,:,ik),wtk_foAB_LDEd(ik)
      write(std_out,*)ik,Kmesh%bz(:,ik)
      MSG_BUG("Wrong weight")
    end if
@@ -2916,7 +2916,7 @@ subroutine littlegroup_init(ext_pt,Kmesh,Cryst,use_umklp,Ltg,npwe,gvec)
  end do
 #endif
 
- ABI_FREE(wtk_folded)
+ ABI_FREE(wtk_foAB_LDEd)
 
  DBG_EXIT("COLL")
 
@@ -3380,7 +3380,7 @@ end subroutine kpath_free
 !! INPUTS
 !!  [unit]=Unit number for output. Defaults to std_out
 !!  [prtvol]=Verbosity level.
-!!  [header]=String to be printed as header for additional info.
+!!  [AB_HEADER]=String to be printed as AB_HEADER for additional info.
 !!  [pre]=Optional string prepended to output e.g. #. Default: " "
 !!
 !! OUTPUT
@@ -3393,7 +3393,7 @@ end subroutine kpath_free
 !!
 !! SOURCE
 
-subroutine kpath_print(kpath, header, unit, prtvol, pre)
+subroutine kpath_print(kpath, AB_HEADER, unit, prtvol, pre)
 
 
 !This section has been created automatically by the script Abilint (TD).
@@ -3407,7 +3407,7 @@ subroutine kpath_print(kpath, header, unit, prtvol, pre)
 !Arguments ------------------------------------
 !scalars
  integer,optional,intent(in) :: unit,prtvol
- character(len=*),optional,intent(in) :: header,pre
+ character(len=*),optional,intent(in) :: AB_HEADER,pre
  type(kpath_t),intent(in) :: kpath
 
 !Local variables-------------------------------
@@ -3421,7 +3421,7 @@ subroutine kpath_print(kpath, header, unit, prtvol, pre)
  my_pre = " "; if (present(pre)) my_pre = pre
  if (unt <= 0) return
 
- if (present(header)) write(unt,"(a)") sjoin(my_pre, '==== '//trim(adjustl(header))//' ==== ')
+ if (present(AB_HEADER)) write(unt,"(a)") sjoin(my_pre, '==== '//trim(adjustl(AB_HEADER))//' ==== ')
  write(unt, "(a)") sjoin(my_pre, "Number of points:", itoa(kpath%npts), ", ndivsmall:", itoa(kpath%ndivsm))
  write(unt, "(a)") sjoin(my_pre, "Boundaries and corresponding index in the k-points array:")
  do ii=1,kpath%nbounds

@@ -171,8 +171,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME, AB_SISNAN
-      REAL               SLAMCH
-      EXTERNAL           AB_LSAME, SLAMCH, AB_SISNAN
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_SLAMCH, AB_SISNAN
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -243,7 +243,7 @@
 *
 *     Get machine parameters
 *
-      SMLNUM = SLAMCH( 'S' )
+      SMLNUM = AB_SLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
 *
       CFROMC = CFROM

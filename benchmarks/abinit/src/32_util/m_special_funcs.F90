@@ -1920,7 +1920,7 @@ type (gspline_t) function gspline_new(sigma) result(new)
 !Local variables ------------------------------
 !scalars
  integer :: ii
- real(dp) :: ybcbeg, ybcend
+ real(dp) :: ybAB_CBEG, ybcend
 ! *************************************************************************
 
  new%nspline = 5 * 1024; new%sigma = sigma
@@ -1939,9 +1939,9 @@ type (gspline_t) function gspline_new(sigma) result(new)
  ! Spline the gaussian approximant.
  ABI_MALLOC(new%svals, (new%nspline, 4))
  new%svals(:, 1) = dirac_delta(new%xvals, sigma)
- ybcbeg = - (two * new%xmin / sigma**2) * new%svals(1,1)
+ ybAB_CBEG = - (two * new%xmin / sigma**2) * new%svals(1,1)
  ybcend = - (two * new%xmax / sigma**2) * new%svals(new%nspline,1)
- call spline(new%xvals, new%svals(:,1), new%nspline, ybcbeg, ybcend, new%svals(:,2))
+ call spline(new%xvals, new%svals(:,1), new%nspline, ybAB_CBEG, ybcend, new%svals(:,2))
 
  ! Spline the primitive: 1/2 [1 + erf(x/sigma)]
  new%svals(:, 3) = half * (one + abi_derf(new%xvals / new%sigma))

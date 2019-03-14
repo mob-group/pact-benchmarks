@@ -137,9 +137,9 @@
       COMPLEX            T
 *     ..
 *     .. External Functions ..
-      REAL               CLANGE, SLAMCH
+      REAL               CLANGE, AB_SLAMCH
       COMPLEX            CDOTU
-      EXTERNAL           CLANGE, SLAMCH, CDOTU
+      EXTERNAL           CLANGE, AB_SLAMCH, CDOTU
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGEMV, CLASWP, CSCAL, CTRMV
@@ -158,7 +158,7 @@
 *
 *     Determine EPS and the norm of A.
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       ANORM = CLANGE( '1', M, N, A, LDA, RWORK )
 *
 *     Compute the product L*U and overwrite AFAC with the result.

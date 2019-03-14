@@ -277,8 +277,8 @@
 *
       LOGICAL            AB_LSAME
       INTEGER            AB_ICAMAX
-      REAL               SLAMCH, AB_SLAPY2
-      EXTERNAL           AB_LSAME, AB_ICAMAX, SLAMCH, AB_SLAPY2
+      REAL               AB_SLAMCH, AB_SLAPY2
+      EXTERNAL           AB_LSAME, AB_ICAMAX, AB_SLAMCH, AB_SLAPY2
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_XERBLA, AB_CSSCAL, AB_CHER, AB_CSWAP
@@ -316,7 +316,7 @@
 *
 *     Compute machine safe minimum
 *
-      SFMIN = SLAMCH( 'S' )
+      SFMIN = AB_SLAMCH( 'S' )
 *
       IF( UPPER ) THEN
 *

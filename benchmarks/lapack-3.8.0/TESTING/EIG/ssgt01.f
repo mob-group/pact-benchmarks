@@ -171,8 +171,8 @@
       REAL               ANORM, ULP
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLANGE, SLANSY
-      EXTERNAL           SLAMCH, SLANGE, SLANSY
+      REAL               AB_SLAMCH, SLANGE, SLANSY
+      EXTERNAL           AB_SLAMCH, SLANGE, SLANSY
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SSCAL, SSYMM
@@ -183,7 +183,7 @@
       IF( N.LE.0 )
      $   RETURN
 *
-      ULP = SLAMCH( 'Epsilon' )
+      ULP = AB_SLAMCH( 'Epsilon' )
 *
 *     Compute product of 1-norms of A and Z.
 *

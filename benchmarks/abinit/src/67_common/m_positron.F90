@@ -110,7 +110,7 @@ contains
 !!  grewtn(3,natom)=d(Ewald)/d(xred) (hartree)
 !!  grvdw(3,ngrvdw)=gradients of energy due to Van der Waals DFT-D dispersion (hartree)
 !!  gsqcut=cutoff value on G**2 for sphere inside fft box
-!!  hdr <type(hdr_type)>=the header of wf, den and pot files
+!!  hdr <type(hdr_type)>=the AB_HEADER of wf, den and pot files
 !!  ifirst_gs= 0 if we are in a single ground-state calculation
 !!     or in the first ground-state calculation of a structural minimization/dynamics
 !!  indsym(4,nsym,natom)=index showing transformation of atom labels
@@ -424,7 +424,7 @@ type(fock_type),pointer, intent(inout) :: fock
 !    ----- Read from disk
      if (dtset%positron>0) then
        rdwrpaw=dtset%usepaw
-       fname=trim(dtfil%fildensin);if (dtset%positron==2) fname=trim(dtfil%fildensin)//'_POSITRON'
+       fname=trim(dtfil%fiAB_LDEnsin);if (dtset%positron==2) fname=trim(dtfil%fiAB_LDEnsin)//'_POSITRON'
        call read_rhor(trim(fname), cplex1, dtset%nspden, nfft, ngfft, rdwrpaw, mpi_enreg, electronpositron%rhor_ep, &
        hdr_den, electronpositron%pawrhoij_ep, comm_cell, check_hdr=hdr)
        etotal_read = hdr_den%etot; call hdr_free(hdr_den)
@@ -1335,7 +1335,7 @@ subroutine poslifetime(dtset,electronpositron,gprimd,my_natom,mpi_enreg,n3xccc,n
              ABI_DEALLOCATE(rhoarr1_j)
            end if
 
-!          Second formalism: use (l,m) moments for densities
+!          second formalism: use (l,m) moments for densities
          else if (dtset%pawxcdev/=0) then
 
 !          Build densities
@@ -3536,7 +3536,7 @@ subroutine posratecore(dtset,electronpositron,iatom,my_natom,mesh_sizej,mpi_enre
    ABI_DEALLOCATE(rhoarr1)
    ABI_DEALLOCATE(rhoarr1_ep)
 
-!Second formalism: use (l,m) moments for densities
+!second formalism: use (l,m) moments for densities
  else if (dtset%pawxcdev/=0) then
 
 !  Build densities

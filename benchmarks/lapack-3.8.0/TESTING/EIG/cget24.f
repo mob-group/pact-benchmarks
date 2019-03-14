@@ -380,8 +380,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            CSLECT
-      REAL               CLANGE, SLAMCH
-      EXTERNAL           CSLECT, CLANGE, SLAMCH
+      REAL               CLANGE, AB_SLAMCH
+      EXTERNAL           CSLECT, CLANGE, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CCOPY, CGEESX, CGEMM, CLACPY, CUNT01, XERBLA
@@ -434,8 +434,8 @@
 *
 *     Important constants
 *
-      SMLNUM = SLAMCH( 'Safe minimum' )
-      ULP = SLAMCH( 'Precision' )
+      SMLNUM = AB_SLAMCH( 'Safe minimum' )
+      ULP = AB_SLAMCH( 'Precision' )
       ULPINV = ONE / ULP
 *
 *     Perform tests (1)-(13)

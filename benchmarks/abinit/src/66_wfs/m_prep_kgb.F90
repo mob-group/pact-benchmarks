@@ -91,7 +91,7 @@ contains
 !!      chebfi,lobpcgwf,m_lobpcgwf,mkresi
 !!
 !! CHILDREN
-!!      dcopy,multithreaded_getghc,prep_index_wavef_bandpp,prep_sort_wavef_spin
+!!      AB_DCOPY,multithreaded_getghc,prep_index_wavef_bandpp,prep_sort_wavef_spin
 !!      prep_wavef_sym_do,prep_wavef_sym_undo,timab,xmpi_alltoallv
 !!
 !! SOURCE
@@ -269,9 +269,9 @@ subroutine prep_getghc(cwavef,gs_hamk,gvnlc,gwavef,swavef,lambda,blocksize,&
    end if
    call timab(545,2,tsec)
  else
-   ! Here, we cheat, and use DCOPY to bypass some compiler's overzealous bound-checking
+   ! Here, we cheat, and use AB_DCOPY to bypass some compiler's overzealous bound-checking
    ! (ndatarecv*my_nspinor*bandpp might be greater than the declared size of cwavef)
-   call DCOPY(2*ndatarecv*my_nspinor*bandpp, cwavef, 1, cwavef_alltoall2, 1)
+   call AB_DCOPY(2*ndatarecv*my_nspinor*bandpp, cwavef, 1, cwavef_alltoall2, 1)
  end if
 
  if(gs_hamk%istwf_k==2) then
@@ -503,10 +503,10 @@ subroutine prep_getghc(cwavef,gs_hamk,gvnlc,gwavef,swavef,lambda,blocksize,&
    call timab(545,2,tsec)
  else
    if(sij_opt == 1) then
-     call DCOPY(2*ndatarecv*my_nspinor*bandpp, swavef_alltoall2, 1, swavef, 1)
+     call AB_DCOPY(2*ndatarecv*my_nspinor*bandpp, swavef_alltoall2, 1, swavef, 1)
    end if
-   call DCOPY(2*ndatarecv*my_nspinor*bandpp, gvnlc_alltoall2, 1, gvnlc, 1)
-   call DCOPY(2*ndatarecv*my_nspinor*bandpp, gwavef_alltoall2, 1, gwavef, 1)
+   call AB_DCOPY(2*ndatarecv*my_nspinor*bandpp, gvnlc_alltoall2, 1, gvnlc, 1)
+   call AB_DCOPY(2*ndatarecv*my_nspinor*bandpp, gwavef_alltoall2, 1, gwavef, 1)
  end if
 
 !====================================================================
@@ -603,7 +603,7 @@ end subroutine prep_getghc
 !!      energy,forstrnps,m_invovl,m_lobpcgwf,vtowfk
 !!
 !! CHILDREN
-!!      dcopy,nonlop,prep_index_wavef_bandpp,prep_sort_wavef_spin,timab
+!!      AB_DCOPY,nonlop,prep_index_wavef_bandpp,prep_sort_wavef_spin,timab
 !!      xmpi_allgather,xmpi_alltoallv
 !!
 !! NOTES
@@ -743,9 +743,9 @@ subroutine prep_nonlop(choice,cpopt,cwaveprj,enlout_block,hamk,idir,lambdablock,
    end if
    call timab(581,2,tsec)
  else
-   ! Here, we cheat, and use DCOPY to bypass some compiler's overzealous bound-checking
+   ! Here, we cheat, and use AB_DCOPY to bypass some compiler's overzealous bound-checking
    ! (ndatarecv*my_nspinor*bandpp might be greater than the declared size of cwavef)
-   call DCOPY(2*ndatarecv*my_nspinor*bandpp,cwavef,1,cwavef_alltoall2,1)
+   call AB_DCOPY(2*ndatarecv*my_nspinor*bandpp,cwavef,1,cwavef_alltoall2,1)
  end if
 
  if(hamk%istwf_k==2) then
@@ -843,7 +843,7 @@ subroutine prep_nonlop(choice,cpopt,cwaveprj,enlout_block,hamk,idir,lambdablock,
    end if
  else
    ! TODO check other usages, maybe
-   call DCOPY(2*ndatarecv*my_nspinor*bandpp, gsc_alltoall2, 1, gsc, 1)
+   call AB_DCOPY(2*ndatarecv*my_nspinor*bandpp, gsc_alltoall2, 1, gsc, 1)
  end if
  if (hamk%istwf_k==2) mpi_enreg%me_g0=old_me_g0
 

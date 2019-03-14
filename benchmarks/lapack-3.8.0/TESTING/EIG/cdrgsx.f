@@ -393,8 +393,8 @@
 *     .. External Functions ..
       LOGICAL            CLCTSX
       INTEGER            ILAENV
-      REAL               CLANGE, SLAMCH
-      EXTERNAL           CLCTSX, ILAENV, CLANGE, SLAMCH
+      REAL               CLANGE, AB_SLAMCH
+      EXTERNAL           CLCTSX, ILAENV, CLANGE, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, CGESVD, CGET51, CGGESX, CLACPY, CLAKF2,
@@ -477,9 +477,9 @@
 *
 *     Important constants
 *
-      ULP = SLAMCH( 'P' )
+      ULP = AB_SLAMCH( 'P' )
       ULPINV = ONE / ULP
-      SMLNUM = SLAMCH( 'S' ) / ULP
+      SMLNUM = AB_SLAMCH( 'S' ) / ULP
       BIGNUM = ONE / SMLNUM
       CALL SLABAD( SMLNUM, BIGNUM )
       THRSH2 = TEN*THRESH

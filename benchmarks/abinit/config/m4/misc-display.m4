@@ -165,7 +165,7 @@ AC_DEFUN([ABI_MSG_NOTICE],[
 
   if test -s "${abi_msg_file}"; then
 
-  dnl Print header
+  dnl Print AB_HEADER
   echo ""
   echo "        +--------------------------------------------------------------+"
   echo "        | ${abi_msg_title} |"

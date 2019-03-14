@@ -242,7 +242,7 @@ subroutine sigma(acell,codvsn,Dtfil,Dtset,Pawang,Pawrad,Pawtab,Psps,rprim,conver
  !integer :: jb_qp,ib_ks,ks_irr
  real(dp) :: compch_fft,compch_sph,r_s,rhoav,alpha,opt_ecut
  real(dp) :: drude_plsmf,my_plsmf,ecore,ecut_eff,ecutdg_eff,ehartree
- real(dp) :: ex_energy,gsqcutc_eff,gsqcutf_eff,gsqcut_shp,norm,oldefermi
+ real(dp) :: ex_energy,gsqcutc_eff,gsqcutf_eff,gsqcut_shp,norm,oAB_LDEfermi
  real(dp) :: ucvol,vxcavg,vxcavg_qp
  real(dp) :: gwc_gsq,gwx_gsq,gw_gsq
  real(dp):: eff,mempercpu_mb,max_wfsmem_mb,nonscal_mem,ug_mem,ur_mem,cprj_mem
@@ -402,7 +402,7 @@ subroutine sigma(acell,codvsn,Dtfil,Dtset,Pawang,Pawrad,Pawtab,Psps,rprim,conver
  call init_distribfft_seq(MPI_enreg_seq%distribfft,'c',ngfftc(2),ngfftc(3),'all')
  call init_distribfft_seq(MPI_enreg_seq%distribfft,'f',ngfftf(2),ngfftf(3),'all')
 
- call print_ngfft(ngfftf,header='Dense FFT mesh used for densities and potentials')
+ call print_ngfft(ngfftf,AB_HEADER='Dense FFT mesh used for densities and potentials')
  nfftf_tot=PRODUCT(ngfftf(1:3))
 
  ! Open and read pseudopotential files ===
@@ -437,8 +437,8 @@ subroutine sigma(acell,codvsn,Dtfil,Dtset,Pawang,Pawrad,Pawtab,Psps,rprim,conver
    MSG_WARNING(' EXPERIMENTAL - Using a pole-fit screening!')
  end if
 
- call print_ngfft(gwc_ngfft,header='FFT mesh for oscillator strengths used for Sigma_c')
- call print_ngfft(gwx_ngfft,header='FFT mesh for oscillator strengths used for Sigma_x')
+ call print_ngfft(gwc_ngfft,AB_HEADER='FFT mesh for oscillator strengths used for Sigma_c')
+ call print_ngfft(gwx_ngfft,AB_HEADER='FFT mesh for oscillator strengths used for Sigma_x')
 
  b1gw=Sigp%minbdgw
  b2gw=Sigp%maxbdgw
@@ -515,7 +515,7 @@ subroutine sigma(acell,codvsn,Dtfil,Dtset,Pawang,Pawrad,Pawtab,Psps,rprim,conver
 
    if (my_rank == master) call pawtab_print(Pawtab)
 
-   ! Get Pawrhoij from the header of the WFK file.
+   ! Get Pawrhoij from the AB_HEADER of the WFK file.
    call pawrhoij_copy(Hdr_wfk%pawrhoij,KS_Pawrhoij)
 
    ! Re-symmetrize symrhoij.
@@ -753,7 +753,7 @@ subroutine sigma(acell,codvsn,Dtfil,Dtset,Pawang,Pawrad,Pawtab,Psps,rprim,conver
  end if
 
  ! This test has been disabled (too expensive!)
- if (.False.) call wfd_test_ortho(Wfd,Cryst,Pawtab,unit=ab_out,mode_paral="COLL")
+ if (.false.) call wfd_test_ortho(Wfd,Cryst,Pawtab,unit=ab_out,mode_paral="COLL")
 
  call timab(404,2,tsec) ! rdkss
  call timab(405,1,tsec) ! Init2
@@ -1065,7 +1065,7 @@ subroutine sigma(acell,codvsn,Dtfil,Dtset,Pawang,Pawrad,Pawtab,Psps,rprim,conver
  end if
 !#endif
 
- call melements_print(KS_me,header="Matrix elements in the KS basis set",prtvol=Dtset%prtvol)
+ call melements_print(KS_me,AB_HEADER="Matrix elements in the KS basis set",prtvol=Dtset%prtvol)
  !
  ! If possible, calculate the EXX energy from the between the frozen core
  ! and the valence electrons using KS wavefunctions
@@ -1178,7 +1178,7 @@ subroutine sigma(acell,codvsn,Dtfil,Dtset,Pawang,Pawrad,Pawtab,Psps,rprim,conver
    call wfd_reset_ur_cprj(Wfd)
 
    ! This test has been disabled (too expensive!)
-   if (.False.) call wfd_test_ortho(Wfd, Cryst, Pawtab, unit=std_out)
+   if (.false.) call wfd_test_ortho(Wfd, Cryst, Pawtab, unit=std_out)
 
    ! Compute QP occupation numbers.
    call wrtout(std_out,'sigma: calculating QP occupation numbers:','COLL')
@@ -1403,7 +1403,7 @@ subroutine sigma(acell,codvsn,Dtfil,Dtset,Pawang,Pawrad,Pawtab,Psps,rprim,conver
    !  TODO add spin-orbit case and gwpara 2
    ABI_MALLOC(my_band_list, (wfd%mband))
    ABI_MALLOC(bmask, (wfd%mband))
-   bmask = .False.; bmask(b1gw:b2gw) = .True.
+   bmask = .false.; bmask(b1gw:b2gw) = .True.
 
    if (Wfd%usepaw==1) then
      ABI_DT_MALLOC(Cp1,(Wfd%natom,Wfd%nspinor))
@@ -1561,7 +1561,7 @@ subroutine sigma(acell,codvsn,Dtfil,Dtset,Pawang,Pawrad,Pawtab,Psps,rprim,conver
    end if
 !  #endif
 
-   call melements_print(QP_me,header="Matrix elements in the QP basis set",prtvol=Dtset%prtvol)
+   call melements_print(QP_me,AB_HEADER="Matrix elements in the QP basis set",prtvol=Dtset%prtvol)
 
    ! * Output the QP pseudopotential strengths Dij and the augmentation occupancies Rhoij.
    if (Dtset%usepaw==1) then
@@ -1717,7 +1717,7 @@ subroutine sigma(acell,codvsn,Dtfil,Dtset,Pawang,Pawrad,Pawtab,Psps,rprim,conver
    QP_BSt%eig = QP_BSt%eig -QP_BSt%fermie
    Sr%egw = Sr%egw-QP_BSt%fermie
    Sr%e0  = Sr%e0 -QP_BSt%fermie
-   oldefermi=QP_BSt%fermie
+   oAB_LDEfermi=QP_BSt%fermie
    ! TODO Recheck fermi
    ! Clean EVERYTHING in particulare the treatment of E fermi
    QP_BSt%fermie=zero
@@ -1962,7 +1962,7 @@ subroutine sigma(acell,codvsn,Dtfil,Dtset,Pawang,Pawrad,Pawtab,Psps,rprim,conver
 
 !      FIXME
        MSG_WARNING(" denfgr in sigma seems to produce wrong results")
-       write(std_out,*)" input tilde ks_rhor integrates: ",SUM(ks_rhor(:,1))*Cryst%ucvol/nfftf
+       write(std_out,*)" input tiAB_LDE ks_rhor integrates: ",SUM(ks_rhor(:,1))*Cryst%ucvol/nfftf
 
        call denfgr(Cryst%atindx1,Cryst%gmet,comm,Cryst%natom,Cryst%natom,Cryst%nattyp,ngfftf,ks_nhat,Wfd%nspinor,&
        Wfd%nsppol,Wfd%nspden,Cryst%ntypat,Pawfgr,Pawrad,KS_Pawrhoij,Pawtab,Dtset%prtvol, &
@@ -1993,7 +1993,7 @@ subroutine sigma(acell,codvsn,Dtfil,Dtset,Pawang,Pawrad,Pawtab,Psps,rprim,conver
 
  if (wfd_iam_master(Wfd)) then
    ! Write info on the run on ab_out, then open files to store final results.
-   call ebands_report_gap(KS_BSt,header='KS Band Gaps',unit=ab_out)
+   call ebands_report_gap(KS_BSt,AB_HEADER='KS Band Gaps',unit=ab_out)
    if(dtset%ucrpa==0) then
      call write_sigma_header(Sigp,Er,Cryst,Kmesh,Qmesh)
    end if
@@ -2075,10 +2075,10 @@ subroutine sigma(acell,codvsn,Dtfil,Dtset,Pawang,Pawrad,Pawtab,Psps,rprim,conver
  ABI_MALLOC(sigcme,(nomega_sigc,ib1:ib2,ib1:ib2,Sigp%nkptgw,Sigp%nsppol*Sigp%nsig_ab))
  sigcme=czero
 
-! if (.False. .and. psps%usepaw == 0 .and. wfd%nspinor == 1 .and. any(dtset%so_psp /= 0)) then
+! if (.false. .and. psps%usepaw == 0 .and. wfd%nspinor == 1 .and. any(dtset%so_psp /= 0)) then
 !   call wrtout(std_out, "Computing SOC contribution with first-order perturbation theory")
 !   ABI_MALLOC(bks_mask, (wfd%mband, wfd%nkibz, wfd%nsppol))
-!   bks_mask = .False.
+!   bks_mask = .false.
 !   do spin=1,wfd%nsppol
 !     do ikcalc=1,Sigp%nkptgw
 !       ik_ibz = Kmesh%tab(Sigp%kptgw2bz(ikcalc)) ! Irred k-point for GW
@@ -2291,7 +2291,7 @@ subroutine sigma(acell,codvsn,Dtfil,Dtset,Pawang,Pawrad,Pawtab,Psps,rprim,conver
      end if
 
      ! Report the QP gaps (Fundamental and Optical)
-     call ebands_report_gap(QP_BSt,header='QP Band Gaps',unit=ab_out)
+     call ebands_report_gap(QP_BSt,AB_HEADER='QP Band Gaps',unit=ab_out)
 
      ! Band structure interpolation from QP energies computed on the k-mesh.
      if (nint(dtset%einterp(1)) /= 0 .and. all(sigp%minbdgw == sigp%minbnd) .and. all(sigp%maxbdgw == sigp%maxbnd)) then
@@ -2488,8 +2488,8 @@ end subroutine sigma
 !! Gsph_Max<gsphere_t>=Info on the G-sphere
 !! Gsph_c<gsphere_t>=Info on the G-sphere for W and Sigma_c
 !! Gsph_x<gsphere_t>=Info on the G-sphere for and Sigma_x
-!! Hdr_wfk<hdr_type>=The header of the WFK file
-!! Hdr_out<hdr_type>=The header to be used for the results of sigma calculations.
+!! Hdr_wfk<hdr_type>=The AB_HEADER of the WFK file
+!! Hdr_out<hdr_type>=The AB_HEADER to be used for the results of sigma calculations.
 !! Vcp<vcoul_t>= Datatype gathering information on the coulombian interaction and the cutoff technique.
 !! Er<Epsilonm1_results>=Datatype storing data used to construct the screening (partially Initialized in OUTPUT)
 !! KS_BSt<ebands_t>=The KS energies and occupation factors.
@@ -2583,7 +2583,7 @@ subroutine setup_sigma(codvsn,wfk_fname,acell,rprim,ngfftf,Dtset,Dtfil,Psps,Pawt
  Sigp%zcut       = Dtset%zcut
  Sigp%mbpt_sciss = Dtset%mbpt_sciss
 
- timrev=  2 ! This information is not reported in the header
+ timrev=  2 ! This information is not reported in the AB_HEADER
             ! 1 => do not use time-reversal symmetry
             ! 2 => take advantage of time-reversal symmetry
  if (any(dtset%kptopt == [3, 4])) timrev = 1
@@ -2761,7 +2761,7 @@ subroutine setup_sigma(codvsn,wfk_fname,acell,rprim,ngfftf,Dtset,Dtfil,Psps,Pawt
 
  ABI_FREE(test_gvec_kss)
 
- ! Get important dimensions from the WFK header
+ ! Get important dimensions from the WFK AB_HEADER
  Sigp%nsppol =Hdr_wfk%nsppol
  Sigp%nspinor=Hdr_wfk%nspinor
  Sigp%nsig_ab=Hdr_wfk%nspinor**2  ! TODO Is it useful calculating only diagonal terms?
@@ -2895,11 +2895,11 @@ subroutine setup_sigma(codvsn,wfk_fname,acell,rprim,ngfftf,Dtset,Dtfil,Psps,Pawt
  ABI_MALLOC(val_indeces,(KS_BSt%nkpt,KS_BSt%nsppol))
  val_indeces = get_valence_idx(KS_BSt)
 
- ! Create Sigma header
+ ! Create Sigma AB_HEADER
  ! TODO Fix problems with symmorphy and k-points
  call hdr_init(KS_BSt,codvsn,Dtset,Hdr_out,Pawtab,pertcase0,Psps,wvl)
 
- ! Get Pawrhoij from the header of the WFK file
+ ! Get Pawrhoij from the AB_HEADER of the WFK file
  ABI_DT_MALLOC(Pawrhoij,(Cryst%natom*Dtset%usepaw))
  if (Dtset%usepaw==1) then
    call pawrhoij_alloc(Pawrhoij,1,Dtset%nspden,Dtset%nspinor,Dtset%nsppol,Cryst%typat,pawtab=Pawtab)

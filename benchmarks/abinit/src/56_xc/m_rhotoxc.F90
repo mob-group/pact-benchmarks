@@ -185,12 +185,12 @@ contains
 !!    0 means no xc applied (usually for testing)
 !! *LDA,LSD
 !!    1 means new Teter (4/93) with spin-pol option        xcspol
-!!    2 means Perdew-Zunger-Ceperley-Alder                 xcpzca
-!!    3 means old Teter (4/91) fit to Ceperley-Alder data  xctetr
+!!    2 means Perdew-Zunger-Ceperley-AAB_LDEr                 xcpzca
+!!    3 means old Teter (4/91) fit to Ceperley-AAB_LDEr data  xctetr
 !!    4 means Wigner                                       xcwign
 !!    5 means Hedin-Lundqvist                              xchelu
 !!    6 means "X-alpha" xc                                 xcxalp
-!!    7 mean Perdew-Wang 92 LSD fit to Ceperley-Alder data xcpbe
+!!    7 mean Perdew-Wang 92 LSD fit to Ceperley-AAB_LDEr data xcpbe
 !!    8 mean Perdew-Wang 92 LSD , exchange-only            xcpbe
 !!    9 mean Perdew-Wang 92 Ex+Ec_RPA  energy              xcpbe
 !!   10 means RPA LSD energy (only the energy !!)          xcpbe

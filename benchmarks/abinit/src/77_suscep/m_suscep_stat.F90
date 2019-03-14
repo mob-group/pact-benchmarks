@@ -153,7 +153,7 @@ CONTAINS  !=====================================================================
 !! CHILDREN
 !!      destroy_mpi_enreg,fftpac,init_distribfft_seq,initmpi_seq,pawcprj_alloc
 !!      pawcprj_free,pawcprj_get,pawcprj_mpi_allgather,pawgylmg,ph1d3d
-!!      sphereboundary,susk,suskmm,symg,symrhg,timab,xmpi_sum,zhpev
+!!      sphereboundary,susk,suskmm,symg,symrhg,timab,xmpi_sum,AB_ZHPEV
 !!
 !! SOURCE
 
@@ -230,7 +230,7 @@ subroutine suscep_stat(atindx,atindx1,cg,cprj,dielar,dimcprj,doccde,&
  real(dp),allocatable :: occ_deavg(:),ph3d_diel(:,:,:),phdiel(:,:,:)
  real(dp),allocatable :: phkxred_diel(:,:),rhoextrap(:,:,:,:),rhoextrg(:,:)
  real(dp),allocatable :: rhoextrr(:,:),sush(:),sussum(:),susvec(:,:,:)
- real(dp),allocatable :: suswk(:,:,:,:),zhpev1(:,:),zhpev2(:)
+ real(dp),allocatable :: suswk(:,:,:,:),AB_ZHPEV1(:,:),AB_ZHPEV2(:)
  type(pawcprj_type),allocatable :: cprj_k(:,:),cprj_loc(:,:)
 
 ! *************************************************************************
@@ -742,11 +742,11 @@ subroutine suscep_stat(atindx,atindx1,cg,cprj,dielar,dimcprj,doccde,&
    ABI_ALLOCATE(sush,(npwsp*(npwsp+1)))
    ABI_ALLOCATE(susvec,(2,npwsp,npwsp))
    ABI_ALLOCATE(eig_diel,(npwsp))
-   ABI_ALLOCATE(zhpev1,(2,2*npwsp-1))
-   ABI_ALLOCATE(zhpev2,(3*npwsp-2))
+   ABI_ALLOCATE(AB_ZHPEV1,(2,2*npwsp-1))
+   ABI_ALLOCATE(AB_ZHPEV2,(3*npwsp-2))
    ier=0
 
-!  Store the susceptibility matrix in proper mode before calling zhpev
+!  Store the susceptibility matrix in proper mode before calling AB_ZHPEV
    indx=1
    do ii=1,npwdiel
      do jj=1,ii
@@ -774,8 +774,8 @@ subroutine suscep_stat(atindx,atindx1,cg,cprj,dielar,dimcprj,doccde,&
      end do
    end if
 
-   call ZHPEV ('V','U',npwsp,sush,eig_diel,susvec,npwsp,zhpev1,&
-&   zhpev2,ier)
+   call AB_ZHPEV ('V','U',npwsp,sush,eig_diel,susvec,npwsp,AB_ZHPEV1,&
+&   AB_ZHPEV2,ier)
 
    write(std_out,*)' suscep_stat : print eigenvalues of the susceptibility matrix'
    do ii=1,npwsp
@@ -785,8 +785,8 @@ subroutine suscep_stat(atindx,atindx1,cg,cprj,dielar,dimcprj,doccde,&
    ABI_DEALLOCATE(sush)
    ABI_DEALLOCATE(susvec)
    ABI_DEALLOCATE(eig_diel)
-   ABI_DEALLOCATE(zhpev1)
-   ABI_DEALLOCATE(zhpev2)
+   ABI_DEALLOCATE(AB_ZHPEV1)
+   ABI_DEALLOCATE(AB_ZHPEV2)
    MSG_ERROR("Stopping here!")
  end if
 

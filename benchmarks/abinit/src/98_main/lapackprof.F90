@@ -72,7 +72,7 @@ program lapackprof
  real(dp) ::  ctime,wtime,gflops
  logical :: do_check,test_ortho,test_copy,test_dotc,test_axpy,test_gemv !,test_gemm
  character(len=24) :: skinds
- character(len=500) :: header,routname
+ character(len=500) :: AB_HEADER,routname
  type(MPI_type) :: MPI_enreg
 !arrays
  integer,allocatable :: sizes(:)
@@ -152,8 +152,8 @@ program lapackprof
    useoverlap = 0
 
    routname = "projbd"
-   header = strcat("BEGIN_BENCHMARK: ",routname)
-   write(std_out,'(a)')TRIM(header)
+   AB_HEADER = strcat("BEGIN_BENCHMARK: ",routname)
+   write(std_out,'(a)')TRIM(AB_HEADER)
 
    do isz=1,nsizes
      npw = sizes(isz)
@@ -184,8 +184,8 @@ program lapackprof
      ABI_FREE(gsc)
    end do
 
-   header = strcat("END_BENCHMARK: ",routname)
-   write(std_out,'(a)')TRIM(header)
+   AB_HEADER = strcat("END_BENCHMARK: ",routname)
+   write(std_out,'(a)')TRIM(AB_HEADER)
  end if
 
  if (test_ortho) then
@@ -194,8 +194,8 @@ program lapackprof
 
    do ortalgo=1,4,1
      routname = strcat(" pw_orthon, ortalgo = ",itoa(ortalgo))
-     header = strcat("BEGIN_BENCHMARK: ",routname)
-     write(std_out,'(a)')TRIM(header)
+     AB_HEADER = strcat("BEGIN_BENCHMARK: ",routname)
+     write(std_out,'(a)')TRIM(AB_HEADER)
 !
      do isz=1,nsizes
        npw = sizes(isz)
@@ -247,8 +247,8 @@ program lapackprof
        ABI_FREE(gsc)
      end do
 
-     header = strcat("END_BENCHMARK: ",routname)
-     write(std_out,'(a)')TRIM(header)
+     AB_HEADER = strcat("END_BENCHMARK: ",routname)
+     write(std_out,'(a)')TRIM(AB_HEADER)
    end do ! ortalgo
  end if
 
@@ -259,8 +259,8 @@ program lapackprof
 !
      if (step==1) routname = " f90_zcopy"
      if (step==2) routname = " cg_zcopy"
-     header = strcat("BEGIN_BENCHMARK: ",routname)
-     write(std_out,'(a)')TRIM(header)
+     AB_HEADER = strcat("BEGIN_BENCHMARK: ",routname)
+     write(std_out,'(a)')TRIM(AB_HEADER)
 !
      do isz=1,nsizes
        npw  = sizes(isz)
@@ -289,20 +289,20 @@ program lapackprof
        ABI_FREE(cg2)
      end do
 
-     header = strcat("END_BENCHMARK: ",routname)
-     write(std_out,'(a)')TRIM(header)
+     AB_HEADER = strcat("END_BENCHMARK: ",routname)
+     write(std_out,'(a)')TRIM(AB_HEADER)
    end do
  end if
 
-!zdotc
+!AB_ZDOTC
  if (test_dotc) then
 !
    do step=1,2
 !
      if (step==1) routname = " f90_zdotc"
      if (step==2) routname = " cg_zdotc"
-     header = strcat("BEGIN_BENCHMARK: ",routname)
-     write(std_out,'(a)')TRIM(header)
+     AB_HEADER = strcat("BEGIN_BENCHMARK: ",routname)
+     write(std_out,'(a)')TRIM(AB_HEADER)
 
      do isz=1,nsizes
        npw  = sizes(isz)
@@ -332,8 +332,8 @@ program lapackprof
        ABI_FREE(cg2)
      end do
 
-     header = strcat("END_BENCHMARK: ",routname)
-     write(std_out,'(a)')TRIM(header)
+     AB_HEADER = strcat("END_BENCHMARK: ",routname)
+     write(std_out,'(a)')TRIM(AB_HEADER)
    end do
  end if
 
@@ -345,8 +345,8 @@ program lapackprof
 !
      if (step==1) routname = " f90_axpy"
      if (step==2) routname = " cg_axpy"
-     header = strcat("BEGIN_BENCHMARK: ",routname)
-     write(std_out,'(a)')TRIM(header)
+     AB_HEADER = strcat("BEGIN_BENCHMARK: ",routname)
+     write(std_out,'(a)')TRIM(AB_HEADER)
 
      do isz=1,nsizes
        npw = sizes(isz)
@@ -386,8 +386,8 @@ program lapackprof
        ABI_FREE(cg2)
      end do
 
-     header = strcat("END_BENCHMARK: ",routname)
-     write(std_out,'(a)')TRIM(header)
+     AB_HEADER = strcat("END_BENCHMARK: ",routname)
+     write(std_out,'(a)')TRIM(AB_HEADER)
    end do
  end if
 
@@ -398,8 +398,8 @@ program lapackprof
    do step=1,2
      if (step==1) routname = " f90_zgemv"
      if (step==2) routname = " cg_zgemv"
-     header = strcat("BEGIN_BENCHMARK: ",routname)
-     write(std_out,'(a)')TRIM(header)
+     AB_HEADER = strcat("BEGIN_BENCHMARK: ",routname)
+     write(std_out,'(a)')TRIM(AB_HEADER)
 
      do isz=1,nsizes
        npw = sizes(isz)
@@ -443,8 +443,8 @@ program lapackprof
        ABI_FREE(cg3)
      end do
 
-     header = strcat("END_BENCHMARK: ",routname)
-     write(std_out,'(a)')TRIM(header)
+     AB_HEADER = strcat("END_BENCHMARK: ",routname)
+     write(std_out,'(a)')TRIM(AB_HEADER)
    end do
  end if
 
@@ -454,8 +454,8 @@ program lapackprof
    do step=1,2
      if (step==1) routname = " f90_transpose"
      if (step==2) routname = " mkl_transponse"
-     header = strcat("BEGIN_BENCHMARK: ",routname)
-     write(std_out,'(a)')TRIM(header)
+     AB_HEADER = strcat("BEGIN_BENCHMARK: ",routname)
+     write(std_out,'(a)')TRIM(AB_HEADER)
 
      do isz=1,nsizes
        npw = sizes(isz)
@@ -486,18 +486,18 @@ program lapackprof
        ABI_FREE(wmat)
      end do
 
-     header = strcat("END_BENCHMARK: ",routname)
-     write(std_out,'(a)')TRIM(header)
+     AB_HEADER = strcat("END_BENCHMARK: ",routname)
+     write(std_out,'(a)')TRIM(AB_HEADER)
    end do
  end if
 
-!zgerc
+!AB_ZGERC
  if (.FALSE.) then
    do step=1,2
      if (step==1) routname = " f90_zgerc"
-     if (step==2) routname = " zgerc"
-     header = strcat("BEGIN_BENCHMARK: ",routname)
-     write(std_out,'(a)')TRIM(header)
+     if (step==2) routname = " AB_ZGERC"
+     AB_HEADER = strcat("BEGIN_BENCHMARK: ",routname)
+     write(std_out,'(a)')TRIM(AB_HEADER)
 
      do isz=1,nsizes
        npw  = sizes(isz)
@@ -506,7 +506,7 @@ program lapackprof
        zvec = cone; zmat = czero
 
        call cwtime(ctime,wtime,gflops,"start")
-       if (step==1) then ! Home made zgerc
+       if (step==1) then ! Home made AB_ZGERC
          do it=1,ncalls
            zmat = czero
 !$OMP PARALLEL DO
@@ -529,8 +529,8 @@ program lapackprof
        ABI_FREE(zmat)
      end do
 
-     header = strcat("END_BENCHMARK: ",routname)
-     write(std_out,'(a)')TRIM(header)
+     AB_HEADER = strcat("END_BENCHMARK: ",routname)
+     write(std_out,'(a)')TRIM(AB_HEADER)
    end do
 
 !  do isz=1,nsizes

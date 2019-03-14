@@ -116,8 +116,8 @@
       DOUBLE PRECISION   RWORK( 1 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, ZLANGE
-      EXTERNAL           DLAMCH, ZLANGE
+      DOUBLE PRECISION   AB_DLAMCH, ZLANGE
+      EXTERNAL           AB_DLAMCH, ZLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           XERBLA, ZLASET, ZUNMRZ
@@ -161,7 +161,7 @@
    10 CONTINUE
 *
       ZRZT02 = ZLANGE( 'One-norm', N, N, WORK, N, RWORK ) /
-     $         ( DLAMCH( 'Epsilon' )*DBLE( MAX( M, N ) ) )
+     $         ( AB_DLAMCH( 'Epsilon' )*DBLE( MAX( M, N ) ) )
       RETURN
 *
 *     End of ZRZT02

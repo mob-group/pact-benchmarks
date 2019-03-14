@@ -152,8 +152,8 @@
       COMPLEX*16         F, FF, FS, G, GS, R, SN
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, AB_DLAPY2
-      EXTERNAL           DLAMCH, AB_DLAPY2
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLAPY2
+      EXTERNAL           AB_DLAMCH, AB_DLAPY2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCMPLX, DCONJG, DIMAG, INT, LOG,
@@ -176,10 +176,10 @@
 *
 *     IF( FIRST ) THEN
 *        FIRST = .FALSE.
-         SAFMIN = DLAMCH( 'S' )
-         EPS = DLAMCH( 'E' )
-         SAFMN2 = DLAMCH( 'B' )**INT( LOG( SAFMIN / EPS ) /
-     $            LOG( DLAMCH( 'B' ) ) / TWO )
+         SAFMIN = AB_DLAMCH( 'S' )
+         EPS = AB_DLAMCH( 'E' )
+         SAFMN2 = AB_DLAMCH( 'B' )**INT( LOG( SAFMIN / EPS ) /
+     $            LOG( AB_DLAMCH( 'B' ) ) / TWO )
          SAFMX2 = ONE / SAFMN2
 *     END IF
       IX = 1

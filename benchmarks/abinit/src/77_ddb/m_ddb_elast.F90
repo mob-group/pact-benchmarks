@@ -93,7 +93,7 @@ contains
 !!      anaddb
 !!
 !! CHILDREN
-!!      asria_corr,matrginv,wrtout,zhpev
+!!      asria_corr,matrginv,wrtout,AB_ZHPEV
 !!
 !! SOURCE
 
@@ -137,8 +137,8 @@ subroutine ddb_elast(inp,crystal,blkval,compl,compl_clamped,compl_stress,d2asr,&
  real(dp) :: eigvalp(3*natom),eigvec(2,3*natom-3,3*natom-3)
  real(dp) :: eigvecp(2,3*natom,3*natom),elast_relaxed(6,6)
  real(dp) :: kmatrix(3*natom,3*natom),new1(6,3*natom)
- real(dp) :: new2(6,6),stress(6),zhpev1(2,2*3*natom-4),zhpev1p(2,2*3*natom-1)
- real(dp) :: zhpev2(3*3*natom-5),zhpev2p(3*3*natom-2)
+ real(dp) :: new2(6,6),stress(6),AB_ZHPEV1(2,2*3*natom-4),AB_ZHPEV1p(2,2*3*natom-1)
+ real(dp) :: AB_ZHPEV2(3*3*natom-5),AB_ZHPEV2p(3*3*natom-2)
  real(dp) :: d2cart(2,3*natom,3*natom)
 
 !***************************************************************************
@@ -258,14 +258,14 @@ subroutine ddb_elast(inp,crystal,blkval,compl,compl_clamped,compl_stress,d2asr,&
      end do
    end do
    Bpmatr(2,:)=zero  !the imaginary part of the force matrix
-!  then call the subroutines CHPEV and ZHPEV to get the eigenvectors
+!  then call the subroutines AB_CHPEV and AB_ZHPEV to get the eigenvectors
 !  NOTE: MJV there is a huge indeterminacy in this matrix, which has all identical 3x3 block lines
 !  this means the orientation of the 0-eigenvalue eigenvectors is kind of random...
 !  Is the usage just to get out the translational modes? We know what the eigenvectors look like already!
 !  The translational modes are the last 3 with eigenvalue 6
 !
-   call ZHPEV ('V','U',3*natom,Bpmatr,eigvalp,eigvecp,3*natom,zhpev1p,zhpev2p,ier)
-   ABI_CHECK(ier == 0, sjoin("ZHPEV returned:", itoa(ier)))
+   call AB_ZHPEV ('V','U',3*natom,Bpmatr,eigvalp,eigvecp,3*natom,AB_ZHPEV1p,AB_ZHPEV2p,ier)
+   ABI_CHECK(ier == 0, sjoin("AB_ZHPEV returned:", itoa(ier)))
 
 !  DEBUG
 !  the eigenval and eigenvec
@@ -348,9 +348,9 @@ subroutine ddb_elast(inp,crystal,blkval,compl,compl_clamped,compl_stress,d2asr,&
      end do
    end do
    Bmatr(2,:)=zero
-!  then call the subroutines CHPEV and ZHPEV to get the eigenvectors and the eigenvalues
-   call ZHPEV ('V','U',3*natom-3,Bmatr,eigval,eigvec,3*natom-3,zhpev1,zhpev2,ier)
-   ABI_CHECK(ier == 0, sjoin("ZHPEV returned:", itoa(ier)))
+!  then call the subroutines AB_CHPEV and AB_ZHPEV to get the eigenvectors and the eigenvalues
+   call AB_ZHPEV ('V','U',3*natom-3,Bmatr,eigval,eigvec,3*natom-3,AB_ZHPEV1,AB_ZHPEV2,ier)
+   ABI_CHECK(ier == 0, sjoin("AB_ZHPEV returned:", itoa(ier)))
 
 !  check the unstable phonon modes, if the first is negative then print warning message
    if(eigval(1)<-1.0*tol8)then

@@ -65,7 +65,7 @@ contains
 !!  eigen(mband*nkpt*nsppol)=array for holding eigenvalues (hartree)
 !!  gmet = reciprocal space metric
 !!  gprimd = dimensionful reciprocal space vectors
-!!  hdr <type(hdr_type)>=the header of wf, den and pot files
+!!  hdr <type(hdr_type)>=the AB_HEADER of wf, den and pot files
 !!  kg(3,mpw*mkmem)=reduced (integer) coordinates of G vecs in basis sphere
 !!  mcg=size of wave-functions array (cg) =mpw*nspinor*mband*mkmem*nsppol
 !!  mpi_enreg=information about MPI parallelization
@@ -494,7 +494,7 @@ subroutine spin_current(cg,dtfil,dtset,gprimd,hdr,kg,mcg,mpi_enreg,psps)
      MSG_ERROR(message)
    end if
 
-!  print header
+!  print AB_HEADER
    write (spcur_unit,'(a)')          '#'
    write (spcur_unit,'(a)')          '#  Xcrysden format file'
    write (spcur_unit,'(a)')          '#  spin current density, for all real space points'
@@ -540,7 +540,7 @@ subroutine spin_current(cg,dtfil,dtset,gprimd,hdr,kg,mcg,mpi_enreg,psps)
            MSG_ERROR(message)
          end if
 
-         ! print header
+         ! print AB_HEADER
          write (spcur_unit,'(a)')        '#'
          write (spcur_unit,'(a)')        '#  Xcrysden format file'
          write (spcur_unit,'(a)')        '#  spin-orbit potential (space diagonal), for all real space points'

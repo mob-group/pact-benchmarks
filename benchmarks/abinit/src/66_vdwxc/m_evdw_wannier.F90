@@ -108,7 +108,7 @@ contains
  integer  :: jwan,jj,ll,mm,mwan,nc,ngr,tmp_mwan,mwan_half
  integer, allocatable:: amagr(:,:,:),inwan(:,:),nw(:,:),nwan(:),npwf(:),ord(:,:)
  integer, allocatable:: tmp_nwan(:)
- real(dp) :: dnrm2,fij,rij,rij_c(3),fu,shift,erfValue
+ real(dp) :: AB_DNRM2,fij,rij,rij_c(3),fu,shift,erfValue
  real(dp), parameter :: a = 20.d0 !Parameter related to the damping function.
  real(dp), parameter :: gama = 4.5d0/(sqrt3**3) !alpha=gama*S**3.
  real(dp), parameter :: gama1 = 0.88d0 !alpha=gama*S**3.
@@ -117,9 +117,9 @@ contains
  real(dp), allocatable:: amawf(:,:),amaspr(:),amaocc(:),dcenters(:,:,:),rc(:,:)
  real(dp), allocatable:: tmp_cent(:,:,:),tmp_spr(:,:),tmp_occ(:,:)
  real(dp), allocatable:: rv(:,:),wanncent(:,:,:),wannspr(:,:),wc_rec(:,:,:),xi(:,:)
- real(dp), allocatable:: c_QHO(:,:),Tij_dip(:,:),polar(:),omega(:),eigv(:),zhpev2(:)
+ real(dp), allocatable:: c_QHO(:,:),Tij_dip(:,:),polar(:),omega(:),eigv(:),AB_ZHPEV2(:)
  real(dpc), allocatable :: newocc_wan(:,:)
- complex(dpc), allocatable :: eigvec(:,:),matrx(:),zhpev1(:)
+ complex(dpc), allocatable :: eigvec(:,:),matrx(:),AB_ZHPEV1(:)
  character(len=500) :: message                   ! to be uncommented, if needed
 ! *************************************************************************
 
@@ -819,7 +819,7 @@ contains
 &                   (real(icz,dp))*rprimd(:,3)+wanncent(:,iwan,isppol)
 
                    rij_c = -dcenters(:,iwan,isppol)+wanncent(:,jwan,isppol)
-                   rij = dnrm2(3,rij_c,1)
+                   rij = AB_DNRM2(3,rij_c,1)
 !                  rij=sqrt(dot_product(rij_c,rij_c))
                    if (rij==zero) cycle
 !DEBUG
@@ -888,7 +888,7 @@ contains
 &                   (real(icz,dp))*rprimd(:,3)+wanncent(:,iwan,isppol)
 
                    rij_c = dcenters(:,iwan,isppol)-wanncent(:,jwan,isppol)
-                   rij = dnrm2(3,rij_c,1)
+                   rij = AB_DNRM2(3,rij_c,1)
 !                  rij=sqrt(dot_product(rij_c,rij_c))
                    if(rij==zero) cycle
 !DEBUG
@@ -923,8 +923,8 @@ contains
      ABI_ALLOCATE(matrx,((3*mwan*nc*(3*mwan*nc+1))/2))
      ABI_ALLOCATE(eigv,(3*mwan*nc))
      ABI_ALLOCATE(eigvec,(3*mwan*nc,3*mwan*nc))
-     ABI_ALLOCATE(zhpev1,(3*2*mwan*nc-1))
-     ABI_ALLOCATE(zhpev2,(3*3*mwan*nc-2))
+     ABI_ALLOCATE(AB_ZHPEV1,(3*2*mwan*nc-1))
+     ABI_ALLOCATE(AB_ZHPEV2,(3*3*mwan*nc-2))
      matrx(:)=cmplx(zero,zero)
      do jj=1,3*mwan*nc
        do ii=1,jj
@@ -938,9 +938,9 @@ contains
 !    write(std_out,*) real(matrx(jj))
 !   enddo
 !ENDDEBUG
-     call ZHPEV ('N','U',3*mwan*nc,matrx,eigv,eigvec,3*mwan*nc,zhpev1,zhpev2,ier)
+     call AB_ZHPEV ('N','U',3*mwan*nc,matrx,eigv,eigvec,3*mwan*nc,AB_ZHPEV1,AB_ZHPEV2,ier)
 !DEBUG
-     write(std_out,*) 'Last argument of ZHPEV: ier=',ch10
+     write(std_out,*) 'Last argument of AB_ZHPEV: ier=',ch10
      write(std_out,*) ier,ch10
      write(std_out,*) 'List of c_QHO eigenvaules:',ch10
      do ll=1,3*mwan*nc
@@ -948,13 +948,13 @@ contains
      end do
 !ENDDEBUG
      if(ier/=0) then !vz_d
-       MSG_ERROR('zhpev fails!') !vz_d
+       MSG_ERROR('AB_ZHPEV fails!') !vz_d
      end if !vz_d
 
      ABI_DEALLOCATE(matrx)
      ABI_DEALLOCATE(eigvec)
-     ABI_DEALLOCATE(zhpev1)
-     ABI_DEALLOCATE(zhpev2)
+     ABI_DEALLOCATE(AB_ZHPEV1)
+     ABI_DEALLOCATE(AB_ZHPEV2)
 
      do ii=1,3*mwan*nc  !3*nwan(isppol)
        corrvdw=corrvdw+sqrt(eigv(ii))
@@ -1163,7 +1163,7 @@ end subroutine getFu
    real(dp),intent(in)    :: wanncent(3,mwan,nsppol),xcart(3,natom)
 !Local variables
    integer :: ii,jj,ll
-   real(dp):: dis,dnrm2,mindi
+   real(dp):: dis,AB_DNRM2,mindi
    real(dp), allocatable :: tmp(:)
 ! *************************************************************************
 
@@ -1172,13 +1172,13 @@ end subroutine getFu
  do ll=1,nsppol
    do ii=1,nwan(ll)
      tmp(:) = wanncent(:,ii,ll) - xcart(:,1)
-     mindi = dnrm2(3,tmp,1)
+     mindi = AB_DNRM2(3,tmp,1)
 !     mindi=sqrt( dot_product(wanncent(:,ii,ll),wanncent(:,ii,ll))+dot_product(xcart(:,1),xcart(:,1))&
 !&     -2*(dot_product(wanncent(:,ii,ll),xcart(:,1))) )
      ord(ii,ll)=vdw_typfrag(1)
      do jj=2,natom
        tmp(:) = wanncent(:,ii,ll) - xcart(:,jj)
-       dis = dnrm2(3,tmp,1)
+       dis = AB_DNRM2(3,tmp,1)
 !       dis=sqrt( dot_product(wanncent(:,ii,ll),wanncent(:,ii,ll))+dot_product(xcart(:,jj),xcart(:,jj))&
 !&       -2*(dot_product(wanncent(:,ii,ll),xcart(:,jj))) )
        if(dis<=mindi) then
@@ -1228,7 +1228,7 @@ end subroutine getFu
    real(dp), intent(out)  :: xi(mwan,nsppol)
 !Local variables
    integer :: ii,iwan,ix,iy,iz,jj,jwan,neigh,steps
-   real(dp):: dis,disi,discent,veff,vfree,dnrm2
+   real(dp):: dis,disi,discent,veff,vfree,AB_DNRM2
    integer, allocatable :: intsec(:,:,:,:)
    real(dp), allocatable :: rpoint(:), tmp(:)
    real(dp), parameter :: delt = 0.05d0 !Bohr, spatial mesh (1D) step
@@ -1249,7 +1249,7 @@ end subroutine getFu
 
 
            tmp(:) = wanncent(:,iwan,ii) - wanncent(:,jwan,jj)
-           dis =  dnrm2(3,tmp,1)
+           dis =  AB_DNRM2(3,tmp,1)
 !           dis=sqrt(  dot_product(wanncent(:,iwan,ii),wanncent(:,iwan,ii))+&
 !&           dot_product(wanncent(:,jwan,jj),wanncent(:,jwan,jj))&
 !&           -2*( dot_product(wanncent(:,iwan,ii),wanncent(:,jwan,jj)) )  )
@@ -1301,7 +1301,7 @@ end subroutine getFu
            rpoint(3) = wanncent(3,iwan,ii) + iz*delt
 
            tmp(:) = wanncent(:,iwan,ii) - rpoint(:)
-           discent = dnrm2(3,tmp,1)
+           discent = AB_DNRM2(3,tmp,1)
 
 !           discent = sqrt( dot_product(wanncent(:,iwan,ii),wanncent(:,iwan,ii))&
 !&           +dot_product( rpoint(:),rpoint(:) )&
@@ -1317,7 +1317,7 @@ end subroutine getFu
                  if ( intsec(iwan,ii,jwan,jj) == 1 ) then
 
                    tmp(:) = rpoint(:) - wanncent(:,jwan,jj)
-                   disi = dnrm2(3,tmp,1)
+                   disi = AB_DNRM2(3,tmp,1)
 !                   disi = sqrt( dot_product(rpoint(:),rpoint(:))&
 !&                   +dot_product( wanncent(:,jwan,jj),wanncent(:,jwan,jj) )&
 !&                   -2*( dot_product(rpoint(:),wanncent(:,jwan,jj)) ) )
@@ -1485,7 +1485,7 @@ end subroutine vv10limit
  integer,intent(out):: nw(nsppol,mwan/2),amagr(mwan,nsppol,mwan/2)
  !local variables
  integer :: dimen,ii,igr,isppol,iw,iwan,jj,jsppol,jwan,ll
- real(dp):: dis, dnrm2
+ real(dp):: dis, AB_DNRM2
  real(dp),allocatable :: tmp(:)
 ! *************************************************************************
 
@@ -1511,7 +1511,7 @@ end subroutine vv10limit
          if (ord(iwan,isppol)==ll .and. ord(jwan,jsppol)==ll ) then
 
            tmp(:) = wanncent(:,iwan,isppol) - wanncent(:,jwan,jsppol)
-           dis = dnrm2(3,tmp,1)
+           dis = AB_DNRM2(3,tmp,1)
 
 !           dis=sqrt( dot_product(wanncent(:,iwan,isppol),wanncent(:,iwan,isppol)) &
 !&           + dot_product(wanncent(:,jwan,jsppol),wanncent(:,jwan,jsppol))&
@@ -1569,7 +1569,7 @@ end subroutine vv10limit
          if (ord(iwan,isppol)==ll .and. ord(jwan,jsppol)==ll ) then
 
            tmp(:) =  wanncent(:,iwan,isppol) - wanncent(:,jwan,jsppol)
-           dis = dnrm2(3,tmp,1)
+           dis = AB_DNRM2(3,tmp,1)
 
 !           dis=sqrt( dot_product(wanncent(:,iwan,isppol),wanncent(:,iwan,isppol)) &
 !&           + dot_product(wanncent(:,jwan,jsppol),wanncent(:,jwan,jsppol))&

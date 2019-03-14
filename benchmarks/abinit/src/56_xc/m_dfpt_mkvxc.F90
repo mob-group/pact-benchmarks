@@ -771,7 +771,7 @@ end subroutine dfpt_mkvxcgga
 
 subroutine dfpt_mkvxc_noncoll(cplex,ixc,kxc,mpi_enreg,nfft,ngfft,nhat,nhatdim,nhat1,nhat1dim,&
 &          nhat1gr,nhat1grdim,nkxc,nspden,n3xccc,optnc,option,paral_kgb,qphon,rhor,rhor1,&
-&          rprimd,usexcnhat,vxc,vxc1,xccc3d1,ixcrot)
+&          rprimd,usexcnhat,vxc,vxc1,xccc3d1,ixAB_CROT)
 
 
 !This section has been created automatically by the script Abilint (TD).
@@ -796,7 +796,7 @@ subroutine dfpt_mkvxc_noncoll(cplex,ixc,kxc,mpi_enreg,nfft,ngfft,nhat,nhatdim,nh
  real(dp),intent(in),target :: rhor(nfft,nspden),rhor1(cplex*nfft,nspden)
  real(dp),intent(in) :: qphon(3),rprimd(3,3),xccc3d1(cplex*n3xccc)
  real(dp),intent(out) :: vxc1(cplex*nfft,nspden)
- integer,optional,intent(in) :: ixcrot
+ integer,optional,intent(in) :: ixAB_CROT
 !Local variables-------------------------------
 !scalars
 !arrays
@@ -873,9 +873,9 @@ subroutine dfpt_mkvxc_noncoll(cplex,ixc,kxc,mpi_enreg,nfft,ngfft,nhat,nhatdim,nh
 
 !  -- Rotate back Vxc(r)^(1)
    if (optnc==1) then
-     if(present(ixcrot)) then
+     if(present(ixAB_CROT)) then
        call rotate_back_mag_dfpt(option,vxc1_diag,vxc1,vxc,kxc,rhor1_,mag,nfft,cplex,&
-&       mag_norm_in=m_norm,rot_method=ixcrot)
+&       mag_norm_in=m_norm,rot_method=ixAB_CROT)
      else
        call rotate_back_mag_dfpt(option,vxc1_diag,vxc1,vxc,kxc,rhor1_,mag,nfft,cplex,&
 &       mag_norm_in=m_norm)

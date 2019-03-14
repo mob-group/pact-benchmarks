@@ -122,7 +122,7 @@ contains
 !! CHILDREN
 !!      cpu_time,extract_svd,g_to_r,gr_to_g,hpsik,pc_k_valence_kernel
 !!      setup_pk_model,sqmr,sqrt_vc_k,wf_block_distribute
-!!      write_text_block_in_timing_log,write_timing_log,xmpi_sum,zgemm,zgesv
+!!      write_text_block_in_timing_log,write_timing_log,xmpi_sum,AB_ZGEMM,AB_ZGESV
 !!
 !! SOURCE
 
@@ -199,7 +199,7 @@ end subroutine generate_frequencies_and_weights
 !! CHILDREN
 !!      cpu_time,extract_svd,g_to_r,gr_to_g,hpsik,pc_k_valence_kernel
 !!      setup_pk_model,sqmr,sqrt_vc_k,wf_block_distribute
-!!      write_text_block_in_timing_log,write_timing_log,xmpi_sum,zgemm,zgesv
+!!      write_text_block_in_timing_log,write_timing_log,xmpi_sum,AB_ZGEMM,AB_ZGESV
 !!
 !! SOURCE
 
@@ -319,7 +319,7 @@ end subroutine compute_eps_m1_minus_eps_model_m1
 !! CHILDREN
 !!      cpu_time,extract_svd,g_to_r,gr_to_g,hpsik,pc_k_valence_kernel
 !!      setup_pk_model,sqmr,sqrt_vc_k,wf_block_distribute
-!!      write_text_block_in_timing_log,write_timing_log,xmpi_sum,zgemm,zgesv
+!!      write_text_block_in_timing_log,write_timing_log,xmpi_sum,AB_ZGEMM,AB_ZGESV
 !!
 !! SOURCE
 
@@ -422,7 +422,7 @@ end subroutine compute_eps_m1_minus_one
 !! CHILDREN
 !!      cpu_time,extract_svd,g_to_r,gr_to_g,hpsik,pc_k_valence_kernel
 !!      setup_pk_model,sqmr,sqrt_vc_k,wf_block_distribute
-!!      write_text_block_in_timing_log,write_timing_log,xmpi_sum,zgemm,zgesv
+!!      write_text_block_in_timing_log,write_timing_log,xmpi_sum,AB_ZGEMM,AB_ZGESV
 !!
 !! SOURCE
 
@@ -757,8 +757,8 @@ end do
 end do
 
 ! the code below is twice as long!
-!call ZGEMV ( TRANS, M, N, ALPHA, A, LDA, X, INCX, BETA, Y, INCY )
-!call ZGEMV ( 'T', npw_k, lmax_model, cmplx_1, local_Lbasis_conjugated, npw_k, YL, 1, cmplx_0, vpv_row, 1)
+!call AB_ZGEMV ( TRANS, M, N, ALPHA, A, LDA, X, INCX, BETA, Y, INCY )
+!call AB_ZGEMV ( 'T', npw_k, lmax_model, cmplx_1, local_Lbasis_conjugated, npw_k, YL, 1, cmplx_0, vpv_row, 1)
 
 !do l2 = 1, l1
 !        eps_model_m1_minus_one(l1,l2,iw) = eps_model_m1_minus_one(l1,l2,iw)     &
@@ -1029,7 +1029,7 @@ end subroutine compute_eps_model_m1_minus_one
 !! CHILDREN
 !!      cpu_time,extract_svd,g_to_r,gr_to_g,hpsik,pc_k_valence_kernel
 !!      setup_pk_model,sqmr,sqrt_vc_k,wf_block_distribute
-!!      write_text_block_in_timing_log,write_timing_log,xmpi_sum,zgemm,zgesv
+!!      write_text_block_in_timing_log,write_timing_log,xmpi_sum,AB_ZGEMM,AB_ZGESV
 !!
 !! SOURCE
 
@@ -1096,7 +1096,7 @@ end subroutine cleanup_projected_Sternheimer_epsilon
 !! CHILDREN
 !!      cpu_time,extract_svd,g_to_r,gr_to_g,hpsik,pc_k_valence_kernel
 !!      setup_pk_model,sqmr,sqrt_vc_k,wf_block_distribute
-!!      write_text_block_in_timing_log,write_timing_log,xmpi_sum,zgemm,zgesv
+!!      write_text_block_in_timing_log,write_timing_log,xmpi_sum,AB_ZGEMM,AB_ZGESV
 !!
 !! SOURCE
 
@@ -2075,7 +2075,7 @@ flush(io_unit_log)
 
 
 call cpu_time(time1)
-call zgesv(lsolutions,      & ! number of rows of A matrix
+call AB_ZGESV(lsolutions,      & ! number of rows of A matrix
 lmax,            & ! number of columns of B matrix
 sternheimer_A,   & ! The A matrix on input, the LU factorization on output
 lsolutions,      & ! leading dimension of A
@@ -2101,7 +2101,7 @@ ABI_ALLOCATE(dummy_tmp_1,(lsolutions,lmax))
 dummy_tmp_1(:,:) = conjg(sternheimer_X) ! DO THIS to avoid potential stack problems
 
 call cpu_time(time1)
-call zgemm(     'N',    & ! A matrix is in normal order
+call AB_ZGEMM(     'N',    & ! A matrix is in normal order
 'N',    & ! B matrix is in normal order
 lmax,    & ! number of rows of A
 lmax,    & ! number of columns of B

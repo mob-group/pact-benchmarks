@@ -129,8 +129,8 @@
      $                   X( 2, 2 )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SLABAD, SLALN2
@@ -145,9 +145,9 @@
 *
 *     Get machine parameters
 *
-      EPS = SLAMCH( 'P' )
-      UNFL = SLAMCH( 'U' )
-      SMLNUM = SLAMCH( 'S' ) / EPS
+      EPS = AB_SLAMCH( 'P' )
+      UNFL = AB_SLAMCH( 'U' )
+      SMLNUM = AB_SLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
       CALL SLABAD( SMLNUM, BIGNUM )
 *

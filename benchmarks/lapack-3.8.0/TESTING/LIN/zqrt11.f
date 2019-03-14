@@ -120,8 +120,8 @@
       INTEGER            INFO, J
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, ZLANGE
-      EXTERNAL           DLAMCH, ZLANGE
+      DOUBLE PRECISION   AB_DLAMCH, ZLANGE
+      EXTERNAL           AB_DLAMCH, ZLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           XERBLA, ZLASET, ZUNM2R
@@ -166,7 +166,7 @@
    10 CONTINUE
 *
       ZQRT11 = ZLANGE( 'One-norm', M, M, WORK, M, RDUMMY ) /
-     $         ( DBLE( M )*DLAMCH( 'Epsilon' ) )
+     $         ( DBLE( M )*AB_DLAMCH( 'Epsilon' ) )
 *
       RETURN
 *

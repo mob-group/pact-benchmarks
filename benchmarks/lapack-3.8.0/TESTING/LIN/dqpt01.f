@@ -148,8 +148,8 @@
       DOUBLE PRECISION   RWORK( 1 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLANGE
-      EXTERNAL           DLAMCH, DLANGE
+      DOUBLE PRECISION   AB_DLAMCH, DLANGE
+      EXTERNAL           AB_DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DAXPY, DCOPY, DORMQR, XERBLA
@@ -199,7 +199,7 @@
    50 CONTINUE
 *
       DQPT01 = DLANGE( 'One-norm', M, N, WORK, M, RWORK ) /
-     $         ( DBLE( MAX( M, N ) )*DLAMCH( 'Epsilon' ) )
+     $         ( DBLE( MAX( M, N ) )*AB_DLAMCH( 'Epsilon' ) )
       IF( NORMA.NE.ZERO )
      $   DQPT01 = DQPT01 / NORMA
 *

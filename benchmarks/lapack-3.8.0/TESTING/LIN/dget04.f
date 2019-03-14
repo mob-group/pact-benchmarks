@@ -127,8 +127,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            IDAMAX
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           IDAMAX, DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           IDAMAX, AB_DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -144,7 +144,7 @@
 *
 *     Exit with RESID = 1/EPS if RCOND is invalid.
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       IF( RCOND.LT.ZERO ) THEN
          RESID = 1.0D0 / EPS
          RETURN

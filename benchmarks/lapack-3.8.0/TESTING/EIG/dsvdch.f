@@ -123,8 +123,8 @@
       DOUBLE PRECISION   EPS, LOWER, OVFL, TUPPR, UNFL, UNFLEP, UPPER
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DSVDCT
@@ -139,9 +139,9 @@
       INFO = 0
       IF( N.LE.0 )
      $   RETURN
-      UNFL = DLAMCH( 'Safe minimum' )
-      OVFL = DLAMCH( 'Overflow' )
-      EPS = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
+      OVFL = AB_DLAMCH( 'Overflow' )
+      EPS = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
 *
 *     UNFLEP is chosen so that when an eigenvalue is multiplied by the
 *     scale factor sqrt(OVFL)*sqrt(sqrt(UNFL))/MX in DSVDCT, it exceeds

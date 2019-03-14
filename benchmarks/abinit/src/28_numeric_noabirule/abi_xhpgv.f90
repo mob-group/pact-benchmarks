@@ -65,9 +65,9 @@
  !if ( present(istwf_k) .and. istwf_k == 2 .and. present(rwork)) then
  if (istwf_k_ /= 2) then
     ABI_CHECK(present(rwork),"rwork must be present")
-    call zhpgv(itype,jobz,uplo,n,a,b,w,z,ldz,work,rwork,info)
+    call AB_ZHPGV(itype,jobz,uplo,n,a,b,w,z,ldz,work,rwork,info)
  else
-    call dspgv(itype,jobz,uplo,n,a,b,w,z,ldz,work,info)
+    call AB_DSPGV(itype,jobz,uplo,n,a,b,w,z,ldz,work,info)
  endif
 
  ABI_CHECK(info==0,"[z,d]hpgv returned info !=0")
@@ -253,7 +253,7 @@ end subroutine abi_dhpgv_alloc_2d
 
 ! *********************************************************************
 
- call chpgv(itype,jobz,uplo,n,a,b,w,z,ldz,work,rwork,info)
+ call AB_CHPGV(itype,jobz,uplo,n,a,b,w,z,ldz,work,rwork,info)
 
 end subroutine abi_chpgv
 !!***
@@ -338,7 +338,7 @@ subroutine abi_zhpgv(itype,jobz,uplo,n,a,b,w,z,ldz,work,rwork,info)
 
  ! *********************************************************************
 
- call zhpgv(itype,jobz,uplo,n,a,b,w,z,ldz,work,rwork,info)
+ call AB_ZHPGV(itype,jobz,uplo,n,a,b,w,z,ldz,work,rwork,info)
 
 end subroutine abi_zhpgv
 !!***

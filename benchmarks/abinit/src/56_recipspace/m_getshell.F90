@@ -113,7 +113,7 @@ contains
 !!      nonlinear
 !!
 !! CHILDREN
-!!      dgelss,getkgrid,wrtout,xmpi_max
+!!      AB_DGELSs,getkgrid,wrtout,xmpi_max
 !!
 !! SOURCE
 
@@ -564,7 +564,7 @@ subroutine getshell(gmet,kneigh,kg_neigh,kptindex,kptopt,kptrlatt,kpt2,&
 !  ENDDEBUG
 
 !  Solve the linear least square problem
-   call dgelss(6,ishell,1,mat,6,rvec,6,sgval,tol8,irank,work,30,info)
+   call AB_DGELSs(6,ishell,1,mat,6,rvec,6,sgval,tol8,irank,work,30,info)
 
    if( info /= 0 ) then
      write(message,'(3a,i0,a)')&

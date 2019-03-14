@@ -533,9 +533,9 @@
       DOUBLE PRECISION   AMAX, BIGNUM, SMIN, SMAX, SCOND, SMLNUM
 *     ..
 *     .. External Functions ..
-      EXTERNAL           AB_LSAME, DLAMCH, AB_ZLA_PORPVGRW
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_ZLA_PORPVGRW
       LOGICAL            AB_LSAME
-      DOUBLE PRECISION   DLAMCH, AB_ZLA_PORPVGRW
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLA_PORPVGRW
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_ZPOEQUB, AB_ZPOTRF, AB_ZPOTRS, AB_ZLACPY,
@@ -549,7 +549,7 @@
       INFO = 0
       NOFACT = AB_LSAME( FACT, 'N' )
       EQUIL = AB_LSAME( FACT, 'E' )
-      SMLNUM = DLAMCH( 'Safe minimum' )
+      SMLNUM = AB_DLAMCH( 'Safe minimum' )
       BIGNUM = ONE / SMLNUM
       IF( NOFACT .OR. EQUIL ) THEN
          EQUED = 'N'

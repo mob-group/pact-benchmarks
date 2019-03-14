@@ -258,8 +258,8 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_IDAMAX
-      DOUBLE PRECISION   AB_DASUM, AB_DDOT, DLAMCH
-      EXTERNAL           AB_LSAME, AB_IDAMAX, AB_DASUM, AB_DDOT, DLAMCH
+      DOUBLE PRECISION   AB_DASUM, AB_DDOT, AB_DLAMCH
+      EXTERNAL           AB_LSAME, AB_IDAMAX, AB_DASUM, AB_DDOT, AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_DAXPY, AB_DSCAL, AB_DTPSV, AB_XERBLA
@@ -301,7 +301,7 @@
 *
 *     Determine machine dependent parameters to control overflow.
 *
-      SMLNUM = DLAMCH( 'Safe minimum' ) / DLAMCH( 'Precision' )
+      SMLNUM = AB_DLAMCH( 'Safe minimum' ) / AB_DLAMCH( 'Precision' )
       BIGNUM = ONE / SMLNUM
       SCALE = ONE
 *

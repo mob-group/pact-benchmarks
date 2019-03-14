@@ -192,8 +192,8 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DQPT01, DQRT11, DQRT12
-      EXTERNAL           DLAMCH, DQPT01, DQRT11, DQRT12
+      DOUBLE PRECISION   AB_DLAMCH, DQPT01, DQRT11, DQRT12
+      EXTERNAL           AB_DLAMCH, DQPT01, DQRT11, DQRT12
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAHD, ALASUM, DGEQP3, DLACPY, DLAORD, DLASET,
@@ -226,7 +226,7 @@
       DO 10 I = 1, 4
          ISEED( I ) = ISEEDY( I )
    10 CONTINUE
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       INFOT = 0
 *
       DO 90 IM = 1, NM

@@ -229,8 +229,8 @@
      $                   SAFMIN, SALFI, SALFR, SBETA, SCALE, TEMP1, ULP
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLANGE
-      EXTERNAL           SLAMCH, SLANGE
+      REAL               AB_SLAMCH, SLANGE
+      EXTERNAL           AB_SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGEMV
@@ -245,9 +245,9 @@
       IF( N.LE.0 )
      $   RETURN
 *
-      SAFMIN = SLAMCH( 'Safe minimum' )
+      SAFMIN = AB_SLAMCH( 'Safe minimum' )
       SAFMAX = ONE / SAFMIN
-      ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
+      ULP = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
 *
       IF( LEFT ) THEN
          TRANS = 'T'

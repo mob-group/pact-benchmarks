@@ -227,8 +227,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL AB_DISNAN
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           AB_DISNAN, DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DISNAN, AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_DCOPY
@@ -247,7 +247,7 @@
       END IF
 *
       FACT = DBLE(2**KTRYMAX)
-      EPS = DLAMCH( 'Precision' )
+      EPS = AB_DLAMCH( 'Precision' )
       SHIFT = 0
       FORCER = .FALSE.
 
@@ -289,7 +289,7 @@
 *
 *     Initialize the record of the best representation found
 *
-      S = DLAMCH( 'S' )
+      S = AB_DLAMCH( 'S' )
       SMLGROWTH = ONE / S
       FAIL = DBLE(N-1)*MINGAP/(SPDIAM*EPS)
       FAIL2 = DBLE(N-1)*MINGAP/(SPDIAM*SQRT(EPS))

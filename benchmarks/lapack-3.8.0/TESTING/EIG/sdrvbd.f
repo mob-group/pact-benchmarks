@@ -399,8 +399,8 @@
       REAL               RESULT( 40 )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLARND
-      EXTERNAL           SLAMCH, SLARND
+      REAL               AB_SLAMCH, SLARND
+      EXTERNAL           AB_SLAMCH, SLARND
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, SBDT01, SGEJSV, SGESDD, SGESVD,
@@ -479,10 +479,10 @@
       PATH( 2: 3 ) = 'BD'
       NFAIL = 0
       NTEST = 0
-      UNFL = SLAMCH( 'Safe minimum' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
       CALL SLABAD( UNFL, OVFL )
-      ULP = SLAMCH( 'Precision' )
+      ULP = AB_SLAMCH( 'Precision' )
       RTUNFL = SQRT( UNFL )
       ULPINV = ONE / ULP
       INFOT = 0

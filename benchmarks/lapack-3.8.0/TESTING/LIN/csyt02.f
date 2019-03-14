@@ -155,8 +155,8 @@
       REAL               ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      REAL               CLANSY, SCASUM, SLAMCH
-      EXTERNAL           CLANSY, SCASUM, SLAMCH
+      REAL               CLANSY, SCASUM, AB_SLAMCH
+      EXTERNAL           CLANSY, SCASUM, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CSYMM
@@ -175,7 +175,7 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       ANORM = CLANSY( '1', UPLO, N, A, LDA, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS

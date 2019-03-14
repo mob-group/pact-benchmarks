@@ -159,8 +159,8 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            IDAMAX
-      DOUBLE PRECISION   DASUM, DLAMCH
-      EXTERNAL           LSAME, IDAMAX, DASUM, DLAMCH
+      DOUBLE PRECISION   DASUM, AB_DLAMCH
+      EXTERNAL           LSAME, IDAMAX, DASUM, AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGEMM
@@ -176,7 +176,7 @@
       IF( N.LE.0 .OR. NS.LE.0 )
      $   RETURN
 *
-      EPS = DLAMCH( 'Precision' )
+      EPS = AB_DLAMCH( 'Precision' )
 *
 *     Compute S - U' * B * V.
 *

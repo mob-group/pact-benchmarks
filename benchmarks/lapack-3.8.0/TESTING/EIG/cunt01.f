@@ -155,9 +155,9 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               CLANSY, SLAMCH
+      REAL               CLANSY, AB_SLAMCH
       COMPLEX            CDOTC
-      EXTERNAL           LSAME, CLANSY, SLAMCH, CDOTC
+      EXTERNAL           LSAME, CLANSY, AB_SLAMCH, CDOTC
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CHERK, CLASET
@@ -180,7 +180,7 @@
       IF( M.LE.0 .OR. N.LE.0 )
      $   RETURN
 *
-      EPS = SLAMCH( 'Precision' )
+      EPS = AB_SLAMCH( 'Precision' )
       IF( M.LT.N .OR. ( M.EQ.N .AND. LSAME( ROWCOL, 'R' ) ) ) THEN
          TRANSU = 'N'
          K = N

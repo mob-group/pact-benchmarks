@@ -165,8 +165,8 @@
       REAL               ANORM, EPS
 *     ..
 *     .. External Functions ..
-      REAL               SASUM, SLAMCH, SLANGE
-      EXTERNAL           SASUM, SLAMCH, SLANGE
+      REAL               SASUM, AB_SLAMCH, SLANGE
+      EXTERNAL           SASUM, AB_SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SCOPY, SGEMV
@@ -264,7 +264,7 @@
 *     Compute norm(A - Q * B * P') / ( n * norm(A) * EPS )
 *
       ANORM = SLANGE( '1', M, N, A, LDA, WORK )
-      EPS = SLAMCH( 'Precision' )
+      EPS = AB_SLAMCH( 'Precision' )
 *
       IF( ANORM.LE.ZERO ) THEN
          IF( RESID.NE.ZERO )

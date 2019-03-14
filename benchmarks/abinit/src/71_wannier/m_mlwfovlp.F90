@@ -87,7 +87,7 @@ contains
 !! INPUTS
 !!  crystal<crystal_t>=Info on the crystalline structure.
 !!  ebands<ebands_t>=The object describing the band structure.
-!!  hdr <type(hdr_type)>=the header of wf, den and pot files
+!!  hdr <type(hdr_type)>=the AB_HEADER of wf, den and pot files
 !!  atindx1(natom)=index table for atoms, inverse of atindx (see gstate.f)
 !!  cg(2,mcg)=planewave coefficients of wavefunctions.
 !!  cprj(natom,mcprj)= <p_lmn|Cnk> coefficients for each WF |Cnk> and each |p_lmn> non-local projector
@@ -1419,7 +1419,7 @@ contains
    open(unit=chk_unit,file=fname,form='unformatted',status='old',iostat=ios)
 
    ierr=0
-   read(chk_unit) ! header                                   ! Date and time
+   read(chk_unit) ! AB_HEADER                                   ! Date and time
    read(chk_unit) ! ((real_lattice(i,j),i=1,3),j=1,3)        ! Real lattice
    read(chk_unit) ! ((recip_lattice(i,j),i=1,3),j=1,3)       ! Reciprocal lattice
    read(chk_unit) ! num_kpts
@@ -3401,7 +3401,7 @@ end subroutine mlwfovlp_radial
 !!      mlwfovlp_proj
 !!
 !! CHILDREN
-!!      rotmat,ylm_cmplx,zgesv
+!!      rotmat,ylm_cmplx,AB_ZGESV
 !!
 !! SOURCE
 
@@ -3434,7 +3434,7 @@ subroutine mlwfovlp_ylmfac(ylmc_fac,lmax,lmax2,mband,nwan,proj_l,proj_m,proj_x,p
  integer:: ipiv(lmax2)
  real(dp)::r(3,lmax2),rp(3,lmax2)
  real(dp)::rs2,rs3,rs6,rs12,umat(3,3)
- complex(dp)::crot(lmax2,lmax2),ctor(lmax2,lmax2),orb_lm(lmax2,-5:3,7)
+ complex(dp)::AB_CROT(lmax2,lmax2),ctor(lmax2,lmax2),orb_lm(lmax2,-5:3,7)
  complex(dp):: ylmcp(lmax2)
  complex(dp):: ylmc_rr(lmax2,lmax2),ylmc_rr_save(lmax2,lmax2)
  complex(dp):: ylmc_rrinv(lmax2,lmax2),ylmc_rp(lmax2,lmax2)
@@ -3563,7 +3563,7 @@ subroutine mlwfovlp_ylmfac(ylmc_fac,lmax,lmax2,mband,nwan,proj_l,proj_m,proj_x,p
      ylmc_rrinv(ii,ii)=c1
    end do !ii
 !  calculate inverse of ylmc(ir,lm) matrix
-   call ZGESV(lmax2,lmax2,ylmc_rr,lmax2,ipiv,ylmc_rrinv,lmax2,info)
+   call AB_ZGESV(lmax2,lmax2,ylmc_rr,lmax2,ipiv,ylmc_rrinv,lmax2,info)
 
 !  check that r points are independent (ie., that matrix inversion wasn't
 !  too close to singular)
@@ -3611,10 +3611,10 @@ subroutine mlwfovlp_ylmfac(ylmc_fac,lmax,lmax2,mband,nwan,proj_l,proj_m,proj_x,p
      end do !ir
 !    the matrix product sum(ir) ylmc_rrinv(lm,ir)*ylmc_rp(ir,lm') gives the
 !    the complex lmXlm matrix representation of the coordinate rotation
-     crot(:,:)=matmul(ylmc_rrinv(:,:),ylmc_rp(:,:))
+     AB_CROT(:,:)=matmul(ylmc_rrinv(:,:),ylmc_rp(:,:))
 
 !    now rotate the current wannier orbital
-     ylmcp(:)=matmul(crot(:,:),ylmc_fac(:,iwan))
+     ylmcp(:)=matmul(AB_CROT(:,:),ylmc_fac(:,iwan))
      ylmc_fac(:,iwan)=ylmcp(:)
 
 !    write(std_out,*)'ylmc_fac',ylmc_fac(:,iwan)

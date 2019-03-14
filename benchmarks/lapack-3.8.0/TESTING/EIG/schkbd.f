@@ -541,8 +541,8 @@
       REAL               DUM( 1 ), DUMMA( 1 ), RESULT( 40 )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLARND, SSXT1
-      EXTERNAL           SLAMCH, SLARND, SSXT1
+      REAL               AB_SLAMCH, SLARND, SSXT1
+      EXTERNAL           AB_SLAMCH, SLARND, SSXT1
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASUM, SBDSDC, SBDSQR, SBDSVDX, SBDT01,
@@ -628,10 +628,10 @@
       PATH( 2: 3 ) = 'BD'
       NFAIL = 0
       NTEST = 0
-      UNFL = SLAMCH( 'Safe minimum' )
-      OVFL = SLAMCH( 'Overflow' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
+      OVFL = AB_SLAMCH( 'Overflow' )
       CALL SLABAD( UNFL, OVFL )
-      ULP = SLAMCH( 'Precision' )
+      ULP = AB_SLAMCH( 'Precision' )
       ULPINV = ONE / ULP
       LOG2UI = INT( LOG( ULPINV ) / LOG( TWO ) )
       RTUNFL = SQRT( UNFL )

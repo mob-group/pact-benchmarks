@@ -352,7 +352,7 @@ subroutine respfn(codvsn,cpui,dtfil,dtset,etotal,iexit,&
 !AM 10152015 -- WARNING --- the full calculation of the piezoelectric tensor
 !from electric field perturbation is only available
 !if nsym/=1 (strain perturbation is not symmetrized):
- has_full_piezo=.False. ; if(pawpiezo==1.and.dtset%nsym==1)  has_full_piezo=.True.
+ has_full_piezo=.false. ; if(pawpiezo==1.and.dtset%nsym==1)  has_full_piezo=.True.
  usevdw=0;if (dtset%vdw_xc>=5.and.dtset%vdw_xc<=7) usevdw=1
 !mkmem variables (mkmem is already argument)
  mkqmem=mkmems(2) ; mk1mem=mkmems(3)
@@ -463,12 +463,12 @@ subroutine respfn(codvsn,cpui,dtfil,dtset,etotal,iexit,&
    ABI_DATATYPE_ALLOCATE(pawrhoij,(0))
  end if
 
-!Initialize header
+!Initialize AB_HEADER
  gscase=0
  call hdr_init(bstruct,codvsn,dtset,hdr,pawtab,gscase,psps,wvl%descr, &
 & comm_atom=mpi_enreg%comm_atom, mpi_atmtab=mpi_enreg%my_atmtab)
 
-!Update header, with evolving variables, when available
+!Update AB_HEADER, with evolving variables, when available
 !Here, rprimd, xred and occ are available
  etot=hdr%etot ; fermie=hdr%fermie ; residm=hdr%residm
 !If parallelism over atom, hdr is distributed
@@ -769,7 +769,7 @@ subroutine respfn(codvsn,cpui,dtfil,dtset,etotal,iexit,&
    end if
 
 !    MT july 2013: Should we read rhoij from the density file ?
-   call read_rhor(dtfil%fildensin, cplex1, dtset%nspden, nfftf, ngfftf, rdwrpaw, mpi_enreg, rhor, &
+   call read_rhor(dtfil%fiAB_LDEnsin, cplex1, dtset%nspden, nfftf, ngfftf, rdwrpaw, mpi_enreg, rhor, &
    hdr_den, pawrhoij_read, spaceworld, check_hdr=hdr)
    etotal = hdr_den%etot; call hdr_free(hdr_den)
 
@@ -1486,11 +1486,11 @@ subroutine respfn(codvsn,cpui,dtfil,dtset,etotal,iexit,&
 
    dscrpt=' Note : temporary (transfer) database '
 
-!  Initialize the header of the DDB file
+!  Initialize the AB_HEADER of the DDB file
    call ddb_hdr_init(ddb_hdr,dtset,psps,pawtab,DDB_VERSION,dscrpt,&
 &   1,xred=xred,occ=occ,ngfft=ngfft)
 
-!  Open the formatted derivative database file, and write the header
+!  Open the formatted derivative database file, and write the AB_HEADER
    call status(0,dtfil%filstat,iexit,level,'call ddb_hdr_open_write')
    call ddb_hdr_open_write(ddb_hdr, dtfil%fnameabo_ddb, dtfil%unddb)
 
@@ -1848,7 +1848,7 @@ subroutine respfn(codvsn,cpui,dtfil,dtset,etotal,iexit,&
    ABI_DEALLOCATE(blkflgfrx1)
  end if
 
-!Clean the header
+!Clean the AB_HEADER
  call hdr_free(hdr)
 
 !Clean GPU data

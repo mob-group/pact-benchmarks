@@ -154,8 +154,8 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_ISAMAX
-      REAL               SLAMCH
-      EXTERNAL           AB_LSAME, AB_ISAMAX, SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_ISAMAX, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_SLACN2, AB_SLATRS, AB_SRSCL, AB_XERBLA
@@ -193,7 +193,7 @@
          RETURN
       END IF
 *
-      SMLNUM = SLAMCH( 'Safe minimum' )
+      SMLNUM = AB_SLAMCH( 'Safe minimum' )
 *
 *     Estimate the 1-norm of inv(A).
 *

@@ -390,8 +390,8 @@
      $                   KTYPE( MAXTYP )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLARND, SSXT1
-      EXTERNAL           SLAMCH, SLARND, SSXT1
+      REAL               AB_SLAMCH, SLARND, SSXT1
+      EXTERNAL           AB_SLAMCH, SLARND, SSXT1
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, SLABAD, SLAFTS, XERBLA, CHBEV, CHBEVD,
@@ -454,10 +454,10 @@
 *
 *     More Important constants
 *
-      UNFL = SLAMCH( 'Safe minimum' )
-      OVFL = SLAMCH( 'Overflow' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
+      OVFL = AB_SLAMCH( 'Overflow' )
       CALL SLABAD( UNFL, OVFL )
-      ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
+      ULP = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
       ULPINV = ONE / ULP
       RTUNFL = SQRT( UNFL )
       RTOVFL = SQRT( OVFL )

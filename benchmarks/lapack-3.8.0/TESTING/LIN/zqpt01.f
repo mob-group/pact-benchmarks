@@ -148,8 +148,8 @@
       DOUBLE PRECISION   RWORK( 1 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, ZLANGE
-      EXTERNAL           DLAMCH, ZLANGE
+      DOUBLE PRECISION   AB_DLAMCH, ZLANGE
+      EXTERNAL           AB_DLAMCH, ZLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           XERBLA, ZAXPY, ZCOPY, ZUNMQR
@@ -199,7 +199,7 @@
    50 CONTINUE
 *
       ZQPT01 = ZLANGE( 'One-norm', M, N, WORK, M, RWORK ) /
-     $         ( DBLE( MAX( M, N ) )*DLAMCH( 'Epsilon' ) )
+     $         ( DBLE( MAX( M, N ) )*AB_DLAMCH( 'Epsilon' ) )
       IF( NORMA.NE.ZERO )
      $   ZQPT01 = ZQPT01 / NORMA
 *

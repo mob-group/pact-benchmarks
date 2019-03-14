@@ -137,15 +137,15 @@
       DOUBLE PRECISION   ANORM, BIGNUM, EPS, RMAX, RMIN
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, ZLANTP
-      EXTERNAL           DLAMCH, ZLANTP
+      DOUBLE PRECISION   AB_DLAMCH, ZLANTP
+      EXTERNAL           AB_DLAMCH, ZLANTP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       RMAX = MAX( RCOND, RCONDC )
       RMIN = MIN( RCOND, RCONDC )
 *
@@ -177,7 +177,7 @@
 *        estimate multiplied by BIGNUM/TMAX, where TMAX is the maximum
 *        element in absolute value in A.
 *
-         BIGNUM = ONE / DLAMCH( 'Safe minimum' )
+         BIGNUM = ONE / AB_DLAMCH( 'Safe minimum' )
          ANORM = ZLANTP( 'M', UPLO, DIAG, N, AP, RWORK )
 *
          RAT = RMAX*( MIN( BIGNUM / MAX( ONE, ANORM ), ONE / EPS ) )

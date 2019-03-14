@@ -126,7 +126,7 @@ real(dp), allocatable :: cg(:,:), eig(:),kpts(:,:), weights(:),coefc(:,:), nkval
  pos=INDEX(fname, "_")
  write(seedname,'(a)') fname(1:pos-1)
 
- write(std_out,*) '         '//achar(27)//'[97m ***********************' !print program header in pearl white
+ write(std_out,*) '         '//achar(27)//'[97m ***********************' !print program AB_HEADER in pearl white
  write(std_out,*) '          ** Fold2Bloch V 1.1  **'
  write(std_out,*) '          **Build  Mar 16, 2015**'
  write(std_out,*) '          ***********************'//achar(27)//'[0m'
@@ -160,18 +160,18 @@ real(dp), allocatable :: cg(:,:), eig(:),kpts(:,:), weights(:),coefc(:,:), nkval
  NCF_CHECK(ebands_ncwrite(ebands, ncid))
 
  ncerr = nctk_def_dims(ncid, [ &
- nctkdim_t("nk_unfolded", nkpt * nfold), &
+ nctkdim_t("nk_unfoAB_LDEd", nkpt * nfold), &
  nctkdim_t("nsppol_times_nspinor", wfk%hdr%nsppol * wfk%hdr%nspinor)], defmode=.True.)
  NCF_CHECK(ncerr)
  ncerr = nctk_def_arrays(ncid, [ &
  nctkarr_t("fold_matrix", "int", "number_of_reduced_dimensions, number_of_reduced_dimensions"), &
- nctkarr_t("reduced_coordinates_of_unfolded_kpoints", "dp", "number_of_reduced_dimensions, nk_unfolded"), &
- nctkarr_t("unfolded_eigenvalues", "dp", "max_number_of_states, nk_unfolded, number_of_spins"), &
- nctkarr_t("spectral_weights", "dp", "max_number_of_states, nk_unfolded, nsppol_times_nspinor") &
+ nctkarr_t("reduced_coordinates_of_unfoAB_LDEd_kpoints", "dp", "number_of_reduced_dimensions, nk_unfoAB_LDEd"), &
+ nctkarr_t("unfoAB_LDEd_eigenvalues", "dp", "max_number_of_states, nk_unfoAB_LDEd, number_of_spins"), &
+ nctkarr_t("spectral_weights", "dp", "max_number_of_states, nk_unfoAB_LDEd, nsppol_times_nspinor") &
  ])
  NCF_CHECK(ncerr)
- NCF_CHECK(nf90_inq_varid(ncid, "reduced_coordinates_of_unfolded_kpoints", kunf_varid))
- NCF_CHECK(nf90_inq_varid(ncid, "unfolded_eigenvalues", eigunf_varid))
+ NCF_CHECK(nf90_inq_varid(ncid, "reduced_coordinates_of_unfoAB_LDEd_kpoints", kunf_varid))
+ NCF_CHECK(nf90_inq_varid(ncid, "unfoAB_LDEd_eigenvalues", eigunf_varid))
  NCF_CHECK(nf90_inq_varid(ncid, "spectral_weights", weights_varid))
  NCF_CHECK(nctk_set_datamode(ncid))
  NCF_CHECK(nf90_put_var(ncid, nctk_idname(ncid, "fold_matrix"), fold_matrix))
@@ -220,7 +220,7 @@ real(dp), allocatable :: cg(:,:), eig(:),kpts(:,:), weights(:),coefc(:,:), nkval
      !Read a block of data
      call wfk_read_band_block(wfk, [1, nband(ikpt)], ikpt, csppol, xmpio_single, kg_k=kg, cg_k=cg, eig_k=eig)
 
-     !Determine unfolded K point states
+     !Determine unfoAB_LDEd K point states
      call newk(kpts(1,ikpt),kpts(2,ikpt),kpts(3,ikpt),folds(1),folds(2),folds(3),nkval)
 #ifdef HAVE_NETCDF
      if (csppol == 1) then

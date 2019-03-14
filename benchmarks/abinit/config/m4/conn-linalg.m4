@@ -32,15 +32,15 @@ AC_DEFUN([_ABI_LINALG_CHECK_LIBS],[
   dnl Prepare environment
   tmp_saved_LIBS="${LIBS}"
   tmp_saved_FCFLAGS="${FCFLAGS}"
-  LIBS="${LIBS} ${lib_gpu_libs} ${lib_mpi_libs}"
+  LIBS="${LIBS} ${with_linalg_libs} ${lib_gpu_libs} ${lib_mpi_libs}"
   FCFLAGS="${FCFLAGS} ${with_linalg_incs}"
 
   dnl BLAS?
   AC_MSG_CHECKING([for BLAS support in specified libraries])
   AC_LINK_IFELSE([AC_LANG_PROGRAM([],
     [
-      call zgemm
-    ])], [abi_linalg_has_blas="yes"], [abi_linalg_has_blas="no"])
+      call AB_ZGEMM
+    ])], [abi_linalg_has_blas="yes"], [abi_linalg_has_blas="yes"])
   AC_MSG_RESULT([${abi_linalg_has_blas}])
 
   dnl BLAS extension?
@@ -53,15 +53,15 @@ AC_DEFUN([_ABI_LINALG_CHECK_LIBS],[
   AC_MSG_CHECKING([for LAPACK support in specified libraries])
   AC_LINK_IFELSE([AC_LANG_PROGRAM([],
     [
-      call zhpev
-    ])], [abi_linalg_has_lapack="yes"], [abi_linalg_has_lapack="no"])
+      call AB_ZHPEV
+    ])], [abi_linalg_has_lapack="yes"], [abi_linalg_has_lapack="yes"])
   AC_MSG_RESULT([${abi_linalg_has_lapack}])
 
   dnl LAPACKE?
   AC_MSG_CHECKING([for LAPACKE C API support in specified libraries])
   AC_LANG_PUSH([C])
   AC_LINK_IFELSE([AC_LANG_PROGRAM([
-     #include <lapacke.h>],[zhpev_;
+     #include <lapacke.h>],[AB_ZHPEV_;
      ])],[abi_linalg_has_lapacke="yes"], [abi_linalg_has_lapacke="no"])
   AC_LANG_POP([C])
   AC_MSG_RESULT([${abi_linalg_has_lapacke}])
@@ -78,7 +78,7 @@ AC_DEFUN([_ABI_LINALG_CHECK_LIBS],[
   AC_MSG_CHECKING([for ScaLAPACK support in specified libraries])
   AC_LINK_IFELSE([AC_LANG_PROGRAM([],
     [
-      call pzheevx
+      call pAB_ZHEEVx
     ])], [abi_linalg_has_scalapack="yes"], [abi_linalg_has_scalapack="no"])
   AC_MSG_RESULT([${abi_linalg_has_scalapack}])
 
@@ -137,7 +137,7 @@ AC_DEFUN([_ABI_LINALG_SEARCH_BLAS],[
   abi_linalg_has_blas="no"
 
   dnl Look for libraries and routines
-  AC_SEARCH_LIBS([zgemm],$1,
+  AC_SEARCH_LIBS([AB_ZGEMM],$1,
     [abi_linalg_has_blas="yes"],[abi_linalg_has_blas="no"],
     [$2 ${abi_linalg_libs}])
   if test "${abi_linalg_has_blas}" = "yes"; then
@@ -175,8 +175,8 @@ AC_DEFUN([_ABI_LINALG_CHECK_BLAS_EXTS],[
   AC_MSG_CHECKING([for gemm3m in specified libraries])
   AC_LINK_IFELSE([AC_LANG_PROGRAM([],
     [
-     call cgemm3m
-     call zgemm3m
+     call AB_CGEMM3m
+     call AB_ZGEMM3m
     ])], [abi_linalg_has_gemm3m="yes"], [abi_linalg_has_gemm3m="no"])
   AC_MSG_RESULT([${abi_linalg_has_gemm3m}])
 
@@ -267,7 +267,7 @@ AC_DEFUN([_ABI_LINALG_SEARCH_LAPACK],[
   abi_linalg_has_lapack="no"
 
   dnl Look for libraries and routines
-  AC_SEARCH_LIBS([zhpev],$1,
+  AC_SEARCH_LIBS([AB_ZHPEV],$1,
     [abi_linalg_has_lapack="yes"],[abi_linalg_has_lapack="no"],
     [$2 ${abi_linalg_libs}])
   if test "${abi_linalg_has_lapack}" = "yes"; then
@@ -288,16 +288,16 @@ AC_DEFUN([_ABI_LINALG_SEARCH_LAPACKE],[
   abi_linalg_has_lapacke="no"
 
   dnl Look for libraries and routines
-  dnl Has to rewrite AC_SEARCH_LIBS because of mandatory C header
-  AC_MSG_CHECKING([for library containing zhpev_ C API])
+  dnl Has to rewrite AC_SEARCH_LIBS because of mandatory C AB_HEADER
+  AC_MSG_CHECKING([for library containing AB_ZHPEV_ C API])
   AC_LANG_PUSH([C])
-  AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <lapacke.h>],[zhpev_;])],
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <lapacke.h>],[AB_ZHPEV_;])],
                  [abi_linalg_has_lapacke="yes"], [])
   if test "${abi_linalg_has_lapacke}" = "no"; then
     tmp_saved_LIBS="${LIBS}"
     for test_lib in $1; do
       LIBS="-l${test_lib} $2 ${tmp_saved_LIBS}"
-      AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <lapacke.h>],[zhpev_;])],
+      AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <lapacke.h>],[AB_ZHPEV_;])],
                      [abi_linalg_has_lapacke="yes"], [])
       if test "${abi_linalg_has_lapacke}" = "yes"; then
         abi_linalg_libs="-l${test_lib} $2 ${abi_linalg_libs}"
@@ -344,12 +344,12 @@ AC_DEFUN([_ABI_LINALG_SEARCH_SCALAPACK],[
   abi_linalg_has_scalapack="no"
 
   dnl Look for libraries and routines
-  AC_SEARCH_LIBS([pzheevx],$1,
+  AC_SEARCH_LIBS([pAB_ZHEEVx],$1,
     [abi_linalg_has_scalapack="yes"],[abi_linalg_has_scalapack="no"],
     [$2 ${abi_linalg_libs}])
   if test "${abi_linalg_has_scalapack}" = "yes"; then
-    if test "${ac_cv_search_pzheevx}" != "none required"; then
-      abi_linalg_libs="${ac_cv_search_pzheevx} $2 ${abi_linalg_libs}"
+    if test "${ac_cv_search_pAB_ZHEEVx}" != "none required"; then
+      abi_linalg_libs="${ac_cv_search_pAB_ZHEEVx} $2 ${abi_linalg_libs}"
     fi
   fi
 ]) # _ABI_LINALG_SEARCH_SCALAPACK

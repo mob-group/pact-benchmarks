@@ -128,8 +128,8 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLANSY, SLANSF, SLARND
-      EXTERNAL           SLAMCH, SLANSY, SLANSF, SLARND
+      REAL               AB_SLAMCH, SLANSY, SLANSF, SLARND
+      EXTERNAL           AB_SLAMCH, SLANSY, SLANSF, SLARND
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           STRTTF
@@ -158,8 +158,8 @@
          ISEED( I ) = ISEEDY( I )
    10 CONTINUE
 *
-      EPS = SLAMCH( 'Precision' )
-      SMALL = SLAMCH( 'Safe minimum' )
+      EPS = AB_SLAMCH( 'Precision' )
+      SMALL = AB_SLAMCH( 'Safe minimum' )
       LARGE = ONE / SMALL
       SMALL = SMALL * LDA * LDA
       LARGE = LARGE / LDA / LDA

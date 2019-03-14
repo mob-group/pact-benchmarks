@@ -70,7 +70,7 @@
 *>                 singular values are computed and returned in the leading
 *>                 columns of A. See more details in the description of A.
 *>                 The default numerical orthogonality threshold is set to
-*>                 approximately TOL=CTOL*EPS, CTOL=SQRT(M), EPS=SLAMCH('E').
+*>                 approximately TOL=CTOL*EPS, CTOL=SQRT(M), EPS=AB_SLAMCH('E').
 *>          = 'C': Analogous to JOBU='U', except that user can control the
 *>                 level of numerical orthogonality of the computed left
 *>                 singular vectors. TOL can be set to TOL = CTOL*EPS, where
@@ -103,7 +103,7 @@
 *> \param[in] M
 *> \verbatim
 *>          M is INTEGER
-*>          The number of rows of the input matrix A. 1/SLAMCH('E') > M >= 0.
+*>          The number of rows of the input matrix A. 1/AB_SLAMCH('E') > M >= 0.
 *> \endverbatim
 *>
 *> \param[in] N
@@ -123,7 +123,7 @@
 *>                 RANKA orthonormal columns of U are returned in the
 *>                 leading RANKA columns of the array A. Here RANKA <= N
 *>                 is the number of computed singular values of A that are
-*>                 above the underflow threshold SLAMCH('S'). The singular
+*>                 above the underflow threshold AB_SLAMCH('S'). The singular
 *>                 vectors corresponding to underflowed or zero singular
 *>                 values are not computed. The value of RANKA is returned
 *>                 in the array WORK as RANKA=NINT(WORK(2)). Also see the
@@ -213,7 +213,7 @@
 *>          If JOBU .EQ. 'C' :
 *>          WORK(1) = CTOL, where CTOL defines the threshold for convergence.
 *>                    The process stops if all columns of A are mutually
-*>                    orthogonal up to CTOL*EPS, EPS=SLAMCH('E').
+*>                    orthogonal up to CTOL*EPS, EPS=AB_SLAMCH('E').
 *>                    It is required that CTOL >= ONE, i.e. it is not
 *>                    allowed to force the routine to obtain orthogonality
 *>                    below EPSILON.
@@ -372,8 +372,8 @@
       INTEGER            AB_ISAMAX
       EXTERNAL           AB_ISAMAX
 *     from LAPACK
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
       LOGICAL            AB_LSAME
       EXTERNAL           AB_LSAME
 *     ..
@@ -454,14 +454,14 @@
          END IF
       END IF
 *     ... and the machine dependent parameters are
-*[!]  (Make sure that SLAMCH() works properly on the target machine.)
+*[!]  (Make sure that AB_SLAMCH() works properly on the target machine.)
 *
-      EPSLN = SLAMCH( 'Epsilon' )
+      EPSLN = AB_SLAMCH( 'Epsilon' )
       ROOTEPS = SQRT( EPSLN )
-      SFMIN = SLAMCH( 'SafeMinimum' )
+      SFMIN = AB_SLAMCH( 'SafeMinimum' )
       ROOTSFMIN = SQRT( SFMIN )
       SMALL = SFMIN / EPSLN
-      BIG = SLAMCH( 'Overflow' )
+      BIG = AB_SLAMCH( 'Overflow' )
 *     BIG         = ONE    / SFMIN
       ROOTBIG = ONE / ROOTSFMIN
       LARGE = BIG / SQRT( FLOAT( M*N ) )

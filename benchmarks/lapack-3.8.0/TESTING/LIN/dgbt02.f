@@ -165,8 +165,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      DOUBLE PRECISION   DASUM, DLAMCH
-      EXTERNAL           LSAME, DASUM, DLAMCH
+      DOUBLE PRECISION   DASUM, AB_DLAMCH
+      EXTERNAL           LSAME, DASUM, AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGBMV
@@ -185,7 +185,7 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       KD = KU + 1
       ANORM = ZERO
       DO 10 J = 1, N

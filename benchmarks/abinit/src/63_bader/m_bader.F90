@@ -84,7 +84,7 @@ module m_bader
  real(dp), save :: h0,hmin,r0,ttsrf,ttcp,tttot
  real(dp), save :: cth(ngaus),th(ngaus),ph(ngaus),wcth(ngaus),wph(ngaus),rs(ngaus,ngaus)
  real(dp), save :: pc(3,npos*ndif), evpc(3,npos*ndif),zpc(3,3,npos*ndif), pcrb(3,npos*ndif)
- logical, save :: deb,ldeb
+ logical, save :: deb,AB_LDEb
 !!! interface chgbas
 !!!    subroutine bschg1(vv,dir)
 !!!      implicit none
@@ -348,16 +348,16 @@ subroutine adini(aim_dtset,inpstr,lenstr)
      write(untout,*) cmot(1:lenc),'      ', aim_dtset%irho
      ipos=ipos+inxh
 
-   case ('PLDEN')
+   case ('PAB_LDEN')
      inxh=index(inpstr(ipos:lenstr),' ')
      if (inxh /= 2) then
        write(std_out,*) 'ERROR in specif. of ', cmot(1:lenc)
        MSG_ERROR("Aborting now")
      end if
      call inread(inpstr(ipos:ipos+inxh-2),inxh-1,"INT",outi,outr,errcod)
-     aim_dtset%plden=outi
-     write(std_out,*) cmot(1:lenc),'     ', aim_dtset%plden
-     write(untout,*) cmot(1:lenc),'     ', aim_dtset%plden
+     aim_dtset%pAB_LDEn=outi
+     write(std_out,*) cmot(1:lenc),'     ', aim_dtset%pAB_LDEn
+     write(untout,*) cmot(1:lenc),'     ', aim_dtset%pAB_LDEn
      ipos=ipos+inxh
 
 
@@ -620,15 +620,15 @@ subroutine adini(aim_dtset,inpstr,lenstr)
      write(std_out, '(1x,a,a,2es17.10)') cmot(1:lenc),'   ', aim_dtset%th0, aim_dtset%phi0
      write(untout, '(1x,a,a,2es17.10)') cmot(1:lenc),'   ', aim_dtset%th0, aim_dtset%phi0
 
-   case ('FOLDEP')
+   case ('FOAB_LDEP')
      do jj=1,3
        inxh=index(inpstr(ipos:lenstr),' ')
        call inread(inpstr(ipos:ipos+inxh-2),inxh-1,"DPR",outi,outr,errcod)
-       aim_dtset%foldep(jj)=outr
+       aim_dtset%foAB_LDEp(jj)=outr
        ipos=ipos+inxh
      end do
-     write(std_out, '(1x,a,a,es17.10)') cmot(1:lenc),'    ', aim_dtset%foldep
-     write(untout, '(1x,a,a,es17.10)') cmot(1:lenc),'    ', aim_dtset%foldep
+     write(std_out, '(1x,a,a,es17.10)') cmot(1:lenc),'    ', aim_dtset%foAB_LDEp
+     write(untout, '(1x,a,a,es17.10)') cmot(1:lenc),'    ', aim_dtset%foAB_LDEp
 
    case ('SCAL')
      do jj=1,3
@@ -937,7 +937,7 @@ subroutine aim_follow(aim_dtset,vv,npmax,srch,iatinit,iposinit,iat,ipos,nstep)
  integer :: i1,i2,i3,ii,iph,ires,ith,jj,kk,nit,np,nph,nsi,nth
  real(dp) :: deltar,dg,dist,dph,dth,fac2,facf,h0old,hh,hold,rho,rr,rsmed
  real(dp) :: t1,t2,t3,vcth,vph,vth,wall,xy,xyz
- logical :: fin,ldebold,srchold,stemp,stemp2
+ logical :: fin,AB_LDEbold,srchold,stemp,stemp2
  character(len=50) :: formpc
  character(len=500) :: msg
 !arrays
@@ -951,7 +951,7 @@ subroutine aim_follow(aim_dtset,vv,npmax,srch,iatinit,iposinit,iat,ipos,nstep)
  fin=.false.
 
  srchold=srch
- ldebold=ldeb
+ AB_LDEbold=AB_LDEb
  h0old=h0
 
  nth=aim_dtset%nth
@@ -962,7 +962,7 @@ subroutine aim_follow(aim_dtset,vv,npmax,srch,iatinit,iposinit,iat,ipos,nstep)
  end if
 
  if (deb) then
-   ldeb=.true.
+   AB_LDEb=.true.
  end if
 
  call vgh_rho(vv,rho,grho,hrho,rr,iat,ipos,slc)
@@ -995,7 +995,7 @@ subroutine aim_follow(aim_dtset,vv,npmax,srch,iatinit,iposinit,iat,ipos,nstep)
    hold=hh
 
    dg=vnorm(grho,0)
-   if (ldeb.or.deb) write(std_out,*) 'dg= ',dg
+   if (AB_LDEb.or.deb) write(std_out,*) 'dg= ',dg
 
 !  the time test
 
@@ -1055,7 +1055,7 @@ subroutine aim_follow(aim_dtset,vv,npmax,srch,iatinit,iposinit,iat,ipos,nstep)
    end if
 
    hh=h0/dg
-   if (ldeb.or.deb) write(std_out,*) 'h= ',hh,' h0= ',h0,' dg= ',dg
+   if (AB_LDEb.or.deb) write(std_out,*) 'h= ',hh,' h0= ',h0,' dg= ',dg
    if (hh>aim_hmax) hh=aim_hmax
 !  step modifications
 
@@ -1092,7 +1092,7 @@ subroutine aim_follow(aim_dtset,vv,npmax,srch,iatinit,iposinit,iat,ipos,nstep)
 
 
    nstep=nstep+1
-   if (ldeb.or.deb) write(std_out,*) 'h= ',hh
+   if (AB_LDEb.or.deb) write(std_out,*) 'h= ',hh
 
    fac2=hh/hold
    if (fac2>=1._dp) then
@@ -1105,7 +1105,7 @@ subroutine aim_follow(aim_dtset,vv,npmax,srch,iatinit,iposinit,iat,ipos,nstep)
      end if
    end if
 
-   if (deb.or.ldeb) then
+   if (deb.or.AB_LDEb) then
      write(std_out,*) ':POS ',vv
      write(std_out,*) ':RBPOS ',vt1
      write(std_out,*) ':GRAD ',grho
@@ -1235,7 +1235,7 @@ subroutine aim_follow(aim_dtset,vv,npmax,srch,iatinit,iposinit,iat,ipos,nstep)
 
 
  srch=srchold
- ldeb=ldebold
+ AB_LDEb=AB_LDEbold
  h0=h0old
 
 
@@ -1594,7 +1594,7 @@ subroutine cpdrv(aim_dtset)
    if(nbcp>0)then
 
 !    Order the BCP. CPs should appear by increasing values of x,y,z , the latter
-!    varying the fastest
+!    varying the faAB_STEST
      ABI_ALLOCATE(sortguide,(nbcp))
      ABI_ALLOCATE(indexcp,(nbcp))
      ABI_DATATYPE_ALLOCATE(cp_tmp,(nbcp))
@@ -1831,7 +1831,7 @@ subroutine cpdrv(aim_dtset)
    if(nrcp>0)then
 
 !    Order the RCP. CPs should appear by increasing values of x,y,z , the latter
-!    varying the fastest
+!    varying the faAB_STEST
      ABI_ALLOCATE(sortguide,(nrcp))
      ABI_ALLOCATE(indexcp,(nrcp))
      ABI_DATATYPE_ALLOCATE(cp_tmp,(nrcp))
@@ -1965,7 +1965,7 @@ subroutine cpdrv(aim_dtset)
    if(nccp>0)then
 
 !    Order the CCP. CPs should appear by increasing values of x,y,z , the latter
-!    varying the fastest
+!    varying the faAB_STEST
      ABI_ALLOCATE(sortguide,(nccp))
      ABI_ALLOCATE(indexcp,(nccp))
      ABI_DATATYPE_ALLOCATE(cp_tmp,(nccp))
@@ -2941,7 +2941,7 @@ subroutine defad(aim_dtset)
  aim_dtset%denout=0
  aim_dtset%lapout=0
  aim_dtset%gpsurf=0
- aim_dtset%plden=0
+ aim_dtset%pAB_LDEn=0
  aim_dtset%dltyp=0
 
  aim_dtset%batom=1
@@ -2963,7 +2963,7 @@ subroutine defad(aim_dtset)
  aim_dtset%atrad=one
  aim_dtset%rmin=one
 
- aim_dtset%foldep(:)=zero
+ aim_dtset%foAB_LDEp(:)=zero
  aim_dtset%vpts(:,:)=zero
  aim_dtset%ngrid(:)=30
  aim_dtset%scal(:)=one
@@ -3163,7 +3163,7 @@ subroutine drvaim(aim_dtset,tcpui,twalli)
    iposinit=batcell
    if (aim_dtset%isurf/=0) srch=.true.
    debold=deb
-   xstart(:)=aim_dtset%foldep(:)
+   xstart(:)=aim_dtset%foAB_LDEp(:)
    call timein(t1,wall)
    call aim_follow(aim_dtset,xstart,npmax,srch,iatinit,iposinit,iat,ipos,nstep)
    call timein(t2,wall)
@@ -3171,7 +3171,7 @@ subroutine drvaim(aim_dtset,tcpui,twalli)
    write(std_out,'(":TIME in aim_follow:", F12.4)') tf
  end if
 
- if (aim_dtset%plden == 1) then
+ if (aim_dtset%pAB_LDEn == 1) then
 !  profile of the density integrated in plane xy
 !  belong the z-axes - not finished - cut3d better !
    call plint()
@@ -3389,11 +3389,11 @@ subroutine initaim(aim_dtset,znucl_batom)
  slc=0    ! code for follow
 
 !The use of the "hdr" routines is much better for the future
-!maintenance of the code. Indeed, the content of the header
+!maintenance of the code. Indeed, the content of the AB_HEADER
 !will continue to change from time to time, and the associated
 !changes should be done in one place only.
 
-!Read ABINIT header ----------------------------------------------------------
+!Read ABINIT AB_HEADER ----------------------------------------------------------
  if(me==master)then
    if (aim_iomode == IO_MODE_ETSF) then
      call hdr_ncread(hdr, untad, fform0)
@@ -3404,7 +3404,7 @@ subroutine initaim(aim_dtset,znucl_batom)
  ABI_CHECK(fform0 /= 0, "hdr_read returned fform == 0")
  call hdr_bcast(hdr,master,me,comm)
 
-!Echo part of the header
+!Echo part of the AB_HEADER
  call hdr_echo(hdr, fform0, 4, unit=std_out)
  call hdr_echo(hdr, fform0, 4, unit=untout)
 
@@ -3644,7 +3644,7 @@ subroutine initaim(aim_dtset,znucl_batom)
 !DECOMPOSITION OF THE MATRIX FOR THE DETERMINATION OF COEFFICIENTS
 !FOR CUBIC SPLINE INTERPOLATION (using the periodic boundary conditions)
 
-!MAIN DIAGONAL (aa) AND SECONDARY DIAGONAL (bb) MATRIX ELEMENTS
+!MAIN DIAGONAL (aa) AND secondARY DIAGONAL (bb) MATRIX ELEMENTS
 
  nmax=ngfft(1)
  do ii=2,3
@@ -3692,7 +3692,7 @@ subroutine initaim(aim_dtset,znucl_batom)
    ptp(ngfft(ii))=ptd(ngfft(ii))
 
 
-!  INITIALISATION OF THE SECOND DERIVATIVE FIELDS
+!  INITIALISATION OF THE second DERIVATIVE FIELDS
 
    nn=ii+1
    if (nn>3) nn=nn-3
@@ -3926,7 +3926,7 @@ subroutine inspln(idir,snn,tnn)
  rsid(dim)=valf(1)+valf(dim-1)-2.*valf(dim)
  rsid(dim)=(rsid(dim)-ss)/ptd(dim)
 
-!SECOND CYCLE WITH TRANSPOSED MATRIX
+!second CYCLE WITH TRANSPOSED MATRIX
 
  rsid(dim)=rsid(dim)/ptd(dim)
  rsid(dim-1)=(rsid(dim-1)-ptc(dim-1)*rsid(dim))/ptd(dim-1)
@@ -3994,7 +3994,7 @@ subroutine integrho(aim_dtset,znucl_batom)
 !Local variables ------------------------------
 !scalars
  integer :: batom,chs,iat,ii,inx,inxf,ipos,jj,kk,ll,nn,nph,nth
- real(dp) :: chg,chgint,cintr,ct1,ct2,lder,nsphe,phimax,phimin,rder
+ real(dp) :: chg,chgint,cintr,ct1,ct2,AB_LDEr,nsphe,phimax,phimin,rder
  real(dp) :: rsmax,rsmin,ss,stp,themax,themin,uu
  real(dp) :: znucl_batom,zz
  logical :: gaus,weit
@@ -4241,9 +4241,9 @@ subroutine integrho(aim_dtset,znucl_batom)
          rder=rder*rr(kk+1)*rr(kk+1)+2._dp*rr(kk+1)*chg
        end if
      end do
-     lder=0._dp
+     AB_LDEr=0._dp
      kk=aim_dtset%npt+1
-     call spline(rr,vrho,kk,lder,rder,vdd)
+     call spline(rr,vrho,kk,AB_LDEr,rder,vdd)
 
 !    INTEGRATION
 
@@ -4722,7 +4722,7 @@ subroutine rsurf(aim_dtset,rr,grho,theta,phi,rr0,iatinit,npmax,srch)
    call vgh_rho(vv,rho,grho,hrho,aa,iat,ipos,0)
    if (rho < aim_rhomin) exit
 
-   ldeb=.false.
+   AB_LDEb=.false.
 
    call aim_follow(aim_dtset,vv,npmax,srch_tmp,iatinit,iposinit,iat,ipos,nstep)
 
@@ -5458,7 +5458,7 @@ subroutine vgh_rho(vv,rho,grho,hrho,rdmin,iat,ipos,chs)
 !arrays
  integer :: indx(3),inii(4,3)
  real(dp) :: cgrad(3),ches(3,3),cof(2,3),ddstar(6),ddu(2),grd(4)
- real(dp) :: hh(4,2),hrh(2),lder(4),pom2sq(2,3),pomsq(2,3)
+ real(dp) :: hh(4,2),hrh(2),AB_LDEr(4),pom2sq(2,3),pomsq(2,3)
  real(dp) :: rhstar(6),sqder(6,4),sqvlr(6,4),trsf(3,3),xx(3)
  real(dp),pointer :: ptddx(:,:,:),ptddy(:,:,:),ptddz(:,:,:),ptrho(:,:,:)
 
@@ -5704,19 +5704,19 @@ subroutine vgh_rho(vv,rho,grho,hrho,rdmin,iat,ipos,chs)
            hh(ll,jj)=(hh(ll,jj)-hh(ll-1,jj))/(grd(ll)-grd(ll-1))
          end do
        end do
-       lder(4)=hh(4,jj)
+       AB_LDEr(4)=hh(4,jj)
        do kk=3,1,-1
-         lder(kk)=hh(kk,jj)+(xx(ii)-grd(kk))*lder(kk+1)
+         AB_LDEr(kk)=hh(kk,jj)+(xx(ii)-grd(kk))*AB_LDEr(kk+1)
        end do
        do kk=1,2
          do ll=3,kk+1,-1
-           lder(ll)=lder(ll)+(xx(ii)-grd(ll-kk))*lder(ll+1)
+           AB_LDEr(ll)=AB_LDEr(ll)+(xx(ii)-grd(ll-kk))*AB_LDEr(ll+1)
          end do
        end do
        nn=ii+jj
        if (nn > 3) nn=nn-3
-       hrho(ii,nn)=hrho(ii,nn)+lder(2)
-       hrho(nn,ii)=hrho(nn,ii)+lder(2)
+       hrho(ii,nn)=hrho(ii,nn)+AB_LDEr(2)
+       hrho(nn,ii)=hrho(nn,ii)+AB_LDEr(2)
      end do
    end do
 

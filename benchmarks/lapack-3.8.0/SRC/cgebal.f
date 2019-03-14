@@ -194,8 +194,8 @@
 *     .. External Functions ..
       LOGICAL            AB_SISNAN, AB_LSAME
       INTEGER            AB_ICAMAX
-      REAL               SLAMCH, AB_SCNRM2
-      EXTERNAL           AB_SISNAN, AB_LSAME, AB_ICAMAX, SLAMCH, AB_SCNR
+      REAL               AB_SLAMCH, AB_SCNRM2
+      EXTERNAL           AB_SISNAN, AB_LSAME, AB_ICAMAX, AB_SLAMCH, AB_SCNR
      $M2
 *     ..
 *     .. External Subroutines ..
@@ -311,7 +311,7 @@
 *
 *     Iterative loop for norm reduction
 *
-      SFMIN1 = SLAMCH( 'S' ) / SLAMCH( 'P' )
+      SFMIN1 = AB_SLAMCH( 'S' ) / AB_SLAMCH( 'P' )
       SFMAX1 = ONE / SFMIN1
       SFMIN2 = SFMIN1*SCLFAC
       SFMAX2 = ONE / SFMIN2

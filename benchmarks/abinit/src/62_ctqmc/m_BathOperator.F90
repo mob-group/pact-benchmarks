@@ -75,7 +75,7 @@ TYPE, PUBLIC :: BathOperator
   DOUBLE PRECISION _PRIVATE                   :: meanError
   DOUBLE PRECISION _PRIVATE                   :: S
   DOUBLE PRECISION _PRIVATE                   :: Stau
-  DOUBLE PRECISION _PRIVATE                   :: Stilde
+  DOUBLE PRECISION _PRIVATE                   :: StiAB_LDE
   TYPE(Vector)     _PRIVATE                   :: R 
   TYPE(Vector)     _PRIVATE                   :: Q 
   TYPE(Vector)     _PRIVATE                   :: Rtau
@@ -524,12 +524,12 @@ DOUBLE PRECISION  FUNCTION BathOperator_getDetAdd(this,CdagC_1, position, partic
   END DO
   ratio = this%S - ratio
 
-  this%Stilde = 1.d0 / ratio
+  this%StiAB_LDE = 1.d0 / ratio
 
   ! This IF is the LAST "NON CORRECTION" in my opinion this should not appears.
 !  IF ( MAX(C,Cdag) .GT. this%beta ) THEN
-!    WRITE(*,*) this%Stilde
-!    this%Stilde = - ABS(this%Stilde)
+!    WRITE(*,*) this%StiAB_LDE
+!    this%StiAB_LDE = - ABS(this%StiAB_LDE)
 !  END IF
 
   ! If antisegment, the det ratio has to be by -1 ( sign of the signature of one
@@ -542,7 +542,7 @@ DOUBLE PRECISION  FUNCTION BathOperator_getDetAdd(this,CdagC_1, position, partic
   this%MAddFlag   = .TRUE.
 !#ifdef CTQMC_CHECK
 !  this%ListCdagC = particle
-!!write(*,*) this%Stilde
+!!write(*,*) this%StiAB_LDE
 !!write(*,*) this%antishift
 !!write(*,*)    this%updatePosRow 
 !!write(*,*)    this%updatePosCol 
@@ -621,9 +621,9 @@ DOUBLE PRECISION FUNCTION BathOperator_getDetRemove(this,position)
 !      IF ( this%updatePosCol .EQ. 0) this%updatePosCol = tail
     END IF
   ENDIF
-  this%Stilde                 = this%M(this%activeflavor)%mat(this%updatePosRow,this%updatePosCol) 
+  this%StiAB_LDE                 = this%M(this%activeflavor)%mat(this%updatePosRow,this%updatePosCol) 
   this%MRemoveFlag            = .TRUE.
-  BathOperator_getDetRemove = this%Stilde
+  BathOperator_getDetRemove = this%StiAB_LDE
 
   ! If remove an antiseg , the det ratio has to be multiplied by -1
   IF ( position .LT. 0 .AND. tail .GT. 1 ) &
@@ -789,7 +789,7 @@ SUBROUTINE BathOperator_setMAdd(this,particle)
   INTEGER                           :: positionRow
   INTEGER                           :: positionCol
   INTEGER                           :: aF
-  DOUBLE PRECISION                  :: Stilde
+  DOUBLE PRECISION                  :: StiAB_LDE
   DOUBLE PRECISION                  :: time
   DOUBLE PRECISION                  :: mbeta_two
   DOUBLE PRECISION                  :: inv_dt
@@ -812,19 +812,19 @@ SUBROUTINE BathOperator_setMAdd(this,particle)
 
   positionRow =  this%updatePosRow
   positionCol =  this%updatePosCol
-  Stilde      =  this%Stilde
+  StiAB_LDE      =  this%StiAB_LDE
 !  write(6,*) "before", positionRow, positionCol
   !CALL MatrixHyb_print(this%M(aF),opt_print=1)
   CALL MatrixHyb_setSize(this%M(aF),new_tail)
 
-  ! Compute Qtilde with Q
-  !this%Q%vec(1:tail) = (-1.d0) * MATMUL(this%M(aF)%mat(1:tail,1:tail),this%Q%vec(1:tail)) * Stilde
+  ! Compute QtiAB_LDE with Q
+  !this%Q%vec(1:tail) = (-1.d0) * MATMUL(this%M(aF)%mat(1:tail,1:tail),this%Q%vec(1:tail)) * StiAB_LDE
   this%Q%vec(1:tail) = MATMUL(this%M(aF)%mat(1:tail,1:tail),this%Q%vec(1:tail))
   !this%Q%vec(PositionRow:new_tail) = EOSHIFT(this%Q%vec(PositionRow:new_tail), SHIFT=-1, BOUNDARY=-1.d0, DIM=1)
 !  this%Qtau%vec(PositionCol:new_tail) = EOSHIFT(this%Qtau%vec(PositionCol:new_tail), SHIFT=-1, BOUNDARY=1.d0, DIM=1)
 !  this%Qtau%vec(PositionCol) = this%Stau
 
-  !Compute Rtilde with R and without multiplying by Stilde
+  !Compute RtiAB_LDE with R and without multiplying by StiAB_LDE
   !this%R%vec(1:tail) = (-1.d0) * MATMUL(this%R%vec(1:tail),this%M(aF)%mat(1:tail,1:tail))
   this%R%vec(1:tail) = MATMUL(this%R%vec(1:tail),this%M(aF)%mat(1:tail,1:tail))
   !this%R%vec(PositionCol:new_tail) = EOSHIFT(this%R%vec(PositionCol:new_tail), SHIFT=-1, BOUNDARY=-1.d0, DIM=1)
@@ -837,7 +837,7 @@ SUBROUTINE BathOperator_setMAdd(this,particle)
   !this%M(aF)%mat(1:new_tail,PositionCol:new_tail) = &
   !                   EOSHIFT(this%M(aF)%mat(1:new_tail,PositionCol:new_tail),SHIFT=-1, BOUNDARY=0.d0, DIM=2)
 ! ! this%M(aF)%mat(1:new_tail,1:new_tail) =  this%M(aF)%mat(1:new_tail,1:new_tail) + &
-! ! Stilde * MATMUL(RESHAPE(this%Q%vec(1:new_tail),(/ new_tail,1 /)),RESHAPE(this%R%vec(1:new_tail),(/ 1,new_tail /)))
+! ! StiAB_LDE * MATMUL(RESHAPE(this%Q%vec(1:new_tail),(/ new_tail,1 /)),RESHAPE(this%R%vec(1:new_tail),(/ 1,new_tail /)))
 
   !this%M(aF)%mat_tau(PositionRow:new_tail,1:new_tail) = &
   !                   EOSHIFT(this%M(aF)%mat_tau(PositionRow:new_tail,1:new_tail),SHIFT=-1, BOUNDARY=0, DIM=1)
@@ -853,13 +853,13 @@ SUBROUTINE BathOperator_setMAdd(this,particle)
     DO row=tail,1,-1
       row_move = row +  ( 1+SIGN(1,row-PositionRow) )/2
       this%M(aF)%mat_tau(row_move,col_move) = this%M(aF)%mat_tau(row,col)
-      this%M(aF)%mat(row_move,col_move) = this%M(aF)%mat(row,col) + this%Q%vec(row)*this%R%vec(col) * Stilde
+      this%M(aF)%mat(row_move,col_move) = this%M(aF)%mat(row,col) + this%Q%vec(row)*this%R%vec(col) * StiAB_LDE
     END DO
   END DO
   ! Add new stuff for new row
   DO row = 1, tail
     row_move = row +  ( 1+SIGN(1,row-PositionRow) )/2
-    this%M(aF)%mat(row_move,PositionCol) = -this%Q%vec(row)*Stilde
+    this%M(aF)%mat(row_move,PositionCol) = -this%Q%vec(row)*StiAB_LDE
     time = this%Rtau%vec(row)
     time = time + ( SIGN(1.d0,time) - 1.d0 )*mbeta_two
     this%M(aF)%mat_tau(row,PositionCol) = INT ( (time*inv_dt) +1.5d0 )
@@ -871,7 +871,7 @@ SUBROUTINE BathOperator_setMAdd(this,particle)
   ! Add new stuff for new col
   DO col = 1, tail 
     col_move = col +  ( 1+SIGN(1,col-PositionCol) )/2
-    this%M(aF)%mat(PositionRow,col_move) = -this%R%vec(col)*Stilde
+    this%M(aF)%mat(PositionRow,col_move) = -this%R%vec(col)*StiAB_LDE
     time = this%Qtau%vec(col)
     time = time + ( SIGN(1.d0,time) - 1.d0 )*mbeta_two
     this%M(aF)%mat_tau(PositionRow,col) = INT ( (time*inv_dt) +1.5d0 )
@@ -881,7 +881,7 @@ SUBROUTINE BathOperator_setMAdd(this,particle)
   time = time + ( SIGN(1.d0,time) - 1.d0 )*mbeta_two
   this%M(aF)%mat_tau(PositionRow,new_tail) = INT ( (time*inv_dt) +1.5d0 )
 
-  this%M(aF)%mat(PositionRow,PositionCol) = Stilde
+  this%M(aF)%mat(PositionRow,PositionCol) = StiAB_LDE
 
   !CALL MatrixHyb_print(this%M(aF),opt_print=1)
 
@@ -892,7 +892,7 @@ SUBROUTINE BathOperator_setMAdd(this,particle)
 !    time = this%Qtau%vec(col)
 !    time = time + ( SIGN(1.d0,time) - 1.d0 )*mbeta_two
 !    this%M(aF)%mat_tau(PositionRow,Col) = INT ( (time*inv_dt) +1.5d0 )
-!    time = this%R%vec(col)*Stilde
+!    time = this%R%vec(col)*StiAB_LDE
 !    DO row = 1, new_tail
 !      this%M(aF)%mat(row,col) = this%M(aF)%mat(row,col) + this%Q%vec(row)*time
 !    END DO
@@ -902,16 +902,16 @@ SUBROUTINE BathOperator_setMAdd(this,particle)
   !col      = tail
   !DO col_move = new_tail, 1, -1
   !  IF ( col_move .EQ. positionCol ) THEN
-  !    ! on calcule rajoute Q tilde
+  !    ! on calcule rajoute Q tiAB_LDE
   !    !row_move = new_tail
   !    row      = tail 
   !    DO row_move = new_tail, 1, -1
   !      ! calcul itau
   !      IF ( row_move .EQ. positionRow ) THEN
-  !        this%M(aF)%mat(row_move,col_move) = Stilde
+  !        this%M(aF)%mat(row_move,col_move) = StiAB_LDE
   !        !time = this%Stau
   !      ELSE
-  !        this%M(aF)%mat(row_move,col_move) = -this%Q%vec(row)*Stilde
+  !        this%M(aF)%mat(row_move,col_move) = -this%Q%vec(row)*StiAB_LDE
   !        !time = this%Rtau%vec(row_move)
   !        row      = row      - 1 
   !      END IF
@@ -920,18 +920,18 @@ SUBROUTINE BathOperator_setMAdd(this,particle)
   !    END DO
   !    ! realignement des indices
   !  ELSE
-  !    ! on calcule Ptilde
+  !    ! on calcule PtiAB_LDE
   !    !row_move = new_tail
   !    row      = tail 
   !    DO row_move = new_tail, 1, -1
   !      IF ( row_move .EQ. positionRow ) THEN
-  !        this%M(aF)%mat(row_move,col_move) = -this%R%vec(col) * Stilde
+  !        this%M(aF)%mat(row_move,col_move) = -this%R%vec(col) * StiAB_LDE
   !        ! calcul itau
   !        !time = this%Qtau%vec(col_move)
   !        !time = time + ( SIGN(1.d0,time) - 1.d0 )*mbeta_two
   !        !this%M(aF)%mat_tau(row_move,col_move) = INT ( (time*inv_dt) +1.5d0 )
   !      ELSE
-  !        this%M(aF)%mat(row_move,col_move) = this%M(aF)%mat(row,col) + this%Q%vec(row)*this%R%vec(col)*Stilde
+  !        this%M(aF)%mat(row_move,col_move) = this%M(aF)%mat(row,col) + this%Q%vec(row)*this%R%vec(col)*StiAB_LDE
   !        ! copy itau
   !        !this%M(aF)%mat_tau(row_move,col_move) = this%M(aF)%mat_tau(row,col)
   !        row      = row      - 1 
@@ -1072,8 +1072,8 @@ SUBROUTINE BathOperator_setMRemove(this,particle)
   INTEGER                              :: i
   INTEGER                              :: j
   INTEGER                              :: p
-  DOUBLE PRECISION                   :: invStilde
-  DOUBLE PRECISION                   :: invStilde2
+  DOUBLE PRECISION                   :: invStiAB_LDE
+  DOUBLE PRECISION                   :: invStiAB_LDE2
   TYPE(VectorInt) :: vecI_tmp
   TYPE(Vector)    :: vec_tmp
 
@@ -1086,7 +1086,7 @@ SUBROUTINE BathOperator_setMRemove(this,particle)
   new_tail    =  tail - 1
   positionCol =  this%updatePosCol
   positionRow =  this%updatePosRow
-  invStilde   = 1.d0 / this%Stilde
+  invStiAB_LDE   = 1.d0 / this%StiAB_LDE
 
 !  write(6,*) "before", positionRow, positionCol
 !  CALL MatrixHyb_print(this%M(aF),opt_print=1)
@@ -1140,12 +1140,12 @@ SUBROUTINE BathOperator_setMRemove(this,particle)
     !IF ( col_move .EQ. positionCol ) col = col + 1
     col = col_move + (1+SIGN(1,col_move-positionCol))/2
     !row      = 1
-    invStilde2 = invStilde * this%R%vec(col_move)
+    invStiAB_LDE2 = invStiAB_LDE * this%R%vec(col_move)
     DO row_move = 1, new_tail
       !IF ( row_move .EQ. positionRow ) row = row + 1
       row = row_move + (1+SIGN(1,row_move-positionRow))/2
       this%M(aF)%mat(row_move,col_move) = this%M(aF)%mat(row,col) &
-                                      - this%Q%vec(row_move)*invStilde2
+                                      - this%Q%vec(row_move)*invStiAB_LDE2
       this%M(aF)%mat_tau(row_move,col_move) = this%M(aF)%mat_tau(row,col)
       !row      = row      + 1
     END DO

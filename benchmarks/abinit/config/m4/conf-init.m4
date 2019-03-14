@@ -348,7 +348,7 @@ AC_DEFUN([ABI_INIT_OS_INFO],[
 # ABI_INIT_HEADER()
 # -----------------
 #
-# Initializes the contents of the header file produced by Autoheader.
+# Initializes the contents of the AB_HEADER file produced by AutoAB_HEADER.
 #
 AC_DEFUN([ABI_INIT_HEADER],[
   dnl Set top of file ...

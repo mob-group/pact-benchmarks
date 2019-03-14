@@ -162,10 +162,10 @@ C> \ingroup variantsGEcomputational
       INTEGER            KSTART, IPIVSTART, JPIVSTART, KCOLS
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
+      REAL               AB_SLAMCH
       INTEGER            AB_ISAMAX
       LOGICAL            AB_SISNAN
-      EXTERNAL           SLAMCH, AB_ISAMAX, AB_SISNAN
+      EXTERNAL           AB_SLAMCH, AB_ISAMAX, AB_SISNAN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_STRSM, AB_SSCAL, AB_XERBLA, AB_SLASWP
@@ -197,7 +197,7 @@ C> \ingroup variantsGEcomputational
 *
 *     Compute machine safe minimum
 *
-      SFMIN = SLAMCH( 'S' )
+      SFMIN = AB_SLAMCH( 'S' )
 *
       NSTEP = MIN( M, N )
       DO J = 1, NSTEP

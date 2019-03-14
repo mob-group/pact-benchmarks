@@ -98,8 +98,8 @@ contains
 !!      elphon
 !!
 !! CHILDREN
-!!      d2c_wtq,dgemm,ep_ph_weights,ftgam,ftgam_init,gam_mult_displ,ifc_fourq
-!!      matrginv,simpson_int,wrtout,xmpi_sum,zgemm
+!!      d2c_wtq,AB_DGEMM,ep_ph_weights,ftgam,ftgam_init,gam_mult_displ,ifc_fourq
+!!      matrginv,simpson_int,wrtout,xmpi_sum,AB_ZGEMM
 !!
 !! NOTES
 !!   copied from ftiaf9.f
@@ -140,14 +140,14 @@ subroutine mka2f_tr(crystal,ifc,elph_ds,ntemper,tempermin,temperinc,pair2red,elp
  integer :: ie, ie_1, ie2, ie_2, ie1, ie_tmp, ssp, s1(4), s2(4)
  integer :: ie2_left, ie2_right
  integer :: ik_this_proc, ierr,nrpt
- logical,parameter :: debug=.False.
+ logical,parameter :: debug=.false.
  real(dp) :: Temp,chgu,chtu,chsu,chwu,diagerr,ucvol
  real(dp) :: a2fprefactor, gtemp
  real(dp) :: lambda_tr,lor0,lorentz,maxerr,omega
  real(dp) :: rho,tau,wtherm,xtr
  real(dp) :: lambda_tr_trace
  real(dp) :: domega, omega_min, omega_max
- real(dp) :: gaussval, gaussprefactor, gaussfactor, gaussmaxarg, xx
+ real(dp) :: gaussval, gauAB_SSPRefactor, gaussfactor, gaussmaxarg, xx
  real(dp) :: qnorm2, tmp_fermie
  real(dp) :: e1, e2, diff, xe
  real(dp) :: occ_omega, occ_e1, occ_e2
@@ -216,7 +216,7 @@ subroutine mka2f_tr(crystal,ifc,elph_ds,ntemper,tempermin,temperinc,pair2red,elp
  ABI_ALLOCATE(rho_T,(ntemper))
 
 
- gaussprefactor = sqrt(piinv) / elph_ds%a2fsmear
+ gauAB_SSPRefactor = sqrt(piinv) / elph_ds%a2fsmear
  gaussfactor = one / elph_ds%a2fsmear
  gaussmaxarg = sqrt(-log(1.d-90))
 !lor0=(pi*kb_HaK)**2/3.
@@ -336,9 +336,9 @@ subroutine mka2f_tr(crystal,ifc,elph_ds,ntemper,tempermin,temperinc,pair2red,elp
 
 !            NOTE: in these calls gam_now and pheigvec do not have the right rank, but blas usually does not care
 
-             call ZGEMM ( 'N', 'N', 3*natom, 3*natom, 3*natom, c1, gam_now, 3*natom,&
+             call AB_ZGEMM ( 'N', 'N', 3*natom, 3*natom, 3*natom, c1, gam_now, 3*natom,&
 &             pheigvec(:,iFSqpt), 3*natom, c0, tmpgam1, 3*natom)
-             call ZGEMM ( 'C', 'N', 3*natom, 3*natom, 3*natom, c1, pheigvec(:,iFSqpt), 3*natom,&
+             call AB_ZGEMM ( 'C', 'N', 3*natom, 3*natom, 3*natom, c1, pheigvec(:,iFSqpt), 3*natom,&
 &             tmpgam1, 3*natom, c0, tmpgam2, 3*natom)
              diagerr = zero
              do ibranch=1,elph_ds%nbranch
@@ -376,7 +376,7 @@ subroutine mka2f_tr(crystal,ifc,elph_ds,ntemper,tempermin,temperinc,pair2red,elp
                omega = omega+domega
                if (abs(xx) > gaussmaxarg) cycle
 
-               gaussval = gaussprefactor*exp(-xx*xx)
+               gaussval = gauAB_SSPRefactor*exp(-xx*xx)
                gtemp = gaussval*a2fprefactor
 
                if (dabs(gtemp) < 1.0d-50) gtemp = zero
@@ -441,7 +441,7 @@ subroutine mka2f_tr(crystal,ifc,elph_ds,ntemper,tempermin,temperinc,pair2red,elp
  write (unit_a2f_tr,'(a,E16.6)') '#   and the smearing width for gaussians is ', elph_ds%a2fsmear
  write (unit_a2f_tr,'(a)')       '#'
 
-!done with header
+!done with AB_HEADER
  do isppol=1,elph_ds%nsppol
    write (unit_a2f_tr,'(a,E16.6)') '# The DOS at Fermi level is ', elph_tr_ds%dos_n0(1,isppol)
    omega = omega_min
@@ -472,7 +472,7 @@ subroutine mka2f_tr(crystal,ifc,elph_ds,ntemper,tempermin,temperinc,pair2red,elp
  if (open_file(fname,message,newunit=unit_rho,status='unknown') /= 0) then
    MSG_ERROR(message)
  end if
-!print header to resistivity file
+!print AB_HEADER to resistivity file
  write (unit_rho,*) '# Resistivity as a function of temperature.'
  write (unit_rho,*) '#  the formalism is isotropic, so non-cubic crystals may be wrong'
  write (unit_rho,*) '#  '
@@ -484,7 +484,7 @@ subroutine mka2f_tr(crystal,ifc,elph_ds,ntemper,tempermin,temperinc,pair2red,elp
  if (open_file(fname,message,newunit=unit_tau,status='unknown') /= 0) then
    MSG_ERROR(message)
  end if
-!print header to relaxation time file
+!print AB_HEADER to relaxation time file
  write (unit_tau,*) '# Relaxation time as a function of temperature.'
  write (unit_tau,*) '#  the formalism is isotropic, so non-cubic crystals may be wrong'
  write (unit_tau,*) '#  '
@@ -496,7 +496,7 @@ subroutine mka2f_tr(crystal,ifc,elph_ds,ntemper,tempermin,temperinc,pair2red,elp
  if (open_file(fname,message,newunit=unit_sbk,status='unknown') /= 0) then
    MSG_ERROR(message)
  end if
-!print header to relaxation time file
+!print AB_HEADER to relaxation time file
  write (unit_sbk,*) '# Seebeck Coefficint as a function of temperature.'
  write (unit_sbk,*) '#  the formalism is isotropic, so non-cubic crystals may be wrong'
  write (unit_sbk,*) '#  '
@@ -509,7 +509,7 @@ subroutine mka2f_tr(crystal,ifc,elph_ds,ntemper,tempermin,temperinc,pair2red,elp
    MSG_ERROR(message)
  end if
 
-!print header to thermal conductivity file
+!print AB_HEADER to thermal conductivity file
  write (unit_therm,'(a)') '# Thermal conductivity/resistivity as a function of temperature.'
  write (unit_therm,'(a)') '#  the formalism is isotropic, so non-cubic crystals may be wrong'
  write (unit_therm,'(a)') '#  '
@@ -522,7 +522,7 @@ subroutine mka2f_tr(crystal,ifc,elph_ds,ntemper,tempermin,temperinc,pair2red,elp
    MSG_ERROR(message)
  end if
 
-!print header to lorentz file
+!print AB_HEADER to lorentz file
  write (unit_lor,*) '# Lorentz number as a function of temperature.'
  write (unit_lor,*) '#  the formalism is isotropic, so non-cubic crystals may be wrong'
  write (unit_lor,*) '#  '
@@ -866,9 +866,9 @@ subroutine mka2f_tr(crystal,ifc,elph_ds,ntemper,tempermin,temperinc,pair2red,elp
    do itemp=1,ntemper
      q11_inv(:,:)=q11(itemp,:,:,isppol)
      call matrginv(q11_inv,3,3)
-     call DGEMM('N','N',3,3,3,one,q01(itemp,:,:,isppol),3,q11_inv,&
+     call AB_DGEMM('N','N',3,3,3,one,q01(itemp,:,:,isppol),3,q11_inv,&
 &     3,zero,seebeck(isppol,itemp,:,:),3)
-!    call DGEMM('N','N',3,3,3,one,seebeck(isppol,itemp,:,:),3,q01(itemp,:,:,isppol),&
+!    call AB_DGEMM('N','N',3,3,3,one,seebeck(isppol,itemp,:,:),3,q01(itemp,:,:,isppol),&
 !    &     3,zero,rho_nm(isppol,itemp,:,:),3)
    end do
  end do
@@ -1061,7 +1061,7 @@ end subroutine mka2f_tr
 !!      elphon
 !!
 !! CHILDREN
-!!      ftgam,ftgam_init,gam_mult_displ,ifc_fourq,simpson_int,wrtout,zgemm
+!!      ftgam,ftgam_init,gam_mult_displ,ifc_fourq,simpson_int,wrtout,AB_ZGEMM
 !!
 !! NOTES
 !!   copied from ftiaf9.f
@@ -1099,7 +1099,7 @@ subroutine mka2f_tr_lova(crystal,ifc,elph_ds,ntemper,tempermin,temperinc,elph_tr
  real(dp) :: firh_tau,firhT_tau ! added by BX to get Tau
  real(dp) :: a2fprefactor_in, temp_in
  real(dp) :: a2fprefactor_out, temp_out
- real(dp) :: gaussprefactor,gaussval,lambda_tr,lor0,lorentz,maxerr,maxx,omega
+ real(dp) :: gauAB_SSPRefactor,gaussval,lambda_tr,lor0,lorentz,maxerr,maxx,omega
  real(dp) :: rho,tau,tolexp,wtherm,xtr,xx
  real(dp) :: lambda_tr_trace,omega_min, omega_max,qnorm2,spinfact
  character(len=500) :: message
@@ -1159,7 +1159,7 @@ subroutine mka2f_tr_lova(crystal,ifc,elph_ds,ntemper,tempermin,temperinc,elph_tr
 !maximum value of frequency (a grid has to be chosen for the representation of alpha^2 F)
 !WARNING! supposes this value has been set in mkelph_linwid.
 
- gaussprefactor = sqrt(piinv) / elph_ds%a2fsmear
+ gauAB_SSPRefactor = sqrt(piinv) / elph_ds%a2fsmear
  gaussfactor = one / elph_ds%a2fsmear
 
 !spinfact should be 1 for a normal non sppol calculation without spinorbit
@@ -1247,9 +1247,9 @@ subroutine mka2f_tr_lova(crystal,ifc,elph_ds,ntemper,tempermin,temperinc,elph_tr
 
 !
 !        NOTE: in these calls gam_now and pheigvec do not have the right rank, but blas usually does not care
-         call ZGEMM ( 'N', 'N', 3*natom, 3*natom, 3*natom, c1, gam_now_in, 3*natom,&
+         call AB_ZGEMM ( 'N', 'N', 3*natom, 3*natom, 3*natom, c1, gam_now_in, 3*natom,&
 &         pheigvec(:,iFSqpt), 3*natom, c0, tmpgam1, 3*natom)
-         call ZGEMM ( 'C', 'N', 3*natom, 3*natom, 3*natom, c1, pheigvec(:,iFSqpt), 3*natom,&
+         call AB_ZGEMM ( 'C', 'N', 3*natom, 3*natom, 3*natom, c1, pheigvec(:,iFSqpt), 3*natom,&
 &         tmpgam1, 3*natom, c0, tmpgam2, 3*natom)
          diagerr = zero
 
@@ -1267,9 +1267,9 @@ subroutine mka2f_tr_lova(crystal,ifc,elph_ds,ntemper,tempermin,temperinc,elph_tr
            maxerr=max(diagerr, maxerr)
          end if
 
-         call ZGEMM ( 'N', 'N', 3*natom, 3*natom, 3*natom, c1, gam_now_out, 3*natom,&
+         call AB_ZGEMM ( 'N', 'N', 3*natom, 3*natom, 3*natom, c1, gam_now_out, 3*natom,&
 &         pheigvec(:,iFSqpt), 3*natom, c0, tmpgam1, 3*natom)
-         call ZGEMM ( 'C', 'N', 3*natom, 3*natom, 3*natom, c1, pheigvec(:,iFSqpt), 3*natom,&
+         call AB_ZGEMM ( 'C', 'N', 3*natom, 3*natom, 3*natom, c1, pheigvec(:,iFSqpt), 3*natom,&
 &         tmpgam1, 3*natom, c0, tmpgam2, 3*natom)
          diagerr = zero
 
@@ -1309,7 +1309,7 @@ subroutine mka2f_tr_lova(crystal,ifc,elph_ds,ntemper,tempermin,temperinc,elph_tr
          tmpa2f_out(:) = zero
          do iomega=1,elph_ds%na2f
            xx = (omega-phfrq(ibranch,iFSqpt))*gaussfactor
-           gaussval = gaussprefactor*exp(-xx*xx)
+           gaussval = gauAB_SSPRefactor*exp(-xx*xx)
 
            temp_in = gaussval*a2fprefactor_in
            temp_out = gaussval*a2fprefactor_out
@@ -1388,7 +1388,7 @@ subroutine mka2f_tr_lova(crystal,ifc,elph_ds,ntemper,tempermin,temperinc,elph_tr
  write (unit_a2f_trout,'(a,E16.6)') '#   and the smearing width for gaussians is ', elph_ds%a2fsmear
  write (unit_a2f_trout,'(a)')       '#'
 
-!done with header
+!done with AB_HEADER
  do isppol=1,elph_ds%nsppol
    write (unit_a2f_tr,'(a,E16.6)') '# The DOS at Fermi level is ', elph_ds%n0(isppol)
    write (unit_a2f_trin,'(a,E16.6)') '# The DOS at Fermi level is ', elph_ds%n0(isppol)
@@ -1422,7 +1422,7 @@ subroutine mka2f_tr_lova(crystal,ifc,elph_ds,ntemper,tempermin,temperinc,elph_tr
    MSG_ERROR(message)
  end if
 
-!print header to resistivity file
+!print AB_HEADER to resistivity file
  write (unit_rho,*) '# Resistivity as a function of temperature.'
  write (unit_rho,*) '#  the formalism is isotropic, so non-cubic crystals may be wrong'
  write (unit_rho,*) '#  '
@@ -1435,7 +1435,7 @@ subroutine mka2f_tr_lova(crystal,ifc,elph_ds,ntemper,tempermin,temperinc,elph_tr
    MSG_ERROR(message)
  end if
 
-!print header to relaxation time file
+!print AB_HEADER to relaxation time file
  write (unit_tau,*) '# Relaxation time as a function of temperature.'
  write (unit_tau,*) '#  the formalism is isotropic, so non-cubic crystals may be wrong'
  write (unit_tau,*) '#  '
@@ -1448,7 +1448,7 @@ subroutine mka2f_tr_lova(crystal,ifc,elph_ds,ntemper,tempermin,temperinc,elph_tr
    MSG_ERROR(message)
  end if
 
-!print header to thermal conductivity file
+!print AB_HEADER to thermal conductivity file
  write (unit_therm,'(a)') '# Thermal conductivity/resistivity as a function of temperature.'
  write (unit_therm,'(a)') '#  the formalism is isotropic, so non-cubic crystals may be wrong'
  write (unit_therm,'(a)') '#  '
@@ -1461,7 +1461,7 @@ subroutine mka2f_tr_lova(crystal,ifc,elph_ds,ntemper,tempermin,temperinc,elph_tr
    MSG_ERROR(message)
  end if
 
-!print header to lorentz file
+!print AB_HEADER to lorentz file
  write (unit_lor,*) '# Lorentz number as a function of temperature.'
  write (unit_lor,*) '#  the formalism is isotropic, so non-cubic crystals may be wrong'
  write (unit_lor,*) '#  '
@@ -1690,9 +1690,9 @@ end subroutine mka2f_tr_lova
 !!      elphon
 !!
 !! CHILDREN
-!!      dgemm,ebands_prtbltztrp_tau_out,ebands_update_occ,ep_el_weights
+!!      AB_DGEMM,ebands_prtbltztrp_tau_out,ebands_update_occ,ep_el_weights
 !!      ep_ph_weights,ftgam,ftgam_init,gam_mult_displ,ifc_fourq,matrginv
-!!      mkqptequiv,phdispl_cart2red,spline,splint,wrtout,xmpi_sum,zgemm
+!!      mkqptequiv,phdispl_cart2red,spline,splint,wrtout,xmpi_sum,AB_ZGEMM
 !!
 !! SOURCE
 
@@ -2013,10 +2013,10 @@ subroutine get_tau_k(Cryst,ifc,Bst,elph_ds,elph_tr_ds,eigenGS,max_occ)
            else if (elph_ds%ep_scalprod == 1) then
 
 !            MJV NOTE : gam_now is being recast as a (3*natom)**2 matrix here
-             call ZGEMM ( 'N', 'N', 3*natom, 3*natom, 3*natom, cone, tmp_gkk_kpt, 3*natom,&
+             call AB_ZGEMM ( 'N', 'N', 3*natom, 3*natom, 3*natom, cone, tmp_gkk_kpt, 3*natom,&
 &             pheigvec(:,iFSqpt), 3*natom, czero, tmp_gkk_kpt2, 3*natom)
 
-             call ZGEMM ( 'C', 'N', 3*natom, 3*natom, 3*natom, cone, pheigvec(:,iFSqpt), 3*natom,&
+             call AB_ZGEMM ( 'C', 'N', 3*natom, 3*natom, 3*natom, cone, pheigvec(:,iFSqpt), 3*natom,&
 &             tmp_gkk_kpt2, 3*natom, czero, gkk_kpt, 3*natom)
 
              diagerr = zero
@@ -2070,10 +2070,10 @@ subroutine get_tau_k(Cryst,ifc,Bst,elph_ds,elph_tr_ds,eigenGS,max_occ)
            else if (elph_ds%ep_scalprod == 1) then
 
 !            MJV NOTE : gam_now is being recast as a (3*natom)**2 matrix here
-             call ZGEMM ( 'N', 'N', 3*natom, 3*natom, 3*natom, cone, tmp_gkk_kpt, 3*natom,&
+             call AB_ZGEMM ( 'N', 'N', 3*natom, 3*natom, 3*natom, cone, tmp_gkk_kpt, 3*natom,&
 &             pheigvec(:,iFSqpt), 3*natom, czero, tmp_gkk_kpt2, 3*natom)
 
-             call ZGEMM ( 'C', 'N', 3*natom, 3*natom, 3*natom, cone, pheigvec(:,iFSqpt), 3*natom,&
+             call AB_ZGEMM ( 'C', 'N', 3*natom, 3*natom, 3*natom, cone, pheigvec(:,iFSqpt), 3*natom,&
 &             tmp_gkk_kpt2, 3*natom, czero, gkk_kpt, 3*natom)
 
              diagerr = zero
@@ -2227,7 +2227,7 @@ subroutine get_tau_k(Cryst,ifc,Bst,elph_ds,elph_tr_ds,eigenGS,max_occ)
    MSG_ERROR(message)
  end if
 
-!print header to relaxation time file
+!print AB_HEADER to relaxation time file
  write (unit_invtau,*) '# k-dep inverse of the relaxation time as a function of temperature.'
  write (unit_invtau,*) '# '
  write (unit_invtau,*) '# nkptirr= ', nkptirr, 'nband= ', nband
@@ -2239,7 +2239,7 @@ subroutine get_tau_k(Cryst,ifc,Bst,elph_ds,elph_tr_ds,eigenGS,max_occ)
    MSG_ERROR(message)
  end if
 
-!print header to relaxation time file
+!print AB_HEADER to relaxation time file
  write (unit_tau,*) '# k-dep relaxation time as a function of temperature.'
  write (unit_tau,*) '# '
  write (unit_tau,*) '# nkptirr= ', nkptirr, 'nband= ', nband
@@ -2308,7 +2308,7 @@ subroutine get_tau_k(Cryst,ifc,Bst,elph_ds,elph_tr_ds,eigenGS,max_occ)
    MSG_ERROR(message)
  end if
 
-!print header to relaxation time file
+!print AB_HEADER to relaxation time file
  write (unit_taue,*) '# Energy-dep relaxation time as a function of temperature.'
  write (unit_taue,*) '# '
  write (unit_taue,*) '# number of temperatures=  ', ntemper
@@ -2419,7 +2419,7 @@ subroutine get_tau_k(Cryst,ifc,Bst,elph_ds,elph_tr_ds,eigenGS,max_occ)
    MSG_ERROR(message)
  end if
 
-!print header to conductivity file
+!print AB_HEADER to conductivity file
  write (unit_cond,*) '#  Conductivity as a function of temperature.'
  write (unit_cond,*) '#  the formalism is isotropic, so non-cubic crystals may be wrong'
  write (unit_cond,*) '#  '
@@ -2432,7 +2432,7 @@ subroutine get_tau_k(Cryst,ifc,Bst,elph_ds,elph_tr_ds,eigenGS,max_occ)
    MSG_ERROR(message)
  end if
 
-!print header to thermal conductivity file
+!print AB_HEADER to thermal conductivity file
  write (unit_therm,'(a)') '# Thermal conductivity as a function of temperature.'
  write (unit_therm,'(a)') '#  the formalism is isotropic, so non-cubic crystals may be wrong'
  write (unit_therm,'(a)') '#  '
@@ -2445,7 +2445,7 @@ subroutine get_tau_k(Cryst,ifc,Bst,elph_ds,elph_tr_ds,eigenGS,max_occ)
    MSG_ERROR(message)
  end if
 
-!print header to relaxation time file
+!print AB_HEADER to relaxation time file
  write (unit_sbk,*) '# Seebeck Coefficint as a function of temperature.'
  write (unit_sbk,*) '#  the formalism is isotropic, so non-cubic crystals may be wrong'
  write (unit_sbk,*) '#  '
@@ -2493,7 +2493,7 @@ subroutine get_tau_k(Cryst,ifc,Bst,elph_ds,elph_tr_ds,eigenGS,max_occ)
    do itemp=1,ntemper
      cond_inv(:,:)=cond(itemp,isppol,:,:)
      call matrginv(cond_inv,3,3)
-     call DGEMM('N','N',3,3,3,one,sbk(itemp,isppol,:,:),3,cond_inv,&
+     call AB_DGEMM('N','N',3,3,3,one,sbk(itemp,isppol,:,:),3,cond_inv,&
 &     3,zero,seebeck(itemp,isppol,:,:),3)
    end do
  end do

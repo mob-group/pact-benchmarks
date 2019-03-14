@@ -74,15 +74,15 @@
       REAL               EPS, RAT
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       IF( RCOND.GT.ZERO ) THEN
          IF( RCONDC.GT.ZERO ) THEN
             RAT = MAX( RCOND, RCONDC ) / MIN( RCOND, RCONDC ) -

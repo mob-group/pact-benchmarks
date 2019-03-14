@@ -129,9 +129,9 @@
       COMPLEX*16         SAVEALPHA
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, AB_DLAPY3, AB_DLAPY2, AB_DZNRM2
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLAPY3, AB_DLAPY2, AB_DZNRM2
       COMPLEX*16         AB_ZLADIV
-      EXTERNAL           DLAMCH, AB_DLAPY3, AB_DLAPY2, AB_DZNRM2, AB_ZLA
+      EXTERNAL           AB_DLAMCH, AB_DLAPY3, AB_DLAPY2, AB_DZNRM2, AB_ZLA
      $DIV
 *     ..
 *     .. Intrinsic Functions ..
@@ -184,7 +184,7 @@
 *        general case
 *
          BETA = SIGN( AB_DLAPY3( ALPHR, ALPHI, XNORM ), ALPHR )
-         SMLNUM = DLAMCH( 'S' ) / DLAMCH( 'E' )
+         SMLNUM = AB_DLAMCH( 'S' ) / AB_DLAMCH( 'E' )
          BIGNUM = ONE / SMLNUM
 *
          KNT = 0

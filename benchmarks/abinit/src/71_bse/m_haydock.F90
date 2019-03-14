@@ -322,7 +322,7 @@ subroutine exc_haydock_driver(BSp,BS_files,Cryst,Kmesh,Hdr_bse,KS_BSt,QP_Bst,Wfd
    ABI_MALLOC(ep_renorms, (hsize))
    timrev = 1
    call listkk(dksqmax, Cryst%gmet, bs2eph, Epren%kpts, Kmesh%bz, Epren%nkpt, Kmesh%nbz, Cryst%nsym, &
-&     sppoldbl, Cryst%symafm, Cryst%symrel, timrev, use_symrec=.False.)
+&     sppoldbl, Cryst%symafm, Cryst%symrel, timrev, use_symrec=.false.)
 
  end if
 
@@ -769,7 +769,7 @@ subroutine haydock_herm(BSp,BS_files,Cryst,Hdr_bse,my_t1,my_t2,&
 
    if (niter_file==0) then       ! Calculation from scratch.
      phi_nm1=ket0(my_t1:my_t2)   ! Select the slice treated by this node.
-     norm = DZNRM2(hexc%hsize,ket0,1) ! Normalization
+     norm = AB_DZNRM2(hexc%hsize,ket0,1) ! Normalization
      phi_nm1=phi_nm1/norm
 
      call hexc_matmul_tda(hexc,hexc_i,phi_nm1,hphi_n)
@@ -808,7 +808,7 @@ subroutine haydock_herm(BSp,BS_files,Cryst,Hdr_bse,my_t1,my_t2,&
    nfact = -four_pi/(Cryst%ucvol*hexc%nbz)
    if (nsppol==1) nfact=two*nfact
 
-   factor = nfact*(DZNRM2(hexc%hsize,ket0,1)**2)
+   factor = nfact*(AB_DZNRM2(hexc%hsize,ket0,1)**2)
 
    ! Which quantity should be checked for convergence?
    check = (/.TRUE.,.TRUE./)
@@ -1319,7 +1319,7 @@ subroutine haydock_mdf_to_tensor(BSp,Cryst,eps,tensor_cart,tensor_red,ierr)
 
  ! Solving linear system
  b = TRANSPOSE(eps)
- call ZGESV(6,BSp%nomega,qqcart,6,ipiv,b,6,info)
+ call AB_ZGESV(6,BSp%nomega,qqcart,6,ipiv,b,6,info)
  tensor_cart = TRANSPOSE(b)
 
  if(info /= 0) then
@@ -1330,7 +1330,7 @@ subroutine haydock_mdf_to_tensor(BSp,Cryst,eps,tensor_cart,tensor_red,ierr)
  end if
 
  b = TRANSPOSE(eps)
- call ZGESV(6,BSp%nomega,qqred,6,ipiv,b,6,info)
+ call AB_ZGESV(6,BSp%nomega,qqred,6,ipiv,b,6,info)
  tensor_red = TRANSPOSE(b)
 
  if(info /= 0) ierr = info
@@ -1462,7 +1462,7 @@ subroutine haydock_psherm(BSp,BS_files,Cryst,Hdr_bse,hexc,hexc_i,hsize,my_t1,my_
    if (open_file(out_file,msg,newunit=out_unt,form="unformatted") /= 0) then
      MSG_ERROR(msg)
    end if
-   ! write header TODO: standardize this part.
+   ! write AB_HEADER TODO: standardize this part.
    write(out_unt)hsize,Bsp%use_coupling,BSE_HAYD_IMEPS,nkets,Bsp%broad
  end if
  !
@@ -2033,7 +2033,7 @@ subroutine haydock_bilanczos(BSp,BS_files,Cryst,Hdr_bse,hexc,hexc_i,hsize,my_t1,
    if (open_file(out_file,msg,newunit=out_unt,form="unformatted") /= 0) then
      MSG_ERROR(msg)
    end if
-   ! write header TODO: standardize this part.
+   ! write AB_HEADER TODO: standardize this part.
    write(out_unt)hsize,Bsp%use_coupling,BSE_HAYD_IMEPS,nkets,Bsp%broad
  end if
  !
@@ -2074,7 +2074,7 @@ subroutine haydock_bilanczos(BSp,BS_files,Cryst,Hdr_bse,hexc,hexc_i,hsize,my_t1,
    if (niter_file==0) then ! Calculation from scratch.
      phi_nm1 = ket0(my_t1:my_t2)
      phit_nm1 = ket0(my_t1:my_t2)
-     norm = DZNRM2(hexc%hsize,ket0,1)
+     norm = AB_DZNRM2(hexc%hsize,ket0,1)
      phi_nm1=phi_nm1/norm
      phit_nm1=phit_nm1/norm
 
@@ -2117,7 +2117,7 @@ subroutine haydock_bilanczos(BSp,BS_files,Cryst,Hdr_bse,hexc,hexc_i,hsize,my_t1,
    end if
 
    ! This factor gives the correct results
-   factor = -nfact*(DZNRM2(hexc%hsize,ket0,1)**2)
+   factor = -nfact*(AB_DZNRM2(hexc%hsize,ket0,1)**2)
 
    ! Which quantity should be checked for convergence?
    check = (/.TRUE.,.TRUE./)

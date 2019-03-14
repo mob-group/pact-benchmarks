@@ -577,7 +577,7 @@ subroutine print_sigma_melems(ikcalc,ib1,ib2,nsp,htotal,hhartree,sigxme,sigcme,p
    write(msg,fmthh) ch10,' Hermitianised matrix elements of Sigma (spin ',isp,' of ',nsp,'):'
    call wrtout(ount,msg,'COLL')
    write(msg,fmth)(jj,jj=1,mc)
-   call wrtout(ount,msg,'COLL') !header
+   call wrtout(ount,msg,'COLL') !AB_HEADER
    do ii=ib1,ib1+mr-1
      write(msg,fmt1)ii-ib1+1,DBLE(htotal(ii,ib1:(ib1+mc-1),isp))
      call wrtout(ount,msg,'COLL') !real part
@@ -593,7 +593,7 @@ subroutine print_sigma_melems(ikcalc,ib1,ib2,nsp,htotal,hhartree,sigxme,sigcme,p
    write(msg,fmthh) ch10,' H_Hartree matrix elements (spin ',isp,' of ',nsp,'):'
    call wrtout(ount,msg,'COLL')
    write(msg,fmth)(jj,jj=1,mc)
-   call wrtout(ount,msg,'COLL') !header
+   call wrtout(ount,msg,'COLL') !AB_HEADER
    do ii=ib1,ib1+mr-1
      write(msg,fmt1)ii-ib1+1,DBLE(hhartree(ii,ib1:(ib1+mc-1),isp))
      call wrtout(ount,msg,'COLL') !real part
@@ -609,7 +609,7 @@ subroutine print_sigma_melems(ikcalc,ib1,ib2,nsp,htotal,hhartree,sigxme,sigcme,p
    write(msg,fmthh) ch10,' Sigma_x matrix elements (spin ',isp,' of ',nsp,'):'
    call wrtout(ount,msg,'COLL')
    write(msg,fmth)(jj,jj=1,mc)
-   call wrtout(ount,msg,'COLL') !header
+   call wrtout(ount,msg,'COLL') !AB_HEADER
    do ii=ib1,ib1+mr-1
      write(msg,fmt1)ii-ib1+1,DBLE(sigxme(ii,ib1:(ib1+mc-1),isp))
      call wrtout(ount,msg,'COLL') !real part
@@ -625,7 +625,7 @@ subroutine print_sigma_melems(ikcalc,ib1,ib2,nsp,htotal,hhartree,sigxme,sigcme,p
    write(msg,fmthh) ch10,' Sigma_c matrix elements (spin ',isp,' of ',nsp,'):'
    call wrtout(ount,msg,'COLL')
    write(msg,fmth)(jj,jj=1,mc)
-   call wrtout(ount,msg,'COLL') !header
+   call wrtout(ount,msg,'COLL') !AB_HEADER
    do ii=ib1,ib1+mr-1
      write(msg,fmt1)ii-ib1+1,DBLE(sigcme(ii,ib1:(ib1+mc-1),isp))
      call wrtout(ount,msg,'COLL') !real part

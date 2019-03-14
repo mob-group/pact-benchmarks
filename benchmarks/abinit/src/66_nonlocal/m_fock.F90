@@ -701,7 +701,7 @@ subroutine fock_init(atindx,cplex,dtset,fock,gsqcut,kg,mpi_enreg,nattyp,npwarr,p
        end do
      end do
    end if
-!========Initialze PAW data========
+!========InitiaAB_LZE PAW data========
    fockcommon%ntypat=dtset%ntypat
    fockcommon%natom=dtset%natom
    if (fockcommon%usepaw==1) then
@@ -2149,7 +2149,7 @@ end function fock_get_getghc_call
 !!  [unit]=Unit number for output
 !!  [prtvol]=Verbosity level
 !!  [mode_paral]=Either "COLL" or "PERS"
-!!  [header]=String to be printed as header for additional info.
+!!  [AB_HEADER]=String to be printed as AB_HEADER for additional info.
 !!
 !! OUTPUT
 !!  Only printing
@@ -2162,7 +2162,7 @@ end function fock_get_getghc_call
 !!
 !! SOURCE
 
-subroutine fock_print(fockcommon,fockbz,header,unit,mode_paral,prtvol)
+subroutine fock_print(fockcommon,fockbz,AB_HEADER,unit,mode_paral,prtvol)
 
 
 !This section has been created automatically by the script Abilint (TD).
@@ -2177,7 +2177,7 @@ subroutine fock_print(fockcommon,fockbz,header,unit,mode_paral,prtvol)
 !scalars
  integer,optional,intent(in) :: unit,prtvol
  character(len=4),optional,intent(in) :: mode_paral
- character(len=*),optional,intent(in) :: header
+ character(len=*),optional,intent(in) :: AB_HEADER
  type(fock_common_type),intent(in) :: fockcommon
  type(fock_BZ_type),intent(in) :: fockbz
 !Local variables-------------------------------
@@ -2192,7 +2192,7 @@ subroutine fock_print(fockcommon,fockbz,header,unit,mode_paral,prtvol)
  my_mode='COLL' ; if (PRESENT(mode_paral)) my_mode=mode_paral
 
  msg=' ==== Info on fock_type ==== '
- if (PRESENT(header)) msg=' ==== '//TRIM(ADJUSTL(header))//' ==== '
+ if (PRESENT(AB_HEADER)) msg=' ==== '//TRIM(ADJUSTL(AB_HEADER))//' ==== '
  call wrtout(my_unt,msg,my_mode)
 
  ! Important dimensions

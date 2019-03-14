@@ -1173,7 +1173,7 @@ subroutine lobpcgwf(cg,dtset,gs_hamk,gsc,icg,igsc,kinpw,mcg,mgsc,mpi_enreg,&
 !  Now, the full matrix is stored in totvnl(:,:). This trick permits:
 !  1) to avoid the reconstruction of the total matrix in vtowfk.F90 (double loop over bands)
 !  2) to use two optimized matrix-matrix blas routine for general (in lobpcgccwf.F90) or hermitian (in vtowfk.F90)
-!  operators, zgemm.f and zhemm.f respectively, rather than a triple loop in both cases.
+!  operators, AB_ZGEMM.f and AB_ZHEMM.f respectively, rather than a triple loop in both cases.
    iwavef=iblock*blocksize
    isubh=1+2*bblocksize*(bblocksize+1)/2
 
@@ -1189,7 +1189,7 @@ subroutine lobpcgwf(cg,dtset,gs_hamk,gsc,icg,igsc,kinpw,mcg,mgsc,mpi_enreg,&
 &   blockvectorax,vectsize,czero,tsubham,iwavef,x_cplx=x_cplx)
 
    if (gs_hamk%usepaw==0) then
-     ! MG FIXME: Here gfortran4.9 allocates temporary array for C in abi_d2zgemm.
+     ! MG FIXME: Here gfortran4.9 allocates temporary array for C in abi_d2AB_ZGEMM.
      call abi_xgemm(cparam(cplx),'n',blocksize,iwavef,vectsize,cone,blockvectorvx,vectsize,&
 &     blockvectorz,vectsize,czero,totvnl(cplx*bblocksize+1:cplx*iwavef,1:iwavef),blocksize,x_cplx=x_cplx)
    end if

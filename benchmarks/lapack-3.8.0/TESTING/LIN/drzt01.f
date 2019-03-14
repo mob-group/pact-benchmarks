@@ -125,8 +125,8 @@
       DOUBLE PRECISION   RWORK( 1 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLANGE
-      EXTERNAL           DLAMCH, DLANGE
+      DOUBLE PRECISION   AB_DLAMCH, DLANGE
+      EXTERNAL           AB_DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DAXPY, DLASET, DORMRZ, XERBLA
@@ -172,7 +172,7 @@
 *
       DRZT01 = DLANGE( 'One-norm', M, N, WORK, M, RWORK )
 *
-      DRZT01 = DRZT01 / ( DLAMCH( 'Epsilon' )*DBLE( MAX( M, N ) ) )
+      DRZT01 = DRZT01 / ( AB_DLAMCH( 'Epsilon' )*DBLE( MAX( M, N ) ) )
       IF( NORMA.NE.ZERO )
      $   DRZT01 = DRZT01 / NORMA
 *

@@ -1619,7 +1619,7 @@ end subroutine moddiel
 !!      prcref,prcref_PMA
 !!
 !! CHILDREN
-!!      timab,wrtout,zhpev
+!!      timab,wrtout,AB_ZHPEV
 !!
 !! SOURCE
 
@@ -1652,7 +1652,7 @@ subroutine dielmt(dielinv,gmet,kg_diel,npwdiel,nspden,occopt,prtvol,susmat)
 !arrays
  real(dp) :: tsec(2)
  real(dp),allocatable :: dielh(:),dielmat(:,:,:,:,:),dielvec(:,:,:)
- real(dp),allocatable :: eig_diel(:),zhpev1(:,:),zhpev2(:)
+ real(dp),allocatable :: eig_diel(:),AB_ZHPEV1(:,:),AB_ZHPEV2(:)
 !no_abirules
 !integer :: ipw3
 !real(dp) :: elementi,elementr
@@ -1790,10 +1790,10 @@ subroutine dielmt(dielinv,gmet,kg_diel,npwdiel,nspden,occopt,prtvol,susmat)
  ABI_ALLOCATE(dielh,(npwsp*(npwsp+1)))
  ABI_ALLOCATE(dielvec,(2,npwsp,npwsp))
  ABI_ALLOCATE(eig_diel,(npwsp))
- ABI_ALLOCATE(zhpev1,(2,2*npwsp-1))
- ABI_ALLOCATE(zhpev2,(3*npwsp-2))
+ ABI_ALLOCATE(AB_ZHPEV1,(2,2*npwsp-1))
+ ABI_ALLOCATE(AB_ZHPEV2,(3*npwsp-2))
  ier=0
-!Store the dielectric matrix in proper mode before calling zhpev
+!Store the dielectric matrix in proper mode before calling AB_ZHPEV
  index=1
  do ii=1,npwdiel
    do jj=1,ii
@@ -1820,10 +1820,10 @@ subroutine dielmt(dielinv,gmet,kg_diel,npwdiel,nspden,occopt,prtvol,susmat)
 !end do
 !end if
 
- call ZHPEV ('V','U',npwsp,dielh,eig_diel,dielvec,npwdiel,zhpev1,&
-& zhpev2,ier)
- ABI_DEALLOCATE(zhpev1)
- ABI_DEALLOCATE(zhpev2)
+ call AB_ZHPEV ('V','U',npwsp,dielh,eig_diel,dielvec,npwdiel,AB_ZHPEV1,&
+& AB_ZHPEV2,ier)
+ ABI_DEALLOCATE(AB_ZHPEV1)
+ ABI_DEALLOCATE(AB_ZHPEV2)
 
  if(prtvol>=10)then
    write(message, '(a,a,a,5es12.4)' )ch10,&
@@ -1990,7 +1990,7 @@ end subroutine dielmt
 !!
 !! CHILDREN
 !!      destroy_mpi_enreg,fourdp,init_distribfft_seq,initmpi_seq,timab,wrtout
-!!      zhpev
+!!      AB_ZHPEV
 !!
 !! SOURCE
 
@@ -2031,7 +2031,7 @@ subroutine dieltcel(dielinv,gmet,kg_diel,kxc,&
  real(dp),allocatable :: khxc(:,:,:,:,:),kxcg(:,:),sqrsus(:,:,:,:,:),sush(:)
  real(dp),allocatable :: susvec(:,:,:),symdielmat(:,:,:,:,:),symh(:)
  real(dp),allocatable :: symvec(:,:,:,:,:),wkxc(:),work(:,:,:,:,:)
- real(dp),allocatable :: work2(:,:,:,:,:),zhpev1(:,:),zhpev2(:)
+ real(dp),allocatable :: work2(:,:,:,:,:),AB_ZHPEV1(:,:),AB_ZHPEV2(:)
 !no_abirules
 !integer :: ipw3
 !real(dp) :: elementi,elementr
@@ -2070,8 +2070,8 @@ subroutine dieltcel(dielinv,gmet,kg_diel,kxc,&
  ABI_ALLOCATE(eig_msusinvsqr,(npwdiel))
  ABI_ALLOCATE(eig_msussqr,(npwdiel))
  ABI_ALLOCATE(eig_sus,(npwdiel))
- ABI_ALLOCATE(zhpev1,(2,2*npwdiel-1))
- ABI_ALLOCATE(zhpev2,(3*npwdiel-2))
+ ABI_ALLOCATE(AB_ZHPEV1,(2,2*npwdiel-1))
+ ABI_ALLOCATE(AB_ZHPEV2,(3*npwdiel-2))
  ABI_ALLOCATE(work,(2,npwdiel,nspden,npwdiel,nspden))
  ABI_ALLOCATE(work2,(2,npwdiel,nspden,npwdiel,nspden))
  ABI_ALLOCATE(sqrsus,(2,npwdiel,nspden,npwdiel,nspden))
@@ -2084,7 +2084,7 @@ subroutine dieltcel(dielinv,gmet,kg_diel,kxc,&
      MSG_ERROR('dieltcel : stop, nspden/=1')
    end if
 
-!  Store the susceptibility matrix in proper mode before calling zhpev
+!  Store the susceptibility matrix in proper mode before calling AB_ZHPEV
    index=1
    do ii=1,npwdiel
      do jj=1,ii
@@ -2095,7 +2095,7 @@ subroutine dieltcel(dielinv,gmet,kg_diel,kxc,&
    end do
 
    ier=0
-   call ZHPEV ('V','U',npwdiel,sush,eig_sus,susvec,npwdiel,zhpev1,zhpev2,ier)
+   call AB_ZHPEV ('V','U',npwdiel,sush,eig_sus,susvec,npwdiel,AB_ZHPEV1,AB_ZHPEV2,ier)
 
 !  DEBUG
 !  write(std_out,*)' dieltcel : print eigenvalues of the susceptibility matrix'
@@ -2303,7 +2303,7 @@ subroutine dieltcel(dielinv,gmet,kg_diel,kxc,&
  ABI_ALLOCATE(symvec,(2,npwdiel,nspden,npwdiel,nspden))
  ABI_ALLOCATE(eig_sym,(npwdiel))
 
-!Store the symmetrized dielectric matrix in proper mode before calling zhpev
+!Store the symmetrized dielectric matrix in proper mode before calling AB_ZHPEV
  index=1
  do ii=1,npwdiel
    do jj=1,ii
@@ -2314,8 +2314,8 @@ subroutine dieltcel(dielinv,gmet,kg_diel,kxc,&
  end do
 
  ier=0
- call ZHPEV ('V','U',npwdiel,symh,eig_sym,symvec,npwdiel,zhpev1,&
-& zhpev2,ier)
+ call AB_ZHPEV ('V','U',npwdiel,symh,eig_sym,symvec,npwdiel,AB_ZHPEV1,&
+& AB_ZHPEV2,ier)
 
  if(prtvol>=10)then
    write(message, '(a,a,a,5es12.4)' )ch10,&
@@ -2432,8 +2432,8 @@ subroutine dieltcel(dielinv,gmet,kg_diel,kxc,&
  ABI_DEALLOCATE(sqrsus)
  ABI_DEALLOCATE(work)
  ABI_DEALLOCATE(work2)
- ABI_DEALLOCATE(zhpev1)
- ABI_DEALLOCATE(zhpev2)
+ ABI_DEALLOCATE(AB_ZHPEV1)
+ ABI_DEALLOCATE(AB_ZHPEV2)
 
  call timab(96,2,tsec)
 
@@ -3325,7 +3325,7 @@ include "dummy_functions.inc"
 !Local variables-------------------------------
 !scalars
  integer :: iter
- real(dp) :: a,b,d,d1,d2,du,dv,dw,dx,e,fu,fv,fw,fx,olde,tol1,tol2,u,u1,u2,vv,w
+ real(dp) :: a,b,d,d1,d2,du,dv,dw,dx,e,fu,fv,fw,fx,oAB_LDE,tol1,tol2,u,u1,u2,vv,w
  real(dp) :: x,xm,zeps
  logical :: ok1,ok2,ok3,ok4
 
@@ -3365,7 +3365,7 @@ include "dummy_functions.inc"
    u2=x+d2
    ok1=((a-u1)*(u1-b)>zero).and.(dx*d1<=zero)
    ok2=((a-u2)*(u2-b)>zero).and.(dx*d2<=zero)
-   olde=e
+   oAB_LDE=e
    e=d
    if(ok1.or.ok2) then
     if(ok1.and.ok2) then
@@ -3373,7 +3373,7 @@ include "dummy_functions.inc"
     else
      d=merge(d1,d2,ok1)
     end if
-    if(abs(d)<=abs(half*olde)) then
+    if(abs(d)<=abs(half*oAB_LDE)) then
      u=x+d
      if(((u-a)<tol2).or.((b-u)<tol2)) d=sign(tol1,xm-x)
     else

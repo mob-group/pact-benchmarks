@@ -114,7 +114,7 @@ module  m_spin_terms
      !integer, allocatable:: bilinear_j(:)
      !real(dp), allocatable:: bilinear_val(:,:,:)
      type(LIL_mat) :: bilinear_lil_mat
-     logical :: csr_mat_ready= .False.
+     logical :: csr_mat_ready= .false.
      type(CSR_mat) :: bilinear_csr_mat
      ! 3, 3, ninit
 
@@ -138,7 +138,7 @@ module  m_spin_terms
      !     Coupling to thermal bath can be on-site
      !     Size should be nmatoms
 
-     logical :: gamma_l_calculated = .False.
+     logical :: gamma_l_calculated = .false.
      real(dp), allocatable :: gamma_l(:)
      ! gamma_l= gyro_ratio/(1+gilbert_damping)**2
 
@@ -210,12 +210,12 @@ contains
        self%S(:,i)=self%spinat(:,i)/self%ms(i)*bohr_mag
     end do
 
-    self%has_external_hfield=.False.
-    self%has_uniaxial_anistropy=.False.
-    self%has_exchange=.False.
-    self%has_DMI=.False.
-    self%has_dipdip=.False.
-    self%has_bilinear=.False.
+    self%has_external_hfield=.false.
+    self%has_uniaxial_anistropy=.false.
+    self%has_exchange=.false.
+    self%has_DMI=.false.
+    self%has_dipdip=.false.
+    self%has_bilinear=.false.
 
     ABI_ALLOCATE( self%gyro_ratio, (nmatoms))
     ! Defautl gyro_ratio
@@ -455,7 +455,7 @@ contains
     !    iatom=self%bilinear_i(i)
     !    jatom=self%bilinear_j(i)
     ! Heff(:,i)=Heff(:,i) + matmul(S(:,i))
-    !call dgemv('n', 3, 3, 1.0_dp/self%ms(iatom), self%bilinear_val(:,:,i), 3, S(:,iatom), 1, 1.0_dp , H, 1 )
+    !call AB_DGEMV('n', 3, 3, 1.0_dp/self%ms(iatom), self%bilinear_val(:,:,i), 3, S(:,iatom), 1, 1.0_dp , H, 1 )
     !  H=matmul(self%bilinear_val(:,:,i), reshape(S(:,iatom), (/3,1/)))
     !  Heff(:,i)=Heff(:,i)+ H(:,1)
     !end do
@@ -781,7 +781,7 @@ contains
 
 
 
-    self%has_exchange=.False.
+    self%has_exchange=.false.
     if (allocated(self%exchange_i))  then
     ABI_DEALLOCATE(self%exchange_i)
     endif
@@ -798,7 +798,7 @@ contains
 
 
 
-    self%has_DMI=.False.
+    self%has_DMI=.false.
     if (allocated(self%DMI_i))  then
     ABI_DEALLOCATE(self%DMI_i)
     endif
@@ -815,7 +815,7 @@ contains
 
 
 
-    self%has_dipdip=.False.
+    self%has_dipdip=.false.
     !if (allocated(self%dipdip_i))  then
     !ABI_DEALLOCATE(self%dipdip_i)
     !endif
@@ -835,7 +835,7 @@ contains
     !if (allocated(self%bilinear_i)) deallocate(self%bilinear_i, stat=err)
     !if (allocated(self%bilinear_j)) deallocate(self%bilinear_j, stat=err)
     !if (allocated(self%bilinear_val)) deallocate(self%bilinear_val, stat=err)
-    self%has_bilinear=.False.
+    self%has_bilinear=.false.
     ! destroy LIL an CSR
     call CSR_mat_finalize(self%bilinear_csr_mat)
     call LIL_mat_finalize(self%bilinear_lil_mat)

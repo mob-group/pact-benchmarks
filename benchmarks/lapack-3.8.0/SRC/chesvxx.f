@@ -550,9 +550,9 @@
       REAL               AMAX, BIGNUM, SMIN, SMAX, SCOND, SMLNUM
 *     ..
 *     .. External Functions ..
-      EXTERNAL           AB_LSAME, SLAMCH,  AB_CLA_HERPVGRW
+      EXTERNAL           AB_LSAME, AB_SLAMCH,  AB_CLA_HERPVGRW
       LOGICAL            AB_LSAME
-      REAL               SLAMCH, AB_CLA_HERPVGRW
+      REAL               AB_SLAMCH, AB_CLA_HERPVGRW
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_CHEEQUB, AB_CHETRF, AB_CHETRS, AB_CLACPY,
@@ -566,7 +566,7 @@
       INFO = 0
       NOFACT = AB_LSAME( FACT, 'N' )
       EQUIL = AB_LSAME( FACT, 'E' )
-      SMLNUM = SLAMCH( 'Safe minimum' )
+      SMLNUM = AB_SLAMCH( 'Safe minimum' )
       BIGNUM = ONE / SMLNUM
       IF( NOFACT .OR. EQUIL ) THEN
          EQUED = 'N'

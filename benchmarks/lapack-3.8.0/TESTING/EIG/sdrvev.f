@@ -451,8 +451,8 @@
       REAL               DUM( 1 ), RES( 2 )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLAPY2, SNRM2
-      EXTERNAL           SLAMCH, SLAPY2, SNRM2
+      REAL               AB_SLAMCH, SLAPY2, SNRM2
+      EXTERNAL           AB_SLAMCH, SLAPY2, SNRM2
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGEEV, SGET22, SLABAD, SLACPY, SLASUM, SLATME,
@@ -526,10 +526,10 @@
 *
 *     More Important constants
 *
-      UNFL = SLAMCH( 'Safe minimum' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
       CALL SLABAD( UNFL, OVFL )
-      ULP = SLAMCH( 'Precision' )
+      ULP = AB_SLAMCH( 'Precision' )
       ULPINV = ONE / ULP
       RTULP = SQRT( ULP )
       RTULPI = ONE / RTULP

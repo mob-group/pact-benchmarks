@@ -266,7 +266,7 @@ contains
    end if
    read(unt,*) (iiG,x,normG(iiG),iG=1,npw)
    close(unt)
-   !!False norme for G=0 idd G is the inverse of the potential inverse du potentiel (q=0)
+   !!false norme for G=0 idd G is the inverse of the potential inverse du potentiel (q=0)
    normG(1)=0
  end if
 
@@ -321,7 +321,7 @@ contains
 !========================================================================
 !------------------------------------------------------------------------
 
-!  SECOND PART OF THE ROUTINE: Read Wannier projections
+!  second PART OF THE ROUTINE: Read Wannier projections
 
 !------------------------------------------------------------------------
 !========================================================================
@@ -535,7 +535,7 @@ contains
  call wrtout(std_out,message,'COLL')
  call wrtout(ab_out,message,'COLL')
 !==Calcul de Ro_G^(mm')(q)==!
- write(message,*) 'Calculation of rhotwilde  m'
+ write(message,*) 'Calculation of rhotwiAB_LDE  m'
  call wrtout(std_out,message,'COLL')
 
 !===============================================================!
@@ -703,11 +703,11 @@ contains
        end if
        do iG2=iG1,npwe
          if (ANY(abs(scr(iG1,iG2,:,:)-scr(iG2,iG1,:,:))>tol)) then
-           write(message,*) iG1,iG2,"False"
+           write(message,*) iG1,iG2,"false"
            MSG_ERROR(message)
            do iomega1=1,nomega
              if(abs(scr(iG1,iG2,iomega1,1)-scr(iG2,iG1,iomega1,1))>tol) then
-               write(message,*) iG1,iG2,"False",scr(iG1,iG2,iomega1,1),scr(iG2,iG1,iomega1,1)
+               write(message,*) iG1,iG2,"false",scr(iG1,iG2,iomega1,1),scr(iG2,iG1,iomega1,1)
                call wrtout(std_out,message,'COLL')
              endif
            enddo
@@ -815,7 +815,7 @@ contains
                if (ANY(abs(scr(iG1,iG2,:,:)-scr(iG2,iG1,:,:))>tol)) then
                  do iomega1=1,nomega
                    if(abs(scr(iG1,iG2,iomega1,1)-scr(iG2,iG1,iomega1,1))>tol) then
-                     write(message,*) iG1,iG2,"False",scr(iG1,iG2,iomega1,1),scr(iG2,iG1,iomega1,1)
+                     write(message,*) iG1,iG2,"false",scr(iG1,iG2,iomega1,1),scr(iG2,iG1,iomega1,1)
                      call wrtout(std_out,message,'COLL')
                    endif
                  enddo

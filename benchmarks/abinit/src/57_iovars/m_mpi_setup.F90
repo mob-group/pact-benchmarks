@@ -1050,7 +1050,7 @@ end subroutine mpi_setup
  real(dp):: eff
  character(len=9) :: suffix
  character(len=500) :: message
- character(len=fnlen) :: filden
+ character(len=fnlen) :: fiAB_LDEn
  type(hdr_type) :: hdr0
 !arrays
  integer :: idum(1),idum3(3),ngmax(3),ngmin(3)
@@ -1302,17 +1302,17 @@ end subroutine mpi_setup
        suffix='_DEN';if (dtset%nimage>1) suffix='_IMG1_DEN'
        ABI_ALLOCATE(jdtset_,(0:ndtset_alloc))
        jdtset_=0;if(ndtset_alloc/=0) jdtset_(0:ndtset_alloc)=dtsets(0:ndtset_alloc)%jdtset
-       call mkfilename(filnam,filden,dtset%getden,idtset,dtset%irdden,jdtset_,ndtset_alloc,suffix,'den',ii)
+       call mkfilename(filnam,fiAB_LDEn,dtset%getden,idtset,dtset%irdden,jdtset_,ndtset_alloc,suffix,'den',ii)
        ABI_DEALLOCATE(jdtset_)
-       !Retrieve ngfft from file header
+       !Retrieve ngfft from file AB_HEADER
        idum3=0
        if (mpi_enreg%me==0) then
-         inquire(file=trim(filden),exist=file_found)
+         inquire(file=trim(fiAB_LDEn),exist=file_found)
          if (file_found) then
-           call hdr_read_from_fname(hdr0,filden,ii,xmpi_comm_self)
+           call hdr_read_from_fname(hdr0,fiAB_LDEn,ii,xmpi_comm_self)
            idum3(1:2)=hdr0%ngfft(2:3);if (file_found) idum3(3)=1
            call hdr_free(hdr0)
-           MSG_WARNING("Cannot find filden"//filden)
+           MSG_WARNING("Cannot find fiAB_LDEn"//fiAB_LDEn)
          end if
        end if
        call xmpi_bcast(idum3,0,mpi_enreg%comm_world,ii)

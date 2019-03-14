@@ -173,8 +173,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      DOUBLE PRECISION   ZLANHE, DLAMCH
-      EXTERNAL           LSAME, ZLANHE, DLAMCH
+      DOUBLE PRECISION   ZLANHE, AB_DLAMCH
+      EXTERNAL           LSAME, ZLANHE, AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZLASET, ZLAVHE_ROOK, ZSYCONVF_ROOK
@@ -197,7 +197,7 @@
 *
 *     1) Determine EPS and the norm of A.
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       ANORM = ZLANHE( '1', UPLO, N, A, LDA, RWORK )
 *
 *     Check the imaginary parts of the diagonal elements and return with

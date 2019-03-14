@@ -246,8 +246,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            AB_ISAMAX
-      REAL               SLAMCH, AB_SLAPY2
-      EXTERNAL           AB_ISAMAX, SLAMCH, AB_SLAPY2
+      REAL               AB_SLAMCH, AB_SLAPY2
+      EXTERNAL           AB_ISAMAX, AB_SLAMCH, AB_SLAPY2
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_SCOPY, AB_SLACPY, AB_SLAMRG, AB_SROT, AB_SSC
@@ -316,7 +316,7 @@
 *
       IMAX = AB_ISAMAX( N, Z, 1 )
       JMAX = AB_ISAMAX( N, D, 1 )
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       TOL = EIGHT*EPS*MAX( ABS( D( JMAX ) ), ABS( Z( IMAX ) ) )
 *
 *     If the rank-1 modifier is small enough, no more needs to be done

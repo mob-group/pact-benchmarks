@@ -31,62 +31,62 @@
 !! ================
 !! ==== BLAS 1 ====
 !! ================
-!! FUNCTION idamax isamax icamax izamax  ---> XIAMAX(n,dx,incx)
-!! * FUNCTION  snrm2  dnrm2 scnrm2 dznmr2  ---> XNRM2(n,x,incx)
-!! FUNCTION  sasum  dasum scasum dzasum  ---> XASUM(n,x,incx)
-!! * FUNCTION               cdotu  zdotu ---> XDOTU(n,x,incx,y,incy)
-!! * FUNCTION               cdotc  zdotc ---> XDOTC(n,x,incx,y,incy)
-!! FUNCTION  sdot   ddot                 ---> XDOT(n,x,incx,y,incy)
-!! FUNCTION  sdsdot sdot                 ---> XDSDOT(n,x,incx,y,incy)
-!! SUBROUTINE saxpy daxpy caxpy  zaxpy   ---> XAXPY(n,ca,cx,incx,cy,incy)
-!! * SUBROUTINE scopy dcopy ccopy  zcopy   ---> XCOPY(n,cx,incx,cy,incy)
-!! SUBROUTINE srotg drotg crotg  zrotg   ---> XROTG(a,b,c,s)
-!! SUBROUTINE srot  drot  csrot  zdrot   ---> XROT(n,x,incx,y,incy,c,s)
-!! * SUBROUTINE sscal dscal cscal  zscal
-!!                        csscal zdscal  ---> XSCAL(n,a,x,incx)
-!! SUBROUTINE sswap dswap cswap  zswap   ---> XSWAP(n,x,incx,y,incy)
+!! FUNCTION AB_IDAMAX AB_ISAMAX AB_ICAMAX AB_IZAMAX  ---> XIAMAX(n,dx,incx)
+!! * FUNCTION  AB_SNRM2  AB_DNRM2 AB_SCNRM2 dznmr2  ---> XNRM2(n,x,incx)
+!! FUNCTION  AB_SASUM  AB_DASUM AB_SCASUM AB_DZASUM  ---> XASUM(n,x,incx)
+!! * FUNCTION               AB_CDOTU  AB_ZDOTU ---> XDOTU(n,x,incx,y,incy)
+!! * FUNCTION               AB_CDOTC  AB_ZDOTC ---> XDOTC(n,x,incx,y,incy)
+!! FUNCTION  AB_SDOT   AB_DDOT                 ---> XDOT(n,x,incx,y,incy)
+!! FUNCTION  AB_SDSDOT AB_SDOT                 ---> XAB_DSDOT(n,x,incx,y,incy)
+!! SUBROUTINE AB_SAXPY AB_DAXPY AB_CAXPY  AB_ZAXPY   ---> XAXPY(n,ca,cx,incx,cy,incy)
+!! * SUBROUTINE AB_SCOPY AB_DCOPY AB_CCOPY  AB_ZCOPY   ---> XCOPY(n,cx,incx,cy,incy)
+!! SUBROUTINE AB_SROTg AB_DROTg AB_CROTg  AB_ZROTg   ---> XROTG(a,b,c,s)
+!! SUBROUTINE AB_SROT  AB_DROT  AB_CSROT  AB_ZDROT   ---> XROT(n,x,incx,y,incy,c,s)
+!! * SUBROUTINE AB_SSCAL AB_DSCAL AB_CSCAL  AB_ZSCAL
+!!                        AB_CSSCAL AB_ZDSCAL  ---> XSCAL(n,a,x,incx)
+!! SUBROUTINE AB_SSWAP AB_DSWAP AB_CSWAP  AB_ZSWAP   ---> XSWAP(n,x,incx,y,incy)
 !!
 !! ================
 !! ==== BLAS 2 ====
 !! ================
-!! SUBROUTINE sgbmv dgbmv cgbmv zgbmv    ---> XGBMV(trans,m,kl,ku,n,alpha,A,lda,X,incx,beta,Y,incy)
-!! * SUBROUTINE sgemv dgemv cgemv zgemv    ---> XGEMV(trans,m,n,alpha,A,lda,X,incx,beta,Y,incy)
-!! * SUBROUTINE             cgerc zgerc    ---> XGERC(m,n,alpha,x,incx,y,incy,A,lda)
-!! SUBROUTINE             cgeru zgeru    ---> XGERU(m,n,alpha,x,incx,y,incy,A,lda)
-!! SUBROUTINE             chbmv zhbmv    ---> XHBMV(uplo,n,k,alpha,A,lda,X,incx,beta,Y,incy)
-!! SUBROUTINE             chemv zhemv    ---> XHEMV(uplo,n,alpha,A,lda,X,incx,beta,Y,incy)
-!! SUBROUTINE             cher  zher     ---> XHER(uplo,n,alpha,x,incx,A,lda)
-!! SUBROUTINE             cher2 zher2    ---> XHER2(uplo,n,alpha,x,incx,y,incy,A,lda)
-!! SUBROUTINE             chpr  zhpr     ---> XHPR(uplo,n,alpha,x,incx,AP)
-!! SUBROUTINE             chpr2 zhpr2    ---> XHPR2(uplo,n,alpha,x,incx,y,incy,AP)
-!! SUBROUTINE             chpmv zhpmv    ---> XHPMV(uplo,n,alpha,AP,X,incx,beta,Y,incy)
-!! SUBROUTINE stbmv dtbmv ctbmv ztbmv    ---> XTBMV(uplo,trans,diag,n,k,A,lda,X,incx)
-!! SUBROUTINE stpmv dtpmv ctpmv ztpmv    ---> XTPMV(uplo,trans,diag,n,AP,X,incx)
-!! SUBROUTINE strmv dtrmv ctrmv ztrmv    ---> XTRMV(uplo,trans,diag,n,A,lda,X,incx)
-!! SUBROUTINE ssymv dsymv                ---> XSYMV(uplo,n,alpha,A,lda,X,incx,beta,Y,incy)
-!! SUBROUTINE ssbmv dsbmv                ---> XSBMV(uplo,n,k,alpha,A,lda,X,incx,beta,Y,incy)
-!! SUBROUTINE sspmv dspmv                ---> XSPMV(uplo,n,alpha,AP,X,incx,beta,Y,incy)
-!! SUBROUTINE stbsv dtbsv ctbsv ztbsv    ---> XTBSV(uplo,trans,diag,n,k,A,lda,X,incx)
-!! SUBROUTINE stpsv dtpsv ctpsv ztpsv    ---> XTPSV(uplo,trans,diag,n,AP,X,incx)
-!! SUBROUTINE strsv dtrsv ctrsv ztrsv    ---> XTRSV(uplo,trans,diag,n,A,lda,X,incx)
-!! SUBROUTINE  sger  dger                ---> XGER(m,n,alpha,x,incx,y,incy,A,lda)
-!! SUBROUTINE  sspr  dspr                ---> XSPR(uplo,n,alpha,x,incx,AP)
-!! SUBROUTINE sspr2 dspr2                ---> XSPR2(uplo,n,alpha,x,incx,y,incy,AP)
-!! SUBROUTINE  ssyr  dsyr                ---> XSYR(uplo,n,alpha,x,incx,A,lda)
-!! SUBROUTINE ssyr2 dsyr2                ---> XSYR2(uplo,n,alpha,x,incx,y,incy,A,lda)
+!! SUBROUTINE AB_SGBMV AB_DGBMV AB_CGBMV AB_ZGBMV    ---> XGBMV(trans,m,kl,ku,n,alpha,A,lda,X,incx,beta,Y,incy)
+!! * SUBROUTINE AB_SGEMV AB_DGEMV AB_CGEMV AB_ZGEMV    ---> XGEMV(trans,m,n,alpha,A,lda,X,incx,beta,Y,incy)
+!! * SUBROUTINE             AB_CGERC AB_ZGERC    ---> XGERC(m,n,alpha,x,incx,y,incy,A,lda)
+!! SUBROUTINE             AB_CGERU AB_ZGERU    ---> XGERU(m,n,alpha,x,incx,y,incy,A,lda)
+!! SUBROUTINE             AB_CHBMV AB_ZHBMV    ---> XHBMV(uplo,n,k,alpha,A,lda,X,incx,beta,Y,incy)
+!! SUBROUTINE             AB_CHEMV AB_ZHEMV    ---> XHEMV(uplo,n,alpha,A,lda,X,incx,beta,Y,incy)
+!! SUBROUTINE             AB_CHER  AB_ZHER     ---> XHER(uplo,n,alpha,x,incx,A,lda)
+!! SUBROUTINE             AB_CHER2 AB_ZHER2    ---> XHER2(uplo,n,alpha,x,incx,y,incy,A,lda)
+!! SUBROUTINE             AB_CHPR  AB_ZHPR     ---> XHPR(uplo,n,alpha,x,incx,AP)
+!! SUBROUTINE             AB_CHPR2 AB_ZHPR2    ---> XHPR2(uplo,n,alpha,x,incx,y,incy,AP)
+!! SUBROUTINE             AB_CHPMV AB_ZHPMV    ---> XHPMV(uplo,n,alpha,AP,X,incx,beta,Y,incy)
+!! SUBROUTINE AB_STBMV AB_DTBMV AB_CTBMV AB_ZTBMV    ---> XTBMV(uplo,trans,diag,n,k,A,lda,X,incx)
+!! SUBROUTINE AB_STPMV AB_DTPMV AB_CTPMV AB_ZTPMV    ---> XTPMV(uplo,trans,diag,n,AP,X,incx)
+!! SUBROUTINE AB_STRMV AB_DTRMV AB_CTRMV AB_ZTRMV    ---> XTRMV(uplo,trans,diag,n,A,lda,X,incx)
+!! SUBROUTINE AB_SSYMV AB_DSYMV                ---> XSYMV(uplo,n,alpha,A,lda,X,incx,beta,Y,incy)
+!! SUBROUTINE AB_SSBMV AB_DSBMV                ---> XSBMV(uplo,n,k,alpha,A,lda,X,incx,beta,Y,incy)
+!! SUBROUTINE AB_SSPMV AB_DSPMV                ---> XSPMV(uplo,n,alpha,AP,X,incx,beta,Y,incy)
+!! SUBROUTINE AB_STBSV AB_DTBSV AB_CTBSV AB_ZTBSV    ---> XTBSV(uplo,trans,diag,n,k,A,lda,X,incx)
+!! SUBROUTINE AB_STPSV AB_DTPSV AB_CTPSV AB_ZTPSV    ---> XTPSV(uplo,trans,diag,n,AP,X,incx)
+!! SUBROUTINE AB_STRSV AB_DTRSV AB_CTRSV AB_ZTRSV    ---> XTRSV(uplo,trans,diag,n,A,lda,X,incx)
+!! SUBROUTINE  AB_SGER  AB_DGER                ---> XGER(m,n,alpha,x,incx,y,incy,A,lda)
+!! SUBROUTINE  AB_SSPR  AB_DSPR                ---> XSPR(uplo,n,alpha,x,incx,AP)
+!! SUBROUTINE AB_SSPR2 AB_DSPR2                ---> XSPR2(uplo,n,alpha,x,incx,y,incy,AP)
+!! SUBROUTINE  AB_SSYR  AB_DSYR                ---> XSYR(uplo,n,alpha,x,incx,A,lda)
+!! SUBROUTINE AB_SSYR2 AB_DSYR2                ---> XSYR2(uplo,n,alpha,x,incx,y,incy,A,lda)
 !!
 !! ================
 !! ==== BLAS 3 ====
 !! ================
-!! * SUBROUTINE sgemm dgemm cgemm zgemm      ---> XGEMM(transA,transB,m,n,k,alpha,A,lda,B,ldb,beta,C,ldc)
-!! SUBROUTINE             chemm zhemm      ---> XHEMM(side,uplo,m,n,alpha,A,lda,B,ldb,beta,C,ldc)
-!! SUBROUTINE            cher2k zher2k     ---> XHER2K(uplo,trans,n,k,alpha,A,lda,B,ldb,beta,C,ldc)
-!! * SUBROUTINE             cherk zherk      ---> XHERK(uplo,trans,n,k,alpha,A,lda,beta,C,ldc)
-!! SUBROUTINE ssymm dsymm csymm zsymm      ---> XSYMM(side,uplo,m,n,alpha,A,lda,B,ldb,beta,C,ldc)
-!! SUBROUTINE ssyr2k dsyr2k csyr2k zsyr2k  ---> XSYR2K(uplo,trans,n,k,alpha,A,lda,B,ldb,beta,C,ldc)
-!! SUBROUTINE ssyrk dsyrk csyrk zsyrk      ---> XSYRK(uplo,trans,n,k,alpha,A,lda,beta,C,ldc)
-!! SUBROUTINE strmm dtrmm ctrmm ztrmm      ---> XTRMM(side,uplo,transa,diag,m,n,alpha,A,lda,B,ldb)
-!! SUBROUTINE strsm dtrsm ctrsm ztrsm      ---> XTRSM(side,uplo,transa,diag,m,n,alpha,A,lda,B,ldb)
+!! * SUBROUTINE AB_SGEMM AB_DGEMM AB_CGEMM AB_ZGEMM      ---> XGEMM(transA,transB,m,n,k,alpha,A,lda,B,ldb,beta,C,ldc)
+!! SUBROUTINE             AB_CHEMM AB_ZHEMM      ---> XHEMM(side,uplo,m,n,alpha,A,lda,B,ldb,beta,C,ldc)
+!! SUBROUTINE            AB_CHER2k AB_ZHER2k     ---> XHER2K(uplo,trans,n,k,alpha,A,lda,B,ldb,beta,C,ldc)
+!! * SUBROUTINE             AB_CHERk AB_ZHERk      ---> XHERK(uplo,trans,n,k,alpha,A,lda,beta,C,ldc)
+!! SUBROUTINE AB_SSYMM AB_DSYMM AB_CSYMM AB_ZSYMM      ---> XSYMM(side,uplo,m,n,alpha,A,lda,B,ldb,beta,C,ldc)
+!! SUBROUTINE AB_SSYR2k AB_DSYR2k AB_CSYR2k AB_ZSYR2k  ---> XSYR2K(uplo,trans,n,k,alpha,A,lda,B,ldb,beta,C,ldc)
+!! SUBROUTINE AB_SSYRk AB_DSYRk AB_CSYRk AB_ZSYRk      ---> XSYRK(uplo,trans,n,k,alpha,A,lda,beta,C,ldc)
+!! SUBROUTINE AB_STRMM AB_DTRMM AB_CTRMM AB_ZTRMM      ---> XTRMM(side,uplo,transa,diag,m,n,alpha,A,lda,B,ldb)
+!! SUBROUTINE AB_STRSM AB_DTRSM AB_CTRSM AB_ZTRSM      ---> XTRSM(side,uplo,transa,diag,m,n,alpha,A,lda,B,ldb)
 !!-------------------------------------------------------------------------------
 !!
 !! SOURCE
@@ -135,33 +135,33 @@ MODULE m_hide_blas
 
 interface xnrm2
   !
-  function snrm2 ( n, x, incx )
+  function AB_SNRM2 ( n, x, incx )
     use defs_basis
-    real(sp) ::  snrm2
+    real(sp) ::  AB_SNRM2
     integer,intent(in) :: incx, n
     real(sp),intent(in) ::  x( * )
-  end function snrm2
+  end function AB_SNRM2
   !
-  function dnrm2 ( n, x, incx )
+  function AB_DNRM2 ( n, x, incx )
     use defs_basis
-    real(dp) :: dnrm2
+    real(dp) :: AB_DNRM2
     integer,intent(in) :: incx, n
     real(dp),intent(in) ::  x( * )
-  end function dnrm2
+  end function AB_DNRM2
   !
-  function scnrm2( n, x, incx )
+  function AB_SCNRM2( n, x, incx )
     use defs_basis
-    real(sp) :: scnrm2
+    real(sp) :: AB_SCNRM2
     integer,intent(in) :: incx, n
     complex(spc),intent(in) :: x( * )
-  end function scnrm2
+  end function AB_SCNRM2
   !
-  function dznrm2( n, x, incx )
+  function AB_DZNRM2( n, x, incx )
     use defs_basis
-    real(dp) :: dznrm2
+    real(dp) :: AB_DZNRM2
     integer,intent(in) :: incx, n
     complex(dpc),intent(in) :: x( * )
-  end function dznrm2
+  end function AB_DZNRM2
   !
 end interface xnrm2
 
@@ -169,59 +169,59 @@ end interface xnrm2
 
 interface xscal
   !
-  subroutine sscal(n,sa,sx,incx)
+  subroutine AB_SSCAL(n,sa,sx,incx)
     use defs_basis
     implicit none
     integer :: incx
     integer :: n
     real(sp) :: sa
     real(sp) :: sx(*)
-  end subroutine sscal
+  end subroutine AB_SSCAL
   !
-  subroutine  dscal(n,da,dx,incx)
+  subroutine  AB_DSCAL(n,da,dx,incx)
     use defs_basis
     implicit none
     integer :: incx
     integer :: n
     real(dp):: da
     real(dp):: dx(*)
-  end subroutine dscal
+  end subroutine AB_DSCAL
   !
-  subroutine  cscal(n,ca,cx,incx)
+  subroutine  AB_CSCAL(n,ca,cx,incx)
     use defs_basis
     implicit none
     integer :: incx
     integer :: n
     complex(spc) :: ca
     complex(spc) :: cx(*)
-  end subroutine cscal
+  end subroutine AB_CSCAL
   !
-  subroutine  zscal(n,za,zx,incx)
+  subroutine  AB_ZSCAL(n,za,zx,incx)
     use defs_basis
     implicit none
     integer :: incx
     integer :: n
     complex(dpc) :: za
     complex(dpc) :: zx(*)
-  end subroutine zscal
+  end subroutine AB_ZSCAL
   !
-  subroutine  csscal(n,sa,cx,incx)
+  subroutine  AB_CSSCAL(n,sa,cx,incx)
     use defs_basis
     implicit none
     integer :: incx
     integer :: n
     real(sp) :: sa
     complex(spc) :: cx(*)
-  end subroutine csscal
+  end subroutine AB_CSSCAL
   !
-  subroutine  zdscal(n,da,zx,incx)
+  subroutine  AB_ZDSCAL(n,da,zx,incx)
     use defs_basis
     implicit none
     integer :: incx
     integer :: n
     real(dp) :: da
     complex(dpc) :: zx(*)
-  end subroutine zdscal
+  end subroutine AB_ZDSCAL
   !
 end interface xscal
 
@@ -230,22 +230,22 @@ end interface xscal
 interface xdotu
   !
 #ifdef HAVE_LINALG_ZDOTU_BUG
-  module procedure cdotu
-  module procedure zdotu
+  module procedure AB_CDOTU
+  module procedure AB_ZDOTU
 #else
-  function cdotu(n,cx,incx,cy,incy)
+  function AB_CDOTU(n,cx,incx,cy,incy)
     use defs_basis
-    complex(spc) :: cdotu
+    complex(spc) :: AB_CDOTU
     complex(spc),intent(in) :: cx(*),cy(*)
     integer,intent(in) :: incx,incy,n
-  end function cdotu
+  end function AB_CDOTU
   !
-  function zdotu(n,zx,incx,zy,incy)
+  function AB_ZDOTU(n,zx,incx,zy,incy)
     use defs_basis
-    complex(dpc) :: zdotu
+    complex(dpc) :: AB_ZDOTU
     complex(dpc),intent(in) :: zx(*),zy(*)
     integer,intent(in) :: incx,incy,n
-  end function zdotu
+  end function AB_ZDOTU
 #endif
   !
 end interface xdotu
@@ -253,29 +253,29 @@ end interface xdotu
 !-------------------------------------------------------------------------------
 
 
-! CDOTC, CDOTU, ZDOTC, and ZDOTU are problematic if Mac OS X's Vec lib is used.
+! AB_CDOTC, AB_CDOTU, AB_ZDOTC, and AB_ZDOTU are problematic if Mac OS X's Vec lib is used.
 ! See http://developer.apple.com/hardwaredrivers/ve/errata.html.
 ! If needed, we replace them with plain Fortran code.
 
 interface xdotc
   !
 #ifdef HAVE_LINALG_ZDOTC_BUG
-   module procedure cdotc
-   module procedure zdotc
+   module procedure AB_CDOTC
+   module procedure AB_ZDOTC
 #else
-  function cdotc(n,cx,incx,cy,incy)
+  function AB_CDOTC(n,cx,incx,cy,incy)
     use defs_basis
-    complex(spc) :: cdotc
+    complex(spc) :: AB_CDOTC
     complex(spc),intent(in) :: cx(*),cy(*)
     integer,intent(in) :: incx,incy,n
-  end function cdotc
+  end function AB_CDOTC
   !
-  function zdotc(n,zx,incx,zy,incy)
+  function AB_ZDOTC(n,zx,incx,zy,incy)
     use defs_basis
-    complex(dpc) :: zdotc
+    complex(dpc) :: AB_ZDOTC
     complex(dpc),intent(in) :: zx(*),zy(*)
     integer,intent(in) :: incx,incy,n
-  end function zdotc
+  end function AB_ZDOTC
 #endif
   !
 end interface xdotc
@@ -285,7 +285,7 @@ end interface xdotc
 interface xcopy
    !module procedure ABI_xcopy
  !
- subroutine scopy(n,sx,incx,sy,incy)
+ subroutine AB_SCOPY(n,sx,incx,sy,incy)
    use defs_basis
    implicit none
    integer,intent(in) :: incx
@@ -293,9 +293,9 @@ interface xcopy
    integer,intent(in) :: n
    real(sp),intent(in) ::  sx(*)
    real(sp),intent(inout) :: sy(*)
- end subroutine scopy
+ end subroutine AB_SCOPY
  !
- subroutine  dcopy(n,dx,incx,dy,incy)
+ subroutine  AB_DCOPY(n,dx,incx,dy,incy)
    use defs_basis
    implicit none
    integer,intent(in) :: incx
@@ -303,9 +303,9 @@ interface xcopy
    integer,intent(in) :: n
    real(dp),intent(in) :: dx(*)
    real(dp),intent(inout) :: dy(*)
- end subroutine dcopy
+ end subroutine AB_DCOPY
  !
- subroutine  ccopy(n,cx,incx,cy,incy)
+ subroutine  AB_CCOPY(n,cx,incx,cy,incy)
    use defs_basis
    implicit none
    integer,intent(in) :: incx
@@ -313,9 +313,9 @@ interface xcopy
    integer,intent(in) :: n
    complex(spc),intent(in) :: cx(*)
    complex(spc),intent(inout) :: cy(*)
- end subroutine ccopy
+ end subroutine AB_CCOPY
  !
- subroutine  zcopy(n,cx,incx,cy,incy)
+ subroutine  AB_ZCOPY(n,cx,incx,cy,incy)
    use defs_basis
    implicit none
    integer,intent(in) :: incx
@@ -323,7 +323,7 @@ interface xcopy
    integer,intent(in) :: n
    complex(dpc),intent(in) :: cx(*)
    complex(dpc),intent(inout) :: cy(*)
- end subroutine zcopy
+ end subroutine AB_ZCOPY
  !
 end interface xcopy
 
@@ -331,41 +331,41 @@ end interface xcopy
 
 interface xgemv
   !
-  subroutine sgemv ( trans, m, n, alpha, a, lda, x, incx, beta, y, incy )
+  subroutine AB_SGEMV ( trans, m, n, alpha, a, lda, x, incx, beta, y, incy )
     use defs_basis
     real(sp),intent(in) :: alpha, beta
     integer,intent(in) :: incx, incy, lda, m, n
     character(len=1),intent(in) :: trans
     real(sp),intent(in) :: a( lda, * ), x( * )
     real(sp),intent(inout) :: y( * )
-  end subroutine sgemv
+  end subroutine AB_SGEMV
   !
-  subroutine dgemv ( trans, m, n, alpha, a, lda, x, incx, beta, y, incy )
+  subroutine AB_DGEMV ( trans, m, n, alpha, a, lda, x, incx, beta, y, incy )
     use defs_basis
     real(dp),intent(in) :: alpha, beta
     integer,intent(in) :: incx, incy, lda, m, n
     character(len=1),intent(in) :: trans
     real(dp),intent(in) :: a( lda, * ), x( * )
     real(dp),intent(inout) :: y( * )
-  end subroutine dgemv
+  end subroutine AB_DGEMV
   !
-  subroutine cgemv ( trans, m, n, alpha, a, lda, x, incx, beta, y, incy )
+  subroutine AB_CGEMV ( trans, m, n, alpha, a, lda, x, incx, beta, y, incy )
     use defs_basis
     complex(spc),intent(in) :: alpha, beta
     integer,intent(in) :: incx, incy, lda, m, n
     character(len=1),intent(in) :: trans
     complex(spc),intent(in) :: a( lda, * ), x( * )
     complex(spc),intent(inout) :: y( * )
-  end subroutine cgemv
+  end subroutine AB_CGEMV
   !
-  subroutine zgemv ( trans, m, n, alpha, a, lda, x, incx, beta, y, incy )
+  subroutine AB_ZGEMV ( trans, m, n, alpha, a, lda, x, incx, beta, y, incy )
     use defs_basis
     complex(dpc),intent(in) :: alpha, beta
     integer,intent(in) :: incx, incy, lda, m, n
     character(len=1),intent(in) :: trans
     complex(dpc),intent(in) :: a( lda, * ), x( * )
     complex(dpc),intent(inout) :: y( * )
-  end subroutine zgemv
+  end subroutine AB_ZGEMV
   !
 end interface xgemv
 
@@ -373,21 +373,21 @@ end interface xgemv
 
 interface xgerc
   !
-  subroutine cgerc ( m, n, alpha, x, incx, y, incy, a, lda )
+  subroutine AB_CGERC ( m, n, alpha, x, incx, y, incy, a, lda )
     use defs_basis
     complex(spc),intent(in) :: alpha
     integer,intent(in) :: incx, incy, lda, m, n
     complex(spc),intent(inout) ::  a( lda, * )
     complex(spc),intent(in) :: x( * ), y( * )
-  end subroutine cgerc
+  end subroutine AB_CGERC
   !
-  subroutine zgerc ( m, n, alpha, x, incx, y, incy, a, lda )
+  subroutine AB_ZGERC ( m, n, alpha, x, incx, y, incy, a, lda )
     use defs_basis
     complex(dpc),intent(in) :: alpha
     integer,intent(in) :: incx, incy, lda, m, n
     complex(dpc),intent(inout) :: a( lda, * )
     complex(dpc),intent(in) :: x( * ), y( * )
-  end subroutine zgerc
+  end subroutine AB_ZGERC
   !
 end interface xgerc
 
@@ -395,47 +395,47 @@ end interface xgerc
 
 interface xgemm
   !
-  subroutine sgemm ( transa, transb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc )
+  subroutine AB_SGEMM ( transa, transb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc )
     use defs_basis
     character(len=1),intent(in) :: transa, transb
     integer,intent(in) :: m, n, k, lda, ldb, ldc
     real(sp),intent(in) :: alpha, beta
     real(sp),intent(in) :: a( lda, * ), b( ldb, * )
     real(sp),intent(inout) :: c( ldc, * )
-  end subroutine sgemm
+  end subroutine AB_SGEMM
   !
-  subroutine dgemm ( transa, transb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc )
+  subroutine AB_DGEMM ( transa, transb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc )
     use defs_basis
     character(len=1),intent(in) :: transa, transb
     integer,intent(in) :: m, n, k, lda, ldb, ldc
     real(dp),intent(in) :: alpha, beta
     real(dp),intent(in) :: a( lda, * ), b( ldb, * )
     real(dp),intent(inout) :: c( ldc, * )
-  end subroutine dgemm
+  end subroutine AB_DGEMM
   !
-  subroutine cgemm ( transa, transb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc )
+  subroutine AB_CGEMM ( transa, transb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc )
     use defs_basis
     character(len=1),intent(in) :: transa, transb
     integer,intent(in) :: m, n, k, lda, ldb, ldc
     complex(spc),intent(in) :: alpha, beta
     complex(spc),intent(in) :: a( lda, * ), b( ldb, * )
     complex(spc),intent(inout) :: c( ldc, * )
-  end subroutine cgemm
+  end subroutine AB_CGEMM
   !
-  subroutine zgemm ( transa, transb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc )
+  subroutine AB_ZGEMM ( transa, transb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc )
     use defs_basis
     character(len=1),intent(in) :: transa, transb
     integer,intent(in) :: m, n, k, lda, ldb, ldc
     complex(dpc),intent(in) :: alpha, beta
     complex(dpc),intent(in) :: a( lda, * ), b( ldb, * )
     complex(dpc),intent(inout) :: c( ldc, * )
-  end subroutine zgemm
+  end subroutine AB_ZGEMM
   !
 end interface xgemm
 
 interface xherk
   !
-  subroutine cherk( uplo, trans, n, k, alpha, a, lda, beta, c, ldc )
+  subroutine AB_CHERk( uplo, trans, n, k, alpha, a, lda, beta, c, ldc )
     use defs_basis
     character(len=1),intent(in) :: uplo
     character(len=1),intent(in) :: trans
@@ -444,9 +444,9 @@ interface xherk
     complex(spc),intent(in) :: a( lda, * )
     real(sp),intent(in) :: beta
     complex(spc),intent(inout) :: c( ldc, * )
-  end subroutine cherk
+  end subroutine AB_CHERk
   !
-  subroutine zherk( uplo, trans, n, k, alpha, a, lda, beta, c, ldc )
+  subroutine AB_ZHERk( uplo, trans, n, k, alpha, a, lda, beta, c, ldc )
     use defs_basis
     character(len=1),intent(in) :: uplo
     character(len=1),intent(in) :: trans
@@ -455,7 +455,7 @@ interface xherk
     complex(dpc),intent(in) :: a( lda, * )
     real(dp),intent(in) :: beta
     complex(dpc),intent(inout) :: c( ldc, * )
-  end subroutine zherk
+  end subroutine AB_ZHERk
   !
 end interface xherk
 
@@ -504,20 +504,20 @@ end interface sqmat_oconjgtrans
 
 CONTAINS  !========================================================================================
 
-! CDOTC, CDOTU, ZDOTC, and ZDOTU are problematic if Mac OS X's Vec lib is used.
+! AB_CDOTC, AB_CDOTU, AB_ZDOTC, and AB_ZDOTU are problematic if Mac OS X's Vec lib is used.
 ! See http://developer.apple.com/hardwaredrivers/ve/errata.html.
 ! Here we replace them with plain Fortran code.
 
 #ifdef HAVE_LINALG_ZDOTC_BUG
-!#warning "Using internal replacement for zdotc. External library cannot be used"
-#include "replacements/cdotc.f"
-#include "replacements/zdotc.f"
+!#warning "Using internal replacement for AB_ZDOTC. External library cannot be used"
+#include "replacements/AB_CDOTC.f"
+#include "replacements/AB_ZDOTC.f"
 #endif
 
 #ifdef HAVE_LINALG_ZDOTU_BUG
-!#warning "Using internal replacement for zdotu. External library cannot be used"
-#include "replacements/cdotu.f"
-#include "replacements/zdotu.f"
+!#warning "Using internal replacement for AB_ZDOTU. External library cannot be used"
+#include "replacements/AB_CDOTU.f"
+#include "replacements/AB_ZDOTU.f"
 #endif
 
 !----------------------------------------------------------------------
@@ -576,7 +576,7 @@ subroutine blas_cholesky_ortho_spc(vec_size,nvec,iomat,cf_ovlp,use_gemm)
 ! *************************************************************************
 
  ! 1) Calculate overlap_ij =  <phi_i|phi_j>
- ! TODO: use dsyrk
+ ! TODO: use AB_DSYRk
  my_usegemm = .FALSE.; if (PRESENT(use_gemm)) my_usegemm = use_gemm
 
  if (my_usegemm) then
@@ -586,14 +586,14 @@ subroutine blas_cholesky_ortho_spc(vec_size,nvec,iomat,cf_ovlp,use_gemm)
  end if
  !
  ! 2) Cholesky factorization: ovlp = U^H U with U upper triangle matrix.
- call CPOTRF('U',nvec,cf_ovlp,nvec,ierr)
+ call AB_CPOTRF('U',nvec,cf_ovlp,nvec,ierr)
  if (ierr/=0)  then
-   write(msg,'(a,i0)')' ZPOTRF returned info= ',ierr
+   write(msg,'(a,i0)')' AB_ZPOTRF returned info= ',ierr
    MSG_ERROR(msg)
  end if
  !
  ! 3) Solve X U = io_mat. On exit iomat is orthonormalized.
- call CTRSM('Right','Upper','Normal','Normal',vec_size,nvec,cone_spc,cf_ovlp,nvec,iomat,vec_size)
+ call AB_CTRSM('Right','Upper','Normal','Normal',vec_size,nvec,cone_spc,cf_ovlp,nvec,iomat,vec_size)
 
 end subroutine blas_cholesky_ortho_spc
 !!***
@@ -661,14 +661,14 @@ subroutine blas_cholesky_ortho_dpc(vec_size,nvec,iomat,cf_ovlp,use_gemm)
  end if
  !
  ! 2) Cholesky factorization: ovlp = U^H U with U upper triangle matrix.
- call ZPOTRF('U',nvec,cf_ovlp,nvec,ierr)
+ call AB_ZPOTRF('U',nvec,cf_ovlp,nvec,ierr)
  if (ierr/=0)  then
-   write(msg,'(a,i0)')' ZPOTRF returned info= ',ierr
+   write(msg,'(a,i0)')' AB_ZPOTRF returned info= ',ierr
    MSG_ERROR(msg)
  end if
  !
  ! 3) Solve X U = io_mat. On exit io_mat is orthonormalized.
- call ZTRSM('Right','Upper','Normal','Normal',vec_size,nvec,cone_dpc,cf_ovlp,nvec,iomat,vec_size)
+ call AB_ZTRSM('Right','Upper','Normal','Normal',vec_size,nvec,cone_dpc,cf_ovlp,nvec,iomat,vec_size)
 
 end subroutine blas_cholesky_ortho_dpc
 !!***

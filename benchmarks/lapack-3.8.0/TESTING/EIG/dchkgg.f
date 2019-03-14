@@ -560,8 +560,8 @@
       DOUBLE PRECISION   DUMMA( 4 ), RMAGN( 0: 3 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLANGE, DLARND
-      EXTERNAL           DLAMCH, DLANGE, DLARND
+      DOUBLE PRECISION   AB_DLAMCH, DLANGE, DLARND
+      EXTERNAL           AB_DLAMCH, DLANGE, DLARND
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGEQR2, DGET51, DGET52, DGGHRD, DHGEQZ, DLABAD,
@@ -640,8 +640,8 @@
       IF( NSIZES.EQ.0 .OR. NTYPES.EQ.0 )
      $   RETURN
 *
-      SAFMIN = DLAMCH( 'Safe minimum' )
-      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
+      SAFMIN = AB_DLAMCH( 'Safe minimum' )
+      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
       SAFMIN = SAFMIN / ULP
       SAFMAX = ONE / SAFMIN
       CALL DLABAD( SAFMIN, SAFMAX )

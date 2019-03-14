@@ -442,7 +442,7 @@ end subroutine fft_test_free_1D
 !!
 !! SOURCE
 
-subroutine fft_test_print(Ftest,header,unit,mode_paral,prtvol)
+subroutine fft_test_print(Ftest,AB_HEADER,unit,mode_paral,prtvol)
 
 
 !This section has been created automatically by the script Abilint (TD).
@@ -457,7 +457,7 @@ subroutine fft_test_print(Ftest,header,unit,mode_paral,prtvol)
 !scalars
  integer,optional,intent(in) :: unit,prtvol
  character(len=4),optional,intent(in) :: mode_paral
- character(len=*),optional,intent(in) :: header
+ character(len=*),optional,intent(in) :: AB_HEADER
  type(FFT_test_t),intent(in) :: Ftest
 
 !Local variables-------------------------------
@@ -472,14 +472,14 @@ subroutine fft_test_print(Ftest,header,unit,mode_paral,prtvol)
  my_mode  ='COLL' ; if (PRESENT(mode_paral)) my_mode  =mode_paral
 
  !msg=' ==== Info on the FFT test object ==== '
- if (PRESENT(header)) then
-   msg=' ==== '//TRIM(ADJUSTL(header))//' ==== '
+ if (PRESENT(AB_HEADER)) then
+   msg=' ==== '//TRIM(ADJUSTL(AB_HEADER))//' ==== '
    call wrtout(my_unt,msg,my_mode)
  end if
 
  !TODO add additional info
  write(msg,'(a,i3)')"FFT setup for fftalg ",Ftest%ngfft(7)
- call print_ngfft(Ftest%ngfft,header=msg,unit=my_unt,mode_paral="COLL")
+ call print_ngfft(Ftest%ngfft,AB_HEADER=msg,unit=my_unt,mode_paral="COLL")
 
 end subroutine fft_test_print
 !!***
@@ -721,7 +721,7 @@ end subroutine fftprof_free_1D
 !!
 !! SOURCE
 
-subroutine fftprof_print(Fprof,header,unit,mode_paral,prtvol)
+subroutine fftprof_print(Fprof,AB_HEADER,unit,mode_paral,prtvol)
 
 
 !This section has been created automatically by the script Abilint (TD).
@@ -736,7 +736,7 @@ subroutine fftprof_print(Fprof,header,unit,mode_paral,prtvol)
 !scalars
  integer,optional,intent(in) :: unit,prtvol
  character(len=4),optional,intent(in) :: mode_paral
- character(len=*),optional,intent(in) :: header
+ character(len=*),optional,intent(in) :: AB_HEADER
  type(FFT_prof_t),intent(in) :: Fprof(:)
 
 !Local variables-------------------------------
@@ -755,7 +755,7 @@ subroutine fftprof_print(Fprof,header,unit,mode_paral,prtvol)
  my_mode  ='COLL' ; if (PRESENT(mode_paral)) my_mode  =mode_paral
 
  msg='==== Info on the FFT_prof_t object ===='
- if (PRESENT(header)) msg='==== '//TRIM(ADJUSTL(header))//' ===='
+ if (PRESENT(AB_HEADER)) msg='==== '//TRIM(ADJUSTL(AB_HEADER))//' ===='
 
  call wrtout(my_unt,ch10//REPEAT("=",LEN_TRIM(msg)))
  call wrtout(my_unt,msg,my_mode)
@@ -843,7 +843,7 @@ end subroutine fftprof_print
 !!
 !! SOURCE
 
-subroutine time_fourdp(Ftest,isign,cplex,header,Ftprof)
+subroutine time_fourdp(Ftest,isign,cplex,AB_HEADER,Ftprof)
 
 
 !This section has been created automatically by the script Abilint (TD).
@@ -857,7 +857,7 @@ subroutine time_fourdp(Ftest,isign,cplex,header,Ftprof)
 !Arguments -----------------------------------
 !scalars
  integer,intent(in) :: cplex,isign
- character(len=500),intent(out) :: header
+ character(len=500),intent(out) :: AB_HEADER
  type(FFT_test_t),intent(inout) :: Ftest
  type(FFT_prof_t),intent(out) :: Ftprof
 
@@ -882,7 +882,7 @@ subroutine time_fourdp(Ftest,isign,cplex,header,Ftprof)
  n2=Ftest%ngfft(2)
  n3=Ftest%ngfft(3)
 
- write(header,'(2(a,i2),a)')" fourdp with cplex ",cplex,", isign ",isign,", ndat 1"
+ write(AB_HEADER,'(2(a,i2),a)')" fourdp with cplex ",cplex,", isign ",isign,", ndat 1"
 
  if (Ftest%available==0) then
    call fftprof_init(Ftprof,test_name,0,0,0,zero,zero,zero)
@@ -989,7 +989,7 @@ end subroutine time_fourdp
 !!
 !! SOURCE
 
-subroutine time_fftbox(Ftest,isign,inplace,header,Ftprof)
+subroutine time_fftbox(Ftest,isign,inplace,AB_HEADER,Ftprof)
 
 
 !This section has been created automatically by the script Abilint (TD).
@@ -1003,7 +1003,7 @@ subroutine time_fftbox(Ftest,isign,inplace,header,Ftprof)
 !Arguments -----------------------------------
 !scalars
  integer,intent(in) :: isign,inplace
- character(len=500),intent(inout) :: header !vz_i
+ character(len=500),intent(inout) :: AB_HEADER !vz_i
  type(FFT_test_t),intent(inout) :: Ftest
  type(FFT_prof_t),intent(out) :: Ftprof
 
@@ -1038,7 +1038,7 @@ subroutine time_fftbox(Ftest,isign,inplace,header,Ftprof)
  nfft = Ftest%nfft
  ndat = Ftest%ndat
 
- write(header,'(3(a,i2))')" fftbox with isign ",isign,", in-place ",inplace,", ndat ",ndat
+ write(AB_HEADER,'(3(a,i2))')" fftbox with isign ",isign,", in-place ",inplace,", ndat ",ndat
 
  ABI_MALLOC(ffc,(nfft*ndat))
  ABI_MALLOC(ggc,(nfft*ndat))
@@ -1133,7 +1133,7 @@ end subroutine time_fftbox
 !!
 !! SOURCE
 
-subroutine time_fourwf(Ftest,cplex,option_fourwf,header,Ftprof)
+subroutine time_fourwf(Ftest,cplex,option_fourwf,AB_HEADER,Ftprof)
 
 
 !This section has been created automatically by the script Abilint (TD).
@@ -1147,7 +1147,7 @@ subroutine time_fourwf(Ftest,cplex,option_fourwf,header,Ftprof)
 !Arguments -----------------------------------
 !scalars
  integer,intent(in) :: cplex,option_fourwf
- character(len=500),intent(out) :: header
+ character(len=500),intent(out) :: AB_HEADER
  type(FFT_test_t),intent(inout) :: Ftest
  type(FFT_prof_t),intent(out) :: Ftprof
 
@@ -1177,7 +1177,7 @@ subroutine time_fourwf(Ftest,cplex,option_fourwf,header,Ftprof)
 
  isbuggy = &
 &   (option_fourwf==3 .and. fftalga==FFT_SG2002 .and. fftalgc /= 0 .and. any(Ftest%istwf_k == [3,4,5,6,7,8,9]))  ! see sg_fourwf
- !isbuggy = .False.
+ !isbuggy = .false.
 
  !FIXME problems with the unitary tests reference files!
  not_supported = ( &
@@ -1190,7 +1190,7 @@ subroutine time_fourwf(Ftest,cplex,option_fourwf,header,Ftprof)
  n1=Ftest%ngfft(1); n2=Ftest%ngfft(2); n3=Ftest%ngfft(3)
  n4=Ftest%ngfft(4); n5=Ftest%ngfft(5); n6=Ftest%ngfft(6)
 
- write(header,'(4(a,i2))')" fourwf with option ",option_fourwf,", cplex ",cplex,", ndat ",ndat,", istwf_k ",Ftest%istwf_k
+ write(AB_HEADER,'(4(a,i2))')" fourwf with option ",option_fourwf,", cplex ",cplex,", ndat ",ndat,", istwf_k ",Ftest%istwf_k
 
  if (isbuggy .or. not_supported .or. Ftest%available==0) then
    call fftprof_init(Ftprof,test_name,0,0,0,zero,zero,zero)
@@ -1477,7 +1477,7 @@ end subroutine fftprof_ncalls_per_test
 !!
 !! SOURCE
 
-subroutine time_rhotwg(Ftest,map2sphere,use_padfft,osc_npw,osc_gvec,header,Ftprof)
+subroutine time_rhotwg(Ftest,map2sphere,use_padfft,osc_npw,osc_gvec,AB_HEADER,Ftprof)
 
 
 !This section has been created automatically by the script Abilint (TD).
@@ -1491,7 +1491,7 @@ subroutine time_rhotwg(Ftest,map2sphere,use_padfft,osc_npw,osc_gvec,header,Ftpro
 !Arguments -----------------------------------
 !scalars
  integer,intent(in) :: map2sphere,use_padfft,osc_npw
- character(len=500),intent(out) :: header
+ character(len=500),intent(out) :: AB_HEADER
  type(FFT_test_t),intent(inout) :: Ftest
  type(FFT_prof_t),intent(out) :: Ftprof
 !arrays
@@ -1528,7 +1528,7 @@ subroutine time_rhotwg(Ftest,map2sphere,use_padfft,osc_npw,osc_gvec,header,Ftpro
  n1=Ftest%ngfft(1); n2=Ftest%ngfft(2); n3=Ftest%ngfft(3)
  n4=Ftest%ngfft(4); n5=Ftest%ngfft(5); n6=Ftest%ngfft(6)
 
- write(header,'(3(a,i2))')"rho_tw_g with use_padfft ",use_padfft,", map2sphere ",map2sphere,", ndat ",ndat
+ write(AB_HEADER,'(3(a,i2))')"rho_tw_g with use_padfft ",use_padfft,", map2sphere ",map2sphere,", ndat ",ndat
 
  ! TODO: zero-pad not available with SG2001 routines.
  not_implemented = (use_padfft==1.and.Ftest%ngfft(7) == 412)
@@ -1638,7 +1638,7 @@ end subroutine time_rhotwg
 !!
 !! SOURCE
 
-subroutine time_fftu(Ftest,isign,header,Ftprof)
+subroutine time_fftu(Ftest,isign,AB_HEADER,Ftprof)
 
 
 !This section has been created automatically by the script Abilint (TD).
@@ -1652,7 +1652,7 @@ subroutine time_fftu(Ftest,isign,header,Ftprof)
 !Arguments -----------------------------------
 !scalars
  integer,intent(in) :: isign
- character(len=500),intent(out) :: header
+ character(len=500),intent(out) :: AB_HEADER
  type(FFT_test_t),intent(inout) :: Ftest
  type(FFT_prof_t),intent(out) :: Ftprof
 
@@ -1681,7 +1681,7 @@ subroutine time_fftu(Ftest,isign,header,Ftprof)
  !n456 = n4*n5*n6
  ndat = Ftest%ndat
 
- write(header,'(2(a,i2))')" fftu with isign ",isign,", ndat ",ndat
+ write(AB_HEADER,'(2(a,i2))')" fftu with isign ",isign,", ndat ",ndat
 
  ! TODO: zero-pad not available with SG2001 routines.
  not_implemented = (Ftest%ngfft(7) == 412)
@@ -1841,7 +1841,7 @@ subroutine prof_fourdp(fft_setups,isign,cplex,necut,ecut_arth,boxcutmin,rprimd,n
  integer :: iec,nsetups,set,funt
  type(FFT_test_t) :: Ftest
  type(FFT_prof_t) :: Ftprof
- character(len=500) :: msg,frm,header
+ character(len=500) :: msg,frm,AB_HEADER
  character(len=fnlen) :: fname
 !arrays
  integer :: ngfft_ecut(18,necut)
@@ -1854,7 +1854,7 @@ subroutine prof_fourdp(fft_setups,isign,cplex,necut,ecut_arth,boxcutmin,rprimd,n
  nsetups = SIZE(fft_setups,DIM=2)
  ecut_list = arth(ecut_arth(1),ecut_arth(2),necut)
  !
- ! Open file and write header with info.
+ ! Open file and write AB_HEADER with info.
  write(fname,'(2(a,i1))')"PROF_fourdp_cplex",cplex,"_isign",isign
  if (open_file(fname,msg,newunit=funt) /= 0) then
    MSG_ERROR(msg)
@@ -1881,7 +1881,7 @@ subroutine prof_fourdp(fft_setups,isign,cplex,necut,ecut_arth,boxcutmin,rprimd,n
      call fft_test_nullify(Ftest)
      call fft_test_init(Ftest,fft_setups(:,set),k_gamma,ecut_list(iec),boxcutmin,rprimd,nsym,symrel,MPI_enreg_in)
 
-     call time_fourdp(Ftest,isign,cplex,header,Ftprof)
+     call time_fourdp(Ftest,isign,cplex,AB_HEADER,Ftprof)
 
      prof_res(1,iec,set) = Ftprof%cpu_time /Ftprof%ncalls
      prof_res(2,iec,set) = Ftprof%wall_time/Ftprof%ncalls
@@ -1955,7 +1955,7 @@ subroutine prof_fourwf(fft_setups,cplex,option,kpoint,necut,ecut_arth,boxcutmin,
  integer :: iec,nsetups,set,funt,istwf_k
  type(FFT_test_t) :: Ftest
  type(FFT_prof_t) :: Ftprof
- character(len=500) :: msg,frm,header
+ character(len=500) :: msg,frm,AB_HEADER
  character(len=fnlen) :: fname
 !arrays
  integer :: ngfft_ecut(18,necut)
@@ -1968,7 +1968,7 @@ subroutine prof_fourwf(fft_setups,cplex,option,kpoint,necut,ecut_arth,boxcutmin,
  ecut_list = arth(ecut_arth(1),ecut_arth(2),necut)
  istwf_k = set_istwfk(kpoint)
  !
- ! Open file and write header with info.
+ ! Open file and write AB_HEADER with info.
  write(fname,'(3(a,i1))')"PROF_fourwf_cplex",cplex,"_option",option,"_istwfk",istwf_k
  if (open_file(fname,msg,newunit=funt) /= 0) then
    MSG_ERROR(msg)
@@ -1995,7 +1995,7 @@ subroutine prof_fourwf(fft_setups,cplex,option,kpoint,necut,ecut_arth,boxcutmin,
      call fft_test_nullify(Ftest)
      call fft_test_init(Ftest,fft_setups(:,set),kpoint,ecut_list(iec),boxcutmin,rprimd,nsym,symrel,MPI_enreg_in)
 
-     call time_fourwf(Ftest,cplex,option,header,Ftprof)
+     call time_fourwf(Ftest,cplex,option,AB_HEADER,Ftprof)
 
      prof_res(1,iec,set) = Ftprof%cpu_time /Ftprof%ncalls
      prof_res(2,iec,set) = Ftprof%wall_time/Ftprof%ncalls
@@ -2070,7 +2070,7 @@ subroutine prof_rhotwg(fft_setups,map2sphere,use_padfft,necut,ecut_arth,osc_ecut
  integer :: iec,nsetups,set,funt,osc_npw
  type(FFT_test_t) :: Ftest
  type(FFT_prof_t) :: Ftprof
- character(len=500) :: msg,frm,header
+ character(len=500) :: msg,frm,AB_HEADER
  character(len=fnlen) :: fname
 !arrays
  integer,allocatable :: osc_gvec(:,:)
@@ -2084,7 +2084,7 @@ subroutine prof_rhotwg(fft_setups,map2sphere,use_padfft,necut,ecut_arth,osc_ecut
  nsetups = SIZE(fft_setups,DIM=2)
  ecut_list = arth(ecut_arth(1),ecut_arth(2),necut)
  !
- ! Open file and write header with info.
+ ! Open file and write AB_HEADER with info.
  write(fname,'(2(a,i1))')"PROF_rhotwg_map2sphere",map2sphere,"_use_padfft",use_padfft
 
  if (open_file(fname,msg,newunit=funt) /= 0) then
@@ -2118,7 +2118,7 @@ subroutine prof_rhotwg(fft_setups,map2sphere,use_padfft,necut,ecut_arth,osc_ecut
      call fft_test_nullify(Ftest)
      call fft_test_init(Ftest,fft_setups(:,set),k_gamma,ecut_list(iec),boxcutmin,rprimd,nsym,symrel,MPI_enreg_in)
 
-     call time_rhotwg(Ftest,map2sphere,use_padfft,osc_npw,osc_gvec,header,Ftprof)
+     call time_rhotwg(Ftest,map2sphere,use_padfft,osc_npw,osc_gvec,AB_HEADER,Ftprof)
 
      prof_res(1,iec,set) = Ftprof%cpu_time /Ftprof%ncalls
      prof_res(2,iec,set) = Ftprof%wall_time/Ftprof%ncalls

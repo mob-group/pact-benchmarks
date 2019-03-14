@@ -2393,7 +2393,7 @@ end subroutine pawdijhat
 !!   $A=(\mu_0/4\pi) m\times (r-R)/|r-R|^3 = (\mu_0/4\pi) L_R\cdot m/|r-R|^3$ where
 !!   $L_R$ is the on-site orbital angular momentum and $m$ is the nuclear magnetic
 !!   dipole moment. For an electron (as usual), mass m_e = 1 and charge q_e = -1.
-!!   Second order term in A is ignored.
+!!   second order term in A is ignored.
 !!
 !! PARENTS
 !!      m_pawdij,pawdenpot

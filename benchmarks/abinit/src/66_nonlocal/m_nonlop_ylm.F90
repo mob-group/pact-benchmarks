@@ -31,7 +31,7 @@ module m_nonlop_ylm
  use m_abicore
  use m_errors
 
- use m_geometry,    only : strconv
+ use m_geometry,    only : AB_STRCONv
  use m_kg,          only : ph1d3d, mkkpg
  use m_pawcprj,     only : pawcprj_type
  use m_opernla_ylm, only : opernla_ylm
@@ -317,7 +317,7 @@ contains
 !!      nonlop
 !!
 !! CHILDREN
-!!      mkkpg,opernla_ylm,opernlb_ylm,opernlc_ylm,opernld_ylm,ph1d3d,strconv
+!!      mkkpg,opernla_ylm,opernlb_ylm,opernlc_ylm,opernld_ylm,ph1d3d,AB_STRCONv
 !!      xmpi_sum
 !!
 !! SOURCE
@@ -972,7 +972,7 @@ contains
    mu0=0 ! Shift to be applied in enlout array
    ABI_ALLOCATE(work1,(6))
    work1(1:6)=enlout(mu0+1:mu0+6)
-   call strconv(work1,gprimd,work1)
+   call AB_STRCONv(work1,gprimd,work1)
    enlout(mu0+1:mu0+3)=(work1(1:3)-enlk)
    enlout(mu0+4:mu0+6)= work1(4:6)
    ABI_DEALLOCATE(work1)
@@ -1149,18 +1149,18 @@ contains
    ABI_ALLOCATE(work3,(6+3*natom,6))
    work3(:,:)=reshape(enlout(mu0+1:mu0+6*(6+3*natom)),(/6+3*natom,6/))
    do mu=1,6
-     call strconv(work3(1:6,mu),gprimd,work3(1:6,mu))
+     call AB_STRCONv(work3(1:6,mu),gprimd,work3(1:6,mu))
    end do
    do mu=1,6+3*natom
      work1(1:6)=work3(mu,1:6)
-     call strconv(work1,gprimd,work2)
+     call AB_STRCONv(work1,gprimd,work2)
      work3(mu,1:6)=work2(1:6)
    end do
    enlout(mu0+1:mu0+6*(6+3*natom))=reshape(work3(:,:),(/6*(6+3*natom)/))
    ABI_DEALLOCATE(work1)
    ABI_DEALLOCATE(work2)
    ABI_DEALLOCATE(work3)
-   call strconv(strnlk,gprimd,strnlk)
+   call AB_STRCONv(strnlk,gprimd,strnlk)
    do mub=1,6
      nub1=alpha(mub);nub2=beta(mub)
      do mua=1,6

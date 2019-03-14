@@ -80,7 +80,7 @@ module m_profiling_abi
 
  ! Save values for memocc_abi.
  real(dp),save :: abimem_limit = zero
- logical,save :: abimem_isinit = .False.
+ logical,save :: abimem_isinit = .false.
  integer,parameter :: logunt = 99
  character(len=fnlen),save :: abimem_file
  type(abimem_t),save :: memloc_abi, memtot_abi
@@ -89,7 +89,7 @@ module m_profiling_abi
  integer,save :: my_rank = 0
  !Debug option for memocc_abi, set in the input file
  !logical,parameter :: abimem_debug=.True.
- !logical,save :: abimem_ilog = .False.
+ !logical,save :: abimem_ilog = .false.
  integer,save :: abimem_level = 0
 
  !real(dp),private,save :: start_time
@@ -233,7 +233,7 @@ subroutine abimem_shutdown()
  logical :: isopen
 ! *************************************************************************
 
- abimem_level = 0; abimem_isinit = .False.
+ abimem_level = 0; abimem_isinit = .false.
 
  ! Close the file if it's connected
  inquire(file=abimem_file, number=unt_found, opened=isopen)
@@ -530,7 +530,7 @@ subroutine abimem_record(istat, vname, addr, act, isize, file, func, line)
    if ((now - last_snapshot) >= dt_snapshot) then
       last_snapshot = now
    else
-      do_log = .False.
+      do_log = .false.
    end if
  end if
 

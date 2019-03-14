@@ -933,7 +933,7 @@ subroutine construct_nwlo_dmft(paw_dmft)
  character(len=500) :: message
  real(dp) :: deltaomega,expfac,omegamaxmin,prefacexp,AA,BB,CC,nlin,nlog,t1
  real(dp) :: wl
- complex(dpc):: ybcbeg,ybcend
+ complex(dpc):: ybAB_CBEG,ybcend
  integer, allocatable :: select_log(:)
  real(dp), allocatable :: omega_lo_tmp(:)
  real(dp), allocatable :: omega_li(:)
@@ -1090,15 +1090,15 @@ subroutine construct_nwlo_dmft(paw_dmft)
 !    tospline_lo(ifreq1)=ifreq1**2-ifreq1
 !    enddo
     splined_li=cmplx(0_dp,0_dp,kind=dp)
-!    ybcbeg=cmplx(one/tol16**2,zero)
+!    ybAB_CBEG=cmplx(one/tol16**2,zero)
 !    ybcend=cmplx(one/tol16**2,zero)
-    ybcbeg=czero
+    ybAB_CBEG=czero
     ybcend=czero
 
 
 !==         spline delta function
     call spline_complex( omega_lo_tmp, tospline_lo, paw_dmft%dmft_nwlo, &
-   & ybcbeg, ybcend, ysplin2_lo)
+   & ybAB_CBEG, ybcend, ysplin2_lo)
 !   do ifreq1=1,paw_dmft%dmft_nwlo
 !    write(6588,*) paw_dmft%omega_lo(ifreq1),ysplin2_lo(ifreq1)
 !   enddo

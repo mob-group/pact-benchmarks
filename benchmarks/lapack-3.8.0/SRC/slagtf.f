@@ -184,8 +184,8 @@
       INTRINSIC          ABS, MAX
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_XERBLA
@@ -210,7 +210,7 @@
          RETURN
       END IF
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
 *
       TL = MAX( TOL, EPS )
       SCALE1 = ABS( A( 1 ) ) + ABS( B( 1 ) )

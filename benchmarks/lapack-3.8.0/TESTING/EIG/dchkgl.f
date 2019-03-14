@@ -82,8 +82,8 @@
      $                   RSCALE( LDA ), RSCLIN( LDA ), WORK( LWORK )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLANGE
-      EXTERNAL           DLAMCH, DLANGE
+      DOUBLE PRECISION   AB_DLAMCH, DLANGE
+      EXTERNAL           AB_DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGGBAL
@@ -100,7 +100,7 @@
       KNT = 0
       RMAX = ZERO
 *
-      EPS = DLAMCH( 'Precision' )
+      EPS = AB_DLAMCH( 'Precision' )
 *
    10 CONTINUE
 *

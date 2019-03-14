@@ -155,7 +155,7 @@ TYPE BathOperatoroffdiag
   DOUBLE PRECISION                            :: Stau
   ! Sherman Morrison notations 
 
-  DOUBLE PRECISION                            :: Stilde
+  DOUBLE PRECISION                            :: StiAB_LDE
   ! Sherman Morrison notations 
 
   TYPE(Vector)                                :: R 
@@ -666,7 +666,7 @@ DOUBLE PRECISION  FUNCTION BathOperatoroffdiag_getDetAdd(op,CdagC_1, position, p
  !sui!write(6,*) "         S-RMQ =", ratio
  !sui!write(6,*) "              getdetAdd ratio",ratio
 
-  op%Stilde = 1.d0 / ratio
+  op%StiAB_LDE = 1.d0 / ratio
   ! If antisegment, the det ratio has to be multiplied by -1 ( sign of the signature of one
   ! permutation line in the matrix)
   IF ( C .LT. Cdag .AND. op%tails(op%activeFlavor) .GT. 0) THEN ! only if an antisegment is added
@@ -675,15 +675,15 @@ DOUBLE PRECISION  FUNCTION BathOperatoroffdiag_getDetAdd(op,CdagC_1, position, p
 
   ! This IF is the LAST "NON CORRECTION" in my opinion this should not appears.
 !  IF ( MAX(C,Cdag) .GT. op%beta ) THEN
-!    WRITE(*,*) op%Stilde
-!    op%Stilde = - ABS(op%Stilde)
+!    WRITE(*,*) op%StiAB_LDE
+!    op%StiAB_LDE = - ABS(op%StiAB_LDE)
 !  END IF
   BathOperatoroffdiag_getDetAdd = ratio
       !write(6,*) " getdetAdd",ratio,BathOperatoroffdiag_getDetAdd
   op%MAddFlag   = .TRUE.
 !#ifdef CTQMC_CHECK
 !  op%ListCdagC = particle
-!!write(*,*) op%Stilde
+!!write(*,*) op%StiAB_LDE
 !!write(*,*) op%antishift
 !!write(*,*)    op%updatePosRow 
 !!write(*,*)    op%updatePosCol 
@@ -762,17 +762,17 @@ DOUBLE PRECISION FUNCTION BathOperatoroffdiag_getDetRemove(op,position)
 !      IF ( op%updatePosCol .EQ. 0) op%updatePosCol = tail
     END IF
   ENDIF
-  op%Stilde                 = op%M%mat(op%Fshift(op%activeFlavor)+&
+  op%StiAB_LDE                 = op%M%mat(op%Fshift(op%activeFlavor)+&
 &                     op%updatePosRow,op%Fshift(op%activeFlavor)+op%updatePosCol) 
 !sui!write(6,*) "Fshift",op%Fshift(op%activeFlavor)
 !sui!write(6,*) "updatepos",op%updatePosRow,op%updatePosCol
   
  
   op%MRemoveFlag            = .TRUE.
-       !write(6,*) "        getdetRemove",op%Stilde
-  BathOperatoroffdiag_getDetRemove = op%Stilde
+       !write(6,*) "        getdetRemove",op%StiAB_LDE
+  BathOperatoroffdiag_getDetRemove = op%StiAB_LDE
   if(position<0.and.op%tails(op%activeFlavor)>1) then
-    BathOperatoroffdiag_getDetRemove = -op%Stilde
+    BathOperatoroffdiag_getDetRemove = -op%StiAB_LDE
   endif
   !do it=1,op%sumtails
   !!sui!write(6,*) "        getdetRemove M",(op%M%mat(it,it1),it1=1,op%sumtails)
@@ -957,7 +957,7 @@ SUBROUTINE BathOperatoroffdiag_setMAdd(op,particle)
   INTEGER                           :: positionCol
   INTEGER                           :: aF,indice
   INTEGER                           :: tailb,taile
-  DOUBLE PRECISION                  :: Stilde
+  DOUBLE PRECISION                  :: StiAB_LDE
   DOUBLE PRECISION                  :: time
   DOUBLE PRECISION                  :: mbeta_two
   DOUBLE PRECISION                  :: inv_dt
@@ -1012,7 +1012,7 @@ SUBROUTINE BathOperatoroffdiag_setMAdd(op,particle)
 ! ---  data obtained from BathOperatoroffdiag_getDetAdd
   PositionRow =  op%updatePosRow + op%Fshift(aF) ! position in the full matrix
   PositionCol =  op%updatePosCol + op%Fshift(aF) ! position in the full matrix
-  Stilde      =  op%Stilde
+  StiAB_LDE      =  op%StiAB_LDE
 
 !  !write(6,*) "before", positionRow, positionCol
   !CALL MatrixHyb_print(op%M(aF),opt_print=1)
@@ -1021,8 +1021,8 @@ SUBROUTINE BathOperatoroffdiag_setMAdd(op,particle)
   CALL MatrixHyb_setSize(op%M,new_tail)
   !write(6,*) "       BathOperatoroffdiag_setMAdd after setsize",size(op%M%mat,1)
 
-  ! Compute Qtilde with Q
-  !op%Q%vec(1:tail) = (-1.d0) * MATMUL(op%M(aF)%mat(1:tail,1:tail),op%Q%vec(1:tail)) * Stilde
+  ! Compute QtiAB_LDE with Q
+  !op%Q%vec(1:tail) = (-1.d0) * MATMUL(op%M(aF)%mat(1:tail,1:tail),op%Q%vec(1:tail)) * StiAB_LDE
 
 ! ---  M*Q => Q
   op%Q%vec(tailb:taile) = MATMUL(op%M%mat(tailb:taile,tailb:taile),op%Q%vec(tailb:taile))
@@ -1031,7 +1031,7 @@ SUBROUTINE BathOperatoroffdiag_setMAdd(op,particle)
 !  op%Qtau%vec(PositionCol:new_tail) = EOSHIFT(op%Qtau%vec(PositionCol:new_tail), SHIFT=-1, BOUNDARY=1.d0, DIM=1)
 !  op%Qtau%vec(PositionCol) = op%Stau
 
-  !Compute Rtilde with R and without multiplying by Stilde
+  !Compute RtiAB_LDE with R and without multiplying by StiAB_LDE
   !op%R%vec(1:tail) = (-1.d0) * MATMUL(op%R%vec(1:tail),op%M(aF)%mat(1:tail,1:tail))
 
 ! ---  R*M => R
@@ -1047,7 +1047,7 @@ SUBROUTINE BathOperatoroffdiag_setMAdd(op,particle)
   !op%M(aF)%mat(1:n12 characters (ABI_ALLOCATE) instead of 4 (FREE)ew_tail,PositionCol:new_tail) = &
   !                   EOSHIFT(op%M(aF)%mat(1:new_tail,PositionCol:new_tail),SHIFT=-1, BOUNDARY=0.d0, DIM=2)
 ! ! op%M(aF)%mat(1:new_tail,1:new_tail) =  op%M(aF)%mat(1:new_tail,1:new_tail) + &
-! ! Stilde * MATMUL(RESHAPE(op%Q%vec(1:new_tail),(/ new_tail,1 /)),RESHAPE(op%R%vec(1:new_tail),(/ 1,new_tail /)))
+! ! StiAB_LDE * MATMUL(RESHAPE(op%Q%vec(1:new_tail),(/ new_tail,1 /)),RESHAPE(op%R%vec(1:new_tail),(/ 1,new_tail /)))
 
   !op%M(aF)%mat_tau(PositionRow:new_tail,1:new_tail) = &
   !                   EOSHIFT(op%M(aF)%mat_tau(PositionRow:new_tail,1:new_tail),SHIFT=-1, BOUNDARY=0, DIM=1)
@@ -1057,21 +1057,21 @@ SUBROUTINE BathOperatoroffdiag_setMAdd(op,particle)
   mbeta_two = -op%beta*0.5d0
   inv_dt = op%inv_dt
 
-! ------ Shift mat_tau and update old M=Ptilde
+! ------ Shift mat_tau and update old M=PtiAB_LDE
   DO col=tail,1,-1  ! decreasing order to avoid overwrite of data
     col_move = col +  ( 1+SIGN(1,col-PositionCol) )/2
     ! if col>= PositionCol col_move=col+1
     ! if col<  PositionCol col_move=col
     DO row=tail,1,-1
       row_move = row +  ( 1+SIGN(1,row-PositionRow) )/2
-! ---  times for Ptilde are kept unchanged. But we have to copy it at the right place
+! ---  times for PtiAB_LDE are kept unchanged. But we have to copy it at the right place
       op%M%mat_tau(row_move,col_move) =  &
       op%M%mat_tau(row,col)
-! ---  Update Ptilde with the same indices as mat_tau
-! ---  M + M*Q Stilde R*M => Ptilde => M
+! ---  Update PtiAB_LDE with the same indices as mat_tau
+! ---  M + M*Q StiAB_LDE R*M => PtiAB_LDE => M
       !if(row>=tailb.and.row<=taile.and.col>=tailb.and.col<=taile) then
         op%M%mat(row_move,col_move) =  &
-        op%M%mat(row,col) + op%Q%vec(row)*op%R%vec(col) * Stilde
+        op%M%mat(row,col) + op%Q%vec(row)*op%R%vec(col) * StiAB_LDE
       !else
       !  op%M%mat(row_move,col_move) = op%M%mat(row,col) 
       !endif
@@ -1081,9 +1081,9 @@ SUBROUTINE BathOperatoroffdiag_setMAdd(op,particle)
 ! ------ Add new stuff for new row
   DO row = 1, tail
     row_move = row +  ( 1+SIGN(1,row-PositionRow) )/2
-! ---  M*Q Stilde => Qtilde => M with the good indices
+! ---  M*Q StiAB_LDE => QtiAB_LDE => M with the good indices
     !if(row>=tailb.and.row<=taile) then
-      op%M%mat(row_move,PositionCol) = -op%Q%vec(row)*Stilde
+      op%M%mat(row_move,PositionCol) = -op%Q%vec(row)*StiAB_LDE
     !else
     !  op%M%mat(row_move,PositionCol) = op%M%mat(row,PositionCol) 
     !endif
@@ -1123,9 +1123,9 @@ SUBROUTINE BathOperatoroffdiag_setMAdd(op,particle)
   ! Add new stuff for new col
   DO col = 1, tail 
     col_move = col +  ( 1+SIGN(1,col-PositionCol) )/2
-! ---   Stilde RN => Rtilde => M
+! ---   StiAB_LDE RN => RtiAB_LDE => M
     !if(col>=tailb.and.col<=taile) then
-      op%M%mat(PositionRow,col_move) = -op%R%vec(col)*Stilde
+      op%M%mat(PositionRow,col_move) = -op%R%vec(col)*StiAB_LDE
     !else
     !  op%M%mat(PositionRow,col_move) = op%M%mat(PositionRow,col) 
     !endif
@@ -1158,7 +1158,7 @@ SUBROUTINE BathOperatoroffdiag_setMAdd(op,particle)
 !      stop
 !    endif
 
-  op%M%mat(PositionRow,PositionCol) = Stilde
+  op%M%mat(PositionRow,PositionCol) = StiAB_LDE
 
   !CALL MatrixHyb_print(op%M,opt_print=1)
 
@@ -1169,7 +1169,7 @@ SUBROUTINE BathOperatoroffdiag_setMAdd(op,particle)
 !    time = op%Qtau%vec(col)
 !    time = time + ( SIGN(1.d0,time) - 1.d0 )*mbeta_two
 !    op%M(aF)%mat_tau(PositionRow,Col) = INT ( (time*inv_dt) +1.5d0 )
-!    time = op%R%vec(col)*Stilde
+!    time = op%R%vec(col)*StiAB_LDE
 !    DO row = 1, new_tail
 !      op%M(aF)%mat(row,col) = op%M(aF)%mat(row,col) + op%Q%vec(row)*time
 !    END DO
@@ -1179,16 +1179,16 @@ SUBROUTINE BathOperatoroffdiag_setMAdd(op,particle)
   !col      = tail
   !DO col_move = new_tail, 1, -1
   !  IF ( col_move .EQ. positionCol ) THEN
-  !    ! on calcule rajoute Q tilde
+  !    ! on calcule rajoute Q tiAB_LDE
   !    !row_move = new_tail
   !    row      = tail 
   !    DO row_move = new_tail, 1, -1
   !      ! calcul itau
   !      IF ( row_move .EQ. positionRow ) THEN
-  !        op%M(aF)%mat(row_move,col_move) = Stilde
+  !        op%M(aF)%mat(row_move,col_move) = StiAB_LDE
   !        !time = op%Stau
   !      ELSE
-  !        op%M(aF)%mat(row_move,col_move) = -op%Q%vec(row)*Stilde
+  !        op%M(aF)%mat(row_move,col_move) = -op%Q%vec(row)*StiAB_LDE
   !        !time = op%Rtau%vec(row_move)
   !        row      = row      - 1 
   !      END IF
@@ -1197,18 +1197,18 @@ SUBROUTINE BathOperatoroffdiag_setMAdd(op,particle)
   !    END DO
   !    ! realignement des indices
   !  ELSE
-  !    ! on calcule Ptilde
+  !    ! on calcule PtiAB_LDE
   !    !row_move = new_tail
   !    row      = tail 
   !    DO row_move = new_tail, 1, -1
   !      IF ( row_move .EQ. positionRow ) THEN
-  !        op%M(aF)%mat(row_move,col_move) = -op%R%vec(col) * Stilde
+  !        op%M(aF)%mat(row_move,col_move) = -op%R%vec(col) * StiAB_LDE
   !        ! calcul itau
   !        !time = op%Qtau%vec(col_move)
   !        !time = time + ( SIGN(1.d0,time) - 1.d0 )*mbeta_two
   !        !op%M(aF)%mat_tau(row_move,col_move) = INT ( (time*inv_dt) +1.5d0 )
   !      ELSE
-  !        op%M(aF)%mat(row_move,col_move) = op%M(aF)%mat(row,col) + op%Q%vec(row)*op%R%vec(col)*Stilde
+  !        op%M(aF)%mat(row_move,col_move) = op%M(aF)%mat(row,col) + op%Q%vec(row)*op%R%vec(col)*StiAB_LDE
   !        ! copy itau
   !        !op%M(aF)%mat_tau(row_move,col_move) = op%M(aF)%mat_tau(row,col)
   !        row      = row      - 1 
@@ -1382,8 +1382,8 @@ SUBROUTINE BathOperatoroffdiag_setMRemove(op,particle)
   INTEGER                              :: i
   INTEGER                              :: j,it,it1
   INTEGER                              :: p
-  DOUBLE PRECISION                   :: invStilde
-  DOUBLE PRECISION                   :: invStilde2
+  DOUBLE PRECISION                   :: invStiAB_LDE
+  DOUBLE PRECISION                   :: invStiAB_LDE2
   TYPE(VectorInt) :: vecI_tmp
   TYPE(Vector)    :: vec_tmp
 
@@ -1404,7 +1404,7 @@ SUBROUTINE BathOperatoroffdiag_setMRemove(op,particle)
   op%sumtails = op%Fshift(op%flavors) + op%tails(op%flavors)
   positionCol =  op%updatePosCol + op%Fshift(af)
   positionRow =  op%updatePosRow + op%Fshift(af)
-  invStilde   = 1.d0 / op%Stilde
+  invStiAB_LDE   = 1.d0 / op%StiAB_LDE
   if(op%opt_nondiag==1) then
     tailb        = 1
     taile        = new_tail
@@ -1466,14 +1466,14 @@ SUBROUTINE BathOperatoroffdiag_setMRemove(op,particle)
     IF ( col_move .EQ. positionCol ) col = col + 1
     !col = col_move + (1+SIGN(1,col_move-positionCol))/2
     row      = 1
-    invStilde2 = invStilde * op%R%vec(col_move)
+    invStiAB_LDE2 = invStiAB_LDE * op%R%vec(col_move)
     DO row_move = 1, new_tail
       IF ( row_move .EQ. positionRow ) row = row + 1
       !row = row_move + (1+SIGN(1,row_move-positionRow))/2
 !    Compute for all rows and cols M <= M - Q 1/S R
       !if(row_move>=tailb.and.row_move<=taile.and.col_move>=tailb.and.col_move<=taile) then
         op%M%mat(row_move,col_move) = op%M%mat(row,col) &
-                                        - op%Q%vec(row_move)*invStilde2
+                                        - op%Q%vec(row_move)*invStiAB_LDE2
       !else
       !  op%M%mat(row_move,col_move) = op%M%mat(row,col) 
       !endif

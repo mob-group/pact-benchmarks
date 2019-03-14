@@ -58,7 +58,7 @@ module m_ab7_invars
      type(dtsets_list),  pointer :: next => null()
      type(dtsets_list),  pointer :: prev => null()
      type(dataset_type), pointer :: dtsets(:)
-     type(pspheader_type), pointer :: pspheads(:)=>null()   !vz_z
+     type(pspAB_HEADER_type), pointer :: pspheads(:)=>null()   !vz_z
      integer :: mxga_n_rules, mxgw_nqlwl, mxlpawu, &
          & mxmband, mxmband_upper, &
          & mxnatom, mxnatpawu, mxnatsph, mxnatsph_extra, mxnatvshift, &
@@ -195,7 +195,7 @@ end subroutine ab7_invars_set_flags
 
  integer, intent(in) :: dtsetsId
  type(dataset_type), pointer :: dtsets(:)
- type(pspheader_type), pointer :: pspheads(:)
+ type(pspAB_HEADER_type), pointer :: pspheads(:)
  type(ab_dimensions), intent(out) :: mxvals
 
  integer, intent(out) :: papiopt, timopt, dmatpuflag
@@ -648,7 +648,7 @@ end subroutine ab7_invars_new_from_file
 
  !8) Finish to read the "file" file completely, as npsp is known,
  !and also initialize pspheads, that contains the important information
- !from the pseudopotential headers, as well as the psp filename
+ !from the pseudopotential AB_HEADERs, as well as the psp filename
 
  if (call_timab) then
    call timab(42,1,opt_timab_tsec)
@@ -698,9 +698,9 @@ end subroutine ab7_invars_new_from_file
       token%dtsets(idtset)%ratsph(:)=two
     else
 !     Note that the following coding assumes that npsp=ntypati for PAW, which is true as of now (XG20101024).
-      !token%dtsets(idtset)%ratsph(1:npsp)=token%pspheads(1:npsp)%pawheader%rpaw
+      !token%dtsets(idtset)%ratsph(1:npsp)=token%pspheads(1:npsp)%pawAB_HEADER%rpaw
       do ipsp=1,npsp
-        token%dtsets(idtset)%ratsph(ipsp)=token%pspheads(ipsp)%pawheader%rpaw
+        token%dtsets(idtset)%ratsph(ipsp)=token%pspheads(ipsp)%pawAB_HEADER%rpaw
       end do
     endif
  end do
@@ -918,8 +918,8 @@ end subroutine ab7_invars_get_ndtset
 !!  npsp=number of pseudopotentials
 !!
 !! OUTPUT
-!!  pspheads(npsp)=<type pspheader_type>=all the important information from the
-!!   pseudopotential file headers, as well as the psp file names
+!!  pspheads(npsp)=<type pspAB_HEADER_type>=all the important information from the
+!!   pseudopotential file AB_HEADERs, as well as the psp file names
 !!
 !! PARENTS
 !!      m_ab7_invars_f90

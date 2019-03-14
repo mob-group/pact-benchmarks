@@ -38,7 +38,7 @@
 
 ! Commented for now because it causes bugs on Shiva's OpenBLAS (?!)
 ! #if defined HAVE_LINALG_GEMM3M
-! #define ZGEMM ZGEMM3M
+! #define AB_ZGEMM AB_ZGEMM3M
 ! #endif
 
 module m_gemm_nonlop
@@ -109,7 +109,7 @@ contains
 !!      gstate
 !!
 !! CHILDREN
-!!      dgemm,opernlc_ylm,xmpi_sum,zgemm
+!!      AB_DGEMM,opernlc_ylm,xmpi_sum,AB_ZGEMM
 !!
 !! SOURCE
  subroutine init_gemm_nonlop(nkpt)
@@ -149,7 +149,7 @@ contains
 !!      gstate
 !!
 !! CHILDREN
-!!      dgemm,opernlc_ylm,xmpi_sum,zgemm
+!!      AB_DGEMM,opernlc_ylm,xmpi_sum,AB_ZGEMM
 !!
 !! SOURCE
  subroutine destroy_gemm_nonlop(nkpt)
@@ -197,7 +197,7 @@ contains
 !!      energy,vtorho
 !!
 !! CHILDREN
-!!      dgemm,opernlc_ylm,xmpi_sum,zgemm
+!!      AB_DGEMM,opernlc_ylm,xmpi_sum,AB_ZGEMM
 !!
 !! SOURCE
  subroutine make_gemm_nonlop(ikpt,npw,lmnmax,ntypat,indlmn,nattyp,istwf_k,ucvol,ffnl_k,ph3d_k)
@@ -276,7 +276,7 @@ contains
 
       ! start from 4pi/sqrt(ucvol)*ffnl
       ! atom_projs(1, :, 1:nlmn) = four_pi/sqrt(ham%ucvol) * ham%ffnl_k(:, 1, 1:nlmn)
-      ! TODO vectorize (DCOPY with stride)
+      ! TODO vectorize (AB_DCOPY with stride)
       do ipw=1, npw
         atom_projs(1,ipw, 1:nlmn) = four_pi/sqrt(ucvol) * ffnl_k(ipw, 1, 1:nlmn, itypat)
       end do
@@ -335,7 +335,7 @@ contains
 !!      nonlop
 !!
 !! CHILDREN
-!!      dgemm,opernlc_ylm,xmpi_sum,zgemm
+!!      AB_DGEMM,opernlc_ylm,xmpi_sum,AB_ZGEMM
 !!
 !! SOURCE
  subroutine gemm_nonlop(atindx1,choice,cpopt,cprjin,dimenl1,dimenl2,dimekbq,dimffnlin,dimffnlout,&
@@ -441,7 +441,7 @@ contains
   else
     ! opernla
     if(cplex == 2) then
-      call ZGEMM('C', 'N', nprojs, ndat, npwin*nspinor, cone, &
+      call AB_ZGEMM('C', 'N', nprojs, ndat, npwin*nspinor, cone, &
 &                gemm_nonlop_kpt(gemm_nonlop_ikpt_this_proc_being_treated)%projs, npwin*nspinor,&
 &                vectin, npwin*nspinor, czero, projections, nprojs)
     else
@@ -453,7 +453,7 @@ contains
           temp_realvec(1+(idat-1)*npwin*nspinor) = temp_realvec(1+(idat-1)*npwin*nspinor)/2
         end do
       end if
-      call DGEMM('T', 'N', nprojs, ndat, npwin*nspinor, one, &
+      call AB_DGEMM('T', 'N', nprojs, ndat, npwin*nspinor, one, &
 &                gemm_nonlop_kpt(gemm_nonlop_ikpt_this_proc_being_treated)%projs_r, npwin*nspinor, &
 &                temp_realvec, npwin*nspinor, zero, projections, nprojs)
       temp_realvec(1:npwin*nspinor*ndat) = vectin(2,1:npwin*nspinor*ndat)
@@ -462,7 +462,7 @@ contains
           temp_realvec(1+(idat-1)*npwin*nspinor) = zero
         end do
       end if
-      call DGEMM('T', 'N', nprojs, ndat, npwin*nspinor, one, &
+      call AB_DGEMM('T', 'N', nprojs, ndat, npwin*nspinor, one, &
 &                gemm_nonlop_kpt(gemm_nonlop_ikpt_this_proc_being_treated)%projs_i, npwin*nspinor, &
 &                temp_realvec, npwin*nspinor, one , projections, nprojs)
       projections = projections * 2
@@ -533,16 +533,16 @@ contains
     if(paw_opt == 3 .or. paw_opt == 4) then
       ! Get svectout from s_projections
       if(cplex == 2) then
-        call ZGEMM('N', 'N', npwout*nspinor, ndat, nprojs, cone, &
+        call AB_ZGEMM('N', 'N', npwout*nspinor, ndat, nprojs, cone, &
 &                  gemm_nonlop_kpt(gemm_nonlop_ikpt_this_proc_being_treated)%projs, npwout*nspinor, &
 &                  s_projections, nprojs, czero, svectout, npwout*nspinor)
       else
          ABI_ALLOCATE(temp_realvec,(MAX(npwout,npwin)*nspinor*ndat))
-        call DGEMM('N', 'N', npwout*nspinor, ndat, nprojs, one, &
+        call AB_DGEMM('N', 'N', npwout*nspinor, ndat, nprojs, one, &
 &                  gemm_nonlop_kpt(gemm_nonlop_ikpt_this_proc_being_treated)%projs_r, npwout*nspinor, &
 &                  s_projections, nprojs, zero, temp_realvec, npwout*nspinor)
         svectout(1,1:npwout*nspinor*ndat) = temp_realvec(1:npwout*nspinor*ndat)
-        call DGEMM('N', 'N', npwout*nspinor, ndat, nprojs, one, &
+        call AB_DGEMM('N', 'N', npwout*nspinor, ndat, nprojs, one, &
 &                  gemm_nonlop_kpt(gemm_nonlop_ikpt_this_proc_being_treated)%projs_i, npwout*nspinor,&
 &                  s_projections, nprojs, zero, temp_realvec, npwout*nspinor)
         svectout(2,1:npwout*nspinor*ndat) = temp_realvec(1:npwout*nspinor*ndat)
@@ -553,16 +553,16 @@ contains
     if(paw_opt == 0 .or. paw_opt == 1 .or. paw_opt == 4) then
       ! Get vectout from vnl_projections
       if(cplex_fac == 2) then
-        call ZGEMM('N', 'N', npwout*nspinor, ndat, nprojs, cone, &
+        call AB_ZGEMM('N', 'N', npwout*nspinor, ndat, nprojs, cone, &
 &                 gemm_nonlop_kpt(gemm_nonlop_ikpt_this_proc_being_treated)%projs, npwout*nspinor, &
 &                 vnl_projections, nprojs, czero, vectout, npwout*nspinor)
       else
          ABI_ALLOCATE(temp_realvec,(MAX(npwout,npwin)*nspinor*ndat))
-        call DGEMM('N', 'N', npwout*nspinor, ndat, nprojs, one, &
+        call AB_DGEMM('N', 'N', npwout*nspinor, ndat, nprojs, one, &
 &                  gemm_nonlop_kpt(gemm_nonlop_ikpt_this_proc_being_treated)%projs_r, npwout*nspinor, &
 &                  vnl_projections, nprojs, zero, temp_realvec, npwout*nspinor)
         vectout(1,1:npwout*nspinor*ndat) = temp_realvec(1:npwout*nspinor*ndat)
-        call DGEMM('N', 'N', npwout*nspinor, ndat, nprojs, one, &
+        call AB_DGEMM('N', 'N', npwout*nspinor, ndat, nprojs, one, &
 &                  gemm_nonlop_kpt(gemm_nonlop_ikpt_this_proc_being_treated)%projs_i, npwout*nspinor, &
 &                  vnl_projections, nprojs, zero, temp_realvec, npwout*nspinor)
         vectout(2,1:npwout*nspinor*ndat) = temp_realvec(1:npwout*nspinor*ndat)

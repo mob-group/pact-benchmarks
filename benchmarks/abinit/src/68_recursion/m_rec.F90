@@ -493,7 +493,7 @@ subroutine InitRec(dtset,mpi_ab,rset,rmet,mproj)
  rset%nfftrec   = 0
  rset%ngfftrec  = 0
 
- rset%tronc = .False.
+ rset%tronc = .false.
 
  rset%mpi => mpi_ab
 
@@ -736,7 +736,7 @@ subroutine Init_nlpspRec(tempe,psps,nlrec,metrec,ngfftrec,debug)
  if(any(psps%pspcod/=3) .and. nlrec%nlpsp ) then
    msg = "The non-local part of psp is used in Recursion only for hgh-psp"
    MSG_WARNING(msg)
-   nlrec%nlpsp = .False.
+   nlrec%nlpsp = .false.
    if (allocated(metrec%gcart))  then
      ABI_DEALLOCATE(metrec%gcart)
    end if
@@ -785,7 +785,7 @@ subroutine Init_nlpspRec(tempe,psps,nlrec,metrec,ngfftrec,debug)
   call pspnl_operat_rec(nlrec,metrec,ngfftrec,debug)
 
  else !--Only local pseudo potentials
-  nlrec%nlpsp = .False.
+  nlrec%nlpsp = .false.
   nlrec%npsp  = psps%npsp
   ABI_ALLOCATE(nlrec%mat_exp_psp_nl,(0,0,0,0))
   ABI_ALLOCATE(nlrec%pspinfo,(0,0))
@@ -1550,7 +1550,7 @@ end subroutine pspnl_operat_rec
 !!      m_rec
 !!
 !! CHILDREN
-!!      dgetrf,dgetri,dsyev,exp_mat,gamma_function,set2unit,wrtout
+!!      AB_DGETRF,AB_DGETRI,AB_DSYEV,exp_mat,gamma_function,set2unit,wrtout
 !!
 !! SOURCE
 
@@ -1665,7 +1665,7 @@ subroutine pspnl_hgh_rec(psps,temperature,nlrec,debug)
 !      do ii=1,g_mat_size
 !      write(std_out,*)h_mat_init(ii,:)
 !      end do
-       call DSYEV('v','u',g_mat_size,u_mat,g_mat_size,eig_val_h,rework,lwork,info)
+       call AB_DSYEV('v','u',g_mat_size,u_mat,g_mat_size,eig_val_h,rework,lwork,info)
 
 !      --THE DIAGONAL MATRIX IS GIVEN BY D=U^t.H.U
 !      (eival=transpose(eivec).h_mat_init.eivec)
@@ -1711,8 +1711,8 @@ subroutine pspnl_hgh_rec(psps,temperature,nlrec,debug)
 
 !      --Inverse of the overlap matrix g
        inv_g_mat = g_mat
-       call DGETRF(g_mat_size,g_mat_size,inv_g_mat,g_mat_size,ipvt,info)
-       call DGETRI(g_mat_size,inv_g_mat,g_mat_size,ipvt,rework,lwork,info)
+       call AB_DGETRF(g_mat_size,g_mat_size,inv_g_mat,g_mat_size,ipvt,info)
+       call AB_DGETRI(g_mat_size,inv_g_mat,g_mat_size,ipvt,rework,lwork,info)
 
 
 !      -----------------------------------------------------------

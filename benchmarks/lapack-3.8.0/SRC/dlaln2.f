@@ -254,8 +254,8 @@
       DOUBLE PRECISION   CI( 2, 2 ), CIV( 4 ), CR( 2, 2 ), CRV( 4 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
+      EXTERNAL           AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_DLADIV
@@ -277,7 +277,7 @@
 *
 *     Compute BIGNUM
 *
-      SMLNUM = TWO*DLAMCH( 'Safe minimum' )
+      SMLNUM = TWO*AB_DLAMCH( 'Safe minimum' )
       BIGNUM = ONE / SMLNUM
       SMINI = MAX( SMIN, SMLNUM )
 *

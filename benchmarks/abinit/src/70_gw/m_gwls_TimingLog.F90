@@ -344,8 +344,8 @@ if (head_node) then
 
   write(io_unit,20) '        Apply Matrix Function          :', list_time(1)
   write(io_unit,20) '        Compute Alpha                  :', list_time(2)
-  write(io_unit,20) '        Update residual array (1-ZGEMM):', list_time(3)
-  write(io_unit,20) '        Update residual array (2-ZGEMM):', list_time(4)
+  write(io_unit,20) '        Update residual array (1-AB_ZGEMM):', list_time(3)
+  write(io_unit,20) '        Update residual array (2-AB_ZGEMM):', list_time(4)
   write(io_unit,20) '        Orthogonalize                  :', list_time(5)
   write(io_unit,20) '        Extract QR factorization       :', list_time(6)
   write(io_unit,10) '-------------------------------------------------------'

@@ -191,7 +191,7 @@ MODULE m_nctk
  public :: nctk_open_read           ! Open a file in read-only mode.
  public :: nctk_open_create         ! Create a netcdf file for modifications.
  public :: nctk_open_modify         ! Open an already existent file for modifications.
- public :: nctk_add_etsf_header     ! Add the ETSF-IO header.
+ public :: nctk_add_etsf_header     ! Add the ETSF-IO AB_HEADER.
  public :: nctk_set_defmode         ! Set the file in define mode (metadata)
  public :: nctk_set_datamode        ! Set the file in datamode (IO)
  public :: nctk_set_collective      ! Set collective access for a netcdf variable
@@ -244,7 +244,7 @@ MODULE m_nctk
  ! If cache_preemption is provided when opening a netCDF-4/HDF5 file, it will be used
  ! instead of the default (0.75) as the preemption value for the HDF5 chunk cache.
 
- logical, save ABI_PROTECTED, public :: nctk_has_mpiio = .False.
+ logical, save ABI_PROTECTED, public :: nctk_has_mpiio = .false.
  ! This flag is set to true if the netcdf library supports parallel IO.
  ! Cannot use CPP flags because nf90_open_par and other similar functions are always
  ! exported by netcdf. As a consequence we have to check at run-time if we can
@@ -553,7 +553,7 @@ subroutine nctk_test_mpiio()
 
 ! *********************************************************************
 
- nctk_has_mpiio = .False.
+ nctk_has_mpiio = .false.
 
 #ifdef HAVE_NETCDF_MPI
  if (xmpi_comm_rank(xmpi_world) == master) then
@@ -568,11 +568,11 @@ subroutine nctk_test_mpiio()
    else if (ncerr == nf90_enopar) then
      ! This is the value returned by the C function ifndef USE_PARALLEL
      MSG_WARNING(sjoin("netcdf lib does not support MPI-IO and: ", nf90_strerror(ncerr)))
-     nctk_has_mpiio = .False.
+     nctk_has_mpiio = .false.
    else
      ! Maybe something wrong in the low-level layer!
      MSG_WARNING(sjoin("Strange, netcdf seems to support MPI-IO but: ", nf90_strerror(ncerr)))
-     nctk_has_mpiio = .False.
+     nctk_has_mpiio = .false.
    end if
 
    ncerr = nf90_close(ncid)
@@ -913,14 +913,14 @@ end function nctk_open_modify
 !!  nctk_add_etsf_header
 !!
 !! FUNCTION
-!!   Add the etsf-io header to a file associated to a netcdf file handler.
+!!   Add the etsf-io AB_HEADER to a file associated to a netcdf file handler.
 !!
 !! INPUTS
 !!  ncid=Netcdf file identifier.
 !!  * version = the number of version to be created.
 !!  * title = (optional) a title for the file (80 characters max).
 !!  * history = (optional) the first line of history (1024 characters max).
-!!  * with_etsf_header = (optional) if true, will create a header
+!!  * with_etsf_header = (optional) if true, will create a AB_HEADER
 !!                       as defined in the ETSF specifications (default is .true.).
 !!                       When value is .false., arguments title, history and version
 !!                       are ignored.
@@ -1074,7 +1074,7 @@ integer function nctk_set_datamode(ncid, reserve) result(ncerr)
 
 ! *********************************************************************
 
- do_reserve = .False.; if (present(reserve)) do_reserve = reserve
+ do_reserve = .false.; if (present(reserve)) do_reserve = reserve
 
  ncerr = nf90_enddef(ncid)
 
@@ -1155,7 +1155,7 @@ end function nctk_set_collective
 !!  ncid=Netcdf identifier.
 !!  dimnames(:)=List of strings with the name of the dimensions
 !!  values(:)=List of integer scalars
-!!  [defmode]=If True, the nc file is set in define mode (default=False)
+!!  [defmode]=If True, the nc file is set in define mode (default=false)
 !!
 !! PARENTS
 !!
@@ -1227,7 +1227,7 @@ end function nctk_def_one_dim
 !!  ncid=Netcdf identifier.
 !!  dimnames(:)=List of strings with the name of the dimensions
 !!  values(:)=List of integer scalars
-!!  [defmode]=If True, the nc file is set in define mode (default=False)
+!!  [defmode]=If True, the nc file is set in define mode (default=false)
 !!
 !! PARENTS
 !!
@@ -1334,7 +1334,7 @@ end function nctk_set_atomic_units
 !!
 !! INPUTS
 !!  ncid=Netcdf identifier.
-!!  [defmode]=If True, the nc file is set in define mode (default=False)
+!!  [defmode]=If True, the nc file is set in define mode (default=false)
 !!
 !! PARENTS
 !!      m_dfpt_io,m_dfptdb,m_header,m_phonons
@@ -1463,7 +1463,7 @@ end subroutine ab_define_var
 !!  ncid=Netcdf identifier.
 !!  varnames(:)=List of strings with the name of the variables
 !!  xtype=Type of the variables
-!!  [defmode]=If True, the nc file is set in define mode (default=False)
+!!  [defmode]=If True, the nc file is set in define mode (default=false)
 !!
 !! PARENTS
 !!
@@ -1537,7 +1537,7 @@ end function nctk_def_scalars_type
 !! INPUTS
 !!  ncid=Netcdf identifier.
 !!  varnames(:)=List of strings with the name of the variables
-!!  [defmode]=If True, the nc file is set in define mode (default=False)
+!!  [defmode]=If True, the nc file is set in define mode (default=false)
 !!
 !! PARENTS
 !!
@@ -1584,7 +1584,7 @@ end function nctk_def_iscalars
 !! INPUTS
 !!  ncid=Netcdf identifier.
 !!  varnames(:)=List of strings with the name of the variables
-!!  [defmode]=If True, the nc file is set in define mode (default=False)
+!!  [defmode]=If True, the nc file is set in define mode (default=false)
 !!
 !! PARENTS
 !!
@@ -1631,7 +1631,7 @@ end function nctk_def_dpscalars
 !! INPUTS
 !!  ncid=Netcdf identifier.
 !!  nctk_array=Array descriptor.
-!!  [defmode]=If True, the nc file is set in define mode (default=False)
+!!  [defmode]=If True, the nc file is set in define mode (default=false)
 !!
 !! PARENTS
 !!
@@ -1747,7 +1747,7 @@ end function nctk_def_one_array
 !! INPUTS
 !!  ncid=Netcdf identifier.
 !!  nctk_arrays(:)=List of array descriptors.
-!!  [defmode]=If True, the nc file is set in define mode (default=False)
+!!  [defmode]=If True, the nc file is set in define mode (default=false)
 !!
 !! PARENTS
 !!
@@ -1805,7 +1805,7 @@ end function nctk_def_array_list
 !!  ncid=Netcdf identifier.
 !!  varnames(:)=List of strings with the name of the variables
 !!  values(:)=List of integer scalars
-!!  [datamode]=If True, the nc file is set in data mode (default=False)
+!!  [datamode]=If True, the nc file is set in data mode (default=false)
 !!
 !! OUTPUT
 !!  ncerr=Exit status
@@ -1869,7 +1869,7 @@ end function nctk_write_iscalars
 !!  ncid=Netcdf identifier.
 !!  varnames(:)=List of strings with the name of the variables
 !!  values(:)=List of real(dp) scalars
-!!  [datamode]=If True, the nc file is set in data mode (default=False)
+!!  [datamode]=If True, the nc file is set in data mode (default=false)
 !!
 !! PARENTS
 !!
@@ -2118,7 +2118,7 @@ end function nctk_write_ibz
 !! INPUTS
 !!  ncid=Netcdf identifier.
 !!  dimname=Name of the dimension.
-!!  [datamode]=If True, the nc file is set in data mode (default=False)
+!!  [datamode]=If True, the nc file is set in data mode (default=false)
 !!
 !! OUTPUT
 !!  dimlen=Value of the dimension.
@@ -2532,7 +2532,7 @@ end function nctk_read_datar
 !!  ngfft(18)=contain all needed information about 3D FFT (see NOTES at beginning of scfcv)
 !!  cplex=1 if real array, 2 for complex
 !!  nfft=Number of FFT points treated by this MPI proc
-!!  nspden=Second dimension of rhor
+!!  nspden=second dimension of rhor
 !!  rhor(cplex*nfft,nspden)=Array in real space (MPI-FFT distributed)
 !!  fftn3_distrib(n3)=rank of the processors which own fft planes in 3rd dimension.
 !!  fftn3_local(n3)=local i3 indices
@@ -2622,7 +2622,7 @@ end subroutine collect_datar
 !!  ngfft(18)=contain all needed information about 3D FFT (see NOTES at beginning of scfcv)
 !!  cplex=1 if real array, 2 for complex
 !!  nfft=Number of FFT points treated by this MPI proc
-!!  nspden=Second dimension of rhor
+!!  nspden=second dimension of rhor
 !!  rhor_glob(cplex*nfft_tot,nspden)=Global array
 !!  master=The rank of the node that owns the global array.
 !!  comm_fft=MPI-FFT communicator

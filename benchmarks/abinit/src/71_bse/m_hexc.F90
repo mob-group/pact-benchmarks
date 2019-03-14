@@ -1572,7 +1572,7 @@ subroutine hexc_interp_matmul(BSp,hsize_coarse,hsize_dense,hmat,phi,hphi,grid,&
 
  test = czero
 
- ! Second step : Multiplication by hmat
+ ! second step : Multiplication by hmat
  do ineighbour = 1,interpolator%nvert
    if(use_blas) then
      !call xgemv('N',hsize_coarse,hsize_coarse,cone,factor*(hmat(:,:,ineighbour)),hsize_coarse,allp(:,ineighbour),1,czero,tmp_array,1)

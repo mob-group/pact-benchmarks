@@ -165,8 +165,8 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ISAMAX
-      REAL               SLAMCH, SLARND
-      EXTERNAL           LSAME, ISAMAX, SLAMCH, SLARND
+      REAL               AB_SLAMCH, SLARND
+      EXTERNAL           LSAME, ISAMAX, AB_SLAMCH, SLARND
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SCOPY, SLABAD, SLARNV, SLATB4, SLATMS, SROT,
@@ -179,8 +179,8 @@
 *
       PATH( 1: 1 ) = 'Single precision'
       PATH( 2: 3 ) = 'TR'
-      UNFL = SLAMCH( 'Safe minimum' )
-      ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
+      ULP = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
       SMLNUM = UNFL
       BIGNUM = ( ONE-ULP ) / SMLNUM
       CALL SLABAD( SMLNUM, BIGNUM )

@@ -108,8 +108,8 @@
       REAL               BIGNUM, CDEN, CDEN1, CNUM, CNUM1, MUL, SMLNUM
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_SLABAD, AB_SSCAL
@@ -126,7 +126,7 @@
 *
 *     Get machine parameters
 *
-      SMLNUM = SLAMCH( 'S' )
+      SMLNUM = AB_SLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
       CALL AB_SLABAD( SMLNUM, BIGNUM )
 *

@@ -454,8 +454,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
-      DOUBLE PRECISION   DLAMCH, DLARND
-      EXTERNAL           ILAENV, DLAMCH, DLARND
+      DOUBLE PRECISION   AB_DLAMCH, DLARND
+      EXTERNAL           ILAENV, AB_DLAMCH, DLARND
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, DGET52, DGGEV3, DLABAD, DLACPY, DLARFG,
@@ -545,8 +545,8 @@
       IF( NSIZES.EQ.0 .OR. NTYPES.EQ.0 )
      $   RETURN
 *
-      SAFMIN = DLAMCH( 'Safe minimum' )
-      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
+      SAFMIN = AB_DLAMCH( 'Safe minimum' )
+      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
       SAFMIN = SAFMIN / ULP
       SAFMAX = ONE / SAFMIN
       CALL DLABAD( SAFMIN, SAFMAX )

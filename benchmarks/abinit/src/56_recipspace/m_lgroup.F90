@@ -144,7 +144,7 @@ type (lgroup_t) function lgroup_new(cryst, kpoint, timrev, nkbz, kbz, nkibz, kib
 !arrays
  integer :: symrec_lg(3,3,2*cryst%nsym),symafm_lg(3,3,2*cryst%nsym)
  integer,allocatable :: ibz2bz(:)
- real(dp),allocatable :: wtk(:),wtk_folded(:)
+ real(dp),allocatable :: wtk(:),wtk_foAB_LDEd(:)
 
 ! *************************************************************************
 
@@ -175,25 +175,25 @@ type (lgroup_t) function lgroup_new(cryst, kpoint, timrev, nkbz, kbz, nkibz, kib
  ! Find the irreducible zone with the little group operations.
  ! Do not use time-reversal since it has been manually introduced previously
  ABI_MALLOC(ibz2bz, (nkbz))
- ABI_MALLOC(wtk_folded, (nkbz))
+ ABI_MALLOC(wtk_foAB_LDEd, (nkbz))
  ABI_MALLOC(wtk, (nkbz))
  wtk = one / nkbz ! Weights sum up to one
 
  ! TODO: In principle here we would like to have a set that contains the initial IBZ.
  call symkpt(chksymbreak0,cryst%gmet,ibz2bz,iout0,kbz,nkbz,new%nibz,&
-   nsym_lg,symrec_lg,my_timrev0,wtk,wtk_folded)
+   nsym_lg,symrec_lg,my_timrev0,wtk,wtk_foAB_LDEd)
 
  ABI_MALLOC(new%ibz, (3, new%nibz))
  ABI_MALLOC(new%weights, (new%nibz))
 
  do ik=1,new%nibz
-   new%weights(ik) = wtk_folded(ibz2bz(ik))
+   new%weights(ik) = wtk_foAB_LDEd(ibz2bz(ik))
    new%ibz(:,ik) = kbz(:, ibz2bz(ik))
  end do
  ABI_CHECK(sum(new%weights) - one < tol12, sjoin("Weights don't sum up to one but to:", ftoa(sum(new%weights))))
 
  ABI_FREE(ibz2bz)
- ABI_FREE(wtk_folded)
+ ABI_FREE(wtk_foAB_LDEd)
  ABI_FREE(wtk)
 
  ! Debug section.
@@ -220,7 +220,7 @@ end function lgroup_new
 !!  Print the object
 !!
 !! INPUTS
-!!  [title]=String to be printed as header for additional info.
+!!  [title]=String to be printed as AB_HEADER for additional info.
 !!  [unit]=Unit number for output
 !!  [prtvol]=Verbosity level
 !!

@@ -439,7 +439,7 @@ subroutine renorm_bst(Epren,Bst,Cryst,itemp,do_lifetime,do_check)
  ABI_MALLOC(bs2eph, (BSt%nkpt*sppoldbl, 6))
  timrev = 1
  call listkk(dksqmax, Cryst%gmet, bs2eph, Epren%kpts, BSt%kptns, Epren%nkpt, Bst%nkpt, Cryst%nsym, &
-&   sppoldbl, Cryst%symafm, Cryst%symrel, timrev, use_symrec=.False.)
+&   sppoldbl, Cryst%symafm, Cryst%symrel, timrev, use_symrec=.false.)
 
  do isppol=1,Bst%nsppol
    do ikpt=1,Bst%nkpt

@@ -1622,7 +1622,7 @@ end subroutine fit_polynomial_coeff_getCoeffBound
 !!                exactly zero.  The factorization has been completed,
 !!                but the factor U is exactly singular, so the solution
 !!                could not be computed.  = 0:  successful exit
-!!          information from the subroutine dsgesv in LAPACK
+!!          information from the subroutine AB_DSGESV in LAPACK
 !!
 !! PARENTS
 !!      m_fit_polynomial_coeff
@@ -1753,16 +1753,16 @@ subroutine fit_polynomial_coeff_solve(coefficients,fcart_coeffs,fcart_diff,energ
 
 !2-Solve Ax=B
 !OLD VERSION..
-! call dgesvx(FACT,TRANS,N,NRHS,A,LDA,AF,LDAF,IPIV,EQUED,R,C,B,LDB,coefficients,LDX,&
+! call AB_DGESVx(FACT,TRANS,N,NRHS,A,LDA,AF,LDAF,IPIV,EQUED,R,C,B,LDB,coefficients,LDX,&
 !             RCOND,FERR,BERR,WORK,IWORK,INFO)
 !U is nonsingular
 ! if (INFO==N+1) then
 !   coefficients = zero
 ! end if
- call DSGESV(N,NRHS,A,LDA,IPIV,B,LDB,coefficients,LDX,WORK,SWORK,ITER,INFO)
+ call AB_DSGESV(N,NRHS,A,LDA,IPIV,B,LDB,coefficients,LDX,WORK,SWORK,ITER,INFO)
 
 !other routine
-! call dgesv(N,NRHS,A,LDA,IPIV,B,LDB,INFO)
+! call AB_DGESV(N,NRHS,A,LDA,IPIV,B,LDB,INFO)
 ! coefficients = B(:,NRHS)
  !U is nonsingular
  if (INFO==N+2) then
@@ -2326,7 +2326,7 @@ subroutine fit_polynomial_coeff_computeMSD(eff_pot,hist,mse,msef,mses,natom,ntim
    xred(:,:)   = hist%xred(:,:,ii)
    rprimd(:,:) = hist%rprimd(:,:,ii)
    call effective_potential_evaluate(eff_pot,energy_harm,fcart,fred,strten,natom,rprimd,&
-&                                    xred=xred,compute_anharmonic=.False.,verbose=.false.)
+&                                    xred=xred,compute_anharmonic=.false.,verbose=.false.)
 
    call effective_potential_evaluate(eff_pot,energy,fcart,fred,strten,natom,rprimd,&
 &                                    xred=xred,compute_anharmonic=need_anharmonic,verbose=.false.)
@@ -2522,7 +2522,7 @@ subroutine fit_polynomial_printSystemFiles(eff_pot,hist)
    MSG_ERROR(msg)
  end if
 
-!Write header
+!Write AB_HEADER
  write(unit_harmonic,'("<?xml version=""1.0"" ?>")')
  write(unit_harmonic,'("<name>")')
 

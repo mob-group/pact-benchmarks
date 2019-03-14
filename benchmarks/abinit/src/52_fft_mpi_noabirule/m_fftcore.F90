@@ -222,7 +222,7 @@ pure function fftalg_has_mpi(fftalg) result(ans)
 
 ! *************************************************************************
 
- ans = .False.
+ ans = .false.
  fftalga = fftalg/100; fftalgb = mod(fftalg,100)/10; fftalgc = mod(fftalg,10)
 
  if (fftalga == FFT_FFTW3) ans = .True.
@@ -491,7 +491,7 @@ end subroutine ngfft_seq
 !!
 !! SOURCE
 
-subroutine print_ngfft(ngfft,header,unit,mode_paral,prtvol)
+subroutine print_ngfft(ngfft,AB_HEADER,unit,mode_paral,prtvol)
 
 
 !This section has been created automatically by the script Abilint (TD).
@@ -505,7 +505,7 @@ subroutine print_ngfft(ngfft,header,unit,mode_paral,prtvol)
 !Arguments ------------------------------------
 !scalars
  integer,intent(in),optional :: prtvol,unit
- character(len=*),intent(in),optional :: header
+ character(len=*),intent(in),optional :: AB_HEADER
  character(len=4),intent(in),optional :: mode_paral
 !arrays
  integer,intent(in) :: ngfft(18)
@@ -523,7 +523,7 @@ subroutine print_ngfft(ngfft,header,unit,mode_paral,prtvol)
  my_mode  ='COLL';  if (PRESENT(mode_paral)) my_mode  =mode_paral
 
  msg=ch10//' ==== FFT mesh description (ngfft) ==== '
- if (PRESENT(header)) msg=ch10//' ==== '//TRIM(ADJUSTL(header))//' ==== '
+ if (PRESENT(AB_HEADER)) msg=ch10//' ==== '//TRIM(ADJUSTL(AB_HEADER))//' ==== '
  call wrtout(my_unt,msg,my_mode)
  write(msg,'(2(a,3i5,a),a,i5,2a,i5)')&
 &  '  FFT mesh divisions ........................ ',ngfft(1),ngfft(2),ngfft(3),ch10,&
@@ -1193,7 +1193,7 @@ subroutine getng(boxcutmin,ecut,gmet,kpt,me_fft,mgfft,nfft,ngfft,nproc_fft,nsym,
  end if
 
 
- call print_ngfft(ngfft,header="FFT mesh",unit=ount,mode_paral="COLL")
+ call print_ngfft(ngfft,AB_HEADER="FFT mesh",unit=ount,mode_paral="COLL")
 
 end subroutine getng
 !!***
@@ -2238,7 +2238,7 @@ end subroutine switch
 !!  n2=Dimension of the transform along y
 !!  lot=Cache blocking factor.
 !!  n1=Dimension of the transform along x
-!!  lzt=Second dimension of z
+!!  lzt=second dimension of z
 !!  zt(2,lzt,n1)
 !!
 !! OUTPUT
@@ -5190,7 +5190,7 @@ end subroutine multpot
 !!  ngfft(18)=contain all needed information about 3D FFT (see NOTES at beginning of scfcv)
 !!  cplex=1 if real array, 2 for complex
 !!  nfft=Number of FFT points treated by this MPI proc
-!!  nspden=Second dimension of rhor
+!!  nspden=second dimension of rhor
 !!  rhor(cplex*nfft,nspden)=Array in real space (MPI-FFT distributed)
 !!  fftn3_distrib(n3)=rank of the processors which own fft planes in 3rd dimension.
 !!  fftn3_local(n3)=local i3 indices

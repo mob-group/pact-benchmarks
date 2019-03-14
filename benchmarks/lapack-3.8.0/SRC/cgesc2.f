@@ -145,8 +145,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            AB_ICAMAX
-      REAL               SLAMCH
-      EXTERNAL           AB_ICAMAX, SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_ICAMAX, AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CMPLX, REAL
@@ -155,8 +155,8 @@
 *
 *     Set constant to control overflow
 *
-      EPS = SLAMCH( 'P' )
-      SMLNUM = SLAMCH( 'S' ) / EPS
+      EPS = AB_SLAMCH( 'P' )
+      SMLNUM = AB_SLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
       CALL AB_SLABAD( SMLNUM, BIGNUM )
 *

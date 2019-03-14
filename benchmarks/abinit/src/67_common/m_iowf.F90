@@ -70,7 +70,7 @@ CONTAINS  !=====================================================================
 !! Conduct output of a "wave-functions" file.
 !!  - Compute the maximal residual
 !!  - Then open a permanent file wff2 for final output of wf data
-!!  - Create a new header for the file.
+!!  - Create a new AB_HEADER for the file.
 !!  - Write wave-functions (and energies)
 !!
 !! INPUTS
@@ -80,7 +80,7 @@ CONTAINS  !=====================================================================
 !!  eigen( (2*mband)**response *mband*nkpt*nsppol)= eigenvalues (hartree) for all bands at each k point
 !!  filnam= character string giving the root to form the name of the
 !!   output WFK or WFQ file if response==0, otherwise it is the filename.
-!!  hdr <type(hdr_type)>=the header of wf, den and pot files
+!!  hdr <type(hdr_type)>=the AB_HEADER of wf, den and pot files
 !!  kg(3,mpw*mkmem)=reduced planewave coordinates.
 !!  kptns(3,nkpt)=k points in terms of recip primitive translations
 !!  mband=maximum number of bands
@@ -454,7 +454,7 @@ subroutine outwf(cg,dtset,psps,eigen,filnam,hdr,kg,kptns,mband,mcg,mkmem,&
    if(mpi_enreg%paralbd==0) tim_rwwf=6
    if(mpi_enreg%paralbd==1) tim_rwwf=12
 
-!  Write header info for new wf file
+!  Write AB_HEADER info for new wf file
    rdwr=2
    if (dtset%usewvl==0) then
      fform=2
@@ -709,7 +709,7 @@ end subroutine outwf
 !!  fname= character string giving the root to form the name of the
 !!   output WFK or WFQ file if response==0, otherwise it is the filename.
 !!  dtset <type(dataset_type)>=all input variables for this dataset
-!!  hdr <type(hdr_type)>=the header of wf, den and pot files
+!!  hdr <type(hdr_type)>=the AB_HEADER of wf, den and pot files
 !!  response: if == 0, GS wavefunctions , if == 1, RF wavefunctions
 !!  mpw=maximum number of plane waves
 !!  mband=maximum number of bands
@@ -788,7 +788,7 @@ subroutine cg_ncwrite(fname,hdr,dtset,response,mpw,mband,nband,nkpt,nsppol,nspin
 ! *************************************************************************
 
  DBG_ENTER("COLL")
- done = .False.
+ done = .false.
 
  path = nctk_ncify(fname)
  call wrtout(std_out, sjoin("in cg_ncwrite with path:", path), "COLL")
@@ -864,7 +864,7 @@ subroutine cg_ncwrite(fname,hdr,dtset,response,mpw,mband,nband,nkpt,nsppol,nspin
        nband_k = nband(ikpt + (spin-1)*nkpt)
        if (.not. proc_distrb_cycle(mpi_enreg%proc_distrb,ikpt,1,nband_k,spin,me_kpt)) then
          if (any(mpi_enreg%proc_distrb(ikpt,:nband_k,spin) /= me_kpt)) then
-           same_layout = .False.; exit spin_loop
+           same_layout = .false.; exit spin_loop
          end if
        end if
      end do
@@ -876,7 +876,7 @@ subroutine cg_ncwrite(fname,hdr,dtset,response,mpw,mband,nband,nkpt,nsppol,nspin
 
  if (same_layout) then
    single_writer = .True.
-   if (nctk_has_mpiio) single_writer = .False.
+   if (nctk_has_mpiio) single_writer = .false.
    !single_writer = .True.
 
    write(msg,'(5a,l1)')&

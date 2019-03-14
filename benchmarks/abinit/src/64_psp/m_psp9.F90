@@ -208,12 +208,12 @@ subroutine psp9in(filpsp,ekb,epsatm,ffspl,indlmn,lloc,lmax,lmnmax,lnmax,&
 ! endif
 
 ! The atomic number is a real number instead of a simple integer
-! z (in Abinit), atomic-number in the header of the PSML file.
+! z (in Abinit), atomic-number in the AB_HEADER of the PSML file.
 ! z      = ps_AtomicNumber(psxml)
 !
 ! The difference between the number of protons in the nucleus and the
 ! sum of the populations of the core shells is the effective atomic number
-! of the pseudo-atom, Zval (in Abinit), z-pseudo in the header of the
+! of the pseudo-atom, Zval (in Abinit), z-pseudo in the AB_HEADER of the
 ! PSML file.
 ! zval   = ps_Zpseudo(psxml)
 
@@ -227,9 +227,9 @@ subroutine psp9in(filpsp,ekb,epsatm,ffspl,indlmn,lloc,lmax,lmnmax,lnmax,&
 !
 ! The following lines are taken from the oncvpsp.f90 subroutine of the oncvpsp
 ! code implemented by D. Hamann
-! The atomic number of the element is read from the header of the XML file
+! The atomic number of the element is read from the AB_HEADER of the XML file
 ! Logarithmic grid defined by Hamann in oncvpsp code
-! z    = psxml%header%z
+! z    = psxml%AB_HEADER%z
 ! amesh = 1.012d0
 ! al    = dlog(amesh)
 ! rr1   = .0005d0/z
@@ -702,7 +702,7 @@ end subroutine psp9in
 !!      psp9in
 !!
 !! CHILDREN
-!!      dgesv
+!!      AB_DGESV
 !!
 !! SOURCE
 
@@ -794,7 +794,7 @@ subroutine psp9cc(psxml,mmax,n1xccc,rad,rchrg,xccc1d)
    end do
    vpoly(irad) = ff(irad,1)
  end do
- call dgesv(6,1,dpoly,6,iwork,vpoly,6,idum)
+ call AB_DGESV(6,1,dpoly,6,iwork,vpoly,6,idum)
 
  do irad=1,2
    ff(irad,2) = &
@@ -844,7 +844,7 @@ subroutine psp9cc(psxml,mmax,n1xccc,rad,rchrg,xccc1d)
  if(rchrg>rad(mmax)) then
    write(message, '(5a)' )&
 &   'Pseudopotential input file core charge mesh',ch10,&
-&   'is inconsistent with rchrg in header.',ch10,&
+&   'is inconsistent with rchrg in AB_HEADER.',ch10,&
 &   'Action: check your pseudopotential input file.'
    MSG_ERROR(message)
  end if

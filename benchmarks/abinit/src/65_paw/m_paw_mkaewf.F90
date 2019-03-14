@@ -104,7 +104,7 @@ CONTAINS  !=====================================================================
 !! ngfftf(18)=contain all needed information about 3D FFT, see ~abinit/doc/variables/vargs.htm#ngfft
 !!  Note that ngfftf refers to the fine mesh.
 !! kg(3,mpw*mkmem)=reduced planewave coordinates
-!! Hdr<hdr_type>=the header of wf, den and pot files
+!! Hdr<hdr_type>=the AB_HEADER of wf, den and pot files
 !! kpt(3,nkpt)=reduced coordinates of k points.
 !!
 !! OUTPUT
@@ -642,7 +642,7 @@ subroutine pawmkaewf(Dtset,crystal,ebands,my_natom,mpw,mband,mcg,mcprj,nkpt,mkme
 !      MS: Various testing and debugging options
        if (.TRUE..and.nprocs==1) then
          if (present(pseudo_norms)) then
-!          Check the supposedly zero overlap |\tilde{Psi_n}-\tilde{Psi_n^1}|^2
+!          Check the supposedly zero overlap |\tiAB_LDE{Psi_n}-\tiAB_LDE{Psi_n^1}|^2
            ABI_MALLOC(dummy_1d,(n1*n2*n3))
            dummy_1d = zero
            norm = zero

@@ -210,7 +210,7 @@
 *>          Kahan, LAPACK Working Note #3.
 *>
 *>          If high relative accuracy is important, set ABSTOL to
-*>          DLAMCH( 'Safe minimum' ).  Doing so will guarantee that
+*>          AB_DLAMCH( 'Safe minimum' ).  Doing so will guarantee that
 *>          eigenvalues are computed to high relative accuracy when
 *>          possible in future releases.  The current code does not
 *>          make any guarantees about high relative accuracy, but
@@ -419,8 +419,8 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_ILAENV, AB_ILAENV2STAGE
-      DOUBLE PRECISION   DLAMCH, AB_DLANSY
-      EXTERNAL           AB_LSAME, DLAMCH, AB_DLANSY, AB_ILAENV, AB_ILAE
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANSY
+      EXTERNAL           AB_LSAME, AB_DLAMCH, AB_DLANSY, AB_ILAENV, AB_ILAE
      $NV2STAGE
 *     ..
 *     .. External Subroutines ..
@@ -534,8 +534,8 @@
 *
 *     Get machine constants.
 *
-      SAFMIN = DLAMCH( 'Safe minimum' )
-      EPS    = DLAMCH( 'Precision' )
+      SAFMIN = AB_DLAMCH( 'Safe minimum' )
+      EPS    = AB_DLAMCH( 'Precision' )
       SMLNUM = SAFMIN / EPS
       BIGNUM = ONE / SMLNUM
       RMIN   = SQRT( SMLNUM )

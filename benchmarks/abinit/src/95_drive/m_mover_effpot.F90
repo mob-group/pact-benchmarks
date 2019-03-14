@@ -194,7 +194,7 @@ implicit none
  character(len=fnlen) :: filename
 !character(len=fnlen) :: filename_psp(3)
  type(electronpositron_type),pointer :: electronpositron
-! type(pspheader_type),allocatable :: pspheads(:)
+! type(pspAB_HEADER_type),allocatable :: pspheads(:)
 ! type(pawrad_type),allocatable :: pawrad(:)
 ! type(pawtab_type),allocatable :: pawtab(:)
 ! type(args_gs_type) :: args_gs

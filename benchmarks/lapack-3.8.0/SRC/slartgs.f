@@ -112,11 +112,11 @@
       EXTERNAL           AB_SLARTGP
 *     ..
 *     .. External Functions ..
-      REAL                    SLAMCH
-      EXTERNAL           SLAMCH
+      REAL                    AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     .. Executable Statements ..
 *
-      THRESH = SLAMCH('E')
+      THRESH = AB_SLAMCH('E')
 *
 *     Compute the first column of B**T*B - SIGMA^2*I, up to a scale
 *     factor.

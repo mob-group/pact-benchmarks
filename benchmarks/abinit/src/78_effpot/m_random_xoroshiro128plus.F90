@@ -18,7 +18,7 @@
 !See <http://creativecommons.org/publicdomain/zero/1.0/>.
 !
 ! << This is the original documentation of Blackman and Vigna
-!This is the successor to xorshift128+. It is the fastest full-period
+!This is the successor to xorshift128+. It is the faAB_STEST full-period
 !generator passing BigCrush without systematic failures, but due to the
 !relatively short period it is acceptable only for applications with a
 !mild amount of parallelism; otherwise, use a xorshift1024* generator.
@@ -62,7 +62,7 @@ module m_random_xoroshiro128plus
      integer(i8), private       :: separator(32) ! Separate cache lines (parallel use)
 
      real(dp) :: residual =0.0d0 ! for saving residual in normal function.
-     logical :: has_residual = .False.
+     logical :: has_residual = .false.
   ! contains
   !   procedure, non_overridable :: set_seed    ! Seed the generator
   !   procedure, non_overridable :: jump        ! Jump function (see below)
@@ -295,7 +295,7 @@ contains
     class(rng_t), intent(inout) :: self
     real(dp) :: r, rands(2), sum_sq
     if(self%has_residual) then
-        self%has_residual=.False.
+        self%has_residual=.false.
         r=self%residual
     else
         do

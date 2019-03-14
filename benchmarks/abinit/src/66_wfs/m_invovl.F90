@@ -104,7 +104,7 @@ CONTAINS
 !!      gstate
 !!
 !! CHILDREN
-!!      dsymm,zhemm
+!!      AB_DSYMM,AB_ZHEMM
 !!
 !! SOURCE
 
@@ -145,7 +145,7 @@ CONTAINS
 !!      gstate
 !!
 !! CHILDREN
-!!      dsymm,zhemm
+!!      AB_DSYMM,AB_ZHEMM
 !!
 !! SOURCE
  subroutine destroy_invovl(nkpt)
@@ -193,7 +193,7 @@ CONTAINS
 !!      vtorho
 !!
 !! CHILDREN
-!!      dsymm,zhemm
+!!      AB_DSYMM,AB_ZHEMM
 !!
 !! SOURCE
 
@@ -302,11 +302,11 @@ subroutine make_invovl(ham, dimffnl, ffnl, ph3d, mpi_enreg)
 
    ! Invert sij
    if(cplx == 2) then
-     call ZHETRF('U', nlmn, invovl%inv_sij(:,:,:,itypat), ham%lmnmax, ipiv, work, (64*nlmn), info)
-     call ZHETRI('U', nlmn, invovl%inv_sij(:,:,:,itypat), ham%lmnmax, ipiv, work, info)
+     call AB_ZHETRF('U', nlmn, invovl%inv_sij(:,:,:,itypat), ham%lmnmax, ipiv, work, (64*nlmn), info)
+     call AB_ZHETRI('U', nlmn, invovl%inv_sij(:,:,:,itypat), ham%lmnmax, ipiv, work, info)
    else
-     call DSYTRF('U', nlmn, invovl%inv_sij(:,:,:,itypat), ham%lmnmax, ipiv, work, (64*nlmn), info)
-     call DSYTRI('U', nlmn, invovl%inv_sij(:,:,:,itypat), ham%lmnmax, ipiv, work, info)
+     call AB_DSYTRF('U', nlmn, invovl%inv_sij(:,:,:,itypat), ham%lmnmax, ipiv, work, (64*nlmn), info)
+     call AB_DSYTRI('U', nlmn, invovl%inv_sij(:,:,:,itypat), ham%lmnmax, ipiv, work, info)
    end if
    ! complete the matrix
    do ilm=1, nlmn
@@ -324,7 +324,7 @@ subroutine make_invovl(ham, dimffnl, ffnl, ph3d, mpi_enreg)
 
      ! start from 4pi/sqrt(ucvol)*ffnl
      ! atom_projs(1, :, 1:nlmn) = four_pi/sqrt(ham%ucvol) * ffnl(:, 1, 1:nlmn)
-     ! TODO vectorize (DCOPY with stride)
+     ! TODO vectorize (AB_DCOPY with stride)
      do ipw=1, ham%npw_k
        atom_projs(1,ipw, 1:nlmn) = four_pi/sqrt(ham%ucvol) * ffnl(ipw, 1, 1:nlmn, itypat)
      end do
@@ -380,11 +380,11 @@ subroutine make_invovl(ham, dimffnl, ffnl, ph3d, mpi_enreg)
        ABI_DEALLOCATE(gram_proj)
        ! ^-1
        if(cplx == 2) then
-         call ZHETRF('U', nlmn, invovl%inv_s_approx(:,:,:,itypat), ham%lmnmax, ipiv, work, (64*nlmn), info)
-         call ZHETRI('U', nlmn, invovl%inv_s_approx(:,:,:,itypat), ham%lmnmax, ipiv, work, info)
+         call AB_ZHETRF('U', nlmn, invovl%inv_s_approx(:,:,:,itypat), ham%lmnmax, ipiv, work, (64*nlmn), info)
+         call AB_ZHETRI('U', nlmn, invovl%inv_s_approx(:,:,:,itypat), ham%lmnmax, ipiv, work, info)
        else
-         call DSYTRF('U', nlmn, invovl%inv_s_approx(:,:,:,itypat), ham%lmnmax, ipiv, work, (64*nlmn), info)
-         call DSYTRI('U', nlmn, invovl%inv_s_approx(:,:,:,itypat), ham%lmnmax, ipiv, work, info)
+         call AB_DSYTRF('U', nlmn, invovl%inv_s_approx(:,:,:,itypat), ham%lmnmax, ipiv, work, (64*nlmn), info)
+         call AB_DSYTRI('U', nlmn, invovl%inv_s_approx(:,:,:,itypat), ham%lmnmax, ipiv, work, info)
        end if
        ! complete lower triangle of matrix
        do ilm=1, nlmn
@@ -458,7 +458,7 @@ end subroutine make_invovl
 !!      chebfi
 !!
 !! CHILDREN
-!!      dsymm,zhemm
+!!      AB_DSYMM,AB_ZHEMM
 !!
 !! SOURCE
 
@@ -614,7 +614,7 @@ end subroutine apply_invovl
 !!      m_invovl
 !!
 !! CHILDREN
-!!      dsymm,zhemm
+!!      AB_DSYMM,AB_ZHEMM
 !!
 !! SOURCE
 subroutine solve_inner(invovl, ham, cplx, mpi_enreg, proj, ndat, sm1proj, PtPsm1proj)
@@ -733,7 +733,7 @@ end subroutine solve_inner
 !!      m_invovl
 !!
 !! CHILDREN
-!!      dsymm,zhemm
+!!      AB_DSYMM,AB_ZHEMM
 !!
 !! SOURCE
 subroutine apply_block(ham, cplx, mat, nprojs, ndat, x, y)
@@ -764,11 +764,11 @@ subroutine apply_block(ham, cplx, mat, nprojs, ndat, x, y)
       !! apply mat to all atoms at once
       ! perform natom multiplications of size nlmn
       if(cplx == 2) then
-        call ZHEMM('L','U', nlmn, ham%nattyp(itypat), cone, mat(:, :, :, itypat), ham%lmnmax, &
+        call AB_ZHEMM('L','U', nlmn, ham%nattyp(itypat), cone, mat(:, :, :, itypat), ham%lmnmax, &
 &                x(:, shift:shift+nlmn*ham%nattyp(itypat)-1, idat), nlmn, czero, &
 &                y(:,shift:shift+nlmn*ham%nattyp(itypat)-1,idat), nlmn)
       else
-        call DSYMM('L','U', nlmn, ham%nattyp(itypat), one, mat(:, :, :, itypat), ham%lmnmax, &
+        call AB_DSYMM('L','U', nlmn, ham%nattyp(itypat), one, mat(:, :, :, itypat), ham%lmnmax, &
 &                x(:, shift:shift+nlmn*ham%nattyp(itypat)-1, idat), nlmn, zero, &
 &                y(:,shift:shift+nlmn*ham%nattyp(itypat)-1,idat), nlmn)
       end if

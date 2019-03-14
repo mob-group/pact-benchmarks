@@ -264,8 +264,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            AB_ILAENV
-      DOUBLE PRECISION   DLAMCH, AB_ZLANGE
-      EXTERNAL           AB_ILAENV, DLAMCH, AB_ZLANGE
+      DOUBLE PRECISION   AB_DLAMCH, AB_ZLANGE
+      EXTERNAL           AB_ILAENV, AB_DLAMCH, AB_ZLANGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          INT, LOG, MAX, MIN, DBLE
@@ -410,8 +410,8 @@
 *
 *     Get machine parameters.
 *
-      EPS = DLAMCH( 'P' )
-      SFMIN = DLAMCH( 'S' )
+      EPS = AB_DLAMCH( 'P' )
+      SFMIN = AB_DLAMCH( 'S' )
       SMLNUM = SFMIN / EPS
       BIGNUM = ONE / SMLNUM
       CALL AB_DLABAD( SMLNUM, BIGNUM )

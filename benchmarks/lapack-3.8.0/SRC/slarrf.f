@@ -227,8 +227,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL AB_SISNAN
-      REAL               SLAMCH
-      EXTERNAL           AB_SISNAN, SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SISNAN, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_SCOPY
@@ -247,7 +247,7 @@
       END IF
 *
       FACT = REAL(2**KTRYMAX)
-      EPS = SLAMCH( 'Precision' )
+      EPS = AB_SLAMCH( 'Precision' )
       SHIFT = 0
       FORCER = .FALSE.
 
@@ -289,7 +289,7 @@
 *
 *     Initialize the record of the best representation found
 *
-      S = SLAMCH( 'S' )
+      S = AB_SLAMCH( 'S' )
       SMLGROWTH = ONE / S
       FAIL = REAL(N-1)*MINGAP/(SPDIAM*EPS)
       FAIL2 = REAL(N-1)*MINGAP/(SPDIAM*SQRT(EPS))

@@ -375,10 +375,10 @@ contains
  intarr(1,:)=dtsets(:)%pitransform
  call prttagm(dprarr,intarr,iout,jdtset_,2,marr,1,narrm,ncid,ndtset_alloc,'pitransform','INT',0)
 
- dprarr(1,:)=dtsets(:)%polcen(1)
- dprarr(2,:)=dtsets(:)%polcen(2)
- dprarr(3,:)=dtsets(:)%polcen(3)
- call prttagm(dprarr,intarr,iout,jdtset_,1,marr,3,narrm,ncid,ndtset_alloc,'polcen','DPR',0)
+ dprarr(1,:)=dtsets(:)%poAB_LCEn(1)
+ dprarr(2,:)=dtsets(:)%poAB_LCEn(2)
+ dprarr(3,:)=dtsets(:)%poAB_LCEn(3)
+ call prttagm(dprarr,intarr,iout,jdtset_,1,marr,3,narrm,ncid,ndtset_alloc,'poAB_LCEn','DPR',0)
 
  intarr(1,:)=dtsets(:)%plowan_bandi
  call prttagm(dprarr,intarr,iout,jdtset_,2,marr,1,narrm,ncid,ndtset_alloc,'plowan_bandi','INT',0)
@@ -557,8 +557,8 @@ contains
  intarr(1,:)=dtsets(:)%prtkden
  call prttagm(dprarr,intarr,iout,jdtset_,2,marr,1,narrm,ncid,ndtset_alloc,'prtkden','INT',0)
 
- intarr(1,:)=dtsets(:)%prtlden
- call prttagm(dprarr,intarr,iout,jdtset_,2,marr,1,narrm,ncid,ndtset_alloc,'prtlden','INT',0)
+ intarr(1,:)=dtsets(:)%prtAB_LDEn
+ call prttagm(dprarr,intarr,iout,jdtset_,2,marr,1,narrm,ncid,ndtset_alloc,'prtAB_LDEn','INT',0)
 
  intarr(1,:)=dtsets(:)%prtnabla
  call prttagm(dprarr,intarr,iout,jdtset_,2,marr,1,narrm,ncid,ndtset_alloc,'prtnabla','INT',0)
@@ -747,11 +747,11 @@ contains
  dprarr(1,:)=dtsets(:)%recrcut
  call prttagm(dprarr,intarr,iout,jdtset_,1,marr,1,narrm,ncid,ndtset_alloc,'recrcut','LEN',0)
 
- intarr(1,:)=dtsets(:)%rectesteg
- call prttagm(dprarr,intarr,iout,jdtset_,2,marr,1,narrm,ncid,ndtset_alloc,'rectesteg','INT',0)
+ intarr(1,:)=dtsets(:)%reAB_CTESTeg
+ call prttagm(dprarr,intarr,iout,jdtset_,2,marr,1,narrm,ncid,ndtset_alloc,'reAB_CTESTeg','INT',0)
 
- dprarr(1,:)=dtsets(:)%rectolden
- call prttagm(dprarr,intarr,iout,jdtset_,1,marr,1,narrm,ncid,ndtset_alloc,'rectolden','DPR',0)
+ dprarr(1,:)=dtsets(:)%rectoAB_LDEn
+ call prttagm(dprarr,intarr,iout,jdtset_,1,marr,1,narrm,ncid,ndtset_alloc,'rectoAB_LDEn','DPR',0)
 
  dprarr(1,:)=dtsets(:)%red_dfield(1)    !!HONG
  dprarr(2,:)=dtsets(:)%red_dfield(2)
@@ -872,8 +872,8 @@ contains
  dprarr(1,:)=dtsets(:)%slabwsrad
  call prttagm(dprarr,intarr,iout,jdtset_,1,marr,1,narrm,ncid,ndtset_alloc,'slabwsrad','DPR',0)
 
- dprarr(1,:)=dtsets(:)%slabzbeg
- call prttagm(dprarr,intarr,iout,jdtset_,1,marr,1,narrm,ncid,ndtset_alloc,'slabzbeg','DPR',0)
+ dprarr(1,:)=dtsets(:)%slabAB_ZBEG
+ call prttagm(dprarr,intarr,iout,jdtset_,1,marr,1,narrm,ncid,ndtset_alloc,'slabAB_ZBEG','DPR',0)
 
  dprarr(1,:)=dtsets(:)%slabzend
  call prttagm(dprarr,intarr,iout,jdtset_,1,marr,1,narrm,ncid,ndtset_alloc,'slabzend','DPR',0)

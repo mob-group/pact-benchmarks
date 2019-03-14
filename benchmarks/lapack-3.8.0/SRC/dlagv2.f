@@ -187,16 +187,16 @@
       EXTERNAL           AB_DLAG2, AB_DLARTG, AB_DLASV2, AB_DROT
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, AB_DLAPY2
-      EXTERNAL           DLAMCH, AB_DLAPY2
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLAPY2
+      EXTERNAL           AB_DLAMCH, AB_DLAPY2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
 *     ..
 *     .. Executable Statements ..
 *
-      SAFMIN = DLAMCH( 'S' )
-      ULP = DLAMCH( 'P' )
+      SAFMIN = AB_DLAMCH( 'S' )
+      ULP = AB_DLAMCH( 'P' )
 *
 *     Scale A
 *

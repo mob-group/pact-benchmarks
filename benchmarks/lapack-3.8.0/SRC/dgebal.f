@@ -192,8 +192,8 @@
 *     .. External Functions ..
       LOGICAL            AB_DISNAN, AB_LSAME
       INTEGER            AB_IDAMAX
-      DOUBLE PRECISION   DLAMCH, AB_DNRM2
-      EXTERNAL           AB_DISNAN, AB_LSAME, AB_IDAMAX, DLAMCH, AB_DNRM
+      DOUBLE PRECISION   AB_DLAMCH, AB_DNRM2
+      EXTERNAL           AB_DISNAN, AB_LSAME, AB_IDAMAX, AB_DLAMCH, AB_DNRM
      $2
 *     ..
 *     .. External Subroutines ..
@@ -309,7 +309,7 @@
 *
 *     Iterative loop for norm reduction
 *
-      SFMIN1 = DLAMCH( 'S' ) / DLAMCH( 'P' )
+      SFMIN1 = AB_DLAMCH( 'S' ) / AB_DLAMCH( 'P' )
       SFMAX1 = ONE / SFMIN1
       SFMIN2 = SFMIN1*SCLFAC
       SFMAX2 = ONE / SFMIN2

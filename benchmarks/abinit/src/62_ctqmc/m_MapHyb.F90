@@ -421,7 +421,7 @@ RECURSIVE SUBROUTINE MapHyb_quickSort(this, begin, end)
   INTEGER                     :: it2
   INTEGER                     :: pivot
   INTEGER                     :: Iswap
-  DOUBLE PRECISION            :: Dswap
+  DOUBLE PRECISION            :: AB_DSWAP
 
   pivot = this%listINT((end-begin)/2 + begin) ! not the betterchoice.... FIXME
   it1 = begin
@@ -435,11 +435,11 @@ RECURSIVE SUBROUTINE MapHyb_quickSort(this, begin, end)
     END DO
     IF ( it1 .LE. it2) THEN
       Iswap = this%listINT(it1)
-      Dswap = this%listDBLE(it1)
+      AB_DSWAP = this%listDBLE(it1)
       this%listINT(it1)  = this%listINT(it2)
       this%listDBLE(it1) = this%listDBLE(it2)
       this%listINT(it2)  = Iswap
-      this%listDBLE(it2) = Dswap
+      this%listDBLE(it2) = AB_DSWAP
       it1 = it1 + 1
       it2 = it2 - 1
     END IF

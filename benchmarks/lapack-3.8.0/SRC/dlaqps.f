@@ -210,15 +210,15 @@
 *     ..
 *     .. External Functions ..
       INTEGER            AB_IDAMAX
-      DOUBLE PRECISION   DLAMCH, AB_DNRM2
-      EXTERNAL           AB_IDAMAX, DLAMCH, AB_DNRM2
+      DOUBLE PRECISION   AB_DLAMCH, AB_DNRM2
+      EXTERNAL           AB_IDAMAX, AB_DLAMCH, AB_DNRM2
 *     ..
 *     .. Executable Statements ..
 *
       LASTRK = MIN( M, N+OFFSET )
       LSTICC = 0
       K = 0
-      TOL3Z = SQRT(DLAMCH('Epsilon'))
+      TOL3Z = SQRT(AB_DLAMCH('Epsilon'))
 *
 *     Beginning of while loop.
 *
@@ -350,7 +350,7 @@
 *
 *        NOTE: The computation of VN1( LSTICC ) relies on the fact that
 *        AB_SNRM2 does not fail on vectors with norm below the value of
-*        SQRT(DLAMCH('S'))
+*        SQRT(AB_DLAMCH('S'))
 *
          VN2( LSTICC ) = VN1( LSTICC )
          LSTICC = ITEMP

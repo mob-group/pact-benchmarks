@@ -36,9 +36,9 @@
 #include "abi_common.h"
 
 #if defined HAVE_LINALG_GEMM3M
-#define ABI_ZGEMM ZGEMM3M
+#define ABI_ZGEMM AB_ZGEMM3M
 #else
-#define ABI_ZGEMM ZGEMM
+#define ABI_ZGEMM AB_ZGEMM
 #endif
 
 MODULE m_cgtools
@@ -452,11 +452,11 @@ subroutine cg_to_reim(npw,ndat,cg,factor,reim)
 
  ! Pack real and imaginary part of the wavefunctions.
  ! and multiply by scale factor if factor /= one. Could block but oh well
- call dcopy(npw*ndat, cg(1), 2, reim(1), 1)
- if (factor /= one) call dscal(npw*ndat,factor,reim(1),1)
+ call AB_DCOPY(npw*ndat, cg(1), 2, reim(1), 1)
+ if (factor /= one) call AB_DSCAL(npw*ndat,factor,reim(1),1)
 
- call dcopy(npw*ndat, cg(2), 2, reim(npw*ndat+1), 1)
- if (factor /= one) call dscal(npw*ndat,factor,reim(npw*ndat+1),1)
+ call AB_DCOPY(npw*ndat, cg(2), 2, reim(npw*ndat+1), 1)
+ if (factor /= one) call AB_DSCAL(npw*ndat,factor,reim(npw*ndat+1),1)
 
 end subroutine cg_to_reim
 !!***
@@ -500,10 +500,10 @@ subroutine cg_from_reim(npw,ndat,reim,factor,cg)
 
  ! UnPack real and imaginary part and multiply by scale factor if /= one.
  ! Could use blocking but oh well
- call dcopy(npw*ndat, reim(1), 1, cg(1), 2)
- call dcopy(npw*ndat, reim(npw*ndat+1), 1, cg(2), 2)
+ call AB_DCOPY(npw*ndat, reim(1), 1, cg(1), 2)
+ call AB_DCOPY(npw*ndat, reim(npw*ndat+1), 1, cg(2), 2)
 
- if (factor /= one) call dscal(2*npw*ndat,factor, cg(1), 1)
+ if (factor /= one) call AB_DSCAL(2*npw*ndat,factor, cg(1), 1)
 
 end subroutine cg_from_reim
 !!***
@@ -551,7 +551,7 @@ subroutine cg_zcopy(n, x, y)
 
 ! *************************************************************************
 
- call zcopy(n,x,1,y,1)
+ call AB_ZCOPY(n,x,1,y,1)
 
 end subroutine cg_zcopy
 !!***
@@ -567,7 +567,7 @@ end subroutine cg_zcopy
 !!
 !! INPUTS
 !!  n = Specifies the number of elements in vector x.
-!!  a(2)= The scalar a. If a(2) is zero, x = a*x is computed via zdscal
+!!  a(2)= The scalar a. If a(2) is zero, x = a*x is computed via AB_ZDSCAL
 !!
 !! OUTPUT
 !!  x = Updated vector.
@@ -600,9 +600,9 @@ subroutine cg_zscal(n, a, x)
 ! *************************************************************************
 
  if (a(2) == zero) then
-   call zdscal(n, a, x, 1)
+   call AB_ZDSCAL(n, a, x, 1)
  else
-   call zscal(n, a, x, 1)
+   call AB_ZSCAL(n, a, x, 1)
  end if
 
 end subroutine cg_zscal
@@ -616,7 +616,7 @@ end subroutine cg_zscal
 !!
 !! FUNCTION
 !!   returns the euclidean norm of a vector via the function name, so that
-!!   DZNRM2 := sqrt( x**H*x )
+!!   AB_DZNRM2 := sqrt( x**H*x )
 !!
 !! INPUTS
 !!  n = Specifies the number of elements in vector x.
@@ -645,11 +645,11 @@ function cg_dznrm2(n, x) result(res)
  real(dp) :: res
 !arrays
  real(dp),intent(in) :: x(2*n)
- real(dp),external :: dznrm2
+ real(dp),external :: AB_DZNRM2
 
 ! *************************************************************************
 
- res = dznrm2(n, x, 1)
+ res = AB_DZNRM2(n, x, 1)
 
 end function cg_dznrm2
 !!***
@@ -697,7 +697,7 @@ function cg_zdotc(n,x,y) result(res)
  integer :: ii
 #endif
  complex(dpc) :: cres
- complex(dpc),external :: zdotc
+ complex(dpc),external :: AB_ZDOTC
 
 ! *************************************************************************
 
@@ -711,7 +711,7 @@ function cg_zdotc(n,x,y) result(res)
  end do
 
 #else
- cres = zdotc(n, x, 1, y, 1)
+ cres = AB_ZDOTC(n, x, 1, y, 1)
  res(1) = REAL(cres)
  res(2) = AIMAG(cres)
 #endif
@@ -759,11 +759,11 @@ function cg_real_zdotc(n,x,y) result(res)
  real(dp) :: res
 
 !Local variables-------------------------------
- real(dp),external :: ddot
+ real(dp),external :: AB_DDOT
 
 ! *************************************************************************
 
- res = ddot(2*n,x,1,y,1)
+ res = AB_DDOT(2*n,x,1,y,1)
 
 end function cg_real_zdotc
 !!***
@@ -813,7 +813,7 @@ function cg_zdotu(n, x, y) result(res)
  integer :: ii
 #endif
  complex(dpc) :: cres
- complex(dpc),external :: zdotu
+ complex(dpc),external :: AB_ZDOTU
 
 ! *************************************************************************
 
@@ -826,7 +826,7 @@ function cg_zdotu(n, x, y) result(res)
    res(2) = res(2) + x(1,ii)*y(2,ii) + x(2,ii)*y(1,ii)
  end do
 #else
- cres = zdotu(n, x, 1, y, 1)
+ cres = AB_ZDOTU(n, x, 1, y, 1)
  res(1) = REAL(cres)
  res(2) = AIMAG(cres)
 #endif
@@ -883,9 +883,9 @@ subroutine cg_zaxpy(n,alpha,x,y)
 ! *************************************************************************
 
  if (alpha(2) == zero) then
-   call daxpy(2*n,alpha(1),x,1,y,1)
+   call AB_DAXPY(2*n,alpha(1),x,1,y,1)
  else
-   call zaxpy(n,alpha,x,1,y,1)
+   call AB_ZAXPY(n,alpha,x,1,y,1)
  end if
 
 end subroutine cg_zaxpy
@@ -941,8 +941,8 @@ subroutine cg_zaxpby(n,a,x,b,y)
 #ifdef HAVE_LINALG_AXPBY
  call zaxpby(n, a, x, 1, b, y, 1)
 #else
- call zscal(n, b, y, 1)
- call zaxpy(n, a, x, 1, y,1)
+ call AB_ZSCAL(n, b, y, 1)
+ call AB_ZAXPY(n, a, x, 1, y,1)
 #endif
 
 end subroutine cg_zaxpby
@@ -1020,10 +1020,10 @@ subroutine cg_zgemv(trans,nrows,ncols,cgmat,vec,matvec,alpha,beta)
  my_alpha = cg_cone;  if (PRESENT(alpha)) my_alpha = alpha
  my_beta  = cg_czero; if (PRESENT(beta))  my_beta  = beta
 
- call ZGEMM(trans,"N",mm,nn,kk,my_alpha,cgmat,lda,vec,ldb,my_beta,matvec,ldc)
- ! ZGEMM(TRANSA,TRANSB,M,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+ call AB_ZGEMM(trans,"N",mm,nn,kk,my_alpha,cgmat,lda,vec,ldb,my_beta,matvec,ldc)
+ ! AB_ZGEMM(TRANSA,TRANSB,M,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
 
- !call ZGEMV(trans,mm,nn,my_alpha,cgmat,lda,vec,1,my_beta,matvec,1)
+ !call AB_ZGEMV(trans,mm,nn,my_alpha,cgmat,lda,vec,1,my_beta,matvec,1)
 
 end subroutine cg_zgemv
 !!***
@@ -1104,7 +1104,7 @@ subroutine cg_zgemm(transa,transb,npws,ncola,ncolb,cg_a,cg_b,cg_c,alpha,beta)
  my_alpha = cg_cone;  if (PRESENT(alpha)) my_alpha = alpha
  my_beta  = cg_czero; if (PRESENT(beta))  my_beta  = beta
 
- call ZGEMM(transa,transb,mm,nn,kk,my_alpha,cg_a,lda,cg_b,ldb,my_beta,cg_c,ldc)
+ call AB_ZGEMM(transa,transb,mm,nn,kk,my_alpha,cg_a,lda,cg_b,ldb,my_beta,cg_c,ldc)
 
 end subroutine cg_zgemm
 !!***
@@ -1730,7 +1730,7 @@ subroutine dotprod_vn(cplex,dens,dotr,doti,nfft,nfftot,nspden,option,pot,ucvol, 
      do ifft=1,cplex*nfft
        dotr=dotr + pot(ifft,1)*dens(ifft,1)
      end do
-!    dotr = ddot(cplex*nfft,pot,1,dens,1)
+!    dotr = AB_DDOT(cplex*nfft,pot,1,dens,1)
 
    else  ! option==2 and cplex==2 : one builds the imaginary part, from complex den/pot
 
@@ -2125,7 +2125,7 @@ subroutine  cg_getspin(cgcband, npw_k, spin, cgcmat)
 
 ! cgcmat_ = cgcband * cgcband^T*  i.e. 2x2 matrix of spin components (dpcomplex)
  cgcmat_ = czero
- call zgemm('n','c',2,2,npw_k,cone,cgcband,2,cgcband,2,czero,cgcmat_,2)
+ call AB_ZGEMM('n','c',2,2,npw_k,cone,cgcband,2,cgcband,2,czero,cgcmat_,2)
 
 ! spin(*)  = sum_{si sj pi} cgcband(si,pi)^* pauli_mat*(si,sj) cgcband(sj,pi)
  cspin(0) = cgcmat_(1,1)*pauli_mat(1,1,0) + cgcmat_(2,1)*pauli_mat(2,1,0) &
@@ -2730,7 +2730,7 @@ subroutine cgnc_cholesky(npws,nband,cgblock,istwfk,me_g0,comm_pw,use_gemm)
  if (my_usegemm) then
    call ABI_ZGEMM("Conjugate","Normal",nband,nband,npws,cone,cgblock,npws,cgblock,npws,czero,cf_ovlp,nband)
  else
-   call ZHERK("U","C",nband,npws,one,cgblock,npws,zero,cf_ovlp,nband)
+   call AB_ZHERK("U","C",nband,npws,one,cgblock,npws,zero,cf_ovlp,nband)
  end if
 
  if (istwfk==1) then
@@ -2741,10 +2741,10 @@ subroutine cgnc_cholesky(npws,nband,cgblock,istwfk,me_g0,comm_pw,use_gemm)
    end if
    !
    ! 2) Cholesky factorization: O = U^H U with U upper triangle matrix.
-   call ZPOTRF('U',nband,cf_ovlp,nband,ierr)
+   call AB_ZPOTRF('U',nband,cf_ovlp,nband,ierr)
 
    if (ierr/=0)  then
-     write(msg,'(a,i0)')' ZPOTRF returned info = ',ierr
+     write(msg,'(a,i0)')' AB_ZPOTRF returned info = ',ierr
      MSG_ERROR(msg)
    end if
 
@@ -2755,7 +2755,7 @@ subroutine cgnc_cholesky(npws,nband,cgblock,istwfk,me_g0,comm_pw,use_gemm)
 
    if (istwfk==2 .and. me_g0==1) then
      ! Extract the real part at G=0 and subtract its contribution to the overlap.
-     call dcopy(nband,cgblock,2*npws,rcg0,1)
+     call AB_DCOPY(nband,cgblock,2*npws,rcg0,1)
      do b2=1,nband
        do b1=1,b2
          rovlp(b1,b2) = rovlp(b1,b2) - rcg0(b1)*rcg0(b2)
@@ -2769,10 +2769,10 @@ subroutine cgnc_cholesky(npws,nband,cgblock,istwfk,me_g0,comm_pw,use_gemm)
    end if
    !
    ! 2) Cholesky factorization: O = U^H U with U upper triangle matrix.
-   call DPOTRF('U',nband,rovlp,nband,ierr)
+   call AB_DPOTRF('U',nband,rovlp,nband,ierr)
 
    if (ierr/=0)  then
-     write(msg,'(a,i0)')' DPOTRF returned info = ',ierr
+     write(msg,'(a,i0)')' AB_DPOTRF returned info = ',ierr
      MSG_ERROR(msg)
    end if
 
@@ -2781,7 +2781,7 @@ subroutine cgnc_cholesky(npws,nband,cgblock,istwfk,me_g0,comm_pw,use_gemm)
  end if
  !
  ! 3) Solve X U = cgblock. On exit cgblock is orthonormalized.
- call ZTRSM('Right','Upper','Normal','Normal',npws,nband,cone,cf_ovlp,nband,cgblock,npws)
+ call AB_ZTRSM('Right','Upper','Normal','Normal',npws,nband,cone,cf_ovlp,nband,cgblock,npws)
 
 #ifdef DEBUG_MODE
  if (istwfk==2) then
@@ -2875,10 +2875,10 @@ subroutine cgpaw_cholesky(npws,nband,cgblock,gsc,istwfk,me_g0,comm_pw)
    end if
    !
    ! 2) Cholesky factorization: O = U^H U with U upper triangle matrix.
-   call ZPOTRF('U',nband,cf_ovlp,nband,ierr)
+   call AB_ZPOTRF('U',nband,cf_ovlp,nband,ierr)
 
    if (ierr/=0)  then
-     write(msg,'(a,i0)')' ZPOTRF returned info= ',ierr
+     write(msg,'(a,i0)')' AB_ZPOTRF returned info= ',ierr
      MSG_ERROR(msg)
    end if
 
@@ -2889,8 +2889,8 @@ subroutine cgpaw_cholesky(npws,nband,cgblock,gsc,istwfk,me_g0,comm_pw)
 
    if (istwfk==2 .and. me_g0==1) then
      ! Extract the real part at G=0 and subtract its contribution to the overlap.
-     call dcopy(nband,cgblock,2*npws,rcg0,1)
-     call dcopy(nband,gsc,2*npws,rg0sc,1)
+     call AB_DCOPY(nband,cgblock,2*npws,rcg0,1)
+     call AB_DCOPY(nband,gsc,2*npws,rg0sc,1)
      do b2=1,nband
        do b1=1,b2
         rovlp(b1,b2) = rovlp(b1,b2) - rcg0(b1)*rg0sc(b2)
@@ -2904,10 +2904,10 @@ subroutine cgpaw_cholesky(npws,nband,cgblock,gsc,istwfk,me_g0,comm_pw)
    end if
   !
    ! 2) Cholesky factorization: O = U^H U with U upper triangle matrix.
-   call DPOTRF('U',nband,rovlp,nband,ierr)
+   call AB_DPOTRF('U',nband,rovlp,nband,ierr)
 
    if (ierr/=0)  then
-     write(msg,'(a,i0)')' DPOTRF returned info= ',ierr
+     write(msg,'(a,i0)')' AB_DPOTRF returned info= ',ierr
      MSG_ERROR(msg)
    end if
 
@@ -2916,10 +2916,10 @@ subroutine cgpaw_cholesky(npws,nband,cgblock,gsc,istwfk,me_g0,comm_pw)
  end if
  !
  ! 3) Solve X U = cgblock.
- call ZTRSM('Right','Upper','Normal','Normal',npws,nband,cone,cf_ovlp,nband,cgblock,npws)
+ call AB_ZTRSM('Right','Upper','Normal','Normal',npws,nband,cone,cf_ovlp,nband,cgblock,npws)
 
  ! 4) Solve Y U = gsc. On exit <cgblock|gsc> = 1
- call ZTRSM('Right','Upper','Normal','Normal',npws,nband,cone,cf_ovlp,nband,gsc,npws)
+ call AB_ZTRSM('Right','Upper','Normal','Normal',npws,nband,cone,cf_ovlp,nband,gsc,npws)
 
  ABI_FREE(cf_ovlp)
 
@@ -3090,8 +3090,8 @@ subroutine cgnc_gsortho(npws,nband1,icg1,nband2,iocg2,istwfk,normalize,me_g0,com
    !
    if (istwfk==2 .and. me_g0==1) then
      ! Extract the real part at G=0 and subtract its contribution.
-     call dcopy(nband1,icg1, 2*npws,r_icg1, 1)
-     call dcopy(nband2,iocg2,2*npws,r_iocg2,1)
+     call AB_DCOPY(nband1,icg1, 2*npws,r_icg1, 1)
+     call AB_DCOPY(nband2,iocg2,2*npws,r_iocg2,1)
      do b2=1,nband2
        do b1=1,nband1
          proj(1,b1,b2) = proj(1,b1,b2) - r_icg1(b1) * r_iocg2(b2)
@@ -3363,8 +3363,8 @@ subroutine cgpaw_gsortho(npws,nband1,icg1,igsc1,nband2,iocg2,iogsc2,istwfk,norma
    !
    if (istwfk==2 .and. me_g0==1) then
      ! Extract the real part at G=0 and subtract its contribution.
-     call dcopy(nband1,igsc1,2*npws,r_icg1, 1)
-     call dcopy(nband2,iocg2,2*npws,r_iocg2,1)
+     call AB_DCOPY(nband1,igsc1,2*npws,r_icg1, 1)
+     call AB_DCOPY(nband2,iocg2,2*npws,r_iocg2,1)
      do b2=1,nband2
        do b1=1,nband1
          proj(1,b1,b2) = proj(1,b1,b2) - r_icg1(b1) * r_iocg2(b2)
@@ -3515,7 +3515,7 @@ end subroutine cgpaw_gramschmidt
 !!     in normal use, projbd applies P_c projector
 !!     if cg and scg are inverted, projbd applies P_c+ projector
 !!
-!!  4) cg_zgemv wraps ZGEMM whose implementation is more efficient, especially in the threaded case.
+!!  4) cg_zgemv wraps AB_ZGEMM whose implementation is more efficient, especially in the threaded case.
 !!
 !! PARENTS
 !!      cgwf,dfpt_cgwf,dfpt_nstpaw,getdc1,lapackprof
@@ -4918,7 +4918,7 @@ subroutine subdiago(cg,eig_k,evec,gsc,icg,igsc,istwf_k,&
 
 !=====================================================
 !Carry out rotation of bands C(G,n) according to evecs
-! ZGEMM if istwfk==1, DGEMM if istwfk==2
+! AB_ZGEMM if istwfk==1, AB_DGEMM if istwfk==2
 !=====================================================
  if (istwf_k==2) then
 
@@ -5160,7 +5160,7 @@ subroutine pw_orthon(icg,igsc,istwf_k,mcg,mgsc,nelem,nvec,ortalgo,ovl_vecnm,useo
 !  =========================
 !  First (new new) algorithm
 !  =========================
-!  NEW VERSION: avoid copies, use ZHERK for NC
+!  NEW VERSION: avoid copies, use AB_ZHERK for NC
    cg_idx = cgindex(1)
    if (useoverlap==1) then
      gsc_idx = gscindex(1)
@@ -5171,7 +5171,7 @@ subroutine pw_orthon(icg,igsc,istwf_k,mcg,mgsc,nelem,nvec,ortalgo,ovl_vecnm,useo
 
  else if(ortalgo==1) then
 !  =======================
-!  Second (new) algorithm
+!  second (new) algorithm
 !  =======================
 !  This first algorithm seems to be more efficient especially in the parallel band-FFT mode.
 

@@ -213,7 +213,7 @@ end function wfindex
 !!   lobpcgwf
 !!
 !! CHILDREN
-!!   dcopy, zcopy
+!!   AB_DCOPY, AB_ZCOPY
 !!
 !! SOURCE
 !!
@@ -291,20 +291,20 @@ subroutine wfcopy(direction,size,tsrc,incsrc,tdest,incdest,blockiter,iblock,indt
          tdest(1 ,iblocksize)=tsrc(1,wfindex(iband,indtype))
          g1 = wfindex(iband,  indtype)+1
          g2 = wfindex(iband+1,indtype)-1
-         call dcopy(rvectsize-1,tsrc(1,g1:g2),1,tdest(2:rvectsize,iblocksize),1)
+         call AB_DCOPY(rvectsize-1,tsrc(1,g1:g2),1,tdest(2:rvectsize,iblocksize),1)
          tdest(2:rvectsize,iblocksize) = factor * tdest(2:rvectsize,iblocksize)
 
-         call dcopy(rvectsize-1,tsrc(2,g1:g2),1,tdest(rvectsize+1:vectsize,iblocksize),1)
+         call AB_DCOPY(rvectsize-1,tsrc(2,g1:g2),1,tdest(rvectsize+1:vectsize,iblocksize),1)
          tdest(rvectsize+1:vectsize,iblocksize) = factor * tdest(rvectsize+1:vectsize,iblocksize)
          ! MG FIXME: Here gfortran4.9 allocates temporary arrays due to factor.
          !call cg_to_reim(rvectsize-1,ndat1,tsrc(1:,g1:),factor,tdest(2:,iblocksize))
        else
          g1 = wfindex(iband,  indtype)
          g2 = wfindex(iband+1,indtype)-1
-         call dcopy(rvectsize,tsrc(1,g1:g2),1,tdest(1:rvectsize,iblocksize),1)
+         call AB_DCOPY(rvectsize,tsrc(1,g1:g2),1,tdest(1:rvectsize,iblocksize),1)
          tdest(1:rvectsize,iblocksize) = factor * tdest(1:rvectsize,iblocksize)
 
-         call dcopy(rvectsize,tsrc(2,g1:g2),1,tdest(rvectsize+1:vectsize,iblocksize),1)
+         call AB_DCOPY(rvectsize,tsrc(2,g1:g2),1,tdest(rvectsize+1:vectsize,iblocksize),1)
          tdest(rvectsize+1:vectsize,iblocksize) = factor * tdest(rvectsize+1:vectsize,iblocksize)
          !call cg_to_reim(rvectsize,ndat1,tsrc(1:,g1:),factor,tdest(1:,iblocksize))
        end if
@@ -314,18 +314,18 @@ subroutine wfcopy(direction,size,tsrc,incsrc,tdest,incdest,blockiter,iblock,indt
        if (bblock) then
          g1 = vectsize*((iblock-1)*blocksize)+lig+1
          g2 = vectsize*(iblock*blocksize)+lig
-         call zcopy(size,tsrc(:,g1:g2),incsrc,tdest(:,1:blocksize),incdest)
+         call AB_ZCOPY(size,tsrc(:,g1:g2),incsrc,tdest(:,1:blocksize),incdest)
        else
          g1 = lig+1
          g2 = vectsize*((iblock-1)*blocksize)+lig
-         call zcopy(size,tsrc(:,g1:g2),incsrc,tdest(:,1:bblocksize),incdest)
+         call AB_ZCOPY(size,tsrc(:,g1:g2),incsrc,tdest(:,1:bblocksize),incdest)
        end if
      else if (indtype == 'S') then
        g1 = lig+1
        g2 = vectsize*((iblock-1)*blocksize)+lig
-       call zcopy(size,tsrc(:,g1:g2),incsrc,tdest(:,1:bblocksize),incdest)
+       call AB_ZCOPY(size,tsrc(:,g1:g2),incsrc,tdest(:,1:bblocksize),incdest)
      else
-       call zcopy(size,tsrc,incsrc,tdest,incdest)
+       call AB_ZCOPY(size,tsrc,incsrc,tdest,incdest)
      endif
    end if
 
@@ -344,18 +344,18 @@ subroutine wfcopy(direction,size,tsrc,incsrc,tdest,incdest,blockiter,iblock,indt
 
          g1 = wfindex(iband,indtype)+1
          g2 = wfindex(iband+1,indtype)-1
-         call dcopy(rvectsize-1,tsrc(2:rvectsize,iblocksize),1,tdest(1,g1:g2),1)
+         call AB_DCOPY(rvectsize-1,tsrc(2:rvectsize,iblocksize),1,tdest(1,g1:g2),1)
          tdest(1,g1:g2) = factor * tdest(1,g1:g2)
 
-         call dcopy(rvectsize-1,tsrc(rvectsize+1:vectsize,iblocksize),1,tdest(2,g1:g2),1)
+         call AB_DCOPY(rvectsize-1,tsrc(rvectsize+1:vectsize,iblocksize),1,tdest(2,g1:g2),1)
          tdest(2,g1:g2) = factor * tdest(2,g1:g2)
          !call cg_from_reim(rvectsize-1,ndat1,tsrc(2:,iblocksize),factor,tdest(1,g1:))
        else
          g1 = wfindex(iband,indtype)
          g2 = wfindex(iband+1,indtype)-1
-         call dcopy(rvectsize,tsrc(1:rvectsize,iblocksize),1,tdest(1,g1:g2),1)
+         call AB_DCOPY(rvectsize,tsrc(1:rvectsize,iblocksize),1,tdest(1,g1:g2),1)
          tdest(1,g1:g2) = factor * tdest(1,g1:g2)
-         call dcopy(rvectsize,tsrc(rvectsize+1:vectsize,iblocksize),1,tdest(2,g1:g2),1)
+         call AB_DCOPY(rvectsize,tsrc(rvectsize+1:vectsize,iblocksize),1,tdest(2,g1:g2),1)
          tdest(2,g1:g2) = factor * tdest(2,g1:g2)
          !call cg_from_reim(rvectsize,ndat1,tsrc(1:,iblocksize),factor,tdest(1:,g1))
        end if
@@ -364,13 +364,13 @@ subroutine wfcopy(direction,size,tsrc,incsrc,tdest,incdest,blockiter,iblock,indt
      if (indtype == 'C') then
        g1 = vectsize*((iblock-1)*blocksize)+lig+1
        g2 = vectsize*(iblock*blocksize)+lig
-       call zcopy(size,tsrc,1,tdest(:,g1:g2),1)
+       call AB_ZCOPY(size,tsrc,1,tdest(:,g1:g2),1)
      else if ( indtype == 'S' ) then
        g1 = vectsize*((iblock-1)*blocksize)+lig+1
        g2 = vectsize*(iblock*blocksize)+lig
-       call zcopy(size,tsrc,1,tdest(:,g1:g2),1)
+       call AB_ZCOPY(size,tsrc,1,tdest(:,g1:g2),1)
      else
-       call zcopy(size,tsrc,1,tdest,1)
+       call AB_ZCOPY(size,tsrc,1,tdest,1)
      end if
    end if
  else 

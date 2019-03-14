@@ -172,8 +172,8 @@
       DOUBLE PRECISION   ANORM, BNORM, DNORM, EPS, UNFL, XNORM, YNORM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DASUM, DLAMCH, DLANGE
-      EXTERNAL           DASUM, DLAMCH, DLANGE
+      DOUBLE PRECISION   DASUM, AB_DLAMCH, DLANGE
+      EXTERNAL           DASUM, AB_DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
 *
@@ -184,8 +184,8 @@
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = DLAMCH( 'Epsilon' )
-      UNFL = DLAMCH( 'Safe minimum' )
+      EPS = AB_DLAMCH( 'Epsilon' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
       ANORM = MAX( DLANGE( '1', N, M, A, LDA, RWORK ), UNFL )
       BNORM = MAX( DLANGE( '1', N, P, B, LDB, RWORK ), UNFL )
 *

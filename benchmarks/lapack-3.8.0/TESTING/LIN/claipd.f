@@ -102,15 +102,15 @@
       REAL               BIGNUM
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CMPLX, REAL
 *     ..
 *     .. Executable Statements ..
 *
-      BIGNUM = SLAMCH( 'Epsilon' ) / SLAMCH( 'Safe minimum' )
+      BIGNUM = AB_SLAMCH( 'Epsilon' ) / AB_SLAMCH( 'Safe minimum' )
       IA = 1
       IXA = INDA
       DO 10 I = 1, N

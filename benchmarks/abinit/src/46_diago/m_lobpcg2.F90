@@ -353,7 +353,7 @@ module m_lobpcg2
     type(xgBlock_t):: RR_eig ! Will be eigenvaluesXN
     double precision :: maxResidu, minResidu, average, deviation
     double precision :: prevMaxResidu
-    double precision :: dlamch
+    double precision :: AB_DLAMCH
     integer :: eigResiduMax, eigResiduMin
     integer :: ierr = 0
     integer :: nrestart
@@ -520,7 +520,7 @@ module m_lobpcg2
           !RR_eig = eigenvalues3N%self
         end if
         !RR_eig = eigenvalues3N%self
-        call lobpcg_rayleighRitz(lobpcg,RR_var,RR_eig,ierr,2*dlamch('E'))
+        call lobpcg_rayleighRitz(lobpcg,RR_var,RR_eig,ierr,2*AB_DLAMCH('E'))
         if ( ierr /= 0 ) then
           MSG_ERROR_NOSTOP("I'm so so sorry I could not make it, I did my best but I failed. Sorry. I'm gonna suicide",ierr)
           exit
@@ -569,7 +569,7 @@ module m_lobpcg2
       lobpcg%BX = lobpcg%AllBX0%self
       lobpcg%blockdim = blockdim*nblock
       call lobpcg_Borthonormalize(lobpcg,VAR_X,.true.,ierr) ! Do rotate AX
-      call lobpcg_rayleighRitz(lobpcg,VAR_X,eigen,ierr,2*dlamch('E'))
+      call lobpcg_rayleighRitz(lobpcg,VAR_X,eigen,ierr,2*AB_DLAMCH('E'))
     end if
 
     call timab(tim_run,2,tsec)

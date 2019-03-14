@@ -69,7 +69,7 @@ MODULE m_io_kss
 
  private
 
- public :: write_kss_header    ! Writes the header of the KSS file.
+ public :: write_kss_header    ! Writes the AB_HEADER of the KSS file.
  !private :: write_vkb         ! Writes the KB form factors and derivates on file for a single k-point.
  public :: write_kss_wfgk      ! Write the Gamma-centered wavefunctions and energies on the KSS file for a single k-point.
  public :: k2gamma_centered    ! Convert a set of wavefunctions from the k-centered to the gamma-centered basis set.
@@ -85,7 +85,7 @@ CONTAINS  !===========================================================
 !!  write_kss_header
 !!
 !! FUNCTION
-!!  Write the header of the KSS file either using plain Fortran-IO or netcdf with ETSF-IO format.
+!!  Write the AB_HEADER of the KSS file either using plain Fortran-IO or netcdf with ETSF-IO format.
 !!  Returns the unit number to be used for further writing.
 !!  It should be executed by master node only.
 !!
@@ -96,11 +96,11 @@ CONTAINS  !===========================================================
 !!  shlim(ishm)=The cumulative number of G"s in each shell.
 !!  nbandksseff=Number of bands to be written.
 !!  mband=The maximum number of bands treated by abinit.
-!!  nsym2=Number of symmetry operations to be written on the header.
+!!  nsym2=Number of symmetry operations to be written on the AB_HEADER.
 !!  symrel2(3,3,nsym2)=The symmetry operations in real space to be written.
 !!  tnons2(3,nsym2)=The fractional translations associateed to symrel2.
 !!  gbig(3,kss_npw)=The set of G-vectors for the KSS wavefunctions (Gamma-centered)
-!!  Hdr<hdr_type>=The abinit header.
+!!  Hdr<hdr_type>=The abinit AB_HEADER.
 !!  Dtset <dataset_type>=all input variables for this dataset
 !!  Psps<pseudopotential_type>=Structure gathering info on the pseudopotentials.
 !!  iomode=Input variables specifying the fileformat. (0-->Fortran,3-->netcdf with ETSF-IO format).
@@ -110,7 +110,7 @@ CONTAINS  !===========================================================
 !!  kss_unt=The unit number of the opened file.
 !!
 !! SIDE EFFECTS
-!!  The KSS Header is written on file.
+!!  The KSS AB_HEADER is written on file.
 !!
 !! PARENTS
 !!      outkss
@@ -189,7 +189,7 @@ subroutine write_kss_header(filekss,kss_npw,ishm,nbandksseff,mband,nsym2,symrel2
  write(msg,'(a,i2,a)')' number of symmetry operations ',nsym2,' (without inversion)'
  call wrtout(std_out,msg,'COLL')
 
-!Copy the header so that we can change some basic dimensions using the KSS values:
+!Copy the AB_HEADER so that we can change some basic dimensions using the KSS values:
 !(bantot, npwarr, nband) and the occupation factors
 
 !Note that nsym and symrel might have been changed this has to be fixed
@@ -204,7 +204,7 @@ subroutine write_kss_header(filekss,kss_npw,ishm,nbandksseff,mband,nsym2,symrel2
  my_Hdr%istwfk = 1  ! KSS file does not support istwfk/=1 even though the GS run
                     ! can take advantage of time-reversal symmetry.
 
-!Copy the occ number in the new header with correct dimensions
+!Copy the occ number in the new AB_HEADER with correct dimensions
 !fill with zero the rest since mband can be < nbandksseff
  !write(std_out,*)associated(my_Hdr%occ)
  ABI_DEALLOCATE(my_Hdr%occ)
@@ -275,7 +275,7 @@ subroutine write_kss_header(filekss,kss_npw,ishm,nbandksseff,mband,nsym2,symrel2
    ! Create file.
    NCF_CHECK(nctk_open_create(kss_unt, nctk_ncify(filekss), xmpi_comm_self))
 
-   ! Add additional info from abinit header.
+   ! Add additional info from abinit AB_HEADER.
    NCF_CHECK(hdr_ncwrite(my_hdr, kss_unt, fform, nc_define=.True.))
 
    ! Add info on crystalline structure
@@ -1614,7 +1614,7 @@ end subroutine kss_calc_vkb
 !!  - Re-ordering G-vectors according to stars (sets of Gs related by symmetry operations).
 !!    A set of g for all k-points is created.
 !!  - Creating and opening the output "_KSS'" file
-!!  - Printing out output file header information...
+!!  - Printing out output file AB_HEADER information...
 !! ... and, for each k-point:
 !!    According to 'kssform', either
 !!      - Re-computing <G|H|G_prim> matrix elements for all (G, G_prim).
@@ -1634,7 +1634,7 @@ end subroutine kss_calc_vkb
 !!  eigen(mband*nkpt*nsppol)=array for holding eigenvalues (hartree)
 !!  gmet(3,3)=reciprocal space metric tensor in bohr**-2.
 !!  gprimd(3,3)=dimensional reciprocal space primitive translations
-!!  Hdr <type(hdr_type)>=the header of wf, den and pot files
+!!  Hdr <type(hdr_type)>=the AB_HEADER of wf, den and pot files
 !!  kssform=govern the Kohn-Sham Structure file format
 !!  mband=maximum number of bands
 !!  mcg=size of wave-functions array (cg) =mpw*nspinor*mband*mkmem*nsppol
@@ -2137,7 +2137,7 @@ subroutine outkss(crystal,Dtfil,Dtset,ecut,gmet,gprimd,Hdr,&
  end if
 !
 !==========================================================================
-!=== Open KSS file for output, write header with dimensions and kb sign ===
+!=== Open KSS file for output, write AB_HEADER with dimensions and kb sign ===
 !==========================================================================
 !
 !* Output required disk space.
@@ -2378,7 +2378,7 @@ subroutine outkss(crystal,Dtfil,Dtset,ecut,gmet,gprimd,Hdr,&
              spinor_shift1=(ispinor-1)*npwkss
              ug1 => wfg(:,1+spinor_shift1:npwkss+spinor_shift1,ib)
 
-             !ovlp(1) =ddot(npwkss,ug1(1,:),1,ug1(1,:),1) + ddot(npwkss,ug1(2,:),1,ug1(2,:),1)
+             !ovlp(1) =AB_DDOT(npwkss,ug1(1,:),1,ug1(1,:),1) + AB_DDOT(npwkss,ug1(2,:),1,ug1(2,:),1)
              ovlp(1) = cg_dznrm2(npwkss,ug1)
              ovlp(1) = ovlp(1)**2
              ovlp(2) = zero
@@ -2404,8 +2404,8 @@ subroutine outkss(crystal,Dtfil,Dtset,ecut,gmet,gprimd,Hdr,&
                ug1 => wfg(:,1+spinor_shift1:npwkss+spinor_shift1,ib )
                ug2 => wfg(:,1+spinor_shift1:npwkss+spinor_shift1,ibp)
 
-               !ovlp(1)=ddot(npwkss,ug1(1,:),1,ug2(1,:),1) + ddot(npwkss,ug1(2,:),1,ug2(2,:),1)
-               !ovlp(2)=ddot(npwkss,ug1(1,:),1,ug2(2,:),1) - ddot(npwkss,ug1(2,:),1,ug2(1,:),1)
+               !ovlp(1)=AB_DDOT(npwkss,ug1(1,:),1,ug2(1,:),1) + AB_DDOT(npwkss,ug1(2,:),1,ug2(2,:),1)
+               !ovlp(2)=AB_DDOT(npwkss,ug1(1,:),1,ug2(2,:),1) - AB_DDOT(npwkss,ug1(2,:),1,ug2(1,:),1)
                ovlp = cg_zdotc(npwkss,ug1,ug2)
 
                if (Psps%usepaw==1) ovlp= ovlp &
@@ -2726,7 +2726,7 @@ subroutine dsksta(ishm,usepaw,nbandkss,mpsang,natom,ntypat,npwkss,nkpt,nspinor,n
 
 ! *********************************************************************
 
-!The Abinit header is not considered.
+!The Abinit AB_HEADER is not considered.
  bsize_hdr= 80*2 + & !title
 &5*4 + & !nsym2,nbandksseff,npwkss,ishm,mpsang
 &nsym2*9*4 + & !symrel2
@@ -2758,7 +2758,7 @@ subroutine dsksta(ishm,usepaw,nbandkss,mpsang,natom,ntypat,npwkss,nkpt,nspinor,n
  write(msg,'(2a,f8.2,4a,4(a,f8.2,2a))')ch10,&
 & ' Total amount of disk space required by _KSS file = ',bsize_tot*b2Mb,' Mb.',ch10,&
 & '  Subdivided into : ',ch10,&
-& '  Header             = ',bsize_hdr *b2Mb,' Mb.',ch10,&
+& '  AB_HEADER             = ',bsize_hdr *b2Mb,' Mb.',ch10,&
 & '  KB elements        = ',bsize_kb  *b2Mb,' Mb.',ch10,&
 & '  Wavefunctions (PW) = ',bsize_wf  *b2Mb,' Mb.',ch10,&
 & '  PAW projectors     = ',bsize_cprj*b2Mb,' Mb.',ch10

@@ -195,8 +195,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME
-      REAL               AB_SDOT, SLAMCH, AB_SLANGE
-      EXTERNAL           AB_LSAME, AB_SDOT, SLAMCH, AB_SLANGE
+      REAL               AB_SDOT, AB_SLAMCH, AB_SLANGE
+      EXTERNAL           AB_LSAME, AB_SDOT, AB_SLAMCH, AB_SLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_SLABAD, AB_SLALN2, AB_SLASY2, AB_SSCAL, AB_X
@@ -245,8 +245,8 @@
 *
 *     Set constants to control overflow
 *
-      EPS = SLAMCH( 'P' )
-      SMLNUM = SLAMCH( 'S' )
+      EPS = AB_SLAMCH( 'P' )
+      SMLNUM = AB_SLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
       CALL AB_SLABAD( SMLNUM, BIGNUM )
       SMLNUM = SMLNUM*REAL( M*N ) / EPS

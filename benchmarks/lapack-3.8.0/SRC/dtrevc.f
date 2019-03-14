@@ -254,8 +254,8 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_IDAMAX
-      DOUBLE PRECISION   AB_DDOT, DLAMCH
-      EXTERNAL           AB_LSAME, AB_IDAMAX, AB_DDOT, DLAMCH
+      DOUBLE PRECISION   AB_DDOT, AB_DLAMCH
+      EXTERNAL           AB_LSAME, AB_IDAMAX, AB_DDOT, AB_DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_DLABAD, AB_DAXPY, AB_DCOPY, AB_DGEMV, AB_DLA
@@ -344,10 +344,10 @@
 *
 *     Set the constants to control overflow.
 *
-      UNFL = DLAMCH( 'Safe minimum' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
       CALL AB_DLABAD( UNFL, OVFL )
-      ULP = DLAMCH( 'Precision' )
+      ULP = AB_DLAMCH( 'Precision' )
       SMLNUM = UNFL*( N / ULP )
       BIGNUM = ( ONE-ULP ) / SMLNUM
 *

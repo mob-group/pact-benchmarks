@@ -68,8 +68,8 @@ contains
 !!  ndtset_alloc=number of datasets, corrected for allocation of at least
 !!      one data set.
 !!  npsp=number of pseudopotentials
-!!  pspheads(npsp)=<type pspheader_type>all the important information from the
-!!   pseudopotential file header, as well as the psp file name
+!!  pspheads(npsp)=<type pspAB_HEADER_type>all the important information from the
+!!   pseudopotential file AB_HEADER, as well as the psp file name
 !!
 !! OUTPUT
 !!   printing only
@@ -101,7 +101,7 @@ subroutine memory_eval(dtsets,iout,mpi_enregs,ndtset,ndtset_alloc,npsp,pspheads)
  type(MPI_type),intent(inout) :: mpi_enregs(0:ndtset_alloc)
 !arrays
  type(dataset_type),intent(inout) :: dtsets(0:ndtset_alloc)
- type(pspheader_type),intent(in) :: pspheads(npsp)
+ type(pspAB_HEADER_type),intent(in) :: pspheads(npsp)
 
 !Local variables -------------------------------
 !scalars
@@ -421,7 +421,7 @@ end subroutine memory_eval
 !!  pawspnorb=1 when spin-orbit is activated within PAW
 !!  pawstgylm=1 if g_l(r).Y_lm(r) factors are stored in memory (PAW)
 !!  prtvol=control print volume
-!!  pspheads(npsp)=<type pspheader_type>all the important information from the header
+!!  pspheads(npsp)=<type pspAB_HEADER_type>all the important information from the AB_HEADER
 !!  tfkinfun=flag controling the use of Thomas-Fermi algorithme (without WF)
 !!  typat(natom)=type of each atom
 !!  ucvol= unit cell volume
@@ -529,7 +529,7 @@ subroutine memory(n1xccc,extrapwf,getcell,idtset,icoulomb,intxc,ionmov,iout,dens
 !arrays
  integer,intent(in) :: nband(nkpt*nsppol),ngfft(18),ngfftdiel(18),ngfftf(18)
  integer,intent(in) :: nloalg(3),typat(natom)
- type(pspheader_type) :: pspheads(npsp)
+ type(pspAB_HEADER_type) :: pspheads(npsp)
 
 !Local variables-------------------------------
 !marrays=maximal number of arrays to be monitored (or group of arrays)
@@ -711,17 +711,17 @@ subroutine memory(n1xccc,extrapwf,getcell,idtset,icoulomb,intxc,ionmov,iout,dens
    ABI_ALLOCATE(pawver,(npsp))
    ABI_ALLOCATE(rshp,(npsp))
    do ii=1,npsp
-     basis_size(ii)=pspheads(ii)%pawheader%basis_size
-     mesh_size(ii)=pspheads(ii)%pawheader%mesh_size
-     l_size(ii)=pspheads(ii)%pawheader%l_size
-     lmn_size(ii)=pspheads(ii)%pawheader%lmn_size
+     basis_size(ii)=pspheads(ii)%pawAB_HEADER%basis_size
+     mesh_size(ii)=pspheads(ii)%pawAB_HEADER%mesh_size
+     l_size(ii)=pspheads(ii)%pawAB_HEADER%l_size
+     lmn_size(ii)=pspheads(ii)%pawAB_HEADER%lmn_size
      lmn2_size(ii)=lmn_size(ii)*(lmn_size(ii)+1)/2
-     pawver(ii)=pspheads(ii)%pawheader%pawver
-     rshp(ii)=pspheads(ii)%pawheader%rshp
-     shape_type(ii)=pspheads(ii)%pawheader%shape_type
+     pawver(ii)=pspheads(ii)%pawAB_HEADER%pawver
+     rshp(ii)=pspheads(ii)%pawAB_HEADER%rshp
+     shape_type(ii)=pspheads(ii)%pawAB_HEADER%shape_type
    end do
    l_max=maxval(pspheads(:)%lmax)
-   l_size_max=maxval(pspheads(:)%pawheader%l_size)
+   l_size_max=maxval(pspheads(:)%pawAB_HEADER%l_size)
    rhoij_nspden=nspden;if (pawspnorb>0) rhoij_nspden=4
    ABI_ALLOCATE(my_nattyp,(ntypat))
    if ((mpi_enreg%nproc_atom<=1).or.(.not.associated(mpi_enreg%my_atmtab))) then
@@ -834,7 +834,7 @@ subroutine memory(n1xccc,extrapwf,getcell,idtset,icoulomb,intxc,ionmov,iout,dens
  if (abs(densfor_pred)==5.or.abs(densfor_pred)==6) then          ! scf_history...
    histsz=2
    cfftf(18)=nspden*(histsz+1)+1      ; dttyp(18)=8  ! %deltarhor, %atmrho_last, %rhor_last
-   cadd(19)=3*natom*2*histsz          ; dttyp(19)=8  ! %xreddiff,xred_last
+   cadd(19)=3*natom*2*histsz          ; dttyp(19)=8  ! %xreAB_DDIFF,xred_last
    dttyp(20)=4
    if (usepaw==1) then
      do ii=1,ntypat
@@ -1186,7 +1186,7 @@ subroutine memory(n1xccc,extrapwf,getcell,idtset,icoulomb,intxc,ionmov,iout,dens
 !(11)                    in dielmt ---------------------------------------
 
  if(modulo(iprcel,100)>=20.and.modulo(iprcel,100)<70)then
-!  dielh,dielvec,eig_diel,zhpev1,zhpev2
+!  dielh,dielvec,eig_diel,AB_ZHPEV1,AB_ZHPEV2
    cadd(111)=3*npwdiel*npwdiel                   &
 &   +9*npwdiel           ; dttyp(111)=8
  end if
@@ -2328,8 +2328,8 @@ end subroutine memorf
 !!  npspalch=number of pseudopotentials for alchemical purposes
 !!  ntypat=number of types of pseudo atoms
 !!  ntypalch=number of types of alchemical pseudo atoms
-!!  pspheads(npsp)=<type pspheader_type>all the important information from the
-!!   pseudopotential file headers, as well as the psp file names
+!!  pspheads(npsp)=<type pspAB_HEADER_type>all the important information from the
+!!   pseudopotential file AB_HEADERs, as well as the psp file names
 !!
 !! OUTPUT
 !!  lmnmax=maximum number of l,m,n projectors, not taking into account the spin-orbit
@@ -2363,7 +2363,7 @@ subroutine getdim_nloc(lmnmax,lmnmaxso,lnmax,lnmaxso,mixalch,nimage,npsp,npspalc
  integer,intent(out) :: lmnmax,lmnmaxso,lnmax,lnmaxso
 !arrays
  real(dp),intent(in) :: mixalch(npspalch,ntypalch,nimage)
- type(pspheader_type),intent(in) :: pspheads(npsp)
+ type(pspAB_HEADER_type),intent(in) :: pspheads(npsp)
 
 !Local variables-------------------------------
 !scalars
@@ -2600,8 +2600,8 @@ end subroutine setmqgrid
 !!                purposes, and if a failure occurs, the routine stops.
 !!          if 2, like 1, but before stopping, the routine will provide
 !!                an estimation of the available memory.
-!!  pspheads(npsp)=<type pspheader_type>all the important information from the
-!!   pseudopotential file header, as well as the psp file name
+!!  pspheads(npsp)=<type pspAB_HEADER_type>all the important information from the
+!!   pseudopotential file AB_HEADER, as well as the psp file name
 !!
 !! OUTPUT
 !!  (only writing)
@@ -2644,7 +2644,7 @@ subroutine wvl_memory(dtset, idtset, mpi_enreg, npsp, option, pspheads)
   type(dataset_type),intent(in) :: dtset
   type(MPI_type),intent(in) :: mpi_enreg
   !arrays
-  type(pspheader_type),intent(in) :: pspheads(npsp)
+  type(pspAB_HEADER_type),intent(in) :: pspheads(npsp)
 
 !Local variables-------------------------------
 #if defined HAVE_BIGDFT

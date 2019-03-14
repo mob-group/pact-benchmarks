@@ -444,7 +444,7 @@ subroutine effective_potential_initmpi(eff_pot,comm)
  call effpot_mpi_init(eff_pot%harmonics_terms%ifcs%cell,cell_number,eff_pot%mpi_ifc,&
 &                     eff_pot%crystal%natom,ndiv,eff_pot%harmonics_terms%ifcs%nrpt,comm)
 
-!Second mpi_coeff
+!second mpi_coeff
  ndiv = 1
  call effpot_mpi_free(eff_pot%mpi_coeff)
  call effpot_mpi_init(eff_pot%harmonics_terms%ifcs%cell,cell_number,eff_pot%mpi_coeff,&
@@ -1878,7 +1878,7 @@ subroutine effective_potential_writeXML(eff_pot,option,filename,prt_dipdip)
    call wrtout(ab_out,msg,'COLL')
    call wrtout(std_out,msg,'COLL')
 
-!  Write header
+!  Write AB_HEADER
    WRITE(unit_xml,'("<?xml version=""1.0"" ?>")')
    WRITE(unit_xml,'("<System_definition>")')
 

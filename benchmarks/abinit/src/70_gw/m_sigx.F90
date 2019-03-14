@@ -72,7 +72,7 @@ contains
 !! Psps <type(pseudopotential_type)>=variables related to pseudopotentials
 !!    %usepaw=1 for PAW, 0 for NC pseudopotentials.
 !! Qmesh <kmesh_t> : datatype gathering information of the q-mesh used
-!!    %ibz=q points where $\tilde\epsilon^{-1}$ has been computed
+!!    %ibz=q points where $\tiAB_LDE\epsilon^{-1}$ has been computed
 !!    %bz(3,nqbz)=coordinates of all q-points in BZ
 !! Sigp <sigparams_t> (see the definition of this structured datatype)
 !! Cryst<crystal_t>=Info on unit cell and symmetries
@@ -93,7 +93,7 @@ contains
 !!  Sr%x_mat(minbnd:maxbnd,minbnd:maxbnd,%nsppol*Sigp%nsig_ab)=Matrix elements of Sigma_x.
 !!
 !! NOTES
-!!  1) The treatment of the divergence of Gygi+Baldereschi (PRB 1986) [[cite:Gigy1986]] is included.
+!!  1) The treatment of the divergence of Gygi+BaAB_LDEreschi (PRB 1986) [[cite:Gigy1986]] is included.
 !!
 !!  2) On the symmetrization of Sigma matrix elements
 !!     If  Sk = k+G0 then  M_G(k, Sq)= e^{-i( Sq+G).t} M_{ S^-1(G}   (k,q)

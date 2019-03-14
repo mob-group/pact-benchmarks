@@ -441,8 +441,8 @@
       COMPLEX*16         DUM( 1 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DZNRM2
-      EXTERNAL           DLAMCH, DZNRM2
+      DOUBLE PRECISION   AB_DLAMCH, DZNRM2
+      EXTERNAL           AB_DLAMCH, DZNRM2
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DLABAD, DLASUM, XERBLA, ZGEEV, ZGET22, ZLACPY,
@@ -516,10 +516,10 @@
 *
 *     More Important constants
 *
-      UNFL = DLAMCH( 'Safe minimum' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
       OVFL = ONE / UNFL
       CALL DLABAD( UNFL, OVFL )
-      ULP = DLAMCH( 'Precision' )
+      ULP = AB_DLAMCH( 'Precision' )
       ULPINV = ONE / ULP
       RTULP = SQRT( ULP )
       RTULPI = ONE / RTULP

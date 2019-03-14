@@ -136,10 +136,10 @@
 *>          matrix.
 *>
 *>          Eigenvalues will be computed most accurately when ABSTOL is
-*>          set to twice the underflow threshold 2*SLAMCH('S'), not zero.
+*>          set to twice the underflow threshold 2*AB_SLAMCH('S'), not zero.
 *>          If this routine returns with INFO>0, indicating that some
 *>          eigenvectors did not converge, try setting ABSTOL to
-*>          2*SLAMCH('S').
+*>          2*AB_SLAMCH('S').
 *>
 *>          See "Computing Small Singular Values of Bidiagonal Matrices
 *>          with Guaranteed High Relative Accuracy," by Demmel and
@@ -259,8 +259,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            AB_LSAME
-      REAL               SLAMCH, AB_SLANST
-      EXTERNAL           AB_LSAME, SLAMCH, AB_SLANST
+      REAL               AB_SLAMCH, AB_SLANST
+      EXTERNAL           AB_LSAME, AB_SLAMCH, AB_SLANST
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_SCOPY, AB_SSCAL, AB_SSTEBZ, AB_SSTEIN, AB_SS
@@ -331,8 +331,8 @@
 *
 *     Get machine constants.
 *
-      SAFMIN = SLAMCH( 'Safe minimum' )
-      EPS = SLAMCH( 'Precision' )
+      SAFMIN = AB_SLAMCH( 'Safe minimum' )
+      EPS = AB_SLAMCH( 'Precision' )
       SMLNUM = SAFMIN / EPS
       BIGNUM = ONE / SMLNUM
       RMIN = SQRT( SMLNUM )

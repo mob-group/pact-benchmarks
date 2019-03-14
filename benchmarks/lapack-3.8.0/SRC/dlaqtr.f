@@ -197,8 +197,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            AB_IDAMAX
-      DOUBLE PRECISION   AB_DASUM, AB_DDOT, DLAMCH, AB_DLANGE
-      EXTERNAL           AB_IDAMAX, AB_DASUM, AB_DDOT, DLAMCH, AB_DLANGE
+      DOUBLE PRECISION   AB_DASUM, AB_DDOT, AB_DLAMCH, AB_DLANGE
+      EXTERNAL           AB_IDAMAX, AB_DASUM, AB_DDOT, AB_DLAMCH, AB_DLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_DAXPY, AB_DLADIV, AB_DLALN2, AB_DSCAL
@@ -220,8 +220,8 @@
 *
 *     Set constants to control overflow
 *
-      EPS = DLAMCH( 'P' )
-      SMLNUM = DLAMCH( 'S' ) / EPS
+      EPS = AB_DLAMCH( 'P' )
+      SMLNUM = AB_DLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
 *
       XNORM = AB_DLANGE( 'M', N, N, T, LDT, D )

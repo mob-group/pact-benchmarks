@@ -89,8 +89,8 @@ contains
 !!      driver_invert_positive_definite_hermitian_matrix
 !!      generateprintdielectriceigenvalues
 !!      matrix_function_epsilon_model_operator
-!!      set_dielectric_function_frequency,setup_pk_model,write_timing_log,zgemm
-!!      zheevd
+!!      set_dielectric_function_frequency,setup_pk_model,write_timing_log,AB_ZGEMM
+!!      AB_ZHEEVd
 !!
 !! SOURCE
 
@@ -187,8 +187,8 @@ end subroutine driver_generate_dielectric_matrix
 !!      driver_invert_positive_definite_hermitian_matrix
 !!      generateprintdielectriceigenvalues
 !!      matrix_function_epsilon_model_operator
-!!      set_dielectric_function_frequency,setup_pk_model,write_timing_log,zgemm
-!!      zheevd
+!!      set_dielectric_function_frequency,setup_pk_model,write_timing_log,AB_ZGEMM
+!!      AB_ZHEEVd
 !!
 !! SOURCE
 
@@ -418,8 +418,8 @@ end subroutine GeneratePrintDielectricEigenvalues
 !!      driver_invert_positive_definite_hermitian_matrix
 !!      generateprintdielectriceigenvalues
 !!      matrix_function_epsilon_model_operator
-!!      set_dielectric_function_frequency,setup_pk_model,write_timing_log,zgemm
-!!      zheevd
+!!      set_dielectric_function_frequency,setup_pk_model,write_timing_log,AB_ZGEMM
+!!      AB_ZHEEVd
 !!
 !! SOURCE
 
@@ -678,7 +678,7 @@ tr_eps_3 = tr_eps_3 + dble(model_epsilon_matrix(lm,lm)) - dble(eig_exact(lm))
 end do
 
 ABI_ALLOCATE(dummy3,(k*nseeds,k*nseeds))
-call ZGEMM(      'N',   & ! Hermitian conjugate the first array
+call AB_ZGEMM(      'N',   & ! Hermitian conjugate the first array
 'N',   & ! Leave second array as is
 k*nseeds,   & ! the number of rows of the  matrix op( A )
 k*nseeds,   & ! the number of columns of the  matrix op( B )
@@ -706,7 +706,7 @@ ABI_ALLOCATE(work,(lwork))
 ABI_ALLOCATE(rwork,(lrwork))
 ABI_ALLOCATE(iwork,(liwork))
 
-call zheevd('N', 'U',k*nseeds, dummy2, k*nseeds, eig_exact, work, lwork, rwork, lrwork, iwork, liwork, info)
+call AB_ZHEEVd('N', 'U',k*nseeds, dummy2, k*nseeds, eig_exact, work, lwork, rwork, lrwork, iwork, liwork, info)
 if ( info /= 0) then        
   debug_unit = get_unit()
   write(debug_filename,'(A,I4.4,A)') 'LAPACK_DEBUG_PROC=',mpi_enreg%me,'.log'
@@ -714,7 +714,7 @@ if ( info /= 0) then
   open(debug_unit,file=trim(debug_filename),status='unknown')
 
   write(debug_unit,'(A)')      '*************************************************************************************'
-  write(debug_unit,'(A,I4,A)') '*      ERROR: info = ',info,' in ZHEEVD(1), gwls_GenerateEpsilon'
+  write(debug_unit,'(A,I4,A)') '*      ERROR: info = ',info,' in AB_ZHEEVD(1), gwls_GenerateEpsilon'
   write(debug_unit,'(A)')      '*************************************************************************************'
 
   close(debug_unit)

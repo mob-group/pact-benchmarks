@@ -163,8 +163,8 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ISAMAX
-      REAL               SCASUM, SLAMCH
-      EXTERNAL           LSAME, ISAMAX, SCASUM, SLAMCH
+      REAL               SCASUM, AB_SLAMCH
+      EXTERNAL           LSAME, ISAMAX, SCASUM, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGEMV
@@ -245,7 +245,7 @@
 *
 *     Compute norm(B - U * S * V') / ( n * norm(B) * EPS )
 *
-      EPS = SLAMCH( 'Precision' )
+      EPS = AB_SLAMCH( 'Precision' )
 *
       IF( BNORM.LE.ZERO ) THEN
          IF( RESID.NE.ZERO )

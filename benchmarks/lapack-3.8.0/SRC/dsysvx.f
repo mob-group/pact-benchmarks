@@ -315,8 +315,8 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_ILAENV
-      DOUBLE PRECISION   DLAMCH, AB_DLANSY
-      EXTERNAL           AB_LSAME, AB_ILAENV, DLAMCH, AB_DLANSY
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLANSY
+      EXTERNAL           AB_LSAME, AB_ILAENV, AB_DLAMCH, AB_DLANSY
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_DLACPY, AB_DSYCON, AB_DSYRFS, AB_DSYTRF, AB_
@@ -408,7 +408,7 @@
 *
 *     Set INFO = N+1 if the matrix is singular to working precision.
 *
-      IF( RCOND.LT.DLAMCH( 'Epsilon' ) )
+      IF( RCOND.LT.AB_DLAMCH( 'Epsilon' ) )
      $   INFO = N + 1
 *
       WORK( 1 ) = LWKOPT

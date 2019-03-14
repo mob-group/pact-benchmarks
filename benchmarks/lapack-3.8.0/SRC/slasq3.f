@@ -215,9 +215,9 @@
       EXTERNAL           AB_SLASQ4, AB_SLASQ5, AB_SLASQ6
 *     ..
 *     .. External Function ..
-      REAL               SLAMCH
+      REAL               AB_SLAMCH
       LOGICAL            AB_SISNAN
-      EXTERNAL           AB_SISNAN, SLAMCH
+      EXTERNAL           AB_SISNAN, AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT
@@ -225,7 +225,7 @@
 *     .. Executable Statements ..
 *
       N0IN = N0
-      EPS = SLAMCH( 'Precision' )
+      EPS = AB_SLAMCH( 'Precision' )
       TOL = EPS*HUNDRD
       TOL2 = TOL**2
 *

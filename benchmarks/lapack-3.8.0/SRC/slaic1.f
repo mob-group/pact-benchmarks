@@ -163,12 +163,12 @@
       INTRINSIC          ABS, MAX, SIGN, SQRT
 *     ..
 *     .. External Functions ..
-      REAL               AB_SDOT, SLAMCH
-      EXTERNAL           AB_SDOT, SLAMCH
+      REAL               AB_SDOT, AB_SLAMCH
+      EXTERNAL           AB_SDOT, AB_SLAMCH
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       ALPHA = AB_SDOT( J, X, 1, W, 1 )
 *
       ABSALP = ABS( ALPHA )

@@ -165,8 +165,8 @@
      $                   THREE = 3.0E0, FOUR = 4.0E0, EIGHT = 8.0E0 )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. Local Arrays ..
       REAL               AB_DSCALE( 3 ), AB_ZSCALE( 3 )
@@ -248,9 +248,9 @@
 *     SMINV2, EPS are not SAVEd anymore between one call to the
 *     others but recomputed at each call
 *
-      EPS = SLAMCH( 'Epsilon' )
-      BASE = SLAMCH( 'Base' )
-      SMALL1 = BASE**( INT( LOG( SLAMCH( 'SafMin' ) ) / LOG( BASE ) /
+      EPS = AB_SLAMCH( 'Epsilon' )
+      BASE = AB_SLAMCH( 'Base' )
+      SMALL1 = BASE**( INT( LOG( AB_SLAMCH( 'SafMin' ) ) / LOG( BASE ) /
      $         THREE ) )
       SMINV1 = ONE / SMALL1
       SMALL2 = SMALL1*SMALL1

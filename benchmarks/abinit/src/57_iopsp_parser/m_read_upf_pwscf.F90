@@ -69,10 +69,10 @@ subroutine read_pseudo (is, iunps)
     call errore ('read_pseudo', 'Wrong is number', 1)
   end if
   write(std_out,* ) " Reading pseudopotential file in UPF format..."
-  !------->Search for Header
-  call scan_begin (iunps, "HEADER", .true.)
+  !------->Search for AB_HEADER
+  call scan_begin (iunps, "AB_HEADER", .true.)
   call read_pseudo_header (is, iunps)
-  call scan_end (iunps, "HEADER")
+  call scan_end (iunps, "AB_HEADER")
 
   !-------->Search for mesh information
   call scan_begin (iunps, "MESH", .true.)

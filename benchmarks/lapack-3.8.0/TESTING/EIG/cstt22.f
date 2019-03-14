@@ -174,8 +174,8 @@
       COMPLEX            AUKJ
 *     ..
 *     .. External Functions ..
-      REAL               CLANGE, CLANSY, SLAMCH
-      EXTERNAL           CLANGE, CLANSY, SLAMCH
+      REAL               CLANGE, CLANSY, AB_SLAMCH
+      EXTERNAL           CLANGE, CLANSY, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGEMM
@@ -190,8 +190,8 @@
       IF( N.LE.0 .OR. M.LE.0 )
      $   RETURN
 *
-      UNFL = SLAMCH( 'Safe minimum' )
-      ULP = SLAMCH( 'Epsilon' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
+      ULP = AB_SLAMCH( 'Epsilon' )
 *
 *     Do Test 1
 *

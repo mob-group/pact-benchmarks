@@ -131,7 +131,7 @@
       INTEGER            IPIV(NMAX), IWORK(3*NMAX)
 
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
 
 *     .. External Subroutines ..
       EXTERNAL           DLAHILB, DGESVXX, DPOSVXX, DSYSVXX,
@@ -153,7 +153,7 @@
       UPLO = 'U'
       TRANS = 'N'
       EQUED = 'N'
-      EPS = DLAMCH('Epsilon')
+      EPS = AB_DLAMCH('Epsilon')
       NFAIL = 0
       N_AUX_TESTS = 0
       LDA = NMAX
@@ -321,13 +321,13 @@
                   CWISE_ERR = MAX(ABS(X(I,K) - INVHILB(I,K))
      $                            /ABS(INVHILB(I,K)), CWISE_ERR)
                ELSE IF (X(I, K) .NE. 0.0D+0) THEN
-                  CWISE_ERR = DLAMCH('OVERFLOW')
+                  CWISE_ERR = AB_DLAMCH('OVERFLOW')
                END IF
             END DO
             IF (NORMT .NE. 0.0D+0) THEN
                NWISE_ERR = NORMDIF / NORMT
             ELSE IF (NORMDIF .NE. 0.0D+0) THEN
-               NWISE_ERR = DLAMCH('OVERFLOW')
+               NWISE_ERR = AB_DLAMCH('OVERFLOW')
             ELSE
                NWISE_ERR = 0.0D+0
             ENDIF

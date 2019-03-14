@@ -181,8 +181,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               CLANGE, CLANHB, CLANHP, SLAMCH
-      EXTERNAL           LSAME, CLANGE, CLANHB, CLANHP, SLAMCH
+      REAL               CLANGE, CLANHB, CLANHP, AB_SLAMCH
+      EXTERNAL           LSAME, CLANGE, CLANHB, CLANHP, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGEMM, CHPR, CHPR2
@@ -209,8 +209,8 @@
          CUPLO = 'L'
       END IF
 *
-      UNFL = SLAMCH( 'Safe minimum' )
-      ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
+      ULP = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
 *
 *     Some Error Checks
 *

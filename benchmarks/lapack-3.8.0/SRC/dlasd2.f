@@ -303,8 +303,8 @@
       DOUBLE PRECISION   C, EPS, HLFTOL, S, TAU, TOL, Z1
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, AB_DLAPY2
-      EXTERNAL           DLAMCH, AB_DLAPY2
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLAPY2
+      EXTERNAL           AB_DLAMCH, AB_DLAPY2
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_DCOPY, AB_DLACPY, AB_DLAMRG, AB_DLASET, AB_D
@@ -399,7 +399,7 @@
 *
 *     Calculate the allowable deflation tolerance
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       TOL = MAX( ABS( ALPHA ), ABS( BETA ) )
       TOL = EIGHT*EPS*MAX( ABS( D( N ) ), TOL )
 *

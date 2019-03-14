@@ -380,9 +380,9 @@
      $                   AB_XERBLA
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
+      REAL               AB_SLAMCH
       LOGICAL            AB_LSAME
-      EXTERNAL           AB_LSAME, SLAMCH
+      EXTERNAL           AB_LSAME, AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, ATAN2, COS, MAX, MIN, SIN, SQRT
@@ -453,8 +453,8 @@
 *
 *     Get machine constants
 *
-      EPS = SLAMCH( 'Epsilon' )
-      UNFL = SLAMCH( 'Safe minimum' )
+      EPS = AB_SLAMCH( 'Epsilon' )
+      UNFL = AB_SLAMCH( 'Safe minimum' )
       TOLMUL = MAX( TEN, MIN( HUNDRED, EPS**MEIGHTH ) )
       TOL = TOLMUL*EPS
       THRESH = MAX( TOL, MAXITR*Q*Q*UNFL )

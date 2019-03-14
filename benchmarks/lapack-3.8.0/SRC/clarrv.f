@@ -333,8 +333,8 @@
      $                   SIGMA, SPDIAM, SSIGMA, TAU, TMP, TOL, ZTZ
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_CLAR1V, AB_CLASET, AB_CSSCAL, AB_SCOPY, AB_S
@@ -399,7 +399,7 @@
       CALL AB_CLASET( 'Full', N, ZUSEDW, CZERO, CZERO,
      $                    Z(1,ZUSEDL), LDZ )
 
-      EPS = SLAMCH( 'Precision' )
+      EPS = AB_SLAMCH( 'Precision' )
       RQTOL = TWO * EPS
 *
 *     Set expert flags for standard code.

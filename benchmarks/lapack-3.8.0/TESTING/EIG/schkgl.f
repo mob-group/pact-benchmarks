@@ -82,8 +82,8 @@
      $                   RSCALE( LDA ), RSCLIN( LDA ), WORK( LWORK )
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLANGE
-      EXTERNAL           SLAMCH, SLANGE
+      REAL               AB_SLAMCH, SLANGE
+      EXTERNAL           AB_SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGGBAL
@@ -100,7 +100,7 @@
       KNT = 0
       RMAX = ZERO
 *
-      EPS = SLAMCH( 'Precision' )
+      EPS = AB_SLAMCH( 'Precision' )
 *
    10 CONTINUE
 *

@@ -259,8 +259,8 @@
       REAL               EPS2, RESID, ULP, ULPINV
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, CLANGE, CLANHE
-      EXTERNAL           SLAMCH, CLANGE, CLANHE
+      REAL               AB_SLAMCH, CLANGE, CLANHE
+      EXTERNAL           AB_SLAMCH, CLANGE, CLANHE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGEMM, CHERK, CLACPY, CLASET, AB_cuncsd,
@@ -271,7 +271,7 @@
 *     ..
 *     .. Executable Statements ..
 *
-      ULP = SLAMCH( 'Precision' )
+      ULP = AB_SLAMCH( 'Precision' )
       ULPINV = REALONE / ULP
 *
 *     The first half of the routine checks the 2-by-2 CSD

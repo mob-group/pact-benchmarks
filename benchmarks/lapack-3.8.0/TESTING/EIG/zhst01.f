@@ -165,8 +165,8 @@
       DOUBLE PRECISION   ANORM, EPS, OVFL, SMLNUM, UNFL, WNORM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, ZLANGE
-      EXTERNAL           DLAMCH, ZLANGE
+      DOUBLE PRECISION   AB_DLAMCH, ZLANGE
+      EXTERNAL           AB_DLAMCH, ZLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DLABAD, ZGEMM, ZLACPY, ZUNT01
@@ -184,8 +184,8 @@
          RETURN
       END IF
 *
-      UNFL = DLAMCH( 'Safe minimum' )
-      EPS = DLAMCH( 'Precision' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
+      EPS = AB_DLAMCH( 'Precision' )
       OVFL = ONE / UNFL
       CALL DLABAD( UNFL, OVFL )
       SMLNUM = UNFL*N / EPS

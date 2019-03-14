@@ -475,7 +475,7 @@
      $                   BLAS_DGBMV2_X, AB_DLA_GBAMV, AB_DLA_WWADDW, DLA
      $MCH,
      $                   AB_CHLA_TRANSTYPE, AB_DLA_LIN_BERR
-      DOUBLE PRECISION   DLAMCH
+      DOUBLE PRECISION   AB_DLAMCH
       CHARACTER          AB_CHLA_TRANSTYPE
 *     ..
 *     .. Intrinsic Functions ..
@@ -485,8 +485,8 @@
 *
       IF (INFO.NE.0) RETURN
       TRANS = AB_CHLA_TRANSTYPE(TRANS_TYPE)
-      EPS = DLAMCH( 'Epsilon' )
-      HUGEVAL = DLAMCH( 'Overflow' )
+      EPS = AB_DLAMCH( 'Epsilon' )
+      HUGEVAL = AB_DLAMCH( 'Overflow' )
 *     Force HUGEVAL to Inf
       HUGEVAL = HUGEVAL * HUGEVAL
 *     Using HUGEVAL may lead to spurious underflows.

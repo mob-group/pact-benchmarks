@@ -130,9 +130,9 @@
       REAL               ALPHI, ALPHR, BETA, RSAFMN, SAFMIN, XNORM
 *     ..
 *     .. External Functions ..
-      REAL               AB_SCNRM2, SLAMCH, AB_SLAPY3
+      REAL               AB_SCNRM2, AB_SLAMCH, AB_SLAPY3
       COMPLEX            AB_CLADIV
-      EXTERNAL           AB_SCNRM2, SLAMCH, AB_SLAPY3, AB_CLADIV
+      EXTERNAL           AB_SCNRM2, AB_SLAMCH, AB_SLAPY3, AB_CLADIV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CMPLX, REAL, SIGN
@@ -161,7 +161,7 @@
 *        general case
 *
          BETA = -SIGN( AB_SLAPY3( ALPHR, ALPHI, XNORM ), ALPHR )
-         SAFMIN = SLAMCH( 'S' ) / SLAMCH( 'E' )
+         SAFMIN = AB_SLAMCH( 'S' ) / AB_SLAMCH( 'E' )
          RSAFMN = ONE / SAFMIN
 *
          KNT = 0

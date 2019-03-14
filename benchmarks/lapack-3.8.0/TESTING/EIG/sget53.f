@@ -151,8 +151,8 @@
      $                   SAFMIN, SCALES, SIGMIN, TEMP, ULP, WIS, WRS
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -169,8 +169,8 @@
 *
 *     Machine constants and norms
 *
-      SAFMIN = SLAMCH( 'Safe minimum' )
-      ULP = SLAMCH( 'Epsilon' )*SLAMCH( 'Base' )
+      SAFMIN = AB_SLAMCH( 'Safe minimum' )
+      ULP = AB_SLAMCH( 'Epsilon' )*AB_SLAMCH( 'Base' )
       ABSW = ABS( WRS ) + ABS( WIS )
       ANORM = MAX( ABS( A( 1, 1 ) )+ABS( A( 2, 1 ) ),
      $        ABS( A( 1, 2 ) )+ABS( A( 2, 2 ) ), SAFMIN )

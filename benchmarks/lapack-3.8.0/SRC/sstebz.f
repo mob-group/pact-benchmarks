@@ -134,7 +134,7 @@
 *>          will be used, where |T| means the 1-norm of T.
 *>
 *>          Eigenvalues will be computed most accurately when ABSTOL is
-*>          set to twice the underflow threshold 2*SLAMCH('S'), not zero.
+*>          set to twice the underflow threshold 2*AB_SLAMCH('S'), not zero.
 *> \endverbatim
 *>
 *> \param[in] D
@@ -313,8 +313,8 @@
 *     .. External Functions ..
       LOGICAL            AB_LSAME
       INTEGER            AB_ILAENV
-      REAL               SLAMCH
-      EXTERNAL           AB_LSAME, AB_ILAENV, SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_LSAME, AB_ILAENV, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_SLAEBZ, AB_XERBLA
@@ -392,8 +392,8 @@
 *     NB is the minimum vector length for vector bisection, or 0
 *     if only scalar is to be done.
 *
-      SAFEMN = SLAMCH( 'S' )
-      ULP = SLAMCH( 'P' )
+      SAFEMN = AB_SLAMCH( 'S' )
+      ULP = AB_SLAMCH( 'P' )
       RTOLI = ULP*RELFAC
       NB = AB_ILAENV( 1, 'AB_SSTEBZ', ' ', N, -1, -1, -1 )
       IF( NB.LE.1 )

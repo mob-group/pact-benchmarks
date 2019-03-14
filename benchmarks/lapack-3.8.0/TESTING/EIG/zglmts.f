@@ -175,8 +175,8 @@
       DOUBLE PRECISION   ANORM, BNORM, DNORM, EPS, UNFL, XNORM, YNORM
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DZASUM, ZLANGE
-      EXTERNAL           DLAMCH, DZASUM, ZLANGE
+      DOUBLE PRECISION   AB_DLAMCH, DZASUM, ZLANGE
+      EXTERNAL           AB_DLAMCH, DZASUM, ZLANGE
 *     ..
 *     .. External Subroutines ..
 *
@@ -187,8 +187,8 @@
 *     ..
 *     .. Executable Statements ..
 *
-      EPS = DLAMCH( 'Epsilon' )
-      UNFL = DLAMCH( 'Safe minimum' )
+      EPS = AB_DLAMCH( 'Epsilon' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
       ANORM = MAX( ZLANGE( '1', N, M, A, LDA, RWORK ), UNFL )
       BNORM = MAX( ZLANGE( '1', N, P, B, LDB, RWORK ), UNFL )
 *

@@ -5,7 +5,7 @@
 !!
 !! FUNCTION
 !!  This module contains the declaration of data types and methods
-!!  to handle the header of the DDB files.
+!!  to handle the AB_HEADER of the DDB files.
 !!
 !! COPYRIGHT
 !! Copyright (C) 2011-2018 ABINIT group (MJV, XG, MT, MM, MVeithen, MG, PB, JCC, GA)
@@ -148,9 +148,9 @@ MODULE m_ddb_hdr
  public :: ddb_hdr_init            ! Construct object
  public :: ddb_hdr_malloc          ! Allocate dynamic memory.
  public :: ddb_hdr_free            ! Free dynamic memory.
- public :: ddb_hdr_open_write      ! Open the DDB file and write the header.
- public :: ddb_hdr_open_read       ! Open the DDB file and read the header.
- public :: ddb_hdr_compare         ! Compare two DDB headers.
+ public :: ddb_hdr_open_write      ! Open the DDB file and write the AB_HEADER.
+ public :: ddb_hdr_open_read       ! Open the DDB file and read the AB_HEADER.
+ public :: ddb_hdr_compare         ! Compare two DDB AB_HEADERs.
 
 CONTAINS  !===========================================================
 !!***
@@ -460,7 +460,7 @@ end subroutine ddb_hdr_free
 !! ddb_hdr_open_write
 !!
 !! FUNCTION
-!!  Open the DDB file and write the header.
+!!  Open the DDB file and write the AB_HEADER.
 !!
 !! INPUTS
 !!
@@ -527,7 +527,7 @@ end subroutine ddb_hdr_open_write
 !! ddb_hdr_open_read
 !!
 !! FUNCTION
-!!  Open the DDB file and read the header.
+!!  Open the DDB file and read the AB_HEADER.
 !!
 !! INPUTS
 !!
@@ -673,7 +673,7 @@ end subroutine ddb_hdr_open_read
 !! ddb_hdr_compare
 !!
 !! FUNCTION
-!!  Compare two DDB headers and raise error if they differ.
+!!  Compare two DDB AB_HEADERs and raise error if they differ.
 !!  Also, complete psps information if one has more info than the other.
 !!
 !! INPUTS
@@ -1078,7 +1078,7 @@ subroutine psddb8 (choice,dimekb,ekb,fullinit,indlmn,lmnmax,&
    read(nunit, '(24x,i4)' )nblok
 
 !  ==================================================================================
-!  Second option: read psp characteristic from file ================================
+!  second option: read psp characteristic from file ================================
 !  ==================================================================================
  else if(choice==2)then
 
@@ -2339,7 +2339,7 @@ subroutine inprep8 (dimekb,filnam,lmnmax,mband,mblktyp,msym,natom,nblok,nkpt,&
 
    dimekb=0
    lmnmax=0
-   !usepaw=0   ! GA: usepaw is also declared earlier in the header
+   !usepaw=0   ! GA: usepaw is also declared earlier in the AB_HEADER
                !     and it is that earlier value that usepaw will
                !     be compared in ioddb8_in, so there is no reason
                !     to override the value here.

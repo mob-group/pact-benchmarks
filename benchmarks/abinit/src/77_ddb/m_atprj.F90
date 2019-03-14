@@ -129,7 +129,7 @@ subroutine atprj_init(t_atprj, natom, natprj_bs, iatprj_bs, outfile_radix)
      if (open_file(t_atprj%filename(imode,iatom), msg, newunit=iunit, form="formatted", action="write") /= 0) then
        MSG_ERROR(msg)
      end if
-     ! print header
+     ! print AB_HEADER
      write (unit=iunit, fmt='(a)') '##'
      write (unit=iunit, fmt='(a,I6,a)') '##  This file contains abinit phonon frequencies for mode number ', &
 &          imode, ' along a path in reciprocal space,'

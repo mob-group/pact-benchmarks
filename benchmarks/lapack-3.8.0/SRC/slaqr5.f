@@ -289,8 +289,8 @@
       LOGICAL            ACCUM, BLK22, BMP22
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH
-      EXTERNAL           SLAMCH
+      REAL               AB_SLAMCH
+      EXTERNAL           AB_SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
 *
@@ -346,10 +346,10 @@
 *
 *     ==== Machine constants for deflation ====
 *
-      SAFMIN = SLAMCH( 'SAFE MINIMUM' )
+      SAFMIN = AB_SLAMCH( 'SAFE MINIMUM' )
       SAFMAX = ONE / SAFMIN
       CALL AB_SLABAD( SAFMIN, SAFMAX )
-      ULP = SLAMCH( 'PRECISION' )
+      ULP = AB_SLAMCH( 'PRECISION' )
       SMLNUM = SAFMIN*( REAL( N ) / ULP )
 *
 *     ==== Use accumulated reflections to update far-from-diagonal

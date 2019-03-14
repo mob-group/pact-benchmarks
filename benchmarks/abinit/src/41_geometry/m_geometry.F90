@@ -67,7 +67,7 @@ MODULE m_geometry
  public :: symredcart         ! Convert a symmetry operation from reduced coordinates (integers) to cart coords (reals)
  public :: strainsym          ! Symmetrize the strain tensor.
  public :: stresssym          ! Symmetrize the stress tensor.
- public :: strconv            ! Convert from symmetric storage mode in reduced coords to cart coords.
+ public :: AB_STRCONv            ! Convert from symmetric storage mode in reduced coords to cart coords.
  public :: littlegroup_pert   ! Determines the set of symmetries that leaves a perturbation invariant.
  public :: irreducible_set_pert  ! Determines a set of perturbations that form a basis
 
@@ -2159,7 +2159,7 @@ subroutine bonds_lgth_angles(coordn,fnameabo_app_geo,natom,ntypat,rprimd,typat,x
              dif(1)=xred(1,ia)-(xred(1,ib)+dble(t1))
              dif(2)=xred(2,ia)-(xred(2,ib)+dble(t2))
              dif(3)=xred(3,ia)-(xred(3,ib)+dble(t3))
-             sq=rsdot(dif(1),dif(2),dif(3),dif(1),dif(2),dif(3),rmet)
+             sq=rAB_SDOT(dif(1),dif(2),dif(3),dif(1),dif(2),dif(3),rmet)
 
 !            Insert the atom at the proper place in the neighbor list.
              do ineighb=mneighb,0,-1
@@ -2260,9 +2260,9 @@ subroutine bonds_lgth_angles(coordn,fnameabo_app_geo,natom,ntypat,rprimd,typat,x
            bab(mu)=xred(mu,ib)+dble(list_neighb(ineighb,1+mu,1))-xred(mu,ia)
            bac(mu)=xred(mu,ic)+dble(list_neighb(jneighb,1+mu,1))-xred(mu,ia)
          end do
-         asq=rsdot(bab(1),bab(2),bab(3),bab(1),bab(2),bab(3),rmet)
-         bsq=rsdot(bac(1),bac(2),bac(3),bac(1),bac(2),bac(3),rmet)
-         adotb=rsdot(bab(1),bab(2),bab(3),bac(1),bac(2),bac(3),rmet)
+         asq=rAB_SDOT(bab(1),bab(2),bab(3),bab(1),bab(2),bab(3),rmet)
+         bsq=rAB_SDOT(bac(1),bac(2),bac(3),bac(1),bac(2),bac(3),rmet)
+         adotb=rAB_SDOT(bab(1),bab(2),bab(3),bac(1),bac(2),bac(3),rmet)
          co=adotb/sqrt(asq*bsq)
          if( abs(co)-1.0d0 >= 0.0d0 )then
            if( abs(co)-1.0d0 <= 1.0d-12 )then
@@ -2295,22 +2295,22 @@ subroutine bonds_lgth_angles(coordn,fnameabo_app_geo,natom,ntypat,rprimd,typat,x
 
  contains
 
-   function rsdot(u1,u2,u3,v1,v2,v3,rmet)
+   function rAB_SDOT(u1,u2,u3,v1,v2,v3,rmet)
 
 
 !This section has been created automatically by the script Abilint (TD).
 !Do not modify the following lines by hand.
 #undef ABI_FUNC
-#define ABI_FUNC 'rsdot'
+#define ABI_FUNC 'rAB_SDOT'
 !End of the abilint section
 
-   real(dp) :: rsdot
+   real(dp) :: rAB_SDOT
    real(dp),intent(in) :: u1,u2,u3,v1,v2,v3
    real(dp),intent(in) :: rmet(3,3)
-   rsdot=rmet(1,1)*u1*v1+rmet(2,1)*u2*v1+&
+   rAB_SDOT=rmet(1,1)*u1*v1+rmet(2,1)*u2*v1+&
 &   rmet(3,1)*u3*v1+rmet(1,2)*u1*v2+rmet(2,2)*u2*v2+&
 &   rmet(3,2)*u3*v2+rmet(1,3)*u1*v3+rmet(2,3)*u2*v3+rmet(3,3)*u3*v3
- end function rsdot
+ end function rAB_SDOT
 
 end subroutine bonds_lgth_angles
 !!***
@@ -3193,7 +3193,7 @@ end subroutine symredcart
 !!      xfpack_vin2x,xfpack_x2vin
 !!
 !! CHILDREN
-!!      dgemm,mati3inv,matrginv
+!!      AB_DGEMM,mati3inv,matrginv
 !!
 !! SOURCE
 
@@ -3234,7 +3234,7 @@ subroutine strainsym(nsym,rprimd0,rprimd,rprimd_symm,symrel)
 !so strain = rprimd * rprimd0^{-1}
 !transform to triclinic frame with rprimd0^{-1} * strain * rprimd0
 !giving strain as rprimd0^{-1} * rprimd
- call dgemm('N','N',3,3,3,one,rprimd0_inv,3,rprimd,3,zero,strain,3)
+ call AB_DGEMM('N','N',3,3,3,one,rprimd0_inv,3,rprimd,3,zero,strain,3)
 
 !loop over symmetry elements to obtain symmetrized strain matrix
  strain_symm = zero
@@ -3244,8 +3244,8 @@ subroutine strainsym(nsym,rprimd0,rprimd,rprimd_symm,symrel)
 
 !  mati3inv gives the inverse transpose of symrel
    call mati3inv(symrel(:,:,isym),symrel_it)
-   call dgemm('N','N',3,3,3,one,strain,3,dble(symrel(:,:,isym)),3,zero,tmp_mat,3)
-   call dgemm('T','N',3,3,3,one,dble(symrel_it),3,tmp_mat,3,one,strain_symm,3)
+   call AB_DGEMM('N','N',3,3,3,one,strain,3,dble(symrel(:,:,isym)),3,zero,tmp_mat,3)
+   call AB_DGEMM('T','N',3,3,3,one,dble(symrel_it),3,tmp_mat,3,one,strain_symm,3)
 
  end do
 
@@ -3256,7 +3256,7 @@ subroutine strainsym(nsym,rprimd0,rprimd,rprimd_symm,symrel)
 !that is, convert strain back to cartesian frame and then multipy by r_old,
 !to get the r_new primitive vectors
 
- call dgemm('N','N',3,3,3,one,rprimd0,3,strain_symm,3,zero,rprimd_symm,3)
+ call AB_DGEMM('N','N',3,3,3,one,rprimd0,3,strain_symm,3,zero,rprimd_symm,3)
 
 end subroutine strainsym
 !!***
@@ -3287,7 +3287,7 @@ end subroutine strainsym
 !!      dfpt_nselt,dfpt_nstpaw,forstrnps,littlegroup_pert,pawgrnl,stress
 !!
 !! CHILDREN
-!!      matr3inv,strconv
+!!      matr3inv,AB_STRCONv
 !!
 !! SOURCE
 
@@ -3325,7 +3325,7 @@ subroutine stresssym(gprimd,nsym,stress,sym)
  rprimdt=transpose(rprimd)
 
 !Compute stress tensor in reduced coordinates
- call strconv(stress,rprimdt,strfrac)
+ call AB_STRCONv(stress,rprimdt,strfrac)
 
 !Switch to full storage mode
  tensor(1,1)=strfrac(1)
@@ -3369,14 +3369,14 @@ subroutine stresssym(gprimd,nsym,stress,sym)
  strfrac(6)=tensor(2,1)
 
 !Convert back stress tensor (symmetrized) in cartesian coordinates
- call strconv(strfrac,gprimd,stress)
+ call AB_STRCONv(strfrac,gprimd,stress)
 
 end subroutine stresssym
 !!***
 
-!!****f* m_geometry/strconv
+!!****f* m_geometry/AB_STRCONv
 !! NAME
-!! strconv
+!! AB_STRCONv
 !!
 !! FUNCTION
 !! If original gprimd is input, convert from symmetric storage mode
@@ -3406,13 +3406,13 @@ end subroutine stresssym
 !!
 !! SOURCE
 
-subroutine strconv(frac,gprimd,cart)
+subroutine AB_STRCONv(frac,gprimd,cart)
 
 
 !This section has been created automatically by the script Abilint (TD).
 !Do not modify the following lines by hand.
 #undef ABI_FUNC
-#define ABI_FUNC 'strconv'
+#define ABI_FUNC 'AB_STRCONv'
 !End of the abilint section
 
  implicit none
@@ -3458,7 +3458,7 @@ subroutine strconv(frac,gprimd,cart)
  cart(5)=work1(1,3)
  cart(6)=work1(1,2)
 
-end subroutine strconv
+end subroutine AB_STRCONv
 !!***
 
 !!****f* m_geometry/littlegroup_pert

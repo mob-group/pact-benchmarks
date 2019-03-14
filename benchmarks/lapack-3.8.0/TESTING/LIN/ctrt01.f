@@ -152,8 +152,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               CLANTR, SLAMCH
-      EXTERNAL           LSAME, CLANTR, SLAMCH
+      REAL               CLANTR, AB_SLAMCH
+      EXTERNAL           LSAME, CLANTR, AB_SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CTRMV
@@ -173,7 +173,7 @@
 *
 *     Exit with RESID = 1/EPS if ANORM = 0 or AINVNM = 0.
 *
-      EPS = SLAMCH( 'Epsilon' )
+      EPS = AB_SLAMCH( 'Epsilon' )
       ANORM = CLANTR( '1', UPLO, DIAG, N, N, A, LDA, RWORK )
       AINVNM = CLANTR( '1', UPLO, DIAG, N, N, AINV, LDAINV, RWORK )
       IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN

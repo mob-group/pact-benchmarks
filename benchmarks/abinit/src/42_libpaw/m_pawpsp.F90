@@ -56,7 +56,7 @@ module m_pawpsp
  public:: pawpsp_main            !main routine to read psp
  public:: pawpsp_nl              !make paw projector form factors f_l(q)
  public:: pawpsp_read            !read psp from file
- public:: pawpsp_read_header     !read header of psp file
+ public:: pawpsp_read_header     !read AB_HEADER of psp file
  public:: pawpsp_read_corewf     !read core wavefunction
  public:: pawpsp_read_header_2   !reads pspversion, basis_size and lmn_size
  public:: pawpsp_rw_atompaw      !read and writes ATOMPAW psp with gaussian |p>
@@ -65,8 +65,8 @@ module m_pawpsp
  public:: pawpsp_7in             !reads non-XML atomic data
  public:: pawpsp_17in            !reads XML atomic data
  public:: pawpsp_calc            !calculates atomic quantities from psp info
- public:: pawpsp_read_header_xml !read header of psp file for XML
- public:: pawpsp_read_pawheader  !read header variables from XML objects
+ public:: pawpsp_read_header_xml !read AB_HEADER of psp file for XML
+ public:: pawpsp_read_pawAB_HEADER  !read AB_HEADER variables from XML objects
  public:: pawpsp_bcast           ! broadcast PAW psp data
  public:: pawpsp_cg              !compute sin FFT transform of a density
  public:: pawpsp_lo              !compute sin FFT transform of local potential
@@ -82,7 +82,7 @@ module m_pawpsp
 !! pawpsp_header_type
 !!
 !! FUNCTION
-!! For PAW, header related data
+!! For PAW, AB_HEADER related data
 !!
 !! SOURCE
 
@@ -817,7 +817,7 @@ subroutine pawpsp_read(core_mesh,funit,imainmesh,lmax,&
 ! *************************************************************************
 
 !==========================================================
-!Read lines 4 to 11 of the header
+!Read lines 4 to 11 of the AB_HEADER
 
 !This is important for BigDFT in standalone mode
  call pawpsp_read_header_2(funit,pspversion,pawtab%basis_size,pawtab%lmn_size)
@@ -1914,7 +1914,7 @@ subroutine pawpsp_calc(core_mesh,epsatm,ffspl,imainmesh,ixc,lnmax,&
      MSG_ERROR(msg)
    end if
  else
-!  For compatibility reasons set PAW radius at the end of mesh (older versions)
+!  For compatibility reasons set PAW radius at the end of mesh (oAB_LDEr versions)
    if (pawtab%rpaw/=pawrad%rmax) then
      msz_tmp=pawrad%mesh_size;mst_tmp=pawrad%mesh_type
      rstep_tmp=pawrad%rstep;lstep_tmp=pawrad%lstep
@@ -2905,11 +2905,11 @@ end subroutine pawpsp_wvl_calc
 !!  lmax=value of lmax mentioned at the second line of the psp file
 !!  lnmax=max. number of (l,n) components over all type of psps
 !!            angular momentum of nonlocal pseudopotential
-!!  mmax=max number of pts in real space grid (already read in the psp file header)
+!!  mmax=max number of pts in real space grid (already read in the psp file AB_HEADER)
 !!  mqgrid_ff=dimension of q (or G) grid for nl form factors (array ffspl)
 !!  mqgrid_vl=dimension of q (or G) grid for Vloc (array vlspl)
 !!  pawxcdev=choice of XC development (0=no dev. (use of angular mesh) ; 1 or 2=dev. on moments)
-!!  pspheads= header of the current pseudopotential
+!!  pspheads= AB_HEADER of the current pseudopotential
 !!  qgrid_ff(psps%mqgrid_ff)=values of q on grid from 0 to qmax (bohr^-1) for nl form factors
 !!  qgrid_vl(psps%mqgrid_vl)=values of q on grid from 0 to qmax (bohr^-1) for Vloc
 !!  xclevel= XC functional level
@@ -4017,7 +4017,7 @@ end subroutine pawpsp_7in
      wvl%pfac(2,ii+1:ii+nterm)=b1i(1:nterm)
      wvl%parg(1,ii+1:ii+nterm)=b2r(1:nterm)
      wvl%parg(2,ii+1:ii+nterm)=b2i(1:nterm)
-!    Second gaussian
+!    second gaussian
      wvl%pfac(1,ii+nterm+1:ii+nterm*2)= b1r(1:nterm)
      wvl%pfac(2,ii+nterm+1:ii+nterm*2)=-b1i(1:nterm)
      wvl%parg(1,ii+nterm+1:ii+nterm*2)= b2r(1:nterm)
@@ -4186,7 +4186,7 @@ implicit none
 
 ! *************************************************************************
 
-!Read psp version in line 4 of the header
+!Read psp version in line 4 of the AB_HEADER
  pspversion=1
  read (funit,'(a80)') pspline;pspline=adjustl(pspline)
  if (pspline(1:3)=="paw".or.pspline(1:3)=="PAW") &
@@ -4529,9 +4529,9 @@ end subroutine pawpsp_read_header_xml
 
 !-------------------------------------------------------------------------
 
-!!****f* m_pawpsp/pawpsp_read_pawheader
+!!****f* m_pawpsp/pawpsp_read_pawAB_HEADER
 !! NAME
-!!  pawpsp_read_pawheader
+!!  pawpsp_read_pawAB_HEADER
 !!
 !! FUNCTION
 !!
@@ -4550,14 +4550,14 @@ end subroutine pawpsp_read_header_xml
 !!
 !! SOURCE
 
-subroutine pawpsp_read_pawheader(basis_size,lmax,lmn_size,&
+subroutine pawpsp_read_pawAB_HEADER(basis_size,lmax,lmn_size,&
 & l_size,mesh_size,pspversion,psxml,rpaw,rshp,shape_type)
 
 
 !This section has been created automatically by the script Abilint (TD).
 !Do not modify the following lines by hand.
 #undef ABI_FUNC
-#define ABI_FUNC 'pawpsp_read_pawheader'
+#define ABI_FUNC 'pawpsp_read_pawAB_HEADER'
 !End of the abilint section
 
 implicit none
@@ -4618,7 +4618,7 @@ implicit none
      rshp=rpaw
  end select
 
-end subroutine pawpsp_read_pawheader
+end subroutine pawpsp_read_pawAB_HEADER
 !!***
 
 !-------------------------------------------------------------------------
@@ -4874,15 +4874,15 @@ subroutine pawpsp_main( &
 
    else if (usexml == 1 .and. present(psxml)) then
      write(msg,'(a,a)')  &
-&     '- pawpsp : Reading pseudopotential header in XML form from ', trim(filpsp)
+&     '- pawpsp : Reading pseudopotential AB_HEADER in XML form from ', trim(filpsp)
      call wrtout(ab_out,msg,'COLL')
      call wrtout(std_out,  msg,'COLL')
 
-!    Return header information
+!    Return AB_HEADER information
      call pawpsp_read_header_xml(lloc,lmax,pspcod,&
 &     pspxc,psxml,r2well,zion,znucl)
 !    Fill in pawpsp_header object:
-     call pawpsp_read_pawheader(pawpsp_header%basis_size,&
+     call pawpsp_read_pawAB_HEADER(pawpsp_header%basis_size,&
 &   lmax,pawpsp_header%lmn_size,&
 &   pawpsp_header%l_size,pawpsp_header%mesh_size,&
 &   pawpsp_header%pawver,psxml,&

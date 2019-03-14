@@ -2040,7 +2040,7 @@ subroutine outvars_anaddb (anaddb_dtset,nunit)
 
 !List of vector 2  (cartesian coordinates)
  if(anaddb_dtset%nph2l/=0)then
-   write(nunit,'(a)')' Second list of wavevector (cart. coord.) :'
+   write(nunit,'(a)')' second list of wavevector (cart. coord.) :'
    write(nunit,'(3x,a9,3i10)')'    nph2l',anaddb_dtset%nph2l
    write(nunit,'(3x,a9)')'    qph2l'
    do iph2=1,anaddb_dtset%nph2l

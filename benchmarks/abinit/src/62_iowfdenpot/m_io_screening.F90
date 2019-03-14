@@ -4,7 +4,7 @@
 !!  m_io_screening
 !!
 !! FUNCTION
-!!  This module contains the definition of the header of the
+!!  This module contains the definition of the AB_HEADER of the
 !!  _SCR and _SUSC file as well as methods used to read/write/echo.
 !!
 !! COPYRIGHT
@@ -69,9 +69,9 @@ MODULE m_io_screening
 !!  hscr_t
 !!
 !! FUNCTION
-!!  The structure defining the header of the SCR/SUSC file.
+!!  The structure defining the AB_HEADER of the SCR/SUSC file.
 !!  hscr_t contains the most important dimensions associated to the SCR/SUSC matrix,
-!!  important GW metadata and the Abint header. The SCR/SUS matrices are saved
+!!  important GW metadata and the Abint AB_HEADER. The SCR/SUS matrices are saved
 !!  with the same format. There are nqibz blocks, each block contains (npwe,npwe,nomega) matrices.
 !!  SCR and SUS files mainly differ for what concerns the treatment of the q-->0 limit.
 !!  The treatment of the non-analytic behaviour is not yet implemented but the main ideas are
@@ -83,7 +83,7 @@ MODULE m_io_screening
 !!  1) q=Gamma should be the first q-point
 !!
 !!  2) This point contains an initial section with data used to treat the q-->0 limit, followed
-!!     by the SCR/SUS matrix evaluated for the small q-point (qlwl). The header should contains
+!!     by the SCR/SUS matrix evaluated for the small q-point (qlwl). The AB_HEADER should contains
 !!     enough info so that we can skip this section and use the pre-existing routines to read
 !!     the matrices.
 !!
@@ -120,7 +120,7 @@ MODULE m_io_screening
     ! q-->0 treatment, 0 for None, 1-2 for transversal gauge, 3 for longitudinal
 
   integer :: headform
-    ! format of the SCR header
+    ! format of the SCR AB_HEADER
 
   integer :: fform
     ! File format
@@ -223,7 +223,7 @@ MODULE m_io_screening
     ! TODO: Add frequency mesh type?
 
   type(hdr_type) :: hdr
-    ! The abinit header.
+    ! The abinit AB_HEADER.
 
  end type hscr_t
 !!***
@@ -234,21 +234,21 @@ MODULE m_io_screening
  integer,public,parameter :: HSCR_LATEST_HEADFORM = HSCR_KNOWN_HEADFORMS(size(HSCR_KNOWN_HEADFORMS))
  ! The latest headform used when writing.
 
- public :: hscr_from_file       ! Read the header from file.
- public :: hscr_io              ! I/O of the header (read/write/echo).
+ public :: hscr_from_file       ! Read the AB_HEADER from file.
+ public :: hscr_io              ! I/O of the AB_HEADER (read/write/echo).
  !public :: hscr_fort_read
  !public :: hscr_fort_write
  !public :: hscr_ncwread
  !public :: hscr_ncwrite
- !public :: hscr_echo            ! I/O of the header (read/write/echo).
- public :: hscr_print           ! Print the SCR related part of the header.
- public :: hscr_new             ! Create header.
- public :: hscr_bcast           ! Transmit the header.
- public :: hscr_free            ! Free the header.
- public :: hscr_copy            ! Copy the SCR|SUSC header.
- public :: hscr_merge           ! Merge two or more headers.
+ !public :: hscr_echo            ! I/O of the AB_HEADER (read/write/echo).
+ public :: hscr_print           ! Print the SCR related part of the AB_HEADER.
+ public :: hscr_new             ! Create AB_HEADER.
+ public :: hscr_bcast           ! Transmit the AB_HEADER.
+ public :: hscr_free            ! Free the AB_HEADER.
+ public :: hscr_copy            ! Copy the SCR|SUSC AB_HEADER.
+ public :: hscr_merge           ! Merge two or more AB_HEADERs.
  public :: write_screening      ! Write a q-slice of the matrix in G-space.
- public :: read_screening       ! Read the content of the (SCR|SUSC) file placed after the header.
+ public :: read_screening       ! Read the content of the (SCR|SUSC) file placed after the AB_HEADER.
 
 ! Tools used in mrgscr.
  public :: ioscr_qmerge         ! Produce new file by merging the q-points stored in other files.
@@ -294,14 +294,14 @@ end function ncname_from_id
 !!  hscr_from_file
 !!
 !! FUNCTION
-!!  Read the header of the (SCR/SUS) file
+!!  Read the AB_HEADER of the (SCR/SUS) file
 !!
 !! INPUTS
 !!  path=File name
 !!  comm = MPI communicator.
 !!
 !! OUTPUT
-!!  hscr<hscr_t>=The header.
+!!  hscr<hscr_t>=The AB_HEADER.
 !!  fform=Kind of the array in the file (0 signals an error)
 !!
 !! PARENTS
@@ -378,7 +378,7 @@ end subroutine hscr_from_file
 !!
 !! FUNCTION
 !! This subroutine deals with the I/O of the hscr_t structured variables (read/write/echo).
-!! According to the value of rdwr, it reads the header of a file, writes it, or echo the value
+!! According to the value of rdwr, it reads the AB_HEADER of a file, writes it, or echo the value
 !! of the structured variable to a file. Note that, when reading, different records of hscr_t
 !! are allocated here, according to the values of the read variables. Records of hscr_t should be
 !! deallocated correctly by a call to hdr_free when hscr_t is not used anymore.
@@ -387,10 +387,10 @@ end subroutine hscr_from_file
 !!  iomode=Option defining the file format of the external file.
 !!  comm=MPI communicator.
 !!  master=rank of the master node in comm, usually 0
-!!  rdwr= if 1, read the hscr_t structured variable from the header of the file,
-!!        if 2, write the header to unformatted file
-!!        if 3, echo part of the header to formatted file (records 1 and 2)
-!!        if 4, echo the header to formatted file
+!!  rdwr= if 1, read the hscr_t structured variable from the AB_HEADER of the file,
+!!        if 2, write the AB_HEADER to unformatted file
+!!        if 3, echo part of the AB_HEADER to formatted file (records 1 and 2)
+!!        if 4, echo the AB_HEADER to formatted file
 !!        if 5, read the hscr_t without rewinding (unformatted)
 !!        if 6, write the hscr_t without rewinding (unformatted)
 !!  unt=unit number of the file (unformatted if rdwr=1, 2, 5 or 6 formatted if rdwr=3,4)
@@ -403,7 +403,7 @@ end subroutine hscr_from_file
 !!  fform=kind of the array in the file
 !!   if rdwr=1,5 : will be output ; if the reading fail, return fform=0
 !!   if rdwr=2,3,4,6 : should be input, will be written or echo to file
-!!  hscr_t <type(hscr_t)>=the header structured variable
+!!  hscr_t <type(hscr_t)>=the AB_HEADER structured variable
 !!   if rdwr=1,5 : will be output
 !!   if rdwr=2,3,4,6 : should be input, will be written or echo to file
 !!
@@ -461,9 +461,9 @@ subroutine hscr_io(hscr,fform,rdwr,unt,comm,master,iomode)
  if (rdwr==1 .or. rdwr==5) then
 
    if (.True.) then
-   ! TODO: only master should read but then I have to skip the header.
+   ! TODO: only master should read but then I have to skip the AB_HEADER.
    !if (my_rank == master) then
-     ! Read the abinit header, rewinding of the file (if any) is done here.
+     ! Read the abinit AB_HEADER, rewinding of the file (if any) is done here.
      if (iomode==IO_MODE_FORTRAN) then
        call hdr_fort_read(hscr%hdr, unt, fform, rewind=(rdwr==1))
      else if (iomode==IO_MODE_ETSF) then
@@ -528,7 +528,7 @@ subroutine hscr_io(hscr,fform,rdwr,unt,comm,master,iomode)
          hscr%omega = dcmplx(real_omega(1,:), real_omega(2,:))
          ABI_FREE(real_omega)
 
-         ! Read extra data added in new header.
+         ! Read extra data added in new AB_HEADER.
          NCF_CHECK(nf90_get_var(ncid, vid("vcutgeo"), hscr%vcutgeo))
          NCF_CHECK(nf90_get_var(ncid, vid("id"), hscr%id))
          NCF_CHECK(nf90_get_var(ncid, vid("ikxc"), hscr%ikxc))
@@ -574,11 +574,11 @@ subroutine hscr_io(hscr,fform,rdwr,unt,comm,master,iomode)
    !call hscr_mpio_skip(mpio_fh,fform,offset)
 
  else if (rdwr==2.or.rdwr==6) then
-   ! Writing the header of an unformatted file.
+   ! Writing the AB_HEADER of an unformatted file.
    ! Always use the latest version.
 
    if (iomode==IO_MODE_FORTRAN .or. iomode==IO_MODE_MPI) then
-     ! Write the abinit header.
+     ! Write the abinit AB_HEADER.
      call hdr_fort_write(hscr%hdr, unt, fform, ierr)
      ABI_CHECK(ierr == 0, "hdr_fort_write retured ierr != 0")
 
@@ -608,7 +608,7 @@ subroutine hscr_io(hscr,fform,rdwr,unt,comm,master,iomode)
    else if (iomode == IO_MODE_ETSF) then
 #ifdef HAVE_NETCDF
      ncid = unt
-     ! Write the abinit header, rewinding of the file (if any) is done here.
+     ! Write the abinit AB_HEADER, rewinding of the file (if any) is done here.
      NCF_CHECK(hdr_ncwrite(hscr%hdr, ncid, fform, nc_define=.True.))
 
      ! Define dimensions
@@ -629,7 +629,7 @@ subroutine hscr_io(hscr,fform,rdwr,unt,comm,master,iomode)
 
      ! Part 3) of the specs
      ! (note that, in the specs, the Gs depend on the q-point but npwe is a scalar
-     ! basis_set is added by the abinit header.
+     ! basis_set is added by the abinit AB_HEADER.
      ! FIXME: g-vectors are not written properly.
      ncerr = nctk_def_arrays(ncid, [&
        ! Standard
@@ -742,7 +742,7 @@ end subroutine hscr_io
 !! hscr_print
 !!
 !! FUNCTION
-!!  Prints info on the header of the SCR|SUSC file.
+!!  Prints info on the AB_HEADER of the SCR|SUSC file.
 !!
 !! INPUTS
 !!
@@ -756,7 +756,7 @@ end subroutine hscr_io
 !!
 !! SOURCE
 
-subroutine hscr_print(Hscr,header,unit,prtvol,mode_paral)
+subroutine hscr_print(Hscr,AB_HEADER,unit,prtvol,mode_paral)
 
 
 !This section has been created automatically by the script Abilint (TD).
@@ -771,7 +771,7 @@ subroutine hscr_print(Hscr,header,unit,prtvol,mode_paral)
 !scalars
  integer,intent(in),optional :: prtvol,unit
  character(len=4),intent(in),optional :: mode_paral
- character(len=*),intent(in),optional :: header
+ character(len=*),intent(in),optional :: AB_HEADER
  type(hscr_t),intent(in) :: hscr
 
 !Local variables-------------------------------
@@ -786,8 +786,8 @@ subroutine hscr_print(Hscr,header,unit,prtvol,mode_paral)
  verbose=0  ; if (PRESENT(prtvol    )) verbose=prtvol
  mode='COLL'; if (PRESENT(mode_paral)) mode   =mode_paral
 
- if (PRESENT(header)) then
-   msg=' ==== '//TRIM(ADJUSTL(header))//' ==== '
+ if (PRESENT(AB_HEADER)) then
+   msg=' ==== '//TRIM(ADJUSTL(AB_HEADER))//' ==== '
    call wrtout(unt,msg,mode)
  end if
 
@@ -835,7 +835,7 @@ subroutine hscr_print(Hscr,header,unit,prtvol,mode_paral)
  call wrtout(unt,msg,mode)
 
  if (verbose==0) then
-   call wrtout(unt,' The header contains additional records.',mode)
+   call wrtout(unt,' The AB_HEADER contains additional records.',mode)
  else
    write(msg,'(2a)')ch10,' q-points [r.l.u.]:'
    call wrtout(unt,msg,mode)
@@ -855,7 +855,7 @@ subroutine hscr_print(Hscr,header,unit,prtvol,mode_paral)
 ! HSCR_NEW
 ! HSCR_NEW
 
- ! Echo the abinit header.
+ ! Echo the abinit AB_HEADER.
  !if (prtvol>0) call hdr_echo(hscr%hdr,fform,rdwr,unit=unt)
 
 end subroutine hscr_print
@@ -878,10 +878,10 @@ end subroutine hscr_print
 !!  tordering=The time-ordering of the Response function.
 !!  gvec(3,Ep%npwe)=The G-vectors used.
 !!  Ep<em1params_t>=Parameters defining the calculation of the screening.
-!!  hdr_abinit<hdr_type>=The abinit header.
+!!  hdr_abinit<hdr_type>=The abinit AB_HEADER.
 !!
 !! OUTPUT
-!!  Hscr<type(hscr_t)>=the header, initialized.
+!!  Hscr<type(hscr_t)>=the AB_HEADER, initialized.
 !!
 !! PARENTS
 !!      screening
@@ -932,7 +932,7 @@ type(hscr_t) function hscr_new(varname,dtset,ep,hdr_abinit,ikxc,test_type,torder
     MSG_ERROR(sjoin("Cannot find any abifile object associated to varname:", varname))
  end if
 
- ! Copy the abinit header.
+ ! Copy the abinit AB_HEADER.
  call hdr_copy(hdr_abinit,Hscr%Hdr)
 
  ! Initialize quantities related to the screening file
@@ -985,9 +985,9 @@ end function hscr_new
 !! hscr_bcast
 !!
 !! FUNCTION
-!! This subroutine transmit the header structured datatype initialized
+!! This subroutine transmit the AB_HEADER structured datatype initialized
 !! on one processor (or a group of processor), to the other processors.
-!! It also allocates the needed part of the header.
+!! It also allocates the needed part of the AB_HEADER.
 !!
 !! INPUTS
 !!  master=ID of the master node.
@@ -998,7 +998,7 @@ end function hscr_new
 !!  (no output)
 !!
 !! SIDE EFFECTS
-!!  Hscr<type(hscr_t)>=the SCR header. For the master, it is already
+!!  Hscr<type(hscr_t)>=the SCR AB_HEADER. For the master, it is already
 !!   initialized entirely, while for the other procs, everything has
 !!   to be transmitted.
 !!
@@ -1073,7 +1073,7 @@ subroutine hscr_bcast(hscr,master,my_rank,comm)
  call xmpi_bcast(hscr%qlwl, master,comm,ierr)
  call xmpi_bcast(hscr%omega,master,comm,ierr)
 
- ! Communicate the Abinit header.
+ ! Communicate the Abinit AB_HEADER.
  call hdr_bcast(hscr%Hdr,master,my_rank,comm)
 
 ! HSCR_NEW
@@ -1098,7 +1098,7 @@ end subroutine hscr_bcast
 !! hscr_malloc
 !!
 !! FUNCTION
-!! Allocate the components of the header structured datatype except for hscr%hdr
+!! Allocate the components of the AB_HEADER structured datatype except for hscr%hdr
 !!
 !! PARENTS
 !!      m_io_screening
@@ -1142,10 +1142,10 @@ end subroutine hscr_malloc
 !! hscr_free
 !!
 !! FUNCTION
-!! Deallocate the components of the header structured datatype
+!! Deallocate the components of the AB_HEADER structured datatype
 !!
 !! INPUTS
-!! hdr <type(hdr_type)>=the header
+!! hdr <type(hdr_type)>=the AB_HEADER
 !!
 !! OUTPUT
 !!  (only deallocate)
@@ -1205,7 +1205,7 @@ end subroutine hscr_free
 !! hscr_copy
 !!
 !! FUNCTION
-!! Deep copy of the header of the _SCR or _SUSC file.
+!! Deep copy of the AB_HEADER of the _SCR or _SUSC file.
 !!
 !! INPUTS
 !!
@@ -1263,7 +1263,7 @@ subroutine hscr_copy(Hscr_in,Hscr_cp)
  Hscr_cp%spsmear  = Hscr_in%spsmear
  Hscr_cp%zcut     = Hscr_in%zcut
 
- ! Copy the abinit Header
+ ! Copy the abinit AB_HEADER
  call hdr_copy(Hscr_in%Hdr,Hscr_cp%Hdr)
 
  Hscr_cp%titles(:) = Hscr_in%titles(:)
@@ -1294,13 +1294,13 @@ end subroutine hscr_copy
 !! hscr_merge
 !!
 !! FUNCTION
-!! This subroutine merges diffrent header structured variable (hscr_t)
+!! This subroutine merges diffrent AB_HEADER structured variable (hscr_t)
 !!
 !! INPUTS
-!!  Hscr_in(:) <hscr_t)>=List of headers to be merged.
+!!  Hscr_in(:) <hscr_t)>=List of AB_HEADERs to be merged.
 !!
 !! OUTPUT
-!!  Hscr_out<hscr_t>=The output merged header.
+!!  Hscr_out<hscr_t>=The output merged AB_HEADER.
 !!
 !! PARENTS
 !!      m_io_screening
@@ -1338,55 +1338,55 @@ subroutine hscr_merge(Hscr_in,Hscr_out)
  !@hscr_t
  nhds=SIZE(Hscr_in)
 
- ! Initial copy of the header ===
- ! If multiple headers, select the header containing q-->0 so that we copy also heads and wings
+ ! Initial copy of the AB_HEADER ===
+ ! If multiple AB_HEADERs, select the AB_HEADER containing q-->0 so that we copy also heads and wings
  ii = imax_loc(Hscr_in(:)%nqlwl)
  call hscr_copy(Hscr_in(ii),Hscr_out)
  if (nhds==1) return
 
- ! Check consistency of the abinit Headers.
+ ! Check consistency of the abinit AB_HEADERs.
  ! FFT grid might be q-point dependent so we stop only when restart==0
  isok=.TRUE.
  do ihd=2,nhds
    call hdr_check(Hscr_in(1)%fform,Hscr_in(ihd)%fform,Hscr_in(1)%Hdr,Hscr_in(ihd)%Hdr,'COLL',restart,restartpaw)
    if (restart==0) then
      isok=.FALSE.
-     write(msg,'(a,i0,a)')' Abinit header no.',ihd,' is not consistent with the first header '
+     write(msg,'(a,i0,a)')' Abinit AB_HEADER no.',ihd,' is not consistent with the first AB_HEADER '
      MSG_WARNING(msg)
    end if
  end do
  if (.not.isok) then
-   MSG_ERROR('Cannot continue, Check headers')
+   MSG_ERROR('Cannot continue, Check AB_HEADERs')
  end if
 
  ! Now check variables related to polarizability|epsilon^{-1}.
  ! 1) Tests quantities that must be equal
- ii = assert_eq(Hscr_in(:)%ID,       'Headers have different Identifiers')
- ii = assert_eq(Hscr_in(:)%ikxc,     'Headers have different ikxc'       )
- ii = assert_eq(Hscr_in(:)%headform, 'Headers have different headform'   )
- ii = assert_eq(Hscr_in(:)%fform,    'Headers have different fform'      )
- ii = assert_eq(Hscr_in(:)%gwcalctyp,'Headers have different gwcalctyp'  )
- ii = assert_eq(Hscr_in(:)%nI,       'Headers have different nI'         )
- ii = assert_eq(Hscr_in(:)%nJ,       'Headers have different nJ'         )
- ii = assert_eq(Hscr_in(:)%nomega,   'Headers have different nomega'     )
- ii = assert_eq(Hscr_in(:)%test_type,'Headers have different test_type'  )
- ii = assert_eq(Hscr_in(:)%tordering,'Headers have different tordering'  )
+ ii = assert_eq(Hscr_in(:)%ID,       'AB_HEADERs have different Identifiers')
+ ii = assert_eq(Hscr_in(:)%ikxc,     'AB_HEADERs have different ikxc'       )
+ ii = assert_eq(Hscr_in(:)%headform, 'AB_HEADERs have different headform'   )
+ ii = assert_eq(Hscr_in(:)%fform,    'AB_HEADERs have different fform'      )
+ ii = assert_eq(Hscr_in(:)%gwcalctyp,'AB_HEADERs have different gwcalctyp'  )
+ ii = assert_eq(Hscr_in(:)%nI,       'AB_HEADERs have different nI'         )
+ ii = assert_eq(Hscr_in(:)%nJ,       'AB_HEADERs have different nJ'         )
+ ii = assert_eq(Hscr_in(:)%nomega,   'AB_HEADERs have different nomega'     )
+ ii = assert_eq(Hscr_in(:)%test_type,'AB_HEADERs have different test_type'  )
+ ii = assert_eq(Hscr_in(:)%tordering,'AB_HEADERs have different tordering'  )
 
  ! This is not mandatory but makes life easier!
- ii = assert_eq(Hscr_in(:)%npwe,'Headers have different number of G-vectors'  )
+ ii = assert_eq(Hscr_in(:)%npwe,'AB_HEADERs have different number of G-vectors'  )
 
  do ihd=2,nhds
    if (ANY(ABS(Hscr_in(ihd)%omega-Hscr_in(1)%omega)>tol6)) then
-     write(msg,'(a,i0,a)')' Frequencies in the first and the ',ihd,'-th header differ'
+     write(msg,'(a,i0,a)')' Frequencies in the first and the ',ihd,'-th AB_HEADER differ'
      MSG_ERROR(msg)
    end if
    if (ANY(Hscr_in(ihd)%gvec(:,:)-Hscr_in(1)%gvec(:,:)/=0)) then
-     write(msg,'(a,i0,a)')' Incompatible G-vector list found in the ',ihd,'-th header'
+     write(msg,'(a,i0,a)')' Incompatible G-vector list found in the ',ihd,'-th AB_HEADER'
      MSG_ERROR(msg)
    end if
    if (hscr_in(ihd)%kind_cdata /= hscr_in(1)%kind_cdata) then
      write(msg,'(3a,i0,2a)')' Files contain data with different precisions.',ch10,&
-     "In particular the ",ihd,'-th header has precision:',trim(hscr_in(ihd)%kind_cdata)
+     "In particular the ",ihd,'-th AB_HEADER has precision:',trim(hscr_in(ihd)%kind_cdata)
      MSG_ERROR(msg)
    end if
  end do !ihd
@@ -1427,8 +1427,8 @@ subroutine hscr_merge(Hscr_in,Hscr_out)
 
  if (nqneq /= nqtot) then
    write(msg,'(3a,2(i0,a))')&
-    'COMMENT: Headers contain duplicated q-points ',ch10,&
-    'Found ',nqneq,' distinct q-points among the total ',nqtot,' points reported in the headers. '
+    'COMMENT: AB_HEADERs contain duplicated q-points ',ch10,&
+    'Found ',nqneq,' distinct q-points among the total ',nqtot,' points reported in the AB_HEADERs. '
    call wrtout(std_out, msg)
  end if
 
@@ -1448,7 +1448,7 @@ end subroutine hscr_merge
 !! write_screening
 !!
 !! FUNCTION
-!! For a single q-point, write either \tilde epsilon^{-1} on the _SCR file
+!! For a single q-point, write either \tiAB_LDE epsilon^{-1} on the _SCR file
 !! or chi0 on the _SUSC file. The file is supposed to have been open in the calling routine.
 !!
 !! INPUTS
@@ -1561,7 +1561,7 @@ end subroutine write_screening
 !! read_screening
 !!
 !! FUNCTION
-!! Read either a screening (\tilde epsilon^{-1}) file in the SCR format or
+!! Read either a screening (\tiAB_LDE epsilon^{-1}) file in the SCR format or
 !! the irreducible polarizability (chi0) in the SUSC format.
 !!
 !! INPUTS
@@ -1578,7 +1578,7 @@ end subroutine write_screening
 !!  nomegaA=number of asked frequencies
 !!
 !! OUTPUT
-!!  epsm1(npweA,npweA,nomegaA,nqibzA) = \tilde\epsilon^{-1}(Ng,Ng,Nw,Nq)
+!!  epsm1(npweA,npweA,nomegaA,nqibzA) = \tiAB_LDE\epsilon^{-1}(Ng,Ng,Nw,Nq)
 !!
 !! NOTES
 !!  * If the epsilon matrix read is bigger than npweA x npweA, it will be truncated;
@@ -1662,14 +1662,14 @@ subroutine read_screening(varname,fname,npweA,nqibzA,nomegaA,epsm1,iomode,comm,&
    mpi_type_frm = xmpio_mpi_type_frm ! MPI type of the record marker.
    sc_mode = xmpio_collective
 
-   ! Master reads the header via Fortran IO then bcast the data.
+   ! Master reads the AB_HEADER via Fortran IO then bcast the data.
    call hscr_from_file(hscr, fname, fform, comm)
 
    ! Open the file with MPI-IO
    call MPI_FILE_OPEN(comm, fname, MPI_MODE_RDONLY, xmpio_info ,mpi_fh, mpi_err)
    ABI_CHECK_MPI(mpi_err, sjoin("MPI_FILE_OPEN:", fname))
 
-   ! Retrieve the offset of the section immediately below the header.
+   ! Retrieve the offset of the section immediately below the AB_HEADER.
    call hscr_mpio_skip(mpi_fh,test_fform,offset)
    ABI_CHECK(test_fform == fform, "mismatch in fform!")
 
@@ -1705,7 +1705,7 @@ subroutine read_screening(varname,fname,npweA,nqibzA,nomegaA,epsm1,iomode,comm,&
  end select
 
  ! Slice or full array?
- read_qslice = .False.
+ read_qslice = .false.
  if (PRESENT(iqiA)) then
    read_qslice = .True.
    !call wrtout(std_out, sjoin('. Reading q-slice for iq = ',itoa(iqiA),' from: ', fname))
@@ -1831,7 +1831,7 @@ subroutine read_screening(varname,fname,npweA,nqibzA,nomegaA,epsm1,iomode,comm,&
        end if ! iqibz==iqiA
      end do qread_loop ! iqibz
 
-   case (.False.)
+   case (.false.)
      ! Read the entire array.
      do iqibz=1,Hscr%nqibz
        do iomega=1,nomegaA
@@ -1910,7 +1910,7 @@ end subroutine read_screening
 !!  hscr_mpio_skip
 !!
 !! FUNCTION
-!!   Skip the header of the (SCR|SUSC) file in MPI-IO mode. This routine uses local MPI-IO calls hence
+!!   Skip the AB_HEADER of the (SCR|SUSC) file in MPI-IO mode. This routine uses local MPI-IO calls hence
 !!   it can be safely called by master node only. Note however that in this case the
 !!   offset has to be communicated to the other nodes.
 !!
@@ -1921,7 +1921,7 @@ end subroutine read_screening
 !!
 !! OUTPUT
 !!  fform=kind of the array in the file
-!!  offset=The offset of the Fortran record located immediately below the Abinit header.
+!!  offset=The offset of the Fortran record located immediately below the Abinit AB_HEADER.
 !!
 !! PARENTS
 !!      m_io_screening
@@ -2015,7 +2015,7 @@ end subroutine hscr_mpio_skip
 !!  fname_out=Name of the file to be produced.
 !!
 !! OUTPUT
-!!  ohscr<hscr_t>=The header of the output file.
+!!  ohscr<hscr_t>=The AB_HEADER of the output file.
 !!
 !! PARENTS
 !!      mrgscr
@@ -2065,9 +2065,9 @@ subroutine ioscr_qmerge(nfiles, filenames, hscr_files, fname_out, ohscr)
    MSG_ERROR(sjoin("Cannot overwrite existing file:", fname_out))
  end if
 
- ! Merge the headers creating the full list of q-points.
+ ! Merge the AB_HEADERs creating the full list of q-points.
  call hscr_merge(Hscr_files(1:nfiles), ohscr)
- call hscr_print(ohscr, header='Header of the final file', unit=std_out, prtvol=1)
+ call hscr_print(ohscr, AB_HEADER='AB_HEADER of the final file', unit=std_out, prtvol=1)
 
  ! For each q to be merged, save the index of the file where q is stored as well as its sequential index.
  ! Useful to do the merge point-by-point thus avoiding the allocation of the entire epsm1 array.
@@ -2102,7 +2102,7 @@ subroutine ioscr_qmerge(nfiles, filenames, hscr_files, fname_out, ohscr)
 #endif
  end if
 
- ! Write the header.
+ ! Write the AB_HEADER.
  fform_merge = hscr_files(1)%fform
  abifile = abifile_from_fform(fform_merge)
  if (abifile%fform == 0) then
@@ -2226,7 +2226,7 @@ subroutine ioscr_qrecover(ipath, nqrec, fname_out)
    end if
  end if
 
- ! Read header.
+ ! Read AB_HEADER.
  call hscr_from_file(hscr, ipath, ifform, comm)
  ABI_CHECK(ifform /= 0, sjoin("fform = 0 while reading:", ipath))
 
@@ -2234,7 +2234,7 @@ subroutine ioscr_qrecover(ipath, nqrec, fname_out)
    MSG_ERROR(sjoin("Wrong input. nqibz on file:", itoa(hscr%nqibz)))
  end if
 
- ! Copy header
+ ! Copy AB_HEADER
  call hscr_copy(hscr, hscr_recov)
 
  ! Change dimensions and arrays associated to nqibz.
@@ -2243,9 +2243,9 @@ subroutine ioscr_qrecover(ipath, nqrec, fname_out)
  ABI_MALLOC(hscr_recov%qibz, (3,nqrec))
  hscr_recov%qibz = hscr%qibz(:,1:nqrec)
 
- call hscr_print(hscr_recov,header="Header of the new SCR file",unit=std_out,prtvol=1)
+ call hscr_print(hscr_recov,AB_HEADER="AB_HEADER of the new SCR file",unit=std_out,prtvol=1)
 
- ! Write the header of the recovered file.
+ ! Write the AB_HEADER of the recovered file.
  fform1 = hscr%fform
 
  abifile = abifile_from_fform(fform1)
@@ -2299,7 +2299,7 @@ end subroutine ioscr_qrecover
 !!  fname_out=Name of the file to be produced.
 !!
 !! OUTPUT
-!!  ohscr<hscr_t>=The header of the output file.
+!!  ohscr<hscr_t>=The AB_HEADER of the output file.
 !!
 !! PARENTS
 !!      mrgscr
@@ -2479,7 +2479,7 @@ subroutine ioscr_wmerge(nfiles, filenames, hscr_file, freqremax, fname_out, ohsc
  write(std_out,'(2a,i0,a)') ch10,' Merging ',nfreq_tot,' frequencies.'
  write(std_out,'(2(a,i0),2a)') ' ',nfreqre,' real, and ',nfreqim,' imaginary.',ch10
 
- ! Copy old header
+ ! Copy old AB_HEADER
  call hscr_copy(Hscr_file(1),ohscr)
 
  ! TODO: hscr_wmerge
@@ -2492,8 +2492,8 @@ subroutine ioscr_wmerge(nfiles, filenames, hscr_file, freqremax, fname_out, ohsc
  npwe4mI = ohscr%npwe*ohscr%nI
  npwe4mJ = ohscr%npwe*ohscr%nJ
 
- ! Print new header for info
- call hscr_print(ohscr,header='Header of the final file',unit=std_out,prtvol=1)
+ ! Print new AB_HEADER for info
+ call hscr_print(ohscr,AB_HEADER='AB_HEADER of the final file',unit=std_out,prtvol=1)
 
  if (file_exists(fname_out)) then
    MSG_ERROR(sjoin("Cannot overwrite existing file:", fname_out))
@@ -2513,7 +2513,7 @@ subroutine ioscr_wmerge(nfiles, filenames, hscr_file, freqremax, fname_out, ohsc
    end if
  end if
 
- ! * Write the header.
+ ! * Write the AB_HEADER.
  fform_merge = ohscr%fform
 
  abifile = abifile_from_fform(fform_merge)
@@ -2597,13 +2597,13 @@ end subroutine ioscr_wmerge
 !!
 !! INPUTS
 !!  inpath=Input file
-!!  ihscr<hscr_t>=Headerf of the input file.
+!!  ihscr<hscr_t>=AB_HEADERf of the input file.
 !!  fname_out=Output file.
 !!  nfreq_tot=Number of frequencies in new file.
 !!  freq_indx(nfreq_tot)=Index of frequency to be kept in input file.
 !!
 !! OUTPUT
-!!  ohscr<hscr_t>=The header of the output file.
+!!  ohscr<hscr_t>=The AB_HEADER of the output file.
 !!
 !! PARENTS
 !!      mrgscr
@@ -2652,7 +2652,7 @@ subroutine ioscr_wremove(inpath, ihscr, fname_out, nfreq_tot, freq_indx, ohscr)
  ABI_CHECK(nfreq_tot > 0, "nfreq_tot <= 0!")
  if (all(freq_indx == 0)) MSG_ERROR("all(freq_indx == 0)")
 
- ! Copy the old header
+ ! Copy the old AB_HEADER
  call hscr_copy(ihscr, ohscr)
 
  ! Then modify entries for new frequency grid.
@@ -2666,8 +2666,8 @@ subroutine ioscr_wremove(inpath, ihscr, fname_out, nfreq_tot, freq_indx, ohscr)
  npwe4mI = ohscr%npwe*ohscr%nI
  npwe4mJ = ohscr%npwe*ohscr%nJ
 
- ! Print new header for info
- call hscr_print(ohscr,header='Header of the final file',unit=std_out,prtvol=1)
+ ! Print new AB_HEADER for info
+ call hscr_print(ohscr,AB_HEADER='AB_HEADER of the final file',unit=std_out,prtvol=1)
 
  ! Open output file.
  if (endswith(fname_out, ".nc")) then
@@ -2684,7 +2684,7 @@ subroutine ioscr_wremove(inpath, ihscr, fname_out, nfreq_tot, freq_indx, ohscr)
    end if
  end if
 
- ! Write the header.
+ ! Write the AB_HEADER.
  fform_merge = ohscr%fform
  abifile = abifile_from_fform(fform_merge)
  if (abifile%fform == 0) then

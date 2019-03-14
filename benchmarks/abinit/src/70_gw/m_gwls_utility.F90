@@ -118,7 +118,7 @@ end function complex_vector_product
 !!      gwls_GWlanczos
 !!
 !! CHILDREN
-!!      matrix_function,xmpi_sum,zgemm
+!!      matrix_function,xmpi_sum,AB_ZGEMM
 !!
 !! SOURCE
 
@@ -163,7 +163,7 @@ integer :: ierr
 ABI_ALLOCATE(C,(Qsize,Xsize))
 
 ! Compute Q^dagger . X
-call ZGEMM(            'C',   & ! Hermitian conjugate the first array
+call AB_ZGEMM(            'C',   & ! Hermitian conjugate the first array
 'N',   & ! Leave second array as is
 Qsize,   & ! the number of rows of the  matrix op( A )
 Xsize,   & ! the number of columns of the  matrix op( B )
@@ -181,7 +181,7 @@ Qsize)     ! LDC
 call xmpi_sum(C,mpi_communicator,ierr) ! sum on all processors working on FFT!
 
 ! Compute X - Q.(Q^dagger . X)
-call ZGEMM(            'N',   & ! Leave first array as is
+call AB_ZGEMM(            'N',   & ! Leave first array as is
 'N',   & ! Leave second array as is
 Hsize,   & ! the number of rows of the  matrix op( A )
 Xsize,   & ! the number of columns of the  matrix op( B )
@@ -215,7 +215,7 @@ end subroutine orthogonalize
 !!      gwls_DielectricArray,gwls_GenerateEpsilon
 !!
 !! CHILDREN
-!!      matrix_function,xmpi_sum,zgemm
+!!      matrix_function,xmpi_sum,AB_ZGEMM
 !!
 !! SOURCE
 
@@ -250,10 +250,10 @@ integer      :: info
 
 
 ! First, peform a decomposition
-call zpotrf( 'U', ldim,matrix, ldim, info )
+call AB_ZPOTRF( 'U', ldim,matrix, ldim, info )
 
-! Second, inverse the matrix in the new format
-call zpotri( 'U', ldim,matrix, ldim, info )
+! second, inverse the matrix in the new format
+call AB_ZPOTRI( 'U', ldim,matrix, ldim, info )
 
 
 ! Finally,  properly symmetrise the matrix so that it is hermitian!
@@ -283,7 +283,7 @@ end subroutine driver_invert_positive_definite_hermitian_matrix
 !!      gwls_ComputePoles,gwls_GenerateEpsilon
 !!
 !! CHILDREN
-!!      matrix_function,xmpi_sum,zgemm
+!!      matrix_function,xmpi_sum,AB_ZGEMM
 !!
 !! SOURCE
 
@@ -404,7 +404,7 @@ end if
 
 ! NEVER use MATMUL! It stores temp arrays on stack, which kills executables compiled with intel!
 ! check_matrix(:,:) = matmul(transpose(conjg(Lbasis)),Lbasis)
-call ZGEMM(            'C',   & ! Hermitian conjugate the first array
+call AB_ZGEMM(            'C',   & ! Hermitian conjugate the first array
 'N',   & ! Leave second array as is
 lmax,   & ! the number of rows of the  matrix op( A )
 lmax,   & ! the number of columns of the  matrix op( B )

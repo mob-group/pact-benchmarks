@@ -151,7 +151,7 @@ end subroutine open_haydock
 !! read_dim_haydock
 !!
 !! FUNCTION
-!!  Reads the header dimensions of the haydock file and store them in
+!!  Reads the AB_HEADER dimensions of the haydock file and store them in
 !!  the haydock file descriptor
 !!
 !! INPUT/OUTPUT
@@ -267,7 +267,7 @@ end subroutine write_dim_haydock
 !! skip_dim_haydock
 !!
 !! FUNCTION
-!!  Skip the part of the file reading basic dimensions contained in the header
+!!  Skip the part of the file reading basic dimensions contained in the AB_HEADER
 !!
 !! INPUTS
 !!  haydock_file = haydock file descriptor

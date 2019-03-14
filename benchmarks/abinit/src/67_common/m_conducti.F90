@@ -187,7 +187,7 @@ contains
 !These default values are typical of sequential use
  iomode=IO_MODE_FORTRAN ; spaceComm=xmpi_comm_self; me=0
 
-! Read the header of the optic files
+! Read the AB_HEADER of the optic files
  call hdr_read_from_fname(hdr, filnam1, fform1, spaceComm)
  call hdr_free(hdr)
  if (fform1 /= 610) then
@@ -198,12 +198,12 @@ contains
  opt_unt = get_unit()
  call WffOpen(iomode,spaceComm,filnam1,ierr,wff1,master,me,opt_unt)
 
-!Read the header from Ground state file
+!Read the AB_HEADER from Ground state file
  rdwr=1
  call hdr_io(fform1,hdr,rdwr,wff1)
  ABI_CHECK(fform1/=0,"Error opening wff1")
 
-!Extract info from the header
+!Extract info from the AB_HEADER
  headform=hdr%headform
  bantot=hdr%bantot
  ecut=hdr%ecut_eff
@@ -637,7 +637,7 @@ end subroutine conducti_paw
 !These default values are typical of sequential use
  iomode=IO_MODE_FORTRAN; spaceComm=xmpi_comm_self; me=0
 
-! Read the header of the OPT2 file.
+! Read the AB_HEADER of the OPT2 file.
  call hdr_read_from_fname(hdr, filnam2, fform2, spaceComm)
  call hdr_free(hdr)
 
@@ -649,11 +649,11 @@ end subroutine conducti_paw
  opt2_unt = get_unit()
  call WffOpen(iomode,spaceComm,filnam2,ierr,wff2,master,me,opt2_unt)
 
-!Read the header
+!Read the AB_HEADER
  rdwr=1
  call hdr_io(fform2,hdr,rdwr,wff2)
 
-!Extract info from the header
+!Extract info from the AB_HEADER
  headform=hdr%headform
  bantot=hdr%bantot
  ecut=hdr%ecut_eff
@@ -989,9 +989,9 @@ subroutine conducti_nc(filnam,filnam_out,mpi_enreg)
    MSG_ERROR("ddk1 and ddk3 are not consistent. see above messages")
  end if
 
-!Extract params from the header of the first ddk file (might have been the GS file ?)
+!Extract params from the AB_HEADER of the first ddk file (might have been the GS file ?)
 
-!Extract info from the header
+!Extract info from the AB_HEADER
  headform=hdr%headform
  bantot=hdr%bantot
  ecut=hdr%ecut_eff
@@ -1837,7 +1837,7 @@ end subroutine msig
 !These default values are typical of sequential use
  iomode=IO_MODE_FORTRAN; spaceComm=xmpi_comm_self; me=0
 
-! Read the header of the OPT2 file.
+! Read the AB_HEADER of the OPT2 file.
  call hdr_read_from_fname(hdr, filnam2, fform2, spaceComm)
  call hdr_free(hdr)
 
@@ -1849,11 +1849,11 @@ end subroutine msig
  opt2_unt = get_unit()
  call WffOpen(iomode,spaceComm,filnam2,ierr,wff2,master,me,opt2_unt)
 
-!Read the header
+!Read the AB_HEADER
  rdwr=1
  call hdr_io(fform2,hdr,rdwr,wff2)
 
-!Extract info from the header
+!Extract info from the AB_HEADER
  headform=hdr%headform
  bantot=hdr%bantot
  ecut=hdr%ecut_eff

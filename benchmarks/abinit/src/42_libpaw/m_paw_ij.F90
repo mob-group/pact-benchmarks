@@ -971,7 +971,7 @@ character(len=500) :: msg
    end do
  end if
 
-!Second case: a gather
+!second case: a gather
  if (paral_case==2) then
    call paw_ij_gather(paw_ij_in,paw_ij_cpy,-1,my_comm_atom)
  end if

@@ -16,7 +16,7 @@
 # _ABI_CHECK_NUMPY_HEADERS()
 # --------------------------
 #
-# Checks for the existence of NumPy headers.
+# Checks for the existence of NumPy AB_HEADERs.
 #
 AC_DEFUN([_ABI_CHECK_NUMPY_HEADERS],[
   dnl Init

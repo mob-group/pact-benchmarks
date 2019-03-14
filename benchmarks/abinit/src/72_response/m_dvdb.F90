@@ -63,8 +63,8 @@ MODULE m_dvdb
  private
 !!***
 
- ! Version 1: header + vscf1(r)
- ! Version 2: header + vscf1(r) + record with rhog1(G=0)
+ ! Version 1: AB_HEADER + vscf1(r)
+ ! Version 2: AB_HEADER + vscf1(r) + record with rhog1(G=0)
  !integer,public,parameter :: dvdb_last_version = 1
  integer,public,parameter :: dvdb_last_version = 2
 
@@ -159,13 +159,13 @@ MODULE m_dvdb
   integer :: prtvol=0
    ! Verbosity level
 
-  logical :: debug=.False.
+  logical :: debug=.false.
    ! Debug flag
 
-  logical :: has_dielt_zeff=.False.
+  logical :: has_dielt_zeff=.false.
    ! Does the dvdb have the dielectric tensor and Born effective charges
 
-  logical :: symv1=.False.
+  logical :: symv1=.false.
    ! Activate symmetrization of v1 potentials.
 
   character(len=fnlen) :: path = ABI_NOFILE
@@ -319,7 +319,7 @@ subroutine dvdb_init(db, path, comm)
  my_rank = xmpi_comm_rank(comm)
  db%path = path; db%comm = comm; db%iomode = IO_MODE_FORTRAN
 
- ! Master reads the header and builds useful tables
+ ! Master reads the AB_HEADER and builds useful tables
  if (my_rank == master) then
 
    if (open_file(path, msg, newunit=unt, form="unformatted", status="old", action="read") /= 0) then
@@ -328,7 +328,7 @@ subroutine dvdb_init(db, path, comm)
    read(unt, err=10, iomsg=msg) db%version
    read(unt, err=10, iomsg=msg) db%numv1
 
-   ! Get important dimensions from the first header and rewind the file.
+   ! Get important dimensions from the first AB_HEADER and rewind the file.
    call hdr_fort_read(hdr_ref, unt, fform)
    if (dvdb_check_fform(fform, "read_dvdb", msg) /= 0) then
      MSG_ERROR(sjoin("While reading:", path, ch10, msg))
@@ -715,7 +715,7 @@ end subroutine dvdb_free
 !!
 !! SOURCE
 
-subroutine dvdb_print(db, header, unit, prtvol, mode_paral)
+subroutine dvdb_print(db, AB_HEADER, unit, prtvol, mode_paral)
 
 
 !This section has been created automatically by the script Abilint (TD).
@@ -730,7 +730,7 @@ subroutine dvdb_print(db, header, unit, prtvol, mode_paral)
 !scalars
  integer,optional,intent(in) :: prtvol,unit
  character(len=4),optional,intent(in) :: mode_paral
- character(len=*),optional,intent(in) :: header
+ character(len=*),optional,intent(in) :: AB_HEADER
  type(dvdb_t),intent(in) :: db
 
 !Local variables-------------------------------
@@ -746,7 +746,7 @@ subroutine dvdb_print(db, header, unit, prtvol, mode_paral)
  my_mode = 'COLL'; if (PRESENT(mode_paral)) my_mode = mode_paral
 
  msg=' ==== Info on the dvdb% object ==== '
- if (PRESENT(header)) msg=' ==== '//TRIM(ADJUSTL(header))//' ==== '
+ if (PRESENT(AB_HEADER)) msg=' ==== '//TRIM(ADJUSTL(AB_HEADER))//' ==== '
  call wrtout(my_unt,msg,my_mode)
 
  write(std_out,"(a)")sjoin("DVDB version:", itoa(db%version))
@@ -776,7 +776,7 @@ subroutine dvdb_print(db, header, unit, prtvol, mode_paral)
  end if
 
  if (my_prtvol > 0) then
-   call crystal_print(db%cryst, header="Crystal structure in DVDB file")
+   call crystal_print(db%cryst, AB_HEADER="Crystal structure in DVDB file")
    write(std_out,"(a)")"FFT mesh for potentials on file:"
    write(std_out,"(a)")"q-point, idir, ipert, ngfft(:3)"
    do iv1=1,db%numv1
@@ -938,7 +938,7 @@ integer function dvdb_read_onev1(db, idir, ipert, iqpt, cplex, nfft, ngfft, v1sc
    return
  end if
 
- ! Find (idir, ipert, iqpt) and skip the header.
+ ! Find (idir, ipert, iqpt) and skip the AB_HEADER.
  call dvdb_seek(db, idir, ipert, iqpt)
  ierr = my_hdr_skip(db%fh, idir, ipert, db%qpts(:,iqpt), msg)
  if (ierr /= 0) return
@@ -1190,7 +1190,7 @@ subroutine v1phq_complete(cryst,qpt,ngfft,cplex,nfft,nspden,nsppol,mpi_enreg,sym
  integer :: i1,i2,i3,id1,id2,id3,n1,n2,n3,ind1,ind2,j1,j2,j3,l1,l2,l3,k1,k2,k3,nfftot
  real(dp) :: arg
  logical :: has_phase
- logical,parameter :: debug=.False.
+ logical,parameter :: debug=.false.
  character(len=500) :: msg
  integer,save :: enough=0
 !arrays
@@ -3052,7 +3052,7 @@ end subroutine dvdb_seek
 !!  dvdb_rewind
 !!
 !! FUNCTION
-!!   Rewind the file and move to the first header. Needed only if dvdb%iomode==IO_MODE_FORTRAN
+!!   Rewind the file and move to the first AB_HEADER. Needed only if dvdb%iomode==IO_MODE_FORTRAN
 !!   Return exit code and error message in msg if ierr != 0
 !!
 !! PARENTS
@@ -3108,7 +3108,7 @@ end function dvdb_rewind
 !!  my_hdr_skip
 !!
 !! FUNCTION
-!!  Skip the header without rewinding the file. Return exit code.
+!!  Skip the AB_HEADER without rewinding the file. Return exit code.
 !!
 !! NOTES
 !!  Because hdr_skip rewinds the file and I'm not gonna change that ugly code.
@@ -3414,7 +3414,7 @@ subroutine dvdb_merge_files(nfiles, v1files, dvdb_path, prtvol)
    end if
  end do
 
- ! Read the headers
+ ! Read the AB_HEADERs
  ABI_DT_MALLOC(hdr1_list, (nfiles))
 
  nperts = size(hdr1_list)
@@ -3426,12 +3426,12 @@ subroutine dvdb_merge_files(nfiles, v1files, dvdb_path, prtvol)
  write(ount, err=10, iomsg=msg) dvdb_last_version
  write(ount, err=10, iomsg=msg) nperts
 
- ! Validate headers.
- ! TODO: Should perform consistency check on the headers, rearrange them in blocks of q-points.
+ ! Validate AB_HEADERs.
+ ! TODO: Should perform consistency check on the AB_HEADERs, rearrange them in blocks of q-points.
  ! ignore POT1 files that do not correspond to atomic perturbations.
 
  do ii=1,nfiles
-   write(std_out,"(a,i0,2a)")"- Reading header of file [",ii,"]: ",trim(v1files(ii))
+   write(std_out,"(a,i0,2a)")"- Reading AB_HEADER of file [",ii,"]: ",trim(v1files(ii))
 
    if (endswith(v1files(ii), ".nc")) then
 #ifdef HAVE_NETCDF
@@ -3458,7 +3458,7 @@ subroutine dvdb_merge_files(nfiles, v1files, dvdb_path, prtvol)
    ! 109  POT1 files without vh1(G=0)
    ! 111  POT1 files with extra record with vh1(G=0) after FFT data.
    has_rhog1_g0(ii) = .True.
-   if (fform == 109) has_rhog1_g0(ii) = .False.
+   if (fform == 109) has_rhog1_g0(ii) = .false.
 
    write(std_out,"(a,i0,2a)")"- Merging file [",ii,"]: ",trim(v1files(ii))
    jj = ii
@@ -3599,7 +3599,7 @@ end subroutine calc_eiqr
 !!  Check the value of fform. Return exit status and error message.
 !!
 !! INPUTS
-!!   fform=Value read from the header
+!!   fform=Value read from the AB_HEADER
 !!   mode="merge_dvdb" to check the value of fform when we are merging POT1 files
 !!        "read_dvdb" when we are reading POT1 files from a DVDB file.
 !!
@@ -3725,7 +3725,7 @@ subroutine dvdb_test_v1rsym(db_path, comm)
  call dvdb_init(db, db_path, comm)
  db%debug = .True.
  !db%symv1 = .True.
- db%symv1 = .False.
+ db%symv1 = .false.
  call dvdb_print(db)
 
  call ngfft_seq(ngfft, db%ngfft3_v1(:,1))
@@ -3872,7 +3872,7 @@ subroutine dvdb_test_v1complete(db_path, dump_path, comm)
 
  call dvdb_init(db, db_path, comm)
  db%debug = .True.
- db%symv1 = .False. !; db%symv1 = .True.
+ db%symv1 = .false. !; db%symv1 = .True.
  call dvdb_print(db)
  call dvdb_list_perts(db, [-1,-1,-1])
 
@@ -4041,7 +4041,7 @@ subroutine dvdb_test_ftinterp(db_path, ngqpt, comm)
  call dvdb_init(db, db_path, comm)
  db%debug = .True.
  db%symv1 = .True.
- db%symv1 = .False.
+ db%symv1 = .false.
  call dvdb_print(db)
 
  ! Define FFT mesh for real space representation.
@@ -4354,10 +4354,10 @@ subroutine dvdb_interpolate_and_write(dtfil, ngfft, ngfftf, cryst, dvdb, &
  nqbz_coarse = product(ngqpt_coarse) * nqshift_coarse
 
  ! ========================================== !
- ! Prepare the header to write the potentials
+ ! Prepare the AB_HEADER to write the potentials
  ! ========================================== !
 
- ! Read the first header
+ ! Read the first AB_HEADER
  if (my_rank == master) then
    if (open_file(dvdb%path, msg, newunit=unt, form="unformatted", status="old", action="read") /= 0) then
      MSG_ERROR(msg)
@@ -4372,7 +4372,7 @@ subroutine dvdb_interpolate_and_write(dtfil, ngfft, ngfftf, cryst, dvdb, &
    close(unt)
  end if
 
- ! Reset the symmetries of the header
+ ! Reset the symmetries of the AB_HEADER
  ! One might have disable the symmetries in the response function calculation
  ! that produced the initial set of potentials present in the DVDB.
  ! This is because the symmetry features are not used in all parts
@@ -4514,7 +4514,7 @@ subroutine dvdb_interpolate_and_write(dtfil, ngfft, ngfftf, cryst, dvdb, &
        hdr_ref%qptn = qpt
        hdr_ref%pertcase = ipert
 
-       ! Write header
+       ! Write AB_HEADER
        call hdr_fort_write(hdr_ref, ount, fform_pot, ierr)
        ABI_CHECK(ierr == 0, "hdr_fort_write returned ierr = 0")
 
@@ -4569,7 +4569,7 @@ subroutine dvdb_interpolate_and_write(dtfil, ngfft, ngfftf, cryst, dvdb, &
 
          hdr_ref%qptn = qpt
          hdr_ref%pertcase = ipert
-         ! Write header
+         ! Write AB_HEADER
          call hdr_fort_write(hdr_ref, ount, fform_pot, ierr)
          ABI_CHECK(ierr == 0, "hdr_fort_write returned ierr = 0")
 

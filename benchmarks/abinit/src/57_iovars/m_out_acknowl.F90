@@ -57,8 +57,8 @@ contains
 !!  ndtset_alloc=number of datasets, corrected for allocation of at least
 !!   one data set. Use for most dimensioned arrays.
 !!  npsp=number of pseudopotentials
-!!  pspheads(npsp)=<type pspheader_type>=all the important information from the
-!!   pseudopotential file headers, as well as the psp file names
+!!  pspheads(npsp)=<type pspAB_HEADER_type>=all the important information from the
+!!   pseudopotential file AB_HEADERs, as well as the psp file names
 !!
 !! OUTPUT
 !!  Only writing
@@ -85,7 +85,7 @@ subroutine out_acknowl(dtsets,iout,ndtset_alloc,npsp,pspheads)
 !Arguments ------------------------------------
 !scalars
  integer,intent(in) :: iout,npsp,ndtset_alloc
- type(pspheader_type),intent(in) :: pspheads(npsp)
+ type(pspAB_HEADER_type),intent(in) :: pspheads(npsp)
 !arrays
  type(dataset_type),intent(in) :: dtsets(0:ndtset_alloc)
 
@@ -159,7 +159,7 @@ subroutine out_acknowl(dtsets,iout,ndtset_alloc,npsp,pspheads)
 & ' should be cited especially if you are using the GW part of ABINIT, as several authors'//ch10//&
 & ' of this part are not in the list of authors of the first or third paper.'//ch10//&
 & ' The .pdf of the latter paper is available at https://www.abinit.org/about/zfk_0505-06_558-562.pdf.'//ch10//&
-& ' Note that it should not redistributed (Copyright by Oldenburg Wissenshaftverlag,'//ch10//&
+& ' Note that it should not redistributed (Copyright by OAB_LDEnburg Wissenshaftverlag,'//ch10//&
 & ' the licence allows the authors to put it on the Web).'//ch10//&
 & ' DOI and bibtex : see https://docs.abinit.org/theory/bibliography/#gonze2005'
  priority(3)=1
@@ -276,7 +276,7 @@ subroutine out_acknowl(dtsets,iout,ndtset_alloc,npsp,pspheads)
 
  ref(20)=' Plane-wave based electronic structure calculations for correlated materials.'//ch10//&
 & ' using dynamical mean-field theory and projected local orbitals,'//ch10// &
-& ' B. Amadon, F. Lechermann, A. Georges, F. Jollet, T.O. Wehling, A.I. Lichenstein,'//ch10// &
+& ' B. Amadon, F. LeAB_CHERmann, A. Georges, F. Jollet, T.O. Wehling, A.I. Lichenstein,'//ch10// &
 & ' Phys. Rev. B 77, 205112 (2008).'
  comment(20)=' Comment : to be cited in case the computation of overlap operator'// &
 & ' for Wannier90 interface within PAW is used,'//ch10//&

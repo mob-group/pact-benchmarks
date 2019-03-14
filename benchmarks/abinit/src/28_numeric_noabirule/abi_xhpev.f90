@@ -65,9 +65,9 @@
  !if ( present(istwf_k) .and. (istwf_k .ne. 2) .and. present(rwork)) then
  if (istwf_k_ /= 2) then
     ABI_CHECK(present(rwork),"rwork must be present")
-    call zhpev(jobz,uplo,n,a,w,z,ldz,work,rwork,info)
+    call AB_ZHPEV(jobz,uplo,n,a,w,z,ldz,work,rwork,info)
  else
-    call dspev(jobz,uplo,n,a,w,z,ldz,work(1:3*n),info)
+    call AB_DSPEV(jobz,uplo,n,a,w,z,ldz,work(1:3*n),info)
  endif
 
 end subroutine abi_dhpev
@@ -253,7 +253,7 @@ end subroutine abi_dhpev_alloc_2d
 
 ! *********************************************************************
 
- call chpev(jobz,uplo,n,a,w,z,ldz,work,rwork,info)
+ call AB_CHPEV(jobz,uplo,n,a,w,z,ldz,work,rwork,info)
 
 end subroutine abi_chpev
 !!***
@@ -337,7 +337,7 @@ end subroutine abi_chpev_alloc
 
 ! *********************************************************************
 
- call zhpev(jobz,uplo,n,a,w,z,ldz,work,rwork,info)
+ call AB_ZHPEV(jobz,uplo,n,a,w,z,ldz,work,rwork,info)
 
 end subroutine abi_zhpev
 !!***

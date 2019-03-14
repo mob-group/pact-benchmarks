@@ -501,8 +501,8 @@
      $                   KTYPE( MAXTYP )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLARND, DSXT1
-      EXTERNAL           DLAMCH, DLARND, DSXT1
+      DOUBLE PRECISION   AB_DLAMCH, DLARND, DSXT1
+      EXTERNAL           AB_DLAMCH, DLARND, DSXT1
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, DLABAD, DLACPY, DLAFTS, DLASET, DLATMR,
@@ -575,10 +575,10 @@
 *
 *     More Important constants
 *
-      UNFL = DLAMCH( 'Safe minimum' )
-      OVFL = DLAMCH( 'Overflow' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
+      OVFL = AB_DLAMCH( 'Overflow' )
       CALL DLABAD( UNFL, OVFL )
-      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
+      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
       ULPINV = ONE / ULP
       RTUNFL = SQRT( UNFL )
       RTOVFL = SQRT( OVFL )

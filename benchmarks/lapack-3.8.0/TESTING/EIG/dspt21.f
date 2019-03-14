@@ -249,8 +249,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      DOUBLE PRECISION   DDOT, DLAMCH, DLANGE, DLANSP
-      EXTERNAL           LSAME, DDOT, DLAMCH, DLANGE, DLANSP
+      DOUBLE PRECISION   DDOT, AB_DLAMCH, DLANGE, DLANSP
+      EXTERNAL           LSAME, DDOT, AB_DLAMCH, DLANGE, DLANSP
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DAXPY, DCOPY, DGEMM, DLACPY, DLASET, DOPMTR,
@@ -279,8 +279,8 @@
          CUPLO = 'L'
       END IF
 *
-      UNFL = DLAMCH( 'Safe minimum' )
-      ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
+      UNFL = AB_DLAMCH( 'Safe minimum' )
+      ULP = AB_DLAMCH( 'Epsilon' )*AB_DLAMCH( 'Base' )
 *
 *     Some Error Checks
 *

@@ -124,9 +124,9 @@ subroutine wvl_read(dtset, hdr0, hdr, mpi_enreg, option, rprimd, wff, wfs, wvl, 
   real(dp)              :: hgrid_old(3)
   real(dp), allocatable :: psigold(:,:,:,:,:,:)
   real(dp), allocatable, target :: wvl_band(:)
-  type(etsf_basisdata) :: basis_folder
-  type(etsf_main)      :: main_folder
-  type(etsf_electrons) :: electrons_folder
+  type(etsf_basisdata) :: basis_foAB_LDEr
+  type(etsf_main)      :: main_foAB_LDEr
+  type(etsf_electrons) :: electrons_foAB_LDEr
   logical               :: reformat
   logical              :: lstat
   type(etsf_io_low_error) :: error
@@ -212,22 +212,22 @@ subroutine wvl_read(dtset, hdr0, hdr, mpi_enreg, option, rprimd, wff, wfs, wvl, 
        hgrid_old(3) = hdr0%rprimd(3,3) / n_old(3)
        ABI_ALLOCATE(psigold,(0:n_old(1), 2, 0:n_old(2), 2, 0:n_old(3), 2))
        ABI_ALLOCATE(psifscf,(wvl%Glr%d%n1i, wvl%Glr%d%n2i, wvl%Glr%d%n3i))
-       ABI_ALLOCATE(basis_folder%coordinates_of_basis_grid_points%data2D,(3,hdr0%nwvlarr(1)))
+       ABI_ALLOCATE(basis_foAB_LDEr%coordinates_of_basis_grid_points%data2D,(3,hdr0%nwvlarr(1)))
      end if
 
 !    We read the basis set definition
-     ABI_ALLOCATE(basis_folder%number_of_coefficients_per_grid_point%data1D,(hdr0%nwvlarr(1)))
-     call etsf_io_basisdata_get(wff%unwff, basis_folder, lstat, error)
+     ABI_ALLOCATE(basis_foAB_LDEr%number_of_coefficients_per_grid_point%data1D,(hdr0%nwvlarr(1)))
+     call etsf_io_basisdata_get(wff%unwff, basis_foAB_LDEr, lstat, error)
      ETSF_CHECK_ERROR(lstat, error)
 
 !    We allocate a temporary array to read the wavefunctions
 !    and reorder then into wfs%ks%psi
-     ABI_ALLOCATE(wvl_band,(sum(basis_folder%number_of_coefficients_per_grid_point%data1D)))
+     ABI_ALLOCATE(wvl_band,(sum(basis_foAB_LDEr%number_of_coefficients_per_grid_point%data1D)))
 !    We just read the file from disk to memory, band per band.
      do iBand = 1, dtset%mband, 1
-       main_folder%wfs_coeff__state_access = iBand
-       main_folder%coefficients_of_wavefunctions%data1D => wvl_band
-       call etsf_io_main_get(wff%unwff, main_folder, lstat, error)
+       main_foAB_LDEr%wfs_coeff__state_access = iBand
+       main_foAB_LDEr%coefficients_of_wavefunctions%data1D => wvl_band
+       call etsf_io_main_get(wff%unwff, main_foAB_LDEr, lstat, error)
        ETSF_CHECK_ERROR(lstat, error)
 
 !      Now we reorder
@@ -236,10 +236,10 @@ subroutine wvl_read(dtset, hdr0, hdr, mpi_enreg, option, rprimd, wff, wfs, wvl, 
          psigold = zero
          iCoeff = 1
          do i = 1, hdr0%nwvlarr(1), 1
-           coord = basis_folder%coordinates_of_basis_grid_points%data2D(:, i) / 2
+           coord = basis_foAB_LDEr%coordinates_of_basis_grid_points%data2D(:, i) / 2
            psigold(coord(1), 1, coord(2), 1, coord(3), 1) = wvl_band(iCoeff)
            iCoeff = iCoeff + 1
-           if (basis_folder%number_of_coefficients_per_grid_point%data1D(i) == 8) then
+           if (basis_foAB_LDEr%number_of_coefficients_per_grid_point%data1D(i) == 8) then
              psigold(coord(1), 2, coord(2), 1, coord(3), 1) = wvl_band(iCoeff + 0)
              psigold(coord(1), 1, coord(2), 2, coord(3), 1) = wvl_band(iCoeff + 1)
              psigold(coord(1), 2, coord(2), 2, coord(3), 1) = wvl_band(iCoeff + 2)
@@ -267,7 +267,7 @@ subroutine wvl_read(dtset, hdr0, hdr, mpi_enreg, option, rprimd, wff, wfs, wvl, 
            wfs%ks%psi(bandSize * (iBand - me * wfs%ks%orbs%norbp - 1) + iCoarse) = &
 &           wvl_band(iCoeff)
            iCoeff  = iCoeff  + 1
-           if (basis_folder%number_of_coefficients_per_grid_point%data1D(iCoarse) == 8) then
+           if (basis_foAB_LDEr%number_of_coefficients_per_grid_point%data1D(iCoarse) == 8) then
              wfs%ks%psi(iFine:iFine + 6) = wvl_band(iCoeff:iCoeff + 6)
              iFine  = iFine  + 7
              iCoeff = iCoeff + 7
@@ -277,15 +277,15 @@ subroutine wvl_read(dtset, hdr0, hdr, mpi_enreg, option, rprimd, wff, wfs, wvl, 
      end do
 
 !    We read wfs%ks%eval (TODO maybe removed later).
-     electrons_folder%eigenvalues%data1D => wfs%ks%orbs%eval
-     call etsf_io_electrons_get(wff%unwff, electrons_folder, lstat, error)
+     electrons_foAB_LDEr%eigenvalues%data1D => wfs%ks%orbs%eval
+     call etsf_io_electrons_get(wff%unwff, electrons_foAB_LDEr, lstat, error)
      ETSF_CHECK_ERROR(lstat, error)
 
 !    Deallocate temporary arrays
      ABI_DEALLOCATE(wvl_band)
-     ABI_DEALLOCATE(basis_folder%number_of_coefficients_per_grid_point%data1D)
+     ABI_DEALLOCATE(basis_foAB_LDEr%number_of_coefficients_per_grid_point%data1D)
      if (reformat) then
-       ABI_DEALLOCATE(basis_folder%coordinates_of_basis_grid_points%data2D)
+       ABI_DEALLOCATE(basis_foAB_LDEr%coordinates_of_basis_grid_points%data2D)
        ABI_DEALLOCATE(psigold)
        ABI_DEALLOCATE(psifscf)
      end if
@@ -388,9 +388,9 @@ subroutine wvl_write(dtset, eigen, mpi_enreg, option, rprimd, wff, wfs, wvl, xre
   integer, allocatable  :: coeff_map(:,:,:)
   integer, allocatable, target :: wvl_coord(:,:), wvl_ncoeff(:)
   real(dp), allocatable, target :: wvl_band(:)
-  type(etsf_basisdata) :: basis_folder
-  type(etsf_main)      :: main_folder
-  type(etsf_electrons) :: electrons_folder
+  type(etsf_basisdata) :: basis_foAB_LDEr
+  type(etsf_main)      :: main_foAB_LDEr
+  type(etsf_electrons) :: electrons_foAB_LDEr
   logical              :: lstat
   type(etsf_io_low_error) :: error
 #endif
@@ -493,10 +493,10 @@ subroutine wvl_write(dtset, eigen, mpi_enreg, option, rprimd, wff, wfs, wvl, xre
          wvl_ncoeff(iGrid) = wvl_ncoeff(iGrid) + 7
        end do
      end do
-     basis_folder%coordinates_of_basis_grid_points%data2D => wvl_coord
-     basis_folder%number_of_coefficients_per_grid_point%data1D => wvl_ncoeff
+     basis_foAB_LDEr%coordinates_of_basis_grid_points%data2D => wvl_coord
+     basis_foAB_LDEr%number_of_coefficients_per_grid_point%data1D => wvl_ncoeff
 
-     call etsf_io_basisdata_put(wff%unwff, basis_folder, lstat, error)
+     call etsf_io_basisdata_put(wff%unwff, basis_foAB_LDEr, lstat, error)
 
      ETSF_CHECK_ERROR(lstat, error)
 
@@ -526,17 +526,17 @@ subroutine wvl_write(dtset, eigen, mpi_enreg, option, rprimd, wff, wfs, wvl, xre
            iFine  = iFine + 7
          end if
        end do
-       main_folder%wfs_coeff__state_access = iband
-       main_folder%coefficients_of_wavefunctions%data1D => wvl_band
-       call etsf_io_main_put(wff%unwff, main_folder, lstat, error)
+       main_foAB_LDEr%wfs_coeff__state_access = iband
+       main_foAB_LDEr%coefficients_of_wavefunctions%data1D => wvl_band
+       call etsf_io_main_put(wff%unwff, main_foAB_LDEr, lstat, error)
        ETSF_CHECK_ERROR(lstat, error)
      end do
 
 !    We write the electronic informations.
 !    =====================================
-     electrons_folder%eigenvalues%data1D => eigen
-     electrons_folder%eigenvalues__number_of_states = dtset%mband
-     call etsf_io_electrons_put(wff%unwff, electrons_folder, lstat, error)
+     electrons_foAB_LDEr%eigenvalues%data1D => eigen
+     electrons_foAB_LDEr%eigenvalues__number_of_states = dtset%mband
+     call etsf_io_electrons_put(wff%unwff, electrons_foAB_LDEr, lstat, error)
      ETSF_CHECK_ERROR(lstat,error)
 
 !    We deallocate all arrays

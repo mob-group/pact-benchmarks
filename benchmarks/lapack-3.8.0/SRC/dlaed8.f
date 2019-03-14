@@ -274,8 +274,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            AB_IDAMAX
-      DOUBLE PRECISION   DLAMCH, AB_DLAPY2
-      EXTERNAL           AB_IDAMAX, DLAMCH, AB_DLAPY2
+      DOUBLE PRECISION   AB_DLAMCH, AB_DLAPY2
+      EXTERNAL           AB_IDAMAX, AB_DLAMCH, AB_DLAPY2
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           AB_DCOPY, AB_DLACPY, AB_DLAMRG, AB_DROT, AB_DSC
@@ -358,7 +358,7 @@
 *
       IMAX = AB_IDAMAX( N, Z, 1 )
       JMAX = AB_IDAMAX( N, D, 1 )
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = AB_DLAMCH( 'Epsilon' )
       TOL = EIGHT*EPS*ABS( D( JMAX ) )
 *
 *     If the rank-1 modifier is small enough, no more needs to be done
