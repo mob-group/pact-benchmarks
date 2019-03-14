@@ -1,4 +1,4 @@
-*> \brief \b ZGEQRT
+*> \brief \b AB_ZGEQRT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZGEQRT + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgeqrt.f">
+*> Download AB_ZGEQRT + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZGEQRt.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgeqrt.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZGEQRt.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgeqrt.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZGEQRt.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZGEQRT( M, N, NB, A, LDA, T, LDT, WORK, INFO )
+*       SUBROUTINE AB_ZGEQRT( M, N, NB, A, LDA, T, LDT, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER INFO, LDA, LDT, M, N, NB
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> ZGEQRT computes a blocked QR factorization of a complex M-by-N matrix A
+*> AB_ZGEQRT computes a blocked QR factorization of a complex M-by-N matrix A
 *> using the compact WY representation of Q.
 *> \endverbatim
 *
@@ -139,7 +139,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZGEQRT( M, N, NB, A, LDA, T, LDT, WORK, INFO )
+      SUBROUTINE AB_ZGEQRT( M, N, NB, A, LDA, T, LDT, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -162,7 +162,7 @@
       PARAMETER( USE_RECURSIVE_QR=.TRUE. )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL   ZGEQRT2, ZGEQRT3, ZLARFB, XERBLA
+      EXTERNAL   AB_ZGEQRT2, AB_ZGEQRT3, AB_ZLARFB, AB_XERBLA
 *     ..
 *     .. Executable Statements ..
 *
@@ -181,7 +181,7 @@
          INFO = -7
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZGEQRT', -INFO )
+         CALL AB_XERBLA( 'AB_ZGEQRT', -INFO )
          RETURN
       END IF
 *
@@ -198,21 +198,23 @@
 *     Compute the QR factorization of the current block A(I:M,I:I+IB-1)
 *
          IF( USE_RECURSIVE_QR ) THEN
-            CALL ZGEQRT3( M-I+1, IB, A(I,I), LDA, T(1,I), LDT, IINFO )
+            CALL AB_ZGEQRT3( M-I+1, IB, A(I,I), LDA, T(1,I), LDT, IINFO 
+     $)
          ELSE
-            CALL ZGEQRT2( M-I+1, IB, A(I,I), LDA, T(1,I), LDT, IINFO )
+            CALL AB_ZGEQRT2( M-I+1, IB, A(I,I), LDA, T(1,I), LDT, IINFO 
+     $)
          END IF
          IF( I+IB.LE.N ) THEN
 *
 *     Update by applying H**H to A(I:M,I+IB:N) from the left
 *
-            CALL ZLARFB( 'L', 'C', 'F', 'C', M-I+1, N-I-IB+1, IB,
+            CALL AB_ZLARFB( 'L', 'C', 'F', 'C', M-I+1, N-I-IB+1, IB,
      $                   A( I, I ), LDA, T( 1, I ), LDT,
      $                   A( I, I+IB ), LDA, WORK , N-I-IB+1 )
          END IF
       END DO
       RETURN
 *
-*     End of ZGEQRT
+*     End of AB_ZGEQRT
 *
       END

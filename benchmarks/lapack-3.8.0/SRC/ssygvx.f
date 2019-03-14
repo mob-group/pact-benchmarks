@@ -1,4 +1,4 @@
-*> \brief \b SSYGVX
+*> \brief \b AB_SSYGVX
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SSYGVX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssygvx.f">
+*> Download AB_SSYGVX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SSYGVx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssygvx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SSYGVx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssygvx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SSYGVx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SSYGVX( ITYPE, JOBZ, RANGE, UPLO, N, A, LDA, B, LDB,
+*       SUBROUTINE AB_SSYGVX( ITYPE, JOBZ, RANGE, UPLO, N, A, LDA, B, LDB,
 *                          VL, VU, IL, IU, ABSTOL, M, W, Z, LDZ, WORK,
 *                          LWORK, IWORK, IFAIL, INFO )
 *
@@ -39,7 +39,7 @@
 *>
 *> \verbatim
 *>
-*> SSYGVX computes selected eigenvalues, and optionally, eigenvectors
+*> AB_SSYGVX computes selected eigenvalues, and optionally, eigenvectors
 *> of a real generalized symmetric-definite eigenproblem, of the form
 *> A*x=(lambda)*B*x,  A*Bx=(lambda)*x,  or B*A*x=(lambda)*x.  Here A
 *> and B are assumed to be symmetric and B is also positive definite.
@@ -238,12 +238,12 @@
 *>          LWORK is INTEGER
 *>          The length of the array WORK.  LWORK >= max(1,8*N).
 *>          For optimal efficiency, LWORK >= (NB+3)*N,
-*>          where NB is the blocksize for SSYTRD returned by ILAENV.
+*>          where NB is the blocksize for AB_SSYTRD returned by AB_ILAENV.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -265,8 +265,8 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
-*>          > 0:  SPOTRF or SSYEVX returned an error code:
-*>             <= N:  if INFO = i, SSYEVX failed to converge;
+*>          > 0:  AB_SPOTRF or AB_SSYEVX returned an error code:
+*>             <= N:  if INFO = i, AB_SSYEVX failed to converge;
 *>                    i eigenvectors failed to converge.  Their indices
 *>                    are stored in array IFAIL.
 *>             > N:   if INFO = N + i, for 1 <= i <= N, then the leading
@@ -293,7 +293,7 @@
 *>     Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA
 *
 *  =====================================================================
-      SUBROUTINE SSYGVX( ITYPE, JOBZ, RANGE, UPLO, N, A, LDA, B, LDB,
+      SUBROUTINE AB_SSYGVX( ITYPE, JOBZ, RANGE, UPLO, N, A, LDA, B, LDB,
      $                   VL, VU, IL, IU, ABSTOL, M, W, Z, LDZ, WORK,
      $                   LWORK, IWORK, IFAIL, INFO )
 *
@@ -325,12 +325,13 @@
       INTEGER            LWKMIN, LWKOPT, NB
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      EXTERNAL           ILAENV, LSAME
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_ILAENV, AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SPOTRF, SSYEVX, SSYGST, STRMM, STRSM, XERBLA
+      EXTERNAL           AB_SPOTRF, AB_SSYEVX, AB_SSYGST, AB_STRMM, AB_S
+     $TRSM, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -339,21 +340,21 @@
 *
 *     Test the input parameters.
 *
-      UPPER = LSAME( UPLO, 'U' )
-      WANTZ = LSAME( JOBZ, 'V' )
-      ALLEIG = LSAME( RANGE, 'A' )
-      VALEIG = LSAME( RANGE, 'V' )
-      INDEIG = LSAME( RANGE, 'I' )
+      UPPER = AB_LSAME( UPLO, 'U' )
+      WANTZ = AB_LSAME( JOBZ, 'V' )
+      ALLEIG = AB_LSAME( RANGE, 'A' )
+      VALEIG = AB_LSAME( RANGE, 'V' )
+      INDEIG = AB_LSAME( RANGE, 'I' )
       LQUERY = ( LWORK.EQ.-1 )
 *
       INFO = 0
       IF( ITYPE.LT.1 .OR. ITYPE.GT.3 ) THEN
          INFO = -1
-      ELSE IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
+      ELSE IF( .NOT.( WANTZ .OR. AB_LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -2
       ELSE IF( .NOT.( ALLEIG .OR. VALEIG .OR. INDEIG ) ) THEN
          INFO = -3
-      ELSE IF( .NOT.( UPPER .OR. LSAME( UPLO, 'L' ) ) ) THEN
+      ELSE IF( .NOT.( UPPER .OR. AB_LSAME( UPLO, 'L' ) ) ) THEN
          INFO = -4
       ELSE IF( N.LT.0 ) THEN
          INFO = -5
@@ -381,7 +382,7 @@
 *
       IF( INFO.EQ.0 ) THEN
          LWKMIN = MAX( 1, 8*N )
-         NB = ILAENV( 1, 'SSYTRD', UPLO, N, -1, -1, -1 )
+         NB = AB_ILAENV( 1, 'AB_SSYTRD', UPLO, N, -1, -1, -1 )
          LWKOPT = MAX( LWKMIN, ( NB + 3 )*N )
          WORK( 1 ) = LWKOPT
 *
@@ -391,7 +392,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SSYGVX', -INFO )
+         CALL AB_XERBLA( 'AB_SSYGVX', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -406,7 +407,7 @@
 *
 *     Form a Cholesky factorization of B.
 *
-      CALL SPOTRF( UPLO, N, B, LDB, INFO )
+      CALL AB_SPOTRF( UPLO, N, B, LDB, INFO )
       IF( INFO.NE.0 ) THEN
          INFO = N + INFO
          RETURN
@@ -414,8 +415,9 @@
 *
 *     Transform problem to standard eigenvalue problem and solve.
 *
-      CALL SSYGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
-      CALL SSYEVX( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL, IU, ABSTOL,
+      CALL AB_SSYGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
+      CALL AB_SSYEVX( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL, IU, ABST
+     $OL,
      $             M, W, Z, LDZ, WORK, LWORK, IWORK, IFAIL, INFO )
 *
       IF( WANTZ ) THEN
@@ -435,7 +437,8 @@
                TRANS = 'T'
             END IF
 *
-            CALL STRSM( 'Left', UPLO, TRANS, 'Non-unit', N, M, ONE, B,
+            CALL AB_STRSM( 'Left', UPLO, TRANS, 'Non-unit', N, M, ONE, B
+     $,
      $                  LDB, Z, LDZ )
 *
          ELSE IF( ITYPE.EQ.3 ) THEN
@@ -449,7 +452,8 @@
                TRANS = 'N'
             END IF
 *
-            CALL STRMM( 'Left', UPLO, TRANS, 'Non-unit', N, M, ONE, B,
+            CALL AB_STRMM( 'Left', UPLO, TRANS, 'Non-unit', N, M, ONE, B
+     $,
      $                  LDB, Z, LDZ )
          END IF
       END IF
@@ -460,6 +464,6 @@
 *
       RETURN
 *
-*     End of SSYGVX
+*     End of AB_SSYGVX
 *
       END

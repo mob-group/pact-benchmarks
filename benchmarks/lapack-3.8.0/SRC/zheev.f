@@ -1,4 +1,4 @@
-*> \brief <b> ZHEEV computes the eigenvalues and, optionally, the left and/or right eigenvectors for HE matrices</b>
+*> \brief <b> AB_ZHEEV computes the eigenvalues and, optionally, the left and/or right eigenvectors for HE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZHEEV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zheev.f">
+*> Download AB_ZHEEV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZHEEV.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zheev.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZHEEV.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zheev.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZHEEV.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZHEEV( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, RWORK,
+*       SUBROUTINE AB_ZHEEV( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, RWORK,
 *                         INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> ZHEEV computes all eigenvalues and, optionally, eigenvectors of a
+*> AB_ZHEEV computes all eigenvalues and, optionally, eigenvectors of a
 *> complex Hermitian matrix A.
 *> \endverbatim
 *
@@ -101,12 +101,12 @@
 *>          LWORK is INTEGER
 *>          The length of the array WORK.  LWORK >= max(1,2*N-1).
 *>          For optimal efficiency, LWORK >= (NB+1)*N,
-*>          where NB is the blocksize for ZHETRD returned by ILAENV.
+*>          where NB is the blocksize for AB_ZHETRD returned by AB_ILAENV.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -137,7 +137,7 @@
 *> \ingroup complex16HEeigen
 *
 *  =====================================================================
-      SUBROUTINE ZHEEV( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, RWORK,
+      SUBROUTINE AB_ZHEEV( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, RWORK,
      $                  INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -170,14 +170,15 @@
      $                   SMLNUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      DOUBLE PRECISION   DLAMCH, ZLANHE
-      EXTERNAL           LSAME, ILAENV, DLAMCH, ZLANHE
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      DOUBLE PRECISION   DLAMCH, AB_ZLANHE
+      EXTERNAL           AB_LSAME, AB_ILAENV, DLAMCH, AB_ZLANHE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSCAL, DSTERF, XERBLA, ZHETRD, ZLASCL, ZSTEQR,
-     $                   ZUNGTR
+      EXTERNAL           AB_DSCAL, AB_DSTERF, AB_XERBLA, AB_ZHETRD, AB_Z
+     $LASCL, AB_ZSTEQR,
+     $                   AB_ZUNGTR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT
@@ -186,14 +187,14 @@
 *
 *     Test the input parameters.
 *
-      WANTZ = LSAME( JOBZ, 'V' )
-      LOWER = LSAME( UPLO, 'L' )
+      WANTZ = AB_LSAME( JOBZ, 'V' )
+      LOWER = AB_LSAME( UPLO, 'L' )
       LQUERY = ( LWORK.EQ.-1 )
 *
       INFO = 0
-      IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
+      IF( .NOT.( WANTZ .OR. AB_LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.( LOWER .OR. LSAME( UPLO, 'U' ) ) ) THEN
+      ELSE IF( .NOT.( LOWER .OR. AB_LSAME( UPLO, 'U' ) ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -202,7 +203,7 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         NB = ILAENV( 1, 'ZHETRD', UPLO, N, -1, -1, -1 )
+         NB = AB_ILAENV( 1, 'AB_ZHETRD', UPLO, N, -1, -1, -1 )
          LWKOPT = MAX( 1, ( NB+1 )*N )
          WORK( 1 ) = LWKOPT
 *
@@ -211,7 +212,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZHEEV ', -INFO )
+         CALL AB_XERBLA( 'AB_ZHEEV ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -242,7 +243,7 @@
 *
 *     Scale matrix to allowable range, if necessary.
 *
-      ANRM = ZLANHE( 'M', UPLO, N, A, LDA, RWORK )
+      ANRM = AB_ZLANHE( 'M', UPLO, N, A, LDA, RWORK )
       ISCALE = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.RMIN ) THEN
          ISCALE = 1
@@ -252,27 +253,28 @@
          SIGMA = RMAX / ANRM
       END IF
       IF( ISCALE.EQ.1 )
-     $   CALL ZLASCL( UPLO, 0, 0, ONE, SIGMA, N, N, A, LDA, INFO )
+     $   CALL AB_ZLASCL( UPLO, 0, 0, ONE, SIGMA, N, N, A, LDA, INFO )
 *
-*     Call ZHETRD to reduce Hermitian matrix to tridiagonal form.
+*     Call AB_ZHETRD to reduce Hermitian matrix to tridiagonal form.
 *
       INDE = 1
       INDTAU = 1
       INDWRK = INDTAU + N
       LLWORK = LWORK - INDWRK + 1
-      CALL ZHETRD( UPLO, N, A, LDA, W, RWORK( INDE ), WORK( INDTAU ),
+      CALL AB_ZHETRD( UPLO, N, A, LDA, W, RWORK( INDE ), WORK( INDTAU ),
      $             WORK( INDWRK ), LLWORK, IINFO )
 *
-*     For eigenvalues only, call DSTERF.  For eigenvectors, first call
-*     ZUNGTR to generate the unitary matrix, then call ZSTEQR.
+*     For eigenvalues only, call AB_DSTERF.  For eigenvectors, first call
+*     AB_ZUNGTR to generate the unitary matrix, then call AB_ZSTEQR.
 *
       IF( .NOT.WANTZ ) THEN
-         CALL DSTERF( N, W, RWORK( INDE ), INFO )
+         CALL AB_DSTERF( N, W, RWORK( INDE ), INFO )
       ELSE
-         CALL ZUNGTR( UPLO, N, A, LDA, WORK( INDTAU ), WORK( INDWRK ),
+         CALL AB_ZUNGTR( UPLO, N, A, LDA, WORK( INDTAU ), WORK( INDWRK )
+     $,
      $                LLWORK, IINFO )
          INDWRK = INDE + N
-         CALL ZSTEQR( JOBZ, N, W, RWORK( INDE ), A, LDA,
+         CALL AB_ZSTEQR( JOBZ, N, W, RWORK( INDE ), A, LDA,
      $                RWORK( INDWRK ), INFO )
       END IF
 *
@@ -284,7 +286,7 @@
          ELSE
             IMAX = INFO - 1
          END IF
-         CALL DSCAL( IMAX, ONE / SIGMA, W, 1 )
+         CALL AB_DSCAL( IMAX, ONE / SIGMA, W, 1 )
       END IF
 *
 *     Set WORK(1) to optimal complex workspace size.
@@ -293,6 +295,6 @@
 *
       RETURN
 *
-*     End of ZHEEV
+*     End of AB_ZHEEV
 *
       END

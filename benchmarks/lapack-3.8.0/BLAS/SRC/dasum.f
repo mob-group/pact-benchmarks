@@ -1,4 +1,4 @@
-*> \brief \b DASUM
+*> \brief \b AB_DASUM
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       DOUBLE PRECISION FUNCTION DASUM(N,DX,INCX)
+*       DOUBLE PRECISION FUNCTION AB_DASUM(N,DX,INCX)
 *
 *       .. Scalar Arguments ..
 *       INTEGER INCX,N
@@ -23,7 +23,7 @@
 *>
 *> \verbatim
 *>
-*>    DASUM takes the sum of the absolute values.
+*>    AB_DASUM takes the sum of the absolute values.
 *> \endverbatim
 *
 *  Arguments:
@@ -69,7 +69,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION DASUM(N,DX,INCX)
+      DOUBLE PRECISION FUNCTION AB_DASUM(N,DX,INCX)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -92,7 +92,7 @@
 *     .. Intrinsic Functions ..
       INTRINSIC DABS,MOD
 *     ..
-      DASUM = 0.0d0
+      AB_DASUM = 0.0d0
       DTEMP = 0.0d0
       IF (N.LE.0 .OR. INCX.LE.0) RETURN
       IF (INCX.EQ.1) THEN
@@ -107,7 +107,7 @@
                DTEMP = DTEMP + DABS(DX(I))
             END DO
             IF (N.LT.6) THEN
-               DASUM = DTEMP
+               AB_DASUM = DTEMP
                RETURN
             END IF
          END IF
@@ -126,6 +126,6 @@
             DTEMP = DTEMP + DABS(DX(I))
          END DO
       END IF
-      DASUM = DTEMP
+      AB_DASUM = DTEMP
       RETURN
       END

@@ -1,4 +1,4 @@
-*> \brief <b> SSPEVD computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
+*> \brief <b> AB_SSPEVD computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SSPEVD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sspevd.f">
+*> Download AB_SSPEVD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SSPEVd.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sspevd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SSPEVd.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sspevd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SSPEVd.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SSPEVD( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, LWORK,
+*       SUBROUTINE AB_SSPEVD( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, LWORK,
 *                          IWORK, LIWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> SSPEVD computes all the eigenvalues and, optionally, eigenvectors
+*> AB_SSPEVD computes all the eigenvalues and, optionally, eigenvectors
 *> of a real symmetric matrix A in packed storage. If eigenvectors are
 *> desired, it uses a divide and conquer algorithm.
 *>
@@ -129,7 +129,7 @@
 *>          only calculates the required sizes of the WORK and IWORK
 *>          arrays, returns these values as the first entries of the WORK
 *>          and IWORK arrays, and no error message related to LWORK or
-*>          LIWORK is issued by XERBLA.
+*>          LIWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -149,7 +149,7 @@
 *>          routine only calculates the required sizes of the WORK and
 *>          IWORK arrays, returns these values as the first entries of
 *>          the WORK and IWORK arrays, and no error message related to
-*>          LWORK or LIWORK is issued by XERBLA.
+*>          LWORK or LIWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -175,7 +175,7 @@
 *> \ingroup realOTHEReigen
 *
 *  =====================================================================
-      SUBROUTINE SSPEVD( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, LWORK,
+      SUBROUTINE AB_SSPEVD( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, LWORK,
      $                   IWORK, LIWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -206,12 +206,13 @@
      $                   SMLNUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SLAMCH, SLANSP
-      EXTERNAL           LSAME, SLAMCH, SLANSP
+      LOGICAL            AB_LSAME
+      REAL               SLAMCH, AB_SLANSP
+      EXTERNAL           AB_LSAME, SLAMCH, AB_SLANSP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SOPMTR, SSCAL, SSPTRD, SSTEDC, SSTERF, XERBLA
+      EXTERNAL           AB_SOPMTR, AB_SSCAL, AB_SSPTRD, AB_SSTEDC, AB_S
+     $STERF, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          SQRT
@@ -220,13 +221,14 @@
 *
 *     Test the input parameters.
 *
-      WANTZ = LSAME( JOBZ, 'V' )
+      WANTZ = AB_LSAME( JOBZ, 'V' )
       LQUERY = ( LWORK.EQ.-1 .OR. LIWORK.EQ.-1 )
 *
       INFO = 0
-      IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
+      IF( .NOT.( WANTZ .OR. AB_LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.( LSAME( UPLO, 'U' ) .OR. LSAME( UPLO, 'L' ) ) )
+      ELSE IF( .NOT.( AB_LSAME( UPLO, 'U' ) .OR. AB_LSAME( UPLO, 'L' ) )
+     $ )
      $          THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
@@ -259,7 +261,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SSPEVD', -INFO )
+         CALL AB_XERBLA( 'AB_SSPEVD', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -288,7 +290,7 @@
 *
 *     Scale matrix to allowable range, if necessary.
 *
-      ANRM = SLANSP( 'M', UPLO, N, AP, WORK )
+      ANRM = AB_SLANSP( 'M', UPLO, N, AP, WORK )
       ISCALE = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.RMIN ) THEN
          ISCALE = 1
@@ -298,40 +300,43 @@
          SIGMA = RMAX / ANRM
       END IF
       IF( ISCALE.EQ.1 ) THEN
-         CALL SSCAL( ( N*( N+1 ) ) / 2, SIGMA, AP, 1 )
+         CALL AB_SSCAL( ( N*( N+1 ) ) / 2, SIGMA, AP, 1 )
       END IF
 *
-*     Call SSPTRD to reduce symmetric packed matrix to tridiagonal form.
+*     Call AB_SSPTRD to reduce symmetric packed matrix to tridiagonal form.
 *
       INDE = 1
       INDTAU = INDE + N
-      CALL SSPTRD( UPLO, N, AP, W, WORK( INDE ), WORK( INDTAU ), IINFO )
+      CALL AB_SSPTRD( UPLO, N, AP, W, WORK( INDE ), WORK( INDTAU ), IINF
+     $O )
 *
-*     For eigenvalues only, call SSTERF.  For eigenvectors, first call
-*     SSTEDC to generate the eigenvector matrix, WORK(INDWRK), of the
-*     tridiagonal matrix, then call SOPMTR to multiply it by the
+*     For eigenvalues only, call AB_SSTERF.  For eigenvectors, first call
+*     AB_SSTEDC to generate the eigenvector matrix, WORK(INDWRK), of the
+*     tridiagonal matrix, then call AB_SOPMTR to multiply it by the
 *     Householder transformations represented in AP.
 *
       IF( .NOT.WANTZ ) THEN
-         CALL SSTERF( N, W, WORK( INDE ), INFO )
+         CALL AB_SSTERF( N, W, WORK( INDE ), INFO )
       ELSE
          INDWRK = INDTAU + N
          LLWORK = LWORK - INDWRK + 1
-         CALL SSTEDC( 'I', N, W, WORK( INDE ), Z, LDZ, WORK( INDWRK ),
+         CALL AB_SSTEDC( 'I', N, W, WORK( INDE ), Z, LDZ, WORK( INDWRK )
+     $,
      $                LLWORK, IWORK, LIWORK, INFO )
-         CALL SOPMTR( 'L', UPLO, 'N', N, N, AP, WORK( INDTAU ), Z, LDZ,
+         CALL AB_SOPMTR( 'L', UPLO, 'N', N, N, AP, WORK( INDTAU ), Z, LD
+     $Z,
      $                WORK( INDWRK ), IINFO )
       END IF
 *
 *     If matrix was scaled, then rescale eigenvalues appropriately.
 *
       IF( ISCALE.EQ.1 )
-     $   CALL SSCAL( N, ONE / SIGMA, W, 1 )
+     $   CALL AB_SSCAL( N, ONE / SIGMA, W, 1 )
 *
       WORK( 1 ) = LWMIN
       IWORK( 1 ) = LIWMIN
       RETURN
 *
-*     End of SSPEVD
+*     End of AB_SSPEVD
 *
       END

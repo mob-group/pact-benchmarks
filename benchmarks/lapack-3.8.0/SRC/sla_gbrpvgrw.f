@@ -1,4 +1,4 @@
-*> \brief \b SLA_GBRPVGRW computes the reciprocal pivot growth factor norm(A)/norm(U) for a general banded matrix.
+*> \brief \b AB_SLA_GBRPVGRW computes the reciprocal pivot growth factor norm(A)/norm(U) for a general banded matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLA_GBRPVGRW + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sla_gbrpvgrw.f">
+*> Download AB_SLA_GBRPVGRW + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLA_GBRPVGRW.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sla_gbrpvgrw.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLA_GBRPVGRW.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sla_gbrpvgrw.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLA_GBRPVGRW.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       REAL FUNCTION SLA_GBRPVGRW( N, KL, KU, NCOLS, AB, LDAB, AFB,
+*       REAL FUNCTION AB_SLA_GBRPVGRW( N, KL, KU, NCOLS, AB, LDAB, AFB,
 *                                   LDAFB )
 *
 *       .. Scalar Arguments ..
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> SLA_GBRPVGRW computes the reciprocal pivot growth factor
+*> AB_SLA_GBRPVGRW computes the reciprocal pivot growth factor
 *> norm(A)/norm(U). The "max absolute element" norm is used. If this is
 *> much less than 1, the stability of the LU factorization of the
 *> (equilibrated) matrix A could be poor. This also means that the
@@ -89,7 +89,7 @@
 *> \verbatim
 *>          AFB is REAL array, dimension (LDAFB,N)
 *>     Details of the LU factorization of the band matrix A, as
-*>     computed by SGBTRF.  U is stored as an upper triangular
+*>     computed by AB_SGBTRF.  U is stored as an upper triangular
 *>     band matrix with KL+KU superdiagonals in rows 1 to KL+KU+1,
 *>     and the multipliers used during the factorization are stored
 *>     in rows KL+KU+2 to 2*KL+KU+1.
@@ -114,7 +114,7 @@
 *> \ingroup realGBcomputational
 *
 *  =====================================================================
-      REAL FUNCTION SLA_GBRPVGRW( N, KL, KU, NCOLS, AB, LDAB, AFB,
+      REAL FUNCTION AB_SLA_GBRPVGRW( N, KL, KU, NCOLS, AB, LDAB, AFB,
      $                            LDAFB )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -156,5 +156,5 @@
             RPVGRW = MIN( AMAX / UMAX, RPVGRW )
          END IF
       END DO
-      SLA_GBRPVGRW = RPVGRW
+      AB_SLA_GBRPVGRW = RPVGRW
       END

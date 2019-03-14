@@ -1,4 +1,4 @@
-*> \brief \b DLALN2 solves a 1-by-1 or 2-by-2 linear system of equations of the specified form.
+*> \brief \b AB_DLALN2 solves a 1-by-1 or 2-by-2 linear system of equations of the specified form.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLALN2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaln2.f">
+*> Download AB_DLALN2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLALN2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaln2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLALN2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaln2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLALN2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLALN2( LTRANS, NA, NW, SMIN, CA, A, LDA, D1, D2, B,
+*       SUBROUTINE AB_DLALN2( LTRANS, NA, NW, SMIN, CA, A, LDA, D1, D2, B,
 *                          LDB, WR, WI, X, LDX, SCALE, XNORM, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> DLALN2 solves a system of the form  (ca A - w D ) X = s B
+*> AB_DLALN2 solves a system of the form  (ca A - w D ) X = s B
 *> or (ca A**T - w D) X = s B   with possible scaling ("s") and
 *> perturbation of A.  (A**T means A-transpose.)
 *>
@@ -49,7 +49,7 @@
 *> the first column of each being the real part and the second
 *> being the imaginary part.
 *>
-*> "s" is a scaling factor (.LE. 1), computed by DLALN2, which is
+*> "s" is a scaling factor (.LE. 1), computed by AB_DLALN2, which is
 *> so chosen that X can be computed without overflow.  X is further
 *> scaled if necessary to assure that norm(ca A - w D)*norm(X) is less
 *> than overflow.
@@ -159,7 +159,7 @@
 *> \param[out] X
 *> \verbatim
 *>          X is DOUBLE PRECISION array, dimension (LDX,NW)
-*>          The NA x NW matrix X (unknowns), as computed by DLALN2.
+*>          The NA x NW matrix X (unknowns), as computed by AB_DLALN2.
 *>          If NW=2 ("w" is complex), on exit, column 1 will contain
 *>          the real part of X and column 2 will contain the imaginary
 *>          part.
@@ -215,7 +215,7 @@
 *> \ingroup doubleOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE DLALN2( LTRANS, NA, NW, SMIN, CA, A, LDA, D1, D2, B,
+      SUBROUTINE AB_DLALN2( LTRANS, NA, NW, SMIN, CA, A, LDA, D1, D2, B,
      $                   LDB, WR, WI, X, LDX, SCALE, XNORM, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -249,7 +249,7 @@
      $                   UR22, XI1, XI2, XR1, XR2
 *     ..
 *     .. Local Arrays ..
-      LOGICAL            RSWAP( 4 ), ZSWAP( 4 )
+      LOGICAL            RSWAP( 4 ), AB_ZSWAP( 4 )
       INTEGER            IPIVOT( 4, 4 )
       DOUBLE PRECISION   CI( 2, 2 ), CIV( 4 ), CR( 2, 2 ), CRV( 4 )
 *     ..
@@ -258,7 +258,7 @@
       EXTERNAL           DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLADIV
+      EXTERNAL           AB_DLADIV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -268,7 +268,7 @@
      $                   ( CR( 1, 1 ), CRV( 1 ) )
 *     ..
 *     .. Data statements ..
-      DATA               ZSWAP / .FALSE., .FALSE., .TRUE., .TRUE. /
+      DATA               AB_ZSWAP / .FALSE., .FALSE., .TRUE., .TRUE. /
       DATA               RSWAP / .FALSE., .TRUE., .FALSE., .TRUE. /
       DATA               IPIVOT / 1, 2, 3, 4, 2, 1, 4, 3, 3, 4, 1, 2, 4,
      $                   3, 2, 1 /
@@ -351,7 +351,7 @@
 *
 *           Compute X
 *
-            CALL DLADIV( SCALE*B( 1, 1 ), SCALE*B( 1, 2 ), CSR, CSI,
+            CALL AB_DLADIV( SCALE*B( 1, 1 ), SCALE*B( 1, 2 ), CSR, CSI,
      $                   X( 1, 1 ), X( 1, 2 ) )
             XNORM = ABS( X( 1, 1 ) ) + ABS( X( 1, 2 ) )
          END IF
@@ -436,7 +436,7 @@
 *
             XR2 = ( BR2*SCALE ) / UR22
             XR1 = ( SCALE*BR1 )*UR11R - XR2*( UR11R*UR12 )
-            IF( ZSWAP( ICMAX ) ) THEN
+            IF( AB_ZSWAP( ICMAX ) ) THEN
                X( 1, 1 ) = XR2
                X( 2, 1 ) = XR1
             ELSE
@@ -572,10 +572,10 @@
                END IF
             END IF
 *
-            CALL DLADIV( BR2, BI2, UR22, UI22, XR2, XI2 )
+            CALL AB_DLADIV( BR2, BI2, UR22, UI22, XR2, XI2 )
             XR1 = UR11R*BR1 - UI11R*BI1 - UR12S*XR2 + UI12S*XI2
             XI1 = UI11R*BR1 + UR11R*BI1 - UI12S*XR2 - UR12S*XI2
-            IF( ZSWAP( ICMAX ) ) THEN
+            IF( AB_ZSWAP( ICMAX ) ) THEN
                X( 1, 1 ) = XR2
                X( 2, 1 ) = XR1
                X( 1, 2 ) = XI2
@@ -606,6 +606,6 @@
 *
       RETURN
 *
-*     End of DLALN2
+*     End of AB_DLALN2
 *
       END

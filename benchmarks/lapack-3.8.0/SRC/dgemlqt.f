@@ -1,4 +1,4 @@
-*> \brief \b DGEMLQT
+*> \brief \b AB_DGEMLQT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DGEMLQT + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgemlqt.f">
+*> Download AB_DGEMLQT + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGEMLQt.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgemlqt.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGEMLQt.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgemlqt.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGEMLQt.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGEMLQT( SIDE, TRANS, M, N, K, MB, V, LDV, T, LDT,
+*       SUBROUTINE AB_DGEMLQT( SIDE, TRANS, M, N, K, MB, V, LDV, T, LDT,
 *                          C, LDC, WORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> DGEMLQT overwrites the general real M-by-N matrix C with
+*> AB_DGEMLQT overwrites the general real M-by-N matrix C with
 *>
 *>                 SIDE = 'L'     SIDE = 'R'
 *> TRANS = 'N':      Q C            C Q
@@ -46,7 +46,7 @@
 *>
 *>       Q = H(1) H(2) . . . H(K) = I - V T V**T
 *>
-*> generated using the compact WY representation as returned by DGELQT.
+*> generated using the compact WY representation as returned by AB_DGELQT.
 *>
 *> Q is of order M if SIDE = 'L' and of order N  if SIDE = 'R'.
 *> \endverbatim
@@ -94,7 +94,7 @@
 *>          MB is INTEGER
 *>          The block size used for the storage of T.  K >= MB >= 1.
 *>          This must be the same value of MB used to generate T
-*>          in DGELQT.
+*>          in AB_DGELQT.
 *> \endverbatim
 *>
 *> \param[in] V
@@ -104,7 +104,7 @@
 *>                               (LDV,N) if SIDE = 'R'
 *>          The i-th row must contain the vector which defines the
 *>          elementary reflector H(i), for i = 1,2,...,k, as returned by
-*>          DGELQT in the first K rows of its array argument A.
+*>          AB_DGELQT in the first K rows of its array argument A.
 *> \endverbatim
 *>
 *> \param[in] LDV
@@ -117,7 +117,7 @@
 *> \verbatim
 *>          T is DOUBLE PRECISION array, dimension (LDT,K)
 *>          The upper triangular factors of the block reflectors
-*>          as returned by DGELQT, stored as a MB-by-K matrix.
+*>          as returned by AB_DGELQT, stored as a MB-by-K matrix.
 *> \endverbatim
 *>
 *> \param[in] LDT
@@ -165,7 +165,7 @@
 *> \ingroup doubleGEcomputational
 *
 *  =====================================================================
-      SUBROUTINE DGEMLQT( SIDE, TRANS, M, N, K, MB, V, LDV, T, LDT,
+      SUBROUTINE AB_DGEMLQT( SIDE, TRANS, M, N, K, MB, V, LDV, T, LDT,
      $                   C, LDC, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.8.0) --
@@ -189,11 +189,11 @@
       INTEGER            I, IB, LDWORK, KF
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, DLARFB
+      EXTERNAL           AB_XERBLA, AB_DLARFB
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -203,10 +203,10 @@
 *     .. Test the input arguments ..
 *
       INFO   = 0
-      LEFT   = LSAME( SIDE,  'L' )
-      RIGHT  = LSAME( SIDE,  'R' )
-      TRAN   = LSAME( TRANS, 'T' )
-      NOTRAN = LSAME( TRANS, 'N' )
+      LEFT   = AB_LSAME( SIDE,  'L' )
+      RIGHT  = AB_LSAME( SIDE,  'R' )
+      TRAN   = AB_LSAME( TRANS, 'T' )
+      NOTRAN = AB_LSAME( TRANS, 'N' )
 *
       IF( LEFT ) THEN
          LDWORK = MAX( 1, N )
@@ -234,7 +234,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DGEMLQT', -INFO )
+         CALL AB_XERBLA( 'AB_DGEMLQT', -INFO )
          RETURN
       END IF
 *
@@ -246,7 +246,7 @@
 *
          DO I = 1, K, MB
             IB = MIN( MB, K-I+1 )
-            CALL DLARFB( 'L', 'T', 'F', 'R', M-I+1, N, IB,
+            CALL AB_DLARFB( 'L', 'T', 'F', 'R', M-I+1, N, IB,
      $                   V( I, I ), LDV, T( 1, I ), LDT,
      $                   C( I, 1 ), LDC, WORK, LDWORK )
          END DO
@@ -255,7 +255,7 @@
 *
          DO I = 1, K, MB
             IB = MIN( MB, K-I+1 )
-            CALL DLARFB( 'R', 'N', 'F', 'R', M, N-I+1, IB,
+            CALL AB_DLARFB( 'R', 'N', 'F', 'R', M, N-I+1, IB,
      $                   V( I, I ), LDV, T( 1, I ), LDT,
      $                   C( 1, I ), LDC, WORK, LDWORK )
          END DO
@@ -265,7 +265,7 @@
          KF = ((K-1)/MB)*MB+1
          DO I = KF, 1, -MB
             IB = MIN( MB, K-I+1 )
-            CALL DLARFB( 'L', 'N', 'F', 'R', M-I+1, N, IB,
+            CALL AB_DLARFB( 'L', 'N', 'F', 'R', M-I+1, N, IB,
      $                   V( I, I ), LDV, T( 1, I ), LDT,
      $                   C( I, 1 ), LDC, WORK, LDWORK )
          END DO
@@ -275,7 +275,7 @@
          KF = ((K-1)/MB)*MB+1
          DO I = KF, 1, -MB
             IB = MIN( MB, K-I+1 )
-            CALL DLARFB( 'R', 'T', 'F', 'R', M, N-I+1, IB,
+            CALL AB_DLARFB( 'R', 'T', 'F', 'R', M, N-I+1, IB,
      $                   V( I, I ), LDV, T( 1, I ), LDT,
      $                   C( 1, I ), LDC, WORK, LDWORK )
          END DO
@@ -284,6 +284,6 @@
 *
       RETURN
 *
-*     End of DGEMLQT
+*     End of AB_DGEMLQT
 *
       END

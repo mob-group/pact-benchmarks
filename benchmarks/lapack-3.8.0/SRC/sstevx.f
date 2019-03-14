@@ -1,4 +1,4 @@
-*> \brief <b> SSTEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
+*> \brief <b> AB_SSTEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SSTEVX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sstevx.f">
+*> Download AB_SSTEVX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SSTEVx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sstevx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SSTEVx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sstevx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SSTEVx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SSTEVX( JOBZ, RANGE, N, D, E, VL, VU, IL, IU, ABSTOL,
+*       SUBROUTINE AB_SSTEVX( JOBZ, RANGE, N, D, E, VL, VU, IL, IU, ABSTOL,
 *                          M, W, Z, LDZ, WORK, IWORK, IFAIL, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> SSTEVX computes selected eigenvalues and, optionally, eigenvectors
+*> AB_SSTEVX computes selected eigenvalues and, optionally, eigenvectors
 *> of a real symmetric tridiagonal matrix A.  Eigenvalues and
 *> eigenvectors can be selected by specifying either a range of values
 *> or a range of indices for the desired eigenvalues.
@@ -224,7 +224,8 @@
 *> \ingroup realOTHEReigen
 *
 *  =====================================================================
-      SUBROUTINE SSTEVX( JOBZ, RANGE, N, D, E, VL, VU, IL, IU, ABSTOL,
+      SUBROUTINE AB_SSTEVX( JOBZ, RANGE, N, D, E, VL, VU, IL, IU, ABSTOL
+     $,
      $                   M, W, Z, LDZ, WORK, IWORK, IFAIL, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -257,13 +258,14 @@
      $                   TMP1, TNRM, VLL, VUU
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SLAMCH, SLANST
-      EXTERNAL           LSAME, SLAMCH, SLANST
+      LOGICAL            AB_LSAME
+      REAL               SLAMCH, AB_SLANST
+      EXTERNAL           AB_LSAME, SLAMCH, AB_SLANST
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SSCAL, SSTEBZ, SSTEIN, SSTEQR, SSTERF,
-     $                   SSWAP, XERBLA
+      EXTERNAL           AB_SCOPY, AB_SSCAL, AB_SSTEBZ, AB_SSTEIN, AB_SS
+     $TEQR, AB_SSTERF,
+     $                   AB_SSWAP, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, SQRT
@@ -272,13 +274,13 @@
 *
 *     Test the input parameters.
 *
-      WANTZ = LSAME( JOBZ, 'V' )
-      ALLEIG = LSAME( RANGE, 'A' )
-      VALEIG = LSAME( RANGE, 'V' )
-      INDEIG = LSAME( RANGE, 'I' )
+      WANTZ = AB_LSAME( JOBZ, 'V' )
+      ALLEIG = AB_LSAME( RANGE, 'A' )
+      VALEIG = AB_LSAME( RANGE, 'V' )
+      INDEIG = AB_LSAME( RANGE, 'I' )
 *
       INFO = 0
-      IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
+      IF( .NOT.( WANTZ .OR. AB_LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
       ELSE IF( .NOT.( ALLEIG .OR. VALEIG .OR. INDEIG ) ) THEN
          INFO = -2
@@ -302,7 +304,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SSTEVX', -INFO )
+         CALL AB_XERBLA( 'AB_SSTEVX', -INFO )
          RETURN
       END IF
 *
@@ -346,7 +348,7 @@
          VLL = ZERO
          VUU = ZERO
       ENDIF
-      TNRM = SLANST( 'M', N, D, E )
+      TNRM = AB_SLANST( 'M', N, D, E )
       IF( TNRM.GT.ZERO .AND. TNRM.LT.RMIN ) THEN
          ISCALE = 1
          SIGMA = RMIN / TNRM
@@ -355,8 +357,8 @@
          SIGMA = RMAX / TNRM
       END IF
       IF( ISCALE.EQ.1 ) THEN
-         CALL SSCAL( N, SIGMA, D, 1 )
-         CALL SSCAL( N-1, SIGMA, E( 1 ), 1 )
+         CALL AB_SSCAL( N, SIGMA, D, 1 )
+         CALL AB_SSCAL( N-1, SIGMA, E( 1 ), 1 )
          IF( VALEIG ) THEN
             VLL = VL*SIGMA
             VUU = VU*SIGMA
@@ -364,8 +366,8 @@
       END IF
 *
 *     If all eigenvalues are desired and ABSTOL is less than zero, then
-*     call SSTERF or SSTEQR.  If this fails for some eigenvalue, then
-*     try SSTEBZ.
+*     call AB_SSTERF or AB_SSTEQR.  If this fails for some eigenvalue, then
+*     try AB_SSTEBZ.
 *
       TEST = .FALSE.
       IF( INDEIG ) THEN
@@ -374,13 +376,14 @@
          END IF
       END IF
       IF( ( ALLEIG .OR. TEST ) .AND. ( ABSTOL.LE.ZERO ) ) THEN
-         CALL SCOPY( N, D, 1, W, 1 )
-         CALL SCOPY( N-1, E( 1 ), 1, WORK( 1 ), 1 )
+         CALL AB_SCOPY( N, D, 1, W, 1 )
+         CALL AB_SCOPY( N-1, E( 1 ), 1, WORK( 1 ), 1 )
          INDWRK = N + 1
          IF( .NOT.WANTZ ) THEN
-            CALL SSTERF( N, W, WORK, INFO )
+            CALL AB_SSTERF( N, W, WORK, INFO )
          ELSE
-            CALL SSTEQR( 'I', N, W, WORK, Z, LDZ, WORK( INDWRK ), INFO )
+            CALL AB_SSTEQR( 'I', N, W, WORK, Z, LDZ, WORK( INDWRK ), INF
+     $O )
             IF( INFO.EQ.0 ) THEN
                DO 10 I = 1, N
                   IFAIL( I ) = 0
@@ -394,7 +397,7 @@
          INFO = 0
       END IF
 *
-*     Otherwise, call SSTEBZ and, if eigenvectors are desired, SSTEIN.
+*     Otherwise, call AB_SSTEBZ and, if eigenvectors are desired, AB_SSTEIN.
 *
       IF( WANTZ ) THEN
          ORDER = 'B'
@@ -405,12 +408,14 @@
       INDIBL = 1
       INDISP = INDIBL + N
       INDIWO = INDISP + N
-      CALL SSTEBZ( RANGE, ORDER, N, VLL, VUU, IL, IU, ABSTOL, D, E, M,
+      CALL AB_SSTEBZ( RANGE, ORDER, N, VLL, VUU, IL, IU, ABSTOL, D, E, M
+     $,
      $             NSPLIT, W, IWORK( INDIBL ), IWORK( INDISP ),
      $             WORK( INDWRK ), IWORK( INDIWO ), INFO )
 *
       IF( WANTZ ) THEN
-         CALL SSTEIN( N, D, E, M, W, IWORK( INDIBL ), IWORK( INDISP ),
+         CALL AB_SSTEIN( N, D, E, M, W, IWORK( INDIBL ), IWORK( INDISP )
+     $,
      $                Z, LDZ, WORK( INDWRK ), IWORK( INDIWO ), IFAIL,
      $                INFO )
       END IF
@@ -424,7 +429,7 @@
          ELSE
             IMAX = INFO - 1
          END IF
-         CALL SSCAL( IMAX, ONE / SIGMA, W, 1 )
+         CALL AB_SSCAL( IMAX, ONE / SIGMA, W, 1 )
       END IF
 *
 *     If eigenvalues are not in order, then sort them, along with
@@ -447,7 +452,7 @@
                IWORK( INDIBL+I-1 ) = IWORK( INDIBL+J-1 )
                W( J ) = TMP1
                IWORK( INDIBL+J-1 ) = ITMP1
-               CALL SSWAP( N, Z( 1, I ), 1, Z( 1, J ), 1 )
+               CALL AB_SSWAP( N, Z( 1, I ), 1, Z( 1, J ), 1 )
                IF( INFO.NE.0 ) THEN
                   ITMP1 = IFAIL( I )
                   IFAIL( I ) = IFAIL( J )
@@ -459,6 +464,6 @@
 *
       RETURN
 *
-*     End of SSTEVX
+*     End of AB_SSTEVX
 *
       END

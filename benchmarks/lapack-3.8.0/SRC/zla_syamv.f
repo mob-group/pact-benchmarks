@@ -1,4 +1,4 @@
-*> \brief \b ZLA_SYAMV computes a matrix-vector product using a symmetric indefinite matrix to calculate error bounds.
+*> \brief \b AB_ZLA_SYAMV computes a matrix-vector product using a symmetric indefinite matrix to calculate error bounds.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZLA_SYAMV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zla_syamv.f">
+*> Download AB_ZLA_SYAMV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLA_SYAMV.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zla_syamv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLA_SYAMV.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zla_syamv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLA_SYAMV.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZLA_SYAMV( UPLO, N, ALPHA, A, LDA, X, INCX, BETA, Y,
+*       SUBROUTINE AB_ZLA_SYAMV( UPLO, N, ALPHA, A, LDA, X, INCX, BETA, Y,
 *                             INCY )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> ZLA_SYAMV  performs the matrix-vector operation
+*> AB_ZLA_SYAMV  performs the matrix-vector operation
 *>
 *>         y := alpha*abs(A)*abs(x) + beta*abs(y),
 *>
@@ -176,7 +176,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZLA_SYAMV( UPLO, N, ALPHA, A, LDA, X, INCX, BETA, Y,
+      SUBROUTINE AB_ZLA_SYAMV( UPLO, N, ALPHA, A, LDA, X, INCX, BETA, Y,
      $                      INCY )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
@@ -207,12 +207,12 @@
       COMPLEX*16         ZDUM
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, DLAMCH
+      EXTERNAL           AB_XERBLA, DLAMCH
       DOUBLE PRECISION   DLAMCH
 *     ..
 *     .. External Functions ..
-      EXTERNAL           ILAUPLO
-      INTEGER            ILAUPLO
+      EXTERNAL           AB_ILAUPLO
+      INTEGER            AB_ILAUPLO
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, ABS, SIGN, REAL, DIMAG
@@ -228,8 +228,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF     ( UPLO.NE.ILAUPLO( 'U' ) .AND.
-     $         UPLO.NE.ILAUPLO( 'L' ) )THEN
+      IF     ( UPLO.NE.AB_ILAUPLO( 'U' ) .AND.
+     $         UPLO.NE.AB_ILAUPLO( 'L' ) )THEN
          INFO = 1
       ELSE IF( N.LT.0 )THEN
          INFO = 2
@@ -241,7 +241,7 @@
          INFO = 10
       END IF
       IF( INFO.NE.0 )THEN
-         CALL XERBLA( 'DSYMV ', INFO )
+         CALL AB_XERBLA( 'AB_DSYMV ', INFO )
          RETURN
       END IF
 *
@@ -277,7 +277,7 @@
 *
       IY = KY
       IF ( INCX.EQ.1 ) THEN
-         IF ( UPLO .EQ. ILAUPLO( 'U' ) ) THEN
+         IF ( UPLO .EQ. AB_ILAUPLO( 'U' ) ) THEN
             DO I = 1, N
                IF ( BETA .EQ. ZERO ) THEN
                   SYMB_ZERO = .TRUE.
@@ -345,7 +345,7 @@
             END DO
          END IF
       ELSE
-         IF ( UPLO .EQ. ILAUPLO( 'U' ) ) THEN
+         IF ( UPLO .EQ. AB_ILAUPLO( 'U' ) ) THEN
             DO I = 1, N
                IF ( BETA .EQ. ZERO ) THEN
                   SYMB_ZERO = .TRUE.
@@ -423,6 +423,6 @@
 *
       RETURN
 *
-*     End of ZLA_SYAMV
+*     End of AB_ZLA_SYAMV
 *
       END

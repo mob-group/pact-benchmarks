@@ -1,4 +1,4 @@
-*> \brief <b> ZGGEV computes the eigenvalues and, optionally, the left and/or right eigenvectors for GE matrices</b>
+*> \brief <b> AB_ZGGEV computes the eigenvalues and, optionally, the left and/or right eigenvectors for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZGGEV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zggev.f">
+*> Download AB_ZGGEV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZGGEV.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zggev.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZGGEV.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zggev.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZGGEV.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZGGEV( JOBVL, JOBVR, N, A, LDA, B, LDB, ALPHA, BETA,
+*       SUBROUTINE AB_ZGGEV( JOBVL, JOBVR, N, A, LDA, B, LDB, ALPHA, BETA,
 *                         VL, LDVL, VR, LDVR, WORK, LWORK, RWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -38,7 +38,7 @@
 *>
 *> \verbatim
 *>
-*> ZGGEV computes for a pair of N-by-N complex nonsymmetric matrices
+*> AB_ZGGEV computes for a pair of N-by-N complex nonsymmetric matrices
 *> (A,B), the generalized eigenvalues, and optionally, the left and/or
 *> right generalized eigenvectors.
 *>
@@ -180,7 +180,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -197,8 +197,8 @@
 *>                The QZ iteration failed.  No eigenvectors have been
 *>                calculated, but ALPHA(j) and BETA(j) should be
 *>                correct for j=INFO+1,...,N.
-*>          > N:  =N+1: other then QZ iteration failed in DHGEQZ,
-*>                =N+2: error return from DTGEVC.
+*>          > N:  =N+1: other then QZ iteration failed in AB_DHGEQZ,
+*>                =N+2: error return from AB_DTGEVC.
 *> \endverbatim
 *
 *  Authors:
@@ -214,7 +214,7 @@
 *> \ingroup complex16GEeigen
 *
 *  =====================================================================
-      SUBROUTINE ZGGEV( JOBVL, JOBVR, N, A, LDA, B, LDB, ALPHA, BETA,
+      SUBROUTINE AB_ZGGEV( JOBVL, JOBVR, N, A, LDA, B, LDB, ALPHA, BETA,
      $                  VL, LDVL, VR, LDVR, WORK, LWORK, RWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -256,15 +256,17 @@
       LOGICAL            LDUMMA( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLABAD, XERBLA, ZGEQRF, ZGGBAK, ZGGBAL, ZGGHRD,
-     $                   ZHGEQZ, ZLACPY, ZLASCL, ZLASET, ZTGEVC, ZUNGQR,
-     $                   ZUNMQR
+      EXTERNAL           AB_DLABAD, AB_XERBLA, AB_ZGEQRF, AB_ZGGBAK, AB_
+     $ZGGBAL, AB_ZGGHRD,
+     $                   AB_ZHGEQZ, AB_ZLACPY, AB_ZLASCL, AB_ZLASET, AB_
+     $ZTGEVC, AB_ZUNGQR,
+     $                   AB_ZUNMQR
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      DOUBLE PRECISION   DLAMCH, ZLANGE
-      EXTERNAL           LSAME, ILAENV, DLAMCH, ZLANGE
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      DOUBLE PRECISION   DLAMCH, AB_ZLANGE
+      EXTERNAL           AB_LSAME, AB_ILAENV, DLAMCH, AB_ZLANGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX, SQRT
@@ -279,10 +281,10 @@
 *
 *     Decode the input arguments
 *
-      IF( LSAME( JOBVL, 'N' ) ) THEN
+      IF( AB_LSAME( JOBVL, 'N' ) ) THEN
          IJOBVL = 1
          ILVL = .FALSE.
-      ELSE IF( LSAME( JOBVL, 'V' ) ) THEN
+      ELSE IF( AB_LSAME( JOBVL, 'V' ) ) THEN
          IJOBVL = 2
          ILVL = .TRUE.
       ELSE
@@ -290,10 +292,10 @@
          ILVL = .FALSE.
       END IF
 *
-      IF( LSAME( JOBVR, 'N' ) ) THEN
+      IF( AB_LSAME( JOBVR, 'N' ) ) THEN
          IJOBVR = 1
          ILVR = .FALSE.
-      ELSE IF( LSAME( JOBVR, 'V' ) ) THEN
+      ELSE IF( AB_LSAME( JOBVR, 'V' ) ) THEN
          IJOBVR = 2
          ILVR = .TRUE.
       ELSE
@@ -327,17 +329,19 @@
 *       minimal amount of workspace needed at that point in the code,
 *       as well as the preferred amount for good performance.
 *       NB refers to the optimal block size for the immediately
-*       following subroutine, as returned by ILAENV. The workspace is
+*       following subroutine, as returned by AB_ILAENV. The workspace is
 *       computed assuming ILO = 1 and IHI = N, the worst case.)
 *
       IF( INFO.EQ.0 ) THEN
          LWKMIN = MAX( 1, 2*N )
-         LWKOPT = MAX( 1, N + N*ILAENV( 1, 'ZGEQRF', ' ', N, 1, N, 0 ) )
+         LWKOPT = MAX( 1, N + N*AB_ILAENV( 1, 'AB_ZGEQRF', ' ', N, 1, N,
+     $ 0 ) )
          LWKOPT = MAX( LWKOPT, N +
-     $                 N*ILAENV( 1, 'ZUNMQR', ' ', N, 1, N, 0 ) )
+     $                 N*AB_ILAENV( 1, 'AB_ZUNMQR', ' ', N, 1, N, 0 ) )
          IF( ILVL ) THEN
             LWKOPT = MAX( LWKOPT, N +
-     $                    N*ILAENV( 1, 'ZUNGQR', ' ', N, 1, N, -1 ) )
+     $                    N*AB_ILAENV( 1, 'AB_ZUNGQR', ' ', N, 1, N, -1 
+     $) )
          END IF
          WORK( 1 ) = LWKOPT
 *
@@ -346,7 +350,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZGGEV ', -INFO )
+         CALL AB_XERBLA( 'AB_ZGGEV ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -362,13 +366,13 @@
       EPS = DLAMCH( 'E' )*DLAMCH( 'B' )
       SMLNUM = DLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
+      CALL AB_DLABAD( SMLNUM, BIGNUM )
       SMLNUM = SQRT( SMLNUM ) / EPS
       BIGNUM = ONE / SMLNUM
 *
 *     Scale A if max element outside range [SMLNUM,BIGNUM]
 *
-      ANRM = ZLANGE( 'M', N, N, A, LDA, RWORK )
+      ANRM = AB_ZLANGE( 'M', N, N, A, LDA, RWORK )
       ILASCL = .FALSE.
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
          ANRMTO = SMLNUM
@@ -378,11 +382,11 @@
          ILASCL = .TRUE.
       END IF
       IF( ILASCL )
-     $   CALL ZLASCL( 'G', 0, 0, ANRM, ANRMTO, N, N, A, LDA, IERR )
+     $   CALL AB_ZLASCL( 'G', 0, 0, ANRM, ANRMTO, N, N, A, LDA, IERR )
 *
 *     Scale B if max element outside range [SMLNUM,BIGNUM]
 *
-      BNRM = ZLANGE( 'M', N, N, B, LDB, RWORK )
+      BNRM = AB_ZLANGE( 'M', N, N, B, LDB, RWORK )
       ILBSCL = .FALSE.
       IF( BNRM.GT.ZERO .AND. BNRM.LT.SMLNUM ) THEN
          BNRMTO = SMLNUM
@@ -392,7 +396,7 @@
          ILBSCL = .TRUE.
       END IF
       IF( ILBSCL )
-     $   CALL ZLASCL( 'G', 0, 0, BNRM, BNRMTO, N, N, B, LDB, IERR )
+     $   CALL AB_ZLASCL( 'G', 0, 0, BNRM, BNRMTO, N, N, B, LDB, IERR )
 *
 *     Permute the matrices A, B to isolate eigenvalues if possible
 *     (Real Workspace: need 6*N)
@@ -400,7 +404,7 @@
       ILEFT = 1
       IRIGHT = N + 1
       IRWRK = IRIGHT + N
-      CALL ZGGBAL( 'P', N, A, LDA, B, LDB, ILO, IHI, RWORK( ILEFT ),
+      CALL AB_ZGGBAL( 'P', N, A, LDA, B, LDB, ILO, IHI, RWORK( ILEFT ),
      $             RWORK( IRIGHT ), RWORK( IRWRK ), IERR )
 *
 *     Reduce B to triangular form (QR decomposition of B)
@@ -414,13 +418,13 @@
       END IF
       ITAU = 1
       IWRK = ITAU + IROWS
-      CALL ZGEQRF( IROWS, ICOLS, B( ILO, ILO ), LDB, WORK( ITAU ),
+      CALL AB_ZGEQRF( IROWS, ICOLS, B( ILO, ILO ), LDB, WORK( ITAU ),
      $             WORK( IWRK ), LWORK+1-IWRK, IERR )
 *
 *     Apply the orthogonal transformation to matrix A
 *     (Complex Workspace: need N, prefer N*NB)
 *
-      CALL ZUNMQR( 'L', 'C', IROWS, ICOLS, IROWS, B( ILO, ILO ), LDB,
+      CALL AB_ZUNMQR( 'L', 'C', IROWS, ICOLS, IROWS, B( ILO, ILO ), LDB,
      $             WORK( ITAU ), A( ILO, ILO ), LDA, WORK( IWRK ),
      $             LWORK+1-IWRK, IERR )
 *
@@ -428,19 +432,19 @@
 *     (Complex Workspace: need N, prefer N*NB)
 *
       IF( ILVL ) THEN
-         CALL ZLASET( 'Full', N, N, CZERO, CONE, VL, LDVL )
+         CALL AB_ZLASET( 'Full', N, N, CZERO, CONE, VL, LDVL )
          IF( IROWS.GT.1 ) THEN
-            CALL ZLACPY( 'L', IROWS-1, IROWS-1, B( ILO+1, ILO ), LDB,
+            CALL AB_ZLACPY( 'L', IROWS-1, IROWS-1, B( ILO+1, ILO ), LDB,
      $                   VL( ILO+1, ILO ), LDVL )
          END IF
-         CALL ZUNGQR( IROWS, IROWS, IROWS, VL( ILO, ILO ), LDVL,
+         CALL AB_ZUNGQR( IROWS, IROWS, IROWS, VL( ILO, ILO ), LDVL,
      $                WORK( ITAU ), WORK( IWRK ), LWORK+1-IWRK, IERR )
       END IF
 *
 *     Initialize VR
 *
       IF( ILVR )
-     $   CALL ZLASET( 'Full', N, N, CZERO, CONE, VR, LDVR )
+     $   CALL AB_ZLASET( 'Full', N, N, CZERO, CONE, VR, LDVR )
 *
 *     Reduce to generalized Hessenberg form
 *
@@ -448,10 +452,10 @@
 *
 *        Eigenvectors requested -- work on whole matrix.
 *
-         CALL ZGGHRD( JOBVL, JOBVR, N, ILO, IHI, A, LDA, B, LDB, VL,
+         CALL AB_ZGGHRD( JOBVL, JOBVR, N, ILO, IHI, A, LDA, B, LDB, VL,
      $                LDVL, VR, LDVR, IERR )
       ELSE
-         CALL ZGGHRD( 'N', 'N', IROWS, 1, IROWS, A( ILO, ILO ), LDA,
+         CALL AB_ZGGHRD( 'N', 'N', IROWS, 1, IROWS, A( ILO, ILO ), LDA,
      $                B( ILO, ILO ), LDB, VL, LDVL, VR, LDVR, IERR )
       END IF
 *
@@ -466,7 +470,7 @@
       ELSE
          CHTEMP = 'E'
       END IF
-      CALL ZHGEQZ( CHTEMP, JOBVL, JOBVR, N, ILO, IHI, A, LDA, B, LDB,
+      CALL AB_ZHGEQZ( CHTEMP, JOBVL, JOBVR, N, ILO, IHI, A, LDA, B, LDB,
      $             ALPHA, BETA, VL, LDVL, VR, LDVR, WORK( IWRK ),
      $             LWORK+1-IWRK, RWORK( IRWRK ), IERR )
       IF( IERR.NE.0 ) THEN
@@ -495,7 +499,8 @@
             CHTEMP = 'R'
          END IF
 *
-         CALL ZTGEVC( CHTEMP, 'B', LDUMMA, N, A, LDA, B, LDB, VL, LDVL,
+         CALL AB_ZTGEVC( CHTEMP, 'B', LDUMMA, N, A, LDA, B, LDB, VL, LDV
+     $L,
      $                VR, LDVR, N, IN, WORK( IWRK ), RWORK( IRWRK ),
      $                IERR )
          IF( IERR.NE.0 ) THEN
@@ -507,7 +512,7 @@
 *        (Workspace: none needed)
 *
          IF( ILVL ) THEN
-            CALL ZGGBAK( 'P', 'L', N, ILO, IHI, RWORK( ILEFT ),
+            CALL AB_ZGGBAK( 'P', 'L', N, ILO, IHI, RWORK( ILEFT ),
      $                   RWORK( IRIGHT ), N, VL, LDVL, IERR )
             DO 30 JC = 1, N
                TEMP = ZERO
@@ -523,7 +528,7 @@
    30       CONTINUE
          END IF
          IF( ILVR ) THEN
-            CALL ZGGBAK( 'P', 'R', N, ILO, IHI, RWORK( ILEFT ),
+            CALL AB_ZGGBAK( 'P', 'R', N, ILO, IHI, RWORK( ILEFT ),
      $                   RWORK( IRIGHT ), N, VR, LDVR, IERR )
             DO 60 JC = 1, N
                TEMP = ZERO
@@ -545,14 +550,14 @@
    70 CONTINUE
 *
       IF( ILASCL )
-     $   CALL ZLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHA, N, IERR )
+     $   CALL AB_ZLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHA, N, IERR )
 *
       IF( ILBSCL )
-     $   CALL ZLASCL( 'G', 0, 0, BNRMTO, BNRM, N, 1, BETA, N, IERR )
+     $   CALL AB_ZLASCL( 'G', 0, 0, BNRMTO, BNRM, N, 1, BETA, N, IERR )
 *
       WORK( 1 ) = LWKOPT
       RETURN
 *
-*     End of ZGGEV
+*     End of AB_ZGGEV
 *
       END

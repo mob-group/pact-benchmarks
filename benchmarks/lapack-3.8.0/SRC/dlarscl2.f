@@ -1,4 +1,4 @@
-*> \brief \b DLARSCL2 performs reciprocal diagonal scaling on a vector.
+*> \brief \b AB_DLARSCL2 performs reciprocal diagonal scaling on a vector.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLARSCL2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarscl2.f">
+*> Download AB_DLARSCL2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLARSCL2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarscl2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLARSCL2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarscl2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLARSCL2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLARSCL2 ( M, N, D, X, LDX )
+*       SUBROUTINE AB_DLARSCL2 ( M, N, D, X, LDX )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            M, N, LDX
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> DLARSCL2 performs a reciprocal diagonal scaling on an vector:
+*> AB_DLARSCL2 performs a reciprocal diagonal scaling on an vector:
 *>   x <-- inv(D) * x
 *> where the diagonal matrix D is stored as a vector.
 *>
@@ -88,7 +88,7 @@
 *> \ingroup doubleOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE DLARSCL2 ( M, N, D, X, LDX )
+      SUBROUTINE AB_DLARSCL2 ( M, N, D, X, LDX )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

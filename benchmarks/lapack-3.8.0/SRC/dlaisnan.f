@@ -1,4 +1,4 @@
-*> \brief \b DLAISNAN tests input for NaN by comparing two arguments for inequality.
+*> \brief \b AB_DLAISNAN tests input for NaN by comparing two arguments for inequality.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLAISNAN + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaisnan.f">
+*> Download AB_DLAISNAN + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLAISNAN.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaisnan.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLAISNAN.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaisnan.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLAISNAN.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       LOGICAL FUNCTION DLAISNAN( DIN1, DIN2 )
+*       LOGICAL FUNCTION AB_DLAISNAN( DIN1, DIN2 )
 *
 *       .. Scalar Arguments ..
 *       DOUBLE PRECISION, INTENT(IN) :: DIN1, DIN2
@@ -31,9 +31,9 @@
 *> \verbatim
 *>
 *> This routine is not for general use.  It exists solely to avoid
-*> over-optimization in DISNAN.
+*> over-optimization in AB_DISNAN.
 *>
-*> DLAISNAN checks for NaNs by comparing its two arguments for
+*> AB_DLAISNAN checks for NaNs by comparing its two arguments for
 *> inequality.  NaN is the only floating-point value where NaN != NaN
 *> returns .TRUE.  To check for NaNs, pass the same variable as both
 *> arguments.
@@ -72,7 +72,7 @@
 *> \ingroup OTHERauxiliary
 *
 *  =====================================================================
-      LOGICAL FUNCTION DLAISNAN( DIN1, DIN2 )
+      LOGICAL FUNCTION AB_DLAISNAN( DIN1, DIN2 )
 *
 *  -- LAPACK auxiliary routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -86,6 +86,6 @@
 *  =====================================================================
 *
 *  .. Executable Statements ..
-      DLAISNAN = (DIN1.NE.DIN2)
+      AB_DLAISNAN = (DIN1.NE.DIN2)
       RETURN
       END

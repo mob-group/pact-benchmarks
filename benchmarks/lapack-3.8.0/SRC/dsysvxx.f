@@ -1,4 +1,4 @@
-*> \brief \b DSYSVXX
+*> \brief \b AB_DSYSVXX
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DSYSVXX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsysvxx.f">
+*> Download AB_DSYSVXX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DSYSVxx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsysvxx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DSYSVxx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsysvxx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DSYSVxx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DSYSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV,
+*       SUBROUTINE AB_DSYSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV,
 *                           EQUED, S, B, LDB, X, LDX, RCOND, RPVGRW, BERR,
 *                           N_ERR_BNDS, ERR_BNDS_NORM, ERR_BNDS_COMP,
 *                           NPARAMS, PARAMS, WORK, IWORK, INFO )
@@ -44,24 +44,24 @@
 *>
 *> \verbatim
 *>
-*>    DSYSVXX uses the diagonal pivoting factorization to compute the
+*>    AB_DSYSVXX uses the diagonal pivoting factorization to compute the
 *>    solution to a double precision system of linear equations A * X = B, where A
 *>    is an N-by-N symmetric matrix and X and B are N-by-NRHS matrices.
 *>
 *>    If requested, both normwise and maximum componentwise error bounds
-*>    are returned. DSYSVXX will return a solution with a tiny
+*>    are returned. AB_DSYSVXX will return a solution with a tiny
 *>    guaranteed error (O(eps) where eps is the working machine
 *>    precision) unless the matrix is very ill-conditioned, in which
 *>    case a warning is returned. Relevant condition numbers also are
 *>    calculated and returned.
 *>
-*>    DSYSVXX accepts user-provided factorizations and equilibration
+*>    AB_DSYSVXX accepts user-provided factorizations and equilibration
 *>    factors; see the definitions of the FACT and EQUED options.
 *>    Solving with refinement and using a factorization from a previous
-*>    DSYSVXX call will also produce a solution with either O(eps)
+*>    AB_DSYSVXX call will also produce a solution with either O(eps)
 *>    errors or warnings, but we cannot make that claim for general
 *>    user-provided factorizations and equilibration factors if they
-*>    differ from what DSYSVXX would itself produce.
+*>    differ from what AB_DSYSVXX would itself produce.
 *> \endverbatim
 *
 *> \par Description:
@@ -184,7 +184,7 @@
 *>     If FACT = 'F', then AF is an input argument and on entry
 *>     contains the block diagonal matrix D and the multipliers
 *>     used to obtain the factor U or L from the factorization A =
-*>     U*D*U**T or A = L*D*L**T as computed by DSYTRF.
+*>     U*D*U**T or A = L*D*L**T as computed by AB_DSYTRF.
 *>
 *>     If FACT = 'N', then AF is an output argument and on exit
 *>     returns the block diagonal matrix D and the multipliers
@@ -203,7 +203,7 @@
 *>          IPIV is INTEGER array, dimension (N)
 *>     If FACT = 'F', then IPIV is an input argument and on entry
 *>     contains details of the interchanges and the block
-*>     structure of D, as determined by DSYTRF.  If IPIV(k) > 0,
+*>     structure of D, as determined by AB_DSYTRF.  If IPIV(k) > 0,
 *>     then rows and columns k and IPIV(k) were interchanged and
 *>     D(k,k) is a 1-by-1 diagonal block.  If UPLO = 'U' and
 *>     IPIV(k) = IPIV(k-1) < 0, then rows and columns k-1 and
@@ -214,7 +214,7 @@
 *>
 *>     If FACT = 'N', then IPIV is an output argument and on exit
 *>     contains details of the interchanges and the block
-*>     structure of D, as determined by DSYTRF.
+*>     structure of D, as determined by AB_DSYTRF.
 *> \endverbatim
 *>
 *> \param[in,out] EQUED
@@ -500,7 +500,8 @@
 *> \ingroup doubleSYsolve
 *
 *  =====================================================================
-      SUBROUTINE DSYSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV,
+      SUBROUTINE AB_DSYSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV
+     $,
      $                    EQUED, S, B, LDB, X, LDX, RCOND, RPVGRW, BERR,
      $                    N_ERR_BNDS, ERR_BNDS_NORM, ERR_BNDS_COMP,
      $                    NPARAMS, PARAMS, WORK, IWORK, INFO )
@@ -545,13 +546,14 @@
       DOUBLE PRECISION   AMAX, BIGNUM, SMIN, SMAX, SCOND, SMLNUM
 *     ..
 *     .. External Functions ..
-      EXTERNAL           LSAME, DLAMCH, DLA_SYRPVGRW
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, DLA_SYRPVGRW
+      EXTERNAL           AB_LSAME, DLAMCH, AB_DLA_SYRPVGRW
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   DLAMCH, AB_DLA_SYRPVGRW
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSYEQUB, DSYTRF, DSYTRS,
-     $                   DLACPY, DLAQSY, XERBLA, DLASCL2, DSYRFSX
+      EXTERNAL           AB_DSYEQUB, AB_DSYTRF, AB_DSYTRS,
+     $                   AB_DLACPY, AB_DLAQSY, AB_XERBLA, AB_DLASCL2, AB
+     $_DSYRFSX
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -559,30 +561,30 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-      NOFACT = LSAME( FACT, 'N' )
-      EQUIL = LSAME( FACT, 'E' )
+      NOFACT = AB_LSAME( FACT, 'N' )
+      EQUIL = AB_LSAME( FACT, 'E' )
       SMLNUM = DLAMCH( 'Safe minimum' )
       BIGNUM = ONE / SMLNUM
       IF( NOFACT .OR. EQUIL ) THEN
          EQUED = 'N'
          RCEQU = .FALSE.
       ELSE
-         RCEQU = LSAME( EQUED, 'Y' )
+         RCEQU = AB_LSAME( EQUED, 'Y' )
       ENDIF
 *
 *     Default is failure.  If an input parameter is wrong or
 *     factorization fails, make everything look horrible.  Only the
-*     pivot growth is set here, the rest is initialized in DSYRFSX.
+*     pivot growth is set here, the rest is initialized in AB_DSYRFSX.
 *
       RPVGRW = ZERO
 *
-*     Test the input parameters.  PARAMS is not tested until DSYRFSX.
+*     Test the input parameters.  PARAMS is not tested until AB_DSYRFSX.
 *
       IF( .NOT.NOFACT .AND. .NOT.EQUIL .AND. .NOT.
-     $     LSAME( FACT, 'F' ) ) THEN
+     $     AB_LSAME( FACT, 'F' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME(UPLO, 'U') .AND.
-     $         .NOT.LSAME(UPLO, 'L') ) THEN
+      ELSE IF( .NOT.AB_LSAME(UPLO, 'U') .AND.
+     $         .NOT.AB_LSAME(UPLO, 'L') ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -592,8 +594,8 @@
          INFO = -6
       ELSE IF( LDAF.LT.MAX( 1, N ) ) THEN
          INFO = -8
-      ELSE IF( LSAME( FACT, 'F' ) .AND. .NOT.
-     $        ( RCEQU .OR. LSAME( EQUED, 'N' ) ) ) THEN
+      ELSE IF( AB_LSAME( FACT, 'F' ) .AND. .NOT.
+     $        ( RCEQU .OR. AB_LSAME( EQUED, 'N' ) ) ) THEN
          INFO = -10
       ELSE
          IF ( RCEQU ) THEN
@@ -621,7 +623,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DSYSVXX', -INFO )
+         CALL AB_XERBLA( 'AB_DSYSVXX', -INFO )
          RETURN
       END IF
 *
@@ -629,26 +631,28 @@
 *
 *     Compute row and column scalings to equilibrate the matrix A.
 *
-         CALL DSYEQUB( UPLO, N, A, LDA, S, SCOND, AMAX, WORK, INFEQU )
+         CALL AB_DSYEQUB( UPLO, N, A, LDA, S, SCOND, AMAX, WORK, INFEQU 
+     $)
          IF( INFEQU.EQ.0 ) THEN
 *
 *     Equilibrate the matrix.
 *
-            CALL DLAQSY( UPLO, N, A, LDA, S, SCOND, AMAX, EQUED )
-            RCEQU = LSAME( EQUED, 'Y' )
+            CALL AB_DLAQSY( UPLO, N, A, LDA, S, SCOND, AMAX, EQUED )
+            RCEQU = AB_LSAME( EQUED, 'Y' )
          END IF
       END IF
 *
 *     Scale the right-hand side.
 *
-      IF( RCEQU ) CALL DLASCL2( N, NRHS, S, B, LDB )
+      IF( RCEQU ) CALL AB_DLASCL2( N, NRHS, S, B, LDB )
 *
       IF( NOFACT .OR. EQUIL ) THEN
 *
 *        Compute the LDL^T or UDU^T factorization of A.
 *
-         CALL DLACPY( UPLO, N, N, A, LDA, AF, LDAF )
-         CALL DSYTRF( UPLO, N, AF, LDAF, IPIV, WORK, 5*MAX(1,N), INFO )
+         CALL AB_DLACPY( UPLO, N, N, A, LDA, AF, LDAF )
+         CALL AB_DSYTRF( UPLO, N, AF, LDAF, IPIV, WORK, 5*MAX(1,N), INFO
+     $ )
 *
 *        Return if INFO is non-zero.
 *
@@ -659,7 +663,7 @@
 *           leading rank-deficient INFO columns of A.
 *
             IF ( N.GT.0 )
-     $           RPVGRW = DLA_SYRPVGRW(UPLO, N, INFO, A, LDA, AF,
+     $           RPVGRW = AB_DLA_SYRPVGRW(UPLO, N, INFO, A, LDA, AF,
      $           LDAF, IPIV, WORK )
             RETURN
          END IF
@@ -668,29 +672,29 @@
 *     Compute the reciprocal pivot growth factor RPVGRW.
 *
       IF ( N.GT.0 )
-     $     RPVGRW = DLA_SYRPVGRW( UPLO, N, INFO, A, LDA, AF, LDAF,
+     $     RPVGRW = AB_DLA_SYRPVGRW( UPLO, N, INFO, A, LDA, AF, LDAF,
      $     IPIV, WORK )
 *
 *     Compute the solution matrix X.
 *
-      CALL DLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
-      CALL DSYTRS( UPLO, N, NRHS, AF, LDAF, IPIV, X, LDX, INFO )
+      CALL AB_DLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
+      CALL AB_DSYTRS( UPLO, N, NRHS, AF, LDAF, IPIV, X, LDX, INFO )
 *
 *     Use iterative refinement to improve the computed solution and
 *     compute error bounds and backward error estimates for it.
 *
-      CALL DSYRFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF, IPIV,
+      CALL AB_DSYRFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF, IPIV,
      $     S, B, LDB, X, LDX, RCOND, BERR, N_ERR_BNDS, ERR_BNDS_NORM,
      $     ERR_BNDS_COMP, NPARAMS, PARAMS, WORK, IWORK, INFO )
 *
 *     Scale solutions.
 *
       IF ( RCEQU ) THEN
-         CALL DLASCL2 ( N, NRHS, S, X, LDX )
+         CALL AB_DLASCL2 ( N, NRHS, S, X, LDX )
       END IF
 *
       RETURN
 *
-*     End of DSYSVXX
+*     End of AB_DSYSVXX
 *
       END

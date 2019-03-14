@@ -1,4 +1,4 @@
-*> \brief \b DHSEIN
+*> \brief \b AB_DHSEIN
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DHSEIN + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dhsein.f">
+*> Download AB_DHSEIN + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DHSEIN.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dhsein.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DHSEIN.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dhsein.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DHSEIN.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DHSEIN( SIDE, EIGSRC, INITV, SELECT, N, H, LDH, WR, WI,
+*       SUBROUTINE AB_DHSEIN( SIDE, EIGSRC, INITV, SELECT, N, H, LDH, WR, WI,
 *                          VL, LDVL, VR, LDVR, MM, M, WORK, IFAILL,
 *                          IFAILR, INFO )
 *
@@ -39,7 +39,7 @@
 *>
 *> \verbatim
 *>
-*> DHSEIN uses inverse iteration to find specified right and/or left
+*> AB_DHSEIN uses inverse iteration to find specified right and/or left
 *> eigenvectors of a real upper Hessenberg matrix H.
 *>
 *> The right eigenvector x and the left eigenvector y of the matrix H
@@ -65,15 +65,15 @@
 *> \verbatim
 *>          EIGSRC is CHARACTER*1
 *>          Specifies the source of eigenvalues supplied in (WR,WI):
-*>          = 'Q': the eigenvalues were found using DHSEQR; thus, if
+*>          = 'Q': the eigenvalues were found using AB_DHSEQR; thus, if
 *>                 H has zero subdiagonal elements, and so is
 *>                 block-triangular, then the j-th eigenvalue can be
 *>                 assumed to be an eigenvalue of the block containing
-*>                 the j-th row/column.  This property allows DHSEIN to
+*>                 the j-th row/column.  This property allows AB_DHSEIN to
 *>                 perform inverse iteration on just one diagonal block.
 *>          = 'N': no assumptions are made on the correspondence
 *>                 between eigenvalues and diagonal blocks.  In this
-*>                 case, DHSEIN must always perform inverse iteration
+*>                 case, AB_DHSEIN must always perform inverse iteration
 *>                 using the whole matrix H.
 *> \endverbatim
 *>
@@ -259,7 +259,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DHSEIN( SIDE, EIGSRC, INITV, SELECT, N, H, LDH, WR, WI,
+      SUBROUTINE AB_DHSEIN( SIDE, EIGSRC, INITV, SELECT, N, H, LDH, WR, 
+     $WI,
      $                   VL, LDVL, VR, LDVR, MM, M, WORK, IFAILL,
      $                   IFAILR, INFO )
 *
@@ -292,12 +293,12 @@
      $                   WKR
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME, DISNAN
-      DOUBLE PRECISION   DLAMCH, DLANHS
-      EXTERNAL           LSAME, DLAMCH, DLANHS, DISNAN
+      LOGICAL            AB_LSAME, AB_DISNAN
+      DOUBLE PRECISION   DLAMCH, AB_DLANHS
+      EXTERNAL           AB_LSAME, DLAMCH, AB_DLANHS, AB_DISNAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLAEIN, XERBLA
+      EXTERNAL           AB_DLAEIN, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -306,13 +307,13 @@
 *
 *     Decode and test the input parameters.
 *
-      BOTHV = LSAME( SIDE, 'B' )
-      RIGHTV = LSAME( SIDE, 'R' ) .OR. BOTHV
-      LEFTV = LSAME( SIDE, 'L' ) .OR. BOTHV
+      BOTHV = AB_LSAME( SIDE, 'B' )
+      RIGHTV = AB_LSAME( SIDE, 'R' ) .OR. BOTHV
+      LEFTV = AB_LSAME( SIDE, 'L' ) .OR. BOTHV
 *
-      FROMQR = LSAME( EIGSRC, 'Q' )
+      FROMQR = AB_LSAME( EIGSRC, 'Q' )
 *
-      NOINIT = LSAME( INITV, 'N' )
+      NOINIT = AB_LSAME( INITV, 'N' )
 *
 *     Set M to the number of columns required to store the selected
 *     eigenvectors, and standardize the array SELECT.
@@ -340,9 +341,9 @@
       INFO = 0
       IF( .NOT.RIGHTV .AND. .NOT.LEFTV ) THEN
          INFO = -1
-      ELSE IF( .NOT.FROMQR .AND. .NOT.LSAME( EIGSRC, 'N' ) ) THEN
+      ELSE IF( .NOT.FROMQR .AND. .NOT.AB_LSAME( EIGSRC, 'N' ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.NOINIT .AND. .NOT.LSAME( INITV, 'U' ) ) THEN
+      ELSE IF( .NOT.NOINIT .AND. .NOT.AB_LSAME( INITV, 'U' ) ) THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
          INFO = -5
@@ -356,7 +357,7 @@
          INFO = -14
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DHSEIN', -INFO )
+         CALL AB_XERBLA( 'AB_DHSEIN', -INFO )
          RETURN
       END IF
 *
@@ -423,8 +424,8 @@
 *              Compute infinity-norm of submatrix H(KL:KR,KL:KR) if it
 *              has not ben computed before.
 *
-               HNORM = DLANHS( 'I', KR-KL+1, H( KL, KL ), LDH, WORK )
-               IF( DISNAN( HNORM ) ) THEN
+               HNORM = AB_DLANHS( 'I', KR-KL+1, H( KL, KL ), LDH, WORK )
+               IF( AB_DISNAN( HNORM ) ) THEN
                   INFO = -6
                   RETURN
                ELSE IF( HNORM.GT.ZERO ) THEN
@@ -460,7 +461,8 @@
 *
 *              Compute left eigenvector.
 *
-               CALL DLAEIN( .FALSE., NOINIT, N-KL+1, H( KL, KL ), LDH,
+               CALL AB_DLAEIN( .FALSE., NOINIT, N-KL+1, H( KL, KL ), LDH
+     $,
      $                      WKR, WKI, VL( KL, KSR ), VL( KL, KSI ),
      $                      WORK, LDWORK, WORK( N*N+N+1 ), EPS3, SMLNUM,
      $                      BIGNUM, IINFO )
@@ -489,7 +491,7 @@
 *
 *              Compute right eigenvector.
 *
-               CALL DLAEIN( .TRUE., NOINIT, KR, H, LDH, WKR, WKI,
+               CALL AB_DLAEIN( .TRUE., NOINIT, KR, H, LDH, WKR, WKI,
      $                      VR( 1, KSR ), VR( 1, KSI ), WORK, LDWORK,
      $                      WORK( N*N+N+1 ), EPS3, SMLNUM, BIGNUM,
      $                      IINFO )
@@ -525,6 +527,6 @@
 *
       RETURN
 *
-*     End of DHSEIN
+*     End of AB_DHSEIN
 *
       END

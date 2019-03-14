@@ -1,4 +1,4 @@
-*> \brief \b CDOTU
+*> \brief \b AB_CDOTU
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       COMPLEX FUNCTION CDOTU(N,CX,INCX,CY,INCY)
+*       COMPLEX FUNCTION AB_CDOTU(N,CX,INCX,CY,INCY)
 *
 *       .. Scalar Arguments ..
 *       INTEGER INCX,INCY,N
@@ -23,8 +23,8 @@
 *>
 *> \verbatim
 *>
-*> CDOTU forms the dot product of two complex vectors
-*>      CDOTU = X^T * Y
+*> AB_CDOTU forms the dot product of two complex vectors
+*>      AB_CDOTU = X^T * Y
 *>
 *> \endverbatim
 *
@@ -81,7 +81,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      COMPLEX FUNCTION CDOTU(N,CX,INCX,CY,INCY)
+      COMPLEX FUNCTION AB_CDOTU(N,CX,INCX,CY,INCY)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -102,7 +102,7 @@
       INTEGER I,IX,IY
 *     ..
       CTEMP = (0.0,0.0)
-      CDOTU = (0.0,0.0)
+      AB_CDOTU = (0.0,0.0)
       IF (N.LE.0) RETURN
       IF (INCX.EQ.1 .AND. INCY.EQ.1) THEN
 *
@@ -126,6 +126,6 @@
             IY = IY + INCY
          END DO
       END IF
-      CDOTU = CTEMP
+      AB_CDOTU = CTEMP
       RETURN
       END

@@ -1,4 +1,4 @@
-*> \brief \b DPBSTF
+*> \brief \b AB_DPBSTF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DPBSTF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dpbstf.f">
+*> Download AB_DPBSTF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DPBSTF.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dpbstf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DPBSTF.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpbstf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DPBSTF.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DPBSTF( UPLO, N, KD, AB, LDAB, INFO )
+*       SUBROUTINE AB_DPBSTF( UPLO, N, KD, AB, LDAB, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,10 +34,10 @@
 *>
 *> \verbatim
 *>
-*> DPBSTF computes a split Cholesky factorization of a real
+*> AB_DPBSTF computes a split Cholesky factorization of a real
 *> symmetric positive definite band matrix A.
 *>
-*> This routine is designed to be used in conjunction with DSBGST.
+*> This routine is designed to be used in conjunction with AB_DSBGST.
 *>
 *> The factorization has the form  A = S**T*S  where S is a band matrix
 *> of the same bandwidth as A and the following structure:
@@ -150,7 +150,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DPBSTF( UPLO, N, KD, AB, LDAB, INFO )
+      SUBROUTINE AB_DPBSTF( UPLO, N, KD, AB, LDAB, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -177,11 +177,11 @@
       DOUBLE PRECISION   AJJ
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSCAL, DSYR, XERBLA
+      EXTERNAL           AB_DSCAL, AB_DSYR, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, SQRT
@@ -191,8 +191,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -202,7 +202,7 @@
          INFO = -5
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DPBSTF', -INFO )
+         CALL AB_XERBLA( 'AB_DPBSTF', -INFO )
          RETURN
       END IF
 *
@@ -235,8 +235,8 @@
 *           Compute elements j-km:j-1 of the j-th column and update the
 *           the leading submatrix within the band.
 *
-            CALL DSCAL( KM, ONE / AJJ, AB( KD+1-KM, J ), 1 )
-            CALL DSYR( 'Upper', KM, -ONE, AB( KD+1-KM, J ), 1,
+            CALL AB_DSCAL( KM, ONE / AJJ, AB( KD+1-KM, J ), 1 )
+            CALL AB_DSYR( 'Upper', KM, -ONE, AB( KD+1-KM, J ), 1,
      $                 AB( KD+1, J-KM ), KLD )
    10    CONTINUE
 *
@@ -257,8 +257,8 @@
 *           trailing submatrix within the band.
 *
             IF( KM.GT.0 ) THEN
-               CALL DSCAL( KM, ONE / AJJ, AB( KD, J+1 ), KLD )
-               CALL DSYR( 'Upper', KM, -ONE, AB( KD, J+1 ), KLD,
+               CALL AB_DSCAL( KM, ONE / AJJ, AB( KD, J+1 ), KLD )
+               CALL AB_DSYR( 'Upper', KM, -ONE, AB( KD, J+1 ), KLD,
      $                    AB( KD+1, J+1 ), KLD )
             END IF
    20    CONTINUE
@@ -280,8 +280,8 @@
 *           Compute elements j-km:j-1 of the j-th row and update the
 *           trailing submatrix within the band.
 *
-            CALL DSCAL( KM, ONE / AJJ, AB( KM+1, J-KM ), KLD )
-            CALL DSYR( 'Lower', KM, -ONE, AB( KM+1, J-KM ), KLD,
+            CALL AB_DSCAL( KM, ONE / AJJ, AB( KM+1, J-KM ), KLD )
+            CALL AB_DSYR( 'Lower', KM, -ONE, AB( KM+1, J-KM ), KLD,
      $                 AB( 1, J-KM ), KLD )
    30    CONTINUE
 *
@@ -302,8 +302,8 @@
 *           trailing submatrix within the band.
 *
             IF( KM.GT.0 ) THEN
-               CALL DSCAL( KM, ONE / AJJ, AB( 2, J ), 1 )
-               CALL DSYR( 'Lower', KM, -ONE, AB( 2, J ), 1,
+               CALL AB_DSCAL( KM, ONE / AJJ, AB( 2, J ), 1 )
+               CALL AB_DSYR( 'Lower', KM, -ONE, AB( 2, J ), 1,
      $                    AB( 1, J+1 ), KLD )
             END IF
    40    CONTINUE
@@ -314,6 +314,6 @@
       INFO = J
       RETURN
 *
-*     End of DPBSTF
+*     End of AB_DPBSTF
 *
       END

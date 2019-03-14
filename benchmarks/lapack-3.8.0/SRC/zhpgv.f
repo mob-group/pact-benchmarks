@@ -1,4 +1,4 @@
-*> \brief \b ZHPGV
+*> \brief \b AB_ZHPGV
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZHPGV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhpgv.f">
+*> Download AB_ZHPGV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZHPGV.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhpgv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZHPGV.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhpgv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZHPGV.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZHPGV( ITYPE, JOBZ, UPLO, N, AP, BP, W, Z, LDZ, WORK,
+*       SUBROUTINE AB_ZHPGV( ITYPE, JOBZ, UPLO, N, AP, BP, W, Z, LDZ, WORK,
 *                         RWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> ZHPGV computes all the eigenvalues and, optionally, the eigenvectors
+*> AB_ZHPGV computes all the eigenvalues and, optionally, the eigenvectors
 *> of a complex generalized Hermitian-definite eigenproblem, of the form
 *> A*x=(lambda)*B*x,  A*Bx=(lambda)*x,  or B*A*x=(lambda)*x.
 *> Here A and B are assumed to be Hermitian, stored in packed format,
@@ -139,8 +139,8 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
-*>          > 0:  ZPPTRF or ZHPEV returned an error code:
-*>             <= N:  if INFO = i, ZHPEV failed to converge;
+*>          > 0:  AB_ZPPTRF or AB_ZHPEV returned an error code:
+*>             <= N:  if INFO = i, AB_ZHPEV failed to converge;
 *>                    i off-diagonal elements of an intermediate
 *>                    tridiagonal form did not convergeto zero;
 *>             > N:   if INFO = N + i, for 1 <= i <= n, then the leading
@@ -162,7 +162,8 @@
 *> \ingroup complex16OTHEReigen
 *
 *  =====================================================================
-      SUBROUTINE ZHPGV( ITYPE, JOBZ, UPLO, N, AP, BP, W, Z, LDZ, WORK,
+      SUBROUTINE AB_ZHPGV( ITYPE, JOBZ, UPLO, N, AP, BP, W, Z, LDZ, WORK
+     $,
      $                  RWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -187,25 +188,26 @@
       INTEGER            J, NEIG
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZHPEV, ZHPGST, ZPPTRF, ZTPMV, ZTPSV
+      EXTERNAL           AB_XERBLA, AB_ZHPEV, AB_ZHPGST, AB_ZPPTRF, AB_Z
+     $TPMV, AB_ZTPSV
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters.
 *
-      WANTZ = LSAME( JOBZ, 'V' )
-      UPPER = LSAME( UPLO, 'U' )
+      WANTZ = AB_LSAME( JOBZ, 'V' )
+      UPPER = AB_LSAME( UPLO, 'U' )
 *
       INFO = 0
       IF( ITYPE.LT.1 .OR. ITYPE.GT.3 ) THEN
          INFO = -1
-      ELSE IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
+      ELSE IF( .NOT.( WANTZ .OR. AB_LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.( UPPER .OR. LSAME( UPLO, 'L' ) ) ) THEN
+      ELSE IF( .NOT.( UPPER .OR. AB_LSAME( UPLO, 'L' ) ) ) THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
@@ -213,7 +215,7 @@
          INFO = -9
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZHPGV ', -INFO )
+         CALL AB_XERBLA( 'AB_ZHPGV ', -INFO )
          RETURN
       END IF
 *
@@ -224,7 +226,7 @@
 *
 *     Form a Cholesky factorization of B.
 *
-      CALL ZPPTRF( UPLO, N, BP, INFO )
+      CALL AB_ZPPTRF( UPLO, N, BP, INFO )
       IF( INFO.NE.0 ) THEN
          INFO = N + INFO
          RETURN
@@ -232,8 +234,8 @@
 *
 *     Transform problem to standard eigenvalue problem and solve.
 *
-      CALL ZHPGST( ITYPE, UPLO, N, AP, BP, INFO )
-      CALL ZHPEV( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, RWORK, INFO )
+      CALL AB_ZHPGST( ITYPE, UPLO, N, AP, BP, INFO )
+      CALL AB_ZHPEV( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, RWORK, INFO )
 *
       IF( WANTZ ) THEN
 *
@@ -254,7 +256,7 @@
             END IF
 *
             DO 10 J = 1, NEIG
-               CALL ZTPSV( UPLO, TRANS, 'Non-unit', N, BP, Z( 1, J ),
+               CALL AB_ZTPSV( UPLO, TRANS, 'Non-unit', N, BP, Z( 1, J ),
      $                     1 )
    10       CONTINUE
 *
@@ -270,13 +272,13 @@
             END IF
 *
             DO 20 J = 1, NEIG
-               CALL ZTPMV( UPLO, TRANS, 'Non-unit', N, BP, Z( 1, J ),
+               CALL AB_ZTPMV( UPLO, TRANS, 'Non-unit', N, BP, Z( 1, J ),
      $                     1 )
    20       CONTINUE
          END IF
       END IF
       RETURN
 *
-*     End of ZHPGV
+*     End of AB_ZHPGV
 *
       END

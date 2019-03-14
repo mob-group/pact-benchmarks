@@ -1,4 +1,4 @@
-*> \brief \b DLARRC computes the number of eigenvalues of the symmetric tridiagonal matrix.
+*> \brief \b AB_DLARRC computes the number of eigenvalues of the symmetric tridiagonal matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLARRC + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarrc.f">
+*> Download AB_DLARRC + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLARRC.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarrc.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLARRC.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarrc.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLARRC.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLARRC( JOBT, N, VL, VU, D, E, PIVMIN,
+*       SUBROUTINE AB_DLARRC( JOBT, N, VL, VU, D, E, PIVMIN,
 *                                   EIGCNT, LCNT, RCNT, INFO )
 *
 *       .. Scalar Arguments ..
@@ -134,7 +134,7 @@
 *> Christof Voemel, University of California, Berkeley, USA
 *
 *  =====================================================================
-      SUBROUTINE DLARRC( JOBT, N, VL, VU, D, E, PIVMIN,
+      SUBROUTINE AB_DLARRC( JOBT, N, VL, VU, D, E, PIVMIN,
      $                            EIGCNT, LCNT, RCNT, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.1) --
@@ -164,8 +164,8 @@
 
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. Executable Statements ..
 *
@@ -180,7 +180,7 @@
       LCNT = 0
       RCNT = 0
       EIGCNT = 0
-      MATT = LSAME( JOBT, 'T' )
+      MATT = AB_LSAME( JOBT, 'T' )
 
 
       IF (MATT) THEN
@@ -246,6 +246,6 @@
 
       RETURN
 *
-*     end of DLARRC
+*     end of AB_DLARRC
 *
       END

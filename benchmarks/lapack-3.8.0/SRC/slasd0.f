@@ -1,4 +1,4 @@
-*> \brief \b SLASD0 computes the singular values of a real upper bidiagonal n-by-m matrix B with diagonal d and off-diagonal e. Used by sbdsdc.
+*> \brief \b AB_SLASD0 computes the singular values of a real upper bidiagonal n-by-m matrix B with diagonal d and off-diagonal e. Used by AB_SBDSDC.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLASD0 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasd0.f">
+*> Download AB_SLASD0 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLASD0.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasd0.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLASD0.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasd0.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLASD0.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLASD0( N, SQRE, D, E, U, LDU, VT, LDVT, SMLSIZ, IWORK,
+*       SUBROUTINE AB_SLASD0( N, SQRE, D, E, U, LDU, VT, LDVT, SMLSIZ, IWORK,
 *                          WORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,13 +36,13 @@
 *>
 *> \verbatim
 *>
-*> Using a divide and conquer approach, SLASD0 computes the singular
+*> Using a divide and conquer approach, AB_SLASD0 computes the singular
 *> value decomposition (SVD) of a real upper bidiagonal N-by-M
 *> matrix B with diagonal D and offdiagonal E, where M = N + SQRE.
 *> The algorithm computes orthogonal matrices U and VT such that
 *> B = U * S * VT. The singular values S are overwritten on D.
 *>
-*> A related subroutine, SLASDA, computes only the singular values,
+*> A related subroutine, AB_SLASDA, computes only the singular values,
 *> and optionally, the singular vectors in compact form.
 *> \endverbatim
 *
@@ -147,7 +147,8 @@
 *>     California at Berkeley, USA
 *>
 *  =====================================================================
-      SUBROUTINE SLASD0( N, SQRE, D, E, U, LDU, VT, LDVT, SMLSIZ, IWORK,
+      SUBROUTINE AB_SLASD0( N, SQRE, D, E, U, LDU, VT, LDVT, SMLSIZ, IWO
+     $RK,
      $                   WORK, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.1) --
@@ -173,7 +174,7 @@
       REAL               ALPHA, BETA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLASD1, SLASDQ, SLASDT, XERBLA
+      EXTERNAL           AB_SLASD1, AB_SLASDQ, AB_SLASDT, AB_XERBLA
 *     ..
 *     .. Executable Statements ..
 *
@@ -197,14 +198,15 @@
          INFO = -9
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SLASD0', -INFO )
+         CALL AB_XERBLA( 'AB_SLASD0', -INFO )
          RETURN
       END IF
 *
-*     If the input matrix is too small, call SLASDQ to find the SVD.
+*     If the input matrix is too small, call AB_SLASDQ to find the SVD.
 *
       IF( N.LE.SMLSIZ ) THEN
-         CALL SLASDQ( 'U', SQRE, N, M, N, 0, D, E, VT, LDVT, U, LDU, U,
+         CALL AB_SLASDQ( 'U', SQRE, N, M, N, 0, D, E, VT, LDVT, U, LDU, 
+     $U,
      $                LDU, WORK, INFO )
          RETURN
       END IF
@@ -216,11 +218,11 @@
       NDIMR = NDIML + N
       IDXQ = NDIMR + N
       IWK = IDXQ + N
-      CALL SLASDT( N, NLVL, ND, IWORK( INODE ), IWORK( NDIML ),
+      CALL AB_SLASDT( N, NLVL, ND, IWORK( INODE ), IWORK( NDIML ),
      $             IWORK( NDIMR ), SMLSIZ )
 *
 *     For the nodes on bottom level of the tree, solve
-*     their subproblems by SLASDQ.
+*     their subproblems by AB_SLASDQ.
 *
       NDB1 = ( ND+1 ) / 2
       NCC = 0
@@ -241,7 +243,8 @@
          NLF = IC - NL
          NRF = IC + 1
          SQREI = 1
-         CALL SLASDQ( 'U', SQREI, NL, NLP1, NL, NCC, D( NLF ), E( NLF ),
+         CALL AB_SLASDQ( 'U', SQREI, NL, NLP1, NL, NCC, D( NLF ), E( NLF
+     $ ),
      $                VT( NLF, NLF ), LDVT, U( NLF, NLF ), LDU,
      $                U( NLF, NLF ), LDU, WORK, INFO )
          IF( INFO.NE.0 ) THEN
@@ -257,7 +260,8 @@
             SQREI = 1
          END IF
          NRP1 = NR + SQREI
-         CALL SLASDQ( 'U', SQREI, NR, NRP1, NR, NCC, D( NRF ), E( NRF ),
+         CALL AB_SLASDQ( 'U', SQREI, NR, NRP1, NR, NCC, D( NRF ), E( NRF
+     $ ),
      $                VT( NRF, NRF ), LDVT, U( NRF, NRF ), LDU,
      $                U( NRF, NRF ), LDU, WORK, INFO )
          IF( INFO.NE.0 ) THEN
@@ -297,7 +301,7 @@
             IDXQC = IDXQ + NLF - 1
             ALPHA = D( IC )
             BETA = E( IC )
-            CALL SLASD1( NL, NR, SQREI, D( NLF ), ALPHA, BETA,
+            CALL AB_SLASD1( NL, NR, SQREI, D( NLF ), ALPHA, BETA,
      $                   U( NLF, NLF ), LDU, VT( NLF, NLF ), LDVT,
      $                   IWORK( IDXQC ), IWORK( IWK ), WORK, INFO )
 *
@@ -311,6 +315,6 @@
 *
       RETURN
 *
-*     End of SLASD0
+*     End of AB_SLASD0
 *
       END

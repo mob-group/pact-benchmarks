@@ -1,4 +1,4 @@
-*> \brief \b DLARF applies an elementary reflector to a general rectangular matrix.
+*> \brief \b AB_DLARF applies an elementary reflector to a general rectangular matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLARF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarf.f">
+*> Download AB_DLARF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLARF.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLARF.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLARF.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLARF( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )
+*       SUBROUTINE AB_DLARF( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          SIDE
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> DLARF applies a real elementary reflector H to a real m by n matrix
+*> AB_DLARF applies a real elementary reflector H to a real m by n matrix
 *> C, from either the left or the right. H is represented in the form
 *>
 *>       H = I - tau * v * v**T
@@ -122,7 +122,7 @@
 *> \ingroup doubleOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE DLARF( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )
+      SUBROUTINE AB_DLARF( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -149,16 +149,16 @@
       INTEGER            I, LASTV, LASTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMV, DGER
+      EXTERNAL           AB_DGEMV, AB_DGER
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILADLR, ILADLC
-      EXTERNAL           LSAME, ILADLR, ILADLC
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILADLR, AB_ILADLC
+      EXTERNAL           AB_LSAME, AB_ILADLR, AB_ILADLC
 *     ..
 *     .. Executable Statements ..
 *
-      APPLYLEFT = LSAME( SIDE, 'L' )
+      APPLYLEFT = AB_LSAME( SIDE, 'L' )
       LASTV = 0
       LASTC = 0
       IF( TAU.NE.ZERO ) THEN
@@ -181,10 +181,10 @@
          END DO
          IF( APPLYLEFT ) THEN
 !     Scan for the last non-zero column in C(1:lastv,:).
-            LASTC = ILADLC(LASTV, N, C, LDC)
+            LASTC = AB_ILADLC(LASTV, N, C, LDC)
          ELSE
 !     Scan for the last non-zero row in C(:,1:lastv).
-            LASTC = ILADLR(M, LASTV, C, LDC)
+            LASTC = AB_ILADLR(M, LASTV, C, LDC)
          END IF
       END IF
 !     Note that lastc.eq.0 renders the BLAS operations null; no special
@@ -197,12 +197,13 @@
 *
 *           w(1:lastc,1) := C(1:lastv,1:lastc)**T * v(1:lastv,1)
 *
-            CALL DGEMV( 'Transpose', LASTV, LASTC, ONE, C, LDC, V, INCV,
+            CALL AB_DGEMV( 'Transpose', LASTV, LASTC, ONE, C, LDC, V, IN
+     $CV,
      $           ZERO, WORK, 1 )
 *
 *           C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**T
 *
-            CALL DGER( LASTV, LASTC, -TAU, V, INCV, WORK, 1, C, LDC )
+            CALL AB_DGER( LASTV, LASTC, -TAU, V, INCV, WORK, 1, C, LDC )
          END IF
       ELSE
 *
@@ -212,16 +213,16 @@
 *
 *           w(1:lastc,1) := C(1:lastc,1:lastv) * v(1:lastv,1)
 *
-            CALL DGEMV( 'No transpose', LASTC, LASTV, ONE, C, LDC,
+            CALL AB_DGEMV( 'No transpose', LASTC, LASTV, ONE, C, LDC,
      $           V, INCV, ZERO, WORK, 1 )
 *
 *           C(1:lastc,1:lastv) := C(...) - w(1:lastc,1) * v(1:lastv,1)**T
 *
-            CALL DGER( LASTC, LASTV, -TAU, WORK, 1, V, INCV, C, LDC )
+            CALL AB_DGER( LASTC, LASTV, -TAU, WORK, 1, V, INCV, C, LDC )
          END IF
       END IF
       RETURN
 *
-*     End of DLARF
+*     End of AB_DLARF
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b ZLAQHE scales a Hermitian matrix.
+*> \brief \b AB_ZLAQHE scales a Hermitian matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZLAQHE + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlaqhe.f">
+*> Download AB_ZLAQHE + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLAQHE.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlaqhe.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLAQHE.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlaqhe.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLAQHE.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZLAQHE( UPLO, N, A, LDA, S, SCOND, AMAX, EQUED )
+*       SUBROUTINE AB_ZLAQHE( UPLO, N, A, LDA, S, SCOND, AMAX, EQUED )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          EQUED, UPLO
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> ZLAQHE equilibrates a Hermitian matrix A using the scaling factors
+*> AB_ZLAQHE equilibrates a Hermitian matrix A using the scaling factors
 *> in the vector S.
 *> \endverbatim
 *
@@ -132,7 +132,7 @@
 *> \ingroup complex16HEauxiliary
 *
 *  =====================================================================
-      SUBROUTINE ZLAQHE( UPLO, N, A, LDA, S, SCOND, AMAX, EQUED )
+      SUBROUTINE AB_ZLAQHE( UPLO, N, A, LDA, S, SCOND, AMAX, EQUED )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -160,9 +160,9 @@
       DOUBLE PRECISION   CJ, LARGE, SMALL
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
+      LOGICAL            AB_LSAME
       DOUBLE PRECISION   DLAMCH
-      EXTERNAL           LSAME, DLAMCH
+      EXTERNAL           AB_LSAME, DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE
@@ -190,7 +190,7 @@
 *
 *        Replace A by diag(S) * A * diag(S).
 *
-         IF( LSAME( UPLO, 'U' ) ) THEN
+         IF( AB_LSAME( UPLO, 'U' ) ) THEN
 *
 *           Upper triangle of A is stored.
 *
@@ -218,6 +218,6 @@
 *
       RETURN
 *
-*     End of ZLAQHE
+*     End of AB_ZLAQHE
 *
       END

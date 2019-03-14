@@ -1,4 +1,4 @@
-*> \brief \b CGTTS2 solves a system of linear equations with a tridiagonal matrix using the LU factorization computed by sgttrf.
+*> \brief \b AB_CGTTS2 solves a system of linear equations with a tridiagonal matrix using the LU factorization computed by AB_SGTTRF.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CGTTS2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgtts2.f">
+*> Download AB_CGTTS2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CGTTS2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgtts2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CGTTS2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgtts2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CGTTS2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGTTS2( ITRANS, N, NRHS, DL, D, DU, DU2, IPIV, B, LDB )
+*       SUBROUTINE AB_CGTTS2( ITRANS, N, NRHS, DL, D, DU, DU2, IPIV, B, LDB )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            ITRANS, LDB, N, NRHS
@@ -34,10 +34,10 @@
 *>
 *> \verbatim
 *>
-*> CGTTS2 solves one of the systems of equations
+*> AB_CGTTS2 solves one of the systems of equations
 *>    A * X = B,  A**T * X = B,  or  A**H * X = B,
 *> with a tridiagonal matrix A using the LU factorization computed
-*> by CGTTRF.
+*> by AB_CGTTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -126,7 +126,8 @@
 *> \ingroup complexGTcomputational
 *
 *  =====================================================================
-      SUBROUTINE CGTTS2( ITRANS, N, NRHS, DL, D, DU, DU2, IPIV, B, LDB )
+      SUBROUTINE AB_CGTTS2( ITRANS, N, NRHS, DL, D, DU, DU2, IPIV, B, LD
+     $B )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -344,6 +345,6 @@
          END IF
       END IF
 *
-*     End of CGTTS2
+*     End of AB_CGTTS2
 *
       END

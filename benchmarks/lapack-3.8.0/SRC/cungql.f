@@ -1,4 +1,4 @@
-*> \brief \b CUNGQL
+*> \brief \b AB_CUNGQL
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CUNGQL + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cungql.f">
+*> Download AB_CUNGQL + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CUNGQL.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cungql.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CUNGQL.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cungql.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CUNGQL.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CUNGQL( M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
+*       SUBROUTINE AB_CUNGQL( M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, K, LDA, LWORK, M, N
@@ -33,13 +33,13 @@
 *>
 *> \verbatim
 *>
-*> CUNGQL generates an M-by-N complex matrix Q with orthonormal columns,
+*> AB_CUNGQL generates an M-by-N complex matrix Q with orthonormal columns,
 *> which is defined as the last N columns of a product of K elementary
 *> reflectors of order M
 *>
 *>       Q  =  H(k) . . . H(2) H(1)
 *>
-*> as returned by CGEQLF.
+*> as returned by AB_CGEQLF.
 *> \endverbatim
 *
 *  Arguments:
@@ -69,7 +69,7 @@
 *>          A is COMPLEX array, dimension (LDA,N)
 *>          On entry, the (n-k+i)-th column must contain the vector which
 *>          defines the elementary reflector H(i), for i = 1,2,...,k, as
-*>          returned by CGEQLF in the last k columns of its array
+*>          returned by AB_CGEQLF in the last k columns of its array
 *>          argument A.
 *>          On exit, the M-by-N matrix Q.
 *> \endverbatim
@@ -84,7 +84,7 @@
 *> \verbatim
 *>          TAU is COMPLEX array, dimension (K)
 *>          TAU(i) must contain the scalar factor of the elementary
-*>          reflector H(i), as returned by CGEQLF.
+*>          reflector H(i), as returned by AB_CGEQLF.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -103,7 +103,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -126,7 +126,7 @@
 *> \ingroup complexOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE CUNGQL( M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
+      SUBROUTINE AB_CUNGQL( M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -152,14 +152,14 @@
      $                   NB, NBMIN, NX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLARFB, CLARFT, CUNG2L, XERBLA
+      EXTERNAL           AB_CLARFB, AB_CLARFT, AB_CUNG2L, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
 *     ..
 *     .. External Functions ..
-      INTEGER            ILAENV
-      EXTERNAL           ILAENV
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_ILAENV
 *     ..
 *     .. Executable Statements ..
 *
@@ -181,7 +181,7 @@
          IF( N.EQ.0 ) THEN
             LWKOPT = 1
          ELSE
-            NB = ILAENV( 1, 'CUNGQL', ' ', M, N, K, -1 )
+            NB = AB_ILAENV( 1, 'AB_CUNGQL', ' ', M, N, K, -1 )
             LWKOPT = N*NB
          END IF
          WORK( 1 ) = LWKOPT
@@ -192,7 +192,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CUNGQL', -INFO )
+         CALL AB_XERBLA( 'AB_CUNGQL', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -211,7 +211,7 @@
 *
 *        Determine when to cross over from blocked to unblocked code.
 *
-         NX = MAX( 0, ILAENV( 3, 'CUNGQL', ' ', M, N, K, -1 ) )
+         NX = MAX( 0, AB_ILAENV( 3, 'AB_CUNGQL', ' ', M, N, K, -1 ) )
          IF( NX.LT.K ) THEN
 *
 *           Determine if workspace is large enough for blocked code.
@@ -224,7 +224,8 @@
 *              determine the minimum value of NB.
 *
                NB = LWORK / LDWORK
-               NBMIN = MAX( 2, ILAENV( 2, 'CUNGQL', ' ', M, N, K, -1 ) )
+               NBMIN = MAX( 2, AB_ILAENV( 2, 'AB_CUNGQL', ' ', M, N, K, 
+     $-1 ) )
             END IF
          END IF
       END IF
@@ -249,7 +250,7 @@
 *
 *     Use unblocked code for the first or only block.
 *
-      CALL CUNG2L( M-KK, N-KK, K-KK, A, LDA, TAU, WORK, IINFO )
+      CALL AB_CUNG2L( M-KK, N-KK, K-KK, A, LDA, TAU, WORK, IINFO )
 *
       IF( KK.GT.0 ) THEN
 *
@@ -262,12 +263,12 @@
 *              Form the triangular factor of the block reflector
 *              H = H(i+ib-1) . . . H(i+1) H(i)
 *
-               CALL CLARFT( 'Backward', 'Columnwise', M-K+I+IB-1, IB,
+               CALL AB_CLARFT( 'Backward', 'Columnwise', M-K+I+IB-1, IB,
      $                      A( 1, N-K+I ), LDA, TAU( I ), WORK, LDWORK )
 *
 *              Apply H to A(1:m-k+i+ib-1,1:n-k+i-1) from the left
 *
-               CALL CLARFB( 'Left', 'No transpose', 'Backward',
+               CALL AB_CLARFB( 'Left', 'No transpose', 'Backward',
      $                      'Columnwise', M-K+I+IB-1, N-K+I-1, IB,
      $                      A( 1, N-K+I ), LDA, WORK, LDWORK, A, LDA,
      $                      WORK( IB+1 ), LDWORK )
@@ -275,7 +276,7 @@
 *
 *           Apply H to rows 1:m-k+i+ib-1 of current block
 *
-            CALL CUNG2L( M-K+I+IB-1, IB, IB, A( 1, N-K+I ), LDA,
+            CALL AB_CUNG2L( M-K+I+IB-1, IB, IB, A( 1, N-K+I ), LDA,
      $                   TAU( I ), WORK, IINFO )
 *
 *           Set rows m-k+i+ib:m of current block to zero
@@ -291,6 +292,6 @@
       WORK( 1 ) = IWS
       RETURN
 *
-*     End of CUNGQL
+*     End of AB_CUNGQL
 *
       END

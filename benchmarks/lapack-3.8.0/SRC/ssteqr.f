@@ -1,4 +1,4 @@
-*> \brief \b SSTEQR
+*> \brief \b AB_SSTEQR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SSTEQR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssteqr.f">
+*> Download AB_SSTEQR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SSTEQR.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssteqr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SSTEQR.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssteqr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SSTEQR.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SSTEQR( COMPZ, N, D, E, Z, LDZ, WORK, INFO )
+*       SUBROUTINE AB_SSTEQR( COMPZ, N, D, E, Z, LDZ, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          COMPZ
@@ -34,10 +34,10 @@
 *>
 *> \verbatim
 *>
-*> SSTEQR computes all eigenvalues and, optionally, eigenvectors of a
+*> AB_SSTEQR computes all eigenvalues and, optionally, eigenvectors of a
 *> symmetric tridiagonal matrix using the implicit QL or QR method.
 *> The eigenvectors of a full or band symmetric matrix can also be found
-*> if SSYTRD or SSPTRD or SSBTRD has been used to reduce this matrix to
+*> if AB_SSYTRD or AB_SSPTRD or AB_SSBTRD has been used to reduce this matrix to
 *> tridiagonal form.
 *> \endverbatim
 *
@@ -129,7 +129,7 @@
 *> \ingroup auxOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE SSTEQR( COMPZ, N, D, E, Z, LDZ, WORK, INFO )
+      SUBROUTINE AB_SSTEQR( COMPZ, N, D, E, Z, LDZ, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -161,13 +161,14 @@
      $                   S, SAFMAX, SAFMIN, SSFMAX, SSFMIN, TST
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SLAMCH, SLANST, SLAPY2
-      EXTERNAL           LSAME, SLAMCH, SLANST, SLAPY2
+      LOGICAL            AB_LSAME
+      REAL               SLAMCH, AB_SLANST, AB_SLAPY2
+      EXTERNAL           AB_LSAME, SLAMCH, AB_SLANST, AB_SLAPY2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLAE2, SLAEV2, SLARTG, SLASCL, SLASET, SLASR,
-     $                   SLASRT, SSWAP, XERBLA
+      EXTERNAL           AB_SLAE2, AB_SLAEV2, AB_SLARTG, AB_SLASCL, AB_S
+     $LASET, AB_SLASR,
+     $                   AB_SLASRT, AB_SSWAP, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SIGN, SQRT
@@ -178,11 +179,11 @@
 *
       INFO = 0
 *
-      IF( LSAME( COMPZ, 'N' ) ) THEN
+      IF( AB_LSAME( COMPZ, 'N' ) ) THEN
          ICOMPZ = 0
-      ELSE IF( LSAME( COMPZ, 'V' ) ) THEN
+      ELSE IF( AB_LSAME( COMPZ, 'V' ) ) THEN
          ICOMPZ = 1
-      ELSE IF( LSAME( COMPZ, 'I' ) ) THEN
+      ELSE IF( AB_LSAME( COMPZ, 'I' ) ) THEN
          ICOMPZ = 2
       ELSE
          ICOMPZ = -1
@@ -196,7 +197,7 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SSTEQR', -INFO )
+         CALL AB_XERBLA( 'AB_SSTEQR', -INFO )
          RETURN
       END IF
 *
@@ -224,7 +225,7 @@
 *     matrix.
 *
       IF( ICOMPZ.EQ.2 )
-     $   CALL SLASET( 'Full', N, N, ZERO, ONE, Z, LDZ )
+     $   CALL AB_SLASET( 'Full', N, N, ZERO, ONE, Z, LDZ )
 *
       NMAXIT = N*MAXIT
       JTOT = 0
@@ -266,21 +267,23 @@
 *
 *     Scale submatrix in rows and columns L to LEND
 *
-      ANORM = SLANST( 'M', LEND-L+1, D( L ), E( L ) )
+      ANORM = AB_SLANST( 'M', LEND-L+1, D( L ), E( L ) )
       ISCALE = 0
       IF( ANORM.EQ.ZERO )
      $   GO TO 10
       IF( ANORM.GT.SSFMAX ) THEN
          ISCALE = 1
-         CALL SLASCL( 'G', 0, 0, ANORM, SSFMAX, LEND-L+1, 1, D( L ), N,
+         CALL AB_SLASCL( 'G', 0, 0, ANORM, SSFMAX, LEND-L+1, 1, D( L ), 
+     $N,
      $                INFO )
-         CALL SLASCL( 'G', 0, 0, ANORM, SSFMAX, LEND-L, 1, E( L ), N,
+         CALL AB_SLASCL( 'G', 0, 0, ANORM, SSFMAX, LEND-L, 1, E( L ), N,
      $                INFO )
       ELSE IF( ANORM.LT.SSFMIN ) THEN
          ISCALE = 2
-         CALL SLASCL( 'G', 0, 0, ANORM, SSFMIN, LEND-L+1, 1, D( L ), N,
+         CALL AB_SLASCL( 'G', 0, 0, ANORM, SSFMIN, LEND-L+1, 1, D( L ), 
+     $N,
      $                INFO )
-         CALL SLASCL( 'G', 0, 0, ANORM, SSFMIN, LEND-L, 1, E( L ), N,
+         CALL AB_SLASCL( 'G', 0, 0, ANORM, SSFMIN, LEND-L, 1, E( L ), N,
      $                INFO )
       END IF
 *
@@ -316,18 +319,19 @@
          IF( M.EQ.L )
      $      GO TO 80
 *
-*        If remaining matrix is 2-by-2, use SLAE2 or SLAEV2
+*        If remaining matrix is 2-by-2, use AB_SLAE2 or AB_SLAEV2
 *        to compute its eigensystem.
 *
          IF( M.EQ.L+1 ) THEN
             IF( ICOMPZ.GT.0 ) THEN
-               CALL SLAEV2( D( L ), E( L ), D( L+1 ), RT1, RT2, C, S )
+               CALL AB_SLAEV2( D( L ), E( L ), D( L+1 ), RT1, RT2, C, S 
+     $)
                WORK( L ) = C
                WORK( N-1+L ) = S
-               CALL SLASR( 'R', 'V', 'B', N, 2, WORK( L ),
+               CALL AB_SLASR( 'R', 'V', 'B', N, 2, WORK( L ),
      $                     WORK( N-1+L ), Z( 1, L ), LDZ )
             ELSE
-               CALL SLAE2( D( L ), E( L ), D( L+1 ), RT1, RT2 )
+               CALL AB_SLAE2( D( L ), E( L ), D( L+1 ), RT1, RT2 )
             END IF
             D( L ) = RT1
             D( L+1 ) = RT2
@@ -345,7 +349,7 @@
 *        Form shift.
 *
          G = ( D( L+1 )-P ) / ( TWO*E( L ) )
-         R = SLAPY2( G, ONE )
+         R = AB_SLAPY2( G, ONE )
          G = D( M ) - P + ( E( L ) / ( G+SIGN( R, G ) ) )
 *
          S = ONE
@@ -358,7 +362,7 @@
          DO 70 I = MM1, L, -1
             F = S*E( I )
             B = C*E( I )
-            CALL SLARTG( G, F, C, S, R )
+            CALL AB_SLARTG( G, F, C, S, R )
             IF( I.NE.M-1 )
      $         E( I+1 ) = R
             G = D( I+1 ) - P
@@ -380,7 +384,8 @@
 *
          IF( ICOMPZ.GT.0 ) THEN
             MM = M - L + 1
-            CALL SLASR( 'R', 'V', 'B', N, MM, WORK( L ), WORK( N-1+L ),
+            CALL AB_SLASR( 'R', 'V', 'B', N, MM, WORK( L ), WORK( N-1+L 
+     $),
      $                  Z( 1, L ), LDZ )
          END IF
 *
@@ -423,18 +428,19 @@
          IF( M.EQ.L )
      $      GO TO 130
 *
-*        If remaining matrix is 2-by-2, use SLAE2 or SLAEV2
+*        If remaining matrix is 2-by-2, use AB_SLAE2 or AB_SLAEV2
 *        to compute its eigensystem.
 *
          IF( M.EQ.L-1 ) THEN
             IF( ICOMPZ.GT.0 ) THEN
-               CALL SLAEV2( D( L-1 ), E( L-1 ), D( L ), RT1, RT2, C, S )
+               CALL AB_SLAEV2( D( L-1 ), E( L-1 ), D( L ), RT1, RT2, C, 
+     $S )
                WORK( M ) = C
                WORK( N-1+M ) = S
-               CALL SLASR( 'R', 'V', 'F', N, 2, WORK( M ),
+               CALL AB_SLASR( 'R', 'V', 'F', N, 2, WORK( M ),
      $                     WORK( N-1+M ), Z( 1, L-1 ), LDZ )
             ELSE
-               CALL SLAE2( D( L-1 ), E( L-1 ), D( L ), RT1, RT2 )
+               CALL AB_SLAE2( D( L-1 ), E( L-1 ), D( L ), RT1, RT2 )
             END IF
             D( L-1 ) = RT1
             D( L ) = RT2
@@ -452,7 +458,7 @@
 *        Form shift.
 *
          G = ( D( L-1 )-P ) / ( TWO*E( L-1 ) )
-         R = SLAPY2( G, ONE )
+         R = AB_SLAPY2( G, ONE )
          G = D( M ) - P + ( E( L-1 ) / ( G+SIGN( R, G ) ) )
 *
          S = ONE
@@ -465,7 +471,7 @@
          DO 120 I = M, LM1
             F = S*E( I )
             B = C*E( I )
-            CALL SLARTG( G, F, C, S, R )
+            CALL AB_SLARTG( G, F, C, S, R )
             IF( I.NE.M )
      $         E( I-1 ) = R
             G = D( I ) - P
@@ -487,7 +493,8 @@
 *
          IF( ICOMPZ.GT.0 ) THEN
             MM = L - M + 1
-            CALL SLASR( 'R', 'V', 'F', N, MM, WORK( M ), WORK( N-1+M ),
+            CALL AB_SLASR( 'R', 'V', 'F', N, MM, WORK( M ), WORK( N-1+M 
+     $),
      $                  Z( 1, M ), LDZ )
          END IF
 *
@@ -511,14 +518,16 @@
 *
   140 CONTINUE
       IF( ISCALE.EQ.1 ) THEN
-         CALL SLASCL( 'G', 0, 0, SSFMAX, ANORM, LENDSV-LSV+1, 1,
+         CALL AB_SLASCL( 'G', 0, 0, SSFMAX, ANORM, LENDSV-LSV+1, 1,
      $                D( LSV ), N, INFO )
-         CALL SLASCL( 'G', 0, 0, SSFMAX, ANORM, LENDSV-LSV, 1, E( LSV ),
+         CALL AB_SLASCL( 'G', 0, 0, SSFMAX, ANORM, LENDSV-LSV, 1, E( LSV
+     $ ),
      $                N, INFO )
       ELSE IF( ISCALE.EQ.2 ) THEN
-         CALL SLASCL( 'G', 0, 0, SSFMIN, ANORM, LENDSV-LSV+1, 1,
+         CALL AB_SLASCL( 'G', 0, 0, SSFMIN, ANORM, LENDSV-LSV+1, 1,
      $                D( LSV ), N, INFO )
-         CALL SLASCL( 'G', 0, 0, SSFMIN, ANORM, LENDSV-LSV, 1, E( LSV ),
+         CALL AB_SLASCL( 'G', 0, 0, SSFMIN, ANORM, LENDSV-LSV, 1, E( LSV
+     $ ),
      $                N, INFO )
       END IF
 *
@@ -540,7 +549,7 @@
 *
 *        Use Quick Sort
 *
-         CALL SLASRT( 'I', N, D, INFO )
+         CALL AB_SLASRT( 'I', N, D, INFO )
 *
       ELSE
 *
@@ -559,7 +568,7 @@
             IF( K.NE.I ) THEN
                D( K ) = D( I )
                D( I ) = P
-               CALL SSWAP( N, Z( 1, I ), 1, Z( 1, K ), 1 )
+               CALL AB_SSWAP( N, Z( 1, I ), 1, Z( 1, K ), 1 )
             END IF
   180    CONTINUE
       END IF
@@ -567,6 +576,6 @@
   190 CONTINUE
       RETURN
 *
-*     End of SSTEQR
+*     End of AB_SSTEQR
 *
       END

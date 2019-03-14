@@ -1,4 +1,4 @@
-*> \brief \b SOPGTR
+*> \brief \b AB_SOPGTR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SOPGTR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sopgtr.f">
+*> Download AB_SOPGTR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SOPGTR.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sopgtr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SOPGTR.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sopgtr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SOPGTR.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SOPGTR( UPLO, N, AP, TAU, Q, LDQ, WORK, INFO )
+*       SUBROUTINE AB_SOPGTR( UPLO, N, AP, TAU, Q, LDQ, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,9 +34,9 @@
 *>
 *> \verbatim
 *>
-*> SOPGTR generates a real orthogonal matrix Q which is defined as the
+*> AB_SOPGTR generates a real orthogonal matrix Q which is defined as the
 *> product of n-1 elementary reflectors H(i) of order n, as returned by
-*> SSPTRD using packed storage:
+*> AB_SSPTRD using packed storage:
 *>
 *> if UPLO = 'U', Q = H(n-1) . . . H(2) H(1),
 *>
@@ -50,9 +50,9 @@
 *> \verbatim
 *>          UPLO is CHARACTER*1
 *>          = 'U': Upper triangular packed storage used in previous
-*>                 call to SSPTRD;
+*>                 call to AB_SSPTRD;
 *>          = 'L': Lower triangular packed storage used in previous
-*>                 call to SSPTRD.
+*>                 call to AB_SSPTRD.
 *> \endverbatim
 *>
 *> \param[in] N
@@ -65,14 +65,14 @@
 *> \verbatim
 *>          AP is REAL array, dimension (N*(N+1)/2)
 *>          The vectors which define the elementary reflectors, as
-*>          returned by SSPTRD.
+*>          returned by AB_SSPTRD.
 *> \endverbatim
 *>
 *> \param[in] TAU
 *> \verbatim
 *>          TAU is REAL array, dimension (N-1)
 *>          TAU(i) must contain the scalar factor of the elementary
-*>          reflector H(i), as returned by SSPTRD.
+*>          reflector H(i), as returned by AB_SSPTRD.
 *> \endverbatim
 *>
 *> \param[out] Q
@@ -112,7 +112,7 @@
 *> \ingroup realOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE SOPGTR( UPLO, N, AP, TAU, Q, LDQ, WORK, INFO )
+      SUBROUTINE AB_SOPGTR( UPLO, N, AP, TAU, Q, LDQ, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -138,11 +138,11 @@
       INTEGER            I, IINFO, IJ, J
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SORG2L, SORG2R, XERBLA
+      EXTERNAL           AB_SORG2L, AB_SORG2R, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -152,8 +152,8 @@
 *     Test the input arguments
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -161,7 +161,7 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SOPGTR', -INFO )
+         CALL AB_XERBLA( 'AB_SOPGTR', -INFO )
          RETURN
       END IF
 *
@@ -172,7 +172,7 @@
 *
       IF( UPPER ) THEN
 *
-*        Q was determined by a call to SSPTRD with UPLO = 'U'
+*        Q was determined by a call to AB_SSPTRD with UPLO = 'U'
 *
 *        Unpack the vectors which define the elementary reflectors and
 *        set the last row and column of Q equal to those of the unit
@@ -194,11 +194,11 @@
 *
 *        Generate Q(1:n-1,1:n-1)
 *
-         CALL SORG2L( N-1, N-1, N-1, Q, LDQ, TAU, WORK, IINFO )
+         CALL AB_SORG2L( N-1, N-1, N-1, Q, LDQ, TAU, WORK, IINFO )
 *
       ELSE
 *
-*        Q was determined by a call to SSPTRD with UPLO = 'L'.
+*        Q was determined by a call to AB_SSPTRD with UPLO = 'L'.
 *
 *        Unpack the vectors which define the elementary reflectors and
 *        set the first row and column of Q equal to those of the unit
@@ -221,12 +221,12 @@
 *
 *           Generate Q(2:n,2:n)
 *
-            CALL SORG2R( N-1, N-1, N-1, Q( 2, 2 ), LDQ, TAU, WORK,
+            CALL AB_SORG2R( N-1, N-1, N-1, Q( 2, 2 ), LDQ, TAU, WORK,
      $                   IINFO )
          END IF
       END IF
       RETURN
 *
-*     End of SOPGTR
+*     End of AB_SOPGTR
 *
       END

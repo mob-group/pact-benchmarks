@@ -1,4 +1,4 @@
-*> \brief \b SLAQGE scales a general rectangular matrix, using row and column scaling factors computed by sgeequ.
+*> \brief \b AB_SLAQGE scales a general rectangular matrix, using row and column scaling factors computed by AB_SGEEQU.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLAQGE + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaqge.f">
+*> Download AB_SLAQGE + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLAQGE.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaqge.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLAQGE.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaqge.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLAQGE.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLAQGE( M, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
+*       SUBROUTINE AB_SLAQGE( M, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
 *                          EQUED )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> SLAQGE equilibrates a general M by N matrix A using the row and
+*> AB_SLAQGE equilibrates a general M by N matrix A using the row and
 *> column scaling factors in the vectors R and C.
 *> \endverbatim
 *
@@ -139,7 +139,7 @@
 *> \ingroup realGEauxiliary
 *
 *  =====================================================================
-      SUBROUTINE SLAQGE( M, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
+      SUBROUTINE AB_SLAQGE( M, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
      $                   EQUED )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -231,6 +231,6 @@
 *
       RETURN
 *
-*     End of SLAQGE
+*     End of AB_SLAQGE
 *
       END

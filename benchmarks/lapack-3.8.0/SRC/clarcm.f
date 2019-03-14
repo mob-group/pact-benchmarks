@@ -1,4 +1,4 @@
-*> \brief \b CLARCM copies all or part of a real two-dimensional array to a complex array.
+*> \brief \b AB_CLARCM copies all or part of a real two-dimensional array to a complex array.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CLARCM + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clarcm.f">
+*> Download AB_CLARCM + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLARCM.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clarcm.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLARCM.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clarcm.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLARCM.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLARCM( M, N, A, LDA, B, LDB, C, LDC, RWORK )
+*       SUBROUTINE AB_CLARCM( M, N, A, LDA, B, LDB, C, LDC, RWORK )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDA, LDB, LDC, M, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> CLARCM performs a very simple matrix-matrix multiplication:
+*> AB_CLARCM performs a very simple matrix-matrix multiplication:
 *>          C := A * B,
 *> where A is M by M and real; B is M by N and complex;
 *> C is M by N and complex.
@@ -112,7 +112,7 @@
 *> \ingroup complexOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE CLARCM( M, N, A, LDA, B, LDB, C, LDC, RWORK )
+      SUBROUTINE AB_CLARCM( M, N, A, LDA, B, LDB, C, LDC, RWORK )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -140,7 +140,7 @@
       INTRINSIC          AIMAG, CMPLX, REAL
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMM
+      EXTERNAL           AB_SGEMM
 *     ..
 *     .. Executable Statements ..
 *
@@ -156,7 +156,7 @@
    20 CONTINUE
 *
       L = M*N + 1
-      CALL SGEMM( 'N', 'N', M, N, M, ONE, A, LDA, RWORK, M, ZERO,
+      CALL AB_SGEMM( 'N', 'N', M, N, M, ONE, A, LDA, RWORK, M, ZERO,
      $            RWORK( L ), M )
       DO 40 J = 1, N
          DO 30 I = 1, M
@@ -169,7 +169,7 @@
             RWORK( ( J-1 )*M+I ) = AIMAG( B( I, J ) )
    50    CONTINUE
    60 CONTINUE
-      CALL SGEMM( 'N', 'N', M, N, M, ONE, A, LDA, RWORK, M, ZERO,
+      CALL AB_SGEMM( 'N', 'N', M, N, M, ONE, A, LDA, RWORK, M, ZERO,
      $            RWORK( L ), M )
       DO 80 J = 1, N
          DO 70 I = 1, M
@@ -180,6 +180,6 @@
 *
       RETURN
 *
-*     End of CLARCM
+*     End of AB_CLARCM
 *
       END

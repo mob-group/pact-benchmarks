@@ -1,4 +1,4 @@
-*> \brief \b DLASQ6 computes one dqd transform in ping-pong form. Used by sbdsqr and sstegr.
+*> \brief \b AB_DLASQ6 computes one dqd transform in ping-pong form. Used by AB_SBDSQR and AB_SSTEGR.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLASQ6 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasq6.f">
+*> Download AB_DLASQ6 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLASQ6.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlasq6.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLASQ6.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasq6.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLASQ6.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLASQ6( I0, N0, Z, PP, DMIN, DMIN1, DMIN2, DN,
+*       SUBROUTINE AB_DLASQ6( I0, N0, Z, PP, DMIN, DMIN1, DMIN2, DN,
 *                          DNM1, DNM2 )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> DLASQ6 computes one dqd (shift equal to zero) transform in
+*> AB_DLASQ6 computes one dqd (shift equal to zero) transform in
 *> ping-pong form, with protection against underflow and overflow.
 *> \endverbatim
 *
@@ -116,7 +116,7 @@
 *> \ingroup auxOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE DLASQ6( I0, N0, Z, PP, DMIN, DMIN1, DMIN2, DN,
+      SUBROUTINE AB_DLASQ6( I0, N0, Z, PP, DMIN, DMIN1, DMIN2, DN,
      $                   DNM1, DNM2 )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -249,6 +249,6 @@
       Z( 4*N0-PP ) = EMIN
       RETURN
 *
-*     End of DLASQ6
+*     End of AB_DLASQ6
 *
       END

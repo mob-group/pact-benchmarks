@@ -1,4 +1,4 @@
-*> \brief <b> SGESVX computes the solution to system of linear equations A * X = B for GE matrices</b>
+*> \brief <b> AB_SGESVX computes the solution to system of linear equations A * X = B for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SGESVX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgesvx.f">
+*> Download AB_SGESVX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SGESVx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgesvx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SGESVx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgesvx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SGESVx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SGESVX( FACT, TRANS, N, NRHS, A, LDA, AF, LDAF, IPIV,
+*       SUBROUTINE AB_SGESVX( FACT, TRANS, N, NRHS, A, LDA, AF, LDAF, IPIV,
 *                          EQUED, R, C, B, LDB, X, LDX, RCOND, FERR, BERR,
 *                          WORK, IWORK, INFO )
 *
@@ -40,7 +40,7 @@
 *>
 *> \verbatim
 *>
-*> SGESVX uses the LU factorization to compute the solution to a real
+*> AB_SGESVX uses the LU factorization to compute the solution to a real
 *> system of linear equations
 *>    A * X = B,
 *> where A is an N-by-N matrix and X and B are N-by-NRHS matrices.
@@ -157,7 +157,7 @@
 *>          AF is REAL array, dimension (LDAF,N)
 *>          If FACT = 'F', then AF is an input argument and on entry
 *>          contains the factors L and U from the factorization
-*>          A = P*L*U as computed by SGETRF.  If EQUED .ne. 'N', then
+*>          A = P*L*U as computed by AB_SGETRF.  If EQUED .ne. 'N', then
 *>          AF is the factored form of the equilibrated matrix A.
 *>
 *>          If FACT = 'N', then AF is an output argument and on exit
@@ -181,7 +181,7 @@
 *>          IPIV is INTEGER array, dimension (N)
 *>          If FACT = 'F', then IPIV is an input argument and on entry
 *>          contains the pivot indices from the factorization A = P*L*U
-*>          as computed by SGETRF; row i of the matrix was interchanged
+*>          as computed by AB_SGETRF; row i of the matrix was interchanged
 *>          with row IPIV(i).
 *>
 *>          If FACT = 'N', then IPIV is an output argument and on exit
@@ -345,7 +345,8 @@
 *> \ingroup realGEsolve
 *
 *  =====================================================================
-      SUBROUTINE SGESVX( FACT, TRANS, N, NRHS, A, LDA, AF, LDAF, IPIV,
+      SUBROUTINE AB_SGESVX( FACT, TRANS, N, NRHS, A, LDA, AF, LDAF, IPIV
+     $,
      $                   EQUED, R, C, B, LDB, X, LDX, RCOND, FERR, BERR,
      $                   WORK, IWORK, INFO )
 *
@@ -380,13 +381,14 @@
      $                   ROWCND, RPVGRW, SMLNUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SLAMCH, SLANGE, SLANTR
-      EXTERNAL           LSAME, SLAMCH, SLANGE, SLANTR
+      LOGICAL            AB_LSAME
+      REAL               SLAMCH, AB_SLANGE, AB_SLANTR
+      EXTERNAL           AB_LSAME, SLAMCH, AB_SLANGE, AB_SLANTR
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGECON, SGEEQU, SGERFS, SGETRF, SGETRS, SLACPY,
-     $                   SLAQGE, XERBLA
+      EXTERNAL           AB_SGECON, AB_SGEEQU, AB_SGERFS, AB_SGETRF, AB_
+     $SGETRS, AB_SLACPY,
+     $                   AB_SLAQGE, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -394,27 +396,28 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-      NOFACT = LSAME( FACT, 'N' )
-      EQUIL = LSAME( FACT, 'E' )
-      NOTRAN = LSAME( TRANS, 'N' )
+      NOFACT = AB_LSAME( FACT, 'N' )
+      EQUIL = AB_LSAME( FACT, 'E' )
+      NOTRAN = AB_LSAME( TRANS, 'N' )
       IF( NOFACT .OR. EQUIL ) THEN
          EQUED = 'N'
          ROWEQU = .FALSE.
          COLEQU = .FALSE.
       ELSE
-         ROWEQU = LSAME( EQUED, 'R' ) .OR. LSAME( EQUED, 'B' )
-         COLEQU = LSAME( EQUED, 'C' ) .OR. LSAME( EQUED, 'B' )
+         ROWEQU = AB_LSAME( EQUED, 'R' ) .OR. AB_LSAME( EQUED, 'B' )
+         COLEQU = AB_LSAME( EQUED, 'C' ) .OR. AB_LSAME( EQUED, 'B' )
          SMLNUM = SLAMCH( 'Safe minimum' )
          BIGNUM = ONE / SMLNUM
       END IF
 *
 *     Test the input parameters.
 *
-      IF( .NOT.NOFACT .AND. .NOT.EQUIL .AND. .NOT.LSAME( FACT, 'F' ) )
+      IF( .NOT.NOFACT .AND. .NOT.EQUIL .AND. .NOT.AB_LSAME( FACT, 'F' ) 
+     $)
      $     THEN
          INFO = -1
-      ELSE IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) .AND. .NOT.
-     $         LSAME( TRANS, 'C' ) ) THEN
+      ELSE IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) .AND. .NOT.
+     $         AB_LSAME( TRANS, 'C' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -424,8 +427,8 @@
          INFO = -6
       ELSE IF( LDAF.LT.MAX( 1, N ) ) THEN
          INFO = -8
-      ELSE IF( LSAME( FACT, 'F' ) .AND. .NOT.
-     $         ( ROWEQU .OR. COLEQU .OR. LSAME( EQUED, 'N' ) ) ) THEN
+      ELSE IF( AB_LSAME( FACT, 'F' ) .AND. .NOT.
+     $         ( ROWEQU .OR. COLEQU .OR. AB_LSAME( EQUED, 'N' ) ) ) THEN
          INFO = -10
       ELSE
          IF( ROWEQU ) THEN
@@ -468,7 +471,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SGESVX', -INFO )
+         CALL AB_XERBLA( 'AB_SGESVX', -INFO )
          RETURN
       END IF
 *
@@ -476,15 +479,16 @@
 *
 *        Compute row and column scalings to equilibrate the matrix A.
 *
-         CALL SGEEQU( N, N, A, LDA, R, C, ROWCND, COLCND, AMAX, INFEQU )
+         CALL AB_SGEEQU( N, N, A, LDA, R, C, ROWCND, COLCND, AMAX, INFEQ
+     $U )
          IF( INFEQU.EQ.0 ) THEN
 *
 *           Equilibrate the matrix.
 *
-            CALL SLAQGE( N, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
+            CALL AB_SLAQGE( N, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
      $                   EQUED )
-            ROWEQU = LSAME( EQUED, 'R' ) .OR. LSAME( EQUED, 'B' )
-            COLEQU = LSAME( EQUED, 'C' ) .OR. LSAME( EQUED, 'B' )
+            ROWEQU = AB_LSAME( EQUED, 'R' ) .OR. AB_LSAME( EQUED, 'B' )
+            COLEQU = AB_LSAME( EQUED, 'C' ) .OR. AB_LSAME( EQUED, 'B' )
          END IF
       END IF
 *
@@ -510,8 +514,8 @@
 *
 *        Compute the LU factorization of A.
 *
-         CALL SLACPY( 'Full', N, N, A, LDA, AF, LDAF )
-         CALL SGETRF( N, N, AF, LDAF, IPIV, INFO )
+         CALL AB_SLACPY( 'Full', N, N, A, LDA, AF, LDAF )
+         CALL AB_SGETRF( N, N, AF, LDAF, IPIV, INFO )
 *
 *        Return if INFO is non-zero.
 *
@@ -520,12 +524,12 @@
 *           Compute the reciprocal pivot growth factor of the
 *           leading rank-deficient INFO columns of A.
 *
-            RPVGRW = SLANTR( 'M', 'U', 'N', INFO, INFO, AF, LDAF,
+            RPVGRW = AB_SLANTR( 'M', 'U', 'N', INFO, INFO, AF, LDAF,
      $               WORK )
             IF( RPVGRW.EQ.ZERO ) THEN
                RPVGRW = ONE
             ELSE
-               RPVGRW = SLANGE( 'M', N, INFO, A, LDA, WORK ) / RPVGRW
+               RPVGRW = AB_SLANGE( 'M', N, INFO, A, LDA, WORK ) / RPVGRW
             END IF
             WORK( 1 ) = RPVGRW
             RCOND = ZERO
@@ -541,27 +545,28 @@
       ELSE
          NORM = 'I'
       END IF
-      ANORM = SLANGE( NORM, N, N, A, LDA, WORK )
-      RPVGRW = SLANTR( 'M', 'U', 'N', N, N, AF, LDAF, WORK )
+      ANORM = AB_SLANGE( NORM, N, N, A, LDA, WORK )
+      RPVGRW = AB_SLANTR( 'M', 'U', 'N', N, N, AF, LDAF, WORK )
       IF( RPVGRW.EQ.ZERO ) THEN
          RPVGRW = ONE
       ELSE
-         RPVGRW = SLANGE( 'M', N, N, A, LDA, WORK ) / RPVGRW
+         RPVGRW = AB_SLANGE( 'M', N, N, A, LDA, WORK ) / RPVGRW
       END IF
 *
 *     Compute the reciprocal of the condition number of A.
 *
-      CALL SGECON( NORM, N, AF, LDAF, ANORM, RCOND, WORK, IWORK, INFO )
+      CALL AB_SGECON( NORM, N, AF, LDAF, ANORM, RCOND, WORK, IWORK, INFO
+     $ )
 *
 *     Compute the solution matrix X.
 *
-      CALL SLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
-      CALL SGETRS( TRANS, N, NRHS, AF, LDAF, IPIV, X, LDX, INFO )
+      CALL AB_SLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
+      CALL AB_SGETRS( TRANS, N, NRHS, AF, LDAF, IPIV, X, LDX, INFO )
 *
 *     Use iterative refinement to improve the computed solution and
 *     compute error bounds and backward error estimates for it.
 *
-      CALL SGERFS( TRANS, N, NRHS, A, LDA, AF, LDAF, IPIV, B, LDB, X,
+      CALL AB_SGERFS( TRANS, N, NRHS, A, LDA, AF, LDAF, IPIV, B, LDB, X,
      $             LDX, FERR, BERR, WORK, IWORK, INFO )
 *
 *     Transform the solution matrix X to a solution of the original
@@ -597,6 +602,6 @@
       WORK( 1 ) = RPVGRW
       RETURN
 *
-*     End of SGESVX
+*     End of AB_SGESVX
 *
       END

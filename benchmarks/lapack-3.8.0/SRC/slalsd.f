@@ -1,4 +1,4 @@
-*> \brief \b SLALSD uses the singular value decomposition of A to solve the least squares problem.
+*> \brief \b AB_SLALSD uses the singular value decomposition of A to solve the least squares problem.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLALSD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slalsd.f">
+*> Download AB_SLALSD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLALSD.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slalsd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLALSD.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slalsd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLALSD.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLALSD( UPLO, SMLSIZ, N, NRHS, D, E, B, LDB, RCOND,
+*       SUBROUTINE AB_SLALSD( UPLO, SMLSIZ, N, NRHS, D, E, B, LDB, RCOND,
 *                          RANK, WORK, IWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> SLALSD uses the singular value decomposition of A to solve the least
+*> AB_SLALSD uses the singular value decomposition of A to solve the least
 *> squares problem of finding X to minimize the Euclidean norm of each
 *> column of A*X-B, where A is N-by-N upper bidiagonal, and X and B
 *> are N-by-NRHS. The solution X overwrites B.
@@ -176,7 +176,7 @@
 *>     Osni Marques, LBNL/NERSC, USA \n
 *
 *  =====================================================================
-      SUBROUTINE SLALSD( UPLO, SMLSIZ, N, NRHS, D, E, B, LDB, RCOND,
+      SUBROUTINE AB_SLALSD( UPLO, SMLSIZ, N, NRHS, D, E, B, LDB, RCOND,
      $                   RANK, WORK, IWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -208,13 +208,15 @@
       REAL               CS, EPS, ORGNRM, R, RCND, SN, TOL
 *     ..
 *     .. External Functions ..
-      INTEGER            ISAMAX
-      REAL               SLAMCH, SLANST
-      EXTERNAL           ISAMAX, SLAMCH, SLANST
+      INTEGER            AB_ISAMAX
+      REAL               SLAMCH, AB_SLANST
+      EXTERNAL           AB_ISAMAX, SLAMCH, AB_SLANST
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SGEMM, SLACPY, SLALSA, SLARTG, SLASCL,
-     $                   SLASDA, SLASDQ, SLASET, SLASRT, SROT, XERBLA
+      EXTERNAL           AB_SCOPY, AB_SGEMM, AB_SLACPY, AB_SLALSA, AB_SL
+     $ARTG, AB_SLASCL,
+     $                   AB_SLASDA, AB_SLASDQ, AB_SLASET, AB_SLASRT, AB_
+     $SROT, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, INT, LOG, REAL, SIGN
@@ -233,7 +235,7 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SLALSD', -INFO )
+         CALL AB_XERBLA( 'AB_SLALSD', -INFO )
          RETURN
       END IF
 *
@@ -255,10 +257,11 @@
          RETURN
       ELSE IF( N.EQ.1 ) THEN
          IF( D( 1 ).EQ.ZERO ) THEN
-            CALL SLASET( 'A', 1, NRHS, ZERO, ZERO, B, LDB )
+            CALL AB_SLASET( 'A', 1, NRHS, ZERO, ZERO, B, LDB )
          ELSE
             RANK = 1
-            CALL SLASCL( 'G', 0, 0, D( 1 ), ONE, 1, NRHS, B, LDB, INFO )
+            CALL AB_SLASCL( 'G', 0, 0, D( 1 ), ONE, 1, NRHS, B, LDB, INF
+     $O )
             D( 1 ) = ABS( D( 1 ) )
          END IF
          RETURN
@@ -268,12 +271,12 @@
 *
       IF( UPLO.EQ.'L' ) THEN
          DO 10 I = 1, N - 1
-            CALL SLARTG( D( I ), E( I ), CS, SN, R )
+            CALL AB_SLARTG( D( I ), E( I ), CS, SN, R )
             D( I ) = R
             E( I ) = SN*D( I+1 )
             D( I+1 ) = CS*D( I+1 )
             IF( NRHS.EQ.1 ) THEN
-               CALL SROT( 1, B( I, 1 ), 1, B( I+1, 1 ), 1, CS, SN )
+               CALL AB_SROT( 1, B( I, 1 ), 1, B( I+1, 1 ), 1, CS, SN )
             ELSE
                WORK( I*2-1 ) = CS
                WORK( I*2 ) = SN
@@ -284,7 +287,8 @@
                DO 20 J = 1, N - 1
                   CS = WORK( J*2-1 )
                   SN = WORK( J*2 )
-                  CALL SROT( 1, B( J, I ), 1, B( J+1, I ), 1, CS, SN )
+                  CALL AB_SROT( 1, B( J, I ), 1, B( J+1, I ), 1, CS, SN 
+     $)
    20          CONTINUE
    30       CONTINUE
          END IF
@@ -293,45 +297,49 @@
 *     Scale.
 *
       NM1 = N - 1
-      ORGNRM = SLANST( 'M', N, D, E )
+      ORGNRM = AB_SLANST( 'M', N, D, E )
       IF( ORGNRM.EQ.ZERO ) THEN
-         CALL SLASET( 'A', N, NRHS, ZERO, ZERO, B, LDB )
+         CALL AB_SLASET( 'A', N, NRHS, ZERO, ZERO, B, LDB )
          RETURN
       END IF
 *
-      CALL SLASCL( 'G', 0, 0, ORGNRM, ONE, N, 1, D, N, INFO )
-      CALL SLASCL( 'G', 0, 0, ORGNRM, ONE, NM1, 1, E, NM1, INFO )
+      CALL AB_SLASCL( 'G', 0, 0, ORGNRM, ONE, N, 1, D, N, INFO )
+      CALL AB_SLASCL( 'G', 0, 0, ORGNRM, ONE, NM1, 1, E, NM1, INFO )
 *
 *     If N is smaller than the minimum divide size SMLSIZ, then solve
 *     the problem with another solver.
 *
       IF( N.LE.SMLSIZ ) THEN
          NWORK = 1 + N*N
-         CALL SLASET( 'A', N, N, ZERO, ONE, WORK, N )
-         CALL SLASDQ( 'U', 0, N, N, 0, NRHS, D, E, WORK, N, WORK, N, B,
+         CALL AB_SLASET( 'A', N, N, ZERO, ONE, WORK, N )
+         CALL AB_SLASDQ( 'U', 0, N, N, 0, NRHS, D, E, WORK, N, WORK, N, 
+     $B,
      $                LDB, WORK( NWORK ), INFO )
          IF( INFO.NE.0 ) THEN
             RETURN
          END IF
-         TOL = RCND*ABS( D( ISAMAX( N, D, 1 ) ) )
+         TOL = RCND*ABS( D( AB_ISAMAX( N, D, 1 ) ) )
          DO 40 I = 1, N
             IF( D( I ).LE.TOL ) THEN
-               CALL SLASET( 'A', 1, NRHS, ZERO, ZERO, B( I, 1 ), LDB )
+               CALL AB_SLASET( 'A', 1, NRHS, ZERO, ZERO, B( I, 1 ), LDB 
+     $)
             ELSE
-               CALL SLASCL( 'G', 0, 0, D( I ), ONE, 1, NRHS, B( I, 1 ),
+               CALL AB_SLASCL( 'G', 0, 0, D( I ), ONE, 1, NRHS, B( I, 1 
+     $),
      $                      LDB, INFO )
                RANK = RANK + 1
             END IF
    40    CONTINUE
-         CALL SGEMM( 'T', 'N', N, NRHS, N, ONE, WORK, N, B, LDB, ZERO,
+         CALL AB_SGEMM( 'T', 'N', N, NRHS, N, ONE, WORK, N, B, LDB, ZERO
+     $,
      $               WORK( NWORK ), N )
-         CALL SLACPY( 'A', N, NRHS, WORK( NWORK ), N, B, LDB )
+         CALL AB_SLACPY( 'A', N, NRHS, WORK( NWORK ), N, B, LDB )
 *
 *        Unscale.
 *
-         CALL SLASCL( 'G', 0, 0, ONE, ORGNRM, N, 1, D, N, INFO )
-         CALL SLASRT( 'D', N, D, INFO )
-         CALL SLASCL( 'G', 0, 0, ORGNRM, ONE, N, NRHS, B, LDB, INFO )
+         CALL AB_SLASCL( 'G', 0, 0, ONE, ORGNRM, N, 1, D, N, INFO )
+         CALL AB_SLASRT( 'D', N, D, INFO )
+         CALL AB_SLASCL( 'G', 0, 0, ORGNRM, ONE, N, NRHS, B, LDB, INFO )
 *
          RETURN
       END IF
@@ -404,7 +412,7 @@
                NSUB = NSUB + 1
                IWORK( NSUB ) = N
                IWORK( SIZEI+NSUB-1 ) = 1
-               CALL SCOPY( NRHS, B( N, 1 ), LDB, WORK( BX+NM1 ), N )
+               CALL AB_SCOPY( NRHS, B( N, 1 ), LDB, WORK( BX+NM1 ), N )
             END IF
             ST1 = ST - 1
             IF( NSIZE.EQ.1 ) THEN
@@ -412,26 +420,26 @@
 *              This is a 1-by-1 subproblem and is not solved
 *              explicitly.
 *
-               CALL SCOPY( NRHS, B( ST, 1 ), LDB, WORK( BX+ST1 ), N )
+               CALL AB_SCOPY( NRHS, B( ST, 1 ), LDB, WORK( BX+ST1 ), N )
             ELSE IF( NSIZE.LE.SMLSIZ ) THEN
 *
-*              This is a small subproblem and is solved by SLASDQ.
+*              This is a small subproblem and is solved by AB_SLASDQ.
 *
-               CALL SLASET( 'A', NSIZE, NSIZE, ZERO, ONE,
+               CALL AB_SLASET( 'A', NSIZE, NSIZE, ZERO, ONE,
      $                      WORK( VT+ST1 ), N )
-               CALL SLASDQ( 'U', 0, NSIZE, NSIZE, 0, NRHS, D( ST ),
+               CALL AB_SLASDQ( 'U', 0, NSIZE, NSIZE, 0, NRHS, D( ST ),
      $                      E( ST ), WORK( VT+ST1 ), N, WORK( NWORK ),
      $                      N, B( ST, 1 ), LDB, WORK( NWORK ), INFO )
                IF( INFO.NE.0 ) THEN
                   RETURN
                END IF
-               CALL SLACPY( 'A', NSIZE, NRHS, B( ST, 1 ), LDB,
+               CALL AB_SLACPY( 'A', NSIZE, NRHS, B( ST, 1 ), LDB,
      $                      WORK( BX+ST1 ), N )
             ELSE
 *
 *              A large problem. Solve it using divide and conquer.
 *
-               CALL SLASDA( ICMPQ1, SMLSIZ, NSIZE, SQRE, D( ST ),
+               CALL AB_SLASDA( ICMPQ1, SMLSIZ, NSIZE, SQRE, D( ST ),
      $                      E( ST ), WORK( U+ST1 ), N, WORK( VT+ST1 ),
      $                      IWORK( K+ST1 ), WORK( DIFL+ST1 ),
      $                      WORK( DIFR+ST1 ), WORK( Z+ST1 ),
@@ -444,7 +452,7 @@
                   RETURN
                END IF
                BXST = BX + ST1
-               CALL SLALSA( ICMPQ2, SMLSIZ, NSIZE, NRHS, B( ST, 1 ),
+               CALL AB_SLALSA( ICMPQ2, SMLSIZ, NSIZE, NRHS, B( ST, 1 ),
      $                      LDB, WORK( BXST ), N, WORK( U+ST1 ), N,
      $                      WORK( VT+ST1 ), IWORK( K+ST1 ),
      $                      WORK( DIFL+ST1 ), WORK( DIFR+ST1 ),
@@ -463,7 +471,7 @@
 *
 *     Apply the singular values and treat the tiny ones as zero.
 *
-      TOL = RCND*ABS( D( ISAMAX( N, D, 1 ) ) )
+      TOL = RCND*ABS( D( AB_ISAMAX( N, D, 1 ) ) )
 *
       DO 70 I = 1, N
 *
@@ -471,10 +479,11 @@
 *        subproblems were not solved explicitly.
 *
          IF( ABS( D( I ) ).LE.TOL ) THEN
-            CALL SLASET( 'A', 1, NRHS, ZERO, ZERO, WORK( BX+I-1 ), N )
+            CALL AB_SLASET( 'A', 1, NRHS, ZERO, ZERO, WORK( BX+I-1 ), N 
+     $)
          ELSE
             RANK = RANK + 1
-            CALL SLASCL( 'G', 0, 0, D( I ), ONE, 1, NRHS,
+            CALL AB_SLASCL( 'G', 0, 0, D( I ), ONE, 1, NRHS,
      $                   WORK( BX+I-1 ), N, INFO )
          END IF
          D( I ) = ABS( D( I ) )
@@ -489,13 +498,14 @@
          NSIZE = IWORK( SIZEI+I-1 )
          BXST = BX + ST1
          IF( NSIZE.EQ.1 ) THEN
-            CALL SCOPY( NRHS, WORK( BXST ), N, B( ST, 1 ), LDB )
+            CALL AB_SCOPY( NRHS, WORK( BXST ), N, B( ST, 1 ), LDB )
          ELSE IF( NSIZE.LE.SMLSIZ ) THEN
-            CALL SGEMM( 'T', 'N', NSIZE, NRHS, NSIZE, ONE,
+            CALL AB_SGEMM( 'T', 'N', NSIZE, NRHS, NSIZE, ONE,
      $                  WORK( VT+ST1 ), N, WORK( BXST ), N, ZERO,
      $                  B( ST, 1 ), LDB )
          ELSE
-            CALL SLALSA( ICMPQ2, SMLSIZ, NSIZE, NRHS, WORK( BXST ), N,
+            CALL AB_SLALSA( ICMPQ2, SMLSIZ, NSIZE, NRHS, WORK( BXST ), N
+     $,
      $                   B( ST, 1 ), LDB, WORK( U+ST1 ), N,
      $                   WORK( VT+ST1 ), IWORK( K+ST1 ),
      $                   WORK( DIFL+ST1 ), WORK( DIFR+ST1 ),
@@ -512,12 +522,12 @@
 *
 *     Unscale and sort the singular values.
 *
-      CALL SLASCL( 'G', 0, 0, ONE, ORGNRM, N, 1, D, N, INFO )
-      CALL SLASRT( 'D', N, D, INFO )
-      CALL SLASCL( 'G', 0, 0, ORGNRM, ONE, N, NRHS, B, LDB, INFO )
+      CALL AB_SLASCL( 'G', 0, 0, ONE, ORGNRM, N, 1, D, N, INFO )
+      CALL AB_SLASRT( 'D', N, D, INFO )
+      CALL AB_SLASCL( 'G', 0, 0, ORGNRM, ONE, N, NRHS, B, LDB, INFO )
 *
       RETURN
 *
-*     End of SLALSD
+*     End of AB_SLALSD
 *
       END

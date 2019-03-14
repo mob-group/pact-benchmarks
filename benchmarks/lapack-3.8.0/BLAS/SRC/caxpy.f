@@ -1,4 +1,4 @@
-*> \brief \b CAXPY
+*> \brief \b AB_CAXPY
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CAXPY(N,CA,CX,INCX,CY,INCY)
+*       SUBROUTINE AB_CAXPY(N,CA,CX,INCX,CY,INCY)
 *
 *       .. Scalar Arguments ..
 *       COMPLEX CA
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*>    CAXPY constant times a vector plus a vector.
+*>    AB_CAXPY constant times a vector plus a vector.
 *> \endverbatim
 *
 *  Arguments:
@@ -86,7 +86,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CAXPY(N,CA,CX,INCX,CY,INCY)
+      SUBROUTINE AB_CAXPY(N,CA,CX,INCX,CY,INCY)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -107,11 +107,11 @@
       INTEGER I,IX,IY
 *     ..
 *     .. External Functions ..
-      REAL SCABS1
-      EXTERNAL SCABS1
+      REAL AB_SCABS1
+      EXTERNAL AB_SCABS1
 *     ..
       IF (N.LE.0) RETURN
-      IF (SCABS1(CA).EQ.0.0E+0) RETURN
+      IF (AB_SCABS1(CA).EQ.0.0E+0) RETURN
       IF (INCX.EQ.1 .AND. INCY.EQ.1) THEN
 *
 *        code for both increments equal to 1

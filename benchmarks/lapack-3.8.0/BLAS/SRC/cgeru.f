@@ -1,4 +1,4 @@
-*> \brief \b CGERU
+*> \brief \b AB_CGERU
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGERU(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)
+*       SUBROUTINE AB_CGERU(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)
 *
 *       .. Scalar Arguments ..
 *       COMPLEX ALPHA
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> CGERU  performs the rank 1 operation
+*> AB_CGERU  performs the rank 1 operation
 *>
 *>    A := alpha*x*y**T + A,
 *>
@@ -128,7 +128,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CGERU(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)
+      SUBROUTINE AB_CGERU(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)
 *
 *  -- Reference BLAS level2 routine (version 3.7.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -154,7 +154,7 @@
       INTEGER I,INFO,IX,J,JY,KX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL XERBLA
+      EXTERNAL AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC MAX
@@ -175,7 +175,7 @@
           INFO = 9
       END IF
       IF (INFO.NE.0) THEN
-          CALL XERBLA('CGERU ',INFO)
+          CALL AB_XERBLA('AB_CGERU ',INFO)
           RETURN
       END IF
 *
@@ -222,6 +222,6 @@
 *
       RETURN
 *
-*     End of CGERU .
+*     End of AB_CGERU .
 *
       END

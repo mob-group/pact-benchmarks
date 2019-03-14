@@ -1,4 +1,4 @@
-*> \brief \b DLARFT forms the triangular factor T of a block reflector H = I - vtvH
+*> \brief \b AB_DLARFT forms the triangular factor T of a block reflector H = I - vtvH
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLARFT + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarft.f">
+*> Download AB_DLARFT + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLARFt.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarft.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLARFt.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarft.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLARFt.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLARFT( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
+*       SUBROUTINE AB_DLARFT( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          DIRECT, STOREV
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> DLARFT forms the triangular factor T of a real block reflector H
+*> AB_DLARFT forms the triangular factor T of a real block reflector H
 *> of order n, which is defined as a product of k elementary reflectors.
 *>
 *> If DIRECT = 'F', H = H(1) H(2) . . . H(k) and T is upper triangular;
@@ -161,7 +161,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DLARFT( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
+      SUBROUTINE AB_DLARFT( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -186,11 +186,11 @@
       INTEGER            I, J, PREVLASTV, LASTV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMV, DTRMV
+      EXTERNAL           AB_DGEMV, AB_DTRMV
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. Executable Statements ..
 *
@@ -199,7 +199,7 @@
       IF( N.EQ.0 )
      $   RETURN
 *
-      IF( LSAME( DIRECT, 'F' ) ) THEN
+      IF( AB_LSAME( DIRECT, 'F' ) ) THEN
          PREVLASTV = N
          DO I = 1, K
             PREVLASTV = MAX( I, PREVLASTV )
@@ -214,7 +214,7 @@
 *
 *              general case
 *
-               IF( LSAME( STOREV, 'C' ) ) THEN
+               IF( AB_LSAME( STOREV, 'C' ) ) THEN
 *                 Skip any trailing zeros.
                   DO LASTV = N, I+1, -1
                      IF( V( LASTV, I ).NE.ZERO ) EXIT
@@ -226,7 +226,7 @@
 *
 *                 T(1:i-1,i) := - tau(i) * V(i:j,1:i-1)**T * V(i:j,i)
 *
-                  CALL DGEMV( 'Transpose', J-I, I-1, -TAU( I ),
+                  CALL AB_DGEMV( 'Transpose', J-I, I-1, -TAU( I ),
      $                        V( I+1, 1 ), LDV, V( I+1, I ), 1, ONE,
      $                        T( 1, I ), 1 )
                ELSE
@@ -241,14 +241,15 @@
 *
 *                 T(1:i-1,i) := - tau(i) * V(1:i-1,i:j) * V(i,i:j)**T
 *
-                  CALL DGEMV( 'No transpose', I-1, J-I, -TAU( I ),
+                  CALL AB_DGEMV( 'No transpose', I-1, J-I, -TAU( I ),
      $                        V( 1, I+1 ), LDV, V( I, I+1 ), LDV, ONE,
      $                        T( 1, I ), 1 )
                END IF
 *
 *              T(1:i-1,i) := T(1:i-1,1:i-1) * T(1:i-1,i)
 *
-               CALL DTRMV( 'Upper', 'No transpose', 'Non-unit', I-1, T,
+               CALL AB_DTRMV( 'Upper', 'No transpose', 'Non-unit', I-1, 
+     $T,
      $                     LDT, T( 1, I ), 1 )
                T( I, I ) = TAU( I )
                IF( I.GT.1 ) THEN
@@ -273,7 +274,7 @@
 *              general case
 *
                IF( I.LT.K ) THEN
-                  IF( LSAME( STOREV, 'C' ) ) THEN
+                  IF( AB_LSAME( STOREV, 'C' ) ) THEN
 *                    Skip any leading zeros.
                      DO LASTV = 1, I-1
                         IF( V( LASTV, I ).NE.ZERO ) EXIT
@@ -285,7 +286,8 @@
 *
 *                    T(i+1:k,i) = -tau(i) * V(j:n-k+i,i+1:k)**T * V(j:n-k+i,i)
 *
-                     CALL DGEMV( 'Transpose', N-K+I-J, K-I, -TAU( I ),
+                     CALL AB_DGEMV( 'Transpose', N-K+I-J, K-I, -TAU( I )
+     $,
      $                           V( J, I+1 ), LDV, V( J, I ), 1, ONE,
      $                           T( I+1, I ), 1 )
                   ELSE
@@ -300,14 +302,15 @@
 *
 *                    T(i+1:k,i) = -tau(i) * V(i+1:k,j:n-k+i) * V(i,j:n-k+i)**T
 *
-                     CALL DGEMV( 'No transpose', K-I, N-K+I-J,
+                     CALL AB_DGEMV( 'No transpose', K-I, N-K+I-J,
      $                    -TAU( I ), V( I+1, J ), LDV, V( I, J ), LDV,
      $                    ONE, T( I+1, I ), 1 )
                   END IF
 *
 *                 T(i+1:k,i) := T(i+1:k,i+1:k) * T(i+1:k,i)
 *
-                  CALL DTRMV( 'Lower', 'No transpose', 'Non-unit', K-I,
+                  CALL AB_DTRMV( 'Lower', 'No transpose', 'Non-unit', K-
+     $I,
      $                        T( I+1, I+1 ), LDT, T( I+1, I ), 1 )
                   IF( I.GT.1 ) THEN
                      PREVLASTV = MIN( PREVLASTV, LASTV )
@@ -321,6 +324,6 @@
       END IF
       RETURN
 *
-*     End of DLARFT
+*     End of AB_DLARFT
 *
       END

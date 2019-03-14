@@ -1,4 +1,4 @@
-*> \brief \b ZTGEX2 swaps adjacent diagonal blocks in an upper (quasi) triangular matrix pair by an unitary equivalence transformation.
+*> \brief \b AB_ZTGEX2 swaps adjacent diagonal blocks in an upper (quasi) triangular matrix pair by an unitary equivalence transformation.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZTGEX2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztgex2.f">
+*> Download AB_ZTGEX2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZTGEX2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztgex2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZTGEX2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztgex2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZTGEX2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
+*       SUBROUTINE AB_ZTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
 *                          LDZ, J1, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> ZTGEX2 swaps adjacent diagonal 1 by 1 blocks (A11,B11) and (A22,B22)
+*> AB_ZTGEX2 swaps adjacent diagonal 1 by 1 blocks (A11,B11) and (A22,B22)
 *> in an upper triangular matrix pair (A, B) by an unitary equivalence
 *> transformation.
 *>
@@ -187,7 +187,7 @@
 *>      Numerical Algorithms, 1996.
 *>
 *  =====================================================================
-      SUBROUTINE ZTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
+      SUBROUTINE AB_ZTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
      $                   LDZ, J1, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.1) --
@@ -232,7 +232,7 @@
       EXTERNAL           DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZLACPY, ZLARTG, ZLASSQ, ZROT
+      EXTERNAL           AB_ZLACPY, AB_ZLARTG, AB_ZLASSQ, AB_ZROT
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCONJG, MAX, SQRT
@@ -252,8 +252,8 @@
 *
 *     Make a local copy of selected block in (A, B)
 *
-      CALL ZLACPY( 'Full', M, M, A( J1, J1 ), LDA, S, LDST )
-      CALL ZLACPY( 'Full', M, M, B( J1, J1 ), LDB, T, LDST )
+      CALL AB_ZLACPY( 'Full', M, M, A( J1, J1 ), LDA, S, LDST )
+      CALL AB_ZLACPY( 'Full', M, M, B( J1, J1 ), LDB, T, LDST )
 *
 *     Compute the threshold for testing the acceptance of swapping.
 *
@@ -261,9 +261,9 @@
       SMLNUM = DLAMCH( 'S' ) / EPS
       SCALE = DBLE( CZERO )
       SUM = DBLE( CONE )
-      CALL ZLACPY( 'Full', M, M, S, LDST, WORK, M )
-      CALL ZLACPY( 'Full', M, M, T, LDST, WORK( M*M+1 ), M )
-      CALL ZLASSQ( 2*M*M, WORK, 1, SCALE, SUM )
+      CALL AB_ZLACPY( 'Full', M, M, S, LDST, WORK, M )
+      CALL AB_ZLACPY( 'Full', M, M, T, LDST, WORK( M*M+1 ), M )
+      CALL AB_ZLASSQ( 2*M*M, WORK, 1, SCALE, SUM )
       SA = SCALE*SQRT( SUM )
 *
 *     THRES has been changed from
@@ -283,17 +283,17 @@
       G = S( 2, 2 )*T( 1, 2 ) - T( 2, 2 )*S( 1, 2 )
       SA = ABS( S( 2, 2 ) )
       SB = ABS( T( 2, 2 ) )
-      CALL ZLARTG( G, F, CZ, SZ, CDUM )
+      CALL AB_ZLARTG( G, F, CZ, SZ, CDUM )
       SZ = -SZ
-      CALL ZROT( 2, S( 1, 1 ), 1, S( 1, 2 ), 1, CZ, DCONJG( SZ ) )
-      CALL ZROT( 2, T( 1, 1 ), 1, T( 1, 2 ), 1, CZ, DCONJG( SZ ) )
+      CALL AB_ZROT( 2, S( 1, 1 ), 1, S( 1, 2 ), 1, CZ, DCONJG( SZ ) )
+      CALL AB_ZROT( 2, T( 1, 1 ), 1, T( 1, 2 ), 1, CZ, DCONJG( SZ ) )
       IF( SA.GE.SB ) THEN
-         CALL ZLARTG( S( 1, 1 ), S( 2, 1 ), CQ, SQ, CDUM )
+         CALL AB_ZLARTG( S( 1, 1 ), S( 2, 1 ), CQ, SQ, CDUM )
       ELSE
-         CALL ZLARTG( T( 1, 1 ), T( 2, 1 ), CQ, SQ, CDUM )
+         CALL AB_ZLARTG( T( 1, 1 ), T( 2, 1 ), CQ, SQ, CDUM )
       END IF
-      CALL ZROT( 2, S( 1, 1 ), LDST, S( 2, 1 ), LDST, CQ, SQ )
-      CALL ZROT( 2, T( 1, 1 ), LDST, T( 2, 1 ), LDST, CQ, SQ )
+      CALL AB_ZROT( 2, S( 1, 1 ), LDST, S( 2, 1 ), LDST, CQ, SQ )
+      CALL AB_ZROT( 2, T( 1, 1 ), LDST, T( 2, 1 ), LDST, CQ, SQ )
 *
 *     Weak stability test: |S21| + |T21| <= O(EPS F-norm((S, T)))
 *
@@ -307,12 +307,13 @@
 *        Strong stability test:
 *           F-norm((A-QL**H*S*QR, B-QL**H*T*QR)) <= O(EPS*F-norm((A, B)))
 *
-         CALL ZLACPY( 'Full', M, M, S, LDST, WORK, M )
-         CALL ZLACPY( 'Full', M, M, T, LDST, WORK( M*M+1 ), M )
-         CALL ZROT( 2, WORK, 1, WORK( 3 ), 1, CZ, -DCONJG( SZ ) )
-         CALL ZROT( 2, WORK( 5 ), 1, WORK( 7 ), 1, CZ, -DCONJG( SZ ) )
-         CALL ZROT( 2, WORK, 2, WORK( 2 ), 2, CQ, -SQ )
-         CALL ZROT( 2, WORK( 5 ), 2, WORK( 6 ), 2, CQ, -SQ )
+         CALL AB_ZLACPY( 'Full', M, M, S, LDST, WORK, M )
+         CALL AB_ZLACPY( 'Full', M, M, T, LDST, WORK( M*M+1 ), M )
+         CALL AB_ZROT( 2, WORK, 1, WORK( 3 ), 1, CZ, -DCONJG( SZ ) )
+         CALL AB_ZROT( 2, WORK( 5 ), 1, WORK( 7 ), 1, CZ, -DCONJG( SZ ) 
+     $)
+         CALL AB_ZROT( 2, WORK, 2, WORK( 2 ), 2, CQ, -SQ )
+         CALL AB_ZROT( 2, WORK( 5 ), 2, WORK( 6 ), 2, CQ, -SQ )
          DO 10 I = 1, 2
             WORK( I ) = WORK( I ) - A( J1+I-1, J1 )
             WORK( I+2 ) = WORK( I+2 ) - A( J1+I-1, J1+1 )
@@ -321,7 +322,7 @@
    10    CONTINUE
          SCALE = DBLE( CZERO )
          SUM = DBLE( CONE )
-         CALL ZLASSQ( 2*M*M, WORK, 1, SCALE, SUM )
+         CALL AB_ZLASSQ( 2*M*M, WORK, 1, SCALE, SUM )
          SS = SCALE*SQRT( SUM )
          DTRONG = SS.LE.THRESH
          IF( .NOT.DTRONG )
@@ -331,12 +332,14 @@
 *     If the swap is accepted ("weakly" and "strongly"), apply the
 *     equivalence transformations to the original matrix pair (A,B)
 *
-      CALL ZROT( J1+1, A( 1, J1 ), 1, A( 1, J1+1 ), 1, CZ,
+      CALL AB_ZROT( J1+1, A( 1, J1 ), 1, A( 1, J1+1 ), 1, CZ,
      $           DCONJG( SZ ) )
-      CALL ZROT( J1+1, B( 1, J1 ), 1, B( 1, J1+1 ), 1, CZ,
+      CALL AB_ZROT( J1+1, B( 1, J1 ), 1, B( 1, J1+1 ), 1, CZ,
      $           DCONJG( SZ ) )
-      CALL ZROT( N-J1+1, A( J1, J1 ), LDA, A( J1+1, J1 ), LDA, CQ, SQ )
-      CALL ZROT( N-J1+1, B( J1, J1 ), LDB, B( J1+1, J1 ), LDB, CQ, SQ )
+      CALL AB_ZROT( N-J1+1, A( J1, J1 ), LDA, A( J1+1, J1 ), LDA, CQ, SQ
+     $ )
+      CALL AB_ZROT( N-J1+1, B( J1, J1 ), LDB, B( J1+1, J1 ), LDB, CQ, SQ
+     $ )
 *
 *     Set  N1 by N2 (2,1) blocks to 0
 *
@@ -346,10 +349,10 @@
 *     Accumulate transformations into Q and Z if requested.
 *
       IF( WANTZ )
-     $   CALL ZROT( N, Z( 1, J1 ), 1, Z( 1, J1+1 ), 1, CZ,
+     $   CALL AB_ZROT( N, Z( 1, J1 ), 1, Z( 1, J1+1 ), 1, CZ,
      $              DCONJG( SZ ) )
       IF( WANTQ )
-     $   CALL ZROT( N, Q( 1, J1 ), 1, Q( 1, J1+1 ), 1, CQ,
+     $   CALL AB_ZROT( N, Q( 1, J1 ), 1, Q( 1, J1+1 ), 1, CQ,
      $              DCONJG( SQ ) )
 *
 *     Exit with INFO = 0 if swap was successfully performed.
@@ -362,6 +365,6 @@
       INFO = 1
       RETURN
 *
-*     End of ZTGEX2
+*     End of AB_ZTGEX2
 *
       END

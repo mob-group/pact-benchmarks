@@ -1,4 +1,5 @@
-C> \brief \b ZGETRF VARIANT: Crout Level 3 BLAS version of the algorithm.
+C> \brief \b AB_ZGETRF VARIANT: Crout Level 3 BLAS version of the algori
+     $thm.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +9,7 @@ C> \brief \b ZGETRF VARIANT: Crout Level 3 BLAS version of the algorithm.
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZGETRF ( M, N, A, LDA, IPIV, INFO)
+*       SUBROUTINE AB_ZGETRF ( M, N, A, LDA, IPIV, INFO)
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, M, N
@@ -24,7 +25,7 @@ C> \brief \b ZGETRF VARIANT: Crout Level 3 BLAS version of the algorithm.
 C>\details \b Purpose:
 C>\verbatim
 C>
-C> ZGETRF computes an LU factorization of a general M-by-N matrix A
+C> AB_ZGETRF computes an LU factorization of a general M-by-N matrix A
 C> using partial pivoting with row interchanges.
 C>
 C> The factorization has the form
@@ -80,7 +81,8 @@ C>          = 0:  successful exit
 C>          < 0:  if INFO = -i, the i-th argument had an illegal value
 C>          > 0:  if INFO = i, U(i,i) is exactly zero. The factorization
 C>                has been completed, but the factor U is exactly
-C>                singular, and division by zero will occur if it is used
+C>                singular, and division by zero will occur if it is use
+     $d
 C>                to solve a system of equations.
 C> \endverbatim
 C>
@@ -98,7 +100,7 @@ C> \date December 2016
 C> \ingroup variantsGEcomputational
 *
 *  =====================================================================
-      SUBROUTINE ZGETRF ( M, N, A, LDA, IPIV, INFO)
+      SUBROUTINE AB_ZGETRF ( M, N, A, LDA, IPIV, INFO)
 *
 *  -- LAPACK computational routine (version 3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -123,11 +125,12 @@ C> \ingroup variantsGEcomputational
       INTEGER            I, IINFO, J, JB, NB
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGEMM, ZGETF2, ZLASWP, ZTRSM, XERBLA
+      EXTERNAL           AB_ZGEMM, AB_ZGETF2, AB_ZLASWP, AB_ZTRSM, AB_XE
+     $RBLA
 *     ..
 *     .. External Functions ..
-      INTEGER            ILAENV
-      EXTERNAL           ILAENV
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_ILAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -145,7 +148,7 @@ C> \ingroup variantsGEcomputational
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZGETRF', -INFO )
+         CALL AB_XERBLA( 'AB_ZGETRF', -INFO )
          RETURN
       END IF
 *
@@ -156,12 +159,12 @@ C> \ingroup variantsGEcomputational
 *
 *     Determine the block size for this environment.
 *
-      NB = ILAENV( 1, 'ZGETRF', ' ', M, N, -1, -1 )
+      NB = AB_ILAENV( 1, 'AB_ZGETRF', ' ', M, N, -1, -1 )
       IF( NB.LE.1 .OR. NB.GE.MIN( M, N ) ) THEN
 *
 *        Use unblocked code.
 *
-         CALL ZGETF2( M, N, A, LDA, IPIV, INFO )
+         CALL AB_ZGETF2( M, N, A, LDA, IPIV, INFO )
       ELSE
 *
 *        Use blocked code.
@@ -171,7 +174,7 @@ C> \ingroup variantsGEcomputational
 *
 *           Update current block.
 *
-            CALL ZGEMM( 'No transpose', 'No transpose',
+            CALL AB_ZGEMM( 'No transpose', 'No transpose',
      $                 M-J+1, JB, J-1, -ONE,
      $                 A( J, 1 ), LDA, A( 1, J ), LDA, ONE,
      $                 A( J, J ), LDA )
@@ -180,7 +183,8 @@ C> \ingroup variantsGEcomputational
 *           Factor diagonal and subdiagonal blocks and test for exact
 *           singularity.
 *
-            CALL ZGETF2( M-J+1, JB, A( J, J ), LDA, IPIV( J ), IINFO )
+            CALL AB_ZGETF2( M-J+1, JB, A( J, J ), LDA, IPIV( J ), IINFO 
+     $)
 *
 *           Adjust INFO and the pivot indices.
 *
@@ -192,23 +196,23 @@ C> \ingroup variantsGEcomputational
 *
 *           Apply interchanges to column 1:J-1
 *
-            CALL ZLASWP( J-1, A, LDA, J, J+JB-1, IPIV, 1 )
+            CALL AB_ZLASWP( J-1, A, LDA, J, J+JB-1, IPIV, 1 )
 *
             IF ( J+JB.LE.N ) THEN
 *
 *              Apply interchanges to column J+JB:N
 *
-               CALL ZLASWP( N-J-JB+1, A( 1, J+JB ), LDA, J, J+JB-1,
+               CALL AB_ZLASWP( N-J-JB+1, A( 1, J+JB ), LDA, J, J+JB-1,
      $                     IPIV, 1 )
 *
-               CALL ZGEMM( 'No transpose', 'No transpose',
+               CALL AB_ZGEMM( 'No transpose', 'No transpose',
      $                    JB, N-J-JB+1, J-1, -ONE,
      $                    A( J, 1 ), LDA, A( 1, J+JB ), LDA, ONE,
      $                    A( J, J+JB ), LDA )
 *
 *              Compute block row of U.
 *
-               CALL ZTRSM( 'Left', 'Lower', 'No transpose', 'Unit',
+               CALL AB_ZTRSM( 'Left', 'Lower', 'No transpose', 'Unit',
      $                    JB, N-J-JB+1, ONE, A( J, J ), LDA,
      $                    A( J, J+JB ), LDA )
             END IF
@@ -218,6 +222,6 @@ C> \ingroup variantsGEcomputational
       END IF
       RETURN
 *
-*     End of ZGETRF
+*     End of AB_ZGETRF
 *
       END

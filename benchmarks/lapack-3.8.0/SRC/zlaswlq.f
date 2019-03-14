@@ -2,7 +2,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZLASWLQ( M, N, MB, NB, A, LDA, T, LDT, WORK,
+*       SUBROUTINE AB_ZLASWLQ( M, N, MB, NB, A, LDA, T, LDT, WORK,
 *                            LWORK, INFO)
 *
 *       .. Scalar Arguments ..
@@ -18,7 +18,7 @@
 *>
 *> \verbatim
 *>
-*>          ZLASWLQ computes a blocked Short-Wide LQ factorization of a
+*>          AB_ZLASWLQ computes a blocked Short-Wide LQ factorization of a
 *>          M-by-N matrix A, where N >= M:
 *>          A = L * Q
 *> \endverbatim
@@ -96,7 +96,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *>
 *> \endverbatim
 *> \param[out] INFO
@@ -147,7 +147,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZLASWLQ( M, N, MB, NB, A, LDA, T, LDT, WORK, LWORK,
+      SUBROUTINE AB_ZLASWLQ( M, N, MB, NB, A, LDA, T, LDT, WORK, LWORK,
      $                  INFO)
 *
 *  -- LAPACK computational routine (version 3.7.1) --
@@ -170,10 +170,10 @@
       INTEGER    I, II, KK, CTR
 *     ..
 *     .. EXTERNAL FUNCTIONS ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     .. EXTERNAL SUBROUTINES ..
-      EXTERNAL           ZGELQT, ZTPLQT, XERBLA
+      EXTERNAL           AB_ZGELQT, AB_ZTPLQT, AB_XERBLA
 *     .. INTRINSIC FUNCTIONS ..
       INTRINSIC          MAX, MIN, MOD
 *     ..
@@ -205,7 +205,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-        CALL XERBLA( 'ZLASWLQ', -INFO )
+        CALL AB_XERBLA( 'AB_ZLASWLQ', -INFO )
         RETURN
       ELSE IF (LQUERY) THEN
        RETURN
@@ -220,7 +220,7 @@
 *     The LQ Decomposition
 *
        IF((M.GE.N).OR.(NB.LE.M).OR.(NB.GE.N)) THEN
-        CALL ZGELQT( M, N, MB, A, LDA, T, LDT, WORK, INFO)
+        CALL AB_ZGELQT( M, N, MB, A, LDA, T, LDT, WORK, INFO)
         RETURN
        END IF
 *
@@ -229,14 +229,14 @@
 *
 *      Compute the LQ factorization of the first block A(1:M,1:NB)
 *
-       CALL ZGELQT( M, NB, MB, A(1,1), LDA, T, LDT, WORK, INFO)
+       CALL AB_ZGELQT( M, NB, MB, A(1,1), LDA, T, LDT, WORK, INFO)
        CTR = 1
 *
        DO I = NB+1, II-NB+M , (NB-M)
 *
 *      Compute the QR factorization of the current block A(1:M,I:I+NB-M)
 *
-         CALL ZTPLQT( M, NB-M, 0, MB, A(1,1), LDA, A( 1, I ),
+         CALL AB_ZTPLQT( M, NB-M, 0, MB, A(1,1), LDA, A( 1, I ),
      $                  LDA, T(1, CTR * M + 1),
      $                  LDT, WORK, INFO )
          CTR = CTR + 1
@@ -245,7 +245,7 @@
 *     Compute the QR factorization of the last block A(1:M,II:N)
 *
        IF (II.LE.N) THEN
-        CALL ZTPLQT( M, KK, 0, MB, A(1,1), LDA, A( 1, II ),
+        CALL AB_ZTPLQT( M, KK, 0, MB, A(1,1), LDA, A( 1, II ),
      $                  LDA, T(1, CTR * M + 1), LDT,
      $                  WORK, INFO )
        END IF
@@ -253,6 +253,6 @@
       WORK( 1 ) = M * MB
       RETURN
 *
-*     End of ZLASWLQ
+*     End of AB_ZLASWLQ
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b DGEQL2 computes the QL factorization of a general rectangular matrix using an unblocked algorithm.
+*> \brief \b AB_DGEQL2 computes the QL factorization of a general rectangular matrix using an unblocked algorithm.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DGEQL2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgeql2.f">
+*> Download AB_DGEQL2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGEQL2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgeql2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGEQL2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgeql2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGEQL2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGEQL2( M, N, A, LDA, TAU, WORK, INFO )
+*       SUBROUTINE AB_DGEQL2( M, N, A, LDA, TAU, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, M, N
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> DGEQL2 computes a QL factorization of a real m by n matrix A:
+*> AB_DGEQL2 computes a QL factorization of a real m by n matrix A:
 *> A = Q * L.
 *> \endverbatim
 *
@@ -121,7 +121,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DGEQL2( M, N, A, LDA, TAU, WORK, INFO )
+      SUBROUTINE AB_DGEQL2( M, N, A, LDA, TAU, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -146,7 +146,7 @@
       DOUBLE PRECISION   AII
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARF, DLARFG, XERBLA
+      EXTERNAL           AB_DLARF, AB_DLARFG, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -164,7 +164,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DGEQL2', -INFO )
+         CALL AB_XERBLA( 'AB_DGEQL2', -INFO )
          RETURN
       END IF
 *
@@ -175,19 +175,20 @@
 *        Generate elementary reflector H(i) to annihilate
 *        A(1:m-k+i-1,n-k+i)
 *
-         CALL DLARFG( M-K+I, A( M-K+I, N-K+I ), A( 1, N-K+I ), 1,
+         CALL AB_DLARFG( M-K+I, A( M-K+I, N-K+I ), A( 1, N-K+I ), 1,
      $                TAU( I ) )
 *
 *        Apply H(i) to A(1:m-k+i,1:n-k+i-1) from the left
 *
          AII = A( M-K+I, N-K+I )
          A( M-K+I, N-K+I ) = ONE
-         CALL DLARF( 'Left', M-K+I, N-K+I-1, A( 1, N-K+I ), 1, TAU( I ),
+         CALL AB_DLARF( 'Left', M-K+I, N-K+I-1, A( 1, N-K+I ), 1, TAU( I
+     $ ),
      $               A, LDA, WORK )
          A( M-K+I, N-K+I ) = AII
    10 CONTINUE
       RETURN
 *
-*     End of DGEQL2
+*     End of AB_DGEQL2
 *
       END

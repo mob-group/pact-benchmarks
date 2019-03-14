@@ -1,4 +1,4 @@
-*> \brief \b DSPGST
+*> \brief \b AB_DSPGST
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DSPGST + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dspgst.f">
+*> Download AB_DSPGST + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DSPGST.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dspgst.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DSPGST.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dspgst.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DSPGST.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DSPGST( ITYPE, UPLO, N, AP, BP, INFO )
+*       SUBROUTINE AB_DSPGST( ITYPE, UPLO, N, AP, BP, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> DSPGST reduces a real symmetric-definite generalized eigenproblem
+*> AB_DSPGST reduces a real symmetric-definite generalized eigenproblem
 *> to standard form, using packed storage.
 *>
 *> If ITYPE = 1, the problem is A*x = lambda*B*x,
@@ -43,7 +43,7 @@
 *> If ITYPE = 2 or 3, the problem is A*B*x = lambda*x or
 *> B*A*x = lambda*x, and A is overwritten by U*A*U**T or L**T*A*L.
 *>
-*> B must have been previously factorized as U**T*U or L*L**T by DPPTRF.
+*> B must have been previously factorized as U**T*U or L*L**T by AB_DPPTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -88,7 +88,7 @@
 *> \verbatim
 *>          BP is DOUBLE PRECISION array, dimension (N*(N+1)/2)
 *>          The triangular factor from the Cholesky factorization of B,
-*>          stored in the same format as A, as returned by DPPTRF.
+*>          stored in the same format as A, as returned by AB_DPPTRF.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -111,7 +111,7 @@
 *> \ingroup doubleOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE DSPGST( ITYPE, UPLO, N, AP, BP, INFO )
+      SUBROUTINE AB_DSPGST( ITYPE, UPLO, N, AP, BP, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -138,29 +138,30 @@
       DOUBLE PRECISION   AJJ, AKK, BJJ, BKK, CT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DSCAL, DSPMV, DSPR2, DTPMV, DTPSV,
-     $                   XERBLA
+      EXTERNAL           AB_DAXPY, AB_DSCAL, AB_DSPMV, AB_DSPR2, AB_DTPM
+     $V, AB_DTPSV,
+     $                   AB_XERBLA
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DDOT
-      EXTERNAL           LSAME, DDOT
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DDOT
+      EXTERNAL           AB_LSAME, AB_DDOT
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
+      UPPER = AB_LSAME( UPLO, 'U' )
       IF( ITYPE.LT.1 .OR. ITYPE.GT.3 ) THEN
          INFO = -1
-      ELSE IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      ELSE IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DSPGST', -INFO )
+         CALL AB_XERBLA( 'AB_DSPGST', -INFO )
          RETURN
       END IF
 *
@@ -179,12 +180,13 @@
 *              Compute the j-th column of the upper triangle of A
 *
                BJJ = BP( JJ )
-               CALL DTPSV( UPLO, 'Transpose', 'Nonunit', J, BP,
+               CALL AB_DTPSV( UPLO, 'Transpose', 'Nonunit', J, BP,
      $                     AP( J1 ), 1 )
-               CALL DSPMV( UPLO, J-1, -ONE, AP, BP( J1 ), 1, ONE,
+               CALL AB_DSPMV( UPLO, J-1, -ONE, AP, BP( J1 ), 1, ONE,
      $                     AP( J1 ), 1 )
-               CALL DSCAL( J-1, ONE / BJJ, AP( J1 ), 1 )
-               AP( JJ ) = ( AP( JJ )-DDOT( J-1, AP( J1 ), 1, BP( J1 ),
+               CALL AB_DSCAL( J-1, ONE / BJJ, AP( J1 ), 1 )
+               AP( JJ ) = ( AP( JJ )-AB_DDOT( J-1, AP( J1 ), 1, BP( J1 )
+     $,
      $                    1 ) ) / BJJ
    10       CONTINUE
          ELSE
@@ -204,13 +206,13 @@
                AKK = AKK / BKK**2
                AP( KK ) = AKK
                IF( K.LT.N ) THEN
-                  CALL DSCAL( N-K, ONE / BKK, AP( KK+1 ), 1 )
+                  CALL AB_DSCAL( N-K, ONE / BKK, AP( KK+1 ), 1 )
                   CT = -HALF*AKK
-                  CALL DAXPY( N-K, CT, BP( KK+1 ), 1, AP( KK+1 ), 1 )
-                  CALL DSPR2( UPLO, N-K, -ONE, AP( KK+1 ), 1,
+                  CALL AB_DAXPY( N-K, CT, BP( KK+1 ), 1, AP( KK+1 ), 1 )
+                  CALL AB_DSPR2( UPLO, N-K, -ONE, AP( KK+1 ), 1,
      $                        BP( KK+1 ), 1, AP( K1K1 ) )
-                  CALL DAXPY( N-K, CT, BP( KK+1 ), 1, AP( KK+1 ), 1 )
-                  CALL DTPSV( UPLO, 'No transpose', 'Non-unit', N-K,
+                  CALL AB_DAXPY( N-K, CT, BP( KK+1 ), 1, AP( KK+1 ), 1 )
+                  CALL AB_DTPSV( UPLO, 'No transpose', 'Non-unit', N-K,
      $                        BP( K1K1 ), AP( KK+1 ), 1 )
                END IF
                KK = K1K1
@@ -232,14 +234,14 @@
 *
                AKK = AP( KK )
                BKK = BP( KK )
-               CALL DTPMV( UPLO, 'No transpose', 'Non-unit', K-1, BP,
+               CALL AB_DTPMV( UPLO, 'No transpose', 'Non-unit', K-1, BP,
      $                     AP( K1 ), 1 )
                CT = HALF*AKK
-               CALL DAXPY( K-1, CT, BP( K1 ), 1, AP( K1 ), 1 )
-               CALL DSPR2( UPLO, K-1, ONE, AP( K1 ), 1, BP( K1 ), 1,
+               CALL AB_DAXPY( K-1, CT, BP( K1 ), 1, AP( K1 ), 1 )
+               CALL AB_DSPR2( UPLO, K-1, ONE, AP( K1 ), 1, BP( K1 ), 1,
      $                     AP )
-               CALL DAXPY( K-1, CT, BP( K1 ), 1, AP( K1 ), 1 )
-               CALL DSCAL( K-1, BKK, AP( K1 ), 1 )
+               CALL AB_DAXPY( K-1, CT, BP( K1 ), 1, AP( K1 ), 1 )
+               CALL AB_DSCAL( K-1, BKK, AP( K1 ), 1 )
                AP( KK ) = AKK*BKK**2
    30       CONTINUE
          ELSE
@@ -256,12 +258,12 @@
 *
                AJJ = AP( JJ )
                BJJ = BP( JJ )
-               AP( JJ ) = AJJ*BJJ + DDOT( N-J, AP( JJ+1 ), 1,
+               AP( JJ ) = AJJ*BJJ + AB_DDOT( N-J, AP( JJ+1 ), 1,
      $                    BP( JJ+1 ), 1 )
-               CALL DSCAL( N-J, BJJ, AP( JJ+1 ), 1 )
-               CALL DSPMV( UPLO, N-J, ONE, AP( J1J1 ), BP( JJ+1 ), 1,
+               CALL AB_DSCAL( N-J, BJJ, AP( JJ+1 ), 1 )
+               CALL AB_DSPMV( UPLO, N-J, ONE, AP( J1J1 ), BP( JJ+1 ), 1,
      $                     ONE, AP( JJ+1 ), 1 )
-               CALL DTPMV( UPLO, 'Transpose', 'Non-unit', N-J+1,
+               CALL AB_DTPMV( UPLO, 'Transpose', 'Non-unit', N-J+1,
      $                     BP( JJ ), AP( JJ ), 1 )
                JJ = J1J1
    40       CONTINUE
@@ -269,6 +271,6 @@
       END IF
       RETURN
 *
-*     End of DSPGST
+*     End of AB_DSPGST
 *
       END

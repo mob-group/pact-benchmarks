@@ -1,4 +1,4 @@
-*> \brief \b DORMTR
+*> \brief \b AB_DORMTR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DORMTR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dormtr.f">
+*> Download AB_DORMTR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DORMTR.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dormtr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DORMTR.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dormtr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DORMTR.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DORMTR( SIDE, UPLO, TRANS, M, N, A, LDA, TAU, C, LDC,
+*       SUBROUTINE AB_DORMTR( SIDE, UPLO, TRANS, M, N, A, LDA, TAU, C, LDC,
 *                          WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> DORMTR overwrites the general real M-by-N matrix C with
+*> AB_DORMTR overwrites the general real M-by-N matrix C with
 *>
 *>                 SIDE = 'L'     SIDE = 'R'
 *> TRANS = 'N':      Q * C          C * Q
@@ -43,7 +43,7 @@
 *>
 *> where Q is a real orthogonal matrix of order nq, with nq = m if
 *> SIDE = 'L' and nq = n if SIDE = 'R'. Q is defined as the product of
-*> nq-1 elementary reflectors, as returned by DSYTRD:
+*> nq-1 elementary reflectors, as returned by AB_DSYTRD:
 *>
 *> if UPLO = 'U', Q = H(nq-1) . . . H(2) H(1);
 *>
@@ -64,9 +64,9 @@
 *> \verbatim
 *>          UPLO is CHARACTER*1
 *>          = 'U': Upper triangle of A contains elementary reflectors
-*>                 from DSYTRD;
+*>                 from AB_DSYTRD;
 *>          = 'L': Lower triangle of A contains elementary reflectors
-*>                 from DSYTRD.
+*>                 from AB_DSYTRD.
 *> \endverbatim
 *>
 *> \param[in] TRANS
@@ -94,7 +94,7 @@
 *>                               (LDA,M) if SIDE = 'L'
 *>                               (LDA,N) if SIDE = 'R'
 *>          The vectors which define the elementary reflectors, as
-*>          returned by DSYTRD.
+*>          returned by AB_DSYTRD.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -110,7 +110,7 @@
 *>                               (M-1) if SIDE = 'L'
 *>                               (N-1) if SIDE = 'R'
 *>          TAU(i) must contain the scalar factor of the elementary
-*>          reflector H(i), as returned by DSYTRD.
+*>          reflector H(i), as returned by AB_DSYTRD.
 *> \endverbatim
 *>
 *> \param[in,out] C
@@ -145,7 +145,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -168,7 +168,8 @@
 *> \ingroup doubleOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE DORMTR( SIDE, UPLO, TRANS, M, N, A, LDA, TAU, C, LDC,
+      SUBROUTINE AB_DORMTR( SIDE, UPLO, TRANS, M, N, A, LDA, TAU, C, LDC
+     $,
      $                   WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -191,12 +192,12 @@
       INTEGER            I1, I2, IINFO, LWKOPT, MI, NB, NI, NQ, NW
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      EXTERNAL           LSAME, ILAENV
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_LSAME, AB_ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DORMQL, DORMQR, XERBLA
+      EXTERNAL           AB_DORMQL, AB_DORMQR, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -206,8 +207,8 @@
 *     Test the input arguments
 *
       INFO = 0
-      LEFT = LSAME( SIDE, 'L' )
-      UPPER = LSAME( UPLO, 'U' )
+      LEFT = AB_LSAME( SIDE, 'L' )
+      UPPER = AB_LSAME( UPLO, 'U' )
       LQUERY = ( LWORK.EQ.-1 )
 *
 *     NQ is the order of Q and NW is the minimum dimension of WORK
@@ -219,11 +220,12 @@
          NQ = N
          NW = M
       END IF
-      IF( .NOT.LEFT .AND. .NOT.LSAME( SIDE, 'R' ) ) THEN
+      IF( .NOT.LEFT .AND. .NOT.AB_LSAME( SIDE, 'R' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      ELSE IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.LSAME( TRANS, 'N' ) .AND. .NOT.LSAME( TRANS, 'T' ) )
+      ELSE IF( .NOT.AB_LSAME( TRANS, 'N' ) .AND. .NOT.AB_LSAME( TRANS, '
+     $T' ) )
      $          THEN
          INFO = -3
       ELSE IF( M.LT.0 ) THEN
@@ -241,18 +243,22 @@
       IF( INFO.EQ.0 ) THEN
          IF( UPPER ) THEN
             IF( LEFT ) THEN
-               NB = ILAENV( 1, 'DORMQL', SIDE // TRANS, M-1, N, M-1,
+               NB = AB_ILAENV( 1, 'AB_DORMQL', SIDE // TRANS, M-1, N, M-
+     $1,
      $              -1 )
             ELSE
-               NB = ILAENV( 1, 'DORMQL', SIDE // TRANS, M, N-1, N-1,
+               NB = AB_ILAENV( 1, 'AB_DORMQL', SIDE // TRANS, M, N-1, N-
+     $1,
      $              -1 )
             END IF
          ELSE
             IF( LEFT ) THEN
-               NB = ILAENV( 1, 'DORMQR', SIDE // TRANS, M-1, N, M-1,
+               NB = AB_ILAENV( 1, 'AB_DORMQR', SIDE // TRANS, M-1, N, M-
+     $1,
      $              -1 )
             ELSE
-               NB = ILAENV( 1, 'DORMQR', SIDE // TRANS, M, N-1, N-1,
+               NB = AB_ILAENV( 1, 'AB_DORMQR', SIDE // TRANS, M, N-1, N-
+     $1,
      $              -1 )
             END IF
          END IF
@@ -261,7 +267,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DORMTR', -INFO )
+         CALL AB_XERBLA( 'AB_DORMTR', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -284,13 +290,14 @@
 *
       IF( UPPER ) THEN
 *
-*        Q was determined by a call to DSYTRD with UPLO = 'U'
+*        Q was determined by a call to AB_DSYTRD with UPLO = 'U'
 *
-         CALL DORMQL( SIDE, TRANS, MI, NI, NQ-1, A( 1, 2 ), LDA, TAU, C,
+         CALL AB_DORMQL( SIDE, TRANS, MI, NI, NQ-1, A( 1, 2 ), LDA, TAU,
+     $ C,
      $                LDC, WORK, LWORK, IINFO )
       ELSE
 *
-*        Q was determined by a call to DSYTRD with UPLO = 'L'
+*        Q was determined by a call to AB_DSYTRD with UPLO = 'L'
 *
          IF( LEFT ) THEN
             I1 = 2
@@ -299,12 +306,12 @@
             I1 = 1
             I2 = 2
          END IF
-         CALL DORMQR( SIDE, TRANS, MI, NI, NQ-1, A( 2, 1 ), LDA, TAU,
+         CALL AB_DORMQR( SIDE, TRANS, MI, NI, NQ-1, A( 2, 1 ), LDA, TAU,
      $                C( I1, I2 ), LDC, WORK, LWORK, IINFO )
       END IF
       WORK( 1 ) = LWKOPT
       RETURN
 *
-*     End of DORMTR
+*     End of AB_DORMTR
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b SGBTF2 computes the LU factorization of a general band matrix using the unblocked version of the algorithm.
+*> \brief \b AB_SGBTF2 computes the LU factorization of a general band matrix using the unblocked version of the algorithm.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SGBTF2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgbtf2.f">
+*> Download AB_SGBTF2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SGBTF2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgbtf2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SGBTF2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgbtf2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SGBTF2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SGBTF2( M, N, KL, KU, AB, LDAB, IPIV, INFO )
+*       SUBROUTINE AB_SGBTF2( M, N, KL, KU, AB, LDAB, IPIV, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, KL, KU, LDAB, M, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> SGBTF2 computes an LU factorization of a real m-by-n band matrix A
+*> AB_SGBTF2 computes an LU factorization of a real m-by-n band matrix A
 *> using partial pivoting with row interchanges.
 *>
 *> This is the unblocked version of the algorithm, calling Level 2 BLAS.
@@ -143,7 +143,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SGBTF2( M, N, KL, KU, AB, LDAB, IPIV, INFO )
+      SUBROUTINE AB_SGBTF2( M, N, KL, KU, AB, LDAB, IPIV, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -168,11 +168,11 @@
       INTEGER            I, J, JP, JU, KM, KV
 *     ..
 *     .. External Functions ..
-      INTEGER            ISAMAX
-      EXTERNAL           ISAMAX
+      INTEGER            AB_ISAMAX
+      EXTERNAL           AB_ISAMAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGER, SSCAL, SSWAP, XERBLA
+      EXTERNAL           AB_SGER, AB_SSCAL, AB_SSWAP, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -199,7 +199,7 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SGBTF2', -INFO )
+         CALL AB_XERBLA( 'AB_SGBTF2', -INFO )
          RETURN
       END IF
 *
@@ -237,7 +237,7 @@
 *        subdiagonal elements in the current column.
 *
          KM = MIN( KL, M-J )
-         JP = ISAMAX( KM+1, AB( KV+1, J ), 1 )
+         JP = AB_ISAMAX( KM+1, AB( KV+1, J ), 1 )
          IPIV( J ) = JP + J - 1
          IF( AB( KV+JP, J ).NE.ZERO ) THEN
             JU = MAX( JU, MIN( J+KU+JP-1, N ) )
@@ -245,19 +245,20 @@
 *           Apply interchange to columns J to JU.
 *
             IF( JP.NE.1 )
-     $         CALL SSWAP( JU-J+1, AB( KV+JP, J ), LDAB-1,
+     $         CALL AB_SSWAP( JU-J+1, AB( KV+JP, J ), LDAB-1,
      $                     AB( KV+1, J ), LDAB-1 )
 *
             IF( KM.GT.0 ) THEN
 *
 *              Compute multipliers.
 *
-               CALL SSCAL( KM, ONE / AB( KV+1, J ), AB( KV+2, J ), 1 )
+               CALL AB_SSCAL( KM, ONE / AB( KV+1, J ), AB( KV+2, J ), 1 
+     $)
 *
 *              Update trailing submatrix within the band.
 *
                IF( JU.GT.J )
-     $            CALL SGER( KM, JU-J, -ONE, AB( KV+2, J ), 1,
+     $            CALL AB_SGER( KM, JU-J, -ONE, AB( KV+2, J ), 1,
      $                       AB( KV, J+1 ), LDAB-1, AB( KV+1, J+1 ),
      $                       LDAB-1 )
             END IF
@@ -272,6 +273,6 @@
    40 CONTINUE
       RETURN
 *
-*     End of SGBTF2
+*     End of AB_SGBTF2
 *
       END

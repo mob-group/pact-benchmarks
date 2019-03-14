@@ -1,4 +1,4 @@
-*> \brief \b CPTTS2 solves a tridiagonal system of the form AX=B using the L D LH factorization computed by spttrf.
+*> \brief \b AB_CPTTS2 solves a tridiagonal system of the form AX=B using the L D LH factorization computed by AB_SPTTRF.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CPTTS2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cptts2.f">
+*> Download AB_CPTTS2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CPTTS2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cptts2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CPTTS2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cptts2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CPTTS2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CPTTS2( IUPLO, N, NRHS, D, E, B, LDB )
+*       SUBROUTINE AB_CPTTS2( IUPLO, N, NRHS, D, E, B, LDB )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            IUPLO, LDB, N, NRHS
@@ -34,9 +34,9 @@
 *>
 *> \verbatim
 *>
-*> CPTTS2 solves a tridiagonal system of the form
+*> AB_CPTTS2 solves a tridiagonal system of the form
 *>    A * X = B
-*> using the factorization A = U**H*D*U or A = L*D*L**H computed by CPTTRF.
+*> using the factorization A = U**H*D*U or A = L*D*L**H computed by AB_CPTTRF.
 *> D is a diagonal matrix specified in the vector D, U (or L) is a unit
 *> bidiagonal matrix whose superdiagonal (subdiagonal) is specified in
 *> the vector E, and X and B are N by NRHS matrices.
@@ -111,7 +111,7 @@
 *> \ingroup complexPTcomputational
 *
 *  =====================================================================
-      SUBROUTINE CPTTS2( IUPLO, N, NRHS, D, E, B, LDB )
+      SUBROUTINE AB_CPTTS2( IUPLO, N, NRHS, D, E, B, LDB )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -132,7 +132,7 @@
       INTEGER            I, J
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CSSCAL
+      EXTERNAL           AB_CSSCAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CONJG
@@ -143,7 +143,7 @@
 *
       IF( N.LE.1 ) THEN
          IF( N.EQ.1 )
-     $      CALL CSSCAL( NRHS, 1. / D( 1 ), B, LDB )
+     $      CALL AB_CSSCAL( NRHS, 1. / D( 1 ), B, LDB )
          RETURN
       END IF
 *
@@ -240,6 +240,6 @@
 *
       RETURN
 *
-*     End of CPTTS2
+*     End of AB_CPTTS2
 *
       END

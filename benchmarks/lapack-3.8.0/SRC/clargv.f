@@ -1,4 +1,4 @@
-*> \brief \b CLARGV generates a vector of plane rotations with real cosines and complex sines.
+*> \brief \b AB_CLARGV generates a vector of plane rotations with real cosines and complex sines.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CLARGV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clargv.f">
+*> Download AB_CLARGV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLARGV.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clargv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLARGV.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clargv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLARGV.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLARGV( N, X, INCX, Y, INCY, C, INCC )
+*       SUBROUTINE AB_CLARGV( N, X, INCX, Y, INCY, C, INCC )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCC, INCX, INCY, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> CLARGV generates a vector of complex plane rotations with real
+*> AB_CLARGV generates a vector of complex plane rotations with real
 *> cosines, determined by elements of the complex vectors x and y.
 *> For i = 1,2,...,n
 *>
@@ -43,8 +43,8 @@
 *>
 *>    where c(i)**2 + ABS(s(i))**2 = 1
 *>
-*> The following conventions are used (these are the same as in CLARTG,
-*> but differ from the BLAS1 routine CROTG):
+*> The following conventions are used (these are the same as in AB_CLARTG,
+*> but differ from the BLAS1 routine AB_CROTG):
 *>    If y(i)=0, then c(i)=1 and s(i)=0.
 *>    If x(i)=0, then c(i)=0 and s(i) is chosen so that r(i) is real.
 *> \endverbatim
@@ -120,7 +120,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CLARGV( N, X, INCX, Y, INCY, C, INCC )
+      SUBROUTINE AB_CLARGV( N, X, INCX, Y, INCY, C, INCC )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -151,8 +151,8 @@
       COMPLEX            F, FF, FS, G, GS, R, SN
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLAPY2
-      EXTERNAL           SLAMCH, SLAPY2
+      REAL               SLAMCH, AB_SLAPY2
+      EXTERNAL           SLAMCH, AB_SLAPY2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CMPLX, CONJG, INT, LOG, MAX, REAL,
@@ -188,7 +188,7 @@
          F = X( IX )
          G = Y( IY )
 *
-*        Use identical algorithm as in CLARTG
+*        Use identical algorithm as in AB_CLARTG
 *
          SCALE = MAX( ABS1( F ), ABS1( G ) )
          FS = F
@@ -225,14 +225,14 @@
 *
             IF( F.EQ.CZERO ) THEN
                CS = ZERO
-               R = SLAPY2( REAL( G ), AIMAG( G ) )
+               R = AB_SLAPY2( REAL( G ), AIMAG( G ) )
 *              Do complex/real division explicitly with two real
 *              divisions
-               D = SLAPY2( REAL( GS ), AIMAG( GS ) )
+               D = AB_SLAPY2( REAL( GS ), AIMAG( GS ) )
                SN = CMPLX( REAL( GS ) / D, -AIMAG( GS ) / D )
                GO TO 50
             END IF
-            F2S = SLAPY2( REAL( FS ), AIMAG( FS ) )
+            F2S = AB_SLAPY2( REAL( FS ), AIMAG( FS ) )
 *           G2 and G2S are accurate
 *           G2 is at least SAFMIN, and G2S is at least SAFMN2
             G2S = SQRT( G2 )
@@ -247,12 +247,12 @@
 *           Make sure abs(FF) = 1
 *           Do complex/real division explicitly with 2 real divisions
             IF( ABS1( F ).GT.ONE ) THEN
-               D = SLAPY2( REAL( F ), AIMAG( F ) )
+               D = AB_SLAPY2( REAL( F ), AIMAG( F ) )
                FF = CMPLX( REAL( F ) / D, AIMAG( F ) / D )
             ELSE
                DR = SAFMX2*REAL( F )
                DI = SAFMX2*AIMAG( F )
-               D = SLAPY2( DR, DI )
+               D = AB_SLAPY2( DR, DI )
                FF = CMPLX( DR / D, DI / D )
             END IF
             SN = FF*CMPLX( REAL( GS ) / G2S, -AIMAG( GS ) / G2S )
@@ -294,6 +294,6 @@
    60 CONTINUE
       RETURN
 *
-*     End of CLARGV
+*     End of AB_CLARGV
 *
       END

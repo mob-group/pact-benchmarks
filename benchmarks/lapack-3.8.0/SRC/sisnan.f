@@ -1,4 +1,4 @@
-*> \brief \b SISNAN tests input for NaN.
+*> \brief \b AB_SISNAN tests input for NaN.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SISNAN + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sisnan.f">
+*> Download AB_SISNAN + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SISNAN.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sisnan.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SISNAN.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sisnan.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SISNAN.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       LOGICAL FUNCTION SISNAN( SIN )
+*       LOGICAL FUNCTION AB_SISNAN( SIN )
 *
 *       .. Scalar Arguments ..
 *       REAL, INTENT(IN) :: SIN
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> SISNAN returns .TRUE. if its argument is NaN, and .FALSE.
+*> AB_SISNAN returns .TRUE. if its argument is NaN, and .FALSE.
 *> otherwise.  To be replaced by the Fortran 2003 intrinsic in the
 *> future.
 *> \endverbatim
@@ -57,7 +57,7 @@
 *> \ingroup OTHERauxiliary
 *
 *  =====================================================================
-      LOGICAL FUNCTION SISNAN( SIN )
+      LOGICAL FUNCTION AB_SISNAN( SIN )
 *
 *  -- LAPACK auxiliary routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -71,10 +71,10 @@
 *  =====================================================================
 *
 *  .. External Functions ..
-      LOGICAL SLAISNAN
-      EXTERNAL SLAISNAN
+      LOGICAL AB_SLAISNAN
+      EXTERNAL AB_SLAISNAN
 *  ..
 *  .. Executable Statements ..
-      SISNAN = SLAISNAN(SIN,SIN)
+      AB_SISNAN = AB_SLAISNAN(SIN,SIN)
       RETURN
       END

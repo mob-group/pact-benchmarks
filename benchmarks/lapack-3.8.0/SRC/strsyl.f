@@ -1,4 +1,4 @@
-*> \brief \b STRSYL
+*> \brief \b AB_STRSYL
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download STRSYL + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/strsyl.f">
+*> Download AB_STRSYL + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_STRSYL.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/strsyl.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_STRSYL.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/strsyl.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_STRSYL.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE STRSYL( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB, C,
+*       SUBROUTINE AB_STRSYL( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB, C,
 *                          LDC, SCALE, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> STRSYL solves the real Sylvester matrix equation:
+*> AB_STRSYL solves the real Sylvester matrix equation:
 *>
 *>    op(A)*X + X*op(B) = scale*C or
 *>    op(A)*X - X*op(B) = scale*C,
@@ -46,7 +46,7 @@
 *> the solution X are M-by-N; and scale is an output scale factor, set
 *> <= 1 to avoid overflow in X.
 *>
-*> A and B must be in Schur canonical form (as returned by SHSEQR), that
+*> A and B must be in Schur canonical form (as returned by AB_SHSEQR), that
 *> is, block upper triangular with 1-by-1 and 2-by-2 diagonal blocks;
 *> each 2-by-2 diagonal block has its diagonal elements equal and its
 *> off-diagonal elements of opposite sign.
@@ -161,7 +161,7 @@
 *> \ingroup realSYcomputational
 *
 *  =====================================================================
-      SUBROUTINE STRSYL( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB, C,
+      SUBROUTINE AB_STRSYL( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB, C,
      $                   LDC, SCALE, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -194,12 +194,13 @@
       REAL               DUM( 1 ), VEC( 2, 2 ), X( 2, 2 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SDOT, SLAMCH, SLANGE
-      EXTERNAL           LSAME, SDOT, SLAMCH, SLANGE
+      LOGICAL            AB_LSAME
+      REAL               AB_SDOT, SLAMCH, AB_SLANGE
+      EXTERNAL           AB_LSAME, AB_SDOT, SLAMCH, AB_SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLABAD, SLALN2, SLASY2, SSCAL, XERBLA
+      EXTERNAL           AB_SLABAD, AB_SLALN2, AB_SLASY2, AB_SSCAL, AB_X
+     $ERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL
@@ -208,15 +209,15 @@
 *
 *     Decode and Test input parameters
 *
-      NOTRNA = LSAME( TRANA, 'N' )
-      NOTRNB = LSAME( TRANB, 'N' )
+      NOTRNA = AB_LSAME( TRANA, 'N' )
+      NOTRNB = AB_LSAME( TRANB, 'N' )
 *
       INFO = 0
-      IF( .NOT.NOTRNA .AND. .NOT.LSAME( TRANA, 'T' ) .AND. .NOT.
-     $    LSAME( TRANA, 'C' ) ) THEN
+      IF( .NOT.NOTRNA .AND. .NOT.AB_LSAME( TRANA, 'T' ) .AND. .NOT.
+     $    AB_LSAME( TRANA, 'C' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.NOTRNB .AND. .NOT.LSAME( TRANB, 'T' ) .AND. .NOT.
-     $         LSAME( TRANB, 'C' ) ) THEN
+      ELSE IF( .NOT.NOTRNB .AND. .NOT.AB_LSAME( TRANB, 'T' ) .AND. .NOT.
+     $         AB_LSAME( TRANB, 'C' ) ) THEN
          INFO = -2
       ELSE IF( ISGN.NE.1 .AND. ISGN.NE.-1 ) THEN
          INFO = -3
@@ -232,7 +233,7 @@
          INFO = -11
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'STRSYL', -INFO )
+         CALL AB_XERBLA( 'AB_STRSYL', -INFO )
          RETURN
       END IF
 *
@@ -247,12 +248,12 @@
       EPS = SLAMCH( 'P' )
       SMLNUM = SLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
+      CALL AB_SLABAD( SMLNUM, BIGNUM )
       SMLNUM = SMLNUM*REAL( M*N ) / EPS
       BIGNUM = ONE / SMLNUM
 *
-      SMIN = MAX( SMLNUM, EPS*SLANGE( 'M', M, M, A, LDA, DUM ),
-     $       EPS*SLANGE( 'M', N, N, B, LDB, DUM ) )
+      SMIN = MAX( SMLNUM, EPS*AB_SLANGE( 'M', M, M, A, LDA, DUM ),
+     $       EPS*AB_SLANGE( 'M', N, N, B, LDB, DUM ) )
 *
       SGN = ISGN
 *
@@ -315,9 +316,9 @@
                END IF
 *
                IF( L1.EQ.L2 .AND. K1.EQ.K2 ) THEN
-                  SUML = SDOT( M-K1, A( K1, MIN( K1+1, M ) ), LDA,
+                  SUML = AB_SDOT( M-K1, A( K1, MIN( K1+1, M ) ), LDA,
      $                         C( MIN( K1+1, M ), L1 ), 1 )
-                  SUMR = SDOT( L1-1, C( K1, 1 ), LDC, B( 1, L1 ), 1 )
+                  SUMR = AB_SDOT( L1-1, C( K1, 1 ), LDC, B( 1, L1 ), 1 )
                   VEC( 1, 1 ) = C( K1, L1 ) - ( SUML+SGN*SUMR )
                   SCALOC = ONE
 *
@@ -337,7 +338,7 @@
 *
                   IF( SCALOC.NE.ONE ) THEN
                      DO 10 J = 1, N
-                        CALL SSCAL( M, SCALOC, C( 1, J ), 1 )
+                        CALL AB_SSCAL( M, SCALOC, C( 1, J ), 1 )
    10                CONTINUE
                      SCALE = SCALE*SCALOC
                   END IF
@@ -345,17 +346,17 @@
 *
                ELSE IF( L1.EQ.L2 .AND. K1.NE.K2 ) THEN
 *
-                  SUML = SDOT( M-K2, A( K1, MIN( K2+1, M ) ), LDA,
+                  SUML = AB_SDOT( M-K2, A( K1, MIN( K2+1, M ) ), LDA,
      $                         C( MIN( K2+1, M ), L1 ), 1 )
-                  SUMR = SDOT( L1-1, C( K1, 1 ), LDC, B( 1, L1 ), 1 )
+                  SUMR = AB_SDOT( L1-1, C( K1, 1 ), LDC, B( 1, L1 ), 1 )
                   VEC( 1, 1 ) = C( K1, L1 ) - ( SUML+SGN*SUMR )
 *
-                  SUML = SDOT( M-K2, A( K2, MIN( K2+1, M ) ), LDA,
+                  SUML = AB_SDOT( M-K2, A( K2, MIN( K2+1, M ) ), LDA,
      $                         C( MIN( K2+1, M ), L1 ), 1 )
-                  SUMR = SDOT( L1-1, C( K2, 1 ), LDC, B( 1, L1 ), 1 )
+                  SUMR = AB_SDOT( L1-1, C( K2, 1 ), LDC, B( 1, L1 ), 1 )
                   VEC( 2, 1 ) = C( K2, L1 ) - ( SUML+SGN*SUMR )
 *
-                  CALL SLALN2( .FALSE., 2, 1, SMIN, ONE, A( K1, K1 ),
+                  CALL AB_SLALN2( .FALSE., 2, 1, SMIN, ONE, A( K1, K1 ),
      $                         LDA, ONE, ONE, VEC, 2, -SGN*B( L1, L1 ),
      $                         ZERO, X, 2, SCALOC, XNORM, IERR )
                   IF( IERR.NE.0 )
@@ -363,7 +364,7 @@
 *
                   IF( SCALOC.NE.ONE ) THEN
                      DO 20 J = 1, N
-                        CALL SSCAL( M, SCALOC, C( 1, J ), 1 )
+                        CALL AB_SSCAL( M, SCALOC, C( 1, J ), 1 )
    20                CONTINUE
                      SCALE = SCALE*SCALOC
                   END IF
@@ -372,17 +373,17 @@
 *
                ELSE IF( L1.NE.L2 .AND. K1.EQ.K2 ) THEN
 *
-                  SUML = SDOT( M-K1, A( K1, MIN( K1+1, M ) ), LDA,
+                  SUML = AB_SDOT( M-K1, A( K1, MIN( K1+1, M ) ), LDA,
      $                         C( MIN( K1+1, M ), L1 ), 1 )
-                  SUMR = SDOT( L1-1, C( K1, 1 ), LDC, B( 1, L1 ), 1 )
+                  SUMR = AB_SDOT( L1-1, C( K1, 1 ), LDC, B( 1, L1 ), 1 )
                   VEC( 1, 1 ) = SGN*( C( K1, L1 )-( SUML+SGN*SUMR ) )
 *
-                  SUML = SDOT( M-K1, A( K1, MIN( K1+1, M ) ), LDA,
+                  SUML = AB_SDOT( M-K1, A( K1, MIN( K1+1, M ) ), LDA,
      $                         C( MIN( K1+1, M ), L2 ), 1 )
-                  SUMR = SDOT( L1-1, C( K1, 1 ), LDC, B( 1, L2 ), 1 )
+                  SUMR = AB_SDOT( L1-1, C( K1, 1 ), LDC, B( 1, L2 ), 1 )
                   VEC( 2, 1 ) = SGN*( C( K1, L2 )-( SUML+SGN*SUMR ) )
 *
-                  CALL SLALN2( .TRUE., 2, 1, SMIN, ONE, B( L1, L1 ),
+                  CALL AB_SLALN2( .TRUE., 2, 1, SMIN, ONE, B( L1, L1 ),
      $                         LDB, ONE, ONE, VEC, 2, -SGN*A( K1, K1 ),
      $                         ZERO, X, 2, SCALOC, XNORM, IERR )
                   IF( IERR.NE.0 )
@@ -390,7 +391,7 @@
 *
                   IF( SCALOC.NE.ONE ) THEN
                      DO 40 J = 1, N
-                        CALL SSCAL( M, SCALOC, C( 1, J ), 1 )
+                        CALL AB_SSCAL( M, SCALOC, C( 1, J ), 1 )
    40                CONTINUE
                      SCALE = SCALE*SCALOC
                   END IF
@@ -399,27 +400,27 @@
 *
                ELSE IF( L1.NE.L2 .AND. K1.NE.K2 ) THEN
 *
-                  SUML = SDOT( M-K2, A( K1, MIN( K2+1, M ) ), LDA,
+                  SUML = AB_SDOT( M-K2, A( K1, MIN( K2+1, M ) ), LDA,
      $                         C( MIN( K2+1, M ), L1 ), 1 )
-                  SUMR = SDOT( L1-1, C( K1, 1 ), LDC, B( 1, L1 ), 1 )
+                  SUMR = AB_SDOT( L1-1, C( K1, 1 ), LDC, B( 1, L1 ), 1 )
                   VEC( 1, 1 ) = C( K1, L1 ) - ( SUML+SGN*SUMR )
 *
-                  SUML = SDOT( M-K2, A( K1, MIN( K2+1, M ) ), LDA,
+                  SUML = AB_SDOT( M-K2, A( K1, MIN( K2+1, M ) ), LDA,
      $                         C( MIN( K2+1, M ), L2 ), 1 )
-                  SUMR = SDOT( L1-1, C( K1, 1 ), LDC, B( 1, L2 ), 1 )
+                  SUMR = AB_SDOT( L1-1, C( K1, 1 ), LDC, B( 1, L2 ), 1 )
                   VEC( 1, 2 ) = C( K1, L2 ) - ( SUML+SGN*SUMR )
 *
-                  SUML = SDOT( M-K2, A( K2, MIN( K2+1, M ) ), LDA,
+                  SUML = AB_SDOT( M-K2, A( K2, MIN( K2+1, M ) ), LDA,
      $                         C( MIN( K2+1, M ), L1 ), 1 )
-                  SUMR = SDOT( L1-1, C( K2, 1 ), LDC, B( 1, L1 ), 1 )
+                  SUMR = AB_SDOT( L1-1, C( K2, 1 ), LDC, B( 1, L1 ), 1 )
                   VEC( 2, 1 ) = C( K2, L1 ) - ( SUML+SGN*SUMR )
 *
-                  SUML = SDOT( M-K2, A( K2, MIN( K2+1, M ) ), LDA,
+                  SUML = AB_SDOT( M-K2, A( K2, MIN( K2+1, M ) ), LDA,
      $                         C( MIN( K2+1, M ), L2 ), 1 )
-                  SUMR = SDOT( L1-1, C( K2, 1 ), LDC, B( 1, L2 ), 1 )
+                  SUMR = AB_SDOT( L1-1, C( K2, 1 ), LDC, B( 1, L2 ), 1 )
                   VEC( 2, 2 ) = C( K2, L2 ) - ( SUML+SGN*SUMR )
 *
-                  CALL SLASY2( .FALSE., .FALSE., ISGN, 2, 2,
+                  CALL AB_SLASY2( .FALSE., .FALSE., ISGN, 2, 2,
      $                         A( K1, K1 ), LDA, B( L1, L1 ), LDB, VEC,
      $                         2, SCALOC, X, 2, XNORM, IERR )
                   IF( IERR.NE.0 )
@@ -427,7 +428,7 @@
 *
                   IF( SCALOC.NE.ONE ) THEN
                      DO 50 J = 1, N
-                        CALL SSCAL( M, SCALOC, C( 1, J ), 1 )
+                        CALL AB_SSCAL( M, SCALOC, C( 1, J ), 1 )
    50                CONTINUE
                      SCALE = SCALE*SCALOC
                   END IF
@@ -500,8 +501,8 @@
                END IF
 *
                IF( L1.EQ.L2 .AND. K1.EQ.K2 ) THEN
-                  SUML = SDOT( K1-1, A( 1, K1 ), 1, C( 1, L1 ), 1 )
-                  SUMR = SDOT( L1-1, C( K1, 1 ), LDC, B( 1, L1 ), 1 )
+                  SUML = AB_SDOT( K1-1, A( 1, K1 ), 1, C( 1, L1 ), 1 )
+                  SUMR = AB_SDOT( L1-1, C( K1, 1 ), LDC, B( 1, L1 ), 1 )
                   VEC( 1, 1 ) = C( K1, L1 ) - ( SUML+SGN*SUMR )
                   SCALOC = ONE
 *
@@ -521,7 +522,7 @@
 *
                   IF( SCALOC.NE.ONE ) THEN
                      DO 80 J = 1, N
-                        CALL SSCAL( M, SCALOC, C( 1, J ), 1 )
+                        CALL AB_SSCAL( M, SCALOC, C( 1, J ), 1 )
    80                CONTINUE
                      SCALE = SCALE*SCALOC
                   END IF
@@ -529,15 +530,15 @@
 *
                ELSE IF( L1.EQ.L2 .AND. K1.NE.K2 ) THEN
 *
-                  SUML = SDOT( K1-1, A( 1, K1 ), 1, C( 1, L1 ), 1 )
-                  SUMR = SDOT( L1-1, C( K1, 1 ), LDC, B( 1, L1 ), 1 )
+                  SUML = AB_SDOT( K1-1, A( 1, K1 ), 1, C( 1, L1 ), 1 )
+                  SUMR = AB_SDOT( L1-1, C( K1, 1 ), LDC, B( 1, L1 ), 1 )
                   VEC( 1, 1 ) = C( K1, L1 ) - ( SUML+SGN*SUMR )
 *
-                  SUML = SDOT( K1-1, A( 1, K2 ), 1, C( 1, L1 ), 1 )
-                  SUMR = SDOT( L1-1, C( K2, 1 ), LDC, B( 1, L1 ), 1 )
+                  SUML = AB_SDOT( K1-1, A( 1, K2 ), 1, C( 1, L1 ), 1 )
+                  SUMR = AB_SDOT( L1-1, C( K2, 1 ), LDC, B( 1, L1 ), 1 )
                   VEC( 2, 1 ) = C( K2, L1 ) - ( SUML+SGN*SUMR )
 *
-                  CALL SLALN2( .TRUE., 2, 1, SMIN, ONE, A( K1, K1 ),
+                  CALL AB_SLALN2( .TRUE., 2, 1, SMIN, ONE, A( K1, K1 ),
      $                         LDA, ONE, ONE, VEC, 2, -SGN*B( L1, L1 ),
      $                         ZERO, X, 2, SCALOC, XNORM, IERR )
                   IF( IERR.NE.0 )
@@ -545,7 +546,7 @@
 *
                   IF( SCALOC.NE.ONE ) THEN
                      DO 90 J = 1, N
-                        CALL SSCAL( M, SCALOC, C( 1, J ), 1 )
+                        CALL AB_SSCAL( M, SCALOC, C( 1, J ), 1 )
    90                CONTINUE
                      SCALE = SCALE*SCALOC
                   END IF
@@ -554,15 +555,15 @@
 *
                ELSE IF( L1.NE.L2 .AND. K1.EQ.K2 ) THEN
 *
-                  SUML = SDOT( K1-1, A( 1, K1 ), 1, C( 1, L1 ), 1 )
-                  SUMR = SDOT( L1-1, C( K1, 1 ), LDC, B( 1, L1 ), 1 )
+                  SUML = AB_SDOT( K1-1, A( 1, K1 ), 1, C( 1, L1 ), 1 )
+                  SUMR = AB_SDOT( L1-1, C( K1, 1 ), LDC, B( 1, L1 ), 1 )
                   VEC( 1, 1 ) = SGN*( C( K1, L1 )-( SUML+SGN*SUMR ) )
 *
-                  SUML = SDOT( K1-1, A( 1, K1 ), 1, C( 1, L2 ), 1 )
-                  SUMR = SDOT( L1-1, C( K1, 1 ), LDC, B( 1, L2 ), 1 )
+                  SUML = AB_SDOT( K1-1, A( 1, K1 ), 1, C( 1, L2 ), 1 )
+                  SUMR = AB_SDOT( L1-1, C( K1, 1 ), LDC, B( 1, L2 ), 1 )
                   VEC( 2, 1 ) = SGN*( C( K1, L2 )-( SUML+SGN*SUMR ) )
 *
-                  CALL SLALN2( .TRUE., 2, 1, SMIN, ONE, B( L1, L1 ),
+                  CALL AB_SLALN2( .TRUE., 2, 1, SMIN, ONE, B( L1, L1 ),
      $                         LDB, ONE, ONE, VEC, 2, -SGN*A( K1, K1 ),
      $                         ZERO, X, 2, SCALOC, XNORM, IERR )
                   IF( IERR.NE.0 )
@@ -570,7 +571,7 @@
 *
                   IF( SCALOC.NE.ONE ) THEN
                      DO 100 J = 1, N
-                        CALL SSCAL( M, SCALOC, C( 1, J ), 1 )
+                        CALL AB_SSCAL( M, SCALOC, C( 1, J ), 1 )
   100                CONTINUE
                      SCALE = SCALE*SCALOC
                   END IF
@@ -579,23 +580,24 @@
 *
                ELSE IF( L1.NE.L2 .AND. K1.NE.K2 ) THEN
 *
-                  SUML = SDOT( K1-1, A( 1, K1 ), 1, C( 1, L1 ), 1 )
-                  SUMR = SDOT( L1-1, C( K1, 1 ), LDC, B( 1, L1 ), 1 )
+                  SUML = AB_SDOT( K1-1, A( 1, K1 ), 1, C( 1, L1 ), 1 )
+                  SUMR = AB_SDOT( L1-1, C( K1, 1 ), LDC, B( 1, L1 ), 1 )
                   VEC( 1, 1 ) = C( K1, L1 ) - ( SUML+SGN*SUMR )
 *
-                  SUML = SDOT( K1-1, A( 1, K1 ), 1, C( 1, L2 ), 1 )
-                  SUMR = SDOT( L1-1, C( K1, 1 ), LDC, B( 1, L2 ), 1 )
+                  SUML = AB_SDOT( K1-1, A( 1, K1 ), 1, C( 1, L2 ), 1 )
+                  SUMR = AB_SDOT( L1-1, C( K1, 1 ), LDC, B( 1, L2 ), 1 )
                   VEC( 1, 2 ) = C( K1, L2 ) - ( SUML+SGN*SUMR )
 *
-                  SUML = SDOT( K1-1, A( 1, K2 ), 1, C( 1, L1 ), 1 )
-                  SUMR = SDOT( L1-1, C( K2, 1 ), LDC, B( 1, L1 ), 1 )
+                  SUML = AB_SDOT( K1-1, A( 1, K2 ), 1, C( 1, L1 ), 1 )
+                  SUMR = AB_SDOT( L1-1, C( K2, 1 ), LDC, B( 1, L1 ), 1 )
                   VEC( 2, 1 ) = C( K2, L1 ) - ( SUML+SGN*SUMR )
 *
-                  SUML = SDOT( K1-1, A( 1, K2 ), 1, C( 1, L2 ), 1 )
-                  SUMR = SDOT( L1-1, C( K2, 1 ), LDC, B( 1, L2 ), 1 )
+                  SUML = AB_SDOT( K1-1, A( 1, K2 ), 1, C( 1, L2 ), 1 )
+                  SUMR = AB_SDOT( L1-1, C( K2, 1 ), LDC, B( 1, L2 ), 1 )
                   VEC( 2, 2 ) = C( K2, L2 ) - ( SUML+SGN*SUMR )
 *
-                  CALL SLASY2( .TRUE., .FALSE., ISGN, 2, 2, A( K1, K1 ),
+                  CALL AB_SLASY2( .TRUE., .FALSE., ISGN, 2, 2, A( K1, K1
+     $ ),
      $                         LDA, B( L1, L1 ), LDB, VEC, 2, SCALOC, X,
      $                         2, XNORM, IERR )
                   IF( IERR.NE.0 )
@@ -603,7 +605,7 @@
 *
                   IF( SCALOC.NE.ONE ) THEN
                      DO 110 J = 1, N
-                        CALL SSCAL( M, SCALOC, C( 1, J ), 1 )
+                        CALL AB_SSCAL( M, SCALOC, C( 1, J ), 1 )
   110                CONTINUE
                      SCALE = SCALE*SCALOC
                   END IF
@@ -675,8 +677,8 @@
                END IF
 *
                IF( L1.EQ.L2 .AND. K1.EQ.K2 ) THEN
-                  SUML = SDOT( K1-1, A( 1, K1 ), 1, C( 1, L1 ), 1 )
-                  SUMR = SDOT( N-L1, C( K1, MIN( L1+1, N ) ), LDC,
+                  SUML = AB_SDOT( K1-1, A( 1, K1 ), 1, C( 1, L1 ), 1 )
+                  SUMR = AB_SDOT( N-L1, C( K1, MIN( L1+1, N ) ), LDC,
      $                         B( L1, MIN( L1+1, N ) ), LDB )
                   VEC( 1, 1 ) = C( K1, L1 ) - ( SUML+SGN*SUMR )
                   SCALOC = ONE
@@ -697,7 +699,7 @@
 *
                   IF( SCALOC.NE.ONE ) THEN
                      DO 140 J = 1, N
-                        CALL SSCAL( M, SCALOC, C( 1, J ), 1 )
+                        CALL AB_SSCAL( M, SCALOC, C( 1, J ), 1 )
   140                CONTINUE
                      SCALE = SCALE*SCALOC
                   END IF
@@ -705,17 +707,17 @@
 *
                ELSE IF( L1.EQ.L2 .AND. K1.NE.K2 ) THEN
 *
-                  SUML = SDOT( K1-1, A( 1, K1 ), 1, C( 1, L1 ), 1 )
-                  SUMR = SDOT( N-L2, C( K1, MIN( L2+1, N ) ), LDC,
+                  SUML = AB_SDOT( K1-1, A( 1, K1 ), 1, C( 1, L1 ), 1 )
+                  SUMR = AB_SDOT( N-L2, C( K1, MIN( L2+1, N ) ), LDC,
      $                         B( L1, MIN( L2+1, N ) ), LDB )
                   VEC( 1, 1 ) = C( K1, L1 ) - ( SUML+SGN*SUMR )
 *
-                  SUML = SDOT( K1-1, A( 1, K2 ), 1, C( 1, L1 ), 1 )
-                  SUMR = SDOT( N-L2, C( K2, MIN( L2+1, N ) ), LDC,
+                  SUML = AB_SDOT( K1-1, A( 1, K2 ), 1, C( 1, L1 ), 1 )
+                  SUMR = AB_SDOT( N-L2, C( K2, MIN( L2+1, N ) ), LDC,
      $                         B( L1, MIN( L2+1, N ) ), LDB )
                   VEC( 2, 1 ) = C( K2, L1 ) - ( SUML+SGN*SUMR )
 *
-                  CALL SLALN2( .TRUE., 2, 1, SMIN, ONE, A( K1, K1 ),
+                  CALL AB_SLALN2( .TRUE., 2, 1, SMIN, ONE, A( K1, K1 ),
      $                         LDA, ONE, ONE, VEC, 2, -SGN*B( L1, L1 ),
      $                         ZERO, X, 2, SCALOC, XNORM, IERR )
                   IF( IERR.NE.0 )
@@ -723,7 +725,7 @@
 *
                   IF( SCALOC.NE.ONE ) THEN
                      DO 150 J = 1, N
-                        CALL SSCAL( M, SCALOC, C( 1, J ), 1 )
+                        CALL AB_SSCAL( M, SCALOC, C( 1, J ), 1 )
   150                CONTINUE
                      SCALE = SCALE*SCALOC
                   END IF
@@ -732,17 +734,17 @@
 *
                ELSE IF( L1.NE.L2 .AND. K1.EQ.K2 ) THEN
 *
-                  SUML = SDOT( K1-1, A( 1, K1 ), 1, C( 1, L1 ), 1 )
-                  SUMR = SDOT( N-L2, C( K1, MIN( L2+1, N ) ), LDC,
+                  SUML = AB_SDOT( K1-1, A( 1, K1 ), 1, C( 1, L1 ), 1 )
+                  SUMR = AB_SDOT( N-L2, C( K1, MIN( L2+1, N ) ), LDC,
      $                         B( L1, MIN( L2+1, N ) ), LDB )
                   VEC( 1, 1 ) = SGN*( C( K1, L1 )-( SUML+SGN*SUMR ) )
 *
-                  SUML = SDOT( K1-1, A( 1, K1 ), 1, C( 1, L2 ), 1 )
-                  SUMR = SDOT( N-L2, C( K1, MIN( L2+1, N ) ), LDC,
+                  SUML = AB_SDOT( K1-1, A( 1, K1 ), 1, C( 1, L2 ), 1 )
+                  SUMR = AB_SDOT( N-L2, C( K1, MIN( L2+1, N ) ), LDC,
      $                         B( L2, MIN( L2+1, N ) ), LDB )
                   VEC( 2, 1 ) = SGN*( C( K1, L2 )-( SUML+SGN*SUMR ) )
 *
-                  CALL SLALN2( .FALSE., 2, 1, SMIN, ONE, B( L1, L1 ),
+                  CALL AB_SLALN2( .FALSE., 2, 1, SMIN, ONE, B( L1, L1 ),
      $                         LDB, ONE, ONE, VEC, 2, -SGN*A( K1, K1 ),
      $                         ZERO, X, 2, SCALOC, XNORM, IERR )
                   IF( IERR.NE.0 )
@@ -750,7 +752,7 @@
 *
                   IF( SCALOC.NE.ONE ) THEN
                      DO 160 J = 1, N
-                        CALL SSCAL( M, SCALOC, C( 1, J ), 1 )
+                        CALL AB_SSCAL( M, SCALOC, C( 1, J ), 1 )
   160                CONTINUE
                      SCALE = SCALE*SCALOC
                   END IF
@@ -759,27 +761,28 @@
 *
                ELSE IF( L1.NE.L2 .AND. K1.NE.K2 ) THEN
 *
-                  SUML = SDOT( K1-1, A( 1, K1 ), 1, C( 1, L1 ), 1 )
-                  SUMR = SDOT( N-L2, C( K1, MIN( L2+1, N ) ), LDC,
+                  SUML = AB_SDOT( K1-1, A( 1, K1 ), 1, C( 1, L1 ), 1 )
+                  SUMR = AB_SDOT( N-L2, C( K1, MIN( L2+1, N ) ), LDC,
      $                         B( L1, MIN( L2+1, N ) ), LDB )
                   VEC( 1, 1 ) = C( K1, L1 ) - ( SUML+SGN*SUMR )
 *
-                  SUML = SDOT( K1-1, A( 1, K1 ), 1, C( 1, L2 ), 1 )
-                  SUMR = SDOT( N-L2, C( K1, MIN( L2+1, N ) ), LDC,
+                  SUML = AB_SDOT( K1-1, A( 1, K1 ), 1, C( 1, L2 ), 1 )
+                  SUMR = AB_SDOT( N-L2, C( K1, MIN( L2+1, N ) ), LDC,
      $                         B( L2, MIN( L2+1, N ) ), LDB )
                   VEC( 1, 2 ) = C( K1, L2 ) - ( SUML+SGN*SUMR )
 *
-                  SUML = SDOT( K1-1, A( 1, K2 ), 1, C( 1, L1 ), 1 )
-                  SUMR = SDOT( N-L2, C( K2, MIN( L2+1, N ) ), LDC,
+                  SUML = AB_SDOT( K1-1, A( 1, K2 ), 1, C( 1, L1 ), 1 )
+                  SUMR = AB_SDOT( N-L2, C( K2, MIN( L2+1, N ) ), LDC,
      $                         B( L1, MIN( L2+1, N ) ), LDB )
                   VEC( 2, 1 ) = C( K2, L1 ) - ( SUML+SGN*SUMR )
 *
-                  SUML = SDOT( K1-1, A( 1, K2 ), 1, C( 1, L2 ), 1 )
-                  SUMR = SDOT( N-L2, C( K2, MIN( L2+1, N ) ), LDC,
+                  SUML = AB_SDOT( K1-1, A( 1, K2 ), 1, C( 1, L2 ), 1 )
+                  SUMR = AB_SDOT( N-L2, C( K2, MIN( L2+1, N ) ), LDC,
      $                         B( L2, MIN(L2+1, N ) ), LDB )
                   VEC( 2, 2 ) = C( K2, L2 ) - ( SUML+SGN*SUMR )
 *
-                  CALL SLASY2( .TRUE., .TRUE., ISGN, 2, 2, A( K1, K1 ),
+                  CALL AB_SLASY2( .TRUE., .TRUE., ISGN, 2, 2, A( K1, K1 
+     $),
      $                         LDA, B( L1, L1 ), LDB, VEC, 2, SCALOC, X,
      $                         2, XNORM, IERR )
                   IF( IERR.NE.0 )
@@ -787,7 +790,7 @@
 *
                   IF( SCALOC.NE.ONE ) THEN
                      DO 170 J = 1, N
-                        CALL SSCAL( M, SCALOC, C( 1, J ), 1 )
+                        CALL AB_SSCAL( M, SCALOC, C( 1, J ), 1 )
   170                CONTINUE
                      SCALE = SCALE*SCALOC
                   END IF
@@ -859,9 +862,9 @@
                END IF
 *
                IF( L1.EQ.L2 .AND. K1.EQ.K2 ) THEN
-                  SUML = SDOT( M-K1, A( K1, MIN(K1+1, M ) ), LDA,
+                  SUML = AB_SDOT( M-K1, A( K1, MIN(K1+1, M ) ), LDA,
      $                   C( MIN( K1+1, M ), L1 ), 1 )
-                  SUMR = SDOT( N-L1, C( K1, MIN( L1+1, N ) ), LDC,
+                  SUMR = AB_SDOT( N-L1, C( K1, MIN( L1+1, N ) ), LDC,
      $                         B( L1, MIN( L1+1, N ) ), LDB )
                   VEC( 1, 1 ) = C( K1, L1 ) - ( SUML+SGN*SUMR )
                   SCALOC = ONE
@@ -882,7 +885,7 @@
 *
                   IF( SCALOC.NE.ONE ) THEN
                      DO 200 J = 1, N
-                        CALL SSCAL( M, SCALOC, C( 1, J ), 1 )
+                        CALL AB_SSCAL( M, SCALOC, C( 1, J ), 1 )
   200                CONTINUE
                      SCALE = SCALE*SCALOC
                   END IF
@@ -890,19 +893,19 @@
 *
                ELSE IF( L1.EQ.L2 .AND. K1.NE.K2 ) THEN
 *
-                  SUML = SDOT( M-K2, A( K1, MIN( K2+1, M ) ), LDA,
+                  SUML = AB_SDOT( M-K2, A( K1, MIN( K2+1, M ) ), LDA,
      $                         C( MIN( K2+1, M ), L1 ), 1 )
-                  SUMR = SDOT( N-L2, C( K1, MIN( L2+1, N ) ), LDC,
+                  SUMR = AB_SDOT( N-L2, C( K1, MIN( L2+1, N ) ), LDC,
      $                         B( L1, MIN( L2+1, N ) ), LDB )
                   VEC( 1, 1 ) = C( K1, L1 ) - ( SUML+SGN*SUMR )
 *
-                  SUML = SDOT( M-K2, A( K2, MIN( K2+1, M ) ), LDA,
+                  SUML = AB_SDOT( M-K2, A( K2, MIN( K2+1, M ) ), LDA,
      $                         C( MIN( K2+1, M ), L1 ), 1 )
-                  SUMR = SDOT( N-L2, C( K2, MIN( L2+1, N ) ), LDC,
+                  SUMR = AB_SDOT( N-L2, C( K2, MIN( L2+1, N ) ), LDC,
      $                         B( L1, MIN( L2+1, N ) ), LDB )
                   VEC( 2, 1 ) = C( K2, L1 ) - ( SUML+SGN*SUMR )
 *
-                  CALL SLALN2( .FALSE., 2, 1, SMIN, ONE, A( K1, K1 ),
+                  CALL AB_SLALN2( .FALSE., 2, 1, SMIN, ONE, A( K1, K1 ),
      $                         LDA, ONE, ONE, VEC, 2, -SGN*B( L1, L1 ),
      $                         ZERO, X, 2, SCALOC, XNORM, IERR )
                   IF( IERR.NE.0 )
@@ -910,7 +913,7 @@
 *
                   IF( SCALOC.NE.ONE ) THEN
                      DO 210 J = 1, N
-                        CALL SSCAL( M, SCALOC, C( 1, J ), 1 )
+                        CALL AB_SSCAL( M, SCALOC, C( 1, J ), 1 )
   210                CONTINUE
                      SCALE = SCALE*SCALOC
                   END IF
@@ -919,19 +922,19 @@
 *
                ELSE IF( L1.NE.L2 .AND. K1.EQ.K2 ) THEN
 *
-                  SUML = SDOT( M-K1, A( K1, MIN( K1+1, M ) ), LDA,
+                  SUML = AB_SDOT( M-K1, A( K1, MIN( K1+1, M ) ), LDA,
      $                         C( MIN( K1+1, M ), L1 ), 1 )
-                  SUMR = SDOT( N-L2, C( K1, MIN( L2+1, N ) ), LDC,
+                  SUMR = AB_SDOT( N-L2, C( K1, MIN( L2+1, N ) ), LDC,
      $                         B( L1, MIN( L2+1, N ) ), LDB )
                   VEC( 1, 1 ) = SGN*( C( K1, L1 )-( SUML+SGN*SUMR ) )
 *
-                  SUML = SDOT( M-K1, A( K1, MIN( K1+1, M ) ), LDA,
+                  SUML = AB_SDOT( M-K1, A( K1, MIN( K1+1, M ) ), LDA,
      $                         C( MIN( K1+1, M ), L2 ), 1 )
-                  SUMR = SDOT( N-L2, C( K1, MIN( L2+1, N ) ), LDC,
+                  SUMR = AB_SDOT( N-L2, C( K1, MIN( L2+1, N ) ), LDC,
      $                         B( L2, MIN( L2+1, N ) ), LDB )
                   VEC( 2, 1 ) = SGN*( C( K1, L2 )-( SUML+SGN*SUMR ) )
 *
-                  CALL SLALN2( .FALSE., 2, 1, SMIN, ONE, B( L1, L1 ),
+                  CALL AB_SLALN2( .FALSE., 2, 1, SMIN, ONE, B( L1, L1 ),
      $                         LDB, ONE, ONE, VEC, 2, -SGN*A( K1, K1 ),
      $                         ZERO, X, 2, SCALOC, XNORM, IERR )
                   IF( IERR.NE.0 )
@@ -939,7 +942,7 @@
 *
                   IF( SCALOC.NE.ONE ) THEN
                      DO 220 J = 1, N
-                        CALL SSCAL( M, SCALOC, C( 1, J ), 1 )
+                        CALL AB_SSCAL( M, SCALOC, C( 1, J ), 1 )
   220                CONTINUE
                      SCALE = SCALE*SCALOC
                   END IF
@@ -948,31 +951,32 @@
 *
                ELSE IF( L1.NE.L2 .AND. K1.NE.K2 ) THEN
 *
-                  SUML = SDOT( M-K2, A( K1, MIN( K2+1, M ) ), LDA,
+                  SUML = AB_SDOT( M-K2, A( K1, MIN( K2+1, M ) ), LDA,
      $                         C( MIN( K2+1, M ), L1 ), 1 )
-                  SUMR = SDOT( N-L2, C( K1, MIN( L2+1, N ) ), LDC,
+                  SUMR = AB_SDOT( N-L2, C( K1, MIN( L2+1, N ) ), LDC,
      $                         B( L1, MIN( L2+1, N ) ), LDB )
                   VEC( 1, 1 ) = C( K1, L1 ) - ( SUML+SGN*SUMR )
 *
-                  SUML = SDOT( M-K2, A( K1, MIN( K2+1, M ) ), LDA,
+                  SUML = AB_SDOT( M-K2, A( K1, MIN( K2+1, M ) ), LDA,
      $                         C( MIN( K2+1, M ), L2 ), 1 )
-                  SUMR = SDOT( N-L2, C( K1, MIN( L2+1, N ) ), LDC,
+                  SUMR = AB_SDOT( N-L2, C( K1, MIN( L2+1, N ) ), LDC,
      $                         B( L2, MIN( L2+1, N ) ), LDB )
                   VEC( 1, 2 ) = C( K1, L2 ) - ( SUML+SGN*SUMR )
 *
-                  SUML = SDOT( M-K2, A( K2, MIN( K2+1, M ) ), LDA,
+                  SUML = AB_SDOT( M-K2, A( K2, MIN( K2+1, M ) ), LDA,
      $                         C( MIN( K2+1, M ), L1 ), 1 )
-                  SUMR = SDOT( N-L2, C( K2, MIN( L2+1, N ) ), LDC,
+                  SUMR = AB_SDOT( N-L2, C( K2, MIN( L2+1, N ) ), LDC,
      $                         B( L1, MIN( L2+1, N ) ), LDB )
                   VEC( 2, 1 ) = C( K2, L1 ) - ( SUML+SGN*SUMR )
 *
-                  SUML = SDOT( M-K2, A( K2, MIN( K2+1, M ) ), LDA,
+                  SUML = AB_SDOT( M-K2, A( K2, MIN( K2+1, M ) ), LDA,
      $                         C( MIN( K2+1, M ), L2 ), 1 )
-                  SUMR = SDOT( N-L2, C( K2, MIN( L2+1, N ) ), LDC,
+                  SUMR = AB_SDOT( N-L2, C( K2, MIN( L2+1, N ) ), LDC,
      $                         B( L2, MIN( L2+1, N ) ), LDB )
                   VEC( 2, 2 ) = C( K2, L2 ) - ( SUML+SGN*SUMR )
 *
-                  CALL SLASY2( .FALSE., .TRUE., ISGN, 2, 2, A( K1, K1 ),
+                  CALL AB_SLASY2( .FALSE., .TRUE., ISGN, 2, 2, A( K1, K1
+     $ ),
      $                         LDA, B( L1, L1 ), LDB, VEC, 2, SCALOC, X,
      $                         2, XNORM, IERR )
                   IF( IERR.NE.0 )
@@ -980,7 +984,7 @@
 *
                   IF( SCALOC.NE.ONE ) THEN
                      DO 230 J = 1, N
-                        CALL SSCAL( M, SCALOC, C( 1, J ), 1 )
+                        CALL AB_SSCAL( M, SCALOC, C( 1, J ), 1 )
   230                CONTINUE
                      SCALE = SCALE*SCALOC
                   END IF
@@ -997,6 +1001,6 @@
 *
       RETURN
 *
-*     End of STRSYL
+*     End of AB_STRSYL
 *
       END

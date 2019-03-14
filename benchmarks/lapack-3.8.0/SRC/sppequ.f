@@ -1,4 +1,4 @@
-*> \brief \b SPPEQU
+*> \brief \b AB_SPPEQU
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SPPEQU + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sppequ.f">
+*> Download AB_SPPEQU + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SPPEQU.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sppequ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SPPEQU.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sppequ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SPPEQU.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SPPEQU( UPLO, N, AP, S, SCOND, AMAX, INFO )
+*       SUBROUTINE AB_SPPEQU( UPLO, N, AP, S, SCOND, AMAX, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> SPPEQU computes row and column scalings intended to equilibrate a
+*> AB_SPPEQU computes row and column scalings intended to equilibrate a
 *> symmetric positive definite matrix A in packed storage and reduce
 *> its condition number (with respect to the two-norm).  S contains the
 *> scale factors, S(i)=1/sqrt(A(i,i)), chosen so that the scaled matrix
@@ -114,7 +114,7 @@
 *> \ingroup realOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE SPPEQU( UPLO, N, AP, S, SCOND, AMAX, INFO )
+      SUBROUTINE AB_SPPEQU( UPLO, N, AP, S, SCOND, AMAX, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -142,11 +142,11 @@
       REAL               SMIN
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA
+      EXTERNAL           AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, SQRT
@@ -156,14 +156,14 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SPPEQU', -INFO )
+         CALL AB_XERBLA( 'AB_SPPEQU', -INFO )
          RETURN
       END IF
 *
@@ -233,6 +233,6 @@
       END IF
       RETURN
 *
-*     End of SPPEQU
+*     End of AB_SPPEQU
 *
       END

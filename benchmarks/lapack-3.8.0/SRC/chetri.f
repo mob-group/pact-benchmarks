@@ -1,4 +1,4 @@
-*> \brief \b CHETRI
+*> \brief \b AB_CHETRI
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CHETRI + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chetri.f">
+*> Download AB_CHETRI + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CHETRI.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chetri.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CHETRI.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetri.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CHETRI.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CHETRI( UPLO, N, A, LDA, IPIV, WORK, INFO )
+*       SUBROUTINE AB_CHETRI( UPLO, N, A, LDA, IPIV, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,9 +35,9 @@
 *>
 *> \verbatim
 *>
-*> CHETRI computes the inverse of a complex Hermitian indefinite matrix
+*> AB_CHETRI computes the inverse of a complex Hermitian indefinite matrix
 *> A using the factorization A = U*D*U**H or A = L*D*L**H computed by
-*> CHETRF.
+*> AB_CHETRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -62,7 +62,7 @@
 *> \verbatim
 *>          A is COMPLEX array, dimension (LDA,N)
 *>          On entry, the block diagonal matrix D and the multipliers
-*>          used to obtain the factor U or L as computed by CHETRF.
+*>          used to obtain the factor U or L as computed by AB_CHETRF.
 *>
 *>          On exit, if INFO = 0, the (Hermitian) inverse of the original
 *>          matrix.  If UPLO = 'U', the upper triangular part of the
@@ -82,7 +82,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D
-*>          as determined by CHETRF.
+*>          as determined by AB_CHETRF.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -112,7 +112,7 @@
 *> \ingroup complexHEcomputational
 *
 *  =====================================================================
-      SUBROUTINE CHETRI( UPLO, N, A, LDA, IPIV, WORK, INFO )
+      SUBROUTINE AB_CHETRI( UPLO, N, A, LDA, IPIV, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -143,12 +143,12 @@
       COMPLEX            AKKP1, TEMP
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      COMPLEX            CDOTC
-      EXTERNAL           LSAME, CDOTC
+      LOGICAL            AB_LSAME
+      COMPLEX            AB_CDOTC
+      EXTERNAL           AB_LSAME, AB_CDOTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CCOPY, CHEMV, CSWAP, XERBLA
+      EXTERNAL           AB_CCOPY, AB_CHEMV, AB_CSWAP, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CONJG, MAX, REAL
@@ -158,8 +158,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -167,7 +167,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CHETRI', -INFO )
+         CALL AB_XERBLA( 'AB_CHETRI', -INFO )
          RETURN
       END IF
 *
@@ -223,10 +223,11 @@
 *           Compute column K of the inverse.
 *
             IF( K.GT.1 ) THEN
-               CALL CCOPY( K-1, A( 1, K ), 1, WORK, 1 )
-               CALL CHEMV( UPLO, K-1, -CONE, A, LDA, WORK, 1, ZERO,
+               CALL AB_CCOPY( K-1, A( 1, K ), 1, WORK, 1 )
+               CALL AB_CHEMV( UPLO, K-1, -CONE, A, LDA, WORK, 1, ZERO,
      $                     A( 1, K ), 1 )
-               A( K, K ) = A( K, K ) - REAL( CDOTC( K-1, WORK, 1, A( 1,
+               A( K, K ) = A( K, K ) - REAL( AB_CDOTC( K-1, WORK, 1, A( 
+     $1,
      $                     K ), 1 ) )
             END IF
             KSTEP = 1
@@ -248,18 +249,21 @@
 *           Compute columns K and K+1 of the inverse.
 *
             IF( K.GT.1 ) THEN
-               CALL CCOPY( K-1, A( 1, K ), 1, WORK, 1 )
-               CALL CHEMV( UPLO, K-1, -CONE, A, LDA, WORK, 1, ZERO,
+               CALL AB_CCOPY( K-1, A( 1, K ), 1, WORK, 1 )
+               CALL AB_CHEMV( UPLO, K-1, -CONE, A, LDA, WORK, 1, ZERO,
      $                     A( 1, K ), 1 )
-               A( K, K ) = A( K, K ) - REAL( CDOTC( K-1, WORK, 1, A( 1,
+               A( K, K ) = A( K, K ) - REAL( AB_CDOTC( K-1, WORK, 1, A( 
+     $1,
      $                     K ), 1 ) )
                A( K, K+1 ) = A( K, K+1 ) -
-     $                       CDOTC( K-1, A( 1, K ), 1, A( 1, K+1 ), 1 )
-               CALL CCOPY( K-1, A( 1, K+1 ), 1, WORK, 1 )
-               CALL CHEMV( UPLO, K-1, -CONE, A, LDA, WORK, 1, ZERO,
+     $                       AB_CDOTC( K-1, A( 1, K ), 1, A( 1, K+1 ), 1
+     $ )
+               CALL AB_CCOPY( K-1, A( 1, K+1 ), 1, WORK, 1 )
+               CALL AB_CHEMV( UPLO, K-1, -CONE, A, LDA, WORK, 1, ZERO,
      $                     A( 1, K+1 ), 1 )
                A( K+1, K+1 ) = A( K+1, K+1 ) -
-     $                         REAL( CDOTC( K-1, WORK, 1, A( 1, K+1 ),
+     $                         REAL( AB_CDOTC( K-1, WORK, 1, A( 1, K+1 )
+     $,
      $                         1 ) )
             END IF
             KSTEP = 2
@@ -271,7 +275,7 @@
 *           Interchange rows and columns K and KP in the leading
 *           submatrix A(1:k+1,1:k+1)
 *
-            CALL CSWAP( KP-1, A( 1, K ), 1, A( 1, KP ), 1 )
+            CALL AB_CSWAP( KP-1, A( 1, K ), 1, A( 1, KP ), 1 )
             DO 40 J = KP + 1, K - 1
                TEMP = CONJG( A( J, K ) )
                A( J, K ) = CONJG( A( KP, J ) )
@@ -318,10 +322,11 @@
 *           Compute column K of the inverse.
 *
             IF( K.LT.N ) THEN
-               CALL CCOPY( N-K, A( K+1, K ), 1, WORK, 1 )
-               CALL CHEMV( UPLO, N-K, -CONE, A( K+1, K+1 ), LDA, WORK,
+               CALL AB_CCOPY( N-K, A( K+1, K ), 1, WORK, 1 )
+               CALL AB_CHEMV( UPLO, N-K, -CONE, A( K+1, K+1 ), LDA, WORK
+     $,
      $                     1, ZERO, A( K+1, K ), 1 )
-               A( K, K ) = A( K, K ) - REAL( CDOTC( N-K, WORK, 1,
+               A( K, K ) = A( K, K ) - REAL( AB_CDOTC( N-K, WORK, 1,
      $                     A( K+1, K ), 1 ) )
             END IF
             KSTEP = 1
@@ -343,19 +348,23 @@
 *           Compute columns K-1 and K of the inverse.
 *
             IF( K.LT.N ) THEN
-               CALL CCOPY( N-K, A( K+1, K ), 1, WORK, 1 )
-               CALL CHEMV( UPLO, N-K, -CONE, A( K+1, K+1 ), LDA, WORK,
+               CALL AB_CCOPY( N-K, A( K+1, K ), 1, WORK, 1 )
+               CALL AB_CHEMV( UPLO, N-K, -CONE, A( K+1, K+1 ), LDA, WORK
+     $,
      $                     1, ZERO, A( K+1, K ), 1 )
-               A( K, K ) = A( K, K ) - REAL( CDOTC( N-K, WORK, 1,
+               A( K, K ) = A( K, K ) - REAL( AB_CDOTC( N-K, WORK, 1,
      $                     A( K+1, K ), 1 ) )
                A( K, K-1 ) = A( K, K-1 ) -
-     $                       CDOTC( N-K, A( K+1, K ), 1, A( K+1, K-1 ),
+     $                       AB_CDOTC( N-K, A( K+1, K ), 1, A( K+1, K-1 
+     $),
      $                       1 )
-               CALL CCOPY( N-K, A( K+1, K-1 ), 1, WORK, 1 )
-               CALL CHEMV( UPLO, N-K, -CONE, A( K+1, K+1 ), LDA, WORK,
+               CALL AB_CCOPY( N-K, A( K+1, K-1 ), 1, WORK, 1 )
+               CALL AB_CHEMV( UPLO, N-K, -CONE, A( K+1, K+1 ), LDA, WORK
+     $,
      $                     1, ZERO, A( K+1, K-1 ), 1 )
                A( K-1, K-1 ) = A( K-1, K-1 ) -
-     $                         REAL( CDOTC( N-K, WORK, 1, A( K+1, K-1 ),
+     $                         REAL( AB_CDOTC( N-K, WORK, 1, A( K+1, K-1
+     $ ),
      $                         1 ) )
             END IF
             KSTEP = 2
@@ -368,7 +377,7 @@
 *           submatrix A(k-1:n,k-1:n)
 *
             IF( KP.LT.N )
-     $         CALL CSWAP( N-KP, A( KP+1, K ), 1, A( KP+1, KP ), 1 )
+     $         CALL AB_CSWAP( N-KP, A( KP+1, K ), 1, A( KP+1, KP ), 1 )
             DO 70 J = K + 1, KP - 1
                TEMP = CONJG( A( J, K ) )
                A( J, K ) = CONJG( A( KP, J ) )
@@ -392,6 +401,6 @@
 *
       RETURN
 *
-*     End of CHETRI
+*     End of AB_CHETRI
 *
       END

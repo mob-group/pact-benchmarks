@@ -1,4 +1,4 @@
-*> \brief \b CHPMV
+*> \brief \b AB_CHPMV
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CHPMV(UPLO,N,ALPHA,AP,X,INCX,BETA,Y,INCY)
+*       SUBROUTINE AB_CHPMV(UPLO,N,ALPHA,AP,X,INCX,BETA,Y,INCY)
 *
 *       .. Scalar Arguments ..
 *       COMPLEX ALPHA,BETA
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> CHPMV  performs the matrix-vector operation
+*> AB_CHPMV  performs the matrix-vector operation
 *>
 *>    y := alpha*A*x + beta*y,
 *>
@@ -147,7 +147,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CHPMV(UPLO,N,ALPHA,AP,X,INCX,BETA,Y,INCY)
+      SUBROUTINE AB_CHPMV(UPLO,N,ALPHA,AP,X,INCX,BETA,Y,INCY)
 *
 *  -- Reference BLAS level2 routine (version 3.7.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -176,11 +176,11 @@
       INTEGER I,INFO,IX,IY,J,JX,JY,K,KK,KX,KY
 *     ..
 *     .. External Functions ..
-      LOGICAL LSAME
-      EXTERNAL LSAME
+      LOGICAL AB_LSAME
+      EXTERNAL AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL XERBLA
+      EXTERNAL AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC CONJG,REAL
@@ -189,7 +189,7 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
+      IF (.NOT.AB_LSAME(UPLO,'U') .AND. .NOT.AB_LSAME(UPLO,'L')) THEN
           INFO = 1
       ELSE IF (N.LT.0) THEN
           INFO = 2
@@ -199,7 +199,7 @@
           INFO = 9
       END IF
       IF (INFO.NE.0) THEN
-          CALL XERBLA('CHPMV ',INFO)
+          CALL AB_XERBLA('AB_CHPMV ',INFO)
           RETURN
       END IF
 *
@@ -253,7 +253,7 @@
       END IF
       IF (ALPHA.EQ.ZERO) RETURN
       KK = 1
-      IF (LSAME(UPLO,'U')) THEN
+      IF (AB_LSAME(UPLO,'U')) THEN
 *
 *        Form  y  when AP contains the upper triangle.
 *
@@ -333,6 +333,6 @@
 *
       RETURN
 *
-*     End of CHPMV .
+*     End of AB_CHPMV .
 *
       END

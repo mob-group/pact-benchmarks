@@ -1,4 +1,4 @@
-*> \brief \b ZLAQR5 performs a single small-bulge multi-shift QR sweep.
+*> \brief \b AB_ZLAQR5 performs a single small-bulge multi-shift QR sweep.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZLAQR5 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlaqr5.f">
+*> Download AB_ZLAQR5 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLAQR5.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlaqr5.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLAQR5.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlaqr5.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLAQR5.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZLAQR5( WANTT, WANTZ, KACC22, N, KTOP, KBOT, NSHFTS, S,
+*       SUBROUTINE AB_ZLAQR5( WANTT, WANTZ, KACC22, N, KTOP, KBOT, NSHFTS, S,
 *                          H, LDH, ILOZ, IHIZ, Z, LDZ, V, LDV, U, LDU, NV,
 *                          WV, LDWV, NH, WH, LDWH )
 *
@@ -38,7 +38,7 @@
 *>
 *> \verbatim
 *>
-*>    ZLAQR5, called by ZLAQR0, performs a
+*>    AB_ZLAQR5, called by AB_ZLAQR0, performs a
 *>    single small-bulge multi-shift QR sweep.
 *> \endverbatim
 *
@@ -64,12 +64,12 @@
 *>          KACC22 is INTEGER with value 0, 1, or 2.
 *>             Specifies the computation mode of far-from-diagonal
 *>             orthogonal updates.
-*>        = 0: ZLAQR5 does not accumulate reflections and does not
+*>        = 0: AB_ZLAQR5 does not accumulate reflections and does not
 *>             use matrix-matrix multiply to update far-from-diagonal
 *>             matrix entries.
-*>        = 1: ZLAQR5 accumulates reflections and uses matrix-matrix
+*>        = 1: AB_ZLAQR5 accumulates reflections and uses matrix-matrix
 *>             multiply to update the far-from-diagonal matrix entries.
-*>        = 2: ZLAQR5 accumulates reflections, uses matrix-matrix
+*>        = 2: AB_ZLAQR5 accumulates reflections, uses matrix-matrix
 *>             multiply to update the far-from-diagonal matrix entries,
 *>             and takes advantage of 2-by-2 block structure during
 *>             matrix multiplies.
@@ -245,7 +245,8 @@
 *>       929--947, 2002.
 *>
 *  =====================================================================
-      SUBROUTINE ZLAQR5( WANTT, WANTZ, KACC22, N, KTOP, KBOT, NSHFTS, S,
+      SUBROUTINE AB_ZLAQR5( WANTT, WANTZ, KACC22, N, KTOP, KBOT, NSHFTS,
+     $ S,
      $                   H, LDH, ILOZ, IHIZ, Z, LDZ, V, LDV, U, LDU, NV,
      $                   WV, LDWV, NH, WH, LDWH )
 *
@@ -294,8 +295,9 @@
       COMPLEX*16         VT( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLABAD, ZGEMM, ZLACPY, ZLAQR1, ZLARFG, ZLASET,
-     $                   ZTRMM
+      EXTERNAL           AB_DLABAD, AB_ZGEMM, AB_ZLACPY, AB_ZLAQR1, AB_Z
+     $LARFG, AB_ZLASET,
+     $                   AB_ZTRMM
 *     ..
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABS1
@@ -325,7 +327,7 @@
 *
       SAFMIN = DLAMCH( 'SAFE MINIMUM' )
       SAFMAX = RONE / SAFMIN
-      CALL DLABAD( SAFMIN, SAFMAX )
+      CALL AB_DLABAD( SAFMIN, SAFMAX )
       ULP = DLAMCH( 'PRECISION' )
       SMLNUM = SAFMIN*( DBLE( N ) / ULP )
 *
@@ -356,7 +358,7 @@
       DO 210 INCOL = 3*( 1-NBMPS ) + KTOP - 1, KBOT - 2, 3*NBMPS - 2
          NDCOL = INCOL + KDU
          IF( ACCUM )
-     $      CALL ZLASET( 'ALL', KDU, KDU, ZERO, ONE, U, LDU )
+     $      CALL AB_ZLASET( 'ALL', KDU, KDU, ZERO, ONE, U, LDU )
 *
 *        ==== Near-the-diagonal bulge chase.  The following loop
 *        .    performs the near-the-diagonal part of a small bulge
@@ -391,15 +393,15 @@
             DO 10 M = MTOP, MBOT
                K = KRCOL + 3*( M-1 )
                IF( K.EQ.KTOP-1 ) THEN
-                  CALL ZLAQR1( 3, H( KTOP, KTOP ), LDH, S( 2*M-1 ),
+                  CALL AB_ZLAQR1( 3, H( KTOP, KTOP ), LDH, S( 2*M-1 ),
      $                         S( 2*M ), V( 1, M ) )
                   ALPHA = V( 1, M )
-                  CALL ZLARFG( 3, ALPHA, V( 2, M ), 1, V( 1, M ) )
+                  CALL AB_ZLARFG( 3, ALPHA, V( 2, M ), 1, V( 1, M ) )
                ELSE
                   BETA = H( K+1, K )
                   V( 2, M ) = H( K+2, K )
                   V( 3, M ) = H( K+3, K )
-                  CALL ZLARFG( 3, BETA, V( 2, M ), 1, V( 1, M ) )
+                  CALL AB_ZLARFG( 3, BETA, V( 2, M ), 1, V( 1, M ) )
 *
 *                 ==== A Bulge may collapse because of vigilant
 *                 .    deflation or destructive underflow.  In the
@@ -422,10 +424,10 @@
 *                    .    reflector is too large, then abandon it.
 *                    .    Otherwise, use the new one. ====
 *
-                     CALL ZLAQR1( 3, H( K+1, K+1 ), LDH, S( 2*M-1 ),
+                     CALL AB_ZLAQR1( 3, H( K+1, K+1 ), LDH, S( 2*M-1 ),
      $                            S( 2*M ), VT )
                      ALPHA = VT( 1 )
-                     CALL ZLARFG( 3, ALPHA, VT( 2 ), 1, VT( 1 ) )
+                     CALL AB_ZLARFG( 3, ALPHA, VT( 2 ), 1, VT( 1 ) )
                      REFSUM = DCONJG( VT( 1 ) )*
      $                        ( H( K+1, K )+DCONJG( VT( 2 ) )*
      $                        H( K+2, K ) )
@@ -465,14 +467,14 @@
             K = KRCOL + 3*( M22-1 )
             IF( BMP22 ) THEN
                IF( K.EQ.KTOP-1 ) THEN
-                  CALL ZLAQR1( 2, H( K+1, K+1 ), LDH, S( 2*M22-1 ),
+                  CALL AB_ZLAQR1( 2, H( K+1, K+1 ), LDH, S( 2*M22-1 ),
      $                         S( 2*M22 ), V( 1, M22 ) )
                   BETA = V( 1, M22 )
-                  CALL ZLARFG( 2, BETA, V( 2, M22 ), 1, V( 1, M22 ) )
+                  CALL AB_ZLARFG( 2, BETA, V( 2, M22 ), 1, V( 1, M22 ) )
                ELSE
                   BETA = H( K+1, K )
                   V( 2, M22 ) = H( K+2, K )
-                  CALL ZLARFG( 2, BETA, V( 2, M22 ), 1, V( 1, M22 ) )
+                  CALL AB_ZLARFG( 2, BETA, V( 2, M22 ), 1, V( 1, M22 ) )
                   H( K+1, K ) = BETA
                   H( K+2, K ) = ZERO
                END IF
@@ -707,10 +709,11 @@
 *
                DO 150 JCOL = MIN( NDCOL, KBOT ) + 1, JBOT, NH
                   JLEN = MIN( NH, JBOT-JCOL+1 )
-                  CALL ZGEMM( 'C', 'N', NU, JLEN, NU, ONE, U( K1, K1 ),
+                  CALL AB_ZGEMM( 'C', 'N', NU, JLEN, NU, ONE, U( K1, K1 
+     $),
      $                        LDU, H( INCOL+K1, JCOL ), LDH, ZERO, WH,
      $                        LDWH )
-                  CALL ZLACPY( 'ALL', NU, JLEN, WH, LDWH,
+                  CALL AB_ZLACPY( 'ALL', NU, JLEN, WH, LDWH,
      $                         H( INCOL+K1, JCOL ), LDH )
   150          CONTINUE
 *
@@ -718,10 +721,10 @@
 *
                DO 160 JROW = JTOP, MAX( KTOP, INCOL ) - 1, NV
                   JLEN = MIN( NV, MAX( KTOP, INCOL )-JROW )
-                  CALL ZGEMM( 'N', 'N', JLEN, NU, NU, ONE,
+                  CALL AB_ZGEMM( 'N', 'N', JLEN, NU, NU, ONE,
      $                        H( JROW, INCOL+K1 ), LDH, U( K1, K1 ),
      $                        LDU, ZERO, WV, LDWV )
-                  CALL ZLACPY( 'ALL', JLEN, NU, WV, LDWV,
+                  CALL AB_ZLACPY( 'ALL', JLEN, NU, WV, LDWV,
      $                         H( JROW, INCOL+K1 ), LDH )
   160          CONTINUE
 *
@@ -730,10 +733,10 @@
                IF( WANTZ ) THEN
                   DO 170 JROW = ILOZ, IHIZ, NV
                      JLEN = MIN( NV, IHIZ-JROW+1 )
-                     CALL ZGEMM( 'N', 'N', JLEN, NU, NU, ONE,
+                     CALL AB_ZGEMM( 'N', 'N', JLEN, NU, NU, ONE,
      $                           Z( JROW, INCOL+K1 ), LDZ, U( K1, K1 ),
      $                           LDU, ZERO, WV, LDWV )
-                     CALL ZLACPY( 'ALL', JLEN, NU, WV, LDWV,
+                     CALL AB_ZLACPY( 'ALL', JLEN, NU, WV, LDWV,
      $                            Z( JROW, INCOL+K1 ), LDZ )
   170             CONTINUE
                END IF
@@ -763,41 +766,44 @@
 *                 ==== Copy bottom of H to top+KZS of scratch ====
 *                  (The first KZS rows get multiplied by zero.) ====
 *
-                  CALL ZLACPY( 'ALL', KNZ, JLEN, H( INCOL+1+J2, JCOL ),
+                  CALL AB_ZLACPY( 'ALL', KNZ, JLEN, H( INCOL+1+J2, JCOL 
+     $),
      $                         LDH, WH( KZS+1, 1 ), LDWH )
 *
 *                 ==== Multiply by U21**H ====
 *
-                  CALL ZLASET( 'ALL', KZS, JLEN, ZERO, ZERO, WH, LDWH )
-                  CALL ZTRMM( 'L', 'U', 'C', 'N', KNZ, JLEN, ONE,
+                  CALL AB_ZLASET( 'ALL', KZS, JLEN, ZERO, ZERO, WH, LDWH
+     $ )
+                  CALL AB_ZTRMM( 'L', 'U', 'C', 'N', KNZ, JLEN, ONE,
      $                        U( J2+1, 1+KZS ), LDU, WH( KZS+1, 1 ),
      $                        LDWH )
 *
 *                 ==== Multiply top of H by U11**H ====
 *
-                  CALL ZGEMM( 'C', 'N', I2, JLEN, J2, ONE, U, LDU,
+                  CALL AB_ZGEMM( 'C', 'N', I2, JLEN, J2, ONE, U, LDU,
      $                        H( INCOL+1, JCOL ), LDH, ONE, WH, LDWH )
 *
 *                 ==== Copy top of H to bottom of WH ====
 *
-                  CALL ZLACPY( 'ALL', J2, JLEN, H( INCOL+1, JCOL ), LDH,
+                  CALL AB_ZLACPY( 'ALL', J2, JLEN, H( INCOL+1, JCOL ), L
+     $DH,
      $                         WH( I2+1, 1 ), LDWH )
 *
 *                 ==== Multiply by U21**H ====
 *
-                  CALL ZTRMM( 'L', 'L', 'C', 'N', J2, JLEN, ONE,
+                  CALL AB_ZTRMM( 'L', 'L', 'C', 'N', J2, JLEN, ONE,
      $                        U( 1, I2+1 ), LDU, WH( I2+1, 1 ), LDWH )
 *
 *                 ==== Multiply by U22 ====
 *
-                  CALL ZGEMM( 'C', 'N', I4-I2, JLEN, J4-J2, ONE,
+                  CALL AB_ZGEMM( 'C', 'N', I4-I2, JLEN, J4-J2, ONE,
      $                        U( J2+1, I2+1 ), LDU,
      $                        H( INCOL+1+J2, JCOL ), LDH, ONE,
      $                        WH( I2+1, 1 ), LDWH )
 *
 *                 ==== Copy it back ====
 *
-                  CALL ZLACPY( 'ALL', KDU, JLEN, WH, LDWH,
+                  CALL AB_ZLACPY( 'ALL', KDU, JLEN, WH, LDWH,
      $                         H( INCOL+1, JCOL ), LDH )
   180          CONTINUE
 *
@@ -809,42 +815,45 @@
 *                 ==== Copy right of H to scratch (the first KZS
 *                 .    columns get multiplied by zero) ====
 *
-                  CALL ZLACPY( 'ALL', JLEN, KNZ, H( JROW, INCOL+1+J2 ),
+                  CALL AB_ZLACPY( 'ALL', JLEN, KNZ, H( JROW, INCOL+1+J2 
+     $),
      $                         LDH, WV( 1, 1+KZS ), LDWV )
 *
 *                 ==== Multiply by U21 ====
 *
-                  CALL ZLASET( 'ALL', JLEN, KZS, ZERO, ZERO, WV, LDWV )
-                  CALL ZTRMM( 'R', 'U', 'N', 'N', JLEN, KNZ, ONE,
+                  CALL AB_ZLASET( 'ALL', JLEN, KZS, ZERO, ZERO, WV, LDWV
+     $ )
+                  CALL AB_ZTRMM( 'R', 'U', 'N', 'N', JLEN, KNZ, ONE,
      $                        U( J2+1, 1+KZS ), LDU, WV( 1, 1+KZS ),
      $                        LDWV )
 *
 *                 ==== Multiply by U11 ====
 *
-                  CALL ZGEMM( 'N', 'N', JLEN, I2, J2, ONE,
+                  CALL AB_ZGEMM( 'N', 'N', JLEN, I2, J2, ONE,
      $                        H( JROW, INCOL+1 ), LDH, U, LDU, ONE, WV,
      $                        LDWV )
 *
 *                 ==== Copy left of H to right of scratch ====
 *
-                  CALL ZLACPY( 'ALL', JLEN, J2, H( JROW, INCOL+1 ), LDH,
+                  CALL AB_ZLACPY( 'ALL', JLEN, J2, H( JROW, INCOL+1 ), L
+     $DH,
      $                         WV( 1, 1+I2 ), LDWV )
 *
 *                 ==== Multiply by U21 ====
 *
-                  CALL ZTRMM( 'R', 'L', 'N', 'N', JLEN, I4-I2, ONE,
+                  CALL AB_ZTRMM( 'R', 'L', 'N', 'N', JLEN, I4-I2, ONE,
      $                        U( 1, I2+1 ), LDU, WV( 1, 1+I2 ), LDWV )
 *
 *                 ==== Multiply by U22 ====
 *
-                  CALL ZGEMM( 'N', 'N', JLEN, I4-I2, J4-J2, ONE,
+                  CALL AB_ZGEMM( 'N', 'N', JLEN, I4-I2, J4-J2, ONE,
      $                        H( JROW, INCOL+1+J2 ), LDH,
      $                        U( J2+1, I2+1 ), LDU, ONE, WV( 1, 1+I2 ),
      $                        LDWV )
 *
 *                 ==== Copy it back ====
 *
-                  CALL ZLACPY( 'ALL', JLEN, KDU, WV, LDWV,
+                  CALL AB_ZLACPY( 'ALL', JLEN, KDU, WV, LDWV,
      $                         H( JROW, INCOL+1 ), LDH )
   190          CONTINUE
 *
@@ -857,45 +866,47 @@
 *                    ==== Copy right of Z to left of scratch (first
 *                    .     KZS columns get multiplied by zero) ====
 *
-                     CALL ZLACPY( 'ALL', JLEN, KNZ,
+                     CALL AB_ZLACPY( 'ALL', JLEN, KNZ,
      $                            Z( JROW, INCOL+1+J2 ), LDZ,
      $                            WV( 1, 1+KZS ), LDWV )
 *
 *                    ==== Multiply by U12 ====
 *
-                     CALL ZLASET( 'ALL', JLEN, KZS, ZERO, ZERO, WV,
+                     CALL AB_ZLASET( 'ALL', JLEN, KZS, ZERO, ZERO, WV,
      $                            LDWV )
-                     CALL ZTRMM( 'R', 'U', 'N', 'N', JLEN, KNZ, ONE,
+                     CALL AB_ZTRMM( 'R', 'U', 'N', 'N', JLEN, KNZ, ONE,
      $                           U( J2+1, 1+KZS ), LDU, WV( 1, 1+KZS ),
      $                           LDWV )
 *
 *                    ==== Multiply by U11 ====
 *
-                     CALL ZGEMM( 'N', 'N', JLEN, I2, J2, ONE,
+                     CALL AB_ZGEMM( 'N', 'N', JLEN, I2, J2, ONE,
      $                           Z( JROW, INCOL+1 ), LDZ, U, LDU, ONE,
      $                           WV, LDWV )
 *
 *                    ==== Copy left of Z to right of scratch ====
 *
-                     CALL ZLACPY( 'ALL', JLEN, J2, Z( JROW, INCOL+1 ),
+                     CALL AB_ZLACPY( 'ALL', JLEN, J2, Z( JROW, INCOL+1 )
+     $,
      $                            LDZ, WV( 1, 1+I2 ), LDWV )
 *
 *                    ==== Multiply by U21 ====
 *
-                     CALL ZTRMM( 'R', 'L', 'N', 'N', JLEN, I4-I2, ONE,
+                     CALL AB_ZTRMM( 'R', 'L', 'N', 'N', JLEN, I4-I2, ONE
+     $,
      $                           U( 1, I2+1 ), LDU, WV( 1, 1+I2 ),
      $                           LDWV )
 *
 *                    ==== Multiply by U22 ====
 *
-                     CALL ZGEMM( 'N', 'N', JLEN, I4-I2, J4-J2, ONE,
+                     CALL AB_ZGEMM( 'N', 'N', JLEN, I4-I2, J4-J2, ONE,
      $                           Z( JROW, INCOL+1+J2 ), LDZ,
      $                           U( J2+1, I2+1 ), LDU, ONE,
      $                           WV( 1, 1+I2 ), LDWV )
 *
 *                    ==== Copy the result back to Z ====
 *
-                     CALL ZLACPY( 'ALL', JLEN, KDU, WV, LDWV,
+                     CALL AB_ZLACPY( 'ALL', JLEN, KDU, WV, LDWV,
      $                            Z( JROW, INCOL+1 ), LDZ )
   200             CONTINUE
                END IF
@@ -903,6 +914,6 @@
          END IF
   210 CONTINUE
 *
-*     ==== End of ZLAQR5 ====
+*     ==== End of AB_ZLAQR5 ====
 *
       END

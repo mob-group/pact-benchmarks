@@ -1,4 +1,4 @@
-*> \brief <b> SGEEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors for GE matrices</b>
+*> \brief <b> AB_SGEEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SGEGV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgegv.f">
+*> Download AB_SGEGV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SGEGV.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgegv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SGEGV.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgegv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SGEGV.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SGEGV( JOBVL, JOBVR, N, A, LDA, B, LDB, ALPHAR, ALPHAI,
+*       SUBROUTINE AB_SGEGV( JOBVL, JOBVR, N, A, LDA, B, LDB, ALPHAR, ALPHAI,
 *                         BETA, VL, LDVL, VR, LDVR, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,9 +37,9 @@
 *>
 *> \verbatim
 *>
-*> This routine is deprecated and has been replaced by routine SGGEV.
+*> This routine is deprecated and has been replaced by routine AB_SGGEV.
 *>
-*> SGEGV computes the eigenvalues and, optionally, the left and/or right
+*> AB_SGEGV computes the eigenvalues and, optionally, the left and/or right
 *> eigenvectors of a real matrix pair (A,B).
 *> Given two square matrices A and B,
 *> the generalized nonsymmetric eigenvalue problem (GNEP) is to find the
@@ -102,8 +102,8 @@
 *>          contains the real Schur form of A from the generalized Schur
 *>          factorization of the pair (A,B) after balancing.
 *>          If no eigenvectors were computed, then only the diagonal
-*>          blocks from the Schur form will be correct.  See SGGHRD and
-*>          SHGEQZ for details.
+*>          blocks from the Schur form will be correct.  See AB_SGGHRD and
+*>          AB_SHGEQZ for details.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -121,7 +121,7 @@
 *>          Schur factorization of the pair (A,B) after balancing.
 *>          If no eigenvectors were computed, then only those elements of
 *>          B corresponding to the diagonal blocks from the Schur form of
-*>          A will be correct.  See SGGHRD and SHGEQZ for details.
+*>          A will be correct.  See AB_SGGHRD and AB_SHGEQZ for details.
 *> \endverbatim
 *>
 *> \param[in] LDB
@@ -222,16 +222,16 @@
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK.  LWORK >= max(1,8*N).
 *>          For good performance, LWORK must generally be larger.
-*>          To compute the optimal value of LWORK, call ILAENV to get
-*>          blocksizes (for SGEQRF, SORMQR, and SORGQR.)  Then compute:
-*>          NB  -- MAX of the blocksizes for SGEQRF, SORMQR, and SORGQR;
+*>          To compute the optimal value of LWORK, call AB_ILAENV to get
+*>          blocksizes (for AB_SGEQRF, AB_SORMQR, and AB_SORGQR.)  Then compute:
+*>          NB  -- MAX of the blocksizes for AB_SGEQRF, AB_SORMQR, and AB_SORGQR;
 *>          The optimal LWORK is:
 *>              2*N + MAX( 6*N, N*(NB+1) ).
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -244,17 +244,17 @@
 *>                calculated, but ALPHAR(j), ALPHAI(j), and BETA(j)
 *>                should be correct for j=INFO+1,...,N.
 *>          > N:  errors that usually indicate LAPACK problems:
-*>                =N+1: error return from SGGBAL
-*>                =N+2: error return from SGEQRF
-*>                =N+3: error return from SORMQR
-*>                =N+4: error return from SORGQR
-*>                =N+5: error return from SGGHRD
-*>                =N+6: error return from SHGEQZ (other than failed
+*>                =N+1: error return from AB_SGGBAL
+*>                =N+2: error return from AB_SGEQRF
+*>                =N+3: error return from AB_SORMQR
+*>                =N+4: error return from AB_SORGQR
+*>                =N+5: error return from AB_SGGHRD
+*>                =N+6: error return from AB_SHGEQZ (other than failed
 *>                                                iteration)
-*>                =N+7: error return from STGEVC
-*>                =N+8: error return from SGGBAK (computing VL)
-*>                =N+9: error return from SGGBAK (computing VR)
-*>                =N+10: error return from SLASCL (various calls)
+*>                =N+7: error return from AB_STGEVC
+*>                =N+8: error return from AB_SGGBAK (computing VL)
+*>                =N+9: error return from AB_SGGBAK (computing VR)
+*>                =N+10: error return from AB_SLASCL (various calls)
 *> \endverbatim
 *
 *  Authors:
@@ -277,7 +277,7 @@
 *>  Balancing
 *>  ---------
 *>
-*>  This driver calls SGGBAL to both permute and scale rows and columns
+*>  This driver calls AB_SGGBAL to both permute and scale rows and columns
 *>  of A and B.  The permutations PL and PR are chosen so that PL*A*PR
 *>  and PL*B*R will be upper triangular except for the diagonal blocks
 *>  A(i:j,i:j) and B(i:j,i:j), with i and j as close together as
@@ -286,7 +286,7 @@
 *>  one (except for the elements that start out zero.)
 *>
 *>  After the eigenvalues and eigenvectors of the balanced matrices
-*>  have been computed, SGGBAK transforms the eigenvectors back to what
+*>  have been computed, AB_SGGBAK transforms the eigenvectors back to what
 *>  they would have been (in perfect arithmetic) if they had not been
 *>  balanced.
 *>
@@ -298,12 +298,13 @@
 *>  form[*] of the "balanced" versions of A and B.  If no eigenvectors
 *>  are computed, then only the diagonal blocks will be correct.
 *>
-*>  [*] See SHGEQZ, SGEGS, or read the book "Matrix Computations",
+*>  [*] See AB_SHGEQZ, AB_SGEGS, or read the book "Matrix Computations",
 *>      by Golub & van Loan, pub. by Johns Hopkins U. Press.
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SGEGV( JOBVL, JOBVR, N, A, LDA, B, LDB, ALPHAR, ALPHAI,
+      SUBROUTINE AB_SGEGV( JOBVL, JOBVR, N, A, LDA, B, LDB, ALPHAR, ALPH
+     $AI,
      $                  BETA, VL, LDVL, VR, LDVR, WORK, LWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -341,14 +342,16 @@
       LOGICAL            LDUMMA( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEQRF, SGGBAK, SGGBAL, SGGHRD, SHGEQZ, SLACPY,
-     $                   SLASCL, SLASET, SORGQR, SORMQR, STGEVC, XERBLA
+      EXTERNAL           AB_SGEQRF, AB_SGGBAK, AB_SGGBAL, AB_SGGHRD, AB_
+     $SHGEQZ, AB_SLACPY,
+     $                   AB_SLASCL, AB_SLASET, AB_SORGQR, AB_SORMQR, AB_
+     $STGEVC, AB_XERBLA
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      REAL               SLAMCH, SLANGE
-      EXTERNAL           ILAENV, LSAME, SLAMCH, SLANGE
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      REAL               SLAMCH, AB_SLANGE
+      EXTERNAL           AB_ILAENV, AB_LSAME, SLAMCH, AB_SLANGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, INT, MAX
@@ -357,10 +360,10 @@
 *
 *     Decode the input arguments
 *
-      IF( LSAME( JOBVL, 'N' ) ) THEN
+      IF( AB_LSAME( JOBVL, 'N' ) ) THEN
          IJOBVL = 1
          ILVL = .FALSE.
-      ELSE IF( LSAME( JOBVL, 'V' ) ) THEN
+      ELSE IF( AB_LSAME( JOBVL, 'V' ) ) THEN
          IJOBVL = 2
          ILVL = .TRUE.
       ELSE
@@ -368,10 +371,10 @@
          ILVL = .FALSE.
       END IF
 *
-      IF( LSAME( JOBVR, 'N' ) ) THEN
+      IF( AB_LSAME( JOBVR, 'N' ) ) THEN
          IJOBVR = 1
          ILVR = .FALSE.
-      ELSE IF( LSAME( JOBVR, 'V' ) ) THEN
+      ELSE IF( AB_LSAME( JOBVR, 'V' ) ) THEN
          IJOBVR = 2
          ILVR = .TRUE.
       ELSE
@@ -406,16 +409,16 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         NB1 = ILAENV( 1, 'SGEQRF', ' ', N, N, -1, -1 )
-         NB2 = ILAENV( 1, 'SORMQR', ' ', N, N, N, -1 )
-         NB3 = ILAENV( 1, 'SORGQR', ' ', N, N, N, -1 )
+         NB1 = AB_ILAENV( 1, 'AB_SGEQRF', ' ', N, N, -1, -1 )
+         NB2 = AB_ILAENV( 1, 'AB_SORMQR', ' ', N, N, N, -1 )
+         NB3 = AB_ILAENV( 1, 'AB_SORGQR', ' ', N, N, N, -1 )
          NB = MAX( NB1, NB2, NB3 )
          LOPT = 2*N + MAX( 6*N, N*(NB+1) )
          WORK( 1 ) = LOPT
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SGEGV ', -INFO )
+         CALL AB_XERBLA( 'AB_SGEGV ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -436,7 +439,7 @@
 *
 *     Scale A
 *
-      ANRM = SLANGE( 'M', N, N, A, LDA, WORK )
+      ANRM = AB_SLANGE( 'M', N, N, A, LDA, WORK )
       ANRM1 = ANRM
       ANRM2 = ONE
       IF( ANRM.LT.ONE ) THEN
@@ -447,7 +450,7 @@
       END IF
 *
       IF( ANRM.GT.ZERO ) THEN
-         CALL SLASCL( 'G', -1, -1, ANRM, ONE, N, N, A, LDA, IINFO )
+         CALL AB_SLASCL( 'G', -1, -1, ANRM, ONE, N, N, A, LDA, IINFO )
          IF( IINFO.NE.0 ) THEN
             INFO = N + 10
             RETURN
@@ -456,7 +459,7 @@
 *
 *     Scale B
 *
-      BNRM = SLANGE( 'M', N, N, B, LDB, WORK )
+      BNRM = AB_SLANGE( 'M', N, N, B, LDB, WORK )
       BNRM1 = BNRM
       BNRM2 = ONE
       IF( BNRM.LT.ONE ) THEN
@@ -467,7 +470,7 @@
       END IF
 *
       IF( BNRM.GT.ZERO ) THEN
-         CALL SLASCL( 'G', -1, -1, BNRM, ONE, N, N, B, LDB, IINFO )
+         CALL AB_SLASCL( 'G', -1, -1, BNRM, ONE, N, N, B, LDB, IINFO )
          IF( IINFO.NE.0 ) THEN
             INFO = N + 10
             RETURN
@@ -481,7 +484,7 @@
       ILEFT = 1
       IRIGHT = N + 1
       IWORK = IRIGHT + N
-      CALL SGGBAL( 'P', N, A, LDA, B, LDB, ILO, IHI, WORK( ILEFT ),
+      CALL AB_SGGBAL( 'P', N, A, LDA, B, LDB, ILO, IHI, WORK( ILEFT ),
      $             WORK( IRIGHT ), WORK( IWORK ), IINFO )
       IF( IINFO.NE.0 ) THEN
          INFO = N + 1
@@ -500,7 +503,7 @@
       END IF
       ITAU = IWORK
       IWORK = ITAU + IROWS
-      CALL SGEQRF( IROWS, ICOLS, B( ILO, ILO ), LDB, WORK( ITAU ),
+      CALL AB_SGEQRF( IROWS, ICOLS, B( ILO, ILO ), LDB, WORK( ITAU ),
      $             WORK( IWORK ), LWORK+1-IWORK, IINFO )
       IF( IINFO.GE.0 )
      $   LWKOPT = MAX( LWKOPT, INT( WORK( IWORK ) )+IWORK-1 )
@@ -509,7 +512,7 @@
          GO TO 120
       END IF
 *
-      CALL SORMQR( 'L', 'T', IROWS, ICOLS, IROWS, B( ILO, ILO ), LDB,
+      CALL AB_SORMQR( 'L', 'T', IROWS, ICOLS, IROWS, B( ILO, ILO ), LDB,
      $             WORK( ITAU ), A( ILO, ILO ), LDA, WORK( IWORK ),
      $             LWORK+1-IWORK, IINFO )
       IF( IINFO.GE.0 )
@@ -520,10 +523,10 @@
       END IF
 *
       IF( ILVL ) THEN
-         CALL SLASET( 'Full', N, N, ZERO, ONE, VL, LDVL )
-         CALL SLACPY( 'L', IROWS-1, IROWS-1, B( ILO+1, ILO ), LDB,
+         CALL AB_SLASET( 'Full', N, N, ZERO, ONE, VL, LDVL )
+         CALL AB_SLACPY( 'L', IROWS-1, IROWS-1, B( ILO+1, ILO ), LDB,
      $                VL( ILO+1, ILO ), LDVL )
-         CALL SORGQR( IROWS, IROWS, IROWS, VL( ILO, ILO ), LDVL,
+         CALL AB_SORGQR( IROWS, IROWS, IROWS, VL( ILO, ILO ), LDVL,
      $                WORK( ITAU ), WORK( IWORK ), LWORK+1-IWORK,
      $                IINFO )
          IF( IINFO.GE.0 )
@@ -535,7 +538,7 @@
       END IF
 *
       IF( ILVR )
-     $   CALL SLASET( 'Full', N, N, ZERO, ONE, VR, LDVR )
+     $   CALL AB_SLASET( 'Full', N, N, ZERO, ONE, VR, LDVR )
 *
 *     Reduce to generalized Hessenberg form
 *
@@ -543,10 +546,10 @@
 *
 *        Eigenvectors requested -- work on whole matrix.
 *
-         CALL SGGHRD( JOBVL, JOBVR, N, ILO, IHI, A, LDA, B, LDB, VL,
+         CALL AB_SGGHRD( JOBVL, JOBVR, N, ILO, IHI, A, LDA, B, LDB, VL,
      $                LDVL, VR, LDVR, IINFO )
       ELSE
-         CALL SGGHRD( 'N', 'N', IROWS, 1, IROWS, A( ILO, ILO ), LDA,
+         CALL AB_SGGHRD( 'N', 'N', IROWS, 1, IROWS, A( ILO, ILO ), LDA,
      $                B( ILO, ILO ), LDB, VL, LDVL, VR, LDVR, IINFO )
       END IF
       IF( IINFO.NE.0 ) THEN
@@ -564,7 +567,7 @@
       ELSE
          CHTEMP = 'E'
       END IF
-      CALL SHGEQZ( CHTEMP, JOBVL, JOBVR, N, ILO, IHI, A, LDA, B, LDB,
+      CALL AB_SHGEQZ( CHTEMP, JOBVL, JOBVR, N, ILO, IHI, A, LDA, B, LDB,
      $             ALPHAR, ALPHAI, BETA, VL, LDVL, VR, LDVR,
      $             WORK( IWORK ), LWORK+1-IWORK, IINFO )
       IF( IINFO.GE.0 )
@@ -582,7 +585,7 @@
 *
       IF( ILV ) THEN
 *
-*        Compute Eigenvectors  (STGEVC requires 6*N words of workspace)
+*        Compute Eigenvectors  (AB_STGEVC requires 6*N words of workspace)
 *
          IF( ILVL ) THEN
             IF( ILVR ) THEN
@@ -594,7 +597,8 @@
             CHTEMP = 'R'
          END IF
 *
-         CALL STGEVC( CHTEMP, 'B', LDUMMA, N, A, LDA, B, LDB, VL, LDVL,
+         CALL AB_STGEVC( CHTEMP, 'B', LDUMMA, N, A, LDA, B, LDB, VL, LDV
+     $L,
      $                VR, LDVR, N, IN, WORK( IWORK ), IINFO )
          IF( IINFO.NE.0 ) THEN
             INFO = N + 7
@@ -604,7 +608,7 @@
 *        Undo balancing on VL and VR, rescale
 *
          IF( ILVL ) THEN
-            CALL SGGBAK( 'P', 'L', N, ILO, IHI, WORK( ILEFT ),
+            CALL AB_SGGBAK( 'P', 'L', N, ILO, IHI, WORK( ILEFT ),
      $                   WORK( IRIGHT ), N, VL, LDVL, IINFO )
             IF( IINFO.NE.0 ) THEN
                INFO = N + 8
@@ -640,7 +644,7 @@
    50       CONTINUE
          END IF
          IF( ILVR ) THEN
-            CALL SGGBAK( 'P', 'R', N, ILO, IHI, WORK( ILEFT ),
+            CALL AB_SGGBAK( 'P', 'R', N, ILO, IHI, WORK( ILEFT ),
      $                   WORK( IRIGHT ), N, VR, LDVR, IINFO )
             IF( IINFO.NE.0 ) THEN
                INFO = N + 9
@@ -764,6 +768,6 @@
 *
       RETURN
 *
-*     End of SGEGV
+*     End of AB_SGEGV
 *
       END

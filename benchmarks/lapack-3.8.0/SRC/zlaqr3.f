@@ -1,4 +1,4 @@
-*> \brief \b ZLAQR3 performs the unitary similarity transformation of a Hessenberg matrix to detect and deflate fully converged eigenvalues from a trailing principal submatrix (aggressive early deflation).
+*> \brief \b AB_ZLAQR3 performs the unitary similarity transformation of a Hessenberg matrix to detect and deflate fully converged eigenvalues from a trailing principal submatrix (aggressive early deflation).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZLAQR3 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlaqr3.f">
+*> Download AB_ZLAQR3 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLAQR3.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlaqr3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLAQR3.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlaqr3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLAQR3.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZLAQR3( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH, ILOZ,
+*       SUBROUTINE AB_ZLAQR3( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH, ILOZ,
 *                          IHIZ, Z, LDZ, NS, ND, SH, V, LDV, NH, T, LDT,
 *                          NV, WV, LDWV, WORK, LWORK )
 *
@@ -40,7 +40,7 @@
 *>
 *>    Aggressive early deflation:
 *>
-*>    ZLAQR3 accepts as input an upper Hessenberg matrix
+*>    AB_ZLAQR3 accepts as input an upper Hessenberg matrix
 *>    H and performs an unitary similarity transformation
 *>    designed to detect and deflate fully converged eigenvalues from
 *>    a trailing principal submatrix.  On output H has been over-
@@ -237,11 +237,11 @@
 *>          suffices, but greater efficiency may result from larger
 *>          values of LWORK.
 *>
-*>          If LWORK = -1, then a workspace query is assumed; ZLAQR3
+*>          If LWORK = -1, then a workspace query is assumed; AB_ZLAQR3
 *>          only estimates the optimal workspace size for the given
 *>          values of N, NW, KTOP and KBOT.  The estimate is returned
 *>          in WORK(1).  No error message related to LWORK is issued
-*>          by XERBLA.  Neither H nor Z are accessed.
+*>          by AB_XERBLA.  Neither H nor Z are accessed.
 *> \endverbatim
 *
 *  Authors:
@@ -263,7 +263,8 @@
 *>       University of Kansas, USA
 *>
 *  =====================================================================
-      SUBROUTINE ZLAQR3( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH, ILOZ,
+      SUBROUTINE AB_ZLAQR3( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH, ILO
+     $Z,
      $                   IHIZ, Z, LDZ, NS, ND, SH, V, LDV, NH, T, LDT,
      $                   NV, WV, LDWV, WORK, LWORK )
 *
@@ -300,12 +301,14 @@
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DLAMCH
-      INTEGER            ILAENV
-      EXTERNAL           DLAMCH, ILAENV
+      INTEGER            AB_ILAENV
+      EXTERNAL           DLAMCH, AB_ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLABAD, ZCOPY, ZGEHRD, ZGEMM, ZLACPY, ZLAHQR,
-     $                   ZLAQR4, ZLARF, ZLARFG, ZLASET, ZTREXC, ZUNMHR
+      EXTERNAL           AB_DLABAD, AB_ZCOPY, AB_ZGEHRD, AB_ZGEMM, AB_ZL
+     $ACPY, AB_ZLAHQR,
+     $                   AB_ZLAQR4, AB_ZLARF, AB_ZLARFG, AB_ZLASET, AB_Z
+     $TREXC, AB_ZUNMHR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCMPLX, DCONJG, DIMAG, INT, MAX, MIN
@@ -325,20 +328,22 @@
          LWKOPT = 1
       ELSE
 *
-*        ==== Workspace query call to ZGEHRD ====
+*        ==== Workspace query call to AB_ZGEHRD ====
 *
-         CALL ZGEHRD( JW, 1, JW-1, T, LDT, WORK, WORK, -1, INFO )
+         CALL AB_ZGEHRD( JW, 1, JW-1, T, LDT, WORK, WORK, -1, INFO )
          LWK1 = INT( WORK( 1 ) )
 *
-*        ==== Workspace query call to ZUNMHR ====
+*        ==== Workspace query call to AB_ZUNMHR ====
 *
-         CALL ZUNMHR( 'R', 'N', JW, JW, 1, JW-1, T, LDT, WORK, V, LDV,
+         CALL AB_ZUNMHR( 'R', 'N', JW, JW, 1, JW-1, T, LDT, WORK, V, LDV
+     $,
      $                WORK, -1, INFO )
          LWK2 = INT( WORK( 1 ) )
 *
-*        ==== Workspace query call to ZLAQR4 ====
+*        ==== Workspace query call to AB_ZLAQR4 ====
 *
-         CALL ZLAQR4( .true., .true., JW, 1, JW, T, LDT, SH, 1, JW, V,
+         CALL AB_ZLAQR4( .true., .true., JW, 1, JW, T, LDT, SH, 1, JW, V
+     $,
      $                LDV, WORK, -1, INFQR )
          LWK3 = INT( WORK( 1 ) )
 *
@@ -369,7 +374,7 @@
 *
       SAFMIN = DLAMCH( 'SAFE MINIMUM' )
       SAFMAX = RONE / SAFMIN
-      CALL DLABAD( SAFMIN, SAFMAX )
+      CALL AB_DLABAD( SAFMIN, SAFMAX )
       ULP = DLAMCH( 'PRECISION' )
       SMLNUM = SAFMIN*( DBLE( N ) / ULP )
 *
@@ -407,16 +412,19 @@
 *     .    the deflation window that converged using INFQR
 *     .    here and there to keep track.) ====
 *
-      CALL ZLACPY( 'U', JW, JW, H( KWTOP, KWTOP ), LDH, T, LDT )
-      CALL ZCOPY( JW-1, H( KWTOP+1, KWTOP ), LDH+1, T( 2, 1 ), LDT+1 )
+      CALL AB_ZLACPY( 'U', JW, JW, H( KWTOP, KWTOP ), LDH, T, LDT )
+      CALL AB_ZCOPY( JW-1, H( KWTOP+1, KWTOP ), LDH+1, T( 2, 1 ), LDT+1 
+     $)
 *
-      CALL ZLASET( 'A', JW, JW, ZERO, ONE, V, LDV )
-      NMIN = ILAENV( 12, 'ZLAQR3', 'SV', JW, 1, JW, LWORK )
+      CALL AB_ZLASET( 'A', JW, JW, ZERO, ONE, V, LDV )
+      NMIN = AB_ILAENV( 12, 'AB_ZLAQR3', 'SV', JW, 1, JW, LWORK )
       IF( JW.GT.NMIN ) THEN
-         CALL ZLAQR4( .true., .true., JW, 1, JW, T, LDT, SH( KWTOP ), 1,
+         CALL AB_ZLAQR4( .true., .true., JW, 1, JW, T, LDT, SH( KWTOP ),
+     $ 1,
      $                JW, V, LDV, WORK, LWORK, INFQR )
       ELSE
-         CALL ZLAHQR( .true., .true., JW, 1, JW, T, LDT, SH( KWTOP ), 1,
+         CALL AB_ZLAHQR( .true., .true., JW, 1, JW, T, LDT, SH( KWTOP ),
+     $ 1,
      $                JW, V, LDV, INFQR )
       END IF
 *
@@ -440,10 +448,10 @@
          ELSE
 *
 *           ==== One undeflatable eigenvalue.  Move it up out of the
-*           .    way.   (ZTREXC can not fail in this case.) ====
+*           .    way.   (AB_ZTREXC can not fail in this case.) ====
 *
             IFST = NS
-            CALL ZTREXC( 'V', JW, T, LDT, V, LDV, IFST, ILST, INFO )
+            CALL AB_ZTREXC( 'V', JW, T, LDT, V, LDV, IFST, ILST, INFO )
             ILST = ILST + 1
          END IF
    10 CONTINUE
@@ -466,7 +474,8 @@
    20       CONTINUE
             ILST = I
             IF( IFST.NE.ILST )
-     $         CALL ZTREXC( 'V', JW, T, LDT, V, LDV, IFST, ILST, INFO )
+     $         CALL AB_ZTREXC( 'V', JW, T, LDT, V, LDV, IFST, ILST, INFO
+     $ )
    30    CONTINUE
       END IF
 *
@@ -482,24 +491,25 @@
 *
 *           ==== Reflect spike back into lower triangle ====
 *
-            CALL ZCOPY( NS, V, LDV, WORK, 1 )
+            CALL AB_ZCOPY( NS, V, LDV, WORK, 1 )
             DO 50 I = 1, NS
                WORK( I ) = DCONJG( WORK( I ) )
    50       CONTINUE
             BETA = WORK( 1 )
-            CALL ZLARFG( NS, BETA, WORK( 2 ), 1, TAU )
+            CALL AB_ZLARFG( NS, BETA, WORK( 2 ), 1, TAU )
             WORK( 1 ) = ONE
 *
-            CALL ZLASET( 'L', JW-2, JW-2, ZERO, ZERO, T( 3, 1 ), LDT )
+            CALL AB_ZLASET( 'L', JW-2, JW-2, ZERO, ZERO, T( 3, 1 ), LDT 
+     $)
 *
-            CALL ZLARF( 'L', NS, JW, WORK, 1, DCONJG( TAU ), T, LDT,
+            CALL AB_ZLARF( 'L', NS, JW, WORK, 1, DCONJG( TAU ), T, LDT,
      $                  WORK( JW+1 ) )
-            CALL ZLARF( 'R', NS, NS, WORK, 1, TAU, T, LDT,
+            CALL AB_ZLARF( 'R', NS, NS, WORK, 1, TAU, T, LDT,
      $                  WORK( JW+1 ) )
-            CALL ZLARF( 'R', JW, NS, WORK, 1, TAU, V, LDV,
+            CALL AB_ZLARF( 'R', JW, NS, WORK, 1, TAU, V, LDV,
      $                  WORK( JW+1 ) )
 *
-            CALL ZGEHRD( JW, 1, NS, T, LDT, WORK, WORK( JW+1 ),
+            CALL AB_ZGEHRD( JW, 1, NS, T, LDT, WORK, WORK( JW+1 ),
      $                   LWORK-JW, INFO )
          END IF
 *
@@ -507,15 +517,16 @@
 *
          IF( KWTOP.GT.1 )
      $      H( KWTOP, KWTOP-1 ) = S*DCONJG( V( 1, 1 ) )
-         CALL ZLACPY( 'U', JW, JW, T, LDT, H( KWTOP, KWTOP ), LDH )
-         CALL ZCOPY( JW-1, T( 2, 1 ), LDT+1, H( KWTOP+1, KWTOP ),
+         CALL AB_ZLACPY( 'U', JW, JW, T, LDT, H( KWTOP, KWTOP ), LDH )
+         CALL AB_ZCOPY( JW-1, T( 2, 1 ), LDT+1, H( KWTOP+1, KWTOP ),
      $               LDH+1 )
 *
 *        ==== Accumulate orthogonal matrix in order update
 *        .    H and Z, if requested.  ====
 *
          IF( NS.GT.1 .AND. S.NE.ZERO )
-     $      CALL ZUNMHR( 'R', 'N', JW, NS, 1, NS, T, LDT, WORK, V, LDV,
+     $      CALL AB_ZUNMHR( 'R', 'N', JW, NS, 1, NS, T, LDT, WORK, V, LD
+     $V,
      $                   WORK( JW+1 ), LWORK-JW, INFO )
 *
 *        ==== Update vertical slab in H ====
@@ -527,9 +538,10 @@
          END IF
          DO 60 KROW = LTOP, KWTOP - 1, NV
             KLN = MIN( NV, KWTOP-KROW )
-            CALL ZGEMM( 'N', 'N', KLN, JW, JW, ONE, H( KROW, KWTOP ),
+            CALL AB_ZGEMM( 'N', 'N', KLN, JW, JW, ONE, H( KROW, KWTOP ),
      $                  LDH, V, LDV, ZERO, WV, LDWV )
-            CALL ZLACPY( 'A', KLN, JW, WV, LDWV, H( KROW, KWTOP ), LDH )
+            CALL AB_ZLACPY( 'A', KLN, JW, WV, LDWV, H( KROW, KWTOP ), LD
+     $H )
    60    CONTINUE
 *
 *        ==== Update horizontal slab in H ====
@@ -537,9 +549,9 @@
          IF( WANTT ) THEN
             DO 70 KCOL = KBOT + 1, N, NH
                KLN = MIN( NH, N-KCOL+1 )
-               CALL ZGEMM( 'C', 'N', JW, KLN, JW, ONE, V, LDV,
+               CALL AB_ZGEMM( 'C', 'N', JW, KLN, JW, ONE, V, LDV,
      $                     H( KWTOP, KCOL ), LDH, ZERO, T, LDT )
-               CALL ZLACPY( 'A', JW, KLN, T, LDT, H( KWTOP, KCOL ),
+               CALL AB_ZLACPY( 'A', JW, KLN, T, LDT, H( KWTOP, KCOL ),
      $                      LDH )
    70       CONTINUE
          END IF
@@ -549,9 +561,10 @@
          IF( WANTZ ) THEN
             DO 80 KROW = ILOZ, IHIZ, NV
                KLN = MIN( NV, IHIZ-KROW+1 )
-               CALL ZGEMM( 'N', 'N', KLN, JW, JW, ONE, Z( KROW, KWTOP ),
+               CALL AB_ZGEMM( 'N', 'N', KLN, JW, JW, ONE, Z( KROW, KWTOP
+     $ ),
      $                     LDZ, V, LDV, ZERO, WV, LDWV )
-               CALL ZLACPY( 'A', KLN, JW, WV, LDWV, Z( KROW, KWTOP ),
+               CALL AB_ZLACPY( 'A', KLN, JW, WV, LDWV, Z( KROW, KWTOP ),
      $                      LDZ )
    80       CONTINUE
          END IF
@@ -573,6 +586,6 @@
 *
       WORK( 1 ) = DCMPLX( LWKOPT, 0 )
 *
-*     ==== End of ZLAQR3 ====
+*     ==== End of AB_ZLAQR3 ====
 *
       END

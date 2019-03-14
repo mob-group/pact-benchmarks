@@ -1,4 +1,4 @@
-*> \brief \b CPSTRF computes the Cholesky factorization with complete pivoting of complex Hermitian positive semidefinite matrix.
+*> \brief \b AB_CPSTRF computes the Cholesky factorization with complete pivoting of complex Hermitian positive semidefinite matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CPSTRF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpstrf.f">
+*> Download AB_CPSTRF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CPSTRF.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cpstrf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CPSTRF.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpstrf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CPSTRF.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CPSTRF( UPLO, N, A, LDA, PIV, RANK, TOL, WORK, INFO )
+*       SUBROUTINE AB_CPSTRF( UPLO, N, A, LDA, PIV, RANK, TOL, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       REAL               TOL
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> CPSTRF computes the Cholesky factorization with complete
+*> AB_CPSTRF computes the Cholesky factorization with complete
 *> pivoting of a complex Hermitian positive semidefinite matrix A.
 *>
 *> The factorization has the form
@@ -140,7 +140,8 @@
 *> \ingroup complexOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE CPSTRF( UPLO, N, A, LDA, PIV, RANK, TOL, WORK, INFO )
+      SUBROUTINE AB_CPSTRF( UPLO, N, A, LDA, PIV, RANK, TOL, WORK, INFO 
+     $)
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -174,13 +175,14 @@
 *     ..
 *     .. External Functions ..
       REAL               SLAMCH
-      INTEGER            ILAENV
-      LOGICAL            LSAME, SISNAN
-      EXTERNAL           SLAMCH, ILAENV, LSAME, SISNAN
+      INTEGER            AB_ILAENV
+      LOGICAL            AB_LSAME, AB_SISNAN
+      EXTERNAL           SLAMCH, AB_ILAENV, AB_LSAME, AB_SISNAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMV, CHERK, CLACGV, CPSTF2, CSSCAL, CSWAP,
-     $                   XERBLA
+      EXTERNAL           AB_CGEMV, AB_CHERK, AB_CLACGV, AB_CPSTF2, AB_CS
+     $SCAL, AB_CSWAP,
+     $                   AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CONJG, MAX, MIN, REAL, SQRT, MAXLOC
@@ -190,8 +192,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -199,7 +201,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CPSTRF', -INFO )
+         CALL AB_XERBLA( 'AB_CPSTRF', -INFO )
          RETURN
       END IF
 *
@@ -210,12 +212,12 @@
 *
 *     Get block size
 *
-      NB = ILAENV( 1, 'CPOTRF', UPLO, N, -1, -1, -1 )
+      NB = AB_ILAENV( 1, 'AB_CPOTRF', UPLO, N, -1, -1, -1 )
       IF( NB.LE.1 .OR. NB.GE.N ) THEN
 *
 *        Use unblocked code
 *
-         CALL CPSTF2( UPLO, N, A( 1, 1 ), LDA, PIV, RANK, TOL, WORK,
+         CALL AB_CPSTF2( UPLO, N, A( 1, 1 ), LDA, PIV, RANK, TOL, WORK,
      $                INFO )
          GO TO 230
 *
@@ -234,7 +236,7 @@
   110    CONTINUE
          PVT = MAXLOC( WORK( 1:N ), 1 )
          AJJ = REAL( A( PVT, PVT ) )
-         IF( AJJ.LE.ZERO.OR.SISNAN( AJJ ) ) THEN
+         IF( AJJ.LE.ZERO.OR.AB_SISNAN( AJJ ) ) THEN
             RANK = 0
             INFO = 1
             GO TO 230
@@ -287,7 +289,7 @@
                      ITEMP = MAXLOC( WORK( (N+J):(2*N) ), 1 )
                      PVT = ITEMP + J - 1
                      AJJ = WORK( N+PVT )
-                     IF( AJJ.LE.SSTOP.OR.SISNAN( AJJ ) ) THEN
+                     IF( AJJ.LE.SSTOP.OR.AB_SISNAN( AJJ ) ) THEN
                         A( J, J ) = AJJ
                         GO TO 220
                      END IF
@@ -298,9 +300,9 @@
 *                    Pivot OK, so can now swap pivot rows and columns
 *
                      A( PVT, PVT ) = A( J, J )
-                     CALL CSWAP( J-1, A( 1, J ), 1, A( 1, PVT ), 1 )
+                     CALL AB_CSWAP( J-1, A( 1, J ), 1, A( 1, PVT ), 1 )
                      IF( PVT.LT.N )
-     $                  CALL CSWAP( N-PVT, A( J, PVT+1 ), LDA,
+     $                  CALL AB_CSWAP( N-PVT, A( J, PVT+1 ), LDA,
      $                              A( PVT, PVT+1 ), LDA )
                      DO 140 I = J + 1, PVT - 1
                         CTEMP = CONJG( A( J, I ) )
@@ -325,12 +327,13 @@
 *                 Compute elements J+1:N of row J.
 *
                   IF( J.LT.N ) THEN
-                     CALL CLACGV( J-1, A( 1, J ), 1 )
-                     CALL CGEMV( 'Trans', J-K, N-J, -CONE, A( K, J+1 ),
+                     CALL AB_CLACGV( J-1, A( 1, J ), 1 )
+                     CALL AB_CGEMV( 'Trans', J-K, N-J, -CONE, A( K, J+1 
+     $),
      $                           LDA, A( K, J ), 1, CONE, A( J, J+1 ),
      $                           LDA )
-                     CALL CLACGV( J-1, A( 1, J ), 1 )
-                     CALL CSSCAL( N-J, ONE / AJJ, A( J, J+1 ), LDA )
+                     CALL AB_CLACGV( J-1, A( 1, J ), 1 )
+                     CALL AB_CSSCAL( N-J, ONE / AJJ, A( J, J+1 ), LDA )
                   END IF
 *
   150          CONTINUE
@@ -338,7 +341,7 @@
 *              Update trailing matrix, J already incremented
 *
                IF( K+JB.LE.N ) THEN
-                  CALL CHERK( 'Upper', 'Conj Trans', N-J+1, JB, -ONE,
+                  CALL AB_CHERK( 'Upper', 'Conj Trans', N-J+1, JB, -ONE,
      $                        A( K, J ), LDA, ONE, A( J, J ), LDA )
                END IF
 *
@@ -382,7 +385,7 @@
                      ITEMP = MAXLOC( WORK( (N+J):(2*N) ), 1 )
                      PVT = ITEMP + J - 1
                      AJJ = WORK( N+PVT )
-                     IF( AJJ.LE.SSTOP.OR.SISNAN( AJJ ) ) THEN
+                     IF( AJJ.LE.SSTOP.OR.AB_SISNAN( AJJ ) ) THEN
                         A( J, J ) = AJJ
                         GO TO 220
                      END IF
@@ -393,9 +396,10 @@
 *                    Pivot OK, so can now swap pivot rows and columns
 *
                      A( PVT, PVT ) = A( J, J )
-                     CALL CSWAP( J-1, A( J, 1 ), LDA, A( PVT, 1 ), LDA )
+                     CALL AB_CSWAP( J-1, A( J, 1 ), LDA, A( PVT, 1 ), LD
+     $A )
                      IF( PVT.LT.N )
-     $                  CALL CSWAP( N-PVT, A( PVT+1, J ), 1,
+     $                  CALL AB_CSWAP( N-PVT, A( PVT+1, J ), 1,
      $                              A( PVT+1, PVT ), 1 )
                      DO 190 I = J + 1, PVT - 1
                         CTEMP = CONJG( A( I, J ) )
@@ -420,12 +424,12 @@
 *                 Compute elements J+1:N of column J.
 *
                   IF( J.LT.N ) THEN
-                     CALL CLACGV( J-1, A( J, 1 ), LDA )
-                     CALL CGEMV( 'No Trans', N-J, J-K, -CONE,
+                     CALL AB_CLACGV( J-1, A( J, 1 ), LDA )
+                     CALL AB_CGEMV( 'No Trans', N-J, J-K, -CONE,
      $                           A( J+1, K ), LDA, A( J, K ), LDA, CONE,
      $                           A( J+1, J ), 1 )
-                     CALL CLACGV( J-1, A( J, 1 ), LDA )
-                     CALL CSSCAL( N-J, ONE / AJJ, A( J+1, J ), 1 )
+                     CALL AB_CLACGV( J-1, A( J, 1 ), LDA )
+                     CALL AB_CSSCAL( N-J, ONE / AJJ, A( J+1, J ), 1 )
                   END IF
 *
   200          CONTINUE
@@ -433,7 +437,7 @@
 *              Update trailing matrix, J already incremented
 *
                IF( K+JB.LE.N ) THEN
-                  CALL CHERK( 'Lower', 'No Trans', N-J+1, JB, -ONE,
+                  CALL AB_CHERK( 'Lower', 'No Trans', N-J+1, JB, -ONE,
      $                        A( J, K ), LDA, ONE, A( J, J ), LDA )
                END IF
 *
@@ -458,6 +462,6 @@
   230 CONTINUE
       RETURN
 *
-*     End of CPSTRF
+*     End of AB_CPSTRF
 *
       END

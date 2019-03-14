@@ -1,4 +1,4 @@
-*> \brief \b CSTEGR
+*> \brief \b AB_CSTEGR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CSTEGR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cstegr.f">
+*> Download AB_CSTEGR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CSTEGR.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cstegr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CSTEGR.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cstegr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CSTEGR.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CSTEGR( JOBZ, RANGE, N, D, E, VL, VU, IL, IU,
+*       SUBROUTINE AB_CSTEGR( JOBZ, RANGE, N, D, E, VL, VU, IL, IU,
 *                  ABSTOL, M, W, Z, LDZ, ISUPPZ, WORK, LWORK, IWORK,
 *                  LIWORK, INFO )
 *
@@ -39,7 +39,7 @@
 *>
 *> \verbatim
 *>
-*> CSTEGR computes selected eigenvalues and, optionally, eigenvectors
+*> AB_CSTEGR computes selected eigenvalues and, optionally, eigenvectors
 *> of a real symmetric tridiagonal matrix T. Any such unreduced matrix has
 *> a well defined set of pairwise different real eigenvalues, the corresponding
 *> real eigenvectors are pairwise orthogonal.
@@ -48,13 +48,13 @@
 *> either an interval (VL,VU] or a range of indices IL:IU for the desired
 *> eigenvalues.
 *>
-*> CSTEGR is a compatibility wrapper around the improved CSTEMR routine.
-*> See SSTEMR for further details.
+*> AB_CSTEGR is a compatibility wrapper around the improved AB_CSTEMR routine.
+*> See AB_SSTEMR for further details.
 *>
 *> One important change is that the ABSTOL parameter no longer provides any
 *> benefit and hence is no longer used.
 *>
-*> Note : CSTEGR and CSTEMR work only on machines which follow
+*> Note : AB_CSTEGR and AB_CSTEMR work only on machines which follow
 *> IEEE-754 floating-point standard in their handling of infinities and
 *> NaNs.  Normal execution may create these exceptiona values and hence
 *> may abort due to a floating point exception in environments which
@@ -207,7 +207,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -225,7 +225,7 @@
 *>          If LIWORK = -1, then a workspace query is assumed; the
 *>          routine only calculates the optimal size of the IWORK array,
 *>          returns this value as the first entry of the IWORK array, and
-*>          no error message related to LIWORK is issued by XERBLA.
+*>          no error message related to LIWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -234,11 +234,11 @@
 *>          On exit, INFO
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
-*>          > 0:  if INFO = 1X, internal error in SLARRE,
-*>                if INFO = 2X, internal error in CLARRV.
+*>          > 0:  if INFO = 1X, internal error in AB_SLARRE,
+*>                if INFO = 2X, internal error in AB_CLARRV.
 *>                Here, the digit X = ABS( IINFO ) < 10, where IINFO is
-*>                the nonzero error code returned by SLARRE or
-*>                CLARRV, respectively.
+*>                the nonzero error code returned by AB_SLARRE or
+*>                AB_CLARRV, respectively.
 *> \endverbatim
 *
 *  Authors:
@@ -261,7 +261,7 @@
 *> Christof Voemel, LBNL/NERSC, USA \n
 *
 *  =====================================================================
-      SUBROUTINE CSTEGR( JOBZ, RANGE, N, D, E, VL, VU, IL, IU,
+      SUBROUTINE AB_CSTEGR( JOBZ, RANGE, N, D, E, VL, VU, IL, IU,
      $           ABSTOL, M, W, Z, LDZ, ISUPPZ, WORK, LWORK, IWORK,
      $           LIWORK, INFO )
 *
@@ -287,16 +287,16 @@
       LOGICAL TRYRAC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL CSTEMR
+      EXTERNAL AB_CSTEMR
 *     ..
 *     .. Executable Statements ..
       INFO = 0
       TRYRAC = .FALSE.
 
-      CALL CSTEMR( JOBZ, RANGE, N, D, E, VL, VU, IL, IU,
+      CALL AB_CSTEMR( JOBZ, RANGE, N, D, E, VL, VU, IL, IU,
      $                   M, W, Z, LDZ, N, ISUPPZ, TRYRAC, WORK, LWORK,
      $                   IWORK, LIWORK, INFO )
 *
-*     End of CSTEGR
+*     End of AB_CSTEGR
 *
       END

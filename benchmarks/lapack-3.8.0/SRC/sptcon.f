@@ -1,4 +1,4 @@
-*> \brief \b SPTCON
+*> \brief \b AB_SPTCON
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SPTCON + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sptcon.f">
+*> Download AB_SPTCON + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SPTCON.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sptcon.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SPTCON.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sptcon.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SPTCON.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SPTCON( N, D, E, ANORM, RCOND, WORK, INFO )
+*       SUBROUTINE AB_SPTCON( N, D, E, ANORM, RCOND, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, N
@@ -34,10 +34,10 @@
 *>
 *> \verbatim
 *>
-*> SPTCON computes the reciprocal of the condition number (in the
+*> AB_SPTCON computes the reciprocal of the condition number (in the
 *> 1-norm) of a real symmetric positive definite tridiagonal matrix
 *> using the factorization A = L*D*L**T or A = U**T*D*U computed by
-*> SPTTRF.
+*> AB_SPTTRF.
 *>
 *> Norm(inv(A)) is computed by a direct method, and the reciprocal of
 *> the condition number is computed as
@@ -57,14 +57,14 @@
 *> \verbatim
 *>          D is REAL array, dimension (N)
 *>          The n diagonal elements of the diagonal matrix D from the
-*>          factorization of A, as computed by SPTTRF.
+*>          factorization of A, as computed by AB_SPTTRF.
 *> \endverbatim
 *>
 *> \param[in] E
 *> \verbatim
 *>          E is REAL array, dimension (N-1)
 *>          The (n-1) off-diagonal elements of the unit bidiagonal factor
-*>          U or L from the factorization of A,  as computed by SPTTRF.
+*>          U or L from the factorization of A,  as computed by AB_SPTTRF.
 *> \endverbatim
 *>
 *> \param[in] ANORM
@@ -116,7 +116,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SPTCON( N, D, E, ANORM, RCOND, WORK, INFO )
+      SUBROUTINE AB_SPTCON( N, D, E, ANORM, RCOND, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -142,11 +142,11 @@
       REAL               AINVNM
 *     ..
 *     .. External Functions ..
-      INTEGER            ISAMAX
-      EXTERNAL           ISAMAX
+      INTEGER            AB_ISAMAX
+      EXTERNAL           AB_ISAMAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA
+      EXTERNAL           AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS
@@ -162,7 +162,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SPTCON', -INFO )
+         CALL AB_XERBLA( 'AB_SPTCON', -INFO )
          RETURN
       END IF
 *
@@ -206,7 +206,7 @@
 *
 *     Compute AINVNM = max(x(i)), 1<=i<=n.
 *
-      IX = ISAMAX( N, WORK, 1 )
+      IX = AB_ISAMAX( N, WORK, 1 )
       AINVNM = ABS( WORK( IX ) )
 *
 *     Compute the reciprocal condition number.
@@ -216,6 +216,6 @@
 *
       RETURN
 *
-*     End of SPTCON
+*     End of AB_SPTCON
 *
       END

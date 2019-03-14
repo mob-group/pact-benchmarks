@@ -1,4 +1,4 @@
-*> \brief \b CLALSD uses the singular value decomposition of A to solve the least squares problem.
+*> \brief \b AB_CLALSD uses the singular value decomposition of A to solve the least squares problem.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CLALSD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clalsd.f">
+*> Download AB_CLALSD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLALSD.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clalsd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLALSD.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clalsd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLALSD.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLALSD( UPLO, SMLSIZ, N, NRHS, D, E, B, LDB, RCOND,
+*       SUBROUTINE AB_CLALSD( UPLO, SMLSIZ, N, NRHS, D, E, B, LDB, RCOND,
 *                          RANK, WORK, RWORK, IWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -38,7 +38,7 @@
 *>
 *> \verbatim
 *>
-*> CLALSD uses the singular value decomposition of A to solve the least
+*> AB_CLALSD uses the singular value decomposition of A to solve the least
 *> squares problem of finding X to minimize the Euclidean norm of each
 *> column of A*X-B, where A is N-by-N upper bidiagonal, and X and B
 *> are N-by-NRHS. The solution X overwrites B.
@@ -183,7 +183,7 @@
 *>     Osni Marques, LBNL/NERSC, USA \n
 *
 *  =====================================================================
-      SUBROUTINE CLALSD( UPLO, SMLSIZ, N, NRHS, D, E, B, LDB, RCOND,
+      SUBROUTINE AB_CLALSD( UPLO, SMLSIZ, N, NRHS, D, E, B, LDB, RCOND,
      $                   RANK, WORK, RWORK, IWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -220,14 +220,16 @@
       REAL               CS, EPS, ORGNRM, R, RCND, SN, TOL
 *     ..
 *     .. External Functions ..
-      INTEGER            ISAMAX
-      REAL               SLAMCH, SLANST
-      EXTERNAL           ISAMAX, SLAMCH, SLANST
+      INTEGER            AB_ISAMAX
+      REAL               SLAMCH, AB_SLANST
+      EXTERNAL           AB_ISAMAX, SLAMCH, AB_SLANST
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CCOPY, CLACPY, CLALSA, CLASCL, CLASET, CSROT,
-     $                   SGEMM, SLARTG, SLASCL, SLASDA, SLASDQ, SLASET,
-     $                   SLASRT, XERBLA
+      EXTERNAL           AB_CCOPY, AB_CLACPY, AB_CLALSA, AB_CLASCL, AB_C
+     $LASET, AB_CSROT,
+     $                   AB_SGEMM, AB_SLARTG, AB_SLASCL, AB_SLASDA, AB_S
+     $LASDQ, AB_SLASET,
+     $                   AB_SLASRT, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CMPLX, INT, LOG, REAL, SIGN
@@ -246,7 +248,7 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CLALSD', -INFO )
+         CALL AB_XERBLA( 'AB_CLALSD', -INFO )
          RETURN
       END IF
 *
@@ -268,10 +270,11 @@
          RETURN
       ELSE IF( N.EQ.1 ) THEN
          IF( D( 1 ).EQ.ZERO ) THEN
-            CALL CLASET( 'A', 1, NRHS, CZERO, CZERO, B, LDB )
+            CALL AB_CLASET( 'A', 1, NRHS, CZERO, CZERO, B, LDB )
          ELSE
             RANK = 1
-            CALL CLASCL( 'G', 0, 0, D( 1 ), ONE, 1, NRHS, B, LDB, INFO )
+            CALL AB_CLASCL( 'G', 0, 0, D( 1 ), ONE, 1, NRHS, B, LDB, INF
+     $O )
             D( 1 ) = ABS( D( 1 ) )
          END IF
          RETURN
@@ -281,12 +284,12 @@
 *
       IF( UPLO.EQ.'L' ) THEN
          DO 10 I = 1, N - 1
-            CALL SLARTG( D( I ), E( I ), CS, SN, R )
+            CALL AB_SLARTG( D( I ), E( I ), CS, SN, R )
             D( I ) = R
             E( I ) = SN*D( I+1 )
             D( I+1 ) = CS*D( I+1 )
             IF( NRHS.EQ.1 ) THEN
-               CALL CSROT( 1, B( I, 1 ), 1, B( I+1, 1 ), 1, CS, SN )
+               CALL AB_CSROT( 1, B( I, 1 ), 1, B( I+1, 1 ), 1, CS, SN )
             ELSE
                RWORK( I*2-1 ) = CS
                RWORK( I*2 ) = SN
@@ -297,7 +300,8 @@
                DO 20 J = 1, N - 1
                   CS = RWORK( J*2-1 )
                   SN = RWORK( J*2 )
-                  CALL CSROT( 1, B( J, I ), 1, B( J+1, I ), 1, CS, SN )
+                  CALL AB_CSROT( 1, B( J, I ), 1, B( J+1, I ), 1, CS, SN
+     $ )
    20          CONTINUE
    30       CONTINUE
          END IF
@@ -306,14 +310,14 @@
 *     Scale.
 *
       NM1 = N - 1
-      ORGNRM = SLANST( 'M', N, D, E )
+      ORGNRM = AB_SLANST( 'M', N, D, E )
       IF( ORGNRM.EQ.ZERO ) THEN
-         CALL CLASET( 'A', N, NRHS, CZERO, CZERO, B, LDB )
+         CALL AB_CLASET( 'A', N, NRHS, CZERO, CZERO, B, LDB )
          RETURN
       END IF
 *
-      CALL SLASCL( 'G', 0, 0, ORGNRM, ONE, N, 1, D, N, INFO )
-      CALL SLASCL( 'G', 0, 0, ORGNRM, ONE, NM1, 1, E, NM1, INFO )
+      CALL AB_SLASCL( 'G', 0, 0, ORGNRM, ONE, N, 1, D, N, INFO )
+      CALL AB_SLASCL( 'G', 0, 0, ORGNRM, ONE, NM1, 1, E, NM1, INFO )
 *
 *     If N is smaller than the minimum divide size SMLSIZ, then solve
 *     the problem with another solver.
@@ -325,16 +329,16 @@
          IRWRB = IRWWRK
          IRWIB = IRWRB + N*NRHS
          IRWB = IRWIB + N*NRHS
-         CALL SLASET( 'A', N, N, ZERO, ONE, RWORK( IRWU ), N )
-         CALL SLASET( 'A', N, N, ZERO, ONE, RWORK( IRWVT ), N )
-         CALL SLASDQ( 'U', 0, N, N, N, 0, D, E, RWORK( IRWVT ), N,
+         CALL AB_SLASET( 'A', N, N, ZERO, ONE, RWORK( IRWU ), N )
+         CALL AB_SLASET( 'A', N, N, ZERO, ONE, RWORK( IRWVT ), N )
+         CALL AB_SLASDQ( 'U', 0, N, N, N, 0, D, E, RWORK( IRWVT ), N,
      $                RWORK( IRWU ), N, RWORK( IRWWRK ), 1,
      $                RWORK( IRWWRK ), INFO )
          IF( INFO.NE.0 ) THEN
             RETURN
          END IF
 *
-*        In the real version, B is passed to SLASDQ and multiplied
+*        In the real version, B is passed to AB_SLASDQ and multiplied
 *        internally by Q**H. Here B is complex and that product is
 *        computed below in two steps (real and imaginary parts).
 *
@@ -345,7 +349,7 @@
                RWORK( J ) = REAL( B( JROW, JCOL ) )
    40       CONTINUE
    50    CONTINUE
-         CALL SGEMM( 'T', 'N', N, NRHS, N, ONE, RWORK( IRWU ), N,
+         CALL AB_SGEMM( 'T', 'N', N, NRHS, N, ONE, RWORK( IRWU ), N,
      $               RWORK( IRWB ), N, ZERO, RWORK( IRWRB ), N )
          J = IRWB - 1
          DO 70 JCOL = 1, NRHS
@@ -354,7 +358,7 @@
                RWORK( J ) = AIMAG( B( JROW, JCOL ) )
    60       CONTINUE
    70    CONTINUE
-         CALL SGEMM( 'T', 'N', N, NRHS, N, ONE, RWORK( IRWU ), N,
+         CALL AB_SGEMM( 'T', 'N', N, NRHS, N, ONE, RWORK( IRWU ), N,
      $               RWORK( IRWB ), N, ZERO, RWORK( IRWIB ), N )
          JREAL = IRWRB - 1
          JIMAG = IRWIB - 1
@@ -366,22 +370,24 @@
    80       CONTINUE
    90    CONTINUE
 *
-         TOL = RCND*ABS( D( ISAMAX( N, D, 1 ) ) )
+         TOL = RCND*ABS( D( AB_ISAMAX( N, D, 1 ) ) )
          DO 100 I = 1, N
             IF( D( I ).LE.TOL ) THEN
-               CALL CLASET( 'A', 1, NRHS, CZERO, CZERO, B( I, 1 ), LDB )
+               CALL AB_CLASET( 'A', 1, NRHS, CZERO, CZERO, B( I, 1 ), LD
+     $B )
             ELSE
-               CALL CLASCL( 'G', 0, 0, D( I ), ONE, 1, NRHS, B( I, 1 ),
+               CALL AB_CLASCL( 'G', 0, 0, D( I ), ONE, 1, NRHS, B( I, 1 
+     $),
      $                      LDB, INFO )
                RANK = RANK + 1
             END IF
   100    CONTINUE
 *
-*        Since B is complex, the following call to SGEMM is performed
+*        Since B is complex, the following call to AB_SGEMM is performed
 *        in two steps (real and imaginary parts). That is for V * B
 *        (in the real version of the code V**H is stored in WORK).
 *
-*        CALL SGEMM( 'T', 'N', N, NRHS, N, ONE, WORK, N, B, LDB, ZERO,
+*        CALL AB_SGEMM( 'T', 'N', N, NRHS, N, ONE, WORK, N, B, LDB, ZERO,
 *    $               WORK( NWORK ), N )
 *
          J = IRWB - 1
@@ -391,7 +397,7 @@
                RWORK( J ) = REAL( B( JROW, JCOL ) )
   110       CONTINUE
   120    CONTINUE
-         CALL SGEMM( 'T', 'N', N, NRHS, N, ONE, RWORK( IRWVT ), N,
+         CALL AB_SGEMM( 'T', 'N', N, NRHS, N, ONE, RWORK( IRWVT ), N,
      $               RWORK( IRWB ), N, ZERO, RWORK( IRWRB ), N )
          J = IRWB - 1
          DO 140 JCOL = 1, NRHS
@@ -400,7 +406,7 @@
                RWORK( J ) = AIMAG( B( JROW, JCOL ) )
   130       CONTINUE
   140    CONTINUE
-         CALL SGEMM( 'T', 'N', N, NRHS, N, ONE, RWORK( IRWVT ), N,
+         CALL AB_SGEMM( 'T', 'N', N, NRHS, N, ONE, RWORK( IRWVT ), N,
      $               RWORK( IRWB ), N, ZERO, RWORK( IRWIB ), N )
          JREAL = IRWRB - 1
          JIMAG = IRWIB - 1
@@ -414,9 +420,9 @@
 *
 *        Unscale.
 *
-         CALL SLASCL( 'G', 0, 0, ONE, ORGNRM, N, 1, D, N, INFO )
-         CALL SLASRT( 'D', N, D, INFO )
-         CALL CLASCL( 'G', 0, 0, ORGNRM, ONE, N, NRHS, B, LDB, INFO )
+         CALL AB_SLASCL( 'G', 0, 0, ONE, ORGNRM, N, 1, D, N, INFO )
+         CALL AB_SLASRT( 'D', N, D, INFO )
+         CALL AB_CLASCL( 'G', 0, 0, ORGNRM, ONE, N, NRHS, B, LDB, INFO )
 *
          RETURN
       END IF
@@ -493,7 +499,7 @@
                NSUB = NSUB + 1
                IWORK( NSUB ) = N
                IWORK( SIZEI+NSUB-1 ) = 1
-               CALL CCOPY( NRHS, B( N, 1 ), LDB, WORK( BX+NM1 ), N )
+               CALL AB_CCOPY( NRHS, B( N, 1 ), LDB, WORK( BX+NM1 ), N )
             END IF
             ST1 = ST - 1
             IF( NSIZE.EQ.1 ) THEN
@@ -501,16 +507,16 @@
 *              This is a 1-by-1 subproblem and is not solved
 *              explicitly.
 *
-               CALL CCOPY( NRHS, B( ST, 1 ), LDB, WORK( BX+ST1 ), N )
+               CALL AB_CCOPY( NRHS, B( ST, 1 ), LDB, WORK( BX+ST1 ), N )
             ELSE IF( NSIZE.LE.SMLSIZ ) THEN
 *
-*              This is a small subproblem and is solved by SLASDQ.
+*              This is a small subproblem and is solved by AB_SLASDQ.
 *
-               CALL SLASET( 'A', NSIZE, NSIZE, ZERO, ONE,
+               CALL AB_SLASET( 'A', NSIZE, NSIZE, ZERO, ONE,
      $                      RWORK( VT+ST1 ), N )
-               CALL SLASET( 'A', NSIZE, NSIZE, ZERO, ONE,
+               CALL AB_SLASET( 'A', NSIZE, NSIZE, ZERO, ONE,
      $                      RWORK( U+ST1 ), N )
-               CALL SLASDQ( 'U', 0, NSIZE, NSIZE, NSIZE, 0, D( ST ),
+               CALL AB_SLASDQ( 'U', 0, NSIZE, NSIZE, NSIZE, 0, D( ST ),
      $                      E( ST ), RWORK( VT+ST1 ), N, RWORK( U+ST1 ),
      $                      N, RWORK( NRWORK ), 1, RWORK( NRWORK ),
      $                      INFO )
@@ -518,7 +524,7 @@
                   RETURN
                END IF
 *
-*              In the real version, B is passed to SLASDQ and multiplied
+*              In the real version, B is passed to AB_SLASDQ and multiplied
 *              internally by Q**H. Here B is complex and that product is
 *              computed below in two steps (real and imaginary parts).
 *
@@ -529,7 +535,7 @@
                      RWORK( J ) = REAL( B( JROW, JCOL ) )
   180             CONTINUE
   190          CONTINUE
-               CALL SGEMM( 'T', 'N', NSIZE, NRHS, NSIZE, ONE,
+               CALL AB_SGEMM( 'T', 'N', NSIZE, NRHS, NSIZE, ONE,
      $                     RWORK( U+ST1 ), N, RWORK( IRWB ), NSIZE,
      $                     ZERO, RWORK( IRWRB ), NSIZE )
                J = IRWB - 1
@@ -539,7 +545,7 @@
                      RWORK( J ) = AIMAG( B( JROW, JCOL ) )
   200             CONTINUE
   210          CONTINUE
-               CALL SGEMM( 'T', 'N', NSIZE, NRHS, NSIZE, ONE,
+               CALL AB_SGEMM( 'T', 'N', NSIZE, NRHS, NSIZE, ONE,
      $                     RWORK( U+ST1 ), N, RWORK( IRWB ), NSIZE,
      $                     ZERO, RWORK( IRWIB ), NSIZE )
                JREAL = IRWRB - 1
@@ -553,13 +559,13 @@
   220             CONTINUE
   230          CONTINUE
 *
-               CALL CLACPY( 'A', NSIZE, NRHS, B( ST, 1 ), LDB,
+               CALL AB_CLACPY( 'A', NSIZE, NRHS, B( ST, 1 ), LDB,
      $                      WORK( BX+ST1 ), N )
             ELSE
 *
 *              A large problem. Solve it using divide and conquer.
 *
-               CALL SLASDA( ICMPQ1, SMLSIZ, NSIZE, SQRE, D( ST ),
+               CALL AB_SLASDA( ICMPQ1, SMLSIZ, NSIZE, SQRE, D( ST ),
      $                      E( ST ), RWORK( U+ST1 ), N, RWORK( VT+ST1 ),
      $                      IWORK( K+ST1 ), RWORK( DIFL+ST1 ),
      $                      RWORK( DIFR+ST1 ), RWORK( Z+ST1 ),
@@ -572,7 +578,7 @@
                   RETURN
                END IF
                BXST = BX + ST1
-               CALL CLALSA( ICMPQ2, SMLSIZ, NSIZE, NRHS, B( ST, 1 ),
+               CALL AB_CLALSA( ICMPQ2, SMLSIZ, NSIZE, NRHS, B( ST, 1 ),
      $                      LDB, WORK( BXST ), N, RWORK( U+ST1 ), N,
      $                      RWORK( VT+ST1 ), IWORK( K+ST1 ),
      $                      RWORK( DIFL+ST1 ), RWORK( DIFR+ST1 ),
@@ -591,7 +597,7 @@
 *
 *     Apply the singular values and treat the tiny ones as zero.
 *
-      TOL = RCND*ABS( D( ISAMAX( N, D, 1 ) ) )
+      TOL = RCND*ABS( D( AB_ISAMAX( N, D, 1 ) ) )
 *
       DO 250 I = 1, N
 *
@@ -599,10 +605,11 @@
 *        subproblems were not solved explicitly.
 *
          IF( ABS( D( I ) ).LE.TOL ) THEN
-            CALL CLASET( 'A', 1, NRHS, CZERO, CZERO, WORK( BX+I-1 ), N )
+            CALL AB_CLASET( 'A', 1, NRHS, CZERO, CZERO, WORK( BX+I-1 ), 
+     $N )
          ELSE
             RANK = RANK + 1
-            CALL CLASCL( 'G', 0, 0, D( I ), ONE, 1, NRHS,
+            CALL AB_CLASCL( 'G', 0, 0, D( I ), ONE, 1, NRHS,
      $                   WORK( BX+I-1 ), N, INFO )
          END IF
          D( I ) = ABS( D( I ) )
@@ -617,13 +624,13 @@
          NSIZE = IWORK( SIZEI+I-1 )
          BXST = BX + ST1
          IF( NSIZE.EQ.1 ) THEN
-            CALL CCOPY( NRHS, WORK( BXST ), N, B( ST, 1 ), LDB )
+            CALL AB_CCOPY( NRHS, WORK( BXST ), N, B( ST, 1 ), LDB )
          ELSE IF( NSIZE.LE.SMLSIZ ) THEN
 *
-*           Since B and BX are complex, the following call to SGEMM
+*           Since B and BX are complex, the following call to AB_SGEMM
 *           is performed in two steps (real and imaginary parts).
 *
-*           CALL SGEMM( 'T', 'N', NSIZE, NRHS, NSIZE, ONE,
+*           CALL AB_SGEMM( 'T', 'N', NSIZE, NRHS, NSIZE, ONE,
 *    $                  RWORK( VT+ST1 ), N, RWORK( BXST ), N, ZERO,
 *    $                  B( ST, 1 ), LDB )
 *
@@ -636,7 +643,7 @@
                   RWORK( JREAL ) = REAL( WORK( J+JROW ) )
   260          CONTINUE
   270       CONTINUE
-            CALL SGEMM( 'T', 'N', NSIZE, NRHS, NSIZE, ONE,
+            CALL AB_SGEMM( 'T', 'N', NSIZE, NRHS, NSIZE, ONE,
      $                  RWORK( VT+ST1 ), N, RWORK( IRWB ), NSIZE, ZERO,
      $                  RWORK( IRWRB ), NSIZE )
             J = BXST - N - 1
@@ -648,7 +655,7 @@
                   RWORK( JIMAG ) = AIMAG( WORK( J+JROW ) )
   280          CONTINUE
   290       CONTINUE
-            CALL SGEMM( 'T', 'N', NSIZE, NRHS, NSIZE, ONE,
+            CALL AB_SGEMM( 'T', 'N', NSIZE, NRHS, NSIZE, ONE,
      $                  RWORK( VT+ST1 ), N, RWORK( IRWB ), NSIZE, ZERO,
      $                  RWORK( IRWIB ), NSIZE )
             JREAL = IRWRB - 1
@@ -662,7 +669,8 @@
   300          CONTINUE
   310       CONTINUE
          ELSE
-            CALL CLALSA( ICMPQ2, SMLSIZ, NSIZE, NRHS, WORK( BXST ), N,
+            CALL AB_CLALSA( ICMPQ2, SMLSIZ, NSIZE, NRHS, WORK( BXST ), N
+     $,
      $                   B( ST, 1 ), LDB, RWORK( U+ST1 ), N,
      $                   RWORK( VT+ST1 ), IWORK( K+ST1 ),
      $                   RWORK( DIFL+ST1 ), RWORK( DIFR+ST1 ),
@@ -679,12 +687,12 @@
 *
 *     Unscale and sort the singular values.
 *
-      CALL SLASCL( 'G', 0, 0, ONE, ORGNRM, N, 1, D, N, INFO )
-      CALL SLASRT( 'D', N, D, INFO )
-      CALL CLASCL( 'G', 0, 0, ORGNRM, ONE, N, NRHS, B, LDB, INFO )
+      CALL AB_SLASCL( 'G', 0, 0, ONE, ORGNRM, N, 1, D, N, INFO )
+      CALL AB_SLASRT( 'D', N, D, INFO )
+      CALL AB_CLASCL( 'G', 0, 0, ORGNRM, ONE, N, NRHS, B, LDB, INFO )
 *
       RETURN
 *
-*     End of CLALSD
+*     End of AB_CLALSD
 *
       END

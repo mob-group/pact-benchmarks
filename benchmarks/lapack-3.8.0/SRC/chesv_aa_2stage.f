@@ -1,4 +1,4 @@
-*> \brief <b> CHESV_AA_2STAGE computes the solution to system of linear equations A * X = B for HE matrices</b>
+*> \brief <b> AB_CHESV_AA_2STAGE computes the solution to system of linear equations A * X = B for HE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CHESV_AA_2STAGE + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chesv_aa_2stage.f">
+*> Download AB_CHESV_AA_2STAGE + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CHESV_aa_2stage.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chesv_aa_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CHESV_aa_2stage.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chesv_aa_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CHESV_aa_2stage.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*      SUBROUTINE CHESV_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB,
+*      SUBROUTINE AB_CHESV_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB,
 *                                  IPIV, IPIV2, B, LDB, WORK, LWORK,
 *                                  INFO )
 *
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> CHESV_AA_2STAGE computes the solution to a complex system of 
+*> AB_CHESV_AA_2STAGE computes the solution to a complex system of 
 *> linear equations
 *>    A * X = B,
 *> where A is an N-by-N Hermitian matrix and X and B are N-by-NRHS
@@ -111,7 +111,7 @@
 *>          If LTB = -1, then a workspace query is assumed; the
 *>          routine only calculates the optimal size of LTB, 
 *>          returns this value as the first entry of TB, and
-*>          no error message related to LTB is issued by XERBLA.
+*>          no error message related to LTB is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IPIV
@@ -156,7 +156,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the
 *>          routine only calculates the optimal size of the WORK array,
 *>          returns this value as the first entry of the WORK array, and
-*>          no error message related to LWORK is issued by XERBLA.
+*>          no error message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -180,7 +180,7 @@
 *> \ingroup complexSYcomputational
 *
 *  =====================================================================
-      SUBROUTINE CHESV_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB,
+      SUBROUTINE AB_CHESV_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB,
      $                            IPIV, IPIV2, B, LDB, WORK, LWORK,
      $                            INFO )
 *
@@ -207,12 +207,12 @@
       INTEGER            LWKOPT
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHETRF_AA_2STAGE, CHETRS_AA_2STAGE,
-     $                   XERBLA
+      EXTERNAL           AB_CHETRF_AA_2STAGE, AB_CHETRS_AA_2STAGE,
+     $                   AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -222,10 +222,10 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
+      UPPER = AB_LSAME( UPLO, 'U' )
       WQUERY = ( LWORK.EQ.-1 )
       TQUERY = ( LTB.EQ.-1 )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -238,7 +238,7 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         CALL CHETRF_AA_2STAGE( UPLO, N, A, LDA, TB, -1, IPIV,
+         CALL AB_CHETRF_AA_2STAGE( UPLO, N, A, LDA, TB, -1, IPIV,
      $                          IPIV2, WORK, -1, INFO )
          LWKOPT = INT( WORK(1) )
          IF( LTB.LT.INT( TB(1) ) .AND. .NOT.TQUERY ) THEN
@@ -249,7 +249,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CHESV_AA_2STAGE', -INFO )
+         CALL AB_XERBLA( 'AB_CHESV_AA_2STAGE', -INFO )
          RETURN
       ELSE IF( WQUERY .OR. TQUERY ) THEN
          RETURN
@@ -258,19 +258,19 @@
 *
 *     Compute the factorization A = U*T*U**H or A = L*T*L**H.
 *
-      CALL CHETRF_AA_2STAGE( UPLO, N, A, LDA, TB, LTB, IPIV, IPIV2,
+      CALL AB_CHETRF_AA_2STAGE( UPLO, N, A, LDA, TB, LTB, IPIV, IPIV2,
      $                       WORK, LWORK, INFO )
       IF( INFO.EQ.0 ) THEN
 *
 *        Solve the system A*X = B, overwriting B with X.
 *
-         CALL CHETRS_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB, IPIV,
+         CALL AB_CHETRS_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB, IPIV,
      $                          IPIV2, B, LDB, INFO )
 *
       END IF
 *
       WORK( 1 ) = LWKOPT
 *
-*     End of CHESV_AA_2STAGE
+*     End of AB_CHESV_AA_2STAGE
 *
       END

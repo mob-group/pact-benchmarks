@@ -1,4 +1,4 @@
-*> \brief \b DTGSYL
+*> \brief \b AB_DTGSYL
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DTGSYL + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dtgsyl.f">
+*> Download AB_DTGSYL + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DTGSYL.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dtgsyl.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DTGSYL.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtgsyl.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DTGSYL.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DTGSYL( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC, D,
+*       SUBROUTINE AB_DTGSYL( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC, D,
 *                          LDD, E, LDE, F, LDF, SCALE, DIF, WORK, LWORK,
 *                          IWORK, INFO )
 *
@@ -41,7 +41,7 @@
 *>
 *> \verbatim
 *>
-*> DTGSYL solves the generalized Sylvester equation:
+*> AB_DTGSYL solves the generalized Sylvester equation:
 *>
 *>             A * R - L * B = scale * C                 (1)
 *>             D * R - L * E = scale * F
@@ -64,7 +64,7 @@
 *> Here Ik is the identity matrix of size k and X**T is the transpose of
 *> X. kron(X, Y) is the Kronecker product between the matrices X and Y.
 *>
-*> If TRANS = 'T', DTGSYL solves the transposed system Z**T*y = scale*b,
+*> If TRANS = 'T', AB_DTGSYL solves the transposed system Z**T*y = scale*b,
 *> which is equivalent to solve for R and L in
 *>
 *>             A**T * R + D**T * L = scale * C           (3)
@@ -72,9 +72,9 @@
 *>
 *> This case (TRANS = 'T') is used to compute an one-norm-based estimate
 *> of Dif[(A,D), (B,E)], the separation between the matrix pairs (A,D)
-*> and (B,E), using DLACON.
+*> and (B,E), using AB_DLACON.
 *>
-*> If IJOB >= 1, DTGSYL computes a Frobenius norm-based estimate
+*> If IJOB >= 1, AB_DTGSYL computes a Frobenius norm-based estimate
 *> of Dif[(A,D),(B,E)]. That is, the reciprocal of a lower bound on the
 *> reciprocal of the smallest singular value of Z. See [1-2] for more
 *> information.
@@ -102,7 +102,7 @@
 *>           =3: Only an estimate of Dif[(A,D), (B,E)] is computed.
 *>               (look ahead strategy IJOB  = 1 is used).
 *>           =4: Only an estimate of Dif[(A,D), (B,E)] is computed.
-*>               ( DGECON on sub-systems is used ).
+*>               ( AB_DGECON on sub-systems is used ).
 *>          Not referenced if TRANS = 'T'.
 *> \endverbatim
 *>
@@ -237,7 +237,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -295,7 +295,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DTGSYL( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC, D,
+      SUBROUTINE AB_DTGSYL( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC, D
+     $,
      $                   LDD, E, LDE, F, LDF, SCALE, DIF, WORK, LWORK,
      $                   IWORK, INFO )
 *
@@ -318,7 +319,7 @@
 *     ..
 *
 *  =====================================================================
-*  Replaced various illegal calls to DCOPY by calls to DLASET.
+*  Replaced various illegal calls to AB_DCOPY by calls to AB_DLASET.
 *  Sven Hammarling, 1/5/02.
 *
 *     .. Parameters ..
@@ -329,15 +330,16 @@
       LOGICAL            LQUERY, NOTRAN
       INTEGER            I, IE, IFUNC, IROUND, IS, ISOLVE, J, JE, JS, K,
      $                   LINFO, LWMIN, MB, NB, P, PPQQ, PQ, Q
-      DOUBLE PRECISION   DSCALE, DSUM, SCALE2, SCALOC
+      DOUBLE PRECISION   AB_DSCALE, DSUM, SCALE2, SCALOC
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      EXTERNAL           LSAME, ILAENV
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_LSAME, AB_ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMM, DLACPY, DLASET, DSCAL, DTGSY2, XERBLA
+      EXTERNAL           AB_DGEMM, AB_DLACPY, AB_DLASET, AB_DSCAL, AB_DT
+     $GSY2, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX, SQRT
@@ -347,10 +349,10 @@
 *     Decode and test input parameters
 *
       INFO = 0
-      NOTRAN = LSAME( TRANS, 'N' )
+      NOTRAN = AB_LSAME( TRANS, 'N' )
       LQUERY = ( LWORK.EQ.-1 )
 *
-      IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) ) THEN
+      IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) ) THEN
          INFO = -1
       ELSE IF( NOTRAN ) THEN
          IF( ( IJOB.LT.0 ) .OR. ( IJOB.GT.4 ) ) THEN
@@ -395,7 +397,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DTGSYL', -INFO )
+         CALL AB_XERBLA( 'AB_DTGSYL', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -415,16 +417,16 @@
 *
 *     Determine optimal block sizes MB and NB
 *
-      MB = ILAENV( 2, 'DTGSYL', TRANS, M, N, -1, -1 )
-      NB = ILAENV( 5, 'DTGSYL', TRANS, M, N, -1, -1 )
+      MB = AB_ILAENV( 2, 'AB_DTGSYL', TRANS, M, N, -1, -1 )
+      NB = AB_ILAENV( 5, 'AB_DTGSYL', TRANS, M, N, -1, -1 )
 *
       ISOLVE = 1
       IFUNC = 0
       IF( NOTRAN ) THEN
          IF( IJOB.GE.3 ) THEN
             IFUNC = IJOB - 2
-            CALL DLASET( 'F', M, N, ZERO, ZERO, C, LDC )
-            CALL DLASET( 'F', M, N, ZERO, ZERO, F, LDF )
+            CALL AB_DLASET( 'F', M, N, ZERO, ZERO, C, LDC )
+            CALL AB_DLASET( 'F', M, N, ZERO, ZERO, F, LDF )
          ELSE IF( IJOB.GE.1 ) THEN
             ISOLVE = 2
          END IF
@@ -437,17 +439,19 @@
 *
 *           Use unblocked Level 2 solver
 *
-            DSCALE = ZERO
+            AB_DSCALE = ZERO
             DSUM = ONE
             PQ = 0
-            CALL DTGSY2( TRANS, IFUNC, M, N, A, LDA, B, LDB, C, LDC, D,
-     $                   LDD, E, LDE, F, LDF, SCALE, DSUM, DSCALE,
+            CALL AB_DTGSY2( TRANS, IFUNC, M, N, A, LDA, B, LDB, C, LDC, 
+     $D,
+     $                   LDD, E, LDE, F, LDF, SCALE, DSUM, AB_DSCALE,
      $                   IWORK, PQ, INFO )
-            IF( DSCALE.NE.ZERO ) THEN
+            IF( AB_DSCALE.NE.ZERO ) THEN
                IF( IJOB.EQ.1 .OR. IJOB.EQ.3 ) THEN
-                  DIF = SQRT( DBLE( 2*M*N ) ) / ( DSCALE*SQRT( DSUM ) )
+                  DIF = SQRT( DBLE( 2*M*N ) ) / ( AB_DSCALE*SQRT( DSUM )
+     $ )
                ELSE
-                  DIF = SQRT( DBLE( PQ ) ) / ( DSCALE*SQRT( DSUM ) )
+                  DIF = SQRT( DBLE( PQ ) ) / ( AB_DSCALE*SQRT( DSUM ) )
                END IF
             END IF
 *
@@ -456,13 +460,13 @@
                   IFUNC = IJOB
                END IF
                SCALE2 = SCALE
-               CALL DLACPY( 'F', M, N, C, LDC, WORK, M )
-               CALL DLACPY( 'F', M, N, F, LDF, WORK( M*N+1 ), M )
-               CALL DLASET( 'F', M, N, ZERO, ZERO, C, LDC )
-               CALL DLASET( 'F', M, N, ZERO, ZERO, F, LDF )
+               CALL AB_DLACPY( 'F', M, N, C, LDC, WORK, M )
+               CALL AB_DLACPY( 'F', M, N, F, LDF, WORK( M*N+1 ), M )
+               CALL AB_DLASET( 'F', M, N, ZERO, ZERO, C, LDC )
+               CALL AB_DLASET( 'F', M, N, ZERO, ZERO, F, LDF )
             ELSE IF( ISOLVE.EQ.2 .AND. IROUND.EQ.2 ) THEN
-               CALL DLACPY( 'F', M, N, WORK, M, C, LDC )
-               CALL DLACPY( 'F', M, N, WORK( M*N+1 ), M, F, LDF )
+               CALL AB_DLACPY( 'F', M, N, WORK, M, C, LDC )
+               CALL AB_DLACPY( 'F', M, N, WORK( M*N+1 ), M, F, LDF )
                SCALE = SCALE2
             END IF
    30    CONTINUE
@@ -521,7 +525,7 @@
 *               D(I, I) * R(I, J) - L(I, J) * E(J, J) = F(I, J)
 *           for I = P, P - 1,..., 1; J = 1, 2,..., Q
 *
-            DSCALE = ZERO
+            AB_DSCALE = ZERO
             DSUM = ONE
             PQ = 0
             SCALE = ONE
@@ -534,10 +538,12 @@
                   IE = IWORK( I+1 ) - 1
                   MB = IE - IS + 1
                   PPQQ = 0
-                  CALL DTGSY2( TRANS, IFUNC, MB, NB, A( IS, IS ), LDA,
+                  CALL AB_DTGSY2( TRANS, IFUNC, MB, NB, A( IS, IS ), LDA
+     $,
      $                         B( JS, JS ), LDB, C( IS, JS ), LDC,
      $                         D( IS, IS ), LDD, E( JS, JS ), LDE,
-     $                         F( IS, JS ), LDF, SCALOC, DSUM, DSCALE,
+     $                         F( IS, JS ), LDF, SCALOC, DSUM, AB_DSCALE
+     $,
      $                         IWORK( Q+2 ), PPQQ, LINFO )
                   IF( LINFO.GT.0 )
      $               INFO = LINFO
@@ -545,20 +551,20 @@
                   PQ = PQ + PPQQ
                   IF( SCALOC.NE.ONE ) THEN
                      DO 80 K = 1, JS - 1
-                        CALL DSCAL( M, SCALOC, C( 1, K ), 1 )
-                        CALL DSCAL( M, SCALOC, F( 1, K ), 1 )
+                        CALL AB_DSCAL( M, SCALOC, C( 1, K ), 1 )
+                        CALL AB_DSCAL( M, SCALOC, F( 1, K ), 1 )
    80                CONTINUE
                      DO 90 K = JS, JE
-                        CALL DSCAL( IS-1, SCALOC, C( 1, K ), 1 )
-                        CALL DSCAL( IS-1, SCALOC, F( 1, K ), 1 )
+                        CALL AB_DSCAL( IS-1, SCALOC, C( 1, K ), 1 )
+                        CALL AB_DSCAL( IS-1, SCALOC, F( 1, K ), 1 )
    90                CONTINUE
                      DO 100 K = JS, JE
-                        CALL DSCAL( M-IE, SCALOC, C( IE+1, K ), 1 )
-                        CALL DSCAL( M-IE, SCALOC, F( IE+1, K ), 1 )
+                        CALL AB_DSCAL( M-IE, SCALOC, C( IE+1, K ), 1 )
+                        CALL AB_DSCAL( M-IE, SCALOC, F( IE+1, K ), 1 )
   100                CONTINUE
                      DO 110 K = JE + 1, N
-                        CALL DSCAL( M, SCALOC, C( 1, K ), 1 )
-                        CALL DSCAL( M, SCALOC, F( 1, K ), 1 )
+                        CALL AB_DSCAL( M, SCALOC, C( 1, K ), 1 )
+                        CALL AB_DSCAL( M, SCALOC, F( 1, K ), 1 )
   110                CONTINUE
                      SCALE = SCALE*SCALOC
                   END IF
@@ -567,28 +573,29 @@
 *                 equation.
 *
                   IF( I.GT.1 ) THEN
-                     CALL DGEMM( 'N', 'N', IS-1, NB, MB, -ONE,
+                     CALL AB_DGEMM( 'N', 'N', IS-1, NB, MB, -ONE,
      $                           A( 1, IS ), LDA, C( IS, JS ), LDC, ONE,
      $                           C( 1, JS ), LDC )
-                     CALL DGEMM( 'N', 'N', IS-1, NB, MB, -ONE,
+                     CALL AB_DGEMM( 'N', 'N', IS-1, NB, MB, -ONE,
      $                           D( 1, IS ), LDD, C( IS, JS ), LDC, ONE,
      $                           F( 1, JS ), LDF )
                   END IF
                   IF( J.LT.Q ) THEN
-                     CALL DGEMM( 'N', 'N', MB, N-JE, NB, ONE,
+                     CALL AB_DGEMM( 'N', 'N', MB, N-JE, NB, ONE,
      $                           F( IS, JS ), LDF, B( JS, JE+1 ), LDB,
      $                           ONE, C( IS, JE+1 ), LDC )
-                     CALL DGEMM( 'N', 'N', MB, N-JE, NB, ONE,
+                     CALL AB_DGEMM( 'N', 'N', MB, N-JE, NB, ONE,
      $                           F( IS, JS ), LDF, E( JS, JE+1 ), LDE,
      $                           ONE, F( IS, JE+1 ), LDF )
                   END IF
   120          CONTINUE
   130       CONTINUE
-            IF( DSCALE.NE.ZERO ) THEN
+            IF( AB_DSCALE.NE.ZERO ) THEN
                IF( IJOB.EQ.1 .OR. IJOB.EQ.3 ) THEN
-                  DIF = SQRT( DBLE( 2*M*N ) ) / ( DSCALE*SQRT( DSUM ) )
+                  DIF = SQRT( DBLE( 2*M*N ) ) / ( AB_DSCALE*SQRT( DSUM )
+     $ )
                ELSE
-                  DIF = SQRT( DBLE( PQ ) ) / ( DSCALE*SQRT( DSUM ) )
+                  DIF = SQRT( DBLE( PQ ) ) / ( AB_DSCALE*SQRT( DSUM ) )
                END IF
             END IF
             IF( ISOLVE.EQ.2 .AND. IROUND.EQ.1 ) THEN
@@ -596,13 +603,13 @@
                   IFUNC = IJOB
                END IF
                SCALE2 = SCALE
-               CALL DLACPY( 'F', M, N, C, LDC, WORK, M )
-               CALL DLACPY( 'F', M, N, F, LDF, WORK( M*N+1 ), M )
-               CALL DLASET( 'F', M, N, ZERO, ZERO, C, LDC )
-               CALL DLASET( 'F', M, N, ZERO, ZERO, F, LDF )
+               CALL AB_DLACPY( 'F', M, N, C, LDC, WORK, M )
+               CALL AB_DLACPY( 'F', M, N, F, LDF, WORK( M*N+1 ), M )
+               CALL AB_DLASET( 'F', M, N, ZERO, ZERO, C, LDC )
+               CALL AB_DLASET( 'F', M, N, ZERO, ZERO, F, LDF )
             ELSE IF( ISOLVE.EQ.2 .AND. IROUND.EQ.2 ) THEN
-               CALL DLACPY( 'F', M, N, WORK, M, C, LDC )
-               CALL DLACPY( 'F', M, N, WORK( M*N+1 ), M, F, LDF )
+               CALL AB_DLACPY( 'F', M, N, WORK, M, C, LDC )
+               CALL AB_DLACPY( 'F', M, N, WORK( M*N+1 ), M, F, LDF )
                SCALE = SCALE2
             END IF
   150    CONTINUE
@@ -623,29 +630,29 @@
                JS = IWORK( J )
                JE = IWORK( J+1 ) - 1
                NB = JE - JS + 1
-               CALL DTGSY2( TRANS, IFUNC, MB, NB, A( IS, IS ), LDA,
+               CALL AB_DTGSY2( TRANS, IFUNC, MB, NB, A( IS, IS ), LDA,
      $                      B( JS, JS ), LDB, C( IS, JS ), LDC,
      $                      D( IS, IS ), LDD, E( JS, JS ), LDE,
-     $                      F( IS, JS ), LDF, SCALOC, DSUM, DSCALE,
+     $                      F( IS, JS ), LDF, SCALOC, DSUM, AB_DSCALE,
      $                      IWORK( Q+2 ), PPQQ, LINFO )
                IF( LINFO.GT.0 )
      $            INFO = LINFO
                IF( SCALOC.NE.ONE ) THEN
                   DO 160 K = 1, JS - 1
-                     CALL DSCAL( M, SCALOC, C( 1, K ), 1 )
-                     CALL DSCAL( M, SCALOC, F( 1, K ), 1 )
+                     CALL AB_DSCAL( M, SCALOC, C( 1, K ), 1 )
+                     CALL AB_DSCAL( M, SCALOC, F( 1, K ), 1 )
   160             CONTINUE
                   DO 170 K = JS, JE
-                     CALL DSCAL( IS-1, SCALOC, C( 1, K ), 1 )
-                     CALL DSCAL( IS-1, SCALOC, F( 1, K ), 1 )
+                     CALL AB_DSCAL( IS-1, SCALOC, C( 1, K ), 1 )
+                     CALL AB_DSCAL( IS-1, SCALOC, F( 1, K ), 1 )
   170             CONTINUE
                   DO 180 K = JS, JE
-                     CALL DSCAL( M-IE, SCALOC, C( IE+1, K ), 1 )
-                     CALL DSCAL( M-IE, SCALOC, F( IE+1, K ), 1 )
+                     CALL AB_DSCAL( M-IE, SCALOC, C( IE+1, K ), 1 )
+                     CALL AB_DSCAL( M-IE, SCALOC, F( IE+1, K ), 1 )
   180             CONTINUE
                   DO 190 K = JE + 1, N
-                     CALL DSCAL( M, SCALOC, C( 1, K ), 1 )
-                     CALL DSCAL( M, SCALOC, F( 1, K ), 1 )
+                     CALL AB_DSCAL( M, SCALOC, C( 1, K ), 1 )
+                     CALL AB_DSCAL( M, SCALOC, F( 1, K ), 1 )
   190             CONTINUE
                   SCALE = SCALE*SCALOC
                END IF
@@ -653,18 +660,20 @@
 *              Substitute R(I, J) and L(I, J) into remaining equation.
 *
                IF( J.GT.P+2 ) THEN
-                  CALL DGEMM( 'N', 'T', MB, JS-1, NB, ONE, C( IS, JS ),
+                  CALL AB_DGEMM( 'N', 'T', MB, JS-1, NB, ONE, C( IS, JS 
+     $),
      $                        LDC, B( 1, JS ), LDB, ONE, F( IS, 1 ),
      $                        LDF )
-                  CALL DGEMM( 'N', 'T', MB, JS-1, NB, ONE, F( IS, JS ),
+                  CALL AB_DGEMM( 'N', 'T', MB, JS-1, NB, ONE, F( IS, JS 
+     $),
      $                        LDF, E( 1, JS ), LDE, ONE, F( IS, 1 ),
      $                        LDF )
                END IF
                IF( I.LT.P ) THEN
-                  CALL DGEMM( 'T', 'N', M-IE, NB, MB, -ONE,
+                  CALL AB_DGEMM( 'T', 'N', M-IE, NB, MB, -ONE,
      $                        A( IS, IE+1 ), LDA, C( IS, JS ), LDC, ONE,
      $                        C( IE+1, JS ), LDC )
-                  CALL DGEMM( 'T', 'N', M-IE, NB, MB, -ONE,
+                  CALL AB_DGEMM( 'T', 'N', M-IE, NB, MB, -ONE,
      $                        D( IS, IE+1 ), LDD, F( IS, JS ), LDF, ONE,
      $                        C( IE+1, JS ), LDC )
                END IF
@@ -677,6 +686,6 @@
 *
       RETURN
 *
-*     End of DTGSYL
+*     End of AB_DTGSYL
 *
       END

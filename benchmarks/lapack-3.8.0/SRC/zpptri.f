@@ -1,4 +1,4 @@
-*> \brief \b ZPPTRI
+*> \brief \b AB_ZPPTRI
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZPPTRI + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zpptri.f">
+*> Download AB_ZPPTRI + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZPPTRI.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zpptri.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZPPTRI.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpptri.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZPPTRI.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZPPTRI( UPLO, N, AP, INFO )
+*       SUBROUTINE AB_ZPPTRI( UPLO, N, AP, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,9 +34,9 @@
 *>
 *> \verbatim
 *>
-*> ZPPTRI computes the inverse of a complex Hermitian positive definite
+*> AB_ZPPTRI computes the inverse of a complex Hermitian positive definite
 *> matrix A using the Cholesky factorization A = U**H*U or A = L*L**H
-*> computed by ZPPTRF.
+*> computed by AB_ZPPTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -91,7 +91,7 @@
 *> \ingroup complex16OTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE ZPPTRI( UPLO, N, AP, INFO )
+      SUBROUTINE AB_ZPPTRI( UPLO, N, AP, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -118,12 +118,13 @@
       DOUBLE PRECISION   AJJ
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      COMPLEX*16         ZDOTC
-      EXTERNAL           LSAME, ZDOTC
+      LOGICAL            AB_LSAME
+      COMPLEX*16         AB_ZDOTC
+      EXTERNAL           AB_LSAME, AB_ZDOTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZDSCAL, ZHPR, ZTPMV, ZTPTRI
+      EXTERNAL           AB_XERBLA, AB_ZDSCAL, AB_ZHPR, AB_ZTPMV, AB_ZTP
+     $TRI
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE
@@ -133,14 +134,14 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZPPTRI', -INFO )
+         CALL AB_XERBLA( 'AB_ZPPTRI', -INFO )
          RETURN
       END IF
 *
@@ -151,7 +152,7 @@
 *
 *     Invert the triangular Cholesky factor U or L.
 *
-      CALL ZTPTRI( UPLO, 'Non-unit', N, AP, INFO )
+      CALL AB_ZTPTRI( UPLO, 'Non-unit', N, AP, INFO )
       IF( INFO.GT.0 )
      $   RETURN
       IF( UPPER ) THEN
@@ -163,9 +164,9 @@
             JC = JJ + 1
             JJ = JJ + J
             IF( J.GT.1 )
-     $         CALL ZHPR( 'Upper', J-1, ONE, AP( JC ), 1, AP )
+     $         CALL AB_ZHPR( 'Upper', J-1, ONE, AP( JC ), 1, AP )
             AJJ = AP( JJ )
-            CALL ZDSCAL( J, AJJ, AP( JC ), 1 )
+            CALL AB_ZDSCAL( J, AJJ, AP( JC ), 1 )
    10    CONTINUE
 *
       ELSE
@@ -175,9 +176,11 @@
          JJ = 1
          DO 20 J = 1, N
             JJN = JJ + N - J + 1
-            AP( JJ ) = DBLE( ZDOTC( N-J+1, AP( JJ ), 1, AP( JJ ), 1 ) )
+            AP( JJ ) = DBLE( AB_ZDOTC( N-J+1, AP( JJ ), 1, AP( JJ ), 1 )
+     $ )
             IF( J.LT.N )
-     $         CALL ZTPMV( 'Lower', 'Conjugate transpose', 'Non-unit',
+     $         CALL AB_ZTPMV( 'Lower', 'Conjugate transpose', 'Non-unit'
+     $,
      $                     N-J, AP( JJN ), AP( JJ+1 ), 1 )
             JJ = JJN
    20    CONTINUE
@@ -185,6 +188,6 @@
 *
       RETURN
 *
-*     End of ZPPTRI
+*     End of AB_ZPPTRI
 *
       END

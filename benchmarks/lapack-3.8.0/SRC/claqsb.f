@@ -1,4 +1,4 @@
-*> \brief \b CLAQSB scales a symmetric/Hermitian band matrix, using scaling factors computed by spbequ.
+*> \brief \b AB_CLAQSB scales a symmetric/Hermitian band matrix, using scaling factors computed by AB_SPBEQU.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CLAQSB + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/claqsb.f">
+*> Download AB_CLAQSB + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLAQSB.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/claqsb.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLAQSB.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claqsb.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLAQSB.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLAQSB( UPLO, N, KD, AB, LDAB, S, SCOND, AMAX, EQUED )
+*       SUBROUTINE AB_CLAQSB( UPLO, N, KD, AB, LDAB, S, SCOND, AMAX, EQUED )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          EQUED, UPLO
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> CLAQSB equilibrates a symmetric band matrix A using the scaling
+*> AB_CLAQSB equilibrates a symmetric band matrix A using the scaling
 *> factors in the vector S.
 *> \endverbatim
 *
@@ -139,7 +139,8 @@
 *> \ingroup complexOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE CLAQSB( UPLO, N, KD, AB, LDAB, S, SCOND, AMAX, EQUED )
+      SUBROUTINE AB_CLAQSB( UPLO, N, KD, AB, LDAB, S, SCOND, AMAX, EQUED
+     $ )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -167,9 +168,9 @@
       REAL               CJ, LARGE, SMALL
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
+      LOGICAL            AB_LSAME
       REAL               SLAMCH
-      EXTERNAL           LSAME, SLAMCH
+      EXTERNAL           AB_LSAME, SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -197,7 +198,7 @@
 *
 *        Replace A by diag(S) * A * diag(S).
 *
-         IF( LSAME( UPLO, 'U' ) ) THEN
+         IF( AB_LSAME( UPLO, 'U' ) ) THEN
 *
 *           Upper triangle of A is stored in band format.
 *
@@ -223,6 +224,6 @@
 *
       RETURN
 *
-*     End of CLAQSB
+*     End of AB_CLAQSB
 *
       END

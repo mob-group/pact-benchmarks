@@ -1,4 +1,4 @@
-*> \brief \b ZTBTRS
+*> \brief \b AB_ZTBTRS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZTBTRS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztbtrs.f">
+*> Download AB_ZTBTRS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZTBTRS.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztbtrs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZTBTRS.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztbtrs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZTBTRS.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZTBTRS( UPLO, TRANS, DIAG, N, KD, NRHS, AB, LDAB, B,
+*       SUBROUTINE AB_ZTBTRS( UPLO, TRANS, DIAG, N, KD, NRHS, AB, LDAB, B,
 *                          LDB, INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> ZTBTRS solves a triangular system of the form
+*> AB_ZTBTRS solves a triangular system of the form
 *>
 *>    A * X = B,  A**T * X = B,  or  A**H * X = B,
 *>
@@ -143,7 +143,7 @@
 *> \ingroup complex16OTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE ZTBTRS( UPLO, TRANS, DIAG, N, KD, NRHS, AB, LDAB, B,
+      SUBROUTINE AB_ZTBTRS( UPLO, TRANS, DIAG, N, KD, NRHS, AB, LDAB, B,
      $                   LDB, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -170,11 +170,11 @@
       INTEGER            J
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZTBSV
+      EXTERNAL           AB_XERBLA, AB_ZTBSV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -184,14 +184,15 @@
 *     Test the input parameters.
 *
       INFO = 0
-      NOUNIT = LSAME( DIAG, 'N' )
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      NOUNIT = AB_LSAME( DIAG, 'N' )
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME( TRANS, 'N' ) .AND. .NOT.
-     $         LSAME( TRANS, 'T' ) .AND. .NOT.LSAME( TRANS, 'C' ) ) THEN
+      ELSE IF( .NOT.AB_LSAME( TRANS, 'N' ) .AND. .NOT.
+     $         AB_LSAME( TRANS, 'T' ) .AND. .NOT.AB_LSAME( TRANS, 'C' ) 
+     $) THEN
          INFO = -2
-      ELSE IF( .NOT.NOUNIT .AND. .NOT.LSAME( DIAG, 'U' ) ) THEN
+      ELSE IF( .NOT.NOUNIT .AND. .NOT.AB_LSAME( DIAG, 'U' ) ) THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
@@ -205,7 +206,7 @@
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZTBTRS', -INFO )
+         CALL AB_XERBLA( 'AB_ZTBTRS', -INFO )
          RETURN
       END IF
 *
@@ -234,11 +235,12 @@
 *     Solve A * X = B,  A**T * X = B,  or  A**H * X = B.
 *
       DO 30 J = 1, NRHS
-         CALL ZTBSV( UPLO, TRANS, DIAG, N, KD, AB, LDAB, B( 1, J ), 1 )
+         CALL AB_ZTBSV( UPLO, TRANS, DIAG, N, KD, AB, LDAB, B( 1, J ), 1
+     $ )
    30 CONTINUE
 *
       RETURN
 *
-*     End of ZTBTRS
+*     End of AB_ZTBTRS
 *
       END

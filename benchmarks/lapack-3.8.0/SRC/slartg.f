@@ -1,4 +1,4 @@
-*> \brief \b SLARTG generates a plane rotation with real cosine and real sine.
+*> \brief \b AB_SLARTG generates a plane rotation with real cosine and real sine.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLARTG + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slartg.f">
+*> Download AB_SLARTG + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLARTG.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slartg.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLARTG.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slartg.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLARTG.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLARTG( F, G, CS, SN, R )
+*       SUBROUTINE AB_SLARTG( F, G, CS, SN, R )
 *
 *       .. Scalar Arguments ..
 *       REAL               CS, F, G, R, SN
@@ -30,17 +30,17 @@
 *>
 *> \verbatim
 *>
-*> SLARTG generate a plane rotation so that
+*> AB_SLARTG generate a plane rotation so that
 *>
 *>    [  CS  SN  ]  .  [ F ]  =  [ R ]   where CS**2 + SN**2 = 1.
 *>    [ -SN  CS  ]     [ G ]     [ 0 ]
 *>
-*> This is a slower, more accurate version of the BLAS1 routine SROTG,
+*> This is a slower, more accurate version of the BLAS1 routine AB_SROTG,
 *> with the following other differences:
 *>    F and G are unchanged on return.
 *>    If G=0, then CS=1 and SN=0.
 *>    If F=0 and (G .ne. 0), then CS=0 and SN=1 without doing any
-*>       floating point operations (saves work in SBDSQR when
+*>       floating point operations (saves work in AB_SBDSQR when
 *>       there are zeros on the diagonal).
 *>
 *> If F exceeds G in magnitude, CS will be positive.
@@ -95,7 +95,7 @@
 *> \ingroup OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE SLARTG( F, G, CS, SN, R )
+      SUBROUTINE AB_SLARTG( F, G, CS, SN, R )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -199,6 +199,6 @@
       END IF
       RETURN
 *
-*     End of SLARTG
+*     End of AB_SLARTG
 *
       END

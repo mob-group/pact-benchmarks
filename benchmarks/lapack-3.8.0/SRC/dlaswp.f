@@ -1,4 +1,4 @@
-*> \brief \b DLASWP performs a series of row interchanges on a general rectangular matrix.
+*> \brief \b AB_DLASWP performs a series of row interchanges on a general rectangular matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLASWP + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaswp.f">
+*> Download AB_DLASWP + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLASWP.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaswp.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLASWP.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaswp.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLASWP.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLASWP( N, A, LDA, K1, K2, IPIV, INCX )
+*       SUBROUTINE AB_DLASWP( N, A, LDA, K1, K2, IPIV, INCX )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCX, K1, K2, LDA, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> DLASWP performs a series of row interchanges on the matrix A.
+*> AB_DLASWP performs a series of row interchanges on the matrix A.
 *> One row interchange is initiated for each of rows K1 through K2 of A.
 *> \endverbatim
 *
@@ -113,7 +113,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DLASWP( N, A, LDA, K1, K2, IPIV, INCX )
+      SUBROUTINE AB_DLASWP( N, A, LDA, K1, K2, IPIV, INCX )
 *
 *  -- LAPACK auxiliary routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -188,6 +188,6 @@
 *
       RETURN
 *
-*     End of DLASWP
+*     End of AB_DLASWP
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b CTRSEN
+*> \brief \b AB_CTRSEN
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CTRSEN + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctrsen.f">
+*> Download AB_CTRSEN + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CTRSEN.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctrsen.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CTRSEN.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctrsen.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CTRSEN.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CTRSEN( JOB, COMPQ, SELECT, N, T, LDT, Q, LDQ, W, M, S,
+*       SUBROUTINE AB_CTRSEN( JOB, COMPQ, SELECT, N, T, LDT, Q, LDQ, W, M, S,
 *                          SEP, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> CTRSEN reorders the Schur factorization of a complex matrix
+*> AB_CTRSEN reorders the Schur factorization of a complex matrix
 *> A = Q*T*Q**H, so that a selected cluster of eigenvalues appears in
 *> the leading positions on the diagonal of the upper triangular matrix
 *> T, and the leading columns of Q form an orthonormal basis of the
@@ -164,7 +164,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -191,7 +191,7 @@
 *>
 *> \verbatim
 *>
-*>  CTRSEN first collects the selected eigenvalues by computing a unitary
+*>  AB_CTRSEN first collects the selected eigenvalues by computing a unitary
 *>  transformation Z to move them to the top left corner of T. In other
 *>  words, the selected eigenvalues are the eigenvalues of T11 in:
 *>
@@ -261,7 +261,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CTRSEN( JOB, COMPQ, SELECT, N, T, LDT, Q, LDQ, W, M, S,
+      SUBROUTINE AB_CTRSEN( JOB, COMPQ, SELECT, N, T, LDT, Q, LDQ, W, M,
+     $ S,
      $                   SEP, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -295,12 +296,13 @@
       REAL               RWORK( 1 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               CLANGE
-      EXTERNAL           LSAME, CLANGE
+      LOGICAL            AB_LSAME
+      REAL               AB_CLANGE
+      EXTERNAL           AB_LSAME, AB_CLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLACN2, CLACPY, CTREXC, CTRSYL, XERBLA
+      EXTERNAL           AB_CLACN2, AB_CLACPY, AB_CTREXC, AB_CTRSYL, AB_
+     $XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT
@@ -309,10 +311,10 @@
 *
 *     Decode and test the input parameters.
 *
-      WANTBH = LSAME( JOB, 'B' )
-      WANTS = LSAME( JOB, 'E' ) .OR. WANTBH
-      WANTSP = LSAME( JOB, 'V' ) .OR. WANTBH
-      WANTQ = LSAME( COMPQ, 'V' )
+      WANTBH = AB_LSAME( JOB, 'B' )
+      WANTS = AB_LSAME( JOB, 'E' ) .OR. WANTBH
+      WANTSP = AB_LSAME( JOB, 'V' ) .OR. WANTBH
+      WANTQ = AB_LSAME( COMPQ, 'V' )
 *
 *     Set M to the number of selected eigenvalues.
 *
@@ -331,16 +333,16 @@
 *
       IF( WANTSP ) THEN
          LWMIN = MAX( 1, 2*NN )
-      ELSE IF( LSAME( JOB, 'N' ) ) THEN
+      ELSE IF( AB_LSAME( JOB, 'N' ) ) THEN
          LWMIN = 1
-      ELSE IF( LSAME( JOB, 'E' ) ) THEN
+      ELSE IF( AB_LSAME( JOB, 'E' ) ) THEN
          LWMIN = MAX( 1, NN )
       END IF
 *
-      IF( .NOT.LSAME( JOB, 'N' ) .AND. .NOT.WANTS .AND. .NOT.WANTSP )
+      IF( .NOT.AB_LSAME( JOB, 'N' ) .AND. .NOT.WANTS .AND. .NOT.WANTSP )
      $     THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME( COMPQ, 'N' ) .AND. .NOT.WANTQ ) THEN
+      ELSE IF( .NOT.AB_LSAME( COMPQ, 'N' ) .AND. .NOT.WANTQ ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
@@ -357,7 +359,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CTRSEN', -INFO )
+         CALL AB_XERBLA( 'AB_CTRSEN', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -369,7 +371,7 @@
          IF( WANTS )
      $      S = ONE
          IF( WANTSP )
-     $      SEP = CLANGE( '1', N, N, T, LDT, RWORK )
+     $      SEP = AB_CLANGE( '1', N, N, T, LDT, RWORK )
          GO TO 40
       END IF
 *
@@ -383,7 +385,7 @@
 *           Swap the K-th eigenvalue to position KS.
 *
             IF( K.NE.KS )
-     $         CALL CTREXC( COMPQ, N, T, LDT, Q, LDQ, K, KS, IERR )
+     $         CALL AB_CTREXC( COMPQ, N, T, LDT, Q, LDQ, K, KS, IERR )
          END IF
    20 CONTINUE
 *
@@ -393,14 +395,14 @@
 *
 *           T11*R - R*T22 = scale*T12
 *
-         CALL CLACPY( 'F', N1, N2, T( 1, N1+1 ), LDT, WORK, N1 )
-         CALL CTRSYL( 'N', 'N', -1, N1, N2, T, LDT, T( N1+1, N1+1 ),
+         CALL AB_CLACPY( 'F', N1, N2, T( 1, N1+1 ), LDT, WORK, N1 )
+         CALL AB_CTRSYL( 'N', 'N', -1, N1, N2, T, LDT, T( N1+1, N1+1 ),
      $                LDT, WORK, N1, SCALE, IERR )
 *
 *        Estimate the reciprocal of the condition number of the cluster
 *        of eigenvalues.
 *
-         RNORM = CLANGE( 'F', N1, N2, WORK, N1, RWORK )
+         RNORM = AB_CLANGE( 'F', N1, N2, WORK, N1, RWORK )
          IF( RNORM.EQ.ZERO ) THEN
             S = ONE
          ELSE
@@ -416,20 +418,20 @@
          EST = ZERO
          KASE = 0
    30    CONTINUE
-         CALL CLACN2( NN, WORK( NN+1 ), WORK, EST, KASE, ISAVE )
+         CALL AB_CLACN2( NN, WORK( NN+1 ), WORK, EST, KASE, ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN
 *
 *              Solve T11*R - R*T22 = scale*X.
 *
-               CALL CTRSYL( 'N', 'N', -1, N1, N2, T, LDT,
+               CALL AB_CTRSYL( 'N', 'N', -1, N1, N2, T, LDT,
      $                      T( N1+1, N1+1 ), LDT, WORK, N1, SCALE,
      $                      IERR )
             ELSE
 *
 *              Solve T11**H*R - R*T22**H = scale*X.
 *
-               CALL CTRSYL( 'C', 'C', -1, N1, N2, T, LDT,
+               CALL AB_CTRSYL( 'C', 'C', -1, N1, N2, T, LDT,
      $                      T( N1+1, N1+1 ), LDT, WORK, N1, SCALE,
      $                      IERR )
             END IF
@@ -451,6 +453,6 @@
 *
       RETURN
 *
-*     End of CTRSEN
+*     End of AB_CTRSEN
 *
       END

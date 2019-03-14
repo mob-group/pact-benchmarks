@@ -1,4 +1,4 @@
-*> \brief \b SSYTRS_AA
+*> \brief \b AB_SSYTRS_AA
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SSYTRS_AA + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssytrs_aa.f">
+*> Download AB_SSYTRS_AA + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SSYTRS_aa.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssytrs_aa.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SSYTRS_aa.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssytrs_aa.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SSYTRS_aa.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SSYTRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
+*       SUBROUTINE AB_SSYTRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
 *                             WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,9 +36,9 @@
 *>
 *> \verbatim
 *>
-*> SSYTRS_AA solves a system of linear equations A*X = B with a real
+*> AB_SSYTRS_AA solves a system of linear equations A*X = B with a real
 *> symmetric matrix A using the factorization A = U*T*U**T or
-*> A = L*T*L**T computed by SSYTRF_AA.
+*> A = L*T*L**T computed by AB_SSYTRF_AA.
 *> \endverbatim
 *
 *  Arguments:
@@ -69,7 +69,7 @@
 *> \param[in] A
 *> \verbatim
 *>          A is REAL array, dimension (LDA,N)
-*>          Details of factors computed by SSYTRF_AA.
+*>          Details of factors computed by AB_SSYTRF_AA.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -81,7 +81,7 @@
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          Details of the interchanges as computed by SSYTRF_AA.
+*>          Details of the interchanges as computed by AB_SSYTRF_AA.
 *> \endverbatim
 *>
 *> \param[in,out] B
@@ -126,7 +126,7 @@
 *> \ingroup realSYcomputational
 *
 *  =====================================================================
-      SUBROUTINE SSYTRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
+      SUBROUTINE AB_SSYTRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
      $                      WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.8.0) --
@@ -155,11 +155,12 @@
       INTEGER            K, KP, LWKOPT
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGTSV, SSWAP, SLACPY, STRSM, XERBLA
+      EXTERNAL           AB_SGTSV, AB_SSWAP, AB_SLACPY, AB_STRSM, AB_XER
+     $BLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -167,9 +168,9 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
+      UPPER = AB_LSAME( UPLO, 'U' )
       LQUERY = ( LWORK.EQ.-1 )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -183,7 +184,7 @@
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SSYTRS_AA', -INFO )
+         CALL AB_XERBLA( 'AB_SSYTRS_AA', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          LWKOPT = (3*N-2)
@@ -206,29 +207,31 @@
          DO WHILE ( K.LE.N )
             KP = IPIV( K )
             IF( KP.NE.K )
-     $          CALL SSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $          CALL AB_SSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
             K = K + 1
          END DO
 *
 *        Compute (U \P**T * B) -> B    [ (U \P**T * B) ]
 *
-         CALL STRSM('L', 'U', 'T', 'U', N-1, NRHS, ONE, A( 1, 2 ), LDA,
+         CALL AB_STRSM('L', 'U', 'T', 'U', N-1, NRHS, ONE, A( 1, 2 ), LD
+     $A,
      $               B( 2, 1 ), LDB)
 *
 *        Compute T \ B -> B   [ T \ (U \P**T * B) ]
 *
-         CALL SLACPY( 'F', 1, N, A(1, 1), LDA+1, WORK(N), 1)
+         CALL AB_SLACPY( 'F', 1, N, A(1, 1), LDA+1, WORK(N), 1)
          IF( N.GT.1 ) THEN
-             CALL SLACPY( 'F', 1, N-1, A(1, 2), LDA+1, WORK(1), 1)
-             CALL SLACPY( 'F', 1, N-1, A(1, 2), LDA+1, WORK(2*N), 1)
+             CALL AB_SLACPY( 'F', 1, N-1, A(1, 2), LDA+1, WORK(1), 1)
+             CALL AB_SLACPY( 'F', 1, N-1, A(1, 2), LDA+1, WORK(2*N), 1)
          END IF
-         CALL SGTSV(N, NRHS, WORK(1), WORK(N), WORK(2*N), B, LDB,
+         CALL AB_SGTSV(N, NRHS, WORK(1), WORK(N), WORK(2*N), B, LDB,
      $              INFO)
 *     
 *
 *        Compute (U**T \ B) -> B   [ U**T \ (T \ (U \P**T * B) ) ]
 *
-         CALL STRSM( 'L', 'U', 'N', 'U', N-1, NRHS, ONE, A( 1, 2 ), LDA,
+         CALL AB_STRSM( 'L', 'U', 'N', 'U', N-1, NRHS, ONE, A( 1, 2 ), L
+     $DA,
      $               B(2, 1), LDB)
 *
 *        Pivot, P * B  [ P * (U**T \ (T \ (U \P**T * B) )) ]
@@ -237,7 +240,7 @@
          DO WHILE ( K.GE.1 )
             KP = IPIV( K )
             IF( KP.NE.K )
-     $         CALL SSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL AB_SSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
             K = K - 1
          END DO
 *
@@ -251,28 +254,30 @@
          DO WHILE ( K.LE.N )
             KP = IPIV( K )
             IF( KP.NE.K )
-     $         CALL SSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL AB_SSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
             K = K + 1
          END DO
 *
 *        Compute (L \P**T * B) -> B    [ (L \P**T * B) ]
 *
-         CALL STRSM( 'L', 'L', 'N', 'U', N-1, NRHS, ONE, A( 2, 1), LDA,
+         CALL AB_STRSM( 'L', 'L', 'N', 'U', N-1, NRHS, ONE, A( 2, 1), LD
+     $A,
      $               B(2, 1), LDB)
 *
 *        Compute T \ B -> B   [ T \ (L \P**T * B) ]
 *
-         CALL SLACPY( 'F', 1, N, A(1, 1), LDA+1, WORK(N), 1)
+         CALL AB_SLACPY( 'F', 1, N, A(1, 1), LDA+1, WORK(N), 1)
          IF( N.GT.1 ) THEN
-             CALL SLACPY( 'F', 1, N-1, A(2, 1), LDA+1, WORK(1), 1)
-             CALL SLACPY( 'F', 1, N-1, A(2, 1), LDA+1, WORK(2*N), 1)
+             CALL AB_SLACPY( 'F', 1, N-1, A(2, 1), LDA+1, WORK(1), 1)
+             CALL AB_SLACPY( 'F', 1, N-1, A(2, 1), LDA+1, WORK(2*N), 1)
          END IF
-         CALL SGTSV(N, NRHS, WORK(1), WORK(N), WORK(2*N), B, LDB,
+         CALL AB_SGTSV(N, NRHS, WORK(1), WORK(N), WORK(2*N), B, LDB,
      $              INFO)
 *
 *        Compute (L**T \ B) -> B   [ L**T \ (T \ (L \P**T * B) ) ]
 *
-         CALL STRSM( 'L', 'L', 'T', 'U', N-1, NRHS, ONE, A( 2, 1 ), LDA,
+         CALL AB_STRSM( 'L', 'L', 'T', 'U', N-1, NRHS, ONE, A( 2, 1 ), L
+     $DA,
      $              B( 2, 1 ), LDB)
 *
 *        Pivot, P * B  [ P * (L**T \ (T \ (L \P**T * B) )) ]
@@ -281,7 +286,7 @@
          DO WHILE ( K.GE.1 )
             KP = IPIV( K )
             IF( KP.NE.K )
-     $         CALL SSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL AB_SSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
             K = K - 1
          END DO
 *
@@ -289,6 +294,6 @@
 *
       RETURN
 *
-*     End of SSYTRS_AA
+*     End of AB_SSYTRS_AA
 *
       END

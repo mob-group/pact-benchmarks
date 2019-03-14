@@ -1,4 +1,4 @@
-*> \brief \b CLATRZ factors an upper trapezoidal matrix by means of unitary transformations.
+*> \brief \b AB_CLATRZ factors an upper trapezoidal matrix by means of unitary transformations.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CLATRZ + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clatrz.f">
+*> Download AB_CLATRZ + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLATRZ.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clatrz.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLATRZ.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clatrz.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLATRZ.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLATRZ( M, N, L, A, LDA, TAU, WORK )
+*       SUBROUTINE AB_CLATRZ( M, N, L, A, LDA, TAU, WORK )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            L, LDA, M, N
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> CLATRZ factors the M-by-(M+L) complex upper trapezoidal matrix
+*> AB_CLATRZ factors the M-by-(M+L) complex upper trapezoidal matrix
 *> [ A1 A2 ] = [ A(1:M,1:M) A(1:M,N-L+1:N) ] as ( R  0 ) * Z by means
 *> of unitary transformations, where  Z is an (M+L)-by-(M+L) unitary
 *> matrix and, R and A1 are M-by-M upper triangular matrices.
@@ -138,7 +138,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CLATRZ( M, N, L, A, LDA, TAU, WORK )
+      SUBROUTINE AB_CLATRZ( M, N, L, A, LDA, TAU, WORK )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -163,7 +163,7 @@
       COMPLEX            ALPHA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLACGV, CLARFG, CLARZ
+      EXTERNAL           AB_CLACGV, AB_CLARFG, AB_CLARZ
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CONJG
@@ -186,14 +186,14 @@
 *        Generate elementary reflector H(i) to annihilate
 *        [ A(i,i) A(i,n-l+1:n) ]
 *
-         CALL CLACGV( L, A( I, N-L+1 ), LDA )
+         CALL AB_CLACGV( L, A( I, N-L+1 ), LDA )
          ALPHA = CONJG( A( I, I ) )
-         CALL CLARFG( L+1, ALPHA, A( I, N-L+1 ), LDA, TAU( I ) )
+         CALL AB_CLARFG( L+1, ALPHA, A( I, N-L+1 ), LDA, TAU( I ) )
          TAU( I ) = CONJG( TAU( I ) )
 *
 *        Apply H(i) to A(1:i-1,i:n) from the right
 *
-         CALL CLARZ( 'Right', I-1, N-I+1, L, A( I, N-L+1 ), LDA,
+         CALL AB_CLARZ( 'Right', I-1, N-I+1, L, A( I, N-L+1 ), LDA,
      $               CONJG( TAU( I ) ), A( 1, I ), LDA, WORK )
          A( I, I ) = CONJG( ALPHA )
 *
@@ -201,6 +201,6 @@
 *
       RETURN
 *
-*     End of CLATRZ
+*     End of AB_CLATRZ
 *
       END

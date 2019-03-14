@@ -1,4 +1,4 @@
-*> \brief \b SPTRFS
+*> \brief \b AB_SPTRFS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SPTRFS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sptrfs.f">
+*> Download AB_SPTRFS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SPTRFS.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sptrfs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SPTRFS.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sptrfs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SPTRFS.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SPTRFS( N, NRHS, D, E, DF, EF, B, LDB, X, LDX, FERR,
+*       SUBROUTINE AB_SPTRFS( N, NRHS, D, E, DF, EF, B, LDB, X, LDX, FERR,
 *                          BERR, WORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> SPTRFS improves the computed solution to a system of linear
+*> AB_SPTRFS improves the computed solution to a system of linear
 *> equations when the coefficient matrix is symmetric positive definite
 *> and tridiagonal, and provides error bounds and backward error
 *> estimates for the solution.
@@ -74,14 +74,14 @@
 *> \verbatim
 *>          DF is REAL array, dimension (N)
 *>          The n diagonal elements of the diagonal matrix D from the
-*>          factorization computed by SPTTRF.
+*>          factorization computed by AB_SPTTRF.
 *> \endverbatim
 *>
 *> \param[in] EF
 *> \verbatim
 *>          EF is REAL array, dimension (N-1)
 *>          The (n-1) subdiagonal elements of the unit bidiagonal factor
-*>          L from the factorization computed by SPTTRF.
+*>          L from the factorization computed by AB_SPTTRF.
 *> \endverbatim
 *>
 *> \param[in] B
@@ -99,7 +99,7 @@
 *> \param[in,out] X
 *> \verbatim
 *>          X is REAL array, dimension (LDX,NRHS)
-*>          On entry, the solution matrix X, as computed by SPTTRS.
+*>          On entry, the solution matrix X, as computed by AB_SPTTRS.
 *>          On exit, the improved solution matrix X.
 *> \endverbatim
 *>
@@ -160,7 +160,7 @@
 *> \ingroup realPTcomputational
 *
 *  =====================================================================
-      SUBROUTINE SPTRFS( N, NRHS, D, E, DF, EF, B, LDB, X, LDX, FERR,
+      SUBROUTINE AB_SPTRFS( N, NRHS, D, E, DF, EF, B, LDB, X, LDX, FERR,
      $                   BERR, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -197,15 +197,15 @@
      $                   SAFMIN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SPTTRS, XERBLA
+      EXTERNAL           AB_SAXPY, AB_SPTTRS, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
 *     ..
 *     .. External Functions ..
-      INTEGER            ISAMAX
+      INTEGER            AB_ISAMAX
       REAL               SLAMCH
-      EXTERNAL           ISAMAX, SLAMCH
+      EXTERNAL           AB_ISAMAX, SLAMCH
 *     ..
 *     .. Executable Statements ..
 *
@@ -222,7 +222,7 @@
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SPTRFS', -INFO )
+         CALL AB_XERBLA( 'AB_SPTRFS', -INFO )
          RETURN
       END IF
 *
@@ -314,8 +314,8 @@
 *
 *           Update solution and try again.
 *
-            CALL SPTTRS( N, 1, DF, EF, WORK( N+1 ), N, INFO )
-            CALL SAXPY( N, ONE, WORK( N+1 ), 1, X( 1, J ), 1 )
+            CALL AB_SPTTRS( N, 1, DF, EF, WORK( N+1 ), N, INFO )
+            CALL AB_SAXPY( N, ONE, WORK( N+1 ), 1, X( 1, J ), 1 )
             LSTRES = BERR( J )
             COUNT = COUNT + 1
             GO TO 20
@@ -346,7 +346,7 @@
                WORK( I ) = ABS( WORK( N+I ) ) + NZ*EPS*WORK( I ) + SAFE1
             END IF
    50    CONTINUE
-         IX = ISAMAX( N, WORK, 1 )
+         IX = AB_ISAMAX( N, WORK, 1 )
          FERR( J ) = WORK( IX )
 *
 *        Estimate the norm of inv(A).
@@ -374,7 +374,7 @@
 *
 *        Compute norm(inv(A)) = max(x(i)), 1<=i<=n.
 *
-         IX = ISAMAX( N, WORK, 1 )
+         IX = AB_ISAMAX( N, WORK, 1 )
          FERR( J ) = FERR( J )*ABS( WORK( IX ) )
 *
 *        Normalize error.
@@ -390,6 +390,6 @@
 *
       RETURN
 *
-*     End of SPTRFS
+*     End of AB_SPTRFS
 *
       END

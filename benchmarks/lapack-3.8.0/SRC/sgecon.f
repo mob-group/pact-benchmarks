@@ -1,4 +1,4 @@
-*> \brief \b SGECON
+*> \brief \b AB_SGECON
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SGECON + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgecon.f">
+*> Download AB_SGECON + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SGECON.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgecon.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SGECON.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgecon.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SGECON.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SGECON( NORM, N, A, LDA, ANORM, RCOND, WORK, IWORK,
+*       SUBROUTINE AB_SGECON( NORM, N, A, LDA, ANORM, RCOND, WORK, IWORK,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,9 +37,9 @@
 *>
 *> \verbatim
 *>
-*> SGECON estimates the reciprocal of the condition number of a general
+*> AB_SGECON estimates the reciprocal of the condition number of a general
 *> real matrix A, in either the 1-norm or the infinity-norm, using
-*> the LU factorization computed by SGETRF.
+*> the LU factorization computed by AB_SGETRF.
 *>
 *> An estimate is obtained for norm(inv(A)), and the reciprocal of the
 *> condition number is computed as
@@ -68,7 +68,7 @@
 *> \verbatim
 *>          A is REAL array, dimension (LDA,N)
 *>          The factors L and U from the factorization A = P*L*U
-*>          as computed by SGETRF.
+*>          as computed by AB_SGETRF.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -121,7 +121,7 @@
 *> \ingroup realGEcomputational
 *
 *  =====================================================================
-      SUBROUTINE SGECON( NORM, N, A, LDA, ANORM, RCOND, WORK, IWORK,
+      SUBROUTINE AB_SGECON( NORM, N, A, LDA, ANORM, RCOND, WORK, IWORK,
      $                   INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -155,13 +155,13 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ISAMAX
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ISAMAX
       REAL               SLAMCH
-      EXTERNAL           LSAME, ISAMAX, SLAMCH
+      EXTERNAL           AB_LSAME, AB_ISAMAX, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLACN2, SLATRS, SRSCL, XERBLA
+      EXTERNAL           AB_SLACN2, AB_SLATRS, AB_SRSCL, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -171,8 +171,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      ONENRM = NORM.EQ.'1' .OR. LSAME( NORM, 'O' )
-      IF( .NOT.ONENRM .AND. .NOT.LSAME( NORM, 'I' ) ) THEN
+      ONENRM = NORM.EQ.'1' .OR. AB_LSAME( NORM, 'O' )
+      IF( .NOT.ONENRM .AND. .NOT.AB_LSAME( NORM, 'I' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -182,7 +182,7 @@
          INFO = -5
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SGECON', -INFO )
+         CALL AB_XERBLA( 'AB_SGECON', -INFO )
          RETURN
       END IF
 *
@@ -209,29 +209,32 @@
       END IF
       KASE = 0
    10 CONTINUE
-      CALL SLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
+      CALL AB_SLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
       IF( KASE.NE.0 ) THEN
          IF( KASE.EQ.KASE1 ) THEN
 *
 *           Multiply by inv(L).
 *
-            CALL SLATRS( 'Lower', 'No transpose', 'Unit', NORMIN, N, A,
+            CALL AB_SLATRS( 'Lower', 'No transpose', 'Unit', NORMIN, N, 
+     $A,
      $                   LDA, WORK, SL, WORK( 2*N+1 ), INFO )
 *
 *           Multiply by inv(U).
 *
-            CALL SLATRS( 'Upper', 'No transpose', 'Non-unit', NORMIN, N,
+            CALL AB_SLATRS( 'Upper', 'No transpose', 'Non-unit', NORMIN,
+     $ N,
      $                   A, LDA, WORK, SU, WORK( 3*N+1 ), INFO )
          ELSE
 *
 *           Multiply by inv(U**T).
 *
-            CALL SLATRS( 'Upper', 'Transpose', 'Non-unit', NORMIN, N, A,
+            CALL AB_SLATRS( 'Upper', 'Transpose', 'Non-unit', NORMIN, N,
+     $ A,
      $                   LDA, WORK, SU, WORK( 3*N+1 ), INFO )
 *
 *           Multiply by inv(L**T).
 *
-            CALL SLATRS( 'Lower', 'Transpose', 'Unit', NORMIN, N, A,
+            CALL AB_SLATRS( 'Lower', 'Transpose', 'Unit', NORMIN, N, A,
      $                   LDA, WORK, SL, WORK( 2*N+1 ), INFO )
          END IF
 *
@@ -240,10 +243,10 @@
          SCALE = SL*SU
          NORMIN = 'Y'
          IF( SCALE.NE.ONE ) THEN
-            IX = ISAMAX( N, WORK, 1 )
+            IX = AB_ISAMAX( N, WORK, 1 )
             IF( SCALE.LT.ABS( WORK( IX ) )*SMLNUM .OR. SCALE.EQ.ZERO )
      $         GO TO 20
-            CALL SRSCL( N, SCALE, WORK, 1 )
+            CALL AB_SRSCL( N, SCALE, WORK, 1 )
          END IF
          GO TO 10
       END IF
@@ -256,6 +259,6 @@
    20 CONTINUE
       RETURN
 *
-*     End of SGECON
+*     End of AB_SGECON
 *
       END

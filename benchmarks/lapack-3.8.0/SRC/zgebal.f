@@ -1,4 +1,4 @@
-*> \brief \b ZGEBAL
+*> \brief \b AB_ZGEBAL
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZGEBAL + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgebal.f">
+*> Download AB_ZGEBAL + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZGEBAL.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgebal.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZGEBAL.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgebal.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZGEBAL.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZGEBAL( JOB, N, A, LDA, ILO, IHI, SCALE, INFO )
+*       SUBROUTINE AB_ZGEBAL( JOB, N, A, LDA, ILO, IHI, SCALE, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          JOB
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> ZGEBAL balances a general complex matrix A.  This involves, first,
+*> AB_ZGEBAL balances a general complex matrix A.  This involves, first,
 *> permuting A by a similarity transformation to isolate eigenvalues
 *> in the first 1 to ILO-1 and last IHI+1 to N elements on the
 *> diagonal; and second, applying a diagonal similarity transformation
@@ -160,7 +160,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZGEBAL( JOB, N, A, LDA, ILO, IHI, SCALE, INFO )
+      SUBROUTINE AB_ZGEBAL( JOB, N, A, LDA, ILO, IHI, SCALE, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -193,13 +193,14 @@
      $                   SFMIN2
 *     ..
 *     .. External Functions ..
-      LOGICAL            DISNAN, LSAME
-      INTEGER            IZAMAX
-      DOUBLE PRECISION   DLAMCH, DZNRM2
-      EXTERNAL           DISNAN, LSAME, IZAMAX, DLAMCH, DZNRM2
+      LOGICAL            AB_DISNAN, AB_LSAME
+      INTEGER            AB_IZAMAX
+      DOUBLE PRECISION   DLAMCH, AB_DZNRM2
+      EXTERNAL           AB_DISNAN, AB_LSAME, AB_IZAMAX, DLAMCH, AB_DZNR
+     $M2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZDSCAL, ZSWAP
+      EXTERNAL           AB_XERBLA, AB_ZDSCAL, AB_ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX, MIN
@@ -207,8 +208,10 @@
 *     Test the input parameters
 *
       INFO = 0
-      IF( .NOT.LSAME( JOB, 'N' ) .AND. .NOT.LSAME( JOB, 'P' ) .AND.
-     $    .NOT.LSAME( JOB, 'S' ) .AND. .NOT.LSAME( JOB, 'B' ) ) THEN
+      IF( .NOT.AB_LSAME( JOB, 'N' ) .AND. .NOT.AB_LSAME( JOB, 'P' ) .AND
+     $.
+     $    .NOT.AB_LSAME( JOB, 'S' ) .AND. .NOT.AB_LSAME( JOB, 'B' ) ) TH
+     $EN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -216,7 +219,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZGEBAL', -INFO )
+         CALL AB_XERBLA( 'AB_ZGEBAL', -INFO )
          RETURN
       END IF
 *
@@ -226,14 +229,14 @@
       IF( N.EQ.0 )
      $   GO TO 210
 *
-      IF( LSAME( JOB, 'N' ) ) THEN
+      IF( AB_LSAME( JOB, 'N' ) ) THEN
          DO 10 I = 1, N
             SCALE( I ) = ONE
    10    CONTINUE
          GO TO 210
       END IF
 *
-      IF( LSAME( JOB, 'S' ) )
+      IF( AB_LSAME( JOB, 'S' ) )
      $   GO TO 120
 *
 *     Permutation to isolate eigenvalues if possible
@@ -247,8 +250,8 @@
       IF( J.EQ.M )
      $   GO TO 30
 *
-      CALL ZSWAP( L, A( 1, J ), 1, A( 1, M ), 1 )
-      CALL ZSWAP( N-K+1, A( J, K ), LDA, A( M, K ), LDA )
+      CALL AB_ZSWAP( L, A( 1, J ), 1, A( 1, M ), 1 )
+      CALL AB_ZSWAP( N-K+1, A( J, K ), LDA, A( M, K ), LDA )
 *
    30 CONTINUE
       GO TO ( 40, 80 )IEXC
@@ -302,7 +305,7 @@
          SCALE( I ) = ONE
   130 CONTINUE
 *
-      IF( LSAME( JOB, 'P' ) )
+      IF( AB_LSAME( JOB, 'P' ) )
      $   GO TO 210
 *
 *     Balance the submatrix in rows K to L.
@@ -318,11 +321,11 @@
 *
       DO 200 I = K, L
 *
-         C = DZNRM2( L-K+1, A( K, I ), 1 )
-         R = DZNRM2( L-K+1, A( I, K ), LDA )
-         ICA = IZAMAX( L, A( 1, I ), 1 )
+         C = AB_DZNRM2( L-K+1, A( K, I ), 1 )
+         R = AB_DZNRM2( L-K+1, A( I, K ), LDA )
+         ICA = AB_IZAMAX( L, A( 1, I ), 1 )
          CA = ABS( A( ICA, I ) )
-         IRA = IZAMAX( N-K+1, A( I, K ), LDA )
+         IRA = AB_IZAMAX( N-K+1, A( I, K ), LDA )
          RA = ABS( A( I, IRA+K-1 ) )
 *
 *        Guard against zero C or R due to underflow.
@@ -335,12 +338,12 @@
   160    CONTINUE
          IF( C.GE.G .OR. MAX( F, C, CA ).GE.SFMAX2 .OR.
      $       MIN( R, G, RA ).LE.SFMIN2 )GO TO 170
-            IF( DISNAN( C+F+CA+R+G+RA ) ) THEN
+            IF( AB_DISNAN( C+F+CA+R+G+RA ) ) THEN
 *
 *           Exit if NaN to avoid infinite loop
 *
             INFO = -3
-            CALL XERBLA( 'ZGEBAL', -INFO )
+            CALL AB_XERBLA( 'AB_ZGEBAL', -INFO )
             RETURN
          END IF
          F = F*SCLFAC
@@ -381,8 +384,8 @@
          SCALE( I ) = SCALE( I )*F
          NOCONV = .TRUE.
 *
-         CALL ZDSCAL( N-K+1, G, A( I, K ), LDA )
-         CALL ZDSCAL( L, F, A( 1, I ), 1 )
+         CALL AB_ZDSCAL( N-K+1, G, A( I, K ), LDA )
+         CALL AB_ZDSCAL( L, F, A( 1, I ), 1 )
 *
   200 CONTINUE
 *
@@ -395,6 +398,6 @@
 *
       RETURN
 *
-*     End of ZGEBAL
+*     End of AB_ZGEBAL
 *
       END

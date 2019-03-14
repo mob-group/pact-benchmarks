@@ -1,4 +1,4 @@
-*> \brief \b DLAPMR rearranges rows of a matrix as specified by a permutation vector.
+*> \brief \b AB_DLAPMR rearranges rows of a matrix as specified by a permutation vector.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLAPMR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlapmr.f">
+*> Download AB_DLAPMR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLAPMR.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlapmr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLAPMR.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlapmr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLAPMR.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLAPMR( FORWRD, M, N, X, LDX, K )
+*       SUBROUTINE AB_DLAPMR( FORWRD, M, N, X, LDX, K )
 *
 *       .. Scalar Arguments ..
 *       LOGICAL            FORWRD
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> DLAPMR rearranges the rows of the M by N matrix X as specified
+*> AB_DLAPMR rearranges the rows of the M by N matrix X as specified
 *> by the permutation K(1),K(2),...,K(M) of the integers 1,...,M.
 *> If FORWRD = .TRUE.,  forward permutation:
 *>
@@ -102,7 +102,7 @@
 *> \ingroup doubleOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE DLAPMR( FORWRD, M, N, X, LDX, K )
+      SUBROUTINE AB_DLAPMR( FORWRD, M, N, X, LDX, K )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -198,7 +198,7 @@
 *
       RETURN
 *
-*     End of ZLAPMT
+*     End of AB_ZLAPMT
 *
       END
 

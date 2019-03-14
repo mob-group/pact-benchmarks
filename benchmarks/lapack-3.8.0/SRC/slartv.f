@@ -1,4 +1,4 @@
-*> \brief \b SLARTV applies a vector of plane rotations with real cosines and real sines to the elements of a pair of vectors.
+*> \brief \b AB_SLARTV applies a vector of plane rotations with real cosines and real sines to the elements of a pair of vectors.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLARTV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slartv.f">
+*> Download AB_SLARTV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLARTV.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slartv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLARTV.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slartv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLARTV.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLARTV( N, X, INCX, Y, INCY, C, S, INCC )
+*       SUBROUTINE AB_SLARTV( N, X, INCX, Y, INCY, C, S, INCC )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCC, INCX, INCY, N
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> SLARTV applies a vector of real plane rotations to elements of the
+*> AB_SLARTV applies a vector of real plane rotations to elements of the
 *> real vectors x and y. For i = 1,2,...,n
 *>
 *>    ( x(i) ) := (  c(i)  s(i) ) ( x(i) )
@@ -106,7 +106,7 @@
 *> \ingroup realOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE SLARTV( N, X, INCX, Y, INCY, C, S, INCC )
+      SUBROUTINE AB_SLARTV( N, X, INCX, Y, INCY, C, S, INCC )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -142,6 +142,6 @@
    10 CONTINUE
       RETURN
 *
-*     End of SLARTV
+*     End of AB_SLARTV
 *
       END

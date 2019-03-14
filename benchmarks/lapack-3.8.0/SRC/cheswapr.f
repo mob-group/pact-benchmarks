@@ -1,4 +1,4 @@
-*> \brief \b CHESWAPR applies an elementary permutation on the rows and columns of a Hermitian matrix.
+*> \brief \b AB_CHESWAPR applies an elementary permutation on the rows and columns of a Hermitian matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CHESWAPR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cheswapr.f">
+*> Download AB_CHESWAPR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CHESWAPR.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cheswapr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CHESWAPR.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cheswapr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CHESWAPR.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CHESWAPR( UPLO, N, A, LDA, I1, I2)
+*       SUBROUTINE AB_CHESWAPR( UPLO, N, A, LDA, I1, I2)
 *
 *       .. Scalar Arguments ..
 *       CHARACTER        UPLO
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> CHESWAPR applies an elementary permutation on the rows and the columns of
+*> AB_CHESWAPR applies an elementary permutation on the rows and the columns of
 *> a hermitian matrix.
 *> \endverbatim
 *
@@ -59,7 +59,7 @@
 *> \verbatim
 *>          A is COMPLEX array, dimension (LDA,N)
 *>          On entry, the NB diagonal matrix D and the multipliers
-*>          used to obtain the factor U or L as computed by CSYTRF.
+*>          used to obtain the factor U or L as computed by AB_CSYTRF.
 *>
 *>          On exit, if INFO = 0, the (symmetric) inverse of the original
 *>          matrix.  If UPLO = 'U', the upper triangular part of the
@@ -100,7 +100,7 @@
 *> \ingroup complexHEauxiliary
 *
 *  =====================================================================
-      SUBROUTINE CHESWAPR( UPLO, N, A, LDA, I1, I2)
+      SUBROUTINE AB_CHESWAPR( UPLO, N, A, LDA, I1, I2)
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -123,21 +123,21 @@
       COMPLEX            TMP
 *
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CSWAP
+      EXTERNAL           AB_CSWAP
 *     ..
 *     .. Executable Statements ..
 *
-      UPPER = LSAME( UPLO, 'U' )
+      UPPER = AB_LSAME( UPLO, 'U' )
       IF (UPPER) THEN
 *
 *         UPPER
 *         first swap
 *          - swap column I1 and I2 from I1 to I1-1
-         CALL CSWAP( I1-1, A(1,I1), 1, A(1,I2), 1 )
+         CALL AB_CSWAP( I1-1, A(1,I1), 1, A(1,I2), 1 )
 *
 *          second swap :
 *          - swap A(I1,I1) and A(I2,I2)
@@ -170,7 +170,7 @@
 *         LOWER
 *         first swap
 *          - swap row I1 and I2 from 1 to I1-1
-         CALL CSWAP ( I1-1, A(I1,1), LDA, A(I2,1), LDA )
+         CALL AB_CSWAP ( I1-1, A(I1,1), LDA, A(I2,1), LDA )
 *
 *         second swap :
 *          - swap A(I1,I1) and A(I2,I2)
@@ -199,5 +199,5 @@
 *
       ENDIF
 
-      END SUBROUTINE CHESWAPR
+      END SUBROUTINE AB_CHESWAPR
 

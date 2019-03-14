@@ -1,4 +1,4 @@
-*> \brief \b CLA_GERCOND_X computes the infinity norm condition number of op(A)*diag(x) for general matrices.
+*> \brief \b AB_CLA_GERCOND_X computes the infinity norm condition number of op(A)*diag(x) for general matrices.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CLA_GERCOND_X + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cla_gercond_x.f">
+*> Download AB_CLA_GERCOND_X + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLA_GERCOND_X.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cla_gercond_x.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLA_GERCOND_X.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cla_gercond_x.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLA_GERCOND_X.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       REAL FUNCTION CLA_GERCOND_X( TRANS, N, A, LDA, AF, LDAF, IPIV, X,
+*       REAL FUNCTION AB_CLA_GERCOND_X( TRANS, N, A, LDA, AF, LDAF, IPIV, X,
 *                                    INFO, WORK, RWORK )
 *
 *       .. Scalar Arguments ..
@@ -38,7 +38,7 @@
 *> \verbatim
 *>
 *>
-*>    CLA_GERCOND_X computes the infinity norm condition number of
+*>    AB_CLA_GERCOND_X computes the infinity norm condition number of
 *>    op(A) * diag(X) where X is a COMPLEX vector.
 *> \endverbatim
 *
@@ -77,7 +77,7 @@
 *> \verbatim
 *>          AF is COMPLEX array, dimension (LDAF,N)
 *>     The factors L and U from the factorization
-*>     A = P*L*U as computed by CGETRF.
+*>     A = P*L*U as computed by AB_CGETRF.
 *> \endverbatim
 *>
 *> \param[in] LDAF
@@ -90,7 +90,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>     The pivot indices from the factorization A = P*L*U
-*>     as computed by CGETRF; row i of the matrix was interchanged
+*>     as computed by AB_CGETRF; row i of the matrix was interchanged
 *>     with row IPIV(i).
 *> \endverbatim
 *>
@@ -132,7 +132,8 @@
 *> \ingroup complexGEcomputational
 *
 *  =====================================================================
-      REAL FUNCTION CLA_GERCOND_X( TRANS, N, A, LDA, AF, LDAF, IPIV, X,
+      REAL FUNCTION AB_CLA_GERCOND_X( TRANS, N, A, LDA, AF, LDAF, IPIV, 
+     $X,
      $                             INFO, WORK, RWORK )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -163,11 +164,11 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLACN2, CGETRS, XERBLA
+      EXTERNAL           AB_CLACN2, AB_CGETRS, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, REAL, AIMAG
@@ -180,12 +181,12 @@
 *     ..
 *     .. Executable Statements ..
 *
-      CLA_GERCOND_X = 0.0E+0
+      AB_CLA_GERCOND_X = 0.0E+0
 *
       INFO = 0
-      NOTRANS = LSAME( TRANS, 'N' )
-      IF ( .NOT. NOTRANS .AND. .NOT. LSAME( TRANS, 'T' ) .AND. .NOT.
-     $     LSAME( TRANS, 'C' ) ) THEN
+      NOTRANS = AB_LSAME( TRANS, 'N' )
+      IF ( .NOT. NOTRANS .AND. .NOT. AB_LSAME( TRANS, 'T' ) .AND. .NOT.
+     $     AB_LSAME( TRANS, 'C' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -195,7 +196,7 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CLA_GERCOND_X', -INFO )
+         CALL AB_XERBLA( 'AB_CLA_GERCOND_X', -INFO )
          RETURN
       END IF
 *
@@ -225,7 +226,7 @@
 *     Quick return if possible.
 *
       IF( N.EQ.0 ) THEN
-         CLA_GERCOND_X = 1.0E+0
+         AB_CLA_GERCOND_X = 1.0E+0
          RETURN
       ELSE IF( ANORM .EQ. 0.0E+0 ) THEN
          RETURN
@@ -237,7 +238,7 @@
 *
       KASE = 0
    10 CONTINUE
-      CALL CLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
+      CALL AB_CLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
       IF( KASE.NE.0 ) THEN
          IF( KASE.EQ.2 ) THEN
 *           Multiply by R.
@@ -246,10 +247,11 @@
             END DO
 *
             IF ( NOTRANS ) THEN
-               CALL CGETRS( 'No transpose', N, 1, AF, LDAF, IPIV,
+               CALL AB_CGETRS( 'No transpose', N, 1, AF, LDAF, IPIV,
      $            WORK, N, INFO )
             ELSE
-               CALL CGETRS( 'Conjugate transpose', N, 1, AF, LDAF, IPIV,
+               CALL AB_CGETRS( 'Conjugate transpose', N, 1, AF, LDAF, IP
+     $IV,
      $            WORK, N, INFO )
             ENDIF
 *
@@ -267,10 +269,11 @@
             END DO
 *
             IF ( NOTRANS ) THEN
-               CALL CGETRS( 'Conjugate transpose', N, 1, AF, LDAF, IPIV,
+               CALL AB_CGETRS( 'Conjugate transpose', N, 1, AF, LDAF, IP
+     $IV,
      $            WORK, N, INFO )
             ELSE
-               CALL CGETRS( 'No transpose', N, 1, AF, LDAF, IPIV,
+               CALL AB_CGETRS( 'No transpose', N, 1, AF, LDAF, IPIV,
      $            WORK, N, INFO )
             END IF
 *
@@ -286,7 +289,7 @@
 *     Compute the estimate of the reciprocal condition number.
 *
       IF( AINVNM .NE. 0.0E+0 )
-     $   CLA_GERCOND_X = 1.0E+0 / AINVNM
+     $   AB_CLA_GERCOND_X = 1.0E+0 / AINVNM
 *
       RETURN
 *

@@ -1,4 +1,4 @@
-*> \brief \b CLAQR0 computes the eigenvalues of a Hessenberg matrix, and optionally the matrices from the Schur decomposition.
+*> \brief \b AB_CLAQR0 computes the eigenvalues of a Hessenberg matrix, and optionally the matrices from the Schur decomposition.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CLAQR0 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/claqr0.f">
+*> Download AB_CLAQR0 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLAQR0.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/claqr0.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLAQR0.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claqr0.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLAQR0.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLAQR0( WANTT, WANTZ, N, ILO, IHI, H, LDH, W, ILOZ,
+*       SUBROUTINE AB_CLAQR0( WANTT, WANTZ, N, ILO, IHI, H, LDH, W, ILOZ,
 *                          IHIZ, Z, LDZ, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*>    CLAQR0 computes the eigenvalues of a Hessenberg matrix H
+*>    AB_CLAQR0 computes the eigenvalues of a Hessenberg matrix H
 *>    and, optionally, the matrices T and Z from the Schur decomposition
 *>    H = Z T Z**H, where T is an upper triangular matrix (the
 *>    Schur form), and Z is the unitary matrix of Schur vectors.
@@ -80,8 +80,8 @@
 *>           It is assumed that H is already upper triangular in rows
 *>           and columns 1:ILO-1 and IHI+1:N and, if ILO.GT.1,
 *>           H(ILO,ILO-1) is zero. ILO and IHI are normally set by a
-*>           previous call to CGEBAL, and then passed to CGEHRD when the
-*>           matrix output by CGEBAL is reduced to Hessenberg form.
+*>           previous call to AB_CGEBAL, and then passed to AB_CGEHRD when the
+*>           matrix output by AB_CGEBAL is reduced to Hessenberg form.
 *>           Otherwise, ILO and IHI should be set to 1 and N,
 *>           respectively.  If N.GT.0, then 1.LE.ILO.LE.IHI.LE.N.
 *>           If N = 0, then ILO = 1 and IHI = 0.
@@ -163,19 +163,19 @@
 *>           be required for optimal performance.  A workspace query
 *>           to determine the optimal workspace size is recommended.
 *>
-*>           If LWORK = -1, then CLAQR0 does a workspace query.
-*>           In this case, CLAQR0 checks the input parameters and
+*>           If LWORK = -1, then AB_CLAQR0 does a workspace query.
+*>           In this case, AB_CLAQR0 checks the input parameters and
 *>           estimates the optimal workspace size for the given
 *>           values of N, ILO and IHI.  The estimate is returned
 *>           in WORK(1).  No error message related to LWORK is
-*>           issued by XERBLA.  Neither H nor Z are accessed.
+*>           issued by AB_XERBLA.  Neither H nor Z are accessed.
 *> \endverbatim
 *>
 *> \param[out] INFO
 *> \verbatim
 *>          INFO is INTEGER
 *>             =  0:  successful exit
-*>           .GT. 0:  if INFO = i, CLAQR0 failed to compute all of
+*>           .GT. 0:  if INFO = i, AB_CLAQR0 failed to compute all of
 *>                the eigenvalues.  Elements 1:ilo-1 and i+1:n of WR
 *>                and WI contain those eigenvalues which have been
 *>                successfully computed.  (Failures are rare.)
@@ -237,7 +237,7 @@
 *>       of Matrix Analysis, volume 23, pages 948--973, 2002.
 *>
 *  =====================================================================
-      SUBROUTINE CLAQR0( WANTT, WANTZ, N, ILO, IHI, H, LDH, W, ILOZ,
+      SUBROUTINE AB_CLAQR0( WANTT, WANTZ, N, ILO, IHI, H, LDH, W, ILOZ,
      $                   IHIZ, Z, LDZ, WORK, LWORK, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -257,7 +257,7 @@
 *     .. Parameters ..
 *
 *     ==== Matrices of order NTINY or smaller must be processed by
-*     .    CLAHQR because of insufficient subdiagonal scratch space.
+*     .    AB_CLAHQR because of insufficient subdiagonal scratch space.
 *     .    (This is a hard limit.) ====
       INTEGER            NTINY
       PARAMETER          ( NTINY = 11 )
@@ -295,14 +295,15 @@
       CHARACTER          JBCMPZ*2
 *     ..
 *     .. External Functions ..
-      INTEGER            ILAENV
-      EXTERNAL           ILAENV
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_ILAENV
 *     ..
 *     .. Local Arrays ..
       COMPLEX            ZDUM( 1, 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLACPY, CLAHQR, CLAQR3, CLAQR4, CLAQR5
+      EXTERNAL           AB_CLACPY, AB_CLAHQR, AB_CLAQR3, AB_CLAQR4, AB_
+     $CLAQR5
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CMPLX, INT, MAX, MIN, MOD, REAL,
@@ -326,11 +327,11 @@
 *
       IF( N.LE.NTINY ) THEN
 *
-*        ==== Tiny matrices must use CLAHQR. ====
+*        ==== Tiny matrices must use AB_CLAHQR. ====
 *
          LWKOPT = 1
          IF( LWORK.NE.-1 )
-     $      CALL CLAHQR( WANTT, WANTZ, N, ILO, IHI, H, LDH, W, ILOZ,
+     $      CALL AB_CLAHQR( WANTT, WANTZ, N, ILO, IHI, H, LDH, W, ILOZ,
      $                   IHIZ, Z, LDZ, INFO )
       ELSE
 *
@@ -341,7 +342,7 @@
 *
          INFO = 0
 *
-*        ==== Set up job flags for ILAENV. ====
+*        ==== Set up job flags for AB_ILAENV. ====
 *
          IF( WANTT ) THEN
             JBCMPZ( 1: 1 ) = 'S'
@@ -360,7 +361,7 @@
 *        .    (In fact, there is enough subdiagonal space for
 *        .    NWR.GE.3.) ====
 *
-         NWR = ILAENV( 13, 'CLAQR0', JBCMPZ, N, ILO, IHI, LWORK )
+         NWR = AB_ILAENV( 13, 'AB_CLAQR0', JBCMPZ, N, ILO, IHI, LWORK )
          NWR = MAX( 2, NWR )
          NWR = MIN( IHI-ILO+1, ( N-1 ) / 3, NWR )
 *
@@ -369,19 +370,19 @@
 *        .    enough subdiagonal workspace for NSR to be even
 *        .    and greater than or equal to two as required. ====
 *
-         NSR = ILAENV( 15, 'CLAQR0', JBCMPZ, N, ILO, IHI, LWORK )
+         NSR = AB_ILAENV( 15, 'AB_CLAQR0', JBCMPZ, N, ILO, IHI, LWORK )
          NSR = MIN( NSR, ( N+6 ) / 9, IHI-ILO )
          NSR = MAX( 2, NSR-MOD( NSR, 2 ) )
 *
 *        ==== Estimate optimal workspace ====
 *
-*        ==== Workspace query call to CLAQR3 ====
+*        ==== Workspace query call to AB_CLAQR3 ====
 *
-         CALL CLAQR3( WANTT, WANTZ, N, ILO, IHI, NWR+1, H, LDH, ILOZ,
+         CALL AB_CLAQR3( WANTT, WANTZ, N, ILO, IHI, NWR+1, H, LDH, ILOZ,
      $                IHIZ, Z, LDZ, LS, LD, W, H, LDH, N, H, LDH, N, H,
      $                LDH, WORK, -1 )
 *
-*        ==== Optimal workspace = MAX(CLAQR5, CLAQR3) ====
+*        ==== Optimal workspace = MAX(AB_CLAQR5, AB_CLAQR3) ====
 *
          LWKOPT = MAX( 3*NSR / 2, INT( WORK( 1 ) ) )
 *
@@ -392,20 +393,22 @@
             RETURN
          END IF
 *
-*        ==== CLAHQR/CLAQR0 crossover point ====
+*        ==== AB_CLAHQR/AB_CLAQR0 crossover point ====
 *
-         NMIN = ILAENV( 12, 'CLAQR0', JBCMPZ, N, ILO, IHI, LWORK )
+         NMIN = AB_ILAENV( 12, 'AB_CLAQR0', JBCMPZ, N, ILO, IHI, LWORK )
          NMIN = MAX( NTINY, NMIN )
 *
 *        ==== Nibble crossover point ====
 *
-         NIBBLE = ILAENV( 14, 'CLAQR0', JBCMPZ, N, ILO, IHI, LWORK )
+         NIBBLE = AB_ILAENV( 14, 'AB_CLAQR0', JBCMPZ, N, ILO, IHI, LWORK
+     $ )
          NIBBLE = MAX( 0, NIBBLE )
 *
 *        ==== Accumulate reflections during ttswp?  Use block
 *        .    2-by-2 structure during matrix-matrix multiply? ====
 *
-         KACC22 = ILAENV( 16, 'CLAQR0', JBCMPZ, N, ILO, IHI, LWORK )
+         KACC22 = AB_ILAENV( 16, 'AB_CLAQR0', JBCMPZ, N, ILO, IHI, LWORK
+     $ )
          KACC22 = MAX( 0, KACC22 )
          KACC22 = MIN( 2, KACC22 )
 *
@@ -512,7 +515,8 @@
 *
 *           ==== Aggressive early deflation ====
 *
-            CALL CLAQR3( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH, ILOZ,
+            CALL AB_CLAQR3( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH, ILO
+     $Z,
      $                   IHIZ, Z, LDZ, LS, LD, W, H( KV, 1 ), LDH, NHO,
      $                   H( KV, KT ), LDH, NVE, H( KWV, 1 ), LDH, WORK,
      $                   LWORK )
@@ -535,7 +539,7 @@
      $          KTOP+1.GT.MIN( NMIN, NWMAX ) ) ) ) THEN
 *
 *              ==== NS = nominal number of simultaneous shifts.
-*              .    This may be lowered (slightly) if CLAQR3
+*              .    This may be lowered (slightly) if AB_CLAQR3
 *              .    did not provide that many shifts. ====
 *
                NS = MIN( NSMAX, NSR, MAX( 2, KBOT-KTOP ) )
@@ -545,7 +549,7 @@
 *              .    in a multiple of KEXSH iterations,
 *              .    then try exceptional shifts.
 *              .    Otherwise use shifts provided by
-*              .    CLAQR3 above or from the eigenvalues
+*              .    AB_CLAQR3 above or from the eigenvalues
 *              .    of a trailing principal submatrix. ====
 *
                IF( MOD( NDFL, KEXSH ).EQ.0 ) THEN
@@ -556,8 +560,8 @@
    30             CONTINUE
                ELSE
 *
-*                 ==== Got NS/2 or fewer shifts? Use CLAQR4 or
-*                 .    CLAHQR on a trailing principal submatrix to
+*                 ==== Got NS/2 or fewer shifts? Use AB_CLAQR4 or
+*                 .    AB_CLAHQR on a trailing principal submatrix to
 *                 .    get more. (Since NS.LE.NSMAX.LE.(N+6)/9,
 *                 .    there is enough space below the subdiagonal
 *                 .    to fit an NS-by-NS scratch array.) ====
@@ -565,14 +569,14 @@
                   IF( KBOT-KS+1.LE.NS / 2 ) THEN
                      KS = KBOT - NS + 1
                      KT = N - NS + 1
-                     CALL CLACPY( 'A', NS, NS, H( KS, KS ), LDH,
+                     CALL AB_CLACPY( 'A', NS, NS, H( KS, KS ), LDH,
      $                            H( KT, 1 ), LDH )
                      IF( NS.GT.NMIN ) THEN
-                        CALL CLAQR4( .false., .false., NS, 1, NS,
+                        CALL AB_CLAQR4( .false., .false., NS, 1, NS,
      $                               H( KT, 1 ), LDH, W( KS ), 1, 1,
      $                               ZDUM, 1, WORK, LWORK, INF )
                      ELSE
-                        CALL CLAHQR( .false., .false., NS, 1, NS,
+                        CALL AB_CLAHQR( .false., .false., NS, 1, NS,
      $                               H( KT, 1 ), LDH, W( KS ), 1, 1,
      $                               ZDUM, 1, INF )
                      END IF
@@ -668,7 +672,7 @@
 *
 *              ==== Small-bulge multi-shift QR sweep ====
 *
-               CALL CLAQR5( WANTT, WANTZ, KACC22, N, KTOP, KBOT, NS,
+               CALL AB_CLAQR5( WANTT, WANTZ, KACC22, N, KTOP, KBOT, NS,
      $                      W( KS ), H, LDH, ILOZ, IHIZ, Z, LDZ, WORK,
      $                      3, H( KU, 1 ), LDH, NVE, H( KWV, 1 ), LDH,
      $                      NHO, H( KU, KWH ), LDH )
@@ -696,6 +700,6 @@
 *
       WORK( 1 ) = CMPLX( LWKOPT, 0 )
 *
-*     ==== End of CLAQR0 ====
+*     ==== End of AB_CLAQR0 ====
 *
       END

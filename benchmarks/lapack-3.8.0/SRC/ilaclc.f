@@ -1,4 +1,4 @@
-*> \brief \b ILACLC scans a matrix for its last non-zero column.
+*> \brief \b AB_ILACLC scans a matrix for its last non-zero column.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ILACLC + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ilaclc.f">
+*> Download AB_ILACLC + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ILACLC.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ilaclc.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ILACLC.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ilaclc.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ILACLC.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       INTEGER FUNCTION ILACLC( M, N, A, LDA )
+*       INTEGER FUNCTION AB_ILACLC( M, N, A, LDA )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            M, N, LDA
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> ILACLC scans A for its last non-zero column.
+*> AB_ILACLC scans A for its last non-zero column.
 *> \endverbatim
 *
 *  Arguments:
@@ -76,7 +76,7 @@
 *> \ingroup complexOTHERauxiliary
 *
 *  =====================================================================
-      INTEGER FUNCTION ILACLC( M, N, A, LDA )
+      INTEGER FUNCTION AB_ILACLC( M, N, A, LDA )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -103,14 +103,14 @@
 *
 *     Quick test for the common case where one corner is non-zero.
       IF( N.EQ.0 ) THEN
-         ILACLC = N
+         AB_ILACLC = N
       ELSE IF( A(1, N).NE.ZERO .OR. A(M, N).NE.ZERO ) THEN
-         ILACLC = N
+         AB_ILACLC = N
       ELSE
 *     Now scan each column from the end, returning with the first non-zero.
-         DO ILACLC = N, 1, -1
+         DO AB_ILACLC = N, 1, -1
             DO I = 1, M
-               IF( A(I, ILACLC).NE.ZERO ) RETURN
+               IF( A(I, AB_ILACLC).NE.ZERO ) RETURN
             END DO
          END DO
       END IF

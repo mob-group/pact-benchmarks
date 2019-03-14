@@ -1,4 +1,4 @@
-*> \brief \b DGEQPF
+*> \brief \b AB_DGEQPF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DGEQPF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgeqpf.f">
+*> Download AB_DGEQPF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGEQPF.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgeqpf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGEQPF.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgeqpf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGEQPF.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGEQPF( M, N, A, LDA, JPVT, TAU, WORK, INFO )
+*       SUBROUTINE AB_DGEQPF( M, N, A, LDA, JPVT, TAU, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, M, N
@@ -34,9 +34,9 @@
 *>
 *> \verbatim
 *>
-*> This routine is deprecated and has been replaced by routine DGEQP3.
+*> This routine is deprecated and has been replaced by routine AB_DGEQP3.
 *>
-*> DGEQPF computes a QR factorization with column pivoting of a
+*> AB_DGEQPF computes a QR factorization with column pivoting of a
 *> real M-by-N matrix A: A*P = Q*R.
 *> \endverbatim
 *
@@ -140,7 +140,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DGEQPF( M, N, A, LDA, JPVT, TAU, WORK, INFO )
+      SUBROUTINE AB_DGEQPF( M, N, A, LDA, JPVT, TAU, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -166,15 +166,16 @@
       DOUBLE PRECISION   AII, TEMP, TEMP2, TOL3Z
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEQR2, DLARF, DLARFG, DORM2R, DSWAP, XERBLA
+      EXTERNAL           AB_DGEQR2, AB_DLARF, AB_DLARFG, AB_DORM2R, AB_D
+     $SWAP, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT
 *     ..
 *     .. External Functions ..
-      INTEGER            IDAMAX
-      DOUBLE PRECISION   DLAMCH, DNRM2
-      EXTERNAL           IDAMAX, DLAMCH, DNRM2
+      INTEGER            AB_IDAMAX
+      DOUBLE PRECISION   DLAMCH, AB_DNRM2
+      EXTERNAL           AB_IDAMAX, DLAMCH, AB_DNRM2
 *     ..
 *     .. Executable Statements ..
 *
@@ -189,7 +190,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DGEQPF', -INFO )
+         CALL AB_XERBLA( 'AB_DGEQPF', -INFO )
          RETURN
       END IF
 *
@@ -202,7 +203,7 @@
       DO 10 I = 1, N
          IF( JPVT( I ).NE.0 ) THEN
             IF( I.NE.ITEMP ) THEN
-               CALL DSWAP( M, A( 1, I ), 1, A( 1, ITEMP ), 1 )
+               CALL AB_DSWAP( M, A( 1, I ), 1, A( 1, ITEMP ), 1 )
                JPVT( I ) = JPVT( ITEMP )
                JPVT( ITEMP ) = I
             ELSE
@@ -219,9 +220,10 @@
 *
       IF( ITEMP.GT.0 ) THEN
          MA = MIN( ITEMP, M )
-         CALL DGEQR2( M, MA, A, LDA, TAU, WORK, INFO )
+         CALL AB_DGEQR2( M, MA, A, LDA, TAU, WORK, INFO )
          IF( MA.LT.N ) THEN
-            CALL DORM2R( 'Left', 'Transpose', M, N-MA, MA, A, LDA, TAU,
+            CALL AB_DORM2R( 'Left', 'Transpose', M, N-MA, MA, A, LDA, TA
+     $U,
      $                   A( 1, MA+1 ), LDA, WORK, INFO )
          END IF
       END IF
@@ -232,7 +234,7 @@
 *        work store the exact column norms.
 *
          DO 20 I = ITEMP + 1, N
-            WORK( I ) = DNRM2( M-ITEMP, A( ITEMP+1, I ), 1 )
+            WORK( I ) = AB_DNRM2( M-ITEMP, A( ITEMP+1, I ), 1 )
             WORK( N+I ) = WORK( I )
    20    CONTINUE
 *
@@ -242,10 +244,10 @@
 *
 *           Determine ith pivot column and swap if necessary
 *
-            PVT = ( I-1 ) + IDAMAX( N-I+1, WORK( I ), 1 )
+            PVT = ( I-1 ) + AB_IDAMAX( N-I+1, WORK( I ), 1 )
 *
             IF( PVT.NE.I ) THEN
-               CALL DSWAP( M, A( 1, PVT ), 1, A( 1, I ), 1 )
+               CALL AB_DSWAP( M, A( 1, PVT ), 1, A( 1, I ), 1 )
                ITEMP = JPVT( PVT )
                JPVT( PVT ) = JPVT( I )
                JPVT( I ) = ITEMP
@@ -256,9 +258,10 @@
 *           Generate elementary reflector H(i)
 *
             IF( I.LT.M ) THEN
-               CALL DLARFG( M-I+1, A( I, I ), A( I+1, I ), 1, TAU( I ) )
+               CALL AB_DLARFG( M-I+1, A( I, I ), A( I+1, I ), 1, TAU( I 
+     $) )
             ELSE
-               CALL DLARFG( 1, A( M, M ), A( M, M ), 1, TAU( M ) )
+               CALL AB_DLARFG( 1, A( M, M ), A( M, M ), 1, TAU( M ) )
             END IF
 *
             IF( I.LT.N ) THEN
@@ -267,7 +270,8 @@
 *
                AII = A( I, I )
                A( I, I ) = ONE
-               CALL DLARF( 'LEFT', M-I+1, N-I, A( I, I ), 1, TAU( I ),
+               CALL AB_DLARF( 'LEFT', M-I+1, N-I, A( I, I ), 1, TAU( I )
+     $,
      $                     A( I, I+1 ), LDA, WORK( 2*N+1 ) )
                A( I, I ) = AII
             END IF
@@ -285,7 +289,7 @@
                   TEMP2 = TEMP*( WORK( J ) / WORK( N+J ) )**2
                   IF( TEMP2 .LE. TOL3Z ) THEN
                      IF( M-I.GT.0 ) THEN
-                        WORK( J ) = DNRM2( M-I, A( I+1, J ), 1 )
+                        WORK( J ) = AB_DNRM2( M-I, A( I+1, J ), 1 )
                         WORK( N+J ) = WORK( J )
                      ELSE
                         WORK( J ) = ZERO
@@ -301,6 +305,6 @@
       END IF
       RETURN
 *
-*     End of DGEQPF
+*     End of AB_DGEQPF
 *
       END

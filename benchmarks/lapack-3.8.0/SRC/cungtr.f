@@ -1,4 +1,4 @@
-*> \brief \b CUNGTR
+*> \brief \b AB_CUNGTR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CUNGTR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cungtr.f">
+*> Download AB_CUNGTR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CUNGTR.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cungtr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CUNGTR.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cungtr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CUNGTR.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CUNGTR( UPLO, N, A, LDA, TAU, WORK, LWORK, INFO )
+*       SUBROUTINE AB_CUNGTR( UPLO, N, A, LDA, TAU, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,9 +34,9 @@
 *>
 *> \verbatim
 *>
-*> CUNGTR generates a complex unitary matrix Q which is defined as the
+*> AB_CUNGTR generates a complex unitary matrix Q which is defined as the
 *> product of n-1 elementary reflectors of order N, as returned by
-*> CHETRD:
+*> AB_CHETRD:
 *>
 *> if UPLO = 'U', Q = H(n-1) . . . H(2) H(1),
 *>
@@ -50,9 +50,9 @@
 *> \verbatim
 *>          UPLO is CHARACTER*1
 *>          = 'U': Upper triangle of A contains elementary reflectors
-*>                 from CHETRD;
+*>                 from AB_CHETRD;
 *>          = 'L': Lower triangle of A contains elementary reflectors
-*>                 from CHETRD.
+*>                 from AB_CHETRD.
 *> \endverbatim
 *>
 *> \param[in] N
@@ -65,7 +65,7 @@
 *> \verbatim
 *>          A is COMPLEX array, dimension (LDA,N)
 *>          On entry, the vectors which define the elementary reflectors,
-*>          as returned by CHETRD.
+*>          as returned by AB_CHETRD.
 *>          On exit, the N-by-N unitary matrix Q.
 *> \endverbatim
 *>
@@ -79,7 +79,7 @@
 *> \verbatim
 *>          TAU is COMPLEX array, dimension (N-1)
 *>          TAU(i) must contain the scalar factor of the elementary
-*>          reflector H(i), as returned by CHETRD.
+*>          reflector H(i), as returned by AB_CHETRD.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -98,7 +98,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -121,7 +121,7 @@
 *> \ingroup complexOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE CUNGTR( UPLO, N, A, LDA, TAU, WORK, LWORK, INFO )
+      SUBROUTINE AB_CUNGTR( UPLO, N, A, LDA, TAU, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -148,12 +148,12 @@
       INTEGER            I, IINFO, J, LWKOPT, NB
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      EXTERNAL           ILAENV, LSAME
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_ILAENV, AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CUNGQL, CUNGQR, XERBLA
+      EXTERNAL           AB_CUNGQL, AB_CUNGQR, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -164,8 +164,8 @@
 *
       INFO = 0
       LQUERY = ( LWORK.EQ.-1 )
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -177,16 +177,16 @@
 *
       IF( INFO.EQ.0 ) THEN
          IF ( UPPER ) THEN
-           NB = ILAENV( 1, 'CUNGQL', ' ', N-1, N-1, N-1, -1 )
+           NB = AB_ILAENV( 1, 'AB_CUNGQL', ' ', N-1, N-1, N-1, -1 )
          ELSE
-           NB = ILAENV( 1, 'CUNGQR', ' ', N-1, N-1, N-1, -1 )
+           NB = AB_ILAENV( 1, 'AB_CUNGQR', ' ', N-1, N-1, N-1, -1 )
          END IF
          LWKOPT = MAX( 1, N-1 )*NB
          WORK( 1 ) = LWKOPT
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CUNGTR', -INFO )
+         CALL AB_XERBLA( 'AB_CUNGTR', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -201,7 +201,7 @@
 *
       IF( UPPER ) THEN
 *
-*        Q was determined by a call to CHETRD with UPLO = 'U'
+*        Q was determined by a call to AB_CHETRD with UPLO = 'U'
 *
 *        Shift the vectors which define the elementary reflectors one
 *        column to the left, and set the last row and column of Q to
@@ -220,11 +220,12 @@
 *
 *        Generate Q(1:n-1,1:n-1)
 *
-         CALL CUNGQL( N-1, N-1, N-1, A, LDA, TAU, WORK, LWORK, IINFO )
+         CALL AB_CUNGQL( N-1, N-1, N-1, A, LDA, TAU, WORK, LWORK, IINFO 
+     $)
 *
       ELSE
 *
-*        Q was determined by a call to CHETRD with UPLO = 'L'.
+*        Q was determined by a call to AB_CHETRD with UPLO = 'L'.
 *
 *        Shift the vectors which define the elementary reflectors one
 *        column to the right, and set the first row and column of Q to
@@ -244,13 +245,13 @@
 *
 *           Generate Q(2:n,2:n)
 *
-            CALL CUNGQR( N-1, N-1, N-1, A( 2, 2 ), LDA, TAU, WORK,
+            CALL AB_CUNGQR( N-1, N-1, N-1, A( 2, 2 ), LDA, TAU, WORK,
      $                   LWORK, IINFO )
          END IF
       END IF
       WORK( 1 ) = LWKOPT
       RETURN
 *
-*     End of CUNGTR
+*     End of AB_CUNGTR
 *
       END

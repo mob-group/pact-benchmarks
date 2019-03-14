@@ -1,4 +1,4 @@
-*> \brief <b> ZPOSVX computes the solution to system of linear equations A * X = B for PO matrices</b>
+*> \brief <b> AB_ZPOSVX computes the solution to system of linear equations A * X = B for PO matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZPOSVX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zposvx.f">
+*> Download AB_ZPOSVX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZPOSVx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zposvx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZPOSVx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zposvx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZPOSVx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZPOSVX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, EQUED,
+*       SUBROUTINE AB_ZPOSVX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, EQUED,
 *                          S, B, LDB, X, LDX, RCOND, FERR, BERR, WORK,
 *                          RWORK, INFO )
 *
@@ -39,7 +39,7 @@
 *>
 *> \verbatim
 *>
-*> ZPOSVX uses the Cholesky factorization A = U**H*U or A = L*L**H to
+*> AB_ZPOSVX uses the Cholesky factorization A = U**H*U or A = L*L**H to
 *> compute the solution to a complex system of linear equations
 *>    A * X = B,
 *> where A is an N-by-N Hermitian positive definite matrix and X and B
@@ -302,7 +302,8 @@
 *> \ingroup complex16POsolve
 *
 *  =====================================================================
-      SUBROUTINE ZPOSVX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, EQUED,
+      SUBROUTINE AB_ZPOSVX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, EQUED
+     $,
      $                   S, B, LDB, X, LDX, RCOND, FERR, BERR, WORK,
      $                   RWORK, INFO )
 *
@@ -334,13 +335,14 @@
       DOUBLE PRECISION   AMAX, ANORM, BIGNUM, SCOND, SMAX, SMIN, SMLNUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, ZLANHE
-      EXTERNAL           LSAME, DLAMCH, ZLANHE
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   DLAMCH, AB_ZLANHE
+      EXTERNAL           AB_LSAME, DLAMCH, AB_ZLANHE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLACPY, ZLAQHE, ZPOCON, ZPOEQU, ZPORFS,
-     $                   ZPOTRF, ZPOTRS
+      EXTERNAL           AB_XERBLA, AB_ZLACPY, AB_ZLAQHE, AB_ZPOCON, AB_
+     $ZPOEQU, AB_ZPORFS,
+     $                   AB_ZPOTRF, AB_ZPOTRS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -348,23 +350,25 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-      NOFACT = LSAME( FACT, 'N' )
-      EQUIL = LSAME( FACT, 'E' )
+      NOFACT = AB_LSAME( FACT, 'N' )
+      EQUIL = AB_LSAME( FACT, 'E' )
       IF( NOFACT .OR. EQUIL ) THEN
          EQUED = 'N'
          RCEQU = .FALSE.
       ELSE
-         RCEQU = LSAME( EQUED, 'Y' )
+         RCEQU = AB_LSAME( EQUED, 'Y' )
          SMLNUM = DLAMCH( 'Safe minimum' )
          BIGNUM = ONE / SMLNUM
       END IF
 *
 *     Test the input parameters.
 *
-      IF( .NOT.NOFACT .AND. .NOT.EQUIL .AND. .NOT.LSAME( FACT, 'F' ) )
+      IF( .NOT.NOFACT .AND. .NOT.EQUIL .AND. .NOT.AB_LSAME( FACT, 'F' ) 
+     $)
      $     THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) )
+      ELSE IF( .NOT.AB_LSAME( UPLO, 'U' ) .AND. .NOT.AB_LSAME( UPLO, 'L'
+     $ ) )
      $          THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
@@ -375,8 +379,8 @@
          INFO = -6
       ELSE IF( LDAF.LT.MAX( 1, N ) ) THEN
          INFO = -8
-      ELSE IF( LSAME( FACT, 'F' ) .AND. .NOT.
-     $         ( RCEQU .OR. LSAME( EQUED, 'N' ) ) ) THEN
+      ELSE IF( AB_LSAME( FACT, 'F' ) .AND. .NOT.
+     $         ( RCEQU .OR. AB_LSAME( EQUED, 'N' ) ) ) THEN
          INFO = -9
       ELSE
          IF( RCEQU ) THEN
@@ -404,7 +408,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZPOSVX', -INFO )
+         CALL AB_XERBLA( 'AB_ZPOSVX', -INFO )
          RETURN
       END IF
 *
@@ -412,13 +416,13 @@
 *
 *        Compute row and column scalings to equilibrate the matrix A.
 *
-         CALL ZPOEQU( N, A, LDA, S, SCOND, AMAX, INFEQU )
+         CALL AB_ZPOEQU( N, A, LDA, S, SCOND, AMAX, INFEQU )
          IF( INFEQU.EQ.0 ) THEN
 *
 *           Equilibrate the matrix.
 *
-            CALL ZLAQHE( UPLO, N, A, LDA, S, SCOND, AMAX, EQUED )
-            RCEQU = LSAME( EQUED, 'Y' )
+            CALL AB_ZLAQHE( UPLO, N, A, LDA, S, SCOND, AMAX, EQUED )
+            RCEQU = AB_LSAME( EQUED, 'Y' )
          END IF
       END IF
 *
@@ -436,8 +440,8 @@
 *
 *        Compute the Cholesky factorization A = U**H *U or A = L*L**H.
 *
-         CALL ZLACPY( UPLO, N, N, A, LDA, AF, LDAF )
-         CALL ZPOTRF( UPLO, N, AF, LDAF, INFO )
+         CALL AB_ZLACPY( UPLO, N, N, A, LDA, AF, LDAF )
+         CALL AB_ZPOTRF( UPLO, N, AF, LDAF, INFO )
 *
 *        Return if INFO is non-zero.
 *
@@ -449,21 +453,22 @@
 *
 *     Compute the norm of the matrix A.
 *
-      ANORM = ZLANHE( '1', UPLO, N, A, LDA, RWORK )
+      ANORM = AB_ZLANHE( '1', UPLO, N, A, LDA, RWORK )
 *
 *     Compute the reciprocal of the condition number of A.
 *
-      CALL ZPOCON( UPLO, N, AF, LDAF, ANORM, RCOND, WORK, RWORK, INFO )
+      CALL AB_ZPOCON( UPLO, N, AF, LDAF, ANORM, RCOND, WORK, RWORK, INFO
+     $ )
 *
 *     Compute the solution matrix X.
 *
-      CALL ZLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
-      CALL ZPOTRS( UPLO, N, NRHS, AF, LDAF, X, LDX, INFO )
+      CALL AB_ZLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
+      CALL AB_ZPOTRS( UPLO, N, NRHS, AF, LDAF, X, LDX, INFO )
 *
 *     Use iterative refinement to improve the computed solution and
 *     compute error bounds and backward error estimates for it.
 *
-      CALL ZPORFS( UPLO, N, NRHS, A, LDA, AF, LDAF, B, LDB, X, LDX,
+      CALL AB_ZPORFS( UPLO, N, NRHS, A, LDA, AF, LDAF, B, LDB, X, LDX,
      $             FERR, BERR, WORK, RWORK, INFO )
 *
 *     Transform the solution matrix X to a solution of the original
@@ -487,6 +492,6 @@
 *
       RETURN
 *
-*     End of ZPOSVX
+*     End of AB_ZPOSVX
 *
       END

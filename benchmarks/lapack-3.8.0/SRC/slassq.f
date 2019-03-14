@@ -1,4 +1,4 @@
-*> \brief \b SLASSQ updates a sum of squares represented in scaled form.
+*> \brief \b AB_SLASSQ updates a sum of squares represented in scaled form.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLASSQ + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slassq.f">
+*> Download AB_SLASSQ + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLASSQ.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slassq.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLASSQ.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slassq.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLASSQ.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLASSQ( N, X, INCX, SCALE, SUMSQ )
+*       SUBROUTINE AB_SLASSQ( N, X, INCX, SCALE, SUMSQ )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCX, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> SLASSQ  returns the values  scl  and  smsq  such that
+*> AB_SLASSQ  returns the values  scl  and  smsq  such that
 *>
 *>    ( scl**2 )*smsq = x( 1 )**2 +...+ x( n )**2 + ( scale**2 )*sumsq,
 *>
@@ -101,7 +101,7 @@
 *> \ingroup OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE SLASSQ( N, X, INCX, SCALE, SUMSQ )
+      SUBROUTINE AB_SLASSQ( N, X, INCX, SCALE, SUMSQ )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -127,8 +127,8 @@
       REAL               ABSXI
 *     ..
 *     .. External Functions ..
-      LOGICAL            SISNAN
-      EXTERNAL           SISNAN
+      LOGICAL            AB_SISNAN
+      EXTERNAL           AB_SISNAN
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS
@@ -138,7 +138,7 @@
       IF( N.GT.0 ) THEN
          DO 10 IX = 1, 1 + ( N-1 )*INCX, INCX
             ABSXI = ABS( X( IX ) )
-            IF( ABSXI.GT.ZERO.OR.SISNAN( ABSXI ) ) THEN
+            IF( ABSXI.GT.ZERO.OR.AB_SISNAN( ABSXI ) ) THEN
                IF( SCALE.LT.ABSXI ) THEN
                   SUMSQ = 1 + SUMSQ*( SCALE / ABSXI )**2
                   SCALE = ABSXI
@@ -150,6 +150,6 @@
       END IF
       RETURN
 *
-*     End of SLASSQ
+*     End of AB_SLASSQ
 *
       END

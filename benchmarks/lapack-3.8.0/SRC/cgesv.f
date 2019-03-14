@@ -1,4 +1,4 @@
-*> \brief <b> CGESV computes the solution to system of linear equations A * X = B for GE matrices (simple driver) </b>
+*> \brief <b> AB_CGESV computes the solution to system of linear equations A * X = B for GE matrices (simple driver) </b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CGESV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgesv.f">
+*> Download AB_CGESV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CGESV.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgesv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CGESV.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgesv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CGESV.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGESV( N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+*       SUBROUTINE AB_CGESV( N, NRHS, A, LDA, IPIV, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, LDB, N, NRHS
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> CGESV computes the solution to a complex system of linear equations
+*> AB_CGESV computes the solution to a complex system of linear equations
 *>    A * X = B,
 *> where A is an N-by-N matrix and X and B are N-by-NRHS matrices.
 *>
@@ -120,7 +120,7 @@
 *> \ingroup complexGEsolve
 *
 *  =====================================================================
-      SUBROUTINE CGESV( N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+      SUBROUTINE AB_CGESV( N, NRHS, A, LDA, IPIV, B, LDB, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -138,7 +138,7 @@
 *  =====================================================================
 *
 *     .. External Subroutines ..
-      EXTERNAL           CGETRF, CGETRS, XERBLA
+      EXTERNAL           AB_CGETRF, AB_CGETRS, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -158,22 +158,22 @@
          INFO = -7
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CGESV ', -INFO )
+         CALL AB_XERBLA( 'AB_CGESV ', -INFO )
          RETURN
       END IF
 *
 *     Compute the LU factorization of A.
 *
-      CALL CGETRF( N, N, A, LDA, IPIV, INFO )
+      CALL AB_CGETRF( N, N, A, LDA, IPIV, INFO )
       IF( INFO.EQ.0 ) THEN
 *
 *        Solve the system A*X = B, overwriting B with X.
 *
-         CALL CGETRS( 'No transpose', N, NRHS, A, LDA, IPIV, B, LDB,
+         CALL AB_CGETRS( 'No transpose', N, NRHS, A, LDA, IPIV, B, LDB,
      $                INFO )
       END IF
       RETURN
 *
-*     End of CGESV
+*     End of AB_CGESV
 *
       END

@@ -1,6 +1,6 @@
-*> \brief \b CHEGV_2STAGE
+*> \brief \b AB_CHEGV_2STAGE
 *
-*  @generated from zhegv_2stage.f, fortran z -> c, Sun Nov  6 13:09:52 2016
+*  @generated from AB_ZHEGV_2stage.f, fortran z -> c, Sun Nov  6 13:09:52 2016
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,19 +8,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CHEGV_2STAGE + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chegv_2stage.f">
+*> Download AB_CHEGV_2STAGE + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CHEGV_2stage.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chegv_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CHEGV_2stage.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chegv_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CHEGV_2stage.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CHEGV_2STAGE( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W,
+*       SUBROUTINE AB_CHEGV_2STAGE( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W,
 *                                WORK, LWORK, RWORK, INFO )
 *
 *       IMPLICIT NONE
@@ -40,7 +40,7 @@
 *>
 *> \verbatim
 *>
-*> CHEGV_2STAGE computes all the eigenvalues, and optionally, the eigenvectors
+*> AB_CHEGV_2STAGE computes all the eigenvalues, and optionally, the eigenvectors
 *> of a complex generalized Hermitian-definite eigenproblem, of the form
 *> A*x=(lambda)*B*x,  A*Bx=(lambda)*x,  or B*A*x=(lambda)*x.
 *> Here A and B are assumed to be Hermitian and B is also
@@ -161,7 +161,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -174,8 +174,8 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
-*>          > 0:  CPOTRF or CHEEV returned an error code:
-*>             <= N:  if INFO = i, CHEEV failed to converge;
+*>          > 0:  AB_CPOTRF or AB_CHEEV returned an error code:
+*>             <= N:  if INFO = i, AB_CHEEV failed to converge;
 *>                    i off-diagonal elements of an intermediate
 *>                    tridiagonal form did not converge to zero;
 *>             > N:   if INFO = N + i, for 1 <= i <= N, then the leading
@@ -229,7 +229,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE CHEGV_2STAGE( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W,
+      SUBROUTINE AB_CHEGV_2STAGE( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, 
+     $W,
      $                         WORK, LWORK, RWORK, INFO )
 *
       IMPLICIT NONE
@@ -260,13 +261,14 @@
       INTEGER            NEIG, LWMIN, LHTRD, LWTRD, KD, IB
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV2STAGE
-      EXTERNAL           LSAME, ILAENV2STAGE
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV2STAGE
+      EXTERNAL           AB_LSAME, AB_ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, CHEGST, CPOTRF, CTRMM, CTRSM,
-     $                   CHEEV_2STAGE
+      EXTERNAL           AB_XERBLA, AB_CHEGST, AB_CPOTRF, AB_CTRMM, AB_C
+     $TRSM,
+     $                   AB_CHEEV_2STAGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -275,16 +277,16 @@
 *
 *     Test the input parameters.
 *
-      WANTZ = LSAME( JOBZ, 'V' )
-      UPPER = LSAME( UPLO, 'U' )
+      WANTZ = AB_LSAME( JOBZ, 'V' )
+      UPPER = AB_LSAME( UPLO, 'U' )
       LQUERY = ( LWORK.EQ.-1 )
 *
       INFO = 0
       IF( ITYPE.LT.1 .OR. ITYPE.GT.3 ) THEN
          INFO = -1
-      ELSE IF( .NOT.( LSAME( JOBZ, 'N' ) ) ) THEN
+      ELSE IF( .NOT.( AB_LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.( UPPER .OR. LSAME( UPLO, 'L' ) ) ) THEN
+      ELSE IF( .NOT.( UPPER .OR. AB_LSAME( UPLO, 'L' ) ) ) THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
@@ -295,10 +297,14 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         KD    = ILAENV2STAGE( 1, 'CHETRD_2STAGE', JOBZ, N, -1, -1, -1 )
-         IB    = ILAENV2STAGE( 2, 'CHETRD_2STAGE', JOBZ, N, KD, -1, -1 )
-         LHTRD = ILAENV2STAGE( 3, 'CHETRD_2STAGE', JOBZ, N, KD, IB, -1 )
-         LWTRD = ILAENV2STAGE( 4, 'CHETRD_2STAGE', JOBZ, N, KD, IB, -1 )
+         KD    = AB_ILAENV2STAGE( 1, 'AB_CHETRD_2STAGE', JOBZ, N, -1, -1
+     $, -1 )
+         IB    = AB_ILAENV2STAGE( 2, 'AB_CHETRD_2STAGE', JOBZ, N, KD, -1
+     $, -1 )
+         LHTRD = AB_ILAENV2STAGE( 3, 'AB_CHETRD_2STAGE', JOBZ, N, KD, IB
+     $, -1 )
+         LWTRD = AB_ILAENV2STAGE( 4, 'AB_CHETRD_2STAGE', JOBZ, N, KD, IB
+     $, -1 )
          LWMIN = N + LHTRD + LWTRD
          WORK( 1 )  = LWMIN
 *
@@ -308,7 +314,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CHEGV_2STAGE ', -INFO )
+         CALL AB_XERBLA( 'AB_CHEGV_2STAGE ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -321,7 +327,7 @@
 *
 *     Form a Cholesky factorization of B.
 *
-      CALL CPOTRF( UPLO, N, B, LDB, INFO )
+      CALL AB_CPOTRF( UPLO, N, B, LDB, INFO )
       IF( INFO.NE.0 ) THEN
          INFO = N + INFO
          RETURN
@@ -329,8 +335,8 @@
 *
 *     Transform problem to standard eigenvalue problem and solve.
 *
-      CALL CHEGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
-      CALL CHEEV_2STAGE( JOBZ, UPLO, N, A, LDA, W, 
+      CALL AB_CHEGST( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
+      CALL AB_CHEEV_2STAGE( JOBZ, UPLO, N, A, LDA, W, 
      $                   WORK, LWORK, RWORK, INFO )
 *
       IF( WANTZ ) THEN
@@ -351,7 +357,8 @@
                TRANS = 'C'
             END IF
 *
-            CALL CTRSM( 'Left', UPLO, TRANS, 'Non-unit', N, NEIG, ONE,
+            CALL AB_CTRSM( 'Left', UPLO, TRANS, 'Non-unit', N, NEIG, ONE
+     $,
      $                  B, LDB, A, LDA )
 *
          ELSE IF( ITYPE.EQ.3 ) THEN
@@ -365,7 +372,8 @@
                TRANS = 'N'
             END IF
 *
-            CALL CTRMM( 'Left', UPLO, TRANS, 'Non-unit', N, NEIG, ONE,
+            CALL AB_CTRMM( 'Left', UPLO, TRANS, 'Non-unit', N, NEIG, ONE
+     $,
      $                  B, LDB, A, LDA )
          END IF
       END IF
@@ -374,6 +382,6 @@
 *
       RETURN
 *
-*     End of CHEGV_2STAGE
+*     End of AB_CHEGV_2STAGE
 *
       END

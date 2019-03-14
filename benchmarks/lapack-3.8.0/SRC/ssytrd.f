@@ -1,4 +1,4 @@
-*> \brief \b SSYTRD
+*> \brief \b AB_SSYTRD
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SSYTRD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssytrd.f">
+*> Download AB_SSYTRD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SSYTRD.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssytrd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SSYTRD.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssytrd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SSYTRD.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SSYTRD( UPLO, N, A, LDA, D, E, TAU, WORK, LWORK, INFO )
+*       SUBROUTINE AB_SSYTRD( UPLO, N, A, LDA, D, E, TAU, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> SSYTRD reduces a real symmetric matrix A to real symmetric
+*> AB_SSYTRD reduces a real symmetric matrix A to real symmetric
 *> tridiagonal form T by an orthogonal similarity transformation:
 *> Q**T * A * Q = T.
 *> \endverbatim
@@ -121,7 +121,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -190,7 +190,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SSYTRD( UPLO, N, A, LDA, D, E, TAU, WORK, LWORK, INFO )
+      SUBROUTINE AB_SSYTRD( UPLO, N, A, LDA, D, E, TAU, WORK, LWORK, INF
+     $O )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -218,24 +219,24 @@
      $                   NBMIN, NX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLATRD, SSYR2K, SSYTD2, XERBLA
+      EXTERNAL           AB_SLATRD, AB_SSYR2K, AB_SSYTD2, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      EXTERNAL           LSAME, ILAENV
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_LSAME, AB_ILAENV
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
+      UPPER = AB_LSAME( UPLO, 'U' )
       LQUERY = ( LWORK.EQ.-1 )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -249,13 +250,13 @@
 *
 *        Determine the block size.
 *
-         NB = ILAENV( 1, 'SSYTRD', UPLO, N, -1, -1, -1 )
+         NB = AB_ILAENV( 1, 'AB_SSYTRD', UPLO, N, -1, -1, -1 )
          LWKOPT = N*NB
          WORK( 1 ) = LWKOPT
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SSYTRD', -INFO )
+         CALL AB_XERBLA( 'AB_SSYTRD', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -275,7 +276,8 @@
 *        Determine when to cross over from blocked to unblocked code
 *        (last block is always handled by unblocked code).
 *
-         NX = MAX( NB, ILAENV( 3, 'SSYTRD', UPLO, N, -1, -1, -1 ) )
+         NX = MAX( NB, AB_ILAENV( 3, 'AB_SSYTRD', UPLO, N, -1, -1, -1 ) 
+     $)
          IF( NX.LT.N ) THEN
 *
 *           Determine if workspace is large enough for blocked code.
@@ -289,7 +291,7 @@
 *              unblocked code by setting NX = N.
 *
                NB = MAX( LWORK / LDWORK, 1 )
-               NBMIN = ILAENV( 2, 'SSYTRD', UPLO, N, -1, -1, -1 )
+               NBMIN = AB_ILAENV( 2, 'AB_SSYTRD', UPLO, N, -1, -1, -1 )
                IF( NB.LT.NBMIN )
      $            NX = N
             END IF
@@ -312,13 +314,14 @@
 *           matrix W which is needed to update the unreduced part of
 *           the matrix
 *
-            CALL SLATRD( UPLO, I+NB-1, NB, A, LDA, E, TAU, WORK,
+            CALL AB_SLATRD( UPLO, I+NB-1, NB, A, LDA, E, TAU, WORK,
      $                   LDWORK )
 *
 *           Update the unreduced submatrix A(1:i-1,1:i-1), using an
 *           update of the form:  A := A - V*W**T - W*V**T
 *
-            CALL SSYR2K( UPLO, 'No transpose', I-1, NB, -ONE, A( 1, I ),
+            CALL AB_SSYR2K( UPLO, 'No transpose', I-1, NB, -ONE, A( 1, I
+     $ ),
      $                   LDA, WORK, LDWORK, ONE, A, LDA )
 *
 *           Copy superdiagonal elements back into A, and diagonal
@@ -332,7 +335,7 @@
 *
 *        Use unblocked code to reduce the last or only block
 *
-         CALL SSYTD2( UPLO, KK, A, LDA, D, E, TAU, IINFO )
+         CALL AB_SSYTD2( UPLO, KK, A, LDA, D, E, TAU, IINFO )
       ELSE
 *
 *        Reduce the lower triangle of A
@@ -343,13 +346,13 @@
 *           matrix W which is needed to update the unreduced part of
 *           the matrix
 *
-            CALL SLATRD( UPLO, N-I+1, NB, A( I, I ), LDA, E( I ),
+            CALL AB_SLATRD( UPLO, N-I+1, NB, A( I, I ), LDA, E( I ),
      $                   TAU( I ), WORK, LDWORK )
 *
 *           Update the unreduced submatrix A(i+ib:n,i+ib:n), using
 *           an update of the form:  A := A - V*W**T - W*V**T
 *
-            CALL SSYR2K( UPLO, 'No transpose', N-I-NB+1, NB, -ONE,
+            CALL AB_SSYR2K( UPLO, 'No transpose', N-I-NB+1, NB, -ONE,
      $                   A( I+NB, I ), LDA, WORK( NB+1 ), LDWORK, ONE,
      $                   A( I+NB, I+NB ), LDA )
 *
@@ -364,13 +367,13 @@
 *
 *        Use unblocked code to reduce the last or only block
 *
-         CALL SSYTD2( UPLO, N-I+1, A( I, I ), LDA, D( I ), E( I ),
+         CALL AB_SSYTD2( UPLO, N-I+1, A( I, I ), LDA, D( I ), E( I ),
      $                TAU( I ), IINFO )
       END IF
 *
       WORK( 1 ) = LWKOPT
       RETURN
 *
-*     End of SSYTRD
+*     End of AB_SSYTRD
 *
       END

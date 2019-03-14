@@ -1,4 +1,4 @@
-*> \brief \b DSPTRD
+*> \brief \b AB_DSPTRD
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DSPTRD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsptrd.f">
+*> Download AB_DSPTRD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DSPTRD.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsptrd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DSPTRD.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsptrd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DSPTRD.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DSPTRD( UPLO, N, AP, D, E, TAU, INFO )
+*       SUBROUTINE AB_DSPTRD( UPLO, N, AP, D, E, TAU, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> DSPTRD reduces a real symmetric matrix A stored in packed form to
+*> AB_DSPTRD reduces a real symmetric matrix A stored in packed form to
 *> symmetric tridiagonal form T by an orthogonal similarity
 *> transformation: Q**T * A * Q = T.
 *> \endverbatim
@@ -148,7 +148,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DSPTRD( UPLO, N, AP, D, E, TAU, INFO )
+      SUBROUTINE AB_DSPTRD( UPLO, N, AP, D, E, TAU, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -176,26 +176,27 @@
       DOUBLE PRECISION   ALPHA, TAUI
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DLARFG, DSPMV, DSPR2, XERBLA
+      EXTERNAL           AB_DAXPY, AB_DLARFG, AB_DSPMV, AB_DSPR2, AB_XER
+     $BLA
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DDOT
-      EXTERNAL           LSAME, DDOT
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DDOT
+      EXTERNAL           AB_LSAME, AB_DDOT
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DSPTRD', -INFO )
+         CALL AB_XERBLA( 'AB_DSPTRD', -INFO )
          RETURN
       END IF
 *
@@ -215,7 +216,7 @@
 *           Generate elementary reflector H(i) = I - tau * v * v**T
 *           to annihilate A(1:i-1,i+1)
 *
-            CALL DLARFG( I, AP( I1+I-1 ), AP( I1 ), 1, TAUI )
+            CALL AB_DLARFG( I, AP( I1+I-1 ), AP( I1 ), 1, TAUI )
             E( I ) = AP( I1+I-1 )
 *
             IF( TAUI.NE.ZERO ) THEN
@@ -226,18 +227,18 @@
 *
 *              Compute  y := tau * A * v  storing y in TAU(1:i)
 *
-               CALL DSPMV( UPLO, I, TAUI, AP, AP( I1 ), 1, ZERO, TAU,
+               CALL AB_DSPMV( UPLO, I, TAUI, AP, AP( I1 ), 1, ZERO, TAU,
      $                     1 )
 *
 *              Compute  w := y - 1/2 * tau * (y**T *v) * v
 *
-               ALPHA = -HALF*TAUI*DDOT( I, TAU, 1, AP( I1 ), 1 )
-               CALL DAXPY( I, ALPHA, AP( I1 ), 1, TAU, 1 )
+               ALPHA = -HALF*TAUI*AB_DDOT( I, TAU, 1, AP( I1 ), 1 )
+               CALL AB_DAXPY( I, ALPHA, AP( I1 ), 1, TAU, 1 )
 *
 *              Apply the transformation as a rank-2 update:
 *                 A := A - v * w**T - w * v**T
 *
-               CALL DSPR2( UPLO, I, -ONE, AP( I1 ), 1, TAU, 1, AP )
+               CALL AB_DSPR2( UPLO, I, -ONE, AP( I1 ), 1, TAU, 1, AP )
 *
                AP( I1+I-1 ) = E( I )
             END IF
@@ -258,7 +259,7 @@
 *           Generate elementary reflector H(i) = I - tau * v * v**T
 *           to annihilate A(i+2:n,i)
 *
-            CALL DLARFG( N-I, AP( II+1 ), AP( II+2 ), 1, TAUI )
+            CALL AB_DLARFG( N-I, AP( II+1 ), AP( II+2 ), 1, TAUI )
             E( I ) = AP( II+1 )
 *
             IF( TAUI.NE.ZERO ) THEN
@@ -269,19 +270,21 @@
 *
 *              Compute  y := tau * A * v  storing y in TAU(i:n-1)
 *
-               CALL DSPMV( UPLO, N-I, TAUI, AP( I1I1 ), AP( II+1 ), 1,
+               CALL AB_DSPMV( UPLO, N-I, TAUI, AP( I1I1 ), AP( II+1 ), 1
+     $,
      $                     ZERO, TAU( I ), 1 )
 *
 *              Compute  w := y - 1/2 * tau * (y**T *v) * v
 *
-               ALPHA = -HALF*TAUI*DDOT( N-I, TAU( I ), 1, AP( II+1 ),
+               ALPHA = -HALF*TAUI*AB_DDOT( N-I, TAU( I ), 1, AP( II+1 ),
      $                 1 )
-               CALL DAXPY( N-I, ALPHA, AP( II+1 ), 1, TAU( I ), 1 )
+               CALL AB_DAXPY( N-I, ALPHA, AP( II+1 ), 1, TAU( I ), 1 )
 *
 *              Apply the transformation as a rank-2 update:
 *                 A := A - v * w**T - w * v**T
 *
-               CALL DSPR2( UPLO, N-I, -ONE, AP( II+1 ), 1, TAU( I ), 1,
+               CALL AB_DSPR2( UPLO, N-I, -ONE, AP( II+1 ), 1, TAU( I ), 
+     $1,
      $                     AP( I1I1 ) )
 *
                AP( II+1 ) = E( I )
@@ -295,6 +298,6 @@
 *
       RETURN
 *
-*     End of DSPTRD
+*     End of AB_DSPTRD
 *
       END

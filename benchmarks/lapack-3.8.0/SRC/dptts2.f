@@ -1,4 +1,4 @@
-*> \brief \b DPTTS2 solves a tridiagonal system of the form AX=B using the L D LH factorization computed by spttrf.
+*> \brief \b AB_DPTTS2 solves a tridiagonal system of the form AX=B using the L D LH factorization computed by AB_SPTTRF.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DPTTS2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dptts2.f">
+*> Download AB_DPTTS2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DPTTS2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dptts2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DPTTS2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dptts2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DPTTS2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DPTTS2( N, NRHS, D, E, B, LDB )
+*       SUBROUTINE AB_DPTTS2( N, NRHS, D, E, B, LDB )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDB, N, NRHS
@@ -33,9 +33,9 @@
 *>
 *> \verbatim
 *>
-*> DPTTS2 solves a tridiagonal system of the form
+*> AB_DPTTS2 solves a tridiagonal system of the form
 *>    A * X = B
-*> using the L*D*L**T factorization of A computed by DPTTRF.  D is a
+*> using the L*D*L**T factorization of A computed by AB_DPTTRF.  D is a
 *> diagonal matrix specified in the vector D, L is a unit bidiagonal
 *> matrix whose subdiagonal is specified in the vector E, and X and B
 *> are N by NRHS matrices.
@@ -100,7 +100,7 @@
 *> \ingroup doublePTcomputational
 *
 *  =====================================================================
-      SUBROUTINE DPTTS2( N, NRHS, D, E, B, LDB )
+      SUBROUTINE AB_DPTTS2( N, NRHS, D, E, B, LDB )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -120,7 +120,7 @@
       INTEGER            I, J
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSCAL
+      EXTERNAL           AB_DSCAL
 *     ..
 *     .. Executable Statements ..
 *
@@ -128,7 +128,7 @@
 *
       IF( N.LE.1 ) THEN
          IF( N.EQ.1 )
-     $      CALL DSCAL( NRHS, 1.D0 / D( 1 ), B, LDB )
+     $      CALL AB_DSCAL( NRHS, 1.D0 / D( 1 ), B, LDB )
          RETURN
       END IF
 *
@@ -153,6 +153,6 @@
 *
       RETURN
 *
-*     End of DPTTS2
+*     End of AB_DPTTS2
 *
       END

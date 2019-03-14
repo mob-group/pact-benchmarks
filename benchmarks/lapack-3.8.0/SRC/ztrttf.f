@@ -1,4 +1,4 @@
-*> \brief \b ZTRTTF copies a triangular matrix from the standard full format (TR) to the rectangular full packed format (TF).
+*> \brief \b AB_ZTRTTF copies a triangular matrix from the standard full format (TR) to the rectangular full packed format (TF).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZTRTTF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztrttf.f">
+*> Download AB_ZTRTTF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZTRTTF.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztrttf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZTRTTF.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztrttf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZTRTTF.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZTRTTF( TRANSR, UPLO, N, A, LDA, ARF, INFO )
+*       SUBROUTINE AB_ZTRTTF( TRANSR, UPLO, N, A, LDA, ARF, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          TRANSR, UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> ZTRTTF copies a triangular matrix A from standard full format (TR)
+*> AB_ZTRTTF copies a triangular matrix A from standard full format (TR)
 *> to rectangular full packed format (TF) .
 *> \endverbatim
 *
@@ -214,7 +214,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZTRTTF( TRANSR, UPLO, N, A, LDA, ARF, INFO )
+      SUBROUTINE AB_ZTRTTF( TRANSR, UPLO, N, A, LDA, ARF, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -238,11 +238,11 @@
       INTEGER            I, IJ, J, K, L, N1, N2, NT, NX2, NP1X2
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA
+      EXTERNAL           AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DCONJG, MAX, MOD
@@ -252,11 +252,11 @@
 *     Test the input parameters.
 *
       INFO = 0
-      NORMALTRANSR = LSAME( TRANSR, 'N' )
-      LOWER = LSAME( UPLO, 'L' )
-      IF( .NOT.NORMALTRANSR .AND. .NOT.LSAME( TRANSR, 'C' ) ) THEN
+      NORMALTRANSR = AB_LSAME( TRANSR, 'N' )
+      LOWER = AB_LSAME( UPLO, 'L' )
+      IF( .NOT.NORMALTRANSR .AND. .NOT.AB_LSAME( TRANSR, 'C' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LOWER .AND. .NOT.LSAME( UPLO, 'U' ) ) THEN
+      ELSE IF( .NOT.LOWER .AND. .NOT.AB_LSAME( UPLO, 'U' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -264,7 +264,7 @@
          INFO = -5
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZTRTTF', -INFO )
+         CALL AB_XERBLA( 'AB_ZTRTTF', -INFO )
          RETURN
       END IF
 *
@@ -532,6 +532,6 @@
 *
       RETURN
 *
-*     End of ZTRTTF
+*     End of AB_ZTRTTF
 *
       END

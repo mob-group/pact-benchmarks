@@ -1,4 +1,4 @@
-*> \brief \b SROTM
+*> \brief \b AB_SROTM
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SROTM(N,SX,INCX,SY,INCY,SPARAM)
+*       SUBROUTINE AB_SROTM(N,SX,INCX,SY,INCY,SPARAM)
 *
 *       .. Scalar Arguments ..
 *       INTEGER INCX,INCY,N
@@ -37,7 +37,7 @@
 *>      (SH11  SH12)    (1.E0  SH12)    (SH11  1.E0)    (1.E0  0.E0)
 *>    H=(          )    (          )    (          )    (          )
 *>      (SH21  SH22),   (SH21  1.E0),   (-1.E0 SH22),   (0.E0  1.E0).
-*>    SEE  SROTMG FOR A DESCRIPTION OF DATA STORAGE IN SPARAM.
+*>    SEE  AB_SROTMG FOR A DESCRIPTION OF DATA STORAGE IN SPARAM.
 *>
 *> \endverbatim
 *
@@ -95,7 +95,7 @@
 *> \ingroup single_blas_level1
 *
 *  =====================================================================
-      SUBROUTINE SROTM(N,SX,INCX,SY,INCY,SPARAM)
+      SUBROUTINE AB_SROTM(N,SX,INCX,SY,INCY,SPARAM)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

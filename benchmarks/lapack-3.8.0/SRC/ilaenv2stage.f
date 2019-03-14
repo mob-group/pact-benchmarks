@@ -1,4 +1,4 @@
-*> \brief \b ILAENV2STAGE
+*> \brief \b AB_ILAENV2STAGE
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ILAENV2STAGE + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ilaenv2stage.f">
+*> Download AB_ILAENV2STAGE + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ILAENV2stage.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ilaenv2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ILAENV2stage.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ilaenv2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ILAENV2stage.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       INTEGER FUNCTION ILAENV2STAGE( ISPEC, NAME, OPTS, N1, N2, N3, N4 )
+*       INTEGER FUNCTION AB_ILAENV2STAGE( ISPEC, NAME, OPTS, N1, N2, N3, N4 )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*( * )    NAME, OPTS
@@ -31,16 +31,16 @@
 *>
 *> \verbatim
 *>
-*> ILAENV2STAGE is called from the LAPACK routines to choose problem-dependent
+*> AB_ILAENV2STAGE is called from the LAPACK routines to choose problem-dependent
 *> parameters for the local environment.  See ISPEC for a description of
 *> the parameters.
 *> It sets problem and machine dependent parameters useful for *_2STAGE and
 *> related subroutines.
 *>
-*> ILAENV2STAGE returns an INTEGER
-*> if ILAENV2STAGE >= 0: ILAENV2STAGE returns the value of the parameter
+*> AB_ILAENV2STAGE returns an INTEGER
+*> if AB_ILAENV2STAGE >= 0: AB_ILAENV2STAGE returns the value of the parameter
 *                        specified by ISPEC
-*> if ILAENV2STAGE < 0:  if ILAENV2STAGE = -k, the k-th argument had an
+*> if AB_ILAENV2STAGE < 0:  if AB_ILAENV2STAGE = -k, the k-th argument had an
 *                        illegal value.
 *>
 *> This version provides a set of parameters which should give good,
@@ -60,7 +60,7 @@
 *> \verbatim
 *>          ISPEC is INTEGER
 *>          Specifies the parameter to be returned as the value of
-*>          ILAENV2STAGE.
+*>          AB_ILAENV2STAGE.
 *>          = 1: the optimal blocksize nb for the reduction to BAND
 *>
 *>          = 2: the optimal blocksize ib for the eigenvectors
@@ -131,7 +131,7 @@
 *>
 *> \verbatim
 *>
-*>  The following conventions have been used when calling ILAENV2STAGE
+*>  The following conventions have been used when calling AB_ILAENV2STAGE
 *> from the LAPACK routines:
 *>  1)  OPTS is a concatenation of all of the character options to
 *>      subroutine NAME, in the same order that they appear in the
@@ -141,13 +141,14 @@
 *>      that they appear in the argument list for NAME.  N1 is used
 *>      first, N2 second, and so on, and unused problem dimensions are
 *>      passed a value of -1.
-*>  3)  The parameter value returned by ILAENV2STAGE is checked for validity in
+*>  3)  The parameter value returned by AB_ILAENV2STAGE is checked for validity in
 *>      the calling subroutine.
 *>     
 *> \endverbatim
 *>
 *  =====================================================================
-      INTEGER FUNCTION ILAENV2STAGE( ISPEC, NAME, OPTS, N1, N2, N3, N4 )
+      INTEGER FUNCTION AB_ILAENV2STAGE( ISPEC, NAME, OPTS, N1, N2, N3, N
+     $4 )
 *
 *  -- LAPACK auxiliary routine (version 3.8.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -174,7 +175,7 @@
 *
 *     Invalid value for ISPEC
 *
-      ILAENV2STAGE = -1
+      AB_ILAENV2STAGE = -1
       RETURN
 *
    10 CONTINUE
@@ -182,10 +183,10 @@
 *     2stage eigenvalues and SVD or related subroutines.
 *
       IISPEC = 16 + ISPEC
-      ILAENV2STAGE = IPARAM2STAGE( IISPEC, NAME, OPTS,
+      AB_ILAENV2STAGE = IPARAM2STAGE( IISPEC, NAME, OPTS,
      $                             N1, N2, N3, N4 )
       RETURN
 *
-*     End of ILAENV2STAGE
+*     End of AB_ILAENV2STAGE
 *
       END

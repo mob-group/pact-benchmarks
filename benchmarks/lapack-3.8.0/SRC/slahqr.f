@@ -1,4 +1,4 @@
-*> \brief \b SLAHQR computes the eigenvalues and Schur factorization of an upper Hessenberg matrix, using the double-shift/single-shift QR algorithm.
+*> \brief \b AB_SLAHQR computes the eigenvalues and Schur factorization of an upper Hessenberg matrix, using the double-shift/single-shift QR algorithm.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLAHQR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slahqr.f">
+*> Download AB_SLAHQR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLAHQR.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slahqr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLAHQR.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slahqr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLAHQR.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLAHQR( WANTT, WANTZ, N, ILO, IHI, H, LDH, WR, WI,
+*       SUBROUTINE AB_SLAHQR( WANTT, WANTZ, N, ILO, IHI, H, LDH, WR, WI,
 *                          ILOZ, IHIZ, Z, LDZ, INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,8 +35,8 @@
 *>
 *> \verbatim
 *>
-*>    SLAHQR is an auxiliary routine called by SHSEQR to update the
-*>    eigenvalues and Schur decomposition already computed by SHSEQR, by
+*>    AB_SLAHQR is an auxiliary routine called by AB_SHSEQR to update the
+*>    eigenvalues and Schur decomposition already computed by AB_SHSEQR, by
 *>    dealing with the Hessenberg submatrix in rows and columns ILO to
 *>    IHI.
 *> \endverbatim
@@ -74,7 +74,7 @@
 *>          IHI is INTEGER
 *>          It is assumed that H is already upper quasi-triangular in
 *>          rows and columns IHI+1:N, and that H(ILO,ILO-1) = 0 (unless
-*>          ILO = 1). SLAHQR works primarily with the Hessenberg
+*>          ILO = 1). AB_SLAHQR works primarily with the Hessenberg
 *>          submatrix in rows and columns ILO to IHI, but applies
 *>          transformations to all of H if WANTT is .TRUE..
 *>          1 <= ILO <= max(1,IHI); IHI <= N.
@@ -135,7 +135,7 @@
 *> \verbatim
 *>          Z is REAL array, dimension (LDZ,N)
 *>          If WANTZ is .TRUE., on entry Z must contain the current
-*>          matrix Z of transformations accumulated by SHSEQR, and on
+*>          matrix Z of transformations accumulated by AB_SHSEQR, and on
 *>          exit Z has been updated; transformations are applied only to
 *>          the submatrix Z(ILOZ:IHIZ,ILO:IHI).
 *>          If WANTZ is .FALSE., Z is not referenced.
@@ -151,7 +151,7 @@
 *> \verbatim
 *>          INFO is INTEGER
 *>           =   0: successful exit
-*>          .GT. 0: If INFO = i, SLAHQR failed to compute all the
+*>          .GT. 0: If INFO = i, AB_SLAHQR failed to compute all the
 *>                  eigenvalues ILO to IHI in a total of 30 iterations
 *>                  per eigenvalue; elements i+1:ihi of WR and WI
 *>                  contain those eigenvalues which have been
@@ -197,14 +197,14 @@
 *>
 *>     12-04 Further modifications by
 *>     Ralph Byers, University of Kansas, USA
-*>     This is a modified version of SLAHQR from LAPACK version 3.0.
+*>     This is a modified version of AB_SLAHQR from LAPACK version 3.0.
 *>     It is (1) more robust against overflow and underflow and
 *>     (2) adopts the more conservative Ahues & Tisseur stopping
 *>     criterion (LAWN 122, 1997).
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SLAHQR( WANTT, WANTZ, N, ILO, IHI, H, LDH, WR, WI,
+      SUBROUTINE AB_SLAHQR( WANTT, WANTZ, N, ILO, IHI, H, LDH, WR, WI,
      $                   ILOZ, IHIZ, Z, LDZ, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -243,7 +243,8 @@
       EXTERNAL           SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLABAD, SLANV2, SLARFG, SROT
+      EXTERNAL           AB_SCOPY, AB_SLABAD, AB_SLANV2, AB_SLARFG, AB_S
+     $ROT
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL, SQRT
@@ -277,7 +278,7 @@
 *
       SAFMIN = SLAMCH( 'SAFE MINIMUM' )
       SAFMAX = ONE / SAFMIN
-      CALL SLABAD( SAFMIN, SAFMAX )
+      CALL AB_SLABAD( SAFMIN, SAFMAX )
       ULP = SLAMCH( 'PRECISION' )
       SMLNUM = SAFMIN*( REAL( NH ) / ULP )
 *
@@ -473,8 +474,8 @@
 *
             NR = MIN( 3, I-K+1 )
             IF( K.GT.M )
-     $         CALL SCOPY( NR, H( K, K-1 ), 1, V, 1 )
-            CALL SLARFG( NR, V( 1 ), V( 2 ), 1, T1 )
+     $         CALL AB_SCOPY( NR, H( K, K-1 ), 1, V, 1 )
+            CALL AB_SLARFG( NR, V( 1 ), V( 2 ), 1, T1 )
             IF( K.GT.M ) THEN
                H( K, K-1 ) = V( 1 )
                H( K+1, K-1 ) = ZERO
@@ -579,7 +580,7 @@
 *        Transform the 2-by-2 submatrix to standard Schur form,
 *        and compute and store the eigenvalues.
 *
-         CALL SLANV2( H( I-1, I-1 ), H( I-1, I ), H( I, I-1 ),
+         CALL AB_SLANV2( H( I-1, I-1 ), H( I-1, I ), H( I, I-1 ),
      $                H( I, I ), WR( I-1 ), WI( I-1 ), WR( I ), WI( I ),
      $                CS, SN )
 *
@@ -588,15 +589,17 @@
 *           Apply the transformation to the rest of H.
 *
             IF( I2.GT.I )
-     $         CALL SROT( I2-I, H( I-1, I+1 ), LDH, H( I, I+1 ), LDH,
+     $         CALL AB_SROT( I2-I, H( I-1, I+1 ), LDH, H( I, I+1 ), LDH,
      $                    CS, SN )
-            CALL SROT( I-I1-1, H( I1, I-1 ), 1, H( I1, I ), 1, CS, SN )
+            CALL AB_SROT( I-I1-1, H( I1, I-1 ), 1, H( I1, I ), 1, CS, SN
+     $ )
          END IF
          IF( WANTZ ) THEN
 *
 *           Apply the transformation to Z.
 *
-            CALL SROT( NZ, Z( ILOZ, I-1 ), 1, Z( ILOZ, I ), 1, CS, SN )
+            CALL AB_SROT( NZ, Z( ILOZ, I-1 ), 1, Z( ILOZ, I ), 1, CS, SN
+     $ )
          END IF
       END IF
 *
@@ -608,6 +611,6 @@
   160 CONTINUE
       RETURN
 *
-*     End of SLAHQR
+*     End of AB_SLAHQR
 *
       END

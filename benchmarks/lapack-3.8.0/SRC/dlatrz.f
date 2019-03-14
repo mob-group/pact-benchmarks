@@ -1,4 +1,4 @@
-*> \brief \b DLATRZ factors an upper trapezoidal matrix by means of orthogonal transformations.
+*> \brief \b AB_DLATRZ factors an upper trapezoidal matrix by means of orthogonal transformations.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLATRZ + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlatrz.f">
+*> Download AB_DLATRZ + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLATRZ.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlatrz.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLATRZ.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlatrz.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLATRZ.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLATRZ( M, N, L, A, LDA, TAU, WORK )
+*       SUBROUTINE AB_DLATRZ( M, N, L, A, LDA, TAU, WORK )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            L, LDA, M, N
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> DLATRZ factors the M-by-(M+L) real upper trapezoidal matrix
+*> AB_DLATRZ factors the M-by-(M+L) real upper trapezoidal matrix
 *> [ A1 A2 ] = [ A(1:M,1:M) A(1:M,N-L+1:N) ] as ( R  0 ) * Z, by means
 *> of orthogonal transformations.  Z is an (M+L)-by-(M+L) orthogonal
 *> matrix and, R and A1 are M-by-M upper triangular matrices.
@@ -138,7 +138,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DLATRZ( M, N, L, A, LDA, TAU, WORK )
+      SUBROUTINE AB_DLATRZ( M, N, L, A, LDA, TAU, WORK )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -162,7 +162,7 @@
       INTEGER            I
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARFG, DLARZ
+      EXTERNAL           AB_DLARFG, AB_DLARZ
 *     ..
 *     .. Executable Statements ..
 *
@@ -184,17 +184,17 @@
 *        Generate elementary reflector H(i) to annihilate
 *        [ A(i,i) A(i,n-l+1:n) ]
 *
-         CALL DLARFG( L+1, A( I, I ), A( I, N-L+1 ), LDA, TAU( I ) )
+         CALL AB_DLARFG( L+1, A( I, I ), A( I, N-L+1 ), LDA, TAU( I ) )
 *
 *        Apply H(i) to A(1:i-1,i:n) from the right
 *
-         CALL DLARZ( 'Right', I-1, N-I+1, L, A( I, N-L+1 ), LDA,
+         CALL AB_DLARZ( 'Right', I-1, N-I+1, L, A( I, N-L+1 ), LDA,
      $               TAU( I ), A( 1, I ), LDA, WORK )
 *
    20 CONTINUE
 *
       RETURN
 *
-*     End of DLATRZ
+*     End of AB_DLATRZ
 *
       END

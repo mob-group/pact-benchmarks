@@ -1,4 +1,4 @@
-*> \brief \b SLAED3 used by sstedc. Finds the roots of the secular equation and updates the eigenvectors. Used when the original matrix is tridiagonal.
+*> \brief \b AB_SLAED3 used by AB_SSTEDC. Finds the roots of the secular equation and updates the eigenvectors. Used when the original matrix is tridiagonal.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLAED3 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaed3.f">
+*> Download AB_SLAED3 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLAED3.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaed3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLAED3.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaed3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLAED3.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLAED3( K, N, N1, D, Q, LDQ, RHO, DLAMDA, Q2, INDX,
+*       SUBROUTINE AB_SLAED3( K, N, N1, D, Q, LDQ, RHO, DLAMDA, Q2, INDX,
 *                          CTOT, W, S, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,9 +37,9 @@
 *>
 *> \verbatim
 *>
-*> SLAED3 finds the roots of the secular equation, as defined by the
+*> AB_SLAED3 finds the roots of the secular equation, as defined by the
 *> values in D, W, and RHO, between 1 and K.  It makes the
-*> appropriate calls to SLAED4 and then updates the eigenvectors by
+*> appropriate calls to AB_SLAED4 and then updates the eigenvectors by
 *> multiplying the matrix of eigenvectors of the pair of eigensystems
 *> being combined by the matrix of eigenvectors of the K-by-K system
 *> which is solved here.
@@ -59,7 +59,7 @@
 *> \verbatim
 *>          K is INTEGER
 *>          The number of terms in the rational function to be solved by
-*>          SLAED4.  K >= 0.
+*>          AB_SLAED4.  K >= 0.
 *> \endverbatim
 *>
 *> \param[in] N
@@ -125,8 +125,8 @@
 *> \verbatim
 *>          INDX is INTEGER array, dimension (N)
 *>          The permutation used to arrange the columns of the deflated
-*>          Q matrix into three groups (see SLAED2).
-*>          The rows of the eigenvectors found by SLAED4 must be likewise
+*>          Q matrix into three groups (see AB_SLAED2).
+*>          The rows of the eigenvectors found by AB_SLAED4 must be likewise
 *>          permuted before the matrix multiply can take place.
 *> \endverbatim
 *>
@@ -182,7 +182,7 @@
 *>  Modified by Francoise Tisseur, University of Tennessee
 *>
 *  =====================================================================
-      SUBROUTINE SLAED3( K, N, N1, D, Q, LDQ, RHO, DLAMDA, Q2, INDX,
+      SUBROUTINE AB_SLAED3( K, N, N1, D, Q, LDQ, RHO, DLAMDA, Q2, INDX,
      $                   CTOT, W, S, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
@@ -211,11 +211,12 @@
       REAL               TEMP
 *     ..
 *     .. External Functions ..
-      REAL               SLAMC3, SNRM2
-      EXTERNAL           SLAMC3, SNRM2
+      REAL               SLAMC3, AB_SNRM2
+      EXTERNAL           SLAMC3, AB_SNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SGEMM, SLACPY, SLAED4, SLASET, XERBLA
+      EXTERNAL           AB_SCOPY, AB_SGEMM, AB_SLACPY, AB_SLAED4, AB_SL
+     $ASET, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SIGN, SQRT
@@ -234,7 +235,7 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SLAED3', -INFO )
+         CALL AB_XERBLA( 'AB_SLAED3', -INFO )
          RETURN
       END IF
 *
@@ -265,7 +266,7 @@
    10 CONTINUE
 *
       DO 20 J = 1, K
-         CALL SLAED4( K, J, DLAMDA, W, Q( 1, J ), RHO, D( J ), INFO )
+         CALL AB_SLAED4( K, J, DLAMDA, W, Q( 1, J ), RHO, D( J ), INFO )
 *
 *        If the zero finder fails, the computation is terminated.
 *
@@ -289,11 +290,11 @@
 *
 *     Compute updated W.
 *
-      CALL SCOPY( K, W, 1, S, 1 )
+      CALL AB_SCOPY( K, W, 1, S, 1 )
 *
 *     Initialize W(I) = Q(I,I)
 *
-      CALL SCOPY( K, Q, LDQ+1, W, 1 )
+      CALL AB_SCOPY( K, Q, LDQ+1, W, 1 )
       DO 60 J = 1, K
          DO 40 I = 1, J - 1
             W( I ) = W( I )*( Q( I, J ) / ( DLAMDA( I )-DLAMDA( J ) ) )
@@ -312,7 +313,7 @@
          DO 80 I = 1, K
             S( I ) = W( I ) / Q( I, J )
    80    CONTINUE
-         TEMP = SNRM2( K, S, 1 )
+         TEMP = AB_SNRM2( K, S, 1 )
          DO 90 I = 1, K
             II = INDX( I )
             Q( I, J ) = S( II ) / TEMP
@@ -327,27 +328,29 @@
       N12 = CTOT( 1 ) + CTOT( 2 )
       N23 = CTOT( 2 ) + CTOT( 3 )
 *
-      CALL SLACPY( 'A', N23, K, Q( CTOT( 1 )+1, 1 ), LDQ, S, N23 )
+      CALL AB_SLACPY( 'A', N23, K, Q( CTOT( 1 )+1, 1 ), LDQ, S, N23 )
       IQ2 = N1*N12 + 1
       IF( N23.NE.0 ) THEN
-         CALL SGEMM( 'N', 'N', N2, K, N23, ONE, Q2( IQ2 ), N2, S, N23,
+         CALL AB_SGEMM( 'N', 'N', N2, K, N23, ONE, Q2( IQ2 ), N2, S, N23
+     $,
      $               ZERO, Q( N1+1, 1 ), LDQ )
       ELSE
-         CALL SLASET( 'A', N2, K, ZERO, ZERO, Q( N1+1, 1 ), LDQ )
+         CALL AB_SLASET( 'A', N2, K, ZERO, ZERO, Q( N1+1, 1 ), LDQ )
       END IF
 *
-      CALL SLACPY( 'A', N12, K, Q, LDQ, S, N12 )
+      CALL AB_SLACPY( 'A', N12, K, Q, LDQ, S, N12 )
       IF( N12.NE.0 ) THEN
-         CALL SGEMM( 'N', 'N', N1, K, N12, ONE, Q2, N1, S, N12, ZERO, Q,
+         CALL AB_SGEMM( 'N', 'N', N1, K, N12, ONE, Q2, N1, S, N12, ZERO,
+     $ Q,
      $               LDQ )
       ELSE
-         CALL SLASET( 'A', N1, K, ZERO, ZERO, Q( 1, 1 ), LDQ )
+         CALL AB_SLASET( 'A', N1, K, ZERO, ZERO, Q( 1, 1 ), LDQ )
       END IF
 *
 *
   120 CONTINUE
       RETURN
 *
-*     End of SLAED3
+*     End of AB_SLAED3
 *
       END

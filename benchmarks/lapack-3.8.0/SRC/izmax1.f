@@ -1,4 +1,4 @@
-*> \brief \b IZMAX1 finds the index of the first vector element of maximum absolute value.
+*> \brief \b AB_IZMAX1 finds the index of the first vector element of maximum absolute value.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download IZMAX1 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/izmax1.f">
+*> Download AB_IZMAX1 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_IZMAX1.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/izmax1.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_IZMAX1.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/izmax1.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_IZMAX1.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       INTEGER          FUNCTION IZMAX1( N, ZX, INCX )
+*       INTEGER          FUNCTION AB_IZMAX1( N, ZX, INCX )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCX, N
@@ -33,9 +33,9 @@
 *>
 *> \verbatim
 *>
-*> IZMAX1 finds the index of the first vector element of maximum absolute value.
+*> AB_IZMAX1 finds the index of the first vector element of maximum absolute value.
 *>
-*> Based on IZAMAX from Level 1 BLAS.
+*> Based on AB_IZAMAX from Level 1 BLAS.
 *> The change is to use the 'genuine' absolute value.
 *> \endverbatim
 *
@@ -51,7 +51,7 @@
 *> \param[in] ZX
 *> \verbatim
 *>          ZX is COMPLEX*16 array, dimension (N)
-*>          The vector ZX. The IZMAX1 function returns the index of its first
+*>          The vector ZX. The AB_IZMAX1 function returns the index of its first
 *>          element of maximum absolute value.
 *> \endverbatim
 *>
@@ -76,10 +76,10 @@
 *> \par Contributors:
 *  ==================
 *>
-*> Nick Higham for use with ZLACON.
+*> Nick Higham for use with AB_ZLACON.
 *
 *  =====================================================================
-      INTEGER FUNCTION IZMAX1( N, ZX, INCX )
+      INTEGER FUNCTION AB_IZMAX1( N, ZX, INCX )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -104,9 +104,9 @@
 *     ..
 *     .. Executable Statements ..
 *
-      IZMAX1 = 0
+      AB_IZMAX1 = 0
       IF (N.LT.1 .OR. INCX.LE.0) RETURN
-      IZMAX1 = 1
+      AB_IZMAX1 = 1
       IF (N.EQ.1) RETURN
       IF (INCX.EQ.1) THEN
 *
@@ -115,7 +115,7 @@
          DMAX = ABS(ZX(1))
          DO I = 2,N
             IF (ABS(ZX(I)).GT.DMAX) THEN
-               IZMAX1 = I
+               AB_IZMAX1 = I
                DMAX = ABS(ZX(I))
             END IF
          END DO
@@ -128,7 +128,7 @@
          IX = IX + INCX
          DO I = 2,N
             IF (ABS(ZX(IX)).GT.DMAX) THEN
-               IZMAX1 = I
+               AB_IZMAX1 = I
                DMAX = ABS(ZX(IX))
             END IF
             IX = IX + INCX
@@ -136,6 +136,6 @@
       END IF
       RETURN
 *
-*     End of IZMAX1
+*     End of AB_IZMAX1
 *
       END

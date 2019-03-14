@@ -1,4 +1,4 @@
-*> \brief \b CGGHD3
+*> \brief \b AB_CGGHD3
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CGGHD3 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgghd3.f">
+*> Download AB_CGGHD3 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CGGHD3.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgghd3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CGGHD3.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgghd3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CGGHD3.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*        SUBROUTINE CGGHD3( COMPQ, COMPZ, N, ILO, IHI, A, LDA, B, LDB, Q,
+*        SUBROUTINE AB_CGGHD3( COMPQ, COMPZ, N, ILO, IHI, A, LDA, B, LDB, Q,
 *       $                   LDQ, Z, LDZ, WORK, LWORK, INFO )
 *
 *        .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *> \verbatim
 *>
 *>
-*> CGGHD3 reduces a pair of complex matrices (A,B) to generalized upper
+*> AB_CGGHD3 reduces a pair of complex matrices (A,B) to generalized upper
 *> Hessenberg form using unitary transformations, where A is a
 *> general matrix and B is upper triangular.  The form of the
 *> generalized eigenvalue problem is
@@ -63,10 +63,10 @@
 *>      Q1 * B * Z1**H = (Q1*Q) * T * (Z1*Z)**H
 *>
 *> If Q1 is the unitary matrix from the QR factorization of B in the
-*> original equation A*x = lambda*B*x, then CGGHD3 reduces the original
+*> original equation A*x = lambda*B*x, then AB_CGGHD3 reduces the original
 *> problem to generalized Hessenberg form.
 *>
-*> This is a blocked variant of CGGHRD, using matrix-matrix
+*> This is a blocked variant of AB_CGGHRD, using matrix-matrix
 *> multiplications for parts of the computation to enhance performance.
 *> \endverbatim
 *
@@ -111,7 +111,7 @@
 *>          ILO and IHI mark the rows and columns of A which are to be
 *>          reduced.  It is assumed that A is already upper triangular
 *>          in rows and columns 1:ILO-1 and IHI+1:N.  ILO and IHI are
-*>          normally set by a previous call to CGGBAL; otherwise they
+*>          normally set by a previous call to AB_CGGBAL; otherwise they
 *>          should be set to 1 and N respectively.
 *>          1 <= ILO <= IHI <= N, if N > 0; ILO=1 and IHI=0, if N=0.
 *> \endverbatim
@@ -194,7 +194,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -228,7 +228,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CGGHD3( COMPQ, COMPZ, N, ILO, IHI, A, LDA, B, LDB, Q,
+      SUBROUTINE AB_CGGHD3( COMPQ, COMPZ, N, ILO, IHI, A, LDA, B, LDB, Q
+     $,
      $                   LDQ, Z, LDZ, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.8.0) --
@@ -266,13 +267,14 @@
      $                   TEMP3
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      EXTERNAL           ILAENV, LSAME
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_ILAENV, AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGGHRD, CLARTG, CLASET, CUNM22, CROT, CGEMM,
-     $                   CGEMV, CTRMV, CLACPY, XERBLA
+      EXTERNAL           AB_CGGHRD, AB_CLARTG, AB_CLASET, AB_CUNM22, AB_
+     $CROT, AB_CGEMM,
+     $                   AB_CGEMV, AB_CTRMV, AB_CLACPY, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          REAL, CMPLX, CONJG, MAX
@@ -282,18 +284,18 @@
 *     Decode and test the input parameters.
 *
       INFO = 0
-      NB = ILAENV( 1, 'CGGHD3', ' ', N, ILO, IHI, -1 )
+      NB = AB_ILAENV( 1, 'AB_CGGHD3', ' ', N, ILO, IHI, -1 )
       LWKOPT = MAX( 6*N*NB, 1 )
       WORK( 1 ) = CMPLX( LWKOPT )
-      INITQ = LSAME( COMPQ, 'I' )
-      WANTQ = INITQ .OR. LSAME( COMPQ, 'V' )
-      INITZ = LSAME( COMPZ, 'I' )
-      WANTZ = INITZ .OR. LSAME( COMPZ, 'V' )
+      INITQ = AB_LSAME( COMPQ, 'I' )
+      WANTQ = INITQ .OR. AB_LSAME( COMPQ, 'V' )
+      INITZ = AB_LSAME( COMPZ, 'I' )
+      WANTZ = INITZ .OR. AB_LSAME( COMPZ, 'V' )
       LQUERY = ( LWORK.EQ.-1 )
 *
-      IF( .NOT.LSAME( COMPQ, 'N' ) .AND. .NOT.WANTQ ) THEN
+      IF( .NOT.AB_LSAME( COMPQ, 'N' ) .AND. .NOT.WANTQ ) THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME( COMPZ, 'N' ) .AND. .NOT.WANTZ ) THEN
+      ELSE IF( .NOT.AB_LSAME( COMPZ, 'N' ) .AND. .NOT.WANTZ ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -313,7 +315,7 @@
          INFO = -15
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CGGHD3', -INFO )
+         CALL AB_XERBLA( 'AB_CGGHD3', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -322,14 +324,14 @@
 *     Initialize Q and Z if desired.
 *
       IF( INITQ )
-     $   CALL CLASET( 'All', N, N, CZERO, CONE, Q, LDQ )
+     $   CALL AB_CLASET( 'All', N, N, CZERO, CONE, Q, LDQ )
       IF( INITZ )
-     $   CALL CLASET( 'All', N, N, CZERO, CONE, Z, LDZ )
+     $   CALL AB_CLASET( 'All', N, N, CZERO, CONE, Z, LDZ )
 *
 *     Zero out lower triangle of B.
 *
       IF( N.GT.1 )
-     $   CALL CLASET( 'Lower', N-1, N-1, CZERO, CZERO, B(2, 1), LDB )
+     $   CALL AB_CLASET( 'Lower', N-1, N-1, CZERO, CZERO, B(2, 1), LDB )
 *
 *     Quick return if possible
 *
@@ -341,12 +343,13 @@
 *
 *     Determine the blocksize.
 *
-      NBMIN = ILAENV( 2, 'CGGHD3', ' ', N, ILO, IHI, -1 )
+      NBMIN = AB_ILAENV( 2, 'AB_CGGHD3', ' ', N, ILO, IHI, -1 )
       IF( NB.GT.1 .AND. NB.LT.NH ) THEN
 *
 *        Determine when to use unblocked instead of blocked code.
 *
-         NX = MAX( NB, ILAENV( 3, 'CGGHD3', ' ', N, ILO, IHI, -1 ) )
+         NX = MAX( NB, AB_ILAENV( 3, 'AB_CGGHD3', ' ', N, ILO, IHI, -1 )
+     $ )
          IF( NX.LT.NH ) THEN
 *
 *           Determine if workspace is large enough for blocked code.
@@ -357,7 +360,8 @@
 *              minimum value of NB, and reduce NB or force use of
 *              unblocked code.
 *
-               NBMIN = MAX( 2, ILAENV( 2, 'CGGHD3', ' ', N, ILO, IHI,
+               NBMIN = MAX( 2, AB_ILAENV( 2, 'AB_CGGHD3', ' ', N, ILO, I
+     $HI,
      $                      -1 ) )
                IF( LWORK.GE.6*N*NBMIN ) THEN
                   NB = LWORK / ( 6*N )
@@ -378,7 +382,7 @@
 *
 *        Use blocked code
 *
-         KACC22 = ILAENV( 16, 'CGGHD3', ' ', N, ILO, IHI, -1 )
+         KACC22 = AB_ILAENV( 16, 'AB_CGGHD3', ' ', N, ILO, IHI, -1 )
          BLK22 = KACC22.EQ.2
          DO JCOL = ILO, IHI-2, NB
             NNB = MIN( NB, IHI-JCOL-1 )
@@ -391,10 +395,11 @@
 *
             N2NB = ( IHI-JCOL-1 ) / NNB - 1
             NBLST = IHI - JCOL - N2NB*NNB
-            CALL CLASET( 'All', NBLST, NBLST, CZERO, CONE, WORK, NBLST )
+            CALL AB_CLASET( 'All', NBLST, NBLST, CZERO, CONE, WORK, NBLS
+     $T )
             PW = NBLST * NBLST + 1
             DO I = 1, N2NB
-               CALL CLASET( 'All', 2*NNB, 2*NNB, CZERO, CONE,
+               CALL AB_CLASET( 'All', 2*NNB, 2*NNB, CZERO, CONE,
      $                      WORK( PW ), 2*NNB )
                PW = PW + 4*NNB*NNB
             END DO
@@ -408,7 +413,7 @@
 *
                DO I = IHI, J+2, -1
                   TEMP = A( I-1, J )
-                  CALL CLARTG( TEMP, A( I, J ), C, S, A( I-1, J ) )
+                  CALL AB_CLARTG( TEMP, A( I, J ), C, S, A( I-1, J ) )
                   A( I, J ) = CMPLX( C )
                   B( I, J ) = S
                END DO
@@ -477,10 +482,10 @@
 *
                   IF( JJ.LT.IHI ) THEN
                      TEMP = B( JJ+1, JJ+1 )
-                     CALL CLARTG( TEMP, B( JJ+1, JJ ), C, S,
+                     CALL AB_CLARTG( TEMP, B( JJ+1, JJ ), C, S,
      $                            B( JJ+1, JJ+1 ) )
                      B( JJ+1, JJ ) = CZERO
-                     CALL CROT( JJ-TOP, B( TOP+1, JJ+1 ), 1,
+                     CALL AB_CROT( JJ-TOP, B( TOP+1, JJ+1 ), 1,
      $                          B( TOP+1, JJ ), 1, C, S )
                      A( JJ+1, J ) = CMPLX( C )
                      B( JJ+1, J ) = -CONJG( S )
@@ -515,7 +520,7 @@
                IF( JJ.GT.0 ) THEN
                   DO I = JJ, 1, -1
                      C = DBLE( A( J+1+I, J ) )
-                     CALL CROT( IHI-TOP, A( TOP+1, J+I+1 ), 1,
+                     CALL AB_CROT( IHI-TOP, A( TOP+1, J+I+1 ), 1,
      $                          A( TOP+1, J+I ), 1, C,
      $                          -CONJG( B( J+1+I, J ) ) )
                   END DO
@@ -537,7 +542,7 @@
 *                 triangular.
 *
                   JROW = IHI - NBLST + 1
-                  CALL CGEMV( 'Conjugate', NBLST, LEN, CONE, WORK,
+                  CALL AB_CGEMV( 'Conjugate', NBLST, LEN, CONE, WORK,
      $                        NBLST, A( JROW, J+1 ), 1, CZERO,
      $                        WORK( PW ), 1 )
                   PPW = PW + LEN
@@ -545,10 +550,10 @@
                      WORK( PPW ) = A( I, J+1 )
                      PPW = PPW + 1
                   END DO
-                  CALL CTRMV( 'Lower', 'Conjugate', 'Non-unit',
+                  CALL AB_CTRMV( 'Lower', 'Conjugate', 'Non-unit',
      $                        NBLST-LEN, WORK( LEN*NBLST + 1 ), NBLST,
      $                        WORK( PW+LEN ), 1 )
-                  CALL CGEMV( 'Conjugate', LEN, NBLST-LEN, CONE,
+                  CALL AB_CGEMV( 'Conjugate', LEN, NBLST-LEN, CONE,
      $                        WORK( (LEN+1)*NBLST - LEN + 1 ), NBLST,
      $                        A( JROW+NBLST-LEN, J+1 ), 1, CONE,
      $                        WORK( PW+LEN ), 1 )
@@ -584,16 +589,18 @@
                         WORK( PPW ) = A( I, J+1 )
                         PPW = PPW + 1
                      END DO
-                     CALL CTRMV( 'Upper', 'Conjugate', 'Non-unit', LEN,
+                     CALL AB_CTRMV( 'Upper', 'Conjugate', 'Non-unit', LE
+     $N,
      $                           WORK( PPWO + NNB ), 2*NNB, WORK( PW ),
      $                           1 )
-                     CALL CTRMV( 'Lower', 'Conjugate', 'Non-unit', NNB,
+                     CALL AB_CTRMV( 'Lower', 'Conjugate', 'Non-unit', NN
+     $B,
      $                           WORK( PPWO + 2*LEN*NNB ),
      $                           2*NNB, WORK( PW + LEN ), 1 )
-                     CALL CGEMV( 'Conjugate', NNB, LEN, CONE,
+                     CALL AB_CGEMV( 'Conjugate', NNB, LEN, CONE,
      $                           WORK( PPWO ), 2*NNB, A( JROW, J+1 ), 1,
      $                           CONE, WORK( PW ), 1 )
-                     CALL CGEMV( 'Conjugate', LEN, NNB, CONE,
+                     CALL AB_CGEMV( 'Conjugate', LEN, NNB, CONE,
      $                           WORK( PPWO + 2*LEN*NNB + NNB ), 2*NNB,
      $                           A( JROW+NNB, J+1 ), 1, CONE,
      $                           WORK( PW+LEN ), 1 )
@@ -611,11 +618,11 @@
 *
             COLA = N - JCOL - NNB + 1
             J = IHI - NBLST + 1
-            CALL CGEMM( 'Conjugate', 'No Transpose', NBLST,
+            CALL AB_CGEMM( 'Conjugate', 'No Transpose', NBLST,
      $                  COLA, NBLST, CONE, WORK, NBLST,
      $                  A( J, JCOL+NNB ), LDA, CZERO, WORK( PW ),
      $                  NBLST )
-            CALL CLACPY( 'All', NBLST, COLA, WORK( PW ), NBLST,
+            CALL AB_CLACPY( 'All', NBLST, COLA, WORK( PW ), NBLST,
      $                   A( J, JCOL+NNB ), LDA )
             PPWO = NBLST*NBLST + 1
             J0 = J - NNB
@@ -631,7 +638,7 @@
 *                 where all blocks are NNB-by-NNB, U21 is upper
 *                 triangular and U12 is lower triangular.
 *
-                  CALL CUNM22( 'Left', 'Conjugate', 2*NNB, COLA, NNB,
+                  CALL AB_CUNM22( 'Left', 'Conjugate', 2*NNB, COLA, NNB,
      $                         NNB, WORK( PPWO ), 2*NNB,
      $                         A( J, JCOL+NNB ), LDA, WORK( PW ),
      $                         LWORK-PW+1, IERR )
@@ -639,11 +646,11 @@
 *
 *                 Ignore the structure of U.
 *
-                  CALL CGEMM( 'Conjugate', 'No Transpose', 2*NNB,
+                  CALL AB_CGEMM( 'Conjugate', 'No Transpose', 2*NNB,
      $                        COLA, 2*NNB, CONE, WORK( PPWO ), 2*NNB,
      $                        A( J, JCOL+NNB ), LDA, CZERO, WORK( PW ),
      $                        2*NNB )
-                  CALL CLACPY( 'All', 2*NNB, COLA, WORK( PW ), 2*NNB,
+                  CALL AB_CLACPY( 'All', 2*NNB, COLA, WORK( PW ), 2*NNB,
      $                         A( J, JCOL+NNB ), LDA )
                END IF
                PPWO = PPWO + 4*NNB*NNB
@@ -660,10 +667,10 @@
                   TOPQ = 1
                   NH = N
                END IF
-               CALL CGEMM( 'No Transpose', 'No Transpose', NH,
+               CALL AB_CGEMM( 'No Transpose', 'No Transpose', NH,
      $                     NBLST, NBLST, CONE, Q( TOPQ, J ), LDQ,
      $                     WORK, NBLST, CZERO, WORK( PW ), NH )
-               CALL CLACPY( 'All', NH, NBLST, WORK( PW ), NH,
+               CALL AB_CLACPY( 'All', NH, NBLST, WORK( PW ), NH,
      $                      Q( TOPQ, J ), LDQ )
                PPWO = NBLST*NBLST + 1
                J0 = J - NNB
@@ -676,7 +683,7 @@
 *
 *                    Exploit the structure of U.
 *
-                     CALL CUNM22( 'Right', 'No Transpose', NH, 2*NNB,
+                     CALL AB_CUNM22( 'Right', 'No Transpose', NH, 2*NNB,
      $                            NNB, NNB, WORK( PPWO ), 2*NNB,
      $                            Q( TOPQ, J ), LDQ, WORK( PW ),
      $                            LWORK-PW+1, IERR )
@@ -684,11 +691,11 @@
 *
 *                    Ignore the structure of U.
 *
-                     CALL CGEMM( 'No Transpose', 'No Transpose', NH,
+                     CALL AB_CGEMM( 'No Transpose', 'No Transpose', NH,
      $                           2*NNB, 2*NNB, CONE, Q( TOPQ, J ), LDQ,
      $                           WORK( PPWO ), 2*NNB, CZERO, WORK( PW ),
      $                           NH )
-                     CALL CLACPY( 'All', NH, 2*NNB, WORK( PW ), NH,
+                     CALL AB_CLACPY( 'All', NH, 2*NNB, WORK( PW ), NH,
      $                            Q( TOPQ, J ), LDQ )
                   END IF
                   PPWO = PPWO + 4*NNB*NNB
@@ -702,11 +709,11 @@
 *              Initialize small unitary factors that will hold the
 *              accumulated Givens rotations in workspace.
 *
-               CALL CLASET( 'All', NBLST, NBLST, CZERO, CONE, WORK,
+               CALL AB_CLASET( 'All', NBLST, NBLST, CZERO, CONE, WORK,
      $                      NBLST )
                PW = NBLST * NBLST + 1
                DO I = 1, N2NB
-                  CALL CLASET( 'All', 2*NNB, 2*NNB, CZERO, CONE,
+                  CALL AB_CLASET( 'All', 2*NNB, 2*NNB, CZERO, CONE,
      $                         WORK( PW ), 2*NNB )
                   PW = PW + 4*NNB*NNB
                END DO
@@ -756,9 +763,11 @@
                END DO
             ELSE
 *
-               CALL CLASET( 'Lower', IHI - JCOL - 1, NNB, CZERO, CZERO,
+               CALL AB_CLASET( 'Lower', IHI - JCOL - 1, NNB, CZERO, CZER
+     $O,
      $                      A( JCOL + 2, JCOL ), LDA )
-               CALL CLASET( 'Lower', IHI - JCOL - 1, NNB, CZERO, CZERO,
+               CALL AB_CLASET( 'Lower', IHI - JCOL - 1, NNB, CZERO, CZER
+     $O,
      $                      B( JCOL + 2, JCOL ), LDB )
             END IF
 *
@@ -766,10 +775,10 @@
 *
             IF ( TOP.GT.0 ) THEN
                J = IHI - NBLST + 1
-               CALL CGEMM( 'No Transpose', 'No Transpose', TOP,
+               CALL AB_CGEMM( 'No Transpose', 'No Transpose', TOP,
      $                     NBLST, NBLST, CONE, A( 1, J ), LDA,
      $                     WORK, NBLST, CZERO, WORK( PW ), TOP )
-               CALL CLACPY( 'All', TOP, NBLST, WORK( PW ), TOP,
+               CALL AB_CLACPY( 'All', TOP, NBLST, WORK( PW ), TOP,
      $                      A( 1, J ), LDA )
                PPWO = NBLST*NBLST + 1
                J0 = J - NNB
@@ -778,7 +787,8 @@
 *
 *                    Exploit the structure of U.
 *
-                     CALL CUNM22( 'Right', 'No Transpose', TOP, 2*NNB,
+                     CALL AB_CUNM22( 'Right', 'No Transpose', TOP, 2*NNB
+     $,
      $                            NNB, NNB, WORK( PPWO ), 2*NNB,
      $                            A( 1, J ), LDA, WORK( PW ),
      $                            LWORK-PW+1, IERR )
@@ -786,21 +796,21 @@
 *
 *                    Ignore the structure of U.
 *
-                     CALL CGEMM( 'No Transpose', 'No Transpose', TOP,
+                     CALL AB_CGEMM( 'No Transpose', 'No Transpose', TOP,
      $                           2*NNB, 2*NNB, CONE, A( 1, J ), LDA,
      $                           WORK( PPWO ), 2*NNB, CZERO,
      $                           WORK( PW ), TOP )
-                     CALL CLACPY( 'All', TOP, 2*NNB, WORK( PW ), TOP,
+                     CALL AB_CLACPY( 'All', TOP, 2*NNB, WORK( PW ), TOP,
      $                            A( 1, J ), LDA )
                   END IF
                   PPWO = PPWO + 4*NNB*NNB
                END DO
 *
                J = IHI - NBLST + 1
-               CALL CGEMM( 'No Transpose', 'No Transpose', TOP,
+               CALL AB_CGEMM( 'No Transpose', 'No Transpose', TOP,
      $                     NBLST, NBLST, CONE, B( 1, J ), LDB,
      $                     WORK, NBLST, CZERO, WORK( PW ), TOP )
-               CALL CLACPY( 'All', TOP, NBLST, WORK( PW ), TOP,
+               CALL AB_CLACPY( 'All', TOP, NBLST, WORK( PW ), TOP,
      $                      B( 1, J ), LDB )
                PPWO = NBLST*NBLST + 1
                J0 = J - NNB
@@ -809,7 +819,8 @@
 *
 *                    Exploit the structure of U.
 *
-                     CALL CUNM22( 'Right', 'No Transpose', TOP, 2*NNB,
+                     CALL AB_CUNM22( 'Right', 'No Transpose', TOP, 2*NNB
+     $,
      $                            NNB, NNB, WORK( PPWO ), 2*NNB,
      $                            B( 1, J ), LDB, WORK( PW ),
      $                            LWORK-PW+1, IERR )
@@ -817,11 +828,11 @@
 *
 *                    Ignore the structure of U.
 *
-                     CALL CGEMM( 'No Transpose', 'No Transpose', TOP,
+                     CALL AB_CGEMM( 'No Transpose', 'No Transpose', TOP,
      $                           2*NNB, 2*NNB, CONE, B( 1, J ), LDB,
      $                           WORK( PPWO ), 2*NNB, CZERO,
      $                           WORK( PW ), TOP )
-                     CALL CLACPY( 'All', TOP, 2*NNB, WORK( PW ), TOP,
+                     CALL AB_CLACPY( 'All', TOP, 2*NNB, WORK( PW ), TOP,
      $                            B( 1, J ), LDB )
                   END IF
                   PPWO = PPWO + 4*NNB*NNB
@@ -839,10 +850,10 @@
                   TOPQ = 1
                   NH = N
                END IF
-               CALL CGEMM( 'No Transpose', 'No Transpose', NH,
+               CALL AB_CGEMM( 'No Transpose', 'No Transpose', NH,
      $                     NBLST, NBLST, CONE, Z( TOPQ, J ), LDZ,
      $                     WORK, NBLST, CZERO, WORK( PW ), NH )
-               CALL CLACPY( 'All', NH, NBLST, WORK( PW ), NH,
+               CALL AB_CLACPY( 'All', NH, NBLST, WORK( PW ), NH,
      $                      Z( TOPQ, J ), LDZ )
                PPWO = NBLST*NBLST + 1
                J0 = J - NNB
@@ -855,7 +866,7 @@
 *
 *                    Exploit the structure of U.
 *
-                     CALL CUNM22( 'Right', 'No Transpose', NH, 2*NNB,
+                     CALL AB_CUNM22( 'Right', 'No Transpose', NH, 2*NNB,
      $                            NNB, NNB, WORK( PPWO ), 2*NNB,
      $                            Z( TOPQ, J ), LDZ, WORK( PW ),
      $                            LWORK-PW+1, IERR )
@@ -863,11 +874,11 @@
 *
 *                    Ignore the structure of U.
 *
-                     CALL CGEMM( 'No Transpose', 'No Transpose', NH,
+                     CALL AB_CGEMM( 'No Transpose', 'No Transpose', NH,
      $                           2*NNB, 2*NNB, CONE, Z( TOPQ, J ), LDZ,
      $                           WORK( PPWO ), 2*NNB, CZERO, WORK( PW ),
      $                           NH )
-                     CALL CLACPY( 'All', NH, 2*NNB, WORK( PW ), NH,
+                     CALL AB_CLACPY( 'All', NH, 2*NNB, WORK( PW ), NH,
      $                            Z( TOPQ, J ), LDZ )
                   END IF
                   PPWO = PPWO + 4*NNB*NNB
@@ -889,12 +900,13 @@
       END IF
 *
       IF ( JCOL.LT.IHI )
-     $   CALL CGGHRD( COMPQ2, COMPZ2, N, JCOL, IHI, A, LDA, B, LDB, Q,
+     $   CALL AB_CGGHRD( COMPQ2, COMPZ2, N, JCOL, IHI, A, LDA, B, LDB, Q
+     $,
      $                LDQ, Z, LDZ, IERR )
       WORK( 1 ) = CMPLX( LWKOPT )
 *
       RETURN
 *
-*     End of CGGHD3
+*     End of AB_CGGHD3
 *
       END

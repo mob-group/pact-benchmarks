@@ -1,4 +1,4 @@
-*> \brief \b ZPBCON
+*> \brief \b AB_ZPBCON
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZPBCON + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zpbcon.f">
+*> Download AB_ZPBCON + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZPBCON.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zpbcon.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZPBCON.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpbcon.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZPBCON.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZPBCON( UPLO, N, KD, AB, LDAB, ANORM, RCOND, WORK,
+*       SUBROUTINE AB_ZPBCON( UPLO, N, KD, AB, LDAB, ANORM, RCOND, WORK,
 *                          RWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,10 +37,10 @@
 *>
 *> \verbatim
 *>
-*> ZPBCON estimates the reciprocal of the condition number (in the
+*> AB_ZPBCON estimates the reciprocal of the condition number (in the
 *> 1-norm) of a complex Hermitian positive definite band matrix using
 *> the Cholesky factorization A = U**H*U or A = L*L**H computed by
-*> ZPBTRF.
+*> AB_ZPBTRF.
 *>
 *> An estimate is obtained for norm(inv(A)), and the reciprocal of the
 *> condition number is computed as RCOND = 1 / (ANORM * norm(inv(A))).
@@ -130,7 +130,7 @@
 *> \ingroup complex16OTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE ZPBCON( UPLO, N, KD, AB, LDAB, ANORM, RCOND, WORK,
+      SUBROUTINE AB_ZPBCON( UPLO, N, KD, AB, LDAB, ANORM, RCOND, WORK,
      $                   RWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -165,13 +165,13 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            IZAMAX
+      LOGICAL            AB_LSAME
+      INTEGER            AB_IZAMAX
       DOUBLE PRECISION   DLAMCH
-      EXTERNAL           LSAME, IZAMAX, DLAMCH
+      EXTERNAL           AB_LSAME, AB_IZAMAX, DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZDRSCL, ZLACN2, ZLATBS
+      EXTERNAL           AB_XERBLA, AB_ZDRSCL, AB_ZLACN2, AB_ZLATBS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG
@@ -187,8 +187,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -200,7 +200,7 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZPBCON', -INFO )
+         CALL AB_XERBLA( 'AB_ZPBCON', -INFO )
          RETURN
       END IF
 *
@@ -221,32 +221,34 @@
       KASE = 0
       NORMIN = 'N'
    10 CONTINUE
-      CALL ZLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
+      CALL AB_ZLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
       IF( KASE.NE.0 ) THEN
          IF( UPPER ) THEN
 *
 *           Multiply by inv(U**H).
 *
-            CALL ZLATBS( 'Upper', 'Conjugate transpose', 'Non-unit',
+            CALL AB_ZLATBS( 'Upper', 'Conjugate transpose', 'Non-unit',
      $                   NORMIN, N, KD, AB, LDAB, WORK, SCALEL, RWORK,
      $                   INFO )
             NORMIN = 'Y'
 *
 *           Multiply by inv(U).
 *
-            CALL ZLATBS( 'Upper', 'No transpose', 'Non-unit', NORMIN, N,
+            CALL AB_ZLATBS( 'Upper', 'No transpose', 'Non-unit', NORMIN,
+     $ N,
      $                   KD, AB, LDAB, WORK, SCALEU, RWORK, INFO )
          ELSE
 *
 *           Multiply by inv(L).
 *
-            CALL ZLATBS( 'Lower', 'No transpose', 'Non-unit', NORMIN, N,
+            CALL AB_ZLATBS( 'Lower', 'No transpose', 'Non-unit', NORMIN,
+     $ N,
      $                   KD, AB, LDAB, WORK, SCALEL, RWORK, INFO )
             NORMIN = 'Y'
 *
 *           Multiply by inv(L**H).
 *
-            CALL ZLATBS( 'Lower', 'Conjugate transpose', 'Non-unit',
+            CALL AB_ZLATBS( 'Lower', 'Conjugate transpose', 'Non-unit',
      $                   NORMIN, N, KD, AB, LDAB, WORK, SCALEU, RWORK,
      $                   INFO )
          END IF
@@ -255,10 +257,10 @@
 *
          SCALE = SCALEL*SCALEU
          IF( SCALE.NE.ONE ) THEN
-            IX = IZAMAX( N, WORK, 1 )
+            IX = AB_IZAMAX( N, WORK, 1 )
             IF( SCALE.LT.CABS1( WORK( IX ) )*SMLNUM .OR. SCALE.EQ.ZERO )
      $         GO TO 20
-            CALL ZDRSCL( N, SCALE, WORK, 1 )
+            CALL AB_ZDRSCL( N, SCALE, WORK, 1 )
          END IF
          GO TO 10
       END IF
@@ -272,6 +274,6 @@
 *
       RETURN
 *
-*     End of ZPBCON
+*     End of AB_ZPBCON
 *
       END

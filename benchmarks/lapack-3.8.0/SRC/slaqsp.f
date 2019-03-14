@@ -1,4 +1,4 @@
-*> \brief \b SLAQSP scales a symmetric/Hermitian matrix in packed storage, using scaling factors computed by sppequ.
+*> \brief \b AB_SLAQSP scales a symmetric/Hermitian matrix in packed storage, using scaling factors computed by AB_SPPEQU.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLAQSP + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaqsp.f">
+*> Download AB_SLAQSP + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLAQSP.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaqsp.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLAQSP.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaqsp.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLAQSP.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLAQSP( UPLO, N, AP, S, SCOND, AMAX, EQUED )
+*       SUBROUTINE AB_SLAQSP( UPLO, N, AP, S, SCOND, AMAX, EQUED )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          EQUED, UPLO
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> SLAQSP equilibrates a symmetric matrix A using the scaling factors
+*> AB_SLAQSP equilibrates a symmetric matrix A using the scaling factors
 *> in the vector S.
 *> \endverbatim
 *
@@ -123,7 +123,7 @@
 *> \ingroup realOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE SLAQSP( UPLO, N, AP, S, SCOND, AMAX, EQUED )
+      SUBROUTINE AB_SLAQSP( UPLO, N, AP, S, SCOND, AMAX, EQUED )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -150,9 +150,9 @@
       REAL               CJ, LARGE, SMALL
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
+      LOGICAL            AB_LSAME
       REAL               SLAMCH
-      EXTERNAL           LSAME, SLAMCH
+      EXTERNAL           AB_LSAME, SLAMCH
 *     ..
 *     .. Executable Statements ..
 *
@@ -177,7 +177,7 @@
 *
 *        Replace A by diag(S) * A * diag(S).
 *
-         IF( LSAME( UPLO, 'U' ) ) THEN
+         IF( AB_LSAME( UPLO, 'U' ) ) THEN
 *
 *           Upper triangle of A is stored.
 *
@@ -207,6 +207,6 @@
 *
       RETURN
 *
-*     End of SLAQSP
+*     End of AB_SLAQSP
 *
       END

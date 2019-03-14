@@ -1,4 +1,4 @@
-*> \brief \b SCABS1
+*> \brief \b AB_SCABS1
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       REAL FUNCTION SCABS1(Z)
+*       REAL FUNCTION AB_SCABS1(Z)
 *
 *       .. Scalar Arguments ..
 *       COMPLEX Z
@@ -20,7 +20,7 @@
 *>
 *> \verbatim
 *>
-*> SCABS1 computes |Re(.)| + |Im(.)| of a complex number
+*> AB_SCABS1 computes |Re(.)| + |Im(.)| of a complex number
 *> \endverbatim
 *
 *  Arguments:
@@ -44,7 +44,7 @@
 *> \ingroup single_blas_level1
 *
 *  =====================================================================
-      REAL FUNCTION SCABS1(Z)
+      REAL FUNCTION AB_SCABS1(Z)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -60,6 +60,6 @@
 *     .. Intrinsic Functions ..
       INTRINSIC ABS,AIMAG,REAL
 *     ..
-      SCABS1 = ABS(REAL(Z)) + ABS(AIMAG(Z))
+      AB_SCABS1 = ABS(REAL(Z)) + ABS(AIMAG(Z))
       RETURN
       END

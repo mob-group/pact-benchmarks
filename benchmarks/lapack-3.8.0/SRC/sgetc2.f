@@ -1,4 +1,4 @@
-*> \brief \b SGETC2 computes the LU factorization with complete pivoting of the general n-by-n matrix.
+*> \brief \b AB_SGETC2 computes the LU factorization with complete pivoting of the general n-by-n matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SGETC2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgetc2.f">
+*> Download AB_SGETC2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SGETC2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgetc2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SGETC2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgetc2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SGETC2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SGETC2( N, A, LDA, IPIV, JPIV, INFO )
+*       SUBROUTINE AB_SGETC2( N, A, LDA, IPIV, JPIV, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> SGETC2 computes an LU factorization with complete pivoting of the
+*> AB_SGETC2 computes an LU factorization with complete pivoting of the
 *> n-by-n matrix A. The factorization has the form A = P * L * U * Q,
 *> where P and Q are permutation matrices, L is lower triangular with
 *> unit diagonal elements and U is upper triangular.
@@ -109,7 +109,7 @@
 *>     Umea University, S-901 87 Umea, Sweden.
 *
 *  =====================================================================
-      SUBROUTINE SGETC2( N, A, LDA, IPIV, JPIV, INFO )
+      SUBROUTINE AB_SGETC2( N, A, LDA, IPIV, JPIV, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -135,7 +135,7 @@
       REAL               BIGNUM, EPS, SMIN, SMLNUM, XMAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGER, SLABAD, SSWAP
+      EXTERNAL           AB_SGER, AB_SLABAD, AB_SSWAP
 *     ..
 *     .. External Functions ..
       REAL               SLAMCH
@@ -158,7 +158,7 @@
       EPS = SLAMCH( 'P' )
       SMLNUM = SLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
+      CALL AB_SLABAD( SMLNUM, BIGNUM )
 *
 *     Handle the case N=1 by itself
 *
@@ -195,13 +195,13 @@
 *        Swap rows
 *
          IF( IPV.NE.I )
-     $      CALL SSWAP( N, A( IPV, 1 ), LDA, A( I, 1 ), LDA )
+     $      CALL AB_SSWAP( N, A( IPV, 1 ), LDA, A( I, 1 ), LDA )
          IPIV( I ) = IPV
 *
 *        Swap columns
 *
          IF( JPV.NE.I )
-     $      CALL SSWAP( N, A( 1, JPV ), 1, A( 1, I ), 1 )
+     $      CALL AB_SSWAP( N, A( 1, JPV ), 1, A( 1, I ), 1 )
          JPIV( I ) = JPV
 *
 *        Check for singularity
@@ -213,7 +213,7 @@
          DO 30 J = I + 1, N
             A( J, I ) = A( J, I ) / A( I, I )
    30    CONTINUE
-         CALL SGER( N-I, N-I, -ONE, A( I+1, I ), 1, A( I, I+1 ), LDA,
+         CALL AB_SGER( N-I, N-I, -ONE, A( I+1, I ), 1, A( I, I+1 ), LDA,
      $              A( I+1, I+1 ), LDA )
    40 CONTINUE
 *
@@ -229,6 +229,6 @@
 *
       RETURN
 *
-*     End of SGETC2
+*     End of AB_SGETC2
 *
       END

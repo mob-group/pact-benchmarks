@@ -1,4 +1,4 @@
-*> \brief \b ZUNG2L generates all or part of the unitary matrix Q from a QL factorization determined by cgeqlf (unblocked algorithm).
+*> \brief \b AB_ZUNG2L generates all or part of the unitary matrix Q from a QL factorization determined by AB_CGEQLF (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZUNG2L + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zung2l.f">
+*> Download AB_ZUNG2L + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZUNG2L.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zung2l.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZUNG2L.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zung2l.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZUNG2L.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZUNG2L( M, N, K, A, LDA, TAU, WORK, INFO )
+*       SUBROUTINE AB_ZUNG2L( M, N, K, A, LDA, TAU, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, K, LDA, M, N
@@ -33,13 +33,13 @@
 *>
 *> \verbatim
 *>
-*> ZUNG2L generates an m by n complex matrix Q with orthonormal columns,
+*> AB_ZUNG2L generates an m by n complex matrix Q with orthonormal columns,
 *> which is defined as the last n columns of a product of k elementary
 *> reflectors of order m
 *>
 *>       Q  =  H(k) . . . H(2) H(1)
 *>
-*> as returned by ZGEQLF.
+*> as returned by AB_ZGEQLF.
 *> \endverbatim
 *
 *  Arguments:
@@ -69,7 +69,7 @@
 *>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          On entry, the (n-k+i)-th column must contain the vector which
 *>          defines the elementary reflector H(i), for i = 1,2,...,k, as
-*>          returned by ZGEQLF in the last k columns of its array
+*>          returned by AB_ZGEQLF in the last k columns of its array
 *>          argument A.
 *>          On exit, the m-by-n matrix Q.
 *> \endverbatim
@@ -84,7 +84,7 @@
 *> \verbatim
 *>          TAU is COMPLEX*16 array, dimension (K)
 *>          TAU(i) must contain the scalar factor of the elementary
-*>          reflector H(i), as returned by ZGEQLF.
+*>          reflector H(i), as returned by AB_ZGEQLF.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -112,7 +112,7 @@
 *> \ingroup complex16OTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE ZUNG2L( M, N, K, A, LDA, TAU, WORK, INFO )
+      SUBROUTINE AB_ZUNG2L( M, N, K, A, LDA, TAU, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -137,7 +137,7 @@
       INTEGER            I, II, J, L
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLARF, ZSCAL
+      EXTERNAL           AB_XERBLA, AB_ZLARF, AB_ZSCAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -157,7 +157,7 @@
          INFO = -5
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZUNG2L', -INFO )
+         CALL AB_XERBLA( 'AB_ZUNG2L', -INFO )
          RETURN
       END IF
 *
@@ -181,9 +181,10 @@
 *        Apply H(i) to A(1:m-k+i,1:n-k+i) from the left
 *
          A( M-N+II, II ) = ONE
-         CALL ZLARF( 'Left', M-N+II, II-1, A( 1, II ), 1, TAU( I ), A,
+         CALL AB_ZLARF( 'Left', M-N+II, II-1, A( 1, II ), 1, TAU( I ), A
+     $,
      $               LDA, WORK )
-         CALL ZSCAL( M-N+II-1, -TAU( I ), A( 1, II ), 1 )
+         CALL AB_ZSCAL( M-N+II-1, -TAU( I ), A( 1, II ), 1 )
          A( M-N+II, II ) = ONE - TAU( I )
 *
 *        Set A(m-k+i+1:m,n-k+i) to zero
@@ -194,6 +195,6 @@
    40 CONTINUE
       RETURN
 *
-*     End of ZUNG2L
+*     End of AB_ZUNG2L
 *
       END

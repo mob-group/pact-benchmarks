@@ -1,4 +1,4 @@
-*> \brief \b DLATDF uses the LU factorization of the n-by-n matrix computed by sgetc2 and computes a contribution to the reciprocal Dif-estimate.
+*> \brief \b AB_DLATDF uses the LU factorization of the n-by-n matrix computed by AB_SGETC2 and computes a contribution to the reciprocal Dif-estimate.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,24 +6,24 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLATDF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlatdf.f">
+*> Download AB_DLATDF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLATDF.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlatdf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLATDF.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlatdf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLATDF.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLATDF( IJOB, N, Z, LDZ, RHS, RDSUM, RDSCAL, IPIV,
+*       SUBROUTINE AB_DLATDF( IJOB, N, Z, LDZ, RHS, RDSUM, RAB_DSCAL, IPIV,
 *                          JPIV )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            IJOB, LDZ, N
-*       DOUBLE PRECISION   RDSCAL, RDSUM
+*       DOUBLE PRECISION   RAB_DSCAL, RDSUM
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            IPIV( * ), JPIV( * )
@@ -36,13 +36,13 @@
 *>
 *> \verbatim
 *>
-*> DLATDF uses the LU factorization of the n-by-n matrix Z computed by
-*> DGETC2 and computes a contribution to the reciprocal Dif-estimate
+*> AB_DLATDF uses the LU factorization of the n-by-n matrix Z computed by
+*> AB_DGETC2 and computes a contribution to the reciprocal Dif-estimate
 *> by solving Z * x = b for x, and choosing the r.h.s. b such that
 *> the norm of x is as large as possible. On entry RHS = b holds the
 *> contribution from earlier solved sub-systems, and on return RHS = x.
 *>
-*> The factorization of Z returned by DGETC2 has the form Z = P*L*U*Q,
+*> The factorization of Z returned by AB_DGETC2 has the form Z = P*L*U*Q,
 *> where P and Q are permutation matrices. L is lower triangular with
 *> unit diagonal elements and U is upper triangular.
 *> \endverbatim
@@ -54,7 +54,7 @@
 *> \verbatim
 *>          IJOB is INTEGER
 *>          IJOB = 2: First compute an approximative null-vector e
-*>              of Z using DGECON, e is normalized and solve for
+*>              of Z using AB_DGECON, e is normalized and solve for
 *>              Zx = +-e - f with the sign giving the greater value
 *>              of 2-norm(x). About 5 times as expensive as Default.
 *>          IJOB .ne. 2: Local look ahead strategy where all entries of
@@ -71,7 +71,7 @@
 *> \verbatim
 *>          Z is DOUBLE PRECISION array, dimension (LDZ, N)
 *>          On entry, the LU part of the factorization of the n-by-n
-*>          matrix Z computed by DGETC2:  Z = P * L * U * Q
+*>          matrix Z computed by AB_DGETC2:  Z = P * L * U * Q
 *> \endverbatim
 *>
 *> \param[in] LDZ
@@ -92,23 +92,23 @@
 *> \verbatim
 *>          RDSUM is DOUBLE PRECISION
 *>          On entry, the sum of squares of computed contributions to
-*>          the Dif-estimate under computation by DTGSYL, where the
-*>          scaling factor RDSCAL (see below) has been factored out.
+*>          the Dif-estimate under computation by AB_DTGSYL, where the
+*>          scaling factor RAB_DSCAL (see below) has been factored out.
 *>          On exit, the corresponding sum of squares updated with the
 *>          contributions from the current sub-system.
 *>          If TRANS = 'T' RDSUM is not touched.
-*>          NOTE: RDSUM only makes sense when DTGSY2 is called by STGSYL.
+*>          NOTE: RDSUM only makes sense when AB_DTGSY2 is called by AB_STGSYL.
 *> \endverbatim
 *>
-*> \param[in,out] RDSCAL
+*> \param[in,out] RAB_DSCAL
 *> \verbatim
-*>          RDSCAL is DOUBLE PRECISION
+*>          RAB_DSCAL is DOUBLE PRECISION
 *>          On entry, scaling factor used to prevent overflow in RDSUM.
-*>          On exit, RDSCAL is updated w.r.t. the current contributions
+*>          On exit, RAB_DSCAL is updated w.r.t. the current contributions
 *>          in RDSUM.
-*>          If TRANS = 'T', RDSCAL is not touched.
-*>          NOTE: RDSCAL only makes sense when DTGSY2 is called by
-*>                DTGSYL.
+*>          If TRANS = 'T', RAB_DSCAL is not touched.
+*>          NOTE: RAB_DSCAL only makes sense when AB_DTGSY2 is called by
+*>                AB_DTGSYL.
 *> \endverbatim
 *>
 *> \param[in] IPIV
@@ -168,7 +168,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DLATDF( IJOB, N, Z, LDZ, RHS, RDSUM, RDSCAL, IPIV,
+      SUBROUTINE AB_DLATDF( IJOB, N, Z, LDZ, RHS, RDSUM, RAB_DSCAL, IPIV
+     $,
      $                   JPIV )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -178,7 +179,7 @@
 *
 *     .. Scalar Arguments ..
       INTEGER            IJOB, LDZ, N
-      DOUBLE PRECISION   RDSCAL, RDSUM
+      DOUBLE PRECISION   RAB_DSCAL, RDSUM
 *     ..
 *     .. Array Arguments ..
       INTEGER            IPIV( * ), JPIV( * )
@@ -202,12 +203,13 @@
       DOUBLE PRECISION   WORK( 4*MAXDIM ), XM( MAXDIM ), XP( MAXDIM )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DCOPY, DGECON, DGESC2, DLASSQ, DLASWP,
-     $                   DSCAL
+      EXTERNAL           AB_DAXPY, AB_DCOPY, AB_DGECON, AB_DGESC2, AB_DL
+     $ASSQ, AB_DLASWP,
+     $                   AB_DSCAL
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DASUM, DDOT
-      EXTERNAL           DASUM, DDOT
+      DOUBLE PRECISION   AB_DASUM, AB_DDOT
+      EXTERNAL           AB_DASUM, AB_DDOT
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, SQRT
@@ -218,7 +220,7 @@
 *
 *        Apply permutations IPIV to RHS
 *
-         CALL DLASWP( 1, RHS, LDZ, 1, N-1, IPIV, 1 )
+         CALL AB_DLASWP( 1, RHS, LDZ, 1, N-1, IPIV, 1 )
 *
 *        Solve for L-part choosing RHS either to +1 or -1.
 *
@@ -232,8 +234,9 @@
 *           Look-ahead for L-part RHS(1:N-1) = + or -1, SPLUS and
 *           SMIN computed more efficiently than in BSOLVE [1].
 *
-            SPLUS = SPLUS + DDOT( N-J, Z( J+1, J ), 1, Z( J+1, J ), 1 )
-            SMINU = DDOT( N-J, Z( J+1, J ), 1, RHS( J+1 ), 1 )
+            SPLUS = SPLUS + AB_DDOT( N-J, Z( J+1, J ), 1, Z( J+1, J ), 1
+     $ )
+            SMINU = AB_DDOT( N-J, Z( J+1, J ), 1, RHS( J+1 ), 1 )
             SPLUS = SPLUS*RHS( J )
             IF( SPLUS.GT.SMINU ) THEN
                RHS( J ) = BP
@@ -254,7 +257,7 @@
 *           Compute the remaining r.h.s.
 *
             TEMP = -RHS( J )
-            CALL DAXPY( N-J, TEMP, Z( J+1, J ), 1, RHS( J+1 ), 1 )
+            CALL AB_DAXPY( N-J, TEMP, Z( J+1, J ), 1, RHS( J+1 ), 1 )
 *
    10    CONTINUE
 *
@@ -263,7 +266,7 @@
 *        any ill-conditioning of the original matrix is transfered to U
 *        and not to L. U(N, N) is an approximation to sigma_min(LU).
 *
-         CALL DCOPY( N-1, RHS, 1, XP, 1 )
+         CALL AB_DCOPY( N-1, RHS, 1, XP, 1 )
          XP( N ) = RHS( N ) + ONE
          RHS( N ) = RHS( N ) - ONE
          SPLUS = ZERO
@@ -280,44 +283,44 @@
             SMINU = SMINU + ABS( RHS( I ) )
    30    CONTINUE
          IF( SPLUS.GT.SMINU )
-     $      CALL DCOPY( N, XP, 1, RHS, 1 )
+     $      CALL AB_DCOPY( N, XP, 1, RHS, 1 )
 *
 *        Apply the permutations JPIV to the computed solution (RHS)
 *
-         CALL DLASWP( 1, RHS, LDZ, 1, N-1, JPIV, -1 )
+         CALL AB_DLASWP( 1, RHS, LDZ, 1, N-1, JPIV, -1 )
 *
 *        Compute the sum of squares
 *
-         CALL DLASSQ( N, RHS, 1, RDSCAL, RDSUM )
+         CALL AB_DLASSQ( N, RHS, 1, RAB_DSCAL, RDSUM )
 *
       ELSE
 *
 *        IJOB = 2, Compute approximate nullvector XM of Z
 *
-         CALL DGECON( 'I', N, Z, LDZ, ONE, TEMP, WORK, IWORK, INFO )
-         CALL DCOPY( N, WORK( N+1 ), 1, XM, 1 )
+         CALL AB_DGECON( 'I', N, Z, LDZ, ONE, TEMP, WORK, IWORK, INFO )
+         CALL AB_DCOPY( N, WORK( N+1 ), 1, XM, 1 )
 *
 *        Compute RHS
 *
-         CALL DLASWP( 1, XM, LDZ, 1, N-1, IPIV, -1 )
-         TEMP = ONE / SQRT( DDOT( N, XM, 1, XM, 1 ) )
-         CALL DSCAL( N, TEMP, XM, 1 )
-         CALL DCOPY( N, XM, 1, XP, 1 )
-         CALL DAXPY( N, ONE, RHS, 1, XP, 1 )
-         CALL DAXPY( N, -ONE, XM, 1, RHS, 1 )
-         CALL DGESC2( N, Z, LDZ, RHS, IPIV, JPIV, TEMP )
-         CALL DGESC2( N, Z, LDZ, XP, IPIV, JPIV, TEMP )
-         IF( DASUM( N, XP, 1 ).GT.DASUM( N, RHS, 1 ) )
-     $      CALL DCOPY( N, XP, 1, RHS, 1 )
+         CALL AB_DLASWP( 1, XM, LDZ, 1, N-1, IPIV, -1 )
+         TEMP = ONE / SQRT( AB_DDOT( N, XM, 1, XM, 1 ) )
+         CALL AB_DSCAL( N, TEMP, XM, 1 )
+         CALL AB_DCOPY( N, XM, 1, XP, 1 )
+         CALL AB_DAXPY( N, ONE, RHS, 1, XP, 1 )
+         CALL AB_DAXPY( N, -ONE, XM, 1, RHS, 1 )
+         CALL AB_DGESC2( N, Z, LDZ, RHS, IPIV, JPIV, TEMP )
+         CALL AB_DGESC2( N, Z, LDZ, XP, IPIV, JPIV, TEMP )
+         IF( AB_DASUM( N, XP, 1 ).GT.AB_DASUM( N, RHS, 1 ) )
+     $      CALL AB_DCOPY( N, XP, 1, RHS, 1 )
 *
 *        Compute the sum of squares
 *
-         CALL DLASSQ( N, RHS, 1, RDSCAL, RDSUM )
+         CALL AB_DLASSQ( N, RHS, 1, RAB_DSCAL, RDSUM )
 *
       END IF
 *
       RETURN
 *
-*     End of DLATDF
+*     End of AB_DLATDF
 *
       END

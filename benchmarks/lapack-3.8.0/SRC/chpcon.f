@@ -1,4 +1,4 @@
-*> \brief \b CHPCON
+*> \brief \b AB_CHPCON
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CHPCON + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chpcon.f">
+*> Download AB_CHPCON + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CHPCON.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chpcon.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CHPCON.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chpcon.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CHPCON.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CHPCON( UPLO, N, AP, IPIV, ANORM, RCOND, WORK, INFO )
+*       SUBROUTINE AB_CHPCON( UPLO, N, AP, IPIV, ANORM, RCOND, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -36,9 +36,9 @@
 *>
 *> \verbatim
 *>
-*> CHPCON estimates the reciprocal of the condition number of a complex
+*> AB_CHPCON estimates the reciprocal of the condition number of a complex
 *> Hermitian packed matrix A using the factorization A = U*D*U**H or
-*> A = L*D*L**H computed by CHPTRF.
+*> A = L*D*L**H computed by AB_CHPTRF.
 *>
 *> An estimate is obtained for norm(inv(A)), and the reciprocal of the
 *> condition number is computed as RCOND = 1 / (ANORM * norm(inv(A))).
@@ -66,7 +66,7 @@
 *> \verbatim
 *>          AP is COMPLEX array, dimension (N*(N+1)/2)
 *>          The block diagonal matrix D and the multipliers used to
-*>          obtain the factor U or L as computed by CHPTRF, stored as a
+*>          obtain the factor U or L as computed by AB_CHPTRF, stored as a
 *>          packed triangular matrix.
 *> \endverbatim
 *>
@@ -74,7 +74,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D
-*>          as determined by CHPTRF.
+*>          as determined by AB_CHPTRF.
 *> \endverbatim
 *>
 *> \param[in] ANORM
@@ -116,7 +116,8 @@
 *> \ingroup complexOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE CHPCON( UPLO, N, AP, IPIV, ANORM, RCOND, WORK, INFO )
+      SUBROUTINE AB_CHPCON( UPLO, N, AP, IPIV, ANORM, RCOND, WORK, INFO 
+     $)
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -148,19 +149,19 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHPTRS, CLACN2, XERBLA
+      EXTERNAL           AB_CHPTRS, AB_CLACN2, AB_XERBLA
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -168,7 +169,7 @@
          INFO = -5
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CHPCON', -INFO )
+         CALL AB_XERBLA( 'AB_CHPCON', -INFO )
          RETURN
       END IF
 *
@@ -210,12 +211,12 @@
 *
       KASE = 0
    30 CONTINUE
-      CALL CLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
+      CALL AB_CLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
       IF( KASE.NE.0 ) THEN
 *
 *        Multiply by inv(L*D*L**H) or inv(U*D*U**H).
 *
-         CALL CHPTRS( UPLO, N, 1, AP, IPIV, WORK, N, INFO )
+         CALL AB_CHPTRS( UPLO, N, 1, AP, IPIV, WORK, N, INFO )
          GO TO 30
       END IF
 *
@@ -226,6 +227,6 @@
 *
       RETURN
 *
-*     End of CHPCON
+*     End of AB_CHPCON
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b CGBMV
+*> \brief \b AB_CGBMV
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGBMV(TRANS,M,N,KL,KU,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+*       SUBROUTINE AB_CGBMV(TRANS,M,N,KL,KU,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
 *
 *       .. Scalar Arguments ..
 *       COMPLEX ALPHA,BETA
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> CGBMV  performs one of the matrix-vector operations
+*> AB_CGBMV  performs one of the matrix-vector operations
 *>
 *>    y := alpha*A*x + beta*y,   or   y := alpha*A**T*x + beta*y,   or
 *>
@@ -185,7 +185,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CGBMV(TRANS,M,N,KL,KU,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+      SUBROUTINE AB_CGBMV(TRANS,M,N,KL,KU,ALPHA,A,LDA,X,INCX,BETA,Y,INCY
+     $)
 *
 *  -- Reference BLAS level2 routine (version 3.7.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -215,11 +216,11 @@
       LOGICAL NOCONJ
 *     ..
 *     .. External Functions ..
-      LOGICAL LSAME
-      EXTERNAL LSAME
+      LOGICAL AB_LSAME
+      EXTERNAL AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL XERBLA
+      EXTERNAL AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC CONJG,MAX,MIN
@@ -228,8 +229,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF (.NOT.LSAME(TRANS,'N') .AND. .NOT.LSAME(TRANS,'T') .AND.
-     +    .NOT.LSAME(TRANS,'C')) THEN
+      IF (.NOT.AB_LSAME(TRANS,'N') .AND. .NOT.AB_LSAME(TRANS,'T') .AND.
+     +    .NOT.AB_LSAME(TRANS,'C')) THEN
           INFO = 1
       ELSE IF (M.LT.0) THEN
           INFO = 2
@@ -247,7 +248,7 @@
           INFO = 13
       END IF
       IF (INFO.NE.0) THEN
-          CALL XERBLA('CGBMV ',INFO)
+          CALL AB_XERBLA('AB_CGBMV ',INFO)
           RETURN
       END IF
 *
@@ -256,12 +257,12 @@
       IF ((M.EQ.0) .OR. (N.EQ.0) .OR.
      +    ((ALPHA.EQ.ZERO).AND. (BETA.EQ.ONE))) RETURN
 *
-      NOCONJ = LSAME(TRANS,'T')
+      NOCONJ = AB_LSAME(TRANS,'T')
 *
 *     Set  LENX  and  LENY, the lengths of the vectors x and y, and set
 *     up the start points in  X  and  Y.
 *
-      IF (LSAME(TRANS,'N')) THEN
+      IF (AB_LSAME(TRANS,'N')) THEN
           LENX = N
           LENY = M
       ELSE
@@ -312,7 +313,7 @@
       END IF
       IF (ALPHA.EQ.ZERO) RETURN
       KUP1 = KU + 1
-      IF (LSAME(TRANS,'N')) THEN
+      IF (AB_LSAME(TRANS,'N')) THEN
 *
 *        Form  y := alpha*A*x + y.
 *
@@ -385,6 +386,6 @@
 *
       RETURN
 *
-*     End of CGBMV .
+*     End of AB_CGBMV .
 *
       END

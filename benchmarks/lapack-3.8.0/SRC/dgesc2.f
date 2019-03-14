@@ -1,4 +1,4 @@
-*> \brief \b DGESC2 solves a system of linear equations using the LU factorization with complete pivoting computed by sgetc2.
+*> \brief \b AB_DGESC2 solves a system of linear equations using the LU factorization with complete pivoting computed by AB_SGETC2.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DGESC2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgesc2.f">
+*> Download AB_DGESC2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGESC2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgesc2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGESC2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgesc2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGESC2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGESC2( N, A, LDA, RHS, IPIV, JPIV, SCALE )
+*       SUBROUTINE AB_DGESC2( N, A, LDA, RHS, IPIV, JPIV, SCALE )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            LDA, N
@@ -35,12 +35,12 @@
 *>
 *> \verbatim
 *>
-*> DGESC2 solves a system of linear equations
+*> AB_DGESC2 solves a system of linear equations
 *>
 *>           A * X = scale* RHS
 *>
 *> with a general N-by-N matrix A using the LU factorization with
-*> complete pivoting computed by DGETC2.
+*> complete pivoting computed by AB_DGETC2.
 *> \endverbatim
 *
 *  Arguments:
@@ -56,7 +56,7 @@
 *> \verbatim
 *>          A is DOUBLE PRECISION array, dimension (LDA,N)
 *>          On entry, the  LU part of the factorization of the n-by-n
-*>          matrix A computed by DGETC2:  A = P * L * U * Q
+*>          matrix A computed by AB_DGETC2:  A = P * L * U * Q
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -112,7 +112,7 @@
 *>     Umea University, S-901 87 Umea, Sweden.
 *
 *  =====================================================================
-      SUBROUTINE DGESC2( N, A, LDA, RHS, IPIV, JPIV, SCALE )
+      SUBROUTINE AB_DGESC2( N, A, LDA, RHS, IPIV, JPIV, SCALE )
 *
 *  -- LAPACK auxiliary routine (version 3.8.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -139,12 +139,12 @@
       DOUBLE PRECISION   BIGNUM, EPS, SMLNUM, TEMP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLASWP, DSCAL, DLABAD
+      EXTERNAL           AB_DLASWP, AB_DSCAL, AB_DLABAD
 *     ..
 *     .. External Functions ..
-      INTEGER            IDAMAX
+      INTEGER            AB_IDAMAX
       DOUBLE PRECISION   DLAMCH
-      EXTERNAL           IDAMAX, DLAMCH
+      EXTERNAL           AB_IDAMAX, DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS
@@ -156,11 +156,11 @@
       EPS = DLAMCH( 'P' )
       SMLNUM = DLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
+      CALL AB_DLABAD( SMLNUM, BIGNUM )
 *
 *     Apply permutations IPIV to RHS
 *
-      CALL DLASWP( 1, RHS, LDA, 1, N-1, IPIV, 1 )
+      CALL AB_DLASWP( 1, RHS, LDA, 1, N-1, IPIV, 1 )
 *
 *     Solve for L part
 *
@@ -176,10 +176,10 @@
 *
 *     Check for scaling
 *
-      I = IDAMAX( N, RHS, 1 )
+      I = AB_IDAMAX( N, RHS, 1 )
       IF( TWO*SMLNUM*ABS( RHS( I ) ).GT.ABS( A( N, N ) ) ) THEN
          TEMP = ( ONE / TWO ) / ABS( RHS( I ) )
-         CALL DSCAL( N, TEMP, RHS( 1 ), 1 )
+         CALL AB_DSCAL( N, TEMP, RHS( 1 ), 1 )
          SCALE = SCALE*TEMP
       END IF
 *
@@ -193,9 +193,9 @@
 *
 *     Apply permutations JPIV to the solution (RHS)
 *
-      CALL DLASWP( 1, RHS, LDA, 1, N-1, JPIV, -1 )
+      CALL AB_DLASWP( 1, RHS, LDA, 1, N-1, JPIV, -1 )
       RETURN
 *
-*     End of DGESC2
+*     End of AB_DGESC2
 *
       END

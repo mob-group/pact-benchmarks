@@ -1,4 +1,4 @@
-*> \brief \b SPBTF2 computes the Cholesky factorization of a symmetric/Hermitian positive definite band matrix (unblocked algorithm).
+*> \brief \b AB_SPBTF2 computes the Cholesky factorization of a symmetric/Hermitian positive definite band matrix (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SPBTF2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/spbtf2.f">
+*> Download AB_SPBTF2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SPBTF2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/spbtf2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SPBTF2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spbtf2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SPBTF2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SPBTF2( UPLO, N, KD, AB, LDAB, INFO )
+*       SUBROUTINE AB_SPBTF2( UPLO, N, KD, AB, LDAB, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> SPBTF2 computes the Cholesky factorization of a real symmetric
+*> AB_SPBTF2 computes the Cholesky factorization of a real symmetric
 *> positive definite band matrix A.
 *>
 *> The factorization has the form
@@ -140,7 +140,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SPBTF2( UPLO, N, KD, AB, LDAB, INFO )
+      SUBROUTINE AB_SPBTF2( UPLO, N, KD, AB, LDAB, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -167,11 +167,11 @@
       REAL               AJJ
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SSCAL, SSYR, XERBLA
+      EXTERNAL           AB_SSCAL, AB_SSYR, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, SQRT
@@ -181,8 +181,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -192,7 +192,7 @@
          INFO = -5
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SPBTF2', -INFO )
+         CALL AB_XERBLA( 'AB_SPBTF2', -INFO )
          RETURN
       END IF
 *
@@ -222,8 +222,8 @@
 *
             KN = MIN( KD, N-J )
             IF( KN.GT.0 ) THEN
-               CALL SSCAL( KN, ONE / AJJ, AB( KD, J+1 ), KLD )
-               CALL SSYR( 'Upper', KN, -ONE, AB( KD, J+1 ), KLD,
+               CALL AB_SSCAL( KN, ONE / AJJ, AB( KD, J+1 ), KLD )
+               CALL AB_SSYR( 'Upper', KN, -ONE, AB( KD, J+1 ), KLD,
      $                    AB( KD+1, J+1 ), KLD )
             END IF
    10    CONTINUE
@@ -246,8 +246,8 @@
 *
             KN = MIN( KD, N-J )
             IF( KN.GT.0 ) THEN
-               CALL SSCAL( KN, ONE / AJJ, AB( 2, J ), 1 )
-               CALL SSYR( 'Lower', KN, -ONE, AB( 2, J ), 1,
+               CALL AB_SSCAL( KN, ONE / AJJ, AB( 2, J ), 1 )
+               CALL AB_SSYR( 'Lower', KN, -ONE, AB( 2, J ), 1,
      $                    AB( 1, J+1 ), KLD )
             END IF
    20    CONTINUE
@@ -258,6 +258,6 @@
       INFO = J
       RETURN
 *
-*     End of SPBTF2
+*     End of AB_SPBTF2
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b DGBRFSX
+*> \brief \b AB_DGBRFSX
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DGBRFSX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgbrfsx.f">
+*> Download AB_DGBRFSX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGBRFSx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgbrfsx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGBRFSx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgbrfsx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGBRFSx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGBRFSX( TRANS, EQUED, N, KL, KU, NRHS, AB, LDAB, AFB,
+*       SUBROUTINE AB_DGBRFSX( TRANS, EQUED, N, KL, KU, NRHS, AB, LDAB, AFB,
 *                           LDAFB, IPIV, R, C, B, LDB, X, LDX, RCOND,
 *                           BERR, N_ERR_BNDS, ERR_BNDS_NORM,
 *                           ERR_BNDS_COMP, NPARAMS, PARAMS, WORK, IWORK,
@@ -45,7 +45,7 @@
 *>
 *> \verbatim
 *>
-*>    DGBRFSX improves the computed solution to a system of linear
+*>    AB_DGBRFSX improves the computed solution to a system of linear
 *>    equations and provides error bounds and backward error estimates
 *>    for the solution.  In addition to normwise error bound, the code
 *>    provides maximum componentwise error bound if possible.  See
@@ -138,7 +138,7 @@
 *> \verbatim
 *>          AFB is DOUBLE PRECISION array, dimension (LDAFB,N)
 *>     Details of the LU factorization of the band matrix A, as
-*>     computed by DGBTRF.  U is stored as an upper triangular band
+*>     computed by AB_DGBTRF.  U is stored as an upper triangular band
 *>     matrix with KL+KU superdiagonals in rows 1 to KL+KU+1, and
 *>     the multipliers used during the factorization are stored in
 *>     rows KL+KU+2 to 2*KL+KU+1.
@@ -153,7 +153,7 @@
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>     The pivot indices from DGETRF; for 1<=i<=N, row i of the
+*>     The pivot indices from AB_DGETRF; for 1<=i<=N, row i of the
 *>     matrix was interchanged with row IPIV(i).
 *> \endverbatim
 *>
@@ -208,7 +208,7 @@
 *> \param[in,out] X
 *> \verbatim
 *>          X is DOUBLE PRECISION array, dimension (LDX,NRHS)
-*>     On entry, the solution matrix X, as computed by DGETRS.
+*>     On entry, the solution matrix X, as computed by AB_DGETRS.
 *>     On exit, the improved solution matrix X.
 *> \endverbatim
 *>
@@ -434,7 +434,8 @@
 *> \ingroup doubleGBcomputational
 *
 *  =====================================================================
-      SUBROUTINE DGBRFSX( TRANS, EQUED, N, KL, KU, NRHS, AB, LDAB, AFB,
+      SUBROUTINE AB_DGBRFSX( TRANS, EQUED, N, KL, KU, NRHS, AB, LDAB, AF
+     $B,
      $                    LDAFB, IPIV, R, C, B, LDB, X, LDX, RCOND,
      $                    BERR, N_ERR_BNDS, ERR_BNDS_NORM,
      $                    ERR_BNDS_COMP, NPARAMS, PARAMS, WORK, IWORK,
@@ -495,25 +496,25 @@
       DOUBLE PRECISION   RTHRESH, UNSTABLE_THRESH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, DGBCON
-      EXTERNAL           DLA_GBRFSX_EXTENDED
+      EXTERNAL           AB_XERBLA, AB_DGBCON
+      EXTERNAL           AB_DLA_GBRFSX_EXTENDED
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT
 *     ..
 *     .. External Functions ..
-      EXTERNAL           LSAME, ILATRANS, ILAPREC
-      EXTERNAL           DLAMCH, DLANGB, DLA_GBRCOND
-      DOUBLE PRECISION   DLAMCH, DLANGB, DLA_GBRCOND
-      LOGICAL            LSAME
-      INTEGER            ILATRANS, ILAPREC
+      EXTERNAL           AB_LSAME, AB_ILATRANS, AB_ILAPREC
+      EXTERNAL           DLAMCH, AB_DLANGB, AB_DLA_GBRCOND
+      DOUBLE PRECISION   DLAMCH, AB_DLANGB, AB_DLA_GBRCOND
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILATRANS, AB_ILAPREC
 *     ..
 *     .. Executable Statements ..
 *
 *     Check the input parameters.
 *
       INFO = 0
-      TRANS_TYPE = ILATRANS( TRANS )
+      TRANS_TYPE = AB_ILATRANS( TRANS )
       REF_TYPE = INT( ITREF_DEFAULT )
       IF ( NPARAMS .GE. LA_LINRX_ITREF_I ) THEN
          IF ( PARAMS( LA_LINRX_ITREF_I ) .LT. 0.0D+0 ) THEN
@@ -557,16 +558,16 @@
          N_NORMS = 2
       END IF
 *
-      NOTRAN = LSAME( TRANS, 'N' )
-      ROWEQU = LSAME( EQUED, 'R' ) .OR. LSAME( EQUED, 'B' )
-      COLEQU = LSAME( EQUED, 'C' ) .OR. LSAME( EQUED, 'B' )
+      NOTRAN = AB_LSAME( TRANS, 'N' )
+      ROWEQU = AB_LSAME( EQUED, 'R' ) .OR. AB_LSAME( EQUED, 'B' )
+      COLEQU = AB_LSAME( EQUED, 'C' ) .OR. AB_LSAME( EQUED, 'B' )
 *
 *     Test input parameters.
 *
       IF( TRANS_TYPE.EQ.-1 ) THEN
         INFO = -1
       ELSE IF( .NOT.ROWEQU .AND. .NOT.COLEQU .AND.
-     $         .NOT.LSAME( EQUED, 'N' ) ) THEN
+     $         .NOT.AB_LSAME( EQUED, 'N' ) ) THEN
         INFO = -2
       ELSE IF( N.LT.0 ) THEN
         INFO = -3
@@ -586,7 +587,7 @@
         INFO = -15
       END IF
       IF( INFO.NE.0 ) THEN
-        CALL XERBLA( 'DGBRFSX', -INFO )
+        CALL AB_XERBLA( 'AB_DGBRFSX', -INFO )
         RETURN
       END IF
 *
@@ -639,25 +640,27 @@
       ELSE
          NORM = '1'
       END IF
-      ANORM = DLANGB( NORM, N, KL, KU, AB, LDAB, WORK )
-      CALL DGBCON( NORM, N, KL, KU, AFB, LDAFB, IPIV, ANORM, RCOND,
+      ANORM = AB_DLANGB( NORM, N, KL, KU, AB, LDAB, WORK )
+      CALL AB_DGBCON( NORM, N, KL, KU, AFB, LDAFB, IPIV, ANORM, RCOND,
      $     WORK, IWORK, INFO )
 *
 *     Perform refinement on each right-hand side
 *
       IF ( REF_TYPE .NE. 0 .AND. INFO .EQ. 0 ) THEN
 
-         PREC_TYPE = ILAPREC( 'E' )
+         PREC_TYPE = AB_ILAPREC( 'E' )
 
          IF ( NOTRAN ) THEN
-            CALL DLA_GBRFSX_EXTENDED( PREC_TYPE, TRANS_TYPE,  N, KL, KU,
+            CALL AB_DLA_GBRFSX_EXTENDED( PREC_TYPE, TRANS_TYPE,  N, KL, 
+     $KU,
      $           NRHS, AB, LDAB, AFB, LDAFB, IPIV, COLEQU, C, B,
      $           LDB, X, LDX, BERR, N_NORMS, ERR_BNDS_NORM,
      $           ERR_BNDS_COMP, WORK( N+1 ), WORK( 1 ), WORK( 2*N+1 ),
      $           WORK( 1 ), RCOND, ITHRESH, RTHRESH, UNSTABLE_THRESH,
      $           IGNORE_CWISE, INFO )
          ELSE
-            CALL DLA_GBRFSX_EXTENDED( PREC_TYPE, TRANS_TYPE,  N, KL, KU,
+            CALL AB_DLA_GBRFSX_EXTENDED( PREC_TYPE, TRANS_TYPE,  N, KL, 
+     $KU,
      $           NRHS, AB, LDAB, AFB, LDAFB, IPIV, ROWEQU, R, B,
      $           LDB, X, LDX, BERR, N_NORMS, ERR_BNDS_NORM,
      $           ERR_BNDS_COMP, WORK( N+1 ), WORK( 1 ), WORK( 2*N+1 ),
@@ -672,13 +675,13 @@
 *     Compute scaled normwise condition number cond(A*C).
 *
          IF ( COLEQU .AND. NOTRAN ) THEN
-            RCOND_TMP = DLA_GBRCOND( TRANS, N, KL, KU, AB, LDAB, AFB,
+            RCOND_TMP = AB_DLA_GBRCOND( TRANS, N, KL, KU, AB, LDAB, AFB,
      $           LDAFB, IPIV, -1, C, INFO, WORK, IWORK )
          ELSE IF ( ROWEQU .AND. .NOT. NOTRAN ) THEN
-            RCOND_TMP = DLA_GBRCOND( TRANS, N, KL, KU, AB, LDAB, AFB,
+            RCOND_TMP = AB_DLA_GBRCOND( TRANS, N, KL, KU, AB, LDAB, AFB,
      $           LDAFB, IPIV, -1, R, INFO, WORK, IWORK )
          ELSE
-            RCOND_TMP = DLA_GBRCOND( TRANS, N, KL, KU, AB, LDAB, AFB,
+            RCOND_TMP = AB_DLA_GBRCOND( TRANS, N, KL, KU, AB, LDAB, AFB,
      $           LDAFB, IPIV, 0, R, INFO, WORK, IWORK )
          END IF
          DO J = 1, NRHS
@@ -724,7 +727,8 @@
          DO J = 1, NRHS
             IF ( ERR_BNDS_COMP( J, LA_LINRX_ERR_I ) .LT. CWISE_WRONG )
      $     THEN
-               RCOND_TMP = DLA_GBRCOND( TRANS, N, KL, KU, AB, LDAB, AFB,
+               RCOND_TMP = AB_DLA_GBRCOND( TRANS, N, KL, KU, AB, LDAB, A
+     $FB,
      $              LDAFB, IPIV, 1, X( 1, J ), INFO, WORK, IWORK )
             ELSE
                RCOND_TMP = 0.0D+0
@@ -760,6 +764,6 @@
 *
       RETURN
 *
-*     End of DGBRFSX
+*     End of AB_DGBRFSX
 *
       END

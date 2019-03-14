@@ -1,4 +1,4 @@
-*> \brief \b SSYTRF_ROOK
+*> \brief \b AB_SSYTRF_ROOK
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SSYTRF_ROOK + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssytrf_rook.f">
+*> Download AB_SSYTRF_ROOK + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SSYTRF_rook.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssytrf_rook.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SSYTRF_rook.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssytrf_rook.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SSYTRF_rook.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SSYTRF_ROOK( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
+*       SUBROUTINE AB_SSYTRF_ROOK( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> SSYTRF_ROOK computes the factorization of a real symmetric matrix A
+*> AB_SSYTRF_ROOK computes the factorization of a real symmetric matrix A
 *> using the bounded Bunch-Kaufman ("rook") diagonal pivoting method.
 *> The form of the factorization is
 *>
@@ -119,12 +119,12 @@
 *> \verbatim
 *>          LWORK is INTEGER
 *>          The length of WORK.  LWORK >=1.  For best performance
-*>          LWORK >= N*NB, where NB is the block size returned by ILAENV.
+*>          LWORK >= N*NB, where NB is the block size returned by AB_ILAENV.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -206,7 +206,8 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE SSYTRF_ROOK( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
+      SUBROUTINE AB_SSYTRF_ROOK( UPLO, N, A, LDA, IPIV, WORK, LWORK, INF
+     $O )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -229,12 +230,12 @@
       INTEGER            IINFO, IWS, J, K, KB, LDWORK, LWKOPT, NB, NBMIN
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      EXTERNAL           LSAME, ILAENV
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_LSAME, AB_ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLASYF_ROOK, SSYTF2_ROOK, XERBLA
+      EXTERNAL           AB_SLASYF_ROOK, AB_SSYTF2_ROOK, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -244,9 +245,9 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
+      UPPER = AB_LSAME( UPLO, 'U' )
       LQUERY = ( LWORK.EQ.-1 )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -260,13 +261,13 @@
 *
 *        Determine the block size
 *
-         NB = ILAENV( 1, 'SSYTRF_ROOK', UPLO, N, -1, -1, -1 )
+         NB = AB_ILAENV( 1, 'AB_SSYTRF_ROOK', UPLO, N, -1, -1, -1 )
          LWKOPT = MAX( 1, N*NB )
          WORK( 1 ) = LWKOPT
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SSYTRF_ROOK', -INFO )
+         CALL AB_XERBLA( 'AB_SSYTRF_ROOK', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -278,7 +279,7 @@
          IWS = LDWORK*NB
          IF( LWORK.LT.IWS ) THEN
             NB = MAX( LWORK / LDWORK, 1 )
-            NBMIN = MAX( 2, ILAENV( 2, 'SSYTRF_ROOK',
+            NBMIN = MAX( 2, AB_ILAENV( 2, 'AB_SSYTRF_ROOK',
      $                              UPLO, N, -1, -1, -1 ) )
          END IF
       ELSE
@@ -292,7 +293,7 @@
 *        Factorize A as U*D*U**T using the upper triangle of A
 *
 *        K is the main loop index, decreasing from N to 1 in steps of
-*        KB, where KB is the number of columns factorized by SLASYF_ROOK;
+*        KB, where KB is the number of columns factorized by AB_SLASYF_ROOK;
 *        KB is either NB or NB-1, or K for the last block
 *
          K = N
@@ -308,13 +309,13 @@
 *           Factorize columns k-kb+1:k of A and use blocked code to
 *           update columns 1:k-kb
 *
-            CALL SLASYF_ROOK( UPLO, K, NB, KB, A, LDA,
+            CALL AB_SLASYF_ROOK( UPLO, K, NB, KB, A, LDA,
      $                        IPIV, WORK, LDWORK, IINFO )
          ELSE
 *
 *           Use unblocked code to factorize columns 1:k of A
 *
-            CALL SSYTF2_ROOK( UPLO, K, A, LDA, IPIV, IINFO )
+            CALL AB_SSYTF2_ROOK( UPLO, K, A, LDA, IPIV, IINFO )
             KB = K
          END IF
 *
@@ -335,7 +336,7 @@
 *        Factorize A as L*D*L**T using the lower triangle of A
 *
 *        K is the main loop index, increasing from 1 to N in steps of
-*        KB, where KB is the number of columns factorized by SLASYF_ROOK;
+*        KB, where KB is the number of columns factorized by AB_SLASYF_ROOK;
 *        KB is either NB or NB-1, or N-K+1 for the last block
 *
          K = 1
@@ -351,13 +352,13 @@
 *           Factorize columns k:k+kb-1 of A and use blocked code to
 *           update columns k+kb:n
 *
-            CALL SLASYF_ROOK( UPLO, N-K+1, NB, KB, A( K, K ), LDA,
+            CALL AB_SLASYF_ROOK( UPLO, N-K+1, NB, KB, A( K, K ), LDA,
      $                        IPIV( K ), WORK, LDWORK, IINFO )
          ELSE
 *
 *           Use unblocked code to factorize columns k:n of A
 *
-            CALL SSYTF2_ROOK( UPLO, N-K+1, A( K, K ), LDA, IPIV( K ),
+            CALL AB_SSYTF2_ROOK( UPLO, N-K+1, A( K, K ), LDA, IPIV( K ),
      $                   IINFO )
             KB = N - K + 1
          END IF
@@ -388,6 +389,6 @@
       WORK( 1 ) = LWKOPT
       RETURN
 *
-*     End of SSYTRF_ROOK
+*     End of AB_SSYTRF_ROOK
 *
       END

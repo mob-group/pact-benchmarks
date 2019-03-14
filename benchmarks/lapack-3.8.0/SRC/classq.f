@@ -1,4 +1,4 @@
-*> \brief \b CLASSQ updates a sum of squares represented in scaled form.
+*> \brief \b AB_CLASSQ updates a sum of squares represented in scaled form.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CLASSQ + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/classq.f">
+*> Download AB_CLASSQ + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLASSQ.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/classq.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLASSQ.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/classq.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLASSQ.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLASSQ( N, X, INCX, SCALE, SUMSQ )
+*       SUBROUTINE AB_CLASSQ( N, X, INCX, SCALE, SUMSQ )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCX, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> CLASSQ returns the values scl and ssq such that
+*> AB_CLASSQ returns the values scl and ssq such that
 *>
 *>    ( scl**2 )*ssq = x( 1 )**2 +...+ x( n )**2 + ( scale**2 )*sumsq,
 *>
@@ -104,7 +104,7 @@
 *> \ingroup complexOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE CLASSQ( N, X, INCX, SCALE, SUMSQ )
+      SUBROUTINE AB_CLASSQ( N, X, INCX, SCALE, SUMSQ )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -130,8 +130,8 @@
       REAL               TEMP1
 *     ..
 *     .. External Functions ..
-      LOGICAL            SISNAN
-      EXTERNAL           SISNAN
+      LOGICAL            AB_SISNAN
+      EXTERNAL           AB_SISNAN
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, REAL
@@ -141,7 +141,7 @@
       IF( N.GT.0 ) THEN
          DO 10 IX = 1, 1 + ( N-1 )*INCX, INCX
             TEMP1 = ABS( REAL( X( IX ) ) )
-            IF( TEMP1.GT.ZERO.OR.SISNAN( TEMP1 ) ) THEN
+            IF( TEMP1.GT.ZERO.OR.AB_SISNAN( TEMP1 ) ) THEN
                IF( SCALE.LT.TEMP1 ) THEN
                   SUMSQ = 1 + SUMSQ*( SCALE / TEMP1 )**2
                   SCALE = TEMP1
@@ -150,8 +150,8 @@
                END IF
             END IF
             TEMP1 = ABS( AIMAG( X( IX ) ) )
-            IF( TEMP1.GT.ZERO.OR.SISNAN( TEMP1 ) ) THEN
-               IF( SCALE.LT.TEMP1 .OR. SISNAN( TEMP1 ) ) THEN
+            IF( TEMP1.GT.ZERO.OR.AB_SISNAN( TEMP1 ) ) THEN
+               IF( SCALE.LT.TEMP1 .OR. AB_SISNAN( TEMP1 ) ) THEN
                   SUMSQ = 1 + SUMSQ*( SCALE / TEMP1 )**2
                   SCALE = TEMP1
                ELSE
@@ -163,6 +163,6 @@
 *
       RETURN
 *
-*     End of CLASSQ
+*     End of AB_CLASSQ
 *
       END

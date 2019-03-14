@@ -1,4 +1,4 @@
-*> \brief \b CHETRS_AA
+*> \brief \b AB_CHETRS_AA
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CHETRS_AA + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chetrs_aa.f">
+*> Download AB_CHETRS_AA + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CHETRS_aa.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chetrs_aa.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CHETRS_aa.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetrs_aa.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CHETRS_aa.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CHETRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
+*       SUBROUTINE AB_CHETRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
 *                             WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,9 +36,9 @@
 *>
 *> \verbatim
 *>
-*> CHETRS_AA solves a system of linear equations A*X = B with a complex
+*> AB_CHETRS_AA solves a system of linear equations A*X = B with a complex
 *> hermitian matrix A using the factorization A = U*T*U**H or
-*> A = L*T*L**H computed by CHETRF_AA.
+*> A = L*T*L**H computed by AB_CHETRF_AA.
 *> \endverbatim
 *
 *  Arguments:
@@ -69,7 +69,7 @@
 *> \param[in] A
 *> \verbatim
 *>          A is COMPLEX array, dimension (LDA,N)
-*>          Details of factors computed by CHETRF_AA.
+*>          Details of factors computed by AB_CHETRF_AA.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -81,7 +81,7 @@
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          Details of the interchanges as computed by CHETRF_AA.
+*>          Details of the interchanges as computed by AB_CHETRF_AA.
 *> \endverbatim
 *>
 *> \param[in,out] B
@@ -126,7 +126,7 @@
 *> \ingroup complexHEcomputational
 *
 *  =====================================================================
-      SUBROUTINE CHETRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
+      SUBROUTINE AB_CHETRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
      $                      WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.8.0) --
@@ -155,11 +155,12 @@
       INTEGER            K, KP, LWKOPT
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLACPY, CLACGV, CGTSV, CSWAP, CTRSM, XERBLA
+      EXTERNAL           AB_CLACPY, AB_CLACGV, AB_CGTSV, AB_CSWAP, AB_CT
+     $RSM, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -167,9 +168,9 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
+      UPPER = AB_LSAME( UPLO, 'U' )
       LQUERY = ( LWORK.EQ.-1 )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -183,7 +184,7 @@
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CHETRS_AA', -INFO )
+         CALL AB_XERBLA( 'AB_CHETRS_AA', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          LWKOPT = (3*N-2)
@@ -206,29 +207,33 @@
          DO WHILE ( K.LE.N )
             KP = IPIV( K )
             IF( KP.NE.K )
-     $          CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $          CALL AB_CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
             K = K + 1
          END DO
 *
 *        Compute (U \P**T * B) -> B    [ (U \P**T * B) ]
 *
-         CALL CTRSM('L', 'U', 'C', 'U', N-1, NRHS, ONE, A( 1, 2 ), LDA,
+         CALL AB_CTRSM('L', 'U', 'C', 'U', N-1, NRHS, ONE, A( 1, 2 ), LD
+     $A,
      $               B( 2, 1 ), LDB)
 *
 *        Compute T \ B -> B   [ T \ (U \P**T * B) ]
 *
-         CALL CLACPY( 'F', 1, N, A(1, 1), LDA+1, WORK(N), 1)
+         CALL AB_CLACPY( 'F', 1, N, A(1, 1), LDA+1, WORK(N), 1)
          IF( N.GT.1 ) THEN
-             CALL CLACPY( 'F', 1, N-1, A( 1, 2 ), LDA+1, WORK( 2*N ), 1)
-             CALL CLACPY( 'F', 1, N-1, A( 1, 2 ), LDA+1, WORK( 1 ), 1)
-             CALL CLACGV( N-1, WORK( 1 ), 1 )
+             CALL AB_CLACPY( 'F', 1, N-1, A( 1, 2 ), LDA+1, WORK( 2*N ),
+     $ 1)
+             CALL AB_CLACPY( 'F', 1, N-1, A( 1, 2 ), LDA+1, WORK( 1 ), 1
+     $)
+             CALL AB_CLACGV( N-1, WORK( 1 ), 1 )
          END IF
-         CALL CGTSV(N, NRHS, WORK(1), WORK(N), WORK(2*N), B, LDB,
+         CALL AB_CGTSV(N, NRHS, WORK(1), WORK(N), WORK(2*N), B, LDB,
      $              INFO)
 *
 *        Compute (U**T \ B) -> B   [ U**T \ (T \ (U \P**T * B) ) ]
 *
-         CALL CTRSM( 'L', 'U', 'N', 'U', N-1, NRHS, ONE, A( 1, 2 ), LDA,
+         CALL AB_CTRSM( 'L', 'U', 'N', 'U', N-1, NRHS, ONE, A( 1, 2 ), L
+     $DA,
      $               B(2, 1), LDB)
 *
 *        Pivot, P * B  [ P * (U**T \ (T \ (U \P**T * B) )) ]
@@ -237,7 +242,7 @@
          DO WHILE ( K.GE.1 )
             KP = IPIV( K )
             IF( KP.NE.K )
-     $         CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL AB_CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
             K = K - 1
          END DO
 *
@@ -251,29 +256,33 @@
          DO WHILE ( K.LE.N )
             KP = IPIV( K )
             IF( KP.NE.K )
-     $         CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL AB_CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
             K = K + 1
          END DO
 *
 *        Compute (L \P**T * B) -> B    [ (L \P**T * B) ]
 *
-         CALL CTRSM( 'L', 'L', 'N', 'U', N-1, NRHS, ONE, A( 2, 1), LDA,
+         CALL AB_CTRSM( 'L', 'L', 'N', 'U', N-1, NRHS, ONE, A( 2, 1), LD
+     $A,
      $               B(2, 1), LDB)
 *
 *        Compute T \ B -> B   [ T \ (L \P**T * B) ]
 *
-         CALL CLACPY( 'F', 1, N, A(1, 1), LDA+1, WORK(N), 1)
+         CALL AB_CLACPY( 'F', 1, N, A(1, 1), LDA+1, WORK(N), 1)
          IF( N.GT.1 ) THEN
-             CALL CLACPY( 'F', 1, N-1, A( 2, 1 ), LDA+1, WORK( 1 ), 1)
-             CALL CLACPY( 'F', 1, N-1, A( 2, 1 ), LDA+1, WORK( 2*N ), 1)
-             CALL CLACGV( N-1, WORK( 2*N ), 1 )
+             CALL AB_CLACPY( 'F', 1, N-1, A( 2, 1 ), LDA+1, WORK( 1 ), 1
+     $)
+             CALL AB_CLACPY( 'F', 1, N-1, A( 2, 1 ), LDA+1, WORK( 2*N ),
+     $ 1)
+             CALL AB_CLACGV( N-1, WORK( 2*N ), 1 )
          END IF
-         CALL CGTSV(N, NRHS, WORK(1), WORK(N), WORK(2*N), B, LDB,
+         CALL AB_CGTSV(N, NRHS, WORK(1), WORK(N), WORK(2*N), B, LDB,
      $              INFO)
 *
 *        Compute (L**T \ B) -> B   [ L**T \ (T \ (L \P**T * B) ) ]
 *
-         CALL CTRSM( 'L', 'L', 'C', 'U', N-1, NRHS, ONE, A( 2, 1 ), LDA,
+         CALL AB_CTRSM( 'L', 'L', 'C', 'U', N-1, NRHS, ONE, A( 2, 1 ), L
+     $DA,
      $              B( 2, 1 ), LDB)
 *
 *        Pivot, P * B  [ P * (L**T \ (T \ (L \P**T * B) )) ]
@@ -282,7 +291,7 @@
          DO WHILE ( K.GE.1 )
             KP = IPIV( K )
             IF( KP.NE.K )
-     $         CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL AB_CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
             K = K - 1
          END DO
 *
@@ -290,6 +299,6 @@
 *
       RETURN
 *
-*     End of CHETRS_AA
+*     End of AB_CHETRS_AA
 *
       END

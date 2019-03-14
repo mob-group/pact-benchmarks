@@ -1,4 +1,4 @@
-*> \brief \b DRSCL multiplies a vector by the reciprocal of a real scalar.
+*> \brief \b AB_DRSCL multiplies a vector by the reciprocal of a real scalar.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DRSCL + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/drscl.f">
+*> Download AB_DRSCL + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DRSCL.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/drscl.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DRSCL.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/drscl.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DRSCL.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DRSCL( N, SA, SX, INCX )
+*       SUBROUTINE AB_DRSCL( N, SA, SX, INCX )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCX, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> DRSCL multiplies an n-element real vector x by the real scalar 1/a.
+*> AB_DRSCL multiplies an n-element real vector x by the real scalar 1/a.
 *> This is done without overflow or underflow as long as
 *> the final result x/a does not overflow or underflow.
 *> \endverbatim
@@ -82,7 +82,7 @@
 *> \ingroup doubleOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE DRSCL( N, SA, SX, INCX )
+      SUBROUTINE AB_DRSCL( N, SA, SX, INCX )
 *
 *  -- LAPACK auxiliary routine (version 3.8.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -112,7 +112,7 @@
       EXTERNAL           DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSCAL, DLABAD
+      EXTERNAL           AB_DSCAL, AB_DLABAD
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS
@@ -128,7 +128,7 @@
 *
       SMLNUM = DLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
+      CALL AB_DLABAD( SMLNUM, BIGNUM )
 *
 *     Initialize the denominator to SA and the numerator to 1.
 *
@@ -162,13 +162,13 @@
 *
 *     Scale the vector X by MUL
 *
-      CALL DSCAL( N, MUL, SX, INCX )
+      CALL AB_DSCAL( N, MUL, SX, INCX )
 *
       IF( .NOT.DONE )
      $   GO TO 10
 *
       RETURN
 *
-*     End of DRSCL
+*     End of AB_DRSCL
 *
       END

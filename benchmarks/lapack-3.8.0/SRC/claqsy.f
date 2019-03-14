@@ -1,4 +1,4 @@
-*> \brief \b CLAQSY scales a symmetric/Hermitian matrix, using scaling factors computed by spoequ.
+*> \brief \b AB_CLAQSY scales a symmetric/Hermitian matrix, using scaling factors computed by AB_SPOEQU.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CLAQSY + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/claqsy.f">
+*> Download AB_CLAQSY + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLAQSY.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/claqsy.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLAQSY.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claqsy.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLAQSY.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLAQSY( UPLO, N, A, LDA, S, SCOND, AMAX, EQUED )
+*       SUBROUTINE AB_CLAQSY( UPLO, N, A, LDA, S, SCOND, AMAX, EQUED )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          EQUED, UPLO
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> CLAQSY equilibrates a symmetric matrix A using the scaling factors
+*> AB_CLAQSY equilibrates a symmetric matrix A using the scaling factors
 *> in the vector S.
 *> \endverbatim
 *
@@ -132,7 +132,7 @@
 *> \ingroup complexSYauxiliary
 *
 *  =====================================================================
-      SUBROUTINE CLAQSY( UPLO, N, A, LDA, S, SCOND, AMAX, EQUED )
+      SUBROUTINE AB_CLAQSY( UPLO, N, A, LDA, S, SCOND, AMAX, EQUED )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -160,9 +160,9 @@
       REAL               CJ, LARGE, SMALL
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
+      LOGICAL            AB_LSAME
       REAL               SLAMCH
-      EXTERNAL           LSAME, SLAMCH
+      EXTERNAL           AB_LSAME, SLAMCH
 *     ..
 *     .. Executable Statements ..
 *
@@ -187,7 +187,7 @@
 *
 *        Replace A by diag(S) * A * diag(S).
 *
-         IF( LSAME( UPLO, 'U' ) ) THEN
+         IF( AB_LSAME( UPLO, 'U' ) ) THEN
 *
 *           Upper triangle of A is stored.
 *
@@ -213,6 +213,6 @@
 *
       RETURN
 *
-*     End of CLAQSY
+*     End of AB_CLAQSY
 *
       END

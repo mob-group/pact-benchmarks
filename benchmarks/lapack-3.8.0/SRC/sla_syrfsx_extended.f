@@ -1,4 +1,4 @@
-*> \brief \b SLA_SYRFSX_EXTENDED improves the computed solution to a system of linear equations for symmetric indefinite matrices by performing extra-precise iterative refinement and provides error bounds and backward error estimates for the solution.
+*> \brief \b AB_SLA_SYRFSX_EXTENDED improves the computed solution to a system of linear equations for symmetric indefinite matrices by performing extra-precise iterative refinement and provides error bounds and backward error estimates for the solution.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLA_SYRFSX_EXTENDED + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sla_syrfsx_extended.f">
+*> Download AB_SLA_SYRFSX_EXTENDED + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLA_SYRFSX_EXTENDED.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sla_syrfsx_extended.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLA_SYRFSX_EXTENDED.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sla_syrfsx_extended.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLA_SYRFSX_EXTENDED.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLA_SYRFSX_EXTENDED( PREC_TYPE, UPLO, N, NRHS, A, LDA,
+*       SUBROUTINE AB_SLA_SYRFSX_EXTENDED( PREC_TYPE, UPLO, N, NRHS, A, LDA,
 *                                       AF, LDAF, IPIV, COLEQU, C, B, LDB,
 *                                       Y, LDY, BERR_OUT, N_NORMS,
 *                                       ERR_BNDS_NORM, ERR_BNDS_COMP, RES,
@@ -49,10 +49,10 @@
 *> \verbatim
 *>
 *>
-*> SLA_SYRFSX_EXTENDED improves the computed solution to a system of
+*> AB_SLA_SYRFSX_EXTENDED improves the computed solution to a system of
 *> linear equations by performing extra-precise iterative refinement
 *> and provides error bounds and backward error estimates for the solution.
-*> This subroutine is called by SSYRFSX to perform iterative refinement.
+*> This subroutine is called by AB_SSYRFSX to perform iterative refinement.
 *> In addition to normwise error bound, the code provides maximum
 *> componentwise error bound if possible. See comments for ERR_BNDS_NORM
 *> and ERR_BNDS_COMP for details of the error bounds. Note that this
@@ -67,7 +67,7 @@
 *> \verbatim
 *>          PREC_TYPE is INTEGER
 *>     Specifies the intermediate precision to be used in refinement.
-*>     The value is defined by ILAPREC(P) where P is a CHARACTER and
+*>     The value is defined by AB_ILAPREC(P) where P is a CHARACTER and
 *>     P    = 'S':  Single
 *>          = 'D':  Double
 *>          = 'I':  Indigenous
@@ -111,7 +111,7 @@
 *> \verbatim
 *>          AF is REAL array, dimension (LDAF,N)
 *>     The block diagonal matrix D and the multipliers used to
-*>     obtain the factor U or L as computed by SSYTRF.
+*>     obtain the factor U or L as computed by AB_SSYTRF.
 *> \endverbatim
 *>
 *> \param[in] LDAF
@@ -124,7 +124,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>     Details of the interchanges and the block structure of D
-*>     as determined by SSYTRF.
+*>     as determined by AB_SSYTRF.
 *> \endverbatim
 *>
 *> \param[in] COLEQU
@@ -163,7 +163,7 @@
 *> \param[in,out] Y
 *> \verbatim
 *>          Y is REAL array, dimension (LDY,NRHS)
-*>     On entry, the solution matrix X, as computed by SSYTRS.
+*>     On entry, the solution matrix X, as computed by AB_SSYTRS.
 *>     On exit, the improved solution matrix Y.
 *> \endverbatim
 *>
@@ -180,7 +180,7 @@
 *>     error for right-hand-side j from the formula
 *>         max(i) ( abs(RES(i)) / ( abs(op(A_s))*abs(Y) + abs(B_s) )(i) )
 *>     where abs(Z) is the componentwise absolute value of the matrix
-*>     or vector Z. This is computed by SLA_LIN_BERR.
+*>     or vector Z. This is computed by AB_SLA_LIN_BERR.
 *> \endverbatim
 *>
 *> \param[in] N_NORMS
@@ -371,7 +371,7 @@
 *> \verbatim
 *>          INFO is INTEGER
 *>       = 0:  Successful exit.
-*>       < 0:  if INFO = -i, the ith argument to SLA_SYRFSX_EXTENDED had an illegal
+*>       < 0:  if INFO = -i, the ith argument to AB_SLA_SYRFSX_EXTENDED had an illegal
 *>             value
 *> \endverbatim
 *
@@ -388,7 +388,8 @@
 *> \ingroup realSYcomputational
 *
 *  =====================================================================
-      SUBROUTINE SLA_SYRFSX_EXTENDED( PREC_TYPE, UPLO, N, NRHS, A, LDA,
+      SUBROUTINE AB_SLA_SYRFSX_EXTENDED( PREC_TYPE, UPLO, N, NRHS, A, LD
+     $A,
      $                                AF, LDAF, IPIV, COLEQU, C, B, LDB,
      $                                Y, LDY, BERR_OUT, N_NORMS,
      $                                ERR_BNDS_NORM, ERR_BNDS_COMP, RES,
@@ -454,14 +455,15 @@
       PARAMETER          ( LA_LINRX_RCOND_I = 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           ILAUPLO
-      INTEGER            ILAUPLO
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_ILAUPLO
+      INTEGER            AB_ILAUPLO
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SCOPY, SSYTRS, SSYMV, BLAS_SSYMV_X,
-     $                   BLAS_SSYMV2_X, SLA_SYAMV, SLA_WWADDW,
-     $                   SLA_LIN_BERR
+      EXTERNAL           AB_SAXPY, AB_SCOPY, AB_SSYTRS, AB_SSYMV, BLAS_S
+     $SYMV_X,
+     $                   BLAS_SSYMV2_X, AB_SLA_SYAMV, AB_SLA_WWADDW,
+     $                   AB_SLA_LIN_BERR
       REAL               SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
@@ -470,8 +472,8 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -487,7 +489,7 @@
          INFO = -15
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SLA_SYRFSX_EXTENDED', -INFO )
+         CALL AB_XERBLA( 'AB_SLA_SYRFSX_EXTENDED', -INFO )
          RETURN
       END IF
       EPS = SLAMCH( 'Epsilon' )
@@ -497,10 +499,10 @@
 *     Using HUGEVAL may lead to spurious underflows.
       INCR_THRESH = REAL( N )*EPS
 
-      IF ( LSAME ( UPLO, 'L' ) ) THEN
-         UPLO2 = ILAUPLO( 'L' )
+      IF ( AB_LSAME ( UPLO, 'L' ) ) THEN
+         UPLO2 = AB_ILAUPLO( 'L' )
       ELSE
-         UPLO2 = ILAUPLO( 'U' )
+         UPLO2 = AB_ILAUPLO( 'U' )
       ENDIF
 
       DO J = 1, NRHS
@@ -531,9 +533,9 @@
 *        Compute residual RES = B_s - op(A_s) * Y,
 *            op(A) = A, A**T, or A**H depending on TRANS (and type).
 *
-            CALL SCOPY( N, B( 1, J ), 1, RES, 1 )
+            CALL AB_SCOPY( N, B( 1, J ), 1, RES, 1 )
             IF (Y_PREC_STATE .EQ. BASE_RESIDUAL) THEN
-               CALL SSYMV( UPLO, N, -1.0, A, LDA, Y(1,J), 1,
+               CALL AB_SSYMV( UPLO, N, -1.0, A, LDA, Y(1,J), 1,
      $              1.0, RES, 1 )
             ELSE IF (Y_PREC_STATE .EQ. EXTRA_RESIDUAL) THEN
                CALL BLAS_SSYMV_X( UPLO2, N, -1.0, A, LDA,
@@ -544,8 +546,8 @@
             END IF
 
 !         XXX: RES is no longer needed.
-            CALL SCOPY( N, RES, 1, DY, 1 )
-            CALL SSYTRS( UPLO, N, 1, AF, LDAF, IPIV, DY, N, INFO )
+            CALL AB_SCOPY( N, RES, 1, DY, 1 )
+            CALL AB_SSYTRS( UPLO, N, 1, AF, LDAF, IPIV, DY, N, INFO )
 *
 *         Calculate relative changes DX_X, DZ_Z and ratios DXRAT, DZRAT.
 *
@@ -653,9 +655,9 @@
 *           Update soluton.
 *
             IF (Y_PREC_STATE .LT. EXTRA_Y) THEN
-               CALL SAXPY( N, 1.0, DY, 1, Y(1,J), 1 )
+               CALL AB_SAXPY( N, 1.0, DY, 1, Y(1,J), 1 )
             ELSE
-               CALL SLA_WWADDW( N, Y(1,J), Y_TAIL, DY )
+               CALL AB_SLA_WWADDW( N, Y(1,J), Y_TAIL, DY )
             END IF
 
          END DO
@@ -685,8 +687,8 @@
 *
 *        Compute residual RES = B_s - op(A_s) * Y,
 *            op(A) = A, A**T, or A**H depending on TRANS (and type).
-         CALL SCOPY( N, B( 1, J ), 1, RES, 1 )
-         CALL SSYMV( UPLO, N, -1.0, A, LDA, Y(1,J), 1, 1.0, RES, 1 )
+         CALL AB_SCOPY( N, B( 1, J ), 1, RES, 1 )
+         CALL AB_SSYMV( UPLO, N, -1.0, A, LDA, Y(1,J), 1, 1.0, RES, 1 )
 
          DO I = 1, N
             AYB( I ) = ABS( B( I, J ) )
@@ -694,10 +696,10 @@
 *
 *     Compute abs(op(A_s))*abs(Y) + abs(B_s).
 *
-         CALL SLA_SYAMV( UPLO2, N, 1.0,
+         CALL AB_SLA_SYAMV( UPLO2, N, 1.0,
      $        A, LDA, Y(1, J), 1, 1.0, AYB, 1 )
 
-         CALL SLA_LIN_BERR( N, N, 1, RES, AYB, BERR_OUT( J ) )
+         CALL AB_SLA_LIN_BERR( N, N, 1, RES, AYB, BERR_OUT( J ) )
 *
 *     End of loop for each RHS.
 *

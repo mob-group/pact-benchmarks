@@ -1,4 +1,4 @@
-*> \brief \b CLARZT forms the triangular factor T of a block reflector H = I - vtvH.
+*> \brief \b AB_CLARZT forms the triangular factor T of a block reflector H = I - vtvH.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CLARZT + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clarzt.f">
+*> Download AB_CLARZT + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLARZt.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clarzt.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLARZt.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clarzt.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLARZt.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLARZT( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
+*       SUBROUTINE AB_CLARZT( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          DIRECT, STOREV
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> CLARZT forms the triangular factor T of a complex block reflector
+*> AB_CLARZT forms the triangular factor T of a complex block reflector
 *> H of order > n, which is defined as a product of k elementary
 *> reflectors.
 *>
@@ -183,7 +183,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CLARZT( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
+      SUBROUTINE AB_CLARZT( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -208,24 +208,24 @@
       INTEGER            I, INFO, J
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMV, CLACGV, CTRMV, XERBLA
+      EXTERNAL           AB_CGEMV, AB_CLACGV, AB_CTRMV, AB_XERBLA
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. Executable Statements ..
 *
 *     Check for currently supported options
 *
       INFO = 0
-      IF( .NOT.LSAME( DIRECT, 'B' ) ) THEN
+      IF( .NOT.AB_LSAME( DIRECT, 'B' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME( STOREV, 'R' ) ) THEN
+      ELSE IF( .NOT.AB_LSAME( STOREV, 'R' ) ) THEN
          INFO = -2
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CLARZT', -INFO )
+         CALL AB_XERBLA( 'AB_CLARZT', -INFO )
          RETURN
       END IF
 *
@@ -245,15 +245,15 @@
 *
 *              T(i+1:k,i) = - tau(i) * V(i+1:k,1:n) * V(i,1:n)**H
 *
-               CALL CLACGV( N, V( I, 1 ), LDV )
-               CALL CGEMV( 'No transpose', K-I, N, -TAU( I ),
+               CALL AB_CLACGV( N, V( I, 1 ), LDV )
+               CALL AB_CGEMV( 'No transpose', K-I, N, -TAU( I ),
      $                     V( I+1, 1 ), LDV, V( I, 1 ), LDV, ZERO,
      $                     T( I+1, I ), 1 )
-               CALL CLACGV( N, V( I, 1 ), LDV )
+               CALL AB_CLACGV( N, V( I, 1 ), LDV )
 *
 *              T(i+1:k,i) = T(i+1:k,i+1:k) * T(i+1:k,i)
 *
-               CALL CTRMV( 'Lower', 'No transpose', 'Non-unit', K-I,
+               CALL AB_CTRMV( 'Lower', 'No transpose', 'Non-unit', K-I,
      $                     T( I+1, I+1 ), LDT, T( I+1, I ), 1 )
             END IF
             T( I, I ) = TAU( I )
@@ -261,6 +261,6 @@
    20 CONTINUE
       RETURN
 *
-*     End of CLARZT
+*     End of AB_CLARZT
 *
       END

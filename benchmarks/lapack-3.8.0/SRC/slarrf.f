@@ -1,4 +1,4 @@
-*> \brief \b SLARRF finds a new relatively robust representation such that at least one of the eigenvalues is relatively isolated.
+*> \brief \b AB_SLARRF finds a new relatively robust representation such that at least one of the eigenvalues is relatively isolated.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLARRF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slarrf.f">
+*> Download AB_SLARRF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLARRF.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slarrf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLARRF.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slarrf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLARRF.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLARRF( N, D, L, LD, CLSTRT, CLEND,
+*       SUBROUTINE AB_SLARRF( N, D, L, LD, CLSTRT, CLEND,
 *                          W, WGAP, WERR,
 *                          SPDIAM, CLGAPL, CLGAPR, PIVMIN, SIGMA,
 *                          DPLUS, LPLUS, WORK, INFO )
@@ -40,7 +40,7 @@
 *>
 *> Given the initial representation L D L^T and its cluster of close
 *> eigenvalues (in a relative measure), W( CLSTRT ), W( CLSTRT+1 ), ...
-*> W( CLEND ), SLARRF finds a new relatively robust representation
+*> W( CLEND ), AB_SLARRF finds a new relatively robust representation
 *> L D L^T - SIGMA I = L(+) D(+) L(+)^T such that at least one of the
 *> eigenvalues of L(+) D(+) L(+)^T is relatively isolated.
 *> \endverbatim
@@ -188,7 +188,7 @@
 *> Christof Voemel, University of California, Berkeley, USA
 *
 *  =====================================================================
-      SUBROUTINE SLARRF( N, D, L, LD, CLSTRT, CLEND,
+      SUBROUTINE AB_SLARRF( N, D, L, LD, CLSTRT, CLEND,
      $                   W, WGAP, WERR,
      $                   SPDIAM, CLGAPL, CLGAPR, PIVMIN, SIGMA,
      $                   DPLUS, LPLUS, WORK, INFO )
@@ -226,12 +226,12 @@
      $                   RRR1, RRR2, RSIGMA, S, SMLGROWTH, TMP, ZNM2
 *     ..
 *     .. External Functions ..
-      LOGICAL SISNAN
+      LOGICAL AB_SISNAN
       REAL               SLAMCH
-      EXTERNAL           SISNAN, SLAMCH
+      EXTERNAL           AB_SISNAN, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY
+      EXTERNAL           AB_SCOPY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS
@@ -331,7 +331,7 @@
          ENDIF
          MAX1 = MAX( MAX1,ABS(DPLUS(I+1)) )
  6    CONTINUE
-      SAWNAN1 = SAWNAN1 .OR.  SISNAN( MAX1 )
+      SAWNAN1 = SAWNAN1 .OR.  AB_SISNAN( MAX1 )
 
       IF( FORCER .OR.
      $   (MAX1.LE.GROWTHBOUND .AND. .NOT.SAWNAN1 ) ) THEN
@@ -362,7 +362,7 @@
          ENDIF
          MAX2 = MAX( MAX2,ABS(WORK(I+1)) )
  7    CONTINUE
-      SAWNAN2 = SAWNAN2 .OR.  SISNAN( MAX2 )
+      SAWNAN2 = SAWNAN2 .OR.  AB_SISNAN( MAX2 )
 
       IF( FORCER .OR.
      $   (MAX2.LE.GROWTHBOUND .AND. .NOT.SAWNAN2 ) ) THEN
@@ -484,12 +484,12 @@
       IF (SHIFT.EQ.SLEFT) THEN
       ELSEIF (SHIFT.EQ.SRIGHT) THEN
 *        store new L and D back into DPLUS, LPLUS
-         CALL SCOPY( N, WORK, 1, DPLUS, 1 )
-         CALL SCOPY( N-1, WORK(N+1), 1, LPLUS, 1 )
+         CALL AB_SCOPY( N, WORK, 1, DPLUS, 1 )
+         CALL AB_SCOPY( N-1, WORK(N+1), 1, LPLUS, 1 )
       ENDIF
 
       RETURN
 *
-*     End of SLARRF
+*     End of AB_SLARRF
 *
       END

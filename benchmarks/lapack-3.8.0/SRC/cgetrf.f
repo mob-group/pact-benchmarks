@@ -1,4 +1,4 @@
-*> \brief \b CGETRF
+*> \brief \b AB_CGETRF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CGETRF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgetrf.f">
+*> Download AB_CGETRF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CGETRF.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgetrf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CGETRF.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgetrf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CGETRF.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGETRF( M, N, A, LDA, IPIV, INFO )
+*       SUBROUTINE AB_CGETRF( M, N, A, LDA, IPIV, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, M, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> CGETRF computes an LU factorization of a general M-by-N matrix A
+*> AB_CGETRF computes an LU factorization of a general M-by-N matrix A
 *> using partial pivoting with row interchanges.
 *>
 *> The factorization has the form
@@ -106,7 +106,7 @@
 *> \ingroup complexGEcomputational
 *
 *  =====================================================================
-      SUBROUTINE CGETRF( M, N, A, LDA, IPIV, INFO )
+      SUBROUTINE AB_CGETRF( M, N, A, LDA, IPIV, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -131,11 +131,12 @@
       INTEGER            I, IINFO, J, JB, NB
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMM, CGETRF2, CLASWP, CTRSM, XERBLA
+      EXTERNAL           AB_CGEMM, AB_CGETRF2, AB_CLASWP, AB_CTRSM, AB_X
+     $ERBLA
 *     ..
 *     .. External Functions ..
-      INTEGER            ILAENV
-      EXTERNAL           ILAENV
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_ILAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -153,7 +154,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CGETRF', -INFO )
+         CALL AB_XERBLA( 'AB_CGETRF', -INFO )
          RETURN
       END IF
 *
@@ -164,12 +165,12 @@
 *
 *     Determine the block size for this environment.
 *
-      NB = ILAENV( 1, 'CGETRF', ' ', M, N, -1, -1 )
+      NB = AB_ILAENV( 1, 'AB_CGETRF', ' ', M, N, -1, -1 )
       IF( NB.LE.1 .OR. NB.GE.MIN( M, N ) ) THEN
 *
 *        Use unblocked code.
 *
-         CALL CGETRF2( M, N, A, LDA, IPIV, INFO )
+         CALL AB_CGETRF2( M, N, A, LDA, IPIV, INFO )
       ELSE
 *
 *        Use blocked code.
@@ -180,7 +181,8 @@
 *           Factor diagonal and subdiagonal blocks and test for exact
 *           singularity.
 *
-            CALL CGETRF2( M-J+1, JB, A( J, J ), LDA, IPIV( J ), IINFO )
+            CALL AB_CGETRF2( M-J+1, JB, A( J, J ), LDA, IPIV( J ), IINFO
+     $ )
 *
 *           Adjust INFO and the pivot indices.
 *
@@ -192,25 +194,27 @@
 *
 *           Apply interchanges to columns 1:J-1.
 *
-            CALL CLASWP( J-1, A, LDA, J, J+JB-1, IPIV, 1 )
+            CALL AB_CLASWP( J-1, A, LDA, J, J+JB-1, IPIV, 1 )
 *
             IF( J+JB.LE.N ) THEN
 *
 *              Apply interchanges to columns J+JB:N.
 *
-               CALL CLASWP( N-J-JB+1, A( 1, J+JB ), LDA, J, J+JB-1,
+               CALL AB_CLASWP( N-J-JB+1, A( 1, J+JB ), LDA, J, J+JB-1,
      $                      IPIV, 1 )
 *
 *              Compute block row of U.
 *
-               CALL CTRSM( 'Left', 'Lower', 'No transpose', 'Unit', JB,
+               CALL AB_CTRSM( 'Left', 'Lower', 'No transpose', 'Unit', J
+     $B,
      $                     N-J-JB+1, ONE, A( J, J ), LDA, A( J, J+JB ),
      $                     LDA )
                IF( J+JB.LE.M ) THEN
 *
 *                 Update trailing submatrix.
 *
-                  CALL CGEMM( 'No transpose', 'No transpose', M-J-JB+1,
+                  CALL AB_CGEMM( 'No transpose', 'No transpose', M-J-JB+
+     $1,
      $                        N-J-JB+1, JB, -ONE, A( J+JB, J ), LDA,
      $                        A( J, J+JB ), LDA, ONE, A( J+JB, J+JB ),
      $                        LDA )
@@ -220,6 +224,6 @@
       END IF
       RETURN
 *
-*     End of CGETRF
+*     End of AB_CGETRF
 *
       END

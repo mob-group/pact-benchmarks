@@ -1,4 +1,4 @@
-*> \brief \b SLAUU2 computes the product UUH or LHL, where U and L are upper or lower triangular matrices (unblocked algorithm).
+*> \brief \b AB_SLAUU2 computes the product UUH or LHL, where U and L are upper or lower triangular matrices (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLAUU2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slauu2.f">
+*> Download AB_SLAUU2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLAUU2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slauu2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLAUU2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slauu2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLAUU2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLAUU2( UPLO, N, A, LDA, INFO )
+*       SUBROUTINE AB_SLAUU2( UPLO, N, A, LDA, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> SLAUU2 computes the product U * U**T or L**T * L, where the triangular
+*> AB_SLAUU2 computes the product U * U**T or L**T * L, where the triangular
 *> factor U or L is stored in the upper or lower triangular part of
 *> the array A.
 *>
@@ -100,7 +100,7 @@
 *> \ingroup realOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE SLAUU2( UPLO, N, A, LDA, INFO )
+      SUBROUTINE AB_SLAUU2( UPLO, N, A, LDA, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -127,12 +127,12 @@
       REAL               AII
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SDOT
-      EXTERNAL           LSAME, SDOT
+      LOGICAL            AB_LSAME
+      REAL               AB_SDOT
+      EXTERNAL           AB_LSAME, AB_SDOT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMV, SSCAL, XERBLA
+      EXTERNAL           AB_SGEMV, AB_SSCAL, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -142,8 +142,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -151,7 +151,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SLAUU2', -INFO )
+         CALL AB_XERBLA( 'AB_SLAUU2', -INFO )
          RETURN
       END IF
 *
@@ -167,11 +167,13 @@
          DO 10 I = 1, N
             AII = A( I, I )
             IF( I.LT.N ) THEN
-               A( I, I ) = SDOT( N-I+1, A( I, I ), LDA, A( I, I ), LDA )
-               CALL SGEMV( 'No transpose', I-1, N-I, ONE, A( 1, I+1 ),
+               A( I, I ) = AB_SDOT( N-I+1, A( I, I ), LDA, A( I, I ), LD
+     $A )
+               CALL AB_SGEMV( 'No transpose', I-1, N-I, ONE, A( 1, I+1 )
+     $,
      $                     LDA, A( I, I+1 ), LDA, AII, A( 1, I ), 1 )
             ELSE
-               CALL SSCAL( I, AII, A( 1, I ), 1 )
+               CALL AB_SSCAL( I, AII, A( 1, I ), 1 )
             END IF
    10    CONTINUE
 *
@@ -182,17 +184,18 @@
          DO 20 I = 1, N
             AII = A( I, I )
             IF( I.LT.N ) THEN
-               A( I, I ) = SDOT( N-I+1, A( I, I ), 1, A( I, I ), 1 )
-               CALL SGEMV( 'Transpose', N-I, I-1, ONE, A( I+1, 1 ), LDA,
+               A( I, I ) = AB_SDOT( N-I+1, A( I, I ), 1, A( I, I ), 1 )
+               CALL AB_SGEMV( 'Transpose', N-I, I-1, ONE, A( I+1, 1 ), L
+     $DA,
      $                     A( I+1, I ), 1, AII, A( I, 1 ), LDA )
             ELSE
-               CALL SSCAL( I, AII, A( I, 1 ), LDA )
+               CALL AB_SSCAL( I, AII, A( I, 1 ), LDA )
             END IF
    20    CONTINUE
       END IF
 *
       RETURN
 *
-*     End of SLAUU2
+*     End of AB_SLAUU2
 *
       END

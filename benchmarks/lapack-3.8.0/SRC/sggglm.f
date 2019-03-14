@@ -1,4 +1,4 @@
-*> \brief \b SGGGLM
+*> \brief \b AB_SGGGLM
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SGGGLM + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sggglm.f">
+*> Download AB_SGGGLM + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SGGGLM.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sggglm.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SGGGLM.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sggglm.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SGGGLM.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SGGGLM( N, M, P, A, LDA, B, LDB, D, X, Y, WORK, LWORK,
+*       SUBROUTINE AB_SGGGLM( N, M, P, A, LDA, B, LDB, D, X, Y, WORK, LWORK,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> SGGGLM solves a general Gauss-Markov linear model (GLM) problem:
+*> AB_SGGGLM solves a general Gauss-Markov linear model (GLM) problem:
 *>
 *>         minimize || y ||_2   subject to   d = A*x + B*y
 *>             x
@@ -145,12 +145,12 @@
 *>          The dimension of the array WORK. LWORK >= max(1,N+M+P).
 *>          For optimum performance, LWORK >= M+min(N,P)+max(N,P)*NB,
 *>          where NB is an upper bound for the optimal blocksizes for
-*>          SGEQRF, SGERQF, SORMQR and SORMRQ.
+*>          AB_SGEQRF, AB_SGERQF, AB_SORMQR and AB_SORMRQ.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -182,7 +182,8 @@
 *> \ingroup realOTHEReigen
 *
 *  =====================================================================
-      SUBROUTINE SGGGLM( N, M, P, A, LDA, B, LDB, D, X, Y, WORK, LWORK,
+      SUBROUTINE AB_SGGGLM( N, M, P, A, LDA, B, LDB, D, X, Y, WORK, LWOR
+     $K,
      $                   INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -210,12 +211,13 @@
      $                   NB4, NP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SGEMV, SGGQRF, SORMQR, SORMRQ, STRTRS,
-     $                   XERBLA
+      EXTERNAL           AB_SCOPY, AB_SGEMV, AB_SGGQRF, AB_SORMQR, AB_SO
+     $RMRQ, AB_STRTRS,
+     $                   AB_XERBLA
 *     ..
 *     .. External Functions ..
-      INTEGER            ILAENV
-      EXTERNAL           ILAENV
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_ILAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          INT, MAX, MIN
@@ -246,10 +248,10 @@
             LWKMIN = 1
             LWKOPT = 1
          ELSE
-            NB1 = ILAENV( 1, 'SGEQRF', ' ', N, M, -1, -1 )
-            NB2 = ILAENV( 1, 'SGERQF', ' ', N, M, -1, -1 )
-            NB3 = ILAENV( 1, 'SORMQR', ' ', N, M, P, -1 )
-            NB4 = ILAENV( 1, 'SORMRQ', ' ', N, M, P, -1 )
+            NB1 = AB_ILAENV( 1, 'AB_SGEQRF', ' ', N, M, -1, -1 )
+            NB2 = AB_ILAENV( 1, 'AB_SGERQF', ' ', N, M, -1, -1 )
+            NB3 = AB_ILAENV( 1, 'AB_SORMQR', ' ', N, M, P, -1 )
+            NB4 = AB_ILAENV( 1, 'AB_SORMRQ', ' ', N, M, P, -1 )
             NB = MAX( NB1, NB2, NB3, NB4 )
             LWKMIN = M + N + P
             LWKOPT = M + NP + MAX( N, P )*NB
@@ -262,7 +264,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SGGGLM', -INFO )
+         CALL AB_XERBLA( 'AB_SGGGLM', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -282,21 +284,21 @@
 *     where R11 and T22 are upper triangular, and Q and Z are
 *     orthogonal.
 *
-      CALL SGGQRF( N, M, P, A, LDA, WORK, B, LDB, WORK( M+1 ),
+      CALL AB_SGGQRF( N, M, P, A, LDA, WORK, B, LDB, WORK( M+1 ),
      $             WORK( M+NP+1 ), LWORK-M-NP, INFO )
       LOPT = WORK( M+NP+1 )
 *
 *     Update left-hand-side vector d = Q**T*d = ( d1 ) M
 *                                               ( d2 ) N-M
 *
-      CALL SORMQR( 'Left', 'Transpose', N, 1, M, A, LDA, WORK, D,
+      CALL AB_SORMQR( 'Left', 'Transpose', N, 1, M, A, LDA, WORK, D,
      $             MAX( 1, N ), WORK( M+NP+1 ), LWORK-M-NP, INFO )
       LOPT = MAX( LOPT, INT( WORK( M+NP+1 ) ) )
 *
 *     Solve T22*y2 = d2 for y2
 *
       IF( N.GT.M ) THEN
-         CALL STRTRS( 'Upper', 'No transpose', 'Non unit', N-M, 1,
+         CALL AB_STRTRS( 'Upper', 'No transpose', 'Non unit', N-M, 1,
      $                B( M+1, M+P-N+1 ), LDB, D( M+1 ), N-M, INFO )
 *
          IF( INFO.GT.0 ) THEN
@@ -304,7 +306,7 @@
             RETURN
          END IF
 *
-         CALL SCOPY( N-M, D( M+1 ), 1, Y( M+P-N+1 ), 1 )
+         CALL AB_SCOPY( N-M, D( M+1 ), 1, Y( M+P-N+1 ), 1 )
       END IF
 *
 *     Set y1 = 0
@@ -315,13 +317,14 @@
 *
 *     Update d1 = d1 - T12*y2
 *
-      CALL SGEMV( 'No transpose', M, N-M, -ONE, B( 1, M+P-N+1 ), LDB,
+      CALL AB_SGEMV( 'No transpose', M, N-M, -ONE, B( 1, M+P-N+1 ), LDB,
      $            Y( M+P-N+1 ), 1, ONE, D, 1 )
 *
 *     Solve triangular system: R11*x = d1
 *
       IF( M.GT.0 ) THEN
-         CALL STRTRS( 'Upper', 'No Transpose', 'Non unit', M, 1, A, LDA,
+         CALL AB_STRTRS( 'Upper', 'No Transpose', 'Non unit', M, 1, A, L
+     $DA,
      $                D, M, INFO )
 *
          IF( INFO.GT.0 ) THEN
@@ -331,18 +334,18 @@
 *
 *        Copy D to X
 *
-         CALL SCOPY( M, D, 1, X, 1 )
+         CALL AB_SCOPY( M, D, 1, X, 1 )
       END IF
 *
 *     Backward transformation y = Z**T *y
 *
-      CALL SORMRQ( 'Left', 'Transpose', P, 1, NP,
+      CALL AB_SORMRQ( 'Left', 'Transpose', P, 1, NP,
      $             B( MAX( 1, N-P+1 ), 1 ), LDB, WORK( M+1 ), Y,
      $             MAX( 1, P ), WORK( M+NP+1 ), LWORK-M-NP, INFO )
       WORK( 1 ) = M + NP + MAX( LOPT, INT( WORK( M+NP+1 ) ) )
 *
       RETURN
 *
-*     End of SGGGLM
+*     End of AB_SGGGLM
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b DPPTRF
+*> \brief \b AB_DPPTRF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DPPTRF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dpptrf.f">
+*> Download AB_DPPTRF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DPPTRF.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dpptrf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DPPTRF.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpptrf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DPPTRF.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DPPTRF( UPLO, N, AP, INFO )
+*       SUBROUTINE AB_DPPTRF( UPLO, N, AP, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> DPPTRF computes the Cholesky factorization of a real symmetric
+*> AB_DPPTRF computes the Cholesky factorization of a real symmetric
 *> positive definite matrix A stored in packed format.
 *>
 *> The factorization has the form
@@ -117,7 +117,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DPPTRF( UPLO, N, AP, INFO )
+      SUBROUTINE AB_DPPTRF( UPLO, N, AP, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -144,12 +144,12 @@
       DOUBLE PRECISION   AJJ
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DDOT
-      EXTERNAL           LSAME, DDOT
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DDOT
+      EXTERNAL           AB_LSAME, AB_DDOT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSCAL, DSPR, DTPSV, XERBLA
+      EXTERNAL           AB_DSCAL, AB_DSPR, AB_DTPSV, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          SQRT
@@ -159,14 +159,14 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DPPTRF', -INFO )
+         CALL AB_XERBLA( 'AB_DPPTRF', -INFO )
          RETURN
       END IF
 *
@@ -187,12 +187,12 @@
 *           Compute elements 1:J-1 of column J.
 *
             IF( J.GT.1 )
-     $         CALL DTPSV( 'Upper', 'Transpose', 'Non-unit', J-1, AP,
+     $         CALL AB_DTPSV( 'Upper', 'Transpose', 'Non-unit', J-1, AP,
      $                     AP( JC ), 1 )
 *
 *           Compute U(J,J) and test for non-positive-definiteness.
 *
-            AJJ = AP( JJ ) - DDOT( J-1, AP( JC ), 1, AP( JC ), 1 )
+            AJJ = AP( JJ ) - AB_DDOT( J-1, AP( JC ), 1, AP( JC ), 1 )
             IF( AJJ.LE.ZERO ) THEN
                AP( JJ ) = AJJ
                GO TO 30
@@ -220,8 +220,8 @@
 *           submatrix.
 *
             IF( J.LT.N ) THEN
-               CALL DSCAL( N-J, ONE / AJJ, AP( JJ+1 ), 1 )
-               CALL DSPR( 'Lower', N-J, -ONE, AP( JJ+1 ), 1,
+               CALL AB_DSCAL( N-J, ONE / AJJ, AP( JJ+1 ), 1 )
+               CALL AB_DSPR( 'Lower', N-J, -ONE, AP( JJ+1 ), 1,
      $                    AP( JJ+N-J+1 ) )
                JJ = JJ + N - J + 1
             END IF
@@ -235,6 +235,6 @@
    40 CONTINUE
       RETURN
 *
-*     End of DPPTRF
+*     End of AB_DPPTRF
 *
       END

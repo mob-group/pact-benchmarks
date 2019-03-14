@@ -1,4 +1,4 @@
-*> \brief \b ZPPTRF
+*> \brief \b AB_ZPPTRF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZPPTRF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zpptrf.f">
+*> Download AB_ZPPTRF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZPPTRF.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zpptrf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZPPTRF.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpptrf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZPPTRF.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZPPTRF( UPLO, N, AP, INFO )
+*       SUBROUTINE AB_ZPPTRF( UPLO, N, AP, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> ZPPTRF computes the Cholesky factorization of a complex Hermitian
+*> AB_ZPPTRF computes the Cholesky factorization of a complex Hermitian
 *> positive definite matrix A stored in packed format.
 *>
 *> The factorization has the form
@@ -117,7 +117,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZPPTRF( UPLO, N, AP, INFO )
+      SUBROUTINE AB_ZPPTRF( UPLO, N, AP, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -144,12 +144,12 @@
       DOUBLE PRECISION   AJJ
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      COMPLEX*16         ZDOTC
-      EXTERNAL           LSAME, ZDOTC
+      LOGICAL            AB_LSAME
+      COMPLEX*16         AB_ZDOTC
+      EXTERNAL           AB_LSAME, AB_ZDOTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZDSCAL, ZHPR, ZTPSV
+      EXTERNAL           AB_XERBLA, AB_ZDSCAL, AB_ZHPR, AB_ZTPSV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, SQRT
@@ -159,14 +159,14 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZPPTRF', -INFO )
+         CALL AB_XERBLA( 'AB_ZPPTRF', -INFO )
          RETURN
       END IF
 *
@@ -187,12 +187,14 @@
 *           Compute elements 1:J-1 of column J.
 *
             IF( J.GT.1 )
-     $         CALL ZTPSV( 'Upper', 'Conjugate transpose', 'Non-unit',
+     $         CALL AB_ZTPSV( 'Upper', 'Conjugate transpose', 'Non-unit'
+     $,
      $                     J-1, AP, AP( JC ), 1 )
 *
 *           Compute U(J,J) and test for non-positive-definiteness.
 *
-            AJJ = DBLE( AP( JJ ) ) - ZDOTC( J-1, AP( JC ), 1, AP( JC ),
+            AJJ = DBLE( AP( JJ ) ) - AB_ZDOTC( J-1, AP( JC ), 1, AP( JC 
+     $),
      $            1 )
             IF( AJJ.LE.ZERO ) THEN
                AP( JJ ) = AJJ
@@ -221,8 +223,8 @@
 *           submatrix.
 *
             IF( J.LT.N ) THEN
-               CALL ZDSCAL( N-J, ONE / AJJ, AP( JJ+1 ), 1 )
-               CALL ZHPR( 'Lower', N-J, -ONE, AP( JJ+1 ), 1,
+               CALL AB_ZDSCAL( N-J, ONE / AJJ, AP( JJ+1 ), 1 )
+               CALL AB_ZHPR( 'Lower', N-J, -ONE, AP( JJ+1 ), 1,
      $                    AP( JJ+N-J+1 ) )
                JJ = JJ + N - J + 1
             END IF
@@ -236,6 +238,6 @@
    40 CONTINUE
       RETURN
 *
-*     End of ZPPTRF
+*     End of AB_ZPPTRF
 *
       END

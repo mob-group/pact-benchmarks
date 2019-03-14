@@ -1,4 +1,4 @@
-*> \brief \b DLAQR4 computes the eigenvalues of a Hessenberg matrix, and optionally the matrices from the Schur decomposition.
+*> \brief \b AB_DLAQR4 computes the eigenvalues of a Hessenberg matrix, and optionally the matrices from the Schur decomposition.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLAQR4 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaqr4.f">
+*> Download AB_DLAQR4 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLAQR4.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaqr4.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLAQR4.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaqr4.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLAQR4.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLAQR4( WANTT, WANTZ, N, ILO, IHI, H, LDH, WR, WI,
+*       SUBROUTINE AB_DLAQR4( WANTT, WANTZ, N, ILO, IHI, H, LDH, WR, WI,
 *                          ILOZ, IHIZ, Z, LDZ, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,14 +36,14 @@
 *>
 *> \verbatim
 *>
-*>    DLAQR4 implements one level of recursion for DLAQR0.
+*>    AB_DLAQR4 implements one level of recursion for AB_DLAQR0.
 *>    It is a complete implementation of the small bulge multi-shift
-*>    QR algorithm.  It may be called by DLAQR0 and, for large enough
-*>    deflation window size, it may be called by DLAQR3.  This
-*>    subroutine is identical to DLAQR0 except that it calls DLAQR2
-*>    instead of DLAQR3.
+*>    QR algorithm.  It may be called by AB_DLAQR0 and, for large enough
+*>    deflation window size, it may be called by AB_DLAQR3.  This
+*>    subroutine is identical to AB_DLAQR0 except that it calls AB_DLAQR2
+*>    instead of AB_DLAQR3.
 *>
-*>    DLAQR4 computes the eigenvalues of a Hessenberg matrix H
+*>    AB_DLAQR4 computes the eigenvalues of a Hessenberg matrix H
 *>    and, optionally, the matrices T and Z from the Schur decomposition
 *>    H = Z T Z**T, where T is an upper quasi-triangular matrix (the
 *>    Schur form), and Z is the orthogonal matrix of Schur vectors.
@@ -88,8 +88,8 @@
 *>           It is assumed that H is already upper triangular in rows
 *>           and columns 1:ILO-1 and IHI+1:N and, if ILO.GT.1,
 *>           H(ILO,ILO-1) is zero. ILO and IHI are normally set by a
-*>           previous call to DGEBAL, and then passed to DGEHRD when the
-*>           matrix output by DGEBAL is reduced to Hessenberg form.
+*>           previous call to AB_DGEBAL, and then passed to AB_DGEHRD when the
+*>           matrix output by AB_DGEBAL is reduced to Hessenberg form.
 *>           Otherwise, ILO and IHI should be set to 1 and N,
 *>           respectively.  If N.GT.0, then 1.LE.ILO.LE.IHI.LE.N.
 *>           If N = 0, then ILO = 1 and IHI = 0.
@@ -186,19 +186,19 @@
 *>           be required for optimal performance.  A workspace query
 *>           to determine the optimal workspace size is recommended.
 *>
-*>           If LWORK = -1, then DLAQR4 does a workspace query.
-*>           In this case, DLAQR4 checks the input parameters and
+*>           If LWORK = -1, then AB_DLAQR4 does a workspace query.
+*>           In this case, AB_DLAQR4 checks the input parameters and
 *>           estimates the optimal workspace size for the given
 *>           values of N, ILO and IHI.  The estimate is returned
 *>           in WORK(1).  No error message related to LWORK is
-*>           issued by XERBLA.  Neither H nor Z are accessed.
+*>           issued by AB_XERBLA.  Neither H nor Z are accessed.
 *> \endverbatim
 *>
 *> \param[out] INFO
 *> \verbatim
 *>          INFO is INTEGER
 *>             =  0:  successful exit
-*>           .GT. 0:  if INFO = i, DLAQR4 failed to compute all of
+*>           .GT. 0:  if INFO = i, AB_DLAQR4 failed to compute all of
 *>                the eigenvalues.  Elements 1:ilo-1 and i+1:n of WR
 *>                and WI contain those eigenvalues which have been
 *>                successfully computed.  (Failures are rare.)
@@ -260,7 +260,7 @@
 *>       of Matrix Analysis, volume 23, pages 948--973, 2002.
 *>
 *  =====================================================================
-      SUBROUTINE DLAQR4( WANTT, WANTZ, N, ILO, IHI, H, LDH, WR, WI,
+      SUBROUTINE AB_DLAQR4( WANTT, WANTZ, N, ILO, IHI, H, LDH, WR, WI,
      $                   ILOZ, IHIZ, Z, LDZ, WORK, LWORK, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -281,7 +281,7 @@
 *     .. Parameters ..
 *
 *     ==== Matrices of order NTINY or smaller must be processed by
-*     .    DLAHQR because of insufficient subdiagonal scratch space.
+*     .    AB_DLAHQR because of insufficient subdiagonal scratch space.
 *     .    (This is a hard limit.) ====
       INTEGER            NTINY
       PARAMETER          ( NTINY = 11 )
@@ -315,14 +315,15 @@
       CHARACTER          JBCMPZ*2
 *     ..
 *     .. External Functions ..
-      INTEGER            ILAENV
-      EXTERNAL           ILAENV
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_ILAENV
 *     ..
 *     .. Local Arrays ..
       DOUBLE PRECISION   ZDUM( 1, 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLACPY, DLAHQR, DLANV2, DLAQR2, DLAQR5
+      EXTERNAL           AB_DLACPY, AB_DLAHQR, AB_DLANV2, AB_DLAQR2, AB_
+     $DLAQR5
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, INT, MAX, MIN, MOD
@@ -339,11 +340,11 @@
 *
       IF( N.LE.NTINY ) THEN
 *
-*        ==== Tiny matrices must use DLAHQR. ====
+*        ==== Tiny matrices must use AB_DLAHQR. ====
 *
          LWKOPT = 1
          IF( LWORK.NE.-1 )
-     $      CALL DLAHQR( WANTT, WANTZ, N, ILO, IHI, H, LDH, WR, WI,
+     $      CALL AB_DLAHQR( WANTT, WANTZ, N, ILO, IHI, H, LDH, WR, WI,
      $                   ILOZ, IHIZ, Z, LDZ, INFO )
       ELSE
 *
@@ -354,7 +355,7 @@
 *
          INFO = 0
 *
-*        ==== Set up job flags for ILAENV. ====
+*        ==== Set up job flags for AB_ILAENV. ====
 *
          IF( WANTT ) THEN
             JBCMPZ( 1: 1 ) = 'S'
@@ -373,7 +374,7 @@
 *        .    (In fact, there is enough subdiagonal space for
 *        .    NWR.GE.3.) ====
 *
-         NWR = ILAENV( 13, 'DLAQR4', JBCMPZ, N, ILO, IHI, LWORK )
+         NWR = AB_ILAENV( 13, 'AB_DLAQR4', JBCMPZ, N, ILO, IHI, LWORK )
          NWR = MAX( 2, NWR )
          NWR = MIN( IHI-ILO+1, ( N-1 ) / 3, NWR )
 *
@@ -382,19 +383,19 @@
 *        .    enough subdiagonal workspace for NSR to be even
 *        .    and greater than or equal to two as required. ====
 *
-         NSR = ILAENV( 15, 'DLAQR4', JBCMPZ, N, ILO, IHI, LWORK )
+         NSR = AB_ILAENV( 15, 'AB_DLAQR4', JBCMPZ, N, ILO, IHI, LWORK )
          NSR = MIN( NSR, ( N+6 ) / 9, IHI-ILO )
          NSR = MAX( 2, NSR-MOD( NSR, 2 ) )
 *
 *        ==== Estimate optimal workspace ====
 *
-*        ==== Workspace query call to DLAQR2 ====
+*        ==== Workspace query call to AB_DLAQR2 ====
 *
-         CALL DLAQR2( WANTT, WANTZ, N, ILO, IHI, NWR+1, H, LDH, ILOZ,
+         CALL AB_DLAQR2( WANTT, WANTZ, N, ILO, IHI, NWR+1, H, LDH, ILOZ,
      $                IHIZ, Z, LDZ, LS, LD, WR, WI, H, LDH, N, H, LDH,
      $                N, H, LDH, WORK, -1 )
 *
-*        ==== Optimal workspace = MAX(DLAQR5, DLAQR2) ====
+*        ==== Optimal workspace = MAX(AB_DLAQR5, AB_DLAQR2) ====
 *
          LWKOPT = MAX( 3*NSR / 2, INT( WORK( 1 ) ) )
 *
@@ -405,20 +406,22 @@
             RETURN
          END IF
 *
-*        ==== DLAHQR/DLAQR0 crossover point ====
+*        ==== AB_DLAHQR/AB_DLAQR0 crossover point ====
 *
-         NMIN = ILAENV( 12, 'DLAQR4', JBCMPZ, N, ILO, IHI, LWORK )
+         NMIN = AB_ILAENV( 12, 'AB_DLAQR4', JBCMPZ, N, ILO, IHI, LWORK )
          NMIN = MAX( NTINY, NMIN )
 *
 *        ==== Nibble crossover point ====
 *
-         NIBBLE = ILAENV( 14, 'DLAQR4', JBCMPZ, N, ILO, IHI, LWORK )
+         NIBBLE = AB_ILAENV( 14, 'AB_DLAQR4', JBCMPZ, N, ILO, IHI, LWORK
+     $ )
          NIBBLE = MAX( 0, NIBBLE )
 *
 *        ==== Accumulate reflections during ttswp?  Use block
 *        .    2-by-2 structure during matrix-matrix multiply? ====
 *
-         KACC22 = ILAENV( 16, 'DLAQR4', JBCMPZ, N, ILO, IHI, LWORK )
+         KACC22 = AB_ILAENV( 16, 'AB_DLAQR4', JBCMPZ, N, ILO, IHI, LWORK
+     $ )
          KACC22 = MAX( 0, KACC22 )
          KACC22 = MIN( 2, KACC22 )
 *
@@ -525,7 +528,8 @@
 *
 *           ==== Aggressive early deflation ====
 *
-            CALL DLAQR2( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH, ILOZ,
+            CALL AB_DLAQR2( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH, ILO
+     $Z,
      $                   IHIZ, Z, LDZ, LS, LD, WR, WI, H( KV, 1 ), LDH,
      $                   NHO, H( KV, KT ), LDH, NVE, H( KWV, 1 ), LDH,
      $                   WORK, LWORK )
@@ -548,7 +552,7 @@
      $          KTOP+1.GT.MIN( NMIN, NWMAX ) ) ) ) THEN
 *
 *              ==== NS = nominal number of simultaneous shifts.
-*              .    This may be lowered (slightly) if DLAQR2
+*              .    This may be lowered (slightly) if AB_DLAQR2
 *              .    did not provide that many shifts. ====
 *
                NS = MIN( NSMAX, NSR, MAX( 2, KBOT-KTOP ) )
@@ -558,7 +562,7 @@
 *              .    in a multiple of KEXSH iterations,
 *              .    then try exceptional shifts.
 *              .    Otherwise use shifts provided by
-*              .    DLAQR2 above or from the eigenvalues
+*              .    AB_DLAQR2 above or from the eigenvalues
 *              .    of a trailing principal submatrix. ====
 *
                IF( MOD( NDFL, KEXSH ).EQ.0 ) THEN
@@ -569,7 +573,8 @@
                      BB = SS
                      CC = WILK2*SS
                      DD = AA
-                     CALL DLANV2( AA, BB, CC, DD, WR( I-1 ), WI( I-1 ),
+                     CALL AB_DLANV2( AA, BB, CC, DD, WR( I-1 ), WI( I-1 
+     $),
      $                            WR( I ), WI( I ), CS, SN )
    30             CONTINUE
                   IF( KS.EQ.KTOP ) THEN
@@ -580,7 +585,7 @@
                   END IF
                ELSE
 *
-*                 ==== Got NS/2 or fewer shifts? Use DLAHQR
+*                 ==== Got NS/2 or fewer shifts? Use AB_DLAHQR
 *                 .    on a trailing principal submatrix to
 *                 .    get more. (Since NS.LE.NSMAX.LE.(N+6)/9,
 *                 .    there is enough space below the subdiagonal
@@ -589,9 +594,9 @@
                   IF( KBOT-KS+1.LE.NS / 2 ) THEN
                      KS = KBOT - NS + 1
                      KT = N - NS + 1
-                     CALL DLACPY( 'A', NS, NS, H( KS, KS ), LDH,
+                     CALL AB_DLACPY( 'A', NS, NS, H( KS, KS ), LDH,
      $                            H( KT, 1 ), LDH )
-                     CALL DLAHQR( .false., .false., NS, 1, NS,
+                     CALL AB_DLAHQR( .false., .false., NS, 1, NS,
      $                            H( KT, 1 ), LDH, WR( KS ), WI( KS ),
      $                            1, 1, ZDUM, 1, INF )
                      KS = KS + INF
@@ -605,7 +610,7 @@
                         CC = H( KBOT, KBOT-1 )
                         BB = H( KBOT-1, KBOT )
                         DD = H( KBOT, KBOT )
-                        CALL DLANV2( AA, BB, CC, DD, WR( KBOT-1 ),
+                        CALL AB_DLANV2( AA, BB, CC, DD, WR( KBOT-1 ),
      $                               WI( KBOT-1 ), WR( KBOT ),
      $                               WI( KBOT ), CS, SN )
                         KS = KBOT - 1
@@ -706,7 +711,7 @@
 *
 *              ==== Small-bulge multi-shift QR sweep ====
 *
-               CALL DLAQR5( WANTT, WANTZ, KACC22, N, KTOP, KBOT, NS,
+               CALL AB_DLAQR5( WANTT, WANTZ, KACC22, N, KTOP, KBOT, NS,
      $                      WR( KS ), WI( KS ), H, LDH, ILOZ, IHIZ, Z,
      $                      LDZ, WORK, 3, H( KU, 1 ), LDH, NVE,
      $                      H( KWV, 1 ), LDH, NHO, H( KU, KWH ), LDH )
@@ -734,6 +739,6 @@
 *
       WORK( 1 ) = DBLE( LWKOPT )
 *
-*     ==== End of DLAQR4 ====
+*     ==== End of AB_DLAQR4 ====
 *
       END

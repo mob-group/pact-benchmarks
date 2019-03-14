@@ -1,4 +1,4 @@
-*> \brief \b SSYTRS
+*> \brief \b AB_SSYTRS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SSYTRS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssytrs.f">
+*> Download AB_SSYTRS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SSYTRS.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssytrs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SSYTRS.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssytrs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SSYTRS.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SSYTRS( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+*       SUBROUTINE AB_SSYTRS( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,9 +35,9 @@
 *>
 *> \verbatim
 *>
-*> SSYTRS solves a system of linear equations A*X = B with a real
+*> AB_SSYTRS solves a system of linear equations A*X = B with a real
 *> symmetric matrix A using the factorization A = U*D*U**T or
-*> A = L*D*L**T computed by SSYTRF.
+*> A = L*D*L**T computed by AB_SSYTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -69,7 +69,7 @@
 *> \verbatim
 *>          A is REAL array, dimension (LDA,N)
 *>          The block diagonal matrix D and the multipliers used to
-*>          obtain the factor U or L as computed by SSYTRF.
+*>          obtain the factor U or L as computed by AB_SSYTRF.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -82,7 +82,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D
-*>          as determined by SSYTRF.
+*>          as determined by AB_SSYTRF.
 *> \endverbatim
 *>
 *> \param[in,out] B
@@ -118,7 +118,7 @@
 *> \ingroup realSYcomputational
 *
 *  =====================================================================
-      SUBROUTINE SSYTRS( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+      SUBROUTINE AB_SSYTRS( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -146,11 +146,12 @@
       REAL               AK, AKM1, AKM1K, BK, BKM1, DENOM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMV, SGER, SSCAL, SSWAP, XERBLA
+      EXTERNAL           AB_SGEMV, AB_SGER, AB_SSCAL, AB_SSWAP, AB_XERBL
+     $A
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -158,8 +159,8 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -171,7 +172,7 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SSYTRS', -INFO )
+         CALL AB_XERBLA( 'AB_SSYTRS', -INFO )
          RETURN
       END IF
 *
@@ -205,17 +206,17 @@
 *
             KP = IPIV( K )
             IF( KP.NE.K )
-     $         CALL SSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL AB_SSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
 *
 *           Multiply by inv(U(K)), where U(K) is the transformation
 *           stored in column K of A.
 *
-            CALL SGER( K-1, NRHS, -ONE, A( 1, K ), 1, B( K, 1 ), LDB,
+            CALL AB_SGER( K-1, NRHS, -ONE, A( 1, K ), 1, B( K, 1 ), LDB,
      $                 B( 1, 1 ), LDB )
 *
 *           Multiply by the inverse of the diagonal block.
 *
-            CALL SSCAL( NRHS, ONE / A( K, K ), B( K, 1 ), LDB )
+            CALL AB_SSCAL( NRHS, ONE / A( K, K ), B( K, 1 ), LDB )
             K = K - 1
          ELSE
 *
@@ -225,14 +226,14 @@
 *
             KP = -IPIV( K )
             IF( KP.NE.K-1 )
-     $         CALL SSWAP( NRHS, B( K-1, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL AB_SSWAP( NRHS, B( K-1, 1 ), LDB, B( KP, 1 ), LDB )
 *
 *           Multiply by inv(U(K)), where U(K) is the transformation
 *           stored in columns K-1 and K of A.
 *
-            CALL SGER( K-2, NRHS, -ONE, A( 1, K ), 1, B( K, 1 ), LDB,
+            CALL AB_SGER( K-2, NRHS, -ONE, A( 1, K ), 1, B( K, 1 ), LDB,
      $                 B( 1, 1 ), LDB )
-            CALL SGER( K-2, NRHS, -ONE, A( 1, K-1 ), 1, B( K-1, 1 ),
+            CALL AB_SGER( K-2, NRHS, -ONE, A( 1, K-1 ), 1, B( K-1, 1 ),
      $                 LDB, B( 1, 1 ), LDB )
 *
 *           Multiply by the inverse of the diagonal block.
@@ -273,14 +274,15 @@
 *           Multiply by inv(U**T(K)), where U(K) is the transformation
 *           stored in column K of A.
 *
-            CALL SGEMV( 'Transpose', K-1, NRHS, -ONE, B, LDB, A( 1, K ),
+            CALL AB_SGEMV( 'Transpose', K-1, NRHS, -ONE, B, LDB, A( 1, K
+     $ ),
      $                  1, ONE, B( K, 1 ), LDB )
 *
 *           Interchange rows K and IPIV(K).
 *
             KP = IPIV( K )
             IF( KP.NE.K )
-     $         CALL SSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL AB_SSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
             K = K + 1
          ELSE
 *
@@ -289,16 +291,17 @@
 *           Multiply by inv(U**T(K+1)), where U(K+1) is the transformation
 *           stored in columns K and K+1 of A.
 *
-            CALL SGEMV( 'Transpose', K-1, NRHS, -ONE, B, LDB, A( 1, K ),
+            CALL AB_SGEMV( 'Transpose', K-1, NRHS, -ONE, B, LDB, A( 1, K
+     $ ),
      $                  1, ONE, B( K, 1 ), LDB )
-            CALL SGEMV( 'Transpose', K-1, NRHS, -ONE, B, LDB,
+            CALL AB_SGEMV( 'Transpose', K-1, NRHS, -ONE, B, LDB,
      $                  A( 1, K+1 ), 1, ONE, B( K+1, 1 ), LDB )
 *
 *           Interchange rows K and -IPIV(K).
 *
             KP = -IPIV( K )
             IF( KP.NE.K )
-     $         CALL SSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL AB_SSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
             K = K + 2
          END IF
 *
@@ -330,18 +333,18 @@
 *
             KP = IPIV( K )
             IF( KP.NE.K )
-     $         CALL SSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL AB_SSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
 *
 *           Multiply by inv(L(K)), where L(K) is the transformation
 *           stored in column K of A.
 *
             IF( K.LT.N )
-     $         CALL SGER( N-K, NRHS, -ONE, A( K+1, K ), 1, B( K, 1 ),
+     $         CALL AB_SGER( N-K, NRHS, -ONE, A( K+1, K ), 1, B( K, 1 ),
      $                    LDB, B( K+1, 1 ), LDB )
 *
 *           Multiply by the inverse of the diagonal block.
 *
-            CALL SSCAL( NRHS, ONE / A( K, K ), B( K, 1 ), LDB )
+            CALL AB_SSCAL( NRHS, ONE / A( K, K ), B( K, 1 ), LDB )
             K = K + 1
          ELSE
 *
@@ -351,15 +354,16 @@
 *
             KP = -IPIV( K )
             IF( KP.NE.K+1 )
-     $         CALL SSWAP( NRHS, B( K+1, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL AB_SSWAP( NRHS, B( K+1, 1 ), LDB, B( KP, 1 ), LDB )
 *
 *           Multiply by inv(L(K)), where L(K) is the transformation
 *           stored in columns K and K+1 of A.
 *
             IF( K.LT.N-1 ) THEN
-               CALL SGER( N-K-1, NRHS, -ONE, A( K+2, K ), 1, B( K, 1 ),
+               CALL AB_SGER( N-K-1, NRHS, -ONE, A( K+2, K ), 1, B( K, 1 
+     $),
      $                    LDB, B( K+2, 1 ), LDB )
-               CALL SGER( N-K-1, NRHS, -ONE, A( K+2, K+1 ), 1,
+               CALL AB_SGER( N-K-1, NRHS, -ONE, A( K+2, K+1 ), 1,
      $                    B( K+1, 1 ), LDB, B( K+2, 1 ), LDB )
             END IF
 *
@@ -402,14 +406,14 @@
 *           stored in column K of A.
 *
             IF( K.LT.N )
-     $         CALL SGEMV( 'Transpose', N-K, NRHS, -ONE, B( K+1, 1 ),
+     $         CALL AB_SGEMV( 'Transpose', N-K, NRHS, -ONE, B( K+1, 1 ),
      $                     LDB, A( K+1, K ), 1, ONE, B( K, 1 ), LDB )
 *
 *           Interchange rows K and IPIV(K).
 *
             KP = IPIV( K )
             IF( KP.NE.K )
-     $         CALL SSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL AB_SSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
             K = K - 1
          ELSE
 *
@@ -419,9 +423,9 @@
 *           stored in columns K-1 and K of A.
 *
             IF( K.LT.N ) THEN
-               CALL SGEMV( 'Transpose', N-K, NRHS, -ONE, B( K+1, 1 ),
+               CALL AB_SGEMV( 'Transpose', N-K, NRHS, -ONE, B( K+1, 1 ),
      $                     LDB, A( K+1, K ), 1, ONE, B( K, 1 ), LDB )
-               CALL SGEMV( 'Transpose', N-K, NRHS, -ONE, B( K+1, 1 ),
+               CALL AB_SGEMV( 'Transpose', N-K, NRHS, -ONE, B( K+1, 1 ),
      $                     LDB, A( K+1, K-1 ), 1, ONE, B( K-1, 1 ),
      $                     LDB )
             END IF
@@ -430,7 +434,7 @@
 *
             KP = -IPIV( K )
             IF( KP.NE.K )
-     $         CALL SSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $         CALL AB_SSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
             K = K - 2
          END IF
 *
@@ -440,6 +444,6 @@
 *
       RETURN
 *
-*     End of SSYTRS
+*     End of AB_SSYTRS
 *
       END

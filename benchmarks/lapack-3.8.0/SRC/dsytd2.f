@@ -1,4 +1,4 @@
-*> \brief \b DSYTD2 reduces a symmetric matrix to real symmetric tridiagonal form by an orthogonal similarity transformation (unblocked algorithm).
+*> \brief \b AB_DSYTD2 reduces a symmetric matrix to real symmetric tridiagonal form by an orthogonal similarity transformation (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DSYTD2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsytd2.f">
+*> Download AB_DSYTD2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DSYTD2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsytd2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DSYTD2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsytd2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DSYTD2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DSYTD2( UPLO, N, A, LDA, D, E, TAU, INFO )
+*       SUBROUTINE AB_DSYTD2( UPLO, N, A, LDA, D, E, TAU, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> DSYTD2 reduces a real symmetric matrix A to symmetric tridiagonal
+*> AB_DSYTD2 reduces a real symmetric matrix A to symmetric tridiagonal
 *> form T by an orthogonal similarity transformation: Q**T * A * Q = T.
 *> \endverbatim
 *
@@ -171,7 +171,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DSYTD2( UPLO, N, A, LDA, D, E, TAU, INFO )
+      SUBROUTINE AB_DSYTD2( UPLO, N, A, LDA, D, E, TAU, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -199,12 +199,13 @@
       DOUBLE PRECISION   ALPHA, TAUI
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DLARFG, DSYMV, DSYR2, XERBLA
+      EXTERNAL           AB_DAXPY, AB_DLARFG, AB_DSYMV, AB_DSYR2, AB_XER
+     $BLA
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DDOT
-      EXTERNAL           LSAME, DDOT
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DDOT
+      EXTERNAL           AB_LSAME, AB_DDOT
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -214,8 +215,8 @@
 *     Test the input parameters
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -223,7 +224,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DSYTD2', -INFO )
+         CALL AB_XERBLA( 'AB_DSYTD2', -INFO )
          RETURN
       END IF
 *
@@ -241,7 +242,7 @@
 *           Generate elementary reflector H(i) = I - tau * v * v**T
 *           to annihilate A(1:i-1,i+1)
 *
-            CALL DLARFG( I, A( I, I+1 ), A( 1, I+1 ), 1, TAUI )
+            CALL AB_DLARFG( I, A( I, I+1 ), A( 1, I+1 ), 1, TAUI )
             E( I ) = A( I, I+1 )
 *
             IF( TAUI.NE.ZERO ) THEN
@@ -252,18 +253,19 @@
 *
 *              Compute  x := tau * A * v  storing x in TAU(1:i)
 *
-               CALL DSYMV( UPLO, I, TAUI, A, LDA, A( 1, I+1 ), 1, ZERO,
+               CALL AB_DSYMV( UPLO, I, TAUI, A, LDA, A( 1, I+1 ), 1, ZER
+     $O,
      $                     TAU, 1 )
 *
 *              Compute  w := x - 1/2 * tau * (x**T * v) * v
 *
-               ALPHA = -HALF*TAUI*DDOT( I, TAU, 1, A( 1, I+1 ), 1 )
-               CALL DAXPY( I, ALPHA, A( 1, I+1 ), 1, TAU, 1 )
+               ALPHA = -HALF*TAUI*AB_DDOT( I, TAU, 1, A( 1, I+1 ), 1 )
+               CALL AB_DAXPY( I, ALPHA, A( 1, I+1 ), 1, TAU, 1 )
 *
 *              Apply the transformation as a rank-2 update:
 *                 A := A - v * w**T - w * v**T
 *
-               CALL DSYR2( UPLO, I, -ONE, A( 1, I+1 ), 1, TAU, 1, A,
+               CALL AB_DSYR2( UPLO, I, -ONE, A( 1, I+1 ), 1, TAU, 1, A,
      $                     LDA )
 *
                A( I, I+1 ) = E( I )
@@ -281,7 +283,7 @@
 *           Generate elementary reflector H(i) = I - tau * v * v**T
 *           to annihilate A(i+2:n,i)
 *
-            CALL DLARFG( N-I, A( I+1, I ), A( MIN( I+2, N ), I ), 1,
+            CALL AB_DLARFG( N-I, A( I+1, I ), A( MIN( I+2, N ), I ), 1,
      $                   TAUI )
             E( I ) = A( I+1, I )
 *
@@ -293,19 +295,21 @@
 *
 *              Compute  x := tau * A * v  storing y in TAU(i:n-1)
 *
-               CALL DSYMV( UPLO, N-I, TAUI, A( I+1, I+1 ), LDA,
+               CALL AB_DSYMV( UPLO, N-I, TAUI, A( I+1, I+1 ), LDA,
      $                     A( I+1, I ), 1, ZERO, TAU( I ), 1 )
 *
 *              Compute  w := x - 1/2 * tau * (x**T * v) * v
 *
-               ALPHA = -HALF*TAUI*DDOT( N-I, TAU( I ), 1, A( I+1, I ),
+               ALPHA = -HALF*TAUI*AB_DDOT( N-I, TAU( I ), 1, A( I+1, I )
+     $,
      $                 1 )
-               CALL DAXPY( N-I, ALPHA, A( I+1, I ), 1, TAU( I ), 1 )
+               CALL AB_DAXPY( N-I, ALPHA, A( I+1, I ), 1, TAU( I ), 1 )
 *
 *              Apply the transformation as a rank-2 update:
 *                 A := A - v * w**T - w * v**T
 *
-               CALL DSYR2( UPLO, N-I, -ONE, A( I+1, I ), 1, TAU( I ), 1,
+               CALL AB_DSYR2( UPLO, N-I, -ONE, A( I+1, I ), 1, TAU( I ),
+     $ 1,
      $                     A( I+1, I+1 ), LDA )
 *
                A( I+1, I ) = E( I )
@@ -318,6 +322,6 @@
 *
       RETURN
 *
-*     End of DSYTD2
+*     End of AB_DSYTD2
 *
       END

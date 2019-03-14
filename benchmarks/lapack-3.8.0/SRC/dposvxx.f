@@ -1,4 +1,4 @@
-*> \brief <b> DPOSVXX computes the solution to system of linear equations A * X = B for PO matrices</b>
+*> \brief <b> AB_DPOSVXX computes the solution to system of linear equations A * X = B for PO matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DPOSVXX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dposvxx.f">
+*> Download AB_DPOSVXX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DPOSVxx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dposvxx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DPOSVxx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dposvxx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DPOSVxx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DPOSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, EQUED,
+*       SUBROUTINE AB_DPOSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, EQUED,
 *                           S, B, LDB, X, LDX, RCOND, RPVGRW, BERR,
 *                           N_ERR_BNDS, ERR_BNDS_NORM, ERR_BNDS_COMP,
 *                           NPARAMS, PARAMS, WORK, IWORK, INFO )
@@ -44,25 +44,25 @@
 *>
 *> \verbatim
 *>
-*>    DPOSVXX uses the Cholesky factorization A = U**T*U or A = L*L**T
+*>    AB_DPOSVXX uses the Cholesky factorization A = U**T*U or A = L*L**T
 *>    to compute the solution to a double precision system of linear equations
 *>    A * X = B, where A is an N-by-N symmetric positive definite matrix
 *>    and X and B are N-by-NRHS matrices.
 *>
 *>    If requested, both normwise and maximum componentwise error bounds
-*>    are returned. DPOSVXX will return a solution with a tiny
+*>    are returned. AB_DPOSVXX will return a solution with a tiny
 *>    guaranteed error (O(eps) where eps is the working machine
 *>    precision) unless the matrix is very ill-conditioned, in which
 *>    case a warning is returned. Relevant condition numbers also are
 *>    calculated and returned.
 *>
-*>    DPOSVXX accepts user-provided factorizations and equilibration
+*>    AB_DPOSVXX accepts user-provided factorizations and equilibration
 *>    factors; see the definitions of the FACT and EQUED options.
 *>    Solving with refinement and using a factorization from a previous
-*>    DPOSVXX call will also produce a solution with either O(eps)
+*>    AB_DPOSVXX call will also produce a solution with either O(eps)
 *>    errors or warnings, but we cannot make that claim for general
 *>    user-provided factorizations and equilibration factors if they
-*>    differ from what DPOSVXX would itself produce.
+*>    differ from what AB_DPOSVXX would itself produce.
 *> \endverbatim
 *
 *> \par Description:
@@ -489,7 +489,8 @@
 *> \ingroup doublePOsolve
 *
 *  =====================================================================
-      SUBROUTINE DPOSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, EQUED,
+      SUBROUTINE AB_DPOSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, EQUE
+     $D,
      $                    S, B, LDB, X, LDX, RCOND, RPVGRW, BERR,
      $                    N_ERR_BNDS, ERR_BNDS_NORM, ERR_BNDS_COMP,
      $                    NPARAMS, PARAMS, WORK, IWORK, INFO )
@@ -535,13 +536,14 @@
      $                   SCOND, SMLNUM
 *     ..
 *     .. External Functions ..
-      EXTERNAL           LSAME, DLAMCH, DLA_PORPVGRW
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, DLA_PORPVGRW
+      EXTERNAL           AB_LSAME, DLAMCH, AB_DLA_PORPVGRW
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   DLAMCH, AB_DLA_PORPVGRW
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DPOEQUB, DPOTRF, DPOTRS, DLACPY, DLAQSY,
-     $                   XERBLA, DLASCL2, DPORFSX
+      EXTERNAL           AB_DPOEQUB, AB_DPOTRF, AB_DPOTRS, AB_DLACPY, AB
+     $_DLAQSY,
+     $                   AB_XERBLA, AB_DLASCL2, AB_DPORFSX
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -549,30 +551,30 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-      NOFACT = LSAME( FACT, 'N' )
-      EQUIL = LSAME( FACT, 'E' )
+      NOFACT = AB_LSAME( FACT, 'N' )
+      EQUIL = AB_LSAME( FACT, 'E' )
       SMLNUM = DLAMCH( 'Safe minimum' )
       BIGNUM = ONE / SMLNUM
       IF( NOFACT .OR. EQUIL ) THEN
          EQUED = 'N'
          RCEQU = .FALSE.
       ELSE
-         RCEQU = LSAME( EQUED, 'Y' )
+         RCEQU = AB_LSAME( EQUED, 'Y' )
       ENDIF
 *
 *     Default is failure.  If an input parameter is wrong or
 *     factorization fails, make everything look horrible.  Only the
-*     pivot growth is set here, the rest is initialized in DPORFSX.
+*     pivot growth is set here, the rest is initialized in AB_DPORFSX.
 *
       RPVGRW = ZERO
 *
-*     Test the input parameters.  PARAMS is not tested until DPORFSX.
+*     Test the input parameters.  PARAMS is not tested until AB_DPORFSX.
 *
       IF( .NOT.NOFACT .AND. .NOT.EQUIL .AND. .NOT.
-     $     LSAME( FACT, 'F' ) ) THEN
+     $     AB_LSAME( FACT, 'F' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME( UPLO, 'U' ) .AND.
-     $         .NOT.LSAME( UPLO, 'L' ) ) THEN
+      ELSE IF( .NOT.AB_LSAME( UPLO, 'U' ) .AND.
+     $         .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -582,8 +584,8 @@
          INFO = -6
       ELSE IF( LDAF.LT.MAX( 1, N ) ) THEN
          INFO = -8
-      ELSE IF( LSAME( FACT, 'F' ) .AND. .NOT.
-     $        ( RCEQU .OR. LSAME( EQUED, 'N' ) ) ) THEN
+      ELSE IF( AB_LSAME( FACT, 'F' ) .AND. .NOT.
+     $        ( RCEQU .OR. AB_LSAME( EQUED, 'N' ) ) ) THEN
          INFO = -9
       ELSE
          IF ( RCEQU ) THEN
@@ -611,7 +613,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DPOSVXX', -INFO )
+         CALL AB_XERBLA( 'AB_DPOSVXX', -INFO )
          RETURN
       END IF
 *
@@ -619,26 +621,26 @@
 *
 *     Compute row and column scalings to equilibrate the matrix A.
 *
-         CALL DPOEQUB( N, A, LDA, S, SCOND, AMAX, INFEQU )
+         CALL AB_DPOEQUB( N, A, LDA, S, SCOND, AMAX, INFEQU )
          IF( INFEQU.EQ.0 ) THEN
 *
 *     Equilibrate the matrix.
 *
-            CALL DLAQSY( UPLO, N, A, LDA, S, SCOND, AMAX, EQUED )
-            RCEQU = LSAME( EQUED, 'Y' )
+            CALL AB_DLAQSY( UPLO, N, A, LDA, S, SCOND, AMAX, EQUED )
+            RCEQU = AB_LSAME( EQUED, 'Y' )
          END IF
       END IF
 *
 *     Scale the right-hand side.
 *
-      IF( RCEQU ) CALL DLASCL2( N, NRHS, S, B, LDB )
+      IF( RCEQU ) CALL AB_DLASCL2( N, NRHS, S, B, LDB )
 *
       IF( NOFACT .OR. EQUIL ) THEN
 *
 *        Compute the Cholesky factorization of A.
 *
-         CALL DLACPY( UPLO, N, N, A, LDA, AF, LDAF )
-         CALL DPOTRF( UPLO, N, AF, LDAF, INFO )
+         CALL AB_DLACPY( UPLO, N, N, A, LDA, AF, LDAF )
+         CALL AB_DPOTRF( UPLO, N, AF, LDAF, INFO )
 *
 *        Return if INFO is non-zero.
 *
@@ -648,24 +650,25 @@
 *           Compute the reciprocal pivot growth factor of the
 *           leading rank-deficient INFO columns of A.
 *
-            RPVGRW = DLA_PORPVGRW( UPLO, INFO, A, LDA, AF, LDAF, WORK )
+            RPVGRW = AB_DLA_PORPVGRW( UPLO, INFO, A, LDA, AF, LDAF, WORK
+     $ )
             RETURN
          ENDIF
       END IF
 *
 *     Compute the reciprocal growth factor RPVGRW.
 *
-      RPVGRW = DLA_PORPVGRW( UPLO, N, A, LDA, AF, LDAF, WORK )
+      RPVGRW = AB_DLA_PORPVGRW( UPLO, N, A, LDA, AF, LDAF, WORK )
 *
 *     Compute the solution matrix X.
 *
-      CALL DLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
-      CALL DPOTRS( UPLO, N, NRHS, AF, LDAF, X, LDX, INFO )
+      CALL AB_DLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
+      CALL AB_DPOTRS( UPLO, N, NRHS, AF, LDAF, X, LDX, INFO )
 *
 *     Use iterative refinement to improve the computed solution and
 *     compute error bounds and backward error estimates for it.
 *
-      CALL DPORFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF,
+      CALL AB_DPORFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF,
      $     S, B, LDB, X, LDX, RCOND, BERR, N_ERR_BNDS, ERR_BNDS_NORM,
      $     ERR_BNDS_COMP, NPARAMS, PARAMS, WORK, IWORK, INFO )
 
@@ -673,11 +676,11 @@
 *     Scale solutions.
 *
       IF ( RCEQU ) THEN
-         CALL DLASCL2 ( N, NRHS, S, X, LDX )
+         CALL AB_DLASCL2 ( N, NRHS, S, X, LDX )
       END IF
 *
       RETURN
 *
-*     End of DPOSVXX
+*     End of AB_DPOSVXX
 *
       END

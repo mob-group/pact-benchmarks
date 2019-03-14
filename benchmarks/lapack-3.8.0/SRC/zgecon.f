@@ -1,4 +1,4 @@
-*> \brief \b ZGECON
+*> \brief \b AB_ZGECON
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZGECON + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgecon.f">
+*> Download AB_ZGECON + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZGECON.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgecon.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZGECON.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgecon.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZGECON.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZGECON( NORM, N, A, LDA, ANORM, RCOND, WORK, RWORK,
+*       SUBROUTINE AB_ZGECON( NORM, N, A, LDA, ANORM, RCOND, WORK, RWORK,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,9 +37,9 @@
 *>
 *> \verbatim
 *>
-*> ZGECON estimates the reciprocal of the condition number of a general
+*> AB_ZGECON estimates the reciprocal of the condition number of a general
 *> complex matrix A, in either the 1-norm or the infinity-norm, using
-*> the LU factorization computed by ZGETRF.
+*> the LU factorization computed by AB_ZGETRF.
 *>
 *> An estimate is obtained for norm(inv(A)), and the reciprocal of the
 *> condition number is computed as
@@ -68,7 +68,7 @@
 *> \verbatim
 *>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          The factors L and U from the factorization A = P*L*U
-*>          as computed by ZGETRF.
+*>          as computed by AB_ZGETRF.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -121,7 +121,7 @@
 *> \ingroup complex16GEcomputational
 *
 *  =====================================================================
-      SUBROUTINE ZGECON( NORM, N, A, LDA, ANORM, RCOND, WORK, RWORK,
+      SUBROUTINE AB_ZGECON( NORM, N, A, LDA, ANORM, RCOND, WORK, RWORK,
      $                   INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -156,13 +156,13 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            IZAMAX
+      LOGICAL            AB_LSAME
+      INTEGER            AB_IZAMAX
       DOUBLE PRECISION   DLAMCH
-      EXTERNAL           LSAME, IZAMAX, DLAMCH
+      EXTERNAL           AB_LSAME, AB_IZAMAX, DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZDRSCL, ZLACN2, ZLATRS
+      EXTERNAL           AB_XERBLA, AB_ZDRSCL, AB_ZLACN2, AB_ZLATRS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX
@@ -178,8 +178,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      ONENRM = NORM.EQ.'1' .OR. LSAME( NORM, 'O' )
-      IF( .NOT.ONENRM .AND. .NOT.LSAME( NORM, 'I' ) ) THEN
+      ONENRM = NORM.EQ.'1' .OR. AB_LSAME( NORM, 'O' )
+      IF( .NOT.ONENRM .AND. .NOT.AB_LSAME( NORM, 'I' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -189,7 +189,7 @@
          INFO = -5
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZGECON', -INFO )
+         CALL AB_XERBLA( 'AB_ZGECON', -INFO )
          RETURN
       END IF
 *
@@ -216,30 +216,33 @@
       END IF
       KASE = 0
    10 CONTINUE
-      CALL ZLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
+      CALL AB_ZLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
       IF( KASE.NE.0 ) THEN
          IF( KASE.EQ.KASE1 ) THEN
 *
 *           Multiply by inv(L).
 *
-            CALL ZLATRS( 'Lower', 'No transpose', 'Unit', NORMIN, N, A,
+            CALL AB_ZLATRS( 'Lower', 'No transpose', 'Unit', NORMIN, N, 
+     $A,
      $                   LDA, WORK, SL, RWORK, INFO )
 *
 *           Multiply by inv(U).
 *
-            CALL ZLATRS( 'Upper', 'No transpose', 'Non-unit', NORMIN, N,
+            CALL AB_ZLATRS( 'Upper', 'No transpose', 'Non-unit', NORMIN,
+     $ N,
      $                   A, LDA, WORK, SU, RWORK( N+1 ), INFO )
          ELSE
 *
 *           Multiply by inv(U**H).
 *
-            CALL ZLATRS( 'Upper', 'Conjugate transpose', 'Non-unit',
+            CALL AB_ZLATRS( 'Upper', 'Conjugate transpose', 'Non-unit',
      $                   NORMIN, N, A, LDA, WORK, SU, RWORK( N+1 ),
      $                   INFO )
 *
 *           Multiply by inv(L**H).
 *
-            CALL ZLATRS( 'Lower', 'Conjugate transpose', 'Unit', NORMIN,
+            CALL AB_ZLATRS( 'Lower', 'Conjugate transpose', 'Unit', NORM
+     $IN,
      $                   N, A, LDA, WORK, SL, RWORK, INFO )
          END IF
 *
@@ -248,10 +251,10 @@
          SCALE = SL*SU
          NORMIN = 'Y'
          IF( SCALE.NE.ONE ) THEN
-            IX = IZAMAX( N, WORK, 1 )
+            IX = AB_IZAMAX( N, WORK, 1 )
             IF( SCALE.LT.CABS1( WORK( IX ) )*SMLNUM .OR. SCALE.EQ.ZERO )
      $         GO TO 20
-            CALL ZDRSCL( N, SCALE, WORK, 1 )
+            CALL AB_ZDRSCL( N, SCALE, WORK, 1 )
          END IF
          GO TO 10
       END IF
@@ -264,6 +267,6 @@
    20 CONTINUE
       RETURN
 *
-*     End of ZGECON
+*     End of AB_ZGECON
 *
       END

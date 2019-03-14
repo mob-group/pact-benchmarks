@@ -1,4 +1,4 @@
-*> \brief \b SGEEQU
+*> \brief \b AB_SGEEQU
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SGEEQU + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgeequ.f">
+*> Download AB_SGEEQU + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SGEEQU.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgeequ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SGEEQU.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgeequ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SGEEQU.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SGEEQU( M, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
+*       SUBROUTINE AB_SGEEQU( M, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> SGEEQU computes row and column scalings intended to equilibrate an
+*> AB_SGEEQU computes row and column scalings intended to equilibrate an
 *> M-by-N matrix A and reduce its condition number.  R returns the row
 *> scale factors and C the column scale factors, chosen to try to make
 *> the largest element in each row and column of the matrix B with
@@ -136,7 +136,7 @@
 *> \ingroup realGEcomputational
 *
 *  =====================================================================
-      SUBROUTINE SGEEQU( M, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
+      SUBROUTINE AB_SGEEQU( M, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
      $                   INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -167,7 +167,7 @@
       EXTERNAL           SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA
+      EXTERNAL           AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -185,7 +185,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SGEEQU', -INFO )
+         CALL AB_XERBLA( 'AB_SGEEQU', -INFO )
          RETURN
       END IF
 *
@@ -299,6 +299,6 @@
 *
       RETURN
 *
-*     End of SGEEQU
+*     End of AB_SGEEQU
 *
       END

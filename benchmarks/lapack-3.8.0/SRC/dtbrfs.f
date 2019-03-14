@@ -1,4 +1,4 @@
-*> \brief \b DTBRFS
+*> \brief \b AB_DTBRFS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DTBRFS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dtbrfs.f">
+*> Download AB_DTBRFS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DTBRFS.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dtbrfs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DTBRFS.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtbrfs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DTBRFS.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DTBRFS( UPLO, TRANS, DIAG, N, KD, NRHS, AB, LDAB, B,
+*       SUBROUTINE AB_DTBRFS( UPLO, TRANS, DIAG, N, KD, NRHS, AB, LDAB, B,
 *                          LDB, X, LDX, FERR, BERR, WORK, IWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,12 +37,12 @@
 *>
 *> \verbatim
 *>
-*> DTBRFS provides error bounds and backward error estimates for the
+*> AB_DTBRFS provides error bounds and backward error estimates for the
 *> solution to a system of linear equations with a triangular band
 *> coefficient matrix.
 *>
-*> The solution matrix X must be computed by DTBTRS or some other
-*> means before entering this routine.  DTBRFS does not do iterative
+*> The solution matrix X must be computed by AB_DTBTRS or some other
+*> means before entering this routine.  AB_DTBRFS does not do iterative
 *> refinement because doing so cannot improve the backward error.
 *> \endverbatim
 *
@@ -185,7 +185,7 @@
 *> \ingroup doubleOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE DTBRFS( UPLO, TRANS, DIAG, N, KD, NRHS, AB, LDAB, B,
+      SUBROUTINE AB_DTBRFS( UPLO, TRANS, DIAG, N, KD, NRHS, AB, LDAB, B,
      $                   LDB, X, LDX, FERR, BERR, WORK, IWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -221,31 +221,32 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DCOPY, DLACN2, DTBMV, DTBSV, XERBLA
+      EXTERNAL           AB_DAXPY, AB_DCOPY, AB_DLACN2, AB_DTBMV, AB_DTB
+     $SV, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
+      LOGICAL            AB_LSAME
       DOUBLE PRECISION   DLAMCH
-      EXTERNAL           LSAME, DLAMCH
+      EXTERNAL           AB_LSAME, DLAMCH
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      NOTRAN = LSAME( TRANS, 'N' )
-      NOUNIT = LSAME( DIAG, 'N' )
+      UPPER = AB_LSAME( UPLO, 'U' )
+      NOTRAN = AB_LSAME( TRANS, 'N' )
+      NOUNIT = AB_LSAME( DIAG, 'N' )
 *
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) .AND. .NOT.
-     $         LSAME( TRANS, 'C' ) ) THEN
+      ELSE IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) .AND. .NOT.
+     $         AB_LSAME( TRANS, 'C' ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.NOUNIT .AND. .NOT.LSAME( DIAG, 'U' ) ) THEN
+      ELSE IF( .NOT.NOUNIT .AND. .NOT.AB_LSAME( DIAG, 'U' ) ) THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
@@ -261,7 +262,7 @@
          INFO = -12
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DTBRFS', -INFO )
+         CALL AB_XERBLA( 'AB_DTBRFS', -INFO )
          RETURN
       END IF
 *
@@ -296,10 +297,10 @@
 *        Compute residual R = B - op(A) * X,
 *        where op(A) = A or A**T, depending on TRANS.
 *
-         CALL DCOPY( N, X( 1, J ), 1, WORK( N+1 ), 1 )
-         CALL DTBMV( UPLO, TRANS, DIAG, N, KD, AB, LDAB, WORK( N+1 ),
+         CALL AB_DCOPY( N, X( 1, J ), 1, WORK( N+1 ), 1 )
+         CALL AB_DTBMV( UPLO, TRANS, DIAG, N, KD, AB, LDAB, WORK( N+1 ),
      $               1 )
-         CALL DAXPY( N, -ONE, B( 1, J ), 1, WORK( N+1 ), 1 )
+         CALL AB_DAXPY( N, -ONE, B( 1, J ), 1, WORK( N+1 ), 1 )
 *
 *        Compute componentwise relative backward error from formula
 *
@@ -428,7 +429,7 @@
 *        is incremented by SAFE1 if the i-th component of
 *        abs(op(A))*abs(X) + abs(B) is less than SAFE2.
 *
-*        Use DLACN2 to estimate the infinity-norm of the matrix
+*        Use AB_DLACN2 to estimate the infinity-norm of the matrix
 *           inv(op(A)) * diag(W),
 *        where W = abs(R) + NZ*EPS*( abs(op(A))*abs(X)+abs(B) )))
 *
@@ -442,14 +443,15 @@
 *
          KASE = 0
   210    CONTINUE
-         CALL DLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK, FERR( J ),
+         CALL AB_DLACN2( N, WORK( 2*N+1 ), WORK( N+1 ), IWORK, FERR( J )
+     $,
      $                KASE, ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN
 *
 *              Multiply by diag(W)*inv(op(A)**T).
 *
-               CALL DTBSV( UPLO, TRANST, DIAG, N, KD, AB, LDAB,
+               CALL AB_DTBSV( UPLO, TRANST, DIAG, N, KD, AB, LDAB,
      $                     WORK( N+1 ), 1 )
                DO 220 I = 1, N
                   WORK( N+I ) = WORK( I )*WORK( N+I )
@@ -461,7 +463,7 @@
                DO 230 I = 1, N
                   WORK( N+I ) = WORK( I )*WORK( N+I )
   230          CONTINUE
-               CALL DTBSV( UPLO, TRANS, DIAG, N, KD, AB, LDAB,
+               CALL AB_DTBSV( UPLO, TRANS, DIAG, N, KD, AB, LDAB,
      $                     WORK( N+1 ), 1 )
             END IF
             GO TO 210
@@ -480,6 +482,6 @@
 *
       RETURN
 *
-*     End of DTBRFS
+*     End of AB_DTBRFS
 *
       END

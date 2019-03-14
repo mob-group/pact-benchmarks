@@ -1,4 +1,4 @@
-*> \brief <b> DSYEV computes the eigenvalues and, optionally, the left and/or right eigenvectors for SY matrices</b>
+*> \brief <b> AB_DSYEV computes the eigenvalues and, optionally, the left and/or right eigenvectors for SY matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DSYEV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsyev.f">
+*> Download AB_DSYEV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DSYEV.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsyev.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DSYEV.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsyev.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DSYEV.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DSYEV( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, INFO )
+*       SUBROUTINE AB_DSYEV( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          JOBZ, UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> DSYEV computes all eigenvalues and, optionally, eigenvectors of a
+*> AB_DSYEV computes all eigenvalues and, optionally, eigenvectors of a
 *> real symmetric matrix A.
 *> \endverbatim
 *
@@ -99,12 +99,12 @@
 *>          LWORK is INTEGER
 *>          The length of the array WORK.  LWORK >= max(1,3*N-1).
 *>          For optimal efficiency, LWORK >= (NB+2)*N,
-*>          where NB is the blocksize for DSYTRD returned by ILAENV.
+*>          where NB is the blocksize for AB_DSYTRD returned by AB_ILAENV.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -130,7 +130,7 @@
 *> \ingroup doubleSYeigen
 *
 *  =====================================================================
-      SUBROUTINE DSYEV( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, INFO )
+      SUBROUTINE AB_DSYEV( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -159,14 +159,15 @@
      $                   SMLNUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      DOUBLE PRECISION   DLAMCH, DLANSY
-      EXTERNAL           LSAME, ILAENV, DLAMCH, DLANSY
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      DOUBLE PRECISION   DLAMCH, AB_DLANSY
+      EXTERNAL           AB_LSAME, AB_ILAENV, DLAMCH, AB_DLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLASCL, DORGTR, DSCAL, DSTEQR, DSTERF, DSYTRD,
-     $                   XERBLA
+      EXTERNAL           AB_DLASCL, AB_DORGTR, AB_DSCAL, AB_DSTEQR, AB_D
+     $STERF, AB_DSYTRD,
+     $                   AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT
@@ -175,14 +176,14 @@
 *
 *     Test the input parameters.
 *
-      WANTZ = LSAME( JOBZ, 'V' )
-      LOWER = LSAME( UPLO, 'L' )
+      WANTZ = AB_LSAME( JOBZ, 'V' )
+      LOWER = AB_LSAME( UPLO, 'L' )
       LQUERY = ( LWORK.EQ.-1 )
 *
       INFO = 0
-      IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
+      IF( .NOT.( WANTZ .OR. AB_LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.( LOWER .OR. LSAME( UPLO, 'U' ) ) ) THEN
+      ELSE IF( .NOT.( LOWER .OR. AB_LSAME( UPLO, 'U' ) ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -191,7 +192,7 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         NB = ILAENV( 1, 'DSYTRD', UPLO, N, -1, -1, -1 )
+         NB = AB_ILAENV( 1, 'AB_DSYTRD', UPLO, N, -1, -1, -1 )
          LWKOPT = MAX( 1, ( NB+2 )*N )
          WORK( 1 ) = LWKOPT
 *
@@ -200,7 +201,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DSYEV ', -INFO )
+         CALL AB_XERBLA( 'AB_DSYEV ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -231,7 +232,7 @@
 *
 *     Scale matrix to allowable range, if necessary.
 *
-      ANRM = DLANSY( 'M', UPLO, N, A, LDA, WORK )
+      ANRM = AB_DLANSY( 'M', UPLO, N, A, LDA, WORK )
       ISCALE = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.RMIN ) THEN
          ISCALE = 1
@@ -241,26 +242,28 @@
          SIGMA = RMAX / ANRM
       END IF
       IF( ISCALE.EQ.1 )
-     $   CALL DLASCL( UPLO, 0, 0, ONE, SIGMA, N, N, A, LDA, INFO )
+     $   CALL AB_DLASCL( UPLO, 0, 0, ONE, SIGMA, N, N, A, LDA, INFO )
 *
-*     Call DSYTRD to reduce symmetric matrix to tridiagonal form.
+*     Call AB_DSYTRD to reduce symmetric matrix to tridiagonal form.
 *
       INDE = 1
       INDTAU = INDE + N
       INDWRK = INDTAU + N
       LLWORK = LWORK - INDWRK + 1
-      CALL DSYTRD( UPLO, N, A, LDA, W, WORK( INDE ), WORK( INDTAU ),
+      CALL AB_DSYTRD( UPLO, N, A, LDA, W, WORK( INDE ), WORK( INDTAU ),
      $             WORK( INDWRK ), LLWORK, IINFO )
 *
-*     For eigenvalues only, call DSTERF.  For eigenvectors, first call
-*     DORGTR to generate the orthogonal matrix, then call DSTEQR.
+*     For eigenvalues only, call AB_DSTERF.  For eigenvectors, first call
+*     AB_DORGTR to generate the orthogonal matrix, then call AB_DSTEQR.
 *
       IF( .NOT.WANTZ ) THEN
-         CALL DSTERF( N, W, WORK( INDE ), INFO )
+         CALL AB_DSTERF( N, W, WORK( INDE ), INFO )
       ELSE
-         CALL DORGTR( UPLO, N, A, LDA, WORK( INDTAU ), WORK( INDWRK ),
+         CALL AB_DORGTR( UPLO, N, A, LDA, WORK( INDTAU ), WORK( INDWRK )
+     $,
      $                LLWORK, IINFO )
-         CALL DSTEQR( JOBZ, N, W, WORK( INDE ), A, LDA, WORK( INDTAU ),
+         CALL AB_DSTEQR( JOBZ, N, W, WORK( INDE ), A, LDA, WORK( INDTAU 
+     $),
      $                INFO )
       END IF
 *
@@ -272,7 +275,7 @@
          ELSE
             IMAX = INFO - 1
          END IF
-         CALL DSCAL( IMAX, ONE / SIGMA, W, 1 )
+         CALL AB_DSCAL( IMAX, ONE / SIGMA, W, 1 )
       END IF
 *
 *     Set WORK(1) to optimal workspace size.
@@ -281,6 +284,6 @@
 *
       RETURN
 *
-*     End of DSYEV
+*     End of AB_DSYEV
 *
       END

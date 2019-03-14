@@ -1,4 +1,4 @@
-*> \brief \b DLAED7 used by sstedc. Computes the updated eigensystem of a diagonal matrix after modification by a rank-one symmetric matrix. Used when the original matrix is dense.
+*> \brief \b AB_DLAED7 used by AB_SSTEDC. Computes the updated eigensystem of a diagonal matrix after modification by a rank-one symmetric matrix. Used when the original matrix is dense.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLAED7 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaed7.f">
+*> Download AB_DLAED7 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLAED7.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaed7.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLAED7.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaed7.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLAED7.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLAED7( ICOMPQ, N, QSIZ, TLVLS, CURLVL, CURPBM, D, Q,
+*       SUBROUTINE AB_DLAED7( ICOMPQ, N, QSIZ, TLVLS, CURLVL, CURPBM, D, Q,
 *                          LDQ, INDXQ, RHO, CUTPNT, QSTORE, QPTR, PRMPTR,
 *                          PERM, GIVPTR, GIVCOL, GIVNUM, WORK, IWORK,
 *                          INFO )
@@ -41,11 +41,11 @@
 *>
 *> \verbatim
 *>
-*> DLAED7 computes the updated eigensystem of a diagonal
+*> AB_DLAED7 computes the updated eigensystem of a diagonal
 *> matrix after modification by a rank-one symmetric matrix. This
 *> routine is used only for the eigenproblem which requires all
 *> eigenvalues and optionally eigenvectors of a dense symmetric matrix
-*> that has been reduced to tridiagonal form.  DLAED1 handles
+*> that has been reduced to tridiagonal form.  AB_DLAED1 handles
 *> the case in which all eigenvalues and eigenvectors of a symmetric
 *> tridiagonal matrix are desired.
 *>
@@ -61,11 +61,11 @@
 *>       when there are multiple eigenvalues or if there is a zero in
 *>       the Z vector.  For each such occurrence the dimension of the
 *>       secular equation problem is reduced by one.  This stage is
-*>       performed by the routine DLAED8.
+*>       performed by the routine AB_DLAED8.
 *>
 *>       The second stage consists of calculating the updated
 *>       eigenvalues. This is done by finding the roots of the secular
-*>       equation via the routine DLAED4 (as called by DLAED9).
+*>       equation via the routine AB_DLAED4 (as called by AB_DLAED9).
 *>       This routine also calculates the eigenvectors of the current
 *>       problem.
 *>
@@ -255,7 +255,8 @@
 *> at Berkeley, USA
 *
 *  =====================================================================
-      SUBROUTINE DLAED7( ICOMPQ, N, QSIZ, TLVLS, CURLVL, CURPBM, D, Q,
+      SUBROUTINE AB_DLAED7( ICOMPQ, N, QSIZ, TLVLS, CURLVL, CURPBM, D, Q
+     $,
      $                   LDQ, INDXQ, RHO, CUTPNT, QSTORE, QPTR, PRMPTR,
      $                   PERM, GIVPTR, GIVCOL, GIVNUM, WORK, IWORK,
      $                   INFO )
@@ -288,7 +289,8 @@
      $                   IQ2, IS, IW, IZ, K, LDQ2, N1, N2, PTR
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMM, DLAED8, DLAED9, DLAEDA, DLAMRG, XERBLA
+      EXTERNAL           AB_DGEMM, AB_DLAED8, AB_DLAED9, AB_DLAEDA, AB_D
+     $LAMRG, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -311,7 +313,7 @@
          INFO = -12
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DLAED7', -INFO )
+         CALL AB_XERBLA( 'AB_DLAED7', -INFO )
          RETURN
       END IF
 *
@@ -322,7 +324,7 @@
 *
 *     The following values are for bookkeeping purposes only.  They are
 *     integer pointers which indicate the portion of the workspace
-*     used by a particular array in DLAED8 and DLAED9.
+*     used by a particular array in AB_DLAED8 and AB_DLAED9.
 *
       IF( ICOMPQ.EQ.1 ) THEN
          LDQ2 = QSIZ
@@ -349,7 +351,7 @@
          PTR = PTR + 2**( TLVLS-I )
    10 CONTINUE
       CURR = PTR + CURPBM
-      CALL DLAEDA( N, TLVLS, CURLVL, CURPBM, PRMPTR, PERM, GIVPTR,
+      CALL AB_DLAEDA( N, TLVLS, CURLVL, CURPBM, PRMPTR, PERM, GIVPTR,
      $             GIVCOL, GIVNUM, QSTORE, QPTR, WORK( IZ ),
      $             WORK( IZ+N ), INFO )
 *
@@ -365,7 +367,7 @@
 *
 *     Sort and Deflate eigenvalues.
 *
-      CALL DLAED8( ICOMPQ, K, N, QSIZ, D, Q, LDQ, INDXQ, RHO, CUTPNT,
+      CALL AB_DLAED8( ICOMPQ, K, N, QSIZ, D, Q, LDQ, INDXQ, RHO, CUTPNT,
      $             WORK( IZ ), WORK( IDLMDA ), WORK( IQ2 ), LDQ2,
      $             WORK( IW ), PERM( PRMPTR( CURR ) ), GIVPTR( CURR+1 ),
      $             GIVCOL( 1, GIVPTR( CURR ) ),
@@ -377,12 +379,13 @@
 *     Solve Secular Equation.
 *
       IF( K.NE.0 ) THEN
-         CALL DLAED9( K, 1, K, N, D, WORK( IS ), K, RHO, WORK( IDLMDA ),
+         CALL AB_DLAED9( K, 1, K, N, D, WORK( IS ), K, RHO, WORK( IDLMDA
+     $ ),
      $                WORK( IW ), QSTORE( QPTR( CURR ) ), K, INFO )
          IF( INFO.NE.0 )
      $      GO TO 30
          IF( ICOMPQ.EQ.1 ) THEN
-            CALL DGEMM( 'N', 'N', QSIZ, K, K, ONE, WORK( IQ2 ), LDQ2,
+            CALL AB_DGEMM( 'N', 'N', QSIZ, K, K, ONE, WORK( IQ2 ), LDQ2,
      $                  QSTORE( QPTR( CURR ) ), K, ZERO, Q, LDQ )
          END IF
          QPTR( CURR+1 ) = QPTR( CURR ) + K**2
@@ -391,7 +394,7 @@
 *
          N1 = K
          N2 = N - K
-         CALL DLAMRG( N1, N2, D, 1, -1, INDXQ )
+         CALL AB_DLAMRG( N1, N2, D, 1, -1, INDXQ )
       ELSE
          QPTR( CURR+1 ) = QPTR( CURR )
          DO 20 I = 1, N
@@ -402,6 +405,6 @@
    30 CONTINUE
       RETURN
 *
-*     End of DLAED7
+*     End of AB_DLAED7
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b SSYR
+*> \brief \b AB_SSYR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SSYR(UPLO,N,ALPHA,X,INCX,A,LDA)
+*       SUBROUTINE AB_SSYR(UPLO,N,ALPHA,X,INCX,A,LDA)
 *
 *       .. Scalar Arguments ..
 *       REAL ALPHA
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> SSYR   performs the symmetric rank 1 operation
+*> AB_SSYR   performs the symmetric rank 1 operation
 *>
 *>    A := alpha*x*x**T + A,
 *>
@@ -130,7 +130,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SSYR(UPLO,N,ALPHA,X,INCX,A,LDA)
+      SUBROUTINE AB_SSYR(UPLO,N,ALPHA,X,INCX,A,LDA)
 *
 *  -- Reference BLAS level2 routine (version 3.7.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -157,11 +157,11 @@
       INTEGER I,INFO,IX,J,JX,KX
 *     ..
 *     .. External Functions ..
-      LOGICAL LSAME
-      EXTERNAL LSAME
+      LOGICAL AB_LSAME
+      EXTERNAL AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL XERBLA
+      EXTERNAL AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC MAX
@@ -170,7 +170,7 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
+      IF (.NOT.AB_LSAME(UPLO,'U') .AND. .NOT.AB_LSAME(UPLO,'L')) THEN
           INFO = 1
       ELSE IF (N.LT.0) THEN
           INFO = 2
@@ -180,7 +180,7 @@
           INFO = 7
       END IF
       IF (INFO.NE.0) THEN
-          CALL XERBLA('SSYR  ',INFO)
+          CALL AB_XERBLA('AB_SSYR  ',INFO)
           RETURN
       END IF
 *
@@ -200,7 +200,7 @@
 *     accessed sequentially with one pass through the triangular part
 *     of A.
 *
-      IF (LSAME(UPLO,'U')) THEN
+      IF (AB_LSAME(UPLO,'U')) THEN
 *
 *        Form  A  when A is stored in upper triangle.
 *
@@ -258,6 +258,6 @@
 *
       RETURN
 *
-*     End of SSYR  .
+*     End of AB_SSYR  .
 *
       END

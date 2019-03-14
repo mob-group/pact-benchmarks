@@ -1,4 +1,4 @@
-*> \brief \b SORG2R generates all or part of the orthogonal matrix Q from a QR factorization determined by sgeqrf (unblocked algorithm).
+*> \brief \b AB_SORG2R generates all or part of the orthogonal matrix Q from a QR factorization determined by AB_SGEQRf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SORG2R + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sorg2r.f">
+*> Download AB_SORG2R + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SORG2R.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sorg2r.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SORG2R.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorg2r.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SORG2R.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SORG2R( M, N, K, A, LDA, TAU, WORK, INFO )
+*       SUBROUTINE AB_SORG2R( M, N, K, A, LDA, TAU, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, K, LDA, M, N
@@ -33,13 +33,13 @@
 *>
 *> \verbatim
 *>
-*> SORG2R generates an m by n real matrix Q with orthonormal columns,
+*> AB_SORG2R generates an m by n real matrix Q with orthonormal columns,
 *> which is defined as the first n columns of a product of k elementary
 *> reflectors of order m
 *>
 *>       Q  =  H(1) H(2) . . . H(k)
 *>
-*> as returned by SGEQRF.
+*> as returned by AB_SGEQRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -69,7 +69,7 @@
 *>          A is REAL array, dimension (LDA,N)
 *>          On entry, the i-th column must contain the vector which
 *>          defines the elementary reflector H(i), for i = 1,2,...,k, as
-*>          returned by SGEQRF in the first k columns of its array
+*>          returned by AB_SGEQRF in the first k columns of its array
 *>          argument A.
 *>          On exit, the m-by-n matrix Q.
 *> \endverbatim
@@ -84,7 +84,7 @@
 *> \verbatim
 *>          TAU is REAL array, dimension (K)
 *>          TAU(i) must contain the scalar factor of the elementary
-*>          reflector H(i), as returned by SGEQRF.
+*>          reflector H(i), as returned by AB_SGEQRF.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -112,7 +112,7 @@
 *> \ingroup realOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE SORG2R( M, N, K, A, LDA, TAU, WORK, INFO )
+      SUBROUTINE AB_SORG2R( M, N, K, A, LDA, TAU, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -136,7 +136,7 @@
       INTEGER            I, J, L
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLARF, SSCAL, XERBLA
+      EXTERNAL           AB_SLARF, AB_SSCAL, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -156,7 +156,7 @@
          INFO = -5
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SORG2R', -INFO )
+         CALL AB_XERBLA( 'AB_SORG2R', -INFO )
          RETURN
       END IF
 *
@@ -180,11 +180,11 @@
 *
          IF( I.LT.N ) THEN
             A( I, I ) = ONE
-            CALL SLARF( 'Left', M-I+1, N-I, A( I, I ), 1, TAU( I ),
+            CALL AB_SLARF( 'Left', M-I+1, N-I, A( I, I ), 1, TAU( I ),
      $                  A( I, I+1 ), LDA, WORK )
          END IF
          IF( I.LT.M )
-     $      CALL SSCAL( M-I, -TAU( I ), A( I+1, I ), 1 )
+     $      CALL AB_SSCAL( M-I, -TAU( I ), A( I+1, I ), 1 )
          A( I, I ) = ONE - TAU( I )
 *
 *        Set A(1:i-1,i) to zero
@@ -195,6 +195,6 @@
    40 CONTINUE
       RETURN
 *
-*     End of SORG2R
+*     End of AB_SORG2R
 *
       END

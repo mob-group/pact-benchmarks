@@ -1,4 +1,4 @@
-*> \brief \b ZGEQPF
+*> \brief \b AB_ZGEQPF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZGEQPF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgeqpf.f">
+*> Download AB_ZGEQPF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZGEQPF.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgeqpf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZGEQPF.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgeqpf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZGEQPF.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZGEQPF( M, N, A, LDA, JPVT, TAU, WORK, RWORK, INFO )
+*       SUBROUTINE AB_ZGEQPF( M, N, A, LDA, JPVT, TAU, WORK, RWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, M, N
@@ -35,9 +35,9 @@
 *>
 *> \verbatim
 *>
-*> This routine is deprecated and has been replaced by routine ZGEQP3.
+*> This routine is deprecated and has been replaced by routine AB_ZGEQP3.
 *>
-*> ZGEQPF computes a QR factorization with column pivoting of a
+*> AB_ZGEQPF computes a QR factorization with column pivoting of a
 *> complex M-by-N matrix A: A*P = Q*R.
 *> \endverbatim
 *
@@ -146,7 +146,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZGEQPF( M, N, A, LDA, JPVT, TAU, WORK, RWORK, INFO )
+      SUBROUTINE AB_ZGEQPF( M, N, A, LDA, JPVT, TAU, WORK, RWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -174,15 +174,16 @@
       COMPLEX*16         AII
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZGEQR2, ZLARF, ZLARFG, ZSWAP, ZUNM2R
+      EXTERNAL           AB_XERBLA, AB_ZGEQR2, AB_ZLARF, AB_ZLARFG, AB_Z
+     $SWAP, AB_ZUNM2R
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DCMPLX, DCONJG, MAX, MIN, SQRT
 *     ..
 *     .. External Functions ..
-      INTEGER            IDAMAX
-      DOUBLE PRECISION   DLAMCH, DZNRM2
-      EXTERNAL           IDAMAX, DLAMCH, DZNRM2
+      INTEGER            AB_IDAMAX
+      DOUBLE PRECISION   DLAMCH, AB_DZNRM2
+      EXTERNAL           AB_IDAMAX, DLAMCH, AB_DZNRM2
 *     ..
 *     .. Executable Statements ..
 *
@@ -197,7 +198,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZGEQPF', -INFO )
+         CALL AB_XERBLA( 'AB_ZGEQPF', -INFO )
          RETURN
       END IF
 *
@@ -210,7 +211,7 @@
       DO 10 I = 1, N
          IF( JPVT( I ).NE.0 ) THEN
             IF( I.NE.ITEMP ) THEN
-               CALL ZSWAP( M, A( 1, I ), 1, A( 1, ITEMP ), 1 )
+               CALL AB_ZSWAP( M, A( 1, I ), 1, A( 1, ITEMP ), 1 )
                JPVT( I ) = JPVT( ITEMP )
                JPVT( ITEMP ) = I
             ELSE
@@ -227,9 +228,10 @@
 *
       IF( ITEMP.GT.0 ) THEN
          MA = MIN( ITEMP, M )
-         CALL ZGEQR2( M, MA, A, LDA, TAU, WORK, INFO )
+         CALL AB_ZGEQR2( M, MA, A, LDA, TAU, WORK, INFO )
          IF( MA.LT.N ) THEN
-            CALL ZUNM2R( 'Left', 'Conjugate transpose', M, N-MA, MA, A,
+            CALL AB_ZUNM2R( 'Left', 'Conjugate transpose', M, N-MA, MA, 
+     $A,
      $                   LDA, TAU, A( 1, MA+1 ), LDA, WORK, INFO )
          END IF
       END IF
@@ -240,7 +242,7 @@
 *        work store the exact column norms.
 *
          DO 20 I = ITEMP + 1, N
-            RWORK( I ) = DZNRM2( M-ITEMP, A( ITEMP+1, I ), 1 )
+            RWORK( I ) = AB_DZNRM2( M-ITEMP, A( ITEMP+1, I ), 1 )
             RWORK( N+I ) = RWORK( I )
    20    CONTINUE
 *
@@ -250,10 +252,10 @@
 *
 *           Determine ith pivot column and swap if necessary
 *
-            PVT = ( I-1 ) + IDAMAX( N-I+1, RWORK( I ), 1 )
+            PVT = ( I-1 ) + AB_IDAMAX( N-I+1, RWORK( I ), 1 )
 *
             IF( PVT.NE.I ) THEN
-               CALL ZSWAP( M, A( 1, PVT ), 1, A( 1, I ), 1 )
+               CALL AB_ZSWAP( M, A( 1, PVT ), 1, A( 1, I ), 1 )
                ITEMP = JPVT( PVT )
                JPVT( PVT ) = JPVT( I )
                JPVT( I ) = ITEMP
@@ -264,7 +266,7 @@
 *           Generate elementary reflector H(i)
 *
             AII = A( I, I )
-            CALL ZLARFG( M-I+1, AII, A( MIN( I+1, M ), I ), 1,
+            CALL AB_ZLARFG( M-I+1, AII, A( MIN( I+1, M ), I ), 1,
      $                   TAU( I ) )
             A( I, I ) = AII
 *
@@ -274,7 +276,7 @@
 *
                AII = A( I, I )
                A( I, I ) = DCMPLX( ONE )
-               CALL ZLARF( 'Left', M-I+1, N-I, A( I, I ), 1,
+               CALL AB_ZLARF( 'Left', M-I+1, N-I, A( I, I ), 1,
      $                     DCONJG( TAU( I ) ), A( I, I+1 ), LDA, WORK )
                A( I, I ) = AII
             END IF
@@ -292,7 +294,7 @@
                   TEMP2 = TEMP*( RWORK( J ) / RWORK( N+J ) )**2
                   IF( TEMP2 .LE. TOL3Z ) THEN
                      IF( M-I.GT.0 ) THEN
-                        RWORK( J ) = DZNRM2( M-I, A( I+1, J ), 1 )
+                        RWORK( J ) = AB_DZNRM2( M-I, A( I+1, J ), 1 )
                         RWORK( N+J ) = RWORK( J )
                      ELSE
                         RWORK( J ) = ZERO
@@ -308,6 +310,6 @@
       END IF
       RETURN
 *
-*     End of ZGEQPF
+*     End of AB_ZGEQPF
 *
       END

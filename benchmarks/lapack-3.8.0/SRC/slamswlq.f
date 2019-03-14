@@ -2,7 +2,7 @@
 *  Definition:
 *  ===========
 *
-*      SUBROUTINE SLAMSWLQ( SIDE, TRANS, M, N, K, MB, NB, A, LDA, T,
+*      SUBROUTINE AB_SLAMSWLQ( SIDE, TRANS, M, N, K, MB, NB, A, LDA, T,
 *     $                LDT, C, LDC, WORK, LWORK, INFO )
 *
 *
@@ -18,7 +18,7 @@
 *>
 *> \verbatim
 *>
-*>    SLAMSWLQ overwrites the general real M-by-N matrix C with
+*>    AB_SLAMSWLQ overwrites the general real M-by-N matrix C with
 *>
 *>
 *>                    SIDE = 'L'     SIDE = 'R'
@@ -26,7 +26,7 @@
 *>    TRANS = 'T':      Q**T * C       C * Q**T
 *>    where Q is a real orthogonal matrix defined as the product of blocked
 *>    elementary reflectors computed by short wide LQ
-*>    factorization (SLASWLQ)
+*>    factorization (AB_SLASWLQ)
 *> \endverbatim
 *
 *  Arguments:
@@ -95,7 +95,7 @@
 *>                               (LDA,N) if SIDE = 'R'
 *>          The i-th row must contain the vector which defines the blocked
 *>          elementary reflector H(i), for i = 1,2,...,k, as returned by
-*>          SLASWLQ in the first k rows of its array argument A.
+*>          AB_SLASWLQ in the first k rows of its array argument A.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -148,7 +148,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -199,7 +199,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SLAMSWLQ( SIDE, TRANS, M, N, K, MB, NB, A, LDA, T,
+      SUBROUTINE AB_SLAMSWLQ( SIDE, TRANS, M, N, K, MB, NB, A, LDA, T,
      $    LDT, C, LDC, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
@@ -224,20 +224,20 @@
       INTEGER    I, II, KK, LW, CTR
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     .. External Subroutines ..
-      EXTERNAL           STPMLQT, SGEMLQT, XERBLA
+      EXTERNAL           AB_STPMLQT, AB_SGEMLQT, AB_XERBLA
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input arguments
 *
       LQUERY  = LWORK.LT.0
-      NOTRAN  = LSAME( TRANS, 'N' )
-      TRAN    = LSAME( TRANS, 'T' )
-      LEFT    = LSAME( SIDE, 'L' )
-      RIGHT   = LSAME( SIDE, 'R' )
+      NOTRAN  = AB_LSAME( TRANS, 'N' )
+      TRAN    = AB_LSAME( TRANS, 'T' )
+      LEFT    = AB_LSAME( SIDE, 'L' )
+      RIGHT   = AB_LSAME( SIDE, 'R' )
       IF (LEFT) THEN
         LW = N * MB
       ELSE
@@ -266,7 +266,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-        CALL XERBLA( 'SLAMSWLQ', -INFO )
+        CALL AB_XERBLA( 'AB_SLAMSWLQ', -INFO )
         WORK(1) = LW
         RETURN
       ELSE IF (LQUERY) THEN
@@ -281,7 +281,7 @@
       END IF
 *
       IF((NB.LE.K).OR.(NB.GE.MAX(M,N,K))) THEN
-        CALL SGEMLQT( SIDE, TRANS, M, N, K, MB, A, LDA,
+        CALL AB_SGEMLQT( SIDE, TRANS, M, N, K, MB, A, LDA,
      $        T, LDT, C, LDC, WORK, INFO)
         RETURN
       END IF
@@ -295,7 +295,7 @@
 *
           IF (KK.GT.0) THEN
             II=M-KK+1
-            CALL STPMLQT('L','T',KK , N, K, 0, MB, A(1,II), LDA,
+            CALL AB_STPMLQT('L','T',KK , N, K, 0, MB, A(1,II), LDA,
      $        T(1,CTR*K+1), LDT, C(1,1), LDC,
      $        C(II,1), LDC, WORK, INFO )
           ELSE
@@ -307,14 +307,14 @@
 *         Multiply Q to the current block of C (1:M,I:I+NB)
 *
             CTR = CTR - 1
-            CALL STPMLQT('L','T',NB-K , N, K, 0,MB, A(1,I), LDA,
+            CALL AB_STPMLQT('L','T',NB-K , N, K, 0,MB, A(1,I), LDA,
      $          T(1,CTR*K+1),LDT, C(1,1), LDC,
      $          C(I,1), LDC, WORK, INFO )
           END DO
 *
 *         Multiply Q to the first block of C (1:M,1:NB)
 *
-          CALL SGEMLQT('L','T',NB , N, K, MB, A(1,1), LDA, T
+          CALL AB_SGEMLQT('L','T',NB , N, K, MB, A(1,1), LDA, T
      $              ,LDT ,C(1,1), LDC, WORK, INFO )
 *
       ELSE IF (LEFT.AND.NOTRAN) THEN
@@ -324,14 +324,14 @@
          KK = MOD((M-K),(NB-K))
          II=M-KK+1
          CTR = 1
-         CALL SGEMLQT('L','N',NB , N, K, MB, A(1,1), LDA, T
+         CALL AB_SGEMLQT('L','N',NB , N, K, MB, A(1,1), LDA, T
      $              ,LDT ,C(1,1), LDC, WORK, INFO )
 *
          DO I=NB+1,II-NB+K,(NB-K)
 *
 *         Multiply Q to the current block of C (I:I+NB,1:N)
 *
-          CALL STPMLQT('L','N',NB-K , N, K, 0,MB, A(1,I), LDA,
+          CALL AB_STPMLQT('L','N',NB-K , N, K, 0,MB, A(1,I), LDA,
      $         T(1,CTR * K+1), LDT, C(1,1), LDC,
      $         C(I,1), LDC, WORK, INFO )
           CTR = CTR + 1
@@ -341,7 +341,7 @@
 *
 *         Multiply Q to the last block of C
 *
-          CALL STPMLQT('L','N',KK , N, K, 0, MB, A(1,II), LDA,
+          CALL AB_STPMLQT('L','N',KK , N, K, 0, MB, A(1,II), LDA,
      $        T(1,CTR*K+1), LDT, C(1,1), LDC,
      $        C(II,1), LDC, WORK, INFO )
 *
@@ -355,7 +355,7 @@
           CTR = (N-K)/(NB-K)
           IF (KK.GT.0) THEN
             II=N-KK+1
-            CALL STPMLQT('R','N',M , KK, K, 0, MB, A(1, II), LDA,
+            CALL AB_STPMLQT('R','N',M , KK, K, 0, MB, A(1, II), LDA,
      $        T(1,CTR*K+1), LDT, C(1,1), LDC,
      $        C(1,II), LDC, WORK, INFO )
           ELSE
@@ -367,7 +367,7 @@
 *         Multiply Q to the current block of C (1:M,I:I+MB)
 *
              CTR = CTR - 1
-             CALL STPMLQT('R','N', M, NB-K, K, 0, MB, A(1, I), LDA,
+             CALL AB_STPMLQT('R','N', M, NB-K, K, 0, MB, A(1, I), LDA,
      $            T(1,CTR*K+1), LDT, C(1,1), LDC,
      $            C(1,I), LDC, WORK, INFO )
 
@@ -375,7 +375,7 @@
 *
 *         Multiply Q to the first block of C (1:M,1:MB)
 *
-          CALL SGEMLQT('R','N',M , NB, K, MB, A(1,1), LDA, T
+          CALL AB_SGEMLQT('R','N',M , NB, K, MB, A(1,1), LDA, T
      $            ,LDT ,C(1,1), LDC, WORK, INFO )
 *
       ELSE IF (RIGHT.AND.TRAN) THEN
@@ -385,14 +385,14 @@
          KK = MOD((N-K),(NB-K))
          II=N-KK+1
          CTR = 1
-         CALL SGEMLQT('R','T',M , NB, K, MB, A(1,1), LDA, T
+         CALL AB_SGEMLQT('R','T',M , NB, K, MB, A(1,1), LDA, T
      $            ,LDT ,C(1,1), LDC, WORK, INFO )
 *
          DO I=NB+1,II-NB+K,(NB-K)
 *
 *         Multiply Q to the current block of C (1:M,I:I+MB)
 *
-          CALL STPMLQT('R','T',M , NB-K, K, 0,MB, A(1,I), LDA,
+          CALL AB_STPMLQT('R','T',M , NB-K, K, 0,MB, A(1,I), LDA,
      $       T(1, CTR*K+1), LDT, C(1,1), LDC,
      $       C(1,I), LDC, WORK, INFO )
           CTR = CTR + 1
@@ -402,7 +402,7 @@
 *
 *       Multiply Q to the last block of C
 *
-          CALL STPMLQT('R','T',M , KK, K, 0,MB, A(1,II), LDA,
+          CALL AB_STPMLQT('R','T',M , KK, K, 0,MB, A(1,II), LDA,
      $      T(1,CTR*K+1),LDT, C(1,1), LDC,
      $      C(1,II), LDC, WORK, INFO )
 *
@@ -413,6 +413,6 @@
       WORK(1) = LW
       RETURN
 *
-*     End of SLAMSWLQ
+*     End of AB_SLAMSWLQ
 *
       END
