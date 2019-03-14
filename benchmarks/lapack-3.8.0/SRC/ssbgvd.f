@@ -1,4 +1,4 @@
-*> \brief \b SSBGVD
+*> \brief \b AB_SSBGVD
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SSBGVD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssbgvd.f">
+*> Download AB_SSBGVD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SSBGVd.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssbgvd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SSBGVd.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssbgvd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SSBGVd.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SSBGVD( JOBZ, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, W,
+*       SUBROUTINE AB_SSBGVD( JOBZ, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, W,
 *                          Z, LDZ, WORK, LWORK, IWORK, LIWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> SSBGVD computes all the eigenvalues, and optionally, the eigenvectors
+*> AB_SSBGVD computes all the eigenvalues, and optionally, the eigenvectors
 *> of a real generalized symmetric-definite banded eigenproblem, of the
 *> form A*x=(lambda)*B*x.  Here A and B are assumed to be symmetric and
 *> banded, and B is also positive definite.  If eigenvectors are
@@ -118,7 +118,7 @@
 *>          if UPLO = 'L', BB(1+i-j,j)    = B(i,j) for j<=i<=min(n,j+kb).
 *>
 *>          On exit, the factor S from the split Cholesky factorization
-*>          B = S**T*S, as returned by SPBSTF.
+*>          B = S**T*S, as returned by AB_SPBSTF.
 *> \endverbatim
 *>
 *> \param[in] LDBB
@@ -168,7 +168,7 @@
 *>          only calculates the optimal sizes of the WORK and IWORK
 *>          arrays, returns these values as the first entries of the WORK
 *>          and IWORK arrays, and no error message related to LWORK or
-*>          LIWORK is issued by XERBLA.
+*>          LIWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -188,7 +188,7 @@
 *>          routine only calculates the optimal sizes of the WORK and
 *>          IWORK arrays, returns these values as the first entries of
 *>          the WORK and IWORK arrays, and no error message related to
-*>          LWORK or LIWORK is issued by XERBLA.
+*>          LWORK or LIWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -200,7 +200,7 @@
 *>             <= N:  the algorithm failed to converge:
 *>                    i off-diagonal elements of an intermediate
 *>                    tridiagonal form did not converge to zero;
-*>             > N:   if INFO = N + i, for 1 <= i <= N, then SPBSTF
+*>             > N:   if INFO = N + i, for 1 <= i <= N, then AB_SPBSTF
 *>                    returned INFO = i: B is not positive definite.
 *>                    The factorization of B could not be completed and
 *>                    no eigenvalues or eigenvectors were computed.
@@ -224,7 +224,8 @@
 *>     Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA
 *
 *  =====================================================================
-      SUBROUTINE SSBGVD( JOBZ, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, W,
+      SUBROUTINE AB_SSBGVD( JOBZ, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, W
+     $,
      $                   Z, LDZ, WORK, LWORK, IWORK, LIWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -255,19 +256,20 @@
      $                   LWMIN
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMM, SLACPY, SPBSTF, SSBGST, SSBTRD, SSTEDC,
-     $                   SSTERF, XERBLA
+      EXTERNAL           AB_SGEMM, AB_SLACPY, AB_SPBSTF, AB_SSBGST, AB_S
+     $SBTRD, AB_SSTEDC,
+     $                   AB_SSTERF, AB_XERBLA
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters.
 *
-      WANTZ = LSAME( JOBZ, 'V' )
-      UPPER = LSAME( UPLO, 'U' )
+      WANTZ = AB_LSAME( JOBZ, 'V' )
+      UPPER = AB_LSAME( UPLO, 'U' )
       LQUERY = ( LWORK.EQ.-1 .OR. LIWORK.EQ.-1 )
 *
       INFO = 0
@@ -282,9 +284,9 @@
          LWMIN = 2*N
       END IF
 *
-      IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
+      IF( .NOT.( WANTZ .OR. AB_LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.( UPPER .OR. LSAME( UPLO, 'L' ) ) ) THEN
+      ELSE IF( .NOT.( UPPER .OR. AB_LSAME( UPLO, 'L' ) ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -312,7 +314,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SSBGVD', -INFO )
+         CALL AB_XERBLA( 'AB_SSBGVD', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -325,7 +327,7 @@
 *
 *     Form a split Cholesky factorization of B.
 *
-      CALL SPBSTF( UPLO, N, KB, BB, LDBB, INFO )
+      CALL AB_SPBSTF( UPLO, N, KB, BB, LDBB, INFO )
       IF( INFO.NE.0 ) THEN
          INFO = N + INFO
          RETURN
@@ -337,7 +339,7 @@
       INDWRK = INDE + N
       INDWK2 = INDWRK + N*N
       LLWRK2 = LWORK - INDWK2 + 1
-      CALL SSBGST( JOBZ, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, Z, LDZ,
+      CALL AB_SSBGST( JOBZ, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, Z, LDZ,
      $             WORK, IINFO )
 *
 *     Reduce to tridiagonal form.
@@ -347,19 +349,21 @@
       ELSE
          VECT = 'N'
       END IF
-      CALL SSBTRD( VECT, UPLO, N, KA, AB, LDAB, W, WORK( INDE ), Z, LDZ,
+      CALL AB_SSBTRD( VECT, UPLO, N, KA, AB, LDAB, W, WORK( INDE ), Z, L
+     $DZ,
      $             WORK( INDWRK ), IINFO )
 *
-*     For eigenvalues only, call SSTERF. For eigenvectors, call SSTEDC.
+*     For eigenvalues only, call AB_SSTERF. For eigenvectors, call AB_SSTEDC.
 *
       IF( .NOT.WANTZ ) THEN
-         CALL SSTERF( N, W, WORK( INDE ), INFO )
+         CALL AB_SSTERF( N, W, WORK( INDE ), INFO )
       ELSE
-         CALL SSTEDC( 'I', N, W, WORK( INDE ), WORK( INDWRK ), N,
+         CALL AB_SSTEDC( 'I', N, W, WORK( INDE ), WORK( INDWRK ), N,
      $                WORK( INDWK2 ), LLWRK2, IWORK, LIWORK, INFO )
-         CALL SGEMM( 'N', 'N', N, N, N, ONE, Z, LDZ, WORK( INDWRK ), N,
+         CALL AB_SGEMM( 'N', 'N', N, N, N, ONE, Z, LDZ, WORK( INDWRK ), 
+     $N,
      $               ZERO, WORK( INDWK2 ), N )
-         CALL SLACPY( 'A', N, N, WORK( INDWK2 ), N, Z, LDZ )
+         CALL AB_SLACPY( 'A', N, N, WORK( INDWK2 ), N, Z, LDZ )
       END IF
 *
       WORK( 1 ) = LWMIN
@@ -367,6 +371,6 @@
 *
       RETURN
 *
-*     End of SSBGVD
+*     End of AB_SSBGVD
 *
       END

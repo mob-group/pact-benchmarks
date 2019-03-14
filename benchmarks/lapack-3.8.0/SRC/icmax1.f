@@ -1,4 +1,4 @@
-*> \brief \b ICMAX1 finds the index of the first vector element of maximum absolute value.
+*> \brief \b AB_ICMAX1 finds the index of the first vector element of maximum absolute value.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ICMAX1 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/icmax1.f">
+*> Download AB_ICMAX1 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ICMAX1.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/icmax1.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ICMAX1.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/icmax1.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ICMAX1.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       INTEGER          FUNCTION ICMAX1( N, CX, INCX )
+*       INTEGER          FUNCTION AB_ICMAX1( N, CX, INCX )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCX, N
@@ -33,9 +33,9 @@
 *>
 *> \verbatim
 *>
-*> ICMAX1 finds the index of the first vector element of maximum absolute value.
+*> AB_ICMAX1 finds the index of the first vector element of maximum absolute value.
 *>
-*> Based on ICAMAX from Level 1 BLAS.
+*> Based on AB_ICAMAX from Level 1 BLAS.
 *> The change is to use the 'genuine' absolute value.
 *> \endverbatim
 *
@@ -51,7 +51,7 @@
 *> \param[in] CX
 *> \verbatim
 *>          CX is COMPLEX array, dimension (N)
-*>          The vector CX. The ICMAX1 function returns the index of its first
+*>          The vector CX. The AB_ICMAX1 function returns the index of its first
 *>          element of maximum absolute value.
 *> \endverbatim
 *>
@@ -76,10 +76,10 @@
 *> \par Contributors:
 *  ==================
 *>
-*> Nick Higham for use with CLACON.
+*> Nick Higham for use with AB_CLACON.
 *
 *  =====================================================================
-      INTEGER FUNCTION ICMAX1( N, CX, INCX )
+      INTEGER FUNCTION AB_ICMAX1( N, CX, INCX )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -104,9 +104,9 @@
 *     ..
 *     .. Executable Statements ..
 *
-      ICMAX1 = 0
+      AB_ICMAX1 = 0
       IF (N.LT.1 .OR. INCX.LE.0) RETURN
-      ICMAX1 = 1
+      AB_ICMAX1 = 1
       IF (N.EQ.1) RETURN
       IF (INCX.EQ.1) THEN
 *
@@ -115,7 +115,7 @@
          SMAX = ABS(CX(1))
          DO I = 2,N
             IF (ABS(CX(I)).GT.SMAX) THEN
-               ICMAX1 = I
+               AB_ICMAX1 = I
                SMAX = ABS(CX(I))
             END IF
          END DO
@@ -128,7 +128,7 @@
          IX = IX + INCX
          DO I = 2,N
             IF (ABS(CX(IX)).GT.SMAX) THEN
-               ICMAX1 = I
+               AB_ICMAX1 = I
                SMAX = ABS(CX(IX))
             END IF
             IX = IX + INCX
@@ -136,6 +136,6 @@
       END IF
       RETURN
 *
-*     End of ICMAX1
+*     End of AB_ICMAX1
 *
       END

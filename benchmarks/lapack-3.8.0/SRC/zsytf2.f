@@ -1,4 +1,4 @@
-*> \brief \b ZSYTF2 computes the factorization of a real symmetric indefinite matrix, using the diagonal pivoting method (unblocked algorithm).
+*> \brief \b AB_ZSYTF2 computes the factorization of a real symmetric indefinite matrix, using the diagonal pivoting method (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZSYTF2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zsytf2.f">
+*> Download AB_ZSYTF2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZSYTF2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zsytf2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZSYTF2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsytf2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZSYTF2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZSYTF2( UPLO, N, A, LDA, IPIV, INFO )
+*       SUBROUTINE AB_ZSYTF2( UPLO, N, A, LDA, IPIV, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> ZSYTF2 computes the factorization of a complex symmetric matrix A
+*> AB_ZSYTF2 computes the factorization of a complex symmetric matrix A
 *> using the Bunch-Kaufman diagonal pivoting method:
 *>
 *>    A = U*D*U**T  or  A = L*D*L**T
@@ -182,14 +182,14 @@
 *>    Replace l.209 and l.377
 *>         IF( MAX( ABSAKK, COLMAX ).EQ.ZERO ) THEN
 *>    by
-*>         IF( (MAX( ABSAKK, COLMAX ).EQ.ZERO) .OR. DISNAN(ABSAKK) ) THEN
+*>         IF( (MAX( ABSAKK, COLMAX ).EQ.ZERO) .OR. AB_DISNAN(ABSAKK) ) THEN
 *>
 *>  1-96 - Based on modifications by J. Lewis, Boeing Computer Services
 *>         Company
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE ZSYTF2( UPLO, N, A, LDA, IPIV, INFO )
+      SUBROUTINE AB_ZSYTF2( UPLO, N, A, LDA, IPIV, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -222,12 +222,12 @@
       COMPLEX*16         D11, D12, D21, D22, R1, T, WK, WKM1, WKP1, Z
 *     ..
 *     .. External Functions ..
-      LOGICAL            DISNAN, LSAME
-      INTEGER            IZAMAX
-      EXTERNAL           DISNAN, LSAME, IZAMAX
+      LOGICAL            AB_DISNAN, AB_LSAME
+      INTEGER            AB_IZAMAX
+      EXTERNAL           AB_DISNAN, AB_LSAME, AB_IZAMAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZSCAL, ZSWAP, ZSYR
+      EXTERNAL           AB_XERBLA, AB_ZSCAL, AB_ZSWAP, AB_ZSYR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX, SQRT
@@ -243,8 +243,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -252,7 +252,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZSYTF2', -INFO )
+         CALL AB_XERBLA( 'AB_ZSYTF2', -INFO )
          RETURN
       END IF
 *
@@ -286,13 +286,13 @@
 *        Determine both COLMAX and IMAX.
 *
          IF( K.GT.1 ) THEN
-            IMAX = IZAMAX( K-1, A( 1, K ), 1 )
+            IMAX = AB_IZAMAX( K-1, A( 1, K ), 1 )
             COLMAX = CABS1( A( IMAX, K ) )
          ELSE
             COLMAX = ZERO
          END IF
 *
-         IF( MAX( ABSAKK, COLMAX ).EQ.ZERO .OR. DISNAN(ABSAKK) ) THEN
+         IF( MAX( ABSAKK, COLMAX ).EQ.ZERO .OR. AB_DISNAN(ABSAKK) ) THEN
 *
 *           Column K is zero or underflow, or contains a NaN:
 *           set INFO and continue
@@ -311,10 +311,10 @@
 *              JMAX is the column-index of the largest off-diagonal
 *              element in row IMAX, and ROWMAX is its absolute value
 *
-               JMAX = IMAX + IZAMAX( K-IMAX, A( IMAX, IMAX+1 ), LDA )
+               JMAX = IMAX + AB_IZAMAX( K-IMAX, A( IMAX, IMAX+1 ), LDA )
                ROWMAX = CABS1( A( IMAX, JMAX ) )
                IF( IMAX.GT.1 ) THEN
-                  JMAX = IZAMAX( IMAX-1, A( 1, IMAX ), 1 )
+                  JMAX = AB_IZAMAX( IMAX-1, A( 1, IMAX ), 1 )
                   ROWMAX = MAX( ROWMAX, CABS1( A( JMAX, IMAX ) ) )
                END IF
 *
@@ -345,8 +345,8 @@
 *              Interchange rows and columns KK and KP in the leading
 *              submatrix A(1:k,1:k)
 *
-               CALL ZSWAP( KP-1, A( 1, KK ), 1, A( 1, KP ), 1 )
-               CALL ZSWAP( KK-KP-1, A( KP+1, KK ), 1, A( KP, KP+1 ),
+               CALL AB_ZSWAP( KP-1, A( 1, KK ), 1, A( 1, KP ), 1 )
+               CALL AB_ZSWAP( KK-KP-1, A( KP+1, KK ), 1, A( KP, KP+1 ),
      $                     LDA )
                T = A( KK, KK )
                A( KK, KK ) = A( KP, KP )
@@ -373,11 +373,11 @@
 *              A := A - U(k)*D(k)*U(k)**T = A - W(k)*1/D(k)*W(k)**T
 *
                R1 = CONE / A( K, K )
-               CALL ZSYR( UPLO, K-1, -R1, A( 1, K ), 1, A, LDA )
+               CALL AB_ZSYR( UPLO, K-1, -R1, A( 1, K ), 1, A, LDA )
 *
 *              Store U(k) in column k
 *
-               CALL ZSCAL( K-1, R1, A( 1, K ), 1 )
+               CALL AB_ZSCAL( K-1, R1, A( 1, K ), 1 )
             ELSE
 *
 *              2-by-2 pivot block D(k): columns k and k-1 now hold
@@ -456,13 +456,13 @@
 *        Determine both COLMAX and IMAX.
 *
          IF( K.LT.N ) THEN
-            IMAX = K + IZAMAX( N-K, A( K+1, K ), 1 )
+            IMAX = K + AB_IZAMAX( N-K, A( K+1, K ), 1 )
             COLMAX = CABS1( A( IMAX, K ) )
          ELSE
             COLMAX = ZERO
          END IF
 *
-         IF( MAX( ABSAKK, COLMAX ).EQ.ZERO .OR. DISNAN(ABSAKK) ) THEN
+         IF( MAX( ABSAKK, COLMAX ).EQ.ZERO .OR. AB_DISNAN(ABSAKK) ) THEN
 *
 *           Column K is zero or underflow, or contains a NaN:
 *           set INFO and continue
@@ -481,10 +481,11 @@
 *              JMAX is the column-index of the largest off-diagonal
 *              element in row IMAX, and ROWMAX is its absolute value
 *
-               JMAX = K - 1 + IZAMAX( IMAX-K, A( IMAX, K ), LDA )
+               JMAX = K - 1 + AB_IZAMAX( IMAX-K, A( IMAX, K ), LDA )
                ROWMAX = CABS1( A( IMAX, JMAX ) )
                IF( IMAX.LT.N ) THEN
-                  JMAX = IMAX + IZAMAX( N-IMAX, A( IMAX+1, IMAX ), 1 )
+                  JMAX = IMAX + AB_IZAMAX( N-IMAX, A( IMAX+1, IMAX ), 1 
+     $)
                   ROWMAX = MAX( ROWMAX, CABS1( A( JMAX, IMAX ) ) )
                END IF
 *
@@ -516,8 +517,9 @@
 *              submatrix A(k:n,k:n)
 *
                IF( KP.LT.N )
-     $            CALL ZSWAP( N-KP, A( KP+1, KK ), 1, A( KP+1, KP ), 1 )
-               CALL ZSWAP( KP-KK-1, A( KK+1, KK ), 1, A( KP, KK+1 ),
+     $            CALL AB_ZSWAP( N-KP, A( KP+1, KK ), 1, A( KP+1, KP ), 
+     $1 )
+               CALL AB_ZSWAP( KP-KK-1, A( KK+1, KK ), 1, A( KP, KK+1 ),
      $                     LDA )
                T = A( KK, KK )
                A( KK, KK ) = A( KP, KP )
@@ -546,12 +548,12 @@
 *                 A := A - L(k)*D(k)*L(k)**T = A - W(k)*(1/D(k))*W(k)**T
 *
                   R1 = CONE / A( K, K )
-                  CALL ZSYR( UPLO, N-K, -R1, A( K+1, K ), 1,
+                  CALL AB_ZSYR( UPLO, N-K, -R1, A( K+1, K ), 1,
      $                       A( K+1, K+1 ), LDA )
 *
 *                 Store L(k) in column K
 *
-                  CALL ZSCAL( N-K, R1, A( K+1, K ), 1 )
+                  CALL AB_ZSCAL( N-K, R1, A( K+1, K ), 1 )
                END IF
             ELSE
 *
@@ -606,6 +608,6 @@
    70 CONTINUE
       RETURN
 *
-*     End of ZSYTF2
+*     End of AB_ZSYTF2
 *
       END

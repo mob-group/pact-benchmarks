@@ -1,4 +1,4 @@
-*> \brief \b CLA_HERCOND_X computes the infinity norm condition number of op(A)*diag(x) for Hermitian indefinite matrices.
+*> \brief \b AB_CLA_HERCOND_X computes the infinity norm condition number of op(A)*diag(x) for Hermitian indefinite matrices.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CLA_HERCOND_X + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cla_hercond_x.f">
+*> Download AB_CLA_HERCOND_X + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLA_HERCOND_X.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cla_hercond_x.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLA_HERCOND_X.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cla_hercond_x.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLA_HERCOND_X.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       REAL FUNCTION CLA_HERCOND_X( UPLO, N, A, LDA, AF, LDAF, IPIV, X,
+*       REAL FUNCTION AB_CLA_HERCOND_X( UPLO, N, A, LDA, AF, LDAF, IPIV, X,
 *                                    INFO, WORK, RWORK )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*>    CLA_HERCOND_X computes the infinity norm condition number of
+*>    AB_CLA_HERCOND_X computes the infinity norm condition number of
 *>    op(A) * diag(X) where X is a COMPLEX vector.
 *> \endverbatim
 *
@@ -74,7 +74,7 @@
 *> \verbatim
 *>          AF is COMPLEX array, dimension (LDAF,N)
 *>     The block diagonal matrix D and the multipliers used to
-*>     obtain the factor U or L as computed by CHETRF.
+*>     obtain the factor U or L as computed by AB_CHETRF.
 *> \endverbatim
 *>
 *> \param[in] LDAF
@@ -87,7 +87,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>     Details of the interchanges and the block structure of D
-*>     as determined by CHETRF.
+*>     as determined by AB_CHETRF.
 *> \endverbatim
 *>
 *> \param[in] X
@@ -128,7 +128,8 @@
 *> \ingroup complexHEcomputational
 *
 *  =====================================================================
-      REAL FUNCTION CLA_HERCOND_X( UPLO, N, A, LDA, AF, LDAF, IPIV, X,
+      REAL FUNCTION AB_CLA_HERCOND_X( UPLO, N, A, LDA, AF, LDAF, IPIV, X
+     $,
      $                             INFO, WORK, RWORK )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -158,11 +159,11 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLACN2, CHETRS, XERBLA
+      EXTERNAL           AB_CLACN2, AB_CHETRS, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -175,11 +176,11 @@
 *     ..
 *     .. Executable Statements ..
 *
-      CLA_HERCOND_X = 0.0E+0
+      AB_CLA_HERCOND_X = 0.0E+0
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF ( N.LT.0 ) THEN
          INFO = -2
@@ -189,11 +190,11 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CLA_HERCOND_X', -INFO )
+         CALL AB_XERBLA( 'AB_CLA_HERCOND_X', -INFO )
          RETURN
       END IF
       UP = .FALSE.
-      IF ( LSAME( UPLO, 'U' ) ) UP = .TRUE.
+      IF ( AB_LSAME( UPLO, 'U' ) ) UP = .TRUE.
 *
 *     Compute norm of op(A)*op2(C).
 *
@@ -227,7 +228,7 @@
 *     Quick return if possible.
 *
       IF( N.EQ.0 ) THEN
-         CLA_HERCOND_X = 1.0E+0
+         AB_CLA_HERCOND_X = 1.0E+0
          RETURN
       ELSE IF( ANORM .EQ. 0.0E+0 ) THEN
          RETURN
@@ -239,7 +240,7 @@
 *
       KASE = 0
    10 CONTINUE
-      CALL CLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
+      CALL AB_CLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
       IF( KASE.NE.0 ) THEN
          IF( KASE.EQ.2 ) THEN
 *
@@ -250,10 +251,10 @@
             END DO
 *
             IF ( UP ) THEN
-               CALL CHETRS( 'U', N, 1, AF, LDAF, IPIV,
+               CALL AB_CHETRS( 'U', N, 1, AF, LDAF, IPIV,
      $            WORK, N, INFO )
             ELSE
-               CALL CHETRS( 'L', N, 1, AF, LDAF, IPIV,
+               CALL AB_CHETRS( 'L', N, 1, AF, LDAF, IPIV,
      $            WORK, N, INFO )
             ENDIF
 *
@@ -271,10 +272,10 @@
             END DO
 *
             IF ( UP ) THEN
-               CALL CHETRS( 'U', N, 1, AF, LDAF, IPIV,
+               CALL AB_CHETRS( 'U', N, 1, AF, LDAF, IPIV,
      $            WORK, N, INFO )
             ELSE
-               CALL CHETRS( 'L', N, 1, AF, LDAF, IPIV,
+               CALL AB_CHETRS( 'L', N, 1, AF, LDAF, IPIV,
      $            WORK, N, INFO )
             END IF
 *
@@ -290,7 +291,7 @@
 *     Compute the estimate of the reciprocal condition number.
 *
       IF( AINVNM .NE. 0.0E+0 )
-     $   CLA_HERCOND_X = 1.0E+0 / AINVNM
+     $   AB_CLA_HERCOND_X = 1.0E+0 / AINVNM
 *
       RETURN
 *

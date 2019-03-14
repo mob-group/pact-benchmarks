@@ -1,4 +1,4 @@
-*> \brief \b SLABAD
+*> \brief \b AB_SLABAD
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLABAD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slabad.f">
+*> Download AB_SLABAD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLABAD.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slabad.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLABAD.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slabad.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLABAD.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLABAD( SMALL, LARGE )
+*       SUBROUTINE AB_SLABAD( SMALL, LARGE )
 *
 *       .. Scalar Arguments ..
 *       REAL               LARGE, SMALL
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> SLABAD takes as input the values computed by SLAMCH for underflow and
+*> AB_SLABAD takes as input the values computed by SLAMCH for underflow and
 *> overflow, and returns the square root of each of these values if the
 *> log of LARGE is sufficiently large.  This subroutine is intended to
 *> identify machines with a large exponent range, such as the Crays, and
@@ -72,7 +72,7 @@
 *> \ingroup OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE SLABAD( SMALL, LARGE )
+      SUBROUTINE AB_SLABAD( SMALL, LARGE )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -100,6 +100,6 @@
 *
       RETURN
 *
-*     End of SLABAD
+*     End of AB_SLABAD
 *
       END

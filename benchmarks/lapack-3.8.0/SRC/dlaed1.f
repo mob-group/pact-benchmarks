@@ -1,4 +1,4 @@
-*> \brief \b DLAED1 used by sstedc. Computes the updated eigensystem of a diagonal matrix after modification by a rank-one symmetric matrix. Used when the original matrix is tridiagonal.
+*> \brief \b AB_DLAED1 used by AB_SSTEDC. Computes the updated eigensystem of a diagonal matrix after modification by a rank-one symmetric matrix. Used when the original matrix is tridiagonal.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLAED1 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaed1.f">
+*> Download AB_DLAED1 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLAED1.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaed1.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLAED1.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaed1.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLAED1.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLAED1( N, D, Q, LDQ, INDXQ, RHO, CUTPNT, WORK, IWORK,
+*       SUBROUTINE AB_DLAED1( N, D, Q, LDQ, INDXQ, RHO, CUTPNT, WORK, IWORK,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,10 +36,10 @@
 *>
 *> \verbatim
 *>
-*> DLAED1 computes the updated eigensystem of a diagonal
+*> AB_DLAED1 computes the updated eigensystem of a diagonal
 *> matrix after modification by a rank-one symmetric matrix.  This
 *> routine is used only for the eigenproblem which requires all
-*> eigenvalues and eigenvectors of a tridiagonal matrix.  DLAED7 handles
+*> eigenvalues and eigenvectors of a tridiagonal matrix.  AB_DLAED7 handles
 *> the case in which eigenvalues only or eigenvalues and eigenvectors
 *> of a full symmetric matrix (which was reduced to tridiagonal form)
 *> are desired.
@@ -56,11 +56,11 @@
 *>       when there are multiple eigenvalues or if there is a zero in
 *>       the Z vector.  For each such occurrence the dimension of the
 *>       secular equation problem is reduced by one.  This stage is
-*>       performed by the routine DLAED2.
+*>       performed by the routine AB_DLAED2.
 *>
 *>       The second stage consists of calculating the updated
 *>       eigenvalues. This is done by finding the roots of the secular
-*>       equation via the routine DLAED4 (as called by DLAED3).
+*>       equation via the routine AB_DLAED4 (as called by AB_DLAED3).
 *>       This routine also calculates the eigenvectors of the current
 *>       problem.
 *>
@@ -160,7 +160,8 @@
 *>  Modified by Francoise Tisseur, University of Tennessee
 *>
 *  =====================================================================
-      SUBROUTINE DLAED1( N, D, Q, LDQ, INDXQ, RHO, CUTPNT, WORK, IWORK,
+      SUBROUTINE AB_DLAED1( N, D, Q, LDQ, INDXQ, RHO, CUTPNT, WORK, IWOR
+     $K,
      $                   INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -184,7 +185,8 @@
      $                   IW, IZ, K, N1, N2, ZPP1
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DLAED2, DLAED3, DLAMRG, XERBLA
+      EXTERNAL           AB_DCOPY, AB_DLAED2, AB_DLAED3, AB_DLAMRG, AB_X
+     $ERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -203,7 +205,7 @@
          INFO = -7
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DLAED1', -INFO )
+         CALL AB_XERBLA( 'AB_DLAED1', -INFO )
          RETURN
       END IF
 *
@@ -214,7 +216,7 @@
 *
 *     The following values are integer pointers which indicate
 *     the portion of the workspace
-*     used by a particular array in DLAED2 and DLAED3.
+*     used by a particular array in AB_DLAED2 and AB_DLAED3.
 *
       IZ = 1
       IDLMDA = IZ + N
@@ -230,13 +232,14 @@
 *     Form the z-vector which consists of the last row of Q_1 and the
 *     first row of Q_2.
 *
-      CALL DCOPY( CUTPNT, Q( CUTPNT, 1 ), LDQ, WORK( IZ ), 1 )
+      CALL AB_DCOPY( CUTPNT, Q( CUTPNT, 1 ), LDQ, WORK( IZ ), 1 )
       ZPP1 = CUTPNT + 1
-      CALL DCOPY( N-CUTPNT, Q( ZPP1, ZPP1 ), LDQ, WORK( IZ+CUTPNT ), 1 )
+      CALL AB_DCOPY( N-CUTPNT, Q( ZPP1, ZPP1 ), LDQ, WORK( IZ+CUTPNT ), 
+     $1 )
 *
 *     Deflate eigenvalues.
 *
-      CALL DLAED2( K, N, CUTPNT, D, Q, LDQ, INDXQ, RHO, WORK( IZ ),
+      CALL AB_DLAED2( K, N, CUTPNT, D, Q, LDQ, INDXQ, RHO, WORK( IZ ),
      $             WORK( IDLMDA ), WORK( IW ), WORK( IQ2 ),
      $             IWORK( INDX ), IWORK( INDXC ), IWORK( INDXP ),
      $             IWORK( COLTYP ), INFO )
@@ -249,7 +252,7 @@
       IF( K.NE.0 ) THEN
          IS = ( IWORK( COLTYP )+IWORK( COLTYP+1 ) )*CUTPNT +
      $        ( IWORK( COLTYP+1 )+IWORK( COLTYP+2 ) )*( N-CUTPNT ) + IQ2
-         CALL DLAED3( K, N, CUTPNT, D, Q, LDQ, RHO, WORK( IDLMDA ),
+         CALL AB_DLAED3( K, N, CUTPNT, D, Q, LDQ, RHO, WORK( IDLMDA ),
      $                WORK( IQ2 ), IWORK( INDXC ), IWORK( COLTYP ),
      $                WORK( IW ), WORK( IS ), INFO )
          IF( INFO.NE.0 )
@@ -259,7 +262,7 @@
 *
          N1 = K
          N2 = N - K
-         CALL DLAMRG( N1, N2, D, 1, -1, INDXQ )
+         CALL AB_DLAMRG( N1, N2, D, 1, -1, INDXQ )
       ELSE
          DO 10 I = 1, N
             INDXQ( I ) = I
@@ -269,6 +272,6 @@
    20 CONTINUE
       RETURN
 *
-*     End of DLAED1
+*     End of AB_DLAED1
 *
       END

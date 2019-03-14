@@ -1,4 +1,4 @@
-*> \brief \b CUNMRZ
+*> \brief \b AB_CUNMRZ
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CUNMRZ + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cunmrz.f">
+*> Download AB_CUNMRZ + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CUNMRZ.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cunmrz.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CUNMRZ.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cunmrz.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CUNMRZ.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CUNMRZ( SIDE, TRANS, M, N, K, L, A, LDA, TAU, C, LDC,
+*       SUBROUTINE AB_CUNMRZ( SIDE, TRANS, M, N, K, L, A, LDA, TAU, C, LDC,
 *                          WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> CUNMRZ overwrites the general complex M-by-N matrix C with
+*> AB_CUNMRZ overwrites the general complex M-by-N matrix C with
 *>
 *>                 SIDE = 'L'     SIDE = 'R'
 *> TRANS = 'N':      Q * C          C * Q
@@ -46,7 +46,7 @@
 *>
 *>       Q = H(1) H(2) . . . H(k)
 *>
-*> as returned by CTZRZF. Q is of order M if SIDE = 'L' and of order N
+*> as returned by AB_CTZRZF. Q is of order M if SIDE = 'L' and of order N
 *> if SIDE = 'R'.
 *> \endverbatim
 *
@@ -103,7 +103,7 @@
 *>                               (LDA,N) if SIDE = 'R'
 *>          The i-th row must contain the vector which defines the
 *>          elementary reflector H(i), for i = 1,2,...,k, as returned by
-*>          CTZRZF in the last k rows of its array argument A.
+*>          AB_CTZRZF in the last k rows of its array argument A.
 *>          A is modified by the routine but restored on exit.
 *> \endverbatim
 *>
@@ -117,7 +117,7 @@
 *> \verbatim
 *>          TAU is COMPLEX array, dimension (K)
 *>          TAU(i) must contain the scalar factor of the elementary
-*>          reflector H(i), as returned by CTZRZF.
+*>          reflector H(i), as returned by AB_CTZRZF.
 *> \endverbatim
 *>
 *> \param[in,out] C
@@ -150,7 +150,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -184,7 +184,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CUNMRZ( SIDE, TRANS, M, N, K, L, A, LDA, TAU, C, LDC,
+      SUBROUTINE AB_CUNMRZ( SIDE, TRANS, M, N, K, L, A, LDA, TAU, C, LDC
+     $,
      $                   WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -214,12 +215,12 @@
      $                   LDWORK, LWKOPT, MI, NB, NBMIN, NI, NQ, NW
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      EXTERNAL           LSAME, ILAENV
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_LSAME, AB_ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLARZB, CLARZT, CUNMR3, XERBLA
+      EXTERNAL           AB_CLARZB, AB_CLARZT, AB_CUNMR3, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -229,8 +230,8 @@
 *     Test the input arguments
 *
       INFO = 0
-      LEFT = LSAME( SIDE, 'L' )
-      NOTRAN = LSAME( TRANS, 'N' )
+      LEFT = AB_LSAME( SIDE, 'L' )
+      NOTRAN = AB_LSAME( TRANS, 'N' )
       LQUERY = ( LWORK.EQ.-1 )
 *
 *     NQ is the order of Q and NW is the minimum dimension of WORK
@@ -242,9 +243,9 @@
          NQ = N
          NW = MAX( 1, M )
       END IF
-      IF( .NOT.LEFT .AND. .NOT.LSAME( SIDE, 'R' ) ) THEN
+      IF( .NOT.LEFT .AND. .NOT.AB_LSAME( SIDE, 'R' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'C' ) ) THEN
+      ELSE IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'C' ) ) THEN
          INFO = -2
       ELSE IF( M.LT.0 ) THEN
          INFO = -3
@@ -270,7 +271,8 @@
          IF( M.EQ.0 .OR. N.EQ.0 ) THEN
             LWKOPT = 1
          ELSE
-            NB = MIN( NBMAX, ILAENV( 1, 'CUNMRQ', SIDE // TRANS, M, N,
+            NB = MIN( NBMAX, AB_ILAENV( 1, 'AB_CUNMRQ', SIDE // TRANS, M
+     $, N,
      $                               K, -1 ) )
             LWKOPT = NW*NB + TSIZE
          END IF
@@ -278,7 +280,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CUNMRZ', -INFO )
+         CALL AB_XERBLA( 'AB_CUNMRZ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -292,14 +294,16 @@
 *
 *     Determine the block size.
 *
-      NB = MIN( NBMAX, ILAENV( 1, 'CUNMRQ', SIDE // TRANS, M, N, K,
+      NB = MIN( NBMAX, AB_ILAENV( 1, 'AB_CUNMRQ', SIDE // TRANS, M, N, K
+     $,
      $                         -1 ) )
       NBMIN = 2
       LDWORK = NW
       IF( NB.GT.1 .AND. NB.LT.K ) THEN
          IF( LWORK.LT.NW*NB+TSIZE ) THEN
             NB = (LWORK-TSIZE) / LDWORK
-            NBMIN = MAX( 2, ILAENV( 2, 'CUNMRQ', SIDE // TRANS, M, N, K,
+            NBMIN = MAX( 2, AB_ILAENV( 2, 'AB_CUNMRQ', SIDE // TRANS, M,
+     $ N, K,
      $                              -1 ) )
          END IF
       END IF
@@ -308,7 +312,7 @@
 *
 *        Use unblocked code
 *
-         CALL CUNMR3( SIDE, TRANS, M, N, K, L, A, LDA, TAU, C, LDC,
+         CALL AB_CUNMR3( SIDE, TRANS, M, N, K, L, A, LDA, TAU, C, LDC,
      $                WORK, IINFO )
       ELSE
 *
@@ -348,7 +352,8 @@
 *           Form the triangular factor of the block reflector
 *           H = H(i+ib-1) . . . H(i+1) H(i)
 *
-            CALL CLARZT( 'Backward', 'Rowwise', L, IB, A( I, JA ), LDA,
+            CALL AB_CLARZT( 'Backward', 'Rowwise', L, IB, A( I, JA ), LD
+     $A,
      $                   TAU( I ), WORK( IWT ), LDT )
 *
             IF( LEFT ) THEN
@@ -367,7 +372,7 @@
 *
 *           Apply H or H**H
 *
-            CALL CLARZB( SIDE, TRANST, 'Backward', 'Rowwise', MI, NI,
+            CALL AB_CLARZB( SIDE, TRANST, 'Backward', 'Rowwise', MI, NI,
      $                   IB, L, A( I, JA ), LDA, WORK( IWT ), LDT,
      $                   C( IC, JC ), LDC, WORK, LDWORK )
    10    CONTINUE
@@ -378,6 +383,6 @@
 *
       RETURN
 *
-*     End of CUNMRZ
+*     End of AB_CUNMRZ
 *
       END

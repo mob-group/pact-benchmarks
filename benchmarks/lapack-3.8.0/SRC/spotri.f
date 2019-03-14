@@ -1,4 +1,4 @@
-*> \brief \b SPOTRI
+*> \brief \b AB_SPOTRI
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SPOTRI + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/spotri.f">
+*> Download AB_SPOTRI + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SPOTRI.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/spotri.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SPOTRI.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/spotri.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SPOTRI.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SPOTRI( UPLO, N, A, LDA, INFO )
+*       SUBROUTINE AB_SPOTRI( UPLO, N, A, LDA, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,9 +34,9 @@
 *>
 *> \verbatim
 *>
-*> SPOTRI computes the inverse of a real symmetric positive definite
+*> AB_SPOTRI computes the inverse of a real symmetric positive definite
 *> matrix A using the Cholesky factorization A = U**T*U or A = L*L**T
-*> computed by SPOTRF.
+*> computed by AB_SPOTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -60,7 +60,7 @@
 *>          A is REAL array, dimension (LDA,N)
 *>          On entry, the triangular factor U or L from the Cholesky
 *>          factorization A = U**T*U or A = L*L**T, as computed by
-*>          SPOTRF.
+*>          AB_SPOTRF.
 *>          On exit, the upper or lower triangle of the (symmetric)
 *>          inverse of A, overwriting the input factor U or L.
 *> \endverbatim
@@ -93,7 +93,7 @@
 *> \ingroup realPOcomputational
 *
 *  =====================================================================
-      SUBROUTINE SPOTRI( UPLO, N, A, LDA, INFO )
+      SUBROUTINE AB_SPOTRI( UPLO, N, A, LDA, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -111,11 +111,11 @@
 *  =====================================================================
 *
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLAUUM, STRTRI, XERBLA
+      EXTERNAL           AB_SLAUUM, AB_STRTRI, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -125,7 +125,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      IF( .NOT.AB_LSAME( UPLO, 'U' ) .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) 
+     $THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -133,7 +134,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SPOTRI', -INFO )
+         CALL AB_XERBLA( 'AB_SPOTRI', -INFO )
          RETURN
       END IF
 *
@@ -144,16 +145,16 @@
 *
 *     Invert the triangular Cholesky factor U or L.
 *
-      CALL STRTRI( UPLO, 'Non-unit', N, A, LDA, INFO )
+      CALL AB_STRTRI( UPLO, 'Non-unit', N, A, LDA, INFO )
       IF( INFO.GT.0 )
      $   RETURN
 *
 *     Form inv(U) * inv(U)**T or inv(L)**T * inv(L).
 *
-      CALL SLAUUM( UPLO, N, A, LDA, INFO )
+      CALL AB_SLAUUM( UPLO, N, A, LDA, INFO )
 *
       RETURN
 *
-*     End of SPOTRI
+*     End of AB_SPOTRI
 *
       END

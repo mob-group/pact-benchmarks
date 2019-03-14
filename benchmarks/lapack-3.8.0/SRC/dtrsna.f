@@ -1,4 +1,4 @@
-*> \brief \b DTRSNA
+*> \brief \b AB_DTRSNA
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DTRSNA + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dtrsna.f">
+*> Download AB_DTRSNA + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DTRSNA.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dtrsna.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DTRSNA.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dtrsna.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DTRSNA.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DTRSNA( JOB, HOWMNY, SELECT, N, T, LDT, VL, LDVL, VR,
+*       SUBROUTINE AB_DTRSNA( JOB, HOWMNY, SELECT, N, T, LDT, VL, LDVL, VR,
 *                          LDVR, S, SEP, MM, M, WORK, LDWORK, IWORK,
 *                          INFO )
 *
@@ -39,12 +39,12 @@
 *>
 *> \verbatim
 *>
-*> DTRSNA estimates reciprocal condition numbers for specified
+*> AB_DTRSNA estimates reciprocal condition numbers for specified
 *> eigenvalues and/or right eigenvectors of a real upper
 *> quasi-triangular matrix T (or of any matrix Q*T*Q**T with Q
 *> orthogonal).
 *>
-*> T must be in Schur canonical form (as returned by DHSEQR), that is,
+*> T must be in Schur canonical form (as returned by AB_DHSEQR), that is,
 *> block upper triangular with 1-by-1 and 2-by-2 diagonal blocks; each
 *> 2-by-2 diagonal block has its diagonal elements equal and its
 *> off-diagonal elements of opposite sign.
@@ -109,7 +109,7 @@
 *>          (or of any Q*T*Q**T with Q orthogonal), corresponding to the
 *>          eigenpairs specified by HOWMNY and SELECT. The eigenvectors
 *>          must be stored in consecutive columns of VL, as returned by
-*>          DHSEIN or DTREVC.
+*>          AB_DHSEIN or AB_DTREVC.
 *>          If JOB = 'V', VL is not referenced.
 *> \endverbatim
 *>
@@ -127,7 +127,7 @@
 *>          (or of any Q*T*Q**T with Q orthogonal), corresponding to the
 *>          eigenpairs specified by HOWMNY and SELECT. The eigenvectors
 *>          must be stored in consecutive columns of VR, as returned by
-*>          DHSEIN or DTREVC.
+*>          AB_DHSEIN or AB_DTREVC.
 *>          If JOB = 'V', VR is not referenced.
 *> \endverbatim
 *>
@@ -261,7 +261,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DTRSNA( JOB, HOWMNY, SELECT, N, T, LDT, VL, LDVL, VR,
+      SUBROUTINE AB_DTRSNA( JOB, HOWMNY, SELECT, N, T, LDT, VL, LDVL, VR
+     $,
      $                   LDVR, S, SEP, MM, M, WORK, LDWORK, IWORK,
      $                   INFO )
 *
@@ -298,12 +299,13 @@
       DOUBLE PRECISION   DUMMY( 1 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DDOT, DLAMCH, DLAPY2, DNRM2
-      EXTERNAL           LSAME, DDOT, DLAMCH, DLAPY2, DNRM2
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   AB_DDOT, DLAMCH, AB_DLAPY2, AB_DNRM2
+      EXTERNAL           AB_LSAME, AB_DDOT, DLAMCH, AB_DLAPY2, AB_DNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLABAD, DLACN2, DLACPY, DLAQTR, DTREXC, XERBLA
+      EXTERNAL           AB_DLABAD, AB_DLACN2, AB_DLACPY, AB_DLAQTR, AB_
+     $DTREXC, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT
@@ -312,16 +314,16 @@
 *
 *     Decode and test the input parameters
 *
-      WANTBH = LSAME( JOB, 'B' )
-      WANTS = LSAME( JOB, 'E' ) .OR. WANTBH
-      WANTSP = LSAME( JOB, 'V' ) .OR. WANTBH
+      WANTBH = AB_LSAME( JOB, 'B' )
+      WANTS = AB_LSAME( JOB, 'E' ) .OR. WANTBH
+      WANTSP = AB_LSAME( JOB, 'V' ) .OR. WANTBH
 *
-      SOMCON = LSAME( HOWMNY, 'S' )
+      SOMCON = AB_LSAME( HOWMNY, 'S' )
 *
       INFO = 0
       IF( .NOT.WANTS .AND. .NOT.WANTSP ) THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME( HOWMNY, 'A' ) .AND. .NOT.SOMCON ) THEN
+      ELSE IF( .NOT.AB_LSAME( HOWMNY, 'A' ) .AND. .NOT.SOMCON ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
@@ -369,7 +371,7 @@
          END IF
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DTRSNA', -INFO )
+         CALL AB_XERBLA( 'AB_DTRSNA', -INFO )
          RETURN
       END IF
 *
@@ -395,7 +397,7 @@
       EPS = DLAMCH( 'P' )
       SMLNUM = DLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
+      CALL AB_DLABAD( SMLNUM, BIGNUM )
 *
       KS = 0
       PAIR = .FALSE.
@@ -435,25 +437,27 @@
 *
 *              Real eigenvalue.
 *
-               PROD = DDOT( N, VR( 1, KS ), 1, VL( 1, KS ), 1 )
-               RNRM = DNRM2( N, VR( 1, KS ), 1 )
-               LNRM = DNRM2( N, VL( 1, KS ), 1 )
+               PROD = AB_DDOT( N, VR( 1, KS ), 1, VL( 1, KS ), 1 )
+               RNRM = AB_DNRM2( N, VR( 1, KS ), 1 )
+               LNRM = AB_DNRM2( N, VL( 1, KS ), 1 )
                S( KS ) = ABS( PROD ) / ( RNRM*LNRM )
             ELSE
 *
 *              Complex eigenvalue.
 *
-               PROD1 = DDOT( N, VR( 1, KS ), 1, VL( 1, KS ), 1 )
-               PROD1 = PROD1 + DDOT( N, VR( 1, KS+1 ), 1, VL( 1, KS+1 ),
+               PROD1 = AB_DDOT( N, VR( 1, KS ), 1, VL( 1, KS ), 1 )
+               PROD1 = PROD1 + AB_DDOT( N, VR( 1, KS+1 ), 1, VL( 1, KS+1
+     $ ),
      $                 1 )
-               PROD2 = DDOT( N, VL( 1, KS ), 1, VR( 1, KS+1 ), 1 )
-               PROD2 = PROD2 - DDOT( N, VL( 1, KS+1 ), 1, VR( 1, KS ),
+               PROD2 = AB_DDOT( N, VL( 1, KS ), 1, VR( 1, KS+1 ), 1 )
+               PROD2 = PROD2 - AB_DDOT( N, VL( 1, KS+1 ), 1, VR( 1, KS )
+     $,
      $                 1 )
-               RNRM = DLAPY2( DNRM2( N, VR( 1, KS ), 1 ),
-     $                DNRM2( N, VR( 1, KS+1 ), 1 ) )
-               LNRM = DLAPY2( DNRM2( N, VL( 1, KS ), 1 ),
-     $                DNRM2( N, VL( 1, KS+1 ), 1 ) )
-               COND = DLAPY2( PROD1, PROD2 ) / ( RNRM*LNRM )
+               RNRM = AB_DLAPY2( AB_DNRM2( N, VR( 1, KS ), 1 ),
+     $                AB_DNRM2( N, VR( 1, KS+1 ), 1 ) )
+               LNRM = AB_DLAPY2( AB_DNRM2( N, VL( 1, KS ), 1 ),
+     $                AB_DNRM2( N, VL( 1, KS+1 ), 1 ) )
+               COND = AB_DLAPY2( PROD1, PROD2 ) / ( RNRM*LNRM )
                S( KS ) = COND
                S( KS+1 ) = COND
             END IF
@@ -467,10 +471,11 @@
 *           Copy the matrix T to the array WORK and swap the diagonal
 *           block beginning at T(k,k) to the (1,1) position.
 *
-            CALL DLACPY( 'Full', N, N, T, LDT, WORK, LDWORK )
+            CALL AB_DLACPY( 'Full', N, N, T, LDT, WORK, LDWORK )
             IFST = K
             ILST = 1
-            CALL DTREXC( 'No Q', N, WORK, LDWORK, DUMMY, 1, IFST, ILST,
+            CALL AB_DTREXC( 'No Q', N, WORK, LDWORK, DUMMY, 1, IFST, ILS
+     $T,
      $                   WORK( 1, N+1 ), IERR )
 *
             IF( IERR.EQ.1 .OR. IERR.EQ.2 ) THEN
@@ -504,7 +509,7 @@
 *
                   MU = SQRT( ABS( WORK( 1, 2 ) ) )*
      $                 SQRT( ABS( WORK( 2, 1 ) ) )
-                  DELTA = DLAPY2( MU, WORK( 2, 1 ) )
+                  DELTA = AB_DLAPY2( MU, WORK( 2, 1 ) )
                   CS = MU / DELTA
                   SN = -WORK( 2, 1 ) / DELTA
 *
@@ -538,7 +543,8 @@
                EST = ZERO
                KASE = 0
    50          CONTINUE
-               CALL DLACN2( NN, WORK( 1, N+2 ), WORK( 1, N+4 ), IWORK,
+               CALL AB_DLACN2( NN, WORK( 1, N+2 ), WORK( 1, N+4 ), IWORK
+     $,
      $                      EST, KASE, ISAVE )
                IF( KASE.NE.0 ) THEN
                   IF( KASE.EQ.1 ) THEN
@@ -546,7 +552,8 @@
 *
 *                       Real eigenvalue: solve C**T*x = scale*c.
 *
-                        CALL DLAQTR( .TRUE., .TRUE., N-1, WORK( 2, 2 ),
+                        CALL AB_DLAQTR( .TRUE., .TRUE., N-1, WORK( 2, 2 
+     $),
      $                               LDWORK, DUMMY, DUMM, SCALE,
      $                               WORK( 1, N+4 ), WORK( 1, N+6 ),
      $                               IERR )
@@ -555,7 +562,8 @@
 *                       Complex eigenvalue: solve
 *                       C**T*(p+iq) = scale*(c+id) in real arithmetic.
 *
-                        CALL DLAQTR( .TRUE., .FALSE., N-1, WORK( 2, 2 ),
+                        CALL AB_DLAQTR( .TRUE., .FALSE., N-1, WORK( 2, 2
+     $ ),
      $                               LDWORK, WORK( 1, N+1 ), MU, SCALE,
      $                               WORK( 1, N+4 ), WORK( 1, N+6 ),
      $                               IERR )
@@ -565,7 +573,8 @@
 *
 *                       Real eigenvalue: solve C*x = scale*c.
 *
-                        CALL DLAQTR( .FALSE., .TRUE., N-1, WORK( 2, 2 ),
+                        CALL AB_DLAQTR( .FALSE., .TRUE., N-1, WORK( 2, 2
+     $ ),
      $                               LDWORK, DUMMY, DUMM, SCALE,
      $                               WORK( 1, N+4 ), WORK( 1, N+6 ),
      $                               IERR )
@@ -574,7 +583,7 @@
 *                       Complex eigenvalue: solve
 *                       C*(p+iq) = scale*(c+id) in real arithmetic.
 *
-                        CALL DLAQTR( .FALSE., .FALSE., N-1,
+                        CALL AB_DLAQTR( .FALSE., .FALSE., N-1,
      $                               WORK( 2, 2 ), LDWORK,
      $                               WORK( 1, N+1 ), MU, SCALE,
      $                               WORK( 1, N+4 ), WORK( 1, N+6 ),
@@ -598,6 +607,6 @@
    60 CONTINUE
       RETURN
 *
-*     End of DTRSNA
+*     End of AB_DTRSNA
 *
       END

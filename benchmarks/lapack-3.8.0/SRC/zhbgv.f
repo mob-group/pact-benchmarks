@@ -1,4 +1,4 @@
-*> \brief \b ZHBGV
+*> \brief \b AB_ZHBGV
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZHBGV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhbgv.f">
+*> Download AB_ZHBGV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZHBGV.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhbgv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZHBGV.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhbgv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZHBGV.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZHBGV( JOBZ, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, W, Z,
+*       SUBROUTINE AB_ZHBGV( JOBZ, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, W, Z,
 *                         LDZ, WORK, RWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> ZHBGV computes all the eigenvalues, and optionally, the eigenvectors
+*> AB_ZHBGV computes all the eigenvalues, and optionally, the eigenvectors
 *> of a complex generalized Hermitian-definite banded eigenproblem, of
 *> the form A*x=(lambda)*B*x. Here A and B are assumed to be Hermitian
 *> and banded, and B is also positive definite.
@@ -110,7 +110,7 @@
 *>          if UPLO = 'L', BB(1+i-j,j)    = B(i,j) for j<=i<=min(n,j+kb).
 *>
 *>          On exit, the factor S from the split Cholesky factorization
-*>          B = S**H*S, as returned by ZPBSTF.
+*>          B = S**H*S, as returned by AB_ZPBSTF.
 *> \endverbatim
 *>
 *> \param[in] LDBB
@@ -161,7 +161,7 @@
 *>             <= N:  the algorithm failed to converge:
 *>                    i off-diagonal elements of an intermediate
 *>                    tridiagonal form did not converge to zero;
-*>             > N:   if INFO = N + i, for 1 <= i <= N, then ZPBSTF
+*>             > N:   if INFO = N + i, for 1 <= i <= N, then AB_ZPBSTF
 *>                    returned INFO = i: B is not positive definite.
 *>                    The factorization of B could not be completed and
 *>                    no eigenvalues or eigenvectors were computed.
@@ -180,7 +180,8 @@
 *> \ingroup complex16OTHEReigen
 *
 *  =====================================================================
-      SUBROUTINE ZHBGV( JOBZ, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, W, Z,
+      SUBROUTINE AB_ZHBGV( JOBZ, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, W,
+     $ Z,
      $                  LDZ, WORK, RWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -206,23 +207,24 @@
       INTEGER            IINFO, INDE, INDWRK
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSTERF, XERBLA, ZHBGST, ZHBTRD, ZPBSTF, ZSTEQR
+      EXTERNAL           AB_DSTERF, AB_XERBLA, AB_ZHBGST, AB_ZHBTRD, AB_
+     $ZPBSTF, AB_ZSTEQR
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters.
 *
-      WANTZ = LSAME( JOBZ, 'V' )
-      UPPER = LSAME( UPLO, 'U' )
+      WANTZ = AB_LSAME( JOBZ, 'V' )
+      UPPER = AB_LSAME( UPLO, 'U' )
 *
       INFO = 0
-      IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
+      IF( .NOT.( WANTZ .OR. AB_LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.( UPPER .OR. LSAME( UPLO, 'L' ) ) ) THEN
+      ELSE IF( .NOT.( UPPER .OR. AB_LSAME( UPLO, 'L' ) ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -238,7 +240,7 @@
          INFO = -12
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZHBGV ', -INFO )
+         CALL AB_XERBLA( 'AB_ZHBGV ', -INFO )
          RETURN
       END IF
 *
@@ -249,7 +251,7 @@
 *
 *     Form a split Cholesky factorization of B.
 *
-      CALL ZPBSTF( UPLO, N, KB, BB, LDBB, INFO )
+      CALL AB_ZPBSTF( UPLO, N, KB, BB, LDBB, INFO )
       IF( INFO.NE.0 ) THEN
          INFO = N + INFO
          RETURN
@@ -259,7 +261,7 @@
 *
       INDE = 1
       INDWRK = INDE + N
-      CALL ZHBGST( JOBZ, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, Z, LDZ,
+      CALL AB_ZHBGST( JOBZ, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, Z, LDZ,
      $             WORK, RWORK( INDWRK ), IINFO )
 *
 *     Reduce to tridiagonal form.
@@ -269,19 +271,19 @@
       ELSE
          VECT = 'N'
       END IF
-      CALL ZHBTRD( VECT, UPLO, N, KA, AB, LDAB, W, RWORK( INDE ), Z,
+      CALL AB_ZHBTRD( VECT, UPLO, N, KA, AB, LDAB, W, RWORK( INDE ), Z,
      $             LDZ, WORK, IINFO )
 *
-*     For eigenvalues only, call DSTERF.  For eigenvectors, call ZSTEQR.
+*     For eigenvalues only, call AB_DSTERF.  For eigenvectors, call AB_ZSTEQR.
 *
       IF( .NOT.WANTZ ) THEN
-         CALL DSTERF( N, W, RWORK( INDE ), INFO )
+         CALL AB_DSTERF( N, W, RWORK( INDE ), INFO )
       ELSE
-         CALL ZSTEQR( JOBZ, N, W, RWORK( INDE ), Z, LDZ,
+         CALL AB_ZSTEQR( JOBZ, N, W, RWORK( INDE ), Z, LDZ,
      $                RWORK( INDWRK ), INFO )
       END IF
       RETURN
 *
-*     End of ZHBGV
+*     End of AB_ZHBGV
 *
       END

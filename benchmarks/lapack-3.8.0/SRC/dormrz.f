@@ -1,4 +1,4 @@
-*> \brief \b DORMRZ
+*> \brief \b AB_DORMRZ
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DORMRZ + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dormrz.f">
+*> Download AB_DORMRZ + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DORMRZ.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dormrz.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DORMRZ.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dormrz.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DORMRZ.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DORMRZ( SIDE, TRANS, M, N, K, L, A, LDA, TAU, C, LDC,
+*       SUBROUTINE AB_DORMRZ( SIDE, TRANS, M, N, K, L, A, LDA, TAU, C, LDC,
 *                          WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> DORMRZ overwrites the general real M-by-N matrix C with
+*> AB_DORMRZ overwrites the general real M-by-N matrix C with
 *>
 *>                 SIDE = 'L'     SIDE = 'R'
 *> TRANS = 'N':      Q * C          C * Q
@@ -46,7 +46,7 @@
 *>
 *>       Q = H(1) H(2) . . . H(k)
 *>
-*> as returned by DTZRZF. Q is of order M if SIDE = 'L' and of order N
+*> as returned by AB_DTZRZF. Q is of order M if SIDE = 'L' and of order N
 *> if SIDE = 'R'.
 *> \endverbatim
 *
@@ -103,7 +103,7 @@
 *>                               (LDA,N) if SIDE = 'R'
 *>          The i-th row must contain the vector which defines the
 *>          elementary reflector H(i), for i = 1,2,...,k, as returned by
-*>          DTZRZF in the last k rows of its array argument A.
+*>          AB_DTZRZF in the last k rows of its array argument A.
 *>          A is modified by the routine but restored on exit.
 *> \endverbatim
 *>
@@ -117,7 +117,7 @@
 *> \verbatim
 *>          TAU is DOUBLE PRECISION array, dimension (K)
 *>          TAU(i) must contain the scalar factor of the elementary
-*>          reflector H(i), as returned by DTZRZF.
+*>          reflector H(i), as returned by AB_DTZRZF.
 *> \endverbatim
 *>
 *> \param[in,out] C
@@ -150,7 +150,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -184,7 +184,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DORMRZ( SIDE, TRANS, M, N, K, L, A, LDA, TAU, C, LDC,
+      SUBROUTINE AB_DORMRZ( SIDE, TRANS, M, N, K, L, A, LDA, TAU, C, LDC
+     $,
      $                   WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -214,12 +215,12 @@
      $                   LDWORK, LWKOPT, MI, NB, NBMIN, NI, NQ, NW
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      EXTERNAL           LSAME, ILAENV
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_LSAME, AB_ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARZB, DLARZT, DORMR3, XERBLA
+      EXTERNAL           AB_DLARZB, AB_DLARZT, AB_DORMR3, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -229,8 +230,8 @@
 *     Test the input arguments
 *
       INFO = 0
-      LEFT = LSAME( SIDE, 'L' )
-      NOTRAN = LSAME( TRANS, 'N' )
+      LEFT = AB_LSAME( SIDE, 'L' )
+      NOTRAN = AB_LSAME( TRANS, 'N' )
       LQUERY = ( LWORK.EQ.-1 )
 *
 *     NQ is the order of Q and NW is the minimum dimension of WORK
@@ -242,9 +243,9 @@
          NQ = N
          NW = MAX( 1, M )
       END IF
-      IF( .NOT.LEFT .AND. .NOT.LSAME( SIDE, 'R' ) ) THEN
+      IF( .NOT.LEFT .AND. .NOT.AB_LSAME( SIDE, 'R' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) ) THEN
+      ELSE IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) ) THEN
          INFO = -2
       ELSE IF( M.LT.0 ) THEN
          INFO = -3
@@ -270,7 +271,8 @@
          IF( M.EQ.0 .OR. N.EQ.0 ) THEN
             LWKOPT = 1
          ELSE
-            NB = MIN( NBMAX, ILAENV( 1, 'DORMRQ', SIDE // TRANS, M, N,
+            NB = MIN( NBMAX, AB_ILAENV( 1, 'AB_DORMRQ', SIDE // TRANS, M
+     $, N,
      $                               K, -1 ) )
             LWKOPT = NW*NB + TSIZE
          END IF
@@ -278,7 +280,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DORMRZ', -INFO )
+         CALL AB_XERBLA( 'AB_DORMRZ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -296,7 +298,8 @@
       IF( NB.GT.1 .AND. NB.LT.K ) THEN
          IF( LWORK.LT.NW*NB+TSIZE ) THEN
             NB = (LWORK-TSIZE) / LDWORK
-            NBMIN = MAX( 2, ILAENV( 2, 'DORMRQ', SIDE // TRANS, M, N, K,
+            NBMIN = MAX( 2, AB_ILAENV( 2, 'AB_DORMRQ', SIDE // TRANS, M,
+     $ N, K,
      $              -1 ) )
          END IF
       END IF
@@ -305,7 +308,7 @@
 *
 *        Use unblocked code
 *
-         CALL DORMR3( SIDE, TRANS, M, N, K, L, A, LDA, TAU, C, LDC,
+         CALL AB_DORMR3( SIDE, TRANS, M, N, K, L, A, LDA, TAU, C, LDC,
      $                WORK, IINFO )
       ELSE
 *
@@ -345,7 +348,8 @@
 *           Form the triangular factor of the block reflector
 *           H = H(i+ib-1) . . . H(i+1) H(i)
 *
-            CALL DLARZT( 'Backward', 'Rowwise', L, IB, A( I, JA ), LDA,
+            CALL AB_DLARZT( 'Backward', 'Rowwise', L, IB, A( I, JA ), LD
+     $A,
      $                   TAU( I ), WORK( IWT ), LDT )
 *
             IF( LEFT ) THEN
@@ -364,7 +368,7 @@
 *
 *           Apply H or H**T
 *
-            CALL DLARZB( SIDE, TRANST, 'Backward', 'Rowwise', MI, NI,
+            CALL AB_DLARZB( SIDE, TRANST, 'Backward', 'Rowwise', MI, NI,
      $                   IB, L, A( I, JA ), LDA, WORK( IWT ), LDT,
      $                   C( IC, JC ), LDC, WORK, LDWORK )
    10    CONTINUE
@@ -375,6 +379,6 @@
 *
       RETURN
 *
-*     End of DORMRZ
+*     End of AB_DORMRZ
 *
       END

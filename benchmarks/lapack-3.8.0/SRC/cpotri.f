@@ -1,4 +1,4 @@
-*> \brief \b CPOTRI
+*> \brief \b AB_CPOTRI
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CPOTRI + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpotri.f">
+*> Download AB_CPOTRI + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CPOTRI.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cpotri.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CPOTRI.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpotri.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CPOTRI.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CPOTRI( UPLO, N, A, LDA, INFO )
+*       SUBROUTINE AB_CPOTRI( UPLO, N, A, LDA, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,9 +34,9 @@
 *>
 *> \verbatim
 *>
-*> CPOTRI computes the inverse of a complex Hermitian positive definite
+*> AB_CPOTRI computes the inverse of a complex Hermitian positive definite
 *> matrix A using the Cholesky factorization A = U**H*U or A = L*L**H
-*> computed by CPOTRF.
+*> computed by AB_CPOTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -60,7 +60,7 @@
 *>          A is COMPLEX array, dimension (LDA,N)
 *>          On entry, the triangular factor U or L from the Cholesky
 *>          factorization A = U**H*U or A = L*L**H, as computed by
-*>          CPOTRF.
+*>          AB_CPOTRF.
 *>          On exit, the upper or lower triangle of the (Hermitian)
 *>          inverse of A, overwriting the input factor U or L.
 *> \endverbatim
@@ -93,7 +93,7 @@
 *> \ingroup complexPOcomputational
 *
 *  =====================================================================
-      SUBROUTINE CPOTRI( UPLO, N, A, LDA, INFO )
+      SUBROUTINE AB_CPOTRI( UPLO, N, A, LDA, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -111,11 +111,11 @@
 *  =====================================================================
 *
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLAUUM, CTRTRI, XERBLA
+      EXTERNAL           AB_CLAUUM, AB_CTRTRI, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -125,7 +125,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      IF( .NOT.AB_LSAME( UPLO, 'U' ) .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) 
+     $THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -133,7 +134,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CPOTRI', -INFO )
+         CALL AB_XERBLA( 'AB_CPOTRI', -INFO )
          RETURN
       END IF
 *
@@ -144,16 +145,16 @@
 *
 *     Invert the triangular Cholesky factor U or L.
 *
-      CALL CTRTRI( UPLO, 'Non-unit', N, A, LDA, INFO )
+      CALL AB_CTRTRI( UPLO, 'Non-unit', N, A, LDA, INFO )
       IF( INFO.GT.0 )
      $   RETURN
 *
 *     Form inv(U) * inv(U)**H or inv(L)**H * inv(L).
 *
-      CALL CLAUUM( UPLO, N, A, LDA, INFO )
+      CALL AB_CLAUUM( UPLO, N, A, LDA, INFO )
 *
       RETURN
 *
-*     End of CPOTRI
+*     End of AB_CPOTRI
 *
       END

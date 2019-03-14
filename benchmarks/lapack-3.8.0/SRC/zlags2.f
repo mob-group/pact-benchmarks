@@ -1,4 +1,4 @@
-*> \brief \b ZLAGS2
+*> \brief \b AB_ZLAGS2
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZLAGS2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlags2.f">
+*> Download AB_ZLAGS2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLAGS2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlags2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLAGS2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlags2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLAGS2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZLAGS2( UPPER, A1, A2, A3, B1, B2, B3, CSU, SNU, CSV,
+*       SUBROUTINE AB_ZLAGS2( UPPER, A1, A2, A3, B1, B2, B3, CSU, SNU, CSV,
 *                          SNV, CSQ, SNQ )
 *
 *       .. Scalar Arguments ..
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> ZLAGS2 computes 2-by-2 unitary matrices U, V and Q, such
+*> AB_ZLAGS2 computes 2-by-2 unitary matrices U, V and Q, such
 *> that if ( UPPER ) then
 *>
 *>           U**H *A*Q = U**H *( A1 A2 )*Q = ( x  0  )
@@ -155,7 +155,8 @@
 *> \ingroup complex16OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE ZLAGS2( UPPER, A1, A2, A3, B1, B2, B3, CSU, SNU, CSV,
+      SUBROUTINE AB_ZLAGS2( UPPER, A1, A2, A3, B1, B2, B3, CSU, SNU, CSV
+     $,
      $                   SNV, CSQ, SNQ )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -183,7 +184,7 @@
      $                   VB12, VB21, VB22
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLASV2, ZLARTG
+      EXTERNAL           AB_DLASV2, AB_ZLARTG
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCMPLX, DCONJG, DIMAG
@@ -220,7 +221,7 @@
 *         ( CSL -SNL )*( A B )*(  CSR  SNR ) = ( R 0 )
 *         ( SNL  CSL ) ( 0 D ) ( -SNR  CSR )   ( 0 T )
 *
-         CALL DLASV2( A, FB, D, S1, S2, SNR, CSR, SNL, CSL )
+         CALL AB_DLASV2( A, FB, D, S1, S2, SNR, CSR, SNL, CSL )
 *
          IF( ABS( CSL ).GE.ABS( SNL ) .OR. ABS( CSR ).GE.ABS( SNR ) )
      $        THEN
@@ -240,17 +241,21 @@
 *           zero (1,2) elements of U**H *A and V**H *B
 *
             IF( ( ABS( UA11R )+ABS1( UA12 ) ).EQ.ZERO ) THEN
-               CALL ZLARTG( -DCMPLX( VB11R ), DCONJG( VB12 ), CSQ, SNQ,
+               CALL AB_ZLARTG( -DCMPLX( VB11R ), DCONJG( VB12 ), CSQ, SN
+     $Q,
      $                      R )
             ELSE IF( ( ABS( VB11R )+ABS1( VB12 ) ).EQ.ZERO ) THEN
-               CALL ZLARTG( -DCMPLX( UA11R ), DCONJG( UA12 ), CSQ, SNQ,
+               CALL AB_ZLARTG( -DCMPLX( UA11R ), DCONJG( UA12 ), CSQ, SN
+     $Q,
      $                      R )
             ELSE IF( AUA12 / ( ABS( UA11R )+ABS1( UA12 ) ).LE.AVB12 /
      $               ( ABS( VB11R )+ABS1( VB12 ) ) ) THEN
-               CALL ZLARTG( -DCMPLX( UA11R ), DCONJG( UA12 ), CSQ, SNQ,
+               CALL AB_ZLARTG( -DCMPLX( UA11R ), DCONJG( UA12 ), CSQ, SN
+     $Q,
      $                      R )
             ELSE
-               CALL ZLARTG( -DCMPLX( VB11R ), DCONJG( VB12 ), CSQ, SNQ,
+               CALL AB_ZLARTG( -DCMPLX( VB11R ), DCONJG( VB12 ), CSQ, SN
+     $Q,
      $                      R )
             END IF
 *
@@ -276,17 +281,21 @@
 *           zero (2,2) elements of U**H *A and V**H *B, and then swap.
 *
             IF( ( ABS1( UA21 )+ABS1( UA22 ) ).EQ.ZERO ) THEN
-               CALL ZLARTG( -DCONJG( VB21 ), DCONJG( VB22 ), CSQ, SNQ,
+               CALL AB_ZLARTG( -DCONJG( VB21 ), DCONJG( VB22 ), CSQ, SNQ
+     $,
      $                      R )
             ELSE IF( ( ABS1( VB21 )+ABS( VB22 ) ).EQ.ZERO ) THEN
-               CALL ZLARTG( -DCONJG( UA21 ), DCONJG( UA22 ), CSQ, SNQ,
+               CALL AB_ZLARTG( -DCONJG( UA21 ), DCONJG( UA22 ), CSQ, SNQ
+     $,
      $                      R )
             ELSE IF( AUA22 / ( ABS1( UA21 )+ABS1( UA22 ) ).LE.AVB22 /
      $               ( ABS1( VB21 )+ABS1( VB22 ) ) ) THEN
-               CALL ZLARTG( -DCONJG( UA21 ), DCONJG( UA22 ), CSQ, SNQ,
+               CALL AB_ZLARTG( -DCONJG( UA21 ), DCONJG( UA22 ), CSQ, SNQ
+     $,
      $                      R )
             ELSE
-               CALL ZLARTG( -DCONJG( VB21 ), DCONJG( VB22 ), CSQ, SNQ,
+               CALL AB_ZLARTG( -DCONJG( VB21 ), DCONJG( VB22 ), CSQ, SNQ
+     $,
      $                      R )
             END IF
 *
@@ -321,7 +330,7 @@
 *         ( CSL -SNL )*( A 0 )*(  CSR  SNR ) = ( R 0 )
 *         ( SNL  CSL ) ( C D ) ( -SNR  CSR )   ( 0 T )
 *
-         CALL DLASV2( A, FC, D, S1, S2, SNR, CSR, SNL, CSL )
+         CALL AB_DLASV2( A, FC, D, S1, S2, SNR, CSR, SNL, CSL )
 *
          IF( ABS( CSR ).GE.ABS( SNR ) .OR. ABS( CSL ).GE.ABS( SNL ) )
      $        THEN
@@ -341,14 +350,14 @@
 *           zero (2,1) elements of U**H *A and V**H *B.
 *
             IF( ( ABS1( UA21 )+ABS( UA22R ) ).EQ.ZERO ) THEN
-               CALL ZLARTG( DCMPLX( VB22R ), VB21, CSQ, SNQ, R )
+               CALL AB_ZLARTG( DCMPLX( VB22R ), VB21, CSQ, SNQ, R )
             ELSE IF( ( ABS1( VB21 )+ABS( VB22R ) ).EQ.ZERO ) THEN
-               CALL ZLARTG( DCMPLX( UA22R ), UA21, CSQ, SNQ, R )
+               CALL AB_ZLARTG( DCMPLX( UA22R ), UA21, CSQ, SNQ, R )
             ELSE IF( AUA21 / ( ABS1( UA21 )+ABS( UA22R ) ).LE.AVB21 /
      $               ( ABS1( VB21 )+ABS( VB22R ) ) ) THEN
-               CALL ZLARTG( DCMPLX( UA22R ), UA21, CSQ, SNQ, R )
+               CALL AB_ZLARTG( DCMPLX( UA22R ), UA21, CSQ, SNQ, R )
             ELSE
-               CALL ZLARTG( DCMPLX( VB22R ), VB21, CSQ, SNQ, R )
+               CALL AB_ZLARTG( DCMPLX( VB22R ), VB21, CSQ, SNQ, R )
             END IF
 *
             CSU = CSR
@@ -373,14 +382,14 @@
 *           zero (1,1) elements of U**H *A and V**H *B, and then swap.
 *
             IF( ( ABS1( UA11 )+ABS1( UA12 ) ).EQ.ZERO ) THEN
-               CALL ZLARTG( VB12, VB11, CSQ, SNQ, R )
+               CALL AB_ZLARTG( VB12, VB11, CSQ, SNQ, R )
             ELSE IF( ( ABS1( VB11 )+ABS1( VB12 ) ).EQ.ZERO ) THEN
-               CALL ZLARTG( UA12, UA11, CSQ, SNQ, R )
+               CALL AB_ZLARTG( UA12, UA11, CSQ, SNQ, R )
             ELSE IF( AUA11 / ( ABS1( UA11 )+ABS1( UA12 ) ).LE.AVB11 /
      $               ( ABS1( VB11 )+ABS1( VB12 ) ) ) THEN
-               CALL ZLARTG( UA12, UA11, CSQ, SNQ, R )
+               CALL AB_ZLARTG( UA12, UA11, CSQ, SNQ, R )
             ELSE
-               CALL ZLARTG( VB12, VB11, CSQ, SNQ, R )
+               CALL AB_ZLARTG( VB12, VB11, CSQ, SNQ, R )
             END IF
 *
             CSU = SNR
@@ -394,6 +403,6 @@
 *
       RETURN
 *
-*     End of ZLAGS2
+*     End of AB_ZLAGS2
 *
       END

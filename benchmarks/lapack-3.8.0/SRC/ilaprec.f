@@ -1,4 +1,4 @@
-*> \brief \b ILAPREC
+*> \brief \b AB_ILAPREC
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ILAPREC + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ilaprec.f">
+*> Download AB_ILAPREC + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ILAPREC.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ilaprec.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ILAPREC.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ilaprec.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ILAPREC.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       INTEGER FUNCTION ILAPREC( PREC )
+*       INTEGER FUNCTION AB_ILAPREC( PREC )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          PREC
@@ -34,9 +34,9 @@
 *> intermediate precision to the relevant BLAST-specified integer
 *> constant.
 *>
-*> ILAPREC returns an INTEGER.  If ILAPREC < 0, then the input is not a
+*> AB_ILAPREC returns an INTEGER.  If AB_ILAPREC < 0, then the input is not a
 *> character indicating a supported intermediate precision.  Otherwise
-*> ILAPREC returns the constant value corresponding to PREC.
+*> AB_ILAPREC returns the constant value corresponding to PREC.
 *> \endverbatim
 *
 *  Arguments:
@@ -56,7 +56,7 @@
 *> \ingroup auxOTHERcomputational
 *
 *  =====================================================================
-      INTEGER FUNCTION ILAPREC( PREC )
+      INTEGER FUNCTION AB_ILAPREC( PREC )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -76,23 +76,23 @@
      $     BLAS_PREC_INDIGENOUS = 213, BLAS_PREC_EXTRA = 214 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. Executable Statements ..
-      IF( LSAME( PREC, 'S' ) ) THEN
-         ILAPREC = BLAS_PREC_SINGLE
-      ELSE IF( LSAME( PREC, 'D' ) ) THEN
-         ILAPREC = BLAS_PREC_DOUBLE
-      ELSE IF( LSAME( PREC, 'I' ) ) THEN
-         ILAPREC = BLAS_PREC_INDIGENOUS
-      ELSE IF( LSAME( PREC, 'X' ) .OR. LSAME( PREC, 'E' ) ) THEN
-         ILAPREC = BLAS_PREC_EXTRA
+      IF( AB_LSAME( PREC, 'S' ) ) THEN
+         AB_ILAPREC = BLAS_PREC_SINGLE
+      ELSE IF( AB_LSAME( PREC, 'D' ) ) THEN
+         AB_ILAPREC = BLAS_PREC_DOUBLE
+      ELSE IF( AB_LSAME( PREC, 'I' ) ) THEN
+         AB_ILAPREC = BLAS_PREC_INDIGENOUS
+      ELSE IF( AB_LSAME( PREC, 'X' ) .OR. AB_LSAME( PREC, 'E' ) ) THEN
+         AB_ILAPREC = BLAS_PREC_EXTRA
       ELSE
-         ILAPREC = -1
+         AB_ILAPREC = -1
       END IF
       RETURN
 *
-*     End of ILAPREC
+*     End of AB_ILAPREC
 *
       END

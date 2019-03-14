@@ -1,4 +1,4 @@
-*> \brief \b DLARTV applies a vector of plane rotations with real cosines and real sines to the elements of a pair of vectors.
+*> \brief \b AB_DLARTV applies a vector of plane rotations with real cosines and real sines to the elements of a pair of vectors.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLARTV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlartv.f">
+*> Download AB_DLARTV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLARTV.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlartv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLARTV.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlartv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLARTV.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLARTV( N, X, INCX, Y, INCY, C, S, INCC )
+*       SUBROUTINE AB_DLARTV( N, X, INCX, Y, INCY, C, S, INCC )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCC, INCX, INCY, N
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> DLARTV applies a vector of real plane rotations to elements of the
+*> AB_DLARTV applies a vector of real plane rotations to elements of the
 *> real vectors x and y. For i = 1,2,...,n
 *>
 *>    ( x(i) ) := (  c(i)  s(i) ) ( x(i) )
@@ -106,7 +106,7 @@
 *> \ingroup doubleOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE DLARTV( N, X, INCX, Y, INCY, C, S, INCC )
+      SUBROUTINE AB_DLARTV( N, X, INCX, Y, INCY, C, S, INCC )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -142,6 +142,6 @@
    10 CONTINUE
       RETURN
 *
-*     End of DLARTV
+*     End of AB_DLARTV
 *
       END

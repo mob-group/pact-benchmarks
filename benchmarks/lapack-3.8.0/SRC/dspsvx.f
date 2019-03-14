@@ -1,4 +1,4 @@
-*> \brief <b> DSPSVX computes the solution to system of linear equations A * X = B for OTHER matrices</b>
+*> \brief <b> AB_DSPSVX computes the solution to system of linear equations A * X = B for OTHER matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DSPSVX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dspsvx.f">
+*> Download AB_DSPSVX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DSPSVx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dspsvx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DSPSVx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dspsvx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DSPSVx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DSPSVX( FACT, UPLO, N, NRHS, AP, AFP, IPIV, B, LDB, X,
+*       SUBROUTINE AB_DSPSVX( FACT, UPLO, N, NRHS, AP, AFP, IPIV, B, LDB, X,
 *                          LDX, RCOND, FERR, BERR, WORK, IWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -38,7 +38,7 @@
 *>
 *> \verbatim
 *>
-*> DSPSVX uses the diagonal pivoting factorization A = U*D*U**T or
+*> AB_DSPSVX uses the diagonal pivoting factorization A = U*D*U**T or
 *> A = L*D*L**T to compute the solution to a real system of linear
 *> equations A * X = B, where A is an N-by-N symmetric matrix stored
 *> in packed format and X and B are N-by-NRHS matrices.
@@ -127,13 +127,13 @@
 *>          If FACT = 'F', then AFP is an input argument and on entry
 *>          contains the block diagonal matrix D and the multipliers used
 *>          to obtain the factor U or L from the factorization
-*>          A = U*D*U**T or A = L*D*L**T as computed by DSPTRF, stored as
+*>          A = U*D*U**T or A = L*D*L**T as computed by AB_DSPTRF, stored as
 *>          a packed triangular matrix in the same storage format as A.
 *>
 *>          If FACT = 'N', then AFP is an output argument and on exit
 *>          contains the block diagonal matrix D and the multipliers used
 *>          to obtain the factor U or L from the factorization
-*>          A = U*D*U**T or A = L*D*L**T as computed by DSPTRF, stored as
+*>          A = U*D*U**T or A = L*D*L**T as computed by AB_DSPTRF, stored as
 *>          a packed triangular matrix in the same storage format as A.
 *> \endverbatim
 *>
@@ -142,7 +142,7 @@
 *>          IPIV is INTEGER array, dimension (N)
 *>          If FACT = 'F', then IPIV is an input argument and on entry
 *>          contains details of the interchanges and the block structure
-*>          of D, as determined by DSPTRF.
+*>          of D, as determined by AB_DSPTRF.
 *>          If IPIV(k) > 0, then rows and columns k and IPIV(k) were
 *>          interchanged and D(k,k) is a 1-by-1 diagonal block.
 *>          If UPLO = 'U' and IPIV(k) = IPIV(k-1) < 0, then rows and
@@ -153,7 +153,7 @@
 *>
 *>          If FACT = 'N', then IPIV is an output argument and on exit
 *>          contains details of the interchanges and the block structure
-*>          of D, as determined by DSPTRF.
+*>          of D, as determined by AB_DSPTRF.
 *> \endverbatim
 *>
 *> \param[in] B
@@ -273,7 +273,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DSPSVX( FACT, UPLO, N, NRHS, AP, AFP, IPIV, B, LDB, X,
+      SUBROUTINE AB_DSPSVX( FACT, UPLO, N, NRHS, AP, AFP, IPIV, B, LDB, 
+     $X,
      $                   LDX, RCOND, FERR, BERR, WORK, IWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.1) --
@@ -303,13 +304,14 @@
       DOUBLE PRECISION   ANORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, DLANSP
-      EXTERNAL           LSAME, DLAMCH, DLANSP
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   DLAMCH, AB_DLANSP
+      EXTERNAL           AB_LSAME, DLAMCH, AB_DLANSP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DLACPY, DSPCON, DSPRFS, DSPTRF, DSPTRS,
-     $                   XERBLA
+      EXTERNAL           AB_DCOPY, AB_DLACPY, AB_DSPCON, AB_DSPRFS, AB_D
+     $SPTRF, AB_DSPTRS,
+     $                   AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -319,10 +321,11 @@
 *     Test the input parameters.
 *
       INFO = 0
-      NOFACT = LSAME( FACT, 'N' )
-      IF( .NOT.NOFACT .AND. .NOT.LSAME( FACT, 'F' ) ) THEN
+      NOFACT = AB_LSAME( FACT, 'N' )
+      IF( .NOT.NOFACT .AND. .NOT.AB_LSAME( FACT, 'F' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) )
+      ELSE IF( .NOT.AB_LSAME( UPLO, 'U' ) .AND. .NOT.AB_LSAME( UPLO, 'L'
+     $ ) )
      $          THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
@@ -335,7 +338,7 @@
          INFO = -11
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DSPSVX', -INFO )
+         CALL AB_XERBLA( 'AB_DSPSVX', -INFO )
          RETURN
       END IF
 *
@@ -343,8 +346,8 @@
 *
 *        Compute the factorization A = U*D*U**T or A = L*D*L**T.
 *
-         CALL DCOPY( N*( N+1 ) / 2, AP, 1, AFP, 1 )
-         CALL DSPTRF( UPLO, N, AFP, IPIV, INFO )
+         CALL AB_DCOPY( N*( N+1 ) / 2, AP, 1, AFP, 1 )
+         CALL AB_DSPTRF( UPLO, N, AFP, IPIV, INFO )
 *
 *        Return if INFO is non-zero.
 *
@@ -356,21 +359,23 @@
 *
 *     Compute the norm of the matrix A.
 *
-      ANORM = DLANSP( 'I', UPLO, N, AP, WORK )
+      ANORM = AB_DLANSP( 'I', UPLO, N, AP, WORK )
 *
 *     Compute the reciprocal of the condition number of A.
 *
-      CALL DSPCON( UPLO, N, AFP, IPIV, ANORM, RCOND, WORK, IWORK, INFO )
+      CALL AB_DSPCON( UPLO, N, AFP, IPIV, ANORM, RCOND, WORK, IWORK, INF
+     $O )
 *
 *     Compute the solution vectors X.
 *
-      CALL DLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
-      CALL DSPTRS( UPLO, N, NRHS, AFP, IPIV, X, LDX, INFO )
+      CALL AB_DLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
+      CALL AB_DSPTRS( UPLO, N, NRHS, AFP, IPIV, X, LDX, INFO )
 *
 *     Use iterative refinement to improve the computed solutions and
 *     compute error bounds and backward error estimates for them.
 *
-      CALL DSPRFS( UPLO, N, NRHS, AP, AFP, IPIV, B, LDB, X, LDX, FERR,
+      CALL AB_DSPRFS( UPLO, N, NRHS, AP, AFP, IPIV, B, LDB, X, LDX, FERR
+     $,
      $             BERR, WORK, IWORK, INFO )
 *
 *     Set INFO = N+1 if the matrix is singular to working precision.
@@ -380,6 +385,6 @@
 *
       RETURN
 *
-*     End of DSPSVX
+*     End of AB_DSPSVX
 *
       END

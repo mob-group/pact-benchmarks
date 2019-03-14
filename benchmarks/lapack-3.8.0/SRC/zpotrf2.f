@@ -1,4 +1,4 @@
-*> \brief \b ZPOTRF2
+*> \brief \b AB_ZPOTRF2
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       RECURSIVE SUBROUTINE ZPOTRF2( UPLO, N, A, LDA, INFO )
+*       RECURSIVE SUBROUTINE AB_ZPOTRF2( UPLO, N, A, LDA, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> ZPOTRF2 computes the Cholesky factorization of a real symmetric
+*> AB_ZPOTRF2 computes the Cholesky factorization of a real symmetric
 *> positive definite matrix A using the recursive algorithm.
 *>
 *> The factorization has the form
@@ -104,7 +104,7 @@
 *> \ingroup complex16POcomputational
 *
 *  =====================================================================
-      RECURSIVE SUBROUTINE ZPOTRF2( UPLO, N, A, LDA, INFO )
+      RECURSIVE SUBROUTINE AB_ZPOTRF2( UPLO, N, A, LDA, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -133,11 +133,11 @@
       DOUBLE PRECISION   AJJ
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME, DISNAN
-      EXTERNAL           LSAME, DISNAN
+      LOGICAL            AB_LSAME, AB_DISNAN
+      EXTERNAL           AB_LSAME, AB_DISNAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZHERK, ZTRSM, XERBLA
+      EXTERNAL           AB_ZHERK, AB_ZTRSM, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, DBLE, SQRT
@@ -147,8 +147,8 @@
 *     Test the input parameters
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -156,7 +156,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZPOTRF2', -INFO )
+         CALL AB_XERBLA( 'AB_ZPOTRF2', -INFO )
          RETURN
       END IF
 *
@@ -172,7 +172,7 @@
 *        Test for non-positive-definiteness
 *
          AJJ = DBLE( A( 1, 1 ) )
-         IF( AJJ.LE.ZERO.OR.DISNAN( AJJ ) ) THEN
+         IF( AJJ.LE.ZERO.OR.AB_DISNAN( AJJ ) ) THEN
             INFO = 1
             RETURN
          END IF
@@ -189,7 +189,7 @@
 *
 *        Factor A11
 *
-         CALL ZPOTRF2( UPLO, N1, A( 1, 1 ), LDA, IINFO )
+         CALL AB_ZPOTRF2( UPLO, N1, A( 1, 1 ), LDA, IINFO )
          IF ( IINFO.NE.0 ) THEN
             INFO = IINFO
             RETURN
@@ -201,14 +201,14 @@
 *
 *           Update and scale A12
 *
-            CALL ZTRSM( 'L', 'U', 'C', 'N', N1, N2, CONE,
+            CALL AB_ZTRSM( 'L', 'U', 'C', 'N', N1, N2, CONE,
      $                  A( 1, 1 ), LDA, A( 1, N1+1 ), LDA )
 *
 *           Update and factor A22
 *
-            CALL ZHERK( UPLO, 'C', N2, N1, -ONE, A( 1, N1+1 ), LDA,
+            CALL AB_ZHERK( UPLO, 'C', N2, N1, -ONE, A( 1, N1+1 ), LDA,
      $                  ONE, A( N1+1, N1+1 ), LDA )
-            CALL ZPOTRF2( UPLO, N2, A( N1+1, N1+1 ), LDA, IINFO )
+            CALL AB_ZPOTRF2( UPLO, N2, A( N1+1, N1+1 ), LDA, IINFO )
             IF ( IINFO.NE.0 ) THEN
                INFO = IINFO + N1
                RETURN
@@ -220,14 +220,14 @@
 *
 *           Update and scale A21
 *
-            CALL ZTRSM( 'R', 'L', 'C', 'N', N2, N1, CONE,
+            CALL AB_ZTRSM( 'R', 'L', 'C', 'N', N2, N1, CONE,
      $                  A( 1, 1 ), LDA, A( N1+1, 1 ), LDA )
 *
 *           Update and factor A22
 *
-            CALL ZHERK( UPLO, 'N', N2, N1, -ONE, A( N1+1, 1 ), LDA,
+            CALL AB_ZHERK( UPLO, 'N', N2, N1, -ONE, A( N1+1, 1 ), LDA,
      $                  ONE, A( N1+1, N1+1 ), LDA )
-            CALL ZPOTRF2( UPLO, N2, A( N1+1, N1+1 ), LDA, IINFO )
+            CALL AB_ZPOTRF2( UPLO, N2, A( N1+1, N1+1 ), LDA, IINFO )
             IF ( IINFO.NE.0 ) THEN
                INFO = IINFO + N1
                RETURN
@@ -236,6 +236,6 @@
       END IF
       RETURN
 *
-*     End of ZPOTRF2
+*     End of AB_ZPOTRF2
 *
       END

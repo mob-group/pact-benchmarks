@@ -1,4 +1,4 @@
-*> \brief \b STBCON
+*> \brief \b AB_STBCON
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download STBCON + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stbcon.f">
+*> Download AB_STBCON + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_STBCON.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stbcon.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_STBCON.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stbcon.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_STBCON.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE STBCON( NORM, UPLO, DIAG, N, KD, AB, LDAB, RCOND, WORK,
+*       SUBROUTINE AB_STBCON( NORM, UPLO, DIAG, N, KD, AB, LDAB, RCOND, WORK,
 *                          IWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> STBCON estimates the reciprocal of the condition number of a
+*> AB_STBCON estimates the reciprocal of the condition number of a
 *> triangular band matrix A, in either the 1-norm or the infinity-norm.
 *>
 *> The norm of A is computed and an estimate is obtained for
@@ -140,7 +140,8 @@
 *> \ingroup realOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE STBCON( NORM, UPLO, DIAG, N, KD, AB, LDAB, RCOND, WORK,
+      SUBROUTINE AB_STBCON( NORM, UPLO, DIAG, N, KD, AB, LDAB, RCOND, WO
+     $RK,
      $                   IWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -174,13 +175,13 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ISAMAX
-      REAL               SLAMCH, SLANTB
-      EXTERNAL           LSAME, ISAMAX, SLAMCH, SLANTB
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ISAMAX
+      REAL               SLAMCH, AB_SLANTB
+      EXTERNAL           AB_LSAME, AB_ISAMAX, SLAMCH, AB_SLANTB
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLACN2, SLATBS, SRSCL, XERBLA
+      EXTERNAL           AB_SLACN2, AB_SLATBS, AB_SRSCL, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, REAL
@@ -190,15 +191,15 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      ONENRM = NORM.EQ.'1' .OR. LSAME( NORM, 'O' )
-      NOUNIT = LSAME( DIAG, 'N' )
+      UPPER = AB_LSAME( UPLO, 'U' )
+      ONENRM = NORM.EQ.'1' .OR. AB_LSAME( NORM, 'O' )
+      NOUNIT = AB_LSAME( DIAG, 'N' )
 *
-      IF( .NOT.ONENRM .AND. .NOT.LSAME( NORM, 'I' ) ) THEN
+      IF( .NOT.ONENRM .AND. .NOT.AB_LSAME( NORM, 'I' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      ELSE IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.NOUNIT .AND. .NOT.LSAME( DIAG, 'U' ) ) THEN
+      ELSE IF( .NOT.NOUNIT .AND. .NOT.AB_LSAME( DIAG, 'U' ) ) THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
@@ -208,7 +209,7 @@
          INFO = -7
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'STBCON', -INFO )
+         CALL AB_XERBLA( 'AB_STBCON', -INFO )
          RETURN
       END IF
 *
@@ -224,7 +225,7 @@
 *
 *     Compute the norm of the triangular matrix A.
 *
-      ANORM = SLANTB( NORM, UPLO, DIAG, N, KD, AB, LDAB, WORK )
+      ANORM = AB_SLANTB( NORM, UPLO, DIAG, N, KD, AB, LDAB, WORK )
 *
 *     Continue only if ANORM > 0.
 *
@@ -241,19 +242,22 @@
          END IF
          KASE = 0
    10    CONTINUE
-         CALL SLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
+         CALL AB_SLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAV
+     $E )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.KASE1 ) THEN
 *
 *              Multiply by inv(A).
 *
-               CALL SLATBS( UPLO, 'No transpose', DIAG, NORMIN, N, KD,
+               CALL AB_SLATBS( UPLO, 'No transpose', DIAG, NORMIN, N, KD
+     $,
      $                      AB, LDAB, WORK, SCALE, WORK( 2*N+1 ), INFO )
             ELSE
 *
 *              Multiply by inv(A**T).
 *
-               CALL SLATBS( UPLO, 'Transpose', DIAG, NORMIN, N, KD, AB,
+               CALL AB_SLATBS( UPLO, 'Transpose', DIAG, NORMIN, N, KD, A
+     $B,
      $                      LDAB, WORK, SCALE, WORK( 2*N+1 ), INFO )
             END IF
             NORMIN = 'Y'
@@ -261,11 +265,11 @@
 *           Multiply by 1/SCALE if doing so will not cause overflow.
 *
             IF( SCALE.NE.ONE ) THEN
-               IX = ISAMAX( N, WORK, 1 )
+               IX = AB_ISAMAX( N, WORK, 1 )
                XNORM = ABS( WORK( IX ) )
                IF( SCALE.LT.XNORM*SMLNUM .OR. SCALE.EQ.ZERO )
      $            GO TO 20
-               CALL SRSCL( N, SCALE, WORK, 1 )
+               CALL AB_SRSCL( N, SCALE, WORK, 1 )
             END IF
             GO TO 10
          END IF
@@ -279,6 +283,6 @@
    20 CONTINUE
       RETURN
 *
-*     End of STBCON
+*     End of AB_STBCON
 *
       END

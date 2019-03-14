@@ -1,4 +1,4 @@
-*> \brief <b> SSYSVX computes the solution to system of linear equations A * X = B for SY matrices</b>
+*> \brief <b> AB_SSYSVX computes the solution to system of linear equations A * X = B for SY matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SSYSVX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssysvx.f">
+*> Download AB_SSYSVX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SSYSVx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssysvx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SSYSVx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssysvx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SSYSVx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SSYSVX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV, B,
+*       SUBROUTINE AB_SSYSVX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV, B,
 *                          LDB, X, LDX, RCOND, FERR, BERR, WORK, LWORK,
 *                          IWORK, INFO )
 *
@@ -39,7 +39,7 @@
 *>
 *> \verbatim
 *>
-*> SSYSVX uses the diagonal pivoting factorization to compute the
+*> AB_SSYSVX uses the diagonal pivoting factorization to compute the
 *> solution to a real system of linear equations A * X = B,
 *> where A is an N-by-N symmetric matrix and X and B are N-by-NRHS
 *> matrices.
@@ -136,7 +136,7 @@
 *>          If FACT = 'F', then AF is an input argument and on entry
 *>          contains the block diagonal matrix D and the multipliers used
 *>          to obtain the factor U or L from the factorization
-*>          A = U*D*U**T or A = L*D*L**T as computed by SSYTRF.
+*>          A = U*D*U**T or A = L*D*L**T as computed by AB_SSYTRF.
 *>
 *>          If FACT = 'N', then AF is an output argument and on exit
 *>          returns the block diagonal matrix D and the multipliers used
@@ -155,7 +155,7 @@
 *>          IPIV is INTEGER array, dimension (N)
 *>          If FACT = 'F', then IPIV is an input argument and on entry
 *>          contains details of the interchanges and the block structure
-*>          of D, as determined by SSYTRF.
+*>          of D, as determined by AB_SSYTRF.
 *>          If IPIV(k) > 0, then rows and columns k and IPIV(k) were
 *>          interchanged and D(k,k) is a 1-by-1 diagonal block.
 *>          If UPLO = 'U' and IPIV(k) = IPIV(k-1) < 0, then rows and
@@ -166,7 +166,7 @@
 *>
 *>          If FACT = 'N', then IPIV is an output argument and on exit
 *>          contains details of the interchanges and the block structure
-*>          of D, as determined by SSYTRF.
+*>          of D, as determined by AB_SSYTRF.
 *> \endverbatim
 *>
 *> \param[in] B
@@ -235,12 +235,12 @@
 *>          LWORK is INTEGER
 *>          The length of WORK.  LWORK >= max(1,3*N), and for best
 *>          performance, when FACT = 'N', LWORK >= max(1,3*N,N*NB), where
-*>          NB is the optimal blocksize for SSYTRF.
+*>          NB is the optimal blocksize for AB_SSYTRF.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -280,7 +280,8 @@
 *> \ingroup realSYsolve
 *
 *  =====================================================================
-      SUBROUTINE SSYSVX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV, B,
+      SUBROUTINE AB_SSYSVX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV,
+     $ B,
      $                   LDB, X, LDX, RCOND, FERR, BERR, WORK, LWORK,
      $                   IWORK, INFO )
 *
@@ -312,13 +313,14 @@
       REAL               ANORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      REAL               SLAMCH, SLANSY
-      EXTERNAL           ILAENV, LSAME, SLAMCH, SLANSY
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      REAL               SLAMCH, AB_SLANSY
+      EXTERNAL           AB_ILAENV, AB_LSAME, SLAMCH, AB_SLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLACPY, SSYCON, SSYRFS, SSYTRF, SSYTRS, XERBLA
+      EXTERNAL           AB_SLACPY, AB_SSYCON, AB_SSYRFS, AB_SSYTRF, AB_
+     $SSYTRS, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -328,11 +330,12 @@
 *     Test the input parameters.
 *
       INFO = 0
-      NOFACT = LSAME( FACT, 'N' )
+      NOFACT = AB_LSAME( FACT, 'N' )
       LQUERY = ( LWORK.EQ.-1 )
-      IF( .NOT.NOFACT .AND. .NOT.LSAME( FACT, 'F' ) ) THEN
+      IF( .NOT.NOFACT .AND. .NOT.AB_LSAME( FACT, 'F' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) )
+      ELSE IF( .NOT.AB_LSAME( UPLO, 'U' ) .AND. .NOT.AB_LSAME( UPLO, 'L'
+     $ ) )
      $          THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
@@ -354,14 +357,14 @@
       IF( INFO.EQ.0 ) THEN
          LWKOPT = MAX( 1, 3*N )
          IF( NOFACT ) THEN
-            NB = ILAENV( 1, 'SSYTRF', UPLO, N, -1, -1, -1 )
+            NB = AB_ILAENV( 1, 'AB_SSYTRF', UPLO, N, -1, -1, -1 )
             LWKOPT = MAX( LWKOPT, N*NB )
          END IF
          WORK( 1 ) = LWKOPT
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SSYSVX', -INFO )
+         CALL AB_XERBLA( 'AB_SSYSVX', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -371,8 +374,8 @@
 *
 *        Compute the factorization A = U*D*U**T or A = L*D*L**T.
 *
-         CALL SLACPY( UPLO, N, N, A, LDA, AF, LDAF )
-         CALL SSYTRF( UPLO, N, AF, LDAF, IPIV, WORK, LWORK, INFO )
+         CALL AB_SLACPY( UPLO, N, N, A, LDA, AF, LDAF )
+         CALL AB_SSYTRF( UPLO, N, AF, LDAF, IPIV, WORK, LWORK, INFO )
 *
 *        Return if INFO is non-zero.
 *
@@ -384,22 +387,23 @@
 *
 *     Compute the norm of the matrix A.
 *
-      ANORM = SLANSY( 'I', UPLO, N, A, LDA, WORK )
+      ANORM = AB_SLANSY( 'I', UPLO, N, A, LDA, WORK )
 *
 *     Compute the reciprocal of the condition number of A.
 *
-      CALL SSYCON( UPLO, N, AF, LDAF, IPIV, ANORM, RCOND, WORK, IWORK,
+      CALL AB_SSYCON( UPLO, N, AF, LDAF, IPIV, ANORM, RCOND, WORK, IWORK
+     $,
      $             INFO )
 *
 *     Compute the solution vectors X.
 *
-      CALL SLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
-      CALL SSYTRS( UPLO, N, NRHS, AF, LDAF, IPIV, X, LDX, INFO )
+      CALL AB_SLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
+      CALL AB_SSYTRS( UPLO, N, NRHS, AF, LDAF, IPIV, X, LDX, INFO )
 *
 *     Use iterative refinement to improve the computed solutions and
 *     compute error bounds and backward error estimates for them.
 *
-      CALL SSYRFS( UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV, B, LDB, X,
+      CALL AB_SSYRFS( UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV, B, LDB, X,
      $             LDX, FERR, BERR, WORK, IWORK, INFO )
 *
 *     Set INFO = N+1 if the matrix is singular to working precision.
@@ -411,6 +415,6 @@
 *
       RETURN
 *
-*     End of SSYSVX
+*     End of AB_SSYSVX
 *
       END

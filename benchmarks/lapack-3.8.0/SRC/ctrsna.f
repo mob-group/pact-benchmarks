@@ -1,4 +1,4 @@
-*> \brief \b CTRSNA
+*> \brief \b AB_CTRSNA
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CTRSNA + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctrsna.f">
+*> Download AB_CTRSNA + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CTRSNA.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctrsna.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CTRSNA.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctrsna.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CTRSNA.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CTRSNA( JOB, HOWMNY, SELECT, N, T, LDT, VL, LDVL, VR,
+*       SUBROUTINE AB_CTRSNA( JOB, HOWMNY, SELECT, N, T, LDT, VL, LDVL, VR,
 *                          LDVR, S, SEP, MM, M, WORK, LDWORK, RWORK,
 *                          INFO )
 *
@@ -39,7 +39,7 @@
 *>
 *> \verbatim
 *>
-*> CTRSNA estimates reciprocal condition numbers for specified
+*> AB_CTRSNA estimates reciprocal condition numbers for specified
 *> eigenvalues and/or right eigenvectors of a complex upper triangular
 *> matrix T (or of any matrix Q*T*Q**H with Q unitary).
 *> \endverbatim
@@ -99,7 +99,7 @@
 *>          (or of any Q*T*Q**H with Q unitary), corresponding to the
 *>          eigenpairs specified by HOWMNY and SELECT. The eigenvectors
 *>          must be stored in consecutive columns of VL, as returned by
-*>          CHSEIN or CTREVC.
+*>          AB_CHSEIN or AB_CTREVC.
 *>          If JOB = 'V', VL is not referenced.
 *> \endverbatim
 *>
@@ -117,7 +117,7 @@
 *>          (or of any Q*T*Q**H with Q unitary), corresponding to the
 *>          eigenpairs specified by HOWMNY and SELECT. The eigenvectors
 *>          must be stored in consecutive columns of VR, as returned by
-*>          CHSEIN or CTREVC.
+*>          AB_CHSEIN or AB_CTREVC.
 *>          If JOB = 'V', VR is not referenced.
 *> \endverbatim
 *>
@@ -245,7 +245,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CTRSNA( JOB, HOWMNY, SELECT, N, T, LDT, VL, LDVL, VR,
+      SUBROUTINE AB_CTRSNA( JOB, HOWMNY, SELECT, N, T, LDT, VL, LDVL, VR
+     $,
      $                   LDVR, S, SEP, MM, M, WORK, LDWORK, RWORK,
      $                   INFO )
 *
@@ -284,15 +285,17 @@
       COMPLEX            DUMMY( 1 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ICAMAX
-      REAL               SCNRM2, SLAMCH
-      COMPLEX            CDOTC
-      EXTERNAL           LSAME, ICAMAX, SCNRM2, SLAMCH, CDOTC
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ICAMAX
+      REAL               AB_SCNRM2, SLAMCH
+      COMPLEX            AB_CDOTC
+      EXTERNAL           AB_LSAME, AB_ICAMAX, AB_SCNRM2, SLAMCH, AB_CDOT
+     $C
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLACN2, CLACPY, CLATRS, CSRSCL, CTREXC, SLABAD,
-     $                   XERBLA
+      EXTERNAL           AB_CLACN2, AB_CLACPY, AB_CLATRS, AB_CSRSCL, AB_
+     $CTREXC, AB_SLABAD,
+     $                   AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, REAL
@@ -307,11 +310,11 @@
 *
 *     Decode and test the input parameters
 *
-      WANTBH = LSAME( JOB, 'B' )
-      WANTS = LSAME( JOB, 'E' ) .OR. WANTBH
-      WANTSP = LSAME( JOB, 'V' ) .OR. WANTBH
+      WANTBH = AB_LSAME( JOB, 'B' )
+      WANTS = AB_LSAME( JOB, 'E' ) .OR. WANTBH
+      WANTSP = AB_LSAME( JOB, 'V' ) .OR. WANTBH
 *
-      SOMCON = LSAME( HOWMNY, 'S' )
+      SOMCON = AB_LSAME( HOWMNY, 'S' )
 *
 *     Set M to the number of eigenpairs for which condition numbers are
 *     to be computed.
@@ -329,7 +332,7 @@
       INFO = 0
       IF( .NOT.WANTS .AND. .NOT.WANTSP ) THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME( HOWMNY, 'A' ) .AND. .NOT.SOMCON ) THEN
+      ELSE IF( .NOT.AB_LSAME( HOWMNY, 'A' ) .AND. .NOT.SOMCON ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
@@ -345,7 +348,7 @@
          INFO = -16
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CTRSNA', -INFO )
+         CALL AB_XERBLA( 'AB_CTRSNA', -INFO )
          RETURN
       END IF
 *
@@ -371,7 +374,7 @@
       EPS = SLAMCH( 'P' )
       SMLNUM = SLAMCH( 'S' ) / EPS
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
+      CALL AB_SLABAD( SMLNUM, BIGNUM )
 *
       KS = 1
       DO 50 K = 1, N
@@ -386,9 +389,9 @@
 *           Compute the reciprocal condition number of the k-th
 *           eigenvalue.
 *
-            PROD = CDOTC( N, VR( 1, KS ), 1, VL( 1, KS ), 1 )
-            RNRM = SCNRM2( N, VR( 1, KS ), 1 )
-            LNRM = SCNRM2( N, VL( 1, KS ), 1 )
+            PROD = AB_CDOTC( N, VR( 1, KS ), 1, VL( 1, KS ), 1 )
+            RNRM = AB_SCNRM2( N, VR( 1, KS ), 1 )
+            LNRM = AB_SCNRM2( N, VL( 1, KS ), 1 )
             S( KS ) = ABS( PROD ) / ( RNRM*LNRM )
 *
          END IF
@@ -401,8 +404,9 @@
 *           Copy the matrix T to the array WORK and swap the k-th
 *           diagonal element to the (1,1) position.
 *
-            CALL CLACPY( 'Full', N, N, T, LDT, WORK, LDWORK )
-            CALL CTREXC( 'No Q', N, WORK, LDWORK, DUMMY, 1, K, 1, IERR )
+            CALL AB_CLACPY( 'Full', N, N, T, LDT, WORK, LDWORK )
+            CALL AB_CTREXC( 'No Q', N, WORK, LDWORK, DUMMY, 1, K, 1, IER
+     $R )
 *
 *           Form  C = T22 - lambda*I in WORK(2:N,2:N).
 *
@@ -418,21 +422,22 @@
             KASE = 0
             NORMIN = 'N'
    30       CONTINUE
-            CALL CLACN2( N-1, WORK( 1, N+1 ), WORK, EST, KASE, ISAVE )
+            CALL AB_CLACN2( N-1, WORK( 1, N+1 ), WORK, EST, KASE, ISAVE 
+     $)
 *
             IF( KASE.NE.0 ) THEN
                IF( KASE.EQ.1 ) THEN
 *
 *                 Solve C**H*x = scale*b
 *
-                  CALL CLATRS( 'Upper', 'Conjugate transpose',
+                  CALL AB_CLATRS( 'Upper', 'Conjugate transpose',
      $                         'Nonunit', NORMIN, N-1, WORK( 2, 2 ),
      $                         LDWORK, WORK, SCALE, RWORK, IERR )
                ELSE
 *
 *                 Solve C*x = scale*b
 *
-                  CALL CLATRS( 'Upper', 'No transpose', 'Nonunit',
+                  CALL AB_CLATRS( 'Upper', 'No transpose', 'Nonunit',
      $                         NORMIN, N-1, WORK( 2, 2 ), LDWORK, WORK,
      $                         SCALE, RWORK, IERR )
                END IF
@@ -442,11 +447,11 @@
 *                 Multiply by 1/SCALE if doing so will not cause
 *                 overflow.
 *
-                  IX = ICAMAX( N-1, WORK, 1 )
+                  IX = AB_ICAMAX( N-1, WORK, 1 )
                   XNORM = CABS1( WORK( IX, 1 ) )
                   IF( SCALE.LT.XNORM*SMLNUM .OR. SCALE.EQ.ZERO )
      $               GO TO 40
-                  CALL CSRSCL( N, SCALE, WORK, 1 )
+                  CALL AB_CSRSCL( N, SCALE, WORK, 1 )
                END IF
                GO TO 30
             END IF
@@ -459,6 +464,6 @@
    50 CONTINUE
       RETURN
 *
-*     End of CTRSNA
+*     End of AB_CTRSNA
 *
       END

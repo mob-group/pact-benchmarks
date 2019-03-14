@@ -1,4 +1,4 @@
-*> \brief \b DLA_GBRCOND estimates the Skeel condition number for a general banded matrix.
+*> \brief \b AB_DLA_GBRCOND estimates the Skeel condition number for a general banded matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLA_GBRCOND + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dla_gbrcond.f">
+*> Download AB_DLA_GBRCOND + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLA_GBRCOND.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dla_gbrcond.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLA_GBRCOND.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dla_gbrcond.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLA_GBRCOND.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       DOUBLE PRECISION FUNCTION DLA_GBRCOND( TRANS, N, KL, KU, AB, LDAB,
+*       DOUBLE PRECISION FUNCTION AB_DLA_GBRCOND( TRANS, N, KL, KU, AB, LDAB,
 *                                              AFB, LDAFB, IPIV, CMODE, C,
 *                                              INFO, WORK, IWORK )
 *
@@ -38,7 +38,7 @@
 *>
 *> \verbatim
 *>
-*>    DLA_GBRCOND Estimates the Skeel condition number of  op(A) * op2(C)
+*>    AB_DLA_GBRCOND Estimates the Skeel condition number of  op(A) * op2(C)
 *>    where op2 is determined by CMODE as follows
 *>    CMODE =  1    op2(C) = C
 *>    CMODE =  0    op2(C) = I
@@ -99,7 +99,7 @@
 *> \verbatim
 *>          AFB is DOUBLE PRECISION array, dimension (LDAFB,N)
 *>     Details of the LU factorization of the band matrix A, as
-*>     computed by DGBTRF.  U is stored as an upper triangular
+*>     computed by AB_DGBTRF.  U is stored as an upper triangular
 *>     band matrix with KL+KU superdiagonals in rows 1 to KL+KU+1,
 *>     and the multipliers used during the factorization are stored
 *>     in rows KL+KU+2 to 2*KL+KU+1.
@@ -115,7 +115,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>     The pivot indices from the factorization A = P*L*U
-*>     as computed by DGBTRF; row i of the matrix was interchanged
+*>     as computed by AB_DGBTRF; row i of the matrix was interchanged
 *>     with row IPIV(i).
 *> \endverbatim
 *>
@@ -166,7 +166,8 @@
 *> \ingroup doubleGBcomputational
 *
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION DLA_GBRCOND( TRANS, N, KL, KU, AB, LDAB,
+      DOUBLE PRECISION FUNCTION AB_DLA_GBRCOND( TRANS, N, KL, KU, AB, LD
+     $AB,
      $                                       AFB, LDAFB, IPIV, CMODE, C,
      $                                       INFO, WORK, IWORK )
 *
@@ -196,23 +197,23 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLACN2, DGBTRS, XERBLA
+      EXTERNAL           AB_DLACN2, AB_DGBTRS, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
 *     ..
 *     .. Executable Statements ..
 *
-      DLA_GBRCOND = 0.0D+0
+      AB_DLA_GBRCOND = 0.0D+0
 *
       INFO = 0
-      NOTRANS = LSAME( TRANS, 'N' )
-      IF ( .NOT. NOTRANS .AND. .NOT. LSAME(TRANS, 'T')
-     $     .AND. .NOT. LSAME(TRANS, 'C') ) THEN
+      NOTRANS = AB_LSAME( TRANS, 'N' )
+      IF ( .NOT. NOTRANS .AND. .NOT. AB_LSAME(TRANS, 'T')
+     $     .AND. .NOT. AB_LSAME(TRANS, 'C') ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -226,11 +227,11 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DLA_GBRCOND', -INFO )
+         CALL AB_XERBLA( 'AB_DLA_GBRCOND', -INFO )
          RETURN
       END IF
       IF( N.EQ.0 ) THEN
-         DLA_GBRCOND = 1.0D+0
+         AB_DLA_GBRCOND = 1.0D+0
          RETURN
       END IF
 *
@@ -283,7 +284,7 @@
 
       KASE = 0
    10 CONTINUE
-      CALL DLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
+      CALL AB_DLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
       IF( KASE.NE.0 ) THEN
          IF( KASE.EQ.2 ) THEN
 *
@@ -294,10 +295,11 @@
             END DO
 
             IF ( NOTRANS ) THEN
-               CALL DGBTRS( 'No transpose', N, KL, KU, 1, AFB, LDAFB,
+               CALL AB_DGBTRS( 'No transpose', N, KL, KU, 1, AFB, LDAFB,
      $              IPIV, WORK, N, INFO )
             ELSE
-               CALL DGBTRS( 'Transpose', N, KL, KU, 1, AFB, LDAFB, IPIV,
+               CALL AB_DGBTRS( 'Transpose', N, KL, KU, 1, AFB, LDAFB, IP
+     $IV,
      $              WORK, N, INFO )
             END IF
 *
@@ -327,10 +329,11 @@
             END IF
 
             IF ( NOTRANS ) THEN
-               CALL DGBTRS( 'Transpose', N, KL, KU, 1, AFB, LDAFB, IPIV,
+               CALL AB_DGBTRS( 'Transpose', N, KL, KU, 1, AFB, LDAFB, IP
+     $IV,
      $              WORK, N, INFO )
             ELSE
-               CALL DGBTRS( 'No transpose', N, KL, KU, 1, AFB, LDAFB,
+               CALL AB_DGBTRS( 'No transpose', N, KL, KU, 1, AFB, LDAFB,
      $              IPIV, WORK, N, INFO )
             END IF
 *
@@ -346,7 +349,7 @@
 *     Compute the estimate of the reciprocal condition number.
 *
       IF( AINVNM .NE. 0.0D+0 )
-     $   DLA_GBRCOND = ( 1.0D+0 / AINVNM )
+     $   AB_DLA_GBRCOND = ( 1.0D+0 / AINVNM )
 *
       RETURN
 *

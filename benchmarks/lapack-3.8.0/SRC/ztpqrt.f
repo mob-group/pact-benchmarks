@@ -1,4 +1,4 @@
-*> \brief \b ZTPQRT
+*> \brief \b AB_ZTPQRT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZTPQRT + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztpqrt.f">
+*> Download AB_ZTPQRT + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZTPQRT.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztpqrt.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZTPQRT.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztpqrt.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZTPQRT.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZTPQRT( M, N, L, NB, A, LDA, B, LDB, T, LDT, WORK,
+*       SUBROUTINE AB_ZTPQRT( M, N, L, NB, A, LDA, B, LDB, T, LDT, WORK,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> ZTPQRT computes a blocked QR factorization of a complex
+*> AB_ZTPQRT computes a blocked QR factorization of a complex
 *> "triangular-pentagonal" matrix C, which is composed of a
 *> triangular block A and pentagonal block B, using the compact
 *> WY representation for Q.
@@ -186,7 +186,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZTPQRT( M, N, L, NB, A, LDA, B, LDB, T, LDT, WORK,
+      SUBROUTINE AB_ZTPQRT( M, N, L, NB, A, LDA, B, LDB, T, LDT, WORK,
      $                   INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -208,7 +208,7 @@
       INTEGER    I, IB, LB, MB, IINFO
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL   ZTPQRT2, ZTPRFB, XERBLA
+      EXTERNAL   AB_ZTPQRT2, AB_ZTPRFB, AB_XERBLA
 *     ..
 *     .. Executable Statements ..
 *
@@ -231,7 +231,7 @@
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZTPQRT', -INFO )
+         CALL AB_XERBLA( 'AB_ZTPQRT', -INFO )
          RETURN
       END IF
 *
@@ -251,13 +251,13 @@
             LB = MB-M+L-I+1
          END IF
 *
-         CALL ZTPQRT2( MB, IB, LB, A(I,I), LDA, B( 1, I ), LDB,
+         CALL AB_ZTPQRT2( MB, IB, LB, A(I,I), LDA, B( 1, I ), LDB,
      $                 T(1, I ), LDT, IINFO )
 *
 *     Update by applying H**H to B(:,I+IB:N) from the left
 *
          IF( I+IB.LE.N ) THEN
-            CALL ZTPRFB( 'L', 'C', 'F', 'C', MB, N-I-IB+1, IB, LB,
+            CALL AB_ZTPRFB( 'L', 'C', 'F', 'C', MB, N-I-IB+1, IB, LB,
      $                    B( 1, I ), LDB, T( 1, I ), LDT,
      $                    A( I, I+IB ), LDA, B( 1, I+IB ), LDB,
      $                    WORK, IB )
@@ -265,6 +265,6 @@
       END DO
       RETURN
 *
-*     End of ZTPQRT
+*     End of AB_ZTPQRT
 *
       END

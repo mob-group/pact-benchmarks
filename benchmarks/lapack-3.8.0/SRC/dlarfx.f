@@ -1,4 +1,4 @@
-*> \brief \b DLARFX applies an elementary reflector to a general rectangular matrix, with loop unrolling when the reflector has order ≤ 10.
+*> \brief \b AB_DLARFX applies an elementary reflector to a general rectangular matrix, with loop unrolling when the reflector has order ≤ 10.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLARFX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarfx.f">
+*> Download AB_DLARFX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLARFx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarfx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLARFx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarfx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLARFx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLARFX( SIDE, M, N, V, TAU, C, LDC, WORK )
+*       SUBROUTINE AB_DLARFX( SIDE, M, N, V, TAU, C, LDC, WORK )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          SIDE
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> DLARFX applies a real elementary reflector H to a real m by n
+*> AB_DLARFX applies a real elementary reflector H to a real m by n
 *> matrix C, from either the left or the right. H is represented in the
 *> form
 *>
@@ -118,7 +118,7 @@
 *> \ingroup doubleOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE DLARFX( SIDE, M, N, V, TAU, C, LDC, WORK )
+      SUBROUTINE AB_DLARFX( SIDE, M, N, V, TAU, C, LDC, WORK )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -146,17 +146,17 @@
      $                   V1, V10, V2, V3, V4, V5, V6, V7, V8, V9
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARF
+      EXTERNAL           AB_DLARF
 *     ..
 *     .. Executable Statements ..
 *
       IF( TAU.EQ.ZERO )
      $   RETURN
-      IF( LSAME( SIDE, 'L' ) ) THEN
+      IF( AB_LSAME( SIDE, 'L' ) ) THEN
 *
 *        Form  H * C, where H has order m.
 *
@@ -165,7 +165,7 @@
 *
 *        Code for general M
 *
-         CALL DLARF( SIDE, M, N, V, 1, TAU, C, LDC, WORK )
+         CALL AB_DLARF( SIDE, M, N, V, 1, TAU, C, LDC, WORK )
          GO TO 410
    10    CONTINUE
 *
@@ -431,7 +431,7 @@
 *
 *        Code for general N
 *
-         CALL DLARF( SIDE, M, N, V, 1, TAU, C, LDC, WORK )
+         CALL AB_DLARF( SIDE, M, N, V, 1, TAU, C, LDC, WORK )
          GO TO 410
   210    CONTINUE
 *
@@ -692,6 +692,6 @@
   410 CONTINUE
       RETURN
 *
-*     End of DLARFX
+*     End of AB_DLARFX
 *
       END

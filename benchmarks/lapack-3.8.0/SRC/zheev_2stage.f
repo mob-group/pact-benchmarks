@@ -1,4 +1,4 @@
-*> \brief <b> ZHEEV_2STAGE computes the eigenvalues and, optionally, the left and/or right eigenvectors for HE matrices</b>
+*> \brief <b> AB_ZHEEV_2STAGE computes the eigenvalues and, optionally, the left and/or right eigenvectors for HE matrices</b>
 *
 *  @precisions fortran z -> s d c
 *
@@ -8,19 +8,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZHEEV_2STAGE + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zheev_2stage.f">
+*> Download AB_ZHEEV_2STAGE + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZHEEV_2stage.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zheev_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZHEEV_2stage.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zheev_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZHEEV_2stage.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZHEEV_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK,
+*       SUBROUTINE AB_ZHEEV_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK,
 *                                RWORK, INFO )
 *
 *       IMPLICIT NONE
@@ -40,7 +40,7 @@
 *>
 *> \verbatim
 *>
-*> ZHEEV_2STAGE computes all eigenvalues and, optionally, eigenvectors of a
+*> AB_ZHEEV_2STAGE computes all eigenvalues and, optionally, eigenvectors of a
 *> complex Hermitian matrix A using the 2stage technique for
 *> the reduction to tridiagonal.
 *> \endverbatim
@@ -123,7 +123,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -186,7 +186,7 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE ZHEEV_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK,
+      SUBROUTINE AB_ZHEEV_2STAGE( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK,
      $                         RWORK, INFO )
 *
       IMPLICIT NONE
@@ -221,14 +221,15 @@
      $                   SMLNUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV2STAGE
-      DOUBLE PRECISION   DLAMCH, ZLANHE
-      EXTERNAL           LSAME, DLAMCH, ZLANHE, ILAENV2STAGE
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV2STAGE
+      DOUBLE PRECISION   DLAMCH, AB_ZLANHE
+      EXTERNAL           AB_LSAME, DLAMCH, AB_ZLANHE, AB_ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSCAL, DSTERF, XERBLA, ZLASCL, ZSTEQR,
-     $                   ZUNGTR, ZHETRD_2STAGE
+      EXTERNAL           AB_DSCAL, AB_DSTERF, AB_XERBLA, AB_ZLASCL, AB_Z
+     $STEQR,
+     $                   AB_ZUNGTR, AB_ZHETRD_2STAGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX, SQRT
@@ -237,14 +238,14 @@
 *
 *     Test the input parameters.
 *
-      WANTZ = LSAME( JOBZ, 'V' )
-      LOWER = LSAME( UPLO, 'L' )
+      WANTZ = AB_LSAME( JOBZ, 'V' )
+      LOWER = AB_LSAME( UPLO, 'L' )
       LQUERY = ( LWORK.EQ.-1 )
 *
       INFO = 0
-      IF( .NOT.( LSAME( JOBZ, 'N' ) ) ) THEN
+      IF( .NOT.( AB_LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.( LOWER .OR. LSAME( UPLO, 'U' ) ) ) THEN
+      ELSE IF( .NOT.( LOWER .OR. AB_LSAME( UPLO, 'U' ) ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -253,10 +254,14 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         KD    = ILAENV2STAGE( 1, 'ZHETRD_2STAGE', JOBZ, N, -1, -1, -1 )
-         IB    = ILAENV2STAGE( 2, 'ZHETRD_2STAGE', JOBZ, N, KD, -1, -1 )
-         LHTRD = ILAENV2STAGE( 3, 'ZHETRD_2STAGE', JOBZ, N, KD, IB, -1 )
-         LWTRD = ILAENV2STAGE( 4, 'ZHETRD_2STAGE', JOBZ, N, KD, IB, -1 )
+         KD    = AB_ILAENV2STAGE( 1, 'AB_ZHETRD_2STAGE', JOBZ, N, -1, -1
+     $, -1 )
+         IB    = AB_ILAENV2STAGE( 2, 'AB_ZHETRD_2STAGE', JOBZ, N, KD, -1
+     $, -1 )
+         LHTRD = AB_ILAENV2STAGE( 3, 'AB_ZHETRD_2STAGE', JOBZ, N, KD, IB
+     $, -1 )
+         LWTRD = AB_ILAENV2STAGE( 4, 'AB_ZHETRD_2STAGE', JOBZ, N, KD, IB
+     $, -1 )
          LWMIN = N + LHTRD + LWTRD
          WORK( 1 )  = LWMIN
 *
@@ -265,7 +270,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZHEEV_2STAGE ', -INFO )
+         CALL AB_XERBLA( 'AB_ZHEEV_2STAGE ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -296,7 +301,7 @@
 *
 *     Scale matrix to allowable range, if necessary.
 *
-      ANRM = ZLANHE( 'M', UPLO, N, A, LDA, RWORK )
+      ANRM = AB_ZLANHE( 'M', UPLO, N, A, LDA, RWORK )
       ISCALE = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.RMIN ) THEN
          ISCALE = 1
@@ -306,9 +311,9 @@
          SIGMA = RMAX / ANRM
       END IF
       IF( ISCALE.EQ.1 )
-     $   CALL ZLASCL( UPLO, 0, 0, ONE, SIGMA, N, N, A, LDA, INFO )
+     $   CALL AB_ZLASCL( UPLO, 0, 0, ONE, SIGMA, N, N, A, LDA, INFO )
 *
-*     Call ZHETRD_2STAGE to reduce Hermitian matrix to tridiagonal form.
+*     Call AB_ZHETRD_2STAGE to reduce Hermitian matrix to tridiagonal form.
 *
       INDE    = 1
       INDTAU  = 1
@@ -316,20 +321,21 @@
       INDWRK  = INDHOUS + LHTRD
       LLWORK  = LWORK - INDWRK + 1
 *
-      CALL ZHETRD_2STAGE( JOBZ, UPLO, N, A, LDA, W, RWORK( INDE ),
+      CALL AB_ZHETRD_2STAGE( JOBZ, UPLO, N, A, LDA, W, RWORK( INDE ),
      $                    WORK( INDTAU ), WORK( INDHOUS ), LHTRD, 
      $                    WORK( INDWRK ), LLWORK, IINFO )
 *
-*     For eigenvalues only, call DSTERF.  For eigenvectors, first call
-*     ZUNGTR to generate the unitary matrix, then call ZSTEQR.
+*     For eigenvalues only, call AB_DSTERF.  For eigenvectors, first call
+*     AB_ZUNGTR to generate the unitary matrix, then call AB_ZSTEQR.
 *
       IF( .NOT.WANTZ ) THEN
-         CALL DSTERF( N, W, RWORK( INDE ), INFO )
+         CALL AB_DSTERF( N, W, RWORK( INDE ), INFO )
       ELSE
-         CALL ZUNGTR( UPLO, N, A, LDA, WORK( INDTAU ), WORK( INDWRK ),
+         CALL AB_ZUNGTR( UPLO, N, A, LDA, WORK( INDTAU ), WORK( INDWRK )
+     $,
      $                LLWORK, IINFO )
          INDWRK = INDE + N
-         CALL ZSTEQR( JOBZ, N, W, RWORK( INDE ), A, LDA,
+         CALL AB_ZSTEQR( JOBZ, N, W, RWORK( INDE ), A, LDA,
      $                RWORK( INDWRK ), INFO )
       END IF
 *
@@ -341,7 +347,7 @@
          ELSE
             IMAX = INFO - 1
          END IF
-         CALL DSCAL( IMAX, ONE / SIGMA, W, 1 )
+         CALL AB_DSCAL( IMAX, ONE / SIGMA, W, 1 )
       END IF
 *
 *     Set WORK(1) to optimal complex workspace size.
@@ -350,6 +356,6 @@
 *
       RETURN
 *
-*     End of ZHEEV_2STAGE
+*     End of AB_ZHEEV_2STAGE
 *
       END

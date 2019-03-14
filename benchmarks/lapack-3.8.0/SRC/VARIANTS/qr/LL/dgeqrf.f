@@ -1,4 +1,5 @@
-C> \brief \b DGEQRF VARIANT: left-looking Level 3 BLAS version of the algorithm.
+C> \brief \b AB_DGEQRF VARIANT: left-looking Level 3 BLAS version of the
+     $ algorithm.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +9,7 @@ C> \brief \b DGEQRF VARIANT: left-looking Level 3 BLAS version of the algorithm.
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGEQRF ( M, N, A, LDA, TAU, WORK, LWORK, INFO )
+*       SUBROUTINE AB_DGEQRF ( M, N, A, LDA, TAU, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, LWORK, M, N
@@ -23,7 +24,7 @@ C> \brief \b DGEQRF VARIANT: left-looking Level 3 BLAS version of the algorithm.
 C>\details \b Purpose:
 C>\verbatim
 C>
-C> DGEQRF computes a QR factorization of a real M-by-N matrix A:
+C> AB_DGEQRF computes a QR factorization of a real M-by-N matrix A:
 C> A = Q * R.
 C>
 C> This is the left-looking Level 3 BLAS version of the algorithm.
@@ -51,7 +52,8 @@ C>          A is DOUBLE PRECISION array, dimension (LDA,N)
 C>          On entry, the M-by-N matrix A.
 C>          On exit, the elements on and above the diagonal of the array
 C>          contain the min(M,N)-by-N upper trapezoidal matrix R (R is
-C>          upper triangular if m >= n); the elements below the diagonal,
+C>          upper triangular if m >= n); the elements below the diagonal
+     $,
 C>          with the array TAU, represent the orthogonal matrix Q as a
 C>          product of min(m,n) elementary reflectors (see Further
 C>          Details).
@@ -81,30 +83,40 @@ C> \verbatim
 C>          LWORK is INTEGER
 C> \endverbatim
 C> \verbatim
-C>          The dimension of the array WORK. The dimension can be divided into three parts.
+C>          The dimension of the array WORK. The dimension can be divide
+     $d into three parts.
 C> \endverbatim
 C> \verbatim
-C>          1) The part for the triangular factor T. If the very last T is not bigger
-C>             than any of the rest, then this part is NB x ceiling(K/NB), otherwise,
-C>             NB x (K-NT), where K = min(M,N) and NT is the dimension of the very last T
+C>          1) The part for the triangular factor T. If the very last T 
+     $is not bigger
+C>             than any of the rest, then this part is NB x ceiling(K/NB
+     $), otherwise,
+C>             NB x (K-NT), where K = min(M,N) and NT is the dimension o
+     $f the very last T
 C> \endverbatim
 C> \verbatim
-C>          2) The part for the very last T when T is bigger than any of the rest T.
-C>             The size of this part is NT x NT, where NT = K - ceiling ((K-NX)/NB) x NB,
+C>          2) The part for the very last T when T is bigger than any of
+     $ the rest T.
+C>             The size of this part is NT x NT, where NT = K - ceiling 
+     $((K-NX)/NB) x NB,
 C>             where K = min(M,N), NX is calculated by
-C>                   NX = MAX( 0, ILAENV( 3, 'DGEQRF', ' ', M, N, -1, -1 ) )
+C>                   NX = MAX( 0, AB_ILAENV( 3, 'AB_DGEQRF', ' ', M, N, 
+     $-1, -1 ) )
 C> \endverbatim
 C> \verbatim
-C>          3) The part for dlarfb is of size max((N-M)*K, (N-M)*NB, K*NB, NB*NB)
+C>          3) The part for AB_DLARFb is of size max((N-M)*K, (N-M)*NB, 
+     $K*NB, NB*NB)
 C> \endverbatim
 C> \verbatim
 C>          So LWORK = part1 + part2 + part3
 C> \endverbatim
 C> \verbatim
-C>          If LWORK = -1, then a workspace query is assumed; the routine
+C>          If LWORK = -1, then a workspace query is assumed; the routin
+     $e
 C>          only calculates the optimal size of the WORK array, returns
-C>          this value as the first entry of the WORK array, and no error
-C>          message related to LWORK is issued by XERBLA.
+C>          this value as the first entry of the WORK array, and no erro
+     $r
+C>          message related to LWORK is issued by AB_XERBLA.
 C> \endverbatim
 C>
 C> \param[out] INFO
@@ -147,7 +159,7 @@ C>
 C> \endverbatim
 C>
 *  =====================================================================
-      SUBROUTINE DGEQRF ( M, N, A, LDA, TAU, WORK, LWORK, INFO )
+      SUBROUTINE AB_DGEQRF ( M, N, A, LDA, TAU, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -169,15 +181,15 @@ C>
      $                   NBMIN, NX, LBWORK, NT, LLWORK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEQR2, DLARFB, DLARFT, XERBLA
+      EXTERNAL           AB_DGEQR2, AB_DLARFB, AB_DLARFT, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
 *     ..
 *     .. External Functions ..
-      INTEGER            ILAENV
-      REAL               SCEIL
-      EXTERNAL           ILAENV, SCEIL
+      INTEGER            AB_ILAENV
+      REAL               AB_SCEIL
+      EXTERNAL           AB_ILAENV, AB_SCEIL
 *     ..
 *     .. Executable Statements ..
 
@@ -186,13 +198,13 @@ C>
       NX = 0
       IWS = N
       K = MIN( M, N )
-      NB = ILAENV( 1, 'DGEQRF', ' ', M, N, -1, -1 )
+      NB = AB_ILAENV( 1, 'AB_DGEQRF', ' ', M, N, -1, -1 )
 
       IF( NB.GT.1 .AND. NB.LT.K ) THEN
 *
 *        Determine when to cross over from blocked to unblocked code.
 *
-         NX = MAX( 0, ILAENV( 3, 'DGEQRF', ' ', M, N, -1, -1 ) )
+         NX = MAX( 0, AB_ILAENV( 3, 'AB_DGEQRF', ' ', M, N, -1, -1 ) )
       END IF
 *
 *     Get NT, the size of the very last T, which is the left-over from in-between K-NX and K to K, eg.:
@@ -205,26 +217,26 @@ C>
 *
 *     So here 4 x 4 is the last T stored in the workspace
 *
-      NT = K-SCEIL(REAL(K-NX)/REAL(NB))*NB
+      NT = K-AB_SCEIL(REAL(K-NX)/REAL(NB))*NB
 
 *
-*     optimal workspace = space for dlarfb + space for normal T's + space for the last T
+*     optimal workspace = space for AB_DLARFb + space for normal T's + space for the last T
 *
       LLWORK = MAX (MAX((N-M)*K, (N-M)*NB), MAX(K*NB, NB*NB))
-      LLWORK = SCEIL(REAL(LLWORK)/REAL(NB))
+      LLWORK = AB_SCEIL(REAL(LLWORK)/REAL(NB))
 
       IF ( NT.GT.NB ) THEN
 
           LBWORK = K-NT
 *
-*         Optimal workspace for dlarfb = MAX(1,N)*NT
+*         Optimal workspace for AB_DLARFb = MAX(1,N)*NT
 *
           LWKOPT = (LBWORK+LLWORK)*NB
           WORK( 1 ) = (LWKOPT+NT*NT)
 
       ELSE
 
-          LBWORK = SCEIL(REAL(K)/REAL(NB))*NB
+          LBWORK = AB_SCEIL(REAL(K)/REAL(NB))*NB
           LWKOPT = (LBWORK+LLWORK-NB)*NB
           WORK( 1 ) = LWKOPT
 
@@ -244,7 +256,7 @@ C>
          INFO = -7
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DGEQRF', -INFO )
+         CALL AB_XERBLA( 'AB_DGEQRF', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -280,7 +292,7 @@ C>
                     NB = (LWORK-NT*NT)/(LBWORK+LLWORK)
                END IF
 
-               NBMIN = MAX( 2, ILAENV( 2, 'DGEQRF', ' ', M, N, -1,
+               NBMIN = MAX( 2, AB_ILAENV( 2, 'AB_DGEQRF', ' ', M, N, -1,
      $                 -1 ) )
             END IF
          END IF
@@ -299,7 +311,7 @@ C>
 *
 *              Apply H' to A(J:M,I:I+IB-1) from the left
 *
-               CALL DLARFB( 'Left', 'Transpose', 'Forward',
+               CALL AB_DLARFB( 'Left', 'Transpose', 'Forward',
      $                      'Columnwise', M-J+1, IB, NB,
      $                      A( J, J ), LDA, WORK(J), LBWORK,
      $                      A( J, I ), LDA, WORK(LBWORK*NB+NT*NT+1),
@@ -310,7 +322,7 @@ C>
 *           Compute the QR factorization of the current block
 *           A(I:M,I:I+IB-1)
 *
-            CALL DGEQR2( M-I+1, IB, A( I, I ), LDA, TAU( I ),
+            CALL AB_DGEQR2( M-I+1, IB, A( I, I ), LDA, TAU( I ),
      $                        WORK(LBWORK*NB+NT*NT+1), IINFO )
 
             IF( I+IB.LE.N ) THEN
@@ -318,7 +330,7 @@ C>
 *              Form the triangular factor of the block reflector
 *              H = H(i) H(i+1) . . . H(i+ib-1)
 *
-               CALL DLARFT( 'Forward', 'Columnwise', M-I+1, IB,
+               CALL AB_DLARFT( 'Forward', 'Columnwise', M-I+1, IB,
      $                      A( I, I ), LDA, TAU( I ),
      $                      WORK(I), LBWORK )
 *
@@ -338,21 +350,21 @@ C>
 *
 *                Apply H' to A(J:M,I:K) from the left
 *
-                 CALL DLARFB( 'Left', 'Transpose', 'Forward',
+                 CALL AB_DLARFB( 'Left', 'Transpose', 'Forward',
      $                       'Columnwise', M-J+1, K-I+1, NB,
      $                       A( J, J ), LDA, WORK(J), LBWORK,
      $                       A( J, I ), LDA, WORK(LBWORK*NB+NT*NT+1),
      $                       K-I+1)
 30           CONTINUE
 
-             CALL DGEQR2( M-I+1, K-I+1, A( I, I ), LDA, TAU( I ),
+             CALL AB_DGEQR2( M-I+1, K-I+1, A( I, I ), LDA, TAU( I ),
      $                   WORK(LBWORK*NB+NT*NT+1),IINFO )
 
          ELSE
 *
 *        Use unblocked code to factor the last or only block.
 *
-         CALL DGEQR2( M-I+1, N-I+1, A( I, I ), LDA, TAU( I ),
+         CALL AB_DGEQR2( M-I+1, N-I+1, A( I, I ), LDA, TAU( I ),
      $               WORK,IINFO )
 
          END IF
@@ -368,10 +380,10 @@ C>
 *         H = H(i) H(i+1) . . . H(i+ib-1)
 *
           IF ( NT .LE. NB ) THEN
-               CALL DLARFT( 'Forward', 'Columnwise', M-I+1, K-I+1,
+               CALL AB_DLARFT( 'Forward', 'Columnwise', M-I+1, K-I+1,
      $                     A( I, I ), LDA, TAU( I ), WORK(I), LBWORK )
           ELSE
-               CALL DLARFT( 'Forward', 'Columnwise', M-I+1, K-I+1,
+               CALL AB_DLARFT( 'Forward', 'Columnwise', M-I+1, K-I+1,
      $                     A( I, I ), LDA, TAU( I ),
      $                     WORK(LBWORK*NB+1), NT )
           END IF
@@ -383,7 +395,7 @@ C>
 
                IB = MIN( K-J+1, NB )
 
-               CALL DLARFB( 'Left', 'Transpose', 'Forward',
+               CALL AB_DLARFB( 'Left', 'Transpose', 'Forward',
      $                     'Columnwise', M-J+1, N-M, IB,
      $                     A( J, J ), LDA, WORK(J), LBWORK,
      $                     A( J, M+1 ), LDA, WORK(LBWORK*NB+NT*NT+1),
@@ -392,13 +404,13 @@ C>
 40       CONTINUE
 
          IF ( NT.LE.NB ) THEN
-             CALL DLARFB( 'Left', 'Transpose', 'Forward',
+             CALL AB_DLARFB( 'Left', 'Transpose', 'Forward',
      $                   'Columnwise', M-J+1, N-M, K-J+1,
      $                   A( J, J ), LDA, WORK(J), LBWORK,
      $                   A( J, M+1 ), LDA, WORK(LBWORK*NB+NT*NT+1),
      $                   N-M)
          ELSE
-             CALL DLARFB( 'Left', 'Transpose', 'Forward',
+             CALL AB_DLARFB( 'Left', 'Transpose', 'Forward',
      $                   'Columnwise', M-J+1, N-M, K-J+1,
      $                   A( J, J ), LDA,
      $                   WORK(LBWORK*NB+1),
@@ -411,7 +423,7 @@ C>
       WORK( 1 ) = IWS
       RETURN
 *
-*     End of DGEQRF
+*     End of AB_DGEQRF
 *
       END
 

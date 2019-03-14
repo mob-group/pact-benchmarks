@@ -1,4 +1,4 @@
-*> \brief <b> SLASQ5 computes one dqds transform in ping-pong form. Used by sbdsqr and sstegr. </b>
+*> \brief <b> AB_SLASQ5 computes one dqds transform in ping-pong form. Used by AB_SBDSQR and AB_SSTEGR. </b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLASQ5 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasq5.f">
+*> Download AB_SLASQ5 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLASQ5.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasq5.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLASQ5.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasq5.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLASQ5.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLASQ5( I0, N0, Z, PP, TAU, SIGMA, DMIN, DMIN1, DMIN2, DN,
+*       SUBROUTINE AB_SLASQ5( I0, N0, Z, PP, TAU, SIGMA, DMIN, DMIN1, DMIN2, DN,
 *                          DNM1, DNM2, IEEE, EPS )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> SLASQ5 computes one dqds transform in ping-pong form, one
+*> AB_SLASQ5 computes one dqds transform in ping-pong form, one
 *> version for IEEE machines another for non IEEE machines.
 *> \endverbatim
 *
@@ -141,7 +141,8 @@
 *> \ingroup auxOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE SLASQ5( I0, N0, Z, PP, TAU, SIGMA, DMIN, DMIN1, DMIN2,
+      SUBROUTINE AB_SLASQ5( I0, N0, Z, PP, TAU, SIGMA, DMIN, DMIN1, DMIN
+     $2,
      $                   DN, DNM1, DNM2, IEEE, EPS )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -406,6 +407,6 @@
       Z( 4*N0-PP ) = EMIN
       RETURN
 *
-*     End of SLASQ5
+*     End of AB_SLASQ5
 *
       END

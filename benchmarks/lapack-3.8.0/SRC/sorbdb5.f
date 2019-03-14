@@ -1,4 +1,4 @@
-*> \brief \b SORBDB5
+*> \brief \b AB_SORBDB5
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SORBDB5 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sorbdb5.f">
+*> Download AB_SORBDB5 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SORBDB5.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sorbdb5.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SORBDB5.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorbdb5.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SORBDB5.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SORBDB5( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2,
+*       SUBROUTINE AB_SORBDB5( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2,
 *                           LDQ2, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *>\verbatim
 *>
-*> SORBDB5 orthogonalizes the column vector
+*> AB_SORBDB5 orthogonalizes the column vector
 *>      X = [ X1 ]
 *>          [ X2 ]
 *> with respect to the columns of
@@ -153,7 +153,8 @@
 *> \ingroup realOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE SORBDB5( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2,
+      SUBROUTINE AB_SORBDB5( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, 
+     $Q2,
      $                    LDQ2, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
@@ -179,11 +180,11 @@
       INTEGER            CHILDINFO, I, J
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SORBDB6, XERBLA
+      EXTERNAL           AB_SORBDB6, AB_XERBLA
 *     ..
 *     .. External Functions ..
-      REAL               SNRM2
-      EXTERNAL           SNRM2
+      REAL               AB_SNRM2
+      EXTERNAL           AB_SNRM2
 *     ..
 *     .. Intrinsic Function ..
       INTRINSIC          MAX
@@ -212,19 +213,20 @@
       END IF
 *
       IF( INFO .NE. 0 ) THEN
-         CALL XERBLA( 'SORBDB5', -INFO )
+         CALL AB_XERBLA( 'AB_SORBDB5', -INFO )
          RETURN
       END IF
 *
 *     Project X onto the orthogonal complement of Q
 *
-      CALL SORBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2, LDQ2,
+      CALL AB_SORBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2, LD
+     $Q2,
      $              WORK, LWORK, CHILDINFO )
 *
 *     If the projection is nonzero, then return
 *
-      IF( SNRM2(M1,X1,INCX1) .NE. ZERO
-     $    .OR. SNRM2(M2,X2,INCX2) .NE. ZERO ) THEN
+      IF( AB_SNRM2(M1,X1,INCX1) .NE. ZERO
+     $    .OR. AB_SNRM2(M2,X2,INCX2) .NE. ZERO ) THEN
          RETURN
       END IF
 *
@@ -239,10 +241,10 @@
          DO J = 1, M2
             X2(J) = ZERO
          END DO
-         CALL SORBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2,
+         CALL AB_SORBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2,
      $                 LDQ2, WORK, LWORK, CHILDINFO )
-         IF( SNRM2(M1,X1,INCX1) .NE. ZERO
-     $       .OR. SNRM2(M2,X2,INCX2) .NE. ZERO ) THEN
+         IF( AB_SNRM2(M1,X1,INCX1) .NE. ZERO
+     $       .OR. AB_SNRM2(M2,X2,INCX2) .NE. ZERO ) THEN
             RETURN
          END IF
       END DO
@@ -258,17 +260,17 @@
             X2(J) = ZERO
          END DO
          X2(I) = ONE
-         CALL SORBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2,
+         CALL AB_SORBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2,
      $                 LDQ2, WORK, LWORK, CHILDINFO )
-         IF( SNRM2(M1,X1,INCX1) .NE. ZERO
-     $       .OR. SNRM2(M2,X2,INCX2) .NE. ZERO ) THEN
+         IF( AB_SNRM2(M1,X1,INCX1) .NE. ZERO
+     $       .OR. AB_SNRM2(M2,X2,INCX2) .NE. ZERO ) THEN
             RETURN
          END IF
       END DO
 *
       RETURN
 *
-*     End of SORBDB5
+*     End of AB_SORBDB5
 *
       END
 

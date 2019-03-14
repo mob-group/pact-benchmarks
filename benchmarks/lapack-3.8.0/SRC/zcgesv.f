@@ -1,4 +1,4 @@
-*> \brief <b> ZCGESV computes the solution to system of linear equations A * X = B for GE matrices</b> (mixed precision with iterative refinement)
+*> \brief <b> AB_ZCGESV computes the solution to system of linear equations A * X = B for GE matrices</b> (mixed precision with iterative refinement)
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZCGESV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zcgesv.f">
+*> Download AB_ZCGESV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZCGESV.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zcgesv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZCGESV.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zcgesv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZCGESV.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZCGESV( N, NRHS, A, LDA, IPIV, B, LDB, X, LDX, WORK,
+*       SUBROUTINE AB_ZCGESV( N, NRHS, A, LDA, IPIV, B, LDB, X, LDX, WORK,
 *                          SWORK, RWORK, ITER, INFO )
 *
 *       .. Scalar Arguments ..
@@ -38,11 +38,11 @@
 *>
 *> \verbatim
 *>
-*> ZCGESV computes the solution to a complex system of linear equations
+*> AB_ZCGESV computes the solution to a complex system of linear equations
 *>    A * X = B,
 *> where A is an N-by-N matrix and X and B are N-by-NRHS matrices.
 *>
-*> ZCGESV first attempts to factorize the matrix in COMPLEX and use this
+*> AB_ZCGESV first attempts to factorize the matrix in COMPLEX and use this
 *> factorization within an iterative refinement procedure to produce a
 *> solution with COMPLEX*16 normwise backward error quality (see below).
 *> If the approach fails the method switches to a COMPLEX*16
@@ -52,7 +52,7 @@
 *> the ratio COMPLEX performance over COMPLEX*16 performance is too
 *> small. A reasonable strategy should take the number of right-hand
 *> sides and the size of the matrix into account. This might be done
-*> with a call to ILAENV in the future. Up to now, we always try
+*> with a call to AB_ILAENV in the future. Up to now, we always try
 *> iterative refinement.
 *>
 *> The iterative refinement process is stopped if
@@ -167,7 +167,7 @@
 *>                    implementation- or machine-specific reasons
 *>               -2 : narrowing the precision induced an overflow,
 *>                    the routine fell back to full precision
-*>               -3 : failure of CGETRF
+*>               -3 : failure of AB_CGETRF
 *>               -31: stop the iterative refinement after the 30th
 *>                    iterations
 *>          > 0: iterative refinement has been successfully used.
@@ -198,7 +198,7 @@
 *> \ingroup complex16GEsolve
 *
 *  =====================================================================
-      SUBROUTINE ZCGESV( N, NRHS, A, LDA, IPIV, B, LDB, X, LDX, WORK,
+      SUBROUTINE AB_ZCGESV( N, NRHS, A, LDA, IPIV, B, LDB, X, LDX, WORK,
      $                   SWORK, RWORK, ITER, INFO )
 *
 *  -- LAPACK driver routine (version 3.8.0) --
@@ -239,13 +239,14 @@
       COMPLEX*16         ZDUM
 *
 *     .. External Subroutines ..
-      EXTERNAL           CGETRS, CGETRF, CLAG2Z, XERBLA, ZAXPY, ZGEMM,
-     $                   ZLACPY, ZLAG2C, ZGETRF, ZGETRS
+      EXTERNAL           AB_CGETRS, AB_CGETRF, AB_CLAG2Z, AB_XERBLA, AB_
+     $ZAXPY, AB_ZGEMM,
+     $                   AB_ZLACPY, AB_ZLAG2C, AB_ZGETRF, AB_ZGETRS
 *     ..
 *     .. External Functions ..
-      INTEGER            IZAMAX
-      DOUBLE PRECISION   DLAMCH, ZLANGE
-      EXTERNAL           IZAMAX, DLAMCH, ZLANGE
+      INTEGER            AB_IZAMAX
+      DOUBLE PRECISION   DLAMCH, AB_ZLANGE
+      EXTERNAL           AB_IZAMAX, DLAMCH, AB_ZLANGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, SQRT
@@ -275,7 +276,7 @@
          INFO = -9
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZCGESV', -INFO )
+         CALL AB_XERBLA( 'AB_ZCGESV', -INFO )
          RETURN
       END IF
 *
@@ -294,7 +295,7 @@
 *
 *     Compute some constants.
 *
-      ANRM = ZLANGE( 'I', N, N, A, LDA, RWORK )
+      ANRM = AB_ZLANGE( 'I', N, N, A, LDA, RWORK )
       EPS = DLAMCH( 'Epsilon' )
       CTE = ANRM*EPS*SQRT( DBLE( N ) )*BWDMAX
 *
@@ -306,7 +307,7 @@
 *     Convert B from double precision to single precision and store the
 *     result in SX.
 *
-      CALL ZLAG2C( N, NRHS, B, LDB, SWORK( PTSX ), N, INFO )
+      CALL AB_ZLAG2C( N, NRHS, B, LDB, SWORK( PTSX ), N, INFO )
 *
       IF( INFO.NE.0 ) THEN
          ITER = -2
@@ -316,7 +317,7 @@
 *     Convert A from double precision to single precision and store the
 *     result in SA.
 *
-      CALL ZLAG2C( N, N, A, LDA, SWORK( PTSA ), N, INFO )
+      CALL AB_ZLAG2C( N, N, A, LDA, SWORK( PTSA ), N, INFO )
 *
       IF( INFO.NE.0 ) THEN
          ITER = -2
@@ -325,7 +326,7 @@
 *
 *     Compute the LU factorization of SA.
 *
-      CALL CGETRF( N, N, SWORK( PTSA ), N, IPIV, INFO )
+      CALL AB_CGETRF( N, N, SWORK( PTSA ), N, IPIV, INFO )
 *
       IF( INFO.NE.0 ) THEN
          ITER = -3
@@ -334,26 +335,27 @@
 *
 *     Solve the system SA*SX = SB.
 *
-      CALL CGETRS( 'No transpose', N, NRHS, SWORK( PTSA ), N, IPIV,
+      CALL AB_CGETRS( 'No transpose', N, NRHS, SWORK( PTSA ), N, IPIV,
      $             SWORK( PTSX ), N, INFO )
 *
 *     Convert SX back to double precision
 *
-      CALL CLAG2Z( N, NRHS, SWORK( PTSX ), N, X, LDX, INFO )
+      CALL AB_CLAG2Z( N, NRHS, SWORK( PTSX ), N, X, LDX, INFO )
 *
 *     Compute R = B - AX (R is WORK).
 *
-      CALL ZLACPY( 'All', N, NRHS, B, LDB, WORK, N )
+      CALL AB_ZLACPY( 'All', N, NRHS, B, LDB, WORK, N )
 *
-      CALL ZGEMM( 'No Transpose', 'No Transpose', N, NRHS, N, NEGONE, A,
+      CALL AB_ZGEMM( 'No Transpose', 'No Transpose', N, NRHS, N, NEGONE,
+     $ A,
      $            LDA, X, LDX, ONE, WORK, N )
 *
 *     Check whether the NRHS normwise backward errors satisfy the
 *     stopping criterion. If yes, set ITER=0 and return.
 *
       DO I = 1, NRHS
-         XNRM = CABS1( X( IZAMAX( N, X( 1, I ), 1 ), I ) )
-         RNRM = CABS1( WORK( IZAMAX( N, WORK( 1, I ), 1 ), I ) )
+         XNRM = CABS1( X( AB_IZAMAX( N, X( 1, I ), 1 ), I ) )
+         RNRM = CABS1( WORK( AB_IZAMAX( N, WORK( 1, I ), 1 ), I ) )
          IF( RNRM.GT.XNRM*CTE )
      $      GO TO 10
       END DO
@@ -371,7 +373,7 @@
 *        Convert R (in WORK) from double precision to single precision
 *        and store the result in SX.
 *
-         CALL ZLAG2C( N, NRHS, WORK, N, SWORK( PTSX ), N, INFO )
+         CALL AB_ZLAG2C( N, NRHS, WORK, N, SWORK( PTSX ), N, INFO )
 *
          IF( INFO.NE.0 ) THEN
             ITER = -2
@@ -380,31 +382,33 @@
 *
 *        Solve the system SA*SX = SR.
 *
-         CALL CGETRS( 'No transpose', N, NRHS, SWORK( PTSA ), N, IPIV,
+         CALL AB_CGETRS( 'No transpose', N, NRHS, SWORK( PTSA ), N, IPIV
+     $,
      $                SWORK( PTSX ), N, INFO )
 *
 *        Convert SX back to double precision and update the current
 *        iterate.
 *
-         CALL CLAG2Z( N, NRHS, SWORK( PTSX ), N, WORK, N, INFO )
+         CALL AB_CLAG2Z( N, NRHS, SWORK( PTSX ), N, WORK, N, INFO )
 *
          DO I = 1, NRHS
-            CALL ZAXPY( N, ONE, WORK( 1, I ), 1, X( 1, I ), 1 )
+            CALL AB_ZAXPY( N, ONE, WORK( 1, I ), 1, X( 1, I ), 1 )
          END DO
 *
 *        Compute R = B - AX (R is WORK).
 *
-         CALL ZLACPY( 'All', N, NRHS, B, LDB, WORK, N )
+         CALL AB_ZLACPY( 'All', N, NRHS, B, LDB, WORK, N )
 *
-         CALL ZGEMM( 'No Transpose', 'No Transpose', N, NRHS, N, NEGONE,
+         CALL AB_ZGEMM( 'No Transpose', 'No Transpose', N, NRHS, N, NEGO
+     $NE,
      $               A, LDA, X, LDX, ONE, WORK, N )
 *
 *        Check whether the NRHS normwise backward errors satisfy the
 *        stopping criterion. If yes, set ITER=IITER>0 and return.
 *
          DO I = 1, NRHS
-            XNRM = CABS1( X( IZAMAX( N, X( 1, I ), 1 ), I ) )
-            RNRM = CABS1( WORK( IZAMAX( N, WORK( 1, I ), 1 ), I ) )
+            XNRM = CABS1( X( AB_IZAMAX( N, X( 1, I ), 1 ), I ) )
+            RNRM = CABS1( WORK( AB_IZAMAX( N, WORK( 1, I ), 1 ), I ) )
             IF( RNRM.GT.XNRM*CTE )
      $         GO TO 20
          END DO
@@ -432,17 +436,17 @@
 *     Single-precision iterative refinement failed to converge to a
 *     satisfactory solution, so we resort to double precision.
 *
-      CALL ZGETRF( N, N, A, LDA, IPIV, INFO )
+      CALL AB_ZGETRF( N, N, A, LDA, IPIV, INFO )
 *
       IF( INFO.NE.0 )
      $   RETURN
 *
-      CALL ZLACPY( 'All', N, NRHS, B, LDB, X, LDX )
-      CALL ZGETRS( 'No transpose', N, NRHS, A, LDA, IPIV, X, LDX,
+      CALL AB_ZLACPY( 'All', N, NRHS, B, LDB, X, LDX )
+      CALL AB_ZGETRS( 'No transpose', N, NRHS, A, LDA, IPIV, X, LDX,
      $             INFO )
 *
       RETURN
 *
-*     End of ZCGESV.
+*     End of AB_ZCGESV.
 *
       END

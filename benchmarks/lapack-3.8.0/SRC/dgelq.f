@@ -2,7 +2,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGELQ( M, N, A, LDA, T, TSIZE, WORK, LWORK,
+*       SUBROUTINE AB_DGELQ( M, N, A, LDA, T, TSIZE, WORK, LWORK,
 *                         INFO )
 *
 *       .. Scalar Arguments ..
@@ -17,7 +17,7 @@
 *  =============
 *>
 *> \verbatim
-*> DGELQ computes a LQ factorization of an M-by-N matrix A.
+*> AB_DGELQ computes a LQ factorization of an M-by-N matrix A.
 *> \endverbatim
 *
 *  Arguments:
@@ -69,7 +69,7 @@
 *>          If TSIZE = -1 or -2, then a workspace query is assumed. The routine
 *>          only calculates the sizes of the T and WORK arrays, returns these
 *>          values as the first entries of the T and WORK arrays, and no error
-*>          message related to T or WORK is issued by XERBLA.
+*>          message related to T or WORK is issued by AB_XERBLA.
 *>          If TSIZE = -1, the routine calculates optimal size of T for the 
 *>          optimum performance and returns this value in T(1).
 *>          If TSIZE = -2, the routine calculates minimal size of T and 
@@ -91,7 +91,7 @@
 *>          If LWORK = -1 or -2, then a workspace query is assumed. The routine
 *>          only calculates the sizes of the T and WORK arrays, returns these
 *>          values as the first entries of the T and WORK arrays, and no error
-*>          message related to T or WORK is issued by XERBLA.
+*>          message related to T or WORK is issued by AB_XERBLA.
 *>          If LWORK = -1, the routine calculates optimal size of WORK for the
 *>          optimal performance and returns this value in WORK(1).
 *>          If LWORK = -2, the routine calculates minimal size of WORK and 
@@ -147,16 +147,16 @@
 *>          T(2): row block size (MB)
 *>          T(3): column block size (NB)
 *>          T(6:TSIZE): data structure needed for Q, computed by
-*>                           DLASWLQ or DGELQT
+*>                           AB_DLASWLQ or AB_DGELQT
 *>
 *>  Depending on the matrix dimensions M and N, and row and column
-*>  block sizes MB and NB returned by ILAENV, DGELQ will use either
-*>  DLASWLQ (if the matrix is short-and-wide) or DGELQT to compute
+*>  block sizes MB and NB returned by AB_ILAENV, AB_DGELQ will use either
+*>  AB_DLASWLQ (if the matrix is short-and-wide) or AB_DGELQT to compute
 *>  the LQ factorization.
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DGELQ( M, N, A, LDA, T, TSIZE, WORK, LWORK,
+      SUBROUTINE AB_DGELQ( M, N, A, LDA, T, TSIZE, WORK, LWORK,
      $                  INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -179,18 +179,18 @@
       INTEGER            MB, NB, MINTSZ, NBLCKS
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGELQT, DLASWLQ, XERBLA
+      EXTERNAL           AB_DGELQT, AB_DLASWLQ, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, MOD
 *     ..
 *     .. External Functions ..
-      INTEGER            ILAENV
-      EXTERNAL           ILAENV
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_ILAENV
 *     ..
 *     .. Executable Statements ..
 *
@@ -211,8 +211,8 @@
 *     Determine the block size
 *
       IF( MIN( M, N ).GT.0 ) THEN
-        MB = ILAENV( 1, 'DGELQ ', ' ', M, N, 1, -1 )
-        NB = ILAENV( 1, 'DGELQ ', ' ', M, N, 2, -1 )
+        MB = AB_ILAENV( 1, 'AB_DGELQ ', ' ', M, N, 1, -1 )
+        NB = AB_ILAENV( 1, 'AB_DGELQ ', ' ', M, N, 2, -1 )
       ELSE
         MB = 1
         NB = N
@@ -276,7 +276,7 @@
         END IF
       END IF
       IF( INFO.NE.0 ) THEN
-        CALL XERBLA( 'DGELQ', -INFO )
+        CALL AB_XERBLA( 'AB_DGELQ', -INFO )
         RETURN
       ELSE IF( LQUERY ) THEN
         RETURN
@@ -291,9 +291,9 @@
 *     The LQ Decomposition
 *
       IF( ( N.LE.M ) .OR. ( NB.LE.M ) .OR. ( NB.GE.N ) ) THEN
-        CALL DGELQT( M, N, MB, A, LDA, T( 6 ), MB, WORK, INFO )
+        CALL AB_DGELQT( M, N, MB, A, LDA, T( 6 ), MB, WORK, INFO )
       ELSE
-        CALL DLASWLQ( M, N, MB, NB, A, LDA, T( 6 ), MB, WORK,
+        CALL AB_DLASWLQ( M, N, MB, NB, A, LDA, T( 6 ), MB, WORK,
      $                LWORK, INFO )
       END IF
 *
@@ -301,6 +301,6 @@
 *
       RETURN
 *
-*     End of DGELQ
+*     End of AB_DGELQ
 *
       END

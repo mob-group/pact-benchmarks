@@ -1,4 +1,4 @@
-*> \brief <b> ZGESVDX computes the singular value decomposition (SVD) for GE matrices</b>
+*> \brief <b> AB_ZGESVDX computes the singular value decomposition (SVD) for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZGESVDX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgesvdx.f">
+*> Download AB_ZGESVDX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZGESVdx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgesvdx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZGESVdx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgesvdx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZGESVdx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*     SUBROUTINE CGESVDX( JOBU, JOBVT, RANGE, M, N, A, LDA, VL, VU,
+*     SUBROUTINE AB_CGESVDX( JOBU, JOBVT, RANGE, M, N, A, LDA, VL, VU,
 *    $                    IL, IU, NS, S, U, LDU, VT, LDVT, WORK,
 *    $                    LWORK, RWORK, IWORK, INFO )
 *
@@ -41,7 +41,7 @@
 *>
 *> \verbatim
 *>
-*>  ZGESVDX computes the singular value decomposition (SVD) of a complex
+*>  AB_ZGESVDX computes the singular value decomposition (SVD) of a complex
 *>  M-by-N matrix A, optionally computing the left and/or right singular
 *>  vectors. The SVD is written
 *>
@@ -54,9 +54,9 @@
 *>  are returned in descending order.  The first min(m,n) columns of
 *>  U and V are the left and right singular vectors of A.
 *>
-*>  ZGESVDX uses an eigenvalue problem for obtaining the SVD, which
+*>  AB_ZGESVDX uses an eigenvalue problem for obtaining the SVD, which
 *>  allows for the computation of a subset of singular values and
-*>  vectors. See DBDSVDX for details.
+*>  vectors. See AB_DBDSVDX for details.
 *>
 *>  Note that the routine returns V**T, not V.
 *> \endverbatim
@@ -225,7 +225,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -239,7 +239,7 @@
 *>          IWORK is INTEGER array, dimension (12*MIN(M,N))
 *>          If INFO = 0, the first NS elements of IWORK are zero. If INFO > 0,
 *>          then IWORK contains the indices of the eigenvectors that failed
-*>          to converge in DBDSVDX/DSTEVX.
+*>          to converge in AB_DBDSVDX/AB_DSTEVX.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -248,9 +248,9 @@
 *>           = 0:  successful exit
 *>           < 0:  if INFO = -i, the i-th argument had an illegal value
 *>           > 0:  if INFO = i, then i eigenvectors failed to converge
-*>                 in DBDSVDX/DSTEVX.
+*>                 in AB_DBDSVDX/AB_DSTEVX.
 *>                 if INFO = N*2 + 1, an internal error occurred in
-*>                 DBDSVDX
+*>                 AB_DBDSVDX
 *> \endverbatim
 *
 *  Authors:
@@ -266,7 +266,7 @@
 *> \ingroup complex16GEsing
 *
 *  =====================================================================
-      SUBROUTINE ZGESVDX( JOBU, JOBVT, RANGE, M, N, A, LDA, VL, VU,
+      SUBROUTINE AB_ZGESVDX( JOBU, JOBVT, RANGE, M, N, A, LDA, VL, VU,
      $                    IL, IU, NS, S, U, LDU, VT, LDVT, WORK,
      $                    LWORK, RWORK, IWORK, INFO )
 *
@@ -308,14 +308,16 @@
       DOUBLE PRECISION   DUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGEBRD, ZGELQF, ZGEQRF, ZLASCL, ZLASET, ZLACPY,
-     $                   ZUNMLQ, ZUNMBR, ZUNMQR, DBDSVDX, DLASCL, XERBLA
+      EXTERNAL           AB_ZGEBRD, AB_ZGELQF, AB_ZGEQRF, AB_ZLASCL, AB_
+     $ZLASET, AB_ZLACPY,
+     $                   AB_ZUNMLQ, AB_ZUNMBR, AB_ZUNMQR, AB_DBDSVDX, AB
+     $_DLASCL, AB_XERBLA
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      DOUBLE PRECISION   DLAMCH, ZLANGE
-      EXTERNAL           LSAME, ILAENV, DLAMCH, ZLANGE
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      DOUBLE PRECISION   DLAMCH, AB_ZLANGE
+      EXTERNAL           AB_LSAME, AB_ILAENV, DLAMCH, AB_ZLANGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, SQRT
@@ -330,23 +332,23 @@
       LQUERY = ( LWORK.EQ.-1 )
       MINMN = MIN( M, N )
 
-      WANTU = LSAME( JOBU, 'V' )
-      WANTVT = LSAME( JOBVT, 'V' )
+      WANTU = AB_LSAME( JOBU, 'V' )
+      WANTVT = AB_LSAME( JOBVT, 'V' )
       IF( WANTU .OR. WANTVT ) THEN
          JOBZ = 'V'
       ELSE
          JOBZ = 'N'
       END IF
-      ALLS = LSAME( RANGE, 'A' )
-      VALS = LSAME( RANGE, 'V' )
-      INDS = LSAME( RANGE, 'I' )
+      ALLS = AB_LSAME( RANGE, 'A' )
+      VALS = AB_LSAME( RANGE, 'V' )
+      INDS = AB_LSAME( RANGE, 'I' )
 *
       INFO = 0
-      IF( .NOT.LSAME( JOBU, 'V' ) .AND.
-     $    .NOT.LSAME( JOBU, 'N' ) ) THEN
+      IF( .NOT.AB_LSAME( JOBU, 'V' ) .AND.
+     $    .NOT.AB_LSAME( JOBU, 'N' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME( JOBVT, 'V' ) .AND.
-     $         .NOT.LSAME( JOBVT, 'N' ) ) THEN
+      ELSE IF( .NOT.AB_LSAME( JOBVT, 'V' ) .AND.
+     $         .NOT.AB_LSAME( JOBVT, 'N' ) ) THEN
          INFO = -2
       ELSE IF( .NOT.( ALLS .OR. VALS .OR. INDS ) ) THEN
          INFO = -3
@@ -390,50 +392,58 @@
 *     minimal amount of workspace needed at that point in the code,
 *     as well as the preferred amount for good performance.
 *     NB refers to the optimal block size for the immediately
-*     following subroutine, as returned by ILAENV.)
+*     following subroutine, as returned by AB_ILAENV.)
 *
       IF( INFO.EQ.0 ) THEN
          MINWRK = 1
          MAXWRK = 1
          IF( MINMN.GT.0 ) THEN
             IF( M.GE.N ) THEN
-               MNTHR = ILAENV( 6, 'ZGESVD', JOBU // JOBVT, M, N, 0, 0 )
+               MNTHR = AB_ILAENV( 6, 'AB_ZGESVD', JOBU // JOBVT, M, N, 0
+     $, 0 )
                IF( M.GE.MNTHR ) THEN
 *
 *                 Path 1 (M much larger than N)
 *
                   MINWRK = N*(N+5)
-                  MAXWRK = N + N*ILAENV(1,'ZGEQRF',' ',M,N,-1,-1)
+                  MAXWRK = N + N*AB_ILAENV(1,'AB_ZGEQRF',' ',M,N,-1,-1)
                   MAXWRK = MAX(MAXWRK,
-     $                     N*N+2*N+2*N*ILAENV(1,'ZGEBRD',' ',N,N,-1,-1))
+     $                     N*N+2*N+2*N*AB_ILAENV(1,'AB_ZGEBRD',' ',N,N,-
+     $1,-1))
                   IF (WANTU .OR. WANTVT) THEN
                      MAXWRK = MAX(MAXWRK,
-     $                       N*N+2*N+N*ILAENV(1,'ZUNMQR','LN',N,N,N,-1))
+     $                       N*N+2*N+N*AB_ILAENV(1,'AB_ZUNMQR','LN',N,N,
+     $N,-1))
                   END IF
                ELSE
 *
 *                 Path 2 (M at least N, but not much larger)
 *
                   MINWRK = 3*N + M
-                  MAXWRK = 2*N + (M+N)*ILAENV(1,'ZGEBRD',' ',M,N,-1,-1)
+                  MAXWRK = 2*N + (M+N)*AB_ILAENV(1,'AB_ZGEBRD',' ',M,N,-
+     $1,-1)
                   IF (WANTU .OR. WANTVT) THEN
                      MAXWRK = MAX(MAXWRK,
-     $                        2*N+N*ILAENV(1,'ZUNMQR','LN',N,N,N,-1))
+     $                        2*N+N*AB_ILAENV(1,'AB_ZUNMQR','LN',N,N,N,-
+     $1))
                   END IF
                END IF
             ELSE
-               MNTHR = ILAENV( 6, 'ZGESVD', JOBU // JOBVT, M, N, 0, 0 )
+               MNTHR = AB_ILAENV( 6, 'AB_ZGESVD', JOBU // JOBVT, M, N, 0
+     $, 0 )
                IF( N.GE.MNTHR ) THEN
 *
 *                 Path 1t (N much larger than M)
 *
                   MINWRK = M*(M+5)
-                  MAXWRK = M + M*ILAENV(1,'ZGELQF',' ',M,N,-1,-1)
+                  MAXWRK = M + M*AB_ILAENV(1,'AB_ZGELQF',' ',M,N,-1,-1)
                   MAXWRK = MAX(MAXWRK,
-     $                     M*M+2*M+2*M*ILAENV(1,'ZGEBRD',' ',M,M,-1,-1))
+     $                     M*M+2*M+2*M*AB_ILAENV(1,'AB_ZGEBRD',' ',M,M,-
+     $1,-1))
                   IF (WANTU .OR. WANTVT) THEN
                      MAXWRK = MAX(MAXWRK,
-     $                       M*M+2*M+M*ILAENV(1,'ZUNMQR','LN',M,M,M,-1))
+     $                       M*M+2*M+M*AB_ILAENV(1,'AB_ZUNMQR','LN',M,M,
+     $M,-1))
                   END IF
                ELSE
 *
@@ -441,10 +451,12 @@
 *
 *
                   MINWRK = 3*M + N
-                  MAXWRK = 2*M + (M+N)*ILAENV(1,'ZGEBRD',' ',M,N,-1,-1)
+                  MAXWRK = 2*M + (M+N)*AB_ILAENV(1,'AB_ZGEBRD',' ',M,N,-
+     $1,-1)
                   IF (WANTU .OR. WANTVT) THEN
                      MAXWRK = MAX(MAXWRK,
-     $                        2*M+M*ILAENV(1,'ZUNMQR','LN',M,M,M,-1))
+     $                        2*M+M*AB_ILAENV(1,'AB_ZUNMQR','LN',M,M,M,-
+     $1))
                   END IF
                END IF
             END IF
@@ -458,7 +470,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZGESVDX', -INFO )
+         CALL AB_XERBLA( 'AB_ZGESVDX', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -494,14 +506,14 @@
 *
 *     Scale A if max element outside range [SMLNUM,BIGNUM]
 *
-      ANRM = ZLANGE( 'M', M, N, A, LDA, DUM )
+      ANRM = AB_ZLANGE( 'M', M, N, A, LDA, DUM )
       ISCL = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
          ISCL = 1
-         CALL ZLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, A, LDA, INFO )
+         CALL AB_ZLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, A, LDA, INFO )
       ELSE IF( ANRM.GT.BIGNUM ) THEN
          ISCL = 1
-         CALL ZLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, A, LDA, INFO )
+         CALL AB_ZLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, A, LDA, INFO )
       END IF
 *
       IF( M.GE.N ) THEN
@@ -522,7 +534,7 @@
 *
             ITAU = 1
             ITEMP = ITAU + N
-            CALL ZGEQRF( M, N, A, LDA, WORK( ITAU ), WORK( ITEMP ),
+            CALL AB_ZGEQRF( M, N, A, LDA, WORK( ITAU ), WORK( ITEMP ),
      $                   LWORK-ITEMP+1, INFO )
 *
 *           Copy R into WORK and bidiagonalize it:
@@ -535,10 +547,10 @@
             ID = 1
             IE = ID + N
             ITGKZ = IE + N
-            CALL ZLACPY( 'U', N, N, A, LDA, WORK( IQRF ), N )
-            CALL ZLASET( 'L', N-1, N-1, CZERO, CZERO,
+            CALL AB_ZLACPY( 'U', N, N, A, LDA, WORK( IQRF ), N )
+            CALL AB_ZLASET( 'L', N-1, N-1, CZERO, CZERO,
      $                   WORK( IQRF+1 ), N )
-            CALL ZGEBRD( N, N, WORK( IQRF ), N, RWORK( ID ),
+            CALL AB_ZGEBRD( N, N, WORK( IQRF ), N, RWORK( ID ),
      $                   RWORK( IE ), WORK( ITAUQ ), WORK( ITAUP ),
      $                   WORK( ITEMP ), LWORK-ITEMP+1, INFO )
             ITEMPR = ITGKZ + N*(N*2+1)
@@ -546,7 +558,7 @@
 *           Solve eigenvalue problem TGK*Z=Z*S.
 *           (Workspace: need 2*N*N+14*N)
 *
-            CALL DBDSVDX( 'U', JOBZ, RNGTGK, N, RWORK( ID ),
+            CALL AB_DBDSVDX( 'U', JOBZ, RNGTGK, N, RWORK( ID ),
      $                    RWORK( IE ), VL, VU, ILTGK, IUTGK, NS, S,
      $                    RWORK( ITGKZ ), N*2, RWORK( ITEMPR ),
      $                    IWORK, INFO)
@@ -562,19 +574,20 @@
                   END DO
                   K = K + N
                END DO
-               CALL ZLASET( 'A', M-N, NS, CZERO, CZERO, U( N+1,1 ), LDU)
+               CALL AB_ZLASET( 'A', M-N, NS, CZERO, CZERO, U( N+1,1 ), L
+     $DU)
 *
-*              Call ZUNMBR to compute QB*UB.
+*              Call AB_ZUNMBR to compute QB*UB.
 *              (Workspace in WORK( ITEMP ): need N, prefer N*NB)
 *
-               CALL ZUNMBR( 'Q', 'L', 'N', N, NS, N, WORK( IQRF ), N,
+               CALL AB_ZUNMBR( 'Q', 'L', 'N', N, NS, N, WORK( IQRF ), N,
      $                      WORK( ITAUQ ), U, LDU, WORK( ITEMP ),
      $                      LWORK-ITEMP+1, INFO )
 *
-*              Call ZUNMQR to compute Q*(QB*UB).
+*              Call AB_ZUNMQR to compute Q*(QB*UB).
 *              (Workspace in WORK( ITEMP ): need N, prefer N*NB)
 *
-               CALL ZUNMQR( 'L', 'N', M, NS, N, A, LDA,
+               CALL AB_ZUNMQR( 'L', 'N', M, NS, N, A, LDA,
      $                      WORK( ITAU ), U, LDU, WORK( ITEMP ),
      $                      LWORK-ITEMP+1, INFO )
             END IF
@@ -591,10 +604,10 @@
                   K = K + N
                END DO
 *
-*              Call ZUNMBR to compute VB**T * PB**T
+*              Call AB_ZUNMBR to compute VB**T * PB**T
 *              (Workspace in WORK( ITEMP ): need N, prefer N*NB)
 *
-               CALL ZUNMBR( 'P', 'R', 'C', NS, N, N, WORK( IQRF ), N,
+               CALL AB_ZUNMBR( 'P', 'R', 'C', NS, N, N, WORK( IQRF ), N,
      $                      WORK( ITAUP ), VT, LDVT, WORK( ITEMP ),
      $                      LWORK-ITEMP+1, INFO )
             END IF
@@ -614,7 +627,7 @@
             ID = 1
             IE = ID + N
             ITGKZ = IE + N
-            CALL ZGEBRD( M, N, A, LDA, RWORK( ID ), RWORK( IE ),
+            CALL AB_ZGEBRD( M, N, A, LDA, RWORK( ID ), RWORK( IE ),
      $                   WORK( ITAUQ ), WORK( ITAUP ), WORK( ITEMP ),
      $                   LWORK-ITEMP+1, INFO )
             ITEMPR = ITGKZ + N*(N*2+1)
@@ -622,7 +635,7 @@
 *           Solve eigenvalue problem TGK*Z=Z*S.
 *           (Workspace: need 2*N*N+14*N)
 *
-            CALL DBDSVDX( 'U', JOBZ, RNGTGK, N, RWORK( ID ),
+            CALL AB_DBDSVDX( 'U', JOBZ, RNGTGK, N, RWORK( ID ),
      $                    RWORK( IE ), VL, VU, ILTGK, IUTGK, NS, S,
      $                    RWORK( ITGKZ ), N*2, RWORK( ITEMPR ),
      $                    IWORK, INFO)
@@ -638,12 +651,13 @@
                   END DO
                   K = K + N
                END DO
-               CALL ZLASET( 'A', M-N, NS, CZERO, CZERO, U( N+1,1 ), LDU)
+               CALL AB_ZLASET( 'A', M-N, NS, CZERO, CZERO, U( N+1,1 ), L
+     $DU)
 *
-*              Call ZUNMBR to compute QB*UB.
+*              Call AB_ZUNMBR to compute QB*UB.
 *              (Workspace in WORK( ITEMP ): need N, prefer N*NB)
 *
-               CALL ZUNMBR( 'Q', 'L', 'N', M, NS, N, A, LDA,
+               CALL AB_ZUNMBR( 'Q', 'L', 'N', M, NS, N, A, LDA,
      $                      WORK( ITAUQ ), U, LDU, WORK( ITEMP ),
      $                      LWORK-ITEMP+1, IERR )
             END IF
@@ -660,10 +674,10 @@
                   K = K + N
                END DO
 *
-*              Call ZUNMBR to compute VB**T * PB**T
+*              Call AB_ZUNMBR to compute VB**T * PB**T
 *              (Workspace in WORK( ITEMP ): need N, prefer N*NB)
 *
-               CALL ZUNMBR( 'P', 'R', 'C', NS, N, N, A, LDA,
+               CALL AB_ZUNMBR( 'P', 'R', 'C', NS, N, N, A, LDA,
      $                      WORK( ITAUP ), VT, LDVT, WORK( ITEMP ),
      $                      LWORK-ITEMP+1, IERR )
             END IF
@@ -685,7 +699,7 @@
 *
             ITAU = 1
             ITEMP = ITAU + M
-            CALL ZGELQF( M, N, A, LDA, WORK( ITAU ), WORK( ITEMP ),
+            CALL AB_ZGELQF( M, N, A, LDA, WORK( ITAU ), WORK( ITEMP ),
      $                   LWORK-ITEMP+1, INFO )
 
 *           Copy L into WORK and bidiagonalize it:
@@ -698,10 +712,10 @@
             ID = 1
             IE = ID + M
             ITGKZ = IE + M
-            CALL ZLACPY( 'L', M, M, A, LDA, WORK( ILQF ), M )
-            CALL ZLASET( 'U', M-1, M-1, CZERO, CZERO,
+            CALL AB_ZLACPY( 'L', M, M, A, LDA, WORK( ILQF ), M )
+            CALL AB_ZLASET( 'U', M-1, M-1, CZERO, CZERO,
      $                   WORK( ILQF+M ), M )
-            CALL ZGEBRD( M, M, WORK( ILQF ), M, RWORK( ID ),
+            CALL AB_ZGEBRD( M, M, WORK( ILQF ), M, RWORK( ID ),
      $                   RWORK( IE ), WORK( ITAUQ ), WORK( ITAUP ),
      $                   WORK( ITEMP ), LWORK-ITEMP+1, INFO )
             ITEMPR = ITGKZ + M*(M*2+1)
@@ -709,7 +723,7 @@
 *           Solve eigenvalue problem TGK*Z=Z*S.
 *           (Workspace: need 2*M*M+14*M)
 *
-            CALL DBDSVDX( 'U', JOBZ, RNGTGK, M, RWORK( ID ),
+            CALL AB_DBDSVDX( 'U', JOBZ, RNGTGK, M, RWORK( ID ),
      $                    RWORK( IE ), VL, VU, ILTGK, IUTGK, NS, S,
      $                    RWORK( ITGKZ ), M*2, RWORK( ITEMPR ),
      $                    IWORK, INFO)
@@ -726,10 +740,10 @@
                   K = K + M
                END DO
 *
-*              Call ZUNMBR to compute QB*UB.
+*              Call AB_ZUNMBR to compute QB*UB.
 *              (Workspace in WORK( ITEMP ): need M, prefer M*NB)
 *
-               CALL ZUNMBR( 'Q', 'L', 'N', M, NS, M, WORK( ILQF ), M,
+               CALL AB_ZUNMBR( 'Q', 'L', 'N', M, NS, M, WORK( ILQF ), M,
      $                      WORK( ITAUQ ), U, LDU, WORK( ITEMP ),
      $                      LWORK-ITEMP+1, INFO )
             END IF
@@ -745,20 +759,20 @@
                   END DO
                   K = K + M
                END DO
-               CALL ZLASET( 'A', NS, N-M, CZERO, CZERO,
+               CALL AB_ZLASET( 'A', NS, N-M, CZERO, CZERO,
      $                      VT( 1,M+1 ), LDVT )
 *
-*              Call ZUNMBR to compute (VB**T)*(PB**T)
+*              Call AB_ZUNMBR to compute (VB**T)*(PB**T)
 *              (Workspace in WORK( ITEMP ): need M, prefer M*NB)
 *
-               CALL ZUNMBR( 'P', 'R', 'C', NS, M, M, WORK( ILQF ), M,
+               CALL AB_ZUNMBR( 'P', 'R', 'C', NS, M, M, WORK( ILQF ), M,
      $                      WORK( ITAUP ), VT, LDVT, WORK( ITEMP ),
      $                      LWORK-ITEMP+1, INFO )
 *
-*              Call ZUNMLQ to compute ((VB**T)*(PB**T))*Q.
+*              Call AB_ZUNMLQ to compute ((VB**T)*(PB**T))*Q.
 *              (Workspace in WORK( ITEMP ): need M, prefer M*NB)
 *
-               CALL ZUNMLQ( 'R', 'N', NS, N, M, A, LDA,
+               CALL AB_ZUNMLQ( 'R', 'N', NS, N, M, A, LDA,
      $                      WORK( ITAU ), VT, LDVT, WORK( ITEMP ),
      $                      LWORK-ITEMP+1, INFO )
             END IF
@@ -778,7 +792,7 @@
             ID = 1
             IE = ID + M
             ITGKZ = IE + M
-            CALL ZGEBRD( M, N, A, LDA, RWORK( ID ), RWORK( IE ),
+            CALL AB_ZGEBRD( M, N, A, LDA, RWORK( ID ), RWORK( IE ),
      $                   WORK( ITAUQ ), WORK( ITAUP ), WORK( ITEMP ),
      $                   LWORK-ITEMP+1, INFO )
             ITEMPR = ITGKZ + M*(M*2+1)
@@ -786,7 +800,7 @@
 *           Solve eigenvalue problem TGK*Z=Z*S.
 *           (Workspace: need 2*M*M+14*M)
 *
-            CALL DBDSVDX( 'L', JOBZ, RNGTGK, M, RWORK( ID ),
+            CALL AB_DBDSVDX( 'L', JOBZ, RNGTGK, M, RWORK( ID ),
      $                    RWORK( IE ), VL, VU, ILTGK, IUTGK, NS, S,
      $                    RWORK( ITGKZ ), M*2, RWORK( ITEMPR ),
      $                    IWORK, INFO)
@@ -803,10 +817,10 @@
                   K = K + M
                END DO
 *
-*              Call ZUNMBR to compute QB*UB.
+*              Call AB_ZUNMBR to compute QB*UB.
 *              (Workspace in WORK( ITEMP ): need M, prefer M*NB)
 *
-               CALL ZUNMBR( 'Q', 'L', 'N', M, NS, N, A, LDA,
+               CALL AB_ZUNMBR( 'Q', 'L', 'N', M, NS, N, A, LDA,
      $                      WORK( ITAUQ ), U, LDU, WORK( ITEMP ),
      $                      LWORK-ITEMP+1, INFO )
             END IF
@@ -822,13 +836,13 @@
                   END DO
                   K = K + M
                END DO
-               CALL ZLASET( 'A', NS, N-M, CZERO, CZERO,
+               CALL AB_ZLASET( 'A', NS, N-M, CZERO, CZERO,
      $                      VT( 1,M+1 ), LDVT )
 *
-*              Call ZUNMBR to compute VB**T * PB**T
+*              Call AB_ZUNMBR to compute VB**T * PB**T
 *              (Workspace in WORK( ITEMP ): need M, prefer M*NB)
 *
-               CALL ZUNMBR( 'P', 'R', 'C', NS, N, M, A, LDA,
+               CALL AB_ZUNMBR( 'P', 'R', 'C', NS, N, M, A, LDA,
      $                      WORK( ITAUP ), VT, LDVT, WORK( ITEMP ),
      $                      LWORK-ITEMP+1, INFO )
             END IF
@@ -839,10 +853,10 @@
 *
       IF( ISCL.EQ.1 ) THEN
          IF( ANRM.GT.BIGNUM )
-     $      CALL DLASCL( 'G', 0, 0, BIGNUM, ANRM, MINMN, 1,
+     $      CALL AB_DLASCL( 'G', 0, 0, BIGNUM, ANRM, MINMN, 1,
      $                   S, MINMN, INFO )
          IF( ANRM.LT.SMLNUM )
-     $      CALL DLASCL( 'G', 0, 0, SMLNUM, ANRM, MINMN, 1,
+     $      CALL AB_DLASCL( 'G', 0, 0, SMLNUM, ANRM, MINMN, 1,
      $                   S, MINMN, INFO )
       END IF
 *
@@ -852,6 +866,6 @@
 *
       RETURN
 *
-*     End of ZGESVDX
+*     End of AB_ZGESVDX
 *
       END

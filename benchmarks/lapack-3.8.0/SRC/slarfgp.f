@@ -1,4 +1,4 @@
-*> \brief \b SLARFGP generates an elementary reflector (Householder matrix) with non-negative beta.
+*> \brief \b AB_SLARFGP generates an elementary reflector (Householder matrix) with non-negative beta.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLARFGP + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slarfgp.f">
+*> Download AB_SLARFGP + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLARFgp.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slarfgp.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLARFgp.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slarfgp.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLARFgp.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLARFGP( N, ALPHA, X, INCX, TAU )
+*       SUBROUTINE AB_SLARFGP( N, ALPHA, X, INCX, TAU )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCX, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> SLARFGP generates a real elementary reflector H of order n, such
+*> AB_SLARFGP generates a real elementary reflector H of order n, such
 *> that
 *>
 *>       H * ( alpha ) = ( beta ),   H**T * H = I.
@@ -102,7 +102,7 @@
 *> \ingroup realOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE SLARFGP( N, ALPHA, X, INCX, TAU )
+      SUBROUTINE AB_SLARFGP( N, ALPHA, X, INCX, TAU )
 *
 *  -- LAPACK auxiliary routine (version 3.8.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -128,14 +128,14 @@
       REAL               BETA, BIGNUM, SAVEALPHA, SMLNUM, XNORM
 *     ..
 *     .. External Functions ..
-      REAL               SLAMCH, SLAPY2, SNRM2
-      EXTERNAL           SLAMCH, SLAPY2, SNRM2
+      REAL               SLAMCH, AB_SLAPY2, AB_SNRM2
+      EXTERNAL           SLAMCH, AB_SLAPY2, AB_SNRM2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, SIGN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SSCAL
+      EXTERNAL           AB_SSCAL
 *     ..
 *     .. Executable Statements ..
 *
@@ -144,7 +144,7 @@
          RETURN
       END IF
 *
-      XNORM = SNRM2( N-1, X, INCX )
+      XNORM = AB_SNRM2( N-1, X, INCX )
 *
       IF( XNORM.EQ.ZERO ) THEN
 *
@@ -168,7 +168,7 @@
 *
 *        general case
 *
-         BETA = SIGN( SLAPY2( ALPHA, XNORM ), ALPHA )
+         BETA = SIGN( AB_SLAPY2( ALPHA, XNORM ), ALPHA )
          SMLNUM = SLAMCH( 'S' ) / SLAMCH( 'E' )
          KNT = 0
          IF( ABS( BETA ).LT.SMLNUM ) THEN
@@ -178,7 +178,7 @@
             BIGNUM = ONE / SMLNUM
    10       CONTINUE
             KNT = KNT + 1
-            CALL SSCAL( N-1, BIGNUM, X, INCX )
+            CALL AB_SSCAL( N-1, BIGNUM, X, INCX )
             BETA = BETA*BIGNUM
             ALPHA = ALPHA*BIGNUM
             IF( (ABS( BETA ).LT.SMLNUM) .AND. (KNT .LT. 20) )
@@ -186,8 +186,8 @@
 *
 *           New BETA is at most 1, at least SMLNUM
 *
-            XNORM = SNRM2( N-1, X, INCX )
-            BETA = SIGN( SLAPY2( ALPHA, XNORM ), ALPHA )
+            XNORM = AB_SNRM2( N-1, X, INCX )
+            BETA = SIGN( AB_SLAPY2( ALPHA, XNORM ), ALPHA )
          END IF
          SAVEALPHA = ALPHA
          ALPHA = ALPHA + BETA
@@ -223,7 +223,7 @@
 *
 *           This is the general case.
 *
-            CALL SSCAL( N-1, ONE / ALPHA, X, INCX )
+            CALL AB_SSCAL( N-1, ONE / ALPHA, X, INCX )
 *
          END IF
 *
@@ -237,6 +237,6 @@
 *
       RETURN
 *
-*     End of SLARFGP
+*     End of AB_SLARFGP
 *
       END

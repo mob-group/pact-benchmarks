@@ -1,4 +1,4 @@
-*> \brief \b SLANGB returns the value of the 1-norm, Frobenius norm, infinity-norm, or the largest absolute value of any element of general band matrix.
+*> \brief \b AB_SLANGB returns the value of the 1-norm, Frobenius norm, infinity-norm, or the largest absolute value of any element of general band matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLANGB + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slangb.f">
+*> Download AB_SLANGB + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLANGB.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slangb.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLANGB.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slangb.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLANGB.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       REAL             FUNCTION SLANGB( NORM, N, KL, KU, AB, LDAB,
+*       REAL             FUNCTION AB_SLANGB( NORM, N, KL, KU, AB, LDAB,
 *                        WORK )
 *
 *       .. Scalar Arguments ..
@@ -35,15 +35,15 @@
 *>
 *> \verbatim
 *>
-*> SLANGB  returns the value of the one norm,  or the Frobenius norm, or
+*> AB_SLANGB  returns the value of the one norm,  or the Frobenius norm, or
 *> the  infinity norm,  or the element of  largest absolute value  of an
 *> n by n band matrix  A,  with kl sub-diagonals and ku super-diagonals.
 *> \endverbatim
 *>
-*> \return SLANGB
+*> \return AB_SLANGB
 *> \verbatim
 *>
-*>    SLANGB = ( max(abs(A(i,j))), NORM = 'M' or 'm'
+*>    AB_SLANGB = ( max(abs(A(i,j))), NORM = 'M' or 'm'
 *>             (
 *>             ( norm1(A),         NORM = '1', 'O' or 'o'
 *>             (
@@ -63,14 +63,14 @@
 *> \param[in] NORM
 *> \verbatim
 *>          NORM is CHARACTER*1
-*>          Specifies the value to be returned in SLANGB as described
+*>          Specifies the value to be returned in AB_SLANGB as described
 *>          above.
 *> \endverbatim
 *>
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The order of the matrix A.  N >= 0.  When N = 0, SLANGB is
+*>          The order of the matrix A.  N >= 0.  When N = 0, AB_SLANGB is
 *>          set to zero.
 *> \endverbatim
 *>
@@ -121,7 +121,7 @@
 *> \ingroup realGBauxiliary
 *
 *  =====================================================================
-      REAL             FUNCTION SLANGB( NORM, N, KL, KU, AB, LDAB,
+      REAL             FUNCTION AB_SLANGB( NORM, N, KL, KU, AB, LDAB,
      $                 WORK )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -149,11 +149,11 @@
       REAL               SCALE, SUM, VALUE, TEMP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLASSQ
+      EXTERNAL           AB_SLASSQ
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME, SISNAN
-      EXTERNAL           LSAME, SISNAN
+      LOGICAL            AB_LSAME, AB_SISNAN
+      EXTERNAL           AB_LSAME, AB_SISNAN
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT
@@ -162,7 +162,7 @@
 *
       IF( N.EQ.0 ) THEN
          VALUE = ZERO
-      ELSE IF( LSAME( NORM, 'M' ) ) THEN
+      ELSE IF( AB_LSAME( NORM, 'M' ) ) THEN
 *
 *        Find max(abs(A(i,j))).
 *
@@ -170,10 +170,10 @@
          DO 20 J = 1, N
             DO 10 I = MAX( KU+2-J, 1 ), MIN( N+KU+1-J, KL+KU+1 )
                TEMP = ABS( AB( I, J ) )
-               IF( VALUE.LT.TEMP .OR. SISNAN( TEMP ) ) VALUE = TEMP
+               IF( VALUE.LT.TEMP .OR. AB_SISNAN( TEMP ) ) VALUE = TEMP
    10       CONTINUE
    20    CONTINUE
-      ELSE IF( ( LSAME( NORM, 'O' ) ) .OR. ( NORM.EQ.'1' ) ) THEN
+      ELSE IF( ( AB_LSAME( NORM, 'O' ) ) .OR. ( NORM.EQ.'1' ) ) THEN
 *
 *        Find norm1(A).
 *
@@ -183,9 +183,9 @@
             DO 30 I = MAX( KU+2-J, 1 ), MIN( N+KU+1-J, KL+KU+1 )
                SUM = SUM + ABS( AB( I, J ) )
    30       CONTINUE
-            IF( VALUE.LT.SUM .OR. SISNAN( SUM ) ) VALUE = SUM
+            IF( VALUE.LT.SUM .OR. AB_SISNAN( SUM ) ) VALUE = SUM
    40    CONTINUE
-      ELSE IF( LSAME( NORM, 'I' ) ) THEN
+      ELSE IF( AB_LSAME( NORM, 'I' ) ) THEN
 *
 *        Find normI(A).
 *
@@ -201,9 +201,10 @@
          VALUE = ZERO
          DO 80 I = 1, N
             TEMP = WORK( I )
-            IF( VALUE.LT.TEMP .OR. SISNAN( TEMP ) ) VALUE = TEMP
+            IF( VALUE.LT.TEMP .OR. AB_SISNAN( TEMP ) ) VALUE = TEMP
    80    CONTINUE
-      ELSE IF( ( LSAME( NORM, 'F' ) ) .OR. ( LSAME( NORM, 'E' ) ) ) THEN
+      ELSE IF( ( AB_LSAME( NORM, 'F' ) ) .OR. ( AB_LSAME( NORM, 'E' ) ) 
+     $) THEN
 *
 *        Find normF(A).
 *
@@ -212,14 +213,15 @@
          DO 90 J = 1, N
             L = MAX( 1, J-KU )
             K = KU + 1 - J + L
-            CALL SLASSQ( MIN( N, J+KL )-L+1, AB( K, J ), 1, SCALE, SUM )
+            CALL AB_SLASSQ( MIN( N, J+KL )-L+1, AB( K, J ), 1, SCALE, SU
+     $M )
    90    CONTINUE
          VALUE = SCALE*SQRT( SUM )
       END IF
 *
-      SLANGB = VALUE
+      AB_SLANGB = VALUE
       RETURN
 *
-*     End of SLANGB
+*     End of AB_SLANGB
 *
       END

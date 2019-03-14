@@ -1,4 +1,4 @@
-*> \brief \b DLA_WWADDW adds a vector into a doubled-single vector.
+*> \brief \b AB_DLA_WWADDW adds a vector into a doubled-single vector.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLA_WWADDW + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dla_wwaddw.f">
+*> Download AB_DLA_WWADDW + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLA_WWADDW.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dla_wwaddw.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLA_WWADDW.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dla_wwaddw.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLA_WWADDW.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLA_WWADDW( N, X, Y, W )
+*       SUBROUTINE AB_DLA_WWADDW( N, X, Y, W )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            N
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*>    DLA_WWADDW adds a vector W into a doubled-single vector (X, Y).
+*>    AB_DLA_WWADDW adds a vector W into a doubled-single vector (X, Y).
 *>
 *>    This works for all extant IBM's hex and binary floating point
 *>    arithmetics, but not for decimal.
@@ -79,7 +79,7 @@
 *> \ingroup doubleOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE DLA_WWADDW( N, X, Y, W )
+      SUBROUTINE AB_DLA_WWADDW( N, X, Y, W )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

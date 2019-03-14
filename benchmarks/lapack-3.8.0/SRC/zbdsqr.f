@@ -1,4 +1,4 @@
-*> \brief \b ZBDSQR
+*> \brief \b AB_ZBDSQR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZBDSQR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zbdsqr.f">
+*> Download AB_ZBDSQR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZBDSQR.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zbdsqr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZBDSQR.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zbdsqr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZBDSQR.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZBDSQR( UPLO, N, NCVT, NRU, NCC, D, E, VT, LDVT, U,
+*       SUBROUTINE AB_ZBDSQR( UPLO, N, NCVT, NRU, NCC, D, E, VT, LDVT, U,
 *                          LDU, C, LDC, RWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> ZBDSQR computes the singular values and, optionally, the right and/or
+*> AB_ZBDSQR computes the singular values and, optionally, the right and/or
 *> left singular vectors from the singular value decomposition (SVD) of
 *> a real N-by-N (upper or lower) bidiagonal matrix B using the implicit
 *> zero-shift QR algorithm.  The SVD of B has the form
@@ -50,7 +50,7 @@
 *> vectors are requested, this subroutine returns P**H*VT instead of
 *> P**H, for given complex input matrices U and VT.  When U and VT are
 *> the unitary matrices that reduce a general matrix A to bidiagonal
-*> form: A = U*B*VT, as computed by ZGEBRD, then
+*> form: A = U*B*VT, as computed by AB_ZGEBRD, then
 *>
 *>    A = (U*Q) * S * (P**H*VT)
 *>
@@ -219,7 +219,7 @@
 *> \ingroup complex16OTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE ZBDSQR( UPLO, N, NCVT, NRU, NCC, D, E, VT, LDVT, U,
+      SUBROUTINE AB_ZBDSQR( UPLO, N, NCVT, NRU, NCC, D, E, VT, LDVT, U,
      $                   LDU, C, LDC, RWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -266,13 +266,14 @@
      $                   SN, THRESH, TOL, TOLMUL, UNFL
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
+      LOGICAL            AB_LSAME
       DOUBLE PRECISION   DLAMCH
-      EXTERNAL           LSAME, DLAMCH
+      EXTERNAL           AB_LSAME, DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARTG, DLAS2, DLASQ1, DLASV2, XERBLA, ZDROT,
-     $                   ZDSCAL, ZLASR, ZSWAP
+      EXTERNAL           AB_DLARTG, AB_DLAS2, AB_DLASQ1, AB_DLASV2, AB_X
+     $ERBLA, AB_ZDROT,
+     $                   AB_ZDSCAL, AB_ZLASR, AB_ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN, SIGN, SQRT
@@ -282,8 +283,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      LOWER = LSAME( UPLO, 'L' )
-      IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LOWER ) THEN
+      LOWER = AB_LSAME( UPLO, 'L' )
+      IF( .NOT.AB_LSAME( UPLO, 'U' ) .AND. .NOT.LOWER ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -303,7 +304,7 @@
          INFO = -13
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZBDSQR', -INFO )
+         CALL AB_XERBLA( 'AB_ZBDSQR', -INFO )
          RETURN
       END IF
       IF( N.EQ.0 )
@@ -318,7 +319,7 @@
 *     If no singular vectors desired, use qd algorithm
 *
       IF( .NOT.ROTATE ) THEN
-         CALL DLASQ1( N, D, E, RWORK, INFO )
+         CALL AB_DLASQ1( N, D, E, RWORK, INFO )
 *
 *     If INFO equals 2, dqds didn't finish, try to finish
 *
@@ -341,7 +342,7 @@
 *
       IF( LOWER ) THEN
          DO 10 I = 1, N - 1
-            CALL DLARTG( D( I ), E( I ), CS, SN, R )
+            CALL AB_DLARTG( D( I ), E( I ), CS, SN, R )
             D( I ) = R
             E( I ) = SN*D( I+1 )
             D( I+1 ) = CS*D( I+1 )
@@ -352,10 +353,12 @@
 *        Update singular vectors if desired
 *
          IF( NRU.GT.0 )
-     $      CALL ZLASR( 'R', 'V', 'F', NRU, N, RWORK( 1 ), RWORK( N ),
+     $      CALL AB_ZLASR( 'R', 'V', 'F', NRU, N, RWORK( 1 ), RWORK( N )
+     $,
      $                  U, LDU )
          IF( NCC.GT.0 )
-     $      CALL ZLASR( 'L', 'V', 'F', N, NCC, RWORK( 1 ), RWORK( N ),
+     $      CALL AB_ZLASR( 'L', 'V', 'F', N, NCC, RWORK( 1 ), RWORK( N )
+     $,
      $                  C, LDC )
       END IF
 *
@@ -464,7 +467,7 @@
 *
 *        2 by 2 block, handle separately
 *
-         CALL DLASV2( D( M-1 ), E( M-1 ), D( M ), SIGMN, SIGMX, SINR,
+         CALL AB_DLASV2( D( M-1 ), E( M-1 ), D( M ), SIGMN, SIGMX, SINR,
      $                COSR, SINL, COSL )
          D( M-1 ) = SIGMX
          E( M-1 ) = ZERO
@@ -473,12 +476,13 @@
 *        Compute singular vectors, if desired
 *
          IF( NCVT.GT.0 )
-     $      CALL ZDROT( NCVT, VT( M-1, 1 ), LDVT, VT( M, 1 ), LDVT,
+     $      CALL AB_ZDROT( NCVT, VT( M-1, 1 ), LDVT, VT( M, 1 ), LDVT,
      $                  COSR, SINR )
          IF( NRU.GT.0 )
-     $      CALL ZDROT( NRU, U( 1, M-1 ), 1, U( 1, M ), 1, COSL, SINL )
+     $      CALL AB_ZDROT( NRU, U( 1, M-1 ), 1, U( 1, M ), 1, COSL, SINL
+     $ )
          IF( NCC.GT.0 )
-     $      CALL ZDROT( NCC, C( M-1, 1 ), LDC, C( M, 1 ), LDC, COSL,
+     $      CALL AB_ZDROT( NCC, C( M-1, 1 ), LDC, C( M, 1 ), LDC, COSL,
      $                  SINL )
          M = M - 2
          GO TO 60
@@ -577,10 +581,10 @@
 *
          IF( IDIR.EQ.1 ) THEN
             SLL = ABS( D( LL ) )
-            CALL DLAS2( D( M-1 ), E( M-1 ), D( M ), SHIFT, R )
+            CALL AB_DLAS2( D( M-1 ), E( M-1 ), D( M ), SHIFT, R )
          ELSE
             SLL = ABS( D( M ) )
-            CALL DLAS2( D( LL ), E( LL ), D( LL+1 ), SHIFT, R )
+            CALL AB_DLAS2( D( LL ), E( LL ), D( LL+1 ), SHIFT, R )
          END IF
 *
 *        Test if shift negligible, and if so set to zero
@@ -606,10 +610,11 @@
             CS = ONE
             OLDCS = ONE
             DO 120 I = LL, M - 1
-               CALL DLARTG( D( I )*CS, E( I ), CS, SN, R )
+               CALL AB_DLARTG( D( I )*CS, E( I ), CS, SN, R )
                IF( I.GT.LL )
      $            E( I-1 ) = OLDSN*R
-               CALL DLARTG( OLDCS*R, D( I+1 )*SN, OLDCS, OLDSN, D( I ) )
+               CALL AB_DLARTG( OLDCS*R, D( I+1 )*SN, OLDCS, OLDSN, D( I 
+     $) )
                RWORK( I-LL+1 ) = CS
                RWORK( I-LL+1+NM1 ) = SN
                RWORK( I-LL+1+NM12 ) = OLDCS
@@ -622,13 +627,15 @@
 *           Update singular vectors
 *
             IF( NCVT.GT.0 )
-     $         CALL ZLASR( 'L', 'V', 'F', M-LL+1, NCVT, RWORK( 1 ),
+     $         CALL AB_ZLASR( 'L', 'V', 'F', M-LL+1, NCVT, RWORK( 1 ),
      $                     RWORK( N ), VT( LL, 1 ), LDVT )
             IF( NRU.GT.0 )
-     $         CALL ZLASR( 'R', 'V', 'F', NRU, M-LL+1, RWORK( NM12+1 ),
+     $         CALL AB_ZLASR( 'R', 'V', 'F', NRU, M-LL+1, RWORK( NM12+1 
+     $),
      $                     RWORK( NM13+1 ), U( 1, LL ), LDU )
             IF( NCC.GT.0 )
-     $         CALL ZLASR( 'L', 'V', 'F', M-LL+1, NCC, RWORK( NM12+1 ),
+     $         CALL AB_ZLASR( 'L', 'V', 'F', M-LL+1, NCC, RWORK( NM12+1 
+     $),
      $                     RWORK( NM13+1 ), C( LL, 1 ), LDC )
 *
 *           Test convergence
@@ -644,10 +651,11 @@
             CS = ONE
             OLDCS = ONE
             DO 130 I = M, LL + 1, -1
-               CALL DLARTG( D( I )*CS, E( I-1 ), CS, SN, R )
+               CALL AB_DLARTG( D( I )*CS, E( I-1 ), CS, SN, R )
                IF( I.LT.M )
      $            E( I ) = OLDSN*R
-               CALL DLARTG( OLDCS*R, D( I-1 )*SN, OLDCS, OLDSN, D( I ) )
+               CALL AB_DLARTG( OLDCS*R, D( I-1 )*SN, OLDCS, OLDSN, D( I 
+     $) )
                RWORK( I-LL ) = CS
                RWORK( I-LL+NM1 ) = -SN
                RWORK( I-LL+NM12 ) = OLDCS
@@ -660,13 +668,14 @@
 *           Update singular vectors
 *
             IF( NCVT.GT.0 )
-     $         CALL ZLASR( 'L', 'V', 'B', M-LL+1, NCVT, RWORK( NM12+1 ),
+     $         CALL AB_ZLASR( 'L', 'V', 'B', M-LL+1, NCVT, RWORK( NM12+1
+     $ ),
      $                     RWORK( NM13+1 ), VT( LL, 1 ), LDVT )
             IF( NRU.GT.0 )
-     $         CALL ZLASR( 'R', 'V', 'B', NRU, M-LL+1, RWORK( 1 ),
+     $         CALL AB_ZLASR( 'R', 'V', 'B', NRU, M-LL+1, RWORK( 1 ),
      $                     RWORK( N ), U( 1, LL ), LDU )
             IF( NCC.GT.0 )
-     $         CALL ZLASR( 'L', 'V', 'B', M-LL+1, NCC, RWORK( 1 ),
+     $         CALL AB_ZLASR( 'L', 'V', 'B', M-LL+1, NCC, RWORK( 1 ),
      $                     RWORK( N ), C( LL, 1 ), LDC )
 *
 *           Test convergence
@@ -687,14 +696,14 @@
      $          ( SIGN( ONE, D( LL ) )+SHIFT / D( LL ) )
             G = E( LL )
             DO 140 I = LL, M - 1
-               CALL DLARTG( F, G, COSR, SINR, R )
+               CALL AB_DLARTG( F, G, COSR, SINR, R )
                IF( I.GT.LL )
      $            E( I-1 ) = R
                F = COSR*D( I ) + SINR*E( I )
                E( I ) = COSR*E( I ) - SINR*D( I )
                G = SINR*D( I+1 )
                D( I+1 ) = COSR*D( I+1 )
-               CALL DLARTG( F, G, COSL, SINL, R )
+               CALL AB_DLARTG( F, G, COSL, SINL, R )
                D( I ) = R
                F = COSL*E( I ) + SINL*D( I+1 )
                D( I+1 ) = COSL*D( I+1 ) - SINL*E( I )
@@ -712,13 +721,15 @@
 *           Update singular vectors
 *
             IF( NCVT.GT.0 )
-     $         CALL ZLASR( 'L', 'V', 'F', M-LL+1, NCVT, RWORK( 1 ),
+     $         CALL AB_ZLASR( 'L', 'V', 'F', M-LL+1, NCVT, RWORK( 1 ),
      $                     RWORK( N ), VT( LL, 1 ), LDVT )
             IF( NRU.GT.0 )
-     $         CALL ZLASR( 'R', 'V', 'F', NRU, M-LL+1, RWORK( NM12+1 ),
+     $         CALL AB_ZLASR( 'R', 'V', 'F', NRU, M-LL+1, RWORK( NM12+1 
+     $),
      $                     RWORK( NM13+1 ), U( 1, LL ), LDU )
             IF( NCC.GT.0 )
-     $         CALL ZLASR( 'L', 'V', 'F', M-LL+1, NCC, RWORK( NM12+1 ),
+     $         CALL AB_ZLASR( 'L', 'V', 'F', M-LL+1, NCC, RWORK( NM12+1 
+     $),
      $                     RWORK( NM13+1 ), C( LL, 1 ), LDC )
 *
 *           Test convergence
@@ -735,14 +746,14 @@
      $          D( M ) )
             G = E( M-1 )
             DO 150 I = M, LL + 1, -1
-               CALL DLARTG( F, G, COSR, SINR, R )
+               CALL AB_DLARTG( F, G, COSR, SINR, R )
                IF( I.LT.M )
      $            E( I ) = R
                F = COSR*D( I ) + SINR*E( I-1 )
                E( I-1 ) = COSR*E( I-1 ) - SINR*D( I )
                G = SINR*D( I-1 )
                D( I-1 ) = COSR*D( I-1 )
-               CALL DLARTG( F, G, COSL, SINL, R )
+               CALL AB_DLARTG( F, G, COSL, SINL, R )
                D( I ) = R
                F = COSL*E( I-1 ) + SINL*D( I-1 )
                D( I-1 ) = COSL*D( I-1 ) - SINL*E( I-1 )
@@ -765,13 +776,14 @@
 *           Update singular vectors if desired
 *
             IF( NCVT.GT.0 )
-     $         CALL ZLASR( 'L', 'V', 'B', M-LL+1, NCVT, RWORK( NM12+1 ),
+     $         CALL AB_ZLASR( 'L', 'V', 'B', M-LL+1, NCVT, RWORK( NM12+1
+     $ ),
      $                     RWORK( NM13+1 ), VT( LL, 1 ), LDVT )
             IF( NRU.GT.0 )
-     $         CALL ZLASR( 'R', 'V', 'B', NRU, M-LL+1, RWORK( 1 ),
+     $         CALL AB_ZLASR( 'R', 'V', 'B', NRU, M-LL+1, RWORK( 1 ),
      $                     RWORK( N ), U( 1, LL ), LDU )
             IF( NCC.GT.0 )
-     $         CALL ZLASR( 'L', 'V', 'B', M-LL+1, NCC, RWORK( 1 ),
+     $         CALL AB_ZLASR( 'L', 'V', 'B', M-LL+1, NCC, RWORK( 1 ),
      $                     RWORK( N ), C( LL, 1 ), LDC )
          END IF
       END IF
@@ -790,7 +802,7 @@
 *           Change sign of singular vectors, if desired
 *
             IF( NCVT.GT.0 )
-     $         CALL ZDSCAL( NCVT, NEGONE, VT( I, 1 ), LDVT )
+     $         CALL AB_ZDSCAL( NCVT, NEGONE, VT( I, 1 ), LDVT )
          END IF
   170 CONTINUE
 *
@@ -816,12 +828,13 @@
             D( ISUB ) = D( N+1-I )
             D( N+1-I ) = SMIN
             IF( NCVT.GT.0 )
-     $         CALL ZSWAP( NCVT, VT( ISUB, 1 ), LDVT, VT( N+1-I, 1 ),
+     $         CALL AB_ZSWAP( NCVT, VT( ISUB, 1 ), LDVT, VT( N+1-I, 1 ),
      $                     LDVT )
             IF( NRU.GT.0 )
-     $         CALL ZSWAP( NRU, U( 1, ISUB ), 1, U( 1, N+1-I ), 1 )
+     $         CALL AB_ZSWAP( NRU, U( 1, ISUB ), 1, U( 1, N+1-I ), 1 )
             IF( NCC.GT.0 )
-     $         CALL ZSWAP( NCC, C( ISUB, 1 ), LDC, C( N+1-I, 1 ), LDC )
+     $         CALL AB_ZSWAP( NCC, C( ISUB, 1 ), LDC, C( N+1-I, 1 ), LDC
+     $ )
          END IF
   190 CONTINUE
       GO TO 220
@@ -837,6 +850,6 @@
   220 CONTINUE
       RETURN
 *
-*     End of ZBDSQR
+*     End of AB_ZBDSQR
 *
       END

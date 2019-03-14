@@ -1,4 +1,4 @@
-*> \brief \b SAXPY
+*> \brief \b AB_SAXPY
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SAXPY(N,SA,SX,INCX,SY,INCY)
+*       SUBROUTINE AB_SAXPY(N,SA,SX,INCX,SY,INCY)
 *
 *       .. Scalar Arguments ..
 *       REAL SA
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*>    SAXPY constant times a vector plus a vector.
+*>    AB_SAXPY constant times a vector plus a vector.
 *>    uses unrolled loops for increments equal to one.
 *> \endverbatim
 *
@@ -87,7 +87,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SAXPY(N,SA,SX,INCX,SY,INCY)
+      SUBROUTINE AB_SAXPY(N,SA,SX,INCX,SY,INCY)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

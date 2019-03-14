@@ -1,7 +1,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGETSLS( TRANS, M, N, NRHS, A, LDA, B, LDB,
+*       SUBROUTINE AB_DGETSLS( TRANS, M, N, NRHS, A, LDA, B, LDB,
 *     $                     WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -18,7 +18,7 @@
 *>
 *> \verbatim
 *>
-*> DGETSLS solves overdetermined or underdetermined real linear systems
+*> AB_DGETSLS solves overdetermined or underdetermined real linear systems
 *> involving an M-by-N matrix A, using a tall skinny QR or short wide LQ
 *> factorization of A.  It is assumed that A has full rank.
 *>
@@ -81,7 +81,7 @@
 *>          On entry, the M-by-N matrix A.
 *>          On exit,
 *>          A is overwritten by details of its QR or LQ
-*>          factorization as returned by DGEQR or DGELQ.
+*>          factorization as returned by AB_DGEQR or AB_DGELQ.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -157,7 +157,7 @@
 *> \ingroup doubleGEsolve
 *
 *  =====================================================================
-      SUBROUTINE DGETSLS( TRANS, M, N, NRHS, A, LDA, B, LDB,
+      SUBROUTINE AB_DGETSLS( TRANS, M, N, NRHS, A, LDA, B, LDB,
      $                    WORK, LWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.1) --
@@ -188,14 +188,15 @@
       DOUBLE PRECISION   ANRM, BIGNUM, BNRM, SMLNUM, TQ( 5 ), WORKQ( 1 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      DOUBLE PRECISION   DLAMCH, DLANGE
-      EXTERNAL           LSAME, ILAENV, DLABAD, DLAMCH, DLANGE
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      DOUBLE PRECISION   DLAMCH, AB_DLANGE
+      EXTERNAL           AB_LSAME, AB_ILAENV, AB_DLABAD, DLAMCH, AB_DLAN
+     $GE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEQR, DGEMQR, DLASCL, DLASET,
-     $                   DTRTRS, XERBLA, DGELQ, DGEMLQ
+      EXTERNAL           AB_DGEQR, AB_DGEMQR, AB_DLASCL, AB_DLASET,
+     $                   AB_DTRTRS, AB_XERBLA, AB_DGELQ, AB_DGEMLQ
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX, MIN, INT
@@ -208,11 +209,11 @@
       MINMN = MIN( M, N )
       MAXMN = MAX( M, N )
       MNK   = MAX( MINMN, NRHS )
-      TRAN  = LSAME( TRANS, 'T' )
+      TRAN  = AB_LSAME( TRANS, 'T' )
 *
       LQUERY = ( LWORK.EQ.-1 .OR. LWORK.EQ.-2 )
-      IF( .NOT.( LSAME( TRANS, 'N' ) .OR.
-     $    LSAME( TRANS, 'T' ) ) ) THEN
+      IF( .NOT.( AB_LSAME( TRANS, 'N' ) .OR.
+     $    AB_LSAME( TRANS, 'T' ) ) ) THEN
          INFO = -1
       ELSE IF( M.LT.0 ) THEN
          INFO = -2
@@ -231,31 +232,31 @@
 *     Determine the block size and minimum LWORK
 *
        IF( M.GE.N ) THEN
-         CALL DGEQR( M, N, A, LDA, TQ, -1, WORKQ, -1, INFO2 )
+         CALL AB_DGEQR( M, N, A, LDA, TQ, -1, WORKQ, -1, INFO2 )
          TSZO = INT( TQ( 1 ) )
          LWO  = INT( WORKQ( 1 ) )
-         CALL DGEMQR( 'L', TRANS, M, NRHS, N, A, LDA, TQ,
+         CALL AB_DGEMQR( 'L', TRANS, M, NRHS, N, A, LDA, TQ,
      $                TSZO, B, LDB, WORKQ, -1, INFO2 )
          LWO  = MAX( LWO, INT( WORKQ( 1 ) ) )
-         CALL DGEQR( M, N, A, LDA, TQ, -2, WORKQ, -2, INFO2 )
+         CALL AB_DGEQR( M, N, A, LDA, TQ, -2, WORKQ, -2, INFO2 )
          TSZM = INT( TQ( 1 ) )
          LWM  = INT( WORKQ( 1 ) )
-         CALL DGEMQR( 'L', TRANS, M, NRHS, N, A, LDA, TQ,
+         CALL AB_DGEMQR( 'L', TRANS, M, NRHS, N, A, LDA, TQ,
      $                TSZM, B, LDB, WORKQ, -1, INFO2 )
          LWM = MAX( LWM, INT( WORKQ( 1 ) ) )
          WSIZEO = TSZO + LWO
          WSIZEM = TSZM + LWM
        ELSE
-         CALL DGELQ( M, N, A, LDA, TQ, -1, WORKQ, -1, INFO2 )
+         CALL AB_DGELQ( M, N, A, LDA, TQ, -1, WORKQ, -1, INFO2 )
          TSZO = INT( TQ( 1 ) )
          LWO  = INT( WORKQ( 1 ) )
-         CALL DGEMLQ( 'L', TRANS, N, NRHS, M, A, LDA, TQ,
+         CALL AB_DGEMLQ( 'L', TRANS, N, NRHS, M, A, LDA, TQ,
      $                TSZO, B, LDB, WORKQ, -1, INFO2 )
          LWO  = MAX( LWO, INT( WORKQ( 1 ) ) )
-         CALL DGELQ( M, N, A, LDA, TQ, -2, WORKQ, -2, INFO2 )
+         CALL AB_DGELQ( M, N, A, LDA, TQ, -2, WORKQ, -2, INFO2 )
          TSZM = INT( TQ( 1 ) )
          LWM  = INT( WORKQ( 1 ) )
-         CALL DGEMLQ( 'L', TRANS, N, NRHS, M, A, LDA, TQ,
+         CALL AB_DGEMLQ( 'L', TRANS, N, NRHS, M, A, LDA, TQ,
      $                TSZO, B, LDB, WORKQ, -1, INFO2 )
          LWM  = MAX( LWM, INT( WORKQ( 1 ) ) )
          WSIZEO = TSZO + LWO
@@ -269,7 +270,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-        CALL XERBLA( 'DGETSLS', -INFO )
+        CALL AB_XERBLA( 'AB_DGETSLS', -INFO )
         WORK( 1 ) = DBLE( WSIZEO )
         RETURN
       END IF
@@ -289,7 +290,7 @@
 *     Quick return if possible
 *
       IF( MIN( M, N, NRHS ).EQ.0 ) THEN
-           CALL DLASET( 'FULL', MAX( M, N ), NRHS, ZERO, ZERO,
+           CALL AB_DLASET( 'FULL', MAX( M, N ), NRHS, ZERO, ZERO,
      $                  B, LDB )
            RETURN
       END IF
@@ -298,29 +299,29 @@
 *
        SMLNUM = DLAMCH( 'S' ) / DLAMCH( 'P' )
        BIGNUM = ONE / SMLNUM
-       CALL DLABAD( SMLNUM, BIGNUM )
+       CALL AB_DLABAD( SMLNUM, BIGNUM )
 *
 *     Scale A, B if max element outside range [SMLNUM,BIGNUM]
 *
-      ANRM = DLANGE( 'M', M, N, A, LDA, WORK )
+      ANRM = AB_DLANGE( 'M', M, N, A, LDA, WORK )
       IASCL = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
 *
 *        Scale matrix norm up to SMLNUM
 *
-         CALL DLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, A, LDA, INFO )
+         CALL AB_DLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, A, LDA, INFO )
          IASCL = 1
       ELSE IF( ANRM.GT.BIGNUM ) THEN
 *
 *        Scale matrix norm down to BIGNUM
 *
-         CALL DLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, A, LDA, INFO )
+         CALL AB_DLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, A, LDA, INFO )
          IASCL = 2
       ELSE IF( ANRM.EQ.ZERO ) THEN
 *
 *        Matrix all zero. Return zero solution.
 *
-         CALL DLASET( 'F', MAXMN, NRHS, ZERO, ZERO, B, LDB )
+         CALL AB_DLASET( 'F', MAXMN, NRHS, ZERO, ZERO, B, LDB )
          GO TO 50
       END IF
 *
@@ -328,20 +329,20 @@
       IF ( TRAN ) THEN
         BROW = N
       END IF
-      BNRM = DLANGE( 'M', BROW, NRHS, B, LDB, WORK )
+      BNRM = AB_DLANGE( 'M', BROW, NRHS, B, LDB, WORK )
       IBSCL = 0
       IF( BNRM.GT.ZERO .AND. BNRM.LT.SMLNUM ) THEN
 *
 *        Scale matrix norm up to SMLNUM
 *
-         CALL DLASCL( 'G', 0, 0, BNRM, SMLNUM, BROW, NRHS, B, LDB,
+         CALL AB_DLASCL( 'G', 0, 0, BNRM, SMLNUM, BROW, NRHS, B, LDB,
      $                INFO )
          IBSCL = 1
       ELSE IF( BNRM.GT.BIGNUM ) THEN
 *
 *        Scale matrix norm down to BIGNUM
 *
-         CALL DLASCL( 'G', 0, 0, BNRM, BIGNUM, BROW, NRHS, B, LDB,
+         CALL AB_DLASCL( 'G', 0, 0, BNRM, BIGNUM, BROW, NRHS, B, LDB,
      $                INFO )
          IBSCL = 2
       END IF
@@ -350,7 +351,7 @@
 *
 *        compute QR factorization of A
 *
-        CALL DGEQR( M, N, A, LDA, WORK( LW2+1 ), LW1,
+        CALL AB_DGEQR( M, N, A, LDA, WORK( LW2+1 ), LW1,
      $              WORK( 1 ), LW2, INFO )
         IF ( .NOT.TRAN ) THEN
 *
@@ -358,13 +359,13 @@
 *
 *           B(1:M,1:NRHS) := Q**T * B(1:M,1:NRHS)
 *
-          CALL DGEMQR( 'L' , 'T', M, NRHS, N, A, LDA,
+          CALL AB_DGEMQR( 'L' , 'T', M, NRHS, N, A, LDA,
      $                 WORK( LW2+1 ), LW1, B, LDB, WORK( 1 ), LW2,
      $                 INFO )
 *
 *           B(1:N,1:NRHS) := inv(R) * B(1:N,1:NRHS)
 *
-          CALL DTRTRS( 'U', 'N', 'N', N, NRHS,
+          CALL AB_DTRTRS( 'U', 'N', 'N', N, NRHS,
      $                  A, LDA, B, LDB, INFO )
           IF( INFO.GT.0 ) THEN
             RETURN
@@ -376,7 +377,7 @@
 *
 *           B(1:N,1:NRHS) := inv(R**T) * B(1:N,1:NRHS)
 *
-            CALL DTRTRS( 'U', 'T', 'N', N, NRHS,
+            CALL AB_DTRTRS( 'U', 'T', 'N', N, NRHS,
      $                   A, LDA, B, LDB, INFO )
 *
             IF( INFO.GT.0 ) THEN
@@ -393,7 +394,7 @@
 *
 *           B(1:M,1:NRHS) := Q(1:N,:) * B(1:N,1:NRHS)
 *
-            CALL DGEMQR( 'L', 'N', M, NRHS, N, A, LDA,
+            CALL AB_DGEMQR( 'L', 'N', M, NRHS, N, A, LDA,
      $                   WORK( LW2+1 ), LW1, B, LDB, WORK( 1 ), LW2,
      $                   INFO )
 *
@@ -405,7 +406,7 @@
 *
 *        Compute LQ factorization of A
 *
-         CALL DGELQ( M, N, A, LDA, WORK( LW2+1 ), LW1,
+         CALL AB_DGELQ( M, N, A, LDA, WORK( LW2+1 ), LW1,
      $               WORK( 1 ), LW2, INFO )
 *
 *        workspace at least M, optimally M*NB.
@@ -416,7 +417,7 @@
 *
 *           B(1:M,1:NRHS) := inv(L) * B(1:M,1:NRHS)
 *
-            CALL DTRTRS( 'L', 'N', 'N', M, NRHS,
+            CALL AB_DTRTRS( 'L', 'N', 'N', M, NRHS,
      $                   A, LDA, B, LDB, INFO )
 *
             IF( INFO.GT.0 ) THEN
@@ -433,7 +434,7 @@
 *
 *           B(1:N,1:NRHS) := Q(1:N,:)**T * B(1:M,1:NRHS)
 *
-            CALL DGEMLQ( 'L', 'T', N, NRHS, M, A, LDA,
+            CALL AB_DGEMLQ( 'L', 'T', N, NRHS, M, A, LDA,
      $                   WORK( LW2+1 ), LW1, B, LDB, WORK( 1 ), LW2,
      $                   INFO )
 *
@@ -447,7 +448,7 @@
 *
 *           B(1:N,1:NRHS) := Q * B(1:N,1:NRHS)
 *
-            CALL DGEMLQ( 'L', 'N', N, NRHS, M, A, LDA,
+            CALL AB_DGEMLQ( 'L', 'N', N, NRHS, M, A, LDA,
      $                   WORK( LW2+1 ), LW1, B, LDB, WORK( 1 ), LW2,
      $                   INFO )
 *
@@ -455,7 +456,7 @@
 *
 *           B(1:M,1:NRHS) := inv(L**T) * B(1:M,1:NRHS)
 *
-            CALL DTRTRS( 'Lower', 'Transpose', 'Non-unit', M, NRHS,
+            CALL AB_DTRTRS( 'Lower', 'Transpose', 'Non-unit', M, NRHS,
      $                   A, LDA, B, LDB, INFO )
 *
             IF( INFO.GT.0 ) THEN
@@ -471,17 +472,17 @@
 *     Undo scaling
 *
       IF( IASCL.EQ.1 ) THEN
-        CALL DLASCL( 'G', 0, 0, ANRM, SMLNUM, SCLLEN, NRHS, B, LDB,
+        CALL AB_DLASCL( 'G', 0, 0, ANRM, SMLNUM, SCLLEN, NRHS, B, LDB,
      $               INFO )
       ELSE IF( IASCL.EQ.2 ) THEN
-        CALL DLASCL( 'G', 0, 0, ANRM, BIGNUM, SCLLEN, NRHS, B, LDB,
+        CALL AB_DLASCL( 'G', 0, 0, ANRM, BIGNUM, SCLLEN, NRHS, B, LDB,
      $               INFO )
       END IF
       IF( IBSCL.EQ.1 ) THEN
-        CALL DLASCL( 'G', 0, 0, SMLNUM, BNRM, SCLLEN, NRHS, B, LDB,
+        CALL AB_DLASCL( 'G', 0, 0, SMLNUM, BNRM, SCLLEN, NRHS, B, LDB,
      $               INFO )
       ELSE IF( IBSCL.EQ.2 ) THEN
-        CALL DLASCL( 'G', 0, 0, BIGNUM, BNRM, SCLLEN, NRHS, B, LDB,
+        CALL AB_DLASCL( 'G', 0, 0, BIGNUM, BNRM, SCLLEN, NRHS, B, LDB,
      $               INFO )
       END IF
 *
@@ -489,6 +490,6 @@
       WORK( 1 ) = DBLE( TSZO + LWO )
       RETURN
 *
-*     End of DGETSLS
+*     End of AB_DGETSLS
 *
       END

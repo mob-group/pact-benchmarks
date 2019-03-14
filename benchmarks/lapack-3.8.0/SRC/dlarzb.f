@@ -1,4 +1,4 @@
-*> \brief \b DLARZB applies a block reflector or its transpose to a general matrix.
+*> \brief \b AB_DLARZB applies a block reflector or its transpose to a general matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLARZB + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarzb.f">
+*> Download AB_DLARZB + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLARZb.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarzb.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLARZb.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarzb.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLARZb.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLARZB( SIDE, TRANS, DIRECT, STOREV, M, N, K, L, V,
+*       SUBROUTINE AB_DLARZB( SIDE, TRANS, DIRECT, STOREV, M, N, K, L, V,
 *                          LDV, T, LDT, C, LDC, WORK, LDWORK )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> DLARZB applies a real block reflector H or its transpose H**T to
+*> AB_DLARZB applies a real block reflector H or its transpose H**T to
 *> a real distributed M-by-N  C from the left or the right.
 *>
 *> Currently, only STOREV = 'R' and DIRECT = 'B' are supported.
@@ -180,7 +180,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DLARZB( SIDE, TRANS, DIRECT, STOREV, M, N, K, L, V,
+      SUBROUTINE AB_DLARZB( SIDE, TRANS, DIRECT, STOREV, M, N, K, L, V,
      $                   LDV, T, LDT, C, LDC, WORK, LDWORK )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -208,11 +208,11 @@
       INTEGER            I, INFO, J
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DGEMM, DTRMM, XERBLA
+      EXTERNAL           AB_DCOPY, AB_DGEMM, AB_DTRMM, AB_XERBLA
 *     ..
 *     .. Executable Statements ..
 *
@@ -224,42 +224,43 @@
 *     Check for currently supported options
 *
       INFO = 0
-      IF( .NOT.LSAME( DIRECT, 'B' ) ) THEN
+      IF( .NOT.AB_LSAME( DIRECT, 'B' ) ) THEN
          INFO = -3
-      ELSE IF( .NOT.LSAME( STOREV, 'R' ) ) THEN
+      ELSE IF( .NOT.AB_LSAME( STOREV, 'R' ) ) THEN
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DLARZB', -INFO )
+         CALL AB_XERBLA( 'AB_DLARZB', -INFO )
          RETURN
       END IF
 *
-      IF( LSAME( TRANS, 'N' ) ) THEN
+      IF( AB_LSAME( TRANS, 'N' ) ) THEN
          TRANST = 'T'
       ELSE
          TRANST = 'N'
       END IF
 *
-      IF( LSAME( SIDE, 'L' ) ) THEN
+      IF( AB_LSAME( SIDE, 'L' ) ) THEN
 *
 *        Form  H * C  or  H**T * C
 *
 *        W( 1:n, 1:k ) = C( 1:k, 1:n )**T
 *
          DO 10 J = 1, K
-            CALL DCOPY( N, C( J, 1 ), LDC, WORK( 1, J ), 1 )
+            CALL AB_DCOPY( N, C( J, 1 ), LDC, WORK( 1, J ), 1 )
    10    CONTINUE
 *
 *        W( 1:n, 1:k ) = W( 1:n, 1:k ) + ...
 *                        C( m-l+1:m, 1:n )**T * V( 1:k, 1:l )**T
 *
          IF( L.GT.0 )
-     $      CALL DGEMM( 'Transpose', 'Transpose', N, K, L, ONE,
+     $      CALL AB_DGEMM( 'Transpose', 'Transpose', N, K, L, ONE,
      $                  C( M-L+1, 1 ), LDC, V, LDV, ONE, WORK, LDWORK )
 *
 *        W( 1:n, 1:k ) = W( 1:n, 1:k ) * T**T  or  W( 1:m, 1:k ) * T
 *
-         CALL DTRMM( 'Right', 'Lower', TRANST, 'Non-unit', N, K, ONE, T,
+         CALL AB_DTRMM( 'Right', 'Lower', TRANST, 'Non-unit', N, K, ONE,
+     $ T,
      $               LDT, WORK, LDWORK )
 *
 *        C( 1:k, 1:n ) = C( 1:k, 1:n ) - W( 1:n, 1:k )**T
@@ -274,29 +275,31 @@
 *                            V( 1:k, 1:l )**T * W( 1:n, 1:k )**T
 *
          IF( L.GT.0 )
-     $      CALL DGEMM( 'Transpose', 'Transpose', L, N, K, -ONE, V, LDV,
+     $      CALL AB_DGEMM( 'Transpose', 'Transpose', L, N, K, -ONE, V, L
+     $DV,
      $                  WORK, LDWORK, ONE, C( M-L+1, 1 ), LDC )
 *
-      ELSE IF( LSAME( SIDE, 'R' ) ) THEN
+      ELSE IF( AB_LSAME( SIDE, 'R' ) ) THEN
 *
 *        Form  C * H  or  C * H**T
 *
 *        W( 1:m, 1:k ) = C( 1:m, 1:k )
 *
          DO 40 J = 1, K
-            CALL DCOPY( M, C( 1, J ), 1, WORK( 1, J ), 1 )
+            CALL AB_DCOPY( M, C( 1, J ), 1, WORK( 1, J ), 1 )
    40    CONTINUE
 *
 *        W( 1:m, 1:k ) = W( 1:m, 1:k ) + ...
 *                        C( 1:m, n-l+1:n ) * V( 1:k, 1:l )**T
 *
          IF( L.GT.0 )
-     $      CALL DGEMM( 'No transpose', 'Transpose', M, K, L, ONE,
+     $      CALL AB_DGEMM( 'No transpose', 'Transpose', M, K, L, ONE,
      $                  C( 1, N-L+1 ), LDC, V, LDV, ONE, WORK, LDWORK )
 *
 *        W( 1:m, 1:k ) = W( 1:m, 1:k ) * T  or  W( 1:m, 1:k ) * T**T
 *
-         CALL DTRMM( 'Right', 'Lower', TRANS, 'Non-unit', M, K, ONE, T,
+         CALL AB_DTRMM( 'Right', 'Lower', TRANS, 'Non-unit', M, K, ONE, 
+     $T,
      $               LDT, WORK, LDWORK )
 *
 *        C( 1:m, 1:k ) = C( 1:m, 1:k ) - W( 1:m, 1:k )
@@ -311,13 +314,14 @@
 *                            W( 1:m, 1:k ) * V( 1:k, 1:l )
 *
          IF( L.GT.0 )
-     $      CALL DGEMM( 'No transpose', 'No transpose', M, L, K, -ONE,
+     $      CALL AB_DGEMM( 'No transpose', 'No transpose', M, L, K, -ONE
+     $,
      $                  WORK, LDWORK, V, LDV, ONE, C( 1, N-L+1 ), LDC )
 *
       END IF
 *
       RETURN
 *
-*     End of DLARZB
+*     End of AB_DLARZB
 *
       END

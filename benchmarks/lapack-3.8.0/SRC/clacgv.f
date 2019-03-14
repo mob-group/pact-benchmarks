@@ -1,4 +1,4 @@
-*> \brief \b CLACGV conjugates a complex vector.
+*> \brief \b AB_CLACGV conjugates a complex vector.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CLACGV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clacgv.f">
+*> Download AB_CLACGV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLACGV.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clacgv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLACGV.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clacgv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLACGV.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLACGV( N, X, INCX )
+*       SUBROUTINE AB_CLACGV( N, X, INCX )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCX, N
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> CLACGV conjugates a complex vector of length N.
+*> AB_CLACGV conjugates a complex vector of length N.
 *> \endverbatim
 *
 *  Arguments:
@@ -72,7 +72,7 @@
 *> \ingroup complexOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE CLACGV( N, X, INCX )
+      SUBROUTINE AB_CLACGV( N, X, INCX )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -111,6 +111,6 @@
       END IF
       RETURN
 *
-*     End of CLACGV
+*     End of AB_CLACGV
 *
       END

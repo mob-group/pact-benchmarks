@@ -1,4 +1,4 @@
-*> \brief \b CGBTRS
+*> \brief \b AB_CGBTRS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CGBTRS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgbtrs.f">
+*> Download AB_CGBTRS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CGBTRS.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgbtrs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CGBTRS.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgbtrs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CGBTRS.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGBTRS( TRANS, N, KL, KU, NRHS, AB, LDAB, IPIV, B, LDB,
+*       SUBROUTINE AB_CGBTRS( TRANS, N, KL, KU, NRHS, AB, LDAB, IPIV, B, LDB,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,10 +36,10 @@
 *>
 *> \verbatim
 *>
-*> CGBTRS solves a system of linear equations
+*> AB_CGBTRS solves a system of linear equations
 *>    A * X = B,  A**T * X = B,  or  A**H * X = B
 *> with a general band matrix A using the LU factorization computed
-*> by CGBTRF.
+*> by AB_CGBTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -83,7 +83,7 @@
 *> \verbatim
 *>          AB is COMPLEX array, dimension (LDAB,N)
 *>          Details of the LU factorization of the band matrix A, as
-*>          computed by CGBTRF.  U is stored as an upper triangular band
+*>          computed by AB_CGBTRF.  U is stored as an upper triangular band
 *>          matrix with KL+KU superdiagonals in rows 1 to KL+KU+1, and
 *>          the multipliers used during the factorization are stored in
 *>          rows KL+KU+2 to 2*KL+KU+1.
@@ -135,7 +135,8 @@
 *> \ingroup complexGBcomputational
 *
 *  =====================================================================
-      SUBROUTINE CGBTRS( TRANS, N, KL, KU, NRHS, AB, LDAB, IPIV, B, LDB,
+      SUBROUTINE AB_CGBTRS( TRANS, N, KL, KU, NRHS, AB, LDAB, IPIV, B, L
+     $DB,
      $                   INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -163,11 +164,12 @@
       INTEGER            I, J, KD, L, LM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMV, CGERU, CLACGV, CSWAP, CTBSV, XERBLA
+      EXTERNAL           AB_CGEMV, AB_CGERU, AB_CLACGV, AB_CSWAP, AB_CTB
+     $SV, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -177,9 +179,9 @@
 *     Test the input parameters.
 *
       INFO = 0
-      NOTRAN = LSAME( TRANS, 'N' )
-      IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) .AND. .NOT.
-     $    LSAME( TRANS, 'C' ) ) THEN
+      NOTRAN = AB_LSAME( TRANS, 'N' )
+      IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) .AND. .NOT.
+     $    AB_LSAME( TRANS, 'C' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -195,7 +197,7 @@
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CGBTRS', -INFO )
+         CALL AB_XERBLA( 'AB_CGBTRS', -INFO )
          RETURN
       END IF
 *
@@ -223,8 +225,9 @@
                LM = MIN( KL, N-J )
                L = IPIV( J )
                IF( L.NE.J )
-     $            CALL CSWAP( NRHS, B( L, 1 ), LDB, B( J, 1 ), LDB )
-               CALL CGERU( LM, NRHS, -ONE, AB( KD+1, J ), 1, B( J, 1 ),
+     $            CALL AB_CSWAP( NRHS, B( L, 1 ), LDB, B( J, 1 ), LDB )
+               CALL AB_CGERU( LM, NRHS, -ONE, AB( KD+1, J ), 1, B( J, 1 
+     $),
      $                     LDB, B( J+1, 1 ), LDB )
    10       CONTINUE
          END IF
@@ -233,11 +236,12 @@
 *
 *           Solve U*X = B, overwriting B with X.
 *
-            CALL CTBSV( 'Upper', 'No transpose', 'Non-unit', N, KL+KU,
+            CALL AB_CTBSV( 'Upper', 'No transpose', 'Non-unit', N, KL+KU
+     $,
      $                  AB, LDAB, B( 1, I ), 1 )
    20    CONTINUE
 *
-      ELSE IF( LSAME( TRANS, 'T' ) ) THEN
+      ELSE IF( AB_LSAME( TRANS, 'T' ) ) THEN
 *
 *        Solve A**T * X = B.
 *
@@ -245,7 +249,8 @@
 *
 *           Solve U**T * X = B, overwriting B with X.
 *
-            CALL CTBSV( 'Upper', 'Transpose', 'Non-unit', N, KL+KU, AB,
+            CALL AB_CTBSV( 'Upper', 'Transpose', 'Non-unit', N, KL+KU, A
+     $B,
      $                  LDAB, B( 1, I ), 1 )
    30    CONTINUE
 *
@@ -254,11 +259,11 @@
          IF( LNOTI ) THEN
             DO 40 J = N - 1, 1, -1
                LM = MIN( KL, N-J )
-               CALL CGEMV( 'Transpose', LM, NRHS, -ONE, B( J+1, 1 ),
+               CALL AB_CGEMV( 'Transpose', LM, NRHS, -ONE, B( J+1, 1 ),
      $                     LDB, AB( KD+1, J ), 1, ONE, B( J, 1 ), LDB )
                L = IPIV( J )
                IF( L.NE.J )
-     $            CALL CSWAP( NRHS, B( L, 1 ), LDB, B( J, 1 ), LDB )
+     $            CALL AB_CSWAP( NRHS, B( L, 1 ), LDB, B( J, 1 ), LDB )
    40       CONTINUE
          END IF
 *
@@ -270,7 +275,8 @@
 *
 *           Solve U**H * X = B, overwriting B with X.
 *
-            CALL CTBSV( 'Upper', 'Conjugate transpose', 'Non-unit', N,
+            CALL AB_CTBSV( 'Upper', 'Conjugate transpose', 'Non-unit', N
+     $,
      $                  KL+KU, AB, LDAB, B( 1, I ), 1 )
    50    CONTINUE
 *
@@ -279,19 +285,19 @@
          IF( LNOTI ) THEN
             DO 60 J = N - 1, 1, -1
                LM = MIN( KL, N-J )
-               CALL CLACGV( NRHS, B( J, 1 ), LDB )
-               CALL CGEMV( 'Conjugate transpose', LM, NRHS, -ONE,
+               CALL AB_CLACGV( NRHS, B( J, 1 ), LDB )
+               CALL AB_CGEMV( 'Conjugate transpose', LM, NRHS, -ONE,
      $                     B( J+1, 1 ), LDB, AB( KD+1, J ), 1, ONE,
      $                     B( J, 1 ), LDB )
-               CALL CLACGV( NRHS, B( J, 1 ), LDB )
+               CALL AB_CLACGV( NRHS, B( J, 1 ), LDB )
                L = IPIV( J )
                IF( L.NE.J )
-     $            CALL CSWAP( NRHS, B( L, 1 ), LDB, B( J, 1 ), LDB )
+     $            CALL AB_CSWAP( NRHS, B( L, 1 ), LDB, B( J, 1 ), LDB )
    60       CONTINUE
          END IF
       END IF
       RETURN
 *
-*     End of CGBTRS
+*     End of AB_CGBTRS
 *
       END

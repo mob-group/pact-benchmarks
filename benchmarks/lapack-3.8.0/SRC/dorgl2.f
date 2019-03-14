@@ -1,4 +1,4 @@
-*> \brief \b DORGL2
+*> \brief \b AB_DORGL2
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DORGL2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dorgl2.f">
+*> Download AB_DORGL2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DORGL2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dorgl2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DORGL2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dorgl2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DORGL2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DORGL2( M, N, K, A, LDA, TAU, WORK, INFO )
+*       SUBROUTINE AB_DORGL2( M, N, K, A, LDA, TAU, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, K, LDA, M, N
@@ -33,13 +33,13 @@
 *>
 *> \verbatim
 *>
-*> DORGL2 generates an m by n real matrix Q with orthonormal rows,
+*> AB_DORGL2 generates an m by n real matrix Q with orthonormal rows,
 *> which is defined as the first m rows of a product of k elementary
 *> reflectors of order n
 *>
 *>       Q  =  H(k) . . . H(2) H(1)
 *>
-*> as returned by DGELQF.
+*> as returned by AB_DGELQF.
 *> \endverbatim
 *
 *  Arguments:
@@ -69,7 +69,7 @@
 *>          A is DOUBLE PRECISION array, dimension (LDA,N)
 *>          On entry, the i-th row must contain the vector which defines
 *>          the elementary reflector H(i), for i = 1,2,...,k, as returned
-*>          by DGELQF in the first k rows of its array argument A.
+*>          by AB_DGELQF in the first k rows of its array argument A.
 *>          On exit, the m-by-n matrix Q.
 *> \endverbatim
 *>
@@ -83,7 +83,7 @@
 *> \verbatim
 *>          TAU is DOUBLE PRECISION array, dimension (K)
 *>          TAU(i) must contain the scalar factor of the elementary
-*>          reflector H(i), as returned by DGELQF.
+*>          reflector H(i), as returned by AB_DGELQF.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -111,7 +111,7 @@
 *> \ingroup doubleOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE DORGL2( M, N, K, A, LDA, TAU, WORK, INFO )
+      SUBROUTINE AB_DORGL2( M, N, K, A, LDA, TAU, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -135,7 +135,7 @@
       INTEGER            I, J, L
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARF, DSCAL, XERBLA
+      EXTERNAL           AB_DLARF, AB_DSCAL, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -155,7 +155,7 @@
          INFO = -5
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DORGL2', -INFO )
+         CALL AB_XERBLA( 'AB_DORGL2', -INFO )
          RETURN
       END IF
 *
@@ -184,10 +184,10 @@
          IF( I.LT.N ) THEN
             IF( I.LT.M ) THEN
                A( I, I ) = ONE
-               CALL DLARF( 'Right', M-I, N-I+1, A( I, I ), LDA,
+               CALL AB_DLARF( 'Right', M-I, N-I+1, A( I, I ), LDA,
      $                     TAU( I ), A( I+1, I ), LDA, WORK )
             END IF
-            CALL DSCAL( N-I, -TAU( I ), A( I, I+1 ), LDA )
+            CALL AB_DSCAL( N-I, -TAU( I ), A( I, I+1 ), LDA )
          END IF
          A( I, I ) = ONE - TAU( I )
 *
@@ -199,6 +199,6 @@
    40 CONTINUE
       RETURN
 *
-*     End of DORGL2
+*     End of AB_DORGL2
 *
       END

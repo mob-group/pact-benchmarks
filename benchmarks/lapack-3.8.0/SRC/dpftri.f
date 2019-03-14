@@ -1,4 +1,4 @@
-*> \brief \b DPFTRI
+*> \brief \b AB_DPFTRI
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DPFTRI + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dpftri.f">
+*> Download AB_DPFTRI + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DPFTRI.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dpftri.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DPFTRI.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpftri.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DPFTRI.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DPFTRI( TRANSR, UPLO, N, A, INFO )
+*       SUBROUTINE AB_DPFTRI( TRANSR, UPLO, N, A, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          TRANSR, UPLO
@@ -33,9 +33,9 @@
 *>
 *> \verbatim
 *>
-*> DPFTRI computes the inverse of a (real) symmetric positive definite
+*> AB_DPFTRI computes the inverse of a (real) symmetric positive definite
 *> matrix A using the Cholesky factorization A = U**T*U or A = L*L**T
-*> computed by DPFTRF.
+*> computed by AB_DPFTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -189,7 +189,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DPFTRI( TRANSR, UPLO, N, A, INFO )
+      SUBROUTINE AB_DPFTRI( TRANSR, UPLO, N, A, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -214,11 +214,12 @@
       INTEGER            N1, N2, K
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, DTFTRI, DLAUUM, DTRMM, DSYRK
+      EXTERNAL           AB_XERBLA, AB_DTFTRI, AB_DLAUUM, AB_DTRMM, AB_D
+     $SYRK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MOD
@@ -228,17 +229,17 @@
 *     Test the input parameters.
 *
       INFO = 0
-      NORMALTRANSR = LSAME( TRANSR, 'N' )
-      LOWER = LSAME( UPLO, 'L' )
-      IF( .NOT.NORMALTRANSR .AND. .NOT.LSAME( TRANSR, 'T' ) ) THEN
+      NORMALTRANSR = AB_LSAME( TRANSR, 'N' )
+      LOWER = AB_LSAME( UPLO, 'L' )
+      IF( .NOT.NORMALTRANSR .AND. .NOT.AB_LSAME( TRANSR, 'T' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LOWER .AND. .NOT.LSAME( UPLO, 'U' ) ) THEN
+      ELSE IF( .NOT.LOWER .AND. .NOT.AB_LSAME( UPLO, 'U' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DPFTRI', -INFO )
+         CALL AB_XERBLA( 'AB_DPFTRI', -INFO )
          RETURN
       END IF
 *
@@ -249,7 +250,7 @@
 *
 *     Invert the triangular Cholesky factor U or L.
 *
-      CALL DTFTRI( TRANSR, UPLO, 'N', N, A, INFO )
+      CALL AB_DTFTRI( TRANSR, UPLO, 'N', N, A, INFO )
       IF( INFO.GT.0 )
      $   RETURN
 *
@@ -290,12 +291,13 @@
 *              T1 -> a(0,0), T2 -> a(0,1), S -> a(N1,0)
 *              T1 -> a(0), T2 -> a(n), S -> a(N1)
 *
-               CALL DLAUUM( 'L', N1, A( 0 ), N, INFO )
-               CALL DSYRK( 'L', 'T', N1, N2, ONE, A( N1 ), N, ONE,
+               CALL AB_DLAUUM( 'L', N1, A( 0 ), N, INFO )
+               CALL AB_DSYRK( 'L', 'T', N1, N2, ONE, A( N1 ), N, ONE,
      $                     A( 0 ), N )
-               CALL DTRMM( 'L', 'U', 'N', 'N', N2, N1, ONE, A( N ), N,
+               CALL AB_DTRMM( 'L', 'U', 'N', 'N', N2, N1, ONE, A( N ), N
+     $,
      $                     A( N1 ), N )
-               CALL DLAUUM( 'U', N2, A( N ), N, INFO )
+               CALL AB_DLAUUM( 'U', N2, A( N ), N, INFO )
 *
             ELSE
 *
@@ -303,12 +305,13 @@
 *              T1 -> a(N1+1,0), T2 -> a(N1,0), S -> a(0,0)
 *              T1 -> a(N2), T2 -> a(N1), S -> a(0)
 *
-               CALL DLAUUM( 'L', N1, A( N2 ), N, INFO )
-               CALL DSYRK( 'L', 'N', N1, N2, ONE, A( 0 ), N, ONE,
+               CALL AB_DLAUUM( 'L', N1, A( N2 ), N, INFO )
+               CALL AB_DSYRK( 'L', 'N', N1, N2, ONE, A( 0 ), N, ONE,
      $                     A( N2 ), N )
-               CALL DTRMM( 'R', 'U', 'T', 'N', N1, N2, ONE, A( N1 ), N,
+               CALL AB_DTRMM( 'R', 'U', 'T', 'N', N1, N2, ONE, A( N1 ), 
+     $N,
      $                     A( 0 ), N )
-               CALL DLAUUM( 'U', N2, A( N1 ), N, INFO )
+               CALL AB_DLAUUM( 'U', N2, A( N1 ), N, INFO )
 *
             END IF
 *
@@ -321,24 +324,27 @@
 *              SRPA for LOWER, TRANSPOSE, and N is odd
 *              T1 -> a(0), T2 -> a(1), S -> a(0+N1*N1)
 *
-               CALL DLAUUM( 'U', N1, A( 0 ), N1, INFO )
-               CALL DSYRK( 'U', 'N', N1, N2, ONE, A( N1*N1 ), N1, ONE,
+               CALL AB_DLAUUM( 'U', N1, A( 0 ), N1, INFO )
+               CALL AB_DSYRK( 'U', 'N', N1, N2, ONE, A( N1*N1 ), N1, ONE
+     $,
      $                     A( 0 ), N1 )
-               CALL DTRMM( 'R', 'L', 'N', 'N', N1, N2, ONE, A( 1 ), N1,
+               CALL AB_DTRMM( 'R', 'L', 'N', 'N', N1, N2, ONE, A( 1 ), N
+     $1,
      $                     A( N1*N1 ), N1 )
-               CALL DLAUUM( 'L', N2, A( 1 ), N1, INFO )
+               CALL AB_DLAUUM( 'L', N2, A( 1 ), N1, INFO )
 *
             ELSE
 *
 *              SRPA for UPPER, TRANSPOSE, and N is odd
 *              T1 -> a(0+N2*N2), T2 -> a(0+N1*N2), S -> a(0)
 *
-               CALL DLAUUM( 'U', N1, A( N2*N2 ), N2, INFO )
-               CALL DSYRK( 'U', 'T', N1, N2, ONE, A( 0 ), N2, ONE,
+               CALL AB_DLAUUM( 'U', N1, A( N2*N2 ), N2, INFO )
+               CALL AB_DSYRK( 'U', 'T', N1, N2, ONE, A( 0 ), N2, ONE,
      $                     A( N2*N2 ), N2 )
-               CALL DTRMM( 'L', 'L', 'T', 'N', N2, N1, ONE, A( N1*N2 ),
+               CALL AB_DTRMM( 'L', 'L', 'T', 'N', N2, N1, ONE, A( N1*N2 
+     $),
      $                     N2, A( 0 ), N2 )
-               CALL DLAUUM( 'L', N2, A( N1*N2 ), N2, INFO )
+               CALL AB_DLAUUM( 'L', N2, A( N1*N2 ), N2, INFO )
 *
             END IF
 *
@@ -358,12 +364,13 @@
 *              T1 -> a(1,0), T2 -> a(0,0), S -> a(k+1,0)
 *              T1 -> a(1), T2 -> a(0), S -> a(k+1)
 *
-               CALL DLAUUM( 'L', K, A( 1 ), N+1, INFO )
-               CALL DSYRK( 'L', 'T', K, K, ONE, A( K+1 ), N+1, ONE,
+               CALL AB_DLAUUM( 'L', K, A( 1 ), N+1, INFO )
+               CALL AB_DSYRK( 'L', 'T', K, K, ONE, A( K+1 ), N+1, ONE,
      $                     A( 1 ), N+1 )
-               CALL DTRMM( 'L', 'U', 'N', 'N', K, K, ONE, A( 0 ), N+1,
+               CALL AB_DTRMM( 'L', 'U', 'N', 'N', K, K, ONE, A( 0 ), N+1
+     $,
      $                     A( K+1 ), N+1 )
-               CALL DLAUUM( 'U', K, A( 0 ), N+1, INFO )
+               CALL AB_DLAUUM( 'U', K, A( 0 ), N+1, INFO )
 *
             ELSE
 *
@@ -371,12 +378,13 @@
 *              T1 -> a(k+1,0) ,  T2 -> a(k,0),   S -> a(0,0)
 *              T1 -> a(k+1), T2 -> a(k), S -> a(0)
 *
-               CALL DLAUUM( 'L', K, A( K+1 ), N+1, INFO )
-               CALL DSYRK( 'L', 'N', K, K, ONE, A( 0 ), N+1, ONE,
+               CALL AB_DLAUUM( 'L', K, A( K+1 ), N+1, INFO )
+               CALL AB_DSYRK( 'L', 'N', K, K, ONE, A( 0 ), N+1, ONE,
      $                     A( K+1 ), N+1 )
-               CALL DTRMM( 'R', 'U', 'T', 'N', K, K, ONE, A( K ), N+1,
+               CALL AB_DTRMM( 'R', 'U', 'T', 'N', K, K, ONE, A( K ), N+1
+     $,
      $                     A( 0 ), N+1 )
-               CALL DLAUUM( 'U', K, A( K ), N+1, INFO )
+               CALL AB_DLAUUM( 'U', K, A( K ), N+1, INFO )
 *
             END IF
 *
@@ -390,12 +398,13 @@
 *              T1 -> B(0,1), T2 -> B(0,0), S -> B(0,k+1),
 *              T1 -> a(0+k), T2 -> a(0+0), S -> a(0+k*(k+1)); lda=k
 *
-               CALL DLAUUM( 'U', K, A( K ), K, INFO )
-               CALL DSYRK( 'U', 'N', K, K, ONE, A( K*( K+1 ) ), K, ONE,
+               CALL AB_DLAUUM( 'U', K, A( K ), K, INFO )
+               CALL AB_DSYRK( 'U', 'N', K, K, ONE, A( K*( K+1 ) ), K, ON
+     $E,
      $                     A( K ), K )
-               CALL DTRMM( 'R', 'L', 'N', 'N', K, K, ONE, A( 0 ), K,
+               CALL AB_DTRMM( 'R', 'L', 'N', 'N', K, K, ONE, A( 0 ), K,
      $                     A( K*( K+1 ) ), K )
-               CALL DLAUUM( 'L', K, A( 0 ), K, INFO )
+               CALL AB_DLAUUM( 'L', K, A( 0 ), K, INFO )
 *
             ELSE
 *
@@ -403,12 +412,13 @@
 *              T1 -> B(0,k+1),     T2 -> B(0,k),   S -> B(0,0),
 *              T1 -> a(0+k*(k+1)), T2 -> a(0+k*k), S -> a(0+0)); lda=k
 *
-               CALL DLAUUM( 'U', K, A( K*( K+1 ) ), K, INFO )
-               CALL DSYRK( 'U', 'T', K, K, ONE, A( 0 ), K, ONE,
+               CALL AB_DLAUUM( 'U', K, A( K*( K+1 ) ), K, INFO )
+               CALL AB_DSYRK( 'U', 'T', K, K, ONE, A( 0 ), K, ONE,
      $                     A( K*( K+1 ) ), K )
-               CALL DTRMM( 'L', 'L', 'T', 'N', K, K, ONE, A( K*K ), K,
+               CALL AB_DTRMM( 'L', 'L', 'T', 'N', K, K, ONE, A( K*K ), K
+     $,
      $                     A( 0 ), K )
-               CALL DLAUUM( 'L', K, A( K*K ), K, INFO )
+               CALL AB_DLAUUM( 'L', K, A( K*K ), K, INFO )
 *
             END IF
 *
@@ -418,6 +428,6 @@
 *
       RETURN
 *
-*     End of DPFTRI
+*     End of AB_DPFTRI
 *
       END

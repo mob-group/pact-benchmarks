@@ -1,4 +1,4 @@
-*> \brief \b DGETRI
+*> \brief \b AB_DGETRI
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DGETRI + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgetri.f">
+*> Download AB_DGETRI + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGETRI.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgetri.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGETRI.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgetri.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGETRI.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGETRI( N, A, LDA, IPIV, WORK, LWORK, INFO )
+*       SUBROUTINE AB_DGETRI( N, A, LDA, IPIV, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, LWORK, N
@@ -34,8 +34,8 @@
 *>
 *> \verbatim
 *>
-*> DGETRI computes the inverse of a matrix using the LU factorization
-*> computed by DGETRF.
+*> AB_DGETRI computes the inverse of a matrix using the LU factorization
+*> computed by AB_DGETRF.
 *>
 *> This method inverts U and then computes inv(A) by solving the system
 *> inv(A)*L = inv(U) for inv(A).
@@ -54,7 +54,7 @@
 *> \verbatim
 *>          A is DOUBLE PRECISION array, dimension (LDA,N)
 *>          On entry, the factors L and U from the factorization
-*>          A = P*L*U as computed by DGETRF.
+*>          A = P*L*U as computed by AB_DGETRF.
 *>          On exit, if INFO = 0, the inverse of the original matrix A.
 *> \endverbatim
 *>
@@ -67,7 +67,7 @@
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          The pivot indices from DGETRF; for 1<=i<=N, row i of the
+*>          The pivot indices from AB_DGETRF; for 1<=i<=N, row i of the
 *>          matrix was interchanged with row IPIV(i).
 *> \endverbatim
 *>
@@ -82,12 +82,12 @@
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK.  LWORK >= max(1,N).
 *>          For optimal performance LWORK >= N*NB, where NB is
-*>          the optimal blocksize returned by ILAENV.
+*>          the optimal blocksize returned by AB_ILAENV.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -112,7 +112,7 @@
 *> \ingroup doubleGEcomputational
 *
 *  =====================================================================
-      SUBROUTINE DGETRI( N, A, LDA, IPIV, WORK, LWORK, INFO )
+      SUBROUTINE AB_DGETRI( N, A, LDA, IPIV, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -139,11 +139,12 @@
      $                   NBMIN, NN
 *     ..
 *     .. External Functions ..
-      INTEGER            ILAENV
-      EXTERNAL           ILAENV
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMM, DGEMV, DSWAP, DTRSM, DTRTRI, XERBLA
+      EXTERNAL           AB_DGEMM, AB_DGEMV, AB_DSWAP, AB_DTRSM, AB_DTRT
+     $RI, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -153,7 +154,7 @@
 *     Test the input parameters.
 *
       INFO = 0
-      NB = ILAENV( 1, 'DGETRI', ' ', N, -1, -1, -1 )
+      NB = AB_ILAENV( 1, 'AB_DGETRI', ' ', N, -1, -1, -1 )
       LWKOPT = N*NB
       WORK( 1 ) = LWKOPT
       LQUERY = ( LWORK.EQ.-1 )
@@ -165,7 +166,7 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DGETRI', -INFO )
+         CALL AB_XERBLA( 'AB_DGETRI', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -176,10 +177,10 @@
       IF( N.EQ.0 )
      $   RETURN
 *
-*     Form inv(U).  If INFO > 0 from DTRTRI, then U is singular,
+*     Form inv(U).  If INFO > 0 from AB_DTRTRI, then U is singular,
 *     and the inverse is not computed.
 *
-      CALL DTRTRI( 'Upper', 'Non-unit', N, A, LDA, INFO )
+      CALL AB_DTRTRI( 'Upper', 'Non-unit', N, A, LDA, INFO )
       IF( INFO.GT.0 )
      $   RETURN
 *
@@ -189,7 +190,8 @@
          IWS = MAX( LDWORK*NB, 1 )
          IF( LWORK.LT.IWS ) THEN
             NB = LWORK / LDWORK
-            NBMIN = MAX( 2, ILAENV( 2, 'DGETRI', ' ', N, -1, -1, -1 ) )
+            NBMIN = MAX( 2, AB_ILAENV( 2, 'AB_DGETRI', ' ', N, -1, -1, -
+     $1 ) )
          END IF
       ELSE
          IWS = N
@@ -213,7 +215,7 @@
 *           Compute current column of inv(A).
 *
             IF( J.LT.N )
-     $         CALL DGEMV( 'No transpose', N, N-J, -ONE, A( 1, J+1 ),
+     $         CALL AB_DGEMV( 'No transpose', N, N-J, -ONE, A( 1, J+1 ),
      $                     LDA, WORK( J+1 ), 1, ONE, A( 1, J ), 1 )
    20    CONTINUE
       ELSE
@@ -237,10 +239,11 @@
 *           Compute current block column of inv(A).
 *
             IF( J+JB.LE.N )
-     $         CALL DGEMM( 'No transpose', 'No transpose', N, JB,
+     $         CALL AB_DGEMM( 'No transpose', 'No transpose', N, JB,
      $                     N-J-JB+1, -ONE, A( 1, J+JB ), LDA,
      $                     WORK( J+JB ), LDWORK, ONE, A( 1, J ), LDA )
-            CALL DTRSM( 'Right', 'Lower', 'No transpose', 'Unit', N, JB,
+            CALL AB_DTRSM( 'Right', 'Lower', 'No transpose', 'Unit', N, 
+     $JB,
      $                  ONE, WORK( J ), LDWORK, A( 1, J ), LDA )
    50    CONTINUE
       END IF
@@ -250,12 +253,12 @@
       DO 60 J = N - 1, 1, -1
          JP = IPIV( J )
          IF( JP.NE.J )
-     $      CALL DSWAP( N, A( 1, J ), 1, A( 1, JP ), 1 )
+     $      CALL AB_DSWAP( N, A( 1, J ), 1, A( 1, JP ), 1 )
    60 CONTINUE
 *
       WORK( 1 ) = IWS
       RETURN
 *
-*     End of DGETRI
+*     End of AB_DGETRI
 *
       END

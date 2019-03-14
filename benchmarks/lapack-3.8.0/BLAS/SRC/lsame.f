@@ -1,4 +1,4 @@
-*> \brief \b LSAME
+*> \brief \b AB_LSAME
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       LOGICAL FUNCTION LSAME(CA,CB)
+*       LOGICAL FUNCTION AB_LSAME(CA,CB)
 *
 *       .. Scalar Arguments ..
 *       CHARACTER CA,CB
@@ -20,7 +20,7 @@
 *>
 *> \verbatim
 *>
-*> LSAME returns .TRUE. if CA is the same letter as CB regardless of
+*> AB_LSAME returns .TRUE. if CA is the same letter as CB regardless of
 *> case.
 *> \endverbatim
 *
@@ -51,7 +51,7 @@
 *> \ingroup aux_blas
 *
 *  =====================================================================
-      LOGICAL FUNCTION LSAME(CA,CB)
+      LOGICAL FUNCTION AB_LSAME(CA,CB)
 *
 *  -- Reference BLAS level1 routine (version 3.1) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -73,8 +73,8 @@
 *
 *     Test if the characters are equal
 *
-      LSAME = CA .EQ. CB
-      IF (LSAME) RETURN
+      AB_LSAME = CA .EQ. CB
+      IF (AB_LSAME) RETURN
 *
 *     Now test for equivalence if both characters are alphabetic.
 *
@@ -116,10 +116,10 @@
           IF (INTA.GE.225 .AND. INTA.LE.250) INTA = INTA - 32
           IF (INTB.GE.225 .AND. INTB.LE.250) INTB = INTB - 32
       END IF
-      LSAME = INTA .EQ. INTB
+      AB_LSAME = INTA .EQ. INTB
 *
 *     RETURN
 *
-*     End of LSAME
+*     End of AB_LSAME
 *
       END

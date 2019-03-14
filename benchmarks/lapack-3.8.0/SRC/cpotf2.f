@@ -1,4 +1,4 @@
-*> \brief \b CPOTF2 computes the Cholesky factorization of a symmetric/Hermitian positive definite matrix (unblocked algorithm).
+*> \brief \b AB_CPOTF2 computes the Cholesky factorization of a symmetric/Hermitian positive definite matrix (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CPOTF2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpotf2.f">
+*> Download AB_CPOTF2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CPOTF2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cpotf2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CPOTF2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpotf2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CPOTF2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CPOTF2( UPLO, N, A, LDA, INFO )
+*       SUBROUTINE AB_CPOTF2( UPLO, N, A, LDA, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> CPOTF2 computes the Cholesky factorization of a complex Hermitian
+*> AB_CPOTF2 computes the Cholesky factorization of a complex Hermitian
 *> positive definite matrix A.
 *>
 *> The factorization has the form
@@ -107,7 +107,7 @@
 *> \ingroup complexPOcomputational
 *
 *  =====================================================================
-      SUBROUTINE CPOTF2( UPLO, N, A, LDA, INFO )
+      SUBROUTINE AB_CPOTF2( UPLO, N, A, LDA, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -136,12 +136,12 @@
       REAL               AJJ
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME, SISNAN
-      COMPLEX            CDOTC
-      EXTERNAL           LSAME, CDOTC, SISNAN
+      LOGICAL            AB_LSAME, AB_SISNAN
+      COMPLEX            AB_CDOTC
+      EXTERNAL           AB_LSAME, AB_CDOTC, AB_SISNAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMV, CLACGV, CSSCAL, XERBLA
+      EXTERNAL           AB_CGEMV, AB_CLACGV, AB_CSSCAL, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, REAL, SQRT
@@ -151,8 +151,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -160,7 +160,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CPOTF2', -INFO )
+         CALL AB_XERBLA( 'AB_CPOTF2', -INFO )
          RETURN
       END IF
 *
@@ -177,9 +177,9 @@
 *
 *           Compute U(J,J) and test for non-positive-definiteness.
 *
-            AJJ = REAL( A( J, J ) ) - CDOTC( J-1, A( 1, J ), 1,
+            AJJ = REAL( A( J, J ) ) - AB_CDOTC( J-1, A( 1, J ), 1,
      $            A( 1, J ), 1 )
-            IF( AJJ.LE.ZERO.OR.SISNAN( AJJ ) ) THEN
+            IF( AJJ.LE.ZERO.OR.AB_SISNAN( AJJ ) ) THEN
                A( J, J ) = AJJ
                GO TO 30
             END IF
@@ -189,11 +189,11 @@
 *           Compute elements J+1:N of row J.
 *
             IF( J.LT.N ) THEN
-               CALL CLACGV( J-1, A( 1, J ), 1 )
-               CALL CGEMV( 'Transpose', J-1, N-J, -CONE, A( 1, J+1 ),
+               CALL AB_CLACGV( J-1, A( 1, J ), 1 )
+               CALL AB_CGEMV( 'Transpose', J-1, N-J, -CONE, A( 1, J+1 ),
      $                     LDA, A( 1, J ), 1, CONE, A( J, J+1 ), LDA )
-               CALL CLACGV( J-1, A( 1, J ), 1 )
-               CALL CSSCAL( N-J, ONE / AJJ, A( J, J+1 ), LDA )
+               CALL AB_CLACGV( J-1, A( 1, J ), 1 )
+               CALL AB_CSSCAL( N-J, ONE / AJJ, A( J, J+1 ), LDA )
             END IF
    10    CONTINUE
       ELSE
@@ -204,9 +204,9 @@
 *
 *           Compute L(J,J) and test for non-positive-definiteness.
 *
-            AJJ = REAL( A( J, J ) ) - CDOTC( J-1, A( J, 1 ), LDA,
+            AJJ = REAL( A( J, J ) ) - AB_CDOTC( J-1, A( J, 1 ), LDA,
      $            A( J, 1 ), LDA )
-            IF( AJJ.LE.ZERO.OR.SISNAN( AJJ ) ) THEN
+            IF( AJJ.LE.ZERO.OR.AB_SISNAN( AJJ ) ) THEN
                A( J, J ) = AJJ
                GO TO 30
             END IF
@@ -216,11 +216,12 @@
 *           Compute elements J+1:N of column J.
 *
             IF( J.LT.N ) THEN
-               CALL CLACGV( J-1, A( J, 1 ), LDA )
-               CALL CGEMV( 'No transpose', N-J, J-1, -CONE, A( J+1, 1 ),
+               CALL AB_CLACGV( J-1, A( J, 1 ), LDA )
+               CALL AB_CGEMV( 'No transpose', N-J, J-1, -CONE, A( J+1, 1
+     $ ),
      $                     LDA, A( J, 1 ), LDA, CONE, A( J+1, J ), 1 )
-               CALL CLACGV( J-1, A( J, 1 ), LDA )
-               CALL CSSCAL( N-J, ONE / AJJ, A( J+1, J ), 1 )
+               CALL AB_CLACGV( J-1, A( J, 1 ), LDA )
+               CALL AB_CSSCAL( N-J, ONE / AJJ, A( J+1, J ), 1 )
             END IF
    20    CONTINUE
       END IF
@@ -232,6 +233,6 @@
    40 CONTINUE
       RETURN
 *
-*     End of CPOTF2
+*     End of AB_CPOTF2
 *
       END

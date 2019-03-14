@@ -1,4 +1,4 @@
-*> \brief \b CHEGS2 reduces a Hermitian definite generalized eigenproblem to standard form, using the factorization results obtained from cpotrf (unblocked algorithm).
+*> \brief \b AB_CHEGS2 reduces a Hermitian definite generalized eigenproblem to standard form, using the factorization results obtained from AB_CPOTRF (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CHEGS2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chegs2.f">
+*> Download AB_CHEGS2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CHEGS2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chegs2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CHEGS2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chegs2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CHEGS2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CHEGS2( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
+*       SUBROUTINE AB_CHEGS2( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> CHEGS2 reduces a complex Hermitian-definite generalized
+*> AB_CHEGS2 reduces a complex Hermitian-definite generalized
 *> eigenproblem to standard form.
 *>
 *> If ITYPE = 1, the problem is A*x = lambda*B*x,
@@ -43,7 +43,7 @@
 *> If ITYPE = 2 or 3, the problem is A*B*x = lambda*x or
 *> B*A*x = lambda*x, and A is overwritten by U*A*U**H or L**H *A*L.
 *>
-*> B must have been previously factorized as U**H *U or L*L**H by ZPOTRF.
+*> B must have been previously factorized as U**H *U or L*L**H by AB_ZPOTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -96,7 +96,7 @@
 *> \verbatim
 *>          B is COMPLEX array, dimension (LDB,N)
 *>          The triangular factor from the Cholesky factorization of B,
-*>          as returned by CPOTRF.
+*>          as returned by AB_CPOTRF.
 *> \endverbatim
 *>
 *> \param[in] LDB
@@ -125,7 +125,7 @@
 *> \ingroup complexHEcomputational
 *
 *  =====================================================================
-      SUBROUTINE CHEGS2( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
+      SUBROUTINE AB_CHEGS2( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -155,25 +155,26 @@
       COMPLEX            CT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CHER2, CLACGV, CSSCAL, CTRMV, CTRSV,
-     $                   XERBLA
+      EXTERNAL           AB_CAXPY, AB_CHER2, AB_CLACGV, AB_CSSCAL, AB_CT
+     $RMV, AB_CTRSV,
+     $                   AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
+      UPPER = AB_LSAME( UPLO, 'U' )
       IF( ITYPE.LT.1 .OR. ITYPE.GT.3 ) THEN
          INFO = -1
-      ELSE IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      ELSE IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -183,7 +184,7 @@
          INFO = -7
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CHEGS2', -INFO )
+         CALL AB_XERBLA( 'AB_CHEGS2', -INFO )
          RETURN
       END IF
 *
@@ -201,21 +202,22 @@
                AKK = AKK / BKK**2
                A( K, K ) = AKK
                IF( K.LT.N ) THEN
-                  CALL CSSCAL( N-K, ONE / BKK, A( K, K+1 ), LDA )
+                  CALL AB_CSSCAL( N-K, ONE / BKK, A( K, K+1 ), LDA )
                   CT = -HALF*AKK
-                  CALL CLACGV( N-K, A( K, K+1 ), LDA )
-                  CALL CLACGV( N-K, B( K, K+1 ), LDB )
-                  CALL CAXPY( N-K, CT, B( K, K+1 ), LDB, A( K, K+1 ),
+                  CALL AB_CLACGV( N-K, A( K, K+1 ), LDA )
+                  CALL AB_CLACGV( N-K, B( K, K+1 ), LDB )
+                  CALL AB_CAXPY( N-K, CT, B( K, K+1 ), LDB, A( K, K+1 ),
      $                        LDA )
-                  CALL CHER2( UPLO, N-K, -CONE, A( K, K+1 ), LDA,
+                  CALL AB_CHER2( UPLO, N-K, -CONE, A( K, K+1 ), LDA,
      $                        B( K, K+1 ), LDB, A( K+1, K+1 ), LDA )
-                  CALL CAXPY( N-K, CT, B( K, K+1 ), LDB, A( K, K+1 ),
+                  CALL AB_CAXPY( N-K, CT, B( K, K+1 ), LDB, A( K, K+1 ),
      $                        LDA )
-                  CALL CLACGV( N-K, B( K, K+1 ), LDB )
-                  CALL CTRSV( UPLO, 'Conjugate transpose', 'Non-unit',
+                  CALL AB_CLACGV( N-K, B( K, K+1 ), LDB )
+                  CALL AB_CTRSV( UPLO, 'Conjugate transpose', 'Non-unit'
+     $,
      $                        N-K, B( K+1, K+1 ), LDB, A( K, K+1 ),
      $                        LDA )
-                  CALL CLACGV( N-K, A( K, K+1 ), LDA )
+                  CALL AB_CLACGV( N-K, A( K, K+1 ), LDA )
                END IF
    10       CONTINUE
          ELSE
@@ -231,13 +233,15 @@
                AKK = AKK / BKK**2
                A( K, K ) = AKK
                IF( K.LT.N ) THEN
-                  CALL CSSCAL( N-K, ONE / BKK, A( K+1, K ), 1 )
+                  CALL AB_CSSCAL( N-K, ONE / BKK, A( K+1, K ), 1 )
                   CT = -HALF*AKK
-                  CALL CAXPY( N-K, CT, B( K+1, K ), 1, A( K+1, K ), 1 )
-                  CALL CHER2( UPLO, N-K, -CONE, A( K+1, K ), 1,
+                  CALL AB_CAXPY( N-K, CT, B( K+1, K ), 1, A( K+1, K ), 1
+     $ )
+                  CALL AB_CHER2( UPLO, N-K, -CONE, A( K+1, K ), 1,
      $                        B( K+1, K ), 1, A( K+1, K+1 ), LDA )
-                  CALL CAXPY( N-K, CT, B( K+1, K ), 1, A( K+1, K ), 1 )
-                  CALL CTRSV( UPLO, 'No transpose', 'Non-unit', N-K,
+                  CALL AB_CAXPY( N-K, CT, B( K+1, K ), 1, A( K+1, K ), 1
+     $ )
+                  CALL AB_CTRSV( UPLO, 'No transpose', 'Non-unit', N-K,
      $                        B( K+1, K+1 ), LDB, A( K+1, K ), 1 )
                END IF
    20       CONTINUE
@@ -253,14 +257,15 @@
 *
                AKK = A( K, K )
                BKK = B( K, K )
-               CALL CTRMV( UPLO, 'No transpose', 'Non-unit', K-1, B,
+               CALL AB_CTRMV( UPLO, 'No transpose', 'Non-unit', K-1, B,
      $                     LDB, A( 1, K ), 1 )
                CT = HALF*AKK
-               CALL CAXPY( K-1, CT, B( 1, K ), 1, A( 1, K ), 1 )
-               CALL CHER2( UPLO, K-1, CONE, A( 1, K ), 1, B( 1, K ), 1,
+               CALL AB_CAXPY( K-1, CT, B( 1, K ), 1, A( 1, K ), 1 )
+               CALL AB_CHER2( UPLO, K-1, CONE, A( 1, K ), 1, B( 1, K ), 
+     $1,
      $                     A, LDA )
-               CALL CAXPY( K-1, CT, B( 1, K ), 1, A( 1, K ), 1 )
-               CALL CSSCAL( K-1, BKK, A( 1, K ), 1 )
+               CALL AB_CAXPY( K-1, CT, B( 1, K ), 1, A( 1, K ), 1 )
+               CALL AB_CSSCAL( K-1, BKK, A( 1, K ), 1 )
                A( K, K ) = AKK*BKK**2
    30       CONTINUE
          ELSE
@@ -273,24 +278,26 @@
 *
                AKK = A( K, K )
                BKK = B( K, K )
-               CALL CLACGV( K-1, A( K, 1 ), LDA )
-               CALL CTRMV( UPLO, 'Conjugate transpose', 'Non-unit', K-1,
+               CALL AB_CLACGV( K-1, A( K, 1 ), LDA )
+               CALL AB_CTRMV( UPLO, 'Conjugate transpose', 'Non-unit', K
+     $-1,
      $                     B, LDB, A( K, 1 ), LDA )
                CT = HALF*AKK
-               CALL CLACGV( K-1, B( K, 1 ), LDB )
-               CALL CAXPY( K-1, CT, B( K, 1 ), LDB, A( K, 1 ), LDA )
-               CALL CHER2( UPLO, K-1, CONE, A( K, 1 ), LDA, B( K, 1 ),
+               CALL AB_CLACGV( K-1, B( K, 1 ), LDB )
+               CALL AB_CAXPY( K-1, CT, B( K, 1 ), LDB, A( K, 1 ), LDA )
+               CALL AB_CHER2( UPLO, K-1, CONE, A( K, 1 ), LDA, B( K, 1 )
+     $,
      $                     LDB, A, LDA )
-               CALL CAXPY( K-1, CT, B( K, 1 ), LDB, A( K, 1 ), LDA )
-               CALL CLACGV( K-1, B( K, 1 ), LDB )
-               CALL CSSCAL( K-1, BKK, A( K, 1 ), LDA )
-               CALL CLACGV( K-1, A( K, 1 ), LDA )
+               CALL AB_CAXPY( K-1, CT, B( K, 1 ), LDB, A( K, 1 ), LDA )
+               CALL AB_CLACGV( K-1, B( K, 1 ), LDB )
+               CALL AB_CSSCAL( K-1, BKK, A( K, 1 ), LDA )
+               CALL AB_CLACGV( K-1, A( K, 1 ), LDA )
                A( K, K ) = AKK*BKK**2
    40       CONTINUE
          END IF
       END IF
       RETURN
 *
-*     End of CHEGS2
+*     End of AB_CHEGS2
 *
       END

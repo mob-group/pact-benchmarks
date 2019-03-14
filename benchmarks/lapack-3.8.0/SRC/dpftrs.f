@@ -1,4 +1,4 @@
-*> \brief \b DPFTRS
+*> \brief \b AB_DPFTRS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DPFTRS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dpftrs.f">
+*> Download AB_DPFTRS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DPFTRS.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dpftrs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DPFTRS.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpftrs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DPFTRS.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DPFTRS( TRANSR, UPLO, N, NRHS, A, B, LDB, INFO )
+*       SUBROUTINE AB_DPFTRS( TRANSR, UPLO, N, NRHS, A, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          TRANSR, UPLO
@@ -34,9 +34,9 @@
 *>
 *> \verbatim
 *>
-*> DPFTRS solves a system of linear equations A*X = B with a symmetric
+*> AB_DPFTRS solves a system of linear equations A*X = B with a symmetric
 *> positive definite matrix A using the Cholesky factorization
-*> A = U**T*U or A = L*L**T computed by DPFTRF.
+*> A = U**T*U or A = L*L**T computed by AB_DPFTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -73,7 +73,7 @@
 *> \verbatim
 *>          A is DOUBLE PRECISION array, dimension ( N*(N+1)/2 ).
 *>          The triangular factor U or L from the Cholesky factorization
-*>          of RFP A = U**T*U or RFP A = L*L**T, as computed by DPFTRF.
+*>          of RFP A = U**T*U or RFP A = L*L**T, as computed by AB_DPFTRF.
 *>          See note below for more details about RFP A.
 *> \endverbatim
 *>
@@ -197,7 +197,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DPFTRS( TRANSR, UPLO, N, NRHS, A, B, LDB, INFO )
+      SUBROUTINE AB_DPFTRS( TRANSR, UPLO, N, NRHS, A, B, LDB, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -222,11 +222,11 @@
       LOGICAL            LOWER, NORMALTRANSR
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, DTFSM
+      EXTERNAL           AB_XERBLA, AB_DTFSM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -236,11 +236,11 @@
 *     Test the input parameters.
 *
       INFO = 0
-      NORMALTRANSR = LSAME( TRANSR, 'N' )
-      LOWER = LSAME( UPLO, 'L' )
-      IF( .NOT.NORMALTRANSR .AND. .NOT.LSAME( TRANSR, 'T' ) ) THEN
+      NORMALTRANSR = AB_LSAME( TRANSR, 'N' )
+      LOWER = AB_LSAME( UPLO, 'L' )
+      IF( .NOT.NORMALTRANSR .AND. .NOT.AB_LSAME( TRANSR, 'T' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LOWER .AND. .NOT.LSAME( UPLO, 'U' ) ) THEN
+      ELSE IF( .NOT.LOWER .AND. .NOT.AB_LSAME( UPLO, 'U' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -250,7 +250,7 @@
          INFO = -7
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DPFTRS', -INFO )
+         CALL AB_XERBLA( 'AB_DPFTRS', -INFO )
          RETURN
       END IF
 *
@@ -262,19 +262,19 @@
 *     start execution: there are two triangular solves
 *
       IF( LOWER ) THEN
-         CALL DTFSM( TRANSR, 'L', UPLO, 'N', 'N', N, NRHS, ONE, A, B,
+         CALL AB_DTFSM( TRANSR, 'L', UPLO, 'N', 'N', N, NRHS, ONE, A, B,
      $               LDB )
-         CALL DTFSM( TRANSR, 'L', UPLO, 'T', 'N', N, NRHS, ONE, A, B,
+         CALL AB_DTFSM( TRANSR, 'L', UPLO, 'T', 'N', N, NRHS, ONE, A, B,
      $               LDB )
       ELSE
-         CALL DTFSM( TRANSR, 'L', UPLO, 'T', 'N', N, NRHS, ONE, A, B,
+         CALL AB_DTFSM( TRANSR, 'L', UPLO, 'T', 'N', N, NRHS, ONE, A, B,
      $               LDB )
-         CALL DTFSM( TRANSR, 'L', UPLO, 'N', 'N', N, NRHS, ONE, A, B,
+         CALL AB_DTFSM( TRANSR, 'L', UPLO, 'N', 'N', N, NRHS, ONE, A, B,
      $               LDB )
       END IF
 *
       RETURN
 *
-*     End of DPFTRS
+*     End of AB_DPFTRS
 *
       END

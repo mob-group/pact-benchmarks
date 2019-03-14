@@ -1,4 +1,4 @@
-*> \brief \b ZPOEQU
+*> \brief \b AB_ZPOEQU
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZPOEQU + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zpoequ.f">
+*> Download AB_ZPOEQU + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZPOEQU.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zpoequ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZPOEQU.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpoequ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZPOEQU.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZPOEQU( N, A, LDA, S, SCOND, AMAX, INFO )
+*       SUBROUTINE AB_ZPOEQU( N, A, LDA, S, SCOND, AMAX, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, N
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> ZPOEQU computes row and column scalings intended to equilibrate a
+*> AB_ZPOEQU computes row and column scalings intended to equilibrate a
 *> Hermitian positive definite matrix A and reduce its condition number
 *> (with respect to the two-norm).  S contains the scale factors,
 *> S(i) = 1/sqrt(A(i,i)), chosen so that the scaled matrix B with
@@ -111,7 +111,7 @@
 *> \ingroup complex16POcomputational
 *
 *  =====================================================================
-      SUBROUTINE ZPOEQU( N, A, LDA, S, SCOND, AMAX, INFO )
+      SUBROUTINE AB_ZPOEQU( N, A, LDA, S, SCOND, AMAX, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -138,7 +138,7 @@
       DOUBLE PRECISION   SMIN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA
+      EXTERNAL           AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX, MIN, SQRT
@@ -154,7 +154,7 @@
          INFO = -3
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZPOEQU', -INFO )
+         CALL AB_XERBLA( 'AB_ZPOEQU', -INFO )
          RETURN
       END IF
 *
@@ -202,6 +202,6 @@
       END IF
       RETURN
 *
-*     End of ZPOEQU
+*     End of AB_ZPOEQU
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b DGBEQU
+*> \brief \b AB_DGBEQU
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DGBEQU + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgbequ.f">
+*> Download AB_DGBEQU + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGBEQU.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgbequ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGBEQU.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgbequ.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGBEQU.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGBEQU( M, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND,
+*       SUBROUTINE AB_DGBEQU( M, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND,
 *                          AMAX, INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> DGBEQU computes row and column scalings intended to equilibrate an
+*> AB_DGBEQU computes row and column scalings intended to equilibrate an
 *> M-by-N band matrix A and reduce its condition number.  R returns the
 *> row scale factors and C the column scale factors, chosen to try to
 *> make the largest element in each row and column of the matrix B with
@@ -150,7 +150,8 @@
 *> \ingroup doubleGBcomputational
 *
 *  =====================================================================
-      SUBROUTINE DGBEQU( M, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND,
+      SUBROUTINE AB_DGBEQU( M, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND
+     $,
      $                   AMAX, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -181,7 +182,7 @@
       EXTERNAL           DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA
+      EXTERNAL           AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -203,7 +204,7 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DGBEQU', -INFO )
+         CALL AB_XERBLA( 'AB_DGBEQU', -INFO )
          RETURN
       END IF
 *
@@ -319,6 +320,6 @@
 *
       RETURN
 *
-*     End of DGBEQU
+*     End of AB_DGBEQU
 *
       END

@@ -1,4 +1,4 @@
-*> \brief <b> ZGBSV computes the solution to system of linear equations A * X = B for GB matrices</b> (simple driver)
+*> \brief <b> AB_ZGBSV computes the solution to system of linear equations A * X = B for GB matrices</b> (simple driver)
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZGBSV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgbsv.f">
+*> Download AB_ZGBSV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZGBSV.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgbsv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZGBSV.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgbsv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZGBSV.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZGBSV( N, KL, KU, NRHS, AB, LDAB, IPIV, B, LDB, INFO )
+*       SUBROUTINE AB_ZGBSV( N, KL, KU, NRHS, AB, LDAB, IPIV, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, KL, KU, LDAB, LDB, N, NRHS
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> ZGBSV computes the solution to a complex system of linear equations
+*> AB_ZGBSV computes the solution to a complex system of linear equations
 *> A * X = B, where A is a band matrix of order N with KL subdiagonals
 *> and KU superdiagonals, and X and B are N-by-NRHS matrices.
 *>
@@ -160,7 +160,8 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZGBSV( N, KL, KU, NRHS, AB, LDAB, IPIV, B, LDB, INFO )
+      SUBROUTINE AB_ZGBSV( N, KL, KU, NRHS, AB, LDAB, IPIV, B, LDB, INFO
+     $ )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -178,7 +179,7 @@
 *  =====================================================================
 *
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZGBTRF, ZGBTRS
+      EXTERNAL           AB_XERBLA, AB_ZGBTRF, AB_ZGBTRS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -202,22 +203,23 @@
          INFO = -9
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZGBSV ', -INFO )
+         CALL AB_XERBLA( 'AB_ZGBSV ', -INFO )
          RETURN
       END IF
 *
 *     Compute the LU factorization of the band matrix A.
 *
-      CALL ZGBTRF( N, N, KL, KU, AB, LDAB, IPIV, INFO )
+      CALL AB_ZGBTRF( N, N, KL, KU, AB, LDAB, IPIV, INFO )
       IF( INFO.EQ.0 ) THEN
 *
 *        Solve the system A*X = B, overwriting B with X.
 *
-         CALL ZGBTRS( 'No transpose', N, KL, KU, NRHS, AB, LDAB, IPIV,
+         CALL AB_ZGBTRS( 'No transpose', N, KL, KU, NRHS, AB, LDAB, IPIV
+     $,
      $                B, LDB, INFO )
       END IF
       RETURN
 *
-*     End of ZGBSV
+*     End of AB_ZGBSV
 *
       END

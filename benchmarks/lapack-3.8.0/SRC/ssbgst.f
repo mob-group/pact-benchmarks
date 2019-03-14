@@ -1,4 +1,4 @@
-*> \brief \b SSBGST
+*> \brief \b AB_SSBGST
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SSBGST + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssbgst.f">
+*> Download AB_SSBGST + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SSBGST.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssbgst.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SSBGST.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssbgst.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SSBGST.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SSBGST( VECT, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, X,
+*       SUBROUTINE AB_SSBGST( VECT, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, X,
 *                          LDX, WORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,11 +36,11 @@
 *>
 *> \verbatim
 *>
-*> SSBGST reduces a real symmetric-definite banded generalized
+*> AB_SSBGST reduces a real symmetric-definite banded generalized
 *> eigenproblem  A*x = lambda*B*x  to standard form  C*y = lambda*y,
 *> such that C has the same bandwidth as A.
 *>
-*> B must have been previously factorized as S**T*S by SPBSTF, using a
+*> B must have been previously factorized as S**T*S by AB_SPBSTF, using a
 *> split Cholesky factorization. A is overwritten by C = X**T*A*X, where
 *> X = S**(-1)*Q and Q is an orthogonal matrix chosen to preserve the
 *> bandwidth of A.
@@ -107,7 +107,7 @@
 *> \verbatim
 *>          BB is REAL array, dimension (LDBB,N)
 *>          The banded factor S from the split Cholesky factorization of
-*>          B, as returned by SPBSTF, stored in the first KB+1 rows of
+*>          B, as returned by AB_SPBSTF, stored in the first KB+1 rows of
 *>          the array.
 *> \endverbatim
 *>
@@ -156,7 +156,8 @@
 *> \ingroup realOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE SSBGST( VECT, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, X,
+      SUBROUTINE AB_SSBGST( VECT, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, X
+     $,
      $                   LDX, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -186,12 +187,13 @@
       REAL               BII, RA, RA1, T
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGER, SLAR2V, SLARGV, SLARTG, SLARTV, SLASET,
-     $                   SROT, SSCAL, XERBLA
+      EXTERNAL           AB_SGER, AB_SLAR2V, AB_SLARGV, AB_SLARTG, AB_SL
+     $ARTV, AB_SLASET,
+     $                   AB_SROT, AB_SSCAL, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -200,14 +202,14 @@
 *
 *     Test the input parameters
 *
-      WANTX = LSAME( VECT, 'V' )
-      UPPER = LSAME( UPLO, 'U' )
+      WANTX = AB_LSAME( VECT, 'V' )
+      UPPER = AB_LSAME( UPLO, 'U' )
       KA1 = KA + 1
       KB1 = KB + 1
       INFO = 0
-      IF( .NOT.WANTX .AND. .NOT.LSAME( VECT, 'N' ) ) THEN
+      IF( .NOT.WANTX .AND. .NOT.AB_LSAME( VECT, 'N' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      ELSE IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -223,7 +225,7 @@
          INFO = -11
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SSBGST', -INFO )
+         CALL AB_XERBLA( 'AB_SSBGST', -INFO )
          RETURN
       END IF
 *
@@ -237,10 +239,10 @@
 *     Initialize X to the unit matrix, if needed
 *
       IF( WANTX )
-     $   CALL SLASET( 'Full', N, N, ZERO, ONE, X, LDX )
+     $   CALL AB_SLASET( 'Full', N, N, ZERO, ONE, X, LDX )
 *
 *     Set M to the splitting point m. It must be the same value as is
-*     used in SPBSTF. The chosen value allows the arrays WORK and RWORK
+*     used in AB_SPBSTF. The chosen value allows the arrays WORK and RWORK
 *     to be of dimension (N).
 *
       M = ( N+KB ) / 2
@@ -368,9 +370,9 @@
 *
 *              post-multiply X by inv(S(i))
 *
-               CALL SSCAL( N-M, ONE / BII, X( M+1, I ), 1 )
+               CALL AB_SSCAL( N-M, ONE / BII, X( M+1, I ), 1 )
                IF( KBT.GT.0 )
-     $            CALL SGER( N-M, KBT, -ONE, X( M+1, I ), 1,
+     $            CALL AB_SGER( N-M, KBT, -ONE, X( M+1, I ), 1,
      $                       BB( KB1-KBT, I ), 1, X( M+1, I-KBT ), LDX )
             END IF
 *
@@ -393,7 +395,7 @@
 *
 *                 generate rotation to annihilate a(i,i-k+ka+1)
 *
-                  CALL SLARTG( AB( K+1, I-K+KA ), RA1,
+                  CALL AB_SLARTG( AB( K+1, I-K+KA ), RA1,
      $                         WORK( N+I-K+KA-M ), WORK( I-K+KA-M ),
      $                         RA )
 *
@@ -430,14 +432,15 @@
 *           have been created outside the band
 *
             IF( NRT.GT.0 )
-     $         CALL SLARGV( NRT, AB( 1, J2T ), INCA, WORK( J2T-M ), KA1,
+     $         CALL AB_SLARGV( NRT, AB( 1, J2T ), INCA, WORK( J2T-M ), K
+     $A1,
      $                      WORK( N+J2T-M ), KA1 )
             IF( NR.GT.0 ) THEN
 *
 *              apply rotations in 1st set from the right
 *
                DO 100 L = 1, KA - 1
-                  CALL SLARTV( NR, AB( KA1-L, J2 ), INCA,
+                  CALL AB_SLARTV( NR, AB( KA1-L, J2 ), INCA,
      $                         AB( KA-L, J2+1 ), INCA, WORK( N+J2-M ),
      $                         WORK( J2-M ), KA1 )
   100          CONTINUE
@@ -445,7 +448,7 @@
 *              apply rotations in 1st set from both sides to diagonal
 *              blocks
 *
-               CALL SLAR2V( NR, AB( KA1, J2 ), AB( KA1, J2+1 ),
+               CALL AB_SLAR2V( NR, AB( KA1, J2 ), AB( KA1, J2+1 ),
      $                      AB( KA, J2+1 ), INCA, WORK( N+J2-M ),
      $                      WORK( J2-M ), KA1 )
 *
@@ -456,7 +459,7 @@
             DO 110 L = KA - 1, KB - K + 1, -1
                NRT = ( N-J2+L ) / KA1
                IF( NRT.GT.0 )
-     $            CALL SLARTV( NRT, AB( L, J2+KA1-L ), INCA,
+     $            CALL AB_SLARTV( NRT, AB( L, J2+KA1-L ), INCA,
      $                         AB( L+1, J2+KA1-L ), INCA,
      $                         WORK( N+J2-M ), WORK( J2-M ), KA1 )
   110       CONTINUE
@@ -466,7 +469,7 @@
 *              post-multiply X by product of rotations in 1st set
 *
                DO 120 J = J2, J1, KA1
-                  CALL SROT( N-M, X( M+1, J ), 1, X( M+1, J+1 ), 1,
+                  CALL AB_SROT( N-M, X( M+1, J ), 1, X( M+1, J+1 ), 1,
      $                       WORK( N+J-M ), WORK( J-M ) )
   120          CONTINUE
             END IF
@@ -494,7 +497,7 @@
             DO 140 L = KB - K, 1, -1
                NRT = ( N-J2+KA+L ) / KA1
                IF( NRT.GT.0 )
-     $            CALL SLARTV( NRT, AB( L, J2-L+1 ), INCA,
+     $            CALL AB_SLARTV( NRT, AB( L, J2-L+1 ), INCA,
      $                         AB( L+1, J2-L+1 ), INCA, WORK( N+J2-KA ),
      $                         WORK( J2-KA ), KA1 )
   140       CONTINUE
@@ -527,13 +530,13 @@
 *              generate rotations in 2nd set to annihilate elements
 *              which have been created outside the band
 *
-               CALL SLARGV( NR, AB( 1, J2 ), INCA, WORK( J2 ), KA1,
+               CALL AB_SLARGV( NR, AB( 1, J2 ), INCA, WORK( J2 ), KA1,
      $                      WORK( N+J2 ), KA1 )
 *
 *              apply rotations in 2nd set from the right
 *
                DO 180 L = 1, KA - 1
-                  CALL SLARTV( NR, AB( KA1-L, J2 ), INCA,
+                  CALL AB_SLARTV( NR, AB( KA1-L, J2 ), INCA,
      $                         AB( KA-L, J2+1 ), INCA, WORK( N+J2 ),
      $                         WORK( J2 ), KA1 )
   180          CONTINUE
@@ -541,7 +544,7 @@
 *              apply rotations in 2nd set from both sides to diagonal
 *              blocks
 *
-               CALL SLAR2V( NR, AB( KA1, J2 ), AB( KA1, J2+1 ),
+               CALL AB_SLAR2V( NR, AB( KA1, J2 ), AB( KA1, J2+1 ),
      $                      AB( KA, J2+1 ), INCA, WORK( N+J2 ),
      $                      WORK( J2 ), KA1 )
 *
@@ -552,7 +555,7 @@
             DO 190 L = KA - 1, KB - K + 1, -1
                NRT = ( N-J2+L ) / KA1
                IF( NRT.GT.0 )
-     $            CALL SLARTV( NRT, AB( L, J2+KA1-L ), INCA,
+     $            CALL AB_SLARTV( NRT, AB( L, J2+KA1-L ), INCA,
      $                         AB( L+1, J2+KA1-L ), INCA, WORK( N+J2 ),
      $                         WORK( J2 ), KA1 )
   190       CONTINUE
@@ -562,7 +565,7 @@
 *              post-multiply X by product of rotations in 2nd set
 *
                DO 200 J = J2, J1, KA1
-                  CALL SROT( N-M, X( M+1, J ), 1, X( M+1, J+1 ), 1,
+                  CALL AB_SROT( N-M, X( M+1, J ), 1, X( M+1, J+1 ), 1,
      $                       WORK( N+J ), WORK( J ) )
   200          CONTINUE
             END IF
@@ -576,7 +579,7 @@
             DO 220 L = KB - K, 1, -1
                NRT = ( N-J2+L ) / KA1
                IF( NRT.GT.0 )
-     $            CALL SLARTV( NRT, AB( L, J2+KA1-L ), INCA,
+     $            CALL AB_SLARTV( NRT, AB( L, J2+KA1-L ), INCA,
      $                         AB( L+1, J2+KA1-L ), INCA,
      $                         WORK( N+J2-M ), WORK( J2-M ), KA1 )
   220       CONTINUE
@@ -628,9 +631,9 @@
 *
 *              post-multiply X by inv(S(i))
 *
-               CALL SSCAL( N-M, ONE / BII, X( M+1, I ), 1 )
+               CALL AB_SSCAL( N-M, ONE / BII, X( M+1, I ), 1 )
                IF( KBT.GT.0 )
-     $            CALL SGER( N-M, KBT, -ONE, X( M+1, I ), 1,
+     $            CALL AB_SGER( N-M, KBT, -ONE, X( M+1, I ), 1,
      $                       BB( KBT+1, I-KBT ), LDBB-1,
      $                       X( M+1, I-KBT ), LDX )
             END IF
@@ -654,7 +657,8 @@
 *
 *                 generate rotation to annihilate a(i-k+ka+1,i)
 *
-                  CALL SLARTG( AB( KA1-K, I ), RA1, WORK( N+I-K+KA-M ),
+                  CALL AB_SLARTG( AB( KA1-K, I ), RA1, WORK( N+I-K+KA-M 
+     $),
      $                         WORK( I-K+KA-M ), RA )
 *
 *                 create nonzero element a(i-k+ka+1,i-k) outside the
@@ -690,14 +694,15 @@
 *           have been created outside the band
 *
             IF( NRT.GT.0 )
-     $         CALL SLARGV( NRT, AB( KA1, J2T-KA ), INCA, WORK( J2T-M ),
+     $         CALL AB_SLARGV( NRT, AB( KA1, J2T-KA ), INCA, WORK( J2T-M
+     $ ),
      $                      KA1, WORK( N+J2T-M ), KA1 )
             IF( NR.GT.0 ) THEN
 *
 *              apply rotations in 1st set from the left
 *
                DO 330 L = 1, KA - 1
-                  CALL SLARTV( NR, AB( L+1, J2-L ), INCA,
+                  CALL AB_SLARTV( NR, AB( L+1, J2-L ), INCA,
      $                         AB( L+2, J2-L ), INCA, WORK( N+J2-M ),
      $                         WORK( J2-M ), KA1 )
   330          CONTINUE
@@ -705,7 +710,8 @@
 *              apply rotations in 1st set from both sides to diagonal
 *              blocks
 *
-               CALL SLAR2V( NR, AB( 1, J2 ), AB( 1, J2+1 ), AB( 2, J2 ),
+               CALL AB_SLAR2V( NR, AB( 1, J2 ), AB( 1, J2+1 ), AB( 2, J2
+     $ ),
      $                      INCA, WORK( N+J2-M ), WORK( J2-M ), KA1 )
 *
             END IF
@@ -715,7 +721,7 @@
             DO 340 L = KA - 1, KB - K + 1, -1
                NRT = ( N-J2+L ) / KA1
                IF( NRT.GT.0 )
-     $            CALL SLARTV( NRT, AB( KA1-L+1, J2 ), INCA,
+     $            CALL AB_SLARTV( NRT, AB( KA1-L+1, J2 ), INCA,
      $                         AB( KA1-L, J2+1 ), INCA, WORK( N+J2-M ),
      $                         WORK( J2-M ), KA1 )
   340       CONTINUE
@@ -725,7 +731,7 @@
 *              post-multiply X by product of rotations in 1st set
 *
                DO 350 J = J2, J1, KA1
-                  CALL SROT( N-M, X( M+1, J ), 1, X( M+1, J+1 ), 1,
+                  CALL AB_SROT( N-M, X( M+1, J ), 1, X( M+1, J+1 ), 1,
      $                       WORK( N+J-M ), WORK( J-M ) )
   350          CONTINUE
             END IF
@@ -753,7 +759,7 @@
             DO 370 L = KB - K, 1, -1
                NRT = ( N-J2+KA+L ) / KA1
                IF( NRT.GT.0 )
-     $            CALL SLARTV( NRT, AB( KA1-L+1, J2-KA ), INCA,
+     $            CALL AB_SLARTV( NRT, AB( KA1-L+1, J2-KA ), INCA,
      $                         AB( KA1-L, J2-KA+1 ), INCA,
      $                         WORK( N+J2-KA ), WORK( J2-KA ), KA1 )
   370       CONTINUE
@@ -786,13 +792,14 @@
 *              generate rotations in 2nd set to annihilate elements
 *              which have been created outside the band
 *
-               CALL SLARGV( NR, AB( KA1, J2-KA ), INCA, WORK( J2 ), KA1,
+               CALL AB_SLARGV( NR, AB( KA1, J2-KA ), INCA, WORK( J2 ), K
+     $A1,
      $                      WORK( N+J2 ), KA1 )
 *
 *              apply rotations in 2nd set from the left
 *
                DO 410 L = 1, KA - 1
-                  CALL SLARTV( NR, AB( L+1, J2-L ), INCA,
+                  CALL AB_SLARTV( NR, AB( L+1, J2-L ), INCA,
      $                         AB( L+2, J2-L ), INCA, WORK( N+J2 ),
      $                         WORK( J2 ), KA1 )
   410          CONTINUE
@@ -800,7 +807,8 @@
 *              apply rotations in 2nd set from both sides to diagonal
 *              blocks
 *
-               CALL SLAR2V( NR, AB( 1, J2 ), AB( 1, J2+1 ), AB( 2, J2 ),
+               CALL AB_SLAR2V( NR, AB( 1, J2 ), AB( 1, J2+1 ), AB( 2, J2
+     $ ),
      $                      INCA, WORK( N+J2 ), WORK( J2 ), KA1 )
 *
             END IF
@@ -810,7 +818,7 @@
             DO 420 L = KA - 1, KB - K + 1, -1
                NRT = ( N-J2+L ) / KA1
                IF( NRT.GT.0 )
-     $            CALL SLARTV( NRT, AB( KA1-L+1, J2 ), INCA,
+     $            CALL AB_SLARTV( NRT, AB( KA1-L+1, J2 ), INCA,
      $                         AB( KA1-L, J2+1 ), INCA, WORK( N+J2 ),
      $                         WORK( J2 ), KA1 )
   420       CONTINUE
@@ -820,7 +828,7 @@
 *              post-multiply X by product of rotations in 2nd set
 *
                DO 430 J = J2, J1, KA1
-                  CALL SROT( N-M, X( M+1, J ), 1, X( M+1, J+1 ), 1,
+                  CALL AB_SROT( N-M, X( M+1, J ), 1, X( M+1, J+1 ), 1,
      $                       WORK( N+J ), WORK( J ) )
   430          CONTINUE
             END IF
@@ -834,7 +842,7 @@
             DO 450 L = KB - K, 1, -1
                NRT = ( N-J2+L ) / KA1
                IF( NRT.GT.0 )
-     $            CALL SLARTV( NRT, AB( KA1-L+1, J2 ), INCA,
+     $            CALL AB_SLARTV( NRT, AB( KA1-L+1, J2 ), INCA,
      $                         AB( KA1-L, J2+1 ), INCA, WORK( N+J2-M ),
      $                         WORK( J2-M ), KA1 )
   450       CONTINUE
@@ -937,9 +945,10 @@
 *
 *              post-multiply X by inv(S(i))
 *
-               CALL SSCAL( NX, ONE / BII, X( 1, I ), 1 )
+               CALL AB_SSCAL( NX, ONE / BII, X( 1, I ), 1 )
                IF( KBT.GT.0 )
-     $            CALL SGER( NX, KBT, -ONE, X( 1, I ), 1, BB( KB, I+1 ),
+     $            CALL AB_SGER( NX, KBT, -ONE, X( 1, I ), 1, BB( KB, I+1
+     $ ),
      $                       LDBB-1, X( 1, I+1 ), LDX )
             END IF
 *
@@ -961,7 +970,7 @@
 *
 *                 generate rotation to annihilate a(i+k-ka-1,i)
 *
-                  CALL SLARTG( AB( K+1, I ), RA1, WORK( N+I+K-KA ),
+                  CALL AB_SLARTG( AB( K+1, I ), RA1, WORK( N+I+K-KA ),
      $                         WORK( I+K-KA ), RA )
 *
 *                 create nonzero element a(i+k-ka-1,i+k) outside the
@@ -997,14 +1006,15 @@
 *           have been created outside the band
 *
             IF( NRT.GT.0 )
-     $         CALL SLARGV( NRT, AB( 1, J1+KA ), INCA, WORK( J1 ), KA1,
+     $         CALL AB_SLARGV( NRT, AB( 1, J1+KA ), INCA, WORK( J1 ), KA
+     $1,
      $                      WORK( N+J1 ), KA1 )
             IF( NR.GT.0 ) THEN
 *
 *              apply rotations in 1st set from the left
 *
                DO 580 L = 1, KA - 1
-                  CALL SLARTV( NR, AB( KA1-L, J1+L ), INCA,
+                  CALL AB_SLARTV( NR, AB( KA1-L, J1+L ), INCA,
      $                         AB( KA-L, J1+L ), INCA, WORK( N+J1 ),
      $                         WORK( J1 ), KA1 )
   580          CONTINUE
@@ -1012,7 +1022,7 @@
 *              apply rotations in 1st set from both sides to diagonal
 *              blocks
 *
-               CALL SLAR2V( NR, AB( KA1, J1 ), AB( KA1, J1-1 ),
+               CALL AB_SLAR2V( NR, AB( KA1, J1 ), AB( KA1, J1-1 ),
      $                      AB( KA, J1 ), INCA, WORK( N+J1 ),
      $                      WORK( J1 ), KA1 )
 *
@@ -1024,7 +1034,7 @@
                NRT = ( J2+L-1 ) / KA1
                J1T = J2 - ( NRT-1 )*KA1
                IF( NRT.GT.0 )
-     $            CALL SLARTV( NRT, AB( L, J1T ), INCA,
+     $            CALL AB_SLARTV( NRT, AB( L, J1T ), INCA,
      $                         AB( L+1, J1T-1 ), INCA, WORK( N+J1T ),
      $                         WORK( J1T ), KA1 )
   590       CONTINUE
@@ -1034,7 +1044,7 @@
 *              post-multiply X by product of rotations in 1st set
 *
                DO 600 J = J1, J2, KA1
-                  CALL SROT( NX, X( 1, J ), 1, X( 1, J-1 ), 1,
+                  CALL AB_SROT( NX, X( 1, J ), 1, X( 1, J-1 ), 1,
      $                       WORK( N+J ), WORK( J ) )
   600          CONTINUE
             END IF
@@ -1063,7 +1073,7 @@
                NRT = ( J2+KA+L-1 ) / KA1
                J1T = J2 - ( NRT-1 )*KA1
                IF( NRT.GT.0 )
-     $            CALL SLARTV( NRT, AB( L, J1T+KA ), INCA,
+     $            CALL AB_SLARTV( NRT, AB( L, J1T+KA ), INCA,
      $                         AB( L+1, J1T+KA-1 ), INCA,
      $                         WORK( N+M-KB+J1T+KA ),
      $                         WORK( M-KB+J1T+KA ), KA1 )
@@ -1097,13 +1107,14 @@
 *              generate rotations in 2nd set to annihilate elements
 *              which have been created outside the band
 *
-               CALL SLARGV( NR, AB( 1, J1+KA ), INCA, WORK( M-KB+J1 ),
+               CALL AB_SLARGV( NR, AB( 1, J1+KA ), INCA, WORK( M-KB+J1 )
+     $,
      $                      KA1, WORK( N+M-KB+J1 ), KA1 )
 *
 *              apply rotations in 2nd set from the left
 *
                DO 660 L = 1, KA - 1
-                  CALL SLARTV( NR, AB( KA1-L, J1+L ), INCA,
+                  CALL AB_SLARTV( NR, AB( KA1-L, J1+L ), INCA,
      $                         AB( KA-L, J1+L ), INCA,
      $                         WORK( N+M-KB+J1 ), WORK( M-KB+J1 ), KA1 )
   660          CONTINUE
@@ -1111,7 +1122,7 @@
 *              apply rotations in 2nd set from both sides to diagonal
 *              blocks
 *
-               CALL SLAR2V( NR, AB( KA1, J1 ), AB( KA1, J1-1 ),
+               CALL AB_SLAR2V( NR, AB( KA1, J1 ), AB( KA1, J1-1 ),
      $                      AB( KA, J1 ), INCA, WORK( N+M-KB+J1 ),
      $                      WORK( M-KB+J1 ), KA1 )
 *
@@ -1123,7 +1134,7 @@
                NRT = ( J2+L-1 ) / KA1
                J1T = J2 - ( NRT-1 )*KA1
                IF( NRT.GT.0 )
-     $            CALL SLARTV( NRT, AB( L, J1T ), INCA,
+     $            CALL AB_SLARTV( NRT, AB( L, J1T ), INCA,
      $                         AB( L+1, J1T-1 ), INCA,
      $                         WORK( N+M-KB+J1T ), WORK( M-KB+J1T ),
      $                         KA1 )
@@ -1134,7 +1145,7 @@
 *              post-multiply X by product of rotations in 2nd set
 *
                DO 680 J = J1, J2, KA1
-                  CALL SROT( NX, X( 1, J ), 1, X( 1, J-1 ), 1,
+                  CALL AB_SROT( NX, X( 1, J ), 1, X( 1, J-1 ), 1,
      $                       WORK( N+M-KB+J ), WORK( M-KB+J ) )
   680          CONTINUE
             END IF
@@ -1149,7 +1160,7 @@
                NRT = ( J2+L-1 ) / KA1
                J1T = J2 - ( NRT-1 )*KA1
                IF( NRT.GT.0 )
-     $            CALL SLARTV( NRT, AB( L, J1T ), INCA,
+     $            CALL AB_SLARTV( NRT, AB( L, J1T ), INCA,
      $                         AB( L+1, J1T-1 ), INCA, WORK( N+J1T ),
      $                         WORK( J1T ), KA1 )
   700       CONTINUE
@@ -1201,9 +1212,10 @@
 *
 *              post-multiply X by inv(S(i))
 *
-               CALL SSCAL( NX, ONE / BII, X( 1, I ), 1 )
+               CALL AB_SSCAL( NX, ONE / BII, X( 1, I ), 1 )
                IF( KBT.GT.0 )
-     $            CALL SGER( NX, KBT, -ONE, X( 1, I ), 1, BB( 2, I ), 1,
+     $            CALL AB_SGER( NX, KBT, -ONE, X( 1, I ), 1, BB( 2, I ),
+     $ 1,
      $                       X( 1, I+1 ), LDX )
             END IF
 *
@@ -1225,7 +1237,7 @@
 *
 *                 generate rotation to annihilate a(i,i+k-ka-1)
 *
-                  CALL SLARTG( AB( KA1-K, I+K-KA ), RA1,
+                  CALL AB_SLARTG( AB( KA1-K, I+K-KA ), RA1,
      $                         WORK( N+I+K-KA ), WORK( I+K-KA ), RA )
 *
 *                 create nonzero element a(i+k,i+k-ka-1) outside the
@@ -1261,21 +1273,23 @@
 *           have been created outside the band
 *
             IF( NRT.GT.0 )
-     $         CALL SLARGV( NRT, AB( KA1, J1 ), INCA, WORK( J1 ), KA1,
+     $         CALL AB_SLARGV( NRT, AB( KA1, J1 ), INCA, WORK( J1 ), KA1
+     $,
      $                      WORK( N+J1 ), KA1 )
             IF( NR.GT.0 ) THEN
 *
 *              apply rotations in 1st set from the right
 *
                DO 810 L = 1, KA - 1
-                  CALL SLARTV( NR, AB( L+1, J1 ), INCA, AB( L+2, J1-1 ),
+                  CALL AB_SLARTV( NR, AB( L+1, J1 ), INCA, AB( L+2, J1-1
+     $ ),
      $                         INCA, WORK( N+J1 ), WORK( J1 ), KA1 )
   810          CONTINUE
 *
 *              apply rotations in 1st set from both sides to diagonal
 *              blocks
 *
-               CALL SLAR2V( NR, AB( 1, J1 ), AB( 1, J1-1 ),
+               CALL AB_SLAR2V( NR, AB( 1, J1 ), AB( 1, J1-1 ),
      $                      AB( 2, J1-1 ), INCA, WORK( N+J1 ),
      $                      WORK( J1 ), KA1 )
 *
@@ -1287,7 +1301,7 @@
                NRT = ( J2+L-1 ) / KA1
                J1T = J2 - ( NRT-1 )*KA1
                IF( NRT.GT.0 )
-     $            CALL SLARTV( NRT, AB( KA1-L+1, J1T-KA1+L ), INCA,
+     $            CALL AB_SLARTV( NRT, AB( KA1-L+1, J1T-KA1+L ), INCA,
      $                         AB( KA1-L, J1T-KA1+L ), INCA,
      $                         WORK( N+J1T ), WORK( J1T ), KA1 )
   820       CONTINUE
@@ -1297,7 +1311,7 @@
 *              post-multiply X by product of rotations in 1st set
 *
                DO 830 J = J1, J2, KA1
-                  CALL SROT( NX, X( 1, J ), 1, X( 1, J-1 ), 1,
+                  CALL AB_SROT( NX, X( 1, J ), 1, X( 1, J-1 ), 1,
      $                       WORK( N+J ), WORK( J ) )
   830          CONTINUE
             END IF
@@ -1326,7 +1340,7 @@
                NRT = ( J2+KA+L-1 ) / KA1
                J1T = J2 - ( NRT-1 )*KA1
                IF( NRT.GT.0 )
-     $            CALL SLARTV( NRT, AB( KA1-L+1, J1T+L-1 ), INCA,
+     $            CALL AB_SLARTV( NRT, AB( KA1-L+1, J1T+L-1 ), INCA,
      $                         AB( KA1-L, J1T+L-1 ), INCA,
      $                         WORK( N+M-KB+J1T+KA ),
      $                         WORK( M-KB+J1T+KA ), KA1 )
@@ -1360,13 +1374,14 @@
 *              generate rotations in 2nd set to annihilate elements
 *              which have been created outside the band
 *
-               CALL SLARGV( NR, AB( KA1, J1 ), INCA, WORK( M-KB+J1 ),
+               CALL AB_SLARGV( NR, AB( KA1, J1 ), INCA, WORK( M-KB+J1 ),
      $                      KA1, WORK( N+M-KB+J1 ), KA1 )
 *
 *              apply rotations in 2nd set from the right
 *
                DO 890 L = 1, KA - 1
-                  CALL SLARTV( NR, AB( L+1, J1 ), INCA, AB( L+2, J1-1 ),
+                  CALL AB_SLARTV( NR, AB( L+1, J1 ), INCA, AB( L+2, J1-1
+     $ ),
      $                         INCA, WORK( N+M-KB+J1 ), WORK( M-KB+J1 ),
      $                         KA1 )
   890          CONTINUE
@@ -1374,7 +1389,7 @@
 *              apply rotations in 2nd set from both sides to diagonal
 *              blocks
 *
-               CALL SLAR2V( NR, AB( 1, J1 ), AB( 1, J1-1 ),
+               CALL AB_SLAR2V( NR, AB( 1, J1 ), AB( 1, J1-1 ),
      $                      AB( 2, J1-1 ), INCA, WORK( N+M-KB+J1 ),
      $                      WORK( M-KB+J1 ), KA1 )
 *
@@ -1386,7 +1401,7 @@
                NRT = ( J2+L-1 ) / KA1
                J1T = J2 - ( NRT-1 )*KA1
                IF( NRT.GT.0 )
-     $            CALL SLARTV( NRT, AB( KA1-L+1, J1T-KA1+L ), INCA,
+     $            CALL AB_SLARTV( NRT, AB( KA1-L+1, J1T-KA1+L ), INCA,
      $                         AB( KA1-L, J1T-KA1+L ), INCA,
      $                         WORK( N+M-KB+J1T ), WORK( M-KB+J1T ),
      $                         KA1 )
@@ -1397,7 +1412,7 @@
 *              post-multiply X by product of rotations in 2nd set
 *
                DO 910 J = J1, J2, KA1
-                  CALL SROT( NX, X( 1, J ), 1, X( 1, J-1 ), 1,
+                  CALL AB_SROT( NX, X( 1, J ), 1, X( 1, J-1 ), 1,
      $                       WORK( N+M-KB+J ), WORK( M-KB+J ) )
   910          CONTINUE
             END IF
@@ -1412,7 +1427,7 @@
                NRT = ( J2+L-1 ) / KA1
                J1T = J2 - ( NRT-1 )*KA1
                IF( NRT.GT.0 )
-     $            CALL SLARTV( NRT, AB( KA1-L+1, J1T-KA1+L ), INCA,
+     $            CALL AB_SLARTV( NRT, AB( KA1-L+1, J1T-KA1+L ), INCA,
      $                         AB( KA1-L, J1T-KA1+L ), INCA,
      $                         WORK( N+J1T ), WORK( J1T ), KA1 )
   930       CONTINUE
@@ -1429,6 +1444,6 @@
 *
       GO TO 490
 *
-*     End of SSBGST
+*     End of AB_SSBGST
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b ZHPR2
+*> \brief \b AB_ZHPR2
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZHPR2(UPLO,N,ALPHA,X,INCX,Y,INCY,AP)
+*       SUBROUTINE AB_ZHPR2(UPLO,N,ALPHA,X,INCX,Y,INCY,AP)
 *
 *       .. Scalar Arguments ..
 *       COMPLEX*16 ALPHA
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> ZHPR2  performs the hermitian rank 2 operation
+*> AB_ZHPR2  performs the hermitian rank 2 operation
 *>
 *>    A := alpha*x*y**H + conjg( alpha )*y*x**H + A,
 *>
@@ -143,7 +143,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZHPR2(UPLO,N,ALPHA,X,INCX,Y,INCY,AP)
+      SUBROUTINE AB_ZHPR2(UPLO,N,ALPHA,X,INCX,Y,INCY,AP)
 *
 *  -- Reference BLAS level2 routine (version 3.7.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -170,11 +170,11 @@
       INTEGER I,INFO,IX,IY,J,JX,JY,K,KK,KX,KY
 *     ..
 *     .. External Functions ..
-      LOGICAL LSAME
-      EXTERNAL LSAME
+      LOGICAL AB_LSAME
+      EXTERNAL AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL XERBLA
+      EXTERNAL AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC DBLE,DCONJG
@@ -183,7 +183,7 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
+      IF (.NOT.AB_LSAME(UPLO,'U') .AND. .NOT.AB_LSAME(UPLO,'L')) THEN
           INFO = 1
       ELSE IF (N.LT.0) THEN
           INFO = 2
@@ -193,7 +193,7 @@
           INFO = 7
       END IF
       IF (INFO.NE.0) THEN
-          CALL XERBLA('ZHPR2 ',INFO)
+          CALL AB_XERBLA('AB_ZHPR2 ',INFO)
           RETURN
       END IF
 *
@@ -223,7 +223,7 @@
 *     are accessed sequentially with one pass through AP.
 *
       KK = 1
-      IF (LSAME(UPLO,'U')) THEN
+      IF (AB_LSAME(UPLO,'U')) THEN
 *
 *        Form  A  when upper triangle is stored in AP.
 *
@@ -313,6 +313,6 @@
 *
       RETURN
 *
-*     End of ZHPR2 .
+*     End of AB_ZHPR2 .
 *
       END

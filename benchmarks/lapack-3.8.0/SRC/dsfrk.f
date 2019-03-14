@@ -1,4 +1,4 @@
-*> \brief \b DSFRK performs a symmetric rank-k operation for matrix in RFP format.
+*> \brief \b AB_DSFRK performs a symmetric rank-k operation for matrix in RFP format.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DSFRK + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsfrk.f">
+*> Download AB_DSFRK + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DSFRK.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsfrk.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DSFRK.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsfrk.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DSFRK.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DSFRK( TRANSR, UPLO, TRANS, N, K, ALPHA, A, LDA, BETA,
+*       SUBROUTINE AB_DSFRK( TRANSR, UPLO, TRANS, N, K, ALPHA, A, LDA, BETA,
 *                         C )
 *
 *       .. Scalar Arguments ..
@@ -38,7 +38,7 @@
 *>
 *> Level 3 BLAS like routine for C in RFP Format.
 *>
-*> DSFRK performs one of the symmetric rank--k operations
+*> AB_DSFRK performs one of the symmetric rank--k operations
 *>
 *>    C := alpha*A*A**T + beta*C,
 *>
@@ -163,7 +163,8 @@
 *> \ingroup doubleOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE DSFRK( TRANSR, UPLO, TRANS, N, K, ALPHA, A, LDA, BETA,
+      SUBROUTINE AB_DSFRK( TRANSR, UPLO, TRANS, N, K, ALPHA, A, LDA, BET
+     $A,
      $                  C )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -192,11 +193,11 @@
       INTEGER            INFO, NROWA, J, NK, N1, N2
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, DGEMM, DSYRK
+      EXTERNAL           AB_XERBLA, AB_DGEMM, AB_DSYRK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -206,9 +207,9 @@
 *     Test the input parameters.
 *
       INFO = 0
-      NORMALTRANSR = LSAME( TRANSR, 'N' )
-      LOWER = LSAME( UPLO, 'L' )
-      NOTRANS = LSAME( TRANS, 'N' )
+      NORMALTRANSR = AB_LSAME( TRANSR, 'N' )
+      LOWER = AB_LSAME( UPLO, 'L' )
+      NOTRANS = AB_LSAME( TRANS, 'N' )
 *
       IF( NOTRANS ) THEN
          NROWA = N
@@ -216,11 +217,11 @@
          NROWA = K
       END IF
 *
-      IF( .NOT.NORMALTRANSR .AND. .NOT.LSAME( TRANSR, 'T' ) ) THEN
+      IF( .NOT.NORMALTRANSR .AND. .NOT.AB_LSAME( TRANSR, 'T' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LOWER .AND. .NOT.LSAME( UPLO, 'U' ) ) THEN
+      ELSE IF( .NOT.LOWER .AND. .NOT.AB_LSAME( UPLO, 'U' ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.NOTRANS .AND. .NOT.LSAME( TRANS, 'T' ) ) THEN
+      ELSE IF( .NOT.NOTRANS .AND. .NOT.AB_LSAME( TRANS, 'T' ) ) THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
@@ -230,14 +231,14 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DSFRK ', -INFO )
+         CALL AB_XERBLA( 'AB_DSFRK ', -INFO )
          RETURN
       END IF
 *
 *     Quick return if possible.
 *
 *     The quick return case: ((ALPHA.EQ.0).AND.(BETA.NE.ZERO)) is not
-*     done (it is in DSYRK for example) and left in the general case.
+*     done (it is in AB_DSYRK for example) and left in the general case.
 *
       IF( ( N.EQ.0 ) .OR. ( ( ( ALPHA.EQ.ZERO ) .OR. ( K.EQ.0 ) ) .AND.
      $    ( BETA.EQ.ONE ) ) )RETURN
@@ -283,22 +284,26 @@
 *
 *                 N is odd, TRANSR = 'N', UPLO = 'L', and TRANS = 'N'
 *
-                  CALL DSYRK( 'L', 'N', N1, K, ALPHA, A( 1, 1 ), LDA,
+                  CALL AB_DSYRK( 'L', 'N', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( 1 ), N )
-                  CALL DSYRK( 'U', 'N', N2, K, ALPHA, A( N1+1, 1 ), LDA,
+                  CALL AB_DSYRK( 'U', 'N', N2, K, ALPHA, A( N1+1, 1 ), L
+     $DA,
      $                        BETA, C( N+1 ), N )
-                  CALL DGEMM( 'N', 'T', N2, N1, K, ALPHA, A( N1+1, 1 ),
+                  CALL AB_DGEMM( 'N', 'T', N2, N1, K, ALPHA, A( N1+1, 1 
+     $),
      $                        LDA, A( 1, 1 ), LDA, BETA, C( N1+1 ), N )
 *
                ELSE
 *
 *                 N is odd, TRANSR = 'N', UPLO = 'L', and TRANS = 'T'
 *
-                  CALL DSYRK( 'L', 'T', N1, K, ALPHA, A( 1, 1 ), LDA,
+                  CALL AB_DSYRK( 'L', 'T', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( 1 ), N )
-                  CALL DSYRK( 'U', 'T', N2, K, ALPHA, A( 1, N1+1 ), LDA,
+                  CALL AB_DSYRK( 'U', 'T', N2, K, ALPHA, A( 1, N1+1 ), L
+     $DA,
      $                        BETA, C( N+1 ), N )
-                  CALL DGEMM( 'T', 'N', N2, N1, K, ALPHA, A( 1, N1+1 ),
+                  CALL AB_DGEMM( 'T', 'N', N2, N1, K, ALPHA, A( 1, N1+1 
+     $),
      $                        LDA, A( 1, 1 ), LDA, BETA, C( N1+1 ), N )
 *
                END IF
@@ -311,22 +316,24 @@
 *
 *                 N is odd, TRANSR = 'N', UPLO = 'U', and TRANS = 'N'
 *
-                  CALL DSYRK( 'L', 'N', N1, K, ALPHA, A( 1, 1 ), LDA,
+                  CALL AB_DSYRK( 'L', 'N', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( N2+1 ), N )
-                  CALL DSYRK( 'U', 'N', N2, K, ALPHA, A( N2, 1 ), LDA,
+                  CALL AB_DSYRK( 'U', 'N', N2, K, ALPHA, A( N2, 1 ), LDA
+     $,
      $                        BETA, C( N1+1 ), N )
-                  CALL DGEMM( 'N', 'T', N1, N2, K, ALPHA, A( 1, 1 ),
+                  CALL AB_DGEMM( 'N', 'T', N1, N2, K, ALPHA, A( 1, 1 ),
      $                        LDA, A( N2, 1 ), LDA, BETA, C( 1 ), N )
 *
                ELSE
 *
 *                 N is odd, TRANSR = 'N', UPLO = 'U', and TRANS = 'T'
 *
-                  CALL DSYRK( 'L', 'T', N1, K, ALPHA, A( 1, 1 ), LDA,
+                  CALL AB_DSYRK( 'L', 'T', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( N2+1 ), N )
-                  CALL DSYRK( 'U', 'T', N2, K, ALPHA, A( 1, N2 ), LDA,
+                  CALL AB_DSYRK( 'U', 'T', N2, K, ALPHA, A( 1, N2 ), LDA
+     $,
      $                        BETA, C( N1+1 ), N )
-                  CALL DGEMM( 'T', 'N', N1, N2, K, ALPHA, A( 1, 1 ),
+                  CALL AB_DGEMM( 'T', 'N', N1, N2, K, ALPHA, A( 1, 1 ),
      $                        LDA, A( 1, N2 ), LDA, BETA, C( 1 ), N )
 *
                END IF
@@ -345,11 +352,12 @@
 *
 *                 N is odd, TRANSR = 'T', UPLO = 'L', and TRANS = 'N'
 *
-                  CALL DSYRK( 'U', 'N', N1, K, ALPHA, A( 1, 1 ), LDA,
+                  CALL AB_DSYRK( 'U', 'N', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( 1 ), N1 )
-                  CALL DSYRK( 'L', 'N', N2, K, ALPHA, A( N1+1, 1 ), LDA,
+                  CALL AB_DSYRK( 'L', 'N', N2, K, ALPHA, A( N1+1, 1 ), L
+     $DA,
      $                        BETA, C( 2 ), N1 )
-                  CALL DGEMM( 'N', 'T', N1, N2, K, ALPHA, A( 1, 1 ),
+                  CALL AB_DGEMM( 'N', 'T', N1, N2, K, ALPHA, A( 1, 1 ),
      $                        LDA, A( N1+1, 1 ), LDA, BETA,
      $                        C( N1*N1+1 ), N1 )
 *
@@ -357,11 +365,12 @@
 *
 *                 N is odd, TRANSR = 'T', UPLO = 'L', and TRANS = 'T'
 *
-                  CALL DSYRK( 'U', 'T', N1, K, ALPHA, A( 1, 1 ), LDA,
+                  CALL AB_DSYRK( 'U', 'T', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( 1 ), N1 )
-                  CALL DSYRK( 'L', 'T', N2, K, ALPHA, A( 1, N1+1 ), LDA,
+                  CALL AB_DSYRK( 'L', 'T', N2, K, ALPHA, A( 1, N1+1 ), L
+     $DA,
      $                        BETA, C( 2 ), N1 )
-                  CALL DGEMM( 'T', 'N', N1, N2, K, ALPHA, A( 1, 1 ),
+                  CALL AB_DGEMM( 'T', 'N', N1, N2, K, ALPHA, A( 1, 1 ),
      $                        LDA, A( 1, N1+1 ), LDA, BETA,
      $                        C( N1*N1+1 ), N1 )
 *
@@ -375,22 +384,26 @@
 *
 *                 N is odd, TRANSR = 'T', UPLO = 'U', and TRANS = 'N'
 *
-                  CALL DSYRK( 'U', 'N', N1, K, ALPHA, A( 1, 1 ), LDA,
+                  CALL AB_DSYRK( 'U', 'N', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( N2*N2+1 ), N2 )
-                  CALL DSYRK( 'L', 'N', N2, K, ALPHA, A( N1+1, 1 ), LDA,
+                  CALL AB_DSYRK( 'L', 'N', N2, K, ALPHA, A( N1+1, 1 ), L
+     $DA,
      $                        BETA, C( N1*N2+1 ), N2 )
-                  CALL DGEMM( 'N', 'T', N2, N1, K, ALPHA, A( N1+1, 1 ),
+                  CALL AB_DGEMM( 'N', 'T', N2, N1, K, ALPHA, A( N1+1, 1 
+     $),
      $                        LDA, A( 1, 1 ), LDA, BETA, C( 1 ), N2 )
 *
                ELSE
 *
 *                 N is odd, TRANSR = 'T', UPLO = 'U', and TRANS = 'T'
 *
-                  CALL DSYRK( 'U', 'T', N1, K, ALPHA, A( 1, 1 ), LDA,
+                  CALL AB_DSYRK( 'U', 'T', N1, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( N2*N2+1 ), N2 )
-                  CALL DSYRK( 'L', 'T', N2, K, ALPHA, A( 1, N1+1 ), LDA,
+                  CALL AB_DSYRK( 'L', 'T', N2, K, ALPHA, A( 1, N1+1 ), L
+     $DA,
      $                        BETA, C( N1*N2+1 ), N2 )
-                  CALL DGEMM( 'T', 'N', N2, N1, K, ALPHA, A( 1, N1+1 ),
+                  CALL AB_DGEMM( 'T', 'N', N2, N1, K, ALPHA, A( 1, N1+1 
+     $),
      $                        LDA, A( 1, 1 ), LDA, BETA, C( 1 ), N2 )
 *
                END IF
@@ -415,11 +428,13 @@
 *
 *                 N is even, TRANSR = 'N', UPLO = 'L', and TRANS = 'N'
 *
-                  CALL DSYRK( 'L', 'N', NK, K, ALPHA, A( 1, 1 ), LDA,
+                  CALL AB_DSYRK( 'L', 'N', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( 2 ), N+1 )
-                  CALL DSYRK( 'U', 'N', NK, K, ALPHA, A( NK+1, 1 ), LDA,
+                  CALL AB_DSYRK( 'U', 'N', NK, K, ALPHA, A( NK+1, 1 ), L
+     $DA,
      $                        BETA, C( 1 ), N+1 )
-                  CALL DGEMM( 'N', 'T', NK, NK, K, ALPHA, A( NK+1, 1 ),
+                  CALL AB_DGEMM( 'N', 'T', NK, NK, K, ALPHA, A( NK+1, 1 
+     $),
      $                        LDA, A( 1, 1 ), LDA, BETA, C( NK+2 ),
      $                        N+1 )
 *
@@ -427,11 +442,13 @@
 *
 *                 N is even, TRANSR = 'N', UPLO = 'L', and TRANS = 'T'
 *
-                  CALL DSYRK( 'L', 'T', NK, K, ALPHA, A( 1, 1 ), LDA,
+                  CALL AB_DSYRK( 'L', 'T', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( 2 ), N+1 )
-                  CALL DSYRK( 'U', 'T', NK, K, ALPHA, A( 1, NK+1 ), LDA,
+                  CALL AB_DSYRK( 'U', 'T', NK, K, ALPHA, A( 1, NK+1 ), L
+     $DA,
      $                        BETA, C( 1 ), N+1 )
-                  CALL DGEMM( 'T', 'N', NK, NK, K, ALPHA, A( 1, NK+1 ),
+                  CALL AB_DGEMM( 'T', 'N', NK, NK, K, ALPHA, A( 1, NK+1 
+     $),
      $                        LDA, A( 1, 1 ), LDA, BETA, C( NK+2 ),
      $                        N+1 )
 *
@@ -445,11 +462,12 @@
 *
 *                 N is even, TRANSR = 'N', UPLO = 'U', and TRANS = 'N'
 *
-                  CALL DSYRK( 'L', 'N', NK, K, ALPHA, A( 1, 1 ), LDA,
+                  CALL AB_DSYRK( 'L', 'N', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( NK+2 ), N+1 )
-                  CALL DSYRK( 'U', 'N', NK, K, ALPHA, A( NK+1, 1 ), LDA,
+                  CALL AB_DSYRK( 'U', 'N', NK, K, ALPHA, A( NK+1, 1 ), L
+     $DA,
      $                        BETA, C( NK+1 ), N+1 )
-                  CALL DGEMM( 'N', 'T', NK, NK, K, ALPHA, A( 1, 1 ),
+                  CALL AB_DGEMM( 'N', 'T', NK, NK, K, ALPHA, A( 1, 1 ),
      $                        LDA, A( NK+1, 1 ), LDA, BETA, C( 1 ),
      $                        N+1 )
 *
@@ -457,11 +475,12 @@
 *
 *                 N is even, TRANSR = 'N', UPLO = 'U', and TRANS = 'T'
 *
-                  CALL DSYRK( 'L', 'T', NK, K, ALPHA, A( 1, 1 ), LDA,
+                  CALL AB_DSYRK( 'L', 'T', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( NK+2 ), N+1 )
-                  CALL DSYRK( 'U', 'T', NK, K, ALPHA, A( 1, NK+1 ), LDA,
+                  CALL AB_DSYRK( 'U', 'T', NK, K, ALPHA, A( 1, NK+1 ), L
+     $DA,
      $                        BETA, C( NK+1 ), N+1 )
-                  CALL DGEMM( 'T', 'N', NK, NK, K, ALPHA, A( 1, 1 ),
+                  CALL AB_DGEMM( 'T', 'N', NK, NK, K, ALPHA, A( 1, 1 ),
      $                        LDA, A( 1, NK+1 ), LDA, BETA, C( 1 ),
      $                        N+1 )
 *
@@ -481,11 +500,12 @@
 *
 *                 N is even, TRANSR = 'T', UPLO = 'L', and TRANS = 'N'
 *
-                  CALL DSYRK( 'U', 'N', NK, K, ALPHA, A( 1, 1 ), LDA,
+                  CALL AB_DSYRK( 'U', 'N', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( NK+1 ), NK )
-                  CALL DSYRK( 'L', 'N', NK, K, ALPHA, A( NK+1, 1 ), LDA,
+                  CALL AB_DSYRK( 'L', 'N', NK, K, ALPHA, A( NK+1, 1 ), L
+     $DA,
      $                        BETA, C( 1 ), NK )
-                  CALL DGEMM( 'N', 'T', NK, NK, K, ALPHA, A( 1, 1 ),
+                  CALL AB_DGEMM( 'N', 'T', NK, NK, K, ALPHA, A( 1, 1 ),
      $                        LDA, A( NK+1, 1 ), LDA, BETA,
      $                        C( ( ( NK+1 )*NK )+1 ), NK )
 *
@@ -493,11 +513,12 @@
 *
 *                 N is even, TRANSR = 'T', UPLO = 'L', and TRANS = 'T'
 *
-                  CALL DSYRK( 'U', 'T', NK, K, ALPHA, A( 1, 1 ), LDA,
+                  CALL AB_DSYRK( 'U', 'T', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( NK+1 ), NK )
-                  CALL DSYRK( 'L', 'T', NK, K, ALPHA, A( 1, NK+1 ), LDA,
+                  CALL AB_DSYRK( 'L', 'T', NK, K, ALPHA, A( 1, NK+1 ), L
+     $DA,
      $                        BETA, C( 1 ), NK )
-                  CALL DGEMM( 'T', 'N', NK, NK, K, ALPHA, A( 1, 1 ),
+                  CALL AB_DGEMM( 'T', 'N', NK, NK, K, ALPHA, A( 1, 1 ),
      $                        LDA, A( 1, NK+1 ), LDA, BETA,
      $                        C( ( ( NK+1 )*NK )+1 ), NK )
 *
@@ -511,22 +532,26 @@
 *
 *                 N is even, TRANSR = 'T', UPLO = 'U', and TRANS = 'N'
 *
-                  CALL DSYRK( 'U', 'N', NK, K, ALPHA, A( 1, 1 ), LDA,
+                  CALL AB_DSYRK( 'U', 'N', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( NK*( NK+1 )+1 ), NK )
-                  CALL DSYRK( 'L', 'N', NK, K, ALPHA, A( NK+1, 1 ), LDA,
+                  CALL AB_DSYRK( 'L', 'N', NK, K, ALPHA, A( NK+1, 1 ), L
+     $DA,
      $                        BETA, C( NK*NK+1 ), NK )
-                  CALL DGEMM( 'N', 'T', NK, NK, K, ALPHA, A( NK+1, 1 ),
+                  CALL AB_DGEMM( 'N', 'T', NK, NK, K, ALPHA, A( NK+1, 1 
+     $),
      $                        LDA, A( 1, 1 ), LDA, BETA, C( 1 ), NK )
 *
                ELSE
 *
 *                 N is even, TRANSR = 'T', UPLO = 'U', and TRANS = 'T'
 *
-                  CALL DSYRK( 'U', 'T', NK, K, ALPHA, A( 1, 1 ), LDA,
+                  CALL AB_DSYRK( 'U', 'T', NK, K, ALPHA, A( 1, 1 ), LDA,
      $                        BETA, C( NK*( NK+1 )+1 ), NK )
-                  CALL DSYRK( 'L', 'T', NK, K, ALPHA, A( 1, NK+1 ), LDA,
+                  CALL AB_DSYRK( 'L', 'T', NK, K, ALPHA, A( 1, NK+1 ), L
+     $DA,
      $                        BETA, C( NK*NK+1 ), NK )
-                  CALL DGEMM( 'T', 'N', NK, NK, K, ALPHA, A( 1, NK+1 ),
+                  CALL AB_DGEMM( 'T', 'N', NK, NK, K, ALPHA, A( 1, NK+1 
+     $),
      $                        LDA, A( 1, 1 ), LDA, BETA, C( 1 ), NK )
 *
                END IF
@@ -539,6 +564,6 @@
 *
       RETURN
 *
-*     End of DSFRK
+*     End of AB_DSFRK
 *
       END

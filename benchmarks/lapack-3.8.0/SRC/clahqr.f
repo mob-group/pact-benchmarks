@@ -1,4 +1,4 @@
-*> \brief \b CLAHQR computes the eigenvalues and Schur factorization of an upper Hessenberg matrix, using the double-shift/single-shift QR algorithm.
+*> \brief \b AB_CLAHQR computes the eigenvalues and Schur factorization of an upper Hessenberg matrix, using the double-shift/single-shift QR algorithm.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CLAHQR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clahqr.f">
+*> Download AB_CLAHQR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLAHQR.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clahqr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLAHQR.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clahqr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLAHQR.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLAHQR( WANTT, WANTZ, N, ILO, IHI, H, LDH, W, ILOZ,
+*       SUBROUTINE AB_CLAHQR( WANTT, WANTZ, N, ILO, IHI, H, LDH, W, ILOZ,
 *                          IHIZ, Z, LDZ, INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,8 +35,8 @@
 *>
 *> \verbatim
 *>
-*>    CLAHQR is an auxiliary routine called by CHSEQR to update the
-*>    eigenvalues and Schur decomposition already computed by CHSEQR, by
+*>    AB_CLAHQR is an auxiliary routine called by AB_CHSEQR to update the
+*>    eigenvalues and Schur decomposition already computed by AB_CHSEQR, by
 *>    dealing with the Hessenberg submatrix in rows and columns ILO to
 *>    IHI.
 *> \endverbatim
@@ -74,7 +74,7 @@
 *>          IHI is INTEGER
 *>          It is assumed that H is already upper triangular in rows and
 *>          columns IHI+1:N, and that H(ILO,ILO-1) = 0 (unless ILO = 1).
-*>          CLAHQR works primarily with the Hessenberg submatrix in rows
+*>          AB_CLAHQR works primarily with the Hessenberg submatrix in rows
 *>          and columns ILO to IHI, but applies transformations to all of
 *>          H if WANTT is .TRUE..
 *>          1 <= ILO <= max(1,IHI); IHI <= N.
@@ -123,7 +123,7 @@
 *> \verbatim
 *>          Z is COMPLEX array, dimension (LDZ,N)
 *>          If WANTZ is .TRUE., on entry Z must contain the current
-*>          matrix Z of transformations accumulated by CHSEQR, and on
+*>          matrix Z of transformations accumulated by AB_CHSEQR, and on
 *>          exit Z has been updated; transformations are applied only to
 *>          the submatrix Z(ILOZ:IHIZ,ILO:IHI).
 *>          If WANTZ is .FALSE., Z is not referenced.
@@ -139,7 +139,7 @@
 *> \verbatim
 *>          INFO is INTEGER
 *>           =   0: successful exit
-*>          .GT. 0: if INFO = i, CLAHQR failed to compute all the
+*>          .GT. 0: if INFO = i, AB_CLAHQR failed to compute all the
 *>                  eigenvalues ILO to IHI in a total of 30 iterations
 *>                  per eigenvalue; elements i+1:ihi of W contain
 *>                  those eigenvalues which have been successfully
@@ -185,14 +185,14 @@
 *>
 *>     12-04 Further modifications by
 *>     Ralph Byers, University of Kansas, USA
-*>     This is a modified version of CLAHQR from LAPACK version 3.0.
+*>     This is a modified version of AB_CLAHQR from LAPACK version 3.0.
 *>     It is (1) more robust against overflow and underflow and
 *>     (2) adopts the more conservative Ahues & Tisseur stopping
 *>     criterion (LAWN 122, 1997).
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CLAHQR( WANTT, WANTZ, N, ILO, IHI, H, LDH, W, ILOZ,
+      SUBROUTINE AB_CLAHQR( WANTT, WANTZ, N, ILO, IHI, H, LDH, W, ILOZ,
      $                   IHIZ, Z, LDZ, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -231,12 +231,12 @@
       COMPLEX            V( 2 )
 *     ..
 *     .. External Functions ..
-      COMPLEX            CLADIV
+      COMPLEX            AB_CLADIV
       REAL               SLAMCH
-      EXTERNAL           CLADIV, SLAMCH
+      EXTERNAL           AB_CLADIV, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CCOPY, CLARFG, CSCAL, SLABAD
+      EXTERNAL           AB_CCOPY, AB_CLARFG, AB_CSCAL, AB_SLABAD
 *     ..
 *     .. Statement Functions ..
       REAL               CABS1
@@ -283,11 +283,13 @@
             SC = H( I, I-1 ) / CABS1( H( I, I-1 ) )
             SC = CONJG( SC ) / ABS( SC )
             H( I, I-1 ) = ABS( H( I, I-1 ) )
-            CALL CSCAL( JHI-I+1, SC, H( I, I ), LDH )
-            CALL CSCAL( MIN( JHI, I+1 )-JLO+1, CONJG( SC ), H( JLO, I ),
+            CALL AB_CSCAL( JHI-I+1, SC, H( I, I ), LDH )
+            CALL AB_CSCAL( MIN( JHI, I+1 )-JLO+1, CONJG( SC ), H( JLO, I
+     $ ),
      $                  1 )
             IF( WANTZ )
-     $         CALL CSCAL( IHIZ-ILOZ+1, CONJG( SC ), Z( ILOZ, I ), 1 )
+     $         CALL AB_CSCAL( IHIZ-ILOZ+1, CONJG( SC ), Z( ILOZ, I ), 1 
+     $)
          END IF
    20 CONTINUE
 *
@@ -298,7 +300,7 @@
 *
       SAFMIN = SLAMCH( 'SAFE MINIMUM' )
       SAFMAX = RONE / SAFMIN
-      CALL SLABAD( SAFMIN, SAFMAX )
+      CALL AB_SLABAD( SAFMIN, SAFMAX )
       ULP = SLAMCH( 'PRECISION' )
       SMLNUM = SAFMIN*( REAL( NH ) / ULP )
 *
@@ -412,7 +414,7 @@
                   IF( REAL( X / SX )*REAL( Y )+AIMAG( X / SX )*
      $                AIMAG( Y ).LT.RZERO )Y = -Y
                END IF
-               T = T - U*CLADIV( U, ( X+Y ) )
+               T = T - U*AB_CLADIV( U, ( X+Y ) )
             END IF
          END IF
 *
@@ -462,12 +464,12 @@
 *           chases the bulge one step toward the bottom of the active
 *           submatrix.
 *
-*           V(2) is always real before the call to CLARFG, and hence
+*           V(2) is always real before the call to AB_CLARFG, and hence
 *           after the call T2 ( = T1*V(2) ) is also real.
 *
             IF( K.GT.M )
-     $         CALL CCOPY( 2, H( K, K-1 ), 1, V, 1 )
-            CALL CLARFG( 2, V( 1 ), V( 2 ), 1, T1 )
+     $         CALL AB_CCOPY( 2, H( K, K-1 ), 1, V, 1 )
+            CALL AB_CLARFG( 2, V( 1 ), V( 2 ), 1, T1 )
             IF( K.GT.M ) THEN
                H( K, K-1 ) = V( 1 )
                H( K+1, K-1 ) = ZERO
@@ -519,10 +521,11 @@
                DO 110 J = M, I
                   IF( J.NE.M+1 ) THEN
                      IF( I2.GT.J )
-     $                  CALL CSCAL( I2-J, TEMP, H( J, J+1 ), LDH )
-                     CALL CSCAL( J-I1, CONJG( TEMP ), H( I1, J ), 1 )
+     $                  CALL AB_CSCAL( I2-J, TEMP, H( J, J+1 ), LDH )
+                     CALL AB_CSCAL( J-I1, CONJG( TEMP ), H( I1, J ), 1 )
                      IF( WANTZ ) THEN
-                        CALL CSCAL( NZ, CONJG( TEMP ), Z( ILOZ, J ), 1 )
+                        CALL AB_CSCAL( NZ, CONJG( TEMP ), Z( ILOZ, J ), 
+     $1 )
                      END IF
                   END IF
   110          CONTINUE
@@ -537,10 +540,10 @@
             H( I, I-1 ) = RTEMP
             TEMP = TEMP / RTEMP
             IF( I2.GT.I )
-     $         CALL CSCAL( I2-I, CONJG( TEMP ), H( I, I+1 ), LDH )
-            CALL CSCAL( I-I1, TEMP, H( I1, I ), 1 )
+     $         CALL AB_CSCAL( I2-I, CONJG( TEMP ), H( I, I+1 ), LDH )
+            CALL AB_CSCAL( I-I1, TEMP, H( I1, I ), 1 )
             IF( WANTZ ) THEN
-               CALL CSCAL( NZ, TEMP, Z( ILOZ, I ), 1 )
+               CALL AB_CSCAL( NZ, TEMP, Z( ILOZ, I ), 1 )
             END IF
          END IF
 *
@@ -565,6 +568,6 @@
   150 CONTINUE
       RETURN
 *
-*     End of CLAHQR
+*     End of AB_CLAHQR
 *
       END

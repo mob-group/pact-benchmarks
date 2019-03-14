@@ -1,4 +1,4 @@
-*> \brief \b IDAMAX
+*> \brief \b AB_IDAMAX
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       INTEGER FUNCTION IDAMAX(N,DX,INCX)
+*       INTEGER FUNCTION AB_IDAMAX(N,DX,INCX)
 *
 *       .. Scalar Arguments ..
 *       INTEGER INCX,N
@@ -23,7 +23,7 @@
 *>
 *> \verbatim
 *>
-*>    IDAMAX finds the index of the first element having maximum absolute value.
+*>    AB_IDAMAX finds the index of the first element having maximum absolute value.
 *> \endverbatim
 *
 *  Arguments:
@@ -69,7 +69,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      INTEGER FUNCTION IDAMAX(N,DX,INCX)
+      INTEGER FUNCTION AB_IDAMAX(N,DX,INCX)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -92,9 +92,9 @@
 *     .. Intrinsic Functions ..
       INTRINSIC DABS
 *     ..
-      IDAMAX = 0
+      AB_IDAMAX = 0
       IF (N.LT.1 .OR. INCX.LE.0) RETURN
-      IDAMAX = 1
+      AB_IDAMAX = 1
       IF (N.EQ.1) RETURN
       IF (INCX.EQ.1) THEN
 *
@@ -103,7 +103,7 @@
          DMAX = DABS(DX(1))
          DO I = 2,N
             IF (DABS(DX(I)).GT.DMAX) THEN
-               IDAMAX = I
+               AB_IDAMAX = I
                DMAX = DABS(DX(I))
             END IF
          END DO
@@ -116,7 +116,7 @@
          IX = IX + INCX
          DO I = 2,N
             IF (DABS(DX(IX)).GT.DMAX) THEN
-               IDAMAX = I
+               AB_IDAMAX = I
                DMAX = DABS(DX(IX))
             END IF
             IX = IX + INCX

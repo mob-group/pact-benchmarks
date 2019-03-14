@@ -1,4 +1,4 @@
-*> \brief \b DPBCON
+*> \brief \b AB_DPBCON
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DPBCON + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dpbcon.f">
+*> Download AB_DPBCON + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DPBCON.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dpbcon.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DPBCON.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpbcon.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DPBCON.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DPBCON( UPLO, N, KD, AB, LDAB, ANORM, RCOND, WORK,
+*       SUBROUTINE AB_DPBCON( UPLO, N, KD, AB, LDAB, ANORM, RCOND, WORK,
 *                          IWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,9 +37,9 @@
 *>
 *> \verbatim
 *>
-*> DPBCON estimates the reciprocal of the condition number (in the
+*> AB_DPBCON estimates the reciprocal of the condition number (in the
 *> 1-norm) of a real symmetric positive definite band matrix using the
-*> Cholesky factorization A = U**T*U or A = L*L**T computed by DPBTRF.
+*> Cholesky factorization A = U**T*U or A = L*L**T computed by AB_DPBTRF.
 *>
 *> An estimate is obtained for norm(inv(A)), and the reciprocal of the
 *> condition number is computed as RCOND = 1 / (ANORM * norm(inv(A))).
@@ -129,7 +129,7 @@
 *> \ingroup doubleOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE DPBCON( UPLO, N, KD, AB, LDAB, ANORM, RCOND, WORK,
+      SUBROUTINE AB_DPBCON( UPLO, N, KD, AB, LDAB, ANORM, RCOND, WORK,
      $                   IWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -163,13 +163,13 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            IDAMAX
+      LOGICAL            AB_LSAME
+      INTEGER            AB_IDAMAX
       DOUBLE PRECISION   DLAMCH
-      EXTERNAL           LSAME, IDAMAX, DLAMCH
+      EXTERNAL           AB_LSAME, AB_IDAMAX, DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLACN2, DLATBS, DRSCL, XERBLA
+      EXTERNAL           AB_DLACN2, AB_DLATBS, AB_DRSCL, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS
@@ -179,8 +179,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -192,7 +192,7 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DPBCON', -INFO )
+         CALL AB_XERBLA( 'AB_DPBCON', -INFO )
          RETURN
       END IF
 *
@@ -213,34 +213,36 @@
       KASE = 0
       NORMIN = 'N'
    10 CONTINUE
-      CALL DLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
+      CALL AB_DLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
       IF( KASE.NE.0 ) THEN
          IF( UPPER ) THEN
 *
 *           Multiply by inv(U**T).
 *
-            CALL DLATBS( 'Upper', 'Transpose', 'Non-unit', NORMIN, N,
+            CALL AB_DLATBS( 'Upper', 'Transpose', 'Non-unit', NORMIN, N,
      $                   KD, AB, LDAB, WORK, SCALEL, WORK( 2*N+1 ),
      $                   INFO )
             NORMIN = 'Y'
 *
 *           Multiply by inv(U).
 *
-            CALL DLATBS( 'Upper', 'No transpose', 'Non-unit', NORMIN, N,
+            CALL AB_DLATBS( 'Upper', 'No transpose', 'Non-unit', NORMIN,
+     $ N,
      $                   KD, AB, LDAB, WORK, SCALEU, WORK( 2*N+1 ),
      $                   INFO )
          ELSE
 *
 *           Multiply by inv(L).
 *
-            CALL DLATBS( 'Lower', 'No transpose', 'Non-unit', NORMIN, N,
+            CALL AB_DLATBS( 'Lower', 'No transpose', 'Non-unit', NORMIN,
+     $ N,
      $                   KD, AB, LDAB, WORK, SCALEL, WORK( 2*N+1 ),
      $                   INFO )
             NORMIN = 'Y'
 *
 *           Multiply by inv(L**T).
 *
-            CALL DLATBS( 'Lower', 'Transpose', 'Non-unit', NORMIN, N,
+            CALL AB_DLATBS( 'Lower', 'Transpose', 'Non-unit', NORMIN, N,
      $                   KD, AB, LDAB, WORK, SCALEU, WORK( 2*N+1 ),
      $                   INFO )
          END IF
@@ -249,10 +251,10 @@
 *
          SCALE = SCALEL*SCALEU
          IF( SCALE.NE.ONE ) THEN
-            IX = IDAMAX( N, WORK, 1 )
+            IX = AB_IDAMAX( N, WORK, 1 )
             IF( SCALE.LT.ABS( WORK( IX ) )*SMLNUM .OR. SCALE.EQ.ZERO )
      $         GO TO 20
-            CALL DRSCL( N, SCALE, WORK, 1 )
+            CALL AB_DRSCL( N, SCALE, WORK, 1 )
          END IF
          GO TO 10
       END IF
@@ -266,6 +268,6 @@
 *
       RETURN
 *
-*     End of DPBCON
+*     End of AB_DPBCON
 *
       END

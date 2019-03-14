@@ -1,4 +1,4 @@
-*> \brief \b CTGSYL
+*> \brief \b AB_CTGSYL
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CTGSYL + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctgsyl.f">
+*> Download AB_CTGSYL + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CTGSYL.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctgsyl.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CTGSYL.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctgsyl.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CTGSYL.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CTGSYL( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC, D,
+*       SUBROUTINE AB_CTGSYL( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC, D,
 *                          LDD, E, LDE, F, LDF, SCALE, DIF, WORK, LWORK,
 *                          IWORK, INFO )
 *
@@ -41,7 +41,7 @@
 *>
 *> \verbatim
 *>
-*> CTGSYL solves the generalized Sylvester equation:
+*> AB_CTGSYL solves the generalized Sylvester equation:
 *>
 *>             A * R - L * B = scale * C            (1)
 *>             D * R - L * E = scale * F
@@ -72,9 +72,9 @@
 *>
 *> This case (TRANS = 'C') is used to compute an one-norm-based estimate
 *> of Dif[(A,D), (B,E)], the separation between the matrix pairs (A,D)
-*> and (B,E), using CLACON.
+*> and (B,E), using AB_CLACON.
 *>
-*> If IJOB >= 1, CTGSYL computes a Frobenius norm-based estimate of
+*> If IJOB >= 1, AB_CTGSYL computes a Frobenius norm-based estimate of
 *> Dif[(A,D),(B,E)]. That is, the reciprocal of a lower bound on the
 *> reciprocal of the smallest singular value of Z.
 *>
@@ -101,7 +101,7 @@
 *>          =3: Only an estimate of Dif[(A,D), (B,E)] is computed.
 *>              (look ahead strategy is used).
 *>          =4: Only an estimate of Dif[(A,D), (B,E)] is computed.
-*>              (CGECON on sub-systems is used).
+*>              (AB_CGECON on sub-systems is used).
 *>          Not referenced if TRANS = 'C'.
 *> \endverbatim
 *>
@@ -235,7 +235,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -291,7 +291,8 @@
 *>      July 1989, pp 745-751.
 *>
 *  =====================================================================
-      SUBROUTINE CTGSYL( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC, D,
+      SUBROUTINE AB_CTGSYL( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC, D
+     $,
      $                   LDD, E, LDE, F, LDF, SCALE, DIF, WORK, LWORK,
      $                   IWORK, INFO )
 *
@@ -314,7 +315,7 @@
 *     ..
 *
 *  =====================================================================
-*  Replaced various illegal calls to CCOPY by calls to CLASET.
+*  Replaced various illegal calls to AB_CCOPY by calls to AB_CLASET.
 *  Sven Hammarling, 1/5/02.
 *
 *     .. Parameters ..
@@ -327,15 +328,16 @@
       LOGICAL            LQUERY, NOTRAN
       INTEGER            I, IE, IFUNC, IROUND, IS, ISOLVE, J, JE, JS, K,
      $                   LINFO, LWMIN, MB, NB, P, PQ, Q
-      REAL               DSCALE, DSUM, SCALE2, SCALOC
+      REAL               AB_DSCALE, DSUM, SCALE2, SCALOC
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      EXTERNAL           LSAME, ILAENV
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_LSAME, AB_ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMM, CLACPY, CLASET, CSCAL, CTGSY2, XERBLA
+      EXTERNAL           AB_CGEMM, AB_CLACPY, AB_CLASET, AB_CSCAL, AB_CT
+     $GSY2, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CMPLX, MAX, REAL, SQRT
@@ -345,10 +347,10 @@
 *     Decode and test input parameters
 *
       INFO = 0
-      NOTRAN = LSAME( TRANS, 'N' )
+      NOTRAN = AB_LSAME( TRANS, 'N' )
       LQUERY = ( LWORK.EQ.-1 )
 *
-      IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'C' ) ) THEN
+      IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'C' ) ) THEN
          INFO = -1
       ELSE IF( NOTRAN ) THEN
          IF( ( IJOB.LT.0 ) .OR. ( IJOB.GT.4 ) ) THEN
@@ -393,7 +395,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CTGSYL', -INFO )
+         CALL AB_XERBLA( 'AB_CTGSYL', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -413,16 +415,16 @@
 *
 *     Determine  optimal block sizes MB and NB
 *
-      MB = ILAENV( 2, 'CTGSYL', TRANS, M, N, -1, -1 )
-      NB = ILAENV( 5, 'CTGSYL', TRANS, M, N, -1, -1 )
+      MB = AB_ILAENV( 2, 'AB_CTGSYL', TRANS, M, N, -1, -1 )
+      NB = AB_ILAENV( 5, 'AB_CTGSYL', TRANS, M, N, -1, -1 )
 *
       ISOLVE = 1
       IFUNC = 0
       IF( NOTRAN ) THEN
          IF( IJOB.GE.3 ) THEN
             IFUNC = IJOB - 2
-            CALL CLASET( 'F', M, N, CZERO, CZERO, C, LDC )
-            CALL CLASET( 'F', M, N, CZERO, CZERO, F, LDF )
+            CALL AB_CLASET( 'F', M, N, CZERO, CZERO, C, LDC )
+            CALL AB_CLASET( 'F', M, N, CZERO, CZERO, F, LDF )
          ELSE IF( IJOB.GE.1 .AND. NOTRAN ) THEN
             ISOLVE = 2
          END IF
@@ -436,17 +438,19 @@
          DO 30 IROUND = 1, ISOLVE
 *
             SCALE = ONE
-            DSCALE = ZERO
+            AB_DSCALE = ZERO
             DSUM = ONE
             PQ = M*N
-            CALL CTGSY2( TRANS, IFUNC, M, N, A, LDA, B, LDB, C, LDC, D,
-     $                   LDD, E, LDE, F, LDF, SCALE, DSUM, DSCALE,
+            CALL AB_CTGSY2( TRANS, IFUNC, M, N, A, LDA, B, LDB, C, LDC, 
+     $D,
+     $                   LDD, E, LDE, F, LDF, SCALE, DSUM, AB_DSCALE,
      $                   INFO )
-            IF( DSCALE.NE.ZERO ) THEN
+            IF( AB_DSCALE.NE.ZERO ) THEN
                IF( IJOB.EQ.1 .OR. IJOB.EQ.3 ) THEN
-                  DIF = SQRT( REAL( 2*M*N ) ) / ( DSCALE*SQRT( DSUM ) )
+                  DIF = SQRT( REAL( 2*M*N ) ) / ( AB_DSCALE*SQRT( DSUM )
+     $ )
                ELSE
-                  DIF = SQRT( REAL( PQ ) ) / ( DSCALE*SQRT( DSUM ) )
+                  DIF = SQRT( REAL( PQ ) ) / ( AB_DSCALE*SQRT( DSUM ) )
                END IF
             END IF
             IF( ISOLVE.EQ.2 .AND. IROUND.EQ.1 ) THEN
@@ -454,13 +458,13 @@
                   IFUNC = IJOB
                END IF
                SCALE2 = SCALE
-               CALL CLACPY( 'F', M, N, C, LDC, WORK, M )
-               CALL CLACPY( 'F', M, N, F, LDF, WORK( M*N+1 ), M )
-               CALL CLASET( 'F', M, N, CZERO, CZERO, C, LDC )
-               CALL CLASET( 'F', M, N, CZERO, CZERO, F, LDF )
+               CALL AB_CLACPY( 'F', M, N, C, LDC, WORK, M )
+               CALL AB_CLACPY( 'F', M, N, F, LDF, WORK( M*N+1 ), M )
+               CALL AB_CLASET( 'F', M, N, CZERO, CZERO, C, LDC )
+               CALL AB_CLASET( 'F', M, N, CZERO, CZERO, F, LDF )
             ELSE IF( ISOLVE.EQ.2 .AND. IROUND.EQ.2 ) THEN
-               CALL CLACPY( 'F', M, N, WORK, M, C, LDC )
-               CALL CLACPY( 'F', M, N, WORK( M*N+1 ), M, F, LDF )
+               CALL AB_CLACPY( 'F', M, N, WORK, M, C, LDC )
+               CALL AB_CLACPY( 'F', M, N, WORK( M*N+1 ), M, F, LDF )
                SCALE = SCALE2
             END IF
    30    CONTINUE
@@ -517,7 +521,7 @@
 *
             PQ = 0
             SCALE = ONE
-            DSCALE = ZERO
+            AB_DSCALE = ZERO
             DSUM = ONE
             DO 130 J = P + 2, Q
                JS = IWORK( J )
@@ -527,37 +531,43 @@
                   IS = IWORK( I )
                   IE = IWORK( I+1 ) - 1
                   MB = IE - IS + 1
-                  CALL CTGSY2( TRANS, IFUNC, MB, NB, A( IS, IS ), LDA,
+                  CALL AB_CTGSY2( TRANS, IFUNC, MB, NB, A( IS, IS ), LDA
+     $,
      $                         B( JS, JS ), LDB, C( IS, JS ), LDC,
      $                         D( IS, IS ), LDD, E( JS, JS ), LDE,
-     $                         F( IS, JS ), LDF, SCALOC, DSUM, DSCALE,
+     $                         F( IS, JS ), LDF, SCALOC, DSUM, AB_DSCALE
+     $,
      $                         LINFO )
                   IF( LINFO.GT.0 )
      $               INFO = LINFO
                   PQ = PQ + MB*NB
                   IF( SCALOC.NE.ONE ) THEN
                      DO 80 K = 1, JS - 1
-                        CALL CSCAL( M, CMPLX( SCALOC, ZERO ), C( 1, K ),
+                        CALL AB_CSCAL( M, CMPLX( SCALOC, ZERO ), C( 1, K
+     $ ),
      $                              1 )
-                        CALL CSCAL( M, CMPLX( SCALOC, ZERO ), F( 1, K ),
+                        CALL AB_CSCAL( M, CMPLX( SCALOC, ZERO ), F( 1, K
+     $ ),
      $                              1 )
    80                CONTINUE
                      DO 90 K = JS, JE
-                        CALL CSCAL( IS-1, CMPLX( SCALOC, ZERO ),
+                        CALL AB_CSCAL( IS-1, CMPLX( SCALOC, ZERO ),
      $                              C( 1, K ), 1 )
-                        CALL CSCAL( IS-1, CMPLX( SCALOC, ZERO ),
+                        CALL AB_CSCAL( IS-1, CMPLX( SCALOC, ZERO ),
      $                              F( 1, K ), 1 )
    90                CONTINUE
                      DO 100 K = JS, JE
-                        CALL CSCAL( M-IE, CMPLX( SCALOC, ZERO ),
+                        CALL AB_CSCAL( M-IE, CMPLX( SCALOC, ZERO ),
      $                              C( IE+1, K ), 1 )
-                        CALL CSCAL( M-IE, CMPLX( SCALOC, ZERO ),
+                        CALL AB_CSCAL( M-IE, CMPLX( SCALOC, ZERO ),
      $                              F( IE+1, K ), 1 )
   100                CONTINUE
                      DO 110 K = JE + 1, N
-                        CALL CSCAL( M, CMPLX( SCALOC, ZERO ), C( 1, K ),
+                        CALL AB_CSCAL( M, CMPLX( SCALOC, ZERO ), C( 1, K
+     $ ),
      $                              1 )
-                        CALL CSCAL( M, CMPLX( SCALOC, ZERO ), F( 1, K ),
+                        CALL AB_CSCAL( M, CMPLX( SCALOC, ZERO ), F( 1, K
+     $ ),
      $                              1 )
   110                CONTINUE
                      SCALE = SCALE*SCALOC
@@ -566,32 +576,33 @@
 *                 Substitute R(I,J) and L(I,J) into remaining equation.
 *
                   IF( I.GT.1 ) THEN
-                     CALL CGEMM( 'N', 'N', IS-1, NB, MB,
+                     CALL AB_CGEMM( 'N', 'N', IS-1, NB, MB,
      $                           CMPLX( -ONE, ZERO ), A( 1, IS ), LDA,
      $                           C( IS, JS ), LDC, CMPLX( ONE, ZERO ),
      $                           C( 1, JS ), LDC )
-                     CALL CGEMM( 'N', 'N', IS-1, NB, MB,
+                     CALL AB_CGEMM( 'N', 'N', IS-1, NB, MB,
      $                           CMPLX( -ONE, ZERO ), D( 1, IS ), LDD,
      $                           C( IS, JS ), LDC, CMPLX( ONE, ZERO ),
      $                           F( 1, JS ), LDF )
                   END IF
                   IF( J.LT.Q ) THEN
-                     CALL CGEMM( 'N', 'N', MB, N-JE, NB,
+                     CALL AB_CGEMM( 'N', 'N', MB, N-JE, NB,
      $                           CMPLX( ONE, ZERO ), F( IS, JS ), LDF,
      $                           B( JS, JE+1 ), LDB, CMPLX( ONE, ZERO ),
      $                           C( IS, JE+1 ), LDC )
-                     CALL CGEMM( 'N', 'N', MB, N-JE, NB,
+                     CALL AB_CGEMM( 'N', 'N', MB, N-JE, NB,
      $                           CMPLX( ONE, ZERO ), F( IS, JS ), LDF,
      $                           E( JS, JE+1 ), LDE, CMPLX( ONE, ZERO ),
      $                           F( IS, JE+1 ), LDF )
                   END IF
   120          CONTINUE
   130       CONTINUE
-            IF( DSCALE.NE.ZERO ) THEN
+            IF( AB_DSCALE.NE.ZERO ) THEN
                IF( IJOB.EQ.1 .OR. IJOB.EQ.3 ) THEN
-                  DIF = SQRT( REAL( 2*M*N ) ) / ( DSCALE*SQRT( DSUM ) )
+                  DIF = SQRT( REAL( 2*M*N ) ) / ( AB_DSCALE*SQRT( DSUM )
+     $ )
                ELSE
-                  DIF = SQRT( REAL( PQ ) ) / ( DSCALE*SQRT( DSUM ) )
+                  DIF = SQRT( REAL( PQ ) ) / ( AB_DSCALE*SQRT( DSUM ) )
                END IF
             END IF
             IF( ISOLVE.EQ.2 .AND. IROUND.EQ.1 ) THEN
@@ -599,13 +610,13 @@
                   IFUNC = IJOB
                END IF
                SCALE2 = SCALE
-               CALL CLACPY( 'F', M, N, C, LDC, WORK, M )
-               CALL CLACPY( 'F', M, N, F, LDF, WORK( M*N+1 ), M )
-               CALL CLASET( 'F', M, N, CZERO, CZERO, C, LDC )
-               CALL CLASET( 'F', M, N, CZERO, CZERO, F, LDF )
+               CALL AB_CLACPY( 'F', M, N, C, LDC, WORK, M )
+               CALL AB_CLACPY( 'F', M, N, F, LDF, WORK( M*N+1 ), M )
+               CALL AB_CLASET( 'F', M, N, CZERO, CZERO, C, LDC )
+               CALL AB_CLASET( 'F', M, N, CZERO, CZERO, F, LDF )
             ELSE IF( ISOLVE.EQ.2 .AND. IROUND.EQ.2 ) THEN
-               CALL CLACPY( 'F', M, N, WORK, M, C, LDC )
-               CALL CLACPY( 'F', M, N, WORK( M*N+1 ), M, F, LDF )
+               CALL AB_CLACPY( 'F', M, N, WORK, M, C, LDC )
+               CALL AB_CLACPY( 'F', M, N, WORK( M*N+1 ), M, F, LDF )
                SCALE = SCALE2
             END IF
   150    CONTINUE
@@ -625,36 +636,38 @@
                JS = IWORK( J )
                JE = IWORK( J+1 ) - 1
                NB = JE - JS + 1
-               CALL CTGSY2( TRANS, IFUNC, MB, NB, A( IS, IS ), LDA,
+               CALL AB_CTGSY2( TRANS, IFUNC, MB, NB, A( IS, IS ), LDA,
      $                      B( JS, JS ), LDB, C( IS, JS ), LDC,
      $                      D( IS, IS ), LDD, E( JS, JS ), LDE,
-     $                      F( IS, JS ), LDF, SCALOC, DSUM, DSCALE,
+     $                      F( IS, JS ), LDF, SCALOC, DSUM, AB_DSCALE,
      $                      LINFO )
                IF( LINFO.GT.0 )
      $            INFO = LINFO
                IF( SCALOC.NE.ONE ) THEN
                   DO 160 K = 1, JS - 1
-                     CALL CSCAL( M, CMPLX( SCALOC, ZERO ), C( 1, K ),
+                     CALL AB_CSCAL( M, CMPLX( SCALOC, ZERO ), C( 1, K ),
      $                           1 )
-                     CALL CSCAL( M, CMPLX( SCALOC, ZERO ), F( 1, K ),
+                     CALL AB_CSCAL( M, CMPLX( SCALOC, ZERO ), F( 1, K ),
      $                           1 )
   160             CONTINUE
                   DO 170 K = JS, JE
-                     CALL CSCAL( IS-1, CMPLX( SCALOC, ZERO ), C( 1, K ),
+                     CALL AB_CSCAL( IS-1, CMPLX( SCALOC, ZERO ), C( 1, K
+     $ ),
      $                           1 )
-                     CALL CSCAL( IS-1, CMPLX( SCALOC, ZERO ), F( 1, K ),
+                     CALL AB_CSCAL( IS-1, CMPLX( SCALOC, ZERO ), F( 1, K
+     $ ),
      $                           1 )
   170             CONTINUE
                   DO 180 K = JS, JE
-                     CALL CSCAL( M-IE, CMPLX( SCALOC, ZERO ),
+                     CALL AB_CSCAL( M-IE, CMPLX( SCALOC, ZERO ),
      $                           C( IE+1, K ), 1 )
-                     CALL CSCAL( M-IE, CMPLX( SCALOC, ZERO ),
+                     CALL AB_CSCAL( M-IE, CMPLX( SCALOC, ZERO ),
      $                           F( IE+1, K ), 1 )
   180             CONTINUE
                   DO 190 K = JE + 1, N
-                     CALL CSCAL( M, CMPLX( SCALOC, ZERO ), C( 1, K ),
+                     CALL AB_CSCAL( M, CMPLX( SCALOC, ZERO ), C( 1, K ),
      $                           1 )
-                     CALL CSCAL( M, CMPLX( SCALOC, ZERO ), F( 1, K ),
+                     CALL AB_CSCAL( M, CMPLX( SCALOC, ZERO ), F( 1, K ),
      $                           1 )
   190             CONTINUE
                   SCALE = SCALE*SCALOC
@@ -663,21 +676,21 @@
 *              Substitute R(I,J) and L(I,J) into remaining equation.
 *
                IF( J.GT.P+2 ) THEN
-                  CALL CGEMM( 'N', 'C', MB, JS-1, NB,
+                  CALL AB_CGEMM( 'N', 'C', MB, JS-1, NB,
      $                        CMPLX( ONE, ZERO ), C( IS, JS ), LDC,
      $                        B( 1, JS ), LDB, CMPLX( ONE, ZERO ),
      $                        F( IS, 1 ), LDF )
-                  CALL CGEMM( 'N', 'C', MB, JS-1, NB,
+                  CALL AB_CGEMM( 'N', 'C', MB, JS-1, NB,
      $                        CMPLX( ONE, ZERO ), F( IS, JS ), LDF,
      $                        E( 1, JS ), LDE, CMPLX( ONE, ZERO ),
      $                        F( IS, 1 ), LDF )
                END IF
                IF( I.LT.P ) THEN
-                  CALL CGEMM( 'C', 'N', M-IE, NB, MB,
+                  CALL AB_CGEMM( 'C', 'N', M-IE, NB, MB,
      $                        CMPLX( -ONE, ZERO ), A( IS, IE+1 ), LDA,
      $                        C( IS, JS ), LDC, CMPLX( ONE, ZERO ),
      $                        C( IE+1, JS ), LDC )
-                  CALL CGEMM( 'C', 'N', M-IE, NB, MB,
+                  CALL AB_CGEMM( 'C', 'N', M-IE, NB, MB,
      $                        CMPLX( -ONE, ZERO ), D( IS, IE+1 ), LDD,
      $                        F( IS, JS ), LDF, CMPLX( ONE, ZERO ),
      $                        C( IE+1, JS ), LDC )
@@ -690,6 +703,6 @@
 *
       RETURN
 *
-*     End of CTGSYL
+*     End of AB_CTGSYL
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b DPOTRF
+*> \brief \b AB_DPOTRF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DPOTRF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dpotrf.f">
+*> Download AB_DPOTRF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DPOTRF.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dpotrf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DPOTRF.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpotrf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DPOTRF.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DPOTRF( UPLO, N, A, LDA, INFO )
+*       SUBROUTINE AB_DPOTRF( UPLO, N, A, LDA, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> DPOTRF computes the Cholesky factorization of a real symmetric
+*> AB_DPOTRF computes the Cholesky factorization of a real symmetric
 *> positive definite matrix A.
 *>
 *> The factorization has the form
@@ -105,7 +105,7 @@
 *> \ingroup doublePOcomputational
 *
 *  =====================================================================
-      SUBROUTINE DPOTRF( UPLO, N, A, LDA, INFO )
+      SUBROUTINE AB_DPOTRF( UPLO, N, A, LDA, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -131,12 +131,13 @@
       INTEGER            J, JB, NB
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      EXTERNAL           LSAME, ILAENV
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_LSAME, AB_ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMM, DPOTRF2, DSYRK, DTRSM, XERBLA
+      EXTERNAL           AB_DGEMM, AB_DPOTRF2, AB_DSYRK, AB_DTRSM, AB_XE
+     $RBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -146,8 +147,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -155,7 +156,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DPOTRF', -INFO )
+         CALL AB_XERBLA( 'AB_DPOTRF', -INFO )
          RETURN
       END IF
 *
@@ -166,12 +167,12 @@
 *
 *     Determine the block size for this environment.
 *
-      NB = ILAENV( 1, 'DPOTRF', UPLO, N, -1, -1, -1 )
+      NB = AB_ILAENV( 1, 'AB_DPOTRF', UPLO, N, -1, -1, -1 )
       IF( NB.LE.1 .OR. NB.GE.N ) THEN
 *
 *        Use unblocked code.
 *
-         CALL DPOTRF2( UPLO, N, A, LDA, INFO )
+         CALL AB_DPOTRF2( UPLO, N, A, LDA, INFO )
       ELSE
 *
 *        Use blocked code.
@@ -186,19 +187,21 @@
 *              for non-positive-definiteness.
 *
                JB = MIN( NB, N-J+1 )
-               CALL DSYRK( 'Upper', 'Transpose', JB, J-1, -ONE,
+               CALL AB_DSYRK( 'Upper', 'Transpose', JB, J-1, -ONE,
      $                     A( 1, J ), LDA, ONE, A( J, J ), LDA )
-               CALL DPOTRF2( 'Upper', JB, A( J, J ), LDA, INFO )
+               CALL AB_DPOTRF2( 'Upper', JB, A( J, J ), LDA, INFO )
                IF( INFO.NE.0 )
      $            GO TO 30
                IF( J+JB.LE.N ) THEN
 *
 *                 Compute the current block row.
 *
-                  CALL DGEMM( 'Transpose', 'No transpose', JB, N-J-JB+1,
+                  CALL AB_DGEMM( 'Transpose', 'No transpose', JB, N-J-JB
+     $+1,
      $                        J-1, -ONE, A( 1, J ), LDA, A( 1, J+JB ),
      $                        LDA, ONE, A( J, J+JB ), LDA )
-                  CALL DTRSM( 'Left', 'Upper', 'Transpose', 'Non-unit',
+                  CALL AB_DTRSM( 'Left', 'Upper', 'Transpose', 'Non-unit
+     $',
      $                        JB, N-J-JB+1, ONE, A( J, J ), LDA,
      $                        A( J, J+JB ), LDA )
                END IF
@@ -214,19 +217,21 @@
 *              for non-positive-definiteness.
 *
                JB = MIN( NB, N-J+1 )
-               CALL DSYRK( 'Lower', 'No transpose', JB, J-1, -ONE,
+               CALL AB_DSYRK( 'Lower', 'No transpose', JB, J-1, -ONE,
      $                     A( J, 1 ), LDA, ONE, A( J, J ), LDA )
-               CALL DPOTRF2( 'Lower', JB, A( J, J ), LDA, INFO )
+               CALL AB_DPOTRF2( 'Lower', JB, A( J, J ), LDA, INFO )
                IF( INFO.NE.0 )
      $            GO TO 30
                IF( J+JB.LE.N ) THEN
 *
 *                 Compute the current block column.
 *
-                  CALL DGEMM( 'No transpose', 'Transpose', N-J-JB+1, JB,
+                  CALL AB_DGEMM( 'No transpose', 'Transpose', N-J-JB+1, 
+     $JB,
      $                        J-1, -ONE, A( J+JB, 1 ), LDA, A( J, 1 ),
      $                        LDA, ONE, A( J+JB, J ), LDA )
-                  CALL DTRSM( 'Right', 'Lower', 'Transpose', 'Non-unit',
+                  CALL AB_DTRSM( 'Right', 'Lower', 'Transpose', 'Non-uni
+     $t',
      $                        N-J-JB+1, JB, ONE, A( J, J ), LDA,
      $                        A( J+JB, J ), LDA )
                END IF
@@ -241,6 +246,6 @@
    40 CONTINUE
       RETURN
 *
-*     End of DPOTRF
+*     End of AB_DPOTRF
 *
       END

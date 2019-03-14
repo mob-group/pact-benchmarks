@@ -1,4 +1,4 @@
-*> \brief \b DGBTRS
+*> \brief \b AB_DGBTRS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DGBTRS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgbtrs.f">
+*> Download AB_DGBTRS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGBTRS.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgbtrs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGBTRS.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgbtrs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGBTRS.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGBTRS( TRANS, N, KL, KU, NRHS, AB, LDAB, IPIV, B, LDB,
+*       SUBROUTINE AB_DGBTRS( TRANS, N, KL, KU, NRHS, AB, LDAB, IPIV, B, LDB,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,10 +36,10 @@
 *>
 *> \verbatim
 *>
-*> DGBTRS solves a system of linear equations
+*> AB_DGBTRS solves a system of linear equations
 *>    A * X = B  or  A**T * X = B
 *> with a general band matrix A using the LU factorization computed
-*> by DGBTRF.
+*> by AB_DGBTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -83,7 +83,7 @@
 *> \verbatim
 *>          AB is DOUBLE PRECISION array, dimension (LDAB,N)
 *>          Details of the LU factorization of the band matrix A, as
-*>          computed by DGBTRF.  U is stored as an upper triangular band
+*>          computed by AB_DGBTRF.  U is stored as an upper triangular band
 *>          matrix with KL+KU superdiagonals in rows 1 to KL+KU+1, and
 *>          the multipliers used during the factorization are stored in
 *>          rows KL+KU+2 to 2*KL+KU+1.
@@ -135,7 +135,8 @@
 *> \ingroup doubleGBcomputational
 *
 *  =====================================================================
-      SUBROUTINE DGBTRS( TRANS, N, KL, KU, NRHS, AB, LDAB, IPIV, B, LDB,
+      SUBROUTINE AB_DGBTRS( TRANS, N, KL, KU, NRHS, AB, LDAB, IPIV, B, L
+     $DB,
      $                   INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -163,11 +164,12 @@
       INTEGER            I, J, KD, L, LM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMV, DGER, DSWAP, DTBSV, XERBLA
+      EXTERNAL           AB_DGEMV, AB_DGER, AB_DSWAP, AB_DTBSV, AB_XERBL
+     $A
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -177,9 +179,9 @@
 *     Test the input parameters.
 *
       INFO = 0
-      NOTRAN = LSAME( TRANS, 'N' )
-      IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) .AND. .NOT.
-     $    LSAME( TRANS, 'C' ) ) THEN
+      NOTRAN = AB_LSAME( TRANS, 'N' )
+      IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) .AND. .NOT.
+     $    AB_LSAME( TRANS, 'C' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -195,7 +197,7 @@
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DGBTRS', -INFO )
+         CALL AB_XERBLA( 'AB_DGBTRS', -INFO )
          RETURN
       END IF
 *
@@ -223,8 +225,9 @@
                LM = MIN( KL, N-J )
                L = IPIV( J )
                IF( L.NE.J )
-     $            CALL DSWAP( NRHS, B( L, 1 ), LDB, B( J, 1 ), LDB )
-               CALL DGER( LM, NRHS, -ONE, AB( KD+1, J ), 1, B( J, 1 ),
+     $            CALL AB_DSWAP( NRHS, B( L, 1 ), LDB, B( J, 1 ), LDB )
+               CALL AB_DGER( LM, NRHS, -ONE, AB( KD+1, J ), 1, B( J, 1 )
+     $,
      $                    LDB, B( J+1, 1 ), LDB )
    10       CONTINUE
          END IF
@@ -233,7 +236,8 @@
 *
 *           Solve U*X = B, overwriting B with X.
 *
-            CALL DTBSV( 'Upper', 'No transpose', 'Non-unit', N, KL+KU,
+            CALL AB_DTBSV( 'Upper', 'No transpose', 'Non-unit', N, KL+KU
+     $,
      $                  AB, LDAB, B( 1, I ), 1 )
    20    CONTINUE
 *
@@ -245,7 +249,8 @@
 *
 *           Solve U**T*X = B, overwriting B with X.
 *
-            CALL DTBSV( 'Upper', 'Transpose', 'Non-unit', N, KL+KU, AB,
+            CALL AB_DTBSV( 'Upper', 'Transpose', 'Non-unit', N, KL+KU, A
+     $B,
      $                  LDAB, B( 1, I ), 1 )
    30    CONTINUE
 *
@@ -254,16 +259,16 @@
          IF( LNOTI ) THEN
             DO 40 J = N - 1, 1, -1
                LM = MIN( KL, N-J )
-               CALL DGEMV( 'Transpose', LM, NRHS, -ONE, B( J+1, 1 ),
+               CALL AB_DGEMV( 'Transpose', LM, NRHS, -ONE, B( J+1, 1 ),
      $                     LDB, AB( KD+1, J ), 1, ONE, B( J, 1 ), LDB )
                L = IPIV( J )
                IF( L.NE.J )
-     $            CALL DSWAP( NRHS, B( L, 1 ), LDB, B( J, 1 ), LDB )
+     $            CALL AB_DSWAP( NRHS, B( L, 1 ), LDB, B( J, 1 ), LDB )
    40       CONTINUE
          END IF
       END IF
       RETURN
 *
-*     End of DGBTRS
+*     End of AB_DGBTRS
 *
       END

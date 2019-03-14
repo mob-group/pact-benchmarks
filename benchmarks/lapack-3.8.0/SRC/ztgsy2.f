@@ -1,4 +1,4 @@
-*> \brief \b ZTGSY2 solves the generalized Sylvester equation (unblocked algorithm).
+*> \brief \b AB_ZTGSY2 solves the generalized Sylvester equation (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,26 +6,26 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZTGSY2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztgsy2.f">
+*> Download AB_ZTGSY2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZTGSY2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztgsy2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZTGSY2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztgsy2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZTGSY2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZTGSY2( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC, D,
-*                          LDD, E, LDE, F, LDF, SCALE, RDSUM, RDSCAL,
+*       SUBROUTINE AB_ZTGSY2( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC, D,
+*                          LDD, E, LDE, F, LDF, SCALE, RDSUM, RAB_DSCAL,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          TRANS
 *       INTEGER            IJOB, INFO, LDA, LDB, LDC, LDD, LDE, LDF, M, N
-*       DOUBLE PRECISION   RDSCAL, RDSUM, SCALE
+*       DOUBLE PRECISION   RAB_DSCAL, RDSUM, SCALE
 *       ..
 *       .. Array Arguments ..
 *       COMPLEX*16         A( LDA, * ), B( LDB, * ), C( LDC, * ),
@@ -38,7 +38,7 @@
 *>
 *> \verbatim
 *>
-*> ZTGSY2 solves the generalized Sylvester equation
+*> AB_ZTGSY2 solves the generalized Sylvester equation
 *>
 *>             A * R - L * B = scale * C               (1)
 *>             D * R - L * E = scale * F
@@ -67,12 +67,12 @@
 *>             R  * B**H + L  * E**H  = scale * -F
 *>
 *> This case is used to compute an estimate of Dif[(A, D), (B, E)] =
-*> = sigma_min(Z) using reverse communicaton with ZLACON.
+*> = sigma_min(Z) using reverse communicaton with AB_ZLACON.
 *>
-*> ZTGSY2 also (IJOB >= 1) contributes to the computation in ZTGSYL
+*> AB_ZTGSY2 also (IJOB >= 1) contributes to the computation in AB_ZTGSYL
 *> of an upper bound on the separation between to matrix pairs. Then
 *> the input (A, D), (B, E) are sub-pencils of two matrix pairs in
-*> ZTGSYL.
+*> AB_ZTGSYL.
 *> \endverbatim
 *
 *  Arguments:
@@ -95,7 +95,7 @@
 *>              pairs is computed. (look ahead strategy is used).
 *>          =2: A contribution from this subsystem to a Frobenius
 *>              norm-based estimate of the separation between two matrix
-*>              pairs is computed. (DGECON on sub-systems is used.)
+*>              pairs is computed. (AB_DGECON on sub-systems is used.)
 *>          Not referenced if TRANS = 'T'.
 *> \endverbatim
 *>
@@ -206,24 +206,24 @@
 *> \verbatim
 *>          RDSUM is DOUBLE PRECISION
 *>          On entry, the sum of squares of computed contributions to
-*>          the Dif-estimate under computation by ZTGSYL, where the
-*>          scaling factor RDSCAL (see below) has been factored out.
+*>          the Dif-estimate under computation by AB_ZTGSYL, where the
+*>          scaling factor RAB_DSCAL (see below) has been factored out.
 *>          On exit, the corresponding sum of squares updated with the
 *>          contributions from the current sub-system.
 *>          If TRANS = 'T' RDSUM is not touched.
-*>          NOTE: RDSUM only makes sense when ZTGSY2 is called by
-*>          ZTGSYL.
+*>          NOTE: RDSUM only makes sense when AB_ZTGSY2 is called by
+*>          AB_ZTGSYL.
 *> \endverbatim
 *>
-*> \param[in,out] RDSCAL
+*> \param[in,out] RAB_DSCAL
 *> \verbatim
-*>          RDSCAL is DOUBLE PRECISION
+*>          RAB_DSCAL is DOUBLE PRECISION
 *>          On entry, scaling factor used to prevent overflow in RDSUM.
-*>          On exit, RDSCAL is updated w.r.t. the current contributions
+*>          On exit, RAB_DSCAL is updated w.r.t. the current contributions
 *>          in RDSUM.
-*>          If TRANS = 'T', RDSCAL is not touched.
-*>          NOTE: RDSCAL only makes sense when ZTGSY2 is called by
-*>          ZTGSYL.
+*>          If TRANS = 'T', RAB_DSCAL is not touched.
+*>          NOTE: RAB_DSCAL only makes sense when AB_ZTGSY2 is called by
+*>          AB_ZTGSYL.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -255,8 +255,9 @@
 *>     Umea University, S-901 87 Umea, Sweden.
 *
 *  =====================================================================
-      SUBROUTINE ZTGSY2( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC, D,
-     $                   LDD, E, LDE, F, LDF, SCALE, RDSUM, RDSCAL,
+      SUBROUTINE AB_ZTGSY2( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC, D
+     $,
+     $                   LDD, E, LDE, F, LDF, SCALE, RDSUM, RAB_DSCAL,
      $                   INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -267,7 +268,7 @@
 *     .. Scalar Arguments ..
       CHARACTER          TRANS
       INTEGER            IJOB, INFO, LDA, LDB, LDC, LDD, LDE, LDF, M, N
-      DOUBLE PRECISION   RDSCAL, RDSUM, SCALE
+      DOUBLE PRECISION   RAB_DSCAL, RDSUM, SCALE
 *     ..
 *     .. Array Arguments ..
       COMPLEX*16         A( LDA, * ), B( LDB, * ), C( LDC, * ),
@@ -292,11 +293,12 @@
       COMPLEX*16         RHS( LDZ ), Z( LDZ, LDZ )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZAXPY, ZGESC2, ZGETC2, ZLATDF, ZSCAL
+      EXTERNAL           AB_XERBLA, AB_ZAXPY, AB_ZGESC2, AB_ZGETC2, AB_Z
+     $LATDF, AB_ZSCAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DCMPLX, DCONJG, MAX
@@ -307,8 +309,8 @@
 *
       INFO = 0
       IERR = 0
-      NOTRAN = LSAME( TRANS, 'N' )
-      IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'C' ) ) THEN
+      NOTRAN = AB_LSAME( TRANS, 'N' )
+      IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'C' ) ) THEN
          INFO = -1
       ELSE IF( NOTRAN ) THEN
          IF( ( IJOB.LT.0 ) .OR. ( IJOB.GT.2 ) ) THEN
@@ -335,7 +337,7 @@
          END IF
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZTGSY2', -INFO )
+         CALL AB_XERBLA( 'AB_ZTGSY2', -INFO )
          RETURN
       END IF
 *
@@ -365,22 +367,23 @@
 *
 *              Solve Z * x = RHS
 *
-               CALL ZGETC2( LDZ, Z, LDZ, IPIV, JPIV, IERR )
+               CALL AB_ZGETC2( LDZ, Z, LDZ, IPIV, JPIV, IERR )
                IF( IERR.GT.0 )
      $            INFO = IERR
                IF( IJOB.EQ.0 ) THEN
-                  CALL ZGESC2( LDZ, Z, LDZ, RHS, IPIV, JPIV, SCALOC )
+                  CALL AB_ZGESC2( LDZ, Z, LDZ, RHS, IPIV, JPIV, SCALOC )
                   IF( SCALOC.NE.ONE ) THEN
                      DO 10 K = 1, N
-                        CALL ZSCAL( M, DCMPLX( SCALOC, ZERO ),
+                        CALL AB_ZSCAL( M, DCMPLX( SCALOC, ZERO ),
      $                              C( 1, K ), 1 )
-                        CALL ZSCAL( M, DCMPLX( SCALOC, ZERO ),
+                        CALL AB_ZSCAL( M, DCMPLX( SCALOC, ZERO ),
      $                              F( 1, K ), 1 )
    10                CONTINUE
                      SCALE = SCALE*SCALOC
                   END IF
                ELSE
-                  CALL ZLATDF( IJOB, LDZ, Z, LDZ, RHS, RDSUM, RDSCAL,
+                  CALL AB_ZLATDF( IJOB, LDZ, Z, LDZ, RHS, RDSUM, RAB_DSC
+     $AL,
      $                         IPIV, JPIV )
                END IF
 *
@@ -393,13 +396,15 @@
 *
                IF( I.GT.1 ) THEN
                   ALPHA = -RHS( 1 )
-                  CALL ZAXPY( I-1, ALPHA, A( 1, I ), 1, C( 1, J ), 1 )
-                  CALL ZAXPY( I-1, ALPHA, D( 1, I ), 1, F( 1, J ), 1 )
+                  CALL AB_ZAXPY( I-1, ALPHA, A( 1, I ), 1, C( 1, J ), 1 
+     $)
+                  CALL AB_ZAXPY( I-1, ALPHA, D( 1, I ), 1, F( 1, J ), 1 
+     $)
                END IF
                IF( J.LT.N ) THEN
-                  CALL ZAXPY( N-J, RHS( 2 ), B( J, J+1 ), LDB,
+                  CALL AB_ZAXPY( N-J, RHS( 2 ), B( J, J+1 ), LDB,
      $                        C( I, J+1 ), LDC )
-                  CALL ZAXPY( N-J, RHS( 2 ), E( J, J+1 ), LDE,
+                  CALL AB_ZAXPY( N-J, RHS( 2 ), E( J, J+1 ), LDE,
      $                        F( I, J+1 ), LDF )
                END IF
 *
@@ -432,15 +437,17 @@
 *
 *              Solve Z**H * x = RHS
 *
-               CALL ZGETC2( LDZ, Z, LDZ, IPIV, JPIV, IERR )
+               CALL AB_ZGETC2( LDZ, Z, LDZ, IPIV, JPIV, IERR )
                IF( IERR.GT.0 )
      $            INFO = IERR
-               CALL ZGESC2( LDZ, Z, LDZ, RHS, IPIV, JPIV, SCALOC )
+               CALL AB_ZGESC2( LDZ, Z, LDZ, RHS, IPIV, JPIV, SCALOC )
                IF( SCALOC.NE.ONE ) THEN
                   DO 40 K = 1, N
-                     CALL ZSCAL( M, DCMPLX( SCALOC, ZERO ), C( 1, K ),
+                     CALL AB_ZSCAL( M, DCMPLX( SCALOC, ZERO ), C( 1, K )
+     $,
      $                           1 )
-                     CALL ZSCAL( M, DCMPLX( SCALOC, ZERO ), F( 1, K ),
+                     CALL AB_ZSCAL( M, DCMPLX( SCALOC, ZERO ), F( 1, K )
+     $,
      $                           1 )
    40             CONTINUE
                   SCALE = SCALE*SCALOC
@@ -467,6 +474,6 @@
       END IF
       RETURN
 *
-*     End of ZTGSY2
+*     End of AB_ZTGSY2
 *
       END

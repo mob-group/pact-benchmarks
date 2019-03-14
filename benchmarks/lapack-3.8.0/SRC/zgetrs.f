@@ -1,4 +1,4 @@
-*> \brief \b ZGETRS
+*> \brief \b AB_ZGETRS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZGETRS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgetrs.f">
+*> Download AB_ZGETRS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZGETRS.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgetrs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZGETRS.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgetrs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZGETRS.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZGETRS( TRANS, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+*       SUBROUTINE AB_ZGETRS( TRANS, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          TRANS
@@ -35,10 +35,10 @@
 *>
 *> \verbatim
 *>
-*> ZGETRS solves a system of linear equations
+*> AB_ZGETRS solves a system of linear equations
 *>    A * X = B,  A**T * X = B,  or  A**H * X = B
 *> with a general N-by-N matrix A using the LU factorization computed
-*> by ZGETRF.
+*> by AB_ZGETRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -70,7 +70,7 @@
 *> \verbatim
 *>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          The factors L and U from the factorization A = P*L*U
-*>          as computed by ZGETRF.
+*>          as computed by AB_ZGETRF.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -82,7 +82,7 @@
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          The pivot indices from ZGETRF; for 1<=i<=N, row i of the
+*>          The pivot indices from AB_ZGETRF; for 1<=i<=N, row i of the
 *>          matrix was interchanged with row IPIV(i).
 *> \endverbatim
 *>
@@ -119,7 +119,7 @@
 *> \ingroup complex16GEcomputational
 *
 *  =====================================================================
-      SUBROUTINE ZGETRS( TRANS, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+      SUBROUTINE AB_ZGETRS( TRANS, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -145,11 +145,11 @@
       LOGICAL            NOTRAN
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLASWP, ZTRSM
+      EXTERNAL           AB_XERBLA, AB_ZLASWP, AB_ZTRSM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -159,9 +159,9 @@
 *     Test the input parameters.
 *
       INFO = 0
-      NOTRAN = LSAME( TRANS, 'N' )
-      IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) .AND. .NOT.
-     $    LSAME( TRANS, 'C' ) ) THEN
+      NOTRAN = AB_LSAME( TRANS, 'N' )
+      IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) .AND. .NOT.
+     $    AB_LSAME( TRANS, 'C' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -173,7 +173,7 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZGETRS', -INFO )
+         CALL AB_XERBLA( 'AB_ZGETRS', -INFO )
          RETURN
       END IF
 *
@@ -188,16 +188,17 @@
 *
 *        Apply row interchanges to the right hand sides.
 *
-         CALL ZLASWP( NRHS, B, LDB, 1, N, IPIV, 1 )
+         CALL AB_ZLASWP( NRHS, B, LDB, 1, N, IPIV, 1 )
 *
 *        Solve L*X = B, overwriting B with X.
 *
-         CALL ZTRSM( 'Left', 'Lower', 'No transpose', 'Unit', N, NRHS,
+         CALL AB_ZTRSM( 'Left', 'Lower', 'No transpose', 'Unit', N, NRHS
+     $,
      $               ONE, A, LDA, B, LDB )
 *
 *        Solve U*X = B, overwriting B with X.
 *
-         CALL ZTRSM( 'Left', 'Upper', 'No transpose', 'Non-unit', N,
+         CALL AB_ZTRSM( 'Left', 'Upper', 'No transpose', 'Non-unit', N,
      $               NRHS, ONE, A, LDA, B, LDB )
       ELSE
 *
@@ -205,21 +206,22 @@
 *
 *        Solve U**T *X = B or U**H *X = B, overwriting B with X.
 *
-         CALL ZTRSM( 'Left', 'Upper', TRANS, 'Non-unit', N, NRHS, ONE,
+         CALL AB_ZTRSM( 'Left', 'Upper', TRANS, 'Non-unit', N, NRHS, ONE
+     $,
      $               A, LDA, B, LDB )
 *
 *        Solve L**T *X = B, or L**H *X = B overwriting B with X.
 *
-         CALL ZTRSM( 'Left', 'Lower', TRANS, 'Unit', N, NRHS, ONE, A,
+         CALL AB_ZTRSM( 'Left', 'Lower', TRANS, 'Unit', N, NRHS, ONE, A,
      $               LDA, B, LDB )
 *
 *        Apply row interchanges to the solution vectors.
 *
-         CALL ZLASWP( NRHS, B, LDB, 1, N, IPIV, -1 )
+         CALL AB_ZLASWP( NRHS, B, LDB, 1, N, IPIV, -1 )
       END IF
 *
       RETURN
 *
-*     End of ZGETRS
+*     End of AB_ZGETRS
 *
       END

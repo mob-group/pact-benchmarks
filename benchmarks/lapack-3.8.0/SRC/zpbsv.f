@@ -1,4 +1,4 @@
-*> \brief <b> ZPBSV computes the solution to system of linear equations A * X = B for OTHER matrices</b>
+*> \brief <b> AB_ZPBSV computes the solution to system of linear equations A * X = B for OTHER matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZPBSV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zpbsv.f">
+*> Download AB_ZPBSV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZPBSV.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zpbsv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZPBSV.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpbsv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZPBSV.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZPBSV( UPLO, N, KD, NRHS, AB, LDAB, B, LDB, INFO )
+*       SUBROUTINE AB_ZPBSV( UPLO, N, KD, NRHS, AB, LDAB, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> ZPBSV computes the solution to a complex system of linear equations
+*> AB_ZPBSV computes the solution to a complex system of linear equations
 *>    A * X = B,
 *> where A is an N-by-N Hermitian positive definite band matrix and X
 *> and B are N-by-NRHS matrices.
@@ -162,7 +162,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZPBSV( UPLO, N, KD, NRHS, AB, LDAB, B, LDB, INFO )
+      SUBROUTINE AB_ZPBSV( UPLO, N, KD, NRHS, AB, LDAB, B, LDB, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -180,11 +180,11 @@
 *  =====================================================================
 *
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZPBTRF, ZPBTRS
+      EXTERNAL           AB_XERBLA, AB_ZPBTRF, AB_ZPBTRS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -194,7 +194,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      IF( .NOT.AB_LSAME( UPLO, 'U' ) .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) 
+     $THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -208,22 +209,22 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZPBSV ', -INFO )
+         CALL AB_XERBLA( 'AB_ZPBSV ', -INFO )
          RETURN
       END IF
 *
 *     Compute the Cholesky factorization A = U**H *U or A = L*L**H.
 *
-      CALL ZPBTRF( UPLO, N, KD, AB, LDAB, INFO )
+      CALL AB_ZPBTRF( UPLO, N, KD, AB, LDAB, INFO )
       IF( INFO.EQ.0 ) THEN
 *
 *        Solve the system A*X = B, overwriting B with X.
 *
-         CALL ZPBTRS( UPLO, N, KD, NRHS, AB, LDAB, B, LDB, INFO )
+         CALL AB_ZPBTRS( UPLO, N, KD, NRHS, AB, LDAB, B, LDB, INFO )
 *
       END IF
       RETURN
 *
-*     End of ZPBSV
+*     End of AB_ZPBSV
 *
       END

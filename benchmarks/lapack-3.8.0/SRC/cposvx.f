@@ -1,4 +1,4 @@
-*> \brief <b> CPOSVX computes the solution to system of linear equations A * X = B for PO matrices</b>
+*> \brief <b> AB_CPOSVX computes the solution to system of linear equations A * X = B for PO matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CPOSVX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cposvx.f">
+*> Download AB_CPOSVX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CPOSVx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cposvx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CPOSVx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cposvx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CPOSVx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CPOSVX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, EQUED,
+*       SUBROUTINE AB_CPOSVX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, EQUED,
 *                          S, B, LDB, X, LDX, RCOND, FERR, BERR, WORK,
 *                          RWORK, INFO )
 *
@@ -39,7 +39,7 @@
 *>
 *> \verbatim
 *>
-*> CPOSVX uses the Cholesky factorization A = U**H*U or A = L*L**H to
+*> AB_CPOSVX uses the Cholesky factorization A = U**H*U or A = L*L**H to
 *> compute the solution to a complex system of linear equations
 *>    A * X = B,
 *> where A is an N-by-N Hermitian positive definite matrix and X and B
@@ -302,7 +302,8 @@
 *> \ingroup complexPOsolve
 *
 *  =====================================================================
-      SUBROUTINE CPOSVX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, EQUED,
+      SUBROUTINE AB_CPOSVX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, EQUED
+     $,
      $                   S, B, LDB, X, LDX, RCOND, FERR, BERR, WORK,
      $                   RWORK, INFO )
 *
@@ -334,13 +335,14 @@
       REAL               AMAX, ANORM, BIGNUM, SCOND, SMAX, SMIN, SMLNUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               CLANHE, SLAMCH
-      EXTERNAL           LSAME, CLANHE, SLAMCH
+      LOGICAL            AB_LSAME
+      REAL               AB_CLANHE, SLAMCH
+      EXTERNAL           AB_LSAME, AB_CLANHE, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLACPY, CLAQHE, CPOCON, CPOEQU, CPORFS, CPOTRF,
-     $                   CPOTRS, XERBLA
+      EXTERNAL           AB_CLACPY, AB_CLAQHE, AB_CPOCON, AB_CPOEQU, AB_
+     $CPORFS, AB_CPOTRF,
+     $                   AB_CPOTRS, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -348,23 +350,25 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-      NOFACT = LSAME( FACT, 'N' )
-      EQUIL = LSAME( FACT, 'E' )
+      NOFACT = AB_LSAME( FACT, 'N' )
+      EQUIL = AB_LSAME( FACT, 'E' )
       IF( NOFACT .OR. EQUIL ) THEN
          EQUED = 'N'
          RCEQU = .FALSE.
       ELSE
-         RCEQU = LSAME( EQUED, 'Y' )
+         RCEQU = AB_LSAME( EQUED, 'Y' )
          SMLNUM = SLAMCH( 'Safe minimum' )
          BIGNUM = ONE / SMLNUM
       END IF
 *
 *     Test the input parameters.
 *
-      IF( .NOT.NOFACT .AND. .NOT.EQUIL .AND. .NOT.LSAME( FACT, 'F' ) )
+      IF( .NOT.NOFACT .AND. .NOT.EQUIL .AND. .NOT.AB_LSAME( FACT, 'F' ) 
+     $)
      $     THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) )
+      ELSE IF( .NOT.AB_LSAME( UPLO, 'U' ) .AND. .NOT.AB_LSAME( UPLO, 'L'
+     $ ) )
      $          THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
@@ -375,8 +379,8 @@
          INFO = -6
       ELSE IF( LDAF.LT.MAX( 1, N ) ) THEN
          INFO = -8
-      ELSE IF( LSAME( FACT, 'F' ) .AND. .NOT.
-     $         ( RCEQU .OR. LSAME( EQUED, 'N' ) ) ) THEN
+      ELSE IF( AB_LSAME( FACT, 'F' ) .AND. .NOT.
+     $         ( RCEQU .OR. AB_LSAME( EQUED, 'N' ) ) ) THEN
          INFO = -9
       ELSE
          IF( RCEQU ) THEN
@@ -404,7 +408,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CPOSVX', -INFO )
+         CALL AB_XERBLA( 'AB_CPOSVX', -INFO )
          RETURN
       END IF
 *
@@ -412,13 +416,13 @@
 *
 *        Compute row and column scalings to equilibrate the matrix A.
 *
-         CALL CPOEQU( N, A, LDA, S, SCOND, AMAX, INFEQU )
+         CALL AB_CPOEQU( N, A, LDA, S, SCOND, AMAX, INFEQU )
          IF( INFEQU.EQ.0 ) THEN
 *
 *           Equilibrate the matrix.
 *
-            CALL CLAQHE( UPLO, N, A, LDA, S, SCOND, AMAX, EQUED )
-            RCEQU = LSAME( EQUED, 'Y' )
+            CALL AB_CLAQHE( UPLO, N, A, LDA, S, SCOND, AMAX, EQUED )
+            RCEQU = AB_LSAME( EQUED, 'Y' )
          END IF
       END IF
 *
@@ -436,8 +440,8 @@
 *
 *        Compute the Cholesky factorization A = U**H *U or A = L*L**H.
 *
-         CALL CLACPY( UPLO, N, N, A, LDA, AF, LDAF )
-         CALL CPOTRF( UPLO, N, AF, LDAF, INFO )
+         CALL AB_CLACPY( UPLO, N, N, A, LDA, AF, LDAF )
+         CALL AB_CPOTRF( UPLO, N, AF, LDAF, INFO )
 *
 *        Return if INFO is non-zero.
 *
@@ -449,21 +453,22 @@
 *
 *     Compute the norm of the matrix A.
 *
-      ANORM = CLANHE( '1', UPLO, N, A, LDA, RWORK )
+      ANORM = AB_CLANHE( '1', UPLO, N, A, LDA, RWORK )
 *
 *     Compute the reciprocal of the condition number of A.
 *
-      CALL CPOCON( UPLO, N, AF, LDAF, ANORM, RCOND, WORK, RWORK, INFO )
+      CALL AB_CPOCON( UPLO, N, AF, LDAF, ANORM, RCOND, WORK, RWORK, INFO
+     $ )
 *
 *     Compute the solution matrix X.
 *
-      CALL CLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
-      CALL CPOTRS( UPLO, N, NRHS, AF, LDAF, X, LDX, INFO )
+      CALL AB_CLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
+      CALL AB_CPOTRS( UPLO, N, NRHS, AF, LDAF, X, LDX, INFO )
 *
 *     Use iterative refinement to improve the computed solution and
 *     compute error bounds and backward error estimates for it.
 *
-      CALL CPORFS( UPLO, N, NRHS, A, LDA, AF, LDAF, B, LDB, X, LDX,
+      CALL AB_CPORFS( UPLO, N, NRHS, A, LDA, AF, LDAF, B, LDB, X, LDX,
      $             FERR, BERR, WORK, RWORK, INFO )
 *
 *     Transform the solution matrix X to a solution of the original
@@ -487,6 +492,6 @@
 *
       RETURN
 *
-*     End of CPOSVX
+*     End of AB_CPOSVX
 *
       END

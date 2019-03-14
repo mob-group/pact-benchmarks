@@ -1,4 +1,4 @@
-*> \brief \b SLAEBZ computes the number of eigenvalues of a real symmetric tridiagonal matrix which are less than or equal to a given value, and performs other tasks required by the routine sstebz.
+*> \brief \b AB_SLAEBZ computes the number of eigenvalues of a real symmetric tridiagonal matrix which are less than or equal to a given value, and performs other tasks required by the routine AB_SSTEBZ.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLAEBZ + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaebz.f">
+*> Download AB_SLAEBZ + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLAEBZ.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaebz.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLAEBZ.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaebz.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLAEBZ.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLAEBZ( IJOB, NITMAX, N, MMAX, MINP, NBMIN, ABSTOL,
+*       SUBROUTINE AB_SLAEBZ( IJOB, NITMAX, N, MMAX, MINP, NBMIN, ABSTOL,
 *                          RELTOL, PIVMIN, D, E, E2, NVAL, AB, C, MOUT,
 *                          NAB, WORK, IWORK, INFO )
 *
@@ -38,7 +38,7 @@
 *>
 *> \verbatim
 *>
-*> SLAEBZ contains the iteration loops which compute and use the
+*> AB_SLAEBZ contains the iteration loops which compute and use the
 *> function N(w), which is the count of eigenvalues of a symmetric
 *> tridiagonal matrix T less than or equal to its argument  w.  It
 *> performs a choice of two types of loops:
@@ -89,7 +89,7 @@
 *>          = 3:  Perform bisection iteration to invert N(w), i.e.,
 *>                to find a point which has a specified number of
 *>                eigenvalues of T to its left.
-*>          Other values will cause SLAEBZ to return with INFO=-1.
+*>          Other values will cause AB_SLAEBZ to return with INFO=-1.
 *> \endverbatim
 *>
 *> \param[in] NITMAX
@@ -113,7 +113,7 @@
 *> \verbatim
 *>          MMAX is INTEGER
 *>          The maximum number of intervals.  If more than MMAX intervals
-*>          are generated, then SLAEBZ will quit with INFO=MMAX+1.
+*>          are generated, then AB_SLAEBZ will quit with INFO=MMAX+1.
 *> \endverbatim
 *>
 *> \param[in] MINP
@@ -228,7 +228,7 @@
 *>             N(AB(i,1)) <= NAB(i,1) <= NAB(i,2) <= N(AB(i,2)),
 *>             which means that in interval i only eigenvalues
 *>             NAB(i,1)+1,...,NAB(i,2) will be considered.  Usually,
-*>             NAB(i,j)=N(AB(i,j)), from a previous call to SLAEBZ with
+*>             NAB(i,j)=N(AB(i,j)), from a previous call to AB_SLAEBZ with
 *>             IJOB=1.
 *>             On output, NAB(i,j) will contain
 *>             max(na(k),min(nb(k),N(AB(i,j)))), where k is the index of
@@ -242,7 +242,7 @@
 *>             reorderings -- see NVAL and AB), or unless N(w) < NVAL(i)
 *>             for all search points  w , in which case NAB(i,2) will
 *>             not be modified.  Normally, NAB should be set to some
-*>             distinctive value(s) before SLAEBZ is called.
+*>             distinctive value(s) before AB_SLAEBZ is called.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -286,14 +286,14 @@
 *>  routines, thus the interface is less user-friendly.  It is intended
 *>  for two purposes:
 *>
-*>  (a) finding eigenvalues.  In this case, SLAEBZ should have one or
-*>      more initial intervals set up in AB, and SLAEBZ should be called
+*>  (a) finding eigenvalues.  In this case, AB_SLAEBZ should have one or
+*>      more initial intervals set up in AB, and AB_SLAEBZ should be called
 *>      with IJOB=1.  This sets up NAB, and also counts the eigenvalues.
 *>      Intervals with no eigenvalues would usually be thrown out at
 *>      this point.  Also, if not all the eigenvalues in an interval i
 *>      are desired, NAB(i,1) can be increased or NAB(i,2) decreased.
 *>      For example, set NAB(i,1)=NAB(i,2)-1 to get the largest
-*>      eigenvalue.  SLAEBZ is then called with IJOB=2 and MMAX
+*>      eigenvalue.  AB_SLAEBZ is then called with IJOB=2 and MMAX
 *>      no smaller than the value of MOUT returned by the call with
 *>      IJOB=1.  After this (IJOB=2) call, eigenvalues NAB(i,1)+1
 *>      through NAB(i,2) are approximately AB(i,1) (or AB(i,2)) to the
@@ -305,7 +305,7 @@
 *>      NVAL element should contain  f-1  and the other should contain  l
 *>      , while C should contain a and b, resp.  NAB(i,1) should be -1
 *>      and NAB(i,2) should be N+1, to flag an error if the desired
-*>      interval does not lie in (a,b).  SLAEBZ is then called with
+*>      interval does not lie in (a,b).  AB_SLAEBZ is then called with
 *>      IJOB=3.  On exit, if w(f-1) < w(f), then one of the intervals --
 *>      j -- will have AB(j,1)=AB(j,2) and NAB(j,1)=NAB(j,2)=f-1, while
 *>      if, to the specified tolerance, w(f-k)=...=w(f+r), k > 0 and r
@@ -315,7 +315,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SLAEBZ( IJOB, NITMAX, N, MMAX, MINP, NBMIN, ABSTOL,
+      SUBROUTINE AB_SLAEBZ( IJOB, NITMAX, N, MMAX, MINP, NBMIN, ABSTOL,
      $                   RELTOL, PIVMIN, D, E, E2, NVAL, AB, C, MOUT,
      $                   NAB, WORK, IWORK, INFO )
 *
@@ -644,6 +644,6 @@
 *
       RETURN
 *
-*     End of SLAEBZ
+*     End of AB_SLAEBZ
 *
       END

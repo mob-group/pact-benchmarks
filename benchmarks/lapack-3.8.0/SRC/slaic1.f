@@ -1,4 +1,4 @@
-*> \brief \b SLAIC1 applies one step of incremental condition estimation.
+*> \brief \b AB_SLAIC1 applies one step of incremental condition estimation.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLAIC1 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaic1.f">
+*> Download AB_SLAIC1 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLAIC1.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaic1.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLAIC1.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaic1.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLAIC1.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLAIC1( JOB, J, X, SEST, W, GAMMA, SESTPR, S, C )
+*       SUBROUTINE AB_SLAIC1( JOB, J, X, SEST, W, GAMMA, SESTPR, S, C )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            J, JOB
@@ -34,13 +34,13 @@
 *>
 *> \verbatim
 *>
-*> SLAIC1 applies one step of incremental condition estimation in
+*> AB_SLAIC1 applies one step of incremental condition estimation in
 *> its simplest version:
 *>
 *> Let x, twonorm(x) = 1, be an approximate singular vector of an j-by-j
 *> lower triangular matrix L, such that
 *>          twonorm(L*x) = sest
-*> Then SLAIC1 computes sestpr, s, c such that
+*> Then AB_SLAIC1 computes sestpr, s, c such that
 *> the vector
 *>                 [ s*x ]
 *>          xhat = [  c  ]
@@ -132,7 +132,7 @@
 *> \ingroup realOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE SLAIC1( JOB, J, X, SEST, W, GAMMA, SESTPR, S, C )
+      SUBROUTINE AB_SLAIC1( JOB, J, X, SEST, W, GAMMA, SESTPR, S, C )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -163,13 +163,13 @@
       INTRINSIC          ABS, MAX, SIGN, SQRT
 *     ..
 *     .. External Functions ..
-      REAL               SDOT, SLAMCH
-      EXTERNAL           SDOT, SLAMCH
+      REAL               AB_SDOT, SLAMCH
+      EXTERNAL           AB_SDOT, SLAMCH
 *     ..
 *     .. Executable Statements ..
 *
       EPS = SLAMCH( 'Epsilon' )
-      ALPHA = SDOT( J, X, 1, W, 1 )
+      ALPHA = AB_SDOT( J, X, 1, W, 1 )
 *
       ABSALP = ABS( ALPHA )
       ABSGAM = ABS( GAMMA )
@@ -362,6 +362,6 @@
       END IF
       RETURN
 *
-*     End of SLAIC1
+*     End of AB_SLAIC1
 *
       END

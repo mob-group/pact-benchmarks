@@ -1,4 +1,4 @@
-*> \brief \b SORMRQ
+*> \brief \b AB_SORMRQ
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SORMRQ + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sormrq.f">
+*> Download AB_SORMRQ + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SORMRQ.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sormrq.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SORMRQ.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sormrq.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SORMRQ.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SORMRQ( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,
+*       SUBROUTINE AB_SORMRQ( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,
 *                          WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> SORMRQ overwrites the general real M-by-N matrix C with
+*> AB_SORMRQ overwrites the general real M-by-N matrix C with
 *>
 *>                 SIDE = 'L'     SIDE = 'R'
 *> TRANS = 'N':      Q * C          C * Q
@@ -47,7 +47,7 @@
 *>
 *>       Q = H(1) H(2) . . . H(k)
 *>
-*> as returned by SGERQF. Q is of order M if SIDE = 'L' and of order N
+*> as returned by AB_SGERQF. Q is of order M if SIDE = 'L' and of order N
 *> if SIDE = 'R'.
 *> \endverbatim
 *
@@ -96,7 +96,7 @@
 *>                               (LDA,N) if SIDE = 'R'
 *>          The i-th row must contain the vector which defines the
 *>          elementary reflector H(i), for i = 1,2,...,k, as returned by
-*>          SGERQF in the last k rows of its array argument A.
+*>          AB_SGERQF in the last k rows of its array argument A.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -109,7 +109,7 @@
 *> \verbatim
 *>          TAU is REAL array, dimension (K)
 *>          TAU(i) must contain the scalar factor of the elementary
-*>          reflector H(i), as returned by SGERQF.
+*>          reflector H(i), as returned by AB_SGERQF.
 *> \endverbatim
 *>
 *> \param[in,out] C
@@ -142,7 +142,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -165,7 +165,7 @@
 *> \ingroup realOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE SORMRQ( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,
+      SUBROUTINE AB_SORMRQ( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,
      $                   WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -196,12 +196,12 @@
      $                   MI, NB, NBMIN, NI, NQ, NW
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      EXTERNAL           LSAME, ILAENV
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_LSAME, AB_ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLARFB, SLARFT, SORMR2, XERBLA
+      EXTERNAL           AB_SLARFB, AB_SLARFT, AB_SORMR2, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -211,8 +211,8 @@
 *     Test the input arguments
 *
       INFO = 0
-      LEFT = LSAME( SIDE, 'L' )
-      NOTRAN = LSAME( TRANS, 'N' )
+      LEFT = AB_LSAME( SIDE, 'L' )
+      NOTRAN = AB_LSAME( TRANS, 'N' )
       LQUERY = ( LWORK.EQ.-1 )
 *
 *     NQ is the order of Q and NW is the minimum dimension of WORK
@@ -224,9 +224,9 @@
          NQ = N
          NW = MAX( 1, M )
       END IF
-      IF( .NOT.LEFT .AND. .NOT.LSAME( SIDE, 'R' ) ) THEN
+      IF( .NOT.LEFT .AND. .NOT.AB_LSAME( SIDE, 'R' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) ) THEN
+      ELSE IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) ) THEN
          INFO = -2
       ELSE IF( M.LT.0 ) THEN
          INFO = -3
@@ -249,7 +249,8 @@
          IF( M.EQ.0 .OR. N.EQ.0 ) THEN
             LWKOPT = 1
          ELSE
-            NB = MIN( NBMAX, ILAENV( 1, 'SORMRQ', SIDE // TRANS, M, N,
+            NB = MIN( NBMAX, AB_ILAENV( 1, 'AB_SORMRQ', SIDE // TRANS, M
+     $, N,
      $                               K, -1 ) )
             LWKOPT = NW*NB + TSIZE
          END IF
@@ -257,7 +258,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SORMRQ', -INFO )
+         CALL AB_XERBLA( 'AB_SORMRQ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -274,7 +275,8 @@
       IF( NB.GT.1 .AND. NB.LT.K ) THEN
          IF( LWORK.LT.NW*NB+TSIZE ) THEN
             NB = (LWORK-TSIZE) / LDWORK
-            NBMIN = MAX( 2, ILAENV( 2, 'SORMRQ', SIDE // TRANS, M, N, K,
+            NBMIN = MAX( 2, AB_ILAENV( 2, 'AB_SORMRQ', SIDE // TRANS, M,
+     $ N, K,
      $              -1 ) )
          END IF
       END IF
@@ -283,7 +285,8 @@
 *
 *        Use unblocked code
 *
-         CALL SORMR2( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC, WORK,
+         CALL AB_SORMR2( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC, WORK
+     $,
      $                IINFO )
       ELSE
 *
@@ -319,7 +322,7 @@
 *           Form the triangular factor of the block reflector
 *           H = H(i+ib-1) . . . H(i+1) H(i)
 *
-            CALL SLARFT( 'Backward', 'Rowwise', NQ-K+I+IB-1, IB,
+            CALL AB_SLARFT( 'Backward', 'Rowwise', NQ-K+I+IB-1, IB,
      $                   A( I, 1 ), LDA, TAU( I ), WORK( IWT ), LDT )
             IF( LEFT ) THEN
 *
@@ -335,7 +338,7 @@
 *
 *           Apply H or H**T
 *
-            CALL SLARFB( SIDE, TRANST, 'Backward', 'Rowwise', MI, NI,
+            CALL AB_SLARFB( SIDE, TRANST, 'Backward', 'Rowwise', MI, NI,
      $                   IB, A( I, 1 ), LDA, WORK( IWT ), LDT, C, LDC,
      $                   WORK, LDWORK )
    10    CONTINUE
@@ -343,6 +346,6 @@
       WORK( 1 ) = LWKOPT
       RETURN
 *
-*     End of SORMRQ
+*     End of AB_SORMRQ
 *
       END

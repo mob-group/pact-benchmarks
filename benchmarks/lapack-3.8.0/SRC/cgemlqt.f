@@ -1,7 +1,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGEMLQT( SIDE, TRANS, M, N, K, MB, V, LDV, T, LDT,
+*       SUBROUTINE AB_CGEMLQT( SIDE, TRANS, M, N, K, MB, V, LDV, T, LDT,
 *                          C, LDC, WORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -18,7 +18,7 @@
 *>
 *> \verbatim
 *>
-*> CGEMLQT overwrites the general real M-by-N matrix C with
+*> AB_CGEMLQT overwrites the general real M-by-N matrix C with
 *>
 *>                 SIDE = 'L'     SIDE = 'R'
 *> TRANS = 'N':      Q C            C Q
@@ -29,7 +29,7 @@
 *>
 *>       Q = H(1) H(2) . . . H(K) = I - V T V**H
 *>
-*> generated using the compact WY representation as returned by CGELQT.
+*> generated using the compact WY representation as returned by AB_CGELQT.
 *>
 *> Q is of order M if SIDE = 'L' and of order N  if SIDE = 'R'.
 *> \endverbatim
@@ -77,7 +77,7 @@
 *>          MB is INTEGER
 *>          The block size used for the storage of T.  K >= MB >= 1.
 *>          This must be the same value of MB used to generate T
-*>          in DGELQT.
+*>          in AB_DGELQT.
 *> \endverbatim
 *>
 *> \param[in] V
@@ -87,7 +87,7 @@
 *>                               (LDV,N) if SIDE = 'R'
 *>          The i-th row must contain the vector which defines the
 *>          elementary reflector H(i), for i = 1,2,...,k, as returned by
-*>          DGELQT in the first K rows of its array argument A.
+*>          AB_DGELQT in the first K rows of its array argument A.
 *> \endverbatim
 *>
 *> \param[in] LDV
@@ -100,7 +100,7 @@
 *> \verbatim
 *>          T is COMPLEX array, dimension (LDT,K)
 *>          The upper triangular factors of the block reflectors
-*>          as returned by DGELQT, stored as a MB-by-K matrix.
+*>          as returned by AB_DGELQT, stored as a MB-by-K matrix.
 *> \endverbatim
 *>
 *> \param[in] LDT
@@ -148,7 +148,7 @@
 *> \ingroup doubleGEcomputational
 *
 *  =====================================================================
-      SUBROUTINE CGEMLQT( SIDE, TRANS, M, N, K, MB, V, LDV, T, LDT,
+      SUBROUTINE AB_CGEMLQT( SIDE, TRANS, M, N, K, MB, V, LDV, T, LDT,
      $                   C, LDC, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.8.0) --
@@ -172,11 +172,11 @@
       INTEGER            I, IB, LDWORK, KF
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, CLARFB
+      EXTERNAL           AB_XERBLA, AB_CLARFB
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -186,10 +186,10 @@
 *     .. Test the input arguments ..
 *
       INFO   = 0
-      LEFT   = LSAME( SIDE,  'L' )
-      RIGHT  = LSAME( SIDE,  'R' )
-      TRAN   = LSAME( TRANS, 'C' )
-      NOTRAN = LSAME( TRANS, 'N' )
+      LEFT   = AB_LSAME( SIDE,  'L' )
+      RIGHT  = AB_LSAME( SIDE,  'R' )
+      TRAN   = AB_LSAME( TRANS, 'C' )
+      NOTRAN = AB_LSAME( TRANS, 'N' )
 *
       IF( LEFT ) THEN
          LDWORK = MAX( 1, N )
@@ -217,7 +217,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CGEMLQT', -INFO )
+         CALL AB_XERBLA( 'AB_CGEMLQT', -INFO )
          RETURN
       END IF
 *
@@ -229,7 +229,7 @@
 *
          DO I = 1, K, MB
             IB = MIN( MB, K-I+1 )
-            CALL CLARFB( 'L', 'C', 'F', 'R', M-I+1, N, IB,
+            CALL AB_CLARFB( 'L', 'C', 'F', 'R', M-I+1, N, IB,
      $                   V( I, I ), LDV, T( 1, I ), LDT,
      $                   C( I, 1 ), LDC, WORK, LDWORK )
          END DO
@@ -238,7 +238,7 @@
 *
          DO I = 1, K, MB
             IB = MIN( MB, K-I+1 )
-            CALL CLARFB( 'R', 'N', 'F', 'R', M, N-I+1, IB,
+            CALL AB_CLARFB( 'R', 'N', 'F', 'R', M, N-I+1, IB,
      $                   V( I, I ), LDV, T( 1, I ), LDT,
      $                   C( 1, I ), LDC, WORK, LDWORK )
          END DO
@@ -248,7 +248,7 @@
          KF = ((K-1)/MB)*MB+1
          DO I = KF, 1, -MB
             IB = MIN( MB, K-I+1 )
-            CALL CLARFB( 'L', 'N', 'F', 'R', M-I+1, N, IB,
+            CALL AB_CLARFB( 'L', 'N', 'F', 'R', M-I+1, N, IB,
      $                   V( I, I ), LDV, T( 1, I ), LDT,
      $                   C( I, 1 ), LDC, WORK, LDWORK )
          END DO
@@ -258,7 +258,7 @@
          KF = ((K-1)/MB)*MB+1
          DO I = KF, 1, -MB
             IB = MIN( MB, K-I+1 )
-            CALL CLARFB( 'R', 'C', 'F', 'R', M, N-I+1, IB,
+            CALL AB_CLARFB( 'R', 'C', 'F', 'R', M, N-I+1, IB,
      $                   V( I, I ), LDV, T( 1, I ), LDT,
      $                   C( 1, I ), LDC, WORK, LDWORK )
          END DO
@@ -267,6 +267,6 @@
 *
       RETURN
 *
-*     End of CGEMLQT
+*     End of AB_CGEMLQT
 *
       END

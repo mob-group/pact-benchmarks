@@ -1,4 +1,4 @@
-*> \brief <b> SSPEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
+*> \brief <b> AB_SSPEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SSPEVX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sspevx.f">
+*> Download AB_SSPEVX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SSPEVx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sspevx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SSPEVx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sspevx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SSPEVx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SSPEVX( JOBZ, RANGE, UPLO, N, AP, VL, VU, IL, IU,
+*       SUBROUTINE AB_SSPEVX( JOBZ, RANGE, UPLO, N, AP, VL, VU, IL, IU,
 *                          ABSTOL, M, W, Z, LDZ, WORK, IWORK, IFAIL,
 *                          INFO )
 *
@@ -38,7 +38,7 @@
 *>
 *> \verbatim
 *>
-*> SSPEVX computes selected eigenvalues and, optionally, eigenvectors
+*> AB_SSPEVX computes selected eigenvalues and, optionally, eigenvectors
 *> of a real symmetric matrix A in packed storage.  Eigenvalues/vectors
 *> can be selected by specifying either a range of values or a range of
 *> indices for the desired eigenvalues.
@@ -230,7 +230,7 @@
 *> \ingroup realOTHEReigen
 *
 *  =====================================================================
-      SUBROUTINE SSPEVX( JOBZ, RANGE, UPLO, N, AP, VL, VU, IL, IU,
+      SUBROUTINE AB_SSPEVX( JOBZ, RANGE, UPLO, N, AP, VL, VU, IL, IU,
      $                   ABSTOL, M, W, Z, LDZ, WORK, IWORK, IFAIL,
      $                   INFO )
 *
@@ -265,13 +265,15 @@
      $                   SIGMA, SMLNUM, TMP1, VLL, VUU
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SLAMCH, SLANSP
-      EXTERNAL           LSAME, SLAMCH, SLANSP
+      LOGICAL            AB_LSAME
+      REAL               SLAMCH, AB_SLANSP
+      EXTERNAL           AB_LSAME, SLAMCH, AB_SLANSP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SOPGTR, SOPMTR, SSCAL, SSPTRD, SSTEBZ,
-     $                   SSTEIN, SSTEQR, SSTERF, SSWAP, XERBLA
+      EXTERNAL           AB_SCOPY, AB_SOPGTR, AB_SOPMTR, AB_SSCAL, AB_SS
+     $PTRD, AB_SSTEBZ,
+     $                   AB_SSTEIN, AB_SSTEQR, AB_SSTERF, AB_SSWAP, AB_X
+     $ERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, SQRT
@@ -280,17 +282,18 @@
 *
 *     Test the input parameters.
 *
-      WANTZ = LSAME( JOBZ, 'V' )
-      ALLEIG = LSAME( RANGE, 'A' )
-      VALEIG = LSAME( RANGE, 'V' )
-      INDEIG = LSAME( RANGE, 'I' )
+      WANTZ = AB_LSAME( JOBZ, 'V' )
+      ALLEIG = AB_LSAME( RANGE, 'A' )
+      VALEIG = AB_LSAME( RANGE, 'V' )
+      INDEIG = AB_LSAME( RANGE, 'I' )
 *
       INFO = 0
-      IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
+      IF( .NOT.( WANTZ .OR. AB_LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
       ELSE IF( .NOT.( ALLEIG .OR. VALEIG .OR. INDEIG ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.( LSAME( UPLO, 'L' ) .OR. LSAME( UPLO, 'U' ) ) )
+      ELSE IF( .NOT.( AB_LSAME( UPLO, 'L' ) .OR. AB_LSAME( UPLO, 'U' ) )
+     $ )
      $          THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
@@ -313,7 +316,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SSPEVX', -INFO )
+         CALL AB_XERBLA( 'AB_SSPEVX', -INFO )
          RETURN
       END IF
 *
@@ -358,7 +361,7 @@
          VLL = ZERO
          VUU = ZERO
       ENDIF
-      ANRM = SLANSP( 'M', UPLO, N, AP, WORK )
+      ANRM = AB_SLANSP( 'M', UPLO, N, AP, WORK )
       IF( ANRM.GT.ZERO .AND. ANRM.LT.RMIN ) THEN
          ISCALE = 1
          SIGMA = RMIN / ANRM
@@ -367,7 +370,7 @@
          SIGMA = RMAX / ANRM
       END IF
       IF( ISCALE.EQ.1 ) THEN
-         CALL SSCAL( ( N*( N+1 ) ) / 2, SIGMA, AP, 1 )
+         CALL AB_SSCAL( ( N*( N+1 ) ) / 2, SIGMA, AP, 1 )
          IF( ABSTOL.GT.0 )
      $      ABSTLL = ABSTOL*SIGMA
          IF( VALEIG ) THEN
@@ -376,18 +379,18 @@
          END IF
       END IF
 *
-*     Call SSPTRD to reduce symmetric packed matrix to tridiagonal form.
+*     Call AB_SSPTRD to reduce symmetric packed matrix to tridiagonal form.
 *
       INDTAU = 1
       INDE = INDTAU + N
       INDD = INDE + N
       INDWRK = INDD + N
-      CALL SSPTRD( UPLO, N, AP, WORK( INDD ), WORK( INDE ),
+      CALL AB_SSPTRD( UPLO, N, AP, WORK( INDD ), WORK( INDE ),
      $             WORK( INDTAU ), IINFO )
 *
 *     If all eigenvalues are desired and ABSTOL is less than or equal
-*     to zero, then call SSTERF or SOPGTR and SSTEQR.  If this fails
-*     for some eigenvalue, then try SSTEBZ.
+*     to zero, then call AB_SSTERF or AB_SOPGTR and AB_SSTEQR.  If this fails
+*     for some eigenvalue, then try AB_SSTEBZ.
 *
       TEST = .FALSE.
       IF (INDEIG) THEN
@@ -396,16 +399,16 @@
          END IF
       END IF
       IF ((ALLEIG .OR. TEST) .AND. (ABSTOL.LE.ZERO)) THEN
-         CALL SCOPY( N, WORK( INDD ), 1, W, 1 )
+         CALL AB_SCOPY( N, WORK( INDD ), 1, W, 1 )
          INDEE = INDWRK + 2*N
          IF( .NOT.WANTZ ) THEN
-            CALL SCOPY( N-1, WORK( INDE ), 1, WORK( INDEE ), 1 )
-            CALL SSTERF( N, W, WORK( INDEE ), INFO )
+            CALL AB_SCOPY( N-1, WORK( INDE ), 1, WORK( INDEE ), 1 )
+            CALL AB_SSTERF( N, W, WORK( INDEE ), INFO )
          ELSE
-            CALL SOPGTR( UPLO, N, AP, WORK( INDTAU ), Z, LDZ,
+            CALL AB_SOPGTR( UPLO, N, AP, WORK( INDTAU ), Z, LDZ,
      $                   WORK( INDWRK ), IINFO )
-            CALL SCOPY( N-1, WORK( INDE ), 1, WORK( INDEE ), 1 )
-            CALL SSTEQR( JOBZ, N, W, WORK( INDEE ), Z, LDZ,
+            CALL AB_SCOPY( N-1, WORK( INDE ), 1, WORK( INDEE ), 1 )
+            CALL AB_SSTEQR( JOBZ, N, W, WORK( INDEE ), Z, LDZ,
      $                   WORK( INDWRK ), INFO )
             IF( INFO.EQ.0 ) THEN
                DO 10 I = 1, N
@@ -420,7 +423,7 @@
          INFO = 0
       END IF
 *
-*     Otherwise, call SSTEBZ and, if eigenvectors are desired, SSTEIN.
+*     Otherwise, call AB_SSTEBZ and, if eigenvectors are desired, AB_SSTEIN.
 *
       IF( WANTZ ) THEN
          ORDER = 'B'
@@ -430,20 +433,21 @@
       INDIBL = 1
       INDISP = INDIBL + N
       INDIWO = INDISP + N
-      CALL SSTEBZ( RANGE, ORDER, N, VLL, VUU, IL, IU, ABSTLL,
+      CALL AB_SSTEBZ( RANGE, ORDER, N, VLL, VUU, IL, IU, ABSTLL,
      $             WORK( INDD ), WORK( INDE ), M, NSPLIT, W,
      $             IWORK( INDIBL ), IWORK( INDISP ), WORK( INDWRK ),
      $             IWORK( INDIWO ), INFO )
 *
       IF( WANTZ ) THEN
-         CALL SSTEIN( N, WORK( INDD ), WORK( INDE ), M, W,
+         CALL AB_SSTEIN( N, WORK( INDD ), WORK( INDE ), M, W,
      $                IWORK( INDIBL ), IWORK( INDISP ), Z, LDZ,
      $                WORK( INDWRK ), IWORK( INDIWO ), IFAIL, INFO )
 *
 *        Apply orthogonal matrix used in reduction to tridiagonal
-*        form to eigenvectors returned by SSTEIN.
+*        form to eigenvectors returned by AB_SSTEIN.
 *
-         CALL SOPMTR( 'L', UPLO, 'N', N, M, AP, WORK( INDTAU ), Z, LDZ,
+         CALL AB_SOPMTR( 'L', UPLO, 'N', N, M, AP, WORK( INDTAU ), Z, LD
+     $Z,
      $                WORK( INDWRK ), IINFO )
       END IF
 *
@@ -456,7 +460,7 @@
          ELSE
             IMAX = INFO - 1
          END IF
-         CALL SSCAL( IMAX, ONE / SIGMA, W, 1 )
+         CALL AB_SSCAL( IMAX, ONE / SIGMA, W, 1 )
       END IF
 *
 *     If eigenvalues are not in order, then sort them, along with
@@ -479,7 +483,7 @@
                IWORK( INDIBL+I-1 ) = IWORK( INDIBL+J-1 )
                W( J ) = TMP1
                IWORK( INDIBL+J-1 ) = ITMP1
-               CALL SSWAP( N, Z( 1, I ), 1, Z( 1, J ), 1 )
+               CALL AB_SSWAP( N, Z( 1, I ), 1, Z( 1, J ), 1 )
                IF( INFO.NE.0 ) THEN
                   ITMP1 = IFAIL( I )
                   IFAIL( I ) = IFAIL( J )
@@ -491,6 +495,6 @@
 *
       RETURN
 *
-*     End of SSPEVX
+*     End of AB_SSPEVX
 *
       END

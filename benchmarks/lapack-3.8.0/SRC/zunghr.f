@@ -1,4 +1,4 @@
-*> \brief \b ZUNGHR
+*> \brief \b AB_ZUNGHR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZUNGHR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zunghr.f">
+*> Download AB_ZUNGHR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZUNGHR.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zunghr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZUNGHR.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zunghr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZUNGHR.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZUNGHR( N, ILO, IHI, A, LDA, TAU, WORK, LWORK, INFO )
+*       SUBROUTINE AB_ZUNGHR( N, ILO, IHI, A, LDA, TAU, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            IHI, ILO, INFO, LDA, LWORK, N
@@ -33,9 +33,9 @@
 *>
 *> \verbatim
 *>
-*> ZUNGHR generates a complex unitary matrix Q which is defined as the
+*> AB_ZUNGHR generates a complex unitary matrix Q which is defined as the
 *> product of IHI-ILO elementary reflectors of order N, as returned by
-*> ZGEHRD:
+*> AB_ZGEHRD:
 *>
 *> Q = H(ilo) H(ilo+1) . . . H(ihi-1).
 *> \endverbatim
@@ -59,7 +59,7 @@
 *>          IHI is INTEGER
 *>
 *>          ILO and IHI must have the same values as in the previous call
-*>          of ZGEHRD. Q is equal to the unit matrix except in the
+*>          of AB_ZGEHRD. Q is equal to the unit matrix except in the
 *>          submatrix Q(ilo+1:ihi,ilo+1:ihi).
 *>          1 <= ILO <= IHI <= N, if N > 0; ILO=1 and IHI=0, if N=0.
 *> \endverbatim
@@ -68,7 +68,7 @@
 *> \verbatim
 *>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          On entry, the vectors which define the elementary reflectors,
-*>          as returned by ZGEHRD.
+*>          as returned by AB_ZGEHRD.
 *>          On exit, the N-by-N unitary matrix Q.
 *> \endverbatim
 *>
@@ -82,7 +82,7 @@
 *> \verbatim
 *>          TAU is COMPLEX*16 array, dimension (N-1)
 *>          TAU(i) must contain the scalar factor of the elementary
-*>          reflector H(i), as returned by ZGEHRD.
+*>          reflector H(i), as returned by AB_ZGEHRD.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -101,7 +101,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -124,7 +124,8 @@
 *> \ingroup complex16OTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE ZUNGHR( N, ILO, IHI, A, LDA, TAU, WORK, LWORK, INFO )
+      SUBROUTINE AB_ZUNGHR( N, ILO, IHI, A, LDA, TAU, WORK, LWORK, INFO 
+     $)
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -150,11 +151,11 @@
       INTEGER            I, IINFO, J, LWKOPT, NB, NH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZUNGQR
+      EXTERNAL           AB_XERBLA, AB_ZUNGQR
 *     ..
 *     .. External Functions ..
-      INTEGER            ILAENV
-      EXTERNAL           ILAENV
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_ILAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -179,13 +180,13 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         NB = ILAENV( 1, 'ZUNGQR', ' ', NH, NH, NH, -1 )
+         NB = AB_ILAENV( 1, 'AB_ZUNGQR', ' ', NH, NH, NH, -1 )
          LWKOPT = MAX( 1, NH )*NB
          WORK( 1 ) = LWKOPT
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZUNGHR', -INFO )
+         CALL AB_XERBLA( 'AB_ZUNGHR', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -230,12 +231,12 @@
 *
 *        Generate Q(ilo+1:ihi,ilo+1:ihi)
 *
-         CALL ZUNGQR( NH, NH, NH, A( ILO+1, ILO+1 ), LDA, TAU( ILO ),
+         CALL AB_ZUNGQR( NH, NH, NH, A( ILO+1, ILO+1 ), LDA, TAU( ILO ),
      $                WORK, LWORK, IINFO )
       END IF
       WORK( 1 ) = LWKOPT
       RETURN
 *
-*     End of ZUNGHR
+*     End of AB_ZUNGHR
 *
       END

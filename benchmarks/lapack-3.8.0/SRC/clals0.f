@@ -1,4 +1,4 @@
-*> \brief \b CLALS0 applies back multiplying factors in solving the least squares problem using divide and conquer SVD approach. Used by sgelsd.
+*> \brief \b AB_CLALS0 applies back multiplying factors in solving the least squares problem using divide and conquer SVD approach. Used by AB_SGELSd.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CLALS0 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clals0.f">
+*> Download AB_CLALS0 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLALS0.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clals0.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLALS0.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clals0.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLALS0.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLALS0( ICOMPQ, NL, NR, SQRE, NRHS, B, LDB, BX, LDBX,
+*       SUBROUTINE AB_CLALS0( ICOMPQ, NL, NR, SQRE, NRHS, B, LDB, BX, LDBX,
 *                          PERM, GIVPTR, GIVCOL, LDGCOL, GIVNUM, LDGNUM,
 *                          POLES, DIFL, DIFR, Z, K, C, S, RWORK, INFO )
 *
@@ -41,7 +41,7 @@
 *>
 *> \verbatim
 *>
-*> CLALS0 applies back the multiplying factors of either the left or the
+*> AB_CLALS0 applies back the multiplying factors of either the left or the
 *> right singular vector matrix of a diagonal matrix appended by a row
 *> to the right hand side matrix B in solving the least squares problem
 *> using the divide-and-conquer SVD approach.
@@ -266,7 +266,8 @@
 *>     Osni Marques, LBNL/NERSC, USA \n
 *
 *  =====================================================================
-      SUBROUTINE CLALS0( ICOMPQ, NL, NR, SQRE, NRHS, B, LDB, BX, LDBX,
+      SUBROUTINE AB_CLALS0( ICOMPQ, NL, NR, SQRE, NRHS, B, LDB, BX, LDBX
+     $,
      $                   PERM, GIVPTR, GIVCOL, LDGCOL, GIVNUM, LDGNUM,
      $                   POLES, DIFL, DIFR, Z, K, C, S, RWORK, INFO )
 *
@@ -299,12 +300,13 @@
       REAL               DIFLJ, DIFRJ, DJ, DSIGJ, DSIGJP, TEMP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CCOPY, CLACPY, CLASCL, CSROT, CSSCAL, SGEMV,
-     $                   XERBLA
+      EXTERNAL           AB_CCOPY, AB_CLACPY, AB_CLASCL, AB_CSROT, AB_CS
+     $SCAL, AB_SGEMV,
+     $                   AB_XERBLA
 *     ..
 *     .. External Functions ..
-      REAL               SLAMC3, SNRM2
-      EXTERNAL           SLAMC3, SNRM2
+      REAL               SLAMC3, AB_SNRM2
+      EXTERNAL           SLAMC3, AB_SNRM2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          AIMAG, CMPLX, MAX, REAL
@@ -340,7 +342,7 @@
          INFO = -20
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CLALS0', -INFO )
+         CALL AB_XERBLA( 'AB_CLALS0', -INFO )
          RETURN
       END IF
 *
@@ -354,25 +356,26 @@
 *        Step (1L): apply back the Givens rotations performed.
 *
          DO 10 I = 1, GIVPTR
-            CALL CSROT( NRHS, B( GIVCOL( I, 2 ), 1 ), LDB,
+            CALL AB_CSROT( NRHS, B( GIVCOL( I, 2 ), 1 ), LDB,
      $                  B( GIVCOL( I, 1 ), 1 ), LDB, GIVNUM( I, 2 ),
      $                  GIVNUM( I, 1 ) )
    10    CONTINUE
 *
 *        Step (2L): permute rows of B.
 *
-         CALL CCOPY( NRHS, B( NLP1, 1 ), LDB, BX( 1, 1 ), LDBX )
+         CALL AB_CCOPY( NRHS, B( NLP1, 1 ), LDB, BX( 1, 1 ), LDBX )
          DO 20 I = 2, N
-            CALL CCOPY( NRHS, B( PERM( I ), 1 ), LDB, BX( I, 1 ), LDBX )
+            CALL AB_CCOPY( NRHS, B( PERM( I ), 1 ), LDB, BX( I, 1 ), LDB
+     $X )
    20    CONTINUE
 *
 *        Step (3L): apply the inverse of the left singular vector
 *        matrix to BX.
 *
          IF( K.EQ.1 ) THEN
-            CALL CCOPY( NRHS, BX, LDBX, B, LDB )
+            CALL AB_CCOPY( NRHS, BX, LDBX, B, LDB )
             IF( Z( 1 ).LT.ZERO ) THEN
-               CALL CSSCAL( NRHS, NEGONE, B, LDB )
+               CALL AB_CSSCAL( NRHS, NEGONE, B, LDB )
             END IF
          ELSE
             DO 100 J = 1, K
@@ -411,12 +414,12 @@
                   END IF
    40          CONTINUE
                RWORK( 1 ) = NEGONE
-               TEMP = SNRM2( K, RWORK, 1 )
+               TEMP = AB_SNRM2( K, RWORK, 1 )
 *
-*              Since B and BX are complex, the following call to SGEMV
+*              Since B and BX are complex, the following call to AB_SGEMV
 *              is performed in two steps (real and imaginary parts).
 *
-*              CALL SGEMV( 'T', K, NRHS, ONE, BX, LDBX, WORK, 1, ZERO,
+*              CALL AB_SGEMV( 'T', K, NRHS, ONE, BX, LDBX, WORK, 1, ZERO,
 *    $                     B( J, 1 ), LDB )
 *
                I = K + NRHS*2
@@ -426,7 +429,7 @@
                      RWORK( I ) = REAL( BX( JROW, JCOL ) )
    50             CONTINUE
    60          CONTINUE
-               CALL SGEMV( 'T', K, NRHS, ONE, RWORK( 1+K+NRHS*2 ), K,
+               CALL AB_SGEMV( 'T', K, NRHS, ONE, RWORK( 1+K+NRHS*2 ), K,
      $                     RWORK( 1 ), 1, ZERO, RWORK( 1+K ), 1 )
                I = K + NRHS*2
                DO 80 JCOL = 1, NRHS
@@ -435,13 +438,13 @@
                      RWORK( I ) = AIMAG( BX( JROW, JCOL ) )
    70             CONTINUE
    80          CONTINUE
-               CALL SGEMV( 'T', K, NRHS, ONE, RWORK( 1+K+NRHS*2 ), K,
+               CALL AB_SGEMV( 'T', K, NRHS, ONE, RWORK( 1+K+NRHS*2 ), K,
      $                     RWORK( 1 ), 1, ZERO, RWORK( 1+K+NRHS ), 1 )
                DO 90 JCOL = 1, NRHS
                   B( J, JCOL ) = CMPLX( RWORK( JCOL+K ),
      $                           RWORK( JCOL+K+NRHS ) )
    90          CONTINUE
-               CALL CLASCL( 'G', 0, 0, TEMP, ONE, 1, NRHS, B( J, 1 ),
+               CALL AB_CLASCL( 'G', 0, 0, TEMP, ONE, 1, NRHS, B( J, 1 ),
      $                      LDB, INFO )
   100       CONTINUE
          END IF
@@ -449,7 +452,7 @@
 *        Move the deflated rows of BX to B also.
 *
          IF( K.LT.MAX( M, N ) )
-     $      CALL CLACPY( 'A', N-K, NRHS, BX( K+1, 1 ), LDBX,
+     $      CALL AB_CLACPY( 'A', N-K, NRHS, BX( K+1, 1 ), LDBX,
      $                   B( K+1, 1 ), LDB )
       ELSE
 *
@@ -459,7 +462,7 @@
 *        to B.
 *
          IF( K.EQ.1 ) THEN
-            CALL CCOPY( NRHS, B, LDB, BX, LDBX )
+            CALL AB_CCOPY( NRHS, B, LDB, BX, LDBX )
          ELSE
             DO 180 J = 1, K
                DSIGJ = POLES( J, 2 )
@@ -488,10 +491,10 @@
                   END IF
   120          CONTINUE
 *
-*              Since B and BX are complex, the following call to SGEMV
+*              Since B and BX are complex, the following call to AB_SGEMV
 *              is performed in two steps (real and imaginary parts).
 *
-*              CALL SGEMV( 'T', K, NRHS, ONE, B, LDB, WORK, 1, ZERO,
+*              CALL AB_SGEMV( 'T', K, NRHS, ONE, B, LDB, WORK, 1, ZERO,
 *    $                     BX( J, 1 ), LDBX )
 *
                I = K + NRHS*2
@@ -501,7 +504,7 @@
                      RWORK( I ) = REAL( B( JROW, JCOL ) )
   130             CONTINUE
   140          CONTINUE
-               CALL SGEMV( 'T', K, NRHS, ONE, RWORK( 1+K+NRHS*2 ), K,
+               CALL AB_SGEMV( 'T', K, NRHS, ONE, RWORK( 1+K+NRHS*2 ), K,
      $                     RWORK( 1 ), 1, ZERO, RWORK( 1+K ), 1 )
                I = K + NRHS*2
                DO 160 JCOL = 1, NRHS
@@ -510,7 +513,7 @@
                      RWORK( I ) = AIMAG( B( JROW, JCOL ) )
   150             CONTINUE
   160          CONTINUE
-               CALL SGEMV( 'T', K, NRHS, ONE, RWORK( 1+K+NRHS*2 ), K,
+               CALL AB_SGEMV( 'T', K, NRHS, ONE, RWORK( 1+K+NRHS*2 ), K,
      $                     RWORK( 1 ), 1, ZERO, RWORK( 1+K+NRHS ), 1 )
                DO 170 JCOL = 1, NRHS
                   BX( J, JCOL ) = CMPLX( RWORK( JCOL+K ),
@@ -523,27 +526,29 @@
 *        related to the right null space of the subproblem.
 *
          IF( SQRE.EQ.1 ) THEN
-            CALL CCOPY( NRHS, B( M, 1 ), LDB, BX( M, 1 ), LDBX )
-            CALL CSROT( NRHS, BX( 1, 1 ), LDBX, BX( M, 1 ), LDBX, C, S )
+            CALL AB_CCOPY( NRHS, B( M, 1 ), LDB, BX( M, 1 ), LDBX )
+            CALL AB_CSROT( NRHS, BX( 1, 1 ), LDBX, BX( M, 1 ), LDBX, C, 
+     $S )
          END IF
          IF( K.LT.MAX( M, N ) )
-     $      CALL CLACPY( 'A', N-K, NRHS, B( K+1, 1 ), LDB,
+     $      CALL AB_CLACPY( 'A', N-K, NRHS, B( K+1, 1 ), LDB,
      $                   BX( K+1, 1 ), LDBX )
 *
 *        Step (3R): permute rows of B.
 *
-         CALL CCOPY( NRHS, BX( 1, 1 ), LDBX, B( NLP1, 1 ), LDB )
+         CALL AB_CCOPY( NRHS, BX( 1, 1 ), LDBX, B( NLP1, 1 ), LDB )
          IF( SQRE.EQ.1 ) THEN
-            CALL CCOPY( NRHS, BX( M, 1 ), LDBX, B( M, 1 ), LDB )
+            CALL AB_CCOPY( NRHS, BX( M, 1 ), LDBX, B( M, 1 ), LDB )
          END IF
          DO 190 I = 2, N
-            CALL CCOPY( NRHS, BX( I, 1 ), LDBX, B( PERM( I ), 1 ), LDB )
+            CALL AB_CCOPY( NRHS, BX( I, 1 ), LDBX, B( PERM( I ), 1 ), LD
+     $B )
   190    CONTINUE
 *
 *        Step (4R): apply back the Givens rotations performed.
 *
          DO 200 I = GIVPTR, 1, -1
-            CALL CSROT( NRHS, B( GIVCOL( I, 2 ), 1 ), LDB,
+            CALL AB_CSROT( NRHS, B( GIVCOL( I, 2 ), 1 ), LDB,
      $                  B( GIVCOL( I, 1 ), 1 ), LDB, GIVNUM( I, 2 ),
      $                  -GIVNUM( I, 1 ) )
   200    CONTINUE
@@ -551,6 +556,6 @@
 *
       RETURN
 *
-*     End of CLALS0
+*     End of AB_CLALS0
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b SLAHR2 reduces the specified number of first columns of a general rectangular matrix A so that elements below the specified subdiagonal are zero, and returns auxiliary matrices which are needed to apply the transformation to the unreduced part of A.
+*> \brief \b AB_SLAHR2 reduces the specified number of first columns of a general rectangular matrix A so that elements below the specified subdiagonal are zero, and returns auxiliary matrices which are needed to apply the transformation to the unreduced part of A.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLAHR2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slahr2.f">
+*> Download AB_SLAHR2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLAHR2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slahr2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLAHR2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slahr2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLAHR2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLAHR2( N, K, NB, A, LDA, TAU, T, LDT, Y, LDY )
+*       SUBROUTINE AB_SLAHR2( N, K, NB, A, LDA, TAU, T, LDT, Y, LDY )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            K, LDA, LDT, LDY, N, NB
@@ -34,13 +34,13 @@
 *>
 *> \verbatim
 *>
-*> SLAHR2 reduces the first NB columns of A real general n-BY-(n-k+1)
+*> AB_SLAHR2 reduces the first NB columns of A real general n-BY-(n-k+1)
 *> matrix A so that elements below the k-th subdiagonal are zero. The
 *> reduction is performed by an orthogonal similarity transformation
 *> Q**T * A * Q. The routine returns the matrices V and T which determine
 *> Q as a block reflector I - V*T*V**T, and also the matrix Y = A * V * T.
 *>
-*> This is an auxiliary routine called by SGEHRD.
+*> This is an auxiliary routine called by AB_SGEHRD.
 *> \endverbatim
 *
 *  Arguments:
@@ -164,11 +164,11 @@
 *>  modified element of the upper Hessenberg matrix H, and vi denotes an
 *>  element of the vector defining H(i).
 *>
-*>  This subroutine is a slight modification of LAPACK-3.0's DLAHRD
+*>  This subroutine is a slight modification of LAPACK-3.0's AB_DLAHRD
 *>  incorporating improvements proposed by Quintana-Orti and Van de
 *>  Gejin. Note that the entries of A(1:K,2:NB) differ from those
-*>  returned by the original LAPACK-3.0's DLAHRD routine. (This
-*>  subroutine is not backward compatible with LAPACK-3.0's DLAHRD.)
+*>  returned by the original LAPACK-3.0's AB_DLAHRD routine. (This
+*>  subroutine is not backward compatible with LAPACK-3.0's AB_DLAHRD.)
 *> \endverbatim
 *
 *> \par References:
@@ -179,7 +179,7 @@
 *>  Mathematical Software, 32(2):180-194, June 2006.
 *>
 *  =====================================================================
-      SUBROUTINE SLAHR2( N, K, NB, A, LDA, TAU, T, LDT, Y, LDY )
+      SUBROUTINE AB_SLAHR2( N, K, NB, A, LDA, TAU, T, LDT, Y, LDY )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -206,8 +206,9 @@
       REAL              EI
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SCOPY, SGEMM, SGEMV, SLACPY,
-     $                   SLARFG, SSCAL, STRMM, STRMV
+      EXTERNAL           AB_SAXPY, AB_SCOPY, AB_SGEMM, AB_SGEMV, AB_SLAC
+     $PY,
+     $                   AB_SLARFG, AB_SSCAL, AB_STRMM, AB_STRMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN
@@ -226,7 +227,8 @@
 *
 *           Update I-th column of A - Y * V**T
 *
-            CALL SGEMV( 'NO TRANSPOSE', N-K, I-1, -ONE, Y(K+1,1), LDY,
+            CALL AB_SGEMV( 'NO TRANSPOSE', N-K, I-1, -ONE, Y(K+1,1), LDY
+     $,
      $                  A( K+I-1, 1 ), LDA, ONE, A( K+1, I ), 1 )
 *
 *           Apply I - V * T**T * V**T to this column (call it b) from the
@@ -239,35 +241,35 @@
 *
 *           w := V1**T * b1
 *
-            CALL SCOPY( I-1, A( K+1, I ), 1, T( 1, NB ), 1 )
-            CALL STRMV( 'Lower', 'Transpose', 'UNIT',
+            CALL AB_SCOPY( I-1, A( K+1, I ), 1, T( 1, NB ), 1 )
+            CALL AB_STRMV( 'Lower', 'Transpose', 'UNIT',
      $                  I-1, A( K+1, 1 ),
      $                  LDA, T( 1, NB ), 1 )
 *
 *           w := w + V2**T * b2
 *
-            CALL SGEMV( 'Transpose', N-K-I+1, I-1,
+            CALL AB_SGEMV( 'Transpose', N-K-I+1, I-1,
      $                  ONE, A( K+I, 1 ),
      $                  LDA, A( K+I, I ), 1, ONE, T( 1, NB ), 1 )
 *
 *           w := T**T * w
 *
-            CALL STRMV( 'Upper', 'Transpose', 'NON-UNIT',
+            CALL AB_STRMV( 'Upper', 'Transpose', 'NON-UNIT',
      $                  I-1, T, LDT,
      $                  T( 1, NB ), 1 )
 *
 *           b2 := b2 - V2*w
 *
-            CALL SGEMV( 'NO TRANSPOSE', N-K-I+1, I-1, -ONE,
+            CALL AB_SGEMV( 'NO TRANSPOSE', N-K-I+1, I-1, -ONE,
      $                  A( K+I, 1 ),
      $                  LDA, T( 1, NB ), 1, ONE, A( K+I, I ), 1 )
 *
 *           b1 := b1 - V1*w
 *
-            CALL STRMV( 'Lower', 'NO TRANSPOSE',
+            CALL AB_STRMV( 'Lower', 'NO TRANSPOSE',
      $                  'UNIT', I-1,
      $                  A( K+1, 1 ), LDA, T( 1, NB ), 1 )
-            CALL SAXPY( I-1, -ONE, T( 1, NB ), 1, A( K+1, I ), 1 )
+            CALL AB_SAXPY( I-1, -ONE, T( 1, NB ), 1, A( K+1, I ), 1 )
 *
             A( K+I-1, I-1 ) = EI
          END IF
@@ -275,28 +277,29 @@
 *        Generate the elementary reflector H(I) to annihilate
 *        A(K+I+1:N,I)
 *
-         CALL SLARFG( N-K-I+1, A( K+I, I ), A( MIN( K+I+1, N ), I ), 1,
+         CALL AB_SLARFG( N-K-I+1, A( K+I, I ), A( MIN( K+I+1, N ), I ), 
+     $1,
      $                TAU( I ) )
          EI = A( K+I, I )
          A( K+I, I ) = ONE
 *
 *        Compute  Y(K+1:N,I)
 *
-         CALL SGEMV( 'NO TRANSPOSE', N-K, N-K-I+1,
+         CALL AB_SGEMV( 'NO TRANSPOSE', N-K, N-K-I+1,
      $               ONE, A( K+1, I+1 ),
      $               LDA, A( K+I, I ), 1, ZERO, Y( K+1, I ), 1 )
-         CALL SGEMV( 'Transpose', N-K-I+1, I-1,
+         CALL AB_SGEMV( 'Transpose', N-K-I+1, I-1,
      $               ONE, A( K+I, 1 ), LDA,
      $               A( K+I, I ), 1, ZERO, T( 1, I ), 1 )
-         CALL SGEMV( 'NO TRANSPOSE', N-K, I-1, -ONE,
+         CALL AB_SGEMV( 'NO TRANSPOSE', N-K, I-1, -ONE,
      $               Y( K+1, 1 ), LDY,
      $               T( 1, I ), 1, ONE, Y( K+1, I ), 1 )
-         CALL SSCAL( N-K, TAU( I ), Y( K+1, I ), 1 )
+         CALL AB_SSCAL( N-K, TAU( I ), Y( K+1, I ), 1 )
 *
 *        Compute T(1:I,I)
 *
-         CALL SSCAL( I-1, -TAU( I ), T( 1, I ), 1 )
-         CALL STRMV( 'Upper', 'No Transpose', 'NON-UNIT',
+         CALL AB_SSCAL( I-1, -TAU( I ), T( 1, I ), 1 )
+         CALL AB_STRMV( 'Upper', 'No Transpose', 'NON-UNIT',
      $               I-1, T, LDT,
      $               T( 1, I ), 1 )
          T( I, I ) = TAU( I )
@@ -306,21 +309,21 @@
 *
 *     Compute Y(1:K,1:NB)
 *
-      CALL SLACPY( 'ALL', K, NB, A( 1, 2 ), LDA, Y, LDY )
-      CALL STRMM( 'RIGHT', 'Lower', 'NO TRANSPOSE',
+      CALL AB_SLACPY( 'ALL', K, NB, A( 1, 2 ), LDA, Y, LDY )
+      CALL AB_STRMM( 'RIGHT', 'Lower', 'NO TRANSPOSE',
      $            'UNIT', K, NB,
      $            ONE, A( K+1, 1 ), LDA, Y, LDY )
       IF( N.GT.K+NB )
-     $   CALL SGEMM( 'NO TRANSPOSE', 'NO TRANSPOSE', K,
+     $   CALL AB_SGEMM( 'NO TRANSPOSE', 'NO TRANSPOSE', K,
      $               NB, N-K-NB, ONE,
      $               A( 1, 2+NB ), LDA, A( K+1+NB, 1 ), LDA, ONE, Y,
      $               LDY )
-      CALL STRMM( 'RIGHT', 'Upper', 'NO TRANSPOSE',
+      CALL AB_STRMM( 'RIGHT', 'Upper', 'NO TRANSPOSE',
      $            'NON-UNIT', K, NB,
      $            ONE, T, LDT, Y, LDY )
 *
       RETURN
 *
-*     End of SLAHR2
+*     End of AB_SLAHR2
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b ILAUPLO
+*> \brief \b AB_ILAUPLO
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ILAUPLO + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ilauplo.f">
+*> Download AB_ILAUPLO + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ILAUPLO.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ilauplo.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ILAUPLO.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ilauplo.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ILAUPLO.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       INTEGER FUNCTION ILAUPLO( UPLO )
+*       INTEGER FUNCTION AB_ILAUPLO( UPLO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,9 +34,9 @@
 *> upper- or lower-triangular matrix to the relevant BLAST-specified
 *> integer constant.
 *>
-*> ILAUPLO returns an INTEGER.  If ILAUPLO < 0, then the input is not
+*> AB_ILAUPLO returns an INTEGER.  If AB_ILAUPLO < 0, then the input is not
 *> a character indicating an upper- or lower-triangular matrix.
-*> Otherwise ILAUPLO returns the constant value corresponding to UPLO.
+*> Otherwise AB_ILAUPLO returns the constant value corresponding to UPLO.
 *> \endverbatim
 *
 *  Arguments:
@@ -56,7 +56,7 @@
 *> \ingroup auxOTHERcomputational
 *
 *  =====================================================================
-      INTEGER FUNCTION ILAUPLO( UPLO )
+      INTEGER FUNCTION AB_ILAUPLO( UPLO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -74,19 +74,19 @@
       PARAMETER ( BLAS_UPPER = 121, BLAS_LOWER = 122 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. Executable Statements ..
-      IF( LSAME( UPLO, 'U' ) ) THEN
-         ILAUPLO = BLAS_UPPER
-      ELSE IF( LSAME( UPLO, 'L' ) ) THEN
-         ILAUPLO = BLAS_LOWER
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
+         AB_ILAUPLO = BLAS_UPPER
+      ELSE IF( AB_LSAME( UPLO, 'L' ) ) THEN
+         AB_ILAUPLO = BLAS_LOWER
       ELSE
-         ILAUPLO = -1
+         AB_ILAUPLO = -1
       END IF
       RETURN
 *
-*     End of ILAUPLO
+*     End of AB_ILAUPLO
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b ZGEBD2 reduces a general matrix to bidiagonal form using an unblocked algorithm.
+*> \brief \b AB_ZGEBD2 reduces a general matrix to bidiagonal form using an unblocked algorithm.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZGEBD2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgebd2.f">
+*> Download AB_ZGEBD2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZGEBD2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgebd2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZGEBD2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgebd2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZGEBD2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZGEBD2( M, N, A, LDA, D, E, TAUQ, TAUP, WORK, INFO )
+*       SUBROUTINE AB_ZGEBD2( M, N, A, LDA, D, E, TAUQ, TAUP, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, M, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> ZGEBD2 reduces a complex general m by n matrix A to upper or lower
+*> AB_ZGEBD2 reduces a complex general m by n matrix A to upper or lower
 *> real bidiagonal form B by a unitary transformation: Q**H * A * P = B.
 *>
 *> If m >= n, B is upper bidiagonal; if m < n, B is lower bidiagonal.
@@ -187,7 +187,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZGEBD2( M, N, A, LDA, D, E, TAUQ, TAUP, WORK, INFO )
+      SUBROUTINE AB_ZGEBD2( M, N, A, LDA, D, E, TAUQ, TAUP, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -214,7 +214,7 @@
       COMPLEX*16         ALPHA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLACGV, ZLARF, ZLARFG
+      EXTERNAL           AB_XERBLA, AB_ZLACGV, AB_ZLARF, AB_ZLARFG
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DCONJG, MAX, MIN
@@ -232,7 +232,7 @@
          INFO = -4
       END IF
       IF( INFO.LT.0 ) THEN
-         CALL XERBLA( 'ZGEBD2', -INFO )
+         CALL AB_XERBLA( 'AB_ZGEBD2', -INFO )
          RETURN
       END IF
 *
@@ -245,7 +245,7 @@
 *           Generate elementary reflector H(i) to annihilate A(i+1:m,i)
 *
             ALPHA = A( I, I )
-            CALL ZLARFG( M-I+1, ALPHA, A( MIN( I+1, M ), I ), 1,
+            CALL AB_ZLARFG( M-I+1, ALPHA, A( MIN( I+1, M ), I ), 1,
      $                   TAUQ( I ) )
             D( I ) = ALPHA
             A( I, I ) = ONE
@@ -253,7 +253,7 @@
 *           Apply H(i)**H to A(i:m,i+1:n) from the left
 *
             IF( I.LT.N )
-     $         CALL ZLARF( 'Left', M-I+1, N-I, A( I, I ), 1,
+     $         CALL AB_ZLARF( 'Left', M-I+1, N-I, A( I, I ), 1,
      $                     DCONJG( TAUQ( I ) ), A( I, I+1 ), LDA, WORK )
             A( I, I ) = D( I )
 *
@@ -262,18 +262,18 @@
 *              Generate elementary reflector G(i) to annihilate
 *              A(i,i+2:n)
 *
-               CALL ZLACGV( N-I, A( I, I+1 ), LDA )
+               CALL AB_ZLACGV( N-I, A( I, I+1 ), LDA )
                ALPHA = A( I, I+1 )
-               CALL ZLARFG( N-I, ALPHA, A( I, MIN( I+2, N ) ), LDA,
+               CALL AB_ZLARFG( N-I, ALPHA, A( I, MIN( I+2, N ) ), LDA,
      $                      TAUP( I ) )
                E( I ) = ALPHA
                A( I, I+1 ) = ONE
 *
 *              Apply G(i) to A(i+1:m,i+1:n) from the right
 *
-               CALL ZLARF( 'Right', M-I, N-I, A( I, I+1 ), LDA,
+               CALL AB_ZLARF( 'Right', M-I, N-I, A( I, I+1 ), LDA,
      $                     TAUP( I ), A( I+1, I+1 ), LDA, WORK )
-               CALL ZLACGV( N-I, A( I, I+1 ), LDA )
+               CALL AB_ZLACGV( N-I, A( I, I+1 ), LDA )
                A( I, I+1 ) = E( I )
             ELSE
                TAUP( I ) = ZERO
@@ -287,9 +287,9 @@
 *
 *           Generate elementary reflector G(i) to annihilate A(i,i+1:n)
 *
-            CALL ZLACGV( N-I+1, A( I, I ), LDA )
+            CALL AB_ZLACGV( N-I+1, A( I, I ), LDA )
             ALPHA = A( I, I )
-            CALL ZLARFG( N-I+1, ALPHA, A( I, MIN( I+1, N ) ), LDA,
+            CALL AB_ZLARFG( N-I+1, ALPHA, A( I, MIN( I+1, N ) ), LDA,
      $                   TAUP( I ) )
             D( I ) = ALPHA
             A( I, I ) = ONE
@@ -297,9 +297,9 @@
 *           Apply G(i) to A(i+1:m,i:n) from the right
 *
             IF( I.LT.M )
-     $         CALL ZLARF( 'Right', M-I, N-I+1, A( I, I ), LDA,
+     $         CALL AB_ZLARF( 'Right', M-I, N-I+1, A( I, I ), LDA,
      $                     TAUP( I ), A( I+1, I ), LDA, WORK )
-            CALL ZLACGV( N-I+1, A( I, I ), LDA )
+            CALL AB_ZLACGV( N-I+1, A( I, I ), LDA )
             A( I, I ) = D( I )
 *
             IF( I.LT.M ) THEN
@@ -308,14 +308,14 @@
 *              A(i+2:m,i)
 *
                ALPHA = A( I+1, I )
-               CALL ZLARFG( M-I, ALPHA, A( MIN( I+2, M ), I ), 1,
+               CALL AB_ZLARFG( M-I, ALPHA, A( MIN( I+2, M ), I ), 1,
      $                      TAUQ( I ) )
                E( I ) = ALPHA
                A( I+1, I ) = ONE
 *
 *              Apply H(i)**H to A(i+1:m,i+1:n) from the left
 *
-               CALL ZLARF( 'Left', M-I, N-I, A( I+1, I ), 1,
+               CALL AB_ZLARF( 'Left', M-I, N-I, A( I+1, I ), 1,
      $                     DCONJG( TAUQ( I ) ), A( I+1, I+1 ), LDA,
      $                     WORK )
                A( I+1, I ) = E( I )
@@ -326,6 +326,6 @@
       END IF
       RETURN
 *
-*     End of ZGEBD2
+*     End of AB_ZGEBD2
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b SORBDB6
+*> \brief \b AB_SORBDB6
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SORBDB6 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sorbdb6.f">
+*> Download AB_SORBDB6 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SORBDB6.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sorbdb6.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SORBDB6.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorbdb6.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SORBDB6.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SORBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2,
+*       SUBROUTINE AB_SORBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2,
 *                           LDQ2, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *>\verbatim
 *>
-*> SORBDB6 orthogonalizes the column vector
+*> AB_SORBDB6 orthogonalizes the column vector
 *>      X = [ X1 ]
 *>          [ X2 ]
 *> with respect to the columns of
@@ -151,7 +151,8 @@
 *> \ingroup realOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE SORBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, Q2,
+      SUBROUTINE AB_SORBDB6( M1, M2, N, X1, INCX1, X2, INCX2, Q1, LDQ1, 
+     $Q2,
      $                    LDQ2, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
@@ -181,7 +182,7 @@
       REAL               NORMSQ1, NORMSQ2, SCL1, SCL2, SSQ1, SSQ2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMV, SLASSQ, XERBLA
+      EXTERNAL           AB_SGEMV, AB_SLASSQ, AB_XERBLA
 *     ..
 *     .. Intrinsic Function ..
       INTRINSIC          MAX
@@ -210,7 +211,7 @@
       END IF
 *
       IF( INFO .NE. 0 ) THEN
-         CALL XERBLA( 'SORBDB6', -INFO )
+         CALL AB_XERBLA( 'AB_SORBDB6', -INFO )
          RETURN
       END IF
 *
@@ -219,10 +220,10 @@
 *
       SCL1 = REALZERO
       SSQ1 = REALONE
-      CALL SLASSQ( M1, X1, INCX1, SCL1, SSQ1 )
+      CALL AB_SLASSQ( M1, X1, INCX1, SCL1, SSQ1 )
       SCL2 = REALZERO
       SSQ2 = REALONE
-      CALL SLASSQ( M2, X2, INCX2, SCL2, SSQ2 )
+      CALL AB_SLASSQ( M2, X2, INCX2, SCL2, SSQ2 )
       NORMSQ1 = SCL1**2*SSQ1 + SCL2**2*SSQ2
 *
       IF( M1 .EQ. 0 ) THEN
@@ -230,23 +231,25 @@
             WORK(I) = ZERO
          END DO
       ELSE
-         CALL SGEMV( 'C', M1, N, ONE, Q1, LDQ1, X1, INCX1, ZERO, WORK,
+         CALL AB_SGEMV( 'C', M1, N, ONE, Q1, LDQ1, X1, INCX1, ZERO, WORK
+     $,
      $               1 )
       END IF
 *
-      CALL SGEMV( 'C', M2, N, ONE, Q2, LDQ2, X2, INCX2, ONE, WORK, 1 )
+      CALL AB_SGEMV( 'C', M2, N, ONE, Q2, LDQ2, X2, INCX2, ONE, WORK, 1 
+     $)
 *
-      CALL SGEMV( 'N', M1, N, NEGONE, Q1, LDQ1, WORK, 1, ONE, X1,
+      CALL AB_SGEMV( 'N', M1, N, NEGONE, Q1, LDQ1, WORK, 1, ONE, X1,
      $            INCX1 )
-      CALL SGEMV( 'N', M2, N, NEGONE, Q2, LDQ2, WORK, 1, ONE, X2,
+      CALL AB_SGEMV( 'N', M2, N, NEGONE, Q2, LDQ2, WORK, 1, ONE, X2,
      $            INCX2 )
 *
       SCL1 = REALZERO
       SSQ1 = REALONE
-      CALL SLASSQ( M1, X1, INCX1, SCL1, SSQ1 )
+      CALL AB_SLASSQ( M1, X1, INCX1, SCL1, SSQ1 )
       SCL2 = REALZERO
       SSQ2 = REALONE
-      CALL SLASSQ( M2, X2, INCX2, SCL2, SSQ2 )
+      CALL AB_SLASSQ( M2, X2, INCX2, SCL2, SSQ2 )
       NORMSQ2 = SCL1**2*SSQ1 + SCL2**2*SSQ2
 *
 *     If projection is sufficiently large in norm, then stop.
@@ -272,23 +275,25 @@
             WORK(I) = ZERO
          END DO
       ELSE
-         CALL SGEMV( 'C', M1, N, ONE, Q1, LDQ1, X1, INCX1, ZERO, WORK,
+         CALL AB_SGEMV( 'C', M1, N, ONE, Q1, LDQ1, X1, INCX1, ZERO, WORK
+     $,
      $               1 )
       END IF
 *
-      CALL SGEMV( 'C', M2, N, ONE, Q2, LDQ2, X2, INCX2, ONE, WORK, 1 )
+      CALL AB_SGEMV( 'C', M2, N, ONE, Q2, LDQ2, X2, INCX2, ONE, WORK, 1 
+     $)
 *
-      CALL SGEMV( 'N', M1, N, NEGONE, Q1, LDQ1, WORK, 1, ONE, X1,
+      CALL AB_SGEMV( 'N', M1, N, NEGONE, Q1, LDQ1, WORK, 1, ONE, X1,
      $            INCX1 )
-      CALL SGEMV( 'N', M2, N, NEGONE, Q2, LDQ2, WORK, 1, ONE, X2,
+      CALL AB_SGEMV( 'N', M2, N, NEGONE, Q2, LDQ2, WORK, 1, ONE, X2,
      $            INCX2 )
 *
       SCL1 = REALZERO
       SSQ1 = REALONE
-      CALL SLASSQ( M1, X1, INCX1, SCL1, SSQ1 )
+      CALL AB_SLASSQ( M1, X1, INCX1, SCL1, SSQ1 )
       SCL2 = REALZERO
       SSQ2 = REALONE
-      CALL SLASSQ( M1, X1, INCX1, SCL1, SSQ1 )
+      CALL AB_SLASSQ( M1, X1, INCX1, SCL1, SSQ1 )
       NORMSQ2 = SCL1**2*SSQ1 + SCL2**2*SSQ2
 *
 *     If second projection is sufficiently large in norm, then do
@@ -306,7 +311,7 @@
 *
       RETURN
 *
-*     End of SORBDB6
+*     End of AB_SORBDB6
 *
       END
 

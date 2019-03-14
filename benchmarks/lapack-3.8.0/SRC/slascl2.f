@@ -1,4 +1,4 @@
-*> \brief \b SLASCL2 performs diagonal scaling on a vector.
+*> \brief \b AB_SLASCL2 performs diagonal scaling on a vector.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLASCL2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slascl2.f">
+*> Download AB_SLASCL2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLASCL2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slascl2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLASCL2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slascl2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLASCL2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLASCL2 ( M, N, D, X, LDX )
+*       SUBROUTINE AB_SLASCL2 ( M, N, D, X, LDX )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            M, N, LDX
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> SLASCL2 performs a diagonal scaling on a vector:
+*> AB_SLASCL2 performs a diagonal scaling on a vector:
 *>   x <-- D * x
 *> where the diagonal matrix D is stored as a vector.
 *>
@@ -88,7 +88,7 @@
 *> \ingroup realOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE SLASCL2 ( M, N, D, X, LDX )
+      SUBROUTINE AB_SLASCL2 ( M, N, D, X, LDX )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

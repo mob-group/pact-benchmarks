@@ -1,4 +1,4 @@
-*> \brief \b SLAR2V applies a vector of plane rotations with real cosines and real sines from both sides to a sequence of 2-by-2 symmetric/Hermitian matrices.
+*> \brief \b AB_SLAR2V applies a vector of plane rotations with real cosines and real sines from both sides to a sequence of 2-by-2 symmetric/Hermitian matrices.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLAR2V + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slar2v.f">
+*> Download AB_SLAR2V + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLAR2V.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slar2v.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLAR2V.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slar2v.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLAR2V.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLAR2V( N, X, Y, Z, INCX, C, S, INCC )
+*       SUBROUTINE AB_SLAR2V( N, X, Y, Z, INCX, C, S, INCC )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCC, INCX, N
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> SLAR2V applies a vector of real plane rotations from both sides to
+*> AB_SLAR2V applies a vector of real plane rotations from both sides to
 *> a sequence of 2-by-2 real symmetric matrices, defined by the elements
 *> of the vectors x, y and z. For i = 1,2,...,n
 *>
@@ -108,7 +108,7 @@
 *> \ingroup realOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE SLAR2V( N, X, Y, Z, INCX, C, S, INCC )
+      SUBROUTINE AB_SLAR2V( N, X, Y, Z, INCX, C, S, INCC )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -151,7 +151,7 @@
          IC = IC + INCC
    10 CONTINUE
 *
-*     End of SLAR2V
+*     End of AB_SLAR2V
 *
       RETURN
       END

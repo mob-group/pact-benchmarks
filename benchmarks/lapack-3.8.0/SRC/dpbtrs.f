@@ -1,4 +1,4 @@
-*> \brief \b DPBTRS
+*> \brief \b AB_DPBTRS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DPBTRS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dpbtrs.f">
+*> Download AB_DPBTRS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DPBTRS.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dpbtrs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DPBTRS.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpbtrs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DPBTRS.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DPBTRS( UPLO, N, KD, NRHS, AB, LDAB, B, LDB, INFO )
+*       SUBROUTINE AB_DPBTRS( UPLO, N, KD, NRHS, AB, LDAB, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,9 +34,9 @@
 *>
 *> \verbatim
 *>
-*> DPBTRS solves a system of linear equations A*X = B with a symmetric
+*> AB_DPBTRS solves a system of linear equations A*X = B with a symmetric
 *> positive definite band matrix A using the Cholesky factorization
-*> A = U**T*U or A = L*L**T computed by DPBTRF.
+*> A = U**T*U or A = L*L**T computed by AB_DPBTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -119,7 +119,7 @@
 *> \ingroup doubleOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE DPBTRS( UPLO, N, KD, NRHS, AB, LDAB, B, LDB, INFO )
+      SUBROUTINE AB_DPBTRS( UPLO, N, KD, NRHS, AB, LDAB, B, LDB, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -141,11 +141,11 @@
       INTEGER            J
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DTBSV, XERBLA
+      EXTERNAL           AB_DTBSV, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -155,8 +155,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -170,7 +170,7 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DPBTRS', -INFO )
+         CALL AB_XERBLA( 'AB_DPBTRS', -INFO )
          RETURN
       END IF
 *
@@ -187,12 +187,13 @@
 *
 *           Solve U**T *X = B, overwriting B with X.
 *
-            CALL DTBSV( 'Upper', 'Transpose', 'Non-unit', N, KD, AB,
+            CALL AB_DTBSV( 'Upper', 'Transpose', 'Non-unit', N, KD, AB,
      $                  LDAB, B( 1, J ), 1 )
 *
 *           Solve U*X = B, overwriting B with X.
 *
-            CALL DTBSV( 'Upper', 'No transpose', 'Non-unit', N, KD, AB,
+            CALL AB_DTBSV( 'Upper', 'No transpose', 'Non-unit', N, KD, A
+     $B,
      $                  LDAB, B( 1, J ), 1 )
    10    CONTINUE
       ELSE
@@ -203,18 +204,19 @@
 *
 *           Solve L*X = B, overwriting B with X.
 *
-            CALL DTBSV( 'Lower', 'No transpose', 'Non-unit', N, KD, AB,
+            CALL AB_DTBSV( 'Lower', 'No transpose', 'Non-unit', N, KD, A
+     $B,
      $                  LDAB, B( 1, J ), 1 )
 *
 *           Solve L**T *X = B, overwriting B with X.
 *
-            CALL DTBSV( 'Lower', 'Transpose', 'Non-unit', N, KD, AB,
+            CALL AB_DTBSV( 'Lower', 'Transpose', 'Non-unit', N, KD, AB,
      $                  LDAB, B( 1, J ), 1 )
    20    CONTINUE
       END IF
 *
       RETURN
 *
-*     End of DPBTRS
+*     End of AB_DPBTRS
 *
       END

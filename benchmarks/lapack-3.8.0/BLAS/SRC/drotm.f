@@ -1,4 +1,4 @@
-*> \brief \b DROTM
+*> \brief \b AB_DROTM
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DROTM(N,DX,INCX,DY,INCY,DPARAM)
+*       SUBROUTINE AB_DROTM(N,DX,INCX,DY,INCY,DPARAM)
 *
 *       .. Scalar Arguments ..
 *       INTEGER INCX,INCY,N
@@ -37,7 +37,7 @@
 *>      (DH11  DH12)    (1.D0  DH12)    (DH11  1.D0)    (1.D0  0.D0)
 *>    H=(          )    (          )    (          )    (          )
 *>      (DH21  DH22),   (DH21  1.D0),   (-1.D0 DH22),   (0.D0  1.D0).
-*>    SEE DROTMG FOR A DESCRIPTION OF DATA STORAGE IN DPARAM.
+*>    SEE AB_DROTMG FOR A DESCRIPTION OF DATA STORAGE IN DPARAM.
 *> \endverbatim
 *
 *  Arguments:
@@ -94,7 +94,7 @@
 *> \ingroup double_blas_level1
 *
 *  =====================================================================
-      SUBROUTINE DROTM(N,DX,INCX,DY,INCY,DPARAM)
+      SUBROUTINE AB_DROTM(N,DX,INCX,DY,INCY,DPARAM)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

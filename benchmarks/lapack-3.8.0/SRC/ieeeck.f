@@ -1,4 +1,4 @@
-*> \brief \b IEEECK
+*> \brief \b AB_IEEECK
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download IEEECK + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ieeeck.f">
+*> Download AB_IEEECK + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_IEEECK.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ieeeck.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_IEEECK.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ieeeck.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_IEEECK.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       INTEGER          FUNCTION IEEECK( ISPEC, ZERO, ONE )
+*       INTEGER          FUNCTION AB_IEEECK( ISPEC, ZERO, ONE )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            ISPEC
@@ -31,7 +31,7 @@
 *>
 *> \verbatim
 *>
-*> IEEECK is called from the ILAENV to verify that Infinity and
+*> AB_IEEECK is called from the AB_ILAENV to verify that Infinity and
 *> possibly NaN arithmetic is safe (i.e. will not trap).
 *> \endverbatim
 *
@@ -80,7 +80,7 @@
 *> \ingroup OTHERauxiliary
 *
 *  =====================================================================
-      INTEGER          FUNCTION IEEECK( ISPEC, ZERO, ONE )
+      INTEGER          FUNCTION AB_IEEECK( ISPEC, ZERO, ONE )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -99,53 +99,53 @@
      $                   NEGZRO, NEWZRO, POSINF
 *     ..
 *     .. Executable Statements ..
-      IEEECK = 1
+      AB_IEEECK = 1
 *
       POSINF = ONE / ZERO
       IF( POSINF.LE.ONE ) THEN
-         IEEECK = 0
+         AB_IEEECK = 0
          RETURN
       END IF
 *
       NEGINF = -ONE / ZERO
       IF( NEGINF.GE.ZERO ) THEN
-         IEEECK = 0
+         AB_IEEECK = 0
          RETURN
       END IF
 *
       NEGZRO = ONE / ( NEGINF+ONE )
       IF( NEGZRO.NE.ZERO ) THEN
-         IEEECK = 0
+         AB_IEEECK = 0
          RETURN
       END IF
 *
       NEGINF = ONE / NEGZRO
       IF( NEGINF.GE.ZERO ) THEN
-         IEEECK = 0
+         AB_IEEECK = 0
          RETURN
       END IF
 *
       NEWZRO = NEGZRO + ZERO
       IF( NEWZRO.NE.ZERO ) THEN
-         IEEECK = 0
+         AB_IEEECK = 0
          RETURN
       END IF
 *
       POSINF = ONE / NEWZRO
       IF( POSINF.LE.ONE ) THEN
-         IEEECK = 0
+         AB_IEEECK = 0
          RETURN
       END IF
 *
       NEGINF = NEGINF*POSINF
       IF( NEGINF.GE.ZERO ) THEN
-         IEEECK = 0
+         AB_IEEECK = 0
          RETURN
       END IF
 *
       POSINF = POSINF*POSINF
       IF( POSINF.LE.ONE ) THEN
-         IEEECK = 0
+         AB_IEEECK = 0
          RETURN
       END IF
 *
@@ -170,32 +170,32 @@
       NAN6 = NAN5*ZERO
 *
       IF( NAN1.EQ.NAN1 ) THEN
-         IEEECK = 0
+         AB_IEEECK = 0
          RETURN
       END IF
 *
       IF( NAN2.EQ.NAN2 ) THEN
-         IEEECK = 0
+         AB_IEEECK = 0
          RETURN
       END IF
 *
       IF( NAN3.EQ.NAN3 ) THEN
-         IEEECK = 0
+         AB_IEEECK = 0
          RETURN
       END IF
 *
       IF( NAN4.EQ.NAN4 ) THEN
-         IEEECK = 0
+         AB_IEEECK = 0
          RETURN
       END IF
 *
       IF( NAN5.EQ.NAN5 ) THEN
-         IEEECK = 0
+         AB_IEEECK = 0
          RETURN
       END IF
 *
       IF( NAN6.EQ.NAN6 ) THEN
-         IEEECK = 0
+         AB_IEEECK = 0
          RETURN
       END IF
 *

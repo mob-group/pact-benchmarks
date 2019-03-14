@@ -1,4 +1,4 @@
-*> \brief \b DLAEIN computes a specified right or left eigenvector of an upper Hessenberg matrix by inverse iteration.
+*> \brief \b AB_DLAEIN computes a specified right or left eigenvector of an upper Hessenberg matrix by inverse iteration.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLAEIN + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaein.f">
+*> Download AB_DLAEIN + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLAEIN.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaein.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLAEIN.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaein.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLAEIN.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLAEIN( RIGHTV, NOINIT, N, H, LDH, WR, WI, VR, VI, B,
+*       SUBROUTINE AB_DLAEIN( RIGHTV, NOINIT, N, H, LDH, WR, WI, VR, VI, B,
 *                          LDB, WORK, EPS3, SMLNUM, BIGNUM, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> DLAEIN uses inverse iteration to find a right or left eigenvector
+*> AB_DLAEIN uses inverse iteration to find a right or left eigenvector
 *> corresponding to the eigenvalue (WR,WI) of a real upper Hessenberg
 *> matrix H.
 *> \endverbatim
@@ -169,7 +169,8 @@
 *> \ingroup doubleOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE DLAEIN( RIGHTV, NOINIT, N, H, LDH, WR, WI, VR, VI, B,
+      SUBROUTINE AB_DLAEIN( RIGHTV, NOINIT, N, H, LDH, WR, WI, VR, VI, B
+     $,
      $                   LDB, WORK, EPS3, SMLNUM, BIGNUM, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -201,12 +202,12 @@
      $                   W1, X, XI, XR, Y
 *     ..
 *     .. External Functions ..
-      INTEGER            IDAMAX
-      DOUBLE PRECISION   DASUM, DLAPY2, DNRM2
-      EXTERNAL           IDAMAX, DASUM, DLAPY2, DNRM2
+      INTEGER            AB_IDAMAX
+      DOUBLE PRECISION   AB_DASUM, AB_DLAPY2, AB_DNRM2
+      EXTERNAL           AB_IDAMAX, AB_DASUM, AB_DLAPY2, AB_DNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLADIV, DLATRS, DSCAL
+      EXTERNAL           AB_DLADIV, AB_DLATRS, AB_DSCAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, SQRT
@@ -247,8 +248,8 @@
 *
 *           Scale supplied initial vector.
 *
-            VNORM = DNRM2( N, VR, 1 )
-            CALL DSCAL( N, ( EPS3*ROOTN ) / MAX( VNORM, NRMSML ), VR,
+            VNORM = AB_DNRM2( N, VR, 1 )
+            CALL AB_DSCAL( N, ( EPS3*ROOTN ) / MAX( VNORM, NRMSML ), VR,
      $                  1 )
          END IF
 *
@@ -335,13 +336,14 @@
 *             or U**T*x = scale*v for a left eigenvector,
 *           overwriting x on v.
 *
-            CALL DLATRS( 'Upper', TRANS, 'Nonunit', NORMIN, N, B, LDB,
+            CALL AB_DLATRS( 'Upper', TRANS, 'Nonunit', NORMIN, N, B, LDB
+     $,
      $                   VR, SCALE, WORK, IERR )
             NORMIN = 'Y'
 *
 *           Test for sufficient growth in the norm of v.
 *
-            VNORM = DASUM( N, VR, 1 )
+            VNORM = AB_DASUM( N, VR, 1 )
             IF( VNORM.GE.GROWTO*SCALE )
      $         GO TO 120
 *
@@ -363,8 +365,8 @@
 *
 *        Normalize eigenvector.
 *
-         I = IDAMAX( N, VR, 1 )
-         CALL DSCAL( N, ONE / ABS( VR( I ) ), VR, 1 )
+         I = AB_IDAMAX( N, VR, 1 )
+         CALL AB_DSCAL( N, ONE / ABS( VR( I ) ), VR, 1 )
       ELSE
 *
 *        Complex eigenvalue.
@@ -381,10 +383,11 @@
 *
 *           Scale supplied initial vector.
 *
-            NORM = DLAPY2( DNRM2( N, VR, 1 ), DNRM2( N, VI, 1 ) )
+            NORM = AB_DLAPY2( AB_DNRM2( N, VR, 1 ), AB_DNRM2( N, VI, 1 )
+     $ )
             REC = ( EPS3*ROOTN ) / MAX( NORM, NRMSML )
-            CALL DSCAL( N, REC, VR, 1 )
-            CALL DSCAL( N, REC, VI, 1 )
+            CALL AB_DSCAL( N, REC, VR, 1 )
+            CALL AB_DSCAL( N, REC, VI, 1 )
          END IF
 *
          IF( RIGHTV ) THEN
@@ -401,7 +404,7 @@
   140       CONTINUE
 *
             DO 170 I = 1, N - 1
-               ABSBII = DLAPY2( B( I, I ), B( I+1, I ) )
+               ABSBII = AB_DLAPY2( B( I, I ), B( I+1, I ) )
                EI = H( I+1, I )
                IF( ABSBII.LT.ABS( EI ) ) THEN
 *
@@ -443,8 +446,8 @@
 *
 *              Compute 1-norm of offdiagonal elements of i-th row.
 *
-               WORK( I ) = DASUM( N-I, B( I, I+1 ), LDB ) +
-     $                     DASUM( N-I, B( I+2, I ), 1 )
+               WORK( I ) = AB_DASUM( N-I, B( I, I+1 ), LDB ) +
+     $                     AB_DASUM( N-I, B( I+2, I ), 1 )
   170       CONTINUE
             IF( B( N, N ).EQ.ZERO .AND. B( N+1, N ).EQ.ZERO )
      $         B( N, N ) = EPS3
@@ -468,7 +471,7 @@
 *
             DO 210 J = N, 2, -1
                EJ = H( J, J-1 )
-               ABSBJJ = DLAPY2( B( J, J ), B( J+1, J ) )
+               ABSBJJ = AB_DLAPY2( B( J, J ), B( J+1, J ) )
                IF( ABSBJJ.LT.ABS( EJ ) ) THEN
 *
 *                 Interchange columns and eliminate
@@ -509,8 +512,8 @@
 *
 *              Compute 1-norm of offdiagonal elements of j-th column.
 *
-               WORK( J ) = DASUM( J-1, B( 1, J ), 1 ) +
-     $                     DASUM( J-1, B( J+1, 1 ), LDB )
+               WORK( J ) = AB_DASUM( J-1, B( 1, J ), 1 ) +
+     $                     AB_DASUM( J-1, B( J+1, 1 ), LDB )
   210       CONTINUE
             IF( B( 1, 1 ).EQ.ZERO .AND. B( 2, 1 ).EQ.ZERO )
      $         B( 1, 1 ) = EPS3
@@ -534,8 +537,8 @@
 *
                IF( WORK( I ).GT.VCRIT ) THEN
                   REC = ONE / VMAX
-                  CALL DSCAL( N, REC, VR, 1 )
-                  CALL DSCAL( N, REC, VI, 1 )
+                  CALL AB_DSCAL( N, REC, VR, 1 )
+                  CALL AB_DSCAL( N, REC, VI, 1 )
                   SCALE = SCALE*REC
                   VMAX = ONE
                   VCRIT = BIGNUM
@@ -561,8 +564,8 @@
                      W1 = ABS( XR ) + ABS( XI )
                      IF( W1.GT.W*BIGNUM ) THEN
                         REC = ONE / W1
-                        CALL DSCAL( N, REC, VR, 1 )
-                        CALL DSCAL( N, REC, VI, 1 )
+                        CALL AB_DSCAL( N, REC, VR, 1 )
+                        CALL AB_DSCAL( N, REC, VI, 1 )
                         XR = VR( I )
                         XI = VI( I )
                         SCALE = SCALE*REC
@@ -572,7 +575,8 @@
 *
 *                 Divide by diagonal element of B.
 *
-                  CALL DLADIV( XR, XI, B( I, I ), B( I+1, I ), VR( I ),
+                  CALL AB_DLADIV( XR, XI, B( I, I ), B( I+1, I ), VR( I 
+     $),
      $                         VI( I ) )
                   VMAX = MAX( ABS( VR( I ) )+ABS( VI( I ) ), VMAX )
                   VCRIT = BIGNUM / VMAX
@@ -591,7 +595,7 @@
 *
 *           Test for sufficient growth in the norm of (VR,VI).
 *
-            VNORM = DASUM( N, VR, 1 ) + DASUM( N, VI, 1 )
+            VNORM = AB_DASUM( N, VR, 1 ) + AB_DASUM( N, VI, 1 )
             IF( VNORM.GE.GROWTO*SCALE )
      $         GO TO 280
 *
@@ -620,13 +624,13 @@
          DO 290 I = 1, N
             VNORM = MAX( VNORM, ABS( VR( I ) )+ABS( VI( I ) ) )
   290    CONTINUE
-         CALL DSCAL( N, ONE / VNORM, VR, 1 )
-         CALL DSCAL( N, ONE / VNORM, VI, 1 )
+         CALL AB_DSCAL( N, ONE / VNORM, VR, 1 )
+         CALL AB_DSCAL( N, ONE / VNORM, VI, 1 )
 *
       END IF
 *
       RETURN
 *
-*     End of DLAEIN
+*     End of AB_DLAEIN
 *
       END

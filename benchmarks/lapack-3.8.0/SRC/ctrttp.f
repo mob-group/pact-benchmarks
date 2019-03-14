@@ -1,4 +1,4 @@
-*> \brief \b CTRTTP copies a triangular matrix from the standard full format (TR) to the standard packed format (TP).
+*> \brief \b AB_CTRTTP copies a triangular matrix from the standard full format (TR) to the standard packed format (TP).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CTRTTP + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctrttp.f">
+*> Download AB_CTRTTP + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CTRTTP.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctrttp.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CTRTTP.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctrttp.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CTRTTP.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CTRTTP( UPLO, N, A, LDA, AP, INFO )
+*       SUBROUTINE AB_CTRTTP( UPLO, N, A, LDA, AP, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> CTRTTP copies a triangular matrix A from full format (TR) to standard
+*> AB_CTRTTP copies a triangular matrix A from full format (TR) to standard
 *> packed format (TP).
 *> \endverbatim
 *
@@ -102,7 +102,7 @@
 *> \ingroup complexOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE CTRTTP( UPLO, N, A, LDA, AP, INFO )
+      SUBROUTINE AB_CTRTTP( UPLO, N, A, LDA, AP, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -126,19 +126,19 @@
       INTEGER            I, J, K
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA
+      EXTERNAL           AB_XERBLA
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters.
 *
       INFO = 0
-      LOWER = LSAME( UPLO, 'L' )
-      IF( .NOT.LOWER .AND. .NOT.LSAME( UPLO, 'U' ) ) THEN
+      LOWER = AB_LSAME( UPLO, 'L' )
+      IF( .NOT.LOWER .AND. .NOT.AB_LSAME( UPLO, 'U' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -146,7 +146,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CTRTTP', -INFO )
+         CALL AB_XERBLA( 'AB_CTRTTP', -INFO )
          RETURN
       END IF
 *
@@ -171,6 +171,6 @@
 *
       RETURN
 *
-*     End of CTRTTP
+*     End of AB_CTRTTP
 *
       END

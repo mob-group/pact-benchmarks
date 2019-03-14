@@ -1,4 +1,4 @@
-*> \brief \b DLARZ applies an elementary reflector (as returned by stzrzf) to a general matrix.
+*> \brief \b AB_DLARZ applies an elementary reflector (as returned by AB_STZRZF) to a general matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLARZ + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlarz.f">
+*> Download AB_DLARZ + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLARZ.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlarz.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLARZ.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlarz.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLARZ.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLARZ( SIDE, M, N, L, V, INCV, TAU, C, LDC, WORK )
+*       SUBROUTINE AB_DLARZ( SIDE, M, N, L, V, INCV, TAU, C, LDC, WORK )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          SIDE
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> DLARZ applies a real elementary reflector H to a real M-by-N
+*> AB_DLARZ applies a real elementary reflector H to a real M-by-N
 *> matrix C, from either the left or the right. H is represented in the
 *> form
 *>
@@ -46,7 +46,7 @@
 *> If tau = 0, then H is taken to be the unit matrix.
 *>
 *>
-*> H is a product of k elementary reflectors as returned by DTZRZF.
+*> H is a product of k elementary reflectors as returned by AB_DTZRZF.
 *> \endverbatim
 *
 *  Arguments:
@@ -83,7 +83,7 @@
 *> \verbatim
 *>          V is DOUBLE PRECISION array, dimension (1+(L-1)*abs(INCV))
 *>          The vector v in the representation of H as returned by
-*>          DTZRZF. V is not used if TAU = 0.
+*>          AB_DTZRZF. V is not used if TAU = 0.
 *> \endverbatim
 *>
 *> \param[in] INCV
@@ -143,7 +143,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DLARZ( SIDE, M, N, L, V, INCV, TAU, C, LDC, WORK )
+      SUBROUTINE AB_DLARZ( SIDE, M, N, L, V, INCV, TAU, C, LDC, WORK )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -166,15 +166,15 @@
       PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DCOPY, DGEMV, DGER
+      EXTERNAL           AB_DAXPY, AB_DCOPY, AB_DGEMV, AB_DGER
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. Executable Statements ..
 *
-      IF( LSAME( SIDE, 'L' ) ) THEN
+      IF( AB_LSAME( SIDE, 'L' ) ) THEN
 *
 *        Form  H * C
 *
@@ -182,21 +182,22 @@
 *
 *           w( 1:n ) = C( 1, 1:n )
 *
-            CALL DCOPY( N, C, LDC, WORK, 1 )
+            CALL AB_DCOPY( N, C, LDC, WORK, 1 )
 *
 *           w( 1:n ) = w( 1:n ) + C( m-l+1:m, 1:n )**T * v( 1:l )
 *
-            CALL DGEMV( 'Transpose', L, N, ONE, C( M-L+1, 1 ), LDC, V,
+            CALL AB_DGEMV( 'Transpose', L, N, ONE, C( M-L+1, 1 ), LDC, V
+     $,
      $                  INCV, ONE, WORK, 1 )
 *
 *           C( 1, 1:n ) = C( 1, 1:n ) - tau * w( 1:n )
 *
-            CALL DAXPY( N, -TAU, WORK, 1, C, LDC )
+            CALL AB_DAXPY( N, -TAU, WORK, 1, C, LDC )
 *
 *           C( m-l+1:m, 1:n ) = C( m-l+1:m, 1:n ) - ...
 *                               tau * v( 1:l ) * w( 1:n )**T
 *
-            CALL DGER( L, N, -TAU, V, INCV, WORK, 1, C( M-L+1, 1 ),
+            CALL AB_DGER( L, N, -TAU, V, INCV, WORK, 1, C( M-L+1, 1 ),
      $                 LDC )
          END IF
 *
@@ -208,21 +209,22 @@
 *
 *           w( 1:m ) = C( 1:m, 1 )
 *
-            CALL DCOPY( M, C, 1, WORK, 1 )
+            CALL AB_DCOPY( M, C, 1, WORK, 1 )
 *
 *           w( 1:m ) = w( 1:m ) + C( 1:m, n-l+1:n, 1:n ) * v( 1:l )
 *
-            CALL DGEMV( 'No transpose', M, L, ONE, C( 1, N-L+1 ), LDC,
+            CALL AB_DGEMV( 'No transpose', M, L, ONE, C( 1, N-L+1 ), LDC
+     $,
      $                  V, INCV, ONE, WORK, 1 )
 *
 *           C( 1:m, 1 ) = C( 1:m, 1 ) - tau * w( 1:m )
 *
-            CALL DAXPY( M, -TAU, WORK, 1, C, 1 )
+            CALL AB_DAXPY( M, -TAU, WORK, 1, C, 1 )
 *
 *           C( 1:m, n-l+1:n ) = C( 1:m, n-l+1:n ) - ...
 *                               tau * w( 1:m ) * v( 1:l )**T
 *
-            CALL DGER( M, L, -TAU, WORK, 1, V, INCV, C( 1, N-L+1 ),
+            CALL AB_DGER( M, L, -TAU, WORK, 1, V, INCV, C( 1, N-L+1 ),
      $                 LDC )
 *
          END IF
@@ -231,6 +233,6 @@
 *
       RETURN
 *
-*     End of DLARZ
+*     End of AB_DLARZ
 *
       END

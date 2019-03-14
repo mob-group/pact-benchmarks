@@ -1,4 +1,4 @@
-*> \brief \b ZLARFGP generates an elementary reflector (Householder matrix) with non-negative beta.
+*> \brief \b AB_ZLARFGP generates an elementary reflector (Householder matrix) with non-negative beta.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZLARFGP + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlarfgp.f">
+*> Download AB_ZLARFGP + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLARFgp.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlarfgp.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLARFgp.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlarfgp.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLARFgp.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZLARFGP( N, ALPHA, X, INCX, TAU )
+*       SUBROUTINE AB_ZLARFGP( N, ALPHA, X, INCX, TAU )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCX, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> ZLARFGP generates a complex elementary reflector H of order n, such
+*> AB_ZLARFGP generates a complex elementary reflector H of order n, such
 *> that
 *>
 *>       H**H * ( alpha ) = ( beta ),   H**H * H = I.
@@ -102,7 +102,7 @@
 *> \ingroup complex16OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE ZLARFGP( N, ALPHA, X, INCX, TAU )
+      SUBROUTINE AB_ZLARFGP( N, ALPHA, X, INCX, TAU )
 *
 *  -- LAPACK auxiliary routine (version 3.8.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -129,15 +129,16 @@
       COMPLEX*16         SAVEALPHA
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLAPY3, DLAPY2, DZNRM2
-      COMPLEX*16         ZLADIV
-      EXTERNAL           DLAMCH, DLAPY3, DLAPY2, DZNRM2, ZLADIV
+      DOUBLE PRECISION   DLAMCH, AB_DLAPY3, AB_DLAPY2, AB_DZNRM2
+      COMPLEX*16         AB_ZLADIV
+      EXTERNAL           DLAMCH, AB_DLAPY3, AB_DLAPY2, AB_DZNRM2, AB_ZLA
+     $DIV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCMPLX, DIMAG, SIGN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZDSCAL, ZSCAL
+      EXTERNAL           AB_ZDSCAL, AB_ZSCAL
 *     ..
 *     .. Executable Statements ..
 *
@@ -146,7 +147,7 @@
          RETURN
       END IF
 *
-      XNORM = DZNRM2( N-1, X, INCX )
+      XNORM = AB_DZNRM2( N-1, X, INCX )
       ALPHR = DBLE( ALPHA )
       ALPHI = DIMAG( ALPHA )
 *
@@ -171,7 +172,7 @@
             END IF
          ELSE
 *           Only "reflecting" the diagonal entry to be real and non-negative.
-            XNORM = DLAPY2( ALPHR, ALPHI )
+            XNORM = AB_DLAPY2( ALPHR, ALPHI )
             TAU = DCMPLX( ONE - ALPHR / XNORM, -ALPHI / XNORM )
             DO J = 1, N-1
                X( 1 + (J-1)*INCX ) = ZERO
@@ -182,7 +183,7 @@
 *
 *        general case
 *
-         BETA = SIGN( DLAPY3( ALPHR, ALPHI, XNORM ), ALPHR )
+         BETA = SIGN( AB_DLAPY3( ALPHR, ALPHI, XNORM ), ALPHR )
          SMLNUM = DLAMCH( 'S' ) / DLAMCH( 'E' )
          BIGNUM = ONE / SMLNUM
 *
@@ -193,7 +194,7 @@
 *
    10       CONTINUE
             KNT = KNT + 1
-            CALL ZDSCAL( N-1, BIGNUM, X, INCX )
+            CALL AB_ZDSCAL( N-1, BIGNUM, X, INCX )
             BETA = BETA*BIGNUM
             ALPHI = ALPHI*BIGNUM
             ALPHR = ALPHR*BIGNUM
@@ -202,9 +203,9 @@
 *
 *           New BETA is at most 1, at least SMLNUM
 *
-            XNORM = DZNRM2( N-1, X, INCX )
+            XNORM = AB_DZNRM2( N-1, X, INCX )
             ALPHA = DCMPLX( ALPHR, ALPHI )
-            BETA = SIGN( DLAPY3( ALPHR, ALPHI, XNORM ), ALPHR )
+            BETA = SIGN( AB_DLAPY3( ALPHR, ALPHI, XNORM ), ALPHR )
          END IF
          SAVEALPHA = ALPHA
          ALPHA = ALPHA + BETA
@@ -217,7 +218,7 @@
             TAU = DCMPLX( ALPHR/BETA, -ALPHI/BETA )
             ALPHA = DCMPLX( -ALPHR, ALPHI )
          END IF
-         ALPHA = ZLADIV( DCMPLX( ONE ), ALPHA )
+         ALPHA = AB_ZLADIV( DCMPLX( ONE ), ALPHA )
 *
          IF ( ABS(TAU).LE.SMLNUM ) THEN
 *
@@ -241,7 +242,7 @@
                   BETA = -SAVEALPHA
                END IF
             ELSE
-               XNORM = DLAPY2( ALPHR, ALPHI )
+               XNORM = AB_DLAPY2( ALPHR, ALPHI )
                TAU = DCMPLX( ONE - ALPHR / XNORM, -ALPHI / XNORM )
                DO J = 1, N-1
                   X( 1 + (J-1)*INCX ) = ZERO
@@ -253,7 +254,7 @@
 *
 *           This is the general case.
 *
-            CALL ZSCAL( N-1, ALPHA, X, INCX )
+            CALL AB_ZSCAL( N-1, ALPHA, X, INCX )
 *
          END IF
 *
@@ -267,6 +268,6 @@
 *
       RETURN
 *
-*     End of ZLARFGP
+*     End of AB_ZLARFGP
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b STGSY2 solves the generalized Sylvester equation (unblocked algorithm).
+*> \brief \b AB_STGSY2 solves the generalized Sylvester equation (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,27 +6,27 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download STGSY2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stgsy2.f">
+*> Download AB_STGSY2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_STGSY2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stgsy2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_STGSY2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stgsy2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_STGSY2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE STGSY2( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC, D,
-*                          LDD, E, LDE, F, LDF, SCALE, RDSUM, RDSCAL,
+*       SUBROUTINE AB_STGSY2( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC, D,
+*                          LDD, E, LDE, F, LDF, SCALE, RDSUM, RAB_DSCAL,
 *                          IWORK, PQ, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          TRANS
 *       INTEGER            IJOB, INFO, LDA, LDB, LDC, LDD, LDE, LDF, M, N,
 *      $                   PQ
-*       REAL               RDSCAL, RDSUM, SCALE
+*       REAL               RAB_DSCAL, RDSUM, SCALE
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            IWORK( * )
@@ -40,7 +40,7 @@
 *>
 *> \verbatim
 *>
-*> STGSY2 solves the generalized Sylvester equation:
+*> AB_STGSY2 solves the generalized Sylvester equation:
 *>
 *>             A * R - L * B = scale * C                (1)
 *>             D * R - L * E = scale * F,
@@ -71,12 +71,12 @@
 *>             R  * B**T + L  * E**T  = scale * -F
 *>
 *> This case is used to compute an estimate of Dif[(A, D), (B, E)] =
-*> sigma_min(Z) using reverse communicaton with SLACON.
+*> sigma_min(Z) using reverse communicaton with AB_SLACON.
 *>
-*> STGSY2 also (IJOB >= 1) contributes to the computation in STGSYL
+*> AB_STGSY2 also (IJOB >= 1) contributes to the computation in AB_STGSYL
 *> of an upper bound on the separation between to matrix pairs. Then
 *> the input (A, D), (B, E) are sub-pencils of the matrix pair in
-*> STGSYL. See STGSYL for details.
+*> AB_STGSYL. See AB_STGSYL for details.
 *> \endverbatim
 *
 *  Arguments:
@@ -99,7 +99,7 @@
 *>               pairs is computed. (look ahead strategy is used).
 *>          = 2: A contribution from this subsystem to a Frobenius
 *>               norm-based estimate of the separation between two matrix
-*>               pairs is computed. (SGECON on sub-systems is used.)
+*>               pairs is computed. (AB_SGECON on sub-systems is used.)
 *>          Not referenced if TRANS = 'T'.
 *> \endverbatim
 *>
@@ -210,23 +210,23 @@
 *> \verbatim
 *>          RDSUM is REAL
 *>          On entry, the sum of squares of computed contributions to
-*>          the Dif-estimate under computation by STGSYL, where the
-*>          scaling factor RDSCAL (see below) has been factored out.
+*>          the Dif-estimate under computation by AB_STGSYL, where the
+*>          scaling factor RAB_DSCAL (see below) has been factored out.
 *>          On exit, the corresponding sum of squares updated with the
 *>          contributions from the current sub-system.
 *>          If TRANS = 'T' RDSUM is not touched.
-*>          NOTE: RDSUM only makes sense when STGSY2 is called by STGSYL.
+*>          NOTE: RDSUM only makes sense when AB_STGSY2 is called by AB_STGSYL.
 *> \endverbatim
 *>
-*> \param[in,out] RDSCAL
+*> \param[in,out] RAB_DSCAL
 *> \verbatim
-*>          RDSCAL is REAL
+*>          RAB_DSCAL is REAL
 *>          On entry, scaling factor used to prevent overflow in RDSUM.
-*>          On exit, RDSCAL is updated w.r.t. the current contributions
+*>          On exit, RAB_DSCAL is updated w.r.t. the current contributions
 *>          in RDSUM.
-*>          If TRANS = 'T', RDSCAL is not touched.
-*>          NOTE: RDSCAL only makes sense when STGSY2 is called by
-*>                STGSYL.
+*>          If TRANS = 'T', RAB_DSCAL is not touched.
+*>          NOTE: RAB_DSCAL only makes sense when AB_STGSY2 is called by
+*>                AB_STGSYL.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -270,8 +270,9 @@
 *>     Umea University, S-901 87 Umea, Sweden.
 *
 *  =====================================================================
-      SUBROUTINE STGSY2( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC, D,
-     $                   LDD, E, LDE, F, LDF, SCALE, RDSUM, RDSCAL,
+      SUBROUTINE AB_STGSY2( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC, D
+     $,
+     $                   LDD, E, LDE, F, LDF, SCALE, RDSUM, RAB_DSCAL,
      $                   IWORK, PQ, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -283,7 +284,7 @@
       CHARACTER          TRANS
       INTEGER            IJOB, INFO, LDA, LDB, LDC, LDD, LDE, LDF, M, N,
      $                   PQ
-      REAL               RDSCAL, RDSUM, SCALE
+      REAL               RAB_DSCAL, RDSUM, SCALE
 *     ..
 *     .. Array Arguments ..
       INTEGER            IWORK( * )
@@ -292,7 +293,7 @@
 *     ..
 *
 *  =====================================================================
-*  Replaced various illegal calls to SCOPY by calls to SLASET.
+*  Replaced various illegal calls to AB_SCOPY by calls to AB_SLASET.
 *  Sven Hammarling, 27/5/02.
 *
 *     .. Parameters ..
@@ -312,12 +313,14 @@
       REAL               RHS( LDZ ), Z( LDZ, LDZ )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SCOPY, SGEMM, SGEMV, SGER, SGESC2,
-     $                   SGETC2, SSCAL, SLASET, SLATDF, XERBLA
+      EXTERNAL           AB_SAXPY, AB_SCOPY, AB_SGEMM, AB_SGEMV, AB_SGER
+     $, AB_SGESC2,
+     $                   AB_SGETC2, AB_SSCAL, AB_SLASET, AB_SLATDF, AB_X
+     $ERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -328,8 +331,8 @@
 *
       INFO = 0
       IERR = 0
-      NOTRAN = LSAME( TRANS, 'N' )
-      IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) ) THEN
+      NOTRAN = AB_LSAME( TRANS, 'N' )
+      IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) ) THEN
          INFO = -1
       ELSE IF( NOTRAN ) THEN
          IF( ( IJOB.LT.0 ) .OR. ( IJOB.GT.2 ) ) THEN
@@ -356,7 +359,7 @@
          END IF
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'STGSY2', -INFO )
+         CALL AB_XERBLA( 'AB_STGSY2', -INFO )
          RETURN
       END IF
 *
@@ -440,23 +443,23 @@
 *
 *                 Solve Z * x = RHS
 *
-                  CALL SGETC2( ZDIM, Z, LDZ, IPIV, JPIV, IERR )
+                  CALL AB_SGETC2( ZDIM, Z, LDZ, IPIV, JPIV, IERR )
                   IF( IERR.GT.0 )
      $               INFO = IERR
 *
                   IF( IJOB.EQ.0 ) THEN
-                     CALL SGESC2( ZDIM, Z, LDZ, RHS, IPIV, JPIV,
+                     CALL AB_SGESC2( ZDIM, Z, LDZ, RHS, IPIV, JPIV,
      $                            SCALOC )
                      IF( SCALOC.NE.ONE ) THEN
                         DO 50 K = 1, N
-                           CALL SSCAL( M, SCALOC, C( 1, K ), 1 )
-                           CALL SSCAL( M, SCALOC, F( 1, K ), 1 )
+                           CALL AB_SSCAL( M, SCALOC, C( 1, K ), 1 )
+                           CALL AB_SSCAL( M, SCALOC, F( 1, K ), 1 )
    50                   CONTINUE
                         SCALE = SCALE*SCALOC
                      END IF
                   ELSE
-                     CALL SLATDF( IJOB, ZDIM, Z, LDZ, RHS, RDSUM,
-     $                            RDSCAL, IPIV, JPIV )
+                     CALL AB_SLATDF( IJOB, ZDIM, Z, LDZ, RHS, RDSUM,
+     $                            RAB_DSCAL, IPIV, JPIV )
                   END IF
 *
 *                 Unpack solution vector(s)
@@ -469,15 +472,17 @@
 *
                   IF( I.GT.1 ) THEN
                      ALPHA = -RHS( 1 )
-                     CALL SAXPY( IS-1, ALPHA, A( 1, IS ), 1, C( 1, JS ),
+                     CALL AB_SAXPY( IS-1, ALPHA, A( 1, IS ), 1, C( 1, JS
+     $ ),
      $                           1 )
-                     CALL SAXPY( IS-1, ALPHA, D( 1, IS ), 1, F( 1, JS ),
+                     CALL AB_SAXPY( IS-1, ALPHA, D( 1, IS ), 1, F( 1, JS
+     $ ),
      $                           1 )
                   END IF
                   IF( J.LT.Q ) THEN
-                     CALL SAXPY( N-JE, RHS( 2 ), B( JS, JE+1 ), LDB,
+                     CALL AB_SAXPY( N-JE, RHS( 2 ), B( JS, JE+1 ), LDB,
      $                           C( IS, JE+1 ), LDC )
-                     CALL SAXPY( N-JE, RHS( 2 ), E( JS, JE+1 ), LDE,
+                     CALL AB_SAXPY( N-JE, RHS( 2 ), E( JS, JE+1 ), LDE,
      $                           F( IS, JE+1 ), LDF )
                   END IF
 *
@@ -514,23 +519,23 @@
 *
 *                 Solve Z * x = RHS
 *
-                  CALL SGETC2( ZDIM, Z, LDZ, IPIV, JPIV, IERR )
+                  CALL AB_SGETC2( ZDIM, Z, LDZ, IPIV, JPIV, IERR )
                   IF( IERR.GT.0 )
      $               INFO = IERR
 *
                   IF( IJOB.EQ.0 ) THEN
-                     CALL SGESC2( ZDIM, Z, LDZ, RHS, IPIV, JPIV,
+                     CALL AB_SGESC2( ZDIM, Z, LDZ, RHS, IPIV, JPIV,
      $                            SCALOC )
                      IF( SCALOC.NE.ONE ) THEN
                         DO 60 K = 1, N
-                           CALL SSCAL( M, SCALOC, C( 1, K ), 1 )
-                           CALL SSCAL( M, SCALOC, F( 1, K ), 1 )
+                           CALL AB_SSCAL( M, SCALOC, C( 1, K ), 1 )
+                           CALL AB_SSCAL( M, SCALOC, F( 1, K ), 1 )
    60                   CONTINUE
                         SCALE = SCALE*SCALOC
                      END IF
                   ELSE
-                     CALL SLATDF( IJOB, ZDIM, Z, LDZ, RHS, RDSUM,
-     $                            RDSCAL, IPIV, JPIV )
+                     CALL AB_SLATDF( IJOB, ZDIM, Z, LDZ, RHS, RDSUM,
+     $                            RAB_DSCAL, IPIV, JPIV )
                   END IF
 *
 *                 Unpack solution vector(s)
@@ -544,19 +549,23 @@
 *                 equation.
 *
                   IF( I.GT.1 ) THEN
-                     CALL SGER( IS-1, NB, -ONE, A( 1, IS ), 1, RHS( 1 ),
+                     CALL AB_SGER( IS-1, NB, -ONE, A( 1, IS ), 1, RHS( 1
+     $ ),
      $                          1, C( 1, JS ), LDC )
-                     CALL SGER( IS-1, NB, -ONE, D( 1, IS ), 1, RHS( 1 ),
+                     CALL AB_SGER( IS-1, NB, -ONE, D( 1, IS ), 1, RHS( 1
+     $ ),
      $                          1, F( 1, JS ), LDF )
                   END IF
                   IF( J.LT.Q ) THEN
-                     CALL SAXPY( N-JE, RHS( 3 ), B( JS, JE+1 ), LDB,
+                     CALL AB_SAXPY( N-JE, RHS( 3 ), B( JS, JE+1 ), LDB,
      $                           C( IS, JE+1 ), LDC )
-                     CALL SAXPY( N-JE, RHS( 3 ), E( JS, JE+1 ), LDE,
+                     CALL AB_SAXPY( N-JE, RHS( 3 ), E( JS, JE+1 ), LDE,
      $                           F( IS, JE+1 ), LDF )
-                     CALL SAXPY( N-JE, RHS( 4 ), B( JSP1, JE+1 ), LDB,
+                     CALL AB_SAXPY( N-JE, RHS( 4 ), B( JSP1, JE+1 ), LDB
+     $,
      $                           C( IS, JE+1 ), LDC )
-                     CALL SAXPY( N-JE, RHS( 4 ), E( JSP1, JE+1 ), LDE,
+                     CALL AB_SAXPY( N-JE, RHS( 4 ), E( JSP1, JE+1 ), LDE
+     $,
      $                           F( IS, JE+1 ), LDF )
                   END IF
 *
@@ -593,22 +602,22 @@
 *
 *                 Solve Z * x = RHS
 *
-                  CALL SGETC2( ZDIM, Z, LDZ, IPIV, JPIV, IERR )
+                  CALL AB_SGETC2( ZDIM, Z, LDZ, IPIV, JPIV, IERR )
                   IF( IERR.GT.0 )
      $               INFO = IERR
                   IF( IJOB.EQ.0 ) THEN
-                     CALL SGESC2( ZDIM, Z, LDZ, RHS, IPIV, JPIV,
+                     CALL AB_SGESC2( ZDIM, Z, LDZ, RHS, IPIV, JPIV,
      $                            SCALOC )
                      IF( SCALOC.NE.ONE ) THEN
                         DO 70 K = 1, N
-                           CALL SSCAL( M, SCALOC, C( 1, K ), 1 )
-                           CALL SSCAL( M, SCALOC, F( 1, K ), 1 )
+                           CALL AB_SSCAL( M, SCALOC, C( 1, K ), 1 )
+                           CALL AB_SSCAL( M, SCALOC, F( 1, K ), 1 )
    70                   CONTINUE
                         SCALE = SCALE*SCALOC
                      END IF
                   ELSE
-                     CALL SLATDF( IJOB, ZDIM, Z, LDZ, RHS, RDSUM,
-     $                            RDSCAL, IPIV, JPIV )
+                     CALL AB_SLATDF( IJOB, ZDIM, Z, LDZ, RHS, RDSUM,
+     $                            RAB_DSCAL, IPIV, JPIV )
                   END IF
 *
 *                 Unpack solution vector(s)
@@ -622,15 +631,17 @@
 *                 equation.
 *
                   IF( I.GT.1 ) THEN
-                     CALL SGEMV( 'N', IS-1, MB, -ONE, A( 1, IS ), LDA,
+                     CALL AB_SGEMV( 'N', IS-1, MB, -ONE, A( 1, IS ), LDA
+     $,
      $                           RHS( 1 ), 1, ONE, C( 1, JS ), 1 )
-                     CALL SGEMV( 'N', IS-1, MB, -ONE, D( 1, IS ), LDD,
+                     CALL AB_SGEMV( 'N', IS-1, MB, -ONE, D( 1, IS ), LDD
+     $,
      $                           RHS( 1 ), 1, ONE, F( 1, JS ), 1 )
                   END IF
                   IF( J.LT.Q ) THEN
-                     CALL SGER( MB, N-JE, ONE, RHS( 3 ), 1,
+                     CALL AB_SGER( MB, N-JE, ONE, RHS( 3 ), 1,
      $                          B( JS, JE+1 ), LDB, C( IS, JE+1 ), LDC )
-                     CALL SGER( MB, N-JE, ONE, RHS( 3 ), 1,
+                     CALL AB_SGER( MB, N-JE, ONE, RHS( 3 ), 1,
      $                          E( JS, JE+1 ), LDE, F( IS, JE+1 ), LDF )
                   END IF
 *
@@ -638,7 +649,7 @@
 *
 *                 Build an 8-by-8 system Z * x = RHS
 *
-                  CALL SLASET( 'F', LDZ, LDZ, ZERO, ZERO, Z, LDZ )
+                  CALL AB_SLASET( 'F', LDZ, LDZ, ZERO, ZERO, Z, LDZ )
 *
                   Z( 1, 1 ) = A( IS, IS )
                   Z( 2, 1 ) = A( ISP1, IS )
@@ -681,30 +692,31 @@
                   K = 1
                   II = MB*NB + 1
                   DO 80 JJ = 0, NB - 1
-                     CALL SCOPY( MB, C( IS, JS+JJ ), 1, RHS( K ), 1 )
-                     CALL SCOPY( MB, F( IS, JS+JJ ), 1, RHS( II ), 1 )
+                     CALL AB_SCOPY( MB, C( IS, JS+JJ ), 1, RHS( K ), 1 )
+                     CALL AB_SCOPY( MB, F( IS, JS+JJ ), 1, RHS( II ), 1 
+     $)
                      K = K + MB
                      II = II + MB
    80             CONTINUE
 *
 *                 Solve Z * x = RHS
 *
-                  CALL SGETC2( ZDIM, Z, LDZ, IPIV, JPIV, IERR )
+                  CALL AB_SGETC2( ZDIM, Z, LDZ, IPIV, JPIV, IERR )
                   IF( IERR.GT.0 )
      $               INFO = IERR
                   IF( IJOB.EQ.0 ) THEN
-                     CALL SGESC2( ZDIM, Z, LDZ, RHS, IPIV, JPIV,
+                     CALL AB_SGESC2( ZDIM, Z, LDZ, RHS, IPIV, JPIV,
      $                            SCALOC )
                      IF( SCALOC.NE.ONE ) THEN
                         DO 90 K = 1, N
-                           CALL SSCAL( M, SCALOC, C( 1, K ), 1 )
-                           CALL SSCAL( M, SCALOC, F( 1, K ), 1 )
+                           CALL AB_SSCAL( M, SCALOC, C( 1, K ), 1 )
+                           CALL AB_SSCAL( M, SCALOC, F( 1, K ), 1 )
    90                   CONTINUE
                         SCALE = SCALE*SCALOC
                      END IF
                   ELSE
-                     CALL SLATDF( IJOB, ZDIM, Z, LDZ, RHS, RDSUM,
-     $                            RDSCAL, IPIV, JPIV )
+                     CALL AB_SLATDF( IJOB, ZDIM, Z, LDZ, RHS, RDSUM,
+     $                            RAB_DSCAL, IPIV, JPIV )
                   END IF
 *
 *                 Unpack solution vector(s)
@@ -712,8 +724,9 @@
                   K = 1
                   II = MB*NB + 1
                   DO 100 JJ = 0, NB - 1
-                     CALL SCOPY( MB, RHS( K ), 1, C( IS, JS+JJ ), 1 )
-                     CALL SCOPY( MB, RHS( II ), 1, F( IS, JS+JJ ), 1 )
+                     CALL AB_SCOPY( MB, RHS( K ), 1, C( IS, JS+JJ ), 1 )
+                     CALL AB_SCOPY( MB, RHS( II ), 1, F( IS, JS+JJ ), 1 
+     $)
                      K = K + MB
                      II = II + MB
   100             CONTINUE
@@ -722,19 +735,21 @@
 *                 equation.
 *
                   IF( I.GT.1 ) THEN
-                     CALL SGEMM( 'N', 'N', IS-1, NB, MB, -ONE,
+                     CALL AB_SGEMM( 'N', 'N', IS-1, NB, MB, -ONE,
      $                           A( 1, IS ), LDA, RHS( 1 ), MB, ONE,
      $                           C( 1, JS ), LDC )
-                     CALL SGEMM( 'N', 'N', IS-1, NB, MB, -ONE,
+                     CALL AB_SGEMM( 'N', 'N', IS-1, NB, MB, -ONE,
      $                           D( 1, IS ), LDD, RHS( 1 ), MB, ONE,
      $                           F( 1, JS ), LDF )
                   END IF
                   IF( J.LT.Q ) THEN
                      K = MB*NB + 1
-                     CALL SGEMM( 'N', 'N', MB, N-JE, NB, ONE, RHS( K ),
+                     CALL AB_SGEMM( 'N', 'N', MB, N-JE, NB, ONE, RHS( K 
+     $),
      $                           MB, B( JS, JE+1 ), LDB, ONE,
      $                           C( IS, JE+1 ), LDC )
-                     CALL SGEMM( 'N', 'N', MB, N-JE, NB, ONE, RHS( K ),
+                     CALL AB_SGEMM( 'N', 'N', MB, N-JE, NB, ONE, RHS( K 
+     $),
      $                           MB, E( JS, JE+1 ), LDE, ONE,
      $                           F( IS, JE+1 ), LDF )
                   END IF
@@ -781,15 +796,16 @@
 *
 *                 Solve Z**T * x = RHS
 *
-                  CALL SGETC2( ZDIM, Z, LDZ, IPIV, JPIV, IERR )
+                  CALL AB_SGETC2( ZDIM, Z, LDZ, IPIV, JPIV, IERR )
                   IF( IERR.GT.0 )
      $               INFO = IERR
 *
-                  CALL SGESC2( ZDIM, Z, LDZ, RHS, IPIV, JPIV, SCALOC )
+                  CALL AB_SGESC2( ZDIM, Z, LDZ, RHS, IPIV, JPIV, SCALOC 
+     $)
                   IF( SCALOC.NE.ONE ) THEN
                      DO 130 K = 1, N
-                        CALL SSCAL( M, SCALOC, C( 1, K ), 1 )
-                        CALL SSCAL( M, SCALOC, F( 1, K ), 1 )
+                        CALL AB_SSCAL( M, SCALOC, C( 1, K ), 1 )
+                        CALL AB_SSCAL( M, SCALOC, F( 1, K ), 1 )
   130                CONTINUE
                      SCALE = SCALE*SCALOC
                   END IF
@@ -804,18 +820,20 @@
 *
                   IF( J.GT.P+2 ) THEN
                      ALPHA = RHS( 1 )
-                     CALL SAXPY( JS-1, ALPHA, B( 1, JS ), 1, F( IS, 1 ),
+                     CALL AB_SAXPY( JS-1, ALPHA, B( 1, JS ), 1, F( IS, 1
+     $ ),
      $                           LDF )
                      ALPHA = RHS( 2 )
-                     CALL SAXPY( JS-1, ALPHA, E( 1, JS ), 1, F( IS, 1 ),
+                     CALL AB_SAXPY( JS-1, ALPHA, E( 1, JS ), 1, F( IS, 1
+     $ ),
      $                           LDF )
                   END IF
                   IF( I.LT.P ) THEN
                      ALPHA = -RHS( 1 )
-                     CALL SAXPY( M-IE, ALPHA, A( IS, IE+1 ), LDA,
+                     CALL AB_SAXPY( M-IE, ALPHA, A( IS, IE+1 ), LDA,
      $                           C( IE+1, JS ), 1 )
                      ALPHA = -RHS( 2 )
-                     CALL SAXPY( M-IE, ALPHA, D( IS, IE+1 ), LDD,
+                     CALL AB_SAXPY( M-IE, ALPHA, D( IS, IE+1 ), LDD,
      $                           C( IE+1, JS ), 1 )
                   END IF
 *
@@ -852,14 +870,15 @@
 *
 *                 Solve Z**T * x = RHS
 *
-                  CALL SGETC2( ZDIM, Z, LDZ, IPIV, JPIV, IERR )
+                  CALL AB_SGETC2( ZDIM, Z, LDZ, IPIV, JPIV, IERR )
                   IF( IERR.GT.0 )
      $               INFO = IERR
-                  CALL SGESC2( ZDIM, Z, LDZ, RHS, IPIV, JPIV, SCALOC )
+                  CALL AB_SGESC2( ZDIM, Z, LDZ, RHS, IPIV, JPIV, SCALOC 
+     $)
                   IF( SCALOC.NE.ONE ) THEN
                      DO 140 K = 1, N
-                        CALL SSCAL( M, SCALOC, C( 1, K ), 1 )
-                        CALL SSCAL( M, SCALOC, F( 1, K ), 1 )
+                        CALL AB_SSCAL( M, SCALOC, C( 1, K ), 1 )
+                        CALL AB_SSCAL( M, SCALOC, F( 1, K ), 1 )
   140                CONTINUE
                      SCALE = SCALE*SCALOC
                   END IF
@@ -875,19 +894,19 @@
 *                 equation.
 *
                   IF( J.GT.P+2 ) THEN
-                     CALL SAXPY( JS-1, RHS( 1 ), B( 1, JS ), 1,
+                     CALL AB_SAXPY( JS-1, RHS( 1 ), B( 1, JS ), 1,
      $                           F( IS, 1 ), LDF )
-                     CALL SAXPY( JS-1, RHS( 2 ), B( 1, JSP1 ), 1,
+                     CALL AB_SAXPY( JS-1, RHS( 2 ), B( 1, JSP1 ), 1,
      $                           F( IS, 1 ), LDF )
-                     CALL SAXPY( JS-1, RHS( 3 ), E( 1, JS ), 1,
+                     CALL AB_SAXPY( JS-1, RHS( 3 ), E( 1, JS ), 1,
      $                           F( IS, 1 ), LDF )
-                     CALL SAXPY( JS-1, RHS( 4 ), E( 1, JSP1 ), 1,
+                     CALL AB_SAXPY( JS-1, RHS( 4 ), E( 1, JSP1 ), 1,
      $                           F( IS, 1 ), LDF )
                   END IF
                   IF( I.LT.P ) THEN
-                     CALL SGER( M-IE, NB, -ONE, A( IS, IE+1 ), LDA,
+                     CALL AB_SGER( M-IE, NB, -ONE, A( IS, IE+1 ), LDA,
      $                          RHS( 1 ), 1, C( IE+1, JS ), LDC )
-                     CALL SGER( M-IE, NB, -ONE, D( IS, IE+1 ), LDD,
+                     CALL AB_SGER( M-IE, NB, -ONE, D( IS, IE+1 ), LDD,
      $                          RHS( 3 ), 1, C( IE+1, JS ), LDC )
                   END IF
 *
@@ -924,15 +943,16 @@
 *
 *                 Solve Z**T * x = RHS
 *
-                  CALL SGETC2( ZDIM, Z, LDZ, IPIV, JPIV, IERR )
+                  CALL AB_SGETC2( ZDIM, Z, LDZ, IPIV, JPIV, IERR )
                   IF( IERR.GT.0 )
      $               INFO = IERR
 *
-                  CALL SGESC2( ZDIM, Z, LDZ, RHS, IPIV, JPIV, SCALOC )
+                  CALL AB_SGESC2( ZDIM, Z, LDZ, RHS, IPIV, JPIV, SCALOC 
+     $)
                   IF( SCALOC.NE.ONE ) THEN
                      DO 150 K = 1, N
-                        CALL SSCAL( M, SCALOC, C( 1, K ), 1 )
-                        CALL SSCAL( M, SCALOC, F( 1, K ), 1 )
+                        CALL AB_SSCAL( M, SCALOC, C( 1, K ), 1 )
+                        CALL AB_SSCAL( M, SCALOC, F( 1, K ), 1 )
   150                CONTINUE
                      SCALE = SCALE*SCALOC
                   END IF
@@ -948,16 +968,18 @@
 *                 equation.
 *
                   IF( J.GT.P+2 ) THEN
-                     CALL SGER( MB, JS-1, ONE, RHS( 1 ), 1, B( 1, JS ),
+                     CALL AB_SGER( MB, JS-1, ONE, RHS( 1 ), 1, B( 1, JS 
+     $),
      $                          1, F( IS, 1 ), LDF )
-                     CALL SGER( MB, JS-1, ONE, RHS( 3 ), 1, E( 1, JS ),
+                     CALL AB_SGER( MB, JS-1, ONE, RHS( 3 ), 1, E( 1, JS 
+     $),
      $                          1, F( IS, 1 ), LDF )
                   END IF
                   IF( I.LT.P ) THEN
-                     CALL SGEMV( 'T', MB, M-IE, -ONE, A( IS, IE+1 ),
+                     CALL AB_SGEMV( 'T', MB, M-IE, -ONE, A( IS, IE+1 ),
      $                           LDA, RHS( 1 ), 1, ONE, C( IE+1, JS ),
      $                           1 )
-                     CALL SGEMV( 'T', MB, M-IE, -ONE, D( IS, IE+1 ),
+                     CALL AB_SGEMV( 'T', MB, M-IE, -ONE, D( IS, IE+1 ),
      $                           LDD, RHS( 3 ), 1, ONE, C( IE+1, JS ),
      $                           1 )
                   END IF
@@ -966,7 +988,7 @@
 *
 *                 Build an 8-by-8 system Z**T * x = RHS
 *
-                  CALL SLASET( 'F', LDZ, LDZ, ZERO, ZERO, Z, LDZ )
+                  CALL AB_SLASET( 'F', LDZ, LDZ, ZERO, ZERO, Z, LDZ )
 *
                   Z( 1, 1 ) = A( IS, IS )
                   Z( 2, 1 ) = A( IS, ISP1 )
@@ -1009,8 +1031,9 @@
                   K = 1
                   II = MB*NB + 1
                   DO 160 JJ = 0, NB - 1
-                     CALL SCOPY( MB, C( IS, JS+JJ ), 1, RHS( K ), 1 )
-                     CALL SCOPY( MB, F( IS, JS+JJ ), 1, RHS( II ), 1 )
+                     CALL AB_SCOPY( MB, C( IS, JS+JJ ), 1, RHS( K ), 1 )
+                     CALL AB_SCOPY( MB, F( IS, JS+JJ ), 1, RHS( II ), 1 
+     $)
                      K = K + MB
                      II = II + MB
   160             CONTINUE
@@ -1018,15 +1041,16 @@
 *
 *                 Solve Z**T * x = RHS
 *
-                  CALL SGETC2( ZDIM, Z, LDZ, IPIV, JPIV, IERR )
+                  CALL AB_SGETC2( ZDIM, Z, LDZ, IPIV, JPIV, IERR )
                   IF( IERR.GT.0 )
      $               INFO = IERR
 *
-                  CALL SGESC2( ZDIM, Z, LDZ, RHS, IPIV, JPIV, SCALOC )
+                  CALL AB_SGESC2( ZDIM, Z, LDZ, RHS, IPIV, JPIV, SCALOC 
+     $)
                   IF( SCALOC.NE.ONE ) THEN
                      DO 170 K = 1, N
-                        CALL SSCAL( M, SCALOC, C( 1, K ), 1 )
-                        CALL SSCAL( M, SCALOC, F( 1, K ), 1 )
+                        CALL AB_SSCAL( M, SCALOC, C( 1, K ), 1 )
+                        CALL AB_SSCAL( M, SCALOC, F( 1, K ), 1 )
   170                CONTINUE
                      SCALE = SCALE*SCALOC
                   END IF
@@ -1036,8 +1060,9 @@
                   K = 1
                   II = MB*NB + 1
                   DO 180 JJ = 0, NB - 1
-                     CALL SCOPY( MB, RHS( K ), 1, C( IS, JS+JJ ), 1 )
-                     CALL SCOPY( MB, RHS( II ), 1, F( IS, JS+JJ ), 1 )
+                     CALL AB_SCOPY( MB, RHS( K ), 1, C( IS, JS+JJ ), 1 )
+                     CALL AB_SCOPY( MB, RHS( II ), 1, F( IS, JS+JJ ), 1 
+     $)
                      K = K + MB
                      II = II + MB
   180             CONTINUE
@@ -1046,18 +1071,18 @@
 *                 equation.
 *
                   IF( J.GT.P+2 ) THEN
-                     CALL SGEMM( 'N', 'T', MB, JS-1, NB, ONE,
+                     CALL AB_SGEMM( 'N', 'T', MB, JS-1, NB, ONE,
      $                           C( IS, JS ), LDC, B( 1, JS ), LDB, ONE,
      $                           F( IS, 1 ), LDF )
-                     CALL SGEMM( 'N', 'T', MB, JS-1, NB, ONE,
+                     CALL AB_SGEMM( 'N', 'T', MB, JS-1, NB, ONE,
      $                           F( IS, JS ), LDF, E( 1, JS ), LDE, ONE,
      $                           F( IS, 1 ), LDF )
                   END IF
                   IF( I.LT.P ) THEN
-                     CALL SGEMM( 'T', 'N', M-IE, NB, MB, -ONE,
+                     CALL AB_SGEMM( 'T', 'N', M-IE, NB, MB, -ONE,
      $                           A( IS, IE+1 ), LDA, C( IS, JS ), LDC,
      $                           ONE, C( IE+1, JS ), LDC )
-                     CALL SGEMM( 'T', 'N', M-IE, NB, MB, -ONE,
+                     CALL AB_SGEMM( 'T', 'N', M-IE, NB, MB, -ONE,
      $                           D( IS, IE+1 ), LDD, F( IS, JS ), LDF,
      $                           ONE, C( IE+1, JS ), LDC )
                   END IF
@@ -1070,6 +1095,6 @@
       END IF
       RETURN
 *
-*     End of STGSY2
+*     End of AB_STGSY2
 *
       END

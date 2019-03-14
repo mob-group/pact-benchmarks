@@ -1,4 +1,4 @@
-*> \brief <b> ZGESV computes the solution to system of linear equations A * X = B for GE matrices (simple driver) </b>
+*> \brief <b> AB_ZGESV computes the solution to system of linear equations A * X = B for GE matrices (simple driver) </b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZGESV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgesv.f">
+*> Download AB_ZGESV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZGESV.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgesv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZGESV.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgesv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZGESV.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZGESV( N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+*       SUBROUTINE AB_ZGESV( N, NRHS, A, LDA, IPIV, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, LDB, N, NRHS
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> ZGESV computes the solution to a complex system of linear equations
+*> AB_ZGESV computes the solution to a complex system of linear equations
 *>    A * X = B,
 *> where A is an N-by-N matrix and X and B are N-by-NRHS matrices.
 *>
@@ -120,7 +120,7 @@
 *> \ingroup complex16GEsolve
 *
 *  =====================================================================
-      SUBROUTINE ZGESV( N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+      SUBROUTINE AB_ZGESV( N, NRHS, A, LDA, IPIV, B, LDB, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -138,7 +138,7 @@
 *  =====================================================================
 *
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZGETRF, ZGETRS
+      EXTERNAL           AB_XERBLA, AB_ZGETRF, AB_ZGETRS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -158,22 +158,22 @@
          INFO = -7
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZGESV ', -INFO )
+         CALL AB_XERBLA( 'AB_ZGESV ', -INFO )
          RETURN
       END IF
 *
 *     Compute the LU factorization of A.
 *
-      CALL ZGETRF( N, N, A, LDA, IPIV, INFO )
+      CALL AB_ZGETRF( N, N, A, LDA, IPIV, INFO )
       IF( INFO.EQ.0 ) THEN
 *
 *        Solve the system A*X = B, overwriting B with X.
 *
-         CALL ZGETRS( 'No transpose', N, NRHS, A, LDA, IPIV, B, LDB,
+         CALL AB_ZGETRS( 'No transpose', N, NRHS, A, LDA, IPIV, B, LDB,
      $                INFO )
       END IF
       RETURN
 *
-*     End of ZGESV
+*     End of AB_ZGESV
 *
       END

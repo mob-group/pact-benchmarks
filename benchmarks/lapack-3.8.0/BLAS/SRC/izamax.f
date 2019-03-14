@@ -1,4 +1,4 @@
-*> \brief \b IZAMAX
+*> \brief \b AB_IZAMAX
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       INTEGER FUNCTION IZAMAX(N,ZX,INCX)
+*       INTEGER FUNCTION AB_IZAMAX(N,ZX,INCX)
 *
 *       .. Scalar Arguments ..
 *       INTEGER INCX,N
@@ -23,7 +23,7 @@
 *>
 *> \verbatim
 *>
-*>    IZAMAX finds the index of the first element having maximum |Re(.)| + |Im(.)|
+*>    AB_IZAMAX finds the index of the first element having maximum |Re(.)| + |Im(.)|
 *> \endverbatim
 *
 *  Arguments:
@@ -69,7 +69,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      INTEGER FUNCTION IZAMAX(N,ZX,INCX)
+      INTEGER FUNCTION AB_IZAMAX(N,ZX,INCX)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -90,22 +90,22 @@
       INTEGER I,IX
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION DCABS1
-      EXTERNAL DCABS1
+      DOUBLE PRECISION AB_DCABS1
+      EXTERNAL AB_DCABS1
 *     ..
-      IZAMAX = 0
+      AB_IZAMAX = 0
       IF (N.LT.1 .OR. INCX.LE.0) RETURN
-      IZAMAX = 1
+      AB_IZAMAX = 1
       IF (N.EQ.1) RETURN
       IF (INCX.EQ.1) THEN
 *
 *        code for increment equal to 1
 *
-         DMAX = DCABS1(ZX(1))
+         DMAX = AB_DCABS1(ZX(1))
          DO I = 2,N
-            IF (DCABS1(ZX(I)).GT.DMAX) THEN
-               IZAMAX = I
-               DMAX = DCABS1(ZX(I))
+            IF (AB_DCABS1(ZX(I)).GT.DMAX) THEN
+               AB_IZAMAX = I
+               DMAX = AB_DCABS1(ZX(I))
             END IF
          END DO
       ELSE
@@ -113,12 +113,12 @@
 *        code for increment not equal to 1
 *
          IX = 1
-         DMAX = DCABS1(ZX(1))
+         DMAX = AB_DCABS1(ZX(1))
          IX = IX + INCX
          DO I = 2,N
-            IF (DCABS1(ZX(IX)).GT.DMAX) THEN
-               IZAMAX = I
-               DMAX = DCABS1(ZX(IX))
+            IF (AB_DCABS1(ZX(IX)).GT.DMAX) THEN
+               AB_IZAMAX = I
+               DMAX = AB_DCABS1(ZX(IX))
             END IF
             IX = IX + INCX
          END DO

@@ -1,4 +1,4 @@
-*> \brief \b CTPRFB applies a real or complex "triangular-pentagonal" blocked reflector to a real or complex matrix, which is composed of two blocks.
+*> \brief \b AB_CTPRFB applies a real or complex "triangular-pentagonal" blocked reflector to a real or complex matrix, which is composed of two blocks.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CTPRFB + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctprfb.f">
+*> Download AB_CTPRFB + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CTPRFB.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctprfb.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CTPRFB.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctprfb.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CTPRFB.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CTPRFB( SIDE, TRANS, DIRECT, STOREV, M, N, K, L,
+*       SUBROUTINE AB_CTPRFB( SIDE, TRANS, DIRECT, STOREV, M, N, K, L,
 *                          V, LDV, T, LDT, A, LDA, B, LDB, WORK, LDWORK )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> CTPRFB applies a complex "triangular-pentagonal" block reflector H or its
+*> AB_CTPRFB applies a complex "triangular-pentagonal" block reflector H or its
 *> conjugate transpose H**H to a complex matrix C, which is composed of two
 *> blocks A and B, either from the left or right.
 *>
@@ -248,7 +248,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CTPRFB( SIDE, TRANS, DIRECT, STOREV, M, N, K, L,
+      SUBROUTINE AB_CTPRFB( SIDE, TRANS, DIRECT, STOREV, M, N, K, L,
      $                   V, LDV, T, LDT, A, LDA, B, LDB, WORK, LDWORK )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -276,11 +276,11 @@
       LOGICAL   LEFT, FORWARD, COLUMN, RIGHT, BACKWARD, ROW
 *     ..
 *     .. External Functions ..
-      LOGICAL   LSAME
-      EXTERNAL  LSAME
+      LOGICAL   AB_LSAME
+      EXTERNAL  AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL  CGEMM, CTRMM
+      EXTERNAL  AB_CGEMM, AB_CTRMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC CONJG
@@ -291,10 +291,10 @@
 *
       IF( M.LE.0 .OR. N.LE.0 .OR. K.LE.0 .OR. L.LT.0 ) RETURN
 *
-      IF( LSAME( STOREV, 'C' ) ) THEN
+      IF( AB_LSAME( STOREV, 'C' ) ) THEN
          COLUMN = .TRUE.
          ROW = .FALSE.
-      ELSE IF ( LSAME( STOREV, 'R' ) ) THEN
+      ELSE IF ( AB_LSAME( STOREV, 'R' ) ) THEN
          COLUMN = .FALSE.
          ROW = .TRUE.
       ELSE
@@ -302,10 +302,10 @@
          ROW = .FALSE.
       END IF
 *
-      IF( LSAME( SIDE, 'L' ) ) THEN
+      IF( AB_LSAME( SIDE, 'L' ) ) THEN
          LEFT = .TRUE.
          RIGHT = .FALSE.
-      ELSE IF( LSAME( SIDE, 'R' ) ) THEN
+      ELSE IF( AB_LSAME( SIDE, 'R' ) ) THEN
          LEFT = .FALSE.
          RIGHT = .TRUE.
       ELSE
@@ -313,10 +313,10 @@
          RIGHT = .FALSE.
       END IF
 *
-      IF( LSAME( DIRECT, 'F' ) ) THEN
+      IF( AB_LSAME( DIRECT, 'F' ) ) THEN
          FORWARD = .TRUE.
          BACKWARD = .FALSE.
-      ELSE IF( LSAME( DIRECT, 'B' ) ) THEN
+      ELSE IF( AB_LSAME( DIRECT, 'B' ) ) THEN
          FORWARD = .FALSE.
          BACKWARD = .TRUE.
       ELSE
@@ -351,11 +351,11 @@
                WORK( I, J ) = B( M-L+I, J )
             END DO
          END DO
-         CALL CTRMM( 'L', 'U', 'C', 'N', L, N, ONE, V( MP, 1 ), LDV,
+         CALL AB_CTRMM( 'L', 'U', 'C', 'N', L, N, ONE, V( MP, 1 ), LDV,
      $               WORK, LDWORK )
-         CALL CGEMM( 'C', 'N', L, N, M-L, ONE, V, LDV, B, LDB,
+         CALL AB_CGEMM( 'C', 'N', L, N, M-L, ONE, V, LDV, B, LDB,
      $               ONE, WORK, LDWORK )
-         CALL CGEMM( 'C', 'N', K-L, N, M, ONE, V( 1, KP ), LDV,
+         CALL AB_CGEMM( 'C', 'N', K-L, N, M, ONE, V( 1, KP ), LDV,
      $               B, LDB, ZERO, WORK( KP, 1 ), LDWORK )
 *
          DO J = 1, N
@@ -364,7 +364,7 @@
             END DO
          END DO
 *
-         CALL CTRMM( 'L', 'U', TRANS, 'N', K, N, ONE, T, LDT,
+         CALL AB_CTRMM( 'L', 'U', TRANS, 'N', K, N, ONE, T, LDT,
      $               WORK, LDWORK )
 *
          DO J = 1, N
@@ -373,11 +373,11 @@
             END DO
          END DO
 *
-         CALL CGEMM( 'N', 'N', M-L, N, K, -ONE, V, LDV, WORK, LDWORK,
+         CALL AB_CGEMM( 'N', 'N', M-L, N, K, -ONE, V, LDV, WORK, LDWORK,
      $               ONE, B, LDB )
-         CALL CGEMM( 'N', 'N', L, N, K-L, -ONE, V( MP, KP ), LDV,
+         CALL AB_CGEMM( 'N', 'N', L, N, K-L, -ONE, V( MP, KP ), LDV,
      $               WORK( KP, 1 ), LDWORK, ONE, B( MP, 1 ),  LDB )
-         CALL CTRMM( 'L', 'U', 'N', 'N', L, N, ONE, V( MP, 1 ), LDV,
+         CALL AB_CTRMM( 'L', 'U', 'N', 'N', L, N, ONE, V( MP, 1 ), LDV,
      $               WORK, LDWORK )
          DO J = 1, N
             DO I = 1, L
@@ -411,11 +411,11 @@
                WORK( I, J ) = B( I, N-L+J )
             END DO
          END DO
-         CALL CTRMM( 'R', 'U', 'N', 'N', M, L, ONE, V( NP, 1 ), LDV,
+         CALL AB_CTRMM( 'R', 'U', 'N', 'N', M, L, ONE, V( NP, 1 ), LDV,
      $               WORK, LDWORK )
-         CALL CGEMM( 'N', 'N', M, L, N-L, ONE, B, LDB,
+         CALL AB_CGEMM( 'N', 'N', M, L, N-L, ONE, B, LDB,
      $               V, LDV, ONE, WORK, LDWORK )
-         CALL CGEMM( 'N', 'N', M, K-L, N, ONE, B, LDB,
+         CALL AB_CGEMM( 'N', 'N', M, K-L, N, ONE, B, LDB,
      $               V( 1, KP ), LDV, ZERO, WORK( 1, KP ), LDWORK )
 *
          DO J = 1, K
@@ -424,7 +424,7 @@
             END DO
          END DO
 *
-         CALL CTRMM( 'R', 'U', TRANS, 'N', M, K, ONE, T, LDT,
+         CALL AB_CTRMM( 'R', 'U', TRANS, 'N', M, K, ONE, T, LDT,
      $               WORK, LDWORK )
 *
          DO J = 1, K
@@ -433,11 +433,12 @@
             END DO
          END DO
 *
-         CALL CGEMM( 'N', 'C', M, N-L, K, -ONE, WORK, LDWORK,
+         CALL AB_CGEMM( 'N', 'C', M, N-L, K, -ONE, WORK, LDWORK,
      $               V, LDV, ONE, B, LDB )
-         CALL CGEMM( 'N', 'C', M, L, K-L, -ONE, WORK( 1, KP ), LDWORK,
+         CALL AB_CGEMM( 'N', 'C', M, L, K-L, -ONE, WORK( 1, KP ), LDWORK
+     $,
      $               V( NP, KP ), LDV, ONE, B( 1, NP ), LDB )
-         CALL CTRMM( 'R', 'U', 'C', 'N', M, L, ONE, V( NP, 1 ), LDV,
+         CALL AB_CTRMM( 'R', 'U', 'C', 'N', M, L, ONE, V( NP, 1 ), LDV,
      $               WORK, LDWORK )
          DO J = 1, L
             DO I = 1, M
@@ -473,11 +474,11 @@
             END DO
          END DO
 *
-         CALL CTRMM( 'L', 'L', 'C', 'N', L, N, ONE, V( 1, KP ), LDV,
+         CALL AB_CTRMM( 'L', 'L', 'C', 'N', L, N, ONE, V( 1, KP ), LDV,
      $               WORK( KP, 1 ), LDWORK )
-         CALL CGEMM( 'C', 'N', L, N, M-L, ONE, V( MP, KP ), LDV,
+         CALL AB_CGEMM( 'C', 'N', L, N, M-L, ONE, V( MP, KP ), LDV,
      $               B( MP, 1 ), LDB, ONE, WORK( KP, 1 ), LDWORK )
-         CALL CGEMM( 'C', 'N', K-L, N, M, ONE, V, LDV,
+         CALL AB_CGEMM( 'C', 'N', K-L, N, M, ONE, V, LDV,
      $               B, LDB, ZERO, WORK, LDWORK )
 *
          DO J = 1, N
@@ -486,7 +487,7 @@
             END DO
          END DO
 *
-         CALL CTRMM( 'L', 'L', TRANS, 'N', K, N, ONE, T, LDT,
+         CALL AB_CTRMM( 'L', 'L', TRANS, 'N', K, N, ONE, T, LDT,
      $               WORK, LDWORK )
 *
          DO J = 1, N
@@ -495,11 +496,11 @@
             END DO
          END DO
 *
-         CALL CGEMM( 'N', 'N', M-L, N, K, -ONE, V( MP, 1 ), LDV,
+         CALL AB_CGEMM( 'N', 'N', M-L, N, K, -ONE, V( MP, 1 ), LDV,
      $               WORK, LDWORK, ONE, B( MP, 1 ), LDB )
-         CALL CGEMM( 'N', 'N', L, N, K-L, -ONE, V, LDV,
+         CALL AB_CGEMM( 'N', 'N', L, N, K-L, -ONE, V, LDV,
      $               WORK, LDWORK, ONE, B,  LDB )
-         CALL CTRMM( 'L', 'L', 'N', 'N', L, N, ONE, V( 1, KP ), LDV,
+         CALL AB_CTRMM( 'L', 'L', 'N', 'N', L, N, ONE, V( 1, KP ), LDV,
      $               WORK( KP, 1 ), LDWORK )
          DO J = 1, N
             DO I = 1, L
@@ -533,11 +534,11 @@
                WORK( I, K-L+J ) = B( I, J )
             END DO
          END DO
-         CALL CTRMM( 'R', 'L', 'N', 'N', M, L, ONE, V( 1, KP ), LDV,
+         CALL AB_CTRMM( 'R', 'L', 'N', 'N', M, L, ONE, V( 1, KP ), LDV,
      $               WORK( 1, KP ), LDWORK )
-         CALL CGEMM( 'N', 'N', M, L, N-L, ONE, B( 1, NP ), LDB,
+         CALL AB_CGEMM( 'N', 'N', M, L, N-L, ONE, B( 1, NP ), LDB,
      $               V( NP, KP ), LDV, ONE, WORK( 1, KP ), LDWORK )
-         CALL CGEMM( 'N', 'N', M, K-L, N, ONE, B, LDB,
+         CALL AB_CGEMM( 'N', 'N', M, K-L, N, ONE, B, LDB,
      $               V, LDV, ZERO, WORK, LDWORK )
 *
          DO J = 1, K
@@ -546,7 +547,7 @@
             END DO
          END DO
 *
-         CALL CTRMM( 'R', 'L', TRANS, 'N', M, K, ONE, T, LDT,
+         CALL AB_CTRMM( 'R', 'L', TRANS, 'N', M, K, ONE, T, LDT,
      $               WORK, LDWORK )
 *
          DO J = 1, K
@@ -555,11 +556,11 @@
             END DO
          END DO
 *
-         CALL CGEMM( 'N', 'C', M, N-L, K, -ONE, WORK, LDWORK,
+         CALL AB_CGEMM( 'N', 'C', M, N-L, K, -ONE, WORK, LDWORK,
      $               V( NP, 1 ), LDV, ONE, B( 1, NP ), LDB )
-         CALL CGEMM( 'N', 'C', M, L, K-L, -ONE, WORK, LDWORK,
+         CALL AB_CGEMM( 'N', 'C', M, L, K-L, -ONE, WORK, LDWORK,
      $               V, LDV, ONE, B, LDB )
-         CALL CTRMM( 'R', 'L', 'C', 'N', M, L, ONE, V( 1, KP ), LDV,
+         CALL AB_CTRMM( 'R', 'L', 'C', 'N', M, L, ONE, V( 1, KP ), LDV,
      $               WORK( 1, KP ), LDWORK )
          DO J = 1, L
             DO I = 1, M
@@ -593,11 +594,11 @@
                WORK( I, J ) = B( M-L+I, J )
             END DO
          END DO
-         CALL CTRMM( 'L', 'L', 'N', 'N', L, N, ONE, V( 1, MP ), LDV,
+         CALL AB_CTRMM( 'L', 'L', 'N', 'N', L, N, ONE, V( 1, MP ), LDV,
      $               WORK, LDB )
-         CALL CGEMM( 'N', 'N', L, N, M-L, ONE, V, LDV,B, LDB,
+         CALL AB_CGEMM( 'N', 'N', L, N, M-L, ONE, V, LDV,B, LDB,
      $               ONE, WORK, LDWORK )
-         CALL CGEMM( 'N', 'N', K-L, N, M, ONE, V( KP, 1 ), LDV,
+         CALL AB_CGEMM( 'N', 'N', K-L, N, M, ONE, V( KP, 1 ), LDV,
      $               B, LDB, ZERO, WORK( KP, 1 ), LDWORK )
 *
          DO J = 1, N
@@ -606,7 +607,7 @@
             END DO
          END DO
 *
-         CALL CTRMM( 'L', 'U', TRANS, 'N', K, N, ONE, T, LDT,
+         CALL AB_CTRMM( 'L', 'U', TRANS, 'N', K, N, ONE, T, LDT,
      $               WORK, LDWORK )
 *
          DO J = 1, N
@@ -615,11 +616,11 @@
             END DO
          END DO
 *
-         CALL CGEMM( 'C', 'N', M-L, N, K, -ONE, V, LDV, WORK, LDWORK,
+         CALL AB_CGEMM( 'C', 'N', M-L, N, K, -ONE, V, LDV, WORK, LDWORK,
      $               ONE, B, LDB )
-         CALL CGEMM( 'C', 'N', L, N, K-L, -ONE, V( KP, MP ), LDV,
+         CALL AB_CGEMM( 'C', 'N', L, N, K-L, -ONE, V( KP, MP ), LDV,
      $               WORK( KP, 1 ), LDWORK, ONE, B( MP, 1 ), LDB )
-         CALL CTRMM( 'L', 'L', 'C', 'N', L, N, ONE, V( 1, MP ), LDV,
+         CALL AB_CTRMM( 'L', 'L', 'C', 'N', L, N, ONE, V( 1, MP ), LDV,
      $               WORK, LDWORK )
          DO J = 1, N
             DO I = 1, L
@@ -652,11 +653,11 @@
                WORK( I, J ) = B( I, N-L+J )
             END DO
          END DO
-         CALL CTRMM( 'R', 'L', 'C', 'N', M, L, ONE, V( 1, NP ), LDV,
+         CALL AB_CTRMM( 'R', 'L', 'C', 'N', M, L, ONE, V( 1, NP ), LDV,
      $               WORK, LDWORK )
-         CALL CGEMM( 'N', 'C', M, L, N-L, ONE, B, LDB, V, LDV,
+         CALL AB_CGEMM( 'N', 'C', M, L, N-L, ONE, B, LDB, V, LDV,
      $               ONE, WORK, LDWORK )
-         CALL CGEMM( 'N', 'C', M, K-L, N, ONE, B, LDB,
+         CALL AB_CGEMM( 'N', 'C', M, K-L, N, ONE, B, LDB,
      $               V( KP, 1 ), LDV, ZERO, WORK( 1, KP ), LDWORK )
 *
          DO J = 1, K
@@ -665,7 +666,7 @@
             END DO
          END DO
 *
-         CALL CTRMM( 'R', 'U', TRANS, 'N', M, K, ONE, T, LDT,
+         CALL AB_CTRMM( 'R', 'U', TRANS, 'N', M, K, ONE, T, LDT,
      $               WORK, LDWORK )
 *
          DO J = 1, K
@@ -674,11 +675,12 @@
             END DO
          END DO
 *
-         CALL CGEMM( 'N', 'N', M, N-L, K, -ONE, WORK, LDWORK,
+         CALL AB_CGEMM( 'N', 'N', M, N-L, K, -ONE, WORK, LDWORK,
      $               V, LDV, ONE, B, LDB )
-         CALL CGEMM( 'N', 'N', M, L, K-L, -ONE, WORK( 1, KP ), LDWORK,
+         CALL AB_CGEMM( 'N', 'N', M, L, K-L, -ONE, WORK( 1, KP ), LDWORK
+     $,
      $               V( KP, NP ), LDV, ONE, B( 1, NP ), LDB )
-         CALL CTRMM( 'R', 'L', 'N', 'N', M, L, ONE, V( 1, NP ), LDV,
+         CALL AB_CTRMM( 'R', 'L', 'N', 'N', M, L, ONE, V( 1, NP ), LDV,
      $               WORK, LDWORK )
          DO J = 1, L
             DO I = 1, M
@@ -712,11 +714,11 @@
                WORK( K-L+I, J ) = B( I, J )
             END DO
          END DO
-         CALL CTRMM( 'L', 'U', 'N', 'N', L, N, ONE, V( KP, 1 ), LDV,
+         CALL AB_CTRMM( 'L', 'U', 'N', 'N', L, N, ONE, V( KP, 1 ), LDV,
      $               WORK( KP, 1 ), LDWORK )
-         CALL CGEMM( 'N', 'N', L, N, M-L, ONE, V( KP, MP ), LDV,
+         CALL AB_CGEMM( 'N', 'N', L, N, M-L, ONE, V( KP, MP ), LDV,
      $               B( MP, 1 ), LDB, ONE, WORK( KP, 1 ), LDWORK )
-         CALL CGEMM( 'N', 'N', K-L, N, M, ONE, V, LDV, B, LDB,
+         CALL AB_CGEMM( 'N', 'N', K-L, N, M, ONE, V, LDV, B, LDB,
      $               ZERO, WORK, LDWORK )
 *
          DO J = 1, N
@@ -725,7 +727,7 @@
             END DO
          END DO
 *
-         CALL CTRMM( 'L', 'L ', TRANS, 'N', K, N, ONE, T, LDT,
+         CALL AB_CTRMM( 'L', 'L ', TRANS, 'N', K, N, ONE, T, LDT,
      $               WORK, LDWORK )
 *
          DO J = 1, N
@@ -734,11 +736,11 @@
             END DO
          END DO
 *
-         CALL CGEMM( 'C', 'N', M-L, N, K, -ONE, V( 1, MP ), LDV,
+         CALL AB_CGEMM( 'C', 'N', M-L, N, K, -ONE, V( 1, MP ), LDV,
      $               WORK, LDWORK, ONE, B( MP, 1 ), LDB )
-         CALL CGEMM( 'C', 'N', L, N, K-L, -ONE, V, LDV,
+         CALL AB_CGEMM( 'C', 'N', L, N, K-L, -ONE, V, LDV,
      $               WORK, LDWORK, ONE, B, LDB )
-         CALL CTRMM( 'L', 'U', 'C', 'N', L, N, ONE, V( KP, 1 ), LDV,
+         CALL AB_CTRMM( 'L', 'U', 'C', 'N', L, N, ONE, V( KP, 1 ), LDV,
      $               WORK( KP, 1 ), LDWORK )
          DO J = 1, N
             DO I = 1, L
@@ -771,11 +773,11 @@
                WORK( I, K-L+J ) = B( I, J )
             END DO
          END DO
-         CALL CTRMM( 'R', 'U', 'C', 'N', M, L, ONE, V( KP, 1 ), LDV,
+         CALL AB_CTRMM( 'R', 'U', 'C', 'N', M, L, ONE, V( KP, 1 ), LDV,
      $               WORK( 1, KP ), LDWORK )
-         CALL CGEMM( 'N', 'C', M, L, N-L, ONE, B( 1, NP ), LDB,
+         CALL AB_CGEMM( 'N', 'C', M, L, N-L, ONE, B( 1, NP ), LDB,
      $               V( KP, NP ), LDV, ONE, WORK( 1, KP ), LDWORK )
-         CALL CGEMM( 'N', 'C', M, K-L, N, ONE, B, LDB, V, LDV,
+         CALL AB_CGEMM( 'N', 'C', M, K-L, N, ONE, B, LDB, V, LDV,
      $               ZERO, WORK, LDWORK )
 *
          DO J = 1, K
@@ -784,7 +786,7 @@
             END DO
          END DO
 *
-         CALL CTRMM( 'R', 'L', TRANS, 'N', M, K, ONE, T, LDT,
+         CALL AB_CTRMM( 'R', 'L', TRANS, 'N', M, K, ONE, T, LDT,
      $               WORK, LDWORK )
 *
          DO J = 1, K
@@ -793,11 +795,11 @@
             END DO
          END DO
 *
-         CALL CGEMM( 'N', 'N', M, N-L, K, -ONE, WORK, LDWORK,
+         CALL AB_CGEMM( 'N', 'N', M, N-L, K, -ONE, WORK, LDWORK,
      $               V( 1, NP ), LDV, ONE, B( 1, NP ), LDB )
-         CALL CGEMM( 'N', 'N', M, L, K-L , -ONE, WORK, LDWORK,
+         CALL AB_CGEMM( 'N', 'N', M, L, K-L , -ONE, WORK, LDWORK,
      $               V, LDV, ONE, B, LDB )
-         CALL CTRMM( 'R', 'U', 'N', 'N', M, L, ONE, V( KP, 1 ), LDV,
+         CALL AB_CTRMM( 'R', 'U', 'N', 'N', M, L, ONE, V( KP, 1 ), LDV,
      $               WORK( 1, KP ), LDWORK )
          DO J = 1, L
             DO I = 1, M
@@ -809,6 +811,6 @@
 *
       RETURN
 *
-*     End of CTPRFB
+*     End of AB_CTPRFB
 *
       END

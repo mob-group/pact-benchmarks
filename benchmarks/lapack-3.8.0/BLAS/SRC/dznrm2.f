@@ -1,4 +1,4 @@
-*> \brief \b DZNRM2
+*> \brief \b AB_DZNRM2
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       DOUBLE PRECISION FUNCTION DZNRM2(N,X,INCX)
+*       DOUBLE PRECISION FUNCTION AB_DZNRM2(N,X,INCX)
 *
 *       .. Scalar Arguments ..
 *       INTEGER INCX,N
@@ -23,10 +23,10 @@
 *>
 *> \verbatim
 *>
-*> DZNRM2 returns the euclidean norm of a vector via the function
+*> AB_DZNRM2 returns the euclidean norm of a vector via the function
 *> name, so that
 *>
-*>    DZNRM2 := sqrt( x**H*x )
+*>    AB_DZNRM2 := sqrt( x**H*x )
 *> \endverbatim
 *
 *  Arguments:
@@ -68,12 +68,12 @@
 *> \verbatim
 *>
 *>  -- This version written on 25-October-1982.
-*>     Modified on 14-October-1993 to inline the call to ZLASSQ.
+*>     Modified on 14-October-1993 to inline the call to AB_ZLASSQ.
 *>     Sven Hammarling, Nag Ltd.
 *> \endverbatim
 *>
 *  =====================================================================
-      DOUBLE PRECISION FUNCTION DZNRM2(N,X,INCX)
+      DOUBLE PRECISION FUNCTION AB_DZNRM2(N,X,INCX)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -107,7 +107,7 @@
           SSQ = ONE
 *        The following loop is equivalent to this call to the LAPACK
 *        auxiliary routine:
-*        CALL ZLASSQ( N, X, INCX, SCALE, SSQ )
+*        CALL AB_ZLASSQ( N, X, INCX, SCALE, SSQ )
 *
           DO 10 IX = 1,1 + (N-1)*INCX,INCX
               IF (DBLE(X(IX)).NE.ZERO) THEN
@@ -132,9 +132,9 @@
           NORM = SCALE*SQRT(SSQ)
       END IF
 *
-      DZNRM2 = NORM
+      AB_DZNRM2 = NORM
       RETURN
 *
-*     End of DZNRM2.
+*     End of AB_DZNRM2.
 *
       END

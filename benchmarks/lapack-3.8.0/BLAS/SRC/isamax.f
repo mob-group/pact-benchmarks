@@ -1,4 +1,4 @@
-*> \brief \b ISAMAX
+*> \brief \b AB_ISAMAX
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       INTEGER FUNCTION ISAMAX(N,SX,INCX)
+*       INTEGER FUNCTION AB_ISAMAX(N,SX,INCX)
 *
 *       .. Scalar Arguments ..
 *       INTEGER INCX,N
@@ -23,7 +23,7 @@
 *>
 *> \verbatim
 *>
-*>    ISAMAX finds the index of the first element having maximum absolute value.
+*>    AB_ISAMAX finds the index of the first element having maximum absolute value.
 *> \endverbatim
 *
 *  Arguments:
@@ -69,7 +69,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      INTEGER FUNCTION ISAMAX(N,SX,INCX)
+      INTEGER FUNCTION AB_ISAMAX(N,SX,INCX)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -92,9 +92,9 @@
 *     .. Intrinsic Functions ..
       INTRINSIC ABS
 *     ..
-      ISAMAX = 0
+      AB_ISAMAX = 0
       IF (N.LT.1 .OR. INCX.LE.0) RETURN
-      ISAMAX = 1
+      AB_ISAMAX = 1
       IF (N.EQ.1) RETURN
       IF (INCX.EQ.1) THEN
 *
@@ -103,7 +103,7 @@
          SMAX = ABS(SX(1))
          DO I = 2,N
             IF (ABS(SX(I)).GT.SMAX) THEN
-               ISAMAX = I
+               AB_ISAMAX = I
                SMAX = ABS(SX(I))
             END IF
          END DO
@@ -116,7 +116,7 @@
          IX = IX + INCX
          DO I = 2,N
             IF (ABS(SX(IX)).GT.SMAX) THEN
-               ISAMAX = I
+               AB_ISAMAX = I
                SMAX = ABS(SX(IX))
             END IF
             IX = IX + INCX

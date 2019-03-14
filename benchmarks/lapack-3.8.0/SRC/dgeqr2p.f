@@ -1,4 +1,4 @@
-*> \brief \b DGEQR2P computes the QR factorization of a general rectangular matrix with non-negative diagonal elements using an unblocked algorithm.
+*> \brief \b AB_DGEQR2P computes the QR factorization of a general rectangular matrix with non-negative diagonal elements using an unblocked algorithm.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DGEQR2P + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgeqr2p.f">
+*> Download AB_DGEQR2P + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGEQR2p.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgeqr2p.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGEQR2p.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dgeqr2p.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGEQR2p.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGEQR2P( M, N, A, LDA, TAU, WORK, INFO )
+*       SUBROUTINE AB_DGEQR2P( M, N, A, LDA, TAU, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, M, N
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> DGEQR2P computes a QR factorization of a real m by n matrix A:
+*> AB_DGEQR2P computes a QR factorization of a real m by n matrix A:
 *> A = Q * R. The diagonal entries of R are nonnegative.
 *> \endverbatim
 *
@@ -122,7 +122,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DGEQR2P( M, N, A, LDA, TAU, WORK, INFO )
+      SUBROUTINE AB_DGEQR2P( M, N, A, LDA, TAU, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -147,7 +147,7 @@
       DOUBLE PRECISION   AII
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARF, DLARFGP, XERBLA
+      EXTERNAL           AB_DLARF, AB_DLARFGP, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -165,7 +165,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DGEQR2P', -INFO )
+         CALL AB_XERBLA( 'AB_DGEQR2P', -INFO )
          RETURN
       END IF
 *
@@ -175,7 +175,7 @@
 *
 *        Generate elementary reflector H(i) to annihilate A(i+1:m,i)
 *
-         CALL DLARFGP( M-I+1, A( I, I ), A( MIN( I+1, M ), I ), 1,
+         CALL AB_DLARFGP( M-I+1, A( I, I ), A( MIN( I+1, M ), I ), 1,
      $                TAU( I ) )
          IF( I.LT.N ) THEN
 *
@@ -183,13 +183,13 @@
 *
             AII = A( I, I )
             A( I, I ) = ONE
-            CALL DLARF( 'Left', M-I+1, N-I, A( I, I ), 1, TAU( I ),
+            CALL AB_DLARF( 'Left', M-I+1, N-I, A( I, I ), 1, TAU( I ),
      $                  A( I, I+1 ), LDA, WORK )
             A( I, I ) = AII
          END IF
    10 CONTINUE
       RETURN
 *
-*     End of DGEQR2P
+*     End of AB_DGEQR2P
 *
       END

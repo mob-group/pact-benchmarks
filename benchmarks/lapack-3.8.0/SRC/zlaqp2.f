@@ -1,4 +1,4 @@
-*> \brief \b ZLAQP2 computes a QR factorization with column pivoting of the matrix block.
+*> \brief \b AB_ZLAQP2 computes a QR factorization with column pivoting of the matrix block.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZLAQP2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlaqp2.f">
+*> Download AB_ZLAQP2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLAQP2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlaqp2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLAQP2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlaqp2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLAQP2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZLAQP2( M, N, OFFSET, A, LDA, JPVT, TAU, VN1, VN2,
+*       SUBROUTINE AB_ZLAQP2( M, N, OFFSET, A, LDA, JPVT, TAU, VN1, VN2,
 *                          WORK )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> ZLAQP2 computes a QR factorization with column pivoting of
+*> AB_ZLAQP2 computes a QR factorization with column pivoting of
 *> the block A(OFFSET+1:M,1:N).
 *> The block A(1:OFFSET,1:N) is accordingly pivoted, but not factorized.
 *> \endverbatim
@@ -146,7 +146,7 @@
 *> \endhtmlonly
 *
 *  =====================================================================
-      SUBROUTINE ZLAQP2( M, N, OFFSET, A, LDA, JPVT, TAU, VN1, VN2,
+      SUBROUTINE AB_ZLAQP2( M, N, OFFSET, A, LDA, JPVT, TAU, VN1, VN2,
      $                   WORK )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -177,15 +177,15 @@
       COMPLEX*16         AII
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZLARF, ZLARFG, ZSWAP
+      EXTERNAL           AB_ZLARF, AB_ZLARFG, AB_ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DCONJG, MAX, MIN, SQRT
 *     ..
 *     .. External Functions ..
-      INTEGER            IDAMAX
-      DOUBLE PRECISION   DLAMCH, DZNRM2
-      EXTERNAL           IDAMAX, DLAMCH, DZNRM2
+      INTEGER            AB_IDAMAX
+      DOUBLE PRECISION   DLAMCH, AB_DZNRM2
+      EXTERNAL           AB_IDAMAX, DLAMCH, AB_DZNRM2
 *     ..
 *     .. Executable Statements ..
 *
@@ -200,10 +200,10 @@
 *
 *        Determine ith pivot column and swap if necessary.
 *
-         PVT = ( I-1 ) + IDAMAX( N-I+1, VN1( I ), 1 )
+         PVT = ( I-1 ) + AB_IDAMAX( N-I+1, VN1( I ), 1 )
 *
          IF( PVT.NE.I ) THEN
-            CALL ZSWAP( M, A( 1, PVT ), 1, A( 1, I ), 1 )
+            CALL AB_ZSWAP( M, A( 1, PVT ), 1, A( 1, I ), 1 )
             ITEMP = JPVT( PVT )
             JPVT( PVT ) = JPVT( I )
             JPVT( I ) = ITEMP
@@ -214,10 +214,11 @@
 *        Generate elementary reflector H(i).
 *
          IF( OFFPI.LT.M ) THEN
-            CALL ZLARFG( M-OFFPI+1, A( OFFPI, I ), A( OFFPI+1, I ), 1,
+            CALL AB_ZLARFG( M-OFFPI+1, A( OFFPI, I ), A( OFFPI+1, I ), 1
+     $,
      $                   TAU( I ) )
          ELSE
-            CALL ZLARFG( 1, A( M, I ), A( M, I ), 1, TAU( I ) )
+            CALL AB_ZLARFG( 1, A( M, I ), A( M, I ), 1, TAU( I ) )
          END IF
 *
          IF( I.LT.N ) THEN
@@ -226,7 +227,7 @@
 *
             AII = A( OFFPI, I )
             A( OFFPI, I ) = CONE
-            CALL ZLARF( 'Left', M-OFFPI+1, N-I, A( OFFPI, I ), 1,
+            CALL AB_ZLARF( 'Left', M-OFFPI+1, N-I, A( OFFPI, I ), 1,
      $                  DCONJG( TAU( I ) ), A( OFFPI, I+1 ), LDA,
      $                  WORK( 1 ) )
             A( OFFPI, I ) = AII
@@ -245,7 +246,7 @@
                TEMP2 = TEMP*( VN1( J ) / VN2( J ) )**2
                IF( TEMP2 .LE. TOL3Z ) THEN
                   IF( OFFPI.LT.M ) THEN
-                     VN1( J ) = DZNRM2( M-OFFPI, A( OFFPI+1, J ), 1 )
+                     VN1( J ) = AB_DZNRM2( M-OFFPI, A( OFFPI+1, J ), 1 )
                      VN2( J ) = VN1( J )
                   ELSE
                      VN1( J ) = ZERO
@@ -261,6 +262,6 @@
 *
       RETURN
 *
-*     End of ZLAQP2
+*     End of AB_ZLAQP2
 *
       END

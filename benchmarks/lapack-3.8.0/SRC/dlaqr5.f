@@ -1,4 +1,4 @@
-*> \brief \b DLAQR5 performs a single small-bulge multi-shift QR sweep.
+*> \brief \b AB_DLAQR5 performs a single small-bulge multi-shift QR sweep.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLAQR5 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaqr5.f">
+*> Download AB_DLAQR5 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLAQR5.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaqr5.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLAQR5.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaqr5.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLAQR5.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLAQR5( WANTT, WANTZ, KACC22, N, KTOP, KBOT, NSHFTS,
+*       SUBROUTINE AB_DLAQR5( WANTT, WANTZ, KACC22, N, KTOP, KBOT, NSHFTS,
 *                          SR, SI, H, LDH, ILOZ, IHIZ, Z, LDZ, V, LDV, U,
 *                          LDU, NV, WV, LDWV, NH, WH, LDWH )
 *
@@ -39,7 +39,7 @@
 *>
 *> \verbatim
 *>
-*>    DLAQR5, called by DLAQR0, performs a
+*>    AB_DLAQR5, called by AB_DLAQR0, performs a
 *>    single small-bulge multi-shift QR sweep.
 *> \endverbatim
 *
@@ -65,12 +65,12 @@
 *>          KACC22 is INTEGER with value 0, 1, or 2.
 *>             Specifies the computation mode of far-from-diagonal
 *>             orthogonal updates.
-*>        = 0: DLAQR5 does not accumulate reflections and does not
+*>        = 0: AB_DLAQR5 does not accumulate reflections and does not
 *>             use matrix-matrix multiply to update far-from-diagonal
 *>             matrix entries.
-*>        = 1: DLAQR5 accumulates reflections and uses matrix-matrix
+*>        = 1: AB_DLAQR5 accumulates reflections and uses matrix-matrix
 *>             multiply to update the far-from-diagonal matrix entries.
-*>        = 2: DLAQR5 accumulates reflections, uses matrix-matrix
+*>        = 2: AB_DLAQR5 accumulates reflections, uses matrix-matrix
 *>             multiply to update the far-from-diagonal matrix entries,
 *>             and takes advantage of 2-by-2 block structure during
 *>             matrix multiplies.
@@ -253,7 +253,7 @@
 *>       929--947, 2002.
 *>
 *  =====================================================================
-      SUBROUTINE DLAQR5( WANTT, WANTZ, KACC22, N, KTOP, KBOT, NSHFTS,
+      SUBROUTINE AB_DLAQR5( WANTT, WANTZ, KACC22, N, KTOP, KBOT, NSHFTS,
      $                   SR, SI, H, LDH, ILOZ, IHIZ, Z, LDZ, V, LDV, U,
      $                   LDU, NV, WV, LDWV, NH, WH, LDWH )
 *
@@ -300,8 +300,9 @@
       DOUBLE PRECISION   VT( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMM, DLABAD, DLACPY, DLAQR1, DLARFG, DLASET,
-     $                   DTRMM
+      EXTERNAL           AB_DGEMM, AB_DLABAD, AB_DLACPY, AB_DLAQR1, AB_D
+     $LARFG, AB_DLASET,
+     $                   AB_DTRMM
 *     ..
 *     .. Executable Statements ..
 *
@@ -347,7 +348,7 @@
 *
       SAFMIN = DLAMCH( 'SAFE MINIMUM' )
       SAFMAX = ONE / SAFMIN
-      CALL DLABAD( SAFMIN, SAFMAX )
+      CALL AB_DLABAD( SAFMIN, SAFMAX )
       ULP = DLAMCH( 'PRECISION' )
       SMLNUM = SAFMIN*( DBLE( N ) / ULP )
 *
@@ -378,7 +379,7 @@
       DO 220 INCOL = 3*( 1-NBMPS ) + KTOP - 1, KBOT - 2, 3*NBMPS - 2
          NDCOL = INCOL + KDU
          IF( ACCUM )
-     $      CALL DLASET( 'ALL', KDU, KDU, ZERO, ONE, U, LDU )
+     $      CALL AB_DLASET( 'ALL', KDU, KDU, ZERO, ONE, U, LDU )
 *
 *        ==== Near-the-diagonal bulge chase.  The following loop
 *        .    performs the near-the-diagonal part of a small bulge
@@ -413,16 +414,16 @@
             DO 20 M = MTOP, MBOT
                K = KRCOL + 3*( M-1 )
                IF( K.EQ.KTOP-1 ) THEN
-                  CALL DLAQR1( 3, H( KTOP, KTOP ), LDH, SR( 2*M-1 ),
+                  CALL AB_DLAQR1( 3, H( KTOP, KTOP ), LDH, SR( 2*M-1 ),
      $                         SI( 2*M-1 ), SR( 2*M ), SI( 2*M ),
      $                         V( 1, M ) )
                   ALPHA = V( 1, M )
-                  CALL DLARFG( 3, ALPHA, V( 2, M ), 1, V( 1, M ) )
+                  CALL AB_DLARFG( 3, ALPHA, V( 2, M ), 1, V( 1, M ) )
                ELSE
                   BETA = H( K+1, K )
                   V( 2, M ) = H( K+2, K )
                   V( 3, M ) = H( K+3, K )
-                  CALL DLARFG( 3, BETA, V( 2, M ), 1, V( 1, M ) )
+                  CALL AB_DLARFG( 3, BETA, V( 2, M ), 1, V( 1, M ) )
 *
 *                 ==== A Bulge may collapse because of vigilant
 *                 .    deflation or destructive underflow.  In the
@@ -445,11 +446,11 @@
 *                    .    reflector is too large, then abandon it.
 *                    .    Otherwise, use the new one. ====
 *
-                     CALL DLAQR1( 3, H( K+1, K+1 ), LDH, SR( 2*M-1 ),
+                     CALL AB_DLAQR1( 3, H( K+1, K+1 ), LDH, SR( 2*M-1 ),
      $                            SI( 2*M-1 ), SR( 2*M ), SI( 2*M ),
      $                            VT )
                      ALPHA = VT( 1 )
-                     CALL DLARFG( 3, ALPHA, VT( 2 ), 1, VT( 1 ) )
+                     CALL AB_DLARFG( 3, ALPHA, VT( 2 ), 1, VT( 1 ) )
                      REFSUM = VT( 1 )*( H( K+1, K )+VT( 2 )*
      $                        H( K+2, K ) )
 *
@@ -488,15 +489,15 @@
             K = KRCOL + 3*( M22-1 )
             IF( BMP22 ) THEN
                IF( K.EQ.KTOP-1 ) THEN
-                  CALL DLAQR1( 2, H( K+1, K+1 ), LDH, SR( 2*M22-1 ),
+                  CALL AB_DLAQR1( 2, H( K+1, K+1 ), LDH, SR( 2*M22-1 ),
      $                         SI( 2*M22-1 ), SR( 2*M22 ), SI( 2*M22 ),
      $                         V( 1, M22 ) )
                   BETA = V( 1, M22 )
-                  CALL DLARFG( 2, BETA, V( 2, M22 ), 1, V( 1, M22 ) )
+                  CALL AB_DLARFG( 2, BETA, V( 2, M22 ), 1, V( 1, M22 ) )
                ELSE
                   BETA = H( K+1, K )
                   V( 2, M22 ) = H( K+2, K )
-                  CALL DLARFG( 2, BETA, V( 2, M22 ), 1, V( 1, M22 ) )
+                  CALL AB_DLARFG( 2, BETA, V( 2, M22 ), 1, V( 1, M22 ) )
                   H( K+1, K ) = BETA
                   H( K+2, K ) = ZERO
                END IF
@@ -718,10 +719,11 @@
 *
                DO 160 JCOL = MIN( NDCOL, KBOT ) + 1, JBOT, NH
                   JLEN = MIN( NH, JBOT-JCOL+1 )
-                  CALL DGEMM( 'C', 'N', NU, JLEN, NU, ONE, U( K1, K1 ),
+                  CALL AB_DGEMM( 'C', 'N', NU, JLEN, NU, ONE, U( K1, K1 
+     $),
      $                        LDU, H( INCOL+K1, JCOL ), LDH, ZERO, WH,
      $                        LDWH )
-                  CALL DLACPY( 'ALL', NU, JLEN, WH, LDWH,
+                  CALL AB_DLACPY( 'ALL', NU, JLEN, WH, LDWH,
      $                         H( INCOL+K1, JCOL ), LDH )
   160          CONTINUE
 *
@@ -729,10 +731,10 @@
 *
                DO 170 JROW = JTOP, MAX( KTOP, INCOL ) - 1, NV
                   JLEN = MIN( NV, MAX( KTOP, INCOL )-JROW )
-                  CALL DGEMM( 'N', 'N', JLEN, NU, NU, ONE,
+                  CALL AB_DGEMM( 'N', 'N', JLEN, NU, NU, ONE,
      $                        H( JROW, INCOL+K1 ), LDH, U( K1, K1 ),
      $                        LDU, ZERO, WV, LDWV )
-                  CALL DLACPY( 'ALL', JLEN, NU, WV, LDWV,
+                  CALL AB_DLACPY( 'ALL', JLEN, NU, WV, LDWV,
      $                         H( JROW, INCOL+K1 ), LDH )
   170          CONTINUE
 *
@@ -741,10 +743,10 @@
                IF( WANTZ ) THEN
                   DO 180 JROW = ILOZ, IHIZ, NV
                      JLEN = MIN( NV, IHIZ-JROW+1 )
-                     CALL DGEMM( 'N', 'N', JLEN, NU, NU, ONE,
+                     CALL AB_DGEMM( 'N', 'N', JLEN, NU, NU, ONE,
      $                           Z( JROW, INCOL+K1 ), LDZ, U( K1, K1 ),
      $                           LDU, ZERO, WV, LDWV )
-                     CALL DLACPY( 'ALL', JLEN, NU, WV, LDWV,
+                     CALL AB_DLACPY( 'ALL', JLEN, NU, WV, LDWV,
      $                            Z( JROW, INCOL+K1 ), LDZ )
   180             CONTINUE
                END IF
@@ -774,41 +776,44 @@
 *                 ==== Copy bottom of H to top+KZS of scratch ====
 *                  (The first KZS rows get multiplied by zero.) ====
 *
-                  CALL DLACPY( 'ALL', KNZ, JLEN, H( INCOL+1+J2, JCOL ),
+                  CALL AB_DLACPY( 'ALL', KNZ, JLEN, H( INCOL+1+J2, JCOL 
+     $),
      $                         LDH, WH( KZS+1, 1 ), LDWH )
 *
 *                 ==== Multiply by U21**T ====
 *
-                  CALL DLASET( 'ALL', KZS, JLEN, ZERO, ZERO, WH, LDWH )
-                  CALL DTRMM( 'L', 'U', 'C', 'N', KNZ, JLEN, ONE,
+                  CALL AB_DLASET( 'ALL', KZS, JLEN, ZERO, ZERO, WH, LDWH
+     $ )
+                  CALL AB_DTRMM( 'L', 'U', 'C', 'N', KNZ, JLEN, ONE,
      $                        U( J2+1, 1+KZS ), LDU, WH( KZS+1, 1 ),
      $                        LDWH )
 *
 *                 ==== Multiply top of H by U11**T ====
 *
-                  CALL DGEMM( 'C', 'N', I2, JLEN, J2, ONE, U, LDU,
+                  CALL AB_DGEMM( 'C', 'N', I2, JLEN, J2, ONE, U, LDU,
      $                        H( INCOL+1, JCOL ), LDH, ONE, WH, LDWH )
 *
 *                 ==== Copy top of H to bottom of WH ====
 *
-                  CALL DLACPY( 'ALL', J2, JLEN, H( INCOL+1, JCOL ), LDH,
+                  CALL AB_DLACPY( 'ALL', J2, JLEN, H( INCOL+1, JCOL ), L
+     $DH,
      $                         WH( I2+1, 1 ), LDWH )
 *
 *                 ==== Multiply by U21**T ====
 *
-                  CALL DTRMM( 'L', 'L', 'C', 'N', J2, JLEN, ONE,
+                  CALL AB_DTRMM( 'L', 'L', 'C', 'N', J2, JLEN, ONE,
      $                        U( 1, I2+1 ), LDU, WH( I2+1, 1 ), LDWH )
 *
 *                 ==== Multiply by U22 ====
 *
-                  CALL DGEMM( 'C', 'N', I4-I2, JLEN, J4-J2, ONE,
+                  CALL AB_DGEMM( 'C', 'N', I4-I2, JLEN, J4-J2, ONE,
      $                        U( J2+1, I2+1 ), LDU,
      $                        H( INCOL+1+J2, JCOL ), LDH, ONE,
      $                        WH( I2+1, 1 ), LDWH )
 *
 *                 ==== Copy it back ====
 *
-                  CALL DLACPY( 'ALL', KDU, JLEN, WH, LDWH,
+                  CALL AB_DLACPY( 'ALL', KDU, JLEN, WH, LDWH,
      $                         H( INCOL+1, JCOL ), LDH )
   190          CONTINUE
 *
@@ -820,42 +825,45 @@
 *                 ==== Copy right of H to scratch (the first KZS
 *                 .    columns get multiplied by zero) ====
 *
-                  CALL DLACPY( 'ALL', JLEN, KNZ, H( JROW, INCOL+1+J2 ),
+                  CALL AB_DLACPY( 'ALL', JLEN, KNZ, H( JROW, INCOL+1+J2 
+     $),
      $                         LDH, WV( 1, 1+KZS ), LDWV )
 *
 *                 ==== Multiply by U21 ====
 *
-                  CALL DLASET( 'ALL', JLEN, KZS, ZERO, ZERO, WV, LDWV )
-                  CALL DTRMM( 'R', 'U', 'N', 'N', JLEN, KNZ, ONE,
+                  CALL AB_DLASET( 'ALL', JLEN, KZS, ZERO, ZERO, WV, LDWV
+     $ )
+                  CALL AB_DTRMM( 'R', 'U', 'N', 'N', JLEN, KNZ, ONE,
      $                        U( J2+1, 1+KZS ), LDU, WV( 1, 1+KZS ),
      $                        LDWV )
 *
 *                 ==== Multiply by U11 ====
 *
-                  CALL DGEMM( 'N', 'N', JLEN, I2, J2, ONE,
+                  CALL AB_DGEMM( 'N', 'N', JLEN, I2, J2, ONE,
      $                        H( JROW, INCOL+1 ), LDH, U, LDU, ONE, WV,
      $                        LDWV )
 *
 *                 ==== Copy left of H to right of scratch ====
 *
-                  CALL DLACPY( 'ALL', JLEN, J2, H( JROW, INCOL+1 ), LDH,
+                  CALL AB_DLACPY( 'ALL', JLEN, J2, H( JROW, INCOL+1 ), L
+     $DH,
      $                         WV( 1, 1+I2 ), LDWV )
 *
 *                 ==== Multiply by U21 ====
 *
-                  CALL DTRMM( 'R', 'L', 'N', 'N', JLEN, I4-I2, ONE,
+                  CALL AB_DTRMM( 'R', 'L', 'N', 'N', JLEN, I4-I2, ONE,
      $                        U( 1, I2+1 ), LDU, WV( 1, 1+I2 ), LDWV )
 *
 *                 ==== Multiply by U22 ====
 *
-                  CALL DGEMM( 'N', 'N', JLEN, I4-I2, J4-J2, ONE,
+                  CALL AB_DGEMM( 'N', 'N', JLEN, I4-I2, J4-J2, ONE,
      $                        H( JROW, INCOL+1+J2 ), LDH,
      $                        U( J2+1, I2+1 ), LDU, ONE, WV( 1, 1+I2 ),
      $                        LDWV )
 *
 *                 ==== Copy it back ====
 *
-                  CALL DLACPY( 'ALL', JLEN, KDU, WV, LDWV,
+                  CALL AB_DLACPY( 'ALL', JLEN, KDU, WV, LDWV,
      $                         H( JROW, INCOL+1 ), LDH )
   200          CONTINUE
 *
@@ -868,45 +876,47 @@
 *                    ==== Copy right of Z to left of scratch (first
 *                    .     KZS columns get multiplied by zero) ====
 *
-                     CALL DLACPY( 'ALL', JLEN, KNZ,
+                     CALL AB_DLACPY( 'ALL', JLEN, KNZ,
      $                            Z( JROW, INCOL+1+J2 ), LDZ,
      $                            WV( 1, 1+KZS ), LDWV )
 *
 *                    ==== Multiply by U12 ====
 *
-                     CALL DLASET( 'ALL', JLEN, KZS, ZERO, ZERO, WV,
+                     CALL AB_DLASET( 'ALL', JLEN, KZS, ZERO, ZERO, WV,
      $                            LDWV )
-                     CALL DTRMM( 'R', 'U', 'N', 'N', JLEN, KNZ, ONE,
+                     CALL AB_DTRMM( 'R', 'U', 'N', 'N', JLEN, KNZ, ONE,
      $                           U( J2+1, 1+KZS ), LDU, WV( 1, 1+KZS ),
      $                           LDWV )
 *
 *                    ==== Multiply by U11 ====
 *
-                     CALL DGEMM( 'N', 'N', JLEN, I2, J2, ONE,
+                     CALL AB_DGEMM( 'N', 'N', JLEN, I2, J2, ONE,
      $                           Z( JROW, INCOL+1 ), LDZ, U, LDU, ONE,
      $                           WV, LDWV )
 *
 *                    ==== Copy left of Z to right of scratch ====
 *
-                     CALL DLACPY( 'ALL', JLEN, J2, Z( JROW, INCOL+1 ),
+                     CALL AB_DLACPY( 'ALL', JLEN, J2, Z( JROW, INCOL+1 )
+     $,
      $                            LDZ, WV( 1, 1+I2 ), LDWV )
 *
 *                    ==== Multiply by U21 ====
 *
-                     CALL DTRMM( 'R', 'L', 'N', 'N', JLEN, I4-I2, ONE,
+                     CALL AB_DTRMM( 'R', 'L', 'N', 'N', JLEN, I4-I2, ONE
+     $,
      $                           U( 1, I2+1 ), LDU, WV( 1, 1+I2 ),
      $                           LDWV )
 *
 *                    ==== Multiply by U22 ====
 *
-                     CALL DGEMM( 'N', 'N', JLEN, I4-I2, J4-J2, ONE,
+                     CALL AB_DGEMM( 'N', 'N', JLEN, I4-I2, J4-J2, ONE,
      $                           Z( JROW, INCOL+1+J2 ), LDZ,
      $                           U( J2+1, I2+1 ), LDU, ONE,
      $                           WV( 1, 1+I2 ), LDWV )
 *
 *                    ==== Copy the result back to Z ====
 *
-                     CALL DLACPY( 'ALL', JLEN, KDU, WV, LDWV,
+                     CALL AB_DLACPY( 'ALL', JLEN, KDU, WV, LDWV,
      $                            Z( JROW, INCOL+1 ), LDZ )
   210             CONTINUE
                END IF
@@ -914,6 +924,6 @@
          END IF
   220 CONTINUE
 *
-*     ==== End of DLAQR5 ====
+*     ==== End of AB_DLAQR5 ====
 *
       END

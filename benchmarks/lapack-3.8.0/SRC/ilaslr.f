@@ -1,4 +1,4 @@
-*> \brief \b ILASLR scans a matrix for its last non-zero row.
+*> \brief \b AB_ILASLR scans a matrix for its last non-zero row.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ILASLR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ilaslr.f">
+*> Download AB_ILASLR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ILASLR.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ilaslr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ILASLR.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ilaslr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ILASLR.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       INTEGER FUNCTION ILASLR( M, N, A, LDA )
+*       INTEGER FUNCTION AB_ILASLR( M, N, A, LDA )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            M, N, LDA
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> ILASLR scans A for its last non-zero row.
+*> AB_ILASLR scans A for its last non-zero row.
 *> \endverbatim
 *
 *  Arguments:
@@ -76,7 +76,7 @@
 *> \ingroup realOTHERauxiliary
 *
 *  =====================================================================
-      INTEGER FUNCTION ILASLR( M, N, A, LDA )
+      INTEGER FUNCTION AB_ILASLR( M, N, A, LDA )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -103,18 +103,18 @@
 *
 *     Quick test for the common case where one corner is non-zero.
       IF( M.EQ.0 ) THEN
-         ILASLR = M
+         AB_ILASLR = M
       ELSEIF( A(M, 1).NE.ZERO .OR. A(M, N).NE.ZERO ) THEN
-         ILASLR = M
+         AB_ILASLR = M
       ELSE
 *     Scan up each column tracking the last zero row seen.
-         ILASLR = 0
+         AB_ILASLR = 0
          DO J = 1, N
             I=M
             DO WHILE((A(MAX(I,1),J).EQ.ZERO).AND.(I.GE.1))
                I=I-1
             ENDDO
-            ILASLR = MAX( ILASLR, I )
+            AB_ILASLR = MAX( AB_ILASLR, I )
          END DO
       END IF
       RETURN

@@ -1,4 +1,4 @@
-*> \brief \b DORM2R multiplies a general matrix by the orthogonal matrix from a QR factorization determined by sgeqrf (unblocked algorithm).
+*> \brief \b AB_DORM2R multiplies a general matrix by the orthogonal matrix from a QR factorization determined by AB_SGEQRf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DORM2R + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dorm2r.f">
+*> Download AB_DORM2R + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DORM2R.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dorm2r.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DORM2R.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dorm2r.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DORM2R.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DORM2R( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,
+*       SUBROUTINE AB_DORM2R( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,
 *                          WORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> DORM2R overwrites the general real m by n matrix C with
+*> AB_DORM2R overwrites the general real m by n matrix C with
 *>
 *>       Q * C  if SIDE = 'L' and TRANS = 'N', or
 *>
@@ -50,7 +50,7 @@
 *>
 *>       Q = H(1) H(2) . . . H(k)
 *>
-*> as returned by DGEQRF. Q is of order m if SIDE = 'L' and of order n
+*> as returned by AB_DGEQRF. Q is of order m if SIDE = 'L' and of order n
 *> if SIDE = 'R'.
 *> \endverbatim
 *
@@ -97,7 +97,7 @@
 *>          A is DOUBLE PRECISION array, dimension (LDA,K)
 *>          The i-th column must contain the vector which defines the
 *>          elementary reflector H(i), for i = 1,2,...,k, as returned by
-*>          DGEQRF in the first k columns of its array argument A.
+*>          AB_DGEQRF in the first k columns of its array argument A.
 *>          A is modified by the routine but restored on exit.
 *> \endverbatim
 *>
@@ -113,7 +113,7 @@
 *> \verbatim
 *>          TAU is DOUBLE PRECISION array, dimension (K)
 *>          TAU(i) must contain the scalar factor of the elementary
-*>          reflector H(i), as returned by DGEQRF.
+*>          reflector H(i), as returned by AB_DGEQRF.
 *> \endverbatim
 *>
 *> \param[in,out] C
@@ -156,7 +156,7 @@
 *> \ingroup doubleOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE DORM2R( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,
+      SUBROUTINE AB_DORM2R( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,
      $                   WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -184,11 +184,11 @@
       DOUBLE PRECISION   AII
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARF, XERBLA
+      EXTERNAL           AB_DLARF, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -198,8 +198,8 @@
 *     Test the input arguments
 *
       INFO = 0
-      LEFT = LSAME( SIDE, 'L' )
-      NOTRAN = LSAME( TRANS, 'N' )
+      LEFT = AB_LSAME( SIDE, 'L' )
+      NOTRAN = AB_LSAME( TRANS, 'N' )
 *
 *     NQ is the order of Q
 *
@@ -208,9 +208,9 @@
       ELSE
          NQ = N
       END IF
-      IF( .NOT.LEFT .AND. .NOT.LSAME( SIDE, 'R' ) ) THEN
+      IF( .NOT.LEFT .AND. .NOT.AB_LSAME( SIDE, 'R' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) ) THEN
+      ELSE IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) ) THEN
          INFO = -2
       ELSE IF( M.LT.0 ) THEN
          INFO = -3
@@ -224,7 +224,7 @@
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DORM2R', -INFO )
+         CALL AB_XERBLA( 'AB_DORM2R', -INFO )
          RETURN
       END IF
 *
@@ -271,12 +271,13 @@
 *
          AII = A( I, I )
          A( I, I ) = ONE
-         CALL DLARF( SIDE, MI, NI, A( I, I ), 1, TAU( I ), C( IC, JC ),
+         CALL AB_DLARF( SIDE, MI, NI, A( I, I ), 1, TAU( I ), C( IC, JC 
+     $),
      $               LDC, WORK )
          A( I, I ) = AII
    10 CONTINUE
       RETURN
 *
-*     End of DORM2R
+*     End of AB_DORM2R
 *
       END

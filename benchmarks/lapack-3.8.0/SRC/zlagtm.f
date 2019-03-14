@@ -1,4 +1,4 @@
-*> \brief \b ZLAGTM performs a matrix-matrix product of the form C = αAB+βC, where A is a tridiagonal matrix, B and C are rectangular matrices, and α and β are scalars, which may be 0, 1, or -1.
+*> \brief \b AB_ZLAGTM performs a matrix-matrix product of the form C = αAB+βC, where A is a tridiagonal matrix, B and C are rectangular matrices, and α and β are scalars, which may be 0, 1, or -1.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZLAGTM + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlagtm.f">
+*> Download AB_ZLAGTM + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLAGTM.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlagtm.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLAGTM.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlagtm.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLAGTM.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZLAGTM( TRANS, N, NRHS, ALPHA, DL, D, DU, X, LDX, BETA,
+*       SUBROUTINE AB_ZLAGTM( TRANS, N, NRHS, ALPHA, DL, D, DU, X, LDX, BETA,
 *                          B, LDB )
 *
 *       .. Scalar Arguments ..
@@ -37,7 +37,7 @@
 *>
 *> \verbatim
 *>
-*> ZLAGTM performs a matrix-vector product of the form
+*> AB_ZLAGTM performs a matrix-vector product of the form
 *>
 *>    B := alpha * A * X + beta * B
 *>
@@ -142,7 +142,8 @@
 *> \ingroup complex16OTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE ZLAGTM( TRANS, N, NRHS, ALPHA, DL, D, DU, X, LDX, BETA,
+      SUBROUTINE AB_ZLAGTM( TRANS, N, NRHS, ALPHA, DL, D, DU, X, LDX, BE
+     $TA,
      $                   B, LDB )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -170,8 +171,8 @@
       INTEGER            I, J
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DCONJG
@@ -198,7 +199,7 @@
       END IF
 *
       IF( ALPHA.EQ.ONE ) THEN
-         IF( LSAME( TRANS, 'N' ) ) THEN
+         IF( AB_LSAME( TRANS, 'N' ) ) THEN
 *
 *           Compute B := B + A*X
 *
@@ -216,7 +217,7 @@
    50             CONTINUE
                END IF
    60       CONTINUE
-         ELSE IF( LSAME( TRANS, 'T' ) ) THEN
+         ELSE IF( AB_LSAME( TRANS, 'T' ) ) THEN
 *
 *           Compute B := B + A**T * X
 *
@@ -234,7 +235,7 @@
    70             CONTINUE
                END IF
    80       CONTINUE
-         ELSE IF( LSAME( TRANS, 'C' ) ) THEN
+         ELSE IF( AB_LSAME( TRANS, 'C' ) ) THEN
 *
 *           Compute B := B + A**H * X
 *
@@ -256,7 +257,7 @@
   100       CONTINUE
          END IF
       ELSE IF( ALPHA.EQ.-ONE ) THEN
-         IF( LSAME( TRANS, 'N' ) ) THEN
+         IF( AB_LSAME( TRANS, 'N' ) ) THEN
 *
 *           Compute B := B - A*X
 *
@@ -274,7 +275,7 @@
   110             CONTINUE
                END IF
   120       CONTINUE
-         ELSE IF( LSAME( TRANS, 'T' ) ) THEN
+         ELSE IF( AB_LSAME( TRANS, 'T' ) ) THEN
 *
 *           Compute B := B - A**T *X
 *
@@ -292,7 +293,7 @@
   130             CONTINUE
                END IF
   140       CONTINUE
-         ELSE IF( LSAME( TRANS, 'C' ) ) THEN
+         ELSE IF( AB_LSAME( TRANS, 'C' ) ) THEN
 *
 *           Compute B := B - A**H *X
 *
@@ -316,6 +317,6 @@
       END IF
       RETURN
 *
-*     End of ZLAGTM
+*     End of AB_ZLAGTM
 *
       END

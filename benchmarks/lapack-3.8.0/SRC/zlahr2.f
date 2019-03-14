@@ -1,4 +1,4 @@
-*> \brief \b ZLAHR2 reduces the specified number of first columns of a general rectangular matrix A so that elements below the specified subdiagonal are zero, and returns auxiliary matrices which are needed to apply the transformation to the unreduced part of A.
+*> \brief \b AB_ZLAHR2 reduces the specified number of first columns of a general rectangular matrix A so that elements below the specified subdiagonal are zero, and returns auxiliary matrices which are needed to apply the transformation to the unreduced part of A.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZLAHR2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlahr2.f">
+*> Download AB_ZLAHR2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZLAHR2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlahr2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZLAHR2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlahr2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZLAHR2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZLAHR2( N, K, NB, A, LDA, TAU, T, LDT, Y, LDY )
+*       SUBROUTINE AB_ZLAHR2( N, K, NB, A, LDA, TAU, T, LDT, Y, LDY )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            K, LDA, LDT, LDY, N, NB
@@ -34,13 +34,13 @@
 *>
 *> \verbatim
 *>
-*> ZLAHR2 reduces the first NB columns of A complex general n-BY-(n-k+1)
+*> AB_ZLAHR2 reduces the first NB columns of A complex general n-BY-(n-k+1)
 *> matrix A so that elements below the k-th subdiagonal are zero. The
 *> reduction is performed by an unitary similarity transformation
 *> Q**H * A * Q. The routine returns the matrices V and T which determine
 *> Q as a block reflector I - V*T*V**H, and also the matrix Y = A * V * T.
 *>
-*> This is an auxiliary routine called by ZGEHRD.
+*> This is an auxiliary routine called by AB_ZGEHRD.
 *> \endverbatim
 *
 *  Arguments:
@@ -164,11 +164,11 @@
 *>  modified element of the upper Hessenberg matrix H, and vi denotes an
 *>  element of the vector defining H(i).
 *>
-*>  This subroutine is a slight modification of LAPACK-3.0's DLAHRD
+*>  This subroutine is a slight modification of LAPACK-3.0's AB_DLAHRD
 *>  incorporating improvements proposed by Quintana-Orti and Van de
 *>  Gejin. Note that the entries of A(1:K,2:NB) differ from those
-*>  returned by the original LAPACK-3.0's DLAHRD routine. (This
-*>  subroutine is not backward compatible with LAPACK-3.0's DLAHRD.)
+*>  returned by the original LAPACK-3.0's AB_DLAHRD routine. (This
+*>  subroutine is not backward compatible with LAPACK-3.0's AB_DLAHRD.)
 *> \endverbatim
 *
 *> \par References:
@@ -179,7 +179,7 @@
 *>  Mathematical Software, 32(2):180-194, June 2006.
 *>
 *  =====================================================================
-      SUBROUTINE ZLAHR2( N, K, NB, A, LDA, TAU, T, LDT, Y, LDY )
+      SUBROUTINE AB_ZLAHR2( N, K, NB, A, LDA, TAU, T, LDT, Y, LDY )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -206,8 +206,10 @@
       COMPLEX*16        EI
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZAXPY, ZCOPY, ZGEMM, ZGEMV, ZLACPY,
-     $                   ZLARFG, ZSCAL, ZTRMM, ZTRMV, ZLACGV
+      EXTERNAL           AB_ZAXPY, AB_ZCOPY, AB_ZGEMM, AB_ZGEMV, AB_ZLAC
+     $PY,
+     $                   AB_ZLARFG, AB_ZSCAL, AB_ZTRMM, AB_ZTRMV, AB_ZLA
+     $CGV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN
@@ -226,10 +228,11 @@
 *
 *           Update I-th column of A - Y * V**H
 *
-            CALL ZLACGV( I-1, A( K+I-1, 1 ), LDA )
-            CALL ZGEMV( 'NO TRANSPOSE', N-K, I-1, -ONE, Y(K+1,1), LDY,
+            CALL AB_ZLACGV( I-1, A( K+I-1, 1 ), LDA )
+            CALL AB_ZGEMV( 'NO TRANSPOSE', N-K, I-1, -ONE, Y(K+1,1), LDY
+     $,
      $                  A( K+I-1, 1 ), LDA, ONE, A( K+1, I ), 1 )
-            CALL ZLACGV( I-1, A( K+I-1, 1 ), LDA )
+            CALL AB_ZLACGV( I-1, A( K+I-1, 1 ), LDA )
 *
 *           Apply I - V * T**H * V**H to this column (call it b) from the
 *           left, using the last column of T as workspace
@@ -241,35 +244,35 @@
 *
 *           w := V1**H * b1
 *
-            CALL ZCOPY( I-1, A( K+1, I ), 1, T( 1, NB ), 1 )
-            CALL ZTRMV( 'Lower', 'Conjugate transpose', 'UNIT',
+            CALL AB_ZCOPY( I-1, A( K+1, I ), 1, T( 1, NB ), 1 )
+            CALL AB_ZTRMV( 'Lower', 'Conjugate transpose', 'UNIT',
      $                  I-1, A( K+1, 1 ),
      $                  LDA, T( 1, NB ), 1 )
 *
 *           w := w + V2**H * b2
 *
-            CALL ZGEMV( 'Conjugate transpose', N-K-I+1, I-1,
+            CALL AB_ZGEMV( 'Conjugate transpose', N-K-I+1, I-1,
      $                  ONE, A( K+I, 1 ),
      $                  LDA, A( K+I, I ), 1, ONE, T( 1, NB ), 1 )
 *
 *           w := T**H * w
 *
-            CALL ZTRMV( 'Upper', 'Conjugate transpose', 'NON-UNIT',
+            CALL AB_ZTRMV( 'Upper', 'Conjugate transpose', 'NON-UNIT',
      $                  I-1, T, LDT,
      $                  T( 1, NB ), 1 )
 *
 *           b2 := b2 - V2*w
 *
-            CALL ZGEMV( 'NO TRANSPOSE', N-K-I+1, I-1, -ONE,
+            CALL AB_ZGEMV( 'NO TRANSPOSE', N-K-I+1, I-1, -ONE,
      $                  A( K+I, 1 ),
      $                  LDA, T( 1, NB ), 1, ONE, A( K+I, I ), 1 )
 *
 *           b1 := b1 - V1*w
 *
-            CALL ZTRMV( 'Lower', 'NO TRANSPOSE',
+            CALL AB_ZTRMV( 'Lower', 'NO TRANSPOSE',
      $                  'UNIT', I-1,
      $                  A( K+1, 1 ), LDA, T( 1, NB ), 1 )
-            CALL ZAXPY( I-1, -ONE, T( 1, NB ), 1, A( K+1, I ), 1 )
+            CALL AB_ZAXPY( I-1, -ONE, T( 1, NB ), 1, A( K+1, I ), 1 )
 *
             A( K+I-1, I-1 ) = EI
          END IF
@@ -277,28 +280,29 @@
 *        Generate the elementary reflector H(I) to annihilate
 *        A(K+I+1:N,I)
 *
-         CALL ZLARFG( N-K-I+1, A( K+I, I ), A( MIN( K+I+1, N ), I ), 1,
+         CALL AB_ZLARFG( N-K-I+1, A( K+I, I ), A( MIN( K+I+1, N ), I ), 
+     $1,
      $                TAU( I ) )
          EI = A( K+I, I )
          A( K+I, I ) = ONE
 *
 *        Compute  Y(K+1:N,I)
 *
-         CALL ZGEMV( 'NO TRANSPOSE', N-K, N-K-I+1,
+         CALL AB_ZGEMV( 'NO TRANSPOSE', N-K, N-K-I+1,
      $               ONE, A( K+1, I+1 ),
      $               LDA, A( K+I, I ), 1, ZERO, Y( K+1, I ), 1 )
-         CALL ZGEMV( 'Conjugate transpose', N-K-I+1, I-1,
+         CALL AB_ZGEMV( 'Conjugate transpose', N-K-I+1, I-1,
      $               ONE, A( K+I, 1 ), LDA,
      $               A( K+I, I ), 1, ZERO, T( 1, I ), 1 )
-         CALL ZGEMV( 'NO TRANSPOSE', N-K, I-1, -ONE,
+         CALL AB_ZGEMV( 'NO TRANSPOSE', N-K, I-1, -ONE,
      $               Y( K+1, 1 ), LDY,
      $               T( 1, I ), 1, ONE, Y( K+1, I ), 1 )
-         CALL ZSCAL( N-K, TAU( I ), Y( K+1, I ), 1 )
+         CALL AB_ZSCAL( N-K, TAU( I ), Y( K+1, I ), 1 )
 *
 *        Compute T(1:I,I)
 *
-         CALL ZSCAL( I-1, -TAU( I ), T( 1, I ), 1 )
-         CALL ZTRMV( 'Upper', 'No Transpose', 'NON-UNIT',
+         CALL AB_ZSCAL( I-1, -TAU( I ), T( 1, I ), 1 )
+         CALL AB_ZTRMV( 'Upper', 'No Transpose', 'NON-UNIT',
      $               I-1, T, LDT,
      $               T( 1, I ), 1 )
          T( I, I ) = TAU( I )
@@ -308,21 +312,21 @@
 *
 *     Compute Y(1:K,1:NB)
 *
-      CALL ZLACPY( 'ALL', K, NB, A( 1, 2 ), LDA, Y, LDY )
-      CALL ZTRMM( 'RIGHT', 'Lower', 'NO TRANSPOSE',
+      CALL AB_ZLACPY( 'ALL', K, NB, A( 1, 2 ), LDA, Y, LDY )
+      CALL AB_ZTRMM( 'RIGHT', 'Lower', 'NO TRANSPOSE',
      $            'UNIT', K, NB,
      $            ONE, A( K+1, 1 ), LDA, Y, LDY )
       IF( N.GT.K+NB )
-     $   CALL ZGEMM( 'NO TRANSPOSE', 'NO TRANSPOSE', K,
+     $   CALL AB_ZGEMM( 'NO TRANSPOSE', 'NO TRANSPOSE', K,
      $               NB, N-K-NB, ONE,
      $               A( 1, 2+NB ), LDA, A( K+1+NB, 1 ), LDA, ONE, Y,
      $               LDY )
-      CALL ZTRMM( 'RIGHT', 'Upper', 'NO TRANSPOSE',
+      CALL AB_ZTRMM( 'RIGHT', 'Upper', 'NO TRANSPOSE',
      $            'NON-UNIT', K, NB,
      $            ONE, T, LDT, Y, LDY )
 *
       RETURN
 *
-*     End of ZLAHR2
+*     End of AB_ZLAHR2
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b SSBGV
+*> \brief \b AB_SSBGV
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SSBGV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssbgv.f">
+*> Download AB_SSBGV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SSBGV.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssbgv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SSBGV.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssbgv.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SSBGV.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SSBGV( JOBZ, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, W, Z,
+*       SUBROUTINE AB_SSBGV( JOBZ, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, W, Z,
 *                         LDZ, WORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> SSBGV computes all the eigenvalues, and optionally, the eigenvectors
+*> AB_SSBGV computes all the eigenvalues, and optionally, the eigenvectors
 *> of a real generalized symmetric-definite banded eigenproblem, of
 *> the form A*x=(lambda)*B*x. Here A and B are assumed to be symmetric
 *> and banded, and B is also positive definite.
@@ -109,7 +109,7 @@
 *>          if UPLO = 'L', BB(1+i-j,j)    = B(i,j) for j<=i<=min(n,j+kb).
 *>
 *>          On exit, the factor S from the split Cholesky factorization
-*>          B = S**T*S, as returned by SPBSTF.
+*>          B = S**T*S, as returned by AB_SPBSTF.
 *> \endverbatim
 *>
 *> \param[in] LDBB
@@ -155,7 +155,7 @@
 *>             <= N:  the algorithm failed to converge:
 *>                    i off-diagonal elements of an intermediate
 *>                    tridiagonal form did not converge to zero;
-*>             > N:   if INFO = N + i, for 1 <= i <= N, then SPBSTF
+*>             > N:   if INFO = N + i, for 1 <= i <= N, then AB_SPBSTF
 *>                    returned INFO = i: B is not positive definite.
 *>                    The factorization of B could not be completed and
 *>                    no eigenvalues or eigenvectors were computed.
@@ -174,7 +174,8 @@
 *> \ingroup realOTHEReigen
 *
 *  =====================================================================
-      SUBROUTINE SSBGV( JOBZ, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, W, Z,
+      SUBROUTINE AB_SSBGV( JOBZ, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, W,
+     $ Z,
      $                  LDZ, WORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -199,23 +200,24 @@
       INTEGER            IINFO, INDE, INDWRK
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SPBSTF, SSBGST, SSBTRD, SSTEQR, SSTERF, XERBLA
+      EXTERNAL           AB_SPBSTF, AB_SSBGST, AB_SSBTRD, AB_SSTEQR, AB_
+     $SSTERF, AB_XERBLA
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters.
 *
-      WANTZ = LSAME( JOBZ, 'V' )
-      UPPER = LSAME( UPLO, 'U' )
+      WANTZ = AB_LSAME( JOBZ, 'V' )
+      UPPER = AB_LSAME( UPLO, 'U' )
 *
       INFO = 0
-      IF( .NOT.( WANTZ .OR. LSAME( JOBZ, 'N' ) ) ) THEN
+      IF( .NOT.( WANTZ .OR. AB_LSAME( JOBZ, 'N' ) ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.( UPPER .OR. LSAME( UPLO, 'L' ) ) ) THEN
+      ELSE IF( .NOT.( UPPER .OR. AB_LSAME( UPLO, 'L' ) ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -231,7 +233,7 @@
          INFO = -12
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SSBGV ', -INFO )
+         CALL AB_XERBLA( 'AB_SSBGV ', -INFO )
          RETURN
       END IF
 *
@@ -242,7 +244,7 @@
 *
 *     Form a split Cholesky factorization of B.
 *
-      CALL SPBSTF( UPLO, N, KB, BB, LDBB, INFO )
+      CALL AB_SPBSTF( UPLO, N, KB, BB, LDBB, INFO )
       IF( INFO.NE.0 ) THEN
          INFO = N + INFO
          RETURN
@@ -252,7 +254,7 @@
 *
       INDE = 1
       INDWRK = INDE + N
-      CALL SSBGST( JOBZ, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, Z, LDZ,
+      CALL AB_SSBGST( JOBZ, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, Z, LDZ,
      $             WORK( INDWRK ), IINFO )
 *
 *     Reduce to tridiagonal form.
@@ -262,19 +264,21 @@
       ELSE
          VECT = 'N'
       END IF
-      CALL SSBTRD( VECT, UPLO, N, KA, AB, LDAB, W, WORK( INDE ), Z, LDZ,
+      CALL AB_SSBTRD( VECT, UPLO, N, KA, AB, LDAB, W, WORK( INDE ), Z, L
+     $DZ,
      $             WORK( INDWRK ), IINFO )
 *
-*     For eigenvalues only, call SSTERF.  For eigenvectors, call SSTEQR.
+*     For eigenvalues only, call AB_SSTERF.  For eigenvectors, call AB_SSTEQR.
 *
       IF( .NOT.WANTZ ) THEN
-         CALL SSTERF( N, W, WORK( INDE ), INFO )
+         CALL AB_SSTERF( N, W, WORK( INDE ), INFO )
       ELSE
-         CALL SSTEQR( JOBZ, N, W, WORK( INDE ), Z, LDZ, WORK( INDWRK ),
+         CALL AB_SSTEQR( JOBZ, N, W, WORK( INDE ), Z, LDZ, WORK( INDWRK 
+     $),
      $                INFO )
       END IF
       RETURN
 *
-*     End of SSBGV
+*     End of AB_SSBGV
 *
       END

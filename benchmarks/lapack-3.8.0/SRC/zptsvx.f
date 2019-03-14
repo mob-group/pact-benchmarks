@@ -1,4 +1,4 @@
-*> \brief <b> ZPTSVX computes the solution to system of linear equations A * X = B for PT matrices</b>
+*> \brief <b> AB_ZPTSVX computes the solution to system of linear equations A * X = B for PT matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZPTSVX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zptsvx.f">
+*> Download AB_ZPTSVX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZPTSVx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zptsvx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZPTSVx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zptsvx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZPTSVx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZPTSVX( FACT, N, NRHS, D, E, DF, EF, B, LDB, X, LDX,
+*       SUBROUTINE AB_ZPTSVX( FACT, N, NRHS, D, E, DF, EF, B, LDB, X, LDX,
 *                          RCOND, FERR, BERR, WORK, RWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -39,7 +39,7 @@
 *>
 *> \verbatim
 *>
-*> ZPTSVX uses the factorization A = L*D*L**H to compute the solution
+*> AB_ZPTSVX uses the factorization A = L*D*L**H to compute the solution
 *> to a complex system of linear equations A*X = B, where A is an
 *> N-by-N Hermitian positive definite tridiagonal matrix and X and B
 *> are N-by-NRHS matrices.
@@ -231,7 +231,7 @@
 *> \ingroup complex16PTsolve
 *
 *  =====================================================================
-      SUBROUTINE ZPTSVX( FACT, N, NRHS, D, E, DF, EF, B, LDB, X, LDX,
+      SUBROUTINE AB_ZPTSVX( FACT, N, NRHS, D, E, DF, EF, B, LDB, X, LDX,
      $                   RCOND, FERR, BERR, WORK, RWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -262,13 +262,14 @@
       DOUBLE PRECISION   ANORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, ZLANHT
-      EXTERNAL           LSAME, DLAMCH, ZLANHT
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   DLAMCH, AB_ZLANHT
+      EXTERNAL           AB_LSAME, DLAMCH, AB_ZLANHT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, XERBLA, ZCOPY, ZLACPY, ZPTCON, ZPTRFS,
-     $                   ZPTTRF, ZPTTRS
+      EXTERNAL           AB_DCOPY, AB_XERBLA, AB_ZCOPY, AB_ZLACPY, AB_ZP
+     $TCON, AB_ZPTRFS,
+     $                   AB_ZPTTRF, AB_ZPTTRS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -278,8 +279,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      NOFACT = LSAME( FACT, 'N' )
-      IF( .NOT.NOFACT .AND. .NOT.LSAME( FACT, 'F' ) ) THEN
+      NOFACT = AB_LSAME( FACT, 'N' )
+      IF( .NOT.NOFACT .AND. .NOT.AB_LSAME( FACT, 'F' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -291,7 +292,7 @@
          INFO = -11
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZPTSVX', -INFO )
+         CALL AB_XERBLA( 'AB_ZPTSVX', -INFO )
          RETURN
       END IF
 *
@@ -299,10 +300,10 @@
 *
 *        Compute the L*D*L**H (or U**H*D*U) factorization of A.
 *
-         CALL DCOPY( N, D, 1, DF, 1 )
+         CALL AB_DCOPY( N, D, 1, DF, 1 )
          IF( N.GT.1 )
-     $      CALL ZCOPY( N-1, E, 1, EF, 1 )
-         CALL ZPTTRF( N, DF, EF, INFO )
+     $      CALL AB_ZCOPY( N-1, E, 1, EF, 1 )
+         CALL AB_ZPTTRF( N, DF, EF, INFO )
 *
 *        Return if INFO is non-zero.
 *
@@ -314,21 +315,22 @@
 *
 *     Compute the norm of the matrix A.
 *
-      ANORM = ZLANHT( '1', N, D, E )
+      ANORM = AB_ZLANHT( '1', N, D, E )
 *
 *     Compute the reciprocal of the condition number of A.
 *
-      CALL ZPTCON( N, DF, EF, ANORM, RCOND, RWORK, INFO )
+      CALL AB_ZPTCON( N, DF, EF, ANORM, RCOND, RWORK, INFO )
 *
 *     Compute the solution vectors X.
 *
-      CALL ZLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
-      CALL ZPTTRS( 'Lower', N, NRHS, DF, EF, X, LDX, INFO )
+      CALL AB_ZLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
+      CALL AB_ZPTTRS( 'Lower', N, NRHS, DF, EF, X, LDX, INFO )
 *
 *     Use iterative refinement to improve the computed solutions and
 *     compute error bounds and backward error estimates for them.
 *
-      CALL ZPTRFS( 'Lower', N, NRHS, D, E, DF, EF, B, LDB, X, LDX, FERR,
+      CALL AB_ZPTRFS( 'Lower', N, NRHS, D, E, DF, EF, B, LDB, X, LDX, FE
+     $RR,
      $             BERR, WORK, RWORK, INFO )
 *
 *     Set INFO = N+1 if the matrix is singular to working precision.
@@ -338,6 +340,6 @@
 *
       RETURN
 *
-*     End of ZPTSVX
+*     End of AB_ZPTSVX
 *
       END

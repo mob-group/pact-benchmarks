@@ -1,4 +1,4 @@
-*> \brief \b CPPTRS
+*> \brief \b AB_CPPTRS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CPPTRS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpptrs.f">
+*> Download AB_CPPTRS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CPPTRS.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cpptrs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CPPTRS.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpptrs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CPPTRS.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CPPTRS( UPLO, N, NRHS, AP, B, LDB, INFO )
+*       SUBROUTINE AB_CPPTRS( UPLO, N, NRHS, AP, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,9 +34,9 @@
 *>
 *> \verbatim
 *>
-*> CPPTRS solves a system of linear equations A*X = B with a Hermitian
+*> AB_CPPTRS solves a system of linear equations A*X = B with a Hermitian
 *> positive definite matrix A in packed storage using the Cholesky
-*> factorization A = U**H*U or A = L*L**H computed by CPPTRF.
+*> factorization A = U**H*U or A = L*L**H computed by AB_CPPTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -106,7 +106,7 @@
 *> \ingroup complexOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE CPPTRS( UPLO, N, NRHS, AP, B, LDB, INFO )
+      SUBROUTINE AB_CPPTRS( UPLO, N, NRHS, AP, B, LDB, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -128,11 +128,11 @@
       INTEGER            I
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CTPSV, XERBLA
+      EXTERNAL           AB_CTPSV, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -142,8 +142,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -153,7 +153,7 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CPPTRS', -INFO )
+         CALL AB_XERBLA( 'AB_CPPTRS', -INFO )
          RETURN
       END IF
 *
@@ -170,12 +170,13 @@
 *
 *           Solve U**H *X = B, overwriting B with X.
 *
-            CALL CTPSV( 'Upper', 'Conjugate transpose', 'Non-unit', N,
+            CALL AB_CTPSV( 'Upper', 'Conjugate transpose', 'Non-unit', N
+     $,
      $                  AP, B( 1, I ), 1 )
 *
 *           Solve U*X = B, overwriting B with X.
 *
-            CALL CTPSV( 'Upper', 'No transpose', 'Non-unit', N, AP,
+            CALL AB_CTPSV( 'Upper', 'No transpose', 'Non-unit', N, AP,
      $                  B( 1, I ), 1 )
    10    CONTINUE
       ELSE
@@ -186,18 +187,19 @@
 *
 *           Solve L*Y = B, overwriting B with X.
 *
-            CALL CTPSV( 'Lower', 'No transpose', 'Non-unit', N, AP,
+            CALL AB_CTPSV( 'Lower', 'No transpose', 'Non-unit', N, AP,
      $                  B( 1, I ), 1 )
 *
 *           Solve L**H *X = Y, overwriting B with X.
 *
-            CALL CTPSV( 'Lower', 'Conjugate transpose', 'Non-unit', N,
+            CALL AB_CTPSV( 'Lower', 'Conjugate transpose', 'Non-unit', N
+     $,
      $                  AP, B( 1, I ), 1 )
    20    CONTINUE
       END IF
 *
       RETURN
 *
-*     End of CPPTRS
+*     End of AB_CPPTRS
 *
       END

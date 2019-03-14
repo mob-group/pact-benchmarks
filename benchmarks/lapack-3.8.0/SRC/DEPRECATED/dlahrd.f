@@ -1,4 +1,4 @@
-*> \brief \b DLAHRD reduces the first nb columns of a general rectangular matrix A so that elements below the k-th subdiagonal are zero, and returns auxiliary matrices which are needed to apply the transformation to the unreduced part of A.
+*> \brief \b AB_DLAHRD reduces the first nb columns of a general rectangular matrix A so that elements below the k-th subdiagonal are zero, and returns auxiliary matrices which are needed to apply the transformation to the unreduced part of A.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLAHRD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlahrd.f">
+*> Download AB_DLAHRD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLAHRD.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlahrd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLAHRD.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlahrd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLAHRD.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLAHRD( N, K, NB, A, LDA, TAU, T, LDT, Y, LDY )
+*       SUBROUTINE AB_DLAHRD( N, K, NB, A, LDA, TAU, T, LDT, Y, LDY )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            K, LDA, LDT, LDY, N, NB
@@ -34,9 +34,9 @@
 *>
 *> \verbatim
 *>
-*> This routine is deprecated and has been replaced by routine DLAHR2.
+*> This routine is deprecated and has been replaced by routine AB_DLAHR2.
 *>
-*> DLAHRD reduces the first NB columns of a real general n-by-(n-k+1)
+*> AB_DLAHRD reduces the first NB columns of a real general n-by-(n-k+1)
 *> matrix A so that elements below the k-th subdiagonal are zero. The
 *> reduction is performed by an orthogonal similarity transformation
 *> Q**T * A * Q. The routine returns the matrices V and T which determine
@@ -165,7 +165,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DLAHRD( N, K, NB, A, LDA, TAU, T, LDT, Y, LDY )
+      SUBROUTINE AB_DLAHRD( N, K, NB, A, LDA, TAU, T, LDT, Y, LDY )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -191,7 +191,8 @@
       DOUBLE PRECISION   EI
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DCOPY, DGEMV, DLARFG, DSCAL, DTRMV
+      EXTERNAL           AB_DAXPY, AB_DCOPY, AB_DGEMV, AB_DLARFG, AB_DSC
+     $AL, AB_DTRMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN
@@ -210,7 +211,7 @@
 *
 *           Compute i-th column of A - Y * V**T
 *
-            CALL DGEMV( 'No transpose', N, I-1, -ONE, Y, LDY,
+            CALL AB_DGEMV( 'No transpose', N, I-1, -ONE, Y, LDY,
      $                  A( K+I-1, 1 ), LDA, ONE, A( 1, I ), 1 )
 *
 *           Apply I - V * T**T * V**T to this column (call it b) from the
@@ -223,30 +224,33 @@
 *
 *           w := V1**T * b1
 *
-            CALL DCOPY( I-1, A( K+1, I ), 1, T( 1, NB ), 1 )
-            CALL DTRMV( 'Lower', 'Transpose', 'Unit', I-1, A( K+1, 1 ),
+            CALL AB_DCOPY( I-1, A( K+1, I ), 1, T( 1, NB ), 1 )
+            CALL AB_DTRMV( 'Lower', 'Transpose', 'Unit', I-1, A( K+1, 1 
+     $),
      $                  LDA, T( 1, NB ), 1 )
 *
 *           w := w + V2**T *b2
 *
-            CALL DGEMV( 'Transpose', N-K-I+1, I-1, ONE, A( K+I, 1 ),
+            CALL AB_DGEMV( 'Transpose', N-K-I+1, I-1, ONE, A( K+I, 1 ),
      $                  LDA, A( K+I, I ), 1, ONE, T( 1, NB ), 1 )
 *
 *           w := T**T *w
 *
-            CALL DTRMV( 'Upper', 'Transpose', 'Non-unit', I-1, T, LDT,
+            CALL AB_DTRMV( 'Upper', 'Transpose', 'Non-unit', I-1, T, LDT
+     $,
      $                  T( 1, NB ), 1 )
 *
 *           b2 := b2 - V2*w
 *
-            CALL DGEMV( 'No transpose', N-K-I+1, I-1, -ONE, A( K+I, 1 ),
+            CALL AB_DGEMV( 'No transpose', N-K-I+1, I-1, -ONE, A( K+I, 1
+     $ ),
      $                  LDA, T( 1, NB ), 1, ONE, A( K+I, I ), 1 )
 *
 *           b1 := b1 - V1*w
 *
-            CALL DTRMV( 'Lower', 'No transpose', 'Unit', I-1,
+            CALL AB_DTRMV( 'Lower', 'No transpose', 'Unit', I-1,
      $                  A( K+1, 1 ), LDA, T( 1, NB ), 1 )
-            CALL DAXPY( I-1, -ONE, T( 1, NB ), 1, A( K+1, I ), 1 )
+            CALL AB_DAXPY( I-1, -ONE, T( 1, NB ), 1, A( K+1, I ), 1 )
 *
             A( K+I-1, I-1 ) = EI
          END IF
@@ -254,25 +258,30 @@
 *        Generate the elementary reflector H(i) to annihilate
 *        A(k+i+1:n,i)
 *
-         CALL DLARFG( N-K-I+1, A( K+I, I ), A( MIN( K+I+1, N ), I ), 1,
+         CALL AB_DLARFG( N-K-I+1, A( K+I, I ), A( MIN( K+I+1, N ), I ), 
+     $1,
      $                TAU( I ) )
          EI = A( K+I, I )
          A( K+I, I ) = ONE
 *
 *        Compute  Y(1:n,i)
 *
-         CALL DGEMV( 'No transpose', N, N-K-I+1, ONE, A( 1, I+1 ), LDA,
+         CALL AB_DGEMV( 'No transpose', N, N-K-I+1, ONE, A( 1, I+1 ), LD
+     $A,
      $               A( K+I, I ), 1, ZERO, Y( 1, I ), 1 )
-         CALL DGEMV( 'Transpose', N-K-I+1, I-1, ONE, A( K+I, 1 ), LDA,
+         CALL AB_DGEMV( 'Transpose', N-K-I+1, I-1, ONE, A( K+I, 1 ), LDA
+     $,
      $               A( K+I, I ), 1, ZERO, T( 1, I ), 1 )
-         CALL DGEMV( 'No transpose', N, I-1, -ONE, Y, LDY, T( 1, I ), 1,
+         CALL AB_DGEMV( 'No transpose', N, I-1, -ONE, Y, LDY, T( 1, I ),
+     $ 1,
      $               ONE, Y( 1, I ), 1 )
-         CALL DSCAL( N, TAU( I ), Y( 1, I ), 1 )
+         CALL AB_DSCAL( N, TAU( I ), Y( 1, I ), 1 )
 *
 *        Compute T(1:i,i)
 *
-         CALL DSCAL( I-1, -TAU( I ), T( 1, I ), 1 )
-         CALL DTRMV( 'Upper', 'No transpose', 'Non-unit', I-1, T, LDT,
+         CALL AB_DSCAL( I-1, -TAU( I ), T( 1, I ), 1 )
+         CALL AB_DTRMV( 'Upper', 'No transpose', 'Non-unit', I-1, T, LDT
+     $,
      $               T( 1, I ), 1 )
          T( I, I ) = TAU( I )
 *
@@ -281,6 +290,6 @@
 *
       RETURN
 *
-*     End of DLAHRD
+*     End of AB_DLAHRD
 *
       END

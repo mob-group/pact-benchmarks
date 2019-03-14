@@ -1,4 +1,4 @@
-*> \brief \b ZPBSTF
+*> \brief \b AB_ZPBSTF
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZPBSTF + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zpbstf.f">
+*> Download AB_ZPBSTF + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZPBSTF.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zpbstf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZPBSTF.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zpbstf.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZPBSTF.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZPBSTF( UPLO, N, KD, AB, LDAB, INFO )
+*       SUBROUTINE AB_ZPBSTF( UPLO, N, KD, AB, LDAB, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,10 +34,10 @@
 *>
 *> \verbatim
 *>
-*> ZPBSTF computes a split Cholesky factorization of a complex
+*> AB_ZPBSTF computes a split Cholesky factorization of a complex
 *> Hermitian positive definite band matrix A.
 *>
-*> This routine is designed to be used in conjunction with ZHBGST.
+*> This routine is designed to be used in conjunction with AB_ZHBGST.
 *>
 *> The factorization has the form  A = S**H*S  where S is a band matrix
 *> of the same bandwidth as A and the following structure:
@@ -151,7 +151,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZPBSTF( UPLO, N, KD, AB, LDAB, INFO )
+      SUBROUTINE AB_ZPBSTF( UPLO, N, KD, AB, LDAB, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -178,11 +178,11 @@
       DOUBLE PRECISION   AJJ
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZDSCAL, ZHER, ZLACGV
+      EXTERNAL           AB_XERBLA, AB_ZDSCAL, AB_ZHER, AB_ZLACGV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX, MIN, SQRT
@@ -192,8 +192,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -203,7 +203,7 @@
          INFO = -5
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZPBSTF', -INFO )
+         CALL AB_XERBLA( 'AB_ZPBSTF', -INFO )
          RETURN
       END IF
 *
@@ -238,8 +238,8 @@
 *           Compute elements j-km:j-1 of the j-th column and update the
 *           the leading submatrix within the band.
 *
-            CALL ZDSCAL( KM, ONE / AJJ, AB( KD+1-KM, J ), 1 )
-            CALL ZHER( 'Upper', KM, -ONE, AB( KD+1-KM, J ), 1,
+            CALL AB_ZDSCAL( KM, ONE / AJJ, AB( KD+1-KM, J ), 1 )
+            CALL AB_ZHER( 'Upper', KM, -ONE, AB( KD+1-KM, J ), 1,
      $                 AB( KD+1, J-KM ), KLD )
    10    CONTINUE
 *
@@ -262,11 +262,11 @@
 *           trailing submatrix within the band.
 *
             IF( KM.GT.0 ) THEN
-               CALL ZDSCAL( KM, ONE / AJJ, AB( KD, J+1 ), KLD )
-               CALL ZLACGV( KM, AB( KD, J+1 ), KLD )
-               CALL ZHER( 'Upper', KM, -ONE, AB( KD, J+1 ), KLD,
+               CALL AB_ZDSCAL( KM, ONE / AJJ, AB( KD, J+1 ), KLD )
+               CALL AB_ZLACGV( KM, AB( KD, J+1 ), KLD )
+               CALL AB_ZHER( 'Upper', KM, -ONE, AB( KD, J+1 ), KLD,
      $                    AB( KD+1, J+1 ), KLD )
-               CALL ZLACGV( KM, AB( KD, J+1 ), KLD )
+               CALL AB_ZLACGV( KM, AB( KD, J+1 ), KLD )
             END IF
    20    CONTINUE
       ELSE
@@ -289,11 +289,11 @@
 *           Compute elements j-km:j-1 of the j-th row and update the
 *           trailing submatrix within the band.
 *
-            CALL ZDSCAL( KM, ONE / AJJ, AB( KM+1, J-KM ), KLD )
-            CALL ZLACGV( KM, AB( KM+1, J-KM ), KLD )
-            CALL ZHER( 'Lower', KM, -ONE, AB( KM+1, J-KM ), KLD,
+            CALL AB_ZDSCAL( KM, ONE / AJJ, AB( KM+1, J-KM ), KLD )
+            CALL AB_ZLACGV( KM, AB( KM+1, J-KM ), KLD )
+            CALL AB_ZHER( 'Lower', KM, -ONE, AB( KM+1, J-KM ), KLD,
      $                 AB( 1, J-KM ), KLD )
-            CALL ZLACGV( KM, AB( KM+1, J-KM ), KLD )
+            CALL AB_ZLACGV( KM, AB( KM+1, J-KM ), KLD )
    30    CONTINUE
 *
 *        Factorize the updated submatrix A(1:m,1:m) as U**H*U.
@@ -315,8 +315,8 @@
 *           trailing submatrix within the band.
 *
             IF( KM.GT.0 ) THEN
-               CALL ZDSCAL( KM, ONE / AJJ, AB( 2, J ), 1 )
-               CALL ZHER( 'Lower', KM, -ONE, AB( 2, J ), 1,
+               CALL AB_ZDSCAL( KM, ONE / AJJ, AB( 2, J ), 1 )
+               CALL AB_ZHER( 'Lower', KM, -ONE, AB( 2, J ), 1,
      $                    AB( 1, J+1 ), KLD )
             END IF
    40    CONTINUE
@@ -327,6 +327,6 @@
       INFO = J
       RETURN
 *
-*     End of ZPBSTF
+*     End of AB_ZPBSTF
 *
       END

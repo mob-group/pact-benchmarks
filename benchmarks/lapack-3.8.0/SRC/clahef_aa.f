@@ -1,4 +1,4 @@
-*> \brief \b CLAHEF_AA
+*> \brief \b AB_CLAHEF_AA
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CLAHEF_AA + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clahef_aa.f">
+*> Download AB_CLAHEF_AA + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLAHEF_aa.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clahef_aa.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLAHEF_aa.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clahef_aa.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLAHEF_aa.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLAHEF_AA( UPLO, J1, M, NB, A, LDA, IPIV,
+*       SUBROUTINE AB_CLAHEF_AA( UPLO, J1, M, NB, A, LDA, IPIV,
 *                             H, LDH, WORK )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> CLAHEF_AA factorizes a panel of a complex hermitian matrix A using
+*> AB_CLAHEF_AA factorizes a panel of a complex hermitian matrix A using
 *> the Aasen's algorithm. The panel consists of a set of NB rows of A
 *> when UPLO is U, or a set of NB columns when UPLO is L.
 *>
@@ -66,7 +66,7 @@
 *>          J1 is INTEGER
 *>          The location of the first row, or column, of the panel
 *>          within the submatrix of A, passed to this routine, e.g.,
-*>          when called by CHETRF_AA, for the first panel, J1 is 1,
+*>          when called by AB_CHETRF_AA, for the first panel, J1 is 1,
 *>          while for the remaining panels, J1 is 2.
 *> \endverbatim
 *>
@@ -141,7 +141,7 @@
 *> \ingroup complexSYcomputational
 *
 *  =====================================================================
-      SUBROUTINE CLAHEF_AA( UPLO, J1, M, NB, A, LDA, IPIV,
+      SUBROUTINE AB_CLAHEF_AA( UPLO, J1, M, NB, A, LDA, IPIV,
      $                      H, LDH, WORK )
 *
 *  -- LAPACK computational routine (version 3.8.0) --
@@ -170,13 +170,14 @@
       COMPLEX      PIV, ALPHA
 *     ..
 *     .. External Functions ..
-      LOGICAL      LSAME
-      INTEGER      ICAMAX, ILAENV
-      EXTERNAL     LSAME, ILAENV, ICAMAX
+      LOGICAL      AB_LSAME
+      INTEGER      AB_ICAMAX, AB_ILAENV
+      EXTERNAL     AB_LSAME, AB_ILAENV, AB_ICAMAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL     CLACGV, CGEMV, CSCAL, CAXPY, CCOPY, CSWAP, CLASET,
-     $             XERBLA
+      EXTERNAL     AB_CLACGV, AB_CGEMV, AB_CSCAL, AB_CAXPY, AB_CCOPY, AB
+     $_CSWAP, AB_CLASET,
+     $             AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC    REAL, CONJG, MAX
@@ -190,7 +191,7 @@
 *
       K1 = (2-J1)+1
 *
-      IF( LSAME( UPLO, 'U' ) ) THEN
+      IF( AB_LSAME( UPLO, 'U' ) ) THEN
 *
 *        .....................................................
 *        Factorize A as U**T*D*U using the upper triangle of A
@@ -201,7 +202,7 @@
      $      GO TO 20
 *
 *        K is the column to be factorized
-*         when being called from CHETRF_AA,
+*         when being called from AB_CHETRF_AA,
 *         > for the first block column, J1 is 1, hence J1+J-1 is J,
 *         > for the rest of the columns, J1 is 2, and J1+J-1 is J+1,
 *
@@ -226,17 +227,17 @@
 *         > for the rest of the columns, K is J+1, skipping only the
 *           first column
 *
-            CALL CLACGV( J-K1, A( 1, J ), 1 )
-            CALL CGEMV( 'No transpose', MJ, J-K1,
+            CALL AB_CLACGV( J-K1, A( 1, J ), 1 )
+            CALL AB_CGEMV( 'No transpose', MJ, J-K1,
      $                 -ONE, H( J, K1 ), LDH,
      $                       A( 1, J ), 1,
      $                  ONE, H( J, J ), 1 )
-            CALL CLACGV( J-K1, A( 1, J ), 1 )
+            CALL AB_CLACGV( J-K1, A( 1, J ), 1 )
          END IF
 *
 *        Copy H(i:n, i) into WORK
 *
-         CALL CCOPY( MJ, H( J, J ), 1, WORK( 1 ), 1 )
+         CALL AB_CCOPY( MJ, H( J, J ), 1, WORK( 1 ), 1 )
 *
          IF( J.GT.K1 ) THEN
 *
@@ -244,7 +245,7 @@
 *            where A(J-1, J) stores T(J-1, J) and A(J-2, J:N) stores U(J-1, J:N)
 *
             ALPHA = -CONJG( A( K-1, J ) )
-            CALL CAXPY( MJ, ALPHA, A( K-2, J ), LDA, WORK( 1 ), 1 )
+            CALL AB_CAXPY( MJ, ALPHA, A( K-2, J ), LDA, WORK( 1 ), 1 )
          END IF
 *
 *        Set A(J, J) = T(J, J)
@@ -258,13 +259,13 @@
 *
             IF( K.GT.1 ) THEN
                ALPHA = -A( K, J )
-               CALL CAXPY( M-J, ALPHA, A( K-1, J+1 ), LDA,
+               CALL AB_CAXPY( M-J, ALPHA, A( K-1, J+1 ), LDA,
      $                                 WORK( 2 ), 1 )
             ENDIF
 *
 *           Find max(|WORK(2:n)|)
 *
-            I2 = ICAMAX( M-J, WORK( 2 ), 1 ) + 1
+            I2 = AB_ICAMAX( M-J, WORK( 2 ), 1 ) + 1
             PIV = WORK( I2 )
 *
 *           Apply hermitian pivot
@@ -281,14 +282,14 @@
 *
                I1 = I1+J-1
                I2 = I2+J-1
-               CALL CSWAP( I2-I1-1, A( J1+I1-1, I1+1 ), LDA,
+               CALL AB_CSWAP( I2-I1-1, A( J1+I1-1, I1+1 ), LDA,
      $                              A( J1+I1, I2 ), 1 )
-               CALL CLACGV( I2-I1, A( J1+I1-1, I1+1 ), LDA )
-               CALL CLACGV( I2-I1-1, A( J1+I1, I2 ), 1 )
+               CALL AB_CLACGV( I2-I1, A( J1+I1-1, I1+1 ), LDA )
+               CALL AB_CLACGV( I2-I1-1, A( J1+I1, I2 ), 1 )
 *
 *              Swap A(I1, I2+1:N) with A(I2, I2+1:N)
 *
-               CALL CSWAP( M-I2, A( J1+I1-1, I2+1 ), LDA,
+               CALL AB_CSWAP( M-I2, A( J1+I1-1, I2+1 ), LDA,
      $                           A( J1+I2-1, I2+1 ), LDA )
 *
 *              Swap A(I1, I1) with A(I2,I2)
@@ -299,7 +300,7 @@
 *
 *              Swap H(I1, 1:J1) with H(I2, 1:J1)
 *
-               CALL CSWAP( I1-1, H( I1, 1 ), LDH, H( I2, 1 ), LDH )
+               CALL AB_CSWAP( I1-1, H( I1, 1 ), LDH, H( I2, 1 ), LDH )
                IPIV( I1 ) = I2
 *
                IF( I1.GT.(K1-1) ) THEN
@@ -307,7 +308,7 @@
 *                 Swap L(1:I1-1, I1) with L(1:I1-1, I2),
 *                  skipping the first column
 *
-                  CALL CSWAP( I1-K1+1, A( 1, I1 ), 1,
+                  CALL AB_CSWAP( I1-K1+1, A( 1, I1 ), 1,
      $                                 A( 1, I2 ), 1 )
                END IF
             ELSE
@@ -322,7 +323,7 @@
 *
 *              Copy A(J+1:N, J+1) into H(J:N, J),
 *
-               CALL CCOPY( M-J, A( K+1, J+1 ), LDA,
+               CALL AB_CCOPY( M-J, A( K+1, J+1 ), LDA,
      $                          H( J+1, J+1 ), 1 )
             END IF
 *
@@ -331,10 +332,10 @@
 *
             IF( A( K, J+1 ).NE.ZERO ) THEN
                ALPHA = ONE / A( K, J+1 )
-               CALL CCOPY( M-J-1, WORK( 3 ), 1, A( K, J+2 ), LDA )
-               CALL CSCAL( M-J-1, ALPHA, A( K, J+2 ), LDA )
+               CALL AB_CCOPY( M-J-1, WORK( 3 ), 1, A( K, J+2 ), LDA )
+               CALL AB_CSCAL( M-J-1, ALPHA, A( K, J+2 ), LDA )
             ELSE
-               CALL CLASET( 'Full', 1, M-J-1, ZERO, ZERO,
+               CALL AB_CLASET( 'Full', 1, M-J-1, ZERO, ZERO,
      $                      A( K, J+2 ), LDA)
             END IF
          END IF
@@ -353,7 +354,7 @@
      $      GO TO 40
 *
 *        K is the column to be factorized
-*         when being called from CHETRF_AA,
+*         when being called from AB_CHETRF_AA,
 *         > for the first block column, J1 is 1, hence J1+J-1 is J,
 *         > for the rest of the columns, J1 is 2, and J1+J-1 is J+1,
 *
@@ -378,17 +379,17 @@
 *         > for the rest of the columns, K is J+1, skipping only the
 *           first column
 *
-            CALL CLACGV( J-K1, A( J, 1 ), LDA )
-            CALL CGEMV( 'No transpose', MJ, J-K1,
+            CALL AB_CLACGV( J-K1, A( J, 1 ), LDA )
+            CALL AB_CGEMV( 'No transpose', MJ, J-K1,
      $                 -ONE, H( J, K1 ), LDH,
      $                       A( J, 1 ), LDA,
      $                  ONE, H( J, J ), 1 )
-            CALL CLACGV( J-K1, A( J, 1 ), LDA )
+            CALL AB_CLACGV( J-K1, A( J, 1 ), LDA )
          END IF
 *
 *        Copy H(J:N, J) into WORK
 *
-         CALL CCOPY( MJ, H( J, J ), 1, WORK( 1 ), 1 )
+         CALL AB_CCOPY( MJ, H( J, J ), 1, WORK( 1 ), 1 )
 *
          IF( J.GT.K1 ) THEN
 *
@@ -396,7 +397,7 @@
 *            where A(J-1, J) = T(J-1, J) and A(J, J-2) = L(J, J-1)
 *
             ALPHA = -CONJG( A( J, K-1 ) )
-            CALL CAXPY( MJ, ALPHA, A( J, K-2 ), 1, WORK( 1 ), 1 )
+            CALL AB_CAXPY( MJ, ALPHA, A( J, K-2 ), 1, WORK( 1 ), 1 )
          END IF
 *
 *        Set A(J, J) = T(J, J)
@@ -410,13 +411,13 @@
 *
             IF( K.GT.1 ) THEN
                ALPHA = -A( J, K )
-               CALL CAXPY( M-J, ALPHA, A( J+1, K-1 ), 1,
+               CALL AB_CAXPY( M-J, ALPHA, A( J+1, K-1 ), 1,
      $                                 WORK( 2 ), 1 )
             ENDIF
 *
 *           Find max(|WORK(2:n)|)
 *
-            I2 = ICAMAX( M-J, WORK( 2 ), 1 ) + 1
+            I2 = AB_ICAMAX( M-J, WORK( 2 ), 1 ) + 1
             PIV = WORK( I2 )
 *
 *           Apply hermitian pivot
@@ -433,14 +434,14 @@
 *
                I1 = I1+J-1
                I2 = I2+J-1
-               CALL CSWAP( I2-I1-1, A( I1+1, J1+I1-1 ), 1,
+               CALL AB_CSWAP( I2-I1-1, A( I1+1, J1+I1-1 ), 1,
      $                              A( I2, J1+I1 ), LDA )
-               CALL CLACGV( I2-I1, A( I1+1, J1+I1-1 ), 1 )
-               CALL CLACGV( I2-I1-1, A( I2, J1+I1 ), LDA )
+               CALL AB_CLACGV( I2-I1, A( I1+1, J1+I1-1 ), 1 )
+               CALL AB_CLACGV( I2-I1-1, A( I2, J1+I1 ), LDA )
 *
 *              Swap A(I2+1:N, I1) with A(I2+1:N, I2)
 *
-               CALL CSWAP( M-I2, A( I2+1, J1+I1-1 ), 1,
+               CALL AB_CSWAP( M-I2, A( I2+1, J1+I1-1 ), 1,
      $                           A( I2+1, J1+I2-1 ), 1 )
 *
 *              Swap A(I1, I1) with A(I2, I2)
@@ -451,7 +452,7 @@
 *
 *              Swap H(I1, I1:J1) with H(I2, I2:J1)
 *
-               CALL CSWAP( I1-1, H( I1, 1 ), LDH, H( I2, 1 ), LDH )
+               CALL AB_CSWAP( I1-1, H( I1, 1 ), LDH, H( I2, 1 ), LDH )
                IPIV( I1 ) = I2
 *
                IF( I1.GT.(K1-1) ) THEN
@@ -459,7 +460,7 @@
 *                 Swap L(1:I1-1, I1) with L(1:I1-1, I2),
 *                  skipping the first column
 *
-                  CALL CSWAP( I1-K1+1, A( I1, 1 ), LDA,
+                  CALL AB_CSWAP( I1-K1+1, A( I1, 1 ), LDA,
      $                                 A( I2, 1 ), LDA )
                END IF
             ELSE
@@ -474,7 +475,7 @@
 *
 *              Copy A(J+1:N, J+1) into H(J+1:N, J),
 *
-               CALL CCOPY( M-J, A( J+1, K+1 ), 1,
+               CALL AB_CCOPY( M-J, A( J+1, K+1 ), 1,
      $                          H( J+1, J+1 ), 1 )
             END IF
 *
@@ -483,10 +484,10 @@
 *
             IF( A( J+1, K ).NE.ZERO ) THEN
                ALPHA = ONE / A( J+1, K )
-               CALL CCOPY( M-J-1, WORK( 3 ), 1, A( J+2, K ), 1 )
-               CALL CSCAL( M-J-1, ALPHA, A( J+2, K ), 1 )
+               CALL AB_CCOPY( M-J-1, WORK( 3 ), 1, A( J+2, K ), 1 )
+               CALL AB_CSCAL( M-J-1, ALPHA, A( J+2, K ), 1 )
             ELSE
-               CALL CLASET( 'Full', M-J-1, 1, ZERO, ZERO,
+               CALL AB_CLASET( 'Full', M-J-1, 1, ZERO, ZERO,
      $                      A( J+2, K ), LDA )
             END IF
          END IF
@@ -496,6 +497,6 @@
       END IF
       RETURN
 *
-*     End of CLAHEF_AA
+*     End of AB_CLAHEF_AA
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b CPOCON
+*> \brief \b AB_CPOCON
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CPOCON + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cpocon.f">
+*> Download AB_CPOCON + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CPOCON.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cpocon.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CPOCON.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cpocon.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CPOCON.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CPOCON( UPLO, N, A, LDA, ANORM, RCOND, WORK, RWORK,
+*       SUBROUTINE AB_CPOCON( UPLO, N, A, LDA, ANORM, RCOND, WORK, RWORK,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,9 +37,9 @@
 *>
 *> \verbatim
 *>
-*> CPOCON estimates the reciprocal of the condition number (in the
+*> AB_CPOCON estimates the reciprocal of the condition number (in the
 *> 1-norm) of a complex Hermitian positive definite matrix using the
-*> Cholesky factorization A = U**H*U or A = L*L**H computed by CPOTRF.
+*> Cholesky factorization A = U**H*U or A = L*L**H computed by AB_CPOTRF.
 *>
 *> An estimate is obtained for norm(inv(A)), and the reciprocal of the
 *> condition number is computed as RCOND = 1 / (ANORM * norm(inv(A))).
@@ -65,7 +65,7 @@
 *> \verbatim
 *>          A is COMPLEX array, dimension (LDA,N)
 *>          The triangular factor U or L from the Cholesky factorization
-*>          A = U**H*U or A = L*L**H, as computed by CPOTRF.
+*>          A = U**H*U or A = L*L**H, as computed by AB_CPOTRF.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -118,7 +118,7 @@
 *> \ingroup complexPOcomputational
 *
 *  =====================================================================
-      SUBROUTINE CPOCON( UPLO, N, A, LDA, ANORM, RCOND, WORK, RWORK,
+      SUBROUTINE AB_CPOCON( UPLO, N, A, LDA, ANORM, RCOND, WORK, RWORK,
      $                   INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -153,13 +153,13 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ICAMAX
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ICAMAX
       REAL               SLAMCH
-      EXTERNAL           LSAME, ICAMAX, SLAMCH
+      EXTERNAL           AB_LSAME, AB_ICAMAX, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLACN2, CLATRS, CSRSCL, XERBLA
+      EXTERNAL           AB_CLACN2, AB_CLATRS, AB_CSRSCL, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, REAL
@@ -175,8 +175,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -186,7 +186,7 @@
          INFO = -5
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CPOCON', -INFO )
+         CALL AB_XERBLA( 'AB_CPOCON', -INFO )
          RETURN
       END IF
 *
@@ -207,31 +207,33 @@
       KASE = 0
       NORMIN = 'N'
    10 CONTINUE
-      CALL CLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
+      CALL AB_CLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
       IF( KASE.NE.0 ) THEN
          IF( UPPER ) THEN
 *
 *           Multiply by inv(U**H).
 *
-            CALL CLATRS( 'Upper', 'Conjugate transpose', 'Non-unit',
+            CALL AB_CLATRS( 'Upper', 'Conjugate transpose', 'Non-unit',
      $                   NORMIN, N, A, LDA, WORK, SCALEL, RWORK, INFO )
             NORMIN = 'Y'
 *
 *           Multiply by inv(U).
 *
-            CALL CLATRS( 'Upper', 'No transpose', 'Non-unit', NORMIN, N,
+            CALL AB_CLATRS( 'Upper', 'No transpose', 'Non-unit', NORMIN,
+     $ N,
      $                   A, LDA, WORK, SCALEU, RWORK, INFO )
          ELSE
 *
 *           Multiply by inv(L).
 *
-            CALL CLATRS( 'Lower', 'No transpose', 'Non-unit', NORMIN, N,
+            CALL AB_CLATRS( 'Lower', 'No transpose', 'Non-unit', NORMIN,
+     $ N,
      $                   A, LDA, WORK, SCALEL, RWORK, INFO )
             NORMIN = 'Y'
 *
 *           Multiply by inv(L**H).
 *
-            CALL CLATRS( 'Lower', 'Conjugate transpose', 'Non-unit',
+            CALL AB_CLATRS( 'Lower', 'Conjugate transpose', 'Non-unit',
      $                   NORMIN, N, A, LDA, WORK, SCALEU, RWORK, INFO )
          END IF
 *
@@ -239,10 +241,10 @@
 *
          SCALE = SCALEL*SCALEU
          IF( SCALE.NE.ONE ) THEN
-            IX = ICAMAX( N, WORK, 1 )
+            IX = AB_ICAMAX( N, WORK, 1 )
             IF( SCALE.LT.CABS1( WORK( IX ) )*SMLNUM .OR. SCALE.EQ.ZERO )
      $         GO TO 20
-            CALL CSRSCL( N, SCALE, WORK, 1 )
+            CALL AB_CSRSCL( N, SCALE, WORK, 1 )
          END IF
          GO TO 10
       END IF
@@ -255,6 +257,6 @@
    20 CONTINUE
       RETURN
 *
-*     End of CPOCON
+*     End of AB_CPOCON
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b DGGGLM
+*> \brief \b AB_DGGGLM
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DGGGLM + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dggglm.f">
+*> Download AB_DGGGLM + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DGGGLM.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dggglm.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DGGGLM.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dggglm.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DGGGLM.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGGGLM( N, M, P, A, LDA, B, LDB, D, X, Y, WORK, LWORK,
+*       SUBROUTINE AB_DGGGLM( N, M, P, A, LDA, B, LDB, D, X, Y, WORK, LWORK,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> DGGGLM solves a general Gauss-Markov linear model (GLM) problem:
+*> AB_DGGGLM solves a general Gauss-Markov linear model (GLM) problem:
 *>
 *>         minimize || y ||_2   subject to   d = A*x + B*y
 *>             x
@@ -145,12 +145,12 @@
 *>          The dimension of the array WORK. LWORK >= max(1,N+M+P).
 *>          For optimum performance, LWORK >= M+min(N,P)+max(N,P)*NB,
 *>          where NB is an upper bound for the optimal blocksizes for
-*>          DGEQRF, SGERQF, DORMQR and SORMRQ.
+*>          AB_DGEQRF, AB_SGERQF, AB_DORMQR and AB_SORMRQ.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -182,7 +182,8 @@
 *> \ingroup doubleOTHEReigen
 *
 *  =====================================================================
-      SUBROUTINE DGGGLM( N, M, P, A, LDA, B, LDB, D, X, Y, WORK, LWORK,
+      SUBROUTINE AB_DGGGLM( N, M, P, A, LDA, B, LDB, D, X, Y, WORK, LWOR
+     $K,
      $                   INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -210,12 +211,13 @@
      $                   NB4, NP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DGEMV, DGGQRF, DORMQR, DORMRQ, DTRTRS,
-     $                   XERBLA
+      EXTERNAL           AB_DCOPY, AB_DGEMV, AB_DGGQRF, AB_DORMQR, AB_DO
+     $RMRQ, AB_DTRTRS,
+     $                   AB_XERBLA
 *     ..
 *     .. External Functions ..
-      INTEGER            ILAENV
-      EXTERNAL           ILAENV
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_ILAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          INT, MAX, MIN
@@ -246,10 +248,10 @@
             LWKMIN = 1
             LWKOPT = 1
          ELSE
-            NB1 = ILAENV( 1, 'DGEQRF', ' ', N, M, -1, -1 )
-            NB2 = ILAENV( 1, 'DGERQF', ' ', N, M, -1, -1 )
-            NB3 = ILAENV( 1, 'DORMQR', ' ', N, M, P, -1 )
-            NB4 = ILAENV( 1, 'DORMRQ', ' ', N, M, P, -1 )
+            NB1 = AB_ILAENV( 1, 'AB_DGEQRF', ' ', N, M, -1, -1 )
+            NB2 = AB_ILAENV( 1, 'AB_DGERQF', ' ', N, M, -1, -1 )
+            NB3 = AB_ILAENV( 1, 'AB_DORMQR', ' ', N, M, P, -1 )
+            NB4 = AB_ILAENV( 1, 'AB_DORMRQ', ' ', N, M, P, -1 )
             NB = MAX( NB1, NB2, NB3, NB4 )
             LWKMIN = M + N + P
             LWKOPT = M + NP + MAX( N, P )*NB
@@ -262,7 +264,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DGGGLM', -INFO )
+         CALL AB_XERBLA( 'AB_DGGGLM', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -282,21 +284,21 @@
 *     where R11 and T22 are upper triangular, and Q and Z are
 *     orthogonal.
 *
-      CALL DGGQRF( N, M, P, A, LDA, WORK, B, LDB, WORK( M+1 ),
+      CALL AB_DGGQRF( N, M, P, A, LDA, WORK, B, LDB, WORK( M+1 ),
      $             WORK( M+NP+1 ), LWORK-M-NP, INFO )
       LOPT = WORK( M+NP+1 )
 *
 *     Update left-hand-side vector d = Q**T*d = ( d1 ) M
 *                                               ( d2 ) N-M
 *
-      CALL DORMQR( 'Left', 'Transpose', N, 1, M, A, LDA, WORK, D,
+      CALL AB_DORMQR( 'Left', 'Transpose', N, 1, M, A, LDA, WORK, D,
      $             MAX( 1, N ), WORK( M+NP+1 ), LWORK-M-NP, INFO )
       LOPT = MAX( LOPT, INT( WORK( M+NP+1 ) ) )
 *
 *     Solve T22*y2 = d2 for y2
 *
       IF( N.GT.M ) THEN
-         CALL DTRTRS( 'Upper', 'No transpose', 'Non unit', N-M, 1,
+         CALL AB_DTRTRS( 'Upper', 'No transpose', 'Non unit', N-M, 1,
      $                B( M+1, M+P-N+1 ), LDB, D( M+1 ), N-M, INFO )
 *
          IF( INFO.GT.0 ) THEN
@@ -304,7 +306,7 @@
             RETURN
          END IF
 *
-         CALL DCOPY( N-M, D( M+1 ), 1, Y( M+P-N+1 ), 1 )
+         CALL AB_DCOPY( N-M, D( M+1 ), 1, Y( M+P-N+1 ), 1 )
       END IF
 *
 *     Set y1 = 0
@@ -315,13 +317,14 @@
 *
 *     Update d1 = d1 - T12*y2
 *
-      CALL DGEMV( 'No transpose', M, N-M, -ONE, B( 1, M+P-N+1 ), LDB,
+      CALL AB_DGEMV( 'No transpose', M, N-M, -ONE, B( 1, M+P-N+1 ), LDB,
      $            Y( M+P-N+1 ), 1, ONE, D, 1 )
 *
 *     Solve triangular system: R11*x = d1
 *
       IF( M.GT.0 ) THEN
-         CALL DTRTRS( 'Upper', 'No Transpose', 'Non unit', M, 1, A, LDA,
+         CALL AB_DTRTRS( 'Upper', 'No Transpose', 'Non unit', M, 1, A, L
+     $DA,
      $                D, M, INFO )
 *
          IF( INFO.GT.0 ) THEN
@@ -331,18 +334,18 @@
 *
 *        Copy D to X
 *
-         CALL DCOPY( M, D, 1, X, 1 )
+         CALL AB_DCOPY( M, D, 1, X, 1 )
       END IF
 *
 *     Backward transformation y = Z**T *y
 *
-      CALL DORMRQ( 'Left', 'Transpose', P, 1, NP,
+      CALL AB_DORMRQ( 'Left', 'Transpose', P, 1, NP,
      $             B( MAX( 1, N-P+1 ), 1 ), LDB, WORK( M+1 ), Y,
      $             MAX( 1, P ), WORK( M+NP+1 ), LWORK-M-NP, INFO )
       WORK( 1 ) = M + NP + MAX( LOPT, INT( WORK( M+NP+1 ) ) )
 *
       RETURN
 *
-*     End of DGGGLM
+*     End of AB_DGGGLM
 *
       END

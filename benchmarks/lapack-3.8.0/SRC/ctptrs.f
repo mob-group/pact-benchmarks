@@ -1,4 +1,4 @@
-*> \brief \b CTPTRS
+*> \brief \b AB_CTPTRS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CTPTRS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ctptrs.f">
+*> Download AB_CTPTRS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CTPTRS.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ctptrs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CTPTRS.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ctptrs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CTPTRS.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CTPTRS( UPLO, TRANS, DIAG, N, NRHS, AP, B, LDB, INFO )
+*       SUBROUTINE AB_CTPTRS( UPLO, TRANS, DIAG, N, NRHS, AP, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          DIAG, TRANS, UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> CTPTRS solves a triangular system of the form
+*> AB_CTPTRS solves a triangular system of the form
 *>
 *>    A * X = B,  A**T * X = B,  or  A**H * X = B,
 *>
@@ -128,7 +128,8 @@
 *> \ingroup complexOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE CTPTRS( UPLO, TRANS, DIAG, N, NRHS, AP, B, LDB, INFO )
+      SUBROUTINE AB_CTPTRS( UPLO, TRANS, DIAG, N, NRHS, AP, B, LDB, INFO
+     $ )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -154,11 +155,11 @@
       INTEGER            J, JC
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CTPSV, XERBLA
+      EXTERNAL           AB_CTPSV, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -168,14 +169,15 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      NOUNIT = LSAME( DIAG, 'N' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      NOUNIT = AB_LSAME( DIAG, 'N' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME( TRANS, 'N' ) .AND. .NOT.
-     $         LSAME( TRANS, 'T' ) .AND. .NOT.LSAME( TRANS, 'C' ) ) THEN
+      ELSE IF( .NOT.AB_LSAME( TRANS, 'N' ) .AND. .NOT.
+     $         AB_LSAME( TRANS, 'T' ) .AND. .NOT.AB_LSAME( TRANS, 'C' ) 
+     $) THEN
          INFO = -2
-      ELSE IF( .NOT.NOUNIT .AND. .NOT.LSAME( DIAG, 'U' ) ) THEN
+      ELSE IF( .NOT.NOUNIT .AND. .NOT.AB_LSAME( DIAG, 'U' ) ) THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
@@ -185,7 +187,7 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CTPTRS', -INFO )
+         CALL AB_XERBLA( 'AB_CTPTRS', -INFO )
          RETURN
       END IF
 *
@@ -218,11 +220,11 @@
 *     Solve  A * x = b,  A**T * x = b,  or  A**H * x = b.
 *
       DO 30 J = 1, NRHS
-         CALL CTPSV( UPLO, TRANS, DIAG, N, AP, B( 1, J ), 1 )
+         CALL AB_CTPSV( UPLO, TRANS, DIAG, N, AP, B( 1, J ), 1 )
    30 CONTINUE
 *
       RETURN
 *
-*     End of CTPTRS
+*     End of AB_CTPTRS
 *
       END

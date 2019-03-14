@@ -1,4 +1,4 @@
-*> \brief <b> ZGESVXX computes the solution to system of linear equations A * X = B for GE matrices</b>
+*> \brief <b> AB_ZGESVXX computes the solution to system of linear equations A * X = B for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZGESVXX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgesvxx.f">
+*> Download AB_ZGESVXX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZGESVxx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgesvxx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZGESVxx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgesvxx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZGESVxx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZGESVXX( FACT, TRANS, N, NRHS, A, LDA, AF, LDAF, IPIV,
+*       SUBROUTINE AB_ZGESVXX( FACT, TRANS, N, NRHS, A, LDA, AF, LDAF, IPIV,
 *                           EQUED, R, C, B, LDB, X, LDX, RCOND, RPVGRW,
 *                           BERR, N_ERR_BNDS, ERR_BNDS_NORM,
 *                           ERR_BNDS_COMP, NPARAMS, PARAMS, WORK, RWORK,
@@ -45,24 +45,24 @@
 *>
 *> \verbatim
 *>
-*>    ZGESVXX uses the LU factorization to compute the solution to a
+*>    AB_ZGESVXX uses the LU factorization to compute the solution to a
 *>    complex*16 system of linear equations  A * X = B,  where A is an
 *>    N-by-N matrix and X and B are N-by-NRHS matrices.
 *>
 *>    If requested, both normwise and maximum componentwise error bounds
-*>    are returned. ZGESVXX will return a solution with a tiny
+*>    are returned. AB_ZGESVXX will return a solution with a tiny
 *>    guaranteed error (O(eps) where eps is the working machine
 *>    precision) unless the matrix is very ill-conditioned, in which
 *>    case a warning is returned. Relevant condition numbers also are
 *>    calculated and returned.
 *>
-*>    ZGESVXX accepts user-provided factorizations and equilibration
+*>    AB_ZGESVXX accepts user-provided factorizations and equilibration
 *>    factors; see the definitions of the FACT and EQUED options.
 *>    Solving with refinement and using a factorization from a previous
-*>    ZGESVXX call will also produce a solution with either O(eps)
+*>    AB_ZGESVXX call will also produce a solution with either O(eps)
 *>    errors or warnings, but we cannot make that claim for general
 *>    user-provided factorizations and equilibration factors if they
-*>    differ from what ZGESVXX would itself produce.
+*>    differ from what AB_ZGESVXX would itself produce.
 *> \endverbatim
 *
 *> \par Description:
@@ -186,7 +186,7 @@
 *>          AF is COMPLEX*16 array, dimension (LDAF,N)
 *>     If FACT = 'F', then AF is an input argument and on entry
 *>     contains the factors L and U from the factorization
-*>     A = P*L*U as computed by ZGETRF.  If EQUED .ne. 'N', then
+*>     A = P*L*U as computed by AB_ZGETRF.  If EQUED .ne. 'N', then
 *>     AF is the factored form of the equilibrated matrix A.
 *>
 *>     If FACT = 'N', then AF is an output argument and on exit
@@ -210,7 +210,7 @@
 *>          IPIV is INTEGER array, dimension (N)
 *>     If FACT = 'F', then IPIV is an input argument and on entry
 *>     contains the pivot indices from the factorization A = P*L*U
-*>     as computed by ZGETRF; row i of the matrix was interchanged
+*>     as computed by AB_ZGETRF; row i of the matrix was interchanged
 *>     with row IPIV(i).
 *>
 *>     If FACT = 'N', then IPIV is an output argument and on exit
@@ -329,7 +329,7 @@
 *>     This also means that the solution X, estimated condition numbers,
 *>     and error bounds could be unreliable. If factorization fails with
 *>     0<INFO<=N, then this contains the reciprocal pivot growth factor
-*>     for the leading INFO columns of A.  In ZGESVX, this quantity is
+*>     for the leading INFO columns of A.  In AB_ZGESVX, this quantity is
 *>     returned in WORK(1).
 *> \endverbatim
 *>
@@ -534,7 +534,8 @@
 *> \ingroup complex16GEsolve
 *
 *  =====================================================================
-      SUBROUTINE ZGESVXX( FACT, TRANS, N, NRHS, A, LDA, AF, LDAF, IPIV,
+      SUBROUTINE AB_ZGESVXX( FACT, TRANS, N, NRHS, A, LDA, AF, LDAF, IPI
+     $V,
      $                    EQUED, R, C, B, LDB, X, LDX, RCOND, RPVGRW,
      $                    BERR, N_ERR_BNDS, ERR_BNDS_NORM,
      $                    ERR_BNDS_COMP, NPARAMS, PARAMS, WORK, RWORK,
@@ -581,13 +582,14 @@
      $                   ROWCND, SMLNUM
 *     ..
 *     .. External Functions ..
-      EXTERNAL           LSAME, DLAMCH, ZLA_GERPVGRW
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, ZLA_GERPVGRW
+      EXTERNAL           AB_LSAME, DLAMCH, AB_ZLA_GERPVGRW
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   DLAMCH, AB_ZLA_GERPVGRW
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGEEQUB, ZGETRF, ZGETRS, ZLACPY, ZLAQGE,
-     $                   XERBLA, ZLASCL2, ZGERFSX
+      EXTERNAL           AB_ZGEEQUB, AB_ZGETRF, AB_ZGETRS, AB_ZLACPY, AB
+     $_ZLAQGE,
+     $                   AB_XERBLA, AB_ZLASCL2, AB_ZGERFSX
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -595,9 +597,9 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-      NOFACT = LSAME( FACT, 'N' )
-      EQUIL = LSAME( FACT, 'E' )
-      NOTRAN = LSAME( TRANS, 'N' )
+      NOFACT = AB_LSAME( FACT, 'N' )
+      EQUIL = AB_LSAME( FACT, 'E' )
+      NOTRAN = AB_LSAME( TRANS, 'N' )
       SMLNUM = DLAMCH( 'Safe minimum' )
       BIGNUM = ONE / SMLNUM
       IF( NOFACT .OR. EQUIL ) THEN
@@ -605,23 +607,23 @@
          ROWEQU = .FALSE.
          COLEQU = .FALSE.
       ELSE
-         ROWEQU = LSAME( EQUED, 'R' ) .OR. LSAME( EQUED, 'B' )
-         COLEQU = LSAME( EQUED, 'C' ) .OR. LSAME( EQUED, 'B' )
+         ROWEQU = AB_LSAME( EQUED, 'R' ) .OR. AB_LSAME( EQUED, 'B' )
+         COLEQU = AB_LSAME( EQUED, 'C' ) .OR. AB_LSAME( EQUED, 'B' )
       END IF
 *
 *     Default is failure.  If an input parameter is wrong or
 *     factorization fails, make everything look horrible.  Only the
-*     pivot growth is set here, the rest is initialized in ZGERFSX.
+*     pivot growth is set here, the rest is initialized in AB_ZGERFSX.
 *
       RPVGRW = ZERO
 *
-*     Test the input parameters.  PARAMS is not tested until ZGERFSX.
+*     Test the input parameters.  PARAMS is not tested until AB_ZGERFSX.
 *
       IF( .NOT.NOFACT .AND. .NOT.EQUIL .AND. .NOT.
-     $     LSAME( FACT, 'F' ) ) THEN
+     $     AB_LSAME( FACT, 'F' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) .AND. .NOT.
-     $        LSAME( TRANS, 'C' ) ) THEN
+      ELSE IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) .AND. .NOT.
+     $        AB_LSAME( TRANS, 'C' ) ) THEN
          INFO = -2
       ELSE IF( N.LT.0 ) THEN
          INFO = -3
@@ -631,8 +633,8 @@
          INFO = -6
       ELSE IF( LDAF.LT.MAX( 1, N ) ) THEN
          INFO = -8
-      ELSE IF( LSAME( FACT, 'F' ) .AND. .NOT.
-     $        ( ROWEQU .OR. COLEQU .OR. LSAME( EQUED, 'N' ) ) ) THEN
+      ELSE IF( AB_LSAME( FACT, 'F' ) .AND. .NOT.
+     $        ( ROWEQU .OR. COLEQU .OR. AB_LSAME( EQUED, 'N' ) ) ) THEN
          INFO = -10
       ELSE
          IF( ROWEQU ) THEN
@@ -675,7 +677,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZGESVXX', -INFO )
+         CALL AB_XERBLA( 'AB_ZGESVXX', -INFO )
          RETURN
       END IF
 *
@@ -683,16 +685,16 @@
 *
 *     Compute row and column scalings to equilibrate the matrix A.
 *
-         CALL ZGEEQUB( N, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
+         CALL AB_ZGEEQUB( N, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
      $        INFEQU )
          IF( INFEQU.EQ.0 ) THEN
 *
 *     Equilibrate the matrix.
 *
-            CALL ZLAQGE( N, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
+            CALL AB_ZLAQGE( N, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
      $           EQUED )
-            ROWEQU = LSAME( EQUED, 'R' ) .OR. LSAME( EQUED, 'B' )
-            COLEQU = LSAME( EQUED, 'C' ) .OR. LSAME( EQUED, 'B' )
+            ROWEQU = AB_LSAME( EQUED, 'R' ) .OR. AB_LSAME( EQUED, 'B' )
+            COLEQU = AB_LSAME( EQUED, 'C' ) .OR. AB_LSAME( EQUED, 'B' )
          END IF
 *
 *     If the scaling factors are not applied, set them to 1.0.
@@ -712,17 +714,17 @@
 *     Scale the right-hand side.
 *
       IF( NOTRAN ) THEN
-         IF( ROWEQU ) CALL ZLASCL2( N, NRHS, R, B, LDB )
+         IF( ROWEQU ) CALL AB_ZLASCL2( N, NRHS, R, B, LDB )
       ELSE
-         IF( COLEQU ) CALL ZLASCL2( N, NRHS, C, B, LDB )
+         IF( COLEQU ) CALL AB_ZLASCL2( N, NRHS, C, B, LDB )
       END IF
 *
       IF( NOFACT .OR. EQUIL ) THEN
 *
 *        Compute the LU factorization of A.
 *
-         CALL ZLACPY( 'Full', N, N, A, LDA, AF, LDAF )
-         CALL ZGETRF( N, N, AF, LDAF, IPIV, INFO )
+         CALL AB_ZLACPY( 'Full', N, N, A, LDA, AF, LDAF )
+         CALL AB_ZGETRF( N, N, AF, LDAF, IPIV, INFO )
 *
 *        Return if INFO is non-zero.
 *
@@ -732,24 +734,24 @@
 *           Compute the reciprocal pivot growth factor of the
 *           leading rank-deficient INFO columns of A.
 *
-            RPVGRW = ZLA_GERPVGRW( N, INFO, A, LDA, AF, LDAF )
+            RPVGRW = AB_ZLA_GERPVGRW( N, INFO, A, LDA, AF, LDAF )
             RETURN
          END IF
       END IF
 *
 *     Compute the reciprocal pivot growth factor RPVGRW.
 *
-      RPVGRW = ZLA_GERPVGRW( N, N, A, LDA, AF, LDAF )
+      RPVGRW = AB_ZLA_GERPVGRW( N, N, A, LDA, AF, LDAF )
 *
 *     Compute the solution matrix X.
 *
-      CALL ZLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
-      CALL ZGETRS( TRANS, N, NRHS, AF, LDAF, IPIV, X, LDX, INFO )
+      CALL AB_ZLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
+      CALL AB_ZGETRS( TRANS, N, NRHS, AF, LDAF, IPIV, X, LDX, INFO )
 *
 *     Use iterative refinement to improve the computed solution and
 *     compute error bounds and backward error estimates for it.
 *
-      CALL ZGERFSX( TRANS, EQUED, N, NRHS, A, LDA, AF, LDAF,
+      CALL AB_ZGERFSX( TRANS, EQUED, N, NRHS, A, LDA, AF, LDAF,
      $     IPIV, R, C, B, LDB, X, LDX, RCOND, BERR,
      $     N_ERR_BNDS, ERR_BNDS_NORM, ERR_BNDS_COMP, NPARAMS, PARAMS,
      $     WORK, RWORK, INFO )
@@ -757,13 +759,13 @@
 *     Scale solutions.
 *
       IF ( COLEQU .AND. NOTRAN ) THEN
-         CALL ZLASCL2 ( N, NRHS, C, X, LDX )
+         CALL AB_ZLASCL2 ( N, NRHS, C, X, LDX )
       ELSE IF ( ROWEQU .AND. .NOT.NOTRAN ) THEN
-         CALL ZLASCL2 ( N, NRHS, R, X, LDX )
+         CALL AB_ZLASCL2 ( N, NRHS, R, X, LDX )
       END IF
 *
       RETURN
 *
-*     End of ZGESVXX
+*     End of AB_ZGESVXX
 *
       END

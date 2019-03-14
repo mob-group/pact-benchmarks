@@ -1,4 +1,4 @@
-*> \brief \b SLANEG computes the Sturm count.
+*> \brief \b AB_SLANEG computes the Sturm count.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLANEG + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaneg.f">
+*> Download AB_SLANEG + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLANEG.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaneg.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLANEG.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaneg.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLANEG.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       INTEGER FUNCTION SLANEG( N, D, LLD, SIGMA, PIVMIN, R )
+*       INTEGER FUNCTION AB_SLANEG( N, D, LLD, SIGMA, PIVMIN, R )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            N, R
@@ -34,13 +34,13 @@
 *>
 *> \verbatim
 *>
-*> SLANEG computes the Sturm count, the number of negative pivots
+*> AB_SLANEG computes the Sturm count, the number of negative pivots
 *> encountered while factoring tridiagonal T - sigma I = L D L^T.
 *> This implementation works directly on the factors without forming
 *> the tridiagonal matrix T.  The Sturm count is also the number of
 *> eigenvalues of T less than sigma.
 *>
-*> This routine is called from SLARRB.
+*> This routine is called from AB_SLARRB.
 *>
 *> The current routine does not use the PIVMIN parameter but rather
 *> requires IEEE-754 propagation of Infinities and NaNs.  This
@@ -116,7 +116,7 @@
 *>     Jason Riedy, University of California, Berkeley, USA \n
 *>
 *  =====================================================================
-      INTEGER FUNCTION SLANEG( N, D, LLD, SIGMA, PIVMIN, R )
+      INTEGER FUNCTION AB_SLANEG( N, D, LLD, SIGMA, PIVMIN, R )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -153,8 +153,8 @@
       INTRINSIC MIN, MAX
 *     ..
 *     .. External Functions ..
-      LOGICAL SISNAN
-      EXTERNAL SISNAN
+      LOGICAL AB_SISNAN
+      EXTERNAL AB_SISNAN
 *     ..
 *     .. Executable Statements ..
 
@@ -171,7 +171,7 @@
             TMP = T / DPLUS
             T = TMP * LLD( J ) - SIGMA
  21      CONTINUE
-         SAWNAN = SISNAN( T )
+         SAWNAN = AB_SISNAN( T )
 *     Run a slower version of the above loop if a NaN is detected.
 *     A NaN should occur only with a zero pivot after an infinite
 *     pivot.  In that case, substituting 1 for T/DPLUS is the
@@ -183,7 +183,7 @@
                DPLUS = D( J ) + T
                IF( DPLUS.LT.ZERO ) NEG1 = NEG1 + 1
                TMP = T / DPLUS
-               IF (SISNAN(TMP)) TMP = ONE
+               IF (AB_SISNAN(TMP)) TMP = ONE
                T = TMP * LLD(J) - SIGMA
  22         CONTINUE
          END IF
@@ -201,7 +201,7 @@
             TMP = P / DMINUS
             P = TMP * D( J ) - SIGMA
  23      CONTINUE
-         SAWNAN = SISNAN( P )
+         SAWNAN = AB_SISNAN( P )
 *     As above, run a slower version that substitutes 1 for Inf/Inf.
 *
          IF( SAWNAN ) THEN
@@ -211,7 +211,7 @@
                DMINUS = LLD( J ) + P
                IF( DMINUS.LT.ZERO ) NEG2 = NEG2 + 1
                TMP = P / DMINUS
-               IF (SISNAN(TMP)) TMP = ONE
+               IF (AB_SISNAN(TMP)) TMP = ONE
                P = TMP * D(J) - SIGMA
  24         CONTINUE
          END IF
@@ -223,5 +223,5 @@
       GAMMA = (T + SIGMA) + P
       IF( GAMMA.LT.ZERO ) NEGCNT = NEGCNT+1
 
-      SLANEG = NEGCNT
+      AB_SLANEG = NEGCNT
       END

@@ -1,4 +1,4 @@
-*> \brief <b> ZGELS solves overdetermined or underdetermined systems for GE matrices</b>
+*> \brief <b> AB_ZGELS solves overdetermined or underdetermined systems for GE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZGELS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgels.f">
+*> Download AB_ZGELS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZGELS.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgels.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZGELS.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgels.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZGELS.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZGELS( TRANS, M, N, NRHS, A, LDA, B, LDB, WORK, LWORK,
+*       SUBROUTINE AB_ZGELS( TRANS, M, N, NRHS, A, LDA, B, LDB, WORK, LWORK,
 *                         INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> ZGELS solves overdetermined or underdetermined complex linear systems
+*> AB_ZGELS solves overdetermined or underdetermined complex linear systems
 *> involving an M-by-N matrix A, or its conjugate-transpose, using a QR
 *> or LQ factorization of A.  It is assumed that A has full rank.
 *>
@@ -95,9 +95,9 @@
 *>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          On entry, the M-by-N matrix A.
 *>            if M >= N, A is overwritten by details of its QR
-*>                       factorization as returned by ZGEQRF;
+*>                       factorization as returned by AB_ZGEQRF;
 *>            if M <  N, A is overwritten by details of its LQ
-*>                       factorization as returned by ZGELQF.
+*>                       factorization as returned by AB_ZGELQF.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -152,7 +152,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -179,7 +179,8 @@
 *> \ingroup complex16GEsolve
 *
 *  =====================================================================
-      SUBROUTINE ZGELS( TRANS, M, N, NRHS, A, LDA, B, LDB, WORK, LWORK,
+      SUBROUTINE AB_ZGELS( TRANS, M, N, NRHS, A, LDA, B, LDB, WORK, LWOR
+     $K,
      $                  INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -212,14 +213,15 @@
       DOUBLE PRECISION   RWORK( 1 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      DOUBLE PRECISION   DLAMCH, ZLANGE
-      EXTERNAL           LSAME, ILAENV, DLAMCH, ZLANGE
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      DOUBLE PRECISION   DLAMCH, AB_ZLANGE
+      EXTERNAL           AB_LSAME, AB_ILAENV, DLAMCH, AB_ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLABAD, XERBLA, ZGELQF, ZGEQRF, ZLASCL, ZLASET,
-     $                   ZTRTRS, ZUNMLQ, ZUNMQR
+      EXTERNAL           AB_DLABAD, AB_XERBLA, AB_ZGELQF, AB_ZGEQRF, AB_
+     $ZLASCL, AB_ZLASET,
+     $                   AB_ZTRTRS, AB_ZUNMLQ, AB_ZUNMQR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX, MIN
@@ -231,7 +233,8 @@
       INFO = 0
       MN = MIN( M, N )
       LQUERY = ( LWORK.EQ.-1 )
-      IF( .NOT.( LSAME( TRANS, 'N' ) .OR. LSAME( TRANS, 'C' ) ) ) THEN
+      IF( .NOT.( AB_LSAME( TRANS, 'N' ) .OR. AB_LSAME( TRANS, 'C' ) ) ) 
+     $THEN
          INFO = -1
       ELSE IF( M.LT.0 ) THEN
          INFO = -2
@@ -253,25 +256,29 @@
       IF( INFO.EQ.0 .OR. INFO.EQ.-10 ) THEN
 *
          TPSD = .TRUE.
-         IF( LSAME( TRANS, 'N' ) )
+         IF( AB_LSAME( TRANS, 'N' ) )
      $      TPSD = .FALSE.
 *
          IF( M.GE.N ) THEN
-            NB = ILAENV( 1, 'ZGEQRF', ' ', M, N, -1, -1 )
+            NB = AB_ILAENV( 1, 'AB_ZGEQRF', ' ', M, N, -1, -1 )
             IF( TPSD ) THEN
-               NB = MAX( NB, ILAENV( 1, 'ZUNMQR', 'LN', M, NRHS, N,
+               NB = MAX( NB, AB_ILAENV( 1, 'AB_ZUNMQR', 'LN', M, NRHS, N
+     $,
      $              -1 ) )
             ELSE
-               NB = MAX( NB, ILAENV( 1, 'ZUNMQR', 'LC', M, NRHS, N,
+               NB = MAX( NB, AB_ILAENV( 1, 'AB_ZUNMQR', 'LC', M, NRHS, N
+     $,
      $              -1 ) )
             END IF
          ELSE
-            NB = ILAENV( 1, 'ZGELQF', ' ', M, N, -1, -1 )
+            NB = AB_ILAENV( 1, 'AB_ZGELQF', ' ', M, N, -1, -1 )
             IF( TPSD ) THEN
-               NB = MAX( NB, ILAENV( 1, 'ZUNMLQ', 'LC', N, NRHS, M,
+               NB = MAX( NB, AB_ILAENV( 1, 'AB_ZUNMLQ', 'LC', N, NRHS, M
+     $,
      $              -1 ) )
             ELSE
-               NB = MAX( NB, ILAENV( 1, 'ZUNMLQ', 'LN', N, NRHS, M,
+               NB = MAX( NB, AB_ILAENV( 1, 'AB_ZUNMLQ', 'LN', N, NRHS, M
+     $,
      $              -1 ) )
             END IF
          END IF
@@ -282,7 +289,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZGELS ', -INFO )
+         CALL AB_XERBLA( 'AB_ZGELS ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -291,7 +298,8 @@
 *     Quick return if possible
 *
       IF( MIN( M, N, NRHS ).EQ.0 ) THEN
-         CALL ZLASET( 'Full', MAX( M, N ), NRHS, CZERO, CZERO, B, LDB )
+         CALL AB_ZLASET( 'Full', MAX( M, N ), NRHS, CZERO, CZERO, B, LDB
+     $ )
          RETURN
       END IF
 *
@@ -299,49 +307,49 @@
 *
       SMLNUM = DLAMCH( 'S' ) / DLAMCH( 'P' )
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
+      CALL AB_DLABAD( SMLNUM, BIGNUM )
 *
 *     Scale A, B if max element outside range [SMLNUM,BIGNUM]
 *
-      ANRM = ZLANGE( 'M', M, N, A, LDA, RWORK )
+      ANRM = AB_ZLANGE( 'M', M, N, A, LDA, RWORK )
       IASCL = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
 *
 *        Scale matrix norm up to SMLNUM
 *
-         CALL ZLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, A, LDA, INFO )
+         CALL AB_ZLASCL( 'G', 0, 0, ANRM, SMLNUM, M, N, A, LDA, INFO )
          IASCL = 1
       ELSE IF( ANRM.GT.BIGNUM ) THEN
 *
 *        Scale matrix norm down to BIGNUM
 *
-         CALL ZLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, A, LDA, INFO )
+         CALL AB_ZLASCL( 'G', 0, 0, ANRM, BIGNUM, M, N, A, LDA, INFO )
          IASCL = 2
       ELSE IF( ANRM.EQ.ZERO ) THEN
 *
 *        Matrix all zero. Return zero solution.
 *
-         CALL ZLASET( 'F', MAX( M, N ), NRHS, CZERO, CZERO, B, LDB )
+         CALL AB_ZLASET( 'F', MAX( M, N ), NRHS, CZERO, CZERO, B, LDB )
          GO TO 50
       END IF
 *
       BROW = M
       IF( TPSD )
      $   BROW = N
-      BNRM = ZLANGE( 'M', BROW, NRHS, B, LDB, RWORK )
+      BNRM = AB_ZLANGE( 'M', BROW, NRHS, B, LDB, RWORK )
       IBSCL = 0
       IF( BNRM.GT.ZERO .AND. BNRM.LT.SMLNUM ) THEN
 *
 *        Scale matrix norm up to SMLNUM
 *
-         CALL ZLASCL( 'G', 0, 0, BNRM, SMLNUM, BROW, NRHS, B, LDB,
+         CALL AB_ZLASCL( 'G', 0, 0, BNRM, SMLNUM, BROW, NRHS, B, LDB,
      $                INFO )
          IBSCL = 1
       ELSE IF( BNRM.GT.BIGNUM ) THEN
 *
 *        Scale matrix norm down to BIGNUM
 *
-         CALL ZLASCL( 'G', 0, 0, BNRM, BIGNUM, BROW, NRHS, B, LDB,
+         CALL AB_ZLASCL( 'G', 0, 0, BNRM, BIGNUM, BROW, NRHS, B, LDB,
      $                INFO )
          IBSCL = 2
       END IF
@@ -350,7 +358,8 @@
 *
 *        compute QR factorization of A
 *
-         CALL ZGEQRF( M, N, A, LDA, WORK( 1 ), WORK( MN+1 ), LWORK-MN,
+         CALL AB_ZGEQRF( M, N, A, LDA, WORK( 1 ), WORK( MN+1 ), LWORK-MN
+     $,
      $                INFO )
 *
 *        workspace at least N, optimally N*NB
@@ -361,7 +370,8 @@
 *
 *           B(1:M,1:NRHS) := Q**H * B(1:M,1:NRHS)
 *
-            CALL ZUNMQR( 'Left', 'Conjugate transpose', M, NRHS, N, A,
+            CALL AB_ZUNMQR( 'Left', 'Conjugate transpose', M, NRHS, N, A
+     $,
      $                   LDA, WORK( 1 ), B, LDB, WORK( MN+1 ), LWORK-MN,
      $                   INFO )
 *
@@ -369,7 +379,8 @@
 *
 *           B(1:N,1:NRHS) := inv(R) * B(1:N,1:NRHS)
 *
-            CALL ZTRTRS( 'Upper', 'No transpose', 'Non-unit', N, NRHS,
+            CALL AB_ZTRTRS( 'Upper', 'No transpose', 'Non-unit', N, NRHS
+     $,
      $                   A, LDA, B, LDB, INFO )
 *
             IF( INFO.GT.0 ) THEN
@@ -384,7 +395,7 @@
 *
 *           B(1:N,1:NRHS) := inv(R**H) * B(1:N,1:NRHS)
 *
-            CALL ZTRTRS( 'Upper', 'Conjugate transpose','Non-unit',
+            CALL AB_ZTRTRS( 'Upper', 'Conjugate transpose','Non-unit',
      $                   N, NRHS, A, LDA, B, LDB, INFO )
 *
             IF( INFO.GT.0 ) THEN
@@ -401,7 +412,7 @@
 *
 *           B(1:M,1:NRHS) := Q(1:N,:) * B(1:N,1:NRHS)
 *
-            CALL ZUNMQR( 'Left', 'No transpose', M, NRHS, N, A, LDA,
+            CALL AB_ZUNMQR( 'Left', 'No transpose', M, NRHS, N, A, LDA,
      $                   WORK( 1 ), B, LDB, WORK( MN+1 ), LWORK-MN,
      $                   INFO )
 *
@@ -415,7 +426,8 @@
 *
 *        Compute LQ factorization of A
 *
-         CALL ZGELQF( M, N, A, LDA, WORK( 1 ), WORK( MN+1 ), LWORK-MN,
+         CALL AB_ZGELQF( M, N, A, LDA, WORK( 1 ), WORK( MN+1 ), LWORK-MN
+     $,
      $                INFO )
 *
 *        workspace at least M, optimally M*NB.
@@ -426,7 +438,8 @@
 *
 *           B(1:M,1:NRHS) := inv(L) * B(1:M,1:NRHS)
 *
-            CALL ZTRTRS( 'Lower', 'No transpose', 'Non-unit', M, NRHS,
+            CALL AB_ZTRTRS( 'Lower', 'No transpose', 'Non-unit', M, NRHS
+     $,
      $                   A, LDA, B, LDB, INFO )
 *
             IF( INFO.GT.0 ) THEN
@@ -443,7 +456,8 @@
 *
 *           B(1:N,1:NRHS) := Q(1:N,:)**H * B(1:M,1:NRHS)
 *
-            CALL ZUNMLQ( 'Left', 'Conjugate transpose', N, NRHS, M, A,
+            CALL AB_ZUNMLQ( 'Left', 'Conjugate transpose', N, NRHS, M, A
+     $,
      $                   LDA, WORK( 1 ), B, LDB, WORK( MN+1 ), LWORK-MN,
      $                   INFO )
 *
@@ -457,7 +471,7 @@
 *
 *           B(1:N,1:NRHS) := Q * B(1:N,1:NRHS)
 *
-            CALL ZUNMLQ( 'Left', 'No transpose', N, NRHS, M, A, LDA,
+            CALL AB_ZUNMLQ( 'Left', 'No transpose', N, NRHS, M, A, LDA,
      $                   WORK( 1 ), B, LDB, WORK( MN+1 ), LWORK-MN,
      $                   INFO )
 *
@@ -465,7 +479,7 @@
 *
 *           B(1:M,1:NRHS) := inv(L**H) * B(1:M,1:NRHS)
 *
-            CALL ZTRTRS( 'Lower', 'Conjugate transpose', 'Non-unit',
+            CALL AB_ZTRTRS( 'Lower', 'Conjugate transpose', 'Non-unit',
      $                   M, NRHS, A, LDA, B, LDB, INFO )
 *
             IF( INFO.GT.0 ) THEN
@@ -481,17 +495,17 @@
 *     Undo scaling
 *
       IF( IASCL.EQ.1 ) THEN
-         CALL ZLASCL( 'G', 0, 0, ANRM, SMLNUM, SCLLEN, NRHS, B, LDB,
+         CALL AB_ZLASCL( 'G', 0, 0, ANRM, SMLNUM, SCLLEN, NRHS, B, LDB,
      $                INFO )
       ELSE IF( IASCL.EQ.2 ) THEN
-         CALL ZLASCL( 'G', 0, 0, ANRM, BIGNUM, SCLLEN, NRHS, B, LDB,
+         CALL AB_ZLASCL( 'G', 0, 0, ANRM, BIGNUM, SCLLEN, NRHS, B, LDB,
      $                INFO )
       END IF
       IF( IBSCL.EQ.1 ) THEN
-         CALL ZLASCL( 'G', 0, 0, SMLNUM, BNRM, SCLLEN, NRHS, B, LDB,
+         CALL AB_ZLASCL( 'G', 0, 0, SMLNUM, BNRM, SCLLEN, NRHS, B, LDB,
      $                INFO )
       ELSE IF( IBSCL.EQ.2 ) THEN
-         CALL ZLASCL( 'G', 0, 0, BIGNUM, BNRM, SCLLEN, NRHS, B, LDB,
+         CALL AB_ZLASCL( 'G', 0, 0, BIGNUM, BNRM, SCLLEN, NRHS, B, LDB,
      $                INFO )
       END IF
 *
@@ -500,6 +514,6 @@
 *
       RETURN
 *
-*     End of ZGELS
+*     End of AB_ZGELS
 *
       END

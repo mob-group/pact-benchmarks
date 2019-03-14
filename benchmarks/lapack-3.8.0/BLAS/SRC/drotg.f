@@ -1,4 +1,4 @@
-*> \brief \b DROTG
+*> \brief \b AB_DROTG
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DROTG(DA,DB,C,S)
+*       SUBROUTINE AB_DROTG(DA,DB,C,S)
 *
 *       .. Scalar Arguments ..
 *       DOUBLE PRECISION C,DA,DB,S
@@ -20,7 +20,7 @@
 *>
 *> \verbatim
 *>
-*>    DROTG construct givens plane rotation.
+*>    AB_DROTG construct givens plane rotation.
 *> \endverbatim
 *
 *  Arguments:
@@ -67,7 +67,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DROTG(DA,DB,C,S)
+      SUBROUTINE AB_DROTG(DA,DB,C,S)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

@@ -1,4 +1,4 @@
-*> \brief \b STPQRT
+*> \brief \b AB_STPQRT
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download STPQRT + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stpqrt.f">
+*> Download AB_STPQRT + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_STPQRT.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stpqrt.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_STPQRT.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stpqrt.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_STPQRT.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE STPQRT( M, N, L, NB, A, LDA, B, LDB, T, LDT, WORK,
+*       SUBROUTINE AB_STPQRT( M, N, L, NB, A, LDA, B, LDB, T, LDT, WORK,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> STPQRT computes a blocked QR factorization of a real
+*> AB_STPQRT computes a blocked QR factorization of a real
 *> "triangular-pentagonal" matrix C, which is composed of a
 *> triangular block A and pentagonal block B, using the compact
 *> WY representation for Q.
@@ -186,7 +186,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE STPQRT( M, N, L, NB, A, LDA, B, LDB, T, LDT, WORK,
+      SUBROUTINE AB_STPQRT( M, N, L, NB, A, LDA, B, LDB, T, LDT, WORK,
      $                   INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -208,7 +208,7 @@
       INTEGER    I, IB, LB, MB, IINFO
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL   STPQRT2, STPRFB, XERBLA
+      EXTERNAL   AB_STPQRT2, AB_STPRFB, AB_XERBLA
 *     ..
 *     .. Executable Statements ..
 *
@@ -231,7 +231,7 @@
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'STPQRT', -INFO )
+         CALL AB_XERBLA( 'AB_STPQRT', -INFO )
          RETURN
       END IF
 *
@@ -251,13 +251,13 @@
             LB = MB-M+L-I+1
          END IF
 *
-         CALL STPQRT2( MB, IB, LB, A(I,I), LDA, B( 1, I ), LDB,
+         CALL AB_STPQRT2( MB, IB, LB, A(I,I), LDA, B( 1, I ), LDB,
      $                 T(1, I ), LDT, IINFO )
 *
 *     Update by applying H^H to B(:,I+IB:N) from the left
 *
          IF( I+IB.LE.N ) THEN
-            CALL STPRFB( 'L', 'T', 'F', 'C', MB, N-I-IB+1, IB, LB,
+            CALL AB_STPRFB( 'L', 'T', 'F', 'C', MB, N-I-IB+1, IB, LB,
      $                    B( 1, I ), LDB, T( 1, I ), LDT,
      $                    A( I, I+IB ), LDA, B( 1, I+IB ), LDB,
      $                    WORK, IB )
@@ -265,6 +265,6 @@
       END DO
       RETURN
 *
-*     End of STPQRT
+*     End of AB_STPQRT
 *
       END

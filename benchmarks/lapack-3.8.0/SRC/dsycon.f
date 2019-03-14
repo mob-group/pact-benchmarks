@@ -1,4 +1,4 @@
-*> \brief \b DSYCON
+*> \brief \b AB_DSYCON
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DSYCON + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsycon.f">
+*> Download AB_DSYCON + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DSYCON.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsycon.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DSYCON.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsycon.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DSYCON.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DSYCON( UPLO, N, A, LDA, IPIV, ANORM, RCOND, WORK,
+*       SUBROUTINE AB_DSYCON( UPLO, N, A, LDA, IPIV, ANORM, RCOND, WORK,
 *                          IWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -37,9 +37,9 @@
 *>
 *> \verbatim
 *>
-*> DSYCON estimates the reciprocal of the condition number (in the
+*> AB_DSYCON estimates the reciprocal of the condition number (in the
 *> 1-norm) of a real symmetric matrix A using the factorization
-*> A = U*D*U**T or A = L*D*L**T computed by DSYTRF.
+*> A = U*D*U**T or A = L*D*L**T computed by AB_DSYTRF.
 *>
 *> An estimate is obtained for norm(inv(A)), and the reciprocal of the
 *> condition number is computed as RCOND = 1 / (ANORM * norm(inv(A))).
@@ -67,7 +67,7 @@
 *> \verbatim
 *>          A is DOUBLE PRECISION array, dimension (LDA,N)
 *>          The block diagonal matrix D and the multipliers used to
-*>          obtain the factor U or L as computed by DSYTRF.
+*>          obtain the factor U or L as computed by AB_DSYTRF.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -80,7 +80,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D
-*>          as determined by DSYTRF.
+*>          as determined by AB_DSYTRF.
 *> \endverbatim
 *>
 *> \param[in] ANORM
@@ -127,7 +127,7 @@
 *> \ingroup doubleSYcomputational
 *
 *  =====================================================================
-      SUBROUTINE DSYCON( UPLO, N, A, LDA, IPIV, ANORM, RCOND, WORK,
+      SUBROUTINE AB_DSYCON( UPLO, N, A, LDA, IPIV, ANORM, RCOND, WORK,
      $                   IWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -160,11 +160,11 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLACN2, DSYTRS, XERBLA
+      EXTERNAL           AB_DLACN2, AB_DSYTRS, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -174,8 +174,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -185,7 +185,7 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DSYCON', -INFO )
+         CALL AB_XERBLA( 'AB_DSYCON', -INFO )
          RETURN
       END IF
 *
@@ -223,12 +223,12 @@
 *
       KASE = 0
    30 CONTINUE
-      CALL DLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
+      CALL AB_DLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
       IF( KASE.NE.0 ) THEN
 *
 *        Multiply by inv(L*D*L**T) or inv(U*D*U**T).
 *
-         CALL DSYTRS( UPLO, N, 1, A, LDA, IPIV, WORK, N, INFO )
+         CALL AB_DSYTRS( UPLO, N, 1, A, LDA, IPIV, WORK, N, INFO )
          GO TO 30
       END IF
 *
@@ -239,6 +239,6 @@
 *
       RETURN
 *
-*     End of DSYCON
+*     End of AB_DSYCON
 *
       END

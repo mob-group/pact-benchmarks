@@ -1,4 +1,4 @@
-*> \brief \b CGEBRD
+*> \brief \b AB_CGEBRD
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CGEBRD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgebrd.f">
+*> Download AB_CGEBRD + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CGEBRD.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgebrd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CGEBRD.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgebrd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CGEBRD.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGEBRD( M, N, A, LDA, D, E, TAUQ, TAUP, WORK, LWORK,
+*       SUBROUTINE AB_CGEBRD( M, N, A, LDA, D, E, TAUQ, TAUP, WORK, LWORK,
 *                          INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> CGEBRD reduces a general complex M-by-N matrix A to upper or lower
+*> AB_CGEBRD reduces a general complex M-by-N matrix A to upper or lower
 *> bidiagonal form B by a unitary transformation: Q**H * A * P = B.
 *>
 *> If m >= n, B is upper bidiagonal; if m < n, B is lower bidiagonal.
@@ -130,7 +130,7 @@
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -203,7 +203,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CGEBRD( M, N, A, LDA, D, E, TAUQ, TAUP, WORK, LWORK,
+      SUBROUTINE AB_CGEBRD( M, N, A, LDA, D, E, TAUQ, TAUP, WORK, LWORK,
      $                   INFO )
 *
 *  -- LAPACK computational routine (version 3.8.0) --
@@ -232,21 +232,21 @@
      $                   NBMIN, NX, WS
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEBD2, CGEMM, CLABRD, XERBLA
+      EXTERNAL           AB_CGEBD2, AB_CGEMM, AB_CLABRD, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, REAL
 *     ..
 *     .. External Functions ..
-      INTEGER            ILAENV
-      EXTERNAL           ILAENV
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_ILAENV
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters
 *
       INFO = 0
-      NB = MAX( 1, ILAENV( 1, 'CGEBRD', ' ', M, N, -1, -1 ) )
+      NB = MAX( 1, AB_ILAENV( 1, 'AB_CGEBRD', ' ', M, N, -1, -1 ) )
       LWKOPT = ( M+N )*NB
       WORK( 1 ) = REAL( LWKOPT )
       LQUERY = ( LWORK.EQ.-1 )
@@ -260,7 +260,7 @@
          INFO = -10
       END IF
       IF( INFO.LT.0 ) THEN
-         CALL XERBLA( 'CGEBRD', -INFO )
+         CALL AB_XERBLA( 'AB_CGEBRD', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -282,7 +282,7 @@
 *
 *        Set the crossover point NX.
 *
-         NX = MAX( NB, ILAENV( 3, 'CGEBRD', ' ', M, N, -1, -1 ) )
+         NX = MAX( NB, AB_ILAENV( 3, 'AB_CGEBRD', ' ', M, N, -1, -1 ) )
 *
 *        Determine when to switch from blocked to unblocked code.
 *
@@ -293,7 +293,7 @@
 *              Not enough work space for the optimal NB, consider using
 *              a smaller block size.
 *
-               NBMIN = ILAENV( 2, 'CGEBRD', ' ', M, N, -1, -1 )
+               NBMIN = AB_ILAENV( 2, 'AB_CGEBRD', ' ', M, N, -1, -1 )
                IF( LWORK.GE.( M+N )*NBMIN ) THEN
                   NB = LWORK / ( M+N )
                ELSE
@@ -312,18 +312,20 @@
 *        the matrices X and Y which are needed to update the unreduced
 *        part of the matrix
 *
-         CALL CLABRD( M-I+1, N-I+1, NB, A( I, I ), LDA, D( I ), E( I ),
+         CALL AB_CLABRD( M-I+1, N-I+1, NB, A( I, I ), LDA, D( I ), E( I 
+     $),
      $                TAUQ( I ), TAUP( I ), WORK, LDWRKX,
      $                WORK( LDWRKX*NB+1 ), LDWRKY )
 *
 *        Update the trailing submatrix A(i+ib:m,i+ib:n), using
 *        an update of the form  A := A - V*Y**H - X*U**H
 *
-         CALL CGEMM( 'No transpose', 'Conjugate transpose', M-I-NB+1,
+         CALL AB_CGEMM( 'No transpose', 'Conjugate transpose', M-I-NB+1,
      $               N-I-NB+1, NB, -ONE, A( I+NB, I ), LDA,
      $               WORK( LDWRKX*NB+NB+1 ), LDWRKY, ONE,
      $               A( I+NB, I+NB ), LDA )
-         CALL CGEMM( 'No transpose', 'No transpose', M-I-NB+1, N-I-NB+1,
+         CALL AB_CGEMM( 'No transpose', 'No transpose', M-I-NB+1, N-I-NB
+     $+1,
      $               NB, -ONE, WORK( NB+1 ), LDWRKX, A( I, I+NB ), LDA,
      $               ONE, A( I+NB, I+NB ), LDA )
 *
@@ -344,11 +346,11 @@
 *
 *     Use unblocked code to reduce the remainder of the matrix
 *
-      CALL CGEBD2( M-I+1, N-I+1, A( I, I ), LDA, D( I ), E( I ),
+      CALL AB_CGEBD2( M-I+1, N-I+1, A( I, I ), LDA, D( I ), E( I ),
      $             TAUQ( I ), TAUP( I ), WORK, IINFO )
       WORK( 1 ) = WS
       RETURN
 *
-*     End of CGEBRD
+*     End of AB_CGEBRD
 *
       END

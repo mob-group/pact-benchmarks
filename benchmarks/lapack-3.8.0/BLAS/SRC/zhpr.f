@@ -1,4 +1,4 @@
-*> \brief \b ZHPR
+*> \brief \b AB_ZHPR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZHPR(UPLO,N,ALPHA,X,INCX,AP)
+*       SUBROUTINE AB_ZHPR(UPLO,N,ALPHA,X,INCX,AP)
 *
 *       .. Scalar Arguments ..
 *       DOUBLE PRECISION ALPHA
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> ZHPR    performs the hermitian rank 1 operation
+*> AB_ZHPR    performs the hermitian rank 1 operation
 *>
 *>    A := alpha*x*x**H + A,
 *>
@@ -128,7 +128,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZHPR(UPLO,N,ALPHA,X,INCX,AP)
+      SUBROUTINE AB_ZHPR(UPLO,N,ALPHA,X,INCX,AP)
 *
 *  -- Reference BLAS level2 routine (version 3.7.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -155,11 +155,11 @@
       INTEGER I,INFO,IX,J,JX,K,KK,KX
 *     ..
 *     .. External Functions ..
-      LOGICAL LSAME
-      EXTERNAL LSAME
+      LOGICAL AB_LSAME
+      EXTERNAL AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL XERBLA
+      EXTERNAL AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC DBLE,DCONJG
@@ -168,7 +168,7 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IF (.NOT.LSAME(UPLO,'U') .AND. .NOT.LSAME(UPLO,'L')) THEN
+      IF (.NOT.AB_LSAME(UPLO,'U') .AND. .NOT.AB_LSAME(UPLO,'L')) THEN
           INFO = 1
       ELSE IF (N.LT.0) THEN
           INFO = 2
@@ -176,7 +176,7 @@
           INFO = 5
       END IF
       IF (INFO.NE.0) THEN
-          CALL XERBLA('ZHPR  ',INFO)
+          CALL AB_XERBLA('AB_ZHPR  ',INFO)
           RETURN
       END IF
 *
@@ -196,7 +196,7 @@
 *     are accessed sequentially with one pass through AP.
 *
       KK = 1
-      IF (LSAME(UPLO,'U')) THEN
+      IF (AB_LSAME(UPLO,'U')) THEN
 *
 *        Form  A  when upper triangle is stored in AP.
 *
@@ -274,6 +274,6 @@
 *
       RETURN
 *
-*     End of ZHPR  .
+*     End of AB_ZHPR  .
 *
       END

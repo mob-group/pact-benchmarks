@@ -1,4 +1,4 @@
-*> \brief \b ZHESV_ROOK computes the solution to a system of linear equations A * X = B for HE matrices using the bounded Bunch-Kaufman ("rook") diagonal pivoting method
+*> \brief \b AB_ZHESV_ROOK computes the solution to a system of linear equations A * X = B for HE matrices using the bounded Bunch-Kaufman ("rook") diagonal pivoting method
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZHESV_ROOK + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhesv_rook.f">
+*> Download AB_ZHESV_ROOK + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZHESV_rook.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhesv_rook.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZHESV_rook.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhesv_rook.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZHESV_rook.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZHESV_ROOK( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
+*       SUBROUTINE AB_ZHESV_ROOK( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
 *                              LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> ZHESV_ROOK computes the solution to a complex system of linear equations
+*> AB_ZHESV_ROOK computes the solution to a complex system of linear equations
 *>    A * X = B,
 *> where A is an N-by-N Hermitian matrix and X and B are N-by-NRHS
 *> matrices.
@@ -49,12 +49,12 @@
 *> triangular matrices, and D is Hermitian and block diagonal with
 *> 1-by-1 and 2-by-2 diagonal blocks.
 *>
-*> ZHETRF_ROOK is called to compute the factorization of a complex
+*> AB_ZHETRF_ROOK is called to compute the factorization of a complex
 *> Hermition matrix A using the bounded Bunch-Kaufman ("rook") diagonal
 *> pivoting method.
 *>
 *> The factored form of A is then used to solve the system
-*> of equations A * X = B by calling ZHETRS_ROOK (uses BLAS 2).
+*> of equations A * X = B by calling AB_ZHETRS_ROOK (uses BLAS 2).
 *> \endverbatim
 *
 *  Arguments:
@@ -95,7 +95,7 @@
 *>          On exit, if INFO = 0, the block diagonal matrix D and the
 *>          multipliers used to obtain the factor U or L from the
 *>          factorization A = U*D*U**H or A = L*D*L**H as computed by
-*>          ZHETRF_ROOK.
+*>          AB_ZHETRF_ROOK.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -156,14 +156,14 @@
 *>          LWORK is INTEGER
 *>          The length of WORK.  LWORK >= 1, and for best performance
 *>          LWORK >= max(1,N*NB), where NB is the optimal blocksize for
-*>          ZHETRF_ROOK.
+*>          AB_ZHETRF_ROOK.
 *>          for LWORK < N, TRS will be done with Level BLAS 2
 *>          for LWORK >= N, TRS will be done with Level BLAS 3
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -202,7 +202,8 @@
 *
 *
 *  =====================================================================
-      SUBROUTINE ZHESV_ROOK( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
+      SUBROUTINE AB_ZHESV_ROOK( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WOR
+     $K,
      $                       LWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.5.0) --
@@ -226,12 +227,12 @@
       INTEGER            LWKOPT, NB
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      EXTERNAL           LSAME, ILAENV
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_LSAME, AB_ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZHETRF_ROOK, ZHETRS_ROOK
+      EXTERNAL           AB_XERBLA, AB_ZHETRF_ROOK, AB_ZHETRS_ROOK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -242,7 +243,8 @@
 *
       INFO = 0
       LQUERY = ( LWORK.EQ.-1 )
-      IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      IF( .NOT.AB_LSAME( UPLO, 'U' ) .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) 
+     $THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -260,14 +262,14 @@
          IF( N.EQ.0 ) THEN
             LWKOPT = 1
          ELSE
-            NB = ILAENV( 1, 'ZHETRF_ROOK', UPLO, N, -1, -1, -1 )
+            NB = AB_ILAENV( 1, 'AB_ZHETRF_ROOK', UPLO, N, -1, -1, -1 )
             LWKOPT = N*NB
          END IF
          WORK( 1 ) = LWKOPT
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZHESV_ROOK ', -INFO )
+         CALL AB_XERBLA( 'AB_ZHESV_ROOK ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -275,14 +277,15 @@
 *
 *     Compute the factorization A = U*D*U**H or A = L*D*L**H.
 *
-      CALL ZHETRF_ROOK( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
+      CALL AB_ZHETRF_ROOK( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
       IF( INFO.EQ.0 ) THEN
 *
 *        Solve the system A*X = B, overwriting B with X.
 *
 *        Solve with TRS ( Use Level BLAS 2)
 *
-         CALL ZHETRS_ROOK( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+         CALL AB_ZHETRS_ROOK( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, INFO 
+     $)
 *
       END IF
 *
@@ -290,6 +293,6 @@
 *
       RETURN
 *
-*     End of ZHESV_ROOK
+*     End of AB_ZHESV_ROOK
 *
       END

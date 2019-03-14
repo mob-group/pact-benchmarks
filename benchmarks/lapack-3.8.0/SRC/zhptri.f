@@ -1,4 +1,4 @@
-*> \brief \b ZHPTRI
+*> \brief \b AB_ZHPTRI
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZHPTRI + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhptri.f">
+*> Download AB_ZHPTRI + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZHPTRI.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhptri.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZHPTRI.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhptri.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZHPTRI.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZHPTRI( UPLO, N, AP, IPIV, WORK, INFO )
+*       SUBROUTINE AB_ZHPTRI( UPLO, N, AP, IPIV, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,9 +35,9 @@
 *>
 *> \verbatim
 *>
-*> ZHPTRI computes the inverse of a complex Hermitian indefinite matrix
+*> AB_ZHPTRI computes the inverse of a complex Hermitian indefinite matrix
 *> A in packed storage using the factorization A = U*D*U**H or
-*> A = L*D*L**H computed by ZHPTRF.
+*> A = L*D*L**H computed by AB_ZHPTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -62,7 +62,7 @@
 *> \verbatim
 *>          AP is COMPLEX*16 array, dimension (N*(N+1)/2)
 *>          On entry, the block diagonal matrix D and the multipliers
-*>          used to obtain the factor U or L as computed by ZHPTRF,
+*>          used to obtain the factor U or L as computed by AB_ZHPTRF,
 *>          stored as a packed triangular matrix.
 *>
 *>          On exit, if INFO = 0, the (Hermitian) inverse of the original
@@ -77,7 +77,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D
-*>          as determined by ZHPTRF.
+*>          as determined by AB_ZHPTRF.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -107,7 +107,7 @@
 *> \ingroup complex16OTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE ZHPTRI( UPLO, N, AP, IPIV, WORK, INFO )
+      SUBROUTINE AB_ZHPTRI( UPLO, N, AP, IPIV, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -138,12 +138,12 @@
       COMPLEX*16         AKKP1, TEMP
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      COMPLEX*16         ZDOTC
-      EXTERNAL           LSAME, ZDOTC
+      LOGICAL            AB_LSAME
+      COMPLEX*16         AB_ZDOTC
+      EXTERNAL           AB_LSAME, AB_ZDOTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZCOPY, ZHPMV, ZSWAP
+      EXTERNAL           AB_XERBLA, AB_ZCOPY, AB_ZHPMV, AB_ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCONJG
@@ -153,14 +153,14 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZHPTRI', -INFO )
+         CALL AB_XERBLA( 'AB_ZHPTRI', -INFO )
          RETURN
       END IF
 *
@@ -222,11 +222,12 @@
 *           Compute column K of the inverse.
 *
             IF( K.GT.1 ) THEN
-               CALL ZCOPY( K-1, AP( KC ), 1, WORK, 1 )
-               CALL ZHPMV( UPLO, K-1, -CONE, AP, WORK, 1, ZERO,
+               CALL AB_ZCOPY( K-1, AP( KC ), 1, WORK, 1 )
+               CALL AB_ZHPMV( UPLO, K-1, -CONE, AP, WORK, 1, ZERO,
      $                     AP( KC ), 1 )
                AP( KC+K-1 ) = AP( KC+K-1 ) -
-     $                        DBLE( ZDOTC( K-1, WORK, 1, AP( KC ), 1 ) )
+     $                        DBLE( AB_ZDOTC( K-1, WORK, 1, AP( KC ), 1 
+     $) )
             END IF
             KSTEP = 1
          ELSE
@@ -247,19 +248,22 @@
 *           Compute columns K and K+1 of the inverse.
 *
             IF( K.GT.1 ) THEN
-               CALL ZCOPY( K-1, AP( KC ), 1, WORK, 1 )
-               CALL ZHPMV( UPLO, K-1, -CONE, AP, WORK, 1, ZERO,
+               CALL AB_ZCOPY( K-1, AP( KC ), 1, WORK, 1 )
+               CALL AB_ZHPMV( UPLO, K-1, -CONE, AP, WORK, 1, ZERO,
      $                     AP( KC ), 1 )
                AP( KC+K-1 ) = AP( KC+K-1 ) -
-     $                        DBLE( ZDOTC( K-1, WORK, 1, AP( KC ), 1 ) )
+     $                        DBLE( AB_ZDOTC( K-1, WORK, 1, AP( KC ), 1 
+     $) )
                AP( KCNEXT+K-1 ) = AP( KCNEXT+K-1 ) -
-     $                            ZDOTC( K-1, AP( KC ), 1, AP( KCNEXT ),
+     $                            AB_ZDOTC( K-1, AP( KC ), 1, AP( KCNEXT
+     $ ),
      $                            1 )
-               CALL ZCOPY( K-1, AP( KCNEXT ), 1, WORK, 1 )
-               CALL ZHPMV( UPLO, K-1, -CONE, AP, WORK, 1, ZERO,
+               CALL AB_ZCOPY( K-1, AP( KCNEXT ), 1, WORK, 1 )
+               CALL AB_ZHPMV( UPLO, K-1, -CONE, AP, WORK, 1, ZERO,
      $                     AP( KCNEXT ), 1 )
                AP( KCNEXT+K ) = AP( KCNEXT+K ) -
-     $                          DBLE( ZDOTC( K-1, WORK, 1, AP( KCNEXT ),
+     $                          DBLE( AB_ZDOTC( K-1, WORK, 1, AP( KCNEXT
+     $ ),
      $                          1 ) )
             END IF
             KSTEP = 2
@@ -273,7 +277,7 @@
 *           submatrix A(1:k+1,1:k+1)
 *
             KPC = ( KP-1 )*KP / 2 + 1
-            CALL ZSWAP( KP-1, AP( KC ), 1, AP( KPC ), 1 )
+            CALL AB_ZSWAP( KP-1, AP( KC ), 1, AP( KPC ), 1 )
             KX = KPC + KP - 1
             DO 40 J = KP + 1, K - 1
                KX = KX + J - 1
@@ -326,10 +330,10 @@
 *           Compute column K of the inverse.
 *
             IF( K.LT.N ) THEN
-               CALL ZCOPY( N-K, AP( KC+1 ), 1, WORK, 1 )
-               CALL ZHPMV( UPLO, N-K, -CONE, AP( KC+N-K+1 ), WORK, 1,
+               CALL AB_ZCOPY( N-K, AP( KC+1 ), 1, WORK, 1 )
+               CALL AB_ZHPMV( UPLO, N-K, -CONE, AP( KC+N-K+1 ), WORK, 1,
      $                     ZERO, AP( KC+1 ), 1 )
-               AP( KC ) = AP( KC ) - DBLE( ZDOTC( N-K, WORK, 1,
+               AP( KC ) = AP( KC ) - DBLE( AB_ZDOTC( N-K, WORK, 1,
      $                    AP( KC+1 ), 1 ) )
             END IF
             KSTEP = 1
@@ -351,19 +355,22 @@
 *           Compute columns K-1 and K of the inverse.
 *
             IF( K.LT.N ) THEN
-               CALL ZCOPY( N-K, AP( KC+1 ), 1, WORK, 1 )
-               CALL ZHPMV( UPLO, N-K, -CONE, AP( KC+( N-K+1 ) ), WORK,
+               CALL AB_ZCOPY( N-K, AP( KC+1 ), 1, WORK, 1 )
+               CALL AB_ZHPMV( UPLO, N-K, -CONE, AP( KC+( N-K+1 ) ), WORK
+     $,
      $                     1, ZERO, AP( KC+1 ), 1 )
-               AP( KC ) = AP( KC ) - DBLE( ZDOTC( N-K, WORK, 1,
+               AP( KC ) = AP( KC ) - DBLE( AB_ZDOTC( N-K, WORK, 1,
      $                    AP( KC+1 ), 1 ) )
                AP( KCNEXT+1 ) = AP( KCNEXT+1 ) -
-     $                          ZDOTC( N-K, AP( KC+1 ), 1,
+     $                          AB_ZDOTC( N-K, AP( KC+1 ), 1,
      $                          AP( KCNEXT+2 ), 1 )
-               CALL ZCOPY( N-K, AP( KCNEXT+2 ), 1, WORK, 1 )
-               CALL ZHPMV( UPLO, N-K, -CONE, AP( KC+( N-K+1 ) ), WORK,
+               CALL AB_ZCOPY( N-K, AP( KCNEXT+2 ), 1, WORK, 1 )
+               CALL AB_ZHPMV( UPLO, N-K, -CONE, AP( KC+( N-K+1 ) ), WORK
+     $,
      $                     1, ZERO, AP( KCNEXT+2 ), 1 )
                AP( KCNEXT ) = AP( KCNEXT ) -
-     $                        DBLE( ZDOTC( N-K, WORK, 1, AP( KCNEXT+2 ),
+     $                        DBLE( AB_ZDOTC( N-K, WORK, 1, AP( KCNEXT+2
+     $ ),
      $                        1 ) )
             END IF
             KSTEP = 2
@@ -378,7 +385,7 @@
 *
             KPC = NPP - ( N-KP+1 )*( N-KP+2 ) / 2 + 1
             IF( KP.LT.N )
-     $         CALL ZSWAP( N-KP, AP( KC+KP-K+1 ), 1, AP( KPC+1 ), 1 )
+     $         CALL AB_ZSWAP( N-KP, AP( KC+KP-K+1 ), 1, AP( KPC+1 ), 1 )
             KX = KC + KP - K
             DO 70 J = K + 1, KP - 1
                KX = KX + N - J + 1
@@ -405,6 +412,6 @@
 *
       RETURN
 *
-*     End of ZHPTRI
+*     End of AB_ZHPTRI
 *
       END

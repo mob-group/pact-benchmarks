@@ -1,4 +1,4 @@
-*> \brief \b ZHEMM
+*> \brief \b AB_ZHEMM
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZHEMM(SIDE,UPLO,M,N,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+*       SUBROUTINE AB_ZHEMM(SIDE,UPLO,M,N,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
 *
 *       .. Scalar Arguments ..
 *       COMPLEX*16 ALPHA,BETA
@@ -25,7 +25,7 @@
 *>
 *> \verbatim
 *>
-*> ZHEMM  performs one of the matrix-matrix operations
+*> AB_ZHEMM  performs one of the matrix-matrix operations
 *>
 *>    C := alpha*A*B + beta*C,
 *>
@@ -189,7 +189,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZHEMM(SIDE,UPLO,M,N,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+      SUBROUTINE AB_ZHEMM(SIDE,UPLO,M,N,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
 *
 *  -- Reference BLAS level3 routine (version 3.7.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -208,11 +208,11 @@
 *  =====================================================================
 *
 *     .. External Functions ..
-      LOGICAL LSAME
-      EXTERNAL LSAME
+      LOGICAL AB_LSAME
+      EXTERNAL AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL XERBLA
+      EXTERNAL AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC DBLE,DCONJG,MAX
@@ -231,19 +231,20 @@
 *
 *     Set NROWA as the number of rows of A.
 *
-      IF (LSAME(SIDE,'L')) THEN
+      IF (AB_LSAME(SIDE,'L')) THEN
           NROWA = M
       ELSE
           NROWA = N
       END IF
-      UPPER = LSAME(UPLO,'U')
+      UPPER = AB_LSAME(UPLO,'U')
 *
 *     Test the input parameters.
 *
       INFO = 0
-      IF ((.NOT.LSAME(SIDE,'L')) .AND. (.NOT.LSAME(SIDE,'R'))) THEN
+      IF ((.NOT.AB_LSAME(SIDE,'L')) .AND. (.NOT.AB_LSAME(SIDE,'R'))) THE
+     $N
           INFO = 1
-      ELSE IF ((.NOT.UPPER) .AND. (.NOT.LSAME(UPLO,'L'))) THEN
+      ELSE IF ((.NOT.UPPER) .AND. (.NOT.AB_LSAME(UPLO,'L'))) THEN
           INFO = 2
       ELSE IF (M.LT.0) THEN
           INFO = 3
@@ -257,7 +258,7 @@
           INFO = 12
       END IF
       IF (INFO.NE.0) THEN
-          CALL XERBLA('ZHEMM ',INFO)
+          CALL AB_XERBLA('AB_ZHEMM ',INFO)
           RETURN
       END IF
 *
@@ -287,7 +288,7 @@
 *
 *     Start the operations.
 *
-      IF (LSAME(SIDE,'L')) THEN
+      IF (AB_LSAME(SIDE,'L')) THEN
 *
 *        Form  C := alpha*A*B + beta*C.
 *
@@ -366,6 +367,6 @@
 *
       RETURN
 *
-*     End of ZHEMM .
+*     End of AB_ZHEMM .
 *
       END

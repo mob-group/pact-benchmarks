@@ -1,4 +1,4 @@
-*> \brief \b DLAG2S converts a double precision matrix to a single precision matrix.
+*> \brief \b AB_DLAG2S converts a double precision matrix to a single precision matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLAG2S + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlag2s.f">
+*> Download AB_DLAG2S + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLAG2s.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlag2s.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLAG2s.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlag2s.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLAG2s.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLAG2S( M, N, A, LDA, SA, LDSA, INFO )
+*       SUBROUTINE AB_DLAG2S( M, N, A, LDA, SA, LDSA, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, LDSA, M, N
@@ -34,11 +34,11 @@
 *>
 *> \verbatim
 *>
-*> DLAG2S converts a DOUBLE PRECISION matrix, SA, to a SINGLE
+*> AB_DLAG2S converts a DOUBLE PRECISION matrix, SA, to a SINGLE
 *> PRECISION matrix, A.
 *>
 *> RMAX is the overflow for the SINGLE PRECISION arithmetic
-*> DLAG2S checks that all the entries of A are between -RMAX and
+*> AB_DLAG2S checks that all the entries of A are between -RMAX and
 *> RMAX. If not the conversion is aborted and a flag is raised.
 *>
 *> This is an auxiliary routine so there is no argument checking.
@@ -106,7 +106,7 @@
 *> \ingroup doubleOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE DLAG2S( M, N, A, LDA, SA, LDSA, INFO )
+      SUBROUTINE AB_DLAG2S( M, N, A, LDA, SA, LDSA, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -147,6 +147,6 @@
    30 CONTINUE
       RETURN
 *
-*     End of DLAG2S
+*     End of AB_DLAG2S
 *
       END

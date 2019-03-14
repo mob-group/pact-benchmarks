@@ -1,4 +1,4 @@
-*> \brief \b DPPTRS
+*> \brief \b AB_DPPTRS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DPPTRS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dpptrs.f">
+*> Download AB_DPPTRS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DPPTRS.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dpptrs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DPPTRS.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dpptrs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DPPTRS.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DPPTRS( UPLO, N, NRHS, AP, B, LDB, INFO )
+*       SUBROUTINE AB_DPPTRS( UPLO, N, NRHS, AP, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -34,9 +34,9 @@
 *>
 *> \verbatim
 *>
-*> DPPTRS solves a system of linear equations A*X = B with a symmetric
+*> AB_DPPTRS solves a system of linear equations A*X = B with a symmetric
 *> positive definite matrix A in packed storage using the Cholesky
-*> factorization A = U**T*U or A = L*L**T computed by DPPTRF.
+*> factorization A = U**T*U or A = L*L**T computed by AB_DPPTRF.
 *> \endverbatim
 *
 *  Arguments:
@@ -106,7 +106,7 @@
 *> \ingroup doubleOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE DPPTRS( UPLO, N, NRHS, AP, B, LDB, INFO )
+      SUBROUTINE AB_DPPTRS( UPLO, N, NRHS, AP, B, LDB, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -128,11 +128,11 @@
       INTEGER            I
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DTPSV, XERBLA
+      EXTERNAL           AB_DTPSV, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -142,8 +142,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -153,7 +153,7 @@
          INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DPPTRS', -INFO )
+         CALL AB_XERBLA( 'AB_DPPTRS', -INFO )
          RETURN
       END IF
 *
@@ -170,12 +170,12 @@
 *
 *           Solve U**T *X = B, overwriting B with X.
 *
-            CALL DTPSV( 'Upper', 'Transpose', 'Non-unit', N, AP,
+            CALL AB_DTPSV( 'Upper', 'Transpose', 'Non-unit', N, AP,
      $                  B( 1, I ), 1 )
 *
 *           Solve U*X = B, overwriting B with X.
 *
-            CALL DTPSV( 'Upper', 'No transpose', 'Non-unit', N, AP,
+            CALL AB_DTPSV( 'Upper', 'No transpose', 'Non-unit', N, AP,
      $                  B( 1, I ), 1 )
    10    CONTINUE
       ELSE
@@ -186,18 +186,18 @@
 *
 *           Solve L*Y = B, overwriting B with X.
 *
-            CALL DTPSV( 'Lower', 'No transpose', 'Non-unit', N, AP,
+            CALL AB_DTPSV( 'Lower', 'No transpose', 'Non-unit', N, AP,
      $                  B( 1, I ), 1 )
 *
 *           Solve L**T *X = Y, overwriting B with X.
 *
-            CALL DTPSV( 'Lower', 'Transpose', 'Non-unit', N, AP,
+            CALL AB_DTPSV( 'Lower', 'Transpose', 'Non-unit', N, AP,
      $                  B( 1, I ), 1 )
    20    CONTINUE
       END IF
 *
       RETURN
 *
-*     End of DPPTRS
+*     End of AB_DPPTRS
 *
       END

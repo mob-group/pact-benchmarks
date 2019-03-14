@@ -1,4 +1,4 @@
-*> \brief \b SLALSA computes the SVD of the coefficient matrix in compact form. Used by sgelsd.
+*> \brief \b AB_SLALSA computes the SVD of the coefficient matrix in compact form. Used by AB_SGELSd.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLALSA + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slalsa.f">
+*> Download AB_SLALSA + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLALSA.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slalsa.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLALSA.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slalsa.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLALSA.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLALSA( ICOMPQ, SMLSIZ, N, NRHS, B, LDB, BX, LDBX, U,
+*       SUBROUTINE AB_SLALSA( ICOMPQ, SMLSIZ, N, NRHS, B, LDB, BX, LDBX, U,
 *                          LDU, VT, K, DIFL, DIFR, Z, POLES, GIVPTR,
 *                          GIVCOL, LDGCOL, PERM, GIVNUM, C, S, WORK,
 *                          IWORK, INFO )
@@ -43,16 +43,16 @@
 *>
 *> \verbatim
 *>
-*> SLALSA is an itermediate step in solving the least squares problem
+*> AB_SLALSA is an itermediate step in solving the least squares problem
 *> by computing the SVD of the coefficient matrix in compact form (The
 *> singular vectors are computed as products of simple orthorgonal
 *> matrices.).
 *>
-*> If ICOMPQ = 0, SLALSA applies the inverse of the left singular vector
+*> If ICOMPQ = 0, AB_SLALSA applies the inverse of the left singular vector
 *> matrix of an upper bidiagonal matrix to the right hand side; and if
-*> ICOMPQ = 1, SLALSA applies the right singular vector matrix to the
+*> ICOMPQ = 1, AB_SLALSA applies the right singular vector matrix to the
 *> right hand side. The singular vector matrices were generated in
-*> compact form by SLALSA.
+*> compact form by AB_SLALSA.
 *> \endverbatim
 *
 *  Arguments:
@@ -262,7 +262,8 @@
 *>     Osni Marques, LBNL/NERSC, USA \n
 *
 *  =====================================================================
-      SUBROUTINE SLALSA( ICOMPQ, SMLSIZ, N, NRHS, B, LDB, BX, LDBX, U,
+      SUBROUTINE AB_SLALSA( ICOMPQ, SMLSIZ, N, NRHS, B, LDB, BX, LDBX, U
+     $,
      $                   LDU, VT, K, DIFL, DIFR, Z, POLES, GIVPTR,
      $                   GIVCOL, LDGCOL, PERM, GIVNUM, C, S, WORK,
      $                   IWORK, INFO )
@@ -298,7 +299,8 @@
      $                   NR, NRF, NRP1, SQRE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SGEMM, SLALS0, SLASDT, XERBLA
+      EXTERNAL           AB_SCOPY, AB_SGEMM, AB_SLALS0, AB_SLASDT, AB_XE
+     $RBLA
 *     ..
 *     .. Executable Statements ..
 *
@@ -324,7 +326,7 @@
          INFO = -19
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SLALSA', -INFO )
+         CALL AB_XERBLA( 'AB_SLALSA', -INFO )
          RETURN
       END IF
 *
@@ -334,7 +336,7 @@
       NDIML = INODE + N
       NDIMR = NDIML + N
 *
-      CALL SLASDT( N, NLVL, ND, IWORK( INODE ), IWORK( NDIML ),
+      CALL AB_SLASDT( N, NLVL, ND, IWORK( INODE ), IWORK( NDIML ),
      $             IWORK( NDIMR ), SMLSIZ )
 *
 *     The following code applies back the left singular vector factors.
@@ -345,7 +347,7 @@
       END IF
 *
 *     The nodes on the bottom level of the tree were solved
-*     by SLASDQ. The corresponding left and right singular vector
+*     by AB_SLASDQ. The corresponding left and right singular vector
 *     matrices are in explicit form. First apply back the left
 *     singular vector matrices.
 *
@@ -364,9 +366,9 @@
          NR = IWORK( NDIMR+I1 )
          NLF = IC - NL
          NRF = IC + 1
-         CALL SGEMM( 'T', 'N', NL, NRHS, NL, ONE, U( NLF, 1 ), LDU,
+         CALL AB_SGEMM( 'T', 'N', NL, NRHS, NL, ONE, U( NLF, 1 ), LDU,
      $               B( NLF, 1 ), LDB, ZERO, BX( NLF, 1 ), LDBX )
-         CALL SGEMM( 'T', 'N', NR, NRHS, NR, ONE, U( NRF, 1 ), LDU,
+         CALL AB_SGEMM( 'T', 'N', NR, NRHS, NR, ONE, U( NRF, 1 ), LDU,
      $               B( NRF, 1 ), LDB, ZERO, BX( NRF, 1 ), LDBX )
    10 CONTINUE
 *
@@ -375,7 +377,7 @@
 *
       DO 20 I = 1, ND
          IC = IWORK( INODE+I-1 )
-         CALL SCOPY( NRHS, B( IC, 1 ), LDB, BX( IC, 1 ), LDBX )
+         CALL AB_SCOPY( NRHS, B( IC, 1 ), LDB, BX( IC, 1 ), LDBX )
    20 CONTINUE
 *
 *     Finally go through the left singular vector matrices of all
@@ -405,7 +407,8 @@
             NLF = IC - NL
             NRF = IC + 1
             J = J - 1
-            CALL SLALS0( ICOMPQ, NL, NR, SQRE, NRHS, BX( NLF, 1 ), LDBX,
+            CALL AB_SLALS0( ICOMPQ, NL, NR, SQRE, NRHS, BX( NLF, 1 ), LD
+     $BX,
      $                   B( NLF, 1 ), LDB, PERM( NLF, LVL ),
      $                   GIVPTR( J ), GIVCOL( NLF, LVL2 ), LDGCOL,
      $                   GIVNUM( NLF, LVL2 ), LDU, POLES( NLF, LVL2 ),
@@ -450,7 +453,8 @@
                SQRE = 1
             END IF
             J = J + 1
-            CALL SLALS0( ICOMPQ, NL, NR, SQRE, NRHS, B( NLF, 1 ), LDB,
+            CALL AB_SLALS0( ICOMPQ, NL, NR, SQRE, NRHS, B( NLF, 1 ), LDB
+     $,
      $                   BX( NLF, 1 ), LDBX, PERM( NLF, LVL ),
      $                   GIVPTR( J ), GIVCOL( NLF, LVL2 ), LDGCOL,
      $                   GIVNUM( NLF, LVL2 ), LDU, POLES( NLF, LVL2 ),
@@ -461,7 +465,7 @@
    70 CONTINUE
 *
 *     The nodes on the bottom level of the tree were solved
-*     by SLASDQ. The corresponding right singular vector
+*     by AB_SLASDQ. The corresponding right singular vector
 *     matrices are in explicit form. Apply them back.
 *
       NDB1 = ( ND+1 ) / 2
@@ -478,9 +482,11 @@
          END IF
          NLF = IC - NL
          NRF = IC + 1
-         CALL SGEMM( 'T', 'N', NLP1, NRHS, NLP1, ONE, VT( NLF, 1 ), LDU,
+         CALL AB_SGEMM( 'T', 'N', NLP1, NRHS, NLP1, ONE, VT( NLF, 1 ), L
+     $DU,
      $               B( NLF, 1 ), LDB, ZERO, BX( NLF, 1 ), LDBX )
-         CALL SGEMM( 'T', 'N', NRP1, NRHS, NRP1, ONE, VT( NRF, 1 ), LDU,
+         CALL AB_SGEMM( 'T', 'N', NRP1, NRHS, NRP1, ONE, VT( NRF, 1 ), L
+     $DU,
      $               B( NRF, 1 ), LDB, ZERO, BX( NRF, 1 ), LDBX )
    80 CONTINUE
 *
@@ -488,6 +494,6 @@
 *
       RETURN
 *
-*     End of SLALSA
+*     End of AB_SLALSA
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b ZTGEVC
+*> \brief \b AB_ZTGEVC
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZTGEVC + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztgevc.f">
+*> Download AB_ZTGEVC + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZTGEVC.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztgevc.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZTGEVC.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztgevc.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZTGEVC.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZTGEVC( SIDE, HOWMNY, SELECT, N, S, LDS, P, LDP, VL,
+*       SUBROUTINE AB_ZTGEVC( SIDE, HOWMNY, SELECT, N, S, LDS, P, LDP, VL,
 *                          LDVL, VR, LDVR, MM, M, WORK, RWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -39,14 +39,14 @@
 *>
 *> \verbatim
 *>
-*> ZTGEVC computes some or all of the right and/or left eigenvectors of
+*> AB_ZTGEVC computes some or all of the right and/or left eigenvectors of
 *> a pair of complex matrices (S,P), where S and P are upper triangular.
 *> Matrix pairs of this type are produced by the generalized Schur
 *> factorization of a complex matrix pair (A,B):
 *>
 *>    A = Q*S*Z**H,  B = Q*P*Z**H
 *>
-*> as computed by ZGGHRD + ZHGEQZ.
+*> as computed by AB_ZGGHRD + AB_ZHGEQZ.
 *>
 *> The right eigenvector x and the left eigenvector y of (S,P)
 *> corresponding to an eigenvalue w are defined by:
@@ -105,7 +105,7 @@
 *> \verbatim
 *>          S is COMPLEX*16 array, dimension (LDS,N)
 *>          The upper triangular matrix S from a generalized Schur
-*>          factorization, as computed by ZHGEQZ.
+*>          factorization, as computed by AB_ZHGEQZ.
 *> \endverbatim
 *>
 *> \param[in] LDS
@@ -118,7 +118,7 @@
 *> \verbatim
 *>          P is COMPLEX*16 array, dimension (LDP,N)
 *>          The upper triangular matrix P from a generalized Schur
-*>          factorization, as computed by ZHGEQZ.  P must have real
+*>          factorization, as computed by AB_ZHGEQZ.  P must have real
 *>          diagonal elements.
 *> \endverbatim
 *>
@@ -133,7 +133,7 @@
 *>          VL is COMPLEX*16 array, dimension (LDVL,MM)
 *>          On entry, if SIDE = 'L' or 'B' and HOWMNY = 'B', VL must
 *>          contain an N-by-N matrix Q (usually the unitary matrix Q
-*>          of left Schur vectors returned by ZHGEQZ).
+*>          of left Schur vectors returned by AB_ZHGEQZ).
 *>          On exit, if SIDE = 'L' or 'B', VL contains:
 *>          if HOWMNY = 'A', the matrix Y of left eigenvectors of (S,P);
 *>          if HOWMNY = 'B', the matrix Q*Y;
@@ -155,7 +155,7 @@
 *>          VR is COMPLEX*16 array, dimension (LDVR,MM)
 *>          On entry, if SIDE = 'R' or 'B' and HOWMNY = 'B', VR must
 *>          contain an N-by-N matrix Q (usually the unitary matrix Z
-*>          of right Schur vectors returned by ZHGEQZ).
+*>          of right Schur vectors returned by AB_ZHGEQZ).
 *>          On exit, if SIDE = 'R' or 'B', VR contains:
 *>          if HOWMNY = 'A', the matrix X of right eigenvectors of (S,P);
 *>          if HOWMNY = 'B', the matrix Z*X;
@@ -216,7 +216,7 @@
 *> \ingroup complex16GEcomputational
 *
 *  =====================================================================
-      SUBROUTINE ZTGEVC( SIDE, HOWMNY, SELECT, N, S, LDS, P, LDP, VL,
+      SUBROUTINE AB_ZTGEVC( SIDE, HOWMNY, SELECT, N, S, LDS, P, LDP, VL,
      $                   LDVL, VR, LDVR, MM, M, WORK, RWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -256,13 +256,13 @@
       COMPLEX*16         BCOEFF, CA, CB, D, SALPHA, SUM, SUMA, SUMB, X
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
+      LOGICAL            AB_LSAME
       DOUBLE PRECISION   DLAMCH
-      COMPLEX*16         ZLADIV
-      EXTERNAL           LSAME, DLAMCH, ZLADIV
+      COMPLEX*16         AB_ZLADIV
+      EXTERNAL           AB_LSAME, DLAMCH, AB_ZLADIV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLABAD, XERBLA, ZGEMV
+      EXTERNAL           AB_DLABAD, AB_XERBLA, AB_ZGEMV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCMPLX, DCONJG, DIMAG, MAX, MIN
@@ -277,15 +277,15 @@
 *
 *     Decode and Test the input parameters
 *
-      IF( LSAME( HOWMNY, 'A' ) ) THEN
+      IF( AB_LSAME( HOWMNY, 'A' ) ) THEN
          IHWMNY = 1
          ILALL = .TRUE.
          ILBACK = .FALSE.
-      ELSE IF( LSAME( HOWMNY, 'S' ) ) THEN
+      ELSE IF( AB_LSAME( HOWMNY, 'S' ) ) THEN
          IHWMNY = 2
          ILALL = .FALSE.
          ILBACK = .FALSE.
-      ELSE IF( LSAME( HOWMNY, 'B' ) ) THEN
+      ELSE IF( AB_LSAME( HOWMNY, 'B' ) ) THEN
          IHWMNY = 3
          ILALL = .TRUE.
          ILBACK = .TRUE.
@@ -293,15 +293,15 @@
          IHWMNY = -1
       END IF
 *
-      IF( LSAME( SIDE, 'R' ) ) THEN
+      IF( AB_LSAME( SIDE, 'R' ) ) THEN
          ISIDE = 1
          COMPL = .FALSE.
          COMPR = .TRUE.
-      ELSE IF( LSAME( SIDE, 'L' ) ) THEN
+      ELSE IF( AB_LSAME( SIDE, 'L' ) ) THEN
          ISIDE = 2
          COMPL = .TRUE.
          COMPR = .FALSE.
-      ELSE IF( LSAME( SIDE, 'B' ) ) THEN
+      ELSE IF( AB_LSAME( SIDE, 'B' ) ) THEN
          ISIDE = 3
          COMPL = .TRUE.
          COMPR = .TRUE.
@@ -322,7 +322,7 @@
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZTGEVC', -INFO )
+         CALL AB_XERBLA( 'AB_ZTGEVC', -INFO )
          RETURN
       END IF
 *
@@ -356,7 +356,7 @@
          INFO = -13
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZTGEVC', -INFO )
+         CALL AB_XERBLA( 'AB_ZTGEVC', -INFO )
          RETURN
       END IF
 *
@@ -370,7 +370,7 @@
 *
       SAFMIN = DLAMCH( 'Safe minimum' )
       BIG = ONE / SAFMIN
-      CALL DLABAD( SAFMIN, BIG )
+      CALL AB_DLABAD( SAFMIN, BIG )
       ULP = DLAMCH( 'Epsilon' )*DLAMCH( 'Base' )
       SMALL = SAFMIN*N / ULP
       BIG = ONE / SMALL
@@ -524,14 +524,15 @@
                         SUM = TEMP*SUM
                      END IF
                   END IF
-                  WORK( J ) = ZLADIV( -SUM, D )
+                  WORK( J ) = AB_ZLADIV( -SUM, D )
                   XMAX = MAX( XMAX, ABS1( WORK( J ) ) )
   100          CONTINUE
 *
 *              Back transform eigenvector if HOWMNY='B'.
 *
                IF( ILBACK ) THEN
-                  CALL ZGEMV( 'N', N, N+1-JE, CONE, VL( 1, JE ), LDVL,
+                  CALL AB_ZGEMV( 'N', N, N+1-JE, CONE, VL( 1, JE ), LDVL
+     $,
      $                        WORK( JE ), 1, CZERO, WORK( N+1 ), 1 )
                   ISRC = 2
                   IBEG = 1
@@ -669,7 +670,7 @@
                      END IF
                   END IF
 *
-                  WORK( J ) = ZLADIV( -WORK( J ), D )
+                  WORK( J ) = AB_ZLADIV( -WORK( J ), D )
 *
                   IF( J.GT.1 ) THEN
 *
@@ -697,7 +698,7 @@
 *              Back transform eigenvector if HOWMNY='B'.
 *
                IF( ILBACK ) THEN
-                  CALL ZGEMV( 'N', N, JE, CONE, VR, LDVR, WORK, 1,
+                  CALL AB_ZGEMV( 'N', N, JE, CONE, VR, LDVR, WORK, 1,
      $                        CZERO, WORK( N+1 ), 1 )
                   ISRC = 2
                   IEND = N
@@ -732,6 +733,6 @@
 *
       RETURN
 *
-*     End of ZTGEVC
+*     End of AB_ZTGEVC
 *
       END

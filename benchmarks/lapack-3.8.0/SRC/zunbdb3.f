@@ -1,4 +1,4 @@
-*> \brief \b ZUNBDB3
+*> \brief \b AB_ZUNBDB3
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZUNBDB3 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zunbdb3.f">
+*> Download AB_ZUNBDB3 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZUNBDB3.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zunbdb3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZUNBDB3.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zunbdb3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZUNBDB3.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZUNBDB3( M, P, Q, X11, LDX11, X21, LDX21, THETA, PHI,
+*       SUBROUTINE AB_ZUNBDB3( M, P, Q, X11, LDX11, X21, LDX21, THETA, PHI,
 *                           TAUP1, TAUP2, TAUQ1, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *>\verbatim
 *>
-*> ZUNBDB3 simultaneously bidiagonalizes the blocks of a tall and skinny
+*> AB_ZUNBDB3 simultaneously bidiagonalizes the blocks of a tall and skinny
 *> matrix X with orthonomal columns:
 *>
 *>                            [ B11 ]
@@ -46,7 +46,7 @@
 *>                            [  0  ]
 *>
 *> X11 is P-by-Q, and X21 is (M-P)-by-Q. M-P must be no larger than P,
-*> Q, or M-Q. Routines ZUNBDB1, ZUNBDB2, and ZUNBDB4 handle cases in
+*> Q, or M-Q. Routines AB_ZUNBDB1, AB_ZUNBDB2, and AB_ZUNBDB4 handle cases in
 *> which M-P is not the minimum dimension.
 *>
 *> The unitary matrices P1, P2, and Q1 are P-by-P, (M-P)-by-(M-P),
@@ -154,7 +154,7 @@
 *>           If LWORK = -1, then a workspace query is assumed; the routine
 *>           only calculates the optimal size of the WORK array, returns
 *>           this value as the first entry of the WORK array, and no error
-*>           message related to LWORK is issued by XERBLA.
+*>           message related to LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -187,8 +187,8 @@
 *>  with a sine or cosine of a PHI. See [1] or ZUNCSD for details.
 *>
 *>  P1, P2, and Q1 are represented as products of elementary reflectors.
-*>  See ZUNCSD2BY1 for details on generating P1, P2, and Q1 using ZUNGQR
-*>  and ZUNGLQ.
+*>  See AB_ZUNCSD2BY1 for details on generating P1, P2, and Q1 using AB_ZUNGQR
+*>  and AB_ZUNGLQ.
 *> \endverbatim
 *
 *> \par References:
@@ -198,7 +198,8 @@
 *>      Algorithms, 50(1):33-65, 2009.
 *>
 *  =====================================================================
-      SUBROUTINE ZUNBDB3( M, P, Q, X11, LDX11, X21, LDX21, THETA, PHI,
+      SUBROUTINE AB_ZUNBDB3( M, P, Q, X11, LDX11, X21, LDX21, THETA, PHI
+     $,
      $                    TAUP1, TAUP2, TAUQ1, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.8.0) --
@@ -228,11 +229,12 @@
       LOGICAL            LQUERY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZLARF, ZLARFGP, ZUNBDB5, ZDROT, ZLACGV, XERBLA
+      EXTERNAL           AB_ZLARF, AB_ZLARFGP, AB_ZUNBDB5, AB_ZDROT, AB_
+     $ZLACGV, AB_XERBLA
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DZNRM2
-      EXTERNAL           DZNRM2
+      DOUBLE PRECISION   AB_DZNRM2
+      EXTERNAL           AB_DZNRM2
 *     ..
 *     .. Intrinsic Function ..
       INTRINSIC          ATAN2, COS, MAX, SIN, SQRT
@@ -271,7 +273,7 @@
          END IF
       END IF
       IF( INFO .NE. 0 ) THEN
-         CALL XERBLA( 'ZUNBDB3', -INFO )
+         CALL AB_XERBLA( 'AB_ZUNBDB3', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -282,39 +284,40 @@
       DO I = 1, M-P
 *
          IF( I .GT. 1 ) THEN
-            CALL ZDROT( Q-I+1, X11(I-1,I), LDX11, X21(I,I), LDX11, C,
+            CALL AB_ZDROT( Q-I+1, X11(I-1,I), LDX11, X21(I,I), LDX11, C,
      $                  S )
          END IF
 *
-         CALL ZLACGV( Q-I+1, X21(I,I), LDX21 )
-         CALL ZLARFGP( Q-I+1, X21(I,I), X21(I,I+1), LDX21, TAUQ1(I) )
+         CALL AB_ZLACGV( Q-I+1, X21(I,I), LDX21 )
+         CALL AB_ZLARFGP( Q-I+1, X21(I,I), X21(I,I+1), LDX21, TAUQ1(I) )
          S = DBLE( X21(I,I) )
          X21(I,I) = ONE
-         CALL ZLARF( 'R', P-I+1, Q-I+1, X21(I,I), LDX21, TAUQ1(I),
+         CALL AB_ZLARF( 'R', P-I+1, Q-I+1, X21(I,I), LDX21, TAUQ1(I),
      $               X11(I,I), LDX11, WORK(ILARF) )
-         CALL ZLARF( 'R', M-P-I, Q-I+1, X21(I,I), LDX21, TAUQ1(I),
+         CALL AB_ZLARF( 'R', M-P-I, Q-I+1, X21(I,I), LDX21, TAUQ1(I),
      $               X21(I+1,I), LDX21, WORK(ILARF) )
-         CALL ZLACGV( Q-I+1, X21(I,I), LDX21 )
-         C = SQRT( DZNRM2( P-I+1, X11(I,I), 1 )**2
-     $           + DZNRM2( M-P-I, X21(I+1,I), 1 )**2 )
+         CALL AB_ZLACGV( Q-I+1, X21(I,I), LDX21 )
+         C = SQRT( AB_DZNRM2( P-I+1, X11(I,I), 1 )**2
+     $           + AB_DZNRM2( M-P-I, X21(I+1,I), 1 )**2 )
          THETA(I) = ATAN2( S, C )
 *
-         CALL ZUNBDB5( P-I+1, M-P-I, Q-I, X11(I,I), 1, X21(I+1,I), 1,
+         CALL AB_ZUNBDB5( P-I+1, M-P-I, Q-I, X11(I,I), 1, X21(I+1,I), 1,
      $                 X11(I,I+1), LDX11, X21(I+1,I+1), LDX21,
      $                 WORK(IORBDB5), LORBDB5, CHILDINFO )
-         CALL ZLARFGP( P-I+1, X11(I,I), X11(I+1,I), 1, TAUP1(I) )
+         CALL AB_ZLARFGP( P-I+1, X11(I,I), X11(I+1,I), 1, TAUP1(I) )
          IF( I .LT. M-P ) THEN
-            CALL ZLARFGP( M-P-I, X21(I+1,I), X21(I+2,I), 1, TAUP2(I) )
+            CALL AB_ZLARFGP( M-P-I, X21(I+1,I), X21(I+2,I), 1, TAUP2(I) 
+     $)
             PHI(I) = ATAN2( DBLE( X21(I+1,I) ), DBLE( X11(I,I) ) )
             C = COS( PHI(I) )
             S = SIN( PHI(I) )
             X21(I+1,I) = ONE
-            CALL ZLARF( 'L', M-P-I, Q-I, X21(I+1,I), 1,
+            CALL AB_ZLARF( 'L', M-P-I, Q-I, X21(I+1,I), 1,
      $                  DCONJG(TAUP2(I)), X21(I+1,I+1), LDX21,
      $                  WORK(ILARF) )
          END IF
          X11(I,I) = ONE
-         CALL ZLARF( 'L', P-I+1, Q-I, X11(I,I), 1, DCONJG(TAUP1(I)),
+         CALL AB_ZLARF( 'L', P-I+1, Q-I, X11(I,I), 1, DCONJG(TAUP1(I)),
      $               X11(I,I+1), LDX11, WORK(ILARF) )
 *
       END DO
@@ -322,15 +325,15 @@
 *     Reduce the bottom-right portion of X11 to the identity matrix
 *
       DO I = M-P + 1, Q
-         CALL ZLARFGP( P-I+1, X11(I,I), X11(I+1,I), 1, TAUP1(I) )
+         CALL AB_ZLARFGP( P-I+1, X11(I,I), X11(I+1,I), 1, TAUP1(I) )
          X11(I,I) = ONE
-         CALL ZLARF( 'L', P-I+1, Q-I, X11(I,I), 1, DCONJG(TAUP1(I)),
+         CALL AB_ZLARF( 'L', P-I+1, Q-I, X11(I,I), 1, DCONJG(TAUP1(I)),
      $               X11(I,I+1), LDX11, WORK(ILARF) )
       END DO
 *
       RETURN
 *
-*     End of ZUNBDB3
+*     End of AB_ZUNBDB3
 *
       END
 

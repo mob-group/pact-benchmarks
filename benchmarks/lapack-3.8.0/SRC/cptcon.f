@@ -1,4 +1,4 @@
-*> \brief \b CPTCON
+*> \brief \b AB_CPTCON
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CPTCON + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cptcon.f">
+*> Download AB_CPTCON + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CPTCON.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cptcon.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CPTCON.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cptcon.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CPTCON.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CPTCON( N, D, E, ANORM, RCOND, RWORK, INFO )
+*       SUBROUTINE AB_CPTCON( N, D, E, ANORM, RCOND, RWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, N
@@ -35,10 +35,10 @@
 *>
 *> \verbatim
 *>
-*> CPTCON computes the reciprocal of the condition number (in the
+*> AB_CPTCON computes the reciprocal of the condition number (in the
 *> 1-norm) of a complex Hermitian positive definite tridiagonal matrix
 *> using the factorization A = L*D*L**H or A = U**H*D*U computed by
-*> CPTTRF.
+*> AB_CPTTRF.
 *>
 *> Norm(inv(A)) is computed by a direct method, and the reciprocal of
 *> the condition number is computed as
@@ -58,14 +58,14 @@
 *> \verbatim
 *>          D is REAL array, dimension (N)
 *>          The n diagonal elements of the diagonal matrix D from the
-*>          factorization of A, as computed by CPTTRF.
+*>          factorization of A, as computed by AB_CPTTRF.
 *> \endverbatim
 *>
 *> \param[in] E
 *> \verbatim
 *>          E is COMPLEX array, dimension (N-1)
 *>          The (n-1) off-diagonal elements of the unit bidiagonal factor
-*>          U or L from the factorization of A, as computed by CPTTRF.
+*>          U or L from the factorization of A, as computed by AB_CPTTRF.
 *> \endverbatim
 *>
 *> \param[in] ANORM
@@ -117,7 +117,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CPTCON( N, D, E, ANORM, RCOND, RWORK, INFO )
+      SUBROUTINE AB_CPTCON( N, D, E, ANORM, RCOND, RWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -144,11 +144,11 @@
       REAL               AINVNM
 *     ..
 *     .. External Functions ..
-      INTEGER            ISAMAX
-      EXTERNAL           ISAMAX
+      INTEGER            AB_ISAMAX
+      EXTERNAL           AB_ISAMAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA
+      EXTERNAL           AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS
@@ -164,7 +164,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CPTCON', -INFO )
+         CALL AB_XERBLA( 'AB_CPTCON', -INFO )
          RETURN
       END IF
 *
@@ -208,7 +208,7 @@
 *
 *     Compute AINVNM = max(x(i)), 1<=i<=n.
 *
-      IX = ISAMAX( N, RWORK, 1 )
+      IX = AB_ISAMAX( N, RWORK, 1 )
       AINVNM = ABS( RWORK( IX ) )
 *
 *     Compute the reciprocal condition number.
@@ -218,6 +218,6 @@
 *
       RETURN
 *
-*     End of CPTCON
+*     End of AB_CPTCON
 *
       END

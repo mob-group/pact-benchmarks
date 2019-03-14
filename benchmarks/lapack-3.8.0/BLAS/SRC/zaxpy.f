@@ -1,4 +1,4 @@
-*> \brief \b ZAXPY
+*> \brief \b AB_ZAXPY
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZAXPY(N,ZA,ZX,INCX,ZY,INCY)
+*       SUBROUTINE AB_ZAXPY(N,ZA,ZX,INCX,ZY,INCY)
 *
 *       .. Scalar Arguments ..
 *       COMPLEX*16 ZA
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*>    ZAXPY constant times a vector plus a vector.
+*>    AB_ZAXPY constant times a vector plus a vector.
 *> \endverbatim
 *
 *  Arguments:
@@ -86,7 +86,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZAXPY(N,ZA,ZX,INCX,ZY,INCY)
+      SUBROUTINE AB_ZAXPY(N,ZA,ZX,INCX,ZY,INCY)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -107,11 +107,11 @@
       INTEGER I,IX,IY
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION DCABS1
-      EXTERNAL DCABS1
+      DOUBLE PRECISION AB_DCABS1
+      EXTERNAL AB_DCABS1
 *     ..
       IF (N.LE.0) RETURN
-      IF (DCABS1(ZA).EQ.0.0d0) RETURN
+      IF (AB_DCABS1(ZA).EQ.0.0d0) RETURN
       IF (INCX.EQ.1 .AND. INCY.EQ.1) THEN
 *
 *        code for both increments equal to 1

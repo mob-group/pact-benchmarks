@@ -1,4 +1,4 @@
-*> \brief <b> SPTSVX computes the solution to system of linear equations A * X = B for PT matrices</b>
+*> \brief <b> AB_SPTSVX computes the solution to system of linear equations A * X = B for PT matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SPTSVX + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sptsvx.f">
+*> Download AB_SPTSVX + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SPTSVx.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sptsvx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SPTSVx.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sptsvx.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SPTSVx.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SPTSVX( FACT, N, NRHS, D, E, DF, EF, B, LDB, X, LDX,
+*       SUBROUTINE AB_SPTSVX( FACT, N, NRHS, D, E, DF, EF, B, LDB, X, LDX,
 *                          RCOND, FERR, BERR, WORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -38,7 +38,7 @@
 *>
 *> \verbatim
 *>
-*> SPTSVX uses the factorization A = L*D*L**T to compute the solution
+*> AB_SPTSVX uses the factorization A = L*D*L**T to compute the solution
 *> to a real system of linear equations A*X = B, where A is an N-by-N
 *> symmetric positive definite tridiagonal matrix and X and B are
 *> N-by-NRHS matrices.
@@ -225,7 +225,7 @@
 *> \ingroup realPTsolve
 *
 *  =====================================================================
-      SUBROUTINE SPTSVX( FACT, N, NRHS, D, E, DF, EF, B, LDB, X, LDX,
+      SUBROUTINE AB_SPTSVX( FACT, N, NRHS, D, E, DF, EF, B, LDB, X, LDX,
      $                   RCOND, FERR, BERR, WORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -255,13 +255,14 @@
       REAL               ANORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SLAMCH, SLANST
-      EXTERNAL           LSAME, SLAMCH, SLANST
+      LOGICAL            AB_LSAME
+      REAL               SLAMCH, AB_SLANST
+      EXTERNAL           AB_LSAME, SLAMCH, AB_SLANST
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLACPY, SPTCON, SPTRFS, SPTTRF, SPTTRS,
-     $                   XERBLA
+      EXTERNAL           AB_SCOPY, AB_SLACPY, AB_SPTCON, AB_SPTRFS, AB_S
+     $PTTRF, AB_SPTTRS,
+     $                   AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -271,8 +272,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      NOFACT = LSAME( FACT, 'N' )
-      IF( .NOT.NOFACT .AND. .NOT.LSAME( FACT, 'F' ) ) THEN
+      NOFACT = AB_LSAME( FACT, 'N' )
+      IF( .NOT.NOFACT .AND. .NOT.AB_LSAME( FACT, 'F' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -284,7 +285,7 @@
          INFO = -11
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SPTSVX', -INFO )
+         CALL AB_XERBLA( 'AB_SPTSVX', -INFO )
          RETURN
       END IF
 *
@@ -292,10 +293,10 @@
 *
 *        Compute the L*D*L**T (or U**T*D*U) factorization of A.
 *
-         CALL SCOPY( N, D, 1, DF, 1 )
+         CALL AB_SCOPY( N, D, 1, DF, 1 )
          IF( N.GT.1 )
-     $      CALL SCOPY( N-1, E, 1, EF, 1 )
-         CALL SPTTRF( N, DF, EF, INFO )
+     $      CALL AB_SCOPY( N-1, E, 1, EF, 1 )
+         CALL AB_SPTTRF( N, DF, EF, INFO )
 *
 *        Return if INFO is non-zero.
 *
@@ -307,21 +308,21 @@
 *
 *     Compute the norm of the matrix A.
 *
-      ANORM = SLANST( '1', N, D, E )
+      ANORM = AB_SLANST( '1', N, D, E )
 *
 *     Compute the reciprocal of the condition number of A.
 *
-      CALL SPTCON( N, DF, EF, ANORM, RCOND, WORK, INFO )
+      CALL AB_SPTCON( N, DF, EF, ANORM, RCOND, WORK, INFO )
 *
 *     Compute the solution vectors X.
 *
-      CALL SLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
-      CALL SPTTRS( N, NRHS, DF, EF, X, LDX, INFO )
+      CALL AB_SLACPY( 'Full', N, NRHS, B, LDB, X, LDX )
+      CALL AB_SPTTRS( N, NRHS, DF, EF, X, LDX, INFO )
 *
 *     Use iterative refinement to improve the computed solutions and
 *     compute error bounds and backward error estimates for them.
 *
-      CALL SPTRFS( N, NRHS, D, E, DF, EF, B, LDB, X, LDX, FERR, BERR,
+      CALL AB_SPTRFS( N, NRHS, D, E, DF, EF, B, LDB, X, LDX, FERR, BERR,
      $             WORK, INFO )
 *
 *     Set INFO = N+1 if the matrix is singular to working precision.
@@ -331,6 +332,6 @@
 *
       RETURN
 *
-*     End of SPTSVX
+*     End of AB_SPTSVX
 *
       END

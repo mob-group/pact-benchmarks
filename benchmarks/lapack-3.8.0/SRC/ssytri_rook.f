@@ -1,4 +1,4 @@
-*> \brief \b SSYTRI_ROOK
+*> \brief \b AB_SSYTRI_ROOK
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SSYTRI_ROOK + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssytri_rook.f">
+*> Download AB_SSYTRI_ROOK + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SSYTRI_rook.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssytri_rook.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SSYTRI_rook.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssytri_rook.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SSYTRI_rook.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SSYTRI_ROOK( UPLO, N, A, LDA, IPIV, WORK, INFO )
+*       SUBROUTINE AB_SSYTRI_ROOK( UPLO, N, A, LDA, IPIV, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -35,9 +35,9 @@
 *>
 *> \verbatim
 *>
-*> SSYTRI_ROOK computes the inverse of a real symmetric
+*> AB_SSYTRI_ROOK computes the inverse of a real symmetric
 *> matrix A using the factorization A = U*D*U**T or A = L*D*L**T
-*> computed by SSYTRF_ROOK.
+*> computed by AB_SSYTRF_ROOK.
 *> \endverbatim
 *
 *  Arguments:
@@ -62,7 +62,7 @@
 *> \verbatim
 *>          A is REAL array, dimension (LDA,N)
 *>          On entry, the block diagonal matrix D and the multipliers
-*>          used to obtain the factor U or L as computed by SSYTRF_ROOK.
+*>          used to obtain the factor U or L as computed by AB_SSYTRF_ROOK.
 *>
 *>          On exit, if INFO = 0, the (symmetric) inverse of the original
 *>          matrix.  If UPLO = 'U', the upper triangular part of the
@@ -82,7 +82,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D
-*>          as determined by SSYTRF_ROOK.
+*>          as determined by AB_SSYTRF_ROOK.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -127,7 +127,7 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE SSYTRI_ROOK( UPLO, N, A, LDA, IPIV, WORK, INFO )
+      SUBROUTINE AB_SSYTRI_ROOK( UPLO, N, A, LDA, IPIV, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -155,12 +155,12 @@
       REAL               AK, AKKP1, AKP1, D, T, TEMP
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      REAL               SDOT
-      EXTERNAL           LSAME, SDOT
+      LOGICAL            AB_LSAME
+      REAL               AB_SDOT
+      EXTERNAL           AB_LSAME, AB_SDOT
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SSWAP, SSYMV, XERBLA
+      EXTERNAL           AB_SCOPY, AB_SSWAP, AB_SSYMV, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -170,8 +170,8 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      UPPER = AB_LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -179,7 +179,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SSYTRI_ROOK', -INFO )
+         CALL AB_XERBLA( 'AB_SSYTRI_ROOK', -INFO )
          RETURN
       END IF
 *
@@ -235,10 +235,10 @@
 *           Compute column K of the inverse.
 *
             IF( K.GT.1 ) THEN
-               CALL SCOPY( K-1, A( 1, K ), 1, WORK, 1 )
-               CALL SSYMV( UPLO, K-1, -ONE, A, LDA, WORK, 1, ZERO,
+               CALL AB_SCOPY( K-1, A( 1, K ), 1, WORK, 1 )
+               CALL AB_SSYMV( UPLO, K-1, -ONE, A, LDA, WORK, 1, ZERO,
      $                     A( 1, K ), 1 )
-               A( K, K ) = A( K, K ) - SDOT( K-1, WORK, 1, A( 1, K ),
+               A( K, K ) = A( K, K ) - AB_SDOT( K-1, WORK, 1, A( 1, K ),
      $                     1 )
             END IF
             KSTEP = 1
@@ -260,18 +260,19 @@
 *           Compute columns K and K+1 of the inverse.
 *
             IF( K.GT.1 ) THEN
-               CALL SCOPY( K-1, A( 1, K ), 1, WORK, 1 )
-               CALL SSYMV( UPLO, K-1, -ONE, A, LDA, WORK, 1, ZERO,
+               CALL AB_SCOPY( K-1, A( 1, K ), 1, WORK, 1 )
+               CALL AB_SSYMV( UPLO, K-1, -ONE, A, LDA, WORK, 1, ZERO,
      $                     A( 1, K ), 1 )
-               A( K, K ) = A( K, K ) - SDOT( K-1, WORK, 1, A( 1, K ),
+               A( K, K ) = A( K, K ) - AB_SDOT( K-1, WORK, 1, A( 1, K ),
      $                     1 )
                A( K, K+1 ) = A( K, K+1 ) -
-     $                       SDOT( K-1, A( 1, K ), 1, A( 1, K+1 ), 1 )
-               CALL SCOPY( K-1, A( 1, K+1 ), 1, WORK, 1 )
-               CALL SSYMV( UPLO, K-1, -ONE, A, LDA, WORK, 1, ZERO,
+     $                       AB_SDOT( K-1, A( 1, K ), 1, A( 1, K+1 ), 1 
+     $)
+               CALL AB_SCOPY( K-1, A( 1, K+1 ), 1, WORK, 1 )
+               CALL AB_SSYMV( UPLO, K-1, -ONE, A, LDA, WORK, 1, ZERO,
      $                     A( 1, K+1 ), 1 )
                A( K+1, K+1 ) = A( K+1, K+1 ) -
-     $                         SDOT( K-1, WORK, 1, A( 1, K+1 ), 1 )
+     $                         AB_SDOT( K-1, WORK, 1, A( 1, K+1 ), 1 )
             END IF
             KSTEP = 2
          END IF
@@ -284,8 +285,9 @@
             KP = IPIV( K )
             IF( KP.NE.K ) THEN
                IF( KP.GT.1 )
-     $             CALL SSWAP( KP-1, A( 1, K ), 1, A( 1, KP ), 1 )
-               CALL SSWAP( K-KP-1, A( KP+1, K ), 1, A( KP, KP+1 ), LDA )
+     $             CALL AB_SSWAP( KP-1, A( 1, K ), 1, A( 1, KP ), 1 )
+               CALL AB_SSWAP( K-KP-1, A( KP+1, K ), 1, A( KP, KP+1 ), LD
+     $A )
                TEMP = A( K, K )
                A( K, K ) = A( KP, KP )
                A( KP, KP ) = TEMP
@@ -298,8 +300,9 @@
             KP = -IPIV( K )
             IF( KP.NE.K ) THEN
                IF( KP.GT.1 )
-     $            CALL SSWAP( KP-1, A( 1, K ), 1, A( 1, KP ), 1 )
-               CALL SSWAP( K-KP-1, A( KP+1, K ), 1, A( KP, KP+1 ), LDA )
+     $            CALL AB_SSWAP( KP-1, A( 1, K ), 1, A( 1, KP ), 1 )
+               CALL AB_SSWAP( K-KP-1, A( KP+1, K ), 1, A( KP, KP+1 ), LD
+     $A )
 *
                TEMP = A( K, K )
                A( K, K ) = A( KP, KP )
@@ -313,8 +316,9 @@
             KP = -IPIV( K )
             IF( KP.NE.K ) THEN
                IF( KP.GT.1 )
-     $            CALL SSWAP( KP-1, A( 1, K ), 1, A( 1, KP ), 1 )
-               CALL SSWAP( K-KP-1, A( KP+1, K ), 1, A( KP, KP+1 ), LDA )
+     $            CALL AB_SSWAP( KP-1, A( 1, K ), 1, A( 1, KP ), 1 )
+               CALL AB_SSWAP( K-KP-1, A( KP+1, K ), 1, A( KP, KP+1 ), LD
+     $A )
                TEMP = A( K, K )
                A( K, K ) = A( KP, KP )
                A( KP, KP ) = TEMP
@@ -351,10 +355,12 @@
 *           Compute column K of the inverse.
 *
             IF( K.LT.N ) THEN
-               CALL SCOPY( N-K, A( K+1, K ), 1, WORK, 1 )
-               CALL SSYMV( UPLO, N-K, -ONE, A( K+1, K+1 ), LDA, WORK, 1,
+               CALL AB_SCOPY( N-K, A( K+1, K ), 1, WORK, 1 )
+               CALL AB_SSYMV( UPLO, N-K, -ONE, A( K+1, K+1 ), LDA, WORK,
+     $ 1,
      $                     ZERO, A( K+1, K ), 1 )
-               A( K, K ) = A( K, K ) - SDOT( N-K, WORK, 1, A( K+1, K ),
+               A( K, K ) = A( K, K ) - AB_SDOT( N-K, WORK, 1, A( K+1, K 
+     $),
      $                     1 )
             END IF
             KSTEP = 1
@@ -376,19 +382,23 @@
 *           Compute columns K-1 and K of the inverse.
 *
             IF( K.LT.N ) THEN
-               CALL SCOPY( N-K, A( K+1, K ), 1, WORK, 1 )
-               CALL SSYMV( UPLO, N-K, -ONE, A( K+1, K+1 ), LDA, WORK, 1,
+               CALL AB_SCOPY( N-K, A( K+1, K ), 1, WORK, 1 )
+               CALL AB_SSYMV( UPLO, N-K, -ONE, A( K+1, K+1 ), LDA, WORK,
+     $ 1,
      $                     ZERO, A( K+1, K ), 1 )
-               A( K, K ) = A( K, K ) - SDOT( N-K, WORK, 1, A( K+1, K ),
+               A( K, K ) = A( K, K ) - AB_SDOT( N-K, WORK, 1, A( K+1, K 
+     $),
      $                     1 )
                A( K, K-1 ) = A( K, K-1 ) -
-     $                       SDOT( N-K, A( K+1, K ), 1, A( K+1, K-1 ),
+     $                       AB_SDOT( N-K, A( K+1, K ), 1, A( K+1, K-1 )
+     $,
      $                       1 )
-               CALL SCOPY( N-K, A( K+1, K-1 ), 1, WORK, 1 )
-               CALL SSYMV( UPLO, N-K, -ONE, A( K+1, K+1 ), LDA, WORK, 1,
+               CALL AB_SCOPY( N-K, A( K+1, K-1 ), 1, WORK, 1 )
+               CALL AB_SSYMV( UPLO, N-K, -ONE, A( K+1, K+1 ), LDA, WORK,
+     $ 1,
      $                     ZERO, A( K+1, K-1 ), 1 )
                A( K-1, K-1 ) = A( K-1, K-1 ) -
-     $                         SDOT( N-K, WORK, 1, A( K+1, K-1 ), 1 )
+     $                         AB_SDOT( N-K, WORK, 1, A( K+1, K-1 ), 1 )
             END IF
             KSTEP = 2
          END IF
@@ -401,8 +411,10 @@
             KP = IPIV( K )
             IF( KP.NE.K ) THEN
                IF( KP.LT.N )
-     $            CALL SSWAP( N-KP, A( KP+1, K ), 1, A( KP+1, KP ), 1 )
-               CALL SSWAP( KP-K-1, A( K+1, K ), 1, A( KP, K+1 ), LDA )
+     $            CALL AB_SSWAP( N-KP, A( KP+1, K ), 1, A( KP+1, KP ), 1
+     $ )
+               CALL AB_SSWAP( KP-K-1, A( K+1, K ), 1, A( KP, K+1 ), LDA 
+     $)
                TEMP = A( K, K )
                A( K, K ) = A( KP, KP )
                A( KP, KP ) = TEMP
@@ -415,8 +427,10 @@
             KP = -IPIV( K )
             IF( KP.NE.K ) THEN
                IF( KP.LT.N )
-     $            CALL SSWAP( N-KP, A( KP+1, K ), 1, A( KP+1, KP ), 1 )
-               CALL SSWAP( KP-K-1, A( K+1, K ), 1, A( KP, K+1 ), LDA )
+     $            CALL AB_SSWAP( N-KP, A( KP+1, K ), 1, A( KP+1, KP ), 1
+     $ )
+               CALL AB_SSWAP( KP-K-1, A( K+1, K ), 1, A( KP, K+1 ), LDA 
+     $)
 *
                TEMP = A( K, K )
                A( K, K ) = A( KP, KP )
@@ -430,8 +444,10 @@
             KP = -IPIV( K )
             IF( KP.NE.K ) THEN
                IF( KP.LT.N )
-     $            CALL SSWAP( N-KP, A( KP+1, K ), 1, A( KP+1, KP ), 1 )
-               CALL SSWAP( KP-K-1, A( K+1, K ), 1, A( KP, K+1 ), LDA )
+     $            CALL AB_SSWAP( N-KP, A( KP+1, K ), 1, A( KP+1, KP ), 1
+     $ )
+               CALL AB_SSWAP( KP-K-1, A( K+1, K ), 1, A( KP, K+1 ), LDA 
+     $)
                TEMP = A( K, K )
                A( K, K ) = A( KP, KP )
                A( KP, KP ) = TEMP
@@ -445,6 +461,6 @@
 *
       RETURN
 *
-*     End of SSYTRI_ROOK
+*     End of AB_SSYTRI_ROOK
 *
       END

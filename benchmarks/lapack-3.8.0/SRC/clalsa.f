@@ -1,4 +1,4 @@
-*> \brief \b CLALSA computes the SVD of the coefficient matrix in compact form. Used by sgelsd.
+*> \brief \b AB_CLALSA computes the SVD of the coefficient matrix in compact form. Used by AB_SGELSd.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CLALSA + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clalsa.f">
+*> Download AB_CLALSA + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLALSA.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clalsa.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLALSA.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clalsa.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLALSA.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLALSA( ICOMPQ, SMLSIZ, N, NRHS, B, LDB, BX, LDBX, U,
+*       SUBROUTINE AB_CLALSA( ICOMPQ, SMLSIZ, N, NRHS, B, LDB, BX, LDBX, U,
 *                          LDU, VT, K, DIFL, DIFR, Z, POLES, GIVPTR,
 *                          GIVCOL, LDGCOL, PERM, GIVNUM, C, S, RWORK,
 *                          IWORK, INFO )
@@ -42,16 +42,16 @@
 *>
 *> \verbatim
 *>
-*> CLALSA is an itermediate step in solving the least squares problem
+*> AB_CLALSA is an itermediate step in solving the least squares problem
 *> by computing the SVD of the coefficient matrix in compact form (The
 *> singular vectors are computed as products of simple orthorgonal
 *> matrices.).
 *>
-*> If ICOMPQ = 0, CLALSA applies the inverse of the left singular vector
+*> If ICOMPQ = 0, AB_CLALSA applies the inverse of the left singular vector
 *> matrix of an upper bidiagonal matrix to the right hand side; and if
-*> ICOMPQ = 1, CLALSA applies the right singular vector matrix to the
+*> ICOMPQ = 1, AB_CLALSA applies the right singular vector matrix to the
 *> right hand side. The singular vector matrices were generated in
-*> compact form by CLALSA.
+*> compact form by AB_CLALSA.
 *> \endverbatim
 *
 *  Arguments:
@@ -262,7 +262,8 @@
 *>     Osni Marques, LBNL/NERSC, USA \n
 *
 *  =====================================================================
-      SUBROUTINE CLALSA( ICOMPQ, SMLSIZ, N, NRHS, B, LDB, BX, LDBX, U,
+      SUBROUTINE AB_CLALSA( ICOMPQ, SMLSIZ, N, NRHS, B, LDB, BX, LDBX, U
+     $,
      $                   LDU, VT, K, DIFL, DIFR, Z, POLES, GIVPTR,
      $                   GIVCOL, LDGCOL, PERM, GIVNUM, C, S, RWORK,
      $                   IWORK, INFO )
@@ -297,7 +298,8 @@
      $                   NDIMR, NL, NLF, NLP1, NLVL, NR, NRF, NRP1, SQRE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CCOPY, CLALS0, SGEMM, SLASDT, XERBLA
+      EXTERNAL           AB_CCOPY, AB_CLALS0, AB_SGEMM, AB_SLASDT, AB_XE
+     $RBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          AIMAG, CMPLX, REAL
@@ -326,7 +328,7 @@
          INFO = -19
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CLALSA', -INFO )
+         CALL AB_XERBLA( 'AB_CLALSA', -INFO )
          RETURN
       END IF
 *
@@ -336,7 +338,7 @@
       NDIML = INODE + N
       NDIMR = NDIML + N
 *
-      CALL SLASDT( N, NLVL, ND, IWORK( INODE ), IWORK( NDIML ),
+      CALL AB_SLASDT( N, NLVL, ND, IWORK( INODE ), IWORK( NDIML ),
      $             IWORK( NDIMR ), SMLSIZ )
 *
 *     The following code applies back the left singular vector factors.
@@ -347,7 +349,7 @@
       END IF
 *
 *     The nodes on the bottom level of the tree were solved
-*     by SLASDQ. The corresponding left and right singular vector
+*     by AB_SLASDQ. The corresponding left and right singular vector
 *     matrices are in explicit form. First apply back the left
 *     singular vector matrices.
 *
@@ -367,10 +369,10 @@
          NLF = IC - NL
          NRF = IC + 1
 *
-*        Since B and BX are complex, the following call to SGEMM
+*        Since B and BX are complex, the following call to AB_SGEMM
 *        is performed in two steps (real and imaginary parts).
 *
-*        CALL SGEMM( 'T', 'N', NL, NRHS, NL, ONE, U( NLF, 1 ), LDU,
+*        CALL AB_SGEMM( 'T', 'N', NL, NRHS, NL, ONE, U( NLF, 1 ), LDU,
 *     $               B( NLF, 1 ), LDB, ZERO, BX( NLF, 1 ), LDBX )
 *
          J = NL*NRHS*2
@@ -380,7 +382,7 @@
                RWORK( J ) = REAL( B( JROW, JCOL ) )
    10       CONTINUE
    20    CONTINUE
-         CALL SGEMM( 'T', 'N', NL, NRHS, NL, ONE, U( NLF, 1 ), LDU,
+         CALL AB_SGEMM( 'T', 'N', NL, NRHS, NL, ONE, U( NLF, 1 ), LDU,
      $               RWORK( 1+NL*NRHS*2 ), NL, ZERO, RWORK( 1 ), NL )
          J = NL*NRHS*2
          DO 40 JCOL = 1, NRHS
@@ -389,7 +391,7 @@
                RWORK( J ) = AIMAG( B( JROW, JCOL ) )
    30       CONTINUE
    40    CONTINUE
-         CALL SGEMM( 'T', 'N', NL, NRHS, NL, ONE, U( NLF, 1 ), LDU,
+         CALL AB_SGEMM( 'T', 'N', NL, NRHS, NL, ONE, U( NLF, 1 ), LDU,
      $               RWORK( 1+NL*NRHS*2 ), NL, ZERO, RWORK( 1+NL*NRHS ),
      $               NL )
          JREAL = 0
@@ -403,10 +405,10 @@
    50       CONTINUE
    60    CONTINUE
 *
-*        Since B and BX are complex, the following call to SGEMM
+*        Since B and BX are complex, the following call to AB_SGEMM
 *        is performed in two steps (real and imaginary parts).
 *
-*        CALL SGEMM( 'T', 'N', NR, NRHS, NR, ONE, U( NRF, 1 ), LDU,
+*        CALL AB_SGEMM( 'T', 'N', NR, NRHS, NR, ONE, U( NRF, 1 ), LDU,
 *    $               B( NRF, 1 ), LDB, ZERO, BX( NRF, 1 ), LDBX )
 *
          J = NR*NRHS*2
@@ -416,7 +418,7 @@
                RWORK( J ) = REAL( B( JROW, JCOL ) )
    70       CONTINUE
    80    CONTINUE
-         CALL SGEMM( 'T', 'N', NR, NRHS, NR, ONE, U( NRF, 1 ), LDU,
+         CALL AB_SGEMM( 'T', 'N', NR, NRHS, NR, ONE, U( NRF, 1 ), LDU,
      $               RWORK( 1+NR*NRHS*2 ), NR, ZERO, RWORK( 1 ), NR )
          J = NR*NRHS*2
          DO 100 JCOL = 1, NRHS
@@ -425,7 +427,7 @@
                RWORK( J ) = AIMAG( B( JROW, JCOL ) )
    90       CONTINUE
   100    CONTINUE
-         CALL SGEMM( 'T', 'N', NR, NRHS, NR, ONE, U( NRF, 1 ), LDU,
+         CALL AB_SGEMM( 'T', 'N', NR, NRHS, NR, ONE, U( NRF, 1 ), LDU,
      $               RWORK( 1+NR*NRHS*2 ), NR, ZERO, RWORK( 1+NR*NRHS ),
      $               NR )
          JREAL = 0
@@ -446,7 +448,7 @@
 *
       DO 140 I = 1, ND
          IC = IWORK( INODE+I-1 )
-         CALL CCOPY( NRHS, B( IC, 1 ), LDB, BX( IC, 1 ), LDBX )
+         CALL AB_CCOPY( NRHS, B( IC, 1 ), LDB, BX( IC, 1 ), LDBX )
   140 CONTINUE
 *
 *     Finally go through the left singular vector matrices of all
@@ -476,7 +478,8 @@
             NLF = IC - NL
             NRF = IC + 1
             J = J - 1
-            CALL CLALS0( ICOMPQ, NL, NR, SQRE, NRHS, BX( NLF, 1 ), LDBX,
+            CALL AB_CLALS0( ICOMPQ, NL, NR, SQRE, NRHS, BX( NLF, 1 ), LD
+     $BX,
      $                   B( NLF, 1 ), LDB, PERM( NLF, LVL ),
      $                   GIVPTR( J ), GIVCOL( NLF, LVL2 ), LDGCOL,
      $                   GIVNUM( NLF, LVL2 ), LDU, POLES( NLF, LVL2 ),
@@ -521,7 +524,8 @@
                SQRE = 1
             END IF
             J = J + 1
-            CALL CLALS0( ICOMPQ, NL, NR, SQRE, NRHS, B( NLF, 1 ), LDB,
+            CALL AB_CLALS0( ICOMPQ, NL, NR, SQRE, NRHS, B( NLF, 1 ), LDB
+     $,
      $                   BX( NLF, 1 ), LDBX, PERM( NLF, LVL ),
      $                   GIVPTR( J ), GIVCOL( NLF, LVL2 ), LDGCOL,
      $                   GIVNUM( NLF, LVL2 ), LDU, POLES( NLF, LVL2 ),
@@ -532,7 +536,7 @@
   190 CONTINUE
 *
 *     The nodes on the bottom level of the tree were solved
-*     by SLASDQ. The corresponding right singular vector
+*     by AB_SLASDQ. The corresponding right singular vector
 *     matrices are in explicit form. Apply them back.
 *
       NDB1 = ( ND+1 ) / 2
@@ -550,10 +554,10 @@
          NLF = IC - NL
          NRF = IC + 1
 *
-*        Since B and BX are complex, the following call to SGEMM is
+*        Since B and BX are complex, the following call to AB_SGEMM is
 *        performed in two steps (real and imaginary parts).
 *
-*        CALL SGEMM( 'T', 'N', NLP1, NRHS, NLP1, ONE, VT( NLF, 1 ), LDU,
+*        CALL AB_SGEMM( 'T', 'N', NLP1, NRHS, NLP1, ONE, VT( NLF, 1 ), LDU,
 *    $               B( NLF, 1 ), LDB, ZERO, BX( NLF, 1 ), LDBX )
 *
          J = NLP1*NRHS*2
@@ -563,7 +567,8 @@
                RWORK( J ) = REAL( B( JROW, JCOL ) )
   200       CONTINUE
   210    CONTINUE
-         CALL SGEMM( 'T', 'N', NLP1, NRHS, NLP1, ONE, VT( NLF, 1 ), LDU,
+         CALL AB_SGEMM( 'T', 'N', NLP1, NRHS, NLP1, ONE, VT( NLF, 1 ), L
+     $DU,
      $               RWORK( 1+NLP1*NRHS*2 ), NLP1, ZERO, RWORK( 1 ),
      $               NLP1 )
          J = NLP1*NRHS*2
@@ -573,7 +578,8 @@
                RWORK( J ) = AIMAG( B( JROW, JCOL ) )
   220       CONTINUE
   230    CONTINUE
-         CALL SGEMM( 'T', 'N', NLP1, NRHS, NLP1, ONE, VT( NLF, 1 ), LDU,
+         CALL AB_SGEMM( 'T', 'N', NLP1, NRHS, NLP1, ONE, VT( NLF, 1 ), L
+     $DU,
      $               RWORK( 1+NLP1*NRHS*2 ), NLP1, ZERO,
      $               RWORK( 1+NLP1*NRHS ), NLP1 )
          JREAL = 0
@@ -587,10 +593,10 @@
   240       CONTINUE
   250    CONTINUE
 *
-*        Since B and BX are complex, the following call to SGEMM is
+*        Since B and BX are complex, the following call to AB_SGEMM is
 *        performed in two steps (real and imaginary parts).
 *
-*        CALL SGEMM( 'T', 'N', NRP1, NRHS, NRP1, ONE, VT( NRF, 1 ), LDU,
+*        CALL AB_SGEMM( 'T', 'N', NRP1, NRHS, NRP1, ONE, VT( NRF, 1 ), LDU,
 *    $               B( NRF, 1 ), LDB, ZERO, BX( NRF, 1 ), LDBX )
 *
          J = NRP1*NRHS*2
@@ -600,7 +606,8 @@
                RWORK( J ) = REAL( B( JROW, JCOL ) )
   260       CONTINUE
   270    CONTINUE
-         CALL SGEMM( 'T', 'N', NRP1, NRHS, NRP1, ONE, VT( NRF, 1 ), LDU,
+         CALL AB_SGEMM( 'T', 'N', NRP1, NRHS, NRP1, ONE, VT( NRF, 1 ), L
+     $DU,
      $               RWORK( 1+NRP1*NRHS*2 ), NRP1, ZERO, RWORK( 1 ),
      $               NRP1 )
          J = NRP1*NRHS*2
@@ -610,7 +617,8 @@
                RWORK( J ) = AIMAG( B( JROW, JCOL ) )
   280       CONTINUE
   290    CONTINUE
-         CALL SGEMM( 'T', 'N', NRP1, NRHS, NRP1, ONE, VT( NRF, 1 ), LDU,
+         CALL AB_SGEMM( 'T', 'N', NRP1, NRHS, NRP1, ONE, VT( NRF, 1 ), L
+     $DU,
      $               RWORK( 1+NRP1*NRHS*2 ), NRP1, ZERO,
      $               RWORK( 1+NRP1*NRHS ), NRP1 )
          JREAL = 0
@@ -630,6 +638,6 @@
 *
       RETURN
 *
-*     End of CLALSA
+*     End of AB_CLALSA
 *
       END

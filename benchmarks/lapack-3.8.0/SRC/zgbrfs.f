@@ -1,4 +1,4 @@
-*> \brief \b ZGBRFS
+*> \brief \b AB_ZGBRFS
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZGBRFS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgbrfs.f">
+*> Download AB_ZGBRFS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZGBRFS.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgbrfs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZGBRFS.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgbrfs.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZGBRFS.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZGBRFS( TRANS, N, KL, KU, NRHS, AB, LDAB, AFB, LDAFB,
+*       SUBROUTINE AB_ZGBRFS( TRANS, N, KL, KU, NRHS, AB, LDAB, AFB, LDAFB,
 *                          IPIV, B, LDB, X, LDX, FERR, BERR, WORK, RWORK,
 *                          INFO )
 *
@@ -39,7 +39,7 @@
 *>
 *> \verbatim
 *>
-*> ZGBRFS improves the computed solution to a system of linear
+*> AB_ZGBRFS improves the computed solution to a system of linear
 *> equations when the coefficient matrix is banded, and provides
 *> error bounds and backward error estimates for the solution.
 *> \endverbatim
@@ -100,7 +100,7 @@
 *> \verbatim
 *>          AFB is COMPLEX*16 array, dimension (LDAFB,N)
 *>          Details of the LU factorization of the band matrix A, as
-*>          computed by ZGBTRF.  U is stored as an upper triangular band
+*>          computed by AB_ZGBTRF.  U is stored as an upper triangular band
 *>          matrix with KL+KU superdiagonals in rows 1 to KL+KU+1, and
 *>          the multipliers used during the factorization are stored in
 *>          rows KL+KU+2 to 2*KL+KU+1.
@@ -115,7 +115,7 @@
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          The pivot indices from ZGBTRF; for 1<=i<=N, row i of the
+*>          The pivot indices from AB_ZGBTRF; for 1<=i<=N, row i of the
 *>          matrix was interchanged with row IPIV(i).
 *> \endverbatim
 *>
@@ -134,7 +134,7 @@
 *> \param[in,out] X
 *> \verbatim
 *>          X is COMPLEX*16 array, dimension (LDX,NRHS)
-*>          On entry, the solution matrix X, as computed by ZGBTRS.
+*>          On entry, the solution matrix X, as computed by AB_ZGBTRS.
 *>          On exit, the improved solution matrix X.
 *> \endverbatim
 *>
@@ -202,7 +202,8 @@
 *> \ingroup complex16GBcomputational
 *
 *  =====================================================================
-      SUBROUTINE ZGBRFS( TRANS, N, KL, KU, NRHS, AB, LDAB, AFB, LDAFB,
+      SUBROUTINE AB_ZGBRFS( TRANS, N, KL, KU, NRHS, AB, LDAB, AFB, LDAFB
+     $,
      $                   IPIV, B, LDB, X, LDX, FERR, BERR, WORK, RWORK,
      $                   INFO )
 *
@@ -247,15 +248,16 @@
       INTEGER            ISAVE( 3 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZAXPY, ZCOPY, ZGBMV, ZGBTRS, ZLACN2
+      EXTERNAL           AB_XERBLA, AB_ZAXPY, AB_ZCOPY, AB_ZGBMV, AB_ZGB
+     $TRS, AB_ZLACN2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX, MIN
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
+      LOGICAL            AB_LSAME
       DOUBLE PRECISION   DLAMCH
-      EXTERNAL           LSAME, DLAMCH
+      EXTERNAL           AB_LSAME, DLAMCH
 *     ..
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABS1
@@ -268,9 +270,9 @@
 *     Test the input parameters.
 *
       INFO = 0
-      NOTRAN = LSAME( TRANS, 'N' )
-      IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) .AND. .NOT.
-     $    LSAME( TRANS, 'C' ) ) THEN
+      NOTRAN = AB_LSAME( TRANS, 'N' )
+      IF( .NOT.NOTRAN .AND. .NOT.AB_LSAME( TRANS, 'T' ) .AND. .NOT.
+     $    AB_LSAME( TRANS, 'C' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -290,7 +292,7 @@
          INFO = -14
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZGBRFS', -INFO )
+         CALL AB_XERBLA( 'AB_ZGBRFS', -INFO )
          RETURN
       END IF
 *
@@ -333,8 +335,9 @@
 *        Compute residual R = B - op(A) * X,
 *        where op(A) = A, A**T, or A**H, depending on TRANS.
 *
-         CALL ZCOPY( N, B( 1, J ), 1, WORK, 1 )
-         CALL ZGBMV( TRANS, N, N, KL, KU, -CONE, AB, LDAB, X( 1, J ), 1,
+         CALL AB_ZCOPY( N, B( 1, J ), 1, WORK, 1 )
+         CALL AB_ZGBMV( TRANS, N, N, KL, KU, -CONE, AB, LDAB, X( 1, J ),
+     $ 1,
      $               CONE, WORK, 1 )
 *
 *        Compute componentwise relative backward error from formula
@@ -392,9 +395,10 @@
 *
 *           Update solution and try again.
 *
-            CALL ZGBTRS( TRANS, N, KL, KU, 1, AFB, LDAFB, IPIV, WORK, N,
+            CALL AB_ZGBTRS( TRANS, N, KL, KU, 1, AFB, LDAFB, IPIV, WORK,
+     $ N,
      $                   INFO )
-            CALL ZAXPY( N, CONE, WORK, 1, X( 1, J ), 1 )
+            CALL AB_ZAXPY( N, CONE, WORK, 1, X( 1, J ), 1 )
             LSTRES = BERR( J )
             COUNT = COUNT + 1
             GO TO 20
@@ -418,7 +422,7 @@
 *        is incremented by SAFE1 if the i-th component of
 *        abs(op(A))*abs(X) + abs(B) is less than SAFE2.
 *
-*        Use ZLACN2 to estimate the infinity-norm of the matrix
+*        Use AB_ZLACN2 to estimate the infinity-norm of the matrix
 *           inv(op(A)) * diag(W),
 *        where W = abs(R) + NZ*EPS*( abs(op(A))*abs(X)+abs(B) )))
 *
@@ -433,13 +437,13 @@
 *
          KASE = 0
   100    CONTINUE
-         CALL ZLACN2( N, WORK( N+1 ), WORK, FERR( J ), KASE, ISAVE )
+         CALL AB_ZLACN2( N, WORK( N+1 ), WORK, FERR( J ), KASE, ISAVE )
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN
 *
 *              Multiply by diag(W)*inv(op(A)**H).
 *
-               CALL ZGBTRS( TRANST, N, KL, KU, 1, AFB, LDAFB, IPIV,
+               CALL AB_ZGBTRS( TRANST, N, KL, KU, 1, AFB, LDAFB, IPIV,
      $                      WORK, N, INFO )
                DO 110 I = 1, N
                   WORK( I ) = RWORK( I )*WORK( I )
@@ -451,7 +455,7 @@
                DO 120 I = 1, N
                   WORK( I ) = RWORK( I )*WORK( I )
   120          CONTINUE
-               CALL ZGBTRS( TRANSN, N, KL, KU, 1, AFB, LDAFB, IPIV,
+               CALL AB_ZGBTRS( TRANSN, N, KL, KU, 1, AFB, LDAFB, IPIV,
      $                      WORK, N, INFO )
             END IF
             GO TO 100
@@ -470,6 +474,6 @@
 *
       RETURN
 *
-*     End of ZGBRFS
+*     End of AB_ZGBRFS
 *
       END

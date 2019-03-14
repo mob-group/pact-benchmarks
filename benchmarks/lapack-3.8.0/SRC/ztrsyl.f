@@ -1,4 +1,4 @@
-*> \brief \b ZTRSYL
+*> \brief \b AB_ZTRSYL
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZTRSYL + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztrsyl.f">
+*> Download AB_ZTRSYL + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_ZTRSYL.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztrsyl.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_ZTRSYL.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztrsyl.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_ZTRSYL.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZTRSYL( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB, C,
+*       SUBROUTINE AB_ZTRSYL( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB, C,
 *                          LDC, SCALE, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> ZTRSYL solves the complex Sylvester matrix equation:
+*> AB_ZTRSYL solves the complex Sylvester matrix equation:
 *>
 *>    op(A)*X + X*op(B) = scale*C or
 *>    op(A)*X - X*op(B) = scale*C,
@@ -154,7 +154,7 @@
 *> \ingroup complex16SYcomputational
 *
 *  =====================================================================
-      SUBROUTINE ZTRSYL( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB, C,
+      SUBROUTINE AB_ZTRSYL( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB, C,
      $                   LDC, SCALE, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -188,13 +188,14 @@
       DOUBLE PRECISION   DUM( 1 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, ZLANGE
-      COMPLEX*16         ZDOTC, ZDOTU, ZLADIV
-      EXTERNAL           LSAME, DLAMCH, ZLANGE, ZDOTC, ZDOTU, ZLADIV
+      LOGICAL            AB_LSAME
+      DOUBLE PRECISION   DLAMCH, AB_ZLANGE
+      COMPLEX*16         AB_ZDOTC, AB_ZDOTU, AB_ZLADIV
+      EXTERNAL           AB_LSAME, DLAMCH, AB_ZLANGE, AB_ZDOTC, AB_ZDOTU
+     $, AB_ZLADIV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLABAD, XERBLA, ZDSCAL
+      EXTERNAL           AB_DLABAD, AB_XERBLA, AB_ZDSCAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCMPLX, DCONJG, DIMAG, MAX, MIN
@@ -203,13 +204,13 @@
 *
 *     Decode and Test input parameters
 *
-      NOTRNA = LSAME( TRANA, 'N' )
-      NOTRNB = LSAME( TRANB, 'N' )
+      NOTRNA = AB_LSAME( TRANA, 'N' )
+      NOTRNB = AB_LSAME( TRANB, 'N' )
 *
       INFO = 0
-      IF( .NOT.NOTRNA .AND. .NOT.LSAME( TRANA, 'C' ) ) THEN
+      IF( .NOT.NOTRNA .AND. .NOT.AB_LSAME( TRANA, 'C' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.NOTRNB .AND. .NOT.LSAME( TRANB, 'C' ) ) THEN
+      ELSE IF( .NOT.NOTRNB .AND. .NOT.AB_LSAME( TRANB, 'C' ) ) THEN
          INFO = -2
       ELSE IF( ISGN.NE.1 .AND. ISGN.NE.-1 ) THEN
          INFO = -3
@@ -225,7 +226,7 @@
          INFO = -11
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZTRSYL', -INFO )
+         CALL AB_XERBLA( 'AB_ZTRSYL', -INFO )
          RETURN
       END IF
 *
@@ -240,11 +241,11 @@
       EPS = DLAMCH( 'P' )
       SMLNUM = DLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
-      CALL DLABAD( SMLNUM, BIGNUM )
+      CALL AB_DLABAD( SMLNUM, BIGNUM )
       SMLNUM = SMLNUM*DBLE( M*N ) / EPS
       BIGNUM = ONE / SMLNUM
-      SMIN = MAX( SMLNUM, EPS*ZLANGE( 'M', M, M, A, LDA, DUM ),
-     $       EPS*ZLANGE( 'M', N, N, B, LDB, DUM ) )
+      SMIN = MAX( SMLNUM, EPS*AB_ZLANGE( 'M', M, M, A, LDA, DUM ),
+     $       EPS*AB_ZLANGE( 'M', N, N, B, LDB, DUM ) )
       SGN = ISGN
 *
       IF( NOTRNA .AND. NOTRNB ) THEN
@@ -264,9 +265,9 @@
          DO 30 L = 1, N
             DO 20 K = M, 1, -1
 *
-               SUML = ZDOTU( M-K, A( K, MIN( K+1, M ) ), LDA,
+               SUML = AB_ZDOTU( M-K, A( K, MIN( K+1, M ) ), LDA,
      $                C( MIN( K+1, M ), L ), 1 )
-               SUMR = ZDOTU( L-1, C( K, 1 ), LDC, B( 1, L ), 1 )
+               SUMR = AB_ZDOTU( L-1, C( K, 1 ), LDC, B( 1, L ), 1 )
                VEC = C( K, L ) - ( SUML+SGN*SUMR )
 *
                SCALOC = ONE
@@ -282,11 +283,11 @@
                   IF( DB.GT.BIGNUM*DA11 )
      $               SCALOC = ONE / DB
                END IF
-               X11 = ZLADIV( VEC*DCMPLX( SCALOC ), A11 )
+               X11 = AB_ZLADIV( VEC*DCMPLX( SCALOC ), A11 )
 *
                IF( SCALOC.NE.ONE ) THEN
                   DO 10 J = 1, N
-                     CALL ZDSCAL( M, SCALOC, C( 1, J ), 1 )
+                     CALL AB_ZDSCAL( M, SCALOC, C( 1, J ), 1 )
    10             CONTINUE
                   SCALE = SCALE*SCALOC
                END IF
@@ -312,8 +313,8 @@
          DO 60 L = 1, N
             DO 50 K = 1, M
 *
-               SUML = ZDOTC( K-1, A( 1, K ), 1, C( 1, L ), 1 )
-               SUMR = ZDOTU( L-1, C( K, 1 ), LDC, B( 1, L ), 1 )
+               SUML = AB_ZDOTC( K-1, A( 1, K ), 1, C( 1, L ), 1 )
+               SUMR = AB_ZDOTU( L-1, C( K, 1 ), LDC, B( 1, L ), 1 )
                VEC = C( K, L ) - ( SUML+SGN*SUMR )
 *
                SCALOC = ONE
@@ -330,11 +331,11 @@
      $               SCALOC = ONE / DB
                END IF
 *
-               X11 = ZLADIV( VEC*DCMPLX( SCALOC ), A11 )
+               X11 = AB_ZLADIV( VEC*DCMPLX( SCALOC ), A11 )
 *
                IF( SCALOC.NE.ONE ) THEN
                   DO 40 J = 1, N
-                     CALL ZDSCAL( M, SCALOC, C( 1, J ), 1 )
+                     CALL AB_ZDSCAL( M, SCALOC, C( 1, J ), 1 )
    40             CONTINUE
                   SCALE = SCALE*SCALOC
                END IF
@@ -363,8 +364,8 @@
          DO 90 L = N, 1, -1
             DO 80 K = 1, M
 *
-               SUML = ZDOTC( K-1, A( 1, K ), 1, C( 1, L ), 1 )
-               SUMR = ZDOTC( N-L, C( K, MIN( L+1, N ) ), LDC,
+               SUML = AB_ZDOTC( K-1, A( 1, K ), 1, C( 1, L ), 1 )
+               SUMR = AB_ZDOTC( N-L, C( K, MIN( L+1, N ) ), LDC,
      $                B( L, MIN( L+1, N ) ), LDB )
                VEC = C( K, L ) - ( SUML+SGN*DCONJG( SUMR ) )
 *
@@ -382,11 +383,11 @@
      $               SCALOC = ONE / DB
                END IF
 *
-               X11 = ZLADIV( VEC*DCMPLX( SCALOC ), A11 )
+               X11 = AB_ZLADIV( VEC*DCMPLX( SCALOC ), A11 )
 *
                IF( SCALOC.NE.ONE ) THEN
                   DO 70 J = 1, N
-                     CALL ZDSCAL( M, SCALOC, C( 1, J ), 1 )
+                     CALL AB_ZDSCAL( M, SCALOC, C( 1, J ), 1 )
    70             CONTINUE
                   SCALE = SCALE*SCALOC
                END IF
@@ -412,9 +413,9 @@
          DO 120 L = N, 1, -1
             DO 110 K = M, 1, -1
 *
-               SUML = ZDOTU( M-K, A( K, MIN( K+1, M ) ), LDA,
+               SUML = AB_ZDOTU( M-K, A( K, MIN( K+1, M ) ), LDA,
      $                C( MIN( K+1, M ), L ), 1 )
-               SUMR = ZDOTC( N-L, C( K, MIN( L+1, N ) ), LDC,
+               SUMR = AB_ZDOTC( N-L, C( K, MIN( L+1, N ) ), LDC,
      $                B( L, MIN( L+1, N ) ), LDB )
                VEC = C( K, L ) - ( SUML+SGN*DCONJG( SUMR ) )
 *
@@ -432,11 +433,11 @@
      $               SCALOC = ONE / DB
                END IF
 *
-               X11 = ZLADIV( VEC*DCMPLX( SCALOC ), A11 )
+               X11 = AB_ZLADIV( VEC*DCMPLX( SCALOC ), A11 )
 *
                IF( SCALOC.NE.ONE ) THEN
                   DO 100 J = 1, N
-                     CALL ZDSCAL( M, SCALOC, C( 1, J ), 1 )
+                     CALL AB_ZDSCAL( M, SCALOC, C( 1, J ), 1 )
   100             CONTINUE
                   SCALE = SCALE*SCALOC
                END IF
@@ -449,6 +450,6 @@
 *
       RETURN
 *
-*     End of ZTRSYL
+*     End of AB_ZTRSYL
 *
       END

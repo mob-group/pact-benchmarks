@@ -2,7 +2,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZGEQR( M, N, A, LDA, T, TSIZE, WORK, LWORK,
+*       SUBROUTINE AB_ZGEQR( M, N, A, LDA, T, TSIZE, WORK, LWORK,
 *                         INFO )
 *
 *       .. Scalar Arguments ..
@@ -17,7 +17,7 @@
 *  =============
 *>
 *> \verbatim
-*> ZGEQR computes a QR factorization of an M-by-N matrix A.
+*> AB_ZGEQR computes a QR factorization of an M-by-N matrix A.
 *> \endverbatim
 *
 *  Arguments:
@@ -69,7 +69,7 @@
 *>          If TSIZE = -1 or -2, then a workspace query is assumed. The routine
 *>          only calculates the sizes of the T and WORK arrays, returns these
 *>          values as the first entries of the T and WORK arrays, and no error
-*>          message related to T or WORK is issued by XERBLA.
+*>          message related to T or WORK is issued by AB_XERBLA.
 *>          If TSIZE = -1, the routine calculates optimal size of T for the 
 *>          optimum performance and returns this value in T(1).
 *>          If TSIZE = -2, the routine calculates minimal size of T and 
@@ -91,7 +91,7 @@
 *>          If LWORK = -1 or -2, then a workspace query is assumed. The routine
 *>          only calculates the sizes of the T and WORK arrays, returns these
 *>          values as the first entries of the T and WORK arrays, and no error
-*>          message related to T or WORK is issued by XERBLA.
+*>          message related to T or WORK is issued by AB_XERBLA.
 *>          If LWORK = -1, the routine calculates optimal size of WORK for the
 *>          optimal performance and returns this value in WORK(1).
 *>          If LWORK = -2, the routine calculates minimal size of WORK and 
@@ -147,17 +147,17 @@
 *>          T(2): row block size (MB)
 *>          T(3): column block size (NB)
 *>          T(6:TSIZE): data structure needed for Q, computed by
-*>                           ZLATSQR or ZGEQRT
+*>                           AB_ZLATSQR or AB_ZGEQRT
 *>
 *>  Depending on the matrix dimensions M and N, and row and column
-*>  block sizes MB and NB returned by ILAENV, ZGEQR will use either
-*>  ZLATSQR (if the matrix is tall-and-skinny) or ZGEQRT to compute
+*>  block sizes MB and NB returned by AB_ILAENV, AB_ZGEQR will use either
+*>  AB_ZLATSQR (if the matrix is tall-and-skinny) or AB_ZGEQRT to compute
 *>  the QR factorization.
 *>
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZGEQR( M, N, A, LDA, T, TSIZE, WORK, LWORK,
+      SUBROUTINE AB_ZGEQR( M, N, A, LDA, T, TSIZE, WORK, LWORK,
      $                  INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -180,18 +180,18 @@
       INTEGER            MB, NB, MINTSZ, NBLCKS
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            AB_LSAME
+      EXTERNAL           AB_LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZLATSQR, ZGEQRT, XERBLA
+      EXTERNAL           AB_ZLATSQR, AB_ZGEQRT, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, MOD
 *     ..
 *     .. External Functions ..
-      INTEGER            ILAENV
-      EXTERNAL           ILAENV
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_ILAENV
 *     ..
 *     .. Executable Statements ..
 *
@@ -212,8 +212,8 @@
 *     Determine the block size
 *
       IF( MIN ( M, N ).GT.0 ) THEN
-        MB = ILAENV( 1, 'ZGEQR ', ' ', M, N, 1, -1 )
-        NB = ILAENV( 1, 'ZGEQR ', ' ', M, N, 2, -1 )
+        MB = AB_ILAENV( 1, 'AB_ZGEQR ', ' ', M, N, 1, -1 )
+        NB = AB_ILAENV( 1, 'AB_ZGEQR ', ' ', M, N, 2, -1 )
       ELSE
         MB = M
         NB = 1
@@ -277,7 +277,7 @@
         END IF
       END IF
       IF( INFO.NE.0 ) THEN
-        CALL XERBLA( 'ZGEQR', -INFO )
+        CALL AB_XERBLA( 'AB_ZGEQR', -INFO )
         RETURN
       ELSE IF( LQUERY ) THEN
         RETURN
@@ -292,9 +292,9 @@
 *     The QR Decomposition
 *
       IF( ( M.LE.N ) .OR. ( MB.LE.N ) .OR. ( MB.GE.M ) ) THEN
-        CALL ZGEQRT( M, N, NB, A, LDA, T( 6 ), NB, WORK, INFO )
+        CALL AB_ZGEQRT( M, N, NB, A, LDA, T( 6 ), NB, WORK, INFO )
       ELSE
-        CALL ZLATSQR( M, N, MB, NB, A, LDA, T( 6 ), NB, WORK,
+        CALL AB_ZLATSQR( M, N, MB, NB, A, LDA, T( 6 ), NB, WORK,
      $                LWORK, INFO )
       END IF
 *
@@ -302,6 +302,6 @@
 *
       RETURN
 *
-*     End of ZGEQR
+*     End of AB_ZGEQR
 *
       END

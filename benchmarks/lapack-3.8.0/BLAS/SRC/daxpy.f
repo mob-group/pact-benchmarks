@@ -1,4 +1,4 @@
-*> \brief \b DAXPY
+*> \brief \b AB_DAXPY
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DAXPY(N,DA,DX,INCX,DY,INCY)
+*       SUBROUTINE AB_DAXPY(N,DA,DX,INCX,DY,INCY)
 *
 *       .. Scalar Arguments ..
 *       DOUBLE PRECISION DA
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*>    DAXPY constant times a vector plus a vector.
+*>    AB_DAXPY constant times a vector plus a vector.
 *>    uses unrolled loops for increments equal to one.
 *> \endverbatim
 *
@@ -87,7 +87,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DAXPY(N,DA,DX,INCX,DY,INCY)
+      SUBROUTINE AB_DAXPY(N,DA,DX,INCX,DY,INCY)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

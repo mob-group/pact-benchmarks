@@ -1,4 +1,4 @@
-*> \brief \b DLAED0 used by sstedc. Computes all eigenvalues and corresponding eigenvectors of an unreduced symmetric tridiagonal matrix using the divide and conquer method.
+*> \brief \b AB_DLAED0 used by AB_SSTEDC. Computes all eigenvalues and corresponding eigenvectors of an unreduced symmetric tridiagonal matrix using the divide and conquer method.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLAED0 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaed0.f">
+*> Download AB_DLAED0 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLAED0.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaed0.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLAED0.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaed0.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLAED0.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLAED0( ICOMPQ, QSIZ, N, D, E, Q, LDQ, QSTORE, LDQS,
+*       SUBROUTINE AB_DLAED0( ICOMPQ, QSIZ, N, D, E, Q, LDQ, QSTORE, LDQS,
 *                          WORK, IWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> DLAED0 computes all eigenvalues and corresponding eigenvectors of a
+*> AB_DLAED0 computes all eigenvalues and corresponding eigenvectors of a
 *> symmetric tridiagonal matrix using the divide and conquer method.
 *> \endverbatim
 *
@@ -169,7 +169,7 @@
 *> at Berkeley, USA
 *
 *  =====================================================================
-      SUBROUTINE DLAED0( ICOMPQ, QSIZ, N, D, E, Q, LDQ, QSTORE, LDQS,
+      SUBROUTINE AB_DLAED0( ICOMPQ, QSIZ, N, D, E, Q, LDQ, QSTORE, LDQS,
      $                   WORK, IWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -200,12 +200,13 @@
       DOUBLE PRECISION   TEMP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DGEMM, DLACPY, DLAED1, DLAED7, DSTEQR,
-     $                   XERBLA
+      EXTERNAL           AB_DCOPY, AB_DGEMM, AB_DLACPY, AB_DLAED1, AB_DL
+     $AED7, AB_DSTEQR,
+     $                   AB_XERBLA
 *     ..
 *     .. External Functions ..
-      INTEGER            ILAENV
-      EXTERNAL           ILAENV
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_ILAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, INT, LOG, MAX
@@ -228,7 +229,7 @@
          INFO = -9
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DLAED0', -INFO )
+         CALL AB_XERBLA( 'AB_DLAED0', -INFO )
          RETURN
       END IF
 *
@@ -237,7 +238,7 @@
       IF( N.EQ.0 )
      $   RETURN
 *
-      SMLSIZ = ILAENV( 9, 'DLAED0', ' ', 0, 0, 0, 0 )
+      SMLSIZ = AB_ILAENV( 9, 'AB_DLAED0', ' ', 0, 0, 0, 0 )
 *
 *     Determine the size and placement of the submatrices, and save in
 *     the leading elements of IWORK.
@@ -314,18 +315,18 @@
             MATSIZ = IWORK( I+1 ) - IWORK( I )
          END IF
          IF( ICOMPQ.EQ.2 ) THEN
-            CALL DSTEQR( 'I', MATSIZ, D( SUBMAT ), E( SUBMAT ),
+            CALL AB_DSTEQR( 'I', MATSIZ, D( SUBMAT ), E( SUBMAT ),
      $                   Q( SUBMAT, SUBMAT ), LDQ, WORK, INFO )
             IF( INFO.NE.0 )
      $         GO TO 130
          ELSE
-            CALL DSTEQR( 'I', MATSIZ, D( SUBMAT ), E( SUBMAT ),
+            CALL AB_DSTEQR( 'I', MATSIZ, D( SUBMAT ), E( SUBMAT ),
      $                   WORK( IQ-1+IWORK( IQPTR+CURR ) ), MATSIZ, WORK,
      $                   INFO )
             IF( INFO.NE.0 )
      $         GO TO 130
             IF( ICOMPQ.EQ.1 ) THEN
-               CALL DGEMM( 'N', 'N', QSIZ, MATSIZ, MATSIZ, ONE,
+               CALL AB_DGEMM( 'N', 'N', QSIZ, MATSIZ, MATSIZ, ONE,
      $                     Q( 1, SUBMAT ), LDQ, WORK( IQ-1+IWORK( IQPTR+
      $                     CURR ) ), MATSIZ, ZERO, QSTORE( 1, SUBMAT ),
      $                     LDQS )
@@ -364,19 +365,20 @@
 *
 *     Merge lower order eigensystems (of size MSD2 and MATSIZ - MSD2)
 *     into an eigensystem of size MATSIZ.
-*     DLAED1 is used only for the full eigensystem of a tridiagonal
+*     AB_DLAED1 is used only for the full eigensystem of a tridiagonal
 *     matrix.
-*     DLAED7 handles the cases in which eigenvalues only or eigenvalues
+*     AB_DLAED7 handles the cases in which eigenvalues only or eigenvalues
 *     and eigenvectors of a full symmetric matrix (which was reduced to
 *     tridiagonal form) are desired.
 *
             IF( ICOMPQ.EQ.2 ) THEN
-               CALL DLAED1( MATSIZ, D( SUBMAT ), Q( SUBMAT, SUBMAT ),
+               CALL AB_DLAED1( MATSIZ, D( SUBMAT ), Q( SUBMAT, SUBMAT ),
      $                      LDQ, IWORK( INDXQ+SUBMAT ),
      $                      E( SUBMAT+MSD2-1 ), MSD2, WORK,
      $                      IWORK( SUBPBS+1 ), INFO )
             ELSE
-               CALL DLAED7( ICOMPQ, MATSIZ, QSIZ, TLVLS, CURLVL, CURPRB,
+               CALL AB_DLAED7( ICOMPQ, MATSIZ, QSIZ, TLVLS, CURLVL, CURP
+     $RB,
      $                      D( SUBMAT ), QSTORE( 1, SUBMAT ), LDQS,
      $                      IWORK( INDXQ+SUBMAT ), E( SUBMAT+MSD2-1 ),
      $                      MSD2, WORK( IQ ), IWORK( IQPTR ),
@@ -403,23 +405,23 @@
          DO 100 I = 1, N
             J = IWORK( INDXQ+I )
             WORK( I ) = D( J )
-            CALL DCOPY( QSIZ, QSTORE( 1, J ), 1, Q( 1, I ), 1 )
+            CALL AB_DCOPY( QSIZ, QSTORE( 1, J ), 1, Q( 1, I ), 1 )
   100    CONTINUE
-         CALL DCOPY( N, WORK, 1, D, 1 )
+         CALL AB_DCOPY( N, WORK, 1, D, 1 )
       ELSE IF( ICOMPQ.EQ.2 ) THEN
          DO 110 I = 1, N
             J = IWORK( INDXQ+I )
             WORK( I ) = D( J )
-            CALL DCOPY( N, Q( 1, J ), 1, WORK( N*I+1 ), 1 )
+            CALL AB_DCOPY( N, Q( 1, J ), 1, WORK( N*I+1 ), 1 )
   110    CONTINUE
-         CALL DCOPY( N, WORK, 1, D, 1 )
-         CALL DLACPY( 'A', N, N, WORK( N+1 ), N, Q, LDQ )
+         CALL AB_DCOPY( N, WORK, 1, D, 1 )
+         CALL AB_DLACPY( 'A', N, N, WORK( N+1 ), N, Q, LDQ )
       ELSE
          DO 120 I = 1, N
             J = IWORK( INDXQ+I )
             WORK( I ) = D( J )
   120    CONTINUE
-         CALL DCOPY( N, WORK, 1, D, 1 )
+         CALL AB_DCOPY( N, WORK, 1, D, 1 )
       END IF
       GO TO 140
 *
@@ -429,6 +431,6 @@
   140 CONTINUE
       RETURN
 *
-*     End of DLAED0
+*     End of AB_DLAED0
 *
       END

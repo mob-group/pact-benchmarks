@@ -1,4 +1,4 @@
-*> \brief \b DLANV2 computes the Schur factorization of a real 2-by-2 nonsymmetric matrix in standard form.
+*> \brief \b AB_DLANV2 computes the Schur factorization of a real 2-by-2 nonsymmetric matrix in standard form.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLANV2 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlanv2.f">
+*> Download AB_DLANV2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DLANV2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlanv2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DLANV2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlanv2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DLANV2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLANV2( A, B, C, D, RT1R, RT1I, RT2R, RT2I, CS, SN )
+*       SUBROUTINE AB_DLANV2( A, B, C, D, RT1R, RT1I, RT2R, RT2I, CS, SN )
 *
 *       .. Scalar Arguments ..
 *       DOUBLE PRECISION   A, B, C, CS, D, RT1I, RT1R, RT2I, RT2R, SN
@@ -30,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> DLANV2 computes the Schur factorization of a real 2-by-2 nonsymmetric
+*> AB_DLANV2 computes the Schur factorization of a real 2-by-2 nonsymmetric
 *> matrix in standard form:
 *>
 *>      [ A  B ] = [ CS -SN ] [ AA  BB ] [ CS  SN ]
@@ -125,7 +125,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DLANV2( A, B, C, D, RT1R, RT1I, RT2R, RT2I, CS, SN )
+      SUBROUTINE AB_DLANV2( A, B, C, D, RT1R, RT1I, RT2R, RT2I, CS, SN )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -149,8 +149,8 @@
      $                   SAC, SCALE, SIGMA, SN1, TAU, TEMP, Z
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLAPY2
-      EXTERNAL           DLAMCH, DLAPY2
+      DOUBLE PRECISION   DLAMCH, AB_DLAPY2
+      EXTERNAL           DLAMCH, AB_DLAPY2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SIGN, SQRT
@@ -202,7 +202,7 @@
 *
 *           Compute B and the rotation matrix
 *
-            TAU = DLAPY2( C, Z )
+            TAU = AB_DLAPY2( C, Z )
             CS = Z / TAU
             SN = C / TAU
             B = B - C
@@ -213,7 +213,7 @@
 *           Make diagonal elements equal.
 *
             SIGMA = B + C
-            TAU = DLAPY2( SIGMA, TEMP )
+            TAU = AB_DLAPY2( SIGMA, TEMP )
             CS = SQRT( HALF*( ONE+ABS( SIGMA ) / TAU ) )
             SN = -( P / ( TAU*CS ) )*SIGN( ONE, SIGMA )
 *
@@ -284,6 +284,6 @@
       END IF
       RETURN
 *
-*     End of DLANV2
+*     End of AB_DLANV2
 *
       END

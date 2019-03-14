@@ -1,4 +1,4 @@
-*> \brief \b SRSCL multiplies a vector by the reciprocal of a real scalar.
+*> \brief \b AB_SRSCL multiplies a vector by the reciprocal of a real scalar.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SRSCL + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/srscl.f">
+*> Download AB_SRSCL + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SRSCL.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/srscl.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SRSCL.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/srscl.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SRSCL.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SRSCL( N, SA, SX, INCX )
+*       SUBROUTINE AB_SRSCL( N, SA, SX, INCX )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INCX, N
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> SRSCL multiplies an n-element real vector x by the real scalar 1/a.
+*> AB_SRSCL multiplies an n-element real vector x by the real scalar 1/a.
 *> This is done without overflow or underflow as long as
 *> the final result x/a does not overflow or underflow.
 *> \endverbatim
@@ -82,7 +82,7 @@
 *> \ingroup realOTHERauxiliary
 *
 *  =====================================================================
-      SUBROUTINE SRSCL( N, SA, SX, INCX )
+      SUBROUTINE AB_SRSCL( N, SA, SX, INCX )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -112,7 +112,7 @@
       EXTERNAL           SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLABAD, SSCAL
+      EXTERNAL           AB_SLABAD, AB_SSCAL
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS
@@ -128,7 +128,7 @@
 *
       SMLNUM = SLAMCH( 'S' )
       BIGNUM = ONE / SMLNUM
-      CALL SLABAD( SMLNUM, BIGNUM )
+      CALL AB_SLABAD( SMLNUM, BIGNUM )
 *
 *     Initialize the denominator to SA and the numerator to 1.
 *
@@ -162,13 +162,13 @@
 *
 *     Scale the vector X by MUL
 *
-      CALL SSCAL( N, MUL, SX, INCX )
+      CALL AB_SSCAL( N, MUL, SX, INCX )
 *
       IF( .NOT.DONE )
      $   GO TO 10
 *
       RETURN
 *
-*     End of SRSCL
+*     End of AB_SRSCL
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b DSYTRI_3
+*> \brief \b AB_DSYTRI_3
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DSYTRI_3 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsytri_3.f">
+*> Download AB_DSYTRI_3 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_DSYTRI_3.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsytri_3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_DSYTRI_3.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsytri_3.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_DSYTRI_3.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DSYTRI_3( UPLO, N, A, LDA, E, IPIV, WORK, LWORK,
+*       SUBROUTINE AB_DSYTRI_3( UPLO, N, A, LDA, E, IPIV, WORK, LWORK,
 *                            INFO )
 *
 *       .. Scalar Arguments ..
@@ -35,8 +35,8 @@
 *  =============
 *>
 *> \verbatim
-*> DSYTRI_3 computes the inverse of a real symmetric indefinite
-*> matrix A using the factorization computed by DSYTRF_RK or DSYTRF_BK:
+*> AB_DSYTRI_3 computes the inverse of a real symmetric indefinite
+*> matrix A using the factorization computed by AB_DSYTRF_RK or AB_DSYTRF_BK:
 *>
 *>     A = P*U*D*(U**T)*(P**T) or A = P*L*D*(L**T)*(P**T),
 *>
@@ -45,8 +45,8 @@
 *> matrix, P**T is the transpose of P, and D is symmetric and block
 *> diagonal with 1-by-1 and 2-by-2 diagonal blocks.
 *>
-*> DSYTRI_3 sets the leading dimension of the workspace  before calling
-*> DSYTRI_3X that actually computes the inverse.  This is the blocked
+*> AB_DSYTRI_3 sets the leading dimension of the workspace  before calling
+*> AB_DSYTRI_3X that actually computes the inverse.  This is the blocked
 *> version of the algorithm, calling Level 3 BLAS.
 *> \endverbatim
 *
@@ -72,7 +72,7 @@
 *> \verbatim
 *>          A is DOUBLE PRECISION array, dimension (LDA,N)
 *>          On entry, diagonal of the block diagonal matrix D and
-*>          factors U or L as computed by DSYTRF_RK and DSYTRF_BK:
+*>          factors U or L as computed by AB_DSYTRF_RK and AB_DSYTRF_BK:
 *>            a) ONLY diagonal elements of the symmetric block diagonal
 *>               matrix D on the diagonal of A, i.e. D(k,k) = A(k,k);
 *>               (superdiagonal (or subdiagonal) elements of D
@@ -114,7 +114,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D
-*>          as determined by DSYTRF_RK or DSYTRF_BK.
+*>          as determined by AB_DSYTRF_RK or AB_DSYTRF_BK.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -132,7 +132,7 @@
 *>          the routine only calculates the optimal size of the optimal
 *>          size of the WORK array, returns this value as the first
 *>          entry of the WORK array, and no error message related to
-*>          LWORK is issued by XERBLA.
+*>          LWORK is issued by AB_XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -167,7 +167,7 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE DSYTRI_3( UPLO, N, A, LDA, E, IPIV, WORK, LWORK,
+      SUBROUTINE AB_DSYTRI_3( UPLO, N, A, LDA, E, IPIV, WORK, LWORK,
      $                     INFO )
 *
 *  -- LAPACK computational routine (version 3.8.0) --
@@ -191,12 +191,12 @@
       INTEGER            LWKOPT, NB
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ILAENV
-      EXTERNAL           LSAME, ILAENV
+      LOGICAL            AB_LSAME
+      INTEGER            AB_ILAENV
+      EXTERNAL           AB_LSAME, AB_ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSYTRI_3X, XERBLA
+      EXTERNAL           AB_DSYTRI_3X, AB_XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -206,15 +206,15 @@
 *     Test the input parameters.
 *
       INFO = 0
-      UPPER = LSAME( UPLO, 'U' )
+      UPPER = AB_LSAME( UPLO, 'U' )
       LQUERY = ( LWORK.EQ.-1 )
 *
 *     Determine the block size
 *
-      NB = MAX( 1, ILAENV( 1, 'DSYTRI_3', UPLO, N, -1, -1, -1 ) )
+      NB = MAX( 1, AB_ILAENV( 1, 'AB_DSYTRI_3', UPLO, N, -1, -1, -1 ) )
       LWKOPT = ( N+NB+1 ) * ( NB+3 )
 *
-      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+      IF( .NOT.UPPER .AND. .NOT.AB_LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
@@ -225,7 +225,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DSYTRI_3', -INFO )
+         CALL AB_XERBLA( 'AB_DSYTRI_3', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          WORK( 1 ) = LWKOPT
@@ -237,12 +237,12 @@
       IF( N.EQ.0 )
      $   RETURN
 *
-      CALL DSYTRI_3X( UPLO, N, A, LDA, E, IPIV, WORK, NB, INFO )
+      CALL AB_DSYTRI_3X( UPLO, N, A, LDA, E, IPIV, WORK, NB, INFO )
 *
       WORK( 1 ) = LWKOPT
 *
       RETURN
 *
-*     End of DSYTRI_3
+*     End of AB_DSYTRI_3
 *
       END

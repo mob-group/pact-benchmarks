@@ -1,4 +1,4 @@
-*> \brief \b CLANTR returns the value of the 1-norm, or the Frobenius norm, or the infinity norm, or the element of largest absolute value of a trapezoidal or triangular matrix.
+*> \brief \b AB_CLANTR returns the value of the 1-norm, or the Frobenius norm, or the infinity norm, or the element of largest absolute value of a trapezoidal or triangular matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CLANTR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clantr.f">
+*> Download AB_CLANTR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_CLANTR.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clantr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_CLANTR.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clantr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_CLANTR.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       REAL             FUNCTION CLANTR( NORM, UPLO, DIAG, M, N, A, LDA,
+*       REAL             FUNCTION AB_CLANTR( NORM, UPLO, DIAG, M, N, A, LDA,
 *                        WORK )
 *
 *       .. Scalar Arguments ..
@@ -36,15 +36,15 @@
 *>
 *> \verbatim
 *>
-*> CLANTR  returns the value of the one norm,  or the Frobenius norm, or
+*> AB_CLANTR  returns the value of the one norm,  or the Frobenius norm, or
 *> the  infinity norm,  or the  element of  largest absolute value  of a
 *> trapezoidal or triangular matrix A.
 *> \endverbatim
 *>
-*> \return CLANTR
+*> \return AB_CLANTR
 *> \verbatim
 *>
-*>    CLANTR = ( max(abs(A(i,j))), NORM = 'M' or 'm'
+*>    AB_CLANTR = ( max(abs(A(i,j))), NORM = 'M' or 'm'
 *>             (
 *>             ( norm1(A),         NORM = '1', 'O' or 'o'
 *>             (
@@ -64,7 +64,7 @@
 *> \param[in] NORM
 *> \verbatim
 *>          NORM is CHARACTER*1
-*>          Specifies the value to be returned in CLANTR as described
+*>          Specifies the value to be returned in AB_CLANTR as described
 *>          above.
 *> \endverbatim
 *>
@@ -89,14 +89,14 @@
 *> \verbatim
 *>          M is INTEGER
 *>          The number of rows of the matrix A.  M >= 0, and if
-*>          UPLO = 'U', M <= N.  When M = 0, CLANTR is set to zero.
+*>          UPLO = 'U', M <= N.  When M = 0, AB_CLANTR is set to zero.
 *> \endverbatim
 *>
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
 *>          The number of columns of the matrix A.  N >= 0, and if
-*>          UPLO = 'L', N <= M.  When N = 0, CLANTR is set to zero.
+*>          UPLO = 'L', N <= M.  When N = 0, AB_CLANTR is set to zero.
 *> \endverbatim
 *>
 *> \param[in] A
@@ -139,7 +139,8 @@
 *> \ingroup complexOTHERauxiliary
 *
 *  =====================================================================
-      REAL             FUNCTION CLANTR( NORM, UPLO, DIAG, M, N, A, LDA,
+      REAL             FUNCTION AB_CLANTR( NORM, UPLO, DIAG, M, N, A, LD
+     $A,
      $                 WORK )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -168,11 +169,11 @@
       REAL               SCALE, SUM, VALUE
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME, SISNAN
-      EXTERNAL           LSAME, SISNAN
+      LOGICAL            AB_LSAME, AB_SISNAN
+      EXTERNAL           AB_LSAME, AB_SISNAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLASSQ
+      EXTERNAL           AB_CLASSQ
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MIN, SQRT
@@ -181,52 +182,56 @@
 *
       IF( MIN( M, N ).EQ.0 ) THEN
          VALUE = ZERO
-      ELSE IF( LSAME( NORM, 'M' ) ) THEN
+      ELSE IF( AB_LSAME( NORM, 'M' ) ) THEN
 *
 *        Find max(abs(A(i,j))).
 *
-         IF( LSAME( DIAG, 'U' ) ) THEN
+         IF( AB_LSAME( DIAG, 'U' ) ) THEN
             VALUE = ONE
-            IF( LSAME( UPLO, 'U' ) ) THEN
+            IF( AB_LSAME( UPLO, 'U' ) ) THEN
                DO 20 J = 1, N
                   DO 10 I = 1, MIN( M, J-1 )
                      SUM = ABS( A( I, J ) )
-                     IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
+                     IF( VALUE .LT. SUM .OR. AB_SISNAN( SUM ) ) VALUE = 
+     $SUM
    10             CONTINUE
    20          CONTINUE
             ELSE
                DO 40 J = 1, N
                   DO 30 I = J + 1, M
                      SUM = ABS( A( I, J ) )
-                     IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
+                     IF( VALUE .LT. SUM .OR. AB_SISNAN( SUM ) ) VALUE = 
+     $SUM
    30             CONTINUE
    40          CONTINUE
             END IF
          ELSE
             VALUE = ZERO
-            IF( LSAME( UPLO, 'U' ) ) THEN
+            IF( AB_LSAME( UPLO, 'U' ) ) THEN
                DO 60 J = 1, N
                   DO 50 I = 1, MIN( M, J )
                      SUM = ABS( A( I, J ) )
-                     IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
+                     IF( VALUE .LT. SUM .OR. AB_SISNAN( SUM ) ) VALUE = 
+     $SUM
    50             CONTINUE
    60          CONTINUE
             ELSE
                DO 80 J = 1, N
                   DO 70 I = J, M
                      SUM = ABS( A( I, J ) )
-                     IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
+                     IF( VALUE .LT. SUM .OR. AB_SISNAN( SUM ) ) VALUE = 
+     $SUM
    70             CONTINUE
    80          CONTINUE
             END IF
          END IF
-      ELSE IF( ( LSAME( NORM, 'O' ) ) .OR. ( NORM.EQ.'1' ) ) THEN
+      ELSE IF( ( AB_LSAME( NORM, 'O' ) ) .OR. ( NORM.EQ.'1' ) ) THEN
 *
 *        Find norm1(A).
 *
          VALUE = ZERO
-         UDIAG = LSAME( DIAG, 'U' )
-         IF( LSAME( UPLO, 'U' ) ) THEN
+         UDIAG = AB_LSAME( DIAG, 'U' )
+         IF( AB_LSAME( UPLO, 'U' ) ) THEN
             DO 110 J = 1, N
                IF( ( UDIAG ) .AND. ( J.LE.M ) ) THEN
                   SUM = ONE
@@ -239,7 +244,7 @@
                      SUM = SUM + ABS( A( I, J ) )
   100             CONTINUE
                END IF
-               IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
+               IF( VALUE .LT. SUM .OR. AB_SISNAN( SUM ) ) VALUE = SUM
   110       CONTINUE
          ELSE
             DO 140 J = 1, N
@@ -254,15 +259,15 @@
                      SUM = SUM + ABS( A( I, J ) )
   130             CONTINUE
                END IF
-               IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
+               IF( VALUE .LT. SUM .OR. AB_SISNAN( SUM ) ) VALUE = SUM
   140       CONTINUE
          END IF
-      ELSE IF( LSAME( NORM, 'I' ) ) THEN
+      ELSE IF( AB_LSAME( NORM, 'I' ) ) THEN
 *
 *        Find normI(A).
 *
-         IF( LSAME( UPLO, 'U' ) ) THEN
-            IF( LSAME( DIAG, 'U' ) ) THEN
+         IF( AB_LSAME( UPLO, 'U' ) ) THEN
+            IF( AB_LSAME( DIAG, 'U' ) ) THEN
                DO 150 I = 1, M
                   WORK( I ) = ONE
   150          CONTINUE
@@ -282,7 +287,7 @@
   200          CONTINUE
             END IF
          ELSE
-            IF( LSAME( DIAG, 'U' ) ) THEN
+            IF( AB_LSAME( DIAG, 'U' ) ) THEN
                DO 210 I = 1, N
                   WORK( I ) = ONE
   210          CONTINUE
@@ -308,48 +313,51 @@
          VALUE = ZERO
          DO 280 I = 1, M
             SUM = WORK( I )
-            IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
+            IF( VALUE .LT. SUM .OR. AB_SISNAN( SUM ) ) VALUE = SUM
   280    CONTINUE
-      ELSE IF( ( LSAME( NORM, 'F' ) ) .OR. ( LSAME( NORM, 'E' ) ) ) THEN
+      ELSE IF( ( AB_LSAME( NORM, 'F' ) ) .OR. ( AB_LSAME( NORM, 'E' ) ) 
+     $) THEN
 *
 *        Find normF(A).
 *
-         IF( LSAME( UPLO, 'U' ) ) THEN
-            IF( LSAME( DIAG, 'U' ) ) THEN
+         IF( AB_LSAME( UPLO, 'U' ) ) THEN
+            IF( AB_LSAME( DIAG, 'U' ) ) THEN
                SCALE = ONE
                SUM = MIN( M, N )
                DO 290 J = 2, N
-                  CALL CLASSQ( MIN( M, J-1 ), A( 1, J ), 1, SCALE, SUM )
+                  CALL AB_CLASSQ( MIN( M, J-1 ), A( 1, J ), 1, SCALE, SU
+     $M )
   290          CONTINUE
             ELSE
                SCALE = ZERO
                SUM = ONE
                DO 300 J = 1, N
-                  CALL CLASSQ( MIN( M, J ), A( 1, J ), 1, SCALE, SUM )
+                  CALL AB_CLASSQ( MIN( M, J ), A( 1, J ), 1, SCALE, SUM 
+     $)
   300          CONTINUE
             END IF
          ELSE
-            IF( LSAME( DIAG, 'U' ) ) THEN
+            IF( AB_LSAME( DIAG, 'U' ) ) THEN
                SCALE = ONE
                SUM = MIN( M, N )
                DO 310 J = 1, N
-                  CALL CLASSQ( M-J, A( MIN( M, J+1 ), J ), 1, SCALE,
+                  CALL AB_CLASSQ( M-J, A( MIN( M, J+1 ), J ), 1, SCALE,
      $                         SUM )
   310          CONTINUE
             ELSE
                SCALE = ZERO
                SUM = ONE
                DO 320 J = 1, N
-                  CALL CLASSQ( M-J+1, A( J, J ), 1, SCALE, SUM )
+                  CALL AB_CLASSQ( M-J+1, A( J, J ), 1, SCALE, SUM )
   320          CONTINUE
             END IF
          END IF
          VALUE = SCALE*SQRT( SUM )
       END IF
 *
-      CLANTR = VALUE
+      AB_CLANTR = VALUE
       RETURN
 *
-*     End of CLANTR
+*     End of AB_CLANTR
 *
       END

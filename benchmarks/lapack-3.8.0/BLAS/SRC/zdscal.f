@@ -1,4 +1,4 @@
-*> \brief \b ZDSCAL
+*> \brief \b AB_ZDSCAL
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZDSCAL(N,DA,ZX,INCX)
+*       SUBROUTINE AB_ZDSCAL(N,DA,ZX,INCX)
 *
 *       .. Scalar Arguments ..
 *       DOUBLE PRECISION DA
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*>    ZDSCAL scales a vector by a constant.
+*>    AB_ZDSCAL scales a vector by a constant.
 *> \endverbatim
 *
 *  Arguments:
@@ -76,7 +76,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZDSCAL(N,DA,ZX,INCX)
+      SUBROUTINE AB_ZDSCAL(N,DA,ZX,INCX)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

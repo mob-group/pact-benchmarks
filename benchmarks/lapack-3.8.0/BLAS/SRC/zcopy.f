@@ -1,4 +1,4 @@
-*> \brief \b ZCOPY
+*> \brief \b AB_ZCOPY
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZCOPY(N,ZX,INCX,ZY,INCY)
+*       SUBROUTINE AB_ZCOPY(N,ZX,INCX,ZY,INCY)
 *
 *       .. Scalar Arguments ..
 *       INTEGER INCX,INCY,N
@@ -23,7 +23,7 @@
 *>
 *> \verbatim
 *>
-*>    ZCOPY copies a vector, x, to a vector, y.
+*>    AB_ZCOPY copies a vector, x, to a vector, y.
 *> \endverbatim
 *
 *  Arguments:
@@ -79,7 +79,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZCOPY(N,ZX,INCX,ZY,INCY)
+      SUBROUTINE AB_ZCOPY(N,ZX,INCX,ZY,INCY)
 *
 *  -- Reference BLAS level1 routine (version 3.8.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

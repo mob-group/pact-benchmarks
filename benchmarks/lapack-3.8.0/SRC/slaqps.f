@@ -1,4 +1,4 @@
-*> \brief \b SLAQPS computes a step of QR factorization with column pivoting of a real m-by-n matrix A by using BLAS level 3.
+*> \brief \b AB_SLAQPS computes a step of QR factorization with column pivoting of a real m-by-n matrix A by using BLAS level 3.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SLAQPS + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slaqps.f">
+*> Download AB_SLAQPS + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/AB_SLAQPS.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slaqps.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/AB_SLAQPS.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slaqps.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/AB_SLAQPS.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLAQPS( M, N, OFFSET, NB, KB, A, LDA, JPVT, TAU, VN1,
+*       SUBROUTINE AB_SLAQPS( M, N, OFFSET, NB, KB, A, LDA, JPVT, TAU, VN1,
 *                          VN2, AUXV, F, LDF )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> SLAQPS computes a step of QR factorization with column pivoting
+*> AB_SLAQPS computes a step of QR factorization with column pivoting
 *> of a real M-by-N matrix A by using Blas-3.  It tries to factorize
 *> NB columns from A starting from the row OFFSET+1, and updates all
 *> of the matrix with Blas-3 xGEMM.
@@ -175,7 +175,8 @@
 *> \endhtmlonly
 *
 *  =====================================================================
-      SUBROUTINE SLAQPS( M, N, OFFSET, NB, KB, A, LDA, JPVT, TAU, VN1,
+      SUBROUTINE AB_SLAQPS( M, N, OFFSET, NB, KB, A, LDA, JPVT, TAU, VN1
+     $,
      $                   VN2, AUXV, F, LDF )
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
@@ -203,15 +204,15 @@
       REAL               AKK, TEMP, TEMP2, TOL3Z
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMM, SGEMV, SLARFG, SSWAP
+      EXTERNAL           AB_SGEMM, AB_SGEMV, AB_SLARFG, AB_SSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, NINT, REAL, SQRT
 *     ..
 *     .. External Functions ..
-      INTEGER            ISAMAX
-      REAL               SLAMCH, SNRM2
-      EXTERNAL           ISAMAX, SLAMCH, SNRM2
+      INTEGER            AB_ISAMAX
+      REAL               SLAMCH, AB_SNRM2
+      EXTERNAL           AB_ISAMAX, SLAMCH, AB_SNRM2
 *     ..
 *     .. Executable Statements ..
 *
@@ -229,10 +230,10 @@
 *
 *        Determine ith pivot column and swap if necessary
 *
-         PVT = ( K-1 ) + ISAMAX( N-K+1, VN1( K ), 1 )
+         PVT = ( K-1 ) + AB_ISAMAX( N-K+1, VN1( K ), 1 )
          IF( PVT.NE.K ) THEN
-            CALL SSWAP( M, A( 1, PVT ), 1, A( 1, K ), 1 )
-            CALL SSWAP( K-1, F( PVT, 1 ), LDF, F( K, 1 ), LDF )
+            CALL AB_SSWAP( M, A( 1, PVT ), 1, A( 1, K ), 1 )
+            CALL AB_SSWAP( K-1, F( PVT, 1 ), LDF, F( K, 1 ), LDF )
             ITEMP = JPVT( PVT )
             JPVT( PVT ) = JPVT( K )
             JPVT( K ) = ITEMP
@@ -244,16 +245,18 @@
 *        A(RK:M,K) := A(RK:M,K) - A(RK:M,1:K-1)*F(K,1:K-1)**T.
 *
          IF( K.GT.1 ) THEN
-            CALL SGEMV( 'No transpose', M-RK+1, K-1, -ONE, A( RK, 1 ),
+            CALL AB_SGEMV( 'No transpose', M-RK+1, K-1, -ONE, A( RK, 1 )
+     $,
      $                  LDA, F( K, 1 ), LDF, ONE, A( RK, K ), 1 )
          END IF
 *
 *        Generate elementary reflector H(k).
 *
          IF( RK.LT.M ) THEN
-            CALL SLARFG( M-RK+1, A( RK, K ), A( RK+1, K ), 1, TAU( K ) )
+            CALL AB_SLARFG( M-RK+1, A( RK, K ), A( RK+1, K ), 1, TAU( K 
+     $) )
          ELSE
-            CALL SLARFG( 1, A( RK, K ), A( RK, K ), 1, TAU( K ) )
+            CALL AB_SLARFG( 1, A( RK, K ), A( RK, K ), 1, TAU( K ) )
          END IF
 *
          AKK = A( RK, K )
@@ -264,7 +267,7 @@
 *        Compute  F(K+1:N,K) := tau(K)*A(RK:M,K+1:N)**T*A(RK:M,K).
 *
          IF( K.LT.N ) THEN
-            CALL SGEMV( 'Transpose', M-RK+1, N-K, TAU( K ),
+            CALL AB_SGEMV( 'Transpose', M-RK+1, N-K, TAU( K ),
      $                  A( RK, K+1 ), LDA, A( RK, K ), 1, ZERO,
      $                  F( K+1, K ), 1 )
          END IF
@@ -280,10 +283,11 @@
 *                    *A(RK:M,K).
 *
          IF( K.GT.1 ) THEN
-            CALL SGEMV( 'Transpose', M-RK+1, K-1, -TAU( K ), A( RK, 1 ),
+            CALL AB_SGEMV( 'Transpose', M-RK+1, K-1, -TAU( K ), A( RK, 1
+     $ ),
      $                  LDA, A( RK, K ), 1, ZERO, AUXV( 1 ), 1 )
 *
-            CALL SGEMV( 'No transpose', N, K-1, ONE, F( 1, 1 ), LDF,
+            CALL AB_SGEMV( 'No transpose', N, K-1, ONE, F( 1, 1 ), LDF,
      $                  AUXV( 1 ), 1, ONE, F( 1, K ), 1 )
          END IF
 *
@@ -291,7 +295,8 @@
 *        A(RK,K+1:N) := A(RK,K+1:N) - A(RK,1:K)*F(K+1:N,1:K)**T.
 *
          IF( K.LT.N ) THEN
-            CALL SGEMV( 'No transpose', N-K, K, -ONE, F( K+1, 1 ), LDF,
+            CALL AB_SGEMV( 'No transpose', N-K, K, -ONE, F( K+1, 1 ), LD
+     $F,
      $                  A( RK, 1 ), LDA, ONE, A( RK, K+1 ), LDA )
          END IF
 *
@@ -331,7 +336,8 @@
 *                         A(OFFSET+KB+1:M,1:KB)*F(KB+1:N,1:KB)**T.
 *
       IF( KB.LT.MIN( N, M-OFFSET ) ) THEN
-         CALL SGEMM( 'No transpose', 'Transpose', M-RK, N-KB, KB, -ONE,
+         CALL AB_SGEMM( 'No transpose', 'Transpose', M-RK, N-KB, KB, -ON
+     $E,
      $               A( RK+1, 1 ), LDA, F( KB+1, 1 ), LDF, ONE,
      $               A( RK+1, KB+1 ), LDA )
       END IF
@@ -341,10 +347,10 @@
    40 CONTINUE
       IF( LSTICC.GT.0 ) THEN
          ITEMP = NINT( VN2( LSTICC ) )
-         VN1( LSTICC ) = SNRM2( M-RK, A( RK+1, LSTICC ), 1 )
+         VN1( LSTICC ) = AB_SNRM2( M-RK, A( RK+1, LSTICC ), 1 )
 *
 *        NOTE: The computation of VN1( LSTICC ) relies on the fact that
-*        SNRM2 does not fail on vectors with norm below the value of
+*        AB_SNRM2 does not fail on vectors with norm below the value of
 *        SQRT(DLAMCH('S'))
 *
          VN2( LSTICC ) = VN1( LSTICC )
@@ -354,6 +360,6 @@
 *
       RETURN
 *
-*     End of SLAQPS
+*     End of AB_SLAQPS
 *
       END
